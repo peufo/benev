@@ -1,10 +1,51 @@
 <script lang="ts">
+	import { mdiPlus } from '@mdi/js'
+	import Icon from '$lib/material/Icon.svelte'
+	import EventForm from './EventForm.svelte'
+	import Header from '$lib/Header.svelte';
+
+	export let data
+
+	let createDialog: HTMLDialogElement
 </script>
 
-<div class="p-4 card bg-white">
-	<h2 class="text-xl">Évènements</h2>
-	<hr>
+<dialog bind:this={createDialog} class="modal">
+	<EventForm class="modal-box" callback={() => createDialog.close()} />
+</dialog>
 
-	
-
+<div class="p-2" >
+	<Header/>
 </div>
+
+<main class="grow p-2">
+	<div class="p-4 card bg-base-100">
+		<div class="flex gap-2 py-2 items-center">
+			<h2 class="text-2xl">Tous les évènements</h2>
+			<div class="grow" />
+			<button class="btn btn-primary" on:click={() => createDialog.showModal()}>
+				<Icon path={mdiPlus} />
+				Nouveau
+			</button>
+		</div>
+		<hr />
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{#each data.events as event}
+					<tr class="hover cursor-pointer relative">
+						<td>{event.name}</td>
+						<td>{event.description || '-'}</td>
+						<a href="/{event.id}" class="inset-0 absolute" />
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
+</main>

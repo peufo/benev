@@ -45,12 +45,10 @@ model Key {
 }
 
 model Event {
-  id String @id @unique
-
-  ownerId String
-  owner   User   @relation(references: [id], fields: [ownerId], onDelete: Cascade)
-
-  name        String
+  id          String  @id @unique
+  name        String  @unique
+  ownerId     String
+  owner       User    @relation(references: [id], fields: [ownerId], onDelete: Cascade)
   date        String?
   description String?
   logo        String?
@@ -66,17 +64,19 @@ model Event {
 }
 
 model Page {
-  id String @id @unique
+  id String @id @default(cuid())
 
   eventId String
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade)
 
   title   String
   content String
+
+  @@unique([eventId, title])
 }
 
 model Team {
-  id String @id @unique
+  id String @id @default(cuid())
 
   name        String
   description String?
@@ -91,7 +91,7 @@ model Team {
 }
 
 model Period {
-  id String @id @unique
+  id String @id @default(cuid())
 
   start        DateTime
   end          DateTime
@@ -104,7 +104,7 @@ model Period {
 }
 
 model Subscribe {
-  id String @id @unique
+  id String @id @default(cuid())
 
   periodId String
   period   Period @relation(references: [id], fields: [periodId], onDelete: Cascade)

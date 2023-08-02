@@ -4,6 +4,7 @@ import { setContext, getContext } from 'svelte'
 import { useNotify } from '$lib/notify'
 
 export * from './user'
+export * from './event'
 
 export type SetError = { [key: string]: (err: string) => void }
 export type FormContext = { setError: SetError }
@@ -14,7 +15,9 @@ export const formContext = {
 	set: (ctx: FormContext) => setContext<FormContext>(formContextKey, ctx),
 }
 
-export function useForm<Shema extends z.ZodRawShape>() {
+type Callback = () => unknown
+
+export function useForm<Shema extends z.ZodRawShape>(successCallback: Callback = () => {}) {
 	type Data = Partial<z.infer<z.ZodObject<Shema>>>
 
 	const notify = useNotify()
@@ -59,6 +62,7 @@ export function useForm<Shema extends z.ZodRawShape>() {
 			if (result.type === 'success') {
 				notify.success('Succès')
 				update()
+				successCallback()
 				return
 			}
 		}

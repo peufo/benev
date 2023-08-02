@@ -8,7 +8,7 @@
 	export let data
 
 	const form = useForm()
-	let state: 'login' | 'resgister' = 'resgister'
+	let state: 'login' | 'register' = 'register'
 </script>
 
 {#if data.user}
@@ -34,20 +34,20 @@
 				role="button"
 				tabindex="0"
 				class="tab tab-lg grow tab-lifted"
-				class:tab-active={state === 'resgister'}
-				on:click={() => (state = 'resgister')}
-				on:keyup={() => (state = 'resgister')}
+				class:tab-active={state === 'register'}
+				on:click={() => (state = 'register')}
+				on:keyup={() => (state = 'register')}
 			>
 				Nouveau compte
 			</span>
 		</div>
 
 		<form
-			class="card-body border border-t-0 border-gray-300 rounded-b-xl"
+			class="card-body border border-t-0 border-base-300 rounded-b-xl"
 			method="post"
 			use:enhance={form.submit}
 		>
-			{#if state === 'resgister'}
+			{#if state === 'register'}
 				<div transition:slide|local class="flex flex-col gap-2">
 
 					<div class="grid grid-cols-2 gap-2">

@@ -2,7 +2,7 @@ import z from 'zod'
 import type { Prisma } from '@prisma/client'
 import type { ZodObj } from './utils'
 
-export type AuthUserCreateForm = Omit<Prisma.UserUncheckedCreateInput, 'id'> & {
+type UserCreateForm = Omit<Prisma.UserUncheckedCreateInput, 'id'> & {
 	password: string
 }
 
@@ -17,5 +17,5 @@ const userForm = {
 	firstName: z.string(),
 	lastName: z.string(),
 	phone: z.string(),
-} satisfies ZodObj<AuthUserCreateForm>
+} satisfies ZodObj<UserCreateForm>
 export const userShema = z.object(userForm)
