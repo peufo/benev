@@ -15,8 +15,14 @@ model User {
   firstName String
   lastName  String
 
+  events       Event[]
+  teams        Team[]
+  subscribes   Subscribe[]
   auth_session Session[]
   auth_key     Key[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Session {
@@ -36,4 +42,65 @@ model Key {
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
+}
+
+model Event {
+  id String @id @unique
+
+  ownerId String
+  owner   User   @relation(references: [id], fields: [ownerId], onDelete: Cascade)
+
+  name        String
+  date        String?
+  description String?
+  logo        String?
+  web         String?
+  email       String?
+  phone       String?
+  address     String?
+  teams       Team[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Team {
+  id String @id @unique
+
+  name        String
+  description String?
+  leaders     User[]
+
+  eventId String
+  event   Event    @relation(references: [id], fields: [eventId], onDelete: Cascade)
+  periods Period[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Period {
+  id String @id @unique
+
+  start        DateTime
+  end          DateTime
+  maxSubscribe Int         @default(1)
+  teamId       String
+  team         Team        @relation(references: [id], fields: [teamId], onDelete: Cascade)
+  subscribes   Subscribe[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Subscribe {
+  id String @id @unique
+
+  periodId String
+  period   Period @relation(references: [id], fields: [periodId], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
