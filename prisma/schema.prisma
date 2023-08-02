@@ -59,9 +59,20 @@ model Event {
   phone       String?
   address     String?
   teams       Team[]
+  pages       Page[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Page {
+  id String @id @unique
+
+  eventId String
+  event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade)
+
+  title   String
+  content String
 }
 
 model Team {

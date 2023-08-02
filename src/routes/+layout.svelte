@@ -7,10 +7,10 @@
 
 	export let data
 
-	const routes: [string, string][] = [
-		['/', 'Home'],
-		['/simulation', 'Simulation'],
-		['/auth', 'Auth'],
+	// TODO use event pages
+	const pages: [string, string][] = [
+		['/notes', 'Règlement'],
+		['/faq', 'FAQ'],
 	]
 </script>
 
@@ -22,9 +22,9 @@
 					<a class="btn-ghost btn text-xl" href="/">BENEV</a>
 				</div>
 				<div class="navbar-end gap-2">
-					<div class="tabs tabs-boxed">
-						{#each routes as [href, label]}
-							<a class="tab" {href} class:tab-active={$page.route.id === href}>
+					<div class="tabs">
+						{#each pages as [href, label]}
+							<a class="tab tab-bordered" {href} class:tab-active={$page.route.id === href}>
 								{label}
 							</a>
 						{/each}
