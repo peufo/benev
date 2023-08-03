@@ -11,6 +11,11 @@ export const GET = async ({ url }) => {
 				{ email: { contains: search } },
 			],
 		},
+		select: {
+			id: true,
+			firstName: true,
+			lastName: true,
+		},
 	})
 
 	return json(users)

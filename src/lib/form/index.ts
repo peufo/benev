@@ -2,9 +2,11 @@ import type { SubmitFunction } from '@sveltejs/kit'
 import type { z } from 'zod'
 import { setContext, getContext } from 'svelte'
 import { useNotify } from '$lib/notify'
+import { goto } from '$app/navigation'
 
 export * from './user'
 export * from './event'
+export * from './team'
 
 export type SetError = { [key: string]: (err: string) => void }
 export type FormContext = { setError: SetError }
@@ -15,9 +17,15 @@ export const formContext = {
 	set: (ctx: FormContext) => setContext<FormContext>(formContextKey, ctx),
 }
 
-type Callback = () => unknown
+type UseFormOptions = {
+	successCallback?: () => unknown
+	successUpdate?: boolean
+}
 
-export function useForm<Shema extends z.ZodRawShape>(successCallback: Callback = () => {}) {
+export function useForm<Shema extends z.ZodRawShape>({
+	successCallback,
+	successUpdate = true,
+}: UseFormOptions = {}) {
 	type Data = Partial<z.infer<z.ZodObject<Shema>>>
 
 	const notify = useNotify()
@@ -61,9 +69,14 @@ export function useForm<Shema extends z.ZodRawShape>(successCallback: Callback =
 
 			if (result.type === 'success') {
 				notify.success('Succès')
-				update()
-				successCallback()
+
+				if (successCallback) successCallback()
+				if (successUpdate) update()
 				return
+			}
+
+			if (result.type === 'redirect') {
+				goto(result.location)
 			}
 		}
 	}

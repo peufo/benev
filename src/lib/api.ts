@@ -50,5 +50,5 @@ function methods<T extends unknown>(route: string) {
 }
 
 export const api = {
-	user: methods<User>('/user'),
+	user: methods<User>('/users'),
 }

@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import { parseFormData } from '$lib/server'
 import { eventShema } from '$lib/form'
 import { prisma } from '$lib/server'
@@ -10,7 +10,7 @@ export const load = async () => {
 }
 
 export const actions = {
-	new_event: async ({ request, locals }) => {
+	create_event: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
@@ -24,6 +24,6 @@ export const actions = {
 			},
 		})
 
-		return { event }
+		throw redirect(301, `/${event.id}`)
 	},
 }

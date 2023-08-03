@@ -65,7 +65,7 @@
 			<div class="card-actions justify-end">
 				<input
 					type="submit"
-					class="btn-primary btn"
+					class="btn-neutral btn"
 					value={state === 'login' ? 'Connexion' : 'Créer un compte'}
 					formaction={state === 'login' ? '?/login' : '?/register'}
 				/>

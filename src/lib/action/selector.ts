@@ -72,8 +72,6 @@ export function selector(
 
 	input.addEventListener('keydown', handleKeydown)
 
-	console.log(input)
-
 	return {
 		update(params: { focusIndex: number }) {
 			focusIndex = params.focusIndex

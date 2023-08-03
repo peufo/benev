@@ -7,14 +7,14 @@
 	let klass = ''
 	export { klass as class }
   export let callback: () => unknown = () => {}
-	const form = useForm(callback)
+	const form = useForm({successCallback: callback})
 </script>
 
-<form method="post" action="?/new_event" class="{klass} flex flex-col gap-2" use:enhance={form.submit}>
+<form method="post" action="?/create_event" class="{klass} flex flex-col gap-2" use:enhance={form.submit}>
 	<h3 class="font-bold text-lg">Nouvel évènement</h3>
 	
   <InputText key="name" label="Nom de l'évènement"/>
-  <InputText key="id" label="Identifiant"/>
+  <InputText key="id" label="Identifiant"  />
 	<InputTextarea key="description" label="Description"/>
 
 	<div class="flex justify-end">
