@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
 	import InputText from '$lib/material/input/InputText.svelte'
+	import InputTextarea from '$lib/material/input/InputTextarea.svelte'
 
 	let klass = ''
 	export { klass as class }
@@ -14,6 +15,7 @@
 	
   <InputText key="name" label="Nom de l'évènement"/>
   <InputText key="id" label="Identifiant"/>
+	<InputTextarea key="description" label="Description"/>
 
 	<div class="flex justify-end">
 		<button class="btn">Valider</button>

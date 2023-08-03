@@ -1,3 +1,5 @@
 export { default as FormControl } from './FormControl.svelte'
 export { default as InputText } from './InputText.svelte'
 export { default as InputPassword } from './InputPassword.svelte'
+export { default as InputTextarea } from './InputTextarea.svelte'
+export { default as InputRelations } from './InputRelations.svelte'

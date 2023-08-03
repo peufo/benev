@@ -26,4 +26,6 @@
     {/if}
 	</div>
 	<hr />
+
+	<TeamForm  />
 </div>
