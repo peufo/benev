@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
 	import PeriodForm from './PeriodForm.svelte'
+	import SubscribeForm from './SubscribeForm.svelte'
+	import ThanksDialog from './ThanksDialog.svelte'
 
 	export let data
 
@@ -15,9 +17,8 @@
 	const formatRange = (start: Date, end: Date) => formater.formatRange(start, end)
 
 	let subscribeDialog: HTMLDialogElement
-	let selectedPeriodLabel: string | undefined = undefined
-
-
+	let thanksDialog: ThanksDialog
+	let selectedPeriod: (typeof data.periods)[number] | undefined = undefined
 </script>
 
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
@@ -28,7 +29,7 @@
 		</div>
 		<div class="grow" />
 	</div>
-	<div class="divider"></div>
+	<div class="divider" />
 
 	<table class="table">
 		<thead>
@@ -40,24 +41,23 @@
 
 		<tbody>
 			{#each data.periods as period}
-				
 				<tr
 					class="hover cursor-pointer relative"
 					on:click={() => {
-						selectedPeriodLabel = formatRange(period.start, period.end)
+						selectedPeriod = period
 						subscribeDialog.showModal()
 					}}
 				>
 					<td class="w-full">
-						{#if !browser}
-							<span class="loading loading-dots loading-xs h-3" />
-						{:else}
+						{#if browser}
 							{formatRange(period.start, period.end)}
 						{/if}
 					</td>
 					<td class="flex gap-2 items-center w-40">
-						<progress class="progress" value={1} max={period.maxSubscribe} />
-						<span class="whitespace-nowrap">1 / {period.maxSubscribe}</span>
+						<progress class="progress" value={period.subscribes.length} max={period.maxSubscribe} />
+						<span class="whitespace-nowrap">
+							{period.subscribes.length} / {period.maxSubscribe}
+						</span>
 					</td>
 				</tr>
 			{/each}
@@ -72,18 +72,17 @@
 {/if}
 
 <dialog class="modal" bind:this={subscribeDialog}>
-	<form action="new_subscribe" method="post" class="modal-box flex flex-col gap-4">
-		<h2 class="text-2xl">{data.team.name}</h2>
-
-		<p class="text-lg">Souhaites-tu t'inscrire à la période de travail suivante ?</p>
-		<p class="text-lg">{selectedPeriodLabel}</p>
-
-		<div class="flex gap-2 justify-end">
-			<button class="btn btn-ghost" on:click|preventDefault={() => subscribeDialog.close()}>
-				Non
-			</button>
-
-			<button class="btn">Oui je le veux !</button>
-		</div>
-	</form>
+	<SubscribeForm
+		userId={data.user?.userId || ''}
+		periodId={selectedPeriod?.id || ''}
+		teamName={data.team.name}
+		periodLabel={selectedPeriod && formatRange(selectedPeriod.start, selectedPeriod.end)}
+		on:close={() => subscribeDialog.close()}
+		on:success={() => {
+			subscribeDialog.close()
+			thanksDialog.open()
+		}}
+	/>
 </dialog>
+
+<ThanksDialog bind:this={thanksDialog} />

@@ -8,6 +8,7 @@ export * from './user'
 export * from './event'
 export * from './team'
 export * from './period'
+export * from './subscribe'
 
 export type SetError = { [key: string]: (err: string) => void }
 export type FormContext = { setError: SetError }

@@ -108,6 +108,8 @@ model Period {
 model Subscribe {
   id String @id @default(cuid())
 
+  state SubscribeState @default(request)
+
   periodId String
   period   Period @relation(references: [id], fields: [periodId], onDelete: Cascade)
 
@@ -116,4 +118,10 @@ model Subscribe {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum SubscribeState {
+  request
+  accepted
+  denied
 }

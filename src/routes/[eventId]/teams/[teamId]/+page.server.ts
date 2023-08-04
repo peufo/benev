@@ -1,6 +1,6 @@
 import { isLeader, isLeaderOrThrow, parseFormData, prisma } from '$lib/server'
-import { periodShema } from '$lib/form'
-import { fail } from '@sveltejs/kit'
+import { periodShema, subscribeShema } from '$lib/form'
+import { error, fail } from '@sveltejs/kit'
 
 export const load = async ({ params, locals }) => {
 	const { teamId } = params
@@ -11,7 +11,10 @@ export const load = async ({ params, locals }) => {
 			where: { id: teamId },
 			include: { leaders: true },
 		}),
-		periods: await prisma.period.findMany({ where: { teamId }, include: { subscribes: true } }),
+		periods: await prisma.period.findMany({
+			where: { teamId },
+			include: { subscribes: true },
+		}),
 	}
 }
 
@@ -38,6 +41,17 @@ export const actions = {
 				teamId,
 			},
 		})
+		return
+	},
+	new_subscribe: async ({ request, locals }) => {
+		const session = await locals.auth.validate()
+		if (!session) throw error(401)
+
+		const { err, data } = await parseFormData(request, subscribeShema)
+		if (err) return err
+
+		await prisma.subscribe.create({ data })
+
 		return
 	},
 }
