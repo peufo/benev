@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { mdiPlus } from '@mdi/js'
-	import { page } from '$app/stores'
-	import { Icon } from '$lib/material'
-	import PeriodForm from './PeriodForm.svelte'
+import PeriodForm from './PeriodForm.svelte'
 
 	export let data
 
@@ -15,7 +12,10 @@
 		minute: 'numeric',
 	})
 
-	$: isOwner = data.event.ownerId === data.user?.userId
+	let subscribeDialog: HTMLDialogElement
+	let selectedPeriodLabel: string | undefined = undefined
+
+
 </script>
 
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
@@ -25,7 +25,6 @@
 			<p>{data.team.description || ''}</p>
 		</div>
 		<div class="grow" />
-
 	</div>
 	<hr />
 
@@ -39,12 +38,18 @@
 
 		<tbody>
 			{#each data.periods as period}
-				<tr class="hover cursor-pointer relative">
-					<td>{formater.formatRange(period.start, period.end)}</td>
+				{@const periodLabel = formater.formatRange(period.start, period.end)}
+				<tr
+					class="hover cursor-pointer relative"
+					on:click={() => {
+						selectedPeriodLabel = periodLabel
+						subscribeDialog.showModal()
+					}}
+				>
+					<td>{periodLabel}</td>
 					<td class="flex gap-2 items-center">
-						<progress class="progress" value={1} max={period.maxSubscribe}/>
+						<progress class="progress" value={1} max={period.maxSubscribe} />
 						<span class="whitespace-nowrap">1 / {period.maxSubscribe}</span>
-						
 					</td>
 				</tr>
 			{/each}
@@ -52,6 +57,25 @@
 	</table>
 </div>
 
-<div class="max-w-md m-auto mt-4 bg-base-100 rounded-lg">
-	<PeriodForm />
-</div>
+{#if data.isLeader}
+	<div class="max-w-md m-auto mt-4 bg-base-100 rounded-lg">
+		<PeriodForm />
+	</div>
+{/if}
+
+<dialog class="modal" bind:this={subscribeDialog}>
+	<form action="new_subscribe" method="post" class="modal-box flex flex-col gap-4">
+		<h2 class="text-2xl">{data.team.name}</h2>
+
+		<p class="text-lg">Souhaites-tu t'inscrire à la période de travail suivante ?</p>
+		<p class="text-lg">{selectedPeriodLabel}</p>
+
+		<div class="flex gap-2 justify-end">
+			<button class="btn btn-ghost" on:click|preventDefault={() => subscribeDialog.close()}>
+				Non
+			</button>
+
+			<button class="btn">Oui je le veux !</button>
+		</div>
+	</form>
+</dialog>

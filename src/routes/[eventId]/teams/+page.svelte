@@ -5,14 +5,13 @@
 
 	export let data
 
-	$: isOwner = data.event.ownerId === data.user?.userId
 </script>
 
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
 	<div class="flex gap-2 py-2 items-center">
 		<h2 class="text-2xl">Équipes</h2>
 		<div class="grow" />
-		{#if isOwner}
+		{#if data.isOwner}
 			<a href="/{$page.params.eventId}/teams/create" class="btn btn-neutral">
 				<Icon path={mdiPlus} />
 				Ajouter une équipe

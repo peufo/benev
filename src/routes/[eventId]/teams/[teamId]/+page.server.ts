@@ -1,22 +1,26 @@
-import { isOwnerOrLeader, parseFormData, prisma } from '$lib/server'
+import { isLeader, isLeaderOrThrow, parseFormData, prisma } from '$lib/server'
 import { periodShema } from '$lib/form'
 import { fail } from '@sveltejs/kit'
 
-export const load = async ({ params }) => {
+export const load = async ({ params, locals }) => {
 	const { teamId } = params
 
 	return {
-		team: prisma.team.findUniqueOrThrow({ where: { id: teamId } }),
-		periods: prisma.period.findMany({ where: { teamId }, include: { subscribes: true } }),
+		isLeader: await isLeader(teamId, locals),
+		team: await prisma.team.findUniqueOrThrow({
+			where: { id: teamId },
+			include: { leaders: true },
+		}),
+		periods: await prisma.period.findMany({ where: { teamId }, include: { subscribes: true } }),
 	}
 }
 
 export const actions = {
 	new_period: async ({ params, request, locals }) => {
-		await isOwnerOrLeader(params.teamId, locals)
+		const { teamId } = params
+		await isLeaderOrThrow(teamId, locals)
 
 		const { err, data } = await parseFormData(request, periodShema)
-		console.log(err?.data)
 		if (err) return err
 
 		if (data.start.getTime() > data.end.getTime()) {
@@ -31,7 +35,7 @@ export const actions = {
 		await prisma.period.create({
 			data: {
 				...data,
-				teamId: params.teamId,
+				teamId,
 			},
 		})
 		return

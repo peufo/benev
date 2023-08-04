@@ -1,11 +1,11 @@
 import { teamShema } from '$lib/form/team'
 import { parseFormData } from '$lib/server/formData'
-import { isOwner, prisma } from '$lib/server'
+import { isOwnerOrThrow, prisma } from '$lib/server'
 import { redirect } from '@sveltejs/kit'
 
 export const actions = {
 	default: async ({ params, request, locals }) => {
-		await isOwner(params.eventId, locals)
+		await isOwnerOrThrow(params.eventId, locals)
 
 		const { err, data } = await parseFormData(request, teamShema)
 		if (err) return err
