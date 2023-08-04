@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte'
+	import dayjs from 'dayjs'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
 	import { InputDate, InputNumber } from '$lib/material/input'
-	import { createEventDispatcher } from 'svelte'
 
 	let klass = ''
 	export { klass as class }
@@ -17,7 +18,6 @@
 
 	const tabs = [
 		['add', 'Ajouter'],
-		['continue', 'Continuer'],
 		['duplicate', 'Dupliquer'],
 	] as const
 	let tabSelected: (typeof tabs)[number][0] = 'add'
@@ -31,6 +31,15 @@
 
 	function handleEndBlur() {
 		if (!start) start = end
+	}
+
+	function getNextPeriod() {
+		if (!start || !end) return
+		const _start = dayjs(start)
+		const _end = dayjs(end)
+		const step = _end.diff(_start, 'minute')
+		start = end
+		end = _end.add(step, 'minute').format('YYYY-MM-DDTHH:mm')
 	}
 
 </script>
@@ -75,15 +84,15 @@
 					on:blur={handleEndBlur}
 				/>
 			</div>
-		{:else if tabSelected === 'continue'}
-			<h2>TODO:</h2>
-			<div>Continuer avec une pause de ... et un durée de ...</div>
 		{:else if tabSelected === 'duplicate'}
 			<h2>TODO:</h2>
 			<div>Dupliquer en ajoutant ... jours à la sélection</div>
 		{/if}
 
-		<div class="flex justify-end mt-2">
+		<div class="flex justify-end mt-2 gap-2">
+			<button class="btn btn-ghost" class:btn-disabled={!start || !end} on:click|preventDefault={getNextPeriod}>
+				Continuer
+			</button>
 			<button class="btn">Valider</button>
 		</div>
 	</div>
