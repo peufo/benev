@@ -27,7 +27,7 @@
     </p>
     
     <div class="flex gap-2 justify-end">
-      <button class="btn" on:click={() => dialog.close()}>OK ça joue</button>
+      <button class="btn" on:click={() => dialog.close()}>OK, ça joue !</button>
     </div>
     
   </div>

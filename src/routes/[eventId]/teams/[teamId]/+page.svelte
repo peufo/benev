@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
+	import { Icon } from '$lib/material'
+	import { mdiAccountCheck, mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 	import PeriodForm from './PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -41,8 +43,9 @@
 
 		<tbody>
 			{#each data.periods as period}
-				{@const nbSubscribe = period.subscribes.filter(sub => sub.state !== 'denied').length}
+				{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
 				{@const isFull = nbSubscribe >= period.maxSubscribe}
+				{@const userSubscribe = period.subscribes.find((sub) => sub.userId === data.user?.userId)}
 				<tr
 					class="relative"
 					class:hover={!isFull}
@@ -61,6 +64,13 @@
 					</td>
 					<td class="flex gap-2 items-center w-40">
 						<progress class="progress" value={nbSubscribe} max={period.maxSubscribe} />
+						{#if userSubscribe?.state === 'request'}
+							<Icon path={mdiAccountCheck} class="fill-info" title="En attente de validation" />
+						{:else if userSubscribe?.state === 'accepted'}
+							<Icon path={mdiCheck} class="fill-success" title="Validé" />
+						{:else if userSubscribe?.state === 'denied'}
+							<Icon path={mdiAlertOctagonOutline} class="fill-warning" title="Inscription refusé" />
+						{/if}
 						<span class="whitespace-nowrap">
 							{nbSubscribe} / {period.maxSubscribe}
 						</span>
@@ -72,7 +82,7 @@
 </div>
 
 {#if data.isLeader}
-	<div class="max-w-md m-auto mt-4 bg-base-100 rounded-lg">
+	<div class="max-w-4xl m-auto mt-4 bg-base-100 rounded-lg">
 		<PeriodForm />
 	</div>
 {/if}
