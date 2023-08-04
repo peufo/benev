@@ -103,8 +103,8 @@
 	<FormControl key="relations_{key}" {label} {error} class={klass}>
 		<input
 			type="hidden"
-			name={key}
-			value="json_{JSON.stringify(items?.map(({ id }) => id) || [])}"
+			name="json_{key}"
+			value={JSON.stringify(items?.map(({ id }) => id) || [])}
 		/>
 
 		<div class="flex flex-wrap items-center gap-2">

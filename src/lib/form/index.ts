@@ -7,6 +7,7 @@ import { goto } from '$app/navigation'
 export * from './user'
 export * from './event'
 export * from './team'
+export * from './period'
 
 export type SetError = { [key: string]: (err: string) => void }
 export type FormContext = { setError: SetError }
@@ -20,11 +21,15 @@ export const formContext = {
 type UseFormOptions = {
 	successCallback?: () => unknown
 	successUpdate?: boolean
+	successReset?: boolean
+	successMessage?: string
 }
 
 export function useForm<Shema extends z.ZodRawShape>({
 	successCallback,
 	successUpdate = true,
+	successReset = true,
+	successMessage = 'Succès',
 }: UseFormOptions = {}) {
 	type Data = Partial<z.infer<z.ZodObject<Shema>>>
 
@@ -68,15 +73,14 @@ export function useForm<Shema extends z.ZodRawShape>({
 			}
 
 			if (result.type === 'success') {
-				notify.success('Succès')
-
+				notify.success(successMessage)
 				if (successCallback) successCallback()
-				if (successUpdate) update()
+				if (successUpdate) update({ reset: successReset })
 				return
 			}
 
 			if (result.type === 'redirect') {
-				goto(result.location)
+				goto(result.location, { replaceState: true })
 			}
 		}
 	}

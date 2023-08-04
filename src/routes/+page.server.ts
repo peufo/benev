@@ -10,7 +10,7 @@ export const load = async () => {
 }
 
 export const actions = {
-	create_event: async ({ request, locals }) => {
+	new_event: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 

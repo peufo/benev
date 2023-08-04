@@ -2,7 +2,7 @@
 	import { mdiPlus } from '@mdi/js'
 	import Icon from '$lib/material/Icon.svelte'
 	import EventForm from './EventForm.svelte'
-	import Header from '$lib/Header.svelte';
+	import Header from '$lib/Header.svelte'
 
 	export let data
 
@@ -10,11 +10,15 @@
 </script>
 
 <dialog bind:this={createDialog} class="modal">
-	<EventForm class="modal-box" callback={() => createDialog.close()} />
+	<EventForm
+		class="modal-box"
+		on:cancel={() => createDialog.close()}
+		on:success={() => createDialog.close()}
+	/>
 </dialog>
 
-<div class="p-2" >
-	<Header/>
+<div class="p-2">
+	<Header />
 </div>
 
 <main class="grow p-2">
@@ -42,7 +46,7 @@
 					<tr class="hover cursor-pointer relative">
 						<td>{event.name}</td>
 						<td>{event.description || '-'}</td>
-						<a href="/{event.id}" class="inset-0 absolute" >{' '}</a>
+						<a href="/{event.id}" class="inset-0 absolute">{' '}</a>
 					</tr>
 				{/each}
 			</tbody>

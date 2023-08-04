@@ -9,16 +9,22 @@ import { fail } from '@sveltejs/kit'
 function getFormDataTyped(formData: Record<string, unknown>): Record<string, unknown> {
 	for (const [key, value] of Object.entries(formData)) {
 		if (value instanceof Blob) delete formData[key]
-		if (key.startsWith('relation_')) delete formData[key]
-		if (key.startsWith('relations_')) delete formData[key]
-
+		const formatKey = key.split('_')[0]
+		if (!formatKey) continue
+		if (formatKey === 'relation') delete formData[key]
+		if (formatKey === 'relations') delete formData[key]
 		if (typeof value !== 'string' || !formData[key]) continue
-		else if (value.startsWith('number_')) formData[key] = Number(value.replace('number_', ''))
-		else if (value.startsWith('boolean_')) formData[key] = value.replace('boolean_', '') === 'true'
-		else if (value.startsWith('date_')) formData[key] = new Date(value)
-		else if (value.startsWith('json_')) {
-			console.log(value)
-			formData[key] = JSON.parse(value.replace('json_', ''))
+
+		const formats: Record<string, (k: string) => void> = {
+			number: (k) => (formData[k] = Number(value)),
+			date: (k) => (formData[k] = new Date(value)),
+			boolean: (k) => (formData[k] = value === 'true'),
+			json: (k) => (formData[k] = JSON.parse(value)),
+		}
+
+		if (formats[formatKey]) {
+			const k = key.replace(`${formatKey}_`, '')
+			formats[formatKey](k)
 		}
 	}
 	return formData

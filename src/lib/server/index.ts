@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client'
 import { dev } from '$app/environment'
 
 export * from './formData'
+export * from './permission'
 
 export const prisma = new PrismaClient()
 
