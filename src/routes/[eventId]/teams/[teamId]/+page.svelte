@@ -28,7 +28,7 @@
 		</div>
 		<div class="grow" />
 	</div>
-	<hr />
+	<div class="divider"></div>
 
 	<table class="table">
 		<thead>

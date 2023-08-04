@@ -13,12 +13,12 @@
 		<div class="grow" />
 		{#if data.isOwner}
 			<a href="/{$page.params.eventId}/teams/create" class="btn btn-neutral">
-				<Icon path={mdiPlus} />
+				<Icon path={mdiPlus} class="fill-neutral-content" />
 				Ajouter une équipe
 			</a>
 		{/if}
 	</div>
-	<hr />
+	<div class="divider"></div>
 
 	<table class="table">
 		<thead>

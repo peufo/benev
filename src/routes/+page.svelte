@@ -27,11 +27,11 @@
 			<h2 class="text-2xl">Tous les évènements</h2>
 			<div class="grow" />
 			<button class="btn btn-neutral" on:click={() => createDialog.showModal()}>
-				<Icon path={mdiPlus} />
+				<Icon path={mdiPlus}  class="fill-neutral-content" />
 				Nouveau
 			</button>
 		</div>
-		<hr />
+		<div class="divider"></div>
 
 		<table class="table">
 			<thead>
