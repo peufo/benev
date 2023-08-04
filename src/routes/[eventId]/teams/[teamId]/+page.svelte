@@ -42,9 +42,14 @@
 		<tbody>
 			{#each data.periods as period}
 				{@const nbSubscribe = period.subscribes.filter(sub => sub.state !== 'denied').length}
+				{@const isFull = nbSubscribe >= period.maxSubscribe}
 				<tr
-					class="hover cursor-pointer relative"
+					class="relative"
+					class:hover={!isFull}
+					class:cursor-pointer={!isFull}
+					class:opacity-50={isFull}
 					on:click={() => {
+						if (isFull) return
 						selectedPeriod = period
 						subscribeDialog.showModal()
 					}}
