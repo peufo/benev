@@ -25,12 +25,7 @@
 			<p>{data.team.description || ''}</p>
 		</div>
 		<div class="grow" />
-		{#if isOwner}
-			<a href="/{$page.params.eventId}/teams/create" class="btn btn-neutral">
-				<Icon path={mdiPlus} />
-				Ajouter une période
-			</a>
-		{/if}
+
 	</div>
 	<hr />
 
