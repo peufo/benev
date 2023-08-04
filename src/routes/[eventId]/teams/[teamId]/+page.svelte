@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
 	import { Icon } from '$lib/material'
-	import { mdiAccountCheck, mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
+	import { mdiFormatListChecks, mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 	import PeriodForm from './PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -44,15 +44,15 @@
 		<tbody>
 			{#each data.periods as period}
 				{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
-				{@const isFull = nbSubscribe >= period.maxSubscribe}
 				{@const userSubscribe = period.subscribes.find((sub) => sub.userId === data.user?.userId)}
+				{@const disabled = userSubscribe || nbSubscribe >= period.maxSubscribe}
 				<tr
 					class="relative"
-					class:hover={!isFull}
-					class:cursor-pointer={!isFull}
-					class:opacity-50={isFull}
+					class:hover={!disabled}
+					class:cursor-pointer={!disabled}
+					class:opacity-70={disabled}
 					on:click={() => {
-						if (isFull) return
+						if (disabled) return
 						selectedPeriod = period
 						subscribeDialog.showModal()
 					}}
@@ -65,7 +65,7 @@
 					<td class="flex gap-2 items-center w-40">
 						<progress class="progress" value={nbSubscribe} max={period.maxSubscribe} />
 						{#if userSubscribe?.state === 'request'}
-							<Icon path={mdiAccountCheck} class="fill-info" title="En attente de validation" />
+							<Icon path={mdiFormatListChecks} class="fill-info" title="En attente de validation" />
 						{:else if userSubscribe?.state === 'accepted'}
 							<Icon path={mdiCheck} class="fill-success" title="Validé" />
 						{:else if userSubscribe?.state === 'denied'}
@@ -82,7 +82,7 @@
 </div>
 
 {#if data.isLeader}
-	<div class="max-w-4xl m-auto mt-4 bg-base-100 rounded-lg">
+	<div class="p-4 card bg-base-100 max-w-4xl m-auto mt-4">
 		<PeriodForm />
 	</div>
 {/if}

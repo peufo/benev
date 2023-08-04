@@ -16,12 +16,6 @@
 		},
 	})
 
-	const tabs = [
-		['add', 'Ajouter'],
-		['duplicate', 'Dupliquer'],
-	] as const
-	let tabSelected: (typeof tabs)[number][0] = 'add'
-
 	let start = ''
 	let end = ''
 
@@ -41,59 +35,46 @@
 		start = end
 		end = _end.add(step, 'minute').format('YYYY-MM-DDTHH:mm')
 	}
-
 </script>
 
 <form action="?/new_period" method="post" use:enhance={form.submit} class={klass}>
-	<div class="tabs">
-		{#each tabs as [key, label] (key)}
-			<div
-				class="tab tab-lifted tab-lg grow"
-				class:tab-active={tabSelected === key}
-				on:click={() => (tabSelected = key)}
-				on:keyup={() => (tabSelected = key)}
-				role="tab"
-				tabindex="0"
+	<div class="flex flex-wrap gap-2 items-end">
+		<div class="flex gap-2 grow flex-wrap-reverse">
+			<InputDate
+				key="start"
+				label="Début"
+				input={{ step: 300 }}
+				bind:value={start}
+				on:blur={handleStartBlur}
+				class="grow"
+			/>
+			<InputDate
+				key="end"
+				label="Fin"
+				input={{ step: 300 }}
+				bind:value={end}
+				on:blur={handleEndBlur}
+				class="grow"
+			/>
+			<InputNumber
+				key="maxSubscribe"
+				label="Nombre de bénévole"
+				class="max-w-[150px]"
+				input={{ min: 1, step: 1, value: 1 }}
+			/>
+		</div>
+
+
+		<div class="flex gap-2 grow">
+			<button
+				type="button"
+				class="btn btn-ghost grow"
+				class:btn-disabled={!start || !end}
+				on:click={getNextPeriod}
 			>
-				{label}
-			</div>
-		{/each}
-	</div>
-
-	<div class="card-body border border-t-0 border-base-300 rounded-b-xl">
-		{#if tabSelected === 'add'}
-			<div class="grid grid-cols-2 gap-2">
-				<InputNumber
-					key="maxSubscribe"
-					label="Nombre de bénévole"
-					class="col-span-2"
-					input={{ min: 1, step: 1, value: 1 }}
-				/>
-				<InputDate
-					key="start"
-					label="Début"
-					input={{ step: 300 }}
-					bind:value={start}
-					on:blur={handleStartBlur}
-				/>
-				<InputDate
-					key="end"
-					label="Fin"
-					input={{ step: 300 }}
-					bind:value={end}
-					on:blur={handleEndBlur}
-				/>
-			</div>
-		{:else if tabSelected === 'duplicate'}
-			<h2>TODO:</h2>
-			<div>Dupliquer en ajoutant ... jours à la sélection</div>
-		{/if}
-
-		<div class="flex justify-end mt-2 gap-2">
-			<button class="btn btn-ghost" class:btn-disabled={!start || !end} on:click|preventDefault={getNextPeriod}>
-				Continuer
+				Suivante
 			</button>
-			<button class="btn">Valider</button>
+			<button class="btn grow" type="submit">Ajouter</button>
 		</div>
 	</div>
 </form>
