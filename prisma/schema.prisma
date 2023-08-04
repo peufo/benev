@@ -118,6 +118,8 @@ model Subscribe {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, periodId])
 }
 
 enum SubscribeState {
