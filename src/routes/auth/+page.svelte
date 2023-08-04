@@ -8,7 +8,7 @@
 	export let data
 
 	const form = useForm()
-	let state: 'login' | 'register' = 'register'
+	let state: 'login' | 'register' = 'login'
 </script>
 
 {#if data.user}

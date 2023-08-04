@@ -8,9 +8,11 @@
 	export { klass as class }
 	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
 	const form = useForm({
-    successReset: false,
+		successReset: false,
 		successMessage: 'Période ajoutée',
-		successCallback: () => dispatch('success'),
+		successCallback: () => {
+			dispatch('success')
+		},
 	})
 
 	const tabs = [
@@ -19,6 +21,18 @@
 		['duplicate', 'Dupliquer'],
 	] as const
 	let tabSelected: (typeof tabs)[number][0] = 'add'
+
+	let start = ''
+	let end = ''
+
+	function handleStartBlur() {
+		if (!end) end = start
+	}
+
+	function handleEndBlur() {
+		if (!start) start = end
+	}
+
 </script>
 
 <form action="?/new_period" method="post" use:enhance={form.submit} class={klass}>
@@ -46,8 +60,20 @@
 					class="col-span-2"
 					input={{ min: 1, step: 1, value: 1 }}
 				/>
-				<InputDate key="start" label="Début" />
-				<InputDate key="end" label="Fin" />
+				<InputDate
+					key="start"
+					label="Début"
+					input={{ step: 300 }}
+					bind:value={start}
+					on:blur={handleStartBlur}
+				/>
+				<InputDate
+					key="end"
+					label="Fin"
+					input={{ step: 300 }}
+					bind:value={end}
+					on:blur={handleEndBlur}
+				/>
 			</div>
 		{:else if tabSelected === 'continue'}
 			<h2>TODO:</h2>
