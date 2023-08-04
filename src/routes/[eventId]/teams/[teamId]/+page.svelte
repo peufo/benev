@@ -41,6 +41,7 @@
 
 		<tbody>
 			{#each data.periods as period}
+				{@const nbSubscribe = period.subscribes.filter(sub => sub.state !== 'denied').length}
 				<tr
 					class="hover cursor-pointer relative"
 					on:click={() => {
@@ -54,9 +55,9 @@
 						{/if}
 					</td>
 					<td class="flex gap-2 items-center w-40">
-						<progress class="progress" value={period.subscribes.length} max={period.maxSubscribe} />
+						<progress class="progress" value={nbSubscribe} max={period.maxSubscribe} />
 						<span class="whitespace-nowrap">
-							{period.subscribes.length} / {period.maxSubscribe}
+							{nbSubscribe} / {period.maxSubscribe}
 						</span>
 					</td>
 				</tr>
