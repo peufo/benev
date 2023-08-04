@@ -20,7 +20,7 @@
 </script>
 
 <div class="p-2">
-	<Header>
+	<Header userName={data.user?.name}>
 		<a slot="start" href="/{eventId}" class="btn btn-ghost text-xl pl-0">
 			<Icon path={mdiChevronRight} />
 			{data.event.name}

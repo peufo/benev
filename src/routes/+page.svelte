@@ -18,7 +18,7 @@
 </dialog>
 
 <div class="p-2">
-	<Header />
+	<Header userName={data.user?.name} />
 </div>
 
 <main class="grow p-2">
