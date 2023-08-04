@@ -1,5 +1,6 @@
 <script lang="ts">
-import PeriodForm from './PeriodForm.svelte'
+	import { browser } from '$app/environment'
+	import PeriodForm from './PeriodForm.svelte'
 
 	export let data
 
@@ -11,6 +12,7 @@ import PeriodForm from './PeriodForm.svelte'
 		hour: 'numeric',
 		minute: 'numeric',
 	})
+	const formatRange = (start: Date, end: Date) => formater.formatRange(start, end)
 
 	let subscribeDialog: HTMLDialogElement
 	let selectedPeriodLabel: string | undefined = undefined
@@ -38,16 +40,22 @@ import PeriodForm from './PeriodForm.svelte'
 
 		<tbody>
 			{#each data.periods as period}
-				{@const periodLabel = formater.formatRange(period.start, period.end)}
+				
 				<tr
 					class="hover cursor-pointer relative"
 					on:click={() => {
-						selectedPeriodLabel = periodLabel
+						selectedPeriodLabel = formatRange(period.start, period.end)
 						subscribeDialog.showModal()
 					}}
 				>
-					<td>{periodLabel}</td>
-					<td class="flex gap-2 items-center">
+					<td class="w-full">
+						{#if !browser}
+							<span class="loading loading-dots loading-xs h-3" />
+						{:else}
+							{formatRange(period.start, period.end)}
+						{/if}
+					</td>
+					<td class="flex gap-2 items-center w-40">
 						<progress class="progress" value={1} max={period.maxSubscribe} />
 						<span class="whitespace-nowrap">1 / {period.maxSubscribe}</span>
 					</td>
