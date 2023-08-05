@@ -10,4 +10,10 @@ const periodForm = {
 	end: z.date(),
 } satisfies ZodObj<PeriodCreateForm>
 
+const periodFormUpdate = {
+	id: z.string(),
+	...periodForm,
+} satisfies ZodObj<PeriodCreateForm>
+
 export const periodShema = z.object(periodForm)
+export const periodShemaUpdate = z.object(periodFormUpdate)

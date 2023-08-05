@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
 	import { Icon } from '$lib/material'
-	import { mdiFormatListChecks, mdiAlertOctagonOutline, mdiCheck, mdiChevronRight } from '@mdi/js'
+	import { mdiChevronRight, mdiPencilOutline } from '@mdi/js'
 	import PeriodForm from './PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Subscribes from './Subscribes.svelte'
 	import { urlParam } from '$lib/store'
 	import { goto } from '$app/navigation'
-	import { slide } from 'svelte/transition'
 	import SubscribeState from './SubscribeState.svelte'
 
 	export let data
@@ -24,7 +23,9 @@
 	const formatRange = (start: Date, end: Date) => formater.formatRange(start, end)
 
 	let subscribeDialog: HTMLDialogElement
+	let updateDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
+	let periodUpdatForm: PeriodForm
 	let selectedPeriod: (typeof data.periods)[number] | undefined = undefined
 
 	const periodOpenKey = 'periodOpen'
@@ -35,6 +36,15 @@
 		<div>
 			<h2 class="text-2xl">{data.team.name}</h2>
 			<p>{data.team.description || ''}</p>
+			<div>
+				Responsables :
+				{#each data.team.leaders as leader}
+					<a href="#" class="btn btn-xs btn-ghost">
+						{leader.firstName}
+						{leader.lastName}
+					</a>
+				{/each}
+			</div>
 		</div>
 		<div class="grow" />
 	</div>
@@ -73,36 +83,52 @@
 					<td class="flex gap-2 items-center w-40">
 						<progress class="progress" value={nbSubscribe} max={period.maxSubscribe} />
 						{#if userSubscribe}
-							<SubscribeState state={userSubscribe.state}/>
+							<SubscribeState state={userSubscribe.state} />
 						{/if}
 
 						<span class="whitespace-nowrap">
 							{nbSubscribe} / {period.maxSubscribe}
 						</span>
 					</td>
-					<td class="py-0">
-						<button
-							class="btn btn-square btn-sm"
-							on:click|stopPropagation={() => {
-								if ($urlParam.hasValue(periodOpenKey, period.id)) {
-									goto($urlParam.without(periodOpenKey), { replaceState: true })
-									return
-								}
-								goto($urlParam.with({ [periodOpenKey]: period.id }), { replaceState: true })
-							}}
-						>
-							<Icon
-								path={mdiChevronRight}
-								class=" transition-transform
-									{$urlParam.hasValue(periodOpenKey, period.id) ? 'rotate-90' : ''}
-								"
-							/>
-						</button>
-					</td>
+					{#if data.isLeader}
+						<td class="py-0">
+							<div class="flex gap-2">
+								<button
+									class="btn btn-square btn-sm"
+									on:click|stopPropagation={() => {
+										periodUpdatForm.setPeriod(period)
+										updateDialog.showModal()
+									}}
+								>
+									<Icon path={mdiPencilOutline} />
+								</button>
+
+								<button
+									class="btn btn-square btn-sm"
+									on:click|stopPropagation={() => {
+										if ($urlParam.hasValue(periodOpenKey, period.id)) {
+											goto($urlParam.without(periodOpenKey), { replaceState: true })
+											return
+										}
+										goto($urlParam.with({ [periodOpenKey]: period.id }), { replaceState: true })
+									}}
+								>
+									<Icon
+										path={mdiChevronRight}
+										class=" transition-transform
+											{$urlParam.hasValue(periodOpenKey, period.id) ? 'rotate-90' : ''}
+										"
+									/>
+								</button>
+							</div>
+						</td>
+					{/if}
 				</tr>
 
-				<Subscribes subscribes={period.subscribes} isOpen={$urlParam.hasValue(periodOpenKey, period.id)} />
-
+				<Subscribes
+					subscribes={period.subscribes}
+					isOpen={$urlParam.hasValue(periodOpenKey, period.id)}
+				/>
 			{/each}
 		</tbody>
 	</table>
@@ -113,6 +139,17 @@
 		<PeriodForm />
 	</div>
 {/if}
+
+<dialog class="modal" bind:this={updateDialog}>
+	<div class="modal-box">
+		<PeriodForm
+			isUpdate
+			bind:this={periodUpdatForm}
+			on:cancel={() => updateDialog.close()}
+			on:success={() => updateDialog.close()}
+		/>
+	</div>
+</dialog>
 
 <dialog class="modal" bind:this={subscribeDialog}>
 	<SubscribeForm
