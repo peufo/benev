@@ -1,4 +1,17 @@
-export { default as FormControl } from './FormControl.svelte'
+import type { ComponentProps } from 'svelte'
+import type { HTMLInputAttributes, HTMLTextareaAttributes } from 'svelte/elements'
+import { default as FormControl } from './FormControl.svelte'
+
+export type InputProps = ComponentProps<FormControl> & {
+	input?: HTMLInputAttributes
+	value?: string
+}
+export type TextareaProps = ComponentProps<FormControl> & {
+	textarea?: HTMLTextareaAttributes
+	value?: string
+}
+
+export { FormControl }
 export { default as InputText } from './InputText.svelte'
 export { default as InputPassword } from './InputPassword.svelte'
 export { default as InputTextarea } from './InputTextarea.svelte'

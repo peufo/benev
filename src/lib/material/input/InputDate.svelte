@@ -1,11 +1,8 @@
 <script lang="ts">
-	import type { ComponentProps } from 'svelte'
-	import type { HTMLInputAttributes } from 'svelte/elements'
 	import FormControl from './FormControl.svelte'
-
-	type $$Props = ComponentProps<FormControl> & { input?: HTMLInputAttributes; value?: string }
+	import type {InputProps} from '.'
+	type $$Props = InputProps
 	$: ({ input, ...props } = $$props as $$Props)
-
 	export let value = ''
 </script>
 

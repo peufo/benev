@@ -1,11 +1,20 @@
 <script lang="ts">
-	import type { ComponentProps } from 'svelte'
 	import FormControl from './FormControl.svelte'
-
-	type $$Props = ComponentProps<FormControl>
-	$: props = $$props as $$Props
+	import type { TextareaProps } from '.'
+	type $$Props = TextareaProps
+	$: ({ textarea, ...props } = $$props as $$Props)
+	export let value = ''
 </script>
 
 <FormControl {...props} let:key>
-	<textarea name={key} id={key} class="textarea textarea-bordered"></textarea>
+	<textarea
+		bind:value
+		on:input
+		on:focus
+		on:blur
+		name={key}
+		id={key}
+		class="textarea textarea-bordered"
+		{...textarea}
+	/>
 </FormControl>

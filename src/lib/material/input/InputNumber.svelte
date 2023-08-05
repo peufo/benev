@@ -1,12 +1,21 @@
 <script lang="ts">
-	import type { ComponentProps } from 'svelte'
-	import type { HTMLInputAttributes } from 'svelte/elements'
 	import FormControl from './FormControl.svelte'
-
-	type $$Props = ComponentProps<FormControl> & { input?: HTMLInputAttributes }
+	import type { InputProps } from '.'
+	type $$Props = InputProps
 	$: ({ input, ...props } = $$props as $$Props)
+	export let value = ''
 </script>
 
 <FormControl {...props} let:key>
-	<input type="number" name="number_{key}" id="number_{key}" class="input-bordered input" {...input} />
+	<input
+		bind:value
+		on:input
+		on:focus
+		on:blur
+		type="number"
+		name="number_{key}"
+		id="number_{key}"
+		class="input-bordered input"
+		{...input}
+	/>
 </FormControl>
