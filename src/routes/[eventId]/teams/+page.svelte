@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { mdiPlus } from '@mdi/js'
+	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 
 	export let data
-
 </script>
 
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
@@ -18,7 +17,7 @@
 			</a>
 		{/if}
 	</div>
-	<div class="divider"></div>
+	<div class="divider" />
 
 	<table class="table text-base">
 		<thead>
@@ -31,11 +30,25 @@
 		<tbody>
 			{#each data.teams as team}
 				<tr class="hover cursor-pointer relative">
-					<td>{team.name}</td>
-					<td
-						>{team.leaders.map((leader) => `${leader.firstName} ${leader.lastName}`).join(', ')}</td
-					>
-					<a href="{$eventPath}/teams/{team.id}" class="inset-0 absolute">{' '}</a>
+					<td>
+						{team.name}
+						<a href="{$eventPath}/teams/{team.id}">
+							<span class="inset-0 absolute"></span>
+						</a>
+					
+					</td>
+					<td>
+						{team.leaders.map((leader) => `${leader.firstName} ${leader.lastName}`).join(', ')}
+					</td>
+
+					<td class="py-0">
+						<div class="flex justify-end">
+							<a class="btn btn-square btn-sm relative" href="{$eventPath}/teams/{team.id}/edit">
+								<Icon path={mdiPencilOutline} />
+							</a>
+						</div>
+					</td>
+
 				</tr>
 			{/each}
 		</tbody>

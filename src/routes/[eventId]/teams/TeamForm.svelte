@@ -3,28 +3,46 @@
 	import { useForm } from '$lib/form'
 	import { InputRelations, InputText, InputTextarea } from '$lib/material/input'
 	import { api } from '$lib/api'
+	import type { Team, User } from '@prisma/client'
+	import { eventPath } from '$lib/store'
 
 	let klass = ''
 	export { klass as class }
+	export let isUpdate = false
+	export let team: (Team & { leaders: User[] }) | undefined = undefined
+
 	const form = useForm({ successUpdate: false })
 </script>
 
 <form method="post" class="{klass} flex flex-col gap-2" use:enhance={form.submit}>
-	<h3 class="font-bold text-lg">Nouvel équipe</h3>
+	{#if isUpdate}
+		<h3 class="font-bold text-lg">Modification de l'équipe</h3>
+	{:else}
+		<h3 class="font-bold text-lg">Nouvel équipe</h3>
+	{/if}
 
-	<InputText key="name" label="Nom de l'équipe" />
+	<InputText key="name" label="Nom de l'équipe" value={team?.name} />
 	<InputRelations
 		key="leaders"
 		label="Responsables"
 		getItems={api.user.findMany}
 		search={api.user.search}
 		getLabel={(user) => `${user.firstName} ${user.lastName}`}
+		value={team?.leaders}
 	/>
-	<InputTextarea key="description" label="Description" />
+	<InputTextarea key="description" label="Description" value={team?.description || ''} />
 
 	<div class="flex gap-2">
-		<a class="btn btn-ghost" href="./">Annuler</a>
-		<div class="grow"></div>
-		<button class="btn">Valider</button>
+		<a class="btn btn-ghost" href="{$eventPath}/teams">Annuler</a>
+		<div class="grow" />
+
+		{#if isUpdate}
+			<button class="btn btn-error btn-outline" formaction="?/delete">
+				Supprimer
+			</button>
+		{/if}
+		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit">
+			Valider
+		</button>
 	</div>
 </form>

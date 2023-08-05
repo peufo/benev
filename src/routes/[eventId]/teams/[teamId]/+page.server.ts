@@ -1,21 +1,15 @@
-import { isLeader, isLeaderOrThrow, parseFormData, prisma } from '$lib/server'
+import { isLeaderOrThrow, parseFormData, prisma } from '$lib/server'
 import { periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
 import { error, fail } from '@sveltejs/kit'
 
-export const load = async ({ params, locals }) => {
+export const load = async ({ params, parent }) => {
+	const { isLeader } = await parent()
 	const { teamId } = params
 
-	const _isLeader = await isLeader(teamId, locals)
-
 	return {
-		isLeader: _isLeader,
-		team: await prisma.team.findUniqueOrThrow({
-			where: { id: teamId },
-			include: { leaders: true },
-		}),
 		periods: await prisma.period.findMany({
 			where: { teamId },
-			include: { subscribes: _isLeader ? { include: { user: true } } : true },
+			include: { subscribes: isLeader ? { include: { user: true } } : true },
 		}),
 	}
 }
