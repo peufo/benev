@@ -3,10 +3,10 @@
 ## Organisateur
 
 - [x] Créer un évènement
-- [x] Éditer les évenements
+- [ ] Éditer l'évenements
 - [ ] Éditer la page d'accueil
 - [ ] Éditer des pages complémentaires (Règles, FAQ, ...)
-- [ ] Éditer des équipes
+- [x] Éditer des équipes
 - [x] Nommer des responsables
 - [ ] Inviter des nouveaux utilisateurs
 - [ ] Visualiser les bénévoles et leur activité (filtre sur la période)

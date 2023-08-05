@@ -12,6 +12,7 @@
 	export let pages: [string, string][] = [
 		['', 'Bienvenu'],
 		['/teams', 'Équipes'],
+		['/admin', 'Admin'],
 		['/rules', 'Règlement'],
 		['/faq', 'FAQ'],
 	]
