@@ -4,6 +4,7 @@
 
 	import Header from '$lib/Header.svelte'
 	import { Icon } from '$lib/material'
+	import { eventPath } from '$lib/store'
 
 	export let data
 
@@ -15,13 +16,11 @@
 		['/faq', 'FAQ'],
 	]
 
-	$: eventId = $page.params.eventId
-
 </script>
 
 <div class="p-2">
 	<Header userName={data.user?.name}>
-		<a slot="start" href="/{eventId}" class="btn btn-ghost text-xl pl-0">
+		<a slot="start" href={$eventPath} class="btn btn-ghost text-xl pl-0">
 			<Icon path={mdiChevronRight} />
 			{data.event.name}
 		</a>
@@ -30,7 +29,7 @@
 			{#each pages as [pageId, label] (pageId)}
 				<a
 					class="tab tab-bordered"
-					href="/{eventId}{pageId}"
+					href="{$eventPath}{pageId}"
 					class:tab-active={$page.route.id === pageId}
 				>
 					{label}

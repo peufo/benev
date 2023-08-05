@@ -33,7 +33,7 @@
 		</div>
 		<div class="divider"></div>
 
-		<table class="table">
+		<table class="table text-base">
 			<thead>
 				<tr>
 					<th>Nom</th>

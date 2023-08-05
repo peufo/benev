@@ -5,6 +5,11 @@
 	import PeriodForm from './PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
+	import Subscribes from './Subscribes.svelte'
+	import { urlParam } from '$lib/store'
+	import { goto } from '$app/navigation'
+	import { slide } from 'svelte/transition'
+	import SubscribeState from './SubscribeState.svelte'
 
 	export let data
 
@@ -21,6 +26,8 @@
 	let subscribeDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
 	let selectedPeriod: (typeof data.periods)[number] | undefined = undefined
+
+	const periodOpenKey = 'periodOpen'
 </script>
 
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
@@ -33,7 +40,7 @@
 	</div>
 	<div class="divider" />
 
-	<table class="table">
+	<table class="table text-base">
 		<thead>
 			<tr>
 				<th>Période de travail</th>
@@ -51,6 +58,7 @@
 					class:hover={!disabled}
 					class:cursor-pointer={!disabled}
 					class:opacity-70={disabled}
+					class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
 					on:click={() => {
 						if (disabled) return
 						selectedPeriod = period
@@ -64,42 +72,37 @@
 					</td>
 					<td class="flex gap-2 items-center w-40">
 						<progress class="progress" value={nbSubscribe} max={period.maxSubscribe} />
-						{#if userSubscribe?.state === 'request'}
-							<Icon path={mdiFormatListChecks} class="fill-info" title="En attente de validation" />
-						{:else if userSubscribe?.state === 'accepted'}
-							<Icon path={mdiCheck} class="fill-success" title="Validé" />
-						{:else if userSubscribe?.state === 'denied'}
-							<Icon path={mdiAlertOctagonOutline} class="fill-warning" title="Inscription refusé" />
+						{#if userSubscribe}
+							<SubscribeState state={userSubscribe.state}/>
 						{/if}
+
 						<span class="whitespace-nowrap">
 							{nbSubscribe} / {period.maxSubscribe}
 						</span>
 					</td>
 					<td class="py-0">
-						<button class="btn btn-square btn-sm" on:click|stopPropagation={() => console.log('todo')}>
-							<Icon path={mdiChevronRight}/>
+						<button
+							class="btn btn-square btn-sm"
+							on:click|stopPropagation={() => {
+								if ($urlParam.hasValue(periodOpenKey, period.id)) {
+									goto($urlParam.without(periodOpenKey), { replaceState: true })
+									return
+								}
+								goto($urlParam.with({ [periodOpenKey]: period.id }), { replaceState: true })
+							}}
+						>
+							<Icon
+								path={mdiChevronRight}
+								class=" transition-transform
+									{$urlParam.hasValue(periodOpenKey, period.id) ? 'rotate-90' : ''}
+								"
+							/>
 						</button>
 					</td>
+				</tr>
 
-					<tr>
+				<Subscribes subscribes={period.subscribes} isOpen={$urlParam.hasValue(periodOpenKey, period.id)} />
 
-						<table class="table ml-6 mb-4">
-		
-							<tbody>
-								{#each period.subscribes as subscribe}
-									<tr>
-										<td>{subscribe.userId}</td>
-										<td>{subscribe.state}</td>
-									</tr>
-								{/each}
-							</tbody>
-		
-						</table>
-					</tr>
-				
-					
-			
-				
 			{/each}
 		</tbody>
 	</table>

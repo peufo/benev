@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
-	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
+	import { eventPath } from '$lib/store'
 
 	export let data
 
@@ -12,7 +12,7 @@
 		<h2 class="text-2xl">Équipes</h2>
 		<div class="grow" />
 		{#if data.isOwner}
-			<a href="/{$page.params.eventId}/teams/create" class="btn btn-neutral">
+			<a href="{$eventPath}/teams/create" class="btn btn-neutral">
 				<Icon path={mdiPlus} class="fill-neutral-content" />
 				Ajouter une équipe
 			</a>
@@ -20,7 +20,7 @@
 	</div>
 	<div class="divider"></div>
 
-	<table class="table">
+	<table class="table text-base">
 		<thead>
 			<tr>
 				<th>Nom</th>
@@ -35,7 +35,7 @@
 					<td
 						>{team.leaders.map((leader) => `${leader.firstName} ${leader.lastName}`).join(', ')}</td
 					>
-					<a href="/{$page.params.eventId}/teams/{team.id}" class="inset-0 absolute">{' '}</a>
+					<a href="{$eventPath}/teams/{team.id}" class="inset-0 absolute">{' '}</a>
 				</tr>
 			{/each}
 		</tbody>

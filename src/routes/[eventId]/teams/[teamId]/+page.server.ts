@@ -5,15 +5,17 @@ import { error, fail } from '@sveltejs/kit'
 export const load = async ({ params, locals }) => {
 	const { teamId } = params
 
+	const _isLeader = await isLeader(teamId, locals)
+
 	return {
-		isLeader: await isLeader(teamId, locals),
+		isLeader: _isLeader,
 		team: await prisma.team.findUniqueOrThrow({
 			where: { id: teamId },
 			include: { leaders: true },
 		}),
 		periods: await prisma.period.findMany({
 			where: { teamId },
-			include: { subscribes: true },
+			include: { subscribes: _isLeader ? { include: { user: true } } : true },
 		}),
 	}
 }
