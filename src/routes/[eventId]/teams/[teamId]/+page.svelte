@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
 	import { Icon } from '$lib/material'
-	import { mdiFormatListChecks, mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
+	import { mdiFormatListChecks, mdiAlertOctagonOutline, mdiCheck, mdiChevronRight } from '@mdi/js'
 	import PeriodForm from './PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -75,7 +75,31 @@
 							{nbSubscribe} / {period.maxSubscribe}
 						</span>
 					</td>
-				</tr>
+					<td class="py-0">
+						<button class="btn btn-square btn-sm" on:click|stopPropagation={() => console.log('todo')}>
+							<Icon path={mdiChevronRight}/>
+						</button>
+					</td>
+
+					<tr>
+
+						<table class="table ml-6 mb-4">
+		
+							<tbody>
+								{#each period.subscribes as subscribe}
+									<tr>
+										<td>{subscribe.userId}</td>
+										<td>{subscribe.state}</td>
+									</tr>
+								{/each}
+							</tbody>
+		
+						</table>
+					</tr>
+				
+					
+			
+				
 			{/each}
 		</tbody>
 	</table>
