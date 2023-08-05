@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { mdiChevronRight } from '@mdi/js'
+	import { mdiChevronRight, mdiCogOutline } from '@mdi/js'
 
 	import Header from '$lib/Header.svelte'
 	import { Icon } from '$lib/material'
@@ -11,7 +11,6 @@
 	// TODO use event pages
 	export let pages: [string, string][] = [
 		['', 'Bienvenu'],
-		['/teams', 'Équipes'],
 		['/admin', 'Admin'],
 		['/rules', 'Règlement'],
 		['/faq', 'FAQ'],
@@ -26,6 +25,8 @@
 			{data.event.name}
 		</a>
 
+
+
 		<div slot="end" class="tabs">
 			{#each pages as [pageId, label] (pageId)}
 				<a
@@ -36,6 +37,13 @@
 					{label}
 				</a>
 			{/each}
+
+			{#if data.isOwner}
+				<a href="{$eventPath}/admin" class="btn btn-ghost btn-square">
+					<Icon path={mdiCogOutline} title="Administration de l'évenement"/>
+				</a>
+			{/if}
+
 		</div>
 	</Header>
 </div>

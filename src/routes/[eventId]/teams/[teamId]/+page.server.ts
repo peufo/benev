@@ -9,6 +9,7 @@ export const load = async ({ params, parent }) => {
 	return {
 		periods: await prisma.period.findMany({
 			where: { teamId },
+			orderBy: { start: 'asc' },
 			include: { subscribes: isLeader ? { include: { user: true } } : true },
 		}),
 	}

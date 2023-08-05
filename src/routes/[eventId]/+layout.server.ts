@@ -1,7 +1,8 @@
-import { prisma } from '$lib/server'
+import { isOwner, prisma } from '$lib/server'
 
-export const load = async ({ params }) => {
-	const event = await prisma.event.findUniqueOrThrow({ where: { id: params.eventId } })
-
-	return { event }
+export const load = async ({ params, locals }) => {
+	return {
+		isOwner: await isOwner(params.eventId, locals),
+		event: await prisma.event.findUniqueOrThrow({ where: { id: params.eventId } }),
+	}
 }

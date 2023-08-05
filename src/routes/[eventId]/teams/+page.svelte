@@ -4,6 +4,7 @@
 	import { eventPath } from '$lib/store'
 
 	export let data
+
 </script>
 
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
