@@ -27,10 +27,10 @@
 								{subscribe.user.firstName}
 								{subscribe.user.lastName}
 							</a>
-							<a class="btn btn-square btn-sm" href="tel:{subscribe.user.phone}">
+							<a class="btn btn-square btn-sm" href="tel:{subscribe.user.phone}" target="_blank">
 								<Icon path={mdiPhone} size={18} title="Appeler {subscribe.user.firstName}" />
 							</a>
-							<a class="btn btn-square btn-sm" href="tel:{subscribe.user.phone}">
+							<a class="btn btn-square btn-sm" href="mailto:{subscribe.user.email}" target="_blank">
 								<Icon
 									path={mdiEmailOutline}
 									size={18}
