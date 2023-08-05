@@ -85,7 +85,8 @@
 				key="maxSubscribe"
 				label="Nombre de bénévole"
 				class="max-w-[150px]"
-				input={{ min: 1, step: 1, value: period?.maxSubscribe || 1 }}
+				value={String(period?.maxSubscribe || 1)}
+				input={{ min: 1, step: 1 }}
 			/>
 		</div>
 

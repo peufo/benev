@@ -3,7 +3,7 @@
 ## Organisateur
 
 - [x] Créer un évènement
-- [ ] Éditer les évenements
+- [x] Éditer les évenements
 - [ ] Éditer la page d'accueil
 - [ ] Éditer des pages complémentaires (Règles, FAQ, ...)
 - [ ] Éditer des équipes
