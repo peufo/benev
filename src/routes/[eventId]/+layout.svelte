@@ -11,7 +11,7 @@
 	// TODO use event pages
 	export let pages: [string, string][] = [
 		['', 'Bienvenu'],
-		['/admin', 'Admin'],
+		['/teams', 'Équipe'],
 		['/rules', 'Règlement'],
 		['/faq', 'FAQ'],
 	]

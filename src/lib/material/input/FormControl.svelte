@@ -7,6 +7,7 @@
 	export let key: string
 	export let label: string
 	export let error = ''
+	export let hint = ''
 
 	const { setError } = formContext.get()
 	setError[key] = (err) => (error = err)
@@ -22,6 +23,10 @@
 	{#if error}
 		<label for={key} class="label" transition:slide>
 			<span class="label-text-alt text-warning">{error}</span>
+		</label>
+	{:else if hint}
+		<label for={key} class="label" transition:slide>
+			<span class="label-text-alt text-info">{hint}</span>
 		</label>
 	{/if}
 </div>
