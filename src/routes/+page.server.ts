@@ -21,6 +21,12 @@ export const actions = {
 			data: {
 				...data,
 				ownerId: session.user.userId,
+				pages: {
+					create: {
+						title: 'Bienvenue',
+						content: 'Acceuil tes bénévoles commme il se doit grâce cette page.',
+					},
+				},
 			},
 		})
 

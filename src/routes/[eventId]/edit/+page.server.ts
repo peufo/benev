@@ -3,9 +3,13 @@ import { eventShema } from '$lib/form'
 
 import { isOwnerOrThrow, parseFormData, prisma } from '$lib/server'
 
-export const load = async ({ parent }) => {
+export const load = async ({ parent, params }) => {
 	const { isOwner } = await parent()
 	if (!isOwner) throw error(401)
+
+	return {
+		pages: await prisma.page.findMany({ where: { eventId: params.eventId } }),
+	}
 }
 
 export const actions = {

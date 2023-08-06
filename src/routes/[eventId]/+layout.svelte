@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { mdiChevronRight, mdiCogOutline } from '@mdi/js'
+	import { mdiChevronRight, mdiPencilOutline } from '@mdi/js'
 
 	import Header from '$lib/Header.svelte'
 	import { Icon } from '$lib/material'
@@ -25,8 +25,6 @@
 			{data.event.name}
 		</a>
 
-
-
 		<div slot="end" class="tabs">
 			{#each pages as [pageId, label] (pageId)}
 				<a
@@ -39,8 +37,8 @@
 			{/each}
 
 			{#if data.isOwner}
-				<a href="{$eventPath}/admin" class="btn btn-ghost btn-square">
-					<Icon path={mdiCogOutline} title="Administration de l'évenement"/>
+				<a href="{$eventPath}/edit" class="btn btn-ghost btn-square">
+					<Icon path={mdiPencilOutline} title="Administration de l'évenement"/>
 				</a>
 			{/if}
 

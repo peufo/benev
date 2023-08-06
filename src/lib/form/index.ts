@@ -1,6 +1,6 @@
 import type { SubmitFunction } from '@sveltejs/kit'
 import type { z } from 'zod'
-import { setContext, getContext } from 'svelte'
+import { setContext, getContext, hasContext } from 'svelte'
 import { useNotify } from '$lib/notify'
 import { goto } from '$app/navigation'
 
@@ -15,11 +15,13 @@ export type FormContext = { setError: SetError }
 
 const formContextKey = {}
 export const formContext = {
+	ok: () => hasContext(formContextKey),
 	get: () => getContext<FormContext>(formContextKey),
 	set: (ctx: FormContext) => setContext<FormContext>(formContextKey, ctx),
 }
 
 type UseFormOptions = {
+	beforeRequest?: () => unknown
 	successCallback?: () => unknown
 	successUpdate?: boolean
 	successReset?: boolean
@@ -27,6 +29,7 @@ type UseFormOptions = {
 }
 
 export function useForm<Shema extends z.ZodRawShape>({
+	beforeRequest,
 	successCallback,
 	successUpdate = true,
 	successReset = true,
@@ -61,6 +64,8 @@ export function useForm<Shema extends z.ZodRawShape>({
 	}
 
 	const submit: SubmitFunction<Data> = (event) => {
+		if (beforeRequest) beforeRequest()
+
 		return async ({ result, update }) => {
 			if (result.type === 'error') {
 				notify.error('Oups, erreur non gerée')

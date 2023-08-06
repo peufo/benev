@@ -9,8 +9,14 @@
 	export let error = ''
 	export let hint = ''
 
-	const { setError } = formContext.get()
-	setError[key] = (err) => (error = err)
+	if (formContext.ok()) {
+		const { setError } = formContext.get()
+		setError[key] = (err) => (error = err)
+	} else {
+		console.error(
+			'Please set "const form = useForm()" and "use:enhance={form.submit}" in form element'
+		)
+	}
 </script>
 
 <div class="form-control {klass}">
