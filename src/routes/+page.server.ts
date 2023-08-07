@@ -34,7 +34,7 @@ export const actions = {
 						isIndex: true,
 						title: 'Bienvenue',
 						path: 'bienvenue',
-						content: '',
+						content: 'null',
 					},
 				},
 			},
