@@ -15,15 +15,22 @@
 		['/rules', 'Règlement'],
 		['/faq', 'FAQ'],
 	]
-
 </script>
 
 <div class="p-2">
 	<Header userName={data.user?.name}>
-		<a slot="start" href={$eventPath} class="btn btn-ghost text-xl pl-0">
-			<Icon path={mdiChevronRight} />
-			{data.event.name}
-		</a>
+		<div class="content" slot="start">
+			<a href={$eventPath} class="btn btn-ghost text-xl pl-0">
+				<Icon path={mdiChevronRight} />
+				{data.event.name}
+			</a>
+
+			{#if data.isOwner}
+				<a href="{$eventPath}/edit" class="btn btn-ghost btn-square" title="Éditer l'évenement">
+					<Icon path={mdiPencilOutline} title="Éditer l'évenement" />
+				</a>
+			{/if}
+		</div>
 
 		<div slot="end" class="tabs">
 			{#each pages as [pageId, label] (pageId)}
@@ -35,13 +42,6 @@
 					{label}
 				</a>
 			{/each}
-
-			{#if data.isOwner}
-				<a href="{$eventPath}/edit" class="btn btn-ghost btn-square">
-					<Icon path={mdiPencilOutline} title="Administration de l'évenement"/>
-				</a>
-			{/if}
-
 		</div>
 	</Header>
 </div>

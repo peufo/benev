@@ -17,7 +17,7 @@
 
 <div class="flex gap-2">
 	<div>
-		<ul class="menu menu-lg bg-base-200 w-56 rounded-box mt-2">
+		<ul class="menu menu-lg bg-base-200 w-56 rounded-box mt-2 text-clip">
 			{#each data.pages as {id, title}}
 				<li>
 					<a href="{$eventPath}/edit/pages/{id}" class:active={$page.params.pageId === id}>

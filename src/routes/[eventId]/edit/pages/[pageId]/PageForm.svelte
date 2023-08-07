@@ -29,6 +29,7 @@
           if (!editor) return
           const data = await editor.save()
           page.content = JSON.stringify(data)
+          
         },
         onReady: () => {
           isReady = true
@@ -43,7 +44,7 @@
 </script>
 
 <form method="post" action="?/update_page" use:enhance={form.submit} class="flex flex-col gap-2">
-	<InputText key="title" value={page.title} label="" input={{ placeholder: 'Titre de la page' }} class="max-w-xs" />
+	<InputText key="title" bind:value={page.title} label="" input={{ placeholder: 'Titre de la page' }} class="max-w-xs" />
   
   <input type="hidden" name="id" value={page.id}>
   <input type="hidden" name="content" value={page.content}>
