@@ -70,8 +70,9 @@ model Page {
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade)
 
   title   String
-  path    String @default("")
-  content String @db.Text
+  path    String  @default("")
+  isIndex Boolean @default(false)
+  content String  @db.Text
 
   @@unique([eventId, path])
 }

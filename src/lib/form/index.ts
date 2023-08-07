@@ -87,7 +87,9 @@ export function useForm<Shema extends z.ZodRawShape>({
 			}
 
 			if (result.type === 'redirect') {
-				goto(result.location, { replaceState: true })
+				notify.success(successMessage)
+				if (successCallback) successCallback()
+				goto(result.location, { replaceState: true, invalidateAll: successUpdate })
 			}
 		}
 	}

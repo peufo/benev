@@ -27,12 +27,10 @@ export const actions = {
 				ownerId: session.user.userId,
 				pages: {
 					create: {
+						isIndex: true,
 						title: 'Bienvenue',
-						content: JSON.stringify({
-							version: '2.27.2',
-							time: new Date().getTime(),
-							blocks: [],
-						}),
+						path: 'bienvenue',
+						content: '',
 					},
 				},
 			},

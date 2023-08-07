@@ -1,6 +1,7 @@
 import { pageShema } from '$lib/form'
-import { redirect } from '@sveltejs/kit'
+import { fail, redirect } from '@sveltejs/kit'
 import { isOwnerOrThrow, parseFormData, prisma } from '$lib/server'
+import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ params }) => {
 	const page = await prisma.page.findUnique({ where: { id: params.pageId } })
@@ -15,6 +16,13 @@ export const actions = {
 		const { err, data } = await parseFormData(request, pageShema)
 		if (err) return err
 
+		const path = normalizePath(data.title)
+
+		const page = await prisma.page.findFirst({
+			where: { eventId: params.eventId, path },
+		})
+		if (page) return fail(400, { message: 'Ce titre est déjà utilisé' })
+
 		await prisma.page.update({
 			where: { id: data.id },
 			data,
@@ -26,7 +34,7 @@ export const actions = {
 		await isOwnerOrThrow(params.eventId, locals)
 
 		await prisma.page.delete({
-			where: { id: params.pageId },
+			where: { id: params.pageId, isIndex: false },
 		})
 
 		return
