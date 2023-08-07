@@ -14,7 +14,7 @@
 ## Responsable
 
 - [x] Éditer les besoins en bénévoles (période + nombre de bénévoles)
-- [ ] Être averti en cas de nouvelle inscription
+- [x] Être averti en cas de nouvelle inscription
 - [ ] Valider des inscriptions
 - [x] Lister les bénévoles (et leur info) par période
 
