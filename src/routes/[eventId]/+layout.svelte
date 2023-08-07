@@ -14,6 +14,7 @@
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import Footer from '$lib/Footer.svelte'
+	import Menu from './Menu.svelte'
 
 	export let data
 </script>
@@ -24,29 +25,16 @@
 
 <div class="p-2">
 	<Header userName={data.user?.name}>
-		<div class="content" slot="start">
-			<a href={$eventPath} class="btn btn-ghost text-xl pl-0">
-				<Icon path={mdiChevronRight} />
+		<div class="contents" slot="start">
+			<a href={$eventPath} class="btn btn-ghost text-xl lg:pl-0">
+				<Icon path={mdiChevronRight} class="hidden lg:inline-block" />
 				{data.event.name}
 			</a>
 
-			{#if data.isOwner}
-				<a href="{$eventPath}/edit" class="btn btn-ghost btn-square" title="Éditer l'évenement">
-					<Icon path={mdiPencilOutline} title="Éditer l'évenement" />
-				</a>
-			{/if}
 		</div>
 
-		<div slot="end" class="tabs tabs-boxed">
-			{#each data.pages as { title, path, id, isIndex } (id)}
-				<a
-					class="tab"
-					href="{$eventPath}{isIndex ? '' : `/${path}`}"
-					class:tab-active={(isIndex && !$page.params.pagePath) || $page.params.pagePath === path}
-				>
-					{title}
-				</a>
-			{/each}
+		<div slot="end" class="contents">
+			<Menu pages={data.pages} isOwner={data.isOwner} />
 		</div>
 	</Header>
 </div>
