@@ -16,18 +16,10 @@
 	import Footer from '$lib/Footer.svelte'
 
 	export let data
-
-	// TODO use event pages
-	export let pages: [string, string][] = [
-		['', 'Bienvenu'],
-		['/teams', 'Équipe'],
-		['/rules', 'Règlement'],
-		['/faq', 'FAQ'],
-	]
 </script>
 
 <svelte:head>
-  <title>BENEV - {data.event.name}</title>
+	<title>BENEV - {data.event.name}</title>
 </svelte:head>
 
 <div class="p-2">
@@ -45,14 +37,14 @@
 			{/if}
 		</div>
 
-		<div slot="end" class="tabs">
-			{#each pages as [pageId, label] (pageId)}
+		<div slot="end" class="tabs tabs-boxed">
+			{#each data.pages as { title, path, id, isIndex } (id)}
 				<a
-					class="tab tab-bordered"
-					href="{$eventPath}{pageId}"
-					class:tab-active={$page.route.id === pageId}
+					class="tab"
+					href="{$eventPath}{isIndex ? '' : `/${path}`}"
+					class:tab-active={(isIndex && !$page.params.pagePath) || $page.params.pagePath === path}
 				>
-					{label}
+					{title}
 				</a>
 			{/each}
 		</div>
@@ -64,7 +56,6 @@
 </main>
 
 <Footer>
-
 	<div class="flex flex-wrap">
 		{#if data.event.web}
 			<a class="btn btn-ghost flex" href={data.event.web} target="_blank">
@@ -98,5 +89,4 @@
 			</a>
 		{/if}
 	</div>
-
 </Footer>
