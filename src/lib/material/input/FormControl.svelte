@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
+	import { onMount } from 'svelte'
 	import { formContext } from '$lib/form'
 
 	let klass = ''
@@ -17,9 +18,22 @@
 			'Please set "const form = useForm()" and "use:enhance={form.submit}" in form element'
 		)
 	}
+
+	let formControl: HTMLDivElement
+	onMount(() => {
+		const input = formControl.querySelector('input')
+		if (!input) return
+		const handleInput = () => error = ''
+		input.addEventListener('input', handleInput)
+		return () => {
+			input.removeEventListener('input', handleInput)
+		}
+	})
+
+
 </script>
 
-<div class="form-control {klass}">
+<div class="form-control {klass}" bind:this={formControl}>
 	<label for={key} class="label">
 		<span class="label-text">{label}</span>
 	</label>

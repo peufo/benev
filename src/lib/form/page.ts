@@ -4,6 +4,7 @@ import type { ZodObj } from './utils'
 
 const form = {
 	id: z.string(),
+	path: z.string(),
 	title: z.string().min(2),
 	content: z.string(),
 } satisfies ZodObj<Prisma.PageCreateWithoutEventInput>

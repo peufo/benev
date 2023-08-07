@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit'
+import { error, fail, redirect } from '@sveltejs/kit'
 import { parseFormData } from '$lib/server'
 import { eventShema } from '$lib/form'
 import { prisma } from '$lib/server'
@@ -16,6 +16,10 @@ export const actions = {
 
 		const { err, data } = await parseFormData(request, eventShema)
 		if (err) return err
+
+		const exist = await prisma.event.findUnique({ where: { id: data.id } })
+		if (exist)
+			return fail(400, { issues: [{ path: ['name'], message: 'Désolé, ce nom est déjà pris' }] })
 
 		const event = await prisma.event.create({
 			data: {

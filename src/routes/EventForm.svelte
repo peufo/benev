@@ -5,6 +5,7 @@
 	import InputText from '$lib/material/input/InputText.svelte'
 	import InputTextarea from '$lib/material/input/InputTextarea.svelte'
 	import type { Event } from '@prisma/client'
+	import { normalizePath } from '$lib/normalizePath'
 
 	let klass = ''
 	export { klass as class }
@@ -16,7 +17,8 @@
 	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
 	const form = useForm({ successCallback: () => dispatch('success'), successUpdate, successReset })
 
-	let id = event?.id || ''
+	$: name = event?.name || ''
+
 </script>
 
 <form
@@ -31,17 +33,17 @@
 		<h3 class="font-bold text-lg">Nouvel évènement</h3>
 	{/if}
 
-	<InputText key="name" label="Nom de l'évènement" value={event?.name} />
+	<InputText
+		key="name"
+		label="Nom de l'évènement"
+		bind:value={name}
+		hint={name && `benev.ch/${normalizePath(name)}`}
+	/>
 
 	{#if isUpdate}
-		<input type="hidden" name="id" value={id} />
+		<input type="hidden" name="id" value={event?.id} />
 	{:else}
-		<InputText
-			key="id"
-			label="URL"
-			bind:value={id}
-			hint="Attention, ne peut pas être changé plus tard. benev.ch/{id} "
-		/>
+		<input type="hidden" name="id" value={normalizePath(name)} />
 	{/if}
 
 	<InputTextarea key="description" label="Description" value={event?.description || ''} />
