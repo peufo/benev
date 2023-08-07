@@ -1,6 +1,8 @@
-import { isLeaderOrThrow, parseFormData, prisma } from '$lib/server'
+import { isLeaderOrThrow, parseFormData, prisma, sendMail } from '$lib/server'
 import { periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
 import { error, fail } from '@sveltejs/kit'
+
+import MailNewSubscribe from './MailNewSubscribe.svelte'
 
 export const load = async ({ params, parent }) => {
 	const { isLeader } = await parent()
@@ -23,7 +25,23 @@ export const actions = {
 		const { err, data } = await parseFormData(request, subscribeShema)
 		if (err) return err
 
-		await prisma.subscribe.create({ data })
+		const subscribe = await prisma.subscribe.create({
+			data,
+			include: {
+				user: true,
+				period: {
+					include: { team: { include: { event: true, leaders: { select: { email: true } } } } },
+				},
+			},
+		})
+
+		// @ts-ignore
+		const { html } = MailNewSubscribe.render({ subscribe })
+		sendMail({
+			to: subscribe.period.team.leaders.map(({ email }) => email),
+			subject: 'Un nouveau bénévole',
+			html,
+		})
 
 		return
 	},

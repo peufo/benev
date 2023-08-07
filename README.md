@@ -25,4 +25,4 @@
 - [ ] Être averti lors da la validation de l'inscription
 - [ ] Visualiser ces inscriptions
 - [ ] Renseigner toute les infos util à l'organisation
-- [ ] Parcourir les pages d'un évenement
+- [x] Parcourir les pages d'un évenement

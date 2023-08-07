@@ -6,6 +6,7 @@ import { dev } from '$app/environment'
 
 export * from './formData'
 export * from './permission'
+export * from './mail'
 
 export const prisma = new PrismaClient()
 
