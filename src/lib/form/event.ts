@@ -4,7 +4,7 @@ import type { ZodObj } from './utils'
 
 export type EventCreateForm = Omit<Prisma.EventCreateInput, 'owner'>
 
-const eventForm = {
+const form = {
 	id: z.string().toLowerCase().min(3),
 	name: z.string().min(3),
 	date: z.string().optional(),
@@ -16,4 +16,4 @@ const eventForm = {
 	address: z.string().optional(),
 } satisfies ZodObj<EventCreateForm>
 
-export const eventShema = z.object(eventForm)
+export const eventShema = z.object(form)

@@ -11,9 +11,10 @@
 	export let isUpdate = false
 	export let event: Event | undefined = undefined
 	export let successUpdate = true
+	export let successReset = true
 
 	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
-	const form = useForm({ successCallback: () => dispatch('success'), successUpdate })
+	const form = useForm({ successCallback: () => dispatch('success'), successUpdate, successReset })
 
 	let id = event?.id || ''
 </script>

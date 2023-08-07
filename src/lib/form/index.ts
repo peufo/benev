@@ -9,6 +9,7 @@ export * from './event'
 export * from './team'
 export * from './period'
 export * from './subscribe'
+export * from './page'
 
 export type SetError = { [key: string]: (err: string) => void }
 export type FormContext = { setError: SetError }
@@ -21,7 +22,7 @@ export const formContext = {
 }
 
 type UseFormOptions = {
-	beforeRequest?: () => unknown
+	beforeRequest?: (...args: Parameters<SubmitFunction>) => Promise<unknown>
 	successCallback?: () => unknown
 	successUpdate?: boolean
 	successReset?: boolean
@@ -63,8 +64,8 @@ export function useForm<Shema extends z.ZodRawShape>({
 		}
 	}
 
-	const submit: SubmitFunction<Data> = (event) => {
-		if (beforeRequest) beforeRequest()
+	const submit: SubmitFunction<Data> = async (event) => {
+		if (beforeRequest) await beforeRequest(event)
 
 		return async ({ result, update }) => {
 			if (result.type === 'error') {

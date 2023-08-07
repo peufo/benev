@@ -24,7 +24,11 @@ export const actions = {
 				pages: {
 					create: {
 						title: 'Bienvenue',
-						content: 'Acceuil tes bénévoles commme il se doit grâce cette page.',
+						content: JSON.stringify({
+							version: '2.27.2',
+							time: new Date().getTime(),
+							blocks: [],
+						}),
 					},
 				},
 			},

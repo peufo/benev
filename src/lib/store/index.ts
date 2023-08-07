@@ -18,6 +18,7 @@ export const urlParam = derived(page, ({ url }) => {
 		},
 		/** Check if key exist in url params */
 		has: (key: string) => url.searchParams.has(key),
+		get: (key: string) => url.searchParams.get(key),
 		/** Check if value match in url params */
 		hasValue: (key: string, value: string) => url.searchParams.get(key) === value,
 	}

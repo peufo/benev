@@ -70,7 +70,7 @@ model Page {
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade)
 
   title   String
-  content String
+  content String @db.Text
 
   @@unique([eventId, title])
 }
