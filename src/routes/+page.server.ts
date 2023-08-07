@@ -21,6 +21,10 @@ export const actions = {
 		if (exist)
 			return fail(400, { issues: [{ path: ['name'], message: 'Désolé, ce nom est déjà pris' }] })
 
+		const reservedPaths = ['auth', 'users', 'root']
+		if (reservedPaths.includes(data.id))
+			return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
+
 		const event = await prisma.event.create({
 			data: {
 				...data,

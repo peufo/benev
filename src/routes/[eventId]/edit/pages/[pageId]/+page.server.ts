@@ -17,6 +17,9 @@ export const actions = {
 		if (err) return err
 
 		const path = normalizePath(data.title)
+		const reservedPaths = ['edit', 'teams', 'users']
+		if (reservedPaths.includes(path))
+			return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
 
 		const page = await prisma.page.findFirst({
 			where: { eventId: params.eventId, path },
