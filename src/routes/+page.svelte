@@ -3,6 +3,7 @@
 	import Icon from '$lib/material/Icon.svelte'
 	import EventForm from './EventForm.svelte'
 	import Header from '$lib/Header.svelte'
+	import Footer from '$lib/Footer.svelte'
 
 	export let data
 
@@ -53,3 +54,5 @@
 		</table>
 	</div>
 </main>
+
+<Footer />

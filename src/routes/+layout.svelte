@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Notifications from 'svelte-notifications'
 	import '../app.css'
-
 </script>
 
 <Notifications zIndex={50}>
