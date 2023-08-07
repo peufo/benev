@@ -3,6 +3,8 @@ import { periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
 import { error, fail } from '@sveltejs/kit'
 
 import MailNewSubscribe from './MailNewSubscribe.svelte'
+import MailSubscribeState from './MailSubscribeState.svelte'
+import type { SubscribeState } from '@prisma/client'
 
 export const load = async ({ params, parent }) => {
 	const { isLeader } = await parent()
@@ -83,12 +85,51 @@ export const actions = {
 	},
 	delete_period: async ({ params, request, locals }) => {
 		await isLeaderOrThrow(params.teamId, locals)
-
-		const data = await request.formData()
-		const id = data.get('id')
-		if (typeof id !== 'string') return fail(400, { message: 'id is required' })
-
+		const { id, err } = await getId(request)
+		if (err) return err
 		await prisma.period.delete({ where: { id } })
 		return
 	},
+	subscribe_accepted: async ({ params, request, locals }) => {
+		await isLeaderOrThrow(params.teamId, locals)
+		await setSubscribState(request, 'accepted')
+		return
+	},
+	subscribe_denied: async ({ params, request, locals }) => {
+		await isLeaderOrThrow(params.teamId, locals)
+		await setSubscribState(request, 'denied')
+		return
+	},
+}
+
+async function setSubscribState(request: Request, state: SubscribeState) {
+	const { id, err } = await getId(request)
+	if (err) return err
+	const subscribe = await prisma.subscribe.update({
+		where: { id },
+		data: { state },
+		include: {
+			user: { select: { email: true } },
+			period: {
+				include: { team: { include: { event: true, leaders: { select: { email: true } } } } },
+			},
+		},
+	})
+
+	// @ts-ignore
+	const { html } = MailSubscribeState.render({ subscribe })
+	sendMail({
+		to: subscribe.user.email,
+		subject: `Inscription ${subscribe.state === 'accepted' ? 'acceptée' : 'refusée'}`,
+		html,
+	})
+
+	return
+}
+
+async function getId(request: Request) {
+	const data = await request.formData()
+	const id = data.get('id')
+	if (typeof id !== 'string') return { id: null, err: fail(400, { message: 'id is required' }) }
+	return { id }
 }

@@ -6,6 +6,7 @@
 	import SubscribeState from './SubscribeState.svelte'
 	import { mdiEmailOutline, mdiPhone } from '@mdi/js'
 	import { eventPath } from '$lib/store'
+	import SubscribeStateForm from './SubscribeStateForm.svelte'
 
 	// TODO: Pourquoi user ne passe pas directement dans le type ???
 	export let subscribes: (PageData['periods'][number]['subscribes'][number] & { user?: User })[]
@@ -38,9 +39,9 @@
 								/>
 							</a>
 						{/if}
-						<div>
-							<SubscribeState state={subscribe.state} class="p-1" />
-						</div>
+
+						<SubscribeStateForm {subscribe} />
+						
 					</div>
 				{:else}
 					<div class="flex flex-end justify-center text-secondary">

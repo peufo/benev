@@ -20,7 +20,7 @@
     Bonne nouvelle ! <br>
     <b>{subscribe.user.firstName} {subscribe.user.lastName}</b>
     souhaite renforcer l'équipe <b>{subscribe.period.team.name}</b>
-    durant la période suivante:
+    durant la période suivante :
   </p>
 
   
