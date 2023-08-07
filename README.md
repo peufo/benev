@@ -15,14 +15,14 @@
 
 - [x] Éditer les besoins en bénévoles (période + nombre de bénévoles)
 - [x] Être averti en cas de nouvelle inscription
-- [ ] Valider des inscriptions
+- [x] Valider des inscriptions
 - [x] Lister les bénévoles (et leur info) par période
 
 ## Bénévole
 
 - [x] Visualiser les équipes, leur périodes et les besoins en bénévoles
 - [x] S'inscrire sur une période
-- [ ] Être averti lors da la validation de l'inscription
+- [x] Être averti lors da la validation de l'inscription
 - [ ] Visualiser ces inscriptions
 - [ ] Renseigner toute les infos util à l'organisation
 - [x] Parcourir les pages d'un évenement
