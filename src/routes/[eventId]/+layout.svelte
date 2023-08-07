@@ -26,6 +26,10 @@
 	]
 </script>
 
+<svelte:head>
+  <title>{data.event.name}</title>
+</svelte:head>
+
 <div class="p-2">
 	<Header userName={data.user?.name}>
 		<div class="content" slot="start">

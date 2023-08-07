@@ -66,7 +66,7 @@
 	<input type="hidden" name="content" value={page.content} />
 	<input type="hidden" name="eventId" value={page.eventId} />
 
-	<div class="input input-bordered w-[210mm] min-h-[555px] overflow-auto prose max-w-none">
+	<div class="input input-bordered w-[210mm] min-h-[555px] overflow-auto prose">
 		<div bind:this={holder} />
 	</div>
 

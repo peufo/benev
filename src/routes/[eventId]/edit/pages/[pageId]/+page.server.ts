@@ -21,10 +21,10 @@ export const actions = {
 		if (reservedPaths.includes(path))
 			return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
 
-		const page = await prisma.page.findFirst({
-			where: { eventId: params.eventId, path },
+		const samePage = await prisma.page.findFirst({
+			where: { id: { not: data.id }, eventId: params.eventId, path },
 		})
-		if (page) return fail(400, { message: 'Ce titre est déjà utilisé' })
+		if (samePage) return fail(400, { message: 'Ce titre est déjà utilisé' })
 
 		await prisma.page.update({
 			where: { id: data.id },

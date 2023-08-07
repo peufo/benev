@@ -10,8 +10,8 @@ const form = {
 	date: z.string().optional(),
 	description: z.string().optional(),
 	logo: z.string().optional(),
-	web: z.string().optional(),
-	email: z.string().optional(),
+	web: z.string().url().optional().or(z.string().max(0)),
+	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
 	address: z.string().optional(),
 } satisfies ZodObj<EventCreateForm>
