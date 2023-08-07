@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Page from './Page.svelte';
+  import Page from '../Page.svelte';
 	export let data
 
 </script>

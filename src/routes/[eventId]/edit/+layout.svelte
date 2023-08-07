@@ -8,6 +8,10 @@
 	]
 </script>
 
+<svelte:head>
+  <title>BENEV - Édition</title>
+</svelte:head>
+
 <div class="grid place-content-center">
   <div class="card bg-base-100 min-w-[500px]">
     <div class="tabs">

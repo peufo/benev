@@ -27,7 +27,7 @@
 </script>
 
 <svelte:head>
-  <title>{data.event.name}</title>
+  <title>BENEV - {data.event.name}</title>
 </svelte:head>
 
 <div class="p-2">
