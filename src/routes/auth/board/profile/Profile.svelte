@@ -19,70 +19,70 @@
 		successMessage: 'Profile sauvegardé'
 	})
 
-	console.log(user)
 </script>
 
-<form method="post" use:enhance={form.submit} class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+<form method="post" use:enhance={form.submit} class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4">
 	<InputText
 		key="email"
 		label="Email"
 		input={{ readonly: true, disabled: true }}
 		value={user.email}
-		class="col-span-6"
+		class="md:col-span-6"
 	/>
-	<InputText key="phone" label="Téléphone" value={user.phone || ''} class="col-span-6" />
+	<InputText key="phone" label="Téléphone" value={user.phone || ''} class="md:col-span-6" />
 
-	<InputText key="firstName" label="Prénom" value={user.firstName} class="col-span-4" />
-	<InputText key="lastName" label="Nom de famille" value={user.lastName} class="col-span-4" />
+	<InputText key="firstName" label="Prénom" value={user.firstName} class="md:col-span-4" />
+	<InputText key="lastName" label="Nom de famille" value={user.lastName} class="md:col-span-4" />
 	<InputDate
 		key="birthday"
 		label="Date de naissance"
 		value={dayjs(user.birthday).format('YYYY-MM-DD')}
-		class="col-span-4"
+		class="md:col-span-4"
 	/>
 
-	<InputText key="street" label="Rue et numéro" value={user.street || ''} class="col-span-4" />
-	<InputText key="zipCode" label="Code postal" value={user.zipCode || ''} class="col-span-4" />
-	<InputText key="city" label="Localité" value={user.city || ''} class="col-span-4" />
+	<InputText key="street" label="Rue et numéro" value={user.street || ''} class="md:col-span-4" />
+	<InputText key="zipCode" label="Code postal" value={user.zipCode || ''} class="md:col-span-4" />
+	<InputText key="city" label="Localité" value={user.city || ''} class="md:col-span-4" />
 
 	<InputBoolean
 		key="isInsured"
 		label="Assurance accident"
 		value={user.isInsured}
-		class="col-span-3"
+		class="md:col-span-3"
 	/>
 	<InputRadio
 		key="size"
 		label="Taille de t-shirt"
 		value={user.size || ''}
 		options={userSizeLabel}
-		class="col-span-3"
+		class="md:col-span-3"
 	/>
 
 	<InputCheckboxs
 		key="diet"
 		label="Régime alimentaire"
 		options={['Végétarien', 'Végétalien', 'Sans gluten', 'Sans lactose']}
-		class="col-span-3"
+		class="md:col-span-3"
 		value={JSON.parse(user.diet || '')}
 	/>
 
 	<InputTextarea
 		key="skillString"
 		label="Compétences"
-		value={user.city || ''}
-		class="col-span-3"
+		value={user.skillString || ''}
+		class="md:col-span-3"
 		textarea={{ placeholder: 'Menuiserie, communication, informatique,...', rows: 4 }}
 	/>
 
 	<InputTextarea
 		key="comment"
 		label="Commentaires / expériences / allergies"
-		class="col-span-12"
+		class="md:col-span-12"
 		textarea={{ rows: 3 }}
+		value={user.comment}
 	/>
 
-	<div class="flex justify-end col-span-12">
+	<div class="flex justify-end md:col-span-12">
 		<button class="btn">Sauvegarder </button>
 	</div>
 </form>

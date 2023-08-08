@@ -24,7 +24,7 @@
 - [x] S'inscrire sur une période
 - [x] Être averti lors da la validation de l'inscription
 - [ ] Visualiser ces inscriptions
-- [ ] Renseigner toute les infos util à l'organisation
+- [x] Renseigner toute les infos util à l'organisation
 - [x] Parcourir les pages d'un évenement
 
 ### Améliorations

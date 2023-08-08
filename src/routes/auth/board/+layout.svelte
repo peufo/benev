@@ -21,7 +21,7 @@
     {/each}
   </ul>
 
-  <div class="card bg-base-100">
+  <div class="card bg-base-100 max-w-3xl" style="width: -webkit-fill-available;">
     <div class="card-body">
       <slot />
     </div>
