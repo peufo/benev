@@ -17,7 +17,7 @@
 		"format": "prettier --plugin-search-dir . --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"postinstall": "prisma generate"
+		"postinstall": "prisma migrate deploy"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
