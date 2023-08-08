@@ -22,14 +22,20 @@
 	{#each blocksHTML as html}
 		{@html html}
 	{:else}
-		<h2>Salut 👋</h2>
-		<p>
-			Merci pour ta confiance.<br />
-			Tu peux éditer cette page qui servira a accueillir tes bénévoles en cliquant sur le bouton juste
-			en dessous.
-		</p>
+		{#if page?.isIndex}
+			<h2>Salut 👋</h2>
+			<p>
+				Merci pour ta confiance.<br />
+				Tu peux éditer cette page qui servira a accueillir tes bénévoles en cliquant sur le bouton juste
+				en dessous.
+			</p>
 
-		<p>Jonas</p>
+			<p>Jonas</p>
+		{:else}
+			<div class="text-center p-10">
+				Cette page est vide
+			</div>
+		{/if}
 	{/each}
 
 	{#if isOwner}
