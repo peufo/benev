@@ -1,21 +1,22 @@
 <script lang="ts">
 	import FormControl from './FormControl.svelte'
 	import type { InputProps } from '.'
-	type $$Props = InputProps
+	type $$Props = InputProps<boolean>
 	$: ({ input, ...props } = $$props as $$Props)
-	export let value = ''
+	export let value = false
+
 </script>
 
-<FormControl {...props} prefix="number" let:key>
+<FormControl {...props} prefix="boolean" let:key>
 	<input
-		bind:value
+		bind:checked={value}
 		on:input
 		on:focus
 		on:blur
-		type="number"
+		type="checkbox"
 		name={key}
 		id={key}
-		class="input-bordered input"
+		class="checkbox"
 		{...input}
 	/>
 </FormControl>

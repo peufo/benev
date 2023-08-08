@@ -1,6 +1,6 @@
-# Fonctionalités
+## Fonctionalités
 
-## Organisateur
+### Organisateur
 
 - [x] Créer un évènement
 - [x] Éditer l'évenements
@@ -11,14 +11,14 @@
 - [ ] Inviter des nouveaux utilisateurs
 - [ ] Visualiser les bénévoles et leur activité (filtre sur la période)
 
-## Responsable
+### Responsable
 
 - [x] Éditer les besoins en bénévoles (période + nombre de bénévoles)
 - [x] Être averti en cas de nouvelle inscription
 - [x] Valider des inscriptions
 - [x] Lister les bénévoles (et leur info) par période
 
-## Bénévole
+### Bénévole
 
 - [x] Visualiser les équipes, leur périodes et les besoins en bénévoles
 - [x] S'inscrire sur une période
@@ -27,7 +27,16 @@
 - [ ] Renseigner toute les infos util à l'organisation
 - [x] Parcourir les pages d'un évenement
 
-## Améliorations
+### Améliorations
 
 - [ ] Ajouter une confirmation au boutons "supprimer"
 - [ ] Édition des pages en version mobile
+- [ ] Gestion de l'inscription à la newsletter
+- [ ] Validation des adresses mail
+- [ ] Pagination correcte
+- [ ] Page d'accueil
+- [ ] Recheche des évenements moins austère
+
+## Notes
+
+Le renseignement du genre est-il pertinent ?

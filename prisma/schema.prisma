@@ -15,6 +15,16 @@ model User {
   firstName String
   lastName  String
 
+  birthday    DateTime?
+  street      String?
+  zipCode     String?
+  city        String?
+  isInsured   Boolean   @default(false)
+  size        Size?
+  diet        String?
+  skillString String? // TODO: replace by tags système ?
+  comment     String?
+
   events       Event[]
   teams        Team[]
   subscribes   Subscribe[]
@@ -23,6 +33,13 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum Size {
+  small
+  medium
+  large
+  xLarge
 }
 
 model Session {

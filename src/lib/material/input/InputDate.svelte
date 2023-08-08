@@ -6,15 +6,15 @@
 	export let value = ''
 </script>
 
-<FormControl {...props} let:key>
+<FormControl {...props} prefix="date" let:key>
 	<input
 		bind:value
 		on:input
 		on:focus
 		on:blur
 		type="datetime-local"
-		name="date_{key}"
-		id="date_{key}"
+		name={key}
+		id={key}
 		class="input-bordered input"
 		{...input}
 	/>
