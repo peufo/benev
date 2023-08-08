@@ -14,7 +14,7 @@
 		{#if data.isOwner}
 			<a href="{$eventPath}/teams/create" class="btn btn-neutral">
 				<Icon path={mdiPlus} class="fill-neutral-content" />
-				Ajouter une équipe
+				Ajouter un secteur
 			</a>
 		{/if}
 	</div>

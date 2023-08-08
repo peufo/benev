@@ -23,7 +23,7 @@
     <h2 class="text-center text-2xl">Un énorme merci !</h2>
     
     <p>
-      Tu recevras une confirmation par mail dés qu'un responsable de l'équipe aura validé ton inscription.
+      Tu recevras une confirmation par mail dés qu'un responsable du secteur aura validé ton inscription.
     </p>
     
     <div class="flex gap-2 justify-end">

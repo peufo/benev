@@ -16,12 +16,12 @@
 
 <form method="post" class="{klass} flex flex-col gap-2" use:enhance={form.submit}>
 	{#if isUpdate}
-		<h3 class="font-bold text-lg">Modification de l'équipe</h3>
+		<h3 class="font-bold text-lg">Modification du secteur</h3>
 	{:else}
-		<h3 class="font-bold text-lg">Nouvel équipe</h3>
+		<h3 class="font-bold text-lg">Nouveau secteur</h3>
 	{/if}
 
-	<InputText key="name" label="Nom de l'équipe" value={team?.name} />
+	<InputText key="name" label="Nom du secteur" value={team?.name} />
 	<InputRelations
 		key="leaders"
 		label="Responsables"

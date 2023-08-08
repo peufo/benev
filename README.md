@@ -39,15 +39,14 @@
 - [ ] Page d'accueil
 - [ ] Recheche des évenements moins austère
 - [ ] Implémenter un système de tag (skills)
-- [ ] Gestion de l'ordre des pages
 
 ## Bugs
 
-- [ ] Edition évenement sur mobile
+- [ ] Gestion de l'évenement sur mobile
 - [x] Temps de réponse ajouter un disable sur les boutons
-- [ ] Ne pas afficher le message sur les pages qui ne sont pas l'index
-- [ ] Séparer le lien "édition / Admin" des autres pages
-- [ ] Changer l'ordre des page --> Bienvenue, Équipe, page 1, ...
+- [x] Ne pas afficher le message sur les pages qui ne sont pas l'index
+- [x] Séparer le lien "édition / Admin" des autres pages
+- [x] Changer l'ordre des page --> Bienvenue, Équipe, page 1, ...
 
 ## Notes
 
