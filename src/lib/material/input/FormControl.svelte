@@ -10,8 +10,8 @@
 	export let label: string
 	export let error = ''
 	export let hint = ''
-	export let prefix = ''
-	export let prefixFor = ''
+	export let prefix: string | number = ''
+	export let prefixFor: string | number = ''
 
 	$: _key = prefix ? `${prefix}_${key}` : key
 

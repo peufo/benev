@@ -36,6 +36,7 @@
 - [ ] Pagination correcte
 - [ ] Page d'accueil
 - [ ] Recheche des évenements moins austère
+- [ ] Implémenter un système de tag (skills)
 
 ## Notes
 

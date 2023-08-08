@@ -18,7 +18,7 @@ function getFormDataTyped(formData: Record<string, unknown>): Record<string, unk
 		const formats: Record<string, (k: string) => void> = {
 			number: (k) => (formData[k] = Number(value)),
 			date: (k) => (formData[k] = new Date(value)),
-			boolean: (k) => (formData[k] = value === 'true'),
+			boolean: (k) => (formData[k] = value === 'true' || value === 'on'),
 			json: (k) => (formData[k] = JSON.parse(value)),
 		}
 

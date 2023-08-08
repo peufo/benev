@@ -1,5 +1,6 @@
-import { redirect } from '@sveltejs/kit'
-import { prisma } from '$lib/server'
+import { error, redirect } from '@sveltejs/kit'
+import { parseFormData, prisma } from '$lib/server'
+import { userShema } from '$lib/form'
 
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()
@@ -9,4 +10,19 @@ export const load = async ({ locals }) => {
 			where: { id: session.user.userId },
 		}),
 	}
+}
+
+export const actions = {
+	default: async ({ locals, request }) => {
+		const session = await locals.auth.validate()
+		if (!session) throw error(401, { message: 'Non autorisé' })
+
+		const { err, data } = await parseFormData(request, userShema)
+		if (err) return err
+
+		await prisma.user.update({
+			where: { id: session.user.userId },
+			data,
+		})
+	},
 }

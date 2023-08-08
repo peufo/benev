@@ -12,7 +12,7 @@
 		on:input
 		on:focus
 		on:blur
-		type="date"
+		type="datetime-local"
 		name={key}
 		id={key}
 		class="input-bordered input"

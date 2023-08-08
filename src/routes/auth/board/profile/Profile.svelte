@@ -3,14 +3,26 @@
 	import dayjs from 'dayjs'
 	import { useForm, userSizeLabel } from '$lib/form'
 	import { enhance } from '$app/forms'
-	import { InputText, InputDate, InputBoolean, InputRadio } from '$lib/material/input'
+	import {
+		InputText,
+		InputDate,
+		InputBoolean,
+		InputRadio,
+		InputTextarea,
+		InputCheckboxs,
+	} from '$lib/material/input'
 
 	export let user: User
 
-	const form = useForm()
+	const form = useForm({
+		successReset: false,
+		successMessage: 'Profile sauvegardé'
+	})
+
+	console.log(user)
 </script>
 
-<form method="post" use:enhance={form.submit} class="grid grid-cols-12 gap-4">
+<form method="post" use:enhance={form.submit} class="grid grid-cols-1 lg:grid-cols-12 gap-4">
 	<InputText
 		key="email"
 		label="Email"
@@ -25,7 +37,7 @@
 	<InputDate
 		key="birthday"
 		label="Date de naissance"
-		value={dayjs(user.birthday).format('YYYY-MM-DDTHH:mm')}
+		value={dayjs(user.birthday).format('YYYY-MM-DD')}
 		class="col-span-4"
 	/>
 
@@ -33,16 +45,42 @@
 	<InputText key="zipCode" label="Code postal" value={user.zipCode || ''} class="col-span-4" />
 	<InputText key="city" label="Localité" value={user.city || ''} class="col-span-4" />
 
-  <InputBoolean key="isInsured" label="Assurance accident" value={user.isInsured} class="col-span-4"/>
-  <InputRadio key="size" label="Taille de t-shirt" options={userSizeLabel} class="col-span-4"/>
+	<InputBoolean
+		key="isInsured"
+		label="Assurance accident"
+		value={user.isInsured}
+		class="col-span-3"
+	/>
+	<InputRadio
+		key="size"
+		label="Taille de t-shirt"
+		value={user.size || ''}
+		options={userSizeLabel}
+		class="col-span-3"
+	/>
 
-  <!--
-    size        Size?
-    diet        String?
-    skillString String? // TODO: replace by tags système ?
-    comment     String?
-  -->
+	<InputCheckboxs
+		key="diet"
+		label="Régime alimentaire"
+		options={['Végétarien', 'Végétalien', 'Sans gluten', 'Sans lactose']}
+		class="col-span-3"
+		value={JSON.parse(user.diet || '')}
+	/>
 
+	<InputTextarea
+		key="skillString"
+		label="Compétences"
+		value={user.city || ''}
+		class="col-span-3"
+		textarea={{ placeholder: 'Menuiserie, communication, informatique,...', rows: 4 }}
+	/>
+
+	<InputTextarea
+		key="comment"
+		label="Commentaires / expériences / allergies"
+		class="col-span-12"
+		textarea={{ rows: 3 }}
+	/>
 
 	<div class="flex justify-end col-span-12">
 		<button class="btn">Sauvegarder </button>

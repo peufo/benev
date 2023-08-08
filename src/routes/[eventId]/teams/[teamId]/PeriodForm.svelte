@@ -3,7 +3,7 @@
 	import dayjs from 'dayjs'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
-	import { InputDate, InputNumber } from '$lib/material/input'
+	import { InputDatetime, InputNumber } from '$lib/material/input'
 	import type { Period } from '@prisma/client'
 
 	let klass = ''
@@ -65,7 +65,7 @@
 				<input type="hidden" name="id" value={period.id} />
 			{/if}
 
-			<InputDate
+			<InputDatetime
 				key="start"
 				label="Début"
 				input={{ step: 300 }}
@@ -73,7 +73,7 @@
 				on:blur={handleStartBlur}
 				class="grow"
 			/>
-			<InputDate
+			<InputDatetime
 				key="end"
 				label="Fin"
 				input={{ step: 300 }}
