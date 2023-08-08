@@ -41,6 +41,7 @@ export const load = async ({ locals }) => {
 		subscribes: await prisma.subscribe.findMany({
 			where: { userId },
 			include: { period: true },
+			orderBy: { period: { start: 'asc' } },
 		}),
 	}
 }

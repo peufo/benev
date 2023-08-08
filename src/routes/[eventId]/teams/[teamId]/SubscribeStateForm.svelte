@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Subscribe } from '@prisma/client'
-	import SubscribeState from './SubscribeState.svelte'
+	import SubscribeState from '$lib/SubscribeState.svelte'
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
 	import { Icon } from '$lib/material'

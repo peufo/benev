@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { browser } from '$app/environment'
 	import { Icon } from '$lib/material'
 	import { mdiChevronRight, mdiPencilOutline } from '@mdi/js'
 	import PeriodForm from './PeriodForm.svelte'
@@ -8,19 +7,10 @@
 	import Subscribes from './Subscribes.svelte'
 	import { urlParam } from '$lib/store'
 	import { goto } from '$app/navigation'
-	import SubscribeState from './SubscribeState.svelte'
+	import SubscribeState from '$lib/SubscribeState.svelte'
+	import { formatRange } from '$lib/formatRange'
 
 	export let data
-
-	const formater = new Intl.DateTimeFormat('fr-ch', {
-		weekday: 'long',
-		day: 'numeric',
-		month: 'numeric',
-		year: 'numeric',
-		hour: 'numeric',
-		minute: 'numeric',
-	})
-	const formatRange = (start: Date, end: Date) => formater.formatRange(start, end)
 
 	let subscribeDialog: HTMLDialogElement
 	let updateDialog: HTMLDialogElement
@@ -77,9 +67,7 @@
 					}}
 				>
 					<td class="w-full">
-						{#if browser}
-							{formatRange(period.start, period.end)}
-						{/if}
+						{formatRange(period)}
 					</td>
 					<td class="flex gap-2 items-center w-40">
 						<progress class="progress" value={nbSubscribe} max={period.maxSubscribe} />
@@ -157,7 +145,7 @@
 		userId={data.user?.userId || ''}
 		periodId={selectedPeriod?.id || ''}
 		teamName={data.team.name}
-		periodLabel={selectedPeriod && formatRange(selectedPeriod.start, selectedPeriod.end)}
+		periodLabel={selectedPeriod && formatRange(selectedPeriod)}
 		on:close={() => subscribeDialog.close()}
 		on:success={() => {
 			subscribeDialog.close()
