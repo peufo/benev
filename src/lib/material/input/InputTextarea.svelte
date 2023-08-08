@@ -2,8 +2,8 @@
 	import FormControl from './FormControl.svelte'
 	import type { TextareaProps } from '.'
 	type $$Props = TextareaProps
-	$: ({ textarea, ...props } = $$props as $$Props)
-	export let value = ''
+	$: ({ textarea, value: _value, ...props } = $$props as $$Props)
+	export let value = _value
 </script>
 
 <FormControl {...props} let:key>

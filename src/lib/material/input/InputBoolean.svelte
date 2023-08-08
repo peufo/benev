@@ -2,8 +2,8 @@
 	import FormControl from './FormControl.svelte'
 	import type { InputProps } from '.'
 	type $$Props = InputProps<boolean>
-	$: ({ input, ...props } = $$props as $$Props)
-	export let value = false
+	$: ({ input, value: _value, ...props } = $$props as $$Props)
+	export let value = _value
 
 </script>
 
@@ -16,7 +16,7 @@
 		type="checkbox"
 		name={key}
 		id={key}
-		class="checkbox"
+		class="toggle"
 		{...input}
 	/>
 </FormControl>

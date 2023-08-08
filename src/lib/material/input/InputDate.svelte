@@ -2,8 +2,8 @@
 	import FormControl from './FormControl.svelte'
 	import type {InputProps} from '.'
 	type $$Props = InputProps
-	$: ({ input, ...props } = $$props as $$Props)
-	export let value = ''
+	$: ({ input, value: _value, ...props } = $$props as $$Props)
+	export let value = _value
 </script>
 
 <FormControl {...props} prefix="date" let:key>
