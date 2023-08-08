@@ -1,11 +1,11 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 import { auth, parseFormData } from '$lib/server'
-import { userShema, loginShema, registerShema } from '$lib/form'
+import { loginShema, registerShema } from '$lib/form'
 
-export const load = async ({ locals }) => {
+export const load = async ({ locals, url }) => {
 	const session = await locals.auth.validate()
-	if (session) throw redirect(301, '/auth/board')
+	if (session) throw redirect(301, url.searchParams.get('callback') || '/auth/board')
 }
 
 export const actions: Actions = {
@@ -31,7 +31,8 @@ export const actions: Actions = {
 			})
 			const session = await auth.createSession({ userId: user.userId, attributes: {} })
 			locals.auth.setSession(session)
-			if (typeof formData.callback === 'string') throw redirect(300, formData.callback)
+
+			// if (typeof formData.callback === 'string') throw redirect(300, formData.callback)
 		} catch (error) {
 			const { message } = error as Error
 			console.log(error)
@@ -52,7 +53,7 @@ export const actions: Actions = {
 			return fail(400, { message })
 		}
 
-		if (typeof formData.callback === 'string') throw redirect(300, formData.callback)
+		// if (typeof formData.callback === 'string') throw redirect(300, formData.callback)
 	},
 
 	logout: async ({ locals }) => {
