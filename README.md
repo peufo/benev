@@ -26,3 +26,8 @@
 - [ ] Visualiser ces inscriptions
 - [ ] Renseigner toute les infos util à l'organisation
 - [x] Parcourir les pages d'un évenement
+
+## Améliorations
+
+- [ ] Ajouter une confirmation au boutons "supprimer"
+- [ ] Édition des pages en version mobile

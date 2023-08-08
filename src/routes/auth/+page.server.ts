@@ -1,7 +1,12 @@
-import { fail } from '@sveltejs/kit'
+import { fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 import { auth, parseFormData } from '$lib/server'
 import { userShema, loginShema } from '$lib/form'
+
+export const load = async ({ locals }) => {
+	const session = await locals.auth.validate()
+	if (session) throw redirect(301, '/auth/board')
+}
 
 export const actions: Actions = {
 	register: async ({ request, locals }) => {
