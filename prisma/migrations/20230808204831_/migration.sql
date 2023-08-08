@@ -5,6 +5,15 @@ CREATE TABLE `User` (
     `phone` VARCHAR(191) NULL,
     `firstName` VARCHAR(191) NOT NULL,
     `lastName` VARCHAR(191) NOT NULL,
+    `birthday` DATETIME(3) NULL,
+    `street` VARCHAR(191) NULL,
+    `zipCode` VARCHAR(191) NULL,
+    `city` VARCHAR(191) NULL,
+    `isInsured` BOOLEAN NOT NULL DEFAULT false,
+    `size` ENUM('small', 'medium', 'large', 'xLarge') NULL,
+    `diet` VARCHAR(191) NULL,
+    `skillString` VARCHAR(191) NULL,
+    `comment` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -62,6 +71,7 @@ CREATE TABLE `Page` (
     `eventId` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NOT NULL,
     `path` VARCHAR(191) NOT NULL DEFAULT '',
+    `isIndex` BOOLEAN NOT NULL DEFAULT false,
     `content` TEXT NOT NULL,
 
     UNIQUE INDEX `Page_eventId_path_key`(`eventId`, `path`),
@@ -97,7 +107,7 @@ CREATE TABLE `Period` (
 -- CreateTable
 CREATE TABLE `Subscribe` (
     `id` VARCHAR(191) NOT NULL,
-    `state` ENUM('request', 'accepted', 'denied') NOT NULL DEFAULT 'request',
+    `state` ENUM('request', 'accepted', 'denied', 'cancelled') NOT NULL DEFAULT 'request',
     `periodId` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
