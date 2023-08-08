@@ -44,7 +44,7 @@
 ## Bugs
 
 - [ ] Edition évenement sur mobile
-- [ ] Temps de réponse ajouter un disable sur les boutons
+- [x] Temps de réponse ajouter un disable sur les boutons
 - [ ] Ne pas afficher le message sur les pages qui ne sont pas l'index
 - [ ] Séparer le lien "édition / Admin" des autres pages
 - [ ] Changer l'ordre des page --> Bienvenue, Équipe, page 1, ...

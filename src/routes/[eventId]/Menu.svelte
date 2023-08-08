@@ -3,33 +3,27 @@
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
-	import { mdiMenu } from '@mdi/js'
+	import { mdiCogOutline, mdiMenu } from '@mdi/js'
+	export let pageIndex: LayoutData['pageIndex']
 	export let pages: LayoutData['pages']
 	export let isOwner: boolean
 </script>
 
 <ul class="tabs hidden lg:block">
-  {#if isOwner}
-    <a
-      href="{$eventPath}/edit"
-      class="tab"
-      class:tab-active={$page.url.pathname.startsWith(`${$eventPath}/edit`)}
-    >
-      Edition
-    </a>
-  {/if}
-
+	<a href={$eventPath} class="tab tab-bordered" class:tab-active={$page.route.id === '/[eventId]'}>
+		{pageIndex.title}
+	</a>
 	<a
 		href="{$eventPath}/teams"
-		class="tab"
-		class:tab-active={$page.url.pathname.startsWith(`${$eventPath}/teams`)}
+		class="tab tab-bordered"
+		class:tab-active={$page.route.id?.startsWith('/[eventId]/teams')}
 	>
 		Équipes
 	</a>
 
 	{#each pages as { title, path, id, isIndex } (id)}
 		{@const href = `${$eventPath}${isIndex ? '' : `/${path}`}`}
-		<a class="tab" {href} class:tab-active={$page.url.pathname == href}>
+		<a class="tab tab-bordered" {href} class:tab-active={$page.url.pathname == href}>
 			{title}
 		</a>
 	{/each}
@@ -43,22 +37,29 @@
 	</label>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-		
-    {#if isOwner}
-    <li>
-			<a
-				href="{$eventPath}/edit"
-				class:active={$page.url.pathname.startsWith(`${$eventPath}/edit`)}
-			>
-				Edition
+		{#if isOwner}
+			<li>
+				<a
+					href="{$eventPath}/edit"
+					class:active={$page.url.pathname.startsWith(`${$eventPath}/edit`)}
+				>
+					<Icon path={mdiCogOutline} class="rotate-12" />
+					Gestion évenement
+				</a>
+			</li>
+		{/if}
+
+
+		<li>
+			<a href={$eventPath} class:active={$page.route.id == '/[eventId]'}>
+				{pageIndex.title}
 			</a>
 		</li>
-    {/if}
 
 		<li>
 			<a
 				href="{$eventPath}/teams"
-				class:active={$page.url.pathname.startsWith(`${$eventPath}/teams`)}
+				class:active={$page.route.id?.startsWith('/[eventId]/teams')}
 			>
 				Équipes
 			</a>

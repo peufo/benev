@@ -18,7 +18,7 @@
     <slot name="start"/>
   </div>
   <div class="grow"></div>
-  <div class="gap-2">
+  <div >
     <slot name="end"/>
 
     <a class="btn-ghost rounded-btn btn" href="/auth">

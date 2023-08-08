@@ -2,6 +2,7 @@
 	import { page } from '$app/stores'
 	import {
 		mdiChevronRight,
+		mdiCogOutline,
 		mdiEmailOutline,
 		mdiMapMarkerOutline,
 		mdiPencilOutline,
@@ -17,6 +18,7 @@
 	import Menu from './Menu.svelte'
 
 	export let data
+
 </script>
 
 <svelte:head>
@@ -31,10 +33,21 @@
 				{data.event.name}
 			</a>
 
+			{#if data.isOwner}
+				<a
+					href="{$eventPath}/edit"
+					class="
+						hidden lg:btn btn-square 
+						{$page.route.id?.startsWith(`/[eventId]/edit`) ? '' : 'lg:btn-ghost'}
+					"
+				>
+					<Icon path={mdiCogOutline} title="Gestion évenement" class="rotate-12" />
+				</a>
+			{/if}
 		</div>
 
 		<div slot="end" class="contents">
-			<Menu pages={data.pages} isOwner={data.isOwner} />
+			<Menu pages={data.pages} pageIndex={data.pageIndex} isOwner={data.isOwner} />
 		</div>
 	</Header>
 </div>
