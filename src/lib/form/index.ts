@@ -67,7 +67,11 @@ export function useForm<Shema extends z.ZodRawShape>({
 	const submit: SubmitFunction<Data> = async (event) => {
 		if (beforeRequest) await beforeRequest(event)
 
+		event.submitter?.classList.add('btn-disabled')
+
 		return async ({ result, update }) => {
+			event.submitter?.classList.remove('btn-disabled')
+
 			if (result.type === 'error') {
 				notify.error('Oups, erreur non gerée')
 				return
