@@ -23,7 +23,7 @@
 - [x] Visualiser les équipes, leur périodes et les besoins en bénévoles
 - [x] S'inscrire sur une période
 - [x] Être averti lors da la validation de l'inscription
-- [ ] Visualiser ses inscriptions
+- [x] Visualiser ses inscriptions
 - [x] Renseigner toute les infos util à l'organisation
 - [x] Parcourir les pages d'un évenement
 
