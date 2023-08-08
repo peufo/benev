@@ -6,6 +6,7 @@ export const subscribeStateLabel: Record<Subscribe['state'], string> = {
 	request: 'Demande en cours',
 	accepted: 'Validé',
 	denied: 'Refusé',
+	cancelled: 'Annuller',
 }
 
 const subscribeForm = {

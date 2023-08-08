@@ -3,7 +3,6 @@
 	import type { PageData } from './$types'
 	import type { User } from '@prisma/client'
 	import { Icon } from '$lib/material'
-	import SubscribeState from './SubscribeState.svelte'
 	import { mdiEmailOutline, mdiPhone } from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import SubscribeStateForm from './SubscribeStateForm.svelte'

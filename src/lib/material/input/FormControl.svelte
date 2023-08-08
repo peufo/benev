@@ -17,7 +17,7 @@
 
 	if (formContext.ok()) {
 		const { setError } = formContext.get()
-		setError[_key] = (err) => (error = err)
+		setError[key] = (err) => (error = err)
 	} else {
 		console.error(
 			'Please set "const form = useForm()" and "use:enhance={form.submit}" in form element'

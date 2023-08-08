@@ -23,13 +23,15 @@
 - [x] Visualiser les équipes, leur périodes et les besoins en bénévoles
 - [x] S'inscrire sur une période
 - [x] Être averti lors da la validation de l'inscription
-- [ ] Visualiser ces inscriptions
+- [ ] Visualiser ses inscriptions
 - [x] Renseigner toute les infos util à l'organisation
 - [x] Parcourir les pages d'un évenement
 
 ### Améliorations
 
 - [ ] Ajouter une confirmation au boutons "supprimer"
+- [ ] Ajouter le logo BENEV
+- [ ] Ajouter des logo aux évenements
 - [ ] Édition des pages en version mobile
 - [ ] Gestion de l'inscription à la newsletter
 - [ ] Validation des adresses mail

@@ -8,6 +8,14 @@ const loginForm = {
 }
 export const loginShema = z.object(loginForm)
 
+const registerForm = {
+	...loginForm,
+	firstName: z.string().min(2),
+	lastName: z.string().min(2),
+	phone: z.string().optional(),
+}
+export const registerShema = z.object(registerForm)
+
 export const userSizeLabel: Record<$Enums.Size, string> = {
 	small: 'Small',
 	medium: 'Medium',
@@ -17,8 +25,8 @@ export const userSizeLabel: Record<$Enums.Size, string> = {
 
 type UserForm = Omit<Prisma.UserUncheckedCreateInput, 'id' | 'email'>
 const userForm = {
-	firstName: z.string(),
-	lastName: z.string(),
+	firstName: z.string().min(2),
+	lastName: z.string().min(2),
 	phone: z.string().optional(),
 	size: z.enum(toTuple(userSizeLabel)).optional(),
 	birthday: z.date().optional(),

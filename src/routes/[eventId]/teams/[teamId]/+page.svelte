@@ -38,6 +38,7 @@
 			<p>{data.team.description || ''}</p>
 			<div>
 				Responsables :
+				<!-- TODO: menu de lien utils vers les responsables -->
 				{#each data.team.leaders as leader}
 					<a href="#" class="btn btn-xs btn-ghost">
 						{leader.firstName}

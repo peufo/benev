@@ -8,7 +8,7 @@
 	]
 </script>
 
-<div class="flex gap-4 items-start flex-wrap">
+<div class="flex gap-4 items-start flex-wrap justify-center">
 
   <ul class="menu menu-lg bg-base-100 rounded-box text-clip">
     {#each tabs as { path, label }}

@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 import { auth, parseFormData } from '$lib/server'
-import { userShema, loginShema } from '$lib/form'
+import { userShema, loginShema, registerShema } from '$lib/form'
 
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()
@@ -10,7 +10,7 @@ export const load = async ({ locals }) => {
 
 export const actions: Actions = {
 	register: async ({ request, locals }) => {
-		const { err, data } = await parseFormData(request, userShema)
+		const { err, data, formData } = await parseFormData(request, registerShema)
 		if (err) return err
 
 		const attributes = {
@@ -31,6 +31,7 @@ export const actions: Actions = {
 			})
 			const session = await auth.createSession({ userId: user.userId, attributes: {} })
 			locals.auth.setSession(session)
+			if (typeof formData.callback === 'string') throw redirect(300, formData.callback)
 		} catch (error) {
 			const { message } = error as Error
 			console.log(error)
@@ -39,7 +40,7 @@ export const actions: Actions = {
 	},
 
 	login: async ({ request, locals }) => {
-		const { err, data } = await parseFormData(request, loginShema)
+		const { err, data, formData } = await parseFormData(request, loginShema)
 		if (err) return err
 		try {
 			const user = await auth.useKey('email', data.email, data.password)
@@ -50,6 +51,8 @@ export const actions: Actions = {
 			console.error(error)
 			return fail(400, { message })
 		}
+
+		if (typeof formData.callback === 'string') throw redirect(300, formData.callback)
 	},
 
 	logout: async ({ locals }) => {

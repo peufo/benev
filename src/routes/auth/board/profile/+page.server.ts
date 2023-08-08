@@ -15,7 +15,7 @@ export const load = async ({ locals }) => {
 export const actions = {
 	default: async ({ locals, request }) => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(401, { message: 'Non autorisé' })
+		if (!session) throw error(401)
 
 		const { err, data } = await parseFormData(request, userShema)
 		if (err) return err

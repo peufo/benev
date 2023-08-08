@@ -63,7 +63,7 @@
 		label="Régime alimentaire"
 		options={['Végétarien', 'Végétalien', 'Sans gluten', 'Sans lactose']}
 		class="md:col-span-3"
-		value={JSON.parse(user.diet || '')}
+		value={JSON.parse(user.diet || '[]')}
 	/>
 
 	<InputTextarea
@@ -79,7 +79,7 @@
 		label="Commentaires / expériences / allergies"
 		class="md:col-span-12"
 		textarea={{ rows: 3 }}
-		value={user.comment}
+		value={user.comment || ''}
 	/>
 
 	<div class="flex justify-end md:col-span-12">
