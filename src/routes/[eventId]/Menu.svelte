@@ -18,7 +18,7 @@
 		class="tab tab-bordered"
 		class:tab-active={$page.route.id?.startsWith('/[eventId]/teams')}
 	>
-		Équipes
+		Secteurs
 	</a>
 
 	{#each pages as { title, path, id, isIndex } (id)}
@@ -61,7 +61,7 @@
 				href="{$eventPath}/teams"
 				class:active={$page.route.id?.startsWith('/[eventId]/teams')}
 			>
-				Équipes
+				Secteurs
 			</a>
 		</li>
 

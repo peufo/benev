@@ -9,7 +9,7 @@
 
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
 	<div class="flex gap-2 py-2 items-center">
-		<h2 class="text-2xl">Équipes</h2>
+		<h2 class="text-2xl">Secteurs</h2>
 		<div class="grow" />
 		{#if data.isOwner}
 			<a href="{$eventPath}/teams/create" class="btn btn-neutral">
