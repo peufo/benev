@@ -16,6 +16,7 @@ export const GET = async ({ url }) => {
 			firstName: true,
 			lastName: true,
 		},
+		take: 5,
 	})
 
 	return json(users)
