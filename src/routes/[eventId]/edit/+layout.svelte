@@ -3,8 +3,8 @@
 	import { eventPath } from '$lib/store'
 
 	const tabs = [
-		['/edit', "L'évenement"],
-		['/edit/pages', 'Les pages'],
+		{path: '/edit', label: "L'évenement", reg: /\/edit$/},
+  {path: '/edit/pages', label: 'Les pages', reg: /\/edit\/pages*/},
 	]
 </script>
 
@@ -15,9 +15,9 @@
 <div class="grid place-content-center">
   <div class="card bg-base-100 min-w-[500px]">
     <div class="tabs">
-      {#each tabs as [path, label]}
+      {#each tabs as {path, label, reg}}
         {@const href = `${$eventPath}${path}`}
-        <a {href} class="tab tab-lg tab-lifted" class:tab-active={$page.url.pathname.endsWith(path)}>
+        <a {href} class="tab tab-lg tab-lifted" class:tab-active={$page.url.pathname.match(reg)}>
           {label}
         </a>
       {/each}
