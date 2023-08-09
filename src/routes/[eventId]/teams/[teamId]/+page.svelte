@@ -69,18 +69,20 @@
 					<td class="w-full">
 						{formatRange(period)}
 					</td>
-					<td class="flex gap-2 items-center w-40">
-						<progress class="progress" value={nbSubscribe} max={period.maxSubscribe} />
+					<td class="flex gap-2 items-center">
+						<progress class="progress max-w-[100px] w-[8vw]" value={nbSubscribe} max={period.maxSubscribe} />
+						
+						<span class="whitespace-nowrap text-xs">
+							{nbSubscribe}/{period.maxSubscribe}
+						</span>
+
 						{#if userSubscribe}
 							<SubscribeState state={userSubscribe.state} />
+						{:else}
+							<div class="grow"></div>
 						{/if}
 
-						<span class="whitespace-nowrap">
-							{nbSubscribe} / {period.maxSubscribe}
-						</span>
-					</td>
 					{#if data.isLeader}
-						<td class="py-0">
 							<div class="flex gap-2">
 								<button
 									class="btn btn-square btn-sm"
@@ -110,8 +112,8 @@
 									/>
 								</button>
 							</div>
+							{/if}
 						</td>
-					{/if}
 				</tr>
 
 				<Subscribes
