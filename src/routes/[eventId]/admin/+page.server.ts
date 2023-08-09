@@ -1,5 +1,5 @@
-import { fail, redirect } from '@sveltejs/kit'
-import { eventShema, pageShema } from '$lib/form'
+import { redirect } from '@sveltejs/kit'
+import { eventShema } from '$lib/form'
 
 import { isOwnerOrThrow, parseFormData, prisma } from '$lib/server'
 

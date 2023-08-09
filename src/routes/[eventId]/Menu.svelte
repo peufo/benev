@@ -40,8 +40,8 @@
 		{#if isOwner}
 			<li>
 				<a
-					href="{$eventPath}/edit"
-					class:active={$page.url.pathname.startsWith(`${$eventPath}/edit`)}
+					href="{$eventPath}/admin"
+					class:active={$page.url.pathname.startsWith(`${$eventPath}/admin`)}
 				>
 					<Icon path={mdiCogOutline} class="rotate-12" />
 					Gestion évenement

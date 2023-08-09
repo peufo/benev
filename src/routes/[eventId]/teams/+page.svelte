@@ -43,7 +43,7 @@
 					{#if data.isOwner}
 						<td class="py-0">
 							<div class="flex justify-end">
-								<a class="btn btn-square btn-sm relative" href="{$eventPath}/teams/{team.id}/edit">
+								<a class="btn btn-square btn-sm relative" href="{$eventPath}/teams/{team.id}/admin">
 									<Icon path={mdiPencilOutline} />
 								</a>
 							</div>

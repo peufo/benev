@@ -35,10 +35,10 @@
 
 			{#if data.isOwner}
 				<a
-					href="{$eventPath}/edit"
+					href="{$eventPath}/admin"
 					class="
 						hidden lg:btn btn-square 
-						{$page.route.id?.startsWith(`/[eventId]/edit`) ? '' : 'lg:btn-ghost'}
+						{$page.route.id?.startsWith(`/[eventId]/admin`) ? '' : 'lg:btn-ghost'}
 					"
 				>
 					<Icon path={mdiCogOutline} title="Gestion évenement" class="rotate-12" />

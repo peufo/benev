@@ -38,7 +38,7 @@
 
 	{#if isOwner}
 		<div class="flex justify-end not-prose">
-			<a href="{$eventPath}/edit/pages{page ? `/${page.id}` : ''}" class="btn">
+			<a href="{$eventPath}/admin/pages{page ? `/${page.id}` : ''}" class="btn">
 				<Icon path={mdiPencilOutline} />
 				Editer cette page
 			</a>

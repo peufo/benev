@@ -4,7 +4,7 @@ import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ parent, params }) => {
 	const { pages } = await parent()
-	if (pages[0]) throw redirect(301, `/${params.eventId}/edit/pages/${pages[0].id}`)
+	if (pages[0]) throw redirect(301, `/${params.eventId}/admin/pages/${pages[0].id}`)
 }
 
 export const actions = {
@@ -27,7 +27,7 @@ export const actions = {
 			.catch((err) => {
 				return fail(400, { message: err.message })
 			})
-		if ('id' in pageOrFail) throw redirect(301, `/${params.eventId}/edit/pages/${pageOrFail.id}`)
+		if ('id' in pageOrFail) throw redirect(301, `/${params.eventId}/admin/pages/${pageOrFail.id}`)
 		return pageOrFail
 	},
 }

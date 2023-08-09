@@ -20,7 +20,7 @@
 			
 			<li>
 				<a
-					href="{$eventPath}/edit/pages/{data.pageIndex.id}"
+					href="{$eventPath}/admin/pages/{data.pageIndex.id}"
 					class:active={$page.params.pageId === data.pageIndex.id}
 				>
 					{data.pageIndex.title}
@@ -29,14 +29,14 @@
 
 			{#each data.pages as { id, title }}
 				<li>
-					<a href="{$eventPath}/edit/pages/{id}" class:active={$page.params.pageId === id}>
+					<a href="{$eventPath}/admin/pages/{id}" class:active={$page.params.pageId === id}>
 						{title}
 					</a>
 				</li>
 			{/each}
 		</ul>
 
-		<form action="{$eventPath}/edit/pages?/create_page" method="post" use:enhance={form.submit}>
+		<form action="{$eventPath}/admin/pages?/create_page" method="post" use:enhance={form.submit}>
 			<button class="btn w-full mt-2">
 				<Icon path={mdiPlus} />
 				Nouvel page
