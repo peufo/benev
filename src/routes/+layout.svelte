@@ -5,7 +5,7 @@
 
 <svelte:head>
 	<title>BENEV</title>
-	<meta name="description" content="Platforme simple de gestion de bénévoles" >
+	<meta name="description" content="Platforme de gestion de bénévoles" >
 	<meta name="author" content="Jonas Voisard">
 </svelte:head>
 

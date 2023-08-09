@@ -32,7 +32,7 @@
 <div class="dropdown dropdown-bottom dropdown-end lg:hidden">
 	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-	<label tabindex="0" class="btn btn-ghost m-1">
+	<label tabindex="0" class="btn btn-ghost btn-square">
 		<Icon path={mdiMenu} />
 	</label>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->

@@ -27,10 +27,8 @@
 			<p>
 				Merci pour ta confiance.<br />
 				Tu peux éditer cette page qui servira a accueillir tes bénévoles en cliquant sur le bouton juste
-				en dessous.
+				en-dessous.
 			</p>
-
-			<p>Jonas</p>
 		{:else}
 			<div class="text-center p-10">
 				Cette page est vide

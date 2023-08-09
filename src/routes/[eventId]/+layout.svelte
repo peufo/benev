@@ -28,7 +28,7 @@
 <div class="p-2">
 	<Header userName={data.user?.name}>
 		<div class="contents" slot="start">
-			<a href={$eventPath} class="btn btn-ghost text-xl lg:pl-0">
+			<a href={$eventPath} class="link link-hover text-lg">
 				<Icon path={mdiChevronRight} class="hidden lg:inline-block" />
 				{data.event.name}
 			</a>
