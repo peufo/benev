@@ -4,7 +4,6 @@
 	import { eventPath } from '$lib/store'
 
 	export let data
-
 </script>
 
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
@@ -34,22 +33,22 @@
 					<td>
 						{team.name}
 						<a href="{$eventPath}/teams/{team.id}">
-							<span class="inset-0 absolute"></span>
+							<span class="inset-0 absolute" />
 						</a>
-					
 					</td>
 					<td>
-						{team.leaders.map(({user}) => `${user.firstName} ${user.lastName}`).join(', ')}
+						{team.leaders.map(({ user }) => `${user.firstName} ${user.lastName}`).join(', ')}
 					</td>
 
-					<td class="py-0">
-						<div class="flex justify-end">
-							<a class="btn btn-square btn-sm relative" href="{$eventPath}/teams/{team.id}/edit">
-								<Icon path={mdiPencilOutline} />
-							</a>
-						</div>
-					</td>
-
+					{#if data.isOwner}
+						<td class="py-0">
+							<div class="flex justify-end">
+								<a class="btn btn-square btn-sm relative" href="{$eventPath}/teams/{team.id}/edit">
+									<Icon path={mdiPencilOutline} />
+								</a>
+							</div>
+						</td>
+					{/if}
 				</tr>
 			{/each}
 		</tbody>
