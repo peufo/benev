@@ -5,8 +5,6 @@
 		mdiCogOutline,
 		mdiEmailOutline,
 		mdiMapMarkerOutline,
-		mdiPencilOutline,
-		mdiPhone,
 		mdiPhoneOutline,
 		mdiWeb,
 	} from '@mdi/js'

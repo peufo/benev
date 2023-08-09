@@ -12,7 +12,6 @@
 	const form = useForm()
 </script>
 
-<h3 class="font-bold text-lg">Édition des pages</h3>
 
 <div class="flex gap-2 flex-wrap">
 	<div>

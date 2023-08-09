@@ -12,18 +12,24 @@
 	<title>BENEV - Édition</title>
 </svelte:head>
 
-<div class="grid place-content-center">
-	<div class="card bg-base-100 min-w-[500px]">
-		<div class="tabs">
-			{#each tabs as { path, label, reg }}
-				{@const href = `${$eventPath}${path}`}
-				<a {href} class="tab tab-lg tab-lifted" class:tab-active={$page.url.pathname.match(reg)}>
-					{label}
-				</a>
-			{/each}
-		</div>
-		<div class="card-body">
-			<slot />
-		</div>
-	</div>
+
+<div class="flex gap-4 items-start flex-wrap justify-center">
+
+  <ul class="menu menu-lg bg-base-100 rounded-box text-clip">
+    {#each tabs as { path, label, reg }}
+			{@const href = `${$eventPath}${path}`}
+      <li>
+        <a {href} class:active={$page.url.pathname.match(reg)}>
+          {label}
+        </a>
+      </li>
+    {/each}
+  </ul>
+
+  <div class="card bg-base-100 max-w-4xl" style="width: -webkit-fill-available;">
+    <div class="card-body">
+      <slot />
+    </div>
+  </div>
+
 </div>

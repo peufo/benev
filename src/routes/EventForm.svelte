@@ -24,12 +24,10 @@
 <form
 	method="post"
 	action={isUpdate ? '?/update_event' : '?/new_event'}
-	class="{klass} flex flex-col gap-2"
+	class="{klass} flex flex-col gap-2 max-w-sm"
 	use:enhance={form.submit}
 >
-	{#if isUpdate}
-		<h3 class="font-bold text-lg">Édition de l'évènement</h3>
-	{:else}
+	{#if !isUpdate}
 		<h3 class="font-bold text-lg">Nouvel évènement</h3>
 	{/if}
 

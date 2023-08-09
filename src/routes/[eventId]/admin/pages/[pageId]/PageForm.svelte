@@ -46,7 +46,7 @@
 </script>
 
 <form method="post" action="?/update_page" use:enhance={form.submit} class="flex flex-col gap-2">
-  <div class="flex items-end gap-2">
+  <div class="flex flex-wrap items-end gap-2">
     <InputText
       key="title"
       bind:value={page.title}
@@ -66,9 +66,11 @@
 	<input type="hidden" name="content" value={page.content} />
 	<input type="hidden" name="eventId" value={page.eventId} />
 
-	<div class="input input-bordered w-[210mm] min-h-[555px] overflow-auto prose">
-		<div bind:this={holder} />
-	</div>
+
+		<div class="input input-bordered sm:w-[158mm] min-h-[555px] overflow-auto prose">
+			<div bind:this={holder} />
+		</div>
+	
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn">Valider</button>

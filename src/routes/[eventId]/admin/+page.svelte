@@ -4,8 +4,12 @@
 	export let data
 </script>
 
-<EventForm
-	isUpdate
-	successReset={false}
-	event={data.event}
-/>
+<div class="flex justify-center">
+	<EventForm
+		isUpdate
+		successReset={false}
+		event={data.event}
+		class="grow"
+	/>
+</div>
+
