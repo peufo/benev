@@ -26,14 +26,16 @@ type MailOption = {
 }
 
 export const sendMail = async (mail: MailOption) => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		transporter.sendMail(
 			{
 				from: `BENEV <${SMTP_USER}>`,
 				...mail,
 			},
 			(err, info) => {
-				if (err) return reject(err)
+				if (err) {
+					console.error(err)
+				}
 				resolve(info)
 			}
 		)
