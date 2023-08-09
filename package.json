@@ -21,7 +21,6 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
-		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/debounce": "^1.2.1",
 		"@types/nodemailer": "^6.4.9",
@@ -52,6 +51,7 @@
 		"@lucia-auth/adapter-prisma": "^3.0.0",
 		"@mdi/js": "^7.2.96",
 		"@prisma/client": "^5.1.1",
+		"@sveltejs/adapter-vercel": "^3.0.3",
 		"@tailwindcss/typography": "^0.5.9",
 		"axios": "^1.4.0",
 		"dayjs": "^1.11.9",
