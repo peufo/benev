@@ -17,7 +17,7 @@
 	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
 	const form = useForm({ successCallback: () => dispatch('success'), successUpdate, successReset })
 
-	$: name = event?.name || ''
+	let name = ''
 
 </script>
 
@@ -33,16 +33,22 @@
 		<h3 class="font-bold text-lg">Nouvel évènement</h3>
 	{/if}
 
-	<InputText
-		key="name"
-		label="Nom de l'évènement"
-		bind:value={name}
-		hint={name && `benev.ch/${normalizePath(name)}`}
-	/>
-
-	{#if isUpdate}
-		<input type="hidden" name="id" value={event?.id} />
+	
+	{#if isUpdate && event}
+		<InputText
+			key="name"
+			label="Nom de l'évènement"
+			bind:value={event.name}
+			hint="benev.ch/{normalizePath(event.name)}"
+		/>
+		<input type="hidden" name="id" value={event.id} />
 	{:else}
+		<InputText
+			key="name"
+			label="Nom de l'évènement"
+			bind:value={name}
+			hint={name && `benev.ch/${normalizePath(name)}`}
+		/>
 		<input type="hidden" name="id" value={normalizePath(name)} />
 	{/if}
 
