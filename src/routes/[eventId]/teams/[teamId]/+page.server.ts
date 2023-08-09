@@ -32,7 +32,11 @@ export const actions = {
 			include: {
 				user: true,
 				period: {
-					include: { team: { include: { event: true, leaders: { select: { email: true } } } } },
+					include: {
+						team: {
+							include: { event: true, leaders: { select: { user: { select: { email: true } } } } },
+						},
+					},
 				},
 			},
 		})
@@ -40,7 +44,7 @@ export const actions = {
 		// @ts-ignore
 		const { html } = MailNewSubscribe.render({ subscribe })
 		sendMail({
-			to: subscribe.period.team.leaders.map(({ email }) => email),
+			to: subscribe.period.team.leaders.map(({ user }) => user.email),
 			subject: 'Un nouveau bénévole',
 			html,
 		})
@@ -111,7 +115,11 @@ async function setSubscribState(request: Request, state: SubscribeState) {
 		include: {
 			user: { select: { email: true } },
 			period: {
-				include: { team: { include: { event: true, leaders: { select: { email: true } } } } },
+				include: {
+					team: {
+						include: { event: true, leaders: { select: { user: { select: { email: true } } } } },
+					},
+				},
 			},
 		},
 	})

@@ -25,12 +25,12 @@ export async function isLeader(teamId: string, locals: App.Locals) {
 		where: { id: teamId },
 		include: {
 			event: { select: { ownerId: true } },
-			leaders: { select: { id: true } },
+			leaders: { select: { userId: true } },
 		},
 	})
 
 	const _isOwner = team.event.ownerId === session.user.userId
-	const _isLeader = team.leaders.map(({ id }) => id).includes(session.user.userId)
+	const _isLeader = team.leaders.map(({ userId }) => userId).includes(session.user.userId)
 	if (!_isOwner && !_isLeader) return false
 
 	return true

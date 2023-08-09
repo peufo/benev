@@ -39,7 +39,7 @@
 					
 					</td>
 					<td>
-						{team.leaders.map((leader) => `${leader.firstName} ${leader.lastName}`).join(', ')}
+						{team.leaders.map(({user}) => `${user.firstName} ${user.lastName}`).join(', ')}
 					</td>
 
 					<td class="py-0">

@@ -10,13 +10,24 @@ export const load = async ({ params, locals }) => {
 export const actions = {
 	update: async ({ params, request, locals }) => {
 		await isOwnerOrThrow(params.eventId, locals)
-
 		const { err, data } = await parseFormData(request, teamShema, { arrayOperation: 'set' })
 		if (err) return err
 
+		const { teamId } = params
+		const { leaders, ...restData } = data
+
 		await prisma.team.update({
 			where: { id: params.teamId },
-			data,
+			data: {
+				...restData,
+				...(leaders && {
+					leaders: {
+						set: leaders.set.map(({ id }) => ({
+							userId_teamId: { userId: id, teamId },
+						})),
+					},
+				}),
+			},
 		})
 
 		throw redirect(303, `/${params.eventId}/teams`)

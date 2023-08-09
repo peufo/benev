@@ -29,10 +29,10 @@
 			<div>
 				Responsables :
 				<!-- TODO: menu de lien utils vers les responsables -->
-				{#each data.team.leaders as leader}
+				{#each data.team.leaders as {user}}
 					<a href="#" class="btn btn-xs btn-ghost">
-						{leader.firstName}
-						{leader.lastName}
+						{user.firstName}
+						{user.lastName}
 					</a>
 				{/each}
 			</div>

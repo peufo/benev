@@ -7,7 +7,7 @@ export const load = async ({ params, locals }) => {
 		isLeader: await isLeader(teamId, locals),
 		team: await prisma.team.findUniqueOrThrow({
 			where: { id: teamId },
-			include: { leaders: true },
+			include: { leaders: { include: { user: true } } },
 		}),
 	}
 }

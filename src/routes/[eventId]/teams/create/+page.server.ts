@@ -10,12 +10,19 @@ export const actions = {
 		const { err, data } = await parseFormData(request, teamShema)
 		if (err) return err
 
+		const { leaders, ...restData } = data
+
 		const team = await prisma.team.create({
 			data: {
-				...data,
+				...restData,
 				eventId: params.eventId,
 			},
 		})
+
+		if (leaders)
+			await prisma.leader.createMany({
+				data: leaders.connect.map(({ id }) => ({ userId: id, teamId: team.id })),
+			})
 
 		throw redirect(303, `/${params.eventId}/teams/${team.id}`)
 	},

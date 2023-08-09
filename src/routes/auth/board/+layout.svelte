@@ -4,7 +4,7 @@
 	const tabs = [
 		{ path: 'subscribes', label: 'Mes inscriptions' },
 		{ path: 'profile', label: 'Profil' },
-		{ path: 'logout', label: 'Déconnexion' },
+		{ path: 'account', label: 'Compte' },
 	]
 </script>
 

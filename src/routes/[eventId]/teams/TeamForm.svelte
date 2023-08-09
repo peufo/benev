@@ -3,13 +3,13 @@
 	import { useForm } from '$lib/form'
 	import { InputRelations, InputText, InputTextarea } from '$lib/material/input'
 	import { api } from '$lib/api'
-	import type { Team, User } from '@prisma/client'
+	import type { Team, Leader, User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 
 	let klass = ''
 	export { klass as class }
 	export let isUpdate = false
-	export let team: (Team & { leaders: User[] }) | undefined = undefined
+	export let team: (Team & { leaders: (Leader & {user: User})[] }) | undefined = undefined
 
 	const form = useForm({ successUpdate: false })
 </script>
@@ -28,7 +28,7 @@
 		getItems={api.user.findMany}
 		search={api.user.search}
 		getLabel={(user) => `${user.firstName} ${user.lastName}`}
-		value={team?.leaders}
+		value={team?.leaders.map(l => l.user)}
 	/>
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
 

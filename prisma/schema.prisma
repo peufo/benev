@@ -25,8 +25,10 @@ model User {
   skillString String? // TODO: replace by tags système ?
   comment     String?
 
+  isEmailValided Boolean @default(false)
+
   events       Event[]
-  teams        Team[]
+  leaders      Leader[]
   subscribes   Subscribe[]
   auth_session Session[]
   auth_key     Key[]
@@ -99,7 +101,7 @@ model Team {
 
   name        String
   description String?
-  leaders     User[]
+  leaders     Leader[]
 
   eventId String
   event   Event    @relation(references: [id], fields: [eventId], onDelete: Cascade)
@@ -109,6 +111,19 @@ model Team {
   updatedAt DateTime @updatedAt
 
   @@unique([name, eventId])
+}
+
+model Leader {
+  isValided Boolean @default(false)
+  userId    String
+  user      User    @relation(references: [id], fields: [userId], onDelete: Cascade)
+  teamId    String
+  team      Team    @relation(references: [id], fields: [teamId], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, teamId])
 }
 
 model Period {
