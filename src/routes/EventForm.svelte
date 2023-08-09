@@ -39,7 +39,7 @@
 			key="name"
 			label="Nom de l'évènement"
 			bind:value={event.name}
-			hint="benev.ch/{normalizePath(event.name)}"
+			hint="benev.ch/{event.id}"
 		/>
 		<input type="hidden" name="id" value={event.id} />
 	{:else}
