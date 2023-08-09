@@ -1,4 +1,8 @@
-## Fonctionalités
+# Benev
+
+Platforme de gestion de bénévole
+
+## Fonctionalités de base
 
 ### Organisateur
 
@@ -9,7 +13,8 @@
 - [x] Éditer des équipes
 - [x] Nommer des responsables
 - [ ] Inviter des nouveaux utilisateurs
-- [ ] Visualiser les bénévoles et leur activité (filtre sur la période)
+- [ ] Différencier les utilisateurs homonymes lors de la sélection de responsables
+- [ ] Vue d'ensemble des bénévoles d'un événement (filtre sur la période)
 
 ### Responsable
 
@@ -26,28 +31,3 @@
 - [x] Visualiser ses inscriptions
 - [x] Renseigner toute les infos util à l'organisation
 - [x] Parcourir les pages d'un évenement
-
-### Améliorations
-
-- [ ] Ajouter une confirmation au boutons "supprimer"
-- [ ] Ajouter le logo BENEV
-- [ ] Ajouter des logo aux évenements
-- [ ] Édition des pages en version mobile
-- [ ] Gestion de l'inscription à la newsletter
-- [ ] Validation des adresses mail
-- [ ] Pagination correcte
-- [ ] Page d'accueil
-- [ ] Recheche des évenements moins austère
-- [ ] Implémenter un système de tag (skills)
-
-## Bugs
-
-- [ ] Gestion de l'évenement sur mobile
-- [x] Temps de réponse ajouter un disable sur les boutons
-- [x] Ne pas afficher le message sur les pages qui ne sont pas l'index
-- [x] Séparer le lien "édition / Admin" des autres pages
-- [x] Changer l'ordre des page --> Bienvenue, Équipe, page 1, ...
-
-## Notes
-
-Le renseignement du genre est-il pertinent ?
