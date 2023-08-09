@@ -10,11 +10,12 @@ export const load = async ({ params, locals }) => {
 export const actions = {
 	update: async ({ params, request, locals }) => {
 		await isOwnerOrThrow(params.eventId, locals)
-		const { err, data } = await parseFormData(request, teamShema, { arrayOperation: 'set' })
+		const { err, data } = await parseFormData(request, teamShema)
 		if (err) return err
 
 		const { teamId } = params
 		const { leaders, ...restData } = data
+		const leadersId = leaders?.connect.map(({ id }) => id) || []
 
 		await prisma.team.update({
 			where: { id: params.teamId },
@@ -22,9 +23,14 @@ export const actions = {
 				...restData,
 				...(leaders && {
 					leaders: {
-						set: leaders.set.map(({ id }) => ({
-							userId_teamId: { userId: id, teamId },
-						})),
+						deleteMany: {
+							teamId,
+							userId: { notIn: leadersId },
+						},
+						createMany: {
+							data: leadersId.map((id) => ({ userId: id })),
+							skipDuplicates: true,
+						},
 					},
 				}),
 			},
