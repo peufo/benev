@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Icon } from '$lib/material'
-	import { mdiChevronRight, mdiPencilOutline } from '@mdi/js'
+	import { mdiChevronRight, mdiEmailOutline, mdiPencilOutline, mdiPhoneOutline } from '@mdi/js'
 	import PeriodForm from './PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -28,12 +28,29 @@
 			<p>{data.team.description || ''}</p>
 			<div>
 				Responsables :
-				<!-- TODO: menu de lien utils vers les responsables -->
-				{#each data.team.leaders as {user}}
-					<a href="#" class="btn btn-xs btn-ghost">
-						{user.firstName}
-						{user.lastName}
-					</a>
+				{#each data.team.leaders as { user }}
+					<div class="dropdown">
+						<!-- svelte-ignore a11y-label-has-associated-control -->
+						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+						<label tabindex="0" class="btn btn-sm">{user.firstName} {user.lastName}</label>
+						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+						<ul tabindex="0" class="dropdown-content menu z-10 p-2 shadow rounded-box bg-base-100 w-48">
+							<li>
+								<a href="mailto:{user.email}" target="_blank">
+									<Icon path={mdiEmailOutline} />
+									Envoyer un mail
+								</a>
+							</li>
+							{#if user.phone}
+								<li>
+									<a href="tel:{user.phone}" target="_blank">
+										<Icon path={mdiPhoneOutline} />
+										Téléphoner
+									</a>
+								</li>
+							{/if}
+						</ul>
+					</div>
 				{/each}
 			</div>
 		</div>
@@ -70,8 +87,12 @@
 						{formatRange(period)}
 					</td>
 					<td class="flex gap-2 items-center">
-						<progress class="progress max-w-[100px] w-[8vw]" value={nbSubscribe} max={period.maxSubscribe} />
-						
+						<progress
+							class="progress max-w-[100px] w-[8vw]"
+							value={nbSubscribe}
+							max={period.maxSubscribe}
+						/>
+
 						<span class="whitespace-nowrap text-xs">
 							{nbSubscribe}/{period.maxSubscribe}
 						</span>
@@ -79,10 +100,10 @@
 						{#if userSubscribe}
 							<SubscribeState state={userSubscribe.state} />
 						{:else}
-							<div class="grow"></div>
+							<div class="grow" />
 						{/if}
 
-					{#if data.isLeader}
+						{#if data.isLeader}
 							<div class="flex gap-2">
 								<button
 									class="btn btn-square btn-sm"
@@ -112,8 +133,8 @@
 									/>
 								</button>
 							</div>
-							{/if}
-						</td>
+						{/if}
+					</td>
 				</tr>
 
 				<Subscribes
