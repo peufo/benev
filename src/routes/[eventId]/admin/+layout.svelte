@@ -5,11 +5,12 @@
 	const tabs = [
 		{ path: '/admin', label: "L'évenement", reg: /\/admin$/ },
 		{ path: '/admin/pages', label: 'Les pages', reg: /\/admin\/pages*/ },
+		{ path: '/admin/users', label: 'Les bénévoles', reg: /\/admin\/users/ },
 	]
 </script>
 
 <svelte:head>
-	<title>BENEV - Édition</title>
+	<title>BENEV - Administration</title>
 </svelte:head>
 
 
