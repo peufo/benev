@@ -1,3 +1,3 @@
 <h2>
-  Infos d'un utilisateur inscris à un évenement
+  TODO: Profile et inscriptions d'un utilisateur inscris à un évenement
 </h2>

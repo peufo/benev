@@ -1,5 +1,3 @@
-prénom, nom
-
-équipes à charges
-
-TODO: droit sur l'évenement
+<h2>
+  TODO: table avec prénom, nom, équipes à charges, (droit sur l'évenement)
+</h2>
