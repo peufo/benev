@@ -2,6 +2,7 @@ import { fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 import { auth, parseFormData } from '$lib/server'
 import { loginShema, registerShema } from '$lib/form'
+
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()
 	if (session) throw redirect(301, '/auth/subscribes')

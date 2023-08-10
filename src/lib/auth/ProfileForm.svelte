@@ -16,12 +16,16 @@
 
 	const form = useForm({
 		successReset: false,
-		successMessage: 'Profile sauvegardé'
+		successMessage: 'Profile sauvegardé',
 	})
-
 </script>
 
-<form method="post" use:enhance={form.submit} class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4">
+<form
+	method="post"
+	action="/auth/profile"
+	use:enhance={form.submit}
+	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4"
+>
 	<InputText
 		key="email"
 		label="Email"

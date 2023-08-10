@@ -1,5 +1,5 @@
 <script lang="ts">
-  import UserLayout from "$lib/UserLayout.svelte";
+  import UserLayout from "$lib/auth/AuthLayout.svelte";
   export let data
   
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Profile from './Profile.svelte'
+	import Profile from '$lib/auth/ProfileForm.svelte'
 
 	export let data
 </script>
