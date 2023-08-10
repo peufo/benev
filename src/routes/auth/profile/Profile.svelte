@@ -60,7 +60,7 @@
 
 	<InputCheckboxs
 		key="diet"
-		label="Régime alimentaire"
+		label="Régime particulier"
 		options={['Végétarien', 'Végétalien', 'Sans gluten', 'Sans lactose']}
 		class="md:col-span-3"
 		value={JSON.parse(user.diet || '[]')}

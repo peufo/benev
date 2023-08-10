@@ -1,15 +1,9 @@
 <script lang="ts">
-	import Footer from "$lib/Footer.svelte"
-  import Header from "$lib/Header.svelte"
+  import UserLayout from "$lib/UserLayout.svelte";
   export let data
+  
 </script>
 
-<div class="p-2" >
-	<Header userName={data.user?.name}/>
-</div>
-
-<main class="grow p-2">
+<UserLayout user={data.user}>
   <slot/>
-</main>
-
-<Footer />
+</UserLayout>

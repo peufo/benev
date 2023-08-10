@@ -5,7 +5,7 @@
 	export let data
 
 	const teamsIds = data.subscribes.map((s) => s.period.teamId)
-	// data.events.map(e => e.teams.map(t => t.id)).flat()
+	
 </script>
 
 <div class="flex flex-col gap-10">
