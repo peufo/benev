@@ -17,7 +17,7 @@
 	<div class="dropdown dropdown-bottom dropdown-end">
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<label tabindex="0" class="btn">
+		<label tabindex="0" class="btn btn-square lg:inline-flex lg:w-auto lg:px-2">
 			<Icon path={mdiAccountOutline} />
 			<span class="hidden lg:block">{userName || ''}</span>
 		</label>
