@@ -23,9 +23,10 @@
 					{#each event.teams.filter((t) => teamsIds.includes(t.id)) as team}
 						{@const _subscribes = subscribes.filter((s) => s.period.teamId === team.id)}
 
-						<tr class="last:border-none">
+						<tr class="last:border-none relative hover">
 							<td class="align-top pt-6 font-semibold">
-								<a href="/{event.id}/teams/{team.id}" class="link link-hover">{team.name}</a>
+								<a href="/{event.id}/teams/{team.id}" class="absolute inset-0">{' '}</a>
+								{team.name}
 							</td>
 
 							<td>
