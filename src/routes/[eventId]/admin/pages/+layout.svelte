@@ -43,5 +43,7 @@
 		</form>
 	</div>
 
-	<slot />
+	<div class="grow">
+		<slot />
+	</div>
 </div>

@@ -13,7 +13,7 @@
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import Footer from '$lib/Footer.svelte'
-	import Menu from './Menu.svelte'
+	import EventMenu from './EventMenu.svelte'
 
 	export let data
 </script>
@@ -43,7 +43,7 @@
 	</div>
 
 	<div slot="end" class="contents">
-		<Menu pages={data.pages} pageIndex={data.pageIndex} isOwner={data.isOwner} />
+		<EventMenu pages={data.pages} pageIndex={data.pageIndex} isOwner={data.isOwner} />
 	</div>
 </Header>
 

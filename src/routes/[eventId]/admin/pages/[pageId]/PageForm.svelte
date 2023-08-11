@@ -58,7 +58,6 @@
     <a href={pagePath} class="btn btn-ghost">
       {pagePath}
     </a>
-
   </div>
 
 	<input type="hidden" name="id" value={page.id} />
@@ -67,9 +66,9 @@
 	<input type="hidden" name="eventId" value={page.eventId} />
 
 
-		<div class="input input-bordered sm:w-[158mm] min-h-[555px] overflow-auto prose">
-			<div bind:this={holder} />
-		</div>
+	<div class="input input-bordered min-h-[555px] overflow-auto prose max-w-none">
+		<div bind:this={holder} />
+	</div>
 	
 
 	<div class="flex flex-row-reverse gap-2">
@@ -80,4 +79,5 @@
 			formaction="?/delete_page">Supprimer</button
 		>
 	</div>
+
 </form>

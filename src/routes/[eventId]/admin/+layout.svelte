@@ -14,19 +14,18 @@
 	<title>BENEV - Administration</title>
 </svelte:head>
 
-<div class="flex gap-4 items-start flex-wrap justify-center">
-	<ul class="menu menu-lg bg-base-100 rounded-box text-clip">
+<div class="flex flex-col gap-4 max-w-4xl m-auto">
+	<div class="tabs tabs-boxed bg-base-100 grid grid-cols-1 sm:grid-cols-4 shadow-lg">
 		{#each tabs as { path, label, reg }}
 			{@const href = `${$eventPath}${path}`}
-			<li>
-				<a {href} class:active={$page.url.pathname.match(reg)}>
-					{label}
-				</a>
-			</li>
-		{/each}
-	</ul>
 
-	<div class="card bg-base-100 max-w-4xl" style="width: -webkit-fill-available;">
+			<a class="tab tab-lg whitespace-nowrap" {href} class:tab-active={$page.url.pathname.match(reg)}>
+				{label}
+			</a>
+		{/each}
+	</div>
+
+	<div class="card bg-base-100 shadow-lg">
 		<div class="card-body p-2 sm:p-8">
 			<slot />
 		</div>
