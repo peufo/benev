@@ -5,7 +5,7 @@ import { loginShema, registerShema } from '$lib/form'
 
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()
-	if (session) throw redirect(301, '/auth/subscribes')
+	if (session) throw redirect(301, '/me/subscribes')
 }
 
 export const actions: Actions = {

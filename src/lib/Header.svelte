@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiAccountOutline, mdiHomeOutline } from '@mdi/js'
 	import Icon from '$lib/material/Icon.svelte'
-	import AuthMenu from '$lib/auth/AuthMenu.svelte'
+	import AuthMenu from '$lib/me/AuthMenu.svelte'
 
 	export let userName = ''
 </script>

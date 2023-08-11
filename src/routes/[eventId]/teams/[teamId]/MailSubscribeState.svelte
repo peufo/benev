@@ -50,6 +50,6 @@
 
 	<p>
     Tu peux trouver toutes les informations dont tu as besoins dans 
-    <a href="{domain}/auth">ton tableau de bord.</a>
+    <a href="{domain}/me">ton tableau de bord.</a>
 	</p>
 </main>

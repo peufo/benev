@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AuthSubscribes from '$lib/auth/AuthSubscribes.svelte';
+	import AuthSubscribes from '$lib/me/AuthSubscribes.svelte';
 	export let data
 
 </script>

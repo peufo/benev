@@ -25,7 +25,7 @@
 
 	<form
 		method="post"
-		action="/auth/profile"
+		action="/me/profile"
 		use:enhance={form.submit}
 		class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4"
 	>

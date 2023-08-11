@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Footer from '$lib/Footer.svelte'
 	import Header from '$lib/Header.svelte'
-	import Login from '$lib/auth/Login.svelte'
-	import AuthMenu from '$lib/auth/AuthMenu.svelte'
+	import Login from '$lib/me/Login.svelte'
+	import AuthMenu from '$lib/me/AuthMenu.svelte'
 
 	import type { User } from 'lucia'
 

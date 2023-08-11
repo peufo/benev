@@ -22,7 +22,7 @@
 
 		<ul class="dropdown-content menu menu-lg shadow-lg bg-base-100 rounded-box w-56">
 			{#each tabs as { path, label }}
-				{@const href = `/auth/${path}`}
+				{@const href = `/me/${path}`}
 				<li>
 					<a {href} class:active={$page.url.pathname === href}>
 						{label}
@@ -31,14 +31,14 @@
 			{/each}
 
 			<div class="divider">
-				<form method="POST" action="/auth?/logout">
+				<form method="POST" action="/me?/logout">
 					<button class="btn btn-sm"> Déconnexion </button>
 				</form>
 			</div>
 		</ul>
 	</div>
 {:else}
-	<a class="btn-ghost rounded-btn btn btn-square" href="/auth">
+	<a class="btn-ghost rounded-btn btn btn-square" href="/me">
 		<Icon path={mdiAccountOutline} />
 	</a>
 {/if}
