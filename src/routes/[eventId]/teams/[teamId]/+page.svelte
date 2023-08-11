@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { Icon } from '$lib/material'
-	import { mdiChevronRight, mdiEmailOutline, mdiPencilOutline, mdiPhoneOutline } from '@mdi/js'
+	import {
+		mdiArrowLeft,
+		mdiChevronRight,
+		mdiEmailOutline,
+		mdiPencilOutline,
+		mdiPhoneOutline,
+	} from '@mdi/js'
 	import PeriodForm from './PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Subscribes from './Subscribes.svelte'
-	import { urlParam } from '$lib/store'
+	import { eventPath, urlParam } from '$lib/store'
 	import { goto } from '$app/navigation'
 	import SubscribeState from '$lib/SubscribeState.svelte'
 	import { formatRange } from '$lib/formatRange'
@@ -24,6 +30,10 @@
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
 	<div class="flex gap-2 py-2 items-center">
 		<div>
+			<a href="{$eventPath}/teams" class="btn btn-sm">
+				<Icon path={mdiArrowLeft} />
+				secteurs
+			</a>
 			<h2 class="text-2xl">{data.team.name}</h2>
 			<p>{data.team.description || ''}</p>
 			<div>
@@ -34,7 +44,10 @@
 						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 						<label tabindex="0" class="btn btn-sm">{user.firstName} {user.lastName}</label>
 						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-						<ul tabindex="0" class="dropdown-content menu z-10 p-2 shadow rounded-box bg-base-100 w-48">
+						<ul
+							tabindex="0"
+							class="dropdown-content menu z-10 p-2 shadow rounded-box bg-base-100 w-48"
+						>
 							<li>
 								<a href="mailto:{user.email}" target="_blank">
 									<Icon path={mdiEmailOutline} />
