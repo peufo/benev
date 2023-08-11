@@ -11,6 +11,9 @@
 </script>
 
 <div class="flex flex-col gap-10">
+
+	<h1 class="text-3xl">Mes inscriptions</h1>
+
 	{#each events as event}
 		<section>
 			<a class="text-xl link link-hover" href="/{event.id}">{event.name}</a>
