@@ -46,7 +46,7 @@
 						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 						<ul
 							tabindex="0"
-							class="dropdown-content menu z-10 p-2 shadow rounded-box bg-base-100 w-48"
+							class="dropdown-content menu z-10 p-2 shadow-lg rounded-box bg-base-100 w-48"
 						>
 							<li>
 								<a href="mailto:{user.email}" target="_blank">
