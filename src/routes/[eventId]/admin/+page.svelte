@@ -51,7 +51,7 @@
 	}
 </script>
 
-<div>TODO: FILTRE PAR PERIODE</div>
+<div>TODO: FILTRE PAR PERIODE + par équipes</div>
 
 <div class="flex gap-4 items-start flex-wrap">
 	<div class="stats bg-base-200 grow">
