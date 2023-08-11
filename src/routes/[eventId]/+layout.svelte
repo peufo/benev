@@ -16,39 +16,36 @@
 	import Menu from './Menu.svelte'
 
 	export let data
-
 </script>
 
 <svelte:head>
 	<title>BENEV - {data.event.name}</title>
 </svelte:head>
 
-<div class="p-2">
-	<Header userName={data.user?.name}>
-		<div class="contents" slot="start">
-			<a href={$eventPath} class="link link-hover text-lg">
-				<Icon path={mdiChevronRight} class="hidden lg:inline-block" />
-				{data.event.name}
-			</a>
+<Header userName={data.user?.name} pathPrefix={$eventPath}>
+	<div class="contents" slot="start">
+		<a href={$eventPath} class="link link-hover text-lg">
+			<Icon path={mdiChevronRight} class="hidden lg:inline-block" />
+			{data.event.name}
+		</a>
 
-			{#if data.isOwner}
-				<a
-					href="{$eventPath}/admin"
-					class="
-						hidden lg:btn btn-square 
+		{#if data.isOwner}
+			<a
+				href="{$eventPath}/admin"
+				class="
+						hidden lg:btn btn-square
 						{$page.route.id?.startsWith(`/[eventId]/admin`) ? '' : 'lg:btn-ghost'}
 					"
-				>
-					<Icon path={mdiCogOutline} title="Gestion évenement" class="rotate-12" />
-				</a>
-			{/if}
-		</div>
+			>
+				<Icon path={mdiCogOutline} title="Gestion évenement" class="rotate-12" />
+			</a>
+		{/if}
+	</div>
 
-		<div slot="end" class="contents">
-			<Menu pages={data.pages} pageIndex={data.pageIndex} isOwner={data.isOwner} />
-		</div>
-	</Header>
-</div>
+	<div slot="end" class="contents">
+		<Menu pages={data.pages} pageIndex={data.pageIndex} isOwner={data.isOwner} />
+	</div>
+</Header>
 
 <main class="grow p-2">
 	<slot />

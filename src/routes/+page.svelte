@@ -18,9 +18,7 @@
 	/>
 </dialog>
 
-<div class="p-2">
-	<Header userName={data.user?.name} />
-</div>
+<Header userName={data.user?.name} />
 
 <main class="grow p-2">
 	<div class="p-4 card bg-base-100 max-w-4xl m-auto">
@@ -28,11 +26,11 @@
 			<h2 class="text-2xl">Tous les évènements</h2>
 			<div class="grow" />
 			<button class="btn btn-neutral" on:click={() => createDialog.showModal()}>
-				<Icon path={mdiPlus}  class="fill-neutral-content" />
+				<Icon path={mdiPlus} class="fill-neutral-content" />
 				Nouveau
 			</button>
 		</div>
-		<div class="divider"></div>
+		<div class="divider" />
 
 		<table class="table text-base">
 			<thead>

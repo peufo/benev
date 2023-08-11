@@ -9,6 +9,8 @@
 	]
 
 	export let userName = ''
+	export let pathPrefix = ''
+
 </script>
 
 {#if userName}
@@ -20,9 +22,9 @@
 			<span class="hidden lg:block">{userName || ''}</span>
 		</label>
 
-		<ul class="dropdown-content menu menu-lg shadow-lg bg-base-100 rounded-box w-56">
+		<ul class="dropdown-content menu menu-lg z-10 shadow-lg bg-base-100 rounded-box w-56">
 			{#each tabs as { path, label }}
-				{@const href = `/me/${path}`}
+				{@const href = `${pathPrefix}/me/${path}`}
 				<li>
 					<a {href} class:active={$page.url.pathname === href}>
 						{label}
