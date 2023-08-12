@@ -90,7 +90,9 @@
 					{key}
 				</div>
 			{:else}
-				Aucun
+				<div class="stat-value text-sm">
+					Aucun
+				</div>
 			{/each}
 		</div>
 	</div>
