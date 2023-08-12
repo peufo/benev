@@ -21,12 +21,13 @@ export const formContext = {
 	set: (ctx: FormContext) => setContext<FormContext>(formContextKey, ctx),
 }
 
+type SuccessMessage = string | ((action: URL) => string)
 type UseFormOptions = {
 	beforeRequest?: (...args: Parameters<SubmitFunction>) => Promise<unknown>
-	successCallback?: () => unknown
+	successCallback?: (action: URL) => unknown
 	successUpdate?: boolean
 	successReset?: boolean
-	successMessage?: string
+	successMessage?: SuccessMessage
 }
 
 export function useForm<Shema extends z.ZodRawShape>({
@@ -69,7 +70,7 @@ export function useForm<Shema extends z.ZodRawShape>({
 
 		event.submitter?.classList.add('btn-disabled')
 
-		return async ({ result, update }) => {
+		return async ({ result, update, action }) => {
 			event.submitter?.classList.remove('btn-disabled')
 
 			if (result.type === 'error') {
@@ -83,16 +84,22 @@ export function useForm<Shema extends z.ZodRawShape>({
 				return
 			}
 
+			const notifySuccess = (successMessage?: SuccessMessage) => {
+				if (!successMessage) return
+				if (typeof successMessage === 'string') notify.success(successMessage)
+				else notify.success(successMessage(action))
+			}
+
 			if (result.type === 'success') {
-				notify.success(successMessage)
-				if (successCallback) successCallback()
+				notifySuccess(successMessage)
+				if (successCallback) successCallback(action)
 				if (successUpdate) update({ reset: successReset })
 				return
 			}
 
 			if (result.type === 'redirect') {
-				notify.success(successMessage)
-				if (successCallback) successCallback()
+				notifySuccess(successMessage)
+				if (successCallback) successCallback(action)
 				goto(result.location, { replaceState: true, invalidateAll: successUpdate })
 			}
 		}

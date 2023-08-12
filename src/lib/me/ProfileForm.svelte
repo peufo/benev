@@ -10,13 +10,24 @@
 		InputRadio,
 		InputTextarea,
 		InputCheckboxs,
+		FormControl,
 	} from '$lib/material/input'
+	import { Icon } from '$lib/material'
+	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 
 	export let user: User
 
+	let verificationEmailSent = false
+	const verificationEmailMessage = 'Un email de verification à été envoyé'
 	const form = useForm({
 		successReset: false,
-		successMessage: 'Profile sauvegardé',
+		successMessage: (action) => {
+			if (!action.search) return 'Profile sauvegardé'
+			else {
+				verificationEmailSent = true
+				return verificationEmailMessage
+			}
+		},
 	})
 </script>
 
@@ -29,13 +40,39 @@
 		use:enhance={form.submit}
 		class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4"
 	>
-		<InputText
+		<FormControl
 			key="email"
 			label="Email"
-			input={{ readonly: true, disabled: true }}
-			value={user.email}
 			class="md:col-span-6"
-		/>
+			hint={verificationEmailSent ? verificationEmailMessage : ''}
+		>
+			<div class="join">
+				<input
+					value={user.email}
+					type="text"
+					name="email"
+					id="email"
+					readonly
+					disabled
+					class="input-bordered input join-item grow"
+				/>
+
+				{#if user.isEmailVerified}
+					<div class="btn-square join-item grid place-content-center bg-base-200">
+						<Icon path={mdiCheck} class="fill-success" title="Votre email a été verifié" />
+					</div>
+				{:else}
+					<button
+						class="btn btn-square join-item"
+						formaction="/me?/verify_email"
+						disabled={verificationEmailSent}
+					>
+						<Icon path={mdiAlertOctagonOutline} class="fill-warning" title="Valide ton email" />
+					</button>
+				{/if}
+			</div>
+		</FormControl>
+
 		<InputText key="phone" label="Téléphone" value={user.phone || ''} class="md:col-span-6" />
 
 		<InputText key="firstName" label="Prénom" value={user.firstName} class="md:col-span-4" />

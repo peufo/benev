@@ -4,6 +4,8 @@
 	type $$Props = InputProps
 	$: ({ input, value: _value, ...props } = $$props as $$Props)
 	export let value = _value
+
+	$: ({ class: inputClass, ...inputProps } = input || {})
 </script>
 
 <FormControl {...props} let:key>
@@ -15,7 +17,7 @@
 		type="text"
 		name={key}
 		id={key}
-		class="input-bordered input"
-		{...input}
+		class="input-bordered input {inputClass || ''}"
+		{...inputProps}
 	/>
 </FormControl>

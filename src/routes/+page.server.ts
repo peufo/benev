@@ -20,7 +20,7 @@ export const actions = {
 		if (exist)
 			return fail(400, { issues: [{ path: ['name'], message: 'Désolé, ce nom est déjà pris' }] })
 
-		const reservedPaths = ['auth', 'me', 'users', 'root', 'admin']
+		const reservedPaths = ['auth', 'me', 'users', 'root', 'admin', 'email-check']
 		if (reservedPaths.includes(data.id))
 			return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
 

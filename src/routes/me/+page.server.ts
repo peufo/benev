@@ -1,7 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
-import { auth, parseFormData } from '$lib/server'
+import { auth, generateEmailVerificationToken, parseFormData, sendEmailTemplate } from '$lib/server'
 import { loginShema, registerShema } from '$lib/form'
+import { EmailVerificationLink } from '$lib/email'
 
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()
@@ -32,6 +33,16 @@ export const actions: Actions = {
 			})
 			const session = await auth.createSession({ userId: user.userId, attributes: {} })
 			locals.auth.setSession(session)
+
+			const tokenId = await generateEmailVerificationToken(session.user.id)
+			sendEmailTemplate(EmailVerificationLink, {
+				to: session.user.email,
+				subject: 'Bienvenu',
+				props: {
+					isNewUser: true,
+					tokenId,
+				},
+			})
 		} catch (error) {
 			const { message } = error as Error
 			console.log(error)
@@ -58,5 +69,16 @@ export const actions: Actions = {
 		if (!session) return fail(401)
 		await auth.invalidateSession(session.sessionId)
 		locals.auth.setSession(null) // remove cookie
+	},
+
+	verify_email: async ({ locals }) => {
+		const session = await locals.auth.validate()
+		if (!session) return fail(401)
+		const tokenId = await generateEmailVerificationToken(session.user.id)
+		sendEmailTemplate(EmailVerificationLink, {
+			to: session.user.email,
+			subject: 'Verification de ton Email',
+			props: { tokenId },
+		})
 	},
 }

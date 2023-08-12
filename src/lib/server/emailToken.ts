@@ -10,17 +10,18 @@ export const generateEmailVerificationToken = async (userId: string) => {
 	if (reusableToken) return reusableToken.id
 
 	const tokenId = generateRandomString(63)
-	await prisma.emailVerificationToken.create({
+	const newToken = await prisma.emailVerificationToken.create({
 		data: {
 			id: tokenId,
 			expires: new Date().getTime() + 2 * HOURE,
 			userId,
 		},
 	})
+
 	return tokenId
 }
 
-export const validateEmailVerificationTOken = async (tokenId: string) => {
+export const validateEmailVerificationToken = async (tokenId: string) => {
 	const [token] = await prisma.$transaction([
 		prisma.emailVerificationToken.findUniqueOrThrow({ where: { id: tokenId } }),
 		prisma.emailVerificationToken.delete({ where: { id: tokenId } }),
