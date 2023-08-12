@@ -1,8 +1,7 @@
 <script lang="ts">
+	import Contact from '$lib/Contact.svelte'
 	import { userSizeLabel } from '$lib/form'
-	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import { mdiEmailOutline, mdiPhoneOutline } from '@mdi/js'
 	import { Size } from '@prisma/client'
 	import dayjs from 'dayjs'
 
@@ -113,22 +112,23 @@
 			{#each data.users as user}
 				<tr class="relative hover">
 					<td>{user.firstName} {user.lastName}</td>
-					<td>{user.subscribes.length}</td>
-					<td>{toHour(workTimes[user.id])}</td>
+					<td>
+						<div class="badge badge-lg">
+							{user.subscribes.length}
+						</div>
+					</td>
+					<td>
+						<div class="badge badge-lg">
+							{toHour(workTimes[user.id])}
+						</div>
+					</td>
 					<td>{(user.size && userSizeLabel[user.size]) || '-'}</td>
 					<td>{user.diet?.replaceAll(/[\[\]"]/g, '').replaceAll(',', ', ') || ''}</td>
 					<td>{getAge(user.birthday)}</td>
 					<td align="right">
 						<a href="{$eventPath}/admin/users/{user.id}" class="absolute inset-0">{' '}</a>
 
-						{#if user.phone}
-							<a href="tel:{user.phone}" target="_blank" class="btn btn-square btn-sm relative">
-								<Icon path={mdiPhoneOutline} title="Téléphoner à {user.firstName}" />
-							</a>
-						{/if}
-						<a href="mailto:{user.email}" target="_blank" class="btn btn-square btn-sm relative">
-							<Icon path={mdiEmailOutline} title="Envoyer un mail à {user.firstName}" />
-						</a>
+						<Contact {user} />
 					</td>
 				</tr>
 			{/each}

@@ -24,12 +24,12 @@
 						{@const _subscribes = subscribes.filter((s) => s.period.teamId === team.id)}
 
 						<tr class="last:border-none relative hover">
-							<td class="align-top pt-6 font-semibold">
+							<td class="align-top pt-6 font-semibold rounded-l-box">
 								<a href="/{event.id}/teams/{team.id}" class="absolute inset-0">{' '}</a>
 								{team.name}
 							</td>
 
-							<td>
+							<td class="rounded-r-box">
 								<table>
 									<tbody>
 										{#each _subscribes as { period, state }}
