@@ -6,7 +6,8 @@ import { dev } from '$app/environment'
 
 export * from './formData'
 export * from './permission'
-export * from './mail'
+export * from './email'
+export * from './emailToken'
 
 export const prisma = new PrismaClient()
 
@@ -14,12 +15,7 @@ export const auth = lucia({
 	adapter: adapter(prisma),
 	env: dev ? 'DEV' : 'PROD',
 	middleware: sveltekit(),
-	getUserAttributes: (data) => ({
-		userId: data.id,
-		email: data.email,
-		name: `${data.firstName} ${data.lastName}`,
-		phone: data.phone,
-	}),
+	getUserAttributes: (data) => data,
 })
 
 export type Auth = typeof auth

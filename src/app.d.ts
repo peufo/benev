@@ -17,6 +17,7 @@ declare global {
 		type Auth = import('$lib/server').Auth
 		type DatabaseUserAttributes = {
 			email: string
+			isEmailVerified: boolean
 			firstName: string
 			lastName: string
 			phone?: string

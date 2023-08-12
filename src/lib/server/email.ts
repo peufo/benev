@@ -1,5 +1,6 @@
 import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } from '$env/static/private'
 import nodemailer from 'nodemailer'
+import type { ComponentProps, ComponentType } from 'svelte'
 
 export const transporter = nodemailer.createTransport({
 	host: SMTP_HOST,
@@ -25,7 +26,7 @@ type MailOption = {
 	html: string
 }
 
-export const sendMail = async (mail: MailOption) => {
+export const sendEmail = async (mail: MailOption) => {
 	return new Promise((resolve) => {
 		transporter.sendMail(
 			{
@@ -39,5 +40,20 @@ export const sendMail = async (mail: MailOption) => {
 				resolve(info)
 			}
 		)
+	})
+}
+
+export async function sendEmailTemplate<Component extends ComponentType>(
+	template: Component,
+	options: Omit<MailOption, 'html'> & {
+		props: ComponentProps<InstanceType<Component>>
+	}
+) {
+	// @ts-ignore
+	const { html } = template.render(options.props)
+	return sendEmail({
+		to: options.to,
+		subject: options.subject,
+		html,
 	})
 }

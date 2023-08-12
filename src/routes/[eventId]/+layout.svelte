@@ -22,7 +22,7 @@
 	<title>BENEV - {data.event.name}</title>
 </svelte:head>
 
-<Header userName={data.user?.name} pathPrefix={$eventPath}>
+<Header userName={data.user?.firstName} pathPrefix={$eventPath}>
 	<div class="contents" slot="start">
 		<a href={$eventPath} class="link link-hover text-lg">
 			<Icon path={mdiChevronRight} class="hidden lg:inline-block" />

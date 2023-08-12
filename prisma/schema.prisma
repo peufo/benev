@@ -25,12 +25,11 @@ model User {
   skillString String? // TODO: replace by tags système ?
   comment     String?
 
-  isEmailValided Boolean @default(false)
+  emailVerificationTokens EmailVerificationToken[]
+  isEmailVerified         Boolean                  @default(false)
 
-  // owners of
-  events       Event[]
-  // leaders in
-  leaders      Leader[]
+  ownerOf      Event[]
+  leadersOf    Leader[]
   subscribes   Subscribe[]
   auth_session Session[]
   auth_key     Key[]
@@ -63,6 +62,13 @@ model Key {
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
+}
+
+model EmailVerificationToken {
+  id      String @id
+  expires BigInt
+  userId  String
+  user    User   @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Event {
@@ -144,7 +150,8 @@ model Period {
 model Subscribe {
   id String @id @default(cuid())
 
-  state SubscribeState @default(request)
+  state   SubscribeState   @default(request)
+  request SubscribeRequest @default(byUser)
 
   periodId String
   period   Period @relation(references: [id], fields: [periodId], onDelete: Cascade)
@@ -156,6 +163,11 @@ model Subscribe {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, periodId])
+}
+
+enum SubscribeRequest {
+  byUser
+  byLeader
 }
 
 enum SubscribeState {

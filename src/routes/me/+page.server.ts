@@ -18,6 +18,7 @@ export const actions: Actions = {
 			firstName: data.firstName,
 			lastName: data.lastName,
 			phone: data.phone,
+			isEmailVerified: false,
 		}
 
 		try {
@@ -31,8 +32,6 @@ export const actions: Actions = {
 			})
 			const session = await auth.createSession({ userId: user.userId, attributes: {} })
 			locals.auth.setSession(session)
-
-			// if (typeof formData.callback === 'string') throw redirect(300, formData.callback)
 		} catch (error) {
 			const { message } = error as Error
 			console.log(error)
@@ -52,8 +51,6 @@ export const actions: Actions = {
 			console.error(error)
 			return fail(400, { message })
 		}
-
-		// if (typeof formData.callback === 'string') throw redirect(300, formData.callback)
 	},
 
 	logout: async ({ locals }) => {

@@ -7,7 +7,7 @@
 </script>
 
 
-<Header userName={data.user?.name} />
+<Header userName={data.user?.firstName} />
 
 <UserLayout user={data.user}>
 	<slot />

@@ -25,7 +25,7 @@
       <td>{user.firstName} {user.lastName}</td>
       <td>
         <div class="badge badge-lg">
-          {user.leaders.length}
+          {user.leadersOf.length}
         </div>
       </td>
       <td align="right">

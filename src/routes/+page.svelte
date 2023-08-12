@@ -18,7 +18,7 @@
 	/>
 </dialog>
 
-<Header userName={data.user?.name} />
+<Header userName={data.user?.firstName} />
 
 <main class="grow p-2">
 	<div class="p-4 card bg-base-100 max-w-4xl m-auto">

@@ -1,11 +1,9 @@
 <script lang="ts">
+	import { EmailNewSubscribe, EmailSubscribeState } from '$lib/email'
 
-  import MailNewSubscribe from "../../../[eventId]/teams/[teamId]/MailNewSubscribe.svelte";
-  import MailSubscribeState from "../../../[eventId]/teams/[teamId]/MailSubscribeState.svelte";
-
-  export let data
+	export let data
 </script>
 
-<MailNewSubscribe subscribe={data.subscribe} />
+<EmailNewSubscribe subscribe={data.subscribe} />
 
-<MailSubscribeState subscribe={data.subscribe}/>
+<EmailSubscribeState subscribe={data.subscribe} />

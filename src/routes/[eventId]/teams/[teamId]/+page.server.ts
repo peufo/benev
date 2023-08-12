@@ -1,9 +1,8 @@
-import { isLeaderOrThrow, parseFormData, prisma, sendMail } from '$lib/server'
+import { isLeaderOrThrow, parseFormData, prisma, sendEmailTemplate } from '$lib/server'
 import { periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
 import { error, fail } from '@sveltejs/kit'
 
-import MailNewSubscribe from './MailNewSubscribe.svelte'
-import MailSubscribeState from './MailSubscribeState.svelte'
+import { EmailNewSubscribe, EmailSubscribeState } from '$lib/email'
 import type { SubscribeState } from '@prisma/client'
 
 export const load = async ({ params, parent }) => {
@@ -41,12 +40,10 @@ export const actions = {
 			},
 		})
 
-		// @ts-ignore
-		const { html } = MailNewSubscribe.render({ subscribe })
-		sendMail({
+		sendEmailTemplate(EmailNewSubscribe, {
 			to: subscribe.period.team.leaders.map(({ user }) => user.email),
 			subject: 'Un nouveau bénévole',
-			html,
+			props: { subscribe },
 		})
 
 		return
@@ -124,12 +121,10 @@ async function setSubscribState(request: Request, state: SubscribeState) {
 		},
 	})
 
-	// @ts-ignore
-	const { html } = MailSubscribeState.render({ subscribe })
-	sendMail({
+	sendEmailTemplate(EmailSubscribeState, {
 		to: subscribe.user.email,
 		subject: `Inscription ${subscribe.state === 'accepted' ? 'acceptée' : 'refusée'}`,
-		html,
+		props: { subscribe },
 	})
 
 	return
