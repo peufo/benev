@@ -1,8 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
-import { auth, generateEmailVerificationToken, parseFormData, sendEmailTemplate } from '$lib/server'
-import { loginShema, registerShema } from '$lib/form'
-import { EmailVerificationLink } from '$lib/email'
+import { auth, generateToken, parseFormData, prisma, sendEmailTemplate } from '$lib/server'
+import { loginShema, passwordResetShema, registerShema } from '$lib/form'
+import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
 
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()
@@ -34,7 +34,7 @@ export const actions: Actions = {
 			const session = await auth.createSession({ userId: user.userId, attributes: {} })
 			locals.auth.setSession(session)
 
-			const tokenId = await generateEmailVerificationToken(session.user.id)
+			const tokenId = await generateToken('emailVerification', session.user.id)
 			sendEmailTemplate(EmailVerificationLink, {
 				to: session.user.email,
 				subject: 'Bienvenu',
@@ -51,7 +51,7 @@ export const actions: Actions = {
 	},
 
 	login: async ({ request, locals }) => {
-		const { err, data, formData } = await parseFormData(request, loginShema)
+		const { err, data } = await parseFormData(request, loginShema)
 		if (err) return err
 		try {
 			const user = await auth.useKey('email', data.email, data.password)
@@ -74,10 +74,24 @@ export const actions: Actions = {
 	verify_email: async ({ locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) return fail(401)
-		const tokenId = await generateEmailVerificationToken(session.user.id)
+		const tokenId = await generateToken('emailVerification', session.user.id)
 		sendEmailTemplate(EmailVerificationLink, {
 			to: session.user.email,
 			subject: 'Verification de ton Email',
+			props: { tokenId },
+		})
+	},
+	reset_password: async ({ request }) => {
+		const { err, data } = await parseFormData(request, passwordResetShema)
+		if (err) return err
+		const user = await prisma.user.findUniqueOrThrow({
+			where: { email: data.email },
+			select: { id: true },
+		})
+		const tokenId = await generateToken('passwordReset', user.id)
+		sendEmailTemplate(EmailPasswordReset, {
+			to: data.email,
+			subject: 'Changement de mot de passe',
 			props: { tokenId },
 		})
 	},

@@ -13,7 +13,7 @@
 
 <p>
   Tu peux valider ton adresse email en 
-  <a href="{domain}/email-check/{tokenId}" data-sveltekit-preload-data="off">
+  <a href="{domain}/token/{tokenId}/email_verification" data-sveltekit-preload-data="off">
     cliquant sur ce lien.
   </a>
 </p>

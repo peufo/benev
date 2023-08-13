@@ -25,8 +25,8 @@ model User {
   skillString String? // TODO: replace by tags système ?
   comment     String?
 
-  emailVerificationTokens EmailVerificationToken[]
-  isEmailVerified         Boolean                  @default(false)
+  tokens          Token[]
+  isEmailVerified Boolean @default(false)
 
   ownerOf      Event[]
   leadersOf    Leader[]
@@ -64,11 +64,17 @@ model Key {
   @@index([user_id])
 }
 
-model EmailVerificationToken {
-  id      String @id
+model Token {
+  id      String    @id
+  type    TokenType
   expires BigInt
   userId  String
-  user    User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user    User      @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+enum TokenType {
+  emailVerification
+  passwordReset
 }
 
 model Event {

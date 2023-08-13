@@ -25,10 +25,12 @@
 		<div class="flex gap-2 py-2 items-center">
 			<h2 class="text-2xl">Tous les évènements</h2>
 			<div class="grow" />
-			<button class="btn btn-neutral" on:click={() => createDialog.showModal()}>
-				<Icon path={mdiPlus} class="fill-neutral-content" />
-				Nouveau
-			</button>
+			{#if data.user?.isEmailVerified}
+				<button class="btn btn-neutral" on:click={() => createDialog.showModal()}>
+					<Icon path={mdiPlus} class="fill-neutral-content" />
+					Nouveau
+				</button>
+			{/if}
 		</div>
 		<div class="divider" />
 

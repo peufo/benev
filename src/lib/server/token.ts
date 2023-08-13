@@ -1,18 +1,19 @@
 import { isWithinExpiration, generateRandomString } from 'lucia/utils'
-
+import type { TokenType } from '@prisma/client'
 import { prisma } from '.'
 
-export const generateEmailVerificationToken = async (userId: string) => {
+export const generateToken = async (tokenType: TokenType, userId: string) => {
 	const HOURE = 1000 * 60 * 60
 
-	const tokens = await prisma.emailVerificationToken.findMany({ where: { userId } })
+	const tokens = await prisma.token.findMany({ where: { userId, type: tokenType } })
 	const reusableToken = tokens.find(({ expires }) => isWithinExpiration(Number(expires) - HOURE))
 	if (reusableToken) return reusableToken.id
 
 	const tokenId = generateRandomString(63)
-	const newToken = await prisma.emailVerificationToken.create({
+	await prisma.token.create({
 		data: {
 			id: tokenId,
+			type: tokenType,
 			expires: new Date().getTime() + 2 * HOURE,
 			userId,
 		},
@@ -21,10 +22,10 @@ export const generateEmailVerificationToken = async (userId: string) => {
 	return tokenId
 }
 
-export const validateEmailVerificationToken = async (tokenId: string) => {
+export const validateToken = async (tokenType: TokenType, tokenId: string) => {
 	const [token] = await prisma.$transaction([
-		prisma.emailVerificationToken.findUniqueOrThrow({ where: { id: tokenId } }),
-		prisma.emailVerificationToken.delete({ where: { id: tokenId } }),
+		prisma.token.findUniqueOrThrow({ where: { id: tokenId, type: tokenType } }),
+		prisma.token.delete({ where: { id: tokenId, type: tokenType } }),
 	])
 
 	const tokenExpires = Number(token.expires)

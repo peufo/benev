@@ -1,11 +1,10 @@
-import { validateEmailVerificationToken } from '$lib/server/emailToken.js'
+import { validateToken } from '$lib/server'
 import { auth } from '$lib/server'
 import { error, redirect } from '@sveltejs/kit'
 
 export const GET = async ({ params, locals }) => {
 	try {
-		console.log('LOAD')
-		const userId = await validateEmailVerificationToken(params.tokenId)
+		const userId = await validateToken('emailVerification', params.tokenId)
 		const user = await auth.getUser(userId)
 		await auth.invalidateAllUserSessions(user.id)
 		await auth.updateUserAttributes(user.id, {

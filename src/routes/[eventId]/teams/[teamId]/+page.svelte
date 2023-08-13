@@ -92,6 +92,7 @@
 					class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
 					on:click={() => {
 						if (disabled) return
+						if (!data.user) return goto(`/${data.event.id}/me?callback=${location.pathname}`)
 						selectedPeriod = period
 						subscribeDialog.showModal()
 					}}

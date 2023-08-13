@@ -7,7 +7,10 @@
 	import { page } from '$app/stores'
 
 	const form = useForm({
-    successMessage: 'Bienvenue'
+    successMessage: (action) => {
+      if (action.search === '?/reset_password') return "Un lien de réinitialisation t'a été envoyé par email"
+      return 'Bienvenue'
+    }
   })
 	let state: 'login' | 'register' = 'login'
 
@@ -61,13 +64,18 @@
         <input type="hidden" name="callback" value={$page.url.searchParams.get('callback')}/>
       {/if}
 
-      <div class="card-actions justify-end">
-        <input
-          type="submit"
-          class="btn-neutral btn"
-          value={state === 'login' ? 'Connexion' : 'Créer un compte'}
-          formaction={state === 'login' ? '?/login' : '?/register'}
-        />
+      <div class="card-actions flex-row-reverse items-center">
+      
+        <button class="btn" formaction="/me{state === 'login' ? '?/login' : '?/register'}">
+          {state === 'login' ? 'Connexion' : 'Créer un compte'}
+        </button>
+        <div class="grow">
+        </div>
+
+        <button class="link link-hover" formaction="/me?/reset_password">
+          Mot de passe oublié
+        </button>
+
       </div>
     </form>
   </div>

@@ -2,6 +2,11 @@ import z from 'zod'
 import type { Prisma, $Enums } from '@prisma/client'
 import { toTuple, type ZodObj } from './utils'
 
+const passwordResetForm = {
+	email: z.string().email().toLowerCase(),
+}
+export const passwordResetShema = z.object(passwordResetForm)
+
 const loginForm = {
 	email: z.string().email().toLowerCase(),
 	password: z.string().min(8),
