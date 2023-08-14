@@ -27,7 +27,7 @@ type MailOption = {
 }
 
 export const sendEmail = async (mail: MailOption) => {
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 		transporter.sendMail(
 			{
 				from: `BENEV <${SMTP_USER}>`,
@@ -36,6 +36,8 @@ export const sendEmail = async (mail: MailOption) => {
 			(err, info) => {
 				if (err) {
 					console.error(err)
+					reject(err)
+					return
 				}
 				resolve(info)
 			}

@@ -1,12 +1,23 @@
 import { prisma } from '$lib/server'
 
-export const load = async ({ params }) => {
-	const { userId } = params
-
+export async function getSubscribesData(userId: string) {
 	return {
-		userProfile: await prisma.user.findUniqueOrThrow({ where: { id: userId } }),
-		event: await prisma.event.findUniqueOrThrow({
-			where: { id: params.eventId },
+		events: await prisma.event.findMany({
+			where: {
+				teams: {
+					some: {
+						periods: {
+							some: {
+								subscribes: {
+									some: {
+										userId,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			include: {
 				teams: {
 					where: { periods: { some: { subscribes: { some: { userId } } } } },

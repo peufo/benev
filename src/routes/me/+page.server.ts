@@ -75,7 +75,7 @@ export const actions: Actions = {
 		const session = await locals.auth.validate()
 		if (!session) return fail(401)
 		const tokenId = await generateToken('emailVerification', session.user.id)
-		sendEmailTemplate(EmailVerificationLink, {
+		await sendEmailTemplate(EmailVerificationLink, {
 			to: session.user.email,
 			subject: 'Verification de ton Email',
 			props: { tokenId },
@@ -89,7 +89,7 @@ export const actions: Actions = {
 			select: { id: true },
 		})
 		const tokenId = await generateToken('passwordReset', user.id)
-		sendEmailTemplate(EmailPasswordReset, {
+		await sendEmailTemplate(EmailPasswordReset, {
 			to: data.email,
 			subject: 'Changement de mot de passe',
 			props: { tokenId },

@@ -3,25 +3,25 @@
 	import SubscribeState from '$lib/SubscribeState.svelte'
 	import type { Event, Period, Subscribe, Team } from '@prisma/client'
 
-	export let events: (Event & {teams: Team[]})[]
-  export let subscribes: (Subscribe & {period: Period})[]
+	export let events: (Event & {
+		teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
+	})[]
 
-	const teamsIds = subscribes.map((s) => s.period.teamId)
-	
+	export let title = 'Mes inscriptions'
+	export let eventNameVisible = true
 </script>
 
 <div class="flex flex-col gap-10">
-
-	<h1 class="text-3xl">Mes inscriptions</h1>
+	<h1 class="text-3xl">{title}</h1>
 
 	{#each events as event}
 		<section>
-			<a class="text-xl link link-hover" href="/{event.id}">{event.name}</a>
-
-			<table class="table mt-3 outline outline-base-200 outline-2">
+			{#if eventNameVisible}
+				<a class="text-xl link link-hover" href="/{event.id}">{event.name}</a>
+			{/if}
+			<table class="table outline outline-base-200 outline-2" class:mt-3={eventNameVisible}>
 				<tbody>
-					{#each event.teams.filter((t) => teamsIds.includes(t.id)) as team}
-						{@const _subscribes = subscribes.filter((s) => s.period.teamId === team.id)}
+					{#each event.teams as team}
 
 						<tr class="last:border-none relative hover">
 							<td class="align-top pt-6 font-semibold rounded-l-box">
@@ -32,11 +32,11 @@
 							<td class="rounded-r-box">
 								<table>
 									<tbody>
-										{#each _subscribes as { period, state }}
+										{#each team.periods as period}
 											<tr>
 												<td class="w-full">{formatRange(period)}</td>
 												<td>
-													<SubscribeState {state} />
+													<SubscribeState state={period.subscribes[0].state} />
 												</td>
 											</tr>
 										{/each}

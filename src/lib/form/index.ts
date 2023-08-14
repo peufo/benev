@@ -74,7 +74,8 @@ export function useForm<Shema extends z.ZodRawShape>({
 			event.submitter?.classList.remove('btn-disabled')
 
 			if (result.type === 'error') {
-				notify.error('Oups, erreur non gerée')
+				const { message } = result.error
+				notify.error(message || 'Erreur')
 				return
 			}
 
