@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
+	import { mdiPlus } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
+	import Teams from '$lib/Teams.svelte'
 
 	export let data
 </script>
@@ -17,40 +18,8 @@
 			</a>
 		{/if}
 	</div>
+
 	<div class="divider" />
 
-	<table class="table text-base">
-		<thead>
-			<tr>
-				<th>Nom</th>
-				<th>Responsable</th>
-			</tr>
-		</thead>
-
-		<tbody>
-			{#each data.teams as team}
-				<tr class="hover cursor-pointer relative">
-					<td>
-						{team.name}
-						<a href="{$eventPath}/teams/{team.id}">
-							<span class="inset-0 absolute" />
-						</a>
-					</td>
-					<td>
-						{team.leaders.map(({ user }) => `${user.firstName} ${user.lastName}`).join(', ')}
-					</td>
-
-					{#if data.isOwner}
-						<td class="py-0">
-							<div class="flex justify-end">
-								<a class="btn btn-square btn-sm relative" href="{$eventPath}/teams/{team.id}/admin">
-									<Icon path={mdiPencilOutline} />
-								</a>
-							</div>
-						</td>
-					{/if}
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+	<Teams teams={data.teams} isOwner={data.isOwner} />
 </div>

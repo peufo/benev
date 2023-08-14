@@ -9,7 +9,7 @@
 	let klass = ''
 	export { klass as class }
 	export let isUpdate = false
-	export let team: (Team & { leaders: (Leader & {user: User})[] }) | undefined = undefined
+	export let team: (Team & { leaders: (Leader & { user: User })[] }) | undefined = undefined
 
 	const form = useForm({ successUpdate: false })
 </script>
@@ -28,21 +28,16 @@
 		getItems={api.user.findMany}
 		search={api.user.search}
 		getLabel={(user) => `${user.firstName} ${user.lastName}`}
-		value={team?.leaders.map(l => l.user)}
+		value={team?.leaders.map((l) => l.user)}
 	/>
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
 
-	<div class="flex gap-2">
-		<a class="btn btn-ghost" href="{$eventPath}/teams">Annuler</a>
-		<div class="grow" />
-
+	<div class="flex gap-2 flex-row-reverse">
+		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit"> Valider </button>
 		{#if isUpdate}
-			<button class="btn btn-error btn-outline" formaction="?/delete">
-				Supprimer
-			</button>
+			<button class="btn btn-error btn-outline" formaction="?/delete"> Supprimer </button>
 		{/if}
-		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit">
-			Valider
-		</button>
+		<div class="grow" />
+		<a class="btn btn-ghost" href="{$eventPath}/teams">Annuler</a>
 	</div>
 </form>
