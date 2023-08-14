@@ -9,7 +9,7 @@
 	<thead>
 		<tr>
 			<th>Responsable</th>
-			<th>Équipes à charges</th>
+			<th>Équipes à charge</th>
 		</tr>
 	</thead>
 
