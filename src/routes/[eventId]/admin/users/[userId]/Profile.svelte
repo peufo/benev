@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { Icon } from '$lib/material'
 	import {
+		mdiAccountOutline,
 		mdiCakeVariantOutline,
 		mdiCommentOutline,
 		mdiEmailOutline,
 		mdiFoodOutline,
 		mdiHammerWrench,
 		mdiHomeCityOutline,
-		mdiPhoneOutgoing,
 		mdiPhoneOutline,
 		mdiShieldAlertOutline,
 		mdiShieldCheckOutline,
@@ -22,9 +22,13 @@
 
 <div class="card shadow-lg bordered bg-base-200">
 	<div class="card-body">
-		<div class="card-title">{user.firstName} {user.lastName}</div>
+		<div class="card-title gap-4 text-2xl mb-6">
+			<Icon path={mdiAccountOutline} />
+			{user.firstName}
+			{user.lastName}
+		</div>
 
-		<div class="grid grid-cols-2 gap-6 items-center">
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
 			<div class="flex gap-4">
 				<Icon path={mdiHomeCityOutline} />
 				<a
@@ -95,7 +99,7 @@
 				</div>
 			</div>
 
-			<div class="flex gap-4 col-span-2">
+			<div class="flex gap-4 sm:col-span-2">
 				<Icon path={mdiCommentOutline} class="shrink-0" />
 				<div>
 					{user.comment || '-'}
