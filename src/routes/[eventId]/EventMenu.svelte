@@ -36,7 +36,10 @@
 		<Icon path={mdiMenu} />
 	</label>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-	<ul tabindex="0" class="dropdown-content z-[1] menu menu-lg p-2 shadow bg-base-100 rounded-box w-64">
+	<ul
+		tabindex="0"
+		class="dropdown-content z-[1] menu menu-lg p-2 shadow bg-base-100 rounded-box w-64"
+	>
 		{#if isOwner}
 			<li>
 				<a
@@ -44,11 +47,10 @@
 					class:active={$page.url.pathname.startsWith(`${$eventPath}/admin`)}
 				>
 					<Icon path={mdiCogOutline} class="rotate-12" />
-					Gestion évenement
+					Gestion évènement
 				</a>
 			</li>
 		{/if}
-
 
 		<li>
 			<a href={$eventPath} class:active={$page.route.id == '/[eventId]'}>
@@ -57,10 +59,7 @@
 		</li>
 
 		<li>
-			<a
-				href="{$eventPath}/teams"
-				class:active={$page.route.id?.startsWith('/[eventId]/teams')}
-			>
+			<a href="{$eventPath}/teams" class:active={$page.route.id?.startsWith('/[eventId]/teams')}>
 				Secteurs
 			</a>
 		</li>

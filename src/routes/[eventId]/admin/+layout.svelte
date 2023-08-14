@@ -5,7 +5,7 @@
 	const tabs = [
 		{ path: '/admin', label: 'Les bénévoles', reg: /\/admin(\/users.*)?$/ },
 		{ path: '/admin/leaders', label: 'Les responsables', reg: /\/admin\/leaders/ },
-		{ path: '/admin/event', label: "L'évenement", reg: /\/admin\/event/ },
+		{ path: '/admin/event', label: "L'évènement", reg: /\/admin\/event/ },
 		{ path: '/admin/pages', label: 'Les pages', reg: /\/admin\/pages.*/ },
 	]
 </script>
@@ -19,7 +19,11 @@
 		{#each tabs as { path, label, reg }}
 			{@const href = `${$eventPath}${path}`}
 
-			<a class="tab tab-lg whitespace-nowrap" {href} class:tab-active={$page.url.pathname.match(reg)}>
+			<a
+				class="tab tab-lg whitespace-nowrap"
+				{href}
+				class:tab-active={$page.url.pathname.match(reg)}
+			>
 				{label}
 			</a>
 		{/each}

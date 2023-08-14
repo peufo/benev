@@ -54,7 +54,7 @@
 			Aucune inscription pour le moment
 			<br />
 			<br />
-			<a href="/" class="btn"> Trouve un évenement </a>
+			<a href="/" class="btn"> Trouve un évènement </a>
 		</p>
 	{/each}
 </div>

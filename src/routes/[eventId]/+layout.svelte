@@ -37,7 +37,7 @@
 						{$page.route.id?.startsWith(`/[eventId]/admin`) ? '' : 'lg:btn-ghost'}
 					"
 			>
-				<Icon path={mdiCogOutline} title="Gestion évenement" class="rotate-12" />
+				<Icon path={mdiCogOutline} title="Gestion évènement" class="rotate-12" />
 			</a>
 		{/if}
 	</div>

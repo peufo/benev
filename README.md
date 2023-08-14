@@ -7,7 +7,7 @@ Platforme de gestion de bénévole
 ### Organisateur
 
 - [x] Créer un évènement
-- [x] Éditer l'évenements
+- [x] Éditer l'évènements
 - [x] Éditer la page d'accueil
 - [x] Éditer des pages complémentaires (Règles, FAQ, ...)
 - [x] Éditer des équipes
@@ -30,4 +30,4 @@ Platforme de gestion de bénévole
 - [x] Être averti lors da la validation de l'inscription
 - [x] Visualiser ses inscriptions
 - [x] Renseigner toute les infos util à l'organisation
-- [x] Parcourir les pages d'un évenement
+- [x] Parcourir les pages d'un évènement
