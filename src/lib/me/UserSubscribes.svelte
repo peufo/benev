@@ -12,7 +12,9 @@
 </script>
 
 <div class="flex flex-col gap-10">
-	<h1 class="text-3xl">{title}</h1>
+	{#if title}
+		<h1 class="text-2xl">{title}</h1>
+	{/if}
 
 	{#each events as event}
 		<section>
@@ -22,7 +24,6 @@
 			<table class="table outline outline-base-200 outline-2" class:mt-3={eventNameVisible}>
 				<tbody>
 					{#each event.teams as team}
-
 						<tr class="last:border-none relative hover">
 							<td class="align-top pt-6 font-semibold rounded-l-box">
 								<a href="/{event.id}/teams/{team.id}" class="absolute inset-0">{' '}</a>

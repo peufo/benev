@@ -3,6 +3,7 @@
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import UserSubscribes from '$lib/me/UserSubscribes.svelte'
+	import Profile from './Profile.svelte'
 
 	export let data
 </script>
@@ -12,11 +13,10 @@
 		<Icon path={mdiArrowLeft} />
 		Les Bénévoles
 	</a>
-
 </div>
 
-<UserSubscribes
-	events={[data.event]}
-	title="Les inscriptions de {data.userProfile.firstName} {data.userProfile.lastName}"
-	eventNameVisible={false}
-/>
+<div class="flex flex-col gap-6">
+	<Profile user={data.userProfile} />
+
+	<UserSubscribes events={[data.event]} title="" eventNameVisible={false} />
+</div>

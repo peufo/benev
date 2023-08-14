@@ -3,7 +3,7 @@
 	import { userSizeLabel } from '$lib/form'
 	import { eventPath } from '$lib/store'
 	import { Size } from '@prisma/client'
-	import dayjs from 'dayjs'
+	import { getAge } from '$lib/utils'
 
 	export let data
 
@@ -42,12 +42,6 @@
 		return { ...acc, [size]: 1 }
 	}, {} as Record<Size, number>)
 	const sizeLabel = (key: string) => userSizeLabel[key as Size] || ''
-
-	const day = dayjs()
-	const getAge = (date: Date | null) => {
-		if (!date) return '-'
-		return day.diff(dayjs(date), 'year') + ' ans'
-	}
 </script>
 
 <div>TODO: FILTRE PAR PERIODE + par équipes</div>
@@ -90,9 +84,7 @@
 					{key}
 				</div>
 			{:else}
-				<div class="stat-value text-sm">
-					Aucun
-				</div>
+				<div class="stat-value text-sm">Aucun</div>
 			{/each}
 		</div>
 	</div>
