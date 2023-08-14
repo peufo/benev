@@ -3,8 +3,8 @@ import { isOwnerOrThrow, prisma } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ parent, params }) => {
-	const { pages } = await parent()
-	if (pages[0]) throw redirect(301, `/${params.eventId}/admin/pages/${pages[0].id}`)
+	const { pageIndex } = await parent()
+	throw redirect(301, `/${params.eventId}/admin/pages/${pageIndex.id}`)
 }
 
 export const actions = {
