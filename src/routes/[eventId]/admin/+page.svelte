@@ -4,6 +4,7 @@
 	import { eventPath } from '$lib/store'
 	import { Size } from '@prisma/client'
 	import { getAge } from '$lib/utils'
+	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
 
 	export let data
 
@@ -44,7 +45,10 @@
 	const sizeLabel = (key: string) => userSizeLabel[key as Size] || ''
 </script>
 
-<div>TODO: FILTRE PAR PERIODE + par équipes</div>
+<div class="flex gap-4">
+	<PeriodPickerButton action="{$eventPath}/admin" />
+	<div>TODO: FILTRE PAR ÉQUIPES</div>
+</div>
 
 <div class="flex gap-4 items-start flex-wrap">
 	<div class="stats bg-base-200 grow">

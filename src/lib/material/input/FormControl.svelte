@@ -6,42 +6,43 @@
 	let klass = ''
 	export { klass as class }
 	export let classLabel = ''
-	export let key: string
+	export let key = ''
 	export let label: string
 	export let error = ''
 	export let hint = ''
 	export let prefix: string | number = ''
 	export let prefixFor: string | number = ''
+	export let enhanceDisabled = false
 
-	$: _key = prefix ? `${prefix}_${key}` : key
+	$: _key = prefix && key ? `${prefix}_${key}` : key || ''
 
-	if (formContext.ok()) {
-		const { setError } = formContext.get()
-		setError[key] = (err) => (error = err)
-	} else {
-		console.error(
-			'Please set "const form = useForm()" and "use:enhance={form.submit}" in form element'
-		)
+	if (!enhanceDisabled) {
+		if (formContext.ok()) {
+			const { setError } = formContext.get()
+			setError[key] = (err) => (error = err)
+		} else {
+			console.error(
+				'Please set "const form = useForm()" and "use:enhance={form.submit}" in form element'
+			)
+		}
 	}
 
 	let formControl: HTMLDivElement
 	onMount(() => {
 		const input = formControl.querySelector('input')
 		if (!input) return
-		const handleInput = () => error = ''
+		const handleInput = () => (error = '')
 		input.addEventListener('input', handleInput)
 		return () => {
 			input.removeEventListener('input', handleInput)
 		}
 	})
-
 </script>
 
 <div class="form-control {klass}" bind:this={formControl}>
-
 	<label for="{prefixFor}{_key}" class="label cursor-pointer {classLabel}">
 		<span class="label-text">{label}</span>
-		<slot name="label"/>
+		<slot name="label" />
 	</label>
 
 	<slot key={_key} />

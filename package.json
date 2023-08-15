@@ -58,6 +58,7 @@
 		"debounce": "^1.2.1",
 		"editorjs-html": "^3.4.3",
 		"js-confetti": "^0.11.0",
+		"litepicker": "^2.0.12",
 		"lucia": "^2.0.0",
 		"nodemailer": "^6.9.4",
 		"svelte-notifications": "^0.9.98",

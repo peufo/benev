@@ -4,22 +4,18 @@
 	type $$Props = InputProps
 	$: ({ input, value: _value, ...props } = $$props as $$Props)
 	export let value = _value
-	export let inputElement: HTMLInputElement | undefined = undefined
-
-	$: ({ class: inputClass, ...inputProps } = input || {})
 </script>
 
-<FormControl {...props} let:key>
+<FormControl {...props} prefix="time" let:key>
 	<input
 		bind:value
 		on:input
 		on:focus
 		on:blur
-		bind:this={inputElement}
-		type="text"
+		type="time"
 		name={key}
 		id={key}
-		class="input-bordered input {inputClass || ''}"
-		{...inputProps}
+		class="input-bordered input"
+		{...input}
 	/>
 </FormControl>
