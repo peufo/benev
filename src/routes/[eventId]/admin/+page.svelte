@@ -5,6 +5,7 @@
 	import { Size } from '@prisma/client'
 	import { getAge } from '$lib/utils'
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
+	import { InputCheckboxsMenu } from '$lib/material/input'
 
 	export let data
 
@@ -45,8 +46,9 @@
 	const sizeLabel = (key: string) => userSizeLabel[key as Size] || ''
 </script>
 
-<div class="flex gap-4">
+<div class="flex gap-4 flex-wrap">
 	<PeriodPickerButton action="{$eventPath}/admin" />
+	<InputCheckboxsMenu key="teams" label="Secteurs" options={['prout', 'yolo']} enhanceDisabled />
 	<div>TODO: FILTRE PAR ÉQUIPES</div>
 </div>
 

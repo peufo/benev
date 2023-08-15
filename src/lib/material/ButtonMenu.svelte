@@ -8,6 +8,9 @@
 	export let label = 'No label'
 	export let buttonClass = ''
 
+	export const setOpen = () => {
+		open = true
+	}
 	export const close = () => {
 		open = false
 	}
@@ -26,10 +29,12 @@
 	role="menu"
 	tabindex="0"
 >
-	<button class="btn {buttonClass}" on:click={() => (open = true)}>
-		<slot name="prepend-label" />
-		{label}
-	</button>
+	<slot name="btn">
+		<button class="btn {buttonClass}" on:click={() => (open = true)}>
+			<slot name="prepend-label" />
+			{label}
+		</button>
+	</slot>
 
 	{#if open}
 		<div

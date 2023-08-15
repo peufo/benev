@@ -1,13 +1,16 @@
 <script lang="ts">
+	import { goto } from '$app/navigation'
 	import { Icon, ButtonMenu, InputTime } from '$lib/material'
 	import type { Period } from './index'
 	import PeriodPicker from './PeriodPicker.svelte'
 	import { mdiCalendarMonthOutline, mdiClose } from '@mdi/js'
 	import { formatRange } from '$lib/formatRange'
 	import { page } from '$app/stores'
+	import { urlParam } from '$lib/store'
 
 	export let action = ''
 
+	let menu: ButtonMenu
 	const start = $page.url.searchParams.get('start')?.split('T') || []
 	const end = $page.url.searchParams.get('end')?.split('T') || []
 
@@ -20,13 +23,10 @@
 		end: end[1] || '23:59',
 	}
 
-	let menu: ButtonMenu
-	let formElement: HTMLFormElement
+	$: isValidPeriod = period.start && period.end && time.start && time.start
 
 	function getLabel(_period: Period | undefined, _time: Period) {
-		if (!_period || !_period.start || !_period.end) return 'Pas de filtre sur la période'
-		if (_time.start === 'undefined') _time.start = '00:00'
-		if (_time.end === 'undefined') _time.end = '23:59'
+		if (!_period || !_period.start || !_period.end) return 'Toute période'
 
 		return formatRange({
 			start: new Date(`${_period.start}T${_time.start}`),
@@ -34,21 +34,43 @@
 		})
 	}
 
-	function handleMouseLeave() {
-		formElement?.submit()
+	function handleSubmit() {
+		menu.close()
+		if (!isValidPeriod) return
+		goto(
+			$urlParam.with({
+				start: `${period.start}T${time.start || '00:00'}`,
+				end: `${period.end}T${time.end || '23:59'}`,
+			}),
+			{ replaceState: true }
+		)
+	}
+
+	function handleReset() {
+		menu.close()
+		period = { start: '', end: '' }
+		time = { start: '00:00', end: '23:59' }
+		goto($urlParam.without('start', 'end'), { replaceState: true })
 	}
 </script>
 
-<ButtonMenu label={getLabel(period, time)} bind:this={menu} on:mouseLeave={handleMouseLeave}>
-	<div slot="prepend-label" class="mr-2" style="opacity: 0.6;">
-		<Icon path={mdiCalendarMonthOutline} />
+<ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit}>
+	<div slot="btn" class="join">
+		<button class="btn join-item" on:click={() => menu.setOpen()}>
+			<Icon path={mdiCalendarMonthOutline} class="mr-2 opacity-60" />
+			{getLabel(period, time)}
+		</button>
+		{#if isValidPeriod}
+			<button class="btn btn-square join-item" on:click|preventDefault={handleReset}>
+				<Icon path={mdiClose} class="fill-error" />
+			</button>
+		{/if}
 	</div>
 
 	<form
 		{action}
-		bind:this={formElement}
 		class="flex flex-col gap-3 h-full"
-		on:submit={() => menu.close()}
+		on:submit|preventDefault={handleSubmit}
 		data-sveltekit-replacestate
 	>
 		<PeriodPicker numberOfMonths={1} bind:period />
@@ -56,22 +78,10 @@
 		<input class="hidden" type="text" name="start" value="{period.start}T{time.start || '00:00'}" />
 		<input class="hidden" type="text" name="end" value="{period.end}T{time.end || '23:59'}" />
 
-		<div class="flex justify-between items-end p-2">
-			<InputTime label="A partir de" bind:value={time.start} enhanceDisabled />
-			<InputTime label="Jusqu'à" bind:value={time.end} enhanceDisabled />
-
-			<div class="flex">
-				<div class="grow" />
-				<button class="hidden" />
-				<button
-					class="btn btn-square"
-					on:click|preventDefault={() => {
-						formElement.reset()
-					}}
-				>
-					<Icon path={mdiClose} class="fill-error" />
-				</button>
-			</div>
+		<div class="flex gap-2 p-2">
+			<InputTime label="A partir de" bind:value={time.start} enhanceDisabled class="grow" />
+			<InputTime label="Jusqu'à" bind:value={time.end} enhanceDisabled class="grow" />
 		</div>
+		<button class="hidden" />
 	</form>
 </ButtonMenu>
