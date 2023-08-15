@@ -9,8 +9,7 @@
 		user: User
 		period: Period & { team: Team & { event: Event } }
 	}
-	const  domain = dev ? 'http://localhost:5173' : 'https://benev.ch'
-  
+	const domain = dev ? 'http://localhost:5173' : 'https://benev.ch'
 </script>
 
 <h1>
@@ -44,7 +43,7 @@
 
 <p>
 	Verifie
-	<a href="{domain}/{subscribe.period.team.eventId}/users/{subscribe.userId}" target="_blank">
+	<a href="{domain}/{subscribe.period.team.eventId}/admin/users/{subscribe.userId}" target="_blank">
 		ses informations
 	</a>
 	et
