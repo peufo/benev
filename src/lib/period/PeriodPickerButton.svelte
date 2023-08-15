@@ -26,7 +26,7 @@
 	$: isValidPeriod = period.start && period.end && time.start && time.start
 
 	function getLabel(_period: Period | undefined, _time: Period) {
-		if (!_period || !_period.start || !_period.end) return 'Toute période'
+		if (!_period || !_period.start || !_period.end) return 'Toutes les périodes'
 
 		return formatRange({
 			start: new Date(`${_period.start}T${_time.start}`),
@@ -69,7 +69,7 @@
 
 	<form
 		{action}
-		class="flex flex-col gap-3 h-full"
+		class="flex flex-col gap-1 h-full"
 		on:submit|preventDefault={handleSubmit}
 		data-sveltekit-replacestate
 	>

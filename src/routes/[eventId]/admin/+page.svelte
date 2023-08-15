@@ -48,8 +48,13 @@
 
 <div class="flex gap-4 flex-wrap">
 	<PeriodPickerButton action="{$eventPath}/admin" />
-	<InputCheckboxsMenu key="teams" label="Secteurs" options={['prout', 'yolo']} enhanceDisabled />
-	<div>TODO: FILTRE PAR ÉQUIPES</div>
+	<InputCheckboxsMenu
+		key="teams"
+		label="Secteur sélectioné"
+		labelPlurial="Secteurs sélectionés"
+		options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
+		enhanceDisabled
+	/>
 </div>
 
 <div class="flex gap-4 items-start flex-wrap">
