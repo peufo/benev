@@ -9,7 +9,7 @@
 	<thead>
 		<tr>
 			<th>Responsable</th>
-			<th>Équipes à charge</th>
+			<th>Secteurs à charge</th>
 		</tr>
 	</thead>
 
@@ -22,9 +22,11 @@
 					{user.lastName}
 				</td>
 				<td>
-					<div class="badge badge-lg">
-						{user.leadersOf.length}
-					</div>
+					{#each user.leadersOf.map((l) => l.team.name) as team}
+						<div class="badge badge-lg mr-1">
+							{team}
+						</div>
+					{/each}
 				</td>
 				<td align="right">
 					<Contact {user} />

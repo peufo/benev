@@ -6,7 +6,10 @@ export const load = async ({ params: { eventId } }) => ({
 			leadersOf: { some: { team: { eventId } } },
 		},
 		include: {
-			leadersOf: { where: { team: { eventId } } },
+			leadersOf: {
+				where: { team: { eventId } },
+				include: { team: true },
+			},
 		},
 	}),
 })

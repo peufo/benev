@@ -28,136 +28,132 @@
 </script>
 
 <div class="p-4 card bg-base-100 max-w-4xl m-auto">
-	<div class="flex gap-2 py-2 items-center">
+	<div class="p-1 md:p-8 flex flex-col gap-2 items-start">
+		<a href="{$eventPath}/teams" class="btn btn-xs btn-ghost pl-0">
+			<Icon path={mdiArrowLeft} size={16} />
+			secteurs
+		</a>
+		<h2 class="text-2xl">{data.team.name}</h2>
+		<p>{data.team.description || ''}</p>
 		<div>
-			<a href="{$eventPath}/teams" class="btn btn-sm">
-				<Icon path={mdiArrowLeft} />
-				secteurs
-			</a>
-			<h2 class="text-2xl">{data.team.name}</h2>
-			<p>{data.team.description || ''}</p>
-			<div>
-				Responsables :
-				{#each data.team.leaders as { user }}
-					<div class="dropdown">
-						<!-- svelte-ignore a11y-label-has-associated-control -->
-						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-						<label tabindex="0" class="btn btn-sm">{user.firstName} {user.lastName}</label>
-						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-						<ul
-							tabindex="0"
-							class="dropdown-content menu z-10 p-2 shadow-lg rounded-box bg-base-100 w-48"
-						>
+			Responsable{data.team.leaders.length > 1 ? 's' : ''} :
+			{#each data.team.leaders as { user }}
+				<div class="dropdown">
+					<!-- svelte-ignore a11y-label-has-associated-control -->
+					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+					<label tabindex="0" class="btn btn-sm">{user.firstName} {user.lastName}</label>
+					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+					<ul
+						tabindex="0"
+						class="dropdown-content menu z-10 p-2 shadow-lg rounded-box bg-base-100 w-48"
+					>
+						<li>
+							<a href="mailto:{user.email}" target="_blank">
+								<Icon path={mdiEmailOutline} />
+								Envoyer un mail
+							</a>
+						</li>
+						{#if user.phone}
 							<li>
-								<a href="mailto:{user.email}" target="_blank">
-									<Icon path={mdiEmailOutline} />
-									Envoyer un mail
+								<a href="tel:{user.phone}" target="_blank">
+									<Icon path={mdiPhoneOutline} />
+									Téléphoner
 								</a>
 							</li>
-							{#if user.phone}
-								<li>
-									<a href="tel:{user.phone}" target="_blank">
-										<Icon path={mdiPhoneOutline} />
-										Téléphoner
-									</a>
-								</li>
-							{/if}
-						</ul>
-					</div>
-				{/each}
-			</div>
-		</div>
-		<div class="grow" />
-	</div>
-	<div class="divider" />
-
-	<table class="table text-base">
-		<thead>
-			<tr>
-				<th>Période de travail</th>
-				<th>Bénévoles</th>
-			</tr>
-		</thead>
-
-		<tbody>
-			{#each data.periods as period}
-				{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
-				{@const userSubscribe = period.subscribes.find((sub) => sub.userId === data.user?.userId)}
-				{@const disabled = userSubscribe || nbSubscribe >= period.maxSubscribe}
-				<tr
-					class="relative"
-					class:hover={!disabled}
-					class:cursor-pointer={!disabled}
-					class:opacity-70={disabled}
-					class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
-					on:click={() => {
-						if (disabled) return
-						if (!data.user) return goto(`/${data.event.id}/me?callback=${location.pathname}`)
-						selectedPeriod = period
-						subscribeDialog.showModal()
-					}}
-				>
-					<td class="w-full">
-						{formatRange(period)}
-					</td>
-					<td class="flex gap-2 items-center">
-						<progress
-							class="progress max-w-[100px] w-[8vw]"
-							value={nbSubscribe}
-							max={period.maxSubscribe}
-						/>
-
-						<span class="whitespace-nowrap text-xs">
-							{nbSubscribe}/{period.maxSubscribe}
-						</span>
-
-						{#if userSubscribe}
-							<SubscribeState state={userSubscribe.state} />
-						{:else}
-							<div class="grow" />
 						{/if}
-
-						{#if data.isLeader}
-							<div class="flex gap-2">
-								<button
-									class="btn btn-square btn-sm"
-									on:click|stopPropagation={() => {
-										periodUpdatForm.setPeriod(period)
-										updateDialog.showModal()
-									}}
-								>
-									<Icon path={mdiPencilOutline} />
-								</button>
-
-								<button
-									class="btn btn-square btn-sm"
-									on:click|stopPropagation={() => {
-										if ($urlParam.hasValue(periodOpenKey, period.id)) {
-											goto($urlParam.without(periodOpenKey), { replaceState: true })
-											return
-										}
-										goto($urlParam.with({ [periodOpenKey]: period.id }), { replaceState: true })
-									}}
-								>
-									<Icon
-										path={mdiChevronRight}
-										class=" transition-transform
-											{$urlParam.hasValue(periodOpenKey, period.id) ? 'rotate-90' : ''}
-										"
-									/>
-								</button>
-							</div>
-						{/if}
-					</td>
-				</tr>
-
-				<Subscribes
-					subscribes={period.subscribes}
-					isOpen={$urlParam.hasValue(periodOpenKey, period.id)}
-				/>
+					</ul>
+				</div>
 			{/each}
-		</tbody>
-	</table>
+		</div>
+
+		<table class="table text-base">
+			<thead>
+				<tr>
+					<th>Période de travail</th>
+					<th>Bénévoles</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{#each data.periods as period}
+					{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
+					{@const userSubscribe = period.subscribes.find((sub) => sub.userId === data.user?.userId)}
+					{@const disabled = userSubscribe || nbSubscribe >= period.maxSubscribe}
+					<tr
+						class="relative"
+						class:hover={!disabled}
+						class:cursor-pointer={!disabled}
+						class:opacity-70={disabled}
+						class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
+						on:click={() => {
+							if (disabled) return
+							if (!data.user) return goto(`/${data.event.id}/me?callback=${location.pathname}`)
+							selectedPeriod = period
+							subscribeDialog.showModal()
+						}}
+					>
+						<td class="w-full">
+							{formatRange(period)}
+						</td>
+						<td class="flex gap-2 items-center">
+							<progress
+								class="progress max-w-[100px] w-[8vw]"
+								value={nbSubscribe}
+								max={period.maxSubscribe}
+							/>
+
+							<span class="whitespace-nowrap text-xs">
+								{nbSubscribe}/{period.maxSubscribe}
+							</span>
+
+							{#if userSubscribe}
+								<SubscribeState state={userSubscribe.state} />
+							{:else}
+								<div class="grow" />
+							{/if}
+
+							{#if data.isLeader}
+								<div class="flex gap-2">
+									<button
+										class="btn btn-square btn-sm"
+										on:click|stopPropagation={() => {
+											periodUpdatForm.setPeriod(period)
+											updateDialog.showModal()
+										}}
+									>
+										<Icon path={mdiPencilOutline} />
+									</button>
+
+									<button
+										class="btn btn-square btn-sm"
+										on:click|stopPropagation={() => {
+											if ($urlParam.hasValue(periodOpenKey, period.id)) {
+												goto($urlParam.without(periodOpenKey), { replaceState: true })
+												return
+											}
+											goto($urlParam.with({ [periodOpenKey]: period.id }), { replaceState: true })
+										}}
+									>
+										<Icon
+											path={mdiChevronRight}
+											class=" transition-transform
+												{$urlParam.hasValue(periodOpenKey, period.id) ? 'rotate-90' : ''}
+											"
+										/>
+									</button>
+								</div>
+							{/if}
+						</td>
+					</tr>
+
+					<Subscribes
+						subscribes={period.subscribes}
+						isOpen={$urlParam.hasValue(periodOpenKey, period.id)}
+					/>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </div>
 
 {#if data.isLeader}
