@@ -9,7 +9,7 @@
 
 <div class="card p-4 md:p-10 bg-base-100 max-w-4xl m-auto">
 	<div class="flex flex-col gap-2">
-		<div class="flex">
+		<div class="flex items-center">
 			<h2 class="text-2xl">Secteurs</h2>
 			<div class="grow" />
 			{#if data.isOwner}

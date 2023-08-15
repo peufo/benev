@@ -23,7 +23,7 @@
 <div class="card shadow-lg bordered bg-base-200">
 	<div class="card-body">
 		<div class="card-title gap-4 text-2xl mb-6">
-			<Icon path={mdiAccountOutline} />
+			<Icon path={mdiAccountOutline} class="scale-150" />
 			{user.firstName}
 			{user.lastName}
 		</div>
