@@ -8,42 +8,44 @@
 	import { InputCheckboxsMenu } from '$lib/material/input'
 
 	export let data
+	let workTimes: Record<string, number> = {}
 
-	const workTimes: Record<string, number> = data.users.reduce(
+	$: workTimes = data.users.reduce(
 		(times, user) => ({
 			...times,
 			[user.id]: user.subscribes
 				.filter(({ state }) => state === 'accepted' || state === 'request')
-				.reduce((acc, { periodId }) => {
-					const period = data.periods.find(({ id }) => id === periodId)
-					if (!period) return acc
+				.reduce((acc, { period }) => {
 					const time = period.end.getTime() - period.start.getTime()
 					return acc + time
 				}, 0),
 		}),
 		{}
 	)
-	const workTimeTotal = Object.values(workTimes).reduce((acc, cur) => acc + cur, 0)
+	$: workTimeTotal = Object.values(workTimes).reduce((acc, cur) => acc + cur, 0)
 
-	const workTimeNeeded = data.periods.reduce((acc, { start, end, maxSubscribe }) => {
-		return acc + (end.getTime() - start.getTime()) * maxSubscribe
-	}, 0)
+	$: workTimeNeeded = data.users
+		.map((u) => u.subscribes.map((s) => s.period))
+		.flat()
+		.reduce((acc, { start, end, maxSubscribe }) => {
+			return acc + (end.getTime() - start.getTime()) * maxSubscribe
+		}, 0)
 
 	const toHour = (ms: number) => Math.round(ms / (1000 * 60 * 60))
+	const sizeLabel = (key: string) => userSizeLabel[key as Size] || ''
 
-	const diet = data.users.reduce((acc, { diet }) => {
+	$: diet = data.users.reduce((acc, { diet }) => {
 		if (!diet) return acc
 		const key = (JSON.parse(diet) as string[]).join(', ')
 		if (acc[key]) return { ...acc, [key]: acc[key] + 1 }
 		return { ...acc, [key]: 1 }
 	}, {} as Record<string, number>)
 
-	const tshirt = data.users.reduce((acc, { size }) => {
+	$: tshirt = data.users.reduce((acc, { size }) => {
 		if (!size) return acc
 		if (acc[size]) return { ...acc, [size]: acc[size] + 1 }
 		return { ...acc, [size]: 1 }
 	}, {} as Record<Size, number>)
-	const sizeLabel = (key: string) => userSizeLabel[key as Size] || ''
 </script>
 
 <div class="flex gap-4 flex-wrap">

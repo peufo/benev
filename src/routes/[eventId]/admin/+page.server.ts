@@ -1,21 +1,63 @@
 import { prisma } from '$lib/server'
+import { error } from '@sveltejs/kit'
 
 export const load = async ({ params, url }) => {
-	const start = url.searchParams.get('start')
-	const end = url.searchParams.get('end')
-	const teams = url.searchParams.get('teams')
-	console.log({ start, end, teams })
+	const _start = url.searchParams.get('start')
+	const _end = url.searchParams.get('end')
+	const _teams = url.searchParams.get('teams')
 
 	const { eventId } = params
 
+	let periodWhere: {
+		start?: { lte: Date }
+		end?: { gte: Date }
+	} = {}
+	if (typeof _start === 'string' && typeof _end === 'string') {
+		const start = new Date(_start)
+		const end = new Date(_end)
+		if (isNaN(start.getTime()) || isNaN(end.getTime()))
+			throw error(400, '"start" and "end" are not a valid date')
+		periodWhere = {
+			start: { lte: end },
+			end: { gte: start },
+		}
+	}
+
+	const teamWhere: {
+		eventId: string
+		id?: { in: string[] }
+	} = { eventId }
+	if (typeof _teams === 'string') {
+		try {
+			const teams = JSON.parse(_teams) as string[]
+			teamWhere.id = { in: teams }
+		} catch {
+			throw error(400, '"teams is not a valid JSON of type string[]')
+		}
+	}
+
 	return {
-		periods: await prisma.period.findMany({
-			where: { team: { eventId } },
-		}),
 		users: await prisma.user.findMany({
-			where: { subscribes: { some: { period: { team: { eventId } } } } },
+			where: {
+				subscribes: {
+					some: {
+						period: {
+							team: teamWhere,
+							...periodWhere,
+						},
+					},
+				},
+			},
 			include: {
-				subscribes: true,
+				subscribes: {
+					where: {
+						period: {
+							team: teamWhere,
+							...periodWhere,
+						},
+					},
+					include: { period: true },
+				},
 			},
 		}),
 		teams: await prisma.team.findMany({
