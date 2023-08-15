@@ -10,7 +10,7 @@
 	const viewHeight = 24
 </script>
 
-<i class="{klass} grid place-content-center fill-base-content" {title} {style}>
+<i class="grid place-content-center fill-base-content {klass}" {title} {style}>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={size}

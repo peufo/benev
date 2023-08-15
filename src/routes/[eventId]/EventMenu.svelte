@@ -41,12 +41,10 @@
 		class="dropdown-content z-[1] menu menu-lg p-2 shadow bg-base-100 rounded-box w-64"
 	>
 		{#if isOwner}
+			{@const isActive = $page.url.pathname.startsWith(`${$eventPath}/admin`)}
 			<li>
-				<a
-					href="{$eventPath}/admin"
-					class:active={$page.url.pathname.startsWith(`${$eventPath}/admin`)}
-				>
-					<Icon path={mdiCogOutline} class="rotate-12" />
+				<a href="{$eventPath}/admin" class:active={isActive}>
+					<Icon path={mdiCogOutline} class="rotate-12 {isActive ? 'fill-base-300' : ''}" />
 					Gestion évènement
 				</a>
 			</li>
