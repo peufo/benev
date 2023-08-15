@@ -39,6 +39,7 @@ model User {
 }
 
 enum Size {
+  none
   small
   medium
   large

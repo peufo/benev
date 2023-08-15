@@ -113,11 +113,11 @@
 					{#each items || [] as item, index (item.id)}
 						<div
 							transition:slide|local={{ axis: 'x', duration: 200 }}
-							class="text-right badge badge-neutral badge-lg whitespace-nowrap pr-0"
+							class="text-right badge badge-lg whitespace-nowrap pr-0"
 						>
 							{getLabel(item)}
 							<div
-								class="btn btn-circle btn-xs btn-ghost scale-75"
+								class="btn btn-circle btn-xs btn-ghost scale-75 ml-1"
 								role="button"
 								tabindex="0"
 								on:click={() => remove(index)}

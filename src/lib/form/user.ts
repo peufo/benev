@@ -22,6 +22,7 @@ const registerForm = {
 export const registerShema = z.object(registerForm)
 
 export const userSizeLabel: Record<$Enums.Size, string> = {
+	none: 'Nan merci !',
 	small: 'Small',
 	medium: 'Medium',
 	large: 'Large',
