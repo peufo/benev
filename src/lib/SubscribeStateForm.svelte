@@ -7,6 +7,7 @@
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 
 	export let subscribe: Subscribe
+	export let action = ''
 
 	const form = useForm({ successMessage: 'Status changé' })
 </script>
@@ -24,13 +25,13 @@
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<ul tabindex="0" class="menu shadow dropdown-content z-10 bg-base-200 rounded-box">
 			<li>
-				<button formaction="?/subscribe_accepted">
+				<button formaction="{action}?/subscribe_accepted">
 					<Icon path={mdiCheck} class="fill-success" />
 					Accepter
 				</button>
 			</li>
 			<li>
-				<button formaction="?/subscribe_denied">
+				<button formaction="{action}?/subscribe_denied">
 					<Icon path={mdiAlertOctagonOutline} class="fill-warning" />
 					Refuser
 				</button>

@@ -9,8 +9,8 @@
 </script>
 
 <div class="flex">
-	<a href="{$eventPath}/admin" class="btn btn-sm">
-		<Icon path={mdiArrowLeft} />
+	<a href="{$eventPath}/admin" class="btn btn-xs btn-ghost pl-0">
+		<Icon path={mdiArrowLeft} size={16} />
 		Les Bénévoles
 	</a>
 </div>
@@ -18,5 +18,5 @@
 <div class="flex flex-col gap-6">
 	<Profile user={data.userProfile} />
 
-	<UserSubscribes events={[data.event]} title="" eventNameVisible={false} />
+	<UserSubscribes events={[data.event]} title="" eventNameVisible={false} isEditor />
 </div>

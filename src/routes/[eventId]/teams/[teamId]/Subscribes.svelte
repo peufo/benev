@@ -2,10 +2,8 @@
 	import { slide } from 'svelte/transition'
 	import type { PageData } from './$types'
 	import type { User } from '@prisma/client'
-	import { Icon } from '$lib/material'
-	import { mdiEmailOutline, mdiPhone } from '@mdi/js'
 	import { eventPath } from '$lib/store'
-	import SubscribeStateForm from './SubscribeStateForm.svelte'
+	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
 	import Contact from '$lib/Contact.svelte'
 
 	// TODO: Pourquoi user ne passe pas directement dans le type ???

@@ -1,7 +1,9 @@
 <script lang="ts">
+	import type { Event, Period, Subscribe, Team } from '@prisma/client'
 	import { formatRange } from '$lib/formatRange'
 	import SubscribeState from '$lib/SubscribeState.svelte'
-	import type { Event, Period, Subscribe, Team } from '@prisma/client'
+	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
+	import { eventPath } from '$lib/store'
 
 	export let events: (Event & {
 		teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -9,6 +11,7 @@
 
 	export let title = 'Mes inscriptions'
 	export let eventNameVisible = true
+	export let isEditor = false
 </script>
 
 <div class="flex flex-col gap-10">
@@ -24,7 +27,7 @@
 			<table class="table outline outline-base-200 outline-2" class:mt-3={eventNameVisible}>
 				<tbody>
 					{#each event.teams as team}
-						<tr class="last:border-none relative hover">
+						<tr class="last:border-none relative hover:bg-base-200/60">
 							<td class="align-top pt-6 font-semibold rounded-l-box">
 								<a href="/{event.id}/teams/{team.id}" class="absolute inset-0">{' '}</a>
 								{team.name}
@@ -34,10 +37,25 @@
 								<table>
 									<tbody>
 										{#each team.periods as period}
-											<tr>
-												<td class="w-full">{formatRange(period)}</td>
+											<tr class="relative {isEditor ? 'hover:bg-base-200/80' : ''}">
+												<td class="w-full">
+													{#if isEditor}
+														<a
+															href="/{event.id}/teams/{team.id}?periodOpen={period.id}"
+															class="absolute inset-0">{' '}</a
+														>
+													{/if}
+													{formatRange(period)}
+												</td>
 												<td>
-													<SubscribeState state={period.subscribes[0].state} />
+													{#if isEditor}
+														<SubscribeStateForm
+															subscribe={period.subscribes[0]}
+															action="{$eventPath}/teams/{period.teamId}"
+														/>
+													{:else}
+														<SubscribeState state={period.subscribes[0].state} />
+													{/if}
 												</td>
 											</tr>
 										{/each}
