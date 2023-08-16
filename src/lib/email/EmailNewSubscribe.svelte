@@ -6,7 +6,7 @@
 	dayjs.locale('fr-ch')
 
 	export let subscribe: Subscribe & {
-		user: User
+		member: { user: User }
 		period: Period & { team: Team & { event: Event } }
 	}
 	const domain = dev ? 'http://localhost:5173' : 'https://benev.ch'
@@ -19,7 +19,7 @@
 
 <p>
 	Bonne nouvelle ! <br />
-	<b>{subscribe.user.firstName} {subscribe.user.lastName}</b>
+	<b>{subscribe.member.user.firstName} {subscribe.member.user.lastName}</b>
 	souhaite renforcer l'équipe <b>{subscribe.period.team.name}</b>
 	durant la période suivante :
 </p>
@@ -43,7 +43,10 @@
 
 <p>
 	Verifie
-	<a href="{domain}/{subscribe.period.team.eventId}/admin/users/{subscribe.userId}" target="_blank">
+	<a
+		href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
+		target="_blank"
+	>
 		ses informations
 	</a>
 	et

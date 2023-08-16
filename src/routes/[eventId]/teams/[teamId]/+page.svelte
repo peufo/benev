@@ -77,8 +77,10 @@
 			<tbody>
 				{#each data.periods as period}
 					{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
-					{@const userSubscribe = period.subscribes.find((sub) => sub.userId === data.user?.userId)}
-					{@const disabled = userSubscribe || nbSubscribe >= period.maxSubscribe}
+					{@const memberSubscribe = period.subscribes.find(
+						(sub) => sub.memberId === data.member?.id
+					)}
+					{@const disabled = memberSubscribe || nbSubscribe >= period.maxSubscribe}
 					<tr
 						class="relative"
 						class:hover={!disabled}
@@ -106,8 +108,8 @@
 								{nbSubscribe}/{period.maxSubscribe}
 							</span>
 
-							{#if userSubscribe}
-								<SubscribeState state={userSubscribe.state} />
+							{#if memberSubscribe}
+								<SubscribeState state={memberSubscribe.state} />
 							{:else}
 								<div class="grow" />
 							{/if}

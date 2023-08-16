@@ -15,22 +15,24 @@ model User {
   firstName String
   lastName  String
 
-  birthday    DateTime?
-  street      String?
-  zipCode     String?
-  city        String?
-  isInsured   Boolean   @default(false)
+  birthday DateTime?
+  street   String?
+  zipCode  String?
+  city     String?
+  comment  String?
+
+  // TODO: replace by customField système
+  isInsured   Boolean @default(false)
   size        Size?
   diet        String?
   skillString String? // TODO: replace by tags système ?
-  comment     String?
 
   tokens          Token[]
   isEmailVerified Boolean @default(false)
 
-  ownerOf      Event[]
-  leadersOf    Leader[]
-  subscribes   Subscribe[]
+  members Member[]
+  events  Event[] // ownerOf
+
   auth_session Session[]
   auth_key     Key[]
 
@@ -90,11 +92,34 @@ model Event {
   email       String?
   phone       String?
   address     String?
-  teams       Team[]
-  pages       Page[]
+
+  teams   Team[]
+  members Member[]
+  pages   Page[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Member {
+  id String @id @default(cuid())
+
+  isValidedByEvent Boolean @default(false)
+  isValidedByUser  Boolean @default(false)
+
+  userId String
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  eventId String
+  event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade)
+
+  subscribes Subscribe[]
+  leaderOf   Team[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, eventId])
 }
 
 model Page {
@@ -116,7 +141,7 @@ model Team {
 
   name        String
   description String?
-  leaders     Leader[]
+  leaders     Member[]
 
   eventId String
   event   Event    @relation(references: [id], fields: [eventId], onDelete: Cascade)
@@ -126,19 +151,6 @@ model Team {
   updatedAt DateTime @updatedAt
 
   @@unique([name, eventId])
-}
-
-model Leader {
-  isValided Boolean @default(false)
-  userId    String
-  user      User    @relation(references: [id], fields: [userId], onDelete: Cascade)
-  teamId    String
-  team      Team    @relation(references: [id], fields: [teamId], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@id([userId, teamId])
 }
 
 model Period {
@@ -163,13 +175,13 @@ model Subscribe {
   periodId String
   period   Period @relation(references: [id], fields: [periodId], onDelete: Cascade)
 
-  userId String
-  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+  memberId String
+  member   Member @relation(references: [id], fields: [memberId], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId, periodId])
+  @@unique([memberId, periodId])
 }
 
 enum SubscribeRequest {

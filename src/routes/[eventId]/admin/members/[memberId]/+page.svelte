@@ -16,7 +16,7 @@
 </div>
 
 <div class="flex flex-col gap-6">
-	<Profile user={data.userProfile} />
+	<Profile user={data.memberProfile.user} />
 
 	<UserSubscribes events={[data.event]} title="" eventNameVisible={false} isEditor />
 </div>

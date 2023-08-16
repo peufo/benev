@@ -21,7 +21,7 @@
 							<a
 								class="btn btn-sm"
 								title="Voir les infos de {subscribe.user.firstName}"
-								href="{$eventPath}/admin/users/{subscribe.userId}"
+								href="{$eventPath}/admin/members/{subscribe.memberId}"
 							>
 								{subscribe.user.firstName}
 								{subscribe.user.lastName}

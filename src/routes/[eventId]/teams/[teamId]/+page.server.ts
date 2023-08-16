@@ -13,7 +13,9 @@ export const load = async ({ params, parent }) => {
 		periods: await prisma.period.findMany({
 			where: { teamId },
 			orderBy: { start: 'asc' },
-			include: { subscribes: isLeader ? { include: { user: true } } : true },
+			include: {
+				subscribes: isLeader ? { include: { member: { include: { user: true } } } } : true,
+			},
 		}),
 	}
 }
@@ -29,7 +31,7 @@ export const actions = {
 		const subscribe = await prisma.subscribe.create({
 			data,
 			include: {
-				user: true,
+				member: { include: { user: true } },
 				period: {
 					include: {
 						team: {
@@ -110,7 +112,7 @@ async function setSubscribState(request: Request, state: SubscribeState) {
 		where: { id },
 		data: { state },
 		include: {
-			user: { select: { email: true } },
+			member: { include: { user: { select: { email: true } } } },
 			period: {
 				include: {
 					team: {
@@ -122,7 +124,7 @@ async function setSubscribState(request: Request, state: SubscribeState) {
 	})
 
 	sendEmailTemplate(EmailSubscribeState, {
-		to: subscribe.user.email,
+		to: subscribe.member.user.email,
 		subject: `Inscription ${subscribe.state === 'accepted' ? 'acceptée' : 'refusée'}`,
 		props: { subscribe },
 	})

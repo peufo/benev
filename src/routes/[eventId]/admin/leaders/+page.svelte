@@ -14,22 +14,22 @@
 	</thead>
 
 	<tbody>
-		{#each data.users as user}
+		{#each data.members as member}
 			<tr class="relative hover">
 				<td>
-					<a href="{$eventPath}/admin/leaders/{user.id}" class="absolute inset-0">{' '}</a>
-					{user.firstName}
-					{user.lastName}
+					<a href="{$eventPath}/admin/leaders/{member.id}" class="absolute inset-0">{' '}</a>
+					{member.user.firstName}
+					{member.user.lastName}
 				</td>
 				<td>
-					{#each user.leadersOf.map((l) => l.team.name) as team}
+					{#each member.leaderOf.map((team) => team.name) as team}
 						<div class="badge badge-lg mr-1">
 							{team}
 						</div>
 					{/each}
 				</td>
 				<td align="right">
-					<Contact {user} />
+					<Contact user={member.user} />
 				</td>
 			</tr>
 		{/each}

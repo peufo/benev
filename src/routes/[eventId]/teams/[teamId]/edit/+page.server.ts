@@ -10,30 +10,12 @@ export const load = async ({ params, locals }) => {
 export const actions = {
 	update: async ({ params, request, locals }) => {
 		await isOwnerOrThrow(params.eventId, locals)
-		const { err, data } = await parseFormData(request, teamShema)
+		const { err, data } = await parseFormData(request, teamShema, { arrayOperation: 'set' })
 		if (err) return err
-
-		const { teamId } = params
-		const { leaders, ...restData } = data
-		const leadersId = leaders?.connect.map(({ id }) => id) || []
 
 		await prisma.team.update({
 			where: { id: params.teamId },
-			data: {
-				...restData,
-				...(leaders && {
-					leaders: {
-						deleteMany: {
-							teamId,
-							userId: { notIn: leadersId },
-						},
-						createMany: {
-							data: leadersId.map((id) => ({ userId: id })),
-							skipDuplicates: true,
-						},
-					},
-				}),
-			},
+			data,
 		})
 
 		throw redirect(303, `/${params.eventId}/teams`)
@@ -46,3 +28,19 @@ export const actions = {
 		throw redirect(303, `/${params.eventId}/teams`)
 	},
 }
+
+// SET MANY TO MANY EXPLICIT RELATION
+/*
+...(leaders && {
+	leaders: {
+		deleteMany: {
+			teamId,
+			userId: { notIn: leadersId },
+		},
+		createMany: {
+			data: leadersId.map((id) => ({ userId: id })),
+			skipDuplicates: true,
+		},
+	},
+}),
+*/

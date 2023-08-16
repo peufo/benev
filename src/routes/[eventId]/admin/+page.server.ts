@@ -37,7 +37,7 @@ export const load = async ({ params, url }) => {
 	}
 
 	return {
-		users: await prisma.user.findMany({
+		members: await prisma.member.findMany({
 			where: {
 				subscribes: {
 					some: {
@@ -49,6 +49,7 @@ export const load = async ({ params, url }) => {
 				},
 			},
 			include: {
+				user: true,
 				subscribes: {
 					where: {
 						period: {

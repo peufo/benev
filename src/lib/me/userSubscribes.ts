@@ -10,7 +10,9 @@ export async function getSubscribesData(userId: string) {
 							some: {
 								subscribes: {
 									some: {
-										userId,
+										member: {
+											userId,
+										},
 									},
 								},
 							},
@@ -20,10 +22,10 @@ export async function getSubscribesData(userId: string) {
 			},
 			include: {
 				teams: {
-					where: { periods: { some: { subscribes: { some: { userId } } } } },
+					where: { periods: { some: { subscribes: { some: { member: { userId } } } } } },
 					include: {
 						periods: {
-							where: { subscribes: { some: { userId } } },
+							where: { subscribes: { some: { member: { userId } } } },
 							include: { subscribes: true },
 							orderBy: { start: 'asc' },
 						},

@@ -10,7 +10,7 @@
 	export let data
 	let workTimes: Record<string, number> = {}
 
-	$: workTimes = data.users.reduce(
+	$: workTimes = data.members.reduce(
 		(times, user) => ({
 			...times,
 			[user.id]: user.subscribes
@@ -24,7 +24,7 @@
 	)
 	$: workTimeTotal = Object.values(workTimes).reduce((acc, cur) => acc + cur, 0)
 
-	$: workTimeNeeded = data.users
+	$: workTimeNeeded = data.members
 		.map((u) => u.subscribes.map((s) => s.period))
 		.flat()
 		.reduce((acc, { start, end, maxSubscribe }) => {
@@ -34,17 +34,17 @@
 	const toHour = (ms: number) => Math.round(ms / (1000 * 60 * 60))
 	const sizeLabel = (key: string) => userSizeLabel[key as Size] || ''
 
-	$: diet = data.users.reduce((acc, { diet }) => {
-		if (!diet) return acc
-		const key = (JSON.parse(diet) as string[]).join(', ')
+	$: diet = data.members.reduce((acc, { user }) => {
+		if (!user.diet) return acc
+		const key = (JSON.parse(user.diet) as string[]).join(', ')
 		if (acc[key]) return { ...acc, [key]: acc[key] + 1 }
 		return { ...acc, [key]: 1 }
 	}, {} as Record<string, number>)
 
-	$: tshirt = data.users.reduce((acc, { size }) => {
-		if (!size) return acc
-		if (acc[size]) return { ...acc, [size]: acc[size] + 1 }
-		return { ...acc, [size]: 1 }
+	$: tshirt = data.members.reduce((acc, { user }) => {
+		if (!user.size) return acc
+		if (acc[user.size]) return { ...acc, [user.size]: acc[user.size] + 1 }
+		return { ...acc, [user.size]: 1 }
 	}, {} as Record<Size, number>)
 </script>
 
@@ -63,7 +63,7 @@
 	<div class="stats bg-base-200 grow">
 		<div class="stat">
 			<div class="stat-title">Bénévoles</div>
-			<div class="stat-value">{data.users.length}</div>
+			<div class="stat-value">{data.members.length}</div>
 		</div>
 
 		<div class="stat">
@@ -116,12 +116,12 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.users as user}
+			{#each data.members as { user, subscribes }}
 				<tr class="relative hover">
 					<td>{user.firstName} {user.lastName}</td>
 					<td>
 						<div class="badge badge-lg">
-							{user.subscribes.length}
+							{subscribes.length}
 						</div>
 					</td>
 					<td>

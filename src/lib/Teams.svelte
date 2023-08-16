@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { mdiPencilOutline } from '@mdi/js'
-	import { Leader, Period, Team, User, Subscribe } from '@prisma/client'
+	import { Member, Period, Team, User, Subscribe } from '@prisma/client'
 
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 
 	export let teams: (Team & {
-		leaders: (Leader & { user: User })[]
+		leaders: (Member & { user: User })[]
 		periods: (Period & { subscribes: Subscribe[] })[]
 	})[]
 	export let isOwner: boolean

@@ -3,13 +3,13 @@
 	import { useForm } from '$lib/form'
 	import { InputRelations, InputText, InputTextarea } from '$lib/material/input'
 	import { api } from '$lib/api'
-	import type { Team, Leader, User } from '@prisma/client'
+	import type { Team, Member, User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 
 	let klass = ''
 	export { klass as class }
 	export let isUpdate = false
-	export let team: (Team & { leaders: (Leader & { user: User })[] }) | undefined = undefined
+	export let team: (Team & { leaders: (Member & { user: User })[] }) | undefined = undefined
 
 	const form = useForm({ successUpdate: false })
 </script>

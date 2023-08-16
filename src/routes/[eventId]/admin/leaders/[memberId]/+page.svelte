@@ -14,7 +14,7 @@
 		Les responsables
 	</a>
 	<a
-		href="{$eventPath}/admin?teams={JSON.stringify(data.leader.leadersOf.map((l) => l.teamId))}"
+		href="{$eventPath}/admin?teams={JSON.stringify(data.member.leaderOf.map((team) => team.id))}"
 		class="btn btn-xs"
 	>
 		Les bénévoles de ces secteurs
@@ -24,9 +24,9 @@
 <h2 class="text-2xl">
 	Secteurs de
 	<span class="font-bold">
-		{data.leader.firstName}
-		{data.leader.lastName}
+		{data.member.user.firstName}
+		{data.member.user.lastName}
 	</span>
 </h2>
 
-<Teams teams={data.leader.leadersOf.map((l) => l.team)} isOwner={data.isOwner} />
+<Teams teams={data.member.leaderOf} isOwner={data.isOwner} />

@@ -1,15 +1,14 @@
 import { prisma } from '$lib/server'
 
 export const load = async ({ params: { eventId } }) => ({
-	users: await prisma.user.findMany({
+	members: await prisma.member.findMany({
 		where: {
-			leadersOf: { some: { team: { eventId } } },
+			eventId,
+			leaderOf: { some: { eventId } },
 		},
 		include: {
-			leadersOf: {
-				where: { team: { eventId } },
-				include: { team: true },
-			},
+			user: true,
+			leaderOf: true,
 		},
 	}),
 })
