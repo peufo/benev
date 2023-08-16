@@ -1,5 +1,7 @@
 import axios, { type AxiosRequestConfig, type RawAxiosResponseHeaders } from 'axios'
-import type { User } from '@prisma/client'
+import type { Member } from '@prisma/client'
+import { derived } from 'svelte/store'
+import { page } from '$app/stores'
 
 interface RequestConfig<Params = any, Data = any> extends AxiosRequestConfig<Data> {
 	params: Params
@@ -49,6 +51,8 @@ function methods<T extends unknown>(route: string) {
 	}
 }
 
-export const api = {
-	user: methods<User>('/users'),
-}
+export const api = derived(page, ({ params: { eventId } }) => ({
+	member: methods<Member & { user: { firstName: string; lastName: string } }>(
+		`/${eventId}/api/members`
+	),
+}))

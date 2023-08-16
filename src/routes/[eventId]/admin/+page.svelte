@@ -133,7 +133,7 @@
 					<td>{user.diet?.replaceAll(/[\[\]"]/g, '').replaceAll(',', ', ') || ''}</td>
 					<td>{getAge(user.birthday)}</td>
 					<td align="right">
-						<a href="{$eventPath}/admin/users/{user.id}" class="absolute inset-0">{' '}</a>
+						<a href="{$eventPath}/admin/members/{user.id}" class="absolute inset-0">{' '}</a>
 
 						<Contact {user} />
 					</td>

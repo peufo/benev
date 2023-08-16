@@ -25,10 +25,10 @@
 	<InputRelations
 		key="leaders"
 		label="Responsables"
-		getItems={api.user.findMany}
-		search={api.user.search}
-		getLabel={(user) => `${user.firstName} ${user.lastName}`}
-		value={team?.leaders.map((l) => l.user)}
+		getItems={$api.member.findMany}
+		search={$api.member.search}
+		getLabel={(member) => `${member.user.firstName} ${member.user.lastName}`}
+		value={team?.leaders}
 	/>
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
 

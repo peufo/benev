@@ -3,7 +3,7 @@
 	import { eventPath } from '$lib/store'
 
 	const tabs = [
-		{ path: '/admin', label: 'Les bénévoles', reg: /\/admin(\/users.*)?$/ },
+		{ path: '/admin', label: 'Les bénévoles', reg: /\/admin(\/members.*)?$/ },
 		{ path: '/admin/leaders', label: 'Les responsables', reg: /\/admin\/leaders/ },
 		{ path: '/admin/config', label: 'Configuration', reg: /\/admin\/config/ },
 		{ path: '/admin/pages', label: 'Les pages', reg: /\/admin\/pages.*/ },
