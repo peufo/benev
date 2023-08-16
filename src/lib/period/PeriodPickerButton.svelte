@@ -56,7 +56,7 @@
 
 <ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit}>
 	<div slot="btn" class="join">
-		<button class="btn join-item" on:click={() => menu.setOpen()}>
+		<button class="btn join-item shrink flex-nowrap" on:click={() => menu.setOpen()}>
 			<Icon path={mdiCalendarMonthOutline} class="mr-2 opacity-60" />
 			{getLabel(period, time)}
 		</button>
@@ -69,7 +69,7 @@
 
 	<form
 		{action}
-		class="flex flex-col gap-1 h-full"
+		class="flex flex-col"
 		on:submit|preventDefault={handleSubmit}
 		data-sveltekit-replacestate
 	>
@@ -82,6 +82,6 @@
 			<InputTime label="A partir de" bind:value={time.start} enhanceDisabled class="grow" />
 			<InputTime label="Jusqu'à" bind:value={time.end} enhanceDisabled class="grow" />
 		</div>
-		<button class="hidden" />
+		<button class="btn m-2"> Valider </button>
 	</form>
 </ButtonMenu>
