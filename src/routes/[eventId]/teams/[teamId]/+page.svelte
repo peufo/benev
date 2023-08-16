@@ -1,20 +1,16 @@
 <script lang="ts">
-	import { Icon } from '$lib/material'
-	import {
-		mdiArrowLeft,
-		mdiChevronRight,
-		mdiEmailOutline,
-		mdiPencilOutline,
-		mdiPhoneOutline,
-	} from '@mdi/js'
-	import PeriodForm from './PeriodForm.svelte'
-	import SubscribeForm from './SubscribeForm.svelte'
-	import ThanksDialog from './ThanksDialog.svelte'
-	import Subscribes from './Subscribes.svelte'
+	import { Card, Icon, Placeholder } from '$lib/material'
+	import { mdiChevronRight, mdiPencilOutline } from '@mdi/js'
+
 	import { eventPath, urlParam } from '$lib/store'
 	import { goto } from '$app/navigation'
 	import SubscribeState from '$lib/SubscribeState.svelte'
 	import { formatRange } from '$lib/formatRange'
+	import PeriodForm from './PeriodForm.svelte'
+	import SubscribeForm from './SubscribeForm.svelte'
+	import ThanksDialog from './ThanksDialog.svelte'
+	import Subscribes from './Subscribes.svelte'
+	import Leaders from './Leaders.svelte'
 
 	export let data
 
@@ -27,45 +23,18 @@
 	const periodOpenKey = 'periodOpen'
 </script>
 
-<div class="p-4 card bg-base-100 max-w-4xl m-auto">
-	<div class="p-1 md:p-8 flex flex-col gap-2 items-start">
-		<a href="{$eventPath}/teams" class="btn btn-xs btn-ghost pl-0">
-			<Icon path={mdiArrowLeft} size={16} />
-			secteurs
+<Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams">
+	<h2 slot="title">{data.team.name}</h2>
+	<p slot="subtitle">{data.team.description || ''}</p>
+	<div slot="action">
+		<a href="{$eventPath}/teams/{data.team.id}/edit" class="btn btn-square btn-sm">
+			<Icon path={mdiPencilOutline} />
 		</a>
-		<h2 class="text-2xl">{data.team.name}</h2>
-		<p>{data.team.description || ''}</p>
-		<div>
-			Responsable{data.team.leaders.length > 1 ? 's' : ''} :
-			{#each data.team.leaders as { user }}
-				<div class="dropdown">
-					<!-- svelte-ignore a11y-label-has-associated-control -->
-					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-					<label tabindex="0" class="btn btn-sm">{user.firstName} {user.lastName}</label>
-					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-					<ul
-						tabindex="0"
-						class="dropdown-content menu z-10 p-2 shadow-lg rounded-box bg-base-100 w-48"
-					>
-						<li>
-							<a href="mailto:{user.email}" target="_blank">
-								<Icon path={mdiEmailOutline} />
-								Envoyer un mail
-							</a>
-						</li>
-						{#if user.phone}
-							<li>
-								<a href="tel:{user.phone}" target="_blank">
-									<Icon path={mdiPhoneOutline} />
-									Téléphoner
-								</a>
-							</li>
-						{/if}
-					</ul>
-				</div>
-			{/each}
-		</div>
+	</div>
 
+	<Leaders leaders={data.team.leaders} />
+
+	{#if data.periods.length}
 		<table class="table text-base">
 			<thead>
 				<tr>
@@ -139,8 +108,8 @@
 										<Icon
 											path={mdiChevronRight}
 											class=" transition-transform
-												{$urlParam.hasValue(periodOpenKey, period.id) ? 'rotate-90' : ''}
-											"
+											{$urlParam.hasValue(periodOpenKey, period.id) ? 'rotate-90' : ''}
+										"
 										/>
 									</button>
 								</div>
@@ -155,8 +124,10 @@
 				{/each}
 			</tbody>
 		</table>
-	</div>
-</div>
+	{:else}
+		<Placeholder>Aucune période de travail</Placeholder>
+	{/if}
+</Card>
 
 {#if data.isLeader}
 	<div class="p-4 card bg-base-100 max-w-4xl m-auto mt-4">
