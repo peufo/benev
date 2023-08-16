@@ -5,7 +5,7 @@
 	const tabs = [
 		{ path: '/admin', label: 'Les bénévoles', reg: /\/admin(\/users.*)?$/ },
 		{ path: '/admin/leaders', label: 'Les responsables', reg: /\/admin\/leaders/ },
-		{ path: '/admin/event', label: "L'évènement", reg: /\/admin\/event/ },
+		{ path: '/admin/config', label: 'Configuration', reg: /\/admin\/config/ },
 		{ path: '/admin/pages', label: 'Les pages', reg: /\/admin\/pages.*/ },
 	]
 </script>
@@ -29,9 +29,5 @@
 		{/each}
 	</div>
 
-	<div class="card bg-base-100 shadow-lg">
-		<div class="card-body p-2 sm:p-8">
-			<slot />
-		</div>
-	</div>
+	<slot />
 </div>

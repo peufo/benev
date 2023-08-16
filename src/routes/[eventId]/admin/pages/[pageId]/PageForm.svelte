@@ -41,35 +41,32 @@
 		}
 	})
 
-  $: pagePath = `${$eventPath}${page.isIndex ? '' : `/${normalizePath(page.title)}`}`
-
+	$: pagePath = `${$eventPath}${page.isIndex ? '' : `/${normalizePath(page.title)}`}`
 </script>
 
 <form method="post" action="?/update_page" use:enhance={form.submit} class="flex flex-col gap-2">
-  <div class="flex flex-wrap items-end gap-2">
-    <InputText
-      key="title"
-      bind:value={page.title}
-      label=""
-      input={{ placeholder: 'Titre de la page' }}
-      class="max-w-xs"
-    />
+	<div class="flex flex-wrap gap-4">
+		<InputText
+			key="title"
+			bind:value={page.title}
+			label=""
+			input={{ placeholder: 'Titre de la page' }}
+			class="max-w-xs"
+		/>
 
-    <a href={pagePath} class="btn btn-ghost">
-      {pagePath}
-    </a>
-  </div>
+		<a href={pagePath} class="link link-hover pt-7">
+			{pagePath}
+		</a>
+	</div>
 
 	<input type="hidden" name="id" value={page.id} />
 	<input type="hidden" name="path" value={normalizePath(page.title)} />
 	<input type="hidden" name="content" value={page.content} />
 	<input type="hidden" name="eventId" value={page.eventId} />
 
-
 	<div class="input input-bordered min-h-[555px] overflow-auto prose max-w-none">
 		<div bind:this={holder} />
 	</div>
-	
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn">Valider</button>
@@ -79,5 +76,4 @@
 			formaction="?/delete_page">Supprimer</button
 		>
 	</div>
-
 </form>

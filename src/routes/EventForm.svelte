@@ -18,7 +18,6 @@
 	const form = useForm({ successCallback: () => dispatch('success'), successUpdate, successReset })
 
 	let name = ''
-
 </script>
 
 <form
@@ -31,13 +30,12 @@
 		<h3 class="font-bold text-lg">Nouvel évènement</h3>
 	{/if}
 
-	
 	{#if isUpdate && event}
 		<InputText
 			key="name"
 			label="Nom de l'évènement"
 			bind:value={event.name}
-			hint="benev.ch/{event.id}"
+			hint={isUpdate ? '' : `benev.ch/${event.id}`}
 		/>
 		<input type="hidden" name="id" value={event.id} />
 	{:else}
