@@ -9,11 +9,12 @@ CREATE TABLE `User` (
     `street` VARCHAR(191) NULL,
     `zipCode` VARCHAR(191) NULL,
     `city` VARCHAR(191) NULL,
+    `comment` VARCHAR(191) NULL,
     `isInsured` BOOLEAN NOT NULL DEFAULT false,
-    `size` ENUM('small', 'medium', 'large', 'xLarge') NULL,
+    `size` ENUM('none', 'small', 'medium', 'large', 'xLarge') NULL,
     `diet` VARCHAR(191) NULL,
     `skillString` VARCHAR(191) NULL,
-    `comment` VARCHAR(191) NULL,
+    `isEmailVerified` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -46,6 +47,16 @@ CREATE TABLE `Key` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Token` (
+    `id` VARCHAR(191) NOT NULL,
+    `type` ENUM('emailVerification', 'passwordReset') NOT NULL,
+    `expires` BIGINT NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Event` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
@@ -62,6 +73,20 @@ CREATE TABLE `Event` (
 
     UNIQUE INDEX `Event_id_key`(`id`),
     UNIQUE INDEX `Event_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Member` (
+    `id` VARCHAR(191) NOT NULL,
+    `isValidedByEvent` BOOLEAN NOT NULL DEFAULT false,
+    `isValidedByUser` BOOLEAN NOT NULL DEFAULT false,
+    `userId` VARCHAR(191) NOT NULL,
+    `eventId` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `Member_userId_eventId_key`(`userId`, `eventId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -108,22 +133,23 @@ CREATE TABLE `Period` (
 CREATE TABLE `Subscribe` (
     `id` VARCHAR(191) NOT NULL,
     `state` ENUM('request', 'accepted', 'denied', 'cancelled') NOT NULL DEFAULT 'request',
+    `request` ENUM('byUser', 'byLeader') NOT NULL DEFAULT 'byUser',
     `periodId` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
+    `memberId` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `Subscribe_userId_periodId_key`(`userId`, `periodId`),
+    UNIQUE INDEX `Subscribe_memberId_periodId_key`(`memberId`, `periodId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `_TeamToUser` (
+CREATE TABLE `_MemberToTeam` (
     `A` VARCHAR(191) NOT NULL,
     `B` VARCHAR(191) NOT NULL,
 
-    UNIQUE INDEX `_TeamToUser_AB_unique`(`A`, `B`),
-    INDEX `_TeamToUser_B_index`(`B`)
+    UNIQUE INDEX `_MemberToTeam_AB_unique`(`A`, `B`),
+    INDEX `_MemberToTeam_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
@@ -133,7 +159,16 @@ ALTER TABLE `Session` ADD CONSTRAINT `Session_user_id_fkey` FOREIGN KEY (`user_i
 ALTER TABLE `Key` ADD CONSTRAINT `Key_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `Token` ADD CONSTRAINT `Token_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `Event` ADD CONSTRAINT `Event_ownerId_fkey` FOREIGN KEY (`ownerId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Member` ADD CONSTRAINT `Member_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Member` ADD CONSTRAINT `Member_eventId_fkey` FOREIGN KEY (`eventId`) REFERENCES `Event`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Page` ADD CONSTRAINT `Page_eventId_fkey` FOREIGN KEY (`eventId`) REFERENCES `Event`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -148,10 +183,10 @@ ALTER TABLE `Period` ADD CONSTRAINT `Period_teamId_fkey` FOREIGN KEY (`teamId`) 
 ALTER TABLE `Subscribe` ADD CONSTRAINT `Subscribe_periodId_fkey` FOREIGN KEY (`periodId`) REFERENCES `Period`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Subscribe` ADD CONSTRAINT `Subscribe_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Subscribe` ADD CONSTRAINT `Subscribe_memberId_fkey` FOREIGN KEY (`memberId`) REFERENCES `Member`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_TeamToUser` ADD CONSTRAINT `_TeamToUser_A_fkey` FOREIGN KEY (`A`) REFERENCES `Team`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_MemberToTeam` ADD CONSTRAINT `_MemberToTeam_A_fkey` FOREIGN KEY (`A`) REFERENCES `Member`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_TeamToUser` ADD CONSTRAINT `_TeamToUser_B_fkey` FOREIGN KEY (`B`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_MemberToTeam` ADD CONSTRAINT `_MemberToTeam_B_fkey` FOREIGN KEY (`B`) REFERENCES `Team`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
