@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
 
-	import { Icon } from '$lib/material'
+	import { Card, Icon } from '$lib/material'
 	import { page } from '$app/stores'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'
@@ -12,11 +12,9 @@
 	const form = useForm()
 </script>
 
-
-<div class="flex gap-2 flex-wrap">
+<Card bodyClass="flex flex-row gap-4 items-start flex-wrap">
 	<div>
 		<ul class="menu menu-lg bg-base-200 w-56 rounded-box mt-2 text-clip">
-			
 			<li>
 				<a
 					href="{$eventPath}/admin/pages/{data.pageIndex.id}"
@@ -46,4 +44,4 @@
 	<div class="grow">
 		<slot />
 	</div>
-</div>
+</Card>

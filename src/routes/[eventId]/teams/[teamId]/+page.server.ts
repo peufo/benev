@@ -9,8 +9,6 @@ export const load = async ({ params, parent }) => {
 	const { isLeader } = await parent()
 	const { teamId } = params
 
-	console.log({ isLeader })
-
 	return {
 		periods: await prisma.period.findMany({
 			where: { teamId },
