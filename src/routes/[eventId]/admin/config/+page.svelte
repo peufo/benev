@@ -24,7 +24,7 @@
 	</Card>
 
 	<Card>
-		<span slot="title">Profile des membres</span>
+		<span slot="title">Profil des membres</span>
 		<span slot="subtitle">Informations complémentaires demandées aux bénévoles</span>
 	</Card>
 </div>

@@ -6,7 +6,15 @@ export const load = async ({ params }) => {
 	return {
 		memberProfile: await prisma.member.findUniqueOrThrow({
 			where: { id: memberId },
-			include: { user: true },
+			include: {
+				user: true,
+				leaderOf: {
+					include: {
+						leaders: { include: { user: true } },
+						periods: { include: { subscribes: true } },
+					},
+				},
+			},
 		}),
 		event: await prisma.event.findUniqueOrThrow({
 			where: { id: eventId },

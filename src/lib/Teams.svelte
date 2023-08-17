@@ -71,6 +71,6 @@
 	</table>
 {:else}
 	<Placeholder>
-		<span>Aucun secteur pour l'instant</span>
+		<span>Aucun secteur à charge</span>
 	</Placeholder>
 {/if}

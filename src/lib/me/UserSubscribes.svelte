@@ -4,13 +4,13 @@
 	import SubscribeState from '$lib/SubscribeState.svelte'
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
 	import { eventPath } from '$lib/store'
+	import { Card, Placeholder } from '$lib/material'
 
 	export let events: (Event & {
 		teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 	})[]
 
 	export let title = 'Mes inscriptions'
-	export let eventNameVisible = true
 	export let isEditor = false
 </script>
 
@@ -20,11 +20,16 @@
 	{/if}
 
 	{#each events as event}
-		<section>
-			{#if eventNameVisible}
-				<a class="text-xl link link-hover" href="/{event.id}">{event.name}</a>
-			{/if}
-			<table class="table outline outline-base-200 outline-2" class:mt-3={eventNameVisible}>
+		<Card>
+			<span slot="title">
+				{#if $$slots.title}
+					<slot name="title" />
+				{:else}
+					<a class="link link-hover" href="/{event.id}">{event.name}</a>
+				{/if}
+			</span>
+
+			<table class="table outline outline-base-200 outline-2">
 				<tbody>
 					{#each event.teams as team}
 						<tr class="last:border-none relative hover:bg-base-200/60">
@@ -66,13 +71,13 @@
 					{/each}
 				</tbody>
 			</table>
-		</section>
+		</Card>
 	{:else}
-		<p class="text-center">
-			Aucune inscription pour le moment
+		<Placeholder>
+			<span>Aucune inscription pour le moment</span>
 			<br />
 			<br />
 			<a href="/" class="btn"> Trouve un évènement </a>
-		</p>
+		</Placeholder>
 	{/each}
 </div>
