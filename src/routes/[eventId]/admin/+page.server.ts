@@ -39,17 +39,34 @@ export const load = async ({ params, url }) => {
 	return {
 		members: await prisma.member.findMany({
 			where: {
-				subscribes: {
-					some: {
-						period: {
-							team: teamWhere,
-							...periodWhere,
+				OR: [
+					{
+						subscribes: {
+							some: {
+								period: {
+									team: teamWhere,
+									...periodWhere,
+								},
+							},
 						},
 					},
-				},
+					{
+						leaderOf: {
+							some: {
+								periods: {
+									some: {
+										team: teamWhere,
+										...periodWhere,
+									},
+								},
+							},
+						},
+					},
+				],
 			},
 			include: {
 				user: true,
+				leaderOf: true,
 				subscribes: {
 					where: {
 						period: {
