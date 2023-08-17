@@ -7,7 +7,9 @@
 	import Contact from '$lib/Contact.svelte'
 
 	// TODO: Pourquoi user ne passe pas directement dans le type ???
-	export let subscribes: (PageData['periods'][number]['subscribes'][number] & { user?: User })[]
+	export let subscribes: (PageData['periods'][number]['subscribes'][number] & {
+		member?: { user: User }
+	})[]
 	export let isOpen = false
 </script>
 
@@ -17,17 +19,17 @@
 			<div class="py-3 pl-6" transition:slide>
 				{#each subscribes as subscribe}
 					<div class="flex gap-2 justify-end items-center py-1">
-						{#if subscribe.user}
+						{#if subscribe.member}
 							<a
 								class="btn btn-sm"
-								title="Voir les infos de {subscribe.user.firstName}"
+								title="Voir les infos de {subscribe.member.user.firstName}"
 								href="{$eventPath}/admin/members/{subscribe.memberId}"
 							>
-								{subscribe.user.firstName}
-								{subscribe.user.lastName}
+								{subscribe.member.user.firstName}
+								{subscribe.member.user.lastName}
 							</a>
 
-							<Contact user={subscribe.user} />
+							<Contact user={subscribe.member.user} />
 						{/if}
 
 						<SubscribeStateForm {subscribe} />
