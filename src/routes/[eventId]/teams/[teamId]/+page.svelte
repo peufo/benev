@@ -2,8 +2,8 @@
 	import { Card, Icon, Placeholder } from '$lib/material'
 	import { mdiChevronRight, mdiPencilOutline } from '@mdi/js'
 
-	import { eventPath, urlParam } from '$lib/store'
 	import { goto } from '$app/navigation'
+	import { eventPath, urlParam } from '$lib/store'
 	import SubscribeState from '$lib/SubscribeState.svelte'
 	import { formatRange } from '$lib/formatRange'
 	import PeriodForm from './PeriodForm.svelte'
@@ -11,10 +11,12 @@
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Subscribes from './Subscribes.svelte'
 	import Leaders from './Leaders.svelte'
+	import MemberForm from './MemberForm.svelte'
 
 	export let data
 
 	let subscribeDialog: HTMLDialogElement
+	let memberDialog: HTMLDialogElement
 	let updateDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
 	let periodUpdatForm: PeriodForm
@@ -59,8 +61,13 @@
 						on:click={() => {
 							if (disabled) return
 							if (!data.user) return goto(`/${data.event.id}/me?callback=${location.pathname}`)
+
 							selectedPeriod = period
-							subscribeDialog.showModal()
+							if (!data.member) {
+								memberDialog?.showModal()
+							} else {
+								subscribeDialog?.showModal()
+							}
 						}}
 					>
 						<td class="w-full">
@@ -146,18 +153,33 @@
 	</div>
 </dialog>
 
+<dialog class="modal" bind:this={memberDialog}>
+	{#if data.user}
+		<MemberForm
+			userId={data.user.id}
+			event={data.event}
+			on:close={() => memberDialog.close()}
+			on:success={async () => {
+				memberDialog.close()
+				subscribeDialog.showModal()
+			}}
+		/>
+	{/if}
+</dialog>
+
 <dialog class="modal" bind:this={subscribeDialog}>
-	<SubscribeForm
-		userId={data.user?.userId || ''}
-		periodId={selectedPeriod?.id || ''}
-		teamName={data.team.name}
-		periodLabel={selectedPeriod && formatRange(selectedPeriod)}
-		on:close={() => subscribeDialog.close()}
-		on:success={() => {
-			subscribeDialog.close()
-			thanksDialog.open()
-		}}
-	/>
+	{#if selectedPeriod && data.member}
+		<SubscribeForm
+			memberId={data.member.id}
+			team={data.team}
+			period={selectedPeriod}
+			on:close={() => subscribeDialog.close()}
+			on:success={() => {
+				subscribeDialog.close()
+				thanksDialog.open()
+			}}
+		/>
+	{/if}
 </dialog>
 
 <ThanksDialog bind:this={thanksDialog} />

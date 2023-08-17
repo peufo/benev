@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 
-	import { Period, Team } from '@prisma/client'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
-	import { formatRange } from '$lib/formatRange'
+	import { Event } from '@prisma/client'
 
-	export let team: Team
-	export let memberId: string
-	export let period: Period
+	export let event: Event
+	export let userId: string
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
@@ -18,18 +16,19 @@
 </script>
 
 <form
-	action="?/new_subscribe"
+	action="?/new_member"
 	method="post"
 	class="modal-box flex flex-col gap-4"
 	use:enhance={form.submit}
 >
-	<input type="hidden" name="memberId" value={memberId} />
-	<input type="hidden" name="periodId" value={period.id} />
+	<input type="hidden" name="userId" value={userId} />
 
-	<h2 class="text-2xl">{team.name}</h2>
+	<h2 class="card-title">Rejoindre {event.name} ?</h2>
 
-	<p class="text-lg">Souhaites-tu t'inscrire à la période de travail suivante ?</p>
-	<p class="text-lg">{formatRange(period)}</p>
+	<p class="text-lg">
+		En acceptant, tu permets aux responsables de cet évènemment d'accéder aux informations de ton
+		profil.
+	</p>
 
 	<div class="flex gap-2 justify-end">
 		<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('close')}> Non </button>

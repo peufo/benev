@@ -10,6 +10,7 @@ export * from './team'
 export * from './period'
 export * from './subscribe'
 export * from './page'
+export * from './member'
 
 export type SetError = { [key: string]: (err: string) => void }
 export type FormContext = { setError: SetError }
@@ -48,12 +49,21 @@ export function useForm<Shema extends z.ZodRawShape>({
 		for (const key in setError) setError[key]('')
 	}
 
-	function handleFailure({ issues, message }: { issues?: z.ZodIssue[]; message?: string }) {
+	function handleFailure({
+		issues,
+		message,
+	}: {
+		issues?: (z.ZodIssue & { received?: string; expected?: string })[]
+		message?: string
+	}) {
 		resetErrors()
 		issues?.forEach((issue) => {
 			const key = issue.path[0]
 			if (!setError[key]) {
-				console.warn('Error not showed', issue)
+				notify.warning(
+					`[${issue.code}] ${issue.path[0]} receive "${issue.received}" instead "${issue.expected}"`
+				)
+				console.warn('Error not visible', issue)
 				return
 			}
 			setError[key](issue.message)

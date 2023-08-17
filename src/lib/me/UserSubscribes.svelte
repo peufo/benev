@@ -37,7 +37,7 @@
 								<table>
 									<tbody>
 										{#each team.periods as period}
-											<tr class="relative {isEditor ? 'hover:bg-base-200/80' : ''}">
+											<tr class={isEditor ? 'relative hover:bg-base-200/80' : ''}>
 												<td class="w-full">
 													{#if isEditor}
 														<a

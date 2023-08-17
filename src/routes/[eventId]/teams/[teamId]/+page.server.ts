@@ -1,5 +1,5 @@
 import { isLeaderOrThrow, parseFormData, prisma, sendEmailTemplate } from '$lib/server'
-import { periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
+import { memberShema, periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
 import { error, fail } from '@sveltejs/kit'
 
 import { EmailNewSubscribe, EmailSubscribeState } from '$lib/email'
@@ -21,6 +21,27 @@ export const load = async ({ params, parent }) => {
 }
 
 export const actions = {
+	new_member: async ({ request, locals, params }) => {
+		const session = await locals.auth.validate()
+		if (!session) throw error(401)
+
+		const { err, data } = await parseFormData(request, memberShema)
+		if (err) return err
+
+		const isValidedByUser = session.user.id === data.userId
+		// TODO (invit_member ?) const isValidedByEvent = false
+
+		await prisma.member.create({
+			data: {
+				...data,
+				eventId: params.eventId,
+				isValidedByUser,
+			},
+		})
+
+		// TODO: send mail to owner (optional)
+		// TODO: send mail to new member
+	},
 	new_subscribe: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
