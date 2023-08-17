@@ -1,12 +1,32 @@
 <script lang="ts">
+	import {
+		mdiAccountGroupOutline,
+		mdiApplicationCogOutline,
+		mdiFileDocumentMultipleOutline,
+	} from '@mdi/js'
 	import { page } from '$app/stores'
 	import { eventPath } from '$lib/store'
+	import { Icon } from '$lib/material'
 
 	const tabs = [
-		{ path: '/admin', label: 'Les bénévoles', reg: /\/admin(\/members.*)?$/ },
-		{ path: '/admin/leaders', label: 'Les responsables', reg: /\/admin\/leaders/ },
-		{ path: '/admin/config', label: 'Configuration', reg: /\/admin\/config/ },
-		{ path: '/admin/pages', label: 'Les pages', reg: /\/admin\/pages.*/ },
+		{
+			path: '/admin',
+			label: 'Les bénévoles',
+			icon: mdiAccountGroupOutline,
+			reg: /\/admin(\/members.*)?$/,
+		},
+		{
+			path: '/admin/config',
+			label: 'Configuration',
+			icon: mdiApplicationCogOutline,
+			reg: /\/admin\/config/,
+		},
+		{
+			path: '/admin/pages',
+			label: 'Les pages',
+			icon: mdiFileDocumentMultipleOutline,
+			reg: /\/admin\/pages.*/,
+		},
 	]
 </script>
 
@@ -16,7 +36,7 @@
 
 <div class="flex flex-col gap-4 max-w-4xl m-auto">
 	<div class="tabs tabs-boxed bg-base-100 grid grid-cols-1 sm:grid-cols-4 shadow-lg">
-		{#each tabs as { path, label, reg }}
+		{#each tabs as { path, label, reg, icon }}
 			{@const href = `${$eventPath}${path}`}
 
 			<a
@@ -24,6 +44,7 @@
 				{href}
 				class:tab-active={$page.url.pathname.match(reg)}
 			>
+				<Icon path={icon} class="mr-3 opacity-70" size={22} />
 				{label}
 			</a>
 		{/each}
