@@ -8,6 +8,7 @@ export const GET = async ({ params, url, locals }) => {
 
 	const members = await prisma.member.findMany({
 		where: {
+			eventId: params.eventId,
 			// TODO: isValidedByEvent: true,
 			isValidedByUser: true,
 			user: {
