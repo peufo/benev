@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Card } from '$lib/material'
 	import EventForm from '../../../EventForm.svelte'
+	import ShareForm from './ShareForm.svelte'
+	import WorkInProgress from '$lib/WorkInProgress.svelte'
 
 	export let data
 </script>
@@ -13,18 +15,13 @@
 
 	<Card>
 		<span slot="title">Partage</span>
-
-		<div>Evenement visible par : À tous, sur invitation</div>
-
-		<div>Copier le lien de l'évenement</div>
-
-		<div>Inscription</div>
-
-		<div>Le responsable doivent accepter</div>
+		<ShareForm />
 	</Card>
 
-	<Card>
-		<span slot="title">Profil des membres</span>
-		<span slot="subtitle">Informations complémentaires demandées aux bénévoles</span>
-	</Card>
+	<WorkInProgress>
+		<Card>
+			<span slot="title">Profil des membres</span>
+			<span slot="subtitle">Informations complémentaires demandées aux bénévoles</span>
+		</Card>
+	</WorkInProgress>
 </div>

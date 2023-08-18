@@ -6,6 +6,7 @@
 	import Contact from '$lib/Contact.svelte'
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
 	import { InputCheckboxsMenu, Card, Placeholder, InputBoolean } from '$lib/material'
+	import WorkInProgress from '$lib/WorkInProgress.svelte'
 
 	export let data
 	let workTimes: Record<string, number> = {}
@@ -61,23 +62,25 @@
 				options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
 				enhanceDisabled
 			/>
-			<div class="flex gap-4">
-				<div>TODO: ajouter ces filtres</div>
-				<InputBoolean
-					key="volunteers"
-					label="Bénévoles"
-					value={true}
-					enhanceDisabled
-					input={{ disabled: true }}
-				/>
-				<InputBoolean
-					key="leaders"
-					label="Responsables"
-					value={true}
-					enhanceDisabled
-					input={{ disabled: true }}
-				/>
-			</div>
+
+			<WorkInProgress>
+				<div class="flex gap-4">
+					<InputBoolean
+						key="volunteers"
+						label="Bénévoles"
+						value={true}
+						enhanceDisabled
+						input={{ disabled: true }}
+					/>
+					<InputBoolean
+						key="leaders"
+						label="Responsables"
+						value={true}
+						enhanceDisabled
+						input={{ disabled: true }}
+					/>
+				</div>
+			</WorkInProgress>
 		</div>
 	</Card>
 
