@@ -1,4 +1,4 @@
-import { isOwner, prisma } from '$lib/server'
+import { isOwner, isLeaderInEvent, prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
 export const load = async ({ params, locals, depends }) => {
@@ -15,7 +15,8 @@ export const load = async ({ params, locals, depends }) => {
 						where: { userId_eventId: { userId: session.user.id, eventId } },
 				  })
 				: null,
-			isOwner: await isOwner(params.eventId, locals),
+			isOwner: await isOwner(eventId, locals),
+			isLeaderInEvent: await isLeaderInEvent(eventId, locals),
 			event: await prisma.event.findUniqueOrThrow({ where: { id: eventId } }),
 			pageIndex: await prisma.page.findFirstOrThrow({
 				where: { eventId, isIndex: true },

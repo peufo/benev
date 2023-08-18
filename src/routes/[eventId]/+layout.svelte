@@ -29,7 +29,7 @@
 			{data.event.name}
 		</a>
 
-		{#if data.isOwner}
+		{#if data.isOwner || data.isLeaderInEvent}
 			<a
 				href="{$eventPath}/admin"
 				class="
@@ -43,7 +43,12 @@
 	</div>
 
 	<div slot="end" class="contents">
-		<EventMenu pages={data.pages} pageIndex={data.pageIndex} isOwner={data.isOwner} />
+		<EventMenu
+			pages={data.pages}
+			pageIndex={data.pageIndex}
+			isOwner={data.isOwner}
+			isLeaderInEvent={data.isLeaderInEvent}
+		/>
 	</div>
 </Header>
 

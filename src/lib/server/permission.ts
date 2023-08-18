@@ -17,6 +17,18 @@ export async function isOwnerOrThrow(eventId: string, locals: App.Locals) {
 	if (!ok) throw error(401)
 }
 
+export async function isLeaderInEvent(eventId: string, locals: App.Locals) {
+	const session = await locals.auth.validate()
+	if (!session) return false
+
+	const member = await prisma.member.findUnique({
+		where: { userId_eventId: { eventId, userId: session.user.id } },
+		include: { leaderOf: true },
+	})
+	if (member?.leaderOf.length) return true
+	return false
+}
+
 export async function isLeader(teamId: string, locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) return false

@@ -7,6 +7,7 @@
 	export let pageIndex: LayoutData['pageIndex']
 	export let pages: LayoutData['pages']
 	export let isOwner: boolean
+	export let isLeaderInEvent: boolean
 </script>
 
 <ul class="tabs hidden lg:block">
@@ -40,7 +41,7 @@
 		tabindex="0"
 		class="dropdown-content z-[1] menu menu-lg p-2 shadow bg-base-100 rounded-box w-64"
 	>
-		{#if isOwner}
+		{#if isOwner || isLeaderInEvent}
 			{@const isActive = $page.url.pathname.startsWith(`${$eventPath}/admin`)}
 			<li>
 				<a href="{$eventPath}/admin" class:active={isActive}>
