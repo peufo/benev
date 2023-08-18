@@ -7,7 +7,11 @@
 </script>
 
 <div class="flex gap-2">
-	<Icon path={mdiShieldAccount} class="opacity-70" title="Responsables" />
+	<Icon
+		path={mdiShieldAccount}
+		class="opacity-70 {leaders.length ? '' : 'fill-error'}"
+		title="Responsables"
+	/>
 
 	{#each leaders as { user }}
 		<div class="dropdown">
@@ -36,6 +40,6 @@
 			</ul>
 		</div>
 	{:else}
-		Pas de responsable
+		<span class="text-error">Pas de responsable</span>
 	{/each}
 </div>

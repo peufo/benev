@@ -4,9 +4,12 @@
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
 	import { Event } from '@prisma/client'
+	import { eventPath } from '$lib/store'
 
 	export let event: Event
 	export let userId: string
+	let klass = ''
+	export { klass as class }
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
@@ -16,9 +19,9 @@
 </script>
 
 <form
-	action="?/new_member"
+	action="{$eventPath}/invite?/new_member"
 	method="post"
-	class="modal-box flex flex-col gap-4"
+	class="modal-box flex flex-col gap-4 {klass}"
 	use:enhance={form.submit}
 >
 	<input type="hidden" name="userId" value={userId} />

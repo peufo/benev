@@ -11,7 +11,7 @@
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Subscribes from './Subscribes.svelte'
 	import Leaders from './Leaders.svelte'
-	import MemberForm from './MemberForm.svelte'
+	import MemberForm from '$lib/MemberForm.svelte'
 
 	export let data
 

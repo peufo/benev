@@ -36,7 +36,7 @@ export const sendEmail = async (mail: MailOption) => {
 			(err, info) => {
 				if (err) {
 					console.error(err)
-					reject(err)
+					// reject(err)
 					return
 				}
 				resolve(info)

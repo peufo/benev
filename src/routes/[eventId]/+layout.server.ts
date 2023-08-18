@@ -3,17 +3,26 @@ import { error } from '@sveltejs/kit'
 
 export const load = async ({ params, locals, depends }) => {
 	depends('event')
+	const session = await locals.auth.validate()
+	const { eventId } = params
+
 	const select = { id: true, title: true, path: true, isIndex: true }
+
 	try {
 		return {
+			member: session
+				? await prisma.member.findUnique({
+						where: { userId_eventId: { userId: session.user.id, eventId } },
+				  })
+				: null,
 			isOwner: await isOwner(params.eventId, locals),
-			event: await prisma.event.findUniqueOrThrow({ where: { id: params.eventId } }),
+			event: await prisma.event.findUniqueOrThrow({ where: { id: eventId } }),
 			pageIndex: await prisma.page.findFirstOrThrow({
-				where: { eventId: params.eventId, isIndex: true },
+				where: { eventId, isIndex: true },
 				select,
 			}),
 			pages: await prisma.page.findMany({
-				where: { eventId: params.eventId, isIndex: false },
+				where: { eventId, isIndex: false },
 				select,
 			}),
 		}

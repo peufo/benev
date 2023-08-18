@@ -182,7 +182,7 @@
 				</tbody>
 			</table>
 		{:else}
-			<Placeholder>Aucun bénévole</Placeholder>
+			<Placeholder>Aucun bénévole actif</Placeholder>
 		{/if}
 	</Card>
 </div>
