@@ -7,7 +7,7 @@
 	export let data
 </script>
 
-<div class="grid grid-cols-2 grid-rows-2 gap-4">
+<div class="grid grid-cols-1 grid-rows-2 gap-4 md:grid-cols-2">
 	<Card class="row-span-2">
 		<span slot="title">Informations de base</span>
 		<EventForm isUpdate successReset={false} event={data.event} class="grow" />

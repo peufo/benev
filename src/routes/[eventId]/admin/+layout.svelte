@@ -35,17 +35,17 @@
 </svelte:head>
 
 <div class="flex flex-col gap-4 max-w-4xl m-auto">
-	<div class="tabs tabs-boxed bg-base-100 grid grid-cols-1 sm:grid-cols-4 shadow-lg">
+	<div class="tabs tabs-boxed bg-base-100 grid grid-cols-1 sm:grid-cols-3 shadow-lg">
 		{#each tabs as { path, label, reg, icon }}
 			{@const href = `${$eventPath}${path}`}
 
 			<a
-				class="tab tab-lg whitespace-nowrap"
+				class="tab tab-lg flex-nowrap grow"
 				{href}
 				class:tab-active={$page.url.pathname.match(reg)}
 			>
 				<Icon path={icon} class="mr-3 opacity-70" size={22} />
-				{label}
+				<span>{label}</span>
 			</a>
 		{/each}
 	</div>
