@@ -5,6 +5,7 @@
 	import EditorJsHTML from 'editorjs-html'
 	import type { Page } from '@prisma/client'
 	import { Icon } from '$lib/material'
+	import HelpPage from '$lib/HelpPage.svelte'
 
 	export let page: Page | null
 	export let isOwner = false
@@ -23,12 +24,7 @@
 		{@html html}
 	{:else}
 		{#if page?.isIndex}
-			<h2>Salut 👋</h2>
-			<p>
-				Merci pour ta confiance.<br />
-				Tu peux éditer cette page qui servira a accueillir tes bénévoles en cliquant sur le bouton juste
-				en-dessous.
-			</p>
+			<HelpPage/>
 		{:else}
 			<div class="text-center p-10">
 				Cette page est vide
