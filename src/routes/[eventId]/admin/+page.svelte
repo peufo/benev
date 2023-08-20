@@ -63,24 +63,10 @@
 				enhanceDisabled
 			/>
 
-			<WorkInProgress>
-				<div class="flex gap-4">
-					<InputBoolean
-						key="volunteers"
-						label="Bénévoles"
-						value={true}
-						enhanceDisabled
-						input={{ disabled: true }}
-					/>
-					<InputBoolean
-						key="leaders"
-						label="Responsables"
-						value={true}
-						enhanceDisabled
-						input={{ disabled: true }}
-					/>
-				</div>
-			</WorkInProgress>
+			<div class="flex gap-4">
+				<InputBoolean key="volunteers" label="Bénévoles" value={true} enhanceDisabled bindWithParams/>
+				<InputBoolean key="leaders" label="Responsables" value={true} enhanceDisabled bindWithParams />
+			</div>
 		</div>
 	</Card>
 

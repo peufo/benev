@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client'
 import { prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
@@ -5,13 +6,12 @@ export const load = async ({ params, url }) => {
 	const _start = url.searchParams.get('start')
 	const _end = url.searchParams.get('end')
 	const _teams = url.searchParams.get('teams')
+	const with_volunteers = url.searchParams.get('boolean_volunteers') !== 'false'
+	const with_leaders = url.searchParams.get('boolean_leaders') !== 'false'
 
 	const { eventId } = params
 
-	let periodWhere: {
-		start?: { lte: Date }
-		end?: { gte: Date }
-	} = {}
+	let periodWhere: Prisma.PeriodWhereInput = {}
 	if (typeof _start === 'string' && typeof _end === 'string') {
 		const start = new Date(_start)
 		const end = new Date(_end)
@@ -23,10 +23,7 @@ export const load = async ({ params, url }) => {
 		}
 	}
 
-	const teamWhere: {
-		eventId: string
-		id?: { in: string[] }
-	} = { eventId }
+	const teamWhere: Prisma.TeamWhereInput = { eventId }
 	if (typeof _teams === 'string') {
 		try {
 			const teams = JSON.parse(_teams) as string[]
@@ -36,34 +33,37 @@ export const load = async ({ params, url }) => {
 		}
 	}
 
+	const OR: Prisma.MemberWhereInput[] = []
+
+	if (with_volunteers)
+		OR.push({
+			subscribes: {
+				some: {
+					period: {
+						team: teamWhere,
+						...periodWhere,
+					},
+				},
+			},
+		})
+
+	if (with_leaders)
+		OR.push({
+			leaderOf: {
+				some: {
+					periods: {
+						some: {
+							team: teamWhere,
+							...periodWhere,
+						},
+					},
+				},
+			},
+		})
+
 	return {
 		members: await prisma.member.findMany({
-			where: {
-				OR: [
-					{
-						subscribes: {
-							some: {
-								period: {
-									team: teamWhere,
-									...periodWhere,
-								},
-							},
-						},
-					},
-					{
-						leaderOf: {
-							some: {
-								periods: {
-									some: {
-										team: teamWhere,
-										...periodWhere,
-									},
-								},
-							},
-						},
-					},
-				],
-			},
+			where: { OR },
 			include: {
 				user: true,
 				leaderOf: true,
