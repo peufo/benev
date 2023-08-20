@@ -2,8 +2,7 @@
 	import { createEventDispatcher } from 'svelte'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
-	import InputText from '$lib/material/input/InputText.svelte'
-	import InputTextarea from '$lib/material/input/InputTextarea.svelte'
+	import {InputText, InputTextarea, DeleteButton} from '$lib/material'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 
@@ -59,7 +58,7 @@
 		<button class="btn" type="submit">Valider</button>
 
 		{#if isUpdate}
-			<button formaction="?/delete_event" class="btn btn-outline btn-error"> Supprimer </button>
+			<DeleteButton formaction="?/delete_event"/>
 		{/if}
 		<div class="grow" />
 		{#if !isUpdate}

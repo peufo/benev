@@ -5,6 +5,7 @@
 	import { useForm } from '$lib/form'
 	import { InputDatetime, InputNumber } from '$lib/material/input'
 	import type { Period } from '@prisma/client'
+	import { DeleteButton } from '$lib/material'
 
 	let klass = ''
 	export { klass as class }
@@ -96,9 +97,9 @@
 					Annuler
 				</button>
 				<div class="grow" />
-				<button class="btn btn-error btn-outline" formaction="?/delete_period">
-					Supprimer
-				</button>
+
+				<DeleteButton formaction="?/delete_period"/>
+	
 				<button class="btn" type="submit">Valider</button>
 			{:else}
 				<button

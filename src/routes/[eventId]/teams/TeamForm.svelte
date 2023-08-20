@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
-	import { InputRelations, InputText, InputTextarea } from '$lib/material/input'
+	import { InputRelations, InputText, InputTextarea , DeleteButton} from '$lib/material'
 	import { api } from '$lib/api'
 	import type { Team, Member, User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
@@ -35,7 +35,7 @@
 	<div class="flex gap-2 flex-row-reverse">
 		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit"> Valider </button>
 		{#if isUpdate}
-			<button class="btn btn-error btn-outline" formaction="?/delete"> Supprimer </button>
+			<DeleteButton formaction="?/delete"/>
 		{/if}
 		<div class="grow" />
 		<a class="btn btn-ghost" href="{$eventPath}/teams">Annuler</a>

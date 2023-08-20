@@ -5,7 +5,7 @@
 	import type { Page } from '@prisma/client'
 
 	import { useForm } from '$lib/form'
-	import { InputText } from '$lib/material'
+	import { DeleteButton, InputText } from '$lib/material'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 
@@ -70,10 +70,6 @@
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn">Valider</button>
-		<button
-			class="btn btn-outline btn-error"
-			class:btn-disabled={page.isIndex}
-			formaction="?/delete_page">Supprimer</button
-		>
+		<DeleteButton formaction="?/delete_page" disabled={page.isIndex} />
 	</div>
 </form>
