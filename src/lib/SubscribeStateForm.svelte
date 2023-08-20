@@ -4,7 +4,7 @@
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
 	import { Icon } from '$lib/material'
-	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
+	import { mdiCloseOctagonOutline, mdiCheck } from '@mdi/js'
 
 	export let subscribe: Subscribe
 	export let action = ''
@@ -32,7 +32,7 @@
 			</li>
 			<li>
 				<button formaction="{action}?/subscribe_denied">
-					<Icon path={mdiAlertOctagonOutline} class="fill-warning" />
+					<Icon path={mdiCloseOctagonOutline} class="fill-error" />
 					Refuser
 				</button>
 			</li>
