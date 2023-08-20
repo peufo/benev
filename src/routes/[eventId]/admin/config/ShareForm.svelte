@@ -9,6 +9,8 @@
 </script>
 
 <form action="?/update_event" method="post" use:enhance={form.submit}>
+	<CopyText label="Lien de la page d'accueil" value="https://benev.ch{$eventPath}" />
+
 	<CopyText label="Lien d'invitation" value="https://benev.ch{$eventPath}/invite" />
 
 	<br />
