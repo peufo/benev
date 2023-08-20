@@ -22,4 +22,5 @@
 		class="input-bordered input {inputClass || ''}"
 		{...inputProps}
 	/>
+	<slot name="append"/>
 </FormControl>

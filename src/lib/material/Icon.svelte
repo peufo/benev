@@ -1,4 +1,8 @@
 <script lang="ts">
+	import tippy, { type Props as TippyProps } from 'tippy.js'
+	import 'tippy.js/dist/tippy.css'
+	import { onMount } from 'svelte'
+
 	export let path: string
 	export let title = ''
 	export let size = 24
@@ -6,11 +10,22 @@
 	export { klass as class }
 	export let style = ''
 	export let classSVG = ''
+	export let tippyProps: Partial<TippyProps> = {}
+	export let tippyTargetParent = false
 	const viewWidth = 24
 	const viewHeight = 24
+
+	let icon: HTMLElement
+
+	onMount(() => {
+		if (!title) return
+		const target = tippyTargetParent ? icon.parentElement : icon
+		const tip = tippy(target || icon, { content: title, ...tippyProps })
+		return () => tip.destroy()
+	})
 </script>
 
-<i class="grid place-content-center fill-base-content {klass}" {title} {style}>
+<i bind:this={icon} class="grid place-content-center fill-base-content {klass}" {style}>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={size}

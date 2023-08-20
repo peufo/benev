@@ -1,7 +1,7 @@
 <script>
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
-	import { InputBoolean, InputText } from '$lib/material/input'
+	import { InputBoolean, InputText, CopyText } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'
 
@@ -9,12 +9,7 @@
 </script>
 
 <form action="?/update_event" method="post" use:enhance={form.submit}>
-	<InputText
-		key="share-link"
-		label="Lien d'invitation"
-		value="benev.ch{$eventPath}/invite"
-		input={{ readonly: true }}
-	/>
+	<CopyText label="Lien d'invitation" value="https://benev.ch{$eventPath}/invite" />
 
 	<br />
 
