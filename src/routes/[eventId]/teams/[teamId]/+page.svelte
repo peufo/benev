@@ -56,7 +56,6 @@
 						class="relative"
 						class:hover={!disabled}
 						class:cursor-pointer={!disabled}
-						class:opacity-70={disabled}
 						class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
 						on:click={() => {
 							if (disabled) return
@@ -70,7 +69,7 @@
 							}
 						}}
 					>
-						<td class="w-full">
+						<td class="w-full" class:opacity-70={disabled}>
 							{formatRange(period)}
 						</td>
 						<td class="flex gap-2 items-center">
