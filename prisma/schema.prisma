@@ -140,7 +140,7 @@ model Team {
   id String @id @default(cuid())
 
   name        String
-  description String?
+  description String?  @db.Text
   leaders     Member[]
 
   eventId String
