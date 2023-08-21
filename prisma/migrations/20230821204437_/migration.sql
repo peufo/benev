@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Event` ADD COLUMN `timezone` INTEGER NOT NULL DEFAULT -120;
