@@ -15,7 +15,7 @@
 		{/each}
 	</ul>
 
-	<div class="prose">
+	<div class="prose max-w-none grow bg-white">
 		<slot />
 	</div>
 </div>
