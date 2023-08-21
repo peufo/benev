@@ -10,6 +10,18 @@
 	export let isLeaderInEvent: boolean
 </script>
 
+{#if isOwner || isLeaderInEvent}
+	<a
+		href="{$eventPath}/admin"
+		class="
+			hidden lg:btn btn-square
+			{$page.route.id?.startsWith(`/[eventId]/admin`) ? '' : 'lg:btn-ghost'}
+		"
+	>
+		<Icon path={mdiCogOutline} title="Gestion évènement" class="rotate-12" />
+	</a>
+{/if}
+
 <ul class="tabs hidden lg:block">
 	<a href={$eventPath} class="tab tab-bordered" class:tab-active={$page.route.id === '/[eventId]'}>
 		{pageIndex.title}

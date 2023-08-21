@@ -28,20 +28,7 @@
 			<Icon path={mdiChevronRight} class="hidden lg:inline-block" />
 			{data.event.name}
 		</a>
-
-		{#if data.isOwner || data.isLeaderInEvent}
-			<a
-				href="{$eventPath}/admin"
-				class="
-						hidden lg:btn btn-square
-						{$page.route.id?.startsWith(`/[eventId]/admin`) ? '' : 'lg:btn-ghost'}
-					"
-			>
-				<Icon path={mdiCogOutline} title="Gestion évènement" class="rotate-12" />
-			</a>
-		{/if}
 	</div>
-
 	<div slot="end" class="contents">
 		<EventMenu
 			pages={data.pages}
