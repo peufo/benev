@@ -8,12 +8,13 @@
 	const form = useForm()
 </script>
 
-<form action="?/update_event" method="post" use:enhance={form.submit}>
-	<CopyText label="Lien de la page d'accueil" value="https://benev.ch{$eventPath}" />
+<form action="?/update_event" method="post" use:enhance={form.submit} class="flex flex-col gap-4">
+	<CopyText label="Lien de la page d'accueil de l'évènement" value="https://benev.ch{$eventPath}" />
 
-	<CopyText label="Lien d'invitation" value="https://benev.ch{$eventPath}/invite" />
-
-	<br />
+	<CopyText
+		label="Lien d'invitation à devenir membre"
+		value="https://benev.ch{$eventPath}/invite"
+	/>
 
 	<WorkInProgress>
 		<InputBoolean
