@@ -32,9 +32,10 @@ export const load = async ({ params, url }) => {
 		}
 	}
 
+	const allMember = !memberType || memberType === 'all'
 	const OR: Prisma.MemberWhereInput[] = []
 
-	if (!memberType || memberType === 'volunteers')
+	if (allMember || memberType === 'volunteers')
 		OR.push({
 			subscribes: {
 				some: {
@@ -46,7 +47,7 @@ export const load = async ({ params, url }) => {
 			},
 		})
 
-	if (!memberType || memberType === 'leaders')
+	if (allMember || memberType === 'leaders')
 		OR.push({
 			leaderOf: {
 				some: {

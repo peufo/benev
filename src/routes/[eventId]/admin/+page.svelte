@@ -68,7 +68,7 @@
 				options={{
 					volunteers: 'Bénévoles',
 					leaders: 'Responsable',
-					'': 'Tous',
+					all: 'Tous',
 				}}
 				bindWithParams
 			/>
