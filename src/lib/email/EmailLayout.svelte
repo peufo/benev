@@ -79,7 +79,7 @@
 									</p>
 
 									<p style="color:#666666;font-size:12px;line-height:24px; padding-bottom: 20px;">
-                    Tu peux modifier tes notifications par mail 
+                    Définis tes préfèrences concernant les notifications par mails
 										<a
 											href="https://benev.ch/me"
 											style="color:#067df7; text-decoration:none"

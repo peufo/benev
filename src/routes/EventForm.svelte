@@ -45,6 +45,7 @@
 			hint={name && `benev.ch/${normalizePath(name)}`}
 		/>
 		<input type="hidden" name="id" value={normalizePath(name)} />
+		<input type="hidden" name="timezone" value={new Date().getTimezoneOffset()}/>
 	{/if}
 
 	<InputTextarea key="description" label="Description" value={event?.description || ''} />

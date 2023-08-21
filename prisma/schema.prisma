@@ -92,6 +92,7 @@ model Event {
   email       String?
   phone       String?
   address     String?
+  timezone    Int     @default(-120)
 
   teams   Team[]
   members Member[]

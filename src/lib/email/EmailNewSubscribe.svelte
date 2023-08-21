@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { dev } from '$app/environment'
 	import type { Subscribe, Period, Team, User, Event } from '@prisma/client'
-	import dayjs from 'dayjs'
-	import 'dayjs/locale/fr-ch'
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
-	dayjs.locale('fr-ch')
+	import { formatRange } from '$lib/formatRange'
 
 	export let subscribe: Subscribe & {
 		member: { user: User }
@@ -22,23 +20,8 @@
 		souhaite renforcer le secteur <b>{subscribe.period.team.name}</b>
 		durant la période suivante :
 	</p>
-	
-	<table style="max-width: 300px;">
-		<tbody>
-			<tr>
-				<th style="text-align: left; padding-right: 30px;">Début</th>
-				<th style="text-align: right;">
-					{dayjs(subscribe.period.start).format('dddd MM.DD.YYYY à HH:mm')}
-				</th>
-			</tr>
-			<tr>
-				<th style="text-align: left; padding-right: 30px;">Fin</th>
-				<th style="text-align: right;">
-					{dayjs(subscribe.period.end).format('dddd MM.DD.YYYY à HH:mm')}
-				</th>
-			</tr>
-		</tbody>
-	</table>
+
+	<b>{formatRange(subscribe.period)}</b>
 	
 	<p>
 		Verifie

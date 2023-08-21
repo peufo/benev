@@ -5,6 +5,7 @@ const formater = new Intl.DateTimeFormat('fr-ch', {
 	year: 'numeric',
 	hour: 'numeric',
 	minute: 'numeric',
+	timeZone: 'Europe/Zurich',
 })
 
 type Range = { start: Date; end: Date }

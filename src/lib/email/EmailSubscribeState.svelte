@@ -2,9 +2,7 @@
 	import { dev } from '$app/environment'
 	import type { Subscribe, Period, Team, Event } from '@prisma/client'
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
-	import dayjs from 'dayjs'
-	import 'dayjs/locale/fr-ch'
-	dayjs.locale('fr-ch')
+	import { formatRange } from '$lib/formatRange'
 
 	export let subscribe: Subscribe & {
 		period: Period & { team: Team & { event: Event } }
@@ -31,22 +29,7 @@
 		</p>
 	{/if}
 
-	<table style="max-width: 300px;">
-		<tbody>
-			<tr>
-				<th style="text-align: left; padding-right: 30px;">Début</th>
-				<th style="text-align: right;">
-					{dayjs(subscribe.period.start).format('dddd MM.DD.YYYY à HH:mm')}
-				</th>
-			</tr>
-			<tr>
-				<th style="text-align: left; padding-right: 30px;">Fin</th>
-				<th style="text-align: right;">
-					{dayjs(subscribe.period.end).format('dddd MM.DD.YYYY à HH:mm')}
-				</th>
-			</tr>
-		</tbody>
-	</table>
+	<b>{formatRange(subscribe.period)}</b>
 
 	<p>
 		Tu peux trouver toutes les informations dont tu as besoins dans
