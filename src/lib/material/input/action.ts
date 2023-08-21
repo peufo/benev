@@ -34,12 +34,15 @@ export function bindCheckedWithParams(node: HTMLInputElement, { bindEnable = fal
 	const importValueFromParams = () => {
 		const _urlParam = get(urlParam)
 		if (!_urlParam.has(name)) return
-		node.checked = _urlParam.get(name) === 'true'
+		const paramValue = _urlParam.get(name)
+		if (node.value === 'on') node.checked = paramValue === 'true'
+		else node.checked = paramValue === node.value
 	}
 
 	const handleInput = () => {
 		const _urlParam = get(urlParam)
-		const newUrl = _urlParam.with({ [name]: node.checked ? 'true' : 'false' })
+		const newValue = node.value === 'on' ? (node.checked ? 'true' : 'false') : node.value
+		const newUrl = _urlParam.with({ [name]: newValue })
 		goto(newUrl, { replaceState: true })
 	}
 

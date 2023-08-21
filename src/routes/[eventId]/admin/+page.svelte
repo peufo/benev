@@ -5,8 +5,7 @@
 	import { userSizeLabel } from '$lib/form'
 	import Contact from '$lib/Contact.svelte'
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
-	import { InputCheckboxsMenu, Card, Placeholder, InputBoolean } from '$lib/material'
-	import WorkInProgress from '$lib/WorkInProgress.svelte'
+	import { InputCheckboxsMenu, Card, Placeholder, InputBoolean, InputRadioButtons } from '$lib/material'
 
 	export let data
 	let workTimes: Record<string, number> = {}
@@ -61,12 +60,19 @@
 				labelPlurial="Secteurs sélectionés"
 				options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
 				enhanceDisabled
+				
 			/>
 
-			<div class="flex gap-4">
-				<InputBoolean key="volunteers" label="Bénévoles" value={true} enhanceDisabled bindWithParams/>
-				<InputBoolean key="leaders" label="Responsables" value={true} enhanceDisabled bindWithParams />
-			</div>
+			<InputRadioButtons
+				key="member_type"
+				options={{
+					volunteers: 'Bénévoles',
+					leaders: 'Responsable',
+					'': 'Tous',
+				}}
+				bindWithParams
+			/>
+
 		</div>
 	</Card>
 

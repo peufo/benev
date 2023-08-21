@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FormControl from './FormControl.svelte'
 	import type { InputProps } from '.'
+	import { bindValueWithParams } from './action'
 	type $$Props = InputProps & { options: Record<string, string> }
 	$: ({ input, value: _value, options: _options, class: klass, ...props } = $$props as $$Props)
 	export let value = _value
@@ -21,6 +22,7 @@
 			class="flex-row-reverse justify-end items-center gap-2"
 		>
 			<input
+				use:bindValueWithParams={{ bindEnable: props.bindWithParams}}
 				bind:group={value}
 				on:input
 				on:focus

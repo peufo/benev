@@ -6,8 +6,7 @@ export const load = async ({ params, url }) => {
 	const _start = url.searchParams.get('start')
 	const _end = url.searchParams.get('end')
 	const _teams = url.searchParams.get('teams')
-	const with_volunteers = url.searchParams.get('boolean_volunteers') !== 'false'
-	const with_leaders = url.searchParams.get('boolean_leaders') !== 'false'
+	const memberType = url.searchParams.get('member_type')
 
 	const { eventId } = params
 
@@ -35,7 +34,7 @@ export const load = async ({ params, url }) => {
 
 	const OR: Prisma.MemberWhereInput[] = []
 
-	if (with_volunteers)
+	if (!memberType || memberType === 'volunteers')
 		OR.push({
 			subscribes: {
 				some: {
@@ -47,7 +46,7 @@ export const load = async ({ params, url }) => {
 			},
 		})
 
-	if (with_leaders)
+	if (!memberType || memberType === 'leaders')
 		OR.push({
 			leaderOf: {
 				some: {
