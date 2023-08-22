@@ -37,7 +37,7 @@ export const actions: Actions = {
 			const tokenId = await generateToken('emailVerification', session.user.id)
 			sendEmailTemplate(EmailVerificationLink, {
 				to: session.user.email,
-				subject: 'Bienvenu',
+				subject: 'Bienvenue',
 				props: {
 					isNewUser: true,
 					tokenId,

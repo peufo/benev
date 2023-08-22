@@ -4,7 +4,7 @@
 
 <h2>Salut 👋</h2>
 <p>
-	Bienvenu dans l'espace réservé à ton évènement.<br>
+	Bienvenue dans l'espace réservé à ton évènement.<br>
 	Voici les étapes clés pour le configurer :
 </p>
 
