@@ -25,7 +25,13 @@
 				{#if $$slots.title}
 					<slot name="title" />
 				{:else}
-					<a class="link link-hover" href="/{event.id}">{event.name}</a>
+					<a class="link link-hover" href="/{event.id}">
+						{#if event.logo}
+							<img src={event.logo} alt="logo de {event.name}" class="w-8 pr-2 inline-block">
+						{/if}
+						<span>{event.name}</span>
+						
+					</a>
 				{/if}
 			</span>
 
