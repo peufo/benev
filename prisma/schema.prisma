@@ -94,8 +94,6 @@ model Event {
   address     String?
   timezone    Int     @default(-120)
 
-  memberFields Json @default("[]")
-
   teams   Team[]
   members Member[]
   pages   Page[]
