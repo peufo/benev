@@ -15,13 +15,4 @@
 		label="Lien d'invitation à devenir membre"
 		value="https://benev.ch{$eventPath}/invite"
 	/>
-
-	<WorkInProgress>
-		<InputBoolean
-			key="private"
-			label="Évènement privé ?"
-			hint="Tous le monde peut rejoindre cette évenement"
-			input={{ disabled: true }}
-		/>
-	</WorkInProgress>
 </form>
