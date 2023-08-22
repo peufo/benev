@@ -1,5 +1,5 @@
 import { isLeaderOrThrow, parseFormData, prisma, sendEmailTemplate } from '$lib/server'
-import { memberShema, periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
+import { periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
 import { error, fail } from '@sveltejs/kit'
 
 import { EmailNewSubscribe, EmailSubscribeState } from '$lib/email'
@@ -44,6 +44,7 @@ export const actions = {
 
 		if (subscribe.period.team.leaders.length)
 			sendEmailTemplate(EmailNewSubscribe, {
+				from: subscribe.period.team.event.name,
 				to: subscribe.period.team.leaders.map(({ user }) => user.email),
 				subject: 'Un nouveau bénévole',
 				props: { subscribe },
@@ -125,6 +126,7 @@ async function setSubscribState(request: Request, state: SubscribeState) {
 	})
 
 	sendEmailTemplate(EmailSubscribeState, {
+		from: subscribe.period.team.event.name,
 		to: subscribe.member.user.email,
 		subject: `Inscription ${subscribe.state === 'accepted' ? 'acceptée' : 'refusée'}`,
 		props: { subscribe },

@@ -21,16 +21,17 @@ transporter.verify(function (err) {
 })
 
 type MailOption = {
+	from?: string
 	to: string | string[]
 	subject: string
 	html: string
 }
 
-export const sendEmail = async (mail: MailOption) => {
+export const sendEmail = async ({ from, ...mail }: MailOption) => {
 	return new Promise((resolve, reject) => {
 		transporter.sendMail(
 			{
-				from: `BENEV <${SMTP_USER}>`,
+				from: `${from || 'Benev.ch'} <${SMTP_USER}>`,
 				...mail,
 			},
 			(err, info) => {
@@ -54,6 +55,7 @@ export async function sendEmailTemplate<Component extends ComponentType>(
 	// @ts-ignore
 	const { html } = template.render(options.props)
 	return sendEmail({
+		from: options.from,
 		to: options.to,
 		subject: options.subject,
 		html,
