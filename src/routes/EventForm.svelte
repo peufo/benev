@@ -2,9 +2,11 @@
 	import { createEventDispatcher } from 'svelte'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
-	import {InputText, InputTextarea, DeleteButton} from '$lib/material'
+	import { InputText, InputTextarea, DeleteButton } from '$lib/material'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
+	import { debounce } from '$lib/debounce'
+	import { slide } from 'svelte/transition'
 
 	let klass = ''
 	export { klass as class }
@@ -17,6 +19,17 @@
 	const form = useForm({ successCallback: () => dispatch('success'), successUpdate, successReset })
 
 	let name = ''
+	let webInput: HTMLInputElement
+	let scrapLogoPending = false
+	let logo = event?.logo || null
+	const handleWebInput = debounce(async () => {
+		const site = webInput.value
+		scrapLogoPending = true
+		const res = await fetch(`/api/scrap?site=${site}`)
+			.then((res) => res.json())
+			.finally(() => (scrapLogoPending = false))
+		logo = res.logo
+	}, 400)
 </script>
 
 <form
@@ -45,12 +58,35 @@
 			hint={name && `benev.ch/${normalizePath(name)}`}
 		/>
 		<input type="hidden" name="id" value={normalizePath(name)} />
-		<input type="hidden" name="timezone" value={new Date().getTimezoneOffset()}/>
+		<input type="hidden" name="timezone" value={new Date().getTimezoneOffset()} />
 	{/if}
 
 	<InputTextarea key="description" label="Description" value={event?.description || ''} />
 
-	<InputText key="web" label="Site web" value={event?.web || ''} />
+	<InputText
+		key="web"
+		label="Site web"
+		value={event?.web || ''}
+		bind:inputElement={webInput}
+		on:input={handleWebInput}
+		wrapperClass="flex items-center"
+	>
+		<div slot="append">
+			{#if logo || scrapLogoPending}
+				<div transition:slide={{ axis: 'x' }} class="w-10 grid place-content-center">
+					{#if logo}
+						<img src={logo} alt="logo" class="w-5" />
+					{:else if scrapLogoPending}
+						<div class="loading loading-ring loading-xs" />
+					{/if}
+				</div>
+			{/if}
+		</div>
+	</InputText>
+
+	<input type="hidden" name="logo" value={logo}>
+
+
 	<InputText key="email" label="Email de contact" value={event?.email || ''} />
 	<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
 	<InputText key="address" label="Lieu" value={event?.address || ''} />
@@ -59,7 +95,7 @@
 		<button class="btn" type="submit">Valider</button>
 
 		{#if isUpdate}
-			<DeleteButton formaction="?/delete_event"/>
+			<DeleteButton formaction="?/delete_event" />
 		{/if}
 		<div class="grow" />
 		{#if !isUpdate}

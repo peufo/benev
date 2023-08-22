@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores'
 	import {
 		mdiChevronRight,
-		mdiCogOutline,
 		mdiEmailOutline,
 		mdiMapMarkerOutline,
 		mdiPhoneOutline,
@@ -26,7 +24,12 @@
 	<div class="contents" slot="start">
 		<a href={$eventPath} class="link link-hover text-lg">
 			<Icon path={mdiChevronRight} class="hidden lg:inline-block" />
-			{data.event.name}
+			{#if data.event.logo}
+				<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}">
+			{/if}
+			<span>
+				{data.event.name}
+			</span>
 		</a>
 	</div>
 	<div slot="end" class="contents">
@@ -47,7 +50,11 @@
 	<div class="flex flex-wrap">
 		{#if data.event.web}
 			<a class="btn btn-ghost flex" href={data.event.web} target="_blank">
-				<Icon path={mdiWeb} />
+				{#if data.event.logo}
+					<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}">
+				{:else}
+					<Icon path={mdiWeb} />
+				{/if}
 				{data.event.web.replace(/^http(s)?:\/\/(www\.)?/, '').replace(/\/$/, '')}
 			</a>
 		{/if}

@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit'
 import { eventShema } from '$lib/form'
 
 import { isOwnerOrThrow, parseFormData, prisma } from '$lib/server'
+import { scrapLogo } from '$lib/server/scrapLogo'
 
 export const actions = {
 	update_event: async ({ request, params, locals }) => {

@@ -5,6 +5,7 @@ import { default as FormControl } from './FormControl.svelte'
 export type InputProps<T = string> = ComponentProps<FormControl> & {
 	input?: HTMLInputAttributes
 	inputElement?: HTMLInputElement
+	wrapperClass?: string
 	value?: T
 	bindWithParams?: boolean
 }
