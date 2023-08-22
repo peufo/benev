@@ -3,7 +3,10 @@
 </script>
 
 <h2>Salut 👋</h2>
-<p>Voici les étapes clés pour configurer ton espace.</p>
+<p>
+	Bienvenu dans l'espace réservé à ton évènement.<br>
+	Voici les étapes clés pour le configurer :
+</p>
 
 <section>
 	<h3>Édition des pages</h3>
