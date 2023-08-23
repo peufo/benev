@@ -49,7 +49,7 @@
 <Footer>
 	<div class="flex flex-wrap">
 		{#if data.event.web}
-			<a class="btn btn-ghost flex" href={data.event.web} target="_blank">
+			<a class="btn btn-sm sm:btn-md btn-ghost flex" href={data.event.web} target="_blank">
 				{#if data.event.logo}
 					<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}">
 				{:else}
@@ -60,14 +60,14 @@
 		{/if}
 
 		{#if data.event.email}
-			<a class="btn btn-ghost flex" href="mailto:{data.event.email}" target="_blank">
+			<a class="btn btn-sm sm:btn-md btn-ghost flex" href="mailto:{data.event.email}" target="_blank">
 				<Icon path={mdiEmailOutline} />
 				{data.event.email}
 			</a>
 		{/if}
 
 		{#if data.event.phone}
-			<a class="btn btn-ghost flex" href="tel:{data.event.phone}" target="_blank">
+			<a class="btn btn-sm sm:btn-md btn-ghost flex" href="tel:{data.event.phone}" target="_blank">
 				<Icon path={mdiPhoneOutline} />
 				{data.event.phone}
 			</a>
@@ -75,7 +75,7 @@
 
 		{#if data.event.address}
 			<a
-				class="btn btn-ghost flex"
+				class="btn btn-sm sm:btn-md btn-ghost flex"
 				href="https://www.google.com/maps/place/{data.event.address}"
 				target="_blank"
 			>

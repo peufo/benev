@@ -1,4 +1,4 @@
-<footer class="footer footer-center p-6 bg-base-100 gap-5 mt-2">
+<footer class="footer footer-center p-6 bg-base-100 gap-5 mt-2 overflow-hidden">
 
   <slot />
 

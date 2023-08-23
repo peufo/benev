@@ -6,7 +6,7 @@
 	export let leaders: (Member & { user: User })[]
 </script>
 
-<div class="flex gap-2">
+<div class="flex flex-wrap gap-2">
 	<Icon
 		path={mdiShieldAccount}
 		class="btn-sm btn-square opacity-70 {leaders.length ? '' : 'fill-error'}"
