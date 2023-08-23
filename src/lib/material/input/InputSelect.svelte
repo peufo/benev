@@ -16,11 +16,12 @@
 	let focusIndex = 0
 
 	function onSelect(index: number) {
+		focusIndex = index
 		value = Object.keys(options)[index]
     selectorList.close()
 	}
 
-	const handleMouseLeave = debounce(() => {
+	const handleLeave = debounce(() => {
 		selectorList.close()
 	}, 300)
 </script>
@@ -36,15 +37,16 @@
 			focusIndex = index
 		},
 	}}
-	on:mouseenter={handleMouseLeave.clear}
-	on:mouseleave={handleMouseLeave}
+	on:mouseenter={handleLeave.clear}
+	on:mouseleave={handleLeave}
 	role="menu"
-	tabindex="0"
+	tabindex="-1"
 >
 	<button
 		on:click|preventDefault={() => selectorList.open()}
-		on:keydown={() => selectorList.open()}
-		class="btn"
+		on:focus={() => selectorList.open()}
+		on:blur={handleLeave}
+		class="btn w-full justify-start"
 	>
     {#if options[value]}
       {@const item = options[value]}
