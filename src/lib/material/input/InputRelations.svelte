@@ -156,6 +156,7 @@
 		{isLoading}
 		{focusIndex}
 		on:select={({ detail }) => select(detail)}
+		class="w-full"
 	>
 		<slot {item}>{getLabel(item)}</slot>
 	</SelectorList>

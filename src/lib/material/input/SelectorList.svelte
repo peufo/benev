@@ -4,13 +4,14 @@
 	import { createEventDispatcher } from 'svelte'
 	import { fade, fly, slide } from 'svelte/transition'
 
+	let klass = ''
+	export {klass as class}
+
 	type Item = $$Generic<{ id: string }>
 	export let items: Item[]
-
 	export let isError = false
 	export let isLoading = false
 	export let focusIndex = 0
-
 	export let isOpen = false
 	let isInvisible = false
 
@@ -34,7 +35,7 @@
 	<ul
 		in:fly|local={{ y: 20, duration: 100 }}
 		out:fade|local={{ duration: 100, delay: 150 }}
-		class="z-10 absolute translate-y-2 bg-base-200 rounded-box p-2 flex flex-col gap-1"
+		class="z-10 absolute translate-y-2 bg-base-200 rounded-box p-2 flex flex-col gap-1 {klass}"
 		class:opacity-0={isInvisible}
 	>
 		{#if isError}
