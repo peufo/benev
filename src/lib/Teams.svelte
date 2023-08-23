@@ -5,7 +5,6 @@
 	import { Icon, Placeholder } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { rowLink } from './action'
-	import Leaders from '../routes/[eventId]/teams/[teamId]/Leaders.svelte'
 
 	export let teams: (Team & {
 		leaders: (Member & { user: User })[]
