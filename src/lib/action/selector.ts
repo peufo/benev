@@ -10,7 +10,7 @@ type Params = {
 export function selector(
 	node: HTMLElement,
 	{
-		inputQuerySelector = 'input[type=text]',
+		inputQuerySelector = 'input[type=text], button',
 		listQuerySelector = 'ul',
 		itemsQuerySelector = 'li',
 		focusIndex = -1,
@@ -18,8 +18,8 @@ export function selector(
 		onFocus = () => {},
 	}: Partial<Params> = {}
 ) {
-	const input = node.querySelector<HTMLInputElement>(inputQuerySelector)
-	if (!(input instanceof HTMLInputElement)) {
+	const input = node.querySelector<HTMLInputElement | HTMLButtonElement>(inputQuerySelector)
+	if (!(input instanceof HTMLInputElement) && !(input instanceof HTMLButtonElement)) {
 		console.error('input element not found or is not an  HTMLInputElement')
 		return
 	}
@@ -70,14 +70,14 @@ export function selector(
 		}
 	}
 
-	input.addEventListener('keydown', handleKeydown)
+	;(input as HTMLInputElement).addEventListener('keydown', handleKeydown)
 
 	return {
 		update(params: { focusIndex: number }) {
 			focusIndex = params.focusIndex
 		},
 		destroy() {
-			input.removeEventListener('keydown', handleKeydown)
+			;(input as HTMLInputElement).removeEventListener('keydown', handleKeydown)
 		},
 	}
 }

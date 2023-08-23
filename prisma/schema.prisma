@@ -94,10 +94,46 @@ model Event {
   address     String?
   timezone    Int     @default(-120)
 
-  teams   Team[]
-  members Member[]
-  pages   Page[]
+  teams        Team[]
+  pages        Page[]
+  members      Member[]
+  memberFields Field[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Field {
+  id             String       @id @default(cuid())
+  eventId        String
+  event          Event        @relation(references: [id], fields: [eventId], onDelete: Cascade)
+  type           FieldType
+  name           String
+  required       Boolean
+  memberCanWrite Boolean
+  memberCanRead  Boolean
+  description    String?
+  options        String?
+  values         FieldValue[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+enum FieldType {
+  string
+  number
+  boolean
+  select
+  multiselect
+}
+
+model FieldValue {
+  id        String   @id @default(cuid())
+  fieldId   String
+  field     Field    @relation(references: [id], fields: [fieldId], onDelete: Cascade)
+  memberId  String
+  member    Member   @relation(references: [id], fields: [memberId], onDelete: Cascade)
+  value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -108,14 +144,14 @@ model Member {
   isValidedByEvent Boolean @default(false)
   isValidedByUser  Boolean @default(false)
 
-  userId String
-  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
-
+  userId  String
+  user    User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   eventId String
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade)
 
   subscribes Subscribe[]
   leaderOf   Team[]
+  profile    FieldValue[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -133,6 +169,9 @@ model Page {
   path    String  @default("")
   isIndex Boolean @default(false)
   content String  @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([eventId, path])
 }

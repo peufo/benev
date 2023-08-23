@@ -34,7 +34,7 @@
 	<ul
 		in:fly|local={{ y: 20, duration: 100 }}
 		out:fade|local={{ duration: 100, delay: 150 }}
-		class="z-10 menu absolute translate-y-2 bg-base-200 rounded-box w-full"
+		class="z-10 absolute translate-y-2 bg-base-200 rounded-box p-2 flex flex-col gap-1"
 		class:opacity-0={isInvisible}
 	>
 		{#if isError}
@@ -47,7 +47,7 @@
 					role="menuitem"
 					on:click={() => dispatch('select', index)}
 					on:keydown={() => dispatch('select', index)}
-					class="flex btn btn-ghost btn-sm btn-block"
+					class="flex btn justify-start btn-ghost btn-sm btn-block"
 					class:btn-active={isFocused}
 				>
 					<slot {item} />

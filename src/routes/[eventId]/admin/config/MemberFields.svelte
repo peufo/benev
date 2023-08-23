@@ -1,14 +1,11 @@
 <script lang="ts">
-	import WorkInProgress from '$lib/WorkInProgress.svelte'
 	import { Card } from '$lib/material'
-	import MemberField from './MemberField.svelte'
+	import MemberFieldForm from './MemberFieldForm.svelte'
 </script>
 
-<WorkInProgress>
-	<Card>
-		<span slot="title">Profil des membres</span>
-		<span slot="subtitle">Informations complémentaires demandées aux bénévoles</span>
+<Card>
+	<span slot="title">Profil des membres</span>
+	<span slot="subtitle">Informations complémentaires demandées aux bénévoles</span>
 
-		<MemberField />
-	</Card>
-</WorkInProgress>
+	<MemberFieldForm />
+</Card>
