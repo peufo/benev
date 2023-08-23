@@ -1,11 +1,15 @@
 <script lang="ts">
 	import FormControl from './FormControl.svelte'
 	import type { InputProps } from '.'
+	type Options = string[] | { value: string; label: string }[]
 
-	type $$Props = InputProps<string[]> & { options: string[] }
+	type $$Props = InputProps<string[]> & { options: Options }
 	$: ({ input, value: _value, options: _1, class: klass, ...props } = $$props as $$Props)
 	export let value = _value || []
-	export let options: string[]
+	export let options: Options
+
+	$: _options = options.map((opt) => (typeof opt === 'string' ? { value: opt, label: opt } : opt))
+
 </script>
 
 <input type="hidden" name={props.key} value={JSON.stringify(value)}>
@@ -15,21 +19,22 @@
 		<span class="label-text">{props.label}</span>
 	</div>
 
-	{#each options as option, index} 
+	{#each _options as option, index} 
 		<FormControl
 			{...props}
 			let:key
-			label={option}
+			label={option.label}
 			prefix="ignored"
 			prefixFor={index}
 			class="flex-row-reverse justify-end items-center gap-2"
 		>
 			<input
 				bind:group={value}
+				on:change
 				on:input
 				on:focus
 				on:blur
-				value={option}
+				value={option.value}
 				type="checkbox"
 				name={key}
 				id="{index}{key}"

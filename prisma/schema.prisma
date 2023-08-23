@@ -109,9 +109,10 @@ model Field {
   event          Event        @relation(references: [id], fields: [eventId], onDelete: Cascade)
   type           FieldType
   name           String
-  required       Boolean
+  label          String?
   memberCanWrite Boolean
   memberCanRead  Boolean
+  required       Boolean      @default(false)
   description    String?
   options        String?
   values         FieldValue[]
