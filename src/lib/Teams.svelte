@@ -4,6 +4,7 @@
 
 	import { Icon, Placeholder } from '$lib/material'
 	import { eventPath } from '$lib/store'
+	import { rowLink } from './action'
 
 	export let teams: (Team & {
 		leaders: (Member & { user: User })[]
@@ -34,12 +35,9 @@
 					.map((p) => p.maxSubscribe)
 					.reduce((acc, cur) => acc + cur, 0)}
 
-				<tr class="hover cursor-pointer relative">
+				<tr class="hover cursor-pointer" use:rowLink={`${$eventPath}/teams/${team.id}`}>
 					<td>
 						{team.name}
-						<a href="{$eventPath}/teams/{team.id}">
-							<span class="inset-0 absolute" />
-						</a>
 					</td>
 					<td>
 						{team.leaders.map(({ user }) => `${user.firstName} ${user.lastName}`).join(', ')}
@@ -57,8 +55,8 @@
 					</td>
 
 					{#if isOwner}
-						<td class="py-0">
-							<div class="flex justify-end">
+						<td class="py-0" data-prepend={1}>
+							<div class="flex justify-end z-10">
 								<a class="btn btn-square btn-sm relative" href="{$eventPath}/teams/{team.id}/edit">
 									<Icon path={mdiPencilOutline} />
 								</a>
