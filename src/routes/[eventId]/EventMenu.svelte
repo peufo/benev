@@ -51,7 +51,7 @@
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul
 		tabindex="0"
-		class="dropdown-content z-[1] menu menu-lg p-2 shadow bg-base-100 rounded-box w-64"
+		class="dropdown-content z-10 menu menu-lg p-2 shadow-lg bg-base-100 rounded-box w-64"
 	>
 		{#if isOwner || isLeaderInEvent}
 			{@const isActive = $page.url.pathname.startsWith(`${$eventPath}/admin`)}

@@ -22,7 +22,8 @@
 			<span class="hidden lg:block">{userName || ''}</span>
 		</label>
 
-		<ul class="dropdown-content menu menu-lg z-10 shadow-lg bg-base-100 rounded-box w-56">
+		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+		<ul tabindex="0" class="dropdown-content z-10 menu menu-lg shadow-lg bg-base-100 rounded-box w-56">
 			{#each tabs as { path, label }}
 				{@const href = `${pathPrefix}/me/${path}`}
 				<li>
