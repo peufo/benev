@@ -5,6 +5,7 @@
 	import { Icon, Placeholder } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { rowLink } from './action'
+	import Leaders from '../routes/[eventId]/teams/[teamId]/Leaders.svelte'
 
 	export let teams: (Team & {
 		leaders: (Member & { user: User })[]
@@ -40,7 +41,9 @@
 						{team.name}
 					</td>
 					<td>
-						{team.leaders.map(({ user }) => `${user.firstName} ${user.lastName}`).join(', ')}
+						{#each team.leaders as { user }}
+							<span class="badge">{user.firstName} {user.lastName}</span>
+						{/each}
 					</td>
 					<td>
 						<progress
@@ -49,10 +52,9 @@
 							max={maxSubscribe}
 						/>
 
-						<span class="whitespace-nowrap text-xs">
-							{nbSubscribe}/{maxSubscribe}
+						<span class="whitespace-nowrap text-xs badge">
+							{nbSubscribe} / {maxSubscribe}
 						</span>
-						
 					</td>
 
 					{#if isOwner}
