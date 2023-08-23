@@ -25,6 +25,7 @@ export const GET = async ({ params, url, locals }) => {
 				select: {
 					firstName: true,
 					lastName: true,
+					email: true,
 				},
 			},
 		},

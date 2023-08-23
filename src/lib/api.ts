@@ -52,7 +52,7 @@ function methods<T extends unknown>(route: string) {
 }
 
 export const api = derived(page, ({ params: { eventId } }) => ({
-	member: methods<Member & { user: { firstName: string; lastName: string } }>(
+	member: methods<Member & { user: { firstName: string; lastName: string; email: string } }>(
 		`/${eventId}/api/members`
 	),
 }))

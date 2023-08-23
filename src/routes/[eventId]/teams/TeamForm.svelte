@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
-	import { InputRelations, InputText, InputTextarea , DeleteButton} from '$lib/material'
+	import { InputRelations, InputText, InputTextarea, DeleteButton } from '$lib/material'
 	import { api } from '$lib/api'
 	import type { Team, Member, User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
@@ -28,15 +28,27 @@
 		placeholder="Chercher un membre"
 		getItems={$api.member.findMany}
 		search={$api.member.search}
-		getLabel={(member) => `${member.user.firstName} ${member.user.lastName}`}
 		value={team?.leaders}
-	/>
+	>
+		<!-- Good typing -->
+		<span slot="badge" let:item>
+			{item.user.firstName} {item.user.lastName}
+		</span>
+
+		<!-- Bad typing -->
+		<div slot="listItem" let:item class="flex w-full">
+			<span>{item.user.firstName} {item.user.lastName}</span>
+			<div class="grow"></div>
+			<span style="font-size: 0.6rem;">{item.user.email}</span>
+		</div>
+	
+	</InputRelations>
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
 
 	<div class="flex gap-2 flex-row-reverse">
 		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit"> Valider </button>
 		{#if isUpdate}
-			<DeleteButton formaction="?/delete"/>
+			<DeleteButton formaction="?/delete" />
 		{/if}
 		<div class="grow" />
 		<a class="btn btn-ghost" href="{$eventPath}/teams">Annuler</a>

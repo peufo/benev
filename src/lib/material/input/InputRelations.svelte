@@ -4,7 +4,7 @@
 	import { slide } from 'svelte/transition'
 
 	import { browser } from '$app/environment'
-	import { createEventDispatcher, type ComponentProps } from 'svelte'
+	import { createEventDispatcher } from 'svelte'
 	import { debounce } from '$lib/debounce'
 
 	import { useNotify } from '$lib/notify'
@@ -20,7 +20,6 @@
 	export let label: string
 	export let search: (q: string) => Promise<RelationItem[]>
 	export let getItems: (ids: string[]) => Promise<RelationItem[]>
-	export let getLabel: (item: RelationItem) => string = (item) => item.id
 	export let createUrl = ''
 	export let createTitle = ''
 	export let value: string[] | RelationItem[] = []
@@ -116,7 +115,7 @@
 							transition:slide|local={{ axis: 'x', duration: 200 }}
 							class="text-right badge badge-lg whitespace-nowrap pr-0"
 						>
-							{getLabel(item)}
+							<slot {item} name="badge">{item.id}</slot>
 							<div
 								class="btn btn-circle btn-xs btn-ghost scale-75 ml-1"
 								role="button"
@@ -151,13 +150,14 @@
 	<SelectorList
 		bind:this={selectorList}
 		items={proposedItems}
-		let:item
 		{isError}
 		{isLoading}
 		{focusIndex}
 		on:select={({ detail }) => select(detail)}
 		class="w-full"
+		let:index
 	>
-		<slot {item}>{getLabel(item)}</slot>
+		{@const item = proposedItems[index]}
+		<slot name="listItem" {item}>{item.id}</slot>
 	</SelectorList>
 </div>

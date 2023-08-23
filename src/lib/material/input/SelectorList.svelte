@@ -51,7 +51,7 @@
 					class="flex btn justify-start btn-ghost btn-sm btn-block"
 					class:btn-active={isFocused}
 				>
-					<slot {item} />
+					<slot {item} {index} />
 				</li>
 			{:else}
 				<li transition:slide|local={{ duration: 100 }} class="btn btn-disabled btn-sm">
