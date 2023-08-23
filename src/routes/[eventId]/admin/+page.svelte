@@ -5,7 +5,8 @@
 	import { userSizeLabel } from '$lib/form'
 	import Contact from '$lib/Contact.svelte'
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
-	import { InputCheckboxsMenu, Card, Placeholder, InputBoolean, InputRadioButtons } from '$lib/material'
+	import { InputCheckboxsMenu, Card, Placeholder,  InputRadioButtons } from '$lib/material'
+	import { rowLink } from '$lib/action'
 
 	export let data
 	let workTimes: Record<string, number> = {}
@@ -139,7 +140,7 @@
 				</thead>
 				<tbody>
 					{#each data.members as member}
-						<tr class="relative hover">
+						<tr use:rowLink={{href: `${$eventPath}/admin/members/${member.id}`}}>
 							<td>{member.user.firstName} {member.user.lastName}</td>
 							<td>
 								<div class="badge badge-lg">
@@ -163,8 +164,7 @@
 							<td>{(member.user.size && userSizeLabel[member.user.size]) || '-'}</td>
 							<td>{member.user.diet?.replaceAll(/[\[\]"]/g, '').replaceAll(',', ', ') || ''}</td>
 							<td>{getAge(member.user.birthday)}</td>
-							<td align="right">
-								<a href="{$eventPath}/admin/members/{member.id}" class="absolute inset-0">{' '}</a>
+							<td align="right" data-prepend>
 
 								<Contact user={member.user} />
 							</td>

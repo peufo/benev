@@ -35,7 +35,7 @@
 					.map((p) => p.maxSubscribe)
 					.reduce((acc, cur) => acc + cur, 0)}
 
-				<tr class="hover cursor-pointer" use:rowLink={`${$eventPath}/teams/${team.id}`}>
+				<tr use:rowLink={`${$eventPath}/teams/${team.id}`}>
 					<td>
 						{team.name}
 					</td>
@@ -52,10 +52,11 @@
 						<span class="whitespace-nowrap text-xs">
 							{nbSubscribe}/{maxSubscribe}
 						</span>
+						
 					</td>
 
 					{#if isOwner}
-						<td class="py-0" data-prepend={1}>
+						<td class="py-0" data-prepend>
 							<div class="flex justify-end z-10">
 								<a class="btn btn-square btn-sm relative" href="{$eventPath}/teams/{team.id}/edit">
 									<Icon path={mdiPencilOutline} />

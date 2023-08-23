@@ -4,6 +4,7 @@
 	import EventForm from './EventForm.svelte'
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
+	import {rowLink} from '$lib/action'
 
 	export let data
 
@@ -44,10 +45,11 @@
 
 			<tbody>
 				{#each data.events as event}
-					<tr class="hover cursor-pointer relative">
-						<td>{event.name}</td>
+					<tr use:rowLink={{href: `/${event.id}`}}>
+						<td>
+							{event.name}
+						</td>
 						<td>{event.description || '-'}</td>
-						<a href="/{event.id}" class="inset-0 absolute">{' '}</a>
 					</tr>
 				{/each}
 			</tbody>
