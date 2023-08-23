@@ -29,9 +29,11 @@
 	<h2 slot="title">{data.team.name}</h2>
 	<p slot="subtitle">{data.team.description || ''}</p>
 	<div slot="action">
-		<a href="{$eventPath}/teams/{data.team.id}/edit" class="btn btn-square btn-sm">
-			<Icon path={mdiPencilOutline} />
-		</a>
+		{#if data.isLeader}
+			<a href="{$eventPath}/teams/{data.team.id}/edit" class="btn btn-square btn-sm">
+				<Icon path={mdiPencilOutline} />
+			</a>
+		{/if}
 	</div>
 
 	<Leaders leaders={data.team.leaders} />
