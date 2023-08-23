@@ -75,14 +75,16 @@
 							{formatRange(period)}
 						</td>
 						<td class="flex gap-2 items-center">
-							<progress
-								class="progress max-w-[100px] w-[8vw]"
-								value={nbSubscribe}
-								max={period.maxSubscribe}
-							/>
-
-							<span class="whitespace-nowrap text-xs">
-								{nbSubscribe}/{period.maxSubscribe}
+							<span class="whitespace-normal sm:whitespace-nowrap">
+								<progress
+									class="progress max-w-[100px] w-[8vw]"
+									value={nbSubscribe}
+									max={period.maxSubscribe}
+								/>
+	
+								<span class="text-xs badge">
+									{nbSubscribe}/{period.maxSubscribe}
+								</span>
 							</span>
 
 							{#if memberSubscribe}

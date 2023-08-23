@@ -35,7 +35,7 @@
 					.map((p) => p.maxSubscribe)
 					.reduce((acc, cur) => acc + cur, 0)}
 
-				<tr use:rowLink={{href: `${$eventPath}/teams/${team.id}`}}>
+				<tr use:rowLink={{ href: `${$eventPath}/teams/${team.id}` }}>
 					<td>
 						{team.name}
 					</td>
@@ -44,14 +44,14 @@
 							<span class="badge">{user.firstName} {user.lastName}</span>
 						{/each}
 					</td>
-					<td>
+					<td class="whitespace-normal sm:whitespace-nowrap">
 						<progress
 							class="progress max-w-[100px] w-[8vw]"
 							value={nbSubscribe}
 							max={maxSubscribe}
 						/>
 
-						<span class="whitespace-nowrap text-xs badge">
+						<span class="text-xs badge">
 							{nbSubscribe} / {maxSubscribe}
 						</span>
 					</td>
