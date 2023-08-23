@@ -10,10 +10,14 @@
 <Card class="max-w-4xl m-auto">
 	<span slot="title">Secteurs</span>
 
-	<a slot="action" href="{$eventPath}/teams/create" class="btn btn-sm">
-		<Icon path={mdiPlus} />
-		Nouveau
-	</a>
+	<div slot="action">
+		{#if data.isOwner}
+			<a href="{$eventPath}/teams/create" class="btn btn-sm">
+				<Icon path={mdiPlus} />
+				Nouveau
+			</a>
+		{/if}
+	</div>
 
 	<Teams teams={data.teams} isOwner={data.isOwner} />
 </Card>
