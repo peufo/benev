@@ -128,7 +128,7 @@ async function setSubscribState(request: Request, state: SubscribeState) {
 	sendEmailTemplate(EmailSubscribeState, {
 		from: subscribe.period.team.event.name,
 		to: subscribe.member.user.email,
-		subject: `Inscription ${subscribe.state === 'accepted' ? 'acceptée' : 'refusée'}`,
+		subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'refusée'}`,
 		props: { subscribe },
 	})
 

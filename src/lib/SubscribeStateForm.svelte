@@ -27,7 +27,7 @@
 			<li>
 				<button formaction="{action}?/subscribe_accepted">
 					<Icon path={mdiCheck} class="fill-success" />
-					Accepter
+					Confirmer
 				</button>
 			</li>
 			<li>
