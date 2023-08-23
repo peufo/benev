@@ -35,7 +35,7 @@
 					.map((p) => p.maxSubscribe)
 					.reduce((acc, cur) => acc + cur, 0)}
 
-				<tr use:rowLink={`${$eventPath}/teams/${team.id}`}>
+				<tr use:rowLink={{href: `${$eventPath}/teams/${team.id}`}}>
 					<td>
 						{team.name}
 					</td>
