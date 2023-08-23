@@ -27,7 +27,9 @@
 
 <Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams">
 	<h2 slot="title">{data.team.name}</h2>
-	<p slot="subtitle">{data.team.description || ''}</p>
+	<p slot="subtitle" class="pb-3">
+		{data.team.description || ''}
+	</p>
 	<div slot="action">
 		{#if data.isLeader}
 			<a href="{$eventPath}/teams/{data.team.id}/edit" class="btn btn-square btn-sm">
@@ -81,7 +83,7 @@
 									value={nbSubscribe}
 									max={period.maxSubscribe}
 								/>
-	
+
 								<span class="text-xs badge">
 									{nbSubscribe}/{period.maxSubscribe}
 								</span>

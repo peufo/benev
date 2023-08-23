@@ -9,7 +9,7 @@
 <div class="flex gap-2">
 	<Icon
 		path={mdiShieldAccount}
-		class="opacity-70 {leaders.length ? '' : 'fill-error'}"
+		class="btn-sm btn-square opacity-70 {leaders.length ? '' : 'fill-error'}"
 		title="Responsables"
 	/>
 

@@ -17,14 +17,18 @@
 						<Icon path={mdiArrowLeft} size={20} />
 					</a>
 				{/if}
-				<div class="card-title"><slot name="title" /></div>
+				<div class="card-title">
+					<slot name="title" />
+				</div>
 				<div class="grow" />
 				<slot name="action" />
 			</div>
 		{/if}
 
 		{#if $$slots.subtitle}
-			<div class="text-sm"><slot name="subtitle" /></div>
+			<div class="text-sm" class:pl-10={returnUrl}>
+				<slot name="subtitle" />
+			</div>
 		{/if}
 		<slot />
 	</div>
