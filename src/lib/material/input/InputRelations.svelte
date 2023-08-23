@@ -25,6 +25,7 @@
 	export let createTitle = ''
 	export let value: string[] | RelationItem[] = []
 	export let error = ''
+	export let placeholder = ''
 
 	let klass = ''
 	export { klass as class }
@@ -139,6 +140,7 @@
 				on:focus={handleFocus}
 				on:blur={handleBlur}
 				autocomplete="off"
+				{placeholder}
 				class="input-bordered input grow"
 			/>
 

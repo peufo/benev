@@ -25,6 +25,7 @@
 	<InputRelations
 		key="leaders"
 		label="Responsables"
+		placeholder="Chercher un membre"
 		getItems={$api.member.findMany}
 		search={$api.member.search}
 		getLabel={(member) => `${member.user.firstName} ${member.user.lastName}`}
