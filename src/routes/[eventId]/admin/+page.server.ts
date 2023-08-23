@@ -32,7 +32,7 @@ export const load = async ({ params, url }) => {
 		}
 	}
 
-	const allMember = periodWhere && (!memberType || memberType === 'all')
+	const allMember = !memberType || memberType === 'all'
 	const OR: Prisma.MemberWhereInput[] = []
 
 	if (allMember || memberType === 'volunteers')
@@ -52,9 +52,11 @@ export const load = async ({ params, url }) => {
 			leaderOf: {
 				some: {
 					...teamWhere,
-					periods: {
-						some: periodWhere,
-					},
+					...(periodWhere && {
+						periods: {
+							some: periodWhere,
+						},
+					}),
 				},
 			},
 		})
