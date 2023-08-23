@@ -28,10 +28,10 @@ type MailOption = {
 }
 
 export const sendEmail = async ({ from, ...mail }: MailOption) => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		transporter.sendMail(
 			{
-				from: `${from || 'Benev.ch'} <${SMTP_USER}>`,
+				from: `${from || 'Benev'} <${SMTP_USER}>`,
 				...mail,
 			},
 			(err, info) => {
