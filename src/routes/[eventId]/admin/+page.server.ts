@@ -10,7 +10,7 @@ export const load = async ({ params, url }) => {
 
 	const { eventId } = params
 
-	let periodWhere: Prisma.PeriodWhereInput = {}
+	let periodWhere: Prisma.PeriodWhereInput | undefined = undefined
 	if (typeof _start === 'string' && typeof _end === 'string') {
 		const start = new Date(_start)
 		const end = new Date(_end)
@@ -32,7 +32,7 @@ export const load = async ({ params, url }) => {
 		}
 	}
 
-	const allMember = !memberType || memberType === 'all'
+	const allMember = periodWhere && (!memberType || memberType === 'all')
 	const OR: Prisma.MemberWhereInput[] = []
 
 	if (allMember || memberType === 'volunteers')
@@ -40,8 +40,8 @@ export const load = async ({ params, url }) => {
 			subscribes: {
 				some: {
 					period: {
-						team: teamWhere,
 						...periodWhere,
+						team: teamWhere,
 					},
 				},
 			},
@@ -51,11 +51,9 @@ export const load = async ({ params, url }) => {
 		OR.push({
 			leaderOf: {
 				some: {
+					...teamWhere,
 					periods: {
-						some: {
-							team: teamWhere,
-							...periodWhere,
-						},
+						some: periodWhere,
 					},
 				},
 			},
@@ -63,19 +61,22 @@ export const load = async ({ params, url }) => {
 
 	return {
 		members: await prisma.member.findMany({
-			where: { OR },
+			where: {
+				eventId,
+				...(OR.length && { OR }),
+			},
 			include: {
 				user: true,
 				leaderOf: true,
 				subscribes: {
 					where: {
-						period: {
-							team: teamWhere,
-							...periodWhere,
-						},
+						period: periodWhere || {},
 					},
 					include: { period: true },
 				},
+			},
+			orderBy: {
+				user: { firstName: 'asc' },
 			},
 		}),
 		teams: await prisma.team.findMany({

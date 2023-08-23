@@ -60,7 +60,6 @@
 				labelPlurial="Secteurs sélectionés"
 				options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
 				enhanceDisabled
-				
 			/>
 
 			<InputRadioButtons
