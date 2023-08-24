@@ -3,8 +3,8 @@
 	import type { InputProps } from '.'
 	type Options = string[] | { value: string; label: string }[]
 
-	type $$Props = InputProps<string[]> & { options: Options }
-	$: ({ input, value: _value, options: _1, class: klass, ...props } = $$props as $$Props)
+	type $$Props = InputProps<string[]> & { options: Options, checkboxesClass?: string }
+	$: ({ input, value: _value, options: _1, class: klass, checkboxesClass, ...props } = $$props as $$Props)
 	export let value = _value || []
 	export let options: Options
 
@@ -19,28 +19,31 @@
 		<span class="label-text">{props.label}</span>
 	</div>
 
-	{#each _options as option, index} 
-		<FormControl
-			{...props}
-			let:key
-			label={option.label}
-			prefix="ignored"
-			prefixFor={index}
-			class="flex-row-reverse justify-end items-center gap-2"
-		>
-			<input
-				bind:group={value}
-				on:change
-				on:input
-				on:focus
-				on:blur
-				value={option.value}
-				type="checkbox"
-				name={key}
-				id="{index}{key}"
-				class="checkbox"
-				{...input}
-			/>
-		</FormControl>
-	{/each}
+	<div class={checkboxesClass}>
+		{#each _options as option, index} 
+			<FormControl
+				{...props}
+				let:key
+				label={option.label}
+				prefix="ignored"
+				prefixFor={index}
+				class="flex-row-reverse justify-end items-center gap-2"
+			>
+				<input
+					bind:group={value}
+					on:change
+					on:input
+					on:focus
+					on:blur
+					value={option.value}
+					type="checkbox"
+					name={key}
+					id="{index}{key}"
+					class="checkbox"
+					{...input}
+				/>
+			</FormControl>
+		{/each}
+
+	</div>
 </div>

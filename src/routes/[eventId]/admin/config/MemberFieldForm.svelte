@@ -1,12 +1,20 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import { FieldType } from '@prisma/client'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'
 	import { memberFieldType, useForm } from '$lib/form'
-	import { InputSelect, InputText } from '$lib/material'
-	import InputCheckboxs from '$lib/material/input/InputCheckboxs.svelte'
+	import { InputSelect, InputText, InputCheckboxs } from '$lib/material'
+	import MemberField from './MemberField.svelte'
 
 	const form = useForm()
 	let memberRight: string[] = []
+
+	let fieldType: FieldType = 'string'
+	let name = ''
+	let label = ''
+
+	$: memberCanRead = memberRight.includes('read')
+	$: memberCanWrite = memberRight.includes('write')
 
 	function handleInputMemberRight(event: Event) {
 		const { value, checked } = event.target as HTMLInputElement
@@ -18,10 +26,15 @@
 <WorkInProgress />
 
 <form method="post" use:enhance={form.submit}>
-	<InputSelect key="type" value="string" options={memberFieldType} />
+	<InputSelect key="type" bind:value={fieldType} options={memberFieldType} />
 
-	<InputText key="name" label="Nom" hint="Le nom de la donnée récoltée." />
-	<InputText key="label" label="Label" hint="Titre libre, peut être sous forme de question." />
+	<InputText key="name" bind:value={name} label="Nom" hint="Le nom de la donnée récoltée." />
+	<InputText
+		key="label"
+		bind:value={label}
+		label="Label"
+		hint="Titre libre, peut être sous forme de question."
+	/>
 
 	<!--
 		<InputBoolean key="required" label="Champ requis" />
@@ -36,16 +49,13 @@
 			{ value: 'read', label: 'Lire la valeur' },
 			{ value: 'write', label: 'Modifier la valeur' },
 		]}
+		checkboxesClass="flex gap-6"
 	/>
-	<input
-		type="hidden"
-		name="memberCanRead"
-		value={memberRight.includes('read') ? 'true' : 'false'}
-	/>
-	<input
-		type="hidden"
-		name="memberCanWrite"
-		value={memberRight.includes('write') ? 'true' : 'false'}
-	/>
-
+	<input type="hidden" name="memberCanRead" value={memberCanRead} />
+	<input type="hidden" name="memberCanWrite" value={memberCanWrite} />
 </form>
+
+<h2 class="font-bold">Aperçu</h2>
+<div class="rounded-box border bordered p-2 bg-base-200">
+	<MemberField field={{ type: fieldType, name, label, memberCanRead, memberCanWrite }} />
+</div>

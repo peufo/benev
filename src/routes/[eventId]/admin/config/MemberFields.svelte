@@ -5,7 +5,7 @@
 
 <Card>
 	<span slot="title">Profil des membres</span>
-	<span slot="subtitle">Informations complémentaires demandées aux bénévoles</span>
+	<span slot="subtitle">Informations complémentaires concernant vos membres</span>
 
 	<MemberFieldForm />
 </Card>

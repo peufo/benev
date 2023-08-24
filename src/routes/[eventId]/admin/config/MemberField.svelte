@@ -1,0 +1,23 @@
+<script lang="ts">
+	import type { Prisma, FieldType } from '@prisma/client'
+	import type { ComponentType } from 'svelte'
+	import {
+		InputText,
+		InputNumber,
+		InputBoolean,
+		InputRadio,
+		InputCheckboxs,
+	} from '$lib/material/input'
+
+	export let field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
+
+	const components: Record<FieldType, ComponentType> = {
+		string: InputText,
+		number: InputNumber,
+		boolean: InputBoolean,
+		select: InputRadio,
+		multiselect: InputCheckboxs,
+	}
+</script>
+
+<svelte:component this={components[field.type]} key={field.name} label={field.label || field.name} />
