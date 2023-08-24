@@ -38,13 +38,13 @@
 	<div class="tabs tabs-boxed bg-base-100 grid grid-cols-1 sm:grid-cols-3 shadow-lg">
 		{#each tabs as { path, label, reg, icon }}
 			{@const href = `${$eventPath}${path}`}
-
+			{@const active = !!$page.url.pathname.match(reg)}
 			<a
 				class="tab tab-lg flex-nowrap grow"
 				{href}
-				class:tab-active={$page.url.pathname.match(reg)}
+				class:tab-active={active}
 			>
-				<Icon path={icon} class="mr-3 opacity-70" size={22} />
+				<Icon path={icon} class="mr-3 opacity-70" size={22} {active}/>
 				<span>{label}</span>
 			</a>
 		{/each}
