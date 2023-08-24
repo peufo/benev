@@ -27,7 +27,7 @@
 	<div class="join">
 		<input type="text" {value} readonly class="input-bordered input join-item w-full" />
 		<button on:click|preventDefault={handleClick} class="join-item btn btn-square">
-			<Icon path={mdiContentCopy} title="Copier" tippyTargetParent />
+			<Icon path={mdiContentCopy} title="Copier"  />
 		</button>
 	</div>
 </div>

@@ -11,7 +11,6 @@
 	export let style = ''
 	export let classSVG = ''
 	export let tippyProps: Partial<TippyProps> = {}
-	export let tippyTargetParent = false
 	const viewWidth = 24
 	const viewHeight = 24
 
@@ -19,7 +18,9 @@
 
 	onMount(() => {
 		if (!title) return
-		const target = tippyTargetParent ? icon.parentElement : icon
+		const parent = icon.parentElement
+		const isButton = parent?.tagName === 'BUTTON' || parent?.tagName === 'A'
+		const target = parent && isButton ? parent : icon
 		const tip = tippy(target || icon, { content: title, ...tippyProps })
 		return () => tip.destroy()
 	})

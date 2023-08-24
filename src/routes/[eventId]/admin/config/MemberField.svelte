@@ -20,4 +20,9 @@
 	}
 </script>
 
-<svelte:component this={components[field.type]} key={field.name} label={field.label || field.name} />
+<svelte:component
+	this={components[field.type]}
+	key={field.name}
+	label={field.label || field.name}
+	options={JSON.parse(field.options || '[]')}
+/>

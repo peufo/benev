@@ -4,6 +4,7 @@
 	import { Icon } from '$lib/material'
 	import { debounce } from '$lib/debounce'
 	import {type Options,type Option, parseOptions} from '.'
+	import { onMount } from 'svelte'
 
   export let key = ''
   export let value = ''
@@ -14,7 +15,11 @@
 	$: selectedOption = _options.find(opt => opt.value === value)
 
 	let selectorList: SelectorList<Option & { id: string }>
-	let focusIndex = 0
+	let focusIndex = 0 
+	onMount(() => {
+		const index = _options.findIndex(opt => opt.value === value)
+		focusIndex = index === -1 ? 0 : index
+	})
 
 	function onSelect(index: number) {
 		focusIndex = index
@@ -44,7 +49,8 @@
 	tabindex="-1"
 >
 	<button
-		on:click|preventDefault={() => selectorList.open()}
+		type="button"
+		on:click={() => selectorList.open()}
 		on:focus={() => selectorList.open()}
 		on:blur={handleLeave}
 		class="btn w-full justify-start"
