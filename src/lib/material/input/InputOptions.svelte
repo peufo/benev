@@ -14,10 +14,14 @@
   const notify = useNotify()
 
 	function handleKeyDown(e: KeyboardEvent) {
-		if (e.key === 'Enter') createOption()
+		if (e.key === 'Enter') {
+			e.preventDefault()
+			createOption()
+		}
 	}
 
 	function createOption() {
+		if (!newOption) return
     if (options.includes(newOption)) return notify.warning('Cette option éxiste déjà !')
 		options = [...options, newOption]
 		newOption = ''

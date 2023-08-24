@@ -14,7 +14,7 @@
 		successCallback: () => dispatch('success'),
 	})
 
-	let memberRight: string[] = []
+	let memberRight: string[] = ['read', 'write']
 	let fieldType: FieldType = 'string'
 	let name = ''
 	let label = ''
@@ -57,7 +57,7 @@
 	<InputCheckboxs
 		bind:value={memberRight}
 		on:input={handleInputMemberRight}
-		label="Le membre peut"
+		label="Les membres peuvent"
 		checkboxesClass="flex gap-6"
 		options={[
 			{ value: 'read', label: 'Lire la valeur' },
