@@ -1,5 +1,5 @@
-import { fail, redirect } from '@sveltejs/kit'
-import { isOwnerOrThrow, prisma } from '$lib/server'
+import { redirect } from '@sveltejs/kit'
+import { isOwnerOrThrow, prisma, tryOrFail } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ parent, params }) => {
@@ -15,19 +15,17 @@ export const actions = {
 
 		const title = `Ma page ${pagesCount + 1}`
 
-		const pageOrFail = await prisma.page
-			.create({
-				data: {
-					eventId: params.eventId,
-					title,
-					path: normalizePath(title),
-					content: '',
-				},
-			})
-			.catch((err) => {
-				return fail(400, { message: err.message })
-			})
-		if ('id' in pageOrFail) throw redirect(301, `/${params.eventId}/admin/pages/${pageOrFail.id}`)
-		return pageOrFail
+		return tryOrFail(
+			() =>
+				prisma.page.create({
+					data: {
+						eventId: params.eventId,
+						title,
+						path: normalizePath(title),
+						content: '',
+					},
+				}),
+			(page) => `/${params.eventId}/admin/pages/${page.id}`
+		)
 	},
 }

@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { parseFormData, prisma } from '$lib/server'
+import { parseFormData, prisma, tryOrFail } from '$lib/server'
 import { userShema } from '$lib/form'
 
 export const load = async ({ locals }) => {
@@ -19,10 +19,11 @@ export const actions = {
 
 		const { err, data } = await parseFormData(request, userShema)
 		if (err) return err
-
-		await prisma.user.update({
-			where: { id: session.user.userId },
-			data,
-		})
+		return tryOrFail(() =>
+			prisma.user.update({
+				where: { id: session.user.userId },
+				data,
+			})
+		)
 	},
 }

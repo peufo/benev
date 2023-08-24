@@ -1,7 +1,6 @@
 import { teamShema } from '$lib/form/team'
 import { parseFormData } from '$lib/server/formData'
-import { isOwnerOrThrow, prisma } from '$lib/server'
-import { redirect } from '@sveltejs/kit'
+import { isOwnerOrThrow, prisma, tryOrFail } from '$lib/server'
 
 export const load = async ({ params, locals }) => {
 	await isOwnerOrThrow(params.eventId, locals)
@@ -13,34 +12,23 @@ export const actions = {
 		const { err, data } = await parseFormData(request, teamShema, { arrayOperation: 'set' })
 		if (err) return err
 
-		await prisma.team.update({
-			where: { id: params.teamId },
-			data,
-		})
-
-		throw redirect(303, `/${params.eventId}/teams`)
+		return tryOrFail(
+			() =>
+				prisma.team.update({
+					where: { id: params.teamId },
+					data,
+				}),
+			`/${params.eventId}/teams`
+		)
 	},
 	delete: async ({ params, locals }) => {
 		await isOwnerOrThrow(params.eventId, locals)
-		await prisma.team.delete({
-			where: { id: params.teamId },
-		})
-		throw redirect(303, `/${params.eventId}/teams`)
+		return tryOrFail(
+			() =>
+				prisma.team.delete({
+					where: { id: params.teamId },
+				}),
+			`/${params.eventId}/teams`
+		)
 	},
 }
-
-// SET MANY TO MANY EXPLICIT RELATION
-/*
-...(leaders && {
-	leaders: {
-		deleteMany: {
-			teamId,
-			userId: { notIn: leadersId },
-		},
-		createMany: {
-			data: leadersId.map((id) => ({ userId: id })),
-			skipDuplicates: true,
-		},
-	},
-}),
-*/

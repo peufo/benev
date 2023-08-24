@@ -1,4 +1,4 @@
-import { isLeaderOrThrow, parseFormData, prisma, sendEmailTemplate } from '$lib/server'
+import { isLeaderOrThrow, parseFormData, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
 import { periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
 import { error, fail } from '@sveltejs/kit'
 
@@ -28,29 +28,32 @@ export const actions = {
 		const { err, data } = await parseFormData(request, subscribeShema)
 		if (err) return err
 
-		const subscribe = await prisma.subscribe.create({
-			data,
-			include: {
-				member: { include: { user: true } },
-				period: {
-					include: {
-						team: {
-							include: { event: true, leaders: { select: { user: { select: { email: true } } } } },
+		return tryOrFail(async () => {
+			const subscribe = await prisma.subscribe.create({
+				data,
+				include: {
+					member: { include: { user: true } },
+					period: {
+						include: {
+							team: {
+								include: {
+									event: true,
+									leaders: { select: { user: { select: { email: true } } } },
+								},
+							},
 						},
 					},
 				},
-			},
-		})
-
-		if (subscribe.period.team.leaders.length)
-			sendEmailTemplate(EmailNewSubscribe, {
-				from: subscribe.period.team.event.name,
-				to: subscribe.period.team.leaders.map(({ user }) => user.email),
-				subject: 'Un nouveau bénévole',
-				props: { subscribe },
 			})
 
-		return
+			if (subscribe.period.team.leaders.length)
+				sendEmailTemplate(EmailNewSubscribe, {
+					from: subscribe.period.team.event.name,
+					to: subscribe.period.team.leaders.map(({ user }) => user.email),
+					subject: 'Un nouveau bénévole',
+					props: { subscribe },
+				})
+		})
 	},
 	new_period: async ({ params, request, locals }) => {
 		const { teamId } = params
@@ -68,71 +71,70 @@ export const actions = {
 			})
 		}
 
-		await prisma.period.create({
-			data: {
-				...data,
-				teamId,
-			},
-		})
-		return
+		return tryOrFail(() =>
+			prisma.period.create({
+				data: {
+					...data,
+					teamId,
+				},
+			})
+		)
 	},
 	update_period: async ({ params, request, locals }) => {
 		await isLeaderOrThrow(params.teamId, locals)
 		const { err, data } = await parseFormData(request, periodShemaUpdate)
 		if (err) return err
 
-		await prisma.period.update({
-			where: { id: data.id },
-			data,
-		})
-
-		return
+		return tryOrFail(() =>
+			prisma.period.update({
+				where: { id: data.id },
+				data,
+			})
+		)
 	},
 	delete_period: async ({ params, request, locals }) => {
 		await isLeaderOrThrow(params.teamId, locals)
 		const { id, err } = await getId(request)
 		if (err) return err
-		await prisma.period.delete({ where: { id } })
-		return
+		return tryOrFail(() => prisma.period.delete({ where: { id } }))
 	},
 	subscribe_accepted: async ({ params, request, locals }) => {
 		await isLeaderOrThrow(params.teamId, locals)
-		await setSubscribState(request, 'accepted')
-		return
+		return await setSubscribState(request, 'accepted')
 	},
 	subscribe_denied: async ({ params, request, locals }) => {
 		await isLeaderOrThrow(params.teamId, locals)
-		await setSubscribState(request, 'denied')
-		return
+		return await setSubscribState(request, 'denied')
 	},
 }
 
 async function setSubscribState(request: Request, state: SubscribeState) {
 	const { id, err } = await getId(request)
 	if (err) return err
-	const subscribe = await prisma.subscribe.update({
-		where: { id },
-		data: { state },
-		include: {
-			member: { include: { user: { select: { email: true } } } },
-			period: {
-				include: {
-					team: {
-						include: { event: true, leaders: { select: { user: { select: { email: true } } } } },
+
+	return tryOrFail(async () => {
+		const subscribe = await prisma.subscribe.update({
+			where: { id },
+			data: { state },
+			include: {
+				member: { include: { user: { select: { email: true } } } },
+				period: {
+					include: {
+						team: {
+							include: { event: true, leaders: { select: { user: { select: { email: true } } } } },
+						},
 					},
 				},
 			},
-		},
-	})
+		})
 
-	sendEmailTemplate(EmailSubscribeState, {
-		from: subscribe.period.team.event.name,
-		to: subscribe.member.user.email,
-		subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'refusée'}`,
-		props: { subscribe },
+		sendEmailTemplate(EmailSubscribeState, {
+			from: subscribe.period.team.event.name,
+			to: subscribe.member.user.email,
+			subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'refusée'}`,
+			props: { subscribe },
+		})
 	})
-
-	return
 }
 
 async function getId(request: Request) {

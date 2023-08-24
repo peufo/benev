@@ -1,6 +1,6 @@
 import { pageShema } from '$lib/form'
 import { fail, redirect } from '@sveltejs/kit'
-import { isOwnerOrThrow, parseFormData, prisma } from '$lib/server'
+import { isOwnerOrThrow, parseFormData, prisma, tryOrFail } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ params }) => {
@@ -26,20 +26,20 @@ export const actions = {
 		})
 		if (samePage) return fail(400, { message: 'Ce titre est déjà utilisé' })
 
-		await prisma.page.update({
-			where: { id: data.id },
-			data,
-		})
-
-		return
+		return tryOrFail(() =>
+			prisma.page.update({
+				where: { id: data.id },
+				data,
+			})
+		)
 	},
 	delete_page: async ({ params, locals }) => {
 		await isOwnerOrThrow(params.eventId, locals)
 
-		await prisma.page.delete({
-			where: { id: params.pageId, isIndex: false },
-		})
-
-		return
+		return tryOrFail(() =>
+			prisma.page.delete({
+				where: { id: params.pageId, isIndex: false },
+			})
+		)
 	},
 }

@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit'
 import { memberShema } from '$lib/form'
-import { parseFormData, prisma } from '$lib/server'
+import { parseFormData, prisma, tryOrFail } from '$lib/server'
 
 export const load = async ({ locals, params }) => {
 	const session = await locals.auth.validate()
@@ -17,16 +17,17 @@ export const actions = {
 
 		const isValidedByUser = session.user.id === data.userId
 		// TODO (invit_member ?) const isValidedByEvent = false
-
-		await prisma.member.create({
-			data: {
-				...data,
-				eventId: params.eventId,
-				isValidedByUser,
-			},
-		})
-
 		// TODO: send mail to owner (optional)
 		// TODO: send mail to new member
+
+		return tryOrFail(() =>
+			prisma.member.create({
+				data: {
+					...data,
+					eventId: params.eventId,
+					isValidedByUser,
+				},
+			})
+		)
 	},
 }

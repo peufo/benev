@@ -1,5 +1,5 @@
 import { error, fail, redirect } from '@sveltejs/kit'
-import { parseFormData } from '$lib/server'
+import { parseFormData, tryOrFail } from '$lib/server'
 import { eventShema } from '$lib/form'
 import { prisma } from '$lib/server'
 
@@ -16,37 +16,41 @@ export const actions = {
 		const { err, data } = await parseFormData(request, eventShema)
 		if (err) return err
 
+		const nameFail = (message: string) => fail(400, { issues: [{ path: ['name'], message }] })
+
 		const exist = await prisma.event.findUnique({ where: { id: data.id } })
-		if (exist)
-			return fail(400, { issues: [{ path: ['name'], message: 'Désolé, ce nom est déjà pris' }] })
+		if (exist) return nameFail('Désolé, ce nom est déjà pris')
 
 		const reservedPaths = ['auth', 'me', 'users', 'members', 'root', 'admin', 'token', 'api']
 		if (reservedPaths.includes(data.id))
-			return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
-		const { userId } = session.user
+			return nameFail(`Les noms suivant sont réservés: ${reservedPaths.join(', ')}`)
 
-		const event = await prisma.event.create({
-			data: {
-				...data,
-				ownerId: userId,
-				pages: {
-					create: {
-						isIndex: true,
-						title: 'Bienvenue',
-						path: 'bienvenue',
-						content: 'null',
+		return tryOrFail(
+			async () => {
+				const { userId } = session.user
+				return await prisma.event.create({
+					data: {
+						...data,
+						ownerId: userId,
+						pages: {
+							create: {
+								isIndex: true,
+								title: 'Bienvenue',
+								path: 'bienvenue',
+								content: 'null',
+							},
+						},
+						members: {
+							create: {
+								userId,
+								isValidedByEvent: true,
+								isValidedByUser: true,
+							},
+						},
 					},
-				},
-				members: {
-					create: {
-						userId,
-						isValidedByEvent: true,
-						isValidedByUser: true,
-					},
-				},
+				})
 			},
-		})
-
-		throw redirect(301, `/${event.id}`)
+			(res) => `/${res.id}`
+		)
 	},
 }
