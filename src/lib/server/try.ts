@@ -13,7 +13,7 @@ export async function tryOrFail<T = unknown>(
 		return result
 	} catch (error: any) {
 		console.error(error)
-		if ('meta' in error && 'cause' in error.meta) {
+		if ('meta' in error && error.meta && 'cause' in error.meta) {
 			return fail(400, { message: error.meta.cause })
 		}
 		const { message } = error as Error
