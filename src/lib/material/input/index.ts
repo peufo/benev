@@ -30,3 +30,22 @@ export { default as InputRadioButtons } from './InputRadioButtons.svelte'
 export { default as InputCheckboxs } from './InputCheckboxs.svelte'
 export { default as InputCheckboxsMenu } from './InputCheckboxsMenu.svelte'
 export { default as InputSelect } from './InputSelect.svelte'
+
+export type Option = { value: string; label: string; icon?: string }
+export type Options =
+	| string[]
+	| Option[]
+	| Record<string, string>
+	| Record<string, Omit<Option, 'value'>>
+export function parseOptions(options: Options): Option[] {
+	if (Array.isArray(options)) {
+		return options.map((opt) => {
+			if (typeof opt === 'string') return { value: opt, label: opt }
+			return opt
+		})
+	}
+	return Object.entries(options).map(([value, opt]) => {
+		if (typeof opt === 'string') return { value, label: opt }
+		return { value, ...opt }
+	})
+}

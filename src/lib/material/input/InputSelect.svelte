@@ -3,14 +3,15 @@
 	import { selector } from '$lib/action'
 	import { Icon } from '$lib/material'
 	import { debounce } from '$lib/debounce'
-
-
-	type Option = { label: string; icon?: string }
+	import {type Options,type Option, parseOptions} from '.'
 
   export let key = ''
   export let value = ''
   export let placeholder = 'Selection'
-	export let options: Record<string, Option>
+	export let options: Options
+
+	$: _options = parseOptions(options)
+	$: selectedOption = _options.find(opt => opt.value === value)
 
 	let selectorList: SelectorList<Option & { id: string }>
 	let focusIndex = 0
@@ -48,12 +49,11 @@
 		on:blur={handleLeave}
 		class="btn w-full justify-start"
 	>
-    {#if options[value]}
-      {@const item = options[value]}
-      {#if item.icon}
-        <Icon path={item.icon} />
+    {#if selectedOption}
+      {#if selectedOption.icon}
+        <Icon path={selectedOption.icon} />
       {/if}
-      <span>{item.label}</span>
+      <span>{selectedOption.label}</span>
     {:else}
       {placeholder}
     {/if}
@@ -62,7 +62,7 @@
 	<SelectorList
 		bind:this={selectorList}
 		{focusIndex}
-		items={Object.entries(options).map(([id, v]) => ({ id, ...v }))}
+		items={_options.map(opt => ({id: opt.value, ...opt}))}
 		let:item
     on:select={({detail}) => onSelect(detail)}
 	>

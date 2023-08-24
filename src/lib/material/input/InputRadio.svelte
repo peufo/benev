@@ -1,11 +1,12 @@
 <script lang="ts">
 	import FormControl from './FormControl.svelte'
-	import type { InputProps } from '.'
+	import { type InputProps, type Options, parseOptions } from '.'
 	import { bindValueWithParams } from './action'
-	type $$Props = InputProps & { options: Record<string, string> }
-	$: ({ input, value: _value, options: _options, class: klass, ...props } = $$props as $$Props)
+	type $$Props = InputProps & { options: Options }
+	$: ({ input, value: _value, options, class: klass, ...props } = $$props as $$Props)
 	export let value = _value
-	export let options: Record<string, string>
+
+	$: _options = parseOptions(options)
 </script>
 
 <div class={klass}>
@@ -13,24 +14,24 @@
 		<span class="label-text">{props.label}</span>
 	</div>
 
-	{#each Object.entries(options) as [v, label]}
+	{#each _options as option}
 		<FormControl
 			{...props}
 			let:key
-			{label}
-			prefixFor={v}
+			label={option.label}
+			prefixFor={option.value}
 			class="flex-row-reverse justify-end items-center gap-2"
 		>
 			<input
-				use:bindValueWithParams={{ bindEnable: props.bindWithParams}}
+				use:bindValueWithParams={{ bindEnable: props.bindWithParams }}
 				bind:group={value}
 				on:input
 				on:focus
 				on:blur
-				value={v}
+				value={option.value}
 				type="radio"
 				name={key}
-				id="{v}{key}"
+				id="{option.value}{key}"
 				class="radio"
 				{...input}
 			/>
