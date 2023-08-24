@@ -118,6 +118,8 @@ model Field {
   values         FieldValue[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+
+  @@unique([eventId, name])
 }
 
 enum FieldType {

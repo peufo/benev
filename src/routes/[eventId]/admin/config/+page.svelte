@@ -8,15 +8,18 @@
 </script>
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-2 items-start">
-	<Card class="row-span-2">
+	<Card>
 		<span slot="title">Informations de base</span>
 		<EventForm isUpdate successReset={false} event={data.event} class="grow" />
 	</Card>
 
-	<Card>
-		<span slot="title">Partage</span>
-		<ShareForm />
-	</Card>
+	<div class="flex flex-col gap-4">
 
-	<MemberFields />
+		<Card>
+			<span slot="title">Partage</span>
+			<ShareForm />
+		</Card>
+	
+		<MemberFields />
+	</div>
 </div>

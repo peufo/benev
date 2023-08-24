@@ -35,7 +35,7 @@
 <form
 	method="post"
 	action={isUpdate ? '?/update_event' : '?/new_event'}
-	class="{klass} flex flex-col gap-2 max-w-sm"
+	class="{klass} flex flex-col gap-2"
 	use:enhance={form.submit}
 >
 	{#if !isUpdate}

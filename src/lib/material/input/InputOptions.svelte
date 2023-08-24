@@ -9,6 +9,7 @@
 
 	let options: string[] = JSON.parse(value)
 	let newOption = ''
+	let optionInput: HTMLInputElement
 
   const notify = useNotify()
 
@@ -21,6 +22,7 @@
 		options = [...options, newOption]
 		newOption = ''
 		value = JSON.stringify(options)
+		optionInput.focus()
 	}
 
 	function removeOption(index: number) {
@@ -48,10 +50,8 @@
 			>
 				<Icon
 					path={mdiTrashCanOutline}
-					title="Supprimer"
 					size={20}
 					class="fill-error"
-					tippyProps={{ placement: 'right' }}
 				/>
 			</button>
 		</div>
@@ -59,6 +59,7 @@
 
 	<div class="join flex pt-2">
 		<input
+			bind:this={optionInput}
 			type="text"
 			placeholder="Nouvelle option"
 			class="input input-bordered grow join-item"

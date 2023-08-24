@@ -19,7 +19,6 @@ export const memberFieldType: Record<Field['type'], { label: string; icon: strin
 
 const memberFieldForm = {
 	name: z.string().min(2),
-	required: z.boolean(),
 	memberCanWrite: z.boolean(),
 	memberCanRead: z.boolean(),
 	description: z.string().optional(),
