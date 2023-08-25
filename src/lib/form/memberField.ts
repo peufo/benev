@@ -26,4 +26,10 @@ const memberFieldForm = {
 	type: z.enum(toTuple(memberFieldType)),
 } satisfies ZodObj<Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>>
 
+const memberFieldUpdateForm = {
+	...memberFieldForm,
+	id: z.string(),
+}
+
 export const memberFieldShema = z.object(memberFieldForm)
+export const memberFieldShemaUpdate = z.object(memberFieldUpdateForm)

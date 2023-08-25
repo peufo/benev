@@ -20,6 +20,6 @@
 			<ShareForm />
 		</Card>
 	
-		<MemberFields />
+		<MemberFields fields={data.memberFields} />
 	</div>
 </div>
