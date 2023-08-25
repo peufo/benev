@@ -61,7 +61,7 @@
 												<td class="w-full">
 													{formatRange(period)}
 												</td>
-												<td>
+												<td data-prepend>
 													{#if isEditor}
 														<SubscribeStateForm
 															subscribe={period.subscribes[0]}

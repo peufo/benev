@@ -5,6 +5,7 @@
 	import { memberFieldType } from '$lib/form'
 	import MemberFieldForm from './MemberFieldForm.svelte'
 	import { slide } from 'svelte/transition'
+	import WorkInProgress from '$lib/WorkInProgress.svelte'
 
 	export let fields: Field[]
 
@@ -17,7 +18,7 @@
 		formDialog.showModal()
 	}
 
-	function handleClickUpdateField(field: Field) { 
+	function handleClickUpdateField(field: Field) {
 		isUpdate = true
 		memberFieldForm.setField(field)
 		formDialog.showModal()
@@ -25,10 +26,13 @@
 </script>
 
 <Card>
-	<span slot="title">Profil des membres</span>
+	<span slot="title">
+		<WorkInProgress>
+			<span>Profil des membres</span>
+		</WorkInProgress>
+	</span>
 	<span slot="subtitle">Informations complémentaires concernant vos membres</span>
 	<div>
-
 		{#each fields as field (field.id)}
 			<button
 				transition:slide
@@ -41,8 +45,8 @@
 				<Icon path={memberFieldType[field.type].icon} />
 				{field.name}
 			</button>
-			{/each}
-		</div>
+		{/each}
+	</div>
 
 	<button class="btn" on:click={handleClickNewField}> Ajouter un champ </button>
 </Card>
@@ -50,13 +54,13 @@
 <dialog bind:this={formDialog} class="modal">
 	<div class="modal-box">
 		<div class="flex items-center justify-between pb-4">
-			<span class="card-title"> 
-				{isUpdate ? 'Modifier le' : 'Ajouter un'} champ 
+			<span class="card-title">
+				{isUpdate ? 'Modifier le' : 'Ajouter un'} champ
 			</span>
 			<button class="btn btn-square btn-ghost btn-sm" on:click={() => formDialog.close()}>
 				<Icon path={mdiClose} />
 			</button>
 		</div>
-		<MemberFieldForm on:success={() => formDialog.close()} bind:this={memberFieldForm}  />
+		<MemberFieldForm on:success={() => formDialog.close()} bind:this={memberFieldForm} />
 	</div>
 </dialog>
