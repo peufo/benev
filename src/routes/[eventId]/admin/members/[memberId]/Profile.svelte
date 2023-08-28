@@ -1,9 +1,9 @@
 <script lang="ts">
 	import {
-		mdiAccountOutline,
 		mdiCakeVariantOutline,
 		mdiCommentOutline,
-		mdiEmailOutline,
+		mdiEmailCheckOutline,
+		mdiEmailAlertOutline,
 		mdiFoodOutline,
 		mdiHammerWrench,
 		mdiHomeCityOutline,
@@ -51,7 +51,15 @@
 		</div>
 
 		<div class="flex gap-4">
-			<Icon path={mdiEmailOutline} class="opacity-70" />
+			{#if user.isEmailVerified}
+				<Icon path={mdiEmailCheckOutline} class="opacity-70 fill-success" title="Email verfifié" />
+			{:else}
+				<Icon
+					path={mdiEmailAlertOutline}
+					class="opacity-70 fill-error"
+					title="Cette email n'a pas été verifié"
+				/>
+			{/if}
 			<a href="mailto:{user.email}" class="link link-hover" target="_blank">
 				{user.email}
 			</a>
