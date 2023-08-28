@@ -5,7 +5,7 @@
 	import { userSizeLabel } from '$lib/form'
 	import Contact from '$lib/Contact.svelte'
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
-	import { InputCheckboxsMenu, Card, Placeholder,  InputRadioButtons } from '$lib/material'
+	import { InputCheckboxsMenu, Card, Placeholder, InputRadioButtons } from '$lib/material'
 	import { rowLink } from '$lib/action'
 
 	export let data
@@ -72,7 +72,6 @@
 				}}
 				bindWithParams
 			/>
-
 		</div>
 	</Card>
 
@@ -140,22 +139,22 @@
 				</thead>
 				<tbody>
 					{#each data.members as member}
-						<tr use:rowLink={{href: `${$eventPath}/admin/members/${member.id}`}}>
+						<tr use:rowLink={{ href: `${$eventPath}/admin/members/${member.id}` }}>
 							<td>{member.user.firstName} {member.user.lastName}</td>
 							<td>
-								<div class="badge badge-lg">
+								<div class="badge">
 									{member.subscribes.length}
 								</div>
 							</td>
 							<td>
-								<div class="badge badge-lg">
+								<div class="badge">
 									{toHour(workTimes[member.id])}
 								</div>
 							</td>
 
 							<td>
 								{#each member.leaderOf.map((team) => team.name) as team}
-									<div class="badge badge-lg mr-1">
+									<div class="badge badge-sm mr-1 whitespace-nowrap">
 										{team}
 									</div>
 								{/each}
@@ -165,7 +164,6 @@
 							<td>{member.user.diet?.replaceAll(/[\[\]"]/g, '').replaceAll(',', ', ') || ''}</td>
 							<td>{getAge(member.user.birthday)}</td>
 							<td align="right" data-prepend>
-
 								<Contact user={member.user} />
 							</td>
 						</tr>

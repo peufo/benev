@@ -41,7 +41,7 @@
 					</td>
 					<td>
 						{#each team.leaders as { user }}
-							<span class="badge">{user.firstName} {user.lastName}</span>
+							<span class="badge badge-sm whitespace-nowrap">{user.firstName} {user.lastName}</span>
 						{/each}
 					</td>
 					<td class="whitespace-normal sm:whitespace-nowrap">

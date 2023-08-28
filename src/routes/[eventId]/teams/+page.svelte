@@ -19,5 +19,7 @@
 		{/if}
 	</div>
 
-	<Teams teams={data.teams} isOwner={data.isOwner} />
+	<div class="overflow-x-auto">
+		<Teams teams={data.teams} isOwner={data.isOwner} />
+	</div>
 </Card>
