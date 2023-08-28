@@ -10,10 +10,8 @@
 	{#if !user}
 		<Login />
 	{:else}
-		<div class="card bg-base-100 max-w-3xl m-auto">
-			<div class="card-body">
-				<slot />
-			</div>
+		<div class="max-w-3xl m-auto flex flex-col gap-4">
+			<slot />
 		</div>
 	{/if}
 </main>

@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { slide } from 'svelte/transition'
+	import { mdiClose } from '@mdi/js'
 	import { Field } from '@prisma/client'
 	import { Card, Icon } from '$lib/material'
-	import { mdiClose } from '@mdi/js'
 	import { memberFieldType } from '$lib/form'
 	import MemberFieldForm from './MemberFieldForm.svelte'
-	import { slide } from 'svelte/transition'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'
 
 	export let fields: Field[]

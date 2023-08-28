@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
 	import Icon from '$lib/material/Icon.svelte'
-	import EventForm from './EventForm.svelte'
+	import EventForm from '$lib/EventForm.svelte'
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
-	import {rowLink} from '$lib/action'
+	import { rowLink } from '$lib/action'
 
 	export let data
 
@@ -45,7 +45,7 @@
 
 			<tbody>
 				{#each data.events as event}
-					<tr use:rowLink={{href: `/${event.id}`}}>
+					<tr use:rowLink={{ href: `/${event.id}` }}>
 						<td>
 							{event.name}
 						</td>

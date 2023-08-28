@@ -13,17 +13,44 @@ export const load = async ({ locals }) => {
 }
 
 export const actions = {
-	default: async ({ locals, request }) => {
+	/** Update member profile */
+	default: async ({ locals, request, params: { eventId } }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
+		return tryOrFail(async () => {
+			const formData = Object.fromEntries(await request.formData())
+			const data: Record<string, string> = Object.entries(formData)
+				.filter(([key]) => !key.startsWith('ignored_'))
+				.reduce(
+					(acc, [key, value]) => ({
+						...acc,
+						[key.replace(/(number_)|(boolean)_/, '')]: value,
+					}),
+					{}
+				)
 
-		const { err, data } = await parseFormData(request, userShema)
-		if (err) return err
-		return tryOrFail(() =>
-			prisma.user.update({
-				where: { id: session.user.userId },
-				data,
+			console.log(data)
+
+			const fields = await prisma.field.findMany({
+				where: { eventId, name: { in: Object.keys(data) } },
 			})
-		)
+
+			const member = await prisma.member.findUniqueOrThrow({
+				where: { userId_eventId: { eventId, userId: session.user.id } },
+			})
+
+			await prisma.member.update({
+				where: { id: member.id },
+				data: {
+					profile: {
+						upsert: fields.map(({ name, id }) => ({
+							where: { fieldId_memberId: { fieldId: id, memberId: member.id } },
+							create: { value: data[name], fieldId: id },
+							update: { value: data[name] },
+						})),
+					},
+				},
+			})
+		})
 	},
 }

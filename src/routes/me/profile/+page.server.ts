@@ -5,9 +5,28 @@ import { userShema } from '$lib/form'
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()
 	if (!session) throw redirect(300, '/me')
+	const { userId } = session.user
 	return {
-		user: await prisma.user.findFirstOrThrow({
-			where: { id: session.user.userId },
+		user: await prisma.user.findUniqueOrThrow({
+			where: { id: userId },
+			include: {
+				members: {
+					include: {
+						event: {
+							include: {
+								memberFields: {
+									where: { memberCanWrite: true },
+								},
+							},
+						},
+						profile: {
+							where: {
+								field: { memberCanRead: true },
+							},
+						},
+					},
+				},
+			},
 		}),
 	}
 }

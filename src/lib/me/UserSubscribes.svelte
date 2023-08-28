@@ -11,7 +11,7 @@
 		teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 	})[]
 
-	export let title = 'Mes inscriptions'
+	export let title = ''
 	export let isEditor = false
 </script>
 

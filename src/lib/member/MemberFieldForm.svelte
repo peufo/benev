@@ -16,7 +16,7 @@
 	})
 
 	type NonNull<T> = { [P in keyof T]-?: NonNullable<T[P]> }
-	type FieldForm = {id?: string} & NonNull<
+	type FieldForm = { id?: string } & NonNull<
 		Pick<Field, 'type' | 'name' | 'label' | 'options' | 'memberCanRead' | 'memberCanWrite'>
 	>
 	export function setField(value: Field | null) {
@@ -54,16 +54,15 @@
 			if (checked) field.memberCanRead = true
 		} else if (value === 'read') {
 			field.memberCanRead = checked
-			if (!checked) field.memberCanWrite = false 
+			if (!checked) field.memberCanWrite = false
 		}
 	}
 </script>
 
 <form method="post" use:enhance={form.submit} class="flex flex-col gap-2">
 	{#if field.id}
-		<input type="hidden" name="id" value={field.id}>
+		<input type="hidden" name="id" value={field.id} />
 	{/if}
-
 
 	<InputSelect key="type" bind:value={field.type} options={memberFieldType} />
 

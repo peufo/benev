@@ -14,6 +14,7 @@
 	} from '$lib/material/input'
 	import { Icon } from '$lib/material'
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
+	import Card from '$lib/material/Card.svelte'
 
 	export let user: User
 
@@ -31,8 +32,8 @@
 	})
 </script>
 
-<div>
-	<h1 class="text-3xl mb-4">Mon profil</h1>
+<Card>
+	<h1 slot="title">Mon profile</h1>
 
 	<form
 		method="post"
@@ -130,4 +131,4 @@
 			<button class="btn">Sauvegarder </button>
 		</div>
 	</form>
-</div>
+</Card>

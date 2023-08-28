@@ -8,6 +8,7 @@
 </script>
 
 <FormControl {...props} prefix="boolean" let:key>
+	<input type="hidden" name={key} value={value ? 'true' : 'false'} />
 	<input
 		bind:checked={value}
 		use:bindCheckedWithParams={{ bindEnable: bindWithParams }}
@@ -15,7 +16,6 @@
 		on:focus
 		on:blur
 		type="checkbox"
-		name={key}
 		id={key}
 		class="toggle"
 		{...input}

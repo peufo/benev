@@ -139,6 +139,8 @@ model FieldValue {
   value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([fieldId, memberId])
 }
 
 model Member {
