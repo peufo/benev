@@ -21,11 +21,19 @@
 		select: InputRadio,
 		multiselect: InputCheckboxs,
 	}
+
+	const parseValue: Record<FieldType, (value: string) => string | boolean | number | string[]> = {
+		string: (v) => v,
+		number: (v) => +v,
+		boolean: (v) => v === 'true',
+		select: (v) => v,
+		multiselect: (v) => JSON.parse(v) as string[],
+	}
 </script>
 
 <svelte:component
 	this={components[field.type]}
-	{value}
+	value={parseValue[field.type](value)}
 	class={klass}
 	key={field.name}
 	label={field.label || field.name}

@@ -2,12 +2,31 @@ import { error, redirect } from '@sveltejs/kit'
 import { parseFormData, prisma, tryOrFail } from '$lib/server'
 import { userShema } from '$lib/form'
 
-export const load = async ({ locals }) => {
+export const load = async ({ locals, params: { eventId } }) => {
 	const session = await locals.auth.validate()
 	if (!session) throw redirect(300, '/me')
+
+	const { userId } = session.user
 	return {
-		user: await prisma.user.findFirstOrThrow({
-			where: { id: session.user.userId },
+		user: await prisma.user.findUniqueOrThrow({
+			where: { id: userId },
+		}),
+		member: await prisma.member.findUniqueOrThrow({
+			where: { userId_eventId: { userId, eventId } },
+			include: {
+				event: {
+					include: {
+						memberFields: {
+							where: { memberCanWrite: true },
+						},
+					},
+				},
+				profile: {
+					where: {
+						field: { memberCanRead: true },
+					},
+				},
+			},
 		}),
 	}
 }
@@ -17,6 +36,7 @@ export const actions = {
 	default: async ({ locals, request, params: { eventId } }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
+
 		return tryOrFail(async () => {
 			const formData = Object.fromEntries(await request.formData())
 			const data: Record<string, string> = Object.entries(formData)
@@ -29,7 +49,7 @@ export const actions = {
 					{}
 				)
 
-			console.log(data)
+			console.log('todododo', data)
 
 			const fields = await prisma.field.findMany({
 				where: { eventId, name: { in: Object.keys(data) } },

@@ -9,6 +9,7 @@
 
 <FormControl {...props} prefix="boolean" let:key>
 	<input type="hidden" name={key} value={value ? 'true' : 'false'} />
+	<!--{@debug value}-->
 	<input
 		bind:checked={value}
 		use:bindCheckedWithParams={{ bindEnable: bindWithParams }}

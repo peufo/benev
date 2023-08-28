@@ -9,7 +9,9 @@
 	export let event: Event & { memberFields: Field[] }
 	export let fieldsValue: FieldValue[]
 
-	const form = useForm()
+	const form = useForm({
+		successReset: false,
+	})
 </script>
 
 <Card>
@@ -28,7 +30,6 @@
 	>
 		{#each event.memberFields as field (field.id)}
 			{@const { value } = fieldsValue.find((value) => value.fieldId === field.id) || { value: '' }}
-			{@debug value}
 			<MemberField {field} {value} class="md:col-span-3" />
 		{/each}
 
