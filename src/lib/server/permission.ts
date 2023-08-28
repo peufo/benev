@@ -1,9 +1,17 @@
 import { error } from '@sveltejs/kit'
 import { prisma } from '.'
+import { ROOT_USER } from '$env/static/private'
+
+export async function isRoot(locals: App.Locals) {
+	const session = await locals.auth.validate()
+	return session?.user.email === ROOT_USER
+}
 
 export async function isOwner(eventId: string, locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) return false
+
+	if (await isRoot(locals)) return true
 
 	const { ownerId } = await prisma.event.findUniqueOrThrow({
 		where: { id: eventId },
