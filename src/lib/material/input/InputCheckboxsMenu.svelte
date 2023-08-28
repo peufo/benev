@@ -2,15 +2,28 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import FormControl from './FormControl.svelte'
-	import type { InputProps } from '.'
+	import { type InputProps, type Options, parseOptions } from '.'
 	import { ButtonMenu, Icon } from '$lib/material'
 	import { mdiClose } from '@mdi/js'
 	import { urlParam } from '$lib/store'
 
-	type Options = string[] | { value: string; label: string }[]
-
-	type $$Props = InputProps<string[]> & { options: Options; labelPlurial: string; key: string }
-	$: ({ input, value: _value, options: _1, class: klass, ...props } = $$props as $$Props)
+	type $$Props = InputProps<string[]> & {
+		key: string
+		options: Options
+		labelPlurial: string
+		labelDefault?: string
+		right?: boolean
+	}
+	$: ({
+		input,
+		value: _value,
+		options: _1,
+		class: klass,
+		labelPlurial,
+		labelDefault,
+		right,
+		...props
+	} = $$props as $$Props)
 
 	export let key: string
 	export let options: Options
@@ -18,15 +31,16 @@
 
 	let menu: ButtonMenu
 
-	$: _options = options.map((opt) => (typeof opt === 'string' ? { value: opt, label: opt } : opt))
+	$: _options = parseOptions(options)
 
 	function handleSubmit() {
+		if (!menu) return
 		menu.close()
 		if (!value.length) {
-			goto($urlParam.without(key), { replaceState: true })
+			goto($urlParam.without(key), { replaceState: true, noScroll: true })
 			return
 		}
-		goto($urlParam.with({ [key]: JSON.stringify(value) }), { replaceState: true })
+		goto($urlParam.with({ [key]: JSON.stringify(value) }), { replaceState: true, noScroll: true })
 	}
 
 	function handleReset() {
@@ -38,20 +52,20 @@
 
 <input type="hidden" name={key} value={JSON.stringify(value)} />
 
-<ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit}>
+<ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit} {right}>
 	<div class="join" slot="btn">
-		<button class="btn join-item" on:click={() => menu.setOpen()}>
+		<button class="btn btn-sm join-item" on:click={() => menu.setOpen()}>
 			{#if value.length === 0}
-				<span>Tous les {props.labelPlurial}</span>
+				<span>{labelDefault || labelPlurial}</span>
 			{:else}
 				<span class="badge badge-lg">{value.length}</span>
 				<span>
-					{value.length > 1 ? props.labelPlurial : props.label}
+					{value.length > 1 ? labelPlurial : props.label}
 				</span>
 			{/if}
 		</button>
 		{#if value.length}
-			<button class="btn btn-square join-item" on:click={handleReset}>
+			<button class="btn btn-sm btn-square join-item" on:click={handleReset}>
 				<Icon path={mdiClose} class="fill-error" />
 			</button>
 		{/if}
@@ -64,7 +78,7 @@
 				let:key
 				label={option.label}
 				prefixFor={index}
-				class="flex-row-reverse justify-end items-center gap-2"
+				class="flex-row-reverse justify-end items-center gap-2 whitespace-nowrap"
 			>
 				<input
 					bind:group={value}

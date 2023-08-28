@@ -57,7 +57,7 @@
 <ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit}>
 	<div slot="btn" class="join">
 		<button class="btn join-item shrink flex-nowrap" on:click={() => menu.setOpen()}>
-			<Icon path={mdiCalendarMonthOutline} class="mr-2 opacity-60" />
+			<Icon path={mdiCalendarMonthOutline} class="opacity-60" />
 			{getLabel(period, time)}
 		</button>
 		{#if isValidPeriod}

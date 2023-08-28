@@ -85,5 +85,8 @@ export const load = async ({ params, url }) => {
 			where: { eventId },
 			select: { id: true, name: true },
 		}),
+		fields: await prisma.field.findMany({
+			where: { eventId },
+		}),
 	}
 }

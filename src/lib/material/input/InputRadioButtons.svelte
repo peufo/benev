@@ -2,15 +2,15 @@
 	import type { HTMLInputAttributes } from 'svelte/elements'
 	import { bindCheckedWithParams } from './action'
 
-  let klass = ''
-  export {klass as class}
-  export let key: string
+	let klass = ''
+	export { klass as class }
+	export let key: string
 	export let value = ''
 	export let options: Record<string, string>
-  export let input: HTMLInputAttributes | undefined = undefined
-  export let bindWithParams = false
+	export let input: HTMLInputAttributes | undefined = undefined
+	export let bindWithParams = false
 
-  $: ({class: inputClass, ...inputProps} = input || {})
+	$: ({ class: inputClass, ...inputProps } = input || {})
 </script>
 
 <div class="join {klass}">
@@ -24,7 +24,7 @@
 			value={v}
 			type="radio"
 			name={key}
-			class="join-item btn {inputClass}"
+			class="join-item btn btn-sm {inputClass}"
 			aria-label={label}
 			{...inputProps}
 		/>

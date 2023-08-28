@@ -1,38 +1,17 @@
 <script lang="ts">
 	import { Size } from '@prisma/client'
-	import { getAge } from '$lib/utils'
+
 	import { eventPath } from '$lib/store'
 	import { userSizeLabel } from '$lib/form'
-	import Contact from '$lib/Contact.svelte'
+
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
-	import { InputCheckboxsMenu, Card, Placeholder, InputRadioButtons } from '$lib/material'
-	import { rowLink } from '$lib/action'
+	import { InputCheckboxsMenu, Card, InputRadioButtons } from '$lib/material'
+
+	import Members from './Members.svelte'
 
 	export let data
 	let workTimes: Record<string, number> = {}
 
-	$: workTimes = data.members.reduce(
-		(times, user) => ({
-			...times,
-			[user.id]: user.subscribes
-				.filter(({ state }) => state === 'accepted' || state === 'request')
-				.reduce((acc, { period }) => {
-					const time = period.end.getTime() - period.start.getTime()
-					return acc + time
-				}, 0),
-		}),
-		{}
-	)
-	$: workTimeTotal = Object.values(workTimes).reduce((acc, cur) => acc + cur, 0)
-
-	$: workTimeNeeded = data.members
-		.map((u) => u.subscribes.map((s) => s.period))
-		.flat()
-		.reduce((acc, { start, end, maxSubscribe }) => {
-			return acc + (end.getTime() - start.getTime()) * maxSubscribe
-		}, 0)
-
-	const toHour = (ms: number) => Math.round(ms / (1000 * 60 * 60))
 	const sizeLabel = (key: string) => userSizeLabel[key as Size] || ''
 
 	$: diet = data.members.reduce((acc, { user }) => {
@@ -59,6 +38,7 @@
 				key="teams"
 				label="Secteur sélectioné"
 				labelPlurial="Secteurs sélectionés"
+				labelDefault="Tous les secteurs"
 				options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
 				enhanceDisabled
 			/>
@@ -83,13 +63,6 @@
 				<div class="stat">
 					<div class="stat-title">Bénévoles</div>
 					<div class="stat-value">{data.members.length}</div>
-				</div>
-
-				<div class="stat">
-					<div class="stat-title">Heures</div>
-					<div class="stat-value">
-						{toHour(workTimeTotal)} / {toHour(workTimeNeeded)}
-					</div>
 				</div>
 			</div>
 
@@ -123,55 +96,5 @@
 		</div>
 	</Card>
 
-	<Card class="overflow-x-auto md:col-span-2">
-		{#if data.members.length}
-			<table class="table">
-				<thead>
-					<tr>
-						<td>Bénévole</td>
-						<td>Périodes</td>
-						<td>Heures</td>
-						<th>Secteurs à charge</th>
-						<td>T-shirt</td>
-						<td>Régime particulier</td>
-						<td>Age</td>
-					</tr>
-				</thead>
-				<tbody>
-					{#each data.members as member}
-						<tr use:rowLink={{ href: `${$eventPath}/admin/members/${member.id}` }}>
-							<td>{member.user.firstName} {member.user.lastName}</td>
-							<td>
-								<div class="badge">
-									{member.subscribes.length}
-								</div>
-							</td>
-							<td>
-								<div class="badge">
-									{toHour(workTimes[member.id])}
-								</div>
-							</td>
-
-							<td>
-								{#each member.leaderOf.map((team) => team.name) as team}
-									<div class="badge badge-sm mr-1 whitespace-nowrap">
-										{team}
-									</div>
-								{/each}
-							</td>
-
-							<td>{(member.user.size && userSizeLabel[member.user.size]) || '-'}</td>
-							<td>{member.user.diet?.replaceAll(/[\[\]"]/g, '').replaceAll(',', ', ') || ''}</td>
-							<td>{getAge(member.user.birthday)}</td>
-							<td align="right" data-prepend>
-								<Contact user={member.user} />
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		{:else}
-			<Placeholder>Aucun bénévole actif</Placeholder>
-		{/if}
-	</Card>
+	<Members members={data.members} fields={data.fields} />
 </div>

@@ -7,6 +7,7 @@
 	export let open = false
 	export let label = 'No label'
 	export let buttonClass = ''
+	export let right = false
 
 	export const setOpen = () => {
 		open = true
@@ -38,7 +39,8 @@
 
 	{#if open}
 		<div
-			class="card bg-base-100 absolute top-12 z-10 shadow-lg bordered"
+			class="card bg-base-100 absolute top-10 z-10 shadow-lg bordered"
+			class:right-0={right}
 			transition:fly|local={{ y: 30, duration: 200 }}
 		>
 			<slot>No content</slot>
