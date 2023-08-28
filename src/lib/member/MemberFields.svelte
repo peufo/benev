@@ -26,11 +26,7 @@
 </script>
 
 <Card>
-	<span slot="title">
-		<WorkInProgress>
-			<span>Profil des membres</span>
-		</WorkInProgress>
-	</span>
+	<span slot="title"> Profil des membres </span>
 	<span slot="subtitle">Informations complémentaires concernant vos membres</span>
 	<div>
 		{#each fields as field (field.id)}

@@ -1,6 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { parseFormData, prisma, tryOrFail } from '$lib/server'
-import { userShema } from '$lib/form'
+import { prisma, tryOrFail } from '$lib/server'
 
 export const load = async ({ locals, params: { eventId } }) => {
 	const session = await locals.auth.validate()
@@ -48,8 +47,6 @@ export const actions = {
 					}),
 					{}
 				)
-
-			console.log('todododo', data)
 
 			const fields = await prisma.field.findMany({
 				where: { eventId, name: { in: Object.keys(data) } },
