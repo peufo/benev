@@ -9,9 +9,13 @@
 </script>
 
 {#if state === 'request'}
-	<Icon path={mdiAlertOctagonOutline} class="fill-warning {klass}" title="En attente de validation" />
+	<Icon
+		path={mdiAlertOctagonOutline}
+		class="fill-warning {klass}"
+		title="En attente de validation"
+	/>
 {:else if state === 'accepted'}
-	<Icon path={mdiCheck} class="fill-success {klass}" title="Validé" />
+	<Icon path={mdiCheck} class="fill-success {klass}" title="Inscription confirmée" />
 {:else if state === 'denied'}
-	<Icon path={mdiCloseOctagonOutline} class="fill-error {klass}" title="Inscription refusé" />
+	<Icon path={mdiCloseOctagonOutline} class="fill-error {klass}" title="Inscription refusée" />
 {/if}

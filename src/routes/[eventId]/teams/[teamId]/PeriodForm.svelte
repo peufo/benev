@@ -10,7 +10,7 @@
 	let klass = ''
 	export { klass as class }
 	export let isUpdate = false
-	
+
 	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
 	const form = useForm({
 		successReset: false,
@@ -19,7 +19,7 @@
 			dispatch('success')
 		},
 	})
-	
+
 	let period: Period | undefined = undefined
 	let start = ''
 	let end = ''
@@ -46,7 +46,6 @@
 		start = dayjs(period.start).format('YYYY-MM-DDTHH:mm')
 		end = dayjs(period.end).format('YYYY-MM-DDTHH:mm')
 	}
-
 </script>
 
 <form
@@ -58,7 +57,6 @@
 	{#if isUpdate}
 		<h2 class="text-xl">Modification de la periode</h2>
 	{/if}
-
 
 	<div class="flex flex-wrap gap-2 items-end">
 		<div class="flex gap-2 grow flex-wrap-reverse">
@@ -84,7 +82,7 @@
 			/>
 			<InputNumber
 				key="maxSubscribe"
-				label="Nombre de bénévole"
+				label="Nombre de bénévoles"
 				class="max-w-[150px]"
 				value={String(period?.maxSubscribe || 1)}
 				input={{ min: 1, step: 1 }}
@@ -98,8 +96,8 @@
 				</button>
 				<div class="grow" />
 
-				<DeleteButton formaction="?/delete_period"/>
-	
+				<DeleteButton formaction="?/delete_period" />
+
 				<button class="btn" type="submit">Valider</button>
 			{:else}
 				<button

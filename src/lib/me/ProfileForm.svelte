@@ -25,7 +25,7 @@
 </script>
 
 <Card>
-	<h1 slot="title">Mon profile</h1>
+	<h1 slot="title">Mon profil</h1>
 
 	<form
 		method="post"

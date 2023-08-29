@@ -47,7 +47,7 @@
 				key="member_type"
 				options={{
 					volunteers: 'Bénévoles',
-					leaders: 'Responsable',
+					leaders: 'Responsables',
 					all: 'Tous',
 				}}
 				bindWithParams

@@ -17,22 +17,28 @@
 	{#if subscribe.state === 'accepted'}
 		<p>
 			Bonne nouvelle ! <br />
-			Tu pourras rejoindre l'équipe
+			Tu pourras rejoindre le secteur
 			<b>{subscribe.period.team.name}</b>
 			durant la période suivante :
 		</p>
 	{:else}
 		<p>
-			Désolé, un des responsables de l'équipe
+			Désolé, ton inscription au secteur
 			<b>{subscribe.period.team.name}</b>
-			a refusé ton inscription à la période de travail suivante :
+			a été refusée pour la période de travail suivante :
 		</p>
 	{/if}
 
 	<b>{formatRange(subscribe.period)}</b>
 
+	{#if subscribe.state === 'denied'}
+		Retourne
+		<a href="{domain}/{subscribe.period.team.eventId}/teams">sur la plateforme</a>
+		si tu souhaites trouver une autre tranche horaire. Merci pour ta disponibilité !
+	{/if}
+
 	<p>
-		Tu peux trouver toutes les informations dont tu as besoins dans
-		<a href="{domain}/me">ton tableau de bord.</a>
+		Tu peux retrouver toutes tes inscription sur
+		<a href="{domain}/{subscribe.period.team.eventId}/me">ton tableau de bord.</a>
 	</p>
 </EmailLayout>
