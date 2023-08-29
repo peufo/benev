@@ -6,26 +6,31 @@
 
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
 	import { InputCheckboxsMenu, Card, InputRadioButtons } from '$lib/material'
+	import WorkInProgress from '$lib/WorkInProgress.svelte'
 
 	import Members from './Members.svelte'
 
 	export let data
-	let workTimes: Record<string, number> = {}
 
-	const sizeLabel = (key: string) => userSizeLabel[key as Size] || ''
-
-	$: diet = data.members.reduce((acc, { user }) => {
-		if (!user.diet) return acc
-		const key = (JSON.parse(user.diet) as string[]).join(', ')
-		if (acc[key]) return { ...acc, [key]: acc[key] + 1 }
-		return { ...acc, [key]: 1 }
-	}, {} as Record<string, number>)
-
-	$: tshirt = data.members.reduce((acc, { user }) => {
-		if (!user.size) return acc
-		if (acc[user.size]) return { ...acc, [user.size]: acc[user.size] + 1 }
-		return { ...acc, [user.size]: 1 }
-	}, {} as Record<Size, number>)
+	const stats = data.fields
+		.map((field) => {
+			if (field.type === 'select' || field.type === 'multiselect') {
+				return {
+					name: field.name,
+					distribution: data.members.reduce((acc, { profile }) => {
+						const { value } = profile.find((v) => v.fieldId === field.id) || { value: '' }
+						if (!value) return acc
+						const key =
+							field.type === 'select'
+								? value
+								: value.replaceAll(/[\[\"\]]/g, '').replaceAll(',', ', ')
+						if (acc[key]) return { ...acc, [key]: acc[key] + 1 }
+						return { ...acc, [key]: 1 }
+					}, {} as Record<string, number>),
+				}
+			}
+		})
+		.filter(Boolean)
 </script>
 
 <div class="grid md:grid-cols-2 gap-4">
@@ -67,31 +72,21 @@
 			</div>
 
 			<div class="stats bg-base-200 grow items-start">
-				<div class="stat">
-					<div class="stat-title">T-shirts</div>
-					<div class="stat-value text-sm">
-						{#each Object.entries(tshirt) as [key, value]}
-							<div class="stat-value text-sm">
-								<span class="pr-1">{value}</span>
-								{sizeLabel(key)}
-							</div>
-						{:else}
-							Aucun
-						{/each}
-					</div>
-				</div>
-
-				<div class="stat">
-					<div class="stat-title">Régimes particuliés</div>
-					{#each Object.entries(diet) as [key, value]}
+				{#each stats as stat}
+					<div class="stat">
+						<div class="stat-title">{stat?.name}</div>
 						<div class="stat-value text-sm">
-							<span class="pr-1">{value}</span>
-							{key}
+							{#each Object.entries(stat?.distribution || {}) as [key, value]}
+								<div class="stat-value text-sm">
+									<span class="pr-1">{value}</span>
+									{key}
+								</div>
+							{:else}
+								<div class="stat-value text-sm">Aucun</div>
+							{/each}
 						</div>
-					{:else}
-						<div class="stat-value text-sm">Aucun</div>
-					{/each}
-				</div>
+					</div>
+				{/each}
 			</div>
 		</div>
 	</Card>
