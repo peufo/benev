@@ -1,13 +1,7 @@
 <script lang="ts">
-	import { Size } from '@prisma/client'
-
 	import { eventPath } from '$lib/store'
-	import { userSizeLabel } from '$lib/form'
-
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
 	import { InputCheckboxsMenu, Card, InputRadioButtons } from '$lib/material'
-	import WorkInProgress from '$lib/WorkInProgress.svelte'
-
 	import Members from './Members.svelte'
 
 	export let data

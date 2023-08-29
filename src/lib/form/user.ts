@@ -21,27 +21,14 @@ const registerForm = {
 }
 export const registerShema = z.object(registerForm)
 
-export const userSizeLabel: Record<$Enums.Size, string> = {
-	none: 'Nan merci !',
-	small: 'Small',
-	medium: 'Medium',
-	large: 'Large',
-	xLarge: 'XLarge',
-}
-
 type UserForm = Omit<Prisma.UserUncheckedCreateInput, 'id' | 'email'>
 const userForm = {
 	firstName: z.string().min(2),
 	lastName: z.string().min(2),
 	phone: z.string().optional(),
-	size: z.enum(toTuple(userSizeLabel)).optional(),
 	birthday: z.date().optional(),
 	street: z.string().optional(),
 	zipCode: z.string().optional(),
 	city: z.string().optional(),
-	isInsured: z.boolean().optional(),
-	diet: z.string().optional(),
-	skillString: z.string().optional(),
-	comment: z.string().optional(),
 } satisfies ZodObj<UserForm>
 export const userShema = z.object(userForm)

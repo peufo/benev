@@ -19,13 +19,6 @@ model User {
   street   String?
   zipCode  String?
   city     String?
-  comment  String?
-
-  // TODO: replace by customField système
-  isInsured   Boolean @default(false)
-  size        Size?
-  diet        String?
-  skillString String? // TODO: replace by tags système ?
 
   tokens          Token[]
   isEmailVerified Boolean @default(false)
@@ -38,14 +31,6 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum Size {
-  none
-  small
-  medium
-  large
-  xLarge
 }
 
 model Session {
