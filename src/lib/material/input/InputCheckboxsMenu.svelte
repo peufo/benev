@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
+	import { mdiClose } from '@mdi/js'
 	import FormControl from './FormControl.svelte'
 	import { type InputProps, type Options, parseOptions } from '.'
 	import { ButtonMenu, Icon } from '$lib/material'
-	import { mdiClose } from '@mdi/js'
 	import { urlParam } from '$lib/store'
-	import { onMount } from 'svelte'
 
 	type $$Props = InputProps<string[]> & {
 		key: string
@@ -31,7 +30,6 @@
 	export let value = _value || JSON.parse($page.url.searchParams.get(key) || '[]')
 
 	let menu: ButtonMenu
-	onMount(() => menu.setOpen())
 
 	$: _options = parseOptions(options)
 

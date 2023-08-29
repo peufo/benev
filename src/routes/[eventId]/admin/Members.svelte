@@ -34,7 +34,12 @@
 		{}
 	)
 
-	let selectedColumns: string[] = JSON.parse($page.url.searchParams.get('columns') || '[]')
+	let selectedColumns: string[] = JSON.parse($page.url.searchParams.get('columns') || 'null') || [
+		'periods',
+		'hours',
+		'sectors',
+		'age',
+	]
 	const columns: Record<
 		string,
 		{ label: string; cellValue: (m: _Member) => string | number | boolean | string[] }
@@ -63,10 +68,10 @@
 	}
 </script>
 
-<Card class="overflow-x-hidden md:col-span-2 min-h-[320px]">
+<Card class="md:col-span-2 overflow-x-auto">
 	<span slot="title">Bénévoles</span>
 
-	<div slot="action" class="z-20">
+	<div slot="action">
 		<InputCheckboxsMenu
 			key="columns"
 			bind:value={selectedColumns}
@@ -78,9 +83,9 @@
 		/>
 	</div>
 
-	<div class="w-full overflow-x-auto overflow-y-visible">
+	<div class="overflow-x-auto min-h-[270px]">
 		{#if members.length}
-			<table class="table">
+			<table class="table table-pin-rows">
 				<thead>
 					<tr>
 						<th>Nom</th>
