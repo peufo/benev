@@ -24,6 +24,7 @@
 							field.type === 'select'
 								? value
 								: value.replaceAll(/[\[\"\]]/g, '').replaceAll(',', ', ')
+						if (!key) return acc
 						if (acc[key]) return { ...acc, [key]: acc[key] + 1 }
 						return { ...acc, [key]: 1 }
 					}, {} as Record<string, number>),
