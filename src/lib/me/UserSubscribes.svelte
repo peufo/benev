@@ -35,51 +35,57 @@
 				{/if}
 			</span>
 
-			<table class="table outline outline-base-200 outline-2">
-				<tbody>
-					{#each event.teams as team}
-						<tr
-							class="last:border-none hover:bg-base-200/60 cursor-pointer"
-							use:rowLink={{ href: `/${event.id}/teams/${team.id}`, addRowClasses: false }}
-						>
-							<td class="align-top pt-6 font-semibold rounded-l-box">
-								{team.name}
-							</td>
+			{#if event.teams.length}
+				<table class="table outline outline-base-200 outline-2">
+					<tbody>
+						{#each event.teams as team}
+							<tr
+								class="last:border-none hover:bg-base-200/60 cursor-pointer"
+								use:rowLink={{ href: `/${event.id}/teams/${team.id}`, addRowClasses: false }}
+							>
+								<td class="align-top pt-6 font-semibold rounded-l-box">
+									{team.name}
+								</td>
 
-							<td class="rounded-r-box" data-prepend>
-								<table>
-									<tbody>
-										{#each team.periods as period}
-											<tr
-												class={isEditor ? 'hover:bg-base-200/80' : ''}
-												use:rowLink={{
-													href: `/${event.id}/teams/${team.id}?periodOpen=${period.id}`,
-													addRowClasses: false,
-													enable: isEditor,
-												}}
-											>
-												<td class="w-full">
-													{formatRange(period)}
-												</td>
-												<td data-prepend>
-													{#if isEditor}
-														<SubscribeStateForm
-															subscribe={period.subscribes[0]}
-															action="{$eventPath}/teams/{period.teamId}"
-														/>
-													{:else}
-														<SubscribeState state={period.subscribes[0].state} />
-													{/if}
-												</td>
-											</tr>
-										{/each}
-									</tbody>
-								</table>
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+								<td class="rounded-r-box" data-prepend>
+									<table>
+										<tbody>
+											{#each team.periods as period}
+												<tr
+													class={isEditor ? 'hover:bg-base-200/80' : ''}
+													use:rowLink={{
+														href: `/${event.id}/teams/${team.id}?periodOpen=${period.id}`,
+														addRowClasses: false,
+														enable: isEditor,
+													}}
+												>
+													<td class="w-full">
+														{formatRange(period)}
+													</td>
+													<td data-prepend>
+														{#if isEditor}
+															<SubscribeStateForm
+																subscribe={period.subscribes[0]}
+																action="{$eventPath}/teams/{period.teamId}"
+															/>
+														{:else}
+															<SubscribeState state={period.subscribes[0].state} />
+														{/if}
+													</td>
+												</tr>
+											{/each}
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			{:else}
+				<Placeholder>
+					<span>Aucune inscription pour le moment</span>
+				</Placeholder>
+			{/if}
 		</Card>
 	{:else}
 		<Placeholder>
