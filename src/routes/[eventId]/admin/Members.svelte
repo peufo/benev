@@ -1,18 +1,21 @@
 <script lang="ts">
 	import { getAge } from '$lib/utils'
 	import { eventPath } from '$lib/store'
-	import { rowLink } from '$lib/action'
-	import { userSizeLabel } from '$lib/form'
 
-	import { Field, Member, Period, Subscribe, Team, User } from '@prisma/client'
+	import { Field, FieldValue, Member, Period, Subscribe, Team, User } from '@prisma/client'
 	import { Card, InputCheckboxsMenu, Placeholder } from '$lib/material'
 	import Contact from '$lib/Contact.svelte'
+	import { page } from '$app/stores'
+	import { goto } from '$app/navigation'
 
-	export let members: (Member & {
+	type _Member = Member & {
 		user: User
 		leaderOf: Team[]
 		subscribes: (Subscribe & { period: Period })[]
-	})[]
+		profile: FieldValue[]
+	}
+
+	export let members: _Member[]
 
 	export let fields: Field[]
 
@@ -30,69 +33,94 @@
 		}),
 		{}
 	)
+
+	let selectedColumns: string[] = JSON.parse($page.url.searchParams.get('columns') || '[]')
+	const columns: Record<
+		string,
+		{ label: string; cellValue: (m: _Member) => string | number | boolean | string[] }
+	> = {
+		periods: { label: 'Périodes', cellValue: (m) => m.subscribes.length },
+		hours: { label: 'Heures', cellValue: (m) => toHour(workTimes[m.id]) },
+		sectors: { label: 'Secteurs à charges', cellValue: (m) => m.leaderOf.map(({ name }) => name) },
+		age: { label: 'Age', cellValue: (m) => getAge(m.user.birthday) },
+		...fields.reduce(
+			(acc, cur) => ({
+				...acc,
+				[cur.id]: {
+					label: cur.name,
+					cellValue: (m: _Member) => {
+						const { value } = m.profile.find((f) => f.fieldId === cur.id) || { value: '' }
+						if (!value) return ''
+						if (cur.type === 'multiselect') return JSON.parse(value)
+						if (cur.type === 'boolean') return value === 'true'
+						if (cur.type === 'number') return +value
+						return value
+					},
+				},
+			}),
+			{}
+		),
+	}
 </script>
 
-<Card class="overflow-x-hidden md:col-span-2">
+<Card class="overflow-x-hidden md:col-span-2 min-h-[320px]">
 	<span slot="title">Bénévoles</span>
 
-	<div slot="action">
+	<div slot="action" class="z-20">
 		<InputCheckboxsMenu
-			key="fields"
+			key="columns"
+			bind:value={selectedColumns}
 			label="Champ visible"
 			labelPlurial="Champs visibles"
-			options={[
-				{ value: 'periods', label: 'Périodes' },
-				{ value: 'hours', label: 'Heures' },
-				{ value: 'sectors', label: 'Secteurs à charges' },
-				{ value: 'age', label: 'Age' },
-				...fields.map((f) => ({ value: f.name, label: f.name })),
-			]}
+			options={columns}
 			right
 			enhanceDisabled
 		/>
 	</div>
 
-	<div class="w-full overflow-x-auto">
+	<div class="w-full overflow-x-auto overflow-y-visible">
 		{#if members.length}
-			<table class="table table-pin-rows">
+			<table class="table">
 				<thead>
 					<tr>
-						<td>Nom</td>
-						<td>Périodes</td>
-						<td>Heures</td>
-						<th>Secteurs à charge</th>
-						<td>T-shirt</td>
-						<td>Régime particulier</td>
-						<td>Age</td>
+						<th>Nom</th>
+						{#each selectedColumns as columnId}
+							<th>{columns[columnId].label}</th>
+						{/each}
 					</tr>
 				</thead>
+
 				<tbody>
 					{#each members as member}
-						<tr use:rowLink={{ href: `${$eventPath}/admin/members/${member.id}` }}>
-							<td>{member.user.firstName} {member.user.lastName}</td>
+						<tr
+							on:click={() => goto(`${$eventPath}/admin/members/${member.id}`)}
+							class="hover cursor-pointer"
+						>
 							<td>
-								<div class="badge">
-									{member.subscribes.length}
-								</div>
-							</td>
-							<td>
-								<div class="badge">
-									{toHour(workTimes[member.id])}
-								</div>
+								{member.user.firstName}
+								{member.user.lastName}
 							</td>
 
-							<td>
-								{#each member.leaderOf.map((team) => team.name) as team}
-									<div class="badge badge-sm mr-1 whitespace-nowrap">
-										{team}
-									</div>
-								{/each}
-							</td>
+							{#each selectedColumns as columnId}
+								{@const value = columns[columnId].cellValue(member)}
+								<td>
+									{#if Array.isArray(value)}
+										{#each value as v}
+											<span class="badge badge-sm mr-1 whitespace-nowrap">
+												{v}
+											</span>
+										{/each}
+									{:else if typeof value === 'number'}
+										<span class="badge">{value}</span>
+									{:else if typeof value === 'boolean'}
+										<span class="badge">{value ? 'OUI' : 'NON'}</span>
+									{:else}
+										<span>{value}</span>
+									{/if}
+								</td>
+							{/each}
 
-							<td>{(member.user.size && userSizeLabel[member.user.size]) || '-'}</td>
-							<td>{member.user.diet?.replaceAll(/[\[\]"]/g, '').replaceAll(',', ', ') || ''}</td>
-							<td>{getAge(member.user.birthday)}</td>
-							<td align="right" data-prepend>
+							<td align="right">
 								<Contact user={member.user} />
 							</td>
 						</tr>

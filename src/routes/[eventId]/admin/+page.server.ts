@@ -70,6 +70,7 @@ export const load = async ({ params, url }) => {
 			include: {
 				user: true,
 				leaderOf: true,
+				profile: true,
 				subscribes: {
 					where: {
 						period: periodWhere || {},
