@@ -28,6 +28,7 @@ export async function isOwnerOrThrow(eventId: string, locals: App.Locals) {
 export async function isLeaderInEvent(eventId: string, locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) return false
+	if (await isOwner(eventId, locals)) return true
 
 	const member = await prisma.member.findUnique({
 		where: { userId_eventId: { eventId, userId: session.user.id } },

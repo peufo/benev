@@ -2,6 +2,7 @@
 	import Teams from '$lib/Teams.svelte'
 	import { Card } from '$lib/material'
 	import UserSubscribes from '$lib/me/UserSubscribes.svelte'
+	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import { eventPath } from '$lib/store'
 	import Profile from './Profile.svelte'
 
@@ -9,7 +10,14 @@
 </script>
 
 <div class="grid gap-6">
-	<Profile user={data.memberProfile.user} />
+	<Profile user={data.memberProfile.user}>
+		<div class="divider" />
+		<MemberProfileForm
+			event={data.event}
+			fieldsValue={data.memberProfile.profile}
+			memberId={data.memberProfile.id}
+		/>
+	</Profile>
 
 	<UserSubscribes events={[data.event]} title="" isEditor>
 		<span slot="title">Inscriptions</span>

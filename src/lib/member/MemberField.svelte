@@ -13,6 +13,7 @@
 	export let value = ''
 	let klass = ''
 	export { klass as class }
+	export let canWriteAll = false
 
 	const components: Record<FieldType, ComponentType> = {
 		string: InputText,
@@ -27,7 +28,7 @@
 		number: (v) => +v,
 		boolean: (v) => v === 'true',
 		select: (v) => v,
-		multiselect: (v) => JSON.parse(v) as string[],
+		multiselect: (v) => (v ? (JSON.parse(v) as string[]) : []),
 	}
 </script>
 
@@ -38,4 +39,5 @@
 	key={field.name}
 	label={field.label || field.name}
 	options={JSON.parse(field.options || '[]')}
+	input={{ disabled: !field.memberCanWrite && !canWriteAll }}
 />

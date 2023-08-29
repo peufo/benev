@@ -15,7 +15,7 @@ export const load = async ({ locals }) => {
 						event: {
 							include: {
 								memberFields: {
-									where: { memberCanWrite: true },
+									where: { memberCanRead: true },
 								},
 							},
 						},

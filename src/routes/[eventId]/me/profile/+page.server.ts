@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { prisma, tryOrFail } from '$lib/server'
+import { isLeaderInEvent, isOwner, prisma, tryOrFail } from '$lib/server'
 
 export const load = async ({ locals, params: { eventId } }) => {
 	const session = await locals.auth.validate()
@@ -16,7 +16,7 @@ export const load = async ({ locals, params: { eventId } }) => {
 				event: {
 					include: {
 						memberFields: {
-							where: { memberCanWrite: true },
+							where: { memberCanRead: true },
 						},
 					},
 				},
@@ -36,6 +36,8 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
+		const _isLeaderInEvent = await isLeaderInEvent(eventId, locals)
+
 		return tryOrFail(async () => {
 			const formData = Object.fromEntries(await request.formData())
 			const data: Record<string, string> = Object.entries(formData)
@@ -48,20 +50,29 @@ export const actions = {
 					{}
 				)
 
-			const fields = await prisma.field.findMany({
-				where: { eventId, name: { in: Object.keys(data) } },
-			})
+			if (data.memberId && !_isLeaderInEvent) throw error(401)
+			const memberId =
+				data.memberId ||
+				(
+					await prisma.member.findUniqueOrThrow({
+						where: { userId_eventId: { eventId, userId: session.user.id } },
+					})
+				).id
 
-			const member = await prisma.member.findUniqueOrThrow({
-				where: { userId_eventId: { eventId, userId: session.user.id } },
+			const fields = await prisma.field.findMany({
+				where: {
+					eventId,
+					name: { in: Object.keys(data) },
+					...(!_isLeaderInEvent && { memberCanWrite: true }),
+				},
 			})
 
 			await prisma.member.update({
-				where: { id: member.id },
+				where: { id: memberId },
 				data: {
 					profile: {
 						upsert: fields.map(({ name, id }) => ({
-							where: { fieldId_memberId: { fieldId: id, memberId: member.id } },
+							where: { fieldId_memberId: { fieldId: id, memberId: memberId } },
 							create: { value: data[name], fieldId: id },
 							update: { value: data[name] },
 						})),

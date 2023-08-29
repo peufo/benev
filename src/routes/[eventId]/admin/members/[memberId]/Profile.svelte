@@ -110,4 +110,6 @@
 			</div>
 		</div>
 	</div>
+
+	<slot />
 </Card>
