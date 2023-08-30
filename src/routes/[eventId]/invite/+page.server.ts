@@ -1,6 +1,7 @@
 import { error, redirect } from '@sveltejs/kit'
 import { memberShema } from '$lib/form'
-import { parseFormData, prisma, tryOrFail } from '$lib/server'
+import { parseFormData, prisma, tryOrFail, sendEmailTemplate } from '$lib/server'
+import { EmailNewMember, EmailNewMemberNotification } from '$lib/email'
 
 export const load = async ({ locals, params }) => {
 	const session = await locals.auth.validate()
@@ -16,18 +17,39 @@ export const actions = {
 		if (err) return err
 
 		const isValidedByUser = session.user.id === data.userId
-		// TODO (invit_member ?) const isValidedByEvent = false
-		// TODO: send mail to owner (optional)
-		// TODO: send mail to new member
 
-		return tryOrFail(() =>
-			prisma.member.create({
+		return tryOrFail(async () => {
+			const member = await prisma.member.create({
 				data: {
 					...data,
 					eventId: params.eventId,
 					isValidedByUser,
 				},
+				include: {
+					user: true,
+					event: {
+						include: {
+							owner: true,
+							memberFields: true,
+						},
+					},
+				},
 			})
-		)
+
+			await Promise.all([
+				sendEmailTemplate(EmailNewMember, {
+					from: member.event.name,
+					to: member.user.email,
+					subject: `${member.event.name} - Nouveau membre`,
+					props: { member },
+				}),
+				sendEmailTemplate(EmailNewMemberNotification, {
+					from: member.event.name,
+					to: member.event.owner.email,
+					subject: `${member.event.name} - Nouveau membre`,
+					props: { member },
+				}),
+			])
+		})
 	},
 }

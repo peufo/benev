@@ -1,19 +1,16 @@
 <script lang="ts">
-	import { dev } from '$app/environment'
 	import type { Subscribe, Period, Team, User, Event } from '@prisma/client'
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
 	import { formatRange } from '$lib/formatRange'
+	import { domain } from '.'
 
 	export let subscribe: Subscribe & {
 		member: { user: User }
 		period: Period & { team: Team & { event: Event } }
 	}
-	const domain = dev ? 'http://localhost:5173' : 'https://benev.ch'
 </script>
 
 <EmailLayout title={subscribe.period.team.event.name} subtitle="Nouvelle inscription">
-
-	
 	<p>
 		Bonne nouvelle ! <br />
 		<b>{subscribe.member.user.firstName} {subscribe.member.user.lastName}</b>
@@ -22,7 +19,7 @@
 	</p>
 
 	<b>{formatRange(subscribe.period)}</b>
-	
+
 	<p>
 		Verifie
 		<a
@@ -41,5 +38,4 @@
 		</a>
 		si tout te semble ok.
 	</p>
-	
 </EmailLayout>

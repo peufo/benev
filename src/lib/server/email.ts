@@ -21,9 +21,13 @@ transporter.verify(function (err) {
 })
 
 type MailOption = {
+	/** Just expeditor name (whitout mail) */
 	from?: string
+	/** Email(s) of destinators */
 	to: string | string[]
+	/** Email title */
 	subject: string
+	/** Email content */
 	html: string
 }
 

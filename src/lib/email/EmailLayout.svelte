@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { domain } from '.'
 	export let title = ''
 	export let subtitle = ''
 
@@ -59,7 +60,7 @@
 												<td
 													style="font-size: 14px;padding-bottom:8px;padding-left:4px;padding-right:4px;padding-top:8px"
 												>
-												  <slot />
+													<slot />
 												</td>
 											</tr>
 										</tbody>
@@ -69,23 +70,19 @@
 
 									<p style="color:#666666;font-size:12px;line-height:24px">
 										Gestion des bénévole par
-                    <a
-											href="https://benev.ch"
-											style="color:#067df7; text-decoration:none"
-											target="_blank"
-										>
+										<a href={domain} style="color:#067df7; text-decoration:none" target="_blank">
 											benev.ch
 										</a>
 									</p>
 
 									<p style="color:#666666;font-size:12px;line-height:24px; padding-bottom: 20px;">
-                    Définis tes préfèrences concernant les notifications par mails
+										Définis tes préfèrences concernant les notifications par mails
 										<a
-											href="https://benev.ch/me"
+											href="{domain}/me"
 											style="color:#067df7; text-decoration:none"
 											target="_blank"
 										>
-                      sur ton profil
+											sur ton profil
 										</a>
 									</p>
 								</div>

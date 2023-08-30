@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { dev } from '$app/environment'
 	import type { Subscribe, Period, Team, Event } from '@prisma/client'
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
 	import { formatRange } from '$lib/formatRange'
+	import { domain } from '.'
 
 	export let subscribe: Subscribe & {
 		period: Period & { team: Team & { event: Event } }
 	}
-	const domain = dev ? 'http://localhost:5173' : 'https://benev.ch'
 </script>
 
 <EmailLayout

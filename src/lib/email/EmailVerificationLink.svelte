@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { dev } from '$app/environment'
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
+	import { domain } from '.'
 
 	export let isNewUser = false
 	export let tokenId: string
-	const domain = dev ? 'http://localhost:5173' : 'https://benev.ch'
 </script>
 
 <EmailLayout title={isNewUser ? 'Bienvenue sur benev.ch' : 'Verification de ton adresse mail'}>

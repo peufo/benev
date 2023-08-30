@@ -10,7 +10,7 @@
 </script>
 
 <Card>
-	<h2 slot="title">
+	<h2 slot="title" id="member-profile-{event.id}">
 		Mon profil
 		<a href="/{event.id}" class="link link-hover">
 			{event.name}
