@@ -6,6 +6,7 @@
 	import { eventPath } from '$lib/store'
 	import { Card, Placeholder } from '$lib/material'
 	import { rowLink } from '$lib/action'
+	import { page } from '$app/stores'
 
 	export let events: (Event & {
 		teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -88,11 +89,16 @@
 			{/if}
 		</Card>
 	{:else}
-		<Placeholder>
-			<span>Aucune inscription pour le moment</span>
-			<br />
-			<br />
-			<a href="/" class="btn"> Trouve un évènement </a>
-		</Placeholder>
+		<Card>
+			<Placeholder>
+				<span>Aucune inscription pour le moment</span>
+				<br />
+				{#if $page.params.eventId}
+					<a href="/{$page.params.eventId}/teams" class="btn"> Trouve un secteurs </a>
+				{:else}
+					<a href="/" class="btn"> Trouve un évènement </a>
+				{/if}
+			</Placeholder>
+		</Card>
 	{/each}
 </div>
