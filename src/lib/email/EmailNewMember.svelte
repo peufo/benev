@@ -15,7 +15,7 @@
 	{#if member.event.memberFields.length}
 		<p>
 			Avant d'accepter tes inscriptions à des période de travails, nous avons besoins de quelques
-			informations supplémentaire te concernant. Tu peux les renseigner
+			informations supplémentaire te concernant. Si ce n'est pas déjà fait, tu peux les renseigner
 			<a href="{domain}/{member.event.id}/me/profile#member-profile-{member.event.id}">
 				sur ton profil
 			</a>.
