@@ -4,7 +4,7 @@
 
 <h2>Salut 👋</h2>
 <p>
-	Bienvenue dans l'espace réservé à ton évènement.<br>
+	Bienvenue dans l'espace réservé à ton évènement.<br />
 	Voici les étapes clés pour le configurer :
 </p>
 
@@ -36,7 +36,7 @@
 	</p>
 	<p>
 		Tu peux aussi directement les inviter à devenir membre 👉 <b>
-			<a href="benev.ch{$eventPath}/invite">https://benev.ch{$eventPath}/invite</a>
+			<a href="https://benev.ch{$eventPath}/invite">https://benev.ch{$eventPath}/invite</a>
 		</b>
 	</p>
 </section>
