@@ -17,5 +17,5 @@
 		</a>
 	</h2>
 
-	<MemberProfileForm {event} {fieldsValue} {memberId} />
+	<MemberProfileForm {event} {fieldsValue} {memberId} on:success />
 </Card>

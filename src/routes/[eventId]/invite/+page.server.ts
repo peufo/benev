@@ -3,9 +3,8 @@ import { memberShema } from '$lib/form'
 import { parseFormData, prisma, tryOrFail, sendEmailTemplate } from '$lib/server'
 import { EmailNewMember, EmailNewMemberNotification } from '$lib/email'
 
-export const load = async ({ locals, params }) => {
-	const session = await locals.auth.validate()
-	if (!session) throw redirect(301, `/${params.eventId}/me?callback=/${params.eventId}/invite`)
+export const load = async ({ params }) => {
+	throw redirect(301, `/${params.eventId}/me/profile`)
 }
 
 export const actions = {

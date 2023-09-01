@@ -42,6 +42,8 @@ export async function isLeader(teamId: string, locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) return false
 
+	if (await isRoot(locals)) return true
+
 	const team = await prisma.team.findUniqueOrThrow({
 		where: { id: teamId },
 		include: {

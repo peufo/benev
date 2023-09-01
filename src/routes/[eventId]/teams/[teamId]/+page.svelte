@@ -12,11 +12,13 @@
 	import Subscribes from './Subscribes.svelte'
 	import Leaders from './Leaders.svelte'
 	import MemberForm from '$lib/MemberForm.svelte'
+	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 
 	export let data
 
 	let subscribeDialog: HTMLDialogElement
 	let memberDialog: HTMLDialogElement
+	let memberProfilDialog: HTMLDialogElement
 	let updateDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
 	let periodUpdatForm: PeriodForm
@@ -164,12 +166,29 @@
 			userId={data.user.id}
 			event={data.event}
 			on:close={() => memberDialog.close()}
-			on:success={async () => {
+			on:success={() => {
 				memberDialog.close()
-				subscribeDialog.showModal()
+				if (data.event.memberFields.length) memberProfilDialog.showModal()
+				else subscribeDialog.showModal()
 			}}
 		/>
 	{/if}
+</dialog>
+
+<dialog class="modal" bind:this={memberProfilDialog}>
+	<div class="modal-box">
+		<h3 class="card-title mb-2">Complète ton profile {data.event.name}</h3>
+		<MemberProfileForm
+			event={data.event}
+			fieldsValue={[]}
+			class="sm:grid-cols-1 md:grid-cols-1"
+			writeOnly
+			on:success={() => {
+				memberProfilDialog.close()
+				subscribeDialog.showModal()
+			}}
+		/>
+	</div>
 </dialog>
 
 <dialog class="modal" bind:this={subscribeDialog}>

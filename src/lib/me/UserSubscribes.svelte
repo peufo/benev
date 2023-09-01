@@ -94,7 +94,7 @@
 				<span>Aucune inscription pour le moment</span>
 				<br />
 				{#if $page.params.eventId}
-					<a href="/{$page.params.eventId}/teams" class="btn"> Trouve un secteurs </a>
+					<a href="/{$page.params.eventId}/teams" class="btn"> Voir les secteurs </a>
 				{:else}
 					<a href="/" class="btn"> Trouve un évènement </a>
 				{/if}

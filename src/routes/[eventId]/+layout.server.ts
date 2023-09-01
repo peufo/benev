@@ -17,7 +17,14 @@ export const load = async ({ params, locals, depends }) => {
 				: null,
 			isOwner: await isOwner(eventId, locals),
 			isLeaderInEvent: await isLeaderInEvent(eventId, locals),
-			event: await prisma.event.findUniqueOrThrow({ where: { id: eventId } }),
+			event: await prisma.event.findUniqueOrThrow({
+				where: { id: eventId },
+				include: {
+					memberFields: {
+						where: { memberCanRead: true },
+					},
+				},
+			}),
 			pageIndex: await prisma.page.findFirstOrThrow({
 				where: { eventId, isIndex: true },
 				select,

@@ -10,10 +10,12 @@
 	export let userId: string
 	let klass = ''
 	export { klass as class }
+	export let noCancelButton = false
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
 	const form = useForm({
+		successMessage: 'Benvenue',
 		successCallback: () => dispatch('success'),
 	})
 </script>
@@ -34,8 +36,9 @@
 	</p>
 
 	<div class="flex gap-2 justify-end">
-		<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('close')}> Non </button>
-
+		{#if !noCancelButton}
+			<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('close')}> Non </button>
+		{/if}
 		<button class="btn">Oui je le veux !</button>
 	</div>
 </form>
