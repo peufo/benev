@@ -24,7 +24,7 @@ export const actions = {
 		} catch {
 			throw error(401, 'Invalid token')
 		} finally {
-			throw redirect(301, '/me')
+			throw redirect(302, '/me')
 		}
 	},
 }

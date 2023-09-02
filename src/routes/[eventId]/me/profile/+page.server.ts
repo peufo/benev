@@ -1,11 +1,9 @@
-import { error, redirect } from '@sveltejs/kit'
-import { isLeaderInEvent, prisma, tryOrFail } from '$lib/server'
+import { error } from '@sveltejs/kit'
+import { getUserIdOrRedirect, isLeaderInEvent, prisma, tryOrFail } from '$lib/server'
 
-export const load = async ({ locals, params: { eventId } }) => {
-	const session = await locals.auth.validate()
-	if (!session) throw redirect(301, '/me')
+export const load = async ({ url, locals, params: { eventId } }) => {
+	const userId = await getUserIdOrRedirect(url, locals)
 
-	const { userId } = session.user
 	return {
 		user: await prisma.user.findUniqueOrThrow({
 			where: { id: userId },

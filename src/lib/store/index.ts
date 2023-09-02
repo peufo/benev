@@ -1,7 +1,7 @@
 import { derived } from 'svelte/store'
 import { page } from '$app/stores'
 
-export const eventPath = derived(page, ({ params }) => `/${params.eventId}`)
+export const eventPath = derived(page, ({ params }) => (params.eventId ? `/${params.eventId}` : ''))
 export const urlParam = derived(page, ({ url }) => {
 	return {
 		/** Return new url with new params */

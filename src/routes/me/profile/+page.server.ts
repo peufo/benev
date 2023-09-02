@@ -1,11 +1,10 @@
-import { error, redirect } from '@sveltejs/kit'
-import { parseFormData, prisma, tryOrFail } from '$lib/server'
+import { error } from '@sveltejs/kit'
+import { getUserIdOrRedirect, parseFormData, prisma, tryOrFail } from '$lib/server'
 import { userShema } from '$lib/form'
 
-export const load = async ({ locals }) => {
-	const session = await locals.auth.validate()
-	if (!session) throw redirect(300, '/me')
-	const { userId } = session.user
+export const load = async ({ url, locals }) => {
+	const userId = await getUserIdOrRedirect(url, locals)
+
 	return {
 		user: await prisma.user.findUniqueOrThrow({
 			where: { id: userId },

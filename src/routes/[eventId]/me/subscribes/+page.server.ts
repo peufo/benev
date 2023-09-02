@@ -1,8 +1,7 @@
-import { redirect } from '@sveltejs/kit'
 import { getSubscribesData } from '$lib/me/userSubscribes'
+import { getUserIdOrRedirect } from '$lib/server/permission.js'
 
-export const load = async ({ locals }) => {
-	const session = await locals.auth.validate()
-	if (!session) throw redirect(300, '/me')
-	return await getSubscribesData(session.user.userId)
+export const load = async ({ url, locals }) => {
+	const userId = await getUserIdOrRedirect(url, locals)
+	return await getSubscribesData(userId)
 }

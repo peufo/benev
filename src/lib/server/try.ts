@@ -20,8 +20,8 @@ export async function tryOrFail<T = unknown>(
 		return fail(400, { message })
 	} finally {
 		if (isSuccess && redirectTo) {
-			if (typeof redirectTo === 'string') throw redirect(301, redirectTo)
-			else if (result) throw redirect(301, redirectTo(result))
+			if (typeof redirectTo === 'string') throw redirect(302, redirectTo)
+			else if (result) throw redirect(302, redirectTo(result))
 			console.warn('No result can be provide in redirectTo() function. Please use a simple string.')
 		}
 	}
@@ -35,6 +35,6 @@ export async function tryOrRedirect<T = unknown>(
 		return await fn()
 	} catch (error: any) {
 		console.error(error)
-		throw redirect(301, redirectTo)
+		throw redirect(302, redirectTo)
 	}
 }

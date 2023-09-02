@@ -1,7 +1,10 @@
 import { auth } from '$lib/server'
-import type { Handle } from '@sveltejs/kit'
+import { redirect, type Handle } from '@sveltejs/kit'
+import { sequence } from '@sveltejs/kit/hooks'
 
-export const handle: Handle = async ({ event, resolve }) => {
+const authentication: Handle = async ({ event, resolve }) => {
 	event.locals.auth = auth.handleRequest(event)
 	return await resolve(event)
 }
+
+export const handle = sequence(authentication)

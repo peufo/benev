@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
+	import { eventPath } from '$lib/store'
 	import { mdiAccountOutline } from '@mdi/js'
 
 	const tabs = [
@@ -10,7 +11,6 @@
 
 	export let userName = ''
 	export let pathPrefix = ''
-
 </script>
 
 {#if userName}
@@ -23,7 +23,10 @@
 		</label>
 
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<ul tabindex="0" class="dropdown-content z-10 menu menu-lg shadow-lg bg-base-100 rounded-box w-56">
+		<ul
+			tabindex="0"
+			class="dropdown-content z-10 menu menu-lg shadow-lg bg-base-100 rounded-box w-56"
+		>
 			{#each tabs as { path, label }}
 				{@const href = `${pathPrefix}/me/${path}`}
 				<li>
@@ -41,7 +44,7 @@
 		</ul>
 	</div>
 {:else}
-	<a class="btn-ghost rounded-btn btn btn-square" href="/me">
+	<a class="btn-ghost rounded-btn btn btn-square" href={$eventPath ? `${$eventPath}/me` : `/me`}>
 		<Icon path={mdiAccountOutline} />
 	</a>
 {/if}
