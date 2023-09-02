@@ -2,7 +2,6 @@ import { isOwner, isLeaderInEvent, prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
 export const load = async ({ params, locals, depends }) => {
-	console.log('PROUT')
 	depends('event')
 	const session = await locals.auth.validate()
 	const { eventId } = params
