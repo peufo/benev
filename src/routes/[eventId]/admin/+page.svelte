@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { eventPath } from '$lib/store'
-	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
-	import { InputCheckboxsMenu, Card, InputRadioButtons } from '$lib/material'
+	import { Card } from '$lib/material'
 	import Members from './Members.svelte'
 
 	export let data
@@ -28,32 +26,8 @@
 		.filter(Boolean)
 </script>
 
-<div class="grid md:grid-cols-2 gap-4">
-	<Card>
-		<span slot="title">Filtres</span>
-
-		<div class="flex gap-4 flex-wrap">
-			<PeriodPickerButton action="{$eventPath}/admin" />
-			<InputCheckboxsMenu
-				key="teams"
-				label="Secteur sélectioné"
-				labelPlurial="Secteurs sélectionés"
-				labelDefault="Tous les secteurs"
-				options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
-				enhanceDisabled
-			/>
-
-			<InputRadioButtons
-				key="member_type"
-				options={{
-					volunteers: 'Bénévoles',
-					leaders: 'Responsables',
-					all: 'Tous',
-				}}
-				bindWithParams
-			/>
-		</div>
-	</Card>
+<div class="flex flex-col gap-4">
+	<Members members={data.members} fields={data.fields} teams={data.teams} />
 
 	<Card>
 		<span slot="title">Synthèse</span>
@@ -85,6 +59,4 @@
 			</div>
 		</div>
 	</Card>
-
-	<Members members={data.members} fields={data.fields} />
 </div>

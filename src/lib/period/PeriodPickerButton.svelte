@@ -56,12 +56,12 @@
 
 <ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit} dropdownClass="max-h-none">
 	<div slot="btn" class="join">
-		<button class="btn join-item shrink flex-nowrap" on:click={() => menu.setOpen()}>
+		<button class="btn btn-sm join-item shrink flex-nowrap" on:click={() => menu.setOpen()}>
 			<Icon path={mdiCalendarMonthOutline} class="opacity-60" />
 			{getLabel(period, time)}
 		</button>
 		{#if isValidPeriod}
-			<button class="btn btn-square join-item" on:click|preventDefault={handleReset}>
+			<button class="btn btn-sm btn-square join-item" on:click|preventDefault={handleReset}>
 				<Icon path={mdiClose} class="fill-error" />
 			</button>
 		{/if}

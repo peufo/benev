@@ -5,6 +5,7 @@
 	import { Field, FieldValue, Member, Period, Subscribe, Team, User } from '@prisma/client'
 	import { Card, InputCheckboxsMenu, Placeholder } from '$lib/material'
 	import Contact from '$lib/Contact.svelte'
+	import MembersFilter from './MembersFilter.svelte'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 
@@ -16,8 +17,8 @@
 	}
 
 	export let members: _Member[]
-
 	export let fields: Field[]
+	export let teams: { id: string; name: string }[]
 
 	const toHour = (ms: number) => Math.round(ms / (1000 * 60 * 60))
 	let workTimes: Record<string, number> = {}
@@ -69,14 +70,16 @@
 </script>
 
 <Card class="md:col-span-2 overflow-x-auto">
-	<span slot="title">Bénévoles</span>
+	<span slot="title">Membres</span>
 
-	<div slot="action">
+	<div slot="action" class="flex gap-2 flex-wrap">
+		<MembersFilter {teams} />
+
 		<InputCheckboxsMenu
 			key="columns"
 			bind:value={selectedColumns}
-			label="Champ visible"
-			labelPlurial="Champs visibles"
+			label="Colonne"
+			labelPlurial="Colonnes"
 			options={columns}
 			right
 			enhanceDisabled
