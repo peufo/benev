@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Plan } from '$lib/plan'
+
+	export let data
 </script>
 
-<Plan />
+<Plan teams={data.teams} />
