@@ -8,6 +8,7 @@
 	export let label = 'No label'
 	export let buttonClass = ''
 	export let right = false
+	export let dropdownClass = ''
 
 	export const setOpen = () => {
 		open = true
@@ -39,7 +40,7 @@
 
 	{#if open}
 		<div
-			class="card bg-base-100 absolute top-10 z-10 shadow-lg bordered max-h-64 overflow-y-auto"
+			class="card bg-base-100 absolute top-10 z-10 shadow-lg bordered max-h-64 overflow-y-auto {dropdownClass}"
 			class:right-0={right}
 			transition:fly|local={{ y: 30, duration: 200 }}
 		>

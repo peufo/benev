@@ -54,7 +54,7 @@
 	}
 </script>
 
-<ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit}>
+<ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit} dropdownClass="max-h-none">
 	<div slot="btn" class="join">
 		<button class="btn join-item shrink flex-nowrap" on:click={() => menu.setOpen()}>
 			<Icon path={mdiCalendarMonthOutline} class="opacity-60" />
