@@ -2,6 +2,7 @@
 	import {
 		mdiAccountGroupOutline,
 		mdiApplicationCogOutline,
+		mdiChartGantt,
 		mdiFileDocumentMultipleOutline,
 	} from '@mdi/js'
 	import { page } from '$app/stores'
@@ -11,9 +12,15 @@
 	const tabs = [
 		{
 			path: '/admin',
-			label: 'Les bénévoles',
+			label: 'Les membres',
 			icon: mdiAccountGroupOutline,
 			reg: /\/admin(\/members.*)?$/,
+		},
+		{
+			path: '/admin/plan',
+			label: 'planification',
+			icon: mdiChartGantt,
+			reg: /\/admin\/plan/,
 		},
 		{
 			path: '/admin/config',
@@ -35,16 +42,16 @@
 </svelte:head>
 
 <div class="flex flex-col gap-4 max-w-4xl m-auto">
-	<div class="tabs tabs-boxed bg-base-100 grid grid-cols-1 sm:grid-cols-3 shadow-lg">
+	<div class="tabs tabs-boxed bg-base-100 grid grid-cols-1 md:grid-cols-4 shadow-lg">
 		{#each tabs as { path, label, reg, icon }}
 			{@const href = `${$eventPath}${path}`}
 			{@const active = !!$page.url.pathname.match(reg)}
 			<a
-				class="tab tab-lg flex-nowrap grow"
+				class="tab tab-lg flex-nowrap grow justify-start md:justify-center"
 				{href}
 				class:tab-active={active}
 			>
-				<Icon path={icon} class="mr-3 opacity-70" size={22} {active}/>
+				<Icon path={icon} class="mr-3 opacity-70" size={22} {active} />
 				<span>{label}</span>
 			</a>
 		{/each}
