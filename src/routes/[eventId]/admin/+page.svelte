@@ -27,8 +27,6 @@
 </script>
 
 <div class="flex flex-col gap-4">
-	<Members members={data.members} fields={data.fields} teams={data.teams} />
-
 	<Card>
 		<span slot="title">Synthèse</span>
 
@@ -59,4 +57,6 @@
 			</div>
 		</div>
 	</Card>
+
+	<Members members={data.members} fields={data.fields} teams={data.teams} />
 </div>
