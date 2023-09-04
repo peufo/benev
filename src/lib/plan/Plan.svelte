@@ -9,10 +9,14 @@
 
 	let rowHeight = 40
 
-	let start = dayjs().startOf('day')
+	const periods = teams
+		.map(({ periods }) => periods)
+		.flat()
+		.sort()
+
 	const range = {
-		start,
-		end: start.add(10, 'day'),
+		start: dayjs(periods[0]?.start).startOf('day'),
+		end: dayjs(periods.at(-1)?.start).endOf('day'),
 	}
 
 	const days: Dayjs[] = []
@@ -22,17 +26,14 @@
 </script>
 
 <Card>
-	<input type="number" bind:value={rowHeight} />
+	<input type="number" class="input" bind:value={rowHeight} />
 
 	<div class="max-h-[615px] overflow-auto table-pin-cols snap-x scroll-pl-16 bordered">
 		<div class="flex min-w-max pr-2">
 			<div class="sticky left-0 z-10 bg-base-100">
 				{#each days as day}
 					<div class="w-16">
-						<div
-							class="sticky top-0 bg-base-100 pr-2 border-b translate-y-px"
-							style:height="{rowHeight}px"
-						>
+						<div class="sticky top-0 bg-base-100 pr-2 border-b" style:height="{rowHeight}px">
 							<div class="text-sm font-medium">{day.format('ddd D')}</div>
 							<div class="text-xs">{day.format('MMMM')}</div>
 						</div>
