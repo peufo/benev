@@ -3,6 +3,7 @@
 	import { Period, Subscribe, Team } from '@prisma/client'
 	import dayjs, { type Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
+	import PeriodCard from './PeriodCard.svelte'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -10,18 +11,18 @@
 	let rowHeight = 40
 
 	const periods = teams
-		.map(({ periods }) => periods)
-		.flat()
+		.map(({ periods }) => periods.map((p) => [p.start, p.end]))
+		.flat(2)
 		.sort()
 
 	const range = {
-		start: dayjs(periods[0]?.start).startOf('day'),
-		end: dayjs(periods.at(-1)?.start).endOf('day'),
+		start: dayjs(periods[0]).startOf('day'),
+		end: dayjs(periods.at(-1)).endOf('day'),
 	}
 
 	const days: Dayjs[] = []
-	for (let time = range.start; time.isBefore(range.end); time = time.add(1, 'day')) {
-		days.push(time)
+	for (let day = range.start; day.isBefore(range.end); day = day.add(1, 'day')) {
+		days.push(day)
 	}
 </script>
 
@@ -30,7 +31,7 @@
 
 	<div class="max-h-[615px] overflow-auto table-pin-cols snap-x scroll-pl-16 bordered">
 		<div class="flex min-w-max pr-2">
-			<div class="sticky left-0 z-10 bg-base-100">
+			<div class="sticky left-0 z-20 bg-base-100">
 				{#each days as day}
 					<div class="w-16">
 						<div class="sticky top-0 bg-base-100 pr-2 border-b" style:height="{rowHeight}px">
@@ -60,8 +61,8 @@
 			</div>
 
 			{#each teams as team}
-				<div class="snap-start pl-2">
-					<div class="w-52 sticky top-0 pb-2" style:height="{rowHeight}px">
+				<div class="snap-start pl-2 relative">
+					<div class="w-52 sticky top-0 pb-2 z-10" style:height="{rowHeight}px">
 						<div class="flex items-center rounded bg-base-200 h-full px-2">
 							<span class="overflow-hidden whitespace-nowrap text-ellipsis font-medium">
 								{team.name}
@@ -70,11 +71,7 @@
 					</div>
 
 					{#each team.periods as period}
-						<div class="bg-base-100">
-							<div class="border rounded-md p-2">
-								{period.subscribes.length} / {period.maxSubscribe}
-							</div>
-						</div>
+						<PeriodCard {period} origin={range.start} hourHeight={rowHeight} />
 					{/each}
 				</div>
 			{/each}

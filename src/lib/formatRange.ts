@@ -10,6 +10,10 @@ const formater = new Intl.DateTimeFormat('fr-ch', {
 
 type Range = { start: Date; end: Date }
 
-export const formatRange = ({ start, end }: Range) => {
-	return formater.formatRange(start, end)
-}
+export const formatRange = ({ start, end }: Range) => formater.formatRange(start, end)
+
+const formaterHour = new Intl.DateTimeFormat('fr-ch', {
+	hour: 'numeric',
+	minute: 'numeric',
+})
+export const formatRangeHour = ({ start, end }: Range) => formaterHour.formatRange(start, end)
