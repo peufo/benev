@@ -81,7 +81,7 @@
 
 			{#each teams as team}
 				<div class="snap-start pl-2 relative">
-					<div class="w-36 sticky top-0 pb-2 z-10" style:height="{hourHeight}px">
+					<div class="w-28 sticky top-0 pb-2 z-10" style:height="{hourHeight}px">
 						<div
 							class="relative flex items-center rounded bg-base-200 h-full px-2 outline outline-base-100"
 						>
