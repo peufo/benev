@@ -7,6 +7,7 @@
 	import Profile from './Profile.svelte'
 
 	export let data
+	console.log(data)
 </script>
 
 <div class="grid gap-6">

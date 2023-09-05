@@ -26,7 +26,7 @@ export async function getSubscribesData(userId: string) {
 					include: {
 						periods: {
 							where: { subscribes: { some: { member: { userId } } } },
-							include: { subscribes: true },
+							include: { subscribes: { where: { member: { userId } } } },
 							orderBy: { start: 'asc' },
 						},
 					},
