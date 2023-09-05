@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 const formater = new Intl.DateTimeFormat('fr-ch', {
 	weekday: 'long',
 	day: 'numeric',
@@ -12,8 +14,5 @@ type Range = { start: Date; end: Date }
 
 export const formatRange = ({ start, end }: Range) => formater.formatRange(start, end)
 
-const formaterHour = new Intl.DateTimeFormat('fr-ch', {
-	hour: 'numeric',
-	minute: 'numeric',
-})
-export const formatRangeHour = ({ start, end }: Range) => formaterHour.formatRange(start, end)
+export const formatRangeHour = ({ start, end }: Range) =>
+	[dayjs(start).format('HH:mm'), dayjs(end).format('HH:mm')].join(' – ')

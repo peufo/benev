@@ -4,6 +4,7 @@
 	import dayjs, { type Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	import PeriodCard from './PeriodCard.svelte'
+	import { eventPath } from '$lib/store'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -65,8 +66,9 @@
 
 			{#each teams as team}
 				<div class="snap-start pl-2 relative z-20">
-					<div class="w-52 sticky top-0 pb-2 z-10" style:height="{hourHeight}px">
-						<div class="flex items-center rounded bg-base-200 h-full px-2">
+					<div class="w-36 sticky top-0 pb-2 z-10" style:height="{hourHeight}px">
+						<div class="relative flex items-center rounded bg-base-200 h-full px-2 outline outline-base-100">
+							<a href="{$eventPath}/teams/{team.id}" class="absolute inset-0">{" "}</a>
 							<span class="overflow-hidden whitespace-nowrap text-ellipsis font-medium">
 								{team.name}
 							</span>
@@ -94,7 +96,7 @@
 		left: 100%;
 		border-bottom-width: 1px;
 	}
-	div .scale:first-child::after {
+	.scale:first-child::after {
 		top: -1px;
 		height: calc(100% + 1px);
 		border-top-width: 1px;

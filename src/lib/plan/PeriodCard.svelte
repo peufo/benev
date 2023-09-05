@@ -21,7 +21,17 @@
 	style:top="{top}px"
 	style:height="{height}px"
 >
-	{formatRangeHour(period)}
+<span class="text-xs font-semibold">{formatRangeHour(period)}</span>
+	<div class="whitespace-normal sm:whitespace-nowrap">
+		<progress
+			class="progress w-20"
+			value={period.subscribes.length}
+			max={period.maxSubscribe}
+		/>
 
-	{period.subscribes.length} / {period.maxSubscribe}
+		<span class="text-xs badge">
+			{period.subscribes.length}/{period.maxSubscribe}
+		</span>
+	</div>
+	
 </div>
