@@ -18,7 +18,7 @@
 		},
 		{
 			path: '/admin/plan',
-			label: 'planification',
+			label: 'Planification',
 			icon: mdiChartGantt,
 			reg: /\/admin\/plan/,
 		},
