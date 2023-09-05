@@ -16,8 +16,8 @@
 		.sort()
 
 	const range = {
-		start: dayjs(periods.at(-1)).startOf('day'),
-		end: dayjs(periods[0]).endOf('day'),
+		start: dayjs(periods[0]).startOf('day'),
+		end: dayjs(periods.at(-1)).endOf('day'),
 	}
 
 	console.log({ range, periods })
