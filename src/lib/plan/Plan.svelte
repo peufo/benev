@@ -11,7 +11,7 @@
 	let hourHeight = 40
 
 	const periods = teams
-		.map(({ periods }) => periods.map((p) => [p.start, p.end]))
+		.map(({ periods }) => periods.map((p) => [p.start.getTime(), p.end.getTime()]))
 		.flat(2)
 		.sort()
 
@@ -20,7 +20,7 @@
 		end: dayjs(periods[0]).endOf('day'),
 	}
 
-	console.log({ range })
+	console.log({ range, periods })
 
 	const days: Dayjs[] = []
 	for (let day = range.start; day.isBefore(range.end); day = day.add(1, 'day')) {
