@@ -4,7 +4,7 @@ import { error, redirect } from '@sveltejs/kit'
 import z from 'zod'
 
 export const actions = {
-	default: async ({ params, locals, request }) => {
+	default: async ({ params, locals, request, url }) => {
 		const { err, data } = await parseFormData(request, z.object({ password: z.string().min(8) }))
 		if (err) return err
 

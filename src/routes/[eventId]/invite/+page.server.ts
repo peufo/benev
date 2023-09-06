@@ -18,8 +18,8 @@ export const load = async ({ params }) => {
 }
 
 export const actions = {
-	new_invite: async ({ request, locals, params }) => {
-		const session = await isLeaderInEventOrThrow(params.eventId, locals)
+	new_invite: async ({ request, locals, params: { eventId } }) => {
+		const session = await isLeaderInEventOrThrow(eventId, locals)
 
 		const { err, data } = await parseFormData(
 			request,
@@ -46,11 +46,17 @@ export const actions = {
 					attributes: { ...data, isEmailVerified: false },
 				})
 			}
+			const userId = user.id
+
+			const member = await prisma.member.findFirst({
+				where: { userId, eventId },
+			})
+			if (member) throw new Error('Member already exists')
 
 			const newMember = await prisma.member.create({
 				data: {
-					userId: user.id,
-					eventId: params.eventId,
+					userId,
+					eventId,
 					isValidedByEvent: true,
 				},
 				include: {

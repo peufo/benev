@@ -27,7 +27,11 @@
 	})
 </script>
 
-<i bind:this={icon} class="grid place-content-center {active ? 'fill-base-100' : 'fill-base-content'} {klass}" {style}>
+<i
+	bind:this={icon}
+	class="grid place-content-center {active ? 'fill-base-100' : 'fill-base-content'} {klass}"
+	{style}
+>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={size}
