@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	const links = ['new_subscribe', 'verification_link', 'reset_password', 'new_member']
+	const links = ['new_subscribe', 'verification_link', 'reset_password', 'invite']
 </script>
 
 <div class="flex gap-4">

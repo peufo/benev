@@ -21,7 +21,7 @@
 </script>
 
 <form
-	action="{$eventPath}/invite?/new_member"
+	action="{$eventPath}/invite?/accept_invite"
 	method="post"
 	class="modal-box flex flex-col gap-4 {klass}"
 	use:enhance={form.submit}

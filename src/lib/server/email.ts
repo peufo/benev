@@ -11,7 +11,7 @@ export const transporter = nodemailer.createTransport({
 	},
 })
 
-transporter.verify(function (err) {
+transporter.verify((err: unknown) => {
 	if (err) {
 		console.log('Mail config error')
 		console.error(err)
@@ -38,7 +38,7 @@ export const sendEmail = async ({ from, ...mail }: MailOption) => {
 				from: `${from || 'Benev'} <${SMTP_USER}>`,
 				...mail,
 			},
-			(err, info) => {
+			(err: unknown, info: unknown) => {
 				if (err) console.error(err)
 				resolve(info)
 			}

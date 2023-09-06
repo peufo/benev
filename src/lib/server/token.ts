@@ -2,11 +2,11 @@ import { isWithinExpiration, generateRandomString } from 'lucia/utils'
 import type { TokenType } from '@prisma/client'
 import { prisma } from '.'
 
-export const generateToken = async (tokenType: TokenType, userId: string) => {
+export const generateToken = async (tokenType: TokenType, userId: string, expires?: number) => {
 	const HOURE = 1000 * 60 * 60
 
 	const tokens = await prisma.token.findMany({ where: { userId, type: tokenType } })
-	const reusableToken = tokens.find(({ expires }) => isWithinExpiration(Number(expires) - HOURE))
+	const reusableToken = tokens.find((token) => isWithinExpiration(Number(token.expires) - HOURE))
 	if (reusableToken) return reusableToken.id
 
 	const tokenId = generateRandomString(63)
@@ -14,7 +14,7 @@ export const generateToken = async (tokenType: TokenType, userId: string) => {
 		data: {
 			id: tokenId,
 			type: tokenType,
-			expires: new Date().getTime() + 2 * HOURE,
+			expires: expires || new Date().getTime() + 2 * HOURE,
 			userId,
 		},
 	})

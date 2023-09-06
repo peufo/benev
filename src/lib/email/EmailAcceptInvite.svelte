@@ -8,8 +8,9 @@
 
 <EmailLayout title={member.event.name} subtitle="Bienvenue dans notre équipe bénévole">
 	<p>
-		{member.user.firstName}, tu fais désormais parti des notres. Cela implique que les responsables
-		peuvent accèder aux informations de ton profil.
+		Salut {member.user.firstName},<br />
+		Tu fais désormais parti des notres. Cela implique que les responsables peuvent accèder aux informations
+		de ton profil.
 	</p>
 
 	{#if member.event.memberFields.length}

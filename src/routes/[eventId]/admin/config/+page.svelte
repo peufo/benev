@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card } from '$lib/material'
 	import EventForm from '$lib/EventForm.svelte'
-	import ShareForm from './ShareForm.svelte'
+	import Share from './Share.svelte'
 	import MemberFields from '$lib/member/MemberFields.svelte'
 
 	export let data
@@ -16,7 +16,7 @@
 	<div class="flex flex-col gap-4">
 		<Card>
 			<span slot="title">Partage</span>
-			<ShareForm />
+			<Share />
 		</Card>
 
 		<MemberFields fields={data.memberFields} />

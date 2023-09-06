@@ -15,8 +15,8 @@ export const load = async ({ params, locals, depends }) => {
 						where: { userId_eventId: { userId: session.user.id, eventId } },
 				  })
 				: null,
-			isOwner: await isOwner(eventId, locals),
-			isLeaderInEvent: await isLeaderInEvent(eventId, locals),
+			isOwner: !!(await isOwner(eventId, locals)),
+			isLeaderInEvent: !!(await isLeaderInEvent(eventId, locals)),
 			event: await prisma.event.findUniqueOrThrow({
 				where: { id: eventId },
 				include: {

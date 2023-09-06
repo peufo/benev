@@ -11,7 +11,7 @@
 	let showLinks = false
 </script>
 
-{#if data.member}
+{#if data.member?.isValidedByUser}
 	<Profile user={data.user} />
 	{#if data.member.event.memberFields.length}
 		<MemberProfile
