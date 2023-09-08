@@ -6,6 +6,7 @@
 	import PeriodCard from './PeriodCard.svelte'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'
 	import { eventPath } from '$lib/store'
+	import { tip } from '$lib/action'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -81,7 +82,11 @@
 
 			{#each teams as team}
 				<div class="snap-start pl-2 relative">
-					<div class="w-28 sticky top-0 pb-2 z-10" style:height="{hourHeight}px">
+					<div
+						class="w-28 sticky top-0 pb-2 z-10"
+						style:height="{hourHeight}px"
+						use:tip={{ content: team.name }}
+					>
 						<div
 							class="relative flex items-center rounded bg-base-200 h-full px-2 outline outline-base-100"
 						>
