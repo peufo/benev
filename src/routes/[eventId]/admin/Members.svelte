@@ -99,7 +99,7 @@
 				</thead>
 
 				<tbody>
-					{#each members as member}
+					{#each members as member (member.id)}
 						<tr
 							on:click={() => goto(`${$eventPath}/admin/members/${member.id}`)}
 							class="hover cursor-pointer"

@@ -2,7 +2,6 @@
 	import { mdiClose } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	export let title = ''
-	export let subtitle = ''
 	export let dialog: HTMLDialogElement
 </script>
 
