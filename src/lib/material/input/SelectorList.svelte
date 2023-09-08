@@ -35,7 +35,7 @@
 	<ul
 		in:fly|local={{ y: 20, duration: 100 }}
 		out:fade|local={{ duration: 100, delay: 150 }}
-		class="z-10 absolute translate-y-2 bg-base-200 rounded-box p-2 flex flex-col gap-1 {klass}"
+		class="z-10 absolute translate-y-2 bg-base-200 rounded-box p-2 flex flex-col gap-1 shadow {klass}"
 		class:opacity-0={isInvisible}
 	>
 		{#if isError}

@@ -82,6 +82,7 @@ export const actions = {
 					authorName: `${session.user.firstName} ${session.user.lastName}`,
 				},
 			})
+			return newMember
 		})
 	},
 

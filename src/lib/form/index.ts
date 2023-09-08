@@ -24,23 +24,21 @@ export const formContext = {
 }
 
 type SuccessMessage = string | ((action: URL) => string)
-type UseFormOptions = {
+type UseFormOptions<ReturnData> = {
 	beforeRequest?: (...args: Parameters<SubmitFunction>) => Promise<unknown>
-	successCallback?: (action: URL) => unknown
+	successCallback?: (action: URL, data?: ReturnData) => unknown
 	successUpdate?: boolean
 	successReset?: boolean
 	successMessage?: SuccessMessage
 }
 
-export function useForm<Shema extends z.ZodRawShape>({
+export function useForm<ReturnData extends Record<string, unknown>>({
 	beforeRequest,
 	successCallback,
 	successUpdate = true,
 	successReset = true,
 	successMessage = 'Succès',
-}: UseFormOptions = {}) {
-	type Data = Partial<z.infer<z.ZodObject<Shema>>>
-
+}: UseFormOptions<ReturnData> = {}) {
 	const notify = useNotify()
 
 	const setError: SetError = {}
@@ -76,7 +74,7 @@ export function useForm<Shema extends z.ZodRawShape>({
 		}
 	}
 
-	const submit: SubmitFunction<Data> = async (event) => {
+	const submit: SubmitFunction<ReturnData> = async (event) => {
 		if (beforeRequest) await beforeRequest(event)
 
 		event.submitter?.classList.add('btn-disabled')
@@ -104,7 +102,7 @@ export function useForm<Shema extends z.ZodRawShape>({
 
 			if (result.type === 'success') {
 				notifySuccess(successMessage)
-				if (successCallback) successCallback(action)
+				if (successCallback) successCallback(action, result.data)
 				if (successUpdate) update({ reset: successReset })
 				return
 			}

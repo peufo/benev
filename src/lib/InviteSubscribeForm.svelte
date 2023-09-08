@@ -1,23 +1,60 @@
 <script lang="ts">
-	import { Dialog } from '$lib/material'
+	import { Member, User } from '@prisma/client'
+	import { Dialog, Icon, InputRelation } from '$lib/material'
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
-	import InputMembers from '$lib/InputMembers.svelte'
 	import InviteForm from '$lib/InviteForm.svelte'
+	import { api } from '$lib/api'
+	import { mdiAccountPlusOutline } from '@mdi/js'
 
 	let newMemberDialog: HTMLDialogElement
 
 	const form = useForm()
+	let member: (Member & { user: User }) | null = null
 </script>
 
 <form method="post" action="" use:enhance={form.submit} class="flex flex-col gap-2">
-	<InputMembers key="members" inviteDialog={newMemberDialog} />
+	<div class="flex gap-2 items-end justify-end">
+		<div class="grow max-w-sm">
+			<InputRelation
+				key="member"
+				placeholder="Inscrire un membre"
+				getItem={$api.member.findOne}
+				search={$api.member.search}
+				bind:item={member}
+			>
+				<div slot="item" class="contents" let:item>
+					{item?.user.firstName}
+					{item?.user.lastName}
+				</div>
 
-	<div class="flex justify-end">
-		<button class="btn"> Inviter </button>
+				<div slot="listItem" let:item class="flex w-full">
+					{#if item}
+						<span>{item.user.firstName} {item.user.lastName}</span>
+						<div class="grow" />
+						<span style="font-size: 0.6rem;">{item.user.email}</span>
+					{/if}
+				</div>
+
+				<div slot="append">
+					<button type="button" class="btn btn-square" on:click={() => newMemberDialog.showModal()}>
+						<Icon path={mdiAccountPlusOutline} title="Inviter un nouveau membre" />
+					</button>
+				</div>
+			</InputRelation>
+		</div>
+
+		{#if member}
+			<button class="btn"> Inscrire </button>
+		{/if}
 	</div>
 </form>
 
 <Dialog bind:dialog={newMemberDialog} title="Inviter un nouveau membre">
-	<InviteForm on:success={() => newMemberDialog.close()} />
+	<InviteForm
+		on:success={({ detail }) => {
+			newMemberDialog.close()
+			if (detail) member = detail
+		}}
+	/>
 </Dialog>

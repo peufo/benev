@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
+	import { Member, User } from '@prisma/client'
+
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
 	import { eventPath } from '$lib/store'
 	import { InputText } from '$lib/material'
 
-	const dispatch = createEventDispatcher<{ success: void }>()
-	const form = useForm({
-		successCallback: () => dispatch('success'),
+	type MemberWithUser = Member & { user: User }
+	const dispatch = createEventDispatcher<{ success: MemberWithUser | undefined }>()
+	const form = useForm<MemberWithUser>({
+		successCallback: (action, member) => dispatch('success', member),
 		successMessage: 'Invitation envoyée',
 	})
 </script>

@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { mdiClose } from '@mdi/js'
 
-	import { slide } from 'svelte/transition'
-
 	import { browser } from '$app/environment'
-	import { createEventDispatcher } from 'svelte'
+	import { createEventDispatcher, tick } from 'svelte'
 	import { debounce } from '$lib/debounce'
 
 	import { useNotify } from '$lib/notify'
@@ -17,12 +15,12 @@
 	type RelationItem = $$Generic<{ id: string }>
 
 	export let key: string
-	export let label: string
+	export let label = ''
 	export let search: (q: string) => Promise<RelationItem[]>
-	export let getItems: (ids: string[]) => Promise<RelationItem[]>
+	export let getItem: (id: string) => Promise<RelationItem>
 	export let createUrl = ''
 	export let createTitle = ''
-	export let value: string[] | RelationItem[] = []
+	export let value: string | RelationItem = ''
 	export let error = ''
 	export let placeholder = ''
 
@@ -30,7 +28,7 @@
 	export { klass as class }
 
 	let proposedItems: RelationItem[] = []
-	export let items: RelationItem[] | null = null
+	export let item: RelationItem | null = null
 
 	let isLoading = false
 	let isError = false
@@ -38,27 +36,28 @@
 	let searchValue = ''
 	const notify = useNotify()
 	let selectorList: SelectorList<RelationItem>
-	const dispatch = createEventDispatcher<{ input: { value: string[]; items: RelationItem[] } }>()
-
-	$: if (value.length && !items) lookupItem()
+	const dispatch = createEventDispatcher<{ input: { value: string; item: RelationItem } }>()
+	let inputElement: HTMLInputElement
+	$: if (value && !item) lookupItem()
 
 	async function lookupItem() {
-		if (!browser || !value.length || items) return
-		if (typeof value[0] === 'string') items = await getItems(value as string[])
-		else items = value as RelationItem[]
+		if (!browser || !value || item) return
+		if (typeof value === 'string') item = await getItem(value as string)
+		else item = value as RelationItem
 	}
 
 	async function select(index = focusIndex) {
-		if (!items) items = [proposedItems[index]]
-		else items = [...items, proposedItems[index]]
-		searchValue = ''
-		searchItems('')
-		dispatch('input', { value: items.map(({ id }) => id), items })
+		item = proposedItems[index]
+		value = item.id
+		dispatch('input', { value: item.id, item })
 	}
 
-	function remove(index: number) {
-		if (!items?.length) return
-		items = [...items.slice(0, index), ...items.slice(index + 1)]
+	async function clear() {
+		searchValue = ''
+		value = ''
+		item = null
+		await tick()
+		inputElement.focus()
 	}
 
 	async function searchItems(searchValue = '') {
@@ -66,9 +65,7 @@
 			isLoading = true
 			isError = false
 			focusIndex = 0
-			const res = await search(searchValue)
-			const currentIds = items?.map(({ id }) => id) || []
-			proposedItems = res.filter(({ id }) => !currentIds.includes(id))
+			proposedItems = await search(searchValue)
 		} catch (error) {
 			notify.error('Erreur')
 			isError = true
@@ -100,41 +97,27 @@
 		},
 	}}
 >
-	<FormControl key="relations_{key}" {label} {error} class={klass}>
-		<input
-			type="hidden"
-			name="json_{key}"
-			value={JSON.stringify(items?.map(({ id }) => id) || [])}
-		/>
-
-		<div class="flex flex-wrap items-center gap-2">
-			{#if items && items.length}
-				<div class="flex gap-2 flex-wrap">
-					{#each items || [] as item, index (item.id)}
-						<div
-							transition:slide|local={{ axis: 'x', duration: 200 }}
-							class="text-right badge badge-lg whitespace-nowrap pr-0"
-						>
-							<slot {item} name="badge">{item.id}</slot>
-							<div
-								class="btn btn-circle btn-xs btn-ghost scale-75 ml-1"
-								role="button"
-								tabindex="0"
-								on:click={() => remove(index)}
-								on:keyup={(event) => event.key === 'Enter' && remove(index)}
-							>
-								<Icon path={mdiClose} />
-							</div>
-						</div>
-					{/each}
+	<FormControl {key} {label} {error} class={klass} let:key>
+		{#if item}
+			<input type="hidden" name={key} value={item.id} />
+			<div class="rounded-lg border flex items-center h-12 pl-4 pr-2 gap-2">
+				<div class="grow">
+					<slot name="item" {item}>
+						{item.id}
+					</slot>
 				</div>
-			{/if}
+				<button type="button" on:click={() => clear()} class="btn btn-square btn-sm">
+					<Icon path={mdiClose} />
+				</button>
+			</div>
+		{:else}
 			<div class="flex grow gap-2">
 				<div class="flex grow gap-2 items-center relative">
 					<input
 						type="text"
 						id="relations_{key}"
 						name="relations_{key}"
+						bind:this={inputElement}
 						bind:value={searchValue}
 						on:input={(e) => searchItemsDebounce(e.currentTarget.value)}
 						on:focus={handleFocus}
@@ -148,7 +131,7 @@
 				</div>
 				<slot name="append" />
 			</div>
-		</div>
+		{/if}
 	</FormControl>
 
 	<SelectorList
