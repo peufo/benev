@@ -2,6 +2,7 @@
 	import { mdiEmailOutline, mdiPhoneOutline, mdiShieldAccount } from '@mdi/js'
 	import { Member, User } from '@prisma/client'
 	import { Icon } from '$lib/material'
+	import { tip } from '$lib/action'
 
 	export let leaders: (Member & { user: User })[]
 </script>
@@ -13,32 +14,44 @@
 		title="Responsables"
 	/>
 
-	{#each leaders as { user }}
-		<div class="dropdown">
-			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-			<label tabindex="0" class="btn btn-sm">{user.firstName} {user.lastName}</label>
-			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-			<ul
-				tabindex="0"
-				class="dropdown-content menu z-10 p-2 shadow-lg rounded-box bg-base-100 w-48"
-			>
-				<li>
-					<a href="mailto:{user.email}" target="_blank">
-						<Icon path={mdiEmailOutline} />
-						Envoyer un mail
-					</a>
-				</li>
-				{#if user.phone}
+	{#each leaders as member}
+		{#if member.isValidedByUser}
+			<div class="dropdown">
+				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+				<label tabindex="0" class="btn btn-sm">
+					{member.user.firstName}
+					{member.user.lastName}
+				</label>
+				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+				<ul
+					tabindex="0"
+					class="dropdown-content menu z-10 p-2 shadow-lg rounded-box bg-base-100 w-48"
+				>
 					<li>
-						<a href="tel:{user.phone}" target="_blank">
-							<Icon path={mdiPhoneOutline} />
-							Téléphoner
+						<a href="mailto:{member.user.email}" target="_blank">
+							<Icon path={mdiEmailOutline} />
+							Envoyer un mail
 						</a>
 					</li>
-				{/if}
-			</ul>
-		</div>
+					{#if member.user.phone}
+						<li>
+							<a href="tel:{member.user.phone}" target="_blank">
+								<Icon path={mdiPhoneOutline} />
+								Téléphoner
+							</a>
+						</li>
+					{/if}
+				</ul>
+			</div>
+		{:else}
+			<div use:tip={{ content: "Ce membre n'a pas validé sa participation" }}>
+				<button class="btn btn-sm btn-disabled">
+					{member.user.firstName}
+					{member.user.lastName}
+				</button>
+			</div>
+		{/if}
 	{:else}
 		<span class="text-error">Pas de responsable</span>
 	{/each}

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import tippy, { type Props as TippyProps } from 'tippy.js'
 	import 'tippy.js/dist/tippy.css'
-	import { Period, Subscribe } from '@prisma/client'
+	import { Subscribe } from '@prisma/client'
 	import { onMount } from 'svelte'
 
-	export let period: Period & { subscribes: Subscribe[] }
+	export let period: { maxSubscribe: number; subscribes: Subscribe[] }
 	export let tippyProps: Partial<TippyProps> = {}
 	let klass = ''
 	export { klass as class }
@@ -31,14 +31,14 @@
 <div
 	bind:offsetWidth={width}
 	bind:this={container}
-	class="h-2 rounded bg-base-300 w-full relative {klass}"
+	class="h-2 rounded bg-base-300 w-full relative overflow-hidden {klass}"
 >
 	<div
-		class="h-2 bg-warning absolute rounded"
+		class="h-2 bg-warning absolute rounded-r"
 		style:width="{width * ((accepted + request) / period.maxSubscribe)}px"
 	/>
 	<div
-		class="h-2 bg-success absolute rounded"
+		class="h-2 bg-success absolute rounded-r"
 		style:width="{width * (accepted / period.maxSubscribe)}px"
 	/>
 </div>

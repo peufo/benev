@@ -68,7 +68,16 @@ export const load = async ({ params, url }) => {
 				...(OR.length && { OR }),
 			},
 			include: {
-				user: true,
+				user: {
+					select: {
+						// TODO: conditional select in terms of isValidedByUser
+						email: true,
+						phone: true,
+						firstName: true,
+						lastName: true,
+						birthday: true,
+					},
+				},
 				leaderOf: true,
 				profile: true,
 				subscribes: {

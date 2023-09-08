@@ -10,7 +10,7 @@
 	import { goto } from '$app/navigation'
 
 	type _Member = Member & {
-		user: User
+		user: { email: string; firstName: string; lastName: string; birthday: Date | null }
 		leaderOf: Team[]
 		subscribes: (Subscribe & { period: Period })[]
 		profile: FieldValue[]
@@ -129,7 +129,7 @@
 							{/each}
 
 							<td align="right">
-								<Contact user={member.user} />
+								<Contact user={{ phone: null, ...member.user }} />
 							</td>
 						</tr>
 					{/each}

@@ -5,7 +5,16 @@ export const load = async ({ params }) => {
 		teams: await prisma.team.findMany({
 			where: { eventId: params.eventId },
 			include: {
-				leaders: { include: { user: true } },
+				leaders: {
+					include: {
+						user: {
+							select: {
+								firstName: true,
+								lastName: true,
+							},
+						},
+					},
+				},
 				periods: { include: { subscribes: true } },
 			},
 			orderBy: {

@@ -5,21 +5,23 @@
 	export let user: { email: string; phone: string | null; firstName: string; lastName: string }
 </script>
 
-{#if user.phone}
+<div class="flex gap-1 justify-end">
+	{#if user.phone}
+		<a
+			href="tel:{user.phone}"
+			target="_blank"
+			class="btn btn-square btn-sm relative"
+			on:click|stopPropagation
+		>
+			<Icon path={mdiPhone} size={18} title="Téléphoner à {user.firstName}" />
+		</a>
+	{/if}
 	<a
-		href="tel:{user.phone}"
+		href="mailto:{user.email}"
 		target="_blank"
 		class="btn btn-square btn-sm relative"
 		on:click|stopPropagation
 	>
-		<Icon path={mdiPhone} size={18} title="Téléphoner à {user.firstName}" />
+		<Icon path={mdiEmailOutline} size={18} title="Envoyer un mail à {user.firstName}" />
 	</a>
-{/if}
-<a
-	href="mailto:{user.email}"
-	target="_blank"
-	class="btn btn-square btn-sm relative"
-	on:click|stopPropagation
->
-	<Icon path={mdiEmailOutline} size={18} title="Envoyer un mail à {user.firstName}" />
-</a>
+</div>

@@ -4,7 +4,8 @@
 
 	import { Icon, Placeholder } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import { rowLink } from './action'
+	import { rowLink, tip } from '$lib/action'
+	import Progress from '$lib/Progress.svelte'
 
 	export let teams: (Team & {
 		leaders: (Member & { user: User })[]
@@ -25,12 +26,7 @@
 
 		<tbody>
 			{#each teams as team}
-				{@const nbSubscribe = team.periods
-					.map(
-						(p) =>
-							p.subscribes.filter((s) => s.state === 'request' || s.state === 'accepted').length
-					)
-					.reduce((acc, cur) => acc + cur, 0)}
+				{@const subscribes = team.periods.map((p) => p.subscribes).flat()}
 				{@const maxSubscribe = team.periods
 					.map((p) => p.maxSubscribe)
 					.reduce((acc, cur) => acc + cur, 0)}
@@ -39,20 +35,26 @@
 					<td>
 						{team.name}
 					</td>
-					<td>
-						{#each team.leaders as { user }}
-							<span class="badge badge-sm whitespace-nowrap">{user.firstName} {user.lastName}</span>
+					<td data-prepend>
+						{#each team.leaders as member}
+							<span
+								class="badge badge-sm whitespace-nowrap"
+								class:opacity-40={!member.isValidedByUser}
+								use:tip={{
+									content: "Ce membre n'a pas validé sa participation",
+									disable: member.isValidedByUser,
+								}}
+							>
+								{member.user.firstName}
+								{member.user.lastName}
+							</span>
 						{/each}
 					</td>
-					<td class="whitespace-normal sm:whitespace-nowrap">
-						<progress
-							class="progress max-w-[100px] w-[8vw]"
-							value={nbSubscribe}
-							max={maxSubscribe}
-						/>
+					<td class="whitespace-normal sm:whitespace-nowrap" data-prepend>
+						<Progress period={{ maxSubscribe, subscribes }} />
 
 						<span class="text-xs badge">
-							{nbSubscribe} / {maxSubscribe}
+							{subscribes.filter((s) => s.state === 'accepted' || s.state === 'request').length} / {maxSubscribe}
 						</span>
 					</td>
 
