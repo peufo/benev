@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition'
 	import type { PageData } from './$types'
 	import type { User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
@@ -10,36 +9,27 @@
 	export let subscribes: (PageData['periods'][number]['subscribes'][number] & {
 		member?: { user: User }
 	})[]
-	export let isOpen = false
 </script>
 
-<tr class:border-0={!isOpen}>
-	<td class="py-0" colspan="3">
-		{#if isOpen}
-			<div class="py-3 pl-6" transition:slide>
-				{#each subscribes as subscribe}
-					<div class="flex gap-2 justify-end items-center py-1">
-						{#if subscribe.member}
-							<a
-								class="btn btn-sm"
-								title="Voir les infos de {subscribe.member.user.firstName}"
-								href="{$eventPath}/admin/members/{subscribe.memberId}"
-							>
-								{subscribe.member.user.firstName}
-								{subscribe.member.user.lastName}
-							</a>
+<div class="py-3 pl-6">
+	{#each subscribes as subscribe}
+		<div class="flex gap-2 justify-end items-center py-1">
+			{#if subscribe.member}
+				<a
+					class="btn btn-sm"
+					title="Voir les infos de {subscribe.member.user.firstName}"
+					href="{$eventPath}/admin/members/{subscribe.memberId}"
+				>
+					{subscribe.member.user.firstName}
+					{subscribe.member.user.lastName}
+				</a>
 
-							<Contact user={subscribe.member.user} />
-						{/if}
+				<Contact user={subscribe.member.user} />
+			{/if}
 
-						<SubscribeStateForm {subscribe} />
-					</div>
-				{:else}
-					<div class="flex flex-end justify-center text-secondary">
-						Aucune inscription pour l'instant
-					</div>
-				{/each}
-			</div>
-		{/if}
-	</td>
-</tr>
+			<SubscribeStateForm {subscribe} />
+		</div>
+	{:else}
+		<div class="flex flex-end justify-center text-secondary">Aucune inscription pour l'instant</div>
+	{/each}
+</div>

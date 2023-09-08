@@ -12,14 +12,16 @@
 <div class="card bg-base-100 shadow-lg {klass}">
 	<div class="card-body p-2 sm:p-8 {bodyClass}">
 		{#if $$slots.title || $$slots.action}
-			<div class="{headerClass} flex flex-wrap gap-2 mt-2 sm:mt-0 items-center">
-				{#if returnUrl}
-					<a href={returnUrl} class="btn btn-square btn-ghost btn-sm">
-						<Icon path={mdiArrowLeft} size={20} />
-					</a>
-				{/if}
-				<div class="card-title">
-					<slot name="title" />
+			<div class="{headerClass} flex gap-2 mt-2 sm:mt-0 items-center">
+				<div class="flex gap-2 flex-wrap">
+					{#if returnUrl}
+						<a href={returnUrl} class="btn btn-square btn-ghost btn-sm">
+							<Icon path={mdiArrowLeft} size={20} />
+						</a>
+					{/if}
+					<div class="card-title">
+						<slot name="title" />
+					</div>
 				</div>
 				<div class="grow" />
 				<slot name="action" />

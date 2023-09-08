@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Card, Icon, Placeholder } from '$lib/material'
-	import { mdiAccountPlusOutline, mdiChevronRight, mdiPencilOutline } from '@mdi/js'
+	import { mdiAccountArrowUpOutline, mdiChevronRight, mdiPencilOutline } from '@mdi/js'
 
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam } from '$lib/store'
 	import SubscribeState from '$lib/SubscribeState.svelte'
 	import { formatRange } from '$lib/formatRange'
-	import PeriodForm from './PeriodForm.svelte'
+	import PeriodForm from './[periodId]/PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Subscribes from './Subscribes.svelte'
@@ -14,20 +14,29 @@
 	import MemberForm from '$lib/MemberForm.svelte'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import Progress from '$lib/Progress.svelte'
-	import InviteSubscribeDialog from '$lib/InviteSubscribeDialog.svelte'
+	import { slide } from 'svelte/transition'
 
 	export let data
 
 	let subscribeDialog: HTMLDialogElement
 	let memberDialog: HTMLDialogElement
 	let memberProfilDialog: HTMLDialogElement
-	let updateDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
-	let periodUpdatForm: PeriodForm
-	let inviteSubscribeDialog: InviteSubscribeDialog
-	let selectedPeriod: (typeof data.periods)[number] | undefined = undefined
+	type _Period = (typeof data.periods)[number]
+	let selectedPeriod: _Period | undefined = undefined
 
 	const periodOpenKey = 'periodOpen'
+
+	function subscribe(period: _Period) {
+		if (!data.user) return goto(`/${data.event.id}/me?callback=${location.pathname}`)
+
+		selectedPeriod = period
+		if (!data.member) {
+			memberDialog?.showModal()
+		} else {
+			subscribeDialog?.showModal()
+		}
+	}
 </script>
 
 <Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams">
@@ -56,27 +65,19 @@
 
 			<tbody>
 				{#each data.periods as period}
+					{@const isOpen = $urlParam.hasValue(periodOpenKey, period.id)}
 					{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
-					{@const memberSubscribe = period.subscribes.find(
-						(sub) => sub.memberId === data.member?.id
-					)}
+					{@const iAmSubscribed = period.subscribes.find((sub) => sub.memberId === data.member?.id)}
 					{@const isComplet = nbSubscribe >= period.maxSubscribe}
-					{@const disabled = memberSubscribe || isComplet}
+					{@const disabled = iAmSubscribed || isComplet}
 					<tr
 						class="relative"
 						class:hover={!disabled}
 						class:cursor-pointer={!disabled}
 						class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
 						on:click={() => {
-							if (disabled) return
-							if (!data.user) return goto(`/${data.event.id}/me?callback=${location.pathname}`)
-
-							selectedPeriod = period
-							if (!data.member) {
-								memberDialog?.showModal()
-							} else {
-								subscribeDialog?.showModal()
-							}
+							if (data.isLeader) return goto(`${$eventPath}/teams/${period.teamId}/${period.id}`)
+							if (!disabled) subscribe(period)
 						}}
 					>
 						<td class="w-full" class:opacity-70={disabled}>
@@ -89,35 +90,26 @@
 								{nbSubscribe}/{period.maxSubscribe}
 							</span>
 
-							{#if memberSubscribe}
-								<SubscribeState state={memberSubscribe.state} />
+							{#if iAmSubscribed}
+								<SubscribeState state={iAmSubscribed.state} />
 							{:else}
 								<div class="grow" />
 							{/if}
 
 							{#if data.isLeader}
 								<div class="flex gap-2">
-									{#if !isComplet}
+									{#if !disabled}
 										<button
 											class="btn btn-square btn-sm"
-											on:click|stopPropagation={() => inviteSubscribeDialog.open(period)}
+											on:click|stopPropagation={() => subscribe(period)}
 										>
 											<Icon
-												path={mdiAccountPlusOutline}
+												path={mdiAccountArrowUpOutline}
 												size={20}
-												title="Inviter un membre participer à cette période"
+												title="M'inscrire à cette période"
 											/>
 										</button>
 									{/if}
-									<button
-										class="btn btn-square btn-sm"
-										on:click|stopPropagation={() => {
-											periodUpdatForm.setPeriod(period)
-											updateDialog.showModal()
-										}}
-									>
-										<Icon path={mdiPencilOutline} title="Éditer cette période" />
-									</button>
 
 									<button
 										class="btn btn-square btn-sm"
@@ -141,10 +133,15 @@
 						</td>
 					</tr>
 
-					<Subscribes
-						subscribes={period.subscribes}
-						isOpen={$urlParam.hasValue(periodOpenKey, period.id)}
-					/>
+					<tr class:border-0={!isOpen}>
+						<td class="py-0" colspan="3">
+							{#if isOpen}
+								<div class="py-3 pl-6" transition:slide>
+									<Subscribes subscribes={period.subscribes} />
+								</div>
+							{/if}
+						</td>
+					</tr>
 				{/each}
 			</tbody>
 		</table>
@@ -158,17 +155,6 @@
 		<PeriodForm />
 	</div>
 {/if}
-
-<dialog class="modal" bind:this={updateDialog}>
-	<div class="modal-box">
-		<PeriodForm
-			isUpdate
-			bind:this={periodUpdatForm}
-			on:cancel={() => updateDialog.close()}
-			on:success={() => updateDialog.close()}
-		/>
-	</div>
-</dialog>
 
 <dialog class="modal" bind:this={memberDialog}>
 	{#if data.user}
@@ -215,7 +201,5 @@
 		/>
 	{/if}
 </dialog>
-
-<InviteSubscribeDialog bind:this={inviteSubscribeDialog} />
 
 <ThanksDialog bind:this={thanksDialog} />

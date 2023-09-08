@@ -6,23 +6,25 @@
 	import { InputDatetime, InputNumber } from '$lib/material/input'
 	import type { Period } from '@prisma/client'
 	import { DeleteButton } from '$lib/material'
+	import { eventPath } from '$lib/store'
+	import { page } from '$app/stores'
 
 	let klass = ''
 	export { klass as class }
-	export let isUpdate = false
+	export let period: Period | undefined = undefined
+	const isUpdate = !!period
 
-	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
+	const dispatch = createEventDispatcher<{ success: void }>()
 	const form = useForm({
 		successReset: false,
-		successMessage: isUpdate ? 'Succès' : 'Période ajoutée',
+		successMessage: isUpdate ? 'Période mise à jour' : 'Période ajoutée',
 		successCallback: () => {
 			dispatch('success')
 		},
 	})
 
-	let period: Period | undefined = undefined
-	let start = ''
-	let end = ''
+	let start = dayjs(period?.start).startOf('hour').format('YYYY-MM-DDTHH:mm')
+	let end = dayjs(period?.end).startOf('hour').format('YYYY-MM-DDTHH:mm')
 
 	function handleStartBlur() {
 		if (!end) end = start
@@ -40,26 +42,18 @@
 		start = end
 		end = _end.add(step, 'minute').format('YYYY-MM-DDTHH:mm')
 	}
-
-	export function setPeriod(_period: Period) {
-		period = _period
-		start = dayjs(period.start).format('YYYY-MM-DDTHH:mm')
-		end = dayjs(period.end).format('YYYY-MM-DDTHH:mm')
-	}
 </script>
 
 <form
-	action={isUpdate ? '?/update_period' : '?/new_period'}
+	action={`${$eventPath}/teams/${$page.params.teamId}${
+		isUpdate ? '?/update_period' : '?/new_period'
+	}`}
 	method="post"
 	use:enhance={form.submit}
 	class={klass}
 >
-	{#if isUpdate}
-		<h2 class="text-xl">Modification de la periode</h2>
-	{/if}
-
 	<div class="flex flex-wrap gap-2 items-end">
-		<div class="flex gap-2 grow flex-wrap-reverse">
+		<div class="flex gap-2 grow flex-wrap">
 			{#if isUpdate && period}
 				<input type="hidden" name="id" value={period.id} />
 			{/if}
@@ -80,26 +74,22 @@
 				on:blur={handleEndBlur}
 				class="grow"
 			/>
-			<InputNumber
-				key="maxSubscribe"
-				label="Nombre de bénévoles"
-				class="max-w-[150px]"
-				value={String(period?.maxSubscribe || 1)}
-				input={{ min: 1, step: 1 }}
-			/>
 		</div>
+		<InputNumber
+			key="maxSubscribe"
+			label="Nombre de bénévoles"
+			class="max-w-[150px]"
+			value={String(period?.maxSubscribe || 1)}
+			input={{ min: 1, step: 1 }}
+		/>
 
-		<div class="flex gap-2 grow">
+		<div class="flex flex-row-reverse gap-2 grow">
 			{#if isUpdate}
-				<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('cancel')}>
-					Annuler
-				</button>
-				<div class="grow" />
-
-				<DeleteButton formaction="?/delete_period" />
-
 				<button class="btn" type="submit">Valider</button>
+				<DeleteButton formaction="?/delete_period" />
+				<div class="grow" />
 			{:else}
+				<button class="btn grow" type="submit">Ajouter</button>
 				<button
 					type="button"
 					class="btn btn-ghost grow"
@@ -108,7 +98,6 @@
 				>
 					Suivante
 				</button>
-				<button class="btn grow" type="submit">Ajouter</button>
 			{/if}
 		</div>
 	</div>

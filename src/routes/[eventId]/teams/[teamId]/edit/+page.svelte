@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { Card } from '$lib/material'
 	import TeamForm from '../../TeamForm.svelte'
 
-  export let data
-
+	export let data
 </script>
 
-<div class="card p-4 bg-base-100 m-auto max-w-md">
-	<TeamForm isUpdate team={data.team}/>
-</div>
+<Card class="max-w-lg m-auto">
+	<TeamForm isUpdate team={data.team} />
+</Card>

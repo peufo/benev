@@ -5,7 +5,7 @@
 	export let user: { email: string; phone: string | null; firstName: string; lastName: string }
 </script>
 
-<div class="flex gap-1 justify-end">
+<div class="flex gap-2 justify-end">
 	{#if user.phone}
 		<a
 			href="tel:{user.phone}"
