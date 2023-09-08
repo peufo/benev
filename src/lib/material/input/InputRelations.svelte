@@ -121,7 +121,7 @@
 								role="button"
 								tabindex="0"
 								on:click={() => remove(index)}
-								on:keyup={() => remove(index)}
+								on:keyup={(event) => event.key === 'Enter' && remove(index)}
 							>
 								<Icon path={mdiClose} />
 							</div>

@@ -52,6 +52,6 @@
 			</div>
 		{/if}
 	{:else}
-		<span class="text-error">Pas de responsable</span>
+		<div class="text-error pt-1">Pas de responsable</div>
 	{/each}
 </div>
