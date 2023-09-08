@@ -52,10 +52,6 @@
 					</td>
 					<td class="whitespace-normal sm:whitespace-nowrap" data-prepend>
 						<Progress period={{ maxSubscribe, subscribes }} />
-
-						<span class="text-xs badge">
-							{subscribes.filter((s) => s.state === 'accepted' || s.state === 'request').length} / {maxSubscribe}
-						</span>
 					</td>
 
 					{#if isOwner}

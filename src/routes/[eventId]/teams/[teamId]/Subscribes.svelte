@@ -11,9 +11,9 @@
 	})[]
 </script>
 
-<div class="py-3 pl-6">
+<div class="flex flex-col gap-2">
 	{#each subscribes as subscribe}
-		<div class="flex gap-2 justify-end items-center py-1">
+		<div class="flex gap-2 justify-end items-center">
 			{#if subscribe.member}
 				<a
 					class="btn btn-sm"

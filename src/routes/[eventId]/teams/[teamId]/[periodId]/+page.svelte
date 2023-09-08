@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiPencilOutline } from '@mdi/js'
 	import InviteSubscribeForm from '$lib/InviteSubscribeForm.svelte'
+	import Progress from '$lib/Progress.svelte'
 	import { formatRange } from '$lib/formatRange.js'
 	import { Card, Dialog, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
@@ -21,8 +22,10 @@
 		</button>
 	</div>
 
-	<div class="flex flex-wrap gap-4">
-		<div class="grow">PROGRESS</div>
+	<div class="grid gap-4 grid-cols-1 md:grid-cols-2 mt-4">
+		<div>
+			<Progress period={data.period} withLabel />
+		</div>
 		<div>
 			<Subscribes subscribes={data.period.subscribes} />
 			<InviteSubscribeForm />

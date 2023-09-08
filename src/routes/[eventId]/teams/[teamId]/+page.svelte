@@ -86,10 +86,6 @@
 						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center">
 							<Progress {period} class="w-14" />
 
-							<span class="text-xs badge">
-								{nbSubscribe}/{period.maxSubscribe}
-							</span>
-
 							{#if iAmSubscribed}
 								<SubscribeState state={iAmSubscribed.state} />
 							{:else}

@@ -12,7 +12,7 @@
 	const form = useForm({ successMessage: 'Status changé' })
 </script>
 
-<form method="post" use:enhance={form.submit}>
+<form method="post" use:enhance={form.submit} class="h-8">
 	<input type="hidden" name="id" value={subscribe.id} />
 
 	<div class="dropdown dropdown-end">
