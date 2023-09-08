@@ -23,8 +23,8 @@
 		},
 	})
 
-	let start = dayjs(period?.start).startOf('hour').format('YYYY-MM-DDTHH:mm')
-	let end = dayjs(period?.end).startOf('hour').format('YYYY-MM-DDTHH:mm')
+	let start = (period ? dayjs(period.start) : dayjs().startOf('hour')).format('YYYY-MM-DDTHH:mm')
+	let end = (period ? dayjs(period.end) : dayjs().startOf('hour')).format('YYYY-MM-DDTHH:mm')
 
 	function handleStartBlur() {
 		if (!end) end = start
