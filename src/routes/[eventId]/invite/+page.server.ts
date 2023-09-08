@@ -36,6 +36,7 @@ export const actions = {
 				where: { email: data.email },
 				select: { id: true, email: true },
 			})
+			let isNewUser = !user
 			if (!user) {
 				user = await auth.createUser({
 					key: {
@@ -65,14 +66,16 @@ export const actions = {
 				},
 			})
 
-			const tokenId = await generateToken(
-				'passwordReset',
-				user.id,
-				new Date().getTime() + 1000 * 60 * 60 * 24 * 7
-			)
+			const tokenId = isNewUser
+				? await generateToken(
+						'passwordReset',
+						user.id,
+						new Date().getTime() + 1000 * 60 * 60 * 24 * 7
+				  )
+				: undefined
 			await sendEmailTemplate(EmailNewInvite, {
 				to: data.email,
-				subject: 'Changement de mot de passe',
+				subject: `${newMember.event.name} - Invitation`,
 				props: {
 					tokenId,
 					member: newMember,

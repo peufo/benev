@@ -1,10 +1,18 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
 	import { eventPath } from '$lib/store'
 	import { InputText } from '$lib/material'
 
-	const form = useForm()
+	const dispatch = createEventDispatcher<{ success: void }>()
+	const form = useForm({
+		successCallback: () => {
+			console.log('ECHO')
+			dispatch('success')
+		},
+		successMessage: 'Invitation envoyée',
+	})
 </script>
 
 <form

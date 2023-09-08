@@ -5,7 +5,13 @@ import z from 'zod'
 
 export const actions = {
 	default: async ({ params, locals, request, url }) => {
-		const { err, data } = await parseFormData(request, z.object({ password: z.string().min(8) }))
+		const { err, data } = await parseFormData(
+			request,
+			z.object({
+				password: z.string().min(8),
+				callback: z.string().optional(),
+			})
+		)
 		if (err) return err
 
 		try {
@@ -24,6 +30,7 @@ export const actions = {
 		} catch {
 			throw error(401, 'Invalid token')
 		} finally {
+			if (data.callback) throw redirect(302, data.callback)
 			throw redirect(302, '/me')
 		}
 	},

@@ -28,6 +28,11 @@
 				<Icon path={mdiClose} />
 			</button>
 		</div>
-		<InviteForm />
+		<InviteForm
+			on:success={() => {
+				console.log('YOLO')
+				dialog.close()
+			}}
+		/>
 	</div>
 </dialog>
