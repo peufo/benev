@@ -12,7 +12,6 @@
 
 	let container: HTMLDivElement
 
-	let width = 0
 	const accepted = period.subscribes.filter((sub) => sub.state === 'accepted').length
 	const request = period.subscribes.filter((sub) => sub.state === 'request').length
 
@@ -26,17 +25,16 @@
 	class:gap-2={withLabel}
 >
 	<div
-		bind:offsetWidth={width}
 		bind:this={container}
 		class="h-2 rounded bg-base-300 w-full relative overflow-hidden {klass}"
 	>
 		<div
 			class="h-2 bg-warning absolute rounded-r"
-			style:width="{width * ((accepted + request) / period.maxSubscribe)}px"
+			style:width="{100 * ((accepted + request) / period.maxSubscribe)}%"
 		/>
 		<div
 			class="h-2 bg-success absolute rounded-r"
-			style:width="{width * (accepted / period.maxSubscribe)}px"
+			style:width="{100 * (accepted / period.maxSubscribe)}%"
 		/>
 	</div>
 
