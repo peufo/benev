@@ -3,7 +3,14 @@
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
 	import { api } from '$lib/api'
-	import { InputRelations, InputText, InputTextarea, DeleteButton, Icon } from '$lib/material'
+	import {
+		InputRelations,
+		InputText,
+		InputTextarea,
+		DeleteButton,
+		Icon,
+		Dialog,
+	} from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { mdiAccountPlusOutline, mdiClose } from '@mdi/js'
 	import InviteForm from '$lib/InviteForm.svelte'
@@ -65,18 +72,6 @@
 	</div>
 </form>
 
-<dialog bind:this={inviteDialog} class="modal">
-	<div class="modal-box">
-		<div class="flex justify-between">
-			<span class="card-title">Inviter un nouveau membre</span>
-			<button
-				type="button"
-				class="btn btn-square btn-ghost btn-sm"
-				on:click={() => inviteDialog.close()}
-			>
-				<Icon path={mdiClose} />
-			</button>
-		</div>
-		<InviteForm on:success={() => inviteDialog.close()} />
-	</div>
-</dialog>
+<Dialog bind:dialog={inviteDialog} title="Inviter un nouveau membre">
+	<InviteForm on:success={() => inviteDialog.close()} />
+</Dialog>

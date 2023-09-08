@@ -12,6 +12,7 @@ export const load = async ({ params, locals }) => {
 							firstName: true,
 							lastName: true,
 							email: true,
+							phone: true,
 						},
 					},
 				},
@@ -29,6 +30,7 @@ export const load = async ({ params, locals }) => {
 						firstName: leader.user.firstName,
 						lastName: leader.user.lastName,
 						email: '',
+						phone: null,
 					},
 			  }
 	)

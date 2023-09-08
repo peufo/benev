@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Card, Icon, Placeholder } from '$lib/material'
-	import { mdiChevronRight, mdiPencilOutline } from '@mdi/js'
+	import { mdiAccountPlusOutline, mdiChevronRight, mdiPencilOutline } from '@mdi/js'
 
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam } from '$lib/store'
@@ -13,6 +13,8 @@
 	import Leaders from './Leaders.svelte'
 	import MemberForm from '$lib/MemberForm.svelte'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
+	import Progress from '$lib/Progress.svelte'
+	import InviteSubscribeDialog from '$lib/InviteSubscribeDialog.svelte'
 
 	export let data
 
@@ -22,6 +24,7 @@
 	let updateDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
 	let periodUpdatForm: PeriodForm
+	let inviteSubscribeDialog: InviteSubscribeDialog
 	let selectedPeriod: (typeof data.periods)[number] | undefined = undefined
 
 	const periodOpenKey = 'periodOpen'
@@ -57,7 +60,8 @@
 					{@const memberSubscribe = period.subscribes.find(
 						(sub) => sub.memberId === data.member?.id
 					)}
-					{@const disabled = memberSubscribe || nbSubscribe >= period.maxSubscribe}
+					{@const isComplet = nbSubscribe >= period.maxSubscribe}
+					{@const disabled = memberSubscribe || isComplet}
 					<tr
 						class="relative"
 						class:hover={!disabled}
@@ -78,17 +82,11 @@
 						<td class="w-full" class:opacity-70={disabled}>
 							{formatRange(period)}
 						</td>
-						<td class="flex gap-2 items-center">
-							<span class="whitespace-normal sm:whitespace-nowrap">
-								<progress
-									class="progress max-w-[100px] w-[8vw]"
-									value={nbSubscribe}
-									max={period.maxSubscribe}
-								/>
+						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center">
+							<Progress {period} class="w-14" />
 
-								<span class="text-xs badge">
-									{nbSubscribe}/{period.maxSubscribe}
-								</span>
+							<span class="text-xs badge">
+								{nbSubscribe}/{period.maxSubscribe}
 							</span>
 
 							{#if memberSubscribe}
@@ -99,6 +97,18 @@
 
 							{#if data.isLeader}
 								<div class="flex gap-2">
+									{#if !isComplet}
+										<button
+											class="btn btn-square btn-sm"
+											on:click|stopPropagation={() => inviteSubscribeDialog.open(period)}
+										>
+											<Icon
+												path={mdiAccountPlusOutline}
+												size={20}
+												title="Inviter un membre participer à cette période"
+											/>
+										</button>
+									{/if}
 									<button
 										class="btn btn-square btn-sm"
 										on:click|stopPropagation={() => {
@@ -106,7 +116,7 @@
 											updateDialog.showModal()
 										}}
 									>
-										<Icon path={mdiPencilOutline} />
+										<Icon path={mdiPencilOutline} title="Éditer cette période" />
 									</button>
 
 									<button
@@ -205,5 +215,7 @@
 		/>
 	{/if}
 </dialog>
+
+<InviteSubscribeDialog bind:this={inviteSubscribeDialog} />
 
 <ThanksDialog bind:this={thanksDialog} />

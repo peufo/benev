@@ -26,10 +26,10 @@
 	<input type="hidden" name="memberId" value={memberId} />
 	<input type="hidden" name="periodId" value={period.id} />
 
-	<h2 class="text-2xl">{team.name}</h2>
+	<h2 class="card-title">{team.name}</h2>
+	<p class="font-semibold">{formatRange(period)}</p>
 
-	<p class="text-lg">Souhaites-tu t'inscrire à la période de travail suivante ?</p>
-	<p class="text-lg">{formatRange(period)}</p>
+	<p>Souhaites-tu t'inscrire à cette période ?</p>
 
 	<div class="flex gap-2 justify-end">
 		<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('close')}> Non </button>

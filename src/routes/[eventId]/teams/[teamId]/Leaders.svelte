@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { mdiEmailOutline, mdiPhoneOutline, mdiShieldAccount } from '@mdi/js'
-	import { Member, User } from '@prisma/client'
 	import { Icon } from '$lib/material'
 	import { tip } from '$lib/action'
-
-	export let leaders: (Member & { user: User })[]
+	import type { LayoutData } from './$types'
+	export let leaders: LayoutData['team']['leaders']
 </script>
 
 <div class="flex flex-wrap gap-2">
