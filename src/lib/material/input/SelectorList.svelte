@@ -2,10 +2,10 @@
 	import { tick } from 'svelte'
 
 	import { createEventDispatcher } from 'svelte'
-	import { fade, fly, slide } from 'svelte/transition'
+	import { fade, fly } from 'svelte/transition'
 
 	let klass = ''
-	export {klass as class}
+	export { klass as class }
 
 	type Item = $$Generic<{ id: string }>
 	export let items: Item[]
@@ -44,17 +44,16 @@
 			{#each items as item, index (item.id)}
 				{@const isFocused = focusIndex === index}
 				<li
-					transition:slide|local={{ duration: 100 }}
 					role="menuitem"
 					on:click={() => dispatch('select', index)}
 					on:keydown={() => dispatch('select', index)}
-					class="flex btn justify-start btn-ghost btn-sm btn-block"
+					class="flex justify-start btn btn-ghost btn-sm btn-block animate-none"
 					class:btn-active={isFocused}
 				>
 					<slot {item} {index} />
 				</li>
 			{:else}
-				<li transition:slide|local={{ duration: 100 }} class="btn btn-disabled btn-sm">
+				<li class="btn btn-disabled btn-sm">
 					{isLoading ? 'Chargement...' : 'Aucun élément'}
 				</li>
 			{/each}

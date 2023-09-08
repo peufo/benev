@@ -14,7 +14,7 @@
 	class:btn-square={justIcon}
 	on:click={() => dialog.showModal()}
 >
-	<Icon path={mdiAccountPlusOutline} />
+	<Icon path={mdiAccountPlusOutline} title={justIcon ? 'Inviter un nouveau membre' : ''} />
 	{#if !justIcon}
 		Inviter un membre
 	{/if}
@@ -24,15 +24,10 @@
 	<div class="modal-box">
 		<div class="flex justify-between">
 			<span class="card-title">Inviter un nouveau membre</span>
-			<button class="btn btn-square btn-ghost btn-sm" on:click={() => dialog.close()}>
+			<button type="button" class="btn btn-square btn-ghost btn-sm" on:click={() => dialog.close()}>
 				<Icon path={mdiClose} />
 			</button>
 		</div>
-		<InviteForm
-			on:success={() => {
-				console.log('YOLO')
-				dialog.close()
-			}}
-		/>
+		<InviteForm on:success={() => dialog.close()} />
 	</div>
 </dialog>

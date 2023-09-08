@@ -40,7 +40,7 @@
 			path={mdiPlus}
 			on:click={() => dispatch('create')}
 			title={createTitle}
-			class="outline outline-2 outline-primary-light hover:bg-primary"
+			class="btn btn-square"
 		/>
 	</div>
 {/if}

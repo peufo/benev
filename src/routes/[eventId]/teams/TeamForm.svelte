@@ -1,10 +1,12 @@
 <script lang="ts">
+	import type { Team, Member, User } from '@prisma/client'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
-	import { InputRelations, InputText, InputTextarea, DeleteButton } from '$lib/material'
 	import { api } from '$lib/api'
-	import type { Team, Member, User } from '@prisma/client'
+	import { InputRelations, InputText, InputTextarea, DeleteButton, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
+	import { mdiAccountPlusOutline, mdiClose } from '@mdi/js'
+	import InviteForm from '$lib/InviteForm.svelte'
 
 	let klass = ''
 	export { klass as class }
@@ -12,6 +14,8 @@
 	export let team: (Team & { leaders: (Member & { user: User })[] }) | undefined = undefined
 
 	const form = useForm({ successUpdate: false })
+
+	let inviteDialog: HTMLDialogElement
 </script>
 
 <form method="post" class="{klass} flex flex-col gap-2" use:enhance={form.submit}>
@@ -30,18 +34,24 @@
 		search={$api.member.search}
 		value={team?.leaders}
 	>
-		<!-- Good typing -->
+		<!-- Good type -->
 		<span slot="badge" let:item>
-			{item.user.firstName} {item.user.lastName}
+			{item.user.firstName}
+			{item.user.lastName}
 		</span>
 
-		<!-- Bad typing -->
+		<!-- Bad type (any) -->
 		<div slot="listItem" let:item class="flex w-full">
 			<span>{item.user.firstName} {item.user.lastName}</span>
-			<div class="grow"></div>
+			<div class="grow" />
 			<span style="font-size: 0.6rem;">{item.user.email}</span>
 		</div>
-	
+
+		<div slot="append">
+			<button type="button" class="btn btn-square" on:click={() => inviteDialog.showModal()}>
+				<Icon path={mdiAccountPlusOutline} title="Inviter un nouveau membre" />
+			</button>
+		</div>
 	</InputRelations>
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
 
@@ -54,3 +64,19 @@
 		<a class="btn btn-ghost" href="{$eventPath}/teams">Annuler</a>
 	</div>
 </form>
+
+<dialog bind:this={inviteDialog} class="modal">
+	<div class="modal-box">
+		<div class="flex justify-between">
+			<span class="card-title">Inviter un nouveau membre</span>
+			<button
+				type="button"
+				class="btn btn-square btn-ghost btn-sm"
+				on:click={() => inviteDialog.close()}
+			>
+				<Icon path={mdiClose} />
+			</button>
+		</div>
+		<InviteForm on:success={() => inviteDialog.close()} />
+	</div>
+</dialog>

@@ -7,10 +7,7 @@
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 	const form = useForm({
-		successCallback: () => {
-			console.log('ECHO')
-			dispatch('success')
-		},
+		successCallback: () => dispatch('success'),
 		successMessage: 'Invitation envoyée',
 	})
 </script>

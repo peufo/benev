@@ -130,20 +130,24 @@
 				</div>
 			{/if}
 
-			<input
-				type="text"
-				id="relations_{key}"
-				name="relations_{key}"
-				bind:value={searchValue}
-				on:input={(e) => searchItemsDebounce(e.currentTarget.value)}
-				on:focus={handleFocus}
-				on:blur={handleBlur}
-				autocomplete="off"
-				{placeholder}
-				class="input-bordered input grow"
-			/>
+			<div class="flex grow gap-2">
+				<input
+					type="text"
+					id="relations_{key}"
+					name="relations_{key}"
+					bind:value={searchValue}
+					on:input={(e) => searchItemsDebounce(e.currentTarget.value)}
+					on:focus={handleFocus}
+					on:blur={handleBlur}
+					autocomplete="off"
+					{placeholder}
+					class="input-bordered input grow"
+				/>
 
-			<RelationAfter {isLoading} {createUrl} {createTitle} />
+				<RelationAfter {isLoading} {createUrl} {createTitle} />
+
+				<slot name="append" />
+			</div>
 		</div>
 	</FormControl>
 
