@@ -10,8 +10,6 @@
 	export { klass as class }
 	export let withLabel = false
 
-	let container: HTMLDivElement
-
 	$: accepted = period.subscribes.filter((sub) => sub.state === 'accepted').length
 	$: request = period.subscribes.filter((sub) => sub.state === 'request').length
 
@@ -24,10 +22,7 @@
 	class:flex-col={withLabel}
 	class:gap-2={withLabel}
 >
-	<div
-		bind:this={container}
-		class="h-2 rounded bg-base-300 w-full relative overflow-hidden {klass}"
-	>
+	<div class="h-2 rounded bg-base-300 w-full relative overflow-hidden {klass}">
 		<div
 			class="h-2 bg-warning absolute rounded-r"
 			style:width="{100 * ((accepted + request) / period.maxSubscribe)}%"
@@ -61,7 +56,7 @@
 			</span>
 		</div>
 	{:else}
-		<span class="badge badge-sm">
+		<span class="badge badge-sm whitespace-nowrap">
 			{accepted + request} / {period.maxSubscribe}
 		</span>
 	{/if}

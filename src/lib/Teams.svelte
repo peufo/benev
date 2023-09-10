@@ -50,7 +50,7 @@
 							</span>
 						{/each}
 					</td>
-					<td class="whitespace-normal sm:whitespace-nowrap" data-prepend>
+					<td>
 						<Progress period={{ maxSubscribe, subscribes }} />
 					</td>
 

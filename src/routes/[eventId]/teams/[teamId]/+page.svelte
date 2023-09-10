@@ -85,7 +85,7 @@
 							{formatRange(period)}
 						</td>
 						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center">
-							<Progress {period} class="w-14" />
+							<Progress {period} class="w-[60px]" />
 
 							{#if iAmSubscribed}
 								<SubscribeState state={iAmSubscribed.state} />
