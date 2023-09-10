@@ -69,7 +69,8 @@
 					{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
 					{@const iAmSubscribed = period.subscribes.find((sub) => sub.memberId === data.member?.id)}
 					{@const isComplet = nbSubscribe >= period.maxSubscribe}
-					{@const disabled = iAmSubscribed || isComplet}
+					{@const available = !iAmSubscribed && !isComplet}
+					{@const disabled = !data.isLeader && !available}
 					<tr
 						class="relative"
 						class:hover={!disabled}
@@ -94,7 +95,7 @@
 
 							{#if data.isLeader}
 								<div class="flex gap-2">
-									{#if !disabled}
+									{#if available}
 										<button
 											class="btn btn-square btn-sm"
 											on:click|stopPropagation={() => subscribe(period)}

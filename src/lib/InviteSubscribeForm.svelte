@@ -13,7 +13,12 @@
 	let member: (Member & { user: User }) | null = null
 </script>
 
-<form method="post" action="" use:enhance={form.submit} class="flex flex-col gap-2">
+<form
+	method="post"
+	action="?/invite_subscribe"
+	use:enhance={form.submit}
+	class="flex flex-col gap-2"
+>
 	<div class="flex gap-2 items-end justify-end">
 		<div class="grow max-w-sm">
 			<InputRelation

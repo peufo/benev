@@ -12,8 +12,8 @@
 
 	let container: HTMLDivElement
 
-	const accepted = period.subscribes.filter((sub) => sub.state === 'accepted').length
-	const request = period.subscribes.filter((sub) => sub.state === 'request').length
+	$: accepted = period.subscribes.filter((sub) => sub.state === 'accepted').length
+	$: request = period.subscribes.filter((sub) => sub.state === 'request').length
 
 	const plurial = (n: number) => (n > 1 ? 's' : '')
 </script>

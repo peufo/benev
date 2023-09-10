@@ -26,15 +26,3 @@ export async function tryOrFail<T = unknown>(
 		}
 	}
 }
-
-export async function tryOrRedirect<T = unknown>(
-	fn: () => Promise<T>,
-	redirectTo: string
-): Promise<T> {
-	try {
-		return await fn()
-	} catch (error: any) {
-		console.error(error)
-		throw redirect(302, redirectTo)
-	}
-}

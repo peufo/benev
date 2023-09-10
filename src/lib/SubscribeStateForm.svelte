@@ -5,16 +5,15 @@
 	import { enhance } from '$app/forms'
 	import { Icon } from '$lib/material'
 	import { mdiCloseOctagonOutline, mdiCheck } from '@mdi/js'
+	import { eventPath } from './store'
 
 	export let subscribe: Subscribe
-	export let action = ''
+	export let action = `${$eventPath}/subscribes/${subscribe.id}`
 
 	const form = useForm({ successMessage: 'Status changé' })
 </script>
 
 <form method="post" use:enhance={form.submit} class="h-8">
-	<input type="hidden" name="id" value={subscribe.id} />
-
 	<div class="dropdown dropdown-end">
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<!-- svelte-ignore a11y-label-has-associated-control -->
