@@ -6,6 +6,7 @@
 	import { type InputProps, type Options, parseOptions } from '.'
 	import { ButtonMenu, Icon } from '$lib/material'
 	import { urlParam } from '$lib/store'
+	import { jsonParse } from '$lib/jsonParse'
 
 	type $$Props = InputProps<string[]> & {
 		key: string
@@ -27,7 +28,7 @@
 
 	export let key: string
 	export let options: Options
-	export let value = _value || JSON.parse($page.url.searchParams.get(key) || '[]')
+	export let value = _value || jsonParse($page.url.searchParams.get(key), [])
 
 	let menu: ButtonMenu
 

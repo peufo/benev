@@ -8,6 +8,7 @@
 	import MembersFilter from './MembersFilter.svelte'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
+	import { jsonParse } from '$lib/jsonParse'
 
 	type _Member = Member & {
 		user: { email: string; firstName: string; lastName: string; birthday: Date | null }
@@ -57,7 +58,7 @@
 					cellValue: (m: _Member) => {
 						const { value } = m.profile.find((f) => f.fieldId === cur.id) || { value: '' }
 						if (!value) return ''
-						if (cur.type === 'multiselect') return JSON.parse(value)
+						if (cur.type === 'multiselect') return jsonParse(value, [])
 						if (cur.type === 'boolean') return value === 'true'
 						if (cur.type === 'number') return +value
 						return value

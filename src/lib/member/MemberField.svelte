@@ -8,6 +8,7 @@
 		InputRadio,
 		InputCheckboxs,
 	} from '$lib/material/input'
+	import { jsonParse } from '$lib/jsonParse'
 
 	export let field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
 	export let value = ''
@@ -28,7 +29,7 @@
 		number: (v) => +v,
 		boolean: (v) => v === 'true',
 		select: (v) => v,
-		multiselect: (v) => (v ? (JSON.parse(v) as string[]) : []),
+		multiselect: (v) => jsonParse<string[]>(v, []),
 	}
 </script>
 
@@ -38,6 +39,6 @@
 	class={klass}
 	key={field.name}
 	label={field.label || field.name}
-	options={JSON.parse(field.options || '[]')}
+	options={jsonParse(field.options, [])}
 	input={{ disabled: !field.memberCanWrite && !canWriteAll }}
 />
