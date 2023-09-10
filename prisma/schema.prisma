@@ -99,7 +99,7 @@ model Field {
   memberCanRead  Boolean
   required       Boolean      @default(false)
   description    String?
-  options        String?
+  options        String?      @db.Text()
   values         FieldValue[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
