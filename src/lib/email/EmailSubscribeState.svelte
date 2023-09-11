@@ -7,6 +7,7 @@
 	export let subscribe: Subscribe & {
 		period: Period & { team: Team & { event: Event } }
 	}
+
 </script>
 
 <EmailLayout
