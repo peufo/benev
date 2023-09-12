@@ -46,7 +46,7 @@
 
 <form
 	action={`${$eventPath}/teams/${$page.params.teamId}${
-		isUpdate ? '?/update_period' : '?/new_period'
+		isUpdate ? `/${$page.params.periodId}?/update_period` : '?/new_period'
 	}`}
 	method="post"
 	use:enhance={form.submit}
