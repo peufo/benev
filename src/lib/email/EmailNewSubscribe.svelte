@@ -9,11 +9,12 @@
 		period: Period & { team: Team & { event: Event } }
 	}
 
+	// If author is defined, this mail is destined to leader
+	export let author: { firstName: string; lastName: string } | undefined = undefined
 
-	// If author is defined, this mail is destined to leader 
-	export let author: {firstName: string, lastName: string} | undefined = undefined
+	let to: 'user' | 'leader' = subscribe.createdBy === 'user' ? 'leader' : 'user'
 
-	let to: 'user' | 'leader' = author ? 'user' : 'leader'
+	if (subscribe.createdBy === 'leader' && !author) throw new Error('prop "author" is required')
 </script>
 
 <EmailLayout title={subscribe.period.team.event.name} subtitle="Nouvelle inscription">
@@ -22,46 +23,47 @@
 		<p>
 			Bonne nouvelle ! <br />
 			<b>{subscribe.member.user.firstName} {subscribe.member.user.lastName}</b>
-			souhaite renforcer le secteur <b>{subscribe.period.team.name}</b>
-			durant la période suivante :
+			souhaite participer à la période de travail suivante :
 		</p>
 	{:else if author}
 		<p>
 			Salut ! <br />
-			<b>{author.firstName} {author.lastName}</b> t'invite à rejoindre l'équipe de bénévoles
-			<b>{subscribe.period.team.name}</b>
-			durant la période suivante.
+			<b>{author.firstName} {author.lastName}</b> t'invite à rejoindre l'équipe de bénévoles durant la
+			période de travail suivante :
+		</p>
+	{:else}
+		<p>
+			Salut ! <br />
+			Tu es invité à rejoindre l'équipe de bénévoles durant la période de travail suivante :
 		</p>
 	{/if}
 
+	<b>{subscribe.period.team.name}</b><br />
 	<b>{formatRange(subscribe.period)}</b>
 
-
 	{#if to === 'leader'}
-	<p>
-		Verifie
-		<a
-			href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
-			target="_blank"
-		>
-			ses informations
-		</a>
-		et
-		<a
-			target="_blank"
-			href="{domain}/{subscribe.period.team.eventId}/teams/{subscribe.period
-				.teamId}/{subscribe.periodId}"
-		>
-			valide son inscription
-		</a>
-		si tout te semble ok.
-	</p>
+		<p>
+			Verifie
+			<a
+				href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
+				target="_blank"
+			>
+				ses informations
+			</a>
+			et
+			<a
+				target="_blank"
+				href="{domain}/{subscribe.period.team.eventId}/teams/{subscribe.period
+					.teamId}/{subscribe.periodId}"
+			>
+				valide son inscription
+			</a>
+			si tout te semble ok.
+		</p>
 	{:else}
 		<p>
-			Tu peux voir et confirmer tes inscriptions 
-			<a href="{domain}/{subscribe.period.team.eventId}/me">
-				en cliquant ici.
-			</a>
+			Tu peux voir et confirmer tes inscriptions
+			<a href="{domain}/{subscribe.period.team.eventId}/me"> en cliquant ici. </a>
 		</p>
 	{/if}
 </EmailLayout>

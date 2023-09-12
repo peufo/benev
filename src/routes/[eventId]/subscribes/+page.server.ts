@@ -54,7 +54,7 @@ export const actions = {
 					from: subscribe.period.team.event.name,
 					to,
 					subject: 'Nouvelle inscription',
-					props: { subscribe },
+					props: { subscribe, author: session.user },
 				})
 		})
 	},
