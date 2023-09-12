@@ -4,7 +4,6 @@
 
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam } from '$lib/store'
-	import SubscribeState from '$lib/SubscribeState.svelte'
 	import { formatRange } from '$lib/formatRange'
 	import PeriodForm from './[periodId]/PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
@@ -15,6 +14,7 @@
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import Progress from '$lib/Progress.svelte'
 	import { slide } from 'svelte/transition'
+	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
 
 	export let data
 
@@ -88,7 +88,7 @@
 							<Progress {period} class="w-[60px]" />
 
 							{#if mySubscribe}
-								<SubscribeState subscribe={mySubscribe} />
+								<SubscribeStateForm subscribe={mySubscribe} isMember isLeader={!!data.isLeader} />
 							{:else}
 								<div class="grow" />
 							{/if}

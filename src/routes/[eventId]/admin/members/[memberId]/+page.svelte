@@ -19,7 +19,7 @@
 		/>
 	</Profile>
 
-	<UserSubscribes events={[data.event]} title="" isEditor>
+	<UserSubscribes events={[data.event]} title="" isLeader>
 		<span slot="title">Inscriptions</span>
 	</UserSubscribes>
 

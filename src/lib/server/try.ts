@@ -1,4 +1,4 @@
-import { type ActionFailure, fail, redirect } from '@sveltejs/kit'
+import { type ActionFailure, fail, redirect, HttpError_1 } from '@sveltejs/kit'
 
 export async function tryOrFail<T = unknown>(
 	fn: () => Promise<T>,
@@ -12,7 +12,10 @@ export async function tryOrFail<T = unknown>(
 		isSuccess = true
 		return result
 	} catch (error: any) {
-		console.error(error)
+		if ('status' in error && 'body' in error && 'message' in error.body) {
+			return fail(error.status, { message: error.body.message })
+		}
+
 		if ('meta' in error && error.meta && 'cause' in error.meta) {
 			return fail(400, { message: error.meta.cause })
 		}

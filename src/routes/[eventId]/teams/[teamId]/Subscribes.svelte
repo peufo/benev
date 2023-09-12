@@ -27,7 +27,7 @@
 				<Contact user={subscribe.member.user} />
 			{/if}
 
-			<SubscribeStateForm {subscribe} />
+			<SubscribeStateForm {subscribe} isLeader />
 		</div>
 	{:else}
 		<div class="flex flex-end justify-center text-secondary">Aucune inscription pour l'instant</div>

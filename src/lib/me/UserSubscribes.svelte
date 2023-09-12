@@ -1,9 +1,7 @@
 <script lang="ts">
 	import type { Event, Period, Subscribe, Team } from '@prisma/client'
 	import { formatRange } from '$lib/formatRange'
-	import SubscribeState from '$lib/SubscribeState.svelte'
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
-	import { eventPath } from '$lib/store'
 	import { Card, Placeholder } from '$lib/material'
 	import { rowLink } from '$lib/action'
 	import { page } from '$app/stores'
@@ -13,7 +11,8 @@
 	})[]
 
 	export let title = ''
-	export let isEditor = false
+	export let isLeader = false
+	export let isMember = false
 </script>
 
 <div class="flex flex-col gap-10">
@@ -53,22 +52,23 @@
 										<tbody>
 											{#each team.periods as period}
 												<tr
-													class={isEditor ? 'hover:bg-base-200/80' : ''}
+													class={isLeader ? 'hover:bg-base-200/80' : ''}
 													use:rowLink={{
 														href: `/${event.id}/teams/${team.id}?periodOpen=${period.id}`,
 														addRowClasses: false,
-														enable: isEditor,
+														enable: isLeader,
 													}}
 												>
 													<td class="w-full">
 														{formatRange(period)}
 													</td>
 													<td data-prepend>
-														{#if isEditor}
-															<SubscribeStateForm subscribe={period.subscribes[0]} />
-														{:else}
-															<SubscribeState subscribe={period.subscribes[0]} />
-														{/if}
+														<SubscribeStateForm
+															subscribe={period.subscribes[0]}
+															eventId={event.id}
+															{isLeader}
+															{isMember}
+														/>
 													</td>
 												</tr>
 											{/each}

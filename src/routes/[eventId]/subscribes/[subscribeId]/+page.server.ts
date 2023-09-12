@@ -2,16 +2,22 @@ import { SubscribeState } from '@prisma/client'
 import { isLeaderOrThrow, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
 import { EmailSubscribeState } from '$lib/email'
 import { Action } from './$types'
+import { error } from '@sveltejs/kit'
 
 const setSubscribState: (state: SubscribeState) => Action =
 	(state) =>
 	({ locals, params: { subscribeId } }) => {
 		return tryOrFail(async () => {
-			const { period } = await prisma.subscribe.findUniqueOrThrow({
+			const _subscribe = await prisma.subscribe.findUniqueOrThrow({
 				where: { id: subscribeId },
-				include: { period: true },
+				include: { period: true, member: true },
 			})
-			await isLeaderOrThrow(period.teamId, locals)
+
+			if (_subscribe.createdBy === 'user') await isLeaderOrThrow(_subscribe.period.teamId, locals)
+			if (_subscribe.createdBy === 'leader') {
+				const session = await locals.auth.validate()
+				if (session?.user.id !== _subscribe.member.userId) throw error(401)
+			}
 
 			const subscribe = await prisma.subscribe.update({
 				where: { id: subscribeId },
