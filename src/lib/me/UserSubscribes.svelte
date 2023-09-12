@@ -65,10 +65,7 @@
 													</td>
 													<td data-prepend>
 														{#if isEditor}
-															<SubscribeStateForm
-																subscribe={period.subscribes[0]}
-																action="{$eventPath}/teams/{period.teamId}"
-															/>
+															<SubscribeStateForm subscribe={period.subscribes[0]} />
 														{:else}
 															<SubscribeState subscribe={period.subscribes[0]} />
 														{/if}
