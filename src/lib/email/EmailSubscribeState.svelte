@@ -9,7 +9,7 @@
 		period: Period & { team: Team & { event: Event } }
 	}
 
-	let to: 'user' | 'leader' = subscribe.createdBy === 'user' ? 'leader' : 'user'
+	let to: 'user' | 'leader' = subscribe.createdBy
 </script>
 
 <EmailLayout
