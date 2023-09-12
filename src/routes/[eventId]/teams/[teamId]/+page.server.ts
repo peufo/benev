@@ -1,9 +1,6 @@
-import { isLeaderOrThrow, parseFormData, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
-import { periodShema, periodShemaUpdate, subscribeShema } from '$lib/form'
-import { error, fail } from '@sveltejs/kit'
-
-import { EmailNewSubscribe, EmailSubscribeState } from '$lib/email'
-import type { SubscribeState } from '@prisma/client'
+import { isLeaderOrThrow, parseFormData, prisma, tryOrFail } from '$lib/server'
+import { periodShema } from '$lib/form'
+import { fail } from '@sveltejs/kit'
 
 export const load = async ({ params, parent }) => {
 	const { isLeader } = await parent()

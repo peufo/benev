@@ -27,7 +27,7 @@ export const actions = {
 				data: {
 					...data,
 					state: _isLeader && isSelfSubscribe ? 'accepted' : 'request',
-					request: isSelfSubscribe ? 'byUser' : 'byLeader',
+					createdBy: isSelfSubscribe ? 'user' : 'leader',
 				},
 				include: {
 					member: { include: { user: true } },
@@ -44,11 +44,16 @@ export const actions = {
 				},
 			})
 
-			if (subscribe.period.team.leaders.length)
+			const to =
+				subscribe.createdBy === 'user'
+					? subscribe.period.team.leaders.map(({ user }) => user.email)
+					: [subscribe.member.user.email]
+
+			if (to.length)
 				await sendEmailTemplate(EmailNewSubscribe, {
 					from: subscribe.period.team.event.name,
-					to: subscribe.period.team.leaders.map(({ user }) => user.email),
-					subject: 'Un nouveau bénévole',
+					to,
+					subject: 'Nouvelle inscription',
 					props: { subscribe },
 				})
 		})

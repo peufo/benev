@@ -17,7 +17,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 				where: { id: subscribeId },
 				data: { state },
 				include: {
-					member: { include: { user: { select: { email: true } } } },
+					member: { include: { user: true } },
 					period: {
 						include: {
 							team: {
@@ -31,12 +31,19 @@ const setSubscribState: (state: SubscribeState) => Action =
 				},
 			})
 
-			await sendEmailTemplate(EmailSubscribeState, {
-				from: subscribe.period.team.event.name,
-				to: subscribe.member.user.email,
-				subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'refusée'}`,
-				props: { subscribe },
-			})
+			const to =
+				subscribe.createdBy === 'user'
+					? [subscribe.member.user.email]
+					: subscribe.period.team.leaders.map((l) => l.user.email)
+
+			if (to.length) {
+				await sendEmailTemplate(EmailSubscribeState, {
+					from: subscribe.period.team.event.name,
+					to,
+					subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'refusée'}`,
+					props: { subscribe },
+				})
+			}
 		})
 	}
 

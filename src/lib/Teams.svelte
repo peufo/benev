@@ -8,7 +8,7 @@
 	import Progress from '$lib/Progress.svelte'
 
 	export let teams: (Team & {
-		leaders: (Member & { user: User })[]
+		leaders: (Member & { user: { firstName: string; lastName: string } })[]
 		periods: (Period & { subscribes: Subscribe[] })[]
 	})[]
 	export let isOwner: boolean

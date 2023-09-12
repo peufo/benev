@@ -2,8 +2,20 @@ import { teamShema } from '$lib/form/team'
 import { parseFormData } from '$lib/server/formData'
 import { isOwnerOrThrow, prisma, tryOrFail } from '$lib/server'
 
-export const load = async ({ params, locals }) => {
-	await isOwnerOrThrow(params.eventId, locals)
+export const load = async ({ locals, params: { teamId, eventId } }) => {
+	await isOwnerOrThrow(eventId, locals)
+	return {
+		team: await prisma.team.findUniqueOrThrow({
+			where: { id: teamId },
+			include: {
+				leaders: {
+					include: {
+						user: true,
+					},
+				},
+			},
+		}),
+	}
 }
 
 export const actions = {

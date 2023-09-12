@@ -4,7 +4,8 @@
 	export let data
 </script>
 
-<EmailNewSubscribe subscribe={data.subscribe}  />
-<EmailNewSubscribe subscribe={data.subscribe} author={{ firstName: 'Jean', lastName: 'Valjean'}} />
+<EmailNewSubscribe subscribe={data.subscribe} />
+<EmailNewSubscribe subscribe={data.subscribe} author={{ firstName: 'Jean', lastName: 'Valjean' }} />
 
+<EmailSubscribeState subscribe={data.subscribe} />
 <EmailSubscribeState subscribe={data.subscribe} />

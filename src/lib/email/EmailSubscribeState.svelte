@@ -1,44 +1,60 @@
 <script lang="ts">
-	import type { Subscribe, Period, Team, Event } from '@prisma/client'
+	import type { Subscribe, Period, Team, Event, User } from '@prisma/client'
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
 	import { formatRange } from '$lib/formatRange'
 	import { domain } from '.'
 
 	export let subscribe: Subscribe & {
+		member: { user: User }
 		period: Period & { team: Team & { event: Event } }
 	}
 
+	let to: 'user' | 'leader' = subscribe.createdBy === 'user' ? 'leader' : 'user'
 </script>
 
 <EmailLayout
 	title={subscribe.period.team.event.name}
-	subtitle="Ton inscription a été {subscribe.state === 'accepted' ? 'validée' : 'refusée'}"
+	subtitle="{to === 'user' ? 'Ton' : 'Une'} inscription a été {subscribe.state === 'accepted'
+		? 'validée'
+		: 'refusée'}"
 >
 	{#if subscribe.state === 'accepted'}
+		{#if to === 'user'}
+			<p>
+				Bonne nouvelle ! <br />
+				Tu pourras rejoindre la période de travail suivante :
+			</p>
+		{:else}
+			<p>
+				Bonne nouvelle ! <br />
+				<b>{subscribe.member.user.firstName} {subscribe.member.user.lastName}</b>
+				a confirmé sa participation à la période suivante :
+			</p>
+		{/if}
+	{:else if to === 'user'}
+		<p>Désolé, ton inscription à la période de travail suivante a été refusée :</p>
+	{:else}
 		<p>
-			Bonne nouvelle ! <br />
-			Tu pourras rejoindre le secteur
-			<b>{subscribe.period.team.name}</b>
-			durant la période suivante :
+			Désolé,
+			<b>{subscribe.member.user.firstName} {subscribe.member.user.lastName}</b>
+			a refusé de participer à la période de travail suivante :
+		</p>
+	{/if}
+
+	<b>{subscribe.period.team.name}</b><br />
+	<b>{formatRange(subscribe.period)}</b>
+
+	{#if to === 'user'}
+		<p>
+			Tu peux trouver toutes tes inscriptions sur
+			<a href="{domain}/{subscribe.period.team.eventId}/me">ton tableau de bord.</a>
 		</p>
 	{:else}
 		<p>
-			Désolé, ton inscription au secteur
-			<b>{subscribe.period.team.name}</b>
-			a été refusée pour la période de travail suivante :
+			Retrouve toute les inscriptions de {subscribe.member.user.firstName} sur
+			<a href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}">
+				son profil.
+			</a>
 		</p>
 	{/if}
-
-	<b>{formatRange(subscribe.period)}</b>
-
-	{#if subscribe.state === 'denied'}
-		Retourne
-		<a href="{domain}/{subscribe.period.team.eventId}/teams">sur la plateforme</a>
-		si tu souhaites trouver une autre tranche horaire. Merci pour ta disponibilité !
-	{/if}
-
-	<p>
-		Tu peux retrouver toutes tes inscription sur
-		<a href="{domain}/{subscribe.period.team.eventId}/me">ton tableau de bord.</a>
-	</p>
 </EmailLayout>
