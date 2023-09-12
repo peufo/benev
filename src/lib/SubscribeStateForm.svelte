@@ -28,7 +28,9 @@
 		<div class="dropdown dropdown-end">
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label tabindex="0" class="btn btn-square btn-sm">
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+			<label tabindex="0" class="btn btn-square btn-sm" on:click|stopPropagation>
 				<SubscribeState {subscribe} />
 			</label>
 

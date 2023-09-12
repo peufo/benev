@@ -44,6 +44,8 @@ export const actions = {
 				},
 			})
 
+			if (_isLeader && isSelfSubscribe) return
+
 			const to =
 				subscribe.createdBy === 'user'
 					? subscribe.period.team.leaders.map(({ user }) => user.email)
