@@ -54,7 +54,7 @@
 												<tr
 													class={isLeader ? 'hover:bg-base-200/80' : ''}
 													use:rowLink={{
-														href: `/${event.id}/teams/${team.id}?periodOpen=${period.id}`,
+														href: `/${event.id}/teams/${team.id}/${period.id}`,
 														addRowClasses: false,
 														enable: isLeader,
 													}}

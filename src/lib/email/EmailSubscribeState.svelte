@@ -51,7 +51,7 @@
 		</p>
 	{:else}
 		<p>
-			Retrouve toute les inscriptions de {subscribe.member.user.firstName} sur
+			Retrouve toutes les inscriptions de {subscribe.member.user.firstName} sur
 			<a href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}">
 				son profil.
 			</a>
