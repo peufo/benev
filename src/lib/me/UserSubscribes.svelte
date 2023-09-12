@@ -70,7 +70,7 @@
 																action="{$eventPath}/teams/{period.teamId}"
 															/>
 														{:else}
-															<SubscribeState state={period.subscribes[0].state} />
+															<SubscribeState subscribe={period.subscribes[0]} />
 														{/if}
 													</td>
 												</tr>

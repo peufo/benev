@@ -18,7 +18,7 @@
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label tabindex="0" class="btn btn-square btn-sm">
-			<SubscribeState state={subscribe.state} />
+			<SubscribeState {subscribe} />
 		</label>
 
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->

@@ -1,21 +1,23 @@
 <script lang="ts">
 	import { mdiAlertOctagonOutline, mdiCheck, mdiCloseOctagonOutline } from '@mdi/js'
-	import type { SubscribeState } from '@prisma/client'
+	import type { Subscribe } from '@prisma/client'
 	import { Icon } from '$lib/material'
 
 	let klass = ''
 	export { klass as class }
-	export let state: SubscribeState
+	export let subscribe: Subscribe
 </script>
 
-{#if state === 'request'}
+{#if subscribe.state === 'request'}
 	<Icon
 		path={mdiAlertOctagonOutline}
 		class="fill-warning {klass}"
-		title="En attente de validation"
+		title="En attente de validation {subscribe.createdBy === 'user'
+			? `d'un responsable`
+			: `du membre`}"
 	/>
-{:else if state === 'accepted'}
+{:else if subscribe.state === 'accepted'}
 	<Icon path={mdiCheck} class="fill-success {klass}" title="Inscription confirmée" />
-{:else if state === 'denied'}
+{:else if subscribe.state === 'denied'}
 	<Icon path={mdiCloseOctagonOutline} class="fill-error {klass}" title="Inscription refusée" />
 {/if}

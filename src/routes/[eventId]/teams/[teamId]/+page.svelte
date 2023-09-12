@@ -67,9 +67,9 @@
 				{#each data.periods as period}
 					{@const isOpen = $urlParam.hasValue(periodOpenKey, period.id)}
 					{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
-					{@const iAmSubscribed = period.subscribes.find((sub) => sub.memberId === data.member?.id)}
+					{@const mySubscribe = period.subscribes.find((sub) => sub.memberId === data.member?.id)}
 					{@const isComplet = nbSubscribe >= period.maxSubscribe}
-					{@const available = !iAmSubscribed && !isComplet}
+					{@const available = !mySubscribe && !isComplet}
 					{@const disabled = !data.isLeader && !available}
 					<tr
 						class="relative"
@@ -87,8 +87,8 @@
 						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-between">
 							<Progress {period} class="w-[60px]" />
 
-							{#if iAmSubscribed}
-								<SubscribeState state={iAmSubscribed.state} />
+							{#if mySubscribe}
+								<SubscribeState subscribe={mySubscribe} />
 							{:else}
 								<div class="grow" />
 							{/if}
