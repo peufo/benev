@@ -28,7 +28,7 @@
 		</div>
 		<div>
 			<Subscribes subscribes={data.period.subscribes} />
-			<InviteSubscribeForm />
+			<InviteSubscribeForm periodId={data.period.id} />
 		</div>
 	</div>
 </Card>

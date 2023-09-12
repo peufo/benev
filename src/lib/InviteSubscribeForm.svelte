@@ -1,11 +1,14 @@
 <script lang="ts">
+	import { mdiAccountPlusOutline } from '@mdi/js'
 	import { Member, User } from '@prisma/client'
 	import { Dialog, Icon, InputRelation } from '$lib/material'
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
 	import InviteForm from '$lib/InviteForm.svelte'
 	import { api } from '$lib/api'
-	import { mdiAccountPlusOutline } from '@mdi/js'
+	import { eventPath } from '$lib/store'
+
+	export let periodId: string
 
 	let newMemberDialog: HTMLDialogElement
 
@@ -15,14 +18,16 @@
 
 <form
 	method="post"
-	action="?/invite_subscribe"
+	action="{$eventPath}/subscribes?/new_subscribe"
 	use:enhance={form.submit}
 	class="flex flex-col gap-2"
 >
+	<input type="hidden" name="periodId" value={periodId} />
+
 	<div class="flex gap-2 items-end justify-end">
 		<div class="grow max-w-sm">
 			<InputRelation
-				key="member"
+				key="memberId"
 				placeholder="Inscrire un membre"
 				getItem={$api.member.findOne}
 				search={$api.member.search}

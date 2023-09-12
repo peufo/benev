@@ -84,7 +84,7 @@
 						<td class="w-full" class:opacity-70={disabled}>
 							{formatRange(period)}
 						</td>
-						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center">
+						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-between">
 							<Progress {period} class="w-[60px]" />
 
 							{#if iAmSubscribed}
