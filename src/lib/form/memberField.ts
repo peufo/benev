@@ -2,6 +2,7 @@ import z from 'zod'
 import type { Prisma, Field } from '@prisma/client'
 import { toTuple, type ZodObj } from './utils'
 import {
+	mdiTextShort,
 	mdiText,
 	mdiNumeric,
 	mdiCheckboxIntermediateVariant,
@@ -10,7 +11,8 @@ import {
 } from '@mdi/js'
 
 export const memberFieldType: Record<Field['type'], { label: string; icon: string }> = {
-	string: { label: 'Text', icon: mdiText },
+	string: { label: 'Text', icon: mdiTextShort },
+	textarea: { label: 'Text long', icon: mdiText },
 	number: { label: 'Nombre', icon: mdiNumeric },
 	boolean: { label: 'Oui / Non', icon: mdiCheckboxIntermediateVariant },
 	select: { label: 'Liste à choix', icon: mdiOrderBoolDescending },

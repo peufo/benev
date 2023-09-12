@@ -109,6 +109,7 @@ model Field {
 
 enum FieldType {
   string
+  textarea
   number
   boolean
   select

@@ -3,6 +3,7 @@
 	import type { ComponentType } from 'svelte'
 	import {
 		InputText,
+		InputTextarea,
 		InputNumber,
 		InputBoolean,
 		InputRadio,
@@ -18,6 +19,7 @@
 
 	const components: Record<FieldType, ComponentType> = {
 		string: InputText,
+		textarea: InputTextarea,
 		number: InputNumber,
 		boolean: InputBoolean,
 		select: InputRadio,
@@ -26,17 +28,27 @@
 
 	const parseValue: Record<FieldType, (value: string) => string | boolean | number | string[]> = {
 		string: (v) => v,
+		textarea: (v) => v,
 		number: (v) => +v,
 		boolean: (v) => v === 'true',
 		select: (v) => v,
 		multiselect: (v) => jsonParse<string[]>(v, []),
+	}
+
+	const classes: Record<FieldType, string> = {
+		string: '',
+		textarea: 'md:col-span-6',
+		number: '',
+		boolean: '',
+		select: '',
+		multiselect: '',
 	}
 </script>
 
 <svelte:component
 	this={components[field.type]}
 	value={parseValue[field.type](value)}
-	class={klass}
+	class="{classes[field.type]} {klass}"
 	key={field.name}
 	label={field.label || field.name}
 	options={jsonParse(field.options, [])}
