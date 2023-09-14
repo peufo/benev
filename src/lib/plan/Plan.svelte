@@ -1,12 +1,13 @@
 <script lang="ts">
 	import dayjs, { type Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
-	import { Card } from '$lib/material'
+	import { CardFullScreen, Icon } from '$lib/material'
 	import { Period, Subscribe, Team } from '@prisma/client'
 	import PeriodCard from './PeriodCard.svelte'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
+	import { mdiMagnifyMinusOutline, mdiMagnifyPlusOutline } from '@mdi/js'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -32,15 +33,35 @@
 	const hours = Array(24)
 		.fill(0)
 		.map((v, index) => (index + 1).toString().padStart(2, '0'))
+
+	const zoomIn = () => {
+		hourHeight *= 2
+	}
+	const zoomOut = () => {
+		hourHeight /= 2
+	}
 </script>
 
-<Card>
-	<div class="flex">
-		<WorkInProgress />
-		<input type="number" class="input" bind:value={hourHeight} />
+<CardFullScreen let:isFullScreen>
+	<div slot="action" class="contents">
+		<button class="btn btn-square btn-sm" on:click={zoomOut}>
+			<Icon path={mdiMagnifyMinusOutline} />
+		</button>
+		<button class="btn btn-square btn-sm" on:click={zoomIn}>
+			<Icon path={mdiMagnifyPlusOutline} />
+		</button>
 	</div>
 
-	<div class="max-h-[615px] overflow-auto table-pin-cols snap-x scroll-pl-16 bordered">
+	<div class="flex" slot="title">
+		<WorkInProgress />
+	</div>
+
+	<div
+		class="
+			{isFullScreen ? '' : 'max-h-[615px]'} 
+			overflow-auto table-pin-cols snap-x scroll-pl-16 bordered
+		"
+	>
 		<div
 			class="flex min-w-max pr-2 z-10"
 			style="--container-width: {containerWidth}px;"
@@ -104,7 +125,7 @@
 			{/each}
 		</div>
 	</div>
-</Card>
+</CardFullScreen>
 
 <style>
 	.scale {
