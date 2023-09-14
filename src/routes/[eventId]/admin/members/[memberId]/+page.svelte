@@ -37,6 +37,6 @@
 				</a>
 			{/if}
 		</h2>
-		<Teams teams={data.memberProfile.leaderOf} isOwner={data.isOwner} />
+		<Teams teams={data.memberProfile.leaderOf} />
 	</Card>
 </div>

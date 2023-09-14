@@ -20,6 +20,6 @@
 	</div>
 
 	<div class="overflow-x-auto">
-		<Teams teams={data.teams} isOwner={data.isOwner} />
+		<Teams teams={data.teams} />
 	</div>
 </Card>
