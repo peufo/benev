@@ -22,7 +22,7 @@
 	let memberDialog: HTMLDialogElement
 	let memberProfilDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
-	type _Period = (typeof data.periods)[number]
+	type _Period = (typeof data.team.periods)[number]
 	let selectedPeriod: _Period | undefined = undefined
 
 	const periodOpenKey = 'periodOpen'
@@ -54,7 +54,7 @@
 
 	<Leaders leaders={data.team.leaders} />
 
-	{#if data.periods.length}
+	{#if data.team.periods.length}
 		<table class="table text-base">
 			<thead>
 				<tr>
@@ -64,7 +64,7 @@
 			</thead>
 
 			<tbody>
-				{#each data.periods as period}
+				{#each data.team.periods as period}
 					{@const isOpen = $urlParam.hasValue(periodOpenKey, period.id)}
 					{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
 					{@const mySubscribe = period.subscribes.find((sub) => sub.memberId === data.member?.id)}
@@ -84,13 +84,11 @@
 						<td class="w-full" class:opacity-70={disabled}>
 							{formatRange(period)}
 						</td>
-						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-between">
+						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-end">
 							<Progress {period} class="w-[60px]" />
 
 							{#if mySubscribe}
 								<SubscribeStateForm subscribe={mySubscribe} isMember isLeader={!!data.isLeader} />
-							{:else}
-								<div class="grow" />
 							{/if}
 
 							{#if data.isLeader}

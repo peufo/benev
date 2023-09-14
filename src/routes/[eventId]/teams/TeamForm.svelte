@@ -43,7 +43,7 @@
 			<DeleteButton formaction="?/delete" />
 		{/if}
 		<div class="grow" />
-		<a class="btn btn-ghost" href="{$eventPath}/teams">Annuler</a>
+		<a class="btn btn-ghost" href="{$eventPath}/teams{team ? `/${team.id}` : ''}">Annuler</a>
 	</div>
 </form>
 

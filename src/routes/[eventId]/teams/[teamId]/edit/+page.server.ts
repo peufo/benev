@@ -30,7 +30,7 @@ export const actions = {
 					where: { id: params.teamId },
 					data,
 				}),
-			`/${params.eventId}/teams`
+			`/${params.eventId}/teams/${params.teamId}`
 		)
 	},
 	delete: async ({ params, locals }) => {

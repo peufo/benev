@@ -2,8 +2,8 @@
 	import { mdiEmailOutline, mdiPhoneOutline, mdiShieldAccount } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	import { tip } from '$lib/action'
-	import type { LayoutData } from './$types'
-	export let leaders: LayoutData['team']['leaders']
+	import type { PageData } from './$types'
+	export let leaders: PageData['team']['leaders']
 </script>
 
 <div class="flex flex-wrap gap-2">

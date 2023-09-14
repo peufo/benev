@@ -6,7 +6,7 @@
 	import Contact from '$lib/Contact.svelte'
 
 	// TODO: Pourquoi user ne passe pas directement dans le type ???
-	export let subscribes: (PageData['periods'][number]['subscribes'][number] & {
+	export let subscribes: (PageData['team']['periods'][number]['subscribes'][number] & {
 		member?: { user: User }
 	})[]
 </script>

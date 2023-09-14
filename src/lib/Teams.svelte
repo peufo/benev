@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { mdiPencilOutline } from '@mdi/js'
-	import { Member, Period, Team, User, Subscribe } from '@prisma/client'
+	import { Member, Period, Team, Subscribe } from '@prisma/client'
 
-	import { Icon, Placeholder } from '$lib/material'
+	import { Placeholder } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { rowLink, tip } from '$lib/action'
 	import Progress from '$lib/Progress.svelte'
@@ -11,7 +10,6 @@
 		leaders: (Member & { user: { firstName: string; lastName: string } })[]
 		periods: (Period & { subscribes: Subscribe[] })[]
 	})[]
-	export let isOwner: boolean
 </script>
 
 {#if teams.length}
@@ -53,16 +51,6 @@
 					<td>
 						<Progress period={{ maxSubscribe, subscribes }} />
 					</td>
-
-					{#if isOwner}
-						<td class="py-0" data-prepend>
-							<div class="flex justify-end z-10">
-								<a class="btn btn-square btn-sm relative" href="{$eventPath}/teams/{team.id}/edit">
-									<Icon path={mdiPencilOutline} />
-								</a>
-							</div>
-						</td>
-					{/if}
 				</tr>
 			{/each}
 		</tbody>
