@@ -26,6 +26,9 @@ export const actions = {
 	},
 	delete_period: async ({ params, locals }) => {
 		await isLeaderOrThrow(params.teamId, locals)
-		return tryOrFail(() => prisma.period.delete({ where: { id: params.periodId } }))
+		return tryOrFail(
+			() => prisma.period.delete({ where: { id: params.periodId } }),
+			`/${params.eventId}/teams/${params.teamId}`
+		)
 	},
 }
