@@ -23,7 +23,7 @@
 		</thead>
 
 		<tbody>
-			{#each teams as team}
+			{#each teams as team (team.id)}
 				{@const subscribes = team.periods.map((p) => p.subscribes).flat()}
 				{@const maxSubscribe = team.periods
 					.map((p) => p.maxSubscribe)

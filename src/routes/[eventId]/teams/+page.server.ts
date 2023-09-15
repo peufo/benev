@@ -1,9 +1,14 @@
 import { prisma } from '$lib/server'
 
-export const load = async ({ params }) => {
+export const load = async ({ params, url }) => {
+	const search = url.searchParams.get('search')
+
 	return {
 		teams: await prisma.team.findMany({
-			where: { eventId: params.eventId },
+			where: {
+				eventId: params.eventId,
+				...(search && { name: { contains: search } }),
+			},
 			include: {
 				leaders: {
 					include: {
