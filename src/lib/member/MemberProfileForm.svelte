@@ -26,7 +26,7 @@
 	method="post"
 	action="/{event.id}/me/profile"
 	use:enhance={form.submit}
-	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 {klass}"
+	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 grid-flow-row-dense {klass}"
 >
 	{#if memberId}
 		<input type="hidden" name="memberId" value={memberId} />
