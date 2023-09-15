@@ -89,20 +89,21 @@ model Event {
 }
 
 model Field {
-  id             String       @id @default(cuid())
-  eventId        String
-  event          Event        @relation(references: [id], fields: [eventId], onDelete: Cascade)
-  type           FieldType
-  name           String
-  label          String?
-  memberCanWrite Boolean
-  memberCanRead  Boolean
-  required       Boolean      @default(false)
-  description    String?
-  options        String?      @db.Text()
-  values         FieldValue[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  id              String       @id @default(cuid())
+  eventId         String
+  event           Event        @relation(references: [id], fields: [eventId], onDelete: Cascade)
+  type            FieldType
+  name            String
+  label           String?
+  memberCanWrite  Boolean
+  memberCanRead   Boolean
+  allCombinations Boolean      @default(false)
+  required        Boolean      @default(false)
+  description     String?
+  options         String?      @db.Text()
+  values          FieldValue[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
   @@unique([eventId, name])
 }

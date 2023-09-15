@@ -6,6 +6,7 @@
 	import { memberFieldType, useForm } from '$lib/form'
 	import { InputSelect, InputText, InputCheckboxs, DeleteButton, InputOptions } from '$lib/material'
 	import MemberField from './MemberField.svelte'
+	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 	const form = useForm({
@@ -17,7 +18,10 @@
 
 	type NonNull<T> = { [P in keyof T]-?: NonNullable<T[P]> }
 	type FieldForm = { id?: string } & NonNull<
-		Pick<Field, 'type' | 'name' | 'label' | 'options' | 'memberCanRead' | 'memberCanWrite'>
+		Pick<
+			Field,
+			'type' | 'name' | 'label' | 'options' | 'memberCanRead' | 'memberCanWrite' | 'allCombinations'
+		>
 	>
 	export function setField(value: Field | null) {
 		if (value === null) {
@@ -36,6 +40,7 @@
 		name: '',
 		label: '',
 		options: '[]',
+		allCombinations: false,
 		memberCanRead: true,
 		memberCanWrite: true,
 	}
@@ -81,9 +86,22 @@
 		input={{ autocomplete: 'off' }}
 	/>
 
-	{#if field.type === 'select' || field.type === 'multiselect'}
+	{#key field.id}
+		{#if field.type === 'select' || field.type === 'multiselect'}
+			<div transition:slide>
+				<InputOptions key="options" bind:value={field.options} />
+			</div>
+		{/if}
+	{/key}
+
+	{#if field.type === 'multiselect'}
 		<div transition:slide>
-			<InputOptions key="options" bind:value={field.options} />
+			<InputBoolean
+				value={field.allCombinations}
+				key="allCombinations"
+				label="Compter toutes les combinaisons de valeurs"
+				hint="Lors de la syhtèse"
+			/>
 		</div>
 	{/if}
 

@@ -23,6 +23,7 @@ const memberFieldForm = {
 	name: z.string().min(2),
 	memberCanWrite: z.boolean(),
 	memberCanRead: z.boolean(),
+	allCombinations: z.boolean(),
 	description: z.string().optional(),
 	options: z.string().optional(),
 	type: z.enum(toTuple(memberFieldType)),

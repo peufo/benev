@@ -79,8 +79,6 @@ export const load = async ({ params, url }) => {
 
 	if (!where.OR?.length) delete where.OR
 
-	console.log(where)
-
 	return {
 		members: await prisma.member.findMany({
 			where,

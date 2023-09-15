@@ -13,13 +13,19 @@
 					distribution: data.members.reduce((acc, { profile }) => {
 						const { value } = profile.find((v) => v.fieldId === field.id) || { value: '' }
 						if (!value) return acc
-						const key =
+						const keys =
 							field.type === 'select'
-								? value
-								: value.replaceAll(/[\[\"\]]/g, '').replaceAll(',', ', ')
-						if (!key) return acc
-						if (acc[key]) return { ...acc, [key]: acc[key] + 1 }
-						return { ...acc, [key]: 1 }
+								? [value]
+								: field.allCombinations
+								? [value.replaceAll(/[\[\"\]]/g, '').replaceAll(',', ', ')]
+								: (JSON.parse(value) as string[])
+
+						keys.forEach((key) => {
+							if (!key) return
+							if (acc[key]) return (acc = { ...acc, [key]: acc[key] + 1 })
+							acc = { ...acc, [key]: 1 }
+						})
+						return acc
 					}, {} as Record<string, number>),
 				}
 			}
