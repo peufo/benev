@@ -63,7 +63,7 @@
 		<div class="flex gap-4 items-start flex-wrap">
 			<div class="stats bg-base-200 grow">
 				<div class="stat">
-					<div class="stat-title">Bénévoles</div>
+					<div class="stat-title">Membres</div>
 					<div class="stat-value">{data.members.length}</div>
 				</div>
 				<div class="stat">

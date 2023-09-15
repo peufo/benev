@@ -68,7 +68,7 @@
 		</button>
 		{#if value.length}
 			<button class="btn btn-sm btn-square join-item" on:click={handleReset}>
-				<Icon path={mdiClose} class="fill-error" />
+				<Icon path={mdiClose} class="fill-base-content" />
 			</button>
 		{/if}
 	</div>

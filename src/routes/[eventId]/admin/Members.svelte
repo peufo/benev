@@ -52,9 +52,13 @@
 </script>
 
 <Card class="md:col-span-2 overflow-x-auto" headerClass="flex-wrap">
-	<div slot="title" class="flex gap-2 flex-wrap">
+	<div slot="title" class="flex gap-4 flex-wrap">
 		<span>Membres</span>
+	</div>
+
+	<div slot="action" class="flex gap-2 flex-wrap">
 		<InputSearch />
+		<MembersFilter {teams} />
 		<InputCheckboxsMenu
 			key="columns"
 			bind:value={selectedColumns}
@@ -64,10 +68,6 @@
 			right
 			enhanceDisabled
 		/>
-	</div>
-
-	<div slot="action" class="flex gap-2 flex-wrap">
-		<MembersFilter {teams} />
 	</div>
 
 	<div class="overflow-x-auto min-h-[270px]">
