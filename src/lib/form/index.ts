@@ -82,7 +82,6 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 		return async ({ result, update, action }) => {
 			event.submitter?.classList.remove('btn-disabled')
 
-			console.log(result)
 			if (result.type === 'error') {
 				const { message } = result.error
 				notify.error(message || 'Erreur')
