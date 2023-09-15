@@ -2,7 +2,7 @@
 	import { Card, Icon } from '$lib/material'
 	import { mdiArrowCollapse, mdiArrowExpand } from '@mdi/js'
 
-	export let isFullScreen = true
+	export let isFullScreen = false
 	let klass = ''
 	export { klass as class }
 </script>
