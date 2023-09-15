@@ -44,25 +44,29 @@ export const load = async ({ params, url }) => {
 	}
 
 	const allMember = !memberType || memberType === 'all'
-	if (allMember || memberType === 'volunteers')
-		where.OR!.push({
-			subscribes: {
-				some: subscribeWhere,
-			},
-		})
-	if (allMember || memberType === 'leaders')
-		where.OR!.push({
-			leaderOf: {
-				some: {
-					...teamWhere,
-					...(periodWhere && {
-						periods: {
-							some: periodWhere,
-						},
-					}),
+	const subscribesFilter = !allMember || _start || _end || _teams
+
+	if (subscribesFilter) {
+		if (allMember || memberType === 'volunteers')
+			where.OR!.push({
+				subscribes: {
+					some: subscribeWhere,
 				},
-			},
-		})
+			})
+		if (allMember || memberType === 'leaders')
+			where.OR!.push({
+				leaderOf: {
+					some: {
+						...teamWhere,
+						...(periodWhere && {
+							periods: {
+								some: periodWhere,
+							},
+						}),
+					},
+				},
+			})
+	}
 
 	if (search)
 		where.user = {
@@ -75,20 +79,13 @@ export const load = async ({ params, url }) => {
 
 	if (!where.OR?.length) delete where.OR
 
+	console.log(where)
+
 	return {
 		members: await prisma.member.findMany({
 			where,
 			include: {
-				user: {
-					select: {
-						// TODO: conditional select in terms of isValidedByUser
-						email: true,
-						phone: true,
-						firstName: true,
-						lastName: true,
-						birthday: true,
-					},
-				},
+				user: true,
 				leaderOf: true,
 				profile: true,
 				subscribes: {
