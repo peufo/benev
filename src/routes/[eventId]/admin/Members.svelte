@@ -76,7 +76,7 @@
 		<InputCheckboxsMenu
 			key="columns"
 			bind:value={selectedColumns}
-			label="Colonne"
+			label="Choix des colonnes"
 			labelPlurial="Colonnes"
 			options={columns}
 			right

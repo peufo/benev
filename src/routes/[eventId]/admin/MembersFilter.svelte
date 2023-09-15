@@ -9,9 +9,8 @@
 <PeriodPickerButton action="{$eventPath}/admin" />
 <InputCheckboxsMenu
 	key="teams"
-	label="Secteur sélectioné"
+	label="Tous les secteurs"
 	labelPlurial="Secteurs sélectionés"
-	labelDefault="Tous les secteurs"
 	options={teams.map((t) => ({ value: t.id, label: t.name }))}
 	enhanceDisabled
 />

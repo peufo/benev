@@ -12,7 +12,6 @@
 		key: string
 		options: Options
 		labelPlurial: string
-		labelDefault?: string
 		right?: boolean
 	}
 	$: ({
@@ -21,7 +20,7 @@
 		options: _1,
 		class: klass,
 		labelPlurial,
-		labelDefault,
+		label,
 		right,
 		...props
 	} = $$props as $$Props)
@@ -49,6 +48,8 @@
 		value = []
 		goto($urlParam.without(key), { replaceState: true })
 	}
+
+	const getLabel = (value: string) => _options.find((opt) => opt.value === value)?.label
 </script>
 
 <input type="hidden" name={key} value={JSON.stringify(value)} />
@@ -57,12 +58,12 @@
 	<div class="join" slot="btn">
 		<button class="btn btn-sm join-item" on:click={() => menu.setOpen()}>
 			{#if value.length === 0}
-				<span>{labelDefault || labelPlurial}</span>
+				<span>{label || labelPlurial}</span>
+			{:else if value.length === 1}
+				<span>{getLabel(value[0])}</span>
 			{:else}
 				<span class="badge badge-lg">{value.length}</span>
-				<span>
-					{value.length > 1 ? labelPlurial : props.label}
-				</span>
+				<span>{labelPlurial}</span>
 			{/if}
 		</button>
 		{#if value.length}
@@ -73,7 +74,7 @@
 	</div>
 
 	<div class="{klass} p-2">
-		{#each _options as option, index}
+		{#each _options as option, index (option.value)}
 			<FormControl
 				{...props}
 				let:key
