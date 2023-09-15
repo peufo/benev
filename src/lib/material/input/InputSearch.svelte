@@ -12,7 +12,7 @@
 	bind:inputElement
 	bind:value
 	bindWithParams
-	input={{ class: 'input-sm pr-8', placeholder: 'Recherche' }}
+	input={{ class: 'input-sm pr-8', placeholder: 'Recherche', autocomplete: 'off' }}
 	wrapperClass="relative"
 >
 	<button
