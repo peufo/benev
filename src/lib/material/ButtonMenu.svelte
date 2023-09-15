@@ -40,7 +40,10 @@
 
 	{#if open}
 		<div
-			class="card bg-base-100 absolute top-10 z-10 shadow-lg bordered max-h-64 overflow-y-auto {dropdownClass}"
+			class="
+				card p-2 bg-base-100 absolute top-10 z-10 shadow-lg bordered max-h-64
+				overflow-y-auto overflow-x-hidden {dropdownClass}
+			"
 			class:right-0={right}
 			transition:fly|local={{ y: 30, duration: 200 }}
 		>

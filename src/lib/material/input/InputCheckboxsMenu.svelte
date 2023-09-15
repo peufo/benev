@@ -73,7 +73,7 @@
 		{/if}
 	</div>
 
-	<div class="{klass} p-2">
+	<div class={klass}>
 		{#each _options as option, index (option.value)}
 			<FormControl
 				{...props}
