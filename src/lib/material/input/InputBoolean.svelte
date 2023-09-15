@@ -8,6 +8,7 @@
 </script>
 
 <FormControl {...props} prefix="boolean" let:key>
+	<slot name="label_append" slot="label_append" />
 	<input type="hidden" name={key} value={value ? 'true' : 'false'} />
 	<!--{@debug value}-->
 	<input

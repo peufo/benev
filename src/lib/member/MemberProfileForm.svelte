@@ -34,7 +34,7 @@
 
 	{#each event.memberFields.filter((f) => !writeOnly || f.memberCanWrite) as field (field.id)}
 		{@const { value } = fieldsValue.find((value) => value.fieldId === field.id) || { value: '' }}
-		<MemberField {field} {value} canWriteAll={!!memberId} class="md:col-span-3" />
+		<MemberField {field} {value} isLeader={!!memberId} class="md:col-span-3" />
 	{/each}
 
 	<div class="flex justify-end md:col-span-12">

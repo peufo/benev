@@ -2,8 +2,9 @@
 	import FormControl from './FormControl.svelte'
 	import { type InputProps, type Options, parseOptions } from '.'
 	import { bindValueWithParams } from './action'
+	import { slide } from 'svelte/transition'
 	type $$Props = InputProps & { options: Options }
-	$: ({ input, value: _value, options, class: klass, ...props } = $$props as $$Props)
+	$: ({ input, value: _value, options, hint, error, class: klass, ...props } = $$props as $$Props)
 	export let value = _value
 
 	$: _options = parseOptions(options)
@@ -12,6 +13,7 @@
 <div class={klass}>
 	<div class="label">
 		<span class="label-text">{props.label}</span>
+		<slot name="label_append" />
 	</div>
 
 	{#each _options as option}
@@ -37,4 +39,14 @@
 			/>
 		</FormControl>
 	{/each}
+
+	{#if error}
+		<div class="label" transition:slide>
+			<span class="label-text-alt text-warning">{error}</span>
+		</div>
+	{:else if hint}
+		<div class="label" transition:slide>
+			<span class="label-text-alt text-info">{hint}</span>
+		</div>
+	{/if}
 </div>

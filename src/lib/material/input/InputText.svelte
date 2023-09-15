@@ -11,6 +11,8 @@
 </script>
 
 <FormControl {...props} enhanceDisabled={props.enhanceDisabled || bindWithParams} let:key>
+	<slot name="label_append" slot="label_append" />
+
 	<div class={wrapperClass}>
 		<slot name="prepend" {value} />
 		<input

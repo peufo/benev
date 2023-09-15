@@ -10,12 +10,14 @@
 		InputCheckboxs,
 	} from '$lib/material/input'
 	import { jsonParse } from '$lib/jsonParse'
+	import { Icon } from '$lib/material'
+	import { mdiEyeOffOutline, mdiPencilOffOutline } from '@mdi/js'
 
 	export let field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
 	export let value = ''
 	let klass = ''
 	export { klass as class }
-	export let canWriteAll = false
+	export let isLeader = false
 
 	const components: Record<FieldType, ComponentType> = {
 		string: InputText,
@@ -52,5 +54,25 @@
 	key={field.name}
 	label={field.label || field.name}
 	options={jsonParse(field.options, [])}
-	input={{ disabled: !field.memberCanWrite && !canWriteAll }}
-/>
+	input={{ disabled: !field.memberCanWrite && !isLeader }}
+>
+	<div class="contents" slot="label_append">
+		{#if isLeader}
+			{#if !field.memberCanRead}
+				<Icon
+					path={mdiEyeOffOutline}
+					title="Les membres ne peuvent pas voir ce champ"
+					class="ml-3 opacity-75"
+				/>
+				<div class="grow" />
+			{:else if !field.memberCanWrite}
+				<Icon
+					path={mdiPencilOffOutline}
+					title="Les membres ne peuvent pas éditer ce champ"
+					class="ml-3 opacity-75"
+				/>
+				<div class="grow" />
+			{/if}
+		{/if}
+	</div>
+</svelte:component>

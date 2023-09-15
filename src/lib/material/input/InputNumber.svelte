@@ -7,6 +7,7 @@
 </script>
 
 <FormControl {...props} prefix="number" let:key>
+	<slot name="label_append" slot="label_append" />
 	<input
 		bind:value
 		on:input

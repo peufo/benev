@@ -99,7 +99,7 @@
 			<InputBoolean
 				value={field.allCombinations}
 				key="allCombinations"
-				label="Compter toutes les combinaisons de valeurs"
+				label="Compter par combinaisons de valeurs"
 				hint="Lors de la syhtèse"
 			/>
 		</div>

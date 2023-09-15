@@ -44,6 +44,7 @@
 		<label for="{prefixFor}{_key}" class="label cursor-pointer {classLabel}">
 			<span class="label-text">{label}</span>
 			<slot name="label" />
+			<slot name="label_append" />
 		</label>
 	{/if}
 

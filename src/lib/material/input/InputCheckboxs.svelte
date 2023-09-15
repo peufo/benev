@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FormControl from './FormControl.svelte'
 	import { type InputProps, type Options, parseOptions } from '.'
+	import { slide } from 'svelte/transition'
 
 	type $$Props = InputProps<string[]> & { options: Options; checkboxesClass?: string }
 	$: ({
@@ -9,6 +10,8 @@
 		options: _1,
 		class: klass,
 		checkboxesClass,
+		hint,
+		error,
 		...props
 	} = $$props as $$Props)
 	export let value = _value || []
@@ -22,6 +25,7 @@
 <div class={klass}>
 	<div class="label">
 		<span class="label-text">{props.label}</span>
+		<slot name="label_append" />
 	</div>
 
 	<div class={checkboxesClass}>
@@ -50,4 +54,14 @@
 			</FormControl>
 		{/each}
 	</div>
+
+	{#if error}
+		<div class="label" transition:slide>
+			<span class="label-text-alt text-warning">{error}</span>
+		</div>
+	{:else if hint}
+		<div class="label" transition:slide>
+			<span class="label-text-alt text-info">{hint}</span>
+		</div>
+	{/if}
 </div>

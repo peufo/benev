@@ -7,6 +7,7 @@
 </script>
 
 <FormControl {...props} let:key>
+	<slot name="label_append" slot="label_append" />
 	<textarea
 		bind:value
 		on:input
