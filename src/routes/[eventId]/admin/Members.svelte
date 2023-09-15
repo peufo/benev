@@ -2,8 +2,8 @@
 	import { getAge } from '$lib/utils'
 	import { eventPath } from '$lib/store'
 
-	import { Field, FieldValue, Member, Period, Subscribe, Team, User } from '@prisma/client'
-	import { Card, InputCheckboxsMenu, Placeholder } from '$lib/material'
+	import { Field, FieldValue, Member, Period, Subscribe, Team } from '@prisma/client'
+	import { Card, InputCheckboxsMenu, InputSearch, Placeholder } from '$lib/material'
 	import Contact from '$lib/Contact.svelte'
 	import MembersFilter from './MembersFilter.svelte'
 	import { page } from '$app/stores'
@@ -70,12 +70,10 @@
 	}
 </script>
 
-<Card class="md:col-span-2 overflow-x-auto">
-	<span slot="title">Membres</span>
-
-	<div slot="action" class="flex gap-2 flex-wrap">
-		<MembersFilter {teams} />
-
+<Card class="md:col-span-2 overflow-x-auto" headerClass="flex-wrap">
+	<div slot="title" class="flex gap-2 flex-wrap">
+		<span>Membres</span>
+		<InputSearch />
 		<InputCheckboxsMenu
 			key="columns"
 			bind:value={selectedColumns}
@@ -85,6 +83,10 @@
 			right
 			enhanceDisabled
 		/>
+	</div>
+
+	<div slot="action" class="flex gap-2 flex-wrap">
+		<MembersFilter {teams} />
 	</div>
 
 	<div class="overflow-x-auto min-h-[270px]">

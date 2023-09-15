@@ -35,16 +35,19 @@ export const load = async ({ params, url }) => {
 		}
 	}
 
+	const subscribeWhere: Prisma.SubscribeWhereInput = {
+		state: { in: ['request', 'accepted'] },
+		period: {
+			...periodWhere,
+			team: teamWhere,
+		},
+	}
+
 	const allMember = !memberType || memberType === 'all'
 	if (allMember || memberType === 'volunteers')
 		where.OR!.push({
 			subscribes: {
-				some: {
-					period: {
-						...periodWhere,
-						team: teamWhere,
-					},
-				},
+				some: subscribeWhere,
 			},
 		})
 	if (allMember || memberType === 'leaders')
@@ -60,6 +63,8 @@ export const load = async ({ params, url }) => {
 				},
 			},
 		})
+
+	console.log({search})
 
 	if (search)
 		where.OR!.push({
@@ -91,13 +96,7 @@ export const load = async ({ params, url }) => {
 				leaderOf: true,
 				profile: true,
 				subscribes: {
-					where: {
-						state: { in: ['request', 'accepted'] },
-						period: {
-							...periodWhere,
-							team: teamWhere,
-						},
-					},
+					where: subscribeWhere,
 					include: { period: true },
 				},
 			},

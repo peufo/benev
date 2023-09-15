@@ -20,7 +20,7 @@ export function bindValueWithParams(
 	const handleInput = debounce(async () => {
 		const _urlParam = get(urlParam)
 		const newUrl = node.value ? _urlParam.with({ [name]: node.value }) : _urlParam.without(name)
-		await goto(newUrl, { replaceState: true, keepFocus: true })
+		await goto(newUrl, { replaceState: true, keepFocus: true, noScroll: true })
 	}, debounceTime)
 
 	importValueFromParams()
@@ -47,7 +47,7 @@ export function bindCheckedWithParams(node: HTMLInputElement, { bindEnable = fal
 	const handleInput = async () => {
 		const newValue = node.value === 'on' ? (node.checked ? 'true' : 'false') : node.value
 		const newUrl = get(urlParam).with({ [name]: newValue })
-		await goto(newUrl, { replaceState: true, keepFocus: true })
+		await goto(newUrl, { replaceState: true, keepFocus: true, noScroll: true })
 	}
 
 	importValueFromParams()
