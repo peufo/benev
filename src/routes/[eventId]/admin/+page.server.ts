@@ -64,18 +64,14 @@ export const load = async ({ params, url }) => {
 			},
 		})
 
-	console.log({search})
-
 	if (search)
-		where.OR!.push({
-			user: {
-				OR: [
-					{ firstName: { contains: search } },
-					{ lastName: { contains: search } },
-					{ email: { contains: search } },
-				],
-			},
-		})
+		where.user = {
+			OR: [
+				{ firstName: { contains: search } },
+				{ lastName: { contains: search } },
+				{ email: { contains: search } },
+			],
+		}
 
 	if (!where.OR?.length) delete where.OR
 
