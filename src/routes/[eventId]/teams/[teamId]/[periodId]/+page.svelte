@@ -26,7 +26,7 @@
 		<div>
 			<Progress period={data.period} withLabel />
 		</div>
-		<div>
+		<div class="flex flex-col gap-2">
 			<Subscribes subscribes={data.period.subscribes} />
 			<InviteSubscribeForm periodId={data.period.id} />
 		</div>
