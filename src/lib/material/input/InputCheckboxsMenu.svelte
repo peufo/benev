@@ -11,17 +11,19 @@
 	type $$Props = InputProps<string[]> & {
 		key: string
 		options: Options
-		labelPlurial: string
 		right?: boolean
+		btnClass?: string
+		badgePrimary?: boolean
 	}
 	$: ({
 		input,
 		value: _value,
 		options: _1,
 		class: klass,
-		labelPlurial,
 		label,
 		right,
+		btnClass,
+		badgePrimary,
 		...props
 	} = $$props as $$Props)
 
@@ -48,22 +50,25 @@
 		value = []
 		goto($urlParam.without(key), { replaceState: true })
 	}
-
-	const getLabel = (value: string) => _options.find((opt) => opt.value === value)?.label
 </script>
 
 <input type="hidden" name={key} value={JSON.stringify(value)} />
 
 <ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit} {right}>
-	<div class="join" slot="btn">
-		<button class="btn btn-sm join-item" on:click={() => menu.setOpen()}>
-			{#if value.length === 0}
-				<span>{label || labelPlurial}</span>
-			{:else if value.length === 1}
-				<span>{getLabel(value[0])}</span>
-			{:else}
-				<span class="badge badge-lg">{value.length}</span>
-				<span>{labelPlurial}</span>
+	<div class="join" class:ml-2={value.length} slot="btn">
+		<button class="btn btn-sm join-item indicator {btnClass || ''}" on:click={() => menu.setOpen()}>
+			<slot name="label">
+				<span>{label}</span>
+			</slot>
+			{#if value.length > 0}
+				<span
+					class="
+						indicator-item indicator-start badge badge-sm
+						{badgePrimary ? 'badge-primary' : 'badge-outline bg-base-100'}
+					"
+				>
+					{value.length}
+				</span>
 			{/if}
 		</button>
 		{#if value.length}

@@ -9,10 +9,10 @@
 <PeriodPickerButton action="{$eventPath}/admin" />
 <InputCheckboxsMenu
 	key="teams"
-	label="Tous les secteurs"
-	labelPlurial="Secteurs sélectionés"
+	label="secteurs"
 	options={teams.map((t) => ({ value: t.id, label: t.name }))}
 	enhanceDisabled
+	badgePrimary
 />
 
 <InputRadioButtons

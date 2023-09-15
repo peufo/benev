@@ -2,13 +2,14 @@
 	import { getAge } from '$lib/utils'
 	import { eventPath } from '$lib/store'
 
-	import { Card, InputCheckboxsMenu, InputSearch, Placeholder } from '$lib/material'
+	import { Card, Icon, InputCheckboxsMenu, InputSearch, Placeholder } from '$lib/material'
 	import Contact from '$lib/Contact.svelte'
 	import MembersFilter from './MembersFilter.svelte'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 	import { jsonParse } from '$lib/jsonParse'
 	import type { PageData } from './$types'
+	import { mdiViewColumnOutline } from '@mdi/js'
 
 	type Member = PageData['members'][number]
 	export let members: Member[]
@@ -56,21 +57,34 @@
 		<span>Membres</span>
 	</div>
 
-	<div slot="action" class="flex gap-2 flex-wrap">
+	<div slot="action" class="flex gap-x-3 gap-y-2 flex-wrap">
 		<InputSearch />
 		<MembersFilter {teams} />
-		<InputCheckboxsMenu
-			key="columns"
-			bind:value={selectedColumns}
-			label="Choix des colonnes"
-			labelPlurial="Colonnes"
-			options={columns}
-			right
-			enhanceDisabled
-		/>
 	</div>
 
-	<div class="overflow-x-auto min-h-[270px]">
+	<div class="relative">
+		<div class="absolute z-10 right-8 top-4">
+			<InputCheckboxsMenu
+				key="columns"
+				bind:value={selectedColumns}
+				label="Colonnes"
+				options={columns}
+				right
+				enhanceDisabled
+				btnClass="btn-square"
+			>
+				<div slot="label" class="contents">
+					<Icon
+						path={mdiViewColumnOutline}
+						title="Choix des colonnes"
+						tippyProps={{ placement: 'left' }}
+					/>
+				</div>
+			</InputCheckboxsMenu>
+		</div>
+	</div>
+
+	<div class="overflow-x-auto overflow-y-scroll min-h-[320px] max-h-[600px] mt-2">
 		{#if members.length}
 			<table class="table table-pin-rows">
 				<thead>
@@ -79,6 +93,7 @@
 						{#each selectedColumns as columnId}
 							<th>{columns[columnId].label}</th>
 						{/each}
+						<th />
 					</tr>
 				</thead>
 
