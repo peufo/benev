@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { HTMLInputAttributes } from 'svelte/elements'
+	import type { FormEventHandler, HTMLInputAttributes } from 'svelte/elements'
 	import { bindCheckedWithParams } from './action'
 
 	let klass = ''
@@ -11,16 +11,24 @@
 	export let bindWithParams = false
 
 	$: ({ class: inputClass, ...inputProps } = input || {})
+
+	const handleClick: FormEventHandler<HTMLInputElement> = (event) => {
+		const target = event.target as HTMLInputElement
+		target.checked = value !== target.value
+		if (!target.checked) value = ''
+	}
 </script>
 
 <div class="join {klass}">
 	{#each Object.entries(options) as [v, label]}
 		<input
-			use:bindCheckedWithParams={{ bindEnable: bindWithParams }}
+			use:bindCheckedWithParams={{
+				bindEnable: bindWithParams,
+				listenerType: 'click',
+				initValue: (initialValue) => (value = initialValue),
+			}}
 			bind:group={value}
-			on:input
-			on:focus
-			on:blur
+			on:click={handleClick}
 			value={v}
 			type="radio"
 			name={key}

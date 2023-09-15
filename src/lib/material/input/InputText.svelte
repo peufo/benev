@@ -21,7 +21,7 @@
 			on:focus
 			on:blur
 			bind:this={inputElement}
-			use:bindValueWithParams={{ bindEnable: bindWithParams, setValue: (v) => (value = v) }}
+			use:bindValueWithParams={{ bindEnable: bindWithParams, initValue: (v) => (value = v) }}
 			type="text"
 			name={key}
 			id={key}

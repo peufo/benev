@@ -43,17 +43,15 @@ export const load = async ({ params, url }) => {
 		},
 	}
 
-	const allMember = !memberType || memberType === 'all'
-	const subscribesFilter = !allMember || _start || _end || _teams
-
+	const subscribesFilter = memberType || _start || _end || _teams
 	if (subscribesFilter) {
-		if (allMember || memberType === 'volunteers')
+		if (!memberType || memberType === 'volunteers')
 			where.OR!.push({
 				subscribes: {
 					some: subscribeWhere,
 				},
 			})
-		if (allMember || memberType === 'leaders')
+		if (!memberType || memberType === 'leaders')
 			where.OR!.push({
 				leaderOf: {
 					some: {

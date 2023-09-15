@@ -20,7 +20,6 @@
 	options={{
 		volunteers: 'Bénévoles',
 		leaders: 'Responsables',
-		all: 'Tous',
 	}}
 	bindWithParams
 />
