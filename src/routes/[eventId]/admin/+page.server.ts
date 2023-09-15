@@ -3,6 +3,7 @@ import { prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
 export const load = async ({ params, url }) => {
+	const search = url.searchParams.get('search')
 	const _start = url.searchParams.get('start')
 	const _end = url.searchParams.get('end')
 	const _teams = url.searchParams.get('teams')
@@ -10,7 +11,10 @@ export const load = async ({ params, url }) => {
 
 	const { eventId } = params
 
+	const where: Prisma.MemberWhereInput = { eventId, OR: [] }
+	const teamWhere: Prisma.TeamWhereInput = { eventId }
 	let periodWhere: Prisma.PeriodWhereInput | undefined = undefined
+
 	if (typeof _start === 'string' && typeof _end === 'string') {
 		const start = new Date(_start)
 		const end = new Date(_end)
@@ -22,7 +26,6 @@ export const load = async ({ params, url }) => {
 		}
 	}
 
-	const teamWhere: Prisma.TeamWhereInput = { eventId }
 	if (typeof _teams === 'string') {
 		try {
 			const teams = JSON.parse(_teams) as string[]
@@ -33,10 +36,8 @@ export const load = async ({ params, url }) => {
 	}
 
 	const allMember = !memberType || memberType === 'all'
-	const OR: Prisma.MemberWhereInput[] = []
-
 	if (allMember || memberType === 'volunteers')
-		OR.push({
+		where.OR!.push({
 			subscribes: {
 				some: {
 					period: {
@@ -46,9 +47,8 @@ export const load = async ({ params, url }) => {
 				},
 			},
 		})
-
 	if (allMember || memberType === 'leaders')
-		OR.push({
+		where.OR!.push({
 			leaderOf: {
 				some: {
 					...teamWhere,
@@ -61,12 +61,22 @@ export const load = async ({ params, url }) => {
 			},
 		})
 
+	if (search)
+		where.OR!.push({
+			user: {
+				OR: [
+					{ firstName: { contains: search } },
+					{ lastName: { contains: search } },
+					{ email: { contains: search } },
+				],
+			},
+		})
+
+	if (!where.OR?.length) delete where.OR
+
 	return {
 		members: await prisma.member.findMany({
-			where: {
-				eventId,
-				...(OR.length && { OR }),
-			},
+			where,
 			include: {
 				user: {
 					select: {
@@ -82,7 +92,11 @@ export const load = async ({ params, url }) => {
 				profile: true,
 				subscribes: {
 					where: {
-						period: periodWhere || {},
+						state: { in: ['request', 'accepted'] },
+						period: {
+							...periodWhere,
+							team: teamWhere,
+						},
 					},
 					include: { period: true },
 				},
