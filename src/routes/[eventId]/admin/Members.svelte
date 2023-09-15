@@ -2,39 +2,21 @@
 	import { getAge } from '$lib/utils'
 	import { eventPath } from '$lib/store'
 
-	import { Field, FieldValue, Member, Period, Subscribe, Team } from '@prisma/client'
 	import { Card, InputCheckboxsMenu, InputSearch, Placeholder } from '$lib/material'
 	import Contact from '$lib/Contact.svelte'
 	import MembersFilter from './MembersFilter.svelte'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 	import { jsonParse } from '$lib/jsonParse'
+	import type { PageData } from './$types'
 
-	type _Member = Member & {
-		user: { email: string; firstName: string; lastName: string; birthday: Date | null }
-		leaderOf: Team[]
-		subscribes: (Subscribe & { period: Period })[]
-		profile: FieldValue[]
-	}
+	type Member = PageData['members'][number]
+	export let members: Member[]
+	export let fields: PageData['fields']
+	export let teams: PageData['teams']
+	export let workTimes: Record<string, number> = {}
 
-	export let members: _Member[]
-	export let fields: Field[]
-	export let teams: { id: string; name: string }[]
-
-	const toHour = (ms: number) => Math.round(ms / (1000 * 60 * 60))
-	let workTimes: Record<string, number> = {}
-	$: workTimes = members.reduce(
-		(times, user) => ({
-			...times,
-			[user.id]: user.subscribes
-				.filter(({ state }) => state === 'accepted' || state === 'request')
-				.reduce((acc, { period }) => {
-					const time = period.end.getTime() - period.start.getTime()
-					return acc + time
-				}, 0),
-		}),
-		{}
-	)
+	const toHour = (ms: number) => ms / (1000 * 60 * 60)
 
 	let selectedColumns: string[] = JSON.parse($page.url.searchParams.get('columns') || 'null') || [
 		'periods',
@@ -43,7 +25,7 @@
 	]
 	const columns: Record<
 		string,
-		{ label: string; cellValue: (m: _Member) => string | number | boolean | string[] }
+		{ label: string; cellValue: (m: Member) => string | number | boolean | string[] }
 	> = {
 		periods: { label: 'Périodes', cellValue: (m) => m.subscribes.length },
 		hours: { label: 'Heures', cellValue: (m) => toHour(workTimes[m.id]) },
@@ -54,7 +36,7 @@
 				...acc,
 				[cur.id]: {
 					label: cur.name,
-					cellValue: (m: _Member) => {
+					cellValue: (m: Member) => {
 						const { value } = m.profile.find((f) => f.fieldId === cur.id) || { value: '' }
 						if (!value) return ''
 						if (cur.type === 'multiselect') return jsonParse(value, [])
@@ -131,7 +113,7 @@
 							{/each}
 
 							<td align="right">
-								<Contact user={{ phone: null, ...member.user }} />
+								<Contact user={{ ...member.user }} />
 							</td>
 						</tr>
 					{/each}

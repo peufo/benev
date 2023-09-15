@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { Card } from '$lib/material'
+	import { record } from 'zod'
 	import Members from './Members.svelte'
 
 	export let data
 
-	const stats = data.fields
+	$: stats = data.fields
 		.map((field) => {
 			if (field.type === 'select' || field.type === 'multiselect') {
 				return {
@@ -24,6 +25,29 @@
 			}
 		})
 		.filter(Boolean)
+
+	$: totalSlots = data.periods.reduce((acc, cur) => acc + cur.maxSubscribe, 0)
+	$: totalSubscribes = data.members.reduce((acc, cur) => acc + cur.subscribes.length, 0)
+	let workTimes: Record<string, number>
+	$: workTimes = data.members.reduce(
+		(times, user) => ({
+			...times,
+			[user.id]: user.subscribes.reduce((acc, { period }) => {
+				const time = period.end.getTime() - period.start.getTime()
+				return acc + time
+			}, 0),
+		}),
+		{}
+	)
+
+	const toHour = (ms: number) => Math.round(ms / (1000 * 60 * 60))
+	$: totalSubscribesHours = toHour(Object.values(workTimes).reduce((acc, cur) => acc + cur, 0))
+	$: totalSlotsHours = toHour(
+		data.periods.reduce(
+			(acc, cur) => acc + cur.maxSubscribe * (cur.end.getTime() - cur.start.getTime()),
+			0
+		)
+	)
 </script>
 
 <div class="flex flex-col gap-4">
@@ -35,6 +59,14 @@
 				<div class="stat">
 					<div class="stat-title">Bénévoles</div>
 					<div class="stat-value">{data.members.length}</div>
+				</div>
+				<div class="stat">
+					<div class="stat-title">Périodes</div>
+					<div class="stat-value">{totalSubscribes}/{totalSlots}</div>
+				</div>
+				<div class="stat">
+					<div class="stat-title">Heures</div>
+					<div class="stat-value">{totalSubscribesHours}/{totalSlotsHours}</div>
 				</div>
 			</div>
 
@@ -58,5 +90,5 @@
 		</div>
 	</Card>
 
-	<Members members={data.members} fields={data.fields} teams={data.teams} />
+	<Members members={data.members} fields={data.fields} teams={data.teams} {workTimes} />
 </div>

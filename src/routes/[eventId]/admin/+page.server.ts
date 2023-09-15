@@ -93,7 +93,9 @@ export const load = async ({ params, url }) => {
 				profile: true,
 				subscribes: {
 					where: subscribeWhere,
-					include: { period: true },
+					include: {
+						period: true,
+					},
 				},
 			},
 			orderBy: {
@@ -106,6 +108,9 @@ export const load = async ({ params, url }) => {
 		}),
 		fields: await prisma.field.findMany({
 			where: { eventId },
+		}),
+		periods: await prisma.period.findMany({
+			where: { ...periodWhere, team: { eventId, ...teamWhere } },
 		}),
 	}
 }
