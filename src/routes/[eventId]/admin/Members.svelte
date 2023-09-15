@@ -40,7 +40,6 @@
 		'periods',
 		'hours',
 		'sectors',
-		'age',
 	]
 	const columns: Record<
 		string,
