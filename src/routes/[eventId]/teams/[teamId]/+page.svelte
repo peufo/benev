@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { Card, Icon, Placeholder } from '$lib/material'
-	import { mdiAccountArrowUpOutline, mdiChevronRight, mdiPencilOutline } from '@mdi/js'
+	import {
+		mdiAccountArrowUpOutline,
+		mdiAccountMultipleOutline,
+		mdiChevronRight,
+		mdiPencilOutline,
+	} from '@mdi/js'
 
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam } from '$lib/store'
@@ -46,8 +51,12 @@
 	</p>
 	<div slot="action">
 		{#if data.isLeader}
+			<a href={`${$eventPath}/admin?teams=["${data.team.id}"]`} class="btn btn-square btn-sm">
+				<Icon path={mdiAccountMultipleOutline} title="Tous les bénévoles du secteur" />
+			</a>
+
 			<a href="{$eventPath}/teams/{data.team.id}/edit" class="btn btn-square btn-sm">
-				<Icon path={mdiPencilOutline} />
+				<Icon path={mdiPencilOutline} title="Éditer ce secteur" />
 			</a>
 		{/if}
 	</div>
