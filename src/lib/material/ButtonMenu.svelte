@@ -25,7 +25,7 @@
 </script>
 
 <div
-	class="relative"
+	class="relative z-20"
 	on:mouseenter={handleMouseLeave.clear}
 	on:mouseleave={handleMouseLeave}
 	role="menu"

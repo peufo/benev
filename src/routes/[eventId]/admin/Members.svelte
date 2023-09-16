@@ -62,8 +62,8 @@
 		<MembersFilter {teams} />
 	</div>
 
-	<div class="relative">
-		<div class="absolute z-10 right-8 top-4">
+	<div class="relative z-10">
+		<div class="absolute right-8 top-4">
 			<InputCheckboxsMenu
 				key="columns"
 				bind:value={selectedColumns}
