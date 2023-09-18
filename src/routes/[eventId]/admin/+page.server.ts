@@ -80,10 +80,11 @@ export const load = async ({ params, url }) => {
 		}
 
 	if (typeof fieldId === 'string' && typeof fieldValue === 'string') {
+		const field = await prisma.field.findUniqueOrThrow({ where: { id: fieldId, eventId } })
 		where.profile = {
 			some: {
 				fieldId,
-				value: { contains: fieldValue },
+				value: field.type === 'multiselect' ? { contains: `"${fieldValue}"` } : fieldValue,
 			},
 		}
 	}
