@@ -8,8 +8,8 @@
 
 	export let fields: Field[]
 
-	let fieldId = ''
-	let fieldValue = ''
+	let fieldId = $urlParam.get('fieldId') || ''
+	let fieldValue = $urlParam.get('fieldValue') || ''
 
 	function resetFieldValue() {
 		fieldValue = ''
@@ -36,7 +36,7 @@
 	>
 		<div class="contents" slot="placeholder">
 			<Icon path={mdiFilterOutline} class="opacity-70 fill-base-content scale-90" />
-			Autre
+			Plus
 		</div>
 	</InputSelect>
 
