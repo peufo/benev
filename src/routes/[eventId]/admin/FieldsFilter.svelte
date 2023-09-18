@@ -13,14 +13,14 @@
 
 	function resetFieldValue() {
 		fieldValue = ''
-		goto($urlParam.without('fieldId', 'fieldValue'), { replaceState: true })
+		goto($urlParam.without('fieldId', 'fieldValue'), { replaceState: true, noScroll: true })
 	}
 
 	function handleSelectFieldValue() {
 		if (!fieldId || !fieldValue) {
-			goto($urlParam.without('fieldId', 'fieldValue'), { replaceState: true })
+			goto($urlParam.without('fieldId', 'fieldValue'), { replaceState: true, noScroll: true })
 		}
-		goto($urlParam.with({ fieldId, fieldValue }), { replaceState: true })
+		goto($urlParam.with({ fieldId, fieldValue }), { replaceState: true, noScroll: true })
 	}
 </script>
 

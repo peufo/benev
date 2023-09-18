@@ -8,6 +8,8 @@ export const load = async ({ params, url }) => {
 	const _end = url.searchParams.get('end')
 	const _teams = url.searchParams.get('teams')
 	const memberType = url.searchParams.get('member_type')
+	const fieldId = url.searchParams.get('fieldId')
+	const fieldValue = url.searchParams.get('fieldValue')
 
 	const { eventId } = params
 
@@ -66,6 +68,8 @@ export const load = async ({ params, url }) => {
 			})
 	}
 
+	if (!where.OR?.length) delete where.OR
+
 	if (search)
 		where.user = {
 			OR: [
@@ -75,7 +79,14 @@ export const load = async ({ params, url }) => {
 			],
 		}
 
-	if (!where.OR?.length) delete where.OR
+	if (typeof fieldId === 'string' && typeof fieldValue === 'string') {
+		where.profile = {
+			some: {
+				fieldId,
+				value: { contains: fieldValue },
+			},
+		}
+	}
 
 	return {
 		members: await prisma.member.findMany({
