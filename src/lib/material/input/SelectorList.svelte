@@ -32,7 +32,7 @@
 				<slot {item} {index} />
 			</li>
 		{:else}
-			<li class="btn btn-disabled btn-sm">
+			<li class="px-3 py-2 rounded opacity-70">
 				{isLoading ? 'Chargement...' : 'Aucun élément'}
 			</li>
 		{/each}
