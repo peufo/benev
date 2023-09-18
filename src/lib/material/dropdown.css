@@ -1,0 +1,8 @@
+.tippy-box[data-theme~='dropdown'] {
+	background: none;
+	color: initial;
+}
+
+.tippy-box[data-theme~='dropdown'] > .tippy-content {
+	padding: 0;
+}

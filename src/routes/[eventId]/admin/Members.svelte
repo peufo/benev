@@ -59,7 +59,7 @@
 
 	<div slot="action" class="flex gap-x-3 gap-y-2 flex-wrap">
 		<InputSearch />
-		<MembersFilter {teams} />
+		<MembersFilter {teams} {fields} />
 	</div>
 
 	<div class="relative z-10">

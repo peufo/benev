@@ -1,41 +1,40 @@
 <script lang="ts">
 	import SelectorList from './SelectorList.svelte'
 	import { selector } from '$lib/action'
-	import { Icon } from '$lib/material'
-	import { debounce } from '$lib/debounce'
-	import {type Options,type Option, parseOptions} from '.'
+	import { DropDown, Icon } from '$lib/material'
+	import { type Options, type Option, parseOptions } from '.'
 	import { onMount } from 'svelte'
 
-  export let key = ''
-  export let value = ''
-  export let placeholder = 'Selection'
+	export let key = ''
+	export let value = ''
 	export let options: Options
+	let klass = ''
+	export { klass as class }
+	export let btnClass = ''
 
 	$: _options = parseOptions(options)
-	$: selectedOption = _options.find(opt => opt.value === value)
+	$: selectedOption = _options.find((opt) => opt.value === value)
 
 	let selectorList: SelectorList<Option & { id: string }>
-	let focusIndex = 0 
+	let dropDown: DropDown
+
+	let focusIndex = 0
 	onMount(() => {
-		const index = _options.findIndex(opt => opt.value === value)
+		const index = _options.findIndex((opt) => opt.value === value)
 		focusIndex = index === -1 ? 0 : index
 	})
 
 	function onSelect(index: number) {
 		focusIndex = index
-		value = Object.keys(options)[index]
-    selectorList.close()
+		value = _options[index].value
+		dropDown.hide()
 	}
-
-	const handleLeave = debounce(() => {
-		selectorList.close()
-	}, 300)
 </script>
 
-<input type="hidden" name={key} {value}>
+<input type="hidden" name={key} {value} />
 
 <div
-	class="relative"
+	class={klass}
 	use:selector={{
 		focusIndex,
 		onSelect,
@@ -43,38 +42,33 @@
 			focusIndex = index
 		},
 	}}
-	on:mouseenter={handleLeave.clear}
-	on:mouseleave={handleLeave}
 	role="menu"
 	tabindex="-1"
 >
-	<button
-		type="button"
-		on:click={() => selectorList.open()}
-		on:focus={() => selectorList.open()}
-		on:blur={handleLeave}
-		class="btn w-full justify-start"
-	>
-    {#if selectedOption}
-      {#if selectedOption.icon}
-        <Icon path={selectedOption.icon} />
-      {/if}
-      <span>{selectedOption.label}</span>
-    {:else}
-      {placeholder}
-    {/if}
-	</button>
+	<DropDown bind:this={dropDown}>
+		<button slot="activator" type="button" class="btn w-full justify-start {btnClass}">
+			{#if selectedOption}
+				{#if selectedOption.icon}
+					<Icon path={selectedOption.icon} />
+				{/if}
+				<span>{selectedOption.label}</span>
+			{:else}
+				<slot name="placeholder">Sélection</slot>
+			{/if}
+		</button>
 
-	<SelectorList
-		bind:this={selectorList}
-		{focusIndex}
-		items={_options.map(opt => ({id: opt.value, ...opt}))}
-		let:item
-    on:select={({detail}) => onSelect(detail)}
-	>
-		{#if item.icon}
-			<Icon path={item.icon} />
-		{/if}
-		<span>{item.label}</span>
-	</SelectorList>
+		<SelectorList
+			bind:this={selectorList}
+			{focusIndex}
+			items={_options.map((opt) => ({ id: opt.value, ...opt }))}
+			let:item
+			on:select={({ detail }) => onSelect(detail)}
+			class="w-full"
+		>
+			{#if item.icon}
+				<Icon path={item.icon} />
+			{/if}
+			<span class="whitespace-nowrap">{item.label}</span>
+		</SelectorList>
+	</DropDown>
 </div>

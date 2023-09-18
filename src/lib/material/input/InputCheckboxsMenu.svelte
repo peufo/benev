@@ -4,7 +4,7 @@
 	import { mdiClose } from '@mdi/js'
 	import FormControl from './FormControl.svelte'
 	import { type InputProps, type Options, parseOptions } from '.'
-	import { ButtonMenu, Icon } from '$lib/material'
+	import { DropDown, Icon } from '$lib/material'
 	import { urlParam } from '$lib/store'
 	import { jsonParse } from '$lib/jsonParse'
 
@@ -31,13 +31,12 @@
 	export let options: Options
 	export let value = _value || jsonParse($page.url.searchParams.get(key), [])
 
-	let menu: ButtonMenu
+	let dropdown: DropDown
 
 	$: _options = parseOptions(options)
 
 	function handleSubmit() {
-		if (!menu) return
-		menu.close()
+		if (!dropdown) return
 		if (!value.length) {
 			goto($urlParam.without(key), { replaceState: true, noScroll: true })
 			return
@@ -46,7 +45,7 @@
 	}
 
 	function handleReset() {
-		menu.close()
+		dropdown.hide()
 		value = []
 		goto($urlParam.without(key), { replaceState: true })
 	}
@@ -54,9 +53,9 @@
 
 <input type="hidden" name={key} value={JSON.stringify(value)} />
 
-<ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit} {right}>
-	<div class="join" class:ml-2={value.length} slot="btn">
-		<button class="btn btn-sm join-item indicator {btnClass || ''}" on:click={() => menu.setOpen()}>
+<DropDown bind:this={dropdown} tippyProps={{ onHide: handleSubmit }}>
+	<div class="join" class:ml-2={value.length} slot="activator">
+		<button class="btn btn-sm join-item indicator {btnClass || ''}">
 			<slot name="label">
 				<span>{label}</span>
 			</slot>
@@ -101,4 +100,4 @@
 			</FormControl>
 		{/each}
 	</div>
-</ButtonMenu>
+</DropDown>

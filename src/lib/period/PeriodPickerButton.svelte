@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { Icon, ButtonMenu, InputTime } from '$lib/material'
+	import { Icon, DropDown, InputTime } from '$lib/material'
 	import type { Period } from './index'
 	import PeriodPicker from './PeriodPicker.svelte'
 	import { mdiCalendarMonthOutline, mdiClose } from '@mdi/js'
@@ -10,7 +10,7 @@
 
 	export let action = ''
 
-	let menu: ButtonMenu
+	let dropDown: DropDown
 	const start = $page.url.searchParams.get('start')?.split('T') || []
 	const end = $page.url.searchParams.get('end')?.split('T') || []
 
@@ -35,7 +35,7 @@
 	}
 
 	function handleSubmit() {
-		menu.close()
+		dropDown.hide()
 		if (!isValidPeriod) return
 		goto(
 			$urlParam.with({
@@ -47,16 +47,16 @@
 	}
 
 	function handleReset() {
-		menu.close()
+		dropDown.hide()
 		period = { start: '', end: '' }
 		time = { start: '00:00', end: '23:59' }
 		goto($urlParam.without('start', 'end'), { replaceState: true })
 	}
 </script>
 
-<ButtonMenu bind:this={menu} on:mouseLeave={handleSubmit} dropdownClass="max-h-none">
-	<div slot="btn" class="join">
-		<button class="btn btn-sm join-item shrink flex-nowrap" on:click={() => menu.setOpen()}>
+<DropDown bind:this={dropDown} on:mouseLeave={handleSubmit} class="max-h-full">
+	<div slot="activator" class="join">
+		<button class="btn btn-sm join-item shrink flex-nowrap">
 			<Icon path={mdiCalendarMonthOutline} class="opacity-60" />
 			{getLabel(period, time)}
 		</button>
@@ -84,4 +84,4 @@
 		</div>
 		<button class="btn m-2"> Valider </button>
 	</form>
-</ButtonMenu>
+</DropDown>

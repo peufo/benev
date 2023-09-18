@@ -26,7 +26,7 @@
 	</span>
 
 	<!-- Bad type (any) -->
-	<div slot="listItem" let:item class="flex w-full">
+	<div slot="listItem" let:item class="contents items-end">
 		<span>{item.user.firstName} {item.user.lastName}</span>
 		<div class="grow" />
 		<span style="font-size: 0.6rem;">{item.user.email}</span>

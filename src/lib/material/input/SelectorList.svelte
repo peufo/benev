@@ -12,51 +12,29 @@
 	export let isError = false
 	export let isLoading = false
 	export let focusIndex = 0
-	export let isOpen = false
-	let isInvisible = false
-
-	export async function close() {
-		// wait for click event dispatch
-		await tick()
-		isInvisible = true
-		setTimeout(() => {
-			isOpen = false
-		}, 200)
-	}
-	export function open() {
-		isInvisible = false
-		isOpen = true
-	}
 
 	const dispatch = createEventDispatcher<{ select: number }>()
 </script>
 
-{#if isOpen}
-	<ul
-		in:fly|local={{ y: 20, duration: 100 }}
-		out:fade|local={{ duration: 100, delay: 150 }}
-		class="z-10 absolute translate-y-2 bg-base-200 rounded-box p-2 flex flex-col gap-1 shadow {klass}"
-		class:opacity-0={isInvisible}
-	>
-		{#if isError}
-			<li class="p-2 text-center">Erreur 🥲</li>
+<ul class="flex flex-col gap-1 {klass}">
+	{#if isError}
+		<li class="p-2 text-center">Erreur 🥲</li>
+	{:else}
+		{#each items as item, index (item.id)}
+			{@const isFocused = focusIndex === index}
+			<li
+				role="menuitem"
+				on:click={() => dispatch('select', index)}
+				on:keydown={() => dispatch('select', index)}
+				class="flex justify-start gap-3 items-center hover:bg-base-200 px-3 py-2 rounded cursor-pointer"
+				class:bg-base-300={isFocused}
+			>
+				<slot {item} {index} />
+			</li>
 		{:else}
-			{#each items as item, index (item.id)}
-				{@const isFocused = focusIndex === index}
-				<li
-					role="menuitem"
-					on:click={() => dispatch('select', index)}
-					on:keydown={() => dispatch('select', index)}
-					class="flex justify-start btn btn-ghost btn-sm btn-block animate-none"
-					class:btn-active={isFocused}
-				>
-					<slot {item} {index} />
-				</li>
-			{:else}
-				<li class="btn btn-disabled btn-sm">
-					{isLoading ? 'Chargement...' : 'Aucun élément'}
-				</li>
-			{/each}
-		{/if}
-	</ul>
-{/if}
+			<li class="btn btn-disabled btn-sm">
+				{isLoading ? 'Chargement...' : 'Aucun élément'}
+			</li>
+		{/each}
+	{/if}
+</ul>
