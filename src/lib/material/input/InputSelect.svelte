@@ -2,8 +2,8 @@
 	import SelectorList from './SelectorList.svelte'
 	import { selector } from '$lib/action'
 	import { DropDown, Icon } from '$lib/material'
-	import { type Options, type Option, parseOptions } from '.'
-	import { onMount } from 'svelte'
+	import { type Options, parseOptions } from '.'
+	import { createEventDispatcher, onMount } from 'svelte'
 
 	export let key = ''
 	export let value = ''
@@ -15,8 +15,8 @@
 	$: _options = parseOptions(options)
 	$: selectedOption = _options.find((opt) => opt.value === value)
 
-	let selectorList: SelectorList<Option & { id: string }>
 	let dropDown: DropDown
+	const dispatch = createEventDispatcher<{ select: string }>()
 
 	let focusIndex = 0
 	onMount(() => {
@@ -27,6 +27,7 @@
 	function onSelect(index: number) {
 		focusIndex = index
 		value = _options[index].value
+		dispatch('select', value)
 		dropDown.hide()
 	}
 </script>
@@ -58,7 +59,6 @@
 		</button>
 
 		<SelectorList
-			bind:this={selectorList}
 			{focusIndex}
 			items={_options.map((opt) => ({ id: opt.value, ...opt }))}
 			let:item

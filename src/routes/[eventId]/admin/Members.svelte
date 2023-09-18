@@ -55,10 +55,10 @@
 <Card class="md:col-span-2 overflow-x-auto" headerClass="flex-wrap">
 	<div slot="title" class="flex gap-4 flex-wrap">
 		<span>Membres</span>
+		<InputSearch />
 	</div>
 
 	<div slot="action" class="flex gap-x-3 gap-y-2 flex-wrap">
-		<InputSearch />
 		<MembersFilter {teams} {fields} />
 	</div>
 
