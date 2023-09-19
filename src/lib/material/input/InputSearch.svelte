@@ -4,6 +4,9 @@
 	import { browser } from '$app/environment'
 
 	export let value: string | undefined = undefined
+	let klass = ''
+	export { klass as class }
+
 	let inputElement: HTMLInputElement
 </script>
 
@@ -13,7 +16,7 @@
 	bind:value
 	bindWithParams
 	input={{ class: 'input-sm pr-8', placeholder: 'Recherche', autocomplete: 'off' }}
-	wrapperClass="relative"
+	wrapperClass="relative {klass}"
 >
 	<button
 		slot="append"

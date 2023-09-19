@@ -54,14 +54,14 @@
 </script>
 
 <Card class="md:col-span-2 overflow-x-auto" headerClass="flex-wrap">
-	<div slot="title" class="flex gap-4 flex-wrap">
-		<span>Membres</span>
+	<div slot="title" class="flex gap-2 flex-wrap">
+		<span class="mr-3">Membres</span>
 		<InputSearch />
+		<MembersCopy {members} {fields} />
 	</div>
 
 	<div slot="action" class="flex gap-x-3 gap-y-2 flex-wrap">
 		<MembersFilter {teams} {fields} />
-		<MembersCopy {members} {fields} />
 	</div>
 
 	<div class="relative z-10">
