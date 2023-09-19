@@ -10,6 +10,7 @@
 	import { jsonParse } from '$lib/jsonParse'
 	import type { PageData } from './$types'
 	import { mdiViewColumnOutline } from '@mdi/js'
+	import MembersCopy from './MembersCopy.svelte'
 
 	type Member = PageData['members'][number]
 	export let members: Member[]
@@ -60,6 +61,7 @@
 
 	<div slot="action" class="flex gap-x-3 gap-y-2 flex-wrap">
 		<MembersFilter {teams} {fields} />
+		<MembersCopy {members} {fields} />
 	</div>
 
 	<div class="relative z-10">
