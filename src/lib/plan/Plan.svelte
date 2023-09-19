@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
 	import dayjs, { type Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	import { CardFullScreen, Icon } from '$lib/material'
@@ -12,10 +13,23 @@
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 
+	onMount(() => {
+		if (!document.location.hash) return
+		const periodEl = document.querySelector<HTMLLinkElement>(document.location.hash)
+		if (!periodEl) return
+		periodEl.classList.add('outline')
+		scrollContainer.scroll({
+			top: periodEl.offsetTop - 80,
+			left: periodEl.parentElement!.offsetLeft,
+			behavior: 'smooth',
+		})
+	})
+
 	const headerHeight = 40
 	const hourHeight = 40
 	let scale = 6
 	let containerWidth = 0
+	let scrollContainer: HTMLDivElement
 
 	const periods = teams
 		.map(({ periods }) => periods.map((p) => [p.start.getTime(), p.end.getTime()]))
@@ -71,9 +85,11 @@
 	</div>
 
 	<div
+		bind:this={scrollContainer}
 		class="
 			{isFullScreen ? '' : 'max-h-[615px]'} 
-			overflow-auto table-pin-cols snap-x scroll-pl-16 bordered
+			overflow-auto table-pin-cols bordered
+			snap-x scroll-pl-16 scroll-p-20
 		"
 	>
 		<div
@@ -126,6 +142,7 @@
 					<div
 						class="w-36 sticky top-0 pb-2 z-10"
 						style:height="{headerHeight}px"
+						style:scrollPaddingTop="{headerHeight}px"
 						use:tip={{ content: team.name }}
 					>
 						<div

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiPencilOutline } from '@mdi/js'
+	import { mdiChartGantt, mdiPencilOutline } from '@mdi/js'
 	import InviteSubscribeForm from '$lib/InviteSubscribeForm.svelte'
 	import Progress from '$lib/Progress.svelte'
 	import { formatRange } from '$lib/formatRange.js'
@@ -17,8 +17,11 @@
 	<h2 slot="title">{data.period.team.name}</h2>
 	<h3 slot="subtitle" class="card-title">{formatRange(data.period)}</h3>
 	<div slot="action">
+		<a class="btn btn-square btn-sm" href="{$eventPath}/admin/plan#{data.period.id}">
+			<Icon path={mdiChartGantt} title="Voir cette période sur le planning" />
+		</a>
 		<button on:click={() => editDialog.showModal()} class="btn btn-square btn-sm">
-			<Icon path={mdiPencilOutline} />
+			<Icon path={mdiPencilOutline} title="Modifier cette période" />
 		</button>
 	</div>
 
