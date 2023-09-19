@@ -168,7 +168,8 @@
 			on:close={() => memberDialog.close()}
 			on:success={() => {
 				memberDialog.close()
-				if (data.event.memberFields.length) memberProfilDialog.showModal()
+				if (data.event.memberFields.filter((f) => f.memberCanWrite).length)
+					memberProfilDialog.showModal()
 				else subscribeDialog.showModal()
 			}}
 		/>
