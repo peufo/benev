@@ -1,7 +1,26 @@
+<script lang="ts" context="module">
+	import { createSingleton, type CreateSingletonInstance, type Instance } from 'tippy.js'
+	import { debounce } from '$lib/debounce'
+
+	const tips: Instance[] = []
+	let singleton: CreateSingletonInstance | undefined = undefined
+	if (browser) singleton = createSingleton(tips, { moveTransition: 'transform 0.13s ease-out' })
+
+	const setInstances = debounce(() => {
+		singleton?.setInstances(tips)
+	}, 200)
+
+	const addTip = (tip: Instance) => {
+		tips.push(tip)
+		setInstances()
+	}
+</script>
+
 <script lang="ts">
 	import tippy, { type Props as TippyProps } from 'tippy.js'
 	import { onMount } from 'svelte'
 	import 'tippy.js/dist/tippy.css'
+	import { browser } from '$app/environment'
 
 	export let path: string
 	export let title = ''
@@ -23,7 +42,11 @@
 		const isButton = parent?.tagName === 'BUTTON' || parent?.tagName === 'A'
 		const target = parent && isButton ? parent : icon
 		const tip = tippy(target || icon, { content: title, ...tippyProps })
-		return () => tip.destroy()
+		addTip(tip)
+		return () => {
+			tips.splice(tips.indexOf(tip), 1)
+			tip.destroy()
+		}
 	})
 </script>
 
