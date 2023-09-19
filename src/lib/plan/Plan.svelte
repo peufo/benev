@@ -12,7 +12,9 @@
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 
-	let hourHeight = 40
+	const headerHeight = 40
+	const hourHeight = 40
+	let scale = 24
 	let containerWidth = 0
 
 	const periods = teams
@@ -30,24 +32,33 @@
 		days.push(day)
 	}
 
-	const hours = Array(24)
-		.fill(0)
-		.map((v, index) => (index + 1).toString().padStart(2, '0'))
-
+	const scales = [1, 2, 6, 12, 24]
 	const zoomIn = () => {
-		hourHeight *= 2
+		const index = scales.indexOf(scale)
+		if (!scales[index + 1]) return
+		scale = scales[index + 1]
 	}
 	const zoomOut = () => {
-		hourHeight /= 2
+		const index = scales.indexOf(scale)
+		if (!scales[index - 1]) return
+		scale = scales[index - 1]
 	}
+
+	$: hours = Array(scale)
+		.fill(0)
+		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
 </script>
 
 <CardFullScreen let:isFullScreen>
 	<div slot="action" class="contents">
-		<button class="btn btn-square btn-sm" on:click={zoomOut}>
+		<button class="btn btn-square btn-sm" on:click={zoomOut} disabled={scale <= scales[0]}>
 			<Icon path={mdiMagnifyMinusOutline} />
 		</button>
-		<button class="btn btn-square btn-sm" on:click={zoomIn}>
+		<button
+			class="btn btn-square btn-sm"
+			on:click={zoomIn}
+			disabled={scale >= scales[scales.length + 1]}
+		>
 			<Icon path={mdiMagnifyPlusOutline} />
 		</button>
 	</div>
@@ -68,6 +79,10 @@
 			bind:offsetWidth={containerWidth}
 		>
 			<div class="sticky left-0 z-20 bg-base-100">
+				<!-- Header -->
+				<div style:height="{headerHeight}px" />
+
+				<!-- Scale -->
 				{#each days as day}
 					<div class="w-16">
 						<div
@@ -78,7 +93,7 @@
 							<div class="text-xs">{day.format('MMMM')}</div>
 						</div>
 						<div>
-							{#each hours.slice(0, 23) as hour}
+							{#each hours.slice(0, -1) as hour}
 								<div
 									class="flex items-center bg-base-100 text-center font-light border-r"
 									style:height="{hourHeight}px"
@@ -93,7 +108,9 @@
 				{/each}
 			</div>
 
+			<!-- Scale rows -->
 			<div class="w-0">
+				<div class="scale" style:height="{headerHeight}px" />
 				{#each days as day}
 					{#each hours as hour}
 						<div class="scale" style:height="{hourHeight}px" />
@@ -105,7 +122,7 @@
 				<div class="snap-start pl-2 relative">
 					<div
 						class="w-28 sticky top-0 pb-2 z-10"
-						style:height="{hourHeight}px"
+						style:height="{headerHeight}px"
 						use:tip={{ content: team.name }}
 					>
 						<div
@@ -119,7 +136,7 @@
 					</div>
 
 					{#each team.periods as period}
-						<PeriodCard {period} origin={range.start} {hourHeight} />
+						<PeriodCard {period} origin={range.start} {hourHeight} {headerHeight} {scale} />
 					{/each}
 				</div>
 			{/each}
