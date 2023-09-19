@@ -15,9 +15,9 @@ export const loginShema = z.object(loginForm)
 
 const registerForm = {
 	...loginForm,
-	firstName: z.string().min(2),
-	lastName: z.string().min(2),
-	phone: z.string().optional(),
+	firstName: z.string().min(2).trim(),
+	lastName: z.string().min(2).trim(),
+	phone: z.string().trim().optional(),
 }
 export const registerShema = z.object(registerForm)
 
