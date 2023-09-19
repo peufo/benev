@@ -21,13 +21,15 @@
 	href="{$eventPath}/teams/{period.teamId}/{period.id}"
 	class="
 		absolute left-2 right-0
-		bg-base-200 border rounded-md p-2 text-sm
+		bg-base-200 border rounded-md p-0 text-sm
 		hover:z-10
 		hover:outline outline-1 outline-primary
+		overflow-hidden shadow
 	"
 	style:top="{top}px"
 	style:height="{height}px"
 >
-	<span class="text-xs font-semibold">{formatRangeHour(period)}</span>
-	<Progress {period} />
+	<Progress {period} class="justify-between" badgeClass="mr-1">
+		<span slot="before-badge" class="text-xs font-semibold ml-1">{formatRangeHour(period)}</span>
+	</Progress>
 </a>

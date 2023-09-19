@@ -14,7 +14,7 @@
 
 	const headerHeight = 40
 	const hourHeight = 40
-	let scale = 24
+	let scale = 6
 	let containerWidth = 0
 
 	const periods = teams
@@ -33,16 +33,19 @@
 	}
 
 	const scales = [1, 2, 6, 12, 24]
-	const zoomIn = () => {
-		const index = scales.indexOf(scale)
-		if (!scales[index + 1]) return
-		scale = scales[index + 1]
-	}
-	const zoomOut = () => {
-		const index = scales.indexOf(scale)
-		if (!scales[index - 1]) return
-		scale = scales[index - 1]
-	}
+	const zoom = (() => {
+		let index = scales.indexOf(scale) || 3
+		return {
+			in: () => {
+				if (!scales[index + 1]) return
+				scale = scales[++index]
+			},
+			out: () => {
+				if (!scales[index - 1]) return
+				scale = scales[--index]
+			},
+		}
+	})()
 
 	$: hours = Array(scale)
 		.fill(0)
@@ -51,12 +54,12 @@
 
 <CardFullScreen let:isFullScreen>
 	<div slot="action" class="contents">
-		<button class="btn btn-square btn-sm" on:click={zoomOut} disabled={scale <= scales[0]}>
+		<button class="btn btn-square btn-sm" on:click={zoom.out} disabled={scale <= scales[0]}>
 			<Icon path={mdiMagnifyMinusOutline} />
 		</button>
 		<button
 			class="btn btn-square btn-sm"
-			on:click={zoomIn}
+			on:click={zoom.in}
 			disabled={scale >= scales[scales.length + 1]}
 		>
 			<Icon path={mdiMagnifyPlusOutline} />
@@ -121,7 +124,7 @@
 			{#each teams as team}
 				<div class="snap-start pl-2 relative">
 					<div
-						class="w-28 sticky top-0 pb-2 z-10"
+						class="w-36 sticky top-0 pb-2 z-10"
 						style:height="{headerHeight}px"
 						use:tip={{ content: team.name }}
 					>
