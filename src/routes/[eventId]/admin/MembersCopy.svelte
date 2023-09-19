@@ -18,7 +18,7 @@
 		navigator.clipboard
 			.writeText(csv)
 			.then(() => {
-				notify.success(`Données prètes à être coller dans un tableur`)
+				notify.success(`Données prêtes à être collé dans un tableur`)
 			})
 			.catch((error) => {
 				notify.error(error)
@@ -38,11 +38,14 @@
 					.reduce((acc, cur) => acc + cur, 0) /
 				(1000 * 60 * 60),
 			leaderOf: (m) => m.leaderOf.map((team) => team.name).join(', '),
-			...(fields.reduce((acc, cur) => ({
-				...acc,
-				[cur.name]: (m: Member) => m.profile.find(({ fieldId }) => fieldId === cur.id)?.value || '',
-			})),
-			{}),
+			...fields.reduce(
+				(acc, cur) => ({
+					...acc,
+					[cur.name]: (m: Member) =>
+						m.profile.find(({ fieldId }) => fieldId === cur.id)?.value || '',
+				}),
+				{}
+			),
 		}
 
 		const headers = Object.keys(columns).join('\t')
