@@ -39,11 +39,9 @@
 				<table class="table outline outline-base-200 outline-2">
 					<tbody>
 						{#each event.teams as team}
-							<tr
-								class="last:border-none hover:bg-base-200/60 cursor-pointer"
-								use:rowLink={{ href: `/${event.id}/teams/${team.id}`, addRowClasses: false }}
-							>
-								<td class="align-top pt-6 font-semibold rounded-l-box">
+							<tr class="last:border-none hover:bg-base-200/60 cursor-pointer">
+								<td class="align-top pt-6 font-semibold rounded-l-box relative">
+									<a href="/{event.id}/teams/{team.id}" class="absolute inset-0">{' '}</a>
 									{team.name}
 								</td>
 

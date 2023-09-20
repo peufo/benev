@@ -1,6 +1,6 @@
 import z from 'zod'
 import type { Prisma, Subscribe } from '@prisma/client'
-import { toTuple, type ZodObj } from './utils'
+import { type ZodObj } from './utils'
 
 export const subscribeStateLabel: Record<Subscribe['state'], string> = {
 	request: 'Demande en cours',

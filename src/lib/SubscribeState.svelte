@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { mdiAlertOctagonOutline, mdiCheck, mdiCloseOctagonOutline } from '@mdi/js'
+	import {
+		mdiAlertOctagonOutline,
+		mdiCheck,
+		mdiCloseOctagonOutline,
+		mdiTrashCanOutline,
+	} from '@mdi/js'
 	import type { Subscribe } from '@prisma/client'
 	import { Icon } from '$lib/material'
 
@@ -7,7 +12,11 @@
 	export { klass as class }
 	export let subscribe: Subscribe
 
-	$: changeAuthor = subscribe.createdBy === 'leader' ? 'par le membre' : 'par un responsable'
+	$: changeAuthor =
+		(subscribe.createdBy === 'user') ===
+		(subscribe.state === 'cancelled' || subscribe.state === 'request')
+			? 'par le membre'
+			: 'par un responsable'
 </script>
 
 {#if subscribe.state === 'request'}
@@ -25,5 +34,11 @@
 		path={mdiCloseOctagonOutline}
 		class="fill-error {klass}"
 		title="Inscription refusée {changeAuthor}"
+	/>
+{:else if subscribe.state === 'cancelled'}
+	<Icon
+		path={mdiTrashCanOutline}
+		class="fill-error {klass}"
+		title="Inscription annulée {changeAuthor}"
 	/>
 {/if}

@@ -21,7 +21,6 @@
 	{#if to === 'leader'}
 		<!-- On s'adresse au leader -->
 		<p>
-			Bonne nouvelle ! <br />
 			<b>{subscribe.member.user.firstName} {subscribe.member.user.lastName}</b>
 			souhaite participer à la période de travail suivante :
 		</p>
