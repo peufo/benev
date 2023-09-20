@@ -113,6 +113,8 @@
 												title="M'inscrire à cette période"
 											/>
 										</button>
+									{:else}
+										<div class="w-8" />
 									{/if}
 
 									<button
