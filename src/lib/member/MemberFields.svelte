@@ -5,7 +5,6 @@
 	import { Card, Icon } from '$lib/material'
 	import { memberFieldType } from '$lib/form'
 	import MemberFieldForm from './MemberFieldForm.svelte'
-	import WorkInProgress from '$lib/WorkInProgress.svelte'
 
 	export let fields: Field[]
 

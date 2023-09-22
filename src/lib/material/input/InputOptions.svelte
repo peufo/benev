@@ -3,6 +3,7 @@
 	import { Icon } from '$lib/material'
 	import { slide } from 'svelte/transition'
 	import { useNotify } from '$lib/notify'
+	import { listEditable } from '$lib/action'
 
 	export let key: string
 	export let value = '[]'
@@ -11,7 +12,7 @@
 	let newOption = ''
 	let optionInput: HTMLInputElement
 
-  const notify = useNotify()
+	const notify = useNotify()
 
 	function handleKeyDown(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
@@ -22,7 +23,7 @@
 
 	function createOption() {
 		if (!newOption) return
-    if (options.includes(newOption)) return notify.warning('Cette option éxiste déjà !')
+		if (options.includes(newOption)) return notify.warning('Cette option éxiste déjà !')
 		options = [...options, newOption]
 		newOption = ''
 		value = JSON.stringify(options)
@@ -31,6 +32,11 @@
 
 	function removeOption(index: number) {
 		options = [...options.slice(0, index), ...options.slice(index + 1)]
+		value = JSON.stringify(options)
+	}
+
+	function onChange(newOrder: string[]) {
+		options = newOrder
 		value = JSON.stringify(options)
 	}
 </script>
@@ -42,24 +48,22 @@
 </div>
 
 <div class="border bordered rounded-box p-2">
-	{#each options as option, index (option)}
-		<div class="flex gap-2 items-center" transition:slide={{duration: 200}}>
-			<div class="grow pl-4">
-				{option}
+	<div use:listEditable={{ items: options, onChange }}>
+		{#each options as option, index (option)}
+			<div class="flex gap-2 items-center" transition:slide={{ duration: 200 }}>
+				<div class="grow pl-4">
+					{option}
+				</div>
+				<button
+					type="button"
+					class="btn btn-square btn-ghost btn-sm"
+					on:click={() => removeOption(index)}
+				>
+					<Icon path={mdiTrashCanOutline} size={20} class="fill-error" />
+				</button>
 			</div>
-			<button
-				type="button"
-				class="btn btn-square btn-ghost btn-sm"
-				on:click={() => removeOption(index)}
-			>
-				<Icon
-					path={mdiTrashCanOutline}
-					size={20}
-					class="fill-error"
-				/>
-			</button>
-		</div>
-	{/each}
+		{/each}
+	</div>
 
 	<div class="join flex pt-2">
 		<input
