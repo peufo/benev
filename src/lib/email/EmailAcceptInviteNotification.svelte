@@ -9,7 +9,7 @@
 <EmailLayout title={member.event.name} subtitle="Un nouveau membre a rejoint l'évènement">
 	<p>
 		<b>{member.user.firstName} {member.user.lastName}</b>
-		fait désormais parti de l'évenement.
+		fait désormais partie de l'évènement.
 	</p>
 	<p>
 		Tu peux trouver toutes ses informations

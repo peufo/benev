@@ -33,7 +33,8 @@
 	{:else}
 		<p>
 			Salut ! <br />
-			Tu es invité à rejoindre l'équipe de bénévoles durant la période de travail suivante :
+			Un responsable t'invite à rejoindre l'équipe de bénévoles durant la période de travail suivante
+			:
 		</p>
 	{/if}
 
