@@ -9,19 +9,18 @@
 <EmailLayout title={member.event.name} subtitle="Bienvenue dans notre équipe bénévole">
 	<p>
 		Salut {member.user.firstName},<br />
-		Tu fais désormais parti des notres. Cela implique que les responsables peuvent accèder aux informations
-		de ton profil.
+		Tu fais désormais partie des nôtres. Tu peux maintenant compléter
+		<a href="{domain}/{member.eventId}/me/profile#member-profile-{member.eventId}"> ton profil </a>
+		si ce n'est déjà fait et t'inscrire aux tranches horaires qui t'intéressent en consultant les différents
+		<a href="{domain}/{member.eventId}/teams">secteurs</a>.
 	</p>
 
-	{#if member.event.memberFields.length}
-		<p>
-			Avant d'accepter tes inscriptions à des période de travails, nous avons besoins de quelques
-			informations supplémentaire te concernant. Si ce n'est pas déjà fait, tu peux les renseigner
-			<a href="{domain}/{member.event.id}/me/profile#member-profile-{member.event.id}">
-				sur ton profil
-			</a>.
-		</p>
-	{/if}
+	<p>
+		Les responsables qui ont accès à ton profil pourront ensuite valider tes tranches horaires et
+		prendre contact avec toi le moment venu.
+	</p>
 
 	<p>Un énorme merci pour ta disponibilité !</p>
+
+	<p>Toute l'équipe {member.event.name}</p>
 </EmailLayout>
