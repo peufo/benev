@@ -56,15 +56,6 @@ export const actions = {
 		const { err, data } = await parseFormData(request, periodShema)
 		if (err) return err
 
-		if (data.start.getTime() > data.end.getTime()) {
-			return fail(400, {
-				issues: [
-					{ path: ['start'], message: 'Doit être avant la fin' },
-					{ path: ['end'], message: 'Doit être après le début' },
-				],
-			})
-		}
-
 		return tryOrFail(() =>
 			prisma.period.create({
 				data: {

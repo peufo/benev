@@ -31,9 +31,9 @@ function getFormDataTyped(formData: Record<string, unknown>): Record<string, unk
 	return formData
 }
 
-export async function parseFormData<Type extends z.ZodRawShape>(
+export async function parseFormData<Type extends z.ZodRawShape, Type2 extends z.ZodRawShape>(
 	request: Request,
-	shema: z.ZodObject<Type>,
+	shema: z.ZodObject<Type> | z.ZodEffects<z.ZodObject<Type>>,
 	options: {
 		arrayOperation: ArrayOperation
 	} = { arrayOperation: 'connect' }
