@@ -1,5 +1,6 @@
 import type z from 'zod'
 import { fail } from '@sveltejs/kit'
+import { Blob } from 'buffer'
 
 /**
  * Recieve formData as Record<string, string>
