@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit'
+import { isFreeRange } from 'perod'
 import { subscribeShema } from '$lib/form'
 import { isLeader, parseFormData, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
 import { EmailNewSubscribe } from '$lib/email'
@@ -16,12 +17,28 @@ export const actions = {
 				prisma.period.findUniqueOrThrow({ where: { id: data.periodId } }),
 				prisma.member.findUniqueOrThrow({
 					where: { userId_eventId: { userId: session.user.id, eventId } },
+					include: {
+						subscribes: {
+							where: { state: { in: ['accepted', 'request'] } },
+							include: { period: true },
+						},
+					},
 				}),
 			])
 			const _isLeader = await isLeader(period.teamId, locals)
 			const isSelfSubscribe = data.memberId === member.id
-
 			if (!_isLeader && !isSelfSubscribe) throw error(401)
+
+			if (
+				!isFreeRange(
+					period,
+					member.subscribes.map((sub) => sub.period)
+				)
+			) {
+				const message =
+					(isSelfSubscribe ? 'Tu es' : 'Ce membre est') + ' déjà occupé durant cette période'
+				throw error(401, message)
+			}
 
 			const subscribe = await prisma.subscribe.create({
 				data: {
