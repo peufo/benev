@@ -13,6 +13,6 @@
 	</p>
 	<p>
 		Tu peux trouver toutes ses informations
-		<a href="{domain}/{member.event.id}/admin/members/{member.id}">sur son profil.</a>
+		<a href="{domain}/{member.event.id}/admin/manage/members/{member.id}">sur son profil.</a>
 	</p>
 </EmailLayout>

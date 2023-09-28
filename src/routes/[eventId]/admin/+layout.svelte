@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {
-		mdiAccountGroupOutline,
+		mdiHomeOutline,
 		mdiApplicationCogOutline,
 		mdiChartGantt,
 		mdiFileDocumentMultipleOutline,
@@ -12,9 +12,9 @@
 	const tabs = [
 		{
 			path: '/admin',
-			label: 'Les membres',
-			icon: mdiAccountGroupOutline,
-			reg: /\/admin(\/members.*)?$/,
+			label: 'Gestion',
+			icon: mdiHomeOutline,
+			reg: /\/admin(\/manage.*)?$/,
 		},
 		{
 			path: '/admin/plan',

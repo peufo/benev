@@ -45,7 +45,7 @@
 		<p>
 			Verifie
 			<a
-				href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
+				href="{domain}/{subscribe.period.team.eventId}/admin/manage/members/{subscribe.memberId}"
 				target="_blank"
 			>
 				ses informations

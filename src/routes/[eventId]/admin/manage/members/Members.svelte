@@ -2,20 +2,18 @@
 	import { getAge } from '$lib/utils'
 	import { eventPath } from '$lib/store'
 
-	import { Card, Icon, InputCheckboxsMenu, InputSearch, Placeholder } from '$lib/material'
+	import { Icon, InputCheckboxsMenu, Placeholder } from '$lib/material'
 	import Contact from '$lib/Contact.svelte'
-	import MembersFilter from './MembersFilter.svelte'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 	import { jsonParse } from '$lib/jsonParse'
-	import type { PageData } from './$types'
 	import { mdiViewColumnOutline } from '@mdi/js'
-	import MembersCopy from './MembersCopy.svelte'
+
+	import type { PageData } from './$types'
 
 	type Member = PageData['members'][number]
 	export let members: Member[]
 	export let fields: PageData['fields']
-	export let teams: PageData['teams']
 	export let workTimes: Record<string, number> = {}
 
 	const toHour = (ms: number) => ms / (1000 * 60 * 60)
@@ -53,19 +51,9 @@
 	}
 </script>
 
-<Card class="md:col-span-2 overflow-x-auto" headerClass="flex-wrap">
-	<div slot="title" class="flex gap-2 flex-wrap">
-		<span class="mr-3">Membres</span>
-		<InputSearch />
-		<MembersCopy {members} {fields} />
-	</div>
-
-	<div slot="action" class="flex gap-x-3 gap-y-2 flex-wrap">
-		<MembersFilter {teams} {fields} />
-	</div>
-
+<div class="contents">
 	<div class="relative z-10">
-		<div class="absolute right-8 top-4">
+		<div class="absolute right-8 top-2">
 			<InputCheckboxsMenu
 				key="columns"
 				bind:value={selectedColumns}
@@ -102,7 +90,7 @@
 				<tbody>
 					{#each members as member (member.id)}
 						<tr
-							on:click={() => goto(`${$eventPath}/admin/members/${member.id}`)}
+							on:click={() => goto(`${$eventPath}/admin/manage/members/${member.id}`)}
 							class="hover cursor-pointer"
 						>
 							<td>
@@ -140,4 +128,4 @@
 			<Placeholder>Aucun bénévole actif</Placeholder>
 		{/if}
 	</div>
-</Card>
+</div>
