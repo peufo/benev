@@ -1,36 +1,60 @@
 import { error } from '@sveltejs/kit'
-import { SubscribeState } from '@prisma/client'
+import { Prisma, SubscribeState } from '@prisma/client'
 import { Action } from './$types'
 import { isLeaderOrThrow, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
 import { EmailNewSubscribe, EmailSubscribeState, EmailSubscribeStateCancelled } from '$lib/email'
 import { Session } from 'lucia'
+import { isFreeRange } from 'perod'
+
+type Edtions = Record<SubscribeState, SubscribeState[]>
+const creatorEditions: Edtions = {
+	request: ['cancelled'],
+	accepted: ['cancelled'],
+	denied: ['cancelled'],
+	cancelled: ['request'],
+}
+const subscriberEditions: Edtions = {
+	request: ['accepted', 'denied'],
+	accepted: ['denied'],
+	denied: ['accepted'],
+	cancelled: [],
+}
 
 const setSubscribState: (state: SubscribeState) => Action =
 	(state) =>
 	({ locals, params: { subscribeId } }) => {
 		return tryOrFail(async () => {
+			const whereSubscribe: Prisma.SubscribeWhereInput = {
+				id: { not: subscribeId },
+				state: { in: ['accepted', 'request'] },
+			}
+
 			const _subscribe = await prisma.subscribe.findUniqueOrThrow({
 				where: { id: subscribeId },
-				include: { period: true, member: true },
+				include: {
+					member: {
+						include: {
+							subscribes: {
+								where: whereSubscribe,
+								include: { period: true },
+							},
+						},
+					},
+					period: {
+						include: {
+							subscribes: {
+								where: whereSubscribe,
+							},
+						},
+					},
+				},
 			})
 
-			type Edtions = Record<SubscribeState, SubscribeState[]>
-			const creatorEditions: Edtions = {
-				request: ['cancelled'],
-				accepted: ['cancelled'],
-				denied: ['cancelled'],
-				cancelled: ['request'],
-			}
-			const subscriberEditions: Edtions = {
-				request: ['accepted', 'denied'],
-				accepted: ['denied'],
-				denied: ['accepted'],
-				cancelled: [],
-			}
 			const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
 			const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
 			if (!isCreatorEdition && !isSubscriberEdition) throw error(401)
 
+			// Check if author right
 			const isLeaderRequired = (_subscribe.createdBy === 'leader') === isCreatorEdition
 			let session: Session | null
 			if (isLeaderRequired) {
@@ -38,6 +62,20 @@ const setSubscribState: (state: SubscribeState) => Action =
 			} else {
 				session = await locals.auth.validate()
 				if (session?.user.id !== _subscribe.member.userId) throw error(401)
+			}
+
+			if (state === 'accepted' || state === 'request') {
+				// Check if the period is already complet
+				const { subscribes, maxSubscribe } = _subscribe.period
+				if (maxSubscribe <= subscribes.length) {
+					throw error(403, 'Sorry, this period is already complet')
+				}
+
+				// Check if member is free in this period
+				const memberPeriods = _subscribe.member.subscribes.map((sub) => sub.period)
+				if (!isFreeRange(_subscribe.period, memberPeriods)) {
+					throw error(403, `Already busy during this period`)
+				}
 			}
 
 			const subscribe = await prisma.subscribe.update({

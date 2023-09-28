@@ -14,7 +14,10 @@ export const actions = {
 
 		return tryOrFail(async () => {
 			const [period, member] = await Promise.all([
-				prisma.period.findUniqueOrThrow({ where: { id: data.periodId } }),
+				prisma.period.findUniqueOrThrow({
+					where: { id: data.periodId },
+					include: { subscribes: { where: { state: { in: ['accepted', 'request'] } } } },
+				}),
 				prisma.member.findUniqueOrThrow({
 					where: { userId_eventId: { userId: session.user.id, eventId } },
 					include: {
@@ -25,19 +28,22 @@ export const actions = {
 					},
 				}),
 			])
+
+			// Check if the period is already complet
+			if (period.maxSubscribe <= period.subscribes.length) {
+				throw error(403, 'Sorry, this period is already complet')
+			}
+
+			// Check if author as the right to create this subscribe
 			const _isLeader = await isLeader(period.teamId, locals)
 			const isSelfSubscribe = data.memberId === member.id
-			if (!_isLeader && !isSelfSubscribe) throw error(401)
+			if (!_isLeader && !isSelfSubscribe) throw error(403)
 
-			if (
-				!isFreeRange(
-					period,
-					member.subscribes.map((sub) => sub.period)
-				)
-			) {
-				const message =
-					(isSelfSubscribe ? 'Tu es' : 'Ce membre est') + ' déjà occupé durant cette période'
-				throw error(401, message)
+			// Check if member is free in this period
+			const memberPeriods = member.subscribes.map((sub) => sub.period)
+			if (!isFreeRange(period, memberPeriods)) {
+				const startMessage = isSelfSubscribe ? 'You are' : 'This member is'
+				throw error(403, `${startMessage} already busy during this period`)
 			}
 
 			const subscribe = await prisma.subscribe.create({
