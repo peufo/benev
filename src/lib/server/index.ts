@@ -9,6 +9,7 @@ export * from './permission'
 export * from './email'
 export * from './token'
 export * from './try'
+export * from './parseQuery'
 
 export const prisma = new PrismaClient()
 

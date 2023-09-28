@@ -2,6 +2,13 @@ import type z from 'zod'
 import { fail } from '@sveltejs/kit'
 import { Blob } from 'buffer'
 
+export const formats: Record<string, (value: string) => unknown> = {
+	number: (value) => Number(value),
+	date: (value) => new Date(value),
+	boolean: (value) => value === 'true' || value === 'on',
+	json: (value) => JSON.parse(value),
+}
+
 /**
  * Recieve formData as Record<string, string>
  * Format number and boolean
@@ -16,22 +23,15 @@ function getFormDataTyped(formData: Record<string, unknown>): Record<string, unk
 		if (formatKey === 'relations') delete formData[key]
 		if (typeof value !== 'string' || !formData[key]) continue
 
-		const formats: Record<string, (k: string) => void> = {
-			number: (k) => (formData[k] = Number(value)),
-			date: (k) => (formData[k] = new Date(value)),
-			boolean: (k) => (formData[k] = value === 'true' || value === 'on'),
-			json: (k) => (formData[k] = JSON.parse(value)),
-		}
-
 		if (formats[formatKey]) {
 			const k = key.replace(`${formatKey}_`, '')
-			formats[formatKey](k)
+			formData[k] = formats[formatKey](value)
 		}
 	}
 	return formData
 }
 
-export async function parseFormData<Type extends z.ZodRawShape, Type2 extends z.ZodRawShape>(
+export async function parseFormData<Type extends z.ZodRawShape>(
 	request: Request,
 	shema: z.ZodObject<Type> | z.ZodEffects<z.ZodObject<Type>>,
 	options: {

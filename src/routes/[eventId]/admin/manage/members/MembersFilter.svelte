@@ -19,7 +19,7 @@
 />
 
 <InputRadioButtons
-	key="member_type"
+	key="memberType"
 	options={{
 		volunteers: 'Bénévoles',
 		leaders: 'Responsables',

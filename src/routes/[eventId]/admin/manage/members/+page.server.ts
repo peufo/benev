@@ -1,34 +1,37 @@
-import type { Prisma } from '@prisma/client'
-import { prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
+import z from 'zod'
+import type { Prisma } from '@prisma/client'
+import { parseQuery, prisma } from '$lib/server'
 
 export const load = async ({ url, params: { eventId } }) => {
-	const search = url.searchParams.get('search')
-	const _start = url.searchParams.get('start')
-	const _end = url.searchParams.get('end')
-	const _teams = url.searchParams.get('teams')
-	const memberType = url.searchParams.get('member_type')
-	const fieldId = url.searchParams.get('fieldId')
-	const fieldValue = url.searchParams.get('fieldValue')
+	const { query, err } = parseQuery(
+		url,
+		z.object({
+			search: z.string(),
+			start: z.coerce.date(),
+			end: z.coerce.date(),
+			teams: z.string(),
+			memberType: z.string(),
+			fieldId: z.string(),
+			fieldValue: z.string(),
+		})
+	)
+	if (err) return err
 
 	const where: Prisma.MemberWhereInput = { eventId, OR: [] }
 	const teamWhere: Prisma.TeamWhereInput = { eventId }
 	let periodWhere: Prisma.PeriodWhereInput | undefined = undefined
 
-	if (typeof _start === 'string' && typeof _end === 'string') {
-		const start = new Date(_start)
-		const end = new Date(_end)
-		if (isNaN(start.getTime()) || isNaN(end.getTime()))
-			throw error(400, '"start" and "end" are not a valid date')
+	if (query.start && query.end) {
 		periodWhere = {
-			start: { lte: end },
-			end: { gte: start },
+			start: { lte: query.end },
+			end: { gte: query.start },
 		}
 	}
 
-	if (typeof _teams === 'string') {
+	if (query.teams) {
 		try {
-			const teams = JSON.parse(_teams) as string[]
+			const teams = JSON.parse(query.teams) as string[]
 			teamWhere.id = { in: teams }
 		} catch {
 			throw error(400, '"teams is not a valid JSON of type string[]')
@@ -43,15 +46,15 @@ export const load = async ({ url, params: { eventId } }) => {
 		},
 	}
 
-	const subscribesFilter = memberType || _start || _end || _teams
+	const subscribesFilter = !!(query.memberType || query.start || query.end || query.teams)
 	if (subscribesFilter) {
-		if (!memberType || memberType === 'volunteers')
+		if (!query.memberType || query.memberType === 'volunteers')
 			where.OR!.push({
 				subscribes: {
 					some: subscribeWhere,
 				},
 			})
-		if (!memberType || memberType === 'leaders')
+		if (!query.memberType || query.memberType === 'leaders')
 			where.OR!.push({
 				leaderOf: {
 					some: {
@@ -68,21 +71,22 @@ export const load = async ({ url, params: { eventId } }) => {
 
 	if (!where.OR?.length) delete where.OR
 
-	if (search)
+	if (query.search)
 		where.user = {
 			OR: [
-				{ firstName: { contains: search } },
-				{ lastName: { contains: search } },
-				{ email: { contains: search } },
+				{ firstName: { contains: query.search } },
+				{ lastName: { contains: query.search } },
+				{ email: { contains: query.search } },
 			],
 		}
 
-	if (typeof fieldId === 'string' && typeof fieldValue === 'string') {
-		const field = await prisma.field.findUniqueOrThrow({ where: { id: fieldId, eventId } })
+	if (query.fieldId && query.fieldValue) {
+		const field = await prisma.field.findUniqueOrThrow({ where: { id: query.fieldId, eventId } })
 		where.profile = {
 			some: {
-				fieldId,
-				value: field.type === 'multiselect' ? { contains: `"${fieldValue}"` } : fieldValue,
+				fieldId: query.fieldId,
+				value:
+					field.type === 'multiselect' ? { contains: `"${query.fieldValue}"` } : query.fieldValue,
 			},
 		}
 	}
