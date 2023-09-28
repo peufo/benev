@@ -43,7 +43,7 @@
 	export let eventId = $page.params.eventId
 	export let action = `/${eventId}/subscribes/${subscribe.id}`
 
-	const form = useForm({ successMessage: 'Status changé' })
+	const form = useForm({ successMessage: 'Status changé', successReset: false })
 	const creatorStates: Partial<States> = creatorEditions[subscribe.state].reduce(
 		(acc, cur) => ({ ...acc, [cur]: states[cur] }),
 		{}
@@ -80,7 +80,7 @@
 			<ul tabindex="0" class="menu shadow dropdown-content z-10 bg-base-200 rounded-box">
 				{#each editions as [state, edit]}
 					<li>
-						<button formaction="{action}?/subscribe_{state}">
+						<button formaction="{action}?/subscribe_{state}" on:click|stopPropagation>
 							<Icon path={edit.icon} class={edit.class} />
 							{edit.label}
 						</button>
