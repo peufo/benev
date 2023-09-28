@@ -4,6 +4,7 @@
 		mdiAccountArrowUpOutline,
 		mdiAccountMultipleOutline,
 		mdiChevronRight,
+		mdiClipboardTextMultipleOutline,
 		mdiPencilOutline,
 	} from '@mdi/js'
 
@@ -51,8 +52,17 @@
 	</p>
 	<div slot="action">
 		{#if data.isLeader}
-			<a href={`${$eventPath}/admin?teams=["${data.team.id}"]`} class="btn btn-square btn-sm">
-				<Icon path={mdiAccountMultipleOutline} title="Tous les bénévoles du secteur" />
+			<a
+				href={`${$eventPath}/admin/manage/members?teams=["${data.team.id}"]`}
+				class="btn btn-square btn-sm"
+			>
+				<Icon path={mdiAccountMultipleOutline} title="Tous les membres du secteur" />
+			</a>
+			<a
+				href={`${$eventPath}/admin/manage/subscribes?teams=["${data.team.id}"]`}
+				class="btn btn-square btn-sm"
+			>
+				<Icon path={mdiClipboardTextMultipleOutline} title="Toutes les inscriptions du secteur" />
 			</a>
 
 			<a href="{$eventPath}/teams/{data.team.id}/edit" class="btn btn-square btn-sm">

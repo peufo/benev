@@ -5,7 +5,7 @@
 	import {
 		mdiSigma,
 		mdiListBoxOutline,
-		mdiAccountGroup,
+		mdiAccountMultipleOutline,
 		mdiClipboardTextMultipleOutline,
 	} from '@mdi/js'
 
@@ -22,7 +22,7 @@
 			class:tab-active={isMemberTab}
 		>
 			<Icon
-				path={mdiAccountGroup}
+				path={mdiAccountMultipleOutline}
 				class="mr-2 {isMemberTab ? '' : 'opacity-50 group-hover:opacity-100'}"
 			/>
 			Membres
