@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Field } from '@prisma/client'
-	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
-	import { InputCheckboxsMenu, InputRadioButtons } from '$lib/material'
+	import type { Field, Team } from '@prisma/client'
+	import { InputCheckboxsMenu } from '$lib/material'
+	import { PeriodPickerButton } from '$lib/period'
 	import FieldsFilter from '$lib/FieldsFilter.svelte'
 
 	export let teams: { id: string; name: string }[]
@@ -16,15 +16,6 @@
 	options={teams.map((t) => ({ value: t.id, label: t.name }))}
 	enhanceDisabled
 	badgePrimary
-/>
-
-<InputRadioButtons
-	key="member_type"
-	options={{
-		volunteers: 'Bénévoles',
-		leaders: 'Responsables',
-	}}
-	bindWithParams
 />
 
 <FieldsFilter {fields} />

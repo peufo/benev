@@ -8,8 +8,6 @@
 	import { page } from '$app/stores'
 	import { urlParam } from '$lib/store'
 
-	export let action = ''
-
 	let dropDown: DropDown
 	const start = $page.url.searchParams.get('start')?.split('T') || []
 	const end = $page.url.searchParams.get('end')?.split('T') || []
@@ -67,12 +65,7 @@
 		{/if}
 	</div>
 
-	<form
-		{action}
-		class="flex flex-col"
-		on:submit|preventDefault={handleSubmit}
-		data-sveltekit-replacestate
-	>
+	<form class="flex flex-col" on:submit|preventDefault={handleSubmit} data-sveltekit-replacestate>
 		<PeriodPicker numberOfMonths={1} bind:period />
 
 		<input class="hidden" type="text" name="start" value="{period.start}T{time.start || '00:00'}" />

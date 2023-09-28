@@ -2,7 +2,7 @@ import type { Prisma } from '@prisma/client'
 import { prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
-export const load = async ({ params, url }) => {
+export const load = async ({ url, params: { eventId } }) => {
 	const search = url.searchParams.get('search')
 	const _start = url.searchParams.get('start')
 	const _end = url.searchParams.get('end')
@@ -10,8 +10,6 @@ export const load = async ({ params, url }) => {
 	const memberType = url.searchParams.get('member_type')
 	const fieldId = url.searchParams.get('fieldId')
 	const fieldValue = url.searchParams.get('fieldValue')
-
-	const { eventId } = params
 
 	const where: Prisma.MemberWhereInput = { eventId, OR: [] }
 	const teamWhere: Prisma.TeamWhereInput = { eventId }
@@ -106,13 +104,6 @@ export const load = async ({ params, url }) => {
 			orderBy: {
 				user: { firstName: 'asc' },
 			},
-		}),
-		teams: await prisma.team.findMany({
-			where: { eventId },
-			select: { id: true, name: true },
-		}),
-		fields: await prisma.field.findMany({
-			where: { eventId },
 		}),
 		periods: await prisma.period.findMany({
 			where: { ...periodWhere, team: { eventId, ...teamWhere } },
