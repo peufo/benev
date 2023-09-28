@@ -95,7 +95,7 @@
 						</td>
 						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-end">
 							{#if mySubscribe}
-								<SubscribeStateForm subscribe={mySubscribe} isMember isLeader={!!data.isLeader} />
+								<SubscribeStateForm subscribe={mySubscribe} isLeader={!!data.isLeader} />
 							{/if}
 
 							<Progress {period} class="w-[60px]" />

@@ -52,7 +52,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 
 			const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
 			const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
-			if (!isCreatorEdition && !isSubscriberEdition) throw error(401)
+			if (!isCreatorEdition && !isSubscriberEdition) throw error(403)
 
 			// Check if author right
 			const isLeaderRequired = (_subscribe.createdBy === 'leader') === isCreatorEdition
@@ -61,7 +61,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 				session = await isLeaderOrThrow(_subscribe.period.teamId, locals)
 			} else {
 				session = await locals.auth.validate()
-				if (session?.user.id !== _subscribe.member.userId) throw error(401)
+				if (session?.user.id !== _subscribe.member.userId) throw error(403)
 			}
 
 			if (state === 'accepted' || state === 'request') {

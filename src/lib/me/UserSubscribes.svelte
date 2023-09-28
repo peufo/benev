@@ -12,7 +12,6 @@
 
 	export let title = ''
 	export let isLeader = false
-	export let isMember = false
 </script>
 
 <div class="flex flex-col gap-10">
@@ -65,7 +64,6 @@
 															subscribe={period.subscribes[0]}
 															eventId={event.id}
 															{isLeader}
-															{isMember}
 														/>
 													</td>
 												</tr>

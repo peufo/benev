@@ -3,4 +3,4 @@
 	export let data
 </script>
 
-<UserSubscribes {...data} isMember />
+<UserSubscribes {...data} />

@@ -38,17 +38,20 @@
 	import { page } from '$app/stores'
 
 	export let subscribe: Subscribe
-	export let isMember = false
-	export let isLeader = false
 	export let eventId = $page.params.eventId
 	export let action = `/${eventId}/subscribes/${subscribe.id}`
+	export let isLeader = false
+
+	let isMember = subscribe.memberId === $page.data.member?.id
 
 	const form = useForm({ successMessage: 'Status changé', successReset: false })
-	const creatorStates: Partial<States> = creatorEditions[subscribe.state].reduce(
+	let creatorStates: Partial<States> = {}
+	let subscriberStates: Partial<States> = {}
+	$: creatorStates = creatorEditions[subscribe.state].reduce(
 		(acc, cur) => ({ ...acc, [cur]: states[cur] }),
 		{}
 	)
-	const subscriberStates: Partial<States> = subscriberEditions[subscribe.state].reduce(
+	$: subscriberStates = subscriberEditions[subscribe.state].reduce(
 		(acc, cur) => ({ ...acc, [cur]: states[cur] }),
 		{}
 	)
