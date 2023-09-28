@@ -1,19 +1,23 @@
 <script lang="ts">
+	import type { PageData } from './$types'
 	import { page } from '$app/stores'
+	import { Subscribe } from '@prisma/client'
 
 	import ColumnsSelect, { type Column } from '$lib/ColumnsSelect.svelte'
 	import { jsonParse } from '$lib/jsonParse'
-
 	import { Placeholder } from '$lib/material'
-	import { Subscribe } from '@prisma/client'
+	import { formatRange } from '$lib/formatRange'
+	import WorkInProgress from '$lib/WorkInProgress.svelte'
 
-	export let subscribes: Subscribe[]
+	export let subscribes: PageData['subscribes']
 
 	const defaultColumnsId = jsonParse<string[]>($page.url.searchParams.get('columns'), [])
 
 	const columns: Record<string, Column<Subscribe>> = {}
 	let selectedColumns: Column<Subscribe>[] = defaultColumnsId.map((id) => columns[id])
 </script>
+
+<WorkInProgress />
 
 <div class="contents">
 	<div class="relative z-10">
@@ -27,6 +31,8 @@
 			<table class="table table-pin-rows">
 				<thead>
 					<tr>
+						<th>Membre</th>
+						<th>Secteur</th>
 						<th>Période</th>
 						{#each selectedColumns as column}
 							<th>{column.label}</th>
@@ -36,14 +42,21 @@
 				</thead>
 
 				<tbody>
-					{#each subscribes as subscribe (subscribe.id)}
+					{#each subscribes as sub (sub.id)}
 						<tr>
 							<td>
-								{subscribe.periodId}
+								{sub.member.user.firstName}
+								{sub.member.user.lastName}
+							</td>
+							<td>
+								{sub.period.team.name}
+							</td>
+							<td>
+								{formatRange(sub.period)}
 							</td>
 
 							{#each selectedColumns as column}
-								{@const value = column.getValue(subscribe)}
+								{@const value = column.getValue(sub)}
 								<td>
 									{#if Array.isArray(value)}
 										{#each value as v}

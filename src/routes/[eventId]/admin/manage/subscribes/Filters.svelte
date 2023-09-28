@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { Field, Team } from '@prisma/client'
+	import type { Field } from '@prisma/client'
 	import { InputCheckboxsMenu } from '$lib/material'
 	import { PeriodPickerButton } from '$lib/period'
-	import FieldsFilter from '$lib/FieldsFilter.svelte'
+	// import FieldsFilter from '$lib/FieldsFilter.svelte'
 
 	export let teams: { id: string; name: string }[]
-	export let fields: Field[]
+	// export let fields: Field[]
 </script>
 
 <PeriodPickerButton />
@@ -18,4 +18,6 @@
 	badgePrimary
 />
 
-<FieldsFilter {fields} />
+<!-- TODO: mise en place des customs fields sur les subscribes ?
+	<FieldsFilter {fields} />
+-->

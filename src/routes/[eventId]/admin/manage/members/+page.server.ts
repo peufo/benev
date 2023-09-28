@@ -4,7 +4,7 @@ import type { Prisma } from '@prisma/client'
 import { parseQuery, prisma } from '$lib/server'
 
 export const load = async ({ url, params: { eventId } }) => {
-	const { query, err } = parseQuery(
+	const query = parseQuery(
 		url,
 		z.object({
 			search: z.string(),
@@ -16,7 +16,6 @@ export const load = async ({ url, params: { eventId } }) => {
 			fieldValue: z.string(),
 		})
 	)
-	if (err) return err
 
 	const where: Prisma.MemberWhereInput = { eventId, OR: [] }
 	const teamWhere: Prisma.TeamWhereInput = { eventId }

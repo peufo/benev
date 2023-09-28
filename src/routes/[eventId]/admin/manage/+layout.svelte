@@ -38,10 +38,7 @@
 			/>
 			Inscriptions
 		</a>
-	</div>
-
-	<div slot="action" class="flex gap-2">
-		<div class="join">
+		<div class="join ml-4">
 			<a
 				class="
 					btn btn-sm btn-square join-item
@@ -61,7 +58,9 @@
 				<Icon path={mdiSigma} title="Synthèse" class="fill-base-content" />
 			</a>
 		</div>
+	</div>
 
+	<div slot="action" class="flex gap-2">
 		<InputSearch />
 	</div>
 
