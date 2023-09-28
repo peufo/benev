@@ -38,7 +38,7 @@
 					{item?.user.lastName}
 				</div>
 
-				<div slot="listItem" let:item class="flex w-full">
+				<div slot="listItem" let:item class="flex gap-2 items-center w-full">
 					{#if item}
 						<span>{item.user.firstName} {item.user.lastName}</span>
 						<div class="grow" />
