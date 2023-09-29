@@ -7,9 +7,10 @@
 	export let data
 </script>
 
+<WorkInProgress />
 <div class="flex flex-col gap-4">
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
-		<Filters teams={data.teams} fields={data.fields} />
+		<Filters teams={data.teams} />
 	</div>
 
 	<Subscribes subscribes={data.subscribes} />

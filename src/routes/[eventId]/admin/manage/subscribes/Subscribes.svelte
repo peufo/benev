@@ -7,7 +7,7 @@
 	import { jsonParse } from '$lib/jsonParse'
 	import { Placeholder } from '$lib/material'
 	import { formatRange } from '$lib/formatRange'
-	import WorkInProgress from '$lib/WorkInProgress.svelte'
+	import { eventPath } from '$lib/store'
 
 	export let subscribes: PageData['subscribes']
 
@@ -16,8 +16,6 @@
 	const columns: Record<string, Column<Subscribe>> = {}
 	let selectedColumns: Column<Subscribe>[] = defaultColumnsId.map((id) => columns[id])
 </script>
-
-<WorkInProgress />
 
 <div class="contents">
 	<div class="relative z-10">
@@ -31,9 +29,9 @@
 			<table class="table table-pin-rows">
 				<thead>
 					<tr>
+						<th>Période</th>
 						<th>Membre</th>
 						<th>Secteur</th>
-						<th>Période</th>
 						{#each selectedColumns as column}
 							<th>{column.label}</th>
 						{/each}
@@ -45,14 +43,23 @@
 					{#each subscribes as sub (sub.id)}
 						<tr>
 							<td>
-								{sub.member.user.firstName}
-								{sub.member.user.lastName}
+								<a
+									class="link link-hover"
+									href="{$eventPath}/teams/{sub.period.teamId}/{sub.periodId}"
+								>
+									{formatRange(sub.period)}
+								</a>
 							</td>
 							<td>
-								{sub.period.team.name}
+								<a class="link link-hover" href="{$eventPath}/admin/manage/members/{sub.memberId}">
+									{sub.member.user.firstName}
+									{sub.member.user.lastName}
+								</a>
 							</td>
 							<td>
-								{formatRange(sub.period)}
+								<a class="link link-hover" href="{$eventPath}/teams/{sub.period.teamId}">
+									{sub.period.team.name}
+								</a>
 							</td>
 
 							{#each selectedColumns as column}
