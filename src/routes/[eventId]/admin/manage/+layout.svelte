@@ -1,23 +1,16 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { Card, Icon, InputSearch } from '$lib/material'
-	import { eventPath, urlParam } from '$lib/store'
-	import {
-		mdiSigma,
-		mdiListBoxOutline,
-		mdiAccountMultipleOutline,
-		mdiClipboardTextMultipleOutline,
-	} from '@mdi/js'
+	import { eventPath } from '$lib/store'
+	import { mdiAccountMultipleOutline, mdiClipboardTextMultipleOutline } from '@mdi/js'
 
-	let view: 'table' | 'summary'
-	$: view = $urlParam.hasValue('view', 'summary') ? 'summary' : 'table'
 	$: isMemberTab = $page.route.id?.startsWith('/[eventId]/admin/manage/members')
 </script>
 
 <Card headerClass="items-end">
 	<div slot="title" class="tabs -translate-y-2">
 		<a
-			href="{$eventPath}/admin/manage/members"
+			href="{$eventPath}/admin/manage/members{$page.url.search}"
 			class="tab tab-lg tab-bordered group"
 			class:tab-active={isMemberTab}
 		>
@@ -28,7 +21,7 @@
 			Membres
 		</a>
 		<a
-			href="{$eventPath}/admin/manage/subscribes"
+			href="{$eventPath}/admin/manage/subscribes{$page.url.search}"
 			class="tab tab-lg tab-bordered tab-active group"
 			class:tab-active={!isMemberTab}
 		>
