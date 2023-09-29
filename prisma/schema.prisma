@@ -123,7 +123,7 @@ model FieldValue {
   field     Field    @relation(references: [id], fields: [fieldId], onDelete: Cascade)
   memberId  String
   member    Member   @relation(references: [id], fields: [memberId], onDelete: Cascade)
-  value     String
+  value     String   @db.Text()
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
