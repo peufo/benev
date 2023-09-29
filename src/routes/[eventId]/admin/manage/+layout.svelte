@@ -38,26 +38,6 @@
 			/>
 			Inscriptions
 		</a>
-		<div class="join ml-4">
-			<a
-				class="
-					btn btn-sm btn-square join-item
-					{view === 'table' ? 'btn-active' : 'opacity-70'}
-				"
-				href={$urlParam.with({ view: 'table' })}
-			>
-				<Icon path={mdiListBoxOutline} title="Table" class="fill-base-content" />
-			</a>
-			<a
-				class="
-					btn btn-sm btn-square join-item
-					{view === 'summary' ? 'btn-active' : 'opacity-70'}
-				"
-				href={$urlParam.with({ view: 'summary' })}
-			>
-				<Icon path={mdiSigma} title="Synthèse" class="fill-base-content" />
-			</a>
-		</div>
 	</div>
 
 	<div slot="action" class="flex gap-2">
