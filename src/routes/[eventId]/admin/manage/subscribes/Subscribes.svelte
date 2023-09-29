@@ -8,6 +8,7 @@
 	import { Placeholder } from '$lib/material'
 	import { formatRange } from '$lib/formatRange'
 	import { eventPath } from '$lib/store'
+	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
 
 	export let subscribes: PageData['subscribes']
 
@@ -20,7 +21,9 @@
 <div class="contents">
 	<div class="relative z-10">
 		<div class="absolute right-8">
-			<ColumnsSelect {columns} {defaultColumnsId} bind:selectedColumns />
+			<!--
+				<ColumnsSelect {columns} {defaultColumnsId} bind:selectedColumns />
+			-->
 		</div>
 	</div>
 
@@ -32,6 +35,7 @@
 						<th>Période</th>
 						<th>Membre</th>
 						<th>Secteur</th>
+						<th>Statut</th>
 						{#each selectedColumns as column}
 							<th>{column.label}</th>
 						{/each}
@@ -60,6 +64,10 @@
 								<a class="link link-hover" href="{$eventPath}/teams/{sub.period.teamId}">
 									{sub.period.team.name}
 								</a>
+							</td>
+
+							<td>
+								<SubscribeStateForm subscribe={sub} isLeader />
 							</td>
 
 							{#each selectedColumns as column}
