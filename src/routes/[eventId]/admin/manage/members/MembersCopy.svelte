@@ -41,8 +41,11 @@
 			...fields.reduce(
 				(acc, cur) => ({
 					...acc,
-					[cur.name]: (m: Member) =>
-						m.profile.find(({ fieldId }) => fieldId === cur.id)?.value || '',
+					[cur.name]: (m: Member) => {
+						const value = m.profile.find(({ fieldId }) => fieldId === cur.id)?.value || ''
+						return value.replaceAll('\r\n', ' ')
+
+					}
 				}),
 				{}
 			),
