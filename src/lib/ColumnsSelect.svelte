@@ -17,7 +17,7 @@
 	export let columns: Record<string, _Column>
 	export let defaultColumnsId: string[] = []
 
-	let selectedColumnsId = jsonParse<string[]>(
+	export let selectedColumnsId = jsonParse<string[]>(
 		$page.url.searchParams.get('columns'),
 		defaultColumnsId
 	)

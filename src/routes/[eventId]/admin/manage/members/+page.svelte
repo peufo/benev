@@ -21,12 +21,14 @@
 		}),
 		{}
 	)
+
+	let selectedColumnsId: string[]
 </script>
 
 <div class="flex flex-col gap-4">
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
 		<MembersFilter fields={data.fields} teams={data.teams} />
-		<MembersCopy members={data.members} fields={data.fields} />
+		<MembersCopy members={data.members} fields={data.fields} {selectedColumnsId} />
 
 		<a
 			class="
@@ -49,5 +51,5 @@
 		</div>
 	{/if}
 
-	<Members members={data.members} fields={data.fields} {workTimes} />
+	<Members members={data.members} fields={data.fields} {workTimes} bind:selectedColumnsId />
 </div>

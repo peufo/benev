@@ -9,6 +9,7 @@
 
 	export let members: Member[]
 	export let fields: PageData['fields']
+	export let selectedColumnsId: string[] = []
 
 	const notify = useNotify()
 
@@ -26,6 +27,7 @@
 	}
 
 	function getCSV(): string {
+		console.log(selectedColumnsId)
 		const columns: Record<string, (member: Member) => string | number> = {
 			name: (m) => `${m.user.firstName} ${m.user.lastName}`,
 			email: (m) => m.user.email,
@@ -44,8 +46,7 @@
 					[cur.name]: (m: Member) => {
 						const value = m.profile.find(({ fieldId }) => fieldId === cur.id)?.value || ''
 						return value.replaceAll('\r\n', ' ')
-
-					}
+					},
 				}),
 				{}
 			),

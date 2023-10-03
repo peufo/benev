@@ -18,12 +18,6 @@
 
 	const toHour = (ms: number) => ms / (1000 * 60 * 60)
 
-	const defaultColumnsId = jsonParse<string[]>($page.url.searchParams.get('columns'), [
-		'periods',
-		'hours',
-		'sectors',
-	])
-
 	const columns: Record<string, Column<Member>> = {
 		periods: { label: 'Périodes', getValue: (m) => m.subscribes.length },
 		hours: { label: 'Heures', getValue: (m) => toHour(workTimes[m.id]) },
@@ -47,13 +41,15 @@
 			{}
 		),
 	}
-	let selectedColumns: Column<Member>[] = defaultColumnsId.map((id) => columns[id])
+
+	const defaultColumnsId = ['periods', 'hours', 'sectors']
+	export let selectedColumnsId = defaultColumnsId
 </script>
 
 <div class="contents">
 	<div class="relative z-10">
 		<div class="absolute right-8">
-			<ColumnsSelect {columns} {defaultColumnsId} bind:selectedColumns />
+			<ColumnsSelect {columns} {defaultColumnsId} bind:selectedColumnsId />
 		</div>
 	</div>
 
@@ -63,8 +59,8 @@
 				<thead>
 					<tr>
 						<th>Nom</th>
-						{#each selectedColumns as column}
-							<th>{column.label}</th>
+						{#each selectedColumnsId as colId}
+							<th>{columns[colId].label}</th>
 						{/each}
 						<th />
 					</tr>
@@ -81,8 +77,8 @@
 								{member.user.lastName}
 							</td>
 
-							{#each selectedColumns as column}
-								{@const value = column.getValue(member)}
+							{#each selectedColumnsId as colId}
+								{@const value = columns[colId].getValue(member)}
 								<td>
 									{#if Array.isArray(value)}
 										{#each value as v}
