@@ -38,9 +38,7 @@
 	class="{klass} flex flex-col gap-2"
 	use:enhance={form.submit}
 >
-	{#if !isUpdate}
-		<h3 class="font-bold text-lg">Nouvel évènement</h3>
-	{/if}
+
 
 	{#if isUpdate && event}
 		<InputText
@@ -97,15 +95,6 @@
 		{#if isUpdate}
 			<DeleteButton formaction="?/delete_event" />
 		{/if}
-		<div class="grow" />
-		{#if !isUpdate}
-			<button
-				class="btn btn-ghost"
-				type="button"
-				on:click|preventDefault={() => dispatch('cancel')}
-			>
-				Annuler
-			</button>
-		{/if}
+
 	</div>
 </form>

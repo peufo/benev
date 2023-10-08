@@ -1,59 +1,54 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
-	import Icon from '$lib/material/Icon.svelte'
+	import {Icon, Dialog} from '$lib/material'
 	import EventForm from '$lib/EventForm.svelte'
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
-	import { rowLink } from '$lib/action'
+	
 
 	export let data
 
 	let createDialog: HTMLDialogElement
 </script>
 
-<dialog bind:this={createDialog} class="modal">
+<Dialog bind:dialog={createDialog} title="Nouvel évènement">
 	<EventForm
-		class="modal-box"
 		on:cancel={() => createDialog.close()}
 		on:success={() => createDialog.close()}
 	/>
-</dialog>
+</Dialog>
 
 <Header userName={data.user?.firstName} />
 
 <main class="grow p-2">
-	<div class="p-4 card bg-base-100 max-w-4xl m-auto">
-		<div class="flex gap-2 py-2 items-center">
-			<h2 class="text-2xl">Tous les évènements</h2>
+	<div class="max-w-md mx-auto">
+		<div class="flex gap-2 items-center my-6">
+			<h2 class="text-xl">Tous les évènements</h2>
 			<div class="grow" />
 			{#if data.user?.isEmailVerified}
-				<button class="btn btn-neutral" on:click={() => createDialog.showModal()}>
-					<Icon path={mdiPlus} class="fill-neutral-content" />
+				<button class="btn btn-sm" on:click={() => createDialog.showModal()}>
+					<Icon path={mdiPlus} class="fill-base-content" />
 					Nouveau
 				</button>
 			{/if}
 		</div>
-		<div class="divider" />
 
-		<table class="table text-base">
-			<thead>
-				<tr>
-					<th>Nom</th>
-					<th>Description</th>
-				</tr>
-			</thead>
-
-			<tbody>
-				{#each data.events as event}
-					<tr use:rowLink={{ href: `/${event.id}` }}>
-						<td>
-							{event.name}
-						</td>
-						<td>{event.description || '-'}</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
+		<ul class="flex flex-col gap-2 mt-2">
+			{#each data.events as event}
+				<a
+					href="/{event.id}"
+					class="
+						shadow hover:shadow-md transition-shadow
+						bg-base-100 border rounded-lg p-6
+					"
+				>
+					<li>
+						<p class="font-medium mb-2">{event.name}</p>
+						<p class="opacity-70">{event.description}</p>
+					</li>
+				</a>
+			{/each}
+		</ul>
 	</div>
 </main>
 
