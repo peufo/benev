@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
-	import {Icon, Dialog} from '$lib/material'
+	import { Icon, Dialog, CardLink } from '$lib/material'
 	import EventForm from '$lib/EventForm.svelte'
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
-	
 
 	export let data
 
@@ -12,10 +11,7 @@
 </script>
 
 <Dialog bind:dialog={createDialog} title="Nouvel évènement">
-	<EventForm
-		on:cancel={() => createDialog.close()}
-		on:success={() => createDialog.close()}
-	/>
+	<EventForm on:cancel={() => createDialog.close()} on:success={() => createDialog.close()} />
 </Dialog>
 
 <Header userName={data.user?.firstName} />
@@ -35,18 +31,9 @@
 
 		<ul class="flex flex-col gap-2 mt-2">
 			{#each data.events as event}
-				<a
-					href="/{event.id}"
-					class="
-						shadow hover:shadow-md transition-shadow
-						bg-base-100 border rounded-lg p-6
-					"
-				>
-					<li>
-						<p class="font-medium mb-2">{event.name}</p>
-						<p class="opacity-70">{event.description}</p>
-					</li>
-				</a>
+				<CardLink href="/{event.id}" title={event.name}>
+					<p class="opacity-70">{event.description}</p>
+				</CardLink>
 			{/each}
 		</ul>
 	</div>
