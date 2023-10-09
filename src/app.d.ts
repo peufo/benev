@@ -5,8 +5,8 @@ declare global {
 		interface Locals {
 			auth: import('lucia').AuthRequest
 		}
-		// interface Error {}
 		// interface PageData {}
+		// interface Error {}
 		// interface Platform {}
 	}
 }

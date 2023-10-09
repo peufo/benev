@@ -1,16 +1,18 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
-	import { Card, Icon, InputSearch } from '$lib/material'
+	import { Card, DisplayToggle, Icon, InputSearch } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import Teams from '$lib/Teams.svelte'
 
 	export let data
+
 </script>
 
 <Card class="max-w-4xl m-auto">
 	<span slot="title">Secteurs</span>
 
 	<div slot="action" class="flex gap-2">
+		<DisplayToggle />
 		<InputSearch />
 
 		{#if data.isOwner}

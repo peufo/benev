@@ -16,6 +16,8 @@ export const load = async ({ params, url }) => {
 							select: {
 								firstName: true,
 								lastName: true,
+								email: true,
+								phone: true,
 							},
 						},
 					},

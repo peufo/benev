@@ -31,7 +31,13 @@
 
 		<ul class="flex flex-col gap-2 mt-2">
 			{#each data.events as event}
-				<CardLink href="/{event.id}" title={event.name}>
+				<CardLink href="/{event.id}">
+					<div slot="title" class="flex items-center gap-2">
+						{#if event.logo}
+							<img src={event.logo} alt="logo" class="h-6">
+						{/if}
+						{event.name}
+					</div>
 					<p class="opacity-70">{event.description}</p>
 				</CardLink>
 			{/each}

@@ -15,7 +15,7 @@
 	import SubscribeForm from './SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Subscribes from './Subscribes.svelte'
-	import Leaders from './Leaders.svelte'
+	import Leaders from '$lib/Leaders.svelte'
 	import MemberForm from '$lib/MemberForm.svelte'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import Progress from '$lib/Progress.svelte'

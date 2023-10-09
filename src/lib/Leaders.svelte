@@ -2,14 +2,22 @@
 	import { mdiEmailOutline, mdiPhoneOutline, mdiShieldAccount } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	import { tip } from '$lib/action'
-	import type { PageData } from './$types'
-	export let leaders: PageData['team']['leaders']
+	import type { Member } from '@prisma/client'
+	export let leaders: (Member & {
+		user: { firstName: string; lastName: string; email: string; phone: string | null }
+	})[]
+
+	
 </script>
 
 <div class="flex flex-wrap gap-2">
 	<Icon
 		path={mdiShieldAccount}
-		class="btn-sm btn-square opacity-70 {leaders.length ? '' : 'fill-error'}"
+		class="btn-sm btn-square opacity-70
+			{leaders.length ? '' : 'fill-error'}
+		
+		"
+
 		title="Responsables"
 	/>
 

@@ -1,4 +1,5 @@
 export * from './input'
+export * from './display'
 export { default as Icon } from './Icon.svelte'
 export { default as Card } from './Card.svelte'
 export { default as CardFullScreen } from './CardFullScreen.svelte'

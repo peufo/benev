@@ -52,6 +52,7 @@
 		"@mdi/js": "^7.2.96",
 		"@prisma/client": "^5.3.1",
 		"@sveltejs/adapter-vercel": "^3.0.3",
+		"@tailwindcss/container-queries": "^0.1.1",
 		"@tailwindcss/typography": "^0.5.9",
 		"axios": "^1.4.0",
 		"dayjs": "^1.11.9",
