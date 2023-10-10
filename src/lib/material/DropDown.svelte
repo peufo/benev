@@ -27,7 +27,15 @@
 			appendTo: 'parent',
 			...tippyProps,
 		})
-		return () => tip?.destroy()
+
+		const focusables = content.querySelectorAll<HTMLInputElement>('a[href], button, input, textarea, select, details, [tabindex]')
+		const lastFocusable = Array.from(focusables).at(-1)
+		lastFocusable?.addEventListener('blur', hide)
+
+		return () => {
+			lastFocusable?.removeEventListener('blur', hide)
+			tip?.destroy()
+		}
 	})
 
 	export function hide() {
@@ -40,7 +48,7 @@
 </script>
 
 <div>
-	<div bind:this={activator}>
+	<div bind:this={activator} >
 		<slot name="activator">
 			<button class="btn">dropdown</button>
 		</slot>

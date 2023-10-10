@@ -8,7 +8,7 @@
 	})[]
 </script>
 
-<div class="flex flex-wrap gap-2">
+<div class="flex items-center flex-wrap gap-2">
 	<Icon
 		path={mdiShieldAccount}
 		class="btn-sm btn-square opacity-70 {leaders.length ? '' : 'fill-error'}"
@@ -18,10 +18,10 @@
 	{#each leaders as member}
 		{#if member.isValidedByUser}
 			<DropDown>
-				<div slot="activator" class="badge">
+				<button slot="activator" class="badge badge-lg hover:bg-base-200 cursor-pointer">
 					{member.user.firstName}
 					{member.user.lastName}
-				</div>
+				</button>
 
 				<ul class="w-48">
 					<li>
@@ -40,38 +40,8 @@
 					{/if}
 				</ul>
 				
-
 			</DropDown>
 
-
-			<div class="dropdown">
-				<!-- svelte-ignore a11y-label-has-associated-control -->
-				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-				<label tabindex="0" class="btn btn-sm">
-					{member.user.firstName}
-					{member.user.lastName}
-				</label>
-				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-				<ul
-					tabindex="0"
-					class="dropdown-content menu z-10 p-2 shadow-lg rounded-box bg-base-100 w-48"
-				>
-					<li>
-						<a href="mailto:{member.user.email}" target="_blank">
-							<Icon path={mdiEmailOutline} />
-							Envoyer un mail
-						</a>
-					</li>
-					{#if member.user.phone}
-						<li>
-							<a href="tel:{member.user.phone}" target="_blank">
-								<Icon path={mdiPhoneOutline} />
-								Téléphoner
-							</a>
-						</li>
-					{/if}
-				</ul>
-			</div>
 		{:else}
 			<div use:tip={{ content: "Ce membre n'a pas validé sa participation" }}>
 				<button class="btn btn-sm btn-disabled">
