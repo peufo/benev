@@ -12,7 +12,7 @@
 <div class="card bg-base-100 shadow-lg {klass}">
 	<div class="card-body p-2 sm:p-8 {bodyClass}">
 		{#if $$slots.title || $$slots.action}
-			<div class="flex gap-2 flex-wrap mt-2 sm:mt-0 items-center {headerClass}">
+			<div class="flex gap-2 flex-wrap justify-end mt-2 sm:mt-0 items-center {headerClass}">
 				<div class="flex gap-2 flex-wrap">
 					{#if returnUrl}
 						<a href={returnUrl} class="btn btn-square btn-ghost btn-sm">

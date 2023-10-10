@@ -5,8 +5,8 @@
 
 	type Display = 'list' | 'table'
 	const tabs: ({value: Display, title: string, path: string})[] = [
-		{ value: 'list', title: 'Afficher des cartes', path:  mdiCardMultipleOutline},
-		{ value: 'table', title: 'Afficher une table', path: mdiFormatListBulleted },
+		{ value: 'list', title: 'Affichage en cartes', path:  mdiCardMultipleOutline},
+		{ value: 'table', title: 'Affichage en table', path: mdiFormatListBulleted },
 	]
 
 </script>

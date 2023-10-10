@@ -1,13 +1,15 @@
 <script lang="ts">
 	export let href: string
+	let klass = ''
+	export {klass as class}
 </script>
 
 <a
 	{href}
 	class="
-		block
+		{klass} block
     shadow hover:shadow-md transition-shadow
-    bg-base-100 border rounded-lg p-6
+    bg-base-100 border rounded-lg p-5
   "
 >
 	<li>
