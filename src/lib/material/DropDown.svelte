@@ -65,7 +65,9 @@
 	})
 
 	export function hide() {
-		tip?.hide()
+		if (!tip) return
+		if (useSingleton) sigleton?.hide()
+		else tip.hide()
 	}
 
 	export function show() {
@@ -81,9 +83,12 @@
 	</div>
 
 	<div class="hidden">
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
 			class="{klass} border rounded-lg p-1 bg-base-100 shadow-lg max-h-80 overflow-auto"
 			bind:this={content}
+			on:click={hide}
 		>
 			<slot />
 		</div>
