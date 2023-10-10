@@ -3,7 +3,7 @@
 	import { Member, Period, Team, Subscribe } from '@prisma/client'
 
 	import { Placeholder, CardLink } from '$lib/material'
-	import { eventPath, display } from '$lib/store'
+	import { eventPath, display, onlyAvailable } from '$lib/store'
 	import { rowLink, tip } from '$lib/action'
 	import Progress from '$lib/Progress.svelte'
 
@@ -14,18 +14,19 @@
 		periods: (Period & { subscribes: Subscribe[] })[]
 	})[]
 
-	export let onlyAvailableTeams = true
-
 	$: _teams = teams
 		.map((team) => ({
 			...team,
 			subscribes: team.periods.map((p) => p.subscribes).flat(),
 			maxSubscribe: team.periods.map((p) => p.maxSubscribe).reduce((acc, cur) => acc + cur, 0),
 		}))
-		.filter((team) => !onlyAvailableTeams || team.maxSubscribe < team.subscribes.length)
-	
-
-
+		.filter((team) => {
+			if (!$onlyAvailable) return true
+			const nbSubscribes = team.subscribes.filter(
+				({ state }) => state === 'request' || state === 'accepted'
+			).length
+			return nbSubscribes < team.maxSubscribe
+		})
 </script>
 
 {#if teams.length}
@@ -96,9 +97,9 @@
 						</td>
 						<td>
 							<Progress
-							class="mt-1"
-							period={{ maxSubscribe: team.maxSubscribe, subscribes: team.subscribes }}
-						/>
+								class="mt-1"
+								period={{ maxSubscribe: team.maxSubscribe, subscribes: team.subscribes }}
+							/>
 						</td>
 					</tr>
 				{/each}

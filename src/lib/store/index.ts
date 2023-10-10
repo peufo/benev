@@ -3,6 +3,7 @@ import { page } from '$app/stores'
 
 export const eventPath = derived(page, ({ params }) => (params.eventId ? `/${params.eventId}` : ''))
 export const display = writable<'list' | 'table'>('list')
+export const onlyAvailable = writable(true)
 
 export const urlParam = derived(page, ({ url }) => {
 	/** Return new url with new params */
