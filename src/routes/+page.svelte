@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
 	import { Icon, Dialog, CardLink } from '$lib/material'
+	import logo from '$lib/assets/logo.svg'
 	import EventForm from '$lib/EventForm.svelte'
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
@@ -14,7 +15,11 @@
 	<EventForm on:cancel={() => createDialog.close()} on:success={() => createDialog.close()} />
 </Dialog>
 
-<Header userName={data.user?.firstName} />
+<Header userName={data.user?.firstName} >
+	<a slot="start" class="btn-ghost text-lg btn btn-square" href="/">
+		<img src={logo} alt="logo benev" class="w-9 h-9" height="512" width="512">
+	</a>
+</Header>
 
 <main class="grow p-2">
 	<div class="max-w-md mx-auto">

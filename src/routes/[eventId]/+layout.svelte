@@ -17,13 +17,12 @@
 </script>
 
 <svelte:head>
-	<title>BENEV - {data.event.name}</title>
+	<title>{data.event.name}</title>
 </svelte:head>
 
 <Header userName={data.user?.firstName} pathPrefix={$eventPath}>
 	<div class="contents" slot="start">
-		<a href={$eventPath} class="link link-hover text-lg">
-			<Icon path={mdiChevronRight} class="hidden lg:inline-block" />
+		<a href={$eventPath} class="text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg">
 			{#if data.event.logo}
 				<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}">
 			{/if}
