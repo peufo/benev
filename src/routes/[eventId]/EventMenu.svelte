@@ -10,18 +10,6 @@
 	export let isLeaderInEvent: boolean
 </script>
 
-{#if isOwner || isLeaderInEvent}
-	<a
-		href="{$eventPath}/admin"
-		class="
-			hidden lg:btn btn-square
-			{$page.route.id?.startsWith(`/[eventId]/admin`) ? '' : 'lg:btn-ghost'}
-		"
-	>
-		<Icon path={mdiCogOutline} title="Gestion évènement" class="rotate-12" />
-	</a>
-{/if}
-
 <ul class="tabs hidden lg:block">
 	<a href={$eventPath} class="tab tab-bordered" class:tab-active={$page.route.id === '/[eventId]'}>
 		{pageIndex.title}
@@ -42,6 +30,18 @@
 	{/each}
 </ul>
 
+{#if isOwner || isLeaderInEvent}
+	<a
+		href="{$eventPath}/admin"
+		class="
+			hidden lg:btn btn-square
+			{$page.route.id?.startsWith(`/[eventId]/admin`) ? '' : 'lg:btn-ghost'}
+		"
+	>
+		<Icon path={mdiCogOutline} title="Gestion évènement" class="rotate-12" />
+	</a>
+{/if}
+
 <div class="dropdown dropdown-bottom dropdown-end lg:hidden">
 	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -56,8 +56,8 @@
 		{#if isOwner || isLeaderInEvent}
 			{@const active = $page.url.pathname.startsWith(`${$eventPath}/admin`)}
 			<li>
-				<a href="{$eventPath}/admin" class:active={active}>
-					<Icon path={mdiCogOutline} class="rotate-12"  {active}/>
+				<a href="{$eventPath}/admin" class:active>
+					<Icon path={mdiCogOutline} class="rotate-12" {active} />
 					Gestion évènement
 				</a>
 			</li>

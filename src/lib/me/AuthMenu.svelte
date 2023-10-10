@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { Icon } from '$lib/material'
+	import { Icon, DropDown } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import { mdiAccountOutline } from '@mdi/js'
+	import {
+		mdiAccountOutline,
+		mdiCardAccountDetailsOutline,
+		mdiListStatus,
+		mdiLogout,
+	} from '@mdi/js'
 
 	const tabs = [
-		{ path: 'subscribes', label: 'Mes inscriptions' },
-		{ path: 'profile', label: 'Mon profil' },
+		{ path: 'subscribes', label: 'Mes inscriptions', icon: mdiListStatus },
+		{ path: 'profile', label: 'Mon profil', icon: mdiCardAccountDetailsOutline },
 	]
 
 	export let userName = ''
@@ -14,35 +19,30 @@
 </script>
 
 {#if userName}
-	<div class="dropdown dropdown-bottom dropdown-end">
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<label tabindex="0" class="btn btn-square lg:inline-flex lg:w-auto lg:px-2">
+	<DropDown tippyProps={{trigger: 'mouseenter mouseleave click'}}>
+		<button slot="activator" class="btn btn-square btn-ghost lg:inline-flex lg:w-auto lg:px-2">
 			<Icon path={mdiAccountOutline} />
 			<span class="hidden lg:block">{userName || ''}</span>
-		</label>
+		</button>
 
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<ul
-			tabindex="0"
-			class="dropdown-content z-10 menu menu-lg shadow-lg bg-base-100 rounded-box w-56"
-		>
-			{#each tabs as { path, label }}
+		<div class="flex flex-col gap-1">
+			{#each tabs as { path, label, icon }}
 				{@const href = `${pathPrefix}/me/${path}`}
-				<li>
-					<a {href} class:active={$page.url.pathname === href}>
-						{label}
-					</a>
-				</li>
+				<a {href} class="menu-item" class:active={$page.url.pathname === href}>
+					<Icon path={icon} size={22} class="opacity-80" />
+					{label}
+				</a>
 			{/each}
 
-			<div class="divider">
-				<form method="POST" action="/me?/logout">
-					<button class="btn btn-sm"> Déconnexion </button>
-				</form>
-			</div>
-		</ul>
-	</div>
+			<form method="POST" action="/me?/logout" class="contents">
+				<button class="menu-item w-full border">
+					<Icon path={mdiLogout} size={22} class="opacity-80" />
+					Déconnexion
+				</button>
+			</form>
+		</div>
+	</DropDown>
+
 {:else}
 	<a class="btn-ghost rounded-btn btn btn-square" href={$eventPath ? `${$eventPath}/me` : `/me`}>
 		<Icon path={mdiAccountOutline} />
