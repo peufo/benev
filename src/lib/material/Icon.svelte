@@ -31,7 +31,7 @@
 
 <i
 	bind:this={icon}
-	class="grid place-content-center {active ? 'fill-base-100' : 'fill-base-content'} {klass}"
+	class="grid place-content-center {active ? 'fill-base-200' : 'fill-base-content'} {klass}"
 	{style}
 >
 	<svg

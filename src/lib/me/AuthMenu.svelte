@@ -28,8 +28,9 @@
 		<div class="flex flex-col gap-1">
 			{#each tabs as { path, label, icon }}
 				{@const href = `${pathPrefix}/me/${path}`}
-				<a {href} class="menu-item" class:active={$page.url.pathname === href}>
-					<Icon path={icon} size={22} class="opacity-80" />
+				{@const active = $page.url.pathname === href}
+				<a {href} class="menu-item" class:active>
+					<Icon path={icon} size={22} class="opacity-80" {active} />
 					{label}
 				</a>
 			{/each}
