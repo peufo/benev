@@ -1,8 +1,8 @@
 <script lang="ts">
 	import tippy, { type Props as TippyProps, type Instance as TippyInstance } from 'tippy.js'
+	import { onMount } from 'svelte'
 	import '$lib/material/dropdown.css'
 
-	import { onMount } from 'svelte'
 
 	export let tippyProps: Partial<TippyProps> = {}
 	let klass = ''
@@ -48,7 +48,7 @@
 
 	<div class="hidden">
 		<div
-			class="{klass} border rounded-lg p-2 bg-base-100 shadow-lg max-h-80 overflow-auto"
+			class="{klass} border rounded-lg p-1 bg-base-100 shadow-lg max-h-80 overflow-auto"
 			bind:this={content}
 		>
 			<slot />
