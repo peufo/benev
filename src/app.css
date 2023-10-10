@@ -4,9 +4,9 @@
 
 @layer components {
 	.menu-item {
-		@apply flex gap-2 items-center cursor-pointer hover:bg-base-200 px-3 py-2 rounded;
+		@apply flex items-center gap-3 px-3 py-[6px] cursor-pointer hover:bg-base-200 rounded;
 	}
 	.menu-item.active {
-		@apply bg-base-content text-base-200 fill-base-200 stroke-base-200;
+		@apply bg-base-content text-base-200;
 	}
 }

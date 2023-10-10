@@ -19,7 +19,7 @@
 </script>
 
 {#if userName}
-	<DropDown tippyProps={{trigger: 'mouseenter mouseleave click'}}>
+	<DropDown tippyProps={{trigger: 'focus mouseenter mouseleave click'}}>
 		<button slot="activator" class="btn btn-square btn-ghost lg:inline-flex lg:w-auto lg:px-2">
 			<Icon path={mdiAccountOutline} />
 			<span class="hidden lg:block">{userName || ''}</span>
