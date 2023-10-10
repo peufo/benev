@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Card, Icon, Placeholder } from '$lib/material'
 	import {
 		mdiAccountArrowUpOutline,
 		mdiAccountMultipleOutline,
@@ -7,9 +6,10 @@
 		mdiClipboardTextMultipleOutline,
 		mdiPencilOutline,
 	} from '@mdi/js'
-
+	
+	import { Card, Icon, Placeholder, OnlyAvailableToggle } from '$lib/material'
 	import { goto } from '$app/navigation'
-	import { eventPath, urlParam } from '$lib/store'
+	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
 	import { formatRange } from '$lib/formatRange'
 	import PeriodForm from './[periodId]/PeriodForm.svelte'
 	import SubscribeForm from './SubscribeForm.svelte'
@@ -43,6 +43,21 @@
 			subscribeDialog?.showModal()
 		}
 	}
+
+	$: _periods = data.team.periods.map(period => {
+		const nbSubscribe = period.subscribes.filter((sub) => sub.state === 'accepted' || sub.state === 'request').length
+		const	mySubscribe = period.subscribes.find((sub) => sub.memberId === data.member?.id)
+		const isComplete = nbSubscribe >= period.maxSubscribe
+		const available = !mySubscribe && !isComplete
+		return {
+			...period,
+			mySubscribe,
+			available,
+			isComplete,
+			disabled: !data.isLeader && !available
+		}
+	}).filter(period => !$onlyAvailable || !period.isComplete)
+
 </script>
 
 <Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams">
@@ -50,7 +65,10 @@
 	<p slot="subtitle">
 		{data.team.description || ''}
 	</p>
-	<div slot="action">
+	<div slot="action" class="flex gap-2">
+
+		<OnlyAvailableToggle/>
+
 		{#if data.isLeader}
 			<a
 				href={`${$eventPath}/admin/manage/members?teams=["${data.team.id}"]`}
@@ -83,35 +101,31 @@
 			</thead>
 
 			<tbody>
-				{#each data.team.periods as period}
+				{#each _periods as period (period.id)}
 					{@const isOpen = $urlParam.hasValue(periodOpenKey, period.id)}
-					{@const nbSubscribe = period.subscribes.filter((sub) => sub.state !== 'denied').length}
-					{@const mySubscribe = period.subscribes.find((sub) => sub.memberId === data.member?.id)}
-					{@const isComplet = nbSubscribe >= period.maxSubscribe}
-					{@const available = !mySubscribe && !isComplet}
-					{@const disabled = !data.isLeader && !available}
+
 					<tr
-						class:hover={!disabled}
-						class:cursor-pointer={!disabled}
+						class:hover={!period.disabled}
+						class:cursor-pointer={!period.disabled}
 						class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
 						on:click={() => {
 							if (data.isLeader) return goto(`${$eventPath}/teams/${period.teamId}/${period.id}`)
-							if (!disabled) subscribe(period)
+							if (!period.disabled) subscribe(period)
 						}}
 					>
-						<td class="w-full font-medium" class:opacity-70={disabled}>
+						<td class="w-full font-medium" class:opacity-70={period.disabled}>
 							{formatRange(period)}
 						</td>
 						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-end">
-							{#if mySubscribe}
-								<SubscribeStateForm subscribe={mySubscribe} isLeader={!!data.isLeader} />
+							{#if period.mySubscribe}
+								<SubscribeStateForm subscribe={period.mySubscribe} isLeader={!!data.isLeader} />
 							{/if}
 
 							<Progress {period} class="w-[60px]" />
 
 							{#if data.isLeader}
 								<div class="flex gap-2">
-									{#if available}
+									{#if period.available}
 										<button
 											class="btn btn-square btn-sm"
 											on:click|stopPropagation={() => subscribe(period)}
