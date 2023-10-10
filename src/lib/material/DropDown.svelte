@@ -1,12 +1,29 @@
+<script lang="ts" context="module">
+	import { createSingleton, type Instance as TippyInstance } from 'tippy.js'
+
+	const sigleton = browser
+		? createSingleton([], {
+				theme: 'dropdown',
+				arrow: false,
+				moveTransition: 'transform 0.1s ease-out',
+				interactive: true,
+				interactiveDebounce: 50
+		  })
+		: null
+
+	const tips: TippyInstance[] = []
+</script>
+
 <script lang="ts">
-	import tippy, { type Props as TippyProps, type Instance as TippyInstance } from 'tippy.js'
+	import tippy, { type Props as TippyProps } from 'tippy.js'
 	import { onMount } from 'svelte'
 	import '$lib/material/dropdown.css'
-
+	import { browser } from '$app/environment'
 
 	export let tippyProps: Partial<TippyProps> = {}
 	let klass = ''
 	export { klass as class }
+	export let useSingleton = false
 
 	let activator: HTMLDivElement
 	let content: HTMLDivElement
@@ -28,13 +45,22 @@
 			...tippyProps,
 		})
 
-		const focusables = content.querySelectorAll<HTMLInputElement>('a[href], button, input, textarea, select, details, [tabindex]')
+		if (useSingleton) {
+			tips.push(tip)
+			sigleton?.setInstances(tips)
+		}
+
+		const focusables = content.querySelectorAll<HTMLInputElement>(
+			'a[href], button, input, textarea, select, details, [tabindex]'
+		)
 		const lastFocusable = Array.from(focusables).at(-1)
 		lastFocusable?.addEventListener('blur', hide)
-
 		return () => {
 			lastFocusable?.removeEventListener('blur', hide)
-			tip?.destroy()
+			if (useSingleton && tip) {
+				tips.splice(tips.indexOf(tip), 1)
+				tip.destroy()
+			}
 		}
 	})
 
@@ -48,7 +74,7 @@
 </script>
 
 <div>
-	<div bind:this={activator} >
+	<div bind:this={activator}>
 		<slot name="activator">
 			<button class="btn">dropdown</button>
 		</slot>

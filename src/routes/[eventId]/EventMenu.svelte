@@ -8,7 +8,6 @@
 		mdiHomeOutline,
 		mdiMapMarkerRadiusOutline,
 		mdiMenu,
-		mdiApplicationCogOutline,
 		mdiChartGantt,
 		mdiFileDocumentMultipleOutline,
 		mdiAccountMultipleOutline,
@@ -55,7 +54,7 @@
 
 </script>
 
-<DropDown class="max-h-none" tippyProps={{ trigger: 'focus mouseenter mouseleave click' }}>
+<DropDown class="max-h-none" useSingleton tippyProps={{ trigger: 'focus mouseenter mouseleave click' }}>
 	<button slot="activator" class="btn btn-ghost btn-square">
 		<Icon path={mdiMenu} />
 	</button>
