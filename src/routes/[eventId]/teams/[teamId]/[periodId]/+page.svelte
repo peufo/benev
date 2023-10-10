@@ -14,8 +14,10 @@
 </script>
 
 <Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams/{data.period.teamId}">
-	<h2 slot="title">{data.period.team.name}</h2>
-	<h3 slot="subtitle" class="card-title">{formatRange(data.period)}</h3>
+	<h2 slot="title">
+		{data.period.team.name}<br>
+		{formatRange(data.period)}
+	</h2>
 	<div slot="action">
 		<a class="btn btn-square btn-sm" href="{$eventPath}/admin/plan#{data.period.id}">
 			<Icon path={mdiChartGantt} title="Voir cette période sur le planning" />
