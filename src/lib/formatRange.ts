@@ -4,7 +4,7 @@ const formater = new Intl.DateTimeFormat('fr-ch', {
 	weekday: 'long',
 	day: 'numeric',
 	month: 'numeric',
-	year: 'numeric',
+	year: '2-digit',
 	hour: 'numeric',
 	minute: 'numeric',
 	timeZone: 'Europe/Zurich',

@@ -47,7 +47,7 @@
 
 <Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams">
 	<h2 slot="title">{data.team.name}</h2>
-	<p slot="subtitle" class="pb-3">
+	<p slot="subtitle">
 		{data.team.description || ''}
 	</p>
 	<div slot="action">
@@ -74,7 +74,7 @@
 	<Leaders leaders={data.team.leaders} />
 
 	{#if data.team.periods.length}
-		<table class="table text-base">
+		<table class="table text-sm">
 			<thead>
 				<tr>
 					<th>Période de travail</th>
@@ -91,7 +91,6 @@
 					{@const available = !mySubscribe && !isComplet}
 					{@const disabled = !data.isLeader && !available}
 					<tr
-						class="relative"
 						class:hover={!disabled}
 						class:cursor-pointer={!disabled}
 						class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
@@ -100,7 +99,7 @@
 							if (!disabled) subscribe(period)
 						}}
 					>
-						<td class="w-full" class:opacity-70={disabled}>
+						<td class="w-full font-medium" class:opacity-70={disabled}>
 							{formatRange(period)}
 						</td>
 						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-end">
@@ -134,7 +133,7 @@
 												goto($urlParam.without(periodOpenKey), { replaceState: true })
 												return
 											}
-											goto($urlParam.with({ [periodOpenKey]: period.id }), { replaceState: true })
+											goto($urlParam.with({ [periodOpenKey]: period.id }), { replaceState: true, noScroll: true })
 										}}
 									>
 										<Icon
