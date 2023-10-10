@@ -1,9 +1,10 @@
 import { derived, writable } from 'svelte/store'
 import { page } from '$app/stores'
+import { sessionStore } from './utils'
 
 export const eventPath = derived(page, ({ params }) => (params.eventId ? `/${params.eventId}` : ''))
-export const display = writable<'list' | 'table'>('list')
-export const onlyAvailable = writable(true)
+export const display = sessionStore<'list' | 'table'>('display', 'list')
+export const onlyAvailable = sessionStore('onlyAvailable', true)
 
 export const urlParam = derived(page, ({ url }) => {
 	/** Return new url with new params */
