@@ -1,39 +1,20 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { mdiTrayArrowDown } from '@mdi/js'
 	import axios from 'axios'
-	import { Icon } from '$lib/material'
-	import { useNotify } from '$lib/notify'
+	import { CopyData } from '$lib/material'
 	import { getAge } from '$lib/utils'
 	import { eventPath } from '$lib/store'
 
 	type Member = PageData['members'][number]
-
 	export let fields: PageData['fields']
 
-	const notify = useNotify()
-	let isLoading = false
-
-	async function handleCopy() {
-		if (isLoading) return
-		isLoading = true
+	const getData = async () => {
 		const { data } = await axios
-			.get<{ members: Member[] }>(`${$eventPath}/admin/manage/members?all=1`)
-			.finally(() => (isLoading = false))
-		const csv = getCSV(data.members)
-
-		navigator.clipboard
-			.writeText(csv)
-			.then(() => {
-				notify.success(`Données prêtes à être collé dans un tableur`)
-			})
-			.catch((error) => {
-				notify.error(error)
-			})
+				.get<{ members: Member[] }>(`${$eventPath}/admin/manage/members?all=1`)
+		return data.members
 	}
 
-	function getCSV(members: Member[]): string {
-		const columns: Record<string, (member: Member) => string | number> = {
+	const columns: Record<string, (member: Member) => string | number> = {
 			name: (m) => `${m.user.firstName} ${m.user.lastName}`,
 			email: (m) => m.user.email,
 			phone: (m) => m.user.phone?.replace(/^\+/, "'+") || '',
@@ -53,26 +34,6 @@
 			),
 		}
 
-		const headers = Object.keys(columns).join('\t')
-		const rows = members.map((m: Member) =>
-			Object.values(columns)
-				.map((getValue) => getValue(m))
-				.join('\t')
-		)
-		return [headers, rows.join('\r\n')].join('\r\n')
-	}
 </script>
 
-<div class="relative">
-	{#if isLoading}
-		<span class="absolute left-1 top-1 loading loading-spinner scale-125 text-secondary" />
-	{/if}
-	<button class="btn btn-square btn-sm" on:click={handleCopy} class:btn-disabled={isLoading}>
-		<Icon
-			path={mdiTrayArrowDown}
-			size={20}
-			title="Copier les données"
-			class="transition-transform {isLoading ? 'scale-75' : ''}"
-		/>
-	</button>
-</div>
+<CopyData {getData} {columns}/>
