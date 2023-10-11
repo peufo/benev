@@ -10,8 +10,7 @@
 	type Member = PageData['members'][number]
 	export let members: Member[]
 
-	const defaultColumnsId = ['periods', 'hours', 'sectors']
-	export let selectedColumnsId = defaultColumnsId
+	export let selectedColumnsId = ['periods', 'hours', 'sectors']
 	export let columns: Record<string, Column<Member>>
 
 	let limit = 50

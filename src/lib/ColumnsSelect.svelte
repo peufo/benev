@@ -7,20 +7,15 @@
 
 <script lang="ts">
 	import { Icon, InputCheckboxsMenu } from '$lib/material'
-	import { page } from '$app/stores'
-	import { jsonParse } from '$lib/jsonParse'
 	import { mdiViewColumnOutline } from '@mdi/js'
 
 	type Item = $$Generic<Record<string, unknown>>
 	type _Column = Column<Item>
 
 	export let columns: Record<string, _Column>
-	export let defaultColumnsId: string[] = []
 
-	export let selectedColumnsId = jsonParse<string[]>(
-		$page.url.searchParams.get('columns'),
-		defaultColumnsId
-	)
+
+	export let selectedColumnsId: string[] = []
 	export let selectedColumns = getColumnsByIds(selectedColumnsId)
 	$: selectedColumns = getColumnsByIds(selectedColumnsId)
 

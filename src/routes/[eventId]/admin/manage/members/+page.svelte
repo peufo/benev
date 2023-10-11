@@ -27,8 +27,7 @@
 		{}
 	)
 
-	const defaultColumnsId = ['periods', 'hours', 'sectors']
-	let selectedColumnsId = defaultColumnsId
+	let selectedColumnsId = ['periods', 'hours', 'sectors']
 
 	type Member = PageData['members'][number]
 	const toHour = (ms: number) => ms / (1000 * 60 * 60)
@@ -61,7 +60,7 @@
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
 		<MembersFilter fields={data.fields} teams={data.teams} />
 		<MembersCopy members={data.members} fields={data.fields} {selectedColumnsId} />
-		<ColumnsSelect {columns} {defaultColumnsId} bind:selectedColumnsId />
+		<ColumnsSelect {columns} bind:selectedColumnsId />
 
 		<a
 			class="
