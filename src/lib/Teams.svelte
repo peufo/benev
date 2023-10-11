@@ -29,7 +29,7 @@
 		})
 </script>
 
-{#if teams.length}
+{#if _teams.length}
 	{#if $display === 'list'}
 		<div class="@container">
 			<ul in:fade class="grid gap-4 my-6 @xl:grid-cols-2">

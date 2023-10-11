@@ -28,7 +28,7 @@
 	let memberDialog: HTMLDialogElement
 	let memberProfilDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
-	type _Period = (typeof data.team.periods)[number]
+	type _Period = (typeof _)[number]
 	let selectedPeriod: _Period | undefined = undefined
 
 	const periodOpenKey = 'periodOpen'
@@ -44,7 +44,7 @@
 		}
 	}
 
-	$: _periods = data.team.periods.map(period => {
+	$: _periods = _.map(period => {
 		const nbSubscribe = period.subscribes.filter((sub) => sub.state === 'accepted' || sub.state === 'request').length
 		const	mySubscribe = period.subscribes.find((sub) => sub.memberId === data.member?.id)
 		const isComplete = nbSubscribe >= period.maxSubscribe
@@ -91,7 +91,7 @@
 
 	<Leaders leaders={data.team.leaders} />
 
-	{#if data.team.periods.length}
+	{#if _periods.length}
 		<table class="table text-sm">
 			<thead>
 				<tr>
