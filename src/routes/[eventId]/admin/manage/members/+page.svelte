@@ -52,7 +52,7 @@
 <div class="flex flex-col gap-4">
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
 		<MembersFilter fields={data.fields} teams={data.teams} />
-		<MembersCopy members={data.members} fields={data.fields} {selectedColumnsId} />
+		<MembersCopy fields={data.fields} />
 		<ColumnsSelect {columns} bind:selectedColumnsId />
 		
 		<a

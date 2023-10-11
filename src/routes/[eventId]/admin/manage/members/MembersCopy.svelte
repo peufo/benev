@@ -1,20 +1,25 @@
 <script lang="ts">
 	import type { PageData } from './$types'
 	import { mdiTrayArrowDown } from '@mdi/js'
+	import axios from 'axios'
 	import { Icon } from '$lib/material'
 	import { useNotify } from '$lib/notify'
 	import { getAge } from '$lib/utils'
+	import { eventPath } from '$lib/store'
 
 	type Member = PageData['members'][number]
 
-	export let members: Member[]
 	export let fields: PageData['fields']
-	export let selectedColumnsId: string[] = []
 
 	const notify = useNotify()
+	let isLoading = false
 
-	function handleCopy() {
-		const csv = getCSV()
+	async function handleCopy() {
+		if (isLoading) return 
+		isLoading = true
+		const {data} = await axios.get<{members: Member[]}>(`${$eventPath}/admin/manage/members?all=1`).finally(() => isLoading = false)
+		console.log({data})
+		const csv = getCSV(data.members)
 
 		navigator.clipboard
 			.writeText(csv)
@@ -26,8 +31,7 @@
 			})
 	}
 
-	function getCSV(): string {
-		console.log(selectedColumnsId)
+	function getCSV(members: Member[]): string {
 		const columns: Record<string, (member: Member) => string | number> = {
 			name: (m) => `${m.user.firstName} ${m.user.lastName}`,
 			email: (m) => m.user.email,

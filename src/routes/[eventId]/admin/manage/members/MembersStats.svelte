@@ -12,7 +12,7 @@
 	<div class="stats bg-base-200 grow">
 		<div class="stat">
 			<div class="stat-title">Membres</div>
-			<div class="stat-value">{data.members.length}</div>
+			<div class="stat-value">{data.stats.nbMembers}</div>
 		</div>
 		<div class="stat">
 			<div class="stat-title">Périodes</div>
