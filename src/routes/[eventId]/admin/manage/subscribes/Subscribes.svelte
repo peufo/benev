@@ -6,6 +6,8 @@
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
 
 	export let subscribes: PageData['subscribes']
+	let limit = 50
+	const step = 50
 </script>
 
 <div class="contents">
@@ -24,7 +26,7 @@
 				</thead>
 
 				<tbody>
-					{#each subscribes as sub (sub.id)}
+					{#each subscribes.slice(0, limit) as sub (sub.id)}
 						<tr>
 							<td>
 								<a
@@ -53,6 +55,12 @@
 					{/each}
 				</tbody>
 			</table>
+
+			{#if limit < subscribes.length}
+				<div class="w-full grid place-content-center sticky left-0 p-6">
+					<button class="btn btn-sm" on:click={() => (limit += step)}>Afficher plus</button>
+				</div>
+			{/if}
 		{:else}
 			<Placeholder>Aucune inscription trouvé</Placeholder>
 		{/if}

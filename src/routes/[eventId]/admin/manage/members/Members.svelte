@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 
 	import { getAge } from '$lib/utils'
@@ -44,6 +43,9 @@
 
 	const defaultColumnsId = ['periods', 'hours', 'sectors']
 	export let selectedColumnsId = defaultColumnsId
+
+	let limit = 50
+	const step = 50
 </script>
 
 <div class="contents">
@@ -58,7 +60,7 @@
 			<table class="table table-pin-rows">
 				<thead>
 					<tr>
-						<th>Nom</th>
+						<th class="sticky left-0 bg-base-100">Nom</th>
 						{#each selectedColumnsId as colId}
 							<th>{columns[colId].label}</th>
 						{/each}
@@ -67,12 +69,12 @@
 				</thead>
 
 				<tbody>
-					{#each members as member (member.id)}
+					{#each members.slice(0, limit) as member (member.id)}
 						<tr
 							on:click={() => goto(`${$eventPath}/admin/manage/members/${member.id}`)}
-							class="hover cursor-pointer"
+							class="hover cursor-pointer group"
 						>
-							<td>
+							<td class="sticky left-0 bg-base-100 group-hover:bg-base-200 border-r">
 								{member.user.firstName}
 								{member.user.lastName}
 							</td>
@@ -103,6 +105,11 @@
 					{/each}
 				</tbody>
 			</table>
+			{#if limit < members.length}
+				<div class="w-full grid place-content-center sticky left-0 p-6">
+					<button class="btn btn-sm" on:click={() => (limit += step)}>Afficher plus</button>
+				</div>
+			{/if}
 		{:else}
 			<Placeholder>Aucun membre trouvé</Placeholder>
 		{/if}
