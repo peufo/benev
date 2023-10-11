@@ -4,7 +4,7 @@ import type { Prisma } from '@prisma/client'
 import { parseQuery, prisma } from '$lib/server'
 
 export const load = async ({ url, params: { eventId } }) => {
-	const { skip, take, ...query } = parseQuery(
+	const { skip, take, summary, ...query } = parseQuery(
 		url,
 		z.object({
 			search: z.string().optional(),
@@ -16,6 +16,7 @@ export const load = async ({ url, params: { eventId } }) => {
 			fieldValue: z.string().optional(),
 			skip: z.coerce.number().default(0),
 			take: z.coerce.number().default(20),
+			summary: z.coerce.boolean().default(false),
 		})
 	)
 
@@ -92,11 +93,11 @@ export const load = async ({ url, params: { eventId } }) => {
 		}
 	}
 
-	return {
-		members: await prisma.member.findMany({
+	const members = await prisma.member
+		.findMany({
 			where,
-			skip,
-			take,
+			skip: summary ? undefined : skip,
+			take: summary ? undefined : take,
 			include: {
 				user: true,
 				leaderOf: true,
@@ -111,9 +112,63 @@ export const load = async ({ url, params: { eventId } }) => {
 			orderBy: {
 				user: { firstName: 'asc' },
 			},
-		}),
-		periods: await prisma.period.findMany({
+		})
+		.then((res) =>
+			res.map((member) => ({
+				...member,
+				workTime: member.subscribes.reduce((acc, { period }) => {
+					const time = period.end.getTime() - period.start.getTime()
+					return acc + time
+				}, 0),
+			}))
+		)
+
+	if (!summary) return { members }
+
+	const [periods, fields] = await Promise.all([
+		prisma.period.findMany({
 			where: { ...periodWhere, team: { eventId, ...teamWhere } },
+			include: {},
 		}),
+		prisma.field.findMany({ where: { eventId } }),
+	])
+
+	return {
+		members: members.slice(skip, take),
+		stats: {
+			nbSubscribes: members.reduce((acc, cur) => acc + cur.subscribes.length, 0),
+			nbSubscribesTime: members.reduce((acc, cur) => acc + cur.workTime, 0),
+			totalSlots: periods.reduce((acc, cur) => acc + cur.maxSubscribe, 0),
+			totalSlotsTime: periods.reduce(
+				(acc, cur) => acc + cur.maxSubscribe * (cur.end.getTime() - cur.start.getTime()),
+				0
+			),
+			summary: fields
+				.map((field) => {
+					if (field.type === 'select' || field.type === 'multiselect') {
+						return {
+							name: field.name,
+							distribution: members.reduce((acc, { profile }) => {
+								const { value } = profile.find((v) => v.fieldId === field.id) || { value: '' }
+								if (!value) return acc
+								const keys =
+									field.type === 'select'
+										? [value]
+										: field.allCombinations
+										? [value.replaceAll(/[\[\"\]]/g, '').replaceAll(',', ', ')]
+										: (JSON.parse(value) as string[])
+
+								keys.forEach((key) => {
+									if (!key) return
+									if (acc[key]) return (acc = { ...acc, [key]: acc[key] + 1 })
+									acc = { ...acc, [key]: 1 }
+								})
+								return acc
+							}, {} as Record<string, number>),
+						}
+					}
+				})
+				.filter(Boolean),
+		},
 	}
 }

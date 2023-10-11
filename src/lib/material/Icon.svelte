@@ -27,6 +27,7 @@
 			tip.destroy()
 		}
 	})
+
 </script>
 
 <i

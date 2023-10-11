@@ -3,7 +3,7 @@
 	import { Icon } from '$lib/material'
 	import { urlParam } from '$lib/store'
 
-  export let take = 20
+  export let take = 50
 
 	$: skip = +($urlParam.get('skip') || 0)
 	$: _take = +($urlParam.get('take') || take)
@@ -26,7 +26,7 @@
 		data-sveltekit-replacestate
 		class="join-item btn btn-sm pr-1"
 	>
-		{skip + 1} - {skip + _take + 1}
+		{skip + 1} - {skip + _take}
 		<Icon path={mdiChevronRight} title="Afficher les données suivantes" />
 	</a>
 </div>

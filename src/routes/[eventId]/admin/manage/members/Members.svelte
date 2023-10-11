@@ -13,8 +13,6 @@
 	export let selectedColumnsId = ['periods', 'hours', 'sectors']
 	export let columns: Record<string, Column<Member>>
 
-	let limit = 50
-	const step = 50
 </script>
 
 <div class="table-wrapper">
@@ -31,7 +29,7 @@
 			</thead>
 
 			<tbody>
-				{#each members.slice(0, limit) as member (member.id)}
+				{#each members as member (member.id)}
 					<tr
 						on:click={() => goto(`${$eventPath}/admin/manage/members/${member.id}`)}
 						class="hover cursor-pointer group"
@@ -67,11 +65,6 @@
 				{/each}
 			</tbody>
 		</table>
-		{#if limit < members.length}
-			<div class="w-full grid place-content-center sticky left-0 p-6">
-				<button class="btn btn-sm" on:click={() => (limit += step)}>Afficher plus</button>
-			</div>
-		{/if}
 	{:else}
 		<Placeholder>Aucun membre trouvé</Placeholder>
 	{/if}
