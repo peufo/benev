@@ -36,6 +36,7 @@
 				{!$urlParam.hasValue('summary', 'hidden') ? 'btn-active' : 'opacity-70'}
 			"
 			href={$urlParam.toggle({ summary: 'hidden' })}
+			data-sveltekit-noscroll
 		>
 			{#if $urlParam.hasValue('summary', 'hidden')}
 				<Icon path={mdiSigma} title="Afficher la synthèse" class="fill-base-content" />
