@@ -15,10 +15,11 @@
 	let isLoading = false
 
 	async function handleCopy() {
-		if (isLoading) return 
+		if (isLoading) return
 		isLoading = true
-		const {data} = await axios.get<{members: Member[]}>(`${$eventPath}/admin/manage/members?all=1`).finally(() => isLoading = false)
-		console.log({data})
+		const { data } = await axios
+			.get<{ members: Member[] }>(`${$eventPath}/admin/manage/members?all=1`)
+			.finally(() => (isLoading = false))
 		const csv = getCSV(data.members)
 
 		navigator.clipboard
@@ -38,11 +39,7 @@
 			phone: (m) => m.user.phone?.replace(/^\+/, "'+") || '',
 			age: (m) => getAge(m.user.birthday),
 			subscribes: (m) => m.subscribes.length,
-			hours: (m) =>
-				m.subscribes
-					.map(({ period: { start, end } }) => end.getTime() - start.getTime())
-					.reduce((acc, cur) => acc + cur, 0) /
-				(1000 * 60 * 60),
+			hours: (m) => m.workTime / (1000 * 60 * 60),
 			leaderOf: (m) => m.leaderOf.map((team) => team.name).join(', '),
 			...fields.reduce(
 				(acc, cur) => ({
@@ -66,6 +63,16 @@
 	}
 </script>
 
-<button class="btn btn-square btn-sm" on:click={handleCopy}>
-	<Icon path={mdiTrayArrowDown} size={20} title="Copier les données" />
-</button>
+<div class="relative">
+	{#if isLoading}
+		<span class="absolute left-1 top-1 loading loading-spinner scale-125 text-secondary" />
+	{/if}
+	<button class="btn btn-square btn-sm" on:click={handleCopy} class:btn-disabled={isLoading}>
+		<Icon
+			path={mdiTrayArrowDown}
+			size={20}
+			title="Copier les données"
+			class="transition-transform {isLoading ? 'scale-75' : ''}"
+		/>
+	</button>
+</div>
