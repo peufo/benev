@@ -10,6 +10,13 @@ export default {
 		require('@tailwindcss/container-queries'),
 	],
 	daisyui: {
-		themes: ['light'],
+		themes: [
+			{
+				light: {
+					...require('daisyui/src/theming/themes')['[data-theme=light]'],
+					secondary: '#e41e66',
+				},
+			},
+		],
 	},
 }
