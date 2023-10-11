@@ -6,5 +6,5 @@ export function parseQuery<Type extends z.ZodRawShape>(url: URL, shema: z.ZodObj
 		const param = url.searchParams.get(name)
 		if (param) queryRaw[name] = param
 	})
-	return shema.partial().parse(queryRaw)
+	return shema.parse(queryRaw)
 }

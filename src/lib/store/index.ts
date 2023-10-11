@@ -8,9 +8,9 @@ export const onlyAvailable = sessionStore('onlyAvailable', true)
 
 export const urlParam = derived(page, ({ url }) => {
 	/** Return new url with new params */
-	const _with = (params: Record<string, string>) => {
+	const _with = (params: Record<string, string | number>) => {
 		const _url = new URL(url)
-		Object.entries(params).forEach(([key, value]) => _url.searchParams.set(key, value))
+		Object.entries(params).forEach(([key, value]) => _url.searchParams.set(key, String(value)))
 		return _url.pathname + _url.search
 	}
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon } from '$lib/material'
+	import { Icon, Pagination } from '$lib/material'
 	import { urlParam } from '$lib/store'
 	import { slide } from 'svelte/transition'
 	import Members from './Members.svelte'
@@ -38,11 +38,13 @@
 			href={$urlParam.toggle({ summary: 'hidden' })}
 			data-sveltekit-noscroll
 		>
-			{#if $urlParam.hasValue('summary', 'hidden')}
-				<Icon path={mdiSigma} title="Afficher la synthèse" class="fill-base-content" />
-			{:else}
-				<Icon path={mdiSigma} title="Cacher la synthèse" class="fill-base-content" />
-			{/if}
+			<Icon
+				path={mdiSigma}
+				title="{$urlParam.hasValue('summary', 'hidden')
+					? 'Afficher'
+					: 'Cacher'}Afficher la synthèse"
+				class="fill-base-content"
+			/>
 		</a>
 	</div>
 
@@ -53,4 +55,8 @@
 	{/if}
 
 	<Members members={data.members} fields={data.fields} {workTimes} bind:selectedColumnsId />
+
+	<div class="flex justify-end">
+		<Pagination />
+	</div>
 </div>

@@ -55,11 +55,11 @@
 		</div>
 	</div>
 
-	<div class="overflow-x-auto overflow-y-scroll min-h-[320px] max-h-[600px]">
+	<div class="table-wrapper">
 		{#if members.length}
 			<table class="table table-pin-rows">
 				<thead>
-					<tr>
+					<tr class="shadow">
 						<th class="sticky left-0 bg-base-100">Nom</th>
 						{#each selectedColumnsId as colId}
 							<th>{columns[colId].label}</th>

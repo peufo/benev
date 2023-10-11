@@ -11,16 +11,15 @@
 </script>
 
 <div class="contents">
-	<div class="overflow-x-auto overflow-y-scroll min-h-[320px] max-h-[600px]">
+	<div class="table-wrapper">
 		{#if subscribes.length}
 			<table class="table table-pin-rows">
 				<thead>
-					<tr>
+					<tr class="shadow">
 						<th>Période</th>
 						<th>Membre</th>
 						<th>Secteur</th>
 						<th>Statut</th>
-
 						<th />
 					</tr>
 				</thead>

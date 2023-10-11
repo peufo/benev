@@ -9,4 +9,7 @@
 	.menu-item.active {
 		@apply bg-secondary text-secondary-content;
 	}
+	.table-wrapper {
+		@apply overflow-x-auto overflow-y-scroll min-h-[320px] max-h-[600px] border rounded-l-lg;
+	}
 }

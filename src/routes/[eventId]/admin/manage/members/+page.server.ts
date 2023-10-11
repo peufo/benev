@@ -4,16 +4,18 @@ import type { Prisma } from '@prisma/client'
 import { parseQuery, prisma } from '$lib/server'
 
 export const load = async ({ url, params: { eventId } }) => {
-	const query = parseQuery(
+	const { skip, take, ...query } = parseQuery(
 		url,
 		z.object({
-			search: z.string(),
-			start: z.coerce.date(),
-			end: z.coerce.date(),
-			teams: z.string(),
-			memberType: z.string(),
-			fieldId: z.string(),
-			fieldValue: z.string(),
+			search: z.string().optional(),
+			start: z.coerce.date().optional(),
+			end: z.coerce.date().optional(),
+			teams: z.string().optional(),
+			memberType: z.string().optional(),
+			fieldId: z.string().optional(),
+			fieldValue: z.string().optional(),
+			skip: z.coerce.number().default(0),
+			take: z.coerce.number().default(20),
 		})
 	)
 
@@ -93,6 +95,8 @@ export const load = async ({ url, params: { eventId } }) => {
 	return {
 		members: await prisma.member.findMany({
 			where,
+			skip,
+			take,
 			include: {
 				user: true,
 				leaderOf: true,

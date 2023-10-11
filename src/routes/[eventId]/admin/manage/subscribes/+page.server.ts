@@ -4,15 +4,15 @@ import { error } from '@sveltejs/kit'
 import { z } from 'zod'
 
 export const load = async ({ url, params: { eventId } }) => {
-	const query = parseQuery(
+	const { skip, take, ...query } = parseQuery(
 		url,
 		z.object({
-			search: z.string(),
-			start: z.coerce.date(),
-			end: z.coerce.date(),
-			teams: z.string(),
-			fieldId: z.string(),
-			fieldValue: z.string(),
+			search: z.string().optional(),
+			start: z.coerce.date().optional(),
+			end: z.coerce.date().optional(),
+			teams: z.string().optional(),
+			skip: z.coerce.number().default(0),
+			take: z.coerce.number().default(20),
 		})
 	)
 
@@ -51,6 +51,8 @@ export const load = async ({ url, params: { eventId } }) => {
 	return {
 		subscribes: await prisma.subscribe.findMany({
 			where,
+			skip,
+			take,
 			include: {
 				member: {
 					include: { user: true },
