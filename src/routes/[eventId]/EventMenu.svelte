@@ -35,37 +35,36 @@
 			path: '/admin/plan',
 			label: 'Planification',
 			icon: mdiChartGantt,
-
 		},
 		{
 			path: '/admin/config',
 			label: 'Configuration',
 			icon: mdiCogs,
-
 		},
 		{
 			path: '/admin/pages',
 			label: 'Les pages',
 			icon: mdiFileDocumentMultipleOutline,
-
 		},
 	]
-
-
 </script>
 
-<DropDown class="max-h-none" useSingleton tippyProps={{ trigger: 'focus mouseenter mouseleave click' }}>
+<DropDown class="max-h-none">
 	<button slot="activator" class="btn btn-ghost btn-square">
 		<Icon path={mdiMenu} />
 	</button>
 
 	<div class="flex flex-col gap-1">
+		{#if isOwner || isLeaderInEvent}
+			<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Publique</h3>
+		{/if}
+
 		<!-- HOME -->
 		<a href={$eventPath} class="menu-item" class:active={$page.route.id == '/[eventId]'}>
 			<Icon
 				path={mdiHomeOutline}
-				size={22}
-				class="opacity-80"
+				size={20}
+				class="opacity-70"
 				active={$page.route.id == '/[eventId]'}
 			/>
 			{pageIndex.title}
@@ -79,8 +78,8 @@
 		>
 			<Icon
 				path={mdiMapMarkerRadiusOutline}
-				size={22}
-				class="opacity-80"
+				size={20}
+				class="opacity-70"
 				active={$page.route.id?.startsWith('/[eventId]/teams')}
 			/>
 			Secteurs
@@ -92,22 +91,22 @@
 			<a {href} class="menu-item" class:active={$page.url.pathname == href}>
 				<Icon
 					path={mdiFileDocumentOutline}
-					size={22}
-					class="opacity-80"
+					size={20}
+					class="opacity-70"
 					active={$page.url.pathname == href}
 				/>
 				{title}
 			</a>
 		{/each}
 
-		<hr>
-
 		<!-- ADMIN -->
+		<hr />
+		<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Gestion</h3>
 		{#if isOwner || isLeaderInEvent}
-			{#each adminPages as {path, label, icon}}
+			{#each adminPages as { path, label, icon }}
 				{@const active = $page.route.id?.startsWith(`/[eventId]${path}`)}
 				<a href="{$eventPath}{path}" class="menu-item" class:active>
-					<Icon path={icon} size={22} class="opacity-80" {active} />
+					<Icon path={icon} size={20} class="opacity-70" {active} />
 					{label}
 				</a>
 			{/each}
