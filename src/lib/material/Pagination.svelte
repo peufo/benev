@@ -3,7 +3,7 @@
 	import { Icon } from '$lib/material'
 	import { urlParam } from '$lib/store'
 
-  export let take = 50
+  export let take = 20
 
 	$: skip = +($urlParam.get('skip') || 0)
 	$: _take = +($urlParam.get('take') || take)
@@ -13,7 +13,6 @@
 <div class="join">
 	<a
 		href={$urlParam.with({ skip: skip - _take, take: _take })}
-		data-sveltekit-noscroll
 		data-sveltekit-replacestate
     class:btn-disabled={skip - _take < 0 }
 		class="join-item btn btn-sm btn-square"
@@ -22,7 +21,6 @@
 	</a>
 	<a
 		href={$urlParam.with({ skip: skip + _take, take: _take })}
-		data-sveltekit-noscroll
 		data-sveltekit-replacestate
 		class="join-item btn btn-sm pr-1"
 	>

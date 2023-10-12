@@ -17,7 +17,7 @@
 
 <div class="table-wrapper">
 	{#if members.length}
-		<table class="table table-pin-rows">
+		<table class="table">
 			<thead>
 				<tr class="shadow">
 					<th class="sticky left-0 bg-base-100">Membre</th>

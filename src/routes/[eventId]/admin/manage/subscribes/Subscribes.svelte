@@ -9,10 +9,10 @@
 
 </script>
 
-<div class="contents">
+
 	<div class="table-wrapper">
 		{#if subscribes.length}
-			<table class="table table-pin-rows">
+			<table class="table">
 				<thead>
 					<tr class="shadow">
 						<th>Période</th>
@@ -58,4 +58,3 @@
 			<Placeholder>Aucune inscription trouvé</Placeholder>
 		{/if}
 	</div>
-</div>

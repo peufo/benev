@@ -28,7 +28,7 @@
 	import SubscribeState from '$lib/SubscribeState.svelte'
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
-	import { Icon } from '$lib/material'
+	import { Icon, DropDown } from '$lib/material'
 	import {
 		mdiCloseOctagonOutline,
 		mdiCheck,
@@ -70,26 +70,18 @@
 		<SubscribeState {subscribe} />
 	</button>
 {:else}
-	<form method="post" use:enhance={form.submit} class="h-8">
-		<div class="dropdown dropdown-end">
-			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-			<label tabindex="0" class="btn btn-square btn-sm" on:click|stopPropagation>
-				<SubscribeState {subscribe} />
-			</label>
-			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-			<ul tabindex="0" class="menu shadow dropdown-content z-10 bg-base-200 rounded-box">
-				{#each editions as [state, edit]}
-					<li>
-						<button formaction="{action}?/subscribe_{state}" on:click|stopPropagation>
-							<Icon path={edit.icon} class={edit.class} />
-							{edit.label}
-						</button>
-					</li>
-				{/each}
-			</ul>
-		</div>
-	</form>
+	<DropDown>
+		<button slot="activator" class="btn btn-sm btn-square btn-ghost">
+			<SubscribeState {subscribe} />
+		</button>
+
+		<form method="post" use:enhance={form.submit}>
+			{#each editions as [state, edit]}
+				<button class="menu-item" formaction="{action}?/subscribe_{state}" on:click|stopPropagation>
+					<Icon path={edit.icon} class={edit.class} />
+					{edit.label}
+				</button>
+			{/each}
+		</form>
+	</DropDown>
 {/if}
