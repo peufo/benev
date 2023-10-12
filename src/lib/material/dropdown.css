@@ -6,3 +6,7 @@
 .tippy-box[data-theme~='dropdown'] > .tippy-content {
 	padding: 0;
 }
+
+.tippy-box[data-theme~='dropdown'] > .tippy-arrow {
+	color: #e5e7eb;
+}
