@@ -100,9 +100,9 @@
 		{/each}
 
 		<!-- ADMIN -->
-		<hr />
-		<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Gestion</h3>
 		{#if isOwner || isLeaderInEvent}
+			<hr />
+			<h3 class="font-bold opacity-50 pl-3 pt-1 text-xs">Gestion</h3>
 			{#each adminPages as { path, label, icon }}
 				{@const active = $page.route.id?.startsWith(`/[eventId]${path}`)}
 				<a href="{$eventPath}{path}" class="menu-item" class:active>
