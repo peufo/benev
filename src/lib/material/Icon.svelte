@@ -12,6 +12,7 @@
 	export let classSVG = ''
 	export let active = false
 	export let tippyProps: Partial<TippyProps> = {}
+	export let disableTitlePropagation = false
 	const viewWidth = 24
 	const viewHeight = 24
 
@@ -21,13 +22,12 @@
 		if (!title) return
 		const parent = icon.parentElement
 		const isButton = parent?.tagName === 'BUTTON' || parent?.tagName === 'A'
-		const target = parent && isButton ? parent : icon
+		const target = parent && isButton && !disableTitlePropagation ? parent : icon
 		const tip = tippy(target || icon, { content: title, ...tippyProps })
 		return () => {
 			tip.destroy()
 		}
 	})
-
 </script>
 
 <i

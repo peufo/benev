@@ -1,4 +1,4 @@
-import { getSubscribesData } from '$lib/me/userSubscribes'
+import { getSubscribesData } from '$lib/me/MemberSubscribes'
 import { getUserIdOrRedirect } from '$lib/server/permission.js'
 
 export const load = async ({ url, locals }) => {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Teams from '$lib/Teams.svelte'
 	import { Card, Icon } from '$lib/material'
-	import UserSubscribes from '$lib/me/UserSubscribes.svelte'
+	import MemberSubscribes from '$lib/me/MemberSubscribes.svelte'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import { eventPath } from '$lib/store'
 	import { mdiAccountMultipleOutline, mdiClipboardTextMultipleOutline } from '@mdi/js'
@@ -22,9 +22,9 @@
 		/>
 	</Profile>
 
-	<UserSubscribes events={[data.event]} title="" isLeader>
+	<MemberSubscribes events={[data.event]} title="" isLeader>
 		<span slot="title">Inscriptions</span>
-	</UserSubscribes>
+	</MemberSubscribes>
 
 	<Card>
 		<h2 slot="title">Secteurs à charge</h2>
@@ -38,7 +38,10 @@
 					href="{$eventPath}/admin/manage/subscribes?teams={teamsId}"
 					class="btn btn-square btn-sm"
 				>
-					<Icon path={mdiClipboardTextMultipleOutline} title="Toutes les inscriptions de ces secteurs" />
+					<Icon
+						path={mdiClipboardTextMultipleOutline}
+						title="Toutes les inscriptions de ces secteurs"
+					/>
 				</a>
 			{/if}
 		</div>

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import UserSubscribes from '$lib/me/UserSubscribes.svelte'
+	import MemberSubscribes from '$lib/me/MemberSubscribes.svelte'
 	export let data
 </script>
 
-<UserSubscribes {...data} />
+<MemberSubscribes {...data} />
