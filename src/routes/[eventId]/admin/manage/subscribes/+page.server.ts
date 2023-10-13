@@ -42,13 +42,16 @@ export const load = async ({ url, params: { eventId } }) => {
 	where.period = period
 
 	if (query.search) {
+		const words = query.search.split(' ')
 		where.member = {
 			user: {
-				OR: [
-					{ firstName: { contains: query.search } },
-					{ lastName: { contains: query.search } },
-					{ email: { contains: query.search } },
-				],
+				OR: words
+					.map((word) => [
+						{ firstName: { contains: word } },
+						{ lastName: { contains: word } },
+						{ email: { contains: word } },
+					])
+					.flat(),
 			},
 		}
 	}
