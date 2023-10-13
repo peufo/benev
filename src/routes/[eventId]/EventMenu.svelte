@@ -4,9 +4,6 @@
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
 	import {
-		mdiFileDocumentOutline,
-		mdiHomeOutline,
-		mdiMapMarkerRadiusOutline,
 		mdiMenu,
 		mdiChartGantt,
 		mdiFileDocumentMultipleOutline,
@@ -15,6 +12,7 @@
 		mdiCogs,
 	} from '@mdi/js'
 	import DropDown from '$lib/material/DropDown.svelte'
+	import PubliqueMenuItems from './PubliqueMenuItems.svelte'
 	export let pageIndex: LayoutData['pageIndex']
 	export let pages: LayoutData['pages']
 	export let isOwner: boolean
@@ -49,59 +47,26 @@
 	]
 </script>
 
-<DropDown class="max-h-none">
+<div class="gap-2 hidden lg:flex">
+	<PubliqueMenuItems {pages} {pageIndex} />
+</div>
+
+<DropDown class="max-h-none min-w-[200px]">
 	<button slot="activator" class="btn btn-ghost btn-square">
 		<Icon path={mdiMenu} />
 	</button>
 
 	<div class="flex flex-col gap-1">
-		{#if isOwner || isLeaderInEvent}
-			<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Publique</h3>
-		{/if}
-
-		<!-- HOME -->
-		<a href={$eventPath} class="menu-item" class:active={$page.route.id == '/[eventId]'}>
-			<Icon
-				path={mdiHomeOutline}
-				size={20}
-				class="opacity-70"
-				active={$page.route.id == '/[eventId]'}
-			/>
-			{pageIndex.title}
-		</a>
-
-		<!-- TEAMS -->
-		<a
-			href="{$eventPath}/teams"
-			class="menu-item"
-			class:active={$page.route.id?.startsWith('/[eventId]/teams')}
-		>
-			<Icon
-				path={mdiMapMarkerRadiusOutline}
-				size={20}
-				class="opacity-70"
-				active={$page.route.id?.startsWith('/[eventId]/teams')}
-			/>
-			Secteurs
-		</a>
-
-		<!-- PAGES -->
-		{#each pages as { title, path, id, isIndex } (id)}
-			{@const href = `${$eventPath}${isIndex ? '' : `/${path}`}`}
-			<a {href} class="menu-item" class:active={$page.url.pathname == href}>
-				<Icon
-					path={mdiFileDocumentOutline}
-					size={20}
-					class="opacity-70"
-					active={$page.url.pathname == href}
-				/>
-				{title}
-			</a>
-		{/each}
+		<div class="contents lg:hidden">
+			{#if isOwner || isLeaderInEvent}
+				<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Publique</h3>
+			{/if}
+			<PubliqueMenuItems {pages} {pageIndex} />
+		</div>
 
 		<!-- ADMIN -->
 		{#if isOwner || isLeaderInEvent}
-			<hr />
+			<hr class="block lg:hidden" />
 			<h3 class="font-bold opacity-50 pl-3 pt-1 text-xs">Gestion</h3>
 			{#each adminPages as { path, label, icon }}
 				{@const active = $page.route.id?.startsWith(`/[eventId]${path}`)}

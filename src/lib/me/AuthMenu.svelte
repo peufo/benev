@@ -19,7 +19,7 @@
 </script>
 
 {#if userName}
-	<DropDown>
+	<DropDown class="min-w-[200px]">
 		<button slot="activator" class="btn btn-square btn-ghost lg:inline-flex lg:w-auto lg:px-2">
 			<Icon path={mdiAccountOutline} />
 			<span class="hidden lg:block">{userName || ''}</span>
@@ -43,7 +43,6 @@
 			</form>
 		</div>
 	</DropDown>
-
 {:else}
 	<a class="btn-ghost rounded-btn btn btn-square" href={$eventPath ? `${$eventPath}/me` : `/me`}>
 		<Icon path={mdiAccountOutline} />
