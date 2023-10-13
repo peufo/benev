@@ -7,7 +7,7 @@
 				arrow: false,
 				moveTransition: 'transform 0.1s ease-out',
 				interactive: true,
-				interactiveDebounce: 50
+				interactiveDebounce: 50,
 		  })
 		: null
 
@@ -19,6 +19,7 @@
 	import { onMount } from 'svelte'
 	import '$lib/material/dropdown.css'
 	import { browser } from '$app/environment'
+	import { navigating } from '$app/stores'
 
 	export let tippyProps: Partial<TippyProps> = {}
 	let klass = ''
@@ -55,7 +56,13 @@
 		)
 		const lastFocusable = Array.from(focusables).at(-1)
 		lastFocusable?.addEventListener('blur', hide)
+
+		const navigatingUnsubscribe = navigating.subscribe((nav) => {
+			if (!nav) hide()
+		})
+
 		return () => {
+			navigatingUnsubscribe()
 			lastFocusable?.removeEventListener('blur', hide)
 			if (useSingleton && tip) {
 				tips.splice(tips.indexOf(tip), 1)
