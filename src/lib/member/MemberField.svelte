@@ -57,22 +57,20 @@
 	input={{ disabled: !field.memberCanWrite && !isLeader }}
 >
 	<div class="contents" slot="label_append">
-		{#if isLeader}
-			{#if !field.memberCanRead}
-				<Icon
-					path={mdiEyeOffOutline}
-					title="Les membres ne peuvent pas voir ce champ"
-					class="ml-3 opacity-75"
-				/>
-				<div class="grow" />
-			{:else if !field.memberCanWrite}
-				<Icon
-					path={mdiPencilOffOutline}
-					title="Les membres ne peuvent pas éditer ce champ"
-					class="ml-3 opacity-75"
-				/>
-				<div class="grow" />
-			{/if}
+		{#if !field.memberCanRead}
+			<Icon
+				path={mdiEyeOffOutline}
+				title="Les membres ne peuvent pas voir ce champ"
+				class="ml-3 opacity-75"
+			/>
+			<div class="grow" />
+		{:else if !field.memberCanWrite}
+			<Icon
+				path={mdiPencilOffOutline}
+				title="Les membres ne peuvent pas éditer ce champ"
+				class="ml-3 opacity-75"
+			/>
+			<div class="grow" />
 		{/if}
 	</div>
 </svelte:component>
