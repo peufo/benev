@@ -52,7 +52,13 @@
 </div>
 
 <DropDown class="max-h-none min-w-[200px]">
-	<button slot="activator" class="btn btn-ghost btn-square">
+	<button
+		slot="activator"
+		class="
+		btn btn-ghost btn-square
+		{isOwner || isLeaderInEvent ? '' : 'lg:hidden'}
+	"
+	>
 		<Icon path={mdiMenu} />
 	</button>
 
