@@ -59,7 +59,7 @@
 	<div class="flex flex-col gap-1">
 		<div class="contents lg:hidden">
 			{#if isOwner || isLeaderInEvent}
-				<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Publique</h3>
+				<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Public</h3>
 			{/if}
 			<PubliqueMenuItems {pages} {pageIndex} />
 		</div>
