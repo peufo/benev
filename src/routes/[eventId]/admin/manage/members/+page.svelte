@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { mdiChevronRight, mdiSigma } from '@mdi/js'
 	import { slide } from 'svelte/transition'
-	import {derived} from 'svelte/store'
-	import {navigating} from '$app/stores'
+	import { derived } from 'svelte/store'
+	import { navigating } from '$app/stores'
 
-	
 	import type { PageData } from './$types'
 	import { Icon, Pagination } from '$lib/material'
 	import { urlParam } from '$lib/store'
@@ -46,15 +45,15 @@
 		),
 	}
 
-	const summary = derived(urlParam, ({has}) => has('summary'))
+	const summary = derived(urlParam, ({ has }) => has('summary'))
 </script>
 
 <div class="flex flex-col gap-4">
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
 		<MembersFilter fields={data.fields} teams={data.teams} />
-		<MembersCopy fields={data.fields} />
+
 		<ColumnsSelect {columns} bind:selectedColumnsId />
-		
+
 		<a
 			class="
 				btn btn-sm fill-base-content px-1
@@ -63,12 +62,11 @@
 			href={$urlParam.toggle({ summary: 'true' })}
 			data-sveltekit-noscroll
 		>
-			<Icon
-				path={mdiSigma}
-				title="Synthèse"
-			/>
-			<Icon path={mdiChevronRight} class={$summary ? 'rotate-90' : ''}/>
+			<Icon path={mdiSigma} title="Synthèse" />
+			<Icon path={mdiChevronRight} class={$summary ? 'rotate-90' : ''} />
 		</a>
+
+		<MembersCopy fields={data.fields} />
 	</div>
 
 	{#if $summary}
