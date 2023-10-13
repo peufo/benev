@@ -10,15 +10,10 @@
 		teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 	})[]
 
-	export let title = ''
 	export let isLeader = false
 </script>
 
 <div class="flex flex-col gap-10">
-	{#if title}
-		<h1 class="text-2xl">{title}</h1>
-	{/if}
-
 	{#each events as event}
 		<Card>
 			<span slot="title">
@@ -35,7 +30,10 @@
 			</span>
 
 			{#if event.teams.length}
-				<div class="grid gap-2" style:grid-template-columns="repeat(auto-fill, minmax(350px, 1fr))">
+				<div
+					class="grid gap-2 mt-2"
+					style:grid-template-columns="repeat(auto-fill, minmax(350px, 1fr))"
+				>
 					{#each event.teams as team}
 						<CardLink href="/{event.id}/teams/{team.id}">
 							<span slot="title">{team.name}</span>
