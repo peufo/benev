@@ -1,0 +1,32 @@
+<script lang="ts">
+	import { Icon, parseOptions, type Options } from '$lib/material'
+	import { urlParam } from '$lib/store'
+
+	let klass = ''
+	export { klass as class }
+	export let key: string
+	export let options: Options
+
+	$: _options = parseOptions(options)
+</script>
+
+<div class="join {klass}">
+	{#each _options as opt}
+		{@const active = $urlParam.hasValue(key, opt.value)}
+		<a
+			href={$urlParam.toggle({ [key]: opt.value })}
+			class="join-item btn btn-sm"
+			class:btn-primary={active}
+		>
+			{#if opt.icon}
+				<Icon
+					path={opt.icon}
+					title={opt.label}
+					class={active ? 'fill-primary-content' : 'opacity-70'}
+				/>
+			{:else}
+				{opt.label}
+			{/if}
+		</a>
+	{/each}
+</div>

@@ -11,7 +11,7 @@ type BindOptions = {
 }
 
 export function bindValueWithParams(
-	node: HTMLInputElement,
+	node: HTMLInputElement | HTMLButtonElement,
 	{
 		bindEnable = false,
 		debounceTime = 200,

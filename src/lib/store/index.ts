@@ -25,7 +25,7 @@ export const param = derived(page, ({ url }) => {
 	const toggle = (params: Record<string, string>) => {
 		const _url = new URL(url)
 		Object.entries(params).forEach(([key, value]) => {
-			if (_url.searchParams.has(key)) _url.searchParams.delete(key)
+			if (url.searchParams.get(key) === value) _url.searchParams.delete(key)
 			else _url.searchParams.set(key, value)
 		})
 		return _url.search

@@ -2,10 +2,10 @@
 	import { InputCheckboxsMenu } from '$lib/material'
 	import { PeriodPickerButton } from '$lib/period'
 	import { subscribeStateLabel } from '$lib/form'
-	// import FieldsFilter from '$lib/FieldsFilter.svelte'
+	import InputOptionInParam from '$lib/material/input/InputOptionInParam.svelte'
+	import { mdiAccountCircleOutline, mdiShieldAccount } from '@mdi/js'
 
 	export let teams: { id: string; name: string }[]
-	// export let fields: Field[]
 </script>
 
 <PeriodPickerButton />
@@ -16,6 +16,14 @@
 	options={teams.map((t) => ({ value: t.id, label: t.name }))}
 	enhanceDisabled
 	badgePrimary
+/>
+
+<InputOptionInParam
+	key="createdBy"
+	options={{
+		leader: { label: 'Inscrit par un responsable', icon: mdiShieldAccount },
+		user: { label: 'Inscrit par le membre', icon: mdiAccountCircleOutline },
+	}}
 />
 
 <InputCheckboxsMenu

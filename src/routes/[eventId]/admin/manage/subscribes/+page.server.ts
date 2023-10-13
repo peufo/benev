@@ -5,6 +5,8 @@ import { error } from '@sveltejs/kit'
 import { z } from 'zod'
 
 export const load = async ({ url, params: { eventId } }) => {
+	// TODO: use enum provide by prisma
+
 	const { skip, take, ...query } = parseQuery(
 		url,
 		z.object({
@@ -15,6 +17,7 @@ export const load = async ({ url, params: { eventId } }) => {
 			states: z.string().optional(),
 			skip: z.coerce.number().default(0),
 			take: z.coerce.number().default(20),
+			createdBy: z.enum(['leader', 'user']).optional(),
 		})
 	)
 
@@ -53,6 +56,10 @@ export const load = async ({ url, params: { eventId } }) => {
 	if (query.states) {
 		const states = jsonParse<SubscribeState[]>(query.states, [])
 		where.state = { in: states }
+	}
+
+	if (query.createdBy) {
+		where.createdBy = query.createdBy
 	}
 
 	return {
