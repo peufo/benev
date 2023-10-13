@@ -10,7 +10,7 @@
 		<a
 			href="tel:{user.phone}"
 			target="_blank"
-			class="btn btn-square btn-sm relative"
+			class="btn btn-square btn-sm btn-ghost relative"
 			on:click|stopPropagation
 		>
 			<Icon path={mdiPhone} size={18} title="Téléphoner à {user.firstName}" />
@@ -19,7 +19,7 @@
 	<a
 		href="mailto:{user.email}"
 		target="_blank"
-		class="btn btn-square btn-sm relative"
+		class="btn btn-square btn-sm btn-ghost relative"
 		on:click|stopPropagation
 	>
 		<Icon path={mdiEmailOutline} size={18} title="Envoyer un mail à {user.firstName}" />

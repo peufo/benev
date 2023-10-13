@@ -5,6 +5,7 @@
 	import { eventPath } from '$lib/store'
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
 	import { mdiAccountCircleOutline, mdiShieldAccount } from '@mdi/js'
+	import SubscribeCreatedBy from '$lib/SubscribeCreatedBy.svelte'
 
 	export let subscribes: PageData['subscribes']
 </script>
@@ -46,15 +47,7 @@
 							</a>
 						</td>
 						<td>
-							{#if sub.createdBy === 'leader'}
-								<Icon path={mdiShieldAccount} title="Créer par un responsable" class="opacity-60" />
-							{:else}
-								<Icon
-									path={mdiAccountCircleOutline}
-									title="Créer par le membre"
-									class="opacity-60"
-								/>
-							{/if}
+							<SubscribeCreatedBy createdBy={sub.createdBy} />
 						</td>
 
 						<td>

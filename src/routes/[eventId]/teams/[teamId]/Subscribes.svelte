@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { page } from '$app/stores'
 	import type { User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
 	import Contact from '$lib/Contact.svelte'
+	import SubscribeCreatedBy from '$lib/SubscribeCreatedBy.svelte'
 
 	// TODO: Pourquoi user ne passe pas directement dans le type ???
 	export let subscribes: (PageData['team']['periods'][number]['subscribes'][number] & {
@@ -15,9 +15,11 @@
 <div class="flex flex-col gap-2">
 	{#each subscribes as subscribe}
 		<div class="flex gap-2 justify-end items-center">
+			<SubscribeCreatedBy createdBy={subscribe.createdBy} size={20} />
+
 			{#if subscribe.member}
 				<a
-					class="btn btn-sm"
+					class="badge badge-lg"
 					title="Voir les infos de {subscribe.member.user.firstName}"
 					href="{$eventPath}/admin/manage/members/{subscribe.memberId}"
 				>

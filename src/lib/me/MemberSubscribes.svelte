@@ -6,6 +6,7 @@
 	import { rowLink } from '$lib/action'
 	import { page } from '$app/stores'
 	import { mdiAccountCircleOutline, mdiShieldAccount } from '@mdi/js'
+	import SubscribeCreatedBy from '$lib/SubscribeCreatedBy.svelte'
 
 	export let events: (Event & {
 		teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -52,23 +53,8 @@
 										href={isLeader ? periodHref : teamHref}
 										class="grow flex gap-2 items-center px-2 py-2 rounded hover:bg-base-200"
 									>
-										{#if period.subscribes[0].createdBy === 'leader'}
-											<Icon
-												path={mdiShieldAccount}
-												title="Créer par un responsable"
-												class="opacity-60"
-												size={22}
-												disableTitlePropagation
-											/>
-										{:else}
-											<Icon
-												path={mdiAccountCircleOutline}
-												title="Créer par le membre"
-												class="opacity-60"
-												size={22}
-												disableTitlePropagation
-											/>
-										{/if}
+										<SubscribeCreatedBy createdBy={period.subscribes[0].createdBy} size={22} />
+
 										<span class="text-sm">{formatRange(period)}</span>
 										<div class="grow" />
 									</a>
