@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Field } from '@prisma/client'
 	import { InputCheckboxsMenu } from '$lib/material'
 	import { PeriodPickerButton } from '$lib/period'
+	import { subscribeStateLabel } from '$lib/form'
 	// import FieldsFilter from '$lib/FieldsFilter.svelte'
 
 	export let teams: { id: string; name: string }[]
@@ -14,6 +14,14 @@
 	key="teams"
 	label="secteurs"
 	options={teams.map((t) => ({ value: t.id, label: t.name }))}
+	enhanceDisabled
+	badgePrimary
+/>
+
+<InputCheckboxsMenu
+	key="states"
+	label="Statuts"
+	options={subscribeStateLabel}
 	enhanceDisabled
 	badgePrimary
 />

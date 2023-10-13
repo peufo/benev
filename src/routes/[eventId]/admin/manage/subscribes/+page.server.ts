@@ -1,5 +1,6 @@
+import { jsonParse } from '$lib/jsonParse.js'
 import { parseQuery, prisma } from '$lib/server'
-import { Prisma } from '@prisma/client'
+import { Prisma, SubscribeState } from '@prisma/client'
 import { error } from '@sveltejs/kit'
 import { z } from 'zod'
 
@@ -11,6 +12,7 @@ export const load = async ({ url, params: { eventId } }) => {
 			start: z.coerce.date().optional(),
 			end: z.coerce.date().optional(),
 			teams: z.string().optional(),
+			states: z.string().optional(),
 			skip: z.coerce.number().default(0),
 			take: z.coerce.number().default(20),
 		})
@@ -46,6 +48,11 @@ export const load = async ({ url, params: { eventId } }) => {
 				],
 			},
 		}
+	}
+
+	if (query.states) {
+		const states = jsonParse<SubscribeState[]>(query.states, [])
+		where.state = { in: states }
 	}
 
 	return {
