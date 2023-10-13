@@ -75,7 +75,7 @@
 			<SubscribeState {subscribe} />
 		</button>
 
-		<form method="post" use:enhance={form.submit}>
+		<form method="post" use:enhance={form.submit} class="flex flex-col gap-1">
 			{#each editions as [state, edit]}
 				<button class="menu-item" formaction="{action}?/subscribe_{state}" on:click|stopPropagation>
 					<Icon path={edit.icon} class={edit.class} />
