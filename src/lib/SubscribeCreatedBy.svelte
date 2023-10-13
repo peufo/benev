@@ -7,7 +7,19 @@
 </script>
 
 {#if createdBy === 'leader'}
-	<Icon path={mdiShieldAccount} title="Inscrit par un responsable" class="opacity-60" {size} />
+	<Icon
+		path={mdiShieldAccount}
+		title="Inscrit par un responsable"
+		class="opacity-60"
+		{size}
+		disableTitlePropagation
+	/>
 {:else}
-	<Icon path={mdiAccountCircleOutline} title="Inscrit par le membre" class="opacity-60" {size} />
+	<Icon
+		path={mdiAccountCircleOutline}
+		title="Inscrit par le membre"
+		class="opacity-60"
+		{size}
+		disableTitlePropagation
+	/>
 {/if}

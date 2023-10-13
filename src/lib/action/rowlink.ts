@@ -4,6 +4,7 @@ type Option = {
 	addRowClasses?: boolean
 }
 
+/** @deprecated */
 export function rowLink(
 	row: HTMLTableRowElement,
 	{ href, enable = true, addRowClasses = true }: Option

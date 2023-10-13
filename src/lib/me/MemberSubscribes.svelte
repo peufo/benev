@@ -2,10 +2,8 @@
 	import type { Event, Period, Subscribe, Team } from '@prisma/client'
 	import { formatRange } from '$lib/formatRange'
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
-	import { Card, Icon, Placeholder } from '$lib/material'
-	import { rowLink } from '$lib/action'
+	import { Card, CardLink, Placeholder } from '$lib/material'
 	import { page } from '$app/stores'
-	import { mdiAccountCircleOutline, mdiShieldAccount } from '@mdi/js'
 	import SubscribeCreatedBy from '$lib/SubscribeCreatedBy.svelte'
 
 	export let events: (Event & {
@@ -39,25 +37,27 @@
 			{#if event.teams.length}
 				<div class="grid gap-2" style:grid-template-columns="repeat(auto-fill, minmax(350px, 1fr))">
 					{#each event.teams as team}
-						{@const teamHref = `/${event.id}/teams/${team.id}`}
-						<section class="border rounded-xl p-4 shadow">
-							<a href={teamHref} class="link link-hover font-medium">
-								{team.name}
-							</a>
-
+						<CardLink href="/{event.id}/teams/{team.id}">
+							<span slot="title">{team.name}</span>
 							{#each team.periods as period}
-								{@const periodHref = `/${event.id}/teams/${team.id}/${period.id}`}
-
 								<div class="flex gap-1 items-center mt-2">
-									<a
-										href={isLeader ? periodHref : teamHref}
-										class="grow flex gap-2 items-center px-2 py-2 rounded hover:bg-base-200"
+									<div
+										class="
+											grow flex gap-2 items-center px-2 py-2 rounded
+											{isLeader ? 'relative hover:bg-base-200' : ''}
+										"
 									>
+										{#if isLeader}
+											<a href="/{event.id}/teams/{team.id}/{period.id}" class="absolute inset-0">
+												{' '}
+											</a>
+										{/if}
+
 										<SubscribeCreatedBy createdBy={period.subscribes[0].createdBy} size={22} />
 
 										<span class="text-sm">{formatRange(period)}</span>
 										<div class="grow" />
-									</a>
+									</div>
 
 									<SubscribeStateForm
 										subscribe={period.subscribes[0]}
@@ -66,7 +66,7 @@
 									/>
 								</div>
 							{/each}
-						</section>
+						</CardLink>
 					{/each}
 				</div>
 			{:else}

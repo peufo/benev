@@ -66,12 +66,12 @@
 </script>
 
 {#if !editions.length}
-	<button class="btn-square btn-sm">
+	<button class="btn-square btn-sm btn-ghost opacity-70">
 		<SubscribeState {subscribe} />
 	</button>
 {:else}
 	<DropDown tippyProps={{ arrow: true, trigger: 'click' }}>
-		<button slot="activator" class="btn btn-sm btn-square btn-ghost hover:bg-base-200">
+		<button slot="activator" class="relative btn btn-sm btn-square btn-ghost hover:bg-base-200">
 			<SubscribeState {subscribe} />
 		</button>
 

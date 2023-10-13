@@ -31,38 +31,40 @@
 
 {#if _teams.length}
 	{#if $display === 'list'}
-		<div class="@container">
-			<ul in:fade class="grid gap-4 my-6 @xl:grid-cols-2">
-				{#each _teams as team (team.id)}
-					<CardLink href="{$eventPath}/teams/{team.id}" class="p-1">
-						<span slot="title">
-							{team.name}
-						</span>
+		<div
+			in:fade
+			class="grid gap-4 my-6"
+			style:grid-template-columns="repeat(auto-fill, minmax(350px, 1fr))"
+		>
+			{#each _teams as team (team.id)}
+				<CardLink href="{$eventPath}/teams/{team.id}" class="p-1">
+					<span slot="title">
+						{team.name}
+					</span>
 
-						<div class="grid grid-cols-2 gap-2 items-start pt-2">
-							<div class="flex flex-wrap gap-1">
-								{#each team.leaders as member}
-									<div
-										class="badge badge-sm whitespace-nowrap"
-										class:opacity-40={!member.isValidedByUser}
-										use:tip={{
-											content: "Ce membre n'a pas validé sa participation",
-											disable: member.isValidedByUser,
-										}}
-									>
-										{member.user.firstName}
-										{member.user.lastName}
-									</div>
-								{/each}
-							</div>
-							<Progress
-								class="mt-1"
-								period={{ maxSubscribe: team.maxSubscribe, subscribes: team.subscribes }}
-							/>
+					<div class="grid grid-cols-2 gap-2 items-start pt-2">
+						<div class="flex flex-wrap gap-1">
+							{#each team.leaders as member}
+								<div
+									class="badge badge-sm whitespace-nowrap"
+									class:opacity-40={!member.isValidedByUser}
+									use:tip={{
+										content: "Ce membre n'a pas validé sa participation",
+										disable: member.isValidedByUser,
+									}}
+								>
+									{member.user.firstName}
+									{member.user.lastName}
+								</div>
+							{/each}
 						</div>
-					</CardLink>
-				{/each}
-			</ul>
+						<Progress
+							class="mt-1"
+							period={{ maxSubscribe: team.maxSubscribe, subscribes: team.subscribes }}
+						/>
+					</div>
+				</CardLink>
+			{/each}
 		</div>
 	{:else}
 		<table in:fade class="table text-base">
