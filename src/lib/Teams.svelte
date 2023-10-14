@@ -37,7 +37,7 @@
 		<div
 			in:fade
 			class="grid gap-4 my-6"
-			style:grid-template-columns="repeat(auto-fill, minmax(350px, 1fr))"
+			style:grid-template-columns="repeat(auto-fill, minmax(325px, 1fr))"
 		>
 			{#each _teams as team (team.id)}
 				<CardLink href="{$eventPath}/teams/{team.id}" class="p-1">

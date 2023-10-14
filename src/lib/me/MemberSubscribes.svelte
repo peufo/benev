@@ -32,7 +32,7 @@
 			{#if event.teams.length}
 				<div
 					class="grid gap-2 mt-2"
-					style:grid-template-columns="repeat(auto-fill, minmax(350px, 1fr))"
+					style:grid-template-columns="repeat(auto-fill, minmax(325px, 1fr))"
 				>
 					{#each event.teams as team}
 						<CardLink href="/{event.id}/teams/{team.id}">
