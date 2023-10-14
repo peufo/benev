@@ -14,7 +14,7 @@
 	export let user: User
 </script>
 
-<Card returnUrl="{$eventPath}/admin/manage/members">
+<Card returnUrl="{$eventPath}/admin/members">
 	<span slot="title">{user.firstName} {user.lastName}</span>
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">

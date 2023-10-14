@@ -1,1 +1,1 @@
-Redirect to admin/manage/members
+Redirect to admin/members

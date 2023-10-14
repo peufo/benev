@@ -36,7 +36,7 @@
 							</a>
 						</td>
 						<td>
-							<a class="link link-hover" href="{$eventPath}/admin/manage/members/{sub.memberId}">
+							<a class="link link-hover" href="{$eventPath}/admin/members/{sub.memberId}">
 								{sub.member.user.firstName}
 								{sub.member.user.lastName}
 							</a>

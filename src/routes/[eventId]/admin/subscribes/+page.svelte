@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Pagination } from '$lib/material'
+	import { InputSearch, Pagination } from '$lib/material'
 
 	import Filters from './Filters.svelte'
 	import Subscribes from './Subscribes.svelte'
@@ -9,6 +9,7 @@
 
 <div class="flex flex-col gap-3">
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
+		<InputSearch />
 		<Filters teams={data.teams} />
 	</div>
 

@@ -5,7 +5,7 @@
 	import { navigating } from '$app/stores'
 
 	import type { PageData } from './$types'
-	import { Icon, Pagination } from '$lib/material'
+	import { Icon, InputSearch, Pagination } from '$lib/material'
 	import { urlParam } from '$lib/store'
 	import Members from './Members.svelte'
 	import MembersCopy from './MembersCopy.svelte'
@@ -50,6 +50,7 @@
 
 <div class="flex flex-col gap-4">
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
+		<InputSearch />
 		<MembersFilter fields={data.fields} teams={data.teams} />
 
 		<ColumnsSelect {columns} bind:selectedColumnsId />

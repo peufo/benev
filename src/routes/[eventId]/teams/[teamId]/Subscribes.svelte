@@ -21,7 +21,7 @@
 				<a
 					class="badge badge-lg"
 					title="Voir les infos de {subscribe.member.user.firstName}"
-					href="{$eventPath}/admin/manage/members/{subscribe.memberId}"
+					href="{$eventPath}/admin/members/{subscribe.memberId}"
 				>
 					{subscribe.member.user.firstName}
 					{subscribe.member.user.lastName}

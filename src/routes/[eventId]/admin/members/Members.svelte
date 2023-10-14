@@ -30,7 +30,7 @@
 			<tbody>
 				{#each members as member (member.id)}
 					<tr
-						on:click={() => goto(`${$eventPath}/admin/manage/members/${member.id}`)}
+						on:click={() => goto(`${$eventPath}/admin/members/${member.id}`)}
 						class="hover cursor-pointer group"
 					>
 						<td>

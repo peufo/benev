@@ -6,7 +6,7 @@
 		mdiClipboardTextMultipleOutline,
 		mdiPencilOutline,
 	} from '@mdi/js'
-	
+
 	import { Card, Icon, Placeholder, OnlyAvailableToggle } from '$lib/material'
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
@@ -44,20 +44,23 @@
 		}
 	}
 
-	$: _periods = data.team.periods.map(period => {
-		const nbSubscribe = period.subscribes.filter((sub) => sub.state === 'accepted' || sub.state === 'request').length
-		const	mySubscribe = period.subscribes.find((sub) => sub.memberId === data.member?.id)
-		const isComplete = nbSubscribe >= period.maxSubscribe
-		const available = !mySubscribe && !isComplete
-		return {
-			...period,
-			mySubscribe,
-			available,
-			isComplete,
-			disabled: !data.isLeader && !available
-		}
-	}).filter(period => !$onlyAvailable || !period.isComplete)
-
+	$: _periods = data.team.periods
+		.map((period) => {
+			const nbSubscribe = period.subscribes.filter(
+				(sub) => sub.state === 'accepted' || sub.state === 'request'
+			).length
+			const mySubscribe = period.subscribes.find((sub) => sub.memberId === data.member?.id)
+			const isComplete = nbSubscribe >= period.maxSubscribe
+			const available = !mySubscribe && !isComplete
+			return {
+				...period,
+				mySubscribe,
+				available,
+				isComplete,
+				disabled: !data.isLeader && !available,
+			}
+		})
+		.filter((period) => !$onlyAvailable || !period.isComplete)
 </script>
 
 <Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams">
@@ -66,18 +69,17 @@
 		{data.team.description || ''}
 	</p>
 	<div slot="action" class="flex gap-2">
-
-		<OnlyAvailableToggle/>
+		<OnlyAvailableToggle />
 
 		{#if data.isLeader}
 			<a
-				href={`${$eventPath}/admin/manage/members?teams=["${data.team.id}"]`}
+				href={`${$eventPath}/admin/members?teams=["${data.team.id}"]`}
 				class="btn btn-square btn-sm"
 			>
 				<Icon path={mdiAccountMultipleOutline} title="Tous les membres du secteur" />
 			</a>
 			<a
-				href={`${$eventPath}/admin/manage/subscribes?teams=["${data.team.id}"]`}
+				href={`${$eventPath}/admin/subscribes?teams=["${data.team.id}"]`}
 				class="btn btn-square btn-sm"
 			>
 				<Icon path={mdiClipboardTextMultipleOutline} title="Toutes les inscriptions du secteur" />
@@ -147,7 +149,10 @@
 												goto($urlParam.without(periodOpenKey), { replaceState: true })
 												return
 											}
-											goto($urlParam.with({ [periodOpenKey]: period.id }), { replaceState: true, noScroll: true })
+											goto($urlParam.with({ [periodOpenKey]: period.id }), {
+												replaceState: true,
+												noScroll: true,
+											})
 										}}
 									>
 										<Icon

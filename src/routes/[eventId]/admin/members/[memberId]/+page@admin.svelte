@@ -31,13 +31,10 @@
 
 		<div slot="action">
 			{#if data.memberProfile.leaderOf.length}
-				<a href="{$eventPath}/admin/manage/members?teams={teamsId}" class="btn btn-square btn-sm">
+				<a href="{$eventPath}/admin/members?teams={teamsId}" class="btn btn-square btn-sm">
 					<Icon path={mdiAccountMultipleOutline} title="Tous les membres de ces secteurs" />
 				</a>
-				<a
-					href="{$eventPath}/admin/manage/subscribes?teams={teamsId}"
-					class="btn btn-square btn-sm"
-				>
+				<a href="{$eventPath}/admin/subscribes?teams={teamsId}" class="btn btn-square btn-sm">
 					<Icon
 						path={mdiClipboardTextMultipleOutline}
 						title="Toutes les inscriptions de ces secteurs"

@@ -3,48 +3,15 @@
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
-	import {
-		mdiMenu,
-		mdiChartGantt,
-		mdiFileDocumentMultipleOutline,
-		mdiAccountMultipleOutline,
-		mdiClipboardTextMultipleOutline,
-		mdiCogs,
-	} from '@mdi/js'
+	import { mdiMenu } from '@mdi/js'
 	import DropDown from '$lib/material/DropDown.svelte'
 	import PubliqueMenuItems from './PubliqueMenuItems.svelte'
+	import { adminTabs } from './admin/adminTabs'
+
 	export let pageIndex: LayoutData['pageIndex']
 	export let pages: LayoutData['pages']
 	export let isOwner: boolean
 	export let isLeaderInEvent: boolean
-
-	const adminPages = [
-		{
-			path: '/admin/manage/members',
-			label: 'Membres',
-			icon: mdiAccountMultipleOutline,
-		},
-		{
-			path: '/admin/manage/subscribes',
-			label: 'Inscriptions',
-			icon: mdiClipboardTextMultipleOutline,
-		},
-		{
-			path: '/admin/plan',
-			label: 'Planification',
-			icon: mdiChartGantt,
-		},
-		{
-			path: '/admin/config',
-			label: 'Configuration',
-			icon: mdiCogs,
-		},
-		{
-			path: '/admin/pages',
-			label: 'Les pages',
-			icon: mdiFileDocumentMultipleOutline,
-		},
-	]
 </script>
 
 <div class="gap-2 hidden lg:flex">
@@ -74,7 +41,7 @@
 		{#if isOwner || isLeaderInEvent}
 			<hr class="block lg:hidden" />
 			<h3 class="font-bold opacity-50 pl-3 pt-1 text-xs">Gestion</h3>
-			{#each adminPages as { path, label, icon }}
+			{#each adminTabs as { path, label, icon }}
 				{@const active = $page.route.id?.startsWith(`/[eventId]${path}`)}
 				<a href="{$eventPath}{path}" class="menu-item" class:active>
 					<Icon path={icon} size={20} class="opacity-70" {active} />

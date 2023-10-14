@@ -37,7 +37,7 @@
 	{:else}
 		<p>
 			Retrouve toutes les inscriptions de {subscribe.member.user.firstName} sur
-			<a href="{domain}/{subscribe.period.team.eventId}/admin/manage/members/{subscribe.memberId}">
+			<a href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}">
 				son profil.
 			</a>
 		</p>

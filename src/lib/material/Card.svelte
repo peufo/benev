@@ -11,6 +11,8 @@
 
 <div class="card bg-base-100 shadow-lg {klass}">
 	<div class="card-body p-2 sm:p-8 {bodyClass}">
+		<slot name="top" />
+
 		{#if $$slots.title || $$slots.action}
 			<div class="flex flex-wrap gap-2 mt-2 sm:mt-0 items-center {headerClass}">
 				{#if returnUrl}
