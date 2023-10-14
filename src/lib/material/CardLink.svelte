@@ -11,9 +11,9 @@
     bg-base-100 border rounded-lg p-5
   "
 >
-	<a {href} class="absolute inset-0">{' '}</a>
 	<h2 class="font-medium mb-2">
 		<slot name="title" />
 	</h2>
 	<slot />
+	<a {href} class="absolute inset-0">{' '}</a>
 </div>

@@ -42,7 +42,7 @@
 									<div
 										class="
 											grow flex gap-2 items-center px-2 py-2 rounded
-											{isLeader ? 'relative hover:bg-base-200' : ''}
+											{isLeader ? 'relative z-10 hover:bg-base-200' : ''}
 										"
 									>
 										{#if isLeader}
