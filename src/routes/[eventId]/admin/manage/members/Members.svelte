@@ -12,7 +12,6 @@
 
 	export let selectedColumnsId = ['periods', 'hours', 'sectors']
 	export let columns: Record<string, Column<Member>>
-
 </script>
 
 <div class="table-wrapper">
@@ -20,7 +19,7 @@
 		<table class="table">
 			<thead>
 				<tr class="shadow">
-					<th class="sticky left-0 bg-base-100">Membre</th>
+					<th>Membre</th>
 					{#each selectedColumnsId as colId}
 						<th>{columns[colId].label}</th>
 					{/each}
