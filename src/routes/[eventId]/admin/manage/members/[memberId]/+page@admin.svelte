@@ -45,6 +45,6 @@
 				</a>
 			{/if}
 		</div>
-		<Teams teams={data.memberProfile.leaderOf} />
+		<Teams teams={data.memberProfile.leaderOf} showAll />
 	</Card>
 </div>

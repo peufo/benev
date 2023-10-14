@@ -14,6 +14,9 @@
 		periods: (Period & { subscribes: Subscribe[] })[]
 	})[]
 
+	/** By pass $onlyAvailable flag */
+	export let showAll = false
+
 	$: _teams = teams
 		.map((team) => ({
 			...team,
@@ -21,7 +24,7 @@
 			maxSubscribe: team.periods.map((p) => p.maxSubscribe).reduce((acc, cur) => acc + cur, 0),
 		}))
 		.filter((team) => {
-			if (!$onlyAvailable) return true
+			if (!$onlyAvailable || showAll) return true
 			const nbSubscribes = team.subscribes.filter(
 				({ state }) => state === 'request' || state === 'accepted'
 			).length
