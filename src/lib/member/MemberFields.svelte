@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition'
 	import { mdiClose } from '@mdi/js'
 	import { Field } from '@prisma/client'
-	import { Card, Icon } from '$lib/material'
+	import { Icon, SectionCollapse } from '$lib/material'
 	import { memberFieldType } from '$lib/form'
 	import MemberFieldForm from './MemberFieldForm.svelte'
 
@@ -24,7 +24,7 @@
 	}
 </script>
 
-<Card>
+<SectionCollapse value="member-profil">
 	<span slot="title"> Profil des membres </span>
 	<span slot="subtitle">Informations complémentaires concernant vos membres</span>
 	<div>
@@ -44,7 +44,7 @@
 	</div>
 
 	<button class="btn" on:click={handleClickNewField}> Ajouter un champ </button>
-</Card>
+</SectionCollapse>
 
 <dialog bind:this={formDialog} class="modal">
 	<div class="modal-box">

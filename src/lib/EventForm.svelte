@@ -38,8 +38,6 @@
 	class="{klass} flex flex-col gap-2"
 	use:enhance={form.submit}
 >
-
-
 	{#if isUpdate && event}
 		<InputText
 			key="name"
@@ -59,7 +57,12 @@
 		<input type="hidden" name="timezone" value={new Date().getTimezoneOffset()} />
 	{/if}
 
-	<InputTextarea key="description" label="Description" value={event?.description || ''} />
+	<InputTextarea
+		key="description"
+		label="Description"
+		value={event?.description || ''}
+		textarea={{ rows: 4 }}
+	/>
 
 	<InputText
 		key="web"
@@ -82,8 +85,7 @@
 		</div>
 	</InputText>
 
-	<input type="hidden" name="logo" value={logo}>
-
+	<input type="hidden" name="logo" value={logo} />
 
 	<InputText key="email" label="Email de contact" value={event?.email || ''} />
 	<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
@@ -95,6 +97,5 @@
 		{#if isUpdate}
 			<DeleteButton formaction="?/delete_event" />
 		{/if}
-
 	</div>
 </form>

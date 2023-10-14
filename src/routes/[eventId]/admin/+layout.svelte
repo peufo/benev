@@ -15,7 +15,7 @@
 
 <div class="flex flex-col gap-4 max-w-5xl m-auto">
 	<Card>
-		<div slot="top" class="flex gap-2 mb-2 p-2 shadow rounded-t-2xl">
+		<div slot="top" class="flex gap-2 p-2 shadow rounded-t-2xl">
 			{#each adminTabs as { path, label, icon }}
 				{@const active = path === activeTab?.path}
 				<a
