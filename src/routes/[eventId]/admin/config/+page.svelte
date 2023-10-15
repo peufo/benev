@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, SectionCollapse } from '$lib/material'
+	import { SectionCollapse } from '$lib/material'
 	import EventForm from '$lib/EventForm.svelte'
 	import Share from './Share.svelte'
 	import MemberFields from '$lib/member/MemberFields.svelte'
