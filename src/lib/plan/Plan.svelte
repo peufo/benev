@@ -5,7 +5,6 @@
 	import { Icon } from '$lib/material'
 	import { Period, Subscribe, Team } from '@prisma/client'
 	import PeriodCard from './PeriodCard.svelte'
-	import WorkInProgress from '$lib/WorkInProgress.svelte'
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
 	import { mdiMagnifyMinusOutline, mdiMagnifyPlusOutline } from '@mdi/js'
@@ -65,8 +64,6 @@
 		.fill(0)
 		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
 </script>
-
-<WorkInProgress />
 
 <div class="flex gap-2 justify-end">
 	<button class="btn btn-square btn-sm" on:click={zoom.out} disabled={scale <= scales[0]}>
@@ -141,14 +138,18 @@
 					style:scrollPaddingTop="{headerHeight}px"
 					use:tip={{ content: team.name }}
 				>
-					<div
-						class="relative flex items-center rounded bg-base-200 h-full px-2 outline outline-base-100"
+					<a
+						href="{$eventPath}/teams/{team.id}"
+						class="
+							flex items-center rounded bg-base-100
+							h-full px-2 outline outline-base-100
+							text-sm font-semibold border
+					"
 					>
-						<a href="{$eventPath}/teams/{team.id}" class="absolute inset-0">{' '}</a>
-						<span class="overflow-hidden whitespace-nowrap text-ellipsis font-medium">
+						<span class="overflow-hidden whitespace-nowrap text-ellipsis">
 							{team.name}
 						</span>
-					</div>
+					</a>
 				</div>
 
 				{#each team.periods as period}
