@@ -19,22 +19,20 @@
 	}
 </script>
 
-<div class="card bg-base-100 mx-auto prose p-6">
+<div class="card bg-base-100 mx-auto prose p-6 shadow-md">
 	{#each blocksHTML as html}
 		{@html html}
 	{:else}
 		{#if page?.isIndex}
-			<HelpPage/>
+			<HelpPage />
 		{:else}
-			<div class="text-center p-10">
-				Cette page est vide
-			</div>
+			<div class="text-center p-10">Cette page est vide</div>
 		{/if}
 	{/each}
 
 	{#if isOwner}
 		<div class="flex justify-end not-prose">
-			<a href="{$eventPath}/admin/pages{page ? `/${page.id}` : ''}" class="btn">
+			<a href="{$eventPath}/admin/pages{page ? `/${page.id}` : ''}" class="btn btn-sm">
 				<Icon path={mdiPencilOutline} />
 				Editer cette page
 			</a>

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { mdiPlus } from '@mdi/js'
+	import { mdiFileDocumentOutline, mdiHomeOutline, mdiPlus } from '@mdi/js'
 
-	import { Card, Icon } from '$lib/material'
+	import { Icon } from '$lib/material'
 	import { page } from '$app/stores'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'
@@ -12,36 +12,50 @@
 	const form = useForm()
 </script>
 
-<Card bodyClass="flex flex-row gap-4 items-start flex-wrap">
-	<div>
-		<ul class="menu menu-lg bg-base-200 w-56 rounded-box mt-2 text-clip">
-			<li>
-				<a
-					href="{$eventPath}/admin/pages/{data.pageIndex.id}"
-					class:active={$page.params.pageId === data.pageIndex.id}
-				>
-					{data.pageIndex.title}
-				</a>
-			</li>
+<div class="flex gap-2 items-center">
+	<div class="flex gap-1 overflow-x-auto border p-1 rounded-md">
+		<a
+			href="{$eventPath}/admin/pages/{data.pageIndex.id}"
+			class="menu-item shrink-0"
+			class:active={$page.params.pageId === data.pageIndex.id}
+		>
+			<Icon
+				path={mdiHomeOutline}
+				active={$page.params.pageId === data.pageIndex.id}
+				class="opacity-60"
+				size={20}
+			/>
+			<span>{data.pageIndex.title}</span>
+		</a>
 
-			{#each data.pages as { id, title }}
-				<li>
-					<a href="{$eventPath}/admin/pages/{id}" class:active={$page.params.pageId === id}>
-						{title}
-					</a>
-				</li>
-			{/each}
-		</ul>
+		{#each data.pages as { id, title }}
+			<a
+				href="{$eventPath}/admin/pages/{id}"
+				class="menu-item shrink-0"
+				class:active={$page.params.pageId === id}
+			>
+				<Icon
+					path={mdiFileDocumentOutline}
+					active={$page.params.pageId === id}
+					class="opacity-60"
+					size={20}
+				/>
 
-		<form action="{$eventPath}/admin/pages?/create_page" method="post" use:enhance={form.submit}>
-			<button class="btn w-full mt-2">
-				<Icon path={mdiPlus} />
-				Nouvel page
-			</button>
-		</form>
+				<span>{title}</span>
+			</a>
+		{/each}
 	</div>
 
-	<div class="grow">
-		<slot />
-	</div>
-</Card>
+	<form
+		action="{$eventPath}/admin/pages?/create_page"
+		method="post"
+		class="contents"
+		use:enhance={form.submit}
+	>
+		<button class="btn btn-square btn-sm">
+			<Icon path={mdiPlus} title="Ajouter une page" />
+		</button>
+	</form>
+</div>
+
+<slot />

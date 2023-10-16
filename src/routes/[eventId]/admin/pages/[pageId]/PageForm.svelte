@@ -5,9 +5,10 @@
 	import type { Page } from '@prisma/client'
 
 	import { useForm } from '$lib/form'
-	import { DeleteButton, InputText } from '$lib/material'
+	import { DeleteButton, Icon, InputText } from '$lib/material'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
+	import { mdiLink } from '@mdi/js'
 
 	export let page: Page
 
@@ -44,18 +45,23 @@
 	$: pagePath = `${$eventPath}${page.isIndex ? '' : `/${normalizePath(page.title)}`}`
 </script>
 
-<form method="post" action="?/update_page" use:enhance={form.submit} class="flex flex-col gap-2">
-	<div class="flex flex-wrap gap-4">
-		<InputText
-			key="title"
-			bind:value={page.title}
-			label=""
-			input={{ placeholder: 'Titre de la page' }}
-			class="max-w-xs"
+<form
+	method="post"
+	action="?/update_page"
+	use:enhance={form.submit}
+	class="flex flex-col gap-2 mt-4"
+>
+	<div class="flex flex-wrap gap-2 items-center">
+		<span
+			contenteditable="true"
+			class="font-medium text-lg py-1 px-4 grow rounded-lg"
+			bind:innerText={page.title}
 		/>
+		<input type="hidden" name="title" value={page.title} />
 
-		<a href={pagePath} class="link link-hover pt-7">
-			{pagePath}
+		<a href={pagePath} class="link link-hover text-sm flex opacity-70 pr-4">
+			<Icon path={mdiLink} class="opacity-60 -rotate-45" size={18} />
+			<span>{pagePath}</span>
 		</a>
 	</div>
 
@@ -64,12 +70,12 @@
 	<input type="hidden" name="content" value={page.content} />
 	<input type="hidden" name="eventId" value={page.eventId} />
 
-	<div class="input input-bordered min-h-[555px] overflow-auto prose max-w-none">
+	<div class="input input-bordered prose max-w-none h-max">
 		<div bind:this={holder} />
 	</div>
 
 	<div class="flex flex-row-reverse gap-2">
-		<button class="btn">Valider</button>
+		<button class="btn">Sauvegarder</button>
 		<DeleteButton formaction="?/delete_page" disabled={page.isIndex} />
 	</div>
 </form>
