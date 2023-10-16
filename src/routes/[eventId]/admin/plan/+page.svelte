@@ -23,7 +23,7 @@
 
 	let scale = 6
 	let scrollContainer: HTMLDivElement | undefined
-	const scales = [1, 2, 6, 12, 24]
+	const scales = [1, 2, 4, 6, 12, 16, 24]
 	const zoom = (() => {
 		let index = scales.indexOf(scale) || 3
 
