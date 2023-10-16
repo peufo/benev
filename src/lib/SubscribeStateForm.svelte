@@ -18,7 +18,7 @@
 	const states: States = {
 		request: { label: 'Rétablir', icon: mdiAlertOctagonOutline, class: 'fill-warning' },
 		accepted: { label: 'Confirmer', icon: mdiCheck, class: 'fill-success' },
-		denied: { label: 'Refuser', icon: mdiCloseOctagonOutline, class: 'fill-error' },
+		denied: { label: 'Décliner', icon: mdiCloseOctagonOutline, class: 'fill-error' },
 		cancelled: { label: 'Annuler', icon: mdiTrashCanOutline, class: 'fill-error' },
 	}
 </script>
