@@ -17,8 +17,6 @@ export const load = async ({ url, params: { eventId } }) => {
 		where.id = { in: teams }
 	}
 
-	console.log(where)
-
 	return {
 		teams_periods: await prisma.team.findMany({
 			where,

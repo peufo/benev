@@ -12,13 +12,18 @@
 	let klass = ''
 	export { klass as class }
 	export let period: Period | undefined = undefined
-	$: isUpdate = !!period
 
 	const dispatch = createEventDispatcher<{ success: void }>()
+
+	const successMessages: Record<string, string> = {
+		'?/update_period': 'Période mise à jour',
+		'?/new_period': 'Période ajoutée',
+		'?/delete_period': 'Période supprimée',
+	}
+
 	const form = useForm({
 		successReset: false,
-		successMessage: (action) =>
-			action.search === '?/update_period' ? 'Période mise à jour' : 'Période ajoutée',
+		successMessage: (action) => successMessages[action.search] || 'Succès',
 		successCallback: () => {
 			dispatch('success')
 		},
@@ -54,14 +59,14 @@
 </script>
 
 <form
-	action="{basePath}{isUpdate ? `/${$page.params.periodId}?/update_period` : '?/new_period'}"
+	action="{basePath}{!!period ? `/${$page.params.periodId}?/update_period` : '?/new_period'}"
 	method="post"
 	use:enhance={form.submit}
 	class={klass}
 >
 	<div class="flex flex-wrap gap-2 items-end">
 		<div class="flex gap-2 grow flex-wrap">
-			{#if isUpdate && period}
+			{#if !!period}
 				<input type="hidden" name="id" value={period.id} />
 			{/if}
 
@@ -91,9 +96,9 @@
 		/>
 
 		<div class="flex flex-row-reverse gap-2 grow">
-			{#if isUpdate}
+			{#if !!period}
 				<button class="btn" type="submit">Valider</button>
-				<DeleteButton formaction="?/delete_period" />
+				<DeleteButton formaction="{basePath}/{period.id}?/delete_period" />
 				<div class="grow" />
 			{:else}
 				<button class="btn grow" type="submit">Ajouter</button>

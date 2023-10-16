@@ -11,6 +11,8 @@ export const load = async ({ locals, params: { teamId, periodId } }) => {
 	}
 }
 
+// TODO: Avertire les membres inscrits
+
 export const actions = {
 	update_period: async ({ params, request, locals }) => {
 		await isLeaderOrThrow(params.teamId, locals)
@@ -24,11 +26,11 @@ export const actions = {
 			})
 		)
 	},
-	delete_period: async ({ params, locals }) => {
-		await isLeaderOrThrow(params.teamId, locals)
+	delete_period: async ({ params: { eventId, teamId, periodId }, locals }) => {
+		await isLeaderOrThrow(teamId, locals)
 		return tryOrFail(
-			() => prisma.period.delete({ where: { id: params.periodId } }),
-			`/${params.eventId}/teams/${params.teamId}`
+			() => prisma.period.delete({ where: { id: periodId } }),
+			teamId !== 'undefined' ? `/${eventId}/teams/${teamId}` : undefined
 		)
 	},
 }
