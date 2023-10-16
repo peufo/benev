@@ -4,12 +4,17 @@
 	import { CopyData } from '$lib/material'
 	import { getAge } from '$lib/utils'
 	import { eventPath } from '$lib/store'
+	import { page } from '$app/stores'
 
 	type Member = PageData['members'][number]
 	export let fields: PageData['fields']
 
 	const getData = async () => {
-		const { data } = await axios.get<{ members: Member[] }>(`${$eventPath}/admin/members?all=1`)
+		const searchParams = $page.url.searchParams
+		searchParams.append('all', 'true')
+		const { data } = await axios.get<{ members: Member[] }>(
+			`${$eventPath}/admin/members?${searchParams.toString()}`
+		)
 		return data.members
 	}
 
