@@ -11,6 +11,7 @@
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
+	export let scale = 6
 
 	onMount(() => {
 		if (!document.location.hash) return
@@ -26,7 +27,7 @@
 
 	const headerHeight = 40
 	const hourHeight = 40
-	let scale = 6
+
 	let containerWidth = 0
 	let scrollContainer: HTMLDivElement
 
@@ -45,42 +46,14 @@
 		days.push(day)
 	}
 
-	const scales = [1, 2, 6, 12, 24]
-	const zoom = (() => {
-		let index = scales.indexOf(scale) || 3
-		return {
-			in: () => {
-				if (!scales[index + 1]) return
-				scale = scales[++index]
-			},
-			out: () => {
-				if (!scales[index - 1]) return
-				scale = scales[--index]
-			},
-		}
-	})()
-
 	$: hours = Array(scale)
 		.fill(0)
 		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
 </script>
 
-<div class="flex gap-2 justify-end">
-	<button class="btn btn-square btn-sm" on:click={zoom.out} disabled={scale <= scales[0]}>
-		<Icon path={mdiMagnifyMinusOutline} />
-	</button>
-	<button
-		class="btn btn-square btn-sm"
-		on:click={zoom.in}
-		disabled={scale >= scales[scales.length + 1]}
-	>
-		<Icon path={mdiMagnifyPlusOutline} />
-	</button>
-</div>
-
 <div
 	bind:this={scrollContainer}
-	class=" max-h-[100vh]
+	class="max-h-[100vh] max-w[100hw] bg-base-100
 			overflow-auto table-pin-cols bordered
 			snap-x scroll-pl-16 scroll-p-20
 		"

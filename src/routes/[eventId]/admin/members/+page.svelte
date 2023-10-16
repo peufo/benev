@@ -48,7 +48,7 @@
 	const summary = derived(urlParam, ({ has }) => has('summary'))
 </script>
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-3">
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
 		<InputSearch />
 		<MembersFilter fields={data.fields} teams={data.teams} />
