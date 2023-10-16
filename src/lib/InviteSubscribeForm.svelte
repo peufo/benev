@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiAccountPlusOutline } from '@mdi/js'
 	import { Member, User } from '@prisma/client'
+	import { createEventDispatcher } from 'svelte'
 	import { Dialog, Icon, InputRelation } from '$lib/material'
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
@@ -11,8 +12,12 @@
 	export let periodId: string
 
 	let newMemberDialog: HTMLDialogElement
+	const dispatch = createEventDispatcher<{ success: void }>()
 
-	const form = useForm()
+	const form = useForm({
+		successMessage: 'Inscription crée',
+		successCallback: () => dispatch('success'),
+	})
 	let member: (Member & { user: User }) | null = null
 </script>
 

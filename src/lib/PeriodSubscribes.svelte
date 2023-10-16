@@ -14,12 +14,12 @@
 
 <div class="flex flex-col gap-2">
 	{#each subscribes as subscribe}
-		<div class="flex gap-2 justify-end items-center">
-			<SubscribeCreatedBy createdBy={subscribe.createdBy} size={20} />
+		<div class="flex flex-wrap gap-1 justify-end items-center">
+			<SubscribeCreatedBy createdBy={subscribe.createdBy} size={20} class="mr-auto" />
 
 			{#if subscribe.member}
 				<a
-					class="badge badge-lg"
+					class="badge badge-lg whitespace-nowrap hover:bg-base-200"
 					title="Voir les infos de {subscribe.member.user.firstName}"
 					href="{$eventPath}/admin/members/{subscribe.memberId}"
 				>
@@ -30,7 +30,7 @@
 				<Contact user={subscribe.member.user} />
 			{/if}
 
-			<SubscribeStateForm {subscribe} isLeader />
+			<SubscribeStateForm {subscribe} isLeader on:success />
 		</div>
 	{:else}
 		<div class="flex flex-end justify-center text-secondary">Aucune inscription pour l'instant</div>

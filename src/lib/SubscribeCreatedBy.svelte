@@ -4,13 +4,15 @@
 
 	export let createdBy: 'leader' | 'user'
 	export let size = 24
+	let klass = ''
+	export { klass as class }
 </script>
 
 {#if createdBy === 'leader'}
 	<Icon
 		path={mdiShieldAccount}
 		title="Inscrit par un responsable"
-		class="opacity-60"
+		class="opacity-60 {klass}"
 		{size}
 		disableTitlePropagation
 	/>
@@ -18,7 +20,7 @@
 	<Icon
 		path={mdiAccountCircleOutline}
 		title="Inscrit par le membre"
-		class="opacity-60"
+		class="opacity-60 {klass}"
 		{size}
 		disableTitlePropagation
 	/>

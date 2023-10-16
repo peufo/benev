@@ -24,6 +24,7 @@
 </script>
 
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte'
 	import type { Subscribe } from '@prisma/client'
 	import SubscribeState from '$lib/SubscribeState.svelte'
 	import { useForm } from '$lib/form'
@@ -43,8 +44,13 @@
 	export let isLeader = false
 
 	let isMember = subscribe.memberId === $page.data.member?.id
+	const dispatch = createEventDispatcher<{ success: void }>()
 
-	const form = useForm({ successMessage: 'Status changé', successReset: false })
+	const form = useForm({
+		successMessage: 'Status changé',
+		successReset: false,
+		successCallback: () => dispatch('success'),
+	})
 	let creatorStates: Partial<States> = {}
 	let subscriberStates: Partial<States> = {}
 	$: creatorStates = creatorEditions[subscribe.state].reduce(

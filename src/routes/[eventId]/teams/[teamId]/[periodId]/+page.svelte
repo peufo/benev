@@ -6,7 +6,7 @@
 	import { Card, Dialog, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import PeriodForm from '$lib/PeriodForm.svelte'
-	import Subscribes from '$lib/PeriodSubscribes.svelte'
+	import PeriodSubscribes from '$lib/PeriodSubscribes.svelte'
 
 	export let data
 
@@ -32,7 +32,7 @@
 			<Progress period={data.period} withLabel />
 		</div>
 		<div class="flex flex-col gap-2">
-			<Subscribes subscribes={data.period.subscribes} />
+			<PeriodSubscribes subscribes={data.period.subscribes} />
 			<InviteSubscribeForm periodId={data.period.id} />
 		</div>
 	</div>

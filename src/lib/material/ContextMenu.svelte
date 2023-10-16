@@ -71,7 +71,7 @@
 		}}
 		class="
 			border p-2 rounded-xl fixed z-50 shadow-xl
-			bg-base-100/40 backdrop-blur
+			bg-base-100
 		"
 		style="left: {position.x}px; top: {position.y}px;"
 	>

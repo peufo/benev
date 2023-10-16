@@ -1,20 +1,24 @@
 <script lang="ts">
-	import PeriodForm from '$lib/PeriodForm.svelte'
+	import { tick } from 'svelte'
+	import { mdiOpenInNew, mdiPencilOutline } from '@mdi/js'
+	import { Period, Subscribe } from '@prisma/client'
 	import { formatRangeShort } from '$lib/formatRange'
 	import { ContextMenu, Dialog, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import { mdiOpenInNew, mdiPencilOutline } from '@mdi/js'
-	import { Period } from '@prisma/client'
-	import { tick } from 'svelte'
+	import PeriodForm from '$lib/PeriodForm.svelte'
+	import PeriodSubscribes from '$lib/PeriodSubscribes.svelte'
+	import InviteSubscribeForm from '$lib/InviteSubscribeForm.svelte'
+
+	type Period_Subscribes = Period & { subscribes: Subscribe[] }
 
 	let contextMenu: ContextMenu
-	let period: Period | null = null
+	let period: Period_Subscribes | null = null
 	let periodForm: PeriodForm
 
 	let editIsActive = false
 	let editDialog: HTMLDialogElement
 
-	export function open(event: MouseEvent, _period: Period) {
+	export function open(event: MouseEvent, _period: Period_Subscribes & {}) {
 		period = _period
 		contextMenu.open(event)
 	}
@@ -32,13 +36,18 @@
 		periodForm.setPeriod(period)
 		editDialog.showModal()
 	}
+
+	$: isComplet =
+		period &&
+		period.subscribes.filter(({ state }) => state === 'request' || state === 'accepted').length >=
+			period.maxSubscribe
 </script>
 
 <ContextMenu bind:this={contextMenu} on:close={() => !editDialog?.open && (editIsActive = false)}>
 	{#if period}
-		<div class="max-w-[320px] flex flex-col gap-2">
+		<div class="flex flex-col gap-2">
 			<div class="flex gap-2 items-center">
-				<h3 class="font-medium text-sm">{formatRangeShort(period)}</h3>
+				<h3 class="font-medium ml-2">{formatRangeShort(period)}</h3>
 
 				<div class="grow" />
 
@@ -58,6 +67,11 @@
 					/>
 				</a>
 			</div>
+
+			<PeriodSubscribes subscribes={period.subscribes} on:success={() => contextMenu.close()} />
+			{#if !isComplet}
+				<InviteSubscribeForm periodId={period.id} on:success={() => contextMenu.close()} />
+			{/if}
 		</div>
 	{/if}
 </ContextMenu>
