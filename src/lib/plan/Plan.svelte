@@ -8,6 +8,9 @@
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
 	import { newPeriod } from './newPeriod'
+	import { Icon } from '$lib/material'
+	import { mdiPlus } from '@mdi/js'
+	import { page } from '$app/stores'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -145,6 +148,11 @@
 				{/each}
 			</div>
 		{/each}
+
+		<a class="btn btn-sm z-50" href="{$eventPath}/teams/create?redirectTo={$page.url.pathname}">
+			<Icon path={mdiPlus} title="Nouveau secteur" />
+			<span>Ajouter</span>
+		</a>
 	</div>
 </div>
 

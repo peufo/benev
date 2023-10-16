@@ -7,6 +7,7 @@
 
 	import InviteForm from '$lib/InviteForm.svelte'
 	import InputMembers from '$lib/InputMembers.svelte'
+	import { page } from '$app/stores'
 
 	let klass = ''
 	export { klass as class }
@@ -22,6 +23,9 @@
 	const form = useForm({ successUpdate: false })
 
 	let inviteDialog: HTMLDialogElement
+
+	$: redirectTo =
+		$page.url.searchParams.get('redirectTo') || `${$eventPath}/teams${team ? `/${team.id}` : ''}`
 </script>
 
 <form method="post" class="{klass} flex flex-col gap-2" use:enhance={form.submit}>
@@ -37,13 +41,15 @@
 
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
 
+	<input type="hidden" name="redirectTo" value={$page.url.searchParams.get('redirectTo') || ''} />
+
 	<div class="flex gap-2 flex-row-reverse">
 		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit"> Valider </button>
 		{#if isUpdate}
 			<DeleteButton formaction="?/delete" />
 		{/if}
 		<div class="grow" />
-		<a class="btn btn-ghost" href="{$eventPath}/teams{team ? `/${team.id}` : ''}">Annuler</a>
+		<a class="btn btn-ghost" href={redirectTo}>Annuler</a>
 	</div>
 </form>
 

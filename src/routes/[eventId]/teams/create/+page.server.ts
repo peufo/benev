@@ -6,7 +6,7 @@ export const actions = {
 	default: async ({ params, request, locals }) => {
 		await isOwnerOrThrow(params.eventId, locals)
 
-		const { err, data } = await parseFormData(request, teamShema)
+		const { err, data, formData } = await parseFormData(request, teamShema)
 		if (err) return err
 
 		return tryOrFail(
@@ -17,7 +17,10 @@ export const actions = {
 						eventId: params.eventId,
 					},
 				}),
-			(team) => `/${params.eventId}/teams/${team.id}`
+			(team) => {
+				const redirectTo = formData['redirectTo'] as string
+				return redirectTo || `/${params.eventId}/teams/${team.id}`
+			}
 		)
 	},
 }
