@@ -83,9 +83,17 @@
 		<!-- Full screen -->
 		<button class="btn btn-square btn-sm join-item" on:click={toggleFullscreen}>
 			{#if isFullscreen}
-				<Icon path={mdiArrowCollapse} title="Quitter le mode plein écran" />
+				<Icon
+					path={mdiArrowCollapse}
+					title="Quitter le mode plein écran"
+					tippyProps={{ appendTo: 'parent' }}
+				/>
 			{:else}
-				<Icon path={mdiArrowExpand} title="Ouvrir le mode plein écran" />
+				<Icon
+					path={mdiArrowExpand}
+					title="Ouvrir le mode plein écran"
+					tippyProps={{ appendTo: 'parent' }}
+				/>
 			{/if}
 		</button>
 	</div>

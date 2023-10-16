@@ -107,7 +107,7 @@
 					class="w-36 sticky top-0 pb-2 z-10"
 					style:height="{headerHeight}px"
 					style:scrollPaddingTop="{headerHeight}px"
-					use:tip={{ content: team.name }}
+					use:tip={{ content: team.name, appendTo: 'parent' }}
 				>
 					<a
 						href="{$eventPath}/teams/{team.id}"
