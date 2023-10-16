@@ -123,7 +123,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 						await sendEmailTemplate(EmailSubscribeState, {
 							from: subscribe.period.team.event.name,
 							to,
-							subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'refusée'}`,
+							subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'déclinée'}`,
 							props: { subscribe },
 						})
 				}

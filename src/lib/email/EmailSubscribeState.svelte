@@ -16,7 +16,7 @@
 	title={subscribe.period.team.event.name}
 	subtitle="{to === 'user' ? 'Ton' : 'Une'} inscription a été {subscribe.state === 'accepted'
 		? 'validée'
-		: 'refusée'}"
+		: 'déclinée'}"
 >
 	{#if subscribe.state === 'accepted'}
 		{#if to === 'user'}
@@ -32,12 +32,11 @@
 			</p>
 		{/if}
 	{:else if to === 'user'}
-		<p>Désolé, ton inscription à la période de travail suivante a été refusée :</p>
+		<p>Ton inscription à la période de travail suivante a été déclinée :</p>
 	{:else}
 		<p>
-			Désolé,
 			<b>{subscribe.member.user.firstName} {subscribe.member.user.lastName}</b>
-			a refusé de participer à la période de travail suivante :
+			a décliné de participer à la période de travail suivante :
 		</p>
 	{/if}
 

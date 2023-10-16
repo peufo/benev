@@ -5,8 +5,8 @@ import { type ZodObj } from './utils'
 export const subscribeStateLabel: Record<Subscribe['state'], string> = {
 	request: 'Demande en cours',
 	accepted: 'Validé',
-	denied: 'Refusé',
-	cancelled: 'Annuler',
+	denied: 'Décliné',
+	cancelled: 'Annulé',
 }
 
 const subscribeForm = {

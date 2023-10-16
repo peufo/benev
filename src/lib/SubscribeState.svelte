@@ -33,7 +33,7 @@
 	<Icon
 		path={mdiCloseOctagonOutline}
 		class="fill-error {klass}"
-		title="Inscription refusée {changeAuthor}"
+		title="Inscription déclinée {changeAuthor}"
 	/>
 {:else if subscribe.state === 'cancelled'}
 	<Icon
