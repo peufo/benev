@@ -17,10 +17,9 @@
 	subtitle="{to === 'user' ? 'Ton' : 'Une'} inscription a été annulée"
 >
 	{#if to === 'user'}
-		<p>Désolé, ton inscription à la période de travail suivante a été annulée :</p>
+		<p>Ton inscription à la période de travail suivante a été annulée :</p>
 	{:else}
 		<p>
-			Désolé,
 			<b>{subscribe.member.user.firstName} {subscribe.member.user.lastName}</b>
 			a annulé sa participation à la période de travail suivante :
 		</p>
