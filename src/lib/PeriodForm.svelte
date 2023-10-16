@@ -17,7 +17,8 @@
 	const dispatch = createEventDispatcher<{ success: void }>()
 	const form = useForm({
 		successReset: false,
-		successMessage: isUpdate ? 'Période mise à jour' : 'Période ajoutée',
+		successMessage: (action) =>
+			action.search === '?/update_period' ? 'Période mise à jour' : 'Période ajoutée',
 		successCallback: () => {
 			dispatch('success')
 		},
@@ -48,12 +49,12 @@
 		start = end
 		end = _end.add(step, 'minute').format('YYYY-MM-DDTHH:mm')
 	}
+
+	$: basePath = `${$eventPath}/teams/${$page.params.teamId}`
 </script>
 
 <form
-	action={`${$eventPath}/teams/${$page.params.teamId}${
-		isUpdate ? `/${$page.params.periodId}?/update_period` : '?/new_period'
-	}`}
+	action="{basePath}{isUpdate ? `/${$page.params.periodId}?/update_period` : '?/new_period'}"
 	method="post"
 	use:enhance={form.submit}
 	class={klass}
