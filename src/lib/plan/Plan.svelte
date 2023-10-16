@@ -14,7 +14,7 @@
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
-	export let scale = 6
+	export let scale = 12
 	export let scrollContainer: HTMLDivElement | undefined = undefined
 
 	const headerHeight = 40

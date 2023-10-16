@@ -8,7 +8,6 @@
 	import { Icon, InputCheckboxsMenu } from '$lib/material'
 	import { Plan } from '$lib/plan'
 	import { onMount, tick } from 'svelte'
-	import { Period } from '@prisma/client'
 
 	export let data
 
@@ -22,7 +21,7 @@
 		}
 	})
 
-	let scale = 6
+	let scale = 12
 	let scrollContainer: HTMLDivElement | undefined
 	const scales = [1, 2, 4, 6, 12, 16, 24]
 	const zoom = (() => {
