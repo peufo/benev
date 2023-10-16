@@ -23,9 +23,10 @@
 	on:keyup
 	class="
 		absolute left-2 right-0
-		bg-base-200 border rounded-md p-0 text-sm
+		bg-base-300/50
+		border rounded-md p-0 text-sm
 		hover:z-10
-		hover:outline outline-1 outline-primary
+		hover:outline outline-1 outline-secondary
 		overflow-hidden shadow min-h-[30px]
 	"
 	style:top="{top}px"

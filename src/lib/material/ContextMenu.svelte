@@ -69,7 +69,10 @@
 			mouseHover = false
 			handleMouseLeave()
 		}}
-		class="border border-secondary p-2 rounded-xl fixed z-50 bg-base-100 shadow-xl"
+		class="
+			border p-2 rounded-xl fixed z-50 shadow-xl
+			bg-base-100/40 backdrop-blur
+		"
 		style="left: {position.x}px; top: {position.y}px;"
 	>
 		<slot />
