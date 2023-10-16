@@ -29,10 +29,14 @@
 
 		async function updateScroll(previousScale: number, newScale: number) {
 			if (!scrollContainer) return
+			const { scrollTop, clientHeight } = scrollContainer
+			const halfHeight = clientHeight / 2
+			const scrollCenter = scrollTop + halfHeight
 			const ratio = newScale / previousScale
-			const scrollTop = scrollContainer?.scrollTop
+			const top = scrollCenter * ratio - halfHeight
+
 			await tick()
-			scrollContainer.scrollTo({ top: scrollTop * ratio, behavior: 'instant' })
+			scrollContainer.scrollTo({ top, behavior: 'instant' })
 		}
 
 		return {
