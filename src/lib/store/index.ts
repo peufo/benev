@@ -4,7 +4,7 @@ import { sessionStore } from './utils'
 
 export const eventPath = derived(page, ({ params }) => (params.eventId ? `/${params.eventId}` : ''))
 export const display = sessionStore<'list' | 'table'>('display', 'list')
-export const onlyAvailable = sessionStore('onlyAvailable', true)
+export const onlyAvailable = sessionStore('onlyAvailable', false)
 
 export const param = derived(page, ({ url }) => {
 	/** Return new url with new params */
