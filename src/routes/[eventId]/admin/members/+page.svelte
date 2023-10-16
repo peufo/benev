@@ -2,18 +2,18 @@
 	import { mdiChevronRight, mdiSigma } from '@mdi/js'
 	import { slide } from 'svelte/transition'
 	import { derived } from 'svelte/store'
-	import { navigating } from '$app/stores'
 
 	import type { PageData } from './$types'
 	import { Icon, InputSearch, Pagination } from '$lib/material'
 	import { urlParam } from '$lib/store'
+	import ColumnsSelect, { type Column } from '$lib/ColumnsSelect.svelte'
+	import { getAge } from '$lib/utils'
+	import { jsonParse } from '$lib/jsonParse'
 	import Members from './Members.svelte'
 	import MembersCopy from './MembersCopy.svelte'
 	import MembersFilter from './MembersFilter.svelte'
 	import MembersStats from './MembersStats.svelte'
-	import ColumnsSelect, { type Column } from '$lib/ColumnsSelect.svelte'
-	import { getAge } from '$lib/utils'
-	import { jsonParse } from '$lib/jsonParse'
+	import MembersEmails from './MembersEmails.svelte'
 
 	export let data
 
@@ -68,6 +68,7 @@
 		</a>
 
 		<MembersCopy fields={data.fields} />
+		<MembersEmails />
 	</div>
 
 	{#if $summary}
