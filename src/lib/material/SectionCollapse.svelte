@@ -3,16 +3,31 @@
 	import { mdiChevronRight } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	import { urlParam } from '$lib/store'
+	import { onMount } from 'svelte'
 
 	export let value: string
 	let klass = ''
 	export { klass as class }
 
 	$: isOpen = $urlParam.hasValue('section', value)
+
+	let card: HTMLDivElement
+
+	function handleClick() {
+		setTimeout(() => {
+			window.scrollTo({ top: card.offsetTop + 50, behavior: 'smooth' })
+		}, 200)
+	}
 </script>
 
-<div class="card border shadow-md {klass}">
-	<a class="p-7" href={$urlParam.toggle({ section: value })} data-sveltekit-noscroll>
+<div class="card border shadow-md {klass}" bind:this={card}>
+	<a
+		id={value}
+		class="p-7"
+		href={$urlParam.toggle({ section: value })}
+		data-sveltekit-noscroll
+		on:click={handleClick}
+	>
 		<div class="flex gap-2">
 			<div class="card-title grow">
 				<slot name="title" />
