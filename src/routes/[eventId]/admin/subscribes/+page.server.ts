@@ -5,7 +5,7 @@ import { error } from '@sveltejs/kit'
 import { z } from 'zod'
 
 export const load = async ({ url, params: { eventId } }) => {
-	// TODO: use enum provide by prisma
+	// TODO: use enum provided by prisma for "createdBy"
 
 	const { skip, take, ...query } = parseQuery(
 		url,

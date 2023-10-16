@@ -2,12 +2,10 @@
 	import { onMount } from 'svelte'
 	import dayjs, { type Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
-	import { Icon } from '$lib/material'
 	import { Period, Subscribe, Team } from '@prisma/client'
 	import PeriodCard from './PeriodCard.svelte'
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
-	import { mdiMagnifyMinusOutline, mdiMagnifyPlusOutline } from '@mdi/js'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]

@@ -1,12 +1,32 @@
-import { prisma } from '$lib/server'
+import { z } from 'zod'
+import { Prisma } from '@prisma/client'
+import { parseQuery, prisma } from '$lib/server'
+import { jsonParse } from '$lib/jsonParse.js'
 
-export const load = async ({ params: { eventId } }) => ({
-	teams: await prisma.team.findMany({
-		where: { eventId },
-		include: {
-			periods: {
-				include: { subscribes: true },
+export const load = async ({ url, params: { eventId } }) => {
+	const query = parseQuery(
+		url,
+		z.object({
+			teams: z.string().optional(),
+		})
+	)
+	const where: Prisma.TeamWhereInput = { eventId }
+
+	if (query.teams) {
+		const teams = jsonParse<string[]>(query.teams, [])
+		where.id = { in: teams }
+	}
+
+	console.log(where)
+
+	return {
+		teams_periods: await prisma.team.findMany({
+			where,
+			include: {
+				periods: {
+					include: { subscribes: true },
+				},
 			},
-		},
-	}),
-})
+		}),
+	}
+}

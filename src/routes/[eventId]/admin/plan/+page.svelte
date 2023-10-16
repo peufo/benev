@@ -5,7 +5,7 @@
 		mdiMagnifyMinusOutline,
 		mdiMagnifyPlusOutline,
 	} from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon, InputCheckboxsMenu } from '$lib/material'
 	import { Plan } from '$lib/plan'
 	import { onMount } from 'svelte'
 
@@ -54,6 +54,14 @@
 	<div class="flex gap-3" class:pr-4={isFullscreen}>
 		<div class="grow" />
 
+		<InputCheckboxsMenu
+			key="teams"
+			label="secteurs"
+			options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
+			enhanceDisabled
+			badgePrimary
+		/>
+
 		<!-- ZOOM -->
 		<div class="join">
 			<button
@@ -82,5 +90,5 @@
 		</button>
 	</div>
 
-	<Plan teams={data.teams} {scale} />
+	<Plan teams={data.teams_periods} {scale} />
 </div>
