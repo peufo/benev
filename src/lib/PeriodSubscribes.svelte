@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './$types'
+	import type { PageData } from '../routes/[eventId]/teams/[teamId]/$types'
 	import type { User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'

@@ -8,6 +8,7 @@
 	import { Icon, InputCheckboxsMenu } from '$lib/material'
 	import { Plan } from '$lib/plan'
 	import { onMount, tick } from 'svelte'
+	import { Period } from '@prisma/client'
 
 	export let data
 

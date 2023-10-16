@@ -3,7 +3,8 @@
 	import dayjs, { type Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	import { Period, Subscribe, Team } from '@prisma/client'
-	import PeriodCard from './PeriodCard.svelte'
+	import PeriodCard from '$lib/plan/PeriodCard.svelte'
+	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
 	dayjs.locale('fr-ch')
@@ -26,6 +27,8 @@
 
 	const headerHeight = 40
 	const hourHeight = 40
+
+	let contextMenu: PeriodContextMenu
 
 	let containerWidth = 0
 	let range: { start: Dayjs; end: Dayjs }
@@ -128,12 +131,21 @@
 				</div>
 
 				{#each team.periods as period}
-					<PeriodCard {period} origin={range.start} {hourHeight} {headerHeight} {scale} />
+					<PeriodCard
+						{period}
+						origin={range.start}
+						{hourHeight}
+						{headerHeight}
+						{scale}
+						on:click={(event) => contextMenu.open(event, period)}
+					/>
 				{/each}
 			</div>
 		{/each}
 	</div>
 </div>
+
+<PeriodContextMenu bind:this={contextMenu} />
 
 <style>
 	.scale {

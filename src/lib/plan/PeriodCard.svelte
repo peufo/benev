@@ -3,7 +3,6 @@
 	import { Period, Subscribe } from '@prisma/client'
 	import { formatRangeHour } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
-	import { eventPath } from '$lib/store'
 
 	export let period: Period & { subscribes: Subscribe[] }
 	export let origin: dayjs.Dayjs
@@ -16,9 +15,12 @@
 	$: height = dayjs(period.end).diff(period.start) * msHeight
 </script>
 
-<a
+<div
 	id={period.id}
-	href="{$eventPath}/teams/{period.teamId}/{period.id}"
+	role="button"
+	tabindex="0"
+	on:click
+	on:keyup
 	class="
 		absolute left-2 right-0
 		bg-base-200 border rounded-md p-0 text-sm
@@ -32,4 +34,4 @@
 	<Progress {period} class="justify-between" badgeClass="mr-1" progressClass="bg-red-400">
 		<span slot="before-badge" class="text-xs font-semibold ml-1">{formatRangeHour(period)}</span>
 	</Progress>
-</a>
+</div>

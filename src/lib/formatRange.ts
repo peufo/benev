@@ -10,9 +10,17 @@ const formater = new Intl.DateTimeFormat('fr-ch', {
 	timeZone: 'Europe/Zurich',
 })
 
+const formaterShort = new Intl.DateTimeFormat('fr-ch', {
+	weekday: 'short',
+	hour: 'numeric',
+	minute: 'numeric',
+	timeZone: 'Europe/Zurich',
+})
+
 type Range = { start: Date; end: Date }
 
 export const formatRange = ({ start, end }: Range) => formater.formatRange(start, end)
+export const formatRangeShort = ({ start, end }: Range) => formaterShort.formatRange(start, end)
 
 export const formatRangeHour = ({ start, end }: Range) =>
 	[dayjs(start).format('HH:mm'), dayjs(end).format('HH:mm')].join(' – ')

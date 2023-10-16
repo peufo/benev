@@ -12,7 +12,7 @@
 	let klass = ''
 	export { klass as class }
 	export let period: Period | undefined = undefined
-	const isUpdate = !!period
+	$: isUpdate = !!period
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 	const form = useForm({
@@ -25,6 +25,12 @@
 
 	let start = (period ? dayjs(period.start) : dayjs().startOf('hour')).format('YYYY-MM-DDTHH:mm')
 	let end = (period ? dayjs(period.end) : dayjs().startOf('hour')).format('YYYY-MM-DDTHH:mm')
+
+	export function setPeriod(_period: Period) {
+		period = _period
+		start = dayjs(period.start).format('YYYY-MM-DDTHH:mm')
+		end = dayjs(period.end).format('YYYY-MM-DDTHH:mm')
+	}
 
 	function handleStartBlur() {
 		if (!end) end = start

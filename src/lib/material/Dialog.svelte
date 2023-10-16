@@ -7,14 +7,18 @@
 
 <dialog bind:this={dialog} class="modal">
 	<div class="modal-box">
-		<div class="flex justify-between">
+		<div class="flex">
 			{#if title}
 				<span class="card-title">
 					{title}
 				</span>
 			{/if}
 
-			<button type="button" class="btn btn-square btn-ghost btn-sm" on:click={() => dialog.close()}>
+			<button
+				type="button"
+				class="btn btn-square btn-ghost btn-sm ml-auto"
+				on:click={() => dialog.close()}
+			>
 				<Icon path={mdiClose} />
 			</button>
 		</div>

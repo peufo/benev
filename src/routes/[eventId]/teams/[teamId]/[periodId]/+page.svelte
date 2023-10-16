@@ -5,8 +5,8 @@
 	import { formatRange } from '$lib/formatRange.js'
 	import { Card, Dialog, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import PeriodForm from './PeriodForm.svelte'
-	import Subscribes from '../Subscribes.svelte'
+	import PeriodForm from '$lib/PeriodForm.svelte'
+	import Subscribes from '$lib/PeriodSubscribes.svelte'
 
 	export let data
 
@@ -15,7 +15,7 @@
 
 <Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams/{data.period.teamId}">
 	<h2 slot="title">
-		{data.period.team.name}<br>
+		{data.period.team.name}<br />
 		{formatRange(data.period)}
 	</h2>
 	<div slot="action">
