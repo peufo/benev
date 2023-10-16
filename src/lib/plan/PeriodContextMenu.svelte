@@ -1,18 +1,21 @@
 <script lang="ts">
 	import { tick } from 'svelte'
-	import { mdiOpenInNew, mdiPencilOutline } from '@mdi/js'
+	import { mdiOpenInNew, mdiPencilOutline, mdiContentDuplicate } from '@mdi/js'
 	import { Period, Subscribe } from '@prisma/client'
+	import { invalidateAll } from '$app/navigation'
 	import { formatRangeShort } from '$lib/formatRange'
 	import { ContextMenu, Dialog, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import PeriodForm from '$lib/PeriodForm.svelte'
 	import PeriodSubscribes from '$lib/PeriodSubscribes.svelte'
 	import InviteSubscribeForm from '$lib/InviteSubscribeForm.svelte'
+	import axios from 'axios'
+	import PeriodDuplicate from './PeriodDuplicate.svelte'
 
 	type Period_Subscribes = Period & { subscribes: Subscribe[] }
 
 	let contextMenu: ContextMenu
-	let period: Period_Subscribes | null = null
+	let period: Period_Subscribes | undefined = undefined
 	let periodForm: PeriodForm
 
 	let editIsActive = false
@@ -46,12 +49,13 @@
 <ContextMenu bind:this={contextMenu} on:close={() => !editDialog?.open && (editIsActive = false)}>
 	{#if period}
 		<div class="flex flex-col gap-2">
-			<div class="flex gap-2 items-center">
+			<div class="flex gap-1 items-center">
 				<h3 class="font-medium ml-2">{formatRangeShort(period)}</h3>
 
 				<div class="grow" />
 
-				<button class="btn btn-sm btn-square ml-4" on:click={handleClickEdit}>
+				<PeriodDuplicate {period} on:success={() => contextMenu.close()} />
+				<button class="btn btn-sm btn-square" on:click={handleClickEdit}>
 					<Icon path={mdiPencilOutline} size={20} class="opacity-60" title="Éditer la période" />
 				</button>
 				<a
