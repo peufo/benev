@@ -10,6 +10,7 @@
 	export { klass as class }
 	export let withLabel = false
 	export let badgeClass = ''
+	export let progressClass = ''
 
 	$: accepted = period.subscribes.filter((sub) => sub.state === 'accepted').length
 	$: request = period.subscribes.filter((sub) => sub.state === 'request').length
@@ -23,7 +24,7 @@
 	class:flex-col={withLabel}
 	class:gap-2={withLabel}
 >
-	<div class="h-2 rounded bg-base-300 w-full relative overflow-hidden">
+	<div class="h-2 rounded w-full relative overflow-hidden bg-base-300 {progressClass}">
 		<div
 			class="h-2 bg-warning absolute rounded-r"
 			style:width="{100 * ((accepted + request) / period.maxSubscribe)}%"

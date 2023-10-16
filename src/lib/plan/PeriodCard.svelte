@@ -24,12 +24,12 @@
 		bg-base-200 border rounded-md p-0 text-sm
 		hover:z-10
 		hover:outline outline-1 outline-primary
-		overflow-hidden shadow
+		overflow-hidden shadow min-h-[30px]
 	"
 	style:top="{top}px"
 	style:height="{height}px"
 >
-	<Progress {period} class="justify-between" badgeClass="mr-1">
+	<Progress {period} class="justify-between" badgeClass="mr-1" progressClass="bg-red-400">
 		<span slot="before-badge" class="text-xs font-semibold ml-1">{formatRangeHour(period)}</span>
 	</Progress>
 </a>
