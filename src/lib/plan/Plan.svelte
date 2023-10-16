@@ -7,11 +7,17 @@
 	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
+	import { newPeriod } from './newPeriod'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 	export let scale = 6
 	export let scrollContainer: HTMLDivElement | undefined = undefined
+
+	const headerHeight = 40
+	const hourHeight = 40
+
+	$: msHeight = (hourHeight * (scale / 24)) / (1000 * 60 * 60)
 
 	onMount(() => {
 		if (!document.location.hash) return
@@ -24,9 +30,6 @@
 			behavior: 'smooth',
 		})
 	})
-
-	const headerHeight = 40
-	const hourHeight = 40
 
 	let contextMenu: PeriodContextMenu
 
@@ -64,9 +67,10 @@
 	"
 >
 	<div
-		class="flex min-w-max pr-2 z-10"
+		class="flex min-w-max pr-2 z-10 gap-2"
 		style="--container-width: {containerWidth}px;"
 		bind:offsetWidth={containerWidth}
+		use:newPeriod={{ origin: range.start, headerHeight, msHeight }}
 	>
 		<div class="sticky left-0 z-20 bg-base-100">
 			<!-- Header -->
@@ -109,7 +113,7 @@
 		</div>
 
 		{#each teams as team}
-			<div class="snap-start pl-2 relative">
+			<div class="snap-start scroll-mx-2 pl-0 relative" data-team={team.id}>
 				<div
 					class="w-36 sticky top-0 pb-2 z-10"
 					style:height="{headerHeight}px"
@@ -134,9 +138,8 @@
 					<PeriodCard
 						{period}
 						origin={range.start}
-						{hourHeight}
+						{msHeight}
 						{headerHeight}
-						{scale}
 						on:click={(event) => contextMenu.open(event, period)}
 					/>
 				{/each}

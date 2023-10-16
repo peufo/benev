@@ -6,11 +6,9 @@
 
 	export let period: Period & { subscribes: Subscribe[] }
 	export let origin: dayjs.Dayjs
-	export let hourHeight: number
+	export let msHeight: number
 	export let headerHeight: number
-	export let scale: number
 
-	$: msHeight = (hourHeight * (scale / 24)) / (1000 * 60 * 60)
 	$: top = -origin.diff(period.start) * msHeight + headerHeight
 	$: height = dayjs(period.end).diff(period.start) * msHeight
 </script>
@@ -22,7 +20,7 @@
 	on:click
 	on:keyup
 	class="
-		absolute left-2 right-0
+		absolute left-0 right-0
 		bg-base-300/50
 		border rounded-md p-0 text-sm
 		hover:z-10

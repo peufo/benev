@@ -27,7 +27,7 @@
 	}
 
 	export function close() {
-		period = null
+		period = undefined
 		editIsActive = false
 		contextMenu.close()
 	}
