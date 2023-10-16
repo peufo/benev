@@ -88,14 +88,14 @@
 				on:click={zoom.out}
 				disabled={scale <= scales[0]}
 			>
-				<Icon path={mdiMagnifyMinusOutline} />
+				<Icon path={mdiMagnifyMinusOutline} title="Dézoomer" />
 			</button>
 			<button
 				class="btn btn-square btn-sm join-item"
 				on:click={zoom.in}
 				disabled={scale >= scales[scales.length - 1]}
 			>
-				<Icon path={mdiMagnifyPlusOutline} />
+				<Icon path={mdiMagnifyPlusOutline} title="Zoomer" />
 			</button>
 		</div>
 

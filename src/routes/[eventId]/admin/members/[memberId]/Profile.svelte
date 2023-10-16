@@ -7,15 +7,14 @@
 		mdiPhoneOutline,
 	} from '@mdi/js'
 	import { User } from '@prisma/client'
-	import { Card, Icon } from '$lib/material'
+	import { Icon, SectionCollapse } from '$lib/material'
 	import { getAge } from '$lib/utils'
-	import { eventPath } from '$lib/store'
 
 	export let user: User
 </script>
 
-<Card returnUrl="{$eventPath}/admin/members">
-	<span slot="title">{user.firstName} {user.lastName}</span>
+<SectionCollapse value="profile">
+	<span slot="title">Profile</span>
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
 		<div class="flex gap-4">
@@ -67,4 +66,4 @@
 	</div>
 
 	<slot />
-</Card>
+</SectionCollapse>

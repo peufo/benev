@@ -15,7 +15,7 @@
 
 <div class="flex flex-col gap-10">
 	{#each events as event}
-		<Card>
+		<Card class="border">
 			<span slot="title">
 				{#if $$slots.title}
 					<slot name="title" />

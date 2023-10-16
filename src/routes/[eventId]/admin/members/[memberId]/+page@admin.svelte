@@ -4,8 +4,9 @@
 	import MemberSubscribes from '$lib/me/MemberSubscribes.svelte'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import { eventPath } from '$lib/store'
-	import { mdiAccountMultipleOutline, mdiClipboardTextMultipleOutline } from '@mdi/js'
+	import { mdiAccountMultipleOutline, mdiArrowLeft, mdiClipboardTextMultipleOutline } from '@mdi/js'
 	import Profile from './Profile.svelte'
+	import { page } from '$app/stores'
 
 	export let data
 
@@ -13,6 +14,18 @@
 </script>
 
 <div class="grid gap-6">
+	<div class="flex gap-2 items-center">
+		<a href="{$eventPath}/admin/members{$page.url.search}" class="btn btn-square btn-ghost btn-sm">
+			<Icon path={mdiArrowLeft} size={20} />
+		</a>
+
+		<div class="card-title grow">
+			{data.memberProfile.user.firstName}
+			{data.memberProfile.user.lastName}
+		</div>
+		<slot name="action" />
+	</div>
+
 	<Profile user={data.memberProfile.user}>
 		<div class="divider" />
 		<MemberProfileForm
@@ -26,7 +39,7 @@
 		<span slot="title">Inscriptions</span>
 	</MemberSubscribes>
 
-	<Card>
+	<Card class="border">
 		<h2 slot="title">Secteurs à charge</h2>
 
 		<div slot="action">

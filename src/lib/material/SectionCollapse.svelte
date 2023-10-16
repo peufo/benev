@@ -3,11 +3,11 @@
 	import { mdiChevronRight } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	import { urlParam } from '$lib/store'
-	import { onMount } from 'svelte'
 
 	export let value: string
 	let klass = ''
 	export { klass as class }
+	export let returnUrl = ''
 
 	$: isOpen = $urlParam.hasValue('section', value)
 
