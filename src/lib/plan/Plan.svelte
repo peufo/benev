@@ -10,13 +10,14 @@
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 	export let scale = 6
+	export let scrollContainer: HTMLDivElement | undefined = undefined
 
 	onMount(() => {
 		if (!document.location.hash) return
 		const periodEl = document.querySelector<HTMLLinkElement>(document.location.hash)
 		if (!periodEl) return
 		periodEl.classList.add('outline')
-		scrollContainer.scroll({
+		scrollContainer?.scroll({
 			top: periodEl.offsetTop - 80,
 			left: periodEl.parentElement!.offsetLeft,
 			behavior: 'smooth',
@@ -27,34 +28,37 @@
 	const hourHeight = 40
 
 	let containerWidth = 0
-	let scrollContainer: HTMLDivElement
+	let range: { start: Dayjs; end: Dayjs }
+	let days: Dayjs[] = []
 
-	const periods = teams
-		.map(({ periods }) => periods.map((p) => [p.start.getTime(), p.end.getTime()]))
-		.flat(2)
-		.sort()
-
-	const range = {
-		start: dayjs(periods[0]).startOf('day'),
-		end: dayjs(periods.at(-1)).endOf('day'),
+	$: {
+		const periods = teams
+			.map(({ periods }) => periods.map((p) => [p.start.getTime(), p.end.getTime()]))
+			.flat(2)
+			.sort()
+		range = {
+			start: dayjs(periods[0]).startOf('day'),
+			end: dayjs(periods.at(-1)).endOf('day'),
+		}
+		const newDays: Dayjs[] = []
+		for (let day = range.start; day.isBefore(range.end); day = day.add(1, 'day')) {
+			newDays.push(day)
+		}
+		days = newDays
 	}
 
-	const days: Dayjs[] = []
-	for (let day = range.start; day.isBefore(range.end); day = day.add(1, 'day')) {
-		days.push(day)
-	}
-
-	$: hours = Array(scale)
+	$: hours = Array(Math.round(scale))
 		.fill(0)
 		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
 </script>
 
 <div
 	bind:this={scrollContainer}
-	class="max-h-[100vh] max-w[100hw] bg-base-100
-			overflow-auto table-pin-cols bordered
-			snap-x scroll-pl-16 scroll-p-20
-		"
+	class="
+		max-h-[95vh] max-w[100hw] bg-base-100
+		overflow-auto table-pin-cols bordered
+		snap-x scroll-pl-16 scroll-p-20
+	"
 >
 	<div
 		class="flex min-w-max pr-2 z-10"

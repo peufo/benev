@@ -7,7 +7,7 @@
 	} from '@mdi/js'
 	import { Icon, InputCheckboxsMenu } from '$lib/material'
 	import { Plan } from '$lib/plan'
-	import { onMount } from 'svelte'
+	import { onMount, tick } from 'svelte'
 
 	export let data
 
@@ -22,17 +22,31 @@
 	})
 
 	let scale = 6
+	let scrollContainer: HTMLDivElement | undefined
 	const scales = [1, 2, 6, 12, 24]
 	const zoom = (() => {
 		let index = scales.indexOf(scale) || 3
+
+		async function updateScroll(previousScale: number, newScale: number) {
+			if (!scrollContainer) return
+			const ratio = newScale / previousScale
+			const scrollTop = scrollContainer?.scrollTop
+			await tick()
+			scrollContainer.scrollTo({ top: scrollTop * ratio, behavior: 'instant' })
+		}
+
 		return {
 			in: () => {
 				if (!scales[index + 1]) return
+				const previous = scale
 				scale = scales[++index]
+				updateScroll(previous, scale)
 			},
 			out: () => {
 				if (!scales[index - 1]) return
+				const previous = scale
 				scale = scales[--index]
+				updateScroll(previous, scale)
 			},
 		}
 	})()
@@ -98,5 +112,5 @@
 		</button>
 	</div>
 
-	<Plan teams={data.teams_periods} {scale} />
+	<Plan teams={data.teams_periods} {scale} bind:scrollContainer />
 </div>
