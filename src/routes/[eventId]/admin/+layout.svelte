@@ -14,8 +14,8 @@
 </svelte:head>
 
 <div class="flex flex-col gap-4 max-w-5xl m-auto">
-	<Card>
-		<div slot="top" class="flex gap-2 p-2 shadow rounded-t-2xl">
+	<Card bodyClass="sm:pt-4">
+		<div slot="top" class="flex gap-2 p-2 border-b rounded-t-2xl">
 			{#each adminTabs as { path, label, icon }}
 				{@const active = path === activeTab?.path}
 				<a
