@@ -12,11 +12,9 @@
 	})[]
 </script>
 
-<div class="flex flex-col gap-2">
+<div class="flex flex-col gap-1 items-end">
 	{#each subscribes as subscribe}
 		<div class="flex flex-wrap gap-1 justify-end items-center">
-			<SubscribeCreatedBy createdBy={subscribe.createdBy} size={20} class="mr-auto" />
-
 			{#if subscribe.member}
 				<a
 					class="badge badge-lg whitespace-nowrap hover:bg-base-200"
@@ -26,7 +24,11 @@
 					{subscribe.member.user.firstName}
 					{subscribe.member.user.lastName}
 				</a>
+			{/if}
 
+			<SubscribeCreatedBy createdBy={subscribe.createdBy} size={20} class="mr-auto" />
+
+			{#if subscribe.member}
 				<Contact user={subscribe.member.user} />
 			{/if}
 
