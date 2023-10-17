@@ -25,6 +25,7 @@
 	let klass = ''
 	export { klass as class }
 	export let useSingleton = false
+	export let hideOnBlur = false
 	let activator: HTMLDivElement
 
 	let content: HTMLDivElement
@@ -56,7 +57,7 @@
 		)
 		const lastFocusable = Array.from(focusables).at(-1)
 		lastFocusable?.addEventListener('blur', () => {
-			hide()
+			if (hideOnBlur) hide()
 		})
 
 		const navigatingUnsubscribe = navigating.subscribe((nav) => {

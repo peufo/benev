@@ -18,7 +18,7 @@
 	<PubliqueMenuItems {pages} {pageIndex} />
 </div>
 
-<DropDown class="max-h-none min-w-[200px]">
+<DropDown class="max-h-none min-w-[200px]" hideOnBlur>
 	<button
 		slot="activator"
 		class="
