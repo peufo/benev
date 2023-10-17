@@ -9,6 +9,9 @@
 	.menu-item.active {
 		@apply bg-secondary text-secondary-content;
 	}
+	.btn.btn-sm > i {
+		@apply opacity-70;
+	}
 
 	.table-wrapper {
 		@apply overflow-x-auto min-h-[320px] border rounded-lg;

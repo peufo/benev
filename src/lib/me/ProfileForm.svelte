@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
 	import dayjs from 'dayjs'
+	import 'dayjs/locale/fr-ch'
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
 	import { InputText, InputDate, FormControl } from '$lib/material/input'

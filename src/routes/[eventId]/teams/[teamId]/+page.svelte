@@ -21,6 +21,7 @@
 	import Progress from '$lib/Progress.svelte'
 	import { slide } from 'svelte/transition'
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
+	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
 
 	export let data
 
@@ -182,13 +183,13 @@
 	{:else}
 		<Placeholder>Aucune période de travail</Placeholder>
 	{/if}
-</Card>
 
-{#if data.isLeader}
-	<div class="p-4 card bg-base-100 max-w-4xl m-auto mt-4">
-		<PeriodForm />
-	</div>
-{/if}
+	{#if data.isLeader}
+		<div class="flex justify-end px-4">
+			<PeriodEditMenu />
+		</div>
+	{/if}
+</Card>
 
 <dialog class="modal" bind:this={memberDialog}>
 	{#if data.user}

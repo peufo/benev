@@ -55,7 +55,10 @@
 			'a[href], button, input, textarea, select, details, [tabindex]'
 		)
 		const lastFocusable = Array.from(focusables).at(-1)
-		lastFocusable?.addEventListener('blur', hide)
+		lastFocusable?.addEventListener('blur', () => {
+			console.log('CROTTE')
+			hide()
+		})
 
 		const navigatingUnsubscribe = navigating.subscribe((nav) => {
 			if (!nav) hide()

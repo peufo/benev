@@ -1,5 +1,6 @@
 <script lang="ts">
 	import dayjs from 'dayjs'
+	import 'dayjs/locale/fr-ch'
 	import { Period, Subscribe } from '@prisma/client'
 	import { formatRangeHour } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'

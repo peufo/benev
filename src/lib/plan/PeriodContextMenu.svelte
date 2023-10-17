@@ -1,16 +1,14 @@
 <script lang="ts">
-	import { tick } from 'svelte'
-	import { mdiOpenInNew, mdiPencilOutline, mdiContentDuplicate } from '@mdi/js'
+	import { mdiOpenInNew } from '@mdi/js'
 	import { Period, Subscribe } from '@prisma/client'
-	import { invalidateAll } from '$app/navigation'
 	import { formatRangeShort } from '$lib/formatRange'
-	import { ContextMenu, Dialog, Icon } from '$lib/material'
+	import { ContextMenu, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import PeriodForm from '$lib/PeriodForm.svelte'
 	import PeriodSubscribes from '$lib/PeriodSubscribes.svelte'
 	import InviteSubscribeForm from '$lib/InviteSubscribeForm.svelte'
-	import axios from 'axios'
 	import PeriodDuplicate from './PeriodDuplicate.svelte'
+	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
 
 	type Period_Subscribes = Period & { subscribes: Subscribe[] }
 
@@ -32,14 +30,6 @@
 		contextMenu.close()
 	}
 
-	async function handleClickEdit() {
-		if (!period) return
-		editIsActive = true
-		await tick()
-		periodForm.setPeriod(period)
-		editDialog.showModal()
-	}
-
 	$: isComplet =
 		period &&
 		period.subscribes.filter(({ state }) => state === 'request' || state === 'accepted').length >=
@@ -55,9 +45,9 @@
 				<div class="grow" />
 
 				<PeriodDuplicate {period} on:success={() => contextMenu.close()} />
-				<button class="btn btn-sm btn-square" on:click={handleClickEdit}>
-					<Icon path={mdiPencilOutline} size={20} class="opacity-60" title="Éditer la période" />
-				</button>
+
+				<PeriodEditMenu {period} />
+
 				<a
 					href="{$eventPath}/teams/{period.teamId}/{period.id}"
 					class="btn btn-sm btn-square"
@@ -79,15 +69,3 @@
 		</div>
 	{/if}
 </ContextMenu>
-
-{#if period && editIsActive}
-	<Dialog bind:dialog={editDialog} title="Modification de la periode">
-		<PeriodForm
-			bind:this={periodForm}
-			on:success={() => {
-				editDialog.close()
-				editIsActive = false
-			}}
-		/>
-	</Dialog>
-{/if}

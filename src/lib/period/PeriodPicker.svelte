@@ -2,7 +2,6 @@
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte'
 	import type Litepicker from 'litepicker'
 	import dayjs from 'dayjs'
-	import { page } from '$app/stores'
 	import type { Period } from './index'
 
 	export let numberOfMonths = 3
