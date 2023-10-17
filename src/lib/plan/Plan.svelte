@@ -5,13 +5,13 @@
 	import { Period, Subscribe, Team } from '@prisma/client'
 	import PeriodCard from '$lib/plan/PeriodCard.svelte'
 	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
+	import { ContextMenu, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
 	import { newPeriod } from './newPeriod'
-	import { Icon } from '$lib/material'
 	import { mdiPlus } from '@mdi/js'
 	import { page } from '$app/stores'
-	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
+	import PeriodForm from '$lib/PeriodForm.svelte'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -36,6 +36,8 @@
 	})
 
 	let periodContextMenu: PeriodContextMenu
+	let periodContextMenuEdit: ContextMenu
+	let periodForm: PeriodForm
 
 	let containerWidth = 0
 	let range: { start: Dayjs; end: Dayjs }
@@ -61,9 +63,9 @@
 		.fill(0)
 		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
 
-	const onCreate = (newPeriod: { start: Date; end: Date }) => {
-		console.log(newPeriod)
-		// contextMenu.show(newPeriod)
+	const onCreate = (event: MouseEvent, newPeriod: { start: Date; end: Date }) => {
+		periodForm.setPeriod(newPeriod)
+		periodContextMenuEdit.show(event)
 	}
 </script>
 
@@ -166,6 +168,12 @@
 </div>
 
 <PeriodContextMenu bind:this={periodContextMenu} />
+<ContextMenu
+	bind:this={periodContextMenuEdit}
+	tippyProps={{ trigger: 'mouseenter mouseleave', interactiveDebounce: 500 }}
+>
+	<PeriodForm bind:this={periodForm} />
+</ContextMenu>
 
 <style>
 	.scale {

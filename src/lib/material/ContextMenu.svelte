@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 	import { DropDown } from '$lib/material'
+	import type { Props as TippyProps } from 'tippy.js'
+
+	export let tippyProps: Partial<TippyProps> = {}
 
 	const dispatch = createEventDispatcher<{ show: void; hide: void }>()
 
@@ -22,6 +25,6 @@
 	}
 </script>
 
-<DropDown bind:this={dropdown} tippyProps={{ offset: [0, -5] }}>
+<DropDown bind:this={dropdown} tippyProps={{ offset: [0, -5], ...tippyProps }}>
 	<slot />
 </DropDown>

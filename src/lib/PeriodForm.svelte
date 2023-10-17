@@ -13,7 +13,7 @@
 
 	let klass = ''
 	export { klass as class }
-	export let period: Period | undefined = undefined
+	export let period: Partial<Period> | undefined = undefined
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -30,20 +30,24 @@
 			dispatch('success')
 		},
 	})
-	let date = (period ? dayjs(period.start) : dayjs()).format('YYYY-MM-DD')
-	let start = (period ? dayjs(period.start) : dayjs().startOf('hour').add(1, 'hour')).format(
-		'HH:mm'
-	)
-	let end = (period ? dayjs(period.end) : dayjs().startOf('hour').add(4, 'hours')).format('HH:mm')
+
+	let defaultStart = dayjs().startOf('hour').add(1, 'hour').format('HH:mm')
+	let defaultEnd = dayjs(period?.end).startOf('hour').add(4, 'hours').format('HH:mm')
+
+	let date = dayjs(period?.start).format('YYYY-MM-DD')
+	let start = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
+	let end = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
+	let maxSubscribe = String(period?.maxSubscribe || 1)
 
 	$: endIsNextDay = end < start
-	$: basePath = `${$eventPath}/teams/${$page.params.teamId}`
+	$: basePath = `${$eventPath}/teams/${period?.teamId || $page.params.teamId}`
 
-	export function setPeriod(_period?: Period) {
+	export function setPeriod(_period?: Partial<Period>) {
 		period = _period
-		date = (period ? dayjs(period.start) : dayjs()).format('YYYY-MM-DD')
-		start = (period ? dayjs(period.start) : dayjs().startOf('hour').add(1, 'hour')).format('HH:mm')
-		end = (period ? dayjs(period.end) : dayjs().startOf('hour').add(4, 'hours')).format('HH:mm')
+		date = dayjs(period?.start).format('YYYY-MM-DD')
+		start = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
+		end = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
+		if (period?.maxSubscribe) maxSubscribe = String(period.maxSubscribe)
 	}
 
 	function getNextPeriod() {
@@ -62,12 +66,12 @@
 </script>
 
 <form
-	action="{basePath}{!!period ? `/${$page.params.periodId}?/update_period` : '?/new_period'}"
+	action="{basePath}{period?.id ? `/${$page.params.periodId}?/update_period` : '?/new_period'}"
 	method="post"
 	use:enhance={form.submit}
 	class="p-2 flex flex-col gap-3 {klass}"
 >
-	{#if !!period}
+	{#if period?.id}
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
 
@@ -84,7 +88,7 @@
 		<InputNumber
 			key="maxSubscribe"
 			label="Bénévoles"
-			value={String(period?.maxSubscribe || 1)}
+			bind:value={maxSubscribe}
 			input={{ min: 1, step: 1 }}
 		/>
 
@@ -98,15 +102,14 @@
 	</div>
 
 	<div class="flex flex-row-reverse gap-3 grow">
-		{#if !!period}
+		{#if period?.id}
 			<button class="btn" type="submit">Valider</button>
 			<DeleteButton formaction="{basePath}/{period.id}?/delete_period" />
-			<div class="grow" />
 		{:else}
-			<button class="btn grow" type="submit">Ajouter</button>
+			<button class="btn" type="submit">Ajouter</button>
 			<button
 				type="button"
-				class="btn btn-ghost grow"
+				class="btn btn-ghost"
 				class:btn-disabled={!start || !end}
 				on:click|preventDefault={getNextPeriod}
 			>
