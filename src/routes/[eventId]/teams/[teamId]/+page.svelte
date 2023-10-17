@@ -147,7 +147,10 @@
 										class="btn btn-square btn-sm"
 										on:click|stopPropagation={() => {
 											if ($urlParam.hasValue(periodOpenKey, period.id)) {
-												goto($urlParam.without(periodOpenKey), { replaceState: true })
+												goto($urlParam.without(periodOpenKey), {
+													replaceState: true,
+													noScroll: true,
+												})
 												return
 											}
 											goto($urlParam.with({ [periodOpenKey]: period.id }), {
