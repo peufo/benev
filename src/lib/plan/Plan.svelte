@@ -89,7 +89,7 @@
 			{#each days as day}
 				<div class="w-16">
 					<div
-						class="sticky top-0 bg-base-100 pr-2 border-b border-r z-10"
+						class="sticky top-0 bg-base-100 pr-2 border-t border-r z-10 -translate-y-[1px]"
 						style:height="{hourHeight}px"
 					>
 						<div class="text-sm font-medium">{day.format('ddd D')}</div>
