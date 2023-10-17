@@ -35,6 +35,8 @@
 			<SubscribeStateForm {subscribe} isLeader on:success />
 		</div>
 	{:else}
-		<div class="flex flex-end justify-center text-secondary">Aucune inscription pour l'instant</div>
+		<div class="flex flex-end justify-center text-secondary px-4 py-2 opacity-70">
+			Pas d'inscription pour l'instant
+		</div>
 	{/each}
 </div>
