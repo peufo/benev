@@ -15,6 +15,7 @@
 		class="opacity-60 {klass}"
 		{size}
 		disableTitlePropagation
+		tippyProps={{ appendTo: 'parent' }}
 	/>
 {:else}
 	<Icon
@@ -23,5 +24,6 @@
 		class="opacity-60 {klass}"
 		{size}
 		disableTitlePropagation
+		tippyProps={{ appendTo: 'parent' }}
 	/>
 {/if}

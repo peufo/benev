@@ -26,19 +26,27 @@
 		title="En attente de validation {subscribe.createdBy === 'user'
 			? `d'un responsable`
 			: `du membre`}"
+		tippyProps={{ appendTo: 'parent' }}
 	/>
 {:else if subscribe.state === 'accepted'}
-	<Icon path={mdiCheck} class="fill-success {klass}" title="Inscription confirmée {changeAuthor}" />
+	<Icon
+		path={mdiCheck}
+		class="fill-success {klass}"
+		title="Inscription confirmée {changeAuthor}"
+		tippyProps={{ appendTo: 'parent' }}
+	/>
 {:else if subscribe.state === 'denied'}
 	<Icon
 		path={mdiCloseOctagonOutline}
 		class="fill-error {klass}"
 		title="Inscription déclinée {changeAuthor}"
+		tippyProps={{ appendTo: 'parent' }}
 	/>
 {:else if subscribe.state === 'cancelled'}
 	<Icon
 		path={mdiTrashCanOutline}
 		class="fill-error {klass}"
 		title="Inscription annulée {changeAuthor}"
+		tippyProps={{ appendTo: 'parent' }}
 	/>
 {/if}

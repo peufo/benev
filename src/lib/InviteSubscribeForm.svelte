@@ -59,7 +59,11 @@
 
 				<div slot="append">
 					<button type="button" class="btn btn-square" on:click={() => newMemberDialog.showModal()}>
-						<Icon path={mdiAccountPlusOutline} title="Inviter un nouveau membre" />
+						<Icon
+							path={mdiAccountPlusOutline}
+							title="Inviter un nouveau membre"
+							tippyProps={{ appendTo: 'parent' }}
+						/>
 					</button>
 				</div>
 			</InputRelation>

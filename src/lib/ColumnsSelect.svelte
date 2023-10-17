@@ -14,7 +14,6 @@
 
 	export let columns: Record<string, _Column>
 
-
 	export let selectedColumnsId: string[] = []
 	export let selectedColumns = getColumnsByIds(selectedColumnsId)
 	$: selectedColumns = getColumnsByIds(selectedColumnsId)
@@ -34,10 +33,6 @@
 	btnClass="btn-square"
 >
 	<div slot="label" class="contents">
-		<Icon
-			path={mdiViewColumnOutline}
-			title="Choix des colonnes"
-			tippyProps={{ placement: 'left' }}
-		/>
+		<Icon path={mdiViewColumnOutline} title="Choix des colonnes" class="opacity-70" />
 	</div>
 </InputCheckboxsMenu>

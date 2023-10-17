@@ -19,7 +19,7 @@
 			class="h-6 w-6 p-1 grid place-content-center rounded"
 			class:bg-base-300={mode === value}
 		>
-			<Icon {path} {title} size={20} />
+			<Icon {path} {title} size={20} tippyProps={{ appendTo: 'parent' }} />
 		</button>
 	{/each}
 </div>

@@ -25,6 +25,7 @@
 
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
+	import type { Props as TippyProps } from 'tippy.js'
 	import type { Subscribe } from '@prisma/client'
 	import SubscribeState from '$lib/SubscribeState.svelte'
 	import { useForm } from '$lib/form'
@@ -42,6 +43,7 @@
 	export let eventId = $page.params.eventId
 	export let action = `/${eventId}/subscribes/${subscribe.id}`
 	export let isLeader = false
+	export let tippyProps: Partial<TippyProps> = {}
 
 	let isMember = subscribe.memberId === $page.data.member?.id
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -76,7 +78,7 @@
 		<SubscribeState {subscribe} />
 	</button>
 {:else}
-	<DropDown tippyProps={{ arrow: true, trigger: 'click' }}>
+	<DropDown tippyProps={{ arrow: true, trigger: 'click', ...tippyProps }}>
 		<button
 			slot="activator"
 			class="relative btn btn-sm btn-square btn-ghost hover:bg-base-200 z-10"

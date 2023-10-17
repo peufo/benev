@@ -64,12 +64,13 @@
 						size={20}
 						class="opacity-60"
 						title="Ouvrir dans un autre onglet"
+						tippyProps={{ appendTo: 'parent' }}
 					/>
 				</a>
 			</div>
 
 			{#if mode === 'subscribes'}
-				<div class="p-2">
+				<div class="p-2 flex flex-col gap-2">
 					<PeriodSubscribes subscribes={period.subscribes} on:success={() => contextMenu.hide()} />
 
 					{#if !isComplet}
