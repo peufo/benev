@@ -39,12 +39,11 @@
 	$: endIsNextDay = end < start
 	$: basePath = `${$eventPath}/teams/${$page.params.teamId}`
 
-	export function setPeriod(_period: Period) {
+	export function setPeriod(_period?: Period) {
 		period = _period
-		date = dayjs(period.start).format('YYYY-MM-DD')
-		start = dayjs(period.start).format('HH:mm')
-		end = dayjs(period.end).format('HH:mm')
-		endIsNextDay = end < start
+		date = (period ? dayjs(period.start) : dayjs()).format('YYYY-MM-DD')
+		start = (period ? dayjs(period.start) : dayjs().startOf('hour').add(1, 'hour')).format('HH:mm')
+		end = (period ? dayjs(period.end) : dayjs().startOf('hour').add(4, 'hours')).format('HH:mm')
 	}
 
 	function getNextPeriod() {

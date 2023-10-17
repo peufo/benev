@@ -11,6 +11,7 @@
 	import { Icon } from '$lib/material'
 	import { mdiPlus } from '@mdi/js'
 	import { page } from '$app/stores'
+	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -34,7 +35,7 @@
 		})
 	})
 
-	let contextMenu: PeriodContextMenu
+	let periodContextMenu: PeriodContextMenu
 
 	let containerWidth = 0
 	let range: { start: Dayjs; end: Dayjs }
@@ -59,6 +60,11 @@
 	$: hours = Array(Math.round(scale))
 		.fill(0)
 		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
+
+	const onCreate = (newPeriod: { start: Date; end: Date }) => {
+		console.log(newPeriod)
+		// contextMenu.show(newPeriod)
+	}
 </script>
 
 <div
@@ -73,7 +79,7 @@
 		class="flex min-w-max pr-2 z-10 gap-2"
 		style="--container-width: {containerWidth}px;"
 		bind:offsetWidth={containerWidth}
-		use:newPeriod={{ origin: range.start, headerHeight, msHeight }}
+		use:newPeriod={{ origin: range.start, headerHeight, msHeight, onCreate }}
 	>
 		<div class="sticky left-0 z-20 bg-base-100">
 			<!-- Header -->
@@ -143,7 +149,7 @@
 						origin={range.start}
 						{msHeight}
 						{headerHeight}
-						on:click={(event) => contextMenu.show(event, period)}
+						on:click={(event) => periodContextMenu.show(event, period)}
 					/>
 				{/each}
 			</div>
@@ -156,7 +162,7 @@
 	</div>
 </div>
 
-<PeriodContextMenu bind:this={contextMenu} activator={scrollContainer} />
+<PeriodContextMenu bind:this={periodContextMenu} />
 
 <style>
 	.scale {

@@ -8,16 +8,18 @@
 	import InviteSubscribeForm from '$lib/InviteSubscribeForm.svelte'
 	import PeriodDuplicate from './PeriodDuplicate.svelte'
 	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
+	import { tick } from 'svelte'
 
 	type Period_Subscribes = Period & { subscribes: Subscribe[] }
 
 	let contextMenu: ContextMenu
+	let periodEditMenu: PeriodEditMenu
 	let period: Period_Subscribes | undefined = undefined
-	export let activator: HTMLDivElement
 
-	export function show(event: MouseEvent, _period: Period_Subscribes & {}) {
+	export function show(event: MouseEvent, _period?: Period_Subscribes) {
 		period = _period
 		contextMenu.show(event)
+		tick().then(() => periodEditMenu.setPeriod(period))
 	}
 
 	export function hide() {
@@ -31,7 +33,7 @@
 			period.maxSubscribe
 </script>
 
-<ContextMenu bind:this={contextMenu} {activator}>
+<ContextMenu bind:this={contextMenu}>
 	{#if period}
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-1 items-center">
@@ -41,7 +43,7 @@
 
 				<PeriodDuplicate {period} on:success={() => contextMenu.hide()} />
 
-				<PeriodEditMenu {period} on:success={() => contextMenu.hide()} />
+				<PeriodEditMenu bind:this={periodEditMenu} on:success={() => contextMenu.hide()} />
 
 				<a
 					href="{$eventPath}/teams/{period.teamId}/{period.id}"

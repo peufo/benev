@@ -6,16 +6,22 @@
 	import type { Props as TippyProps } from 'tippy.js'
 
 	let dropdown: DropDown
-	export let period: Period | undefined = undefined
+	let periodForm: PeriodForm
+	let period: Period | undefined = undefined
 	export let tippyProps: Partial<TippyProps> = {}
 
-	export function show(_period: Period) {
+	export function show(_period?: Period) {
 		period = _period
+		periodForm.setPeriod(_period)
 		dropdown.show()
 	}
 
 	export function hide() {
 		dropdown.hide()
+	}
+	export function setPeriod(_period?: Period) {
+		period = _period
+		periodForm.setPeriod(_period)
 	}
 </script>
 
@@ -29,5 +35,5 @@
 		{/if}
 	</button>
 
-	<PeriodForm {period} on:success />
+	<PeriodForm bind:this={periodForm} on:success />
 </DropDown>

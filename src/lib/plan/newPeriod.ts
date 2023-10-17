@@ -10,6 +10,7 @@ type Params = {
 	origin: Dayjs
 	msHeight: number
 	headerHeight: number
+	onCreate: (period: { start: Date; end: Date }) => unknown
 }
 
 export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
@@ -54,7 +55,8 @@ export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 		const handleMouseUp = async () => {
 			document.removeEventListener('mousemove', handleMouseMove)
 			const [_start, _end] = end.isAfter(start) ? [start, end] : [end, start]
-			await createPeriod(teamId, { start: _start.toDate(), end: _end.toDate() })
+			const newPeriod = { start: _start.toDate(), end: _end.toDate() }
+			params.onCreate(newPeriod)
 			ghost.remove()
 		}
 
