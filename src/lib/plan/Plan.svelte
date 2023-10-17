@@ -63,7 +63,7 @@
 		.fill(0)
 		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
 
-	const onCreate = (event: MouseEvent, newPeriod: { start: Date; end: Date }) => {
+	const onCreate = (event: MouseEvent, newPeriod: { start?: Date; end?: Date }) => {
 		periodForm.setPeriod(newPeriod)
 		periodContextMenuEdit.show(event)
 	}
@@ -72,7 +72,7 @@
 <div
 	bind:this={scrollContainer}
 	class="
-		max-h-[95vh] max-w[100hw] bg-base-100
+		max-h-[98vh] max-w[100hw] bg-base-100
 		overflow-auto table-pin-cols bordered
 		snap-x scroll-pl-16 scroll-p-20
 	"
