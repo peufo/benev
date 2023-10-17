@@ -36,7 +36,7 @@
 	{#if $display === 'list'}
 		<div
 			in:fade
-			class="grid gap-4 my-6"
+			class="grid gap-4 mt-2"
 			style:grid-template-columns="repeat(auto-fill, minmax(325px, 1fr))"
 		>
 			{#each _teams as team (team.id)}

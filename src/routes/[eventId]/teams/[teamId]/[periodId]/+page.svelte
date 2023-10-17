@@ -11,7 +11,7 @@
 	export let data
 </script>
 
-<Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams/{data.period.teamId}">
+<Card class="max-w-2xl m-auto" returnUrl="{$eventPath}/teams/{data.period.teamId}">
 	<h2 slot="title">
 		{data.period.team.name}<br />
 		{formatRange(data.period)}
@@ -24,13 +24,10 @@
 		<PeriodEditMenu period={data.period} />
 	</div>
 
-	<div class="grid gap-4 grid-cols-1 md:grid-cols-2 mt-4">
-		<div>
-			<Progress period={data.period} withLabel />
-		</div>
-		<div class="flex flex-col gap-2">
-			<PeriodSubscribes subscribes={data.period.subscribes} />
-			<InviteSubscribeForm periodId={data.period.id} />
-		</div>
+	<div class="flex flex-col gap-4 mt-6">
+		<Progress period={data.period} withLabel />
+
+		<PeriodSubscribes subscribes={data.period.subscribes} />
+		<InviteSubscribeForm periodId={data.period.id} />
 	</div>
 </Card>

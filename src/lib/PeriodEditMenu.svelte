@@ -7,7 +7,7 @@
 
 	let dropdown: DropDown
 	let periodForm: PeriodForm
-	let period: Period | undefined = undefined
+	export let period: Period | undefined = undefined
 	export let tippyProps: Partial<TippyProps> = {}
 
 	export function show(_period?: Period) {
@@ -26,12 +26,11 @@
 </script>
 
 <DropDown bind:this={dropdown} {tippyProps} class="max-h-none">
-	<button slot="activator" class="btn btn-sm" class:btn-square={!!period}>
+	<button slot="activator" class="btn btn-sm btn-square">
 		{#if !!period}
 			<Icon path={mdiPencilOutline} size={22} title="Éditer la période" />
 		{:else}
 			<Icon path={mdiPlus} size={22} title="Ajouter une période" />
-			<span>Ajouter</span>
 		{/if}
 	</button>
 

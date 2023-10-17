@@ -11,7 +11,6 @@
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
 	import { formatRange } from '$lib/formatRange'
-	import PeriodForm from '$lib/PeriodForm.svelte'
 	import Subscribes from '$lib/PeriodSubscribes.svelte'
 	import SubscribeForm from '$lib/SubscribeForm.svelte'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -89,6 +88,8 @@
 			<a href="{$eventPath}/teams/{data.team.id}/edit" class="btn btn-square btn-sm">
 				<Icon path={mdiPencilOutline} title="Éditer ce secteur" />
 			</a>
+
+			<PeriodEditMenu />
 		{/if}
 	</div>
 
@@ -185,12 +186,6 @@
 		</table>
 	{:else}
 		<Placeholder>Aucune période de travail</Placeholder>
-	{/if}
-
-	{#if data.isLeader}
-		<div class="flex justify-end px-4">
-			<PeriodEditMenu />
-		</div>
 	{/if}
 </Card>
 
