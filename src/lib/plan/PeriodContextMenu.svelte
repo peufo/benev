@@ -4,7 +4,6 @@
 	import { formatRangeShort } from '$lib/formatRange'
 	import { ContextMenu, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import PeriodForm from '$lib/PeriodForm.svelte'
 	import PeriodSubscribes from '$lib/PeriodSubscribes.svelte'
 	import InviteSubscribeForm from '$lib/InviteSubscribeForm.svelte'
 	import PeriodDuplicate from './PeriodDuplicate.svelte'
@@ -14,20 +13,16 @@
 
 	let contextMenu: ContextMenu
 	let period: Period_Subscribes | undefined = undefined
-	let periodForm: PeriodForm
+	export let activator: HTMLDivElement
 
-	let editIsActive = false
-	let editDialog: HTMLDialogElement
-
-	export function open(event: MouseEvent, _period: Period_Subscribes & {}) {
+	export function show(event: MouseEvent, _period: Period_Subscribes & {}) {
 		period = _period
-		contextMenu.open(event)
+		contextMenu.show(event)
 	}
 
-	export function close() {
+	export function hide() {
 		period = undefined
-		editIsActive = false
-		contextMenu.close()
+		contextMenu.hide()
 	}
 
 	$: isComplet =
@@ -36,7 +31,7 @@
 			period.maxSubscribe
 </script>
 
-<ContextMenu bind:this={contextMenu} on:close={() => !editDialog?.open && (editIsActive = false)}>
+<ContextMenu bind:this={contextMenu} {activator}>
 	{#if period}
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-1 items-center">
@@ -44,9 +39,9 @@
 
 				<div class="grow" />
 
-				<PeriodDuplicate {period} on:success={() => contextMenu.close()} />
+				<PeriodDuplicate {period} on:success={() => contextMenu.hide()} />
 
-				<PeriodEditMenu {period} />
+				<PeriodEditMenu {period} on:success={() => contextMenu.hide()} />
 
 				<a
 					href="{$eventPath}/teams/{period.teamId}/{period.id}"
@@ -62,9 +57,9 @@
 				</a>
 			</div>
 
-			<PeriodSubscribes subscribes={period.subscribes} on:success={() => contextMenu.close()} />
+			<PeriodSubscribes subscribes={period.subscribes} on:success={() => contextMenu.hide()} />
 			{#if !isComplet}
-				<InviteSubscribeForm periodId={period.id} on:success={() => contextMenu.close()} />
+				<InviteSubscribeForm periodId={period.id} on:success={() => contextMenu.hide()} />
 			{/if}
 		</div>
 	{/if}

@@ -143,7 +143,7 @@
 						origin={range.start}
 						{msHeight}
 						{headerHeight}
-						on:click={(event) => contextMenu.open(event, period)}
+						on:click={(event) => contextMenu.show(event, period)}
 					/>
 				{/each}
 			</div>
@@ -156,7 +156,7 @@
 	</div>
 </div>
 
-<PeriodContextMenu bind:this={contextMenu} />
+<PeriodContextMenu bind:this={contextMenu} activator={scrollContainer} />
 
 <style>
 	.scale {

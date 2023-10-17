@@ -79,7 +79,7 @@
 		value={dayjs(`${date}T${end}`).add(+endIsNextDay, 'day').format('YYYY-MM-DDTHH:mm')}
 	/>
 
-	<div class="grid gap-3 grid-cols-2">
+	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(140px, 1fr))">
 		<InputDate label="Date" bind:value={date} />
 
 		<InputNumber

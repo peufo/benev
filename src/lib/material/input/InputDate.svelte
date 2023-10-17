@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FormControl from './FormControl.svelte'
-	import type {InputProps} from '.'
+	import type { InputProps } from '.'
 	type $$Props = InputProps
 	$: ({ input, value: _value, ...props } = $$props as $$Props)
 	export let value = _value

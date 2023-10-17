@@ -29,5 +29,5 @@
 		{/if}
 	</button>
 
-	<PeriodForm {period} on:success={hide} />
+	<PeriodForm {period} on:success />
 </DropDown>

@@ -25,8 +25,8 @@
 	let klass = ''
 	export { klass as class }
 	export let useSingleton = false
-
 	let activator: HTMLDivElement
+
 	let content: HTMLDivElement
 	let tip: TippyInstance | undefined = undefined
 
@@ -56,7 +56,6 @@
 		)
 		const lastFocusable = Array.from(focusables).at(-1)
 		lastFocusable?.addEventListener('blur', () => {
-			console.log('CROTTE')
 			hide()
 		})
 
@@ -83,13 +82,14 @@
 	export function show() {
 		tip?.show()
 	}
+	export function setTippyProps(props: Partial<TippyProps>) {
+		tip?.setProps(props)
+	}
 </script>
 
 <div>
 	<div bind:this={activator}>
-		<slot name="activator">
-			<button class="btn">dropdown</button>
-		</slot>
+		<slot name="activator" />
 	</div>
 
 	<div class="hidden">
