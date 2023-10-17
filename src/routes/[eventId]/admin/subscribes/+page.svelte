@@ -3,6 +3,7 @@
 
 	import Filters from './Filters.svelte'
 	import Subscribes from './Subscribes.svelte'
+	import SubscribesCopy from './SubscribesCopy.svelte'
 
 	export let data
 </script>
@@ -11,6 +12,7 @@
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
 		<InputSearch />
 		<Filters teams={data.teams} />
+		<SubscribesCopy />
 	</div>
 
 	<Subscribes subscribes={data.subscribes} />
