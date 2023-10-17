@@ -50,9 +50,9 @@
 
 				<div class="grow" />
 
-				<PeriodDuplicate {period} on:success={() => contextMenu.hide()} />
-
 				<ContextMenuToggle bind:mode />
+
+				<PeriodDuplicate {period} on:success={() => contextMenu.hide()} />
 
 				<a
 					href="{$eventPath}/teams/{period.teamId}/{period.id}"

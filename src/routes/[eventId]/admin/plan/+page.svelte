@@ -63,13 +63,8 @@
 	}
 </script>
 
-<div
-	class="flex flex-col gap-3 bg-base-100"
-	bind:this={wrapper}
-	class:pl-4={isFullscreen}
-	class:pt-4={isFullscreen}
->
-	<div class="flex gap-3" class:pr-4={isFullscreen}>
+<div class="bg-base-100" bind:this={wrapper} class:pl-4={isFullscreen} class:pt-4={isFullscreen}>
+	<div class="flex gap-3 mb-3" class:pr-4={isFullscreen}>
 		<div class="grow" />
 
 		<InputCheckboxsMenu
@@ -116,5 +111,10 @@
 		</button>
 	</div>
 
-	<Plan teams={data.teams_periods} {scale} bind:scrollContainer />
+	<Plan
+		teams={data.teams_periods}
+		{scale}
+		bind:scrollContainer
+		class={isFullscreen ? 'max-h-[95vh]' : 'max-h-[70vh]'}
+	/>
 </div>

@@ -17,6 +17,8 @@
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 	export let scale = 12
 	export let scrollContainer: HTMLDivElement | undefined = undefined
+	let klass = ''
+	export { klass as class }
 
 	const headerHeight = 40
 	const hourHeight = 40
@@ -72,7 +74,8 @@
 <div
 	bind:this={scrollContainer}
 	class="
-		max-h-[98vh] max-w[100hw] bg-base-100
+		{klass}
+		max-w[100hw] bg-base-100
 		overflow-auto table-pin-cols bordered
 		snap-x scroll-pl-16 scroll-p-20
 	"
@@ -173,7 +176,7 @@
 	bind:this={periodContextMenuEdit}
 	tippyProps={{ trigger: 'mouseenter mouseleave', interactiveDebounce: 500 }}
 >
-	<PeriodForm bind:this={periodForm} />
+	<PeriodForm bind:this={periodForm} on:success={() => periodContextMenuEdit.hide()} />
 </ContextMenu>
 
 <style>
