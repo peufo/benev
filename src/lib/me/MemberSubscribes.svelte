@@ -31,7 +31,7 @@
 
 			{#if event.teams.length}
 				<div
-					class="grid gap-2 mt-2"
+					class="grid gap-4 mt-2"
 					style:grid-template-columns="repeat(auto-fill, minmax(325px, 1fr))"
 				>
 					{#each event.teams as team}
