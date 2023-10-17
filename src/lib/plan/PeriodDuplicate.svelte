@@ -33,5 +33,5 @@
 </script>
 
 <button class="btn btn-sm btn-square" disabled={isLoading} on:click={handleClick}>
-	<Icon path={mdiContentDuplicate} size={20} class="opacity-60" title="Dupliquer la période" />
+	<Icon path={mdiContentDuplicate} size={20} class="opacity-60" title="Ajouter une période après" />
 </button>
