@@ -155,7 +155,10 @@
 			</div>
 		{/each}
 
-		<a class="btn btn-sm z-50" href="{$eventPath}/teams/create?redirectTo={$page.url.pathname}">
+		<a
+			class="btn btn-sm z-50 sticky top-0"
+			href="{$eventPath}/teams/create?redirectTo={$page.url.pathname}"
+		>
 			<Icon path={mdiPlus} title="Nouveau secteur" />
 			<span>Ajouter</span>
 		</a>
