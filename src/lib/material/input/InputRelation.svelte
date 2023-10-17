@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { mdiClose } from '@mdi/js'
+	import type { Props as TippyProps } from 'tippy.js'
 
 	import { browser } from '$app/environment'
 	import { createEventDispatcher, tick } from 'svelte'
@@ -23,6 +24,7 @@
 	export let value: string | RelationItem = ''
 	export let error = ''
 	export let placeholder = ''
+	export let tippyProps: Partial<TippyProps> = {}
 
 	let klass = ''
 	export { klass as class }
@@ -95,7 +97,7 @@
 		},
 	}}
 >
-	<DropDown>
+	<DropDown {tippyProps}>
 		<div class="contents" slot="activator">
 			<FormControl {key} {label} {error} class={klass} let:key>
 				<div class="flex grow gap-2" class:hidden={item}>

@@ -167,7 +167,8 @@
 	</div>
 </div>
 
-<PeriodContextMenu bind:this={periodContextMenu} />
+<PeriodContextMenu bind:this={periodContextMenu} appendTo={scrollContainer} />
+
 <ContextMenu
 	bind:this={periodContextMenuEdit}
 	tippyProps={{ trigger: 'mouseenter mouseleave', interactiveDebounce: 500 }}

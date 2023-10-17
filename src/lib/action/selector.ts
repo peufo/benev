@@ -50,6 +50,7 @@ export function selector(
 	}
 
 	function scrollToSelected(items: NodeListOf<HTMLElement>) {
+		console.log(node)
 		const list = node.querySelector<HTMLElement>(listQuerySelector)
 		if (!(list instanceof HTMLElement)) {
 			console.error('wrapper element not found')

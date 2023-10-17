@@ -4,6 +4,8 @@
 	import type { Props as TippyProps } from 'tippy.js'
 
 	export let tippyProps: Partial<TippyProps> = {}
+	let klass = ''
+	export { klass as class }
 
 	const dispatch = createEventDispatcher<{ show: void; hide: void }>()
 
@@ -25,6 +27,10 @@
 	}
 </script>
 
-<DropDown bind:this={dropdown} tippyProps={{ offset: [0, -5], ...tippyProps }}>
+<DropDown
+	class="{klass} overflow-visible"
+	bind:this={dropdown}
+	tippyProps={{ offset: [0, -5], ...tippyProps }}
+>
 	<slot />
 </DropDown>

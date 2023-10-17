@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiOpenInNew } from '@mdi/js'
 	import { Period, Subscribe } from '@prisma/client'
+	import type { Props as TippyProps } from 'tippy.js'
 	import { formatRangeShort } from '$lib/formatRange'
 	import { ContextMenu, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
@@ -9,6 +10,8 @@
 	import PeriodDuplicate from './PeriodDuplicate.svelte'
 	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
 	import { tick } from 'svelte'
+
+	export let appendTo: TippyProps['appendTo'] = 'parent'
 
 	type Period_Subscribes = Period & { subscribes: Subscribe[] }
 
@@ -33,7 +36,7 @@
 			period.maxSubscribe
 </script>
 
-<ContextMenu bind:this={contextMenu}>
+<ContextMenu class="min-w-[300px]" bind:this={contextMenu} tippyProps={{ appendTo }}>
 	{#if period}
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-1 items-center">
@@ -60,6 +63,7 @@
 			</div>
 
 			<PeriodSubscribes subscribes={period.subscribes} on:success={() => contextMenu.hide()} />
+
 			{#if !isComplet}
 				<InviteSubscribeForm periodId={period.id} on:success={() => contextMenu.hide()} />
 			{/if}

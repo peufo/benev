@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiAccountPlusOutline } from '@mdi/js'
 	import { Member, User } from '@prisma/client'
+	import type { Props as TippyProps } from 'tippy.js'
 	import { createEventDispatcher } from 'svelte'
 	import { Dialog, Icon, InputRelation } from '$lib/material'
 	import { useForm } from '$lib/form'
@@ -10,13 +11,17 @@
 	import { eventPath } from '$lib/store'
 
 	export let periodId: string
+	export let tippyProps: Partial<TippyProps> = {}
 
 	let newMemberDialog: HTMLDialogElement
 	const dispatch = createEventDispatcher<{ success: void }>()
 
 	const form = useForm({
 		successMessage: 'Inscription crée',
-		successCallback: () => dispatch('success'),
+		successCallback: () => {
+			member = null
+			dispatch('success')
+		},
 	})
 	let member: (Member & { user: User }) | null = null
 </script>
@@ -37,6 +42,7 @@
 				getItem={$api.member.findOne}
 				search={$api.member.search}
 				bind:item={member}
+				{tippyProps}
 			>
 				<div slot="item" class="contents" let:item>
 					{item?.user.firstName}
