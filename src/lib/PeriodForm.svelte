@@ -47,22 +47,18 @@
 		endIsNextDay = end < start
 	}
 
-	function handleInput() {}
-
-	function handleStartBlur() {
-		if (!end) end = start
-	}
-
-	function handleEndBlur() {
-		if (!start) start = end
-	}
-
 	function getNextPeriod() {
 		if (!start || !end) return
-		const _start = dayjs(start)
-		const _end = dayjs(end)
+
+		let _start = dayjs(`${date}T${start}`)
+		let _end = dayjs(`${date}T${end}`).add(+endIsNextDay, 'day')
 		const step = _end.diff(_start, 'minute')
-		start = end
+		_start = _end.clone()
+		_end = _end.add(step, 'minute')
+
+		date = _start.format('YYYY-MM-DD')
+		start = _start.format('HH:mm')
+		end = _end.format('HH:mm')
 	}
 </script>
 
