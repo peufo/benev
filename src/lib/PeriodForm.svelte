@@ -40,7 +40,7 @@
 	let maxSubscribe = String(period?.maxSubscribe || 1)
 
 	$: endIsNextDay = end < start
-	$: basePath = `${$eventPath}/teams/${period?.teamId || $page.params.teamId}`
+	$: basePath = `${$eventPath}/teams/${(!period?.id && period?.teamId) || $page.params.teamId}`
 
 	export function setPeriod(_period?: Partial<Period>) {
 		period = _period

@@ -34,5 +34,5 @@
 		{/if}
 	</button>
 
-	<PeriodForm bind:this={periodForm} on:success />
+	<PeriodForm bind:this={periodForm} on:success {period} />
 </DropDown>
