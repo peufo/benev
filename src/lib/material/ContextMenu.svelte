@@ -9,9 +9,8 @@
 	export function show(event: MouseEvent) {
 		const target = event.target as HTMLElement
 		if (!target || !(target instanceof HTMLElement)) return
-
 		dropdown.setTippyProps({
-			getReferenceClientRect: () => target.getBoundingClientRect(),
+			getReferenceClientRect: () => new DOMRect(event.clientX, event.clientY),
 		})
 		dropdown.show()
 		dispatch('show')
@@ -23,6 +22,6 @@
 	}
 </script>
 
-<DropDown bind:this={dropdown}>
+<DropDown bind:this={dropdown} tippyProps={{ offset: [0, -5] }}>
 	<slot />
 </DropDown>
