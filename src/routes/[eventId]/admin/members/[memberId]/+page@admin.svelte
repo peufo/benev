@@ -7,6 +7,7 @@
 	import { mdiAccountMultipleOutline, mdiArrowLeft, mdiClipboardTextMultipleOutline } from '@mdi/js'
 	import Profile from './Profile.svelte'
 	import { page } from '$app/stores'
+	import DisplayToggle from '$lib/material/display/DisplayToggle.svelte'
 
 	export let data
 
@@ -42,8 +43,9 @@
 	<Card class="border">
 		<h2 slot="title">Secteurs à charge</h2>
 
-		<div slot="action">
+		<div slot="action" class="flex gap-2">
 			{#if data.memberProfile.leaderOf.length}
+				<DisplayToggle />
 				<a href="{$eventPath}/admin/members?teams={teamsId}" class="btn btn-square btn-sm">
 					<Icon path={mdiAccountMultipleOutline} title="Tous les membres de ces secteurs" />
 				</a>
