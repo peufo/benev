@@ -176,6 +176,7 @@
 	bind:this={periodContextMenuEdit}
 	tippyProps={{ trigger: 'mouseenter mouseleave', interactiveDebounce: 500 }}
 >
+	<h2 slot="header" class="font-semibold">Nouvelle période</h2>
 	<PeriodForm bind:this={periodForm} on:success={() => periodContextMenuEdit.hide()} />
 </ContextMenu>
 

@@ -39,7 +39,7 @@
 </script>
 
 <ContextMenu
-	class="min-w-[360px] max-h-none"
+	class="max-h-none overflow-y-visible"
 	bind:this={contextMenu}
 	tippyProps={{ appendTo, interactiveDebounce: 500, trigger: 'mouseenter mouseleave' }}
 >
@@ -75,8 +75,11 @@
 				<PeriodSubscribes subscribes={period.subscribes} on:success={() => contextMenu.hide()} />
 
 				{#if !isComplet}
-					<InviteSubscribeForm periodId={period.id} on:success={() => contextMenu.hide()} />
-					<div class="h-56 h-0" />
+					<InviteSubscribeForm
+						periodId={period.id}
+						on:success={() => contextMenu.hide()}
+						tippyProps={{ appendTo: 'parent' }}
+					/>
 				{/if}
 			</div>
 		{:else}

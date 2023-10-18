@@ -23,7 +23,11 @@
 		const parent = icon.parentElement
 		const isButton = parent?.tagName === 'BUTTON' || parent?.tagName === 'A'
 		const target = parent && isButton && !disableTitlePropagation ? parent : icon
-		const tip = tippy(target || icon, { content: title, ...tippyProps })
+		const tip = tippy(target || icon, {
+			content: title,
+			trigger: 'mouseenter',
+			...tippyProps,
+		})
 		return () => {
 			tip.destroy()
 		}

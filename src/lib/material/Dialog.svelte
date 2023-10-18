@@ -3,12 +3,14 @@
 	import { Icon } from '$lib/material'
 	export let dialog: HTMLDialogElement
 	export let hideCloseButton = false
+	let klass = ''
+	export { klass as class }
 </script>
 
 <dialog bind:this={dialog} class="modal">
 	<div class="modal-box p-0 rounded-lg flex flex-col">
-		<div class="p-4 border-b flex relative">
-			<div class="grow sticky top-0">
+		<div class="p-4 border-b flex relative items-center">
+			<div class="grow">
 				<slot name="header" />
 			</div>
 
@@ -22,7 +24,7 @@
 				</button>
 			{/if}
 		</div>
-		<div class="p-4 grow overflow-auto">
+		<div class="p-4 grow overflow-auto {klass}">
 			<slot />
 		</div>
 

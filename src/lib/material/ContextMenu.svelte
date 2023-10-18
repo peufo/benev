@@ -36,18 +36,14 @@
 </script>
 
 {#if $isMobile}
-	<Dialog bind:dialog>
+	<Dialog bind:dialog class={klass}>
 		<div slot="header" class="contents">
 			<slot name="header" />
 		</div>
 		<slot />
 	</Dialog>
 {:else}
-	<DropDown
-		class="{klass} overflow-visible"
-		bind:this={dropdown}
-		tippyProps={{ offset: [0, -5], ...tippyProps }}
-	>
+	<DropDown class={klass} bind:this={dropdown} tippyProps={{ offset: [0, -5], ...tippyProps }}>
 		<div class="flex flex-col gap-2">
 			<slot name="header" />
 			<slot />
