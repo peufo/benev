@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition'
 	import { mdiClose } from '@mdi/js'
 	import { Field } from '@prisma/client'
-	import { Icon, SectionCollapse } from '$lib/material'
+	import { Dialog, Icon, SectionCollapse } from '$lib/material'
 	import { memberFieldType } from '$lib/form'
 	import MemberFieldForm from './MemberFieldForm.svelte'
 
@@ -46,16 +46,10 @@
 	<button class="btn" on:click={handleClickNewField}> Ajouter un champ </button>
 </SectionCollapse>
 
-<dialog bind:this={formDialog} class="modal">
-	<div class="modal-box">
-		<div class="flex items-center justify-between pb-4">
-			<span class="card-title">
-				{isUpdate ? 'Modifier le' : 'Ajouter un'} champ
-			</span>
-			<button class="btn btn-square btn-ghost btn-sm" on:click={() => formDialog.close()}>
-				<Icon path={mdiClose} />
-			</button>
-		</div>
-		<MemberFieldForm on:success={() => formDialog.close()} bind:this={memberFieldForm} />
-	</div>
-</dialog>
+<Dialog bind:dialog={formDialog}>
+	<span slot="header" class="card-title">
+		{isUpdate ? 'Modifier le' : 'Ajouter un'} champ
+	</span>
+
+	<MemberFieldForm on:success={() => formDialog.close()} bind:this={memberFieldForm} />
+</Dialog>

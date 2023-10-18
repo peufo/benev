@@ -76,6 +76,7 @@
 
 				{#if !isComplet}
 					<InviteSubscribeForm periodId={period.id} on:success={() => contextMenu.hide()} />
+					<div class="h-56 h-0" />
 				{/if}
 			</div>
 		{:else}
