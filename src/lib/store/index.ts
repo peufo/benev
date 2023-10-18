@@ -2,6 +2,7 @@ import { derived } from 'svelte/store'
 import { page } from '$app/stores'
 import { sessionStore } from './utils'
 
+export * from './isMobile'
 export const eventPath = derived(page, ({ params }) => (params.eventId ? `/${params.eventId}` : ''))
 export const display = sessionStore<'list' | 'table'>('display', 'list')
 export const onlyAvailable = sessionStore('onlyAvailable', false)

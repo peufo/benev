@@ -21,6 +21,7 @@
 	{/if}
 </button>
 
-<Dialog bind:dialog title="Inviter un nouveau membre">
+<Dialog bind:dialog>
+	<h2 slot="header" class="card-title">Inviter un nouveau membre</h2>
 	<InviteForm on:success={() => dialog.close()} />
 </Dialog>

@@ -53,6 +53,7 @@
 	</div>
 </form>
 
-<Dialog bind:dialog={inviteDialog} title="Inviter un nouveau membre">
+<Dialog bind:dialog={inviteDialog}>
+	<h2 slot="header" class="card-title">Inviter un nouveau membre</h2>
 	<InviteForm on:success={() => inviteDialog.close()} />
 </Dialog>

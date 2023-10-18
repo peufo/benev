@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
-	import { DropDown } from '$lib/material'
+	import { Dialog, DropDown } from '$lib/material'
+	import { isMobile } from '$lib/store'
 	import type { Props as TippyProps } from 'tippy.js'
 
 	export let tippyProps: Partial<TippyProps> = {}
@@ -10,27 +11,46 @@
 	const dispatch = createEventDispatcher<{ show: void; hide: void }>()
 
 	let dropdown: DropDown
+	let dialog: HTMLDialogElement
 
 	export function show(event: MouseEvent) {
-		const target = event.target as HTMLElement
-		if (!target || !(target instanceof HTMLElement)) return
-		dropdown.setTippyProps({
-			getReferenceClientRect: () => new DOMRect(event.clientX, event.clientY),
-		})
-		dropdown.show()
+		if ($isMobile) {
+			dialog?.showModal()
+		} else {
+			const target = event.target as HTMLElement
+			if (!target || !(target instanceof HTMLElement)) return
+			dropdown?.setTippyProps({
+				getReferenceClientRect: () => new DOMRect(event.clientX, event.clientY),
+			})
+			dropdown?.show()
+		}
+
 		dispatch('show')
 	}
 
 	export function hide() {
-		dropdown.hide()
+		if ($isMobile) dialog?.close()
+		else dropdown?.hide()
 		dispatch('hide')
 	}
 </script>
 
-<DropDown
-	class="{klass} overflow-visible"
-	bind:this={dropdown}
-	tippyProps={{ offset: [0, -5], ...tippyProps }}
->
-	<slot />
-</DropDown>
+{#if $isMobile}
+	<Dialog bind:dialog>
+		<div slot="header" class="contents">
+			<slot name="header" />
+		</div>
+		<slot />
+	</Dialog>
+{:else}
+	<DropDown
+		class="{klass} overflow-visible"
+		bind:this={dropdown}
+		tippyProps={{ offset: [0, -5], ...tippyProps }}
+	>
+		<div class="flex flex-col gap-2">
+			<slot name="header" />
+			<slot />
+		</div>
+	</DropDown>
+{/if}

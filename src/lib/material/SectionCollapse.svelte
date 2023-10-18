@@ -7,7 +7,6 @@
 	export let value: string
 	let klass = ''
 	export { klass as class }
-	export let returnUrl = ''
 
 	$: isOpen = $urlParam.hasValue('section', value)
 

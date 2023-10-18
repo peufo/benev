@@ -11,13 +11,14 @@
 	let createDialog: HTMLDialogElement
 </script>
 
-<Dialog bind:dialog={createDialog} title="Nouvel évènement">
+<Dialog bind:dialog={createDialog}>
+	<h2 slot="header" class="card-title">Nouvel évènement</h2>
 	<EventForm on:cancel={() => createDialog.close()} on:success={() => createDialog.close()} />
 </Dialog>
 
-<Header userName={data.user?.firstName} >
+<Header userName={data.user?.firstName}>
 	<a slot="start" class="btn-ghost text-lg btn btn-square" href="/">
-		<img src={logo} alt="logo benev" class="w-9 h-9" height="512" width="512">
+		<img src={logo} alt="logo benev" class="w-9 h-9" height="512" width="512" />
 	</a>
 </Header>
 
@@ -39,7 +40,7 @@
 				<CardLink href="/{event.id}">
 					<div slot="title" class="flex items-center gap-2">
 						{#if event.logo}
-							<img src={event.logo} alt="logo" class="h-6">
+							<img src={event.logo} alt="logo" class="h-6" />
 						{/if}
 						{event.name}
 					</div>
