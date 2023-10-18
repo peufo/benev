@@ -42,6 +42,7 @@
 				getItem={$api.member.findOne}
 				search={$api.member.search}
 				bind:item={member}
+				on:input
 				{tippyProps}
 			>
 				<div slot="item" class="contents" let:item>

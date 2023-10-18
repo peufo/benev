@@ -11,6 +11,7 @@
 	import PeriodDuplicate from './PeriodDuplicate.svelte'
 	import ContextMenuToggle from './ContextMenuToggle.svelte'
 	import PeriodForm from '$lib/PeriodForm.svelte'
+	import { slide } from 'svelte/transition'
 
 	export let appendTo: TippyProps['appendTo'] = 'parent'
 
@@ -36,10 +37,12 @@
 		period &&
 		period.subscribes.filter(({ state }) => state === 'request' || state === 'accepted').length >=
 			period.maxSubscribe
+
+	let inviteDropdownIsOpen = false
 </script>
 
 <ContextMenu
-	class="max-h-none overflow-y-visible"
+	class="max-h-none {inviteDropdownIsOpen ? 'overflow-hidden' : ''}"
 	bind:this={contextMenu}
 	tippyProps={{ appendTo, interactiveDebounce: 500, trigger: 'mouseenter mouseleave' }}
 >
@@ -78,8 +81,25 @@
 					<InviteSubscribeForm
 						periodId={period.id}
 						on:success={() => contextMenu.hide()}
-						tippyProps={{ appendTo: 'parent' }}
+						on:input={() => {
+							setTimeout(() => (inviteDropdownIsOpen = false), 100)
+						}}
+						tippyProps={{
+							placement: 'bottom-start',
+							popperOptions: {
+								modifiers: [{ name: 'flip', enabled: false }],
+							},
+							onTrigger: () => {
+								inviteDropdownIsOpen = true
+							},
+							onHidden: () => {
+								inviteDropdownIsOpen = false
+							},
+						}}
 					/>
+					{#if inviteDropdownIsOpen}
+						<div transition:slide={{ duration: 150 }} class="h-56" />
+					{/if}
 				{/if}
 			</div>
 		{:else}
