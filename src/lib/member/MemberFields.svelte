@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { mdiClose } from '@mdi/js'
 	import { Field } from '@prisma/client'
 	import { Dialog, Icon, SectionCollapse } from '$lib/material'
 	import { memberFieldType } from '$lib/form'
 	import MemberFieldForm from './MemberFieldForm.svelte'
+	import { listEditable } from '$lib/action'
+	import { mdiDrag } from '@mdi/js'
 
 	export let fields: Field[]
 
@@ -27,18 +28,21 @@
 <SectionCollapse value="member-profil">
 	<span slot="title"> Profil des membres </span>
 	<span slot="subtitle">Informations complémentaires concernant vos membres</span>
-	<div>
+	<div use:listEditable={{ dragElementsSelector: '.drag-button' }} class="flex flex-col gap-2">
 		{#each fields as field (field.id)}
 			<button
 				transition:slide
 				on:click={() => handleClickUpdateField(field)}
 				class="
-					w-full mt-2 flex gap-3 p-3 items-center border border-neutral rounded-lg
-					bg-base-200/50 hover:bg-base-200 cursor-pointer
-				"
+						w-full flex gap-3 p-3 items-center border border-neutral rounded-lg
+						bg-base-200/50 hover:bg-base-200 cursor-pointer
+					"
 			>
-				<Icon path={memberFieldType[field.type].icon} />
-				{field.name}
+				<Icon path={memberFieldType[field.type].icon} class="opacity-70" />
+				<span>{field.name}</span>
+				<span class="drag-button btn btn-sm btn-square btn-ghost ml-auto">
+					<Icon path={mdiDrag} />
+				</span>
 			</button>
 		{/each}
 	</div>

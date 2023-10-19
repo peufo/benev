@@ -2,35 +2,27 @@ import type { ListEditableOptions, CreateMouseMoveOptions } from './type'
 import './index.css'
 import { CLASSNAME_DRAG_ACTIVE } from './index'
 import { initDragStyle, resetDragStyle } from './style'
-import {
-	createPlaceholder,
-	getListItem,
-	computeLimits,
-	getNewOrderIndex,
-	getListItemIndex,
-} from './utils'
+import { createPlaceholder, computeLimits, getNewOrderIndex, getListItemIndex } from './utils'
 
 export function createMouseDownHandler<Type = unknown>(
-	node: HTMLDivElement,
+	listElement: HTMLDivElement,
+	itemElement: HTMLElement,
 	options: ListEditableOptions<Type>
 ) {
 	return (event: MouseEvent) => {
-		const dragEl = getListItem(event.target as HTMLElement)
-		if (!dragEl) return
-		if (!node) return
-		node.classList.add(CLASSNAME_DRAG_ACTIVE)
-		dragEl.classList.add(CLASSNAME_DRAG_ACTIVE)
+		listElement.classList.add(CLASSNAME_DRAG_ACTIVE)
+		itemElement.classList.add(CLASSNAME_DRAG_ACTIVE)
 
-		const limits = computeLimits(node, dragEl)
+		const limits = computeLimits(listElement, itemElement)
 		if (!limits) return
 
-		initDragStyle(dragEl)
-		const indexFrom = getListItemIndex(node, dragEl)
-		const placeholder = createPlaceholder({ listEl: node, dragEl, indexFrom })
+		initDragStyle(itemElement)
+		const indexFrom = getListItemIndex(listElement, itemElement)
+		const placeholder = createPlaceholder({ listElement, itemElement: itemElement, indexFrom })
 
 		let indexTo = indexFrom
 		const handleMouseMove = createMouseMoveHandler(
-			{ dragEl, limits, originMouseY: event.clientY, indexFrom },
+			{ itemElement: itemElement, limits, originMouseY: event.clientY, indexFrom },
 			(newIndex) => {
 				const { onHover } = options
 				indexTo = newIndex
@@ -39,14 +31,14 @@ export function createMouseDownHandler<Type = unknown>(
 			}
 		)
 
-		const handleMouseUp = () => {
+		const handleMouseUp = (event: MouseEvent) => {
 			const { onMove, onChange, onReindex, items } = options
 
 			document.removeEventListener('mousemove', handleMouseMove)
-			resetDragStyle(dragEl)
+			resetDragStyle(itemElement)
 			placeholder.remove()
-			node.classList.remove(CLASSNAME_DRAG_ACTIVE)
-			dragEl.classList.remove(CLASSNAME_DRAG_ACTIVE)
+			listElement.classList.remove(CLASSNAME_DRAG_ACTIVE)
+			itemElement.classList.remove(CLASSNAME_DRAG_ACTIVE)
 			if (indexFrom === indexTo) return
 			if (onMove) onMove(indexFrom, indexTo)
 			if (onChange || onReindex) {
@@ -70,18 +62,18 @@ export function createMouseDownHandler<Type = unknown>(
 }
 
 function createMouseMoveHandler(
-	{ dragEl, limits, originMouseY, indexFrom }: CreateMouseMoveOptions,
+	{ itemElement, limits, originMouseY, indexFrom }: CreateMouseMoveOptions,
 	onHover: (newIndex: number) => void
 ) {
 	let currentIndex = indexFrom
 
 	return (event: MouseEvent) => {
-		if (!dragEl || !limits || !originMouseY) return
+		if (!itemElement || !limits || !originMouseY) return
 		let deltaMouseY = event.clientY - originMouseY
 		if (deltaMouseY < limits.top) deltaMouseY = limits.top
 		if (deltaMouseY > limits.bottom) deltaMouseY = limits.bottom
 
-		dragEl.style.transform = `translateY(${deltaMouseY}px)`
+		itemElement.style.transform = `translateY(${deltaMouseY}px)`
 
 		const newIndex = limits.items.findIndex((center) => deltaMouseY <= center)
 

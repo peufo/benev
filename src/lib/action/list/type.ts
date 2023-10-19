@@ -8,18 +8,21 @@ export interface ListEditableOptions<Type = unknown> {
 	/** Fournir les items pour directement récupérer la liste à jour dans onChange */
 	items?: Type[]
 	onDelete?: (index: number, items?: Type[]) => void
+
+	/** Only handle reorder from this elements */
+	dragElementsSelector?: string
 }
 
 export interface CreateMouseMoveOptions {
-	dragEl: HTMLElement
+	itemElement: HTMLElement
 	originMouseY: number
 	limits: ILimits
 	indexFrom: number
 }
 
 export interface CreatePlaceholderArgs {
-	listEl: HTMLElement
-	dragEl: HTMLElement
+	listElement: HTMLElement
+	itemElement: HTMLElement
 	indexFrom: number
 }
 

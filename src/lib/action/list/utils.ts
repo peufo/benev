@@ -1,28 +1,21 @@
 import type { ILimits, CreatePlaceholderArgs } from './type'
-import { CLASSNAME_LIST, CLASSNAME_PLACEHOLDER } from './index'
+import { CLASSNAME_PLACEHOLDER } from './index'
 
-/** Permet de remonter sur "editable > div" depuis click.target */
-export function getListItem(element: HTMLElement | null): HTMLElement | null {
-	if (element === null) return null
-	if (element.parentElement?.classList.contains(CLASSNAME_LIST)) return element
-	return getListItem(element.parentElement)
+export function getListItemIndex(listElement: HTMLElement, itemEl: HTMLElement) {
+	return [...listElement.children].findIndex((item) => item === itemEl)
 }
 
-export function getListItemIndex(listEl: HTMLElement, itemEl: HTMLElement) {
-	return [...listEl.children].findIndex((item) => item === itemEl)
-}
-
-export function createPlaceholder({ listEl, dragEl, indexFrom }: CreatePlaceholderArgs) {
-	const itemsEl = [...listEl.children]
+export function createPlaceholder({ listElement, itemElement, indexFrom }: CreatePlaceholderArgs) {
+	const itemsEl = [...listElement.children]
 	const placeholderEl = document.createElement('div')
 	placeholderEl.classList.add(CLASSNAME_PLACEHOLDER)
-	placeholderEl.style.height = `${dragEl.offsetHeight}px`
-	listEl.insertBefore(placeholderEl, dragEl)
+	placeholderEl.style.height = `${itemElement.offsetHeight}px`
+	listElement.insertBefore(placeholderEl, itemElement)
 
 	const moveTo = (index: number) => {
 		const selectorIndex = index < indexFrom ? index : index + 1
 		const itemEl = itemsEl[selectorIndex]
-		listEl.insertBefore(placeholderEl, itemEl)
+		listElement.insertBefore(placeholderEl, itemEl)
 	}
 	return {
 		moveTo,
@@ -35,9 +28,9 @@ export function createPlaceholder({ listEl, dragEl, indexFrom }: CreatePlacehold
 }
 
 /** Calcule les limites de déplacement supérieur, inférieur et les frontières entre deux items */
-export function computeLimits(listEl: HTMLElement, dragEl: HTMLElement): ILimits | null {
-	const rect = dragEl.getBoundingClientRect()
-	const itemsRect = [...listEl.children]
+export function computeLimits(listElement: HTMLElement, listItemEl: HTMLElement): ILimits | null {
+	const rect = listItemEl.getBoundingClientRect()
+	const itemsRect = [...listElement.children]
 		.filter((el) => !el.classList.contains(CLASSNAME_PLACEHOLDER))
 		.map((el) => el.getBoundingClientRect())
 

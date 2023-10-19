@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 export const load = async ({ params }) => ({
 	memberFields: await prisma.field.findMany({
+		orderBy: { position: 'asc' },
 		where: {
 			eventId: params.eventId,
 		},
@@ -35,19 +36,17 @@ export const actions = {
 			'/'
 		)
 	},
-	create_field: async ({ request, params, locals }) => {
-		await isOwnerOrThrow(params.eventId, locals)
+	create_field: async ({ request, locals, params: { eventId } }) => {
+		await isOwnerOrThrow(eventId, locals)
 		const { err, data } = await parseFormData(request, memberFieldShema)
 		if (err) return err
 
-		return tryOrFail(() =>
-			prisma.field.create({
-				data: {
-					...data,
-					eventId: params.eventId,
-				},
+		return tryOrFail(async () => {
+			const nbFields = await prisma.field.count({ where: { eventId } })
+			return prisma.field.create({
+				data: { ...data, eventId, position: nbFields },
 			})
-		)
+		})
 	},
 	delete_field: async ({ request, params, locals }) => {
 		await isOwnerOrThrow(params.eventId, locals)
@@ -72,5 +71,8 @@ export const actions = {
 				data,
 			})
 		)
+	},
+	reorder_fields: async ({}) => {
+		console.log('TODO')
 	},
 }

@@ -95,6 +95,7 @@ model Field {
   type            FieldType
   name            String
   label           String?
+  position        Int          @default(0)
   memberCanWrite  Boolean
   memberCanRead   Boolean
   allCombinations Boolean      @default(false)

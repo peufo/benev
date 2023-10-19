@@ -1,15 +1,15 @@
-export function initDragStyle(dragEl: HTMLElement) {
-	dragEl.style.zIndex = `${+dragEl.style.zIndex + 1}`
-	dragEl.style.top = `${dragEl.offsetTop}px`
-	dragEl.style.width = `${dragEl.offsetWidth}px`
-	dragEl.style.height = `${dragEl.offsetHeight}px`
-	dragEl.style.position = 'absolute'
+export function initDragStyle(listItemEl: HTMLElement) {
+	listItemEl.style.zIndex = `${+listItemEl.style.zIndex + 1}`
+	listItemEl.style.top = `${listItemEl.offsetTop}px`
+	listItemEl.style.width = `${listItemEl.offsetWidth}px`
+	listItemEl.style.height = `${listItemEl.offsetHeight}px`
+	listItemEl.style.position = 'absolute'
 }
 
-export function resetDragStyle(dragEl: HTMLElement) {
-	dragEl.style.position = 'initial'
-	dragEl.style.zIndex = `${+dragEl.style.zIndex - 1}`
-	dragEl.style.transform = ''
-	dragEl.style.width = `auto`
-	dragEl.style.height = `auto`
+export function resetDragStyle(listItemEl: HTMLElement) {
+	listItemEl.style.position = 'initial'
+	listItemEl.style.zIndex = `${+listItemEl.style.zIndex - 1}`
+	listItemEl.style.transform = ''
+	listItemEl.style.width = `auto`
+	listItemEl.style.height = `auto`
 }

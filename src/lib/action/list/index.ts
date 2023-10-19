@@ -11,9 +11,25 @@ export function listEditable<Type = unknown>(
 	node: HTMLDivElement,
 	options: ListEditableOptions<Type> = {}
 ) {
-	const { onDelete, items } = options
+	const { onDelete, items, dragElementsSelector } = options
+	node.classList.add(CLASSNAME_LIST)
+	const itemElements = Array.from(node.children) as HTMLElement[]
+	const dragElements = Array.from(
+		dragElementsSelector ? node.querySelectorAll(dragElementsSelector) : itemElements
+	) as HTMLElement[]
 
-	const mouseDownHandler = createMouseDownHandler<Type>(node, options)
+	const mouseDownHandlers = itemElements.map((itemElement) =>
+		createMouseDownHandler<Type>(node, itemElement, options)
+	)
+	dragElements.forEach((element, index) => {
+		element.addEventListener('mousedown', mouseDownHandlers[index])
+	})
+
+	// Stop la propagation du click si l'activateur est un sous élément
+	const stopPropagation = (event: MouseEvent) => event.stopPropagation()
+	if (dragElementsSelector) {
+		dragElements.forEach((el) => el.addEventListener('click', stopPropagation))
+	}
 
 	const deleteButtons = node.querySelectorAll(CLASSNAME_DELETE)
 	const deleteButtonHandlers: ((event: Event) => void)[] = []
@@ -26,15 +42,16 @@ export function listEditable<Type = unknown>(
 		deleteButtonHandlers.push(handler)
 	})
 
-	node.classList.add(CLASSNAME_LIST)
-	node.addEventListener('mousedown', mouseDownHandler)
-
 	return {
 		destroy() {
-			if (node) {
-				node.classList.remove(CLASSNAME_LIST)
-				node.removeEventListener('mousedown', mouseDownHandler)
+			node?.classList.remove(CLASSNAME_LIST)
+			dragElements.forEach((element, index) => {
+				element.removeEventListener('mousedown', mouseDownHandlers[index])
+			})
+			if (dragElementsSelector) {
+				dragElements.forEach((el) => el.removeEventListener('click', stopPropagation))
 			}
+
 			deleteButtonHandlers.forEach((handler, index) => {
 				deleteButtons[index].removeEventListener('mousedown', handler)
 			})
