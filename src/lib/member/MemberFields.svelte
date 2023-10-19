@@ -1,13 +1,17 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
+	import { mdiDrag } from '@mdi/js'
+	import axios from 'axios'
 	import { Field } from '@prisma/client'
+	import { listEditable } from '$lib/action'
 	import { Dialog, Icon, SectionCollapse } from '$lib/material'
 	import { memberFieldType } from '$lib/form'
 	import MemberFieldForm from './MemberFieldForm.svelte'
-	import { listEditable } from '$lib/action'
-	import { mdiDrag } from '@mdi/js'
+	import { eventPath } from '$lib/store'
+	import { useNotify } from '$lib/notify'
 
 	export let fields: Field[]
+	const notify = useNotify()
 
 	let formDialog: HTMLDialogElement
 	let memberFieldForm: MemberFieldForm
@@ -23,13 +27,33 @@
 		memberFieldForm.setField(field)
 		formDialog.showModal()
 	}
+
+	async function handleReorder(reorderedFields: Field[]) {
+		fields = reorderedFields
+		const form = new FormData()
+		reorderedFields.forEach((field, index) => {
+			form.append(field.id, String(index))
+		})
+		axios
+			.postForm(`${$eventPath}/admin/config?/reorder_fields`, form)
+			.then(() => notify.success('Nouvel ordre sauvegardé'))
+			.catch((err) => notify.error(err))
+	}
 </script>
 
+<!-- svelte-ignore missing-declaration -->
 <SectionCollapse value="member-profil">
 	<span slot="title"> Profil des membres </span>
 	<span slot="subtitle">Informations complémentaires concernant vos membres</span>
 
-	<div use:listEditable={{ dragElementsSelector: '.drag-button' }} class="flex flex-col gap-2">
+	<div
+		use:listEditable={{
+			dragElementsSelector: '.drag-button',
+			items: fields,
+			onChange: handleReorder,
+		}}
+		class="flex flex-col gap-2"
+	>
 		{#each fields as field (field.id)}
 			<button
 				transition:slide

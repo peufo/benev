@@ -72,7 +72,20 @@ export const actions = {
 			})
 		)
 	},
-	reorder_fields: async ({}) => {
-		console.log('TODO')
+	reorder_fields: async ({ request }) => {
+		const formData: Record<string, unknown> = Object.fromEntries(await request.formData())
+
+		const updates: { id: string; position: number }[] = []
+		Object.entries(formData).forEach(([id, position]) => {
+			if (typeof position === 'string') updates.push({ id, position: +position })
+		})
+
+		return tryOrFail(() =>
+			prisma.$transaction(
+				updates.map(({ id, position }) =>
+					prisma.field.update({ where: { id }, data: { position } })
+				)
+			)
+		)
 	},
 }
