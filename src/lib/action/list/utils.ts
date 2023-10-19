@@ -1,13 +1,18 @@
-import type { ILimits, CreatePlaceholderArgs } from './type'
 import { CLASSNAME_PLACEHOLDER } from './index'
 
 export function getListItemIndex(listElement: HTMLElement, itemEl: HTMLElement) {
 	return [...listElement.children].findIndex((item) => item === itemEl)
 }
 
+export interface CreatePlaceholderArgs {
+	listElement: HTMLElement
+	itemElement: HTMLElement
+	indexFrom: number
+}
 export function createPlaceholder({ listElement, itemElement, indexFrom }: CreatePlaceholderArgs) {
 	const itemsEl = [...listElement.children]
 	const placeholderEl = document.createElement('div')
+
 	placeholderEl.classList.add(CLASSNAME_PLACEHOLDER)
 	placeholderEl.style.height = `${itemElement.offsetHeight}px`
 	listElement.insertBefore(placeholderEl, itemElement)
@@ -27,8 +32,13 @@ export function createPlaceholder({ listElement, itemElement, indexFrom }: Creat
 	}
 }
 
+export interface Limits {
+	top: number
+	bottom: number
+	items: number[]
+}
 /** Calcule les limites de déplacement supérieur, inférieur et les frontières entre deux items */
-export function computeLimits(listElement: HTMLElement, listItemEl: HTMLElement): ILimits | null {
+export function computeLimits(listElement: HTMLElement, listItemEl: HTMLElement): Limits | null {
 	const rect = listItemEl.getBoundingClientRect()
 	const itemsRect = [...listElement.children]
 		.filter((el) => !el.classList.contains(CLASSNAME_PLACEHOLDER))
@@ -69,4 +79,45 @@ export function getNewOrderIndex(len: number, indexFrom: number, indexTo: number
 	const newOrder = [...arrStart, ...arrMove, ...arrEnd]
 
 	return newOrder
+}
+
+export type Position = {
+	clientX: number
+	clientY: number
+}
+
+type DragEvent = {
+	start: (position: Position) => any
+	move: (position: Position) => any
+	end: () => any
+}
+/** Gestion du cycle de vie des évenements de la souris */
+export function dragHandler(element: HTMLElement, handlers: DragEvent) {
+	function startHandler(event: MouseEvent) {
+		handlers.start(event)
+		document.addEventListener('mousemove', handlers.move)
+		document.addEventListener('mouseup', endHandler)
+	}
+
+	function endHandler() {
+		document.removeEventListener('mousemove', handlers.move)
+		document.removeEventListener('mouseup', endHandler)
+		handlers.end()
+	}
+
+	function stopPropagation(event: Event) {
+		event.stopPropagation()
+	}
+
+	element.addEventListener('mousedown', startHandler)
+	element.addEventListener('click', stopPropagation)
+
+	return {
+		detroy() {
+			document.removeEventListener('mousedown', startHandler)
+			document.removeEventListener('mousemove', handlers.move)
+			document.removeEventListener('mouseup', endHandler)
+			element.removeEventListener('click', stopPropagation)
+		},
+	}
 }
