@@ -1,0 +1,50 @@
+name: Benev CI
+
+on:
+  push:
+    branches: [main]
+
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      SSH_HOST:
+        required: true
+      SSH_USERNAME:
+        required: true
+      SSH_PASSWORD:
+        required: true
+
+jobs:
+  build:
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Copy codebase in tmp/app
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: '.'
+          target: '~/tmp/app'
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            cp ~/.env ~/tmp/app/.env
+            cd ~/tmp/app
+            pnpm install --frozen-lockfile
+            pnpm build
+            rm -rf ~/app
+            mv ~/tmp/app ~/app
+            cd ~/app
+            pm2 startOrRestart pm2.config.json

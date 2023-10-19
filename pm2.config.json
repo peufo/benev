@@ -1,0 +1,9 @@
+{
+	"apps": [
+		{
+			"name": "benev",
+			"script": "./build/index.js",
+			"args": "-r dotenv/config"
+		}
+	]
+}
