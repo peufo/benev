@@ -22,7 +22,7 @@
 <div class="card border shadow-md {klass}" bind:this={card}>
 	<a
 		id={value}
-		class="p-7"
+		class="py-8 px-4 md:p-8"
 		href={$urlParam.toggle({ section: value })}
 		data-sveltekit-noscroll
 		on:click={handleClick}
@@ -42,7 +42,7 @@
 	</a>
 
 	{#if isOpen}
-		<div class="card-body pt-0" transition:slide={{ duration: 200 }}>
+		<div class="card-body pt-0 px-4 md:p-8 md:pt-0" transition:slide={{ duration: 200 }}>
 			<slot />
 		</div>
 	{/if}

@@ -28,6 +28,7 @@
 <SectionCollapse value="member-profil">
 	<span slot="title"> Profil des membres </span>
 	<span slot="subtitle">Informations complémentaires concernant vos membres</span>
+
 	<div use:listEditable={{ dragElementsSelector: '.drag-button' }} class="flex flex-col gap-2">
 		{#each fields as field (field.id)}
 			<button
