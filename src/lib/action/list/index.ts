@@ -1,5 +1,5 @@
 import { createDragHandler } from './handlers'
-import { dragHandler } from './utils'
+import { mouseDragHandler, touchDragHandler } from './utils'
 
 export const CLASSNAME_LIST = 'editable-list'
 export const CLASSNAME_DRAG_ACTIVE = 'drag-active'
@@ -32,14 +32,18 @@ export function listEditable<Type = unknown>(
 		...(dragElementsSelector ? node.querySelectorAll(dragElementsSelector) : itemElements),
 	] as HTMLElement[]
 
-	const listeners = dragElements.map((dragElement, index) =>
-		dragHandler(dragElement, createDragHandler(node, itemElements[index], options))
+	const mouseListeners = dragElements.map((dragElement, index) =>
+		mouseDragHandler(dragElement, createDragHandler(node, itemElements[index], options))
+	)
+	const touchListeners = dragElements.map((dragElement, index) =>
+		touchDragHandler(dragElement, createDragHandler(node, itemElements[index], options))
 	)
 
 	return {
 		destroy() {
 			node?.classList.remove(CLASSNAME_LIST)
-			listeners.forEach((listener) => listener.detroy())
+			mouseListeners.forEach((listener) => listener.detroy())
+			touchListeners.forEach((listener) => listener.detroy())
 		},
 	}
 }

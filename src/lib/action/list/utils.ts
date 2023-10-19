@@ -91,8 +91,9 @@ type DragEvent = {
 	move: (position: Position) => any
 	end: () => any
 }
+
 /** Gestion du cycle de vie des évenements de la souris */
-export function dragHandler(element: HTMLElement, handlers: DragEvent) {
+export function mouseDragHandler(element: HTMLElement, handlers: DragEvent) {
 	function startHandler(event: MouseEvent) {
 		handlers.start(event)
 		document.addEventListener('mousemove', handlers.move)
@@ -117,6 +118,45 @@ export function dragHandler(element: HTMLElement, handlers: DragEvent) {
 			document.removeEventListener('mousedown', startHandler)
 			document.removeEventListener('mousemove', handlers.move)
 			document.removeEventListener('mouseup', endHandler)
+			element.removeEventListener('click', stopPropagation)
+		},
+	}
+}
+
+/** Gestion du cycle de vie des évenements de la souris */
+export function touchDragHandler(element: HTMLElement, handlers: DragEvent) {
+	let onDrag = false
+
+	function startHandler(event: TouchEvent) {
+		onDrag = true
+		handlers.start(event.touches[0])
+	}
+
+	function moveHandler(event: TouchEvent) {
+		if (!onDrag) return
+		event.preventDefault()
+		handlers.move(event.touches[0])
+	}
+
+	function endHandler() {
+		onDrag = false
+		handlers.end()
+	}
+
+	function stopPropagation(event: Event) {
+		event.stopPropagation()
+	}
+
+	element.addEventListener('touchstart', startHandler)
+	element.addEventListener('touchmove', moveHandler)
+	element.addEventListener('touchend', endHandler)
+	element.addEventListener('click', stopPropagation)
+
+	return {
+		detroy() {
+			element.removeEventListener('touchstart', startHandler)
+			element.removeEventListener('touchmove', moveHandler)
+			element.removeEventListener('touchend', endHandler)
 			element.removeEventListener('click', stopPropagation)
 		},
 	}
