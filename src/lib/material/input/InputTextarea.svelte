@@ -16,6 +16,7 @@
 		name={key}
 		id={key}
 		class="textarea textarea-bordered"
+		rows="4"
 		{...textarea}
 	/>
 </FormControl>
