@@ -4,12 +4,17 @@ import { CLASSNAME_DRAG_ACTIVE } from './index'
 import { initDragStyle, resetDragStyle } from './style'
 import { createPlaceholder, computeLimits, getNewOrderIndex, getListItemIndex } from './utils'
 
-export function createMouseDownHandler<Type = unknown>(
+type Position = {
+	clientX: number
+	clientY: number
+}
+
+export function createStartHandler<Type = unknown>(
 	listElement: HTMLDivElement,
 	itemElement: HTMLElement,
 	options: ListEditableOptions<Type>
 ) {
-	return (event: MouseEvent) => {
+	return (position: Position) => {
 		listElement.classList.add(CLASSNAME_DRAG_ACTIVE)
 		itemElement.classList.add(CLASSNAME_DRAG_ACTIVE)
 
@@ -21,8 +26,8 @@ export function createMouseDownHandler<Type = unknown>(
 		const placeholder = createPlaceholder({ listElement, itemElement: itemElement, indexFrom })
 
 		let indexTo = indexFrom
-		const handleMouseMove = createMouseMoveHandler(
-			{ itemElement: itemElement, limits, originMouseY: event.clientY, indexFrom },
+		const handleMove = createMoveHandler(
+			{ itemElement: itemElement, limits, originMouseY: position.clientY, indexFrom },
 			(newIndex) => {
 				const { onHover } = options
 				indexTo = newIndex
@@ -30,11 +35,19 @@ export function createMouseDownHandler<Type = unknown>(
 				if (onHover) onHover(indexTo)
 			}
 		)
+		const handleTouchMove = (event: TouchEvent) => {
+			const position = event.touches[0]
+			return handleMove(position)
+		}
 
-		const handleMouseUp = (event: MouseEvent) => {
+		const handleEnd = () => {
 			const { onMove, onChange, onReindex, items } = options
 
-			document.removeEventListener('mousemove', handleMouseMove)
+			document.removeEventListener('mousemove', handleMove)
+			document.removeEventListener('touchstart', handleTouchMove)
+			document.removeEventListener('mouseup', handleEnd)
+			document.removeEventListener('touchend', handleEnd)
+
 			resetDragStyle(itemElement)
 			placeholder.remove()
 			listElement.classList.remove(CLASSNAME_DRAG_ACTIVE)
@@ -56,18 +69,20 @@ export function createMouseDownHandler<Type = unknown>(
 			}
 		}
 
-		document.addEventListener('mousemove', handleMouseMove)
-		document.addEventListener('mouseup', handleMouseUp, { once: true })
+		document.addEventListener('mousemove', handleMove)
+		document.addEventListener('touchstart', handleTouchMove)
+		document.addEventListener('mouseup', handleEnd)
+		document.addEventListener('touchend', handleEnd)
 	}
 }
 
-function createMouseMoveHandler(
+function createMoveHandler(
 	{ itemElement, limits, originMouseY, indexFrom }: CreateMouseMoveOptions,
 	onHover: (newIndex: number) => void
 ) {
 	let currentIndex = indexFrom
 
-	return (event: MouseEvent) => {
+	return (event: Position) => {
 		if (!itemElement || !limits || !originMouseY) return
 		let deltaMouseY = event.clientY - originMouseY
 		if (deltaMouseY < limits.top) deltaMouseY = limits.top

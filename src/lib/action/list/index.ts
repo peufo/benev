@@ -1,5 +1,5 @@
 import type { ListEditableOptions } from './type'
-import { createMouseDownHandler } from './handlers'
+import { createStartHandler } from './handlers'
 
 export * from './type'
 export const CLASSNAME_LIST = 'editable-list'
@@ -18,11 +18,16 @@ export function listEditable<Type = unknown>(
 		dragElementsSelector ? node.querySelectorAll(dragElementsSelector) : itemElements
 	) as HTMLElement[]
 
-	const mouseDownHandlers = itemElements.map((itemElement) =>
-		createMouseDownHandler<Type>(node, itemElement, options)
+	const startHandlers = itemElements.map((itemElement) =>
+		createStartHandler<Type>(node, itemElement, options)
 	)
+	const startTouchHandlers = startHandlers.map((handler) => (event: TouchEvent) => {
+		const position = event.touches[0]
+		return handler(position)
+	})
 	dragElements.forEach((element, index) => {
-		element.addEventListener('mousedown', mouseDownHandlers[index])
+		element.addEventListener('mousedown', startHandlers[index])
+		element.addEventListener('touchstart', startTouchHandlers[index])
 	})
 
 	// Stop la propagation du click si l'activateur est un sous élément
@@ -46,7 +51,7 @@ export function listEditable<Type = unknown>(
 		destroy() {
 			node?.classList.remove(CLASSNAME_LIST)
 			dragElements.forEach((element, index) => {
-				element.removeEventListener('mousedown', mouseDownHandlers[index])
+				element.removeEventListener('mousedown', startHandlers[index])
 			})
 			if (dragElementsSelector) {
 				dragElements.forEach((el) => el.removeEventListener('click', stopPropagation))
