@@ -56,6 +56,9 @@ dependencies:
   perod:
     specifier: ^1.3.1
     version: 1.3.1
+  svelte-easy-crop:
+    specifier: ^2.0.1
+    version: 2.0.1
   svelte-notifications:
     specifier: ^0.9.98
     version: 0.9.98
@@ -2541,6 +2544,10 @@ packages:
       - stylus
       - sugarss
     dev: true
+
+  /svelte-easy-crop@2.0.1:
+    resolution: {integrity: sha512-5cB5wif3DuP92u0etdxk3u0fbGwyNq5G4Dd454g3LeMdVn15oim2rlWPNcbgH5Jr1AJZI5k4Bsp70zbQ0lpNtg==}
+    dev: false
 
   /svelte-eslint-parser@0.32.2(svelte@4.1.2):
     resolution: {integrity: sha512-Ok9D3A4b23iLQsONrjqtXtYDu5ZZ/826Blaw2LeFZVTg1pwofKDG4mz3/GYTax8fQ0plRGHI6j+d9VQYy5Lo/A==}
