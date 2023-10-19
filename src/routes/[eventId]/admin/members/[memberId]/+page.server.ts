@@ -8,7 +8,9 @@ export const load = async ({ params }) => {
 			where: { id: memberId },
 			include: {
 				user: true,
-				profile: true,
+				profile: {
+					orderBy: { field: { position: 'asc' } },
+				},
 				leaderOf: {
 					include: {
 						leaders: { include: { user: true } },
@@ -20,7 +22,9 @@ export const load = async ({ params }) => {
 		event: await prisma.event.findUniqueOrThrow({
 			where: { id: eventId },
 			include: {
-				memberFields: true,
+				memberFields: {
+					orderBy: { position: 'asc' },
+				},
 				teams: {
 					where: { periods: { some: { subscribes: { some: { memberId } } } } },
 					include: {

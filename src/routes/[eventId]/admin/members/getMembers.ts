@@ -131,7 +131,7 @@ export const getMembers = async (eventId: string, url: URL) => {
 			where: { ...periodWhere, team: { eventId, ...teamWhere } },
 			include: {},
 		}),
-		prisma.field.findMany({ where: { eventId } }),
+		prisma.field.findMany({ where: { eventId }, orderBy: { position: 'asc' } }),
 	])
 
 	return {

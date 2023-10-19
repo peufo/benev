@@ -22,6 +22,7 @@ export const load = async ({ params, locals, depends }) => {
 				include: {
 					memberFields: {
 						where: { memberCanRead: true },
+						orderBy: { position: 'asc' },
 					},
 				},
 			}),

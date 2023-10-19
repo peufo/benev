@@ -14,6 +14,7 @@ export const load = async ({ url, locals, params: { eventId } }) => {
 				event: {
 					include: {
 						memberFields: {
+							orderBy: { position: 'asc' },
 							where: { memberCanRead: true },
 						},
 					},

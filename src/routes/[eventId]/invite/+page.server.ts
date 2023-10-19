@@ -126,7 +126,7 @@ export const actions = {
 					event: {
 						include: {
 							owner: true,
-							memberFields: true,
+							memberFields: { orderBy: { position: 'asc' } },
 						},
 					},
 				},
