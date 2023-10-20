@@ -37,30 +37,32 @@
 		<img src={avatar} alt="Avatar de l'utilisateur" class="h-28 w-28" />
 	</button>
 
-	<div class="flex flex-col">
-		<div class="relative menu-item">
-			<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
-			<span>Charger une photo</span>
-			<input
-				type="file"
-				name="avatar"
-				accept="image/*"
-				bind:files
-				on:change={onFileSelected}
-				class="absolute inset-0 opacity-0 cursor-pointer"
-			/>
+	<form action="" method="post" enctype="multipart/form-data">
+		<div class="flex flex-col">
+			<div class="relative menu-item">
+				<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
+				<span>Charger une photo</span>
+				<input
+					type="file"
+					name="avatar"
+					accept="image/*"
+					bind:files
+					on:change={onFileSelected}
+					class="absolute inset-0 opacity-0 cursor-pointer"
+				/>
+			</div>
+
+			<button type="button" class="menu-item">
+				<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
+				<span>Supprimer cette photo</span>
+			</button>
+
+			<button type="button" class="menu-item" on:click={() => (avatar = avatarGeneration())}>
+				<Icon path={mdiReload} class="opacity-70" size={20} />
+				<span>Générer un autre avatar</span>
+			</button>
 		</div>
-
-		<button type="button" class="menu-item">
-			<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
-			<span>Supprimer cette photo</span>
-		</button>
-
-		<button type="button" class="menu-item" on:click={() => (avatar = avatarGeneration())}>
-			<Icon path={mdiReload} class="opacity-70" size={20} />
-			<span>Générer un autre avatar</span>
-		</button>
-	</div>
+	</form>
 </DropDown>
 
 <Dialog bind:dialog>

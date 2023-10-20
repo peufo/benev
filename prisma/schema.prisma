@@ -23,6 +23,10 @@ model User {
   tokens          Token[]
   isEmailVerified Boolean @default(false)
 
+  avatarId          String? @unique
+  avatar            Media?  @relation(name: "avatar", references: [id], fields: [avatarId], onDelete: SetNull)
+  avatarPlaceholder String  @default("") // remove default value after migration
+
   members Member[]
   events  Event[] // ownerOf
 
@@ -233,10 +237,13 @@ enum SubscribeState {
 model Media {
   id String @id @default(uuid())
 
-  name   String
-  small  String // 256x256
-  medium String // 512*512
+  name String
 
+  url    String
+  small  String? // 256x256
+  medium String? // 512*512
+
+  avatarOf    User?    @relation(name: "avatar")
   createdById String
   createdBy   User     @relation(references: [id], fields: [createdById], onDelete: Cascade)
   createdAt   DateTime @default(now())
