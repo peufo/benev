@@ -80,4 +80,16 @@ export const actions = {
 			})
 		})
 	},
+
+	upload_avatar: async ({ request }) => {
+		return tryOrFail(async () => {
+			const formData = await request.formData()
+			const image = formData.get('image')
+			const crop = formData.get('crop')
+			if (typeof crop !== 'string') throw Error('crop need to be s string')
+			console.log('TODO', image)
+
+			console.log('TODO')
+		})
+	},
 }

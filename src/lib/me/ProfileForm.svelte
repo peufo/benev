@@ -7,7 +7,8 @@
 	import { InputText, InputDate, FormControl } from '$lib/material/input'
 	import { Icon } from '$lib/material'
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
-	import Card from '$lib/material/Card.svelte'
+	import SectionCollapse from '$lib/material/SectionCollapse.svelte'
+	import AvatarForm from './AvatarForm.svelte'
 
 	export let user: User
 
@@ -25,8 +26,12 @@
 	})
 </script>
 
-<Card>
-	<h1 slot="title">Mon profil de base</h1>
+<SectionCollapse value="profile">
+	<div slot="logo" class="m-2 md:ml-8 shrink-0">
+		<AvatarForm />
+	</div>
+	<div slot="title">Mon profil de base</div>
+	<h2 slot="subtitle">Informations de base utiles pour tous les événements.</h2>
 
 	<form
 		method="post"
@@ -82,8 +87,13 @@
 		<InputText key="zipCode" label="Code postal" value={user.zipCode || ''} class="md:col-span-4" />
 		<InputText key="city" label="Localité" value={user.city || ''} class="md:col-span-4" />
 
-		<div class="flex justify-end md:col-span-12">
+		<div class="flex items-center col-span-full">
+			<span class="text-xs opacity-70">
+				Ces informations ne sont partagées qu'avec les responsables des événements auquels tu
+				participes.
+			</span>
+			<div class="grow" />
 			<button class="btn">Sauvegarder </button>
 		</div>
 	</form>
-</Card>
+</SectionCollapse>

@@ -92,7 +92,7 @@ type DragEvent = {
 	end: () => any
 }
 
-/** Gestion du cycle de vie des évenements de la souris */
+/** Gestion du cycle de vie des événements de la souris */
 export function mouseDragHandler(element: HTMLElement, handlers: DragEvent) {
 	function startHandler(event: MouseEvent) {
 		handlers.start(event)
@@ -123,7 +123,7 @@ export function mouseDragHandler(element: HTMLElement, handlers: DragEvent) {
 	}
 }
 
-/** Gestion du cycle de vie des évenements de la souris */
+/** Gestion du cycle de vie des événements de la souris */
 export function touchDragHandler(element: HTMLElement, handlers: DragEvent) {
 	let onDrag = false
 
