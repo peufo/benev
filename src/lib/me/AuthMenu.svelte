@@ -22,7 +22,7 @@
 
 {#if user}
 	<DropDown class="min-w-[200px]" hideOnBlur>
-		<button slot="activator" class="btn btn-square btn-ghost lg:inline-flex lg:w-auto lg:px-2">
+		<button slot="activator" class="btn bg-base-100 btn-circle overflow-hidden border">
 			<Avatar {user} />
 		</button>
 
