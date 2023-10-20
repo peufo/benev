@@ -1,19 +1,21 @@
 <script lang="ts">
 	import Cropper from 'svelte-easy-crop'
 	import { User } from '@prisma/client'
+	import type { Instance as TippyInstance } from 'tippy.js'
 	import { mdiReload, mdiTrashCanOutline, mdiTrayArrowUp } from '@mdi/js'
 
 	import { Dialog, DropDown, Icon } from '$lib/material'
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
+	import Avatar from './Avatar.svelte'
 
 	export let user: User
 
 	let dialog: HTMLDialogElement
+	let tip: TippyInstance
 	let files: FileList
 	let image = ''
-	let crop = { x: 0, y: 0 }
-	let zoom = 1
+	let crop: { width: number; height: number; x: number; y: number } | undefined = undefined
 
 	function onFileSelected() {
 		const file = files[0]
@@ -30,38 +32,41 @@
 		'?/upload_avatar': 'Nouvel photo de profil enregistré',
 	}
 	const form = useForm({
-		successCallback: (action) => {
+		successMessage: (action) => {
 			console.log(action.search)
 			return successMessages[action.search] || 'Succès'
+		},
+		successCallback: () => {
+			if (dialog.open) dialog.close()
 		},
 	})
 </script>
 
-<DropDown tippyProps={{ arrow: true }} hideOnBlur>
-	<button
-		slot="activator"
-		type="button"
-		class="border rounded-lg hover:shadow-lg transition-shadow"
-	>
-		<img src={user.avatarPlaceholder} alt="Avatar de l'utilisateur" class="h-28 w-28" />
-	</button>
+<form method="post" use:enhance={form.submit} enctype="multipart/form-data" class="contents">
+	<DropDown tippyProps={{ arrow: true }} hideOnBlur bind:tip>
+		<button
+			slot="activator"
+			type="button"
+			class="border rounded-lg hover:shadow-lg transition-shadow overflow-hidden"
+		>
+			<Avatar {user} class="h-28 w-28" />
+		</button>
 
-	<form action="/me/profile" method="post" enctype="multipart/form-data" use:enhance={form.submit}>
 		<div class="flex flex-col">
-			<div class="relative menu-item">
+			<button type="button" class="relative menu-item">
 				<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
 				<span>Charger une photo</span>
 				<input
 					type="file"
-					name="avatar"
-					accept="image/*"
+					name="image"
+					accept="image/jpeg, image/png, image/webp, image/gif, image/avif, image/tiff"
 					bind:files
 					on:change={onFileSelected}
 					class="absolute inset-0 opacity-0 cursor-pointer"
 				/>
-			</div>
+			</button>
 
-			<button type="button" class="menu-item">
+			<button formaction="/me/profile?/generate_avatar" class="menu-item">
 				<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
 				<span>Supprimer cette photo</span>
 			</button>
@@ -71,16 +76,24 @@
 				<span>Générer un autre avatar</span>
 			</button>
 		</div>
-	</form>
-</DropDown>
+	</DropDown>
 
-<Dialog bind:dialog>
-	<h2 slot="header" class="card-title">Photo de profil</h2>
+	<Dialog bind:dialog>
+		<h2 slot="header" class="card-title">Photo de profil</h2>
 
-	<div class="relative aspect-square rounded-lg overflow-hidden">
-		<Cropper {image} aspect={1} bind:crop bind:zoom showGrid={false} zoomSpeed={0.2} />
-	</div>
-	<div class="flex justify-end mt-2">
-		<button type="button" class="btn btn-primary"> Valider </button>
-	</div>
-</Dialog>
+		<div class="relative aspect-square rounded-lg overflow-hidden">
+			<Cropper
+				{image}
+				aspect={1}
+				showGrid={false}
+				zoomSpeed={0.2}
+				on:cropcomplete={(e) => (crop = e.detail.pixels)}
+			/>
+		</div>
+		<div class="flex justify-end mt-2">
+			<input type="hidden" name="json_crop" value={JSON.stringify(crop)} />
+
+			<button formaction="/me/profile?/upload_avatar" class="btn btn-primary"> Valider </button>
+		</div>
+	</Dialog>
+</form>

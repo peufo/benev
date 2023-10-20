@@ -6,7 +6,6 @@ export const load = async ({ locals }) => {
 	return {
 		user: prisma.user.findUniqueOrThrow({
 			where: { id: session.user.id },
-			include: { avatar: true },
 		}),
 	}
 }

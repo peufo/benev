@@ -26,10 +26,10 @@
 	export { klass as class }
 	export let useSingleton = false
 	export let hideOnBlur = false
+	export let tip: TippyInstance | undefined = undefined
 	let activator: HTMLDivElement
 
 	let content: HTMLDivElement
-	let tip: TippyInstance | undefined = undefined
 
 	onMount(() => {
 		const triggerTarget = activator.querySelector('button, input') || activator

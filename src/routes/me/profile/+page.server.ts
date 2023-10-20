@@ -1,4 +1,9 @@
+import { Blob } from 'node:buffer'
+import path from 'node:path'
 import { error } from '@sveltejs/kit'
+import { z } from 'zod'
+import sharp from 'sharp'
+import { MEDIA_DIR } from '$env/static/private'
 import { getUserIdOrRedirect, parseFormData, prisma, tryOrFail } from '$lib/server'
 import { userShema } from '$lib/form'
 
@@ -58,15 +63,59 @@ export const actions = {
 			})
 		})
 	},
-	upload_avatar: async ({ request }) => {
-		return tryOrFail(async () => {
-			const formData = await request.formData()
-			const image = formData.get('image')
-			const crop = formData.get('crop')
-			if (typeof crop !== 'string') throw Error('crop need to be s string')
-			console.log('TODO', image)
+	upload_avatar: async ({ request, locals }) => {
+		const session = await locals.auth.validate()
+		if (!session) throw error(401)
 
-			console.log('TODO')
+		const { data, err } = await parseFormData(
+			request,
+			z.object({
+				image: z.instanceof(Blob),
+				crop: z.object({
+					x: z.number(),
+					y: z.number(),
+					width: z.number(),
+					height: z.number(),
+				}),
+			})
+		)
+		if (err) return err
+
+		return tryOrFail(async () => {
+			const { image, crop } = data
+
+			const imageBuffer = await image.arrayBuffer()
+
+			const sharpStream = sharp(imageBuffer).extract({
+				left: crop.x,
+				top: crop.y,
+				width: crop.width,
+				height: crop.height,
+			})
+
+			const user = await prisma.user.findUniqueOrThrow({
+				where: { id: session.user.id },
+				include: { avatar: true },
+			})
+			const avatar =
+				user.avatar ||
+				(await prisma.media.create({
+					data: {
+						name: `Avatar de ${user.firstName}`,
+						createdById: user.id,
+						avatarOf: { connect: { id: user.id } },
+					},
+				}))
+
+			const sizes = [256, 512]
+			await Promise.all(
+				sizes.map((size) => {
+					const filePath = path.resolve(MEDIA_DIR, `${avatar.id}-${size}.webp`)
+					return sharpStream.clone().resize(size, size).webp().toFile(filePath)
+				})
+			)
+
+			return
 		})
 	},
 }

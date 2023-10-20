@@ -16,7 +16,7 @@ export const formats: Record<string, (value: string) => unknown> = {
  */
 function getFormDataTyped(formData: Record<string, unknown>): Record<string, unknown> {
 	for (const [key, value] of Object.entries(formData)) {
-		if (value instanceof Blob) delete formData[key]
+		if (value instanceof Blob) continue
 		const formatKey = key.split('_')[0]
 		if (!formatKey) continue
 		if (formatKey === 'relation') delete formData[key]

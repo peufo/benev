@@ -21,7 +21,17 @@ export const actions = {
 		const exist = await prisma.event.findUnique({ where: { id: data.id } })
 		if (exist) return nameFail('Désolé, ce nom est déjà pris')
 
-		const reservedPaths = ['auth', 'me', 'users', 'members', 'root', 'admin', 'token', 'api']
+		const reservedPaths = [
+			'auth',
+			'me',
+			'users',
+			'members',
+			'root',
+			'admin',
+			'token',
+			'api',
+			'media',
+		]
 		if (reservedPaths.includes(data.id))
 			return nameFail(`Les noms suivant sont réservés: ${reservedPaths.join(', ')}`)
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { Media, User } from '@prisma/client'
+	import { User } from '@prisma/client'
 	import { Icon, DropDown } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import {
@@ -16,7 +16,7 @@
 		{ path: 'profile', label: 'Mon profil', icon: mdiCardAccountDetailsOutline },
 	]
 
-	export let user: (User & { avatar: Media | null }) | undefined = undefined
+	export let user: User | undefined = undefined
 	export let pathPrefix = ''
 </script>
 
