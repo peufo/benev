@@ -1,9 +1,13 @@
 <script lang="ts">
 	import Cropper from 'svelte-easy-crop'
-	import { Dialog, DropDown, Icon } from '$lib/material'
+	import { User } from '@prisma/client'
 	import { mdiReload, mdiTrashCanOutline, mdiTrayArrowUp } from '@mdi/js'
 
-	export let avatar = avatarGeneration()
+	import { Dialog, DropDown, Icon } from '$lib/material'
+	import { useForm } from '$lib/form'
+	import { enhance } from '$app/forms'
+
+	export let user: User
 
 	let dialog: HTMLDialogElement
 	let files: FileList
@@ -21,11 +25,16 @@
 		reader.readAsDataURL(file)
 	}
 
-	function avatarGeneration(): string {
-		const url = new URL('https://api.dicebear.com/7.x/avataaars/svg')
-		url.searchParams.append('seed', String(Math.random()))
-		return url.toString()
+	const successMessages: Record<string, string> = {
+		'?/generate_avatar': 'Nouvel avatar généré',
+		'?/upload_avatar': 'Nouvel photo de profil enregistré',
 	}
+	const form = useForm({
+		successCallback: (action) => {
+			console.log(action.search)
+			return successMessages[action.search] || 'Succès'
+		},
+	})
 </script>
 
 <DropDown tippyProps={{ arrow: true }} hideOnBlur>
@@ -34,10 +43,10 @@
 		type="button"
 		class="border rounded-lg hover:shadow-lg transition-shadow"
 	>
-		<img src={avatar} alt="Avatar de l'utilisateur" class="h-28 w-28" />
+		<img src={user.avatarPlaceholder} alt="Avatar de l'utilisateur" class="h-28 w-28" />
 	</button>
 
-	<form action="" method="post" enctype="multipart/form-data">
+	<form action="/me/profile" method="post" enctype="multipart/form-data" use:enhance={form.submit}>
 		<div class="flex flex-col">
 			<div class="relative menu-item">
 				<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
@@ -57,7 +66,7 @@
 				<span>Supprimer cette photo</span>
 			</button>
 
-			<button type="button" class="menu-item" on:click={() => (avatar = avatarGeneration())}>
+			<button formaction="/me/profile?/generate_avatar" class="menu-item">
 				<Icon path={mdiReload} class="opacity-70" size={20} />
 				<span>Générer un autre avatar</span>
 			</button>

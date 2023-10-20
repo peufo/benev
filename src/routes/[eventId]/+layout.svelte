@@ -20,11 +20,14 @@
 	<title>{data.event.name}</title>
 </svelte:head>
 
-<Header userName={data.user?.firstName} pathPrefix={$eventPath}>
+<Header user={data.user} pathPrefix={$eventPath}>
 	<div class="contents" slot="start">
-		<a href={$eventPath} class="text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg">
+		<a
+			href={$eventPath}
+			class="text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg"
+		>
 			{#if data.event.logo}
-				<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}">
+				<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}" />
 			{/if}
 			<span>
 				{data.event.name}
@@ -50,7 +53,11 @@
 		{#if data.event.web}
 			<a class="btn btn-sm sm:btn-md btn-ghost flex" href={data.event.web} target="_blank">
 				{#if data.event.logo}
-					<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}">
+					<img
+						class="inline-block w-5 mx-1"
+						src={data.event.logo}
+						alt="logo of {data.event.name}"
+					/>
 				{:else}
 					<Icon path={mdiWeb} />
 				{/if}
@@ -59,7 +66,11 @@
 		{/if}
 
 		{#if data.event.email}
-			<a class="btn btn-sm sm:btn-md btn-ghost flex" href="mailto:{data.event.email}" target="_blank">
+			<a
+				class="btn btn-sm sm:btn-md btn-ghost flex"
+				href="mailto:{data.event.email}"
+				target="_blank"
+			>
 				<Icon path={mdiEmailOutline} />
 				{data.event.email}
 			</a>

@@ -32,7 +32,7 @@ export const load = async ({ url, locals }) => {
 }
 
 export const actions = {
-	default: async ({ locals, request }) => {
+	update_profile: async ({ locals, request }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
@@ -44,5 +44,29 @@ export const actions = {
 				data,
 			})
 		)
+	},
+	generate_avatar: async ({ locals }) => {
+		const session = await locals.auth.validate()
+		if (!session) throw error(401)
+
+		return tryOrFail(async () => {
+			const avatarUrl = new URL('https://api.dicebear.com/7.x/avataaars/svg')
+			avatarUrl.searchParams.append('seed', String(Math.random()))
+			return prisma.user.update({
+				where: { id: session.user.id },
+				data: { avatarPlaceholder: avatarUrl.toString() },
+			})
+		})
+	},
+	upload_avatar: async ({ request }) => {
+		return tryOrFail(async () => {
+			const formData = await request.formData()
+			const image = formData.get('image')
+			const crop = formData.get('crop')
+			if (typeof crop !== 'string') throw Error('crop need to be s string')
+			console.log('TODO', image)
+
+			console.log('TODO')
+		})
 	},
 }

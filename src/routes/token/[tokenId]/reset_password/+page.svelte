@@ -13,7 +13,7 @@
 	const callback = $page.url.searchParams.get('callback')
 </script>
 
-<Header userName={data.user?.firstName} />
+<Header user={data.user} />
 
 <main class="grow p-2">
 	<div class="card bg-base-100 max-w-md m-auto">

@@ -1,7 +1,8 @@
 <script lang="ts">
 	import AuthMenu from '$lib/me/AuthMenu.svelte'
+	import { Media, User } from '@prisma/client'
 
-	export let userName = ''
+	export let user: (User & { avatar: Media | null }) | undefined = undefined
 	export let pathPrefix = ''
 </script>
 
@@ -14,7 +15,7 @@
 		<div class="gap-2">
 			<slot name="end" />
 
-			<AuthMenu {pathPrefix} {userName} />
+			<AuthMenu {pathPrefix} {user} />
 		</div>
 	</header>
 </div>

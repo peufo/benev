@@ -237,8 +237,7 @@ enum SubscribeState {
 model Media {
   id String @id @default(uuid())
 
-  name String
-
+  name   String
   path   String
   small  String? // 256x256
   medium String? // 512*512

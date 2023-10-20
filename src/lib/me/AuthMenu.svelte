@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
+	import { Media, User } from '@prisma/client'
 	import { Icon, DropDown } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import {
@@ -8,21 +9,21 @@
 		mdiListStatus,
 		mdiLogout,
 	} from '@mdi/js'
+	import Avatar from '$lib/me/Avatar.svelte'
 
 	const tabs = [
 		{ path: 'subscribes', label: 'Mes inscriptions', icon: mdiListStatus },
 		{ path: 'profile', label: 'Mon profil', icon: mdiCardAccountDetailsOutline },
 	]
 
-	export let userName = ''
+	export let user: (User & { avatar: Media | null }) | undefined = undefined
 	export let pathPrefix = ''
 </script>
 
-{#if userName}
+{#if user}
 	<DropDown class="min-w-[200px]" hideOnBlur>
 		<button slot="activator" class="btn btn-square btn-ghost lg:inline-flex lg:w-auto lg:px-2">
-			<Icon path={mdiAccountOutline} />
-			<span class="hidden lg:block">{userName || ''}</span>
+			<Avatar {user} />
 		</button>
 
 		<div class="flex flex-col gap-1">

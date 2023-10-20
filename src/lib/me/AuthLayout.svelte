@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Login from '$lib/me/Login.svelte'
-
-	import type { User } from 'lucia'
+	import { User } from '@prisma/client'
 
 	export let user: User | undefined
 </script>

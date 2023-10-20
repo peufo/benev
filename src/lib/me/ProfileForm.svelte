@@ -13,29 +13,31 @@
 	export let user: User
 
 	let verificationEmailSent = false
+
+	const successMessages: Record<string, string> = {
+		'?/update_profile': 'Profile sauvegardé',
+		'?/verify_email': 'Un email de verification à été envoyé',
+	}
 	const verificationEmailMessage = 'Un email de verification à été envoyé'
 	const form = useForm({
 		successReset: false,
 		successMessage: (action) => {
-			if (!action.search) return 'Profile sauvegardé'
-			else {
-				verificationEmailSent = true
-				return verificationEmailMessage
-			}
+			if (action.search === '?/verify_email') verificationEmailSent = true
+			return successMessages[action.search] || 'Succès'
 		},
 	})
 </script>
 
 <SectionCollapse value="profile">
 	<div slot="logo" class="m-2 md:ml-8 shrink-0">
-		<AvatarForm />
+		<AvatarForm {user} />
 	</div>
 	<div slot="title">Mon profil de base</div>
 	<h2 slot="subtitle">Informations de base utiles pour tous les événements.</h2>
 
 	<form
 		method="post"
-		action="/me/profile"
+		action="/me/profile?/update_profile"
 		use:enhance={form.submit}
 		class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4"
 	>

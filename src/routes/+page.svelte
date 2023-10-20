@@ -16,7 +16,7 @@
 	<EventForm on:cancel={() => createDialog.close()} on:success={() => createDialog.close()} />
 </Dialog>
 
-<Header userName={data.user?.firstName}>
+<Header user={data.user}>
 	<a slot="start" class="btn-ghost text-lg btn btn-square" href="/">
 		<img src={logo} alt="logo benev" class="w-9 h-9" height="512" width="512" />
 	</a>
