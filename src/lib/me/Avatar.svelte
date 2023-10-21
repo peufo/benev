@@ -8,4 +8,6 @@
 	let src = user.avatarId ? `/media/${user.avatarId}/512` : user.avatarPlaceholder
 </script>
 
-<img {src} alt="Avatar de l'utilisateur" class={klass} width="512" height="512" />
+{#key user}
+	<img {src} alt="Avatar de l'utilisateur" class={klass} width="512" height="512" />
+{/key}

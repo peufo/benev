@@ -13,12 +13,13 @@
 
 	let dialog: HTMLDialogElement
 	let tip: TippyInstance
-	let files: FileList
 	let image = ''
 	let crop: { width: number; height: number; x: number; y: number } | undefined = undefined
+	let inputFile: HTMLInputElement
 
 	function onFileSelected() {
-		const file = files[0]
+		if (!inputFile.files) return
+		const file = inputFile.files[0]
 		const reader = new FileReader()
 		reader.onload = ({ target }) => {
 			image = (target?.result || '') as string
@@ -53,17 +54,9 @@
 		</button>
 
 		<div class="flex flex-col">
-			<button type="button" class="relative menu-item">
+			<button type="button" class="relative menu-item" on:click={() => inputFile.click()}>
 				<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
 				<span>Charger une photo</span>
-				<input
-					type="file"
-					name="image"
-					accept="image/jpeg, image/png, image/webp, image/gif, image/avif, image/tiff"
-					bind:files
-					on:change={onFileSelected}
-					class="absolute inset-0 opacity-0 cursor-pointer"
-				/>
 			</button>
 
 			<button formaction="/me/profile?/generate_avatar" class="menu-item">
@@ -92,6 +85,14 @@
 		</div>
 		<div class="flex justify-end mt-2">
 			<input type="hidden" name="json_crop" value={JSON.stringify(crop)} />
+			<input
+				class="hidden"
+				type="file"
+				name="image"
+				accept="image/jpeg, image/png, image/webp, image/gif, image/avif, image/tiff"
+				bind:this={inputFile}
+				on:change={onFileSelected}
+			/>
 
 			<button formaction="/me/profile?/upload_avatar" class="btn btn-primary"> Valider </button>
 		</div>
