@@ -11,7 +11,7 @@ export const actions = {
 			await Promise.all(
 				users.map(({ id }) => {
 					console.log(id)
-					const avatarUrl = new URL('https://api.dicebear.com/7.x/avataaars/svg')
+					const avatarUrl = new URL('https://api.dicebear.com/7.x/thumbs/svg')
 					avatarUrl.searchParams.append('seed', String(Math.random()))
 					const avatarPlaceholder = avatarUrl.toString()
 					return prisma.user.update({ where: { id }, data: { avatarPlaceholder } })

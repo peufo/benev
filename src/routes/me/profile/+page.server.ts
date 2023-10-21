@@ -56,7 +56,7 @@ export const actions = {
 		if (!session) throw error(401)
 
 		return tryOrFail(async () => {
-			const avatarUrl = new URL('https://api.dicebear.com/7.x/avataaars/svg')
+			const avatarUrl = new URL('https://api.dicebear.com/7.x/thumbs/svg')
 			avatarUrl.searchParams.append('seed', String(Math.random()))
 			return prisma.user.update({
 				where: { id: session.user.id },
