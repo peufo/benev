@@ -34,7 +34,7 @@
 	}
 	const form = useForm({
 		successMessage: (action) => {
-			console.log(action.search)
+			tip.hide()
 			return successMessages[action.search] || 'Succès'
 		},
 		successCallback: () => {
@@ -58,16 +58,17 @@
 				<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
 				<span>Charger une photo</span>
 			</button>
-
-			<button formaction="/me/profile?/generate_avatar" class="menu-item">
-				<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
-				<span>Supprimer cette photo</span>
-			</button>
-
-			<button formaction="/me/profile?/generate_avatar" class="menu-item">
-				<Icon path={mdiReload} class="opacity-70" size={20} />
-				<span>Générer un autre avatar</span>
-			</button>
+			{#if user.avatarId}
+				<button formaction="/me/profile?/remove_avatar" class="menu-item">
+					<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
+					<span>Supprimer cette photo</span>
+				</button>
+			{:else}
+				<button formaction="/me/profile?/generate_avatar" class="menu-item">
+					<Icon path={mdiReload} class="opacity-70" size={20} />
+					<span>Générer un autre avatar</span>
+				</button>
+			{/if}
 		</div>
 	</DropDown>
 

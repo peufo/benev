@@ -22,7 +22,13 @@
 
 {#if user}
 	<DropDown class="min-w-[200px]" hideOnBlur>
-		<button slot="activator" class="btn bg-base-100 btn-circle overflow-hidden border">
+		<button
+			slot="activator"
+			class="
+				btn bg-base-100 btn-circle overflow-hidden border
+				hover:shadow-lg transition-shadow
+			"
+		>
 			<Avatar {user} />
 		</button>
 

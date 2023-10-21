@@ -1,5 +1,6 @@
 import { Blob } from 'node:buffer'
 import path from 'node:path'
+import fs from 'node:fs/promises'
 import { error } from '@sveltejs/kit'
 import { z } from 'zod'
 import sharp from 'sharp'
@@ -63,6 +64,19 @@ export const actions = {
 			})
 		})
 	},
+	remove_avatar: async ({ locals }) => {
+		const session = await locals.auth.validate()
+		if (!session) throw error(401)
+
+		return tryOrFail(async () => {
+			const user = await prisma.user.findUniqueOrThrow({ where: { id: session.user.id } })
+			if (!user.avatarId) throw error(404)
+
+			const mediaPath = path.resolve(MEDIA_DIR, user.avatarId)
+			await fs.rm(mediaPath, { recursive: true, force: true })
+			return prisma.media.delete({ where: { id: user.avatarId } })
+		})
+	},
 	upload_avatar: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
@@ -107,10 +121,17 @@ export const actions = {
 					},
 				}))
 
+			const mediaPath = path.resolve(MEDIA_DIR, avatar.id)
+			try {
+				await fs.access(mediaPath, fs.constants.R_OK)
+			} catch {
+				await fs.mkdir(mediaPath, { recursive: true })
+			}
+
 			const sizes = [256, 512]
 			await Promise.all(
 				sizes.map((size) => {
-					const filePath = path.resolve(MEDIA_DIR, `${avatar.id}-${size}.webp`)
+					const filePath = path.resolve(mediaPath, `${size}.webp`)
 					return sharpStream.clone().resize(size, size).webp().toFile(filePath)
 				})
 			)

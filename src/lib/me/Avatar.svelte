@@ -4,10 +4,14 @@
 	export let user: User
 	let klass = ''
 	export { klass as class }
-
-	let src = user.avatarId ? `/media/${user.avatarId}/512` : user.avatarPlaceholder
 </script>
 
 {#key user}
-	<img {src} alt="Avatar de l'utilisateur" class={klass} width="512" height="512" />
+	<img
+		src={user.avatarId ? `/media/${user.avatarId}/512.webp` : user.avatarPlaceholder}
+		alt="Avatar de l'utilisateur"
+		class={klass}
+		width="512"
+		height="512"
+	/>
 {/key}
