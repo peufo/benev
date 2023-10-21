@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { Icon, Placeholder } from '$lib/material'
+	import { Placeholder } from '$lib/material'
 	import { formatRange } from '$lib/formatRange'
 	import { eventPath } from '$lib/store'
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
-	import { mdiAccountCircleOutline, mdiShieldAccount } from '@mdi/js'
 	import SubscribeCreatedBy from '$lib/SubscribeCreatedBy.svelte'
+	import Avatar from '$lib/me/Avatar.svelte'
 
 	export let subscribes: PageData['subscribes']
 </script>
@@ -36,9 +36,15 @@
 							</a>
 						</td>
 						<td>
-							<a class="link link-hover" href="{$eventPath}/admin/members/{sub.memberId}">
-								{sub.member.user.firstName}
-								{sub.member.user.lastName}
+							<a
+								class="link link-hover flex gap-2 items-center"
+								href="{$eventPath}/admin/members/{sub.memberId}"
+							>
+								<Avatar user={sub.member.user} class="h-8 w-8 rounded-full border" />
+								<span class="whitespace-nowrap">
+									{sub.member.user.firstName}
+									{sub.member.user.lastName}
+								</span>
 							</a>
 						</td>
 						<td>

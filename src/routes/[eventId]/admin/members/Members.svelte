@@ -6,6 +6,7 @@
 
 	import type { PageData } from './$types'
 	import type { Column } from '$lib/ColumnsSelect.svelte'
+	import Avatar from '$lib/me/Avatar.svelte'
 
 	type Member = PageData['members'][number]
 	export let members: Member[]
@@ -34,8 +35,13 @@
 						class="hover cursor-pointer group"
 					>
 						<td>
-							{member.user.firstName}
-							{member.user.lastName}
+							<div class="flex gap-2 items-center">
+								<Avatar user={member.user} class="h-8 w-8 rounded-full border" />
+								<span class="whitespace-nowrap">
+									{member.user.firstName}
+									{member.user.lastName}
+								</span>
+							</div>
 						</td>
 
 						{#each selectedColumnsId as colId}
