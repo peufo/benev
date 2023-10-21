@@ -40,7 +40,7 @@
 								class="link link-hover flex gap-2 items-center"
 								href="{$eventPath}/admin/members/{sub.memberId}"
 							>
-								<Avatar user={sub.member.user} class="h-8 w-8 rounded-full border" />
+								<Avatar user={sub.member.user} class="h-8 w-8 rounded border" />
 								<span class="whitespace-nowrap">
 									{sub.member.user.firstName}
 									{sub.member.user.lastName}

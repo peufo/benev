@@ -36,7 +36,7 @@
 					>
 						<td>
 							<div class="flex gap-2 items-center">
-								<Avatar user={member.user} class="h-8 w-8 rounded-full border" />
+								<Avatar user={member.user} class="h-8 w-8 rounded border" />
 								<span class="whitespace-nowrap">
 									{member.user.firstName}
 									{member.user.lastName}
