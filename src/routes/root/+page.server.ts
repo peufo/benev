@@ -6,9 +6,8 @@ export const load = async () => ({
 
 export const actions = {
 	generate_all_avatars: async () => {
+		const users = await prisma.user.findMany({ where: { avatarPlaceholder: '' } })
 		return tryOrFail(async () => {
-			//@ts-ignore
-			const users = await prisma.user.findMany({ where: { avatarPlaceholder: { not: null } } })
 			await Promise.all(
 				users.map(({ id }) => {
 					console.log(id)
