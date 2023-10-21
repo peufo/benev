@@ -25,7 +25,7 @@
 		<button
 			slot="activator"
 			class="
-				btn bg-base-100 btn-circle overflow-hidden border
+				btn bg-base-100 btn-square rounded-lg overflow-hidden border
 				hover:shadow-lg transition-shadow
 			"
 		>

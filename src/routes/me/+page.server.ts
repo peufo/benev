@@ -52,6 +52,7 @@ export const actions = {
 	},
 
 	login: async ({ request, locals }) => {
+		console.log('LOGIN')
 		const { err, data } = await parseFormData(request, loginShema)
 		if (err) return err
 		return tryOrFail(async () => {
