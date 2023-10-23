@@ -32,8 +32,8 @@
 	<div slot="logo" class="m-2 md:ml-8 shrink-0">
 		<AvatarForm {user} />
 	</div>
-	<div slot="title">Mon profil de base</div>
-	<h2 slot="subtitle">Informations de base utiles pour tous les événements.</h2>
+	<div slot="title">{user.firstName} {user.lastName}</div>
+	<h2 slot="subtitle">Profil et préférences commune à tous les événements.</h2>
 
 	<form
 		method="post"

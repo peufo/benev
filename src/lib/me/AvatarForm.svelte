@@ -48,7 +48,7 @@
 		<button
 			slot="activator"
 			type="button"
-			class="border rounded-lg hover:shadow-lg transition-shadow overflow-hidden"
+			class="border rounded-lg hover:shadow-lg transition-shadow overflow-hidden block"
 		>
 			<Avatar {user} class="h-28 w-28" />
 		</button>

@@ -13,7 +13,7 @@
 	<img
 		src={user.avatarId ? `/media/${user.avatarId}/${size}.webp` : user.avatarPlaceholder}
 		alt="Avatar de l'utilisateur"
-		class="{klass} h-full w-full"
+		class={klass}
 		style="margin: 0 !important;"
 		width={size}
 		height={size}
