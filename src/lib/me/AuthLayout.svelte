@@ -5,7 +5,7 @@
 	export let user: User | undefined
 </script>
 
-<main class="grow p-2">
+<div>
 	{#if !user}
 		<Login />
 	{:else}
@@ -13,4 +13,4 @@
 			<slot />
 		</div>
 	{/if}
-</main>
+</div>

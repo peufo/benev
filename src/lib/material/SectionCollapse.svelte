@@ -25,7 +25,7 @@
 
 		<a
 			id={value}
-			class="py-8 px-4 md:p-8 grow {$$slots.logo ? 'pl-0 md:pl-0' : ''}"
+			class="pt-8 pb-4 px-4 md:p-8 grow {$$slots.logo ? 'pl-0 md:pl-0' : ''}"
 			href={$urlParam.toggle({ section: value })}
 			data-sveltekit-noscroll
 			on:click={handleClick}

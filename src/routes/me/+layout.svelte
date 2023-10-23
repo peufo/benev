@@ -13,8 +13,10 @@
 	</a>
 </Header>
 
-<UserLayout user={data.user}>
-	<slot />
-</UserLayout>
+<main class="grow p-2">
+	<UserLayout user={data.user}>
+		<slot />
+	</UserLayout>
+</main>
 
 <Footer />
