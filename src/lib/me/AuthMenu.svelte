@@ -25,11 +25,11 @@
 		<button
 			slot="activator"
 			class="
-				btn bg-base-100 btn-square rounded-lg overflow-hidden border
-				hover:shadow-lg transition-shadow
-			"
+			btn bg-base-100 btn-square block
+			hover:shadow-lg transition-shadow
+		"
 		>
-			<Avatar {user} />
+			<Avatar {user} class="rounded-lg" />
 		</button>
 
 		<div class="flex flex-col gap-1">
