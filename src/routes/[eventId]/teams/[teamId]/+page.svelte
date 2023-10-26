@@ -34,7 +34,7 @@
 	const periodOpenKey = 'periodOpen'
 
 	function subscribe(period: _Period) {
-		if (!data.user) return goto(`/${data.event.id}/me?callback=${location.pathname}`)
+		if (!data.user) return goto(`/auth?callback=${location.pathname}`)
 
 		selectedPeriod = period
 		if (!data.member) {

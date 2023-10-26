@@ -1,1 +1,1 @@
-Redirect to /[eventId]/me/profile
+Redirect to /[eventId]/me

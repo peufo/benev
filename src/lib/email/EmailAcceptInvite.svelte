@@ -10,7 +10,7 @@
 	<p>
 		Salut {member.user.firstName},<br />
 		Tu fais désormais partie des nôtres. Tu peux maintenant compléter
-		<a href="{domain}/{member.eventId}/me#member-profile-{member.eventId}"> ton profil </a>
+		<a href="{domain}/{member.eventId}/me?section=profile-spiegelberg-festival"> ton profil </a>
 		si ce n'est déjà fait et t'inscrire aux tranches horaires qui t'intéressent en consultant les différents
 		<a href="{domain}/{member.eventId}/teams">secteurs</a>.
 	</p>
