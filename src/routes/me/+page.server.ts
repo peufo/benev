@@ -194,6 +194,8 @@ export const actions = {
 					},
 				}))
 
+			console.log({ MEDIA_DIR })
+
 			const mediaPath = path.resolve(MEDIA_DIR, avatar.id)
 			try {
 				await fs.access(mediaPath, fs.constants.R_OK)
