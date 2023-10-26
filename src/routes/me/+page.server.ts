@@ -70,7 +70,6 @@ export const actions = {
 		})
 	},
 	login: async ({ request, locals }) => {
-		console.log('LOGIN')
 		const { err, data } = await parseFormData(request, loginShema)
 		if (err) return err
 		return tryOrFail(async () => {
@@ -193,8 +192,6 @@ export const actions = {
 						avatarOf: { connect: { id: user.id } },
 					},
 				}))
-
-			console.log({ MEDIA_DIR })
 
 			const mediaPath = path.resolve(MEDIA_DIR, avatar.id)
 			try {
