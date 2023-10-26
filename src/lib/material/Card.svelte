@@ -21,7 +21,7 @@
 					</a>
 				{/if}
 
-				<div class="card-title grow">
+				<div class="grow text-lg font-semibold text-base-content/80">
 					<slot name="title" />
 				</div>
 				<slot name="action" />

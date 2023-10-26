@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon, SectionCollapse } from '$lib/material'
+	import { Card, Icon, SectionCollapse } from '$lib/material'
 
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import { eventPath } from '$lib/store'
@@ -44,7 +44,10 @@
 		/>
 	</SectionCollapse>
 
-	<TeamsSubscribes teams={data.event.teams} />
+	<Card class="border">
+		<h2 slot="title">Inscriptions</h2>
+		<TeamsSubscribes teams={data.event.teams} isLeader />
+	</Card>
 
 	<LeaderOf teams={data.memberProfile.leaderOf} />
 </div>

@@ -32,7 +32,7 @@
 			on:click={handleClick}
 		>
 			<div class="flex gap-2">
-				<div class="card-title grow">
+				<div class="grow text-lg font-semibold text-base-content/80">
 					<slot name="title" />
 				</div>
 				<Icon path={mdiChevronRight} class="transition-transform {isOpen ? 'rotate-90' : ''}" />
