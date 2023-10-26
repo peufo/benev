@@ -16,7 +16,7 @@
 </script>
 
 <div
-	class="grid grid-cols-1 sm:grid-cols-2 gap-2 gap-x-8 p-2 items-center text-xs font-medium text-base-content/70 {klass}"
+	class="grid grid-cols-1 sm:grid-cols-2 gap-2 gap-x-8 p-2 items-center text-sm font-medium text-base-content/70 {klass}"
 >
 	<div class="flex gap-4">
 		{#if user.isEmailVerified}
@@ -24,14 +24,14 @@
 				path={mdiEmailCheckOutline}
 				class="opacity-70 fill-success"
 				title="Email verfifié"
-				size={18}
+				size={20}
 			/>
 		{:else}
 			<Icon
 				path={mdiEmailAlertOutline}
 				class="opacity-70 fill-error"
 				title="Cette email n'a pas été verifié"
-				size={18}
+				size={20}
 			/>
 		{/if}
 		<a href="mailto:{user.email}" class="link link-hover" target="_blank">
@@ -40,14 +40,14 @@
 	</div>
 
 	<div class="flex gap-4">
-		<Icon path={mdiPhoneOutline} class="opacity-70" size={18} />
+		<Icon path={mdiPhoneOutline} class="opacity-70" size={20} />
 		<a href="tel:{user.phone}" class="link link-hover" target="_blank">
 			{user.phone}
 		</a>
 	</div>
 
 	<div class="flex gap-4">
-		<Icon path={mdiCakeVariantOutline} class="opacity-70" size={18} />
+		<Icon path={mdiCakeVariantOutline} class="opacity-70" size={20} />
 		<div>
 			{#if user.birthday}
 				{user.birthday.toLocaleDateString()}
@@ -59,7 +59,7 @@
 	</div>
 
 	<div class="flex gap-4">
-		<Icon path={mdiHomeCityOutline} class="opacity-70" size={18} />
+		<Icon path={mdiHomeCityOutline} class="opacity-70" size={20} />
 		<a
 			href="https://www.google.com/maps/search/{user.street} {user.zipCode} {user.city}"
 			class="link link-hover"
