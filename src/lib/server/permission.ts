@@ -74,7 +74,7 @@ export async function isLeaderOrThrow(teamId: string, locals: App.Locals) {
 export async function getUserIdOrRedirect(url: URL, locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) {
-		throw redirect(302, `/me?callback=${url.pathname}`)
+		throw redirect(302, `/auth?callback=${url.pathname}`)
 	}
 	return session.user.id
 }

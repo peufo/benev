@@ -10,10 +10,7 @@
 </script>
 
 <SectionCollapse value="profile-{event.id}">
-	<h2 slot="title" id="member-profile-{event.id}" class="flex items-center gap-2">
-		{#if event.logo}
-			<img src={event.logo} alt="Logo de l'événement" class="h-6" />
-		{/if}
+	<h2 slot="title">
 		Mon profil
 		<a href="/{event.id}" class="link link-hover">
 			{event.name}

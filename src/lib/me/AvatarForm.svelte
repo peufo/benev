@@ -59,12 +59,12 @@
 				<span>Charger une photo</span>
 			</button>
 			{#if user.avatarId}
-				<button formaction="/me/profile?/remove_avatar" class="menu-item">
+				<button formaction="/me?/remove_avatar" class="menu-item">
 					<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
 					<span>Supprimer cette photo</span>
 				</button>
 			{:else}
-				<button formaction="/me/profile?/generate_avatar" class="menu-item">
+				<button formaction="/me?/generate_avatar" class="menu-item">
 					<Icon path={mdiReload} class="opacity-70" size={20} />
 					<span>Générer un autre avatar</span>
 				</button>
@@ -95,7 +95,7 @@
 				on:change={onFileSelected}
 			/>
 
-			<button formaction="/me/profile?/upload_avatar" class="btn btn-primary"> Valider </button>
+			<button formaction="/me?/upload_avatar" class="btn btn-primary"> Valider </button>
 		</div>
 	</Dialog>
 </form>

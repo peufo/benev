@@ -1,22 +1,22 @@
 <script lang="ts">
-	import UserLayout from '$lib/me/AuthLayout.svelte'
+	import { User } from '@prisma/client'
 	import logo from '$lib/assets/logo.svg'
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
 
-	export let data
+	export let user: User | undefined = undefined
 </script>
 
-<Header user={data.user}>
+<Header {user}>
 	<a slot="start" class="btn-ghost text-lg btn btn-square" href="/">
 		<img src={logo} alt="logo benev" class="w-9 h-9" height="512" width="512" />
 	</a>
 </Header>
 
 <main class="grow p-2">
-	<UserLayout user={data.user}>
+	<div class="max-w-3xl mx-auto flex flex-col gap-4">
 		<slot />
-	</UserLayout>
+	</div>
 </main>
 
 <Footer />

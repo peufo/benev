@@ -10,6 +10,7 @@ export const load = async ({ params, locals, depends }) => {
 
 	try {
 		return {
+			userId: session?.user.id || '',
 			member: session
 				? await prisma.member.findUnique({
 						where: { userId_eventId: { userId: session.user.id, eventId } },
@@ -26,12 +27,8 @@ export const load = async ({ params, locals, depends }) => {
 					},
 				},
 			}),
-			pageIndex: await prisma.page.findFirstOrThrow({
-				where: { eventId, isIndex: true },
-				select,
-			}),
 			pages: await prisma.page.findMany({
-				where: { eventId, isIndex: false },
+				where: { eventId },
 				select,
 			}),
 		}

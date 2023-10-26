@@ -1,5 +1,4 @@
-import { prisma } from '$lib/server'
-import { getUserIdOrRedirect } from '$lib/server/permission.js'
+import { prisma, getUserIdOrRedirect } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
 export const load = async ({ parent, url, locals, params: { eventId } }) => {

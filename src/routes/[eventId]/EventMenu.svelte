@@ -1,21 +1,20 @@
 <script lang="ts">
-	import type { LayoutData } from './$types'
+	import { Page } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
 	import { mdiMenu } from '@mdi/js'
 	import DropDown from '$lib/material/DropDown.svelte'
-	import PubliqueMenuItems from './PubliqueMenuItems.svelte'
+	import EventPubliqueMenuItems from '$lib/EventPubliqueMenuItems.svelte'
 	import { adminTabs } from './admin/adminTabs'
 
-	export let pageIndex: LayoutData['pageIndex']
-	export let pages: LayoutData['pages']
+	export let pages: Pick<Page, 'id' | 'title' | 'isIndex' | 'path'>[]
 	export let isOwner: boolean
 	export let isLeaderInEvent: boolean
 </script>
 
 <div class="gap-2 hidden lg:flex">
-	<PubliqueMenuItems {pages} {pageIndex} />
+	<EventPubliqueMenuItems {pages} />
 </div>
 
 <DropDown class="max-h-none min-w-[200px]" hideOnBlur>
@@ -34,7 +33,7 @@
 			{#if isOwner || isLeaderInEvent}
 				<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Public</h3>
 			{/if}
-			<PubliqueMenuItems {pages} {pageIndex} />
+			<EventPubliqueMenuItems {pages} />
 		</div>
 
 		<!-- ADMIN -->

@@ -14,7 +14,7 @@ import {
 import { EmailAcceptInvite, EmailAcceptInviteNotification, EmailNewInvite } from '$lib/email'
 
 export const load = async ({ params }) => {
-	throw redirect(301, `/${params.eventId}/me/profile`)
+	throw redirect(301, `/me/${params.eventId}`)
 }
 
 export const actions = {

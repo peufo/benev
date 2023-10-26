@@ -15,6 +15,6 @@ export const GET = async ({ params, locals }) => {
 	} catch {
 		throw error(401, 'Invalid token')
 	} finally {
-		throw redirect(302, '/me/profile')
+		throw redirect(302, '/me')
 	}
 }

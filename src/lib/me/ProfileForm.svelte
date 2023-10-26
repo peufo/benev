@@ -37,7 +37,7 @@
 
 	<form
 		method="post"
-		action="/me/profile?/update_profile"
+		action="/me?/update_profile"
 		use:enhance={form.submit}
 		class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4"
 	>

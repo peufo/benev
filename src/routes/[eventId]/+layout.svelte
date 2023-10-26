@@ -20,7 +20,7 @@
 	<title>{data.event.name}</title>
 </svelte:head>
 
-<Header user={data.user} pathPrefix={$eventPath}>
+<Header user={data.user}>
 	<div class="contents" slot="start">
 		<a
 			href={$eventPath}
@@ -35,12 +35,7 @@
 		</a>
 	</div>
 	<div slot="end" class="contents">
-		<EventMenu
-			pages={data.pages}
-			pageIndex={data.pageIndex}
-			isOwner={data.isOwner}
-			isLeaderInEvent={data.isLeaderInEvent}
-		/>
+		<EventMenu pages={data.pages} isOwner={data.isOwner} isLeaderInEvent={data.isLeaderInEvent} />
 	</div>
 </Header>
 

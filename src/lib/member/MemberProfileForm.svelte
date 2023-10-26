@@ -24,7 +24,7 @@
 
 <form
 	method="post"
-	action="/{event.id}/me/profile"
+	action="/me/{event.id}"
 	use:enhance={form.submit}
 	class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-4 {klass}"
 >
