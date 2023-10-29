@@ -44,7 +44,7 @@
 	</Dialog>
 {:else}
 	<DropDown class={klass} bind:this={dropdown} tippyProps={{ offset: [0, -5], ...tippyProps }}>
-		<div class="flex flex-col gap-2">
+		<div class="flex flex-col gap-2 p-1">
 			<slot name="header" />
 			<slot />
 		</div>
