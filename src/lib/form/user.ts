@@ -30,5 +30,6 @@ const userForm = {
 	street: z.string().optional(),
 	zipCode: z.string().optional(),
 	city: z.string().optional(),
+	wantsNotification: z.boolean().optional(),
 } satisfies ZodObj<UserForm>
 export const userShema = z.object(userForm)

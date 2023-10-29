@@ -27,6 +27,8 @@ model User {
   avatar            Media?  @relation(name: "avatar", references: [id], fields: [avatarId], onDelete: SetNull)
   avatarPlaceholder String  @default("") // remove default value after migration
 
+  wantsNotification Boolean @default(true)
+
   members Member[]
   events  Event[] // ownerOf
 

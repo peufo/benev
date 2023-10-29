@@ -19,7 +19,7 @@
 	}
 </script>
 
-<div class="card bg-base-100 border shadow-md {klass}" bind:this={card}>
+<div class="card bg-base-100 border bordered shadow-md {klass}" bind:this={card}>
 	<div class="flex gap-2">
 		<slot name="logo" />
 

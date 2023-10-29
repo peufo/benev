@@ -55,9 +55,9 @@ const setSubscribState: (state: SubscribeState) => Action =
 			if (!isCreatorEdition && !isSubscriberEdition) throw error(403)
 
 			// Check if author right
-			const isLeaderRequired = (_subscribe.createdBy === 'leader') === isCreatorEdition
+			const isLeaderAction = (_subscribe.createdBy === 'leader') === isCreatorEdition
 			let session: Session | null
-			if (isLeaderRequired) {
+			if (isLeaderAction) {
 				session = await isLeaderOrThrow(_subscribe.period.teamId, locals)
 			} else {
 				session = await locals.auth.validate()
@@ -96,9 +96,9 @@ const setSubscribState: (state: SubscribeState) => Action =
 				},
 			})
 
-			const toMember = [subscribe.member.user.email]
+			const toMember = subscribe.member.user.wantsNotification ? [subscribe.member.user.email] : []
 			const toLeaders = subscribe.period.team.leaders.map((l) => l.user.email)
-			const to = isLeaderRequired ? toMember : toLeaders
+			const to = isLeaderAction ? toMember : toLeaders
 
 			if (to.length) {
 				switch (state) {

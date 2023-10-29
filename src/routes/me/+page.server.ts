@@ -115,8 +115,9 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data } = await parseFormData(request, userShema)
+		const { err, data, formData } = await parseFormData(request, userShema)
 		if (err) return err
+
 		return tryOrFail(() =>
 			prisma.user.update({
 				where: { id: session.user.userId },

@@ -59,7 +59,7 @@ export const actions = {
 							team: {
 								include: {
 									event: true,
-									leaders: { select: { user: { select: { email: true } } } },
+									leaders: { include: { user: true } },
 								},
 							},
 						},
@@ -69,10 +69,13 @@ export const actions = {
 
 			if (_isLeader && isSelfSubscribe) return
 
-			const to =
-				subscribe.createdBy === 'user'
-					? subscribe.period.team.leaders.map(({ user }) => user.email)
-					: [subscribe.member.user.email]
+			const to: string[] = []
+
+			if (subscribe.createdBy === 'user') {
+				to.push(...subscribe.period.team.leaders.map(({ user }) => user.email))
+			} else if (subscribe.member.user.wantsNotification) {
+				to.push(subscribe.member.user.email)
+			}
 
 			if (to.length)
 				await sendEmailTemplate(EmailNewSubscribe, {

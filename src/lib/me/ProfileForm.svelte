@@ -9,6 +9,7 @@
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 	import SectionCollapse from '$lib/material/SectionCollapse.svelte'
 	import AvatarForm from './AvatarForm.svelte'
+	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
 
 	export let user: User
 
@@ -88,6 +89,13 @@
 		<InputText key="street" label="Rue et numéro" value={user.street || ''} class="md:col-span-4" />
 		<InputText key="zipCode" label="Code postal" value={user.zipCode || ''} class="md:col-span-4" />
 		<InputText key="city" label="Localité" value={user.city || ''} class="md:col-span-4" />
+
+		<InputBoolean
+			key="wantsNotification"
+			label="Être notifié par mail quand mes inscriptions change de statut"
+			class="col-span-full"
+			value={user.wantsNotification}
+		/>
 
 		<div class="flex items-center col-span-full">
 			<span class="text-xs opacity-70">
