@@ -45,6 +45,7 @@ export const actions = {
 			lastName: data.lastName,
 			phone: data.phone,
 			isEmailVerified: false,
+			avatarPlaceholder: createAvatarPlaceholder(),
 		}
 		return tryOrFail(async () => {
 			const user = await auth.createUser({
@@ -128,11 +129,10 @@ export const actions = {
 		if (!session) throw error(401)
 
 		return tryOrFail(async () => {
-			const avatarUrl = new URL('https://api.dicebear.com/7.x/thumbs/svg')
-			avatarUrl.searchParams.append('seed', String(Math.random()))
+			const avatarPlaceholder = createAvatarPlaceholder()
 			return prisma.user.update({
 				where: { id: session.user.id },
-				data: { avatarPlaceholder: avatarUrl.toString() },
+				data: { avatarPlaceholder },
 			})
 		})
 	},
@@ -211,4 +211,10 @@ export const actions = {
 			return
 		})
 	},
+}
+
+function createAvatarPlaceholder() {
+	const avatarUrl = new URL('https://api.dicebear.com/7.x/thumbs/svg')
+	avatarUrl.searchParams.append('seed', String(Math.random()))
+	return avatarUrl.toString()
 }
