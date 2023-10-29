@@ -10,25 +10,29 @@
 	export let data
 
 	const form = useForm()
+
+	$: pageIndex = data.pages.find((p) => p.isIndex)
 </script>
 
 <div class="flex gap-2 items-center">
 	<div class="flex gap-1 overflow-x-auto border p-1 rounded-md">
-		<a
-			href="{$eventPath}/admin/pages/{data.pageIndex.id}"
-			class="menu-item shrink-0"
-			class:active={$page.params.pageId === data.pageIndex.id}
-		>
-			<Icon
-				path={mdiHomeOutline}
-				active={$page.params.pageId === data.pageIndex.id}
-				class="opacity-60"
-				size={20}
-			/>
-			<span>{data.pageIndex.title}</span>
-		</a>
+		{#if pageIndex}
+			<a
+				href="{$eventPath}/admin/pages/{pageIndex.id}"
+				class="menu-item shrink-0"
+				class:active={$page.params.pageId === pageIndex.id}
+			>
+				<Icon
+					path={mdiHomeOutline}
+					active={$page.params.pageId === pageIndex.id}
+					class="opacity-60"
+					size={20}
+				/>
+				<span>{pageIndex.title}</span>
+			</a>
+		{/if}
 
-		{#each data.pages as { id, title }}
+		{#each data.pages.filter((p) => !p.isIndex) as { id, title }}
 			<a
 				href="{$eventPath}/admin/pages/{id}"
 				class="menu-item shrink-0"

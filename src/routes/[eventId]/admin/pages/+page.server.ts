@@ -2,16 +2,16 @@ import { redirect } from '@sveltejs/kit'
 import { isOwnerOrThrow, prisma, tryOrFail } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
-export const load = async ({ parent, params }) => {
-	const { pageIndex } = await parent()
-	throw redirect(301, `/${params.eventId}/admin/pages/${pageIndex.id}`)
+export const load = async ({ params: { eventId } }) => {
+	const pageIndex = await prisma.page.findFirstOrThrow({ where: { eventId, isIndex: true } })
+	throw redirect(301, `/${eventId}/admin/pages/${pageIndex.id}`)
 }
 
 export const actions = {
-	create_page: async ({ params, locals }) => {
-		await isOwnerOrThrow(params.eventId, locals)
+	create_page: async ({ params: { eventId }, locals }) => {
+		await isOwnerOrThrow(eventId, locals)
 
-		const pagesCount = await prisma.page.count({ where: { eventId: params.eventId } })
+		const pagesCount = await prisma.page.count({ where: { eventId: eventId } })
 
 		const title = `Ma page ${pagesCount + 1}`
 
@@ -19,13 +19,13 @@ export const actions = {
 			() =>
 				prisma.page.create({
 					data: {
-						eventId: params.eventId,
+						eventId: eventId,
 						title,
 						path: normalizePath(title),
 						content: '',
 					},
 				}),
-			(page) => `/${params.eventId}/admin/pages/${page.id}`
+			(page) => `/${eventId}/admin/pages/${page.id}`
 		)
 	},
 }

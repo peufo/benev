@@ -6,8 +6,6 @@ export const load = async ({ params, locals, depends }) => {
 	const session = await locals.auth.validate()
 	const { eventId } = params
 
-	const select = { id: true, title: true, path: true, isIndex: true }
-
 	try {
 		return {
 			userId: session?.user.id || '',
@@ -29,7 +27,7 @@ export const load = async ({ params, locals, depends }) => {
 			}),
 			pages: await prisma.page.findMany({
 				where: { eventId },
-				select,
+				select: { id: true, title: true, path: true, isIndex: true },
 			}),
 		}
 	} catch {

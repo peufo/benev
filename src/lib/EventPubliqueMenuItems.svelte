@@ -5,6 +5,7 @@
 	import { Icon } from '$lib/material'
 	import { mdiFileDocumentOutline, mdiHomeOutline, mdiMapMarkerRadiusOutline } from '@mdi/js'
 	export let pages: Pick<Page, 'id' | 'title' | 'isIndex' | 'path'>[]
+
 	export let hideIndex = false
 
 	$: pageIndex = pages.find((p) => p.isIndex)
