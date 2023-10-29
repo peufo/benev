@@ -6,7 +6,7 @@
 
 	export let data
 
-	$: activeTab = adminTabs.find((tab) => $page.route.id?.startsWith(`/[eventId]${tab.path}`))
+	$: activeTab = $adminTabs.find((tab) => $page.route.id?.startsWith(`/[eventId]${tab.path}`))
 </script>
 
 <svelte:head>
@@ -16,7 +16,7 @@
 <div class="flex flex-col gap-4 max-w-5xl m-auto">
 	<Card bodyClass="sm:pt-4">
 		<div slot="top" class="flex gap-2 p-2 border-b rounded-t-2xl">
-			{#each adminTabs as { path, label, icon }}
+			{#each $adminTabs as { path, label, icon }}
 				{@const active = path === activeTab?.path}
 				<a
 					href="{$eventPath}{path}"

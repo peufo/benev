@@ -6,30 +6,36 @@ import {
 	mdiCogs,
 } from '@mdi/js'
 
-export const adminTabs = [
-	{
-		path: '/admin/members',
-		label: 'Membres',
-		icon: mdiAccountMultipleOutline,
-	},
-	{
-		path: '/admin/subscribes',
-		label: 'Inscriptions',
-		icon: mdiClipboardTextMultipleOutline,
-	},
-	{
-		path: '/admin/plan',
-		label: 'Planification',
-		icon: mdiChartGantt,
-	},
-	{
-		path: '/admin/config',
-		label: 'Configuration',
-		icon: mdiCogs,
-	},
-	{
-		path: '/admin/pages',
-		label: 'Les pages',
-		icon: mdiFileDocumentMultipleOutline,
-	},
-]
+import { derived } from 'svelte/store'
+import { param } from '$lib/store'
+
+export const adminTabs = derived(param, ({ without }) => {
+	const query = without('skip', 'take')
+	return [
+		{
+			path: `/admin/members${query}`,
+			label: 'Membres',
+			icon: mdiAccountMultipleOutline,
+		},
+		{
+			path: `/admin/subscribes${query}`,
+			label: 'Inscriptions',
+			icon: mdiClipboardTextMultipleOutline,
+		},
+		{
+			path: `/admin/plan${query}`,
+			label: 'Planification',
+			icon: mdiChartGantt,
+		},
+		{
+			path: `/admin/config${query}`,
+			label: 'Configuration',
+			icon: mdiCogs,
+		},
+		{
+			path: `/admin/pages${query}`,
+			label: 'Les pages',
+			icon: mdiFileDocumentMultipleOutline,
+		},
+	]
+})
