@@ -78,7 +78,7 @@
 									<p style="color:#666666;font-size:12px;line-height:24px; padding-bottom: 20px;">
 										Définis tes préfèrences concernant les notifications par mails
 										<a
-											href="{domain}/me"
+											href="{domain}/me?section=profile"
 											style="color:#067df7; text-decoration:none"
 											target="_blank"
 										>
