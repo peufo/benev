@@ -35,7 +35,7 @@
 		</a>
 	</div>
 	<div slot="end" class="contents">
-		<EventMenu pages={data.pages} isOwner={data.isOwner} isLeaderInEvent={data.isLeaderInEvent} />
+		<EventMenu pages={data.pages} />
 	</div>
 </Header>
 

@@ -4,4 +4,4 @@
 
 </script>
 
-<Page page={data.page} isOwner={data.isOwner}/>
+<Page page={data.page}/>

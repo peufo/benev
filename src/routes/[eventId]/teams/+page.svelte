@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiEyeCheckOutline,mdiEyeOutline, mdiPlus } from '@mdi/js'
+	import {  mdiPlus } from '@mdi/js'
 	import { Card, DisplayToggle, Icon, InputSearch } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import Teams from '$lib/Teams.svelte'
@@ -7,7 +7,8 @@
 
 	export let data
 
-	let onlyAvailableTeams = true
+	$: memberCanCreate = ['owner', 'admin'].includes(data.member?.role || '') 
+
 </script>
 
 <Card class="max-w-4xl m-auto">
@@ -20,7 +21,7 @@
 		<DisplayToggle />
 		<InputSearch />
 
-		{#if data.isOwner}
+		{#if memberCanCreate}
 			<a href="{$eventPath}/teams/create" class="btn btn-sm btn-square">
 				<Icon path={mdiPlus} title="Nouveau secteur" />
 			</a>

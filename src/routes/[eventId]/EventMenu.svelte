@@ -9,8 +9,9 @@
 	import { adminTabs } from './admin/adminTabs'
 
 	export let pages: Pick<Page, 'id' | 'title' | 'isIndex' | 'path'>[]
-	export let isOwner: boolean
-	export let isLeaderInEvent: boolean
+
+	$: adminIsVisible = ['owner', 'admin', 'leader'].includes($page.data.member?.role || '')
+
 </script>
 
 <div class="gap-2 hidden lg:flex">
@@ -22,7 +23,7 @@
 		slot="activator"
 		class="
 		btn btn-ghost btn-square
-		{isOwner || isLeaderInEvent ? '' : 'lg:hidden'}
+		{adminIsVisible ? '' : 'lg:hidden'}
 	"
 	>
 		<Icon path={mdiMenu} />
@@ -30,14 +31,14 @@
 
 	<div class="flex flex-col gap-1">
 		<div class="contents lg:hidden">
-			{#if isOwner || isLeaderInEvent}
+			{#if adminIsVisible}
 				<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Public</h3>
 			{/if}
 			<EventPubliqueMenuItems {pages} />
 		</div>
 
 		<!-- ADMIN -->
-		{#if isOwner || isLeaderInEvent}
+		{#if adminIsVisible}
 			<hr class="block lg:hidden" />
 			<h3 class="font-bold opacity-50 pl-3 pt-1 text-xs">Gestion</h3>
 			{#each $adminTabs as { path, label, icon }}

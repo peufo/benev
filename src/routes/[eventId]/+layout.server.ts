@@ -1,4 +1,4 @@
-import { isOwner, isLeaderInEvent, prisma } from '$lib/server'
+import { isOwner, isLeaderInEvent, prisma, getMemberWithRole } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
 export const load = async ({ params, locals, depends }) => {
@@ -9,13 +9,7 @@ export const load = async ({ params, locals, depends }) => {
 	try {
 		return {
 			userId: session?.user.id || '',
-			member: session
-				? await prisma.member.findUnique({
-						where: { userId_eventId: { userId: session.user.id, eventId } },
-				  })
-				: null,
-			isOwner: !!(await isOwner(eventId, locals)),
-			isLeaderInEvent: !!(await isLeaderInEvent(eventId, locals)),
+			member: await getMemberWithRole(eventId, locals),
 			event: await prisma.event.findUniqueOrThrow({
 				where: { id: eventId },
 				include: {

@@ -1,11 +1,16 @@
 // See https://kit.svelte.dev/docs/types#app
+
+import { MemberWithRole } from '$lib/server'
+
 // for information about these interfaces
 declare global {
 	namespace App {
 		interface Locals {
 			auth: import('lucia').AuthRequest
 		}
-		// interface PageData {}
+		interface PageData {
+			member?: MemberWithRole
+		}
 		// interface Error {}
 		// interface Platform {}
 	}
