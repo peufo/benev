@@ -11,7 +11,7 @@ export const load = async ({ url, locals, params: { eventId } }) => {
 		user: await prisma.user.findUniqueOrThrow({
 			where: { id: userId },
 		}),
-		member: await prisma.member.findUnique({
+		memberProfile: await prisma.member.findUniqueOrThrow({
 			where: { id: memberId },
 			include: {
 				event: {

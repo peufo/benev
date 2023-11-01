@@ -1,7 +1,7 @@
 import { error, redirect } from '@sveltejs/kit'
 import { prisma } from '.'
 import { ROOT_USER } from '$env/static/private'
-import { Member } from '@prisma/client'
+import { Member, Team } from '@prisma/client'
 
 export async function isRoot(locals: App.Locals) {
 	const session = await locals.auth.validate()
@@ -9,7 +9,7 @@ export async function isRoot(locals: App.Locals) {
 }
 
 export type MemberRole = false | 'member' | 'leader' | 'admin' | 'owner'
-export type MemberWithRole = Member & { role: MemberRole }
+export type MemberWithRole = Member & { leaderOf: Team[]; role: MemberRole }
 
 export async function getMemberWithRole(
 	eventId: string,

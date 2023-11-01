@@ -12,15 +12,13 @@
 	export let data
 </script>
 
-
 <div class="max-w-3xl mx-auto flex flex-col gap-4">
-
-	
 	{#if data.member?.isValidedByUser}
-	<ProfileSection user={data.user} >
-		<div slot="title" class="flex flex-wrap">
-				<a href="/me" class="link link-hover" >
-					{data.user.firstName} {data.user.lastName}
+		<ProfileSection user={data.user}>
+			<div slot="title" class="flex flex-wrap">
+				<a href="/me" class="link link-hover">
+					{data.user.firstName}
+					{data.user.lastName}
 				</a>
 				<span class="flex">
 					<Icon path={mdiSlashForward} size={18} />
@@ -28,26 +26,26 @@
 						{data.event.name}
 					</span>
 				</span>
-
 			</div>
 
 			<span slot="subtitle">Membre</span>
-			
+
 			<h3 class="font-medium text-base-content/70 mt-4">
 				Informations commune à tous les événements
 			</h3>
-			<ProfileForm user={data.user}/>
-			
-			{#if data.member.event.memberFields.length}
-			<hr class="my-6">
-			<h3 class="font-medium text-base-content/70 mt-4">
-				Informations spécifiques à  {data.event.name}
-			</h3>
-				<MemberProfileForm fieldsValue={data.member.profile} event={data.member.event} />
+			<ProfileForm user={data.user} />
+
+			{#if data.memberProfile.event.memberFields.length}
+				<hr class="my-6" />
+				<h3 class="font-medium text-base-content/70 mt-4">
+					Informations spécifiques à {data.event.name}
+				</h3>
+				<MemberProfileForm
+					fieldsValue={data.memberProfile.profile}
+					event={data.memberProfile.event}
+				/>
 			{/if}
-
 		</ProfileSection>
-
 
 		<Card class="border">
 			<h2 slot="title">Mes inscriptions</h2>
@@ -55,7 +53,7 @@
 		</Card>
 
 		{#if data.member.leaderOf.length}
-			<LeaderOf teams={data.member.leaderOf} />
+			<LeaderOf teams={data.memberProfile.leaderOf} />
 		{/if}
 	{:else}
 		<MemberForm event={data.event} userId={data.user.id} class="mx-auto" noCancelButton />
