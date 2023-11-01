@@ -3,6 +3,7 @@
 	import { mdiChevronRight } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	import { urlParam } from '$lib/store'
+	import { onDestroy } from 'svelte'
 
 	export let value: string
 	let klass = ''
@@ -12,11 +13,17 @@
 
 	let card: HTMLDivElement
 
+	let timeout: NodeJS.Timeout
 	function handleClick() {
-		setTimeout(() => {
+		timeout = setTimeout(() => {
+			if (!card) return
 			window.scrollTo({ top: card.offsetTop - 20, behavior: 'smooth' })
 		}, 250)
 	}
+
+	onDestroy(() => {
+		clearTimeout(timeout)
+	})
 </script>
 
 <div class="card bg-base-100 border bordered shadow-md {klass}" bind:this={card}>
@@ -25,27 +32,29 @@
 
 		<a
 			id={value}
-			class="pt-4 pb-4 px-4 md:p-8 grow {$$slots.logo ? 'pl-0 md:pl-0' : ''}"
+			class="grow pt-4 pb-4 px-4 md:p-8 {$$slots.logo ? 'pl-0 md:pl-0' : ''}"
 			href={$urlParam.toggle({ section: value })}
 			data-sveltekit-noscroll
 			data-sveltekit-replacestate
 			on:click={handleClick}
 		>
 			<div class="flex gap-2">
-				<div class="grow text-lg font-semibold text-base-content/80">
+				<div class="shrink text-base sm:text-lg font-semibold text-base-content/80">
 					<slot name="title" />
 				</div>
-				<Icon path={mdiChevronRight} class="transition-transform {isOpen ? 'rotate-90' : ''}" />
+				<Icon path={mdiChevronRight} class="ml-auto transition-transform {isOpen ? 'rotate-90' : ''}" />
 			</div>
-
+			
 			{#if $$slots.subtitle}
-				<div class="text-sm opacity-80 mt-2">
-					<slot name="subtitle" />
-				</div>
+			<div class="text-sm opacity-80 mt-2">
+				<slot name="subtitle" />
+			</div>
 			{/if}
 		</a>
+
 	</div>
 
+	
 	{#if isOpen}
 		<div class="card-body pt-0 px-4 md:p-8 md:pt-0" transition:slide={{ duration: 200 }}>
 			<slot />

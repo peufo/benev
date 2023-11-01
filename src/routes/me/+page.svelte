@@ -1,14 +1,14 @@
 <script lang="ts">
 	import LayoutBasic from '$lib/LayoutBasic.svelte'
 	import { CardLink, Icon } from '$lib/material'
-	import Profile from '$lib/me/ProfileForm.svelte'
+	import ProfileSection from '$lib/me/ProfileSection.svelte'
 	import { mdiLogout } from '@mdi/js'
 
 	export let data
 </script>
 
 <LayoutBasic user={data.user}>
-	<Profile user={data.user} />
+	<ProfileSection user={data.user} />
 
 	<h2 class="text-xl font-semibold text-base-content/70 mt-4">Mes évenements</h2>
 

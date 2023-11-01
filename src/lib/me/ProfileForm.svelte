@@ -7,8 +7,6 @@
 	import { InputText, InputDate, FormControl } from '$lib/material/input'
 	import { Icon } from '$lib/material'
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
-	import SectionCollapse from '$lib/material/SectionCollapse.svelte'
-	import AvatarForm from './AvatarForm.svelte'
 	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
 
 	export let user: User
@@ -29,12 +27,6 @@
 	})
 </script>
 
-<SectionCollapse value="profile">
-	<div slot="logo" class="m-2 md:ml-8 shrink-0">
-		<AvatarForm {user} />
-	</div>
-	<div slot="title">{user.firstName} {user.lastName}</div>
-	<h2 slot="subtitle">Profil et préférences commune à tous les événements.</h2>
 
 	<form
 		method="post"
@@ -106,4 +98,4 @@
 			<button class="btn">Sauvegarder </button>
 		</div>
 	</form>
-</SectionCollapse>
+
