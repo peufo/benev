@@ -8,6 +8,7 @@
 	import { Card, Icon } from '$lib/material'
 	import { mdiArrowLeft, mdiLogout, mdiSlashForward } from '@mdi/js'
 	import LeaderOf from '$lib/LeaderOf.svelte'
+	import MemberRole from '$lib/MemberRole.svelte'
 
 	export let data
 </script>
@@ -28,7 +29,9 @@
 				</span>
 			</div>
 
-			<span slot="subtitle">Membre</span>
+			<span slot="subtitle">
+				<MemberRole role={data.member.role} />
+			</span>
 
 			<h3 class="font-medium text-base-content/70 mt-4">
 				Informations commune à tous les événements

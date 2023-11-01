@@ -3,7 +3,7 @@
 	import { PeriodPickerButton } from '$lib/period'
 	import { subscribeStateLabel } from '$lib/form'
 	import InputOptionInParam from '$lib/material/input/InputOptionInParam.svelte'
-	import { mdiAccountCircleOutline, mdiShieldAccount } from '@mdi/js'
+	import { mdiAccountCircleOutline, mdiShieldAccountOutline } from '@mdi/js'
 
 	export let teams: { id: string; name: string }[]
 </script>
@@ -21,7 +21,7 @@
 <InputOptionInParam
 	key="createdBy"
 	options={{
-		leader: { label: 'Inscrit par un responsable', icon: mdiShieldAccount },
+		leader: { label: 'Inscrit par un responsable', icon: mdiShieldAccountOutline },
 		user: { label: 'Inscrit par le membre', icon: mdiAccountCircleOutline },
 	}}
 />

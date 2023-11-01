@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Icon } from '$lib/material'
-	import { mdiAccountCircleOutline, mdiShieldAccount } from '@mdi/js'
+	import { mdiAccountCircleOutline, mdiShieldAccountOutline } from '@mdi/js'
 
 	export let createdBy: 'leader' | 'user'
 	export let size = 24
@@ -10,7 +10,7 @@
 
 {#if createdBy === 'leader'}
 	<Icon
-		path={mdiShieldAccount}
+		path={mdiShieldAccountOutline}
 		title="Inscrit par un responsable"
 		class="opacity-60 {klass}"
 		{size}

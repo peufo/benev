@@ -8,7 +8,7 @@ export async function isRoot(locals: App.Locals) {
 	return session?.user.email === ROOT_USER
 }
 
-export type MemberRole = false | 'member' | 'leader' | 'admin' | 'owner'
+export type MemberRole = 'member' | 'leader' | 'admin' | 'owner'
 export type MemberWithRole = Member & { leaderOf: Team[]; role: MemberRole }
 
 export async function getMemberWithRole(

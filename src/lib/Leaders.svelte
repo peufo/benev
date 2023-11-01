@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiEmailOutline, mdiPhoneOutline, mdiShieldAccount } from '@mdi/js'
+	import { mdiEmailOutline, mdiPhoneOutline, mdiShieldAccountOutline } from '@mdi/js'
 	import { Icon, DropDown } from '$lib/material'
 	import { tip } from '$lib/action'
 	import type { Member } from '@prisma/client'
@@ -10,7 +10,7 @@
 
 <div class="flex items-center gap-2">
 	<Icon
-		path={mdiShieldAccount}
+		path={mdiShieldAccountOutline}
 		class="btn-sm btn-square opacity-70 {leaders.length ? '' : 'fill-error'}"
 		title="Responsables"
 	/>
@@ -23,7 +23,7 @@
 						{member.user.firstName}
 						{member.user.lastName}
 					</button>
-	
+
 					<ul class="w-48">
 						<li>
 							<a class="menu-item" href="mailto:{member.user.email}" target="_blank">
@@ -40,11 +40,12 @@
 							</li>
 						{/if}
 					</ul>
-					
 				</DropDown>
-	
 			{:else}
-				<button use:tip={{ content: "Ce membre n'a pas validé sa participation" }} class="badge badge-lg badge-outline badge-warning">
+				<button
+					use:tip={{ content: "Ce membre n'a pas validé sa participation" }}
+					class="badge badge-lg badge-outline badge-warning"
+				>
 					{member.user.firstName}
 					{member.user.lastName}
 				</button>
@@ -52,7 +53,5 @@
 		{:else}
 			<div class="text-error pt-1">Pas de responsable</div>
 		{/each}
-
 	</div>
-
 </div>
