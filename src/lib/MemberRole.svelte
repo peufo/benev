@@ -11,6 +11,7 @@
 	export let role: MemberRole
 	let klass = ''
 	export { klass as class }
+	export let mode: 'badge' | 'icon' = 'badge'
 
 	const roles: Record<MemberRole, { icon: string; label: string }> = {
 		owner: { label: 'Propriétaire', icon: mdiCrownOutline },
@@ -20,7 +21,11 @@
 	}
 </script>
 
-<div class="badge badge-ghost badge-lg {klass}">
-	<Icon path={roles[role].icon} class="opacity-80 -translate-x-1" size={22} />
-	<span>{roles[role].label}</span>
-</div>
+{#if mode === 'badge'}
+	<div class="badge badge-ghost badge-lg font-normal opacity-80 {klass}">
+		<Icon path={roles[role].icon} class="-translate-x-1" size={22} />
+		<span>{roles[role].label}</span>
+	</div>
+{:else if role !== 'member'}
+	<Icon path={roles[role].icon} class="opacity-70" size={22} title={roles[role].label} />
+{/if}

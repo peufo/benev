@@ -5,10 +5,9 @@ import { z } from 'zod'
 import { Blob } from 'node:buffer'
 import { fail, error } from '@sveltejs/kit'
 import {
-	addRoleInMember,
 	auth,
+	getMemberRole,
 	generateToken,
-	getUserIdOrRedirect,
 	parseFormData,
 	prisma,
 	redirectToAuth,
@@ -17,7 +16,6 @@ import {
 } from '$lib/server'
 import { loginShema, passwordResetShema, registerShema } from '$lib/form'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
-
 import { MEDIA_DIR } from '$env/static/private'
 import { userShema } from '$lib/form'
 
@@ -28,12 +26,16 @@ export const load = async ({ url, parent }) => {
 	const members = await prisma.member.findMany({
 		where: { userId: user.id },
 		include: {
+			user: { select: { email: true } },
 			event: true,
 			leaderOf: true,
 			subscribes: true,
 		},
 	})
-	const membersWithRole = members.map((member) => addRoleInMember(user, member))
+	const membersWithRole = members.map((member) => ({
+		...member,
+		role: getMemberRole(member),
+	}))
 
 	return {
 		user,

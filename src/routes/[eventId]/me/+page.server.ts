@@ -1,16 +1,16 @@
 import { error } from '@sveltejs/kit'
-import { getUserIdOrRedirect, isLeaderInEvent, prisma, tryOrFail } from '$lib/server'
+import { isLeaderInEvent, prisma, redirectToAuth, tryOrFail } from '$lib/server'
 
-export const load = async ({ url, locals, params: { eventId } }) => {
-	const userId = await getUserIdOrRedirect(url, locals)
+export const load = async ({ url, parent, params: { eventId } }) => {
+	const { user } = await parent()
+	if (!user) throw redirectToAuth(url)
+
 	const member = await prisma.member.findUniqueOrThrow({
-		where: { userId_eventId: { userId, eventId } },
+		where: { userId_eventId: { userId: user.id, eventId } },
 	})
 	const memberId = member.id
 	return {
-		user: await prisma.user.findUniqueOrThrow({
-			where: { id: userId },
-		}),
+		user,
 		memberProfile: await prisma.member.findUniqueOrThrow({
 			where: { id: memberId },
 			include: {

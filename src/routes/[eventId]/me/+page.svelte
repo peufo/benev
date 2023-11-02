@@ -6,7 +6,7 @@
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Card, Icon } from '$lib/material'
-	import { mdiArrowLeft, mdiLogout, mdiSlashForward } from '@mdi/js'
+	import { mdiArrowLeft, mdiSlashForward } from '@mdi/js'
 	import LeaderOf from '$lib/LeaderOf.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
 
@@ -67,11 +67,5 @@
 			<Icon path={mdiArrowLeft} size={20} />
 			Tous mes événements
 		</a>
-		<form method="POST" action="/me?/logout" class="contents">
-			<button class="btn">
-				<Icon path={mdiLogout} size={20} class="opacity-70" />
-				Déconnexion
-			</button>
-		</form>
 	</div>
 </div>

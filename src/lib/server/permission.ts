@@ -1,48 +1,10 @@
 import { error, redirect } from '@sveltejs/kit'
 import { prisma } from '.'
 import { ROOT_USER } from '$env/static/private'
-import { Member, Team, Event } from '@prisma/client'
 
 export async function isRoot(locals: App.Locals) {
 	const session = await locals.auth.validate()
 	return session?.user.email === ROOT_USER
-}
-
-export type MemberRole = 'member' | 'leader' | 'admin' | 'owner'
-export type MemberWithRoleInfo = Member & {
-	event: { ownerId: string }
-	leaderOf: Team[]
-}
-export type MemberWithRole = MemberWithRoleInfo & { role: MemberRole }
-
-export async function getMemberWithRole(
-	eventId: string,
-	locals: App.Locals
-): Promise<MemberWithRole | null> {
-	const session = await locals.auth.validate()
-	if (!session) return null
-
-	const member = await prisma.member.findUnique({
-		where: { userId_eventId: { userId: session.user.id, eventId } },
-		include: {
-			event: { select: { ownerId: true } },
-			leaderOf: true,
-		},
-	})
-	if (!member) return null
-	return addRoleInMember(session.user, member)
-}
-
-export function addRoleInMember<M extends MemberWithRoleInfo>(
-	user: { email: string; id: string },
-	member: M
-): M & { role: MemberRole } {
-	const isRoot = user.email === ROOT_USER
-	const isOwner = member.event.ownerId === user.id
-	if (isRoot || isOwner) return { ...member, role: 'owner' }
-	if (member.isAdmin) return { ...member, role: 'admin' }
-	if (member.leaderOf.length) return { ...member, role: 'leader' }
-	return { ...member, role: 'member' }
 }
 
 export async function isOwner(eventId: string, locals: App.Locals) {

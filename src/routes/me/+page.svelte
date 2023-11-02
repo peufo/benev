@@ -46,10 +46,10 @@
 		</CardLink>
 	{/each}
 
-	<div class="flex justify-end">
+	<div class="flex">
 		<form method="POST" action="/me?/logout" class="contents">
 			<button class="btn">
-				<Icon path={mdiLogout} size={20} class="opacity-70" />
+				<Icon path={mdiLogout} size={20} class="opacity-70 rotate-180" />
 				Déconnexion
 			</button>
 		</form>
