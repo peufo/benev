@@ -1,7 +1,7 @@
 import { error, redirect } from '@sveltejs/kit'
 import { prisma } from '.'
 import { ROOT_USER } from '$env/static/private'
-import { Member, Team } from '@prisma/client'
+import { Member, Team, Event } from '@prisma/client'
 
 export async function isRoot(locals: App.Locals) {
 	const session = await locals.auth.validate()
@@ -9,7 +9,11 @@ export async function isRoot(locals: App.Locals) {
 }
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner'
-export type MemberWithRole = Member & { leaderOf: Team[]; role: MemberRole }
+export type MemberWithRoleInfo = Member & {
+	event: { ownerId: string }
+	leaderOf: Team[]
+}
+export type MemberWithRole = MemberWithRoleInfo & { role: MemberRole }
 
 export async function getMemberWithRole(
 	eventId: string,
@@ -25,10 +29,16 @@ export async function getMemberWithRole(
 			leaderOf: true,
 		},
 	})
-
 	if (!member) return null
-	const isRoot = session.user.email === ROOT_USER
-	const isOwner = member.event.ownerId === session.user.id
+	return addRoleInMember(session.user, member)
+}
+
+export function addRoleInMember<M extends MemberWithRoleInfo>(
+	user: { email: string; id: string },
+	member: M
+): M & { role: MemberRole } {
+	const isRoot = user.email === ROOT_USER
+	const isOwner = member.event.ownerId === user.id
 	if (isRoot || isOwner) return { ...member, role: 'owner' }
 	if (member.isAdmin) return { ...member, role: 'admin' }
 	if (member.leaderOf.length) return { ...member, role: 'leader' }
@@ -99,10 +109,11 @@ export async function isLeaderOrThrow(teamId: string, locals: App.Locals) {
 	return session
 }
 
+export function redirectToAuth(url: URL) {
+	return redirect(302, `/auth?callback=${url.pathname}`)
+}
 export async function getUserIdOrRedirect(url: URL, locals: App.Locals) {
 	const session = await locals.auth.validate()
-	if (!session) {
-		throw redirect(302, `/auth?callback=${url.pathname}`)
-	}
+	if (!session) throw redirectToAuth(url)
 	return session.user.id
 }

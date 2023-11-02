@@ -9,6 +9,8 @@
 	} from '@mdi/js'
 
 	export let role: MemberRole
+	let klass = ''
+	export { klass as class }
 
 	const roles: Record<MemberRole, { icon: string; label: string }> = {
 		owner: { label: 'Propriétaire', icon: mdiCrownOutline },
@@ -18,7 +20,7 @@
 	}
 </script>
 
-<div class="badge badge-ghost badge-lg">
+<div class="badge badge-ghost badge-lg {klass}">
 	<Icon path={roles[role].icon} class="opacity-80 -translate-x-1" size={22} />
 	<span>{roles[role].label}</span>
 </div>
