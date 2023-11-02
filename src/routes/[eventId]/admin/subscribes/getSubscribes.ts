@@ -1,12 +1,10 @@
 import { jsonParse } from '$lib/jsonParse.js'
-import { parseQuery, prisma } from '$lib/server'
+import { getMemberRole, parseQuery, prisma } from '$lib/server'
 import { Prisma, SubscribeState } from '@prisma/client'
 import { error } from '@sveltejs/kit'
 import { z } from 'zod'
 
 export const getSubscribes = async (eventId: string, url: URL) => {
-	// TODO: use enum provided by prisma for "createdBy"
-
 	const query = parseQuery(
 		url,
 		z.object({
@@ -17,6 +15,7 @@ export const getSubscribes = async (eventId: string, url: URL) => {
 			states: z.string().optional(),
 			skip: z.coerce.number().default(0),
 			take: z.coerce.number().default(20),
+			// TODO: use enum provided by prisma for "createdBy" -> SubscribeCreatedBy
 			createdBy: z.enum(['leader', 'user']).optional(),
 			all: z.coerce.boolean().default(false),
 		})
@@ -67,19 +66,33 @@ export const getSubscribes = async (eventId: string, url: URL) => {
 	}
 
 	return {
-		subscribes: await prisma.subscribe.findMany({
-			where,
-			skip: query.all ? undefined : query.skip,
-			take: query.all ? undefined : query.take,
-			include: {
-				member: {
-					include: { user: true },
+		subscribes: await prisma.subscribe
+			.findMany({
+				where,
+				skip: query.all ? undefined : query.skip,
+				take: query.all ? undefined : query.take,
+				include: {
+					period: {
+						include: { team: true },
+					},
+					member: {
+						include: {
+							user: true,
+							event: { select: { ownerId: true } },
+							leaderOf: true,
+						},
+					},
 				},
-				period: {
-					include: { team: true },
-				},
-			},
-			orderBy: { period: { start: 'asc' } },
-		}),
+				orderBy: { period: { start: 'asc' } },
+			})
+			.then((subs) =>
+				subs.map((sub) => ({
+					...sub,
+					member: {
+						...sub.member,
+						role: getMemberRole(sub.member),
+					},
+				}))
+			),
 	}
 }

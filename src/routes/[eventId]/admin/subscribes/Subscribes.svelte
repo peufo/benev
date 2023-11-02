@@ -6,6 +6,7 @@
 	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
 	import SubscribeCreatedBy from '$lib/SubscribeCreatedBy.svelte'
 	import Avatar from '$lib/me/Avatar.svelte'
+	import MemberRole from '$lib/MemberRole.svelte'
 
 	export let subscribes: PageData['subscribes']
 </script>
@@ -45,6 +46,7 @@
 									{sub.member.user.firstName}
 									{sub.member.user.lastName}
 								</span>
+								<MemberRole role={sub.member.role} mode="icon" />
 							</a>
 						</td>
 						<td>

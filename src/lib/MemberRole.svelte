@@ -27,5 +27,11 @@
 		<span>{roles[role].label}</span>
 	</div>
 {:else if role !== 'member'}
-	<Icon path={roles[role].icon} class="opacity-70" size={22} title={roles[role].label} />
+	<Icon
+		path={roles[role].icon}
+		class="opacity-70"
+		size={22}
+		title={roles[role].label}
+		disableTitlePropagation
+	/>
 {/if}
