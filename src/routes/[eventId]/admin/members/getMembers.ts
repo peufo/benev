@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import z from 'zod'
 import type { Prisma } from '@prisma/client'
-import { parseQuery, prisma, getMemberRole } from '$lib/server'
+import { parseQuery, prisma, getMemberRoles } from '$lib/server'
 
 export const getMembers = async (eventId: string, url: URL) => {
 	const query = parseQuery(
@@ -118,7 +118,7 @@ export const getMembers = async (eventId: string, url: URL) => {
 		.then((res) =>
 			res.map((member) => ({
 				...member,
-				role: getMemberRole(member),
+				roles: getMemberRoles(member),
 				workTime: member.subscribes.reduce((acc, { period }) => {
 					const time = period.end.getTime() - period.start.getTime()
 					return acc + time

@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { Prisma, SubscribeState } from '@prisma/client'
 import { Action } from './$types'
-import { prisma, sendEmailTemplate, tryOrFail, permission, type MemberWithRole } from '$lib/server'
+import { prisma, sendEmailTemplate, tryOrFail, permission, type MemberWithRoles } from '$lib/server'
 import { EmailNewSubscribe, EmailSubscribeState, EmailSubscribeStateCancelled } from '$lib/email'
 import { isFreeRange } from 'perod'
 
@@ -55,11 +55,11 @@ const setSubscribState: (state: SubscribeState) => Action =
 
 			// Check if author right
 			const isLeaderAction = (_subscribe.createdBy === 'leader') === isCreatorEdition
-			let author: MemberWithRole | null
+			let author: MemberWithRoles | null
 			if (isLeaderAction) {
 				author = await permission.leader(eventId, locals)
 				const isInLeaderTeams = author.leaderOf.find(({ id }) => id === _subscribe.period.teamId)
-				if (author.role === 'leader' && !isInLeaderTeams) throw error(403)
+				if (!author.roles.includes('admin') && !isInLeaderTeams) throw error(403)
 			} else {
 				author = await permission.member(eventId, locals)
 				if (author.id !== _subscribe.memberId) throw error(403)

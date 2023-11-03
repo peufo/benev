@@ -23,7 +23,7 @@
 					<img src={member.event.logo} alt="logo de {member.event.name}" class="w-7 inline-block" />
 				{/if}
 				<span>{member.event.name}</span>
-				<MemberRole role={member.role} class="ml-auto" />
+				<MemberRole roles={member.roles} class="ml-auto" />
 			</div>
 
 			<div class="flex gap-2 mt-4">

@@ -1,5 +1,5 @@
 import { jsonParse } from '$lib/jsonParse.js'
-import { getMemberRole, parseQuery, prisma } from '$lib/server'
+import { getMemberRoles, parseQuery, prisma } from '$lib/server'
 import { Prisma, SubscribeState } from '@prisma/client'
 import { error } from '@sveltejs/kit'
 import { z } from 'zod'
@@ -90,7 +90,7 @@ export const getSubscribes = async (eventId: string, url: URL) => {
 					...sub,
 					member: {
 						...sub.member,
-						role: getMemberRole(sub.member),
+						roles: getMemberRoles(sub.member),
 					},
 				}))
 			),

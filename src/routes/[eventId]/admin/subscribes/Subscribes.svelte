@@ -46,7 +46,7 @@
 									{sub.member.user.firstName}
 									{sub.member.user.lastName}
 								</span>
-								<MemberRole role={sub.member.role} mode="icon" />
+								<MemberRole roles={sub.member.roles} mode="icon" />
 							</a>
 						</td>
 						<td>

@@ -10,8 +10,7 @@
 
 	export let pages: Pick<Page, 'id' | 'title' | 'isIndex' | 'path'>[]
 
-	$: adminIsVisible = ['owner', 'admin', 'leader'].includes($page.data.member?.role || '')
-
+	$: adminIsVisible = $page.data.member?.roles.includes('leader')
 </script>
 
 <div class="gap-2 hidden lg:flex">
@@ -22,9 +21,9 @@
 	<button
 		slot="activator"
 		class="
-		btn btn-ghost btn-square
-		{adminIsVisible ? '' : 'lg:hidden'}
-	"
+			btn btn-ghost btn-square
+			{adminIsVisible ? '' : 'lg:hidden'}
+		"
 	>
 		<Icon path={mdiMenu} />
 	</button>

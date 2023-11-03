@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { isFreeRange } from 'perod'
 import { subscribeShema } from '$lib/form'
-import { isLeader, parseFormData, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
+import { parseFormData, permission, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
 import { EmailNewSubscribe } from '$lib/email'
 
 export const actions = {
@@ -35,7 +35,10 @@ export const actions = {
 			}
 
 			// Check if author as the right to create this subscribe
-			const _isLeader = await isLeader(period.teamId, locals)
+			const _isLeader = await permission
+				.leaderOfTeam(period.teamId, locals)
+				.then(() => true)
+				.catch(() => false)
 			const isSelfSubscribe = data.memberId === member.id
 			if (!_isLeader && !isSelfSubscribe) throw error(403)
 

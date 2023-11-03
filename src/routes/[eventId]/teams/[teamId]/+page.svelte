@@ -24,6 +24,8 @@
 
 	export let data
 
+	$: isLeader = data.member?.roles.includes('leader')
+
 	let subscribeDialog: HTMLDialogElement
 	let memberDialog: HTMLDialogElement
 	let memberProfilDialog: HTMLDialogElement
@@ -57,7 +59,7 @@
 				mySubscribe,
 				available,
 				isComplete,
-				disabled: !data.isLeader && !available,
+				disabled: !isLeader && !available,
 			}
 		})
 		.filter((period) => !$onlyAvailable || !period.isComplete)
@@ -71,7 +73,7 @@
 	<div slot="action" class="flex gap-2">
 		<OnlyAvailableToggle />
 
-		{#if data.isLeader}
+		{#if isLeader}
 			<a
 				href={`${$eventPath}/admin/members?teams=["${data.team.id}"]`}
 				class="btn btn-square btn-sm"
@@ -113,7 +115,7 @@
 						class:cursor-pointer={!period.disabled}
 						class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
 						on:click={() => {
-							if (data.isLeader) return goto(`${$eventPath}/teams/${period.teamId}/${period.id}`)
+							if (isLeader) return goto(`${$eventPath}/teams/${period.teamId}/${period.id}`)
 							if (!period.disabled) subscribe(period)
 						}}
 					>
@@ -122,12 +124,12 @@
 						</td>
 						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-end">
 							{#if period.mySubscribe}
-								<SubscribeStateForm subscribe={period.mySubscribe} isLeader={!!data.isLeader} />
+								<SubscribeStateForm subscribe={period.mySubscribe} isLeader={!!isLeader} />
 							{/if}
 
 							<Progress {period} class="w-[60px]" />
 
-							{#if data.isLeader}
+							{#if isLeader}
 								<div class="flex gap-2">
 									{#if period.available}
 										<button
@@ -207,17 +209,16 @@
 <dialog class="modal" bind:this={memberProfilDialog}>
 	<div class="modal-box">
 		<h3 class="card-title mb-2">Complète ton profile {data.event.name}</h3>
-		<MemberProfileForm
-			member={{
-				...data.member,
-				event: data.event,
-			}}
-			class="sm:grid-cols-1 md:grid-cols-1"
-			on:success={() => {
-				memberProfilDialog.close()
-				subscribeDialog.showModal()
-			}}
-		/>
+		{#if data.member}
+			<MemberProfileForm
+				member={data.member}
+				class="sm:grid-cols-1 md:grid-cols-1"
+				on:success={() => {
+					memberProfilDialog.close()
+					subscribeDialog.showModal()
+				}}
+			/>
+		{/if}
 	</div>
 </dialog>
 

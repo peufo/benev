@@ -8,12 +8,15 @@
 		mdiStarOutline,
 	} from '@mdi/js'
 
-	export let role: MemberRole
+	export let roles: MemberRole[]
 	let klass = ''
 	export { klass as class }
 	export let mode: 'badge' | 'icon' = 'badge'
 
-	const roles: Record<MemberRole, { icon: string; label: string }> = {
+	const rolesOrder: MemberRole[] = ['owner', 'admin', 'leader', 'member']
+	$: role = rolesOrder.find(r => roles.includes(r))
+
+	const rolesMap: Record<MemberRole, { icon: string; label: string }> = {
 		owner: { label: 'Propriétaire', icon: mdiCrownOutline },
 		admin: { label: 'Administrateur', icon: mdiStarOutline },
 		leader: { label: 'Responsable', icon: mdiShieldAccountOutline },
@@ -21,17 +24,19 @@
 	}
 </script>
 
-{#if mode === 'badge'}
-	<div class="badge badge-ghost badge-lg font-normal opacity-80 {klass}">
-		<Icon path={roles[role].icon} class="-translate-x-1" size={22} />
-		<span>{roles[role].label}</span>
-	</div>
-{:else if role !== 'member'}
-	<Icon
-		path={roles[role].icon}
-		class="opacity-70"
-		size={22}
-		title={roles[role].label}
-		disableTitlePropagation
-	/>
+{#if role}
+	{#if mode === 'badge'}
+		<div class="badge badge-ghost badge-lg font-normal opacity-80 {klass}">
+			<Icon path={rolesMap[role].icon} class="-translate-x-1" size={22} />
+			<span>{rolesMap[role].label}</span>
+		</div>
+	{:else if role !== 'member'}
+		<Icon
+			path={rolesMap[role].icon}
+			class="opacity-70"
+			size={22}
+			title={rolesMap[role].label}
+			disableTitlePropagation
+		/>
+	{/if}
 {/if}

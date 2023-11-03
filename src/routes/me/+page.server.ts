@@ -6,7 +6,7 @@ import { Blob } from 'node:buffer'
 import { fail, error } from '@sveltejs/kit'
 import {
 	auth,
-	getMemberRole,
+	getMemberRoles,
 	generateToken,
 	parseFormData,
 	prisma,
@@ -26,7 +26,7 @@ export const load = async ({ url, parent }) => {
 	const members = await prisma.member.findMany({
 		where: { userId: user.id },
 		include: {
-			user: { select: { email: true } },
+			user: true,
 			event: true,
 			leaderOf: true,
 			subscribes: true,
@@ -34,7 +34,7 @@ export const load = async ({ url, parent }) => {
 	})
 	const membersWithRole = members.map((member) => ({
 		...member,
-		role: getMemberRole(member),
+		roles: getMemberRoles(member),
 	}))
 
 	return {

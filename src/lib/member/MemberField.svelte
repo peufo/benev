@@ -46,7 +46,7 @@
 		multiselect: '',
 	}
 
-	$: isLeader = ['owner', 'admin', 'leader'].includes($page.data.member?.role || '')
+	$: isLeader = $page.data.member?.roles.includes('leader')
 </script>
 
 <svelte:component

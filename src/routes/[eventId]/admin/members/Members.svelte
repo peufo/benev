@@ -42,7 +42,7 @@
 									{member.user.firstName}
 									{member.user.lastName}
 								</span>
-								<MemberRole role={member.role} mode="icon" />
+								<MemberRole roles={member.roles} mode="icon" />
 							</div>
 						</td>
 

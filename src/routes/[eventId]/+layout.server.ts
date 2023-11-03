@@ -1,25 +1,16 @@
 import { prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
-import { getMemberRole } from '$lib/server'
+import { getMemberProfile } from '$lib/server'
 
 export const load = async ({ depends, parent, params: { eventId } }) => {
 	depends('event')
 	const { user } = await parent()
 	const userId = user?.id || ''
 
-	const member = await prisma.member.findUnique({
-		where: { userId_eventId: { userId, eventId } },
-		include: {
-			user: { select: { email: true } },
-			event: { select: { ownerId: true } },
-			leaderOf: true,
-		},
-	})
-
 	try {
 		return {
 			userId: user?.id || '',
-			member: member && { ...member, role: getMemberRole(member) },
+			member: await getMemberProfile({ userId, eventId }).catch(() => undefined),
 			event: await prisma.event.findUniqueOrThrow({
 				where: { id: eventId },
 				include: {

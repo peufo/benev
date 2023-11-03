@@ -30,7 +30,7 @@
 			</div>
 
 			<span slot="subtitle">
-				<MemberRole role={data.member.role} />
+				<MemberRole roles={data.member.roles} />
 			</span>
 
 			<h3 class="font-medium text-base-content/70 mt-4">
@@ -38,22 +38,22 @@
 			</h3>
 			<ProfileForm user={data.user} />
 
-			{#if data.memberProfile.profile.length}
+			{#if data.member?.profile.length}
 				<hr class="my-6" />
 				<h3 class="font-medium text-base-content/70 mt-4">
 					Informations spécifiques à {data.event.name}
 				</h3>
-				<MemberProfileForm member={data.memberProfile} />
+				<MemberProfileForm member={data.member} />
 			{/if}
 		</ProfileSection>
 
 		<Card class="border">
 			<h2 slot="title">Mes inscriptions</h2>
-			<TeamsSubscribes teams={data.memberTeams} />
+			<TeamsSubscribes teams={data.memberTeams || []} />
 		</Card>
 
 		{#if data.member.leaderOf.length}
-			<LeaderOf teams={data.memberProfile.leaderOf} />
+			<LeaderOf teams={data.member.leaderOf} />
 		{/if}
 	{:else}
 		<MemberForm event={data.event} userId={data.user.id} class="mx-auto" noCancelButton />

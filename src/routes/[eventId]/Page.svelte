@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiPencilOutline } from '@mdi/js'
-	import {page as pageStore} from '$app/stores'
+	import { page as pageStore } from '$app/stores'
 
 	import { eventPath } from '$lib/store/index.js'
 	import EditorJsHTML from 'editorjs-html'
@@ -17,8 +17,7 @@
 		blocksHTML = content ? parser.parse(content) : []
 	}
 
-	$: canEdit = ['owner', 'admin'].includes($pageStore.data.member?.role || '')
-	
+	$: canEdit = $pageStore.data.member?.roles.includes('admin')
 </script>
 
 <div class="card bg-base-100 mx-auto prose p-6 shadow-md">

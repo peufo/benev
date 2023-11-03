@@ -1,20 +1,15 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
-	import type { Member, Event, FieldValue, Field } from '@prisma/client'
 
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
 	import MemberField from './MemberField.svelte'
-	import type { MemberRole } from '$lib/server'
+	import type { MemberProfile } from '$lib/server'
 
 	let klass = ''
 	export { klass as class }
 
-	export let member: Member & {
-		role: MemberRole
-		profile: FieldValue[]
-		event: Event & { memberFields: Field[] }
-	}
+	export let member: MemberProfile
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 

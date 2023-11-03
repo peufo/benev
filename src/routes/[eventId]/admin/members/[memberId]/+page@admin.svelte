@@ -30,7 +30,7 @@
 					{data.memberProfile.user.lastName}
 				</span>
 
-				<MemberRole role={data.memberProfile.role} />
+				<MemberRole roles={data.memberProfile.roles} />
 			</div>
 			<Profile user={data.memberProfile.user} class="sm:pt-4" />
 		</div>
@@ -40,11 +40,7 @@
 
 	<SectionCollapse value="profile">
 		<h2 slot="title">Informations complémentaires</h2>
-		<MemberProfileForm
-			event={data.event}
-			fieldsValue={data.memberProfile.profile}
-			memberId={data.memberProfile.id}
-		/>
+		<MemberProfileForm member={data.memberProfile} />
 	</SectionCollapse>
 
 	<Card class="border">
