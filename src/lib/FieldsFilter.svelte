@@ -35,7 +35,7 @@
 		on:select={resetFieldValue}
 	>
 		<div class="contents" slot="placeholder">
-			<Icon path={mdiFilterOutline} class="opacity-70 fill-base-content scale-90" />
+			<Icon path={mdiFilterOutline} class="opacity-70 fill-base-content scale-90" size={20} />
 			Plus
 		</div>
 	</InputSelect>

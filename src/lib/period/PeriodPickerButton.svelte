@@ -55,7 +55,7 @@
 <DropDown bind:this={dropDown} on:mouseLeave={handleSubmit} class="max-h-full">
 	<div slot="activator" class="join">
 		<button class="btn btn-sm join-item shrink flex-nowrap">
-			<Icon path={mdiCalendarMonthOutline} class="opacity-60" />
+			<Icon path={mdiCalendarMonthOutline} class="opacity-60" size={20} />
 			{getLabel(period, time)}
 		</button>
 		{#if isValidPeriod}

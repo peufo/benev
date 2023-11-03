@@ -17,12 +17,14 @@
 			href={$urlParam.toggle({ [key]: opt.value })}
 			class="join-item btn btn-sm"
 			class:btn-primary={active}
+			class:w-9={opt.icon}
 		>
 			{#if opt.icon}
 				<Icon
 					path={opt.icon}
 					title={opt.label}
 					class={active ? 'fill-primary-content' : 'opacity-70'}
+					size={20}
 				/>
 			{:else}
 				{opt.label}

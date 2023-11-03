@@ -11,7 +11,7 @@ export const getMembers = async (eventId: string, url: URL) => {
 			start: z.coerce.date().optional(),
 			end: z.coerce.date().optional(),
 			teams: z.string().optional(),
-			memberType: z.string().optional(),
+			role: z.enum(['member', 'leader', 'admin']).optional(),
 			fieldId: z.string().optional(),
 			fieldValue: z.string().optional(),
 			skip: z.coerce.number().default(0),
@@ -49,15 +49,16 @@ export const getMembers = async (eventId: string, url: URL) => {
 		},
 	}
 
-	const subscribesFilter = !!(query.memberType || query.start || query.end || query.teams)
+	const subscribesFilter = !!(query.role || query.start || query.end || query.teams)
 	if (subscribesFilter) {
-		if (!query.memberType || query.memberType === 'volunteers')
+		if (!query.role || query.role === 'member')
 			where.OR!.push({
 				subscribes: {
 					some: subscribeWhere,
 				},
 			})
-		if (!query.memberType || query.memberType === 'leaders')
+
+		if (!query.role || query.role === 'leader')
 			where.OR!.push({
 				leaderOf: {
 					some: {
@@ -71,6 +72,8 @@ export const getMembers = async (eventId: string, url: URL) => {
 				},
 			})
 	}
+
+	if (query.role === 'admin') where.isAdmin = true
 
 	if (!where.OR?.length) delete where.OR
 

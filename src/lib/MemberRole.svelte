@@ -37,7 +37,7 @@
 		<Icon
 			path={rolesMap[role].icon}
 			class="opacity-70"
-			size={22}
+			size={20}
 			title={rolesMap[role].label}
 			disableTitlePropagation
 		/>
