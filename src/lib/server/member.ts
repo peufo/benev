@@ -13,11 +13,10 @@ export type MemberWithRoles = MemberWithRolesInfo & { roles: MemberRole[] }
 export function getMemberRoles(member: MemberWithRolesInfo): MemberRole[] {
 	const isRoot = member.user.email === ROOT_USER
 	const isOwner = member.event.ownerId === member.userId
-	const roles: MemberRole[] = ['member']
-	if (member.leaderOf.length) roles.push('leader')
-	if (member.isAdmin) roles.push('admin')
-	if (isRoot || isOwner) roles.push('owner')
-	return roles
+	if (isRoot || isOwner) return ['owner', 'admin', 'leader', 'member']
+	if (member.isAdmin) return ['admin', 'leader', 'member']
+	if (member.leaderOf.length) return ['leader', 'member']
+	return ['member']
 }
 
 export type MemberProfile = Awaited<ReturnType<typeof getMemberProfile>>
