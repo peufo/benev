@@ -7,7 +7,6 @@ const getPermission = (role: MemberRole) => async (eventId: string, locals: App.
 	if (!session) throw error(401)
 	// TODO: a optimisé en utilisant parent() dans les load()
 	const member = await getMemberProfile({ userId: session.user.id, eventId })
-	console.log(member.roles)
 	const allowed = member.roles.includes(role)
 	if (!allowed) throw error(403)
 	return member
