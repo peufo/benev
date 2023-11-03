@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit'
-import { isOwnerOrThrow, prisma, tryOrFail } from '$lib/server'
+import { prisma, tryOrFail, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ params: { eventId } }) => {
@@ -8,8 +8,8 @@ export const load = async ({ params: { eventId } }) => {
 }
 
 export const actions = {
-	create_page: async ({ params: { eventId }, locals }) => {
-		await isOwnerOrThrow(eventId, locals)
+	create_page: async ({ locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
 
 		const pagesCount = await prisma.page.count({ where: { eventId: eventId } })
 

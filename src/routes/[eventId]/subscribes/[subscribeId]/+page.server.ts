@@ -1,9 +1,8 @@
 import { error } from '@sveltejs/kit'
 import { Prisma, SubscribeState } from '@prisma/client'
 import { Action } from './$types'
-import { isLeaderOrThrow, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
+import { prisma, sendEmailTemplate, tryOrFail, permission, type MemberWithRole } from '$lib/server'
 import { EmailNewSubscribe, EmailSubscribeState, EmailSubscribeStateCancelled } from '$lib/email'
-import { Session } from 'lucia'
 import { isFreeRange } from 'perod'
 
 type Edtions = Record<SubscribeState, SubscribeState[]>
@@ -22,7 +21,7 @@ const subscriberEditions: Edtions = {
 
 const setSubscribState: (state: SubscribeState) => Action =
 	(state) =>
-	({ locals, params: { subscribeId } }) => {
+	({ locals, params: { eventId, subscribeId } }) => {
 		return tryOrFail(async () => {
 			const whereSubscribe: Prisma.SubscribeWhereInput = {
 				id: { not: subscribeId },
@@ -56,12 +55,14 @@ const setSubscribState: (state: SubscribeState) => Action =
 
 			// Check if author right
 			const isLeaderAction = (_subscribe.createdBy === 'leader') === isCreatorEdition
-			let session: Session | null
+			let author: MemberWithRole | null
 			if (isLeaderAction) {
-				session = await isLeaderOrThrow(_subscribe.period.teamId, locals)
+				author = await permission.leader(eventId, locals)
+				const isInLeaderTeams = author.leaderOf.find(({ id }) => id === _subscribe.period.teamId)
+				if (author.role === 'leader' && !isInLeaderTeams) throw error(403)
 			} else {
-				session = await locals.auth.validate()
-				if (session?.user.id !== _subscribe.member.userId) throw error(403)
+				author = await permission.member(eventId, locals)
+				if (author.id !== _subscribe.memberId) throw error(403)
 			}
 
 			if (state === 'accepted' || state === 'request') {
@@ -115,7 +116,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 							from: subscribe.period.team.event.name,
 							to,
 							subject: 'Nouvelle inscription',
-							props: { subscribe, author: session.user },
+							props: { subscribe, author: author.user },
 						})
 						break
 

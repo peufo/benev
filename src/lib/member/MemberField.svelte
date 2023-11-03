@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Prisma, FieldType } from '@prisma/client'
 	import type { ComponentType } from 'svelte'
+	import { mdiEyeOffOutline, mdiPencilOffOutline } from '@mdi/js'
 	import {
 		InputText,
 		InputTextarea,
@@ -9,15 +10,14 @@
 		InputRadio,
 		InputCheckboxs,
 	} from '$lib/material/input'
+	import { page } from '$app/stores'
 	import { jsonParse } from '$lib/jsonParse'
 	import { Icon } from '$lib/material'
-	import { mdiEyeOffOutline, mdiPencilOffOutline } from '@mdi/js'
 
 	export let field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
 	export let value = ''
 	let klass = ''
 	export { klass as class }
-	export let isLeader = false
 
 	const components: Record<FieldType, ComponentType> = {
 		string: InputText,
@@ -45,6 +45,8 @@
 		select: '',
 		multiselect: '',
 	}
+
+	$: isLeader = ['owner', 'admin', 'leader'].includes($page.data.member?.role || '')
 </script>
 
 <svelte:component

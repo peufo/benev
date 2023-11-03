@@ -1,12 +1,14 @@
 import { ROOT_USER } from '$env/static/private'
-import { Member, Team } from '@prisma/client'
+import { Member, Team, User } from '@prisma/client'
+import { prisma } from '.'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner'
 export type MemberWithRoleInfo = Member & {
-	user: { email: string }
+	user: User
 	event: { ownerId: string }
 	leaderOf: Team[]
 }
+export type MemberWithRole = MemberWithRoleInfo & { role: MemberRole }
 
 export function getMemberRole(member: MemberWithRoleInfo): MemberRole {
 	const isRoot = member.user.email === ROOT_USER
@@ -15,4 +17,16 @@ export function getMemberRole(member: MemberWithRoleInfo): MemberRole {
 	if (member.isAdmin) return 'admin'
 	if (member.leaderOf.length) return 'leader'
 	return 'member'
+}
+
+export async function getMemberWithRole(userId: string, eventId: string): Promise<MemberWithRole> {
+	const member = await prisma.member.findUniqueOrThrow({
+		where: { userId_eventId: { userId, eventId } },
+		include: {
+			user: true,
+			event: { select: { ownerId: true } },
+			leaderOf: true,
+		},
+	})
+	return { ...member, role: getMemberRole(member) }
 }

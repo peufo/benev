@@ -16,7 +16,10 @@
 </script>
 
 <div
-	class="grid grid-cols-1 sm:grid-cols-2 gap-2 gap-x-8 p-2 items-center text-sm font-medium text-base-content/70 {klass}"
+	class="
+		grid grid-cols-1 sm:grid-cols-2 gap-2 gap-x-8 p-2 items-center
+		font-medium text-base-content/70 text-sm md:text-base {klass}
+	"
 >
 	<div class="flex gap-4">
 		{#if user.isEmailVerified}

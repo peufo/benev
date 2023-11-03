@@ -1,24 +1,27 @@
-import { prisma } from '$lib/server'
+import { prisma, getMemberRole } from '$lib/server'
 
 export const load = async ({ params }) => {
 	const { memberId, eventId } = params
 
 	return {
-		memberProfile: await prisma.member.findUniqueOrThrow({
-			where: { id: memberId },
-			include: {
-				user: true,
-				profile: {
-					orderBy: { field: { position: 'asc' } },
-				},
-				leaderOf: {
-					include: {
-						leaders: { include: { user: true } },
-						periods: { include: { subscribes: true } },
+		memberProfile: await prisma.member
+			.findUniqueOrThrow({
+				where: { id: memberId },
+				include: {
+					user: true,
+					event: { select: { ownerId: true } },
+					profile: {
+						orderBy: { field: { position: 'asc' } },
+					},
+					leaderOf: {
+						include: {
+							leaders: { include: { user: true } },
+							periods: { include: { subscribes: true } },
+						},
 					},
 				},
-			},
-		}),
+			})
+			.then((member) => ({ ...member, role: getMemberRole(member) })),
 		event: await prisma.event.findUniqueOrThrow({
 			where: { id: eventId },
 			include: {
@@ -38,4 +41,10 @@ export const load = async ({ params }) => {
 			},
 		}),
 	}
+}
+
+export const actions = {
+	toggle_is_admin: async ({ locals }) => {
+		// TODO
+	},
 }

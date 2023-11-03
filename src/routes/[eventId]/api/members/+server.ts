@@ -1,14 +1,14 @@
 import { json } from '@sveltejs/kit'
-import { isOwnerOrThrow, prisma } from '$lib/server'
+import { prisma, permission } from '$lib/server'
 
-export const GET = async ({ params, url, locals }) => {
-	await isOwnerOrThrow(params.eventId, locals)
+export const GET = async ({ params: { eventId }, url, locals }) => {
+	await permission.leader(eventId, locals)
 
 	const search = url.searchParams.get('search') || ''
 
 	const members = await prisma.member.findMany({
 		where: {
-			eventId: params.eventId,
+			eventId,
 			user: {
 				OR: [
 					{ lastName: { contains: search } },

@@ -9,6 +9,7 @@
 	import Avatar from '$lib/me/Avatar.svelte'
 	import LeaderOf from '$lib/LeaderOf.svelte'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
+	import MemberRole from '$lib/MemberRole.svelte'
 
 	export let data
 </script>
@@ -16,7 +17,7 @@
 <div class="grid gap-6">
 	<div class="flex justify-between">
 		<div>
-			<div class="flex gap-2">
+			<div class="flex gap-2 items-center flex-wrap">
 				<a
 					href="{$eventPath}/admin/members{$page.url.search}"
 					class="btn btn-square btn-ghost btn-sm"
@@ -28,6 +29,8 @@
 					{data.memberProfile.user.firstName}
 					{data.memberProfile.user.lastName}
 				</span>
+
+				<MemberRole role={data.memberProfile.role} />
 			</div>
 			<Profile user={data.memberProfile.user} class="sm:pt-4" />
 		</div>

@@ -1,8 +1,8 @@
 import { periodShemaUpdate } from '$lib/form'
-import { isLeaderOrThrow, parseFormData, prisma, tryOrFail } from '$lib/server'
+import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 
 export const load = async ({ locals, params: { teamId, periodId } }) => {
-	await isLeaderOrThrow(teamId, locals)
+	await permission.leaderOfTeam(teamId, locals)
 	return {
 		period: await prisma.period.findUniqueOrThrow({
 			where: { id: periodId },
@@ -14,8 +14,8 @@ export const load = async ({ locals, params: { teamId, periodId } }) => {
 // TODO: Avertire les membres inscrits
 
 export const actions = {
-	update_period: async ({ params, request, locals }) => {
-		await isLeaderOrThrow(params.teamId, locals)
+	update_period: async ({ request, locals, params: { teamId } }) => {
+		await permission.leaderOfTeam(teamId, locals)
 		const { err, data } = await parseFormData(request, periodShemaUpdate)
 		if (err) return err
 
@@ -26,8 +26,8 @@ export const actions = {
 			})
 		)
 	},
-	delete_period: async ({ params: { eventId, teamId, periodId }, locals }) => {
-		await isLeaderOrThrow(teamId, locals)
+	delete_period: async ({ locals, params: { eventId, teamId, periodId } }) => {
+		await permission.leaderOfTeam(teamId, locals)
 		return tryOrFail(
 			() => prisma.period.delete({ where: { id: periodId } }),
 			teamId !== 'undefined' ? `/${eventId}/teams/${teamId}` : undefined

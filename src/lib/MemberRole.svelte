@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { MemberRole } from '$lib/server/permission'
+	import type { MemberRole } from '$lib/server'
 	import { Icon } from '$lib/material'
 	import {
 		mdiShieldAccountOutline,

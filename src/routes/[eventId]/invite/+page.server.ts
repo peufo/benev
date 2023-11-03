@@ -6,10 +6,9 @@ import {
 	prisma,
 	tryOrFail,
 	sendEmailTemplate,
-	isLeaderInEventOrThrow,
 	auth,
-	isLeaderInEvent,
 	generateToken,
+	permission,
 } from '$lib/server'
 import { EmailAcceptInvite, EmailAcceptInviteNotification, EmailNewInvite } from '$lib/email'
 
@@ -19,7 +18,7 @@ export const load = async ({ params }) => {
 
 export const actions = {
 	new_invite: async ({ request, locals, params: { eventId } }) => {
-		const session = await isLeaderInEventOrThrow(eventId, locals)
+		const { user: author } = await permission.leader(eventId, locals)
 
 		const { err, data } = await parseFormData(
 			request,
@@ -79,7 +78,7 @@ export const actions = {
 				props: {
 					tokenId,
 					member: newMember,
-					authorName: `${session.user.firstName} ${session.user.lastName}`,
+					authorName: `${author.firstName} ${author.lastName}`,
 				},
 			})
 			return newMember
@@ -96,7 +95,10 @@ export const actions = {
 		const { userId } = data
 
 		const isValidedByUser = session.user.id === userId
-		const isValidedByEvent = !!(await isLeaderInEvent(eventId, locals))
+		const isValidedByEvent = await permission
+			.leader(eventId, locals)
+			.then(() => true)
+			.catch(() => false)
 
 		return tryOrFail(async () => {
 			// Si le membre existe déjà, on met juste à jour ca validation

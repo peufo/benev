@@ -1,10 +1,10 @@
 import { teamShema } from '$lib/form/team'
 import { parseFormData } from '$lib/server/formData'
-import { isOwnerOrThrow, prisma, tryOrFail } from '$lib/server'
+import { prisma, tryOrFail, permission } from '$lib/server'
 
 export const actions = {
-	default: async ({ params, request, locals }) => {
-		await isOwnerOrThrow(params.eventId, locals)
+	default: async ({ request, locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
 
 		const { err, data, formData } = await parseFormData(request, teamShema)
 		if (err) return err
@@ -14,12 +14,12 @@ export const actions = {
 				prisma.team.create({
 					data: {
 						...data,
-						eventId: params.eventId,
+						eventId,
 					},
 				}),
 			(team) => {
 				const redirectTo = formData['redirectTo'] as string
-				return redirectTo || `/${params.eventId}/teams/${team.id}`
+				return redirectTo || `/${eventId}/teams/${team.id}`
 			}
 		)
 	},

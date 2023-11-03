@@ -1,18 +1,20 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
-	import type { Event, FieldValue, Field } from '@prisma/client'
+	import type { Member, Event, FieldValue, Field } from '@prisma/client'
 
 	import { useForm } from '$lib/form'
 	import { enhance } from '$app/forms'
 	import MemberField from './MemberField.svelte'
+	import type { MemberRole } from '$lib/server'
 
 	let klass = ''
 	export { klass as class }
-	export let event: Event & { memberFields: Field[] }
-	export let fieldsValue: FieldValue[]
-	export let memberId = ''
-	/** Hide readonly fields */
-	export let writeOnly = false
+
+	export let member: Member & {
+		role: MemberRole
+		profile: FieldValue[]
+		event: Event & { memberFields: Field[] }
+	}
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -24,17 +26,15 @@
 
 <form
 	method="post"
-	action="/me/{event.id}"
+	action="/me/{member.eventId}"
 	use:enhance={form.submit}
 	class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-4 {klass}"
 >
-	{#if memberId}
-		<input type="hidden" name="memberId" value={memberId} />
-	{/if}
+	<input type="hidden" name="memberId" value={member.id} />
 
-	{#each event.memberFields.filter((f) => !writeOnly || f.memberCanWrite) as field (field.id)}
-		{@const { value } = fieldsValue.find((value) => value.fieldId === field.id) || { value: '' }}
-		<MemberField {field} {value} isLeader={!!memberId} class="col-span-3" />
+	{#each member.event.memberFields as field (field.id)}
+		{@const { value } = member.profile.find((value) => value.fieldId === field.id) || { value: '' }}
+		<MemberField {field} {value} class="col-span-3" />
 	{/each}
 
 	<div class="flex justify-end col-span-full">

@@ -1,5 +1,5 @@
 import { eventShema, memberFieldShema, memberFieldShemaUpdate } from '$lib/form'
-import { isOwnerOrThrow, parseFormData, prisma, tryOrFail } from '$lib/server'
+import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { z } from 'zod'
 
 export const load = async ({ params }) => ({
@@ -12,9 +12,8 @@ export const load = async ({ params }) => ({
 })
 
 export const actions = {
-	update_event: async ({ request, params, locals }) => {
-		await isOwnerOrThrow(params.eventId, locals)
-
+	update_event: async ({ request, locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
 		const { err, data } = await parseFormData(request, eventShema)
 		if (err) return err
 
@@ -25,19 +24,19 @@ export const actions = {
 			})
 		)
 	},
-	delete_event: async ({ params, locals }) => {
-		await isOwnerOrThrow(params.eventId, locals)
+	delete_event: async ({ locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
 
 		return tryOrFail(
 			() =>
 				prisma.event.delete({
-					where: { id: params.eventId },
+					where: { id: eventId },
 				}),
 			'/'
 		)
 	},
 	create_field: async ({ request, locals, params: { eventId } }) => {
-		await isOwnerOrThrow(eventId, locals)
+		await permission.admin(eventId, locals)
 		const { err, data } = await parseFormData(request, memberFieldShema)
 		if (err) return err
 
@@ -48,19 +47,19 @@ export const actions = {
 			})
 		})
 	},
-	delete_field: async ({ request, params, locals }) => {
-		await isOwnerOrThrow(params.eventId, locals)
+	delete_field: async ({ request, locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
 		const { err, data } = await parseFormData(request, z.object({ id: z.string() }))
 		if (err) return err
 
 		return tryOrFail(() =>
 			prisma.field.delete({
-				where: { id: data.id, eventId: params.eventId },
+				where: { id: data.id, eventId },
 			})
 		)
 	},
-	update_field: async ({ request, params, locals }) => {
-		await isOwnerOrThrow(params.eventId, locals)
+	update_field: async ({ request, locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
 
 		const { err, data } = await parseFormData(request, memberFieldShemaUpdate)
 		if (err) return err
@@ -72,7 +71,8 @@ export const actions = {
 			})
 		)
 	},
-	reorder_fields: async ({ request }) => {
+	reorder_fields: async ({ request, locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
 		const formData: Record<string, unknown> = Object.fromEntries(await request.formData())
 
 		const updates: { id: string; position: number }[] = []

@@ -38,21 +38,18 @@
 			</h3>
 			<ProfileForm user={data.user} />
 
-			{#if data.memberProfile.event.memberFields.length}
+			{#if data.memberProfile.profile.length}
 				<hr class="my-6" />
 				<h3 class="font-medium text-base-content/70 mt-4">
 					Informations spécifiques à {data.event.name}
 				</h3>
-				<MemberProfileForm
-					fieldsValue={data.memberProfile.profile}
-					event={data.memberProfile.event}
-				/>
+				<MemberProfileForm member={data.memberProfile} />
 			{/if}
 		</ProfileSection>
 
 		<Card class="border">
 			<h2 slot="title">Mes inscriptions</h2>
-			<TeamsSubscribes teams={data.teamsSubscribes} />
+			<TeamsSubscribes teams={data.memberTeams} />
 		</Card>
 
 		{#if data.member.leaderOf.length}

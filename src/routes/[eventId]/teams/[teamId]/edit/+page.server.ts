@@ -1,9 +1,10 @@
 import { teamShema } from '$lib/form/team'
 import { parseFormData } from '$lib/server/formData'
-import { isOwnerOrThrow, prisma, tryOrFail } from '$lib/server'
+import { prisma, tryOrFail, permission } from '$lib/server'
 
-export const load = async ({ locals, params: { teamId, eventId } }) => {
-	await isOwnerOrThrow(eventId, locals)
+export const load = async ({ locals, params: { teamId } }) => {
+	await permission.leaderOfTeam(teamId, locals)
+
 	return {
 		team: await prisma.team.findUniqueOrThrow({
 			where: { id: teamId },
@@ -19,28 +20,29 @@ export const load = async ({ locals, params: { teamId, eventId } }) => {
 }
 
 export const actions = {
-	update: async ({ params, request, locals }) => {
-		await isOwnerOrThrow(params.eventId, locals)
+	update: async ({ request, locals, params: { eventId, teamId } }) => {
+		await permission.leaderOfTeam(teamId, locals)
+
 		const { err, data } = await parseFormData(request, teamShema, { arrayOperation: 'set' })
 		if (err) return err
 
 		return tryOrFail(
 			() =>
 				prisma.team.update({
-					where: { id: params.teamId },
+					where: { id: teamId },
 					data,
 				}),
-			`/${params.eventId}/teams/${params.teamId}`
+			`/${eventId}/teams/${teamId}`
 		)
 	},
-	delete: async ({ params, locals }) => {
-		await isOwnerOrThrow(params.eventId, locals)
+	delete: async ({ locals, params: { eventId, teamId } }) => {
+		await permission.leader(eventId, locals)
 		return tryOrFail(
 			() =>
 				prisma.team.delete({
-					where: { id: params.teamId },
+					where: { id: teamId },
 				}),
-			`/${params.eventId}/teams`
+			`/${eventId}/teams`
 		)
 	},
 }

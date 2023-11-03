@@ -197,8 +197,7 @@
 			on:close={() => memberDialog.close()}
 			on:success={() => {
 				memberDialog.close()
-				if (data.event.memberFields.filter((f) => f.memberCanWrite).length)
-					memberProfilDialog.showModal()
+				if (data.event.memberFields.length) memberProfilDialog.showModal()
 				else subscribeDialog.showModal()
 			}}
 		/>
@@ -209,10 +208,11 @@
 	<div class="modal-box">
 		<h3 class="card-title mb-2">Complète ton profile {data.event.name}</h3>
 		<MemberProfileForm
-			event={data.event}
-			fieldsValue={[]}
+			member={{
+				...data.member,
+				event: data.event,
+			}}
 			class="sm:grid-cols-1 md:grid-cols-1"
-			writeOnly
 			on:success={() => {
 				memberProfilDialog.close()
 				subscribeDialog.showModal()

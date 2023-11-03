@@ -1,32 +1,27 @@
 import { error } from '@sveltejs/kit'
-import { isLeaderInEvent, prisma, redirectToAuth, tryOrFail } from '$lib/server'
+import {
+	type MemberRole,
+	getMemberRole,
+	permission,
+	prisma,
+	redirectToAuth,
+	tryOrFail,
+} from '$lib/server'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const { user } = await parent()
 	if (!user) throw redirectToAuth(url)
 
-	const member = await prisma.member.findUniqueOrThrow({
-		where: { userId_eventId: { userId: user.id, eventId } },
-	})
-	const memberId = member.id
-	return {
-		user,
-		memberProfile: await prisma.member.findUniqueOrThrow({
-			where: { id: memberId },
+	const isLeader = (role: MemberRole) => ['owner', 'admin', 'leader'].includes(role)
+
+	const memberProfile = await prisma.member
+		.findUniqueOrThrow({
+			where: { userId_eventId: { userId: user.id, eventId } },
 			include: {
 				event: {
-					include: {
-						memberFields: {
-							orderBy: { position: 'asc' },
-							where: { memberCanRead: true },
-						},
-					},
+					include: { memberFields: { orderBy: { position: 'asc' } } },
 				},
-				profile: {
-					where: {
-						field: { memberCanRead: true },
-					},
-				},
+				profile: { include: { field: true } },
 				subscribes: {
 					include: { period: { include: { team: true } } },
 				},
@@ -37,8 +32,28 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 					},
 				},
 			},
-		}),
-		teamsSubscribes: await prisma.team.findMany({
+		})
+		.then((member) => ({
+			...member,
+			user,
+			role: getMemberRole({ ...member, user }),
+		}))
+		.then((member) => ({
+			...member,
+			profile: member.profile.filter(({ field }) => isLeader(member.role) || field.memberCanRead),
+			event: {
+				...member.event,
+				memberFields: member.event.memberFields.filter(
+					(field) => isLeader(member.role) || field.memberCanRead
+				),
+			},
+		}))
+
+	const memberId = memberProfile.id
+	return {
+		user,
+		memberProfile,
+		memberTeams: await prisma.team.findMany({
 			where: { periods: { some: { subscribes: { some: { memberId } } } } },
 			include: {
 				periods: {
@@ -57,14 +72,11 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 export const actions = {
 	/** Update member profile */
 	default: async ({ locals, request, params: { eventId } }) => {
-		const session = await locals.auth.validate()
-		if (!session) throw error(401)
-
-		const _isLeaderInEvent = await isLeaderInEvent(eventId, locals)
+		const member = await permission.member(eventId, locals)
 
 		return tryOrFail(async () => {
 			const formData = Object.fromEntries(await request.formData())
-			const data: Record<string, string> = Object.entries(formData)
+			const { memberId, ...data }: Record<string, string> = Object.entries(formData)
 				.filter(([key]) => !key.startsWith('ignored_'))
 				.reduce(
 					(acc, [key, value]) => ({
@@ -74,20 +86,18 @@ export const actions = {
 					{}
 				)
 
-			if (data.memberId && !_isLeaderInEvent) throw error(401)
-			const memberId =
-				data.memberId ||
-				(
-					await prisma.member.findUniqueOrThrow({
-						where: { userId_eventId: { eventId, userId: session.user.id } },
-					})
-				).id
+			if (typeof memberId !== 'string') throw Error('memberId is required')
+
+			const editOwnProfile = memberId === member.id
+			const isLeader = !['owner', 'admin', 'leader'].includes(member.role)
+			if (!editOwnProfile && isLeader) throw error(401)
+			// TODO: seulement inscrit à ses secteurs ?
 
 			const fields = await prisma.field.findMany({
 				where: {
 					eventId,
 					name: { in: Object.keys(data) },
-					...(!_isLeaderInEvent && { memberCanWrite: true }),
+					...(!isLeader && { memberCanWrite: true }),
 				},
 			})
 
@@ -96,7 +106,7 @@ export const actions = {
 				data: {
 					profile: {
 						upsert: fields.map(({ name, id }) => ({
-							where: { fieldId_memberId: { fieldId: id, memberId: memberId } },
+							where: { fieldId_memberId: { fieldId: id, memberId } },
 							create: { value: data[name], fieldId: id },
 							update: { value: data[name] },
 						})),
