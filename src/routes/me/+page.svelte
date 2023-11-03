@@ -1,17 +1,35 @@
 <script lang="ts">
+	import { mdiLogout, mdiPlus } from '@mdi/js'
+	import EventForm from '$lib/EventForm.svelte'
 	import LayoutBasic from '$lib/LayoutBasic.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
-	import { CardLink, Icon } from '$lib/material'
+	import { CardLink, Dialog, Icon, Placeholder } from '$lib/material'
 	import ProfileSection from '$lib/me/ProfileSection.svelte'
-	import { mdiLogout } from '@mdi/js'
+	import { useNotify } from '$lib/notify'
 
 	export let data
+
+	let createDialog: HTMLDialogElement
+	const notify = useNotify()
+	function handleClickNewEvent() {
+		if (!data.user?.isEmailVerified) {
+			notify.warning(`Tu dois d'abord valider ton email`)
+			return
+		}
+		createDialog.showModal()
+	}
 </script>
 
 <LayoutBasic user={data.user}>
 	<ProfileSection user={data.user} />
 
-	<h2 class="text-xl font-semibold text-base-content/70 mt-4">Mes évenements</h2>
+	<div class="flex gap-2 justify-between items-center mt-4">
+		<h2 class="text-xl font-semibold text-base-content/70">Mes évenements</h2>
+		<button class="btn btn-sm" on:click={handleClickNewEvent}>
+			<Icon path={mdiPlus} class="fill-base-content" />
+			Organiser
+		</button>
+	</div>
 
 	{#each data.members as member}
 		{@const nbSubscribes = member.subscribes.length}
@@ -44,6 +62,11 @@
 				{/if}
 			</div>
 		</CardLink>
+	{:else}
+		<Placeholder class="gap-3 bg-base-300">
+			<p>Tu n'es membre d'aucun évenement pour l'instant.</p>
+			<a href="/" class="btn btn-ghost"> Trouver un évenement </a>
+		</Placeholder>
 	{/each}
 
 	<div class="flex">
@@ -55,3 +78,8 @@
 		</form>
 	</div>
 </LayoutBasic>
+
+<Dialog bind:dialog={createDialog}>
+	<h2 slot="header" class="card-title">Nouvel évènement</h2>
+	<EventForm on:cancel={() => createDialog.close()} on:success={() => createDialog.close()} />
+</Dialog>

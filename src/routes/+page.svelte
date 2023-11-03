@@ -5,10 +5,19 @@
 	import EventForm from '$lib/EventForm.svelte'
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
+	import { useNotify } from '$lib/notify'
 
 	export let data
 
 	let createDialog: HTMLDialogElement
+	const notify = useNotify()
+	function handleClickNewEvent() {
+		if (!data.user?.isEmailVerified) {
+			notify.warning(`Tu dois d'abord valider ton email`)
+			return
+		}
+		createDialog.showModal()
+	}
 </script>
 
 <Dialog bind:dialog={createDialog}>
@@ -27,12 +36,11 @@
 		<div class="flex gap-2 items-center my-6">
 			<h2 class="text-xl">Tous les évènements</h2>
 			<div class="grow" />
-			{#if data.user?.isEmailVerified}
-				<button class="btn btn-sm" on:click={() => createDialog.showModal()}>
-					<Icon path={mdiPlus} class="fill-base-content" />
-					Nouveau
-				</button>
-			{/if}
+
+			<button class="btn btn-sm" on:click={handleClickNewEvent}>
+				<Icon path={mdiPlus} class="fill-base-content" />
+				Organiser
+			</button>
 		</div>
 
 		<ul class="flex flex-col gap-2 mt-2">
