@@ -11,10 +11,10 @@
 	export let roles: MemberRole[]
 	let klass = ''
 	export { klass as class }
-	export let mode: 'badge' | 'icon' = 'badge'
+	export let mode: 'badge' | 'icon' | 'contents' = 'badge'
 
 	const rolesOrder: MemberRole[] = ['owner', 'admin', 'leader', 'member']
-	$: role = rolesOrder.find(r => roles.includes(r))
+	$: role = rolesOrder.find((r) => roles.includes(r))
 
 	const rolesMap: Record<MemberRole, { icon: string; label: string }> = {
 		owner: { label: 'Propriétaire', icon: mdiCrownOutline },
@@ -30,6 +30,9 @@
 			<Icon path={rolesMap[role].icon} class="-translate-x-1" size={22} />
 			<span>{rolesMap[role].label}</span>
 		</div>
+	{:else if mode === 'contents'}
+		<Icon path={rolesMap[role].icon} class="-translate-x-1" size={22} />
+		<span>{rolesMap[role].label}</span>
 	{:else if role !== 'member'}
 		<Icon
 			path={rolesMap[role].icon}

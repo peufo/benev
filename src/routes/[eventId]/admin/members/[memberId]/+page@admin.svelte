@@ -1,15 +1,16 @@
 <script lang="ts">
-	import { Card, Icon, SectionCollapse } from '$lib/material'
+	import { Card, DropDown, Icon, SectionCollapse } from '$lib/material'
 
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft } from '@mdi/js'
-	import Profile from './Profile.svelte'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import LeaderOf from '$lib/LeaderOf.svelte'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
+	import Profile from './Profile.svelte'
+	import SetAdminForm from './SetAdminForm.svelte'
 
 	export let data
 </script>
@@ -30,7 +31,17 @@
 					{data.memberProfile.user.lastName}
 				</span>
 
-				<MemberRole roles={data.memberProfile.roles} />
+				{#if data.member?.roles.includes('owner')}
+					<DropDown hideOnBlur tippyProps={{ arrow: true }}>
+						<button slot="activator" class="btn btn-sm ml-2">
+							<MemberRole roles={data.memberProfile.roles} mode="contents" />
+						</button>
+
+						<SetAdminForm memberProfile={data.memberProfile} />
+					</DropDown>
+				{:else}
+					<MemberRole roles={data.memberProfile.roles} />
+				{/if}
 			</div>
 			<Profile user={data.memberProfile.user} class="sm:pt-4" />
 		</div>
