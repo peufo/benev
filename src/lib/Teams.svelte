@@ -113,6 +113,6 @@
 	{/if}
 {:else}
 	<Placeholder>
-		<span>Aucun secteur à charge</span>
+		<span>Pas de secteurs</span>
 	</Placeholder>
 {/if}

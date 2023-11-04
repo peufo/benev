@@ -13,7 +13,7 @@ Platforme de gestion de bénévole
 - [x] Éditer des équipes
 - [x] Nommer des responsables
 - [x] Inviter des nouveaux utilisateurs
-- [x] Vue d'ensemble des bénévoles d'un événement (filtre sur la période)
+- [x] Vue d'ensemble des bénévoles d'un évènement (filtre sur la période)
 
 ### Responsable
 

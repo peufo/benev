@@ -64,8 +64,8 @@
 		</CardLink>
 	{:else}
 		<Placeholder class="gap-3 bg-base-300">
-			<p>Tu n'es membre d'aucun évenement pour l'instant.</p>
-			<a href="/" class="btn btn-ghost"> Trouver un évenement </a>
+			<p>Tu n'es membre d'aucun évènement pour l'instant.</p>
+			<a href="/" class="btn btn-ghost"> Trouver un évènement </a>
 		</Placeholder>
 	{/each}
 

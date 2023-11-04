@@ -3,7 +3,7 @@
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
-	import { mdiMenu } from '@mdi/js'
+	import { mdiHelp, mdiMenu } from '@mdi/js'
 	import DropDown from '$lib/material/DropDown.svelte'
 	import EventPubliqueMenuItems from '$lib/EventPubliqueMenuItems.svelte'
 	import { adminTabs } from './admin/adminTabs'
@@ -47,6 +47,20 @@
 					{label}
 				</a>
 			{/each}
+
+			<a
+				href="{$eventPath}/help"
+				class="menu-item"
+				class:active={$page.route.id === '/[eventId]/help'}
+			>
+				<Icon
+					path={mdiHelp}
+					size={20}
+					class="opacity-70"
+					active={$page.route.id === '/[eventId]/help'}
+				/>
+				Aide
+			</a>
 		{/if}
 	</div>
 </DropDown>

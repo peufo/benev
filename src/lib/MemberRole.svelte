@@ -1,3 +1,12 @@
+<script lang="ts" context="module">
+	export const rolesMap: Record<MemberRole, { icon: string; label: string }> = {
+		owner: { label: 'Propriétaire', icon: mdiCrownOutline },
+		admin: { label: 'Administrateur', icon: mdiStarOutline },
+		leader: { label: 'Responsable', icon: mdiShieldAccountOutline },
+		member: { label: 'Membre', icon: mdiAccountCircleOutline },
+	}
+</script>
+
 <script lang="ts">
 	import type { MemberRole } from '$lib/server'
 	import { Icon } from '$lib/material'
@@ -15,13 +24,6 @@
 
 	const rolesOrder: MemberRole[] = ['owner', 'admin', 'leader', 'member']
 	$: role = rolesOrder.find((r) => roles.includes(r))
-
-	const rolesMap: Record<MemberRole, { icon: string; label: string }> = {
-		owner: { label: 'Propriétaire', icon: mdiCrownOutline },
-		admin: { label: 'Administrateur', icon: mdiStarOutline },
-		leader: { label: 'Responsable', icon: mdiShieldAccountOutline },
-		member: { label: 'Membre', icon: mdiAccountCircleOutline },
-	}
 </script>
 
 {#if role}

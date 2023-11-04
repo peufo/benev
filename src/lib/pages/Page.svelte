@@ -6,7 +6,8 @@
 	import EditorJsHTML from 'editorjs-html'
 	import type { Page } from '@prisma/client'
 	import { Icon } from '$lib/material'
-	import HelpPage from '$lib/HelpPage.svelte'
+
+	import PageLayout from './PageLayout.svelte'
 
 	export let page: Page | null
 
@@ -20,15 +21,13 @@
 	$: canEdit = $pageStore.data.member?.roles.includes('admin')
 </script>
 
-<div class="card bg-base-100 mx-auto prose p-6 shadow-md">
+<PageLayout>
 	{#each blocksHTML as html}
 		{@html html}
 	{:else}
-		{#if page?.isIndex}
-			<HelpPage />
-		{:else}
+		<slot name="placeholder">
 			<div class="text-center p-10">Cette page est vide</div>
-		{/if}
+		</slot>
 	{/each}
 
 	{#if canEdit}
@@ -39,4 +38,4 @@
 			</a>
 		</div>
 	{/if}
-</div>
+</PageLayout>

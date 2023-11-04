@@ -31,6 +31,7 @@ export const actions = {
 			'token',
 			'api',
 			'media',
+			'help',
 		]
 		if (reservedPaths.includes(data.id))
 			return nameFail(`Les noms suivant sont réservés: ${reservedPaths.join(', ')}`)

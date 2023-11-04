@@ -1,12 +1,7 @@
 <script lang="ts">
+	import WhoCanDoWhat from './WhoCanDoWhat.svelte'
 	import { eventPath } from '$lib/store'
 </script>
-
-<h2>Salut 👋</h2>
-<p>
-	Bienvenue dans l'espace réservé à ton évènement.<br />
-	Voici les étapes clés pour le configurer :
-</p>
 
 <section>
 	<h3>Édition des pages</h3>
@@ -14,7 +9,7 @@
 	<p>
 		Tu devrais
 		<a href="{$eventPath}/admin/pages">éditer la page d'accueil</a>
-		pour passer les infos les plus importante à tes futures bénévoles. Tu peux également librement créer
+		pour passer les infos les plus importantes à tes futurs bénévoles. Tu peux également librement créer
 		d'autres pages complémentaires (FAQ, conditions, etc...).
 	</p>
 </section>
@@ -40,3 +35,5 @@
 		</b>
 	</p>
 </section>
+
+<WhoCanDoWhat />
