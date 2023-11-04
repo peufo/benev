@@ -99,8 +99,6 @@
 	</p>
 </section>
 
-<hr />
-
 <table class="table table-pin-rows">
 	<thead>
 		<tr>
