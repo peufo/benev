@@ -71,7 +71,7 @@
 
 	<div class="flex">
 		<form method="POST" action="/me?/logout" class="contents">
-			<button class="btn">
+			<button class="btn btn-sm">
 				<Icon path={mdiLogout} size={20} class="opacity-70 rotate-180" />
 				Déconnexion
 			</button>

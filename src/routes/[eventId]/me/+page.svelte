@@ -60,7 +60,7 @@
 	{/if}
 
 	<div class="flex gap-2 justify-between flex-wrap">
-		<a href="/me" class="btn">
+		<a href="/me" class="btn btn-sm">
 			<Icon path={mdiArrowLeft} size={20} />
 			Tous mes événements
 		</a>
