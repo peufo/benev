@@ -16,10 +16,10 @@
 <div class="flex flex-col gap-4 max-w-5xl m-auto">
 	<Card bodyClass="sm:pt-4">
 		<div slot="top" class="flex gap-2 p-2 border-b rounded-t-2xl">
-			{#each $adminTabs as { path, label, icon }}
+			{#each $adminTabs as { path, query, label, icon }}
 				{@const active = path === activeTab?.path}
 				<a
-					href="{$eventPath}{path}"
+					href="{$eventPath}{path}{query}"
 					class="
 							menu-item grow justify-center flex-col gap-0 text-sm py-2
 							lg:flex-row lg:text-base lg:gap-3 rounded-lg

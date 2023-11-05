@@ -11,29 +11,36 @@ import { param } from '$lib/store'
 
 export const adminTabs = derived(param, ({ without }) => {
 	const query = without('skip', 'take')
+
 	return [
 		{
-			path: `/admin/members${query}`,
+			query,
+			path: '/admin/members',
 			label: 'Membres',
 			icon: mdiAccountMultipleOutline,
 		},
 		{
-			path: `/admin/subscribes${query}`,
+			query,
+			path: '/admin/subscribes',
+			url: `/admin/subscribes${query}`,
 			label: 'Inscriptions',
 			icon: mdiClipboardTextMultipleOutline,
 		},
 		{
-			path: `/admin/plan${query}`,
+			query,
+			path: '/admin/plan',
 			label: 'Planification',
 			icon: mdiChartGantt,
 		},
 		{
-			path: `/admin/config${query}`,
+			query,
+			path: '/admin/config',
 			label: 'Configuration',
 			icon: mdiCogs,
 		},
 		{
-			path: `/admin/pages${query}`,
+			query,
+			path: '/admin/pages',
 			label: 'Les pages',
 			icon: mdiFileDocumentMultipleOutline,
 		},

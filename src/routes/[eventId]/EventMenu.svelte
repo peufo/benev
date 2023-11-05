@@ -40,9 +40,9 @@
 		{#if adminIsVisible}
 			<hr class="block lg:hidden" />
 			<h3 class="font-bold opacity-50 pl-3 pt-1 text-xs">Gestion</h3>
-			{#each $adminTabs as { path, label, icon }}
+			{#each $adminTabs as { path, query, label, icon }}
 				{@const active = $page.route.id?.startsWith(`/[eventId]${path}`)}
-				<a href="{$eventPath}{path}" class="menu-item" class:active>
+				<a href="{$eventPath}{path}{query}" class="menu-item" class:active>
 					<Icon path={icon} size={20} class="opacity-70" {active} />
 					{label}
 				</a>
