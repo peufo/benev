@@ -42,21 +42,22 @@
 				<div class="shrink text-base sm:text-lg font-semibold text-base-content/80">
 					<slot name="title" />
 				</div>
-				<Icon path={mdiChevronRight} class="ml-auto transition-transform {isOpen ? 'rotate-90' : ''}" />
+				<Icon
+					path={mdiChevronRight}
+					class="ml-auto transition-transform {isOpen ? 'rotate-90' : ''}"
+				/>
 			</div>
-			
+
 			{#if $$slots.subtitle}
-			<div class="text-sm opacity-80 mt-2">
-				<slot name="subtitle" />
-			</div>
+				<div class="text-sm opacity-80 mt-2">
+					<slot name="subtitle" />
+				</div>
 			{/if}
 		</a>
-
 	</div>
 
-	
 	{#if isOpen}
-		<div class="card-body pt-0 px-4 md:p-8 md:pt-0" transition:slide={{ duration: 200 }}>
+		<div class="card-body pt-0 px-2 pb-2 md:p-8 md:pt-0" transition:slide={{ duration: 200 }}>
 			<slot />
 		</div>
 	{/if}
