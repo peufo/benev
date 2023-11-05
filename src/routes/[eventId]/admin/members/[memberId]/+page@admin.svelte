@@ -31,7 +31,7 @@
 					{data.memberProfile.user.lastName}
 				</span>
 
-				{#if data.member?.roles.includes('owner')}
+				{#if data.member?.roles.includes('owner') && !data.memberProfile.roles.includes('owner')}
 					<DropDown hideOnBlur tippyProps={{ arrow: true }}>
 						<button slot="activator" class="btn btn-sm ml-2">
 							<MemberRole roles={data.memberProfile.roles} mode="contents" />
