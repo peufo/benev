@@ -5,6 +5,7 @@
 	import { CardLink, Placeholder } from '$lib/material'
 
 	import SubscribeCreatedBy from '$lib/SubscribeCreatedBy.svelte'
+	import { page } from '$app/stores'
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 
@@ -20,9 +21,9 @@
 					<div class="flex gap-1 items-center mt-2">
 						<div
 							class="
-											grow flex gap-2 items-center px-2 py-2 rounded
-											{isLeader ? 'relative z-10 hover:bg-base-200' : ''}
-										"
+								grow flex gap-2 items-center px-2 py-2 rounded
+								{isLeader ? 'relative z-10 hover:bg-base-200' : ''}
+							"
 						>
 							{#if isLeader}
 								<a href="/{team.eventId}/teams/{team.id}/{period.id}" class="absolute inset-0">
@@ -49,5 +50,11 @@
 {:else}
 	<Placeholder>
 		<span>Aucune inscription pour le moment</span>
+		<br />
+		{#if $page.params.eventId}
+			<a href="/{$page.params.eventId}/teams" class="btn"> Voir les secteurs </a>
+		{:else}
+			<a href="/" class="btn"> Trouve un évènement </a>
+		{/if}
 	</Placeholder>
 {/if}
