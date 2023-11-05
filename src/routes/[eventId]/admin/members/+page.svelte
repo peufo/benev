@@ -9,6 +9,7 @@
 	import ColumnsSelect, { type Column } from '$lib/ColumnsSelect.svelte'
 	import { getAge } from '$lib/utils'
 	import { jsonParse } from '$lib/jsonParse'
+	import InviteDialog from '$lib/InviteDialog.svelte'
 	import Members from './Members.svelte'
 	import MembersCopy from './MembersCopy.svelte'
 	import MembersFilter from './MembersFilter.svelte'
@@ -52,7 +53,6 @@
 	<div class="flex gap-x-3 gap-y-2 flex-wrap">
 		<InputSearch />
 		<MembersFilter fields={data.fields} teams={data.teams} />
-
 		<ColumnsSelect {columns} bind:selectedColumnsId />
 
 		<a
@@ -69,6 +69,7 @@
 
 		<MembersCopy fields={data.fields} />
 		<MembersEmails />
+		<InviteDialog justIcon class="btn-sm" />
 	</div>
 
 	{#if $summary}
