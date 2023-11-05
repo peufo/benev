@@ -4,7 +4,7 @@
 	import { Icon } from '$lib/material'
 
 	const tabs: { value: boolean; title: string; path: string }[] = [
-		{ value: true, title: "N'afficher que les disponibles", path: mdiEyeCheckOutline },
+		{ value: true, title: "N'afficher que les périodes disponibles", path: mdiEyeCheckOutline },
 		{ value: false, title: 'Tout afficher', path: mdiEyeOutline },
 	]
 </script>

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
+	import { enhance } from '$app/forms'
 
 	import { useForm } from '$lib/form'
-	import { enhance } from '$app/forms'
+	import { eventPath } from '$lib/store'
 	import MemberField from './MemberField.svelte'
 	import type { MemberProfile } from '$lib/server'
 
@@ -21,7 +22,7 @@
 
 <form
 	method="post"
-	action="/me/{member.eventId}"
+	action="{$eventPath}/me"
 	use:enhance={form.submit}
 	class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-4 {klass}"
 >
