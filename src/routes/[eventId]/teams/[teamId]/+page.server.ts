@@ -2,7 +2,7 @@ import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { periodShema } from '$lib/form'
 
 export const load = async ({ locals, params: { teamId } }) => {
-	const isLeader = await permission
+	const isLeaderOfTeam = await permission
 		.leaderOfTeam(teamId, locals)
 		.then(() => true)
 		.catch(() => false)
@@ -25,7 +25,7 @@ export const load = async ({ locals, params: { teamId } }) => {
 			periods: {
 				orderBy: { start: 'asc' },
 				include: {
-					subscribes: isLeader ? { include: { member: { include: { user: true } } } } : true,
+					subscribes: isLeaderOfTeam ? { include: { member: { include: { user: true } } } } : true,
 				},
 			},
 		},
@@ -46,7 +46,7 @@ export const load = async ({ locals, params: { teamId } }) => {
 			  }
 	)
 
-	return { team }
+	return { isLeaderOfTeam, team }
 }
 
 export const actions = {

@@ -24,8 +24,6 @@
 
 	export let data
 
-	$: isLeader = data.member?.roles.includes('leader')
-
 	let subscribeDialog: HTMLDialogElement
 	let memberDialog: HTMLDialogElement
 	let memberProfilDialog: HTMLDialogElement
@@ -59,7 +57,7 @@
 				mySubscribe,
 				available,
 				isComplete,
-				disabled: !isLeader && !available,
+				disabled: !data.isLeaderOfTeam && !available,
 			}
 		})
 		.filter((period) => !$onlyAvailable || !period.isComplete)
@@ -73,7 +71,7 @@
 	<div slot="action" class="flex gap-2">
 		<OnlyAvailableToggle />
 
-		{#if isLeader}
+		{#if data.isLeaderOfTeam}
 			<a
 				href={`${$eventPath}/admin/members?teams=["${data.team.id}"]`}
 				class="btn btn-square btn-sm"
@@ -115,7 +113,8 @@
 						class:cursor-pointer={!period.disabled}
 						class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
 						on:click={() => {
-							if (isLeader) return goto(`${$eventPath}/teams/${period.teamId}/${period.id}`)
+							if (data.isLeaderOfTeam)
+								return goto(`${$eventPath}/teams/${period.teamId}/${period.id}`)
 							if (!period.disabled) subscribe(period)
 						}}
 					>
@@ -124,12 +123,15 @@
 						</td>
 						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-end">
 							{#if period.mySubscribe}
-								<SubscribeStateForm subscribe={period.mySubscribe} isLeader={!!isLeader} />
+								<SubscribeStateForm
+									subscribe={period.mySubscribe}
+									isLeader={!!data.isLeaderOfTeam}
+								/>
 							{/if}
 
 							<Progress {period} class="w-[60px]" />
 
-							{#if isLeader}
+							{#if data.isLeaderOfTeam}
 								<div class="flex gap-2">
 									{#if period.available}
 										<button
