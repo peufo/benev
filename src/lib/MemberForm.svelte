@@ -35,10 +35,10 @@
 		profil.
 	</p>
 
-	<div class="flex gap-2 justify-end">
+	<div class="flex flex-row-reverse gap-2">
+		<button class="btn">Oui je le veux !</button>
 		{#if !noCancelButton}
 			<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('close')}> Non </button>
 		{/if}
-		<button class="btn">Oui je le veux !</button>
 	</div>
 </form>

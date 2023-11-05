@@ -39,7 +39,7 @@
 
 	const classes: Record<FieldType, string> = {
 		string: '',
-		textarea: 'md:col-span-6',
+		textarea: '@lg:col-span-6',
 		number: '',
 		boolean: '',
 		select: '',

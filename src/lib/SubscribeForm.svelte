@@ -31,9 +31,8 @@
 
 	<p>Souhaites-tu t'inscrire à cette période ?</p>
 
-	<div class="flex gap-2 justify-end">
-		<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('close')}> Non </button>
-
+	<div class="flex flex-row-reverse gap-2">
 		<button class="btn">Oui je le veux !</button>
+		<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('close')}> Non </button>
 	</div>
 </form>

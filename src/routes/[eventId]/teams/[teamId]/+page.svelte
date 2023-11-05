@@ -212,7 +212,6 @@
 		{#if data.member}
 			<MemberProfileForm
 				member={data.member}
-				class="sm:grid-cols-1 md:grid-cols-1"
 				on:success={() => {
 					memberProfilDialog.close()
 					subscribeDialog.showModal()

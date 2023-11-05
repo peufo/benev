@@ -20,20 +20,24 @@
 	})
 </script>
 
-<form
-	method="post"
-	action="{$eventPath}/me"
-	use:enhance={form.submit}
-	class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-4 {klass}"
->
-	<input type="hidden" name="memberId" value={member.id} />
+<div class="@container">
+	<form
+		method="post"
+		action="{$eventPath}/me"
+		use:enhance={form.submit}
+		class="grid grid-cols-3 @lg:grid-cols-6 @2xl:grid-cols-12 gap-4 {klass}"
+	>
+		<input type="hidden" name="memberId" value={member.id} />
 
-	{#each member.event.memberFields as field (field.id)}
-		{@const { value } = member.profile.find((value) => value.fieldId === field.id) || { value: '' }}
-		<MemberField {field} {value} class="col-span-3" />
-	{/each}
+		{#each member.event.memberFields as field (field.id)}
+			{@const { value } = member.profile.find((value) => value.fieldId === field.id) || {
+				value: '',
+			}}
+			<MemberField {field} {value} class="col-span-3" />
+		{/each}
 
-	<div class="flex justify-end col-span-full">
-		<button class="btn"> Sauvegarder </button>
-	</div>
-</form>
+		<div class="flex justify-end col-span-full">
+			<button class="btn"> Sauvegarder </button>
+		</div>
+	</form>
+</div>
