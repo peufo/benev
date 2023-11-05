@@ -1,7 +1,6 @@
 <script lang="ts">
-  import Page from '../Page.svelte';
+	import Page from '$lib/pages/Page.svelte'
 	export let data
-
 </script>
 
-<Page page={data.page}/>
+<Page page={data.page} />
