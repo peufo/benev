@@ -11,12 +11,14 @@
 	let klass = ''
 	export { klass as class }
 	export let noCancelButton = false
+	export let successReset = true
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
 	const form = useForm({
 		successMessage: 'Benvenue',
 		successCallback: () => dispatch('success'),
+		successReset,
 	})
 </script>
 

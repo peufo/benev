@@ -9,6 +9,8 @@
 	import { mdiArrowLeft, mdiSlashForward } from '@mdi/js'
 	import LeaderOf from '$lib/LeaderOf.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
+	import { goto, invalidateAll } from '$app/navigation'
+	import { urlParam } from '$lib/store'
 
 	export let data
 </script>
@@ -38,7 +40,7 @@
 			</h3>
 			<ProfileForm user={data.user} />
 
-			{#if data.member?.profile.length}
+			{#if data.member.event.memberFields.length}
 				<hr class="my-6" />
 				<h3 class="font-medium text-base-content/70 mt-4">
 					Informations spécifiques à {data.event.name}
@@ -56,7 +58,14 @@
 			<LeaderOf teams={data.member.leaderOf} />
 		{/if}
 	{:else}
-		<MemberForm event={data.event} userId={data.user.id} class="mx-auto" noCancelButton />
+		<MemberForm
+			event={data.event}
+			userId={data.user.id}
+			class="mx-auto"
+			noCancelButton
+			successReset={false}
+			on:success={() => invalidateAll().then(() => goto($urlParam.with({ section: 'profile' })))}
+		/>
 	{/if}
 
 	<div class="flex gap-2 justify-between flex-wrap">
