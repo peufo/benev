@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte'
-
 	import { createEventDispatcher } from 'svelte'
-	import { fade, fly } from 'svelte/transition'
 
 	let klass = ''
 	export { klass as class }

@@ -98,6 +98,8 @@
 					{...input}
 				/>
 			</FormControl>
+		{:else}
+			<div class="px-3 py-2 rounded opacity-70">Aucun élément</div>
 		{/each}
 	</div>
 </DropDown>
