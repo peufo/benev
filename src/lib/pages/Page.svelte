@@ -5,7 +5,7 @@
 	import { eventPath } from '$lib/store/index.js'
 	import EditorJsHTML from 'editorjs-html'
 	import type { Page } from '@prisma/client'
-	import { Icon } from '$lib/material'
+	import { CopyLink, Icon } from '$lib/material'
 
 	import PageLayout from './PageLayout.svelte'
 
@@ -21,7 +21,7 @@
 	$: canEdit = $pageStore.data.member?.roles.includes('admin')
 </script>
 
-<PageLayout>
+<PageLayout class="relative">
 	{#each blocksHTML as html}
 		{@html html}
 	{:else}
@@ -30,12 +30,15 @@
 		</slot>
 	{/each}
 
-	{#if canEdit}
-		<div class="flex justify-end not-prose">
-			<a href="{$eventPath}/admin/pages{page ? `/${page.id}` : ''}" class="btn btn-sm">
-				<Icon path={mdiPencilOutline} />
-				Editer cette page
+	<div class="flex justify-end gap-2 not-prose absolute right-5 top-5">
+		{#if canEdit}
+			<a
+				href="{$eventPath}/admin/pages{page ? `/${page.id}` : ''}"
+				class="btn btn-sm btn-square btn-ghost"
+			>
+				<Icon path={mdiPencilOutline} title="Éditer cette page" />
 			</a>
-		</div>
-	{/if}
+		{/if}
+		<CopyLink path="{$eventPath}{page ? `/${page.path}` : ''}" />
+	</div>
 </PageLayout>
