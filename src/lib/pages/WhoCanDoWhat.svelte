@@ -24,16 +24,11 @@
 			'Inscrire un membre à une période',
 			[true, true, 'Seulement les périodes de ses secteurs', false],
 		],
+		['Supprimer un membre', [true, true, 'Lui-même', 'Lui-même']],
 		[
 			'Modifier les profils de membres',
-			[
-				true,
-				true,
-				'Profils des membres inscrits à ses secteurs',
-				'Son propre profil ( sauf les champs en lecture seul )',
-			],
+			[true, true, true, 'Son propre profil ( sauf les champs en lecture seul )'],
 		],
-		['Supprimer un membre', [true, true, 'Lui-même', 'Lui-même']],
 		['Inviter un nouveau membre', [true, true, true, false]],
 		['Accèder à la liste des membres et des inscriptions', [true, true, true, false]],
 		['Accèder à la planification', [true, true, true, false]],
