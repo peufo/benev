@@ -20,5 +20,5 @@
 </script>
 
 <button on:click|preventDefault={handleClick} class="btn btn-square btn-sm btn-ghost">
-	<Icon path={mdiLinkVariant} title="Copier le lien" />
+	<Icon path={mdiLinkVariant} title="Copier le lien" size={22} />
 </button>

@@ -36,7 +36,7 @@
 				href="{$eventPath}/admin/pages{page ? `/${page.id}` : ''}"
 				class="btn btn-sm btn-square btn-ghost"
 			>
-				<Icon path={mdiPencilOutline} title="Éditer cette page" />
+				<Icon path={mdiPencilOutline} title="Éditer cette page" size={22} />
 			</a>
 		{/if}
 		<CopyLink path="{$eventPath}{page ? `/${page.path}` : ''}" />
