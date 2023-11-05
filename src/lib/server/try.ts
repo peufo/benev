@@ -1,4 +1,4 @@
-import { type ActionFailure, fail, redirect, HttpError_1 } from '@sveltejs/kit'
+import { type ActionFailure, fail, redirect } from '@sveltejs/kit'
 
 export async function tryOrFail<T = unknown>(
 	fn: () => Promise<T>,

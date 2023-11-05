@@ -1,12 +1,11 @@
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { periodShema } from '$lib/form'
 
-export const load = async ({ params, parent }) => {
-	const { member } = await parent()
-	const { teamId } = params
-
-	// TODO: change for "isLeaderOfTeam" ?
-	const isLeader = member?.roles.includes('leader')
+export const load = async ({ locals, params: { teamId } }) => {
+	const isLeader = await permission
+		.leaderOfTeam(teamId, locals)
+		.then(() => true)
+		.catch(() => false)
 
 	const team = await prisma.team.findUniqueOrThrow({
 		where: { id: teamId },

@@ -1,6 +1,7 @@
 import { teamShema } from '$lib/form/team'
 import { parseFormData } from '$lib/server/formData'
 import { prisma, tryOrFail, permission } from '$lib/server'
+import { error, fail } from '@sveltejs/kit'
 
 export const load = async ({ locals, params: { teamId } }) => {
 	await permission.leaderOfTeam(teamId, locals)
@@ -21,10 +22,11 @@ export const load = async ({ locals, params: { teamId } }) => {
 
 export const actions = {
 	update: async ({ request, locals, params: { eventId, teamId } }) => {
-		await permission.leaderOfTeam(teamId, locals)
+		const member = await permission.leaderOfTeam(teamId, locals)
 
 		const { err, data } = await parseFormData(request, teamShema, { arrayOperation: 'set' })
 		if (err) return err
+		if (!member.roles.includes('admin') && data.leaders) throw error(403)
 
 		return tryOrFail(
 			() =>
@@ -36,7 +38,7 @@ export const actions = {
 		)
 	},
 	delete: async ({ locals, params: { eventId, teamId } }) => {
-		await permission.leader(eventId, locals)
+		await permission.admin(eventId, locals)
 		return tryOrFail(
 			() =>
 				prisma.team.delete({

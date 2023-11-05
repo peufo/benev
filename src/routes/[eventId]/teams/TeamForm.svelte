@@ -1,13 +1,14 @@
 <script lang="ts">
 	import type { Team, Member, User } from '@prisma/client'
 	import { enhance } from '$app/forms'
+	import { page } from '$app/stores'
+
 	import { useForm } from '$lib/form'
 	import { InputText, InputTextarea, DeleteButton, Dialog } from '$lib/material'
 	import { eventPath } from '$lib/store'
 
 	import InviteForm from '$lib/InviteForm.svelte'
 	import InputMembers from '$lib/InputMembers.svelte'
-	import { page } from '$app/stores'
 
 	let klass = ''
 	export { klass as class }
@@ -37,15 +38,15 @@
 
 	<InputText key="name" label="Nom du secteur" value={team?.name} />
 
-	<InputMembers key="leaders" label="Responsables" value={team?.leaders} {inviteDialog} />
-
+	{#if $page.data.member?.roles.includes('admin')}
+		<InputMembers key="leaders" label="Responsables" value={team?.leaders} {inviteDialog} />
+	{/if}
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
-
 	<input type="hidden" name="redirectTo" value={$page.url.searchParams.get('redirectTo') || ''} />
 
 	<div class="flex gap-2 flex-row-reverse">
 		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit"> Valider </button>
-		{#if isUpdate}
+		{#if isUpdate && $page.data.member?.roles.includes('admin')}
 			<DeleteButton formaction="?/delete" />
 		{/if}
 		<div class="grow" />
