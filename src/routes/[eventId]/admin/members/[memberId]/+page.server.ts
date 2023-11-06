@@ -30,7 +30,6 @@ export const load = async ({ params }) => {
 export const actions = {
 	set_isAdmin: async ({ request, locals, params: { eventId, memberId } }) => {
 		await permission.owner(eventId, locals)
-
 		const { err, data } = await parseFormData(request, z.object({ isAdmin: z.coerce.boolean() }))
 		if (err) return err
 
@@ -40,8 +39,5 @@ export const actions = {
 				data: { isAdmin: data.isAdmin },
 			})
 		)
-	},
-	member_delete: async () => {
-		console.log('DELETE MEMBER')
 	},
 }
