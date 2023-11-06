@@ -11,6 +11,7 @@
 	import MemberRole from '$lib/MemberRole.svelte'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { urlParam } from '$lib/store'
+	import MemberDeleteForm from '$lib/member/MemberDeleteForm.svelte'
 
 	export let data
 </script>
@@ -47,6 +48,9 @@
 				</h3>
 				<MemberProfileForm member={data.member} />
 			{/if}
+
+			<hr class="my-6">
+			<MemberDeleteForm memberId={data.member.id}/>
 		</ProfileSection>
 
 		<Card class="border">

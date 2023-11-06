@@ -41,4 +41,7 @@ export const actions = {
 			})
 		)
 	},
+	member_delete: async () => {
+		console.log('DELETE MEMBER')
+	},
 }

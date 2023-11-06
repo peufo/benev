@@ -9,7 +9,6 @@
 
 	let klass = ''
 	export { klass as class }
-
 	export let member: MemberProfile
 
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -36,7 +35,7 @@
 			<MemberField {field} {value} class="col-span-3" />
 		{/each}
 
-		<div class="flex justify-end col-span-full">
+		<div class="flex flex-row-reverse col-span-full">
 			<button class="btn"> Sauvegarder </button>
 		</div>
 	</form>
