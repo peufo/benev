@@ -26,6 +26,7 @@ declare global {
 			firstName: string
 			lastName: string
 			phone?: string
+			avatarPlaceholder: string
 		}
 	}
 }

@@ -13,6 +13,7 @@ import {
 	redirectToAuth,
 	sendEmailTemplate,
 	tryOrFail,
+	createAvatarPlaceholder,
 } from '$lib/server'
 import { loginShema, passwordResetShema, registerShema } from '$lib/form'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
@@ -230,10 +231,4 @@ export const actions = {
 			locals.auth.setSession(null)
 		}, '/')
 	},
-}
-
-function createAvatarPlaceholder() {
-	const avatarUrl = new URL('https://api.dicebear.com/7.x/thumbs/svg')
-	avatarUrl.searchParams.append('seed', String(Math.random()))
-	return avatarUrl.toString()
 }

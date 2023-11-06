@@ -11,6 +11,7 @@ export * from './token'
 export * from './try'
 export * from './parseQuery'
 export * from './member'
+export * from './avatar'
 
 export const prisma = new PrismaClient()
 

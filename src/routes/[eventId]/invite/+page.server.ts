@@ -9,6 +9,7 @@ import {
 	auth,
 	generateToken,
 	permission,
+	createAvatarPlaceholder,
 } from '$lib/server'
 import { EmailAcceptInvite, EmailAcceptInviteNotification, EmailNewInvite } from '$lib/email'
 
@@ -43,7 +44,11 @@ export const actions = {
 						providerUserId: data.email,
 						password: null,
 					},
-					attributes: { ...data, isEmailVerified: false },
+					attributes: {
+						...data,
+						isEmailVerified: false,
+						avatarPlaceholder: createAvatarPlaceholder(),
+					},
 				})
 			}
 			const userId = user.id
@@ -72,8 +77,10 @@ export const actions = {
 						new Date().getTime() + 1000 * 60 * 60 * 24 * 7
 				  )
 				: undefined
+
 			await sendEmailTemplate(EmailNewInvite, {
 				to: data.email,
+				replyTo: author.email,
 				subject: `${newMember.event.name} - Invitation`,
 				props: {
 					tokenId,
