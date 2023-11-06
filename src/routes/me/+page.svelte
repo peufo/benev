@@ -6,6 +6,8 @@
 	import { CardLink, Dialog, Icon, Placeholder } from '$lib/material'
 	import ProfileSection from '$lib/me/ProfileSection.svelte'
 	import { useNotify } from '$lib/notify'
+	import DeleteUserForm from './DeleteUserForm.svelte'
+	import ProfileForm from '$lib/me/ProfileForm.svelte'
 
 	export let data
 
@@ -21,7 +23,12 @@
 </script>
 
 <LayoutBasic user={data.user}>
-	<ProfileSection user={data.user} />
+	<ProfileSection user={data.user} >
+		<ProfileForm user={data.user} />
+		<hr>
+		<DeleteUserForm />
+	</ProfileSection>
+
 
 	<div class="flex gap-2 justify-between items-center mt-4">
 		<h2 class="text-xl font-semibold text-base-content/70">Mes évenements</h2>

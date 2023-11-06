@@ -221,6 +221,15 @@ export const actions = {
 			return
 		})
 	},
+
+	delete_user: async ({ locals }) => {
+		const session = await locals.auth.validate()
+		if (!session) return fail(401)
+		return tryOrFail(async () => {
+			await auth.deleteUser(session.user.id)
+			locals.auth.setSession(null)
+		}, '/')
+	},
 }
 
 function createAvatarPlaceholder() {
