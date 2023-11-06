@@ -1,18 +1,16 @@
 <script lang="ts">
 	import { rolesMap } from '$lib/MemberRole.svelte'
 	import { Icon } from '$lib/material'
-	import { mdiCheck, mdiChevronRight, mdiListStatus } from '@mdi/js'
-	import { slide } from 'svelte/transition'
+	import { mdiCheck, mdiListStatus } from '@mdi/js'
 
 	type Permission = boolean | string
-
-	let matrixOpen = false
 
 	const permissions: [string, [Permission, Permission, Permission, Permission]][] = [
 		['Nommer des administrateurs', [true, false, false, false]],
 		["Supprimer l'événement", [true, false, false, false]],
 		["Configurer l'événement", [true, true, false, false]],
 		['Modifier les pages', [true, true, false, false]],
+		['Bannir un utilisateur', [true, true, false, false]],
 		['Créer et supprimer les secteurs', [true, true, false, false]],
 		['Nommer des responsables de secteurs', [true, true, false, false]],
 		[
