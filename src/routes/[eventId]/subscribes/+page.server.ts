@@ -72,18 +72,16 @@ export const actions = {
 
 			if (_isLeader && isSelfSubscribe) return
 
-			const to: string[] = []
-
-			if (subscribe.createdBy === 'user') {
-				to.push(...subscribe.period.team.leaders.map(({ user }) => user.email))
-			} else if (subscribe.member.user.wantsNotification) {
-				to.push(subscribe.member.user.email)
-			}
+			const memberMail = subscribe.member.user.email
+			const leadersMail = subscribe.period.team.leaders.map(({ user }) => user.email)
+			const to = subscribe.createdBy === 'user' ? leadersMail : memberMail
+			const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
 
 			if (to.length)
 				await sendEmailTemplate(EmailNewSubscribe, {
 					from: subscribe.period.team.event.name,
 					to,
+					replyTo,
 					subject: 'Nouvelle inscription',
 					props: { subscribe, author: session.user },
 				})

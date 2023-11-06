@@ -134,23 +134,30 @@ export const actions = {
 					user: true,
 					event: {
 						include: {
-							owner: true,
 							memberFields: { orderBy: { position: 'asc' } },
 						},
 					},
 				},
 			})
 
-			await Promise.all([
+			const admins = await prisma.member.findMany({
+				where: { eventId, isAdmin: true },
+				select: { user: { select: { email: true } } },
+			})
+			const adminsEmail = admins.map((a) => a.user.email)
+
+			const res = await Promise.all([
 				sendEmailTemplate(EmailAcceptInvite, {
 					from: newMember.event.name,
 					to: newMember.user.email,
+					replyTo: adminsEmail,
 					subject: `${newMember.event.name} - Nouveau membre`,
 					props: { member: newMember },
 				}),
 				sendEmailTemplate(EmailAcceptInviteNotification, {
 					from: newMember.event.name,
-					to: newMember.event.owner.email,
+					to: adminsEmail,
+					replyTo: newMember.user.email,
 					subject: `${newMember.event.name} - Nouveau membre`,
 					props: { member: newMember },
 				}),

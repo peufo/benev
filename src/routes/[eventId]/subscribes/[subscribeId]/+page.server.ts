@@ -100,6 +100,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 			const toMember = subscribe.member.user.wantsNotification ? [subscribe.member.user.email] : []
 			const toLeaders = subscribe.period.team.leaders.map((l) => l.user.email)
 			const to = isLeaderAction ? toMember : toLeaders
+			const replyTo = isLeaderAction ? toLeaders : toMember
 
 			if (to.length) {
 				switch (state) {
@@ -107,6 +108,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 						await sendEmailTemplate(EmailSubscribeStateCancelled, {
 							from: subscribe.period.team.event.name,
 							to,
+							replyTo,
 							subject: `Inscription annulée`,
 							props: { subscribe },
 						})
@@ -115,6 +117,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 						await sendEmailTemplate(EmailNewSubscribe, {
 							from: subscribe.period.team.event.name,
 							to,
+							replyTo,
 							subject: 'Nouvelle inscription',
 							props: { subscribe, author: author.user },
 						})
@@ -124,6 +127,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 						await sendEmailTemplate(EmailSubscribeState, {
 							from: subscribe.period.team.event.name,
 							to,
+							replyTo,
 							subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'déclinée'}`,
 							props: { subscribe },
 						})

@@ -54,6 +54,7 @@ export const actions = {
 						members: {
 							create: {
 								userId,
+								isAdmin: true,
 								isValidedByEvent: true,
 								isValidedByUser: true,
 							},
