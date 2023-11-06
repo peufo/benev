@@ -2,6 +2,7 @@
 	import {
 		mdiAccountArrowUpOutline,
 		mdiAccountMultipleOutline,
+		mdiChartGantt,
 		mdiChevronRight,
 		mdiClipboardTextMultipleOutline,
 		mdiPencilOutline,
@@ -82,7 +83,13 @@
 				href={`${$eventPath}/admin/subscribes?teams=["${data.team.id}"]`}
 				class="btn btn-square btn-sm"
 			>
-				<Icon path={mdiClipboardTextMultipleOutline} title="Toutes les inscriptions du secteur" />
+				<Icon path={mdiClipboardTextMultipleOutline} title="Toutes les inscriptions du secteur" size={20}  />
+			</a>
+			<a
+				href={`${$eventPath}/admin/plan?teams=["${data.team.id}"]`}
+				class="btn btn-square btn-sm"
+			>
+				<Icon path={mdiChartGantt} title="Voir le planning du secteur" />
 			</a>
 
 			<a href="{$eventPath}/teams/{data.team.id}/edit" class="btn btn-square btn-sm">
