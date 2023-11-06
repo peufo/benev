@@ -35,6 +35,7 @@ model User {
   auth_session Session[]
   auth_key     Key[]
   medias       Media[]
+  bans         Ban[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -90,15 +91,28 @@ model Event {
   pages        Page[]
   members      Member[]
   memberFields Field[]
+  bans         Ban[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model Ban {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([eventId, userId])
+}
+
 model Field {
   id              String       @id @default(cuid())
   eventId         String
-  event           Event        @relation(references: [id], fields: [eventId], onDelete: Cascade)
+  event           Event        @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
   type            FieldType
   name            String
   label           String?
@@ -148,7 +162,7 @@ model Member {
   userId  String
   user    User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   eventId String
-  event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade)
+  event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
   subscribes Subscribe[]
   leaderOf   Team[]
@@ -164,7 +178,7 @@ model Page {
   id String @id @default(cuid())
 
   eventId String
-  event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade)
+  event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
   title   String
   path    String  @default("")
@@ -185,7 +199,7 @@ model Team {
   leaders     Member[]
 
   eventId String
-  event   Event    @relation(references: [id], fields: [eventId], onDelete: Cascade)
+  event   Event    @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
   periods Period[]
 
   createdAt DateTime @default(now())
