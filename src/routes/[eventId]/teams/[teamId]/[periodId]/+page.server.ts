@@ -1,5 +1,6 @@
 import { periodShemaUpdate } from '$lib/form'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
+import { z } from 'zod'
 
 export const load = async ({ locals, params: { teamId, periodId } }) => {
 	await permission.leaderOfTeam(teamId, locals)
@@ -26,11 +27,16 @@ export const actions = {
 			})
 		)
 	},
-	delete_period: async ({ locals, params: { eventId, teamId, periodId } }) => {
+	delete_period: async ({ locals, request, params: { eventId, teamId, periodId } }) => {
 		await permission.leaderOfTeam(teamId, locals)
+		const { err, data } = await parseFormData(
+			request,
+			z.object({ disableRedirect: z.coerce.boolean() })
+		)
+		if (err) return err
 		return tryOrFail(
 			() => prisma.period.delete({ where: { id: periodId } }),
-			teamId !== 'undefined' ? `/${eventId}/teams/${teamId}` : undefined
+			data.disableRedirect ? undefined : `/${eventId}/teams/${teamId}`
 		)
 	},
 }

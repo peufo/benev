@@ -103,7 +103,7 @@
 				{/if}
 			</div>
 		{:else}
-			<PeriodForm bind:this={periodForm} {period} on:success={() => contextMenu.hide()} />
+			<PeriodForm bind:this={periodForm} {period} on:success={() => contextMenu.hide()} disableRedirect/>
 		{/if}
 	{/if}
 </ContextMenu>

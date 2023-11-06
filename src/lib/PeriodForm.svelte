@@ -14,6 +14,7 @@
 	let klass = ''
 	export { klass as class }
 	export let period: Partial<Period> | undefined = undefined
+	export let disableRedirect = false
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -40,7 +41,7 @@
 	let maxSubscribe = String(period?.maxSubscribe || 1)
 
 	$: endIsNextDay = end < start
-	$: basePath = `${$eventPath}/teams/${(!period?.id && period?.teamId) || $page.params.teamId}`
+	$: basePath = `${$eventPath}/teams/${period?.teamId || $page.params.teamId}`
 
 	export function setPeriod(_period?: Partial<Period>) {
 		period = _period
@@ -103,6 +104,9 @@
 
 	<div class="flex flex-row-reverse gap-3 grow">
 		{#if period?.id}
+			{#if disableRedirect}
+			<input type="hidden" name="disableRedirect" value="true">
+			{/if}
 			<button class="btn" type="submit">Valider</button>
 			<DeleteButton formaction="{basePath}/{period.id}?/delete_period" />
 		{:else}
