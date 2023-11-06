@@ -12,8 +12,7 @@ export const actions = {
 			const member = await permission.member(eventId, locals)
 			const isSelf = member.id === data.memberId
 			if (!isSelf) await permission.admin(eventId, locals)
-			if (member.event.ownerId === member.userId)
-				throw Error(`Owner can't delete his participation`)
+			if (member.roles.includes('owner')) throw Error(`Owner can't delete his participation`)
 
 			await prisma.member.delete({
 				where: { id: data.memberId, eventId },
