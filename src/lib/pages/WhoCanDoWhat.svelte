@@ -10,7 +10,6 @@
 		["Supprimer l'événement", [true, false, false, false]],
 		["Configurer l'événement", [true, true, false, false]],
 		['Modifier les pages', [true, true, false, false]],
-		['Bannir un utilisateur', [true, true, false, false]],
 		['Créer et supprimer les secteurs', [true, true, false, false]],
 		['Nommer des responsables de secteurs', [true, true, false, false]],
 		[

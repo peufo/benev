@@ -2,8 +2,9 @@
 	import { Card, DropDown, Icon, SectionCollapse } from '$lib/material'
 
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
+	import MemberDeleteForm from '$lib/member/MemberDeleteForm.svelte'
 	import { eventPath } from '$lib/store'
-	import { mdiArrowLeft } from '@mdi/js'
+	import { mdiArrowLeft, mdiCancel, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import LeaderOf from '$lib/LeaderOf.svelte'
@@ -31,13 +32,25 @@
 					{data.memberProfile.user.lastName}
 				</span>
 
-				{#if data.member?.roles.includes('owner') && !data.memberProfile.roles.includes('owner')}
+				{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}
 					<DropDown hideOnBlur tippyProps={{ arrow: true }}>
 						<button slot="activator" class="btn btn-sm ml-2">
 							<MemberRole roles={data.memberProfile.roles} mode="contents" />
 						</button>
 
-						<SetAdminForm memberProfile={data.memberProfile} />
+						{#if data.member?.roles.includes('owner')}
+							<SetAdminForm memberProfile={data.memberProfile} />
+						{/if}
+						
+						<MemberDeleteForm
+							memberId={data.memberProfile.id}
+							redirectTo="{$eventPath}/admin/members"
+							btn={false}
+							class="menu-item w-full"
+						>
+							<Icon path={mdiTrashCanOutline} size={20} class="fill-error" />
+							<span>Supprimer le membre</span>
+						</MemberDeleteForm>
 					</DropDown>
 				{:else}
 					<MemberRole roles={data.memberProfile.roles} />

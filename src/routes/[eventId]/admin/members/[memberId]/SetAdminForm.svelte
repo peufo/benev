@@ -11,9 +11,9 @@
 	const form = useForm()
 </script>
 
-<form action="?/set_isAdmin" method="post" use:enhance={form.submit}>
+<form action="?/set_isAdmin" method="post" use:enhance={form.submit} class="contents">
 	<input type="hidden" name="isAdmin" value={isAdmin ? '' : 'true'} />
-	<button class="btn btn-sm">
+	<button class="menu-item">
 		<MemberRole roles={[isAdmin ? 'member' : 'admin']} mode="icon" />
 		<span>{isAdmin ? 'Retirer' : 'Attribuer'} le rôle d'administrateur</span>
 	</button>

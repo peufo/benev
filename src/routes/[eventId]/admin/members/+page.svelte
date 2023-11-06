@@ -50,7 +50,7 @@
 </script>
 
 <div class="flex flex-col gap-3">
-	<div class="flex gap-x-3 gap-y-2 flex-wrap">
+	<div class="flex gap-x-2 gap-y-2 flex-wrap">
 		<InputSearch />
 		<MembersFilter fields={data.fields} teams={data.teams} />
 		<ColumnsSelect {columns} bind:selectedColumnsId />

@@ -3,6 +3,7 @@
 	export { klass as class }
 	export let formaction: string
 	export let disabled = false
+	export let btn = true
 
 	let button: HTMLButtonElement
 	let width = 0
@@ -25,13 +26,14 @@
 
 <button
 	bind:this={button}
-	class="
-			btn
-			{ready ? 'btn-error btn-outline w-28' : 'text-error btn-ghost'}
-			{klass}
-		"
-	style:width={ready ? `${width}px` : ''}
+	class={klass}
+	class:btn
+	class:btn-error={btn && ready}
+	class:btn-outline={btn && ready}
+	class:text-error={btn && !ready}
+	class:btn-ghost={btn && !ready}
 	class:btn-disabled={disabled}
+	style:width={ready ? `${width}px` : ''}
 	on:click={handleClick}
 	on:mouseleave={handleLeave}
 	formaction={ready ? formaction : undefined}

@@ -50,7 +50,7 @@
 			{/if}
 
 			<hr class="my-6">
-			<MemberDeleteForm memberId={data.member.id}/>
+			<MemberDeleteForm memberId={data.member.id} class="w-max btn-sm"/>
 		</ProfileSection>
 
 		<Card class="border">

@@ -35,7 +35,6 @@ model User {
   auth_session Session[]
   auth_key     Key[]
   medias       Media[]
-  bans         Ban[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -91,22 +90,9 @@ model Event {
   pages        Page[]
   members      Member[]
   memberFields Field[]
-  bans         Ban[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Ban {
-  id        String   @id @default(cuid())
-  eventId   String
-  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([eventId, userId])
 }
 
 model Field {
