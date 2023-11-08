@@ -20,7 +20,7 @@
 	</div>
 	<div slot="subtitle">
 		<slot name="subtitle">
-			<p>Profil et préférences commune à tous les événements.</p>
+			<p>Profil et préférences communes à tous les événements.</p>
 		</slot>
 	</div>
 
