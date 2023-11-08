@@ -56,7 +56,7 @@
 				</div>
 			{:else}
 				<button
-					type="button"
+					
 					class="btn btn-square join-item"
 					formaction="/me?/verify_email"
 					disabled={verificationEmailSent}
