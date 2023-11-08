@@ -16,7 +16,7 @@
 
 </script>
 
-<div class="grid h-full place-content-center p-10">
+<div class="grid place-content-center p-10">
   <div class="card w-96 place-content-center bg-base-100 shadow-xl">
     <div class="tabs w-full">
       <span

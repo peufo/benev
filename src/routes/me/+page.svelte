@@ -2,13 +2,11 @@
 	import { mdiLogout, mdiPlus } from '@mdi/js'
 	import EventForm from '$lib/EventForm.svelte'
 	import LayoutBasic from '$lib/LayoutBasic.svelte'
-	import MemberRole from '$lib/MemberRole.svelte'
-	import { CardLink, Dialog, Icon, Placeholder } from '$lib/material'
+	import {  Dialog, Icon, Placeholder } from '$lib/material'
 	import ProfileSection from '$lib/me/ProfileSection.svelte'
 	import { useNotify } from '$lib/notify'
 	import DeleteUserForm from './DeleteUserForm.svelte'
 	import ProfileForm from '$lib/me/ProfileForm.svelte'
-	import { eventStates } from '$lib/form'
 	import MemberCard from './MemberCard.svelte'
 
 	export let data
