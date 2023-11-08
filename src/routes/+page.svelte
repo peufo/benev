@@ -20,7 +20,7 @@
 				<div class="flex flex-wrap gap-10 items-center justify-center">
 					<img src={logo} alt="Logo benev" />
 					<div>
-						<h1 class="font-medium text-2xl opacity-80">benev.io</h1>
+						<h1 class="font-medium text-2xl opacity-80">benev</h1>
 						<h2 class="opacity-90 text-sm mt-2">Ta plateforme de gestion de bénévole</h2>
 					</div>
 				</div>
