@@ -8,6 +8,7 @@ export const actions = {
 			z.object({ memberId: z.string(), redirectTo: z.string().optional() })
 		)
 		if (err) return err
+
 		return tryOrFail(async () => {
 			const member = await permission.member(eventId, locals)
 			const isSelf = member.id === data.memberId

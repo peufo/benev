@@ -8,6 +8,8 @@
 	import { useNotify } from '$lib/notify'
 	import DeleteUserForm from './DeleteUserForm.svelte'
 	import ProfileForm from '$lib/me/ProfileForm.svelte'
+	import { eventStates } from '$lib/form'
+	import MemberCard from './MemberCard.svelte'
 
 	export let data
 
@@ -23,13 +25,21 @@
 </script>
 
 <LayoutBasic user={data.user}>
-	<ProfileSection user={data.user} >
+	<ProfileSection user={data.user}>
 		<ProfileForm user={data.user} />
-		<hr>
+		<hr />
 		<DeleteUserForm />
 	</ProfileSection>
 
+	<!-- INVITATIONS -->
+	{#if data.members.filter((m) => !m.isValidedByUser).length}
+		<h2 class="text-xl font-semibold text-base-content/70 mt-4">Invitations</h2>
+		{#each data.members.filter((m) => !m.isValidedByUser) as member}
+			<MemberCard {member} />
+		{/each}
+	{/if}
 
+	<!-- MES EVENEMENTS -->
 	<div class="flex gap-2 justify-between items-center mt-4">
 		<h2 class="text-xl font-semibold text-base-content/70">Mes évenements</h2>
 		<button class="btn btn-sm" on:click={handleClickNewEvent}>
@@ -38,37 +48,8 @@
 		</button>
 	</div>
 
-	{#each data.members as member}
-		{@const nbSubscribes = member.subscribes.length}
-		{@const nbLeaderOf = member.leaderOf.length}
-
-		<CardLink href="/{member.eventId}/me">
-			<div slot="title" class="flex gap-2 items-center flex-wrap">
-				{#if member.event.logo}
-					<img src={member.event.logo} alt="logo de {member.event.name}" class="w-7 inline-block" />
-				{/if}
-				<span>{member.event.name}</span>
-				<MemberRole roles={member.roles} class="ml-auto" />
-			</div>
-
-			<div class="flex gap-2 mt-4">
-				<div class="badge">
-					{#if nbSubscribes}
-						<b class="mr-1 opacity-80">{nbSubscribes}</b>
-						<span>Inscription{nbSubscribes > 1 ? 's' : ''}</span>
-					{:else}
-						<span>Pas d'inscription</span>
-					{/if}
-				</div>
-
-				{#if nbLeaderOf}
-					<div class="badge">
-						<b class="mr-1 opacity-80">{nbLeaderOf}</b>
-						<span>Secteur{nbLeaderOf > 1 ? 's' : ''} à charge</span>
-					</div>
-				{/if}
-			</div>
-		</CardLink>
+	{#each data.members.filter((m) => m.isValidedByUser) as member}
+		<MemberCard {member} />
 	{:else}
 		<Placeholder class="gap-3 bg-base-300">
 			<p>Tu n'es membre d'aucun évènement pour l'instant.</p>

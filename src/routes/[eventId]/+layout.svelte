@@ -1,19 +1,23 @@
 <script lang="ts">
 	import {
+	mdiArrowLeft,
 		mdiChevronRight,
 		mdiEmailOutline,
 		mdiMapMarkerOutline,
 		mdiPhoneOutline,
+		mdiTestTube,
 		mdiWeb,
 	} from '@mdi/js'
 
 	import Header from '$lib/Header.svelte'
-	import { Icon } from '$lib/material'
+	import { Card, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import Footer from '$lib/Footer.svelte'
 	import EventMenu from './EventMenu.svelte'
 
 	export let data
+
+	$: accessDenied = data.event.state === 'draft' && !data.member?.roles.includes('leader')
 </script>
 
 <svelte:head>
@@ -35,12 +39,33 @@
 		</a>
 	</div>
 	<div slot="end" class="contents">
-		<EventMenu pages={data.pages} />
+		{#if !accessDenied}
+			<EventMenu pages={data.pages} />
+		{/if}
 	</div>
 </Header>
 
 <main class="grow p-2">
-	<slot />
+	{#if !accessDenied}
+		<slot />
+	{:else}
+		<Card class="max-w-lg mx-auto">
+			<h2 slot="title" class="flex gap-2">
+				<Icon path={mdiTestTube} class="rotate-12 opacity-70" />
+				<span>Bientôt disponible</span>
+			</h2>
+			<p class="mt-4">
+				L'espace bénévole de l'évènement <b>{data.event.name}</b> est cours d'élaboration.
+			</p>
+
+			<div class="mt-8">
+				<a href="/me" class="btn btn-sm">
+					<Icon path={mdiArrowLeft}/>
+					<span>mon profil</span>
+				</a>
+			</div>
+		</Card>
+	{/if}
 </main>
 
 <Footer>

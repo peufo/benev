@@ -33,10 +33,12 @@ export const load = async ({ url, parent }) => {
 			subscribes: true,
 		},
 	})
-	const membersWithRole = members.map((member) => ({
-		...member,
-		roles: getMemberRoles(member),
-	}))
+	const membersWithRole = members
+		.map((member) => ({
+			...member,
+			roles: getMemberRoles(member),
+		}))
+		.filter(({ event, roles }) => event.state !== 'draft' || roles.includes('leader'))
 
 	return {
 		user,

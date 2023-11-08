@@ -26,7 +26,7 @@ export const eventStates: Record<
 		icon: mdiArchiveOutline,
 		label: 'Évènement archivé',
 		class: 'bg-base-200',
-		description: `Le site est marqué comme inactif.`,
+		description: `Les inscriptions sont fermé et le site est marqué comme inactif.`,
 	},
 }
 

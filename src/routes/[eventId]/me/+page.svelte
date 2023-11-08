@@ -9,9 +9,8 @@
 	import { mdiArrowLeft, mdiSlashForward } from '@mdi/js'
 	import LeaderOf from '$lib/LeaderOf.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
-	import { goto, invalidateAll } from '$app/navigation'
-	import { urlParam } from '$lib/store'
 	import MemberDeleteForm from '$lib/member/MemberDeleteForm.svelte'
+	import { eventStates } from '$lib/form'
 
 	export let data
 </script>
@@ -29,6 +28,14 @@
 					<span class="whitespace-nowrap text-ellipsis">
 						{data.event.name}
 					</span>
+					{#if data.event.state !== 'active'}
+						<Icon
+							class="opacity-70 ml-1 {data.event.state === 'draft' ? 'rotate-12' : ''}"
+							size={20}
+							path={eventStates[data.event.state].icon}
+							title={eventStates[data.event.state].label}
+						/>
+					{/if}
 				</span>
 			</div>
 
@@ -49,8 +56,8 @@
 				<MemberProfileForm member={data.member} />
 			{/if}
 
-			<hr class="my-6">
-			<MemberDeleteForm memberId={data.member.id} class="w-max btn-sm"/>
+			<hr class="my-6" />
+			<MemberDeleteForm memberId={data.member.id} class="w-max btn-sm" />
 		</ProfileSection>
 
 		<Card class="border">
@@ -67,8 +74,6 @@
 			userId={data.user.id}
 			class="mx-auto"
 			noCancelButton
-			successReset={false}
-			on:success={() => invalidateAll().then(() => goto($urlParam.with({ section: 'profile' })))}
 		/>
 	{/if}
 

@@ -48,7 +48,7 @@ export const actions = {
 			const editOwnProfile = memberId === member.id
 			const isLeader = member.roles.includes('leader')
 			if (!editOwnProfile && !isLeader) throw error(401)
-			// TODO: seulement inscrit à ses secteurs ?
+			// TODO: Les leaders ne devrait avoir ce droit que sur les membres inscrit à ses secteurs ?
 
 			const fields = await prisma.field.findMany({
 				where: {

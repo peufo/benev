@@ -1,6 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
 import { z } from 'zod'
-import { memberShema } from '$lib/form'
 import {
 	parseFormData,
 	prisma,
@@ -96,7 +95,10 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data } = await parseFormData(request, memberShema)
+		const { err, data } = await parseFormData(
+			request,
+			z.object({ userId: z.string(), redirectTo: z.string().optional() })
+		)
 		if (err) return err
 
 		const { userId } = data
@@ -146,7 +148,7 @@ export const actions = {
 			})
 			const adminsEmail = admins.map((a) => a.user.email)
 
-			const res = await Promise.all([
+			await Promise.all([
 				sendEmailTemplate(EmailAcceptInvite, {
 					from: newMember.event.name,
 					to: newMember.user.email,
@@ -162,6 +164,6 @@ export const actions = {
 					props: { member: newMember },
 				}),
 			])
-		})
+		}, data.redirectTo)
 	},
 }

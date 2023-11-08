@@ -10,7 +10,6 @@ export * from './team'
 export * from './period'
 export * from './subscribe'
 export * from './page'
-export * from './member'
 export * from './memberField'
 
 export type SetError = { [key: string]: (err: string) => void }
