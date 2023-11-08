@@ -1,29 +1,11 @@
 <script lang="ts">
-	import { mdiPlus } from '@mdi/js'
-	import { Icon, Dialog, CardLink } from '$lib/material'
+	import { CardLink } from '$lib/material'
 	import logo from '$lib/assets/logo.svg'
-	import EventForm from '$lib/EventForm.svelte'
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
-	import { useNotify } from '$lib/notify'
 
 	export let data
-
-	let createDialog: HTMLDialogElement
-	const notify = useNotify()
-	function handleClickNewEvent() {
-		if (!data.user?.isEmailVerified) {
-			notify.warning(`Tu dois d'abord valider ton email`)
-			return
-		}
-		createDialog.showModal()
-	}
 </script>
-
-<Dialog bind:dialog={createDialog}>
-	<h2 slot="header" class="card-title">Nouvel évènement</h2>
-	<EventForm on:cancel={() => createDialog.close()} on:success={() => createDialog.close()} />
-</Dialog>
 
 <Header user={data.user}>
 	<a slot="start" class="btn-ghost text-lg btn btn-square" href="/">
@@ -32,30 +14,47 @@
 </Header>
 
 <main class="grow p-2">
-	<div class="max-w-md mx-auto">
-		<div class="flex gap-2 items-center my-6">
-			<h2 class="text-xl">Tous les évènements</h2>
-			<div class="grow" />
+	<div class="max-w-lg mx-auto">
+		<div class="card bg-base-100">
+			<div class="card-body">
+				<div class="flex flex-wrap gap-10 items-center justify-center">
+					<img src={logo} alt="Logo benev" />
+					<div>
+						<h1 class="font-medium text-2xl opacity-80">benev.io</h1>
+						<h2 class="opacity-90 text-sm mt-2">Ta plateforme de gestion de bénévole</h2>
+					</div>
+				</div>
+				
+				<div class="grid place-content-center mt-14 mb-10">
+					<a href="/me" class="btn btn-secondary">
+						{data.user ? 'Voir mes évènements' : 'Essayer maintenant'}
+					</a>
+				</div>
+			
 
-			<button class="btn btn-sm" on:click={handleClickNewEvent}>
-				<Icon path={mdiPlus} class="fill-base-content" />
-				Organiser
-			</button>
+			</div>
 		</div>
 
-		<ul class="flex flex-col gap-2 mt-2">
-			{#each data.events as event}
-				<CardLink href="/{event.id}">
-					<div slot="title" class="flex items-center gap-2">
-						{#if event.logo}
-							<img src={event.logo} alt="logo" class="h-6" />
-						{/if}
-						{event.name}
-					</div>
-					<p class="opacity-70">{event.description}</p>
-				</CardLink>
-			{/each}
-		</ul>
+		<!-- ACTIVES EVENTS -->
+		{#if data.events.length}
+			<div class="flex gap-2 items-center mt-10 mb-4">
+				<h2 class="text-xl">Évènements à venir</h2>
+			</div>
+
+			<ul class="flex flex-col gap-2 mt-2">
+				{#each data.events as event}
+					<CardLink href="/{event.id}">
+						<div slot="title" class="flex items-center gap-2">
+							{#if event.logo}
+								<img src={event.logo} alt="logo" class="h-6" />
+							{/if}
+							{event.name}
+						</div>
+						<p class="opacity-70">{event.description}</p>
+					</CardLink>
+				{/each}
+			</ul>
+		{/if}
 	</div>
 </main>
 

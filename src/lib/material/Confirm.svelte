@@ -7,7 +7,7 @@
 
 </script>
 
-<button type="button" on:click={() => dialog.showModal()} class="btn btn-sm btn-ghost {klass}">
+<button type="button" on:click={() => dialog.showModal()} class="btn btn-ghost {klass}">
 	<slot name="activator">Confirm button</slot>
 </button>
 
@@ -17,7 +17,7 @@
 	</div>
   <slot/>
   <div class="flex justify-end gap-2 mt-10">
-    <button type="button" class="btn btn-sm btn-ghost" on:click={() => dialog.close()}>Annuler</button>
+    <button type="button" class="btn btn-ghost" on:click={() => dialog.close()}>Annuler</button>
     <slot name="action" />
   </div>
 </Dialog>

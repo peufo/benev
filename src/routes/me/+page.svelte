@@ -42,8 +42,8 @@
 	<!-- MES EVENEMENTS -->
 	<div class="flex gap-2 justify-between items-center mt-4">
 		<h2 class="text-xl font-semibold text-base-content/70">Mes évenements</h2>
-		<button class="btn btn-sm" on:click={handleClickNewEvent}>
-			<Icon path={mdiPlus} class="fill-base-content" />
+		<button class="btn" class:btn-secondary={!data.members.length} on:click={handleClickNewEvent}>
+			<Icon path={mdiPlus} class={data.members.length ? '' : 'fill-secondary-content'} />
 			Organiser
 		</button>
 	</div>
