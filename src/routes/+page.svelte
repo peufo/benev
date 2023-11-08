@@ -15,10 +15,10 @@
 
 <main class="grow p-2">
 	<div class="max-w-lg mx-auto">
-		<div class="card bg-base-100">
+		<div class="card bg-base-100 shadow">
 			<div class="card-body">
 				<div class="flex flex-wrap gap-10 items-center justify-center">
-					<img src={logo} alt="Logo benev" />
+					<img src={logo} alt="Logo benev" class="w-36" />
 					<div>
 						<h1 class="font-medium text-2xl opacity-80">benev</h1>
 						<h2 class="opacity-90 text-sm mt-2">Ta plateforme de gestion de bénévole</h2>
@@ -38,7 +38,7 @@
 		<!-- ACTIVES EVENTS -->
 		{#if data.events.length}
 			<div class="flex gap-2 items-center mt-10 mb-4">
-				<h2 class="text-xl">Évènements à venir</h2>
+				<h2 class="text-xl font-semibold text-base-content/70">Évènements à venir</h2>
 			</div>
 
 			<ul class="flex flex-col gap-2 mt-2">
