@@ -1,10 +1,36 @@
 import z from 'zod'
-import type { Prisma } from '@prisma/client'
-import type { ZodObj } from './utils'
+import type { Prisma, EventState } from '@prisma/client'
+import { toTuple, type ZodObj } from './utils'
+import { mdiArchiveOutline, mdiEarth, mdiTestTube } from '@mdi/js'
 
-export type EventCreateForm = Omit<Prisma.EventCreateInput, 'owner'>
+export type EventCreateInput = Omit<Prisma.EventCreateInput, 'owner'>
+export type EventUpdateInput = Omit<Prisma.EventUpdateInput, 'owner'>
 
-const form = {
+export const eventStates: Record<
+	EventState,
+	{ label: string; icon: string; description: string; class: string }
+> = {
+	draft: {
+		icon: mdiTestTube,
+		label: 'Évènement en projet',
+		class: 'border-warning bg-warning/50',
+		description: 'Seul les responsables ont accès au site.',
+	},
+	active: {
+		icon: mdiEarth,
+		label: 'Évènement publié',
+		class: 'border-success bg-success/50',
+		description: `Le site est disponibles pour tout les mondes.`,
+	},
+	archived: {
+		icon: mdiArchiveOutline,
+		label: 'Évènement archivé',
+		class: 'bg-base-200',
+		description: `Le site est marqué comme inactif.`,
+	},
+}
+
+const create = {
 	id: z.string().toLowerCase().min(3),
 	name: z.string().min(3),
 	date: z.string().optional(),
@@ -14,6 +40,13 @@ const form = {
 	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
 	address: z.string().optional(),
-} satisfies ZodObj<EventCreateForm>
+	state: z.enum(toTuple(eventStates)).optional(),
+} satisfies ZodObj<EventCreateInput>
 
-export const eventShema = z.object(form)
+const update = {
+	...create,
+	name: z.string().min(3).optional(),
+} satisfies ZodObj<EventUpdateInput>
+
+export const eventShemaCreate = z.object(create)
+export const eventShemaUpdate = z.object(update)

@@ -1,4 +1,4 @@
-import { eventShema, memberFieldShema, memberFieldShemaUpdate } from '$lib/form'
+import { eventShemaUpdate, memberFieldShema, memberFieldShemaUpdate } from '$lib/form'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { z } from 'zod'
 
@@ -14,7 +14,7 @@ export const load = async ({ params }) => ({
 export const actions = {
 	update_event: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, eventShema)
+		const { err, data } = await parseFormData(request, eventShemaUpdate)
 		if (err) return err
 
 		return tryOrFail(() =>
