@@ -17,11 +17,11 @@
 	<div class="max-w-lg mx-auto">
 		<div class="card bg-base-100 shadow">
 			<div class="card-body">
-				<div class="flex flex-wrap gap-10 items-center justify-center">
+				<div class="flex flex-col gap-10 items-center justify-center text-center">
 					<img src={logo} alt="Logo benev" class="w-36" />
 					<div>
 						<h1 class="font-medium text-2xl opacity-80">benev</h1>
-						<h2 class="opacity-90 text-sm mt-2">Ta plateforme de gestion de bénévole</h2>
+						<h2 class="opacity-90 text-sm mt-2">Ta plateforme de gestion de bénévoles</h2>
 					</div>
 				</div>
 				
@@ -31,7 +31,6 @@
 					</a>
 				</div>
 			
-
 			</div>
 		</div>
 

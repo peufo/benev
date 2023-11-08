@@ -27,11 +27,12 @@
       />
     {/if}
 
-    <MemberRole roles={member.roles} class="ml-auto" />
+    <div class="grow"></div>
+    <MemberRole roles={member.roles}  />
   </div>
 
   <div class="flex gap-2 mt-4">
-    <div class="badge">
+    <div class="badge whitespace-nowrap">
       {#if nbSubscribes}
         <b class="mr-1 opacity-80">{nbSubscribes}</b>
         <span>Inscription{nbSubscribes > 1 ? 's' : ''}</span>
@@ -41,7 +42,7 @@
     </div>
 
     {#if nbLeaderOf}
-      <div class="badge">
+      <div class="badge whitespace-nowrap">
         <b class="mr-1 opacity-80">{nbLeaderOf}</b>
         <span>Secteur{nbLeaderOf > 1 ? 's' : ''} à charge</span>
       </div>
