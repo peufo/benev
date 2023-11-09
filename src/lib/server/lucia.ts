@@ -27,7 +27,7 @@ export const githubAuth = github(auth, {
 export const googleAuth = google(auth, {
 	clientId: GOOGLE_CLIENT_ID,
 	clientSecret: GOOGLE_CLIENT_SECRET,
-	redirectUri: 'http://localhost:5173/auth/google/callback',
+	redirectUri: 'https://benev.io/auth/google/callback',
 })
 
 export type Auth = typeof auth
