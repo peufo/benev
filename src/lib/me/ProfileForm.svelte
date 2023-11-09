@@ -13,24 +13,28 @@
 
 	let verificationEmailSent = false
 
-	const successMessages: Record<string, string> = {
-		'?/update_profile': 'Profile sauvegardé',
-		'?/verify_email': 'Un email de verification à été envoyé',
-	}
+	
 	const verificationEmailMessage = 'Un email de verification à été envoyé'
-	const form = useForm({
+	const formProfile = useForm({
 		successReset: false,
-		successMessage: (action) => {
-			if (action.search === '?/verify_email') verificationEmailSent = true
-			return successMessages[action.search] || 'Succès'
-		},
+		successMessage: 'Profile sauvegardé',
 	})
+
+	const formEmailVerification = useForm({
+		successMessage: verificationEmailMessage,
+		successCallback() {
+			verificationEmailSent = true
+		}
+	})
+
 </script>
+
+<form id="verify_email" method="post" action="/me?/verify_email" use:enhance={formEmailVerification.submit}></form>
 
 <form
 	method="post"
 	action="/me?/update_profile"
-	use:enhance={form.submit}
+	use:enhance={formProfile.submit}
 	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4"
 >
 	<FormControl
@@ -56,9 +60,8 @@
 				</div>
 			{:else}
 				<button
-					
+					form="verify_email"
 					class="btn btn-square join-item"
-					formaction="/me?/verify_email"
 					disabled={verificationEmailSent}
 				>
 					<Icon path={mdiAlertOctagonOutline} class="fill-warning" title="Valide ton email" />
