@@ -17,7 +17,7 @@
 </script>
 
 <div class="grid place-content-center p-10">
-  <div class="card w-96 place-content-center bg-base-100 shadow-xl">
+  <div style:width="min(24rem, calc(100vw - 1rem))" class="card place-content-center bg-base-100 shadow-xl">
     <div class="tabs w-full">
       <span
         role="button"
@@ -67,7 +67,7 @@
       <div class="card-actions flex-row-reverse items-center">
       
         <button class="btn" formaction="/me{state === 'login' ? '?/login' : '?/register'}">
-          {state === 'login' ? 'Connexion' : 'Créer un compte'}
+          {state === 'login' ? 'Connexion' : 'Valider'}
         </button>
         <div class="grow">
         </div>
