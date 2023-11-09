@@ -14,10 +14,13 @@
 	let createDialog: HTMLDialogElement
 	const notify = useNotify()
 	function handleClickNewEvent() {
-		if (!data.user?.isEmailVerified) {
+		
+		// TODO: Réparer les envois d'email
+		if (false && !data.user?.isEmailVerified) {
 			notify.warning(`Tu dois d'abord valider ton email`)
 			return
 		}
+		
 		createDialog.showModal()
 	}
 </script>
