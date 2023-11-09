@@ -1,6 +1,7 @@
 import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } from '$env/static/private'
 import nodemailer, { type SendMailOptions } from 'nodemailer'
 import type { ComponentProps, ComponentType } from 'svelte'
+import { prisma } from './prisma'
 
 export const transporter = nodemailer.createTransport({
 	host: SMTP_HOST,
@@ -47,4 +48,9 @@ export async function sendEmailTemplate<Component extends ComponentType>(
 		...options,
 		html,
 	})
+}
+
+export async function generateEmail() {
+	const userCount = await prisma.user.count()
+	return `guest-${userCount + 1}@benev.io`
 }

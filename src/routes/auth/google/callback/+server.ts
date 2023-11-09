@@ -1,6 +1,6 @@
 import { OAuthRequestError } from '@lucia-auth/oauth'
 import { error } from '@sveltejs/kit'
-import { auth, googleAuth, prisma } from '$lib/server'
+import { auth, generateEmail, googleAuth, prisma } from '$lib/server'
 
 export const GET = async ({ url, cookies, locals }) => {
 	const storedState = cookies.get('google_oauth_state')
@@ -13,8 +13,6 @@ export const GET = async ({ url, cookies, locals }) => {
 	try {
 		const { getExistingUser, googleUser, createUser } = await googleAuth.validateCallback(code)
 
-		console.log(googleUser)
-
 		const getUser = async () => {
 			const existingUser = await getExistingUser()
 			if (existingUser) return existingUser
@@ -23,10 +21,10 @@ export const GET = async ({ url, cookies, locals }) => {
 				if (dbUser) return { ...dbUser, userId: dbUser.id }
 			}
 
-			const email = googleUser.email || `${googleUser.sub}@benev.io`
+			const email = googleUser.email || (await generateEmail())
 			const user = await createUser({
 				attributes: {
-					firstName: googleUser.name,
+					firstName: googleUser.name.split(' ')[0],
 					lastName: googleUser.family_name,
 					avatarPlaceholder: googleUser.picture,
 					email,

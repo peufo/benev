@@ -1,6 +1,6 @@
 import { OAuthRequestError } from '@lucia-auth/oauth'
 import { error } from '@sveltejs/kit'
-import { auth, githubAuth, prisma } from '$lib/server'
+import { auth, generateEmail, githubAuth, prisma } from '$lib/server'
 
 export const GET = async ({ url, cookies, locals }) => {
 	const storedState = cookies.get('github_oauth_state')
@@ -21,7 +21,7 @@ export const GET = async ({ url, cookies, locals }) => {
 				if (dbUser) return { ...dbUser, userId: dbUser.id }
 			}
 
-			const email = githubUser.email || `${githubUser.login}@benev.io`
+			const email = githubUser.email || (await generateEmail())
 			const firstName = githubUser.name?.split(' ')[0] || githubUser.login
 			const lastName = githubUser.name?.split(' ')[1] || githubUser.login
 			const user = await createUser({
