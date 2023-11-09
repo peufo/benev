@@ -12,7 +12,7 @@
 	href={$eventPath ? `${$eventPath}/me` : `/me`}
 	class="
 		btn bg-base-100 btn-square grid place-content-center
-		hover:shadow-lg transition-shadow
+		hover:shadow-lg transition-shadow ml-2
 	"
 >
 	{#if user}

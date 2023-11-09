@@ -21,7 +21,7 @@
 	<button
 		slot="activator"
 		class="
-			btn btn-square
+			btn btn-square ml-2
 			{adminIsVisible ? '' : 'lg:hidden'}
 		"
 	>

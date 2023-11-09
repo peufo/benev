@@ -10,6 +10,8 @@
 	import Avatar from './Avatar.svelte'
 
 	export let user: User
+	let klass = ''
+	export {klass as class}
 
 	let dialog: HTMLDialogElement
 	let tip: TippyInstance
@@ -48,9 +50,9 @@
 		<button
 			slot="activator"
 			type="button"
-			class="border rounded-lg hover:shadow-lg transition-shadow overflow-hidden block"
+			class="rounded-lg hover:shadow-lg transition-shadow overflow-hidden block"
 		>
-			<Avatar {user} class="h-28 w-28" />
+			<Avatar {user} class="h-28 w-28 {klass}" />
 		</button>
 
 		<div class="flex flex-col">

@@ -25,19 +25,22 @@
 </svelte:head>
 
 <Header user={data.user}>
-	<div class="contents" slot="start">
 		<a
+			slot="start"
 			href={$eventPath}
-			class="text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg"
+			class="
+				text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg
+				whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0
+			"
 		>
 			{#if data.event.logo}
 				<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}" />
 			{/if}
-			<span>
+			<span class="whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0">
 				{data.event.name}
 			</span>
 		</a>
-	</div>
+	
 	<div slot="end" class="contents">
 		{#if !accessDenied}
 			<EventMenu pages={data.pages} />

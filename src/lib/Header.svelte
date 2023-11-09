@@ -7,14 +7,9 @@
 
 <div class="p-2">
 	<header class="navbar rounded-2xl bg-base-100 shadow-xl">
-		<div class="gap-2">
-			<slot name="start" />
-		</div>
+		<slot name="start" />
 		<div class="grow" />
-		<div class="gap-2">
-			<slot name="end" />
-
-			<AuthIcon {user} />
-		</div>
+		<slot name="end" />
+		<AuthIcon {user} />
 	</header>
 </div>

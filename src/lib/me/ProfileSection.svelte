@@ -9,20 +9,20 @@
 
 <SectionCollapse value="profile">
 	<div slot="logo" class="m-2 py-0 md:py-6 md:ml-8 shrink-0">
-		<AvatarForm {user} />
+		<AvatarForm {user} class="h-20 w-20 sm:h-28 sm:w-28" />
 	</div>
-
-	<div slot="title">
+	<svelte:fragment slot="title">
 		<slot name="title">
 			{user.firstName}
 			{user.lastName}
 		</slot>
-	</div>
-	<div slot="subtitle">
+	</svelte:fragment>
+
+	<svelte:fragment slot="subtitle">
 		<slot name="subtitle">
-			<p>Profil et préférences communes à tous les événements.</p>
+			<p>Profil général et préférences</p>
 		</slot>
-	</div>
+	</svelte:fragment>
 
 	<slot>
 		<ProfileForm {user} />

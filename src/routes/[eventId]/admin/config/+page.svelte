@@ -13,7 +13,8 @@
 		<EventStateForm event={data.event} />
 
 		<SectionCollapse value="infos" class="grow">
-			<span slot="title">Paramètres et préférences</span>
+			<span slot="title">L'évènement</span>
+			<span slot="subtitle">Informations publiques relatives à ton évènement</span>
 			<EventForm isUpdate successReset={false} event={data.event} class="grow" />
 		</SectionCollapse>
 

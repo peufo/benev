@@ -18,14 +18,17 @@
 <div class="max-w-3xl mx-auto flex flex-col gap-4">
 	{#if data.member?.isValidedByUser}
 		<ProfileSection user={data.user}>
-			<div slot="title" class="flex flex-wrap">
-				<a href="/me" class="link link-hover">
-					{data.user.firstName}
-					{data.user.lastName}
-				</a>
-				<span class="flex">
+			<svelte:fragment slot="title" >
+				<div class="flex">
+					<a href="/me" class="link link-hover">
+						{data.user.firstName}
+						{data.user.lastName}
+					</a>
 					<Icon path={mdiSlashForward} size={18} />
-					<span class="whitespace-nowrap text-ellipsis">
+				</div>
+
+				<div class="flex">
+					<span class="overflow-hidden whitespace-nowrap text-ellipsis min-w-0">
 						{data.event.name}
 					</span>
 					{#if data.event.state !== 'active'}
@@ -36,16 +39,14 @@
 							title={eventStates[data.event.state].label}
 						/>
 					{/if}
-				</span>
-			</div>
+				</div>
+			</svelte:fragment>
 
 			<span slot="subtitle">
 				<MemberRole roles={data.member.roles} />
 			</span>
 
-			<h3 class="font-medium text-base-content/70 mt-4">
-				Informations commune à tous les événements
-			</h3>
+			<h3 class="font-medium text-base-content/70 mt-4">Profil général</h3>
 			<ProfileForm user={data.user} />
 
 			{#if data.member.event.memberFields.length}
@@ -69,12 +70,7 @@
 			<LeaderOf teams={data.member.leaderOf} />
 		{/if}
 	{:else}
-		<MemberForm
-			event={data.event}
-			userId={data.user.id}
-			class="mx-auto"
-			noCancelButton
-		/>
+		<MemberForm event={data.event} userId={data.user.id} class="mx-auto" noCancelButton />
 	{/if}
 
 	<div class="flex gap-2 justify-between flex-wrap">
