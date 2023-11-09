@@ -84,7 +84,7 @@
 		</form>
 
 		<div class="flex p-4 gap-4 justify-center">
-			<a href="/auth/google" class="btn btn-square" use:tip={{ content: 'Connection avec Google' }}>
+			<a href="/auth/google" class="btn btn-square" use:tip={{ content: 'Connexion avec Google' }}>
 				<img src={googleLogo} alt="Logo Google" />
 			</a>
 
@@ -94,7 +94,7 @@
 				data-sveltekit-preload-data="off"
 				data-sveltekit-preload-code="off"
 			>
-				<Icon path={mdiGithub} title="Connection avec Github" />
+				<Icon path={mdiGithub} title="Connexion avec Github" />
 			</a>
 		</div>
 	</div>

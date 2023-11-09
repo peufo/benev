@@ -1,5 +1,5 @@
 import { OAuthRequestError } from '@lucia-auth/oauth'
-import { error, redirect } from '@sveltejs/kit'
+import { error } from '@sveltejs/kit'
 import { auth, githubAuth, prisma } from '$lib/server'
 
 export const GET = async ({ url, cookies, locals }) => {
