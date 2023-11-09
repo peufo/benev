@@ -84,7 +84,7 @@
 		</form>
 
 		<div class="flex p-4 gap-4 justify-center">
-			<a href="/auth/google" class="btn btn-square" use:tip={{ content: 'Connexion avec Google' }}>
+			<a href="/auth/google" class="btn btn-square btn-disabled" use:tip={{ content: 'Connexion avec Google' }}>
 				<img src={googleLogo} alt="Logo Google" />
 			</a>
 
