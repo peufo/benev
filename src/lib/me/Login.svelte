@@ -22,7 +22,7 @@
       <span
         role="button"
         tabindex="0"
-        class="tab tab-lg grow tab-lifted"
+        class="tab tab-lg grow tab-lifted rounded-t-2xl"
         class:tab-active={state === 'login'}
         on:click={() => (state = 'login')}
         on:keyup={() => (state = 'login')}
@@ -32,7 +32,7 @@
       <span
         role="button"
         tabindex="0"
-        class="tab tab-lg grow tab-lifted"
+        class="tab tab-lg grow tab-lifted rounded-t-2xl"
         class:tab-active={state === 'register'}
         on:click={() => (state = 'register')}
         on:keyup={() => (state = 'register')}
