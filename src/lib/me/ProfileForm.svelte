@@ -92,7 +92,7 @@
 		value={user.wantsNotification}
 	/>
 
-	<div class="flex items-center col-span-full">
+	<div class="flex gap-1 items-center col-span-full">
 		<span class="text-xs opacity-70">
 			Ces informations ne sont partagées qu'avec les responsables des événements auquels tu
 			participes.
