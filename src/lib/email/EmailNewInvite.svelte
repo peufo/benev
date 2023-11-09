@@ -18,7 +18,7 @@
 		<p>
 			Tu peux accéder à ton compte et définir ton mot de passe en
 			<a
-				href="{domain}/token/{tokenId}/reset_password?callback=/{member.eventId}/invite"
+				href="{domain}/token/{tokenId}/reset_password?redirectTo=/{member.eventId}/invite"
 				data-sveltekit-preload-data="off"
 			>
 				cliquant sur ce lien.

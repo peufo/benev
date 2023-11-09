@@ -31,7 +31,7 @@ async function leaderOfTeam(teamId: string, locals: App.Locals) {
 }
 
 export function redirectToAuth(url: URL) {
-	return redirect(302, `/auth?callback=${url.pathname}`)
+	return redirect(302, `/auth?redirectTo=${url.pathname}`)
 }
 export async function getUserIdOrRedirect(url: URL, locals: App.Locals) {
 	const session = await locals.auth.validate()

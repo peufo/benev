@@ -16,6 +16,8 @@
 		},
 	})
 	let state: 'login' | 'register' = 'login'
+
+	$: redirectTo = $page.url.searchParams.get('redirectTo')
 </script>
 
 <div class="grid place-content-center p-10">
@@ -46,7 +48,11 @@
 			</span>
 		</div>
 
-		<form class="card-body border border-t-0 border-base-300" method="post" use:enhance={form.submit}>
+		<form
+			class="card-body border border-t-0 border-base-300"
+			method="post"
+			use:enhance={form.submit}
+		>
 			{#if state === 'register'}
 				<div transition:slide|local class="flex flex-col gap-2">
 					<div class="grid grid-cols-2 gap-2">
@@ -61,8 +67,8 @@
 			<InputText key="email" label="Email" />
 			<InputPassword key="password" label="Mot de passe" />
 
-			{#if $page.url.searchParams.get('callback')}
-				<input type="hidden" name="callback" value={$page.url.searchParams.get('callback')} />
+			{#if redirectTo}
+				<input type="hidden" name="redirectTo" value={redirectTo} />
 			{/if}
 
 			<div class="card-actions flex-row-reverse items-center pt-4">
@@ -82,7 +88,12 @@
 				<img src={googleLogo} alt="Logo Google" />
 			</a>
 
-			<a href="/auth/github" class="btn btn-square">
+			<a
+				href="/auth/github"
+				class="btn btn-square"
+				data-sveltekit-preload-data="off"
+				data-sveltekit-preload-code="off"
+			>
 				<Icon path={mdiGithub} title="Connection avec Github" />
 			</a>
 		</div>

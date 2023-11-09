@@ -9,7 +9,7 @@ export const actions = {
 			request,
 			z.object({
 				password: z.string().min(8),
-				callback: z.string().optional(),
+				redirectTo: z.string().optional(),
 			})
 		)
 		if (err) return err
@@ -30,7 +30,7 @@ export const actions = {
 		} catch {
 			throw error(401, 'Invalid token')
 		} finally {
-			if (data.callback) throw redirect(302, data.callback)
+			if (data.redirectTo) throw redirect(302, data.redirectTo)
 			throw redirect(302, '/me')
 		}
 	},

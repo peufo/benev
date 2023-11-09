@@ -10,7 +10,7 @@
 
 	const form = useForm()
 
-	const callback = $page.url.searchParams.get('callback')
+	const redirectTo = $page.url.searchParams.get('redirectTo')
 </script>
 
 <Header user={data.user} />
@@ -19,8 +19,8 @@
 	<div class="card bg-base-100 max-w-md m-auto">
 		<form method="post" class="card-body" use:enhance={form.submit}>
 			<InputPassword key="password" label="Nouveau mot de passe" />
-			{#if callback}
-				<input type="hidden" name="callback" value={callback} />
+			{#if redirectTo}
+				<input type="hidden" name="redirectTo" value={redirectTo} />
 			{/if}
 
 			<div class="flex justify-end">

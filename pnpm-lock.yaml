@@ -17,6 +17,9 @@ dependencies:
   '@lucia-auth/adapter-prisma':
     specifier: ^3.0.0
     version: 3.0.0(@prisma/client@5.5.2)(lucia@2.0.0)
+  '@lucia-auth/oauth':
+    specifier: ^3.4.0
+    version: 3.4.0(lucia@2.0.0)
   '@mdi/js':
     specifier: ^7.2.96
     version: 7.2.96
@@ -41,6 +44,9 @@ dependencies:
   editorjs-html:
     specifier: ^3.4.3
     version: 3.4.3
+  i:
+    specifier: ^0.3.7
+    version: 0.3.7
   js-confetti:
     specifier: ^0.11.0
     version: 0.11.0
@@ -483,6 +489,14 @@ packages:
       lucia: ^2.0.0
     dependencies:
       '@prisma/client': 5.5.2(prisma@5.5.2)
+      lucia: 2.0.0
+    dev: false
+
+  /@lucia-auth/oauth@3.4.0(lucia@2.0.0):
+    resolution: {integrity: sha512-3W4TaCiyUViXK2e2+VJo5324agvYz3102I2YKIttkGDKcevaNpLG3LgiR2rbemyF5UXFKiHgfFvRtKs/KDa9kw==}
+    peerDependencies:
+      lucia: ^2.0.0
+    dependencies:
       lucia: 2.0.0
     dev: false
 
@@ -1801,6 +1815,11 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+
+  /i@0.3.7:
+    resolution: {integrity: sha512-FYz4wlXgkQwIPqhzC5TdNMLSE5+GS1IIDJZY/1ZiEPCT2S3COUVZeT5OW4BmW4r5LHLQuOosSwsvnroG9GR59Q==}
+    engines: {node: '>=0.4'}
+    dev: false
 
   /ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
