@@ -15,7 +15,7 @@
 
 <div class="flex flex-col gap-4 max-w-5xl m-auto">
 	<Card bodyClass="sm:pt-4">
-		<div slot="top" class="flex gap-2 p-2 border-b rounded-t-2xl">
+		<div slot="top" class="sticky top-0 bg-base-100 shadow-sm z-10 flex gap-2 p-2 border-b rounded-t-2xl">
 			{#each $adminTabs as { path, query, label, icon }}
 				{@const active = path === activeTab?.path}
 				<a
@@ -32,7 +32,7 @@
 			{/each}
 		</div>
 
-		<h2 slot="title" class="sm:hidden">
+		<h2 slot="title" class="sm:hidden text-center pb-2">
 			{activeTab?.label}
 		</h2>
 
