@@ -1,28 +1,24 @@
 import z from 'zod'
-import type { Prisma, $Enums } from '@prisma/client'
-import { toTuple, type ZodObj } from './utils'
+import type { Prisma } from '@prisma/client'
+import { type ZodObj } from './utils'
 
-const passwordResetForm = {
-	email: z.string().email().toLowerCase(),
-}
-export const passwordResetShema = z.object(passwordResetForm)
-
-const loginForm = {
+const login = {
 	email: z.string().email().toLowerCase(),
 	password: z.string().min(8),
 }
-export const loginShema = z.object(loginForm)
+export const loginShema = z.object(login)
 
-const registerForm = {
-	...loginForm,
+const register = {
+	...login,
 	firstName: z.string().min(2).trim(),
 	lastName: z.string().min(2).trim(),
 	phone: z.string().trim().optional(),
 }
-export const registerShema = z.object(registerForm)
+export const registerShema = z.object(register)
 
-type UserForm = Omit<Prisma.UserUncheckedCreateInput, 'id' | 'email'>
-const userForm = {
+type UserUpdate = Omit<Prisma.UserUncheckedCreateInput, 'id'>
+const userUpdate = {
+	email: z.string().email().toLowerCase(),
 	firstName: z.string().min(2),
 	lastName: z.string().min(2),
 	phone: z.string().optional(),
@@ -31,5 +27,5 @@ const userForm = {
 	zipCode: z.string().optional(),
 	city: z.string().optional(),
 	wantsNotification: z.boolean().optional(),
-} satisfies ZodObj<UserForm>
-export const userShema = z.object(userForm)
+} satisfies ZodObj<UserUpdate>
+export const userUpdateShema = z.object(userUpdate)

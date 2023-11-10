@@ -49,8 +49,6 @@
 				type="text"
 				name="email"
 				id="email"
-				readonly
-				disabled
 				class="input-bordered input join-item grow"
 			/>
 

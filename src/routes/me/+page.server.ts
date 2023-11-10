@@ -15,10 +15,10 @@ import {
 	tryOrFail,
 	createAvatarPlaceholder,
 } from '$lib/server'
-import { loginShema, passwordResetShema, registerShema } from '$lib/form'
+import { loginShema, registerShema } from '$lib/form'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
 import { MEDIA_DIR } from '$env/static/private'
-import { userShema } from '$lib/form'
+import { userUpdateShema } from '$lib/form'
 
 export const load = async ({ url, parent }) => {
 	const { user } = await parent()
@@ -71,15 +71,7 @@ export const actions = {
 			const session = await auth.createSession({ userId: user.userId, attributes: {} })
 			locals.auth.setSession(session)
 
-			const tokenId = await generateToken('emailVerification', session.user.id)
-			sendEmailTemplate(EmailVerificationLink, {
-				to: session.user.email,
-				subject: 'Bienvenue',
-				props: {
-					isNewUser: true,
-					tokenId,
-				},
-			})
+			sendVerificationEmail(session.user, 'Bienvenue')
 		})
 	},
 	login: async ({ request, locals }) => {
@@ -100,15 +92,13 @@ export const actions = {
 	verify_email: async ({ locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) return fail(401)
-		const tokenId = await generateToken('emailVerification', session.user.id)
-		await sendEmailTemplate(EmailVerificationLink, {
-			to: session.user.email,
-			subject: 'Verification de ton Email',
-			props: { tokenId },
-		})
+		await sendVerificationEmail(session.user)
 	},
 	reset_password: async ({ request }) => {
-		const { err, data } = await parseFormData(request, passwordResetShema)
+		const { err, data } = await parseFormData(
+			request,
+			z.object({ email: z.string().email().toLowerCase() })
+		)
 		if (err) return err
 		return tryOrFail(async () => {
 			const user = await prisma.user.findUniqueOrThrow({
@@ -127,15 +117,22 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data, formData } = await parseFormData(request, userShema)
+		const { err, data } = await parseFormData(request, userUpdateShema)
 		if (err) return err
 
-		return tryOrFail(() =>
-			prisma.user.update({
+		return tryOrFail(async () => {
+			const { userId } = session.user
+			const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } })
+			const emailUpdated = user.email !== data.email
+			if (emailUpdated) sendVerificationEmail(user)
+			return prisma.user.update({
 				where: { id: session.user.userId },
-				data,
+				data: {
+					...data,
+					...(emailUpdated ? { isEmailVerified: false } : {}),
+				},
 			})
-		)
+		})
 	},
 	generate_avatar: async ({ locals }) => {
 		const session = await locals.auth.validate()
@@ -233,4 +230,16 @@ export const actions = {
 			locals.auth.setSession(null)
 		}, '/')
 	},
+}
+
+async function sendVerificationEmail(
+	user: { id: string; email: string },
+	subject = 'Verification de ton Email'
+) {
+	const tokenId = await generateToken('emailVerification', user.id)
+	await sendEmailTemplate(EmailVerificationLink, {
+		to: user.email,
+		subject,
+		props: { tokenId },
+	})
 }
