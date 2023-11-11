@@ -39,5 +39,5 @@ export async function GET() {
 function urlElement(pathname: string, updatedAt?: Date) {
 	const loc = `<loc>https://benev.io${pathname}</loc>`
 	const lastMod = updatedAt ? `<lastmod>${updatedAt.toJSON()}</lastmod>` : ''
-	return loc + lastMod
+	return `<url>${loc + lastMod}</url>`
 }
