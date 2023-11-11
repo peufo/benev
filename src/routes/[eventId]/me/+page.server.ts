@@ -33,6 +33,7 @@ export const actions = {
 
 		return tryOrFail(async () => {
 			const formData = Object.fromEntries(await request.formData())
+			// TODO: use parseFormData z.object
 			const { memberId, ...data }: Record<string, string> = Object.entries(formData)
 				.filter(([key]) => !key.startsWith('ignored_'))
 				.reduce(
