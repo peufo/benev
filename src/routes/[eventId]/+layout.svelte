@@ -1,7 +1,6 @@
 <script lang="ts">
 	import {
-	mdiArrowLeft,
-		mdiChevronRight,
+		mdiArrowLeft,
 		mdiEmailOutline,
 		mdiMapMarkerOutline,
 		mdiPhoneOutline,
@@ -25,27 +24,27 @@
 </svelte:head>
 
 <Header user={data.user}>
-		<a
-			slot="start"
-			href={$eventPath}
-			class="
+	<a
+		slot="start"
+		href={$eventPath}
+		class="
 				text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg
 				whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0
 			"
-		>
-			{#if data.event.logo}
-				<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}" />
-			{/if}
-			<span class="whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0">
-				{data.event.name}
-			</span>
-		</a>
-	
-	<div slot="end" class="contents">
+	>
+		{#if data.event.logo}
+			<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}" />
+		{/if}
+		<span class="whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0">
+			{data.event.name}
+		</span>
+	</a>
+
+	<svelte:fragment slot="end">
 		{#if !accessDenied}
 			<EventMenu pages={data.pages} />
 		{/if}
-	</div>
+	</svelte:fragment>
 </Header>
 
 <main class="grow p-2">
@@ -63,7 +62,7 @@
 
 			<div class="mt-8">
 				<a href="/me" class="btn btn-sm">
-					<Icon path={mdiArrowLeft}/>
+					<Icon path={mdiArrowLeft} />
 					<span>mon profil</span>
 				</a>
 			</div>

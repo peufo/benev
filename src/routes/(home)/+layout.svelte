@@ -3,6 +3,7 @@
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
 	import Benev from '$lib/Benev.svelte'
+	import HomeMenu from './HomeMenu.svelte'
 
 	export let data
 </script>
@@ -20,6 +21,10 @@
 
 		<Benev class="mx-2 text-2xl" />
 	</a>
+
+	<svelte:fragment slot="end">
+		<HomeMenu />
+	</svelte:fragment>
 </Header>
 
 <main class="grow p-2">
