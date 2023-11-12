@@ -3,13 +3,23 @@
 	import logo from '$lib/assets/logo.svg'
 	import Header from '$lib/Header.svelte'
 	import Footer from '$lib/Footer.svelte'
+	import Benev from '$lib/Benev.svelte'
 
 	export let data
 </script>
 
 <Header user={data.user}>
-	<a slot="start" class="btn-ghost text-lg btn btn-square" href="/">
+	<a
+		slot="start"
+		href="/"
+		class="
+			text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg
+			whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0
+		"
+	>
 		<img src={logo} alt="logo benev" class="w-9 h-9" height="512" width="512" />
+
+		<Benev class="mx-2 text-2xl" />
 	</a>
 </Header>
 
@@ -17,20 +27,27 @@
 	<div class="max-w-lg mx-auto">
 		<div class="card bg-base-100 shadow">
 			<div class="card-body">
-				<div class="flex flex-col gap-10 items-center justify-center text-center">
-					<img src={logo} alt="Logo benev" class="w-36" />
-					<div>
-						<h1 class="font-medium text-2xl opacity-80">benev</h1>
-						<h2 class="opacity-90 text-sm mt-2">Ta plateforme de gestion de bénévoles</h2>
+				<div class="text-center">
+					<img src={logo} alt="Logo benev" class="w-36 mx-auto" />
+
+					<h1 class="mt-2 text-4xl">
+						<Benev />
+					</h1>
+
+					<h2 class="text-base-content/80 text-sm mt-10">Ta plateforme de gestion de bénévoles</h2>
+
+					<div class="mt-2">
+						<span class="badge text-base-content/80 shadow-md">simple</span>
+						<span class="badge text-base-content/80 shadow-md">open source</span>
+						<span class="badge text-base-content/80 shadow-md">abordable</span>
 					</div>
 				</div>
-				
-				<div class="grid place-content-center mt-14 mb-10">
+
+				<div class="grid place-content-center mt-12 mb-10">
 					<a href="/me" class="btn btn-secondary">
 						{data.user ? 'Voir mes évènements' : 'Essayer maintenant'}
 					</a>
 				</div>
-			
 			</div>
 		</div>
 
