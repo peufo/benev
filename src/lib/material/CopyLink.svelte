@@ -9,7 +9,7 @@
 
 	function handleClick() {
 		navigator.clipboard
-			.writeText(`https://benev.ch${path}`)
+			.writeText(`https://benev.io${path}`)
 			.then(() => {
 				notify.success(`Lien copié`)
 			})

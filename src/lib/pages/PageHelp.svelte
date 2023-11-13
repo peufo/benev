@@ -55,7 +55,7 @@
 		Il ne te reste maintenant plus qu'à partager ton évènement
 		<b class="whitespace-nowrap">
 			👉
-			<a href="https://benev.ch{$eventPath}">https://benev.ch{$eventPath}</a>
+			<a href="https://benev.io{$eventPath}">https://benev.io{$eventPath}</a>
 		</b>
 	</p>
 </section>

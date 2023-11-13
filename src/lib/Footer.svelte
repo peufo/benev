@@ -7,8 +7,8 @@
 	<slot />
 
 	<div class="flex">
-		<a href="/" class="btn btn-sm btn-square" use:tip={{ content: 'benev.ch' }}>
-			<img src={logo} alt="logo de benev.ch" class="h-5" />
+		<a href="/" class="btn btn-sm btn-square" use:tip={{ content: 'benev.io' }}>
+			<img src={logo} alt="logo de benev.io" class="h-5" />
 		</a>
 		<a href="https://github.com/peufo" class="link link-hover"> Created by peufo </a>
 	</div>

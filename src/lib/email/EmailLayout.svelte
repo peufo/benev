@@ -71,7 +71,7 @@
 									<p style="color:#666666;font-size:12px;line-height:24px">
 										Gestion des bénévoles par
 										<a href={domain} style="color:#067df7; text-decoration:none" target="_blank">
-											benev.ch
+											benev.io
 										</a>
 									</p>
 

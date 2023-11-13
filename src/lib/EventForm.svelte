@@ -44,7 +44,7 @@
 			key="name"
 			label="Nom de l'évènement"
 			bind:value={event.name}
-			hint={isUpdate ? '' : `benev.ch/${event.id}`}
+			hint={isUpdate ? '' : `benev.io/${event.id}`}
 		/>
 		<input type="hidden" name="id" value={event.id} />
 	{:else}
@@ -52,7 +52,7 @@
 			key="name"
 			label="Nom de l'évènement"
 			bind:value={name}
-			hint={name && `benev.ch/${normalizePath(name)}`}
+			hint={name && `benev.io/${normalizePath(name)}`}
 		/>
 		<input type="hidden" name="id" value={normalizePath(name)} />
 		<input type="hidden" name="timezone" value={new Date().getTimezoneOffset()} />

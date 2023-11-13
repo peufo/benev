@@ -6,7 +6,7 @@
 	export let tokenId: string
 </script>
 
-<EmailLayout title={isNewUser ? 'Bienvenue sur benev.ch' : 'Verification de ton adresse mail'}>
+<EmailLayout title={isNewUser ? 'Bienvenue sur benev.io' : 'Verification de ton adresse mail'}>
 	<p>
 		Tu peux valider ton adresse email en
 		<a href="{domain}/token/{tokenId}/email_verification" data-sveltekit-preload-data="off">

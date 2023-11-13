@@ -1,5 +1,5 @@
 import { dev } from '$app/environment'
-export const domain = dev ? 'http://localhost:5173' : 'https://benev.ch'
+export const domain = dev ? 'http://localhost:5173' : 'https://benev.io'
 
 export { default as EmailNewSubscribe } from './EmailNewSubscribe.svelte'
 export { default as EmailSubscribeState } from './EmailSubscribeState.svelte'
