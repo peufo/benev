@@ -1,9 +1,5 @@
 import { prisma, tryOrFail } from '$lib/server'
 
-export const load = async () => ({
-	timezoneOffsetServer: new Date().getTimezoneOffset(),
-})
-
 export const actions = {
 	generate_all_avatars: async () => {
 		const users = await prisma.user.findMany()

@@ -71,11 +71,13 @@
 			<h2>5. Conditions de Vente</h2>
 			<p>
 				Open source n’est pas synonyme de gratuit. Nous aimerions que ce soit le cas, mais la mise
-				en place de benev.io à un coût. Cela représente des centaines d’heures de développement, un
-				hébergement et une disponibilité pour le support. Malgré ça, l’objectif étant de rendre le
-				projet accessible au plus grand nombre d'utilisateurs possibles, les prix appliqués sont
-				radicalement inférieurs aux applications concurrentes. Nous demandons 5 CHF par événement et
-				un coût additionnel de 0.20 CHF par membre participant à l'événement.
+				en place de benev.io à un coût. Cependant, l’objectif étant de rendre le projet accessible
+				au plus grand nombre d'utilisateurs possibles, les prix appliqués sont radicalement
+				inférieurs aux applications concurrentes.
+			</p>
+			<p>
+				Nous demandons 5 CHF par événement et un coût additionnel de 0.20 CHF par membre participant
+				à l'événement.
 			</p>
 		</section>
 
