@@ -106,7 +106,7 @@
 			</a>
 		</div>
 
-		<div class="text-center text-xs text-base-content/80 pb-2">
+		<div class="text-center text-xs text-base-content/80 pb-4">
 			En te connectant, tu acceptes
 			<a href="/terms" class="link" target="_blank"> nos conditions d'utilisations </a>
 		</div>
