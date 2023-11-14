@@ -105,5 +105,10 @@
 				<Icon path={mdiGithub} title="Connexion avec Github" />
 			</a>
 		</div>
+
+		<div class="text-center text-xs text-base-content/80 pb-2">
+			En te connectant, tu acceptes
+			<a href="/terms" class="link" target="_blank"> nos conditions d'utilisations </a>
+		</div>
 	</div>
 </div>
