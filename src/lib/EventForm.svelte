@@ -40,13 +40,13 @@
 	use:enhance={form.submit}
 >
 	{#if isUpdate && event}
+		<InputText key="name" label="Nom de l'évènement" bind:value={event.name} />
 		<InputText
-			key="name"
-			label="Nom de l'évènement"
-			bind:value={event.name}
-			hint={isUpdate ? '' : `benev.io/${event.id}`}
+			key="id"
+			label="Lien de l'évenement"
+			bind:value={event.id}
+			hint="benev.io/{event.id}"
 		/>
-		<input type="hidden" name="id" value={event.id} />
 	{:else}
 		<InputText
 			key="name"

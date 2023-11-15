@@ -19,7 +19,7 @@ export const actions = {
 
 		return tryOrFail(() =>
 			prisma.event.update({
-				where: { id: data.id },
+				where: { id: eventId },
 				data,
 			})
 		)
