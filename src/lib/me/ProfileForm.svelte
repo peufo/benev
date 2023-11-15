@@ -2,7 +2,7 @@
 	import type { User } from '@prisma/client'
 	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 	import { InputText, InputDate, FormControl } from '$lib/material/input'
 	import { Icon } from '$lib/material'
@@ -13,7 +13,6 @@
 
 	let verificationEmailSent = false
 
-	
 	const verificationEmailMessage = 'Un email de verification à été envoyé'
 	const formProfile = useForm({
 		successReset: false,
@@ -24,12 +23,16 @@
 		successMessage: verificationEmailMessage,
 		successCallback() {
 			verificationEmailSent = true
-		}
+		},
 	})
-
 </script>
 
-<form id="verify_email" method="post" action="/me?/verify_email" use:enhance={formEmailVerification.submit}></form>
+<form
+	id="verify_email"
+	method="post"
+	action="/me?/verify_email"
+	use:enhance={formEmailVerification.submit}
+/>
 
 <form
 	method="post"

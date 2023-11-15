@@ -13,10 +13,10 @@ import {
 	tryOrFail,
 	createAvatarPlaceholder,
 } from '$lib/server'
-import { loginShema, registerShema } from '$lib/form'
+import { loginShema, registerShema } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
 import { MEDIA_DIR } from '$env/static/private'
-import { userUpdateShema } from '$lib/form'
+import { userUpdateShema } from '$lib/validation'
 
 export const load = async ({ url, parent }) => {
 	const { user } = await parent()

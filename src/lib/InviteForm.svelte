@@ -3,7 +3,7 @@
 	import { Member, User } from '@prisma/client'
 
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { eventPath } from '$lib/store'
 	import { InputText } from '$lib/material'
 

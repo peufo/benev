@@ -1,4 +1,4 @@
-import { eventShemaUpdate, memberFieldShema, memberFieldShemaUpdate } from '$lib/form'
+import { eventShemaUpdate, memberFieldShema, memberFieldShemaUpdate } from '$lib/validation'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { z } from 'zod'
 

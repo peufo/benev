@@ -3,7 +3,7 @@
 
 	import { page } from '$app/stores'
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { Event } from '@prisma/client'
 	import { eventPath, urlParam } from '$lib/store'
 	import DeleteButton from './material/DeleteButton.svelte'

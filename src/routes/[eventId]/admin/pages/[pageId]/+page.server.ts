@@ -1,4 +1,4 @@
-import { pageShema } from '$lib/form'
+import { pageShema } from '$lib/validation'
 import { fail, redirect } from '@sveltejs/kit'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'

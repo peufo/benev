@@ -1,4 +1,4 @@
-import { teamShema } from '$lib/form/team'
+import { teamShema } from '$lib/validation/team'
 import { parseFormData } from '$lib/server/formData'
 import { prisma, tryOrFail, permission } from '$lib/server'
 import { error, fail } from '@sveltejs/kit'

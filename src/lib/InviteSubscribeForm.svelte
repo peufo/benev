@@ -4,7 +4,7 @@
 	import type { Props as TippyProps } from 'tippy.js'
 	import { createEventDispatcher } from 'svelte'
 	import { Dialog, Icon, InputRelation } from '$lib/material'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 	import InviteForm from '$lib/InviteForm.svelte'
 	import { api } from '$lib/api'

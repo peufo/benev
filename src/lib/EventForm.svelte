@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { slide } from 'svelte/transition'
 	import {
 		InputText,

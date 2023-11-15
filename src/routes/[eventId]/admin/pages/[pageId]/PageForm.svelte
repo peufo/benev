@@ -4,8 +4,8 @@
 	import { enhance } from '$app/forms'
 	import type { Page } from '@prisma/client'
 
-	import { useForm } from '$lib/form'
-	import { DeleteButton, Icon, InputText } from '$lib/material'
+	import { useForm } from '$lib/validation'
+	import { DeleteButton, Icon } from '$lib/material'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { mdiLink } from '@mdi/js'

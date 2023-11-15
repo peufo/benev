@@ -1,5 +1,5 @@
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
-import { periodShema } from '$lib/form'
+import { periodShema } from '$lib/validation'
 
 export const load = async ({ locals, params: { teamId } }) => {
 	const isLeaderOfTeam = await permission

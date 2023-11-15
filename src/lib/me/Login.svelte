@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition'
 	import { enhance } from '$app/forms'
 	import { InputText, InputPassword, Icon } from '$lib/material'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { page } from '$app/stores'
 	import googleLogo from '$lib/assets/google.svg'
 	import { mdiGithub } from '@mdi/js'

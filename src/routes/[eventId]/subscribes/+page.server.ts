@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { isFreeRange } from 'perod'
-import { subscribeShema } from '$lib/form'
+import { subscribeShema } from '$lib/validation'
 import { parseFormData, permission, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
 import { EmailNewSubscribe } from '$lib/email'
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types'
 	import MemberRole from '$lib/MemberRole.svelte'
-	import { eventStates } from '$lib/form'
+	import { eventStates } from '$lib/validation'
 	import { CardLink, Icon } from '$lib/material'
 
 	export let member: PageData['members'][number]

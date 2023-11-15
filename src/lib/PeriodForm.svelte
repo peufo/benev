@@ -4,7 +4,7 @@
 	import 'dayjs/locale/fr-ch'
 	dayjs.locale('fr-ch')
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { InputNumber, InputDate, InputTime } from '$lib/material/input'
 	import type { Period } from '@prisma/client'
 	import { DeleteButton } from '$lib/material'
@@ -105,7 +105,7 @@
 	<div class="flex flex-row-reverse gap-3 grow">
 		{#if period?.id}
 			{#if disableRedirect}
-			<input type="hidden" name="disableRedirect" value="true">
+				<input type="hidden" name="disableRedirect" value="true" />
 			{/if}
 			<button class="btn" type="submit">Valider</button>
 			<DeleteButton formaction="{basePath}/{period.id}?/delete_period" />

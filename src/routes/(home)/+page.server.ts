@@ -1,6 +1,6 @@
 import { error, fail } from '@sveltejs/kit'
 import { parseFormData, tryOrFail } from '$lib/server'
-import { eventShemaCreate } from '$lib/form'
+import { eventShemaCreate } from '$lib/validation'
 import { prisma } from '$lib/server'
 
 export const load = async () => {

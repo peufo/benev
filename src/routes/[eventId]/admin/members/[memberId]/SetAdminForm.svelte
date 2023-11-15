@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { PageData } from './$types'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import MemberRole from '$lib/MemberRole.svelte'
 
 	export let memberProfile: PageData['memberProfile']

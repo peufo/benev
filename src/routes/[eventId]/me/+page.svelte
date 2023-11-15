@@ -10,7 +10,7 @@
 	import LeaderOf from '$lib/LeaderOf.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
 	import MemberDeleteForm from '$lib/member/MemberDeleteForm.svelte'
-	import { eventStates } from '$lib/form'
+	import { eventStates } from '$lib/validation/index.js'
 
 	export let data
 </script>
@@ -18,7 +18,7 @@
 <div class="max-w-3xl mx-auto flex flex-col gap-4">
 	{#if data.member?.isValidedByUser}
 		<ProfileSection user={data.user}>
-			<svelte:fragment slot="title" >
+			<svelte:fragment slot="title">
 				<div class="flex">
 					<a href="/me" class="link link-hover">
 						{data.user.firstName}

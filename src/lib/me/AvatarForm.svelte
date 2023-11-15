@@ -4,7 +4,7 @@
 	import { mdiReload, mdiTrashCanOutline } from '@mdi/js'
 
 	import { Icon } from '$lib/material'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 	import Avatar from './Avatar.svelte'
 	import { InputImage } from '$lib/material/input'

@@ -5,7 +5,7 @@
 	import { Field } from '@prisma/client'
 	import { listEditable } from '$lib/action'
 	import { Dialog, Icon, SectionCollapse } from '$lib/material'
-	import { memberFieldType } from '$lib/form'
+	import { memberFieldType } from '$lib/validation'
 	import MemberFieldForm from './MemberFieldForm.svelte'
 	import { eventPath } from '$lib/store'
 	import { useNotify } from '$lib/notify'

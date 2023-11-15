@@ -5,7 +5,7 @@
 
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/form/index.js'
+	import { useForm } from '$lib/validation/index.js'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 
 	export let data

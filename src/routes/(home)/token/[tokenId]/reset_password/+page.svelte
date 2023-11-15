@@ -2,7 +2,7 @@
 	import { page } from '$app/stores'
 
 	import { InputPassword } from '$lib/material/input'
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 
 	const form = useForm()

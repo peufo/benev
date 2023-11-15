@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { InputCheckboxsMenu } from '$lib/material'
 	import { PeriodPickerButton } from '$lib/period'
-	import { subscribeStateLabel } from '$lib/form'
+	import { subscribeStateLabel } from '$lib/validation'
 	import InputOptionInParam from '$lib/material/input/InputOptionInParam.svelte'
 	import { mdiAccountCircleOutline, mdiShieldAccountOutline } from '@mdi/js'
 

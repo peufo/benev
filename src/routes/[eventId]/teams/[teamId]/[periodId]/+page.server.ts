@@ -1,4 +1,4 @@
-import { periodShemaUpdate } from '$lib/form'
+import { periodShemaUpdate } from '$lib/validation'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { z } from 'zod'
 

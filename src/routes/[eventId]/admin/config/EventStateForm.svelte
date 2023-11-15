@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Event, type EventState } from '@prisma/client'
-	import { eventStates, useForm } from '$lib/form'
+	import { eventStates, useForm } from '$lib/validation'
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'

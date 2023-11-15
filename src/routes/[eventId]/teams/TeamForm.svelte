@@ -3,7 +3,7 @@
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 
-	import { useForm } from '$lib/form'
+	import { useForm } from '$lib/validation'
 	import { InputText, InputTextarea, DeleteButton, Dialog } from '$lib/material'
 	import { eventPath } from '$lib/store'
 
