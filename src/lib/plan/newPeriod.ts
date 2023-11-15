@@ -1,7 +1,7 @@
 import type { Action } from 'svelte/action'
 import type { Dayjs } from 'dayjs'
 import { formatRangeHour } from '$lib/formatRange'
-import { Period } from '@prisma/client'
+import type { Period } from '@prisma/client'
 
 type Params = {
 	origin: Dayjs

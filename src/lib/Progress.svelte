@@ -1,6 +1,6 @@
 <script lang="ts">
 	import 'tippy.js/dist/tippy.css'
-	import { Subscribe } from '@prisma/client'
+	import type { Subscribe } from '@prisma/client'
 	import { Icon } from '$lib/material'
 	import { mdiSlashForward } from '@mdi/js'
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Field } from '@prisma/client'
+	import type { Field } from '@prisma/client'
 	import { mdiAccountCircleOutline, mdiShieldAccountOutline, mdiStarOutline } from '@mdi/js'
 
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
-	import { Member, Period, Team, Subscribe } from '@prisma/client'
+	import type { Member, Period, Team, Subscribe } from '@prisma/client'
 
 	import { Placeholder, CardLink } from '$lib/material'
 	import { eventPath, display, onlyAvailable } from '$lib/store'

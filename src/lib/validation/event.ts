@@ -39,7 +39,7 @@ const create = {
 	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
 	address: z.string().optional(),
-	state: z.enum(toTuple(EventState)).optional(),
+	state: z.enum(toTuple(eventStates)).optional(),
 } satisfies ZodObj<EventCreateInput>
 
 const update = {

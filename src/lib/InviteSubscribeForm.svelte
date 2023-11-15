@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiAccountPlusOutline } from '@mdi/js'
-	import { Member, User } from '@prisma/client'
+	import type { Member, User } from '@prisma/client'
 	import type { Props as TippyProps } from 'tippy.js'
 	import { createEventDispatcher } from 'svelte'
 	import { Dialog, Icon, InputRelation } from '$lib/material'

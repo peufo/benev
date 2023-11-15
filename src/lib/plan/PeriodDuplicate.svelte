@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiContentDuplicate } from '@mdi/js'
-	import { Period } from '@prisma/client'
+	import type { Period } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'

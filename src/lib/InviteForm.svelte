@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
-	import { Member, User } from '@prisma/client'
+	import type { Member, User } from '@prisma/client'
 
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/validation'

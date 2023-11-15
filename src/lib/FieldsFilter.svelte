@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiClose, mdiFilterOutline } from '@mdi/js'
-	import { Field } from '@prisma/client'
+	import type { Field } from '@prisma/client'
 
 	import { Icon, InputSelect } from '$lib/material'
 	import { goto } from '$app/navigation'

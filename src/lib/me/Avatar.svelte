@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { User } from '@prisma/client'
+	import type { User } from '@prisma/client'
 
 	export let user: User
 	let klass = ''

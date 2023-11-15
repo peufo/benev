@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Member, User } from '@prisma/client'
+	import type { Member, User } from '@prisma/client'
 	import { Icon, InputRelations } from '$lib/material'
 	import { api } from '$lib/api'
 	import { mdiAccountPlusOutline } from '@mdi/js'

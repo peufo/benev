@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { Prisma, SubscribeState } from '@prisma/client'
-import { Action } from './$types'
+import type { Prisma, SubscribeState } from '@prisma/client'
+import type { Action } from './$types'
 import { prisma, sendEmailTemplate, tryOrFail, permission, type MemberWithRoles } from '$lib/server'
 import { EmailNewSubscribe, EmailSubscribeState, EmailSubscribeStateCancelled } from '$lib/email'
 import { isFreeRange } from 'perod'

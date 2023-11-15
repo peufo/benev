@@ -1,6 +1,6 @@
 import { jsonParse } from '$lib/jsonParse.js'
 import { getMemberRoles, parseQuery, prisma } from '$lib/server'
-import { Prisma, SubscribeState } from '@prisma/client'
+import type { Prisma, SubscribeState } from '@prisma/client'
 import { error } from '@sveltejs/kit'
 import { z } from '$lib/validation'
 

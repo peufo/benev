@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 
-	import { Period, Team } from '@prisma/client'
+	import type { Period, Team } from '@prisma/client'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/validation'
 	import { formatRange } from '$lib/formatRange'

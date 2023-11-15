@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { User } from '@prisma/client'
-	import type { Instance as TippyInstance } from 'tippy.js'
+	import type { User } from '@prisma/client'
 	import { mdiReload, mdiTrashCanOutline } from '@mdi/js'
 
 	import { Icon } from '$lib/material'

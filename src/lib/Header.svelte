@@ -1,6 +1,6 @@
 <script lang="ts">
 	import AuthIcon from '$lib/me/AuthIcon.svelte'
-	import { User } from '@prisma/client'
+	import type { User } from '@prisma/client'
 
 	export let user: User | undefined = undefined
 </script>

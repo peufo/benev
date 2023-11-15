@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 	import { slide } from 'svelte/transition'
-	import { Field } from '@prisma/client'
+	import type { Field } from '@prisma/client'
 	import { enhance } from '$app/forms'
 	import { memberFieldType, useForm } from '$lib/validation'
 	import { InputSelect, InputText, InputCheckboxs, DeleteButton, InputOptions } from '$lib/material'

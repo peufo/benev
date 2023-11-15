@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiOpenInNew } from '@mdi/js'
-	import { Period, Subscribe } from '@prisma/client'
+	import type { Period, Subscribe } from '@prisma/client'
 	import { tick } from 'svelte'
 	import type { Props as TippyProps } from 'tippy.js'
 	import { formatRangeShort } from '$lib/formatRange'
@@ -103,7 +103,12 @@
 				{/if}
 			</div>
 		{:else}
-			<PeriodForm bind:this={periodForm} {period} on:success={() => contextMenu.hide()} disableRedirect/>
+			<PeriodForm
+				bind:this={periodForm}
+				{period}
+				on:success={() => contextMenu.hide()}
+				disableRedirect
+			/>
 		{/if}
 	{/if}
 </ContextMenu>

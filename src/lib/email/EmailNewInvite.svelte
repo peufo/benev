@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Event, Member, User } from '@prisma/client'
+	import type { Event, Member, User } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
 

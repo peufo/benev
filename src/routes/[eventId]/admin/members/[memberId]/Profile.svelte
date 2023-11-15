@@ -6,7 +6,7 @@
 		mdiHomeCityOutline,
 		mdiPhoneOutline,
 	} from '@mdi/js'
-	import { User } from '@prisma/client'
+	import type { User } from '@prisma/client'
 	import { Icon } from '$lib/material'
 	import { getAge } from '$lib/utils'
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card, DisplayToggle, Icon } from '$lib/material'
 	import Teams from '$lib/Teams.svelte'
-	import { Member, Period, Subscribe, Team } from '@prisma/client'
+	import type { Member, Period, Subscribe, Team } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiAccountMultipleOutline,

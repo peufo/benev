@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition'
 	import { mdiDrag } from '@mdi/js'
 	import axios from 'axios'
-	import { Field } from '@prisma/client'
+	import type { Field } from '@prisma/client'
 	import { listEditable } from '$lib/action'
 	import { Dialog, Icon, SectionCollapse } from '$lib/material'
 	import { memberFieldType } from '$lib/validation'

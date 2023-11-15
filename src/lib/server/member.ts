@@ -1,5 +1,5 @@
 import { ROOT_USER } from '$env/static/private'
-import { Member, Team, User } from '@prisma/client'
+import type { Member, Team, User } from '@prisma/client'
 import { prisma } from './index'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'

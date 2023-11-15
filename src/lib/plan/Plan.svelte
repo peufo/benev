@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte'
 	import dayjs, { type Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
-	import { Period, Subscribe, Team } from '@prisma/client'
+	import type { Period, Subscribe, Team } from '@prisma/client'
 	import PeriodCard from '$lib/plan/PeriodCard.svelte'
 	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
 	import { ContextMenu, Icon } from '$lib/material'

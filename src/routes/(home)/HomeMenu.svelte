@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Page } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
