@@ -30,10 +30,8 @@
 	schema={{
 		'@type': 'Organization',
 		name: 'Benev',
-		logo: {
-			'@type': 'ImageObject',
-			url: logo,
-		},
+		logo,
+		url: 'https://benev.io',
 	}}
 />
 
