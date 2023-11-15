@@ -80,7 +80,7 @@ model Event {
   owner       User       @relation(references: [id], fields: [ownerId], onDelete: Cascade)
   date        String?
   description String?
-  logo        String?
+  icon        String?
   web         String?
   email       String?
   phone       String?

@@ -44,8 +44,8 @@
 			{#each data.events as event}
 				<CardLink href="/{event.id}">
 					<div slot="title" class="flex items-center gap-2">
-						{#if event.logo}
-							<img src={event.logo} alt="logo" class="h-6" />
+						{#if event.icon}
+							<img src={event.icon} alt="logo" class="h-6" />
 						{/if}
 						{event.name}
 					</div>

@@ -1,6 +1,6 @@
 import path from 'path'
 
-export async function scrapLogo(site: string): Promise<string | null> {
+export async function scrapIcon(site: string): Promise<string | null> {
 	try {
 		const html = await fetch(site).then((r) => r.text())
 		const reg = /<link rel="icon" href="([^"]*)/
@@ -9,11 +9,11 @@ export async function scrapLogo(site: string): Promise<string | null> {
 
 		if (href.startsWith('data:')) return href
 
-		const logo = 'https://' + path.join(site.replace(/https+:\/\//, ''), href.replace(site, ''))
-		const res = await fetch(logo)
+		const icon = 'https://' + path.join(site.replace(/https+:\/\//, ''), href.replace(site, ''))
+		const res = await fetch(icon)
 		if (!res.ok) throw 'logo not valid'
 
-		return logo
+		return icon
 	} catch (err) {
 		return null
 	}

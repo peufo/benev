@@ -33,15 +33,15 @@
 	let name = event?.name || ''
 	let eventId = event?.id || ''
 	let webInput: HTMLInputElement
-	let scrapLogoPending = false
-	let logo = event?.logo || null
+	let scrapIconPending = false
+	let icon = event?.icon || null
 	const handleWebInput = debounce(async () => {
 		const site = webInput.value
-		scrapLogoPending = true
+		scrapIconPending = true
 		const res = await fetch(`/api/scrap?site=${site}`)
 			.then((res) => res.json())
-			.finally(() => (scrapLogoPending = false))
-		logo = res.logo
+			.finally(() => (scrapIconPending = false))
+		icon = res.icon
 	}, 400)
 
 	function handleNameInput() {
@@ -86,11 +86,11 @@
 		wrapperClass="flex items-center"
 	>
 		<div slot="append">
-			{#if logo || scrapLogoPending}
+			{#if icon || scrapIconPending}
 				<div transition:slide={{ axis: 'x' }} class="w-10 grid place-content-center">
-					{#if logo}
-						<img src={logo} alt="logo" class="w-5" />
-					{:else if scrapLogoPending}
+					{#if icon}
+						<img src={icon} alt="Icon de l'événement" class="w-5" />
+					{:else if scrapIconPending}
 						<div class="loading loading-ring loading-xs" />
 					{/if}
 				</div>
@@ -98,7 +98,7 @@
 		</div>
 	</InputText>
 
-	<input type="hidden" name="logo" value={logo} />
+	<input type="hidden" name="icon" value={icon} />
 
 	<InputText key="email" label="Email de contact" value={event?.email || ''} />
 	<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />

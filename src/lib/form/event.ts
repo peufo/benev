@@ -35,7 +35,7 @@ const create = {
 	name: z.string().min(3),
 	date: z.string().optional(),
 	description: z.string().optional(),
-	logo: z.string().optional(),
+	icon: z.string().optional(),
 	web: z.string().url().optional().or(z.string().max(0)),
 	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),

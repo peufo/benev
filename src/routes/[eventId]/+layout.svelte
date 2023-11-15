@@ -32,8 +32,8 @@
 				whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0
 			"
 	>
-		{#if data.event.logo}
-			<img class="inline-block w-5 mx-1" src={data.event.logo} alt="logo of {data.event.name}" />
+		{#if data.event.icon}
+			<img class="inline-block w-5 mx-1" src={data.event.icon} alt="logo of {data.event.name}" />
 		{/if}
 		<span class="whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0">
 			{data.event.name}
@@ -74,10 +74,10 @@
 	<div class="flex flex-wrap">
 		{#if data.event.web}
 			<a class="btn btn-sm sm:btn-md btn-ghost flex" href={data.event.web} target="_blank">
-				{#if data.event.logo}
+				{#if data.event.icon}
 					<img
 						class="inline-block w-5 mx-1"
-						src={data.event.logo}
+						src={data.event.icon}
 						alt="logo of {data.event.name}"
 					/>
 				{:else}
