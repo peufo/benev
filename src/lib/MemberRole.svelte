@@ -24,7 +24,7 @@
 	export { klass as class }
 	export let mode: 'badge' | 'icon' | 'contents' = 'badge'
 
-	const rolesOrder: MemberRole[] = ['owner', 'admin', 'leader', 'member']
+	const rolesOrder: MemberRole[] = ['root', 'owner', 'admin', 'leader', 'member']
 	$: role = rolesOrder.find((r) => roles.includes(r))
 </script>
 

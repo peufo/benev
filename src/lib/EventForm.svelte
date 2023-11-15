@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 	import { enhance } from '$app/forms'
-	import { eventStates, useForm } from '$lib/form'
+	import { useForm } from '$lib/form'
 	import { InputText, InputTextarea, DeleteButton } from '$lib/material'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { debounce } from '$lib/debounce'
 	import { slide } from 'svelte/transition'
-	import InputRadio from './material/input/InputRadio.svelte'
 
 	let klass = ''
 	export { klass as class }
@@ -17,9 +16,22 @@
 	export let successReset = true
 
 	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
-	const form = useForm({ successCallback: () => dispatch('success'), successUpdate, successReset })
+	const form = useForm({
+		successCallback: () => dispatch('success'),
+		successUpdate,
+		successReset,
+		beforeRequest: async () => {
+			if (event?.state !== 'active') return
+			if (event.id === eventId) return
+			const msg = `Es tu sûr de vouloir modifier le lien de l'évenement de "/${event.id}" pour "${eventId} ?"`
+			if (!confirm(msg)) {
+				throw Error('Mise à jour annulé')
+			}
+		},
+	})
 
-	let name = ''
+	let name = event?.name || ''
+	let eventId = event?.id || ''
 	let webInput: HTMLInputElement
 	let scrapLogoPending = false
 	let logo = event?.logo || null
@@ -31,6 +43,16 @@
 			.finally(() => (scrapLogoPending = false))
 		logo = res.logo
 	}, 400)
+
+	function handleNameInput() {
+		if (event?.state !== 'active') {
+			eventId = normalizePath(name)
+		}
+	}
+
+	function handleEventIdInput() {
+		eventId = normalizePath(eventId)
+	}
 </script>
 
 <form
@@ -39,24 +61,14 @@
 	class="{klass} flex flex-col gap-2"
 	use:enhance={form.submit}
 >
-	{#if isUpdate && event}
-		<InputText key="name" label="Nom de l'évènement" bind:value={event.name} />
-		<InputText
-			key="id"
-			label="Lien de l'évenement"
-			bind:value={event.id}
-			hint="benev.io/{event.id}"
-		/>
-	{:else}
-		<InputText
-			key="name"
-			label="Nom de l'évènement"
-			bind:value={name}
-			hint={name && `benev.io/${normalizePath(name)}`}
-		/>
-		<input type="hidden" name="id" value={normalizePath(name)} />
-		<input type="hidden" name="timezone" value={new Date().getTimezoneOffset()} />
-	{/if}
+	<InputText key="name" label="Nom de l'évènement" bind:value={name} on:input={handleNameInput} />
+	<InputText
+		key="id"
+		label="Lien de l'évenement"
+		on:input={handleEventIdInput}
+		bind:value={eventId}
+		hint="benev.io/{eventId}"
+	/>
 
 	<InputTextarea
 		key="description"

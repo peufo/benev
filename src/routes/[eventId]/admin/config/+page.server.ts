@@ -17,11 +17,13 @@ export const actions = {
 		const { err, data } = await parseFormData(request, eventShemaUpdate)
 		if (err) return err
 
-		return tryOrFail(() =>
-			prisma.event.update({
-				where: { id: eventId },
-				data,
-			})
+		return tryOrFail(
+			() =>
+				prisma.event.update({
+					where: { id: eventId },
+					data,
+				}),
+			eventId !== data.id ? `/${data.id}/admin/config?section=infos` : undefined
 		)
 	},
 	delete_event: async ({ locals, params: { eventId } }) => {
