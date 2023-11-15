@@ -4,7 +4,7 @@ import { error, redirect } from '@sveltejs/kit'
 import z from 'zod'
 
 export const actions = {
-	default: async ({ params, locals, request, url }) => {
+	default: async ({ params, locals, request }) => {
 		const { err, data } = await parseFormData(
 			request,
 			z.object({

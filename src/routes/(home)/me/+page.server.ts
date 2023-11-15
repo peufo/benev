@@ -147,21 +147,23 @@ export const actions = {
 	delete_avatar: async ({ locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
-		return media.delete({ avatarOf: { id: session.user.id } })
+		return tryOrFail(() => media.delete({ avatarOf: { id: session.user.id } }))
 	},
 	upload_avatar: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		return await media.upload(request, {
-			where: { avatarOf: { id: session.user.id } },
-			data: {
-				name: `Avatar de ${session.user.firstName} ${session.user.lastName}`,
-				createdById: session.user.id,
-				avatarOf: { connect: { id: session.user.id } },
-			},
-			sizes: [256, 512],
-		})
+		return tryOrFail(() =>
+			media.upload(request, {
+				where: { avatarOf: { id: session.user.id } },
+				data: {
+					name: `Avatar de ${session.user.firstName} ${session.user.lastName}`,
+					createdById: session.user.id,
+					avatarOf: { connect: { id: session.user.id } },
+				},
+				sizes: [256, 512],
+			})
+		)
 	},
 
 	delete_user: async ({ locals }) => {

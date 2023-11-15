@@ -2,11 +2,18 @@
 	import { createEventDispatcher } from 'svelte'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/form'
-	import { InputText, InputTextarea, DeleteButton } from '$lib/material'
+	import { slide } from 'svelte/transition'
+	import {
+		InputText,
+		InputTextarea,
+		DeleteButton,
+		InputImage,
+		ImagePlaceholder,
+	} from '$lib/material'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { debounce } from '$lib/debounce'
-	import { slide } from 'svelte/transition'
+	import { FORMAT_A3 } from '$lib/constants'
 
 	let klass = ''
 	export { klass as class }
@@ -69,6 +76,14 @@
 		bind:value={eventId}
 		hint="benev.io/{eventId}"
 	/>
+
+	<InputImage title="Affiche" aspect={FORMAT_A3.aspect}>
+		{#if event?.posterId}
+			<img src="{event.posterId}/original.webp" alt="Affiche de l'événement" />
+		{:else}
+			<ImagePlaceholder x={FORMAT_A3.x / 2} y={FORMAT_A3.y / 2}>Affiche</ImagePlaceholder>
+		{/if}
+	</InputImage>
 
 	<InputTextarea
 		key="description"

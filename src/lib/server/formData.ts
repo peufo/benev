@@ -32,14 +32,21 @@ function getFormDataTyped(formData: Record<string, unknown>): Record<string, unk
 }
 
 export async function parseFormData<Type extends z.ZodRawShape>(
-	request: Request,
+	requestOrFormData: Request | FormData,
 	shema: z.ZodObject<Type> | z.ZodEffects<z.ZodObject<Type>>,
 	options: {
 		arrayOperation: ArrayOperation
 	} = { arrayOperation: 'connect' }
 ) {
-	const formData: Record<string, unknown> = Object.fromEntries(await request.formData())
+	const formData: Record<string, unknown> = Object.fromEntries(
+		requestOrFormData instanceof Request ? await requestOrFormData.formData() : requestOrFormData
+	)
+
+	console.log(formData)
+
 	const formDataTyped = getFormDataTyped({ ...formData })
+	console.log(formDataTyped)
+
 	const parsed = shema.safeParse(formDataTyped)
 	if (parsed.success === false) {
 		return { formData, err: fail(400, { issues: parsed.error.issues }) }
