@@ -1,11 +1,9 @@
-import path from 'node:path'
-import fs from 'node:fs/promises'
-import sharp from 'sharp'
 import { z } from 'zod'
-import { Blob } from 'node:buffer'
+
 import { fail, error } from '@sveltejs/kit'
 import {
 	auth,
+	media,
 	getMemberRoles,
 	generateToken,
 	parseFormData,
@@ -146,79 +144,23 @@ export const actions = {
 			})
 		})
 	},
-	remove_avatar: async ({ locals }) => {
+	delete_avatar: async ({ locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
-
-		return tryOrFail(async () => {
-			const user = await prisma.user.findUniqueOrThrow({ where: { id: session.user.id } })
-			if (!user.avatarId) throw error(404)
-
-			const mediaPath = path.resolve(MEDIA_DIR, user.avatarId)
-			await fs.rm(mediaPath, { recursive: true, force: true })
-			return prisma.media.delete({ where: { id: user.avatarId } })
-		})
+		return media.delete({ avatarOf: { id: session.user.id } })
 	},
 	upload_avatar: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { data, err } = await parseFormData(
-			request,
-			z.object({
-				image: z.instanceof(Blob),
-				crop: z.object({
-					x: z.number(),
-					y: z.number(),
-					width: z.number(),
-					height: z.number(),
-				}),
-			})
-		)
-		if (err) return err
-
-		return tryOrFail(async () => {
-			const { image, crop } = data
-
-			const imageBuffer = await image.arrayBuffer()
-
-			const sharpStream = sharp(imageBuffer).extract({
-				left: crop.x,
-				top: crop.y,
-				width: crop.width,
-				height: crop.height,
-			})
-
-			const user = await prisma.user.findUniqueOrThrow({
-				where: { id: session.user.id },
-				include: { avatar: true },
-			})
-			const avatar =
-				user.avatar ||
-				(await prisma.media.create({
-					data: {
-						name: `Avatar de ${user.firstName}`,
-						createdById: user.id,
-						avatarOf: { connect: { id: user.id } },
-					},
-				}))
-
-			const mediaPath = path.resolve(MEDIA_DIR, avatar.id)
-			try {
-				await fs.access(mediaPath, fs.constants.R_OK)
-			} catch {
-				await fs.mkdir(mediaPath, { recursive: true })
-			}
-
-			const sizes = [256, 512]
-			await Promise.all(
-				sizes.map((size) => {
-					const filePath = path.resolve(mediaPath, `${size}.webp`)
-					return sharpStream.clone().resize(size, size).webp().toFile(filePath)
-				})
-			)
-
-			return
+		return await media.upload(request, {
+			where: { avatarOf: { id: session.user.id } },
+			data: {
+				name: `Avatar de ${session.user.firstName} ${session.user.lastName}`,
+				createdById: session.user.id,
+				avatarOf: { connect: { id: session.user.id } },
+			},
+			sizes: [256, 512],
 		})
 	},
 

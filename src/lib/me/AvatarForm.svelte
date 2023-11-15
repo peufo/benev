@@ -30,7 +30,7 @@
 
 		<svelte:fragment slot="actions">
 			{#if user.avatarId}
-				<button formaction="/me?/remove_avatar" class="menu-item">
+				<button formaction="/me?/delete_avatar" class="menu-item">
 					<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
 					<span>Supprimer cette photo</span>
 				</button>

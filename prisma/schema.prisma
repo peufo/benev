@@ -81,11 +81,17 @@ model Event {
   date        String?
   description String?
   icon        String?
-  web         String?
-  email       String?
-  phone       String?
-  address     String?
-  timezone    Int        @default(-120)
+
+  web      String?
+  email    String?
+  phone    String?
+  address  String?
+  timezone Int     @default(-120)
+
+  logoId   String? @unique
+  logo     Media?  @relation(name: "logo", fields: [logoId], references: [id], onDelete: Cascade)
+  posterId String? @unique
+  poster   Media?  @relation(name: "poster", fields: [posterId], references: [id], onDelete: Cascade)
 
   teams        Team[]
   pages        Page[]
@@ -249,6 +255,8 @@ model Media {
 
   name        String
   avatarOf    User?    @relation(name: "avatar")
+  logoOf      Event?   @relation(name: "logo")
+  posterOf    Event?   @relation(name: "poster")
   createdById String
   createdBy   User     @relation(references: [id], fields: [createdById], onDelete: Cascade)
   createdAt   DateTime @default(now())
