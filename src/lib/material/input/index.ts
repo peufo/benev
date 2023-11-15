@@ -34,6 +34,7 @@ export { default as InputCheckboxsMenu } from './InputCheckboxsMenu.svelte'
 export { default as InputSelect } from './InputSelect.svelte'
 export { default as InputOptions } from './InputOptions.svelte'
 export { default as InputSearch } from './InputSearch.svelte'
+export { default as InputImage } from './InputImage.svelte'
 
 export type Option = { value: string; label: string; icon?: string }
 export type Options =
