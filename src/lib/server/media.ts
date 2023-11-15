@@ -15,77 +15,74 @@ type UploadOption = {
 	sizes: (number | [number, number])[]
 }
 
-export const media = {
-	async delete(where: Prisma.MediaWhereInput) {
-		const media = await prisma.media.findFirst({ where })
-		if (!media) throw error(404)
-		const mediaPath = path.resolve(MEDIA_DIR, media.id)
-		await fs.rm(mediaPath, { recursive: true, force: true })
-		return prisma.media.delete({ where: { id: media.id } })
-	},
-
-	async upload(requestOrFormData: Request | FormData, opt: UploadOption) {
-		const { data, err } = await parseFormData(
-			requestOrFormData,
-			z.object({
-				image: z.instanceof(Blob),
-				crop: z
-					.string()
-					.transform((v) => JSON.parse(v))
-					.pipe(
-						z.object({
-							x: z.number(),
-							y: z.number(),
-							width: z.number(),
-							height: z.number(),
-						})
-					),
-			})
-		)
-		if (err) return err
-
-		console.log(data.crop)
-
-		const { image, crop } = data
-
-		const imageBuffer = await image.arrayBuffer()
-
-		const sharpStream = sharp(imageBuffer).extract({
-			left: crop.x,
-			top: crop.y,
-			width: crop.width,
-			height: crop.height,
+export async function uploadMedia(requestOrFormData: Request | FormData, opt: UploadOption) {
+	const { data, err } = await parseFormData(
+		requestOrFormData,
+		z.object({
+			image: z.instanceof(Blob),
+			crop: z
+				.string()
+				.transform((v) => JSON.parse(v))
+				.pipe(
+					z.object({
+						x: z.number(),
+						y: z.number(),
+						width: z.number(),
+						height: z.number(),
+					})
+				),
 		})
+	)
+	if (err) return err
 
-		let media = await prisma.media.findFirst({
-			where: opt.where,
-		})
+	const { image, crop } = data
 
-		media = await prisma.media.upsert({
-			where: { id: media?.id || '' },
-			update: opt.data,
-			create: opt.data,
-		})
+	const imageBuffer = await image.arrayBuffer()
 
-		const mediaPath = path.resolve(MEDIA_DIR, media.id)
-		try {
-			await fs.access(mediaPath, fs.constants.R_OK)
-		} catch {
-			await fs.mkdir(mediaPath, { recursive: true })
-		}
+	let media = await prisma.media.findFirst({
+		where: opt.where,
+	})
 
-		await Promise.all([
-			...opt.sizes.map((size) => {
-				const [x, y] = typeof size === 'number' ? [size, size] : size
-				const filePath = path.resolve(mediaPath, `${x}-${y}.webp`)
-				return sharpStream.clone().resize(x, y).webp().toFile(filePath)
-			}),
-			() => {
-				const filePath = path.resolve(mediaPath, `original.webp`)
-				return sharpStream.clone().webp().toFile(filePath)
-			},
-		])
+	media = await prisma.media.upsert({
+		where: { id: media?.id || '' },
+		update: opt.data,
+		create: opt.data,
+	})
 
-		return
-	},
+	const mediaPath = path.resolve(MEDIA_DIR, media.id)
+	try {
+		await fs.access(mediaPath, fs.constants.R_OK)
+	} catch {
+		await fs.mkdir(mediaPath, { recursive: true })
+	}
+	/*
+	const sharpStream = sharp(imageBuffer).extract({
+		left: crop.x,
+		top: crop.y,
+		width: crop.width,
+		height: crop.height,
+	})
+
+	await Promise.all([
+		...opt.sizes.map((size) => {
+			const [x, y] = typeof size === 'number' ? [size, size] : size
+			const filePath = path.resolve(mediaPath, `${x}-${y}.webp`)
+			return sharpStream.clone().resize(x, y).webp().toFile(filePath)
+		}),
+		() => {
+			const filePath = path.resolve(mediaPath, `original.webp`)
+			return sharpStream.clone().webp().toFile(filePath)
+		},
+	])
+	*/
+
+	return
+}
+
+export async function deleteMedia(where: Prisma.MediaWhereInput) {
+	const media = await prisma.media.findFirst({ where })
+	if (!media) throw error(404)
+	const mediaPath = path.resolve(MEDIA_DIR, media.id)
+	await fs.rm(mediaPath, { recursive: true, force: true })
+	return prisma.media.delete({ where: { id: media.id } })
 }
