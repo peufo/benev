@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from '$lib/validation'
 import { Prisma } from '@prisma/client'
 import { parseQuery, prisma } from '$lib/server'
 import { jsonParse } from '$lib/jsonParse.js'

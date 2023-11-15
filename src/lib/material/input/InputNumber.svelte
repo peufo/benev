@@ -6,7 +6,7 @@
 	export let value = _value
 </script>
 
-<FormControl {...props} prefix="number" let:key>
+<FormControl {...props} let:key>
 	<slot name="label_append" slot="label_append" />
 	<input
 		bind:value

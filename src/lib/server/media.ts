@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
-import z from 'zod'
+import { z } from '$lib/validation'
 import type { Prisma } from '@prisma/client'
 import { parseFormData } from './formData'
 import { prisma } from './prisma'

@@ -1,6 +1,5 @@
-import z from 'zod'
+import { z, toTuple, type ZodObj } from '$lib/validation'
 import type { Prisma, Field } from '@prisma/client'
-import { toTuple, type ZodObj } from './utils'
 import {
 	mdiTextShort,
 	mdiText,

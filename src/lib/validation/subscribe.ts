@@ -1,6 +1,5 @@
-import z from 'zod'
+import { z, type ZodObj } from '$lib/validation'
 import type { Prisma, Subscribe } from '@prisma/client'
-import { type ZodObj } from './utils'
 
 export const subscribeStateLabel: Record<Subscribe['state'], string> = {
 	request: 'Demande en cours',

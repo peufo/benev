@@ -116,8 +116,8 @@
 		]}
 	/>
 
-	<input type="hidden" name="boolean_memberCanRead" value={field.memberCanRead} />
-	<input type="hidden" name="boolean_memberCanWrite" value={field.memberCanWrite} />
+	<input type="hidden" name="memberCanRead" value={field.memberCanRead ? 'true' : ''} />
+	<input type="hidden" name="memberCanWrite" value={field.memberCanWrite ? 'true' : ''} />
 
 	<h2 class="font-bold">Aperçu</h2>
 	<div class="rounded-box border border-neutral p-2 bg-base-200">

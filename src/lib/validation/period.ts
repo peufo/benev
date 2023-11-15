@@ -1,6 +1,6 @@
-import z from 'zod'
-import type { Prisma, Period } from '@prisma/client'
-import type { ZodObj } from './utils'
+import { z, type ZodObj } from '$lib/validation'
+import type { SuperRefinement } from 'zod'
+import type { Prisma } from '@prisma/client'
 
 type PeriodCreateForm = Omit<Prisma.PeriodCreateInput, 'team'>
 
@@ -10,7 +10,7 @@ const periodForm = {
 	end: z.date(),
 } satisfies ZodObj<PeriodCreateForm>
 
-const validation: z.SuperRefinement<{ start: Date; end: Date }> = ({ start, end }, ctx) => {
+const validation: SuperRefinement<{ start: Date; end: Date }> = ({ start, end }, ctx) => {
 	if (start.getTime() > end.getTime()) {
 		ctx.addIssue({
 			code: 'invalid_date',

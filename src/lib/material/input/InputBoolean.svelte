@@ -7,9 +7,9 @@
 	export let value = _value
 </script>
 
-<FormControl {...props} prefix="boolean" let:key>
+<FormControl {...props} let:key>
 	<slot name="label_append" slot="label_append" />
-	<input type="hidden" name={key} value={value ? 'true' : 'false'} />
+	<input type="hidden" name={key} value={value ? 'true' : ''} />
 	<input
 		bind:checked={value}
 		use:bindCheckedWithParams={{ bindEnable: bindWithParams }}

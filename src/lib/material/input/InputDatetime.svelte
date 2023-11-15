@@ -6,7 +6,7 @@
 	export let value = _value
 </script>
 
-<FormControl {...props} prefix="date" let:key>
+<FormControl {...props} let:key>
 	{#if value}
 		<input type="hidden" name={key} value={new Date(value).toJSON()} />
 	{/if}

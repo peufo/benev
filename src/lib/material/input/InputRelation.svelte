@@ -104,8 +104,8 @@
 					<div class="flex grow gap-2 items-center relative">
 						<input
 							type="text"
-							id="relations_{key}"
-							name="relations_{key}"
+							id={key}
+							name={key}
 							bind:this={inputElement}
 							bind:value={searchValue}
 							on:input={(e) => searchItemsDebounce(e.currentTarget.value)}

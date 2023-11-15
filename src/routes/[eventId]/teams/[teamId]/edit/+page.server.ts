@@ -1,7 +1,7 @@
-import { teamShema } from '$lib/validation/team'
+import { teamShemaUpdate } from '$lib/validation/team'
 import { parseFormData } from '$lib/server/formData'
 import { prisma, tryOrFail, permission } from '$lib/server'
-import { error, fail } from '@sveltejs/kit'
+import { error } from '@sveltejs/kit'
 
 export const load = async ({ locals, params: { teamId } }) => {
 	await permission.leaderOfTeam(teamId, locals)
@@ -24,7 +24,7 @@ export const actions = {
 	update: async ({ request, locals, params: { eventId, teamId } }) => {
 		const member = await permission.leaderOfTeam(teamId, locals)
 
-		const { err, data } = await parseFormData(request, teamShema, { arrayOperation: 'set' })
+		const { err, data } = await parseFormData(request, teamShemaUpdate)
 		if (err) return err
 		if (!member.roles.includes('admin') && data.leaders) throw error(403)
 

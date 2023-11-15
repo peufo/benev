@@ -24,9 +24,9 @@
 		const duration = end.getTime() - start.getTime()
 		const form = new FormData()
 		form.append('id', period.id)
-		form.append('number_maxSubscribe', String(period.maxSubscribe))
-		form.append('date_start', end.toUTCString())
-		form.append('date_end', new Date(end.getTime() + duration).toUTCString())
+		form.append('maxSubscribe', String(period.maxSubscribe))
+		form.append('start', end.toUTCString())
+		form.append('end', new Date(end.getTime() + duration).toUTCString())
 		await axios.postForm(`${$eventPath}/teams/${period.teamId}?/new_period`, form)
 		await invalidateAll()
 	}

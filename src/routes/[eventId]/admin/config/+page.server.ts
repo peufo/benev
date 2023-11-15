@@ -1,6 +1,6 @@
 import { eventShemaUpdate, memberFieldShema, memberFieldShemaUpdate } from '$lib/validation'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
-import { z } from 'zod'
+import { z } from '$lib/validation'
 
 export const load = async ({ params }) => ({
 	memberFields: await prisma.field.findMany({

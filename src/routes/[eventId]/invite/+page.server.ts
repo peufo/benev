@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { z } from 'zod'
+import { z } from '$lib/validation'
 import {
 	parseFormData,
 	prisma,

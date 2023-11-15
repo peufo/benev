@@ -1,6 +1,5 @@
-import z from 'zod'
+import { z, type ZodObj } from '$lib/validation'
 import type { Prisma } from '@prisma/client'
-import type { ZodObj } from './utils'
 
 const form = {
 	id: z.string(),

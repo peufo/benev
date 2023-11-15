@@ -1,7 +1,7 @@
 import { parseFormData, validateToken } from '$lib/server'
 import { auth } from '$lib/server'
 import { error, redirect } from '@sveltejs/kit'
-import z from 'zod'
+import { z } from '$lib/validation'
 
 export const actions = {
 	default: async ({ params, locals, request }) => {

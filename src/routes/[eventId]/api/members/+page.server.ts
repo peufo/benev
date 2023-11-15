@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from '$lib/validation'
 import { parseFormData, permission, prisma, tryOrFail } from '$lib/server'
 
 export const actions = {

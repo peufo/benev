@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import z from 'zod'
+import { z } from '$lib/validation'
 import type { Prisma } from '@prisma/client'
 import { parseQuery, prisma, getMemberRoles } from '$lib/server'
 
@@ -8,16 +8,16 @@ export const getMembers = async (eventId: string, url: URL) => {
 		url,
 		z.object({
 			search: z.string().optional(),
-			start: z.coerce.date().optional(),
-			end: z.coerce.date().optional(),
+			start: z.date().optional(),
+			end: z.date().optional(),
 			teams: z.string().optional(),
 			role: z.enum(['member', 'leader', 'admin']).optional(),
 			fieldId: z.string().optional(),
 			fieldValue: z.string().optional(),
-			skip: z.coerce.number().default(0),
-			take: z.coerce.number().default(20),
-			summary: z.coerce.boolean().default(false),
-			all: z.coerce.boolean().default(false),
+			skip: z.number().default(0),
+			take: z.number().default(20),
+			summary: z.boolean().default(false),
+			all: z.boolean().default(false),
 		})
 	)
 

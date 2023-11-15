@@ -104,7 +104,7 @@
 >
 	<DropDown bind:this={dropdown}>
 		<div slot="activator">
-			<FormControl key="relations_{key}" {label} {error} class={klass}>
+			<FormControl key={key} {label} {error} class={klass}>
 				<div class="flex flex-wrap items-center gap-2">
 					{#if items && items.length}
 						<div class="flex gap-2 flex-wrap">
@@ -131,8 +131,8 @@
 						<div class="flex grow gap-2 items-center relative">
 							<input
 								type="text"
-								id="relations_{key}"
-								name="relations_{key}"
+								id={key}
+								name={key}
 								bind:value={searchValue}
 								on:input={(e) => searchItemsDebounce(e.currentTarget.value)}
 								on:focus={handleFocus}
@@ -148,11 +148,7 @@
 					</div>
 				</div>
 
-				<input
-					type="hidden"
-					name="json_{key}"
-					value={JSON.stringify(items?.map(({ id }) => id) || [])}
-				/>
+				<input type="hidden" name={key} value={JSON.stringify(items?.map(({ id }) => id) || [])} />
 			</FormControl>
 		</div>
 

@@ -2,22 +2,22 @@ import { jsonParse } from '$lib/jsonParse.js'
 import { getMemberRoles, parseQuery, prisma } from '$lib/server'
 import { Prisma, SubscribeState } from '@prisma/client'
 import { error } from '@sveltejs/kit'
-import { z } from 'zod'
+import { z } from '$lib/validation'
 
 export const getSubscribes = async (eventId: string, url: URL) => {
 	const query = parseQuery(
 		url,
 		z.object({
 			search: z.string().optional(),
-			start: z.coerce.date().optional(),
-			end: z.coerce.date().optional(),
+			start: z.date().optional(),
+			end: z.date().optional(),
 			teams: z.string().optional(),
 			states: z.string().optional(),
-			skip: z.coerce.number().default(0),
-			take: z.coerce.number().default(20),
+			skip: z.number().default(0),
+			take: z.number().default(20),
 			// TODO: use enum provided by prisma for "createdBy" -> SubscribeCreatedBy
 			createdBy: z.enum(['leader', 'user']).optional(),
-			all: z.coerce.boolean().default(false),
+			all: z.boolean().default(false),
 		})
 	)
 

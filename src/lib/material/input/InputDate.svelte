@@ -6,7 +6,7 @@
 	export let value = _value
 </script>
 
-<FormControl {...props} prefix="date" let:key>
+<FormControl {...props} let:key>
 	<input
 		bind:value
 		on:input

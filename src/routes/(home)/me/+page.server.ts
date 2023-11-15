@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from '$lib/validation'
 
 import { fail, error } from '@sveltejs/kit'
 import {
@@ -15,7 +15,6 @@ import {
 } from '$lib/server'
 import { loginShema, registerShema } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
-import { MEDIA_DIR } from '$env/static/private'
 import { userUpdateShema } from '$lib/validation'
 
 export const load = async ({ url, parent }) => {
@@ -115,8 +114,10 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data } = await parseFormData(request, userUpdateShema)
+		const { err, data, formData } = await parseFormData(request, userUpdateShema)
 		if (err) return err
+
+		console.log({ data, formData })
 
 		return tryOrFail(async () => {
 			const { userId } = session.user

@@ -1,13 +1,19 @@
-import z from 'zod'
+import { z, type ZodObj } from '$lib/validation'
 import type { Prisma } from '@prisma/client'
-import type { ZodObj } from './utils'
 
-type TeamCreateForm = Omit<Prisma.TeamCreateInput, 'event'> & { leaders?: string[] }
+type TeamShemaCreate = Omit<Prisma.TeamCreateInput, 'event'>
+type TeamShemaUpdate = Omit<Prisma.TeamUpdateInput, 'event'>
 
-const teamForm = {
+const create = {
 	name: z.string().min(3),
 	description: z.string().optional(),
-	leaders: z.array(z.string()).optional(),
-} satisfies ZodObj<TeamCreateForm>
+	leaders: z.relations('connect'),
+} satisfies ZodObj<TeamShemaCreate>
 
-export const teamShema = z.object(teamForm)
+const update = {
+	...create,
+	leaders: z.relations('set'),
+} satisfies ZodObj<TeamShemaUpdate>
+
+export const teamShemaCreate = z.object(create)
+export const teamShemaUpdate = z.object(update)
