@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import sharp from 'sharp'
+import jimp from 'jimp'
 import { z } from '$lib/validation'
 import type { Prisma } from '@prisma/client'
 import { parseFormData } from './formData'
@@ -55,26 +55,21 @@ export async function uploadMedia(requestOrFormData: Request | FormData, opt: Up
 	} catch {
 		await fs.mkdir(mediaPath, { recursive: true })
 	}
-	/*
-	const sharpStream = sharp(imageBuffer).extract({
-		left: crop.x,
-		top: crop.y,
-		width: crop.width,
-		height: crop.height,
-	})
+
+	const jimpImage = await jimp.read(Buffer.from(imageBuffer))
+	jimpImage.crop(crop.x, crop.y, crop.width, crop.height)
 
 	await Promise.all([
 		...opt.sizes.map((size) => {
 			const [x, y] = typeof size === 'number' ? [size, size] : size
-			const filePath = path.resolve(mediaPath, `${x}-${y}.webp`)
-			return sharpStream.clone().resize(x, y).webp().toFile(filePath)
+			const filePath = path.resolve(mediaPath, `${x}-${y}.png`)
+			return jimpImage.clone().resize(x, y).writeAsync(filePath)
 		}),
 		() => {
-			const filePath = path.resolve(mediaPath, `original.webp`)
-			return sharpStream.clone().webp().toFile(filePath)
+			const filePath = path.resolve(mediaPath, `original.png`)
+			return jimpImage.clone().writeAsync(filePath)
 		},
 	])
-	*/
 
 	return
 }

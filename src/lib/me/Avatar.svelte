@@ -11,7 +11,7 @@
 
 {#key user}
 	<img
-		src={user.avatarId ? `/media/${user.avatarId}/${size}-${size}.webp` : user.avatarPlaceholder}
+		src={user.avatarId ? `/media/${user.avatarId}/${size}-${size}.png` : user.avatarPlaceholder}
 		alt="Avatar de l'utilisateur"
 		class={klass}
 		style="margin: 0 !important;"

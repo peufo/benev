@@ -79,7 +79,7 @@
 
 	<InputImage title="Affiche" aspect={FORMAT_A3.aspect}>
 		{#if event?.posterId}
-			<img src="{event.posterId}/original.webp" alt="Affiche de l'événement" />
+			<img src="{event.posterId}/original.png" alt="Affiche de l'événement" />
 		{:else}
 			<ImagePlaceholder x={FORMAT_A3.x / 2} y={FORMAT_A3.y / 2}>Affiche</ImagePlaceholder>
 		{/if}
