@@ -17,6 +17,7 @@ export const permission = {
 	leader: getPermission('leader'),
 	admin: getPermission('admin'),
 	owner: getPermission('owner'),
+	root: getPermission('root'),
 	leaderOfTeam,
 } satisfies Record<MemberRole | 'leaderOfTeam', (...args: any[]) => Promise<MemberWithRoles>>
 

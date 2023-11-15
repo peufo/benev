@@ -2,7 +2,7 @@ import { ROOT_USER } from '$env/static/private'
 import { Member, Team, User } from '@prisma/client'
 import { prisma } from './index'
 
-export type MemberRole = 'member' | 'leader' | 'admin' | 'owner'
+export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
 export type MemberWithRolesInfo = Member & {
 	user: User
 	event: { ownerId: string }
@@ -13,7 +13,8 @@ export type MemberWithRoles = MemberWithRolesInfo & { roles: MemberRole[] }
 export function getMemberRoles(member: MemberWithRolesInfo): MemberRole[] {
 	const isRoot = member.user.email === ROOT_USER
 	const isOwner = member.event.ownerId === member.userId
-	if (isRoot || isOwner) return ['owner', 'admin', 'leader', 'member']
+	if (isRoot) return ['root', 'owner', 'admin', 'leader', 'member']
+	if (isOwner) return ['owner', 'admin', 'leader', 'member']
 	if (member.isAdmin) return ['admin', 'leader', 'member']
 	if (member.leaderOf.length) return ['leader', 'member']
 	return ['member']

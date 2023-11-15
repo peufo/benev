@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
 	export const rolesMap: Record<MemberRole, { icon: string; label: string }> = {
+		root: { label: '__ROOT_USER__', icon: mdiShieldCrownOutline },
 		owner: { label: 'Propriétaire', icon: mdiCrownOutline },
 		admin: { label: 'Administrateur', icon: mdiStarOutline },
 		leader: { label: 'Responsable', icon: mdiShieldAccountOutline },
@@ -15,6 +16,7 @@
 		mdiAccountCircleOutline,
 		mdiCrownOutline,
 		mdiStarOutline,
+		mdiShieldCrownOutline,
 	} from '@mdi/js'
 
 	export let roles: MemberRole[]
