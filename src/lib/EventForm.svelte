@@ -58,6 +58,7 @@
 
 <form
 	method="post"
+	enctype="multipart/form-data"
 	action={isUpdate ? '?/update_event' : '/?/new_event'}
 	class="{klass} flex flex-col gap-2"
 	use:enhance={form.submit}

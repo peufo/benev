@@ -12,8 +12,6 @@ type UploadOption = {
 	key?: string
 	where: Prisma.MediaWhereInput
 	data: Prisma.MediaCreateArgs['data']
-	/** xy[] or [x, y][] */
-	sizes: (number | [number, number])[]
 }
 export const media = {
 	async upload(requestOrFormData: Request | FormData, opt: UploadOption) {
@@ -60,16 +58,9 @@ export const media = {
 		}
 
 		const jimpImage = await jimp.read(Buffer.from(imageBuffer))
-		jimpImage.crop(crop.x, crop.y, crop.width, crop.height)
-
-		await Promise.all([
-			...opt.sizes.map((size) => {
-				const [x, y] = typeof size === 'number' ? [size, size] : size
-				const filePath = path.resolve(mediaPath, `${x}-${y}.png`)
-				return jimpImage.clone().resize(x, y).writeAsync(filePath)
-			}),
-			jimpImage.clone().writeAsync(path.resolve(mediaPath, `original.png`)),
-		])
+		jimpImage
+			.crop(crop.x, crop.y, crop.width, crop.height)
+			.writeAsync(path.resolve(mediaPath, `original.png`))
 
 		return
 	},

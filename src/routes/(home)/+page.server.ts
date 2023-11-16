@@ -2,7 +2,6 @@ import { prisma } from '$lib/server'
 import { error, fail } from '@sveltejs/kit'
 import { media, parseFormData, tryOrFail } from '$lib/server'
 import { eventShemaCreate } from '$lib/validation'
-import { FORMAT_A3 } from '$lib/constants'
 
 export const load = async () => {
 	const events = await prisma.event.findMany({ where: { state: 'active' } })
@@ -72,10 +71,6 @@ export const actions = {
 						createdById: session.user.id,
 						posterOf: { connect: { id: event.id } },
 					},
-					sizes: [
-						[FORMAT_A3.x, FORMAT_A3.y],
-						[FORMAT_A3.x * 2, FORMAT_A3.y * 2],
-					],
 				})
 
 				return event

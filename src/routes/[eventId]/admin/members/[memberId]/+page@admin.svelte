@@ -4,7 +4,7 @@
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import MemberDeleteForm from '$lib/member/MemberDeleteForm.svelte'
 	import { eventPath } from '$lib/store'
-	import { mdiArrowLeft, mdiCancel, mdiTrashCanOutline } from '@mdi/js'
+	import { mdiArrowLeft, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import LeaderOf from '$lib/LeaderOf.svelte'
@@ -41,7 +41,7 @@
 						{#if data.member?.roles.includes('owner')}
 							<SetAdminForm memberProfile={data.memberProfile} />
 						{/if}
-						
+
 						<MemberDeleteForm
 							memberId={data.memberProfile.id}
 							redirectTo="{$eventPath}/admin/members"
@@ -59,7 +59,7 @@
 			<Profile user={data.memberProfile.user} class="sm:pt-4" />
 		</div>
 
-		<Avatar user={data.memberProfile.user} class="h-36 w-36 rounded-md" large />
+		<Avatar user={data.memberProfile.user} class="h-36 w-36 rounded-md" size="medium" />
 	</div>
 
 	<SectionCollapse value="profile">

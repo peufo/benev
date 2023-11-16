@@ -1,7 +1,6 @@
 import { eventShemaUpdate, memberFieldShema, memberFieldShemaUpdate } from '$lib/validation'
 import { parseFormData, prisma, tryOrFail, permission, media } from '$lib/server'
 import { z } from '$lib/validation'
-import { FORMAT_A3 } from '$lib/constants'
 
 export const load = async ({ params }) => ({
 	memberFields: await prisma.field.findMany({
@@ -28,10 +27,6 @@ export const actions = {
 						createdById: member.user.id,
 						posterOf: { connect: { id: eventId } },
 					},
-					sizes: [
-						[FORMAT_A3.x, FORMAT_A3.y],
-						[FORMAT_A3.x * 2, FORMAT_A3.y * 2],
-					],
 				})
 
 				return prisma.event.update({

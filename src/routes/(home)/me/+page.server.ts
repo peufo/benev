@@ -160,7 +160,6 @@ export const actions = {
 					createdById: session.user.id,
 					avatarOf: { connect: { id: session.user.id } },
 				},
-				sizes: [256, 512],
 			})
 		)
 	},
