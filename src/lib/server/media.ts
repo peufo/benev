@@ -21,23 +21,21 @@ export const media = {
 			requestOrFormData,
 			z.object({
 				[keyImage]: z.instanceof(Blob),
-				[keyCrop]: z
-					.string()
-					.transform((v) => JSON.parse(v))
-					.pipe(
-						z.object({
-							x: z.number(),
-							y: z.number(),
-							width: z.number(),
-							height: z.number(),
-						})
-					),
+				[keyCrop]: z.json({
+					x: z.number(),
+					y: z.number(),
+					width: z.number(),
+					height: z.number(),
+				}),
 			})
 		)
 		if (err) return err
 		const image = data[keyImage] as Blob
 		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }
 
+		if (image.size === 0) return
+
+		console.log(image, crop)
 		const imageBuffer = await image.arrayBuffer()
 
 		let media = await prisma.media.findFirst({
