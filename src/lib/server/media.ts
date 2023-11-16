@@ -53,7 +53,8 @@ export const media = {
 		const mediaPath = path.resolve(MEDIA_DIR, media.id)
 		try {
 			await fs.access(mediaPath, fs.constants.R_OK)
-		} catch {
+			await fs.rm(mediaPath, { recursive: true, force: true })
+		} finally {
 			await fs.mkdir(mediaPath, { recursive: true })
 		}
 
