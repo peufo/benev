@@ -7,7 +7,7 @@
 		InputText,
 		InputTextarea,
 		DeleteButton,
-		InputImage,
+		InputImagePreview,
 		ImagePlaceholder,
 	} from '$lib/material'
 	import type { Event } from '@prisma/client'
@@ -77,13 +77,14 @@
 		hint="benev.io/{eventId}"
 	/>
 
-	<InputImage title="Affiche" aspect={FORMAT_A3.aspect}>
-		{#if event?.posterId}
-			<img src="{event.posterId}/original.png" alt="Affiche de l'événement" />
-		{:else}
-			<ImagePlaceholder x={FORMAT_A3.x / 2} y={FORMAT_A3.y / 2}>Affiche</ImagePlaceholder>
-		{/if}
-	</InputImage>
+	<InputImagePreview
+		src={event?.posterId ? `${event.posterId}/original.png` : ''}
+		alt="Affiche de l'événement"
+		title="Affiche"
+		aspect={FORMAT_A3.aspect}
+		x={FORMAT_A3.x / 2}
+		y={FORMAT_A3.y / 2}
+	/>
 
 	<InputTextarea
 		key="description"

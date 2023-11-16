@@ -1,4 +1,9 @@
+<script lang="ts" context="module">
+	export type Crop = { width: number; height: number; x: number; y: number }
+</script>
+
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte'
 	import Cropper from 'svelte-easy-crop'
 	import type { Instance as TippyInstance } from 'tippy.js'
 	import { mdiTrayArrowUp } from '@mdi/js'
@@ -6,15 +11,17 @@
 	import { Dialog, DropDown, Icon } from '$lib/material'
 	import { onMount } from 'svelte'
 
-	export let formaction = ''
+	export let formaction: string | undefined = undefined
 	export let aspect = 1
 	export let cropClass = 'aspect-square'
 	export let title = 'Image'
 	let dialog: HTMLDialogElement
 	let tip: TippyInstance
 	let image = ''
-	let crop: { width: number; height: number; x: number; y: number } | undefined = undefined
+	let crop: Crop | undefined = undefined
 	let inputFile: HTMLInputElement
+
+	const dispatch = createEventDispatcher<{ submit: { crop: Crop; image: string } }>()
 
 	function onFileSelected() {
 		if (!inputFile.files) return
@@ -37,6 +44,11 @@
 	})
 	function handleClickActivator() {
 		if (!$$slots.actions) inputFile.click()
+	}
+
+	function handleValidation() {
+		close()
+		if (crop && image) dispatch('submit', { crop, image })
 	}
 </script>
 
@@ -85,6 +97,13 @@
 			on:change={onFileSelected}
 		/>
 
-		<button {formaction} class="btn btn-primary" on:click={close}> Valider </button>
+		<button
+			{formaction}
+			type={formaction ? 'submit' : 'button'}
+			class="btn btn-primary"
+			on:click={handleValidation}
+		>
+			Valider
+		</button>
 	</div>
 </Dialog>
