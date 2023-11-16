@@ -11,8 +11,7 @@ import {
 	sendEmailTemplate,
 	tryOrFail,
 	createAvatarPlaceholder,
-	uploadMedia,
-	deleteMedia,
+	media,
 } from '$lib/server'
 import { loginShema, registerShema } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
@@ -149,14 +148,14 @@ export const actions = {
 	delete_avatar: async ({ locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
-		return tryOrFail(() => deleteMedia({ avatarOf: { id: session.user.id } }))
+		return tryOrFail(() => media.delete({ avatarOf: { id: session.user.id } }))
 	},
 	upload_avatar: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
 		return tryOrFail(() =>
-			uploadMedia(request, {
+			media.upload(request, {
 				where: { avatarOf: { id: session.user.id } },
 				data: {
 					name: `Avatar de ${session.user.firstName} ${session.user.lastName}`,
