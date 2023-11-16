@@ -1,5 +1,5 @@
 import { z, toTuple, type ZodObj } from '$lib/validation'
-import { type Prisma, EventState } from '@prisma/client'
+import { type Prisma, type EventState } from '@prisma/client'
 import { mdiArchiveOutline, mdiEarth, mdiTestTube } from '@mdi/js'
 
 export type EventCreateInput = Omit<Prisma.EventCreateInput, 'owner'>

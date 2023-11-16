@@ -18,7 +18,7 @@ export const actions = {
 					},
 				}),
 			(team) => {
-				const redirectTo = formData['redirectTo'] as string
+				const redirectTo = formData.get('redirectTo') as string
 				return redirectTo || `/${eventId}/teams/${team.id}`
 			}
 		)

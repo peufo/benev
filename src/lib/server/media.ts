@@ -9,6 +9,7 @@ import { MEDIA_DIR } from '$env/static/private'
 import { error } from '@sveltejs/kit'
 
 type UploadOption = {
+	key?: string
 	where: Prisma.MediaWhereInput
 	data: Prisma.MediaCreateArgs['data']
 	/** xy[] or [x, y][] */
@@ -16,11 +17,13 @@ type UploadOption = {
 }
 export const media = {
 	async upload(requestOrFormData: Request | FormData, opt: UploadOption) {
+		const keyImage = opt.key ? `${opt.key}_image` : 'image'
+		const keyCrop = opt.key ? `${opt.key}_crop` : 'crop'
 		const { data, err } = await parseFormData(
 			requestOrFormData,
 			z.object({
-				image: z.instanceof(Blob),
-				crop: z
+				[keyImage]: z.instanceof(Blob),
+				[keyCrop]: z
 					.string()
 					.transform((v) => JSON.parse(v))
 					.pipe(
@@ -34,8 +37,8 @@ export const media = {
 			})
 		)
 		if (err) return err
-
-		const { image, crop } = data
+		const image = data[keyImage] as Blob
+		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }
 
 		const imageBuffer = await image.arrayBuffer()
 
@@ -65,10 +68,7 @@ export const media = {
 				const filePath = path.resolve(mediaPath, `${x}-${y}.png`)
 				return jimpImage.clone().resize(x, y).writeAsync(filePath)
 			}),
-			() => {
-				const filePath = path.resolve(mediaPath, `original.png`)
-				return jimpImage.clone().writeAsync(filePath)
-			},
+			jimpImage.clone().writeAsync(path.resolve(mediaPath, `original.png`)),
 		])
 
 		return

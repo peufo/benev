@@ -11,10 +11,10 @@
 	import { Dialog, DropDown, Icon } from '$lib/material'
 	import { onMount } from 'svelte'
 
-	export let formaction: string | undefined = undefined
 	export let aspect = 1
-	export let cropClass = 'aspect-square'
 	export let title = 'Image'
+	export let formaction: string | undefined = undefined
+	export let key = ''
 	let dialog: HTMLDialogElement
 	let tip: TippyInstance
 	let image = ''
@@ -77,7 +77,7 @@
 		{title}
 	</h2>
 
-	<div class="relative rounded-lg overflow-hidden {cropClass}">
+	<div class="relative rounded-lg overflow-hidden aspect-square">
 		<Cropper
 			{image}
 			{aspect}
@@ -87,11 +87,11 @@
 		/>
 	</div>
 	<div class="flex justify-end mt-2">
-		<input type="hidden" name="crop" value={JSON.stringify(crop)} />
+		<input type="hidden" name="{key ? `${key}_` : ''}crop" value={JSON.stringify(crop)} />
 		<input
 			class="hidden"
 			type="file"
-			name="image"
+			name="{key ? `${key}_` : ''}image"
 			accept="image/jpeg, image/png, image/webp, image/gif, image/avif, image/tiff"
 			bind:this={inputFile}
 			on:change={onFileSelected}

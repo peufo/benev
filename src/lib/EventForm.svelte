@@ -3,13 +3,7 @@
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/validation'
 	import { slide } from 'svelte/transition'
-	import {
-		InputText,
-		InputTextarea,
-		DeleteButton,
-		InputImagePreview,
-		ImagePlaceholder,
-	} from '$lib/material'
+	import { InputText, InputTextarea, DeleteButton, InputImagePreview } from '$lib/material'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { debounce } from '$lib/debounce'
@@ -78,9 +72,10 @@
 	/>
 
 	<InputImagePreview
-		src={event?.posterId ? `${event.posterId}/original.png` : ''}
-		alt="Affiche de l'événement"
+		key="poster"
+		src={event?.posterId ? `/media/${event.posterId}/original.png` : ''}
 		title="Affiche"
+		alt="Affiche de l'événement"
 		aspect={FORMAT_A3.aspect}
 		x={FORMAT_A3.x / 2}
 		y={FORMAT_A3.y / 2}

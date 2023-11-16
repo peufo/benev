@@ -1,6 +1,7 @@
 import { eventShemaUpdate, memberFieldShema, memberFieldShemaUpdate } from '$lib/validation'
-import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
+import { parseFormData, prisma, tryOrFail, permission, media } from '$lib/server'
 import { z } from '$lib/validation'
+import { FORMAT_A3 } from '$lib/constants'
 
 export const load = async ({ params }) => ({
 	memberFields: await prisma.field.findMany({
@@ -13,16 +14,31 @@ export const load = async ({ params }) => ({
 
 export const actions = {
 	update_event: async ({ request, locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, eventShemaUpdate)
+		const member = await permission.admin(eventId, locals)
+		const { err, data, formData } = await parseFormData(request, eventShemaUpdate)
 		if (err) return err
 
 		return tryOrFail(
-			() =>
-				prisma.event.update({
+			async () => {
+				await media.upload(formData, {
+					key: 'poster',
+					where: { posterOf: { id: eventId } },
+					data: {
+						name: `Affiche`,
+						createdById: member.user.id,
+						posterOf: { connect: { id: eventId } },
+					},
+					sizes: [
+						[FORMAT_A3.x, FORMAT_A3.y],
+						[FORMAT_A3.x * 2, FORMAT_A3.y * 2],
+					],
+				})
+
+				return prisma.event.update({
 					where: { id: eventId },
 					data,
-				}),
+				})
+			},
 			eventId !== data.id ? `/${data.id}/admin/config?section=infos` : undefined
 		)
 	},

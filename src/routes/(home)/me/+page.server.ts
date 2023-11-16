@@ -114,10 +114,8 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data, formData } = await parseFormData(request, userUpdateShema)
+		const { err, data } = await parseFormData(request, userUpdateShema)
 		if (err) return err
-
-		console.log({ data, formData })
 
 		return tryOrFail(async () => {
 			const { userId } = session.user
