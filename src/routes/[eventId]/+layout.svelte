@@ -71,7 +71,7 @@
 </main>
 
 <Footer>
-	<div class="flex flex-wrap">
+	<div class="flex flex-wrap justify-center">
 		{#if data.event.web}
 			<a class="btn btn-sm sm:btn-md btn-ghost flex" href={data.event.web} target="_blank">
 				{#if data.event.icon}
