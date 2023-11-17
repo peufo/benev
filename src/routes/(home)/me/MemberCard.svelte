@@ -3,6 +3,7 @@
 	import MemberRole from '$lib/MemberRole.svelte'
 	import { eventStates } from '$lib/validation'
 	import { CardLink, Icon } from '$lib/material'
+	import logo from '$lib/assets/logo.svg'
 
 	export let member: PageData['members'][number]
 
@@ -11,12 +12,25 @@
 </script>
 
 <CardLink href="/{member.eventId}/me">
-	<div class="flex gap-2">
+	<div class="flex gap-4">
 		{#if member.event.posterId}
-			<img src="/media/{member.event.posterId}?size=a6" alt="Affiche de {member.event.name}" />
+			<img
+				src="/media/{member.event.posterId}?size=a6"
+				alt="Affiche de {member.event.name}"
+				class="rounded border"
+			/>
+		{:else}
+			<div
+				style:width="105px"
+				style:height="148px"
+				class="bg-base-200/50 grid place-content-center rounded"
+			>
+				<img src={logo} alt="Affiche par défaut" class="w-16 grayscale opacity-50" />
+			</div>
 		{/if}
-		<div class="grow">
-			<div class="flex gap-2 items-center flex-wrap">
+
+		<div class="grow flex flex-col gap-4">
+			<div class="flex gap-2 items-center">
 				{#if member.event.icon}
 					<img src={member.event.icon} alt="logo de {member.event.name}" class="w-7 inline-block" />
 				{/if}
@@ -30,12 +44,11 @@
 						title={eventStates[member.event.state].label}
 					/>
 				{/if}
-
-				<div class="grow" />
-				<MemberRole roles={member.roles} />
 			</div>
 
-			<div class="flex flex-wrap gap-2 mt-4">
+			<MemberRole roles={member.roles} class="badge-md" iconSize={20} />
+
+			<div class="flex flex-wrap gap-2">
 				<div class="badge whitespace-nowrap">
 					{#if nbSubscribes}
 						<b class="mr-1 opacity-80">{nbSubscribes}</b>

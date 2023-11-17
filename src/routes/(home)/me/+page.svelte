@@ -41,9 +41,11 @@
 	<!-- INVITATIONS -->
 	{#if data.members.filter((m) => !m.isValidedByUser).length}
 		<h2 class="text-xl font-semibold text-base-content/70 mt-4">Invitations</h2>
-		{#each data.members.filter((m) => !m.isValidedByUser) as member}
-			<MemberCard {member} />
-		{/each}
+		<div class="grid grid-cols-2 gap-4">
+			{#each data.members.filter((m) => !m.isValidedByUser) as member}
+				<MemberCard {member} />
+			{/each}
+		</div>
 	{/if}
 
 	<!-- MES EVENEMENTS -->
