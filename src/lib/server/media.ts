@@ -49,12 +49,11 @@ export const media = {
 		})
 
 		const mediaPath = path.resolve(MEDIA_DIR, media.id)
-		try {
-			await fs.access(mediaPath, fs.constants.R_OK)
-			await fs.rm(mediaPath, { recursive: true, force: true })
-		} finally {
-			await fs.mkdir(mediaPath, { recursive: true })
-		}
+		await fs
+			.access(mediaPath, fs.constants.R_OK)
+			.catch(() => {})
+			.then(async () => await fs.rm(mediaPath, { recursive: true, force: true }))
+			.finally(async () => await fs.mkdir(mediaPath, { recursive: true }))
 
 		const jimpImage = await jimp.read(Buffer.from(imageBuffer))
 		jimpImage
