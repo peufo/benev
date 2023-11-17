@@ -73,7 +73,7 @@
 	{/if}
 </main>
 
-<Footer>
+<Footer class="z-10">
 	<div class="flex flex-wrap justify-center">
 		{#if data.event.web}
 			<a class="btn btn-sm sm:btn-md btn-ghost flex" href={data.event.web} target="_blank">
