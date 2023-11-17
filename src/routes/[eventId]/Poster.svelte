@@ -5,8 +5,8 @@
 	const scotchW = 160
 	const scotchH = 30
 	const createScotchPath = () => {
-		const deep = 5
-		const weight = 5
+		const deep = 8
+		const weight = 6
 		let t = `M0 0 H${scotchW}`
 
 		let currentY = 0
