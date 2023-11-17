@@ -21,7 +21,7 @@
 	$: canEdit = $pageStore.data.member?.roles.includes('admin')
 </script>
 
-<PageLayout class="relative">
+<PageLayout class="relative max-w-2xl">
 	{#each blocksHTML as html}
 		{@html html}
 	{:else}
