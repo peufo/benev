@@ -35,12 +35,13 @@
 
 {#if posterId}
 	<div
-		class="relative -z-10"
+		class="relative -z-10 overflow-y-visible"
 		style="--scotchW: {scotchW}px; --scotchH: {scotchH}px;--scotchPath: path('{scotchPath}');"
 	>
 		<div
-			class="absolute will-change-transform max-w-[75%]"
-			style:transform="translate(10%, {180 + scrollY / 1.5}px) rotate(5deg)"
+			class="absolute will-change-transform max-w-[70%]"
+			style:left="calc(35px + 5%)"
+			style:transform="translateY({180 + scrollY / 1.5}px) rotate(5deg)"
 		>
 			<img src="/media/{posterId}?size=a2" alt="Affiche" class="drop-shadow opacity-70" />
 			<div class="scotch bg-base-300/50 top-0 -left-14 rotate-[-40deg]" />
