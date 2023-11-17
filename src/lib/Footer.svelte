@@ -5,7 +5,7 @@
 	export { klass as class }
 </script>
 
-<footer class="footer footer-center p-6 bg-base-100 gap-5 mt-2 overflow-hidden {klass}">
+<footer class="footer footer-center border-t p-6 bg-base-100 gap-5 mt-2 overflow-hidden {klass}">
 	<slot />
 
 	<div class="flex">

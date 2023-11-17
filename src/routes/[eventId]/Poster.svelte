@@ -32,16 +32,17 @@
 </script>
 
 <svelte:window bind:scrollY />
+
 {#if posterId}
 	<div
-		class="relative"
+		class="relative -z-10"
 		style="--scotchW: {scotchW}px; --scotchH: {scotchH}px;--scotchPath: path('{scotchPath}');"
 	>
 		<div
 			class="absolute will-change-transform max-w-[75%]"
 			style:transform="translate(10%, {180 + scrollY / 1.5}px) rotate(5deg)"
 		>
-			<img src="/media/{posterId}?size=a2" alt="Affiche" class="drop-shadow opacity-60" />
+			<img src="/media/{posterId}?size=a2" alt="Affiche" class="drop-shadow opacity-70" />
 			<div class="scotch bg-base-300/50 top-0 -left-14 rotate-[-40deg]" />
 			<div class="scotch bg-base-300/50 top-0 -right-14 rotate-[45deg]" />
 			<div class="scotch bg-base-300/50 bottom-2 -right-14 rotate-[-40deg]" />

@@ -36,7 +36,7 @@
 />
 
 <Notifications zIndex={50}>
-	<div class="flex min-h-screen flex-col bg-base-200">
+	<div class="flex min-h-screen flex-col bg-base-200/20">
 		<slot />
 	</div>
 </Notifications>
