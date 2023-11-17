@@ -24,6 +24,7 @@
 	export let tippyProps: Partial<TippyProps> = {}
 	let klass = ''
 	export { klass as class }
+	export let wrapperClass = ''
 	export let useSingleton = false
 	export let hideOnBlur = false
 	export let tip: TippyInstance | undefined = undefined
@@ -88,7 +89,7 @@
 	}
 </script>
 
-<div>
+<div class={wrapperClass}>
 	<div bind:this={activator}>
 		<slot name="activator" />
 	</div>

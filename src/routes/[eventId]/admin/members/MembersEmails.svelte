@@ -35,16 +35,15 @@
 	}
 </script>
 
-<div class="relative">
+<button class="btn btn-square btn-sm" on:click={handleMailing} class:btn-disabled={isLoading}>
 	{#if isLoading}
-		<span class="absolute left-1 top-1 loading loading-spinner scale-125 text-secondary" />
-	{/if}
-	<button class="btn btn-square btn-sm" on:click={handleMailing} class:btn-disabled={isLoading}>
+		<span class="loading loading-spinner scale-125 text-secondary" />
+	{:else}
 		<Icon
 			path={mdiEmailMultipleOutline}
 			size={18}
 			title="Envoyer un email aux membres"
 			class="transition-transform {isLoading ? 'scale-75' : ''}"
 		/>
-	</button>
-</div>
+	{/if}
+</button>
