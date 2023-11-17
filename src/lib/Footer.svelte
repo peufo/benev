@@ -1,9 +1,11 @@
 <script lang="ts">
 	import logo from '$lib/assets/logo.svg'
 	import { tip } from './action'
+	let klass = ''
+	export { klass as class }
 </script>
 
-<footer class="footer footer-center p-6 bg-base-100 gap-5 mt-2 overflow-hidden">
+<footer class="footer footer-center p-6 bg-base-100 gap-5 mt-2 overflow-hidden {klass}">
 	<slot />
 
 	<div class="flex">

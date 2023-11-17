@@ -16,6 +16,13 @@
 </script>
 
 <div class="max-w-3xl mx-auto flex flex-col gap-4">
+	<div class="flex gap-2 justify-between flex-wrap">
+		<a href="/me" class="btn btn-sm btn-ghost">
+			<Icon path={mdiArrowLeft} size={20} />
+			Tous mes événements
+		</a>
+	</div>
+
 	{#if data.member?.isValidedByUser}
 		<ProfileSection user={data.user}>
 			<svelte:fragment slot="title">
@@ -72,11 +79,4 @@
 	{:else}
 		<MemberForm event={data.event} userId={data.user.id} class="mx-auto" noCancelButton />
 	{/if}
-
-	<div class="flex gap-2 justify-between flex-wrap">
-		<a href="/me" class="btn btn-sm">
-			<Icon path={mdiArrowLeft} size={20} />
-			Tous mes événements
-		</a>
-	</div>
 </div>

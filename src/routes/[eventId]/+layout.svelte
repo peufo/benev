@@ -13,6 +13,7 @@
 	import { eventPath } from '$lib/store'
 	import Footer from '$lib/Footer.svelte'
 	import EventMenu from './EventMenu.svelte'
+	import Poster from './Poster.svelte'
 
 	export let data
 
@@ -23,7 +24,9 @@
 	<title>{data.event.name}</title>
 </svelte:head>
 
-<Header user={data.user}>
+<Poster posterId={data.event.posterId} />
+
+<Header user={data.user} class="">
 	<a
 		slot="start"
 		href={$eventPath}

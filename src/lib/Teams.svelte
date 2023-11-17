@@ -40,11 +40,7 @@
 			style:grid-template-columns="repeat(auto-fill, minmax(325px, 1fr))"
 		>
 			{#each _teams as team (team.id)}
-				<CardLink href="{$eventPath}/teams/{team.id}" class="p-1">
-					<span slot="title">
-						{team.name}
-					</span>
-
+				<CardLink title={team.name} href="{$eventPath}/teams/{team.id}" class="p-1">
 					<div class="grid grid-cols-2 gap-2 items-start pt-2">
 						<div class="flex flex-wrap gap-1">
 							{#each team.leaders as member}

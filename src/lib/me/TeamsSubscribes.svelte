@@ -15,8 +15,7 @@
 {#if teams.length}
 	<div class="grid gap-4 mt-2" style:grid-template-columns="repeat(auto-fill, minmax(325px, 1fr))">
 		{#each teams as team}
-			<CardLink href="/{team.eventId}/teams/{team.id}">
-				<span slot="title">{team.name}</span>
+			<CardLink title={team.name} href="/{team.eventId}/teams/{team.id}">
 				{#each team.periods as period}
 					<div class="flex gap-1 items-center mt-2">
 						<div

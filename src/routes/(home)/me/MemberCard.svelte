@@ -11,40 +11,47 @@
 </script>
 
 <CardLink href="/{member.eventId}/me">
-	<div slot="title" class="flex gap-2 items-center flex-wrap">
-		{#if member.event.icon}
-			<img src={member.event.icon} alt="logo de {member.event.name}" class="w-7 inline-block" />
+	<div class="flex gap-2">
+		{#if member.event.posterId}
+			<img src="/media/{member.event.posterId}?size=a6" alt="Affiche de {member.event.name}" />
 		{/if}
-		<span>{member.event.name}</span>
+		<div class="grow">
+			<div class="flex gap-2 items-center flex-wrap">
+				{#if member.event.icon}
+					<img src={member.event.icon} alt="logo de {member.event.name}" class="w-7 inline-block" />
+				{/if}
+				<span class="font-medium">{member.event.name}</span>
 
-		{#if member.event.state !== 'active'}
-			<Icon
-				class="opacity-70 z-10 {member.event.state === 'draft' ? 'rotate-12' : ''}"
-				size={20}
-				path={eventStates[member.event.state].icon}
-				title={eventStates[member.event.state].label}
-			/>
-		{/if}
+				{#if member.event.state !== 'active'}
+					<Icon
+						class="opacity-70 z-10 {member.event.state === 'draft' ? 'rotate-12' : ''}"
+						size={20}
+						path={eventStates[member.event.state].icon}
+						title={eventStates[member.event.state].label}
+					/>
+				{/if}
 
-		<div class="grow" />
-		<MemberRole roles={member.roles} />
-	</div>
-
-	<div class="flex gap-2 mt-4">
-		<div class="badge whitespace-nowrap">
-			{#if nbSubscribes}
-				<b class="mr-1 opacity-80">{nbSubscribes}</b>
-				<span>Inscription{nbSubscribes > 1 ? 's' : ''}</span>
-			{:else}
-				<span>Pas d'inscription</span>
-			{/if}
-		</div>
-
-		{#if nbLeaderOf}
-			<div class="badge whitespace-nowrap">
-				<b class="mr-1 opacity-80">{nbLeaderOf}</b>
-				<span>Secteur{nbLeaderOf > 1 ? 's' : ''} à charge</span>
+				<div class="grow" />
+				<MemberRole roles={member.roles} />
 			</div>
-		{/if}
+
+			<div class="flex flex-wrap gap-2 mt-4">
+				<div class="badge whitespace-nowrap">
+					{#if nbSubscribes}
+						<b class="mr-1 opacity-80">{nbSubscribes}</b>
+						<span>Inscription{nbSubscribes > 1 ? 's' : ''}</span>
+					{:else}
+						<span>Pas d'inscription</span>
+					{/if}
+				</div>
+
+				{#if nbLeaderOf}
+					<div class="badge whitespace-nowrap">
+						<b class="mr-1 opacity-80">{nbLeaderOf}</b>
+						<span>Secteur{nbLeaderOf > 1 ? 's' : ''} à charge</span>
+					</div>
+				{/if}
+			</div>
+		</div>
 	</div>
 </CardLink>

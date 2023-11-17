@@ -7,6 +7,7 @@ export const FORMAT_A3 = {
 export const MEDIA_PRESETS = {
 	medium: [256, 256],
 	large: [512, 512],
+	a6: [105, 148],
 	a5: [148, 210],
 	a4: [210, 297],
 	a3: [297, 420],

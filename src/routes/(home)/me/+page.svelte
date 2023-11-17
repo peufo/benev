@@ -39,8 +39,8 @@
 	{/if}
 
 	<!-- MES EVENEMENTS -->
-	<div class="flex gap-2 justify-between items-center mt-8">
-		<h2 class="text-xl font-semibold text-base-content/70">Mes évenements</h2>
+	<div class="flex gap-2 justify-between items-center mt-8 mb-3">
+		<h2 class="text-xl font-semibold text-base-content/70">Mes événements</h2>
 		<button class="btn" class:btn-secondary={!data.members.length} on:click={handleClickNewEvent}>
 			<Icon path={mdiPlus} class={data.members.length ? '' : 'fill-secondary-content'} />
 			Organiser
