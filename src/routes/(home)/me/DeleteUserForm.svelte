@@ -7,7 +7,7 @@
 </script>
 
 <form method="post" use:enhance={form.submit}>
-	<Confirm>
+	<Confirm class="btn-sm">
 		<h2 slot="header" class="font-medium text-lg opacity-75">Supprimer mon compte</h2>
 		<span class="text-error" slot="activator">Supprimer mon compte</span>
 

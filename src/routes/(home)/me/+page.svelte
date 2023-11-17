@@ -27,7 +27,15 @@
 	<ProfileSection user={data.user}>
 		<ProfileForm user={data.user} />
 		<hr />
-		<DeleteUserForm />
+		<div class="flex gap-2 flex-wrap">
+			<form method="POST" action="/me?/logout" class="contents">
+				<button class="btn btn-sm btn-ghost">
+					<Icon path={mdiLogout} size={20} class="opacity-70 rotate-180" />
+					Déconnexion
+				</button>
+			</form>
+			<DeleteUserForm />
+		</div>
 	</ProfileSection>
 
 	<!-- INVITATIONS -->
@@ -56,15 +64,6 @@
 				<a href="/" class="btn btn-ghost"> Trouver un évènement </a>
 			</Placeholder>
 		{/each}
-
-		<div class="flex">
-			<form method="POST" action="/me?/logout" class="contents">
-				<button class="btn btn-sm">
-					<Icon path={mdiLogout} size={20} class="opacity-70 rotate-180" />
-					Déconnexion
-				</button>
-			</form>
-		</div>
 	</div>
 </div>
 
