@@ -5,6 +5,6 @@
 	export let data
 </script>
 
-<Card class="max-w-lg m-auto">
+<Card class="bg-base-100 m-auto max-w-md">
 	<TeamForm isUpdate team={data.team} />
 </Card>

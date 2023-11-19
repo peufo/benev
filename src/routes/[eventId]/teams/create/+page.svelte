@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { Card } from '$lib/material'
 	import TeamForm from '../TeamForm.svelte'
 </script>
 
-<div class="card p-4 bg-base-100 m-auto max-w-md">
+<Card class="bg-base-100 m-auto max-w-md">
 	<TeamForm />
-</div>
+</Card>
