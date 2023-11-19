@@ -95,7 +95,7 @@
 	<thead>
 		<tr>
 			<th class="align-middle">Qui peut faire quoi ?</th>
-			{#each Object.values(rolesMap) as { icon, label }}
+			{#each Object.values(rolesMap).slice(1) as { icon, label }}
 				<th>
 					<Icon path={icon} title={label} class="opacity-70" />
 				</th>
