@@ -2,7 +2,7 @@
 	import { Card } from '$lib/material'
 </script>
 
-<Card class="max-w-lg mx-auto">
+<Card class="max-w-xl mx-auto">
 	<div class="prose">
 		<h1>Conditions d'utilisation</h1>
 		<p>

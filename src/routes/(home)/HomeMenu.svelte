@@ -1,20 +1,12 @@
 <script lang="ts">
-	import { eventPath } from '$lib/store'
-	import { page } from '$app/stores'
-	import { Icon } from '$lib/material'
 	import { mdiMenu } from '@mdi/js'
+	import { Icon } from '$lib/material'
 	import DropDown from '$lib/material/DropDown.svelte'
-
-	const tabs: { path: string; label: string }[] = [{ path: '/terms', label: 'Conditions' }]
+	import HomeMenuItems from './HomeMenuItems.svelte'
 </script>
 
 <div class="gap-2 hidden lg:flex">
-	{#each tabs as { path, label }}
-		{@const active = $page.route.id?.startsWith(`/[eventId]${path}`)}
-		<a href="{$eventPath}{path}" class="menu-item" class:active>
-			{label}
-		</a>
-	{/each}
+	<HomeMenuItems />
 </div>
 
 <DropDown class="max-h-none min-w-[200px]" hideOnBlur>
@@ -23,11 +15,6 @@
 	</button>
 
 	<div class="flex flex-col gap-1">
-		{#each tabs as { path, label }}
-			{@const active = $page.route.id?.startsWith(`/[eventId]${path}`)}
-			<a href="{$eventPath}{path}" class="menu-item" class:active>
-				{label}
-			</a>
-		{/each}
+		<HomeMenuItems />
 	</div>
 </DropDown>

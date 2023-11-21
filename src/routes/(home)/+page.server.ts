@@ -3,11 +3,6 @@ import { error, fail } from '@sveltejs/kit'
 import { media, parseFormData, tryOrFail } from '$lib/server'
 import { eventShemaCreate } from '$lib/validation'
 
-export const load = async () => {
-	const events = await prisma.event.findMany({ where: { state: 'active' } })
-	return { events }
-}
-
 export const actions = {
 	new_event: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
@@ -32,6 +27,7 @@ export const actions = {
 			'media',
 			'help',
 			'terms',
+			'events',
 		]
 		if (reservedPaths.includes(data.id))
 			return nameFail(`Les noms suivant sont réservés: ${reservedPaths.join(', ')}`)

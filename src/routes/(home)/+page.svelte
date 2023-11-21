@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { CardLink } from '$lib/material'
 	import logo from '$lib/assets/logo.svg'
 
 	import Benev from '$lib/Benev.svelte'
@@ -33,25 +32,4 @@
 			</div>
 		</div>
 	</div>
-
-	<!-- ACTIVES EVENTS -->
-	{#if data.events.length}
-		<div class="flex gap-2 items-center mt-10 mb-4">
-			<h2 class="text-xl font-semibold text-base-content/70">Évènements à venir</h2>
-		</div>
-
-		<ul class="flex flex-col gap-2 mt-2">
-			{#each data.events as event}
-				<CardLink href="/{event.id}">
-					<div class="flex items-center gap-2">
-						{#if event.icon}
-							<img src={event.icon} alt="logo" class="h-6" />
-						{/if}
-						<span class="font-medium mb-2">{event.name}</span>
-					</div>
-					<p class="opacity-70">{event.description}</p>
-				</CardLink>
-			{/each}
-		</ul>
-	{/if}
 </div>
