@@ -83,8 +83,8 @@
 			</div>
 		</form>
 
-		<div class="flex p-4 gap-4 justify-center">
-			{#if false}
+		<div class="border border-t-0 rounded-b-2xl">
+			<div class="flex p-4 gap-4 justify-center">
 				<a
 					href="/auth/google"
 					class="btn btn-square"
@@ -94,21 +94,21 @@
 				>
 					<img src={googleLogo} alt="Logo Google" />
 				</a>
-			{/if}
 
-			<a
-				href="/auth/github"
-				class="btn btn-square"
-				data-sveltekit-preload-data="off"
-				data-sveltekit-preload-code="off"
-			>
-				<Icon path={mdiGithub} title="Connexion avec Github" />
-			</a>
-		</div>
+				<a
+					href="/auth/github"
+					class="btn btn-square"
+					data-sveltekit-preload-data="off"
+					data-sveltekit-preload-code="off"
+				>
+					<Icon path={mdiGithub} title="Connexion avec Github" />
+				</a>
+			</div>
 
-		<div class="text-center text-xs text-base-content/80 pb-4">
-			En te connectant, tu acceptes
-			<a href="/terms" class="link" target="_blank"> nos conditions d'utilisations </a>
+			<div class="text-center text-xs text-base-content/80 pb-4">
+				En te connectant, tu acceptes
+				<a href="/terms" class="link" target="_blank"> nos conditions d'utilisations </a>
+			</div>
 		</div>
 	</div>
 </div>
