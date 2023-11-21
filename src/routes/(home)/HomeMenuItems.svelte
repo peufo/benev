@@ -6,7 +6,7 @@
 
 	const tabs: { path: string; label: string; icon: string }[] = [
 		{ path: '/terms', label: 'Conditions', icon: mdiGavel },
-		{ path: '/events', label: 'Événements', icon: mdiCalendarMultiple },
+		{ path: '/events', label: 'Évènements', icon: mdiCalendarMultiple },
 	]
 </script>
 

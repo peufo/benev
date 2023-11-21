@@ -4,7 +4,7 @@
 	const tabs = [
 		{ label: 'Model de mail', path: '/root/mails' },
 		{ label: 'Migration', path: '/root/migrate' },
-		{ label: 'Événements', path: '/root/events' },
+		{ label: 'Évènements', path: '/root/events' },
 	]
 </script>
 

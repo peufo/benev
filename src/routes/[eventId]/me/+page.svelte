@@ -19,7 +19,7 @@
 	<div class="flex gap-2 justify-between flex-wrap">
 		<a href="/me" class="btn btn-sm btn-ghost">
 			<Icon path={mdiArrowLeft} size={20} />
-			Tous mes événements
+			Tous mes évènements
 		</a>
 	</div>
 

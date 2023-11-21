@@ -95,7 +95,7 @@
 
 	<div class="flex gap-1 items-center col-span-full">
 		<span class="text-xs opacity-70">
-			Ces informations ne sont partagées qu'avec les responsables des événements auquels tu
+			Ces informations ne sont partagées qu'avec les responsables des évènements auquels tu
 			participes.
 		</span>
 		<div class="grow" />

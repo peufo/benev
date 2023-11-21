@@ -24,7 +24,7 @@
 		beforeRequest: async () => {
 			if (event?.state !== 'active') return
 			if (event.id === eventId) return
-			const msg = `Es tu sûr de vouloir modifier le lien de l'évenement de "/${event.id}" pour "${eventId} ?"`
+			const msg = `Es tu sûr de vouloir modifier le lien de l'évènement de "/${event.id}" pour "${eventId} ?"`
 			if (!confirm(msg)) {
 				throw Error('Mise à jour annulé')
 			}
@@ -66,7 +66,7 @@
 	<InputText key="name" label="Nom de l'évènement" bind:value={name} on:input={handleNameInput} />
 	<InputText
 		key="id"
-		label="Lien de l'évenement"
+		label="Lien de l'évènement"
 		on:input={handleEventIdInput}
 		bind:value={eventId}
 		hint="benev.io/{eventId}"
@@ -76,7 +76,7 @@
 		key="poster"
 		src={event?.posterId ? `/media/${event.posterId}/original.png` : ''}
 		title="Affiche"
-		alt="Affiche de l'événement"
+		alt="Affiche de l'évènement"
 		aspect={FORMAT_A3.aspect}
 		x={FORMAT_A3.x / 2}
 		y={FORMAT_A3.y / 2}
@@ -101,7 +101,7 @@
 			{#if icon || scrapIconPending}
 				<div transition:slide={{ axis: 'x' }} class="w-10 grid place-content-center">
 					{#if icon}
-						<img src={icon} alt="Icon de l'événement" class="w-5" />
+						<img src={icon} alt="Icon de l'évènement" class="w-5" />
 					{:else if scrapIconPending}
 						<div class="loading loading-ring loading-xs" />
 					{/if}

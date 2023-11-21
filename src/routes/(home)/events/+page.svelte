@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { CardLink, Placeholder } from '$lib/material'
+	import logo from '$lib/assets/logo.svg'
 
 	export let data
 </script>
@@ -12,13 +13,33 @@
 	<ul class="flex flex-col gap-2 mt-2">
 		{#each data.events as event}
 			<CardLink href="/{event.id}">
-				<div class="flex items-center gap-2">
-					{#if event.icon}
-						<img src={event.icon} alt="logo" class="h-6" />
+				<div class="flex gap-4 items-start">
+					{#if event.posterId}
+						<img
+							src="/media/{event.posterId}?size=a6"
+							alt="Affiche de {event.name}"
+							class="rounded border"
+						/>
+					{:else}
+						<div
+							style:width="105px"
+							style:height="148px"
+							class="bg-base-200/50 grid place-content-center rounded"
+						>
+							<img src={logo} alt="Affiche par défaut" class="w-16 grayscale opacity-50" />
+						</div>
 					{/if}
-					<span class="font-medium mb-2">{event.name}</span>
+
+					<div>
+						<div class="flex items-center gap-2 mt-2 mb-4">
+							{#if event.icon}
+								<img src={event.icon} alt="logo" class="h-6" />
+							{/if}
+							<span class="font-medium">{event.name}</span>
+						</div>
+						<p class="opacity-90 text-sm pr-2 pb-2">{event.description}</p>
+					</div>
 				</div>
-				<p class="opacity-70">{event.description}</p>
 			</CardLink>
 		{:else}
 			<Placeholder class="border">Aucun évènements</Placeholder>

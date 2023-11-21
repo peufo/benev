@@ -36,14 +36,14 @@
 			</p>
 			<ol>
 				<li>Toi-même</li>
-				<li>Les responsables d’un événement auquel tu a validé ta participation</li>
+				<li>Les responsables d’un évènement auquel tu a validé ta participation</li>
 				<li>
 					Les développeurs en charge de l’hébergement de l’application dans le cadre de tâches comme
 					du support technique et de la modération
 				</li>
 			</ol>
 			<p>Tu peux supprimer ton compte et toutes les données qui sont associées via ton profil.</p>
-			<p>Tu peux également supprimer ta participation à un événement via ton profil de membre.</p>
+			<p>Tu peux également supprimer ta participation à un évènement via ton profil de membre.</p>
 			<p>
 				Benev.io n'utilise pas de cookies tiers. Nous respectons ta vie privée et ne suivons pas tes
 				activités en dehors de benev.io.
@@ -76,8 +76,8 @@
 				inférieurs aux applications concurrentes.
 			</p>
 			<p>
-				Nous demandons 5 CHF par événement et un coût additionnel de 0.20 CHF par membre participant
-				à l'événement.
+				Nous demandons 5 CHF par évènement et un coût additionnel de 0.20 CHF par membre participant
+				à l'évènement.
 			</p>
 		</section>
 

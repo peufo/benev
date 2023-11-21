@@ -26,7 +26,9 @@
 			<p>
 				Tu peux
 				<a href="/{data.event.id}/teams"> parcourir les secteurs </a>
-				pour t'inscrire aux périodes de travail qui t'intéressent.<br />
+				pour t'inscrire aux périodes de travail qui t'intéressent.
+			</p>
+			<p>
 				<a href="/{data.event.id}/me">Ton tableau de bord</a> te permetra ensuite de consulter ton profil
 				et tes inscriptions.
 			</p>
