@@ -76,10 +76,10 @@
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
 
-	<input type="hidden" name="date_start" value="{date}T{start}" />
+	<input type="hidden" name="start" value="{date}T{start}" />
 	<input
 		type="hidden"
-		name="date_end"
+		name="end"
 		value={dayjs(`${date}T${end}`).add(+endIsNextDay, 'day').format('YYYY-MM-DDTHH:mm')}
 	/>
 
