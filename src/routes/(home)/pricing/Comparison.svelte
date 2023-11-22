@@ -54,7 +54,7 @@
 			bind:value={nbMembers}
 			class="w-12 inline-block text-center border rounded font-medium"
 		/>
-		membres
+		membre{nbMembers > 1 ? 's' : ''}
 	</p>
 
 	{#each _apps as app (app.name)}

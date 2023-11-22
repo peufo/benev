@@ -6,7 +6,7 @@
 	export let data
 </script>
 
-<div class="mx-auto max-w-md">
+<div class="mx-auto max-w-lg">
 	<Card>
 		<h2 slot="title" class="text-center text-xl">Tarif unique</h2>
 		<div class="mt-2 mb-6 grid mx-auto" style:grid-template-columns="1fr 50px 1fr">
