@@ -1,7 +1,9 @@
 <script lang="ts">
+	import type { FormEventHandler } from 'svelte/elements'
+	import { flip } from 'svelte/animate'
 	import { tip } from '$lib/action'
-
 	import { apps } from './comparison'
+	import { debounce } from 'debounce'
 
 	export let rates: Record<string, number> = {}
 
@@ -33,6 +35,23 @@
 		.map((app) => ({ ...app, tarif: app.getTarif(nbEvents, nbMembers) }))
 		.sort((a, b) => a.tarif - b.tarif)
 	$: tarifMax = Math.max(..._apps.map((app) => app.tarif))
+
+	const handleInputNbEvents: FormEventHandler<HTMLInputElement> = (event) => {
+		if (animated) event.currentTarget.valueAsNumber = nbEvents
+		else nbEvents = Math.max(event.currentTarget.valueAsNumber, 1)
+	}
+	const handleInputNbMembers: FormEventHandler<HTMLInputElement> = (event) => {
+		if (animated) event.currentTarget.valueAsNumber = nbMembers
+		else nbMembers = Math.max(event.currentTarget.valueAsNumber, 0)
+	}
+
+	let animated = false
+	const ANIMATION_DURATION = 300
+	const animationEnd = debounce(() => (animated = false), ANIMATION_DURATION)
+	const handleAnimationStart = () => {
+		animated = true
+		animationEnd()
+	}
 </script>
 
 <div class="border p-4 rounded-lg">
@@ -42,7 +61,8 @@
 			type="number"
 			min={1}
 			max={1_000}
-			bind:value={nbEvents}
+			value={nbEvents}
+			on:input={handleInputNbEvents}
 			class="w-12 inline-block text-center border rounded font-medium"
 		/>
 		événement{nbEvents > 1 ? 's' : ''} de
@@ -51,14 +71,19 @@
 			min={0}
 			max={100_000}
 			step={10}
-			bind:value={nbMembers}
+			value={nbMembers}
+			on:input={handleInputNbMembers}
 			class="w-12 inline-block text-center border rounded font-medium"
 		/>
 		membre{nbMembers > 1 ? 's' : ''}
 	</p>
 
 	{#each _apps as app (app.name)}
-		<div class="pt-2">
+		<div
+			class="pt-2"
+			animate:flip={{ duration: ANIMATION_DURATION }}
+			on:animationstart={handleAnimationStart}
+		>
 			<div>
 				<a href={app.href} target="_blank" class="font-medium opacity-80 hover:opacity-100 text-sm">
 					{app.name}
