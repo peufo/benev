@@ -13,7 +13,5 @@
 		alt="Avatar de l'utilisateur"
 		class={klass}
 		style="margin: 0 !important;"
-		width={size}
-		height={size}
 	/>
 {/key}

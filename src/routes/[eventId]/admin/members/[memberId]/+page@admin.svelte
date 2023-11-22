@@ -17,7 +17,7 @@
 </script>
 
 <div class="grid gap-6">
-	<div class="flex justify-between">
+	<div class="flex justify-between gap-8">
 		<div>
 			<div class="flex gap-2 items-center flex-wrap">
 				<a
@@ -59,7 +59,11 @@
 			<Profile user={data.memberProfile.user} class="sm:pt-4" />
 		</div>
 
-		<Avatar user={data.memberProfile.user} class="h-36 w-36 rounded-md" size="medium" />
+		<Avatar
+			user={data.memberProfile.user}
+			class="w-24 h-24 sm:w-36 sm:h-36 rounded-md"
+			size="medium"
+		/>
 	</div>
 
 	<SectionCollapse value="profile">
