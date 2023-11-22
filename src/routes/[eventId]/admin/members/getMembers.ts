@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit'
 import { z } from '$lib/validation'
 import type { Prisma } from '@prisma/client'
 import { parseQuery, prisma, getMemberRoles } from '$lib/server'
@@ -10,13 +9,14 @@ export const getMembers = async (eventId: string, url: URL) => {
 			search: z.string().optional(),
 			start: z.date().optional(),
 			end: z.date().optional(),
-			teams: z.string().optional(),
+			teams: z.array(z.string()).optional(),
 			role: z.enum(['member', 'leader', 'admin']).optional(),
 			fieldId: z.string().optional(),
 			fieldValue: z.string().optional(),
 			skip: z.number().default(0),
 			take: z.number().default(20),
 			summary: z.boolean().default(false),
+			isAbsent: z.booleanAsString().optional(),
 			all: z.boolean().default(false),
 		})
 	)
@@ -32,14 +32,7 @@ export const getMembers = async (eventId: string, url: URL) => {
 		}
 	}
 
-	if (query.teams) {
-		try {
-			const teams = JSON.parse(query.teams) as string[]
-			teamWhere.id = { in: teams }
-		} catch {
-			throw error(400, '"teams is not a valid JSON of type string[]')
-		}
-	}
+	if (query.teams) teamWhere.id = { in: query.teams }
 
 	const subscribeWhere: Prisma.SubscribeWhereInput = {
 		state: { in: ['request', 'accepted'] },
@@ -48,6 +41,8 @@ export const getMembers = async (eventId: string, url: URL) => {
 			team: teamWhere,
 		},
 	}
+
+	if (query.role === 'member') subscribeWhere.isAbsent = query.isAbsent
 
 	const subscribesFilter = !!(query.role || query.start || query.end || query.teams)
 	if (subscribesFilter) {

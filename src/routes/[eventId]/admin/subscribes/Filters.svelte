@@ -3,7 +3,12 @@
 	import { PeriodPickerButton } from '$lib/period'
 	import { subscribeStateLabel } from '$lib/validation'
 	import InputOptionInParam from '$lib/material/input/InputOptionInParam.svelte'
-	import { mdiAccountCircleOutline, mdiShieldAccountOutline } from '@mdi/js'
+	import {
+		mdiAccountCircleOutline,
+		mdiAlertOutline,
+		mdiCheckCircleOutline,
+		mdiShieldAccountOutline,
+	} from '@mdi/js'
 
 	export let teams: { id: string; name: string }[]
 </script>
@@ -23,6 +28,14 @@
 	options={{
 		leader: { label: 'Inscrit par un responsable', icon: mdiShieldAccountOutline },
 		user: { label: 'Inscrit par le membre', icon: mdiAccountCircleOutline },
+	}}
+/>
+
+<InputOptionInParam
+	key="isAbsent"
+	options={{
+		false: { label: 'Marqué comme présent', icon: mdiCheckCircleOutline },
+		true: { label: 'Marqué comme absent', icon: mdiAlertOutline },
 	}}
 />
 

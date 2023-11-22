@@ -12,6 +12,7 @@
 	import MemberRole from '$lib/MemberRole.svelte'
 	import Profile from './Profile.svelte'
 	import SetAdminForm from './SetAdminForm.svelte'
+	import MemberAbsences from '$lib/member/MemberAbsences.svelte'
 
 	export let data
 </script>
@@ -55,6 +56,8 @@
 				{:else}
 					<MemberRole roles={data.memberProfile.roles} />
 				{/if}
+
+				<MemberAbsences subscribes={data.memberProfile.subscribes} />
 			</div>
 			<Profile user={data.memberProfile.user} class="sm:pt-4" />
 		</div>

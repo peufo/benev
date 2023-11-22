@@ -1,7 +1,15 @@
 <script lang="ts">
+	import { slide } from 'svelte/transition'
 	import type { Field } from '@prisma/client'
-	import { mdiAccountCircleOutline, mdiShieldAccountOutline, mdiStarOutline } from '@mdi/js'
+	import {
+		mdiAccountCircleOutline,
+		mdiAlertOutline,
+		mdiCheckCircleOutline,
+		mdiShieldAccountOutline,
+		mdiStarOutline,
+	} from '@mdi/js'
 
+	import { urlParam } from '$lib/store'
 	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
 	import { InputCheckboxsMenu, InputOptionInParam } from '$lib/material'
 	import FieldsFilter from '$lib/FieldsFilter.svelte'
@@ -37,5 +45,17 @@
 		},
 	}}
 />
+
+{#if $urlParam.hasValue('role', 'member')}
+	<div transition:slide={{ axis: 'x' }}>
+		<InputOptionInParam
+			key="isAbsent"
+			options={{
+				false: { label: 'Présent à toutes ses périodes', icon: mdiCheckCircleOutline },
+				true: { label: 'Absent à une période ou plus', icon: mdiAlertOutline },
+			}}
+		/>
+	</div>
+{/if}
 
 <FieldsFilter {fields} />

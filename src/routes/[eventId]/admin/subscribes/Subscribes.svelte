@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { Placeholder } from '$lib/material'
+	import { Icon, Placeholder } from '$lib/material'
 	import { formatRange } from '$lib/formatRange'
 	import { eventPath } from '$lib/store'
-	import { SubscribeCreatedBy, SubscribeStateForm } from '$lib/subscribe'
+	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
+	import { tip } from '$lib/action'
+	import { mdiAlertOutline } from '@mdi/js'
 
 	export let subscribes: PageData['subscribes']
 </script>
@@ -46,6 +48,12 @@
 									{sub.member.user.lastName}
 								</span>
 								<MemberRole roles={sub.member.roles} mode="icon" />
+
+								{#if sub.isAbsent}
+									<div use:tip={{ content: 'Absent à sa période de travail' }}>
+										<Icon path={mdiAlertOutline} class="fill-warning" size={20} />
+									</div>
+								{/if}
 							</a>
 						</td>
 						<td>
@@ -57,8 +65,12 @@
 							<SubscribeCreatedBy createdBy={sub.createdBy} />
 						</td>
 
-						<td>
+						<td align="center">
 							<SubscribeStateForm subscribe={sub} isLeader />
+						</td>
+
+						<td align="center">
+							<SubscribeMenu subscribe={sub} />
 						</td>
 					</tr>
 				{/each}

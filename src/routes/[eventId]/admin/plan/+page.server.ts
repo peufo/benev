@@ -1,21 +1,17 @@
 import { z } from '$lib/validation'
 import type { Prisma } from '@prisma/client'
 import { parseQuery, prisma } from '$lib/server'
-import { jsonParse } from '$lib/jsonParse.js'
 
 export const load = async ({ url, params: { eventId } }) => {
 	const query = parseQuery(
 		url,
 		z.object({
-			teams: z.string().optional(),
+			teams: z.array(z.string()).optional(),
 		})
 	)
 	const where: Prisma.TeamWhereInput = { eventId }
 
-	if (query.teams) {
-		const teams = jsonParse<string[]>(query.teams, [])
-		where.id = { in: teams }
-	}
+	if (query.teams) where.id = { in: query.teams }
 
 	return {
 		teams_periods: await prisma.team.findMany({

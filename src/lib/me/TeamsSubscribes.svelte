@@ -2,8 +2,10 @@
 	import type { Period, Subscribe, Team } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { formatRange } from '$lib/formatRange'
-	import { CardLink, Placeholder } from '$lib/material'
-	import { SubscribeCreatedBy, SubscribeStateForm } from '$lib/subscribe'
+	import { CardLink, Icon, Placeholder } from '$lib/material'
+	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
+	import { mdiAlertOutline } from '@mdi/js'
+	import { tip } from '$lib/action'
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 
@@ -15,6 +17,7 @@
 		{#each teams as team}
 			<CardLink title={team.name} href="/{team.eventId}/teams/{team.id}">
 				{#each team.periods as period}
+					{@const subscribe = period.subscribes[0]}
 					<div class="flex gap-1 items-center mt-2">
 						<div
 							class="
@@ -28,7 +31,13 @@
 								</a>
 							{/if}
 
-							<SubscribeCreatedBy createdBy={period.subscribes[0].createdBy} size={22} />
+							<SubscribeCreatedBy createdBy={subscribe.createdBy} size={22} />
+
+							{#if subscribe.isAbsent}
+								<div class="z-10" use:tip={{ content: 'Absent à sa période de travail' }}>
+									<Icon path={mdiAlertOutline} class="fill-warning" size={20} />
+								</div>
+							{/if}
 
 							<span class="text-sm">{formatRange(period)}</span>
 							<div class="grow" />
@@ -39,6 +48,10 @@
 							eventId={team.eventId}
 							{isLeader}
 						/>
+
+						{#if isLeader}
+							<SubscribeMenu {subscribe} />
+						{/if}
 					</div>
 				{/each}
 			</CardLink>

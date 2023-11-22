@@ -11,28 +11,24 @@ export const getSubscribes = async (eventId: string, url: URL) => {
 			search: z.string().optional(),
 			start: z.date().optional(),
 			end: z.date().optional(),
-			teams: z.string().optional(),
+			teams: z.array(z.string()).optional(),
 			states: z.string().optional(),
 			skip: z.number().default(0),
 			take: z.number().default(20),
 			// TODO: use enum provided by prisma for "createdBy" -> SubscribeCreatedBy
 			createdBy: z.enum(['leader', 'user']).optional(),
+			isAbsent: z.booleanAsString().optional(),
 			all: z.boolean().default(false),
 		})
 	)
+
+	console.log(query)
 
 	const where: Prisma.SubscribeWhereInput = {}
 	const team: Prisma.TeamWhereInput = { eventId }
 	const period: Prisma.PeriodWhereInput = { team }
 
-	if (query.teams) {
-		try {
-			const teams = JSON.parse(query.teams) as string[]
-			team.id = { in: teams }
-		} catch {
-			throw error(400, '"teams is not a valid JSON of type string[]')
-		}
-	}
+	if (query.teams) team.id = { in: query.teams }
 
 	if (query.start && query.end) {
 		period.start = { lte: query.end }
@@ -61,9 +57,8 @@ export const getSubscribes = async (eventId: string, url: URL) => {
 		where.state = { in: states }
 	}
 
-	if (query.createdBy) {
-		where.createdBy = query.createdBy
-	}
+	if (query.createdBy) where.createdBy = query.createdBy
+	if (query.isAbsent !== undefined) where.isAbsent = query.isAbsent
 
 	return {
 		subscribes: await prisma.subscribe

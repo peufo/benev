@@ -4,7 +4,9 @@ import { jsonParse } from '$lib/jsonParse'
 export const z = {
 	...zod,
 	json,
+	array,
 	relations,
+	booleanAsString,
 	number: zod.coerce.number,
 	bigint: zod.coerce.bigint,
 	boolean: zod.coerce.boolean,
@@ -13,6 +15,14 @@ export const z = {
 
 function json<T extends zod.ZodRawShape>(shap: T) {
 	return zod.string().transform(jsonParse).pipe(zod.object(shap))
+}
+
+function array<T extends zod.ZodTypeAny>(shap: T) {
+	return zod.string().transform(jsonParse).pipe(zod.array(shap))
+}
+
+function booleanAsString() {
+	return zod.enum(['true', 'false']).transform((value) => value === 'true')
 }
 
 type Operation = 'set' | 'disconnect' | 'delete' | 'connect'

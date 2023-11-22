@@ -18,7 +18,7 @@
 </script>
 
 <DropDown tippyProps={{ arrow: true }}>
-	<button slot="activator" class="btn btn-sm btn-square btn-ghost hover:bg-base-200">
+	<button slot="activator" class="relative z-10 btn btn-sm btn-square btn-ghost hover:bg-base-200">
 		<Icon path={mdiDotsHorizontal} size={20} class="opacity-80" />
 	</button>
 

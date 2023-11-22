@@ -51,7 +51,7 @@
 
 <div class="flex flex-col gap-3">
 	<div class="flex gap-x-2 gap-y-2 flex-wrap">
-		<InputSearch />
+		<InputSearch class="max-w-[175px]" />
 		<MembersFilter fields={data.fields} teams={data.teams} />
 		<ColumnsSelect {columns} bind:selectedColumnsId />
 

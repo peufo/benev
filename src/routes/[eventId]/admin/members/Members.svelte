@@ -9,6 +9,8 @@
 	import Avatar from '$lib/me/Avatar.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
 
+	import MemberAbsences from '$lib/member/MemberAbsences.svelte'
+
 	type Member = PageData['members'][number]
 	export let members: Member[]
 
@@ -43,6 +45,7 @@
 									{member.user.lastName}
 								</span>
 								<MemberRole roles={member.roles} mode="icon" />
+								<MemberAbsences subscribes={member.subscribes} />
 							</div>
 						</td>
 
