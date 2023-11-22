@@ -26,7 +26,7 @@ export const apps: App[] = [
 		name: 'Swiss Volunteers',
 		href: 'https://www.swissvolunteers.ch',
 		getTarif: (events, members) => {
-			const discount = 700
+			const discount = events * 700
 			const licences = Math.max(members - 100, 0)
 			return events * (1000 + licences * 10) - discount
 		},
