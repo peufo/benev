@@ -12,15 +12,13 @@
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
 	import { formatRange } from '$lib/formatRange'
-	import Subscribes from '$lib/PeriodSubscribes.svelte'
-	import SubscribeForm from '$lib/SubscribeForm.svelte'
+	import { SubscribeForm, SubscribeStateForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Leaders from '$lib/Leaders.svelte'
 	import MemberForm from '$lib/MemberForm.svelte'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import Progress from '$lib/Progress.svelte'
 	import { slide } from 'svelte/transition'
-	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
 	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
 
 	export let data
@@ -83,12 +81,13 @@
 				href={`${$eventPath}/admin/subscribes?teams=["${data.team.id}"]`}
 				class="btn btn-square btn-sm"
 			>
-				<Icon path={mdiClipboardTextMultipleOutline} title="Toutes les inscriptions du secteur" size={20}  />
+				<Icon
+					path={mdiClipboardTextMultipleOutline}
+					title="Toutes les inscriptions du secteur"
+					size={20}
+				/>
 			</a>
-			<a
-				href={`${$eventPath}/admin/plan?teams=["${data.team.id}"]`}
-				class="btn btn-square btn-sm"
-			>
+			<a href={`${$eventPath}/admin/plan?teams=["${data.team.id}"]`} class="btn btn-square btn-sm">
 				<Icon path={mdiChartGantt} title="Voir le planning du secteur" />
 			</a>
 
@@ -187,7 +186,7 @@
 						<td class="py-0" colspan="3">
 							{#if isOpen}
 								<div class="py-3 pl-6" transition:slide>
-									<Subscribes subscribes={period.subscribes} />
+									<SubscribesOfPeriod subscribes={period.subscribes} />
 								</div>
 							{/if}
 						</td>

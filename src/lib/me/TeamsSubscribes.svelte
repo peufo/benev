@@ -1,11 +1,9 @@
 <script lang="ts">
 	import type { Period, Subscribe, Team } from '@prisma/client'
-	import { formatRange } from '$lib/formatRange'
-	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
-	import { CardLink, Placeholder } from '$lib/material'
-
-	import SubscribeCreatedBy from '$lib/SubscribeCreatedBy.svelte'
 	import { page } from '$app/stores'
+	import { formatRange } from '$lib/formatRange'
+	import { CardLink, Placeholder } from '$lib/material'
+	import { SubscribeCreatedBy, SubscribeStateForm } from '$lib/subscribe'
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 

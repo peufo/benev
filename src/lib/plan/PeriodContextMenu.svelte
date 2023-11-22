@@ -6,8 +6,7 @@
 	import { formatRangeShort } from '$lib/formatRange'
 	import { ContextMenu, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import PeriodSubscribes from '$lib/PeriodSubscribes.svelte'
-	import InviteSubscribeForm from '$lib/InviteSubscribeForm.svelte'
+	import { SubscribeInviteForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import PeriodDuplicate from './PeriodDuplicate.svelte'
 	import ContextMenuToggle from './ContextMenuToggle.svelte'
 	import PeriodForm from '$lib/PeriodForm.svelte'
@@ -75,10 +74,10 @@
 	{#if period}
 		{#if mode === 'subscribes'}
 			<div class="p-2 flex flex-col gap-2">
-				<PeriodSubscribes subscribes={period.subscribes} on:success={() => contextMenu.hide()} />
+				<SubscribesOfPeriod subscribes={period.subscribes} on:success={() => contextMenu.hide()} />
 
 				{#if !isComplet}
-					<InviteSubscribeForm
+					<SubscribeInviteForm
 						periodId={period.id}
 						on:success={() => contextMenu.hide()}
 						on:input={() => {

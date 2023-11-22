@@ -27,7 +27,7 @@
 	import { createEventDispatcher } from 'svelte'
 	import type { Props as TippyProps } from 'tippy.js'
 	import type { Subscribe } from '@prisma/client'
-	import SubscribeState from '$lib/SubscribeState.svelte'
+	import { SubscribeState } from '$lib/subscribe'
 	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 	import { Icon, DropDown } from '$lib/material'

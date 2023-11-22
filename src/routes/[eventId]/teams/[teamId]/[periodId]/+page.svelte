@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { mdiChartGantt } from '@mdi/js'
-	import InviteSubscribeForm from '$lib/InviteSubscribeForm.svelte'
 	import Progress from '$lib/Progress.svelte'
-	import { formatRange } from '$lib/formatRange.js'
+	import { formatRange } from '$lib/formatRange'
 	import { Card, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import PeriodSubscribes from '$lib/PeriodSubscribes.svelte'
+	import { SubscribeInviteForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
 
 	export let data
@@ -27,7 +26,7 @@
 	<div class="flex flex-col gap-4 mt-6">
 		<Progress period={data.period} withLabel />
 
-		<PeriodSubscribes subscribes={data.period.subscribes} />
-		<InviteSubscribeForm periodId={data.period.id} />
+		<SubscribesOfPeriod subscribes={data.period.subscribes} />
+		<SubscribeInviteForm periodId={data.period.id} />
 	</div>
 </Card>

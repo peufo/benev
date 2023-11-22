@@ -32,7 +32,6 @@ export const eventStates: Record<
 const create = {
 	id: z.string().toLowerCase().min(3),
 	name: z.string().min(3),
-	date: z.string().optional(),
 	description: z.string().optional(),
 	icon: z.string().optional(),
 	web: z.string().url().optional().or(z.string().max(0)),

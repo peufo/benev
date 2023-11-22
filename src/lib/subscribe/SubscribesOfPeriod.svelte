@@ -1,10 +1,8 @@
 <script lang="ts">
-	import type { PageData } from '../routes/[eventId]/teams/[teamId]/$types'
+	import type { PageData } from '../../routes/[eventId]/teams/[teamId]/$types'
 	import type { User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import SubscribeStateForm from '$lib/SubscribeStateForm.svelte'
-	import Contact from '$lib/Contact.svelte'
-	import SubscribeCreatedBy from '$lib/SubscribeCreatedBy.svelte'
+	import { SubscribeCreatedBy, SubscribeStateForm } from '$lib/subscribe'
 
 	// TODO: Pourquoi user ne passe pas directement dans le type ???
 	export let subscribes: (PageData['team']['periods'][number]['subscribes'][number] & {
@@ -26,11 +24,7 @@
 				</a>
 			{/if}
 
-			<SubscribeCreatedBy createdBy={subscribe.createdBy} size={20} class="mr-auto" />
-
-			{#if subscribe.member}
-				<Contact user={subscribe.member.user} />
-			{/if}
+			<SubscribeCreatedBy createdBy={subscribe.createdBy} size={20} class="mr-auto w-8" />
 
 			<SubscribeStateForm {subscribe} isLeader on:success />
 		</div>
