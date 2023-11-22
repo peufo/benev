@@ -35,8 +35,8 @@
 	$: tarifMax = Math.max(..._apps.map((app) => app.tarif))
 </script>
 
-<div class="border p-2 rounded-lg">
-	<p class="text-sm opacity-90 mt-2 mb-4 text-center">
+<div class="border p-4 rounded-lg">
+	<p class="text-sm opacity-90 my-4 text-center">
 		Coûts pour
 		<input
 			type="number"
@@ -76,8 +76,16 @@
 		</div>
 	{/each}
 
-	<p class="text-xs opacity-80 mt-4 text-center">
+	<p class="text-xs opacity-80 mb-2 mt-6 text-center">
 		Estimations calculées sur les tarifs connus en novembre 2023.<br />
 		Les taux de changes du jour sont utilisés.<br />
+		Tu peux proposer une correction
+		<a
+			class="link"
+			target="_blank"
+			href="https://github.com/peufo/benev/edit/main/src/routes/(home)/pricing/comparison.ts"
+		>
+			sur cette page.
+		</a>
 	</p>
 </div>
