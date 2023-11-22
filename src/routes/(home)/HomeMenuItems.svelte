@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { mdiCalendarMultiple, mdiGavel } from '@mdi/js'
+	import { mdiCalendarMultiple, mdiScaleBalance, mdiWalletOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import { eventPath } from '$lib/store'
 	import { Icon } from '$lib/material'
 
 	const tabs: { path: string; label: string; icon: string }[] = [
-		{ path: '/terms', label: 'Conditions', icon: mdiGavel },
 		{ path: '/events', label: 'Évènements', icon: mdiCalendarMultiple },
+		{ path: '/pricing', label: 'Prix', icon: mdiWalletOutline },
+		{ path: '/terms', label: 'Conditions', icon: mdiScaleBalance },
 	]
 </script>
 

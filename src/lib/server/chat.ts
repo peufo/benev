@@ -1,9 +1,11 @@
-import axios from 'axios'
+import Axios from 'axios'
 
 export const chatServer = 'http://localhost:3000'
 const chatAdminUser = 'peuf'
 const chatAdminPassword = 'wJ66kASk7HqiBs@'
-axios.defaults.baseURL = chatServer + '/api/v1'
+const axios = Axios.create({
+	baseURL: chatServer + '/api/v1',
+})
 
 type LoginResult = { authToken: string; userId: string }
 type AdminAuthHeaders = { 'X-Auth-Token': string; 'X-User.Id': string }
