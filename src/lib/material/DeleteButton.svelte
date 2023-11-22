@@ -21,7 +21,6 @@
 		ready = false
 		clearTimeout(timeout)
 	}
-
 </script>
 
 <button
@@ -39,7 +38,7 @@
 	formaction={ready ? formaction : undefined}
 >
 	{#if ready}
-		<span>T'es sur ?</span>
+		<slot name="ready"><span>T'es sur ?</span></slot>
 	{:else}
 		<slot>Supprimer</slot>
 	{/if}

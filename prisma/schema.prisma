@@ -232,6 +232,8 @@ model Subscribe {
   memberId String
   member   Member @relation(references: [id], fields: [memberId], onDelete: Cascade)
 
+  isAbsent Boolean @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

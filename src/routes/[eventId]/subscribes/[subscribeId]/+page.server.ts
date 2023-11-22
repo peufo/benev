@@ -53,7 +53,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 			const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
 			if (!isCreatorEdition && !isSubscriberEdition) throw error(403)
 
-			// Check if author right
+			// Check author permission
 			const isLeaderAction = (_subscribe.createdBy === 'leader') === isCreatorEdition
 			let author: MemberWithRoles | null
 			if (isLeaderAction) {
@@ -141,4 +141,28 @@ export const actions = {
 	subscribe_denied: setSubscribState('denied'),
 	subscribe_cancelled: setSubscribState('cancelled'),
 	subscribe_request: setSubscribState('request'),
+	subscribe_delete: ({ locals, params: { subscribeId } }) =>
+		// TODO: un petit mail à l'inscrit ?
+		tryOrFail(async () => {
+			const subscribe = await prisma.subscribe.findUniqueOrThrow({
+				where: { id: subscribeId },
+				include: { period: true },
+			})
+			await permission.leaderOfTeam(subscribe.period.teamId, locals)
+			return prisma.subscribe.delete({ where: { id: subscribeId } })
+		}),
+	subscribe_toggle_isAbsent: async ({ locals, params: { subscribeId } }) =>
+		tryOrFail(async () => {
+			const subscribe = await prisma.subscribe.findUniqueOrThrow({
+				where: { id: subscribeId },
+				include: { period: true },
+			})
+			await permission.leaderOfTeam(subscribe.period.teamId, locals)
+			return prisma.subscribe.update({
+				where: { id: subscribeId },
+				data: {
+					isAbsent: !subscribe.isAbsent,
+				},
+			})
+		}),
 }
