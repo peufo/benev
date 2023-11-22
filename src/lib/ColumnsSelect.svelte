@@ -30,7 +30,6 @@
 	options={columns}
 	right
 	enhanceDisabled
-	class="h-8"
 	btnClass="btn-square"
 >
 	<div slot="label" class="contents">
