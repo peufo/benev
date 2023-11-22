@@ -34,7 +34,7 @@
 							<SubscribeCreatedBy createdBy={subscribe.createdBy} size={22} />
 
 							{#if subscribe.isAbsent}
-								<div class="z-10" use:tip={{ content: 'Absent à sa période de travail' }}>
+								<div class="z-10" use:tip={{ content: 'Absent à la période de travail' }}>
 									<Icon path={mdiAlertOutline} class="fill-warning" size={20} />
 								</div>
 							{/if}
