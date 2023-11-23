@@ -2,8 +2,8 @@
 	import type { FormEventHandler } from 'svelte/elements'
 	import { flip } from 'svelte/animate'
 	import { tip } from '$lib/action'
+	import { debounce } from '$lib/debounce'
 	import { apps } from './comparison'
-	import { debounce } from 'debounce'
 
 	export let rates: Record<string, number> = {}
 
