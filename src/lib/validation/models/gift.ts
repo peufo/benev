@@ -1,5 +1,5 @@
 import { z, toTuple, type ZodObj } from '$lib/validation'
-import { type Prisma, GiftConditionsMode, GiftConditionType } from '@prisma/client'
+import { type Prisma, GiftConditionsMode } from '@prisma/client'
 
 export let conditionsModeLabel: Record<GiftConditionsMode, string> = {
 	sum: 'Somme des conditions',
@@ -28,3 +28,9 @@ const createConditionPeriod = {
 	content: z.json({ start: z.date(), end: z.date() }).transform((v) => JSON.stringify(v)),
 	value: z.number(),
 } satisfies ZodObj<Prisma.GiftConditionCreateWithoutGiftInput>
+
+export const createGiftCondition = [
+	createConditionTeams,
+	createConditionHours,
+	createConditionPeriod,
+]
