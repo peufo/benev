@@ -1,4 +1,4 @@
-import { teamCreate } from '$lib/validation/team'
+import { teamCreate } from '$lib/validation/models/team'
 import { parseFormData } from '$lib/server/formData'
 import { prisma, tryOrFail, permission } from '$lib/server'
 

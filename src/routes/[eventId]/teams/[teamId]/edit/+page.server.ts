@@ -1,4 +1,4 @@
-import { teamUpdate } from '$lib/validation/team'
+import { teamUpdate } from '$lib/validation/models/team'
 import { parseFormData } from '$lib/server/formData'
 import { prisma, tryOrFail, permission } from '$lib/server'
 import { error } from '@sveltejs/kit'
