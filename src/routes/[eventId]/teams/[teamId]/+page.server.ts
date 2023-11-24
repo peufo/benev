@@ -1,5 +1,5 @@
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
-import { periodShema } from '$lib/validation'
+import { periodCreate, periodValidation } from '$lib/validation'
 
 export const load = async ({ locals, params: { teamId } }) => {
 	const isLeaderOfTeam = await permission
@@ -53,7 +53,7 @@ export const actions = {
 	new_period: async ({ request, locals, params: { teamId } }) => {
 		await permission.leaderOfTeam(teamId, locals)
 
-		const { err, data } = await parseFormData(request, periodShema)
+		const { err, data } = await parseFormData(request, periodCreate, periodValidation)
 		if (err) return err
 
 		return tryOrFail(() =>

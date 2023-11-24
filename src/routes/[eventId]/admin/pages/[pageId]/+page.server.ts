@@ -1,4 +1,4 @@
-import { pageShema } from '$lib/validation'
+import { pageUpdate } from '$lib/validation'
 import { fail, redirect } from '@sveltejs/kit'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
@@ -13,7 +13,7 @@ export const load = async ({ params }) => {
 export const actions = {
 	update_page: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, pageShema)
+		const { err, data } = await parseFormData(request, pageUpdate)
 		if (err) return err
 
 		const path = normalizePath(data.title)

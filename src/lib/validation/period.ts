@@ -4,13 +4,21 @@ import type { Prisma } from '@prisma/client'
 
 type PeriodCreateForm = Omit<Prisma.PeriodCreateInput, 'team'>
 
-const periodForm = {
+export const periodCreate = {
 	maxSubscribe: z.number().min(1),
 	start: z.date(),
 	end: z.date(),
 } satisfies ZodObj<PeriodCreateForm>
 
-const validation: SuperRefinement<{ start: Date; end: Date }> = ({ start, end }, ctx) => {
+export const periodUpdate = {
+	id: z.string(),
+	...periodCreate,
+}
+
+export const periodValidation: SuperRefinement<{ start: Date; end: Date }> = (
+	{ start, end },
+	ctx
+) => {
 	if (start.getTime() > end.getTime()) {
 		ctx.addIssue({
 			code: 'invalid_date',
@@ -26,6 +34,3 @@ const validation: SuperRefinement<{ start: Date; end: Date }> = ({ start, end },
 		})
 	}
 }
-
-export const periodShema = z.object(periodForm).superRefine(validation)
-export const periodShemaUpdate = z.object({ id: z.string(), ...periodForm }).superRefine(validation)

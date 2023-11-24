@@ -1,22 +1,19 @@
 import { z, type ZodObj } from '$lib/validation'
 import type { Prisma } from '@prisma/client'
 
-const login = {
+export const userLogin = {
 	email: z.string().email().toLowerCase(),
 	password: z.string().min(8),
 }
-export const loginShema = z.object(login)
 
-const register = {
-	...login,
+export const userCreate = {
+	...userLogin,
 	firstName: z.string().min(2).trim(),
 	lastName: z.string().min(2).trim(),
 	phone: z.string().trim().optional(),
-}
-export const registerShema = z.object(register)
+} satisfies ZodObj<Omit<Prisma.UserCreateInput, 'id'> & { password: string }>
 
-type UserUpdate = Omit<Prisma.UserUncheckedCreateInput, 'id'>
-const userUpdate = {
+export const userUpdate = {
 	email: z.string().email().toLowerCase(),
 	firstName: z.string().min(2),
 	lastName: z.string().min(2),
@@ -26,5 +23,4 @@ const userUpdate = {
 	zipCode: z.string().optional(),
 	city: z.string().optional(),
 	wantsNotification: z.boolean().optional(),
-} satisfies ZodObj<UserUpdate>
-export const userUpdateShema = z.object(userUpdate)
+} satisfies ZodObj<Prisma.UserUncheckedUpdateInput>

@@ -3,10 +3,10 @@ import { parseFormData, permission, prisma, tryOrFail } from '$lib/server'
 
 export const actions = {
 	delete_member: async ({ request, locals, params: { eventId } }) => {
-		const { err, data } = await parseFormData(
-			request,
-			z.object({ memberId: z.string(), redirectTo: z.string().optional() })
-		)
+		const { err, data } = await parseFormData(request, {
+			memberId: z.string(),
+			redirectTo: z.string().optional(),
+		})
 		if (err) return err
 
 		return tryOrFail(async () => {

@@ -20,14 +20,11 @@ export const actions = {
 	new_invite: async ({ request, locals, params: { eventId } }) => {
 		const { user: author } = await permission.leader(eventId, locals)
 
-		const { err, data } = await parseFormData(
-			request,
-			z.object({
-				email: z.string().email().toLowerCase(),
-				firstName: z.string().min(2),
-				lastName: z.string().min(2),
-			})
-		)
+		const { err, data } = await parseFormData(request, {
+			email: z.string().email().toLowerCase(),
+			firstName: z.string().min(2),
+			lastName: z.string().min(2),
+		})
 		if (err) return err
 
 		return tryOrFail(async () => {
@@ -95,10 +92,10 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data } = await parseFormData(
-			request,
-			z.object({ userId: z.string(), redirectTo: z.string().optional() })
-		)
+		const { err, data } = await parseFormData(request, {
+			userId: z.string(),
+			redirectTo: z.string().optional(),
+		})
 		if (err) return err
 
 		const { userId } = data

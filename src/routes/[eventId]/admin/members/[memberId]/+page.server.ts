@@ -30,7 +30,7 @@ export const load = async ({ params }) => {
 export const actions = {
 	set_isAdmin: async ({ request, locals, params: { eventId, memberId } }) => {
 		await permission.owner(eventId, locals)
-		const { err, data } = await parseFormData(request, z.object({ isAdmin: z.boolean() }))
+		const { err, data } = await parseFormData(request, { isAdmin: z.boolean() })
 		if (err) return err
 
 		return tryOrFail(() =>

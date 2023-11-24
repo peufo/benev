@@ -1,4 +1,4 @@
-import { eventShemaUpdate, memberFieldShema, memberFieldShemaUpdate } from '$lib/validation'
+import { eventUpdate, memberFieldCreate, memberFieldUpdate } from '$lib/validation'
 import { parseFormData, prisma, tryOrFail, permission, media } from '$lib/server'
 import { z } from '$lib/validation'
 
@@ -14,7 +14,7 @@ export const load = async ({ params }) => ({
 export const actions = {
 	update_event: async ({ request, locals, params: { eventId } }) => {
 		const member = await permission.admin(eventId, locals)
-		const { err, data, formData } = await parseFormData(request, eventShemaUpdate)
+		const { err, data, formData } = await parseFormData(request, eventUpdate)
 		if (err) return err
 
 		return tryOrFail(
@@ -50,7 +50,7 @@ export const actions = {
 	},
 	create_field: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, memberFieldShema)
+		const { err, data } = await parseFormData(request, memberFieldCreate)
 		if (err) return err
 
 		return tryOrFail(async () => {
@@ -62,7 +62,7 @@ export const actions = {
 	},
 	delete_field: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, z.object({ id: z.string() }))
+		const { err, data } = await parseFormData(request, { id: z.string() })
 		if (err) return err
 
 		return tryOrFail(() =>
@@ -74,7 +74,7 @@ export const actions = {
 	update_field: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 
-		const { err, data } = await parseFormData(request, memberFieldShemaUpdate)
+		const { err, data } = await parseFormData(request, memberFieldUpdate)
 		if (err) return err
 
 		return tryOrFail(() =>

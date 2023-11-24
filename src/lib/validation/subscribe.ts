@@ -8,10 +8,8 @@ export const subscribeStateLabel: Record<Subscribe['state'], string> = {
 	cancelled: 'Annulé',
 }
 
-const subscribeForm = {
+export const subscribeCreate = {
 	memberId: z.string(),
 	periodId: z.string(),
 	// state: z.enum(toTuple(subscribeStateLabel)).optional(),
 } satisfies ZodObj<Prisma.SubscribeUncheckedCreateInput>
-
-export const subscribeShema = z.object(subscribeForm)

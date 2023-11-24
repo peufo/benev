@@ -4,16 +4,13 @@ import type { Prisma } from '@prisma/client'
 type TeamShemaCreate = Omit<Prisma.TeamCreateInput, 'event'>
 type TeamShemaUpdate = Omit<Prisma.TeamUpdateInput, 'event'>
 
-const create = {
+export const teamCreate = {
 	name: z.string().min(3),
 	description: z.string().optional(),
 	leaders: z.relations('connect'),
 } satisfies ZodObj<TeamShemaCreate>
 
-const update = {
-	...create,
+export const teamUpdate = {
+	...teamCreate,
 	leaders: z.relations('set'),
 } satisfies ZodObj<TeamShemaUpdate>
-
-export const teamShemaCreate = z.object(create)
-export const teamShemaUpdate = z.object(update)

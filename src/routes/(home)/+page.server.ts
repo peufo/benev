@@ -1,14 +1,14 @@
 import { prisma } from '$lib/server'
 import { error, fail } from '@sveltejs/kit'
 import { media, parseFormData, tryOrFail } from '$lib/server'
-import { eventShemaCreate } from '$lib/validation'
+import { eventCreate } from '$lib/validation'
 
 export const actions = {
 	new_event: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data, formData } = await parseFormData(request, eventShemaCreate)
+		const { err, data, formData } = await parseFormData(request, eventCreate)
 		if (err) return err
 
 		const nameFail = (message: string) => fail(400, { issues: [{ path: ['name'], message }] })

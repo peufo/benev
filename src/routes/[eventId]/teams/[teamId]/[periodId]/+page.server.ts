@@ -1,4 +1,4 @@
-import { periodShemaUpdate } from '$lib/validation'
+import { periodUpdate, periodValidation } from '$lib/validation'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { z } from '$lib/validation'
 
@@ -17,7 +17,7 @@ export const load = async ({ locals, params: { teamId, periodId } }) => {
 export const actions = {
 	update_period: async ({ request, locals, params: { teamId } }) => {
 		await permission.leaderOfTeam(teamId, locals)
-		const { err, data } = await parseFormData(request, periodShemaUpdate)
+		const { err, data } = await parseFormData(request, periodUpdate, periodValidation)
 		if (err) return err
 
 		return tryOrFail(() =>
@@ -29,7 +29,7 @@ export const actions = {
 	},
 	delete_period: async ({ locals, request, params: { eventId, teamId, periodId } }) => {
 		await permission.leaderOfTeam(teamId, locals)
-		const { err, data } = await parseFormData(request, z.object({ disableRedirect: z.boolean() }))
+		const { err, data } = await parseFormData(request, { disableRedirect: z.boolean() })
 		if (err) return err
 		return tryOrFail(
 			() => prisma.period.delete({ where: { id: periodId } }),

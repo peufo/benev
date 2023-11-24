@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { isFreeRange } from 'perod'
-import { subscribeShema } from '$lib/validation'
+import { subscribeCreate } from '$lib/validation'
 import { parseFormData, permission, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
 import { EmailNewSubscribe } from '$lib/email'
 
@@ -9,7 +9,7 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data } = await parseFormData(request, subscribeShema)
+		const { err, data } = await parseFormData(request, subscribeCreate)
 		if (err) return err
 
 		return tryOrFail(async () => {

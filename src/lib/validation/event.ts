@@ -19,7 +19,7 @@ export const eventStates: Record<
 		icon: mdiEarth,
 		label: 'Évènement publié',
 		class: 'border-success bg-success/50',
-		description: `Le site est disponibles pour tout les mondes.`,
+		description: `Le site est disponible pour tout le monde.`,
 	},
 	archived: {
 		icon: mdiArchiveOutline,
@@ -29,7 +29,7 @@ export const eventStates: Record<
 	},
 }
 
-const create = {
+export const eventCreate = {
 	id: z.string().toLowerCase().min(3),
 	name: z.string().min(3),
 	description: z.string().optional(),
@@ -41,10 +41,7 @@ const create = {
 	state: z.enum(toTuple(eventStates)).optional(),
 } satisfies ZodObj<EventCreateInput>
 
-const update = {
-	...create,
+export const eventUpdate = {
+	...eventCreate,
 	name: z.string().min(3).optional(),
 } satisfies ZodObj<EventUpdateInput>
-
-export const eventShemaCreate = z.object(create)
-export const eventShemaUpdate = z.object(update)

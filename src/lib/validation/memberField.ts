@@ -18,7 +18,7 @@ export const memberFieldType: Record<Field['type'], { label: string; icon: strin
 	multiselect: { label: 'Liste à choix multiple', icon: mdiOrderBoolAscendingVariant },
 }
 
-const memberFieldForm = {
+export const memberFieldCreate = {
 	name: z.string().min(2),
 	memberCanWrite: z.boolean(),
 	memberCanRead: z.boolean(),
@@ -28,10 +28,7 @@ const memberFieldForm = {
 	type: z.enum(toTuple(memberFieldType)),
 } satisfies ZodObj<Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>>
 
-const memberFieldUpdateForm = {
-	...memberFieldForm,
+export const memberFieldUpdate = {
+	...memberFieldCreate,
 	id: z.string(),
 }
-
-export const memberFieldShema = z.object(memberFieldForm)
-export const memberFieldShemaUpdate = z.object(memberFieldUpdateForm)

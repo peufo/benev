@@ -5,13 +5,10 @@ import { z } from '$lib/validation'
 
 export const actions = {
 	default: async ({ params, locals, request }) => {
-		const { err, data } = await parseFormData(
-			request,
-			z.object({
-				password: z.string().min(8),
-				redirectTo: z.string().optional(),
-			})
-		)
+		const { err, data } = await parseFormData(request, {
+			password: z.string().min(8),
+			redirectTo: z.string().optional(),
+		})
 		if (err) return err
 
 		try {

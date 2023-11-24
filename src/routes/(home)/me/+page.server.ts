@@ -13,9 +13,9 @@ import {
 	createAvatarPlaceholder,
 	media,
 } from '$lib/server'
-import { loginShema, registerShema } from '$lib/validation'
+import { userLogin, userCreate } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
-import { userUpdateShema } from '$lib/validation'
+import { userUpdate } from '$lib/validation'
 
 export const load = async ({ url, parent }) => {
 	const { user } = await parent()
@@ -45,7 +45,7 @@ export const load = async ({ url, parent }) => {
 
 export const actions = {
 	register: async ({ request, locals }) => {
-		const { err, data } = await parseFormData(request, registerShema)
+		const { err, data } = await parseFormData(request, userCreate)
 		if (err) return err
 
 		const attributes = {
@@ -72,7 +72,7 @@ export const actions = {
 		})
 	},
 	login: async ({ request, locals }) => {
-		const { err, data } = await parseFormData(request, loginShema)
+		const { err, data } = await parseFormData(request, userLogin)
 		if (err) return err
 		return tryOrFail(async () => {
 			const user = await auth.useKey('email', data.email, data.password)
@@ -92,10 +92,7 @@ export const actions = {
 		await sendVerificationEmail(session.user)
 	},
 	reset_password: async ({ request }) => {
-		const { err, data } = await parseFormData(
-			request,
-			z.object({ email: z.string().email().toLowerCase() })
-		)
+		const { err, data } = await parseFormData(request, { email: z.string().email().toLowerCase() })
 		if (err) return err
 		return tryOrFail(async () => {
 			const user = await prisma.user.findUniqueOrThrow({
@@ -114,7 +111,7 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data } = await parseFormData(request, userUpdateShema)
+		const { err, data } = await parseFormData(request, userUpdate)
 		if (err) return err
 
 		return tryOrFail(async () => {

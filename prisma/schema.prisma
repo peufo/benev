@@ -163,9 +163,10 @@ model Member {
   eventId String
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
-  subscribes Subscribe[]
-  leaderOf   Team[]
-  profile    FieldValue[]
+  subscribes       Subscribe[]
+  leaderOf         Team[]
+  profile          FieldValue[]
+  giftsAllocations GiftAllocation[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -253,7 +254,7 @@ enum SubscribeState {
 }
 
 model Media {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
 
   name        String
   avatarOf    User?    @relation(name: "avatar")
@@ -263,4 +264,47 @@ model Media {
   createdBy   User     @relation(references: [id], fields: [createdById], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Gift {
+  id             String             @id @default(cuid())
+  name           String
+  allocations    GiftAllocation[]
+  conditions     GiftCondition[]
+  conditionsMode GiftConditionsMode
+}
+
+enum GiftConditionsMode {
+  sum
+  highest
+}
+
+model GiftCondition {
+  id String @id @default(cuid())
+
+  type    GiftConditionType
+  content String
+  value   Int               @default(1)
+
+  giftId String
+  gift   Gift   @relation(fields: [giftId], references: [id], onDelete: Cascade)
+}
+
+enum GiftConditionType {
+  teams
+  period
+  hours
+}
+
+model GiftAllocation {
+  id String @id @default(cuid())
+
+  giftId String
+  gift   Gift   @relation(fields: [giftId], references: [id], onDelete: Cascade)
+
+  memberId String
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  qteDue   Int
+  qteGiven Int
 }
