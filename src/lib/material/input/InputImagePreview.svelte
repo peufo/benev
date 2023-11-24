@@ -45,9 +45,9 @@
 		<div class="relative group">
 			<span
 				class="
-				font-medium text-base-content/70
+				font-medium bg-base-300/30 backdrop-blur-sm
 				transition-opacity opacity-0 group-hover:opacity-100
-				absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2
+				absolute inset-[1px] grid place-content-center rounded-lg
 			"
 			>
 				prout

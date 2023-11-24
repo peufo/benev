@@ -72,20 +72,24 @@
 		input={{ class: 'pl-[5.4em]' }}
 		wrapperClass="flex items-center"
 	>
-		<span slot="prepend" class="absolute select-none pl-4 translate-y-[1px] opacity-50"
-			>benev.io/</span
-		>
+		<span slot="prepend" class="absolute select-none pl-4 translate-y-[1px] opacity-50">
+			benev.io/
+		</span>
 	</InputText>
 
-	<InputImagePreview
-		key="poster"
-		src={event?.posterId ? `/media/${event.posterId}/original.png` : ''}
-		title="Affiche"
-		alt="Affiche de l'évènement"
-		aspect={FORMAT_A3.aspect}
-		x={FORMAT_A3.x / 2}
-		y={FORMAT_A3.y / 2}
-	/>
+	<div class="flex pt-2">
+		<InputImagePreview
+			key="poster"
+			src={event?.posterId ? `/media/${event.posterId}/original.png` : ''}
+			title="Affiche"
+			alt="Affiche de l'évènement"
+			aspect={FORMAT_A3.aspect}
+			x={FORMAT_A3.x / 2}
+			y={FORMAT_A3.y / 2}
+		/>
+
+		<!-- TODO: logo-->
+	</div>
 
 	<InputTextarea
 		key="description"
