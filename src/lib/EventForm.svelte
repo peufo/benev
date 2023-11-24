@@ -66,11 +66,16 @@
 	<InputText key="name" label="Nom de l'évènement" bind:value={name} on:input={handleNameInput} />
 	<InputText
 		key="id"
-		label="Lien de l'évènement"
+		label="URL de l'évènement"
 		on:input={handleEventIdInput}
 		bind:value={eventId}
-		hint="benev.io/{eventId}"
-	/>
+		input={{ class: 'pl-[5.4em]' }}
+		wrapperClass="flex items-center"
+	>
+		<span slot="prepend" class="absolute select-none pl-4 translate-y-[1px] opacity-50"
+			>benev.io/</span
+		>
+	</InputText>
 
 	<InputImagePreview
 		key="poster"
