@@ -31,7 +31,7 @@
 	>
 		<div>
 			<h3>{gift.name}</h3>
-			<span class="text-sm opacity-70">19 attributions</span>
+			<span class="text-sm opacity-70">10 / 17 distributions</span>
 		</div>
 
 		<a href="#todo" class="btn btn-square btn-sm btn-ghost ml-auto" on:click|stopPropagation>
