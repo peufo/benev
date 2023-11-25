@@ -97,6 +97,7 @@ model Event {
   pages        Page[]
   members      Member[]
   memberFields Field[]
+  gifts        Gift[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -269,9 +270,13 @@ model Media {
 model Gift {
   id             String             @id @default(cuid())
   name           String
+  eventId        String
+  event          Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
   allocations    GiftAllocation[]
   conditions     GiftCondition[]
-  conditionsMode GiftConditionsMode
+  conditionsMode GiftConditionsMode @default(sum)
+
+  @@unique([eventId, name])
 }
 
 enum GiftConditionsMode {

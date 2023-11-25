@@ -2,7 +2,7 @@
 	import { SectionCollapse } from '$lib/material'
 	import EventForm from '$lib/EventForm.svelte'
 	import MemberFields from '$lib/member/MemberFields.svelte'
-	import { GiftForm } from '$lib/gift'
+	import { GiftConfiguration, GiftForm } from '$lib/gift'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import EventStateForm from './EventStateForm.svelte'
 
@@ -26,7 +26,7 @@
 			<span slot="subtitle">
 				Liste et configuration des compensations auxquelles les membres ont droit
 			</span>
-			<GiftForm />
+			<GiftConfiguration gifts={data.gifts} />
 		</SectionCollapse>
 	</div>
 </OnlyAdmin>

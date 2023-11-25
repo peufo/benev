@@ -59,7 +59,7 @@
 				transition:slide
 				on:click={() => handleClickUpdateField(field)}
 				class="
-						w-full flex gap-3 p-3 items-center border border-neutral rounded-lg
+						w-full flex gap-3 py-3 px-4 items-center border rounded-lg
 						bg-base-200/50 hover:bg-base-200 cursor-pointer
 					"
 			>

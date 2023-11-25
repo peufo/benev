@@ -6,31 +6,36 @@ export let conditionsModeLabel: Record<GiftConditionsMode, string> = {
 	highest: 'Plus haute condition',
 }
 
-export const createGift = {
+export const giftCreate = {
 	name: z.string().min(2),
-	conditionsMode: z.enum(toTuple(GiftConditionsMode)),
-} satisfies ZodObj<Prisma.GiftCreateInput>
+	conditionsMode: z.enum(toTuple(GiftConditionsMode)).optional(),
+} satisfies ZodObj<Omit<Prisma.GiftUncheckedCreateInput, 'eventId'>>
 
-const createConditionTeams = {
+export const giftUpdate = {
+	name: z.string().min(2).optional(),
+	conditionsMode: z.enum(toTuple(GiftConditionsMode)).optional(),
+} satisfies ZodObj<Prisma.GiftUncheckedUpdateInput>
+
+const giftConditionTeamsCreate = {
 	type: z.literal('teams'),
 	content: z.array(z.string()).transform((v) => JSON.stringify(v)),
 	value: z.number(),
 } satisfies ZodObj<Prisma.GiftConditionCreateWithoutGiftInput>
 
-const createConditionHours = {
+const giftConditionHoursCreate = {
 	type: z.literal('hours'),
 	content: z.number().transform((v) => JSON.stringify(v)),
 	value: z.number(),
 } satisfies ZodObj<Prisma.GiftConditionCreateWithoutGiftInput>
 
-const createConditionPeriod = {
+const giftConditionPeriodCreate = {
 	type: z.literal('period'),
 	content: z.json({ start: z.date(), end: z.date() }).transform((v) => JSON.stringify(v)),
 	value: z.number(),
 } satisfies ZodObj<Prisma.GiftConditionCreateWithoutGiftInput>
 
 export const createGiftCondition = [
-	createConditionTeams,
-	createConditionHours,
-	createConditionPeriod,
+	giftConditionTeamsCreate,
+	giftConditionHoursCreate,
+	giftConditionPeriodCreate,
 ]
