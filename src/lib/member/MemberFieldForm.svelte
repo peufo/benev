@@ -69,7 +69,12 @@
 		<input type="hidden" name="id" value={field.id} />
 	{/if}
 
-	<InputSelect key="type" bind:value={field.type} options={memberFieldType} />
+	<InputSelect
+		key="type"
+		bind:value={field.type}
+		options={memberFieldType}
+		btnClass="w-full justify-start"
+	/>
 
 	<InputText
 		key="name"

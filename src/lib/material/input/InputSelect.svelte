@@ -47,7 +47,7 @@
 	tabindex="-1"
 >
 	<DropDown bind:this={dropDown}>
-		<button slot="activator" type="button" class="btn w-full justify-start {btnClass}">
+		<button slot="activator" type="button" class="btn {btnClass}">
 			{#if selectedOption}
 				{#if selectedOption.icon}
 					<Icon path={selectedOption.icon} />

@@ -4,22 +4,37 @@
 	import { conditionsModeLabel, useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 	import { InputRadio, InputText } from '$lib/material'
-	import GiftConditionForm from './GiftConditionForm.svelte'
+	import GiftConditions from './GiftConditions.svelte'
 
-	export let gift: (Gift & { conditions: GiftCondition[] }) | undefined = undefined
+	type GiftWithConditions = Gift & { conditions: GiftCondition[] }
+	export let gift: GiftWithConditions | undefined = undefined
 
-	const form = useForm()
+	const createAction = '?/create_gift'
+	const updateAction = '?/update_gift'
+
+	const form = useForm<GiftWithConditions>({
+		successCallback: (url, data) => {
+			if (url.search === createAction) gift = data
+		},
+		successReset: (url) => url.search !== createAction,
+	})
 </script>
 
 <form
-	action="{$eventPath}/admin/config?{!!gift ? '/update_gift' : '/create_gift'}"
+	action="{$eventPath}/admin/config{!!gift ? updateAction : createAction}"
 	method="post"
 	use:enhance={form.submit}
+	class="flex flex-col gap-2"
 >
 	{#if gift}
 		<input type="hidden" name="id" value={gift.id} />
 	{/if}
-	<InputText key="name" value={gift?.name} label="Nom de la prestation" />
+	<InputText
+		key="name"
+		value={gift?.name}
+		label="Nom de la prestation"
+		input={{ placeholder: 'T-Shirt, Boisson, Repas, ...' }}
+	/>
 	{#if gift?.conditions.length}
 		<InputRadio
 			key="conditionsMode"
@@ -29,10 +44,10 @@
 			value={gift?.conditionsMode}
 		/>
 	{/if}
-</form>
 
-{#if !!gift}
-	{#each gift.conditions as condition}
-		<GiftConditionForm {condition} />
-	{/each}
-{/if}
+	<GiftConditions conditions={gift?.conditions} />
+
+	<div class="flex flex-row-reverse">
+		<button class="btn">Valider</button>
+	</div>
+</form>

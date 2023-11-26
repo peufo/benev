@@ -15,11 +15,12 @@ export const formContext = {
 }
 
 type SuccessMessage = string | ((action: URL) => string)
+type BooleanOrFunction = boolean | ((action: URL) => boolean)
 type UseFormOptions<ReturnData> = {
 	beforeRequest?: (...args: Parameters<SubmitFunction>) => Promise<unknown>
 	successCallback?: (action: URL, data?: ReturnData) => unknown
-	successUpdate?: boolean
-	successReset?: boolean
+	successUpdate?: BooleanOrFunction
+	successReset?: BooleanOrFunction
 	successMessage?: SuccessMessage
 }
 
@@ -85,23 +86,22 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 				return
 			}
 
-			const notifySuccess = (successMessage?: SuccessMessage) => {
-				if (!successMessage) return
-				if (typeof successMessage === 'string') notify.success(successMessage)
-				else notify.success(successMessage(action))
+			function tryToRun<T extends string | boolean>(valueOrFunction: T | ((action: URL) => T)): T {
+				if (typeof valueOrFunction === 'function') return valueOrFunction(action)
+				return valueOrFunction
 			}
 
 			if (result.type === 'success') {
-				notifySuccess(successMessage)
+				if (successMessage) notify.success(tryToRun(successMessage))
 				if (successCallback) successCallback(action, result.data)
-				if (successUpdate) update({ reset: successReset })
+				if (successUpdate) update({ reset: tryToRun(successReset) })
 				return
 			}
 
 			if (result.type === 'redirect') {
-				notifySuccess(successMessage)
+				if (successMessage) notify.success(tryToRun(successMessage))
 				if (successCallback) successCallback(action)
-				goto(result.location, { replaceState: true, invalidateAll: successUpdate })
+				goto(result.location, { replaceState: true, invalidateAll: tryToRun(successUpdate) })
 			}
 		}
 	}

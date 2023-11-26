@@ -1,9 +1,15 @@
 import { z, toTuple, type ZodObj } from '$lib/validation'
-import { type Prisma, GiftConditionsMode } from '@prisma/client'
+import { type Prisma, GiftConditionsMode, GiftConditionType } from '@prisma/client'
 
-export let conditionsModeLabel: Record<GiftConditionsMode, string> = {
+export const conditionsModeLabel: Record<GiftConditionsMode, string> = {
 	sum: 'Somme des conditions',
 	highest: 'Plus haute condition',
+}
+
+export const conditionTypeOptions: Record<GiftConditionType, string> = {
+	teams: `Doit être inscrit à l'un de ces secteurs`,
+	hours: `Doit avoir un minimum d'heure de travail de`,
+	period: `Doit travailer durant la période de`,
 }
 
 export const giftCreate = {

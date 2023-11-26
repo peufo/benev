@@ -47,5 +47,5 @@
 		{selectedGift ? 'Édition de la' : 'Nouvelle'} prestation
 	</h2>
 
-	<GiftForm gift={selectedGift} />
+	<GiftForm bind:gift={selectedGift} />
 </Dialog>
