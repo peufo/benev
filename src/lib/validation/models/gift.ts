@@ -1,5 +1,5 @@
 import { z, toTuple, type ZodObj } from '$lib/validation'
-import { type Prisma, GiftConditionsMode, GiftConditionType } from '@prisma/client'
+import type { Prisma, GiftConditionsMode, GiftConditionType } from '@prisma/client'
 
 export const conditionsModeLabel: Record<GiftConditionsMode, string> = {
 	sum: 'Somme des conditions',
@@ -14,12 +14,12 @@ export const conditionTypeOptions: Record<GiftConditionType, string> = {
 
 export const giftCreate = {
 	name: z.string().min(2),
-	conditionsMode: z.enum(toTuple(GiftConditionsMode)).optional(),
+	conditionsMode: z.enum(toTuple(conditionsModeLabel)).optional(),
 } satisfies ZodObj<Omit<Prisma.GiftUncheckedCreateInput, 'eventId'>>
 
 export const giftUpdate = {
 	name: z.string().min(2).optional(),
-	conditionsMode: z.enum(toTuple(GiftConditionsMode)).optional(),
+	conditionsMode: z.enum(toTuple(conditionsModeLabel)).optional(),
 } satisfies ZodObj<Prisma.GiftUncheckedUpdateInput>
 
 const giftConditionTeamsCreate = {

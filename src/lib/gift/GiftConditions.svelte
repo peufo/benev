@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { mdiPlus } from '@mdi/js'
 	import type { GiftConditionType, GiftCondition as TGiftEdition } from '@prisma/client'
 	import GiftCondition from './GiftCondition.svelte'
 	import { conditionTypeOptions } from '$lib/validation'
 	import { Icon, InputSelect } from '$lib/material'
-	import { mdiPlus } from '@mdi/js'
 
 	export let conditions: Partial<TGiftEdition>[] = []
 

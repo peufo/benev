@@ -1,13 +1,9 @@
 <script lang="ts">
-  import type { GiftCondition } from "@prisma/client"
-	import {InputSelect} from "$lib/material"
-  import {conditionTypeOptions} from '$lib/validation'
+	import type { GiftCondition } from '@prisma/client'
 
-
-  export let condition: Partial<GiftCondition>
-
+	export let condition: Partial<GiftCondition>
 </script>
 
 <div>
-  {condition.type} 
+	{condition.type}
 </div>
