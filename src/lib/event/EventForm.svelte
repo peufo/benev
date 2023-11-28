@@ -80,7 +80,7 @@
 	<div class="flex pt-2">
 		<InputImagePreview
 			key="poster"
-			src={event?.posterId ? `/media/${event.posterId}/original.png` : ''}
+			src={event?.posterId ? `/media/${event.posterId}` : ''}
 			title="Affiche"
 			alt="Affiche de l'évènement"
 			aspect={FORMAT_A3.aspect}
