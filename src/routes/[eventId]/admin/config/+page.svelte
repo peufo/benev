@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { Icon, SectionCollapse } from '$lib/material'
-	import { EventForm } from '$lib/event'
+	import { EventForm, EventSettings, EventStateForm } from '$lib/event'
 	import MemberFields from '$lib/member/MemberFields.svelte'
-	import { GiftConfiguration, GiftForm } from '$lib/gift'
+	import { GiftConfiguration } from '$lib/gift'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
-	import EventStateForm from './EventStateForm.svelte'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'
 	import {
 		mdiCalendarStar,
@@ -34,8 +33,9 @@
 				<Icon path={mdiFormatPaint} class="opacity-70 -rotate-6" />
 				Préférences
 			</span>
-			<span slot="subtitle">Configuration de l'aspect et du fonctionnement du site</span>
+			<span slot="subtitle">Configuration du fonctionnement et de l'aspect du site</span>
 			<WorkInProgress />
+			<EventSettings />
 		</SectionCollapse>
 
 		<SectionCollapse value="member-profil">
@@ -43,7 +43,7 @@
 				<Icon path={mdiCardAccountDetailsOutline} class="opacity-70" />
 				Profil des membres
 			</span>
-			<span slot="subtitle">Informations complémentaires concernant vos membres</span>
+			<span slot="subtitle">Informations complémentaires concernant les membres</span>
 			<MemberFields fields={data.memberFields} />
 		</SectionCollapse>
 
