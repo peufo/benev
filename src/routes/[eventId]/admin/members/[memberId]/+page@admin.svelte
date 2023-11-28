@@ -69,10 +69,12 @@
 		/>
 	</div>
 
-	<SectionCollapse value="profile">
-		<h2 slot="title">Informations complémentaires</h2>
-		<MemberProfileForm member={data.memberProfile} />
-	</SectionCollapse>
+	{#if data.event.memberFields.length}
+		<SectionCollapse value="profile">
+			<h2 slot="title">Informations complémentaires</h2>
+			<MemberProfileForm member={data.memberProfile} />
+		</SectionCollapse>
+	{/if}
 
 	<Card class="border">
 		<h2 slot="title">Inscriptions</h2>
