@@ -36,7 +36,7 @@
 			</p>
 			<ol>
 				<li>Toi-même</li>
-				<li>Les responsables d’un évènement auquel tu a validé ta participation</li>
+				<li>Les responsables d’un évènement auquel tu as validé ta participation</li>
 				<li>
 					Les développeurs en charge de l’hébergement de l’application dans le cadre de tâches comme
 					du support technique et de la modération
