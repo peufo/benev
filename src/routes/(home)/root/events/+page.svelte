@@ -9,6 +9,7 @@
 		<thead>
 			<tr>
 				<td>Name</td>
+				<td>CreatedAt</td>
 				<td>State</td>
 				<td>Owner</td>
 				<td>Members</td>
@@ -21,6 +22,9 @@
 						<a href="/{event.id}" class="link link-hover">
 							{event.name}
 						</a>
+					</td>
+					<td>
+						{event.createdAt.toLocaleDateString()}
 					</td>
 					<td>{event.state}</td>
 					<td>{event.owner.firstName} {event.owner.lastName}</td>
