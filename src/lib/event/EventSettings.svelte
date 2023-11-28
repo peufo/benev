@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { InputBoolean, InputCheckboxs } from '$lib/material'
+	import { InputBoolean, InputCheckboxs, InputSelect } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { useForm } from '$lib/validation'
 
@@ -79,8 +79,16 @@
 	/>
 
 	<section>
-		<h3 class="label-text">Valider automatiquement</h3>
-		<InputBoolean label="les nouveaux membres" />
+		<span class="label-text">Valider automatiquement</span>
+		<InputBoolean label="les nouveaux membres de l'évènement" />
 		<InputBoolean label="les nouvelles inscriptions à des périodes" class="disabled" />
+	</section>
+
+	<section>
+		<span class="label-text">Membre s'étant inscrit</span>
+	</section>
+
+	<section>
+		<span class="label-text">Membre invité</span>
 	</section>
 </form>
