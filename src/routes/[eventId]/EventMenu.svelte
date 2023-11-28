@@ -5,7 +5,7 @@
 	import { Icon } from '$lib/material'
 	import { mdiHelp, mdiMenu } from '@mdi/js'
 	import DropDown from '$lib/material/DropDown.svelte'
-	import EventPubliqueMenuItems from '$lib/EventPubliqueMenuItems.svelte'
+	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from './admin/adminTabs'
 
 	export let pages: Pick<Page, 'id' | 'title' | 'isIndex' | 'path'>[]

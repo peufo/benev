@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Icon, SectionCollapse } from '$lib/material'
-	import EventForm from '$lib/EventForm.svelte'
+	import { EventForm } from '$lib/event'
 	import MemberFields from '$lib/member/MemberFields.svelte'
 	import { GiftConfiguration, GiftForm } from '$lib/gift'
 	import OnlyAdmin from '../OnlyAdmin.svelte'

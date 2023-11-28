@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiLogout, mdiPlus } from '@mdi/js'
-	import EventForm from '$lib/EventForm.svelte'
+	import { EventForm } from '$lib/event'
 	import { Dialog, Icon, Placeholder } from '$lib/material'
 	import ProfileSection from '$lib/me/ProfileSection.svelte'
 	import { useNotify } from '$lib/notify'
