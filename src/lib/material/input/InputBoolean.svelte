@@ -7,7 +7,11 @@
 	export let value = _value
 </script>
 
-<FormControl {...props} let:key>
+<FormControl
+	{...props}
+	let:key
+	class="flex-row-reverse justify-end items-center gap-2 {props.class}"
+>
 	<slot name="label_append" slot="label_append" />
 	<input type="hidden" name={key} value={value ? 'true' : ''} />
 	<input
@@ -18,7 +22,7 @@
 		on:blur
 		type="checkbox"
 		id={key}
-		class="toggle"
+		class="checkbox"
 		{...input}
 	/>
 </FormControl>

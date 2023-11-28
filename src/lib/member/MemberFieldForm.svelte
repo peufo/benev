@@ -6,7 +6,7 @@
 	import { memberFieldType, useForm } from '$lib/validation'
 	import { InputSelect, InputText, InputCheckboxs, DeleteButton, InputOptions } from '$lib/material'
 	import MemberField from './MemberField.svelte'
-	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
+	import { InputBoolean } from '$lib/material/input'
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 	const form = useForm({
@@ -104,9 +104,9 @@
 			<InputBoolean
 				value={field.allCombinations}
 				key="allCombinations"
-				label="Compter par combinaisons de valeurs"
-				hint="Lors de la syhtèse"
+				label="Compter par combinaisons de valeurs lors de la syhtèse"
 			/>
+			<!-- TODO: Add help dialog -->
 		</div>
 	{/if}
 

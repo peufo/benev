@@ -34,7 +34,6 @@
 				{...props}
 				let:key
 				label={option.label}
-				prefix="ignored"
 				prefixFor={index}
 				class="flex-row-reverse justify-end items-center gap-2"
 			>
