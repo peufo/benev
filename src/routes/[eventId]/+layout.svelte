@@ -1,5 +1,6 @@
 <script lang="ts">
 	import {
+		mdiArchiveOutline,
 		mdiArrowLeft,
 		mdiEmailOutline,
 		mdiMapMarkerOutline,
@@ -17,7 +18,8 @@
 
 	export let data
 
-	$: accessDenied = data.event.state === 'draft' && !data.member?.roles.includes('leader')
+	$: accessGranted =
+		data.event.state === 'active' || data.member?.roles.includes('leader') || data.userIsRoot
 </script>
 
 <svelte:head>
@@ -44,24 +46,40 @@
 	</a>
 
 	<svelte:fragment slot="end">
-		{#if !accessDenied}
+		{#if accessGranted}
 			<EventMenu pages={data.pages} />
 		{/if}
 	</svelte:fragment>
 </Header>
 
 <main class="grow p-2">
-	{#if !accessDenied}
+	{#if accessGranted}
 		<slot />
-	{:else}
+	{:else if data.event.state === 'draft'}
 		<Card class="max-w-lg mx-auto">
 			<h2 slot="title" class="flex gap-2">
 				<Icon path={mdiTestTube} class="rotate-12 opacity-70" />
+
 				<span>Bientôt disponible</span>
 			</h2>
+
 			<p class="mt-4">
 				L'espace bénévole de l'évènement <b>{data.event.name}</b> est cours d'élaboration.
 			</p>
+
+			<div class="mt-8">
+				<a href="/me" class="btn btn-sm">
+					<Icon path={mdiArrowLeft} />
+					<span>mon profil</span>
+				</a>
+			</div>
+		</Card>
+	{:else}
+		<Card class="max-w-lg mx-auto">
+			<h2 slot="title" class="flex gap-2">
+				<Icon path={mdiArchiveOutline} class="opacity-70" />
+				<span>Cet évènement est archivé</span>
+			</h2>
 
 			<div class="mt-8">
 				<a href="/me" class="btn btn-sm">
