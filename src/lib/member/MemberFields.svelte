@@ -4,7 +4,7 @@
 	import axios from 'axios'
 	import type { Field } from '@prisma/client'
 	import { listEditable } from '$lib/action'
-	import { Dialog, Icon, SectionCollapse } from '$lib/material'
+	import { Dialog, Icon } from '$lib/material'
 	import { memberFieldType } from '$lib/validation'
 	import MemberFieldForm from './MemberFieldForm.svelte'
 	import { eventPath } from '$lib/store'
@@ -41,39 +41,33 @@
 	}
 </script>
 
-<!-- svelte-ignore missing-declaration -->
-<SectionCollapse value="member-profil">
-	<span slot="title"> Profil des membres </span>
-	<span slot="subtitle">Informations complémentaires concernant vos membres</span>
-
-	<div
-		use:listEditable={{
-			dragElementsSelector: '.drag-button',
-			items: fields,
-			onChange: handleReorder,
-		}}
-		class="flex flex-col gap-2"
-	>
-		{#each fields as field (field.id)}
-			<button
-				transition:slide
-				on:click={() => handleClickUpdateField(field)}
-				class="
+<div
+	use:listEditable={{
+		dragElementsSelector: '.drag-button',
+		items: fields,
+		onChange: handleReorder,
+	}}
+	class="flex flex-col gap-2"
+>
+	{#each fields as field (field.id)}
+		<button
+			transition:slide
+			on:click={() => handleClickUpdateField(field)}
+			class="
 						w-full flex gap-3 py-3 px-4 items-center border rounded-lg
 						bg-base-200/50 hover:bg-base-200 cursor-pointer
 					"
-			>
-				<Icon path={memberFieldType[field.type].icon} class="opacity-70" />
-				<span>{field.name}</span>
-				<span class="drag-button btn btn-sm btn-square btn-ghost ml-auto">
-					<Icon path={mdiDrag} />
-				</span>
-			</button>
-		{/each}
-	</div>
+		>
+			<Icon path={memberFieldType[field.type].icon} class="opacity-70" />
+			<span>{field.name}</span>
+			<span class="drag-button btn btn-sm btn-square btn-ghost ml-auto">
+				<Icon path={mdiDrag} />
+			</span>
+		</button>
+	{/each}
+</div>
 
-	<button class="btn" on:click={handleClickNewField}> Ajouter un champ </button>
-</SectionCollapse>
+<button class="btn" on:click={handleClickNewField}> Ajouter un champ </button>
 
 <Dialog bind:dialog={formDialog}>
 	<span slot="header" class="card-title">
