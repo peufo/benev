@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { InputBoolean, InputCheckboxs, InputSelect } from '$lib/material'
+	import { InputBoolean, InputCheckboxsTree } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { useForm } from '$lib/validation'
 
@@ -63,25 +63,28 @@
 	use:enhance={form.submit}
 	class="flex flex-col gap-4"
 >
-	<InputCheckboxs
-		value={getMemberRight(event)}
-		on:input={handleInputMemberRight}
+	<InputCheckboxsTree
 		label="Les membres peuvent"
-		options={[
-			{ value: 'membersCanReadTeams', label: 'voir les secteurs' },
-			{
-				value: 'membersCanSetPreferedTeams',
-				label: "sélectionner les secteurs qu'ils souhaitent rejoindre",
+		options={{
+			membersCanReadTeams: {
+				label: 'voir les secteurs',
+				options: {
+					membersCanSetPreferedTeams: { label: 'sélectionner leurs secteurs souhaités' },
+					membersCanReadPeriods: {
+						label: 'voir les périodes',
+						options: {
+							membersCanSubscribe: { label: "s'inscrire à une période" },
+						},
+					},
+				},
 			},
-			{ value: 'membersCanReadPeriods', label: 'voir les périodes' },
-			{ value: 'membersCanSubscribe', label: "s'inscrire à une période" },
-		]}
+		}}
 	/>
 
 	<section>
 		<span class="label-text">Valider automatiquement</span>
 		<InputBoolean label="les nouveaux membres de l'évènement" />
-		<InputBoolean label="les nouvelles inscriptions à des périodes" class="disabled" />
+		<InputBoolean key="prout" label="les nouvelles inscriptions à des périodes" class="disabled" />
 	</section>
 
 	<section>
