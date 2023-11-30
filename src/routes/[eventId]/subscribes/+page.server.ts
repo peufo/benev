@@ -25,6 +25,7 @@ export const actions = {
 							where: { state: { in: ['accepted', 'request'] } },
 							include: { period: true },
 						},
+						event: true,
 					},
 				}),
 			])
@@ -41,6 +42,7 @@ export const actions = {
 				.catch(() => false)
 			const isSelfSubscribe = data.memberId === member.id
 			if (!_isLeader && !isSelfSubscribe) throw error(403)
+			if (!_isLeader && !member.event.selfSubscribeAllowed) throw error(403)
 
 			// Check if member is free in this period
 			const memberPeriods = member.subscribes.map((sub) => sub.period)

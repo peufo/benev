@@ -57,13 +57,19 @@
 			const isComplete = nbSubscribe >= period.maxSubscribe
 			const available = !mySubscribe && !isComplete
 
+			let disabled = true
+			if (data.isLeaderOfTeam) disabled = false
+			if (available && data.event.selfSubscribeAllowed) {
+				if (data.member) disabled = false
+				if (!data.member && data.event.selfRegisterAllowed) disabled = false
+			}
+
 			return {
 				...period,
 				mySubscribe,
 				available,
 				isComplete,
-				disabled:
-					(!data.isLeaderOfTeam && !available) || (!data.member && !data.event.selfRegisterAllowed),
+				disabled,
 			}
 		})
 		.filter((period) => !$onlyAvailable || !period.isComplete)
