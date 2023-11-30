@@ -5,7 +5,6 @@
 	import { Icon, InputBoolean } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { useForm } from '$lib/validation'
-	import InputCheckboxs from '$lib/material/input/InputCheckboxs.svelte'
 	import { mdiShieldLockOutline } from '@mdi/js'
 
 	const form = useForm({
@@ -22,9 +21,9 @@
 	class="flex flex-col gap-4"
 >
 	<div>
-		<div class="flex gap-2 text-base">
+		<div class="flex gap-2 items-center text-lg font-medium opacity-80">
 			<span> Permissions </span>
-			<Icon path={mdiShieldLockOutline} size={20} class="opacity-80" />
+			<Icon path={mdiShieldLockOutline} />
 		</div>
 		<InputBoolean
 			key="selfRegisterAllowed"

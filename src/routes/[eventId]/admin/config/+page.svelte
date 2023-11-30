@@ -1,16 +1,17 @@
 <script lang="ts">
-	import { Icon, SectionCollapse } from '$lib/material'
-	import { EventForm, EventSettings, EventStateForm } from '$lib/event'
-	import MemberFields from '$lib/member/MemberFields.svelte'
-	import { GiftConfiguration } from '$lib/gift'
-	import OnlyAdmin from '../OnlyAdmin.svelte'
-	import WorkInProgress from '$lib/WorkInProgress.svelte'
 	import {
 		mdiCalendarStar,
 		mdiCardAccountDetailsOutline,
 		mdiFormatPaint,
 		mdiGiftOutline,
 	} from '@mdi/js'
+
+	import { Icon, SectionCollapse } from '$lib/material'
+	import { EventForm, EventSettings, EventStateForm } from '$lib/event'
+	import { MemberFields, MemberSettingsForm } from '$lib/member'
+	import { GiftConfiguration } from '$lib/gift'
+	import OnlyAdmin from '../OnlyAdmin.svelte'
+	import WorkInProgress from '$lib/WorkInProgress.svelte'
 
 	export let data
 </script>
@@ -42,8 +43,17 @@
 				<Icon path={mdiCardAccountDetailsOutline} class="opacity-70" />
 				Profil des membres
 			</span>
-			<span slot="subtitle">Informations complémentaires concernant les membres</span>
-			<MemberFields fields={data.memberFields} />
+			<span slot="subtitle">Paramétrage des informations relatives aux membres</span>
+
+			<section>
+				<MemberSettingsForm event={data.event} />
+			</section>
+
+			<div class="divider" />
+
+			<section>
+				<MemberFields fields={data.memberFields} />
+			</section>
 		</SectionCollapse>
 
 		<SectionCollapse value="gifts" class="grow">

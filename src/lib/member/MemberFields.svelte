@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { mdiDrag } from '@mdi/js'
+	import { mdiDrag, mdiPlus } from '@mdi/js'
 	import axios from 'axios'
 	import type { Field } from '@prisma/client'
 	import { listEditable } from '$lib/action'
@@ -41,6 +41,13 @@
 	}
 </script>
 
+<div class="flex items-center mb-2">
+	<h3 class="text-lg font-medium opacity-75 grow">Champs personalisés</h3>
+	<button class="btn btn-square" on:click={handleClickNewField}>
+		<Icon path={mdiPlus} title="Ajouter un champ" />
+	</button>
+</div>
+
 <div
 	use:listEditable={{
 		dragElementsSelector: '.drag-button',
@@ -66,8 +73,6 @@
 		</button>
 	{/each}
 </div>
-
-<button class="btn" on:click={handleClickNewField}> Ajouter un champ </button>
 
 <Dialog bind:dialog={formDialog}>
 	<span slot="header" class="card-title">
