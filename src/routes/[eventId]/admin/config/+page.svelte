@@ -33,8 +33,7 @@
 				<Icon path={mdiFormatPaint} class="opacity-70 -rotate-6" />
 				Préférences
 			</span>
-			<span slot="subtitle">Configuration du fonctionnement et de l'aspect du site</span>
-			<WorkInProgress />
+			<span slot="subtitle">Configuration du fonctionnement du site</span>
 			<EventSettings event={data.event} />
 		</SectionCollapse>
 
