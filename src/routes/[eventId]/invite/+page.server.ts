@@ -107,7 +107,7 @@ export const actions = {
 			.catch(() => false)
 
 		return tryOrFail(async () => {
-			// Si le membre existe déjà, on met juste à jour ca validation
+			// Si le membre existe déjà, on met juste à jour sa validation
 			const member = await prisma.member.findUnique({
 				where: { userId_eventId: { userId, eventId } },
 			})
@@ -119,8 +119,15 @@ export const actions = {
 						isValidedByEvent,
 					},
 				})
+				// TODO: mails to admins ?
 				return
 			}
+
+			const { selfRegisterAllowed } = await prisma.event.findUniqueOrThrow({
+				where: { id: eventId },
+				select: { selfRegisterAllowed: true },
+			})
+			if (!selfRegisterAllowed) throw error(403)
 
 			const newMember = await prisma.member.create({
 				data: {

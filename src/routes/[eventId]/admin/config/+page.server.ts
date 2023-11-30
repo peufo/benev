@@ -1,4 +1,10 @@
-import { eventUpdate, giftCreate, memberFieldCreate, memberFieldUpdate } from '$lib/validation'
+import {
+	eventSettings,
+	eventUpdate,
+	giftCreate,
+	memberFieldCreate,
+	memberFieldUpdate,
+} from '$lib/validation'
 import { parseFormData, prisma, tryOrFail, permission, media } from '$lib/server'
 import { z } from '$lib/validation'
 
@@ -111,6 +117,17 @@ export const actions = {
 			prisma.gift.create({
 				data: { ...data, eventId },
 				include: { conditions: true },
+			})
+		)
+	},
+	set_settings: async ({ request, locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
+		const { err, data } = await parseFormData(request, eventSettings)
+		if (err) return err
+		return tryOrFail(() =>
+			prisma.event.update({
+				where: { id: eventId },
+				data,
 			})
 		)
 	},

@@ -32,6 +32,11 @@
 
 	const periodOpenKey = 'periodOpen'
 
+	function handlePeriodClick(period: _Period & { disabled: boolean }) {
+		if (data.isLeaderOfTeam) return goto(`${$eventPath}/teams/${period.teamId}/${period.id}`)
+		if (!period.disabled) subscribe(period)
+	}
+
 	function subscribe(period: _Period) {
 		if (!data.user) return goto(`/auth?redirectTo=${location.pathname}`)
 
@@ -51,12 +56,14 @@
 			const mySubscribe = period.subscribes.find((sub) => sub.memberId === data.member?.id)
 			const isComplete = nbSubscribe >= period.maxSubscribe
 			const available = !mySubscribe && !isComplete
+
 			return {
 				...period,
 				mySubscribe,
 				available,
 				isComplete,
-				disabled: !data.isLeaderOfTeam && !available,
+				disabled:
+					(!data.isLeaderOfTeam && !available) || (!data.member && !data.event.selfRegisterAllowed),
 			}
 		})
 		.filter((period) => !$onlyAvailable || !period.isComplete)
@@ -118,13 +125,9 @@
 						class:hover={!period.disabled}
 						class:cursor-pointer={!period.disabled}
 						class:border-0={$urlParam.hasValue(periodOpenKey, period.id)}
-						on:click={() => {
-							if (data.isLeaderOfTeam)
-								return goto(`${$eventPath}/teams/${period.teamId}/${period.id}`)
-							if (!period.disabled) subscribe(period)
-						}}
+						on:click={() => handlePeriodClick(period)}
 					>
-						<td class="w-full font-medium" class:opacity-70={period.disabled}>
+						<td class="w-full font-medium" class:opacity-80={period.disabled}>
 							{formatRange(period)}
 						</td>
 						<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-end">

@@ -45,3 +45,8 @@ export const eventUpdate = {
 	...eventCreate,
 	name: z.string().min(3).optional(),
 } satisfies ZodObj<EventUpdateInput>
+
+export const eventSettings = {
+	selfRegisterAllowed: z.boolean(),
+	selfSubscribeAllowed: z.boolean(),
+} satisfies ZodObj<EventUpdateInput>

@@ -5,7 +5,7 @@
 	import ProfileForm from '$lib/me/ProfileForm.svelte'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon, Placeholder } from '$lib/material'
 	import { mdiArrowLeft, mdiSlashForward } from '@mdi/js'
 	import LeaderOf from '$lib/LeaderOf.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
@@ -76,7 +76,12 @@
 		{#if data.member.leaderOf.length}
 			<LeaderOf teams={data.member.leaderOf} />
 		{/if}
-	{:else}
+	{:else if data.event.selfRegisterAllowed}
 		<MemberForm event={data.event} userId={data.user.id} class="mx-auto" noCancelButton />
+	{:else}
+		<Placeholder class="border text-center bg-base-100/90">
+			<h2 class="text-lg">Invitation requise</h2>
+			<p>Tu dois être invité par un responsable pour pouvoir devenir membre de cette évènement.</p>
+		</Placeholder>
 	{/if}
 </div>

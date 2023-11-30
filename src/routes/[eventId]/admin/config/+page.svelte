@@ -35,7 +35,7 @@
 			</span>
 			<span slot="subtitle">Configuration du fonctionnement et de l'aspect du site</span>
 			<WorkInProgress />
-			<EventSettings />
+			<EventSettings event={data.event} />
 		</SectionCollapse>
 
 		<SectionCollapse value="member-profil">

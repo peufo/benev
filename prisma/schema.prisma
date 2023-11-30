@@ -99,6 +99,10 @@ model Event {
   memberFields Field[]
   gifts        Gift[]
 
+  // Settings
+  selfRegisterAllowed  Boolean @default(true)
+  selfSubscribeAllowed Boolean @default(true)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
