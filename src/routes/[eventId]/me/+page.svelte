@@ -1,15 +1,16 @@
 <script lang="ts">
-	import MemberForm from '$lib/MemberForm.svelte'
+	import { mdiArrowLeft, mdiMapMarkerRadiusOutline, mdiSlashForward } from '@mdi/js'
 
+	import { eventPath } from '$lib/store'
+	import { Card, Icon, Placeholder } from '$lib/material'
 	import ProfileSection from '$lib/me/ProfileSection.svelte'
 	import ProfileForm from '$lib/me/ProfileForm.svelte'
-	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
-	import { Card, Icon, Placeholder } from '$lib/material'
-	import { mdiArrowLeft, mdiSlashForward } from '@mdi/js'
-	import LeaderOf from '$lib/LeaderOf.svelte'
+	import MemberForm from '$lib/MemberForm.svelte'
+	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import MemberRole from '$lib/MemberRole.svelte'
 	import MemberDeleteForm from '$lib/member/MemberDeleteForm.svelte'
+	import LeaderOf from '$lib/LeaderOf.svelte'
 	import { eventStates } from '$lib/validation/index.js'
 
 	export let data
@@ -69,7 +70,12 @@
 		</ProfileSection>
 
 		<Card class="border">
-			<h2 slot="title">Mes inscriptions</h2>
+			<div slot="title" class="flex gap-2">
+				<h3>Mes inscriptions</h3>
+				<a href="{$eventPath}/teams" class="btn btn-square btn-sm ml-auto">
+					<Icon path={mdiMapMarkerRadiusOutline} title="Voir les secteurs" size={20} />
+				</a>
+			</div>
 			<TeamsSubscribes teams={data.memberTeams || []} />
 		</Card>
 
