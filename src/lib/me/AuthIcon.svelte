@@ -16,7 +16,7 @@
 	"
 >
 	{#if user}
-		<Avatar {user} class="rounded-lg" />
+		<Avatar {user} class="rounded-lg w-full h-full" />
 	{:else}
 		<Icon path={mdiAccountOutline} />
 	{/if}
