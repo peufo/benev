@@ -8,7 +8,7 @@
 		mdiPencilOutline,
 	} from '@mdi/js'
 
-	import { Card, Icon, Placeholder, OnlyAvailableToggle } from '$lib/material'
+	import { Card, Icon, Placeholder, Dialog, OnlyAvailableToggle } from '$lib/material'
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
 	import { formatRange } from '$lib/formatRange'
@@ -217,20 +217,18 @@
 	{/if}
 </dialog>
 
-<dialog class="modal" bind:this={memberProfilDialog}>
-	<div class="modal-box">
-		<h3 class="card-title mb-2">Complète ton profile {data.event.name}</h3>
-		{#if data.member}
-			<MemberProfileForm
-				member={data.member}
-				on:success={() => {
-					memberProfilDialog.close()
-					subscribeDialog.showModal()
-				}}
-			/>
-		{/if}
-	</div>
-</dialog>
+<Dialog bind:dialog={memberProfilDialog}>
+	<h3 slot="header" class="card-title">Complète ton profile {data.event.name}</h3>
+	{#if data.member}
+		<MemberProfileForm
+			member={data.member}
+			on:success={() => {
+				memberProfilDialog.close()
+				subscribeDialog.showModal()
+			}}
+		/>
+	{/if}
+</Dialog>
 
 <dialog class="modal" bind:this={subscribeDialog}>
 	{#if selectedPeriod && data.member}
