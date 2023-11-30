@@ -70,7 +70,7 @@
 		on:input={handleEventIdInput}
 		bind:value={eventId}
 		input={{ class: 'pl-[5.4em]' }}
-		wrapperClass="flex items-center"
+		wrapperClass="flex items-center relative"
 	>
 		<span slot="prepend" class="absolute select-none pl-4 translate-y-[1px] opacity-50">
 			benev.io/
