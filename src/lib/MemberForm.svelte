@@ -16,7 +16,10 @@
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
-	const form = useForm()
+	const form = useForm({
+		successReset: false,
+		successCallback: () => dispatch('success'),
+	})
 </script>
 
 <div class="modal-box flex flex-col gap-4 {klass}">
