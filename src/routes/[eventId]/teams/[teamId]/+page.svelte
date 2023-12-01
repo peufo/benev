@@ -79,6 +79,13 @@
 	<h2 slot="title">{data.team.name}</h2>
 	<p slot="subtitle">
 		{data.team.description || ''}
+		{#if data.team.closeSubscribing || data.event.closeSubscribing}
+			<br />
+			Délai d'inscription:
+			<span class="font-medium">
+				{(data.team.closeSubscribing || data.event.closeSubscribing)?.toLocaleDateString()}
+			</span>
+		{/if}
 	</p>
 	<div slot="action" class="flex gap-2">
 		<OnlyAvailableToggle />
