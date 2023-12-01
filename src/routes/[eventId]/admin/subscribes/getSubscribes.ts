@@ -22,8 +22,6 @@ export const getSubscribes = async (eventId: string, url: URL) => {
 		})
 	)
 
-	console.log(query)
-
 	const where: Prisma.SubscribeWhereInput = {}
 	const team: Prisma.TeamWhereInput = { eventId }
 	const period: Prisma.PeriodWhereInput = { team }

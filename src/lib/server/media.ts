@@ -32,7 +32,6 @@ export const media = {
 
 		if (image.size === 0) return
 
-		console.log(image, crop)
 		const imageBuffer = await image.arrayBuffer()
 
 		let media = await prisma.media.findFirst({
