@@ -37,7 +37,7 @@
 		<h3 class="font-medium opacity-80">Options</h3>
 		<InputDate
 			key="closeSubscribing"
-			label="Les inscriptions sont par défaut ouvertes jusqu'au"
+			label="Fin des inscriptions par défaut"
 			value={event.closeSubscribing}
 		/>
 	</dov>
