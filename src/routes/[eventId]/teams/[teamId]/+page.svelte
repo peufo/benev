@@ -5,6 +5,7 @@
 		mdiChartGantt,
 		mdiChevronRight,
 		mdiClipboardTextMultipleOutline,
+		mdiClockTimeFourOutline,
 		mdiPencilOutline,
 	} from '@mdi/js'
 
@@ -20,6 +21,8 @@
 	import Progress from '$lib/Progress.svelte'
 	import { slide } from 'svelte/transition'
 	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
+	import { tip } from '$lib/action'
+	import dayjs from 'dayjs'
 
 	export let data
 
@@ -48,6 +51,11 @@
 		}
 	}
 
+	const closeSubscribing = data.team.closeSubscribing || data.event.closeSubscribing
+	const DAY = 1000 * 60 * 60 * 24
+	const isCloseSubscribing =
+		closeSubscribing && closeSubscribing.getTime() < new Date().getTime() + DAY
+
 	$: _periods = data.team.periods
 		.map((period) => {
 			const nbSubscribe = period.subscribes.filter(
@@ -59,7 +67,7 @@
 
 			let disabled = true
 			if (data.isLeaderOfTeam) disabled = false
-			if (available && data.event.selfSubscribeAllowed) {
+			if (available && data.event.selfSubscribeAllowed && !isCloseSubscribing) {
 				if (data.member) disabled = false
 				if (!data.member && data.event.selfRegisterAllowed) disabled = false
 			}
@@ -79,12 +87,19 @@
 	<h2 slot="title">{data.team.name}</h2>
 	<p slot="subtitle">
 		{data.team.description || ''}
-		{#if data.team.closeSubscribing || data.event.closeSubscribing}
-			<br />
-			Fin des inscriptions:
-			<span class="font-medium">
-				{(data.team.closeSubscribing || data.event.closeSubscribing)?.toLocaleDateString()}
-			</span>
+
+		{@const closeSubscribing = data.team.closeSubscribing || data.event.closeSubscribing}
+		{#if data.event.selfSubscribeAllowed && closeSubscribing}
+			<div class="flex mt-2 gap-2">
+				<span>Fin des inscriptions: </span>
+
+				<span class="badge" class:badge-warning={isCloseSubscribing}>
+					<Icon path={mdiClockTimeFourOutline} size={16} />
+					<span class="ml-1">
+						{dayjs(closeSubscribing).format('DD MMMM YYYY')}
+					</span>
+				</span>
+			</div>
 		{/if}
 	</p>
 	<div slot="action" class="flex gap-2">

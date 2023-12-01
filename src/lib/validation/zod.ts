@@ -6,8 +6,9 @@ export const z = {
 	json,
 	array,
 	relations,
-	date,
+	dateOptional,
 	booleanAsString,
+	date: zod.coerce.date,
 	number: zod.coerce.number,
 	bigint: zod.coerce.bigint,
 	boolean: zod.coerce.boolean,
@@ -25,7 +26,7 @@ function booleanAsString() {
 	return zod.enum(['true', 'false']).transform((value) => value === 'true')
 }
 
-function date() {
+function dateOptional() {
 	return zod.string().transform((v) => (v === '' ? null : new Date(v)))
 }
 

@@ -16,7 +16,10 @@ export const actions = {
 			const [period, member] = await Promise.all([
 				prisma.period.findUniqueOrThrow({
 					where: { id: data.periodId },
-					include: { subscribes: { where: { state: { in: ['accepted', 'request'] } } } },
+					include: {
+						subscribes: { where: { state: { in: ['accepted', 'request'] } } },
+						team: { select: { closeSubscribing: true } },
+					},
 				}),
 				prisma.member.findUniqueOrThrow({
 					where: { userId_eventId: { userId: session.user.id, eventId } },
@@ -42,7 +45,15 @@ export const actions = {
 				.catch(() => false)
 			const isSelfSubscribe = data.memberId === member.id
 			if (!_isLeader && !isSelfSubscribe) throw error(403)
-			if (!_isLeader && !member.event.selfSubscribeAllowed) throw error(403)
+
+			// Check if self subscribe conditions is respected
+			if (!_isLeader) {
+				if (!member.event.selfSubscribeAllowed) throw error(403)
+				const closeSubscribing = period.team.closeSubscribing || member.event.closeSubscribing
+				const DAY = 1000 * 60 * 60 * 24
+				if (closeSubscribing && closeSubscribing.getTime() < new Date().getTime() - DAY)
+					throw error(403)
+			}
 
 			// Check if member is free in this period
 			const memberPeriods = member.subscribes.map((sub) => sub.period)

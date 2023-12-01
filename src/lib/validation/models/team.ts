@@ -8,7 +8,7 @@ export const teamCreate = {
 	name: z.string().min(3),
 	description: z.string().optional(),
 	leaders: z.relations('connect'),
-	closeSubscribing: z.date().optional(),
+	closeSubscribing: z.dateOptional(),
 } satisfies ZodObj<TeamShemaCreate>
 
 export const teamUpdate = {

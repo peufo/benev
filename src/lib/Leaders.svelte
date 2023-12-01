@@ -51,7 +51,7 @@
 				</button>
 			{/if}
 		{:else}
-			<div class="text-error pt-1">Pas de responsable</div>
+			<div class="text-error">Pas de responsable</div>
 		{/each}
 	</div>
 </div>

@@ -49,5 +49,5 @@ export const eventUpdate = {
 export const eventSettings = {
 	selfRegisterAllowed: z.boolean(),
 	selfSubscribeAllowed: z.boolean(),
-	closeSubscribing: z.date(),
+	closeSubscribing: z.dateOptional(),
 } satisfies ZodObj<EventUpdateInput>

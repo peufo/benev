@@ -52,7 +52,7 @@
 							<span class="badge ml-auto opacity-80 z-10" use:tip={{content: `Fin des inscription le ${team.closeSubscribing.toLocaleDateString()}`}}>
 								<Icon path={mdiClockTimeFourOutline} size={16}/>
 								<span class="ml-1">
-									{dayjs(team.closeSubscribing).format('D MMMM')}
+									{dayjs(team.closeSubscribing).format('DD MMMM')}
 								</span>
 							</span>
 						{/if}
