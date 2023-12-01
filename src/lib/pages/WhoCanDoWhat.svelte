@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { rolesMap } from '$lib/MemberRole.svelte'
 	import { Icon } from '$lib/material'
-	import { mdiCheck, mdiListStatus } from '@mdi/js'
+	import { mdiCheck, mdiHelp, mdiListStatus } from '@mdi/js'
 
-	type Permission = boolean | string
+	type Permission = boolean | string | undefined
 
 	const permissions: [string, [Permission, Permission, Permission, Permission]][] = [
 		['Nommer des administrateurs', [true, false, false, false]],
@@ -29,7 +29,7 @@
 		['Inviter un nouveau membre', [true, true, true, false]],
 		['Accèder à la liste des membres et des inscriptions', [true, true, true, false]],
 		['Accèder à la planification', [true, true, true, false]],
-		["S'inscrire à une période", [true, true, true, true]],
+		["S'inscrire à une période", [true, true, true, undefined]],
 		[
 			'Annuler une inscription',
 			[
@@ -113,6 +113,8 @@
 						<td><Icon path={mdiCheck} class="fill-success" /></td>
 					{:else if value === false}
 						<td />
+					{:else if value === undefined}
+						<td><Icon path={mdiHelp} class="fill-warning" title="Paramétrable" /></td>
 					{:else}
 						<td>
 							<Icon path={mdiListStatus} class="fill-info" title={value} />
