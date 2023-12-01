@@ -81,5 +81,5 @@
 		<TeamsSubscribes teams={data.event.teams} isLeader />
 	</Card>
 
-	<LeaderOf teams={data.memberProfile.leaderOf} />
+	<LeaderOf teams={data.memberProfile.leaderOf} event={data.event} />
 </div>

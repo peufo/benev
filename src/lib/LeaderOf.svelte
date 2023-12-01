@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card, DisplayToggle, Icon } from '$lib/material'
 	import Teams from '$lib/Teams.svelte'
-	import type { Member, Period, Subscribe, Team } from '@prisma/client'
+	import type { Event, Member, Period, Subscribe, Team } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiAccountMultipleOutline,
@@ -15,6 +15,7 @@
 		})[]
 		periods: (Period & { subscribes: Subscribe[] })[]
 	})[]
+	export let event: Event
 
 	$: teamsId = JSON.stringify(teams.map((team) => team.id))
 </script>
@@ -39,5 +40,5 @@
 			</a>
 		{/if}
 	</div>
-	<Teams {teams} showAll />
+	<Teams {teams} {event} showAll />
 </Card>

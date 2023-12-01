@@ -24,6 +24,6 @@
 	</div>
 
 	<div class="overflow-x-auto">
-		<Teams teams={data.teams} />
+		<Teams teams={data.teams} event={data.event} />
 	</div>
 </Card>

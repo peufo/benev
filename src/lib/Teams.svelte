@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
-	import type { Member, Period, Team, Subscribe } from '@prisma/client'
+	import type { Member, Period, Team, Subscribe, Event } from '@prisma/client'
 
-	import { Placeholder, CardLink } from '$lib/material'
+	import { Placeholder, CardLink, Icon } from '$lib/material'
 	import { eventPath, display, onlyAvailable } from '$lib/store'
 	import { rowLink, tip } from '$lib/action'
 	import Progress from '$lib/Progress.svelte'
+	import { mdiClockTimeFourOutline } from '@mdi/js'
+	import dayjs from 'dayjs'
 
 	export let teams: (Team & {
 		leaders: (Member & {
@@ -13,6 +15,7 @@
 		})[]
 		periods: (Period & { subscribes: Subscribe[] })[]
 	})[]
+	export let event: Event
 
 	/** By pass $onlyAvailable flag */
 	export let showAll = false
@@ -40,7 +43,20 @@
 			style:grid-template-columns="repeat(auto-fill, minmax(325px, 1fr))"
 		>
 			{#each _teams as team (team.id)}
-				<CardLink title={team.name} href="{$eventPath}/teams/{team.id}" class="p-1">
+				<CardLink href="{$eventPath}/teams/{team.id}" class="p-1">
+					<div class="flex gap-2 items-center mb-2">
+						<h2 class="font-medium">
+							{team.name}
+						</h2>
+						{#if team.closeSubscribing && event.selfSubscribeAllowed}
+							<span class="badge ml-auto opacity-80 z-10" use:tip={{content: `Fin des inscription le ${team.closeSubscribing.toLocaleDateString()}`}}>
+								<Icon path={mdiClockTimeFourOutline} size={16}/>
+								<span class="ml-1">
+									{dayjs(team.closeSubscribing).format('D MMMM')}
+								</span>
+							</span>
+						{/if}
+					</div>
 					<div class="grid grid-cols-2 gap-2 items-start pt-2">
 						<div class="flex flex-wrap gap-1">
 							{#each team.leaders as member}
@@ -61,6 +77,7 @@
 							class="mt-1"
 							period={{ maxSubscribe: team.maxSubscribe, subscribes: team.subscribes }}
 						/>
+
 					</div>
 				</CardLink>
 			{/each}

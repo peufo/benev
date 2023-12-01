@@ -44,13 +44,15 @@
 	{/if}
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
 
-	<InputDate
-		key="closeSubscribing"
-		label="Fin des inscriptions"
-		value={team?.closeSubscribing}
-		hint={event.closeSubscribing && !team?.closeSubscribing ? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}` : ''}
-	/>
-
+	{#if event.selfSubscribeAllowed}
+		<InputDate
+			key="closeSubscribing"
+			label="Fin des inscriptions"
+			value={team?.closeSubscribing}
+			hint={event.closeSubscribing && !team?.closeSubscribing ? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}` : ''}
+		/>
+	{/if}
+	
 	<input type="hidden" name="redirectTo" value={$page.url.searchParams.get('redirectTo') || ''} />
 
 	<div class="flex gap-2 flex-row-reverse">

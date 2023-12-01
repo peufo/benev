@@ -80,7 +80,7 @@
 		</Card>
 
 		{#if data.member.leaderOf.length}
-			<LeaderOf teams={data.member.leaderOf} />
+			<LeaderOf teams={data.member.leaderOf} event={data.event} />
 		{/if}
 	{:else if data.event.selfRegisterAllowed}
 		<MemberForm event={data.event} userId={data.user.id} class="mx-auto" noCancelButton />

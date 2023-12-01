@@ -81,7 +81,7 @@
 		{data.team.description || ''}
 		{#if data.team.closeSubscribing || data.event.closeSubscribing}
 			<br />
-			Délai d'inscription:
+			Fin des inscriptions:
 			<span class="font-medium">
 				{(data.team.closeSubscribing || data.event.closeSubscribing)?.toLocaleDateString()}
 			</span>

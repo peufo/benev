@@ -29,7 +29,7 @@
 		<InputBoolean
 			key="selfSubscribeAllowed"
 			label="Les membres peuvent s'inscrire d'eux même aux périodes de travail"
-			value={event.selfSubscribeAllowed}
+			bind:value={event.selfSubscribeAllowed}
 		/>
 	</div>
 
@@ -39,6 +39,9 @@
 			key="closeSubscribing"
 			label="Fin des inscriptions par défaut"
 			value={event.closeSubscribing}
+			input={{
+				disabled: !event.selfSubscribeAllowed
+			}}
 		/>
 	</dov>
 
