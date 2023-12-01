@@ -200,9 +200,10 @@ model Page {
 model Team {
   id String @id @default(cuid())
 
-  name        String
-  description String?  @db.Text
-  leaders     Member[]
+  name             String
+  description      String?   @db.Text
+  leaders          Member[]
+  closeSubscribing DateTime?
 
   eventId String
   event   Event    @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
