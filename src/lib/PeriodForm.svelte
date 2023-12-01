@@ -35,7 +35,7 @@
 	let defaultStart = dayjs().startOf('hour').add(1, 'hour').format('HH:mm')
 	let defaultEnd = dayjs(period?.end).startOf('hour').add(4, 'hours').format('HH:mm')
 
-	let date = dayjs(period?.start).format('YYYY-MM-DD')
+	let date = period?.start
 	let start = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
 	let end = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
 	let maxSubscribe = String(period?.maxSubscribe || 1)
@@ -45,7 +45,7 @@
 
 	export function setPeriod(_period?: Partial<Period>) {
 		period = _period
-		date = dayjs(period?.start).format('YYYY-MM-DD')
+		date = period?.start
 		start = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
 		end = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
 		if (period?.maxSubscribe) maxSubscribe = String(period.maxSubscribe)
@@ -54,13 +54,14 @@
 	function getNextPeriod() {
 		if (!start || !end) return
 
-		let _start = dayjs(`${date}T${start}`)
-		let _end = dayjs(`${date}T${end}`).add(+endIsNextDay, 'day')
+		const dateString = dayjs(date).format('YYYY-MM-DD')
+		let _start = dayjs(`${dateString}T${start}`)
+		let _end = dayjs(`${dateString}T${end}`).add(+endIsNextDay, 'day')
 		const step = _end.diff(_start, 'minute')
 		_start = _end.clone()
 		_end = _end.add(step, 'minute')
 
-		date = _start.format('YYYY-MM-DD')
+		date = _start.toDate()
 		start = _start.format('HH:mm')
 		end = _end.format('HH:mm')
 	}
@@ -76,11 +77,13 @@
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
 
-	<input type="hidden" name="start" value="{date}T{start}" />
+	<input type="hidden" name="start" value="{dayjs(date).format('YYYY-MM-DD')}T{start}" />
 	<input
 		type="hidden"
 		name="end"
-		value={dayjs(`${date}T${end}`).add(+endIsNextDay, 'day').format('YYYY-MM-DDTHH:mm')}
+		value={dayjs(`${dayjs(date).format('YYYY-MM-DD')}T${end}`)
+			.add(+endIsNextDay, 'day')
+			.format('YYYY-MM-DDTHH:mm')}
 	/>
 
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">

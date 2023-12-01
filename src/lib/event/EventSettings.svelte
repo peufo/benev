@@ -2,10 +2,9 @@
 	import { enhance } from '$app/forms'
 	import type { Event } from '@prisma/client'
 
-	import { Icon, InputBoolean } from '$lib/material'
+	import { InputBoolean, InputDate } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { useForm } from '$lib/validation'
-	import { mdiShieldLockOutline } from '@mdi/js'
 
 	const form = useForm({
 		successReset: false,
@@ -21,10 +20,7 @@
 	class="flex flex-col gap-4"
 >
 	<div>
-		<div class="flex gap-2 items-center text-lg font-medium opacity-80">
-			<span> Permissions </span>
-			<Icon path={mdiShieldLockOutline} />
-		</div>
+		<h3 class="font-medium opacity-80">Permissions</h3>
 		<InputBoolean
 			key="selfRegisterAllowed"
 			label="Les utilisateurs peuvent devenir membre sans invitation"
@@ -36,6 +32,15 @@
 			value={event.selfSubscribeAllowed}
 		/>
 	</div>
+
+	<dov>
+		<h3 class="font-medium opacity-80">Options</h3>
+		<InputDate
+			key="closeSubscribing"
+			label="Les inscriptions sont par défaut ouvertes jusqu'au"
+			value={event.closeSubscribing}
+		/>
+	</dov>
 
 	<div class="flex justify-end">
 		<button class="btn">Valider</button>

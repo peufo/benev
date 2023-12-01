@@ -78,7 +78,7 @@
 	<InputDate
 		key="birthday"
 		label="Date de naissance"
-		value={dayjs(user.birthday).format('YYYY-MM-DD')}
+		value={user.birthday}
 		class="md:col-span-4"
 	/>
 

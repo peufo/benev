@@ -100,8 +100,9 @@ model Event {
   gifts        Gift[]
 
   // Settings
-  selfRegisterAllowed  Boolean @default(true)
-  selfSubscribeAllowed Boolean @default(true)
+  selfRegisterAllowed  Boolean   @default(true)
+  selfSubscribeAllowed Boolean   @default(true)
+  closeSubscribing     DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
