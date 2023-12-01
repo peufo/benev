@@ -48,7 +48,7 @@
 		key="closeSubscribing"
 		label="Fin des inscriptions"
 		value={team?.closeSubscribing}
-		hint={event.closeSubscribing ? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}` : ''}
+		hint={event.closeSubscribing && !team?.closeSubscribing ? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}` : ''}
 	/>
 
 	<input type="hidden" name="redirectTo" value={$page.url.searchParams.get('redirectTo') || ''} />

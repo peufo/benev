@@ -28,6 +28,7 @@ export const actions = {
 		if (err) return err
 		if (!member.roles.includes('admin') && data.leaders) throw error(403)
 
+		console.log(data)
 		return tryOrFail(
 			() =>
 				prisma.team.update({

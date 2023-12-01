@@ -6,11 +6,11 @@ export const z = {
 	json,
 	array,
 	relations,
+	date,
 	booleanAsString,
 	number: zod.coerce.number,
 	bigint: zod.coerce.bigint,
 	boolean: zod.coerce.boolean,
-	date: zod.coerce.date,
 }
 
 function json<T extends zod.ZodRawShape>(shap: T) {
@@ -23,6 +23,10 @@ function array<T extends zod.ZodTypeAny>(shap: T) {
 
 function booleanAsString() {
 	return zod.enum(['true', 'false']).transform((value) => value === 'true')
+}
+
+function date() {
+	return zod.string().transform((v) => (v === '' ? null : new Date(v)))
 }
 
 type Operation = 'set' | 'disconnect' | 'delete' | 'connect'

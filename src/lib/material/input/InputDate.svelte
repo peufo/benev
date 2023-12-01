@@ -8,14 +8,14 @@
 	export let value = _value
 
 	const handleInput: FormEventHandler<HTMLInputElement> = ({currentTarget}) => {
-		value = currentTarget.valueAsDate
+		value = currentTarget.valueAsDate || undefined
 	}
 
 </script>
 
 <FormControl {...props} let:key>
 	<input
-		value={value ? dayjs(value).format('YYYY-MM-DD') : ''}
+		value={value && dayjs(value).format('YYYY-MM-DD')}
 		on:input={handleInput}
 		on:focus
 		on:blur

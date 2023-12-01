@@ -15,7 +15,6 @@ export async function parseFormData<Type extends z.ZodRawShape>(
 	if (validation) shema.superRefine(validation)
 
 	const formDataObject: Record<string, unknown> = Object.fromEntries(formData)
-
 	const parsed = shema.safeParse(formDataObject)
 	if (parsed.success === false) {
 		return { formData, err: fail(400, { issues: parsed.error.issues }) }

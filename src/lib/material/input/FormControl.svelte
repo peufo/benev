@@ -56,7 +56,7 @@
 		</label>
 	{:else if hint}
 		<label for="{prefixFor}{_key}" class="label" transition:slide>
-			<span class="label-text-alt text-info">{hint}</span>
+			<span class="label-text-alt text-neutral">{hint}</span>
 		</label>
 	{/if}
 </div>
