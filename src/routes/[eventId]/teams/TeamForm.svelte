@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Team, Member, User } from '@prisma/client'
+	import type { Team, Member, User, Event } from '@prisma/client'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 
 	import { useForm } from '$lib/validation'
-	import { InputText, InputTextarea, DeleteButton, Dialog } from '$lib/material'
+	import { InputText, InputTextarea, DeleteButton, Dialog, InputDate } from '$lib/material'
 	import { eventPath } from '$lib/store'
 
 	import InviteForm from '$lib/InviteForm.svelte'
@@ -13,6 +13,7 @@
 	let klass = ''
 	export { klass as class }
 	export let isUpdate = false
+	export let event: Event
 	export let team:
 		| (Team & {
 				leaders: (Member & {
@@ -42,6 +43,14 @@
 		<InputMembers key="leaders" label="Responsables" value={team?.leaders} {inviteDialog} />
 	{/if}
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
+
+	<InputDate
+		key="closeSubscribing"
+		label="Fin des inscriptions"
+		value={team?.closeSubscribing}
+		hint={event.closeSubscribing ? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}` : ''}
+	/>
+
 	<input type="hidden" name="redirectTo" value={$page.url.searchParams.get('redirectTo') || ''} />
 
 	<div class="flex gap-2 flex-row-reverse">

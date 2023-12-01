@@ -6,5 +6,5 @@
 </script>
 
 <Card class="bg-base-100 m-auto max-w-md">
-	<TeamForm isUpdate team={data.team} />
+	<TeamForm isUpdate team={data.team} event={data.event} />
 </Card>
