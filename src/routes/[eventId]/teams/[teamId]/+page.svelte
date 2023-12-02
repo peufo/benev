@@ -246,7 +246,7 @@
 </dialog>
 
 <Dialog bind:dialog={memberProfilDialog}>
-	<h3 slot="header" class="card-title">Complète ton profile {data.event.name}</h3>
+	<h3 slot="header" class="card-title">Complète ton profil {data.event.name}</h3>
 	{#if data.member}
 		<MemberProfileForm
 			member={data.member}

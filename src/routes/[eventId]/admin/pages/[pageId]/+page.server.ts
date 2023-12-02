@@ -17,7 +17,17 @@ export const actions = {
 		if (err) return err
 
 		const path = normalizePath(data.title)
-		const reservedPaths = ['admin', 'me', 'teams', 'subscribes', 'help', 'api', 'invite', 'members']
+		const reservedPaths = [
+			'admin',
+			'me',
+			'register',
+			'teams',
+			'subscribes',
+			'help',
+			'api',
+			'invite',
+			'members',
+		]
 		if (reservedPaths.includes(path))
 			return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
 
