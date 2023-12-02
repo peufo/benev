@@ -164,11 +164,9 @@ model FieldValue {
 model Member {
   id String @id @default(cuid())
 
-  isAdmin                  Boolean @default(false)
-  isValidedByEvent         Boolean @default(false)
-  isValidedByUser          Boolean @default(false)
-  isUserProfileCompleted   Boolean @default(false)
-  isMemberProfileCompleted Boolean @default(false)
+  isAdmin          Boolean @default(false)
+  isValidedByEvent Boolean @default(false)
+  isValidedByUser  Boolean @default(false)
 
   userId  String
   user    User   @relation(references: [id], fields: [userId], onDelete: Cascade)

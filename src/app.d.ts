@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import { MemberWithRoles } from '$lib/server'
+import { MemberWithComputedValues } from '$lib/server'
 
 // for information about these interfaces
 declare global {
@@ -9,7 +9,7 @@ declare global {
 			auth: import('lucia').AuthRequest
 		}
 		interface PageData {
-			member?: MemberWithRoles
+			member?: MemberWithComputedValues
 		}
 		// interface Error {}
 		// interface Platform {}

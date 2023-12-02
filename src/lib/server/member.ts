@@ -1,16 +1,31 @@
 import { ROOT_USER } from '$env/static/private'
-import type { Member, Team, User } from '@prisma/client'
+import type { Member, Team, User, Event } from '@prisma/client'
 import { prisma } from './index'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
-export type MemberWithRolesInfo = Member & {
+type MemberWithUserEventAndLeaderOf = Member & {
 	user: User
-	event: { ownerId: string }
+	event: Event
 	leaderOf: Team[]
 }
-export type MemberWithRoles = MemberWithRolesInfo & { roles: MemberRole[] }
+export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
+	roles: MemberRole[]
+	isUserProfileCompleted: boolean
+	isMemberProfileCompleted: boolean
+}
 
-export function getMemberRoles(member: MemberWithRolesInfo): MemberRole[] {
+export function addMemberComputedValues<T extends MemberWithUserEventAndLeaderOf>(
+	member: T
+): T & MemberWithComputedValues {
+	return {
+		...member,
+		roles: getMemberRoles(member),
+		isUserProfileCompleted: getMemberProfileState(member),
+		isMemberProfileCompleted: true, // TODO
+	}
+}
+
+function getMemberRoles(member: MemberWithUserEventAndLeaderOf): MemberRole[] {
 	const isRoot = member.user.email === ROOT_USER
 	const isOwner = member.event.ownerId === member.userId
 	if (isRoot) return ['root', 'owner', 'admin', 'leader', 'member']
@@ -18,6 +33,17 @@ export function getMemberRoles(member: MemberWithRolesInfo): MemberRole[] {
 	if (member.isAdmin) return ['admin', 'leader', 'member']
 	if (member.leaderOf.length) return ['leader', 'member']
 	return ['member']
+}
+
+function getMemberProfileState({ event, user }: MemberWithUserEventAndLeaderOf) {
+	return (
+		[
+			event.userAddressRequired && !(user.street && user.zipCode && user.city),
+			event.userAvatarRequired && !user.avatarId,
+			event.userBirthdayRequired && !user.birthday,
+			event.userPhoneRequired && !user.phone,
+		].filter(Boolean).length === 0
+	)
 }
 
 export type MemberProfile = Awaited<ReturnType<typeof getMemberProfile>>
@@ -52,10 +78,7 @@ export function getMemberProfile(where: MemberUniqueWhere) {
 				},
 			},
 		})
-		.then((member) => ({
-			...member,
-			roles: getMemberRoles(member),
-		}))
+		.then(addMemberComputedValues)
 		.then((member) => ({
 			...member,
 			profile: member.profile.filter(

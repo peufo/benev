@@ -1,5 +1,6 @@
 import { getMembers } from './getMembers'
 
-export const load = async ({ url, params: { eventId } }) => {
-	return getMembers(eventId, url)
+export const load = async ({ url, parent }) => {
+	const { event } = await parent()
+	return getMembers(event, url)
 }

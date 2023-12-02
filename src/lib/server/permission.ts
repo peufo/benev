@@ -1,6 +1,10 @@
 import { error, redirect } from '@sveltejs/kit'
 import { prisma } from '.'
-import { type MemberRole, type MemberWithRoles, getMemberProfile } from '$lib/server/member'
+import {
+	type MemberRole,
+	type MemberWithComputedValues,
+	getMemberProfile,
+} from '$lib/server/member'
 
 const getPermission = (role: MemberRole) => async (eventId: string, locals: App.Locals) => {
 	const session = await locals.auth.validate()
@@ -19,7 +23,10 @@ export const permission = {
 	owner: getPermission('owner'),
 	root: getPermission('root'),
 	leaderOfTeam,
-} satisfies Record<MemberRole | 'leaderOfTeam', (...args: any[]) => Promise<MemberWithRoles>>
+} satisfies Record<
+	MemberRole | 'leaderOfTeam',
+	(...args: any[]) => Promise<MemberWithComputedValues>
+>
 
 async function leaderOfTeam(teamId: string, locals: App.Locals) {
 	const team = await prisma.team.findUniqueOrThrow({ where: { id: teamId } })

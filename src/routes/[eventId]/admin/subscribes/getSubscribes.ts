@@ -1,10 +1,10 @@
 import { jsonParse } from '$lib/jsonParse.js'
-import { getMemberRoles, parseQuery, prisma } from '$lib/server'
-import type { Prisma, SubscribeState } from '@prisma/client'
-import { error } from '@sveltejs/kit'
+import { addMemberComputedValues, parseQuery, prisma } from '$lib/server'
+import type { Event, Prisma, SubscribeState } from '@prisma/client'
 import { z } from '$lib/validation'
 
-export const getSubscribes = async (eventId: string, url: URL) => {
+export const getSubscribes = async (event: Event, url: URL) => {
+	const eventId = event.id
 	const query = parseQuery(
 		url,
 		z.object({
@@ -71,7 +71,6 @@ export const getSubscribes = async (eventId: string, url: URL) => {
 					member: {
 						include: {
 							user: true,
-							event: { select: { ownerId: true } },
 							leaderOf: true,
 						},
 					},
@@ -81,10 +80,7 @@ export const getSubscribes = async (eventId: string, url: URL) => {
 			.then((subs) =>
 				subs.map((sub) => ({
 					...sub,
-					member: {
-						...sub.member,
-						roles: getMemberRoles(sub.member),
-					},
+					member: addMemberComputedValues({ ...sub.member, event }),
 				}))
 			),
 	}

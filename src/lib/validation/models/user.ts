@@ -18,7 +18,7 @@ export const userUpdate = {
 	firstName: z.string().min(2),
 	lastName: z.string().min(2),
 	phone: z.string().optional(),
-	birthday: z.date().optional(),
+	birthday: z.dateOptional(),
 	street: z.string().optional(),
 	zipCode: z.string().optional(),
 	city: z.string().optional(),

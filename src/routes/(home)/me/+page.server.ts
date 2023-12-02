@@ -3,7 +3,7 @@ import { z } from '$lib/validation'
 import { fail, error } from '@sveltejs/kit'
 import {
 	auth,
-	getMemberRoles,
+	addMemberComputedValues,
 	generateToken,
 	parseFormData,
 	prisma,
@@ -31,10 +31,7 @@ export const load = async ({ url, parent }) => {
 		},
 	})
 	const membersWithRole = members
-		.map((member) => ({
-			...member,
-			roles: getMemberRoles(member),
-		}))
+		.map(addMemberComputedValues)
 		.filter(({ event, roles }) => event.state !== 'draft' || roles.includes('leader'))
 
 	return {

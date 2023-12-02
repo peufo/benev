@@ -1,8 +1,9 @@
 import { z } from '$lib/validation'
-import type { Prisma } from '@prisma/client'
-import { parseQuery, prisma, getMemberRoles } from '$lib/server'
+import type { Event, Prisma } from '@prisma/client'
+import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
 
-export const getMembers = async (eventId: string, url: URL) => {
+export const getMembers = async (event: Event, url: URL) => {
+	const eventId = event.id
 	const query = parseQuery(
 		url,
 		z.object({
@@ -101,7 +102,6 @@ export const getMembers = async (eventId: string, url: URL) => {
 				user: true,
 				leaderOf: true,
 				profile: true,
-				event: { select: { ownerId: true } },
 				subscribes: {
 					where: subscribeWhere,
 					include: {
@@ -115,8 +115,7 @@ export const getMembers = async (eventId: string, url: URL) => {
 		})
 		.then((res) =>
 			res.map((member) => ({
-				...member,
-				roles: getMemberRoles(member),
+				...addMemberComputedValues({ ...member, event }),
 				workTime: member.subscribes.reduce((acc, { period }) => {
 					const time = period.end.getTime() - period.start.getTime()
 					return acc + time
