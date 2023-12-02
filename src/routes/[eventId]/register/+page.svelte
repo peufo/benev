@@ -1,8 +1,10 @@
 <script lang="ts">
 	import MemberForm from '$lib/MemberForm.svelte'
 	import { Card } from '$lib/material'
+	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
 	import ProfileForm from '$lib/me/ProfileForm.svelte'
+	import { MemberProfileForm } from '$lib/member'
 
 	/**
 	 * 1. Devenir membre
@@ -31,9 +33,14 @@
 		<Login />
 	{:else if !data.member || !data.member.isValidedByUser}
 		<MemberForm userId={data.user.id} event={data.event} class="mx-auto" />
+	{:else if !data.member.isUserProfileCompleted}
+		<Card>
+			<AvatarForm user={data.user} />
+			<ProfileForm user={data.user} />
+		</Card>
 	{:else}
 		<Card>
-			<ProfileForm user={data.user} />
+			<MemberProfileForm member={data.member} />
 		</Card>
 	{/if}
 </div>
