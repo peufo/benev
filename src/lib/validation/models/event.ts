@@ -51,3 +51,10 @@ export const eventSettings = {
 	selfSubscribeAllowed: z.boolean(),
 	closeSubscribing: z.dateOptional(),
 } satisfies ZodObj<EventUpdateInput>
+
+export const eventMemberSettings = {
+	userAddressRequired: z.boolean(),
+	userPhoneRequired: z.boolean(),
+	userBirthdayRequired: z.boolean(),
+	userAvatarRequired: z.boolean(),
+} satisfies ZodObj<EventUpdateInput>

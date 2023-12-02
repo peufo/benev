@@ -103,6 +103,10 @@ model Event {
   selfRegisterAllowed  Boolean   @default(true)
   selfSubscribeAllowed Boolean   @default(true)
   closeSubscribing     DateTime?
+  userAddressRequired  Boolean   @default(false)
+  userPhoneRequired    Boolean   @default(false)
+  userBirthdayRequired Boolean   @default(false)
+  userAvatarRequired   Boolean   @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

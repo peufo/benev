@@ -27,6 +27,7 @@
 		hours: { label: 'Heures', getValue: (m) => toHour(m.workTime) },
 		sectors: { label: 'Secteurs à charges', getValue: (m) => m.leaderOf.map(({ name }) => name) },
 		age: { label: 'Age', getValue: (m) => getAge(m.user.birthday) },
+		completed: {label: 'Profil complet', getValue: (m) => m.isUserProfileCompleted},
 		...data.fields.reduce(
 			(acc, cur) => ({
 				...acc,

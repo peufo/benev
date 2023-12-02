@@ -58,6 +58,13 @@
 				{/if}
 
 				<MemberAbsences subscribes={data.memberProfile.subscribes} />
+
+				{#if !data.memberProfile.isUserProfileCompleted}
+					<div class="ml-2 badge badge-warning">
+						Profil incomplet
+					</div>
+				{/if}
+
 			</div>
 			<Profile user={data.memberProfile.user} class="sm:pt-4" />
 		</div>

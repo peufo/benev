@@ -5,6 +5,7 @@
 	import { InputBoolean, InputDate } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { useForm } from '$lib/validation'
+	import { slide } from 'svelte/transition'
 
 	const form = useForm({
 		successReset: false,
@@ -28,22 +29,20 @@
 		/>
 		<InputBoolean
 			key="selfSubscribeAllowed"
-			label="Les membres peuvent s'inscrire d'eux même aux périodes de travail"
+			label="Les membres peuvent s'inscrire aux périodes de travail"
 			bind:value={event.selfSubscribeAllowed}
 		/>
 	</div>
-
-	<dov>
-		<h3 class="font-medium opacity-80">Options</h3>
-		<InputDate
-			key="closeSubscribing"
-			label="Fin des inscriptions par défaut"
-			value={event.closeSubscribing}
-			input={{
-				disabled: !event.selfSubscribeAllowed
-			}}
-		/>
-	</dov>
+	{#if event.selfSubscribeAllowed}
+		<div transition:slide={{ duration: 200 }}>
+			<h3 class="font-medium opacity-80">Options</h3>
+			<InputDate
+				key="closeSubscribing"
+				label="Fin des inscriptions par défaut"
+				value={event.closeSubscribing}
+			/>
+		</div>
+	{/if}
 
 	<div class="flex justify-end">
 		<button class="btn">Valider</button>

@@ -27,7 +27,10 @@ function booleanAsString() {
 }
 
 function dateOptional() {
-	return zod.string().transform((v) => (v === '' ? null : new Date(v)))
+	return zod
+		.string()
+		.optional()
+		.transform((v) => (v ? new Date(v) : v === '' ? null : undefined))
 }
 
 type Operation = 'set' | 'disconnect' | 'delete' | 'connect'

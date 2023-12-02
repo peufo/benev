@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
+	import {mdiCheck, mdiClose} from '@mdi/js'
 	import { eventPath } from '$lib/store'
-	import { Placeholder } from '$lib/material'
+	import { Placeholder, Icon } from '$lib/material'
 	import Contact from '$lib/Contact.svelte'
 
 	import type { PageData } from './$types'
@@ -60,8 +61,10 @@
 									{/each}
 								{:else if typeof value === 'number'}
 									<span class="badge">{value}</span>
-								{:else if typeof value === 'boolean'}
-									<span class="badge">{value ? 'OUI' : 'NON'}</span>
+								{:else if value === true}
+									<Icon path={mdiCheck} class="fill-success"/>
+								{:else if value === false}
+									<Icon path={mdiClose} class="fill-error"/>
 								{:else}
 									<span>{value}</span>
 								{/if}
