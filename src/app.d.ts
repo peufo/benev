@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 
 import { MemberWithComputedValues } from '$lib/server'
+import { Event } from '@prisma/client'
 
 // for information about these interfaces
 declare global {
@@ -10,6 +11,7 @@ declare global {
 		}
 		interface PageData {
 			member?: MemberWithComputedValues
+			event?: Event
 		}
 		// interface Error {}
 		// interface Platform {}

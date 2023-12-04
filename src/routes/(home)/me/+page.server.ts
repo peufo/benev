@@ -1,5 +1,3 @@
-import { z } from '$lib/validation'
-
 import { fail, error } from '@sveltejs/kit'
 import {
 	auth,
@@ -13,9 +11,8 @@ import {
 	createAvatarPlaceholder,
 	media,
 } from '$lib/server'
-import { userLogin, userCreate } from '$lib/validation'
+import { userLogin, userCreate, userUpdate, z } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
-import { userUpdate } from '$lib/validation'
 
 export const load = async ({ url, parent }) => {
 	const { user } = await parent()
@@ -108,7 +105,25 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 
-		const { err, data } = await parseFormData(request, userUpdate)
+		// Adapte validation model with event context
+		const formData = await request.formData()
+		const eventId = formData.get('eventId') as string | null
+		const event = await prisma.event.findUnique({ where: { id: eventId || '' } })
+
+		const { err, data } = await parseFormData(formData, userUpdate, (value, ctx) => {
+			if (!event) return
+			const addIssue = (path: string, message: string) =>
+				ctx.addIssue({ code: 'custom', path: [path], message })
+
+			if (event.userBirthdayRequired && !value.birthday)
+				addIssue('birthday', 'Birthday is required')
+			if (event.userPhoneRequired && !value.phone) addIssue('phone', 'Phone is required')
+			if (event.userAddressRequired) {
+				if (!value.city) addIssue('city', 'Address is required')
+				if (!value.street) addIssue('street', 'Address is required')
+				if (!value.zipCode) addIssue('zipCode', 'Address is required')
+			}
+		})
 		if (err) return err
 
 		return tryOrFail(async () => {

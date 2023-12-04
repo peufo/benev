@@ -23,11 +23,13 @@ type UseFormOptions<ReturnData> = {
 	successUpdate?: BooleanOrFunction
 	successReset?: BooleanOrFunction
 	successMessage?: SuccessMessage
+	onResetError?: () => unknown
 }
 
 export function useForm<ReturnData extends Record<string, unknown>>({
 	beforeRequest,
 	successCallback,
+	onResetError,
 	successUpdate = true,
 	successReset = true,
 	successMessage = 'Succès',
@@ -37,10 +39,7 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 
 	function resetErrors() {
 		for (const key in setError) setError[key]('')
-	}
-
-	function setErrors(errors: Record<string, string>) {
-		console.log(setError)
+		if (onResetError) onResetError()
 	}
 
 	function handleFailure({
@@ -85,7 +84,7 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 
 			if (result.type === 'failure') {
 				if (result.data) handleFailure(result.data)
-				else notify.warning('Le formulaire est invalide')
+				notify.warning('Formulaire invalide')
 				return
 			}
 
@@ -104,7 +103,7 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 			if (result.type === 'redirect') {
 				if (successMessage) notify.success(tryToRun(successMessage))
 				if (successCallback) successCallback(action)
-				goto(result.location, { replaceState: true, invalidateAll: tryToRun(successUpdate) })
+				return goto(result.location, { replaceState: true, invalidateAll: tryToRun(successUpdate) })
 			}
 		}
 	}
@@ -112,7 +111,12 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 	return {
 		submit,
 		resetErrors,
-		setErrors,
-		formContext,
+		setError(key: string, value: string) {
+			if (!setError[key]) {
+				console.warn(`Error setter for field "${key}" not exist`)
+				return
+			}
+			setError[key](value)
+		},
 	}
 }

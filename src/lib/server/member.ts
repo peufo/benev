@@ -42,8 +42,11 @@ function getMemberRoles(member: MemberWithUserEventAndLeaderOf): MemberRole[] {
 
 function getUserProfileRequiredFIelds({ event, user }: MemberWithUserEventAndLeaderOf) {
 	const requiredFields: string[] = []
-	if (event.userAddressRequired && !(user.street && user.zipCode && user.city))
-		requiredFields.push('street', 'zipCode', 'city')
+	if (event.userAddressRequired) {
+		if (!user.street) requiredFields.push('street')
+		if (!user.zipCode) requiredFields.push('zipCode')
+		if (!user.city) requiredFields.push('city')
+	}
 	if (event.userAvatarRequired && !user.avatarId) requiredFields.push('avatarId')
 	if (event.userBirthdayRequired && !user.birthday) requiredFields.push('birthday')
 	if (event.userPhoneRequired && !user.phone) requiredFields.push('phone')

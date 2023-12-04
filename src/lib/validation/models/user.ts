@@ -22,5 +22,5 @@ export const userUpdate = {
 	street: z.string().optional(),
 	zipCode: z.string().optional(),
 	city: z.string().optional(),
-	wantsNotification: z.boolean().optional(),
+	wantsNotification: z.boolean(),
 } satisfies ZodObj<Prisma.UserUncheckedUpdateInput>

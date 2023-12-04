@@ -10,9 +10,8 @@ export async function parseFormData<Type extends z.ZodRawShape>(
 		requestOrFormData instanceof Request ? await requestOrFormData.formData() : requestOrFormData
 
 	const [firstShap, ...unionShaps] = Array.isArray(shaps) ? shaps : [shaps]
-	const shema = z.object(firstShap)
+	const shema = z.object(firstShap).superRefine(validation || (() => {}))
 	unionShaps.forEach((shap) => shema.or(z.object(shap)))
-	if (validation) shema.superRefine(validation)
 
 	const formDataObject: Record<string, unknown> = Object.fromEntries(formData)
 	const parsed = shema.safeParse(formDataObject)

@@ -24,10 +24,10 @@
 			verificationEmailSent = true
 		},
 	})
-
 	onMount(() => {
-		// $page.data.member?.userProfileRequiredFields
-		setTimeout(() => {}, 1000)
+		$page.data.member?.userProfileRequiredFields.forEach((key) =>
+			formProfile.setError(key, 'Valeur manquante')
+		)
 	})
 </script>
 
@@ -44,6 +44,9 @@
 	use:enhance={formProfile.submit}
 	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4"
 >
+	{#if $page.data.event?.id}
+		<input type="hidden" name="eventId" value={$page.data.event.id} />
+	{/if}
 	<FormControl
 		key="email"
 		label="Email"
