@@ -12,6 +12,7 @@ export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
 	roles: MemberRole[]
 	userProfileRequiredFields: string[]
 	isUserProfileCompleted: boolean
+	memberProfileRequiredFields: string[]
 	isMemberProfileCompleted: boolean
 }
 

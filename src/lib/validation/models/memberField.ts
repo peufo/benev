@@ -25,6 +25,7 @@ export const memberFieldCreate = {
 	allCombinations: z.boolean().optional(),
 	description: z.string().optional(),
 	options: z.string().optional(),
+	required: z.boolean().optional(),
 	type: z.enum(toTuple(memberFieldType)),
 } satisfies ZodObj<Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>>
 

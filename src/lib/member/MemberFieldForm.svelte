@@ -20,7 +20,14 @@
 	type FieldForm = { id?: string } & NonNull<
 		Pick<
 			Field,
-			'type' | 'name' | 'label' | 'options' | 'memberCanRead' | 'memberCanWrite' | 'allCombinations'
+			| 'type'
+			| 'name'
+			| 'label'
+			| 'options'
+			| 'memberCanRead'
+			| 'memberCanWrite'
+			| 'allCombinations'
+			| 'required'
 		>
 	>
 	export function setField(value: Field | null) {
@@ -43,6 +50,7 @@
 		allCombinations: false,
 		memberCanRead: true,
 		memberCanWrite: true,
+		required: true,
 	}
 	let field: FieldForm = { ...defaultField }
 
@@ -68,66 +76,75 @@
 	{#if field.id}
 		<input type="hidden" name="id" value={field.id} />
 	{/if}
-
-	<InputSelect
-		key="type"
-		bind:value={field.type}
-		options={memberFieldType}
-		btnClass="w-full justify-start"
-	/>
-
-	<InputText
-		key="name"
-		bind:value={field.name}
-		label="Nom"
-		hint="Le nom de la valeur"
-		input={{ autocomplete: 'off' }}
-	/>
-	<InputText
-		key="label"
-		bind:value={field.label}
-		label="Label"
-		hint="Titre libre du champ, peut être sous forme de question"
-		input={{ autocomplete: 'off' }}
-	/>
-
 	{#key field.id}
+		<InputSelect
+			key="type"
+			bind:value={field.type}
+			options={memberFieldType}
+			btnClass="w-full justify-start"
+		/>
+
+		<InputText
+			key="name"
+			bind:value={field.name}
+			label="Nom"
+			hint="Le nom de la valeur"
+			input={{ autocomplete: 'off' }}
+		/>
+		<InputText
+			key="label"
+			bind:value={field.label}
+			label="Label"
+			hint="Titre libre du champ, peut être sous forme de question"
+			input={{ autocomplete: 'off' }}
+		/>
+
 		{#if field.type === 'select' || field.type === 'multiselect'}
 			<div transition:slide>
 				<InputOptions key="options" bind:value={field.options} />
 			</div>
 		{/if}
-	{/key}
 
-	{#if field.type === 'multiselect'}
-		<div transition:slide>
-			<InputBoolean
-				value={field.allCombinations}
-				key="allCombinations"
-				label="Compter par combinaisons de valeurs lors de la syhtèse"
-			/>
-			<!-- TODO: Add help dialog -->
+		{#if field.type === 'multiselect'}
+			<div transition:slide>
+				<InputBoolean
+					value={field.allCombinations}
+					key="allCombinations"
+					label="Compter par combinaisons de valeurs lors de la syhtèse"
+				/>
+				<!-- TODO: Add help dialog -->
+			</div>
+		{/if}
+
+		<InputCheckboxs
+			value={getMemberRight(field)}
+			on:input={handleInputMemberRight}
+			label="Les membres peuvent"
+			checkboxesClass="flex gap-6"
+			options={[
+				{ value: 'read', label: 'Lire la valeur' },
+				{ value: 'write', label: 'Modifier la valeur' },
+			]}
+		/>
+
+		<input type="hidden" name="memberCanRead" value={field.memberCanRead ? 'true' : ''} />
+		<input type="hidden" name="memberCanWrite" value={field.memberCanWrite ? 'true' : ''} />
+
+		{#if field.memberCanWrite && field.type !== 'boolean' && field.type !== 'multiselect'}
+			<div transition:slide={{ duration: 200 }}>
+				<div class="label">
+					<span class="label-text">Les membres doivent</span>
+				</div>
+
+				<InputBoolean key="required" value={field.required} label="Renseigner la valeur" />
+			</div>
+		{/if}
+
+		<h2 class="font-bold">Aperçu</h2>
+		<div class="rounded-box border border-neutral p-2 bg-base-200">
+			<MemberField {field} />
 		</div>
-	{/if}
-
-	<InputCheckboxs
-		value={getMemberRight(field)}
-		on:input={handleInputMemberRight}
-		label="Les membres peuvent"
-		checkboxesClass="flex gap-6"
-		options={[
-			{ value: 'read', label: 'Lire la valeur' },
-			{ value: 'write', label: 'Modifier la valeur' },
-		]}
-	/>
-
-	<input type="hidden" name="memberCanRead" value={field.memberCanRead ? 'true' : ''} />
-	<input type="hidden" name="memberCanWrite" value={field.memberCanWrite ? 'true' : ''} />
-
-	<h2 class="font-bold">Aperçu</h2>
-	<div class="rounded-box border border-neutral p-2 bg-base-200">
-		<MemberField {field} />
-	</div>
+	{/key}
 
 	<div class="flex gap-2 flex-row-reverse">
 		<button class="btn" formaction={field.id ? '?/update_field' : '?/create_field'} type="submit">

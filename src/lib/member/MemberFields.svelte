@@ -79,5 +79,10 @@
 		{isUpdate ? 'Modifier le' : 'Ajouter un'} champ
 	</span>
 
-	<MemberFieldForm on:success={() => formDialog.close()} bind:this={memberFieldForm} />
+	<MemberFieldForm
+		on:success={() => {
+			formDialog.close()
+		}}
+		bind:this={memberFieldForm}
+	/>
 </Dialog>
