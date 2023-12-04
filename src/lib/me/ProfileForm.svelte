@@ -1,13 +1,12 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
-	import dayjs from 'dayjs'
-	import 'dayjs/locale/fr-ch'
+	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
+	import { onMount } from 'svelte'
 	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
-	import { InputText, InputDate, FormControl } from '$lib/material/input'
+	import { InputText, InputDate, FormControl, InputBoolean } from '$lib/material/input'
 	import { Icon } from '$lib/material'
-	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
-	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
+	import { page } from '$app/stores'
 
 	export let user: User
 
@@ -24,6 +23,11 @@
 		successCallback() {
 			verificationEmailSent = true
 		},
+	})
+
+	onMount(() => {
+		// $page.data.member?.userProfileRequiredFields
+		setTimeout(() => {}, 1000)
 	})
 </script>
 
@@ -75,12 +79,7 @@
 
 	<InputText key="firstName" label="Prénom" value={user.firstName} class="md:col-span-4" />
 	<InputText key="lastName" label="Nom de famille" value={user.lastName} class="md:col-span-4" />
-	<InputDate
-		key="birthday"
-		label="Date de naissance"
-		value={user.birthday}
-		class="md:col-span-4"
-	/>
+	<InputDate key="birthday" label="Date de naissance" value={user.birthday} class="md:col-span-4" />
 
 	<InputText key="street" label="Rue et numéro" value={user.street || ''} class="md:col-span-4" />
 	<InputText key="zipCode" label="Code postal" value={user.zipCode || ''} class="md:col-span-4" />

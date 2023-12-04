@@ -17,14 +17,8 @@
 	$: _key = prefix && key ? `${prefix}_${key}` : key || ''
 
 	if (!enhanceDisabled) {
-		if (formContext.ok()) {
-			const { setError } = formContext.get()
-			setError[key] = (err) => (error = err)
-		} else {
-			console.error(
-				'Please set "const form = useForm()" and "use:enhance={form.submit}" in form element'
-			)
-		}
+		const { setError } = formContext.get()
+		setError[key] = (err) => (error = err)
 	}
 
 	let formControl: HTMLDivElement

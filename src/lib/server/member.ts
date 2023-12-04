@@ -10,6 +10,7 @@ type MemberWithUserEventAndLeaderOf = Member & {
 }
 export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
 	roles: MemberRole[]
+	userProfileRequiredFields: string[]
 	isUserProfileCompleted: boolean
 	isMemberProfileCompleted: boolean
 }
@@ -17,11 +18,15 @@ export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
 export function addMemberComputedValues<T extends MemberWithUserEventAndLeaderOf>(
 	member: T
 ): T & MemberWithComputedValues {
+	const userProfileRequiredFields = getUserProfileRequiredFIelds(member)
 	return {
 		...member,
 		roles: getMemberRoles(member),
-		isUserProfileCompleted: getMemberProfileState(member),
-		isMemberProfileCompleted: true, // TODO
+		userProfileRequiredFields,
+		isUserProfileCompleted: !userProfileRequiredFields.length,
+
+		// TODO
+		isMemberProfileCompleted: true,
 	}
 }
 
@@ -35,15 +40,14 @@ function getMemberRoles(member: MemberWithUserEventAndLeaderOf): MemberRole[] {
 	return ['member']
 }
 
-function getMemberProfileState({ event, user }: MemberWithUserEventAndLeaderOf) {
-	return (
-		[
-			event.userAddressRequired && !(user.street && user.zipCode && user.city),
-			event.userAvatarRequired && !user.avatarId,
-			event.userBirthdayRequired && !user.birthday,
-			event.userPhoneRequired && !user.phone,
-		].filter(Boolean).length === 0
-	)
+function getUserProfileRequiredFIelds({ event, user }: MemberWithUserEventAndLeaderOf) {
+	const requiredFields: string[] = []
+	if (event.userAddressRequired && !(user.street && user.zipCode && user.city))
+		requiredFields.push('street', 'zipCode', 'city')
+	if (event.userAvatarRequired && !user.avatarId) requiredFields.push('avatarId')
+	if (event.userBirthdayRequired && !user.birthday) requiredFields.push('birthday')
+	if (event.userPhoneRequired && !user.phone) requiredFields.push('phone')
+	return requiredFields
 }
 
 export type MemberProfile = Awaited<ReturnType<typeof getMemberProfile>>

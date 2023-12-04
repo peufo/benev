@@ -9,9 +9,10 @@ export type FormContext = { setError: SetError }
 
 const formContextKey = {}
 export const formContext = {
-	ok: () => hasContext(formContextKey),
-	get: () => getContext<FormContext>(formContextKey),
-	set: (ctx: FormContext) => setContext<FormContext>(formContextKey, ctx),
+	get: () => {
+		if (hasContext(formContextKey)) return getContext<FormContext>(formContextKey)
+		return setContext<FormContext>(formContextKey, { setError: {} })
+	},
 }
 
 type SuccessMessage = string | ((action: URL) => string)
@@ -32,12 +33,14 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 	successMessage = 'Succès',
 }: UseFormOptions<ReturnData> = {}) {
 	const notify = useNotify()
-
-	const setError: SetError = {}
-	formContext.set({ setError })
+	const { setError } = formContext.get()
 
 	function resetErrors() {
 		for (const key in setError) setError[key]('')
+	}
+
+	function setErrors(errors: Record<string, string>) {
+		console.log(setError)
 	}
 
 	function handleFailure({
@@ -108,5 +111,8 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 
 	return {
 		submit,
+		resetErrors,
+		setErrors,
+		formContext,
 	}
 }
