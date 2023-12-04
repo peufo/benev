@@ -35,12 +35,7 @@
 		<MemberForm userId={data.user.id} event={data.event} class="mx-auto" />
 	{:else if !data.member.isUserProfileCompleted}
 		<Card>
-			<div class="flex items-end gap-2">
-				<AvatarForm user={data.user} />
-				{#if data.member.userProfileRequiredFields.includes('avatarId')}
-					<span class="text-xs text-warning">Photo de profil requise</span>
-				{/if}
-			</div>
+			<AvatarForm user={data.user} />
 			<ProfileForm user={data.user} />
 		</Card>
 	{:else}

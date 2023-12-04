@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
 	import { mdiReload, mdiTrashCanOutline } from '@mdi/js'
-
+	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
 	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
@@ -41,4 +41,7 @@
 			{/if}
 		</svelte:fragment>
 	</InputImage>
+	{#if $page.data.member?.userProfileRequiredFields.includes('avatarId')}
+		<span class="text-xs text-warning">Photo de profil requise</span>
+	{/if}
 </form>
