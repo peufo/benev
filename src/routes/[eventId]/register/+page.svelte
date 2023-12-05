@@ -6,10 +6,18 @@
 	import Login from '$lib/me/Login.svelte'
 	import ProfileForm from '$lib/me/ProfileForm.svelte'
 	import { MemberProfileForm } from '$lib/member'
+	import { page } from '$app/stores'
+	import { goto } from '$app/navigation'
 
 	export let data
 
 	const steps = ['Connexion', 'Adhérer', 'Profil de base', `Profil ${data.event.name}`]
+
+	function handleMemberProfilFormSuccess() {
+		const redirectTo = $page.url.searchParams.get('redirectTo')
+		console.log(redirectTo || `/${data.event.id}/me`)
+		goto(redirectTo || `/${data.event.id}/me`)
+	}
 </script>
 
 <div class="max-w-2xl mx-auto flex flex-col gap-4">
@@ -46,7 +54,12 @@
 		</Card>
 	{:else}
 		<Card>
-			<MemberProfileForm writeOnly member={data.member} />
+			<MemberProfileForm
+				writeOnly
+				member={data.member}
+				on:success={handleMemberProfilFormSuccess}
+				successUpdate={false}
+			/>
 		</Card>
 	{/if}
 </div>

@@ -11,11 +11,13 @@
 	export { klass as class }
 	export let member: MemberProfile
 	export let writeOnly = false
+	export let successUpdate = true
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
 	const form = useForm({
 		successReset: false,
+		successUpdate,
 		successCallback: () => dispatch('success'),
 	})
 

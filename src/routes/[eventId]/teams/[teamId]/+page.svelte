@@ -9,7 +9,7 @@
 		mdiPencilOutline,
 	} from '@mdi/js'
 
-	import { Card, Icon, Placeholder, Dialog, OnlyAvailableToggle } from '$lib/material'
+	import { Card, Icon, Placeholder,  OnlyAvailableToggle } from '$lib/material'
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
 	import { formatRange } from '$lib/formatRange'
@@ -248,7 +248,7 @@
 			period={selectedPeriod}
 			on:close={() => {
 				subscribeDialog.close()
-				if ($page.url.searchParams.has('subscribeTo')) goto($urlParam.without('subscribeTo'))
+				if ($page.url.searchParams.has('subscribeTo')) goto($urlParam.without('subscribeTo'), { replaceState: true})
 			}}
 			on:success={() => {
 				subscribeDialog.close()
