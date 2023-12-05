@@ -40,7 +40,7 @@
 		</Card>
 	{:else}
 		<Card>
-			<MemberProfileForm member={data.member} />
+			<MemberProfileForm writeOnly member={data.member} />
 		</Card>
 	{/if}
 </div>

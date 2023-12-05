@@ -10,6 +10,7 @@
 	let klass = ''
 	export { klass as class }
 	export let member: MemberProfile
+	export let writeOnly = false
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -28,7 +29,7 @@
 	>
 		<input type="hidden" name="memberId" value={member.id} />
 
-		{#each member.event.memberFields as field (field.id)}
+		{#each member.event.memberFields.filter(f => !writeOnly || f.memberCanWrite) as field (field.id)}
 			{@const { value } = member.profile.find((value) => value.fieldId === field.id) || {
 				value: '',
 			}}
