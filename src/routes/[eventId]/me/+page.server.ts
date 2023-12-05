@@ -46,7 +46,7 @@ export const actions = {
 					model[f.id] = z.string().optional()
 					return
 				}
-				model[f.id] = z.string().min(1)
+				model[f.id] = z.string().min(1, { message: 'Valeur manquante' })
 			})
 			const { data, err } = await parseFormData(request, model)
 			if (err) return err
