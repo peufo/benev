@@ -1,6 +1,6 @@
 <script lang="ts">
 	import MemberForm from '$lib/MemberForm.svelte'
-	import { Card } from '$lib/material'
+	import { Card, Placeholder } from '$lib/material'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
 	import ProfileForm from '$lib/me/ProfileForm.svelte'
@@ -31,7 +31,12 @@
 
 	{#if !data.user}
 		<Login />
-	{:else if !data.member || !data.member.isValidedByUser}
+	{:else if !data.event.selfRegisterAllowed && !data.member?.isValidedByEvent}
+		<Placeholder class="border text-center bg-base-100/90">
+			<h2 class="text-lg">Invitation requise</h2>
+			<p>Tu dois être invité par un responsable pour pouvoir devenir membre de cette évènement.</p>
+		</Placeholder>
+	{:else if !data.member?.isValidedByUser}
 		<MemberForm userId={data.user.id} event={data.event} class="mx-auto" />
 	{:else if !data.member.isUserProfileCompleted}
 		<Card>

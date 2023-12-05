@@ -1,14 +1,14 @@
 <script lang="ts">
+	import { mdiAlertOutline } from '@mdi/js'
 	import type { PageData } from './$types'
 	import { Icon, Placeholder } from '$lib/material'
 	import { formatRange } from '$lib/formatRange'
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import Avatar from '$lib/me/Avatar.svelte'
-	import MemberRole from '$lib/MemberRole.svelte'
+	import {MemberRole} from '$lib/member'
 	import { tip } from '$lib/action'
-	import { mdiAlertOutline } from '@mdi/js'
-
+	
 	export let subscribes: PageData['subscribes']
 </script>
 

@@ -1,18 +1,15 @@
 <script lang="ts">
 	import { Card, DropDown, Icon, SectionCollapse } from '$lib/material'
 
-	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
-	import MemberDeleteForm from '$lib/member/MemberDeleteForm.svelte'
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import LeaderOf from '$lib/LeaderOf.svelte'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
-	import MemberRole from '$lib/MemberRole.svelte'
 	import Profile from './Profile.svelte'
 	import SetAdminForm from './SetAdminForm.svelte'
-	import MemberAbsences from '$lib/member/MemberAbsences.svelte'
+	import { MemberProfileStatus, MemberAbsences, MemberRole, MemberProfileForm, MemberDeleteForm } from '$lib/member'
 
 	export let data
 </script>
@@ -58,12 +55,7 @@
 				{/if}
 
 				<MemberAbsences subscribes={data.memberProfile.subscribes} />
-
-				{#if !data.memberProfile.isUserProfileCompleted}
-					<div class="ml-2 badge badge-warning">
-						Profil incomplet
-					</div>
-				{/if}
+				<MemberProfileStatus member={data.memberProfile}/>
 
 			</div>
 			<Profile user={data.memberProfile.user} class="sm:pt-4" />

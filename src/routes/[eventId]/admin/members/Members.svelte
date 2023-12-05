@@ -8,9 +8,8 @@
 	import type { PageData } from './$types'
 	import type { Column } from '$lib/ColumnsSelect.svelte'
 	import Avatar from '$lib/me/Avatar.svelte'
-	import MemberRole from '$lib/MemberRole.svelte'
+	import {MemberRole, MemberAbsences} from '$lib/member'
 
-	import MemberAbsences from '$lib/member/MemberAbsences.svelte'
 
 	type Member = PageData['members'][number]
 	export let members: Member[]

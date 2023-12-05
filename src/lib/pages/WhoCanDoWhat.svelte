@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { rolesMap } from '$lib/MemberRole.svelte'
+	import { rolesMap } from '$lib/member/MemberRole.svelte'
 	import { Icon } from '$lib/material'
 	import { mdiCheck, mdiHelp, mdiListStatus } from '@mdi/js'
 

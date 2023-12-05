@@ -6,24 +6,23 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 	const { user, member } = await parent()
 	if (!user || !member || !member.isValidedByUser) throw redirectToRegister(eventId, url)
 
-	const memberId = member?.id
+	const memberId = member.id
 	return {
 		user,
-		memberTeams:
-			memberId &&
-			(await prisma.team.findMany({
-				where: { periods: { some: { subscribes: { some: { memberId } } } } },
-				include: {
-					periods: {
-						where: { subscribes: { some: { memberId } } },
-						include: {
-							subscribes: {
-								where: { memberId },
-							},
+		member,
+		memberTeams: await prisma.team.findMany({
+			where: { periods: { some: { subscribes: { some: { memberId } } } } },
+			include: {
+				periods: {
+					where: { subscribes: { some: { memberId } } },
+					include: {
+						subscribes: {
+							where: { memberId },
 						},
 					},
 				},
-			})),
+			},
+		}),
 	}
 }
 
