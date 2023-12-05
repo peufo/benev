@@ -73,11 +73,17 @@ export const actions = {
 				where: { id: memberId },
 				data: {
 					profile: {
-						upsert: fieldsToUpdate.map(({ name, id }) => ({
-							where: { fieldId_memberId: { fieldId: id, memberId } },
-							create: { value: fieldsObj[name], fieldId: id },
-							update: { value: fieldsObj[name] },
-						})),
+						upsert: fieldsToUpdate
+							.map(({ name, id }) => {
+								const value = fieldsObj[name] as string
+								return { value, id }
+							})
+							.filter(({ value }) => value !== undefined)
+							.map(({ value, id }) => ({
+								where: { fieldId_memberId: { fieldId: id, memberId } },
+								create: { value, fieldId: id },
+								update: { value },
+							})),
 					},
 				},
 			})

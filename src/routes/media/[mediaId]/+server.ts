@@ -8,12 +8,9 @@ import { MEDIA_PRESETS } from '$lib/constants'
 import jimp from 'jimp'
 
 export const GET = async ({ url, params: { mediaId } }) => {
-	const { size } = parseQuery(
-		url,
-		z.object({
-			size: z.enum(toTuple(MEDIA_PRESETS)).optional(),
-		})
-	)
+	const { size } = parseQuery(url, {
+		size: z.enum(toTuple(MEDIA_PRESETS)).optional(),
+	})
 
 	const fileName = `${size || 'original'}.png`
 	const filePath = path.resolve(MEDIA_DIR, mediaId, fileName)

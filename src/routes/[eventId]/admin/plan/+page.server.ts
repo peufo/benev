@@ -3,12 +3,9 @@ import type { Prisma } from '@prisma/client'
 import { parseQuery, prisma } from '$lib/server'
 
 export const load = async ({ url, params: { eventId } }) => {
-	const query = parseQuery(
-		url,
-		z.object({
-			teams: z.array(z.string()).optional(),
-		})
-	)
+	const query = parseQuery(url, {
+		teams: z.array(z.string()).optional(),
+	})
 	const where: Prisma.TeamWhereInput = { eventId }
 
 	if (query.teams) where.id = { in: query.teams }

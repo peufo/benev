@@ -5,22 +5,19 @@ import { z } from '$lib/validation'
 
 export const getSubscribes = async (event: Event, url: URL) => {
 	const eventId = event.id
-	const query = parseQuery(
-		url,
-		z.object({
-			search: z.string().optional(),
-			start: z.date().optional(),
-			end: z.date().optional(),
-			teams: z.array(z.string()).optional(),
-			states: z.string().optional(),
-			skip: z.number().default(0),
-			take: z.number().default(20),
-			// TODO: use enum provided by prisma for "createdBy" -> SubscribeCreatedBy
-			createdBy: z.enum(['leader', 'user']).optional(),
-			isAbsent: z.booleanAsString().optional(),
-			all: z.boolean().default(false),
-		})
-	)
+	const query = parseQuery(url, {
+		search: z.string().optional(),
+		start: z.date().optional(),
+		end: z.date().optional(),
+		teams: z.array(z.string()).optional(),
+		states: z.string().optional(),
+		skip: z.number().default(0),
+		take: z.number().default(20),
+		// TODO: use enum provided by prisma for "createdBy" -> SubscribeCreatedBy
+		createdBy: z.enum(['leader', 'user']).optional(),
+		isAbsent: z.booleanAsString().optional(),
+		all: z.boolean().default(false),
+	})
 
 	const where: Prisma.SubscribeWhereInput = {}
 	const team: Prisma.TeamWhereInput = { eventId }
@@ -72,6 +69,7 @@ export const getSubscribes = async (event: Event, url: URL) => {
 						include: {
 							user: true,
 							leaderOf: true,
+							profile: { include: { field: true } },
 						},
 					},
 				},
@@ -80,6 +78,7 @@ export const getSubscribes = async (event: Event, url: URL) => {
 			.then((subs) =>
 				subs.map((sub) => ({
 					...sub,
+					// TODO: all memberComputedValues are required ?
 					member: addMemberComputedValues({ ...sub.member, event }),
 				}))
 			),

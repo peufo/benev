@@ -4,23 +4,20 @@ import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
 
 export const getMembers = async (event: Event, url: URL) => {
 	const eventId = event.id
-	const query = parseQuery(
-		url,
-		z.object({
-			search: z.string().optional(),
-			start: z.date().optional(),
-			end: z.date().optional(),
-			teams: z.array(z.string()).optional(),
-			role: z.enum(['member', 'leader', 'admin']).optional(),
-			fieldId: z.string().optional(),
-			fieldValue: z.string().optional(),
-			skip: z.number().default(0),
-			take: z.number().default(20),
-			summary: z.boolean().default(false),
-			isAbsent: z.booleanAsString().optional(),
-			all: z.boolean().default(false),
-		})
-	)
+	const query = parseQuery(url, {
+		search: z.string().optional(),
+		start: z.date().optional(),
+		end: z.date().optional(),
+		teams: z.array(z.string()).optional(),
+		role: z.enum(['member', 'leader', 'admin']).optional(),
+		fieldId: z.string().optional(),
+		fieldValue: z.string().optional(),
+		skip: z.number().default(0),
+		take: z.number().default(20),
+		summary: z.boolean().default(false),
+		isAbsent: z.booleanAsString().optional(),
+		all: z.boolean().default(false),
+	})
 
 	const where: Prisma.MemberWhereInput = { eventId, OR: [] }
 	const teamWhere: Prisma.TeamWhereInput = { eventId }
@@ -101,7 +98,7 @@ export const getMembers = async (event: Event, url: URL) => {
 			include: {
 				user: true,
 				leaderOf: true,
-				profile: true,
+				profile: { include: { field: true } },
 				subscribes: {
 					where: subscribeWhere,
 					include: {

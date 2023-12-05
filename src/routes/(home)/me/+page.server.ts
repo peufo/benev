@@ -10,6 +10,7 @@ import {
 	tryOrFail,
 	createAvatarPlaceholder,
 	media,
+	hidePrivateProfilValues,
 } from '$lib/server'
 import { userLogin, userCreate, userUpdate, z } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
@@ -25,10 +26,12 @@ export const load = async ({ url, parent }) => {
 			event: true,
 			leaderOf: true,
 			subscribes: true,
+			profile: { include: { field: true } },
 		},
 	})
 	const membersWithRole = members
 		.map(addMemberComputedValues)
+		.map(hidePrivateProfilValues)
 		.filter(({ event, roles }) => event.state !== 'draft' || roles.includes('leader'))
 
 	return {

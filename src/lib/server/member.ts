@@ -9,6 +9,7 @@ type MemberWithUserEventAndLeaderOf = Member & {
 	leaderOf: Team[]
 	profile: (FieldValue & { field: Field })[]
 }
+
 export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
 	roles: MemberRole[]
 	userProfileRequiredFields: string[]
@@ -99,11 +100,9 @@ export function getMemberProfile(where: MemberUniqueWhere) {
 			},
 		})
 		.then(addMemberComputedValues)
+		.then(hidePrivateProfilValues)
 		.then((member) => ({
 			...member,
-			profile: member.profile.filter(
-				({ field }) => member.roles.includes('leader') || field.memberCanRead
-			),
 			event: {
 				...member.event,
 				memberFields: member.event.memberFields.filter(
@@ -111,4 +110,13 @@ export function getMemberProfile(where: MemberUniqueWhere) {
 				),
 			},
 		}))
+}
+
+export function hidePrivateProfilValues<T extends MemberWithComputedValues>(member: T) {
+	return {
+		...member,
+		profile: member.profile.filter(
+			({ field }) => member.roles.includes('leader') || field.memberCanRead
+		),
+	}
 }
