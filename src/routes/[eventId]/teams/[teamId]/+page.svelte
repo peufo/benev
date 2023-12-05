@@ -16,19 +16,16 @@
 	import { SubscribeForm, SubscribeStateForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Leaders from '$lib/Leaders.svelte'
-	import MemberForm from '$lib/MemberForm.svelte'
-	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 	import Progress from '$lib/Progress.svelte'
 	import { slide } from 'svelte/transition'
 	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
-	import { tip } from '$lib/action'
 	import dayjs from 'dayjs'
+	import { onMount } from 'svelte'
+	import { page } from '$app/stores'
 
 	export let data
 
 	let subscribeDialog: HTMLDialogElement
-	let memberDialog: HTMLDialogElement
-	let memberProfilDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
 	type _Period = (typeof data.team.periods)[number]
 	let selectedPeriod: _Period | undefined = undefined
@@ -41,20 +38,29 @@
 	}
 
 	function subscribe(period: _Period) {
-		if (!data.user) return goto(`/auth?redirectTo=${location.pathname}`)
-
-		selectedPeriod = period
-		if (!data.member) {
-			memberDialog?.showModal()
-		} else {
-			subscribeDialog?.showModal()
+		if (!data.member?.isValidedByUser) {
+			const redirectTo = encodeURIComponent(`${location.pathname}?subscribeTo=${period.id}`)
+			return goto(`${$eventPath}/register?redirectTo=${redirectTo}`)
 		}
+		selectedPeriod = period
+		subscribeDialog?.showModal()
 	}
 
 	const closeSubscribing = data.team.closeSubscribing || data.event.closeSubscribing
 	const DAY = 1000 * 60 * 60 * 24
 	const isCloseSubscribing =
 		closeSubscribing && closeSubscribing.getTime() < new Date().getTime() + DAY
+
+	onMount(() => {
+		const subscribeTo = $page.url.searchParams.get('subscribeTo')
+		if (!subscribeTo) return
+		const period = data.team.periods.find(p => p.id === subscribeTo)
+		if (!period) return
+		selectedPeriod = period
+		subscribeDialog?.showModal()
+	})
+
+	
 
 	$: _periods = data.team.periods
 		.map((period) => {
@@ -81,6 +87,9 @@
 			}
 		})
 		.filter((period) => !$onlyAvailable || !period.isComplete)
+		
+		
+
 </script>
 
 <Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams">
@@ -230,33 +239,6 @@
 	{/if}
 </Card>
 
-<dialog class="modal" bind:this={memberDialog}>
-	{#if data.user}
-		<MemberForm
-			userId={data.user.id}
-			event={data.event}
-			on:close={() => memberDialog.close()}
-			on:success={() => {
-				memberDialog.close()
-				if (data.event.memberFields.length) memberProfilDialog.showModal()
-				else subscribeDialog.showModal()
-			}}
-		/>
-	{/if}
-</dialog>
-
-<Dialog bind:dialog={memberProfilDialog}>
-	<h3 slot="header" class="card-title">Complète ton profil {data.event.name}</h3>
-	{#if data.member}
-		<MemberProfileForm
-			member={data.member}
-			on:success={() => {
-				memberProfilDialog.close()
-				subscribeDialog.showModal()
-			}}
-		/>
-	{/if}
-</Dialog>
 
 <dialog class="modal" bind:this={subscribeDialog}>
 	{#if selectedPeriod && data.member}
@@ -264,7 +246,10 @@
 			memberId={data.member.id}
 			team={data.team}
 			period={selectedPeriod}
-			on:close={() => subscribeDialog.close()}
+			on:close={() => {
+				subscribeDialog.close()
+				if ($page.url.searchParams.has('subscribeTo')) goto($urlParam.without('subscribeTo'))
+			}}
 			on:success={() => {
 				subscribeDialog.close()
 				thanksDialog.open()

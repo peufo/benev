@@ -49,6 +49,7 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 		issues?: (z.ZodIssue & { received?: string; expected?: string })[]
 		message?: string
 	}) {
+		console.log(issues)
 		resetErrors()
 		issues?.forEach((issue) => {
 			const key = issue.path[0]

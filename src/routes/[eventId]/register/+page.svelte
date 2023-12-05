@@ -1,17 +1,11 @@
 <script lang="ts">
+	import { mdiArrowLeft } from '@mdi/js'
 	import MemberForm from '$lib/MemberForm.svelte'
-	import { Card, Placeholder } from '$lib/material'
+	import { Card, Icon, Placeholder } from '$lib/material'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
 	import ProfileForm from '$lib/me/ProfileForm.svelte'
 	import { MemberProfileForm } from '$lib/member'
-
-	/**
-	 * 1. Devenir membre
-	 * 2. Profil de base complet en fonction des options ?
-	 * 3. Profil complémentaire ?
-	 * 4. Callback
-	 */
 
 	export let data
 
@@ -19,6 +13,13 @@
 </script>
 
 <div class="max-w-2xl mx-auto flex flex-col gap-4">
+	<div class="flex gap-2 justify-between flex-wrap">
+		<a href="/me" class="btn btn-sm btn-ghost">
+			<Icon path={mdiArrowLeft} size={20} />
+			Tous mes évènements
+		</a>
+	</div>
+
 	<Card>
 		<ul class="steps">
 			{#each steps as step, index}
