@@ -27,8 +27,7 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 }
 
 export const actions = {
-	/** Update member profile */
-	default: async ({ locals, request, params: { eventId } }) => {
+	update_member_profile: async ({ locals, request, params: { eventId } }) => {
 		const member = await permission.member(eventId, locals)
 		const isLeader = member.roles.includes('leader')
 
@@ -44,10 +43,10 @@ export const actions = {
 			}
 			fields.forEach((f) => {
 				if (isLeader || !f.required || f.type === 'multiselect' || f.type === 'boolean') {
-					model[f.name] = z.string().optional()
+					model[f.id] = z.string().optional()
 					return
 				}
-				model[f.name] = z.string().min(1)
+				model[f.id] = z.string().min(1)
 			})
 			const { data, err } = await parseFormData(request, model)
 			if (err) return err
@@ -61,26 +60,24 @@ export const actions = {
 			const fieldsToUpdate = await prisma.field.findMany({
 				where: {
 					eventId,
-					name: { in: Object.keys(fieldsObj) },
+					id: { in: Object.keys(fieldsObj) },
 					...(!isLeader && { memberCanWrite: true }),
 				},
 			})
+			const entries = Object.entries(fieldsObj).filter(([id, value]) => value !== undefined) as [
+				string,
+				string
+			][]
 
 			await prisma.member.update({
 				where: { id: memberId },
 				data: {
 					profile: {
-						upsert: fieldsToUpdate
-							.map(({ name, id }) => {
-								const value = fieldsObj[name] as string
-								return { value, id }
-							})
-							.filter(({ value }) => value !== undefined)
-							.map(({ value, id }) => ({
-								where: { fieldId_memberId: { fieldId: id, memberId } },
-								create: { value, fieldId: id },
-								update: { value },
-							})),
+						upsert: entries.map(([id, value]) => ({
+							where: { fieldId_memberId: { fieldId: id, memberId } },
+							create: { value, fieldId: id },
+							update: { value },
+						})),
 					},
 				},
 				include: { profile: { include: { field: true } } },

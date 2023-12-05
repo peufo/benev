@@ -53,7 +53,7 @@
 	this={components[field.type]}
 	value={parseValue[field.type](value)}
 	class="{classes[field.type]} {klass}"
-	key={field.name}
+	key={field.id}
 	label={field.label || field.name}
 	options={jsonParse(field.options, [])}
 	input={{ disabled: !field.memberCanWrite && !isLeader }}

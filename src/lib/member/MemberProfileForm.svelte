@@ -26,7 +26,7 @@
 <div class="@container">
 	<form
 		method="post"
-		action="{$eventPath}/me"
+		action="{$eventPath}/me?/update_member_profile"
 		use:enhance={form.submit}
 		class="grid grid-cols-3 @lg:grid-cols-6 @2xl:grid-cols-12 gap-4 {klass}"
 	>
