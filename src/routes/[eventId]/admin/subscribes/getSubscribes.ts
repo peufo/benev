@@ -1,9 +1,9 @@
 import { jsonParse } from '$lib/jsonParse.js'
 import { addMemberComputedValues, parseQuery, prisma } from '$lib/server'
-import type { Event, Prisma, SubscribeState } from '@prisma/client'
+import type { Event, Field, Prisma, SubscribeState } from '@prisma/client'
 import { z } from '$lib/validation'
 
-export const getSubscribes = async (event: Event, url: URL) => {
+export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
 	const query = parseQuery(url, {
 		search: z.string().optional(),

@@ -1,8 +1,8 @@
 import { z } from '$lib/validation'
-import type { Event, Prisma } from '@prisma/client'
+import type { Event, Field, Prisma } from '@prisma/client'
 import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
 
-export const getMembers = async (event: Event, url: URL) => {
+export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
 	const query = parseQuery(url, {
 		search: z.string().optional(),
@@ -98,7 +98,7 @@ export const getMembers = async (event: Event, url: URL) => {
 			include: {
 				user: true,
 				leaderOf: true,
-				profile: { include: { field: true } },
+				profile: true,
 				subscribes: {
 					where: subscribeWhere,
 					include: {

@@ -23,10 +23,10 @@ export const load = async ({ url, parent }) => {
 		where: { userId: user.id },
 		include: {
 			user: true,
-			event: true,
+			event: { include: { memberFields: true } },
 			leaderOf: true,
 			subscribes: true,
-			profile: { include: { field: true } },
+			profile: true,
 		},
 	})
 	const membersWithRole = members

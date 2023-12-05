@@ -5,9 +5,9 @@ import { prisma } from './index'
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
 type MemberWithUserEventAndLeaderOf = Member & {
 	user: User
-	event: Event
+	event: Event & { memberFields: Field[] }
 	leaderOf: Team[]
-	profile: (FieldValue & { field: Field })[]
+	profile: FieldValue[]
 }
 
 export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
@@ -56,13 +56,13 @@ function getUserProfileRequiredFIelds({ event, user }: MemberWithUserEventAndLea
 	return requiredFields
 }
 
-function getMemberProfileRequiredFields({ profile }: MemberWithUserEventAndLeaderOf) {
+function getMemberProfileRequiredFields({ profile, event }: MemberWithUserEventAndLeaderOf) {
 	const requiredFields: string[] = []
-	profile.forEach(({ value, field }) => {
+	event.memberFields.forEach((field) => {
 		if (!field.required || !field.memberCanRead) return
 		if (field.type === 'boolean' || field.type === 'multiselect') return
-		if (!!value) return
-		requiredFields.push(field.name)
+		const fieldValue = profile.find((f) => (f.fieldId = field.id))
+		if (!fieldValue?.value) requiredFields.push(field.name)
 	})
 	return requiredFields
 }
@@ -87,7 +87,7 @@ export function getMemberProfile(where: MemberUniqueWhere) {
 				event: {
 					include: { memberFields: { orderBy: { position: 'asc' } } },
 				},
-				profile: { include: { field: true } },
+				profile: true,
 				subscribes: {
 					include: { period: { include: { team: true } } },
 				},
@@ -115,8 +115,9 @@ export function getMemberProfile(where: MemberUniqueWhere) {
 export function hidePrivateProfilValues<T extends MemberWithComputedValues>(member: T) {
 	return {
 		...member,
-		profile: member.profile.filter(
-			({ field }) => member.roles.includes('leader') || field.memberCanRead
-		),
+		profile: member.profile.filter(({ fieldId }) => {
+			const field = member.event.memberFields.find((f) => f.id === fieldId)
+			return member.roles.includes('leader') || field?.memberCanRead
+		}),
 	}
 }
