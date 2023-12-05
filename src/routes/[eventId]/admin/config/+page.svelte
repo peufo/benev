@@ -12,6 +12,7 @@
 	import { GiftConfiguration } from '$lib/gift'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'
+	import { dev } from '$app/environment'
 
 	export let data
 </script>
@@ -56,17 +57,19 @@
 			</section>
 		</SectionCollapse>
 
-		<SectionCollapse value="gifts" class="grow">
-			<span slot="title" class="flex gap-3">
-				<Icon path={mdiGiftOutline} class="opacity-70 -rotate-6" />
-				Prestations offertes
-			</span>
-			<span slot="subtitle">
-				Liste et configuration des compensations auxquelles les membres ont droit
-			</span>
+		{#if dev}
+			<SectionCollapse value="gifts" class="grow">
+				<span slot="title" class="flex gap-3">
+					<Icon path={mdiGiftOutline} class="opacity-70 -rotate-6" />
+					Prestations offertes
+				</span>
+				<span slot="subtitle">
+					Liste et configuration des compensations auxquelles les membres ont droit
+				</span>
 
-			<WorkInProgress />
-			<GiftConfiguration gifts={data.gifts} />
-		</SectionCollapse>
+				<WorkInProgress />
+				<GiftConfiguration gifts={data.gifts} />
+			</SectionCollapse>
+		{/if}
 	</div>
 </OnlyAdmin>
