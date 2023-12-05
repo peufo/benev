@@ -69,7 +69,7 @@
 			<span>
 				{field.name}
 				{#if field.required && field.memberCanWrite}
-					<sup>*</sup>
+					<span class="text-error text-lg">*</span>
 				{/if}
 			</span>
 

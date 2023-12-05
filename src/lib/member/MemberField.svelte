@@ -65,14 +65,15 @@
 				title="Les membres ne peuvent pas voir ce champ"
 				class="ml-3 opacity-75"
 			/>
-			<div class="grow" />
 		{:else if !field.memberCanWrite}
 			<Icon
 				path={mdiPencilOffOutline}
 				title="Les membres ne peuvent pas éditer ce champ"
 				class="ml-3 opacity-75"
 			/>
-			<div class="grow" />
+		{:else if field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
+			<span class="text-error text-lg">*</span>
 		{/if}
+		<div class="grow" />
 	</div>
 </svelte:component>
