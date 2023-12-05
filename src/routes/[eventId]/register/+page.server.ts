@@ -1,4 +1,6 @@
-export const load = async ({ parent }) => {
+import { parseQuery } from '$lib/server/parseQuery.js'
+
+export const load = async ({ parent, url }) => {
 	const { member, user } = await parent()
 
 	if (!user) return { stepIndex: 0 }

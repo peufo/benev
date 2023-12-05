@@ -1,5 +1,5 @@
 import { ROOT_USER } from '$env/static/private'
-import type { Member, Team, User, Event } from '@prisma/client'
+import type { Member, Team, User, Event, Field, FieldValue } from '@prisma/client'
 import { prisma } from './index'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
@@ -7,6 +7,7 @@ type MemberWithUserEventAndLeaderOf = Member & {
 	user: User
 	event: Event
 	leaderOf: Team[]
+	profile: (FieldValue & { field: Field })[]
 }
 export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
 	roles: MemberRole[]
@@ -20,14 +21,14 @@ export function addMemberComputedValues<T extends MemberWithUserEventAndLeaderOf
 	member: T
 ): T & MemberWithComputedValues {
 	const userProfileRequiredFields = getUserProfileRequiredFIelds(member)
+	const memberProfileRequiredFields = getMemberProfileRequiredFields(member)
 	return {
 		...member,
 		roles: getMemberRoles(member),
 		userProfileRequiredFields,
 		isUserProfileCompleted: !userProfileRequiredFields.length,
-
-		// TODO
-		isMemberProfileCompleted: true,
+		memberProfileRequiredFields,
+		isMemberProfileCompleted: !memberProfileRequiredFields.length,
 	}
 }
 
@@ -51,6 +52,17 @@ function getUserProfileRequiredFIelds({ event, user }: MemberWithUserEventAndLea
 	if (event.userAvatarRequired && !user.avatarId) requiredFields.push('avatarId')
 	if (event.userBirthdayRequired && !user.birthday) requiredFields.push('birthday')
 	if (event.userPhoneRequired && !user.phone) requiredFields.push('phone')
+	return requiredFields
+}
+
+function getMemberProfileRequiredFields({ profile }: MemberWithUserEventAndLeaderOf) {
+	const requiredFields: string[] = []
+	profile.forEach(({ value, field }) => {
+		if (!field.required || !field.memberCanRead) return
+		if (field.type === 'boolean' || field.type === 'multiselect') return
+		if (!!value) return
+		requiredFields.push(field.name)
+	})
 	return requiredFields
 }
 

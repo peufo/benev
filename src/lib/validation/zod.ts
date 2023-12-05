@@ -44,7 +44,7 @@ function relations(operation: Operation = 'set') {
 }
 
 /** https://github.com/colinhacks/zod/issues/53#issuecomment-1386446580 */
-export type ZodObj<T extends Record<PropertyKey, unknown>> = {
+export type ZodObj<T = Record<PropertyKey, unknown>> = {
 	[key in keyof T]: zod.ZodType<
 		T[key],
 		zod.ZodTypeDef,

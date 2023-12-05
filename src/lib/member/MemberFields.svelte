@@ -61,12 +61,18 @@
 			transition:slide
 			on:click={() => handleClickUpdateField(field)}
 			class="
-						w-full flex gap-3 py-3 px-4 items-center border rounded-lg
-						bg-base-200/50 hover:bg-base-200 cursor-pointer
-					"
+				w-full flex gap-3 py-3 px-4 items-center border rounded-lg
+				bg-base-200/50 hover:bg-base-200 cursor-pointer
+			"
 		>
 			<Icon path={memberFieldType[field.type].icon} class="opacity-70" />
-			<span>{field.name}</span>
+			<span>
+				{field.name}
+				{#if field.required && field.memberCanWrite}
+					<sup>*</sup>
+				{/if}
+			</span>
+
 			<span class="drag-button btn btn-sm btn-square btn-ghost ml-auto">
 				<Icon path={mdiDrag} />
 			</span>

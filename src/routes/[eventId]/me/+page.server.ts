@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { permission, prisma, redirectToAuth, tryOrFail } from '$lib/server'
+import { parseFormData, permission, prisma, redirectToAuth, tryOrFail } from '$lib/server'
+import { ZodObj, z } from '$lib/validation'
 
 export const load = async ({ url, parent }) => {
 	const { user, member } = await parent()
@@ -30,31 +31,40 @@ export const actions = {
 	/** Update member profile */
 	default: async ({ locals, request, params: { eventId } }) => {
 		const member = await permission.member(eventId, locals)
+		const isLeader = member.roles.includes('leader')
 
 		return tryOrFail(async () => {
-			const formData = Object.fromEntries(await request.formData())
-			// TODO: use parseFormData z.object
-			const { memberId, ...data }: Record<string, string> = Object.entries(formData)
-				.filter(([key]) => !key.startsWith('ignored_'))
-				.reduce(
-					(acc, [key, value]) => ({
-						...acc,
-						[key.replace(/(number_)|(boolean)_/, '')]: value,
-					}),
-					{}
-				)
-
-			if (typeof memberId !== 'string') throw Error('memberId is required')
-
-			const editOwnProfile = memberId === member.id
-			const isLeader = member.roles.includes('leader')
-			if (!editOwnProfile && !isLeader) throw error(401)
-			// TODO: Les leaders ne devrait avoir ce droit que sur les membres inscrit à ses secteurs ?
-
 			const fields = await prisma.field.findMany({
 				where: {
 					eventId,
-					name: { in: Object.keys(data) },
+					...(!isLeader && { memberCanWrite: true }),
+				},
+			})
+			const model: ZodObj<{ memberId: string } & Record<string, string | undefined>> = {
+				memberId: z.string(),
+			}
+			fields.forEach((f) => {
+				if (isLeader || !f.required || f.type === 'multiselect' || f.type === 'boolean') {
+					model[f.name] = z.string().optional()
+					return
+				}
+				model[f.name] = z.string().min(1)
+				console.log(f.name)
+			})
+			const { data, err } = await parseFormData(request, model)
+
+			if (err) return err
+
+			const { memberId, ...fieldsObj } = data
+			if (!memberId) throw Error('memberId is required')
+
+			const editOwnProfile = memberId === member.id
+			if (!editOwnProfile && !isLeader) throw error(401)
+
+			const fieldsToUpdate = await prisma.field.findMany({
+				where: {
+					eventId,
+					name: { in: Object.keys(fieldsObj) },
 					...(!isLeader && { memberCanWrite: true }),
 				},
 			})
@@ -63,10 +73,10 @@ export const actions = {
 				where: { id: memberId },
 				data: {
 					profile: {
-						upsert: fields.map(({ name, id }) => ({
+						upsert: fieldsToUpdate.map(({ name, id }) => ({
 							where: { fieldId_memberId: { fieldId: id, memberId } },
-							create: { value: data[name], fieldId: id },
-							update: { value: data[name] },
+							create: { value: fieldsObj[name], fieldId: id },
+							update: { value: fieldsObj[name] },
 						})),
 					},
 				},
