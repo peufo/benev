@@ -23,7 +23,7 @@
 
 	let formControl: HTMLDivElement
 	onMount(() => {
-		const input = formControl.querySelector('input')
+		const input = formControl.querySelector('input, textarea')
 		if (!input) return
 		const handleInput = () => (error = '')
 		input.addEventListener('input', handleInput)
