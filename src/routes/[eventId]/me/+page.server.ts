@@ -49,7 +49,6 @@ export const actions = {
 					return
 				}
 				model[f.name] = z.string().min(1)
-				console.log(f.name)
 			})
 			const { data, err } = await parseFormData(request, model)
 

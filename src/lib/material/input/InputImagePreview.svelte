@@ -50,7 +50,7 @@
 				absolute inset-[1px] grid place-content-center rounded-lg
 			"
 			>
-				prout
+				{title}
 			</span>
 			<img class="{klass} border rounded-lg" {src} {alt} width={x} height={y} />
 		</div>
