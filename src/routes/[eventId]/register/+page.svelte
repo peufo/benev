@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { mdiArrowLeft } from '@mdi/js'
-	import MemberForm from '$lib/MemberForm.svelte'
+	import { page } from '$app/stores'
+	import { goto } from '$app/navigation'
 	import { Card, Icon, Placeholder } from '$lib/material'
+	import { MemberForm, MemberProfileForm } from '$lib/member'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
 	import ProfileForm from '$lib/me/ProfileForm.svelte'
-	import { MemberProfileForm } from '$lib/member'
-	import { page } from '$app/stores'
-	import { goto } from '$app/navigation'
 
 	export let data
 

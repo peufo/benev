@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Card } from '$lib/material'
-	import TeamForm from '../../TeamForm.svelte'
+	import { TeamForm } from '$lib/team'
 
 	export let data
 </script>

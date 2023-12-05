@@ -6,7 +6,7 @@
 	import { useForm } from '$lib/validation'
 	import type { Event } from '@prisma/client'
 	import { eventPath, urlParam } from '$lib/store'
-	import DeleteButton from './material/DeleteButton.svelte'
+	import {DeleteButton} from '$lib/material'
 
 	export let event: Event
 	export let userId: string
