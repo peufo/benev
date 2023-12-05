@@ -51,7 +51,6 @@ export const actions = {
 				model[f.name] = z.string().min(1)
 			})
 			const { data, err } = await parseFormData(request, model)
-
 			if (err) return err
 
 			const { memberId, ...fieldsObj } = data
@@ -85,6 +84,7 @@ export const actions = {
 							})),
 					},
 				},
+				include: { profile: { include: { field: true } } },
 			})
 		})
 	},

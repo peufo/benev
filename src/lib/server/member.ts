@@ -61,7 +61,7 @@ function getMemberProfileRequiredFields({ profile, event }: MemberWithUserEventA
 	event.memberFields.forEach((field) => {
 		if (!field.required || !field.memberCanRead) return
 		if (field.type === 'boolean' || field.type === 'multiselect') return
-		const fieldValue = profile.find((f) => (f.fieldId = field.id))
+		const fieldValue = profile.find((f) => f.fieldId === field.id)
 		if (!fieldValue?.value) requiredFields.push(field.name)
 	})
 	return requiredFields
@@ -87,7 +87,7 @@ export function getMemberProfile(where: MemberUniqueWhere) {
 				event: {
 					include: { memberFields: { orderBy: { position: 'asc' } } },
 				},
-				profile: true,
+				profile: { include: { field: true } },
 				subscribes: {
 					include: { period: { include: { team: true } } },
 				},
