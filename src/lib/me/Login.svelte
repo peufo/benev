@@ -59,8 +59,6 @@
 						<InputText key="firstName" label="Prénom" />
 						<InputText key="lastName" label="Nom" />
 					</div>
-
-					<InputText key="phone" label="Téléphone" />
 				</div>
 			{/if}
 
