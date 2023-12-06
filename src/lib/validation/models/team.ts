@@ -27,7 +27,7 @@ const conditionModel = z.union([
 		args: z.object({
 			fieldId: z.string(),
 			operator,
-			value: z.union([z.string(), zod.array(z.string())]),
+			expectedValue: z.union([z.string(), zod.array(z.string())]),
 		}),
 	}),
 ])

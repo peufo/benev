@@ -38,7 +38,7 @@
 					args: {
 						fieldId: '',
 						operator: 'is',
-						value: '',
+						expectedValue: '',
 					},
 				},
 			]
@@ -168,7 +168,7 @@
 					{@const field = memberFields.find((f) => f.id === fieldId)}
 					{#if field}
 						{@const { component, props } = getFieldInput(field)}
-						<svelte:component this={component} {...props} bind:value={condition.args.value} />
+						<svelte:component this={component} {...props} bind:value={condition.args.expectedValue} />
 					{/if}
 				{/if}
 			</div>
