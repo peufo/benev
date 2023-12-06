@@ -20,13 +20,17 @@
 	$: _options = parseOptions(options)
 </script>
 
-<input type="hidden" name={props.key} value={JSON.stringify(value)} />
+{#if props.key}
+	<input type="hidden" name={props.key} value={JSON.stringify(value)} />
+{/if}
 
 <div class={klass}>
-	<div class="label">
-		<span class="label-text">{props.label}</span>
-		<slot name="label_append" />
-	</div>
+	{#if props.label}
+		<div class="label">
+			<span class="label-text">{props.label}</span>
+			<slot name="label_append" />
+		</div>
+	{/if}
 
 	<div class={checkboxesClass}>
 		{#each _options as option, index}

@@ -25,6 +25,7 @@ export const actions = {
 		const member = await permission.leaderOfTeam(teamId, locals)
 
 		const { err, data } = await parseFormData(request, teamUpdate)
+
 		if (err) return err
 		if (!member.roles.includes('admin') && data.leaders) throw error(403)
 

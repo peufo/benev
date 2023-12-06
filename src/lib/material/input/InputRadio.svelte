@@ -36,10 +36,12 @@
 </script>
 
 <div class={klass} bind:this={formControl}>
-	<div class="label">
-		<span class="label-text">{props.label}</span>
-		<slot name="label_append" />
-	</div>
+	{#if props.label}
+		<div class="label">
+			<span class="label-text">{props.label}</span>
+			<slot name="label_append" />
+		</div>
+	{/if}
 
 	<div class={optionsClass}>
 		{#each _options as option}
