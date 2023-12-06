@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Team, Member, User, Event } from '@prisma/client'
+	import type { Team, Member, User, Event, Field } from '@prisma/client'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 
@@ -9,11 +9,12 @@
 
 	import InviteForm from '$lib/InviteForm.svelte'
 	import InputMembers from '$lib/InputMembers.svelte'
+	import { TeamConditions } from '$lib/team'
 
 	let klass = ''
 	export { klass as class }
 	export let isUpdate = false
-	export let event: Event
+	export let event: Event & { memberFields: Field[]}
 	export let team:
 		| (Team & {
 				leaders: (Member & {
@@ -52,10 +53,12 @@
 			hint={event.closeSubscribing && !team?.closeSubscribing ? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}` : ''}
 		/>
 	{/if}
+
+	<TeamConditions {team} memberFields={event.memberFields}/>
 	
 	<input type="hidden" name="redirectTo" value={$page.url.searchParams.get('redirectTo') || ''} />
 
-	<div class="flex gap-2 flex-row-reverse">
+	<div class="flex gap-2 flex-row-reverse mt-2">
 		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit"> Valider </button>
 		{#if isUpdate && $page.data.member?.roles.includes('admin')}
 			<DeleteButton formaction="?/delete" />

@@ -5,22 +5,34 @@ import * as zod from 'zod'
 type TeamShemaCreate = Omit<Prisma.TeamCreateInput, 'event'>
 type TeamShemaUpdate = Omit<Prisma.TeamUpdateInput, 'event'>
 
+const operator = z.enum([
+	'is',
+	'not',
+	'gt',
+	'lt',
+	'gte',
+	'lte',
+	'contains',
+	'notContains',
+	'haveAny',
+])
 const conditionModel = z.union([
 	z.object({ type: z.literal('valided') }),
 	z.object({
 		type: z.literal('age'),
-		args: z.number(),
+		args: z.number().transform(String),
 	}),
 	z.object({
 		type: z.literal('profile'),
 		args: z.object({
 			fieldId: z.string(),
-			operator: z.enum(['equal', 'contains', 'gt', 'lt']),
+			operator,
 		}),
 	}),
 ])
 
 export type TeamCondition = zod.infer<typeof conditionModel>
+export type TeamConditionOperator = zod.infer<typeof operator>
 
 export const teamCreate = {
 	name: z.string().min(3),

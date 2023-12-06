@@ -11,6 +11,7 @@
 	let klass = ''
 	export { klass as class }
 	export let btnClass = ''
+	export let noBtnClass = false
 
 	$: _options = parseOptions(options)
 	$: selectedOption = _options.find((opt) => opt.value === value)
@@ -47,15 +48,17 @@
 	tabindex="-1"
 >
 	<DropDown bind:this={dropDown}>
-		<button slot="activator" type="button" class="btn {btnClass}">
-			{#if selectedOption}
-				{#if selectedOption.icon}
-					<Icon path={selectedOption.icon} />
+		<button slot="activator" type="button" class:btn={!noBtnClass} class={btnClass}>
+			<slot name="btn">
+				{#if selectedOption}
+					{#if selectedOption.icon}
+						<Icon path={selectedOption.icon} />
+					{/if}
+					<span>{selectedOption.label}</span>
+				{:else}
+					<slot name="placeholder">Sélection</slot>
 				{/if}
-				<span>{selectedOption.label}</span>
-			{:else}
-				<slot name="placeholder">Sélection</slot>
-			{/if}
+			</slot>
 		</button>
 
 		<SelectorList
