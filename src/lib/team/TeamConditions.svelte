@@ -53,15 +53,15 @@
 		multiselect: ['is', 'haveAny'],
 	}
 	const operatorLabel: Record<TeamConditionOperator, string> = {
-		is: '=',
-		not: '≠',
-		gt: '>',
-		gte: '≧',
-		lt: '<',
-		lte: '≦',
+		is: 'Est égal à',
+		not: "N'est pas égal à",
+		gt: 'Est plus grand que',
+		gte: 'Est plus grand ou égal à',
+		lt: 'Est plus petit que',
+		lte: 'Est plus petit ou égal à',
 		contains: 'Contient',
 		notContains: 'Ne contient pas',
-		haveAny: 'Est inclus dans',
+		haveAny: 'A une de ces valeurs',
 	}
 
 	function component<Component extends ComponentType>(
