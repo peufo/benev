@@ -20,10 +20,6 @@
 	$: _options = parseOptions(options)
 </script>
 
-{#if props.key}
-	<input type="hidden" name={props.key} value={JSON.stringify(value)} />
-{/if}
-
 <div class={klass}>
 	{#if props.label}
 		<div class="label">
@@ -68,3 +64,5 @@
 		</div>
 	{/if}
 </div>
+
+<input type="hidden" name={props.key} value={JSON.stringify(value)} />

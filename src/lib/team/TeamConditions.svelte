@@ -21,7 +21,7 @@
 
 	let conditions = jsonParse<TeamCondition[]>(team?.conditions, [])
 	$: addConditionOptions = {
-		...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre aprouvé' }),
+		...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre approuvé' }),
 		...(!conditions.find((c) => c.type === 'age') && { age: 'Âge minimum' }),
 		profile: 'Profil du membre',
 	}
