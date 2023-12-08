@@ -16,7 +16,7 @@
 			<Icon
 				path={mdiPhone}
 				size={18}
-				title="Téléphoner à {user.firstName}"
+				title="Téléphoner à {user.firstName} [{user.phone}]"
 				tippyProps={{ appendTo: 'parent' }}
 			/>
 		</a>
@@ -30,7 +30,7 @@
 		<Icon
 			path={mdiEmailOutline}
 			size={18}
-			title="Envoyer un mail à {user.firstName}"
+			title="Envoyer un mail à {user.firstName} [{user.email}]"
 			tippyProps={{ appendTo: 'parent' }}
 		/>
 	</a>
