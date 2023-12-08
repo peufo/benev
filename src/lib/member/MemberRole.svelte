@@ -29,7 +29,7 @@
 	$: role = rolesOrder.find((r) => roles.includes(r))
 </script>
 
-{#if role}
+{#if role && role !== 'root'}
 	{#if mode === 'badge'}
 		<div class="badge badge-ghost font-normal opacity-80 {klass}">
 			<Icon path={rolesMap[role].icon} class="-translate-x-1" size={iconSize} />
