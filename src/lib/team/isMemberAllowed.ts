@@ -1,6 +1,6 @@
 import { jsonParse } from '$lib/jsonParse'
 import { getAge } from '$lib/utils'
-import type { TeamCondition, TeamConditionOperator } from '$lib/validation'
+import type { TeamConditionOperator } from '$lib/validation'
 import type { FieldValue, Member, Team, User } from '@prisma/client'
 
 export function isMemberAllowed(
@@ -8,8 +8,8 @@ export function isMemberAllowed(
 	member: Member & { user: User; profile: FieldValue[] }
 ): boolean {
 	if (!team.conditions) return true
-	const conditions = jsonParse<TeamCondition[]>(team.conditions, [])
-	const conditionsOk = conditions.map((condition) => {
+
+	const conditionsOk = team.conditions.map((condition) => {
 		if (condition.type === 'valided') return member.isValidedByEvent
 		if (condition.type === 'age') {
 			const birthday = member.user.birthday
@@ -22,7 +22,7 @@ export function isMemberAllowed(
 		if (!fieldValue || expectedValue === undefined) return false
 		return testValue[operator](expectedValue, fieldValue.value)
 	})
-	return conditions.length === conditionsOk.length
+	return team.conditions.length === conditionsOk.length
 }
 
 const testValue: Record<

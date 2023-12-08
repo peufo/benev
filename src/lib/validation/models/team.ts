@@ -16,7 +16,7 @@ const operator = z.enum([
 	'notContains',
 	'haveAny',
 ])
-const conditionModel = z.union([
+export const teamConditionModel = z.union([
 	z.object({ type: z.literal('valided') }),
 	z.object({
 		type: z.literal('age'),
@@ -32,7 +32,7 @@ const conditionModel = z.union([
 	}),
 ])
 
-export type TeamCondition = zod.infer<typeof conditionModel>
+export type TeamCondition = zod.infer<typeof teamConditionModel>
 export type TeamConditionOperator = zod.infer<typeof operator>
 
 export const teamCreate = {
@@ -40,7 +40,7 @@ export const teamCreate = {
 	description: z.string().optional(),
 	leaders: z.relations('connect'),
 	closeSubscribing: z.dateOptional(),
-	conditions: z.array(conditionModel).transform((v) => JSON.stringify(v)),
+	conditions: z.array(teamConditionModel),
 } satisfies ZodObj<TeamShemaCreate>
 
 export const teamUpdate = {

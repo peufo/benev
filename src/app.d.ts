@@ -1,7 +1,9 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import { MemberWithComputedValues } from '$lib/server'
-import { Event } from '@prisma/client'
+import type { MemberWithComputedValues } from '$lib/server'
+import type { Event } from '@prisma/client'
+import { teamConditionModel } from '$lib/validation'
+import zod from 'zod'
 
 // for information about these interfaces
 declare global {
@@ -30,6 +32,12 @@ declare global {
 			phone?: string
 			avatarPlaceholder: string
 		}
+	}
+}
+
+declare global {
+	namespace PrismaJson {
+		type TeamConditions = zod.infer<typeof teamConditionModel>[]
 	}
 }
 

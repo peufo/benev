@@ -8,6 +8,7 @@
 	import Progress from '$lib/Progress.svelte'
 	import { mdiClockTimeFourOutline } from '@mdi/js'
 	import dayjs from 'dayjs'
+	import { jsonParse } from './jsonParse'
 
 	export let teams: (Team & {
 		leaders: (Member & {
@@ -59,6 +60,13 @@
 								<span class="ml-1">
 									{dayjs(team.closeSubscribing).format('DD MMMM')}
 								</span>
+							</span>
+						{/if}
+
+						{#if team.conditions?.length}
+							<span class="badge ml-auto opacity-80 z-10">
+								{team.conditions.length}
+								condition{team.conditions.length > 1 ? 's' : ''}
 							</span>
 						{/if}
 					</div>

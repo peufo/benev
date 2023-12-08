@@ -19,7 +19,7 @@
 	export let team: Team | undefined
 	export let memberFields: Field[]
 
-	let conditions = jsonParse<TeamCondition[]>(team?.conditions, [])
+	let conditions = team?.conditions || []
 	$: addConditionOptions = {
 		...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre approuvé' }),
 		...(!conditions.find((c) => c.type === 'age') && { age: 'Âge minimum' }),
@@ -168,7 +168,11 @@
 					{@const field = memberFields.find((f) => f.id === fieldId)}
 					{#if field}
 						{@const { component, props } = getFieldInput(field)}
-						<svelte:component this={component} {...props} bind:value={condition.args.expectedValue} />
+						<svelte:component
+							this={component}
+							{...props}
+							bind:value={condition.args.expectedValue}
+						/>
 					{/if}
 				{/if}
 			</div>

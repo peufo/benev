@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator json {
+  provider = "prisma-json-types-generator"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -208,7 +212,8 @@ model Team {
   description      String?   @db.Text
   leaders          Member[]
   closeSubscribing DateTime?
-  conditions       String?   @db.Text
+  /// [TeamConditions]
+  conditions       Json?
 
   eventId String
   event   Event    @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
