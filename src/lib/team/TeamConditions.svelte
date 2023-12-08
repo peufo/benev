@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ComponentProps, ComponentType } from 'svelte'
+	import { onMount, type ComponentProps, type ComponentType } from 'svelte'
 	import type { Team, Field, FieldType } from '@prisma/client'
 	import type { TeamCondition, TeamConditionOperator } from '$lib/validation'
 	import { jsonParse } from '$lib/jsonParse'
@@ -15,9 +15,24 @@
 	import InputText from '$lib/material/input/InputText.svelte'
 	import InputCheckboxs from '$lib/material/input/InputCheckboxs.svelte'
 	import InputRadio from '$lib/material/input/InputRadio.svelte'
+	import axios from 'axios'
+	import { eventPath } from '$lib/store'
 
 	export let team: Team | undefined
 	export let memberFields: Field[]
+	let memberAllowedCount = 0
+
+	onMount(() => {
+		getmemberAllowedCount()
+	})
+
+	async function getmemberAllowedCount() {
+		const conditionsParam = encodeURIComponent(JSON.stringify(conditions))
+		const res = await axios.get<number>(
+			`${$eventPath}/teams/membersAllowed?conditions=${conditionsParam}`
+		)
+		memberAllowedCount = res.data
+	}
 
 	let conditions = team?.conditions || []
 	$: addConditionOptions = {
@@ -90,7 +105,13 @@
 <div>
 	<input type="hidden" name="conditions" value={JSON.stringify(conditions)} />
 	<div class="flex items-center mb-2">
-		<h3 class="text-lg font-medium opacity-75 grow">Conditions</h3>
+		<div class="opacity-75 grow flex flex-col">
+			<span class="text-lg font-medium">Conditions</span>
+			<span class="text-xs">
+				{memberAllowedCount}
+				members concernés
+			</span>
+		</div>
 		<InputSelect options={addConditionOptions} on:select={handleAddCondition} btnClass="btn-square">
 			<svelte:fragment slot="btn">
 				<Icon path={mdiPlus} title="Ajouter une condition" />

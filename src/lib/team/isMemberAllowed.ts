@@ -1,28 +1,32 @@
 import { jsonParse } from '$lib/jsonParse'
-import { getAge } from '$lib/utils'
 import type { TeamConditionOperator } from '$lib/validation'
 import type { FieldValue, Member, Team, User } from '@prisma/client'
+import dayjs from 'dayjs'
 
 export function isMemberAllowed(
-	team: Team,
+	conditions: Team['conditions'],
 	member: Member & { user: User; profile: FieldValue[] }
 ): boolean {
-	if (!team.conditions) return true
+	if (!conditions) return true
 
-	const conditionsOk = team.conditions.map((condition) => {
-		if (condition.type === 'valided') return member.isValidedByEvent
-		if (condition.type === 'age') {
-			const birthday = member.user.birthday
-			if (!birthday) return false
-			// TODO: use periods date instead new Date()
-			return getAge(birthday) >= condition.args
-		}
-		const { fieldId, operator, expectedValue } = condition.args
-		const fieldValue = member.profile.find((f) => f.id === fieldId)
-		if (!fieldValue || expectedValue === undefined) return false
-		return testValue[operator](expectedValue, fieldValue.value)
-	})
-	return team.conditions.length === conditionsOk.length
+	const conditionsOk = conditions
+		.map((condition) => {
+			if (condition.type === 'valided') return member.isValidedByEvent
+			if (condition.type === 'age') {
+				const birthday = member.user.birthday
+				if (!birthday) return false
+				// TODO: use periods date instead new Date()
+				const today = dayjs()
+				const age = today.diff(dayjs(birthday), 'year')
+				return age >= Number(condition.args)
+			}
+			const { fieldId, operator, expectedValue } = condition.args
+			const fieldValue = member.profile.find((f) => f.id === fieldId)
+			if (!fieldValue || expectedValue === undefined) return false
+			return testValue[operator](expectedValue, fieldValue.value)
+		})
+		.filter(Boolean)
+	return conditions.length === conditionsOk.length
 }
 
 const testValue: Record<

@@ -7,9 +7,12 @@
 		mdiClipboardTextMultipleOutline,
 		mdiClockTimeFourOutline,
 		mdiPencilOutline,
+		mdiFilterOutline,
 	} from '@mdi/js'
 
-	import { Card, Icon, Placeholder,  OnlyAvailableToggle } from '$lib/material'
+	import dayjs from 'dayjs'
+	import { onMount } from 'svelte'
+	import { Card, Icon, Placeholder, OnlyAvailableToggle } from '$lib/material'
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
 	import { formatRange } from '$lib/formatRange'
@@ -19,8 +22,6 @@
 	import Progress from '$lib/Progress.svelte'
 	import { slide } from 'svelte/transition'
 	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
-	import dayjs from 'dayjs'
-	import { onMount } from 'svelte'
 	import { page } from '$app/stores'
 
 	export let data
@@ -54,13 +55,11 @@
 	onMount(() => {
 		const subscribeTo = $page.url.searchParams.get('subscribeTo')
 		if (!subscribeTo) return
-		const period = data.team.periods.find(p => p.id === subscribeTo)
+		const period = data.team.periods.find((p) => p.id === subscribeTo)
 		if (!period) return
 		selectedPeriod = period
 		subscribeDialog?.showModal()
 	})
-
-	
 
 	$: _periods = data.team.periods
 		.map((period) => {
@@ -87,19 +86,16 @@
 			}
 		})
 		.filter((period) => !$onlyAvailable || !period.isComplete)
-		
-		
-
 </script>
 
 <Card class="max-w-4xl m-auto" returnUrl="{$eventPath}/teams">
 	<h2 slot="title">{data.team.name}</h2>
-	<p slot="subtitle">
+	<div slot="subtitle">
 		{data.team.description || ''}
 
 		{@const closeSubscribing = data.team.closeSubscribing || data.event.closeSubscribing}
-		{#if data.event.selfSubscribeAllowed && closeSubscribing}
-			<div class="flex mt-2 gap-2">
+		<div class="flex gap-2">
+			{#if data.event.selfSubscribeAllowed && closeSubscribing}
 				<span>Fin des inscriptions: </span>
 
 				<span class="badge" class:badge-warning={isCloseSubscribing}>
@@ -108,9 +104,18 @@
 						{dayjs(closeSubscribing).format('DD MMMM YYYY')}
 					</span>
 				</span>
-			</div>
-		{/if}
-	</p>
+			{/if}
+			{#if data.team.conditions?.length}
+				<span class="badge">
+					<Icon path={mdiFilterOutline} size={16}  class="opacity-70"/>
+					<span class="ml-1">
+						{data.team.conditions.length}
+						condition{data.team.conditions.length > 1 ? 's' : ''}
+					</span>
+				</span>
+			{/if}
+		</div>
+	</div>
 	<div slot="action" class="flex gap-2">
 		<OnlyAvailableToggle />
 
@@ -239,7 +244,6 @@
 	{/if}
 </Card>
 
-
 <dialog class="modal" bind:this={subscribeDialog}>
 	{#if selectedPeriod && data.member}
 		<SubscribeForm
@@ -248,7 +252,8 @@
 			period={selectedPeriod}
 			on:close={() => {
 				subscribeDialog.close()
-				if ($page.url.searchParams.has('subscribeTo')) goto($urlParam.without('subscribeTo'), { replaceState: true})
+				if ($page.url.searchParams.has('subscribeTo'))
+					goto($urlParam.without('subscribeTo'), { replaceState: true })
 			}}
 			on:success={() => {
 				subscribeDialog.close()

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
+	import { mdiClockTimeFourOutline, mdiFilterOutline } from '@mdi/js'
 	import type { Member, Period, Team, Subscribe, Event } from '@prisma/client'
 
 	import { Placeholder, CardLink, Icon } from '$lib/material'
 	import { eventPath, display, onlyAvailable } from '$lib/store'
 	import { rowLink, tip } from '$lib/action'
 	import Progress from '$lib/Progress.svelte'
-	import { mdiClockTimeFourOutline } from '@mdi/js'
 	import dayjs from 'dayjs'
 	import { jsonParse } from './jsonParse'
 
@@ -64,10 +64,13 @@
 						{/if}
 
 						{#if team.conditions?.length}
-							<span class="badge ml-auto opacity-80 z-10">
+						<span class="badge opacity-80">
+							<Icon path={mdiFilterOutline} size={16} />
+							<span class="ml-1">
 								{team.conditions.length}
 								condition{team.conditions.length > 1 ? 's' : ''}
 							</span>
+						</span>
 						{/if}
 					</div>
 					<div class="grid grid-cols-2 gap-2 items-start pt-2">
