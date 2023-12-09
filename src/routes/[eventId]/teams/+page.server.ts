@@ -1,8 +1,9 @@
 import { prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/team'
 
-export const load = async ({ params, url }) => {
+export const load = async ({ parent, params, url }) => {
 	const search = url.searchParams.get('search')
+	const { member } = await parent()
 
 	const teams = await prisma.team.findMany({
 		where: {
@@ -30,6 +31,10 @@ export const load = async ({ params, url }) => {
 	})
 
 	return {
-		teams,
+		teams: teams.filter((team) => {
+			if (!team.conditions) return true
+			if (!member) return false
+			return isMemberAllowed(team.conditions, member)
+		}),
 	}
 }
