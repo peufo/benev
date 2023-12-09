@@ -85,7 +85,6 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 
 			if (result.type === 'failure') {
 				if (result.data) handleFailure(result.data)
-				notify.warning('Formulaire invalide')
 				return
 			}
 

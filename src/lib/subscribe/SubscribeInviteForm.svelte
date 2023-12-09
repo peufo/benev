@@ -17,7 +17,7 @@
 	const dispatch = createEventDispatcher<{ success: void }>()
 
 	const form = useForm({
-		successMessage: 'Inscription crée',
+		successMessage: 'Inscription créée',
 		successCallback: () => {
 			member = null
 			dispatch('success')
