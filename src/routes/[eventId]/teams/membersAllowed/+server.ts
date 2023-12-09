@@ -13,7 +13,6 @@ export const GET = async ({ params: { eventId }, url }) => {
 
 	const count = members.filter((member) => {
 		const allowed = isMemberAllowed(conditions, member)
-		console.log(allowed)
 		return allowed
 	}).length
 

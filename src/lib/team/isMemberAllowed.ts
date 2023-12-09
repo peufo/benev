@@ -21,7 +21,7 @@ export function isMemberAllowed(
 				return age >= Number(condition.args)
 			}
 			const { fieldId, operator, expectedValue } = condition.args
-			const fieldValue = member.profile.find((f) => f.id === fieldId)
+			const fieldValue = member.profile.find((f) => f.fieldId === fieldId)
 			if (!fieldValue || expectedValue === undefined) return false
 			return testValue[operator](expectedValue, fieldValue.value)
 		})
@@ -43,11 +43,13 @@ const testValue: Record<
 	},
 	contains: (expectedValue, value) => {
 		if (typeof expectedValue !== 'string') return false
-		return expectedValue.includes(value)
+		const reg = new RegExp(expectedValue, 'i')
+		return !!value.match(reg)
 	},
 	notContains: (expectedValue, value) => {
 		if (typeof expectedValue !== 'string') return false
-		return !expectedValue.includes(value)
+		const reg = new RegExp(expectedValue, 'i')
+		return !value.match(reg)
 	},
 	gt: (expectedValue, value) => {
 		const numbers = toNumbers(expectedValue, value)
@@ -70,8 +72,13 @@ const testValue: Record<
 		return numbers.a <= numbers.b
 	},
 	haveAny: (expectedValue, value) => {
+		console.log({ expectedValue, value })
 		if (typeof expectedValue === 'string') return false
-		return jsonParse<string[]>(value, []).filter((v) => expectedValue.includes(v)).length > 0
+
+		const valueIsJsonArray = value.startsWith('[') && value.endsWith(']')
+		if (valueIsJsonArray)
+			return jsonParse<string[]>(value, []).filter((v) => expectedValue.includes(v)).length > 0
+		return expectedValue.includes(value)
 	},
 }
 
