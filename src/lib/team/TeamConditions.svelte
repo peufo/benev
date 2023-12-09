@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, type ComponentProps, type ComponentType } from 'svelte'
+	import { type ComponentProps, type ComponentType } from 'svelte'
 	import type { Team, Field, FieldType } from '@prisma/client'
 	import type { TeamCondition, TeamConditionOperator } from '$lib/validation'
 	import { jsonParse } from '$lib/jsonParse'
@@ -22,10 +22,7 @@
 	export let memberFields: Field[]
 	let memberAllowedCount = 0
 
-	onMount(() => {
-		getmemberAllowedCount()
-	})
-
+	$: if (conditions) getmemberAllowedCount()
 	async function getmemberAllowedCount() {
 		const conditionsParam = encodeURIComponent(JSON.stringify(conditions))
 		const res = await axios.get<number>(
