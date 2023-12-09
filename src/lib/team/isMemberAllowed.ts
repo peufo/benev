@@ -9,6 +9,11 @@ export function isMemberAllowed(
 ): boolean {
 	if (!conditions) return true
 
+	const memberProfile: Record<string, FieldValue> = member.profile.reduce(
+		(acc, cur) => ({ ...acc, [cur.fieldId]: cur }),
+		{}
+	)
+
 	const conditionsOk = conditions
 		.map((condition) => {
 			if (condition.type === 'valided') return member.isValidedByEvent
@@ -21,7 +26,7 @@ export function isMemberAllowed(
 				return age >= Number(condition.args)
 			}
 			const { fieldId, operator, expectedValue } = condition.args
-			const fieldValue = member.profile.find((f) => f.fieldId === fieldId)
+			const fieldValue = memberProfile[fieldId]
 			if (!fieldValue || expectedValue === undefined) return false
 			return testValue[operator](expectedValue, fieldValue.value)
 		})

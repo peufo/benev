@@ -108,8 +108,12 @@
 		<div class="opacity-75 grow flex flex-col">
 			<span class="text-lg font-medium">Conditions</span>
 			<span class="text-xs">
-				{memberAllowedCount}
-				members concernés
+				Visible pour
+				{#if !conditions.length}
+					tous les membres
+				{:else}
+					{memberAllowedCount} membre{memberAllowedCount > 1 ? 's' : ''}
+				{/if}
 			</span>
 		</div>
 		<InputSelect options={addConditionOptions} on:select={handleAddCondition} btnClass="btn-square">
