@@ -3,6 +3,7 @@ import { isFreeRange } from 'perod'
 import { subscribeCreate } from '$lib/validation'
 import { parseFormData, permission, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
 import { EmailNewSubscribe } from '$lib/email'
+import { isMemberAllowed } from '$lib/team/isMemberAllowed.js'
 
 export const actions = {
 	new_subscribe: async ({ request, locals, params: { eventId } }) => {
@@ -18,7 +19,7 @@ export const actions = {
 					where: { id: data.periodId },
 					include: {
 						subscribes: { where: { state: { in: ['accepted', 'request'] } } },
-						team: { select: { closeSubscribing: true } },
+						team: { select: { closeSubscribing: true, conditions: true } },
 					},
 				}),
 				prisma.member.findUniqueOrThrow({
@@ -29,6 +30,8 @@ export const actions = {
 							include: { period: true },
 						},
 						event: true,
+						user: true,
+						profile: true,
 					},
 				}),
 			])
@@ -53,6 +56,9 @@ export const actions = {
 				const DAY = 1000 * 60 * 60 * 24
 				if (closeSubscribing && closeSubscribing.getTime() < new Date().getTime() - DAY)
 					throw error(403)
+
+				const conditions = period.team.conditions
+				if (conditions && !isMemberAllowed(conditions, member)) throw error(403)
 			}
 
 			// Check if member is free in this period

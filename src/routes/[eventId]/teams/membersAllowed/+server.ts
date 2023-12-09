@@ -1,7 +1,7 @@
 import { error, json } from '@sveltejs/kit'
 import { parseQuery, prisma } from '$lib/server'
 import { z, teamConditionModel } from '$lib/validation'
-import { isMemberAllowed } from '$lib/team/isMemberAllowed.js'
+import { isMemberAllowed } from '$lib/team'
 
 export const GET = async ({ params: { eventId }, url }) => {
 	const { conditions } = parseQuery(url, { conditions: z.array(teamConditionModel) })
