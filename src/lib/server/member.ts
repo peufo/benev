@@ -73,7 +73,7 @@ type MemberUniqueWhere =
 	| { memberId: string; userId?: undefined; eventId?: undefined }
 	| { memberId?: undefined; userId: string; eventId: string }
 
-export function getMemberProfile(where: MemberUniqueWhere) {
+export function getMemberProfile(where: MemberUniqueWhere, accesor?: MemberWithComputedValues) {
 	const _where =
 		where.memberId !== undefined
 			? { id: where.memberId }
@@ -100,24 +100,27 @@ export function getMemberProfile(where: MemberUniqueWhere) {
 			},
 		})
 		.then(addMemberComputedValues)
-		.then(hidePrivateProfilValues)
+		.then((member) => hidePrivateProfilValues(member, accesor))
 		.then((member) => ({
 			...member,
 			event: {
 				...member.event,
 				memberFields: member.event.memberFields.filter(
-					(field) => member.roles.includes('leader') || field.memberCanRead
+					(field) => (accesor || member).roles.includes('leader') || field.memberCanRead
 				),
 			},
 		}))
 }
 
-export function hidePrivateProfilValues<T extends MemberWithComputedValues>(member: T) {
+export function hidePrivateProfilValues<T extends MemberWithComputedValues>(
+	member: T,
+	accesor?: MemberWithComputedValues
+) {
 	return {
 		...member,
 		profile: member.profile.filter(({ fieldId }) => {
 			const field = member.event.memberFields.find((f) => f.id === fieldId)
-			return member.roles.includes('leader') || field?.memberCanRead
+			return (accesor || member).roles.includes('leader') || field?.memberCanRead
 		}),
 	}
 }

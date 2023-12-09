@@ -1,11 +1,11 @@
 import { prisma, getMemberProfile, permission, parseFormData, tryOrFail } from '$lib/server'
 import { z } from '$lib/validation'
 
-export const load = async ({ params }) => {
-	const { memberId, eventId } = params
+export const load = async ({ parent, params: { memberId, eventId } }) => {
+	const { member } = await parent()
 
 	return {
-		memberProfile: await getMemberProfile({ memberId }),
+		memberProfile: await getMemberProfile({ memberId }, member),
 		event: await prisma.event.findUniqueOrThrow({
 			where: { id: eventId },
 			include: {

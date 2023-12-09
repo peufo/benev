@@ -24,11 +24,16 @@
 
 	$: if (conditions) getmemberAllowedCount()
 	async function getmemberAllowedCount() {
-		const conditionsParam = encodeURIComponent(JSON.stringify(conditions))
-		const res = await axios.get<number>(
-			`${$eventPath}/teams/membersAllowed?conditions=${conditionsParam}`
-		)
-		memberAllowedCount = res.data
+		if (!conditions.length) return
+		try {
+			const conditionsParam = encodeURIComponent(JSON.stringify(conditions))
+			const res = await axios.get<number>(
+				`${$eventPath}/teams/membersAllowed?conditions=${conditionsParam}`
+			)
+			memberAllowedCount = res.data
+		} catch {
+			console.log('axios error')
+		}
 	}
 
 	let conditions = team?.conditions || []

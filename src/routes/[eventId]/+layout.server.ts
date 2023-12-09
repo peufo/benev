@@ -9,7 +9,6 @@ export const load = async ({ depends, parent, params: { eventId } }) => {
 
 	const member = await getMemberProfile({ userId, eventId }).catch(() => undefined)
 	const isLeader = member?.roles.includes('leader')
-	console.log({ isLeader })
 
 	try {
 		return {
@@ -19,7 +18,7 @@ export const load = async ({ depends, parent, params: { eventId } }) => {
 				where: { id: eventId },
 				include: {
 					memberFields: {
-						where: { memberCanRead: isLeader },
+						where: isLeader ? {} : { memberCanRead: true },
 						orderBy: { position: 'asc' },
 					},
 				},
