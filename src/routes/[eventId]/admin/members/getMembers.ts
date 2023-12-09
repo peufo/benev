@@ -1,10 +1,11 @@
 import { z } from '$lib/validation'
 import type { Event, Field, Prisma } from '@prisma/client'
 import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
+import { error } from '@sveltejs/kit'
 
 export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
-	const query = parseQuery(url, {
+	const { data, err } = parseQuery(url, {
 		search: z.string().optional(),
 		start: z.date().optional(),
 		end: z.date().optional(),
@@ -19,18 +20,20 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		all: z.boolean().default(false),
 	})
 
+	if (err) throw error(400)
+
 	const where: Prisma.MemberWhereInput = { eventId, OR: [] }
 	const teamWhere: Prisma.TeamWhereInput = { eventId }
 	let periodWhere: Prisma.PeriodWhereInput | undefined = undefined
 
-	if (query.start && query.end) {
+	if (data.start && data.end) {
 		periodWhere = {
-			start: { lte: query.end },
-			end: { gte: query.start },
+			start: { lte: data.end },
+			end: { gte: data.start },
 		}
 	}
 
-	if (query.teams) teamWhere.id = { in: query.teams }
+	if (data.teams) teamWhere.id = { in: data.teams }
 
 	const subscribeWhere: Prisma.SubscribeWhereInput = {
 		state: { in: ['request', 'accepted'] },
@@ -40,18 +43,18 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		},
 	}
 
-	if (query.role === 'member') subscribeWhere.isAbsent = query.isAbsent
+	if (data.role === 'member') subscribeWhere.isAbsent = data.isAbsent
 
-	const subscribesFilter = !!(query.role || query.start || query.end || query.teams)
+	const subscribesFilter = !!(data.role || data.start || data.end || data.teams)
 	if (subscribesFilter) {
-		if (!query.role || query.role === 'member')
+		if (!data.role || data.role === 'member')
 			where.OR!.push({
 				subscribes: {
 					some: subscribeWhere,
 				},
 			})
 
-		if (!query.role || query.role === 'leader')
+		if (!data.role || data.role === 'leader')
 			where.OR!.push({
 				leaderOf: {
 					some: {
@@ -66,26 +69,26 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			})
 	}
 
-	if (query.role === 'admin') where.isAdmin = true
+	if (data.role === 'admin') where.isAdmin = true
 
 	if (!where.OR?.length) delete where.OR
 
-	if (query.search)
+	if (data.search)
 		where.user = {
 			OR: [
-				{ firstName: { contains: query.search } },
-				{ lastName: { contains: query.search } },
-				{ email: { contains: query.search } },
+				{ firstName: { contains: data.search } },
+				{ lastName: { contains: data.search } },
+				{ email: { contains: data.search } },
 			],
 		}
 
-	if (query.fieldId && query.fieldValue) {
-		const field = await prisma.field.findUniqueOrThrow({ where: { id: query.fieldId, eventId } })
+	if (data.fieldId && data.fieldValue) {
+		const field = await prisma.field.findUniqueOrThrow({ where: { id: data.fieldId, eventId } })
 		where.profile = {
 			some: {
-				fieldId: query.fieldId,
+				fieldId: data.fieldId,
 				value:
-					field.type === 'multiselect' ? { contains: `"${query.fieldValue}"` } : query.fieldValue,
+					field.type === 'multiselect' ? { contains: `"${data.fieldValue}"` } : data.fieldValue,
 			},
 		}
 	}
@@ -93,8 +96,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	const members = await prisma.member
 		.findMany({
 			where,
-			skip: query.summary || query.all ? undefined : query.skip,
-			take: query.summary || query.all ? undefined : query.take,
+			skip: data.summary || data.all ? undefined : data.skip,
+			take: data.summary || data.all ? undefined : data.take,
 			include: {
 				user: true,
 				leaderOf: true,
@@ -120,7 +123,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			}))
 		)
 
-	if (!query.summary) return { members }
+	if (!data.summary) return { members }
 
 	const [periods, fields] = await Promise.all([
 		prisma.period.findMany({
@@ -131,7 +134,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	])
 
 	return {
-		members: members.slice(query.skip, query.skip + query.take),
+		members: members.slice(data.skip, data.skip + data.take),
 		stats: {
 			nbMembers: members.length,
 			nbSubscribes: members.reduce((acc, cur) => acc + cur.subscribes.length, 0),

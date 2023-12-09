@@ -8,20 +8,21 @@ import { MEDIA_PRESETS } from '$lib/constants'
 import jimp from 'jimp'
 
 export const GET = async ({ url, params: { mediaId } }) => {
-	const { size } = parseQuery(url, {
+	const { data, err } = parseQuery(url, {
 		size: z.enum(toTuple(MEDIA_PRESETS)).optional(),
 	})
+	if (err) throw error(400)
 
-	const fileName = `${size || 'original'}.png`
+	const fileName = `${data.size || 'original'}.png`
 	const filePath = path.resolve(MEDIA_DIR, mediaId, fileName)
 
 	const buffer = await fs.readFile(filePath).catch(async () => {
-		if (!size) return null
+		if (!data.size) return null
 		try {
 			const filePathOriginal = path.resolve(MEDIA_DIR, mediaId, 'original.png')
 			const bufferOriginal = await fs.readFile(filePathOriginal)
 			const jimpImage = await jimp.read(Buffer.from(bufferOriginal))
-			const [x, y] = MEDIA_PRESETS[size]
+			const [x, y] = MEDIA_PRESETS[data.size]
 			await jimpImage.resize(x, y).writeAsync(filePath)
 			return await jimpImage.getBufferAsync('image/png')
 		} catch {

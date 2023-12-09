@@ -2,10 +2,11 @@ import { jsonParse } from '$lib/jsonParse.js'
 import { addMemberComputedValues, parseQuery, prisma } from '$lib/server'
 import type { Event, Field, Prisma, SubscribeState } from '@prisma/client'
 import { z } from '$lib/validation'
+import { error } from '@sveltejs/kit'
 
 export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
-	const query = parseQuery(url, {
+	const { data, err } = parseQuery(url, {
 		search: z.string().optional(),
 		start: z.date().optional(),
 		end: z.date().optional(),
@@ -18,22 +19,23 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		isAbsent: z.booleanAsString().optional(),
 		all: z.boolean().default(false),
 	})
+	if (err) throw error(400)
 
 	const where: Prisma.SubscribeWhereInput = {}
 	const team: Prisma.TeamWhereInput = { eventId }
 	const period: Prisma.PeriodWhereInput = { team }
 
-	if (query.teams) team.id = { in: query.teams }
+	if (data.teams) team.id = { in: data.teams }
 
-	if (query.start && query.end) {
-		period.start = { lte: query.end }
-		period.end = { gte: query.start }
+	if (data.start && data.end) {
+		period.start = { lte: data.end }
+		period.end = { gte: data.start }
 	}
 
 	where.period = period
 
-	if (query.search) {
-		const words = query.search.split(' ')
+	if (data.search) {
+		const words = data.search.split(' ')
 		where.member = {
 			user: {
 				OR: words
@@ -47,20 +49,20 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		}
 	}
 
-	if (query.states) {
-		const states = jsonParse<SubscribeState[]>(query.states, [])
+	if (data.states) {
+		const states = jsonParse<SubscribeState[]>(data.states, [])
 		where.state = { in: states }
 	}
 
-	if (query.createdBy) where.createdBy = query.createdBy
-	if (query.isAbsent !== undefined) where.isAbsent = query.isAbsent
+	if (data.createdBy) where.createdBy = data.createdBy
+	if (data.isAbsent !== undefined) where.isAbsent = data.isAbsent
 
 	return {
 		subscribes: await prisma.subscribe
 			.findMany({
 				where,
-				skip: query.all ? undefined : query.skip,
-				take: query.all ? undefined : query.take,
+				skip: data.all ? undefined : data.skip,
+				take: data.all ? undefined : data.take,
 				include: {
 					period: {
 						include: { team: true },

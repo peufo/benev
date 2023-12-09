@@ -7,15 +7,19 @@ export const load = async ({ depends, parent, params: { eventId } }) => {
 	const { user } = await parent()
 	const userId = user?.id || ''
 
+	const member = await getMemberProfile({ userId, eventId }).catch(() => undefined)
+	const isLeader = member?.roles.includes('leader')
+	console.log({ isLeader })
+
 	try {
 		return {
 			userId: user?.id || '',
-			member: await getMemberProfile({ userId, eventId }).catch(() => undefined),
+			member,
 			event: await prisma.event.findUniqueOrThrow({
 				where: { id: eventId },
 				include: {
 					memberFields: {
-						where: { memberCanRead: true },
+						where: { memberCanRead: isLeader },
 						orderBy: { position: 'asc' },
 					},
 				},
