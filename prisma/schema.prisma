@@ -39,6 +39,7 @@ model User {
   auth_session Session[]
   auth_key     Key[]
   medias       Media[]
+  messages     Message[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -328,4 +329,24 @@ model GiftAllocation {
 
   qteDue   Int
   qteGiven Int
+}
+
+model Message {
+  id String @id @default(cuid())
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  state   MessageState @default(pending)
+  subject String
+  content String       @db.Text()
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum MessageState {
+  pending
+  cancelled
+  done
 }
