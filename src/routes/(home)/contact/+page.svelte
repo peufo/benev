@@ -28,38 +28,35 @@
 			</div>
 		</form>
 	</Card>
+	{#if data.messages.length}
+		<Card>
+			<h2 slot="title">Mes demandes</h2>
+			<div class="flex flex-col gap-2 mt-4">
+				{#each data.messages as message}
+					<section class="border rounded p-4 pt-2">
+						<div class="flex gap-2 items-top">
+							<div class="flex flex-wrap gap-x-2 gap-y-0 items-center">
+								<h3 class="font-semibold opacity-80">{message.subject}</h3>
+								<span class="text-xs italic opacity-70">
+									Envoyer le {message.createdAt.toLocaleDateString()}
+								</span>
+							</div>
 
-	<Card>
-		<h2 slot="title">Mes demandes</h2>
-		<div class="flex flex-col gap-2 mt-4">
-			{#each data.messages as message}
-				<section class="border rounded p-4 pt-2">
-					<div class="flex gap-2 items-top">
-						<div class="flex flex-wrap gap-x-2 gap-y-0 items-center">
-							<h3 class="font-semibold opacity-80">{message.subject}</h3>
-							<span class="text-xs italic opacity-70">
-								Envoyer le {message.createdAt.toLocaleDateString()}
-							</span>
+							{#if message.state === 'waitOnAgent' || message.state === 'waitOnAuthor'}
+								<div class="badge badge-warning badge-outline ml-auto whitespace-nowrap mt-1">
+									En traitement
+								</div>
+							{:else if message.state === 'done'}
+								<div class="badge badge-success badge-outline ml-auto whitespace-nowrap mt-1">
+									<Icon path={mdiCheck} class="fill-success -translate-x-1" size={18} />
+									Terminé
+								</div>
+							{/if}
 						</div>
-
-						{#if message.state === 'waitOnAgent' || message.state === 'waitOnAuthor'}
-							<div class="badge badge-warning badge-outline ml-auto whitespace-nowrap mt-1">
-								En traitement
-							</div>
-						{:else if message.state === 'done'}
-							<div class="badge badge-success badge-outline ml-auto whitespace-nowrap mt-1">
-								<Icon path={mdiCheck} class="fill-success -translate-x-1" size={18} />
-								Terminé
-							</div>
-						{/if}
-					</div>
-					<p class="text-sm opacity-90 mt-2">{message.content}</p>
-				</section>
-			{:else}
-				<Placeholder>
-					<span>Pas de demande</span>
-				</Placeholder>
-			{/each}
-		</div>
-	</Card>
+						<p class="text-sm opacity-90 mt-2">{message.content}</p>
+					</section>
+				{/each}
+			</div>
+		</Card>
+	{/if}
 </div>
