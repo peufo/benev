@@ -337,7 +337,7 @@ model Message {
   authorId String
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  state   MessageState @default(pending)
+  state   MessageState @default(waitOnAgent)
   subject String
   content String       @db.Text()
 
@@ -346,7 +346,7 @@ model Message {
 }
 
 enum MessageState {
-  pending
-  cancelled
+  waitOnAgent
+  waitOnAuthor
   done
 }

@@ -2,7 +2,7 @@
 CREATE TABLE `Message` (
     `id` VARCHAR(191) NOT NULL,
     `authorId` VARCHAR(191) NOT NULL,
-    `state` ENUM('pending', 'cancelled', 'done') NOT NULL DEFAULT 'pending',
+    `state` ENUM('waitOnAgent', 'waitOnAuthor', 'done') NOT NULL DEFAULT 'waitOnAgent',
     `subject` VARCHAR(191) NOT NULL,
     `content` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

@@ -5,6 +5,7 @@
 		{ label: 'Model de mail', path: '/root/mails' },
 		{ label: 'Migration', path: '/root/migrate' },
 		{ label: 'Évènements', path: '/root/events' },
+		{ label: 'Messages', path: '/root/messages' },
 	]
 </script>
 

@@ -42,7 +42,7 @@
 							</span>
 						</div>
 
-						{#if message.state === 'pending'}
+						{#if message.state === 'waitOnAgent' || message.state === 'waitOnAuthor'}
 							<div class="badge badge-warning badge-outline ml-auto whitespace-nowrap mt-1">
 								En traitement
 							</div>
