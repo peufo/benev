@@ -76,7 +76,7 @@
 				inférieurs aux applications concurrentes.
 			</p>
 			<p>
-				Nous demandons 5 CHF par évènement et un coût additionnel de 0.20 CHF par membre participant
+				Nous demandons 8 CHF par évènement et un coût additionnel de 0.30 CHF par membre participant
 				à l'évènement.
 			</p>
 		</section>
