@@ -11,14 +11,14 @@
 		<h2 slot="title" class="text-center text-xl">Tarif unique</h2>
 		<div class="mt-2 mb-6 grid mx-auto" style:grid-template-columns="1fr 50px 1fr">
 			<div class="flex flex-col items-center whitespace-nowrap">
-				<span class="font-medium">5,00 CHF</span>
+				<span class="font-medium">8,00 CHF</span>
 				<span class="text-xs">par événement</span>
 			</div>
 
 			<Icon path={mdiPlus} class="opacity-70" />
 
 			<div class="flex flex-col items-center whitespace-nowrap">
-				<span class="font-medium">0,20 CHF</span>
+				<span class="font-medium">0,30 CHF</span>
 				<span class="text-xs">par membre</span>
 			</div>
 		</div>

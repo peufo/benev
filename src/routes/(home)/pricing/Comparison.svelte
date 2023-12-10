@@ -12,18 +12,17 @@
 
 	const selectedCurrency = 'CHF'
 
-	const renderAmount = (amount: number, currency = selectedCurrency) => {
+	const getAmount = (amount: number, currency = selectedCurrency) => {
+		if (selectedCurrency === currency) return amount
 		const rateFrom = rates[selectedCurrency]
 		const rateTo = rates[currency]
-		if (!rateFrom || !rateFrom || selectedCurrency === currency)
-			return amount.toLocaleString(undefined, {
-				style: 'currency',
-				currency,
-				maximumFractionDigits: 0,
-			})
-
+		if (!rateFrom || !rateFrom) return amount
 		const rate = rateFrom / rateTo
-		return (amount * rate).toLocaleString(undefined, {
+		return amount * rate
+	}
+
+	const renderAmount = (amount: number) => {
+		return amount.toLocaleString(undefined, {
 			style: 'currency',
 			currency: selectedCurrency,
 			maximumFractionDigits: 0,
@@ -32,7 +31,7 @@
 
 	$: _apps = apps
 		.filter((app) => !app.hide)
-		.map((app) => ({ ...app, tarif: app.getTarif(nbEvents, nbMembers) }))
+		.map((app) => ({ ...app, tarif: getAmount(app.getTarif(nbEvents, nbMembers), app.currency) }))
 		.sort((a, b) => a.tarif - b.tarif)
 	$: tarifMax = Math.max(..._apps.map((app) => app.tarif))
 
@@ -95,7 +94,7 @@
 			>
 				<div class="bg-warning h-2 rounded" style:width="{75 * (app.tarif / tarifMax)}%" />
 				<span class="text-xs font-medium">
-					{renderAmount(app.tarif, app.currency)}
+					{renderAmount(app.tarif)}
 				</span>
 			</div>
 		</div>
