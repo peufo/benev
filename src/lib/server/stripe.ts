@@ -1,9 +1,9 @@
 import Stripe from 'stripe'
-import { STRIPE_PRIVATE_KEY } from '$env/static/private'
+import { PRIVATE_STRIPE_KEY } from '$env/static/private'
 
 import type { User } from 'lucia'
 
-export const stripe = new Stripe(STRIPE_PRIVATE_KEY)
+export const stripe = new Stripe(PRIVATE_STRIPE_KEY)
 
 const products = {
 	licenceMember: 'price_1OLraBAUcTa5BjSxh9ABcdgD',
