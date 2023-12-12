@@ -49,3 +49,8 @@ export async function getUserIdOrRedirect(url: URL, locals: App.Locals) {
 	if (!session) throw redirectToAuth(url)
 	return session.user.id
 }
+export async function getUserOrRedirect(url: URL, locals: App.Locals) {
+	const session = await locals.auth.validate()
+	if (!session) throw redirectToAuth(url)
+	return session.user
+}
