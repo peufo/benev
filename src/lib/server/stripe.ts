@@ -17,7 +17,10 @@ export async function createCheckoutSession(
 	const customerId = await getStripCustomerId(user)
 
 	const { client_secret } = await stripe.checkout.sessions.create({
+		mode: 'payment',
 		ui_mode: 'embedded',
+		customer: customerId,
+		return_url: `${origin}/me/bills?checkoutSessionId={CHECKOUT_SESSION_ID}`,
 		line_items: [
 			{
 				price: products.licenceEvent,
@@ -30,9 +33,6 @@ export async function createCheckoutSession(
 				adjustable_quantity: { enabled: true, minimum: 0, maximum: 10_000 },
 			},
 		],
-		mode: 'payment',
-		customer: customerId,
-		return_url: `${origin}/me/bills?checkoutSessionId={CHECKOUT_SESSION_ID}`,
 	})
 	if (!client_secret) throw Error('Create checkout failed')
 	return { clientSecret: client_secret }
