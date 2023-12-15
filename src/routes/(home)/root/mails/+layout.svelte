@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	const links = ['new_subscribe', 'verification_link', 'reset_password', 'invite']
+
+	const links = Object.keys(import.meta.glob('./*/+page.svelte')).map((p) =>
+		p.replace('./', '').replace('/+page.svelte', '')
+	)
 </script>
 
 <div class="flex gap-4">
