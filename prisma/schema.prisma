@@ -64,7 +64,7 @@ enum LicenceType {
 }
 
 model Checkout {
-  id        String    @id @unique
+  id        String    @id @unique @default(cuid())
   licences  Licence[]
   amount    Int
   currency  String    @default("CHF")
