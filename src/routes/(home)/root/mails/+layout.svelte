@@ -4,6 +4,8 @@
 	const links = Object.keys(import.meta.glob('./*/+page.svelte')).map((p) =>
 		p.replace('./', '').replace('/+page.svelte', '')
 	)
+
+	$: console.log($page.route.id)
 </script>
 
 <div class="flex gap-4">
@@ -11,7 +13,7 @@
 		{#each links as link}
 			{@const href = `/root/mails/${link}`}
 			<li>
-				<a {href} class:active={$page.route.id === href}>
+				<a {href} class:active={$page.route.id?.includes(href)}>
 					{link}
 				</a>
 			</li>

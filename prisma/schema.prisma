@@ -51,6 +51,7 @@ model Licence {
   id         String      @id @default(cuid())
   type       LicenceType
   quantity   Int
+  price      Int
   ownerId    String
   owner      User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   checkoutId String

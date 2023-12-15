@@ -1,10 +1,11 @@
 import Stripe from 'stripe'
-import { PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY } from '$env/static/private'
+import { PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, ROOT_USER } from '$env/static/private'
 
 import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
-import { prisma } from '$lib/server'
+import { prisma, sendEmailTemplate } from '$lib/server'
 import { Prisma } from '@prisma/client'
+import { EmailCheckoutValidation } from '$lib/email'
 
 export const stripe = new Stripe(PRIVATE_STRIPE_KEY)
 
@@ -51,10 +52,9 @@ export const checkout = {
 			)
 
 			if (event.type === 'checkout.session.completed') {
-				// TODO: Envoyer un recu par mail
-				const checkout = event.data.object
-				const checkoutId = checkout.id
-				const userEmail = checkout.customer_details?.email || ''
+				const newCheckout = event.data.object
+				const checkoutId = newCheckout.id
+				const userEmail = newCheckout.customer_details?.email || ''
 				const [{ data: items }, user] = await Promise.all([
 					stripe.checkout.sessions.listLineItems(checkoutId),
 					prisma.user.findUniqueOrThrow({
@@ -67,19 +67,48 @@ export const checkout = {
 				const licenceMember = items.find((item) => item.price?.id === LICENCES.MEMBER)
 				const licences: Prisma.LicenceCreateManyCheckoutInput[] = []
 				if (licenceEvent)
-					licences.push({ type: 'event', quantity: licenceEvent.quantity || 0, ownerId: user.id })
+					licences.push({
+						type: 'event',
+						quantity: licenceEvent.quantity || 0,
+						ownerId: user.id,
+						price: licenceEvent.amount_total,
+					})
 				if (licenceMember)
-					licences.push({ type: 'member', quantity: licenceMember.quantity || 0, ownerId: user.id })
+					licences.push({
+						type: 'member',
+						quantity: licenceMember.quantity || 0,
+						ownerId: user.id,
+						price: licenceMember.amount_total,
+					})
 
-				await prisma.checkout.create({
+				const checkoutCreated = await prisma.checkout.create({
 					data: {
-						id: checkout.id,
+						id: newCheckout.id,
 						userId: user.id,
-						amount: checkout.amount_total || 0,
-						currency: checkout.currency || 'CHF',
+						amount: newCheckout.amount_total || 0,
+						currency: newCheckout.currency || 'CHF',
 						licences: { createMany: { data: licences } },
 					},
+					include: { user: true, licences: true },
 				})
+
+				await Promise.all([
+					sendEmailTemplate(EmailCheckoutValidation, {
+						to: checkoutCreated.user.email,
+						subject: 'Merci pour ton achat',
+						props: {
+							checkout: checkoutCreated,
+						},
+					}),
+					sendEmailTemplate(EmailCheckoutValidation, {
+						to: ROOT_USER,
+						subject: 'Nouvel achat de licence',
+						props: {
+							dest: 'root',
+							checkout: checkoutCreated,
+						},
+					}),
+				])
 			}
 
 			return new Response('success', { status: 200 })
