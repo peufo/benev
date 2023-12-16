@@ -58,7 +58,7 @@
 	{#if dest === 'user'}
 		<p>
 			Tu peux retrouver tous tes achats sur
-			<a href="{domain}/me/bills">ton profil.</a>
+			<a href="{domain}/me/licences">ton profil.</a>
 		</p>
 
 		<p>Merci pour ta confiance !</p>

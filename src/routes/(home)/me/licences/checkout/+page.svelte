@@ -10,7 +10,7 @@
 	onMount(async () => {
 		const stripe = await loadStripe(PUBLIC_STRIPE_KEY)
 		try {
-			const { data } = await axios.post<{ clientSecret: string }>('/me/bills/checkout/create')
+			const { data } = await axios.post<{ clientSecret: string }>('/me/licences/checkout/create')
 			if (!stripe) return new Promise(() => {})
 
 			const checkout = await stripe.initEmbeddedCheckout(data)

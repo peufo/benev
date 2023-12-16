@@ -22,7 +22,7 @@ export const checkout = {
 			mode: 'payment',
 			ui_mode: 'embedded',
 			customer: customerId,
-			return_url: `${origin}/me/bills?checkoutSessionId={CHECKOUT_SESSION_ID}`,
+			return_url: `${origin}/me/licences?checkoutSessionId={CHECKOUT_SESSION_ID}`,
 			line_items: [
 				{
 					price: LICENCES.EVENT,

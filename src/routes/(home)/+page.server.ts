@@ -30,7 +30,7 @@ export const actions = {
 			'events',
 			'pricing',
 			'contact',
-			'bills',
+			'licences',
 		]
 		if (reservedPaths.includes(data.id))
 			return nameFail(`Les noms suivant sont réservés: ${reservedPaths.join(', ')}`)
