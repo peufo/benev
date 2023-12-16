@@ -130,9 +130,3 @@ async function getStripCustomerId(user: User): Promise<string> {
 	})
 	return newCustomer.id
 }
-
-export async function getCustomerCheckouts(user: User) {
-	const customer = await getStripCustomerId(user)
-	const { data } = await stripe.checkout.sessions.list({ customer })
-	return data
-}
