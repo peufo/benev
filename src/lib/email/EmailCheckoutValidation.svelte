@@ -2,14 +2,10 @@
 	import type { Checkout, User, Licence, LicenceType } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
+	import { licencesLabel } from '$lib/validation'
 
 	export let checkout: Checkout & { user: User; licences: Licence[] }
 	export let dest: 'user' | 'root' = 'user'
-
-	const licencesLabel: Record<LicenceType, string> = {
-		event: 'Évènement',
-		member: 'Membre',
-	}
 </script>
 
 <EmailLayout title={dest === 'user' ? 'Merci pour ton achat' : 'Nouvel achat de licences'}>

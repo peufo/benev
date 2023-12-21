@@ -14,7 +14,7 @@
 
 	<div class="card-body p-2 sm:p-8 {bodyClass}">
 		{#if $$slots.title || $$slots.action}
-			<div class="flex flex-wrap gap-2 mt-2 sm:mt-0 items-center {headerClass}">
+			<div class="flex flex-wrap gap-2 items-center {headerClass}">
 				{#if returnUrl}
 					<a href={returnUrl} class="btn btn-square btn-ghost btn-sm">
 						<Icon path={mdiArrowLeft} size={20} />
