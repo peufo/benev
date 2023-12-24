@@ -77,7 +77,6 @@ const testValue: Record<
 		return numbers.a <= numbers.b
 	},
 	haveAny: (expectedValue, value) => {
-		console.log({ expectedValue, value })
 		if (typeof expectedValue === 'string') return false
 
 		const valueIsJsonArray = value.startsWith('[') && value.endsWith(']')
