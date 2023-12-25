@@ -16,4 +16,8 @@
 	.table-wrapper {
 		@apply overflow-x-auto min-h-[320px] border rounded-lg;
 	}
+
+	.title {
+		@apply text-xl font-semibold text-base-content/70;
+	}
 }

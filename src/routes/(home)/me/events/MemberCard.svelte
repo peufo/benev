@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import {MemberRole} from '$lib/member'
+	import { MemberRole } from '$lib/member'
 	import { eventStates } from '$lib/validation'
 	import { CardLink, Icon } from '$lib/material'
 	import logo from '$lib/assets/logo.svg'

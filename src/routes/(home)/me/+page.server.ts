@@ -1,43 +1,19 @@
-import { fail, error } from '@sveltejs/kit'
+import { fail, error, redirect } from '@sveltejs/kit'
 import {
 	auth,
-	addMemberComputedValues,
 	generateToken,
 	parseFormData,
 	prisma,
-	redirectToAuth,
 	sendEmailTemplate,
 	tryOrFail,
 	createAvatarPlaceholder,
 	media,
-	hidePrivateProfilValues,
 } from '$lib/server'
 import { userLogin, userCreate, userUpdate, z } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
 
-export const load = async ({ url, parent }) => {
-	const { user } = await parent()
-	if (!user) throw redirectToAuth(url)
-
-	const members = await prisma.member.findMany({
-		where: { userId: user.id },
-		include: {
-			user: true,
-			event: { include: { memberFields: true } },
-			leaderOf: true,
-			subscribes: true,
-			profile: true,
-		},
-	})
-	const membersWithRole = members
-		.map(addMemberComputedValues)
-		.map((member) => hidePrivateProfilValues(member))
-		.filter(({ event, roles }) => event.state !== 'draft' || roles.includes('leader'))
-
-	return {
-		user,
-		members: membersWithRole,
-	}
+export const load = () => {
+	throw redirect(302, '/me/events')
 }
 
 export const actions = {

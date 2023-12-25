@@ -95,12 +95,7 @@
 		value={user.wantsNotification}
 	/>
 
-	<div class="flex gap-1 items-center col-span-full">
-		<span class="text-xs opacity-70">
-			Ces informations ne sont partagées qu'avec les responsables des évènements auquels tu
-			participes.
-		</span>
-		<div class="grow" />
+	<div class="flex gap-1 items-center justify-end col-span-full">
 		<button class="btn">Sauvegarder </button>
 	</div>
 </form>

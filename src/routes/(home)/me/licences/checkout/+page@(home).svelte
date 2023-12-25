@@ -1,19 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import axios from 'axios'
 	import { loadStripe } from '@stripe/stripe-js'
 	import { PUBLIC_STRIPE_KEY } from '$env/static/public'
 	import Card from '$lib/material/Card.svelte'
 
-	let checkoutElement: HTMLDivElement
+	export let data
 
+	let checkoutElement: HTMLDivElement
 	let destroy: () => void = () => {}
+	let isLoading = true
+
 	async function initCheckout() {
 		try {
 			const stripe = await loadStripe(PUBLIC_STRIPE_KEY)
 			if (!stripe) throw 'stripe is not defined'
-			const { data } = await axios.post<{ clientSecret: string }>('/me/licences/checkout/create')
-			const checkout = await stripe.initEmbeddedCheckout(data)
+			const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret })
+			isLoading = false
 			checkout.mount(checkoutElement)
 			destroy = () => checkout.destroy()
 		} catch (error) {
@@ -28,5 +30,9 @@
 </script>
 
 <Card class="max-w-[1060px] mx-auto">
+	<h2 slot="title" class="text-center mb-2">Obtenir de nouvelles licences</h2>
+	{#if isLoading}
+		<div style:height="600px" />
+	{/if}
 	<div bind:this={checkoutElement} />
 </Card>

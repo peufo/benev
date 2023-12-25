@@ -21,7 +21,7 @@
 					</a>
 				{/if}
 
-				<div class="grow text-base sm:text-lg font-semibold text-base-content/80">
+				<div class="grow sm:text-lg title">
 					<slot name="title" />
 				</div>
 				<slot name="action" />
