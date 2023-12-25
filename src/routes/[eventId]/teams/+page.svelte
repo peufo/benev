@@ -2,7 +2,7 @@
 	import { mdiPlus } from '@mdi/js'
 	import { Card, DisplayToggle, Icon, InputSearch } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import Teams from '$lib/Teams.svelte'
+	import { Teams } from '$lib/team'
 	import OnlyAvailableToggle from '$lib/material/display/OnlyAvailableToggle.svelte'
 
 	export let data

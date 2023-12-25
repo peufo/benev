@@ -5,11 +5,17 @@
 	import { mdiArrowLeft, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
-	import LeaderOf from '$lib/LeaderOf.svelte'
+	import { LeaderOf } from '$lib/team'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import Profile from './Profile.svelte'
 	import SetAdminForm from './SetAdminForm.svelte'
-	import { MemberProfileStatus, MemberAbsences, MemberRole, MemberProfileForm, MemberDeleteForm } from '$lib/member'
+	import {
+		MemberProfileStatus,
+		MemberAbsences,
+		MemberRole,
+		MemberProfileForm,
+		MemberDeleteForm,
+	} from '$lib/member'
 
 	export let data
 </script>
@@ -25,7 +31,7 @@
 					<Icon path={mdiArrowLeft} size={20} />
 				</a>
 
-				<span class="card-title">
+				<span class="title">
 					{data.memberProfile.user.firstName}
 					{data.memberProfile.user.lastName}
 				</span>
@@ -55,8 +61,7 @@
 				{/if}
 
 				<MemberAbsences subscribes={data.memberProfile.subscribes} />
-				<MemberProfileStatus member={data.memberProfile}/>
-
+				<MemberProfileStatus member={data.memberProfile} />
 			</div>
 			<Profile user={data.memberProfile.user} class="sm:pt-4" />
 		</div>

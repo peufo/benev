@@ -32,7 +32,7 @@
 
 		<a
 			id={value}
-			class="grow pt-4 pb-4 px-4 md:p-8 min-w-0 {$$slots.logo ? 'pl-0 md:pl-0' : ''}"
+			class="grow p-2 md:p-8 min-w-0 {$$slots.logo ? 'pl-0 md:pl-0' : ''}"
 			href={$urlParam.toggle({ section: value })}
 			data-sveltekit-noscroll
 			data-sveltekit-replacestate
@@ -41,7 +41,7 @@
 			<div class="flex gap-2">
 				<div
 					class="
-						text-base sm:text-lg font-semibold text-base-content/80
+						title
 						overflow-hidden text-ellipsis min-w-0
 					"
 				>

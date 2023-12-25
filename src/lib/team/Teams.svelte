@@ -8,7 +8,6 @@
 	import { rowLink, tip } from '$lib/action'
 	import Progress from '$lib/Progress.svelte'
 	import dayjs from 'dayjs'
-	import { jsonParse } from './jsonParse'
 
 	export let teams: (Team & {
 		leaders: (Member & {
@@ -64,13 +63,13 @@
 						{/if}
 
 						{#if team.conditions?.length}
-						<span class="badge opacity-80">
-							<Icon path={mdiFilterOutline} size={16} />
-							<span class="ml-1">
-								{team.conditions.length}
-								condition{team.conditions.length > 1 ? 's' : ''}
+							<span class="badge opacity-80">
+								<Icon path={mdiFilterOutline} size={16} />
+								<span class="ml-1">
+									{team.conditions.length}
+									condition{team.conditions.length > 1 ? 's' : ''}
+								</span>
 							</span>
-						</span>
 						{/if}
 					</div>
 					<div class="grid grid-cols-2 gap-2 items-start pt-2">

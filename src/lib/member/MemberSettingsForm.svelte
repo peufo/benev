@@ -17,7 +17,7 @@
 	method="post"
 	use:enhance={form.submit}
 >
-	<h3 class="font-medium opacity-75 mb-2 mt-4">Informations de base requises</h3>
+	<h3 class="font-medium opacity-75 mb-2 mt-4">Informations de compte requises</h3>
 
 	<div class="grid grid-cols-2 gap-x-2">
 		<InputBoolean label="Nom & prénom" value={true} input={{ disabled: true }} />
