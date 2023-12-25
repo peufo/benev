@@ -7,20 +7,23 @@
 
 	let checkoutElement: HTMLDivElement
 
-	onMount(async () => {
-		const stripe = await loadStripe(PUBLIC_STRIPE_KEY)
+	let destroy: () => void = () => {}
+	async function initCheckout() {
 		try {
+			const stripe = await loadStripe(PUBLIC_STRIPE_KEY)
+			if (!stripe) throw 'stripe is not defined'
 			const { data } = await axios.post<{ clientSecret: string }>('/me/licences/checkout/create')
-			if (!stripe) return new Promise(() => {})
-
 			const checkout = await stripe.initEmbeddedCheckout(data)
 			checkout.mount(checkoutElement)
-			return () => {
-				checkout.destroy()
-			}
+			destroy = () => checkout.destroy()
 		} catch (error) {
 			console.log(error)
 		}
+	}
+
+	onMount(() => {
+		initCheckout()
+		return destroy
 	})
 </script>
 

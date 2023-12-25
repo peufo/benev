@@ -9,38 +9,38 @@ import {
 import { derived } from 'svelte/store'
 import { param } from '$lib/store'
 
-export const adminTabs = derived(param, ({ without }) => {
+export const adminTabs = derived(param, ({ without, page }) => {
 	const query = without('skip', 'take')
+	const eventId = page.params.eventId
+
+	const getPath = (p: string) => ({
+		href: `/${eventId}${p}${query}`,
+		isActive: page.route.id?.startsWith(`/[eventId]${p}`),
+	})
 
 	return [
 		{
-			query,
-			path: '/admin/members',
+			...getPath('/admin/members'),
 			label: 'Membres',
 			icon: mdiAccountMultipleOutline,
 		},
 		{
-			query,
-			path: '/admin/subscribes',
-			url: `/admin/subscribes${query}`,
+			...getPath('/admin/subscribes'),
 			label: 'Inscriptions',
 			icon: mdiClipboardTextMultipleOutline,
 		},
 		{
-			query,
-			path: '/admin/plan',
+			...getPath('/admin/plan'),
 			label: 'Planification',
 			icon: mdiChartGantt,
 		},
 		{
-			query,
-			path: '/admin/config',
+			...getPath('/admin/config'),
 			label: 'Configuration',
 			icon: mdiCogs,
 		},
 		{
-			query,
-			path: '/admin/pages',
+			...getPath('/admin/pages'),
 			label: 'Les pages',
 			icon: mdiFileDocumentMultipleOutline,
 		},

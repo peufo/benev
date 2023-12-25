@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/stores'
 	import { Card, Icon } from '$lib/material'
-	import { eventPath } from '$lib/store'
 	import { adminTabs } from './adminTabs'
 
 	export let data
 
-	$: activeTab = $adminTabs.find((tab) => $page.route.id?.startsWith(`/[eventId]${tab.path}`))
+	$: activeTab = $adminTabs.find(({ isActive }) => isActive)
 </script>
 
 <svelte:head>
@@ -19,17 +17,16 @@
 			slot="top"
 			class="sticky top-0 bg-base-100 shadow-sm z-10 flex gap-2 p-2 border-b bordered rounded-t-2xl"
 		>
-			{#each $adminTabs as { path, query, label, icon }}
-				{@const active = path === activeTab?.path}
+			{#each $adminTabs as { href, label, icon, isActive }}
 				<a
-					href="{$eventPath}{path}{query}"
+					{href}
 					class="
 							menu-item grow justify-center flex-col gap-0 text-sm py-2
 							lg:flex-row lg:text-base lg:gap-3 rounded-lg
 						"
-					class:active
+					class:active={isActive}
 				>
-					<Icon path={icon} size={20} class="opacity-70" {active} />
+					<Icon path={icon} size={20} class="opacity-70" active={isActive} />
 					<span class="whitespace-nowrap hidden sm:block">{label}</span>
 				</a>
 			{/each}

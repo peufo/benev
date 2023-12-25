@@ -7,7 +7,9 @@ export const eventPath = derived(page, ({ params }) => (params.eventId ? `/${par
 export const display = sessionStore<'list' | 'table'>('display', 'list')
 export const onlyAvailable = sessionStore('onlyAvailable', false)
 
-export const param = derived(page, ({ url }) => {
+export const param = derived(page, (_page) => {
+	const { url } = _page
+
 	/** Return new url with new params */
 	const _with = (params: Record<string, string | number>) => {
 		const _url = new URL(url)
@@ -41,24 +43,25 @@ export const param = derived(page, ({ url }) => {
 		get: (key: string) => url.searchParams.get(key),
 		/** Check if value match in url params */
 		hasValue: (key: string, value: string) => url.searchParams.get(key) === value,
-		pathname: url.pathname,
+		page: _page,
 	}
 })
 
 export const urlParam = derived(param, (_param) => {
+	const { pathname } = _param.page.url
 	/** Return new url with new params */
 	const _with = (params: Record<string, string | number>) => {
-		return _param.pathname + _param.with(params)
+		return pathname + _param.with(params)
 	}
 
 	/** Return new url without params keys provided */
 	const without = (...keys: string[]) => {
-		return _param.pathname + _param.without(...keys)
+		return pathname + _param.without(...keys)
 	}
 
 	/** Return new url with toggle params */
 	const toggle = (params: Record<string, string>) => {
-		return _param.pathname + _param.toggle(params)
+		return pathname + _param.toggle(params)
 	}
 
 	return {
