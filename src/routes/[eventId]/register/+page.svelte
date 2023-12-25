@@ -20,13 +20,6 @@
 </script>
 
 <div class="max-w-2xl mx-auto flex flex-col gap-4">
-	<div class="flex gap-2 justify-between flex-wrap">
-		<a href="/me" class="btn btn-sm btn-ghost">
-			<Icon path={mdiArrowLeft} size={20} />
-			Tous mes évènements
-		</a>
-	</div>
-
 	<Card>
 		<ul class="steps">
 			{#each steps as step, index}
