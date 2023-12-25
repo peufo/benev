@@ -15,7 +15,7 @@ export const adminTabs = derived(param, ({ without, page }) => {
 
 	const getPath = (p: string) => ({
 		href: `/${eventId}${p}${query}`,
-		isActive: page.route.id?.startsWith(`/[eventId]${p}`),
+		isActive: !!page.route.id?.startsWith(`/[eventId]${p}`),
 	})
 
 	return [
