@@ -20,6 +20,9 @@ export const load = async ({ url, locals }) => {
 		checkouts: await prisma.checkout.findMany({
 			where: { userId: user.id },
 			include: { licences: true },
+			orderBy: {
+				createdAt: 'desc',
+			},
 		}),
 		licences,
 	}

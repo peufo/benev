@@ -1,9 +1,21 @@
 <script lang="ts">
-	import { Icon } from '$lib/material'
+	import { onMount } from 'svelte'
 	import { mdiPlus } from '@mdi/js'
+	import { invalidateAll } from '$app/navigation'
+	import { Icon } from '$lib/material'
 	import { licencesLabel } from '$lib/validation'
 
 	export let data
+
+	let checkoutSessionId: string | null = null
+
+	onMount(() => {
+		const searchParams = new URLSearchParams(location.search)
+		checkoutSessionId = searchParams.get('checkoutSessionId')
+		if (!checkoutSessionId) return
+		const checkout = data.checkouts.find((checkout) => checkout.id === checkoutSessionId)
+		if (!checkout) invalidateAll()
+	})
 </script>
 
 <div class="flex items-center">
@@ -17,12 +29,12 @@
 
 <div class="flex gap-2 mb-2">
 	{#if data.licences.event}
-		<span class="badge badge-lg badge-primary gap-1">
+		<span class="badge badge-lg badge-primary badge-outline gap-1">
 			<b>{data.licences.event}</b> Évènements
 		</span>
 	{/if}
 	{#if data.licences.member}
-		<span class="badge badge-lg badge-primary gap-1">
+		<span class="badge badge-lg badge-primary badge-outline gap-1">
 			<b>{data.licences.member}</b>
 			Membres
 		</span>
@@ -31,7 +43,11 @@
 
 <div class="flex flex-col gap-2">
 	{#each data.checkouts as checkout}
-		<section class="border rounded p-4 pt-2">
+		<section
+			class="border rounded p-4 pt-2"
+			class:border-primary={checkout.id === checkoutSessionId}
+			class:border-2={checkout.id === checkoutSessionId}
+		>
 			<div class="flex gap-2 items-top">
 				<div class="flex flex-wrap gap-x-2 gap-y-0 items-center">
 					<h3 class="font-semibold opacity-80">Achat</h3>

@@ -69,14 +69,14 @@ export const checkout = {
 				if (licenceEvent)
 					licences.push({
 						type: 'event',
-						quantity: licenceEvent.quantity || 0,
+						quantity: licenceEvent.quantity ?? 0,
 						ownerId: user.id,
 						price: licenceEvent.amount_total,
 					})
 				if (licenceMember)
 					licences.push({
 						type: 'member',
-						quantity: licenceMember.quantity || 0,
+						quantity: licenceMember.quantity ?? 0,
 						ownerId: user.id,
 						price: licenceMember.amount_total,
 					})
@@ -85,7 +85,7 @@ export const checkout = {
 					data: {
 						id: newCheckout.id,
 						userId: user.id,
-						amount: newCheckout.amount_total || 0,
+						amount: newCheckout.amount_total ?? 0,
 						currency: newCheckout.currency || 'CHF',
 						licences: { createMany: { data: licences } },
 					},
