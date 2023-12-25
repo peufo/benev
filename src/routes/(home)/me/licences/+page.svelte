@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte'
 	import { mdiPlus } from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
-	import { Icon } from '$lib/material'
+	import { Icon, Placeholder } from '$lib/material'
 	import { licencesLabel } from '$lib/validation'
 
 	export let data
@@ -71,5 +71,9 @@
 				{/each}
 			</div>
 		</section>
+	{:else}
+		<Placeholder>
+			<span>Tu n'as pas de licences organisateur</span>
+		</Placeholder>
 	{/each}
 </div>
