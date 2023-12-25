@@ -30,7 +30,7 @@
 </script>
 
 <Card class="max-w-[1060px] mx-auto">
-	<h2 slot="title" class="text-center mb-2">Obtenir de nouvelles licences</h2>
+	<h2 slot="title" class="text-center mb-2">Obtenir de nouvelles licences organisateur</h2>
 	{#if isLoading}
 		<div style:height="600px" />
 	{/if}
