@@ -6,6 +6,7 @@
 		{ label: 'Migration', path: '/root/migrate' },
 		{ label: 'Évènements', path: '/root/events' },
 		{ label: 'Messages', path: '/root/messages' },
+		{ label: 'Labo', path: '/root/lab' },
 	]
 </script>
 
