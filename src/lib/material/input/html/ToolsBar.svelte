@@ -27,6 +27,20 @@
 		action={() => editor.chain().focus().toggleItalic().run()}
 	/>
 	<ToolMarkLink {editor} />
-	<ToolMarkColor icon={mdiFormatColorText} label="Couleur du text" />
-	<ToolMarkColor icon={mdiFormatColorFill} label="Couleur du fond" />
+	<ToolMarkColor
+		icon={mdiFormatColorText}
+		label="Couleur du text"
+		color={editor.getAttributes('textStyle').color || '#000000'}
+		setColor={editor.commands.setColor}
+	/>
+	<ToolMarkColor
+		icon={mdiFormatColorFill}
+		label="Couleur du fond"
+		color={editor.getAttributes('highlight').color || '#e51f68'}
+		setColor={(color) => editor.commands.setHighlight({ color })}
+	/>
+	<!--
+		<ToolMarkColor {editor} icon={mdiFormatColorFill} label="Couleur du fond" />
+
+	-->
 </div>
