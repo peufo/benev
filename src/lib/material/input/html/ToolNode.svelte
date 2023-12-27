@@ -59,7 +59,7 @@
 		},
 		{
 			key: 'bulletList',
-			label: 'Liste',
+			label: 'Liste à puces',
 			icon: mdiFormatListBulleted,
 			action: () => editor.commands.toggleBulletList(),
 		},
