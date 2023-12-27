@@ -5,6 +5,7 @@ import TextStyle from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
+import Placeholder from '@tiptap/extension-placeholder'
 
 export const extensions: Extensions = [
 	StarterKit.configure({
@@ -21,5 +22,8 @@ export const extensions: Extensions = [
 	TextAlign.configure({
 		types: ['heading', 'paragraph'],
 		alignments: ['left', 'center', 'right'],
+	}),
+	Placeholder.configure({
+		placeholder: 'Rédige ta page ici ...',
 	}),
 ]

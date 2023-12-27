@@ -9,9 +9,11 @@
 	import ToolMenuAlign from './ToolMenuAlign.svelte'
 
 	export let editor: Editor
+	let klass = ''
+	export { klass as class }
 </script>
 
-<div class="flex p-1 border-b overflow-auto">
+<div class="flex p-2 border-b overflow-x-auto bg-base-100 z-10 rounded-t-xl sticky top-0 {klass}">
 	<ToolMenuNode {editor} />
 	<ToolMenuAlign {editor} />
 	<div class="border border-y-0 border-l-0 mx-1 my-auto h-6" />

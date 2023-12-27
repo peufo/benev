@@ -40,7 +40,7 @@
 
 	<input type="hidden" name="eventId" value={page.eventId} />
 
-	<InputHtml key="content" value={page.content} />
+	<InputHtml key="content" value={page.content} classToolbar="top-14" />
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn">Sauvegarder</button>

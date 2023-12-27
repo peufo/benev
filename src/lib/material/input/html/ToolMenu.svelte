@@ -30,11 +30,20 @@
 		}) || tools[0]
 </script>
 
-<DropDown hideOnBlur bind:this={dropdown}>
+<DropDown
+	hideOnBlur
+	bind:this={dropdown}
+	tippyProps={{
+		appendTo: (element) => {
+			const wrapper = element.parentElement?.parentElement?.parentElement?.parentElement
+			return wrapper || element
+		},
+	}}
+>
 	<button slot="activator" type="button" class="menu-item gap-2">
 		<Icon path={toolSelected.icon} size={20} class="opacity-70" />
 		{#if !hideLabel}
-			<span class="font-light">{toolSelected.label}</span>
+			<span class="font-light text-sm">{toolSelected.label}</span>
 		{/if}
 		<Icon path={mdiChevronDown} size={20} class="translate-y-[1px] opacity-70" />
 	</button>

@@ -18,5 +18,5 @@
 	class="menu-item {isActive ? 'bg-base-200/60' : ''}"
 	on:click={action}
 >
-	<Icon path={icon} size={19} class={isActive ? 'opacity-90' : 'opacity-70'} />
+	<Icon path={icon} size={19} class={isActive ? 'opacity-90' : 'opacity-60'} />
 </button>
