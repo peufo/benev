@@ -18,7 +18,7 @@
 </script>
 
 <PageLayout class="relative max-w-2xl">
-	{#if html}
+	{#if html && html !== '<p></p>'}
 		{@html html}
 	{:else}
 		<slot name="placeholder">
