@@ -8,7 +8,6 @@
 	export { klass as class }
 
 	onMount(() => {
-		dialog.addEventListener('focus', console.log)
 		const inputsSelector = 'input:not([type=hidden], [tabindex="-1"])'
 		const inputs = dialog.querySelectorAll<HTMLInputElement>(inputsSelector)
 		const buttons = dialog.querySelectorAll<HTMLButtonElement>('button')
