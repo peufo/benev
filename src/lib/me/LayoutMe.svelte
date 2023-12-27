@@ -4,10 +4,11 @@
 	import { Card, Tabs } from '$lib/material'
 	import { derived, type Readable } from 'svelte/store'
 	import { page } from '$app/stores'
+	import { dev } from '$app/environment'
 
 	const tabs: Readable<Tab[]> = derived(page, (_page) => {
 		const routeId = _page.route.id
-		return [
+		const tabs: Tab[] = [
 			{
 				href: '/me/events',
 				label: 'Mes évènements',
@@ -19,12 +20,17 @@
 				label: 'Mon compte',
 				icon: mdiCardAccountDetailsOutline,
 			},
-			{
+		]
+
+		// licenccing hiden in production
+		if (dev)
+			tabs.push({
 				href: '/me/licences',
 				label: 'Mes licences',
 				icon: mdiLicense,
-			},
-		]
+			})
+
+		return tabs
 	})
 </script>
 
