@@ -8,17 +8,17 @@
 	export { klass as class }
 
 	onMount(() => {
-		const observer = new MutationObserver(() => dialog.open && handleDialogOpen())
+		const observer = new MutationObserver(() => dialog.open && onDialogOpen())
 		observer.observe(dialog, { attributeFilter: ['open'] })
 		return () => observer.disconnect()
 	})
 
-	function handleDialogOpen() {
+	function onDialogOpen() {
 		const selector = 'input:not(input[type=hidden], .btn-close)'
 		const firstInput = dialog.querySelector<HTMLInputElement>(selector)
 		if (!firstInput) return
-
 		firstInput.focus()
+		firstInput.select()
 	}
 </script>
 

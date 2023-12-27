@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { Editor } from '@tiptap/core'
-	import ToolBlock from './ToolBlock.svelte'
-	import ToolSize from './ToolSize.svelte'
-	import ToolFormat from './ToolFormat.svelte'
+	import ToolNode from './ToolNode.svelte'
+	import ToolMark from './ToolMark.svelte'
+	import ToolMarkColor from './ToolMarkColor.svelte'
+	import { mdiFormatColorFill, mdiFormatColorText } from '@mdi/js'
 
 	export let editor: Editor
 </script>
 
 <div class="flex p-1 border-b">
-	<ToolBlock {editor} />
-	<ToolSize />
-	<ToolFormat {editor} />
+	<ToolNode {editor} />
+	<div class="border border-y-0 border-l-0 mx-1" />
+	<ToolMark {editor} />
+	<ToolMarkColor icon={mdiFormatColorText} label="Couleur du text" />
+	<ToolMarkColor icon={mdiFormatColorFill} label="Couleur du fond" />
 </div>

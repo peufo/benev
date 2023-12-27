@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte'
 	import { Editor } from '@tiptap/core'
 	import StarterKit from '@tiptap/starter-kit'
+	import Link from '@tiptap/extension-link'
 	import ToolsBar from './ToolsBar.svelte'
 
 	let element: HTMLDivElement
@@ -11,7 +12,7 @@
 		editor = new Editor({
 			element,
 			content:
-				'asdasddsasdsds<div>sdssds</div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br><div>ad</div><div>asda</div><div>sdasdasd</div><div>asd</div><div>asd</div><div>asdasdas</div><div>as</div></div>',
+				'asdasddsasdsds<div>sdssds</div><div></div><div></div><div></div><div></div><div></div><div><div>ad</div><div>asda</div><div>sdasdasd</div><div>asd</div><div>asd</div><div>asdasdas</div><div>as</div></div>',
 			editorProps: {
 				attributes: {
 					class: 'prose focus:outline-none',
@@ -20,6 +21,9 @@
 			extensions: [
 				StarterKit.configure({
 					heading: { levels: [1, 2, 3] },
+				}),
+				Link.configure({
+					protocols: ['tel', 'mailto'],
 				}),
 			],
 

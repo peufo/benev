@@ -14,11 +14,11 @@
 	export let editor: Editor
 
 	type Tool = {
+		key: string
+		attributes?: {}
 		label: string
 		icon: string
 		action: () => unknown
-		key: string
-		attributes?: {}
 	}
 
 	let dropdown: DropDown
@@ -52,16 +52,16 @@
 			action: () => editor.commands.setHeading({ level: 3 }),
 		},
 		{
-			key: 'bulletList',
-			label: 'Liste',
-			icon: mdiFormatListBulleted,
-			action: () => editor.commands.toggleBulletList(),
-		},
-		{
 			key: 'orderedList',
 			label: 'Liste numéroter',
 			icon: mdiFormatListNumbered,
 			action: () => editor.commands.toggleOrderedList(),
+		},
+		{
+			key: 'bulletList',
+			label: 'Liste',
+			icon: mdiFormatListBulleted,
+			action: () => editor.commands.toggleBulletList(),
 		},
 	]
 
@@ -71,8 +71,6 @@
 	}
 
 	$: toolSelected = tools.find((t) => editor.isActive(t.key, t.attributes)) || tools[0]
-
-	$: console.log(editor.state)
 </script>
 
 <DropDown hideOnBlur bind:this={dropdown}>
@@ -85,7 +83,9 @@
 	{#each tools as tool}
 		<button type="button" class="menu-item w-full" on:click={() => handleClick(tool)}>
 			<Icon path={tool.icon} class="opacity-70" />
-			{tool.label}
+			<span>
+				{tool.label}
+			</span>
 		</button>
 	{/each}
 </DropDown>
