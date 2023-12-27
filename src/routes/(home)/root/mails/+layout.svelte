@@ -4,8 +4,6 @@
 	const links = Object.keys(import.meta.glob('./*/+page.svelte')).map((p) =>
 		p.replace('./', '').replace('/+page.svelte', '')
 	)
-
-	$: console.log($page.route.id)
 </script>
 
 <div class="flex gap-4">

@@ -1,48 +1,36 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import { Editor } from '@tiptap/core'
-	import StarterKit from '@tiptap/starter-kit'
-	import Link from '@tiptap/extension-link'
-	import TextStyle from '@tiptap/extension-text-style'
-	import Color from '@tiptap/extension-color'
-	import Highlight from '@tiptap/extension-highlight'
-	import TextAlign from '@tiptap/extension-text-align'
+	import { extensions } from './extensions'
 
 	import ToolsBar from './ToolsBar.svelte'
+	import { debounce } from '$lib/debounce'
+	import { jsonParse } from '$lib/jsonParse'
+
+	export let value = ''
+	export let key = ''
+	export let valueAsHTML = false
 
 	let element: HTMLDivElement
 	let editor: Editor | null = null
 
 	onMount(() => {
+		const updateValue = debounce(() => {
+			if (editor) value = valueAsHTML ? editor.getHTML() : JSON.stringify(editor.getJSON())
+		}, 200)
+
 		editor = new Editor({
 			element,
-			content:
-				'asdasddsasdsds<div>sdssds</div><div></div><div></div><div></div><div></div><div></div><div><div>ad</div><div>asda</div><div>sdasdasd</div><div>asd</div><div>asd</div><div>asdasdas</div><div>as</div></div>',
+			content: valueAsHTML ? value : jsonParse(value, '<p>parsing error</p>'),
 			editorProps: {
 				attributes: {
-					class: 'prose focus:outline-none',
+					class: 'prose max-w-none focus:outline-none',
 				},
 			},
-			extensions: [
-				StarterKit.configure({
-					heading: { levels: [1, 2, 3] },
-				}),
-				Link.configure({
-					protocols: ['tel', 'mailto'],
-				}),
-				TextStyle,
-				Color,
-				Highlight.configure({
-					multicolor: true,
-				}),
-				TextAlign.configure({
-					types: ['heading', 'paragraph'],
-					alignments: ['left', 'center', 'right'],
-				}),
-			],
-
+			extensions,
 			onTransaction() {
 				editor = editor
+				updateValue()
 			},
 		})
 
@@ -58,3 +46,7 @@
 	{/if}
 	<div bind:this={element} class="p-2" />
 </div>
+
+{#if key}
+	<input type="hidden" name={key} {value} />
+{/if}

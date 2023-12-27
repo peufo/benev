@@ -11,7 +11,7 @@
 	export let editor: Editor
 </script>
 
-<div class="flex p-1 border-b">
+<div class="flex p-1 border-b overflow-auto">
 	<ToolMenuNode {editor} />
 	<ToolMenuAlign {editor} />
 	<div class="border border-y-0 border-l-0 mx-1 my-auto h-6" />

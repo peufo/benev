@@ -32,7 +32,7 @@
 			)
 			memberAllowedCount = res.data
 		} catch {
-			console.log('axios error')
+			console.error('axios error')
 		}
 	}
 

@@ -2,7 +2,7 @@
 	import { mdiArrowLeft } from '@mdi/js'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
-	import { Card, Icon, Placeholder } from '$lib/material'
+	import { Card, Placeholder } from '$lib/material'
 	import { MemberForm, MemberProfileForm } from '$lib/member'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
@@ -14,7 +14,6 @@
 
 	function handleMemberProfilFormSuccess() {
 		const redirectTo = $page.url.searchParams.get('redirectTo')
-		console.log(redirectTo || `/${data.event.id}/me`)
 		goto(redirectTo || `/${data.event.id}/me`)
 	}
 </script>

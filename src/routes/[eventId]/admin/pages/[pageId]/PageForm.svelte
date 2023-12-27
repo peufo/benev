@@ -1,46 +1,16 @@
 <script lang="ts">
-	import type EditorJS from '@editorjs/editorjs'
-	import { onMount } from 'svelte'
 	import { enhance } from '$app/forms'
 	import type { Page } from '@prisma/client'
 
 	import { useForm } from '$lib/validation'
-	import { DeleteButton, Icon } from '$lib/material'
+	import { DeleteButton, Icon, InputHtml } from '$lib/material'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { mdiLink } from '@mdi/js'
 
 	export let page: Page
 
-	let holder: HTMLElement
-	let editor: EditorJS | undefined = undefined
 	const form = useForm()
-
-	onMount(() => {
-		let isReady = false
-		Promise.all([import('@editorjs/editorjs'), import('./editorTools')]).then(
-			([{ default: _EditorJS }, { tools }]) => {
-				editor = new _EditorJS({
-					holder,
-					tools,
-					placeholder: 'Rédige ta page ici',
-					data: page.content && JSON.parse(page.content),
-					onChange: async () => {
-						if (!editor) return
-						const data = await editor.save()
-						page.content = JSON.stringify(data)
-					},
-					onReady: () => {
-						isReady = true
-					},
-				})
-			}
-		)
-
-		return async () => {
-			if (editor && isReady) editor.destroy()
-		}
-	})
 
 	$: pagePath = `${$eventPath}${page.isIndex ? '' : `/${normalizePath(page.title)}`}`
 </script>
@@ -67,12 +37,10 @@
 
 	<input type="hidden" name="id" value={page.id} />
 	<input type="hidden" name="path" value={normalizePath(page.title)} />
-	<input type="hidden" name="content" value={page.content} />
+
 	<input type="hidden" name="eventId" value={page.eventId} />
 
-	<div class="input input-bordered prose max-w-none h-max">
-		<div bind:this={holder} />
-	</div>
+	<InputHtml key="content" value={page.content} />
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn">Sauvegarder</button>

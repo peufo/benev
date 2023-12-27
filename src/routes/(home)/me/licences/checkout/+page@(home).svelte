@@ -19,7 +19,7 @@
 			checkout.mount(checkoutElement)
 			destroy = () => checkout.destroy()
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}
 
