@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Editor } from '@tiptap/core'
+	import type { Editor } from '@tiptap/core'
 	import { Icon } from '$lib/material'
 	import { tip } from '$lib/action'
 

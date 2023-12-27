@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Editor } from '@tiptap/core'
+	import type { Editor } from '@tiptap/core'
 	import { mdiLinkVariant } from '@mdi/js'
 	import { Dialog, InputText } from '$lib/material'
 

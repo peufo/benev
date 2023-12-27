@@ -1,5 +1,5 @@
 import { getUserOrRedirect, prisma } from '$lib/server'
-import { LicenceType } from '@prisma/client'
+import type { LicenceType } from '@prisma/client'
 
 export const load = async ({ url, locals }) => {
 	const user = await getUserOrRedirect(url, locals)

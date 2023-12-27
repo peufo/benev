@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Editor } from '@tiptap/core'
+	import type { Editor } from '@tiptap/core'
 	import { mdiFormatBold, mdiFormatColorFill, mdiFormatColorText, mdiFormatItalic } from '@mdi/js'
 
 	import ToolMenuNode from './ToolMenuNode.svelte'

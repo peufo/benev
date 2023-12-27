@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { parseFormData, permission, prisma, redirectToRegister, tryOrFail } from '$lib/server'
-import { ZodObj, z } from '$lib/validation'
+import { z, type ZodObj } from '$lib/validation'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const { user, member } = await parent()

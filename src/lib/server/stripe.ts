@@ -1,10 +1,10 @@
 import Stripe from 'stripe'
 import { PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, ROOT_USER } from '$env/static/private'
+import type { Prisma } from '@prisma/client'
 
 import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
 import { prisma, sendEmailTemplate } from '$lib/server'
-import { Prisma } from '@prisma/client'
 import { EmailCheckoutValidation } from '$lib/email'
 
 export const stripe = new Stripe(PRIVATE_STRIPE_KEY)

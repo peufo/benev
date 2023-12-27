@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type ComponentProps, type ComponentType } from 'svelte'
+	import type { ComponentProps, ComponentType } from 'svelte'
 	import type { Team, Field, FieldType } from '@prisma/client'
 	import type { TeamCondition, TeamConditionOperator } from '$lib/validation'
 	import { jsonParse } from '$lib/jsonParse'
