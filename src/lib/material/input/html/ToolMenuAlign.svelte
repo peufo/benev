@@ -16,21 +16,18 @@
 	hideLabel
 	tools={[
 		{
-			key: 'textAlign',
 			attributes: { textAlign: 'left' },
 			label: 'Aligner à gauche',
 			icon: mdiAlignHorizontalLeft,
 			action: () => editor.commands.setTextAlign('left'),
 		},
 		{
-			key: 'heading',
 			attributes: { textAlign: 'center' },
 			label: 'Aligner au centre',
 			icon: mdiAlignHorizontalCenter,
 			action: () => editor.commands.setTextAlign('center'),
 		},
 		{
-			key: 'heading',
 			attributes: { textAlign: 'right' },
 			label: 'Aligner à droite',
 			icon: mdiAlignHorizontalRight,

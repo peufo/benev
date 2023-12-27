@@ -4,7 +4,7 @@
 	import { Icon, DropDown } from '$lib/material'
 
 	type Tool = {
-		key: string
+		key?: string
 		attributes?: {}
 		label: string
 		icon: string
@@ -22,7 +22,12 @@
 		dropdown.hide()
 	}
 
-	$: toolSelected = tools.find((t) => editor.isActive(t.key, t.attributes)) || tools[0]
+	$: toolSelected =
+		tools.find((t) => {
+			if (t.key) return editor.isActive(t.key, t.attributes)
+			if (t.attributes) return editor.isActive(t.attributes)
+			return false
+		}) || tools[0]
 </script>
 
 <DropDown hideOnBlur bind:this={dropdown}>
