@@ -8,21 +8,34 @@
 	export { klass as class }
 
 	onMount(() => {
-		const observer = new MutationObserver(() => dialog.open && onDialogOpen())
+		dialog.addEventListener('focus', console.log)
+		const inputsSelector = 'input:not([type=hidden], [tabindex="-1"])'
+		const inputs = dialog.querySelectorAll<HTMLInputElement>(inputsSelector)
+		const buttons = dialog.querySelectorAll<HTMLButtonElement>('button')
+
+		inputs.forEach((input) => (input.tabIndex = -1))
+		buttons.forEach((button) => (button.tabIndex = -1))
+
+		function onDialogOpen() {
+			inputs.forEach((input) => (input.tabIndex = 0))
+			buttons.forEach((button) => (button.tabIndex = 0))
+			if (!inputs[0]) return
+			inputs[0].focus()
+			inputs[0].select()
+		}
+
+		function onDialogClose() {
+			inputs.forEach((input) => (input.tabIndex = -1))
+			buttons.forEach((button) => (button.tabIndex = -1))
+		}
+
+		const observer = new MutationObserver(() => (dialog.open ? onDialogOpen() : onDialogClose()))
 		observer.observe(dialog, { attributeFilter: ['open'] })
 		return () => observer.disconnect()
 	})
-
-	function onDialogOpen() {
-		const selector = 'input:not(input[type=hidden], .btn-close)'
-		const firstInput = dialog.querySelector<HTMLInputElement>(selector)
-		if (!firstInput) return
-		firstInput.focus()
-		firstInput.select()
-	}
 </script>
 
-<dialog bind:this={dialog} class="modal">
+<dialog bind:this={dialog} class="modal" tabindex="-1">
 	<div class="modal-box p-0 rounded-lg flex flex-col">
 		<div class="p-4 border-b flex relative items-center">
 			<div class="grow">
@@ -32,7 +45,7 @@
 			{#if !hideCloseButton}
 				<button
 					type="button"
-					class="btn btn-square btn-ghost btn-sm ml-1 btn-close"
+					class="btn btn-square btn-ghost btn-sm ml"
 					on:click={() => dialog.close()}
 				>
 					<Icon path={mdiClose} />

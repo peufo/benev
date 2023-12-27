@@ -18,6 +18,7 @@
 <div class="flex align-bottom">
 	<input
 		type="color"
+		tabindex="-1"
 		bind:value={color}
 		class="w-0 h-0 border-none outline-none opacity-0 translate-y-8"
 		bind:this={inputColor}
