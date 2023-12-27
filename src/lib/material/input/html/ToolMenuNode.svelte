@@ -2,28 +2,21 @@
 	import { Editor } from '@tiptap/core'
 	import {
 		mdiText,
-		mdiChevronDown,
 		mdiFormatListBulleted,
 		mdiFormatListNumbered,
 		mdiFormatHeader1,
 		mdiFormatHeader3,
 		mdiFormatHeader2,
 	} from '@mdi/js'
-	import { Icon, DropDown } from '$lib/material'
+
+	import ToolMenu from './ToolMenu.svelte'
 
 	export let editor: Editor
+</script>
 
-	type Tool = {
-		key: string
-		attributes?: {}
-		label: string
-		icon: string
-		action: () => unknown
-	}
-
-	let dropdown: DropDown
-
-	const tools: Tool[] = [
+<ToolMenu
+	{editor}
+	tools={[
 		{
 			key: 'paragraph',
 			label: 'Texte',
@@ -63,29 +56,5 @@
 			icon: mdiFormatListBulleted,
 			action: () => editor.commands.toggleBulletList(),
 		},
-	]
-
-	function handleClick(tool: Tool) {
-		tool.action()
-		dropdown.hide()
-	}
-
-	$: toolSelected = tools.find((t) => editor.isActive(t.key, t.attributes)) || tools[0]
-</script>
-
-<DropDown hideOnBlur bind:this={dropdown}>
-	<button slot="activator" type="button" class="menu-item gap-2">
-		<Icon path={toolSelected.icon} class="opacity-70" />
-		<span class="font-light">{toolSelected.label}</span>
-		<Icon path={mdiChevronDown} size={20} class="translate-y-[1px] opacity-70" />
-	</button>
-
-	{#each tools as tool}
-		<button type="button" class="menu-item w-full" on:click={() => handleClick(tool)}>
-			<Icon path={tool.icon} class="opacity-70" />
-			<span>
-				{tool.label}
-			</span>
-		</button>
-	{/each}
-</DropDown>
+	]}
+/>

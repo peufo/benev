@@ -6,6 +6,8 @@
 	import TextStyle from '@tiptap/extension-text-style'
 	import Color from '@tiptap/extension-color'
 	import Highlight from '@tiptap/extension-highlight'
+	import TextAlign from '@tiptap/extension-text-align'
+
 	import ToolsBar from './ToolsBar.svelte'
 
 	let element: HTMLDivElement
@@ -32,6 +34,10 @@
 				Color,
 				Highlight.configure({
 					multicolor: true,
+				}),
+				TextAlign.configure({
+					types: ['heading', 'paragraph'],
+					alignments: ['left', 'center', 'right'],
 				}),
 			],
 

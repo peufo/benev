@@ -1,17 +1,21 @@
 <script lang="ts">
 	import { Editor } from '@tiptap/core'
-	import ToolNode from './ToolNode.svelte'
+	import { mdiFormatBold, mdiFormatColorFill, mdiFormatColorText, mdiFormatItalic } from '@mdi/js'
+
+	import ToolMenuNode from './ToolMenuNode.svelte'
 	import ToolMark from './ToolMark.svelte'
 	import ToolMarkColor from './ToolMarkColor.svelte'
-	import { mdiFormatBold, mdiFormatColorFill, mdiFormatColorText, mdiFormatItalic } from '@mdi/js'
 	import ToolMarkLink from './ToolMarkLink.svelte'
+	import ToolMenuAlign from './ToolMenuAlign.svelte'
 
 	export let editor: Editor
 </script>
 
 <div class="flex p-1 border-b">
-	<ToolNode {editor} />
-	<div class="border border-y-0 border-l-0 mx-1" />
+	<ToolMenuNode {editor} />
+	<ToolMenuAlign {editor} />
+	<div class="border border-y-0 border-l-0 mx-1 my-auto h-6" />
+
 	<ToolMark
 		{editor}
 		key="bold"
@@ -39,8 +43,6 @@
 		color={editor.getAttributes('highlight').color || '#e51f68'}
 		setColor={(color) => editor.commands.setHighlight({ color })}
 	/>
-	<!--
-		<ToolMarkColor {editor} icon={mdiFormatColorFill} label="Couleur du fond" />
 
-	-->
+	<div class="border border-y-0 border-l-0 mx-1 my-auto h-6" />
 </div>

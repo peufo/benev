@@ -21,3 +21,9 @@
 		@apply text-xl font-semibold text-base-content/70;
 	}
 }
+
+mark {
+	border-radius: 0.25em;
+	box-decoration-break: clone;
+	padding: 0.125em 0;
+}
