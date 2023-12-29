@@ -1,7 +1,12 @@
 import { prisma } from '$lib/server'
-import { error, fail } from '@sveltejs/kit'
+import { error, fail, redirect } from '@sveltejs/kit'
 import { media, parseFormData, tryOrFail } from '$lib/server'
 import { eventCreate } from '$lib/validation'
+
+export const load = async ({ parent }) => {
+	const { user } = await parent()
+	if (user) throw redirect(302, '/me')
+}
 
 export const actions = {
 	new_event: async ({ request, locals }) => {
