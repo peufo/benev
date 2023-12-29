@@ -3,7 +3,7 @@
 	import { mdiCheck, mdiClose, mdiPencil } from '@mdi/js'
 	import type { FieldType } from '@prisma/client'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
-	import { Icon } from '$lib/material'
+	import { CardBasic, Icon } from '$lib/material'
 	import { jsonParse } from '$lib/jsonParse'
 	import { fade } from 'svelte/transition'
 
@@ -55,13 +55,11 @@
 
 	<div
 		in:fade
-		class="grid gap-6 mb-6"
+		class="grid gap-4 mb-4 items-start"
 		style:grid-template-columns="repeat(auto-fill, minmax(min(230px, 100%), 1fr))"
 	>
 		{#each profile as { field, value }}
-			<div>
-				<h4 class="text-sm opacity-80 mb-1">{field.name}</h4>
-
+			<CardBasic title={field.name}>
 				{#if simpleTypes.includes(field.type)}
 					<p>{value || '-'}</p>
 				{:else if field.type === 'boolean'}
@@ -84,7 +82,7 @@
 						{/each}
 					</ul>
 				{/if}
-			</div>
+			</CardBasic>
 		{/each}
 	</div>
 {/if}

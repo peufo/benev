@@ -44,7 +44,7 @@
 				<Icon path={mdiCardAccountDetailsOutline} class="opacity-70" />
 				Profil des membres
 			</span>
-			<span slot="subtitle">Paramétrage des informations relatives aux membres</span>
+			<span slot="subtitle">Définition des informations relatives aux membres</span>
 
 			<section>
 				<MemberSettingsForm event={data.event} />
