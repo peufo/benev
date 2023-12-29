@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Card, DropDown, Icon, SectionCollapse } from '$lib/material'
+	import {  DropDown, Icon } from '$lib/material'
 
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
-	import { LeaderOf } from '$lib/team'
+	import {  Teams, TeamsActions } from '$lib/team'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import Profile from './Profile.svelte'
 	import SetAdminForm from './SetAdminForm.svelte'
@@ -20,7 +20,7 @@
 	export let data
 </script>
 
-<div class="grid gap-6">
+<div class="grid gap-20">
 	<div class="flex justify-between gap-8">
 		<div>
 			<div class="flex gap-2 items-center flex-wrap">
@@ -73,16 +73,25 @@
 		/>
 	</div>
 
-	{#if data.event.memberFields.length}
-		<div class="my-4">
-			<MemberProfile hideStatus member={data.memberProfile} />
+	<section>
+		<div class="flex gap-2 items-center mb-4">
+			<h3 class="title">Inscriptions</h3>
 		</div>
-	{/if}
-
-	<Card class="border">
-		<h2 slot="title">Inscriptions</h2>
 		<TeamsSubscribes teams={data.event.teams} isLeader />
-	</Card>
+	</section>
 
-	<LeaderOf teams={data.memberProfile.leaderOf} event={data.event} />
+	<section class="relative">
+		<div class="flex gap-2 items-center mb-4">
+			<h3 class="title">Secteurs à charge</h3>
+			<div class="grow" />
+			<TeamsActions teams={data.memberProfile.leaderOf} />
+		</div>
+		<Teams teams={data.memberProfile.leaderOf} event={data.event} showAll />
+	</section>
+
+	{#if data.event.memberFields.length}
+		<section>
+			<MemberProfile hideStatus member={data.memberProfile} />
+		</section>
+	{/if}
 </div>
