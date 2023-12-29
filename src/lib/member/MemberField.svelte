@@ -58,21 +58,23 @@
 	options={jsonParse(field.options, [])}
 	input={{ disabled: !field.memberCanWrite && !isLeader }}
 >
-	<div class="contents" slot="label_append">
+	<div class="h-5 mr-auto" slot="label_append">
 		{#if !field.memberCanRead}
 			<Icon
 				path={mdiEyeOffOutline}
+				size={20}
 				title="Les membres ne peuvent pas voir ce champ"
 				class="ml-3 opacity-75"
-			/>
-		{:else if !field.memberCanWrite}
-			<Icon
+				/>
+				{:else if !field.memberCanWrite}
+				<Icon
 				path={mdiPencilOffOutline}
+				size={20}
 				title="Les membres ne peuvent pas éditer ce champ"
 				class="ml-3 opacity-75"
 			/>
-		{:else if field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
-			<span class="text-error text-lg">*</span>
+		{:else if  field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
+			<span class="text-error text-xl ml-1">*</span>
 		{/if}
 		<div class="grow" />
 	</div>

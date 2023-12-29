@@ -73,6 +73,12 @@
 		/>
 	</div>
 
+	{#if data.event.memberFields.length}
+		<section>
+			<MemberProfile hideStatus member={data.memberProfile} />
+		</section>
+	{/if}
+
 	<section>
 		<div class="flex gap-2 items-center mb-4">
 			<h3 class="title">Inscriptions</h3>
@@ -89,9 +95,5 @@
 		<Teams teams={data.memberProfile.leaderOf} event={data.event} showAll />
 	</section>
 
-	{#if data.event.memberFields.length}
-		<section>
-			<MemberProfile hideStatus member={data.memberProfile} />
-		</section>
-	{/if}
+
 </div>
