@@ -13,7 +13,7 @@
 		MemberProfileStatus,
 		MemberAbsences,
 		MemberRole,
-		MemberProfileForm,
+		MemberProfile,
 		MemberDeleteForm,
 	} from '$lib/member'
 
@@ -63,7 +63,7 @@
 				<MemberAbsences subscribes={data.memberProfile.subscribes} />
 				<MemberProfileStatus member={data.memberProfile} />
 			</div>
-			<Profile user={data.memberProfile.user} class="sm:pt-4" />
+			<Profile user={data.memberProfile.user} class="sm:pt-4 mt-4" />
 		</div>
 
 		<Avatar
@@ -74,10 +74,9 @@
 	</div>
 
 	{#if data.event.memberFields.length}
-		<SectionCollapse value="profile">
-			<h2 slot="title">Informations complémentaires</h2>
-			<MemberProfileForm member={data.memberProfile} />
-		</SectionCollapse>
+		<div class="my-4">
+			<MemberProfile hideStatus member={data.memberProfile} />
+		</div>
 	{/if}
 
 	<Card class="border">

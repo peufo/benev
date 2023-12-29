@@ -17,7 +17,7 @@
 
 <div
 	class="
-		grid grid-cols-1 sm:grid-cols-2 gap-2 gap-x-8 p-2 items-center
+		grid grid-cols-1 sm:grid-cols-2 gap-2 gap-x-8 pl-0 p-2 items-center
 		font-medium text-base-content/70 text-sm md:text-base {klass}
 	"
 >

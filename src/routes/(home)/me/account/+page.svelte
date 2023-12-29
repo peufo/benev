@@ -18,13 +18,10 @@
 </div>
 <ProfileForm user={data.user} />
 
-<hr />
-<div class="flex gap-2 flex-wrap">
-	<form method="POST" action="/me?/logout" class="contents">
-		<button class="btn btn-sm btn-ghost">
-			<Icon path={mdiLogout} size={20} class="opacity-70 rotate-180" />
-			Déconnexion
-		</button>
-	</form>
+<hr class="my-3" />
+<div class="flex gap-2 flex-wrap justify-end">
 	<DeleteUserForm />
+	<form method="POST" action="/me?/logout" class="contents">
+		<button class="btn btn-sm btn-ghost"> Déconnexion </button>
+	</form>
 </div>

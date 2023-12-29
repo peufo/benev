@@ -20,7 +20,6 @@
 		successUpdate,
 		successCallback: () => dispatch('success'),
 	})
-
 </script>
 
 <div class="@container">
@@ -32,7 +31,7 @@
 	>
 		<input type="hidden" name="memberId" value={member.id} />
 
-		{#each member.event.memberFields.filter(f => !writeOnly || f.memberCanWrite) as field (field.id)}
+		{#each member.event.memberFields.filter((f) => !writeOnly || f.memberCanWrite) as field (field.id)}
 			{@const { value } = member.profile.find((value) => value.fieldId === field.id) || {
 				value: '',
 			}}

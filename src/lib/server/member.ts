@@ -87,7 +87,7 @@ export function getMemberProfile(where: MemberUniqueWhere, accesor?: MemberWithC
 				event: {
 					include: { memberFields: { orderBy: { position: 'asc' } } },
 				},
-				profile: { include: { field: true } },
+				profile: { include: { field: true }, orderBy: { field: { position: 'asc' } } },
 				subscribes: {
 					include: { period: { include: { team: true } } },
 				},

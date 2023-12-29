@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { mdiArrowLeft } from '@mdi/js'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 	import { Card, Placeholder } from '$lib/material'
