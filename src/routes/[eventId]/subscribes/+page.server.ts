@@ -57,8 +57,7 @@ export const actions = {
 				if (closeSubscribing && closeSubscribing.getTime() < new Date().getTime() - DAY)
 					throw error(403)
 
-				const conditions = period.team.conditions
-				if (conditions && !isMemberAllowed(conditions, member)) throw error(403)
+				if (!isMemberAllowed(period.team.conditions, member)) throw error(403)
 			}
 
 			// Check if member is free in this period

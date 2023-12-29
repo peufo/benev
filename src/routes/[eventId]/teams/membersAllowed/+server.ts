@@ -12,10 +12,7 @@ export const GET = async ({ params: { eventId }, url }) => {
 		include: { user: true, profile: true },
 	})
 
-	const count = members.filter((member) => {
-		const allowed = isMemberAllowed(data.conditions, member)
-		return allowed
-	}).length
+	const count = members.filter((member) => isMemberAllowed(data.conditions, member)).length
 
 	return json(count)
 }

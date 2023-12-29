@@ -4,10 +4,11 @@ import type { FieldValue, Member, Team, User } from '@prisma/client'
 import dayjs from 'dayjs'
 
 export function isMemberAllowed(
-	conditions: Team['conditions'],
-	member: Member & { user: User; profile: FieldValue[] }
+	conditions: Team['conditions'] | null,
+	member?: (Member & { user: User; profile: FieldValue[] }) | null
 ): boolean {
 	if (!conditions?.length) return true
+	if (!member) return false
 
 	const memberProfile: Record<string, FieldValue> = member.profile.reduce(
 		(acc, cur) => ({ ...acc, [cur.fieldId]: cur }),

@@ -32,8 +32,6 @@ export const load = async ({ parent, params, url }) => {
 
 	return {
 		teams: teams.filter((team) => {
-			if (!team.conditions) return true
-			if (!member) return false
 			return isMemberAllowed(team.conditions, member)
 		}),
 	}
