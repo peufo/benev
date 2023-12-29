@@ -7,7 +7,7 @@ export function isMemberAllowed(
 	conditions: Team['conditions'],
 	member: Member & { user: User; profile: FieldValue[] }
 ): boolean {
-	if (!conditions) return true
+	if (!conditions?.length) return true
 
 	const memberProfile: Record<string, FieldValue> = member.profile.reduce(
 		(acc, cur) => ({ ...acc, [cur.fieldId]: cur }),

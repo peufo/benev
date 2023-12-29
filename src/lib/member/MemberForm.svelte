@@ -6,13 +6,12 @@
 	import { useForm } from '$lib/validation'
 	import type { Event } from '@prisma/client'
 	import { eventPath, urlParam } from '$lib/store'
-	import {DeleteButton} from '$lib/material'
+	import { DeleteButton } from '$lib/material'
 
 	export let event: Event
 	export let userId: string
 	let klass = ''
 	export { klass as class }
-	export let noCancelButton = false
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
@@ -51,8 +50,6 @@
 			</form>
 		{/if}
 
-		{#if !noCancelButton}
-			<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('close')}> Non </button>
-		{/if}
+		<a href="/me" class="btn btn-ghost"> Non </a>
 	</div>
 </div>
