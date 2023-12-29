@@ -1,13 +1,13 @@
 <script lang="ts">
-	import {  DropDown, Icon } from '$lib/material'
+	import { DropDown, Icon } from '$lib/material'
 
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
-	import {  Teams, TeamsActions } from '$lib/team'
+	import { Teams, TeamsActions } from '$lib/team'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
-	import Profile from './Profile.svelte'
+	import MemberAccount from './MemberAccount.svelte'
 	import SetAdminForm from './SetAdminForm.svelte'
 	import {
 		MemberProfileStatus,
@@ -63,7 +63,7 @@
 				<MemberAbsences subscribes={data.memberProfile.subscribes} />
 				<MemberProfileStatus member={data.memberProfile} />
 			</div>
-			<Profile user={data.memberProfile.user} class="sm:pt-4 mt-4" />
+			<MemberAccount user={data.memberProfile.user} class="sm:pt-4 mt-4" />
 		</div>
 
 		<Avatar
