@@ -1,5 +1,5 @@
 import { generateHTML, generateJSON } from '@tiptap/html'
-import { extensions } from '$lib/material/input/html/extensions'
+import { extensions } from '$lib/material/input/textRich/extensions'
 import { jsonParse } from '$lib/jsonParse'
 
 export const tiptap = {

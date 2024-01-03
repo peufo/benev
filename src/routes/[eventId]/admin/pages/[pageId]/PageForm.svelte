@@ -3,7 +3,7 @@
 	import type { Page } from '@prisma/client'
 
 	import { useForm } from '$lib/validation'
-	import { DeleteButton, Icon, InputHtml } from '$lib/material'
+	import { DeleteButton, Icon, InputTextRich } from '$lib/material'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { mdiLink } from '@mdi/js'
@@ -40,7 +40,7 @@
 
 	<input type="hidden" name="eventId" value={page.eventId} />
 
-	<InputHtml key="content" value={page.content} classToolbar="top-14" />
+	<InputTextRich key="content" value={page.content} classToolbar="top-14" />
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn">Sauvegarder</button>

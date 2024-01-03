@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Card, InputHtml } from '$lib/material'
+	import { Card, InputTextRich } from '$lib/material'
 
 	let value = 'YOOO'
 </script>
 
 <Card class="max-w-3xl mx-auto">
-	<InputHtml bind:value valueAsHTML />
+	<InputTextRich bind:value valueAsHTML />
 </Card>

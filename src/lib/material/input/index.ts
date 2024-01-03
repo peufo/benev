@@ -18,6 +18,7 @@ export type TextareaProps = ComponentProps<FormControl> & {
 
 export { FormControl }
 export { default as InputText } from './InputText.svelte'
+export { default as InputTextRich } from './textRich/InputTextRich.svelte'
 export { default as InputPassword } from './InputPassword.svelte'
 export { default as InputTextarea } from './InputTextarea.svelte'
 export { default as InputRelations } from './InputRelations.svelte'
@@ -37,7 +38,6 @@ export { default as InputOptions } from './InputOptions.svelte'
 export { default as InputSearch } from './InputSearch.svelte'
 export { default as InputImage } from './InputImage.svelte'
 export { default as InputImagePreview } from './InputImagePreview.svelte'
-export { default as InputHtml } from './html/InputHtml.svelte'
 
 export type Option = { value: string; label: string; icon?: string }
 export type Options =
