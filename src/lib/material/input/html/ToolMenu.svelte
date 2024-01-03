@@ -30,16 +30,7 @@
 		}) || tools[0]
 </script>
 
-<DropDown
-	hideOnBlur
-	bind:this={dropdown}
-	tippyProps={{
-		appendTo: (element) => {
-			const wrapper = element.parentElement?.parentElement?.parentElement?.parentElement
-			return wrapper || element
-		},
-	}}
->
+<DropDown hideOnBlur bind:this={dropdown}>
 	<button slot="activator" type="button" class="menu-item gap-2">
 		<Icon path={toolSelected.icon} size={20} class="opacity-70" />
 		{#if !hideLabel}
