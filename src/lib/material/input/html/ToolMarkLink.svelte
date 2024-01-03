@@ -37,6 +37,12 @@
 		editor.chain().focus().unsetLink().run()
 		dialogLink.close()
 	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key !== 'Enter') return
+		event.preventDefault()
+		handleNewLink()
+	}
 </script>
 
 <ToolMark
@@ -54,7 +60,7 @@
 <Dialog bind:dialog={dialogLink}>
 	<h3 slot="header" class="title">Éditer un lien</h3>
 	<div class="flex flex-col gap-2">
-		<InputText bind:value={linkHref} bind:error={linkError} />
+		<InputText bind:value={linkHref} bind:error={linkError} on:keydown={handleKeyDown} />
 		<div class="flex flex-row-reverse gap-2">
 			<button type="button" class="btn" on:click={handleNewLink}> Valider </button>
 			<button type="button" class="btn btn-ghost text-error" on:click={handleRemoveLink}>

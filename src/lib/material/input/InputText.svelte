@@ -20,6 +20,8 @@
 			on:input
 			on:focus
 			on:blur
+			on:keydown
+			on:keyup
 			bind:this={inputElement}
 			use:bindValueWithParams={{ bindEnable: bindWithParams, initValue: (v) => (value = v) }}
 			type="text"
