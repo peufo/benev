@@ -5,11 +5,15 @@
 		mdiAccountMultipleOutline,
 		mdiChartGantt,
 		mdiClipboardTextMultipleOutline,
+		mdiPlus,
 	} from '@mdi/js'
+	import { TeamSelectDialog } from '$lib/team'
 
 	export let teams: { id: string }[]
 
 	$: teamsId = JSON.stringify(teams.map((team) => team.id))
+
+	let teamDialog: HTMLDialogElement
 </script>
 
 {#if teams.length}
@@ -23,4 +27,9 @@
 	<a href="{$eventPath}/admin/plan?teams={teamsId}" class="btn btn-square btn-sm">
 		<Icon path={mdiChartGantt} size={20} title="Voir ces secteurs sur le planning" />
 	</a>
+	<button type="button" class="btn btn-square btn-sm" on:click={() => teamDialog.showModal()}>
+		<Icon path={mdiPlus} title="Ajouter un secteur à charge" />
+	</button>
 {/if}
+
+<TeamSelectDialog bind:dialog={teamDialog} />

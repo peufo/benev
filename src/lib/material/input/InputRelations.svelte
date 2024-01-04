@@ -2,7 +2,6 @@
 	import { slide } from 'svelte/transition'
 	import { mdiClose } from '@mdi/js'
 
-	import { browser } from '$app/environment'
 	import { createEventDispatcher, tick } from 'svelte'
 	import { debounce } from '$lib/debounce'
 
@@ -18,10 +17,9 @@
 	export let key: string
 	export let label: string
 	export let search: (q: string) => Promise<RelationItem[]>
-	export let getItems: (ids: string[]) => Promise<RelationItem[]>
 	export let createUrl = ''
 	export let createTitle = ''
-	export let value: string[] | RelationItem[] = []
+
 	export let error = ''
 	export let placeholder = ''
 
@@ -38,14 +36,6 @@
 	const notify = useNotify()
 	let dropdown: DropDown
 	const dispatch = createEventDispatcher<{ input: { value: string[]; items: RelationItem[] } }>()
-
-	$: if (value.length && !items) lookupItem()
-
-	async function lookupItem() {
-		if (!browser || !value.length || items) return
-		if (typeof value[0] === 'string') items = await getItems(value as string[])
-		else items = value as RelationItem[]
-	}
 
 	async function select(index = focusIndex) {
 		if (!items) items = [proposedItems[index]]
@@ -104,24 +94,24 @@
 >
 	<DropDown bind:this={dropdown}>
 		<div slot="activator">
-			<FormControl key={key} {label} {error} class={klass}>
+			<FormControl {key} {label} {error} class={klass}>
 				<div class="flex flex-wrap items-center gap-2">
 					{#if items && items.length}
 						<div class="flex gap-2 flex-wrap">
 							{#each items || [] as item, index (item.id)}
 								<div
 									transition:slide|local={{ axis: 'x', duration: 200 }}
-									class="text-right badge badge-lg whitespace-nowrap pr-0"
+									class="text-right badge badge-lg whitespace-nowrap pr-0 items-center"
 								>
 									<slot {item} name="badge">{item.id}</slot>
 									<div
-										class="btn btn-circle btn-xs btn-ghost scale-75 ml-1"
+										class="btn btn-circle btn-xs btn-ghost min-h-[18px] h-[18px] w-[18px] ml-1 mr-[2px]"
 										role="button"
 										tabindex="0"
 										on:click={() => remove(index)}
 										on:keyup={(event) => event.key === 'Enter' && remove(index)}
 									>
-										<Icon path={mdiClose} />
+										<Icon path={mdiClose} size={16} />
 									</div>
 								</div>
 							{/each}

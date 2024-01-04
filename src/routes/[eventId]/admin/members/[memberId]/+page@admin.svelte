@@ -94,6 +94,4 @@
 		</div>
 		<Teams teams={data.memberProfile.leaderOf} event={data.event} showAll />
 	</section>
-
-
 </div>

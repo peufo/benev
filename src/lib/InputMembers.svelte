@@ -15,9 +15,8 @@
 	{key}
 	{label}
 	placeholder="Chercher un membre"
-	getItems={$api.member.findMany}
 	search={$api.member.search}
-	{value}
+	items={value}
 >
 	<!-- Good type -->
 	<span slot="badge" let:item>

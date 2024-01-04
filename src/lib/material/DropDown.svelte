@@ -28,11 +28,15 @@
 	export let useSingleton = false
 	export let hideOnBlur = false
 	export let tip: TippyInstance | undefined = undefined
+	// By pass dropdown for use in flat mode
+	export let disable = false
 	let activator: HTMLDivElement
 
 	let content: HTMLDivElement
 
 	onMount(() => {
+		if (disable) return
+
 		const triggerTarget = activator.querySelector('button, input') || activator
 
 		tip = tippy(activator, {
@@ -89,17 +93,26 @@
 	}
 </script>
 
-<div class={wrapperClass}>
-	<div bind:this={activator}>
-		<slot name="activator" />
-	</div>
+{#if !disable}
+	<div class={wrapperClass}>
+		<div bind:this={activator}>
+			<slot name="activator" />
+		</div>
 
-	<div class="hidden">
-		<div
-			class="{klass} border rounded-lg p-1 bg-base-100 shadow-lg max-h-80 overflow-auto"
-			bind:this={content}
-		>
+		<div class="hidden">
+			<div
+				class="{klass} border rounded-lg p-1 bg-base-100 shadow-lg max-h-80 overflow-auto"
+				bind:this={content}
+			>
+				<slot />
+			</div>
+		</div>
+	</div>
+{:else}
+	<div class={wrapperClass}>
+		<slot name="activator" />
+		<div class={klass}>
 			<slot />
 		</div>
 	</div>
-</div>
+{/if}

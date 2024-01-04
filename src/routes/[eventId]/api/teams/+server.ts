@@ -11,38 +11,23 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 		take: z.number().default(5),
 	})
 	if (err) throw error(400)
-	const { search = '', take, ids } = data
+	const { search = '', ids, take } = data
 
 	if (ids)
 		return json(
-			await prisma.member.findMany({
+			await prisma.team.findMany({
 				where: { eventId, id: { in: ids } },
 			})
 		)
 
-	const members = await prisma.member.findMany({
+	const teams = await prisma.team.findMany({
 		where: {
 			eventId,
-			user: {
-				OR: [
-					{ lastName: { contains: search } },
-					{ firstName: { contains: search } },
-					{ email: { contains: search } },
-				],
-			},
+			name: { contains: search },
 		},
-		select: {
-			id: true,
-			user: {
-				select: {
-					firstName: true,
-					lastName: true,
-					email: true,
-				},
-			},
-		},
+		select: { id: true },
 		take,
 	})
 
-	return json(members)
+	return json(teams)
 }

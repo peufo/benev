@@ -2,7 +2,6 @@
 	import { mdiClose } from '@mdi/js'
 	import type { Props as TippyProps } from 'tippy.js'
 
-	import { browser } from '$app/environment'
 	import { createEventDispatcher, tick } from 'svelte'
 	import { debounce } from '$lib/debounce'
 
@@ -18,19 +17,18 @@
 	export let key: string
 	export let label = ''
 	export let search: (q: string) => Promise<RelationItem[]>
-	export let getItem: (id: string) => Promise<RelationItem>
 	export let createUrl = ''
 	export let createTitle = ''
-	export let value: string | RelationItem = ''
+	export let item: RelationItem | null = null
 	export let error = ''
 	export let placeholder = ''
 	export let tippyProps: Partial<TippyProps> = {}
+	export let flatMode = false
 
 	let klass = ''
 	export { klass as class }
 
 	let proposedItems: RelationItem[] = []
-	export let item: RelationItem | null = null
 
 	let isLoading = false
 	let isError = false
@@ -38,25 +36,16 @@
 	let searchValue = ''
 	const notify = useNotify()
 
-	const dispatch = createEventDispatcher<{ input: { value: string; item: RelationItem } }>()
+	const dispatch = createEventDispatcher<{ input: { value: RelationItem } }>()
 	let inputElement: HTMLInputElement
-	$: if (value && !item) lookupItem()
-
-	async function lookupItem() {
-		if (!browser || !value || item) return
-		if (typeof value === 'string') item = await getItem(value as string)
-		else item = value as RelationItem
-	}
 
 	async function select(index = focusIndex) {
 		item = proposedItems[index]
-		value = item.id
-		dispatch('input', { value: item.id, item })
+		dispatch('input', { value: item })
 	}
 
 	async function clear() {
 		searchValue = ''
-		value = ''
 		item = null
 		await tick()
 		inputElement.focus()
@@ -97,7 +86,7 @@
 		},
 	}}
 >
-	<DropDown {tippyProps}>
+	<DropDown {tippyProps} disable={flatMode}>
 		<div class="contents" slot="activator">
 			<FormControl {key} {label} {error} class={klass} let:key>
 				<div class="flex grow gap-2" class:hidden={item}>

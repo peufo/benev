@@ -39,7 +39,6 @@
 			<InputRelation
 				key="memberId"
 				placeholder="Inscrire un membre"
-				getItem={$api.member.findOne}
 				search={$api.member.search}
 				bind:item={member}
 				on:input

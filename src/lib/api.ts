@@ -1,5 +1,5 @@
 import axios, { type AxiosRequestConfig, type RawAxiosResponseHeaders } from 'axios'
-import type { Member } from '@prisma/client'
+import type { Member, Team } from '@prisma/client'
 import { derived } from 'svelte/store'
 import { page } from '$app/stores'
 
@@ -18,8 +18,8 @@ function ensureJson(headers: RawAxiosResponseHeaders, route: string) {
 	}
 }
 function search<T extends unknown>(route: string) {
-	return async (search: string) => {
-		const config: RequestConfig = { params: { search } }
+	return async (search: string, take = 5) => {
+		const config: RequestConfig = { params: { search, take } }
 		const { data, headers } = await _api.get<T[]>(route, config)
 		ensureJson(headers, route)
 		return data
@@ -45,9 +45,9 @@ function findMany<T extends unknown>(route: string) {
 
 function methods<T extends unknown>(route: string) {
 	return {
-		search: search<T>(route),
-		findOne: findOne<T>(route),
+		// findOne: findOne<T>(route),
 		findMany: findMany<T>(route),
+		search: search<T>(route),
 	}
 }
 
@@ -55,4 +55,5 @@ export const api = derived(page, ({ params: { eventId } }) => ({
 	member: methods<Member & { user: { firstName: string; lastName: string; email: string } }>(
 		`/${eventId}/api/members`
 	),
+	team: methods<Team>(`/${eventId}/api/members`),
 }))
