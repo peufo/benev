@@ -4,6 +4,8 @@
 		mdiAlignHorizontalLeft,
 		mdiAlignHorizontalCenter,
 		mdiAlignHorizontalRight,
+		mdiFormatIndentIncrease,
+		mdiFormatIndentDecrease,
 	} from '@mdi/js'
 
 	import ToolMenu from './ToolMenu.svelte'
@@ -32,6 +34,17 @@
 			label: 'Aligner à droite',
 			icon: mdiAlignHorizontalRight,
 			action: () => editor.commands.setTextAlign('right'),
+		},
+		{
+			newSection: true,
+			label: 'Retrait à droite',
+			icon: mdiFormatIndentIncrease,
+			action: () => editor.commands.indent(),
+		},
+		{
+			label: 'Retrait à droite',
+			icon: mdiFormatIndentDecrease,
+			action: () => editor.commands.outdent(),
 		},
 	]}
 />

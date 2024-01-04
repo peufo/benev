@@ -9,6 +9,7 @@
 		label: string
 		icon: string
 		action: () => unknown
+		newSection?: true
 	}
 
 	export let editor: Editor
@@ -40,6 +41,9 @@
 	</button>
 
 	{#each tools as tool}
+		{#if tool.newSection}
+			<hr class="my-2" />
+		{/if}
 		<button type="button" class="menu-item w-full" on:click={() => handleClick(tool)}>
 			<Icon path={tool.icon} size={20} class="opacity-70" />
 			<span>

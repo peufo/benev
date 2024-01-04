@@ -6,6 +6,7 @@ import Color from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
+import { Indent } from './indent'
 
 export const extensions: Extensions = [
 	StarterKit.configure({
@@ -26,4 +27,5 @@ export const extensions: Extensions = [
 	Placeholder.configure({
 		placeholder: 'Rédige ta page ici ...',
 	}),
+	Indent,
 ]

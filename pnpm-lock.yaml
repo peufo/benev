@@ -50,6 +50,9 @@ dependencies:
   '@tiptap/html':
     specifier: ^2.1.13
     version: 2.1.13(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13)
+  '@tiptap/pm':
+    specifier: ^2.1.13
+    version: 2.1.13
   '@tiptap/starter-kit':
     specifier: ^2.1.13
     version: 2.1.13(@tiptap/pm@2.1.13)
