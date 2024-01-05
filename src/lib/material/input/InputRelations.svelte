@@ -38,13 +38,14 @@
 	const notify = useNotify()
 	let dropdown: DropDown
 	const dispatch = createEventDispatcher<{ input: { value: string[]; items: RelationItem[] } }>()
+	let inputSearch: HTMLInputElement
 
 	async function select(index = focusIndex) {
 		if (!items) items = [proposedItems[index]]
 		else items = [...items, proposedItems[index]]
 		dropdown.hide()
-		searchValue = ''
-		searchItems('')
+		inputSearch.select()
+		proposedItems = [...proposedItems.slice(0, index), ...proposedItems.slice(index + 1)]
 		dispatch('input', { value: items.map(({ id }) => id), items })
 		await tick()
 		setTimeout(() => dropdown.show(), 200)
@@ -125,6 +126,7 @@
 								type="text"
 								id={key}
 								name={key}
+								bind:this={inputSearch}
 								bind:value={searchValue}
 								on:input={(e) => searchItemsDebounce(e.currentTarget.value)}
 								on:focus={handleFocus}
