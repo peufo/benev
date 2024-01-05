@@ -6,9 +6,9 @@
 		mdiAccountMultipleOutline,
 		mdiChartGantt,
 		mdiClipboardTextMultipleOutline,
-		mdiPlus,
+		mdiPencilOutline,
 	} from '@mdi/js'
-	import { TeamSelectDialog } from '$lib/team'
+	import { MemberSetLeaderOf } from '$lib/member'
 
 	export let teams: Team[]
 
@@ -29,8 +29,8 @@
 		<Icon path={mdiChartGantt} size={20} title="Voir ces secteurs sur le planning" />
 	</a>
 	<button type="button" class="btn btn-square btn-sm" on:click={() => teamDialog.showModal()}>
-		<Icon path={mdiPlus} title="Ajouter un secteur à charge" />
+		<Icon path={mdiPencilOutline} title="Éditer les secteurs à charge" />
 	</button>
 {/if}
 
-<TeamSelectDialog bind:dialog={teamDialog} {teams} />
+<MemberSetLeaderOf bind:dialog={teamDialog} {teams} />

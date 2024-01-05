@@ -36,7 +36,19 @@ export const actions = {
 		return tryOrFail(() =>
 			prisma.member.update({
 				where: { id: memberId },
-				data: { isAdmin: data.isAdmin },
+				data: { ...data },
+			})
+		)
+	},
+	set_leader_of: async ({ request, locals, params: { eventId, memberId } }) => {
+		await permission.admin(eventId, locals)
+		const { err, data } = await parseFormData(request, { leaderOf: z.relations('set') })
+		if (err) return err
+
+		return tryOrFail(() =>
+			prisma.member.update({
+				where: { id: memberId },
+				data: { ...data },
 			})
 		)
 	},
