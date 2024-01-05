@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
+	import { page } from '$app/stores'
 	import { DisplayToggle, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import {
@@ -28,6 +29,9 @@
 	<a href="{$eventPath}/admin/plan?teams={teamsId}" class="btn btn-square btn-sm">
 		<Icon path={mdiChartGantt} size={20} title="Voir ces secteurs sur le planning" />
 	</a>
+{/if}
+
+{#if $page.data.member?.roles.includes('admin')}
 	<button type="button" class="btn btn-square btn-sm" on:click={() => teamDialog.showModal()}>
 		<Icon path={mdiPencilOutline} title="Éditer les secteurs à charge" />
 	</button>

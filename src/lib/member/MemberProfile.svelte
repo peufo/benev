@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { MemberProfile } from '$lib/server'
-	import { mdiCheck, mdiClose, mdiPencil } from '@mdi/js'
+	import { mdiCheck, mdiClose, mdiPencilOutline } from '@mdi/js'
 	import type { FieldType } from '@prisma/client'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
 	import { CardBasic, Icon } from '$lib/material'
@@ -32,7 +32,7 @@
 		on:click={() => (readOnly = !readOnly)}
 	>
 		<Icon
-			path={readOnly ? mdiPencil : mdiClose}
+			path={readOnly ? mdiPencilOutline : mdiClose}
 			title="{readOnly ? 'Modifier' : 'Voire'} le profile"
 		/>
 	</button>
