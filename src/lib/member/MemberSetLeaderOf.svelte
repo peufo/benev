@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import { enhance } from '$app/forms'
-	import { page } from '$app/stores'
 
 	import { api } from '$lib/api'
 	import { Dialog, InputRelations } from '$lib/material'
@@ -11,6 +10,7 @@
 	export let title = 'Secteur à charges'
 	export let dialog: HTMLDialogElement
 	export let teams: Team[]
+	export let memberId: string
 
 	const form = useForm({
 		successCallback() {
@@ -22,7 +22,7 @@
 <Dialog bind:dialog>
 	<h2 slot="header" class="title">{title}</h2>
 	<form
-		action="{$eventPath}/admin/members/{$page.data.member?.id}?/set_leader_of"
+		action="{$eventPath}/admin/members/{memberId}?/set_leader_of"
 		method="post"
 		use:enhance={form.submit}
 	>

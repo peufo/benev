@@ -13,6 +13,9 @@
 
 	export let teams: Team[]
 
+	// memberId used in actions
+	export let memberId: string
+
 	$: teamsId = JSON.stringify(teams.map((team) => team.id))
 
 	let teamDialog: HTMLDialogElement
@@ -37,4 +40,4 @@
 	</button>
 {/if}
 
-<MemberSetLeaderOf bind:dialog={teamDialog} {teams} />
+<MemberSetLeaderOf bind:dialog={teamDialog} {teams} {memberId} />

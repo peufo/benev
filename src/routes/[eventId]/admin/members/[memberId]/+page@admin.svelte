@@ -90,7 +90,7 @@
 		<div class="flex gap-2 items-center mb-4">
 			<h3 class="title">Secteurs à charge</h3>
 			<div class="grow" />
-			<TeamsActions teams={data.memberProfile.leaderOf} />
+			<TeamsActions teams={data.memberProfile.leaderOf} memberId={data.memberProfile.id} />
 		</div>
 		<Teams teams={data.memberProfile.leaderOf} event={data.event} showAll />
 	</section>
