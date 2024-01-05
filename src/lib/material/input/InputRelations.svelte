@@ -14,17 +14,19 @@
 
 	type RelationItem = $$Generic<{ id: string }>
 
-	export let key: string
-	export let label: string
+	export let key = ''
+	export let label = ''
 	export let search: (q: string) => Promise<RelationItem[]>
 	export let createUrl = ''
 	export let createTitle = ''
 
 	export let error = ''
 	export let placeholder = ''
+	export let flatMode = false
 
 	let klass = ''
 	export { klass as class }
+	export let classList = ''
 
 	let proposedItems: RelationItem[] = []
 	export let items: RelationItem[] | null = null
@@ -92,16 +94,16 @@
 		},
 	}}
 >
-	<DropDown bind:this={dropdown}>
+	<DropDown bind:this={dropdown} disable={flatMode}>
 		<div slot="activator">
 			<FormControl {key} {label} {error} class={klass}>
-				<div class="flex flex-wrap items-center gap-2">
+				<div class="flex flex-col gap-2">
 					{#if items && items.length}
 						<div class="flex gap-2 flex-wrap">
 							{#each items || [] as item, index (item.id)}
 								<div
 									transition:slide|local={{ axis: 'x', duration: 200 }}
-									class="text-right badge badge-lg whitespace-nowrap pr-0 items-center"
+									class="text-right badge badge-lg badge-outline whitespace-nowrap pr-0 items-center"
 								>
 									<slot {item} name="badge">{item.id}</slot>
 									<div
@@ -147,11 +149,13 @@
 			{isError}
 			{isLoading}
 			{focusIndex}
-			on:select={({ detail }) => select(detail)}
 			let:index
+			class="w-full {classList}"
+			on:select={({ detail }) => select(detail)}
 		>
-			{@const item = proposedItems[index]}
-			<slot name="listItem" {item}>{item.id}</slot>
+			<slot name="listItem" item={proposedItems[index]}>
+				{proposedItems[index].id}
+			</slot>
 		</SelectorList>
 	</DropDown>
 </div>

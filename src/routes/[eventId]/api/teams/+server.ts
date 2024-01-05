@@ -25,7 +25,6 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 			eventId,
 			name: { contains: search },
 		},
-		select: { id: true },
 		take,
 	})
 

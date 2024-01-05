@@ -55,5 +55,5 @@ export const api = derived(page, ({ params: { eventId } }) => ({
 	member: methods<Member & { user: { firstName: string; lastName: string; email: string } }>(
 		`/${eventId}/api/members`
 	),
-	team: methods<Team>(`/${eventId}/api/members`),
+	team: methods<Team>(`/${eventId}/api/teams`),
 }))

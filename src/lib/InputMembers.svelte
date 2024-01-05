@@ -18,13 +18,11 @@
 	search={$api.member.search}
 	items={value}
 >
-	<!-- Good type -->
 	<span slot="badge" let:item>
 		{item.user.firstName}
 		{item.user.lastName}
 	</span>
 
-	<!-- Bad type (any) -->
 	<div slot="listItem" let:item class="contents items-end">
 		<span>{item.user.firstName} {item.user.lastName}</span>
 		<div class="grow" />

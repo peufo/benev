@@ -14,7 +14,7 @@
 
 	type RelationItem = $$Generic<{ id: string }>
 
-	export let key: string
+	export let key = ''
 	export let label = ''
 	export let search: (q: string) => Promise<RelationItem[]>
 	export let createUrl = ''
@@ -27,6 +27,7 @@
 
 	let klass = ''
 	export { klass as class }
+	export let classList = ''
 
 	let proposedItems: RelationItem[] = []
 
@@ -131,12 +132,13 @@
 			{isError}
 			{isLoading}
 			{focusIndex}
-			on:select={({ detail }) => select(detail)}
-			class="w-full"
 			let:index
+			class="w-full {classList}"
+			on:select={({ detail }) => select(detail)}
 		>
-			{@const item = proposedItems[index]}
-			<slot name="listItem" {item}>{item.id}</slot>
+			<slot name="listItem" item={proposedItems[index]}>
+				{proposedItems[index].id}
+			</slot>
 		</SelectorList>
 	</DropDown>
 </div>

@@ -111,7 +111,7 @@
 {:else}
 	<div class={wrapperClass}>
 		<slot name="activator" />
-		<div class={klass}>
+		<div class="{klass} mt-2">
 			<slot />
 		</div>
 	</div>

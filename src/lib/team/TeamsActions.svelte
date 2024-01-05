@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Team } from '@prisma/client'
 	import { DisplayToggle, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import {
@@ -9,7 +10,7 @@
 	} from '@mdi/js'
 	import { TeamSelectDialog } from '$lib/team'
 
-	export let teams: { id: string }[]
+	export let teams: Team[]
 
 	$: teamsId = JSON.stringify(teams.map((team) => team.id))
 
@@ -32,4 +33,4 @@
 	</button>
 {/if}
 
-<TeamSelectDialog bind:dialog={teamDialog} />
+<TeamSelectDialog bind:dialog={teamDialog} {teams} />
