@@ -19,7 +19,7 @@
 	})
 </script>
 
-<Dialog bind:dialog>
+<Dialog bind:dialog on:open={() => (teams = teams)}>
 	<h2 slot="header" class="title">{title}</h2>
 	<form
 		action="{$eventPath}/admin/members/{memberId}?/set_leader_of"

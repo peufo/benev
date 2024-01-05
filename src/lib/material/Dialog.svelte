@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte'
 	import { mdiClose } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	import { onMount } from 'svelte'
@@ -6,6 +7,8 @@
 	export let hideCloseButton = false
 	let klass = ''
 	export { klass as class }
+
+	const dispatch = createEventDispatcher<{ open: void; close: void }>()
 
 	onMount(() => {
 		const inputsSelector = 'input:not([type=hidden], [tabindex="-1"])'
@@ -16,6 +19,7 @@
 		buttons.forEach((button) => (button.tabIndex = -1))
 
 		function onDialogOpen() {
+			dispatch('open')
 			inputs.forEach((input) => (input.tabIndex = 0))
 			buttons.forEach((button) => (button.tabIndex = 0))
 			if (!inputs[0]) return
@@ -24,6 +28,7 @@
 		}
 
 		function onDialogClose() {
+			dispatch('close')
 			inputs.forEach((input) => (input.tabIndex = -1))
 			buttons.forEach((button) => (button.tabIndex = -1))
 		}
