@@ -2,7 +2,7 @@
 	import { DropDown, Icon } from '$lib/material'
 
 	import { eventPath } from '$lib/store'
-	import { mdiArrowLeft, mdiTrashCanOutline } from '@mdi/js'
+	import { mdiArrowLeft, mdiPlus, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
@@ -15,9 +15,12 @@
 		MemberRole,
 		MemberProfile,
 		MemberDeleteForm,
+		MemberCreateSubscribeDialog,
 	} from '$lib/member'
 
 	export let data
+
+	let createSubscribeDialog: HTMLDialogElement
 </script>
 
 <div class="grid gap-20">
@@ -82,6 +85,14 @@
 	<section>
 		<div class="flex gap-2 items-center mb-4">
 			<h3 class="title">Inscriptions</h3>
+			<div class="grow" />
+			<button
+				type="button"
+				class="btn btn-square btn-sm"
+				on:click={() => createSubscribeDialog.showModal()}
+			>
+				<Icon path={mdiPlus} title="Inscrire le membre à un secteur" />
+			</button>
 		</div>
 		<TeamsSubscribes teams={data.event.teams} isLeader />
 	</section>
@@ -95,3 +106,5 @@
 		<Teams teams={data.memberProfile.leaderOf} event={data.event} showAll />
 	</section>
 </div>
+
+<MemberCreateSubscribeDialog bind:dialog={createSubscribeDialog} memberId={data.memberProfile.id} />

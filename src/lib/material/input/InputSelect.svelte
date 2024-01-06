@@ -1,6 +1,5 @@
 <script lang="ts">
 	import SelectorList from './SelectorList.svelte'
-	import { selector } from '$lib/action'
 	import { DropDown, Icon } from '$lib/material'
 	import { type Options, parseOptions } from '.'
 	import { createEventDispatcher, onMount } from 'svelte'
@@ -8,8 +7,6 @@
 	export let key = ''
 	export let value = ''
 	export let options: Options
-	let klass = ''
-	export { klass as class }
 	export let btnClass = ''
 	export let noBtnClass = false
 
@@ -17,6 +14,7 @@
 	$: selectedOption = _options.find((opt) => opt.value === value)
 
 	let dropDown: DropDown
+	let button: HTMLButtonElement
 	const dispatch = createEventDispatcher<{ select: string }>()
 
 	let focusIndex = 0
@@ -35,43 +33,37 @@
 
 <input type="hidden" name={key} {value} />
 
-<div
-	class={klass}
-	use:selector={{
-		focusIndex,
-		onSelect,
-		onFocus(index) {
-			focusIndex = index
-		},
-	}}
-	role="menu"
-	tabindex="-1"
->
-	<DropDown bind:this={dropDown}>
-		<button slot="activator" type="button" class:btn={!noBtnClass} class={btnClass}>
-			<slot name="btn">
-				{#if selectedOption}
-					{#if selectedOption.icon}
-						<Icon path={selectedOption.icon} />
-					{/if}
-					<span>{selectedOption.label}</span>
-				{:else}
-					<slot name="placeholder">Sélection</slot>
+<DropDown bind:this={dropDown}>
+	<button
+		bind:this={button}
+		slot="activator"
+		type="button"
+		class:btn={!noBtnClass}
+		class={btnClass}
+	>
+		<slot name="btn">
+			{#if selectedOption}
+				{#if selectedOption.icon}
+					<Icon path={selectedOption.icon} />
 				{/if}
-			</slot>
-		</button>
-
-		<SelectorList
-			{focusIndex}
-			items={_options.map((opt) => ({ id: opt.value, ...opt }))}
-			let:item
-			on:select={({ detail }) => onSelect(detail)}
-			class="w-full"
-		>
-			{#if item.icon}
-				<Icon path={item.icon} />
+				<span>{selectedOption.label}</span>
+			{:else}
+				<slot name="placeholder">Sélection</slot>
 			{/if}
-			<span class="whitespace-nowrap">{item.label}</span>
-		</SelectorList>
-	</DropDown>
-</div>
+		</slot>
+	</button>
+
+	<SelectorList
+		trigger={button}
+		{focusIndex}
+		items={_options.map((opt) => ({ id: opt.value, ...opt }))}
+		let:item
+		on:select={({ detail }) => onSelect(detail)}
+		class="w-full"
+	>
+		{#if item.icon}
+			<Icon path={item.icon} />
+		{/if}
+		<span class="whitespace-nowrap">{item.label}</span>
+	</SelectorList>
+</DropDown>

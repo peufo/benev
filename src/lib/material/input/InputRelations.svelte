@@ -6,7 +6,6 @@
 	import { debounce } from '$lib/debounce'
 
 	import { useNotify } from '$lib/notify'
-	import { selector } from '$lib/action'
 	import { Icon, DropDown } from '$lib/material'
 	import FormControl from './FormControl.svelte'
 	import SelectorList from './SelectorList.svelte'
@@ -41,8 +40,11 @@
 	let inputSearch: HTMLInputElement
 
 	async function select(index = focusIndex) {
-		if (!items) items = [proposedItems[index]]
-		else items = [...items, proposedItems[index]]
+		console.log({ proposedItems, items })
+		const proposedItem = proposedItems[index]
+		if (!proposedItem) return
+		if (!items) items = [proposedItem]
+		else items = [...items, proposedItem]
 		dropdown.hide()
 		inputSearch.select()
 		proposedItems = [...proposedItems.slice(0, index), ...proposedItems.slice(index + 1)]
@@ -85,79 +87,69 @@
 	}
 </script>
 
-<div
-	class="relative"
-	use:selector={{
-		focusIndex,
-		onSelect: select,
-		onFocus(index) {
-			focusIndex = index
-		},
-	}}
->
-	<DropDown bind:this={dropdown} disable={flatMode}>
-		<div slot="activator">
-			<FormControl {key} {label} {error} class={klass}>
-				<div class="flex flex-col gap-2">
-					{#if items && items.length}
-						<div class="flex gap-2 flex-wrap">
-							{#each items || [] as item, index (item.id)}
+<DropDown bind:this={dropdown} disable={flatMode}>
+	<div slot="activator">
+		<FormControl {key} {label} {error} class={klass}>
+			<div class="flex flex-col gap-2">
+				{#if items && items.length}
+					<div class="flex gap-2 flex-wrap">
+						{#each items || [] as item, index (item.id)}
+							<div
+								transition:slide|local={{ axis: 'x', duration: 200 }}
+								class="text-right badge badge-lg badge-outline whitespace-nowrap pr-0 items-center"
+							>
+								<slot {item} name="badge">{item.id}</slot>
 								<div
-									transition:slide|local={{ axis: 'x', duration: 200 }}
-									class="text-right badge badge-lg badge-outline whitespace-nowrap pr-0 items-center"
+									class="btn btn-circle btn-xs btn-ghost min-h-[18px] h-[18px] w-[18px] ml-1 mr-[2px]"
+									role="button"
+									tabindex="0"
+									on:click={() => remove(index)}
+									on:keyup={(event) => event.key === 'Enter' && remove(index)}
 								>
-									<slot {item} name="badge">{item.id}</slot>
-									<div
-										class="btn btn-circle btn-xs btn-ghost min-h-[18px] h-[18px] w-[18px] ml-1 mr-[2px]"
-										role="button"
-										tabindex="0"
-										on:click={() => remove(index)}
-										on:keyup={(event) => event.key === 'Enter' && remove(index)}
-									>
-										<Icon path={mdiClose} size={16} />
-									</div>
+									<Icon path={mdiClose} size={16} />
 								</div>
-							{/each}
-						</div>
-					{/if}
-					<div class="flex grow gap-2">
-						<div class="flex grow gap-2 items-center relative">
-							<input
-								type="text"
-								id={key}
-								name={key}
-								bind:this={inputSearch}
-								bind:value={searchValue}
-								on:input={(e) => searchItemsDebounce(e.currentTarget.value)}
-								on:focus={handleFocus}
-								on:blur={handleBlur}
-								autocomplete="off"
-								{placeholder}
-								class="input-bordered input grow"
-							/>
-
-							<RelationAfter {isLoading} {createUrl} {createTitle} />
-						</div>
-						<slot name="append" />
+							</div>
+						{/each}
 					</div>
+				{/if}
+				<div class="flex grow gap-2">
+					<div class="flex grow gap-2 items-center relative">
+						<input
+							type="text"
+							id={key}
+							name={key}
+							bind:this={inputSearch}
+							bind:value={searchValue}
+							on:input={(e) => searchItemsDebounce(e.currentTarget.value)}
+							on:focus={handleFocus}
+							on:blur={handleBlur}
+							autocomplete="off"
+							{placeholder}
+							class="input-bordered input grow"
+						/>
+
+						<RelationAfter {isLoading} {createUrl} {createTitle} />
+					</div>
+					<slot name="append" />
 				</div>
+			</div>
 
-				<input type="hidden" name={key} value={JSON.stringify(items?.map(({ id }) => id) || [])} />
-			</FormControl>
-		</div>
+			<input type="hidden" name={key} value={JSON.stringify(items?.map(({ id }) => id) || [])} />
+		</FormControl>
+	</div>
 
-		<SelectorList
-			items={proposedItems}
-			{isError}
-			{isLoading}
-			{focusIndex}
-			let:index
-			class="w-full {classList}"
-			on:select={({ detail }) => select(detail)}
-		>
-			<slot name="listItem" item={proposedItems[index]}>
-				{proposedItems[index].id}
-			</slot>
-		</SelectorList>
-	</DropDown>
-</div>
+	<SelectorList
+		trigger={inputSearch}
+		items={proposedItems}
+		{isError}
+		{isLoading}
+		{focusIndex}
+		let:index
+		class="w-full {classList}"
+		on:select={({ detail }) => select(detail)}
+	>
+		<slot name="listItem" item={proposedItems[index]}>
+			{proposedItems[index].id}
+		</slot>
+	</SelectorList>
+</DropDown>

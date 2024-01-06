@@ -1,5 +1,5 @@
 import axios, { type AxiosRequestConfig, type RawAxiosResponseHeaders } from 'axios'
-import type { Member, Team } from '@prisma/client'
+import type { Member, Period, Team } from '@prisma/client'
 import { derived } from 'svelte/store'
 import { page } from '$app/stores'
 
@@ -55,5 +55,5 @@ export const api = derived(page, ({ params: { eventId } }) => ({
 	member: methods<Member & { user: { firstName: string; lastName: string; email: string } }>(
 		`/${eventId}/api/members`
 	),
-	team: methods<Team>(`/${eventId}/api/teams`),
+	team: methods<Team & { periods: Period[] }>(`/${eventId}/api/teams`),
 }))

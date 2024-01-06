@@ -17,6 +17,7 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 		return json(
 			await prisma.team.findMany({
 				where: { eventId, id: { in: ids } },
+				include: { periods: true },
 			})
 		)
 
@@ -25,6 +26,7 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 			eventId,
 			name: { contains: search },
 		},
+		include: { periods: true },
 		take,
 	})
 

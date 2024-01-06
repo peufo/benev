@@ -1,5 +1,5 @@
 type Params = {
-	inputQuerySelector: string
+	trigger?: HTMLInputElement | HTMLButtonElement
 	listQuerySelector: string
 	itemsQuerySelector: string
 	focusIndex: number
@@ -10,7 +10,7 @@ type Params = {
 export function selector(
 	node: HTMLElement,
 	{
-		inputQuerySelector = 'input[type=text], button',
+		trigger,
 		listQuerySelector = 'ul',
 		itemsQuerySelector = 'li',
 		focusIndex = -1,
@@ -18,12 +18,6 @@ export function selector(
 		onFocus = () => {},
 	}: Partial<Params> = {}
 ) {
-	const input = node.querySelector<HTMLInputElement | HTMLButtonElement>(inputQuerySelector)
-	if (!(input instanceof HTMLInputElement) && !(input instanceof HTMLButtonElement)) {
-		console.error('input element not found or is not an  HTMLInputElement')
-		return
-	}
-
 	function handleKeydown(event: KeyboardEvent) {
 		const items = node.querySelectorAll<HTMLElement>(itemsQuerySelector)
 		if (event.key === 'Enter') {
@@ -50,7 +44,7 @@ export function selector(
 	}
 
 	function scrollToSelected(items: NodeListOf<HTMLElement>) {
-		const list = node.querySelector<HTMLElement>(listQuerySelector)
+		const list = node.tagName === 'UL' ? node : node.querySelector<HTMLElement>(listQuerySelector)
 		if (!(list instanceof HTMLElement)) {
 			console.error('wrapper element not found')
 			return
@@ -70,14 +64,20 @@ export function selector(
 		}
 	}
 
-	;(input as HTMLInputElement).addEventListener('keydown', handleKeydown)
+	let triggerElement = (trigger || document) as HTMLInputElement
+	triggerElement.addEventListener('keydown', handleKeydown)
 
 	return {
-		update(params: { focusIndex: number }) {
-			focusIndex = params.focusIndex
+		update(params: Partial<Params>) {
+			if (params.focusIndex) focusIndex = params.focusIndex
+			if (params.trigger) {
+				triggerElement.removeEventListener('keydown', handleKeydown)
+				triggerElement = (params.trigger || document) as HTMLInputElement
+				triggerElement.addEventListener('keydown', handleKeydown)
+			}
 		},
 		destroy() {
-			;(input as HTMLInputElement).removeEventListener('keydown', handleKeydown)
+			triggerElement.removeEventListener('keydown', handleKeydown)
 		},
 	}
 }

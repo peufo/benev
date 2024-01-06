@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { selector } from '$lib/action'
 	import { createEventDispatcher } from 'svelte'
 
 	let klass = ''
@@ -9,11 +10,20 @@
 	export let isError = false
 	export let isLoading = false
 	export let focusIndex = 0
+	export let trigger: HTMLInputElement | HTMLButtonElement | undefined = undefined
 
 	const dispatch = createEventDispatcher<{ select: number }>()
 </script>
 
-<ul class="flex flex-col gap-1 {klass}">
+<ul
+	use:selector={{
+		trigger,
+		focusIndex,
+		onSelect: (index) => dispatch('select', index),
+		onFocus: (index) => (focusIndex = index),
+	}}
+	class="flex flex-col gap-1 {klass}"
+>
 	{#if isError}
 		<li class="p-2 text-center">Erreur 🥲</li>
 	{:else}
