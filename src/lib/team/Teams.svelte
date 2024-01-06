@@ -1,38 +1,29 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
 	import { mdiClockTimeFourOutline, mdiFilterOutline } from '@mdi/js'
-	import type { Member, Period, Team, Subscribe, Event } from '@prisma/client'
+	import dayjs from 'dayjs'
 
+	import type { TeamWithComputedValues } from '$lib/server'
+	import type { Member, Event } from '@prisma/client'
 	import { Placeholder, CardLink, Icon } from '$lib/material'
 	import { eventPath, display, onlyAvailable } from '$lib/store'
 	import { rowLink, tip } from '$lib/action'
 	import Progress from '$lib/Progress.svelte'
-	import dayjs from 'dayjs'
 
-	export let teams: (Team & {
+	export let teams: (TeamWithComputedValues & {
 		leaders: (Member & {
 			user: { firstName: string; lastName: string; email: string; phone: string | null }
 		})[]
-		periods: (Period & { subscribes: Subscribe[] })[]
 	})[]
 	export let event: Event
 
 	/** By pass $onlyAvailable flag */
 	export let showAll = false
 
-	$: _teams = teams
-		.map((team) => ({
-			...team,
-			subscribes: team.periods.map((p) => p.subscribes).flat(),
-			maxSubscribe: team.periods.map((p) => p.maxSubscribe).reduce((acc, cur) => acc + cur, 0),
-		}))
-		.filter((team) => {
-			if (!$onlyAvailable || showAll) return true
-			const nbSubscribes = team.subscribes.filter(
-				({ state }) => state === 'request' || state === 'accepted'
-			).length
-			return nbSubscribes < team.maxSubscribe
-		})
+	$: _teams = teams.filter((team) => {
+		if (!$onlyAvailable || showAll) return true
+		return team.isAvailable
+	})
 </script>
 
 {#if _teams.length}
@@ -90,7 +81,10 @@
 						</div>
 						<Progress
 							class="mt-1"
-							period={{ maxSubscribe: team.maxSubscribe, subscribes: team.subscribes }}
+							period={{
+								maxSubscribe: team.maxSubscribes,
+								subscribes: team.periods.map((p) => p.subscribes).flat(),
+							}}
 						/>
 					</div>
 				</CardLink>
@@ -130,7 +124,10 @@
 						<td>
 							<Progress
 								class="mt-1"
-								period={{ maxSubscribe: team.maxSubscribe, subscribes: team.subscribes }}
+								period={{
+									maxSubscribe: team.maxSubscribes,
+									subscribes: team.periods.map((p) => p.subscribes).flat(),
+								}}
 							/>
 						</td>
 					</tr>

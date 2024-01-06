@@ -1,6 +1,6 @@
 import { ROOT_USER } from '$env/static/private'
 import type { Member, Team, User, Event, Field, FieldValue } from '@prisma/client'
-import { prisma } from './index'
+import { addTeamComputedValues, prisma } from '$lib/server'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
 type MemberWithUserEventAndLeaderOf = Member & {
@@ -103,6 +103,7 @@ export function getMemberProfile(where: MemberUniqueWhere, accesor?: MemberWithC
 		.then((member) => hidePrivateProfilValues(member, accesor))
 		.then((member) => ({
 			...member,
+			leaderOf: member.leaderOf.map(addTeamComputedValues),
 			event: {
 				...member.event,
 				memberFields: member.event.memberFields.filter(
