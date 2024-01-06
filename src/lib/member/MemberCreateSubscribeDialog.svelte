@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
-	import type { Period, Team } from '@prisma/client'
+	import type { Period, Subscribe, Team } from '@prisma/client'
 	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
@@ -10,15 +10,15 @@
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft } from '@mdi/js'
 	import { formatRange } from '$lib/formatRange'
+	import Progress from '$lib/Progress.svelte'
+	import type { TeamWithComputedValues } from '$lib/server'
 
 	export let dialog: HTMLDialogElement
 	export let memberId: string
 
-	type TeamWithPeriods = Team & { periods: Period[] }
-
-	let selectedTeam: TeamWithPeriods | null = null
+	let selectedTeam: TeamWithComputedValues | null = null
 	let selectedPeriod: Period | null = null
-	let inputRelationTeam: InputRelation<TeamWithPeriods>
+	let inputRelationTeam: InputRelation<TeamWithComputedValues>
 	let offsetWidth: number
 
 	let submitButton: HTMLButtonElement
@@ -34,8 +34,7 @@
 		await tick()
 		inputRelationTeam.clear()
 	}
-	function handleSelectTeam(team: TeamWithPeriods) {
-		console.log(team)
+	function handleSelectTeam(team: TeamWithComputedValues) {
 		setTimeout(async () => {
 			selectedTeam = team
 			await tick()
@@ -57,6 +56,10 @@
 			dialog.removeEventListener('keydown', returnKey)
 		}
 	})
+
+	const periodIsAvailable = (period: Period & { subscribes: Subscribe[] }) =>
+		period.subscribes.filter(({ state }) => state === 'accepted' || state === 'request').length <
+		period.maxSubscribe
 </script>
 
 <Dialog bind:dialog class="overflow-x-hidden">
@@ -66,13 +69,20 @@
 			<InputRelation
 				bind:this={inputRelationTeam}
 				flatMode
-				search={(search) => $api.team.search(search, 10)}
+				search={(search) => $api.team.search(search, { take: 10, onlyAvailable: true })}
 				placeholder="Chercher un secteur"
 				classList="max-h-80 overflow-y-auto relative"
 				on:input={({ detail }) => handleSelectTeam(detail.value)}
 			>
 				<svelte:fragment slot="listItem" let:item>
 					<span>{item.name}</span>
+					<Progress
+						class="ml-auto"
+						period={{
+							maxSubscribe: item.maxSubscribes,
+							subscribes: item.periods.map((p) => p.subscribes).flat(),
+						}}
+					/>
 				</svelte:fragment>
 			</InputRelation>
 		</div>
@@ -92,12 +102,13 @@
 
 			<SelectorList
 				trigger={dialog}
-				items={selectedTeam.periods}
+				items={selectedTeam.periods.filter(periodIsAvailable)}
 				class="w-full max-h-80 mt-2 overflow-y-auto relative"
 				on:select={({ detail }) => onSelect(detail)}
 				let:item
 			>
-				{formatRange(item)}
+				<span>{formatRange(item)}</span>
+				<Progress period={item} class="ml-auto" />
 			</SelectorList>
 			<input type="hidden" name="memberId" value={memberId} />
 			<input type="hidden" name="periodId" value={selectedPeriod?.id} />
