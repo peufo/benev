@@ -9,7 +9,6 @@
 	import { useForm } from '$lib/validation'
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft } from '@mdi/js'
-	import { selector } from '$lib/action'
 
 	export let dialog: HTMLDialogElement
 	export let memberId: string
@@ -21,8 +20,9 @@
 	let inputRelationTeam: InputRelation<TeamWithPeriods>
 	let offsetWidth: number
 
-	let formElement: HTMLFormElement
+	let submitButton: HTMLButtonElement
 	const form = useForm({
+		successReset: false,
 		successCallback() {
 			dialog.close()
 		},
@@ -41,10 +41,11 @@
 		}, 0)
 	}
 
-	function onSelect(periodIndex: number) {
+	async function onSelect(periodIndex: number) {
 		if (!selectedTeam) return
 		selectedPeriodId = selectedTeam.periods[periodIndex].id
-		formElement.submit()
+		await tick()
+		submitButton.click()
 	}
 </script>
 
@@ -68,8 +69,7 @@
 	{:else}
 		<form
 			in:fly={{ x: offsetWidth, duration: 250 }}
-			bind:this={formElement}
-			action="{$eventPath}/admin/members/{memberId}?/subscribe"
+			action="{$eventPath}/subscribes?/new_subscribe"
 			method="post"
 			use:enhance={form.submit}
 		>
@@ -90,8 +90,9 @@
 					{item.start}
 				</svelte:fragment>
 			</SelectorList>
-
+			<input type="hidden" name="memberId" value={memberId} />
 			<input type="hidden" name="periodId" value={selectedPeriodId} />
+			<button type="submit" bind:this={submitButton} class="hidden">submit</button>
 		</form>
 	{/if}
 </Dialog>
