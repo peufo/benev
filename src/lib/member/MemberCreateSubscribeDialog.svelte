@@ -33,6 +33,13 @@
 		await tick()
 		inputRelationTeam.clear()
 	}
+	function handleSelectTeam(team: TeamWithPeriods) {
+		setTimeout(async () => {
+			selectedTeam = team
+			await tick()
+			dialog.focus()
+		}, 0)
+	}
 
 	function onSelect(periodIndex: number) {
 		if (!selectedTeam) return
@@ -51,7 +58,7 @@
 				search={(search) => $api.team.search(search, 10)}
 				placeholder="Chercher un secteur"
 				classList="max-h-80 overflow-y-auto relative"
-				on:input={({ detail }) => (selectedTeam = detail.value)}
+				on:input={({ detail }) => handleSelectTeam(detail.value)}
 			>
 				<svelte:fragment slot="listItem" let:item>
 					<span>{item.name}</span>
@@ -74,8 +81,9 @@
 			</div>
 
 			<SelectorList
+				trigger={dialog}
 				items={selectedTeam.periods}
-				class="w-full max-h-80 mt-2"
+				class="w-full max-h-80 mt-2 overflow-y-auto relative"
 				on:select={({ detail }) => onSelect(detail)}
 			>
 				<svelte:fragment let:item>

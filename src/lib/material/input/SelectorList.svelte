@@ -10,7 +10,7 @@
 	export let isError = false
 	export let isLoading = false
 	export let focusIndex = 0
-	export let trigger: HTMLInputElement | HTMLButtonElement | undefined = undefined
+	export let trigger: HTMLElement
 
 	const dispatch = createEventDispatcher<{ select: number }>()
 </script>

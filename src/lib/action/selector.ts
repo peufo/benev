@@ -1,22 +1,22 @@
 type Params = {
-	trigger?: HTMLInputElement | HTMLButtonElement
-	listQuerySelector: string
-	itemsQuerySelector: string
-	focusIndex: number
-	onSelect: (index: number) => unknown
-	onFocus: (index: number) => unknown
+	trigger: HTMLElement | undefined
+	focusIndex?: number
+	listQuerySelector?: string
+	itemsQuerySelector?: string
+	onSelect?: (index: number) => unknown
+	onFocus?: (index: number) => unknown
 }
 
 export function selector(
 	node: HTMLElement,
 	{
 		trigger,
+		focusIndex = -1,
 		listQuerySelector = 'ul',
 		itemsQuerySelector = 'li',
-		focusIndex = -1,
 		onSelect = () => {},
 		onFocus = () => {},
-	}: Partial<Params> = {}
+	}: Params
 ) {
 	function handleKeydown(event: KeyboardEvent) {
 		const items = node.querySelectorAll<HTMLElement>(itemsQuerySelector)
@@ -64,20 +64,19 @@ export function selector(
 		}
 	}
 
-	let triggerElement = (trigger || document) as HTMLInputElement
-	triggerElement.addEventListener('keydown', handleKeydown)
+	trigger?.addEventListener('keydown', handleKeydown)
 
 	return {
 		update(params: Partial<Params>) {
-			if (params.focusIndex) focusIndex = params.focusIndex
+			if (params.focusIndex !== undefined) focusIndex = params.focusIndex
 			if (params.trigger) {
-				triggerElement.removeEventListener('keydown', handleKeydown)
-				triggerElement = (params.trigger || document) as HTMLInputElement
-				triggerElement.addEventListener('keydown', handleKeydown)
+				trigger?.removeEventListener('keydown', handleKeydown)
+				trigger = params.trigger
+				trigger?.addEventListener('keydown', handleKeydown)
 			}
 		},
 		destroy() {
-			triggerElement.removeEventListener('keydown', handleKeydown)
+			trigger?.removeEventListener('keydown', handleKeydown)
 		},
 	}
 }
