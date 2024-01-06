@@ -1,5 +1,5 @@
-import { error, json } from '@sveltejs/kit'
-import { prisma, permission, parseQuery } from '$lib/server'
+import { error } from '@sveltejs/kit'
+import { prisma, permission, parseQuery, json } from '$lib/server'
 import { z } from '$lib/validation'
 
 export const GET = async ({ params: { eventId }, url, locals }) => {

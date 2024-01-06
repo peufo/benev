@@ -32,7 +32,7 @@
 		options={conditionTypeOptions}
 		on:select={addCondition}
 		bind:value={conditionType}
-		btnClass="btn-square"
+		class="btn-square"
 	>
 		<svelte:fragment slot="placeholder">
 			<Icon path={mdiPlus} title="Ajouter une condition" tippyProps={{ appendTo: 'parent' }} />

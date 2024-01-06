@@ -7,8 +7,9 @@
 	export let key = ''
 	export let value = ''
 	export let options: Options
-	export let btnClass = ''
 	export let noBtnClass = false
+	let klass = ''
+	export { klass as class }
 
 	$: _options = parseOptions(options)
 	$: selectedOption = _options.find((opt) => opt.value === value)
@@ -34,13 +35,7 @@
 <input type="hidden" name={key} {value} />
 
 <DropDown bind:this={dropDown}>
-	<button
-		bind:this={button}
-		slot="activator"
-		type="button"
-		class:btn={!noBtnClass}
-		class={btnClass}
-	>
+	<button bind:this={button} slot="activator" type="button" class:btn={!noBtnClass} class={klass}>
 		<slot name="btn">
 			{#if selectedOption}
 				{#if selectedOption.icon}

@@ -1,6 +1,5 @@
-import { json } from '@sveltejs/kit'
 import { getSubscribes } from './getSubscribes'
-import { prisma } from '$lib/server'
+import { prisma, json } from '$lib/server'
 
 export const GET = async ({ url, params: { eventId } }) => {
 	const event = await prisma.event.findUniqueOrThrow({

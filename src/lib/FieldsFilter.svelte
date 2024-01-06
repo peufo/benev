@@ -30,8 +30,7 @@
 		options={fields
 			.filter((f) => f.type === 'select' || f.type === 'multiselect')
 			.map((f) => ({ value: f.id, label: f.label || f.name }))}
-		class="join-item"
-		btnClass="btn-sm {fieldId ? 'rounded-r-none' : ''}"
+		class="join-item btn-sm {fieldId ? 'rounded-r-none' : ''}"
 		on:select={resetFieldValue}
 	>
 		<div class="contents" slot="placeholder">
@@ -46,7 +45,7 @@
 			<InputSelect
 				bind:value={fieldValue}
 				options={field.options || []}
-				btnClass="btn-sm rounded-l-none {fieldValue ? 'btn-primary rounded-r-none' : ''}"
+				class="btn-sm rounded-l-none {fieldValue ? 'btn-primary rounded-r-none' : ''}"
 				on:select={handleSelectFieldValue}
 			>
 				<div class="contents" slot="placeholder">

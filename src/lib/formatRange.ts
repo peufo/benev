@@ -19,7 +19,10 @@ const formaterShort = new Intl.DateTimeFormat('fr-ch', {
 
 type Range = { start: Date; end: Date }
 
-export const formatRange = ({ start, end }: Range) => formater.formatRange(start, end)
+export const formatRange = ({ start, end }: Range) => {
+	console.log({ start, end })
+	return formater.formatRange(start, end)
+}
 export const formatRangeShort = ({ start, end }: Range) => formaterShort.formatRange(start, end)
 
 export const formatRangeHour = ({ start, end }: Range) => {

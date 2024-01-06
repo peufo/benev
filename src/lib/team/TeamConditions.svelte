@@ -118,7 +118,7 @@
 				{/if}
 			</span>
 		</div>
-		<InputSelect options={addConditionOptions} on:select={handleAddCondition} btnClass="btn-square">
+		<InputSelect options={addConditionOptions} on:select={handleAddCondition} class="btn-square">
 			<svelte:fragment slot="btn">
 				<Icon path={mdiPlus} title="Ajouter une condition" />
 			</svelte:fragment>
@@ -174,7 +174,7 @@
 										label: operatorLabel[value],
 									}))}
 									noBtnClass
-									btnClass="label-text bg-base-200 hover:bg-base-300 px-3 py-2 rounded"
+									class="label-text bg-base-200 hover:bg-base-300 px-3 py-2 rounded"
 								/>
 							{/if}
 						{/if}

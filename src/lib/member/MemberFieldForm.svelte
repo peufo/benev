@@ -81,7 +81,7 @@
 			key="type"
 			bind:value={field.type}
 			options={memberFieldType}
-			btnClass="w-full justify-start"
+			class="w-full justify-start"
 		/>
 
 		<InputText

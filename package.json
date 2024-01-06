@@ -67,6 +67,7 @@
 		"axios": "^1.4.0",
 		"dayjs": "^1.11.9",
 		"debounce": "^1.2.1",
+		"devalue": "^4.3.2",
 		"jimp": "^0.22.10",
 		"js-confetti": "^0.11.0",
 		"litepicker": "^2.0.12",

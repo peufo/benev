@@ -65,6 +65,9 @@ dependencies:
   debounce:
     specifier: ^1.2.1
     version: 1.2.1
+  devalue:
+    specifier: ^4.3.2
+    version: 4.3.2
   jimp:
     specifier: ^0.22.10
     version: 0.22.10
@@ -2089,7 +2092,6 @@ packages:
 
   /devalue@4.3.2:
     resolution: {integrity: sha512-KqFl6pOgOW+Y6wJgu80rHpo2/3H07vr8ntR9rkkFIRETewbf5GaYYcakYfiKz89K+sLsuPkQIZaXDMjUObZwWg==}
-    dev: true
 
   /didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}

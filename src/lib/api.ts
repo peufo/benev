@@ -1,4 +1,5 @@
 import axios, { type AxiosRequestConfig, type RawAxiosResponseHeaders } from 'axios'
+import * as devalue from 'devalue'
 import type { Member, Period, Team } from '@prisma/client'
 import { derived } from 'svelte/store'
 import { page } from '$app/stores'
@@ -20,32 +21,23 @@ function ensureJson(headers: RawAxiosResponseHeaders, route: string) {
 function search<T extends unknown>(route: string) {
 	return async (search: string, take = 5) => {
 		const config: RequestConfig = { params: { search, take } }
-		const { data, headers } = await _api.get<T[]>(route, config)
+		const { data, headers } = await _api.get(route, config)
 		ensureJson(headers, route)
-		return data
-	}
-}
-
-function findOne<T extends unknown>(route: string) {
-	return async (id: string) => {
-		const { data, headers } = await _api.get<T>(`${route}/${id}`)
-		ensureJson(headers, route)
-		return data
+		return devalue.unflatten(data) as T[]
 	}
 }
 
 function findMany<T extends unknown>(route: string) {
 	return async (ids: string[]) => {
 		const config: RequestConfig = { params: { ids } }
-		const { data, headers } = await _api.get<T[]>(route, config)
+		const { data, headers } = await _api.get(route, config)
 		ensureJson(headers, route)
-		return data
+		return devalue.unflatten(data) as T[]
 	}
 }
 
 function methods<T extends unknown>(route: string) {
 	return {
-		// findOne: findOne<T>(route),
 		findMany: findMany<T>(route),
 		search: search<T>(route),
 	}

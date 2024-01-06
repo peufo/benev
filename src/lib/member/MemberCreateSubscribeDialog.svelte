@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte'
+	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import type { Period, Team } from '@prisma/client'
 	import { enhance } from '$app/forms'
@@ -9,6 +9,7 @@
 	import { useForm } from '$lib/validation'
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft } from '@mdi/js'
+	import { formatRange } from '$lib/formatRange'
 
 	export let dialog: HTMLDialogElement
 	export let memberId: string
@@ -16,7 +17,7 @@
 	type TeamWithPeriods = Team & { periods: Period[] }
 
 	let selectedTeam: TeamWithPeriods | null = null
-	let selectedPeriodId = ''
+	let selectedPeriod: Period | null = null
 	let inputRelationTeam: InputRelation<TeamWithPeriods>
 	let offsetWidth: number
 
@@ -34,6 +35,7 @@
 		inputRelationTeam.clear()
 	}
 	function handleSelectTeam(team: TeamWithPeriods) {
+		console.log(team)
 		setTimeout(async () => {
 			selectedTeam = team
 			await tick()
@@ -43,10 +45,18 @@
 
 	async function onSelect(periodIndex: number) {
 		if (!selectedTeam) return
-		selectedPeriodId = selectedTeam.periods[periodIndex].id
+		selectedPeriod = selectedTeam.periods[periodIndex]
 		await tick()
 		submitButton.click()
 	}
+
+	onMount(() => {
+		const returnKey = (event: KeyboardEvent) => event.key === 'Backspace' && handleClickReturn()
+		dialog.addEventListener('keydown', returnKey)
+		return () => {
+			dialog.removeEventListener('keydown', returnKey)
+		}
+	})
 </script>
 
 <Dialog bind:dialog class="overflow-x-hidden">
@@ -85,13 +95,12 @@
 				items={selectedTeam.periods}
 				class="w-full max-h-80 mt-2 overflow-y-auto relative"
 				on:select={({ detail }) => onSelect(detail)}
+				let:item
 			>
-				<svelte:fragment let:item>
-					{item.start}
-				</svelte:fragment>
+				{formatRange(item)}
 			</SelectorList>
 			<input type="hidden" name="memberId" value={memberId} />
-			<input type="hidden" name="periodId" value={selectedPeriodId} />
+			<input type="hidden" name="periodId" value={selectedPeriod?.id} />
 			<button type="submit" bind:this={submitButton} class="hidden">submit</button>
 		</form>
 	{/if}
