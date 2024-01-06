@@ -77,6 +77,16 @@ export const actions = {
 					},
 				})
 
+				await media.upload(formData, {
+					key: 'logo',
+					where: { logoOf: { id: event.id } },
+					data: {
+						name: `Logo de ${event.name}`,
+						createdById: session.user.id,
+						logoOf: { connect: { id: event.id } },
+					},
+				})
+
 				return event
 			},
 			(res) => `/${res.id}`

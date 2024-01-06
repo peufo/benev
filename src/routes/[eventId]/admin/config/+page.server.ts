@@ -37,6 +37,15 @@ export const actions = {
 						posterOf: { connect: { id: eventId } },
 					},
 				})
+				await media.upload(formData, {
+					key: 'logo',
+					where: { logoOf: { id: eventId } },
+					data: {
+						name: `Logo`,
+						createdById: member.user.id,
+						logoOf: { connect: { id: eventId } },
+					},
+				})
 
 				return prisma.event.update({
 					where: { id: eventId },

@@ -37,8 +37,14 @@
 				whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0
 			"
 	>
-		{#if data.event.icon}
-			<img class="inline-block w-5 mx-1" src={data.event.icon} alt="logo of {data.event.name}" />
+		{#if data.event.logoId}
+			<img
+				class="inline-block h-10 mx-1"
+				src="/media/{data.event.logoId}?size=medium"
+				alt="logo of {data.event.name}"
+			/>
+		{:else if data.event.icon}
+			<img class="inline-block w-5 mx-1" src={data.event.icon} alt="icon of {data.event.name}" />
 		{/if}
 		<span class="whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0">
 			{data.event.name}

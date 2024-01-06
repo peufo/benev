@@ -77,7 +77,7 @@
 		</span>
 	</InputText>
 
-	<div class="flex pt-2">
+	<div class="flex pt-2 gap-4 items-center justify-center">
 		<InputImagePreview
 			key="poster"
 			src={event?.posterId ? `/media/${event.posterId}` : ''}
@@ -88,7 +88,14 @@
 			y={FORMAT_A3.y / 2}
 		/>
 
-		<!-- TODO: logo-->
+		<InputImagePreview
+			key="logo"
+			src={event?.logoId ? `/media/${event.logoId}` : ''}
+			title="Logo"
+			alt="Logo de l'évènement"
+			x={126}
+			y={126}
+		/>
 	</div>
 
 	<InputTextarea
