@@ -25,7 +25,7 @@ function ensureJson(headers: RawAxiosResponseHeaders, route: string) {
 	}
 }
 function search<T extends unknown, P = {}>(route: string) {
-	return async (search: string, params: P & ParamsPagination) => {
+	return async (search: string, params?: P & ParamsPagination) => {
 		const config: RequestConfig = { params: { search, ...params } }
 		const { data, headers } = await _api.get(route, config)
 		ensureJson(headers, route)

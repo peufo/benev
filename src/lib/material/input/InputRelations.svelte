@@ -40,7 +40,6 @@
 	let inputSearch: HTMLInputElement
 
 	async function select(index = focusIndex) {
-		console.log({ proposedItems, items })
 		const proposedItem = proposedItems[index]
 		if (!proposedItem) return
 		if (!items) items = [proposedItem]

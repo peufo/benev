@@ -29,7 +29,7 @@
 		<InputRelations
 			key="leaderOf"
 			flatMode
-			search={(search) => $api.team.search(search, 10)}
+			search={(search) => $api.team.search(search, { take: 10 })}
 			placeholder="Chercher un nouveau secteur"
 			classList="max-h-80 overflow-y-auto relative"
 			items={teams}
