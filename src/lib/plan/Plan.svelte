@@ -126,7 +126,7 @@
 			{/each}
 		</div>
 
-		{#each teams as team}
+		{#each teams as team (team.id)}
 			<div class="snap-start scroll-mx-2 pl-0 relative" data-team={team.id}>
 				<div
 					class="w-36 sticky top-0 pb-2 z-10"
