@@ -91,7 +91,7 @@
 				class="btn btn-square btn-sm"
 				on:click={() => createSubscribeDialog.showModal()}
 			>
-				<Icon path={mdiPlus} title="Inscrire le membre à un secteur" />
+				<Icon path={mdiPlus} title="Inscrire {data.memberProfile.user.firstName} à un secteur" />
 			</button>
 		</div>
 		<TeamsSubscribes teams={data.event.teams} isLeader />
@@ -107,4 +107,8 @@
 	</section>
 </div>
 
-<MemberCreateSubscribeDialog bind:dialog={createSubscribeDialog} memberId={data.memberProfile.id} />
+<MemberCreateSubscribeDialog
+	bind:dialog={createSubscribeDialog}
+	memberId={data.memberProfile.id}
+	title="Nouvelle inscription pour {data.memberProfile.user.firstName}"
+/>

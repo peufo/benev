@@ -15,6 +15,7 @@
 
 	export let dialog: HTMLDialogElement
 	export let memberId: string
+	export let title = 'Nouvelle inscription'
 
 	let selectedTeam: TeamWithComputedValues | null = null
 	let selectedPeriod: Period | null = null
@@ -37,6 +38,7 @@
 	function handleSelectTeam(team: TeamWithComputedValues) {
 		setTimeout(async () => {
 			selectedTeam = team
+
 			await tick()
 			dialog.focus()
 		}, 0)
@@ -44,7 +46,7 @@
 
 	async function onSelect(periodIndex: number) {
 		if (!selectedTeam) return
-		selectedPeriod = selectedTeam.periods[periodIndex]
+		selectedPeriod = selectedTeam.periods.filter(periodIsAvailable)[periodIndex]
 		await tick()
 		submitButton.click()
 	}
@@ -63,7 +65,7 @@
 </script>
 
 <Dialog bind:dialog class="overflow-x-hidden">
-	<h2 slot="header" class="title" bind:offsetWidth>Nouvelle inscription</h2>
+	<h2 slot="header" class="title" bind:offsetWidth>{title}</h2>
 	{#if !selectedTeam}
 		<div class="content" in:fly={{ x: -offsetWidth, duration: 250 }}>
 			<InputRelation
