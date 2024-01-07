@@ -2,7 +2,7 @@
 	import { mdiArrowLeft } from '@mdi/js'
 	import { Icon } from '$lib/material'
 	import { LayoutMe } from '$lib/me'
-	import { eventStates } from '$lib/validation'
+	import { EVENT_STATES } from '$lib/constant'
 	export let data
 </script>
 
@@ -20,8 +20,8 @@
 			<Icon
 				class="opacity-70 ml-1 {data.event.state === 'draft' ? 'rotate-12' : ''}"
 				size={20}
-				path={eventStates[data.event.state].icon}
-				title={eventStates[data.event.state].label}
+				path={EVENT_STATES[data.event.state].icon}
+				title={EVENT_STATES[data.event.state].label}
 			/>
 		{/if}
 	</div>

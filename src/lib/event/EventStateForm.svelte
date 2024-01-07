@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Event, EventState } from '@prisma/client'
-	import { eventStates, useForm } from '$lib/validation'
+	import { useForm } from '$lib/validation'
+	import { EVENT_STATES } from '$lib/constant'
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'
@@ -19,20 +20,20 @@
 <div
 	class="
     px-4 md:px-8 py-3 rounded-lg border flex justify-between flex-wrap gap-1
-    {eventStates[event.state].class}
+    {EVENT_STATES[event.state].class}
   "
 >
 	<div>
 		<div class="flex gap-2 items-center">
 			<Icon
-				path={eventStates[event.state].icon}
+				path={EVENT_STATES[event.state].icon}
 				class="opacity-80 {event.state === 'draft' ? 'rotate-12' : ''}"
 			/>
-			<span class="font-medium opacity-80">{eventStates[event.state].label}</span>
+			<span class="font-medium opacity-80">{EVENT_STATES[event.state].label}</span>
 		</div>
 
 		<p class="text-sm opacity-60">
-			{eventStates[event.state].description}
+			{EVENT_STATES[event.state].description}
 		</p>
 	</div>
 

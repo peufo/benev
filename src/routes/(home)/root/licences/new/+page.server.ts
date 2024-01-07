@@ -4,6 +4,6 @@ export const actions = {
 	default: async ({ locals }) => {
 		await permission.root(locals)
 
-		console.log('NEW LICENCE')
+		console.log('TODO: NEW LICENCE')
 	},
 }

@@ -4,7 +4,7 @@ import { MEDIA_DIR } from '$env/static/private'
 import { error } from '@sveltejs/kit'
 import { parseQuery } from '$lib/server'
 import { z, toTuple } from '$lib/validation'
-import { MEDIA_PRESETS } from '$lib/constants'
+import { MEDIA_PRESETS } from '$lib/constant'
 import jimp from 'jimp'
 
 export const GET = async ({ url, params: { mediaId } }) => {

@@ -3,7 +3,7 @@
 	import { mdiPlus } from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
 	import { Icon, Placeholder } from '$lib/material'
-	import { licencesLabel } from '$lib/validation'
+	import { LICENCE } from '$lib/constant'
 
 	export let data
 
@@ -66,7 +66,7 @@
 				{#each checkout.licences as licence}
 					<span class="badge gap-1 badge-success">
 						<b>+{licence.quantity}</b>
-						{licencesLabel[licence.type]}{licence.quantity > 1 ? 's' : ''}
+						{LICENCE[licence.type]}{licence.quantity > 1 ? 's' : ''}
 					</span>
 				{/each}
 			</div>

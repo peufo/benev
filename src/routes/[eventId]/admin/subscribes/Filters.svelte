@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { InputCheckboxsMenu } from '$lib/material'
 	import { PeriodPickerButton } from '$lib/period'
-	import { subscribeStateLabel } from '$lib/validation'
+	import { SUBSCRIBE_STATE } from '$lib/constant'
 	import InputOptionInParam from '$lib/material/input/InputOptionInParam.svelte'
 	import {
 		mdiAccountCircleOutline,
@@ -42,7 +42,7 @@
 <InputCheckboxsMenu
 	key="states"
 	label="Statuts"
-	options={subscribeStateLabel}
+	options={SUBSCRIBE_STATE}
 	enhanceDisabled
 	badgePrimary
 />

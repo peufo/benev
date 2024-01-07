@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types'
 	import { MemberRole } from '$lib/member'
-	import { eventStates } from '$lib/validation'
+	import { EVENT_STATES } from '$lib/constant'
 	import { CardLink, Icon } from '$lib/material'
 	import logo from '$lib/assets/logo.svg'
 
@@ -40,8 +40,8 @@
 					<Icon
 						class="opacity-70 z-10 {member.event.state === 'draft' ? 'rotate-12' : ''}"
 						size={20}
-						path={eventStates[member.event.state].icon}
-						title={eventStates[member.event.state].label}
+						path={EVENT_STATES[member.event.state].icon}
+						title={EVENT_STATES[member.event.state].label}
 					/>
 				{/if}
 			</div>

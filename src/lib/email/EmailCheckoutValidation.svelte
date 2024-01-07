@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Checkout, User, Licence, LicenceType } from '@prisma/client'
+	import type { Checkout, User, Licence } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
-	import { licencesLabel } from '$lib/validation'
+	import { LICENCE } from '$lib/constant'
 
 	export let checkout: Checkout & { user: User; licences: Licence[] }
 	export let dest: 'user' | 'root' = 'user'
@@ -33,7 +33,7 @@
 		<tbody>
 			{#each checkout.licences as licence}
 				<tr>
-					<th>{licencesLabel[licence.type]}</th>
+					<th>{LICENCE[licence.type]}</th>
 					<th align="right">{licence.quantity}</th>
 					<th align="right">
 						{(licence.price / 100).toFixed(2)}

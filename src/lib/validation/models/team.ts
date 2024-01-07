@@ -5,7 +5,7 @@ import * as zod from 'zod'
 type TeamShemaCreate = Omit<Prisma.TeamCreateInput, 'event'>
 type TeamShemaUpdate = Omit<Prisma.TeamUpdateInput, 'event'>
 
-const operator = z.enum([
+const teamConditionOperator = z.enum([
 	'is',
 	'not',
 	'gt',
@@ -26,14 +26,14 @@ export const teamConditionModel = z.union([
 		type: z.literal('profile'),
 		args: z.object({
 			fieldId: z.string(),
-			operator,
+			operator: teamConditionOperator,
 			expectedValue: z.union([z.string(), zod.array(z.string())]),
 		}),
 	}),
 ])
 
 export type TeamCondition = zod.infer<typeof teamConditionModel>
-export type TeamConditionOperator = zod.infer<typeof operator>
+export type TeamConditionOperator = zod.infer<typeof teamConditionOperator>
 
 export const teamCreate = {
 	name: z.string().min(3),

@@ -3,7 +3,8 @@
 	import { slide } from 'svelte/transition'
 	import type { Field } from '@prisma/client'
 	import { enhance } from '$app/forms'
-	import { memberFieldType, useForm } from '$lib/validation'
+	import { useForm } from '$lib/validation'
+	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { InputSelect, InputText, InputCheckboxs, DeleteButton, InputOptions } from '$lib/material'
 	import MemberField from './MemberField.svelte'
 	import { InputBoolean } from '$lib/material/input'
@@ -80,7 +81,7 @@
 		<InputSelect
 			key="type"
 			bind:value={field.type}
-			options={memberFieldType}
+			options={MEMBER_FIELD_TYPE}
 			class="w-full justify-start"
 		/>
 

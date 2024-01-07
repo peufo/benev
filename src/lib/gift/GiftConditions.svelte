@@ -2,7 +2,7 @@
 	import { mdiPlus } from '@mdi/js'
 	import type { GiftConditionType, GiftCondition as TGiftEdition } from '@prisma/client'
 	import GiftCondition from './GiftCondition.svelte'
-	import { conditionTypeOptions } from '$lib/validation'
+	import { GIFT_CONDITION_TYPE } from '$lib/constant'
 	import { Icon, InputSelect } from '$lib/material'
 
 	export let conditions: Partial<TGiftEdition>[] = []
@@ -29,7 +29,7 @@
 	</div>
 
 	<InputSelect
-		options={conditionTypeOptions}
+		options={GIFT_CONDITION_TYPE}
 		on:select={addCondition}
 		bind:value={conditionType}
 		class="btn-square"

@@ -1,22 +1,5 @@
 import { z, toTuple, type ZodObj } from '$lib/validation'
-import type { Prisma, Field } from '@prisma/client'
-import {
-	mdiTextShort,
-	mdiText,
-	mdiNumeric,
-	mdiCheckboxIntermediateVariant,
-	mdiOrderBoolDescending,
-	mdiOrderBoolAscendingVariant,
-} from '@mdi/js'
-
-export const memberFieldType: Record<Field['type'], { label: string; icon: string }> = {
-	string: { label: 'Text', icon: mdiTextShort },
-	textarea: { label: 'Text long', icon: mdiText },
-	number: { label: 'Nombre', icon: mdiNumeric },
-	boolean: { label: 'Oui / Non', icon: mdiCheckboxIntermediateVariant },
-	select: { label: 'Liste à choix', icon: mdiOrderBoolDescending },
-	multiselect: { label: 'Liste à choix multiple', icon: mdiOrderBoolAscendingVariant },
-}
+import { type Prisma, FieldType } from '@prisma/client'
 
 export const memberFieldCreate = {
 	name: z.string().min(2),
@@ -26,7 +9,7 @@ export const memberFieldCreate = {
 	description: z.string().optional(),
 	options: z.string().optional(),
 	required: z.boolean().optional(),
-	type: z.enum(toTuple(memberFieldType)),
+	type: z.enum(toTuple(FieldType)),
 } satisfies ZodObj<Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>>
 
 export const memberFieldUpdate = {

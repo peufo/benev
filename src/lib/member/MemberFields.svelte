@@ -5,7 +5,7 @@
 	import type { Field } from '@prisma/client'
 	import { listEditable } from '$lib/action'
 	import { Dialog, Icon } from '$lib/material'
-	import { memberFieldType } from '$lib/validation'
+	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import MemberFieldForm from './MemberFieldForm.svelte'
 	import { eventPath } from '$lib/store'
 	import { useNotify } from '$lib/notify'
@@ -65,7 +65,7 @@
 				bg-base-200/50 hover:bg-base-200 cursor-pointer
 			"
 		>
-			<Icon path={memberFieldType[field.type].icon} class="opacity-70" />
+			<Icon path={MEMBER_FIELD_TYPE[field.type].icon} class="opacity-70" />
 			<span>
 				{field.name}
 				{#if field.required && field.memberCanWrite}

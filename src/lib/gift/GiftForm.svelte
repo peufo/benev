@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Gift, GiftCondition } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import { conditionsModeLabel, useForm } from '$lib/validation'
+	import { useForm } from '$lib/validation'
+	import { GIFT_CONDITION_MODE } from '$lib/constant'
 	import { enhance } from '$app/forms'
 	import { InputRadio, InputText } from '$lib/material'
 	import GiftConditions from './GiftConditions.svelte'
@@ -40,7 +41,7 @@
 			key="conditionsMode"
 			label="Méthode de calcul"
 			optionsClass="flex gap-4"
-			options={conditionsModeLabel}
+			options={GIFT_CONDITION_MODE}
 			value={gift?.conditionsMode}
 		/>
 	{/if}
