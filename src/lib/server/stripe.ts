@@ -84,6 +84,7 @@ export const checkout = {
 				const checkoutCreated = await prisma.checkout.create({
 					data: {
 						id: newCheckout.id,
+						name: 'Achat',
 						userId: user.id,
 						amount: newCheckout.amount_total ?? 0,
 						currency: newCheckout.currency || 'CHF',

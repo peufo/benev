@@ -33,9 +33,9 @@
 		slot="start"
 		href={$eventPath}
 		class="
-				text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg
-				whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0
-			"
+			text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg
+			whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0
+		"
 	>
 		{#if data.event.logoId}
 			<img
