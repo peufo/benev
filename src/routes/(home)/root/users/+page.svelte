@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Card } from '$lib/material'
+	import { sumOfLicences } from '$lib/paywall'
 
 	export let data
 </script>
@@ -38,8 +39,8 @@
 					</td>
 					<td>{user._count.events}</td>
 					<td>{user._count.members}</td>
-					<td>{user.licences.filter((l) => l.type === 'event').length}</td>
-					<td>{user.licences.filter((l) => l.type === 'member').length}</td>
+					<td>{sumOfLicences(user.licences, 'event')}</td>
+					<td>{sumOfLicences(user.licences, 'member')}</td>
 				</tr>
 			{/each}
 		</tbody>
