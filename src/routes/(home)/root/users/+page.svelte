@@ -15,6 +15,8 @@
 				<td>CreatedAt</td>
 				<td>Events</td>
 				<td>Members</td>
+				<td>Licences (event)</td>
+				<td>Licences (member)</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -27,7 +29,7 @@
 						</a>
 					</td>
 					<td>
-						<a href="mailto:{user.email}">
+						<a href="mailto:{user.email}" class="link link-hover">
 							{user.email}
 						</a>
 					</td>
@@ -36,6 +38,8 @@
 					</td>
 					<td>{user._count.events}</td>
 					<td>{user._count.members}</td>
+					<td>{user.licences.filter((l) => l.type === 'event').length}</td>
+					<td>{user.licences.filter((l) => l.type === 'member').length}</td>
 				</tr>
 			{/each}
 		</tbody>

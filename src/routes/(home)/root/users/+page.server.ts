@@ -14,6 +14,7 @@ export const load = async ({ url }) => {
 			take: data.take,
 			skip: data.skip,
 			include: {
+				licences: true,
 				_count: { select: { members: true, events: true } },
 			},
 			orderBy: { createdAt: 'desc' },
