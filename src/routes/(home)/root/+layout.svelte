@@ -1,28 +1,17 @@
-<script>
-	import { page } from '$app/stores'
+<script lang="ts">
+	import Tree from './Tree.svelte'
 
-	const tabs = [
-		{ label: 'Model de mail', path: '/root/mails' },
-		{ label: 'Migration', path: '/root/migrate' },
-		{ label: 'Évènements', path: '/root/events' },
-		{ label: 'Messages', path: '/root/messages' },
-		{ label: 'Labo', path: '/root/lab' },
-	]
+	let tree = Object.keys(import.meta.glob('./**/+page.svelte'))
+		.map((p) => p.replace('./', '').replace(/\/?\+page.svelte/, ''))
+		.filter(Boolean)
+		.map((link) => link.split('/'))
 </script>
 
-<div class="flex gap-4 items-center py-3">
-	<h2 class="text-lg font-medium text-base-content/80">Hey root user</h2>
-	{#each tabs as tab}
-		{@const active = $page.route.id?.includes(tab.path)}
-		<a
-			href={tab.path}
-			class="menu-item"
-			class:bg-secondary={active}
-			class:text-secondary-content={active}
-		>
-			{tab.label}
-		</a>
-	{/each}
+<div class="flex gap-4">
+	<div class="menu p-4 min-h-full w-min">
+		<h1 class="text-lg">HEY ROOT 👋</h1>
+		<hr class="my-2" />
+		<Tree {tree} />
+	</div>
+	<slot />
 </div>
-
-<slot />
