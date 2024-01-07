@@ -1,36 +1,43 @@
 import { error, redirect } from '@sveltejs/kit'
-import { prisma } from '.'
+import { ROOT_USER } from '$env/static/private'
+import { prisma } from '$lib/server'
 import {
 	type MemberRole,
 	type MemberWithComputedValues,
 	getMemberProfile,
 } from '$lib/server/member'
 
-const getPermission = (role: MemberRole) => async (eventId: string, locals: App.Locals) => {
-	const session = await locals.auth.validate()
-	if (!session) throw error(401)
-	// TODO: a optimisé en utilisant parent() dans les load()
-	const member = await getMemberProfile({ userId: session.user.id, eventId })
-	const allowed = member.roles.includes(role)
-	if (!allowed) throw error(403)
-	return member
+export const permission = {
+	root: rootPermission,
+	member: createEventPermission('member'),
+	leader: createEventPermission('leader'),
+	admin: createEventPermission('admin'),
+	owner: createEventPermission('owner'),
+	leaderOfTeam,
 }
 
-export const permission = {
-	member: getPermission('member'),
-	leader: getPermission('leader'),
-	admin: getPermission('admin'),
-	owner: getPermission('owner'),
-	root: getPermission('root'),
-	leaderOfTeam,
-} satisfies Record<
-	MemberRole | 'leaderOfTeam',
-	(...args: any[]) => Promise<MemberWithComputedValues>
->
+async function rootPermission(locals: App.Locals) {
+	const session = await locals.auth.validate()
+	if (!session) throw error(401)
 
-async function leaderOfTeam(teamId: string, locals: App.Locals) {
+	session.user.email === ROOT_USER
+}
+
+function createEventPermission(role: MemberRole) {
+	return async (eventId: string, locals: App.Locals): Promise<MemberWithComputedValues> => {
+		const session = await locals.auth.validate()
+		if (!session) throw error(401)
+		// TODO: a optimisé en utilisant parent() dans les load()
+		const member = await getMemberProfile({ userId: session.user.id, eventId })
+		const allowed = member.roles.includes(role)
+		if (!allowed) throw error(403)
+		return member
+	}
+}
+
+async function leaderOfTeam(teamId: string, locals: App.Locals): Promise<MemberWithComputedValues> {
 	const team = await prisma.team.findUniqueOrThrow({ where: { id: teamId } })
-	const member = await getPermission('leader')(team.eventId, locals)
+	const member = await createEventPermission('leader')(team.eventId, locals)
 	if (!member.roles.includes('admin')) {
 		const isLeaderOfTeam = member.leaderOf.find((t) => t.id === teamId)
 		if (!isLeaderOfTeam) throw error(403)

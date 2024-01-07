@@ -9,7 +9,7 @@
 	<div class="flex gap-2">
 		<h2 class="title">Licences</h2>
 
-		<a href="/root/licences/create" class="btn btn-square btn-sm ml-auto">
+		<a href="/root/licences/new" class="btn btn-square btn-sm ml-auto">
 			<Icon path={mdiPlus} title="Créer des licences manuellement" />
 		</a>
 	</div>
