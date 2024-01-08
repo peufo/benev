@@ -1,7 +1,8 @@
-export function jsonParse<Type>(text: string | null | undefined, defaultValue: Type): Type {
+export function jsonParse<Type>(value: string | null | undefined | Type, defaultValue: Type): Type {
 	try {
-		if (!text) return defaultValue
-		return JSON.parse(text)
+		if (!value) return defaultValue
+		if (typeof value === 'string') return JSON.parse(value)
+		return value
 	} catch {
 		return defaultValue
 	}

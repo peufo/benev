@@ -38,12 +38,12 @@ export type TeamConditionOperator = zod.infer<typeof teamConditionOperator>
 export const teamCreate = {
 	name: z.string().min(3),
 	description: z.string().optional(),
-	leaders: z.relations('connect'),
+	leaders: z.relations.connect,
 	closeSubscribing: z.dateOptional(),
 	conditions: z.array(teamConditionModel),
 } satisfies ZodObj<TeamShemaCreate>
 
 export const teamUpdate = {
 	...teamCreate,
-	leaders: z.relations('set'),
+	leaders: z.relations.set,
 } satisfies ZodObj<TeamShemaUpdate>

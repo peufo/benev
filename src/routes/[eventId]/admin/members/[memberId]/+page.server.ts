@@ -42,7 +42,7 @@ export const actions = {
 	},
 	set_leader_of: async ({ request, locals, params: { eventId, memberId } }) => {
 		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, { leaderOf: z.relations('set') })
+		const { err, data } = await parseFormData(request, { leaderOf: z.relations.set })
 		if (err) return err
 
 		return tryOrFail(() =>
