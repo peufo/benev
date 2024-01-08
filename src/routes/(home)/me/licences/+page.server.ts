@@ -1,20 +1,7 @@
 import { getUserOrRedirect, prisma } from '$lib/server'
-import type { LicenceType } from '@prisma/client'
 
 export const load = async ({ url, locals }) => {
 	const user = await getUserOrRedirect(url, locals)
-
-	const licencesCount = await prisma.licence.groupBy({
-		by: 'type',
-		where: { ownerId: user.id },
-		_sum: {
-			quantity: true,
-		},
-	})
-	const licences: Partial<Record<LicenceType, number>> = licencesCount.reduce(
-		(acc, cur) => ({ ...acc, [cur.type]: cur._sum.quantity }),
-		{}
-	)
 
 	return {
 		checkouts: await prisma.checkout.findMany({
@@ -24,6 +11,15 @@ export const load = async ({ url, locals }) => {
 				createdAt: 'desc',
 			},
 		}),
-		licences,
+		licencesCount: await prisma.licence.groupBy({
+			by: 'type',
+			where: { ownerId: user.id },
+			_sum: {
+				quantity: true,
+			},
+		}),
+		eventsCount: await prisma.event.count({
+			where: { ownerId: user.id, activedAt: { not: null } },
+		}),
 	}
 }

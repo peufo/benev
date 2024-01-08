@@ -42,11 +42,10 @@
 			{@const form = useForm()}
 			<form
 				use:enhance={form.submit}
-				action="{$eventPath}/admin/config?/update_event"
+				action="{$eventPath}/admin/config?/set_state_event"
 				method="post"
 				class="contents"
 			>
-				<input type="hidden" name="id" value={event.id} />
 				<input type="hidden" name="state" value={state} />
 				<button class="btn btn-sm btn-outline">{label}</button>
 			</form>

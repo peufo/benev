@@ -28,17 +28,12 @@
 </div>
 
 <div class="flex gap-2 mb-2">
-	{#if data.licences.event}
+	{#each data.licencesCount as { type, _sum: { quantity } }}
 		<span class="badge badge-lg badge-primary badge-outline gap-1">
-			<b>{data.licences.event}</b> Évènements
+			{LICENCE_TYPE[type]}
+			<b>{quantity}</b>
 		</span>
-	{/if}
-	{#if data.licences.member}
-		<span class="badge badge-lg badge-primary badge-outline gap-1">
-			<b>{data.licences.member}</b>
-			Membres
-		</span>
-	{/if}
+	{/each}
 </div>
 
 <div class="flex flex-col gap-2">
@@ -70,8 +65,8 @@
 						class:badge-success={isPositif}
 						class:badge-warning={!isPositif}
 					>
+						{LICENCE_TYPE[licence.type]}
 						<b>{isPositif ? `+${licence.quantity}` : licence.quantity}</b>
-						{LICENCE_TYPE[licence.type]}{licence.quantity > 1 ? 's' : ''}
 					</span>
 				{/each}
 			</div>

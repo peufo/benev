@@ -1,6 +1,7 @@
 import {
 	eventMemberSettings,
 	eventSettings,
+	eventState,
 	eventUpdate,
 	giftCreate,
 	memberFieldCreate,
@@ -8,6 +9,7 @@ import {
 } from '$lib/validation'
 import { parseFormData, prisma, tryOrFail, permission, media } from '$lib/server'
 import { z } from '$lib/validation'
+import { error } from '@sveltejs/kit'
 
 export const load = async ({ params: { eventId } }) => ({
 	memberFields: await prisma.field.findMany({
@@ -21,6 +23,33 @@ export const load = async ({ params: { eventId } }) => ({
 })
 
 export const actions = {
+	set_state_event: async ({ request, locals, params: { eventId } }) => {
+		const member = await permission.admin(eventId, locals)
+		const { err, data } = await parseFormData(request, eventState)
+		if (err) return err
+
+		return tryOrFail(async () => {
+			const { activedAt, state } = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
+
+			const licenceRequired = !activedAt && state === 'draft' && data.state === 'active'
+			if (licenceRequired) {
+				// TODO: Obtenir le nombre de licences du user
+				const licenceAvailable = true
+
+				if (!licenceAvailable) throw error(403, { message: 'No licence available' })
+				// TODO: Consommer une licences dans une transaction ?
+				return await prisma.event.update({
+					where: { id: eventId },
+					data: {
+						state: 'active',
+						activedAt: new Date(),
+					},
+				})
+			}
+
+			return await prisma.event.update({ where: { id: eventId }, data })
+		})
+	},
 	update_event: async ({ request, locals, params: { eventId } }) => {
 		const member = await permission.admin(eventId, locals)
 		const { err, data, formData } = await parseFormData(request, eventUpdate)

@@ -110,13 +110,12 @@ enum TokenType {
 }
 
 model Event {
-  id      String     @id @unique
-  name    String     @unique
-  state   EventState @default(draft)
-  ownerId String
-  owner   User       @relation(references: [id], fields: [ownerId], onDelete: Cascade)
-
-  hasLicence Boolean @default(false)
+  id        String     @id @unique
+  name      String     @unique
+  state     EventState @default(draft)
+  activedAt DateTime?
+  ownerId   String
+  owner     User       @relation(references: [id], fields: [ownerId], onDelete: Cascade)
 
   description String?
   icon        String?

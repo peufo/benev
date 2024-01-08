@@ -14,12 +14,15 @@ export const eventCreate = {
 	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
 	address: z.string().optional(),
-	state: z.enum(toTuple(EVENT_STATES)).optional(),
 } satisfies ZodObj<EventCreateInput>
 
 export const eventUpdate = {
 	...eventCreate,
 	name: z.string().min(3).optional(),
+} satisfies ZodObj<EventUpdateInput>
+
+export const eventState = {
+	state: z.enum(toTuple(EVENT_STATES)).optional(),
 } satisfies ZodObj<EventUpdateInput>
 
 export const eventSettings = {
