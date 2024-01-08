@@ -6,19 +6,6 @@ export const actions = {
 		await permission.root(locals)
 		const { data, err } = await parseFormData(request, checkoutCreate)
 		if (err) return err
-
-		console.log(data)
-
-		/*
-		prisma.checkout.create({
-			data: {
-				amount: 3,
-				user: { connect: { id: ''}},
-				licences: { }
-			}
-		})
-
-		return tryOrFail(() => prisma.licence.create({ data }), '/root/licences')
-		*/
+		return tryOrFail(() => prisma.checkout.create({ data }), '/root/checkouts')
 	},
 }

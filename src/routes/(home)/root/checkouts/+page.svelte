@@ -18,12 +18,13 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<td>User</td>
-				<td>CreatedAt</td>
-				<td>Amount</td>
-				<td>Currency</td>
-				<td>Licence event</td>
-				<td>Licence member</td>
+				<th>User</th>
+				<th>Name</th>
+				<th>CreatedAt</th>
+				<th>Amount</th>
+				<th>Currency</th>
+				<th>Licence event</th>
+				<th>Licence member</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -34,6 +35,9 @@
 							{checkout.user.firstName}
 							{checkout.user.lastName}
 						</a>
+					</td>
+					<td>
+						{checkout.name ?? '-'}
 					</td>
 					<td>
 						{checkout.createdAt.toLocaleDateString()}

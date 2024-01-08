@@ -21,7 +21,10 @@ function dateOptional() {
 }
 
 const relation = {
-	connect: zod.string().transform((value) => ({ connect: { id: value } })),
+	connect: zod
+		.string()
+		.min(1, 'Required')
+		.transform((value) => ({ connect: { id: value } })),
 	create<T extends zod.ZodRawShape>(shap: T) {
 		return zod.object(shap).transform((value) => ({ create: value }))
 	},
@@ -49,6 +52,7 @@ function relationsUniqueInput(operation: RelationsOperation = 'set') {
 function objectOrArray<T extends zod.ZodRawShape>(shap: T) {
 	return zod.union([zod.array(zod.object(shap)), zod.object(shap)])
 }
+
 const relations = {
 	set: relationsUniqueInput('set'),
 	disconnect: relationsUniqueInput('set'),

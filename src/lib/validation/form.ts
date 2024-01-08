@@ -58,7 +58,9 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 				const key = issue.path[0]
 				if (!setError[key]) {
 					notify.warning(
-						`[${issue.code}] ${issue.path[0]} receive "${issue.received}" instead "${issue.expected}"`
+						`[${issue.code}] ${issue.path.join('.')} receive "${issue.received}" instead "${
+							issue.expected
+						}"`
 					)
 					console.warn('Error not visible', issue)
 					return

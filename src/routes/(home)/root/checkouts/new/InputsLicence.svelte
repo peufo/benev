@@ -14,6 +14,6 @@
 	<input type="hidden" name="{prefix}type" value={type} />
 	<input type="hidden" name="{prefix}ownerId" value={ownerId} />
 
-	<InputNumber key="{prefix}quantity" label="Quantity" value="1" />
+	<InputNumber key="{prefix}quantity" label="Quantity" value="0" />
 	<InputNumber key="{prefix}price" value="0" label="Price" />
 </div>

@@ -11,7 +11,6 @@ export const checkoutCreate = {
 		type: z.enum(toTuple(LICENCE_TYPE)),
 		quantity: z.number(),
 		price: z.number(),
-		checkoutId: z.string(),
 		ownerId: z.string(),
 	}),
 } satisfies ZodObj<Prisma.CheckoutCreateInput>
