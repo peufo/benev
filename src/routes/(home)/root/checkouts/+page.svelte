@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon, Pagination } from '$lib/material'
 	import { sumOfLicences } from '$lib/paywall/index.js'
 	import { mdiPlus } from '@mdi/js'
 
@@ -46,4 +46,8 @@
 			{/each}
 		</tbody>
 	</table>
+
+	<div class="flex justify-end mt-2">
+		<Pagination />
+	</div>
 </Card>

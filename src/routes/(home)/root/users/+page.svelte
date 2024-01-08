@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/material'
+	import { Card, Pagination } from '$lib/material'
 	import { sumOfLicences } from '$lib/paywall'
 
 	export let data
@@ -45,4 +45,7 @@
 			{/each}
 		</tbody>
 	</table>
+	<div class="flex justify-end mt-2">
+		<Pagination />
+	</div>
 </Card>
