@@ -1,7 +1,7 @@
 import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } from '$env/static/private'
 import nodemailer, { type SendMailOptions } from 'nodemailer'
 import type { ComponentProps, ComponentType } from 'svelte'
-import { prisma } from './prisma'
+import { prisma } from '$lib/server'
 
 export const transporter = nodemailer.createTransport({
 	host: SMTP_HOST,

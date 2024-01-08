@@ -1,5 +1,6 @@
 import { z, toTuple, type ZodObj } from '$lib/validation'
-import { EventState, type Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { EVENT_STATES } from '$lib/constant'
 
 export type EventCreateInput = Omit<Prisma.EventCreateInput, 'owner'>
 export type EventUpdateInput = Omit<Prisma.EventUpdateInput, 'owner'>
@@ -13,7 +14,7 @@ export const eventCreate = {
 	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
 	address: z.string().optional(),
-	state: z.enum(toTuple(EventState)).optional(),
+	state: z.enum(toTuple(EVENT_STATES)).optional(),
 } satisfies ZodObj<EventCreateInput>
 
 export const eventUpdate = {

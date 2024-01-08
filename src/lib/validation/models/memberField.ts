@@ -1,5 +1,6 @@
 import { z, toTuple, type ZodObj } from '$lib/validation'
-import { type Prisma, FieldType } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { MEMBER_FIELD_TYPE } from '$lib/constant'
 
 export const memberFieldCreate = {
 	name: z.string().min(2),
@@ -9,7 +10,7 @@ export const memberFieldCreate = {
 	description: z.string().optional(),
 	options: z.string().optional(),
 	required: z.boolean().optional(),
-	type: z.enum(toTuple(FieldType)),
+	type: z.enum(toTuple(MEMBER_FIELD_TYPE)),
 } satisfies ZodObj<Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>>
 
 export const memberFieldUpdate = {
