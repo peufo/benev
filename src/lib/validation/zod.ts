@@ -47,7 +47,7 @@ function relationsUniqueInput(operation: RelationsOperation = 'set') {
 }
 
 function objectOrArray<T extends zod.ZodRawShape>(shap: T) {
-	return zod.union([zod.object(shap), zod.array(zod.object(shap))])
+	return zod.union([zod.array(zod.object(shap)), zod.object(shap)])
 }
 const relations = {
 	set: relationsUniqueInput('set'),

@@ -1,8 +1,8 @@
 import type { SubmitFunction } from '@sveltejs/kit'
 import type { z } from 'zod'
 import { setContext, getContext, hasContext } from 'svelte'
-import { useNotify } from '$lib/notify'
 import { goto } from '$app/navigation'
+import { useNotify } from '$lib/notify'
 
 export type SetError = { [key: string]: (err: string) => void }
 export type FormContext = { setError: SetError }
@@ -46,21 +46,26 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 		issues,
 		message,
 	}: {
-		issues?: (z.ZodIssue & { received?: string; expected?: string })[]
+		issues?: (z.ZodIssue & {
+			received?: string
+			expected?: string
+		})[]
 		message?: string
 	}) {
 		resetErrors()
-		issues?.forEach((issue) => {
-			const key = issue.path[0]
-			if (!setError[key]) {
-				notify.warning(
-					`[${issue.code}] ${issue.path[0]} receive "${issue.received}" instead "${issue.expected}"`
-				)
-				console.warn('Error not visible', issue)
-				return
-			}
-			setError[key](issue.message)
-		})
+		if (issues) {
+			issues.forEach((issue) => {
+				const key = issue.path[0]
+				if (!setError[key]) {
+					notify.warning(
+						`[${issue.code}] ${issue.path[0]} receive "${issue.received}" instead "${issue.expected}"`
+					)
+					console.warn('Error not visible', issue)
+					return
+				}
+				setError[key](issue.message)
+			})
+		}
 
 		if (message) {
 			notify.error(message)

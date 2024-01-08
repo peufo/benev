@@ -9,10 +9,11 @@ export const load = async ({ url }) => {
 	})
 	if (err) throw error(400)
 	return {
-		licences: await prisma.licence.findMany({
+		checkouts: await prisma.checkout.findMany({
 			...data,
 			include: {
-				owner: true,
+				licences: true,
+				user: true,
 			},
 			orderBy: { createdAt: 'desc' },
 		}),
