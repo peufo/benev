@@ -24,7 +24,7 @@
       "
 			class:active
 		>
-			<Icon path={tab.icon} size={20} class="opacity-70" {active} />
+			<Icon path={tab.icon} size={20} class="opacity-70" />
 			<span class="whitespace-nowrap hidden sm:block">{tab.label}</span>
 		</a>
 	{/each}

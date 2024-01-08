@@ -15,7 +15,7 @@
 {#each tabs as { path, label, icon }}
 	{@const active = $page.route.id?.startsWith(`/(home)${path}`)}
 	<a href="{$eventPath}{path}" class="menu-item" class:active>
-		<Icon path={icon} size={20} class="opacity-70" {active} />
+		<Icon path={icon} size={20} class="opacity-70" />
 		{label}
 	</a>
 {/each}

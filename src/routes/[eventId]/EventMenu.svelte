@@ -42,7 +42,7 @@
 			<h3 class="font-bold opacity-50 pl-3 pt-1 text-xs">Gestion</h3>
 			{#each $adminTabs as { href, isActive, label, icon }}
 				<a {href} class="menu-item" class:active={isActive}>
-					<Icon path={icon} size={20} class="opacity-70" active={isActive} />
+					<Icon path={icon} size={20} class="opacity-70" />
 					{label}
 				</a>
 			{/each}

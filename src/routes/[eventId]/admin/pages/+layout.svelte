@@ -24,12 +24,7 @@
 					class="menu-item shrink-0"
 					class:active={$page.params.pageId === pageIndex.id}
 				>
-					<Icon
-						path={mdiHomeOutline}
-						active={$page.params.pageId === pageIndex.id}
-						class="opacity-60"
-						size={20}
-					/>
+					<Icon path={mdiHomeOutline} class="opacity-60" size={20} />
 					<span>{pageIndex.title}</span>
 				</a>
 			{/if}
@@ -40,12 +35,7 @@
 					class="menu-item shrink-0"
 					class:active={$page.params.pageId === id}
 				>
-					<Icon
-						path={mdiFileDocumentOutline}
-						active={$page.params.pageId === id}
-						class="opacity-60"
-						size={20}
-					/>
+					<Icon path={mdiFileDocumentOutline} class="opacity-60" size={20} />
 
 					<span>{title}</span>
 				</a>
