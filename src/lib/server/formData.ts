@@ -13,11 +13,55 @@ export async function parseFormData<Type extends z.ZodRawShape>(
 	const shema = z.object(firstShap).superRefine(validation || (() => {}))
 	unionShaps.forEach((shap) => shema.or(z.object(shap)))
 
-	const formDataObject: Record<string, unknown> = Object.fromEntries(formData)
+	const formDataFlateObject: Record<string, unknown> = Object.fromEntries(formData)
+	const formDataObject = flateToNeestedObject(formDataFlateObject)
+
 	const parsed = shema.safeParse(formDataObject)
 	if (parsed.success === false) {
 		return { formData, err: fail(400, { issues: parsed.error.issues }) }
 	}
 
 	return { data: parsed.data, formData }
+}
+
+function flateToNeestedObject(flatObject: Record<string, unknown>) {
+	const obj: Record<string, unknown> = {}
+	Object.entries(flatObject).forEach(([key, value]) => {
+		set(obj, key, value)
+	})
+
+	return obj
+}
+
+function set(obj: Record<string, any>, path: string | number | (string | number)[], value: any) {
+	if (typeof path === 'number') path = [path]
+	if (!path || path.length === 0) return obj
+	if (typeof path === 'string') return set(obj, path.split('.').map(getKey), value)
+
+	const currentPath = path[0]
+	const currentValue = obj[currentPath]
+
+	if (path.length === 1) {
+		if (currentValue === undefined) {
+			obj[currentPath] = value
+		}
+		return currentValue
+	}
+
+	if (currentValue === undefined) {
+		//check if we assume an array
+		if (typeof path[1] === 'number') {
+			obj[currentPath] = []
+		} else {
+			obj[currentPath] = {}
+		}
+	}
+
+	return set(obj[currentPath], path.slice(1), value)
+}
+
+function getKey(key: string) {
+	const intKey = parseInt(key)
+	if (intKey.toString() === key) return intKey
+	return key
 }

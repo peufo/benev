@@ -2,7 +2,7 @@
 	import type { Checkout, User, Licence } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
-	import { LICENCE } from '$lib/constant'
+	import { LICENCE_TYPE } from '$lib/constant'
 
 	export let checkout: Checkout & { user: User; licences: Licence[] }
 	export let dest: 'user' | 'root' = 'user'
@@ -33,7 +33,7 @@
 		<tbody>
 			{#each checkout.licences as licence}
 				<tr>
-					<th>{LICENCE[licence.type]}</th>
+					<th>{LICENCE_TYPE[licence.type]}</th>
 					<th align="right">{licence.quantity}</th>
 					<th align="right">
 						{(licence.price / 100).toFixed(2)}

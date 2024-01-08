@@ -48,14 +48,15 @@ model User {
 }
 
 model Licence {
-  id         String      @id @default(cuid())
-  type       LicenceType
-  quantity   Int
-  price      Int
-  ownerId    String
-  owner      User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  id       String      @id @default(cuid())
+  type     LicenceType
+  quantity Int
+  price    Int
+  ownerId  String
+  owner    User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
   checkoutId String
-  checkout   Checkout    @relation(fields: [checkoutId], references: [id], onDelete: Cascade)
+  checkout   Checkout @relation(fields: [checkoutId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }

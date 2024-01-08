@@ -2,7 +2,7 @@ import axios, { type AxiosRequestConfig, type RawAxiosResponseHeaders } from 'ax
 import { page } from '$app/stores'
 import { derived } from 'svelte/store'
 import * as devalue from 'devalue'
-import type { Member } from '@prisma/client'
+import type { Member, User } from '@prisma/client'
 import type { TeamWithComputedValues } from '$lib/server'
 
 interface RequestConfig<Params = any, Data = any> extends AxiosRequestConfig<Data> {
@@ -54,4 +54,5 @@ export const api = derived(page, ({ params: { eventId } }) => ({
 		`/${eventId}/api/members`
 	),
 	team: methods<TeamWithComputedValues, { onlyAvailable?: boolean }>(`/${eventId}/api/teams`),
+	user: methods<User>(`/root/users`),
 }))

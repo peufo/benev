@@ -5,6 +5,7 @@ export const z = {
 	...zod,
 	json,
 	array,
+	relation,
 	relations,
 	dateOptional,
 	booleanAsString,
@@ -33,14 +34,19 @@ function dateOptional() {
 		.transform((v) => (v ? new Date(v) : v === '' ? null : undefined))
 }
 
-type Operation = 'set' | 'disconnect' | 'delete' | 'connect'
-type OperationResult = Partial<Record<Operation, { id: string }[]>>
-function relations(operation: Operation = 'set') {
+type RelationsOperation = 'set' | 'disconnect' | 'delete' | 'connect'
+type OperationResult = Partial<Record<RelationsOperation, { id: string }[]>>
+function relations(operation: RelationsOperation = 'set') {
 	return zod
 		.string()
 		.transform(jsonParse)
 		.pipe(zod.array(z.string()))
 		.transform((ids) => ({ [operation]: ids.map((id) => ({ id })) } as OperationResult))
+}
+
+type RelationOperation = 'connect' // | 'create' | 'connectOrCreate'
+function relation(operation: RelationOperation = 'connect') {
+	return zod.string().transform((id) => ({ [operation]: { id } }))
 }
 
 /** https://github.com/colinhacks/zod/issues/53#issuecomment-1386446580 */

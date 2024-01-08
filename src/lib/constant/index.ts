@@ -69,7 +69,7 @@ export const GIFT_CONDITION_TYPE: Record<GiftConditionType, string> = {
 	period: `Doit travailer durant la période de`,
 } as const
 
-export const LICENCE: Record<LicenceType, string> = {
+export const LICENCE_TYPE: Record<LicenceType, string> = {
 	event: 'Évènement',
 	member: 'Membre',
 } as const
