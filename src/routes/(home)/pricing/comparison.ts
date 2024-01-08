@@ -11,7 +11,7 @@ export const apps: App[] = [
 	{
 		name: 'benev.io',
 		href: 'https://benev.io',
-		getTarif: (events, members) => events * (8 + 0.3 * members),
+		getTarif: (events, members) => events * (10 + 0.5 * members),
 	},
 	{
 		name: 'Qo·ezion',

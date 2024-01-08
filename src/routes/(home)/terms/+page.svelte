@@ -6,7 +6,7 @@
 	<div class="prose">
 		<h1>Conditions d'utilisation</h1>
 		<p>
-			Date d'effet : <b>01.11.2023</b> <br />
+			Date d'effet : <b>1 Janvier 2024</b> <br />
 			Temps de lecture : <b>2 minutes</b>
 		</p>
 		<p>En utilisant notre application, tu acceptes les règles ci-dessous.</p>
@@ -76,8 +76,8 @@
 				inférieurs aux applications concurrentes.
 			</p>
 			<p>
-				Nous demandons 8 CHF par évènement et un coût additionnel de 0.30 CHF par membre participant
-				à l'évènement.
+				Nous demandons 10 CHF par évènement et un coût additionnel de 0.50 CHF par membre
+				participant à l'évènement.
 			</p>
 		</section>
 

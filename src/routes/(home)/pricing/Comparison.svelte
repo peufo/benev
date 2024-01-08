@@ -92,7 +92,10 @@
 				class="flex items-center gap-2"
 				use:tip={{ disable: !app.conditions, content: app.conditions }}
 			>
-				<div class="bg-warning h-2 rounded" style:width="{75 * (app.tarif / tarifMax)}%" />
+				<div
+					class="h-2 rounded {app.name === 'benev.io' ? 'bg-primary' : 'bg-warning'}"
+					style:width="{75 * (app.tarif / tarifMax)}%"
+				/>
 				<span class="text-xs font-medium">
 					{renderAmount(app.tarif)}
 				</span>
