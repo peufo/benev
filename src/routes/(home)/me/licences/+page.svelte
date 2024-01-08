@@ -50,7 +50,7 @@
 		>
 			<div class="flex gap-2 items-top">
 				<div class="flex flex-wrap gap-x-2 gap-y-0 items-center">
-					<h3 class="font-semibold opacity-80">Achat</h3>
+					<h3 class="font-semibold opacity-80">{checkout.name || ''}</h3>
 					<span class="text-xs italic opacity-70">
 						{checkout.createdAt.toLocaleDateString()}
 					</span>
@@ -63,9 +63,14 @@
 			</div>
 
 			<div class="flex mt-2 gap-2 justify-end">
-				{#each checkout.licences as licence}
-					<span class="badge gap-1 badge-success">
-						<b>+{licence.quantity}</b>
+				{#each checkout.licences.filter((l) => l.quantity !== 0) as licence}
+					{@const isPositif = licence.quantity > 0}
+					<span
+						class="badge gap-1"
+						class:badge-success={isPositif}
+						class:badge-warning={!isPositif}
+					>
+						<b>{isPositif ? `+${licence.quantity}` : licence.quantity}</b>
 						{LICENCE_TYPE[licence.type]}{licence.quantity > 1 ? 's' : ''}
 					</span>
 				{/each}
