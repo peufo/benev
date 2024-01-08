@@ -2,11 +2,11 @@ import zod from 'zod'
 import { jsonParse } from '$lib/jsonParse'
 
 function json<T extends zod.ZodRawShape>(shap: T) {
-	return zod.any().transform(jsonParse).pipe(zod.object(shap))
+	return zod.string().transform(jsonParse).pipe(zod.object(shap))
 }
 
 function array<T extends zod.ZodTypeAny>(shap: T) {
-	return zod.any().transform(jsonParse).pipe(zod.array(shap))
+	return zod.string().transform(jsonParse).pipe(zod.array(shap))
 }
 
 function booleanAsString() {
@@ -20,6 +20,22 @@ function dateOptional() {
 		.transform((v) => (v ? new Date(v) : v === '' ? null : undefined))
 }
 
+const relation = {
+	connect: zod.string().transform((value) => ({ connect: { id: value } })),
+	create<T extends zod.ZodRawShape>(shap: T) {
+		return zod.object(shap).transform((value) => ({ create: value }))
+	},
+	connectOrCreate<T extends zod.ZodRawShape>(shap: T) {
+		return zod.object(shap).transform((value) => ({ connectOrCreate: value }))
+	},
+	upsert<T extends zod.ZodRawShape>(shap: T) {
+		return zod.object(shap).transform((value) => ({ upsert: value }))
+	},
+	update<T extends zod.ZodRawShape>(shap: T) {
+		return zod.object(shap).transform((value) => ({ update: value }))
+	},
+}
+
 type RelationsOperation = 'set' | 'disconnect' | 'delete' | 'connect'
 type OperationResult = Partial<Record<RelationsOperation, { id: string }[]>>
 function relationsUniqueInput(operation: RelationsOperation = 'set') {
@@ -30,49 +46,34 @@ function relationsUniqueInput(operation: RelationsOperation = 'set') {
 		.transform((ids) => ({ [operation]: ids.map((id) => ({ id })) } as OperationResult))
 }
 
-const relation = {
-	create<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ create: zod.object(shap) })
-	},
-	connectOrCreate<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ connectOrCreate: zod.object(shap) })
-	},
-	connect<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ connect: zod.object(shap) })
-	},
-	upsert<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ upsert: zod.object(shap) })
-	},
-	update<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ update: zod.object(shap) })
-	},
+function objectOrArray<T extends zod.ZodRawShape>(shap: T) {
+	return zod.union([zod.object(shap), zod.array(zod.object(shap))])
 }
-
 const relations = {
 	set: relationsUniqueInput('set'),
 	disconnect: relationsUniqueInput('set'),
 	delete: relationsUniqueInput('delete'),
 	connect: relationsUniqueInput('connect'),
 	create<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ create: zod.object(shap) })
+		return objectOrArray(shap).transform((value) => ({ create: value }))
 	},
 	connectOrCreate<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ connectOrCreate: zod.object(shap) })
+		return objectOrArray(shap).transform((value) => ({ connectOrCreate: value }))
 	},
 	upsert<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ upsert: zod.object(shap) })
+		return objectOrArray(shap).transform((value) => ({ upsert: value }))
 	},
 	createMany<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ createMany: zod.object(shap) })
+		return objectOrArray(shap).transform((value) => ({ createMany: value }))
 	},
 	update<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ update: zod.object(shap) })
+		return objectOrArray(shap).transform((value) => ({ update: value }))
 	},
 	updateMany<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ updateMany: zod.object(shap) })
+		return objectOrArray(shap).transform((value) => ({ updateMany: value }))
 	},
 	deleteMany<T extends zod.ZodRawShape>(shap: T) {
-		return z.json({ deleteMany: zod.object(shap) })
+		return objectOrArray(shap).transform((value) => ({ deleteMany: value }))
 	},
 }
 
@@ -95,7 +96,7 @@ export type ZodObj<T = Record<PropertyKey, unknown>> = {
 	[key in keyof T]: zod.ZodType<
 		T[key],
 		zod.ZodTypeDef,
-		Date | boolean | number | string | undefined
+		Date | boolean | number | string | undefined | object
 	>
 }
 export const toTuple = Object.keys as <T extends {}>(o: T) => UnionToTuple<keyof T>
