@@ -26,7 +26,7 @@
 		<Comparison rates={data.rates} />
 
 		<div class="grid place-content-center mt-12 mb-6">
-			<a href="/me" class="btn btn-secondary"> Essayer maintenant </a>
+			<a href="/me" class="btn btn-primary"> Essayer maintenant </a>
 		</div>
 	</Card>
 </div>

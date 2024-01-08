@@ -26,7 +26,7 @@
 			</div>
 
 			<div class="grid place-content-center mt-12 mb-10">
-				<a href="/me" class="btn btn-secondary">
+				<a href="/me" class="btn btn-primary">
 					{data.user ? 'Voir mes évènements' : 'Essayer maintenant'}
 				</a>
 			</div>
