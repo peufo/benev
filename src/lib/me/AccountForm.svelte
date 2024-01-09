@@ -94,7 +94,6 @@
 			label="Être notifié par mail quand mes inscriptions change de statut"
 			value={user.wantsNotification}
 		/>
-		<InputBoolean key="isOrganizer" label="Je suis organisateur" value={user.isOrganizer} />
 	</div>
 
 	<div class="flex gap-1 items-center justify-end col-span-full">
