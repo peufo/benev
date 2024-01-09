@@ -8,7 +8,7 @@
 	export let rates: Record<string, number> = {}
 
 	let nbEvents = 1
-	let nbMembers = 250
+	let nbMembers = 200
 
 	const selectedCurrency = 'CHF'
 
