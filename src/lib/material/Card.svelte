@@ -9,7 +9,7 @@
 	export let returnUrl = ''
 </script>
 
-<div class="card bg-base-100 shadow-lg {klass}">
+<div class="card bg-base-100 shadow-lg border bordered {klass}">
 	<slot name="top" />
 
 	<div class="card-body p-2 sm:p-8 {bodyClass}">
