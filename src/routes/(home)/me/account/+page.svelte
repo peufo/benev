@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { mdiLogout } from '@mdi/js'
-	import { Icon } from '$lib/material'
 	import { ProfileForm, AvatarForm, DeleteUserForm } from '$lib/me'
 
 	export let data
 </script>
 
-<div class="flex justify-between">
-	<div>
+<div class="flex justify-between gap-4">
+	<div class="shrink">
 		<div class="title mt-2">Mon compte</div>
 		<p class="text-xs opacity-70 mt-3 max-w-sm">
 			Tes informations personnelles sont uniquement partagées avec les responsables des évènements
 			auquels tu participes.
 		</p>
 	</div>
-	<AvatarForm user={data.user} class="h-20 w-20 sm:h-28 sm:w-28 ml-auto" />
+	<div class="shrink-0">
+		<AvatarForm user={data.user} />
+	</div>
 </div>
 <ProfileForm user={data.user} />
 
