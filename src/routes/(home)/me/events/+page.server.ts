@@ -4,7 +4,7 @@ export const load = async ({ parent }) => {
 	const { user } = await parent()
 
 	const members = await prisma.member.findMany({
-		where: { userId: user.id },
+		where: { userId: user.id, event: { deletedAt: null } },
 		include: {
 			user: true,
 			event: { include: { memberFields: true } },

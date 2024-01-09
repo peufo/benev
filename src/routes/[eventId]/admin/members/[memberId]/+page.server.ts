@@ -7,7 +7,7 @@ export const load = async ({ parent, params: { memberId, eventId } }) => {
 	return {
 		memberProfile: await getMemberProfile({ memberId }, member),
 		event: await prisma.event.findUniqueOrThrow({
-			where: { id: eventId },
+			where: { id: eventId, deletedAt: null },
 			include: {
 				memberFields: {
 					orderBy: { position: 'asc' },

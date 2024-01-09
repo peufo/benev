@@ -15,7 +15,7 @@ export const load = async ({ depends, parent, params: { eventId } }) => {
 			userId: user?.id || '',
 			member,
 			event: await prisma.event.findUniqueOrThrow({
-				where: { id: eventId },
+				where: { id: eventId, deletedAt: null },
 				include: {
 					memberFields: {
 						where: isLeader ? {} : { memberCanRead: true },

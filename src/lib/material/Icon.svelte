@@ -10,7 +10,6 @@
 	export { klass as class }
 	export let style = ''
 	export let classSVG = ''
-	export let active = false
 	export let tippyProps: Partial<TippyProps> = {}
 	export let disableTitlePropagation = false
 	const viewWidth = 24
