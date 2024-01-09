@@ -26,7 +26,7 @@
 <div class="flex gap-2 justify-between items-center mb-3">
 	<h2 class="title">Mes évènements</h2>
 	<button class="btn" class:btn-primary={!data.members.length} on:click={handleClickNewEvent}>
-		<Icon path={mdiPlus} class={data.members.length ? '' : 'fill-secondary-content'} />
+		<Icon path={mdiPlus} />
 		Organiser
 	</button>
 </div>
