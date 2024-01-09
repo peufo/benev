@@ -13,7 +13,7 @@
 <form method="post" action="/me?/update_account" use:enhance={form.submit}>
 	<input type="hidden" name="isOrganizer" value="true" />
 
-	<p>Souhaite-tu devenir organisateur d'évenement ?</p>
+	<p>Souhaite-tu devenir organisateur d'évenements ?</p>
 
 	<div class="flex flex-row-reverse gap-2 items-center mt-4">
 		<button class="btn">Oui, je le veux </button>
