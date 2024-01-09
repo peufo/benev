@@ -5,7 +5,7 @@
 	import { MemberForm, MemberProfileForm } from '$lib/member'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
-	import ProfileForm from '$lib/me/ProfileForm.svelte'
+	import AccountForm from '$lib/me/AccountForm.svelte'
 
 	export let data
 
@@ -40,7 +40,7 @@
 	{:else if !data.member.isUserProfileCompleted}
 		<Card>
 			<AvatarForm user={data.user} />
-			<ProfileForm user={data.user} />
+			<AccountForm user={data.user} />
 		</Card>
 	{:else}
 		<Card>

@@ -19,7 +19,7 @@
 			class:bg-base-300={!important && active}
 			class:bg-primary={important && active}
 		>
-			<Icon {path} {title} size={20} active={important && active} />
+			<Icon {path} {title} size={20} />
 		</button>
 	{/each}
 </div>

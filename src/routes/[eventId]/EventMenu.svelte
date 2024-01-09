@@ -52,12 +52,7 @@
 				class="menu-item"
 				class:active={$page.route.id === '/[eventId]/help'}
 			>
-				<Icon
-					path={mdiHelp}
-					size={20}
-					class="opacity-70"
-					active={$page.route.id === '/[eventId]/help'}
-				/>
+				<Icon path={mdiHelp} size={20} class="opacity-70" />
 				Aide
 			</a>
 		{/if}

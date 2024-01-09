@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ProfileForm, AvatarForm, DeleteUserForm } from '$lib/me'
+	import { AccountForm, AvatarForm, DeleteUserForm } from '$lib/me'
 
 	export let data
 </script>
@@ -16,7 +16,7 @@
 		<AvatarForm user={data.user} />
 	</div>
 </div>
-<ProfileForm user={data.user} />
+<AccountForm user={data.user} />
 
 <hr class="my-3" />
 <div class="flex gap-2 flex-wrap justify-end">
