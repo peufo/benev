@@ -10,7 +10,8 @@
 	const features: Feature[] = [
 		{
 			name: 'Espace dédié',
-			description: 'Centralise la communication et la planification de ton évènement.',
+			description:
+				'Crée un site pour centraliser la communication et la planification de ton évènement.',
 		},
 		{
 			name: 'Base de donnée des membres',
@@ -24,7 +25,7 @@
 		{
 			name: "Travail d'équipe",
 			description:
-				"Nomme des administrateurs et des responsables secteurs pour déléguer la gestion de l'évènement.",
+				"Entoure-toi d'administrateurs et de responsables de secteurs pour t'aider dans la gestion.",
 		},
 		{
 			name: 'Documents opérationnels',
@@ -33,7 +34,7 @@
 		},
 		{
 			name: 'Communication',
-			description: 'Personnalise tes notifications par email et tes publipostage.',
+			description: 'Personnalise tes notifications par email et édite des publipostage.',
 			comingSoon: true,
 		},
 		{
@@ -45,7 +46,7 @@
 		{
 			name: 'Système de compensation',
 			description:
-				"Définit des articles et les règles d'éligibilitées pour générer des liste d'attribution",
+				"Définit des articles et les règles d'éligibilitées pour générer des liste d'attribution.",
 			comingSoon: true,
 		},
 	]
