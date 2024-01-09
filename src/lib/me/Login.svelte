@@ -7,15 +7,16 @@
 	import googleLogo from '$lib/assets/google.svg'
 	import { mdiGithub } from '@mdi/js'
 	import { tip } from '$lib/action'
+	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
 
 	const form = useForm({
-		successMessage: (action) => {
+		successMessage(action) {
 			if (action.search === '?/reset_password')
 				return "Un lien de réinitialisation t'a été envoyé par email"
 			return 'Bienvenue'
 		},
 	})
-	let state: 'login' | 'register' = 'login'
+	let state: 'login' | 'register' = 'register'
 
 	$: redirectTo = $page.url.searchParams.get('redirectTo')
 </script>
@@ -64,6 +65,16 @@
 
 			<InputText key="email" label="Email" />
 			<InputPassword key="password" label="Mot de passe" />
+
+			{#if state === 'register'}
+				<div transition:slide|local class="flex flex-col mt-4">
+					<InputBoolean key="isOrganizer" label="Je suis organisateur" />
+					<InputBoolean key="isTermsAccepted">
+						J'accepte
+						<a class="text-sm link" href="/terms" target="_blank"> les conditions d'utilisation </a>
+					</InputBoolean>
+				</div>
+			{/if}
 
 			{#if redirectTo}
 				<input type="hidden" name="redirectTo" value={redirectTo} />

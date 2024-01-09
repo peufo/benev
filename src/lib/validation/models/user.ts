@@ -4,6 +4,11 @@ import type { Prisma } from '@prisma/client'
 export const userLogin = {
 	email: z.string().email().toLowerCase(),
 	password: z.string().min(8),
+	isOrganizer: z.boolean(),
+	isTermsAccepted: z
+		.string()
+		.refine((v) => v === 'true', { message: 'Tu dois accepter les conditions' })
+		.transform((v) => true),
 }
 
 export const userCreate = {

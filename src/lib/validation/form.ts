@@ -18,8 +18,8 @@ export const formContext = {
 type SuccessMessage = string | ((action: URL) => string)
 type BooleanOrFunction = boolean | ((action: URL) => boolean)
 type UseFormOptions<ReturnData> = {
-	beforeRequest?: (...args: Parameters<SubmitFunction>) => Promise<unknown>
-	successCallback?: (action: URL, data?: ReturnData) => unknown
+	beforeRequest?: (...args: Parameters<SubmitFunction>) => any
+	successCallback?: (action: URL, data?: ReturnData) => any
 	successUpdate?: BooleanOrFunction
 	successReset?: BooleanOrFunction
 	successMessage?: SuccessMessage

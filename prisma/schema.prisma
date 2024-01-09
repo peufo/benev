@@ -14,10 +14,12 @@ datasource db {
 model User {
   id String @id @unique
 
-  email     String  @unique
-  phone     String?
-  firstName String
-  lastName  String
+  email           String  @unique
+  phone           String?
+  firstName       String
+  lastName        String
+  isOrganizer     Boolean @default(false)
+  isTermsAccepted Boolean @default(false)
 
   birthday DateTime?
   street   String?
