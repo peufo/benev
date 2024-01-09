@@ -16,7 +16,7 @@
 			return 'Bienvenue'
 		},
 	})
-	let state: 'login' | 'register' = 'register'
+	let state: 'login' | 'register' = 'login'
 
 	$: redirectTo = $page.url.searchParams.get('redirectTo')
 </script>
