@@ -8,10 +8,10 @@
 	import { normalizePath } from '$lib/normalizePath'
 	import { debounce } from '$lib/debounce'
 	import { FORMAT_A3 } from '$lib/constant'
+	import EventDeleteButton from './EventDeleteButton.svelte'
 
 	let klass = ''
 	export { klass as class }
-	export let isUpdate = false
 	export let event: Event | undefined = undefined
 	export let successUpdate = true
 	export let successReset = true
@@ -59,7 +59,7 @@
 <form
 	method="post"
 	enctype="multipart/form-data"
-	action={isUpdate ? '?/update_event' : '/?/new_event'}
+	action={event ? '?/update_event' : '/?/new_event'}
 	class="{klass} flex flex-col gap-2"
 	use:enhance={form.submit}
 >
@@ -134,9 +134,10 @@
 
 	<div class="flex gap-2 flex-row-reverse">
 		<button class="btn" type="submit">Valider</button>
-
-		{#if isUpdate}
-			<DeleteButton formaction="?/delete_event" />
-		{/if}
 	</div>
 </form>
+
+{#if event}
+	<hr />
+	<EventDeleteButton {event} />
+{/if}

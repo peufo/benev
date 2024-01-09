@@ -87,6 +87,8 @@ export const actions = {
 	delete_event: async ({ locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 
+		console.log('PROUT')
+
 		return tryOrFail(
 			() =>
 				prisma.event.delete({

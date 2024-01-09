@@ -8,16 +8,19 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<td>Name</td>
-				<td>CreatedAt</td>
-				<td>State</td>
-				<td>Owner</td>
-				<td>Members</td>
+				<th>Id</th>
+				<th>Name</th>
+				<th>CreatedAt</th>
+				<th>DeletedAt</th>
+				<th>State</th>
+				<th>Owner</th>
+				<th>Members</th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each data.events as event}
 				<tr>
+					<td>{event.id}</td>
 					<td>
 						<a href="/{event.id}" class="link link-hover">
 							{event.name}
@@ -25,6 +28,9 @@
 					</td>
 					<td>
 						{event.createdAt.toLocaleDateString()}
+					</td>
+					<td>
+						{event.deletedAt?.toLocaleDateString() || '-'}
 					</td>
 					<td>{event.state}</td>
 					<td>{event.owner.firstName} {event.owner.lastName}</td>

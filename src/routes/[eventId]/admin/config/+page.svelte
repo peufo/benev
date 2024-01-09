@@ -27,7 +27,7 @@
 				L'évènement
 			</span>
 			<span slot="subtitle">Informations publiques relatives à ton évènement</span>
-			<EventForm isUpdate successReset={false} event={data.event} class="grow" />
+			<EventForm successReset={false} event={data.event} class="grow" />
 		</SectionCollapse>
 
 		<SectionCollapse value="settings">

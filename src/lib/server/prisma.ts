@@ -4,7 +4,9 @@ export const prisma = new PrismaClient().$extends({
 	query: {
 		event: {
 			async delete({ args: { where } }) {
-				await prisma.event.update({ where, data: { deletedAt: new Date() } })
+				const event = await prisma.event.findUniqueOrThrow({ where })
+				const id = `deleted_${event.id}`
+				await prisma.event.update({ where, data: { id, deletedAt: new Date() } })
 				return true
 			},
 		},

@@ -39,6 +39,10 @@ export const actions = {
 		]
 		if (reservedPaths.includes(data.id))
 			return nameFail(`Les noms suivant sont réservés: ${reservedPaths.join(', ')}`)
+		if (data.id.startsWith('deleted_'))
+			return nameFail('Les noms ne peuvent pas commencer par "deleted_"')
+		if (data.id.startsWith('archived_'))
+			return nameFail('Les noms ne peuvent pas commencer par "archived_"')
 
 		return tryOrFail(
 			async () => {
