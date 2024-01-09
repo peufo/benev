@@ -8,7 +8,7 @@
 	export let data
 </script>
 
-<div class="max-w-lg mx-auto flex flex-col gap-10">
+<div class="max-w-lg mx-auto flex flex-col py-10">
 	<Card>
 		<div class="text-center">
 			<img src={logo} alt="Logo benev" class="w-36 mx-auto mt-8" />
@@ -32,6 +32,6 @@
 			</a>
 		</div>
 	</Card>
-
-	<Features />
 </div>
+
+<Features />

@@ -19,7 +19,7 @@
 		{
 			name: "Processus d'adhésion flexible",
 			description:
-				"Automatise ta planification en autorisant l'inscription autonome des membres.\nOu à l'inverse, garde le contrôle en gérant toi-même le entrée pour les secteurs sensible.",
+				"Automatise ta planification en autorisant l'inscription autonome des membres toutes en gardant le contrôle sur les secteurs sensibles.",
 		},
 		{
 			name: "Travail d'équipe",
@@ -45,23 +45,32 @@
 		{
 			name: 'Système de compensation',
 			description:
-				"Définit des articles et règles d'éligibilité pour générer des liste d'attribution",
+				"Définit des articles et les règles d'éligibilitées pour générer des liste d'attribution",
 			comingSoon: true,
 		},
 	]
 </script>
 
-<section class="mb-20">
-	<h2 class="title my-10 text-center">Les possibilités</h2>
-	<div class="grid grid-cols-2 gap-4 items-start">
+<section class="my-20 max-w-7xl mx-auto">
+	<h2 class="title text-2xl text-center mb-10">Les possibilités</h2>
+	<div
+		class="grid gap-4 items-start overflow-auto"
+		style:grid-template-columns="repeat(auto-fill, minmax(min(20rem, 100%), 1fr)"
+	>
 		{#each features as feat}
-			<CardBasic title={feat.name} class="shadow">
-				<p>
+			<CardBasic class="shadow">
+				<div class="flex flex-wrap gap-2 items-center pb-2">
+					<h2 class="font-medium">
+						{feat.name}
+					</h2>
+					<div class="grow" />
+					{#if feat.comingSoon}
+						<span class="badge bg-base-200">Bientôt disponible</span>
+					{/if}
+				</div>
+				<p class="">
 					{feat.description}
 				</p>
-				{#if feat.comingSoon}
-					<span class="badge">Bientôt disponible</span>
-				{/if}
 			</CardBasic>
 		{/each}
 	</div>
