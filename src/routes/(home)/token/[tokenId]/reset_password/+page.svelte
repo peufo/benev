@@ -12,7 +12,7 @@
 
 <div class="card bg-base-100 max-w-md m-auto">
 	<form method="post" class="card-body" use:enhance={form.submit}>
-		<InputPassword key="password" label="Nouveau mot de passe" />
+		<InputPassword key="password" label="Nouveau mot de passe" autocomplete="new-password" />
 		{#if redirectTo}
 			<input type="hidden" name="redirectTo" value={redirectTo} />
 		{/if}
