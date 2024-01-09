@@ -40,7 +40,7 @@
 
 <form
 	method="post"
-	action="/me?/update_profile"
+	action="/me?/update_account"
 	use:enhance={formProfile.submit}
 	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4"
 >
@@ -88,12 +88,14 @@
 	<InputText key="zipCode" label="Code postal" value={user.zipCode || ''} class="md:col-span-4" />
 	<InputText key="city" label="Localité" value={user.city || ''} class="md:col-span-4" />
 
-	<InputBoolean
-		key="wantsNotification"
-		label="Être notifié par mail quand mes inscriptions change de statut"
-		class="col-span-full"
-		value={user.wantsNotification}
-	/>
+	<div class="col-span-full">
+		<InputBoolean
+			key="wantsNotification"
+			label="Être notifié par mail quand mes inscriptions change de statut"
+			value={user.wantsNotification}
+		/>
+		<InputBoolean key="isOrganizer" label="Je suis organisateur" value={user.isOrganizer} />
+	</div>
 
 	<div class="flex gap-1 items-center justify-end col-span-full">
 		<button class="btn">Sauvegarder </button>

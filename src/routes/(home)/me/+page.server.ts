@@ -25,6 +25,8 @@ export const actions = {
 			email: data.email,
 			firstName: data.firstName,
 			lastName: data.lastName,
+			isTermsAccepted: data.isTermsAccepted,
+			isOrganizer: data.isOrganizer,
 			isEmailVerified: false,
 			avatarPlaceholder: createAvatarPlaceholder(),
 		}
@@ -79,7 +81,7 @@ export const actions = {
 			})
 		})
 	},
-	update_profile: async ({ locals, request }) => {
+	update_account: async ({ locals, request }) => {
 		const session = await locals.auth.validate()
 		if (!session) throw error(401)
 

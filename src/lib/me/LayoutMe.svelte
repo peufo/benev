@@ -5,6 +5,9 @@
 	import { derived, type Readable } from 'svelte/store'
 	import { page } from '$app/stores'
 	import { dev } from '$app/environment'
+	import type { User } from '@prisma/client'
+
+	export let user: User
 
 	const tabs: Readable<Tab[]> = derived(page, (_page) => {
 		const routeId = _page.route.id
@@ -22,8 +25,7 @@
 			},
 		]
 
-		// licenccing hiden in production
-		if (dev)
+		if (user.isOrganizer)
 			tabs.push({
 				href: '/me/licences',
 				label: 'Mes licences',

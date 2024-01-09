@@ -6,7 +6,7 @@
 	export let data
 </script>
 
-<LayoutMe>
+<LayoutMe user={data.user}>
 	<div class="flex gap-2 items-center">
 		<a href="/me/events" class="btn btn-square btn-ghost btn-sm">
 			<Icon path={mdiArrowLeft} size={20} />

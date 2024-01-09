@@ -3,12 +3,11 @@ import { parseFormData, permission, prisma, redirectToRegister, tryOrFail } from
 import { z, type ZodObj } from '$lib/validation'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
-	const { user, member } = await parent()
-	if (!user || !member || !member.isValidedByUser) throw redirectToRegister(eventId, url)
+	const { member } = await parent()
+	if (!member || !member.isValidedByUser) throw redirectToRegister(eventId, url)
 
 	const memberId = member.id
 	return {
-		user,
 		member,
 		memberTeams: await prisma.team.findMany({
 			where: { periods: { some: { subscribes: { some: { memberId } } } } },

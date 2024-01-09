@@ -3,12 +3,15 @@
 	import { Dialog, Icon, Placeholder } from '$lib/material'
 	import { mdiPlus } from '@mdi/js'
 	import MemberCard from './MemberCard.svelte'
+	import { IsOrganizerForm } from '$lib/me'
 
 	export let data
 
 	let createDialog: HTMLDialogElement
+	let isOrganizerDialog: HTMLDialogElement
 	function handleClickNewEvent() {
-		createDialog.showModal()
+		if (data.user.isOrganizer) createDialog.showModal()
+		else isOrganizerDialog.showModal()
 	}
 </script>
 
@@ -25,7 +28,13 @@
 <!-- MES EVENEMENTS -->
 <div class="flex gap-2 justify-between items-center mb-3">
 	<h2 class="title">Mes évènements</h2>
-	<button class="btn" class:btn-primary={!data.members.length} on:click={handleClickNewEvent}>
+	<button
+		class="btn btn-ghost"
+		class:btn-ghost={!data.user.isOrganizer}
+		class:text-primary={!data.user.isOrganizer && !data.members.length}
+		class:btn-primary={data.user.isOrganizer && !data.members.length}
+		on:click={handleClickNewEvent}
+	>
 		<Icon path={mdiPlus} />
 		Organiser
 	</button>
@@ -41,6 +50,17 @@
 		</Placeholder>
 	{/each}
 </div>
+
+<Dialog bind:dialog={isOrganizerDialog}>
+	<h2 slot="header" class="card-title">Devenir organisateur</h2>
+	<IsOrganizerForm
+		on:cancel={() => isOrganizerDialog.close()}
+		on:success={() => {
+			isOrganizerDialog.close()
+			createDialog.showModal()
+		}}
+	/>
+</Dialog>
 
 <Dialog bind:dialog={createDialog}>
 	<h2 slot="header" class="card-title">Nouvel évènement</h2>
