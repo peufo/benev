@@ -20,6 +20,10 @@
 	.title {
 		@apply text-xl font-semibold text-base-content/70;
 	}
+
+	.btn-primary {
+		@apply text-white;
+	}
 }
 
 mark {
