@@ -14,7 +14,7 @@
 <div class="flex flex-col gap-4 max-w-5xl m-auto">
 	<Card bodyClass="sm:pt-4">
 		<svelte:fragment slot="top">
-			<Tabs tabs={$adminTabs} />
+			<Tabs tabs={$adminTabs.filter((t) => t.href.includes('/admin/'))} />
 		</svelte:fragment>
 
 		<h2 slot="title" class="sm:hidden text-center pb-2">

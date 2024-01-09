@@ -4,6 +4,7 @@ import {
 	mdiAccountMultipleOutline,
 	mdiClipboardTextMultipleOutline,
 	mdiCogs,
+	mdiHelp,
 } from '@mdi/js'
 
 import { derived } from 'svelte/store'
@@ -43,6 +44,11 @@ export const adminTabs = derived(param, ({ without, page }) => {
 			...getPath('/admin/pages'),
 			label: 'Les pages',
 			icon: mdiFileDocumentMultipleOutline,
+		},
+		{
+			...getPath('/help'),
+			label: 'Aide',
+			icon: mdiHelp,
 		},
 	]
 })

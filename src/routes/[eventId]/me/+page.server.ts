@@ -4,7 +4,7 @@ import { z, type ZodObj } from '$lib/validation'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const { member } = await parent()
-	if (!member || !member.isValidedByUser) throw redirectToRegister(eventId, url)
+	if (!member?.isValidedByUser) throw redirectToRegister(eventId, url)
 
 	const memberId = member.id
 	return {
