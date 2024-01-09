@@ -75,6 +75,7 @@ export const apps: App[] = [
 			const eventsCost = Math.min(200 * events, 600)
 			return eventsCost
 		},
+		hide: 'Based in USA',
 	},
 	{
 		name: 'Rosterfy',
