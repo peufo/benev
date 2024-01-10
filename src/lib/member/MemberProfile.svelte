@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { MemberProfile } from '$lib/server'
+	import { page } from '$app/stores'
 	import { mdiCheck, mdiClose, mdiPencilOutline } from '@mdi/js'
 	import type { FieldType } from '@prisma/client'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
-	import { CardBasic, Icon } from '$lib/material'
+	import { CardBasic, Icon, Placeholder } from '$lib/material'
 	import { jsonParse } from '$lib/jsonParse'
 	import { fade } from 'svelte/transition'
 
@@ -26,16 +27,18 @@
 		<MemberRole roles={member.roles} />
 		<MemberProfileStatus {member} />
 	{/if}
-	<button
-		type="button"
-		class="ml-auto btn btn-square btn-sm"
-		on:click={() => (readOnly = !readOnly)}
-	>
-		<Icon
-			path={readOnly ? mdiPencilOutline : mdiClose}
-			title="{readOnly ? 'Modifier' : 'Voire'} le profile"
-		/>
-	</button>
+	{#if $page.data.member?.roles.includes('leader') || member.event.memberFields.filter((f) => f.memberCanWrite).length}
+		<button
+			type="button"
+			class="ml-auto btn btn-square btn-sm"
+			on:click={() => (readOnly = !readOnly)}
+		>
+			<Icon
+				path={readOnly ? mdiPencilOutline : mdiClose}
+				title="{readOnly ? 'Modifier' : 'Voire'} le profile"
+			/>
+		</button>
+	{/if}
 </div>
 
 {#if !readOnly}
@@ -48,6 +51,8 @@
 			on:success={() => (readOnly = true)}
 		/>
 	</div>
+{:else if !member.profile.length}
+	<Placeholder>Profil vide</Placeholder>
 {:else}
 	{@const profile = member.profile.filter(
 		({ field, value }) => value !== '[]' && (value || field.type === 'boolean')

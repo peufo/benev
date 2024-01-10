@@ -53,7 +53,7 @@
 
 	<section>
 		{#if data.member.event.memberFields.filter((f) => f.memberCanRead).length}
-			<MemberProfile title="Ma participation" member={data.member} />
+			<MemberProfile title="Mon profil" member={data.member} />
 			<hr class="my-3" />
 		{/if}
 
