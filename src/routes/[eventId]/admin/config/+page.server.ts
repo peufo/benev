@@ -1,3 +1,6 @@
+import { parseFormData, prisma, tryOrFail, permission, media, licences } from '$lib/server'
+import { z } from '$lib/validation'
+
 import {
 	eventMemberSettings,
 	eventSettings,
@@ -7,9 +10,6 @@ import {
 	memberFieldCreate,
 	memberFieldUpdate,
 } from '$lib/validation'
-import { parseFormData, prisma, tryOrFail, permission, media } from '$lib/server'
-import { z } from '$lib/validation'
-import { error } from '@sveltejs/kit'
 
 export const load = async ({ params: { eventId } }) => ({
 	memberFields: await prisma.field.findMany({
@@ -29,22 +29,22 @@ export const actions = {
 		if (err) return err
 
 		return tryOrFail(async () => {
-			const { activedAt, state } = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
-
-			const licenceRequired = !activedAt && state === 'draft' && data.state === 'active'
+			const licenceRequired = false
+			// TODO: ENABLE PAYWALL !!!!
+			// const { activedAt, state } = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
+			// const licenceRequired = !activedAt && state === 'draft' && data.state === 'active'
 			if (licenceRequired) {
-				// TODO: Obtenir le nombre de licences du user
-				const licenceAvailable = true
-
-				if (!licenceAvailable) throw error(403, { message: 'No licence available' })
-				// TODO: Consommer une licences dans une transaction ?
-				return await prisma.event.update({
-					where: { id: eventId },
-					data: {
-						state: 'active',
-						activedAt: new Date(),
-					},
-				})
+				const licencesTransaction = await licences(member.userId).event.use(1)
+				return await prisma.$transaction([
+					...licencesTransaction,
+					prisma.event.update({
+						where: { id: eventId },
+						data: {
+							state: 'active',
+							activedAt: new Date(),
+						},
+					}),
+				])
 			}
 
 			return await prisma.event.update({ where: { id: eventId }, data })

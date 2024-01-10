@@ -29,10 +29,10 @@
 				path={EVENT_STATES[event.state].icon}
 				class="opacity-80 {event.state === 'draft' ? 'rotate-12' : ''}"
 			/>
-			<span class="font-medium opacity-80">{EVENT_STATES[event.state].label}</span>
+			<h3 class="title">{EVENT_STATES[event.state].label}</h3>
 		</div>
 
-		<p class="text-sm opacity-60">
+		<p class="text-sm opacity-60 mt-1">
 			{EVENT_STATES[event.state].description}
 		</p>
 	</div>

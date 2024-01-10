@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card, Icon, Pagination } from '$lib/material'
-	import { sumOfLicences } from '$lib/paywall/index.js'
 	import { mdiPlus } from '@mdi/js'
+	import { sumOfLicences } from '$lib/common'
 
 	export let data
 </script>

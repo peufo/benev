@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Card, Pagination } from '$lib/material'
-	import { sumOfLicences } from '$lib/paywall'
+	import { sumOfLicences } from '$lib/common'
 
 	export let data
 </script>

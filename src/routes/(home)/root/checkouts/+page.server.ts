@@ -8,6 +8,7 @@ export const load = async ({ url }) => {
 		skip: z.number().default(0),
 	})
 	if (err) throw error(400)
+
 	return {
 		checkouts: await prisma.checkout.findMany({
 			...data,
