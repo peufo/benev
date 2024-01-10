@@ -78,7 +78,13 @@
 		</div>
 	</FormControl>
 
-	<InputText key="phone" label="Téléphone" value={user.phone || ''} class="md:col-span-6" />
+	<InputText
+		key="phone"
+		label="Téléphone"
+		value={user.phone || ''}
+		class="md:col-span-6"
+		input={{ inputmode: 'tel' }}
+	/>
 
 	<InputText key="firstName" label="Prénom" value={user.firstName} class="md:col-span-4" />
 	<InputText key="lastName" label="Nom de famille" value={user.lastName} class="md:col-span-4" />

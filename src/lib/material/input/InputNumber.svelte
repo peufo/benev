@@ -17,6 +17,7 @@
 		name={key}
 		id={key}
 		class="input-bordered input"
+		inputmode="numeric"
 		{...input}
 	/>
 </FormControl>
