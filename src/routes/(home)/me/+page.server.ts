@@ -109,7 +109,7 @@ export const actions = {
 		return tryOrFail(async () => {
 			const { userId } = session.user
 			const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } })
-			const emailUpdated = user.email !== data.email
+			const emailUpdated = data.email && user.email !== data.email
 			if (emailUpdated) sendVerificationEmail(user)
 			return prisma.user.update({
 				where: { id: session.user.userId },
