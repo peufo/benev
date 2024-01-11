@@ -12,7 +12,7 @@
 	export let item: Item
 	export let field: TableField<Item>
 
-	const value = field.getCell(item)
+	$: value = field.getCell(item)
 </script>
 
 {#if Array.isArray(value)}
