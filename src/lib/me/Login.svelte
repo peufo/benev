@@ -63,7 +63,7 @@
 				</div>
 			{/if}
 
-			<InputText key="email" label="Email" input={{autocomplete: 'email', inputmode: 'email'}} />
+			<InputText key="email" label="Email" />
 			<InputPassword key="password" label="Mot de passe" />
 
 			{#if state === 'register'}

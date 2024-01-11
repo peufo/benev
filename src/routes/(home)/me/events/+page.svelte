@@ -45,7 +45,7 @@
 		<MemberCard {member} />
 	{:else}
 		<Placeholder class="gap-3 bg-base-300">
-			<p class="text-center">Tu n'es membre d'aucun évènement pour l'instant.</p>
+			<p>Tu n'es membre d'aucun évènement pour l'instant.</p>
 			<a href="/events" class="btn btn-ghost"> Trouver un évènement </a>
 		</Placeholder>
 	{/each}
