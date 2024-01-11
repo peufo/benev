@@ -1,6 +1,5 @@
 import { scrapIcon } from '$lib/server/scrapLogo'
-import { error } from '@sveltejs/kit'
-import { json } from '$lib/server'
+import { error, json } from '@sveltejs/kit'
 
 export const GET = async ({ url }) => {
 	const site = url.searchParams.get('site')
