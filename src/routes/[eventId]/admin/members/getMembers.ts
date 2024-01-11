@@ -2,6 +2,7 @@ import { z } from '$lib/validation'
 import type { Event, Field, Prisma } from '@prisma/client'
 import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
 import { error } from '@sveltejs/kit'
+import { jsonParse } from '$lib/jsonParse'
 
 export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
@@ -157,7 +158,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 										? [value]
 										: field.allCombinations
 										? [value.replaceAll(/[\[\"\]]/g, '').replaceAll(',', ', ')]
-										: (JSON.parse(value) as string[])
+										: jsonParse<string[]>(value, [])
 
 								keys.forEach((key) => {
 									if (!key) return
