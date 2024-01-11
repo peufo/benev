@@ -1,14 +1,9 @@
 <script lang="ts">
-	import type { PageData } from './$types'
-	import axios from 'axios'
-	import { Icon } from '$lib/material'
-
-	import { eventPath } from '$lib/store'
-	import { page } from '$app/stores'
 	import { mdiEmailMultipleOutline } from '@mdi/js'
-	import { api } from '$lib/api'
 
-	type Member = PageData['members'][number]
+	import { page } from '$app/stores'
+	import { Icon } from '$lib/material'
+	import { api } from '$lib/api'
 
 	const getMembers = async () => {
 		const searchParams = $page.url.searchParams
