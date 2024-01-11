@@ -12,6 +12,7 @@ interface RequestConfig<Params = any, Data = any> extends AxiosRequestConfig<Dat
 type ParamsPagination = {
 	take?: number
 	skip?: number
+	all?: boolean
 }
 
 const _api = axios.create({ baseURL: '' })

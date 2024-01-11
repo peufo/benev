@@ -6,16 +6,15 @@
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { mdiEmailMultipleOutline } from '@mdi/js'
+	import { api } from '$lib/api'
 
 	type Member = PageData['members'][number]
 
 	const getMembers = async () => {
 		const searchParams = $page.url.searchParams
 		searchParams.append('all', 'true')
-		const { data } = await axios.get<{ members: Member[] }>(
-			`${$eventPath}/admin/members?${searchParams.toString()}`
-		)
-		return data.members
+		const search = searchParams.get('search')
+		return await $api.member.search(search || '', { all: true })
 	}
 
 	let isLoading = false
