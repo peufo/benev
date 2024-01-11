@@ -105,8 +105,12 @@
 		textarea={{ rows: 4 }}
 	/>
 
+	<input
+		type="hidden"
+		name="web"
+		value={webInput.value ? `https://${webInput.value.replace('https?://', '')}` : ''}
+	/>
 	<InputText
-		key="web"
 		label="Site web"
 		value={event?.web || ''}
 		bind:inputElement={webInput}
