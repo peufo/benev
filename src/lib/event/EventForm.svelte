@@ -36,10 +36,11 @@
 	let webInput: HTMLInputElement
 	let scrapIconPending = false
 	let icon = event?.icon || null
+	let webValue = ''
 	const handleWebInput = debounce(async () => {
-		const site = webInput.value
+		webValue = `https://${webInput.value.replace('https?://', '')}`
 		scrapIconPending = true
-		const res = await fetch(`/api/scrap?site=${site}`)
+		const res = await fetch(`/api/scrap?site=${webValue}`)
 			.then((res) => res.json())
 			.finally(() => (scrapIconPending = false))
 		icon = res.icon
@@ -105,11 +106,7 @@
 		textarea={{ rows: 4 }}
 	/>
 
-	<input
-		type="hidden"
-		name="web"
-		value={webInput.value ? `https://${webInput.value.replace('https?://', '')}` : ''}
-	/>
+	<input type="hidden" name="web" value={webValue} />
 	<InputText
 		label="Site web"
 		value={event?.web || ''}
