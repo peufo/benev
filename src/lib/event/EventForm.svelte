@@ -3,7 +3,7 @@
 	import { enhance } from '$app/forms'
 	import { slide } from 'svelte/transition'
 	import { useForm } from '$lib/validation'
-	import { InputText, InputTextarea, DeleteButton, InputImagePreview } from '$lib/material'
+	import { InputText, InputTextarea, InputImagePreview } from '$lib/material'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { debounce } from '$lib/debounce'
@@ -38,7 +38,7 @@
 	let icon = event?.icon || null
 	let webValue = ''
 	const handleWebInput = debounce(async () => {
-		webValue = `https://${webInput.value.replace('https?://', '')}`
+		webValue = webInput.value ? `https://${webInput.value.replace('https?://', '')}` : ''
 		scrapIconPending = true
 		const res = await fetch(`/api/scrap?site=${webValue}`)
 			.then((res) => res.json())
