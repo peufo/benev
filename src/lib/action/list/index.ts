@@ -27,23 +27,39 @@ export function listEditable<Type = unknown>(
 	const { dragElementsSelector } = options
 	node.classList.add(CLASSNAME_LIST)
 
-	const itemElements = [...node.children] as HTMLElement[]
-	const dragElements = [
-		...(dragElementsSelector ? node.querySelectorAll(dragElementsSelector) : itemElements),
-	] as HTMLElement[]
+	let mouseListeners: { detroy: () => void }[] = []
+	let touchListeners: { detroy: () => void }[] = []
+	createListeners()
 
-	const mouseListeners = dragElements.map((dragElement, index) =>
-		mouseDragHandler(dragElement, createDragHandler(node, itemElements[index], options))
-	)
-	const touchListeners = dragElements.map((dragElement, index) =>
-		touchDragHandler(dragElement, createDragHandler(node, itemElements[index], options))
-	)
+	function createListeners() {
+		const itemElements = [...node.children] as HTMLElement[]
+		const dragElements = [
+			...(dragElementsSelector ? node.querySelectorAll(dragElementsSelector) : itemElements),
+		] as HTMLElement[]
+		mouseListeners = dragElements.map((dragElement, index) =>
+			mouseDragHandler(dragElement, createDragHandler(node, itemElements[index], options))
+		)
+		touchListeners = dragElements.map((dragElement, index) =>
+			touchDragHandler(dragElement, createDragHandler(node, itemElements[index], options))
+		)
+	}
+
+	function removeListeners() {
+		mouseListeners.forEach((listener) => listener.detroy())
+		touchListeners.forEach((listener) => listener.detroy())
+	}
 
 	return {
 		destroy() {
 			node?.classList.remove(CLASSNAME_LIST)
-			mouseListeners.forEach((listener) => listener.detroy())
-			touchListeners.forEach((listener) => listener.detroy())
+			removeListeners()
+		},
+		update({ items }: ListEditableOptions<Type>) {
+			if (items?.length !== options.items?.length) {
+				removeListeners()
+				createListeners()
+			}
+			options.items = items
 		},
 	}
 }
