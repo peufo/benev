@@ -10,10 +10,11 @@ export type Cell = ComponentAndProps | Primitive | Primitive[]
 export type TableField<Item> = {
 	key: string
 	label: string
-	hint?: string
-	position?: number
 	getCell: (item: Item) => Cell
-	filter?: ComponentAndProps
+	hint?: string
+	/** Can't be hiden or reorded */
+	locked?: boolean
+	visible?: boolean
 }
 
 export function component<Component extends ComponentType>(

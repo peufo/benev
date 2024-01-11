@@ -4,7 +4,7 @@
 	import { derived } from 'svelte/store'
 
 	import type { PageData } from './$types'
-	import { Icon, InputSearch, Pagination } from '$lib/material'
+	import { Icon, InputSearch, Pagination, Table, component, type TableField } from '$lib/material'
 	import { urlParam } from '$lib/store'
 	import ColumnsSelect, { type Column } from '$lib/ColumnsSelect.svelte'
 	import { getAge } from '$lib/utils'
@@ -15,6 +15,7 @@
 	import MembersFilter from './MembersFilter.svelte'
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
+	import MemberCell from './MemberCell.svelte'
 
 	export let data
 
@@ -22,6 +23,68 @@
 
 	type Member = PageData['members'][number]
 	const toHour = (ms: number) => ms / (1000 * 60 * 60)
+
+	const tableFields: TableField<Member>[] = [
+		{
+			key: 'member',
+			label: 'Membre',
+			getCell: (member) => component(MemberCell, { member }),
+			locked: true,
+		},
+		{
+			key: 'periods',
+			label: 'Périodes',
+			getCell: (m) => m.subscribes.length,
+			visible: true,
+		},
+		{
+			key: 'hours',
+			label: 'Heures',
+			getCell: (m) => toHour(m.workTime),
+			visible: true,
+		},
+		{
+			key: 'sectors',
+			label: 'Secteurs à charges',
+			getCell: (m) => m.leaderOf.map(({ name }) => name),
+			visible: true,
+		},
+		{
+			key: 'age',
+			label: 'Age',
+			getCell: (m) => getAge(m.user.birthday),
+		},
+		{
+			key: 'completed',
+			label: 'Profil complet',
+			getCell: (m) => m.isUserProfileCompleted,
+		},
+		{
+			key: 'isValidedByEvent',
+			label: 'Validé par un responsable',
+			hint: "Un responsable à confirmé l'inscription du membre",
+			getCell: (m) => m.isValidedByEvent,
+		},
+		{
+			key: 'isValidedByUser',
+			label: 'Validé par le membre',
+			hint: 'Le membre à confirmé son invitation',
+			getCell: (m) => m.isValidedByUser,
+		},
+		...data.fields.map((field) => ({
+			key: field.id,
+			label: field.name,
+			getCell: (m: Member) => {
+				const { value } = m.profile.find((f) => f.fieldId === field.id) || { value: '' }
+				if (!value) return ''
+				if (field.type === 'multiselect') return jsonParse(value, [])
+				if (field.type === 'boolean') return value === 'true'
+				if (field.type === 'number') return +value
+				return value
+			},
+		})),
+	]
+
 	const columns: Record<string, Column<Member>> = {
 		periods: { label: 'Périodes', getValue: (m) => m.subscribes.length },
 		hours: { label: 'Heures', getValue: (m) => toHour(m.workTime) },
@@ -30,7 +93,7 @@
 		completed: { label: 'Profil complet', getValue: (m) => m.isUserProfileCompleted },
 		isValidedByEvent: {
 			label: 'Validé par un responsable',
-			hint: "Un responsable à confirmé l'inscription du membre",
+			hint: "Un responsable à confirmé l'adhésion du membre",
 			getValue: (m) => m.isValidedByEvent,
 		},
 		isValidedByUser: {
@@ -88,6 +151,8 @@
 			<MembersStats {data} />
 		</div>
 	{/if}
+
+	<Table items={data.members} fields={tableFields} />
 
 	<Members members={data.members} {columns} bind:selectedColumnsId />
 

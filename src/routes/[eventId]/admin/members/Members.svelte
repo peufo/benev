@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { mdiCheck, mdiClose, mdiDotsHorizontal } from '@mdi/js'
+	import { mdiCheck, mdiClose } from '@mdi/js'
 	import { eventPath } from '$lib/store'
-	import { Placeholder, Icon, DropDown } from '$lib/material'
+	import { Placeholder, Icon } from '$lib/material'
 	import Contact from '$lib/Contact.svelte'
 
 	import type { PageData } from './$types'
@@ -31,25 +31,7 @@
 						</th>
 					{/each}
 
-					<th class="p-0 px-1 sticky right-0 z-10" align="right">
-						<DropDown>
-							<button
-								slot="activator"
-								type="button"
-								class="btn btn-sm btn-square btn-ghost backdrop-blur"
-							>
-								<Icon path={mdiDotsHorizontal} title="Choix des colonnes" />
-							</button>
-
-							<ul>
-								{#each Object.values(columns) as column}
-									<li class="menu-item font-normal">
-										<span>{column.label}</span>
-									</li>
-								{/each}
-							</ul>
-						</DropDown>
-					</th>
+					<th />
 				</tr>
 			</thead>
 

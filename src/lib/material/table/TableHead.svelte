@@ -9,7 +9,7 @@
 
 <thead>
 	<tr class="shadow">
-		{#each fields as field}
+		{#each fields.filter((f) => f.locked || f.visible) as field}
 			<th use:tip={{ disable: !field.hint, content: field.hint }}>
 				{field.label}
 			</th>
