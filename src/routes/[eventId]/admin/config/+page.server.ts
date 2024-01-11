@@ -29,14 +29,20 @@ export const actions = {
 		if (err) return err
 
 		return tryOrFail(async () => {
+			const { activedAt, state } = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
+			//const licenceRequired = !activedAt && state === 'draft' && data.state === 'active'
 			const licenceRequired = false
-			// TODO: ENABLE PAYWALL !!!!
-			// const { activedAt, state } = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
-			// const licenceRequired = !activedAt && state === 'draft' && data.state === 'active'
 			if (licenceRequired) {
-				const licencesTransaction = await licences(member.userId).event.use(1)
+				const memberValidedCount = await prisma.member.count({
+					where: { eventId, isValidedByEvent: true },
+				})
+				const licencesEventTransaction = await licences(member.userId).event.use(1)
+				const licencesMemberTransaction = await licences(member.userId).member.use(
+					memberValidedCount
+				)
 				return await prisma.$transaction([
-					...licencesTransaction,
+					...licencesEventTransaction,
+					...licencesMemberTransaction,
 					prisma.event.update({
 						where: { id: eventId },
 						data: {

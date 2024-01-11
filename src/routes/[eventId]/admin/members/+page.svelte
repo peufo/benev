@@ -27,7 +27,17 @@
 		hours: { label: 'Heures', getValue: (m) => toHour(m.workTime) },
 		sectors: { label: 'Secteurs à charges', getValue: (m) => m.leaderOf.map(({ name }) => name) },
 		age: { label: 'Age', getValue: (m) => getAge(m.user.birthday) },
-		completed: {label: 'Profil complet', getValue: (m) => m.isUserProfileCompleted},
+		completed: { label: 'Profil complet', getValue: (m) => m.isUserProfileCompleted },
+		isValidedByEvent: {
+			label: 'Validé par un responsable',
+			hint: "Un responsable à confirmé l'inscription du membre",
+			getValue: (m) => m.isValidedByEvent,
+		},
+		isValidedByUser: {
+			label: 'Validé par le membre',
+			hint: 'Le membre à confirmé son invitation',
+			getValue: (m) => m.isValidedByUser,
+		},
 		...data.fields.reduce(
 			(acc, cur) => ({
 				...acc,

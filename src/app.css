@@ -12,7 +12,7 @@
 	.btn.btn-sm > i {
 		@apply opacity-70;
 	}
-
+	/* TODO:  obsolete with $lib/material/table */
 	.table-wrapper {
 		@apply overflow-x-auto min-h-[320px] border rounded-lg;
 	}

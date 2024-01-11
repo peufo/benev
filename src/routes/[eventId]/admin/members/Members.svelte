@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import {mdiCheck, mdiClose} from '@mdi/js'
+	import { mdiCheck, mdiClose, mdiDotsHorizontal } from '@mdi/js'
 	import { eventPath } from '$lib/store'
-	import { Placeholder, Icon } from '$lib/material'
+	import { Placeholder, Icon, DropDown } from '$lib/material'
 	import Contact from '$lib/Contact.svelte'
 
 	import type { PageData } from './$types'
 	import type { Column } from '$lib/ColumnsSelect.svelte'
 	import Avatar from '$lib/me/Avatar.svelte'
-	import {MemberRole, MemberAbsences} from '$lib/member'
-
+	import { MemberRole, MemberAbsences } from '$lib/member'
+	import { tip } from '$lib/action'
 
 	type Member = PageData['members'][number]
 	export let members: Member[]
@@ -20,14 +20,36 @@
 
 <div class="table-wrapper">
 	{#if members.length}
-		<table class="table">
+		<table class="table relative">
 			<thead>
 				<tr class="shadow">
 					<th>Membre</th>
 					{#each selectedColumnsId as colId}
-						<th>{columns[colId].label}</th>
+						{@const column = columns[colId]}
+						<th use:tip={{ disable: !column.hint, content: column.hint }}>
+							{column.label}
+						</th>
 					{/each}
-					<th />
+
+					<th class="p-0 px-1 sticky right-0 z-10" align="right">
+						<DropDown>
+							<button
+								slot="activator"
+								type="button"
+								class="btn btn-sm btn-square btn-ghost backdrop-blur"
+							>
+								<Icon path={mdiDotsHorizontal} title="Choix des colonnes" />
+							</button>
+
+							<ul>
+								{#each Object.values(columns) as column}
+									<li class="menu-item font-normal">
+										<span>{column.label}</span>
+									</li>
+								{/each}
+							</ul>
+						</DropDown>
+					</th>
 				</tr>
 			</thead>
 
@@ -61,9 +83,9 @@
 								{:else if typeof value === 'number'}
 									<span class="badge">{value}</span>
 								{:else if value === true}
-									<Icon path={mdiCheck} class="fill-success"/>
+									<Icon path={mdiCheck} class="fill-success" />
 								{:else if value === false}
-									<Icon path={mdiClose} class="fill-error"/>
+									<Icon path={mdiClose} class="fill-error" />
 								{:else}
 									<span>{value}</span>
 								{/if}

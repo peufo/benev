@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
 	export type Column<T extends Record<string, unknown>> = {
 		label: string
+		hint?: string
 		getValue: (item: T) => string | number | boolean | string[]
 	}
 </script>

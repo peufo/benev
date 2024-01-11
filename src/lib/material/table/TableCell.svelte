@@ -1,0 +1,28 @@
+<script lang="ts">
+	import {
+		TableCellArray,
+		TableCellBoolean,
+		TableCellNumber,
+		TableCellString,
+	} from '$lib/material/table/cell'
+
+	import type { TableField } from '$lib/material'
+
+	type Item = $$Generic<{ id: string }>
+	export let item: Item
+	export let field: TableField<Item>
+
+	const value = field.getCell(item)
+</script>
+
+{#if Array.isArray(value)}
+	<TableCellArray {value} />
+{:else if typeof value === 'number'}
+	<TableCellNumber {value} />
+{:else if typeof value === 'boolean'}
+	<TableCellBoolean {value} />
+{:else if typeof value === 'string'}
+	<TableCellString {value} />
+{:else}
+	<svelte:component this={value.component} {...value.props} />
+{/if}
