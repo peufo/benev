@@ -49,7 +49,7 @@ export const EVENT_STATES: Record<
 		icon: mdiEarth,
 		label: 'Évènement publié',
 		class: 'border-success bg-success/50',
-		description: `Le site est disponible pour tout le monde.`,
+		description: `Le site est publiquement disponible.`,
 	},
 	archived: {
 		icon: mdiArchiveOutline,
