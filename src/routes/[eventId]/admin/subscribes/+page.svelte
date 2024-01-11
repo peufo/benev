@@ -6,7 +6,6 @@
 
 	import type { PageData } from './$types'
 	import Filters from './Filters.svelte'
-	import Subscribes from './Subscribes.svelte'
 	import SubscribesCopy from './SubscribesCopy.svelte'
 	import {
 		SubscribeCreatedBy,
@@ -71,8 +70,6 @@
 		action={(subscribe) => component(SubscribeMenu, { subscribe })}
 		placholder="Aucune inscription trouvé"
 	/>
-
-	<Subscribes subscribes={data.subscribes} />
 
 	<div class="flex justify-end">
 		<Pagination />
