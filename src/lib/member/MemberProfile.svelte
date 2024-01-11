@@ -19,6 +19,8 @@
 
 	const simpleTypes: FieldType[] = ['string', 'number', 'textarea', 'select']
 	const parseMultiSelectValue = (value: string) => jsonParse<string[]>(value, [])
+
+	console.log(member.profile)
 </script>
 
 <div class="flex gap-2 items-center mb-4">
@@ -51,43 +53,45 @@
 			on:success={() => (readOnly = true)}
 		/>
 	</div>
-{:else if !member.profile.length}
-	<Placeholder>Profil vide</Placeholder>
 {:else}
 	{@const profile = member.profile.filter(
 		({ field, value }) => value !== '[]' && (value || field.type === 'boolean')
 	)}
 
-	<div
-		in:fade
-		class="grid gap-4 mb-4 items-start"
-		style:grid-template-columns="repeat(auto-fill, minmax(min(230px, 100%), 1fr))"
-	>
-		{#each profile as { field, value }}
-			<CardBasic title={field.name}>
-				{#if simpleTypes.includes(field.type)}
-					<p>{value || '-'}</p>
-				{:else if field.type === 'boolean'}
-					{#if value}
-						<div class="badge">
-							<Icon path={mdiCheck} size={14} class="fill-success" />
-							<span class="ml-1">Oui</span>
-						</div>
-					{:else}
-						<span class="badge">
-							<Icon path={mdiClose} size={14} class="fill-error" />
-							<span class="ml-1">Non</span>
-						</span>
+	{#if !profile.length}
+		<Placeholder>Profil vide</Placeholder>
+	{:else}
+		<div
+			in:fade
+			class="grid gap-4 mb-4 items-start"
+			style:grid-template-columns="repeat(auto-fill, minmax(min(230px, 100%), 1fr))"
+		>
+			{#each profile as { field, value }}
+				<CardBasic title={field.name}>
+					{#if simpleTypes.includes(field.type)}
+						<p>{value || '-'}</p>
+					{:else if field.type === 'boolean'}
+						{#if value}
+							<div class="badge">
+								<Icon path={mdiCheck} size={14} class="fill-success" />
+								<span class="ml-1">Oui</span>
+							</div>
+						{:else}
+							<span class="badge">
+								<Icon path={mdiClose} size={14} class="fill-error" />
+								<span class="ml-1">Non</span>
+							</span>
+						{/if}
+					{:else if field.type === 'multiselect'}
+						{@const items = parseMultiSelectValue(value)}
+						<ul>
+							{#each items as item}
+								<li>• {item}</li>
+							{/each}
+						</ul>
 					{/if}
-				{:else if field.type === 'multiselect'}
-					{@const items = parseMultiSelectValue(value)}
-					<ul>
-						{#each items as item}
-							<li>• {item}</li>
-						{/each}
-					</ul>
-				{/if}
-			</CardBasic>
-		{/each}
-	</div>
+				</CardBasic>
+			{/each}
+		</div>
+	{/if}
 {/if}
