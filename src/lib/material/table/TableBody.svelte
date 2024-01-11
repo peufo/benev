@@ -21,7 +21,7 @@
 			{#each _fields as field (field.key)}
 				<TableCell {item} {field} />
 			{/each}
-			<td>
+			<td align="right">
 				{#if action}
 					{@const { component, props } = action(item)}
 					<svelte:component this={component} {...props} />

@@ -2,11 +2,10 @@
 	import { mdiChevronRight, mdiSigma } from '@mdi/js'
 	import { slide } from 'svelte/transition'
 	import { derived } from 'svelte/store'
-	import { goto } from '$app/navigation'
 
 	import type { PageData } from './$types'
 	import { Icon, InputSearch, Pagination, Table, type TableField } from '$lib/material'
-	import { eventPath, urlParam } from '$lib/store'
+	import { urlParam } from '$lib/store'
 	import { getAge, component } from '$lib/utils'
 	import { jsonParse } from '$lib/jsonParse'
 	import InviteDialog from '$lib/InviteDialog.svelte'
@@ -15,8 +14,7 @@
 	import MembersFilter from './MembersFilter.svelte'
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
-	import MemberCell from './MemberCell.svelte'
-	import { MemberContact } from '$lib/member'
+	import { MemberContact, MemberCell } from '$lib/member'
 
 	export let data
 
@@ -119,8 +117,6 @@
 		fields={tableFields}
 		action={(member) => component(MemberContact, { user: member.user })}
 		placholder="Aucun membre trouvé"
-		classRow="hover cursor-pointer"
-		on:click={({ detail: { id } }) => goto(`${$eventPath}/admin/members/${id}`)}
 	/>
 
 	<div class="flex justify-end">

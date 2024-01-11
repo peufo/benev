@@ -24,5 +24,7 @@
 {:else if typeof value === 'string'}
 	<TableCellString {value} />
 {:else}
-	<svelte:component this={value.component} {...value.props} />
+	<td>
+		<svelte:component this={value.component} {...value.props} />
+	</td>
 {/if}

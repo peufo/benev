@@ -80,7 +80,6 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 			.then((subs) =>
 				subs.map((sub) => ({
 					...sub,
-					// TODO: all memberComputedValues are required ?
 					member: addMemberComputedValues({ ...sub.member, event }),
 				}))
 			),
