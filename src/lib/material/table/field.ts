@@ -1,10 +1,5 @@
-import type { ComponentProps, ComponentType } from 'svelte'
+import type { ComponentAndProps, Primitive } from '$lib/utils'
 
-type ComponentAndProps = {
-	component: ComponentType
-	props: ComponentProps<InstanceType<ComponentType>>
-}
-type Primitive = string | number | boolean
 export type Cell = ComponentAndProps | Primitive | Primitive[]
 
 export type TableField<Item> = {
@@ -15,11 +10,4 @@ export type TableField<Item> = {
 	/** Can't be hiden or reorded */
 	locked?: boolean
 	visible?: boolean
-}
-
-export function component<Component extends ComponentType>(
-	component: Component,
-	props: ComponentProps<InstanceType<Component>>
-): ComponentAndProps {
-	return { component, props }
 }

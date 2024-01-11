@@ -9,11 +9,11 @@
 
 <thead>
 	<tr class="shadow">
-		{#each fields.filter((f) => f.locked || f.visible) as field}
+		{#each fields.filter((f) => f.locked || f.visible) as field (field.key)}
 			<th use:tip={{ disable: !field.hint, content: field.hint }}>
 				{field.label}
 			</th>
 		{/each}
-		<TableFieldsSelect {fields} />
+		<TableFieldsSelect bind:fields />
 	</tr>
 </thead>

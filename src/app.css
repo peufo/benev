@@ -9,6 +9,10 @@
 	.menu-item.active {
 		@apply bg-base-300/80;
 	}
+	.menu-item.disabled {
+		@apply cursor-default hover:bg-base-100;
+	}
+
 	.btn.btn-sm > i {
 		@apply opacity-70;
 	}

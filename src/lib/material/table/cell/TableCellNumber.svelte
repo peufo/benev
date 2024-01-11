@@ -2,6 +2,6 @@
 	export let value: number
 </script>
 
-<td align="right">
+<td>
 	<span class="badge">{value}</span>
 </td>
