@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { Page } from '@prisma/client'
-	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
-	import { mdiHelp, mdiMenu } from '@mdi/js'
+	import { mdiMenu } from '@mdi/js'
 	import DropDown from '$lib/material/DropDown.svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from './admin/adminTabs'

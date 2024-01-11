@@ -20,14 +20,16 @@
 {/if}
 
 <!-- TEAMS -->
-<a
-	href="{$eventPath}/teams"
-	class="menu-item"
-	class:active={$page.route.id?.startsWith('/[eventId]/teams')}
->
-	<Icon path={mdiMapMarkerRadiusOutline} size={20} class="opacity-70" />
-	Secteurs
-</a>
+{#if $page.data.event?.selfSubscribeAllowed || $page.data.member?.roles.includes('leader')}
+	<a
+		href="{$eventPath}/teams"
+		class="menu-item"
+		class:active={$page.route.id?.startsWith('/[eventId]/teams')}
+	>
+		<Icon path={mdiMapMarkerRadiusOutline} size={20} class="opacity-70" />
+		Secteurs
+	</a>
+{/if}
 
 <!-- PAGES -->
 {#each pages.filter((p) => !p.isIndex) as { title, path, id, isIndex } (id)}
