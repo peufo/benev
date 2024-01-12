@@ -25,6 +25,7 @@
 	let klass = ''
 	export { klass as class }
 	export let wrapperClass = ''
+	export let classActivator = ''
 	export let useSingleton = false
 	export let hideOnBlur = false
 	export let hideOnNav = true
@@ -96,7 +97,7 @@
 
 {#if !disable}
 	<div class={wrapperClass}>
-		<div bind:this={activator}>
+		<div class={classActivator} bind:this={activator}>
 			<slot name="activator" />
 		</div>
 

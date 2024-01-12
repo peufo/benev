@@ -10,7 +10,7 @@
 	const dispatch = createEventDispatcher<{ click: string }>()
 </script>
 
-<div class="flex items-center rounded-lg gap-[3px] p-1 bg-base-300">
+<div class="flex items-center rounded-lg gap-[3px] p-1 bg-base-200">
 	{#each _options as { value, label, icon }}
 		{@const isActive = activeValue === value}
 		<button

@@ -41,7 +41,7 @@
 
 <th class="p-1">
 	<DropDown hideOnBlur hideOnNav={!multiSelect} tippyProps={{ appendTo: () => document.body }}>
-		<button slot="activator" class="menu-item w-full flex-wrap gap-y-1">
+		<button slot="activator" class="menu-item w-full flex-wrap gap-y-1 min-h-8">
 			<span>{field.label}</span>
 
 			{#if _optionsActive.length}
