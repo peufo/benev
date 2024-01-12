@@ -29,7 +29,11 @@
 			},
 			getHref(value: string) {
 				if (!multiSelect) return params.toggle({ [field.key]: value })
-				if (selections.includes(value) && selections.length === 1) return params.without(field.key)
+				if (selections.includes(value)) {
+					const newSelections = selections.filter((v) => v !== value)
+					if (!newSelections.length) return params.without(field.key)
+					return params.with({ [field.key]: JSON.stringify(newSelections) })
+				}
 				return params.with({ [field.key]: JSON.stringify([...selections, value]) })
 			},
 		}

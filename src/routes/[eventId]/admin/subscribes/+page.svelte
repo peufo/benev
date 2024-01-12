@@ -22,6 +22,7 @@
 		mdiShieldAccountOutline,
 	} from '@mdi/js'
 	import { eventPath } from '$lib/store'
+	import { SUBSCRIBE_STATE } from '$lib/constant'
 
 	export let data
 
@@ -37,22 +38,22 @@
 		{
 			key: 'team',
 			label: 'Secteur',
+			visible: true,
 			getCell: (sub) => `
 				<a href="${$eventPath}/teams/${sub.period.teamId}" class="link link-hover">
 					${sub.period.team.name}
 				</a>
 			`,
-			visible: true,
 		},
 		{
 			key: 'period',
 			label: 'Période',
+			visible: true,
 			getCell: (sub) => `
 				<a href="${$eventPath}/teams/${sub.period.teamId}/${sub.periodId}" class="link link-hover">
 					${formatRange(sub.period)}
 				</a>
 			`,
-			visible: true,
 		},
 		{
 			key: 'createdBy',
@@ -70,6 +71,7 @@
 		{
 			key: 'isAbsent',
 			label: 'Absent',
+			visible: true,
 			getCell: ({ isAbsent }) => component(SubscribeIsAbsent, { isAbsent }),
 			head: (field) =>
 				component(TableHeadSelect, {
@@ -79,13 +81,18 @@
 						false: { label: 'Marqué comme présent', icon: mdiCheckCircleOutline },
 					},
 				}),
-			visible: true,
 		},
 		{
-			key: 'subscribeState',
+			key: 'states',
 			label: 'Statut',
-			getCell: (subscribe) => component(SubscribeStateForm, { subscribe, isLeader: true }),
 			visible: true,
+			getCell: (subscribe) => component(SubscribeStateForm, { subscribe, isLeader: true }),
+			head: (field) =>
+				component(TableHeadSelect, {
+					field,
+					options: SUBSCRIBE_STATE,
+					multiSelect: true,
+				}),
 		},
 	]
 </script>
