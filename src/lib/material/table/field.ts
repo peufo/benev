@@ -1,5 +1,6 @@
 import type { ComponentAndProps, Primitive } from '$lib/utils'
 import type { FieldType } from '@prisma/client'
+import type {} from 'svelte'
 
 export type Cell = ComponentAndProps | Primitive | Primitive[]
 

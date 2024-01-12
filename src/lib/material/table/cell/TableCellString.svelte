@@ -3,5 +3,5 @@
 </script>
 
 <td>
-	<span>{value}</span>
+	<span>{@html value}</span>
 </td>

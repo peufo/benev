@@ -21,6 +21,7 @@
 		mdiCheckCircleOutline,
 		mdiShieldAccountOutline,
 	} from '@mdi/js'
+	import { eventPath } from '$lib/store'
 
 	export let data
 
@@ -36,13 +37,21 @@
 		{
 			key: 'team',
 			label: 'Secteur',
-			getCell: (sub) => sub.period.team.name,
+			getCell: (sub) => `
+				<a href="${$eventPath}/teams/${sub.period.teamId}" class="link link-hover">
+					${sub.period.team.name}
+				</a>
+			`,
 			visible: true,
 		},
 		{
 			key: 'period',
 			label: 'Période',
-			getCell: (sub) => formatRange(sub.period),
+			getCell: (sub) => `
+				<a href="${$eventPath}/teams/${sub.period.teamId}/${sub.periodId}" class="link link-hover">
+					${formatRange(sub.period)}
+				</a>
+			`,
 			visible: true,
 		},
 		{
