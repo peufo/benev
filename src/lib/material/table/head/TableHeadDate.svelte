@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { Icon, DropDown, InputTime, type TableField } from '$lib/material'
+	import { DropDown, InputTime, type TableField } from '$lib/material'
 	import { PeriodPicker } from '$lib/period'
-	import { mdiCalendarMonthOutline, mdiClose } from '@mdi/js'
+
 	import { formatRange } from '$lib/formatRange'
 	import { page } from '$app/stores'
 	import { urlParam } from '$lib/store'

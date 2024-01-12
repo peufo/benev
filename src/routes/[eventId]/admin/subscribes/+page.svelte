@@ -1,11 +1,15 @@
 <script lang="ts">
+	import {
+		mdiAccountCircleOutline,
+		mdiAlertOutline,
+		mdiCheckCircleOutline,
+		mdiShieldAccountOutline,
+	} from '@mdi/js'
+	import type { PageData } from './$types'
 	import { InputSearch, Pagination } from '$lib/material'
 	import { Table, tableheadComponent, type TableField } from '$lib/material/table'
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
-
-	import type { PageData } from './$types'
-	import Filters from './Filters.svelte'
 	import SubscribesCopy from './SubscribesCopy.svelte'
 	import {
 		SubscribeCreatedBy,
@@ -14,12 +18,7 @@
 		SubscribeStateForm,
 	} from '$lib/subscribe'
 	import { formatRange } from '$lib/formatRange'
-	import {
-		mdiAccountCircleOutline,
-		mdiAlertOutline,
-		mdiCheckCircleOutline,
-		mdiShieldAccountOutline,
-	} from '@mdi/js'
+
 	import { eventPath } from '$lib/store'
 	import { SUBSCRIBE_STATE } from '$lib/constant'
 
@@ -96,7 +95,7 @@
 <div class="flex flex-col gap-3">
 	<div class="flex gap-x-2 gap-y-2 flex-wrap">
 		<InputSearch />
-		<Filters />
+		<div class="grow" />
 		<SubscribesCopy />
 	</div>
 
