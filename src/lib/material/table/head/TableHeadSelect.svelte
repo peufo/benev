@@ -1,13 +1,43 @@
 <script lang="ts">
-	import { type Options, type TableField, parseOptions, DropDown, Icon } from '$lib/material'
+	import { jsonParse } from '$lib/jsonParse'
+	import {
+		type Options,
+		type Option,
+		type TableField,
+		parseOptions,
+		DropDown,
+		Icon,
+	} from '$lib/material'
 	import { urlParam } from '$lib/store'
 
 	export let field: TableField
-
 	export let options: Options
+	export let multiSelect = false
+
+	let select: {
+		getActive(value: string): boolean
+		getHref(value: string): string
+	}
+
+	urlParam.subscribe((params) => {
+		const selection = params.get(field.key)
+		const selections = jsonParse<string[]>(params.get(field.key), [])
+		select = {
+			getActive(value: string) {
+				if (!multiSelect) return selection === value
+				return selections.includes(value)
+			},
+			getHref(value: string) {
+				if (!multiSelect) return params.toggle({ [field.key]: value })
+				if (selections.includes(value) && selections.length === 1) return params.without(field.key)
+				return params.with({ [field.key]: JSON.stringify([...selections, value]) })
+			},
+		}
+	})
+
 	$: _options = parseOptions(options).map((option) => ({
 		...option,
-		active: $urlParam.hasValue(field.key, option.value),
+		active: select.getActive(option.value),
 	}))
 	$: _optionsActive = _options.filter((option) => option.active)
 
@@ -35,7 +65,7 @@
 
 		{#each _options as option}
 			<a
-				href={$urlParam.toggle({ [field.key]: option.value })}
+				href={select.getHref(option.value)}
 				class="menu-item px-3 py-2"
 				class:active={option.active}
 			>
