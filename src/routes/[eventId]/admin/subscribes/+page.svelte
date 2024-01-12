@@ -15,7 +15,12 @@
 	} from '$lib/subscribe'
 	import { formatRange } from '$lib/formatRange'
 	import TableHeadSelect from '$lib/material/table/head/TableHeadSelect.svelte'
-	import { mdiAlertOutline, mdiCheckCircleOutline } from '@mdi/js'
+	import {
+		mdiAccountCircleOutline,
+		mdiAlertOutline,
+		mdiCheckCircleOutline,
+		mdiShieldAccountOutline,
+	} from '@mdi/js'
 
 	export let data
 
@@ -41,9 +46,17 @@
 			visible: true,
 		},
 		{
-			key: 'subscribeBy',
+			key: 'createdBy',
 			label: 'Inscription',
 			getCell: ({ createdBy }) => component(SubscribeCreatedBy, { createdBy }),
+			head: (field) =>
+				component(TableHeadSelect, {
+					field,
+					options: {
+						leader: { label: 'Inscrit par un responsable', icon: mdiShieldAccountOutline },
+						user: { label: 'Inscrit par le membre', icon: mdiAccountCircleOutline },
+					},
+				}),
 		},
 		{
 			key: 'isAbsent',
