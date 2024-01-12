@@ -42,16 +42,16 @@
 </script>
 
 <th class="p-1">
-	<DropDown hideOnBlur hideOnNav={false} tippyProps={{ appendTo: () => document.body }}>
+	<DropDown hideOnBlur hideOnNav={!multiSelect} tippyProps={{ appendTo: () => document.body }}>
 		<button bind:this={button} slot="activator" class="menu-item w-full flex-wrap gap-y-1">
 			<span>{field.label}</span>
 
 			{#if _optionsActive.length}
 				<div class="flex flex-wrap gap-1">
 					{#each _optionsActive as option}
-						<span class="badge badge-primary badge-outline text-xs font-normal">
+						<span class="badge badge-primary badge-xs text-[0.7rem] font-normal text-white">
 							{#if option.icon}
-								<Icon path={option.icon} size={15} class="opacity-60 -translate-x-[3px]" />
+								<Icon path={option.icon} size={10} class="-translate-x-1 fill-white/80" />
 							{/if}
 							{option.label}
 						</span>
@@ -66,6 +66,8 @@
 					href={select.getHref(option.value)}
 					class="menu-item px-3 py-2"
 					class:active={option.active}
+					data-sveltekit-noscroll
+					data-sveltekit-replacestate
 				>
 					{#if option.icon}
 						<Icon path={option.icon} size={18} class="opacity-60" />
