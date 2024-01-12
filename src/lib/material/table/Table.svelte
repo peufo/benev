@@ -19,6 +19,11 @@
 			<TableBody {fields} {items} {action} {classRow} on:click />
 		</table>
 	{:else}
-		<Placeholder>{placholder}</Placeholder>
+		<table class="table relative">
+			<TableHead bind:fields />
+		</table>
+		<Placeholder class="rounded-t-none">
+			{placholder}
+		</Placeholder>
 	{/if}
 </div>
