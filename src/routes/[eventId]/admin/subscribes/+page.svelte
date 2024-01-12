@@ -14,6 +14,8 @@
 		SubscribeStateForm,
 	} from '$lib/subscribe'
 	import { formatRange } from '$lib/formatRange'
+	import TableHeadSelect from '$lib/material/table/head/TableHeadSelect.svelte'
+	import { mdiAlertOutline, mdiCheckCircleOutline } from '@mdi/js'
 
 	export let data
 
@@ -47,6 +49,15 @@
 			key: 'isAbsent',
 			label: 'Absent',
 			getCell: ({ isAbsent }) => component(SubscribeIsAbsent, { isAbsent }),
+			head: (field) =>
+				component(TableHeadSelect, {
+					field,
+					options: {
+						true: { label: 'Marqué comme absent', icon: mdiAlertOutline },
+						false: { label: 'Marqué comme présent', icon: mdiCheckCircleOutline },
+					},
+				}),
+			visible: true,
 		},
 		{
 			key: 'subscribeState',

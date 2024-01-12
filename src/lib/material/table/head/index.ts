@@ -1,0 +1,5 @@
+export { default as TableHeadDefault } from './TableHeadDefault.svelte'
+export { default as TableHeadSelect } from './TableHeadSelect.svelte'
+export { default as TableHeadBoolean } from './TableHeadBoolean.svelte'
+export { default as TableHeadNumber } from './TableHeadNumber.svelte'
+export { default as TableHeadString } from './TableHeadString.svelte'
