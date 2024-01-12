@@ -37,13 +37,11 @@
 		active: select.getActive(option.value),
 	}))
 	$: _optionsActive = _options.filter((option) => option.active)
-
-	let button: HTMLButtonElement
 </script>
 
 <th class="p-1">
 	<DropDown hideOnBlur hideOnNav={!multiSelect} tippyProps={{ appendTo: () => document.body }}>
-		<button bind:this={button} slot="activator" class="menu-item w-full flex-wrap gap-y-1">
+		<button slot="activator" class="menu-item w-full flex-wrap gap-y-1">
 			<span>{field.label}</span>
 
 			{#if _optionsActive.length}

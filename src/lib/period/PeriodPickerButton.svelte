@@ -40,7 +40,7 @@
 				start: `${period.start}T${time.start || '00:00'}`,
 				end: `${period.end}T${time.end || '23:59'}`,
 			}),
-			{ replaceState: true }
+			{ replaceState: true, noScroll: true }
 		)
 	}
 
@@ -48,7 +48,7 @@
 		dropDown.hide()
 		period = { start: '', end: '' }
 		time = { start: '00:00', end: '23:59' }
-		goto($urlParam.without('start', 'end'), { replaceState: true })
+		goto($urlParam.without('start', 'end'), { replaceState: true, noScroll: true })
 	}
 </script>
 
