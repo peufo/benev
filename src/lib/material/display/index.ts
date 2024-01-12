@@ -1,2 +1,2 @@
-export { default as DisplayToggle } from './DisplayToggle.svelte'
-export { default as OnlyAvailableToggle } from './OnlyAvailableToggle.svelte'
+export { default as ToggleListOrTable } from './ToggleListOrTable.svelte'
+export { default as ToggleOnlyAvailable } from './ToggleOnlyAvailable.svelte'

@@ -12,7 +12,7 @@
 
 	import dayjs from 'dayjs'
 	import { onMount } from 'svelte'
-	import { Card, Icon, Placeholder, OnlyAvailableToggle } from '$lib/material'
+	import { Card, Icon, Placeholder, ToggleOnlyAvailable } from '$lib/material'
 	import { goto } from '$app/navigation'
 	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
 	import { formatRange } from '$lib/formatRange'
@@ -107,7 +107,7 @@
 			{/if}
 			{#if data.team.conditions?.length}
 				<span class="badge">
-					<Icon path={mdiFilterOutline} size={16}  class="opacity-70"/>
+					<Icon path={mdiFilterOutline} size={16} class="opacity-70" />
 					<span class="ml-1">
 						{data.team.conditions.length}
 						condition{data.team.conditions.length > 1 ? 's' : ''}
@@ -117,7 +117,7 @@
 		</div>
 	</div>
 	<div slot="action" class="flex gap-2">
-		<OnlyAvailableToggle />
+		<ToggleOnlyAvailable />
 
 		{#if data.isLeaderOfTeam}
 			<a

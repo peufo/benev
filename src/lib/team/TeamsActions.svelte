@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { DisplayToggle, Icon } from '$lib/material'
+	import { ToggleListOrTable, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiAccountMultipleOutline,
@@ -22,7 +22,7 @@
 </script>
 
 {#if teams.length}
-	<DisplayToggle />
+	<ToggleListOrTable />
 	<a href="{$eventPath}/admin/members?teams={teamsId}" class="btn btn-square btn-sm">
 		<Icon path={mdiAccountMultipleOutline} title="Tous les membres de ces secteurs" />
 	</a>
