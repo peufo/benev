@@ -1,12 +1,10 @@
-import type { ComponentAndProps, Primitive } from '$lib/utils'
+import type { ComponentAndProps } from '$lib/utils'
 import type { FieldType } from '@prisma/client'
 import type { ComponentProps, ComponentType } from 'svelte'
 import type { TableField } from '../field'
 
 import { default as TableHeadSelect } from './TableHeadSelect.svelte'
 import { default as TableHeadDate } from './TableHeadDate.svelte'
-import { default as TableHeadDefault } from './TableHeadDefault.svelte'
-// TODO:
 import { default as TableHeadBoolean } from './TableHeadBoolean.svelte'
 import { default as TableHeadNumber } from './TableHeadNumber.svelte'
 import { default as TableHeadString } from './TableHeadString.svelte'
@@ -16,9 +14,9 @@ type _FieldType = FieldType | 'date'
 
 const tableHeadComponentRecord = {
 	boolean: TableHeadBoolean,
-	string: TableHeadDefault,
-	textarea: TableHeadDefault,
-	number: TableHeadDefault,
+	string: TableHeadString,
+	textarea: TableHeadString,
+	number: TableHeadNumber,
 	multiselect: TableHeadSelect,
 	select: TableHeadSelect,
 	date: TableHeadDate,

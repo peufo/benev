@@ -10,6 +10,7 @@
 	<slot name="label_append" slot="label_append" />
 	<input
 		bind:value
+		bind:this={props.inputElement}
 		on:input
 		on:focus
 		on:blur

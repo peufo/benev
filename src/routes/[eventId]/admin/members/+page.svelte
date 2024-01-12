@@ -43,8 +43,9 @@
 		{
 			key: 'subscribes.count',
 			label: 'Inscriptions (nombre)',
-			getCell: (m) => m.subscribes.length,
 			visible: true,
+			getCell: (m) => m.subscribes.length,
+			head: tableheadComponent('number', {}),
 		},
 		{
 			key: 'subscribes.teams',
