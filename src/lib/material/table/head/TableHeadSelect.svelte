@@ -1,13 +1,6 @@
 <script lang="ts">
 	import { jsonParse } from '$lib/jsonParse'
-	import {
-		type Options,
-		type Option,
-		type TableField,
-		parseOptions,
-		DropDown,
-		Icon,
-	} from '$lib/material'
+	import { type Options, type TableField, parseOptions, DropDown, Icon } from '$lib/material'
 	import { urlParam } from '$lib/store'
 
 	export let field: TableField

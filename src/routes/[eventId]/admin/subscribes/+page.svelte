@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { InputSearch, Pagination } from '$lib/material'
-	import { Table, type TableField } from '$lib/material/table'
+	import { Table, tableheadComponent, type TableField } from '$lib/material/table'
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
 
@@ -14,7 +14,6 @@
 		SubscribeStateForm,
 	} from '$lib/subscribe'
 	import { formatRange } from '$lib/formatRange'
-	import TableHeadSelect from '$lib/material/table/head/TableHeadSelect.svelte'
 	import {
 		mdiAccountCircleOutline,
 		mdiAlertOutline,
@@ -23,7 +22,6 @@
 	} from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { SUBSCRIBE_STATE } from '$lib/constant'
-	import TableCell from '$lib/material/table/TableCell.svelte'
 
 	export let data
 
@@ -45,12 +43,9 @@
 					${sub.period.team.name}
 				</a>
 			`,
-			head: (field) =>
-				component(TableHeadSelect, {
-					field,
-					multiSelect: true,
-					options: data.teams.map((t) => ({ value: t.id, label: t.name })),
-				}),
+			head: tableheadComponent('multiselect', {
+				options: data.teams.map((t) => ({ value: t.id, label: t.name })),
+			}),
 		},
 		{
 			key: 'period',
@@ -66,40 +61,33 @@
 			key: 'createdBy',
 			label: 'Inscription',
 			getCell: ({ createdBy }) => component(SubscribeCreatedBy, { createdBy }),
-			head: (field) =>
-				component(TableHeadSelect, {
-					field,
-					options: {
-						leader: { label: 'Inscrit par un responsable', icon: mdiShieldAccountOutline },
-						user: { label: 'Inscrit par le membre', icon: mdiAccountCircleOutline },
-					},
-				}),
+			head: tableheadComponent('select', {
+				options: {
+					leader: { label: 'Inscrit par un responsable', icon: mdiShieldAccountOutline },
+					user: { label: 'Inscrit par le membre', icon: mdiAccountCircleOutline },
+				},
+			}),
 		},
 		{
 			key: 'isAbsent',
 			label: 'Absent',
 			visible: true,
 			getCell: ({ isAbsent }) => component(SubscribeIsAbsent, { isAbsent }),
-			head: (field) =>
-				component(TableHeadSelect, {
-					field,
-					options: {
-						true: { label: 'Marqué comme absent', icon: mdiAlertOutline },
-						false: { label: 'Marqué comme présent', icon: mdiCheckCircleOutline },
-					},
-				}),
+			head: tableheadComponent('select', {
+				options: {
+					true: { label: 'Marqué comme absent', icon: mdiAlertOutline },
+					false: { label: 'Marqué comme présent', icon: mdiCheckCircleOutline },
+				},
+			}),
 		},
 		{
 			key: 'states',
 			label: 'Statut',
 			visible: true,
 			getCell: (subscribe) => component(SubscribeStateForm, { subscribe, isLeader: true }),
-			head: (field) =>
-				component(TableHeadSelect, {
-					field,
-					multiSelect: true,
-					options: SUBSCRIBE_STATE,
-				}),
+			head: tableheadComponent('multiselect', {
+				options: SUBSCRIBE_STATE,
+			}),
 		},
 	]
 </script>
