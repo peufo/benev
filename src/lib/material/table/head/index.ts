@@ -15,7 +15,7 @@ import { default as TableHeadString } from './TableHeadString.svelte'
 type _FieldType = FieldType | 'date'
 
 const tableHeadComponentRecord = {
-	boolean: TableHeadDefault,
+	boolean: TableHeadBoolean,
 	string: TableHeadDefault,
 	textarea: TableHeadDefault,
 	number: TableHeadDefault,

@@ -89,21 +89,24 @@
 			getCell: (m) => getAge(m.user.birthday),
 		},
 		{
-			key: 'completed',
+			key: 'isUserProfileCompleted',
 			label: 'Profil complet',
 			getCell: (m) => m.isUserProfileCompleted,
+			head: tableheadComponent('boolean', {}),
 		},
 		{
 			key: 'isValidedByEvent',
 			label: 'Validé par un responsable',
 			hint: "Un responsable à confirmé l'inscription du membre",
 			getCell: (m) => m.isValidedByEvent,
+			head: tableheadComponent('boolean', {}),
 		},
 		{
 			key: 'isValidedByUser',
 			label: 'Validé par le membre',
 			hint: 'Le membre à confirmé son invitation',
 			getCell: (m) => m.isValidedByUser,
+			head: tableheadComponent('boolean', {}),
 		},
 		...data.fields.map((field) => ({
 			key: field.id,
