@@ -17,9 +17,10 @@ const formaterShort = new Intl.DateTimeFormat('fr-ch', {
 	timeZone: 'Europe/Zurich',
 })
 
-type Range = { start: Date; end: Date }
+type Range = { start: Date | number; end: Date | number }
 
 export const formatRange = ({ start, end }: Range) => formater.formatRange(start, end)
+
 export const formatRangeShort = ({ start, end }: Range) => formaterShort.formatRange(start, end)
 
 export const formatRangeHour = ({ start, end }: Range) => {

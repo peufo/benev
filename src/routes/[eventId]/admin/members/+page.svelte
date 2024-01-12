@@ -4,7 +4,14 @@
 	import { derived } from 'svelte/store'
 
 	import type { PageData } from './$types'
-	import { Icon, InputSearch, Pagination, Table, type TableField } from '$lib/material'
+	import {
+		Icon,
+		InputSearch,
+		Pagination,
+		Table,
+		type TableField,
+		tableheadComponent,
+	} from '$lib/material'
 	import { urlParam } from '$lib/store'
 	import { getAge, component } from '$lib/utils'
 	import { jsonParse } from '$lib/jsonParse'
@@ -15,11 +22,14 @@
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
 	import { MemberContact, MemberCell } from '$lib/member'
+	import dayjs from 'dayjs'
+	import { formatRange } from '$lib/formatRange'
 
 	export let data
 
 	type Member = PageData['members'][number]
-	const toHour = (ms: number) => ms / (1000 * 60 * 60)
+	const toHour = (ms: number) => dayjs(ms).format('hh:mm')
+
 	const summary = derived(urlParam, ({ has }) => has('summary'))
 
 	const tableFields: TableField<Member>[] = [
@@ -29,23 +39,49 @@
 			getCell: (member) => component(MemberCell, { member }),
 			locked: true,
 		},
+
 		{
-			key: 'periods',
-			label: 'Périodes',
+			key: 'subscribes.count',
+			label: 'Inscriptions (nombre)',
 			getCell: (m) => m.subscribes.length,
 			visible: true,
 		},
 		{
+			key: 'subscribes.teams',
+			label: 'Inscriptions (secteur)',
+			visible: true,
+			getCell: (m) =>
+				m.subscribes.map((s) => data.teams.find((t) => t.id === s.period.teamId)?.name || ''),
+			head: tableheadComponent('multiselect', {
+				options: data.teams.map((team) => ({ label: team.name, value: team.id })),
+			}),
+		},
+		{
+			key: 'subscribes.range',
+			label: 'Inscriptions (période)',
+			getCell: (m) => {
+				if (!m.subscribes.length) return '-'
+				const start = Math.min(...m.subscribes.map((s) => s.period.start.getTime()))
+				const end = Math.max(...m.subscribes.map((s) => s.period.end.getTime()))
+				return formatRange({ start, end })
+			},
+			visible: true,
+			head: tableheadComponent('date', {}),
+		},
+		{
 			key: 'hours',
-			label: 'Heures',
+			label: 'Heures de travail',
 			getCell: (m) => toHour(m.workTime),
 			visible: true,
 		},
 		{
-			key: 'sectors',
+			key: 'leaderOf',
 			label: 'Secteurs à charges',
 			getCell: (m) => m.leaderOf.map(({ name }) => name),
 			visible: true,
+			head: tableheadComponent('multiselect', {
+				options: data.teams.map((team) => ({ label: team.name, value: team.id })),
+			}),
 		},
 		{
 			key: 'age',
