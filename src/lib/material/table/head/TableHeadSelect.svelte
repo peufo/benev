@@ -49,7 +49,7 @@
 </script>
 
 <th class="p-1">
-	<DropDown hideOnBlur>
+	<DropDown hideOnBlur hideOnNav={false} tippyProps={{ appendTo: () => document.body }}>
 		<button bind:this={button} slot="activator" class="menu-item w-full flex-wrap gap-y-1">
 			<span>{field.label}</span>
 
@@ -67,17 +67,19 @@
 			{/if}
 		</button>
 
-		{#each _options as option}
-			<a
-				href={select.getHref(option.value)}
-				class="menu-item px-3 py-2"
-				class:active={option.active}
-			>
-				{#if option.icon}
-					<Icon path={option.icon} size={18} class="opacity-60" />
-				{/if}
-				<span class="whitespace-nowrap font-normal">{option.label}</span>
-			</a>
-		{/each}
+		<div class="flex flex-col gap-1">
+			{#each _options as option}
+				<a
+					href={select.getHref(option.value)}
+					class="menu-item px-3 py-2"
+					class:active={option.active}
+				>
+					{#if option.icon}
+						<Icon path={option.icon} size={18} class="opacity-60" />
+					{/if}
+					<span class="whitespace-nowrap font-normal">{option.label}</span>
+				</a>
+			{/each}
+		</div>
 	</DropDown>
 </th>

@@ -27,6 +27,7 @@
 	export let wrapperClass = ''
 	export let useSingleton = false
 	export let hideOnBlur = false
+	export let hideOnNav = true
 	export let tip: TippyInstance | undefined = undefined
 	// By pass dropdown for use in flat mode
 	export let disable = false
@@ -66,7 +67,7 @@
 		})
 
 		const navigatingUnsubscribe = navigating.subscribe((nav) => {
-			if (!nav) hide()
+			if (hideOnNav && !nav) hide()
 		})
 
 		return () => {

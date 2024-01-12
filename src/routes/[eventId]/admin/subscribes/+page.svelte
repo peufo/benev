@@ -23,6 +23,7 @@
 	} from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { SUBSCRIBE_STATE } from '$lib/constant'
+	import TableCell from '$lib/material/table/TableCell.svelte'
 
 	export let data
 
@@ -36,7 +37,7 @@
 			locked: true,
 		},
 		{
-			key: 'team',
+			key: 'teams',
 			label: 'Secteur',
 			visible: true,
 			getCell: (sub) => `
@@ -44,6 +45,12 @@
 					${sub.period.team.name}
 				</a>
 			`,
+			head: (field) =>
+				component(TableHeadSelect, {
+					field,
+					multiSelect: true,
+					options: data.teams.map((t) => ({ value: t.id, label: t.name })),
+				}),
 		},
 		{
 			key: 'period',
@@ -90,8 +97,8 @@
 			head: (field) =>
 				component(TableHeadSelect, {
 					field,
-					options: SUBSCRIBE_STATE,
 					multiSelect: true,
+					options: SUBSCRIBE_STATE,
 				}),
 		},
 	]
