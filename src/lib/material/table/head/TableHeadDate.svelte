@@ -54,17 +54,26 @@
 </script>
 
 <th class="p-1">
-	<DropDown bind:this={dropDown} on:mouseLeave={handleSubmit} class="max-h-full">
-		<button slot="activator" class="menu-item w-full flex-wrap gap-y-1">
+	<DropDown
+		bind:this={dropDown}
+		on:mouseLeave={handleSubmit}
+		tippyProps={{ appendTo: () => document.body }}
+		class="max-h-none"
+	>
+		<button slot="activator" class="menu-item w-full flex-wrap gap-y-1 min-h-8">
 			<span>{field.label}</span>
-			{#if period && time}
+			{#if isValidPeriod}
 				<span class="badge badge-primary badge-xs text-[0.7rem] font-normal text-white">
 					{getLabel(period, time)}
 				</span>
 			{/if}
 		</button>
 
-		<form class="flex flex-col" on:submit|preventDefault={handleSubmit} data-sveltekit-replacestate>
+		<form
+			class="flex flex-col font-normal"
+			on:submit|preventDefault={handleSubmit}
+			data-sveltekit-replacestate
+		>
 			<PeriodPicker numberOfMonths={1} bind:period />
 
 			<input
@@ -75,11 +84,15 @@
 			/>
 			<input class="hidden" type="text" name="end" value="{period.end}T{time.end || '23:59'}" />
 
-			<div class="flex gap-2 p-2">
+			<div class="flex gap-2 m-2">
 				<InputTime label="A partir de" bind:value={time.start} enhanceDisabled class="grow" />
 				<InputTime label="Jusqu'à" bind:value={time.end} enhanceDisabled class="grow" />
 			</div>
-			<button class="btn m-2"> Valider </button>
+
+			<div class="flex flex-row-reverse gap-2 m-2">
+				<button class="btn"> Valider </button>
+				<button class="btn btn-ghost" type="button" on:click={handleReset}>Effacer</button>
+			</div>
 		</form>
 	</DropDown>
 </th>

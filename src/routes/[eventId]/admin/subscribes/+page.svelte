@@ -56,6 +56,7 @@
 					${formatRange(sub.period)}
 				</a>
 			`,
+			head: tableheadComponent('date', {}),
 		},
 		{
 			key: 'createdBy',
@@ -95,7 +96,7 @@
 <div class="flex flex-col gap-3">
 	<div class="flex gap-x-2 gap-y-2 flex-wrap">
 		<InputSearch />
-		<Filters teams={data.teams} />
+		<Filters />
 		<SubscribesCopy />
 	</div>
 
