@@ -1,53 +1,83 @@
 <script lang="ts">
+	import type { Instance as TippyInstance } from 'tippy.js'
+	import { goto } from '$app/navigation'
+
 	import { DropDown, InputNumber } from '$lib/material'
+	import { urlParam } from '$lib/store'
+	import { debounce } from '$lib/debounce'
 	import type { TableField } from '../field'
 
 	export let field: TableField
 
 	let min: string | undefined = undefined
 	let max: string | undefined = undefined
+	let tip: TippyInstance
 
-	let inputMin: string | undefined = undefined
-	let inputMax: string | undefined = undefined
-
-	function handleSubmit() {
-		console.log(inputMin)
-		min = inputMin
-		max = inputMax
-	}
+	const udpateUrl = debounce(() => {
+		if (isDefined(min) || isDefined(max)) {
+			goto($urlParam.with({ [field.key]: JSON.stringify({ min, max }) }), {
+				noScroll: true,
+				keepFocus: true,
+			})
+			return
+		}
+		goto($urlParam.without(field.key), { noScroll: true, keepFocus: true })
+	}, 250)
 
 	function handleReset() {
 		min = undefined
 		max = undefined
-		inputMin = undefined
-		inputMax = undefined
+		tip.hide()
+		goto($urlParam.without(field.key), { noScroll: true, keepFocus: true })
 	}
+
+	function handleOk() {
+		tip.hide()
+	}
+
+	function isDefined(v: string | undefined | null): v is string {
+		return v !== undefined && v !== null
+	}
+
+	$: isNegatifRange = isDefined(min) && isDefined(max) && max < min
 </script>
 
 <td>
-	<DropDown hideOnBlur tippyProps={{ appendTo: () => document.body }}>
+	<DropDown
+		bind:tip
+		hideOnBlur
+		hideOnNav={false}
+		autofocus
+		tippyProps={{ appendTo: () => document.body }}
+	>
 		<button slot="activator" class="menu-item w-full flex-wrap gap-y-1 min-h-8">
 			<span>{field.label}</span>
 
-			{#if min !== undefined || max !== undefined}
+			{#if isDefined(min) || isDefined(max)}
 				<span class="badge badge-primary badge-xs text-[0.7rem] font-normal text-white">
-					{#if min !== undefined}
+					{#if isDefined(min)}
 						{min} &lt;
 					{/if}
 					x
-					{#if max !== undefined}
+					{#if isDefined(max)}
 						&lt; {max}
 					{/if}
 				</span>
 			{/if}
 		</button>
 
-		<form class="grid gap-2 grid-cols-2 p-1" on:submit|preventDefault={handleSubmit}>
-			<InputNumber label="Min" bind:value={inputMin} />
-			<InputNumber label="Max" bind:value={inputMax} />
+		<form class="grid gap-2 grid-cols-2 p-1" on:submit|preventDefault={handleOk}>
+			<InputNumber label="Min" bind:value={min} on:input={udpateUrl} />
+			<InputNumber
+				label="Max"
+				bind:value={max}
+				on:input={udpateUrl}
+				hint={isNegatifRange ? 'Doit être plus grand' : ''}
+			/>
+
 			<div class="col-span-full flex gap-2 justify-end">
 				<button class="btn btn-ghost" type="button" on:click={handleReset}>Effacer</button>
-				<button class="btn">Valider</button>
+				<button class="btn">Ok</button>
 			</div>
 		</form>
 	</DropDown>
