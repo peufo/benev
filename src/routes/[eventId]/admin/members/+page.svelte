@@ -52,7 +52,9 @@
 			label: 'Inscriptions (secteur)',
 			visible: true,
 			getCell: (m) =>
-				m.subscribes.map((s) => data.teams.find((t) => t.id === s.period.teamId)?.name || ''),
+				m.subscribes
+					.map((s) => data.teams.find((t) => t.id === s.period.teamId)?.name || '')
+					.filter((team, index, self) => self.indexOf(team) === index),
 			head: tableheadComponent('multiselect', {
 				options: data.teams.map((team) => ({ label: team.name, value: team.id })),
 			}),
