@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { urlParam } from '$lib/store'
 	import { jsonParse } from '$lib/jsonParse'
 	import { Placeholder } from '$lib/material'
 	import type { ComponentAndProps } from '$lib/utils'
+	import { page } from '$app/stores'
 
 	import { type TableField, TableHead, TableBody, context } from '$lib/material/table'
 
@@ -22,14 +22,20 @@
 	})
 
 	const fieldsVisibleDefault = fields.filter((f) => f.visible).map((f) => f.key)
-	$: fieldsVisible = jsonParse($urlParam.get(KEY_FIELDS_VISIBLE), fieldsVisibleDefault)
-	$: console.log({ fieldsVisible })
+	const params = $page.url.searchParams
+	if (params.has(KEY_FIELDS_VISIBLE)) {
+		const fieldsVisible = jsonParse(params.get(KEY_FIELDS_VISIBLE), fieldsVisibleDefault)
+		fields = fields.map((field) => ({
+			...field,
+			visible: fieldsVisible.includes(field.key),
+		}))
+	}
 </script>
 
 <div class="overflow-x-auto min-h-[320px] border rounded-lg">
 	{#if items.length}
 		<table class="table relative">
-			<TableHead {fields} {fieldsVisible} {key} />
+			<TableHead bind:fields {key} />
 			<TableBody {fields} {items} {action} {classRow} on:click />
 		</table>
 	{:else}

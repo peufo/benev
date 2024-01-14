@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-
 	import { urlParam } from '$lib/store'
 	import { listEditable } from '$lib/action'
 	import { mdiCheck, mdiCircleSmall, mdiDotsHorizontal, mdiDrag } from '@mdi/js'
@@ -9,25 +8,21 @@
 
 	type Item = $$Generic<{ id: string }>
 	export let fields: TableField<Item>[]
-	export let fieldsVisible: string[]
 	export let key: string
 
 	const { KEY_FIELDS_VISIBLE } = context.get(key)
 
 	function onFieldClick(key: string) {
-		const index = fieldsVisible.indexOf(key)
-		if (index === -1) fieldsVisible.push(key)
-		else fieldsVisible.splice(index, 1)
-
-		const newUrl = fieldsVisible.length
-			? $urlParam.with({ [KEY_FIELDS_VISIBLE]: JSON.stringify(fieldsVisible) })
-			: $urlParam.without(KEY_FIELDS_VISIBLE)
-		goto(newUrl, {
-			replaceState: true,
-			noScroll: true,
-			keepFocus: true,
-			invalidateAll: false,
+		fields = fields.map((field, i) => {
+			if (field.key !== key || field.locked) return field
+			return {
+				...field,
+				visible: !field.visible,
+			}
 		})
+		const fieldsVisible = fields.filter((f) => f.visible).map((f) => f.key)
+		const newUrl = $urlParam.with({ [KEY_FIELDS_VISIBLE]: JSON.stringify(fieldsVisible) })
+		goto(newUrl, { replaceState: true, noScroll: true, keepFocus: true })
 	}
 
 	function handleReorder(_fields: TableField<Item>[]) {
@@ -63,7 +58,7 @@
 				>
 					{#if field.locked}
 						<Icon path={mdiCheck} class="fill-base-content/50" size={21} />
-					{:else if fieldsVisible.includes(field.key)}
+					{:else if field.visible}
 						<Icon path={mdiCheck} class="fill-success" size={21} />
 					{:else}
 						<Icon path={mdiCircleSmall} class="fill-base-content/50" size={21} />
