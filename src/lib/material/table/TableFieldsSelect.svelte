@@ -10,7 +10,7 @@
 	export let fields: TableField<Item>[]
 	export let key: string
 
-	const { KEY_FIELDS_VISIBLE } = context.get(key)
+	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_ORDER } = context.get(key)
 
 	function onFieldClick(key: string) {
 		fields = fields.map((field, i) => {
@@ -25,8 +25,11 @@
 		goto(newUrl, { replaceState: true, noScroll: true, keepFocus: true })
 	}
 
-	function handleReorder(_fields: TableField<Item>[]) {
-		fields = _fields
+	function handleReorder(newFieldsOrder: TableField<Item>[]) {
+		fields = newFieldsOrder
+		const fieldsOrder = fields.map((f) => f.key)
+		const newUrl = $urlParam.with({ [KEY_FIELDS_ORDER]: JSON.stringify(fieldsOrder) })
+		goto(newUrl, { replaceState: true, noScroll: true, keepFocus: true })
 	}
 </script>
 

@@ -21,14 +21,27 @@
 		KEY_FIELDS_ORDER,
 	})
 
-	const fieldsVisibleDefault = fields.filter((f) => f.visible).map((f) => f.key)
 	const params = $page.url.searchParams
+
 	if (params.has(KEY_FIELDS_VISIBLE)) {
+		const fieldsVisibleDefault = fields.filter((f) => f.visible).map((f) => f.key)
 		const fieldsVisible = jsonParse(params.get(KEY_FIELDS_VISIBLE), fieldsVisibleDefault)
 		fields = fields.map((field) => ({
 			...field,
 			visible: fieldsVisible.includes(field.key),
 		}))
+	}
+
+	if (params.has(KEY_FIELDS_ORDER)) {
+		const fieldsOrderDefault = fields.map((f) => f.key)
+		const fieldsOrder = jsonParse(params.get(KEY_FIELDS_ORDER), fieldsOrderDefault)
+		if (fieldsOrder.length === fields.length) {
+			fields = fields.map((f, index, self) => {
+				const key = fieldsOrder[index]
+				const field = self.find((_) => _.key === key)
+				return field ? field : f
+			})
+		}
 	}
 </script>
 

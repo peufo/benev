@@ -41,14 +41,14 @@
 		},
 
 		{
-			key: 'subscribes.count',
+			key: 'subscribes_count',
 			label: 'Inscriptions (nombre)',
 			visible: true,
 			getCell: (m) => m.subscribes.length,
 			head: tableheadComponent('number', {}),
 		},
 		{
-			key: 'subscribes.teams',
+			key: 'subscribes_teams',
 			label: 'Inscriptions (secteur)',
 			visible: true,
 			getCell: (m) =>
@@ -60,7 +60,7 @@
 			}),
 		},
 		{
-			key: 'subscribes.range',
+			key: 'subscribes_range',
 			label: 'Inscriptions (période)',
 			getCell: (m) => {
 				if (!m.subscribes.length) return '-'
