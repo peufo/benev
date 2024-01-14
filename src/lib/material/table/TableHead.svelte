@@ -5,6 +5,8 @@
 
 	type Item = $$Generic<{ id: string }>
 	export let fields: TableField<Item>[]
+	export let fieldsVisible: string[] = []
+	export let key: string
 
 	function getComponent(field: TableField): ComponentAndProps {
 		if (!field.head) return component(TableHeadDefault, { field })
@@ -19,6 +21,6 @@
 			{@const { component, props } = getComponent(field)}
 			<svelte:component this={component} {...props} />
 		{/each}
-		<TableFieldsSelect bind:fields />
+		<TableFieldsSelect {fields} {fieldsVisible} {key} />
 	</tr>
 </thead>

@@ -1,20 +1,32 @@
 <script lang="ts">
+	import { goto } from '$app/navigation'
+
+	import { urlParam } from '$lib/store'
 	import { listEditable } from '$lib/action'
-
 	import { mdiCheck, mdiCircleSmall, mdiDotsHorizontal, mdiDrag } from '@mdi/js'
-	import { Icon, DropDown } from '$lib/material'
+	import { Icon, DropDown, type TableField } from '$lib/material'
+	import { context } from '$lib/material/table'
 
-	import type { TableField } from '$lib/material'
 	type Item = $$Generic<{ id: string }>
 	export let fields: TableField<Item>[]
+	export let fieldsVisible: string[]
+	export let key: string
 
-	function onFieldClick(index: number) {
-		fields = fields.map((field, i) => {
-			if (i !== index) return field
-			return {
-				...field,
-				visible: !field.visible,
-			}
+	const { KEY_FIELDS_VISIBLE } = context.get(key)
+
+	function onFieldClick(key: string) {
+		const index = fieldsVisible.indexOf(key)
+		if (index === -1) fieldsVisible.push(key)
+		else fieldsVisible.splice(index, 1)
+
+		const newUrl = fieldsVisible.length
+			? $urlParam.with({ [KEY_FIELDS_VISIBLE]: JSON.stringify(fieldsVisible) })
+			: $urlParam.without(KEY_FIELDS_VISIBLE)
+		goto(newUrl, {
+			replaceState: true,
+			noScroll: true,
+			keepFocus: true,
+			invalidateAll: false,
 		})
 	}
 
@@ -25,6 +37,7 @@
 
 <th class="p-0 px-1 sticky right-0 z-10" align="right">
 	<DropDown
+		hideOnNav={false}
 		class="max-h-screen"
 		tippyProps={{ appendTo: () => document.body, placement: 'bottom-end' }}
 	>
@@ -39,18 +52,18 @@
 				onChange: handleReorder,
 			}}
 		>
-			{#each fields as field, index (field.key)}
+			{#each fields as field (field.key)}
 				<div
 					class="menu-item w-full"
 					class:disabled={field.locked}
 					role="menuitem"
 					tabindex="0"
-					on:click={() => onFieldClick(index)}
-					on:keydown={(e) => e.key === 'Espace' && onFieldClick(index)}
+					on:click={() => onFieldClick(field.key)}
+					on:keydown={(e) => e.key === 'Espace' && onFieldClick(field.key)}
 				>
 					{#if field.locked}
 						<Icon path={mdiCheck} class="fill-base-content/50" size={21} />
-					{:else if field.visible}
+					{:else if fieldsVisible.includes(field.key)}
 						<Icon path={mdiCheck} class="fill-success" size={21} />
 					{:else}
 						<Icon path={mdiCircleSmall} class="fill-base-content/50" size={21} />
