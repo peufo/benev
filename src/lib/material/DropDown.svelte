@@ -27,6 +27,7 @@
 	export let wrapperClass = ''
 	export let classActivator = ''
 	export let useSingleton = false
+	export let autofocus = false
 	export let hideOnBlur = false
 	export let hideOnNav = true
 	export let tip: TippyInstance | undefined = undefined
@@ -40,7 +41,11 @@
 		if (disable) return
 
 		const triggerTarget = activator.querySelector('button, input') || activator
-
+		const focusables = Array.from(
+			content.querySelectorAll<HTMLInputElement>(
+				'a[href], button, input, textarea, select, details, [tabindex]'
+			)
+		)
 		tip = tippy(activator, {
 			content,
 			placement: 'bottom-start',
@@ -51,6 +56,9 @@
 			interactive: true,
 			interactiveDebounce: 50,
 			appendTo: 'parent',
+			onShown() {
+				if (autofocus) focusables[0]?.select()
+			},
 			...tippyProps,
 		})
 
@@ -59,13 +67,8 @@
 			sigleton?.setInstances(tips)
 		}
 
-		const focusables = content.querySelectorAll<HTMLInputElement>(
-			'a[href], button, input, textarea, select, details, [tabindex]'
-		)
-		const lastFocusable = Array.from(focusables).at(-1)
-		lastFocusable?.addEventListener('blur', () => {
-			if (hideOnBlur) hide()
-		})
+		const lastFocusable = focusables.at(-1)
+		if (hideOnBlur) lastFocusable?.addEventListener('blur', hide)
 
 		const navigatingUnsubscribe = navigating.subscribe((nav) => {
 			if (hideOnNav && !nav) hide()
@@ -73,7 +76,7 @@
 
 		return () => {
 			navigatingUnsubscribe()
-			lastFocusable?.removeEventListener('blur', hide)
+			if (hideOnBlur) lastFocusable?.removeEventListener('blur', hide)
 			if (useSingleton && tip) {
 				tips.splice(tips.indexOf(tip), 1)
 				tip.destroy()
