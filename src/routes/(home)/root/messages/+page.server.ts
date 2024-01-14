@@ -9,7 +9,7 @@ export const load = async ({ url }) => {
 		take: z.number().default(20),
 		state: z.enum(toTuple(MessageState)).optional(),
 	})
-	if (err) throw error(400)
+	if (err) error(400);
 
 	const where: Prisma.MessageWhereInput = {}
 	if (data.state) where.state = data.state

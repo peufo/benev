@@ -20,7 +20,7 @@ export function licences(ownerId: string) {
 
 	async function useLicences(type: LicenceType, nb: number): Promise<Prisma.PrismaPromise<any>[]> {
 		const nbAvailable = await getLicencesAvailable(type)
-		if (nbAvailable < nb) throw error(403, { message: 'No licence available' })
+		if (nbAvailable < nb) error(403, { message: 'No licence available' });
 
 		const _licences = await prisma.licence.findMany({
 			where: { ownerId, type },

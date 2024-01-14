@@ -13,7 +13,7 @@ import { userLogin, userCreate, userUpdate, z } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
 
 export const load = () => {
-	throw redirect(302, '/me/events')
+	redirect(302, '/me/events');
 }
 
 export const actions = {
@@ -83,7 +83,7 @@ export const actions = {
 	},
 	update_account: async ({ locals, request }) => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(401)
+		if (!session) error(401);
 
 		// Adapte validation model with event context
 		const formData = await request.formData()
@@ -122,7 +122,7 @@ export const actions = {
 	},
 	generate_avatar: async ({ locals }) => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(401)
+		if (!session) error(401);
 
 		return tryOrFail(async () => {
 			const avatarPlaceholder = createAvatarPlaceholder()
@@ -134,12 +134,12 @@ export const actions = {
 	},
 	delete_avatar: async ({ locals }) => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(401)
+		if (!session) error(401);
 		return tryOrFail(() => media.delete({ avatarOf: { id: session.user.id } }))
 	},
 	upload_avatar: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(401)
+		if (!session) error(401);
 
 		return tryOrFail(() =>
 			media.upload(request, {

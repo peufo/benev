@@ -13,7 +13,7 @@ import {
 import { EmailAcceptInvite, EmailAcceptInviteNotification, EmailNewInvite } from '$lib/email'
 
 export const load = async ({ params }) => {
-	throw redirect(301, `/${params.eventId}/me`)
+	redirect(301, `/${params.eventId}/me`);
 }
 
 export const actions = {
@@ -90,7 +90,7 @@ export const actions = {
 
 	accept_invite: async ({ request, locals, params: { eventId } }) => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(401)
+		if (!session) error(401);
 
 		const { err, data } = await parseFormData(request, {
 			userId: z.string(),
@@ -127,7 +127,7 @@ export const actions = {
 				where: { id: eventId },
 				select: { selfRegisterAllowed: true },
 			})
-			if (!selfRegisterAllowed) throw error(403)
+			if (!selfRegisterAllowed) error(403);
 
 			const newMember = await prisma.member.create({
 				data: {

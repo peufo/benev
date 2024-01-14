@@ -18,7 +18,7 @@ export const permission = {
 
 async function rootPermission(locals: App.Locals) {
 	const session = await locals.auth.validate()
-	if (!session) throw error(401)
+	if (!session) error(401);
 
 	session.user.email === ROOT_USER
 }
@@ -26,11 +26,11 @@ async function rootPermission(locals: App.Locals) {
 function createEventPermission(role: MemberRole) {
 	return async (eventId: string, locals: App.Locals): Promise<MemberWithComputedValues> => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(401)
+		if (!session) error(401);
 		// TODO: a optimisé en utilisant parent() dans les load()
 		const member = await getMemberProfile({ userId: session.user.id, eventId })
 		const allowed = member.roles.includes(role)
-		if (!allowed) throw error(403)
+		if (!allowed) error(403);
 		return member
 	}
 }
@@ -40,7 +40,7 @@ async function leaderOfTeam(teamId: string, locals: App.Locals): Promise<MemberW
 	const member = await createEventPermission('leader')(team.eventId, locals)
 	if (!member.roles.includes('admin')) {
 		const isLeaderOfTeam = member.leaderOf.find((t) => t.id === teamId)
-		if (!isLeaderOfTeam) throw error(403)
+		if (!isLeaderOfTeam) error(403);
 	}
 	return member
 }

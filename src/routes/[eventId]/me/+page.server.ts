@@ -54,7 +54,7 @@ export const actions = {
 			if (!memberId) throw Error('memberId is required')
 
 			const editOwnProfile = memberId === member.id
-			if (!editOwnProfile && !isLeader) throw error(401)
+			if (!editOwnProfile && !isLeader) error(401);
 
 			const fieldsToUpdate = await prisma.field.findMany({
 				where: {

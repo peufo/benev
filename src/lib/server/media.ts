@@ -61,7 +61,7 @@ export const media = {
 
 	async delete(where: Prisma.MediaWhereInput) {
 		const media = await prisma.media.findFirst({ where })
-		if (!media) throw error(404)
+		if (!media) error(404);
 		const mediaPath = path.resolve(MEDIA_DIR, media.id)
 		await fs.rm(mediaPath, { recursive: true, force: true })
 		return prisma.media.delete({ where: { id: media.id } })

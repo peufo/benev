@@ -27,7 +27,7 @@ export const actions = {
 		const { err, data } = await parseFormData(request, teamUpdate)
 
 		if (err) return err
-		if (!member.roles.includes('admin') && data.leaders) throw error(403)
+		if (!member.roles.includes('admin') && data.leaders) error(403);
 
 		return tryOrFail(
 			() =>

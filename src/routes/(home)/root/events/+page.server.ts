@@ -7,7 +7,7 @@ export const load = async ({ url }) => {
 		take: z.number().default(20),
 		skip: z.number().default(0),
 	})
-	if (err) throw error(400)
+	if (err) error(400);
 	return {
 		events: await prisma.event.findMany({
 			take: data.take,

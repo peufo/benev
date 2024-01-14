@@ -42,7 +42,7 @@ export const checkout = {
 	async handleHook(request: Request) {
 		const signature = request.headers.get('stripe-signature')
 
-		if (!signature) throw error(400)
+		if (!signature) error(400);
 		try {
 			const payload = await request.text()
 			const event = await stripe.webhooks.constructEventAsync(
@@ -115,7 +115,7 @@ export const checkout = {
 			return new Response('success', { status: 200 })
 		} catch (err) {
 			console.error(err)
-			throw error(400)
+			error(400);
 		}
 	},
 }

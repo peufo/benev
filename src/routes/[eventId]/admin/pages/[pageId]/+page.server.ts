@@ -6,7 +6,7 @@ import { normalizePath } from '$lib/normalizePath.js'
 export const load = async ({ params }) => {
 	const page = await prisma.page.findUnique({ where: { id: params.pageId } })
 
-	if (!page) throw redirect(302, `/${params.eventId}/admin/pages`)
+	if (!page) redirect(302, `/${params.eventId}/admin/pages`);
 	return { page }
 }
 

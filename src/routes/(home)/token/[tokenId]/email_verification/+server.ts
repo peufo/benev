@@ -13,8 +13,8 @@ export const GET = async ({ params, locals }) => {
 		const session = await auth.createSession({ userId, attributes: {} })
 		locals.auth.setSession(session)
 	} catch {
-		throw error(401, 'Invalid token')
+		error(401, 'Invalid token');
 	} finally {
-		throw redirect(302, '/me')
+		redirect(302, '/me');
 	}
 }

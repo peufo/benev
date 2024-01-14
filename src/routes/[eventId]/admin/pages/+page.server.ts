@@ -4,7 +4,7 @@ import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ params: { eventId } }) => {
 	const pageIndex = await prisma.page.findFirstOrThrow({ where: { eventId, isIndex: true } })
-	throw redirect(301, `/${eventId}/admin/pages/${pageIndex.id}`)
+	redirect(301, `/${eventId}/admin/pages/${pageIndex.id}`);
 }
 
 export const actions = {

@@ -21,7 +21,7 @@ export const load = async ({ url, locals }) => {
 export const actions = {
 	new_message: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(403)
+		if (!session) error(403);
 		const { data, err } = await parseFormData(request, {
 			subject: z.string().min(3).max(252),
 			content: z.string().min(10).max(10_000),

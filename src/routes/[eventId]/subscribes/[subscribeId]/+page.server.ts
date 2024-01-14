@@ -57,7 +57,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 
 			const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
 			const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
-			if (!isCreatorEdition && !isSubscriberEdition) throw error(403)
+			if (!isCreatorEdition && !isSubscriberEdition) error(403);
 
 			// Check author permission
 			const isLeaderAction = (_subscribe.createdBy === 'leader') === isCreatorEdition
@@ -65,23 +65,23 @@ const setSubscribState: (state: SubscribeState) => Action =
 			if (isLeaderAction) {
 				author = await permission.leader(eventId, locals)
 				const isInLeaderTeams = author.leaderOf.find(({ id }) => id === _subscribe.period.teamId)
-				if (!author.roles.includes('admin') && !isInLeaderTeams) throw error(403)
+				if (!author.roles.includes('admin') && !isInLeaderTeams) error(403);
 			} else {
 				author = await permission.member(eventId, locals)
-				if (author.id !== _subscribe.memberId) throw error(403)
+				if (author.id !== _subscribe.memberId) error(403);
 			}
 
 			if (state === 'accepted' || state === 'request') {
 				// Check if the period is already complet
 				const { subscribes, maxSubscribe } = _subscribe.period
 				if (maxSubscribe <= subscribes.length) {
-					throw error(403, 'Sorry, this period is already complet')
+					error(403, 'Sorry, this period is already complet');
 				}
 
 				// Check if member is free in this period
 				const memberPeriods = _subscribe.member.subscribes.map((sub) => sub.period)
 				if (!isFreeRange(_subscribe.period, memberPeriods)) {
-					throw error(403, `Already busy during this period`)
+					error(403, `Already busy during this period`);
 				}
 			}
 

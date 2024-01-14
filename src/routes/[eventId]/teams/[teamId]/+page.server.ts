@@ -50,7 +50,7 @@ export const load = async ({ locals, parent, params: { teamId } }) => {
 			  }
 	)
 
-	if (!isLeaderOfTeam && !isMemberAllowed(team.conditions, member)) throw error(403)
+	if (!isLeaderOfTeam && !isMemberAllowed(team.conditions, member)) error(403);
 
 	return { isLeaderOfTeam, team }
 }

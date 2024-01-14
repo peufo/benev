@@ -21,7 +21,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		all: z.boolean().default(false),
 	})
 
-	if (err) throw error(400)
+	if (err) error(400);
 
 	const where: Prisma.MemberWhereInput = { eventId, OR: [] }
 	const teamWhere: Prisma.TeamWhereInput = { eventId }

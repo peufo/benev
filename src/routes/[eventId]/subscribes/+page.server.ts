@@ -8,7 +8,7 @@ import { isMemberAllowed } from '$lib/team/isMemberAllowed.js'
 export const actions = {
 	new_subscribe: async ({ request, locals, params: { eventId } }) => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(401)
+		if (!session) error(401);
 
 		const { err, data } = await parseFormData(request, subscribeCreate)
 		if (err) return err
@@ -38,7 +38,7 @@ export const actions = {
 
 			// Check if the period is already complet
 			if (period.maxSubscribe <= period.subscribes.length) {
-				throw error(403, 'Sorry, this period is already complet')
+				error(403, 'Sorry, this period is already complet');
 			}
 
 			// Check if author as the right to create this subscribe
@@ -47,24 +47,24 @@ export const actions = {
 				.then(() => true)
 				.catch(() => false)
 			const isSelfSubscribe = data.memberId === member.id
-			if (!_isLeader && !isSelfSubscribe) throw error(403)
+			if (!_isLeader && !isSelfSubscribe) error(403);
 
 			// Check if self subscribe conditions is respected
 			if (!_isLeader) {
-				if (!member.event.selfSubscribeAllowed) throw error(403)
+				if (!member.event.selfSubscribeAllowed) error(403);
 				const closeSubscribing = period.team.closeSubscribing || member.event.closeSubscribing
 				const DAY = 1000 * 60 * 60 * 24
 				if (closeSubscribing && closeSubscribing.getTime() < new Date().getTime() - DAY)
-					throw error(403)
+					error(403);
 
-				if (!isMemberAllowed(period.team.conditions, member)) throw error(403)
+				if (!isMemberAllowed(period.team.conditions, member)) error(403);
 			}
 
 			// Check if member is free in this period
 			const memberPeriods = member.subscribes.map((sub) => sub.period)
 			if (!isFreeRange(period, memberPeriods)) {
 				const startMessage = isSelfSubscribe ? 'You are' : 'This member is'
-				throw error(403, `${startMessage} already busy during this period`)
+				error(403, `${startMessage} already busy during this period`);
 			}
 
 			const subscribe = await prisma.subscribe.create({

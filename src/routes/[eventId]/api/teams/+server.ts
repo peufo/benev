@@ -11,7 +11,7 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 		take: z.number().default(5),
 		onlyAvailable: z.boolean().optional(),
 	})
-	if (err) throw error(400)
+	if (err) error(400);
 	const { search = '', ids, take } = data
 
 	if (ids)

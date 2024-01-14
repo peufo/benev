@@ -7,7 +7,7 @@ export const load = async ({ url, params: { eventId } }) => {
 	const { data, err } = parseQuery(url, {
 		teams: z.array(z.string()).optional(),
 	})
-	if (err) throw error(400)
+	if (err) error(400);
 	const where: Prisma.TeamWhereInput = { eventId }
 
 	if (data.teams) where.id = { in: data.teams }

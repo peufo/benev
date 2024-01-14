@@ -10,7 +10,7 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 		ids: z.array(z.string()).optional(),
 		take: z.number().default(5),
 	})
-	if (err) throw error(400)
+	if (err) error(400);
 	const { search = '', take, ids } = data
 
 	if (ids)

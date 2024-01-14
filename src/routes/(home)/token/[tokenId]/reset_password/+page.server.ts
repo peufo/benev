@@ -25,10 +25,10 @@ export const actions = {
 			const session = await auth.createSession({ userId, attributes: {} })
 			locals.auth.setSession(session)
 		} catch {
-			throw error(401, 'Invalid token')
+			error(401, 'Invalid token');
 		} finally {
-			if (data.redirectTo) throw redirect(302, data.redirectTo)
-			throw redirect(302, '/me')
+			if (data.redirectTo) redirect(302, data.redirectTo);
+			redirect(302, '/me');
 		}
 	},
 }

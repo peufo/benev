@@ -5,13 +5,13 @@ import { eventCreate } from '$lib/validation'
 
 export const load = async ({ parent }) => {
 	const { user } = await parent()
-	if (user) throw redirect(302, '/me')
+	if (user) redirect(302, '/me');
 }
 
 export const actions = {
 	new_event: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
-		if (!session) throw error(401)
+		if (!session) error(401);
 
 		const { err, data, formData } = await parseFormData(request, eventCreate)
 		if (err) return err
