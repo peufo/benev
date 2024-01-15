@@ -7,7 +7,7 @@ import { goto } from '$app/navigation'
 export type TableField<Item = any> = {
 	key: string
 	label: string
-	getCell: (item: Item) => ComponentAndProps | Primitive | Primitive[]
+	getCell: (item: Item) => ComponentAndProps | Primitive | Primitive[] | undefined
 	hint?: string
 	locked?: boolean
 	visible?: boolean

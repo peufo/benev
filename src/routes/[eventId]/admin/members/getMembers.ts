@@ -109,7 +109,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	// TODO: use this in src/routes/[eventId]/teams/membersAllowed/+server.ts
 	const fieldFilterByType: Record<
 		FieldType,
-		(query: string) => Prisma.JsonNullableFilter<'FieldValue'> | null
+		(query: string) => Prisma.JsonNullableFilter<'Member'> | null
 	> = {
 		string: (query) => ({ string_contains: query }),
 		textarea: (query) => ({ string_contains: query }),
@@ -122,7 +122,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		number: (query) => {
 			const parsed = z.filter.number.safeParse(query)
 			if (!parsed.success) return null
-			const filter: Prisma.JsonNullableFilter<'FieldValue'> = {}
+			const filter: Prisma.JsonNullableFilter<'Member'> = {}
 			if (parsed.data?.min) filter.gte = parsed.data?.min
 			if (parsed.data?.max) filter.lte = parsed.data?.max
 			return filter
@@ -139,13 +139,12 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		const fieldId = key.replace('field_', '')
 		const field = await prisma.field.findUniqueOrThrow({ where: { id: fieldId, eventId } })
 		const fieldFilter = fieldFilterByType[field.type](value)
+		console.log({ fieldFilter })
 		if (fieldFilter)
 			filters.push({
-				profile: {
-					some: {
-						fieldId,
-						valueAsJson: fieldFilter,
-					},
+				profileJson: {
+					path: `$.${fieldId}`,
+					...fieldFilter,
 				},
 			})
 	}

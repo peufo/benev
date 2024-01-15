@@ -22,9 +22,12 @@ export const actions = {
 				include: { user: true, profile: { include: { field: true } } },
 			})
 			for (const member of members) {
-				const profileJson: PrismaJson.MemberProfile = {}
+				let profileJson: PrismaJson.MemberProfile = {}
 				member.profile.forEach(({ field, value }) => {
-					profileJson[field.id] = jsonParse(value, undefined)
+					if (field.type === 'multiselect') profileJson[field.id] = jsonParse<string[]>(value, [])
+					else if (field.type === 'boolean') profileJson[field.id] = value === 'true'
+					else if (field.type === 'number') profileJson[field.id] = +value
+					else profileJson[field.id] = value
 				})
 
 				await prisma.member.update({

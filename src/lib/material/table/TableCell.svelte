@@ -23,6 +23,8 @@
 	<TableCellBoolean {value} />
 {:else if typeof value === 'string'}
 	<TableCellString {value} />
+{:else if value === undefined}
+	<td>-</td>
 {:else}
 	<td>
 		<svelte:component this={value.component} {...value.props} />
