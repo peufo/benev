@@ -6,14 +6,20 @@
 	export let value: string | undefined = undefined
 	let klass = ''
 	export { klass as class }
+	export let key = 'search'
 
 	let inputElement: HTMLInputElement
 </script>
 
 <InputText
-	key="search"
+	{key}
 	bind:inputElement
 	bind:value
+	on:blur
+	on:blur
+	on:input
+	on:keydown
+	on:keyup
 	bindWithParams
 	input={{
 		class: 'input-sm pr-8',

@@ -3,6 +3,7 @@
 	import { Placeholder } from '$lib/material'
 	import type { ComponentAndProps } from '$lib/utils'
 	import { page } from '$app/stores'
+	import { urlParam } from '$lib/store'
 
 	import { type TableField, TableHead, TableBody, context } from '$lib/material/table'
 
@@ -14,8 +15,8 @@
 	export let classRow = ''
 	export let key = 'table'
 
-	const KEY_FIELDS_VISIBLE = `${key}.fields.visible`
-	const KEY_FIELDS_ORDER = `${key}fields.order`
+	const KEY_FIELDS_VISIBLE = `${key}_fields_visible`
+	const KEY_FIELDS_ORDER = `${key}_fields_order`
 	context.set(key, {
 		KEY_FIELDS_VISIBLE,
 		KEY_FIELDS_ORDER,

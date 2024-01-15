@@ -74,8 +74,9 @@
 		{
 			key: 'hours',
 			label: 'Heures de travail',
-			getCell: (m) => toHour(m.workTime),
 			visible: true,
+			getCell: (m) => toHour(m.workTime),
+			head: tableheadComponent('number', {}),
 		},
 		{
 			key: 'leaderOf',
@@ -90,6 +91,7 @@
 			key: 'age',
 			label: 'Age',
 			getCell: (m) => getAge(m.user.birthday),
+			head: tableheadComponent('number', {}),
 		},
 		{
 			key: 'isUserProfileCompleted',
@@ -122,6 +124,7 @@
 				if (field.type === 'number') return +value
 				return value
 			},
+			head: tableheadComponent(field.type, {}),
 		})),
 	]
 </script>

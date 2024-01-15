@@ -31,10 +31,6 @@
 		goto($urlParam.without(field.key), { noScroll: true, keepFocus: true })
 	}
 
-	function handleOk() {
-		tip.hide()
-	}
-
 	function isDefined(v: string | undefined | null): v is string {
 		return v !== undefined && v !== null
 	}
@@ -66,13 +62,13 @@
 			{/if}
 		</button>
 
-		<form class="grid gap-2 grid-cols-2 p-1" on:submit|preventDefault={handleOk}>
-			<InputNumber label="Min" bind:value={min} on:input={udpateUrl} />
+		<form class="grid gap-2 grid-cols-2 p-1" on:submit|preventDefault={() => tip.hide()}>
+			<InputNumber bind:value={min} on:input={udpateUrl} input={{ placeholder: 'Min' }} />
 			<InputNumber
-				label="Max"
 				bind:value={max}
 				on:input={udpateUrl}
 				hint={isNegatifRange ? 'Doit être plus grand' : ''}
+				input={{ placeholder: 'Max' }}
 			/>
 
 			<div class="col-span-full flex gap-2 justify-end">
