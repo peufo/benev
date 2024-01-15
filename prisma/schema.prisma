@@ -218,6 +218,9 @@ model Member {
   eventId String
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
+  /// [MemberProfile]
+  profileJson Json?
+
   subscribes       Subscribe[]
   leaderOf         Team[]
   profile          FieldValue[]

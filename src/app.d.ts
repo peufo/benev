@@ -38,6 +38,7 @@ declare global {
 declare global {
 	namespace PrismaJson {
 		type TeamConditions = zod.infer<typeof teamConditionModel>[]
+		type MemberProfile = Record<string, string | string[] | number | boolean | undefined>
 	}
 }
 
