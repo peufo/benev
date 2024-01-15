@@ -100,6 +100,7 @@
 	</div>
 
 	<Table
+		key="subscribes"
 		{fields}
 		items={data.subscribes}
 		action={(subscribe) => component(SubscribeMenu, { subscribe })}

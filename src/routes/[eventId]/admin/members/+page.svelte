@@ -158,6 +158,7 @@
 	{/if}
 
 	<Table
+		key="members"
 		items={data.members}
 		fields={tableFields}
 		action={(member) => component(MemberContact, { user: member.user })}
