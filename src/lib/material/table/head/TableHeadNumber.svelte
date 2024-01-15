@@ -42,7 +42,7 @@
 	$: isNegatifRange = isDefined(min) && isDefined(max) && max < min
 </script>
 
-<td>
+<th class="p-1">
 	<DropDown
 		bind:tip
 		hideOnBlur
@@ -81,4 +81,4 @@
 			</div>
 		</form>
 	</DropDown>
-</td>
+</th>

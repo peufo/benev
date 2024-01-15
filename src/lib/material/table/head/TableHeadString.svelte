@@ -9,7 +9,7 @@
 	let searchValue = ''
 </script>
 
-<td>
+<th class="p-1">
 	<DropDown
 		bind:tip
 		hideOnBlur
@@ -35,4 +35,4 @@
 			on:keydown={(e) => e.key === 'Enter' && tip.hide()}
 		/>
 	</DropDown>
-</td>
+</th>
