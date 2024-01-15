@@ -81,12 +81,26 @@ const relations = {
 	},
 }
 
+const filter = {
+	number: json({
+		min: zod.coerce.number().optional(),
+		max: zod.coerce.number().optional(),
+	}).optional(),
+	multiselect: array(zod.string()).optional(),
+	range: json({
+		start: zod.coerce.date().optional(),
+		end: zod.coerce.date().optional(),
+	}).optional(),
+	boolean: booleanAsString().optional(),
+}
+
 export const z = {
 	...zod,
 	json,
 	array,
 	relation,
 	relations,
+	filter,
 	dateOptional,
 	booleanAsString,
 	date: zod.coerce.date,

@@ -1,5 +1,6 @@
 import { z } from '$lib/validation'
-import type { Event, Field, Prisma } from '@prisma/client'
+import dayjs from 'dayjs'
+import type { Event, Field, Period, Prisma } from '@prisma/client'
 import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
 import { error } from '@sveltejs/kit'
 import { jsonParse } from '$lib/jsonParse'
@@ -8,83 +9,105 @@ export type Member = Awaited<ReturnType<typeof getMembers>>['members'][number]
 
 export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
+
 	const { data, err } = parseQuery(url, {
 		search: z.string().optional(),
-		start: z.date().optional(),
-		end: z.date().optional(),
-		teams: z.array(z.string()).optional(),
+		subscribes_count: z.filter.number,
+		subscribes_teams: z.filter.multiselect,
+		subscribes_range: z.filter.range,
+		subscribes_hours: z.filter.number,
+		leaderOf: z.filter.multiselect,
+		age: z.filter.number,
+		isUserProfileCompleted: z.filter.boolean,
+		isValidedByEvent: z.filter.boolean,
+		isValidedByUser: z.filter.boolean,
+		isAbsent: z.filter.boolean,
 		role: z.enum(['member', 'leader', 'admin']).optional(),
-		fieldId: z.string().optional(),
-		fieldValue: z.string().optional(),
 		skip: z.number().default(0),
 		take: z.number().default(20),
 		summary: z.boolean().default(false),
-		isAbsent: z.booleanAsString().optional(),
 		all: z.boolean().default(false),
 	})
 
 	if (err) error(400)
 
-	const where: Prisma.MemberWhereInput = { eventId, OR: [] }
-	const teamWhere: Prisma.TeamWhereInput = { eventId }
-	let periodWhere: Prisma.PeriodWhereInput | undefined = undefined
+	const filters: Prisma.MemberWhereInput[] = []
+	const subscribesFilters: Prisma.SubscribeWhereInput[] = []
 
-	if (data.start && data.end) {
-		periodWhere = {
-			start: { lte: data.end },
-			end: { gte: data.start },
+	if (data.search) {
+		filters.push({
+			user: {
+				OR: [
+					{ firstName: { contains: data.search } },
+					{ lastName: { contains: data.search } },
+					{ email: { contains: data.search } },
+				],
+			},
+		})
+	}
+
+	if (data.subscribes_teams) {
+		subscribesFilters.push({
+			period: { teamId: { in: data.subscribes_teams } },
+		})
+	}
+
+	if (data.subscribes_range) {
+		const { start, end } = data.subscribes_range
+		subscribesFilters.push({
+			period: {
+				...(start && { end: { gte: start } }),
+				...(end && { start: { lte: end } }),
+			},
+		})
+	}
+
+	if (data.leaderOf) {
+		filters.push({
+			leaderOf: { some: { id: { in: data.leaderOf } } },
+		})
+	}
+
+	if (data.age) {
+		const getDate = (age?: number) => {
+			if (age === undefined) return undefined
+			return dayjs().subtract(age, 'year').toDate()
 		}
-	}
-
-	if (data.teams) teamWhere.id = { in: data.teams }
-
-	const subscribeWhere: Prisma.SubscribeWhereInput = {
-		state: { in: ['request', 'accepted'] },
-		period: {
-			...periodWhere,
-			team: teamWhere,
-		},
-	}
-
-	if (data.role === 'member') subscribeWhere.isAbsent = data.isAbsent
-
-	const subscribesFilter = !!(data.role || data.start || data.end || data.teams)
-	if (subscribesFilter) {
-		if (!data.role || data.role === 'member')
-			where.OR!.push({
-				subscribes: {
-					some: subscribeWhere,
+		const start = getDate(data.age.max)
+		const end = getDate(data.age.min)
+		filters.push({
+			user: {
+				birthday: {
+					not: null,
+					...(start && { gte: start }),
+					...(end && { lte: end }),
 				},
-			})
-
-		if (!data.role || data.role === 'leader')
-			where.OR!.push({
-				leaderOf: {
-					some: {
-						...teamWhere,
-						...(periodWhere && {
-							periods: {
-								some: periodWhere,
-							},
-						}),
-					},
-				},
-			})
+			},
+		})
 	}
 
-	if (data.role === 'admin') where.isAdmin = true
+	if (data.isValidedByEvent) {
+		filters.push({ isValidedByEvent: data.isValidedByEvent })
+	}
+	if (data.isValidedByUser) {
+		console.log(data.isValidedByUser)
+		filters.push({ isValidedByUser: data.isValidedByUser })
+	}
+	if (data.isAbsent) {
+		filters.push({ subscribes: { some: { isAbsent: true } } })
+	}
 
-	if (!where.OR?.length) delete where.OR
+	if (data.role === 'admin') {
+		filters.push({ isAdmin: true })
+	}
+	if (data.role === 'leader') {
+		filters.push({ leaderOf: { some: { eventId } } })
+	}
+	if (data.role === 'member') {
+		subscribesFilters.push({ state: { in: ['request', 'accepted'] } })
+	}
 
-	if (data.search)
-		where.user = {
-			OR: [
-				{ firstName: { contains: data.search } },
-				{ lastName: { contains: data.search } },
-				{ email: { contains: data.search } },
-			],
-		}
-
+	/*
 	if (data.fieldId && data.fieldValue) {
 		const field = await prisma.field.findUniqueOrThrow({ where: { id: data.fieldId, eventId } })
 		where.profile = {
@@ -95,21 +118,34 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			},
 		}
 	}
+	*/
+	const filterOnComputedValues =
+		data.subscribes_count !== undefined ||
+		data.subscribes_hours !== undefined ||
+		data.isUserProfileCompleted !== undefined
 
-	const members = await prisma.member
+	const paginationEnable = !data.summary && !data.all && !filterOnComputedValues
+
+	let members = await prisma.member
 		.findMany({
-			where,
-			skip: data.summary || data.all ? undefined : data.skip,
-			take: data.summary || data.all ? undefined : data.take,
+			where: {
+				eventId,
+				...(filters.length && { AND: filters }),
+				...(subscribesFilters.length && {
+					subscribes: {
+						some: { AND: subscribesFilters },
+					},
+				}),
+			},
+			skip: paginationEnable ? data.skip : undefined,
+			take: paginationEnable ? data.take : undefined,
 			include: {
 				user: true,
 				leaderOf: true,
 				profile: true,
 				subscribes: {
-					where: subscribeWhere,
-					include: {
-						period: true,
-					},
+					where: { AND: [{ state: { in: ['accepted', 'request'] } }, ...subscribesFilters] },
+					include: { period: true },
 				},
 			},
 			orderBy: {
@@ -126,15 +162,52 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			}))
 		)
 
-	if (!data.summary) return { members }
+	if (filterOnComputedValues) {
+		const conditions: ((member: (typeof members)[number]) => boolean)[] = []
 
-	const [periods, fields] = await Promise.all([
-		prisma.period.findMany({
-			where: { ...periodWhere, team: { eventId, ...teamWhere } },
-			include: {},
-		}),
-		prisma.field.findMany({ where: { eventId }, orderBy: { position: 'asc' } }),
-	])
+		if (data.subscribes_count) {
+			const { min, max } = data.subscribes_count
+			if (min !== undefined) conditions.push((m) => min <= m.subscribes.length)
+			if (max !== undefined) conditions.push((m) => max >= m.subscribes.length)
+		}
+
+		if (data.subscribes_hours) {
+			const { min, max } = data.subscribes_hours
+
+			const toHours = (ms: number) => ms / (1000 * 60 * 60)
+			if (min !== undefined) conditions.push((m) => min <= toHours(m.workTime))
+			if (max !== undefined) conditions.push((m) => max >= toHours(m.workTime))
+		}
+
+		if (data.isUserProfileCompleted === true) {
+			conditions.push((m) => m.isMemberProfileCompleted && m.isUserProfileCompleted)
+		}
+		if (data.isUserProfileCompleted === false) {
+			conditions.push((m) => !m.isMemberProfileCompleted || !m.isUserProfileCompleted)
+		}
+
+		members = members.filter((member) => {
+			for (const condition of conditions) {
+				if (!condition(member)) return false
+			}
+			return true
+		})
+	}
+
+	if (!data.summary) {
+		if (!data.all && !paginationEnable)
+			return { members: members.slice(data.skip, data.skip + data.take) }
+		else return { members }
+	}
+
+	const fields = await prisma.field.findMany({ where: { eventId }, orderBy: { position: 'asc' } })
+	const periodsMap = new Map<string, Period>()
+	members.forEach(({ subscribes }) => {
+		subscribes.forEach(({ period }) => {
+			periodsMap.set(period.id, period)
+		})
+	})
+	const periods = Array.from(periodsMap.values())
 
 	return {
 		members: members.slice(data.skip, data.skip + data.take),

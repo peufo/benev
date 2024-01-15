@@ -56,11 +56,11 @@
 			{#if isDefined(min) || isDefined(max)}
 				<span class="badge badge-primary badge-xs text-[0.7rem] font-normal text-white">
 					{#if isDefined(min)}
-						{min} &lt;
+						{min} ≤
 					{/if}
 					x
 					{#if isDefined(max)}
-						&lt; {max}
+						≤ {max}
 					{/if}
 				</span>
 			{/if}

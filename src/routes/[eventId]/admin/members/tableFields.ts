@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { tableheadComponent, type TableField } from '$lib/material'
 import { component, getAge } from '$lib/utils'
 import { MemberCell } from '$lib/member'
@@ -6,6 +5,17 @@ import { formatRange } from '$lib/formatRange'
 import { jsonParse } from '$lib/jsonParse'
 import type { Member } from './getMembers'
 import type { Field } from '@prisma/client'
+
+function toHours(ms: number) {
+	const hours = ms / (1000 * 60 * 60)
+	return (
+		Math.round(hours).toString().padStart(2, '0') +
+		':' +
+		Math.round((hours % 1) * 60)
+			.toString()
+			.padStart(2, '0')
+	)
+}
 
 export function getTableFields(teams: { id: string; name: string }[], fields: Field[]) {
 	const tableFields: TableField<Member>[] = [
@@ -15,7 +25,6 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 			getCell: (member) => component(MemberCell, { member }),
 			locked: true,
 		},
-
 		{
 			key: 'subscribes_count',
 			label: 'Inscriptions (nombre)',
@@ -48,10 +57,10 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 			head: tableheadComponent('date', {}),
 		},
 		{
-			key: 'hours',
+			key: 'subscribes_hours',
 			label: 'Heures de travail',
 			visible: true,
-			getCell: (m) => dayjs(m.workTime).format('hh:mm'),
+			getCell: (m) => toHours(m.workTime),
 			head: tableheadComponent('number', {}),
 		},
 		{

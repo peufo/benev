@@ -6,14 +6,19 @@
 	import { formatRange } from '$lib/formatRange'
 	import { page } from '$app/stores'
 	import { urlParam } from '$lib/store'
+	import { jsonParse } from '$lib/jsonParse'
 
 	type Period = { start: string; end: string }
 
 	export let field: TableField
 
 	let dropDown: DropDown
-	const start = $page.url.searchParams.get('start')?.split('T') || []
-	const end = $page.url.searchParams.get('end')?.split('T') || []
+	const initialValue = jsonParse<{ start?: string; end?: string }>(
+		$page.url.searchParams.get(field.key),
+		{}
+	)
+	const start = initialValue.start?.split('T') || []
+	const end = initialValue.end?.split('T') || []
 
 	let period = {
 		start: start[0] || '',
@@ -38,8 +43,10 @@
 		if (!isValidPeriod) return
 		goto(
 			$urlParam.with({
-				start: `${period.start}T${time.start || '00:00'}`,
-				end: `${period.end}T${time.end || '23:59'}`,
+				[field.key]: JSON.stringify({
+					start: `${period.start}T${time.start || '00:00'}`,
+					end: `${period.end}T${time.end || '23:59'}`,
+				}),
 			}),
 			{ replaceState: true, noScroll: true }
 		)
@@ -49,7 +56,7 @@
 		dropDown.hide()
 		period = { start: '', end: '' }
 		time = { start: '00:00', end: '23:59' }
-		goto($urlParam.without('start', 'end'), { replaceState: true, noScroll: true })
+		goto($urlParam.without(field.key), { replaceState: true, noScroll: true })
 	}
 </script>
 
