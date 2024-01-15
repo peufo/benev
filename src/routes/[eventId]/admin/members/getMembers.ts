@@ -4,6 +4,8 @@ import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
 import { error } from '@sveltejs/kit'
 import { jsonParse } from '$lib/jsonParse'
 
+export type Member = Awaited<ReturnType<typeof getMembers>>['members'][number]
+
 export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
 	const { data, err } = parseQuery(url, {
@@ -21,7 +23,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		all: z.boolean().default(false),
 	})
 
-	if (err) error(400);
+	if (err) error(400)
 
 	const where: Prisma.MemberWhereInput = { eventId, OR: [] }
 	const teamWhere: Prisma.TeamWhereInput = { eventId }

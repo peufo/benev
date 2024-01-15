@@ -10,6 +10,11 @@ export * from './head'
 export * from './field'
 
 type Context = { KEY_FIELDS_VISIBLE: string; KEY_FIELDS_ORDER: string }
+
+export const createKeys = (key: string) => ({
+	KEY_FIELDS_VISIBLE: `${key}_fields_visible`,
+	KEY_FIELDS_ORDER: `${key}_fields_order`,
+})
 export const context = {
 	set: setContext<Context>,
 	get: getContext<Context>,

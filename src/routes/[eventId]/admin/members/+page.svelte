@@ -3,130 +3,24 @@
 	import { slide } from 'svelte/transition'
 	import { derived } from 'svelte/store'
 
-	import type { PageData } from './$types'
-	import {
-		Icon,
-		InputSearch,
-		Pagination,
-		Table,
-		type TableField,
-		tableheadComponent,
-	} from '$lib/material'
+	import { Icon, InputSearch, Pagination, Table, createFieldsInit } from '$lib/material'
 	import { urlParam } from '$lib/store'
-	import { getAge, component } from '$lib/utils'
-	import { jsonParse } from '$lib/jsonParse'
+	import { component } from '$lib/utils'
+
 	import InviteDialog from '$lib/InviteDialog.svelte'
 
+	import { MemberContact } from '$lib/member'
+	import { getTableFields } from './tableFields'
 	import MembersCopy from './MembersCopy.svelte'
 	import MembersFilter from './MembersFilter.svelte'
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
-	import { MemberContact, MemberCell } from '$lib/member'
-	import dayjs from 'dayjs'
-	import { formatRange } from '$lib/formatRange'
 
 	export let data
 
-	type Member = PageData['members'][number]
-	const toHour = (ms: number) => dayjs(ms).format('hh:mm')
+	const tableFields = getTableFields(data.teams, data.fields)
 
 	const summary = derived(urlParam, ({ has }) => has('summary'))
-
-	const tableFields: TableField<Member>[] = [
-		{
-			key: 'member',
-			label: 'Membre',
-			getCell: (member) => component(MemberCell, { member }),
-			locked: true,
-		},
-
-		{
-			key: 'subscribes_count',
-			label: 'Inscriptions (nombre)',
-			visible: true,
-			getCell: (m) => m.subscribes.length,
-			head: tableheadComponent('number', {}),
-		},
-		{
-			key: 'subscribes_teams',
-			label: 'Inscriptions (secteur)',
-			visible: true,
-			getCell: (m) =>
-				m.subscribes
-					.map((s) => data.teams.find((t) => t.id === s.period.teamId)?.name || '')
-					.filter((team, index, self) => self.indexOf(team) === index),
-			head: tableheadComponent('multiselect', {
-				options: data.teams.map((team) => ({ label: team.name, value: team.id })),
-			}),
-		},
-		{
-			key: 'subscribes_range',
-			label: 'Inscriptions (période)',
-			getCell: (m) => {
-				if (!m.subscribes.length) return '-'
-				const start = Math.min(...m.subscribes.map((s) => s.period.start.getTime()))
-				const end = Math.max(...m.subscribes.map((s) => s.period.end.getTime()))
-				return formatRange({ start, end })
-			},
-			visible: true,
-			head: tableheadComponent('date', {}),
-		},
-		{
-			key: 'hours',
-			label: 'Heures de travail',
-			visible: true,
-			getCell: (m) => toHour(m.workTime),
-			head: tableheadComponent('number', {}),
-		},
-		{
-			key: 'leaderOf',
-			label: 'Secteurs à charges',
-			getCell: (m) => m.leaderOf.map(({ name }) => name),
-			visible: true,
-			head: tableheadComponent('multiselect', {
-				options: data.teams.map((team) => ({ label: team.name, value: team.id })),
-			}),
-		},
-		{
-			key: 'age',
-			label: 'Age',
-			getCell: (m) => getAge(m.user.birthday),
-			head: tableheadComponent('number', {}),
-		},
-		{
-			key: 'isUserProfileCompleted',
-			label: 'Profil complet',
-			getCell: (m) => m.isUserProfileCompleted,
-			head: tableheadComponent('boolean', {}),
-		},
-		{
-			key: 'isValidedByEvent',
-			label: 'Validé par un responsable',
-			hint: "Un responsable à confirmé l'inscription du membre",
-			getCell: (m) => m.isValidedByEvent,
-			head: tableheadComponent('boolean', {}),
-		},
-		{
-			key: 'isValidedByUser',
-			label: 'Validé par le membre',
-			hint: 'Le membre à confirmé son invitation',
-			getCell: (m) => m.isValidedByUser,
-			head: tableheadComponent('boolean', {}),
-		},
-		...data.fields.map((field) => ({
-			key: field.id,
-			label: field.name,
-			getCell: (m: Member) => {
-				const { value } = m.profile.find((f) => f.fieldId === field.id) || { value: '' }
-				if (!value) return ''
-				if (field.type === 'multiselect') return jsonParse(value, [])
-				if (field.type === 'boolean') return value === 'true'
-				if (field.type === 'number') return +value
-				return value
-			},
-			head: tableheadComponent(field.type, {}),
-		})),
-	]
 </script>
 
 <div class="flex flex-col gap-3">

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
+	import { page } from '$app/stores'
 	import { urlParam } from '$lib/store'
 	import { listEditable } from '$lib/action'
 	import { mdiCheck, mdiCircleSmall, mdiDotsHorizontal, mdiDrag } from '@mdi/js'
@@ -21,8 +22,10 @@
 			}
 		})
 		const fieldsVisible = fields.filter((f) => f.visible).map((f) => f.key)
-		const newUrl = $urlParam.with({ [KEY_FIELDS_VISIBLE]: JSON.stringify(fieldsVisible) })
-		goto(newUrl, { replaceState: true, noScroll: true, keepFocus: true })
+		const url = new URL($page.url)
+		url.searchParams.set(KEY_FIELDS_VISIBLE, JSON.stringify(fieldsVisible))
+		if (url.searchParams.has(key)) url.searchParams.delete(key)
+		goto(url, { replaceState: true, noScroll: true, keepFocus: true })
 	}
 
 	function handleReorder(newFieldsOrder: TableField<Item>[]) {
