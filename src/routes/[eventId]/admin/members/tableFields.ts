@@ -99,7 +99,7 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 			head: tableheadComponent('boolean', {}),
 		},
 		...fields.map((field) => ({
-			key: field.id,
+			key: `field_${field.id}`,
 			label: field.name,
 			getCell: (m: Member) => {
 				const { value } = m.profile.find((f) => f.fieldId === field.id) || { value: '' }
@@ -109,7 +109,13 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 				if (field.type === 'number') return +value
 				return value
 			},
-			head: tableheadComponent(field.type, {}),
+			head: (f: TableField) => {
+				if (field.type === 'select' || field.type === 'multiselect')
+					return tableheadComponent(field.type, {
+						options: jsonParse<string[]>(field.options, []),
+					})(f)
+				return tableheadComponent(field.type, {})(f)
+			},
 		})),
 	]
 	return tableFields

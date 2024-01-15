@@ -192,14 +192,16 @@ enum FieldType {
 }
 
 model FieldValue {
-  id        String   @id @default(cuid())
-  fieldId   String
-  field     Field    @relation(references: [id], fields: [fieldId], onDelete: Cascade)
-  memberId  String
-  member    Member   @relation(references: [id], fields: [memberId], onDelete: Cascade)
-  value     String   @db.Text()
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  fieldId     String
+  field       Field    @relation(references: [id], fields: [fieldId], onDelete: Cascade)
+  memberId    String
+  member      Member   @relation(references: [id], fields: [memberId], onDelete: Cascade)
+  value       String   @db.Text()
+  /// ![string | number | boolean | string[]]
+  valueAsJson Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@unique([fieldId, memberId])
 }

@@ -1,6 +1,6 @@
 import { z } from '$lib/validation'
 import dayjs from 'dayjs'
-import type { Event, Field, Period, Prisma } from '@prisma/client'
+import type { Event, Field, FieldType, Period, Prisma } from '@prisma/client'
 import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
 import { error } from '@sveltejs/kit'
 import { jsonParse } from '$lib/jsonParse'
@@ -106,18 +106,50 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		subscribesFilters.push({ state: { in: ['request', 'accepted'] } })
 	}
 
-	/*
-	if (data.fieldId && data.fieldValue) {
-		const field = await prisma.field.findUniqueOrThrow({ where: { id: data.fieldId, eventId } })
-		where.profile = {
-			some: {
-				fieldId: data.fieldId,
-				value:
-					field.type === 'multiselect' ? { contains: `"${data.fieldValue}"` } : data.fieldValue,
-			},
-		}
+	// TODO: use this in src/routes/[eventId]/teams/membersAllowed/+server.ts
+	const fieldFilterByType: Record<
+		FieldType,
+		(query: string) => Prisma.JsonNullableFilter<'FieldValue'> | null
+	> = {
+		string: (query) => ({ string_contains: query }),
+		textarea: (query) => ({ string_contains: query }),
+		select: (query) => ({ equals: query }),
+		boolean: (query) => {
+			const parsed = z.filter.boolean.safeParse(query)
+			if (!parsed.success || parsed.data === undefined) return null
+			return { equals: parsed.data }
+		},
+		number: (query) => {
+			const parsed = z.filter.number.safeParse(query)
+			if (!parsed.success) return null
+			const filter: Prisma.JsonNullableFilter<'FieldValue'> = {}
+			if (parsed.data?.min) filter.gte = parsed.data?.min
+			if (parsed.data?.max) filter.lte = parsed.data?.max
+			return filter
+		},
+		multiselect: (query) => {
+			const parsed = z.filter.multiselect.safeParse(query)
+			if (!parsed.success || !parsed.data) return null
+			return { array_contains: parsed.data }
+		},
 	}
-	*/
+
+	for (const [key, value] of url.searchParams.entries()) {
+		if (!key.startsWith('field_')) continue
+		const fieldId = key.replace('field_', '')
+		const field = await prisma.field.findUniqueOrThrow({ where: { id: fieldId, eventId } })
+		const fieldFilter = fieldFilterByType[field.type](value)
+		if (fieldFilter)
+			filters.push({
+				profile: {
+					some: {
+						fieldId,
+						valueAsJson: fieldFilter,
+					},
+				},
+			})
+	}
+
 	const filterOnComputedValues =
 		data.subscribes_count !== undefined ||
 		data.subscribes_hours !== undefined ||
@@ -177,8 +209,6 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			if (min !== undefined) conditions.push((m) => min <= toHours(m.workTime))
 			if (max !== undefined) conditions.push((m) => max >= toHours(m.workTime))
 		}
-
-		console.log({ isUserProfileCompleted: data.isUserProfileCompleted })
 
 		if (data.isUserProfileCompleted === true) {
 			conditions.push((m) => m.isMemberProfileCompleted && m.isUserProfileCompleted)
