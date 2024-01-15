@@ -6,12 +6,16 @@
 	import { urlParam } from '$lib/store'
 	import { debounce } from '$lib/debounce'
 	import type { TableField } from '../field'
+	import { jsonParse } from '$lib/jsonParse'
 
 	export let field: TableField
 
-	let min: string | undefined = undefined
-	let max: string | undefined = undefined
 	let tip: TippyInstance
+
+	let { min, max } = jsonParse<{ min: string | undefined; max: string | undefined }>(
+		$urlParam.get(field.key),
+		{ min: undefined, max: undefined }
+	)
 
 	const udpateUrl = debounce(() => {
 		if (isDefined(min) || isDefined(max)) {
