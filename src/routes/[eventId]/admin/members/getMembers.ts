@@ -86,15 +86,14 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		})
 	}
 
-	if (data.isValidedByEvent) {
+	if (data.isValidedByEvent !== undefined) {
 		filters.push({ isValidedByEvent: data.isValidedByEvent })
 	}
-	if (data.isValidedByUser) {
-		console.log(data.isValidedByUser)
+	if (data.isValidedByUser !== undefined) {
 		filters.push({ isValidedByUser: data.isValidedByUser })
 	}
-	if (data.isAbsent) {
-		filters.push({ subscribes: { some: { isAbsent: true } } })
+	if (data.isAbsent !== undefined) {
+		filters.push({ subscribes: { some: { isAbsent: data.isAbsent } } })
 	}
 
 	if (data.role === 'admin') {
@@ -178,6 +177,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			if (min !== undefined) conditions.push((m) => min <= toHours(m.workTime))
 			if (max !== undefined) conditions.push((m) => max >= toHours(m.workTime))
 		}
+
+		console.log({ isUserProfileCompleted: data.isUserProfileCompleted })
 
 		if (data.isUserProfileCompleted === true) {
 			conditions.push((m) => m.isMemberProfileCompleted && m.isUserProfileCompleted)

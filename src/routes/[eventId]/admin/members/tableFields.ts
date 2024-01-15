@@ -81,7 +81,7 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 		{
 			key: 'isUserProfileCompleted',
 			label: 'Profil complet',
-			getCell: (m) => m.isUserProfileCompleted,
+			getCell: (m) => m.isMemberProfileCompleted && m.isUserProfileCompleted,
 			head: tableheadComponent('boolean', {}),
 		},
 		{

@@ -23,8 +23,6 @@ export function createFieldsInit(tablekey: string, fields: TableField[]) {
 	return (url: URL) => {
 		const { searchParams } = url
 
-		ensureDontHaveFilterHidden(url, fields)
-
 		const fieldsVisibleDefault = fields.filter((f) => f.visible).map((f) => f.key)
 		const fieldsVisible = jsonParse(searchParams.get(KEY_FIELDS_VISIBLE), fieldsVisibleDefault)
 		const fieldsOrderDefault = fields.map((f) => f.key)
@@ -43,6 +41,8 @@ export function createFieldsInit(tablekey: string, fields: TableField[]) {
 				return field ? field : f
 			})
 		}
+
+		ensureDontHaveFilterHidden(url, fields)
 
 		return fields
 	}
