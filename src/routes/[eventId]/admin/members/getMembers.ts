@@ -139,7 +139,6 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		const fieldId = key.replace('field_', '')
 		const field = await prisma.field.findUniqueOrThrow({ where: { id: fieldId, eventId } })
 		const fieldFilter = fieldFilterByType[field.type](value)
-		console.log({ fieldFilter })
 		if (fieldFilter)
 			filters.push({
 				profileJson: {
