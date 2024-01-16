@@ -16,27 +16,4 @@ export const actions = {
 			return
 		})
 	},
-	profile_to_profileJSON: () =>
-		tryOrFail(async () => {
-			const members = await prisma.member.findMany({
-				include: { user: true, profile: { include: { field: true } } },
-			})
-			for (const member of members) {
-				let profileJson: PrismaJson.MemberProfile = {}
-				member.profile.forEach(({ field, value }) => {
-					if (field.type === 'multiselect') profileJson[field.id] = jsonParse<string[]>(value, [])
-					else if (field.type === 'boolean') profileJson[field.id] = value === 'true'
-					else if (field.type === 'number') profileJson[field.id] = +value
-					else profileJson[field.id] = value
-				})
-
-				await prisma.member.update({
-					where: { id: member.id },
-					data: { profileJson },
-				})
-
-				console.log(`${member.user.firstName} profile updated !`)
-			}
-			return
-		}),
 }

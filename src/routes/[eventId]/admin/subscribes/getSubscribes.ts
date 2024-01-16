@@ -19,7 +19,7 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		isAbsent: z.booleanAsString().optional(),
 		all: z.boolean().default(false),
 	})
-	if (err) error(400);
+	if (err) error(400)
 
 	const where: Prisma.SubscribeWhereInput = {}
 	const team: Prisma.TeamWhereInput = { eventId }
@@ -71,7 +71,6 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 						include: {
 							user: true,
 							leaderOf: true,
-							profile: { include: { field: true } },
 						},
 					},
 				},

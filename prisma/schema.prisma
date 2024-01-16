@@ -162,22 +162,21 @@ enum EventState {
 }
 
 model Field {
-  id              String       @id @default(cuid())
+  id              String    @id @default(cuid())
   eventId         String
-  event           Event        @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
+  event           Event     @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
   type            FieldType
   name            String
   label           String?
-  position        Int          @default(0)
+  position        Int       @default(0)
   memberCanWrite  Boolean
   memberCanRead   Boolean
-  allCombinations Boolean      @default(false)
-  required        Boolean      @default(false)
+  allCombinations Boolean   @default(false)
+  required        Boolean   @default(false)
   description     String?
-  options         String?      @db.Text()
-  values          FieldValue[]
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  options         String?   @db.Text()
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@unique([eventId, name])
 }
@@ -189,22 +188,6 @@ enum FieldType {
   boolean
   select
   multiselect
-}
-
-// @deprecated
-model FieldValue {
-  id          String   @id @default(cuid())
-  fieldId     String
-  field       Field    @relation(references: [id], fields: [fieldId], onDelete: Cascade)
-  memberId    String
-  member      Member   @relation(references: [id], fields: [memberId], onDelete: Cascade)
-  value       String   @db.Text()
-  /// ![string | number | boolean | string[]]
-  valueAsJson Json? // TODO: remove this
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@unique([fieldId, memberId])
 }
 
 model Member {
@@ -224,7 +207,6 @@ model Member {
 
   subscribes       Subscribe[]
   leaderOf         Team[]
-  profile          FieldValue[]
   giftsAllocations GiftAllocation[]
 
   createdAt DateTime @default(now())

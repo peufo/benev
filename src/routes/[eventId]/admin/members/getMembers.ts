@@ -171,7 +171,6 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			include: {
 				user: true,
 				leaderOf: true,
-				profile: true,
 				subscribes: {
 					where: { AND: [{ state: { in: ['accepted', 'request'] } }, ...subscribesFilters] },
 					include: { period: true },
@@ -255,16 +254,10 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 						return {
 							fieldId: field.id,
 							fieldName: field.name,
-							distribution: members.reduce((acc, { profile }) => {
-								const { value } = profile.find((v) => v.fieldId === field.id) || { value: '' }
-								if (!value) return acc
-								const keys =
-									field.type === 'select'
-										? [value]
-										: field.allCombinations
-										? [value.replaceAll(/[\[\"\]]/g, '').replaceAll(',', ', ')]
-										: jsonParse<string[]>(value, [])
-
+							distribution: members.reduce((acc, { profileJson }) => {
+								const value = profileJson[field.id]
+								if (value === undefined) return acc
+								const keys = Array.isArray(value) ? value : [String(value)]
 								keys.forEach((key) => {
 									if (!key) return
 									if (acc[key]) return (acc = { ...acc, [key]: acc[key] + 1 })

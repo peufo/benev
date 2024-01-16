@@ -8,9 +8,7 @@
 
 		<form method="post" class="flex flex-col gap-2">
 			<button formaction="?/generate_all_avatars" class="btn"> Genérer tout les avatars </button>
-			<button formaction="?/profile_to_profileJSON" class="btn">
-				Copier les profile en JSON
-			</button>
+
 		</form>
 	</Card>
 </div>

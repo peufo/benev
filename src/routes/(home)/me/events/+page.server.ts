@@ -10,7 +10,6 @@ export const load = async ({ parent }) => {
 			event: { include: { memberFields: true } },
 			leaderOf: true,
 			subscribes: true,
-			profile: true,
 		},
 	})
 	const membersWithRole = members
