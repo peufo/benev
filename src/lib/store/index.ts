@@ -11,9 +11,10 @@ export const param = derived(page, (_page) => {
 	const { url } = _page
 
 	/** Return new url with new params */
-	const _with = (params: Record<string, string | number>) => {
+	const _with = (params: Record<string, string | number>, ...keysToRemove: string[]) => {
 		const _url = new URL(url)
 		Object.entries(params).forEach(([key, value]) => _url.searchParams.set(key, String(value)))
+		keysToRemove.forEach((key) => url.searchParams.delete(key))
 		return _url.search
 	}
 
@@ -50,8 +51,8 @@ export const param = derived(page, (_page) => {
 export const urlParam = derived(param, (_param) => {
 	const { pathname } = _param.page.url
 	/** Return new url with new params */
-	const _with = (params: Record<string, string | number>) => {
-		return pathname + _param.with(params)
+	const _with = (params: Record<string, string | number>, ...keysToRemove: string[]) => {
+		return pathname + _param.with(params, ...keysToRemove)
 	}
 
 	/** Return new url without params keys provided */

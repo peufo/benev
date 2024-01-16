@@ -10,23 +10,8 @@
 	} from '@mdi/js'
 
 	import { urlParam } from '$lib/store'
-	import PeriodPickerButton from '$lib/period/PeriodPickerButton.svelte'
-	import { InputCheckboxsMenu, InputOptionInParam } from '$lib/material'
-	import FieldsFilter from '$lib/FieldsFilter.svelte'
-
-	export let teams: { id: string; name: string }[]
-	export let fields: Field[]
+	import { InputOptionInParam } from '$lib/material'
 </script>
-
-<PeriodPickerButton />
-
-<InputCheckboxsMenu
-	key="teams"
-	label="secteurs"
-	options={teams.map((t) => ({ value: t.id, label: t.name }))}
-	enhanceDisabled
-	badgePrimary
-/>
 
 <InputOptionInParam
 	key="role"
@@ -57,5 +42,3 @@
 		/>
 	</div>
 {/if}
-
-<FieldsFilter {fields} />

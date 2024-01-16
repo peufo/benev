@@ -30,8 +30,9 @@
 			(acc, cur) => ({
 				...acc,
 				[cur.name]: (m: Member) => {
-					const value = m.profile.find(({ fieldId }) => fieldId === cur.id)?.value || ''
-					return value.replaceAll('\r\n', ' ')
+					const value = m.profileJson[cur.id] || ''
+					if (typeof value === 'string') return value.replaceAll('\r\n', ' ')
+					return JSON.stringify(value)
 				},
 			}),
 			{}

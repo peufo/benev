@@ -2,5 +2,9 @@ import { getMembers } from './getMembers'
 
 export const load = async ({ url, parent }) => {
 	const { event } = await parent()
-	return getMembers(event, url)
+	const summary = url.searchParams.get('summary') === 'true'
+	return {
+		summary,
+		...(await getMembers(event, url)),
+	}
 }

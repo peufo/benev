@@ -19,6 +19,7 @@
 	export let placholder = 'Aucun élément trouvé'
 	export let classRow = ''
 	export let key = 'table'
+	export let hideBody = false
 
 	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_ORDER } = createKeys(key)
 	context.set(key, {
@@ -30,8 +31,12 @@
 	fields = fieldsInit($page.url)
 </script>
 
-<div class="overflow-x-auto min-h-[320px] border rounded-lg">
-	{#if items.length}
+<div class="overflow-x-auto border rounded-lg" class:min-h-[320px]={!hideBody}>
+	{#if hideBody}
+		<table class="table relative">
+			<TableHead bind:fields {key} />
+		</table>
+	{:else if items.length}
 		<table class="table relative">
 			<TableHead bind:fields {key} />
 			<TableBody {fields} {items} {action} {classRow} on:click />

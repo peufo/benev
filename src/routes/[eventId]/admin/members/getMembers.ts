@@ -253,7 +253,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 				.map((field) => {
 					if (field.type === 'select' || field.type === 'multiselect') {
 						return {
-							name: field.name,
+							fieldId: field.id,
+							fieldName: field.name,
 							distribution: members.reduce((acc, { profile }) => {
 								const { value } = profile.find((v) => v.fieldId === field.id) || { value: '' }
 								if (!value) return acc

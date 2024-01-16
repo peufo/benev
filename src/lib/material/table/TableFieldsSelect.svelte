@@ -43,7 +43,7 @@
 		tippyProps={{ appendTo: () => document.body, placement: 'bottom-end' }}
 	>
 		<button slot="activator" type="button" class="btn btn-sm btn-square btn-ghost backdrop-blur">
-			<Icon path={mdiDotsHorizontal} title="Choix des colonnes" />
+			<Icon path={mdiDotsHorizontal} title="Définir les champs" />
 		</button>
 
 		<div
