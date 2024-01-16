@@ -1,20 +1,20 @@
 <script lang="ts">
 	import { Icon, parseOptions, type Options } from '$lib/material'
-	import { createEventDispatcher } from 'svelte'
+	import { urlParam } from '$lib/store'
 
 	export let options: Options
-	export let activeValue: string | undefined
 	export let showLabel = false
+	export let key: string
+	export let defaultValue: string | undefined = undefined
 	$: _options = parseOptions(options)
-
-	const dispatch = createEventDispatcher<{ click: string }>()
 </script>
 
 <div class="flex items-center rounded-lg gap-[3px] p-1 bg-base-200">
 	{#each _options as { value, label, icon }}
-		{@const isActive = activeValue === value}
-		<button
-			on:click={() => dispatch('click', value)}
+		{@const isActive =
+			$urlParam.hasValue(key, value) || (!$urlParam.has(key) && value === defaultValue)}
+		<a
+			href={$urlParam.with({ [key]: value })}
 			class="h-6 p-1 flex items-center justify-center gap-2 rounded"
 			class:px-2={showLabel}
 			class:w-6={icon && !showLabel}
@@ -33,6 +33,6 @@
 			{#if !icon || showLabel}
 				<span class="text-sm font-medium opacity-80">{label}</span>
 			{/if}
-		</button>
+		</a>
 	{/each}
 </div>

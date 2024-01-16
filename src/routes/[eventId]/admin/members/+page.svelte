@@ -16,7 +16,6 @@
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
 	import { goto } from '$app/navigation'
-	import { page } from '$app/stores'
 
 	export let data
 
@@ -31,13 +30,12 @@
 		<div class="grow" />
 
 		<TabsSmall
-			on:click={() =>
-				goto($urlParam.toggle({ summary: 'true' }), { keepFocus: true, noScroll: true })}
+			key="summary"
+			defaultValue="false"
 			options={{
 				false: { icon: mdiFormatListBulleted, label: 'Données' },
 				true: { icon: mdiSigma, label: 'Synthèse' },
 			}}
-			activeValue={data.summary ? 'true' : 'false'}
 		/>
 
 		<MembersCopy fields={data.fields} />
