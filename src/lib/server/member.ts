@@ -20,7 +20,6 @@ export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
 export function addMemberComputedValues<T extends MemberWithUserEventAndLeaderOf>(
 	member: T
 ): T & MemberWithComputedValues {
-	console.log(JSON.stringify(member, null, 2))
 	const userProfileRequiredFields = getUserProfileRequiredFIelds(member)
 	const memberProfileRequiredFields = getMemberProfileRequiredFields(member)
 	return {
