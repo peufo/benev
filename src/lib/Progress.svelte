@@ -14,6 +14,7 @@
 
 	$: accepted = period.subscribes.filter((sub) => sub.state === 'accepted').length
 	$: request = period.subscribes.filter((sub) => sub.state === 'request').length
+	$: isComplet = accepted + request >= period.maxSubscribe
 
 	const plurial = (n: number) => (n > 1 ? 's' : '')
 </script>
@@ -59,7 +60,7 @@
 		</div>
 	{:else}
 		<slot name="before-badge" />
-		<span class="badge badge-sm whitespace-nowrap {badgeClass}">
+		<span class="badge badge-sm whitespace-nowrap {badgeClass}" class:bg-base-200={isComplet}>
 			{accepted + request} / {period.maxSubscribe}
 		</span>
 		<slot name="after-badge" />
