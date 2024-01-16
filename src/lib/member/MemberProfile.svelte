@@ -2,10 +2,8 @@
 	import type { MemberProfile } from '$lib/server'
 	import { page } from '$app/stores'
 	import { mdiCheck, mdiClose, mdiPencilOutline } from '@mdi/js'
-	import type { FieldType } from '@prisma/client'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
 	import { CardBasic, Icon, Placeholder } from '$lib/material'
-	import { jsonParse } from '$lib/jsonParse'
 	import { fade } from 'svelte/transition'
 
 	export let member: MemberProfile
@@ -17,10 +15,12 @@
 	export let title = 'Profile'
 	export let hideStatus = false
 
-	const simpleTypes: FieldType[] = ['string', 'number', 'textarea', 'select']
-	const parseMultiSelectValue = (value: string) => jsonParse<string[]>(value, [])
-
-	console.log(member.profile)
+	$: profile = member.event.memberFields
+		.map((field) => ({
+			field,
+			value: member.profileJson[field.id],
+		}))
+		.filter((p) => p.value !== undefined)
 </script>
 
 <div class="flex gap-2 items-center mb-4">
@@ -53,45 +53,36 @@
 			on:success={() => (readOnly = true)}
 		/>
 	</div>
+{:else if !profile.length}
+	<Placeholder>Profil vide</Placeholder>
 {:else}
-	{@const profile = member.profile.filter(
-		({ field, value }) => value !== '[]' && (value || field.type === 'boolean')
-	)}
-
-	{#if !profile.length}
-		<Placeholder>Profil vide</Placeholder>
-	{:else}
-		<div
-			in:fade
-			class="grid gap-4 mb-4 items-start"
-			style:grid-template-columns="repeat(auto-fill, minmax(min(230px, 100%), 1fr))"
-		>
-			{#each profile as { field, value }}
-				<CardBasic title={field.name}>
-					{#if simpleTypes.includes(field.type)}
-						<p>{value || '-'}</p>
-					{:else if field.type === 'boolean'}
-						{#if value}
-							<div class="badge">
-								<Icon path={mdiCheck} size={14} class="fill-success" />
-								<span class="ml-1">Oui</span>
-							</div>
-						{:else}
-							<span class="badge">
-								<Icon path={mdiClose} size={14} class="fill-error" />
-								<span class="ml-1">Non</span>
-							</span>
-						{/if}
-					{:else if field.type === 'multiselect'}
-						{@const items = parseMultiSelectValue(value)}
-						<ul>
-							{#each items as item}
-								<li>• {item}</li>
-							{/each}
-						</ul>
-					{/if}
-				</CardBasic>
-			{/each}
-		</div>
-	{/if}
+	<div
+		in:fade
+		class="grid gap-4 mb-4 items-start"
+		style:grid-template-columns="repeat(auto-fill, minmax(min(230px, 100%), 1fr))"
+	>
+		{#each profile as { field, value }}
+			<CardBasic title={field.name}>
+				{#if typeof value === 'string' || typeof value === 'number'}
+					<p>{value || '-'}</p>
+				{:else if value === true}
+					<div class="badge">
+						<Icon path={mdiCheck} size={14} class="fill-success" />
+						<span class="ml-1">Oui</span>
+					</div>
+				{:else if value === false}
+					<span class="badge">
+						<Icon path={mdiClose} size={14} class="fill-error" />
+						<span class="ml-1">Non</span>
+					</span>
+				{:else if Array.isArray(value)}
+					<ul>
+						{#each value as item}
+							<li>• {item}</li>
+						{/each}
+					</ul>
+				{/if}
+			</CardBasic>
+		{/each}
+	</div>
 {/if}

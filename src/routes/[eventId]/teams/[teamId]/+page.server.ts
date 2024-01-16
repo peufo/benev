@@ -1,5 +1,5 @@
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
-import { isMemberAllowed } from '$lib/team/isMemberAllowed.js'
+import { isMemberAllowed } from '$lib/team/isMemberAllowed'
 import { periodCreate, periodValidation } from '$lib/validation'
 import { error } from '@sveltejs/kit'
 
@@ -50,7 +50,7 @@ export const load = async ({ locals, parent, params: { teamId } }) => {
 			  }
 	)
 
-	if (!isLeaderOfTeam && !isMemberAllowed(team.conditions, member)) error(403);
+	if (!isLeaderOfTeam && !isMemberAllowed(team.conditions, member)) error(403)
 
 	return { isLeaderOfTeam, team }
 }

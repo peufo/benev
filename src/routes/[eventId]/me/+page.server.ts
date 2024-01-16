@@ -1,6 +1,8 @@
 import { error } from '@sveltejs/kit'
 import { parseFormData, permission, prisma, redirectToRegister, tryOrFail } from '$lib/server'
 import { z, type ZodObj } from '$lib/validation'
+import type { Field, FieldType } from '@prisma/client'
+import type { ZodType } from 'zod'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const { member } = await parent()
@@ -37,50 +39,58 @@ export const actions = {
 					...(!isLeader && { memberCanWrite: true }),
 				},
 			})
-			const model: ZodObj<{ memberId: string } & Record<string, string | undefined>> = {
-				memberId: z.string(),
-			}
-			fields.forEach((f) => {
-				if (isLeader || !f.required || f.type === 'multiselect' || f.type === 'boolean') {
-					model[f.id] = z.string().optional()
-					return
-				}
-				model[f.id] = z.string().min(1, { message: 'Valeur manquante' })
-			})
+
+			const model = buildMemberProfileModel(fields, isLeader)
+
 			const { data, err } = await parseFormData(request, model)
 			if (err) return err
 
-			const { memberId, ...fieldsObj } = data
+			const { memberId, ...values } = data
 			if (!memberId) throw Error('memberId is required')
 
 			const editOwnProfile = memberId === member.id
-			if (!editOwnProfile && !isLeader) error(401);
+			if (!editOwnProfile && !isLeader) error(401)
 
-			const fieldsToUpdate = await prisma.field.findMany({
-				where: {
-					eventId,
-					id: { in: Object.keys(fieldsObj) },
-					...(!isLeader && { memberCanWrite: true }),
-				},
-			})
-			const entries = Object.entries(fieldsObj).filter(([id, value]) => value !== undefined) as [
-				string,
-				string
-			][]
-
-			await prisma.member.update({
+			return await prisma.member.update({
 				where: { id: memberId },
 				data: {
-					profile: {
-						upsert: entries.map(([id, value]) => ({
-							where: { fieldId_memberId: { fieldId: id, memberId } },
-							create: { value, fieldId: id },
-							update: { value },
-						})),
+					profileJson: {
+						...member.profileJson,
+						...values,
 					},
 				},
-				include: { profile: { include: { field: true } } },
 			})
 		})
 	},
+}
+
+function buildMemberProfileModel(fields: Field[], isLeader: boolean) {
+	type ProfileValue = string | string[] | number | boolean | undefined
+	const model: ZodObj<{ memberId: string } & Record<string, ProfileValue>> = {
+		memberId: z.string(),
+	}
+
+	const modelByType: Record<FieldType, ZodType<ProfileValue>> = {
+		boolean: z.boolean(),
+		number: z.number(),
+		string: z.string().min(1, { message: 'Valeur manquante' }),
+		textarea: z.string().min(1, { message: 'Valeur manquante' }),
+		select: z.string().min(1, { message: 'Valeur manquante' }),
+		multiselect: z.array(z.string()),
+	}
+	const modelByTypeOptional: Record<FieldType, ZodType<ProfileValue>> = {
+		boolean: z.boolean().optional(),
+		number: z.number().optional(),
+		string: z.string().optional(),
+		textarea: z.string().optional(),
+		select: z.string().optional(),
+		multiselect: z.array(z.string()).optional(),
+	}
+
+	fields.forEach((f) => {
+		if (isLeader || !f.required) model[f.id] = modelByTypeOptional[f.type]
+		else model[f.id] = modelByType[f.type]
+	})
+
+	return model
 }

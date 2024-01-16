@@ -32,9 +32,7 @@
 		<input type="hidden" name="memberId" value={member.id} />
 
 		{#each member.event.memberFields.filter((f) => !writeOnly || f.memberCanWrite) as field (field.id)}
-			{@const { value } = member.profile.find((value) => value.fieldId === field.id) || {
-				value: '',
-			}}
+			{@const value = member.profileJson[field.id] || ''}
 			<MemberField {field} {value} class="col-span-3" />
 		{/each}
 

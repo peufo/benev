@@ -101,7 +101,7 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 		...fields.map((field) => ({
 			key: `field_${field.id}`,
 			label: field.name,
-			getCell: (m: Member) => (m.profileJson ? m.profileJson[field.id] : undefined),
+			getCell: (m: Member) => m.profileJson[field.id],
 			head: (f: TableField) => {
 				if (field.type === 'select' || field.type === 'multiselect')
 					return tableheadComponent(field.type, {

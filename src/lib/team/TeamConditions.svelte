@@ -54,7 +54,7 @@
 					type: 'profile',
 					args: {
 						fieldId: '',
-						operator: 'is',
+						operator: 'equals',
 						expectedValue: '',
 					},
 				},
@@ -62,23 +62,26 @@
 	}
 
 	const operators: Record<FieldType, TeamConditionOperator[]> = {
-		boolean: ['is'],
-		number: ['is', 'gt', 'gte', 'lt', 'lte'],
-		string: ['is', 'not', 'contains', 'notContains'],
-		textarea: ['is', 'not', 'contains', 'notContains'],
-		select: ['haveAny'],
-		multiselect: ['is', 'haveAny'],
+		boolean: ['equals'],
+		number: ['equals', 'gt', 'gte', 'lt', 'lte'],
+		string: ['equals', 'not', 'string_contains'],
+		textarea: ['equals', 'not', 'string_contains', 'string_starts_with', 'string_ends_with'],
+		select: ['equals', 'array_contains', 'array_starts_with', 'array_ends_with'],
+		multiselect: ['equals', 'array_contains', 'array_starts_with', 'array_ends_with'],
 	}
 	const operatorLabel: Record<TeamConditionOperator, string> = {
-		is: 'Est égal à',
+		equals: 'Est égal à',
 		not: "N'est pas égal à",
 		gt: 'Est plus grand que',
 		gte: 'Est plus grand ou égal à',
 		lt: 'Est plus petit que',
 		lte: 'Est plus petit ou égal à',
-		contains: 'Contient',
-		notContains: 'Ne contient pas',
-		haveAny: 'A une de ces valeurs',
+		string_contains: 'Contient',
+		array_contains: 'Contient',
+		string_starts_with: 'Commence par',
+		array_starts_with: 'Commence par',
+		string_ends_with: 'Termine par',
+		array_ends_with: 'Termine par',
 	}
 
 	function component<Component extends ComponentType>(

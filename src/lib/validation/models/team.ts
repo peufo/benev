@@ -6,15 +6,18 @@ type TeamShemaCreate = Omit<Prisma.TeamCreateInput, 'event'>
 type TeamShemaUpdate = Omit<Prisma.TeamUpdateInput, 'event'>
 
 const teamConditionOperator = z.enum([
-	'is',
-	'not',
-	'gt',
+	'equals',
+	'string_contains',
+	'string_starts_with',
+	'string_ends_with',
+	'array_contains',
+	'array_starts_with',
+	'array_ends_with',
 	'lt',
-	'gte',
 	'lte',
-	'contains',
-	'notContains',
-	'haveAny',
+	'gt',
+	'gte',
+	'not',
 ])
 export const teamConditionModel = z.union([
 	z.object({ type: z.literal('valided') }),
@@ -27,7 +30,7 @@ export const teamConditionModel = z.union([
 		args: z.object({
 			fieldId: z.string(),
 			operator: teamConditionOperator,
-			expectedValue: z.union([z.string(), zod.array(z.string())]),
+			expectedValue: z.union([z.string(), zod.array(z.string()), z.boolean(), z.number()]),
 		}),
 	}),
 ])

@@ -1,10 +1,9 @@
 import { addTeamComputedValues, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/team'
-import { error } from '@sveltejs/kit'
 
 export const load = async ({ parent, params, url }) => {
 	const search = url.searchParams.get('search')
-	const { member, event } = await parent()
+	const { member } = await parent()
 
 	const teams = await prisma.team
 		.findMany({

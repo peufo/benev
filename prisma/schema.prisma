@@ -191,6 +191,7 @@ enum FieldType {
   multiselect
 }
 
+// @deprecated
 model FieldValue {
   id          String   @id @default(cuid())
   fieldId     String
@@ -199,7 +200,7 @@ model FieldValue {
   member      Member   @relation(references: [id], fields: [memberId], onDelete: Cascade)
   value       String   @db.Text()
   /// ![string | number | boolean | string[]]
-  valueAsJson Json?
+  valueAsJson Json? // TODO: remove this
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -219,7 +220,7 @@ model Member {
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
   /// [MemberProfile]
-  profileJson Json?
+  profileJson Json @default("{}")
 
   subscribes       Subscribe[]
   leaderOf         Team[]

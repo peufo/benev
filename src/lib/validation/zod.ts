@@ -98,6 +98,7 @@ export const z = {
 	...zod,
 	json,
 	array,
+	arrayRaw: zod.array,
 	relation,
 	relations,
 	filter,

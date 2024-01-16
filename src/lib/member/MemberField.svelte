@@ -15,7 +15,7 @@
 	import { Icon } from '$lib/material'
 
 	export let field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
-	export let value = ''
+	export let value: string | number | true | string[] = ''
 	let klass = ''
 	export { klass as class }
 
@@ -26,15 +26,6 @@
 		boolean: InputBoolean,
 		select: InputRadio,
 		multiselect: InputCheckboxs,
-	}
-
-	const parseValue: Record<FieldType, (value: string) => string | boolean | number | string[]> = {
-		string: (v) => v,
-		textarea: (v) => v,
-		number: (v) => +v,
-		boolean: (v) => v === 'true',
-		select: (v) => v,
-		multiselect: (v) => jsonParse<string[]>(v, []),
 	}
 
 	const classes: Record<FieldType, string> = {
@@ -51,7 +42,7 @@
 
 <svelte:component
 	this={components[field.type]}
-	value={parseValue[field.type](value)}
+	{value}
 	class="{classes[field.type]} {klass}"
 	key={field.id}
 	label={field.label || field.name}
@@ -65,15 +56,15 @@
 				size={20}
 				title="Les membres ne peuvent pas voir ce champ"
 				class="ml-3 opacity-75"
-				/>
-				{:else if !field.memberCanWrite}
-				<Icon
+			/>
+		{:else if !field.memberCanWrite}
+			<Icon
 				path={mdiPencilOffOutline}
 				size={20}
 				title="Les membres ne peuvent pas éditer ce champ"
 				class="ml-3 opacity-75"
 			/>
-		{:else if  field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
+		{:else if field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
 			<span class="text-error text-xl ml-1">*</span>
 		{/if}
 		<div class="grow" />

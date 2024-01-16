@@ -1,5 +1,5 @@
 import { ROOT_USER } from '$env/static/private'
-import type { Member, Team, User, Event, Field, FieldValue } from '@prisma/client'
+import type { Member, Team, User, Event, Field } from '@prisma/client'
 import { addTeamComputedValues, prisma } from '$lib/server'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
@@ -7,7 +7,6 @@ type MemberWithUserEventAndLeaderOf = Member & {
 	user: User
 	event: Event & { memberFields: Field[] }
 	leaderOf: Team[]
-	profile: FieldValue[]
 }
 
 export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
@@ -21,6 +20,7 @@ export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
 export function addMemberComputedValues<T extends MemberWithUserEventAndLeaderOf>(
 	member: T
 ): T & MemberWithComputedValues {
+	console.log(JSON.stringify(member, null, 2))
 	const userProfileRequiredFields = getUserProfileRequiredFIelds(member)
 	const memberProfileRequiredFields = getMemberProfileRequiredFields(member)
 	return {
@@ -56,13 +56,13 @@ function getUserProfileRequiredFIelds({ event, user }: MemberWithUserEventAndLea
 	return requiredFields
 }
 
-function getMemberProfileRequiredFields({ profile, event }: MemberWithUserEventAndLeaderOf) {
+function getMemberProfileRequiredFields({ profileJson, event }: MemberWithUserEventAndLeaderOf) {
 	const requiredFields: string[] = []
 	event.memberFields.forEach((field) => {
 		if (!field.required || !field.memberCanRead) return
 		if (field.type === 'boolean' || field.type === 'multiselect') return
-		const fieldValue = profile.find((f) => f.fieldId === field.id)
-		if (!fieldValue?.value) requiredFields.push(field.name)
+		const fieldValue = profileJson[field.id]
+		if (!fieldValue) requiredFields.push(field.name)
 	})
 	return requiredFields
 }
@@ -87,7 +87,6 @@ export function getMemberProfile(where: MemberUniqueWhere, accesor?: MemberWithC
 				event: {
 					include: { memberFields: { orderBy: { position: 'asc' } } },
 				},
-				profile: { include: { field: true }, orderBy: { field: { position: 'asc' } } },
 				subscribes: {
 					include: { period: { include: { team: true } } },
 				},
@@ -119,7 +118,7 @@ export function hidePrivateProfilValues<T extends MemberWithComputedValues>(
 ) {
 	return {
 		...member,
-		profile: member.profile.filter(({ fieldId }) => {
+		profile: Object.keys(member.profileJson).filter((fieldId) => {
 			const field = member.event.memberFields.find((f) => f.id === fieldId)
 			return (accesor || member).roles.includes('leader') || field?.memberCanRead
 		}),
