@@ -88,7 +88,11 @@
 					{/if}
 					<span>{field.label}</span>
 
-					<span class="drag-button btn btn-xs btn-square btn-ghost ml-auto">
+					<span
+						class="drag-button btn btn-xs btn-square btn-ghost ml-auto"
+						on:mousedown|preventDefault
+						role="none"
+					>
 						<Icon path={mdiDrag} size={18} class="fill-base-content/80" />
 					</span>
 				</a>
