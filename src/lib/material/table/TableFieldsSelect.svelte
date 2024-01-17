@@ -54,7 +54,7 @@
 <th class="p-0 px-1 sticky right-0 z-10" align="right">
 	<DropDown
 		hideOnNav={false}
-		class="max-h-screen"
+		class="max-h-[500px]"
 		tippyProps={{ appendTo: () => document.body, placement: 'bottom-end' }}
 	>
 		<button slot="activator" type="button" class="btn btn-sm btn-square btn-ghost backdrop-blur">
@@ -87,6 +87,7 @@
 					{:else}
 						<Icon path={mdiCircleSmall} class="fill-base-content/50" size={21} />
 					{/if}
+
 					<span>{field.label}</span>
 
 					<span

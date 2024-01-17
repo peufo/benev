@@ -6,7 +6,7 @@
 	import { listEditable } from '$lib/action'
 	import { Dialog, Icon } from '$lib/material'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import MemberFieldForm from './MemberFieldForm.svelte'
+	import { MemberFieldForm } from '$lib/member'
 	import { eventPath } from '$lib/store'
 	import { useNotify } from '$lib/notify'
 
