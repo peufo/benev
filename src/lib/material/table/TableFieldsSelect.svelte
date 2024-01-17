@@ -4,7 +4,15 @@
 	import { urlParam } from '$lib/store'
 	import { listEditable } from '$lib/action'
 	import { jsonParse } from '$lib/jsonParse'
-	import { mdiCheck, mdiCircleSmall, mdiDotsHorizontal, mdiDrag } from '@mdi/js'
+	import {
+		mdiCheck,
+		mdiCheckBold,
+		mdiCheckCircle,
+		mdiCheckCircleOutline,
+		mdiCircleSmall,
+		mdiDotsHorizontal,
+		mdiDrag,
+	} from '@mdi/js'
 	import { Icon, DropDown, type TableField } from '$lib/material'
 	import { context } from '$lib/material/table'
 
@@ -14,11 +22,10 @@
 
 	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = context.get(key)
 
-	function onFieldClick(key: string) {
-		const field = fields.find((f) => f.key === key)
-		if (!field) return
+	function onFieldClick(field: TableField) {
 		if (field.locked) return
 		const url = toggleParam(field.visible ? KEY_FIELDS_HIDDEN : KEY_FIELDS_VISIBLE, field.key)
+		url.searchParams.delete(field.key)
 		goto(url, { replaceState: true, noScroll: true, keepFocus: true })
 	}
 
@@ -65,17 +72,20 @@
 					class:disabled={field.locked}
 					role="menuitem"
 					tabindex="0"
-					on:click={() => onFieldClick(field.key)}
-					on:keydown={(e) => e.key === 'Espace' && onFieldClick(field.key)}
+					on:click={() => onFieldClick(field)}
+					on:keydown={(e) => e.key === 'Espace' && onFieldClick(field)}
 				>
 					{#if field.locked}
 						<Icon path={mdiCheck} class="fill-base-content/50" size={21} />
+					{:else if $urlParam.has(field.key)}
+						<Icon path={mdiCheckCircleOutline} class="fill-primary" size={21} />
 					{:else if field.$visible}
 						<Icon path={mdiCheck} class="fill-success" size={21} />
 					{:else}
 						<Icon path={mdiCircleSmall} class="fill-base-content/50" size={21} />
 					{/if}
 					<span>{field.label}</span>
+
 					<span class="drag-button btn btn-xs btn-square btn-ghost ml-auto">
 						<Icon path={mdiDrag} size={18} class="fill-base-content/80" />
 					</span>
