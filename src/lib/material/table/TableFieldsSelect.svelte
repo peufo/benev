@@ -91,6 +91,7 @@
 					<span
 						class="drag-button btn btn-xs btn-square btn-ghost ml-auto"
 						on:mousedown|preventDefault
+						on:mouseup|preventDefault
 						role="none"
 					>
 						<Icon path={mdiDrag} size={18} class="fill-base-content/80" />
