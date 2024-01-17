@@ -16,10 +16,10 @@
 
 <thead>
 	<tr class="shadow">
-		{#each fields.filter((f) => f.locked || f.visible) as field (field.key)}
+		{#each fields.filter((f) => f.$visible) as field (field.key)}
 			{@const { component, props } = getComponent(field)}
 			<svelte:component this={component} {...props} />
 		{/each}
-		<TableFieldsSelect bind:fields {key} />
+		<TableFieldsSelect {fields} {key} />
 	</tr>
 </thead>

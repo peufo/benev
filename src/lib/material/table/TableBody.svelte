@@ -12,7 +12,7 @@
 
 	const dispatch = createEventDispatcher<{ click: Item }>()
 
-	$: _fields = fields.filter((f) => f.locked || f.visible)
+	$: _fields = fields.filter((f) => f.$visible)
 </script>
 
 <tbody>

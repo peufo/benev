@@ -19,23 +19,25 @@ export type TableField<Item = any> = {
 /**
  * Initialise fields from url query
  */
-export function initFields(tablekey: string, fields: TableField[]) {
+export function updateFieldsFromParams(tablekey: string, fields: TableField[]) {
 	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = createKeys(tablekey)
 	const {
 		url: { searchParams },
 	} = get(page)
 
-	const fieldsVisibleDefault = fields.filter((f) => f.locked || f.visible).map((f) => f.key)
-	const fieldsVisible = jsonParse(searchParams.get(KEY_FIELDS_VISIBLE), fieldsVisibleDefault)
-	const fieldsHiddenDefault = fields.filter((f) => !f.locked && !f.visible).map((f) => f.key)
-	const fieldsHidden = jsonParse(searchParams.get(KEY_FIELDS_HIDDEN), fieldsHiddenDefault)
+	const fieldsVisible = jsonParse<string[]>(searchParams.get(KEY_FIELDS_VISIBLE), [])
+	const fieldsHidden = jsonParse<string[]>(searchParams.get(KEY_FIELDS_HIDDEN), [])
 	const fieldsOrderDefault = fields.map((f) => f.key)
 	const fieldsOrder = jsonParse(searchParams.get(KEY_FIELDS_ORDER), fieldsOrderDefault)
+
+	console.log('UPDATE FIELDS FROM PARAMS', { fieldsVisible, fieldsHidden })
 
 	// Init correct visible prop
 	const _fields = fields.map((field) => ({
 		...field,
-		$visible: fieldsVisible.includes(field.key) && !fieldsHidden.includes(field.key),
+		$visible:
+			field.locked ||
+			(field.visible ? !fieldsHidden.includes(field.key) : fieldsVisible.includes(field.key)),
 	}))
 
 	// Init correct order fields

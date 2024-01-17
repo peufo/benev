@@ -3,6 +3,7 @@
 	import { page } from '$app/stores'
 	import { urlParam } from '$lib/store'
 	import { listEditable } from '$lib/action'
+	import { jsonParse } from '$lib/jsonParse'
 	import { mdiCheck, mdiCircleSmall, mdiDotsHorizontal, mdiDrag } from '@mdi/js'
 	import { Icon, DropDown, type TableField } from '$lib/material'
 	import { context } from '$lib/material/table'
@@ -11,21 +12,26 @@
 	export let fields: TableField<Item>[]
 	export let key: string
 
-	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_ORDER } = context.get(key)
+	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = context.get(key)
 
 	function onFieldClick(key: string) {
-		fields = fields.map((field, i) => {
-			if (field.key !== key || field.locked) return field
-			return {
-				...field,
-				visible: !field.visible,
-			}
-		})
-		const fieldsVisible = fields.filter((f) => f.visible).map((f) => f.key)
-		const url = new URL($page.url)
-		url.searchParams.set(KEY_FIELDS_VISIBLE, JSON.stringify(fieldsVisible))
-		if (url.searchParams.has(key)) url.searchParams.delete(key)
+		const field = fields.find((f) => f.key === key)
+		if (!field) return
+		if (field.locked) return
+		const url = toggleParam(field.visible ? KEY_FIELDS_HIDDEN : KEY_FIELDS_VISIBLE, field.key)
 		goto(url, { replaceState: true, noScroll: true, keepFocus: true })
+	}
+
+	function toggleParam(paramKey: string, fieldKey: string): URL {
+		const url = new URL($page.url)
+		const fieldsKeys = jsonParse<string[]>($page.url.searchParams.get(paramKey), [])
+		if (!fieldsKeys.includes(fieldKey)) fieldsKeys.push(fieldKey)
+		else fieldsKeys.splice(fieldsKeys.indexOf(fieldKey), 1)
+
+		if (fieldsKeys.length) url.searchParams.set(paramKey, JSON.stringify(fieldsKeys))
+		else url.searchParams.delete(paramKey)
+
+		return url
 	}
 
 	function handleReorder(newFieldsOrder: TableField<Item>[]) {
@@ -64,7 +70,7 @@
 				>
 					{#if field.locked}
 						<Icon path={mdiCheck} class="fill-base-content/50" size={21} />
-					{:else if field.visible}
+					{:else if field.$visible}
 						<Icon path={mdiCheck} class="fill-success" size={21} />
 					{:else}
 						<Icon path={mdiCircleSmall} class="fill-base-content/50" size={21} />

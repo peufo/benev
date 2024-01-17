@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation'
 	import { Placeholder } from '$lib/material'
 	import type { ComponentAndProps } from '$lib/utils'
 
@@ -8,7 +9,7 @@
 		TableBody,
 		context,
 		createKeys,
-		initFields,
+		updateFieldsFromParams,
 	} from '$lib/material/table'
 
 	type Item = $$Generic<{ id: string }>
@@ -27,17 +28,19 @@
 		KEY_FIELDS_ORDER,
 	})
 
-	fields = initFields(key, fields)
+	const initFields = () => (fields = updateFieldsFromParams(key, fields))
+	initFields()
+	afterNavigate(initFields)
 </script>
 
 <div class="overflow-x-auto border rounded-lg" class:min-h-[320px]={!hideBody}>
 	{#if hideBody}
 		<table class="table relative">
-			<TableHead bind:fields {key} />
+			<TableHead {fields} {key} />
 		</table>
 	{:else if items.length}
 		<table class="table relative">
-			<TableHead bind:fields {key} />
+			<TableHead {fields} {key} />
 			<TableBody {fields} {items} {action} {classRow} on:click />
 		</table>
 	{:else}
