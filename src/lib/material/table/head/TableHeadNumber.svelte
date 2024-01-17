@@ -19,20 +19,20 @@
 
 	const udpateUrl = debounce(() => {
 		if (isDefined(min) || isDefined(max)) {
-			goto($urlParam.with({ [field.key]: JSON.stringify({ min, max }) }), {
+			goto($urlParam.with({ [field.key]: JSON.stringify({ min, max }) }, 'skip', 'take'), {
 				noScroll: true,
 				keepFocus: true,
 			})
 			return
 		}
-		goto($urlParam.without(field.key), { noScroll: true, keepFocus: true })
+		goto($urlParam.without(field.key, 'skip', 'take'), { noScroll: true, keepFocus: true })
 	}, 250)
 
 	function handleReset() {
 		min = undefined
 		max = undefined
 		tip.hide()
-		goto($urlParam.without(field.key), { noScroll: true, keepFocus: true })
+		goto($urlParam.without(field.key, 'skip', 'take'), { noScroll: true, keepFocus: true })
 	}
 
 	function isDefined(v: string | undefined | null): v is string {

@@ -28,12 +28,13 @@ export const param = derived(page, (_page) => {
 	}
 
 	/** Return new url with toggle params */
-	const toggle = (params: Record<string, string>) => {
+	const toggle = (params: Record<string, string>, ...keysToRemove: string[]) => {
 		const url = new URL(_page.url)
 		Object.entries(params).forEach(([key, value]) => {
 			if (url.searchParams.get(key) === value) url.searchParams.delete(key)
 			else url.searchParams.set(key, value)
 		})
+		keysToRemove.forEach((key) => url.searchParams.delete(key))
 		return url.search
 	}
 
@@ -63,8 +64,8 @@ export const urlParam = derived(param, (_param) => {
 	}
 
 	/** Return new url with toggle params */
-	const toggle = (params: Record<string, string>) => {
-		return pathname + _param.toggle(params)
+	const toggle = (params: Record<string, string>, ...keysToRemove: string[]) => {
+		return pathname + _param.toggle(params, ...keysToRemove)
 	}
 
 	return {

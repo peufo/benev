@@ -30,7 +30,9 @@ export function bindValueWithParams(
 
 	const handleInput = debounce(async () => {
 		const _urlParam = get(urlParam)
-		const newUrl = node.value ? _urlParam.with({ [name]: node.value }) : _urlParam.without(name)
+		const newUrl = node.value
+			? _urlParam.with({ [name]: node.value }, 'skip', 'take')
+			: _urlParam.without(name, 'skip', 'take')
 		await goto(newUrl, { replaceState: true, keepFocus: true, noScroll: true })
 	}, debounceTime)
 
@@ -65,7 +67,9 @@ export function bindCheckedWithParams(
 
 	const handleInput = debounce(async () => {
 		const _urlParam = get(urlParam)
-		const newUrl = node.checked ? _urlParam.with({ [name]: node.value }) : _urlParam.without(name)
+		const newUrl = node.checked
+			? _urlParam.with({ [name]: node.value }, 'skip', 'take')
+			: _urlParam.without(name, 'skip', 'take')
 		await goto(newUrl, { replaceState: true, keepFocus: true, noScroll: true })
 	}, debounceTime)
 

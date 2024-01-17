@@ -21,13 +21,13 @@
 				return selections.includes(value)
 			},
 			getHref(value: string) {
-				if (!multiSelect) return params.toggle({ [field.key]: value })
+				if (!multiSelect) return params.toggle({ [field.key]: value }, 'skip', 'take')
 				if (selections.includes(value)) {
 					const newSelections = selections.filter((v) => v !== value)
 					if (!newSelections.length) return params.without(field.key)
-					return params.with({ [field.key]: JSON.stringify(newSelections) })
+					return params.with({ [field.key]: JSON.stringify(newSelections) }, 'skip', 'take')
 				}
-				return params.with({ [field.key]: JSON.stringify([...selections, value]) })
+				return params.with({ [field.key]: JSON.stringify([...selections, value]) }, 'skip', 'take')
 			},
 		}
 	})

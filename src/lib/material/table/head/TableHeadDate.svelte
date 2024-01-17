@@ -42,12 +42,16 @@
 		dropDown.hide()
 		if (!isValidPeriod) return
 		goto(
-			$urlParam.with({
-				[field.key]: JSON.stringify({
-					start: `${period.start}T${time.start || '00:00'}`,
-					end: `${period.end}T${time.end || '23:59'}`,
-				}),
-			}),
+			$urlParam.with(
+				{
+					[field.key]: JSON.stringify({
+						start: `${period.start}T${time.start || '00:00'}`,
+						end: `${period.end}T${time.end || '23:59'}`,
+					}),
+				},
+				'skip',
+				'take'
+			),
 			{ replaceState: true, noScroll: true }
 		)
 	}
@@ -56,7 +60,7 @@
 		dropDown.hide()
 		period = { start: '', end: '' }
 		time = { start: '00:00', end: '23:59' }
-		goto($urlParam.without(field.key), { replaceState: true, noScroll: true })
+		goto($urlParam.without(field.key, 'skip', 'take'), { replaceState: true, noScroll: true })
 	}
 </script>
 

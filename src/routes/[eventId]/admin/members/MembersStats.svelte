@@ -45,12 +45,7 @@
 								<span class="text-right font-medium">{value}</span>
 								<a
 									class="relative menu-item"
-									href={$urlParam.with(
-										{ [`field_${stat.fieldId}`]: key },
-										'summary',
-										'skip',
-										'take'
-									)}
+									href={$urlParam.with({ [`field_${stat.fieldId}`]: key }, 'skip', 'take', 'summary')}
 								>
 									<span class="z-10">{key}</span>
 									<div
