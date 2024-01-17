@@ -1,8 +1,12 @@
 import { page } from '$app/stores'
 import { get } from 'svelte/store'
 import type { ComponentAndProps, Primitive } from '$lib/utils'
+import type { FieldType } from '@prisma/client'
 import { jsonParse } from '$lib/jsonParse'
 import { createKeys } from '$lib/material/table/context'
+
+// TODO: add FieldType "date" ?
+export type TableFieldType = FieldType | 'date'
 
 export type TableField<Item = any> = {
 	key: string
@@ -11,6 +15,7 @@ export type TableField<Item = any> = {
 	hint?: string
 	locked?: boolean
 	visible?: boolean
+	/** TODO: use directly "type" */
 	head?: ComponentAndProps | ((field: TableField) => ComponentAndProps)
 	/** Internal usage */
 	$visible?: boolean

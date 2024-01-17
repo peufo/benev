@@ -100,6 +100,7 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 		},
 		...fields.map((field) => ({
 			key: `field_${field.id}`,
+			type: field.type,
 			label: field.name,
 			getCell: (m: Member) => m.profileJson[field.id],
 			head: (f: TableField) => {

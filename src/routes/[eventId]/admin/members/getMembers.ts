@@ -258,6 +258,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 						return {
 							fieldId: field.id,
 							fieldName: field.name,
+							fieldType: field.type,
 							distribution: members.reduce((acc, { profileJson }) => {
 								const value = profileJson[field.id]
 								if (value === undefined) return acc
@@ -274,10 +275,11 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 						return {
 							fieldId: field.id,
 							fieldName: field.name,
+							fieldType: field.type,
 							distribution: members.reduce((acc, { profileJson }) => {
 								const value = profileJson[field.id]
 								if (typeof value !== 'boolean') return acc
-								const key = value ? 'Oui' : 'Non'
+								const key = value ? 'true' : 'false'
 								if (acc[key]) acc = { ...acc, [key]: acc[key] + 1 }
 								else acc = { ...acc, [key]: 1 }
 								return acc

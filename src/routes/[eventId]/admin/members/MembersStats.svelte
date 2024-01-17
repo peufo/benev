@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { CardBasic } from '$lib/material'
-	import { map } from 'zod'
 	import type { PageData } from './$types'
 	import { urlParam } from '$lib/store'
 
@@ -31,6 +30,7 @@
 		<div class="flex gap-4 flex-wrap justify-start items-start">
 			{#each data.stats.summary as stat}
 				{#if stat}
+					{@const fieldKey = `field_${stat.fieldId}`}
 					{@const distribution = Object.entries(stat.distribution)}
 					{@const total = distribution
 						.map(([key, value]) => value)
@@ -42,12 +42,17 @@
 							style:grid-template-columns="min-content auto"
 						>
 							{#each distribution as [key, value]}
+								{@const fieldValue = stat.fieldType === 'multiselect' ? JSON.stringify([key]) : key}
+
 								<span class="text-right font-medium">{value}</span>
 								<a
 									class="relative menu-item"
-									href={$urlParam.with({ [`field_${stat.fieldId}`]: key }, 'skip', 'take', 'summary')}
+									data-sveltekit-replacestate
+									href={$urlParam.with({ [fieldKey]: fieldValue }, 'skip', 'take', 'summary')}
 								>
-									<span class="z-10">{key}</span>
+									<span class="z-10"
+										>{stat.fieldType !== 'boolean' ? key : key === 'true' ? 'Oui' : 'Non'}</span
+									>
 									<div
 										class="absolute bg-primary/10 bottom-0 top-0 left-0 rounded"
 										style:width="{(value / total) * 100}%"
