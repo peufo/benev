@@ -1,15 +1,20 @@
 <script lang="ts">
+	import type { PageData } from './$types'
 	import { mdiEmailMultipleOutline } from '@mdi/js'
 
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
 	import { api } from '$lib/api'
 
-	const getMembers = async () => {
+	type Member = PageData['members'][number]
+
+	const getMembersEmails = async () => {
 		const searchParams = $page.url.searchParams
 		searchParams.append('all', 'true')
-		const search = searchParams.get('search')
-		return await $api.member.search(search || '', { all: true })
+		const { members } = await $api.get<{ members: Member[] }>(
+			`/admin/members?${searchParams.toString()}`
+		)
+		return members.map((m) => m.user.email)
 	}
 
 	let isLoading = false
@@ -17,11 +22,10 @@
 	async function handleMailing() {
 		if (isLoading) return
 		isLoading = true
-		const members = await getMembers().finally(() => (isLoading = false))
-		const emails = members.map((m) => m.user.email)
+		const membersMail = await getMembersEmails().finally(() => (isLoading = false))
 		const a = document.createElement('a')
 		a.classList.add('hidden')
-		a.href = `mailto:${emails.join(';')}`
+		a.href = `mailto:${membersMail.join(';')}`
 		a.target = '_blank'
 		document.body.appendChild(a)
 		a.click()
