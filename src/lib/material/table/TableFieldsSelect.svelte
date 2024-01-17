@@ -70,6 +70,7 @@
 		>
 			{#each fields as field (field.key)}
 				<a
+					draggable="false"
 					href={getFieldHref(field)}
 					class="menu-item w-full"
 					class:disabled={field.locked}
@@ -90,8 +91,7 @@
 
 					<span
 						class="drag-button btn btn-xs btn-square btn-ghost ml-auto"
-						on:mousedown|preventDefault
-						on:mouseup|preventDefault
+						on:click|preventDefault
 						role="none"
 					>
 						<Icon path={mdiDrag} size={18} class="fill-base-content/80" />

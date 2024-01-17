@@ -6,6 +6,8 @@ export const CLASSNAME_DRAG_ACTIVE = 'drag-active'
 export const CLASSNAME_PLACEHOLDER = 'item-placholder'
 
 export interface ListEditableOptions<Type = unknown> {
+	onGrabStart?: () => void
+	onGrabEnd?: () => void
 	onHover?: (newOrder: number[]) => void
 	onMove?: (indexFrom: number, indexTo: number) => void
 	/** Déclencher quand l'ordre change. newOrder est un tableau d'index */

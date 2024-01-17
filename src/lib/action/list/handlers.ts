@@ -25,6 +25,7 @@ export function createDragHandler<Type = unknown>(
 		start(position: Position) {
 			limits = computeLimits(listElement, itemElement)
 			if (!limits) return
+			if (options.onGrabStart) options.onGrabStart()
 
 			originMouseY = position.clientY
 			listElement.classList.add(CLASSNAME_DRAG_ACTIVE)
@@ -51,6 +52,7 @@ export function createDragHandler<Type = unknown>(
 		},
 
 		end() {
+			if (options.onGrabEnd) options.onGrabEnd()
 			resetDragStyle(itemElement)
 			placeholder?.remove()
 			listElement.classList.remove(CLASSNAME_DRAG_ACTIVE)
