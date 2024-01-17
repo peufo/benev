@@ -6,8 +6,6 @@
 	import { jsonParse } from '$lib/jsonParse'
 	import {
 		mdiCheck,
-		mdiCheckBold,
-		mdiCheckCircle,
 		mdiCheckCircleOutline,
 		mdiCircleSmall,
 		mdiDotsHorizontal,
@@ -22,11 +20,11 @@
 
 	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = context.get(key)
 
-	function onFieldClick(field: TableField) {
+	function getFieldHref(field: TableField) {
 		if (field.locked) return
 		const url = toggleParam(field.visible ? KEY_FIELDS_HIDDEN : KEY_FIELDS_VISIBLE, field.key)
 		url.searchParams.delete(field.key)
-		goto(url, { replaceState: true, noScroll: true, keepFocus: true })
+		return url.pathname + url.search
 	}
 
 	function toggleParam(paramKey: string, fieldKey: string): URL {
@@ -67,13 +65,13 @@
 			}}
 		>
 			{#each fields as field (field.key)}
-				<div
+				<a
+					href={getFieldHref(field)}
 					class="menu-item w-full"
 					class:disabled={field.locked}
-					role="menuitem"
-					tabindex="0"
-					on:click={() => onFieldClick(field)}
-					on:keydown={(e) => e.key === 'Espace' && onFieldClick(field)}
+					data-sveltekit-keepfocus
+					data-sveltekit-replacestate
+					data-sveltekit-noscroll
 				>
 					{#if field.locked}
 						<Icon path={mdiCheck} class="fill-base-content/50" size={21} />
@@ -89,7 +87,7 @@
 					<span class="drag-button btn btn-xs btn-square btn-ghost ml-auto">
 						<Icon path={mdiDrag} size={18} class="fill-base-content/80" />
 					</span>
-				</div>
+				</a>
 			{/each}
 		</div>
 	</DropDown>
