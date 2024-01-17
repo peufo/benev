@@ -1,20 +1,18 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import axios from 'axios'
 	import { CopyData } from '$lib/material'
-	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
-	import { formatRange } from '$lib/formatRange'
+	import { api } from '$lib/api'
 
 	type Subscribe = PageData['subscribes'][number]
 
 	const getData = async () => {
 		const searchParams = $page.url.searchParams
 		searchParams.append('all', 'true')
-		const { data } = await axios.get<{ subscribes: Subscribe[] }>(
-			`${$eventPath}/admin/subscribes?${searchParams.toString()}`
+		const { subscribes } = await $api.get<{ subscribes: Subscribe[] }>(
+			`/admin/subscribes?${searchParams.toString()}`
 		)
-		return data.subscribes
+		return subscribes
 	}
 
 	const columns: Record<string, (subscribe: Subscribe) => string | number> = {

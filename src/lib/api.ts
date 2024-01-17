@@ -50,10 +50,19 @@ function methods<T extends unknown, P = {}>(route: string) {
 	}
 }
 
-export const api = derived(page, ({ params: { eventId } }) => ({
-	member: methods<Member & { user: { firstName: string; lastName: string; email: string } }>(
-		`/${eventId}/api/members`
-	),
-	team: methods<TeamWithComputedValues, { onlyAvailable?: boolean }>(`/${eventId}/api/teams`),
-	user: methods<User>(`/root/users`),
-}))
+export const api = derived(page, ({ params: { eventId } }) => {
+	async function get<T extends unknown>(route: string, config?: RequestConfig) {
+		const { data, headers } = await _api.get(`/${eventId}${route}`, config)
+		ensureJson(headers, route)
+		return devalue.unflatten(data) as T
+	}
+
+	return {
+		get,
+		member: methods<Member & { user: { firstName: string; lastName: string; email: string } }>(
+			`/${eventId}/api/members`
+		),
+		team: methods<TeamWithComputedValues, { onlyAvailable?: boolean }>(`/${eventId}/api/teams`),
+		user: methods<User>(`/root/users`),
+	}
+})

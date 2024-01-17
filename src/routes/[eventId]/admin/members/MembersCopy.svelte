@@ -1,10 +1,9 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import axios from 'axios'
 	import { CopyData } from '$lib/material'
 	import { getAge } from '$lib/utils'
-	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
+	import { api } from '$lib/api'
 
 	type Member = PageData['members'][number]
 	export let fields: PageData['fields']
@@ -12,10 +11,10 @@
 	const getData = async () => {
 		const searchParams = $page.url.searchParams
 		searchParams.append('all', 'true')
-		const { data } = await axios.get<{ members: Member[] }>(
-			`${$eventPath}/admin/members?${searchParams.toString()}`
+		const { members } = await $api.get<{ members: Member[] }>(
+			`/admin/members?${searchParams.toString()}`
 		)
-		return data.members
+		return members
 	}
 
 	const columns: Record<string, (member: Member) => string | number> = {
@@ -41,3 +40,4 @@
 </script>
 
 <CopyData {getData} {columns} />
+
