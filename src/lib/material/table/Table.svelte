@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Placeholder } from '$lib/material'
 	import type { ComponentAndProps } from '$lib/utils'
-	import { page } from '$app/stores'
 
 	import {
 		type TableField,
@@ -9,26 +8,26 @@
 		TableBody,
 		context,
 		createKeys,
-		createFieldsInit,
+		initFields,
 	} from '$lib/material/table'
 
 	type Item = $$Generic<{ id: string }>
+	export let key = 'table'
 	export let fields: TableField<Item>[]
 	export let items: Item[]
 	export let action: ((item: Item) => ComponentAndProps) | undefined = undefined
 	export let placholder = 'Aucun élément trouvé'
 	export let classRow = ''
-	export let key = 'table'
 	export let hideBody = false
 
-	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_ORDER } = createKeys(key)
+	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = createKeys(key)
 	context.set(key, {
 		KEY_FIELDS_VISIBLE,
+		KEY_FIELDS_HIDDEN,
 		KEY_FIELDS_ORDER,
 	})
 
-	const fieldsInit = createFieldsInit(key, fields)
-	fields = fieldsInit($page.url)
+	fields = initFields(key, fields)
 </script>
 
 <div class="overflow-x-auto border rounded-lg" class:min-h-[320px]={!hideBody}>
@@ -45,6 +44,7 @@
 		<table class="table relative">
 			<TableHead {fields} {key} />
 		</table>
+
 		<Placeholder class="rounded-t-none">
 			{placholder}
 		</Placeholder>

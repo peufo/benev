@@ -1,6 +1,6 @@
-import { z } from '$lib/validation'
-import { fail } from '@sveltejs/kit'
 import type { ZodRawShape } from 'zod'
+import { fail } from '@sveltejs/kit'
+import { z } from '$lib/validation'
 
 export function parseQuery<Type extends ZodRawShape>(url: URL, shape: Type) {
 	const queryRaw: Record<string, unknown> = {}

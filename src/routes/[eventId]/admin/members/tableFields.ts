@@ -1,4 +1,4 @@
-import { tableheadComponent, type TableField } from '$lib/material'
+import { tableheadComponent, type TableField } from '$lib/material/table'
 import { component, getAge } from '$lib/utils'
 import { MemberCell } from '$lib/member'
 import { formatRange } from '$lib/formatRange'

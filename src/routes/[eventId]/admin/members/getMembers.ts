@@ -1,28 +1,32 @@
+import type { ZodRawShape } from 'zod'
 import { z } from '$lib/validation'
 import dayjs from 'dayjs'
 import type { Event, Field, FieldType, Period, Prisma } from '@prisma/client'
 import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
 import { error } from '@sveltejs/kit'
-import { jsonParse } from '$lib/jsonParse'
 
 export type Member = Awaited<ReturnType<typeof getMembers>>['members'][number]
+
+export const membersFilterShape = {
+	search: z.string().optional(),
+	subscribes_count: z.filter.number,
+	subscribes_teams: z.filter.multiselect,
+	subscribes_range: z.filter.range,
+	subscribes_hours: z.filter.number,
+	leaderOf: z.filter.multiselect,
+	age: z.filter.number,
+	isUserProfileCompleted: z.filter.boolean,
+	isValidedByEvent: z.filter.boolean,
+	isValidedByUser: z.filter.boolean,
+	isAbsent: z.filter.boolean,
+	role: z.enum(['member', 'leader', 'admin']).optional(),
+} satisfies ZodRawShape
 
 export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
 
 	const { data, err } = parseQuery(url, {
-		search: z.string().optional(),
-		subscribes_count: z.filter.number,
-		subscribes_teams: z.filter.multiselect,
-		subscribes_range: z.filter.range,
-		subscribes_hours: z.filter.number,
-		leaderOf: z.filter.multiselect,
-		age: z.filter.number,
-		isUserProfileCompleted: z.filter.boolean,
-		isValidedByEvent: z.filter.boolean,
-		isValidedByUser: z.filter.boolean,
-		isAbsent: z.filter.boolean,
-		role: z.enum(['member', 'leader', 'admin']).optional(),
+		...membersFilterShape,
 		skip: z.number().default(0),
 		take: z.number().default(20),
 		summary: z.boolean().default(false),
