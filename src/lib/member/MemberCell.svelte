@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import { Avatar } from '$lib/me'
 	import { MemberAbsences, MemberRole } from '$lib/member'
 	import type { MemberWithComputedValues } from '$lib/server'
@@ -11,7 +12,7 @@
 
 <a
 	class="menu-item pl-0 py-0 flex gap-2 items-center group"
-	href="{$eventPath}/admin/members/{member.id}"
+	href="{$eventPath}/admin/members/{member.id}{$page.url.search}"
 >
 	<Avatar
 		user={member.user}
