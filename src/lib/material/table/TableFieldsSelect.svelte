@@ -23,6 +23,7 @@
 	function getFieldHref(field: TableField) {
 		if (field.locked) return
 		const url = toggleParam(field.visible ? KEY_FIELDS_HIDDEN : KEY_FIELDS_VISIBLE, field.key)
+
 		url.searchParams.delete(field.key)
 		return url.pathname + url.search
 	}

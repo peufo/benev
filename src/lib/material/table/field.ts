@@ -19,7 +19,7 @@ export type TableField<Item = any> = {
 /**
  * Initialise fields from url query
  */
-export function updateFieldsFromParams(tablekey: string, fields: TableField[]) {
+export function syncFieldsWithParams(tablekey: string, fields: TableField[]) {
 	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = createKeys(tablekey)
 	const {
 		url: { searchParams },

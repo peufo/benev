@@ -12,31 +12,29 @@ export const onlyAvailable = derived(
 )
 
 export const param = derived(page, (_page) => {
-	const { url } = _page
-
 	/** Return new url with new params */
 	const _with = (params: Record<string, string | number>, ...keysToRemove: string[]) => {
-		const _url = new URL(url)
-		Object.entries(params).forEach(([key, value]) => _url.searchParams.set(key, String(value)))
+		const url = new URL(_page.url)
+		Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, String(value)))
 		keysToRemove.forEach((key) => url.searchParams.delete(key))
-		return _url.search
+		return url.search
 	}
 
 	/** Return new url without params keys provided */
 	const without = (...keys: string[]) => {
-		const _url = new URL(url)
-		keys.forEach((key) => _url.searchParams.delete(key))
-		return _url.search
+		const url = new URL(_page.url)
+		keys.forEach((key) => url.searchParams.delete(key))
+		return url.search
 	}
 
 	/** Return new url with toggle params */
 	const toggle = (params: Record<string, string>) => {
-		const _url = new URL(url)
+		const url = new URL(_page.url)
 		Object.entries(params).forEach(([key, value]) => {
-			if (url.searchParams.get(key) === value) _url.searchParams.delete(key)
-			else _url.searchParams.set(key, value)
+			if (url.searchParams.get(key) === value) url.searchParams.delete(key)
+			else url.searchParams.set(key, value)
 		})
-		return _url.search
+		return url.search
 	}
 
 	return {
@@ -44,10 +42,10 @@ export const param = derived(page, (_page) => {
 		without,
 		toggle,
 		/** Check if key exist in url params */
-		has: (key: string) => url.searchParams.has(key),
-		get: (key: string) => url.searchParams.get(key),
+		has: (key: string) => _page.url.searchParams.has(key),
+		get: (key: string) => _page.url.searchParams.get(key),
 		/** Check if value match in url params */
-		hasValue: (key: string, value: string) => url.searchParams.get(key) === value,
+		hasValue: (key: string, value: string) => _page.url.searchParams.get(key) === value,
 		page: _page,
 	}
 })

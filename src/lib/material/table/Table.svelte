@@ -9,7 +9,7 @@
 		TableBody,
 		context,
 		createKeys,
-		updateFieldsFromParams,
+		syncFieldsWithParams,
 	} from '$lib/material/table'
 
 	type Item = $$Generic<{ id: string }>
@@ -28,7 +28,7 @@
 		KEY_FIELDS_ORDER,
 	})
 
-	const initFields = () => (fields = updateFieldsFromParams(key, fields))
+	const initFields = () => (fields = syncFieldsWithParams(key, fields))
 	initFields()
 	afterNavigate(initFields)
 </script>

@@ -13,13 +13,12 @@ export function ensureFieldsWithFilterAreVisibles(
 
 	// Ensure all existing filter is visible
 	const _fieldsVisible = [...fieldsVisible]
+	const _fieldsHidden = [...fieldsHidden]
 	for (const key of url.searchParams.keys()) {
 		if (!isFilterKey(key)) continue
-		if (!fieldsVisible.includes(key)) _fieldsVisible.push(key)
+		if (!_fieldsVisible.includes(key)) _fieldsVisible.push(key)
+		if (_fieldsHidden.includes(key)) _fieldsHidden.splice(_fieldsHidden.indexOf(key), 1)
 	}
-
-	// Ensure a field is not visible and hidden in same time
-	const _fieldsHidden = fieldsHidden.filter((field) => !fieldsVisible.includes(field))
 
 	const paramsUpdated =
 		_fieldsVisible.length !== fieldsVisible.length || _fieldsHidden.length !== fieldsHidden.length
