@@ -15,6 +15,7 @@
 
 <InputOptionInParam
 	key="role"
+	removeKeys={['isAbsent']}
 	options={{
 		admin: {
 			icon: mdiStarOutline,

@@ -6,6 +6,7 @@
 	export { klass as class }
 	export let key: string
 	export let options: Options
+	export let removeKeys: string[] = []
 
 	$: _options = parseOptions(options)
 </script>
@@ -14,7 +15,7 @@
 	{#each _options as opt}
 		{@const active = $urlParam.hasValue(key, opt.value)}
 		<a
-			href={$urlParam.toggle({ [key]: opt.value })}
+			href={$urlParam.toggle({ [key]: opt.value }, ...removeKeys)}
 			class="join-item btn btn-sm"
 			class:btn-primary={active}
 			class:w-9={opt.icon}
