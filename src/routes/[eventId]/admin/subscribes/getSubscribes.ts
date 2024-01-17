@@ -1,23 +1,27 @@
+import type { ZodRawShape } from 'zod'
 import { jsonParse } from '$lib/jsonParse.js'
 import { addMemberComputedValues, parseQuery, prisma } from '$lib/server'
 import type { Event, Field, Prisma, SubscribeState } from '@prisma/client'
 import { z } from '$lib/validation'
 import { error } from '@sveltejs/kit'
 
+export const subscribesFilterShape = {
+	search: z.string().optional(),
+	start: z.date().optional(),
+	end: z.date().optional(),
+	teams: z.array(z.string()).optional(),
+	states: z.string().optional(),
+	createdBy: z.enum(['leader', 'user']).optional(),
+	isAbsent: z.booleanAsString().optional(),
+} satisfies ZodRawShape
+
 export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
 	const { data, err } = parseQuery(url, {
-		search: z.string().optional(),
-		start: z.date().optional(),
-		end: z.date().optional(),
-		teams: z.array(z.string()).optional(),
-		states: z.string().optional(),
+		...subscribesFilterShape,
+		all: z.boolean().default(false),
 		skip: z.number().default(0),
 		take: z.number().default(20),
-		// TODO: use enum provided by prisma for "createdBy" -> SubscribeCreatedBy
-		createdBy: z.enum(['leader', 'user']).optional(),
-		isAbsent: z.booleanAsString().optional(),
-		all: z.boolean().default(false),
 	})
 	if (err) error(400)
 
