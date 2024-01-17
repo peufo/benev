@@ -15,6 +15,8 @@
 			$urlParam.hasValue(key, value) || (!$urlParam.has(key) && value === defaultValue)}
 		<a
 			href={$urlParam.with({ [key]: value })}
+			data-sveltekit-noscroll
+			data-sveltekit-replacestate
 			class="h-6 p-1 flex items-center justify-center gap-2 rounded"
 			class:px-2={showLabel}
 			class:w-6={icon && !showLabel}
