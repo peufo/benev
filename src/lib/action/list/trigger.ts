@@ -26,7 +26,7 @@ export function mouseDragTrigger(element: HTMLElement, handler: DragHandler) {
 			document.removeEventListener('mousedown', startHandler)
 			document.removeEventListener('mousemove', handler.move)
 			document.removeEventListener('mouseup', endHandler)
-			element.removeEventListener('click', stopPropagation)
+			element?.removeEventListener('click', stopPropagation)
 		},
 	}
 }
@@ -62,6 +62,7 @@ export function touchDragTrigger(element: HTMLElement, handler: DragHandler) {
 
 	return {
 		destroy() {
+			if (!element) return
 			element.removeEventListener('touchstart', startHandler)
 			element.removeEventListener('touchmove', moveHandler)
 			element.removeEventListener('touchend', endHandler)

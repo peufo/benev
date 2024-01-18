@@ -4,29 +4,16 @@
 	import axios from 'axios'
 	import type { Field } from '@prisma/client'
 	import { listEditable } from '$lib/action'
-	import { Dialog, Icon } from '$lib/material'
+	import { Icon } from '$lib/material'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import { MemberFieldForm } from '$lib/member'
+	import { MemberFieldDialog } from '$lib/member'
 	import { eventPath } from '$lib/store'
 	import { useNotify } from '$lib/notify'
 
 	export let fields: Field[]
 	const notify = useNotify()
 
-	let formDialog: HTMLDialogElement
-	let memberFieldForm: MemberFieldForm
-	let isUpdate = false
-	function handleClickNewField() {
-		isUpdate = false
-		memberFieldForm.setField(null)
-		formDialog.showModal()
-	}
-
-	function handleClickUpdateField(field: Field) {
-		isUpdate = true
-		memberFieldForm.setField(field)
-		formDialog.showModal()
-	}
+	let memberFieldDialog: MemberFieldDialog
 
 	async function handleReorder(reorderedFields: Field[]) {
 		fields = reorderedFields
@@ -43,7 +30,7 @@
 
 <div class="flex items-center mb-2">
 	<h3 class="text-lg font-medium opacity-75 grow">Champs personalisés</h3>
-	<button class="btn btn-square" on:click={handleClickNewField}>
+	<button class="btn btn-square" on:click={() => memberFieldDialog.open()}>
 		<Icon path={mdiPlus} title="Ajouter un champ" />
 	</button>
 </div>
@@ -59,7 +46,7 @@
 	{#each fields as field (field.id)}
 		<button
 			transition:slide
-			on:click={() => handleClickUpdateField(field)}
+			on:click={() => memberFieldDialog.open(field)}
 			class="
 				w-full flex gap-3 py-3 px-4 items-center border rounded-lg
 				bg-base-200/50 hover:bg-base-200 cursor-pointer
@@ -80,15 +67,4 @@
 	{/each}
 </div>
 
-<Dialog bind:dialog={formDialog}>
-	<span slot="header" class="card-title">
-		{isUpdate ? 'Modifier le' : 'Ajouter un'} champ
-	</span>
-
-	<MemberFieldForm
-		on:success={() => {
-			formDialog.close()
-		}}
-		bind:this={memberFieldForm}
-	/>
-</Dialog>
+<MemberFieldDialog bind:this={memberFieldDialog} />

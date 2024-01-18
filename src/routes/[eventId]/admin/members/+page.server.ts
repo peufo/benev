@@ -1,4 +1,5 @@
 import { ensureFieldsWithFilterAreVisibles } from '$lib/material/table/server'
+
 import { getMembers, membersFilterShape } from './getMembers'
 
 export const load = async ({ url, parent }) => {

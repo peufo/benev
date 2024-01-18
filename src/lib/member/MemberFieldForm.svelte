@@ -6,13 +6,21 @@
 	import { useForm } from '$lib/validation'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { InputSelect, InputText, InputCheckboxs, DeleteButton, InputOptions } from '$lib/material'
-	import MemberField from './MemberField.svelte'
+	import { MemberField } from '$lib/member'
 	import { InputBoolean } from '$lib/material/input'
+	import { eventPath } from '$lib/store'
 
-	const dispatch = createEventDispatcher<{ success: void }>()
-	const form = useForm({
-		successCallback: () => {
-			dispatch('success')
+	export let successReset = true
+	export let successUpdate = true
+
+	const action = `${$eventPath}/admin/config`
+
+	const dispatch = createEventDispatcher<{ success: Field | undefined }>()
+	const form = useForm<Field>({
+		successReset,
+		successUpdate,
+		successCallback: (url, field) => {
+			dispatch('success', field)
 			setField(null)
 		},
 	})
@@ -148,11 +156,15 @@
 	{/key}
 
 	<div class="flex gap-2 flex-row-reverse">
-		<button class="btn" formaction={field.id ? '?/update_field' : '?/create_field'} type="submit">
+		<button
+			class="btn"
+			formaction="{action}{field.id ? '?/update_field' : '?/create_field'}"
+			type="submit"
+		>
 			Valider
 		</button>
 		{#if field.id}
-			<DeleteButton formaction="?/delete_field" />
+			<DeleteButton formaction="{action}?/delete_field" />
 		{/if}
 	</div>
 </form>

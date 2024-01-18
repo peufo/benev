@@ -1,28 +1,39 @@
 <script lang="ts">
-	import { mdiChevronRight, mdiFormatListBulleted, mdiSigma } from '@mdi/js'
-	import { slide } from 'svelte/transition'
-	import { derived } from 'svelte/store'
-
-	import { Icon, InputSearch, Pagination, Table, TabsSmall } from '$lib/material'
-	import { urlParam } from '$lib/store'
+	import { mdiFormatListBulleted, mdiSigma } from '@mdi/js'
+	import type { Field } from '@prisma/client'
+	import { page } from '$app/stores'
+	import {  goto } from '$app/navigation'
+	import { InputSearch, Pagination, Table, TabsSmall } from '$lib/material'
 	import { component } from '$lib/utils'
-
 	import InviteDialog from '$lib/InviteDialog.svelte'
-
-	import { MemberContact } from '$lib/member'
+	import { MemberContact, MemberFieldDialog } from '$lib/member'
+	import { jsonParse } from '$lib/jsonParse'
 	import { getTableFields } from './tableFields'
 	import MembersCopy from './MembersCopy.svelte'
 	import MembersFilter from './MembersFilter.svelte'
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
-	import { goto } from '$app/navigation'
 
 	export let data
 
-	const tableFields = getTableFields(data.teams, data.fields)
+	let tableFields = getTableFields(data.teams, data.fields)
+
+	let memberFieldDialog: MemberFieldDialog
+
+	async function handleFieldCreated(field: Field | undefined) {
+		if (!field) return
+		const url = new URL($page.url)
+		const PARAM_VISIBLE_KEY = 'members_fields_visible'
+		const fieldsVisible = jsonParse<string[]>(url.searchParams.get(PARAM_VISIBLE_KEY), [])
+		fieldsVisible.push(`field_${field.id}`)
+		console.log(fieldsVisible)
+		url.searchParams.set(PARAM_VISIBLE_KEY, JSON.stringify(fieldsVisible))
+		await goto(url, { noScroll: true, keepFocus: true, invalidateAll: true })
+		tableFields = getTableFields(data.teams, data.fields)
+	}
 </script>
 
-<div class="flex flex-col gap-3">
+<div class="flex flex-col gap-2">
 	<div class="flex gap-x-2 gap-y-2 flex-wrap">
 		<InputSearch class="max-w-[175px]" />
 		<MembersFilter />
@@ -42,15 +53,17 @@
 		<MembersEmails />
 		<InviteDialog justIcon class="btn-sm" />
 	</div>
-
-	<Table
-		key="members"
-		items={data.members}
-		fields={tableFields}
-		action={(member) => component(MemberContact, { user: member.user })}
-		placholder="Aucun membre trouvé"
-		hideBody={data.summary}
-	/>
+	{#key tableFields}
+		<Table
+			key="members"
+			items={data.members}
+			fields={tableFields}
+			action={(member) => component(MemberContact, { user: member.user })}
+			placholder="Aucun membre trouvé"
+			hideBody={data.summary}
+			onCreateField={() => memberFieldDialog.open()}
+		/>
+	{/key}
 
 	{#if !data.summary}
 		<div class="flex justify-end">
@@ -60,3 +73,9 @@
 		<MembersStats {data} />
 	{/if}
 </div>
+
+<MemberFieldDialog
+	successUpdate={false}
+	bind:this={memberFieldDialog}
+	on:success={({ detail }) => handleFieldCreated(detail)}
+/>

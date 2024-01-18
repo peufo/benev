@@ -6,6 +6,7 @@
 	type Item = $$Generic<{ id: string }>
 	export let fields: TableField<Item>[]
 	export let key: string
+	export let onCreateField: (() => void) | undefined = undefined
 
 	function getComponent(field: TableField): ComponentAndProps {
 		if (!field.head) return component(TableHeadDefault, { field })
@@ -20,6 +21,6 @@
 			{@const { component, props } = getComponent(field)}
 			<svelte:component this={component} {...props} />
 		{/each}
-		<TableFieldsSelect {fields} {key} />
+		<TableFieldsSelect {fields} {key} {onCreateField} />
 	</tr>
 </thead>

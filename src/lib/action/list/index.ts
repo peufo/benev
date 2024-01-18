@@ -20,7 +20,6 @@ export interface ListEditableOptions<Type = unknown> {
 	onDelete?: (index: number, items?: Type[]) => void
 	/** Only handle reorder from this elements */
 	dragElementsSelector?: string
-	scrollContainersSelector?: string
 }
 
 export function listEditable<Type = unknown>(
@@ -52,8 +51,8 @@ export function listEditable<Type = unknown>(
 			touchDragTrigger(dragElement, dragHandlers[index])
 		)
 
-		if (options.scrollContainersSelector) {
-			const scrollContainer = document.querySelector(options.scrollContainersSelector)
+		const scrollContainer = node.parentElement
+		if (scrollContainer) {
 			scrollListeners = dragHandlers.map((handler) => scrollTrigger(handler, scrollContainer))
 		}
 	}

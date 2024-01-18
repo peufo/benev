@@ -1,22 +1,27 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'
-	import { page } from '$app/stores'
-	import { urlParam } from '$lib/store'
-	import { listEditable } from '$lib/action'
-	import { jsonParse } from '$lib/jsonParse'
 	import {
 		mdiCheck,
 		mdiCheckCircleOutline,
 		mdiCircleSmall,
 		mdiDotsHorizontal,
 		mdiDrag,
+		mdiPlus,
 	} from '@mdi/js'
+	import type { Instance as TippyInstance } from 'tippy.js'
+	import { goto } from '$app/navigation'
+	import { page } from '$app/stores'
+	import { urlParam } from '$lib/store'
+	import { listEditable } from '$lib/action'
+	import { jsonParse } from '$lib/jsonParse'
 	import { Icon, DropDown, type TableField } from '$lib/material'
 	import { context } from '$lib/material/table'
 
 	type Item = $$Generic<{ id: string }>
 	export let fields: TableField<Item>[]
 	export let key: string
+	export let onCreateField: (() => void) | undefined = undefined
+
+	let tip: TippyInstance
 
 	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = context.get(key)
 
@@ -49,60 +54,75 @@
 		const newUrl = $urlParam.with({ [KEY_FIELDS_ORDER]: JSON.stringify(fieldsOrder) })
 		goto(newUrl, { replaceState: true, noScroll: true, keepFocus: true })
 	}
-
-	let scrollContainer: HTMLDivElement
 </script>
 
 <th class="p-0 px-1 sticky right-0 z-10" align="right">
 	<DropDown
+		bind:tip
 		hideOnNav={false}
-		class="max-h-[500px] scroll-container"
+		class="max-h-none px-0"
 		tippyProps={{ appendTo: () => document.body, placement: 'bottom-end' }}
-		bind:content={scrollContainer}
 	>
 		<button slot="activator" type="button" class="btn btn-sm btn-square btn-ghost backdrop-blur">
 			<Icon path={mdiDotsHorizontal} title="Définir les champs" />
 		</button>
 
-		<div
-			use:listEditable={{
-				items: fields,
-				onChange: handleReorder,
-				dragElementsSelector: '.drag-button',
-				scrollContainersSelector: '.scroll-container',
-			}}
-		>
-			{#each fields as field (field.key)}
-				<a
-					draggable="false"
-					href={getFieldHref(field)}
-					class="menu-item w-full"
-					class:disabled={field.locked}
-					data-sveltekit-keepfocus
-					data-sveltekit-replacestate
-					data-sveltekit-noscroll
+		{#if onCreateField}
+			<div class="flex pl-2 pr-1 pb-1 gap-2 items-center border-b bordered">
+				<span class=" font-semibold opacity-70">Champs</span>
+				<button
+					type="button"
+					class="btn btn-square btn-sm ml-auto"
+					on:click={() => {
+						if (onCreateField) onCreateField()
+						tip.hide()
+					}}
 				>
-					{#if field.locked}
-						<Icon path={mdiCheck} class="fill-base-content/50" size={21} />
-					{:else if $urlParam.has(field.key)}
-						<Icon path={mdiCheckCircleOutline} class="fill-primary" size={21} />
-					{:else if field.$visible}
-						<Icon path={mdiCheck} class="fill-success" size={21} />
-					{:else}
-						<Icon path={mdiCircleSmall} class="fill-base-content/50" size={21} />
-					{/if}
+					<Icon path={mdiPlus} title="Ajouter un champ" />
+				</button>
+			</div>
+		{/if}
 
-					<span>{field.label}</span>
-
-					<span
-						class="drag-button btn btn-xs btn-square btn-ghost ml-auto"
-						on:click|preventDefault
-						role="none"
+		<div class="max-h-[500px] px-1 pt-1 overflow-auto">
+			<div
+				use:listEditable={{
+					items: fields,
+					onChange: handleReorder,
+					dragElementsSelector: '.drag-button',
+				}}
+			>
+				{#each fields as field (field.key)}
+					<a
+						draggable="false"
+						href={getFieldHref(field)}
+						class="menu-item w-full"
+						class:disabled={field.locked}
+						data-sveltekit-keepfocus
+						data-sveltekit-replacestate
+						data-sveltekit-noscroll
 					>
-						<Icon path={mdiDrag} size={18} class="fill-base-content/80" />
-					</span>
-				</a>
-			{/each}
+						{#if field.locked}
+							<Icon path={mdiCheck} class="fill-base-content/50" size={21} />
+						{:else if $urlParam.has(field.key)}
+							<Icon path={mdiCheckCircleOutline} class="fill-primary" size={21} />
+						{:else if field.$visible}
+							<Icon path={mdiCheck} class="fill-success" size={21} />
+						{:else}
+							<Icon path={mdiCircleSmall} class="fill-base-content/50" size={21} />
+						{/if}
+
+						<span>{field.label}</span>
+
+						<span
+							class="drag-button btn btn-xs btn-square btn-ghost ml-auto"
+							on:click|preventDefault
+							role="none"
+						>
+							<Icon path={mdiDrag} size={18} class="fill-base-content/80" />
+						</span>
+					</a>
+				{/each}
+			</div>
 		</div>
 	</DropDown>
 </th>

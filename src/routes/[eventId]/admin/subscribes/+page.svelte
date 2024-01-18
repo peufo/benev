@@ -92,7 +92,7 @@
 	]
 </script>
 
-<div class="flex flex-col gap-3">
+<div class="flex flex-col gap-2">
 	<div class="flex gap-x-2 gap-y-2 flex-wrap">
 		<InputSearch />
 		<div class="grow" />

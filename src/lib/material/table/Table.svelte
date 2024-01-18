@@ -20,6 +20,7 @@
 	export let placholder = 'Aucun élément trouvé'
 	export let classRow = ''
 	export let hideBody = false
+	export let onCreateField: (() => void) | undefined = undefined
 
 	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = createKeys(key)
 	context.set(key, {
@@ -36,16 +37,16 @@
 <div class="overflow-x-auto border rounded-lg" class:min-h-[320px]={!hideBody}>
 	{#if hideBody}
 		<table class="table relative">
-			<TableHead {fields} {key} />
+			<TableHead {fields} {key} {onCreateField} />
 		</table>
 	{:else if items.length}
 		<table class="table relative">
-			<TableHead {fields} {key} />
+			<TableHead {fields} {key} {onCreateField} />
 			<TableBody {fields} {items} {action} {classRow} on:click />
 		</table>
 	{:else}
 		<table class="table relative">
-			<TableHead {fields} {key} />
+			<TableHead {fields} {key} {onCreateField} />
 		</table>
 
 		<Placeholder class="rounded-t-none">
