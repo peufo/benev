@@ -58,6 +58,7 @@
 		Coûts pour
 		<input
 			type="number"
+			inputmode="numeric"
 			min={1}
 			max={1_000}
 			value={nbEvents}
@@ -67,6 +68,7 @@
 		événement{nbEvents > 1 ? 's' : ''} de
 		<input
 			type="number"
+			inputmode="numeric"
 			min={0}
 			max={100_000}
 			step={10}
