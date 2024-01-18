@@ -23,10 +23,10 @@ export function mouseDragTrigger(element: HTMLElement, handler: DragHandler) {
 
 	return {
 		destroy() {
-			document.removeEventListener('mousedown', startHandler)
+			element?.removeEventListener('mousedown', startHandler)
+			element?.removeEventListener('click', stopPropagation)
 			document.removeEventListener('mousemove', handler.move)
 			document.removeEventListener('mouseup', endHandler)
-			element?.removeEventListener('click', stopPropagation)
 		},
 	}
 }
