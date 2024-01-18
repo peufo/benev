@@ -49,13 +49,16 @@
 		const newUrl = $urlParam.with({ [KEY_FIELDS_ORDER]: JSON.stringify(fieldsOrder) })
 		goto(newUrl, { replaceState: true, noScroll: true, keepFocus: true })
 	}
+
+	let scrollContainer: HTMLDivElement
 </script>
 
 <th class="p-0 px-1 sticky right-0 z-10" align="right">
 	<DropDown
 		hideOnNav={false}
-		class="max-h-[500px]"
+		class="max-h-[500px] scroll-container"
 		tippyProps={{ appendTo: () => document.body, placement: 'bottom-end' }}
+		bind:content={scrollContainer}
 	>
 		<button slot="activator" type="button" class="btn btn-sm btn-square btn-ghost backdrop-blur">
 			<Icon path={mdiDotsHorizontal} title="Définir les champs" />
@@ -63,9 +66,10 @@
 
 		<div
 			use:listEditable={{
-				dragElementsSelector: '.drag-button',
 				items: fields,
 				onChange: handleReorder,
+				dragElementsSelector: '.drag-button',
+				scrollContainersSelector: '.scroll-container',
 			}}
 		>
 			{#each fields as field (field.key)}

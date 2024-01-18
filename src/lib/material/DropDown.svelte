@@ -33,16 +33,15 @@
 	export let tip: TippyInstance | undefined = undefined
 	// By pass dropdown for use in flat mode
 	export let disable = false
+	export let content: HTMLDivElement | undefined = undefined
 	let activator: HTMLDivElement
-
-	let content: HTMLDivElement
 
 	onMount(() => {
 		if (disable) return
 
 		const triggerTarget = activator.querySelector('button, input') || activator
 		const focusables = Array.from(
-			content.querySelectorAll<HTMLInputElement>(
+			content!.querySelectorAll<HTMLInputElement>(
 				'a[href], button, input, textarea, select, details, [tabindex]'
 			)
 		)

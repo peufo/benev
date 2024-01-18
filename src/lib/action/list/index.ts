@@ -1,5 +1,5 @@
 import { createDragHandler } from './handlers'
-import { mouseDragHandler, touchDragHandler } from './utils'
+import { mouseDragTrigger, touchDragTrigger, scrollTrigger } from './trigger'
 
 export const CLASSNAME_LIST = 'editable-list'
 export const CLASSNAME_DRAG_ACTIVE = 'drag-active'
@@ -7,6 +7,7 @@ export const CLASSNAME_PLACEHOLDER = 'item-placholder'
 
 export interface ListEditableOptions<Type = unknown> {
 	onDragStart?: () => void
+	onDragMove?: () => void
 	onDragEnd?: () => void
 	onHover?: (newOrder: number[]) => void
 	onMove?: (indexFrom: number, indexTo: number) => void
@@ -19,7 +20,7 @@ export interface ListEditableOptions<Type = unknown> {
 	onDelete?: (index: number, items?: Type[]) => void
 	/** Only handle reorder from this elements */
 	dragElementsSelector?: string
-	scrollContainers?: HTMLElement[]
+	scrollContainersSelector?: string
 }
 
 export function listEditable<Type = unknown>(
@@ -29,8 +30,9 @@ export function listEditable<Type = unknown>(
 	const { dragElementsSelector } = options
 	node.classList.add(CLASSNAME_LIST)
 
-	let mouseListeners: { detroy: () => void }[] = []
-	let touchListeners: { detroy: () => void }[] = []
+	let mouseListeners: { destroy: () => void }[] = []
+	let touchListeners: { destroy: () => void }[] = []
+	let scrollListeners: { destroy: () => void }[] = []
 	createListeners()
 
 	function createListeners() {
@@ -44,17 +46,22 @@ export function listEditable<Type = unknown>(
 		)
 
 		mouseListeners = dragElements.map((dragElement, index) =>
-			mouseDragHandler(dragElement, dragHandlers[index])
+			mouseDragTrigger(dragElement, dragHandlers[index])
+		)
+		touchListeners = dragElements.map((dragElement, index) =>
+			touchDragTrigger(dragElement, dragHandlers[index])
 		)
 
-		touchListeners = dragElements.map((dragElement, index) =>
-			touchDragHandler(dragElement, dragHandlers[index])
-		)
+		if (options.scrollContainersSelector) {
+			const scrollContainer = document.querySelector(options.scrollContainersSelector)
+			scrollListeners = dragHandlers.map((handler) => scrollTrigger(handler, scrollContainer))
+		}
 	}
 
 	function removeListeners() {
-		mouseListeners.forEach((listener) => listener.detroy())
-		touchListeners.forEach((listener) => listener.detroy())
+		mouseListeners.forEach((listener) => listener.destroy())
+		touchListeners.forEach((listener) => listener.destroy())
+		scrollListeners.forEach((listener) => listener.destroy())
 	}
 
 	return {
