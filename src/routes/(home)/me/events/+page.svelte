@@ -46,8 +46,10 @@
 	{:else}
 		<Placeholder class="gap-3 bg-base-300">
 			<p class="text-center">Tu n'es membre d'aucun évènement pour l'instant.</p>
-			<a href="/events" class="btn btn-ghost"> Trouver un évènement </a>
 		</Placeholder>
+		<div class="text-center">
+			<a href="/events" class="btn btn-primary"> Trouver un évènement </a>
+		</div>
 	{/each}
 </div>
 
