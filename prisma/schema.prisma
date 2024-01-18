@@ -141,6 +141,7 @@ model Event {
   members      Member[]
   memberFields Field[]
   gifts        Gift[]
+  views        View[]
 
   // Settings
   selfRegisterAllowed  Boolean   @default(true)
@@ -208,6 +209,7 @@ model Member {
   subscribes       Subscribe[]
   leaderOf         Team[]
   giftsAllocations GiftAllocation[]
+  views            View[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -283,6 +285,21 @@ model Subscribe {
   updatedAt DateTime @updatedAt
 
   @@unique([memberId, periodId])
+}
+
+model View {
+  id String @id @default(cuid())
+
+  key   String
+  query String @db.Text()
+
+  eventId  String
+  event    Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  authorId String
+  author   Member @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum SubscribeCreatedBy {
