@@ -6,8 +6,8 @@ export const CLASSNAME_DRAG_ACTIVE = 'drag-active'
 export const CLASSNAME_PLACEHOLDER = 'item-placholder'
 
 export interface ListEditableOptions<Type = unknown> {
-	onGrabStart?: () => void
-	onGrabEnd?: () => void
+	onDragStart?: () => void
+	onDragEnd?: () => void
 	onHover?: (newOrder: number[]) => void
 	onMove?: (indexFrom: number, indexTo: number) => void
 	/** Déclencher quand l'ordre change. newOrder est un tableau d'index */
@@ -17,9 +17,9 @@ export interface ListEditableOptions<Type = unknown> {
 	/** Fournir les items pour directement récupérer la liste à jour dans onChange */
 	items?: Type[]
 	onDelete?: (index: number, items?: Type[]) => void
-
 	/** Only handle reorder from this elements */
 	dragElementsSelector?: string
+	scrollContainers?: HTMLElement[]
 }
 
 export function listEditable<Type = unknown>(
@@ -38,11 +38,17 @@ export function listEditable<Type = unknown>(
 		const dragElements = [
 			...(dragElementsSelector ? node.querySelectorAll(dragElementsSelector) : itemElements),
 		] as HTMLElement[]
-		mouseListeners = dragElements.map((dragElement, index) =>
-			mouseDragHandler(dragElement, createDragHandler(node, itemElements[index], options))
+
+		const dragHandlers = dragElements.map((d, index) =>
+			createDragHandler(node, itemElements[index], options)
 		)
+
+		mouseListeners = dragElements.map((dragElement, index) =>
+			mouseDragHandler(dragElement, dragHandlers[index])
+		)
+
 		touchListeners = dragElements.map((dragElement, index) =>
-			touchDragHandler(dragElement, createDragHandler(node, itemElements[index], options))
+			touchDragHandler(dragElement, dragHandlers[index])
 		)
 	}
 

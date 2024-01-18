@@ -98,12 +98,11 @@ export function mouseDragHandler(element: HTMLElement, handlers: DragEvent) {
 	function startHandler(event: MouseEvent) {
 		handlers.start(event)
 		document.addEventListener('mousemove', handlers.move)
-		document.addEventListener('mouseup', endHandler)
+		document.addEventListener('mouseup', endHandler, { once: true })
 	}
 
 	function endHandler() {
 		document.removeEventListener('mousemove', handlers.move)
-		document.removeEventListener('mouseup', endHandler)
 		handlers.end()
 	}
 
