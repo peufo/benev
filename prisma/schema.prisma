@@ -290,6 +290,7 @@ model Subscribe {
 model View {
   id String @id @default(cuid())
 
+  name  String
   key   String
   query String @db.Text()
 
@@ -300,6 +301,8 @@ model View {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([eventId, name, key])
 }
 
 enum SubscribeCreatedBy {

@@ -1,8 +1,8 @@
 import { ensureFieldsWithFilterAreVisibles } from '$lib/material/table/server'
-
 import { getMembers, membersFilterShape } from './getMembers'
+import { prisma } from '$lib/server'
 
-export const load = async ({ url, parent }) => {
+export const load = async ({ url, parent, params: { eventId } }) => {
 	const isFilterKey = (key: string) => key.startsWith('field_') || key in membersFilterShape
 	ensureFieldsWithFilterAreVisibles('members', url, isFilterKey)
 
@@ -14,5 +14,8 @@ export const load = async ({ url, parent }) => {
 		summary,
 		members,
 		stats,
+		views: await prisma.view.findMany({
+			where: { eventId, key: 'members' },
+		}),
 	}
 }
