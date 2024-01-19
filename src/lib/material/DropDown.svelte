@@ -17,9 +17,9 @@
 <script lang="ts">
 	import tippy, { type Props as TippyProps } from 'tippy.js'
 	import { onMount } from 'svelte'
-	import '$lib/material/dropdown.css'
 	import { browser } from '$app/environment'
-	import { navigating } from '$app/stores'
+	import { beforeNavigate } from '$app/navigation'
+	import '$lib/material/dropdown.css'
 
 	export let tippyProps: Partial<TippyProps> = {}
 	let klass = ''
@@ -35,6 +35,8 @@
 	export let disable = false
 	export let content: HTMLDivElement | undefined = undefined
 	let activator: HTMLDivElement
+
+	beforeNavigate(() => hideOnNav && hide())
 
 	onMount(() => {
 		if (disable) return
@@ -69,12 +71,7 @@
 		const lastFocusable = focusables.at(-1)
 		if (hideOnBlur) lastFocusable?.addEventListener('blur', hide)
 
-		const navigatingUnsubscribe = navigating.subscribe((nav) => {
-			if (hideOnNav && !nav) hide()
-		})
-
 		return () => {
-			navigatingUnsubscribe()
 			if (hideOnBlur) lastFocusable?.removeEventListener('blur', hide)
 			if (useSingleton && tip) {
 				tips.splice(tips.indexOf(tip), 1)
