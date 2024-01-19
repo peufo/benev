@@ -52,4 +52,16 @@ export const actions = {
 			})
 		)
 	},
+	set_isValidedByEvent: async ({ request, locals, params: { eventId, memberId } }) => {
+		await permission.leader(eventId, locals)
+		const { err, data } = await parseFormData(request, { isValidedByEvent: z.boolean() })
+		if (err) return err
+
+		return tryOrFail(() =>
+			prisma.member.update({
+				where: { id: memberId },
+				data: { ...data },
+			})
+		)
+	},
 }

@@ -8,7 +8,8 @@
 	import { Teams, TeamsActions } from '$lib/team'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import MemberAccount from './MemberAccount.svelte'
-	import SetAdminForm from './SetAdminForm.svelte'
+	import MemberIsAdminForm from './MemberIsAdminForm.svelte'
+	import MemberIsValidedByEventForm from './MemberIsValidedByEventForm.svelte'
 	import {
 		MemberProfileStatus,
 		MemberAbsences,
@@ -43,10 +44,15 @@
 					<DropDown hideOnBlur tippyProps={{ arrow: true }}>
 						<button slot="activator" class="btn btn-sm ml-2">
 							<MemberRole roles={data.memberProfile.roles} mode="contents" />
+							{#if data.memberProfile.isValidedByEvent}
+								validé
+							{/if}
 						</button>
 
+						<MemberIsValidedByEventForm memberProfile={data.memberProfile} />
+
 						{#if data.member?.roles.includes('owner')}
-							<SetAdminForm memberProfile={data.memberProfile} />
+							<MemberIsAdminForm memberProfile={data.memberProfile} />
 						{/if}
 
 						<MemberDeleteForm

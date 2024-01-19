@@ -57,7 +57,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 
 			const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
 			const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
-			if (!isCreatorEdition && !isSubscriberEdition) error(403);
+			if (!isCreatorEdition && !isSubscriberEdition) error(403)
 
 			// Check author permission
 			const isLeaderAction = (_subscribe.createdBy === 'leader') === isCreatorEdition
@@ -65,23 +65,23 @@ const setSubscribState: (state: SubscribeState) => Action =
 			if (isLeaderAction) {
 				author = await permission.leader(eventId, locals)
 				const isInLeaderTeams = author.leaderOf.find(({ id }) => id === _subscribe.period.teamId)
-				if (!author.roles.includes('admin') && !isInLeaderTeams) error(403);
+				if (!author.roles.includes('admin') && !isInLeaderTeams) error(403)
 			} else {
 				author = await permission.member(eventId, locals)
-				if (author.id !== _subscribe.memberId) error(403);
+				if (author.id !== _subscribe.memberId) error(403)
 			}
 
 			if (state === 'accepted' || state === 'request') {
 				// Check if the period is already complet
 				const { subscribes, maxSubscribe } = _subscribe.period
 				if (maxSubscribe <= subscribes.length) {
-					error(403, 'Sorry, this period is already complet');
+					error(403, 'Sorry, this period is already complet')
 				}
 
 				// Check if member is free in this period
 				const memberPeriods = _subscribe.member.subscribes.map((sub) => sub.period)
 				if (!isFreeRange(_subscribe.period, memberPeriods)) {
-					error(403, `Already busy during this period`);
+					error(403, `Already busy during this period`)
 				}
 			}
 
@@ -103,27 +103,35 @@ const setSubscribState: (state: SubscribeState) => Action =
 				},
 			})
 
+			// Automatique member validation
+			if (isLeaderAction && !subscribe.member.isValidedByEvent) {
+				await prisma.member.update({
+					where: { id: subscribe.memberId },
+					data: { isValidedByEvent: true },
+				})
+			}
+
 			const toMember = subscribe.member.user.wantsNotification ? [subscribe.member.user.email] : []
 			const toLeaders = subscribe.period.team.leaders.map((l) => l.user.email)
-			const to = isLeaderAction ? toMember : toLeaders
-			const replyTo = isLeaderAction ? toLeaders : toMember
+			const emailOptions = {
+				from: subscribe.period.team.event.name,
+				to: isLeaderAction ? toMember : toLeaders,
+				replyTo: isLeaderAction ? toLeaders : toMember,
+			}
 
-			if (to.length) {
+			if (emailOptions.to.length) {
 				switch (state) {
 					case 'cancelled':
 						await sendEmailTemplate(EmailSubscribeStateCancelled, {
-							from: subscribe.period.team.event.name,
-							to,
-							replyTo,
+							...emailOptions,
 							subject: `Inscription annulée`,
 							props: { subscribe },
 						})
 						break
+
 					case 'request':
 						await sendEmailTemplate(EmailNewSubscribe, {
-							from: subscribe.period.team.event.name,
-							to,
-							replyTo,
+							...emailOptions,
 							subject: 'Nouvelle inscription',
 							props: { subscribe, author: author.user },
 						})
@@ -131,9 +139,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 
 					default:
 						await sendEmailTemplate(EmailSubscribeState, {
-							from: subscribe.period.team.event.name,
-							to,
-							replyTo,
+							...emailOptions,
 							subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'déclinée'}`,
 							props: { subscribe },
 						})
