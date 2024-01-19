@@ -67,7 +67,7 @@
 		{/if}
 
 		<li>
-			<a href={$page.url.pathname} class="menu-item pr-1" class:active={!query}>
+			<a href={$page.url.pathname} class="menu-item" class:active={!query}>
 				<span class="grow">Vue simple</span>
 			</a>
 		</li>
