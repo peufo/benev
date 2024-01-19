@@ -49,6 +49,23 @@
 	</button>
 
 	<ul class="flex flex-col gap-1">
+		{#if isNewView}
+			<li>
+				<button
+					type="button"
+					class="menu-item w-full pr-[6px]"
+					on:click={() => {
+						selectedView = undefined
+						dialog.showModal()
+					}}
+				>
+					<span>Ajouter la nouvelle vue</span>
+					<Icon path={mdiPlus} class="opacity-80 ml-auto" size={21} />
+				</button>
+				<hr class="my-1" />
+			</li>
+		{/if}
+
 		<li>
 			<a href={$page.url.pathname} class="menu-item pr-1" class:active={!query}>
 				<span class="grow">Vue simple</span>
@@ -81,23 +98,6 @@
 				</a>
 			</li>
 		{/each}
-
-		{#if isNewView}
-			<li>
-				<hr class="my-1" />
-				<button
-					type="button"
-					class="menu-item w-full pr-[6px]"
-					on:click={() => {
-						selectedView = undefined
-						dialog.showModal()
-					}}
-				>
-					<span>Ajouter la nouvelle vue</span>
-					<Icon path={mdiPlus} class="opacity-80 ml-auto" size={21} />
-				</button>
-			</li>
-		{/if}
 	</ul>
 </DropDown>
 
@@ -127,7 +127,7 @@
 			value={selectedView?.name || ''}
 		/>
 
-		<div class="flex flex-row-reverse mt-2">
+		<div class="flex flex-row-reverse mt-2 gap-2">
 			<button class="btn"> Valider </button>
 
 			<button formaction="{$eventPath}/admin?/delete_view" class="btn btn-ghost text-error">
