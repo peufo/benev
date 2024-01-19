@@ -12,13 +12,15 @@ export function parseOptions(options: Options): Option[] {
 		options = jsonParse(options, [])
 	}
 	if (Array.isArray(options)) {
-		return options.map((opt) => {
+		return options.filter(Boolean).map((opt) => {
 			if (typeof opt === 'string') return { value: opt, label: opt }
 			return opt
 		})
 	}
-	return Object.entries(options).map(([value, opt]) => {
-		if (typeof opt === 'string') return { value, label: opt }
-		return { value, ...opt }
-	})
+	return Object.entries(options)
+		.filter(([value]) => !!value)
+		.map(([value, opt]) => {
+			if (typeof opt === 'string') return { value, label: opt }
+			return { value, ...opt }
+		})
 }
