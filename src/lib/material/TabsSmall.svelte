@@ -1,18 +1,27 @@
 <script lang="ts">
-	import { Icon, parseOptions, type Options } from '$lib/material'
+	import { Icon, parseOptions, type Options, type Option } from '$lib/material'
 	import { urlParam } from '$lib/store'
+	import { page } from '$app/stores'
 
 	export let options: Options
 	export let showLabel = false
 	export let key: string
 	export let defaultValue: string | undefined = undefined
-	$: _options = parseOptions(options)
+
+	const _options = parseOptions(options).map((option) => ({
+		...option,
+		isActive: getIsActive(option),
+	}))
+
+	function getIsActive(option: Option) {
+		if ($page.url.searchParams.get(key) === option.value) return true
+		if (!$page.url.searchParams.has(key)) return option.value === defaultValue
+		return false
+	}
 </script>
 
 <div class="flex items-center rounded-lg gap-[3px] p-1 bg-base-200">
-	{#each _options as { value, label, icon }}
-		{@const isActive =
-			$urlParam.hasValue(key, value) || (!$urlParam.has(key) && value === defaultValue)}
+	{#each _options as { value, label, icon, isActive }}
 		<a
 			href={$urlParam.with({ [key]: value })}
 			data-sveltekit-noscroll
