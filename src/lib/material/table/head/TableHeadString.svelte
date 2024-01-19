@@ -2,11 +2,12 @@
 	import type { Instance as TippyInstance } from 'tippy.js'
 	import { mdiMagnify } from '@mdi/js'
 	import { DropDown, Icon, InputSearch, type TableField } from '$lib/material'
+	import { page } from '$app/stores'
 
 	export let field: TableField
 
 	let tip: TippyInstance
-	let searchValue = ''
+	let searchValue = $page.url.searchParams.get(field.key) || ''
 </script>
 
 <th class="p-1">
