@@ -18,20 +18,24 @@
 		},
 	})
 
-	let query = ''
-	let selectedView: View | undefined = undefined
-	let isNewView = false
+	let query = getQuery($page.url)
+	let selectedView = views.find((v) => v.query === query)
+	let isNewView = !!query && !selectedView
 
 	onMount(() =>
 		page.subscribe(({ url }) => {
-			const searchParam = new URLSearchParams(url.searchParams)
-			searchParam.delete('skip')
-			searchParam.delete('take')
-			query = searchParam.toString()
+			query = getQuery(url)
 			selectedView = views.find((v) => v.query === query)
 			isNewView = !!query && !selectedView
 		})
 	)
+
+	function getQuery({ searchParams }: URL) {
+		const searchParam = new URLSearchParams(searchParams)
+		searchParam.delete('skip')
+		searchParam.delete('take')
+		return searchParam.toString()
+	}
 </script>
 
 <DropDown>
