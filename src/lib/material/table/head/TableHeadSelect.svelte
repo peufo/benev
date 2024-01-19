@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import { jsonParse } from '$lib/jsonParse'
 	import { type Options, type TableField, parseOptions, DropDown, Icon } from '$lib/material'
 	import { urlParam } from '$lib/store'
@@ -7,30 +8,32 @@
 	export let options: Options
 	export let multiSelect = false
 
-	let select: {
-		getActive(value: string): boolean
-		getHref(value: string): string
-	}
+	let select = createSelect($page.url)
+	page.subscribe(({ url }) => (select = createSelect(url)))
 
-	urlParam.subscribe((params) => {
-		const selection = params.get(field.key)
-		const selections = jsonParse<string[]>(params.get(field.key), [])
-		select = {
+	function createSelect({ searchParams }: URL) {
+		const selection = searchParams.get(field.key)
+		const selections = jsonParse<string[]>(searchParams.get(field.key), [])
+		return {
 			getActive(value: string) {
 				if (!multiSelect) return selection === value
 				return selections.includes(value)
 			},
 			getHref(value: string) {
-				if (!multiSelect) return params.toggle({ [field.key]: value }, 'skip', 'take')
+				if (!multiSelect) return $urlParam.toggle({ [field.key]: value }, 'skip', 'take')
 				if (selections.includes(value)) {
 					const newSelections = selections.filter((v) => v !== value)
-					if (!newSelections.length) return params.without(field.key)
-					return params.with({ [field.key]: JSON.stringify(newSelections) }, 'skip', 'take')
+					if (!newSelections.length) return $urlParam.without(field.key)
+					return $urlParam.with({ [field.key]: JSON.stringify(newSelections) }, 'skip', 'take')
 				}
-				return params.with({ [field.key]: JSON.stringify([...selections, value]) }, 'skip', 'take')
+				return $urlParam.with(
+					{ [field.key]: JSON.stringify([...selections, value]) },
+					'skip',
+					'take'
+				)
 			},
 		}
-	})
+	}
 
 	$: _options = parseOptions(options)
 		.filter(Boolean)
