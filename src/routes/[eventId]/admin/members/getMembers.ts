@@ -106,7 +106,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	if (data.role === 'leader') {
 		filters.push({ leaderOf: { some: { eventId } } })
 	}
-	if (data.role === 'member') {
+	if (data.role === 'member' || subscribesFilters.length) {
 		subscribesFilters.push({ state: { in: ['request', 'accepted'] } })
 	}
 
@@ -166,7 +166,9 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 				...(filters.length && { AND: filters }),
 				...(subscribesFilters.length && {
 					subscribes: {
-						some: { AND: subscribesFilters },
+						some: {
+							AND: subscribesFilters,
+						},
 					},
 				}),
 			},
