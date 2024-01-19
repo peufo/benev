@@ -7,15 +7,23 @@
 	import { debounce } from '$lib/debounce'
 	import type { TableField } from '../field'
 	import { jsonParse } from '$lib/jsonParse'
+	import { page } from '$app/stores'
+	import { onMount } from 'svelte'
 
 	export let field: TableField
 
 	let tip: TippyInstance
+	type Range = { min: string | undefined; max: string | undefined }
 
-	let { min, max } = jsonParse<{ min: string | undefined; max: string | undefined }>(
-		$urlParam.get(field.key),
-		{ min: undefined, max: undefined }
-	)
+	let { min, max } = initRange($page.url)
+	onMount(() => page.subscribe(({ url }) => ({ min, max } = initRange(url))))
+
+	function initRange({ searchParams }: URL) {
+		return jsonParse<Range>(searchParams.get(field.key), {
+			min: undefined,
+			max: undefined,
+		})
+	}
 
 	const udpateUrl = debounce(() => {
 		if (isDefined(min) || isDefined(max)) {
