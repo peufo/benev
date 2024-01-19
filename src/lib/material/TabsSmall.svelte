@@ -2,6 +2,7 @@
 	import { Icon, parseOptions, type Options, type Option } from '$lib/material'
 	import { urlParam } from '$lib/store'
 	import { page } from '$app/stores'
+	import { onMount } from 'svelte'
 
 	export let options: Options
 	export let showLabel = false
@@ -9,9 +10,11 @@
 	export let defaultValue: string | undefined = undefined
 
 	let _options = getOptions($page.url)
-	page.subscribe(({ url }) => {
-		_options = getOptions(url)
-	})
+	onMount(() =>
+		page.subscribe(({ url }) => {
+			_options = getOptions(url)
+		})
+	)
 
 	function getOptions(url: URL) {
 		return parseOptions(options).map((option) => ({
