@@ -8,14 +8,20 @@
 	export let key: string
 	export let defaultValue: string | undefined = undefined
 
-	const _options = parseOptions(options).map((option) => ({
-		...option,
-		isActive: getIsActive(option),
-	}))
+	let _options = getOptions($page.url)
+	page.subscribe(({ url }) => {
+		_options = getOptions(url)
+	})
 
-	function getIsActive(option: Option) {
-		if ($page.url.searchParams.get(key) === option.value) return true
-		if (!$page.url.searchParams.has(key)) return option.value === defaultValue
+	function getOptions(url: URL) {
+		return parseOptions(options).map((option) => ({
+			...option,
+			isActive: getIsActive(option, url),
+		}))
+	}
+	function getIsActive(option: Option, { searchParams }: URL) {
+		if (searchParams.get(key) === option.value) return true
+		if (!searchParams.has(key)) return option.value === defaultValue
 		return false
 	}
 </script>
