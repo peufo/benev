@@ -3,7 +3,7 @@
 	import type { Field } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
-	import { InputSearch, Pagination, Table, TabsSmall, ViewSelector } from '$lib/material'
+	import { InputSearch, Pagination, Table, TabsSmall, TableViewSelect } from '$lib/material'
 	import { component } from '$lib/utils'
 	import InviteDialog from '$lib/InviteDialog.svelte'
 	import { MemberContact, MemberFieldDialog } from '$lib/member'
@@ -37,10 +37,10 @@
 	<div class="flex gap-x-2 gap-y-2 flex-wrap">
 		<InputSearch class="max-w-[175px]" />
 		<MembersFilter />
-		<ViewSelector key="members" views={data.views} />
 
 		<div class="grow" />
 
+		<TableViewSelect key="members" views={data.views} />
 		<TabsSmall
 			key="summary"
 			defaultValue="false"

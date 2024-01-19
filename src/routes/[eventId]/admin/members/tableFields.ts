@@ -26,13 +26,6 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 			locked: true,
 		},
 		{
-			key: 'subscribes_count',
-			label: 'Inscriptions (nombre)',
-			visible: true,
-			getCell: (m) => m.subscribes.length,
-			head: tableheadComponent('number', {}),
-		},
-		{
 			key: 'subscribes_teams',
 			label: 'Inscriptions (secteur)',
 			visible: true,
@@ -45,6 +38,12 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 			}),
 		},
 		{
+			key: 'subscribes_count',
+			label: 'Inscriptions (nombre)',
+			getCell: (m) => m.subscribes.length,
+			head: tableheadComponent('number', {}),
+		},
+		{
 			key: 'subscribes_range',
 			label: 'Inscriptions (période)',
 			getCell: (m) => {
@@ -53,7 +52,6 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 				const end = Math.max(...m.subscribes.map((s) => s.period.end.getTime()))
 				return formatRange({ start, end })
 			},
-			visible: true,
 			head: tableheadComponent('date', {}),
 		},
 		{
@@ -67,7 +65,6 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 			key: 'leaderOf',
 			label: 'Secteurs à charges',
 			getCell: (m) => m.leaderOf.map(({ name }) => name),
-			visible: true,
 			head: tableheadComponent('multiselect', {
 				options: teams.map((team) => ({ label: team.name, value: team.id })),
 			}),

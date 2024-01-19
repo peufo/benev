@@ -32,8 +32,7 @@ export function syncFieldsWithParams(tablekey: string, fields: TableField[]) {
 
 	const fieldsVisible = jsonParse<string[]>(searchParams.get(KEY_FIELDS_VISIBLE), [])
 	const fieldsHidden = jsonParse<string[]>(searchParams.get(KEY_FIELDS_HIDDEN), [])
-	const fieldsOrderDefault = fields.map((f) => f.key)
-	const fieldsOrder = jsonParse(searchParams.get(KEY_FIELDS_ORDER), fieldsOrderDefault)
+	const fieldsOrder = jsonParse(searchParams.get(KEY_FIELDS_ORDER), [])
 
 	// Init correct visible prop
 	const _fields = fields.map((field) => ({

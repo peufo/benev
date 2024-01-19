@@ -32,10 +32,12 @@
 		}
 	})
 
-	$: _options = parseOptions(options).map((option) => ({
-		...option,
-		active: select.getActive(option.value),
-	}))
+	$: _options = parseOptions(options)
+		.filter(Boolean)
+		.map((option) => ({
+			...option,
+			active: select.getActive(option.value),
+		}))
 	$: _optionsActive = _options.filter((option) => option.active)
 </script>
 
