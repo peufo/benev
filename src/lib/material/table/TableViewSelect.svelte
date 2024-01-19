@@ -48,7 +48,7 @@
 		<Icon path={mdiChevronDown} size={20} class="opacity-90 translate-x-1 translate-y-[1px]" />
 	</button>
 
-	<ul>
+	<ul class="flex flex-col gap-1">
 		<li>
 			<a href={$page.url.pathname} class="menu-item pr-1" class:active={!query}>
 				<span class="grow">Vue simple</span>
@@ -59,8 +59,7 @@
 			<li>
 				<a
 					href="{$page.url.pathname}?{view.query}"
-					class="menu-item group"
-					class:pr-1={isNewView}
+					class="menu-item pr-1 group"
 					class:active={view.id === selectedView?.id}
 				>
 					<span class="grow">{view.name}</span>
@@ -84,8 +83,8 @@
 		{/each}
 
 		{#if isNewView}
-			<hr class="my-1" />
 			<li>
+				<hr class="my-1" />
 				<button
 					type="button"
 					class="menu-item w-full pr-[6px]"
