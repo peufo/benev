@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { CardBasic } from '$lib/material'
+	import { mdiChevronDown } from '@mdi/js'
+	import { CardBasic, Icon } from '$lib/material'
+	import '$lib/style/animate.css'
+
+	export let title = 'Les possibilités'
+	const titleLength = title.length
+
+	const ANIMATION_STEP = 40
+	const ANIMATION_DELAY = 3000
 
 	type Feature = {
 		name: string
@@ -15,7 +23,7 @@
 		},
 		{
 			name: 'Base de donnée des membres',
-			description: 'Définit les données que tu souhaites récolter ou renseigner.',
+			description: 'Définit librement les informations que tu souhaites récolter ou renseigner.',
 		},
 		{
 			name: "Processus d'adhésion flexible",
@@ -52,10 +60,43 @@
 	]
 </script>
 
-<section class="my-20 max-w-7xl mx-auto">
-	<h2 class="title text-2xl text-center mb-10">Les possibilités</h2>
+<section class="mt-8 mb-10 max-w-7xl mx-auto">
+	<div class="flex justify-center gap-4">
+		<Icon
+			path={mdiChevronDown}
+			size={30}
+			class="opacity-60 animate__pulse"
+			style="
+				--animate-delay: {ANIMATION_DELAY}ms;
+				--animate-rotate: {(titleLength / 2) * -1.5}deg;
+			"
+		/>
+		<h2 class="title text-2xl">
+			{#each title.split('') as char, index}
+				<span
+					class="inline-block animate__pulse"
+					class:mr-2={char === ' '}
+					style="
+						--animate-delay: {ANIMATION_DELAY + ANIMATION_STEP * (index + 1)}ms;
+						--animate-rotate: {((titleLength / 2) - index) * -1.5}deg;
+					"
+				>
+					{char}
+				</span>
+			{/each}
+		</h2>
+		<Icon
+			path={mdiChevronDown}
+			size={30}
+			class="opacity-60 animate__pulse"
+			style="
+				--animate-delay: {ANIMATION_DELAY + (titleLength + 2) * ANIMATION_STEP}ms;
+				--animate-rotate: {(titleLength / 2) * 1.5}deg;
+			"
+		/>
+	</div>
 	<div
-		class="grid gap-4 items-start overflow-auto"
+		class="grid gap-4 items-start overflow-auto mt-12"
 		style:grid-template-columns="repeat(auto-fill, minmax(min(20rem, 100%), 1fr)"
 	>
 		{#each features as feat}
