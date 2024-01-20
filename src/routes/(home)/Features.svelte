@@ -11,7 +11,7 @@
 		{
 			name: 'Espace dédié',
 			description:
-				'Crée un site pour centraliser la communication et la planification de ton évènement.',
+				'Créer un site pour centraliser la communication et la planification de ton évènement.',
 		},
 		{
 			name: 'Base de donnée des membres',
@@ -40,7 +40,7 @@
 		{
 			name: 'Charte des bénévole',
 			description:
-				'Définit une charte à laquelle les bénévoles devront adhèrer lors de leur inscription.',
+				'Définit une charte à laquelle les bénévoles devront adhérer lors de leur inscription.',
 			comingSoon: true,
 		},
 		{
