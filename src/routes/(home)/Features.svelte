@@ -23,57 +23,57 @@
 		name: string
 		icon: string
 		description: string
-		comingSoon?: boolean
+		comingSoon?: string
 	}
 
 	const features: Feature[] = [
 		{
 			name: 'Espace dédié',
+			icon: mdiWeb,
 			description:
 				'Créer un site pour centraliser la communication et la planification de ton évènement.',
-			icon: mdiWeb,
 		},
 		{
 			name: 'Base de donnée des membres',
-			description: 'Définit librement les informations que tu souhaites récolter ou renseigner.',
 			icon: mdiDatabaseOutline,
+			description: 'Définit librement les informations que tu souhaites récolter ou renseigner.',
 		},
 		{
 			name: "Processus d'adhésion flexible",
+			icon: mdiLogin,
 			description:
 				"Automatise ta planification en autorisant l'inscription autonome des membres toutes en gardant le contrôle sur les secteurs sensibles.",
-			icon: mdiLogin,
 		},
 		{
 			name: "Travail d'équipe",
+			icon: mdiAccountGroupOutline,
 			description:
 				"Entoure-toi d'administrateurs et de responsables de secteurs pour t'aider dans la gestion.",
-			icon: mdiAccountGroupOutline,
 		},
 		{
 			name: 'Documents opérationnels',
-			description: "Visualise ou exporte les vues essentiels au bon déroulement de l'organisation.",
 			icon: mdiEyeOutline,
-		},
-		{
-			name: 'Communication',
-			description: 'Personnalise tes notifications par email et édite des publipostage.',
-			comingSoon: true,
-			icon: mdiEmailOutline,
+			description: "Visualise ou exporte les vues essentiels au bon déroulement de l'organisation.",
 		},
 		{
 			name: 'Charte des bénévole',
+			icon: mdiLicense,
 			description:
 				'Définit une charte à laquelle les bénévoles devront adhérer lors de leur inscription.',
-			comingSoon: true,
-			icon: mdiLicense,
+			comingSoon: 'Disponible en Février 2024',
 		},
 		{
 			name: 'Système de compensation',
+			icon: mdiGiftOutline,
 			description:
 				"Définit des articles et les règles d'éligibilitées pour générer des liste d'attribution.",
-			comingSoon: true,
-			icon: mdiGiftOutline,
+			comingSoon: 'Disponible en Février 2024',
+		},
+		{
+			name: 'Communication',
+			icon: mdiEmailOutline,
+			description: 'Personnalise tes notifications par email et édite des publipostage.',
+			comingSoon: 'Disponible en Mars 2024',
 		},
 	]
 </script>
@@ -130,7 +130,7 @@
 					{feat.description}
 				</p>
 				{#if feat.comingSoon}
-					<span class="badge bg-base-200 mt-3">Bientôt disponible</span>
+					<span class="badge bg-base-200 mt-3">{feat.comingSoon}</span>
 				{/if}
 			</CardBasic>
 		{/each}
