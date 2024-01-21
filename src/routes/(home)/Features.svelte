@@ -1,5 +1,15 @@
 <script lang="ts">
-	import { mdiChevronDown } from '@mdi/js'
+	import {
+		mdiAccountGroupOutline,
+		mdiChevronDown,
+		mdiDatabaseOutline,
+		mdiEmailOutline,
+		mdiEyeOutline,
+		mdiGiftOutline,
+		mdiLicense,
+		mdiLogin,
+		mdiWeb,
+	} from '@mdi/js'
 	import { CardBasic, Icon } from '$lib/material'
 	import '$lib/style/animate.css'
 
@@ -7,10 +17,11 @@
 	const titleLength = title.length
 
 	const ANIMATION_STEP = 40
-	const ANIMATION_DELAY = 3000
+	const ANIMATION_DELAY = 2500
 
 	type Feature = {
 		name: string
+		icon: string
 		description: string
 		comingSoon?: boolean
 	}
@@ -20,42 +31,49 @@
 			name: 'Espace dédié',
 			description:
 				'Créer un site pour centraliser la communication et la planification de ton évènement.',
+			icon: mdiWeb,
 		},
 		{
 			name: 'Base de donnée des membres',
 			description: 'Définit librement les informations que tu souhaites récolter ou renseigner.',
+			icon: mdiDatabaseOutline,
 		},
 		{
 			name: "Processus d'adhésion flexible",
 			description:
 				"Automatise ta planification en autorisant l'inscription autonome des membres toutes en gardant le contrôle sur les secteurs sensibles.",
+			icon: mdiLogin,
 		},
 		{
 			name: "Travail d'équipe",
 			description:
 				"Entoure-toi d'administrateurs et de responsables de secteurs pour t'aider dans la gestion.",
+			icon: mdiAccountGroupOutline,
 		},
 		{
 			name: 'Documents opérationnels',
-			description:
-				"Visualise ou exporte les documents essentiels au bon déroulement de l'organisation.",
+			description: "Visualise ou exporte les vues essentiels au bon déroulement de l'organisation.",
+			icon: mdiEyeOutline,
 		},
 		{
 			name: 'Communication',
 			description: 'Personnalise tes notifications par email et édite des publipostage.',
 			comingSoon: true,
+			icon: mdiEmailOutline,
 		},
 		{
 			name: 'Charte des bénévole',
 			description:
 				'Définit une charte à laquelle les bénévoles devront adhérer lors de leur inscription.',
 			comingSoon: true,
+			icon: mdiLicense,
 		},
 		{
 			name: 'Système de compensation',
 			description:
 				"Définit des articles et les règles d'éligibilitées pour générer des liste d'attribution.",
 			comingSoon: true,
+			icon: mdiGiftOutline,
 		},
 	]
 </script>
@@ -78,7 +96,7 @@
 					class:mr-2={char === ' '}
 					style="
 						--animate-delay: {ANIMATION_DELAY + ANIMATION_STEP * (index + 1)}ms;
-						--animate-rotate: {((titleLength / 2) - index) * -1.5}deg;
+						--animate-rotate: {(titleLength / 2 - index) * -1.5}deg;
 					"
 				>
 					{char}
@@ -96,23 +114,24 @@
 		/>
 	</div>
 	<div
-		class="grid gap-4 items-start overflow-auto mt-12"
+		class="grid gap-4 items-start overflow-auto mt-14"
 		style:grid-template-columns="repeat(auto-fill, minmax(min(20rem, 100%), 1fr)"
 	>
 		{#each features as feat}
-			<CardBasic class="shadow">
-				<div class="flex flex-wrap gap-2 items-center pb-2">
+			<CardBasic class="shadow p-5">
+				<div class="flex flex-wrap gap-4 items-center">
+					<Icon path={feat.icon} size={30}  class="opacity-70 p-1 border rounded bg-base-200"/>
 					<h2 class="font-medium">
 						{feat.name}
 					</h2>
 					<div class="grow" />
-					{#if feat.comingSoon}
-						<span class="badge bg-base-200">Bientôt disponible</span>
-					{/if}
 				</div>
-				<p class="">
+				<p class="mt-3 opacity-80">
 					{feat.description}
 				</p>
+				{#if feat.comingSoon}
+					<span class="badge bg-base-200 mt-3">Bientôt disponible</span>
+				{/if}
 			</CardBasic>
 		{/each}
 	</div>
