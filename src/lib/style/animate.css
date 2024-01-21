@@ -1,24 +1,22 @@
 .animate__pulse {
 	transform-origin: center bottom;
 	animation-name: pulse;
-	animation-delay: 1s;
 	animation-delay: var(--animate-delay);
-	animation-duration: 800ms;
+	animation-duration: 5000ms;
 	animation-fill-mode: both;
 	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
 	--animate-rotate: 0deg;
 }
 
 @keyframes pulse {
-	from {
-		transform: scale3d(1, 1, 1) translateY(0px) rotate(0deg);
-	}
-
-	60% {
-		transform: scale3d(1.05, 1.05, 1.05) translateY(-10px) rotate(var(--animate-rotate));
-	}
-
+	from,
+	85%,
 	to {
 		transform: scale3d(1, 1, 1) translateY(0px) rotate(0deg);
+	}
+
+	92% {
+		transform: scale3d(1.05, 1.05, 1.05) translateY(-10px) rotate(var(--animate-rotate));
 	}
 }

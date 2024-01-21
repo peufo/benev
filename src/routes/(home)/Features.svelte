@@ -17,7 +17,6 @@
 	const titleLength = title.length
 
 	const ANIMATION_STEP = 40
-	const ANIMATION_DELAY = 2500
 
 	type Feature = {
 		name: string
@@ -85,8 +84,7 @@
 			size={30}
 			class="opacity-60 animate__pulse"
 			style="
-				--animate-delay: {ANIMATION_DELAY}ms;
-				--animate-rotate: {(titleLength / 2) * -1.5}deg;
+				--animate-rotate: {(titleLength / 2) * -2}deg;
 			"
 		/>
 		<h2 class="title text-2xl">
@@ -95,8 +93,8 @@
 					class="inline-block animate__pulse"
 					class:mr-2={char === ' '}
 					style="
-						--animate-delay: {ANIMATION_DELAY + ANIMATION_STEP * (index + 1)}ms;
-						--animate-rotate: {(titleLength / 2 - index) * -1.5}deg;
+						--animate-delay: {ANIMATION_STEP * (index + 1)}ms;
+						--animate-rotate: {(titleLength / 2 - index) * -2}deg;
 					"
 				>
 					{char}
@@ -108,8 +106,8 @@
 			size={30}
 			class="opacity-60 animate__pulse"
 			style="
-				--animate-delay: {ANIMATION_DELAY + (titleLength + 2) * ANIMATION_STEP}ms;
-				--animate-rotate: {(titleLength / 2) * 1.5}deg;
+				--animate-delay: {(titleLength + 2) * ANIMATION_STEP}ms;
+				--animate-rotate: {(titleLength / 2) * 2}deg;
 			"
 		/>
 	</div>
