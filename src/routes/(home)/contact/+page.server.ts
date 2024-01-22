@@ -21,7 +21,7 @@ export const load = async ({ url, locals }) => {
 export const actions = {
 	new_message: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
-		if (!session) error(403);
+		if (!session) error(403)
 		const { data, err } = await parseFormData(request, {
 			subject: z.string().min(3).max(252),
 			content: z.string().min(10).max(10_000),
@@ -51,7 +51,7 @@ export const actions = {
 						title: `Prise de contact`,
 						subtitle: data.subject,
 						content: `
-              <p>On a bien reçu ta demande et on y répondra aussi vite que possible.</p>
+              <p>Nous avons bien reçu ta demande et nous y répondra aussi vite que possible.</p>
               <p style="border: solid 1px grey; border-radius: 4px; padding: 14px;">
                 ${data.content.replaceAll('\n', '<br/>')}
               </p>

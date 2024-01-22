@@ -68,7 +68,8 @@ export const features: Feature[] = [
 		name: 'Tableau de bord bénévole',
 		icon: mdiViewDashboardOutline,
 		src: dashboardPng,
-		description: 'Chaque bénévole peut retrouve en tout temps ses informations.',
+		description:
+			'Chaque bénévole peut retrouver en tout temps les informations lié à sa participation.',
 	},
 	{
 		name: 'Charte des bénévole',
