@@ -4,7 +4,6 @@
 
 	import { features } from '$lib/features'
 	import { domain } from '.'
-	import { Icon } from '$lib/material'
 
 	import githubPng from '$lib/assets/icons/github.png'
 	import linkedinPng from '$lib/assets/icons/linkedin.png'
@@ -83,7 +82,7 @@
 				<tr>
 					<td style="vertical-align: middle; width: 80px;">
 						<img
-							src="{domain}{jonas}"
+							src={jonas}
 							alt="Portrait de Jonas Voisard"
 							style="height: 65px; width: 65px; border-radius: 8px;"
 						/>

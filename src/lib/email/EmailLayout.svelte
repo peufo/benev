@@ -43,11 +43,7 @@
 												<td align="center">
 													<div>
 														{#if showLogo}
-															<img
-																src="{domain}{logo}"
-																alt="Logo de benev.io"
-																style="height: 100px;"
-															/>
+															<img src={logo} alt="Logo de benev.io" style="height: 100px;" />
 														{/if}
 
 														<h1
@@ -84,7 +80,7 @@
 											<tbody>
 												<tr>
 													<td>
-														<img src="{domain}{logo}" alt="Logo de Benev.io" style="height: 50px" />
+														<img src={logo} alt="Logo de Benev.io" style="height: 50px" />
 													</td>
 													<td style="vertical-align: top;">
 														<p
