@@ -27,9 +27,9 @@
 	<table width="100%" style="border-collapse: separate; " cellspacing="0" cellpadding="0">
 		<tbody>
 			{#each Array(5).fill(0) as row, index}
-				<tr style="padding-top: 1rem;">
+				<tr>
 					{#each features.slice(index * 2, (index + 1) * 2) as { name, src }}
-						<td style="padding: 0.2rem 0.2rem;" align="right">
+						<td style="padding: 1.2rem 0.2rem;" align="right">
 							<img
 								src="{domain}{src}"
 								alt="Icon de fonctionalitée"
@@ -72,8 +72,8 @@
 						</div>
 					</td>
 				</tr>
-				<tr style="padding-top: 1rem;">
-					<td colspan="2">
+				<tr>
+					<td colspan="2" style="padding: 1.2rem 0;">
 						<a href="https://github.com/peufo" title="Github de Jonas Voisard">
 							<img
 								src="{domain}/icons/github.png"
