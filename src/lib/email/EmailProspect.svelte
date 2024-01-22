@@ -4,8 +4,12 @@
 
 	import { features } from '$lib/features'
 	import { domain } from '.'
-	import { mdiEmailOutline, mdiGithub, mdiLinkedin, mdiWhatsapp } from '@mdi/js'
 	import { Icon } from '$lib/material'
+
+	import githubPng from '$lib/assets/icons/github.png'
+	import linkedinPng from '$lib/assets/icons/linkedin.png'
+	import whatsappPng from '$lib/assets/icons/whatsapp.png'
+	import emailPng from '$lib/assets/icons/email-outline.png'
 </script>
 
 <EmailLayout showLogo title="benev.io" subtitle="Votre nouvelle plateforme de gestion de bénévole">
@@ -31,25 +35,37 @@
 	>
 		<tbody>
 			<tr>
-				{#each features.slice(0, 3) as { name, icon }}
-					<td colspan="2" style="text-align: center; padding-bottom: 1rem; width: 33%;">
-						<Icon path={icon} style="opacity: 0.6; margin-bottom: 0.8rem; display: block;" />
+				{#each features.slice(0, 3) as { name, src }}
+					<td style="text-align: center; padding-bottom: 1rem; width: 33%;">
+						<img
+							{src}
+							alt="Icon de fonctionalitée"
+							style="height: 30px; width: 30px; opacity: 0.6; margin: 0.8rem auto;"
+						/>
 						<span style="font-size: 0.8rem;">{name}</span>
 					</td>
 				{/each}
 			</tr>
 			<tr>
-				{#each features.slice(3, 6) as { name, icon }}
-					<td colspan="2" style="text-align: center; padding-bottom: 1rem; width: 33%;">
-						<Icon path={icon} style="opacity: 0.6; margin-bottom: 0.8rem; display: block;" />
+				{#each features.slice(3, 6) as { name, src }}
+					<td style="text-align: center; padding-bottom: 1rem; width: 33%;">
+						<img
+							{src}
+							alt="Icon de fonctionalitée"
+							style="height: 30px; width: 30px; opacity: 0.6; margin: 0.8rem auto;"
+						/>
 						<span style="font-size: 0.8rem;">{name}</span>
 					</td>
 				{/each}
 			</tr>
 			<tr>
-				{#each features.slice(6) as { name, icon }}
-					<td colspan="2" style="text-align: center; padding-bottom: 1rem; width: 33%;">
-						<Icon path={icon} style="opacity: 0.6; margin-bottom: 0.8rem; display: block;" />
+				{#each features.slice(6) as { name, src }}
+					<td style="text-align: center; padding-bottom: 1rem; width: 33%;">
+						<img
+							{src}
+							alt="Icon de fonctionalitée"
+							style="height: 30px; width: 30px; opacity: 0.6; margin: 0.8rem auto;"
+						/>
 						<span style="font-size: 0.8rem;">{name}</span>
 					</td>
 				{/each}
@@ -90,31 +106,31 @@
 							href="https://www.linkedin.com/in/jonas-voisard-591419aa/"
 							title="LinkedIn de Jonas Voisard"
 						>
-							<Icon
-								path={mdiLinkedin}
-								style="display: inline; opacity: 0.7; margin-right: 0.4rem;"
-								size={30}
+							<img
+								src={linkedinPng}
+								alt="Logo de linkedin"
+								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="https://github.com/peufo" title="Github de Jonas Voisard">
-							<Icon
-								path={mdiGithub}
-								style="display: inline; opacity: 0.7; margin-right: 0.4rem;"
-								size={30}
+							<img
+								src={githubPng}
+								alt="Logo de github"
+								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="https://wa.me/0041795491563" title="Watsapp de Jonas Voisard">
-							<Icon
-								path={mdiWhatsapp}
-								style="display: inline; opacity: 0.7; margin-right: 0.4rem;"
-								size={30}
+							<img
+								src={whatsappPng}
+								alt="Logo de Whatsapp"
+								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="mailto://salut@benev.io" title="Contacter salut@benev.io">
-							<Icon
-								path={mdiEmailOutline}
-								style="display: inline; opacity: 0.7; margin-right: 0.4rem;"
-								size={30}
+							<img
+								src={emailPng}
+								alt="Icon email"
+								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 					</td>
