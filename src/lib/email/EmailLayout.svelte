@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { domain } from '.'
-	import logo from '$lib/assets/logo.svg'
+	import logo from '$lib/assets/logo.png'
 
 	export let title = ''
 	export let subtitle = ''
+	export let showLogo = false
 
 	let fontFamily =
 		"font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif"
@@ -41,13 +42,21 @@
 											<tr>
 												<td align="center">
 													<div>
+														{#if showLogo}
+															<img
+																src="{domain}{logo}"
+																alt="Logo de benev.io"
+																style="height: 100px;"
+															/>
+														{/if}
+
 														<h1
-															style="color: #000; font-size: 24px; font-weight: normal; margin:30px 0; padding:0;"
+															style="color: #000; font-size: 24px; font-weight: normal; margin-top: 30px 0; padding:0;"
 														>
 															{title}
 														</h1>
 														{#if subtitle}
-															<h2 style="color: #222; font-weight: normal;">
+															<h2 style="color: #222; font-weight: normal; margin-top: 1em;">
 																{subtitle}
 															</h2>
 														{/if}
@@ -68,39 +77,41 @@
 										</tbody>
 									</table>
 
-									<hr style="border:none;border-top:1px solid #eaeaea;margin:26px 0;width:100%" />
+									<slot name="signature">
+										<hr style="border:none;border-top:1px solid #eaeaea;margin:26px 0;width:100%" />
 
-									<table width="100%" cellpadding="0" cellspacing="0">
-										<tbody>
-											<tr>
-												<td>
-													<img src="{domain}/{logo}" alt="Logo de Benev.io" style="height: 50px" />
-												</td>
-												<td style="vertical-align: top;">
-													<p
-														style="color:#666666;font-size:12px;line-height:24px; padding-top: 10px;"
-													>
-														Gestion des bénévoles par
-														<a
-															href={domain}
-															style="color:#067df7; text-decoration:none"
-															target="_blank"
+										<table width="100%" cellpadding="0" cellspacing="0">
+											<tbody>
+												<tr>
+													<td>
+														<img src="{domain}{logo}" alt="Logo de Benev.io" style="height: 50px" />
+													</td>
+													<td style="vertical-align: top;">
+														<p
+															style="color:#666666;font-size:12px;line-height:24px; padding-top: 10px;"
 														>
-															benev.io
-														</a><br />
-														Définis tes préfèrences concernant les emails
-														<a
-															href="{domain}/me?section=profile"
-															style="color:#067df7; text-decoration:none"
-															target="_blank"
-														>
-															sur ton profil
-														</a>
-													</p>
-												</td>
-											</tr>
-										</tbody>
-									</table>
+															Gestion des bénévoles par
+															<a
+																href={domain}
+																style="color:#067df7; text-decoration:none"
+																target="_blank"
+															>
+																benev.io
+															</a><br />
+															Définis tes préfèrences concernant les emails
+															<a
+																href="{domain}/me?section=profile"
+																style="color:#067df7; text-decoration:none"
+																target="_blank"
+															>
+																sur ton profil
+															</a>
+														</p>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</slot>
 								</div>
 							</td>
 						</tr>

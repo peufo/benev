@@ -3,7 +3,7 @@
 
 	import Benev from '$lib/Benev.svelte'
 	import { Card } from '$lib/material'
-	import Features from './Features.svelte'
+	import { Features } from '$lib/features'
 
 	export let data
 </script>
