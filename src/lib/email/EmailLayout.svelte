@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { domain, getPath } from '.'
+	import { domain } from '.'
 	import logo from '$lib/assets/logo.png'
 
 	export let title = ''
@@ -43,11 +43,7 @@
 												<td align="center">
 													<div>
 														{#if showLogo}
-															<img
-																src={getPath(logo)}
-																alt="Logo de benev.io"
-																style="height: 100px;"
-															/>
+															<img src={logo} alt="Logo de benev.io" style="height: 100px;" />
 														{/if}
 
 														<h1
