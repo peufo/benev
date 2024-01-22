@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { domain } from '.'
+	import logo from '$lib/assets/logo.svg'
+
 	export let title = ''
 	export let subtitle = ''
 
@@ -68,23 +70,37 @@
 
 									<hr style="border:none;border-top:1px solid #eaeaea;margin:26px 0;width:100%" />
 
-									<p style="color:#666666;font-size:12px;line-height:24px">
-										Gestion des bénévoles par
-										<a href={domain} style="color:#067df7; text-decoration:none" target="_blank">
-											benev.io
-										</a>
-									</p>
-
-									<p style="color:#666666;font-size:12px;line-height:24px; padding-bottom: 20px;">
-										Définis tes préfèrences concernant les notifications par mails
-										<a
-											href="{domain}/me?section=profile"
-											style="color:#067df7; text-decoration:none"
-											target="_blank"
-										>
-											sur ton profil
-										</a>
-									</p>
+									<table width="100%" cellpadding="0" cellspacing="0">
+										<tbody>
+											<tr>
+												<td>
+													<img src="{domain}/{logo}" alt="Logo de Benev.io" style="height: 50px" />
+												</td>
+												<td style="vertical-align: top;">
+													<p
+														style="color:#666666;font-size:12px;line-height:24px; padding-top: 10px;"
+													>
+														Gestion des bénévoles par
+														<a
+															href={domain}
+															style="color:#067df7; text-decoration:none"
+															target="_blank"
+														>
+															benev.io
+														</a><br />
+														Définis tes préfèrences concernant les emails
+														<a
+															href="{domain}/me?section=profile"
+															style="color:#067df7; text-decoration:none"
+															target="_blank"
+														>
+															sur ton profil
+														</a>
+													</p>
+												</td>
+											</tr>
+										</tbody>
+									</table>
 								</div>
 							</td>
 						</tr>
