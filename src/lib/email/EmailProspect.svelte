@@ -3,10 +3,9 @@
 	import jonas from '$lib/assets/jonas.png'
 
 	import { features } from '$lib/features'
-	import { domain } from '.'
+	import { getPath, domain } from '.'
 
 	import githubPng from '$lib/assets/icons/github.png'
-	import linkedinPng from '$lib/assets/icons/linkedin.png'
 	import whatsappPng from '$lib/assets/icons/whatsapp.png'
 	import emailPng from '$lib/assets/icons/email-outline.png'
 </script>
@@ -60,7 +59,7 @@
 				<tr>
 					<td style="vertical-align: middle; width: 80px;">
 						<img
-							src={jonas}
+							src={getPath(jonas)}
 							alt="Portrait de Jonas Voisard"
 							style="height: 65px; width: 65px; border-radius: 8px;"
 						/>
@@ -81,21 +80,21 @@
 					<td colspan="2">
 						<a href="https://github.com/peufo" title="Github de Jonas Voisard">
 							<img
-								src="{domain}{githubPng}"
+								src={getPath(githubPng)}
 								alt="Logo de github"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="https://wa.me/41795491563" title="Watsapp de Jonas Voisard">
 							<img
-								src="{domain}{whatsappPng}"
+								src={getPath(whatsappPng)}
 								alt="Logo de Whatsapp"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="mailto:salut@benev.io" title="Contacter salut@benev.io">
 							<img
-								src="{domain}{emailPng}"
+								src={getPath(emailPng)}
 								alt="Icon email"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>

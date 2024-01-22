@@ -12,3 +12,5 @@ export { default as EmailAcceptInvite } from './EmailAcceptInvite.svelte'
 export { default as EmailAcceptInviteNotification } from './EmailAcceptInviteNotification.svelte'
 export { default as EmailCheckoutValidation } from './EmailCheckoutValidation.svelte'
 export { default as EmailProspect } from './EmailProspect.svelte'
+
+export const getPath = (path: string) => `${domain}${path.replace(domain, '')}`
