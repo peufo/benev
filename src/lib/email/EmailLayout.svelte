@@ -43,7 +43,11 @@
 												<td align="center">
 													<div>
 														{#if showLogo}
-															<img src={logo} alt="Logo de benev.io" style="height: 100px;" />
+															<img
+																src="{domain}{logo}"
+																alt="Logo de benev.io"
+																style="height: 100px;"
+															/>
 														{/if}
 
 														<h1
