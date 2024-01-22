@@ -103,7 +103,7 @@
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
-						<a href="mailto://salut@benev.io" title="Contacter salut@benev.io">
+						<a href="mailto:salut@benev.io" title="Contacter salut@benev.io">
 							<img
 								src={emailPng}
 								alt="Icon email"
