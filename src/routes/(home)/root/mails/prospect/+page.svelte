@@ -13,7 +13,7 @@
 	class="flex gap-2 border bordered p-2 items-end"
 	use:enhance={form.submit}
 >
-	<InputText key="to" label="Destinataire" class="w-full" />
+	<InputText key="to" label="Destinataires" class="w-full" />
 
 	<button class="btn">Envoyer</button>
 </form>
