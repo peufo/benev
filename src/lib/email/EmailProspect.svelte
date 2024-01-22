@@ -30,42 +30,78 @@
 	<p>Vous y trouverez toutes les fonctionnalités essentielles pour votre gestion.</p>
 
 	<table
+		width="100%"
 		style="border-collapse: separate; border: 1px solid #ddd; padding: 1.2rem 0.6rem; border-radius: 0.5rem; "
+		cellspacing="0"
+		cellpadding="0"
 	>
 		<tbody>
 			<tr>
 				{#each features.slice(0, 3) as { name, src }}
-					<td style="text-align: center; padding-bottom: 1rem; width: 33%;">
-						<img
-							{src}
-							alt="Icon de fonctionalitée"
-							style="height: 28px; width: 28px; margin-left: calc(50% - 14px); opacity: 0.8;"
-						/>
-						<span style="font-size: 0.8rem;">{name}</span>
+					<td style="width: 33%; text-align: center;" align="center">
+						<table
+							width="100%"
+							border={0}
+							cellspacing="0"
+							cellpadding="0"
+							style="width:100%!important"
+						>
+							<tbody>
+								<tr>
+									<td align="center">
+										<img {src} alt="Icon de fonctionalitée" style="height: 28px; opacity: 0.8;" />
+
+										<span style="font-size: 0.8rem;">{name}</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</td>
 				{/each}
 			</tr>
 			<tr>
 				{#each features.slice(3, 6) as { name, src }}
-					<td align="center" style="text-align: center; padding-bottom: 1rem; width: 33%;">
-						<img
-							{src}
-							alt="Icon de fonctionalitée"
-							style="height: 28px; width: 28px; margin-left: calc(50% - 14px); opacity: 0.8;"
-						/>
-						<span style="font-size: 0.8rem;">{name}</span>
+					<td style="width: 33%; text-align: center;" align="center">
+						<table
+							width="100%"
+							border={0}
+							cellspacing="0"
+							cellpadding="0"
+							style="width:100%!important"
+						>
+							<tbody>
+								<tr>
+									<td align="center">
+										<img {src} alt="Icon de fonctionalitée" style="height: 28px; opacity: 0.8;" />
+
+										<span style="font-size: 0.8rem;">{name}</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</td>
 				{/each}
 			</tr>
 			<tr>
 				{#each features.slice(6) as { name, src }}
-					<td style="text-align: center; padding-bottom: 1rem; width: 33%;">
-						<img
-							{src}
-							alt="Icon de fonctionalitée"
-							style="height: 28px; width: 28px; margin-left: calc(50% - 14px); opacity: 0.8;"
-						/>
-						<span style="font-size: 0.8rem;">{name}</span>
+					<td style="width: 33%; text-align: center;" align="center">
+						<table
+							width="100%"
+							border={0}
+							cellspacing="0"
+							cellpadding="0"
+							style="width:100%!important"
+						>
+							<tbody>
+								<tr>
+									<td align="center">
+										<img {src} alt="Icon de fonctionalitée" style="height: 28px; opacity: 0.8;" />
+
+										<span style="font-size: 0.8rem;">{name}</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</td>
 				{/each}
 			</tr>
