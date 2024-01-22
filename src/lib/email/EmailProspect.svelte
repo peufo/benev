@@ -84,28 +84,28 @@
 							title="LinkedIn de Jonas Voisard"
 						>
 							<img
-								src={linkedinPng}
+								src="{domain}{linkedinPng}"
 								alt="Logo de linkedin"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="https://github.com/peufo" title="Github de Jonas Voisard">
 							<img
-								src={githubPng}
+								src="{domain}{githubPng}"
 								alt="Logo de github"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="https://wa.me/0041795491563" title="Watsapp de Jonas Voisard">
 							<img
-								src={whatsappPng}
+								src="{domain}{whatsappPng}"
 								alt="Logo de Whatsapp"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="mailto://salut@benev.io" title="Contacter salut@benev.io">
 							<img
-								src={emailPng}
+								src="{domain}{emailPng}"
 								alt="Icon email"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
