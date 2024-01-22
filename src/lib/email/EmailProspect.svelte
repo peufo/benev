@@ -18,16 +18,16 @@
 			href={domain}
 			style="display: inline-block; background: #0d3b66; border-radius: 0.6rem;  padding: 0.8rem 1.5rem; color: white; text-decoration: none; text-transform: uppercase;"
 		>
-			Découvrez la maintenant
+			Découvrir maintenant
 		</a>
 	</div>
 
-	<p>Vous y trouverez toutes les fonctionnalités essentielles pour votre gestion.</p>
+	<p>Vous y trouverez toutes les fonctionnalités essentielles à votre gestion.</p>
 
 	<table width="100%" style="border-collapse: separate; " cellspacing="0" cellpadding="0">
 		<tbody>
 			{#each Array(5).fill(0) as row, index}
-				<tr>
+				<tr style="padding-top: 1rem;">
 					{#each features.slice(index * 2, (index + 1) * 2) as { name, src }}
 						<td style="padding: 0.2rem 0.2rem;" align="right">
 							<img
@@ -72,7 +72,7 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<tr style="padding-top: 1rem;">
 					<td colspan="2">
 						<a href="https://github.com/peufo" title="Github de Jonas Voisard">
 							<img
