@@ -7,12 +7,11 @@ import { error } from '@sveltejs/kit'
 
 export const subscribesFilterShape = {
 	search: z.string().optional(),
-	start: z.date().optional(),
-	end: z.date().optional(),
-	teams: z.array(z.string()).optional(),
-	states: z.string().optional(),
+	teams: z.filter.multiselect,
+	period: z.filter.range,
+	states: z.filter.multiselect,
 	createdBy: z.enum(['leader', 'user']).optional(),
-	isAbsent: z.booleanAsString().optional(),
+	isAbsent: z.filter.boolean,
 } satisfies ZodRawShape
 
 export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
@@ -25,46 +24,49 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 	})
 	if (err) error(400)
 
-	const where: Prisma.SubscribeWhereInput = {}
+	const subscribesFilters: Prisma.SubscribeWhereInput[] = []
 	const team: Prisma.TeamWhereInput = { eventId }
 	const period: Prisma.PeriodWhereInput = { team }
 
-	if (data.teams) team.id = { in: data.teams }
-
-	if (data.start && data.end) {
-		period.start = { lte: data.end }
-		period.end = { gte: data.start }
+	if (data.teams) subscribesFilters.push({ period: { teamId: { in: data.teams } } })
+	if (data.period) {
+		const { start, end } = data.period
+		subscribesFilters.push({
+			period: {
+				...(start && { end: { gte: start } }),
+				...(end && { start: { lte: end } }),
+			},
+		})
 	}
-
-	where.period = period
 
 	if (data.search) {
 		const words = data.search.split(' ')
-		where.member = {
-			user: {
-				OR: words
-					.map((word) => [
-						{ firstName: { contains: word } },
-						{ lastName: { contains: word } },
-						{ email: { contains: word } },
-					])
-					.flat(),
+		subscribesFilters.push({
+			member: {
+				user: {
+					OR: words
+						.map((word) => [
+							{ firstName: { contains: word } },
+							{ lastName: { contains: word } },
+							{ email: { contains: word } },
+						])
+						.flat(),
+				},
 			},
-		}
+		})
 	}
 
 	if (data.states) {
-		const states = jsonParse<SubscribeState[]>(data.states, [])
-		where.state = { in: states }
+		subscribesFilters.push({ state: { in: data.states as SubscribeState[] } })
 	}
 
-	if (data.createdBy) where.createdBy = data.createdBy
-	if (data.isAbsent !== undefined) where.isAbsent = data.isAbsent
+	if (data.createdBy) subscribesFilters.push({ createdBy: data.createdBy })
+	if (data.isAbsent !== undefined) subscribesFilters.push({ isAbsent: data.isAbsent })
 
 	return {
 		subscribes: await prisma.subscribe
 			.findMany({
-				where,
+				where: { AND: subscribesFilters },
 				skip: data.all ? undefined : data.skip,
 				take: data.all ? undefined : data.take,
 				include: {
