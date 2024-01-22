@@ -39,7 +39,7 @@
 						<img
 							{src}
 							alt="Icon de fonctionalitée"
-							style="height: 30px; width: 30px; opacity: 0.6; margin: 0.8rem auto;"
+							style="height: 28px; width: 28px; margin-left: calc(50% - 14px); opacity: 0.8;"
 						/>
 						<span style="font-size: 0.8rem;">{name}</span>
 					</td>
@@ -47,11 +47,11 @@
 			</tr>
 			<tr>
 				{#each features.slice(3, 6) as { name, src }}
-					<td style="text-align: center; padding-bottom: 1rem; width: 33%;">
+					<td align="center" style="text-align: center; padding-bottom: 1rem; width: 33%;">
 						<img
 							{src}
 							alt="Icon de fonctionalitée"
-							style="height: 30px; width: 30px; opacity: 0.6; margin: 0.8rem auto;"
+							style="height: 28px; width: 28px; margin-left: calc(50% - 14px); opacity: 0.8;"
 						/>
 						<span style="font-size: 0.8rem;">{name}</span>
 					</td>
@@ -63,7 +63,7 @@
 						<img
 							{src}
 							alt="Icon de fonctionalitée"
-							style="height: 30px; width: 30px; opacity: 0.6; margin: 0.8rem auto;"
+							style="height: 28px; width: 28px; margin-left: calc(50% - 14px); opacity: 0.8;"
 						/>
 						<span style="font-size: 0.8rem;">{name}</span>
 					</td>
