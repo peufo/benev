@@ -2,7 +2,7 @@
 	transform-origin: center bottom;
 	animation-name: pulse;
 	animation-delay: var(--animate-delay);
-	animation-duration: 5000ms;
+	animation-duration: 4400ms;
 	animation-fill-mode: both;
 	animation-timing-function: ease-in-out;
 	animation-iteration-count: infinite;

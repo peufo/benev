@@ -16,7 +16,7 @@
 	export let title = 'Les possibilités'
 	const titleLength = title.length
 
-	const ANIMATION_STEP = 40
+	const ANIMATION_STEP = 35
 
 	type Feature = {
 		name: string
@@ -118,7 +118,7 @@
 		{#each features as feat}
 			<CardBasic class="shadow p-5">
 				<div class="flex flex-wrap gap-4 items-center">
-					<Icon path={feat.icon} size={30}  class="opacity-70 p-1 border rounded bg-base-200"/>
+					<Icon path={feat.icon} size={30} class="opacity-70 p-1 border rounded bg-base-200" />
 					<h2 class="font-medium">
 						{feat.name}
 					</h2>
