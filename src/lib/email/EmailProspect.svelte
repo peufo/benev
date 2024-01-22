@@ -31,7 +31,7 @@
 					{#each features.slice(index * 2, (index + 1) * 2) as { name, src }}
 						<td style="padding: 0.2rem 0.2rem;" align="right">
 							<img
-								{src}
+								src="{domain}{src}"
 								alt="Icon de fonctionalitée"
 								style="height: 28px; width: 28px; opacity: 0.8; display: inline;"
 							/>
@@ -55,7 +55,7 @@
 				<tr>
 					<td style="vertical-align: middle; width: 80px;">
 						<img
-							src={jonas}
+							src="{domain}{jonas}"
 							alt="Portrait de Jonas Voisard"
 							style="height: 65px; width: 65px; border-radius: 8px;"
 						/>
