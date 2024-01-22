@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { domain } from '.'
-	import logo from '$lib/assets/logo.png'
 
 	export let title = ''
 	export let subtitle = ''
@@ -44,7 +43,7 @@
 													<div>
 														{#if showLogo}
 															<img
-																src="{domain}{logo}"
+																src="{domain}/logo.png"
 																alt="Logo de benev.io"
 																style="height: 100px;"
 															/>
@@ -84,7 +83,11 @@
 											<tbody>
 												<tr>
 													<td>
-														<img src={logo} alt="Logo de Benev.io" style="height: 50px" />
+														<img
+															src="{domain}/logo.png"
+															alt="Logo de Benev.io"
+															style="height: 50px"
+														/>
 													</td>
 													<td style="vertical-align: top;">
 														<p
