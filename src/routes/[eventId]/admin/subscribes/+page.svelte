@@ -7,7 +7,7 @@
 	} from '@mdi/js'
 	import type { PageData } from './$types'
 	import { InputSearch, Pagination } from '$lib/material'
-	import { Table, tableheadComponent, type TableField } from '$lib/material/table'
+	import { Table, tableheadComponent, type TableField, TableViewSelect } from '$lib/material/table'
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
 	import SubscribesCopy from './SubscribesCopy.svelte'
@@ -71,7 +71,6 @@
 		{
 			key: 'isAbsent',
 			label: 'Absent',
-			visible: true,
 			getCell: ({ isAbsent }) => component(SubscribeIsAbsent, { isAbsent }),
 			head: tableheadComponent('select', {
 				options: {
@@ -96,6 +95,7 @@
 	<div class="flex gap-x-2 gap-y-2 flex-wrap">
 		<InputSearch />
 		<div class="grow" />
+		<TableViewSelect key="subscribes" views={data.views} />
 		<SubscribesCopy />
 	</div>
 
