@@ -96,7 +96,7 @@
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
-						<a href="https://wa.me/0041795491563" title="Watsapp de Jonas Voisard">
+						<a href="https://wa.me/41795491563" title="Watsapp de Jonas Voisard">
 							<img
 								src={whatsappPng}
 								alt="Logo de Whatsapp"
