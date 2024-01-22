@@ -4,10 +4,6 @@
 
 	import { features } from '$lib/features'
 	import { domain } from '.'
-
-	import githubPng from '$lib/assets/icons/github.png'
-	import whatsappPng from '$lib/assets/icons/whatsapp.png'
-	import emailPng from '$lib/assets/icons/email-outline.png'
 </script>
 
 <EmailLayout showLogo title="benev.io" subtitle="Votre nouvelle plateforme de gestion de bénévole">
@@ -80,21 +76,21 @@
 					<td colspan="2">
 						<a href="https://github.com/peufo" title="Github de Jonas Voisard">
 							<img
-								src={githubPng}
+								src="{domain}/icons/github.png"
 								alt="Logo de github"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="https://wa.me/41795491563" title="Watsapp de Jonas Voisard">
 							<img
-								src={whatsappPng}
+								src="{domain}/icons/whatsapp.png"
 								alt="Logo de Whatsapp"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>
 						</a>
 						<a href="mailto:salut@benev.io" title="Contacter salut@benev.io">
 							<img
-								src={emailPng}
+								src="{domain}/icons/email-outline.png"
 								alt="Icon email"
 								style="height: 30px; width: 30px; display: inline; margin-right: 0.4rem;"
 							/>

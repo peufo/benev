@@ -10,15 +10,15 @@ import {
 	mdiWeb,
 } from '@mdi/js'
 
-import accountPng from '$lib/assets/icons/account-group-outline.png'
-import databasePng from '$lib/assets/icons/database-outline.png'
-import emailPng from '$lib/assets/icons/email-outline.png'
-import eyePng from '$lib/assets/icons/eye-outline.png'
-import giftPng from '$lib/assets/icons/gift-outline.png'
-import licensePng from '$lib/assets/icons/license.png'
-import loginPng from '$lib/assets/icons/login.png'
-import dashboardPng from '$lib/assets/icons/view-dashboard-outline.png'
-import webPng from '$lib/assets/icons/web.png'
+const accountPng = '/icons/account-group-outline.png'
+const databasePng = '/icons/database-outline.png'
+const emailPng = '/icons/email-outline.png'
+const eyePng = '/icons/eye-outline.png'
+const giftPng = '/icons/gift-outline.png'
+const licensePng = '/icons/license.png'
+const loginPng = '/icons/login.png'
+const dashboardPng = '/icons/view-dashboard-outline.png'
+const webPng = '/icons/web.png'
 
 type Feature = {
 	name: string
