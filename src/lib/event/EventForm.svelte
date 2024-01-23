@@ -22,7 +22,7 @@
 		successUpdate,
 		successReset,
 		beforeRequest: async () => {
-			if (event?.state !== 'active') return
+			if (event?.state !== 'actived') return
 			if (event.id === eventId) return
 			const msg = `Es tu sûr de vouloir modifier le lien de l'évènement de "/${event.id}" pour "${eventId} ?"`
 			if (!confirm(msg)) {
@@ -47,7 +47,7 @@
 	}, 400)
 
 	function handleNameInput() {
-		if (event?.state !== 'active') {
+		if (event?.state !== 'actived') {
 			eventId = normalizePath(name)
 		}
 	}

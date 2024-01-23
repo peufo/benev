@@ -7,7 +7,7 @@
 	} from '@mdi/js'
 
 	import { Icon, SectionCollapse } from '$lib/material'
-	import { EventForm, EventSettings, EventStateForm } from '$lib/event'
+	import { EventForm, EventSettings, EventStateForm, EventLicence } from '$lib/event'
 	import { MemberFields, MemberSettingsForm } from '$lib/member'
 	import { GiftConfiguration } from '$lib/gift'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
@@ -19,6 +19,8 @@
 
 <OnlyAdmin>
 	<div class="grid gap-6 pt-4 place-content-center justify-stretch pb-36 px-0 md:px-20 lg:px-48">
+		<EventLicence event={data.event} countMembersValided={data.countMembersValided} />
+
 		<EventStateForm event={data.event} />
 
 		<SectionCollapse value="infos">

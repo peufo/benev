@@ -16,6 +16,7 @@ import {
 	mdiCheckboxIntermediateVariant,
 	mdiOrderBoolDescending,
 	mdiOrderBoolAscendingVariant,
+	mdiCheck,
 } from '@mdi/js'
 
 export const FORMAT_A3 = {
@@ -45,7 +46,13 @@ export const EVENT_STATES: Record<
 		class: 'border-warning bg-warning/50',
 		description: 'Seul les responsables ont accès au site.',
 	},
-	active: {
+	actived: {
+		icon: mdiCheck,
+		label: 'Évènement activé',
+		class: 'border-success bg-success/50',
+		description: `L'évenement possède une licence active.`,
+	},
+	published: {
 		icon: mdiEarth,
 		label: 'Évènement publié',
 		class: 'border-success bg-success/50',

@@ -8,12 +8,16 @@
 	export let event: Event
 
 	const nextStates: Record<EventState, { state: EventState; label: string }[]> = {
-		draft: [{ state: 'active', label: 'Publier' }],
-		active: [
-			{ state: 'draft', label: 'Maintenance' },
+		draft: [{ state: 'actived', label: 'Activer' }],
+		actived: [
+			{ state: 'published', label: 'Publier' },
 			{ state: 'archived', label: 'Archiver' },
 		],
-		archived: [{ state: 'active', label: 'Republier' }],
+		published: [
+			{ state: 'actived', label: 'Maintenance' },
+			{ state: 'archived', label: 'Archiver' },
+		],
+		archived: [{ state: 'published', label: 'Republier' }],
 	}
 </script>
 

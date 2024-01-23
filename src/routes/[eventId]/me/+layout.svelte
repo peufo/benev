@@ -16,7 +16,7 @@
 			{data.event.name}
 		</span>
 
-		{#if data.event.state !== 'active'}
+		{#if data.event.state !== 'actived'}
 			<Icon
 				class="opacity-70 ml-1 {data.event.state === 'draft' ? 'rotate-12' : ''}"
 				size={20}

@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit'
 import type { Prisma } from '@prisma/client'
 import type { LicenceType } from '@prisma/client'
 import { prisma } from '$lib/server'
+import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
 
 export function licences(ownerId: string) {
 	async function getLicencesAvailable(type: LicenceType): Promise<number> {
@@ -20,7 +21,7 @@ export function licences(ownerId: string) {
 
 	async function useLicences(type: LicenceType, nb: number): Promise<Prisma.PrismaPromise<any>[]> {
 		const nbAvailable = await getLicencesAvailable(type)
-		if (nbAvailable < nb) error(403, { message: 'No licence available' });
+		if (nbAvailable < nb) error(403, { message: 'No licence available' })
 
 		const _licences = await prisma.licence.findMany({
 			where: { ownerId, type },
@@ -52,5 +53,22 @@ export function licences(ownerId: string) {
 	return {
 		event: createLicenceMethods('event'),
 		member: createLicenceMethods('member'),
+	}
+}
+
+export async function getLicenceRequired(eventId: string) {
+	const { activedAt, _count } = await prisma.event.findUniqueOrThrow({
+		where: { id: eventId },
+		select: {
+			activedAt: true,
+			state: true,
+			_count: { select: { members: { where: { isValidedByEvent: true } } } },
+		},
+	})
+	const licenceRequired = !activedAt && _count.members > +PUBLIC_FREE_EVENT_MAX_MEMBERS
+	if (!licenceRequired) return false
+	return {
+		event: 1,
+		members: _count.members,
 	}
 }

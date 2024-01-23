@@ -4,7 +4,7 @@ const staticsPages: string[] = [urlElement('/')]
 
 export async function GET() {
 	const events = await prisma.event.findMany({
-		where: { state: 'active', deletedAt: null },
+		where: { state: 'actived', deletedAt: null },
 		include: { pages: { select: { path: true, isIndex: true, updatedAt: true } } },
 	})
 

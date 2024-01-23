@@ -158,7 +158,8 @@ model Event {
 
 enum EventState {
   draft
-  active
+  actived
+  published
   archived
 }
 

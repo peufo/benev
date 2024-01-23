@@ -36,7 +36,7 @@
 				{/if}
 				<span class="font-medium">{member.event.name}</span>
 
-				{#if member.event.state !== 'active'}
+				{#if member.event.state !== 'published'}
 					<Icon
 						class="opacity-70 z-10 {member.event.state === 'draft' ? 'rotate-12' : ''}"
 						size={20}

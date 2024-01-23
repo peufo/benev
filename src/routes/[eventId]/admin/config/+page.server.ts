@@ -1,4 +1,12 @@
-import { parseFormData, prisma, tryOrFail, permission, media, licences } from '$lib/server'
+import {
+	parseFormData,
+	prisma,
+	tryOrFail,
+	permission,
+	media,
+	licences,
+	getLicenceRequired,
+} from '$lib/server'
 import { z } from '$lib/validation'
 
 import {
@@ -20,6 +28,9 @@ export const load = async ({ params: { eventId } }) => ({
 		where: { eventId },
 		include: { conditions: true },
 	}),
+	countMembersValided: await prisma.member.count({
+		where: { eventId, isValidedByEvent: true },
+	}),
 })
 
 export const actions = {
@@ -29,16 +40,14 @@ export const actions = {
 		if (err) return err
 
 		return tryOrFail(async () => {
-			const { activedAt, state } = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
-			//const licenceRequired = !activedAt && state === 'draft' && data.state === 'active'
-			const licenceRequired = false
-			if (licenceRequired) {
-				const memberValidedCount = await prisma.member.count({
-					where: { eventId, isValidedByEvent: true },
-				})
-				const licencesEventTransaction = await licences(member.userId).event.use(1)
+			const licenceRequired = await getLicenceRequired(eventId)
+
+			if (licenceRequired && data.state !== 'draft') {
+				const licencesEventTransaction = await licences(member.userId).event.use(
+					licenceRequired.event
+				)
 				const licencesMemberTransaction = await licences(member.userId).member.use(
-					memberValidedCount
+					licenceRequired.members
 				)
 				return await prisma.$transaction([
 					...licencesEventTransaction,
@@ -46,7 +55,7 @@ export const actions = {
 					prisma.event.update({
 						where: { id: eventId },
 						data: {
-							state: 'active',
+							state: data.state,
 							activedAt: new Date(),
 						},
 					}),
