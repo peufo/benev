@@ -17,6 +17,7 @@ import {
 	mdiOrderBoolDescending,
 	mdiOrderBoolAscendingVariant,
 	mdiCheck,
+	mdiExcavator,
 } from '@mdi/js'
 import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
 
@@ -43,14 +44,14 @@ export const EVENT_STATES: Record<
 > = {
 	draft: {
 		icon: mdiTestTube,
-		label: 'Évènement en projet (éssai)',
-		class: 'border-warning bg-warning/50',
+		label: 'Évènement en projet',
+		class: 'border-warning bg-warning/40',
 		description: `L'évenement est limité à ${PUBLIC_FREE_EVENT_MAX_MEMBERS} membres validés et seul les responsables ont accès au site.`,
 	},
 	actived: {
-		icon: mdiTestTube,
-		label: 'Évènement en projet',
-		class: 'border-warning bg-warning/50',
+		icon: mdiExcavator,
+		label: 'Évènement en construction',
+		class: 'border-warning bg-warning/40',
 		description: `Seul les responsables ont accès au site.`,
 	},
 	published: {
