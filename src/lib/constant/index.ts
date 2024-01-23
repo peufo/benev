@@ -18,6 +18,7 @@ import {
 	mdiOrderBoolAscendingVariant,
 	mdiCheck,
 } from '@mdi/js'
+import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
 
 export const FORMAT_A3 = {
 	x: 297,
@@ -42,15 +43,15 @@ export const EVENT_STATES: Record<
 > = {
 	draft: {
 		icon: mdiTestTube,
-		label: 'Évènement en projet',
+		label: 'Évènement en projet (éssai)',
 		class: 'border-warning bg-warning/50',
-		description: 'Seul les responsables ont accès au site.',
+		description: `L'évenement est limité à ${PUBLIC_FREE_EVENT_MAX_MEMBERS} membres validés et seul les responsables ont accès au site.`,
 	},
 	actived: {
-		icon: mdiCheck,
-		label: 'Évènement activé',
-		class: 'border-success bg-success/50',
-		description: `L'évenement possède une licence active.`,
+		icon: mdiTestTube,
+		label: 'Évènement en projet',
+		class: 'border-warning bg-warning/50',
+		description: `Seul les responsables ont accès au site.`,
 	},
 	published: {
 		icon: mdiEarth,
@@ -76,7 +77,7 @@ export const GIFT_CONDITION_TYPE: Record<GiftConditionType, string> = {
 	period: `Doit travailer durant la période de`,
 } as const
 
-export const LICENCE_TYPE: Record<LicenceType, string> = {
+export const LICENCE_TYPE_LABEL: Record<LicenceType, string> = {
 	event: 'Évènement',
 	member: 'Membre',
 } as const

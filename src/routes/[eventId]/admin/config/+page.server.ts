@@ -1,12 +1,4 @@
-import {
-	parseFormData,
-	prisma,
-	tryOrFail,
-	permission,
-	media,
-	licences,
-	getLicenceRequired,
-} from '$lib/server'
+import { parseFormData, prisma, tryOrFail, permission, media, ensureLicences } from '$lib/server'
 import { z } from '$lib/validation'
 
 import {
@@ -19,49 +11,40 @@ import {
 	memberFieldUpdate,
 } from '$lib/validation'
 
-export const load = async ({ params: { eventId } }) => ({
-	memberFields: await prisma.field.findMany({
-		orderBy: { position: 'asc' },
-		where: { eventId },
-	}),
-	gifts: await prisma.gift.findMany({
-		where: { eventId },
-		include: { conditions: true },
-	}),
-	countMembersValided: await prisma.member.count({
-		where: { eventId, isValidedByEvent: true },
-	}),
-})
+export const load = async ({ parent, params: { eventId } }) => {
+	const { event } = await parent()
+
+	return {
+		memberFields: await prisma.field.findMany({
+			orderBy: { position: 'asc' },
+			where: { eventId },
+		}),
+		gifts: await prisma.gift.findMany({
+			where: { eventId },
+			include: { conditions: true },
+		}),
+		eventCounts: {
+			membersValided: await prisma.member.count({
+				where: { eventId, isValidedByEvent: true },
+			}),
+			membersLicenced: await prisma.member.count({
+				where: { eventId, licence: { isNot: null } },
+			}),
+			memberLicencesAvailable: await prisma.licence.count({
+				where: { ownerId: event.ownerId, type: 'member', memberId: null },
+			}),
+		},
+	}
+}
 
 export const actions = {
 	set_state_event: async ({ request, locals, params: { eventId } }) => {
-		const member = await permission.admin(eventId, locals)
+		await permission.owner(eventId, locals)
 		const { err, data } = await parseFormData(request, eventState)
 		if (err) return err
 
 		return tryOrFail(async () => {
-			const licenceRequired = await getLicenceRequired(eventId)
-
-			if (licenceRequired && data.state !== 'draft') {
-				const licencesEventTransaction = await licences(member.userId).event.use(
-					licenceRequired.event
-				)
-				const licencesMemberTransaction = await licences(member.userId).member.use(
-					licenceRequired.members
-				)
-				return await prisma.$transaction([
-					...licencesEventTransaction,
-					...licencesMemberTransaction,
-					prisma.event.update({
-						where: { id: eventId },
-						data: {
-							state: data.state,
-							activedAt: new Date(),
-						},
-					}),
-				])
-			}
-
+			if (data.state !== 'draft') await ensureLicences(eventId)
 			return await prisma.event.update({ where: { id: eventId }, data })
 		})
 	},

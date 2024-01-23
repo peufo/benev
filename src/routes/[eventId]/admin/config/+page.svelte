@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dev } from '$app/environment'
 	import {
 		mdiCalendarStar,
 		mdiCardAccountDetailsOutline,
@@ -7,21 +8,19 @@
 	} from '@mdi/js'
 
 	import { Icon, SectionCollapse } from '$lib/material'
-	import { EventForm, EventSettings, EventStateForm, EventLicence } from '$lib/event'
+	import { EventForm, EventSettings } from '$lib/event'
 	import { MemberFields, MemberSettingsForm } from '$lib/member'
 	import { GiftConfiguration } from '$lib/gift'
-	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'
-	import { dev } from '$app/environment'
+	import EventStateForm from './EventStateForm.svelte'
+	import OnlyAdmin from '../OnlyAdmin.svelte'
 
 	export let data
 </script>
 
 <OnlyAdmin>
 	<div class="grid gap-6 pt-4 place-content-center justify-stretch pb-36 px-0 md:px-20 lg:px-48">
-		<EventLicence event={data.event} countMembersValided={data.countMembersValided} />
-
-		<EventStateForm event={data.event} />
+		<EventStateForm event={data.event} eventCounts={data.eventCounts} />
 
 		<SectionCollapse value="infos">
 			<span slot="title" class="flex gap-3">

@@ -42,7 +42,7 @@ export const checkout = {
 	async handleHook(request: Request) {
 		const signature = request.headers.get('stripe-signature')
 
-		if (!signature) error(400);
+		if (!signature) error(400)
 		try {
 			const payload = await request.text()
 			const event = await stripe.webhooks.constructEventAsync(
@@ -67,19 +67,14 @@ export const checkout = {
 				const licenceMember = items.find((item) => item.price?.id === LICENCES.MEMBER)
 				const licences: Prisma.LicenceCreateManyCheckoutInput[] = []
 				if (licenceEvent)
-					licences.push({
-						type: 'event',
-						quantity: licenceEvent.quantity ?? 0,
-						ownerId: user.id,
-						price: licenceEvent.amount_total,
-					})
+					licences.push(
+						...Array(licenceEvent.quantity ?? 0).fill({ type: 'event', ownerId: user.id })
+					)
+
 				if (licenceMember)
-					licences.push({
-						type: 'member',
-						quantity: licenceMember.quantity ?? 0,
-						ownerId: user.id,
-						price: licenceMember.amount_total,
-					})
+					licences.push(
+						...Array(licenceMember.quantity ?? 0).fill({ type: 'member', ownerId: user.id })
+					)
 
 				const checkoutCreated = await prisma.checkout.create({
 					data: {
@@ -115,7 +110,7 @@ export const checkout = {
 			return new Response('success', { status: 200 })
 		} catch (err) {
 			console.error(err)
-			error(400);
+			error(400)
 		}
 	},
 }

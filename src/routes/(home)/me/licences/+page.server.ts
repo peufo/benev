@@ -14,9 +14,6 @@ export const load = async ({ url, locals }) => {
 		licencesCount: await prisma.licence.groupBy({
 			by: 'type',
 			where: { ownerId: user.id },
-			_sum: {
-				quantity: true,
-			},
 		}),
 		eventsCount: await prisma.event.count({
 			where: { ownerId: user.id, activedAt: { not: null } },

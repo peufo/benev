@@ -1,5 +1,3 @@
 export { default as EventForm } from './EventForm.svelte'
 export { default as EventPubliqueMenuItems } from './EventPubliqueMenuItems.svelte'
 export { default as EventSettings } from './EventSettings.svelte'
-export { default as EventStateForm } from './EventStateForm.svelte'
-export { default as EventLicence } from './EventLicence.svelte'

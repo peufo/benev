@@ -1,11 +1,16 @@
 <script lang="ts">
-	import type { Event, EventState } from '@prisma/client'
+	import type { Event, EventState, Licence } from '@prisma/client'
+	import type { PageData } from './$types'
 	import { useForm } from '$lib/validation'
 	import { EVENT_STATES } from '$lib/constant'
 	import { Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'
+	import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
+	import { tip } from '$lib/action'
+
 	export let event: Event
+	export let eventCounts: PageData['eventCounts']
 
 	const nextStates: Record<EventState, { state: EventState; label: string }[]> = {
 		draft: [{ state: 'actived', label: 'Activer' }],
@@ -23,7 +28,7 @@
 
 <div
 	class="
-    px-4 md:px-8 py-3 rounded-lg border flex justify-between flex-wrap gap-1
+    md:px-8 p-4 rounded-lg border flex flex-col gap-3
     {EVENT_STATES[event.state].class}
   "
 >
@@ -34,10 +39,36 @@
 				class="opacity-80 {event.state === 'draft' ? 'rotate-12' : ''}"
 			/>
 			<h3 class="title">{EVENT_STATES[event.state].label}</h3>
+			{#if event.state === 'draft'}
+				<div
+					use:tip={{
+						content: `${eventCounts.membersValided} membres validés pour ${PUBLIC_FREE_EVENT_MAX_MEMBERS} possibles`,
+					}}
+					role="progressbar"
+					class="radial-progress bg-warning text-xs opacity-80 ml-auto"
+					style="--value:{(eventCounts.membersValided / +PUBLIC_FREE_EVENT_MAX_MEMBERS) *
+						100}; --size: 3rem;"
+				>
+					{eventCounts.membersValided} / {PUBLIC_FREE_EVENT_MAX_MEMBERS}
+				</div>
+			{:else}
+				{@const maxMembers = eventCounts.membersLicenced + eventCounts.memberLicencesAvailable}
+
+				<div
+					use:tip={{
+						content: `Encore ${eventCounts.memberLicencesAvailable} licences disponibles`,
+					}}
+					role="progressbar"
+					class="radial-progress text-xs bg-primary/10 opacity-80 ml-auto"
+					style="--value:{(eventCounts.membersLicenced / maxMembers) * 100}; --size: 3rem;"
+				>
+					{eventCounts.membersLicenced} / {maxMembers}
+				</div>
+			{/if}
 		</div>
 
 		<p class="text-sm opacity-60 mt-1">
-			{EVENT_STATES[event.state].description}
+			{@html EVENT_STATES[event.state].description}
 		</p>
 	</div>
 

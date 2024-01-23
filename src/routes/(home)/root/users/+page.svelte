@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Card, Pagination } from '$lib/material'
-	import { sumOfLicences } from '$lib/common'
 
 	export let data
 </script>
@@ -22,6 +21,9 @@
 		</thead>
 		<tbody>
 			{#each data.users as user}
+				{@const licencesEvent = user.licences.filter((l) => l.type === 'event')}
+				{@const licencesMember = user.licences.filter((l) => l.type === 'member')}
+
 				<tr>
 					<td>
 						<a href="/root/users/{user.id}" class="link link-hover">
@@ -39,8 +41,12 @@
 					</td>
 					<td>{user._count.events}</td>
 					<td>{user._count.members}</td>
-					<td>{sumOfLicences(user.licences, 'event')}</td>
-					<td>{sumOfLicences(user.licences, 'member')}</td>
+					<td>
+						{licencesEvent.filter((l) => l.eventId).length} / {licencesEvent.length}
+					</td>
+					<td>
+						{licencesMember.filter((l) => l.memberId).length} / {licencesMember.length}
+					</td>
 				</tr>
 			{/each}
 		</tbody>

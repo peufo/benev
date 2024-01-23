@@ -3,11 +3,13 @@
 	import { mdiPlus } from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
 	import { Icon, Placeholder } from '$lib/material'
-	import { LICENCE_TYPE } from '$lib/constant'
+	import { LICENCE_TYPE_LABEL } from '$lib/constant'
 
 	export let data
 
 	let checkoutSessionId: string | null = null
+
+	const licences = data.checkouts.map((checkout) => checkout.licences).flat()
 
 	onMount(() => {
 		const searchParams = new URLSearchParams(location.search)
@@ -28,16 +30,22 @@
 </div>
 
 <div class="flex gap-2 mb-2">
-	{#each data.licencesCount as { type, _sum: { quantity } }}
-		<span class="badge badge-lg badge-primary badge-outline gap-1">
-			{LICENCE_TYPE[type]}
-			<b>{quantity}</b>
-		</span>
-	{/each}
+	<span class="badge badge-lg badge-primary badge-outline gap-1">
+		{LICENCE_TYPE_LABEL.event}
+		<b>{licences.filter((l) => !l.eventId && l.type === 'event').length}</b>
+	</span>
+
+	<span class="badge badge-lg badge-primary badge-outline gap-1">
+		{LICENCE_TYPE_LABEL.member}
+		<b>{licences.filter((l) => !l.memberId && l.type === 'member').length}</b>
+	</span>
 </div>
 
 <div class="flex flex-col gap-2">
 	{#each data.checkouts as checkout}
+		{@const licencesEvent = checkout.licences.filter((l) => l.type === 'event')}
+		{@const licencesMember = checkout.licences.filter((l) => l.type === 'member')}
+
 		<section
 			class="border rounded p-4 pt-2"
 			class:border-primary={checkout.id === checkoutSessionId}
@@ -58,17 +66,19 @@
 			</div>
 
 			<div class="flex mt-2 gap-2 justify-end">
-				{#each checkout.licences.filter((l) => l.quantity !== 0) as licence}
-					{@const isPositif = licence.quantity > 0}
-					<span
-						class="badge gap-1"
-						class:badge-success={isPositif}
-						class:badge-warning={!isPositif}
-					>
-						{LICENCE_TYPE[licence.type]}
-						<b>{isPositif ? `+${licence.quantity}` : licence.quantity}</b>
+				{#if licencesEvent.length}
+					<span class="badge gap-1 badge-success">
+						{LICENCE_TYPE_LABEL.event}
+						<b>+{licencesEvent.length}</b>
 					</span>
-				{/each}
+				{/if}
+
+				{#if licencesMember.length}
+					<span class="badge gap-1 badge-success">
+						{LICENCE_TYPE_LABEL.member}
+						<b>+{licencesMember.length}</b>
+					</span>
+				{/if}
 			</div>
 		</section>
 	{:else}

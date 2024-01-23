@@ -2,10 +2,13 @@
 	import type { Checkout, User, Licence } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
-	import { LICENCE_TYPE } from '$lib/constant'
+	import { LICENCE_TYPE_LABEL } from '$lib/constant'
 
 	export let checkout: Checkout & { user: User; licences: Licence[] }
 	export let dest: 'user' | 'root' = 'user'
+
+	const licencesEvent = checkout.licences.filter((l) => l.type === 'event')
+	const licencesMember = checkout.licences.filter((l) => l.type === 'member')
 </script>
 
 <EmailLayout title={dest === 'user' ? 'Merci pour ton achat' : 'Nouvel achat de licences'}>
@@ -27,25 +30,27 @@
 			<tr>
 				<th style="border-bottom: #ccc solid 1px;">Licence</th>
 				<th style="border-bottom: #ccc solid 1px;" align="right">Quantité</th>
-				<th style="border-bottom: #ccc solid 1px;" align="right">Prix</th>
 			</tr>
 		</thead>
 		<tbody>
-			{#each checkout.licences as licence}
+			{#if licencesEvent.length}
 				<tr>
-					<th>{LICENCE_TYPE[licence.type]}</th>
-					<th align="right">{licence.quantity}</th>
-					<th align="right">
-						{(licence.price / 100).toFixed(2)}
-						{checkout.currency.toUpperCase()}
-					</th>
+					<th>{LICENCE_TYPE_LABEL.event}</th>
+					<th align="right">{licencesEvent.length}</th>
 				</tr>
-			{/each}
+			{/if}
+
+			{#if licencesMember.length}
+				<tr>
+					<th>{LICENCE_TYPE_LABEL.member}</th>
+					<th align="right">{licencesMember.length}</th>
+				</tr>
+			{/if}
 		</tbody>
 	</table>
 
 	<div style="text-align: right; padding: 3px;">
-		Total :
+		Prix :
 		<b>
 			{(checkout.amount / 100).toFixed(2)}
 			{checkout.currency.toUpperCase()}

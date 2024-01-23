@@ -18,7 +18,7 @@
 <!-- INVITATIONS -->
 {#if data.members.filter((m) => !m.isValidedByUser).length}
 	<h2 class="title">Invitations</h2>
-	<div class="grid grid-cols-2 gap-4">
+	<div class="flex flex-col gap-3 mb-4">
 		{#each data.members.filter((m) => !m.isValidedByUser) as member}
 			<MemberCard {member} />
 		{/each}

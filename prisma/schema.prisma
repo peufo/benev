@@ -50,14 +50,16 @@ model User {
 }
 
 model Licence {
-  id           String      @id @default(cuid())
-  type         LicenceType
-  quantity     Int
-  quantityUsed Int         @default(0)
-  isAvailable  Boolean     @default(true)
-  price        Int
-  ownerId      String
-  owner        User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  id   String      @id @default(cuid())
+  type LicenceType
+
+  memberId String? @unique
+  member   Member? @relation(references: [id], fields: [memberId], onDelete: SetNull)
+  eventId  String? @unique
+  event    Event?  @relation(references: [id], fields: [eventId], onDelete: SetNull)
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   checkoutId String
   checkout   Checkout @relation(fields: [checkoutId], references: [id], onDelete: Cascade)
@@ -121,6 +123,8 @@ model Event {
   deletedAt DateTime?
   ownerId   String
   owner     User       @relation(references: [id], fields: [ownerId], onDelete: Cascade)
+
+  licence Licence?
 
   description String?
   icon        String?
@@ -203,6 +207,8 @@ model Member {
   user    User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   eventId String
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
+
+  licence Licence?
 
   /// [MemberProfile]
   profileJson Json @default("{}")

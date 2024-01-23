@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/validation'
-	import { InputNumber, InputRelation, InputRadio, Card, InputText } from '$lib/material'
-	import { LICENCE_TYPE } from '$lib/constant'
+	import { InputNumber, InputRelation, Card, InputText } from '$lib/material'
+
 	import { api } from '$lib/api'
 	import InputsLicence from './InputsLicence.svelte'
 	import type { User } from '@prisma/client'
