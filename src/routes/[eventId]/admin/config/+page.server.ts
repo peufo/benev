@@ -1,4 +1,12 @@
-import { parseFormData, prisma, tryOrFail, permission, media, ensureLicences } from '$lib/server'
+import {
+	parseFormData,
+	prisma,
+	tryOrFail,
+	permission,
+	media,
+	ensureLicenceEvent,
+	ensureLicenceMembers,
+} from '$lib/server'
 import { z } from '$lib/validation'
 
 import {
@@ -47,8 +55,10 @@ export const actions = {
 		if (err) return err
 
 		return tryOrFail(async () => {
-			if (data.state !== 'draft') await ensureLicences(eventId)
-			return await prisma.event.update({ where: { id: eventId }, data })
+			if (data.state !== 'draft') await ensureLicenceEvent(eventId)
+			await prisma.event.update({ where: { id: eventId }, data })
+			await ensureLicenceMembers(eventId)
+			return
 		})
 	},
 	update_event: async ({ request, locals, params: { eventId } }) => {

@@ -16,38 +16,47 @@
 	export let eventCounts: PageData['eventCounts']
 	export let eventLicenceAvailable: boolean
 
-	const nextStates: Record<EventState, { state: EventState; label: string }[]> = {
-		draft: [{ state: 'actived', label: 'Activer' }],
-		actived: [
-			{ state: 'published', label: 'Publier' },
-			{ state: 'archived', label: 'Archiver' },
-		],
-		published: [
-			{ state: 'actived', label: 'Maintenance' },
-			{ state: 'archived', label: 'Archiver' },
-		],
-		archived: [{ state: 'published', label: 'Republier' }],
+	$: nextStates = getNextStates(eventLicenceAvailable)
+	function getNextStates(
+		_eventLicenceAvailable: boolean
+	): Record<EventState, { state: EventState; label: string }[]> {
+		return {
+			draft: [
+				{ state: 'actived', label: _eventLicenceAvailable ? 'Activer' : 'Obtenir une licence' },
+			],
+			actived: [
+				{ state: 'published', label: 'Publier' },
+				{ state: 'archived', label: 'Archiver' },
+			],
+			published: [
+				{ state: 'actived', label: 'Maintenance' },
+				{ state: 'archived', label: 'Archiver' },
+			],
+			archived: [{ state: 'published', label: 'Republier' }],
+		}
 	}
 
 	const notify = useNotify()
 
-	function handleClickLicence(event: MouseEvent | KeyboardEvent) {
+	function handleClickLicence(e: MouseEvent | KeyboardEvent) {
 		if (!$page.data.member?.roles.includes('owner')) {
-			event.preventDefault()
+			e.preventDefault()
 			const owner = `${$page.data.member!.user.firstName} ${$page.data.member!.user.lastName}`
 			notify.warning(`Seul le propriétaire, ${owner}, peut obtenir des licences pour cet évènement`)
 		}
 	}
 
-	function handleClickState(event: MouseEvent | KeyboardEvent, newState: EventState) {
+	function handleClickState(e: MouseEvent | KeyboardEvent, newState: EventState) {
 		if (!$page.data.member?.roles.includes('owner')) {
-			event.preventDefault()
+			e.preventDefault()
 			const owner = `${$page.data.member!.user.firstName} ${$page.data.member!.user.lastName}`
 			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
 		}
 		if (newState === 'actived' && !eventLicenceAvailable) {
-			event.preventDefault()
-			goto(`/me/licences/checkout?return_url=${$eventPath}/admin/config`)
+			e.preventDefault()
+			goto(
+				`/me/licences/checkout?return_url=${$eventPath}/admin/config?checkoutId={CHECKOUT_SESSION_ID}`
+			)
 		}
 	}
 </script>

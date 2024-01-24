@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Card, Icon, Tabs } from '$lib/material'
+	import { Card, Tabs } from '$lib/material'
 	import { useNotify } from '$lib/notify'
 	import { adminTabs } from './adminTabs'
+	import { CheckoutWaitSSE } from '$lib/checkout'
 
 	export let data
 
@@ -39,6 +40,8 @@
 			</a>
 		</div>
 	{/if}
+
+	<CheckoutWaitSSE removeCheckoutId />
 
 	<Card bodyClass="sm:pt-4">
 		<svelte:fragment slot="top">

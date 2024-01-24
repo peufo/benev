@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
 	import { mdiPlus } from '@mdi/js'
-	import { invalidateAll } from '$app/navigation'
+
 	import { Icon, Placeholder } from '$lib/material'
 	import { LICENCE_TYPE_LABEL } from '$lib/constant'
 	import type { PageData } from './$types.js'
 	import { page } from '$app/stores'
+	import { CheckoutWaitSSE } from '$lib/checkout'
 
 	export let data
 
@@ -41,29 +41,8 @@
 			})),
 		].toSorted((a, b) => b.date.getTime() - a.date.getTime())
 	}
+
 	let checkoutId = $page.url.searchParams.get('checkoutId')
-	let isNewCheckoutAwaited = !!checkoutId && !data.checkouts.find(({ id }) => id === checkoutId)
-
-	const handleCheckoutNotification = async () => {
-		isNewCheckoutAwaited = false
-		invalidateAll()
-	}
-
-	function awaitCheckoutNotification() {
-		if (!checkoutId) return
-		if (!isNewCheckoutAwaited) return
-
-		const timeout = setTimeout(handleCheckoutNotification, 5000)
-		const subscription = new EventSource(`/me/licences/checkout/validation${location.search}`)
-		subscription.addEventListener(checkoutId, handleCheckoutNotification)
-
-		return () => {
-			clearTimeout(timeout)
-			if (checkoutId) subscription.removeEventListener(checkoutId, handleCheckoutNotification)
-		}
-	}
-
-	onMount(awaitCheckoutNotification)
 </script>
 
 <div class="flex items-center">
@@ -88,11 +67,9 @@
 </div>
 
 <div class="flex flex-col gap-2">
-	{#if isNewCheckoutAwaited}
-		<div class="h-20 grid place-content-center border-primary border rounded">
-			<span class="loading loading-infinity loading-lg text-primary" />
-		</div>
-	{/if}
+	<CheckoutWaitSSE
+		allreadyLoaded={(checkoutId) => !!data.checkouts.find(({ id }) => id === checkoutId)}
+	/>
 
 	{#each transactions as tr}
 		<section
