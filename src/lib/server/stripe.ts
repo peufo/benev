@@ -4,7 +4,7 @@ import type { Prisma } from '@prisma/client'
 
 import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
-import { prisma, sendEmailTemplate } from '$lib/server'
+import { prisma, sendEmailTemplate, ensureLicenceMembers } from '$lib/server'
 import { EmailCheckoutValidation } from '$lib/email'
 
 export const stripe = new Stripe(PRIVATE_STRIPE_KEY)
@@ -15,26 +15,38 @@ const LICENCES = {
 }
 
 export const checkout = {
-	async create(user: User, origin: string) {
+	async create(user: User, url: URL) {
 		const customerId = await getStripCustomerId(user)
+
+		const licenceEventQuantity = url.searchParams.get('licence_event') || 1
+		const licenceMemberQuantity = url.searchParams.get('licence_member') || 200
+		const return_url =
+			url.origin +
+			(url.searchParams.get('return_url') || '/me/licences?checkoutSessionId={CHECKOUT_SESSION_ID}')
+
+		const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = []
+		if (+licenceEventQuantity)
+			line_items.push({
+				price: LICENCES.EVENT,
+				quantity: +licenceEventQuantity,
+				adjustable_quantity: { enabled: true, minimum: 0, maximum: 100 },
+			})
+
+		if (+licenceMemberQuantity)
+			line_items.push({
+				price: LICENCES.MEMBER,
+				quantity: +licenceMemberQuantity,
+				adjustable_quantity: { enabled: true, minimum: 0, maximum: 10_000 },
+			})
+
+		if (!line_items.length) throw Error('Items is required')
 
 		const { client_secret } = await stripe.checkout.sessions.create({
 			mode: 'payment',
 			ui_mode: 'embedded',
 			customer: customerId,
-			return_url: `${origin}/me/licences?checkoutSessionId={CHECKOUT_SESSION_ID}`,
-			line_items: [
-				{
-					price: LICENCES.EVENT,
-					quantity: 1,
-					adjustable_quantity: { enabled: true, minimum: 0, maximum: 100 },
-				},
-				{
-					price: LICENCES.MEMBER,
-					quantity: 200,
-					adjustable_quantity: { enabled: true, minimum: 0, maximum: 10_000 },
-				},
-			],
+			line_items,
+			return_url,
 		})
 		if (!client_secret) throw Error('Create checkout failed')
 		return { clientSecret: client_secret }
@@ -104,6 +116,7 @@ export const checkout = {
 							checkout: checkoutCreated,
 						},
 					}),
+					updateEventMissingLicences(user.id),
 				])
 			}
 
@@ -125,4 +138,16 @@ async function getStripCustomerId(user: User): Promise<string> {
 		phone: user.phone,
 	})
 	return newCustomer.id
+}
+
+async function updateEventMissingLicences(ownerId: string) {
+	const events = await prisma.event.findMany({
+		where: { ownerId, missingLicencesMember: { gt: 0 } },
+		select: { id: true },
+	})
+	if (!events.length) return
+
+	for (const event of events) {
+		await ensureLicenceMembers(event.id)
+	}
 }
