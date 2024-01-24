@@ -1,9 +1,34 @@
 <script lang="ts">
-	import { Card, InputTextRich } from '$lib/material'
+	import { onMount } from 'svelte'
+	import { Card } from '$lib/material'
+	import { enhance } from '$app/forms'
 
-	let value = 'YOOO'
+	let events: string[] = []
+
+	onMount(() => {
+		const subscription = new EventSource('/root/lab')
+
+		const handleEvent = ({ data }: MessageEvent<string>) => {
+			console.log({ data })
+			events = [...events, data]
+		}
+
+		subscription.addEventListener('hey', handleEvent)
+
+		return () => {
+			subscription.removeEventListener('hey', handleEvent)
+		}
+	})
 </script>
 
 <Card class="max-w-3xl mx-auto">
-	<InputTextRich bind:value valueAsHTML />
+	<form action="?/send_event" method="post" use:enhance>
+		<button class="btn"> send event</button>
+	</form>
+
+	<hr />
+
+	{#each events as event}
+		{JSON.stringify(event)}
+	{/each}
 </Card>
