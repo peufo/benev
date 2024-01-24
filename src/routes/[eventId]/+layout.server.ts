@@ -29,6 +29,6 @@ export const load = async ({ depends, parent, params: { eventId } }) => {
 			}),
 		}
 	} catch {
-		error(404, 'not found');
+		error(404, 'not found')
 	}
 }

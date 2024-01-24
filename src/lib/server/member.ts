@@ -1,4 +1,5 @@
 import { ROOT_USER } from '$env/static/private'
+import type { Prisma } from '@prisma/client'
 import type { Member, Team, User, Event, Field } from '@prisma/client'
 import { addTeamComputedValues, prisma } from '$lib/server'
 
@@ -68,19 +69,13 @@ function getMemberProfileRequiredFields({ profileJson, event }: MemberWithUserEv
 
 export type MemberProfile = Awaited<ReturnType<typeof getMemberProfile>>
 
-type MemberUniqueWhere =
-	| { memberId: string; userId?: undefined; eventId?: undefined }
-	| { memberId?: undefined; userId: string; eventId: string }
-
-export function getMemberProfile(where: MemberUniqueWhere, accesor?: MemberWithComputedValues) {
-	const _where =
-		where.memberId !== undefined
-			? { id: where.memberId }
-			: { userId_eventId: { userId: where.userId, eventId: where.eventId } }
-
+export function getMemberProfile(
+	where: Prisma.MemberWhereInput,
+	accesor?: MemberWithComputedValues
+) {
 	return prisma.member
-		.findUniqueOrThrow({
-			where: _where,
+		.findFirstOrThrow({
+			where,
 			include: {
 				user: true,
 				event: {
