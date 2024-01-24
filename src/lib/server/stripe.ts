@@ -1,3 +1,4 @@
+import { EventEmitter } from 'node:events'
 import Stripe from 'stripe'
 import { PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, ROOT_USER } from '$env/static/private'
 import type { Prisma } from '@prisma/client'
@@ -5,10 +6,12 @@ import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
 
 import { LICENCE_EVENT_PRICE, LICENCE_MEMBER_PRICE } from '$env/static/private'
-import { prisma, sendEmailTemplate, ensureLicenceMembers } from '$lib/server'
+import { prisma, sendEmailTemplate, ensureLicenceMembers, createSSE } from '$lib/server'
 import { EmailCheckoutValidation } from '$lib/email'
 
 export const stripe = new Stripe(PRIVATE_STRIPE_KEY)
+
+const bus = new EventEmitter()
 
 export const checkout = {
 	async create(user: User, url: URL) {
@@ -18,7 +21,7 @@ export const checkout = {
 		const licenceMemberQuantity = url.searchParams.get('licence_member') || 200
 		const return_url =
 			url.origin +
-			(url.searchParams.get('return_url') || '/me/licences?checkoutSessionId={CHECKOUT_SESSION_ID}')
+			(url.searchParams.get('return_url') || '/me/licences?checkoutId={CHECKOUT_SESSION_ID}')
 
 		const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = []
 		if (+licenceEventQuantity)
@@ -114,6 +117,8 @@ export const checkout = {
 					}),
 					updateEventMissingLicences(user.id),
 				])
+
+				bus.emit(checkoutCreated.id)
 			}
 
 			return new Response('success', { status: 200 })
@@ -121,6 +126,16 @@ export const checkout = {
 			console.error(err)
 			error(400)
 		}
+	},
+	async subscribe(checkoutId: string) {
+		const { readable, subscribe } = createSSE()
+		subscribe(bus, checkoutId)
+		return new Response(readable, {
+			headers: {
+				'cache-control': 'no-cache',
+				'content-type': 'text/event-stream',
+			},
+		})
 	},
 }
 

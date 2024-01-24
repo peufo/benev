@@ -1,4 +1,4 @@
-import { createSSE } from './sse'
+import { createSSE } from '$lib/server/sse'
 import { bus } from './bus'
 
 export async function GET({ request }) {
@@ -7,7 +7,6 @@ export async function GET({ request }) {
 
 	const { readable, subscribe } = createSSE(last_event_id)
 
-	subscribe(bus, 'hey')
 	subscribe(bus, 'hey')
 
 	return new Response(readable, {

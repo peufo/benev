@@ -1,3 +1,5 @@
+// thanks: https://github.com/sveltejs/kit/issues/5344#issuecomment-1265286081
+
 import type { EventEmitter } from 'node:events'
 
 export function createSSE(last_id = 0, retry = 0) {

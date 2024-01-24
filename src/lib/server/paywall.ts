@@ -32,9 +32,11 @@ export async function ensureLicenceEvent(eventId: string) {
 
 export async function ensureLicenceMembers(eventId: string) {
 	const event = await prisma.event.findUniqueOrThrow({
-		where: { id: eventId, licence: { isNot: null } },
-		select: { id: true, ownerId: true, missingLicencesMember: true },
+		where: { id: eventId, OR: [{ licence: { isNot: null } }, { state: 'draft' }] },
+		select: { id: true, ownerId: true, missingLicencesMember: true, state: true },
 	})
+
+	if (event.state === 'draft') return
 
 	await removeUselessMemberLicence(event)
 

@@ -4,12 +4,10 @@
 	import { invalidateAll } from '$app/navigation'
 	import { Icon, Placeholder } from '$lib/material'
 	import { LICENCE_TYPE_LABEL } from '$lib/constant'
+	import type { PageData } from './$types.js'
+	import { page } from '$app/stores'
 
 	export let data
-
-	let checkoutSessionId: string | null = null
-
-	const licences = data.checkouts.map((checkout) => checkout.licences).flat()
 
 	type Transaction = {
 		id: string
@@ -20,33 +18,52 @@
 		amount?: number
 		currency?: string
 	}
+	$: licences = data.checkouts.map((checkout) => checkout.licences).flat()
+	$: transactions = getTransactions(data)
 
-	const transactions: Transaction[] = [
-		...data.checkouts.map((checkout) => ({
-			id: checkout.id,
-			name: checkout.name || 'Achat de licences',
-			date: checkout.createdAt,
-			licencesEvent: checkout.licences.filter((l) => l.type === 'event').length,
-			licencesMember: checkout.licences.filter((l) => l.type === 'member').length,
-			amount: checkout.amount,
-			currency: checkout.currency,
-		})),
-		...data.events.map((event) => ({
-			id: event.id,
-			name: `Évènement: ${event.name}`,
-			date: event.updatedAt,
-			licencesEvent: -1,
-			licencesMember: -event._count.members,
-		})),
-	].toSorted((a, b) => b.date.getTime() - a.date.getTime())
+	function getTransactions(data: PageData): Transaction[] {
+		return [
+			...data.checkouts.map((checkout) => ({
+				id: checkout.id,
+				name: checkout.name || 'Achat de licences',
+				date: checkout.createdAt,
+				licencesEvent: checkout.licences.filter((l) => l.type === 'event').length,
+				licencesMember: checkout.licences.filter((l) => l.type === 'member').length,
+				amount: checkout.amount,
+				currency: checkout.currency,
+			})),
+			...data.events.map((event) => ({
+				id: event.id,
+				name: `Évènement: ${event.name}`,
+				date: event.updatedAt,
+				licencesEvent: -1,
+				licencesMember: -event._count.members,
+			})),
+		].toSorted((a, b) => b.date.getTime() - a.date.getTime())
+	}
+	let checkoutId = $page.url.searchParams.get('checkoutId')
+	let isNewCheckoutAwaited = !!checkoutId && !data.checkouts.find(({ id }) => id === checkoutId)
 
-	onMount(() => {
-		const searchParams = new URLSearchParams(location.search)
-		checkoutSessionId = searchParams.get('checkoutSessionId')
-		if (!checkoutSessionId) return
-		const checkout = data.checkouts.find((checkout) => checkout.id === checkoutSessionId)
-		if (!checkout) invalidateAll()
-	})
+	const handleCheckoutNotification = async () => {
+		isNewCheckoutAwaited = false
+		invalidateAll()
+	}
+
+	function awaitCheckoutNotification() {
+		if (!checkoutId) return
+		if (!isNewCheckoutAwaited) return
+
+		const timeout = setTimeout(handleCheckoutNotification, 5000)
+		const subscription = new EventSource(`/me/licences/checkout/validation${location.search}`)
+		subscription.addEventListener(checkoutId, handleCheckoutNotification)
+
+		return () => {
+			clearTimeout(timeout)
+			if (checkoutId) subscription.removeEventListener(checkoutId, handleCheckoutNotification)
+		}
+	}
+
+	onMount(awaitCheckoutNotification)
 </script>
 
 <div class="flex items-center">
@@ -71,11 +88,17 @@
 </div>
 
 <div class="flex flex-col gap-2">
+	{#if isNewCheckoutAwaited}
+		<div class="h-20 grid place-content-center border-primary border rounded">
+			<span class="loading loading-infinity loading-lg text-primary" />
+		</div>
+	{/if}
+
 	{#each transactions as tr}
 		<section
 			class="border rounded p-4 pt-2"
-			class:border-primary={tr.id === checkoutSessionId}
-			class:border-2={tr.id === checkoutSessionId}
+			class:border-primary={tr.id === checkoutId}
+			class:border-2={tr.id === checkoutId}
 		>
 			<div class="flex gap-2 items-top">
 				<div class="flex flex-wrap gap-x-2 gap-y-0 items-center">
