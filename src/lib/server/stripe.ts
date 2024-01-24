@@ -46,6 +46,7 @@ export const checkout = {
 			customer: customerId,
 			line_items,
 			return_url,
+			allow_promotion_codes: true,
 		})
 		if (!client_secret) throw Error('Create checkout failed')
 		return { clientSecret: client_secret }
