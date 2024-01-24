@@ -24,9 +24,7 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 	})
 	if (err) error(400)
 
-	const subscribesFilters: Prisma.SubscribeWhereInput[] = []
-	const team: Prisma.TeamWhereInput = { eventId }
-	const period: Prisma.PeriodWhereInput = { team }
+	const subscribesFilters: Prisma.SubscribeWhereInput[] = [{ period: { team: { eventId } } }]
 
 	if (data.teams) subscribesFilters.push({ period: { teamId: { in: data.teams } } })
 	if (data.period) {
