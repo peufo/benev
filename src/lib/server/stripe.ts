@@ -1,18 +1,14 @@
 import Stripe from 'stripe'
 import { PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, ROOT_USER } from '$env/static/private'
 import type { Prisma } from '@prisma/client'
-
 import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
+
+import { LICENCE_EVENT_PRICE, LICENCE_MEMBER_PRICE } from '$env/static/private'
 import { prisma, sendEmailTemplate, ensureLicenceMembers } from '$lib/server'
 import { EmailCheckoutValidation } from '$lib/email'
 
 export const stripe = new Stripe(PRIVATE_STRIPE_KEY)
-
-const LICENCES = {
-	MEMBER: 'price_1OLraBAUcTa5BjSxh9ABcdgD',
-	EVENT: 'price_1OLrP1AUcTa5BjSxq1DqKGXE',
-}
 
 export const checkout = {
 	async create(user: User, url: URL) {
@@ -27,14 +23,14 @@ export const checkout = {
 		const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = []
 		if (+licenceEventQuantity)
 			line_items.push({
-				price: LICENCES.EVENT,
+				price: LICENCE_EVENT_PRICE,
 				quantity: +licenceEventQuantity,
 				adjustable_quantity: { enabled: true, minimum: 0, maximum: 100 },
 			})
 
 		if (+licenceMemberQuantity)
 			line_items.push({
-				price: LICENCES.MEMBER,
+				price: LICENCE_MEMBER_PRICE,
 				quantity: +licenceMemberQuantity,
 				adjustable_quantity: { enabled: true, minimum: 0, maximum: 10_000 },
 			})
