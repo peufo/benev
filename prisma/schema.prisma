@@ -119,7 +119,7 @@ model Event {
   id        String     @id @unique
   name      String     @unique
   state     EventState @default(draft)
-  activedAt DateTime?
+  activedAt DateTime? // TODO: remove ?
   deletedAt DateTime?
   ownerId   String
   owner     User       @relation(references: [id], fields: [ownerId], onDelete: Cascade)

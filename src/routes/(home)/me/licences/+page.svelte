@@ -11,6 +11,35 @@
 
 	const licences = data.checkouts.map((checkout) => checkout.licences).flat()
 
+	type Transaction = {
+		id: string
+		name: string
+		date: Date
+		licencesEvent: number
+		licencesMember: number
+		amount?: number
+		currency?: string
+	}
+
+	const transactions: Transaction[] = [
+		...data.checkouts.map((checkout) => ({
+			id: checkout.id,
+			name: checkout.name || 'Achat de licences',
+			date: checkout.createdAt,
+			licencesEvent: checkout.licences.filter((l) => l.type === 'event').length,
+			licencesMember: checkout.licences.filter((l) => l.type === 'member').length,
+			amount: checkout.amount,
+			currency: checkout.currency,
+		})),
+		...data.events.map((event) => ({
+			id: event.id,
+			name: `Évènement: ${event.name}`,
+			date: event.updatedAt,
+			licencesEvent: -1,
+			licencesMember: -event._count.members,
+		})),
+	].toSorted((a, b) => b.date.getTime() - a.date.getTime())
+
 	onMount(() => {
 		const searchParams = new URLSearchParams(location.search)
 		checkoutSessionId = searchParams.get('checkoutSessionId')
@@ -42,41 +71,54 @@
 </div>
 
 <div class="flex flex-col gap-2">
-	{#each data.checkouts as checkout}
-		{@const licencesEvent = checkout.licences.filter((l) => l.type === 'event')}
-		{@const licencesMember = checkout.licences.filter((l) => l.type === 'member')}
-
+	{#each transactions as tr}
 		<section
 			class="border rounded p-4 pt-2"
-			class:border-primary={checkout.id === checkoutSessionId}
-			class:border-2={checkout.id === checkoutSessionId}
+			class:border-primary={tr.id === checkoutSessionId}
+			class:border-2={tr.id === checkoutSessionId}
 		>
 			<div class="flex gap-2 items-top">
 				<div class="flex flex-wrap gap-x-2 gap-y-0 items-center">
-					<h3 class="font-semibold opacity-80">{checkout.name || ''}</h3>
+					<h3 class="font-semibold opacity-80">{tr.name || ''}</h3>
 					<span class="text-xs italic opacity-70">
-						{checkout.createdAt.toLocaleDateString()}
+						{tr.date.toLocaleDateString()}
 					</span>
 				</div>
 
-				<div class="ml-auto whitespace-nowrap mt-1 text-sm">
-					{(checkout.amount / 100).toFixed(2)}
-					{checkout.currency.toUpperCase()}
-				</div>
+				{#if tr.amount && tr.currency}
+					<div class="ml-auto whitespace-nowrap mt-1 text-sm">
+						{(tr.amount / 100).toFixed(2)}
+						{tr.currency.toUpperCase()}
+					</div>
+				{/if}
 			</div>
 
 			<div class="flex mt-2 gap-2 justify-end">
-				{#if licencesEvent.length}
-					<span class="badge gap-1 badge-success">
+				{#if tr.licencesEvent !== 0}
+					<span
+						class="badge gap-1"
+						class:badge-success={tr.licencesEvent > 0}
+						class:badge-warning={tr.licencesEvent < 0}
+					>
 						{LICENCE_TYPE_LABEL.event}
-						<b>+{licencesEvent.length}</b>
+						<b
+							>{tr.licencesEvent > 0 ? '+' : ''}
+							{tr.licencesEvent}
+						</b>
 					</span>
 				{/if}
 
-				{#if licencesMember.length}
-					<span class="badge gap-1 badge-success">
+				{#if tr.licencesMember !== 0}
+					<span
+						class="badge gap-1"
+						class:badge-success={tr.licencesMember > 0}
+						class:badge-warning={tr.licencesMember < 0}
+					>
 						{LICENCE_TYPE_LABEL.member}
-						<b>+{licencesMember.length}</b>
+						<b
+							>{tr.licencesMember > 0 ? '+' : ''}
+							{tr.licencesMember}
+						</b>
 					</span>
 				{/if}
 			</div>

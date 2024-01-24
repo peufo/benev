@@ -32,7 +32,7 @@ export async function ensureLicenceEvent(eventId: string) {
 
 export async function ensureLicenceMembers(eventId: string) {
 	const event = await prisma.event.findUniqueOrThrow({
-		where: { id: eventId },
+		where: { id: eventId, licence: { isNot: null } },
 		select: { id: true, ownerId: true, missingLicencesMember: true },
 	})
 
