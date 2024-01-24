@@ -8,6 +8,8 @@
 	import { enhance } from '$app/forms'
 	import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
 	import { tip } from '$lib/action'
+	import { page } from '$app/stores'
+	import { useNotify } from '$lib/notify'
 
 	export let event: Event
 	export let eventCounts: PageData['eventCounts']
@@ -24,6 +26,15 @@
 		],
 		archived: [{ state: 'published', label: 'Republier' }],
 	}
+
+	const notify = useNotify()
+
+	function handleClickLicence(event: MouseEvent | KeyboardEvent) {
+		if (!$page.data.member?.roles.includes('owner')) {
+			event.preventDefault()
+			notify.warning('Seul le propriétaire peut obtenir des licences pour cet évenement')
+		}
+	}
 </script>
 
 <div
@@ -33,19 +44,21 @@
   "
 >
 	<div>
-		<div class="flex gap-2 items-center">
+		<div class="flex gap-2 items-center flex-wrap">
 			<Icon
 				path={EVENT_STATES[event.state].icon}
 				class="opacity-80 {event.state === 'draft' ? 'rotate-12' : ''}"
 			/>
 			<h3 class="title">{EVENT_STATES[event.state].label}</h3>
+			<div class="grow" />
+
 			{#if event.state === 'draft'}
 				<div
 					use:tip={{
 						content: `${eventCounts.membersValided} membres validés pour ${PUBLIC_FREE_EVENT_MAX_MEMBERS} possibles`,
 					}}
 					role="progressbar"
-					class="radial-progress bg-warning text-xs opacity-80 ml-auto"
+					class="radial-progress bg-warning text-xs opacity-80"
 					style="--value:{(eventCounts.membersValided / +PUBLIC_FREE_EVENT_MAX_MEMBERS) *
 						100}; --size: 3rem;"
 				>
@@ -54,19 +67,28 @@
 			{:else}
 				{@const maxMembers = eventCounts.membersLicenced + eventCounts.memberLicencesAvailable}
 				{@const content = event.missingLicencesMember
-					? `Il manque ${event.missingLicencesMember} licences`
+					? `Il manque ${event.missingLicencesMember} licences de membre`
 					: eventCounts.memberLicencesAvailable
-					? `Encore ${eventCounts.memberLicencesAvailable} licences disponibles`
-					: `Pas de licence disponible`}
+					? `Encore ${eventCounts.memberLicencesAvailable} licences de membre disponibles`
+					: `Pas de licence de membre disponible`}
 
-				<div
+				<a
+					href="/me/licences"
+					on:click={handleClickLicence}
+					on:keydown={handleClickLicence}
 					use:tip={{ content }}
-					role="progressbar"
-					class="radial-progress text-xs bg-primary/10 opacity-80 ml-auto"
-					style="--value:{(eventCounts.membersLicenced / maxMembers) * 100}; --size: 3rem;"
 				>
-					{eventCounts.membersLicenced + event.missingLicencesMember} / {maxMembers}
-				</div>
+					<div
+						role="progressbar"
+						class="
+							radial-progress text-xs opacity-80
+							{event.missingLicencesMember ? 'text-error opacity-100' : ''}
+						"
+						style="--value:{(eventCounts.membersLicenced / maxMembers) * 100}; --size: 3rem;"
+					>
+						{eventCounts.membersLicenced + event.missingLicencesMember} / {maxMembers}
+					</div>
+				</a>
 			{/if}
 		</div>
 

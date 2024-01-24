@@ -44,7 +44,7 @@
 					<DropDown hideOnBlur tippyProps={{ arrow: true }}>
 						<button slot="activator" class="btn btn-sm ml-2">
 							<MemberRole roles={data.memberProfile.roles} mode="contents" />
-							{#if data.memberProfile.isValidedByEvent}
+							{#if !data.memberProfile.roles.includes('leader') && data.memberProfile.isValidedByEvent}
 								validé
 							{/if}
 						</button>
