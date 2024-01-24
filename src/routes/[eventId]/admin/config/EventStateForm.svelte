@@ -52,7 +52,7 @@
 			const owner = `${$page.data.member!.user.firstName} ${$page.data.member!.user.lastName}`
 			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
 		}
-		if (newState === 'actived' && !eventLicenceAvailable) {
+		if (event.state === 'draft' && !eventLicenceAvailable) {
 			e.preventDefault()
 			goto(
 				`/me/licences/checkout?return_url=${$eventPath}/admin/config?checkoutId={CHECKOUT_SESSION_ID}`
