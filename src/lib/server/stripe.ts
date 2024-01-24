@@ -71,8 +71,8 @@ export const checkout = {
 					}),
 				])
 
-				const licenceEvent = items.find((item) => item.price?.id === LICENCES.EVENT)
-				const licenceMember = items.find((item) => item.price?.id === LICENCES.MEMBER)
+				const licenceEvent = items.find((item) => item.price?.id === LICENCE_EVENT_PRICE)
+				const licenceMember = items.find((item) => item.price?.id === LICENCE_MEMBER_PRICE)
 				const licences: Prisma.LicenceCreateManyCheckoutInput[] = []
 				if (licenceEvent)
 					licences.push(
