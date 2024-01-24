@@ -9,6 +9,7 @@ import {
 	generateToken,
 	permission,
 	createAvatarPlaceholder,
+	ensureLicenceMembers,
 } from '$lib/server'
 import { EmailAcceptInvite, EmailAcceptInviteNotification, EmailNewInvite } from '$lib/email'
 
@@ -119,6 +120,7 @@ export const actions = {
 						isValidedByEvent,
 					},
 				})
+				await ensureLicenceMembers(eventId)
 				// TODO: mails to admins ?
 				return
 			}

@@ -124,7 +124,8 @@ model Event {
   ownerId   String
   owner     User       @relation(references: [id], fields: [ownerId], onDelete: Cascade)
 
-  licence Licence?
+  licence               Licence?
+  missingLicencesMember Int      @default(0)
 
   description String?
   icon        String?

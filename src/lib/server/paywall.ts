@@ -31,19 +31,27 @@ export async function ensureLicenceEvent(eventId: string) {
 }
 
 export async function ensureLicenceMembers(eventId: string) {
-	const membersWithoutLicence = await prisma.member.findMany({
-		where: { eventId, licence: null },
-	})
-	if (!membersWithoutLicence.length) return
-
-	const { ownerId } = await prisma.event.findUniqueOrThrow({
+	const event = await prisma.event.findUniqueOrThrow({
 		where: { id: eventId },
-		select: { ownerId: true },
+		select: { id: true, ownerId: true, missingLicencesMember: true },
 	})
+
+	await removeUselessMemberLicence(event)
+
+	const membersWithoutLicence = await prisma.member.findMany({
+		where: { eventId, licence: null, isValidedByEvent: true },
+	})
+	if (!membersWithoutLicence.length) {
+		await prisma.event.update({
+			where: { id: event.id },
+			data: { missingLicencesMember: 0 },
+		})
+		return
+	}
 
 	const licencesMember = await prisma.licence.findMany({
 		where: {
-			ownerId,
+			ownerId: event.ownerId,
 			memberId: null,
 			type: 'member',
 		},
@@ -65,6 +73,36 @@ export async function ensureLicenceMembers(eventId: string) {
 
 	await prisma.$transaction(licencesUpdateArgs.map((args) => prisma.licence.update(args)))
 
-	if (membersWithoutLicence.length)
-		throw Error(`${membersWithoutLicence.length} member licences missing`)
+	await updateMissingLicencesMember(event)
+}
+
+async function removeUselessMemberLicence(event: { id: string; ownerId: string }) {
+	const membersWithUselessLicence = await prisma.member.findMany({
+		where: { eventId: event.id, licence: { isNot: null }, isValidedByEvent: false },
+		select: { id: true },
+	})
+
+	if (!membersWithUselessLicence.length) return
+
+	await prisma.$transaction(
+		membersWithUselessLicence.map((m) =>
+			prisma.licence.update({
+				where: { memberId: m.id, type: 'member' },
+				data: { memberId: null },
+			})
+		)
+	)
+}
+
+async function updateMissingLicencesMember(event: { id: string; missingLicencesMember: number }) {
+	const missingLicencesMember = await prisma.member.count({
+		where: { eventId: event.id, isValidedByEvent: true, licence: null },
+	})
+
+	if (missingLicencesMember !== event.missingLicencesMember) {
+		await prisma.event.update({
+			where: { id: event.id },
+			data: { missingLicencesMember },
+		})
+	}
 }

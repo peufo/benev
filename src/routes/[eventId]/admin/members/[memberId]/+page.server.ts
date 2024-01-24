@@ -1,4 +1,11 @@
-import { prisma, getMemberProfile, permission, parseFormData, tryOrFail } from '$lib/server'
+import {
+	prisma,
+	getMemberProfile,
+	permission,
+	parseFormData,
+	tryOrFail,
+	ensureLicenceMembers,
+} from '$lib/server'
 import { z } from '$lib/validation'
 
 export const load = async ({ parent, params: { memberId, eventId } }) => {
@@ -57,11 +64,12 @@ export const actions = {
 		const { err, data } = await parseFormData(request, { isValidedByEvent: z.boolean() })
 		if (err) return err
 
-		return tryOrFail(() =>
-			prisma.member.update({
+		return tryOrFail(async () => {
+			await prisma.member.update({
 				where: { id: memberId },
 				data: { ...data },
 			})
-		)
+			await ensureLicenceMembers(eventId)
+		})
 	},
 }

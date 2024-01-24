@@ -6,6 +6,7 @@ import {
 	sendEmailTemplate,
 	tryOrFail,
 	permission,
+	ensureLicenceMembers,
 	type MemberWithComputedValues,
 } from '$lib/server'
 import { EmailNewSubscribe, EmailSubscribeState, EmailSubscribeStateCancelled } from '$lib/email'
@@ -109,6 +110,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 					where: { id: subscribe.memberId },
 					data: { isValidedByEvent: true },
 				})
+				await ensureLicenceMembers(eventId)
 			}
 
 			const toMember = subscribe.member.user.wantsNotification ? [subscribe.member.user.email] : []

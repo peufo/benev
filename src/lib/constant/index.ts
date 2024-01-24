@@ -45,25 +45,25 @@ export const EVENT_STATES: Record<
 	draft: {
 		icon: mdiTestTube,
 		label: 'Évènement en projet',
-		class: 'border-warning bg-warning/40',
+		class: 'border-warning',
 		description: `L'évenement est limité à ${PUBLIC_FREE_EVENT_MAX_MEMBERS} membres validés et seul les responsables ont accès au site.`,
 	},
 	actived: {
 		icon: mdiExcavator,
 		label: 'Évènement en construction',
-		class: 'border-warning bg-warning/40',
+		class: 'border-warning',
 		description: `Seul les responsables ont accès au site.`,
 	},
 	published: {
 		icon: mdiEarth,
 		label: 'Évènement publié',
-		class: 'border-success bg-success/50',
+		class: 'border-success',
 		description: `Le site est publiquement disponible.`,
 	},
 	archived: {
 		icon: mdiArchiveOutline,
 		label: 'Évènement archivé',
-		class: 'bg-base-200',
+		class: '',
 		description: `Les inscriptions sont fermé et le site est marqué comme inactif.`,
 	},
 } as const
