@@ -10,9 +10,11 @@
 	import { tip } from '$lib/action'
 	import { page } from '$app/stores'
 	import { useNotify } from '$lib/notify'
+	import { goto } from '$app/navigation'
 
 	export let event: Event
 	export let eventCounts: PageData['eventCounts']
+	export let eventLicenceAvailable: boolean
 
 	const nextStates: Record<EventState, { state: EventState; label: string }[]> = {
 		draft: [{ state: 'actived', label: 'Activer' }],
@@ -32,7 +34,20 @@
 	function handleClickLicence(event: MouseEvent | KeyboardEvent) {
 		if (!$page.data.member?.roles.includes('owner')) {
 			event.preventDefault()
-			notify.warning('Seul le propriétaire peut obtenir des licences pour cet évenement')
+			const owner = `${$page.data.member!.user.firstName} ${$page.data.member!.user.lastName}`
+			notify.warning(`Seul le propriétaire, ${owner}, peut obtenir des licences pour cet évènement`)
+		}
+	}
+
+	function handleClickState(event: MouseEvent | KeyboardEvent, newState: EventState) {
+		if (!$page.data.member?.roles.includes('owner')) {
+			event.preventDefault()
+			const owner = `${$page.data.member!.user.firstName} ${$page.data.member!.user.lastName}`
+			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
+		}
+		if (newState === 'actived' && !eventLicenceAvailable) {
+			event.preventDefault()
+			goto(`/me/licences/checkout?return_url=${$eventPath}/admin/config`)
 		}
 	}
 </script>
@@ -107,7 +122,13 @@
 				class="contents"
 			>
 				<input type="hidden" name="state" value={state} />
-				<button class="btn btn-sm btn-primary">{label}</button>
+				<button
+					class="btn btn-sm btn-primary"
+					on:click={(e) => handleClickState(e, state)}
+					on:keydown={(e) => handleClickState(e, state)}
+				>
+					{label}
+				</button>
 			</form>
 		{/each}
 	</div>

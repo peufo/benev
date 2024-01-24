@@ -34,6 +34,9 @@ export const load = async ({ parent, params: { eventId } }) => {
 				where: { ownerId: event.ownerId, type: 'member', memberId: null },
 			}),
 		},
+		eventLicenceAvailable: await prisma.licence.findFirst({
+			where: { ownerId: event.ownerId, type: 'event', eventId: null },
+		}),
 	}
 }
 

@@ -20,7 +20,11 @@
 
 <OnlyAdmin>
 	<div class="grid gap-6 pt-4 place-content-center justify-stretch pb-36 px-0 md:px-20 lg:px-48">
-		<EventStateForm event={data.event} eventCounts={data.eventCounts} />
+		<EventStateForm
+			event={data.event}
+			eventCounts={data.eventCounts}
+			eventLicenceAvailable={!!data.eventLicenceAvailable}
+		/>
 
 		<SectionCollapse value="infos">
 			<span slot="title" class="flex gap-3">

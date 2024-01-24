@@ -46,13 +46,13 @@ export const EVENT_STATES: Record<
 		icon: mdiTestTube,
 		label: 'Évènement en projet',
 		class: 'border-warning',
-		description: `L'évenement est limité à ${PUBLIC_FREE_EVENT_MAX_MEMBERS} membres validés et seul les responsables ont accès au site.`,
+		description: `L'évènement est limité à ${PUBLIC_FREE_EVENT_MAX_MEMBERS} membres validés et seul les responsables y ont accès.`,
 	},
 	actived: {
 		icon: mdiExcavator,
 		label: 'Évènement en construction',
 		class: 'border-warning',
-		description: `Seul les responsables ont accès au site.`,
+		description: `Seul les responsables ont accès au site de l'évènement.`,
 	},
 	published: {
 		icon: mdiEarth,
@@ -64,7 +64,7 @@ export const EVENT_STATES: Record<
 		icon: mdiArchiveOutline,
 		label: 'Évènement archivé',
 		class: '',
-		description: `Les inscriptions sont fermé et le site est marqué comme inactif.`,
+		description: `Seul les responsables ont accès au site de l'évènement.`,
 	},
 } as const
 
