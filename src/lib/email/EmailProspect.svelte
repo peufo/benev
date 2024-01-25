@@ -5,6 +5,8 @@
 	import { features } from '$lib/features'
 	import { domain } from '.'
 
+	export let appellation = ''
+
 	function ensureDomain(route: string) {
 		return domain + route.replace(domain, '')
 	}
@@ -12,7 +14,7 @@
 
 <EmailLayout showLogo title="benev.io" subtitle="Votre nouvelle plateforme de gestion de bénévole">
 	<p>
-		Bonjour cher·e organisateur·rice, 👋 <br />
+		Bonjour cher·e organisateur·rice{appellation ? ` ${appellation}` : ''}, 👋 <br />
 	</p>
 
 	<p>Nous avons mis en place la plateforme idéale pour la gestion de vos bénévoles.</p>
@@ -26,7 +28,7 @@
 		</a>
 	</div>
 
-	<p>Vous y trouverez toutes les fonctionnalités essentielles à votre gestion.</p>
+	<p>Vous y trouverez toutes les fonctionnalités essentielles à votre évènement.</p>
 
 	<table width="100%" style="border-collapse: separate; " cellspacing="0" cellpadding="0">
 		<tbody>

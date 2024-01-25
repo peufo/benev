@@ -9,15 +9,15 @@ export const actions = {
 		if (err) return err
 
 		return tryOrFail(async () => {
-			const emails = data.to
-				.split(/;|\n/)
-				.filter(Boolean)
-				.map((email) => email.trim())
+			const emails = data.to.split('\n')
+
 			for (const email of emails) {
+				const [to, appellation] = email.split('\t')
+
 				await sendEmailTemplate(EmailProspect, {
-					to: email,
+					to,
 					subject: 'Benev.io - Votre plateforme de gestion de bénévole',
-					props: {},
+					props: { appellation },
 				})
 				eventEmiter.emit('send_email', email)
 				await wait(5000 + 3000 * Math.random())
