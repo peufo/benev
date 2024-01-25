@@ -1,18 +1,34 @@
 import { tryOrFail, sendEmailTemplate, parseFormData } from '$lib/server'
 import { EmailProspect } from '$lib/email'
 import { z } from '$lib/validation'
+import { eventEmitter } from './+server'
 
 export const actions = {
 	send_email: async ({ request }) => {
-		const { err, data } = await parseFormData(request, { to: z.string().email() })
+		const { err, data } = await parseFormData(request, { to: z.string() })
 		if (err) return err
 
-		return tryOrFail(() => {
-			return sendEmailTemplate(EmailProspect, {
-				to: data.to,
-				subject: 'Benev.io - Votre plateforme de gestion de bénévole',
-				props: {},
-			})
+		return tryOrFail(async () => {
+			const emails = data.to
+				.split(';')
+				.filter(Boolean)
+				.map((email) => email.trim())
+			for (const email of emails) {
+				await sendEmailTemplate(EmailProspect, {
+					to: email,
+					subject: 'Benev.io - Votre plateforme de gestion de bénévole',
+					props: {},
+				})
+				eventEmitter.emit('send_email', email)
+				await wait(5000 + 3000 * Math.random())
+			}
+			return
 		})
 	},
+}
+
+function wait(ms: number) {
+	return new Promise((reslove) => {
+		setTimeout(reslove, ms)
+	})
 }
