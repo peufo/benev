@@ -12,6 +12,6 @@
 		<a href="/" class="btn btn-sm btn-square" use:tip={{ content: 'benev.io' }}>
 			<img src={logo} alt="logo de benev.io" class="h-5" />
 		</a>
-		<a href="https://github.com/peufo" class="link link-hover"> Created by peufo </a>
+		<a href="https://github.com/peufo" class="link link-hover"> Created in Switzerland by peufo</a>
 	</div>
 </footer>
