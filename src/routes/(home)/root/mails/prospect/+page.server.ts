@@ -10,7 +10,7 @@ export const actions = {
 
 		return tryOrFail(async () => {
 			const emails = data.to
-				.split(';')
+				.split(/;|\n/)
 				.filter(Boolean)
 				.map((email) => email.trim())
 			for (const email of emails) {

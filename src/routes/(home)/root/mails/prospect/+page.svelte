@@ -1,10 +1,11 @@
 <script lang="ts">
+	import dayjs from 'dayjs'
 	import { onMount } from 'svelte'
 	import { enhance } from '$app/forms'
+
 	import { EmailProspect } from '$lib/email'
-	import { InputText } from '$lib/material'
+	import { InputTextarea } from '$lib/material'
 	import { useForm } from '$lib/validation'
-	import dayjs from 'dayjs'
 
 	const form = useForm()
 
@@ -25,7 +26,7 @@
 	class="flex gap-2 border bordered p-2 m-2 rounded items-end"
 	use:enhance={form.submit}
 >
-	<InputText key="to" label="Destinataires" class="w-full" />
+	<InputTextarea key="to" label="Destinataires" class="w-full" />
 
 	<button class="btn">Envoyer</button>
 </form>
