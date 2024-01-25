@@ -24,7 +24,8 @@
 					licence GPL-3
 				</a>. Donc, si tu es curieux, tu es libre de jeter un œil au code source, de contribuer au
 				projet ou d’héberger ta propres version de l’application. Mais garde à l'esprit que ses
-				libertés sont soumises aux termes de la licence.
+				libertés sont soumises aux termes de la licence.<br />
+				Le logo, le domaine et la marques de benev.io sont détenus et exploités par Dev Voisard.
 			</p>
 		</section>
 
