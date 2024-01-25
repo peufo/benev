@@ -4,6 +4,10 @@
 
 	import { features } from '$lib/features'
 	import { domain } from '.'
+
+	function ensureDomain(route: string) {
+		return domain + route.replace(domain, '')
+	}
 </script>
 
 <EmailLayout showLogo title="benev.io" subtitle="Votre nouvelle plateforme de gestion de bénévole">
@@ -55,7 +59,7 @@
 				<tr>
 					<td style="vertical-align: middle; width: 80px;">
 						<img
-							src={jonas}
+							src={ensureDomain(jonas)}
 							alt="Portrait de Jonas Voisard"
 							style="height: 65px; width: 65px; border-radius: 8px;"
 						/>
