@@ -1,7 +1,7 @@
 import { tryOrFail, sendEmailTemplate, parseFormData } from '$lib/server'
 import { EmailProspect } from '$lib/email'
 import { z } from '$lib/validation'
-import { eventEmitter } from './+server'
+import { eventEmiter } from './eventEmitter'
 
 export const actions = {
 	send_email: async ({ request }) => {
@@ -19,7 +19,7 @@ export const actions = {
 					subject: 'Benev.io - Votre plateforme de gestion de bénévole',
 					props: {},
 				})
-				eventEmitter.emit('send_email', email)
+				eventEmiter.emit('send_email', email)
 				await wait(5000 + 3000 * Math.random())
 			}
 			return

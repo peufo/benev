@@ -1,12 +1,10 @@
 import { createSSE } from '$lib/server'
-import { EventEmitter } from 'node:events'
-
-export const eventEmitter = new EventEmitter()
+import { eventEmiter } from './eventEmitter'
 
 export const GET = () => {
 	const { readable, subscribe } = createSSE()
 
-	subscribe(eventEmitter, 'send_email')
+	subscribe(eventEmiter, 'send_email')
 
 	return new Response(readable, {
 		headers: {
