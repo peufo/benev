@@ -7,11 +7,12 @@ export const getAge = (date: Date | null) => {
 	return day.diff(dayjs(date), 'year') + ' ans'
 }
 
+export type Primitive = string | number | boolean
+
 export type ComponentAndProps = {
 	component: ComponentType
 	props: ComponentProps<InstanceType<ComponentType>>
 }
-export type Primitive = string | number | boolean
 
 export function component<Component extends ComponentType>(
 	component: Component,
