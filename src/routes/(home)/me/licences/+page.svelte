@@ -39,7 +39,7 @@
 				licencesEvent: -1,
 				licencesMember: -event._count.members,
 			})),
-		].toSorted((a, b) => b.date.getTime() - a.date.getTime())
+		].sort((a, b) => b.date.getTime() - a.date.getTime())
 	}
 
 	let checkoutId = $page.url.searchParams.get('checkoutId')
