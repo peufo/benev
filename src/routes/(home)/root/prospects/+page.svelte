@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { Table, Pagination, Icon, type TableField } from '$lib/material'
-	import { mdiPlus } from '@mdi/js'
-	import type { Prospect } from '@prisma/client'
 	import { onMount } from 'svelte'
+	import type { Prospect } from '@prisma/client'
+	import { mdiPlus } from '@mdi/js'
+	import { Table, Pagination, Icon, type TableField } from '$lib/material'
+	import SendEmail from './SendEmail.svelte'
+	import { component } from '$lib/utils'
 
 	export let data
 
@@ -38,6 +40,12 @@
 			getCell: (item) => `<a href="${item.site}">${item.site}</a>`,
 		},
 		{
+			key: 'lastContact',
+			label: "Envoi de l'email",
+			getCell: (item) => component(SendEmail, { prospect: item }),
+			visible: true,
+		},
+		{
 			key: 'openEmailAt',
 			label: "Ouverture de l'email",
 			getCell: (item) => item.emailOpenAt?.toLocaleString(),
@@ -61,7 +69,8 @@
 		</a>
 	</div>
 
-	<Table key="prospect" items={data.prospects} {fields} />
+	<Table key="prospects" items={data.prospects || []} {fields} />
+
 	<div class="flex justify-end">
 		<Pagination />
 	</div>

@@ -14,18 +14,22 @@ export const actions = {
 			const prospects = data.prospects
 				.split('\n')
 				.map((prospect) => {
-					const [name, email, site] = prospect.split('\t')
+					const [name, email, site] = prospect.split(/\t|    /)
 					return { name, email, site }
 				})
 				.filter((p) => p.email)
 
-			if (prospects.length)
+			if (prospects.length) {
 				await prisma.prospect.createMany({
 					data: prospects,
 				})
 
-			if (data.sendEmail) {
-				await sendProspectEmails(prospects.map((p) => p.email))
+				if (data.sendEmail) {
+					const newProspects = await prisma.prospect.findMany({
+						where: { email: { in: prospects.map((p) => p.email) } },
+					})
+					await sendProspectEmails(newProspects)
+				}
 			}
 		}, '/root/prospects')
 	},

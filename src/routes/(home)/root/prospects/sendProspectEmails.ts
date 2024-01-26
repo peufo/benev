@@ -1,4 +1,4 @@
-import { sendEmailTemplate } from '$lib/server'
+import { sendEmailTemplate, prisma } from '$lib/server'
 import { EmailProspect } from '$lib/email'
 
 import { eventEmiter } from './eventEmitter'
@@ -9,16 +9,10 @@ export async function sendProspectEmails(prospects: Prospect[]) {
 		await sendEmailTemplate(EmailProspect, {
 			to: prospect.email,
 			subject: 'Benev.io - Votre plateforme de gestion de bénévole',
-			props: { appellation },
+			props: { prospect },
 		})
 		eventEmiter.emit('send_email', prospect)
-		await wait(5000 + 3000 * Math.random())
+		await prisma.prospect.update({ where: { id: prospect.id }, data: { lastContact: new Date() } })
 	}
 	return
-}
-
-function wait(ms: number) {
-	return new Promise((reslove) => {
-		setTimeout(reslove, ms)
-	})
 }
