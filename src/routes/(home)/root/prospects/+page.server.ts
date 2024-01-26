@@ -13,6 +13,12 @@ export const load = async ({ url }) => {
 		prospects: await prisma.prospect.findMany({
 			skip: data.skip,
 			take: data.take,
+			orderBy: {
+				lastContact: {
+					nulls: 'first',
+					sort: 'asc',
+				},
+			},
 		}),
 	}
 }
