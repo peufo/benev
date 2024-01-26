@@ -1,11 +1,12 @@
 <script lang="ts">
+	import type { Prospect } from '@prisma/client'
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
 	import jonas from '$lib/assets/jonas.png'
 
 	import { features } from '$lib/features'
 	import { domain } from '.'
 
-	export let appellation = ''
+	export let prospect: Prospect
 
 	function ensureDomain(route: string) {
 		return domain + route.replace(domain, '')
@@ -14,14 +15,14 @@
 
 <EmailLayout showLogo title="benev.io" subtitle="Votre nouvelle plateforme de gestion de bénévole">
 	<p>
-		Bonjour cher·e organisateur·rice{appellation ? ` ${appellation}` : ''}, 👋 <br />
+		Bonjour cher·e organisateur·rice, 👋 <br />
 	</p>
 
 	<p>Nous avons mis en place la plateforme idéale pour la gestion de vos bénévoles.</p>
 
 	<div style="text-align: center; margin: 3rem 0;">
 		<a
-			href={domain}
+			href="{domain}?prospectId={prospect.id}"
 			style="display: inline-block; background: #0d3b66; border-radius: 0.6rem;  padding: 0.8rem 1.5rem; color: white; text-decoration: none; text-transform: uppercase;"
 		>
 			Découvrir maintenant
@@ -69,9 +70,7 @@
 					<td style="vertical-align: middle; color:#666666;font-size:14px;line-height:24px;">
 						<div>
 							<b>Jonas Voisard,</b> créateur et développeur de
-							<a href={domain} style="color:#067df7; text-decoration:none" target="_blank">
-								benev.io
-							</a><br />
+							<a href={domain} style="color:#067df7; text-decoration:none"> benev.io </a><br />
 							<span>Email: <a href="mailto:salut@benev.io">salut@benev.io</a></span><br />
 
 							<span>Tél: <a href="tel:0041794591563">+41 79 459 15 63</a></span>
@@ -107,3 +106,5 @@
 		</table>
 	</svelte:fragment>
 </EmailLayout>
+
+<img src="{domain}/api/prospect/{prospect.id}.png" alt="prospect open" />

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Prospect` ADD COLUMN `name` VARCHAR(191) NULL,
+    ADD COLUMN `site` VARCHAR(191) NULL;

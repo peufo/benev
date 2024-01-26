@@ -404,3 +404,15 @@ enum MessageState {
   waitOnAuthor
   done
 }
+
+model Prospect {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  name        String?
+  site        String?
+  lastContact DateTime?
+  emailOpenAt DateTime?
+  linkOpenAt  DateTime?
+  comment     String?
+  createdAt   DateTime  @default(now())
+}
