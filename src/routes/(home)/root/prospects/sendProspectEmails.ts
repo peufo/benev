@@ -8,7 +8,7 @@ export async function sendProspectEmails(prospects: Prospect[]) {
 	for (const prospect of prospects) {
 		await sendEmailTemplate(EmailProspect, {
 			to: prospect.email,
-			subject: 'Benev.io - Votre plateforme de gestion de bénévole',
+			subject: 'Votre plateforme de gestion de bénévole',
 			props: { prospect },
 		})
 		eventEmiter.emit('send_email', prospect)

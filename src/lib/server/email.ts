@@ -25,7 +25,7 @@ export const sendEmail = async ({ from, ...options }: SendMailOptions) => {
 	return new Promise((resolve) => {
 		transporter.sendMail(
 			{
-				from: `${from || 'Benev'} <${SMTP_USER}>`,
+				from: `${from || 'Benev.io'} <${SMTP_USER}>`,
 				...options,
 			},
 			(err: unknown, info: unknown) => {
