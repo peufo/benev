@@ -40,7 +40,7 @@ export function bindValueWithParams(
 	node.addEventListener(listenerType, handleInput)
 
 	return {
-		destroy: () => {
+		destroy() {
 			node.removeEventListener(listenerType, handleInput)
 		},
 	}

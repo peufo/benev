@@ -2,11 +2,12 @@
 	import { mdiClose } from '@mdi/js'
 	import { Icon, InputText } from '$lib/material'
 	import { browser } from '$app/environment'
+	import { page } from '$app/stores'
 
-	export let value: string | undefined = undefined
 	let klass = ''
 	export { klass as class }
 	export let key = 'search'
+	export let value = $page.url.searchParams.get(key) || ''
 
 	let inputElement: HTMLInputElement
 </script>
@@ -17,7 +18,7 @@
 	bind:value
 	on:blur
 	on:blur
-	on:input
+	on:input={console.log}
 	on:keydown
 	on:keyup
 	bindWithParams

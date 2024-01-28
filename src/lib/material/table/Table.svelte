@@ -35,20 +35,14 @@
 </script>
 
 <div class="overflow-x-auto border rounded-lg" class:min-h-[320px]={!hideBody}>
-	{#if hideBody}
-		<table class="table relative">
-			<TableHead {fields} {key} {onCreateField} />
-		</table>
-	{:else if items.length}
-		<table class="table relative">
-			<TableHead {fields} {key} {onCreateField} />
+	<table class="table relative">
+		<TableHead {fields} {key} {onCreateField} />
+		{#if !hideBody && items.length}
 			<TableBody {fields} {items} {action} {classRow} on:click />
-		</table>
-	{:else}
-		<table class="table relative">
-			<TableHead {fields} {key} {onCreateField} />
-		</table>
+		{/if}
+	</table>
 
+	{#if hideBody && !items.length}
 		<Placeholder class="rounded-t-none">
 			{placholder}
 		</Placeholder>
