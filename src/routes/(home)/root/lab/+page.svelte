@@ -9,7 +9,6 @@
 		const subscription = new EventSource('/root/lab')
 
 		const handleEvent = ({ data }: MessageEvent<string>) => {
-			console.log({ data })
 			events = [...events, data]
 		}
 

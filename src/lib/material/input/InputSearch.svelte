@@ -18,7 +18,7 @@
 	bind:value
 	on:blur
 	on:blur
-	on:input={console.log}
+	on:input
 	on:keydown
 	on:keyup
 	bindWithParams
