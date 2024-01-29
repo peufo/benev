@@ -61,7 +61,7 @@
 <main class="grow p-2">
 	{#if accessGranted}
 		<slot />
-	{:else if data.event.state === 'draft'}
+	{:else if data.event.state === 'draft' || data.event.state === 'actived'}
 		<Card class="max-w-lg mx-auto">
 			<h2 slot="title" class="flex gap-2">
 				<Icon path={mdiTestTube} class="rotate-12 opacity-70" />

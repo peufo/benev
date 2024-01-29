@@ -11,9 +11,10 @@ import {
 } from '$lib/server'
 import { userLogin, userCreate, userUpdate, z } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
+import { textInputRule } from '@tiptap/core'
 
 export const load = () => {
-	redirect(302, '/me/events');
+	redirect(302, '/me/events')
 }
 
 export const actions = {
@@ -30,8 +31,21 @@ export const actions = {
 			isEmailVerified: false,
 			avatarPlaceholder: createAvatarPlaceholder(),
 		}
+
+		const user = await prisma.user.findUnique({
+			where: { email: data.email },
+			include: { members: { select: { isValidedByUser: true } } },
+		})
+		if (user) {
+			const isAccountFromInvitation =
+				user.members.filter((m) => m.isValidedByUser === false).length > 0 &&
+				user.members.filter((m) => m.isValidedByUser === true).length === 0
+			if (isAccountFromInvitation) error(401, 'This account already created from an invitation')
+			error(401, 'This account already exists')
+		}
+
 		return tryOrFail(async () => {
-			const user = await auth.createUser({
+			const newUser = await auth.createUser({
 				key: {
 					providerId: 'email',
 					providerUserId: data.email,
@@ -39,7 +53,7 @@ export const actions = {
 				},
 				attributes,
 			})
-			const session = await auth.createSession({ userId: user.userId, attributes: {} })
+			const session = await auth.createSession({ userId: newUser.userId, attributes: {} })
 			locals.auth.setSession(session)
 
 			sendVerificationEmail(session.user, 'Bienvenue')
@@ -76,14 +90,14 @@ export const actions = {
 			const tokenId = await generateToken('passwordReset', user.id)
 			await sendEmailTemplate(EmailPasswordReset, {
 				to: data.email,
-				subject: 'Changement de mot de passe',
+				subject: 'Reinitialisation du mot de passe',
 				props: { tokenId },
 			})
 		})
 	},
 	update_account: async ({ locals, request }) => {
 		const session = await locals.auth.validate()
-		if (!session) error(401);
+		if (!session) error(401)
 
 		// Adapte validation model with event context
 		const formData = await request.formData()
@@ -122,7 +136,7 @@ export const actions = {
 	},
 	generate_avatar: async ({ locals }) => {
 		const session = await locals.auth.validate()
-		if (!session) error(401);
+		if (!session) error(401)
 
 		return tryOrFail(async () => {
 			const avatarPlaceholder = createAvatarPlaceholder()
@@ -134,12 +148,12 @@ export const actions = {
 	},
 	delete_avatar: async ({ locals }) => {
 		const session = await locals.auth.validate()
-		if (!session) error(401);
+		if (!session) error(401)
 		return tryOrFail(() => media.delete({ avatarOf: { id: session.user.id } }))
 	},
 	upload_avatar: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
-		if (!session) error(401);
+		if (!session) error(401)
 
 		return tryOrFail(() =>
 			media.upload(request, {

@@ -4,7 +4,7 @@
 	import { createEventDispatcher } from 'svelte'
 
 	const form = useForm({
-		successCallback: () => dispatch('success'),
+		onSuccess: () => dispatch('success'),
 	})
 
 	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()

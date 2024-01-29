@@ -13,7 +13,7 @@
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
 	const form = useForm({
-		successCallback: () => dispatch('success'),
+		onSuccess: () => dispatch('success'),
 	})
 </script>
 

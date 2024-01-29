@@ -18,18 +18,22 @@ export const formContext = {
 type SuccessMessage = string | ((action: URL) => string)
 type BooleanOrFunction = boolean | ((action: URL) => boolean)
 type UseFormOptions<ReturnData> = {
-	beforeRequest?: (...args: Parameters<SubmitFunction>) => any
-	successCallback?: (action: URL, data?: ReturnData) => any
+	onSubmit?: (...args: Parameters<SubmitFunction>) => any
+	onSuccess?: (action: URL, data?: ReturnData) => any
+	onResetError?: () => unknown
+	onError?: (err: any) => unknown
+	onFail?: (failure: Record<string, any> | undefined) => unknown
 	successUpdate?: BooleanOrFunction
 	successReset?: BooleanOrFunction
 	successMessage?: SuccessMessage
-	onResetError?: () => unknown
 }
 
 export function useForm<ReturnData extends Record<string, unknown>>({
-	beforeRequest,
-	successCallback,
+	onSubmit,
+	onSuccess,
 	onResetError,
+	onError,
+	onFail,
 	successUpdate = true,
 	successReset = true,
 	successMessage = 'Succès',
@@ -70,13 +74,13 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 		}
 
 		if (message) {
-			notify.error(message)
-			console.error(message)
+			notify.warning(message)
+			console.warn(message)
 		}
 	}
 
 	const submit: SubmitFunction<ReturnData> = async (event) => {
-		if (beforeRequest) await beforeRequest(event)
+		if (onSubmit) await onSubmit(event)
 
 		event.submitter?.classList.add('btn-disabled')
 
@@ -84,12 +88,14 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 			event.submitter?.classList.remove('btn-disabled')
 
 			if (result.type === 'error') {
+				if (onError) onError(result.error.message)
 				const { message } = result.error
 				notify.error(message || 'Erreur')
 				return
 			}
 
 			if (result.type === 'failure') {
+				if (onFail) onFail(result.data)
 				if (result.data) handleFailure(result.data)
 				return
 			}
@@ -101,14 +107,14 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 
 			if (result.type === 'success') {
 				if (successMessage) notify.success(tryToRun(successMessage))
-				if (successCallback) successCallback(action, result.data)
+				if (onSuccess) onSuccess(action, result.data)
 				if (successUpdate) update({ reset: tryToRun(successReset) })
 				return
 			}
 
 			if (result.type === 'redirect') {
 				if (successMessage) notify.success(tryToRun(successMessage))
-				if (successCallback) successCallback(action)
+				if (onSuccess) onSuccess(action)
 				return goto(result.location, { replaceState: true, invalidateAll: tryToRun(successUpdate) })
 			}
 		}

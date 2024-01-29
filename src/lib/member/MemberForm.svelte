@@ -17,7 +17,7 @@
 
 	const form = useForm({
 		successReset: false,
-		successCallback: () => dispatch('success'),
+		onSuccess: () => dispatch('success'),
 	})
 </script>
 

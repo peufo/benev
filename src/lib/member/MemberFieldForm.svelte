@@ -19,7 +19,7 @@
 	const form = useForm<Field>({
 		successReset,
 		successUpdate,
-		successCallback: (url, field) => {
+		onSuccess: (url, field) => {
 			dispatch('success', field)
 			setField(null)
 		},

@@ -13,7 +13,7 @@
 
 	let dialog: HTMLDialogElement
 	const form = useForm({
-		successCallback() {
+		onSuccess() {
 			dialog.close()
 		},
 	})

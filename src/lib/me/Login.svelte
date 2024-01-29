@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
 	import { enhance } from '$app/forms'
-	import { InputText, InputPassword, Icon } from '$lib/material'
+	import { InputText, InputPassword, Icon, Dialog } from '$lib/material'
 	import { useForm } from '$lib/validation'
 	import { page } from '$app/stores'
 	import googleLogo from '$lib/assets/google.svg'
@@ -11,14 +11,29 @@
 
 	const form = useForm({
 		successMessage(action) {
-			if (action.search === '?/reset_password')
-				return "Un lien de réinitialisation t'a été envoyé par email"
+			if (action.search === '?/reset_password') {
+				recorverDialog.close()
+				state = 'login'
+				return "Un lien de récupération t'a été envoyé par email"
+			}
 			return 'Bienvenue'
+		},
+		onError(err) {
+			if (err === 'This account already exists') {
+				state = 'login'
+				return
+			}
+			if (err === 'This account already created from an invitation') {
+				recorverDialog.showModal()
+				return
+			}
 		},
 	})
 	let state: 'login' | 'register' = 'login'
 
 	$: redirectTo = $page.url.searchParams.get('redirectTo')
+
+	let recorverDialog: HTMLDialogElement
 </script>
 
 <div class="grid place-content-center p-10">
@@ -90,6 +105,14 @@
 					Mot de passe oublié
 				</button>
 			</div>
+
+			<Dialog bind:dialog={recorverDialog}>
+				<h2 class="title" slot="header">Ce compte éxiste déjà</h2>
+				<p>Tu as été invité par un organisateur.</p>
+				<div class="flex justify-end mt-4">
+					<button formaction="/me?/reset_password" class="btn">Récupérer mon compte</button>
+				</div>
+			</Dialog>
 		</form>
 
 		<div class="border border-t-0 rounded-b-2xl">

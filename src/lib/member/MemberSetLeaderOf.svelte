@@ -13,7 +13,7 @@
 	export let memberId: string
 
 	const form = useForm({
-		successCallback() {
+		onSuccess() {
 			dialog.close()
 		},
 	})

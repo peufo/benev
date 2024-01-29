@@ -18,7 +18,7 @@
 
 	const form = useForm({
 		successMessage: 'Inscription créée',
-		successCallback: () => {
+		onSuccess: () => {
 			member = null
 			dispatch('success')
 		},

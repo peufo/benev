@@ -20,7 +20,7 @@
 
 	const formEmailVerification = useForm({
 		successMessage: verificationEmailMessage,
-		successCallback() {
+		onSuccess() {
 			verificationEmailSent = true
 		},
 	})

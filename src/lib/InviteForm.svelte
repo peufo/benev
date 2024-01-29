@@ -10,7 +10,7 @@
 	type MemberWithUser = Member & { user: User }
 	const dispatch = createEventDispatcher<{ success: MemberWithUser | undefined }>()
 	const form = useForm<MemberWithUser>({
-		successCallback: (action, member) => dispatch('success', member),
+		onSuccess: (action, member) => dispatch('success', member),
 		successMessage: 'Invitation envoyée',
 	})
 </script>

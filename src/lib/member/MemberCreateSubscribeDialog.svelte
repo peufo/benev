@@ -25,7 +25,7 @@
 	let submitButton: HTMLButtonElement
 	const form = useForm({
 		successReset: false,
-		successCallback() {
+		onSuccess() {
 			dialog.close()
 		},
 	})

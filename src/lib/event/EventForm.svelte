@@ -18,10 +18,10 @@
 
 	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
 	const form = useForm({
-		successCallback: () => dispatch('success'),
+		onSuccess: () => dispatch('success'),
 		successUpdate,
 		successReset,
-		beforeRequest: async () => {
+		onSubmit: async () => {
 			if (event?.state !== 'actived') return
 			if (event.id === eventId) return
 			const msg = `Es tu sûr de vouloir modifier le lien de l'évènement de "/${event.id}" pour "${eventId} ?"`

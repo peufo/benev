@@ -14,7 +14,7 @@
 	const updateAction = '?/update_gift'
 
 	const form = useForm<GiftWithConditions>({
-		successCallback: (url, data) => {
+		onSuccess: (url, data) => {
 			if (url.search === createAction) gift = data
 		},
 		successReset: (url) => url.search !== createAction,

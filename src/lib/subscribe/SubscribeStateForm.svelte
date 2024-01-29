@@ -51,7 +51,7 @@
 	const form = useForm({
 		successMessage: 'Status changé',
 		successReset: false,
-		successCallback: () => dispatch('success'),
+		onSuccess: () => dispatch('success'),
 	})
 	let creatorStates: Partial<States> = {}
 	let subscriberStates: Partial<States> = {}

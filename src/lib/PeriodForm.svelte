@@ -27,7 +27,7 @@
 	const form = useForm({
 		successReset: false,
 		successMessage: (action) => successMessages[action.search] || 'Succès',
-		successCallback: () => {
+		onSuccess: () => {
 			dispatch('success')
 		},
 	})

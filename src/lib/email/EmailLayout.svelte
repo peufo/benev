@@ -20,10 +20,10 @@
 		<tr>
 			<td align="center">
 				<table
-					width="600"
+					width="540"
 					border={0}
 					cellspacing="0"
-					cellpadding="40"
+					cellpadding="30"
 					style="width: 600px; border:1px solid #eaeaea; border-radius:5px; margin:40px 0; padding: 5px;"
 				>
 					<tbody>
