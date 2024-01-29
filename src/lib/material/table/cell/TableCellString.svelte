@@ -5,10 +5,6 @@
 	export let field: TableField
 </script>
 
-<td
-	data-is-editable={field.isEditable === true ? '1' : undefined}
-	data-field-key={field.key}
-	data-field-type={field.type === 'textarea' ? 'textarea' : 'string'}
->
+<td data-field-key={field.key} data-field-type={field.type === 'textarea' ? 'textarea' : 'string'}>
 	<span>{@html value}</span>
 </td>
