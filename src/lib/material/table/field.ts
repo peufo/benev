@@ -4,21 +4,55 @@ import type { ComponentAndProps, Primitive } from '$lib/utils'
 import type { FieldType } from '@prisma/client'
 import { jsonParse } from '$lib/jsonParse'
 import { createKeys } from '$lib/material/table/context'
+import type { Options } from '$lib/material'
 
-// TODO: add FieldType "date" ?
 export type TableFieldType = FieldType | 'date'
 
-export type TableField<Item = any> = {
+export type TableField<Item = any> = TableFieldCommon &
+	(
+		| TableFieldUntyped<Item>
+		| TableFieldPrimitive<Item>
+		| TableFieldSelect<Item>
+		| TableFieldMultiselect<Item>
+	)
+
+type TableFieldCommon = {
 	key: string
 	label: string
-	getCell: (item: Item) => ComponentAndProps | Primitive | Primitive[] | undefined
+	type?: TableFieldType
+	options?: Options
 	hint?: string
 	locked?: boolean
 	visible?: boolean
-	/** TODO: use directly "type" */
-	head?: ComponentAndProps | ((field: TableField) => ComponentAndProps)
 	/** Internal usage */
 	$visible?: boolean
+}
+
+type TableFieldUntyped<Item = any> = {
+	getCell: (item: Item) => ComponentAndProps | Primitive[] | Primitive | undefined
+	head?: ComponentAndProps | ((field: TableField) => ComponentAndProps)
+}
+
+type TableFieldTypedOptions = {
+	notEditable?: boolean
+	notSortable?: boolean
+	notFilterable?: boolean
+}
+
+type TableFieldPrimitive<Item = any> = TableFieldTypedOptions & {
+	type: Exclude<TableFieldType, 'select' | 'multiselect'>
+	getCell: (item: Item) => ComponentAndProps | Primitive | undefined
+}
+
+type TableFieldSelect<Item = any> = TableFieldTypedOptions & {
+	type: 'select'
+	getCell: (item: Item) => Primitive
+	options: Options
+}
+type TableFieldMultiselect<Item = any> = TableFieldTypedOptions & {
+	type: 'multiselect'
+	getCell: (item: Item) => Primitive[]
+	options: Options
 }
 
 /**

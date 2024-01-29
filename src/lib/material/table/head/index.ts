@@ -18,7 +18,7 @@ const tableHeadComponentRecord = {
 	date: TableHeadDate,
 } satisfies Record<TableFieldType, ComponentType>
 
-export function tableheadComponent<T extends TableFieldType>(
+export function tableHeadComponent<T extends TableFieldType>(
 	type: T,
 	props: Omit<ComponentProps<InstanceType<(typeof tableHeadComponentRecord)[T]>>, 'field'>
 ): (field: TableField) => ComponentAndProps {

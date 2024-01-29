@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiChevronDown, mdiContentSaveEditOutline, mdiPencilOutline, mdiPlus } from '@mdi/js'
+	import { mdiChevronDown, mdiContentSaveEditOutline, mdiPlus } from '@mdi/js'
 	import type { View } from '@prisma/client'
 	import { Dialog, DropDown, Icon, InputText } from '$lib/material'
 	import { eventPath } from '$lib/store'
