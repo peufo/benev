@@ -4,7 +4,7 @@
 	import axios from 'axios'
 	import type { Field } from '@prisma/client'
 	import { listEditable } from '$lib/action'
-	import { Icon } from '$lib/material'
+	import { Icon, Placeholder } from '$lib/material'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { MemberFieldDialog } from '$lib/member'
 	import { eventPath } from '$lib/store'
@@ -66,5 +66,9 @@
 		</button>
 	{/each}
 </div>
+
+{#if !fields.length}
+	<Placeholder />
+{/if}
 
 <MemberFieldDialog bind:this={memberFieldDialog} />
