@@ -1,7 +1,14 @@
 <script lang="ts">
+	import type { TableField } from '$lib/material/table'
+
 	export let value: string
+	export let field: TableField
 </script>
 
-<td>
+<td
+	data-is-editable={field.isEditable === true ? '1' : undefined}
+	data-field-key={field.key}
+	data-field-type={field.type === 'textarea' ? 'textarea' : 'string'}
+>
 	<span>{@html value}</span>
 </td>

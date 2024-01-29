@@ -6,7 +6,7 @@
 		TableCellString,
 	} from '$lib/material/table/cell'
 
-	import type { TableField } from '$lib/material'
+	import type { TableField } from '$lib/material/table'
 
 	type Item = $$Generic<{ id: string }>
 	export let item: Item
@@ -22,7 +22,7 @@
 {:else if typeof value === 'boolean'}
 	<TableCellBoolean {value} />
 {:else if typeof value === 'string'}
-	<TableCellString {value} />
+	<TableCellString {value} {field} />
 {:else if value === undefined}
 	<td>-</td>
 {:else}

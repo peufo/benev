@@ -33,23 +33,17 @@ type TableFieldUntyped<Item = any> = {
 	head?: ComponentAndProps | ((field: TableField) => ComponentAndProps)
 }
 
-type TableFieldTypedOptions = {
-	notEditable?: boolean
-	notSortable?: boolean
-	notFilterable?: boolean
-}
-
-type TableFieldPrimitive<Item = any> = TableFieldTypedOptions & {
+type TableFieldPrimitive<Item = any> = {
 	type: Exclude<TableFieldType, 'select' | 'multiselect'>
 	getCell: (item: Item) => ComponentAndProps | Primitive | undefined
 }
 
-type TableFieldSelect<Item = any> = TableFieldTypedOptions & {
+type TableFieldSelect<Item = any> = {
 	type: 'select'
 	getCell: (item: Item) => Primitive
 	options: Options
 }
-type TableFieldMultiselect<Item = any> = TableFieldTypedOptions & {
+type TableFieldMultiselect<Item = any> = {
 	type: 'multiselect'
 	getCell: (item: Item) => Primitive[]
 	options: Options

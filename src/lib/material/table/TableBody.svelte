@@ -13,11 +13,15 @@
 	const dispatch = createEventDispatcher<{ click: Item }>()
 
 	$: _fields = fields.filter((f) => f.$visible)
+
+	function handleClickRow(event: MouseEvent, item: Item) {
+		dispatch('click', item)
+	}
 </script>
 
 <tbody>
 	{#each items as item (item.id)}
-		<tr class={classRow} on:click={() => dispatch('click', item)}>
+		<tr class={classRow} on:click={(event) => handleClickRow(event, item)}>
 			{#each _fields as field (field.key)}
 				<TableCell {item} {field} />
 			{/each}

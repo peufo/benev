@@ -8,7 +8,7 @@
 	import InviteDialog from '$lib/InviteDialog.svelte'
 	import { MemberContact, MemberFieldDialog } from '$lib/member'
 	import { jsonParse } from '$lib/jsonParse'
-	import { getTableFields } from './tableFields'
+	import { getMembersTableFields } from './membersTableFields'
 	import MembersCopy from './MembersCopy.svelte'
 	import MembersFilter from './MembersFilter.svelte'
 	import MembersStats from './MembersStats.svelte'
@@ -16,7 +16,7 @@
 
 	export let data
 
-	let tableFields = getTableFields(data.teams, data.fields)
+	let tableFields = getMembersTableFields(data.teams, data.fields)
 
 	let memberFieldDialog: MemberFieldDialog
 
@@ -29,7 +29,7 @@
 		console.log(fieldsVisible)
 		url.searchParams.set(PARAM_VISIBLE_KEY, JSON.stringify(fieldsVisible))
 		await goto(url, { noScroll: true, keepFocus: true, invalidateAll: true })
-		tableFields = getTableFields(data.teams, data.fields)
+		tableFields = getMembersTableFields(data.teams, data.fields)
 	}
 </script>
 

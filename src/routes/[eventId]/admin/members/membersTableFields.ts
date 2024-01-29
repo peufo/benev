@@ -17,7 +17,7 @@ function toHours(ms: number) {
 	)
 }
 
-export function getTableFields(teams: { id: string; name: string }[], fields: Field[]) {
+export function getMembersTableFields(teams: { id: string; name: string }[], fields: Field[]) {
 	const tableFields: TableField<Member>[] = [
 		{
 			key: 'member',
@@ -98,6 +98,7 @@ export function getTableFields(teams: { id: string; name: string }[], fields: Fi
 			key: `field_${field.id}`,
 			type: field.type,
 			label: field.name,
+			isEditable: true,
 			getCell: (m: Member) => m.profileJson[field.id],
 			options: jsonParse<string[]>(field.options, []),
 		})),
