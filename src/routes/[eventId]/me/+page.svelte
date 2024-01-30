@@ -45,9 +45,11 @@
 	<section>
 		<div class="flex gap-2 items-center mb-4">
 			<h3 class="title">Mes inscriptions</h3>
-			<a href="{$eventPath}/teams" class="btn btn-square btn-sm ml-auto">
-				<Icon path={mdiMapMarkerRadiusOutline} title="Voir les secteurs" size={20} />
-			</a>
+			{#if data.event.selfSubscribeAllowed}
+				<a href="{$eventPath}/teams" class="btn btn-square btn-sm ml-auto">
+					<Icon path={mdiMapMarkerRadiusOutline} title="Voir les secteurs" size={20} />
+				</a>
+			{/if}
 		</div>
 		<TeamsSubscribes teams={data.memberTeams || []} />
 	</section>
