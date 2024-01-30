@@ -1,11 +1,19 @@
 import { error } from '@sveltejs/kit'
-import { parseFormData, permission, prisma, redirectToRegister, tryOrFail } from '$lib/server'
+import {
+	parseFormData,
+	permission,
+	prisma,
+	redirectToAuth,
+	redirectToRegister,
+	tryOrFail,
+} from '$lib/server'
 import { z, type ZodObj } from '$lib/validation'
 import type { Field, FieldType } from '@prisma/client'
 import type { ZodType } from 'zod'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
-	const { member } = await parent()
+	const { member, user } = await parent()
+	if (!user) throw redirectToAuth(url)
 	if (
 		!member ||
 		!member.isValidedByUser ||

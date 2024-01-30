@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
 	import { Icon } from '$lib/material'
-	import { eventPath } from '$lib/store'
 	import { mdiAccountOutline } from '@mdi/js'
 	import Avatar from '$lib/me/Avatar.svelte'
 
@@ -9,7 +8,7 @@
 </script>
 
 <a
-	href={$eventPath ? `${$eventPath}/me` : `/me`}
+	href="/me"
 	class="
 		btn bg-base-100 btn-square grid place-content-center
 		hover:shadow-lg transition-shadow ml-2
