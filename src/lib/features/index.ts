@@ -77,7 +77,6 @@ export const features: Feature[] = [
 		src: licensePng,
 		description:
 			'Définit une charte à laquelle les bénévoles devront adhérer lors de leur inscription.',
-		comingSoon: 'Disponible en Février 2024',
 	},
 	{
 		name: 'Système de compensation',
