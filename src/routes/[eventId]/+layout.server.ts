@@ -10,19 +10,25 @@ export const load = async ({ depends, parent, params: { eventId } }) => {
 	const member = await getMemberProfile({ userId, eventId }).catch(() => undefined)
 	const isLeader = member?.roles.includes('leader')
 
+	const event = await prisma.event.findUniqueOrThrow({
+		where: { id: eventId, deletedAt: null },
+		include: {
+			memberFields: {
+				where: isLeader ? {} : { memberCanRead: true },
+				orderBy: { position: 'asc' },
+			},
+		},
+	})
+
+	const memberCanRegister =
+		!member?.isValidedByUser && (event.selfRegisterAllowed || member?.isValidedByEvent)
+
 	try {
 		return {
 			userId: user?.id || '',
+			event,
 			member,
-			event: await prisma.event.findUniqueOrThrow({
-				where: { id: eventId, deletedAt: null },
-				include: {
-					memberFields: {
-						where: isLeader ? {} : { memberCanRead: true },
-						orderBy: { position: 'asc' },
-					},
-				},
-			}),
+			memberCanRegister,
 			pages: await prisma.page.findMany({
 				where: { eventId },
 				select: { id: true, title: true, path: true, type: true },

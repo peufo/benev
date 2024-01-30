@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { Icon } from '$lib/material'
 	import { mdiMenu } from '@mdi/js'
+	import { Icon } from '$lib/material'
 	import { Page, PageHelp } from '$lib/pages'
+	import { eventPath } from '$lib/store'
+
 	export let data
 </script>
 
@@ -35,3 +37,9 @@
 		{/if}
 	</svelte:fragment>
 </Page>
+
+{#if data.memberCanRegister}
+	<div class="text-center my-8">
+		<a href="{$eventPath}/register" class="btn btn-primary"> Je veux devenir bénévole </a>
+	</div>
+{/if}

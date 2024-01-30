@@ -54,7 +54,7 @@
 		>
 			<input type="hidden" name="userId" value={userId} />
 			<input type="hidden" name="redirectTo" value={$urlParam.with({ section: 'profile' })} />
-			<button class="btn">Oui je le veux !</button>
+			<button class="btn btn-primary">Oui je le veux !</button>
 		</form>
 
 		{#if $page.data.member?.isValidedByEvent && !$page.data.member?.isValidedByUser}
