@@ -170,17 +170,7 @@ export const actions = {
 			})
 		)
 	},
-	set_settings: async ({ request, locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, eventSettings)
-		if (err) return err
-		return tryOrFail(() =>
-			prisma.event.update({
-				where: { id: eventId },
-				data,
-			})
-		)
-	},
+
 	set_member_settings: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 		const { err, data } = await parseFormData(request, eventMemberSettings)

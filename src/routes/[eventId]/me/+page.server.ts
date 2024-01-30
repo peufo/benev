@@ -46,16 +46,17 @@ export const actions = {
 				},
 			})
 
-			const model = buildMemberProfileModel(fields, isLeader)
+			const formData = await request.formData()
+			const editOwnProfile = member.id === formData.get('memberId')
+			if (!editOwnProfile && !isLeader) error(401)
 
-			const { data, err } = await parseFormData(request, model)
+			const model = buildMemberProfileModel(fields, isLeader && !editOwnProfile)
+
+			const { data, err } = await parseFormData(formData, model)
 			if (err) return err
 
 			const { memberId, ...values } = data
 			if (!memberId) throw Error('memberId is required')
-
-			const editOwnProfile = memberId === member.id
-			if (!editOwnProfile && !isLeader) error(401)
 
 			return await prisma.member.update({
 				where: { id: memberId },
@@ -70,7 +71,7 @@ export const actions = {
 	},
 }
 
-function buildMemberProfileModel(fields: Field[], isLeader: boolean) {
+function buildMemberProfileModel(fields: Field[], isPartial: boolean) {
 	type ProfileValue = string | string[] | number | boolean | undefined
 	const model: ZodObj<{ memberId: string } & Record<string, ProfileValue>> = {
 		memberId: z.string(),
@@ -94,7 +95,7 @@ function buildMemberProfileModel(fields: Field[], isLeader: boolean) {
 	}
 
 	fields.forEach((f) => {
-		if (isLeader || !f.required) model[f.id] = modelByTypeOptional[f.type]
+		if (isPartial || !f.required) model[f.id] = modelByTypeOptional[f.type]
 		else model[f.id] = modelByType[f.type]
 	})
 

@@ -38,7 +38,7 @@
 	function getStepIndexMax() {
 		if (!user) return 0
 		if (!member || !member.isValidedByUser) return 1
-		if (!member.isUserProfileCompleted) return 2
+		if (!isMemberProfileRequired || !member.isUserProfileCompleted) return 2
 		return 3
 	}
 
@@ -51,7 +51,8 @@
 			!!member &&
 			member.isValidedByUser &&
 			member.isUserProfileCompleted &&
-			(!isMemberProfileRequired || member.isMemberProfileCompleted)
+			(!isMemberProfileRequired || member.isMemberProfileCompleted) &&
+			(!forcedStepIndex || forcedStepIndex === stepIndexMax)
 
 		if (registerIsDone) {
 			const redirectTo = $page.url.searchParams.get('redirectTo')
@@ -60,7 +61,6 @@
 		}
 
 		if (forcedStepIndex) {
-			console.log('asdasd', stepIndex, $urlParam.with({ forcedStepIndex: stepIndex + 1 }))
 			await goto($urlParam.with({ forcedStepIndex: stepIndex + 1 }))
 			return
 		}

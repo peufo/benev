@@ -25,13 +25,10 @@ export const eventState = {
 	state: z.enum(toTuple(EVENT_STATES)).optional(),
 } satisfies ZodObj<EventUpdateInput>
 
-export const eventSettings = {
+export const eventMemberSettings = {
 	selfRegisterAllowed: z.boolean(),
 	selfSubscribeAllowed: z.boolean(),
 	closeSubscribing: z.dateOptional(),
-} satisfies ZodObj<EventUpdateInput>
-
-export const eventMemberSettings = {
 	userAddressRequired: z.boolean(),
 	userPhoneRequired: z.boolean(),
 	userBirthdayRequired: z.boolean(),
