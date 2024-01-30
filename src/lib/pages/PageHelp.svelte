@@ -27,11 +27,13 @@
 </section>
 
 <section>
-	<h3>Profil des membres</h3>
+	<h3>Adhésion des membres</h3>
 	<p>
 		Le profil de base des membres contient déjà des informations essentielles telles que leur
 		addresse, leur numéro de téléphone, leur email et leur âge.<br />
-		Ajoute de nouveaux champs si tu souhaites obtenir ou renseigner d'autres données relatives aux membres.
+		Tu peux
+		<a href="{$eventPath}/admin/config?section=membership">paramétrer le processus d'adhésion</a> et
+		définir les informations que tu souhaites récolter auprès des membres.
 	</p>
 </section>
 
