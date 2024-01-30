@@ -121,7 +121,7 @@
 
 		{#if data.isLeaderOfTeam}
 			<a
-				href={`${$eventPath}/admin/members?teams=["${data.team.id}"]`}
+				href={`${$eventPath}/admin/members?subscribes_teams=["${data.team.id}"]`}
 				class="btn btn-square btn-sm"
 			>
 				<Icon path={mdiAccountMultipleOutline} title="Tous les membres du secteur" />
