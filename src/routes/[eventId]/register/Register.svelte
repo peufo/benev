@@ -2,12 +2,13 @@
 	import { page } from '$app/stores'
 	import { afterNavigate, goto, invalidateAll } from '$app/navigation'
 	import { mdiChevronLeft, mdiChevronRight, mdiClose } from '@mdi/js'
+	import type { Event, Field, User, Page } from '@prisma/client'
+
 	import { Card, Dialog, Icon, Placeholder } from '$lib/material'
 	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
 	import AccountForm from '$lib/me/AccountForm.svelte'
-	import type { Event, Field, User } from '@prisma/client'
 	import type { MemberProfile } from '$lib/server'
 	import { urlParam } from '$lib/store'
 	import { slide } from 'svelte/transition'
@@ -15,8 +16,9 @@
 	export let event: Event & { memberFields: Field[] }
 	export let user: User | undefined
 	export let member: MemberProfile | undefined
+	export let charter: Page | null
 
-	const steps = ['Connexion', 'Adhérer', 'Mon compte']
+	const steps = ['Connexion', 'Adhésion', 'Mon compte']
 	const isMemberProfileRequired = !!event.memberFields.filter((f) => f.memberCanWrite).length
 	if (isMemberProfileRequired) steps.push(`Profil ${event.name}`)
 
@@ -67,74 +69,75 @@
 	}
 </script>
 
-<div class="max-w-2xl mx-auto flex flex-col gap-4">
-	<Card>
-		<div class="flex items-center gap-2 mb-4">
-			<h1 class="title">Participer à {event.name}</h1>
-			<div class="join ml-auto border">
-				<a
-					href={$urlParam.with({ forcedStepIndex: stepIndex - 1 })}
-					class="btn btn-sm join-item btn-ghost btn-disabled"
-					class:btn-disabled={stepIndex <= 1}
-				>
-					Précédent
-					<Icon path={mdiChevronLeft} class={stepIndex <= 1 ? 'opacity-20' : 'opacity-70'} />
-				</a>
+<Card class="max-w-2xl mx-auto" bodyClass="flex flex-col gap-6">
+	<div class="flex items-center gap-2 mb-4">
+		<h1 class="title">Participer à {event.name}</h1>
+		<div class="join ml-auto border">
+			<a
+				href={$urlParam.with({ forcedStepIndex: stepIndex - 1 })}
+				class="btn btn-sm join-item btn-ghost btn-disabled"
+				class:btn-disabled={stepIndex <= 1}
+			>
+				Précédent
+				<Icon path={mdiChevronLeft} class={stepIndex <= 1 ? 'opacity-20' : 'opacity-70'} />
+			</a>
 
-				<a
-					href={$urlParam.with({ forcedStepIndex: stepIndex + 1 })}
-					class="btn btn-sm join-item btn-ghost"
-					class:btn-disabled={stepIndex >= stepIndexMax}
-				>
-					<Icon
-						path={mdiChevronRight}
-						class={stepIndex >= stepIndexMax ? 'opacity-20' : 'opacity-70'}
-					/>
-					Suivant
-				</a>
-			</div>
-			{#if !!member}
-				<button
-					type="button"
-					class="btn btn-square btn-sm"
-					transition:slide={{ axis: 'x' }}
-					on:click={() => dialogRemoveMember.showModal()}
-				>
-					<Icon path={mdiClose} title="Annuler et supprimer ma participation" />
-				</button>
-			{/if}
+			<a
+				href={$urlParam.with({ forcedStepIndex: stepIndex + 1 })}
+				class="btn btn-sm join-item btn-ghost"
+				class:btn-disabled={stepIndex >= stepIndexMax}
+			>
+				<Icon
+					path={mdiChevronRight}
+					class={stepIndex >= stepIndexMax ? 'opacity-20' : 'opacity-70'}
+				/>
+				Suivant
+			</a>
 		</div>
-		<ul class="steps">
-			{#each steps as step, index}
-				<li class="step text-sm" class:step-primary={stepIndex >= index}>
-					<a href={$urlParam.with({ forcedStepIndex: index })} class:btn-disabled={index === 0}>
-						{step}
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</Card>
+		{#if !!member}
+			<button
+				type="button"
+				class="btn btn-square btn-sm"
+				transition:slide={{ axis: 'x' }}
+				on:click={() => dialogRemoveMember.showModal()}
+			>
+				<Icon path={mdiClose} title="Annuler et supprimer ma participation" />
+			</button>
+		{/if}
+	</div>
 
-	{#if stepIndex === 0}
-		<Login />
-	{:else if !event.selfRegisterAllowed && !member?.isValidedByEvent}
-		<Placeholder class="border text-center bg-base-100/90">
-			<h2 class="text-lg">Invitation requise</h2>
-			<p>Tu dois être invité par un responsable pour pouvoir devenir membre de cette évènement.</p>
-		</Placeholder>
-	{:else if stepIndex === 1 && user}
-		<MemberForm userId={user.id} {event} class="mx-auto" on:success={onSucces} />
-	{:else if stepIndex === 2 && user}
-		<Card>
+	<ul class="steps">
+		{#each steps as step, index}
+			<li class="step text-sm" class:step-primary={stepIndex >= index}>
+				<a href={$urlParam.with({ forcedStepIndex: index })} class:btn-disabled={index === 0}>
+					{step}
+				</a>
+			</li>
+		{/each}
+	</ul>
+
+	<div class="divider" />
+
+	<div>
+		{#if stepIndex === 0}
+			<Login />
+		{:else if !event.selfRegisterAllowed && !member?.isValidedByEvent}
+			<Placeholder class="border text-center bg-base-100/90">
+				<h2 class="text-lg">Invitation requise</h2>
+				<p>
+					Tu dois être invité par un responsable pour pouvoir devenir membre de cette évènement.
+				</p>
+			</Placeholder>
+		{:else if stepIndex === 1 && user}
+			<MemberForm userId={user.id} {event} {charter} on:success={onSucces} />
+		{:else if stepIndex === 2 && user}
 			<AvatarForm {user} on:success={onSucces} />
 			<AccountForm {user} on:success={onSucces} />
-		</Card>
-	{:else if stepIndex === 3 && member}
-		<Card>
+		{:else if stepIndex === 3 && member}
 			<MemberProfileForm writeOnly {member} on:success={onSucces} />
-		</Card>
-	{/if}
-</div>
+		{/if}
+	</div>
+</Card>
 
 {#if member}
 	<Dialog bind:dialog={dialogRemoveMember}>

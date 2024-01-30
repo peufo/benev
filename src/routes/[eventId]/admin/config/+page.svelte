@@ -52,7 +52,7 @@
 
 			<div class="flex justify-end">
 				<a href="{$eventPath}/register?forcedStepIndex=1" target="_blank" class="btn btn-ghost">
-					Aperçu le formulaire d'adhésion
+					Aperçu du formulaire d'adhésion
 					<Icon path={mdiOpenInNew} size={20} class="opacity-70" />
 				</a>
 			</div>

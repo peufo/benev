@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 
+	import type { Event, Page as TPage } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/validation'
-	import type { Event } from '@prisma/client'
 	import { eventPath, urlParam } from '$lib/store'
 	import { DeleteButton } from '$lib/material'
+	import { Page, tiptap } from '$lib/pages'
 
 	export let event: Event
 	export let userId: string
-	let klass = ''
-	export { klass as class }
+	export let charter: TPage | null
 	export let successReset = false
 	export let successUpdate = false
 
@@ -24,15 +24,28 @@
 	})
 </script>
 
-<div class="modal-box flex flex-col gap-4 {klass}">
-	<h2 class="card-title">Rejoindre {event.name} ?</h2>
+<section>
+	<h2 class="title">Rejoindre {event.name} ?</h2>
 
-	<p class="text-lg">
-		En acceptant, tu permets aux responsables de cet évènemment d'accéder aux informations de ton
-		profil.
-	</p>
+	{#if charter}
+		<div class="prose">
+			{@html tiptap.toHTML(charter.content || '')}
+		</div>
 
-	<div class="flex flex-row-reverse gap-2">
+		<div class="divider" />
+
+		<p class="mt-2">
+			En acceptant, tu affirmes avoir pris connaissance et respecter la chartes des bénévoles
+			ci-dessus.
+		</p>
+	{:else}
+		<p class="mt-2">
+			En acceptant, tu autorises les responsables de cet évènemment à accéder aux informations de
+			ton profil.
+		</p>
+	{/if}
+
+	<div class="flex flex-row-reverse gap-2 mt-4">
 		<form
 			action="{$eventPath}/invite?/accept_invite"
 			method="post"
@@ -55,4 +68,4 @@
 
 		<a href="/me" class="btn btn-ghost"> Non </a>
 	</div>
-</div>
+</section>

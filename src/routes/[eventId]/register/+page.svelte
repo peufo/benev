@@ -4,4 +4,4 @@
 	export let data
 </script>
 
-<Register event={data.event} user={data.user} member={data.member} />
+<Register event={data.event} user={data.user} member={data.member} charter={data.charter} />
