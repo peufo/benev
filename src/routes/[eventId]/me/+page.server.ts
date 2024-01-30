@@ -6,7 +6,13 @@ import type { ZodType } from 'zod'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const { member } = await parent()
-	if (!member?.isValidedByUser) throw redirectToRegister(eventId, url)
+	if (
+		!member ||
+		!member.isValidedByUser ||
+		!member.isUserProfileCompleted ||
+		!member.isMemberProfileCompleted
+	)
+		throw redirectToRegister(eventId, url)
 
 	const memberId = member.id
 	return {

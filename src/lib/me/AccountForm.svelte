@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
-	import { onMount } from 'svelte'
+	import { createEventDispatcher, onMount } from 'svelte'
 	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 	import { InputText, InputDate, FormControl, InputBoolean } from '$lib/material/input'
@@ -9,21 +9,29 @@
 	import { page } from '$app/stores'
 
 	export let user: User
+	export let successReset = false
+	export let successUpdate = false
 
-	let verificationEmailSent = false
+	const dispatch = createEventDispatcher<{ success: void }>()
 
-	const verificationEmailMessage = 'Un email de verification à été envoyé'
 	const formProfile = useForm({
-		successReset: false,
+		successReset,
+		successUpdate,
 		successMessage: 'Profile sauvegardé',
+		onSuccess() {
+			dispatch('success')
+		},
 	})
 
+	let verificationEmailSent = false
+	const verificationEmailMessage = 'Un email de verification à été envoyé'
 	const formEmailVerification = useForm({
 		successMessage: verificationEmailMessage,
 		onSuccess() {
 			verificationEmailSent = true
 		},
 	})
+
 	onMount(() => {
 		$page.data.member?.userProfileRequiredFields.forEach((key) =>
 			formProfile.setError(key, 'Valeur manquante')

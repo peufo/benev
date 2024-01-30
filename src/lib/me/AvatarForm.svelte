@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
+	import { createEventDispatcher } from 'svelte'
 	import { mdiReload, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
@@ -12,12 +13,17 @@
 	let klass = ''
 	export { klass as class }
 
+	const dispatch = createEventDispatcher<{ success: void }>()
+
 	const successMessages: Record<string, string> = {
 		'?/generate_avatar': 'Nouvel avatar généré',
 		'?/upload_avatar': 'Nouvel photo de profil enregistré',
 	}
 	const form = useForm({
-		successMessage: (action) => {
+		onSuccess() {
+			dispatch('success')
+		},
+		successMessage(action) {
 			return successMessages[action.search] || 'Succès'
 		},
 	})

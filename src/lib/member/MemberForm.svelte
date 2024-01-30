@@ -12,11 +12,14 @@
 	export let userId: string
 	let klass = ''
 	export { klass as class }
+	export let successReset = false
+	export let successUpdate = false
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
 	const form = useForm({
-		successReset: false,
+		successReset,
+		successUpdate,
 		onSuccess: () => dispatch('success'),
 	})
 </script>
