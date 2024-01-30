@@ -16,7 +16,7 @@
 			</h3>
 			<p class="text-base-content/80">
 				Page d'accueil du site unique et visible par tous le monde. Si elle est laissée vide, une
-				page générique et basique et affichée par défaut.
+				page générique et basique est affichée par défaut.
 			</p>
 		</section>
 
