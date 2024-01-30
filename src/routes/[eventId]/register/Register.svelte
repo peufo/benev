@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { afterNavigate, goto, invalidateAll } from '$app/navigation'
-	import { mdiChevronLeft, mdiChevronRight } from '@mdi/js'
-	import { Card, Icon, Placeholder } from '$lib/material'
-	import { MemberForm, MemberProfileForm } from '$lib/member'
+	import { mdiChevronLeft, mdiChevronRight, mdiClose } from '@mdi/js'
+	import { Card, Dialog, Icon, Placeholder } from '$lib/material'
+	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
 	import AccountForm from '$lib/me/AccountForm.svelte'
 	import type { Event, Field, User } from '@prisma/client'
 	import type { MemberProfile } from '$lib/server'
 	import { urlParam } from '$lib/store'
+	import { slide } from 'svelte/transition'
 
 	export let event: Event & { memberFields: Field[] }
 	export let user: User | undefined
@@ -19,6 +20,7 @@
 	const isMemberProfileRequired = !!event.memberFields.filter((f) => f.memberCanWrite).length
 	if (isMemberProfileRequired) steps.push(`Profil ${event.name}`)
 
+	let dialogRemoveMember: HTMLDialogElement
 	let forcedStepIndex = 0
 	let stepIndexMax = getStepIndexMax()
 	let stepIndex = getStepIndex($page.url)
@@ -68,7 +70,7 @@
 <div class="max-w-2xl mx-auto flex flex-col gap-4">
 	<Card>
 		<div class="flex items-center gap-2 mb-4">
-			<h1 class="title">Inscription à {event.name}</h1>
+			<h1 class="title">Participer à {event.name}</h1>
 			<div class="join ml-auto border">
 				<a
 					href={$urlParam.with({ forcedStepIndex: stepIndex - 1 })}
@@ -91,6 +93,16 @@
 					Suivant
 				</a>
 			</div>
+			{#if !!member}
+				<button
+					type="button"
+					class="btn btn-square btn-sm"
+					transition:slide={{ axis: 'x' }}
+					on:click={() => dialogRemoveMember.showModal()}
+				>
+					<Icon path={mdiClose} title="Annuler et supprimer ma participation" />
+				</button>
+			{/if}
 		</div>
 		<ul class="steps">
 			{#each steps as step, index}
@@ -123,3 +135,15 @@
 		</Card>
 	{/if}
 </div>
+
+{#if member}
+	<Dialog bind:dialog={dialogRemoveMember}>
+		<h2 slot="header" class="title">On abandonne ?</h2>
+		<div class="flex gap-2 justify-end">
+			<MemberDeleteForm memberId={member.id}>Aupprimer ma participation</MemberDeleteForm>
+			<button type="button" class="btn" on:click={() => dialogRemoveMember.close()}>
+				Je reste
+			</button>
+		</div>
+	</Dialog>
+{/if}

@@ -18,7 +18,7 @@
 <form method="post" class="contents" use:enhance={form.submit}>
 	<input type="hidden" name="memberId" value={memberId} />
 	<input type="hidden" name="redirectTo" value={redirectTo} />
-	<DeleteButton formaction="{$eventPath}/api/members?/delete_member" class="{klass} btn-sm" {btn}>
+	<DeleteButton formaction="{$eventPath}/api/members?/delete_member" class={klass} {btn}>
 		<slot>Supprimer ma participation à l'évènement</slot>
 	</DeleteButton>
 </form>
