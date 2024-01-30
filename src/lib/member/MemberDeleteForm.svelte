@@ -19,6 +19,6 @@
 	<input type="hidden" name="memberId" value={memberId} />
 	<input type="hidden" name="redirectTo" value={redirectTo} />
 	<DeleteButton formaction="{$eventPath}/api/members?/delete_member" class={klass} {btn}>
-		<slot>Supprimer ma participation à l'évènement</slot>
+		<slot>Supprimer ma participation</slot>
 	</DeleteButton>
 </form>
