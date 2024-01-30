@@ -22,6 +22,7 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 			include: {
 				periods: {
 					where: { subscribes: { some: { memberId } } },
+					orderBy: { start: 'asc' },
 					include: {
 						subscribes: {
 							where: { memberId },
