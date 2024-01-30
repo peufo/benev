@@ -79,7 +79,7 @@
 		{
 			key: 'states',
 			label: 'Statut',
-			type: 'select',
+			type: 'multiselect',
 			options: SUBSCRIBE_STATE,
 			getCell: (subscribe) => component(SubscribeStateForm, { subscribe, isLeader: true }),
 			visible: true,
