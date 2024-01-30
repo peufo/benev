@@ -38,7 +38,7 @@
 	let icon = event?.icon || null
 	let webValue = ''
 	const handleWebInput = debounce(async () => {
-		webValue = webInput.value ? `https://${webInput.value.replace('https?://', '')}` : ''
+		webValue = webInput.value ? `https://${webInput.value.replace(/https?:\/\//, '')}` : ''
 		scrapIconPending = true
 		const res = await fetch(`/api/scrap?site=${webValue}`)
 			.then((res) => res.json())
@@ -107,6 +107,7 @@
 	/>
 
 	<input type="hidden" name="web" value={webValue} />
+
 	<InputText
 		label="Site web"
 		value={event?.web || ''}
