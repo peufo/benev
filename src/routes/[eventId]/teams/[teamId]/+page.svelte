@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {
-		mdiAccountArrowUpOutline,
+		mdiClipboardTextOutline,
 		mdiAccountMultipleOutline,
 		mdiChartGantt,
 		mdiChevronRight,
@@ -190,7 +190,7 @@
 											on:click|stopPropagation={() => subscribe(period)}
 										>
 											<Icon
-												path={mdiAccountArrowUpOutline}
+												path={mdiClipboardTextOutline}
 												size={20}
 												title="M'inscrire à cette période"
 											/>

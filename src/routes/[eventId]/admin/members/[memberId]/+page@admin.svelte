@@ -2,7 +2,7 @@
 	import { DropDown, Icon } from '$lib/material'
 
 	import { eventPath } from '$lib/store'
-	import { mdiArrowLeft, mdiPlus, mdiTrashCanOutline } from '@mdi/js'
+	import { mdiArrowLeft, mdiClipboardTextOutline, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
@@ -97,7 +97,11 @@
 				class="btn btn-square btn-sm"
 				on:click={() => createSubscribeDialog.showModal()}
 			>
-				<Icon path={mdiPlus} title="Inscrire {data.memberProfile.user.firstName} à un secteur" />
+				<Icon
+					path={mdiClipboardTextOutline}
+					size={20}
+					title="Inscrire {data.memberProfile.user.firstName} à un secteur"
+				/>
 			</button>
 		</div>
 		<TeamsSubscribes teams={data.event.teams} isLeader />

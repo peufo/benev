@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { mdiFormatListBulleted, mdiSigma } from '@mdi/js'
-	import type { Field } from '@prisma/client'
+	import type { Field, Member } from '@prisma/client'
+	import { tick } from 'svelte'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
+
 	import { InputSearch, Pagination, Table, TabsSmall, TableViewSelect } from '$lib/material'
 	import { component } from '$lib/utils'
 	import InviteDialog from '$lib/InviteDialog.svelte'
-	import { MemberContact, MemberFieldDialog } from '$lib/member'
+	import { MemberActions, MemberCreateSubscribeDialog, MemberFieldDialog } from '$lib/member'
 	import { jsonParse } from '$lib/jsonParse'
 	import { getMembersTableFields } from './membersTableFields'
 	import MembersCopy from './MembersCopy.svelte'
@@ -19,6 +21,8 @@
 	let tableFields = getMembersTableFields(data.teams, data.fields)
 
 	let memberFieldDialog: MemberFieldDialog
+	let createSubscribeDialog: HTMLDialogElement
+	let selectedMember: (Member & { user: { firstName: string } }) | undefined = undefined
 
 	async function handleFieldCreated(field: Field | undefined) {
 		if (!field) return
@@ -59,7 +63,15 @@
 			key="members"
 			items={data.members}
 			fields={tableFields}
-			action={(member) => component(MemberContact, { user: member.user })}
+			action={(member) =>
+				component(MemberActions, {
+					member,
+					async onSubscribeDialog() {
+						selectedMember = member
+						await tick()
+						createSubscribeDialog.showModal()
+					},
+				})}
 			placholder="Aucun membre trouvé"
 			hideBody={data.summary}
 			onCreateField={() => memberFieldDialog.open()}
@@ -80,3 +92,11 @@
 	bind:this={memberFieldDialog}
 	on:success={({ detail }) => handleFieldCreated(detail)}
 />
+
+{#if selectedMember}
+	<MemberCreateSubscribeDialog
+		bind:dialog={createSubscribeDialog}
+		memberId={selectedMember.id}
+		title="Nouvelle inscription pour {selectedMember.user.firstName}"
+	/>
+{/if}
