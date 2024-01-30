@@ -59,7 +59,7 @@ export const actions = {
 						ownerId: userId,
 						pages: {
 							create: {
-								isIndex: true,
+								type: 'home',
 								title: 'Bienvenue',
 								path: 'bienvenue',
 								content: 'null',

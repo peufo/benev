@@ -25,7 +25,7 @@ export const load = async ({ depends, parent, params: { eventId } }) => {
 			}),
 			pages: await prisma.page.findMany({
 				where: { eventId },
-				select: { id: true, title: true, path: true, isIndex: true },
+				select: { id: true, title: true, path: true, type: true },
 			}),
 		}
 	} catch {

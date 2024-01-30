@@ -5,5 +5,5 @@
 </script>
 
 {#key data.page}
-	<PageForm page={data.page} />
+	<PageForm page={data.page} charterAlreadyExist={!!data.pages.find((p) => p.type === 'charter')} />
 {/key}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiFileDocumentOutline, mdiHomeOutline, mdiPlus } from '@mdi/js'
+	import { mdiFileDocumentOutline, mdiPlus } from '@mdi/js'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 
@@ -7,52 +7,44 @@
 	import { eventPath } from '$lib/store'
 	import { useForm } from '$lib/validation/index.js'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
+	import { PAGE_TYPE } from '$lib/constant'
 
 	export let data
 
 	const form = useForm()
-
-	$: pageIndex = data.pages.find((p) => p.isIndex)
 </script>
 
 <OnlyAdmin>
-	<div class="flex gap-2 items-center">
-		<div class="flex gap-1 overflow-x-auto border p-1 rounded-md">
-			{#if pageIndex}
-				<a
-					href="{$eventPath}/admin/pages/{pageIndex.id}"
-					class="menu-item shrink-0"
-					class:active={$page.params.pageId === pageIndex.id}
-				>
-					<Icon path={mdiHomeOutline} class="opacity-60" size={20} />
-					<span>{pageIndex.title}</span>
-				</a>
-			{/if}
-
-			{#each data.pages.filter((p) => !p.isIndex) as { id, title }}
+	<div class="flex items-start">
+		<div class="flex flex-col gap-1 max-w-[200px]">
+			{#each data.pages as { id, title, type }}
 				<a
 					href="{$eventPath}/admin/pages/{id}"
-					class="menu-item shrink-0"
+					class="menu-item"
 					class:active={$page.params.pageId === id}
 				>
-					<Icon path={mdiFileDocumentOutline} class="opacity-60" size={20} />
-
-					<span>{title}</span>
+					<Icon path={PAGE_TYPE[type].icon} class="opacity-60 w-6" size={20} />
+					<span class="overflow-hidden text-ellipsis">{title}</span>
 				</a>
 			{/each}
+
+			<form
+				action="{$eventPath}/admin/pages?/create_page"
+				method="post"
+				class="contents"
+				use:enhance={form.submit}
+			>
+				<button class="menu-item">
+					<Icon path={mdiPlus} class="opacity-70" />
+					<span>Nouvelle page</span>
+				</button>
+			</form>
 		</div>
 
-		<form
-			action="{$eventPath}/admin/pages?/create_page"
-			method="post"
-			class="contents"
-			use:enhance={form.submit}
-		>
-			<button class="btn btn-square btn-sm">
-				<Icon path={mdiPlus} title="Ajouter une page" />
-			</button>
-		</form>
-	</div>
+		<div class="divider divider-horizontal" />
 
-	<slot />
+		<div class="grow">
+			<slot />
+		</div>
+	</div>
 </OnlyAdmin>

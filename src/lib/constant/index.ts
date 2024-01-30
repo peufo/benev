@@ -4,6 +4,7 @@ import type {
 	GiftConditionType,
 	GiftConditionsMode,
 	LicenceType,
+	Page,
 	Subscribe,
 } from '@prisma/client'
 import {
@@ -16,8 +17,11 @@ import {
 	mdiCheckboxIntermediateVariant,
 	mdiOrderBoolDescending,
 	mdiOrderBoolAscendingVariant,
-	mdiCheck,
 	mdiExcavator,
+	mdiHomeOutline,
+	mdiLicense,
+	mdiFileDocumentOutline,
+	mdiAccountCircleOutline,
 } from '@mdi/js'
 import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
 
@@ -97,4 +101,11 @@ export const SUBSCRIBE_STATE: Record<Subscribe['state'], string> = {
 	accepted: 'Validé',
 	denied: 'Décliné',
 	cancelled: 'Annulé',
+} as const
+
+export const PAGE_TYPE: Record<Page['type'], { label: string; icon: string }> = {
+	home: { label: 'Accueil', icon: mdiHomeOutline },
+	charter: { label: 'Charte des bénévoles', icon: mdiLicense },
+	public: { label: 'Page publique', icon: mdiFileDocumentOutline },
+	member: { label: 'Page de membre', icon: mdiAccountCircleOutline },
 } as const

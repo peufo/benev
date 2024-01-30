@@ -5,18 +5,18 @@ const staticsPages: string[] = [urlElement('/')]
 export async function GET() {
 	const events = await prisma.event.findMany({
 		where: { state: 'published', deletedAt: null },
-		include: { pages: { select: { path: true, isIndex: true, updatedAt: true } } },
+		include: { pages: { select: { path: true, type: true, updatedAt: true } } },
 	})
 
 	const eventsSiteMap = events
 		.map((event) => {
 			const basePath = `/${event.id}`
-			const index = event.pages.find((p) => p.isIndex)
-			if (!index) return ''
-			const indexUrlElement = urlElement(basePath, index.updatedAt)
+			const homePage = event.pages.find((p) => p.type === 'home')
+			if (!homePage) return ''
+			const indexUrlElement = urlElement(basePath, homePage.updatedAt)
 			const teamsUrlElement = urlElement(basePath + '/teams')
 			const pagesUrlElement = event.pages
-				.filter((p) => !p.isIndex)
+				.filter((p) => p.type === 'public' || p.type === 'charter')
 				.map((p) => urlElement(`${basePath}/${p.path}`, p.updatedAt))
 			return [indexUrlElement, teamsUrlElement, ...pagesUrlElement].join('')
 		})

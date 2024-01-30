@@ -3,8 +3,8 @@ import { prisma, tryOrFail, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ params: { eventId } }) => {
-	const pageIndex = await prisma.page.findFirstOrThrow({ where: { eventId, isIndex: true } })
-	redirect(301, `/${eventId}/admin/pages/${pageIndex.id}`);
+	const homePage = await prisma.page.findFirstOrThrow({ where: { eventId, type: 'home' } })
+	redirect(301, `/${eventId}/admin/pages/${homePage.id}`)
 }
 
 export const actions = {

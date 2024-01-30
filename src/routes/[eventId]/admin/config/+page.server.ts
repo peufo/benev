@@ -11,7 +11,6 @@ import { z } from '$lib/validation'
 
 import {
 	eventMemberSettings,
-	eventSettings,
 	eventState,
 	eventUpdate,
 	giftCreate,

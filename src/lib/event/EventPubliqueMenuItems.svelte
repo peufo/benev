@@ -3,20 +3,22 @@
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
-	import { mdiFileDocumentOutline, mdiHomeOutline, mdiMapMarkerRadiusOutline } from '@mdi/js'
+	import { mdiHomeOutline, mdiMapMarkerRadiusOutline } from '@mdi/js'
+	import { PAGE_TYPE } from '$lib/constant'
 
-	export let pages: Pick<Page, 'id' | 'title' | 'isIndex' | 'path'>[]
+	export let pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
 	export let hideIndex = false
 	export let classItem = ''
 
-	$: pageIndex = pages.find((p) => p.isIndex)
+	$: pageHome = pages.find((p) => p.type === 'home')
+	$: isMember = !!$page.data.member
 </script>
 
 <!-- HOME -->
-{#if !hideIndex && pageIndex}
+{#if !hideIndex && pageHome}
 	<a href={$eventPath} class="menu-item {classItem}" class:active={$page.route.id == '/[eventId]'}>
 		<Icon path={mdiHomeOutline} size={20} class="opacity-70" />
-		{pageIndex.title}
+		{pageHome.title}
 	</a>
 {/if}
 
@@ -33,10 +35,10 @@
 {/if}
 
 <!-- PAGES -->
-{#each pages.filter((p) => !p.isIndex) as { title, path, id, isIndex } (id)}
-	{@const href = `${$eventPath}${isIndex ? '' : `/${path}`}`}
+{#each pages.filter((p) => p.type !== 'home' && (isMember || p.type !== 'member')) as { title, path, id, type } (id)}
+	{@const href = `${$eventPath}/${path}`}
 	<a {href} class="menu-item {classItem}" class:active={$page.url.pathname == href}>
-		<Icon path={mdiFileDocumentOutline} size={20} class="opacity-70" />
+		<Icon path={PAGE_TYPE[type].icon} size={20} class="opacity-70" />
 		{title}
 	</a>
 {/each}

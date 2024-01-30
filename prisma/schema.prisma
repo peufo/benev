@@ -231,15 +231,26 @@ model Page {
   eventId String
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
-  title   String
-  path    String  @default("")
-  isIndex Boolean @default(false)
-  content String  @db.Text
+  title String
+  path  String @default("")
+
+  type    PageType @default(public)
+  content String   @db.Text
+
+  isVisibleByAll    Boolean @default(false)
+  isVisibleByMember Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([eventId, path])
+}
+
+enum PageType {
+  home
+  charter
+  public
+  member
 }
 
 model Team {

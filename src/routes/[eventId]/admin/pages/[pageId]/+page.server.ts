@@ -3,10 +3,10 @@ import { fail, redirect } from '@sveltejs/kit'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
-export const load = async ({ params }) => {
+export const load = async ({ params, parent }) => {
 	const page = await prisma.page.findUnique({ where: { id: params.pageId } })
+	if (!page) redirect(302, `/${params.eventId}/admin/pages`)
 
-	if (!page) redirect(302, `/${params.eventId}/admin/pages`);
 	return { page }
 }
 
@@ -31,10 +31,18 @@ export const actions = {
 		if (reservedPaths.includes(path))
 			return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
 
-		const samePage = await prisma.page.findFirst({
+		const samePageTitle = await prisma.page.findFirst({
 			where: { id: { not: data.id }, eventId, path },
 		})
-		if (samePage) return fail(400, { message: 'Ce titre est déjà utilisé' })
+		if (samePageTitle) return fail(400, { message: 'Ce titre est déjà utilisé' })
+
+		if (data.type === 'charter') {
+			const charterAlreadyExist = await prisma.page.findFirst({
+				where: { id: { not: data.id }, eventId, type: 'charter' },
+			})
+			if (charterAlreadyExist)
+				return fail(400, { message: 'Il existe déjà une charte des bénévoles' })
+		}
 
 		return tryOrFail(() =>
 			prisma.page.update({
@@ -48,7 +56,7 @@ export const actions = {
 
 		return tryOrFail(() =>
 			prisma.page.delete({
-				where: { id: pageId, isIndex: false },
+				where: { id: pageId, type: { not: 'home' } },
 			})
 		)
 	},

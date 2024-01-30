@@ -39,12 +39,7 @@
 			on:click={handleClick}
 		>
 			<div class="flex gap-2">
-				<div
-					class="
-						title
-						overflow-hidden text-ellipsis min-w-0
-					"
-				>
+				<div class="title overflow-hidden text-ellipsis min-w-0">
 					<slot name="title" />
 				</div>
 				<Icon

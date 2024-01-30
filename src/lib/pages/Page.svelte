@@ -13,7 +13,6 @@
 	export let page: Page | null
 
 	$: html = tiptap.toHTML(page?.content || '')
-
 	$: canEdit = $pageStore.data.member?.roles.includes('admin')
 </script>
 

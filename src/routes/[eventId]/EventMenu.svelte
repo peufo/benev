@@ -7,7 +7,7 @@
 	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from './admin/adminTabs'
 
-	export let pages: Pick<Page, 'id' | 'title' | 'isIndex' | 'path'>[]
+	export let pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
 
 	$: adminIsVisible = $page.data.member?.roles.includes('leader')
 </script>

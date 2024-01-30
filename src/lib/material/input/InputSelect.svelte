@@ -39,7 +39,7 @@
 		<slot name="btn">
 			{#if selectedOption}
 				{#if selectedOption.icon}
-					<Icon path={selectedOption.icon} />
+					<Icon path={selectedOption.icon} size={21} class="opacity-70" />
 				{/if}
 				<span>{selectedOption.label}</span>
 			{:else}
@@ -57,7 +57,7 @@
 		class="w-full"
 	>
 		{#if item.icon}
-			<Icon path={item.icon} />
+			<Icon path={item.icon} size={21} class="opacity-70" />
 		{/if}
 		<span class="whitespace-nowrap">{item.label}</span>
 	</SelectorList>
