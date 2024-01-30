@@ -4,16 +4,17 @@
 	import { page } from '$app/stores'
 	import { Icon } from '$lib/material'
 	import { mdiFileDocumentOutline, mdiHomeOutline, mdiMapMarkerRadiusOutline } from '@mdi/js'
-	export let pages: Pick<Page, 'id' | 'title' | 'isIndex' | 'path'>[]
 
+	export let pages: Pick<Page, 'id' | 'title' | 'isIndex' | 'path'>[]
 	export let hideIndex = false
+	export let classItem = ''
 
 	$: pageIndex = pages.find((p) => p.isIndex)
 </script>
 
 <!-- HOME -->
 {#if !hideIndex && pageIndex}
-	<a href={$eventPath} class="menu-item" class:active={$page.route.id == '/[eventId]'}>
+	<a href={$eventPath} class="menu-item {classItem}" class:active={$page.route.id == '/[eventId]'}>
 		<Icon path={mdiHomeOutline} size={20} class="opacity-70" />
 		{pageIndex.title}
 	</a>
@@ -23,7 +24,7 @@
 {#if $page.data.event?.selfSubscribeAllowed || $page.data.member?.roles.includes('leader')}
 	<a
 		href="{$eventPath}/teams"
-		class="menu-item"
+		class="menu-item {classItem}"
 		class:active={$page.route.id?.startsWith('/[eventId]/teams')}
 	>
 		<Icon path={mdiMapMarkerRadiusOutline} size={20} class="opacity-70" />
@@ -34,7 +35,7 @@
 <!-- PAGES -->
 {#each pages.filter((p) => !p.isIndex) as { title, path, id, isIndex } (id)}
 	{@const href = `${$eventPath}${isIndex ? '' : `/${path}`}`}
-	<a {href} class="menu-item" class:active={$page.url.pathname == href}>
+	<a {href} class="menu-item {classItem}" class:active={$page.url.pathname == href}>
 		<Icon path={mdiFileDocumentOutline} size={20} class="opacity-70" />
 		{title}
 	</a>

@@ -7,18 +7,29 @@
 
 	import { Teams, TeamsActions } from '$lib/team'
 	import { MemberDeleteForm, MemberProfile } from '$lib/member'
+	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from '../admin/adminTabs'
 
 	export let data
 </script>
 
+<section>
+	<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+		<EventPubliqueMenuItems
+			pages={data.pages}
+			classItem="bg-base-200/30 border bordered overflow-hidden"
+		/>
+	</div>
+</section>
+
 {#if data.member.roles.includes('leader')}
 	<section>
+		<h3 class="font-semibold opacity-50 pt-1 text-sm">Gestion</h3>
 		<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
 			{#each $adminTabs as { href, isActive, label, icon }}
 				<a
 					{href}
-					class="menu-item bg-base-200/30 border bordered overflow-hidden"
+					class="menu-item bg-base-200/20 border bordered overflow-hidden"
 					class:active={isActive}
 				>
 					<Icon path={icon} size={20} class="opacity-70" />
@@ -29,6 +40,7 @@
 		</div>
 	</section>
 {/if}
+
 <div class="flex flex-col gap-20 mt-8">
 	<section>
 		<div class="flex gap-2 items-center mb-4">
