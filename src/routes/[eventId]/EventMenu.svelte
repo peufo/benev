@@ -30,7 +30,7 @@
 	<div class="flex flex-col gap-1">
 		<div class="contents lg:hidden">
 			{#if adminIsVisible}
-				<h3 class=" font-bold opacity-50 pl-3 pt-1 text-xs">Public</h3>
+				<h3 class="title-sm pl-3 pt-1">Public</h3>
 			{/if}
 			<EventPubliqueMenuItems {pages} />
 		</div>
@@ -38,7 +38,7 @@
 		<!-- ADMIN -->
 		{#if adminIsVisible}
 			<hr class="block lg:hidden" />
-			<h3 class="font-bold opacity-50 pl-3 pt-1 text-xs">Gestion</h3>
+			<h3 class="title-sm pl-3 pt-1">Gestion</h3>
 			{#each $adminTabs as { href, isActive, label, icon }}
 				<a {href} class="menu-item" class:active={isActive}>
 					<Icon path={icon} size={20} class="opacity-70" />

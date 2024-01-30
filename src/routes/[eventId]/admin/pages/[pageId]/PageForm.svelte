@@ -15,6 +15,7 @@
 	import { eventPath } from '$lib/store'
 	import { mdiLink } from '@mdi/js'
 	import { PAGE_TYPE } from '$lib/constant'
+	import PageTypeHelp from './PageTypeHelp.svelte'
 
 	export let page: Page
 	export let charterAlreadyExist: boolean
@@ -30,8 +31,12 @@
 		<InputText label="Titre" key="title" value={page.title} />
 
 		<FormControl label="Type de page">
+			<svelte:fragment slot="label_append">
+				<PageTypeHelp />
+			</svelte:fragment>
+
 			{#if page.type === 'home'}
-				<div class="menu-item disabled border bordered h-12">
+				<div class="menu-item rounded-lg disabled border bordered h-12">
 					<Icon path={home.icon} size={21} class="opacity-70" />
 					<span>{home.label}</span>
 				</div>
@@ -39,7 +44,7 @@
 				<InputSelect
 					key="type"
 					noBtnClass
-					class="menu-item border bordered h-12"
+					class="menu-item rounded-lg border bordered h-12"
 					options={charterAlreadyExist && page.type !== 'charter'
 						? pageTypes
 						: { charter, ...pageTypes }}
