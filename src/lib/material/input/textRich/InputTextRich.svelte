@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { createEventDispatcher, onMount } from 'svelte'
 	import { Editor } from '@tiptap/core'
 	import { extensions } from './extensions'
 
@@ -15,9 +15,15 @@
 	let element: HTMLDivElement
 	let editor: Editor | null = null
 
+	const dispatch = createEventDispatcher<{ change: void }>()
+
 	onMount(() => {
 		const updateValue = debounce(() => {
-			if (editor) value = valueAsHTML ? editor.getHTML() : JSON.stringify(editor.getJSON())
+			if (!editor) return
+			const newValue = valueAsHTML ? editor.getHTML() : JSON.stringify(editor.getJSON())
+			if (newValue === value) return
+			value = newValue
+			dispatch('change')
 		}, 200)
 
 		editor = new Editor({
@@ -41,7 +47,7 @@
 	})
 </script>
 
-<div class="border bordered rounded-xl relative">
+<div class="border bordered rounded-lg relative">
 	{#if editor}
 		<ToolsBar {editor} class={classToolbar} />
 	{/if}

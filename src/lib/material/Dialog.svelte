@@ -40,7 +40,7 @@
 </script>
 
 <dialog bind:this={dialog} class="modal" tabindex="-1">
-	<div class="modal-box p-0 rounded-lg flex flex-col">
+	<div class="modal-box p-0 rounded-lg flex flex-col border bordered">
 		<div class="p-4 border-b flex relative items-center">
 			<div class="grow">
 				<slot name="header" />

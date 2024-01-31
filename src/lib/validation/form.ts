@@ -15,7 +15,7 @@ export const formContext = {
 	},
 }
 
-type SuccessMessage = string | ((action: URL) => string)
+type SuccessMessage = false | string | ((action: URL) => string)
 type BooleanOrFunction = boolean | ((action: URL) => boolean)
 type UseFormOptions<ReturnData> = {
 	onSubmit?: (...args: Parameters<SubmitFunction>) => any
@@ -106,14 +106,14 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 			}
 
 			if (result.type === 'success') {
-				if (successMessage) notify.success(tryToRun(successMessage))
+				if (successMessage !== false) notify.success(tryToRun(successMessage))
 				if (onSuccess) onSuccess(action, result.data)
 				if (successUpdate) update({ reset: tryToRun(successReset) })
 				return
 			}
 
 			if (result.type === 'redirect') {
-				if (successMessage) notify.success(tryToRun(successMessage))
+				if (successMessage !== false) notify.success(tryToRun(successMessage))
 				if (onSuccess) onSuccess(action)
 				return goto(result.location, { replaceState: true, invalidateAll: tryToRun(successUpdate) })
 			}

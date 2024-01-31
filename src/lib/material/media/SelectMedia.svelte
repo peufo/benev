@@ -9,24 +9,37 @@
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { createEventDispatcher, tick } from 'svelte'
 
+	let medias: Media[] = $page.data.medias || []
+	page.subscribe(({ data }) => (medias = data.medias || []))
+
 	let dialogMedias: HTMLDialogElement
 	let dialogEdit: HTMLDialogElement
 	let dialogCropper: CropperDialog
 	const formUpload = useForm<{ media: Media }>({
-		successReset: false,
 		successUpdate: false,
+		successMessage: 'Nouvelle image',
 		onSuccess(action, data) {
 			dialogCropper.close()
-			if (data) dispatch('select', data?.media)
+			if (data) {
+				medias = [...medias, data.media]
+				dispatch('select', data.media)
+			}
 		},
 	})
 
-	const formEdit = useForm({
-		successReset: false,
+	const formEdit = useForm<Media>({
 		successUpdate: false,
-		onSuccess(action) {
-			// Invalidate medias
+		onSuccess(action, media) {
 			dialogEdit.close()
+			if (!media) return
+			if (action.search === '?/delete_media') {
+				const index = medias.findIndex((m) => m.id === media.id)
+				medias = [...medias.slice(0, index), ...medias.slice(index + 1)]
+			}
+			if (action.search === '?/edit_media') {
+				medias = medias.map((m) => (m.id === media.id ? media : m))
+			}
+			dialogMedias.show()
 		},
 	})
 
@@ -55,14 +68,14 @@
 	}
 </script>
 
-<Dialog bind:dialog={dialogMedias} class="z-10">
+<Dialog bind:dialog={dialogMedias}>
 	<h3 slot="header" class="title">Médiatèque</h3>
 
 	<div
 		class="grid gap-3 items-start"
 		style:grid-template-columns="repeat(auto-fill, minmax(min(6rem, 100%), 1fr)"
 	>
-		{#each $page.data.medias || [] as media}
+		{#each medias as media}
 			<button
 				type="button"
 				on:click={() => handleSelectMedia(media)}
@@ -74,14 +87,21 @@
 					class="block border-b hover:scale-105 transition-transform origin-bottom"
 				/>
 				<div class="title-sm p-1 pl-3 flex items-center flex-wrap gap-2">
-					<span>{media.name || '-'}</span>
-					<button
-						type="button"
-						on:click|stopPropagation={() => handleEditMedia(media)}
-						class="btn btn-xs btn-square btn-ghost ml-auto"
-					>
-						<Icon path={mdiPencilOutline} title="Modifier" size={14} class="fill-base-content/70" />
-					</button>
+					<span class="h-6">{media.name || '-'}</span>
+					{#if media.eventId}
+						<button
+							type="button"
+							on:click|stopPropagation={() => handleEditMedia(media)}
+							class="btn btn-xs btn-square btn-ghost ml-auto"
+						>
+							<Icon
+								path={mdiPencilOutline}
+								title="Modifier"
+								size={14}
+								class="fill-base-content/70"
+							/>
+						</button>
+					{/if}
 				</div>
 			</button>
 		{/each}

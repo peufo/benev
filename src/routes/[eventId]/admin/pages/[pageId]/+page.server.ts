@@ -3,11 +3,16 @@ import { fail, redirect } from '@sveltejs/kit'
 import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
-export const load = async ({ params, parent }) => {
-	const page = await prisma.page.findUnique({ where: { id: params.pageId } })
-	if (!page) redirect(302, `/${params.eventId}/admin/pages`)
+export const load = async ({ params: { pageId, eventId } }) => {
+	const page = await prisma.page.findUnique({ where: { id: pageId } })
+	if (!page) redirect(302, `/${eventId}/admin/pages`)
 
-	return { page }
+	return {
+		page,
+		medias: await prisma.media.findMany({
+			where: { OR: [{ eventId }, { logoOf: { id: eventId } }, { posterOf: { id: eventId } }] },
+		}),
+	}
 }
 
 export const actions = {
