@@ -8,10 +8,13 @@
 	import CropperDialog from './CropperDialog.svelte'
 	import { mdiPlus } from '@mdi/js'
 	import { createEventDispatcher } from 'svelte'
+	import { portal } from '$lib/action'
 
 	let dialogMedias: HTMLDialogElement
 	let dialogCropper: CropperDialog
 	const formUpload = useForm<{ media: Media }>({
+		successReset: false,
+		successUpdate: false,
 		onSuccess(action, data) {
 			dialogCropper.close()
 			if (data) dispatch('select', data?.media)
