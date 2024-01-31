@@ -36,6 +36,7 @@
 			</svelte:fragment>
 
 			{#if page.type === 'home'}
+				<input type="hidden" name="type" value="home" />
 				<div class="menu-item rounded-lg disabled border bordered h-12">
 					<Icon path={home.icon} size={21} class="opacity-70" />
 					<span>{home.label}</span>
