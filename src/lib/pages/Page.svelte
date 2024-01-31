@@ -16,7 +16,7 @@
 	$: canEdit = $pageStore.data.member?.roles.includes('admin')
 </script>
 
-<PageLayout class="relative max-w-2xl">
+<PageLayout class="relative max-w-2xl py-16">
 	{#if html && html !== '<p></p>'}
 		{@html html}
 	{:else}
