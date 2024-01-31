@@ -6,6 +6,7 @@ import Color from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
+import HorizontalRule from '@tiptap/extension-horizontal-rule'
 import { Indent } from './indent'
 
 export const extensions: Extensions = [
@@ -28,4 +29,5 @@ export const extensions: Extensions = [
 		placeholder: 'Rédige ta page ici ...',
 	}),
 	Indent,
+	HorizontalRule,
 ]

@@ -7,6 +7,7 @@
 	import ToolMarkColor from './ToolMarkColor.svelte'
 	import ToolMarkLink from './ToolMarkLink.svelte'
 	import ToolMenuAlign from './ToolMenuAlign.svelte'
+	import ToolMenuInsert from './ToolMenuInsert.svelte'
 
 	export let editor: Editor
 	let klass = ''
@@ -53,5 +54,7 @@
 		/>
 
 		<div class="border border-y-0 border-l-0 mx-1 my-auto h-6" />
+
+		<ToolMenuInsert {editor} />
 	</div>
 </div>

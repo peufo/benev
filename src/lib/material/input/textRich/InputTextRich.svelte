@@ -45,7 +45,7 @@
 	{#if editor}
 		<ToolsBar {editor} class={classToolbar} />
 	{/if}
-	<div bind:this={element} class="p-4 pb-10 min-h-[10rem]" />
+	<div bind:this={element} class="p-4 pb-10 min-h-[20rem]" />
 </div>
 
 {#if key}

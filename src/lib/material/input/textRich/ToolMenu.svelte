@@ -33,10 +33,12 @@
 
 <DropDown hideOnBlur bind:this={dropdown}>
 	<button slot="activator" type="button" class="menu-item gap-2">
-		<Icon path={toolSelected.icon} size={20} class="opacity-70" />
-		{#if !hideLabel}
-			<span class="font-light text-sm">{toolSelected.label}</span>
-		{/if}
+		<slot name="activator">
+			<Icon path={toolSelected.icon} size={20} class="opacity-70" />
+			{#if !hideLabel}
+				<span class="font-light text-sm">{toolSelected.label}</span>
+			{/if}
+		</slot>
 		<Icon path={mdiChevronDown} size={20} class="translate-y-[1px] opacity-70" />
 	</button>
 

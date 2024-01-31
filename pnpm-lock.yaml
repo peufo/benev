@@ -38,6 +38,9 @@ dependencies:
   '@tiptap/extension-highlight':
     specifier: ^2.1.13
     version: 2.1.13(@tiptap/core@2.1.13)
+  '@tiptap/extension-horizontal-rule':
+    specifier: ^2.2.1
+    version: 2.2.1(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13)
   '@tiptap/extension-link':
     specifier: ^2.1.13
     version: 2.1.13(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13)
@@ -1409,8 +1412,8 @@ packages:
       '@tiptap/pm': 2.1.13
     dev: false
 
-  /@tiptap/extension-horizontal-rule@2.1.13(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13):
-    resolution: {integrity: sha512-7OgjgNqZXvBejgULNdMSma2M1nzv4bbZG+FT5XMFZmEOxR9IB1x/RzChjPdeicff2ZK2sfhMBc4Y9femF5XkUg==}
+  /@tiptap/extension-horizontal-rule@2.2.1(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13):
+    resolution: {integrity: sha512-M6mi6CPMeO/1i/0qqEIVbObB3VDT6HhO4cxvjiaWxRXsU+79kdvx33Mk6GHKuXZizAYN1qxeM7byAtFiRu/aIw==}
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
@@ -1553,7 +1556,7 @@ packages:
       '@tiptap/extension-hard-break': 2.1.13(@tiptap/core@2.1.13)
       '@tiptap/extension-heading': 2.1.13(@tiptap/core@2.1.13)
       '@tiptap/extension-history': 2.1.13(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13)
-      '@tiptap/extension-horizontal-rule': 2.1.13(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13)
+      '@tiptap/extension-horizontal-rule': 2.2.1(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13)
       '@tiptap/extension-italic': 2.1.13(@tiptap/core@2.1.13)
       '@tiptap/extension-list-item': 2.1.13(@tiptap/core@2.1.13)
       '@tiptap/extension-ordered-list': 2.1.13(@tiptap/core@2.1.13)
