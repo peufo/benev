@@ -66,8 +66,6 @@
 	bind:this={selectMedia}
 	on:select={({ detail }) => {
 		const src = `/media/${detail.id}`
-		console.log({ src })
-		const result = editor.commands.setImage({ src, alt: detail.name })
-		console.log({ result })
+		editor.commands.setImage({ src, alt: detail.name })
 	}}
 />

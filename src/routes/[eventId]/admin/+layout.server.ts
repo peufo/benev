@@ -13,7 +13,7 @@ export const load = async ({ parent, url, locals, params: { eventId } }) => {
 			orderBy: { name: 'asc' },
 		}),
 		medias: await prisma.media.findMany({
-			where: { eventId },
+			where: { OR: [{ eventId }, { logoOf: { id: eventId } }, { posterOf: { id: eventId } }] },
 		}),
 	}
 }

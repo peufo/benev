@@ -47,7 +47,7 @@ export const actions = {
 		)
 	},
 	upload_media: async ({ request, locals, params: { eventId } }) => {
-		const member = await permission.leader(eventId, locals)
+		const member = await permission.admin(eventId, locals)
 
 		const { err, data, formData } = await parseFormData(request, { name: z.string() })
 		if (err) return err
@@ -62,5 +62,19 @@ export const actions = {
 			})
 			return { media: mediaUploaded }
 		})
+	},
+	delete_media: async ({ request, locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
+		const { err, data } = await parseFormData(request, { id: z.string() })
+		if (err) return err
+		return tryOrFail(() => media.delete({ id: data.id, eventId }))
+	},
+	edit_media: async ({ request, locals, params: { eventId } }) => {
+		await permission.admin(eventId, locals)
+		const { err, data } = await parseFormData(request, { id: z.string(), name: z.string() })
+		if (err) return err
+		return tryOrFail(() =>
+			prisma.media.update({ where: { id: data.id, eventId }, data: { name: data.name } })
+		)
 	},
 }

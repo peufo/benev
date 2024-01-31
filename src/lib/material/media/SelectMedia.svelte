@@ -2,15 +2,15 @@
 	import { enhance } from '$app/forms'
 	import type { Media } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { Dialog, Icon } from '$lib/material'
+	import { DeleteButton, Dialog, Icon, InputText } from '$lib/material'
 	import { useForm } from '$lib/validation'
 
 	import CropperDialog from './CropperDialog.svelte'
-	import { mdiPlus } from '@mdi/js'
-	import { createEventDispatcher } from 'svelte'
-	import { portal } from '$lib/action'
+	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
+	import { createEventDispatcher, tick } from 'svelte'
 
 	let dialogMedias: HTMLDialogElement
+	let dialogEdit: HTMLDialogElement
 	let dialogCropper: CropperDialog
 	const formUpload = useForm<{ media: Media }>({
 		successReset: false,
@@ -21,7 +21,17 @@
 		},
 	})
 
+	const formEdit = useForm({
+		successReset: false,
+		successUpdate: false,
+		onSuccess(action) {
+			// Invalidate medias
+			dialogEdit.close()
+		},
+	})
+
 	const dispatch = createEventDispatcher<{ select: Media }>()
+	let selectedMedia: Media | undefined = undefined
 
 	export function show() {
 		dialogMedias.show()
@@ -35,6 +45,13 @@
 	function handleSelectMedia(media: Media) {
 		dialogMedias.close()
 		dispatch('select', media)
+	}
+
+	async function handleEditMedia(media: Media) {
+		selectedMedia = media
+		await tick()
+		dialogMedias.close()
+		dialogEdit.showModal()
 	}
 </script>
 
@@ -56,7 +73,16 @@
 					alt={media.name}
 					class="block border-b hover:scale-105 transition-transform origin-bottom"
 				/>
-				<div class="title-sm px-3 py-2">{media.name || '-'}</div>
+				<div class="title-sm p-1 pl-3 flex items-center flex-wrap gap-2">
+					<span>{media.name || '-'}</span>
+					<button
+						type="button"
+						on:click|stopPropagation={() => handleEditMedia(media)}
+						class="btn btn-xs btn-square btn-ghost ml-auto"
+					>
+						<Icon path={mdiPencilOutline} title="Modifier" size={14} class="fill-base-content/70" />
+					</button>
+				</div>
 			</button>
 		{/each}
 
@@ -76,6 +102,7 @@
 	</div>
 </Dialog>
 
+<!-- Upload dialog -->
 <form
 	method="post"
 	enctype="multipart/form-data"
@@ -89,3 +116,29 @@
 		formaction="/{$page.params.eventId}/admin?/upload_media"
 	/>
 </form>
+
+{#if selectedMedia}
+	<Dialog bind:dialog={dialogEdit}>
+		<h3 slot="header" class="title">Edition d'une image</h3>
+
+		<img src="/media/{selectedMedia.id}" alt={selectedMedia.name} class="mx-auto" />
+
+		<form method="post" class="contents" use:enhance={formEdit.submit}>
+			<div class="flex flex-row-reverse items-end gap-2 mt-4">
+				<input type="hidden" name="id" value={selectedMedia.id} />
+
+				<button formaction="/{$page.params.eventId}/admin?/edit_media" class="btn btn-primary">
+					Valider
+				</button>
+				<DeleteButton formaction="/{$page.params.eventId}/admin?/delete_media" />
+
+				<InputText
+					key="name"
+					input={{ placeholder: "Description de l'image", autocomplete: 'off' }}
+					class="grow"
+					value={selectedMedia.name}
+				/>
+			</div>
+		</form>
+	</Dialog>
+{/if}
