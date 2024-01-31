@@ -1,7 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 
 import type { MemberWithComputedValues } from '$lib/server'
-import type { Event } from '@prisma/client'
+import type { Event, Media } from '@prisma/client'
 import { teamConditionModel } from '$lib/validation'
 import zod from 'zod'
 
@@ -14,6 +14,7 @@ declare global {
 		interface PageData {
 			member?: MemberWithComputedValues
 			event?: Event
+			medias?: Media[]
 		}
 		// interface Error {}
 		// interface Platform {}

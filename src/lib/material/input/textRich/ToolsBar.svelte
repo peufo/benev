@@ -2,6 +2,7 @@
 	import type { Editor } from '@tiptap/core'
 	import { mdiFormatBold, mdiFormatColorFill, mdiFormatColorText, mdiFormatItalic } from '@mdi/js'
 
+	import { SelectMedia } from '$lib/material'
 	import ToolMenuNode from './ToolMenuNode.svelte'
 	import ToolMark from './ToolMark.svelte'
 	import ToolMarkColor from './ToolMarkColor.svelte'
@@ -12,6 +13,8 @@
 	export let editor: Editor
 	let klass = ''
 	export { klass as class }
+
+	let selectMedia: SelectMedia
 </script>
 
 <div
@@ -55,6 +58,16 @@
 
 		<div class="border border-y-0 border-l-0 mx-1 my-auto h-6" />
 
-		<ToolMenuInsert {editor} />
+		<ToolMenuInsert {editor} on:insertMedia={() => selectMedia.show()} />
 	</div>
 </div>
+
+<SelectMedia
+	bind:this={selectMedia}
+	on:select={({ detail }) => {
+		const src = `/media/${detail.id}`
+		console.log({ src })
+		const result = editor.commands.setImage({ src, alt: detail.name })
+		console.log({ result })
+	}}
+/>

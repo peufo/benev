@@ -10,7 +10,7 @@ import { error } from '@sveltejs/kit'
 
 type UploadOption = {
 	key?: string
-	where: Prisma.MediaWhereInput
+	where?: Prisma.MediaWhereInput
 	data: Prisma.MediaCreateArgs['data']
 }
 export const media = {
@@ -26,25 +26,17 @@ export const media = {
 				height: z.number(),
 			}),
 		})
-		if (err) return err
+		if (err) throw err
 		const image = data[keyImage] as Blob
 		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }
 
-		if (image.size === 0) return
+		if (image.size === 0) throw Error('Empty image')
 
 		const imageBuffer = await image.arrayBuffer()
 
-		let media = await prisma.media.findFirst({
-			where: opt.where,
-		})
-
-		media = await prisma.media.upsert({
-			where: { id: media?.id || '' },
-			update: opt.data,
-			create: opt.data,
-		})
-
+		const media = await createOrUpsertMedia(opt)
 		const mediaPath = path.resolve(MEDIA_DIR, media.id)
+
 		await fs
 			.access(mediaPath, fs.constants.R_OK)
 			.catch(() => {})
@@ -56,14 +48,30 @@ export const media = {
 			.crop(crop.x, crop.y, crop.width, crop.height)
 			.writeAsync(path.resolve(mediaPath, `original.png`))
 
-		return
+		return media
 	},
 
 	async delete(where: Prisma.MediaWhereInput) {
 		const media = await prisma.media.findFirst({ where })
-		if (!media) error(404);
+		if (!media) error(404)
 		const mediaPath = path.resolve(MEDIA_DIR, media.id)
 		await fs.rm(mediaPath, { recursive: true, force: true })
 		return prisma.media.delete({ where: { id: media.id } })
 	},
+}
+
+function createOrUpsertMedia(opt: UploadOption) {
+	if (opt.where) return upsertMedia(opt)
+	return prisma.media.create({ data: opt.data })
+}
+
+async function upsertMedia(opt: UploadOption) {
+	let media = await prisma.media.findFirst({
+		where: opt.where,
+	})
+	return prisma.media.upsert({
+		where: { id: media?.id || '' },
+		update: opt.data,
+		create: opt.data,
+	})
 }

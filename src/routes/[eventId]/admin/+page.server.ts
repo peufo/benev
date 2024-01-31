@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit'
-import { tryOrFail, prisma, parseFormData, permission } from '$lib/server'
+import { tryOrFail, prisma, parseFormData, permission, media } from '$lib/server'
 import { viewCreate, z } from '$lib/validation'
 
 export const load = async ({ url }) => {
@@ -45,5 +45,22 @@ export const actions = {
 				where: { id: data.id, eventId },
 			})
 		)
+	},
+	upload_media: async ({ request, locals, params: { eventId } }) => {
+		const member = await permission.leader(eventId, locals)
+
+		const { err, data, formData } = await parseFormData(request, { name: z.string() })
+		if (err) return err
+
+		return tryOrFail(async () => {
+			const mediaUploaded = await media.upload(formData, {
+				data: {
+					eventId,
+					name: data.name,
+					createdById: member.userId,
+				},
+			})
+			return { media: mediaUploaded }
+		})
 	},
 }

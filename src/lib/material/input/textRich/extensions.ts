@@ -7,6 +7,7 @@ import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
 import HorizontalRule from '@tiptap/extension-horizontal-rule'
+import Image from '@tiptap/extension-image'
 import { Indent } from './indent'
 
 export const extensions: Extensions = [
@@ -22,7 +23,7 @@ export const extensions: Extensions = [
 		multicolor: true,
 	}),
 	TextAlign.configure({
-		types: ['heading', 'paragraph'],
+		types: ['heading', 'paragraph', 'image'],
 		alignments: ['left', 'center', 'right'],
 	}),
 	Placeholder.configure({
@@ -30,4 +31,9 @@ export const extensions: Extensions = [
 	}),
 	Indent,
 	HorizontalRule,
+	Image.configure({
+		HTMLAttributes: {
+			class: 'mx-auto',
+		},
+	}),
 ]

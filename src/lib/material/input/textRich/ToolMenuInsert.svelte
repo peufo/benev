@@ -1,20 +1,28 @@
 <script lang="ts">
 	import type { Editor } from '@tiptap/core'
-	import { mdiPlus, mdiMinus } from '@mdi/js'
+	import { mdiPlus, mdiMinus, mdiImageOutline } from '@mdi/js'
 
-	import ToolMenu from './ToolMenu.svelte'
 	import { Icon } from '$lib/material'
+	import ToolMenu from './ToolMenu.svelte'
+	import { createEventDispatcher } from 'svelte'
 
 	export let editor: Editor
+
+	const dispatch = createEventDispatcher<{ insertMedia: void }>()
 </script>
 
 <ToolMenu
 	{editor}
 	tools={[
 		{
-			label: 'Séparation horizontal',
+			label: 'Séparateur',
 			icon: mdiMinus,
 			action: () => editor.commands.setHorizontalRule(),
+		},
+		{
+			label: 'Image',
+			icon: mdiImageOutline,
+			action: () => dispatch('insertMedia'),
 		},
 	]}
 	hideLabel

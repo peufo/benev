@@ -11,7 +11,7 @@ export const GET = async ({ url, params: { mediaId } }) => {
 	const { data, err } = parseQuery(url, {
 		size: z.enum(toTuple(MEDIA_PRESETS)).optional(),
 	})
-	if (err) error(400);
+	if (err) error(400)
 
 	const fileName = `${data.size || 'original'}.png`
 	const filePath = path.resolve(MEDIA_DIR, mediaId, fileName)
@@ -30,6 +30,10 @@ export const GET = async ({ url, params: { mediaId } }) => {
 		}
 	})
 
-	if (!buffer) error(404);
-	return new Response(buffer)
+	if (!buffer) error(404)
+	return new Response(buffer, {
+		headers: {
+			'content-type': 'image/png',
+		},
+	})
 }

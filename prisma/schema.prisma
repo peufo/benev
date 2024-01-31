@@ -56,7 +56,7 @@ model Licence {
   memberId String? @unique
   member   Member? @relation(references: [id], fields: [memberId], onDelete: SetNull)
   eventId  String? @unique
-  event    Event?  @relation(references: [id], fields: [eventId], onDelete: SetNull)
+  event    Event?  @relation(references: [id], fields: [eventId], onDelete: SetNull, onUpdate: Cascade)
 
   ownerId String
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
@@ -137,9 +137,9 @@ model Event {
   timezone Int     @default(-120)
 
   logoId   String? @unique
-  logo     Media?  @relation(name: "logo", fields: [logoId], references: [id], onDelete: Cascade)
+  logo     Media?  @relation(name: "logo", fields: [logoId], references: [id], onDelete: SetNull)
   posterId String? @unique
-  poster   Media?  @relation(name: "poster", fields: [posterId], references: [id], onDelete: Cascade)
+  poster   Media?  @relation(name: "poster", fields: [posterId], references: [id], onDelete: SetNull)
 
   teams        Team[]
   pages        Page[]
@@ -147,6 +147,7 @@ model Event {
   memberFields Field[]
   gifts        Gift[]
   views        View[]
+  medias       Media[]
 
   // Settings
   selfRegisterAllowed  Boolean   @default(true)
@@ -339,10 +340,14 @@ enum SubscribeState {
 model Media {
   id String @id @default(cuid())
 
-  name        String
-  avatarOf    User?    @relation(name: "avatar")
-  logoOf      Event?   @relation(name: "logo")
-  posterOf    Event?   @relation(name: "poster")
+  name     String
+  avatarOf User?  @relation(name: "avatar")
+  logoOf   Event? @relation(name: "logo")
+  posterOf Event? @relation(name: "poster")
+
+  eventId String?
+  event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
   createdById String
   createdBy   User     @relation(references: [id], fields: [createdById], onDelete: Cascade)
   createdAt   DateTime @default(now())
@@ -353,7 +358,7 @@ model Gift {
   id             String             @id @default(cuid())
   name           String
   eventId        String
-  event          Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event          Event              @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   allocations    GiftAllocation[]
   conditions     GiftCondition[]
   conditionsMode GiftConditionsMode @default(sum)
