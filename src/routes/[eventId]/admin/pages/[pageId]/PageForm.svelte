@@ -28,8 +28,8 @@
 	const form = useForm({
 		successUpdate: false,
 		successMessage: false,
-		async onSuccess() {
-			if (successInvalidateAll) await invalidateAll()
+		async onSuccess(action) {
+			if (successInvalidateAll || action.search === '?/delete_page') await invalidateAll()
 			isDirty = false
 		},
 	})
