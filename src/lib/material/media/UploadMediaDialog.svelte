@@ -12,7 +12,9 @@
 	export let title = 'Nouvelle image'
 	export let formaction: string | undefined = undefined
 	export let key = ''
-	export let inputName = false
+	export let freeName = false
+	export let freeAspect = false
+
 	let dialog: HTMLDialogElement
 	let image = ''
 	let crop: Crop | undefined = undefined
@@ -43,6 +45,14 @@
 		close()
 		if (crop && image) dispatch('submit', { crop, image })
 	}
+
+	const aspects: { label: string; value: number }[] = [
+		{ label: '16:9', value: 16 / 9 },
+		{ label: '3:2', value: 3 / 2 },
+		{ label: '4:3', value: 4 / 3 },
+		{ label: '1:1', value: 1 },
+		{ label: '2:3', value: 2 / 3 },
+	]
 </script>
 
 <Dialog bind:dialog>
@@ -50,14 +60,31 @@
 		{title}
 	</h2>
 
+	{#if freeAspect}
+		<div class="flex gap-2 mb-2">
+			{#each aspects as { label, value }}
+				<button
+					type="button"
+					class="btn btn-square btn-sm"
+					class:btn-primary={aspect === value}
+					on:click={() => (aspect = value)}
+				>
+					{label}
+				</button>
+			{/each}
+		</div>
+	{/if}
+
 	<div class="relative rounded-lg overflow-hidden aspect-square">
-		<Cropper
-			{image}
-			{aspect}
-			showGrid={false}
-			zoomSpeed={0.2}
-			on:cropcomplete={(e) => (crop = e.detail.pixels)}
-		/>
+		{#key aspect}
+			<Cropper
+				{image}
+				{aspect}
+				showGrid={false}
+				zoomSpeed={0.2}
+				on:cropcomplete={(e) => (crop = e.detail.pixels)}
+			/>
+		{/key}
 	</div>
 	<div class="flex justify-end items-end gap-2 mt-2">
 		<input type="hidden" name="{key ? `${key}_` : ''}crop" value={JSON.stringify(crop)} />
@@ -70,7 +97,7 @@
 			on:change={onFileSelected}
 		/>
 
-		{#if inputName}
+		{#if freeName}
 			<InputText
 				key="name"
 				input={{ placeholder: "Description de l'image", autocomplete: 'off' }}

@@ -17,7 +17,7 @@
 	import { PAGE_TYPE } from '$lib/constant'
 	import { debounce } from '$lib/debounce'
 	import PageTypeHelp from './PageTypeHelp.svelte'
-	import { goto, invalidateAll } from '$app/navigation'
+	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
 
 	export let page: Page

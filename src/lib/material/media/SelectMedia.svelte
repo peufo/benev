@@ -5,7 +5,7 @@
 	import { DeleteButton, Dialog, Icon, InputText } from '$lib/material'
 	import { useForm } from '$lib/validation'
 
-	import CropperDialog from './CropperDialog.svelte'
+	import UploadMediaDialog from './UploadMediaDialog.svelte'
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { createEventDispatcher, tick } from 'svelte'
 
@@ -14,12 +14,12 @@
 
 	let dialogMedias: HTMLDialogElement
 	let dialogEdit: HTMLDialogElement
-	let dialogCropper: CropperDialog
+	let dialogUploadMedia: UploadMediaDialog
 	const formUpload = useForm<Media>({
 		successUpdate: false,
 		successMessage: 'Nouvelle image',
 		onSuccess(action, media) {
-			dialogCropper.close()
+			dialogUploadMedia.close()
 			if (media) {
 				medias = [...medias, media]
 				dispatch('select', media)
@@ -52,7 +52,7 @@
 
 	function handleAddMedia() {
 		dialogMedias.close()
-		dialogCropper.show()
+		dialogUploadMedia.show()
 	}
 
 	function handleSelectMedia(media: Media) {
@@ -79,15 +79,12 @@
 			<button
 				type="button"
 				on:click={() => handleSelectMedia(media)}
-				class="text-left border rounded-lg overflow-hidden"
+				class="text-left border rounded-lg outline-primary/50 outline-1 hover:outline p-1 flex flex-col gap-1"
 			>
-				<img
-					src="/media/{media.id}?size=medium"
-					alt={media.name}
-					class="block border-b hover:scale-105 transition-transform origin-bottom"
-				/>
-				<div class="title-sm p-1 pl-3 flex items-center flex-wrap gap-2">
-					<span class="h-6">{media.name || '-'}</span>
+				<img src="/media/{media.id}" alt={media.name} class="rounded" />
+
+				<div class="flex items-center w-full flex-wrap gap-2">
+					<span class="title-sm h-6">{media.name || '-'}</span>
 					{#if media.eventId}
 						<button
 							type="button"
@@ -108,12 +105,12 @@
 
 		<button
 			type="button"
-			class="border rounded-lg grid place-content-center aspect-square group"
+			class="border rounded-lg grid place-content-center aspect-square outline-primary/50 outline-1 hover:outline"
 			on:click={handleAddMedia}
 		>
 			<Icon
 				path={mdiPlus}
-				class="fill-base-content/70 group-hover:scale-125 transition-transform"
+				class="fill-base-content/70"
 				title="Ajouter une nouvelle image"
 				size={42}
 				tippyProps={{ appendTo: 'parent' }}
@@ -122,18 +119,18 @@
 	</div>
 </Dialog>
 
-<!-- Upload dialog -->
 <form
 	method="post"
 	enctype="multipart/form-data"
 	use:enhance={formUpload.submit}
 	on:submit|preventDefault
 >
-	<CropperDialog
-		bind:this={dialogCropper}
+	<UploadMediaDialog
+		bind:this={dialogUploadMedia}
 		title="Nouvelle image"
-		inputName
 		formaction="/{$page.params.eventId}/admin?/upload_media"
+		freeName
+		freeAspect
 	/>
 </form>
 
