@@ -7,6 +7,7 @@ import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
 import Image from '@tiptap/extension-image'
+import Youtube from '@tiptap/extension-youtube'
 import { Indent } from './indent'
 
 export const extensions: Extensions = [
@@ -32,6 +33,16 @@ export const extensions: Extensions = [
 	Image.configure({
 		HTMLAttributes: {
 			class: 'mx-auto',
+		},
+	}),
+	Youtube.configure({
+		width: '100%',
+		height: 360,
+		nocookie: true,
+		origin: 'benev.io',
+		modestBranding: true,
+		HTMLAttributes: {
+			class: 'mx-auto rounded',
 		},
 	}),
 ]

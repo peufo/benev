@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Editor } from '@tiptap/core'
-	import { mdiPlus, mdiMinus, mdiImageOutline } from '@mdi/js'
+	import { mdiPlus, mdiMinus, mdiImageOutline, mdiYoutube } from '@mdi/js'
 
 	import { Icon } from '$lib/material'
 	import ToolMenu from './ToolMenu.svelte'
@@ -23,6 +23,15 @@
 			label: 'Image',
 			icon: mdiImageOutline,
 			action: () => dispatch('insertMedia'),
+		},
+		{
+			label: 'Vidéo',
+			icon: mdiYoutube,
+			action: () => {
+				const src = prompt('Lien youtube')
+				if (!src) return
+				editor.commands.setYoutubeVideo({ src })
+			},
 		},
 	]}
 	hideLabel
