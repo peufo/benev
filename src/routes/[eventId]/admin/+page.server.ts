@@ -52,16 +52,15 @@ export const actions = {
 		const { err, data, formData } = await parseFormData(request, { name: z.string() })
 		if (err) return err
 
-		return tryOrFail(async () => {
-			const mediaUploaded = await media.upload(formData, {
+		return tryOrFail(async () =>
+			media.upload(formData, {
 				data: {
 					eventId,
 					name: data.name,
 					createdById: member.userId,
 				},
 			})
-			return { media: mediaUploaded }
-		})
+		)
 	},
 	delete_media: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)

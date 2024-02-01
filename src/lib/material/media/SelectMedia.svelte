@@ -15,14 +15,14 @@
 	let dialogMedias: HTMLDialogElement
 	let dialogEdit: HTMLDialogElement
 	let dialogCropper: CropperDialog
-	const formUpload = useForm<{ media: Media }>({
+	const formUpload = useForm<Media>({
 		successUpdate: false,
 		successMessage: 'Nouvelle image',
-		onSuccess(action, data) {
+		onSuccess(action, media) {
 			dialogCropper.close()
-			if (data) {
-				medias = [...medias, data.media]
-				dispatch('select', data.media)
+			if (media) {
+				medias = [...medias, media]
+				dispatch('select', media)
 			}
 		},
 	})

@@ -24,7 +24,7 @@
 			if (newValue === value) return
 			value = newValue
 			dispatch('change')
-		}, 200)
+		}, 120)
 
 		editor = new Editor({
 			element,

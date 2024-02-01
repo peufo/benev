@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import { mdiCheck, mdiLink, mdiLoading } from '@mdi/js'
 	import type { Page } from '@prisma/client'
 
 	import { useForm } from '$lib/validation'
@@ -13,19 +14,22 @@
 	} from '$lib/material'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
-	import { mdiCheck, mdiLink, mdiLoading } from '@mdi/js'
 	import { PAGE_TYPE } from '$lib/constant'
-	import PageTypeHelp from './PageTypeHelp.svelte'
 	import { debounce } from '$lib/debounce'
+	import PageTypeHelp from './PageTypeHelp.svelte'
+	import { goto, invalidateAll } from '$app/navigation'
+	import { tick } from 'svelte'
 
 	export let page: Page
 	export let charterAlreadyExist: boolean
 
 	let isDirty = false
+	let successInvalidateAll = false
 	const form = useForm({
 		successUpdate: false,
 		successMessage: false,
-		onSuccess() {
+		async onSuccess() {
+			if (successInvalidateAll) await invalidateAll()
 			isDirty = false
 		},
 	})
@@ -38,19 +42,22 @@
 		isDirty = true
 		autosave()
 	}
-	function handleChangeImediat() {
+	async function handleChangeImediat() {
 		isDirty = true
+		successInvalidateAll = true
+		await tick()
 		submitButton.click()
 	}
 
 	const autosave = debounce(() => {
+		successInvalidateAll = false
 		submitButton.click()
 	}, 800)
 </script>
 
 <form method="post" action="?/update_page" use:enhance={form.submit} class="flex flex-col gap-2">
 	<div class="flex flex-wrap gap-2 items-end">
-		<InputText label="Titre" key="title" value={page.title} on:input={handleChange} />
+		<InputText label="Titre" key="title" value={page.title} on:input={handleChangeImediat} />
 
 		<FormControl label="Type de page">
 			<svelte:fragment slot="label_append">
@@ -82,13 +89,14 @@
 	<input type="hidden" name="path" value={normalizePath(page.title)} />
 
 	<input type="hidden" name="eventId" value={page.eventId} />
-
-	<InputTextRich
-		key="content"
-		value={page.content}
-		classToolbar="top-14"
-		on:change={handleChange}
-	/>
+	{#key page.id}
+		<InputTextRich
+			key="content"
+			value={page.content}
+			classToolbar="top-14"
+			on:change={handleChange}
+		/>
+	{/key}
 
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
