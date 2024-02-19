@@ -15,7 +15,6 @@ export async function parseFormData<Type extends z.ZodRawShape>(
 
 	const formDataFlateObject: Record<string, unknown> = Object.fromEntries(formData)
 	const formDataObject = flateToNeestedObject(formDataFlateObject)
-
 	const parsed = shema.safeParse(formDataObject)
 	if (parsed.success === false) {
 		type Issue = z.ZodIssue & { received: string; expected: string; unionErrors?: z.ZodError[] }

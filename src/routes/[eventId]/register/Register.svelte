@@ -75,23 +75,26 @@
 		<div class="join ml-auto border">
 			<a
 				href={$urlParam.with({ forcedStepIndex: stepIndex - 1 })}
-				class="btn btn-sm join-item btn-ghost btn-disabled"
+				class="btn btn-sm btn-square join-item btn-ghost btn-disabled"
 				class:btn-disabled={stepIndex <= 1}
 			>
-				Précédent
-				<Icon path={mdiChevronLeft} class={stepIndex <= 1 ? 'opacity-20' : 'opacity-70'} />
+				<Icon
+					title="Précédent"
+					path={mdiChevronLeft}
+					class={stepIndex <= 1 ? 'opacity-20' : 'opacity-70'}
+				/>
 			</a>
 
 			<a
 				href={$urlParam.with({ forcedStepIndex: stepIndex + 1 })}
-				class="btn btn-sm join-item btn-ghost"
+				class="btn btn-sm btn-square join-item btn-ghost"
 				class:btn-disabled={stepIndex >= stepIndexMax}
 			>
 				<Icon
+					title="Suivant"
 					path={mdiChevronRight}
 					class={stepIndex >= stepIndexMax ? 'opacity-20' : 'opacity-70'}
 				/>
-				Suivant
 			</a>
 		</div>
 		{#if !!member}
