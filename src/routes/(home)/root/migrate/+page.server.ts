@@ -16,4 +16,16 @@ export const actions = {
 			return
 		})
 	},
+	generate_all_member_profil: async () => {
+		const members = await prisma.member.findMany()
+		return tryOrFail(async () => {
+			await Promise.all(
+				members.map(({ id, profileJson }) => {
+					if (profileJson) return
+					return prisma.member.update({ where: { id }, data: { profileJson: {} } })
+				})
+			)
+			return
+		})
+	},
 }
