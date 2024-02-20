@@ -30,7 +30,7 @@ export const media = {
 		const image = data[keyImage] as Blob
 		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }
 
-		if (image.size === 0) throw Error('Empty image')
+		if (image.size === 0) return
 
 		const imageBuffer = await image.arrayBuffer()
 
