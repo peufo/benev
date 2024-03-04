@@ -22,6 +22,7 @@ export const actions = {
 		if (err) return err
 
 		const nameFail = (message: string) => fail(400, { issues: [{ path: ['name'], message }] })
+
 		const exist = await prisma.event.findUnique({ where: { id: data.id } })
 		if (exist) return nameFail('Désolé, ce nom est déjà pris')
 
@@ -76,25 +77,29 @@ export const actions = {
 					},
 				})
 
-				await media.upload(formData, {
-					key: 'poster',
-					where: { posterOf: { id: event.id } },
-					data: {
-						name: `Affiche de ${event.name}`,
-						createdById: session.user.id,
-						posterOf: { connect: { id: event.id } },
-					},
-				})
+				await media
+					.upload(formData, {
+						key: 'poster',
+						where: { posterOf: { id: event.id } },
+						data: {
+							name: `Affiche de ${event.name}`,
+							createdById: session.user.id,
+							posterOf: { connect: { id: event.id } },
+						},
+					})
+					.catch(console.error)
 
-				await media.upload(formData, {
-					key: 'logo',
-					where: { logoOf: { id: event.id } },
-					data: {
-						name: `Logo de ${event.name}`,
-						createdById: session.user.id,
-						logoOf: { connect: { id: event.id } },
-					},
-				})
+				await media
+					.upload(formData, {
+						key: 'logo',
+						where: { logoOf: { id: event.id } },
+						data: {
+							name: `Logo de ${event.name}`,
+							createdById: session.user.id,
+							logoOf: { connect: { id: event.id } },
+						},
+					})
+					.catch(console.error)
 
 				return event
 			},

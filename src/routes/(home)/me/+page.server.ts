@@ -11,7 +11,6 @@ import {
 } from '$lib/server'
 import { userLogin, userCreate, userUpdate, z } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
-import { textInputRule } from '@tiptap/core'
 
 export const load = () => {
 	redirect(302, '/me/events')

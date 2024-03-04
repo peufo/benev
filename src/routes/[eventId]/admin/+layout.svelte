@@ -18,9 +18,6 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Gestion - {data.event.name}</title>
-</svelte:head>
 
 <div class="flex flex-col gap-4 max-w-5xl m-auto">
 	{#if !!data.event.missingLicencesMember}

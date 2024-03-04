@@ -10,10 +10,10 @@
 </svelte:head>
 
 <MetaTags
-	title="Benev"
+	title="Benev.io"
 	description="Ta plateforme de gestion de bénévoles"
 	openGraph={{
-		title: 'Benev',
+		title: 'Benev.io',
 		description: 'Ta plateforme de gestion de bénévoles',
 		images: [
 			{

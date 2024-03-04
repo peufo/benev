@@ -23,7 +23,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.event.name}</title>
+	<title>Benev.io - {data.event.name}</title>
 </svelte:head>
 
 <Poster posterId={data.event.posterId} />
