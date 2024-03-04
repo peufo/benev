@@ -107,19 +107,21 @@
 	}
 </script>
 
-<div>
+<div class="mt-4">
 	<input type="hidden" name="conditions" value={JSON.stringify(conditions)} />
 	<div class="flex items-center mb-2">
-		<div class="opacity-75 grow flex flex-col">
-			<span class="text-lg font-medium">Conditions</span>
-			<span class="text-xs">
-				Visible pour
-				{#if !conditions.length}
-					tous les membres
-				{:else}
-					{memberAllowedCount} membre{memberAllowedCount > 1 ? 's' : ''}
-				{/if}
-			</span>
+		<div class="grow">
+			<div class="label flex-col items-start">
+				<span class="label-text">Conditions</span>
+				<span class="label-text-alt opacity-80">
+					Visible pour
+					{#if !conditions.length}
+						tous les membres
+					{:else}
+						{memberAllowedCount} membre{memberAllowedCount > 1 ? 's' : ''}
+					{/if}
+				</span>
+			</div>
 		</div>
 		<InputSelect options={addConditionOptions} on:select={handleAddCondition} class="btn-square">
 			<svelte:fragment slot="btn">
