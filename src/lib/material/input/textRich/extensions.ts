@@ -36,6 +36,7 @@ export const extensions: Extensions = [
 		},
 	}),
 	Youtube.configure({
+		// @ts-ignore
 		width: '100%',
 		height: 360,
 		nocookie: true,
