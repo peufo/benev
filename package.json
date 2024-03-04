@@ -82,7 +82,7 @@
 		"stripe": "^14.8.0",
 		"svelte-easy-crop": "^2.0.2",
 		"svelte-meta-tags": "^3.1.0",
-		"svelte-notifications": "^0.9.98",
+		"svelte-sonner": "^0.3.19",
 		"tippy.js": "^6.3.7",
 		"zod": "^3.21.4"
 	}

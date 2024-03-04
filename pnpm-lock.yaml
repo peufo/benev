@@ -104,9 +104,9 @@ dependencies:
   svelte-meta-tags:
     specifier: ^3.1.0
     version: 3.1.0(svelte@4.2.3)(typescript@5.2.2)
-  svelte-notifications:
-    specifier: ^0.9.98
-    version: 0.9.98
+  svelte-sonner:
+    specifier: ^0.3.19
+    version: 0.3.19(svelte@4.2.3)
   tippy.js:
     specifier: ^6.3.7
     version: 6.3.7
@@ -4175,10 +4175,6 @@ packages:
       - typescript
     dev: false
 
-  /svelte-notifications@0.9.98:
-    resolution: {integrity: sha512-w7/sqnQtEjM5uzjb3HfB50RE6KMuuWEQZxfBw86IykslHFJRcTuRvaUv503UMqY/LaioOu6w9mjJTO+ejiReSQ==}
-    dev: false
-
   /svelte-preprocess@5.1.0(postcss@8.4.31)(svelte@4.2.3)(typescript@5.2.2):
     resolution: {integrity: sha512-EkErPiDzHAc0k2MF5m6vBNmRUh338h2myhinUw/xaqsLs7/ZvsgREiLGj03VrSzbY/TB5ZXgBOsKraFee5yceA==}
     engines: {node: '>= 14.10.0'}
@@ -4226,6 +4222,14 @@ packages:
       svelte: 4.2.3
       typescript: 5.2.2
     dev: true
+
+  /svelte-sonner@0.3.19(svelte@4.2.3):
+    resolution: {integrity: sha512-jpPOgLtHwRaB6Vqo2dUQMv15/yUV/BQWTjKpEqQ11uqRSHKjAYUKZyGrHB2cQsGmyjR0JUzBD58btpgNqINQ/Q==}
+    peerDependencies:
+      svelte: '>=3 <5'
+    dependencies:
+      svelte: 4.2.3
+    dev: false
 
   /svelte@4.2.3:
     resolution: {integrity: sha512-sqmG9KC6uUc7fb3ZuWoxXvqk6MI9Uu4ABA1M0fYDgTlFYu1k02xp96u6U9+yJZiVm84m9zge7rrA/BNZdFpOKw==}

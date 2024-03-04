@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Notifications from 'svelte-notifications'
+	import { Toaster } from 'svelte-sonner'
 	import logo from '$lib/assets/logo.png'
 	import { MetaTags, JsonLd } from 'svelte-meta-tags'
 	import '../app.css'
@@ -34,9 +34,8 @@
 		url: 'https://benev.io',
 	}}
 />
+<Toaster />
 
-<Notifications zIndex={50}>
-	<div class="flex min-h-screen flex-col bg-base-200/20">
-		<slot />
-	</div>
-</Notifications>
+<div class="flex min-h-screen flex-col bg-base-200/20">
+	<slot />
+</div>
