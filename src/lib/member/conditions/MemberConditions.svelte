@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ComponentProps, ComponentType } from 'svelte'
 	import type { Team, Field, FieldType } from '@prisma/client'
-	import type { TeamCondition, TeamConditionOperator } from '$lib/validation'
+	import type { MemberCondition, MemberConditionOperator } from '$lib/validation'
 	import { jsonParse } from '$lib/jsonParse'
 	import { Icon, InputSelect, Placeholder } from '$lib/material'
 	import {
@@ -36,7 +36,7 @@
 		}
 	}
 
-	let conditions = team?.conditions || []
+	let conditions: MemberCondition[] = team?.conditions || []
 	$: addConditionOptions = {
 		...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre approuvé' }),
 		...(!conditions.find((c) => c.type === 'age') && { age: 'Âge minimum' }),
@@ -44,7 +44,7 @@
 	}
 
 	function handleAddCondition(event: { detail: string }) {
-		const _type = event.detail as TeamCondition['type']
+		const _type = event.detail as MemberCondition['type']
 		if (_type === 'valided') conditions = [...conditions, { type: 'valided' }]
 		if (_type === 'age') conditions = [...conditions, { type: 'age', args: '18' }]
 		if (_type === 'profile')
@@ -61,7 +61,7 @@
 			]
 	}
 
-	const operators: Record<FieldType, TeamConditionOperator[]> = {
+	const operators: Record<FieldType, MemberConditionOperator[]> = {
 		boolean: ['equals'],
 		number: ['equals', 'gt', 'gte', 'lt', 'lte'],
 		string: ['equals', 'not', 'string_contains'],
@@ -69,7 +69,7 @@
 		select: ['equals', 'array_contains', 'array_starts_with', 'array_ends_with'],
 		multiselect: ['equals', 'array_contains', 'array_starts_with', 'array_ends_with'],
 	}
-	const operatorLabel: Record<TeamConditionOperator, string> = {
+	const operatorLabel: Record<MemberConditionOperator, string> = {
 		equals: 'Est égal à',
 		not: "N'est pas égal à",
 		gt: 'Est plus grand que',
@@ -107,19 +107,21 @@
 	}
 </script>
 
-<div>
+<div class="mt-4">
 	<input type="hidden" name="conditions" value={JSON.stringify(conditions)} />
 	<div class="flex items-center mb-2">
-		<div class="opacity-75 grow flex flex-col">
-			<span class="text-lg font-medium">Conditions</span>
-			<span class="text-xs">
-				Visible pour
-				{#if !conditions.length}
-					tous les membres
-				{:else}
-					{memberAllowedCount} membre{memberAllowedCount > 1 ? 's' : ''}
-				{/if}
-			</span>
+		<div class="grow">
+			<div class="label flex-col items-start">
+				<span class="label-text">Conditions</span>
+				<span class="label-text-alt opacity-80">
+					Visible pour
+					{#if !conditions.length}
+						tous les membres
+					{:else}
+						{memberAllowedCount} membre{memberAllowedCount > 1 ? 's' : ''}
+					{/if}
+				</span>
+			</div>
 		</div>
 		<InputSelect options={addConditionOptions} on:select={handleAddCondition} class="btn-square">
 			<svelte:fragment slot="btn">

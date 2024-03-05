@@ -3,7 +3,7 @@ import { isFreeRange } from 'perod'
 import { subscribeCreate } from '$lib/validation'
 import { parseFormData, permission, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
 import { EmailNewSubscribe } from '$lib/email'
-import { isMemberAllowed } from '$lib/team/isMemberAllowed.js'
+import { isMemberAllowed } from '$lib/member'
 
 export const actions = {
 	new_subscribe: async ({ request, locals, params: { eventId } }) => {

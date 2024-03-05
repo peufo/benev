@@ -5,7 +5,7 @@ import * as zod from 'zod'
 type TeamShemaCreate = Omit<Prisma.TeamCreateInput, 'event'>
 type TeamShemaUpdate = Omit<Prisma.TeamUpdateInput, 'event'>
 
-const teamConditionOperator = z.enum([
+const memberConditionOperator = z.enum([
 	'equals',
 	'string_contains',
 	'string_starts_with',
@@ -19,7 +19,7 @@ const teamConditionOperator = z.enum([
 	'gte',
 	'not',
 ])
-export const teamConditionModel = z.union([
+export const memberConditionModel = z.union([
 	z.object({ type: z.literal('valided') }),
 	z.object({
 		type: z.literal('age'),
@@ -29,21 +29,21 @@ export const teamConditionModel = z.union([
 		type: z.literal('profile'),
 		args: z.object({
 			fieldId: z.string(),
-			operator: teamConditionOperator,
+			operator: memberConditionOperator,
 			expectedValue: z.union([z.string(), zod.array(z.string()), z.boolean(), z.number()]),
 		}),
 	}),
 ])
 
-export type TeamCondition = zod.infer<typeof teamConditionModel>
-export type TeamConditionOperator = zod.infer<typeof teamConditionOperator>
+export type MemberCondition = zod.infer<typeof memberConditionModel>
+export type MemberConditionOperator = zod.infer<typeof memberConditionOperator>
 
 export const teamCreate = {
 	name: z.string().min(3),
 	description: z.string().optional(),
 	leaders: z.relations.connect,
 	closeSubscribing: z.dateOptional(),
-	conditions: z.array(teamConditionModel),
+	conditions: z.array(memberConditionModel),
 } satisfies ZodObj<TeamShemaCreate>
 
 export const teamUpdate = {

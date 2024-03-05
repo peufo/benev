@@ -1,10 +1,10 @@
 import { error } from '@sveltejs/kit'
 import { parseQuery, prisma, json } from '$lib/server'
-import { z, teamConditionModel } from '$lib/validation'
-import { isMemberAllowed } from '$lib/team'
+import { z, memberConditionModel } from '$lib/validation'
+import { isMemberAllowed } from '$lib/member'
 
 export const GET = async ({ params: { eventId }, url }) => {
-	const { data, err } = parseQuery(url, { conditions: z.array(teamConditionModel) })
+	const { data, err } = parseQuery(url, { conditions: z.array(memberConditionModel) })
 	if (err) error(400)
 
 	const members = await prisma.member.findMany({

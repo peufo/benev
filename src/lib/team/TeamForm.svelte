@@ -9,12 +9,12 @@
 
 	import InviteForm from '$lib/InviteForm.svelte'
 	import InputMembers from '$lib/InputMembers.svelte'
-	import { TeamConditions } from '$lib/team'
+	import { MemberConditions } from '$lib/member'
 
 	let klass = ''
 	export { klass as class }
 	export let isUpdate = false
-	export let event: Event & { memberFields: Field[]}
+	export let event: Event & { memberFields: Field[] }
 	export let team:
 		| (Team & {
 				leaders: (Member & {
@@ -50,12 +50,14 @@
 			key="closeSubscribing"
 			label="Fin des inscriptions"
 			value={team?.closeSubscribing}
-			hint={event.closeSubscribing && !team?.closeSubscribing ? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}` : ''}
+			hint={event.closeSubscribing && !team?.closeSubscribing
+				? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
+				: ''}
 		/>
 	{/if}
 
-	<TeamConditions {team} memberFields={event.memberFields}/>
-	
+	<MemberConditions {team} memberFields={event.memberFields} />
+
 	<input type="hidden" name="redirectTo" value={$page.url.searchParams.get('redirectTo') || ''} />
 
 	<div class="flex gap-2 flex-row-reverse mt-2">

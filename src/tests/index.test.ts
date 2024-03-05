@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it } from 'vitest'
 import Footer from '$lib/Footer.svelte'
 
-describe('Basique test', () => {
-	it('Mount footer', () => {
+describe('Conditions input component', () => {
+	it('Mount footer', ({ expect }) => {
 		const target = document.createElement('div')
 		document.body.appendChild(target)
 		const footer = new Footer({ target })

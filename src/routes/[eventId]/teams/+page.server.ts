@@ -1,5 +1,5 @@
 import { addTeamComputedValues, prisma } from '$lib/server'
-import { isMemberAllowed } from '$lib/team'
+import { isMemberAllowed } from '$lib/member'
 
 export const load = async ({ parent, params, url }) => {
 	const search = url.searchParams.get('search')

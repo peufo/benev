@@ -261,7 +261,7 @@ model Team {
   description      String?   @db.Text
   leaders          Member[]
   closeSubscribing DateTime?
-  /// [TeamConditions]
+  /// [MemberConditions]
   conditions       Json?
 
   eventId String

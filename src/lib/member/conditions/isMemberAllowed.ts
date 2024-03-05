@@ -1,4 +1,4 @@
-import type { TeamConditionOperator } from '$lib/validation'
+import type { MemberConditionOperator } from '$lib/validation'
 import type { Member, Team, User } from '@prisma/client'
 import dayjs from 'dayjs'
 
@@ -32,7 +32,7 @@ export function isMemberAllowed(
 type ProfileValue = string | string[] | boolean | number
 
 const testValue: Record<
-	TeamConditionOperator,
+	MemberConditionOperator,
 	(expectedValue: ProfileValue, value: ProfileValue) => boolean
 > = {
 	equals: (expectedValue, value) => {
