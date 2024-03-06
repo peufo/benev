@@ -56,7 +56,7 @@
 		/>
 	{/if}
 
-	<MemberConditions {team} memberFields={event.memberFields} />
+	<MemberConditions conditions={team?.conditions} memberFields={event.memberFields} />
 
 	<input type="hidden" name="redirectTo" value={$page.url.searchParams.get('redirectTo') || ''} />
 

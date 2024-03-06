@@ -1,6 +1,9 @@
 <script lang="ts">
+	import axios from 'axios'
 	import type { ComponentProps, ComponentType } from 'svelte'
-	import type { Team, Field, FieldType } from '@prisma/client'
+	import { get } from 'svelte/store'
+	import { page } from '$app/stores'
+	import type { Field, FieldType } from '@prisma/client'
 	import type { MemberCondition, MemberConditionOperator } from '$lib/validation'
 	import { jsonParse } from '$lib/jsonParse'
 	import { Icon, InputSelect, Placeholder } from '$lib/material'
@@ -15,28 +18,27 @@
 	import InputText from '$lib/material/input/InputText.svelte'
 	import InputCheckboxs from '$lib/material/input/InputCheckboxs.svelte'
 	import InputRadio from '$lib/material/input/InputRadio.svelte'
-	import axios from 'axios'
-	import { eventPath } from '$lib/store'
 
-	export let team: Team | undefined
+	export let conditions: MemberCondition[] = []
 	export let memberFields: Field[]
 	let memberAllowedCount = 0
 
 	$: if (conditions) getmemberAllowedCount()
+
 	async function getmemberAllowedCount() {
 		if (!conditions.length) return
 		try {
+			const { params: eventId } = get(page)
 			const conditionsParam = encodeURIComponent(JSON.stringify(conditions))
 			const res = await axios.get<number>(
-				`${$eventPath}/teams/membersAllowed?conditions=${conditionsParam}`
+				`/${eventId}/teams/membersAllowed?conditions=${conditionsParam}`
 			)
 			memberAllowedCount = res.data
-		} catch {
-			console.error('axios error')
+		} catch (err) {
+			console.error(err)
 		}
 	}
 
-	let conditions: MemberCondition[] = team?.conditions || []
 	$: addConditionOptions = {
 		...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre approuvé' }),
 		...(!conditions.find((c) => c.type === 'age') && { age: 'Âge minimum' }),
