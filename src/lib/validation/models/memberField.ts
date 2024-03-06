@@ -4,6 +4,7 @@ import { MEMBER_FIELD_TYPE } from '$lib/constant'
 
 export const memberFieldCreate = {
 	name: z.string().min(2),
+	label: z.string().optional(),
 	memberCanWrite: z.boolean(),
 	memberCanRead: z.boolean(),
 	allCombinations: z.boolean().optional(),
