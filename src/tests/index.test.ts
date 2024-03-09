@@ -15,7 +15,7 @@ describe('Conditions input component', () => {
 		const addBtn = target.querySelector('button')
 		addBtn?.focus()
 		await pause(300)
-		const menuItems = target.querySelectorAll('li[role="menuitem"]')
+		const menuItems = target.querySelectorAll('li[role="menuitem"]') as NodeListOf<HTMLLIElement>
 		menuItems.item(0).click()
 		await pause(500)
 		expect(target.innerHTML).toContain('Membre approuvé')
