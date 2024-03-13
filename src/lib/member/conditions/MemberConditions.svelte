@@ -94,7 +94,6 @@
 		return { component, props }
 	}
 	function getFieldInput(field: Field): ReturnType<typeof component> {
-		console.log(field)
 		if (field.type === 'boolean')
 			return component(InputRadio, {
 				label: '',
