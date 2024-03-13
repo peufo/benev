@@ -11,7 +11,6 @@ export const GET = async ({ params: { eventId }, url }) => {
 		where: { eventId },
 		include: { user: true },
 	})
-
 	const count = members.filter((member) => isMemberAllowed(data.conditions, member)).length
 
 	return json(count)

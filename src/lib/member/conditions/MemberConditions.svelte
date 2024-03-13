@@ -18,6 +18,7 @@
 	import InputText from '$lib/material/input/InputText.svelte'
 	import InputCheckboxs from '$lib/material/input/InputCheckboxs.svelte'
 	import InputRadio from '$lib/material/input/InputRadio.svelte'
+	import { browser } from '$app/environment'
 
 	export let conditions: MemberCondition[] = []
 	export let memberFields: Field[]
@@ -26,12 +27,12 @@
 	$: if (conditions) getmemberAllowedCount()
 
 	async function getmemberAllowedCount() {
-		if (!conditions.length) return
+		if (!conditions.length || !browser) return
 		try {
-			const { params: eventId } = get(page)
+			const {params} = get(page)
 			const conditionsParam = encodeURIComponent(JSON.stringify(conditions))
 			const res = await axios.get<number>(
-				`/${eventId}/teams/membersAllowed?conditions=${conditionsParam}`
+				`/${params.eventId}/teams/membersAllowed?conditions=${conditionsParam}`
 			)
 			memberAllowedCount = res.data
 		} catch (err) {

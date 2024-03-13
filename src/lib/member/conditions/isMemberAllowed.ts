@@ -36,8 +36,9 @@ const testValue: Record<
 	(expectedValue: ProfileValue, value: ProfileValue) => boolean
 > = {
 	equals: (expectedValue, value) => {
-		if (!isArray(expectedValue) || !isArray(value)) return expectedValue === value
-		return JSON.stringify(expectedValue) === JSON.stringify(value)
+		const expectedValueAsArray = asArray(expectedValue)
+		const valueAsArray = asArray(value)
+		return JSON.stringify(expectedValueAsArray) === JSON.stringify(valueAsArray)
 	},
 	not: (expectedValue, value) => {
 		if (!isArray(expectedValue) || !isArray(value)) return expectedValue !== value
@@ -59,20 +60,24 @@ const testValue: Record<
 		return !!value.match(reg)
 	},
 	array_contains: (expectedValue, value) => {
-		if (!isArray(value)) return false
-		if (!isArray(expectedValue)) return !!value.filter((item) => item === expectedValue).length
-		return !!value.filter((item) => expectedValue.includes(item)).length
+		const valueAsArray = asArray(value)
+		if (!isArray(expectedValue))
+			return !!valueAsArray.filter((item) => item === expectedValue).length
+		return !!valueAsArray.filter((item) => expectedValue.includes(String(item))).length
 	},
 	array_starts_with: (expectedValue, value) => {
-		if (!isArray(value)) return false
-		if (!isArray(expectedValue)) return value.at(-1) === expectedValue
-		return value.filter((item, index) => item === expectedValue[index]).length === value.length
+		const valueAsArray = asArray(value)
+		if (!isArray(expectedValue)) return valueAsArray.at(-1) === expectedValue
+		return (
+			valueAsArray.filter((item, index) => item === expectedValue[index]).length ===
+			valueAsArray.length
+		)
 	},
 	array_ends_with: (expectedValue, value) => {
-		if (!isArray(value)) return false
-		if (!isArray(expectedValue)) return value[0] === expectedValue
-		const expectedItems = expectedValue.slice(-value.length)
-		return JSON.stringify(expectedItems) === JSON.stringify(value)
+		const valueAsArray = asArray(value)
+		if (!isArray(expectedValue)) return valueAsArray[0] === expectedValue
+		const expectedItems = expectedValue.slice(-valueAsArray.length)
+		return JSON.stringify(expectedItems) === JSON.stringify(valueAsArray)
 	},
 	gt: (expectedValue, value) => {
 		if (!isNumber(expectedValue) || !isNumber(value)) return false
@@ -90,6 +95,10 @@ const testValue: Record<
 		if (!isNumber(expectedValue) || !isNumber(value)) return false
 		return expectedValue <= value
 	},
+}
+
+function asArray(value: ProfileValue): (string | number | boolean)[] {
+	return Array.isArray(value) ? value : [value]
 }
 
 function isArray(value: ProfileValue): value is string[] {
