@@ -94,11 +94,12 @@
 		return { component, props }
 	}
 	function getFieldInput(field: Field): ReturnType<typeof component> {
+		console.log(field)
 		if (field.type === 'boolean')
 			return component(InputRadio, {
 				label: '',
 				key: field.id,
-				options: { true: 'Oui', '': 'Non' },
+				options: { true: 'Oui', false: 'Non' },
 			})
 		if (field.type === 'string' || field.type === 'textarea') return component(InputText, {})
 		if (field.type === 'number') return component(InputNumber, {})

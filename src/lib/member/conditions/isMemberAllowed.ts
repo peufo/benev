@@ -22,7 +22,7 @@ export function isMemberAllowed(
 			}
 			const { fieldId, operator, expectedValue } = condition.args
 			const fieldValue = member.profileJson[fieldId]
-			if (!fieldValue || expectedValue === undefined) return false
+			if (fieldValue === undefined || expectedValue === undefined) return false
 			return testValue[operator](expectedValue, fieldValue)
 		})
 		.filter(Boolean)
@@ -36,8 +36,9 @@ const testValue: Record<
 	(expectedValue: ProfileValue, value: ProfileValue) => boolean
 > = {
 	equals: (expectedValue, value) => {
+		console.log({ expectedValue, value })
 		const expectedValueAsArray = asArray(expectedValue)
-		const valueAsArray = asArray(value)
+		const valueAsArray = typeof value === 'boolean' ? [String(value)] : asArray(value)
 		return JSON.stringify(expectedValueAsArray) === JSON.stringify(valueAsArray)
 	},
 	not: (expectedValue, value) => {
