@@ -84,13 +84,13 @@ export const features: Feature[] = [
 		src: giftPng,
 		description:
 			"Définit des articles et les règles d'éligibilitées pour générer des listes d'attribution.",
-		comingSoon: 'Disponible en Février 2024',
+		comingSoon: 'Bientôt disponible',
 	},
 	{
 		name: 'Communication',
 		icon: mdiEmailOutline,
 		src: emailPng,
 		description: 'Personnalise tes notifications par email et édite des publipostage.',
-		comingSoon: 'Disponible en Mars 2024',
+		comingSoon: 'Bientôt disponible',
 	},
 ]
