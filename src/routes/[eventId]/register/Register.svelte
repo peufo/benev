@@ -146,7 +146,7 @@
 	<Dialog bind:dialog={dialogRemoveMember}>
 		<h2 slot="header" class="title">On abandonne ?</h2>
 		<div class="flex gap-2 justify-end">
-			<MemberDeleteForm memberId={member.id}>Aupprimer ma participation</MemberDeleteForm>
+			<MemberDeleteForm memberId={member.id}>Supprimer ma participation</MemberDeleteForm>
 			<button type="button" class="btn" on:click={() => dialogRemoveMember.close()}>
 				Je reste
 			</button>
