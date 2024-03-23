@@ -64,9 +64,8 @@
 	{#if $$slots.actions}
 		<div class="flex flex-col">
 			<button type="button" class="relative menu-item" on:click={() => {
-				console.log('prout')
 				inputFile.click()
-				}}>
+			}}>
 				<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
 				<span>Charger une image</span>
 			</button>
