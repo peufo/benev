@@ -8,7 +8,7 @@
 </script>
 
 <div class="p-2 {klass}">
-	<header class="navbar rounded-2xl bg-base-100 shadow-xl">
+	<header class="navbar rounded-2xl bg-base-100 shadow-lg">
 		<slot name="start" />
 		<div class="grow" />
 		<slot name="end" />

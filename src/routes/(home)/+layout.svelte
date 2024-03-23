@@ -1,7 +1,6 @@
 <script lang="ts">
 	import logo from '$lib/assets/logo.svg'
-	import Header from '$lib/Header.svelte'
-	import Footer from '$lib/Footer.svelte'
+	import { Header, Footer } from '$lib/layout'
 	import Benev from '$lib/Benev.svelte'
 	import HomeMenu from './HomeMenu.svelte'
 

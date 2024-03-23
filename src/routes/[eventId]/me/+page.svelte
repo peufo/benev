@@ -8,7 +8,7 @@
 	import { Teams, TeamsActions } from '$lib/team'
 	import { MemberDeleteForm, MemberProfile } from '$lib/member'
 	import { EventPubliqueMenuItems } from '$lib/event'
-	import { adminTabs } from '../admin/adminTabs'
+	import { adminTabs } from '../../../lib/layout/adminTabs'
 	import { EVENT_STATES } from '$lib/constant'
 
 	export let data

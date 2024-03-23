@@ -23,7 +23,7 @@
 {/if}
 
 <!-- TEAMS -->
-{#if $page.data.event?.selfSubscribeAllowed || $page.data.member?.roles.includes('leader')}
+{#if $page.data.event?.selfSubscribeAllowed}
 	<a
 		href="{$eventPath}/teams"
 		class="menu-item {classItem}"

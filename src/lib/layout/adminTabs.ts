@@ -5,6 +5,7 @@ import {
 	mdiClipboardTextMultipleOutline,
 	mdiCogs,
 	mdiHelp,
+	mdiMapMarkerRadiusOutline,
 } from '@mdi/js'
 
 import { derived } from 'svelte/store'
@@ -20,6 +21,11 @@ export const adminTabs = derived(param, ({ without, page }) => {
 	})
 
 	return [
+		{
+			...getPath('/teams'),
+			label: 'Secteurs',
+			icon: mdiMapMarkerRadiusOutline,
+		},
 		{
 			...getPath('/admin/members'),
 			label: 'Membres',

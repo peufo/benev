@@ -5,7 +5,7 @@
 		mdiMagnifyMinusOutline,
 		mdiMagnifyPlusOutline,
 	} from '@mdi/js'
-	import { Icon, InputCheckboxsMenu } from '$lib/material'
+	import { Card, Icon, InputCheckboxsMenu } from '$lib/material'
 	import { Plan } from '$lib/plan'
 	import { onMount, tick } from 'svelte'
 
@@ -63,58 +63,63 @@
 	}
 </script>
 
-<div class="bg-base-100" bind:this={wrapper} class:pl-4={isFullscreen} class:pt-4={isFullscreen}>
-	<div class="flex gap-3 mb-3" class:pr-4={isFullscreen}>
-		<div class="grow" />
+<Card>
+	<div class="bg-base-100" bind:this={wrapper} class:pl-4={isFullscreen} class:pt-4={isFullscreen}>
+		<div class="flex gap-3 mb-3" class:pr-4={isFullscreen}>
 
-		<InputCheckboxsMenu
-			key="teams"
-			label="secteurs"
-			options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
-			enhanceDisabled
-			badgePrimary
-		/>
+			<h2 class="title">Planification</h2>
+			
+			<div class="grow" />
 
-		<!-- ZOOM -->
-		<div class="join">
-			<button
-				class="btn btn-square btn-sm join-item"
-				on:click={zoom.out}
-				disabled={scale <= scales[0]}
-			>
-				<Icon path={mdiMagnifyMinusOutline} title="Dézoomer" />
-			</button>
-			<button
-				class="btn btn-square btn-sm join-item"
-				on:click={zoom.in}
-				disabled={scale >= scales[scales.length - 1]}
-			>
-				<Icon path={mdiMagnifyPlusOutline} title="Zoomer" />
+			<InputCheckboxsMenu
+				key="teams"
+				label="secteurs"
+				options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
+				enhanceDisabled
+				badgePrimary
+			/>
+
+			<!-- ZOOM -->
+			<div class="join">
+				<button
+					class="btn btn-square btn-sm join-item"
+					on:click={zoom.out}
+					disabled={scale <= scales[0]}
+				>
+					<Icon path={mdiMagnifyMinusOutline} title="Dézoomer" />
+				</button>
+				<button
+					class="btn btn-square btn-sm join-item"
+					on:click={zoom.in}
+					disabled={scale >= scales[scales.length - 1]}
+				>
+					<Icon path={mdiMagnifyPlusOutline} title="Zoomer" />
+				</button>
+			</div>
+
+			<!-- Full screen -->
+			<button class="btn btn-square btn-sm join-item" on:click={toggleFullscreen}>
+				{#if isFullscreen}
+					<Icon
+						path={mdiArrowCollapse}
+						title="Quitter le mode plein écran"
+						tippyProps={{ appendTo: 'parent' }}
+					/>
+				{:else}
+					<Icon
+						path={mdiArrowExpand}
+						title="Ouvrir le mode plein écran"
+						tippyProps={{ appendTo: 'parent' }}
+					/>
+				{/if}
 			</button>
 		</div>
 
-		<!-- Full screen -->
-		<button class="btn btn-square btn-sm join-item" on:click={toggleFullscreen}>
-			{#if isFullscreen}
-				<Icon
-					path={mdiArrowCollapse}
-					title="Quitter le mode plein écran"
-					tippyProps={{ appendTo: 'parent' }}
-				/>
-			{:else}
-				<Icon
-					path={mdiArrowExpand}
-					title="Ouvrir le mode plein écran"
-					tippyProps={{ appendTo: 'parent' }}
-				/>
-			{/if}
-		</button>
+		<Plan
+			teams={data.teams_periods}
+			{scale}
+			bind:scrollContainer
+			class={isFullscreen ? 'max-h-[95vh]' : 'max-h-[70vh]'}
+		/>
 	</div>
-
-	<Plan
-		teams={data.teams_periods}
-		{scale}
-		bind:scrollContainer
-		class={isFullscreen ? 'max-h-[95vh]' : 'max-h-[70vh]'}
-	/>
-</div>
+</Card>

@@ -14,6 +14,7 @@
 </script>
 
 <InputOptionInParam
+  class="bg-base-200"
 	key="role"
 	removeKeys={['isAbsent']}
 	options={{

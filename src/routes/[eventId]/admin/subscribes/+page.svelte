@@ -6,8 +6,8 @@
 		mdiShieldAccountOutline,
 	} from '@mdi/js'
 	import type { PageData } from './$types'
-	import { InputSearch, Pagination } from '$lib/material'
-	import { Table, tableHeadComponent, type TableField, TableViewSelect } from '$lib/material/table'
+	import { Card, InputSearch, Pagination } from '$lib/material'
+	import { Table,  type TableField, TableViewSelect } from '$lib/material/table'
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
 	import SubscribesCopy from './SubscribesCopy.svelte'
@@ -87,23 +87,27 @@
 	]
 </script>
 
-<div class="flex flex-col gap-2">
-	<div class="flex gap-x-2 gap-y-2 flex-wrap">
-		<InputSearch />
-		<div class="grow" />
-		<TableViewSelect key="subscribes" views={data.views} />
-		<SubscribesCopy />
-	</div>
+<Card> 
+	<h2 slot="title">Inscriptions</h2>
 
-	<Table
-		key="subscribes"
-		{fields}
-		items={data.subscribes}
-		action={(subscribe) => component(SubscribeMenu, { subscribe })}
-		placholder="Aucune inscription trouvé"
-	/>
-
-	<div class="flex justify-end">
-		<Pagination />
+	<div class="flex flex-col gap-2">
+		<div class="flex gap-x-2 gap-y-2 flex-wrap">
+			<InputSearch />
+			<div class="grow" />
+			<TableViewSelect key="subscribes" views={data.views} />
+			<SubscribesCopy />
+		</div>
+	
+		<Table
+			key="subscribes"
+			{fields}
+			items={data.subscribes}
+			action={(subscribe) => component(SubscribeMenu, { subscribe })}
+			placholder="Aucune inscription trouvé"
+		/>
+	
+		<div class="flex justify-end">
+			<Pagination />
+		</div>
 	</div>
-</div>
+</Card>

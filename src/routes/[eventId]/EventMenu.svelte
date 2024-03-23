@@ -5,7 +5,7 @@
 	import { mdiMenu } from '@mdi/js'
 	import DropDown from '$lib/material/DropDown.svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
-	import { adminTabs } from './admin/adminTabs'
+	import { adminTabs } from '$lib/layout/adminTabs'
 
 	export let pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
 
@@ -20,20 +20,19 @@
 	<button
 		slot="activator"
 		class="
-			btn btn-square ml-2
-			{adminIsVisible ? '' : 'lg:hidden'}
+			btn btn-square ml-2 lg:hidden
 		"
 	>
 		<Icon path={mdiMenu} />
 	</button>
 
 	<div class="flex flex-col gap-1">
-		<div class="contents lg:hidden">
-			{#if adminIsVisible}
-				<h3 class="title-sm pl-3 pt-1">Public</h3>
-			{/if}
-			<EventPubliqueMenuItems {pages} />
-		</div>
+		
+		{#if adminIsVisible}
+			<h3 class="title-sm pl-3 pt-1">Public</h3>
+		{/if}
+		<EventPubliqueMenuItems {pages} />
+		
 
 		<!-- ADMIN -->
 		{#if adminIsVisible}

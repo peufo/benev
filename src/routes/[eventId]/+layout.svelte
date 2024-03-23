@@ -9,12 +9,13 @@
 		mdiWeb,
 	} from '@mdi/js'
 
-	import Header from '$lib/Header.svelte'
+	import Header from '$lib/layout/Header.svelte'
 	import { Card, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
-	import Footer from '$lib/Footer.svelte'
+	import Footer from '$lib/layout/Footer.svelte'
 	import EventMenu from './EventMenu.svelte'
 	import Poster from './Poster.svelte'
+	import { Drawer } from '$lib/layout'
 
 	export let data
 
@@ -58,45 +59,51 @@
 	</svelte:fragment>
 </Header>
 
-<main class="grow p-2">
-	{#if accessGranted}
-		<slot />
-	{:else if data.event.state === 'draft' || data.event.state === 'actived'}
-		<Card class="max-w-lg mx-auto">
-			<h2 slot="title" class="flex gap-2">
-				<Icon path={mdiTestTube} class="rotate-12 opacity-70" />
+<div class="flex grow items-start relative p-2 gap-4">
+	<Drawer />
 
-				<span>Bientôt disponible</span>
-			</h2>
+	<div class="grow mx-auto">
+		<main class="grow">
+			{#if accessGranted}
+				<slot />
+			{:else if data.event.state === 'draft' || data.event.state === 'actived'}
+				<Card class="max-w-lg mx-auto">
+					<h2 slot="title" class="flex gap-2">
+						<Icon path={mdiTestTube} class="rotate-12 opacity-70" />
 
-			<p class="mt-4">
-				L'espace bénévole de l'évènement <b>{data.event.name}</b> est cours d'élaboration.
-			</p>
+						<span>Bientôt disponible</span>
+					</h2>
 
-			<div class="mt-8">
-				<a href="/me" class="btn btn-sm">
-					<Icon path={mdiArrowLeft} />
-					<span>mon profil</span>
-				</a>
-			</div>
-		</Card>
-	{:else}
-		<Card class="max-w-lg mx-auto">
-			<h2 slot="title" class="flex gap-2">
-				<Icon path={mdiArchiveOutline} class="opacity-70" />
-				<span>Cet évènement est archivé</span>
-			</h2>
+					<p class="mt-4">
+						L'espace bénévole de l'évènement <b>{data.event.name}</b> est cours d'élaboration.
+					</p>
 
-			<div class="mt-8">
-				<a href="/me" class="btn btn-sm">
-					<Icon path={mdiArrowLeft} />
-					<span>mon profil</span>
-				</a>
-			</div>
-		</Card>
-	{/if}
-</main>
+					<div class="mt-8">
+						<a href="/me" class="btn btn-sm">
+							<Icon path={mdiArrowLeft} />
+							<span>mon profil</span>
+						</a>
+					</div>
+				</Card>
+			{:else}
+				<Card class="max-w-lg mx-auto">
+					<h2 slot="title" class="flex gap-2">
+						<Icon path={mdiArchiveOutline} class="opacity-70" />
+						<span>Cet évènement est archivé</span>
+					</h2>
 
+					<div class="mt-8">
+						<a href="/me" class="btn btn-sm">
+							<Icon path={mdiArrowLeft} />
+							<span>mon profil</span>
+						</a>
+					</div>
+				</Card>
+			{/if}
+		</main>
+
+	</div>
+</div>
 <Footer class="z-10">
 	<div class="flex flex-wrap justify-center">
 		{#if data.event.web}
@@ -126,7 +133,11 @@
 		{/if}
 
 		{#if data.event.phone}
-			<a class="btn btn-sm sm:btn-md btn-ghost flex" href="tel:{data.event.phone}" target="_blank">
+			<a
+				class="btn btn-sm sm:btn-md btn-ghost flex"
+				href="tel:{data.event.phone}"
+				target="_blank"
+			>
 				<Icon path={mdiPhoneOutline} />
 				{data.event.phone}
 			</a>

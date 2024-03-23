@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Card, Tabs } from '$lib/material'
+	import { Card } from '$lib/material'
 	import { useNotify } from '$lib/notify'
-	import { adminTabs } from './adminTabs'
+	import { adminTabs } from '../../../lib/layout/adminTabs'
 	import { CheckoutWaitSSE } from '$lib/checkout'
 
 	export let data
@@ -40,15 +40,6 @@
 
 	<CheckoutWaitSSE removeCheckoutId />
 
-	<Card bodyClass="sm:pt-4">
-		<svelte:fragment slot="top">
-			<Tabs tabs={$adminTabs.filter((t) => t.href.includes('/admin/'))} />
-		</svelte:fragment>
-
-		<h2 slot="title" class="sm:hidden text-center pb-2">
-			{activeTab?.label}
-		</h2>
-
-		<slot />
-	</Card>
+	<slot />
+	
 </div>
