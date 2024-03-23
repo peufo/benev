@@ -5,7 +5,7 @@ import { error } from '@sveltejs/kit'
 import { parseQuery } from '$lib/server'
 import { z, toTuple } from '$lib/validation'
 import { MEDIA_PRESETS } from '$lib/constant'
-import jimp from 'jimp'
+import sharp from 'sharp'
 
 export const GET = async ({ url, params: { mediaId } }) => {
 	const { data, err } = parseQuery(url, {
@@ -13,18 +13,18 @@ export const GET = async ({ url, params: { mediaId } }) => {
 	})
 	if (err) error(400)
 
-	const fileName = `${data.size || 'original'}.png`
+	await ensurePngtoWebp(mediaId)
+	const fileName = `${data.size || 'original'}.webp`
 	const filePath = path.resolve(MEDIA_DIR, mediaId, fileName)
 
 	const buffer = await fs.readFile(filePath).catch(async () => {
 		if (!data.size) return null
 		try {
-			const filePathOriginal = path.resolve(MEDIA_DIR, mediaId, 'original.png')
-			const bufferOriginal = await fs.readFile(filePathOriginal)
-			const jimpImage = await jimp.read(Buffer.from(bufferOriginal))
+			const filePathOriginal = path.resolve(MEDIA_DIR, mediaId, 'original.webp')
 			const [x, y] = MEDIA_PRESETS[data.size]
-			await jimpImage.resize(x, y).writeAsync(filePath)
-			return await jimpImage.getBufferAsync('image/png')
+			const image = sharp(filePathOriginal).resize({ width: x, height: y })
+			await image.toFile(filePath)
+			return await image.toBuffer()
 		} catch {
 			return null
 		}
@@ -33,7 +33,21 @@ export const GET = async ({ url, params: { mediaId } }) => {
 	if (!buffer) error(404)
 	return new Response(buffer, {
 		headers: {
-			'content-type': 'image/png',
+			'content-type': 'image/webp',
 		},
 	})
+}
+
+/** Migrate old png file to webp */
+async function ensurePngtoWebp(mediaId: string) {
+	const pathPNG = path.resolve(MEDIA_DIR, mediaId, 'original.png')
+	const pathWEBP = path.resolve(MEDIA_DIR, mediaId, 'original.webp')
+
+	await fs
+		.readFile(pathPNG)
+		.then(async () => {
+			await sharp(pathPNG).toFile(pathWEBP)
+			await fs.rm(pathPNG)
+		})
+		.catch(() => {})
 }

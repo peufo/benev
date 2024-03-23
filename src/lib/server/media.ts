@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import jimp from 'jimp'
+import sharp from 'sharp'
 import { z } from '$lib/validation'
 import type { Prisma } from '@prisma/client'
 import { parseFormData } from './formData'
@@ -43,10 +43,14 @@ export const media = {
 			.then(async () => await fs.rm(mediaPath, { recursive: true, force: true }))
 			.finally(async () => await fs.mkdir(mediaPath, { recursive: true }))
 
-		const jimpImage = await jimp.read(Buffer.from(imageBuffer))
-		jimpImage
-			.crop(crop.x, crop.y, crop.width, crop.height)
-			.writeAsync(path.resolve(mediaPath, `original.png`))
+		await sharp(imageBuffer)
+			.extract({
+				left: crop.x,
+				top: crop.y,
+				width: crop.width,
+				height: crop.height,
+			})
+			.toFile(path.resolve(mediaPath, 'original.webp'))
 
 		return media
 	},
