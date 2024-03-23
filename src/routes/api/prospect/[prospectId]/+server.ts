@@ -1,7 +1,5 @@
 import { prisma } from '$lib/server'
-import Jimp from 'jimp'
-
-const image = new Jimp(1, 1, 'white')
+import sharp from 'sharp'
 
 export const GET = async ({ params }) => {
 	const prospectId = params.prospectId.replace('.png', '')
@@ -10,6 +8,8 @@ export const GET = async ({ params }) => {
 		.update({ where: { id: prospectId }, data: { emailOpenAt: new Date() } })
 		.catch(() => {})
 
-	const buffer = await image.getBufferAsync('image/png')
+	const buffer = await sharp({
+		create: { width: 1, height: 1, channels: 3, background: { r: 255, g: 255, b: 255 } },
+	}).toBuffer()
 	return new Response(buffer)
 }
