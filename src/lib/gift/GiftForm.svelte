@@ -22,7 +22,7 @@
 </script>
 
 <form
-	action="{$eventPath}/admin/config{!!gift ? updateAction : createAction}"
+	action="{$eventPath}/admin/gift{!!gift ? updateAction : createAction}"
 	method="post"
 	use:enhance={form.submit}
 	class="flex flex-col gap-2"

@@ -1,22 +1,7 @@
-import {
-	parseFormData,
-	prisma,
-	tryOrFail,
-	permission,
-	media,
-	ensureLicenceEvent,
-	ensureLicenceMembers,
-} from '$lib/server'
+import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
 import { z } from '$lib/validation'
 
-import {
-	eventMemberSettings,
-	eventState,
-	eventUpdate,
-	giftCreate,
-	memberFieldCreate,
-	memberFieldUpdate,
-} from '$lib/validation'
+import { eventMemberSettings, memberFieldCreate, memberFieldUpdate } from '$lib/validation'
 
 export const load = async ({ parent, params: { eventId } }) => {
 	const { event } = await parent()
@@ -48,63 +33,6 @@ export const load = async ({ parent, params: { eventId } }) => {
 }
 
 export const actions = {
-	set_state_event: async ({ request, locals, params: { eventId } }) => {
-		await permission.owner(eventId, locals)
-		const { err, data } = await parseFormData(request, eventState)
-		if (err) return err
-
-		return tryOrFail(async () => {
-			if (data.state !== 'draft') await ensureLicenceEvent(eventId)
-			await prisma.event.update({ where: { id: eventId }, data })
-			await ensureLicenceMembers(eventId)
-			return
-		})
-	},
-	update_event: async ({ request, locals, params: { eventId } }) => {
-		const member = await permission.admin(eventId, locals)
-		const { err, data, formData } = await parseFormData(request, eventUpdate)
-		if (err) return err
-
-		return tryOrFail(
-			async () => {
-				await media.upload(formData, {
-					key: 'poster',
-					where: { posterOf: { id: eventId } },
-					data: {
-						name: `Affiche`,
-						createdById: member.user.id,
-						posterOf: { connect: { id: eventId } },
-					},
-				})
-				await media.upload(formData, {
-					key: 'logo',
-					where: { logoOf: { id: eventId } },
-					data: {
-						name: `Logo`,
-						createdById: member.user.id,
-						logoOf: { connect: { id: eventId } },
-					},
-				})
-
-				return prisma.event.update({
-					where: { id: eventId },
-					data,
-				})
-			},
-			eventId !== data.id ? `/${data.id}/admin/config?section=infos` : undefined
-		)
-	},
-	delete_event: async ({ locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-
-		return tryOrFail(
-			() =>
-				prisma.event.delete({
-					where: { id: eventId },
-				}),
-			'/'
-		)
-	},
 	create_field: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 		const { err, data } = await parseFormData(request, memberFieldCreate)
@@ -158,18 +86,6 @@ export const actions = {
 			)
 		)
 	},
-	create_gift: async ({ request, locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, giftCreate)
-		if (err) return err
-		return tryOrFail(() =>
-			prisma.gift.create({
-				data: { ...data, eventId },
-				include: { conditions: true },
-			})
-		)
-	},
-
 	set_member_settings: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 		const { err, data } = await parseFormData(request, eventMemberSettings)

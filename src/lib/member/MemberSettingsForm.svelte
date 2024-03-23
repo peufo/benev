@@ -16,7 +16,7 @@
 <form
 	method="post"
 	use:enhance={form.submit}
-	action="{$eventPath}/admin/config?/set_member_settings"
+	action="{$eventPath}/admin/adhesion?/set_member_settings"
 >
 	<div>
 		<h3 class="font-medium opacity-80 mb-2">Permissions</h3>

@@ -7,11 +7,17 @@
 
 {#if $drawerOpen}
 	<div class="sticky top-2 rounded-2xl bg-base-100 shadow-xl p-2 min-w-[220px] hidden lg:block">
-		<h3 class="title-sm pl-3 py-2">Gestion de l'évenement</h3>
+		<h3 class="title-sm pl-3 py-2">Gestion</h3>
     
     <div class="flex flex-col gap-1 text-sm">
 
-			{#each $adminTabs as { href, isActive, label, icon }}
+			{#each $adminTabs as { href, isActive, label, icon }, index}
+				{#if index === 4}
+					<h3 class="title-sm pl-3 py-2">Configuration</h3>
+				{:else if index === 8}
+					<hr>
+				{/if}
+
 				<a {href} class="menu-item" class:active={isActive}>
 					<Icon path={icon} size={20} class="opacity-70 py-1" />
 					{label}

@@ -32,7 +32,7 @@
 		Le profil de base des membres contient déjà des informations essentielles telles que leur
 		addresse, leur numéro de téléphone, leur email et leur âge.<br />
 		Tu peux
-		<a href="{$eventPath}/admin/config?section=membership">paramétrer le processus d'adhésion</a> et
+		<a href="{$eventPath}/admin/adhesion">paramétrer le processus d'adhésion</a> et
 		définir les informations que tu souhaites récolter auprès des membres.
 	</p>
 </section>
@@ -51,7 +51,7 @@
 	<h3>Partage</h3>
 	<p>
 		Ton évènement est par défaut en mode "brouillon". Une fois que tu es prêt à le rendre public,
-		change son statut sur <a href="{$eventPath}/admin/config">l'onglet de configuration.</a>
+		change son statut sur <a href="{$eventPath}/admin/event">l'onglet de configuration.</a>
 	</p>
 	<p>
 		Il ne te reste maintenant plus qu'à partager ton évènement

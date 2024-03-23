@@ -22,7 +22,7 @@
 			form.append(field.id, String(index))
 		})
 		axios
-			.postForm(`${$eventPath}/admin/config?/reorder_fields`, form)
+			.postForm(`${$eventPath}/admin/adhesion?/reorder_fields`, form)
 			.then(() => notify.success('Nouvel ordre sauvegardé'))
 			.catch((err) => notify.error(err))
 	}

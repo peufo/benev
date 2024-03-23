@@ -13,7 +13,7 @@
 	export let successReset = true
 	export let successUpdate = true
 
-	const action = `${$eventPath}/admin/config`
+	const action = `${$eventPath}/admin/adhesion`
 
 	const dispatch = createEventDispatcher<{ success: Field | undefined }>()
 	const form = useForm<Field>({

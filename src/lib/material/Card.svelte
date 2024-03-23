@@ -7,9 +7,10 @@
 	export let bodyClass = ''
 	export let headerClass = ''
 	export let returnUrl = ''
+	export let style = ''
 </script>
 
-<div class="card bg-base-100 shadow-lg border bordered {klass}">
+<div class="card bg-base-100 shadow-lg border bordered {klass}" {style}>
 	<slot name="top" />
 
 	<div class="card-body p-2 sm:p-8 {bodyClass}">

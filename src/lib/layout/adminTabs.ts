@@ -3,11 +3,14 @@ import {
 	mdiFileDocumentMultipleOutline,
 	mdiAccountMultipleOutline,
 	mdiClipboardTextMultipleOutline,
-	mdiCogs,
 	mdiHelp,
 	mdiMapMarkerRadiusOutline,
+	mdiCalendarStar,
+	mdiLogin,
+	mdiGiftOutline,
 } from '@mdi/js'
 
+import { dev } from '$app/environment'
 import { derived } from 'svelte/store'
 import { param } from '$lib/store'
 
@@ -42,9 +45,19 @@ export const adminTabs = derived(param, ({ without, page }) => {
 			icon: mdiChartGantt,
 		},
 		{
-			...getPath('/admin/config'),
-			label: 'Configuration',
-			icon: mdiCogs,
+			...getPath('/admin/event'),
+			label: "L'évènement",
+			icon: mdiCalendarStar,
+		},
+		{
+			...getPath('/admin/adhesion'),
+			label: 'Adhésion',
+			icon: mdiLogin,
+		},
+		{
+			...getPath('/admin/gift'),
+			label: 'Prestations',
+			icon: mdiGiftOutline,
 		},
 		{
 			...getPath('/admin/pages'),

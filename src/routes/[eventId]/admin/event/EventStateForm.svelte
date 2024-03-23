@@ -55,7 +55,7 @@
 		if (event.state === 'draft' && !eventLicenceAvailable) {
 			e.preventDefault()
 			goto(
-				`/me/licences/checkout?return_url=${$eventPath}/admin/config?checkoutId={CHECKOUT_SESSION_ID}`
+				`/me/licences/checkout?return_url=${$eventPath}/admin/event?checkoutId={CHECKOUT_SESSION_ID}`
 			)
 		}
 	}
@@ -63,7 +63,7 @@
 
 <div
 	class="
-    md:px-8 p-4 rounded-lg border flex flex-col gap-3
+    md:px-8 p-4 rounded-lg border flex flex-col gap-3 bg-base-100
     {EVENT_STATES[event.state].class}
   "
 >
@@ -126,7 +126,7 @@
 			{@const form = useForm()}
 			<form
 				use:enhance={form.submit}
-				action="{$eventPath}/admin/config?/set_state_event"
+				action="{$eventPath}/admin/event?/set_state_event"
 				method="post"
 				class="contents"
 			>
