@@ -17,20 +17,27 @@ export const media = {
 	async upload(requestOrFormData: Request | FormData, opt: UploadOption) {
 		const keyImage = opt.key ? `${opt.key}_image` : 'image'
 		const keyCrop = opt.key ? `${opt.key}_crop` : 'crop'
-		const { data, err } = await parseFormData(requestOrFormData, {
+
+		const { data, err, formData } = await parseFormData(requestOrFormData, {
 			[keyImage]: z.instanceof(Blob),
-			[keyCrop]: z.json({
-				x: z.number(),
-				y: z.number(),
-				width: z.number(),
-				height: z.number(),
-			}),
+			[keyCrop]: z.optional(
+				z.json({
+					x: z.number(),
+					y: z.number(),
+					width: z.number(),
+					height: z.number(),
+				})
+			),
 		})
+
+		if (formData.get(keyCrop) === 'undefined') return
 		if (err) throw err
+
 		const image = data[keyImage] as Blob
 		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }
 
 		if (image.size === 0) return
+		if (crop === undefined) return
 
 		const imageBuffer = await image.arrayBuffer()
 

@@ -84,7 +84,6 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 
 		event.submitter?.classList.add('btn-disabled')
 
-		console.log('SUBMIT')
 		return async ({ result, update, action }) => {
 			event.submitter?.classList.remove('btn-disabled')
 
@@ -96,7 +95,6 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 			}
 
 			if (result.type === 'failure') {
-				console.log('FAIL', result.data)
 				if (onFail) onFail(result.data)
 				if (result.data) handleFailure(result.data)
 				return
@@ -108,7 +106,6 @@ export function useForm<ReturnData extends Record<string, unknown>>({
 			}
 
 			if (result.type === 'success') {
-				console.log('SUCCESS')
 				if (successMessage !== false) notify.success(tryToRun(successMessage))
 				if (onSuccess) onSuccess(action, result.data)
 				if (successUpdate) update({ reset: tryToRun(successReset) })

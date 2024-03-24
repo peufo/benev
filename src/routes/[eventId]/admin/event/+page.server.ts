@@ -47,6 +47,7 @@ export const actions = {
 	update_event: async ({ request, locals, params: { eventId } }) => {
 		const member = await permission.admin(eventId, locals)
 		const { err, data, formData } = await parseFormData(request, eventUpdate)
+
 		if (err) return err
 
 		return tryOrFail(

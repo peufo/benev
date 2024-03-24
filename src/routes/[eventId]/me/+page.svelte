@@ -40,34 +40,6 @@
 		{/if}
 	</div>
 
-	<section class="mt-4">
-		<h3 class="font-semibold opacity-50 pt-1 text-sm">Pages publiques</h3>
-		<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-3">
-			<EventPubliqueMenuItems
-				pages={data.pages}
-				classItem="bg-base-200/30 border bordered overflow-hidden"
-			/>
-		</div>
-	</section>
-
-	{#if data.member.roles.includes('leader')}
-		<section class="mt-4">
-			<h3 class="font-semibold opacity-50 pt-1 text-sm">Pages de gestion</h3>
-			<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-3">
-				{#each $adminTabs as { href, isActive, label, icon }}
-					<a
-						{href}
-						class="menu-item bg-base-200/20 border bordered overflow-hidden"
-						class:active={isActive}
-					>
-						<Icon path={icon} size={20} class="opacity-70" />
-
-						{label}
-					</a>
-				{/each}
-			</div>
-		</section>
-	{/if}
 
 	<div class="flex flex-col gap-20 mt-8">
 		<section>
