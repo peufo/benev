@@ -52,7 +52,6 @@ export const suggestion: Omit<SuggestionOptions<SuggestionItem>, 'editor'> = {
 			},
 
 			onKeyDown(props) {
-				console.log('ON KEY DOWN', props)
 				if (props.event.key === 'Escape') {
 					popup.hide()
 					return true
