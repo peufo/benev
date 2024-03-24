@@ -8,7 +8,9 @@ import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
 import Image from '@tiptap/extension-image'
 import Youtube from '@tiptap/extension-youtube'
+import Mention from '@tiptap/extension-mention'
 import { Indent } from './indent'
+import { suggestion } from './suggestion'
 
 export const extensions: Extensions = [
 	StarterKit.configure({
@@ -44,6 +46,16 @@ export const extensions: Extensions = [
 		modestBranding: true,
 		HTMLAttributes: {
 			class: 'mx-auto rounded',
+		},
+	}),
+	Mention.configure({
+		suggestion,
+		renderHTML({ node }) {
+			return [
+				'span',
+				{ class: 'border rounded px-2 mx-1 shadow text-sm !whitespace-nowrap inline-block' },
+				node.attrs.label ?? node.attrs.id,
+			]
 		},
 	}),
 ]

@@ -93,7 +93,6 @@
 		<InputTextRich
 			key="content"
 			value={page.content}
-			classToolbar="top-14"
 			on:change={handleChange}
 		/>
 	{/key}

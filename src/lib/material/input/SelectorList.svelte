@@ -10,7 +10,9 @@
 	export let isError = false
 	export let isLoading = false
 	export let focusIndex = 0
-	export let trigger: HTMLElement
+	export let trigger: HTMLElement | undefined = undefined
+	export let keyDownEvent: KeyboardEvent | undefined = undefined
+	export let keyDownPreventDefault = true
 
 	const dispatch = createEventDispatcher<{ select: number }>()
 </script>
@@ -21,6 +23,8 @@
 		focusIndex,
 		onSelect: (index) => dispatch('select', index),
 		onFocus: (index) => (focusIndex = index),
+		keyDownEvent,
+		keyDownPreventDefault
 	}}
 	class="flex flex-col gap-1 {klass}"
 >

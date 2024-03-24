@@ -10,3 +10,24 @@
 .tippy-box[data-theme~='dropdown'] > .tippy-arrow {
 	color: #e5e7eb;
 }
+
+.tippy-box[data-theme~='dropdown-border'] {
+	background: #fff;
+	color: initial;
+	border-width: 1px;
+	padding: 0.25rem;
+	border-radius: 0.5rem;
+	--tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+	--tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+		0 4px 6px -4px var(--tw-shadow-color);
+	box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+		var(--tw-shadow);
+}
+
+.tippy-box[data-theme~='dropdown-border'] > .tippy-content {
+	padding: 0;
+}
+
+.tippy-box[data-theme~='dropdown-border'] > .tippy-arrow {
+	color: #e5e7eb;
+}

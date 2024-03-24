@@ -5,6 +5,8 @@ type Params = {
 	itemsQuerySelector?: string
 	onSelect?: (index: number) => unknown
 	onFocus?: (index: number) => unknown
+	keyDownEvent?: KeyboardEvent | undefined
+	keyDownPreventDefault?: boolean
 }
 
 export function selector(
@@ -16,17 +18,21 @@ export function selector(
 		itemsQuerySelector = 'li',
 		onSelect = () => {},
 		onFocus = () => {},
+		keyDownEvent = undefined,
+		keyDownPreventDefault = true,
 	}: Params
 ) {
+	trigger?.addEventListener('keydown', handleKeydown)
+
 	function handleKeydown(event: KeyboardEvent) {
 		const items = node.querySelectorAll<HTMLElement>(itemsQuerySelector)
 		if (event.key === 'Enter') {
-			event.preventDefault()
+			if (keyDownPreventDefault) event.preventDefault()
 			onSelect(focusIndex)
 			return
 		}
 		if (event.key === 'ArrowUp') {
-			event.preventDefault()
+			if (keyDownPreventDefault) event.preventDefault()
 			focusIndex--
 			if (focusIndex < 0) focusIndex = items.length - 1
 			onFocus(focusIndex)
@@ -34,7 +40,7 @@ export function selector(
 			return
 		}
 		if (event.key === 'ArrowDown') {
-			event.preventDefault()
+			if (keyDownPreventDefault) event.preventDefault()
 			focusIndex++
 			if (focusIndex > items.length - 1) focusIndex = 0
 			onFocus(focusIndex)
@@ -64,15 +70,17 @@ export function selector(
 		}
 	}
 
-	trigger?.addEventListener('keydown', handleKeydown)
-
 	return {
-		update(params: Partial<Params>) {
-			if (params.focusIndex !== undefined) focusIndex = params.focusIndex
-			if (params.trigger) {
+		update(props: Partial<Params>) {
+			if (props.focusIndex !== undefined) focusIndex = props.focusIndex
+			if (props.trigger) {
 				trigger?.removeEventListener('keydown', handleKeydown)
-				trigger = params.trigger
+				trigger = props.trigger
 				trigger?.addEventListener('keydown', handleKeydown)
+			}
+			if (props.keyDownEvent && keyDownEvent !== props.keyDownEvent) {
+				keyDownEvent = props.keyDownEvent
+				handleKeydown(keyDownEvent)
 			}
 		},
 		destroy() {
