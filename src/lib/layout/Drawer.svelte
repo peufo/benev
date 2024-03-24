@@ -14,8 +14,6 @@
 			{#each $adminTabs as { href, isActive, label, icon }, index}
 				{#if index === 4}
 					<h3 class="title-sm pl-3 py-2">Configuration</h3>
-				{:else if index === 8}
-					<hr>
 				{/if}
 
 				<a {href} class="menu-item" class:active={isActive}>

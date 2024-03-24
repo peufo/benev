@@ -23,7 +23,7 @@ export const adminTabs = derived(param, ({ without, page }) => {
 		isActive: !!page.route.id?.startsWith(`/[eventId]${p}`),
 	})
 
-	return [
+	const tabs = [
 		{
 			...getPath('/teams'),
 			label: 'Secteurs',
@@ -54,11 +54,7 @@ export const adminTabs = derived(param, ({ without, page }) => {
 			label: 'Adhésion',
 			icon: mdiLogin,
 		},
-		{
-			...getPath('/admin/gift'),
-			label: 'Prestations',
-			icon: mdiGiftOutline,
-		},
+
 		{
 			...getPath('/admin/pages'),
 			label: 'Les pages',
@@ -70,4 +66,13 @@ export const adminTabs = derived(param, ({ without, page }) => {
 			icon: mdiHelp,
 		},
 	]
+
+	if (dev)
+		tabs.splice(6, 0, {
+			...getPath('/admin/gift'),
+			label: 'Prestations',
+			icon: mdiGiftOutline,
+		})
+
+	return tabs
 })
