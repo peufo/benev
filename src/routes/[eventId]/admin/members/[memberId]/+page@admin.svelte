@@ -18,13 +18,14 @@
 		MemberDeleteForm,
 		MemberCreateSubscribeDialog,
 	} from '$lib/member'
+	import Card from '$lib/material/Card.svelte'
 
 	export let data
 
 	let createSubscribeDialog: HTMLDialogElement
 </script>
 
-<div class="grid gap-20">
+<Card class="grid gap-20">
 	<div class="flex justify-between gap-8">
 		<div>
 			<div class="flex gap-2 items-center flex-wrap">
@@ -115,7 +116,7 @@
 		</div>
 		<Teams teams={data.memberProfile.leaderOf} event={data.event} showAll />
 	</section>
-</div>
+</Card>
 
 <MemberCreateSubscribeDialog
 	bind:dialog={createSubscribeDialog}

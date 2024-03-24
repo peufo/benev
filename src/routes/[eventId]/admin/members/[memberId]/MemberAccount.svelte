@@ -44,9 +44,13 @@
 
 	<div class="flex gap-4">
 		<Icon path={mdiPhoneOutline} class="opacity-70" size={20} />
-		<a href="tel:{user.phone}" class="link link-hover" target="_blank">
-			{user.phone}
-		</a>
+		{#if user.phone}
+			<a href="tel:{user.phone}" class="link link-hover" target="_blank">
+				{user.phone}
+			</a>
+		{:else}
+			<span>-</span>
+		{/if}
 	</div>
 
 	<div class="flex gap-4">
