@@ -7,6 +7,7 @@
 	import { createEventDispatcher } from 'svelte'
 
 	export let editor: Editor
+	export let canInsertDynamicValue = false
 
 	const dispatch = createEventDispatcher<{ insertMedia: void }>()
 </script>
@@ -35,6 +36,7 @@
 		}, {
 			label: 'Valeur dynamic',
 			icon: mdiAt,
+			disable: !canInsertDynamicValue,
 			action: () => {
 				const {from} = editor.state.selection
 				const lastChar = editor.state.doc.textBetween(from - 1, from)

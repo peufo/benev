@@ -11,6 +11,7 @@
 	export let key = ''
 	export let valueAsHTML = false
 	export let classToolbar = ''
+	export let canInsertDynamicValue = false
 
 	let element: HTMLDivElement
 	let editor: Editor | null = null
@@ -49,7 +50,7 @@
 
 <div class="border bordered rounded-lg relative">
 	{#if editor}
-		<ToolsBar {editor} class={classToolbar} />
+		<ToolsBar {editor} class={classToolbar} {canInsertDynamicValue} />
 	{/if}
 	<div bind:this={element} class="p-4 pb-10 min-h-[20rem]" />
 </div>

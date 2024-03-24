@@ -87,13 +87,14 @@
 
 	<input type="hidden" name="id" value={page.id} />
 	<input type="hidden" name="path" value={normalizePath(page.title)} />
-
 	<input type="hidden" name="eventId" value={page.eventId} />
+	
 	{#key page.id}
 		<InputTextRich
 			key="content"
 			value={page.content}
 			on:change={handleChange}
+			canInsertDynamicValue={false}
 		/>
 	{/key}
 

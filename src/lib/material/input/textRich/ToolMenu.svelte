@@ -10,6 +10,7 @@
 		icon: string
 		action: () => unknown
 		newSection?: true
+		disable?: boolean
 	}
 
 	export let editor: Editor
@@ -46,7 +47,14 @@
 		{#if tool.newSection}
 			<hr class="my-2" />
 		{/if}
-		<button type="button" class="menu-item w-full" on:click={() => handleClick(tool)}>
+		<button
+			disabled={tool.disable}
+			type="button"
+			class="menu-item w-full"
+			class:disabled={tool.disable}
+			class:opacity-60={tool.disable}
+			on:click={() => handleClick(tool)}
+		>
 			<Icon path={tool.icon} size={20} class="opacity-70" />
 			<span>
 				{tool.label}
