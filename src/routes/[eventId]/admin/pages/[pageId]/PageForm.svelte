@@ -23,6 +23,7 @@
 	export let page: Page
 	export let charterAlreadyExist: boolean
 
+	let canInsertDynamicValue = page.type === 'member'
 	let isDirty = false
 	let successInvalidateAll = false
 	const form = useForm({
@@ -43,6 +44,7 @@
 		autosave()
 	}
 	async function handleChangeImediat() {
+		
 		isDirty = true
 		successInvalidateAll = true
 		await tick()
@@ -79,7 +81,11 @@
 						? pageTypes
 						: { charter, ...pageTypes }}
 					value={page.type}
-					on:select={handleChangeImediat}
+					on:select={(event) => {
+						canInsertDynamicValue = event.detail === 'member'
+						handleChangeImediat()
+						return
+					}}
 				/>
 			{/if}
 		</FormControl>
@@ -88,13 +94,13 @@
 	<input type="hidden" name="id" value={page.id} />
 	<input type="hidden" name="path" value={normalizePath(page.title)} />
 	<input type="hidden" name="eventId" value={page.eventId} />
-	
+
 	{#key page.id}
 		<InputTextRich
 			key="content"
 			value={page.content}
 			on:change={handleChange}
-			canInsertDynamicValue={false}
+			{canInsertDynamicValue}
 		/>
 	{/key}
 
