@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Editor } from '@tiptap/core'
-	import { mdiPlus, mdiMinus, mdiImageOutline, mdiYoutube } from '@mdi/js'
+	import { mdiPlus, mdiMinus, mdiImageOutline, mdiYoutube, mdiAt } from '@mdi/js'
 
 	import { Icon } from '$lib/material'
 	import ToolMenu from './ToolMenu.svelte'
@@ -32,7 +32,16 @@
 				if (!src) return
 				editor.commands.setYoutubeVideo({ src })
 			},
-		},
+		}, {
+			label: 'Valeur dynamic',
+			icon: mdiAt,
+			action: () => {
+				const {from} = editor.state.selection
+				const lastChar = editor.state.doc.textBetween(from - 1, from)
+				const charToAdd = lastChar === '' || lastChar === ' ' ? '@' : ' @'
+				editor.chain().insertContent(charToAdd).focus().run()
+			}
+		}
 	]}
 	hideLabel
 >
