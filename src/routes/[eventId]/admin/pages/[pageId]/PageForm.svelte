@@ -19,11 +19,12 @@
 	import PageTypeHelp from './PageTypeHelp.svelte'
 	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
+	import { suggestionItems, type SuggestionItem } from '$lib/material/input/textRich/suggestion'
 
 	export let page: Page
 	export let charterAlreadyExist: boolean
 
-	let canInsertDynamicValue = page.type === 'member'
+	let inputTextRich: InputTextRich
 	let isDirty = false
 	let successInvalidateAll = false
 	const form = useForm({
@@ -38,13 +39,29 @@
 	let submitButton: HTMLButtonElement
 
 	$: pagePath = `${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
+	$: suggestionItems.set(getSuggestionItems(page))
+
+	function getSuggestionItems(p: Page): SuggestionItem[] {
+		if (p.type !== 'member') return []
+		return [
+			{ id: 'firstName', label: 'Prénom' },
+			{ id: 'lastName', label: 'Nom de famille' },
+			{ id: 'name', label: 'Nom et prénom' },
+			{ id: 'age', label: 'Age' },
+			{ id: 'address', label: 'Address' },
+			{ id: 'subscribes', label: 'Liste des inscriptions' },
+			{ id: 'nbSubscribe', label: "Nombre d'inscriptions" },
+			{ id: 'teams', label: 'Liste des secteurs' },
+			{ id: 'nbTeams', label: 'Nombre de secteurs' },
+			{ id: 'gifts', label: 'Liste des compensations' },
+		]
+	}
 
 	function handleChange() {
 		isDirty = true
 		autosave()
 	}
 	async function handleChangeImediat() {
-		
 		isDirty = true
 		successInvalidateAll = true
 		await tick()
@@ -81,11 +98,7 @@
 						? pageTypes
 						: { charter, ...pageTypes }}
 					value={page.type}
-					on:select={(event) => {
-						canInsertDynamicValue = event.detail === 'member'
-						handleChangeImediat()
-						return
-					}}
+					on:select={handleChangeImediat}
 				/>
 			{/if}
 		</FormControl>
@@ -97,10 +110,10 @@
 
 	{#key page.id}
 		<InputTextRich
+			bind:this={inputTextRich}
 			key="content"
 			value={page.content}
 			on:change={handleChange}
-			{canInsertDynamicValue}
 		/>
 	{/key}
 

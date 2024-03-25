@@ -1,23 +1,16 @@
 import type { SuggestionOptions } from '@tiptap/suggestion'
 import tippy, { type Instance as TippyInstance } from 'tippy.js'
+import { writable, get } from 'svelte/store'
 import SuggesionList from './SuggesionList.svelte'
 import '$lib/material/dropdown.css'
 
-export type SuggestionItem = {
-	id: string
-	label: string
-}
+export type SuggestionItem = { id: string; label: string }
+export let suggestionItems = writable<SuggestionItem[]>([])
 
 export const suggestion: Omit<SuggestionOptions<SuggestionItem>, 'editor'> = {
 	items: ({ query }) => {
-		return [
-			{ id: '1', label: 'Lea Thompson' },
-			{ id: '2', label: 'Cyndi Lauper' },
-			{ id: '3', label: 'Tom Cruise' },
-			{ id: '4', label: 'Madonna' },
-		]
-			.filter((item) => item.label.toLowerCase().startsWith(query.toLowerCase()))
-			.slice(0, 5)
+		const items = get(suggestionItems)
+		return items.filter((item) => item.label.toLowerCase().startsWith(query.toLowerCase()))
 	},
 
 	render: () => {

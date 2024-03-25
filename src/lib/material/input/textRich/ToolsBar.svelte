@@ -13,7 +13,6 @@
 	export let editor: Editor
 	let klass = ''
 	export { klass as class }
-	export let canInsertDynamicValue = false
 
 	let selectMedia: SelectMedia
 </script>
@@ -62,7 +61,6 @@
 		<ToolMenuInsert
 			{editor}
 			on:insertMedia={() => selectMedia.show()}
-			{canInsertDynamicValue}
 		/>
 	</div>
 </div>
