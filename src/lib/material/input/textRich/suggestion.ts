@@ -57,8 +57,8 @@ export const suggestion: Omit<SuggestionOptions<SuggestionItem>, 'editor'> = {
 			},
 
 			onExit() {
-				popup.destroy()
-				component.$destroy()
+				popup?.destroy()
+				component?.$destroy()
 			},
 		}
 	},

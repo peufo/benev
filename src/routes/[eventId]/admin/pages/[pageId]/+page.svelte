@@ -12,7 +12,9 @@
 		{ id: 'address', label: 'Address' },
 		{ id: 'subscribes', label: 'Liste des inscriptions' },
 		{ id: 'nbSubscribe', label: "Nombre d'inscriptions" },
-		{ id: 'teams', label: 'Liste des secteurs' },
+		{ id: 'hours', label: 'Heures de travail'},
+		{ id: 'teams_work', label: 'Liste des secteurs de travail' },
+		{ id: 'teams_leader', label: 'Liste des secteurs à charge' },
 		{ id: 'nbTeams', label: 'Nombre de secteurs' },
 		...data.event.memberFields.map(field => ({ id: `field_${field.id}`, label: field.name}))
 	]
