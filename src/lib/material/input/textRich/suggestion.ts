@@ -10,13 +10,13 @@ export let suggestionItems = writable<SuggestionItem[]>([])
 export const suggestion: Omit<SuggestionOptions<SuggestionItem>, 'editor'> = {
 	items: ({ query }) => {
 		const items = get(suggestionItems)
-		return items.filter((item) => item.label.toLowerCase().startsWith(query.toLowerCase()))
+		return items.filter((item) => item.label.toLowerCase().includes(query.toLowerCase()))
 	},
 
 	render: () => {
+		let popup: TippyInstance
 		let target = document.createElement('div')
 		let component: SuggesionList
-		let popup: TippyInstance
 
 		return {
 			onStart: (props) => {

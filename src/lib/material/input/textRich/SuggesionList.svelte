@@ -19,6 +19,7 @@
 	keyDownPreventDefault={false}
 	let:item
 	on:select={(event) => handleSelect(event.detail)}
+	class=" max-h-64 overflow-auto"
 >
 	<span>{item.label}</span>
 </SelectorList>

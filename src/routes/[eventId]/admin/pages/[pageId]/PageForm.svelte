@@ -23,6 +23,7 @@
 
 	export let page: Page
 	export let charterAlreadyExist: boolean
+	export let memberSuggestionItems: SuggestionItem[]
 
 	let inputTextRich: InputTextRich
 	let isDirty = false
@@ -42,19 +43,8 @@
 	$: suggestionItems.set(getSuggestionItems(page))
 
 	function getSuggestionItems(p: Page): SuggestionItem[] {
-		if (p.type !== 'member') return []
-		return [
-			{ id: 'firstName', label: 'Prénom' },
-			{ id: 'lastName', label: 'Nom de famille' },
-			{ id: 'name', label: 'Nom et prénom' },
-			{ id: 'age', label: 'Age' },
-			{ id: 'address', label: 'Address' },
-			{ id: 'subscribes', label: 'Liste des inscriptions' },
-			{ id: 'nbSubscribe', label: "Nombre d'inscriptions" },
-			{ id: 'teams', label: 'Liste des secteurs' },
-			{ id: 'nbTeams', label: 'Nombre de secteurs' },
-			{ id: 'gifts', label: 'Liste des compensations' },
-		]
+		if (p.type === 'member') return memberSuggestionItems
+		return []
 	}
 
 	function handleChange() {
