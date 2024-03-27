@@ -53,7 +53,10 @@ export const extensions: Extensions = [
 		renderHTML({ node }) {
 			return [
 				'span',
-				{ class: 'border rounded px-2 mx-1 shadow text-sm !whitespace-nowrap inline-block' },
+				{
+					class: 'border rounded px-2 mx-1 shadow text-sm !whitespace-nowrap inline-block',
+					'data-key': node.attrs.id,
+				},
 				node.attrs.label ?? node.attrs.id,
 			]
 		},

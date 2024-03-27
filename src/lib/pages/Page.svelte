@@ -8,12 +8,21 @@
 	import { CopyLink, Icon } from '$lib/material'
 	import { tiptap } from '$lib/pages/tiptap'
 
+	import type { MemberWithComputedValues } from '$lib/server'
 	import PageLayout from './PageLayout.svelte'
+	import { injectMemberValues } from './memberValues'
 
 	export let page: Page | null
-
-	$: html = tiptap.toHTML(page?.content || '')
+	export let member: MemberWithComputedValues | undefined = undefined
+	
+	$: html = transformPage(tiptap.toHTML(page?.content || ''))
 	$: canEdit = $pageStore.data.member?.roles.includes('admin')
+
+	function transformPage(_html: string) {
+		if (page?.type !== 'member' || !member) return _html
+		return injectMemberValues(_html, member)
+	}
+
 </script>
 
 <PageLayout class="relative max-w-2xl py-16">

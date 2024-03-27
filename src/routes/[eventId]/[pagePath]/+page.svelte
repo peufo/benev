@@ -2,9 +2,10 @@
 	import Page from '$lib/pages/Page.svelte'
 	import { eventPath } from '$lib/store'
 	export let data
+
 </script>
 
-<Page page={data.page} />
+<Page page={data.page} member={data.member} />
 
 {#if data.memberCanRegister}
 	<div class="text-center my-8">

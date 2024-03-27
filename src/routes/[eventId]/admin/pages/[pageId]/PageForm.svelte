@@ -23,9 +23,7 @@
 
 	export let page: Page
 	export let charterAlreadyExist: boolean
-	export let memberSuggestionItems: SuggestionItem[]
 
-	let inputTextRich: InputTextRich
 	let isDirty = false
 	let successInvalidateAll = false
 	const form = useForm({
@@ -40,12 +38,6 @@
 	let submitButton: HTMLButtonElement
 
 	$: pagePath = `${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
-	$: suggestionItems.set(getSuggestionItems(page))
-
-	function getSuggestionItems(p: Page): SuggestionItem[] {
-		if (p.type === 'member') return memberSuggestionItems
-		return []
-	}
 
 	function handleChange() {
 		isDirty = true
@@ -100,7 +92,6 @@
 
 	{#key page.id}
 		<InputTextRich
-			bind:this={inputTextRich}
 			key="content"
 			value={page.content}
 			on:change={handleChange}
