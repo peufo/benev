@@ -3,7 +3,6 @@
 		mdiAlertOctagonOutline,
 		mdiCheck,
 		mdiClockTimeFourOutline,
-		mdiEmail,
 		mdiEmailOutline,
 	} from '@mdi/js'
 	import type { Message, MessageState } from '@prisma/client'
