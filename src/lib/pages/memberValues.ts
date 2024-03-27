@@ -21,13 +21,15 @@ const memberStaticSuggestions: Partial<Record<NestedPaths<MemberWithComputedValu
 
 // TODO: add 'subscribes', 'teams'
 // TODO: add minimal style with html
-const memberComputedSuggestions: Record<string, [string, (m: MemberWithComputedValues) => string]> =
-	{
-		age: ['Age', (m) => getAge(m.user.birthday)],
-		name: ['Nom et prénom', (m) => `${m.user.firstName} ${m.user.lastName}`],
-		address: ['Adresse', (m) => `${m.user.street} ${m.user.zipCode} ${m.user.city}`],
-		leaderOf: ['Secteurs à charge', (m) => m.leaderOf.join(',')],
-	}
+const memberComputedSuggestions: Record<
+	string,
+	[string, (m: MemberWithComputedValues) => string | string[]]
+> = {
+	age: ['Age', (m) => getAge(m.user.birthday)],
+	name: ['Nom et prénom', (m) => `${m.user.firstName} ${m.user.lastName}`],
+	address: ['Adresse', (m) => `${m.user.street} ${m.user.zipCode} ${m.user.city}`],
+	leaderOf: ['Secteurs à charge', (m) => m.leaderOf.map((t) => t.name)],
+}
 
 export function getMemberSuggestions(fields: Field[]): SuggestionItem[] {
 	return [
@@ -54,6 +56,7 @@ export function injectMemberValues(html: string, member: MemberWithComputedValue
 	]
 
 	for (const { id, value } of replacers) {
+		// TODO: return in function of value type (array, boolean, etc)
 		const regexp = new RegExp(
 			`<span class="[\\w\\d\\-! ]+" data-key="${id.replace('.', '\\.')}".*?<\/span>`,
 			'g'
