@@ -3,14 +3,14 @@
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
 
-	export let member: Member & { user: User; event: Event & { memberFields: Field[] } }
+	export let member: Member & { user: User; event: Event  }
 </script>
 
 <EmailLayout title={member.event.name} subtitle="Bienvenue dans notre équipe bénévole">
 	<p>
 		Salut {member.user.firstName},<br />
 		Tu fais désormais partie des nôtres. Tu peux maintenant compléter
-		<a href="{domain}/{member.eventId}/me?section=profile-spiegelberg-festival"> ton profil </a>
+		<a href="{domain}/{member.eventId}/me"> ton profil </a>
 		si ce n'est déjà fait et t'inscrire aux tranches horaires qui t'intéressent en consultant les différents
 		<a href="{domain}/{member.eventId}/teams">secteurs</a>.
 	</p>

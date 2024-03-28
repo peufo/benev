@@ -5,6 +5,7 @@ import type { Field } from '@prisma/client'
 import type { MemberWithComputedValues } from '$lib/server'
 import type { NestedPaths } from './nestedPaths'
 import { getAge } from '$lib/utils'
+import { domain } from '$lib/email'
 
 const memberStaticSuggestions: Partial<Record<NestedPaths<MemberWithComputedValues>, string>> = {
 	'user.firstName': 'Prénom',
@@ -29,6 +30,10 @@ const memberComputedSuggestions: Record<
 	name: ['Nom et prénom', (m) => `${m.user.firstName} ${m.user.lastName}`],
 	address: ['Adresse', (m) => `${m.user.street} ${m.user.zipCode} ${m.user.city}`],
 	leaderOf: ['Secteurs à charge', (m) => m.leaderOf.map((t) => t.name)],
+	me: [
+		'Lien vers le tableau de bord',
+		(m) => `<a href="${domain}/${m.eventId}/me">tableau de bord</a>`,
+	],
 }
 
 export function getMemberSuggestions(fields: Field[]): SuggestionItem[] {
@@ -56,12 +61,18 @@ export function injectMemberValues(html: string, member: MemberWithComputedValue
 	]
 
 	for (const { id, value } of replacers) {
-		// TODO: return in function of value type (array, boolean, etc)
 		const regexp = new RegExp(
 			`<span class="[\\w\\d\\-! ]+" data-key="${id.replace('.', '\\.')}".*?<\/span>`,
 			'g'
 		)
-		html = html.replaceAll(regexp, value)
+		html = html.replaceAll(regexp, valueToHTML(value))
 	}
 	return html
+}
+
+function valueToHTML(value: number | boolean | string | string[]): string {
+	if (typeof value === 'string') return value
+	if (typeof value === 'number') return value.toString()
+	if (typeof value === 'boolean') return value ? 'Oui' : 'Non'
+	return '<ul>' + value.map((v) => `<li>${v}</li>`).join('') + '</ul>'
 }
