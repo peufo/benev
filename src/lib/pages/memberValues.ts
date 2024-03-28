@@ -28,7 +28,11 @@ const memberComputedSuggestions: Record<
 > = {
 	age: ['Age', (m) => getAge(m.user.birthday)],
 	name: ['Nom et prénom', (m) => `${m.user.firstName} ${m.user.lastName}`],
-	address: ['Adresse', (m) => `${m.user.street} ${m.user.zipCode} ${m.user.city}`],
+	address: [
+		'Adresse',
+		(m) =>
+			`${m.user.firstName} ${m.user.lastName}<br>${m.user.street}<br>${m.user.zipCode} ${m.user.city}`,
+	],
 	leaderOf: ['Secteurs à charge', (m) => m.leaderOf.map((t) => t.name)],
 	me: [
 		'Lien vers le tableau de bord',

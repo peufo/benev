@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Event, Field, Member, User } from '@prisma/client'
+	import type { Event, Member, User } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
 
-	export let member: Member & { user: User; event: Event  }
+	export let member: Member & { user: User; event: Event }
 </script>
 
 <EmailLayout title={member.event.name} subtitle="Bienvenue dans notre équipe bénévole">
