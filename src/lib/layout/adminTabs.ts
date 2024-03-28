@@ -57,7 +57,7 @@ export const adminTabs = derived(param, ({ without, page }) => {
 
 		{
 			...getPath('/admin/pages'),
-			label: 'Publication',
+			label: 'Publications',
 			icon: mdiFileDocumentMultipleOutline,
 		},
 		{
