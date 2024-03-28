@@ -66,7 +66,7 @@ export function injectMemberValues(html: string, member: MemberWithComputedValue
 
 	for (const { id, value } of replacers) {
 		const regexp = new RegExp(
-			`<span class="[\\w\\d\\-! ]+" data-key="${id.replace('.', '\\.')}".*?<\/span>`,
+			`<span class="suggestion" data-key="${id.replace('.', '\\.')}".*?<\/span>`,
 			'g'
 		)
 		html = html.replaceAll(regexp, valueToHTML(value))

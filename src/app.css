@@ -32,6 +32,10 @@
 	.tiptap .ProseMirror-selectednode {
 		@apply outline outline-2 outline-primary rounded;
 	}
+
+	.suggestion {
+		@apply border rounded px-2 mx-1 shadow text-sm !whitespace-nowrap inline-block;
+	}
 }
 
 mark {

@@ -54,7 +54,7 @@ export const extensions: Extensions = [
 			return [
 				'span',
 				{
-					class: 'border rounded px-2 mx-1 shadow text-sm !whitespace-nowrap inline-block',
+					class: 'suggestion',
 					'data-key': node.attrs.id,
 				},
 				node.attrs.label ?? node.attrs.id,
