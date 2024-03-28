@@ -21,6 +21,10 @@
 		@apply text-xs font-bold text-base-content/60;
 	}
 
+	.title-md {
+		@apply font-bold text-base-content/60;
+	}
+
 	.btn-primary {
 		@apply text-white fill-white/90;
 	}

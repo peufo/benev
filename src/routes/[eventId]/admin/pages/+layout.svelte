@@ -18,7 +18,7 @@
 	<OnlyAdmin>
 		<div class="flex items-start">
 			<div class="flex flex-col gap-1 max-w-[200px]">
-				<h2 class="title pb-2">Les pages</h2>
+				<h2 class="title-md pb-2">Pages du site</h2>
 				{#each data.pages as { id, title, type }}
 					<a
 						href="{$eventPath}/admin/pages/{id}"
@@ -41,6 +41,10 @@
 						<span>Nouvelle page</span>
 					</button>
 				</form>
+
+				<h2 class="title-md pb-2 pt-10">Models d'email</h2>
+
+
 			</div>
 
 			<div class="divider divider-horizontal" />
