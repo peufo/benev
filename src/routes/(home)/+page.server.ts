@@ -2,6 +2,7 @@ import { prisma } from '$lib/server'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { media, parseFormData, tryOrFail } from '$lib/server'
 import { eventCreate } from '$lib/validation'
+import { defaultEmailModels } from '$lib/email/models'
 
 export const load = async ({ url }) => {
 	const prospectId = url.searchParams.get('prospectId')
@@ -59,11 +60,16 @@ export const actions = {
 						...data,
 						ownerId: userId,
 						pages: {
-							create: {
-								type: 'home',
-								title: 'Bienvenue',
-								path: 'bienvenue',
-								content: 'null',
+							createMany: {
+								data: [
+									{
+										type: 'home',
+										title: 'Bienvenue',
+										path: 'bienvenue',
+										content: 'null',
+									},
+									...defaultEmailModels,
+								],
 							},
 						},
 						members: {

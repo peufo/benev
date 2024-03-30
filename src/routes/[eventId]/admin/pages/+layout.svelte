@@ -25,8 +25,8 @@
 						class="menu-item"
 						class:active={$page.params.pageId === id}
 					>
-						<Icon path={PAGE_TYPE[type].icon} class="opacity-60 w-6" size={20} />
-						<span class="overflow-hidden text-ellipsis">{title}</span>
+						<Icon path={PAGE_TYPE[type].icon} class="opacity-60 w-6 shrink-0" size={20} />
+						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
 					</a>
 				{/each}
 
@@ -43,7 +43,16 @@
 				</form>
 
 				<h2 class="title-md pb-2 pt-10">Models d'email</h2>
-
+				{#each data.emails as { id, title, type }}
+					<a
+						href="{$eventPath}/admin/pages/{id}"
+						class="menu-item"
+						class:active={$page.params.pageId === id}
+					>
+						<Icon path={PAGE_TYPE[type].icon} class="opacity-60 w-6 shrink-0" size={20} />
+						<span class="overflow-hidden text-ellipsis">{title}</span>
+					</a>
+				{/each}
 
 			</div>
 

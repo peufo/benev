@@ -3,9 +3,10 @@ import objectPath from 'object-path'
 import type { SuggestionItem } from '$lib/material/input/textRich/suggestion'
 import type { Field } from '@prisma/client'
 import type { MemberWithComputedValues } from '$lib/server'
-import type { NestedPaths } from './nestedPaths'
 import { getAge } from '$lib/utils'
 import { domain } from '$lib/email'
+import type { NestedPaths } from './nestedPaths'
+import { type Replacer } from './injectValues'
 
 const memberStaticSuggestions: Partial<Record<NestedPaths<MemberWithComputedValues>, string>> = {
 	'user.firstName': 'Prénom',
@@ -18,10 +19,10 @@ const memberStaticSuggestions: Partial<Record<NestedPaths<MemberWithComputedValu
 	isUserProfileCompleted: "Profile d'utilisateur complet",
 	isValidedByEvent: 'Inscription validé par les organisateurs',
 	isValidedByUser: 'Inscription validé par le membre',
+	'event.name': "Nom de l'évènement",
 }
 
 // TODO: add 'subscribes', 'teams'
-// TODO: add minimal style with html
 const memberComputedSuggestions: Record<
 	string,
 	[string, (m: MemberWithComputedValues) => string | string[]]
@@ -38,6 +39,7 @@ const memberComputedSuggestions: Record<
 		'Lien vers le tableau de bord',
 		(m) => `<a href="${domain}/${m.eventId}/me">tableau de bord</a>`,
 	],
+	teams: ['Lien vers les secteurs', (m) => `<a href="${domain}/${m.eventId}/teams">secteurs</a>`],
 }
 
 export function getMemberSuggestions(fields: Field[]): SuggestionItem[] {
@@ -48,8 +50,8 @@ export function getMemberSuggestions(fields: Field[]): SuggestionItem[] {
 	]
 }
 
-export function injectMemberValues(html: string, member: MemberWithComputedValues): string {
-	const replacers: { id: string; value: string }[] = [
+export function getMemberReplacers(member: MemberWithComputedValues): Replacer[] {
+	return [
 		...Object.entries(memberStaticSuggestions).map(([id]) => ({
 			id,
 			value: objectPath.get(member, id),
@@ -63,20 +65,4 @@ export function injectMemberValues(html: string, member: MemberWithComputedValue
 			value: member.profileJson[field.id] ?? `(valeur manquante pour le champ "${field.name}")`,
 		})),
 	]
-
-	for (const { id, value } of replacers) {
-		const regexp = new RegExp(
-			`<span class="suggestion" data-key="${id.replace('.', '\\.')}".*?<\/span>`,
-			'g'
-		)
-		html = html.replaceAll(regexp, valueToHTML(value))
-	}
-	return html
-}
-
-function valueToHTML(value: number | boolean | string | string[]): string {
-	if (typeof value === 'string') return value
-	if (typeof value === 'number') return value.toString()
-	if (typeof value === 'boolean') return value ? 'Oui' : 'Non'
-	return '<ul>' + value.map((v) => `<li>${v}</li>`).join('') + '</ul>'
 }

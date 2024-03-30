@@ -34,7 +34,7 @@
 			isDirty = false
 		},
 	})
-	const { home, charter, ...pageTypes } = PAGE_TYPE
+	const { home, charter, email, ...pageTypes } = PAGE_TYPE
 	let submitButton: HTMLButtonElement
 
 	$: pagePath = `${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
@@ -58,7 +58,7 @@
 
 <form method="post" action="?/update_page" use:enhance={form.submit} class="flex flex-col gap-2">
 	<div class="flex flex-wrap gap-2 items-end">
-		<InputText label="Titre" key="title" value={page.title} on:input={handleChangeImediat} />
+		<InputText label="Titre" class="grow" key="title" value={page.title} on:input={handleChangeImediat} />
 
 		<FormControl label="Type de page">
 			<svelte:fragment slot="label_append">
@@ -70,6 +70,12 @@
 				<div class="menu-item rounded-lg disabled border bordered h-12">
 					<Icon path={home.icon} size={21} class="opacity-70" />
 					<span>{home.label}</span>
+				</div>
+			{:else if page.type === 'email'}
+				<input type="hidden" name="type" value="home" />
+				<div class="menu-item rounded-lg disabled border bordered h-12">
+					<Icon path={email.icon} size={21} class="opacity-70" />
+					<span>{email.label}</span>
 				</div>
 			{:else}
 				<InputSelect

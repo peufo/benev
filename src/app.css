@@ -10,7 +10,7 @@
 		@apply bg-base-300/80;
 	}
 	.menu-item.disabled {
-		@apply cursor-default hover:bg-base-100;
+		@apply cursor-default bg-base-200/50 hover:bg-base-200/50;
 	}
 
 	.title {
@@ -22,7 +22,7 @@
 	}
 
 	.title-md {
-		@apply font-bold text-base-content/60;
+		@apply font-semibold text-base-content/60;
 	}
 
 	.btn-primary {

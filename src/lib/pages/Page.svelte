@@ -10,7 +10,8 @@
 
 	import type { MemberWithComputedValues } from '$lib/server'
 	import PageLayout from './PageLayout.svelte'
-	import { injectMemberValues } from './memberValues'
+	import { getMemberReplacers } from './memberSuggestions'
+	import { injectValues} from './injectValues'
 
 	export let page: Page | null
 	export let member: MemberWithComputedValues | undefined = undefined
@@ -20,7 +21,8 @@
 
 	function transformPage(_html: string) {
 		if (page?.type !== 'member' || !member) return _html
-		return injectMemberValues(_html, member)
+		const replacers = getMemberReplacers(member)
+		return injectValues(_html, replacers)
 	}
 
 </script>

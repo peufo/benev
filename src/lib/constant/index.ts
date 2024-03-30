@@ -1,3 +1,4 @@
+import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
 import type {
 	EventState,
 	Field,
@@ -22,8 +23,8 @@ import {
 	mdiLicense,
 	mdiFileDocumentOutline,
 	mdiAccountCircleOutline,
+	mdiEmailOutline,
 } from '@mdi/js'
-import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
 
 export const FORMAT_A3 = {
 	x: 297,
@@ -108,4 +109,5 @@ export const PAGE_TYPE: Record<Page['type'], { label: string; icon: string }> = 
 	charter: { label: 'Charte des bénévoles', icon: mdiLicense },
 	public: { label: 'Page publique', icon: mdiFileDocumentOutline },
 	member: { label: 'Page de membre', icon: mdiAccountCircleOutline },
+	email: { label: "Model d'email", icon: mdiEmailOutline },
 } as const

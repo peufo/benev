@@ -235,11 +235,9 @@ model Page {
   title String
   path  String @default("")
 
-  type    PageType @default(public)
-  content String   @db.Text
-
-  isVisibleByAll    Boolean @default(false)
-  isVisibleByMember Boolean @default(false)
+  type        PageType @default(public)
+  content     String   @db.Text
+  description String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -252,6 +250,7 @@ enum PageType {
   charter
   public
   member
+  email
 }
 
 model Team {

@@ -1,0 +1,5 @@
+import { prisma } from '$lib/server'
+
+export const load = async ({ params: { eventId } }) => ({
+	emails: await prisma.page.findMany({ where: { eventId, type: 'email' } }),
+})

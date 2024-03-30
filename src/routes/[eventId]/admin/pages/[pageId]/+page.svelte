@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getMemberSuggestions } from '$lib/pages/memberValues'
+	import { getMemberSuggestions } from '$lib/pages/memberSuggestions'
 	import { suggestionItems } from '$lib/material/input/textRich/suggestion'
 
 	import PageForm from './PageForm.svelte'
