@@ -14,104 +14,37 @@ export const defaultEmailModels: EmailModel[] = [
 		path: 'invitation_create',
 		title: 'Invitation à rejoindre notre équipe de bénévoles',
 		description: 'Email envoyé aux membres invités par un responsable.',
-		content: `
-      <p>
-        Salut <span class="suggestion" data-key="member.user.firstName">Prénom</span>, <br />
-        <span class="suggestion" data-key="authorName">Auteur de l'invitation</span>
-        t'invite à rejoindre l'équipe de bénévoles 
-        <span class="suggestion" data-key="member.event.name">Nom de l'évènement</span>.
-      </p>
-      <p>
-        Tu peux accepter ton invitation et trouver plus d'informations en cliquant sur
-        <span class="suggestion" data-key="acceptURL">ce lien</span>.
-      </p>
-    `,
+		content: `{"type":"doc","content":[{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Salut "},{"type":"mention","attrs":{"id":"member.user.firstName","label":"Prénom"}},{"type":"text","text":","}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"mention","attrs":{"id":"authorName","label":"Auteur de l'invitation"}},{"type":"text","text":" t'invite à rejoindre l'équipe de bénévoles "},{"type":"mention","attrs":{"id":"member.event.name","label":"Nom de l'évènement"}},{"type":"text","text":"."}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Tu peux accepter ton invitation et trouver toutes les informations concernant ta participation en cliquant sur "},{"type":"mention","attrs":{"id":"acceptURL","label":"Lien pour accepter l'invitation"}},{"type":"text","text":"."}]}]}`,
 	},
 	{
 		path: 'invitation_accept',
-		description: 'Notification envoyé au membre quand un responsable accepte sa participation.',
+		description: 'Email envoyé aux membres dont la participation à été validé par un responsable.',
 		title: 'Bienvenue dans notre équipe bénévole',
-		content: `
-      <p>
-        Salut <span class="suggestion" data-key="member.user.firstName">prénom</span>,<br />
-        Tu fais désormais partie des nôtres. Tu peux maintenant compléter ton profil via ton
-        <span class="suggestion" data-key="me">tableau de bord</span>.
-        si ce n'est déjà fait et t'inscrire aux tranches horaires qui t'intéressent en consultant les différents
-        <span class="suggestion" data-key="teams">secteurs</span>.
-      </p>
-      <p>
-        Les responsables qui ont accès à ton profil pourront ensuite valider tes tranches horaires et
-        prendre contact avec toi le moment venu.
-      </p>
-      <p>Un énorme merci pour ta disponibilité !</p>
-      <p>
-        Toute l'équipe 
-        <span class="suggestion" data-key="member.event.name">Nom de l'évènement</span>
-      </p>
-    `,
+		content: `{"type":"doc","content":[{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Salut "},{"type":"mention","attrs":{"id":"member.user.firstName","label":"Prénom"}},{"type":"text","text":","}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Tu fais désormais partie des nôtres. Tu peux maintenant compléter ton profil via ton "},{"type":"mention","attrs":{"id":"me","label":"Lien vers le tableau de bord"}},{"type":"text","text":"si ce n'est déjà fait et t'inscrire aux tranches horaires qui t'intéressent en consultant les différents "},{"type":"mention","attrs":{"id":"teams","label":"Lien vers les secteurs"}},{"type":"text","text":"."}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Les responsables qui ont accès à ton profil pourront ensuite valider tes inscriptions et prendre contact avec toi le moment venu."}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Un énorme merci pour ta disponibilité !"}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Toute l'équipe "},{"type":"mention","attrs":{"id":"member.event.name","label":"Nom de l'évènement"}}]}]}`,
 	},
 	{
 		path: 'subscribe_request',
 		description:
 			"Notification envoyée au membre quand un responsable l'inscrit à une période de travail.",
 		title: 'Nouvelle inscription',
-		content: `
-      <p>
-        Salut ! <br />
-        <b><span class="suggestion" data-key="authorName"></b> t'invite à rejoindre l'équipe de bénévoles durant la
-        période de travail suivante :
-      </p>
-      <b><span class="suggestion" data-key="subscribe.period.team.name">Secteur de travail</span></b><br />
-      <b><span class="suggestion" data-key="subscribe.period">Période de travail</span></b>
-      <p>
-        Tu peux retrouver et confirmer tes inscriptions dans ton 
-        <span class="suggestion" data-key="me">tableau de bord</span>.
-      </p>
-    `,
+		content: `{"type":"doc","content":[{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Salut "},{"type":"mention","attrs":{"id":"member.user.firstName","label":"Prénom"}},{"type":"text","text":","}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"mention","attrs":{"id":"authorName","label":"Auteur de l'invitation"}},{"type":"text","text":" t'invite à rejoindre l'équipe de bénévoles durant la période de travail suivante :"}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"mention","attrs":{"id":"subscribe.period.team.name","label":"Secteur de travail"},"marks":[{"type":"bold"}]},{"type":"text","marks":[{"type":"bold"}],"text":" "},{"type":"hardBreak","marks":[{"type":"bold"}]},{"type":"mention","attrs":{"id":"subscribe.period","label":"Période de travail"},"marks":[{"type":"bold"}]},{"type":"text","marks":[{"type":"bold"}],"text":" "}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Tu peux retrouver et confirmer tes inscriptions dans ton "},{"type":"mention","attrs":{"id":"me","label":"Lien vers le tableau de bord"}},{"type":"text","text":"."}]}]}`,
 	},
 	{
 		path: 'subscribe_accepted',
-		description: 'Notification envoyer au membre quand un responsable accepte une inscription',
-		title: 'Ton inscription a été acceptée',
-		content: `
-      <p>
-        Bonne nouvelle ! <br />
-        Tu pourras rejoindre la période de travail suivante :
-      </p>
-      <b><span class="suggestion" data-key="subscribe.period.team.name">Secteur de travail</span></b><br />
-      <b><span class="suggestion" data-key="subscribe.period">Période de travail</span></b>
-      <p>
-        Tu peux retrouver tes inscriptions dans ton 
-        <span class="suggestion" data-key="me">tableau de bord</span>.
-      </p>
-    `,
+		description: 'Notification envoyée au membre quand un responsable accepte une inscription',
+		title: 'Inscription acceptée',
+		content: `{"type":"doc","content":[{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Bonne nouvelle "},{"type":"mention","attrs":{"id":"member.user.firstName","label":"Prénom"}},{"type":"text","text":"! "}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Ta participation à la période de travail suivante a été validée :"}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"mention","attrs":{"id":"subscribe.period.team.name","label":"Secteur de travail"},"marks":[{"type":"bold"}]},{"type":"text","marks":[{"type":"bold"}],"text":" "},{"type":"hardBreak","marks":[{"type":"bold"}]},{"type":"mention","attrs":{"id":"subscribe.period","label":"Période de travail"},"marks":[{"type":"bold"}]},{"type":"text","marks":[{"type":"bold"}],"text":" "}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Tu peux retrouver tes inscriptions dans ton "},{"type":"mention","attrs":{"id":"me","label":"Lien vers le tableau de bord"}},{"type":"text","text":"."}]}]}`,
 	},
 	{
 		path: 'subscribe_denied',
-		description: 'Notification envoyer au membre quand un responsable refuse une inscription',
-		title: 'Ton inscription à été déclinée',
-		content: `
-      <p>Ton inscription à la période de travail suivante a été déclinée :</p>
-      <b><span class="suggestion" data-key="subscribe.period.team.name">Secteur de travail</span></b><br />
-      <b><span class="suggestion" data-key="subscribe.period">Période de travail</span></b>
-      <p>
-        Tu peux retrouver tes inscriptions dans ton 
-        <span class="suggestion" data-key="me">tableau de bord</span>.
-      </p>
-    `,
+		description: 'Notification envoyée au membre quand un responsable refuse une inscription',
+		title: 'Inscription déclinée',
+		content: `{"type":"doc","content":[{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Salut "},{"type":"mention","attrs":{"id":"member.user.firstName","label":"Prénom"}},{"type":"text","text":","}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Ton inscription à la période de travail suivante a été déclinée :"}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"mention","attrs":{"id":"subscribe.period.team.name","label":"Secteur de travail"},"marks":[{"type":"bold"}]},{"type":"text","marks":[{"type":"bold"}],"text":" "},{"type":"hardBreak","marks":[{"type":"bold"}]},{"type":"mention","attrs":{"id":"subscribe.period","label":"Période de travail"},"marks":[{"type":"bold"}]}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Tu peux retrouver tes inscriptions dans ton "},{"type":"mention","attrs":{"id":"me","label":"Lien vers le tableau de bord"}},{"type":"text","text":"."}]}]}`,
 	},
 	{
 		path: 'subscribe_cancelled',
-		description: 'Notification envoyer au membre quand un responsable annule une inscription',
-		title: 'Ton inscription a été annulée',
-		content: `
-      <p>Ton inscription à la période de travail suivante a été annulée :</p>
-      <b><span class="suggestion" data-key="subscribe.period.team.name">Secteur de travail</span></b><br />
-      <b><span class="suggestion" data-key="subscribe.period">Période de travail</span></b>
-      <p>
-        Tu peux retrouver tes inscriptions dans ton 
-        <span class="suggestion" data-key="me">tableau de bord</span>.
-      </p>
-    `,
+		description: 'Notification envoyée au membre quand un responsable annule une inscription',
+		title: 'Inscription annulée',
+		content: `{"type":"doc","content":[{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Salut "},{"type":"mention","attrs":{"id":"member.user.firstName","label":"Prénom"}},{"type":"text","text":","}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Ton inscription à la période de travail suivante a été annulée :"}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"mention","attrs":{"id":"subscribe.period.team.name","label":"Secteur de travail"},"marks":[{"type":"bold"}]},{"type":"text","marks":[{"type":"bold"}],"text":" "},{"type":"hardBreak","marks":[{"type":"bold"}]},{"type":"mention","attrs":{"id":"subscribe.period","label":"Période de travail"},"marks":[{"type":"bold"}]},{"type":"text","marks":[{"type":"bold"}],"text":" "}]},{"type":"paragraph","attrs":{"textAlign":"left","indent":0},"content":[{"type":"text","text":"Tu peux retrouver tes inscriptions dans ton "},{"type":"mention","attrs":{"id":"me","label":"Lien vers le tableau de bord"}},{"type":"text","text":"."}]}]}`,
 	},
 ].map((model) => ({ ...model, type: 'email' } as EmailModel))

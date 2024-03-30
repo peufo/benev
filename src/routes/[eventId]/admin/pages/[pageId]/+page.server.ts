@@ -61,7 +61,7 @@ export const actions = {
 
 		return tryOrFail(() =>
 			prisma.page.delete({
-				where: { id: pageId, type: { not: 'home' } },
+				where: { id: pageId, type: { notIn: ['home', 'email'] } },
 			})
 		)
 	},

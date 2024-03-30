@@ -38,7 +38,7 @@
 				>
 					<button class="menu-item">
 						<Icon path={mdiPlus} class="opacity-70" />
-						<span>Nouvelle page</span>
+						<span class="text-sm">Nouvelle page</span>
 					</button>
 				</form>
 
@@ -50,7 +50,7 @@
 						class:active={$page.params.pageId === id}
 					>
 						<Icon path={PAGE_TYPE[type].icon} class="opacity-60 w-6 shrink-0" size={20} />
-						<span class="overflow-hidden text-ellipsis">{title}</span>
+						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
 					</a>
 				{/each}
 

@@ -19,7 +19,6 @@
 	import PageTypeHelp from './PageTypeHelp.svelte'
 	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
-	import { suggestionItems, type SuggestionItem } from '$lib/material/input/textRich/suggestion'
 
 	export let page: Page
 	export let charterAlreadyExist: boolean
@@ -57,8 +56,15 @@
 </script>
 
 <form method="post" action="?/update_page" use:enhance={form.submit} class="flex flex-col gap-2">
-	<div class="flex flex-wrap gap-2 items-end">
-		<InputText label="Titre" class="grow" key="title" value={page.title} on:input={handleChangeImediat} />
+	<div class="flex flex-wrap gap-2 items-start">
+		<InputText
+			label="Titre"
+			class="grow"
+			key="title"
+			value={page.title}
+			on:input={handleChangeImediat}
+			hint={page.description || ''}
+		/>
 
 		<FormControl label="Type de page">
 			<svelte:fragment slot="label_append">
@@ -72,7 +78,7 @@
 					<span>{home.label}</span>
 				</div>
 			{:else if page.type === 'email'}
-				<input type="hidden" name="type" value="home" />
+				<input type="hidden" name="type" value="email" />
 				<div class="menu-item rounded-lg disabled border bordered h-12">
 					<Icon path={email.icon} size={21} class="opacity-70" />
 					<span>{email.label}</span>
@@ -93,22 +99,33 @@
 	</div>
 
 	<input type="hidden" name="id" value={page.id} />
-	<input type="hidden" name="path" value={normalizePath(page.title)} />
 	<input type="hidden" name="eventId" value={page.eventId} />
+	{#if page.type !== 'email'}
+		<input type="hidden" name="path" value={normalizePath(page.title)} />
+	{/if}
 
 	{#key page.id}
-		<InputTextRich
-			key="content"
-			value={page.content}
-			on:change={handleChange}
-		/>
+		<InputTextRich key="content" value={page.content} on:change={handleChange} />
 	{/key}
 
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
 
-		<DeleteButton formaction="?/delete_page" disabled={page.type === 'home'} />
+		<DeleteButton
+			formaction="?/delete_page"
+			disabled={page.type === 'home' || page.type === 'email'}
+		/>
 		<div class="grow" />
+
+		{#if page.type !== 'email'}
+			<a
+				href={pagePath}
+				class="flex items-center gap-1 mr-auto link link-hover text-sm opacity-70 pr-4"
+			>
+				<Icon path={mdiLink} class="opacity-60 -rotate-45" size={18} />
+				<span>{pagePath}</span>
+			</a>
+		{/if}
 
 		{#if isDirty}
 			<div class="flex gap-1 items-center">
@@ -121,13 +138,5 @@
 				<span class="text-sm text-base-content/70">Sauvegardé</span>
 			</div>
 		{/if}
-
-		<a
-			href={pagePath}
-			class="flex items-center gap-1 mr-auto link link-hover text-sm opacity-70 pr-4"
-		>
-			<Icon path={mdiLink} class="opacity-60 -rotate-45" size={18} />
-			<span>{pagePath}</span>
-		</a>
 	</div>
 </form>

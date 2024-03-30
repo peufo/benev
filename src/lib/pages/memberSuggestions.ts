@@ -8,38 +8,43 @@ import { domain } from '$lib/email'
 import type { NestedPaths } from './nestedPaths'
 import { type Replacer } from './injectValues'
 
-const memberStaticSuggestions: Partial<Record<NestedPaths<MemberWithComputedValues>, string>> = {
-	'user.firstName': 'Prénom',
-	'user.lastName': 'Nom de famille',
-	'user.email': 'Email',
-	'user.phone': 'Téléphone',
-	'user.isTermsAccepted': 'Charte accepté',
-	roles: 'Rôles',
-	isMemberProfileCompleted: 'Profile de membre complet',
-	isUserProfileCompleted: "Profile d'utilisateur complet",
-	isValidedByEvent: 'Inscription validé par les organisateurs',
-	isValidedByUser: 'Inscription validé par le membre',
-	'event.name': "Nom de l'évènement",
+type DataWithMember = { member: MemberWithComputedValues }
+
+const memberStaticSuggestions: Partial<Record<NestedPaths<DataWithMember>, string>> = {
+	'member.user.firstName': 'Prénom',
+	'member.user.lastName': 'Nom de famille',
+	'member.user.email': 'Email',
+	'member.user.phone': 'Téléphone',
+	'member.user.isTermsAccepted': 'Charte accepté',
+	'member.roles': 'Rôles',
+	'member.isMemberProfileCompleted': 'Profile de membre complet',
+	'member.isUserProfileCompleted': "Profile d'utilisateur complet",
+	'member.isValidedByEvent': 'Inscription validé par les organisateurs',
+	'member.isValidedByUser': 'Inscription validé par le membre',
+	'member.event.name': "Nom de l'évènement",
 }
 
 // TODO: add 'subscribes', 'teams'
 const memberComputedSuggestions: Record<
 	string,
-	[string, (m: MemberWithComputedValues) => string | string[]]
+	[string, (data: DataWithMember) => string | string[]]
 > = {
-	age: ['Age', (m) => getAge(m.user.birthday)],
-	name: ['Nom et prénom', (m) => `${m.user.firstName} ${m.user.lastName}`],
+	age: ['Age', ({ member }) => getAge(member.user.birthday)],
+	name: ['Nom et prénom', ({ member }) => `${member.user.firstName} ${member.user.lastName}`],
 	address: [
 		'Adresse',
-		(m) =>
-			`${m.user.firstName} ${m.user.lastName}<br>${m.user.street}<br>${m.user.zipCode} ${m.user.city}`,
+		({ member }) =>
+			`${member.user.firstName} ${member.user.lastName}<br>${member.user.street}<br>${member.user.zipCode} ${member.user.city}`,
 	],
-	leaderOf: ['Secteurs à charge', (m) => m.leaderOf.map((t) => t.name)],
+	leaderOf: ['Secteurs à charge', ({ member }) => member.leaderOf.map((t) => t.name)],
 	me: [
 		'Lien vers le tableau de bord',
-		(m) => `<a href="${domain}/${m.eventId}/me">tableau de bord</a>`,
+		({ member }) => `<a href="${domain}/${member.eventId}/me">tableau de bord</a>`,
 	],
-	teams: ['Lien vers les secteurs', (m) => `<a href="${domain}/${m.eventId}/teams">secteurs</a>`],
+	teams: [
+		'Lien vers les secteurs',
+		({ member }) => `<a href="${domain}/${member.eventId}/teams">secteurs</a>`,
+	],
 }
 
 export function getMemberSuggestions(fields: Field[]): SuggestionItem[] {
@@ -50,7 +55,7 @@ export function getMemberSuggestions(fields: Field[]): SuggestionItem[] {
 	]
 }
 
-export function getMemberReplacers(member: MemberWithComputedValues): Replacer[] {
+export function getMemberReplacers({ member }: DataWithMember): Replacer[] {
 	return [
 		...Object.entries(memberStaticSuggestions).map(([id]) => ({
 			id,
@@ -58,7 +63,7 @@ export function getMemberReplacers(member: MemberWithComputedValues): Replacer[]
 		})),
 		...Object.entries(memberComputedSuggestions).map(([id, [_, getValue]]) => ({
 			id,
-			value: getValue(member),
+			value: getValue({ member }),
 		})),
 		...member.event.memberFields.map((field) => ({
 			id: `field_${field.id}`,

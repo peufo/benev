@@ -6,7 +6,6 @@ import type { Period, Subscribe, Team, User } from '@prisma/client'
 import { formatRange } from '$lib/formatRange'
 
 type SubscribeWithTeam = Subscribe & {
-	member: { user: User }
 	period: Period & { team: Team }
 }
 type WithMember<Data extends Record<string, unknown>> = { member: MemberWithComputedValues } & Data
@@ -14,9 +13,9 @@ type PropsOf<Keys extends string, U extends Record<Keys, Record<string, unknown>
 type EmailProps = PropsOf<
 	EmailEvent,
 	{
-		invitation_create: { authorName: string; tokenId: string }
+		invitation_create: { tokenId: string; authorName: string }
 		invitation_accept: {}
-		subscribe_request: { authorName: string; subscribe: SubscribeWithTeam }
+		subscribe_request: { subscribe: SubscribeWithTeam; authorName: string }
 		subscribe_accepted: { subscribe: SubscribeWithTeam }
 		subscribe_denied: { subscribe: SubscribeWithTeam }
 		subscribe_cancelled: { subscribe: SubscribeWithTeam }
@@ -40,7 +39,7 @@ const suggestionAuthorName: Suggestion<'invitation_create' | 'subscribe_request'
 	getValue: (data) => data.authorName,
 }
 
-const suggestionsPeriod: Suggestion<
+const suggestionsSubscribe: Suggestion<
 	'subscribe_request' | 'subscribe_accepted' | 'subscribe_cancelled' | 'subscribe_denied'
 >[] = [
 	{
@@ -70,10 +69,10 @@ export const emailSuggestions: EmailSuggestions = {
 		},
 	],
 	invitation_accept: [],
-	subscribe_request: [suggestionAuthorName, ...suggestionsPeriod],
-	subscribe_accepted: suggestionsPeriod,
-	subscribe_denied: [],
-	subscribe_cancelled: [],
+	subscribe_request: [suggestionAuthorName, ...suggestionsSubscribe],
+	subscribe_accepted: suggestionsSubscribe,
+	subscribe_denied: suggestionsSubscribe,
+	subscribe_cancelled: suggestionsSubscribe,
 }
 
 export const emailReplacers: EmailReplacers = Object.entries(emailSuggestions).reduce(

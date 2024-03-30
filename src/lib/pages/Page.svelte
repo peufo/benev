@@ -21,7 +21,7 @@
 
 	function transformPage(_html: string) {
 		if (page?.type !== 'member' || !member) return _html
-		const replacers = getMemberReplacers(member)
+		const replacers = getMemberReplacers({member})
 		return injectValues(_html, replacers)
 	}
 

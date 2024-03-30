@@ -9,7 +9,6 @@
 
 	export let value = ''
 	export let key = ''
-	export let valueAsHTML = false
 	export let classToolbar = ''
 
 	let element: HTMLDivElement
@@ -25,9 +24,10 @@
 	})
 
 	function initEditor() {
+		const valueAsHtml = !value.startsWith('{') && value !== 'null'
 		editor = new Editor({
 			element,
-			content: valueAsHTML ? value : jsonParse(value, undefined),
+			content: valueAsHtml ? value : jsonParse(value, undefined),
 			editorProps: {
 				attributes: {
 					class: 'prose max-w-[210mm] mx-auto focus:outline-none',
@@ -43,7 +43,8 @@
 
 	const updateValue = debounce(() => {
 			if (!editor) return
-			const newValue = valueAsHTML ? editor.getHTML() : JSON.stringify(editor.getJSON())
+			const newValue = JSON.stringify(editor.getJSON())
+			console.log(newValue)
 			if (newValue === value) return
 			value = newValue
 			dispatch('change')
