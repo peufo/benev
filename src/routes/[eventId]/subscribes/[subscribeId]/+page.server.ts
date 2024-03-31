@@ -1,16 +1,15 @@
 import { error } from '@sveltejs/kit'
 import type { Prisma, SubscribeState } from '@prisma/client'
+import { isFreeRange } from 'perod'
 import type { Action } from './$types'
 import {
 	prisma,
-	sendEmailComponent,
 	tryOrFail,
 	permission,
 	ensureLicenceMembers,
 	type MemberWithComputedValues,
 } from '$lib/server'
-import { EmailNewSubscribe, EmailSubscribeState, EmailSubscribeStateCancelled } from '$lib/email'
-import { isFreeRange } from 'perod'
+import { subscribeNotification } from '$lib/email/subscribeNotification'
 
 type Edtions = Record<SubscribeState, SubscribeState[]>
 const creatorEditions: Edtions = {
@@ -120,32 +119,19 @@ const setSubscribState: (state: SubscribeState) => Action =
 				to: isLeaderAction ? toMember : toLeaders,
 				replyTo: isLeaderAction ? toLeaders : toMember,
 			}
+			const subjects: Record<SubscribeState, string> = {
+				request: 'Nouvelle inscription',
+				accepted: 'Inscription acceptée',
+				denied: 'Inscription refusée',
+				cancelled: 'Inscription annulée',
+			}
 
 			if (emailOptions.to.length) {
-				switch (state) {
-					case 'cancelled':
-						await sendEmailComponent(EmailSubscribeStateCancelled, {
-							...emailOptions,
-							subject: `Inscription annulée`,
-							props: { subscribe },
-						})
-						break
-
-					case 'request':
-						await sendEmailComponent(EmailNewSubscribe, {
-							...emailOptions,
-							subject: 'Nouvelle inscription',
-							props: { subscribe, author: author.user },
-						})
-						break
-
-					default:
-						await sendEmailComponent(EmailSubscribeState, {
-							...emailOptions,
-							subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'déclinée'}`,
-							props: { subscribe },
-						})
-				}
+				subscribeNotification[state]({
+					...emailOptions,
+					subject: subjects[state],
+					props: { subscribe, authorName: `${author.user.firstName} ${author.user.lastName}` },
+				})
 			}
 		})
 	}

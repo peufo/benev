@@ -77,9 +77,10 @@ export const actions = {
 				: undefined
 
 			await sendEmailModel(eventId, 'invitation_create', {
+				from: member.event.name,
 				to: data.email,
 				replyTo: author.email,
-				subject: `${member.event.name} - Invitation`,
+				subject: 'Invitation',
 				props: {
 					tokenId,
 					authorName: `${author.firstName} ${author.lastName}`,
@@ -147,20 +148,22 @@ export const actions = {
 			})
 			const adminsEmail = admins.map((a) => a.user.email)
 
+			const emailOptions = {
+				from: member.event.name,
+				subject: 'Invitation acceptée',
+				props: { member },
+			}
+
 			await Promise.all([
 				sendEmailModel(eventId, 'invitation_accept', {
-					from: member.event.name,
+					...emailOptions,
 					to: member.user.email,
 					replyTo: adminsEmail,
-					subject: `${member.event.name} - Nouveau membre`,
-					props: { member },
 				}),
 				sendEmailComponent(EmailAcceptInviteNotification, {
-					from: member.event.name,
+					...emailOptions,
 					to: adminsEmail,
 					replyTo: member.user.email,
-					subject: `${member.event.name} - Nouveau membre`,
-					props: { member },
 				}),
 			])
 		}, data.redirectTo)

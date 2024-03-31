@@ -42,11 +42,13 @@ export const sendEmail = async ({ from, ...options }: SendMailOptions) => {
 	})
 }
 
+export type SendMailOptionsWithProps<Props extends any> = Omit<SendMailOptions, 'html'> & {
+	props: Props
+}
+
 export async function sendEmailComponent<Component extends ComponentType>(
 	component: Component,
-	options: Omit<SendMailOptions, 'html'> & {
-		props: ComponentProps<InstanceType<Component>>
-	}
+	options: SendMailOptionsWithProps<ComponentProps<InstanceType<Component>>>
 ) {
 	// @ts-ignore
 	const { html } = component.render(options.props)
@@ -59,9 +61,7 @@ export async function sendEmailComponent<Component extends ComponentType>(
 export async function sendEmailModel<EmailPath extends EmailEvent>(
 	eventId: string,
 	emailPath: EmailPath,
-	options: Omit<SendMailOptions, 'html'> & {
-		props: EmailModelProps[EmailPath]
-	}
+	options: SendMailOptionsWithProps<EmailModelProps[EmailPath]>
 ) {
 	const html = await renderEmailModel(eventId, emailPath, options.props)
 	return sendEmail({

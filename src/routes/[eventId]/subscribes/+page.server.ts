@@ -1,9 +1,9 @@
 import { error } from '@sveltejs/kit'
 import { isFreeRange } from 'perod'
 import { subscribeCreate } from '$lib/validation'
-import { parseFormData, permission, prisma, sendEmailComponent, tryOrFail } from '$lib/server'
-import { EmailNewSubscribe } from '$lib/email'
+import { parseFormData, permission, prisma, tryOrFail } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
+import { subscribeNotification } from '$lib/email/subscribeNotification'
 
 export const actions = {
 	new_subscribe: async ({ request, locals, params: { eventId } }) => {
@@ -94,12 +94,12 @@ export const actions = {
 			const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
 
 			if (to.length)
-				await sendEmailComponent(EmailNewSubscribe, {
+				subscribeNotification.request({
 					from: subscribe.period.team.event.name,
 					to,
 					replyTo,
 					subject: 'Nouvelle inscription',
-					props: { subscribe, author: session.user },
+					props: { subscribe, authorName: `${session.user.firstName} ${session.user.lastName}` },
 				})
 		})
 	},

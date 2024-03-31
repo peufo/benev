@@ -5,7 +5,7 @@ import type { EmailEvent } from '$lib/email/models'
 import type { Period, Subscribe, Team } from '@prisma/client'
 import { formatRange } from '$lib/formatRange'
 
-type SubscribeWithTeam = Subscribe & {
+export type SubscribeWithTeam = Subscribe & {
 	period: Period & { team: Team }
 }
 type PropsWithMember<Keys extends string, U extends Record<Keys, Record<string, unknown>>> = {
@@ -17,9 +17,9 @@ export type EmailModelProps = PropsWithMember<
 		invitation_create: { tokenId?: string; authorName: string }
 		invitation_accept: {}
 		subscribe_request: { subscribe: SubscribeWithTeam; authorName: string }
-		subscribe_accepted: { subscribe: SubscribeWithTeam }
-		subscribe_denied: { subscribe: SubscribeWithTeam }
-		subscribe_cancelled: { subscribe: SubscribeWithTeam }
+		subscribe_accepted: { subscribe: SubscribeWithTeam; authorName: string }
+		subscribe_denied: { subscribe: SubscribeWithTeam; authorName: string }
+		subscribe_cancelled: { subscribe: SubscribeWithTeam; authorName: string }
 	}
 >
 
