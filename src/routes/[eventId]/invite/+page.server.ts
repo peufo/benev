@@ -112,10 +112,11 @@ export const actions = {
 
 		return tryOrFail(async () => {
 			// Si le membre existe déjà, on met juste à jour sa validation
-			const memberAlready = await getMemberProfile({ eventId, userId })
-			if (memberAlready) {
+
+			const memberAlreadyExist = await prisma.member.findFirst({ where: { eventId, userId } })
+			if (memberAlreadyExist) {
 				await prisma.member.update({
-					where: { id: memberAlready.id },
+					where: { id: memberAlreadyExist.id },
 					data: {
 						isValidedByUser,
 						isValidedByEvent,

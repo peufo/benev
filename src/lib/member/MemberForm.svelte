@@ -7,7 +7,7 @@
 	import { useForm } from '$lib/validation'
 	import { eventPath, urlParam } from '$lib/store'
 	import { DeleteButton } from '$lib/material'
-	import { Page, tiptap } from '$lib/pages'
+	import { tiptap } from '$lib/pages'
 
 	export let event: Event
 	export let userId: string
