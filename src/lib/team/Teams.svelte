@@ -9,6 +9,7 @@
 	import { eventPath, display, onlyAvailable } from '$lib/store'
 	import { rowLink, tip } from '$lib/action'
 	import Progress from '$lib/Progress.svelte'
+	import { formatRange, formatRangeShort } from '$lib/formatRange'
 
 	export let teams: (TeamWithComputedValues & {
 		leaders: (Member & {
@@ -35,10 +36,11 @@
 		>
 			{#each _teams as team (team.id)}
 				<CardLink href="{$eventPath}/teams/{team.id}" class="p-1">
-					<div class="flex gap-2 items-center mb-2">
+					<div class="flex gap-2 items-center">
 						<h2 class="font-medium">
 							{team.name}
 						</h2>
+						<div class="grow"></div>
 						{#if team.closeSubscribing && event.selfSubscribeAllowed}
 							<span
 								class="badge ml-auto opacity-80 z-10"
@@ -63,6 +65,12 @@
 							</span>
 						{/if}
 					</div>
+					{#if team.range}
+						<p class="text-xs opacity-60 font-semibold mt-1 mb-2">
+							{formatRange(team.range)}
+						</p>
+					{/if}
+
 					<div class="grid grid-cols-2 gap-2 items-start pt-2">
 						<div class="flex flex-wrap gap-1">
 							{#each team.leaders as member}
@@ -104,7 +112,12 @@
 				{#each _teams as team (team.id)}
 					<tr use:rowLink={{ href: `${$eventPath}/teams/${team.id}` }}>
 						<td>
-							{team.name}
+							<span>{team.name}</span>
+							{#if team.range}
+								<div class="text-xs opacity-60 font-semibold">
+									{formatRange(team.range)}
+								</div>
+							{/if}
 						</td>
 						<td data-prepend>
 							{#each team.leaders as member}

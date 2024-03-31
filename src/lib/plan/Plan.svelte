@@ -3,15 +3,16 @@
 	import dayjs, { type Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	import type { Period, Subscribe, Team } from '@prisma/client'
+	import { mdiPlus } from '@mdi/js'
+	import { page } from '$app/stores'
 	import PeriodCard from '$lib/plan/PeriodCard.svelte'
 	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
 	import { ContextMenu, Icon } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
-	import { newPeriod } from './newPeriod'
-	import { mdiPlus } from '@mdi/js'
-	import { page } from '$app/stores'
 	import PeriodForm from '$lib/PeriodForm.svelte'
+	import { newPeriod } from './newPeriod'
+	import { getRangeOfTeams } from './getRange'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -46,14 +47,7 @@
 	let days: Dayjs[] = []
 
 	$: {
-		const periods = teams
-			.map(({ periods }) => periods.map((p) => [p.start.getTime(), p.end.getTime()]))
-			.flat(2)
-			.sort()
-		range = {
-			start: dayjs(periods[0]).startOf('day'),
-			end: dayjs(periods.at(-1)).endOf('day'),
-		}
+		range = getRangeOfTeams(teams)
 		const newDays: Dayjs[] = []
 		for (let day = range.start; day.isBefore(range.end); day = day.add(1, 'day')) {
 			newDays.push(day)

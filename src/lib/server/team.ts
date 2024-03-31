@@ -1,4 +1,6 @@
+import { getRangeOfTeam } from '$lib/plan/getRange'
 import type { Period, Subscribe, Team } from '@prisma/client'
+import type { Dayjs } from 'dayjs'
 
 export type TeamWithPeriods = Team & {
 	periods: (Period & { subscribes: Subscribe[] })[]
@@ -10,6 +12,7 @@ export type TeamWithComputedValues = TeamWithPeriods & {
 	nbSubscribesAccepted: number
 	nbSubscribesRequest: number
 	isAvailable: boolean
+	range: { start: Date; end: Date } | null
 }
 
 export function addTeamComputedValues<T extends TeamWithPeriods>(
@@ -28,5 +31,6 @@ export function addTeamComputedValues<T extends TeamWithPeriods>(
 		nbSubscribesAccepted,
 		nbSubscribesRequest,
 		isAvailable: nbSubscribes < maxSubscribes,
+		range: getRangeOfTeam(team),
 	}
 }
