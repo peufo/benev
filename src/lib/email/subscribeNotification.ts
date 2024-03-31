@@ -19,7 +19,6 @@ type SubscribeNotification<State extends SubscribeState> = (
 
 export const subscribeNotification: { [S in SubscribeState]: SubscribeNotification<S> } = {
 	async request({ props, ...restOptions }) {
-		console.log('REQUEST', restOptions)
 		const member = await getMemberProfile({ id: props.subscribe.memberId })
 		const options = { ...restOptions, props: { ...props, member } }
 		if (props.subscribe.createdBy === 'user')
@@ -41,7 +40,6 @@ export const subscribeNotification: { [S in SubscribeState]: SubscribeNotificati
 		else return await sendEmailModel(member.eventId, 'subscribe_denied', options)
 	},
 	async cancelled({ props, ...restOptions }) {
-		console.log('CANCELLED', restOptions)
 		const member = await getMemberProfile({ id: props.subscribe.memberId })
 		const options = { ...restOptions, props: { ...props, member } }
 		if (props.subscribe.createdBy === 'user')
