@@ -10,7 +10,7 @@
 	const redirectTo = $page.url.searchParams.get('redirectTo')
 </script>
 
-<div class="card bg-base-100 max-w-md m-auto">
+<div class="card bg-base-100 max-w-md m-auto shadow-lg">
 	<form method="post" class="card-body" use:enhance={form.submit}>
 		<InputPassword key="password" label="Nouveau mot de passe" autocomplete="new-password" />
 		{#if redirectTo}
