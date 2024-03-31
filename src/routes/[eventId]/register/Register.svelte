@@ -18,6 +18,8 @@
 	export let member: MemberProfile | undefined
 	export let charter: Page | null
 
+	console.log(member)
+
 	const steps = ['Connexion', 'Adhésion', 'Mon compte']
 	const isMemberProfileRequired = !!event.memberFields.filter((f) => f.memberCanWrite).length
 	if (isMemberProfileRequired) steps.push(`Profil ${event.name}`)

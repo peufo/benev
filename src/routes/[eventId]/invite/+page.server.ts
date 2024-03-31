@@ -119,7 +119,7 @@ export const actions = {
 					where: { id: memberAlreadyExist.id },
 					data: {
 						isValidedByUser,
-						isValidedByEvent,
+						isValidedByEvent: isValidedByEvent || memberAlreadyExist.isValidedByEvent,
 					},
 				})
 				await ensureLicenceMembers(eventId)
