@@ -70,7 +70,7 @@
 												<td
 													style="font-size: 14px;padding-bottom:8px;padding-left:4px;padding-right:4px;padding-top:8px"
 												>
-													<slot />
+													<slot >__SLOT__</slot>
 												</td>
 											</tr>
 										</tbody>

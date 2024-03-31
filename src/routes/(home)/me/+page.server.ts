@@ -4,7 +4,7 @@ import {
 	generateToken,
 	parseFormData,
 	prisma,
-	sendEmailTemplate,
+	sendEmailComponent,
 	tryOrFail,
 	createAvatarPlaceholder,
 	media,
@@ -87,7 +87,7 @@ export const actions = {
 				select: { id: true },
 			})
 			const tokenId = await generateToken('passwordReset', user.id)
-			await sendEmailTemplate(EmailPasswordReset, {
+			await sendEmailComponent(EmailPasswordReset, {
 				to: data.email,
 				subject: 'Reinitialisation du mot de passe',
 				props: { tokenId },
@@ -181,7 +181,7 @@ async function sendVerificationEmail(
 	subject = 'Verification de ton Email'
 ) {
 	const tokenId = await generateToken('emailVerification', user.id)
-	await sendEmailTemplate(EmailVerificationLink, {
+	await sendEmailComponent(EmailVerificationLink, {
 		to: user.email,
 		subject,
 		props: { tokenId },

@@ -19,8 +19,8 @@ const memberStaticSuggestions: Partial<Record<NestedPaths<DataWithMember>, strin
 	'member.roles': 'Rôles',
 	'member.isMemberProfileCompleted': 'Profile de membre complet',
 	'member.isUserProfileCompleted': "Profile d'utilisateur complet",
-	'member.isValidedByEvent': 'Inscription validé par les organisateurs',
-	'member.isValidedByUser': 'Inscription validé par le membre',
+	'member.isValidedByEvent': 'Adhésion validé par les organisateurs',
+	'member.isValidedByUser': 'Adhésion validé par le membre',
 	'member.event.name': "Nom de l'évènement",
 }
 

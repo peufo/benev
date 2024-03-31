@@ -2,18 +2,19 @@ import type { MemberWithComputedValues } from '$lib/server'
 import { domain } from '$lib/email'
 import { type Replacer } from './injectValues'
 import type { EmailEvent } from '$lib/email/models'
-import type { Period, Subscribe, Team, User } from '@prisma/client'
+import type { Period, Subscribe, Team } from '@prisma/client'
 import { formatRange } from '$lib/formatRange'
 
 type SubscribeWithTeam = Subscribe & {
 	period: Period & { team: Team }
 }
-type WithMember<Data extends Record<string, unknown>> = { member: MemberWithComputedValues } & Data
-type PropsOf<Keys extends string, U extends Record<Keys, Record<string, unknown>>> = U
-type EmailProps = PropsOf<
+type PropsWithMember<Keys extends string, U extends Record<Keys, Record<string, unknown>>> = {
+	[K in keyof U]: U[K] & { member: MemberWithComputedValues }
+}
+export type EmailModelProps = PropsWithMember<
 	EmailEvent,
 	{
-		invitation_create: { tokenId: string; authorName: string }
+		invitation_create: { tokenId?: string; authorName: string }
 		invitation_accept: {}
 		subscribe_request: { subscribe: SubscribeWithTeam; authorName: string }
 		subscribe_accepted: { subscribe: SubscribeWithTeam }
@@ -21,16 +22,17 @@ type EmailProps = PropsOf<
 		subscribe_cancelled: { subscribe: SubscribeWithTeam }
 	}
 >
+
 type Suggestion<Path extends EmailEvent> = {
 	id: string
 	label: string
-	getValue: (data: WithMember<EmailProps[Path]>) => string
+	getValue: (data: EmailModelProps[Path]) => string
 }
 type EmailSuggestions = {
 	[Path in EmailEvent]: Suggestion<Path>[]
 }
 type EmailReplacers = {
-	[Path in EmailEvent]: (data: WithMember<EmailProps[Path]>) => Replacer[]
+	[Path in EmailEvent]: (data: EmailModelProps[Path]) => Replacer[]
 }
 
 const suggestionAuthorName: Suggestion<'invitation_create' | 'subscribe_request'> = {

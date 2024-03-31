@@ -6,7 +6,7 @@ import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
 
 import { LICENCE_EVENT_PRICE, LICENCE_MEMBER_PRICE } from '$env/static/private'
-import { prisma, sendEmailTemplate, ensureLicenceMembers, createSSE } from '$lib/server'
+import { prisma, sendEmailComponent, ensureLicenceMembers, createSSE } from '$lib/server'
 import { EmailCheckoutValidation } from '$lib/email'
 
 export const stripe = new Stripe(PRIVATE_STRIPE_KEY)
@@ -101,14 +101,14 @@ export const checkout = {
 				})
 
 				await Promise.all([
-					sendEmailTemplate(EmailCheckoutValidation, {
+					sendEmailComponent(EmailCheckoutValidation, {
 						to: checkoutCreated.user.email,
 						subject: 'Merci pour ton achat',
 						props: {
 							checkout: checkoutCreated,
 						},
 					}),
-					sendEmailTemplate(EmailCheckoutValidation, {
+					sendEmailComponent(EmailCheckoutValidation, {
 						to: ROOT_USER,
 						subject: 'Nouvel achat de licence',
 						props: {

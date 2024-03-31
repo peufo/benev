@@ -3,7 +3,7 @@ import type { Prisma, SubscribeState } from '@prisma/client'
 import type { Action } from './$types'
 import {
 	prisma,
-	sendEmailTemplate,
+	sendEmailComponent,
 	tryOrFail,
 	permission,
 	ensureLicenceMembers,
@@ -124,7 +124,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 			if (emailOptions.to.length) {
 				switch (state) {
 					case 'cancelled':
-						await sendEmailTemplate(EmailSubscribeStateCancelled, {
+						await sendEmailComponent(EmailSubscribeStateCancelled, {
 							...emailOptions,
 							subject: `Inscription annulée`,
 							props: { subscribe },
@@ -132,7 +132,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 						break
 
 					case 'request':
-						await sendEmailTemplate(EmailNewSubscribe, {
+						await sendEmailComponent(EmailNewSubscribe, {
 							...emailOptions,
 							subject: 'Nouvelle inscription',
 							props: { subscribe, author: author.user },
@@ -140,7 +140,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 						break
 
 					default:
-						await sendEmailTemplate(EmailSubscribeState, {
+						await sendEmailComponent(EmailSubscribeState, {
 							...emailOptions,
 							subject: `Inscription ${subscribe.state === 'accepted' ? 'confirmée' : 'déclinée'}`,
 							props: { subscribe },

@@ -4,17 +4,19 @@ import {
 	parseFormData,
 	prisma,
 	tryOrFail,
-	sendEmailTemplate,
+	sendEmailComponent,
+	sendEmailModel,
 	auth,
 	generateToken,
 	permission,
 	createAvatarPlaceholder,
 	ensureLicenceMembers,
+	getMemberProfile,
 } from '$lib/server'
-import { EmailAcceptInvite, EmailAcceptInviteNotification, EmailNewInvite } from '$lib/email'
+import { EmailAcceptInviteNotification } from '$lib/email'
 
 export const load = async ({ params }) => {
-	redirect(301, `/${params.eventId}/me`);
+	redirect(301, `/${params.eventId}/me`)
 }
 
 export const actions = {
@@ -50,22 +52,21 @@ export const actions = {
 			}
 			const userId = user.id
 
-			const member = await prisma.member.findFirst({
-				where: { userId, eventId },
-			})
-			if (member) throw new Error('Member already exists')
+			if (
+				await prisma.member.findFirst({
+					where: { userId, eventId },
+				})
+			)
+				throw new Error('Member already exists')
 
-			const newMember = await prisma.member.create({
+			const { id } = await prisma.member.create({
 				data: {
 					userId,
 					eventId,
 					isValidedByEvent: true,
 				},
-				include: {
-					user: true,
-					event: true,
-				},
 			})
+			const member = await getMemberProfile({ id })
 
 			const tokenId = isNewUser
 				? await generateToken(
@@ -75,23 +76,24 @@ export const actions = {
 				  )
 				: undefined
 
-			await sendEmailTemplate(EmailNewInvite, {
+			await sendEmailModel(eventId, 'invitation_create', {
 				to: data.email,
 				replyTo: author.email,
-				subject: `${newMember.event.name} - Invitation`,
+				subject: `${member.event.name} - Invitation`,
 				props: {
 					tokenId,
-					member: newMember,
 					authorName: `${author.firstName} ${author.lastName}`,
+					member,
 				},
 			})
-			return newMember
+
+			return member
 		})
 	},
 
 	accept_invite: async ({ request, locals, params: { eventId } }) => {
 		const session = await locals.auth.validate()
-		if (!session) error(401);
+		if (!session) error(401)
 
 		const { err, data } = await parseFormData(request, {
 			userId: z.string(),
@@ -109,12 +111,10 @@ export const actions = {
 
 		return tryOrFail(async () => {
 			// Si le membre existe déjà, on met juste à jour sa validation
-			const member = await prisma.member.findUnique({
-				where: { userId_eventId: { userId, eventId } },
-			})
-			if (member) {
+			const memberAlready = await getMemberProfile({ eventId, userId })
+			if (memberAlready) {
 				await prisma.member.update({
-					where: { id: member.id },
+					where: { id: memberAlready.id },
 					data: {
 						isValidedByUser,
 						isValidedByEvent,
@@ -129,24 +129,17 @@ export const actions = {
 				where: { id: eventId },
 				select: { selfRegisterAllowed: true },
 			})
-			if (!selfRegisterAllowed) error(403);
+			if (!selfRegisterAllowed) error(403)
 
-			const newMember = await prisma.member.create({
+			const { id } = await prisma.member.create({
 				data: {
 					userId,
 					eventId,
 					isValidedByUser,
 					isValidedByEvent,
 				},
-				include: {
-					user: true,
-					event: {
-						include: {
-							memberFields: { orderBy: { position: 'asc' } },
-						},
-					},
-				},
 			})
+			const member = await getMemberProfile({ id })
 
 			const admins = await prisma.member.findMany({
 				where: { eventId, isAdmin: true },
@@ -155,19 +148,19 @@ export const actions = {
 			const adminsEmail = admins.map((a) => a.user.email)
 
 			await Promise.all([
-				sendEmailTemplate(EmailAcceptInvite, {
-					from: newMember.event.name,
-					to: newMember.user.email,
+				sendEmailModel(eventId, 'invitation_accept', {
+					from: member.event.name,
+					to: member.user.email,
 					replyTo: adminsEmail,
-					subject: `${newMember.event.name} - Nouveau membre`,
-					props: { member: newMember },
+					subject: `${member.event.name} - Nouveau membre`,
+					props: { member },
 				}),
-				sendEmailTemplate(EmailAcceptInviteNotification, {
-					from: newMember.event.name,
+				sendEmailComponent(EmailAcceptInviteNotification, {
+					from: member.event.name,
 					to: adminsEmail,
-					replyTo: newMember.user.email,
-					subject: `${newMember.event.name} - Nouveau membre`,
-					props: { member: newMember },
+					replyTo: member.user.email,
+					subject: `${member.event.name} - Nouveau membre`,
+					props: { member },
 				}),
 			])
 		}, data.redirectTo)

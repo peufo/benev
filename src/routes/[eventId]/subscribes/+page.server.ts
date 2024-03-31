@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { isFreeRange } from 'perod'
 import { subscribeCreate } from '$lib/validation'
-import { parseFormData, permission, prisma, sendEmailTemplate, tryOrFail } from '$lib/server'
+import { parseFormData, permission, prisma, sendEmailComponent, tryOrFail } from '$lib/server'
 import { EmailNewSubscribe } from '$lib/email'
 import { isMemberAllowed } from '$lib/member'
 
@@ -94,7 +94,7 @@ export const actions = {
 			const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
 
 			if (to.length)
-				await sendEmailTemplate(EmailNewSubscribe, {
+				await sendEmailComponent(EmailNewSubscribe, {
 					from: subscribe.period.team.event.name,
 					to,
 					replyTo,

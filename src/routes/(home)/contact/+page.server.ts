@@ -4,7 +4,7 @@ import {
 	parseFormData,
 	prisma,
 	sendEmail,
-	sendEmailTemplate,
+	sendEmailComponent,
 	tryOrFail,
 } from '$lib/server'
 import { z } from '$lib/validation'
@@ -43,7 +43,7 @@ export const actions = {
 					subject: data.subject,
 					text: data.content,
 				}),
-				sendEmailTemplate(EmailBasic, {
+				sendEmailComponent(EmailBasic, {
 					from: `Nouvelle prise de contact avec benev.io`,
 					to: session.user.email,
 					subject: `Prise de contact avec benev.io`,

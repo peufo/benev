@@ -1,4 +1,4 @@
-import { sendEmailTemplate, prisma } from '$lib/server'
+import { sendEmailComponent, prisma } from '$lib/server'
 import { EmailProspect } from '$lib/email'
 
 import { eventEmiter } from './eventEmitter'
@@ -6,7 +6,7 @@ import type { Prospect } from '@prisma/client'
 
 export async function sendProspectEmails(prospects: Prospect[]) {
 	for (const prospect of prospects) {
-		await sendEmailTemplate(EmailProspect, {
+		await sendEmailComponent(EmailProspect, {
 			to: prospect.email,
 			subject: 'Votre plateforme de gestion de bénévole',
 			props: { prospect },

@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { EmailAcceptInvite, EmailAcceptInviteNotification, EmailNewInvite } from '$lib/email'
+	import { EmailAcceptInviteNotification } from '$lib/email'
 
 	export let data
 </script>
 
-<EmailNewInvite {...data} authorName="Magicarp" tokenId="prout" />
+{@html data.emailInvitation}
+{@html data.emailInvitationAccept}
 
-<EmailAcceptInvite {...data} />
+<hr>
 
 <EmailAcceptInviteNotification {...data} />

@@ -12,9 +12,11 @@ export function injectValues(html: string, replacers: Replacer[]): string {
 }
 
 function valueToHTML(value: undefined | number | boolean | string | string[]): string {
-	if (typeof value === 'undefined') return '[Valeur non définie]'
+	if (value === undefined || value === null) return '[Valeur non définie]'
 	if (typeof value === 'string') return value
 	if (typeof value === 'number') return value.toString()
 	if (typeof value === 'boolean') return value ? 'Oui' : 'Non'
-	return '<ul>' + value.map((v) => `<li>${v}</li>`).join('') + '</ul>'
+	if (Array.isArray(value)) return '<ul>' + value.map((v) => `<li>${v}</li>`).join('') + '</ul>'
+	console.warn('valueToHTML failed', value)
+	return ''
 }
