@@ -11,7 +11,8 @@ export function injectValues(html: string, replacers: Replacer[]): string {
 	return html
 }
 
-function valueToHTML(value: number | boolean | string | string[]): string {
+function valueToHTML(value: undefined | number | boolean | string | string[]): string {
+	if (typeof value === 'undefined') return '[Valeur non définie]'
 	if (typeof value === 'string') return value
 	if (typeof value === 'number') return value.toString()
 	if (typeof value === 'boolean') return value ? 'Oui' : 'Non'

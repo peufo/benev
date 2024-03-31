@@ -59,7 +59,7 @@ export function getMemberReplacers({ member }: DataWithMember): Replacer[] {
 	return [
 		...Object.entries(memberStaticSuggestions).map(([id]) => ({
 			id,
-			value: objectPath.get(member, id),
+			value: objectPath.get({ member }, id),
 		})),
 		...Object.entries(memberComputedSuggestions).map(([id, [_, getValue]]) => ({
 			id,
