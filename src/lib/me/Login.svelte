@@ -9,7 +9,10 @@
 	import { tip } from '$lib/action'
 	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
 
+	export let onSuccess:((action: URL, data?: Record<string, unknown> | undefined) => any) | undefined = undefined
+
 	const form = useForm({
+		onSuccess,
 		successMessage(action) {
 			if (action.search === '?/reset_password') {
 				recorverDialog.close()
