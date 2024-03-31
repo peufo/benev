@@ -60,7 +60,9 @@
 </Header>
 
 <div class="flex grow items-start relative p-2 gap-4">
-	<Drawer />
+	{#if data.member?.roles.includes('leader')}
+		<Drawer />
+	{/if}
 
 	<div class="grow mx-auto">
 		<main class="grow">
