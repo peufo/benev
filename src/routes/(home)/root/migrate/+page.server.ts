@@ -1,3 +1,4 @@
+import { defaultEmailModels } from '$lib/email/models.js'
 import { jsonParse } from '$lib/jsonParse.js'
 import { prisma, tryOrFail } from '$lib/server'
 
@@ -16,16 +17,22 @@ export const actions = {
 			return
 		})
 	},
-	generate_all_member_profil: async () => {
-		const members = await prisma.member.findMany()
+	generate_emails_model: async () => {
 		return tryOrFail(async () => {
+			const events = await prisma.event.findMany({
+				include: { pages: { where: { type: 'email' } } },
+			})
 			await Promise.all(
-				members.map(({ id, profileJson }) => {
-					if (profileJson) return
-					return prisma.member.update({ where: { id }, data: { profileJson: {} } })
+				events.map((event) => {
+					const emails = defaultEmailModels.filter(
+						(model) => !event.pages.find((p) => p.path === model.path)
+					)
+					return prisma.event.update({
+						where: { id: event.id },
+						data: { pages: { createMany: { data: emails } } },
+					})
 				})
 			)
-			return
 		})
 	},
 }

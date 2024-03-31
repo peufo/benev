@@ -10,7 +10,9 @@
 			<button formaction="?/generate_all_avatars" class="btn"> Genérer tout les avatars </button>
 		</form>
 		<form method="post" class="flex flex-col gap-2">
-			<button formaction="?/generate_all_member_profil" class="btn"> Générer les valeur de profil par défaut</button>
+			<button formaction="?/generate_emails_model" class="btn"> 
+				Générer les models d'emails
+			</button>
 		</form>
 	</Card>
 </div>
