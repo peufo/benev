@@ -234,6 +234,7 @@ model Page {
 
   title String
   path  String @default("")
+  index Int    @default(0)
 
   type        PageType @default(public)
   content     String   @db.Text

@@ -6,8 +6,10 @@ export const prisma = new PrismaClient().$extends({
 		event: {
 			async delete({ args: { where } }) {
 				const event = await prisma.event.findUniqueOrThrow({ where })
-				const id = `deleted_${event.id}_${createId()}`
-				await prisma.event.update({ where, data: { id, deletedAt: new Date() } })
+				const deletedId = createId()
+				const id = `deleted_${event.id}_${deletedId}`
+				const name = `deleted_${event.name}_${deletedId}`
+				await prisma.event.update({ where, data: { id, name, deletedAt: new Date() } })
 				return true
 			},
 		},
