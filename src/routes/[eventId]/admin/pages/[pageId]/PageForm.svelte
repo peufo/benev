@@ -56,7 +56,7 @@
 </script>
 
 <form method="post" action="?/update_page" use:enhance={form.submit} class="flex flex-col gap-2">
-	<div class="flex flex-wrap gap-2 items-start">
+	<div class="flex gap-2 items-start">
 		<InputText
 			label="Titre"
 			class="grow"
