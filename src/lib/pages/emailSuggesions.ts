@@ -64,7 +64,7 @@ export const emailSuggestions: EmailSuggestions = {
 			label: "Lien pour accepter l'invitation",
 			getValue: (data) => {
 				const href = data.tokenId
-					? `${domain}/token/${data.tokenId}/reset_password?redirectTo=/${data.member.eventId}/me`
+					? `${domain}/token/${data.tokenId}/reset_password?redirectTo=/${data.member.eventId}/me&newUser=${data.member.user.firstName}&eventName=${data.member.event.name}`
 					: `${domain}/${data.member.eventId}/me`
 				return `<a href="${href}" data-sveltekit-preload-data="off">ce lien</a>`
 			},

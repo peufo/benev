@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
 	import { enhance } from '$app/forms'
-	import { InputText, InputPassword, Icon, Dialog } from '$lib/material'
+	import { InputText, InputPassword, Dialog } from '$lib/material'
 	import { useForm } from '$lib/validation'
 	import { page } from '$app/stores'
-	import googleLogo from '$lib/assets/google.svg'
-	import { mdiGithub } from '@mdi/js'
-	import { tip } from '$lib/action'
-	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
 
-	export let onSuccess:((action: URL, data?: Record<string, unknown> | undefined) => any) | undefined = undefined
+	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
+	import { Oauth } from '$lib/me'
+
+	export let onSuccess:
+		| ((action: URL, data?: Record<string, unknown> | undefined) => any)
+		| undefined = undefined
 
 	const form = useForm({
 		onSuccess,
@@ -119,26 +120,7 @@
 		</form>
 
 		<div class="border border-t-0 rounded-b-2xl">
-			<div class="flex p-4 gap-4 justify-center">
-				<a
-					href="/auth/google"
-					class="btn btn-square"
-					data-sveltekit-preload-data="off"
-					data-sveltekit-preload-code="off"
-					use:tip={{ content: 'Connexion avec Google' }}
-				>
-					<img src={googleLogo} alt="Logo Google" />
-				</a>
-
-				<a
-					href="/auth/github"
-					class="btn btn-square"
-					data-sveltekit-preload-data="off"
-					data-sveltekit-preload-code="off"
-				>
-					<Icon path={mdiGithub} title="Connexion avec Github" />
-				</a>
-			</div>
+			<Oauth />
 
 			<div class="text-center text-xs text-base-content/80 pb-4">
 				En te connectant, tu acceptes
