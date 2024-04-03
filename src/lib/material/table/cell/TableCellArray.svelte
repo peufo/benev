@@ -4,7 +4,7 @@
 
 <td>
 	{#each value as v}
-		<span class="badge badge-sm mr-1 whitespace-nowrap">
+		<span class="badge mr-1 whitespace-nowrap">
 			{v}
 		</span>
 	{/each}

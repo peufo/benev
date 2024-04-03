@@ -15,7 +15,6 @@ export const load = async ({ parent }) => {
 	const membersWithRole = members
 		.map(addMemberComputedValues)
 		.map((member) => hidePrivateProfilValues(member))
-		.filter(({ event, roles }) => event.state !== 'draft' || roles.includes('leader'))
 
 	return {
 		members: membersWithRole,

@@ -1,7 +1,15 @@
 import type { ZodRawShape } from 'zod'
 import { z } from '$lib/validation'
 import dayjs from 'dayjs'
-import type { Event, Field, FieldType, Period, Prisma } from '@prisma/client'
+import type {
+	Event,
+	Field,
+	FieldType,
+	Period,
+	Prisma,
+	Subscribe,
+	SubscribeState,
+} from '@prisma/client'
 import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
@@ -52,6 +60,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 
 	if (data.subscribes_teams) {
 		subscribesFilters.push({
+			state: 'accepted',
 			period: { teamId: { in: data.subscribes_teams } },
 		})
 	}
@@ -59,6 +68,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	if (data.subscribes_range) {
 		const { start, end } = data.subscribes_range
 		subscribesFilters.push({
+			state: 'accepted',
 			period: {
 				...(start && { end: { gte: start } }),
 				...(end && { start: { lte: end } }),
@@ -189,10 +199,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		.then((res) =>
 			res.map((member) => ({
 				...addMemberComputedValues({ ...member, event }),
-				workTime: member.subscribes.reduce((acc, { period }) => {
-					const time = period.end.getTime() - period.start.getTime()
-					return acc + time
-				}, 0),
+				workTime: getWorkTime(member.subscribes, 'accepted'),
+				workTimeRequest: getWorkTime(member.subscribes, 'request'),
 			}))
 		)
 
@@ -201,8 +209,10 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 
 		if (data.subscribes_count) {
 			const { min, max } = data.subscribes_count
-			if (min !== undefined) conditions.push((m) => min <= m.subscribes.length)
-			if (max !== undefined) conditions.push((m) => max >= m.subscribes.length)
+			if (min !== undefined)
+				conditions.push((m) => min <= m.subscribes.filter((s) => s.state === 'accepted').length)
+			if (max !== undefined)
+				conditions.push((m) => max >= m.subscribes.filter((s) => s.state === 'accepted').length)
 		}
 
 		if (data.subscribes_hours) {
@@ -292,4 +302,16 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 				.filter(Boolean),
 		},
 	}
+}
+
+function getWorkTime(
+	subscribes: (Subscribe & { period: Period })[],
+	state: SubscribeState
+): number {
+	return subscribes
+		.filter((sub) => sub.state === state)
+		.reduce((acc, { period }) => {
+			const time = period.end.getTime() - period.start.getTime()
+			return acc + time
+		}, 0)
 }
