@@ -14,7 +14,7 @@ export const actions = {
 		if (err) return err
 
 		return tryOrFail(async () => {
-			const [period, member] = await Promise.all([
+			const [period, memberAuthor, subscribes] = await Promise.all([
 				prisma.period.findUniqueOrThrow({
 					where: { id: data.periodId },
 					include: {
@@ -24,14 +24,14 @@ export const actions = {
 				}),
 				prisma.member.findUniqueOrThrow({
 					where: { userId_eventId: { userId: session.user.id, eventId } },
-					include: {
-						subscribes: {
-							where: { state: { in: ['accepted', 'request'] } },
-							include: { period: true },
-						},
-						event: true,
-						user: true,
+					include: { event: true, user: true },
+				}),
+				prisma.subscribe.findMany({
+					where: {
+						memberId: data.memberId,
+						state: { in: ['accepted', 'request'] },
 					},
+					include: { period: true },
 				}),
 			])
 
@@ -45,24 +45,24 @@ export const actions = {
 				.leaderOfTeam(period.teamId, locals)
 				.then(() => true)
 				.catch(() => false)
-			const isSelfSubscribe = data.memberId === member.id
+			const isSelfSubscribe = data.memberId === memberAuthor.id
 			if (!_isLeader && !isSelfSubscribe) error(403)
 
 			// Check if self subscribe conditions is respected
 			if (!_isLeader) {
-				if (!member.event.selfSubscribeAllowed) error(403)
-				const closeSubscribing = period.team.closeSubscribing || member.event.closeSubscribing
+				if (!memberAuthor.event.selfSubscribeAllowed) error(403)
+				const closeSubscribing = period.team.closeSubscribing || memberAuthor.event.closeSubscribing
 				const DAY = 1000 * 60 * 60 * 24
 				if (closeSubscribing && closeSubscribing.getTime() < new Date().getTime() - DAY) error(403)
 
-				if (!isMemberAllowed(period.team.conditions, member)) error(403)
+				if (!isMemberAllowed(period.team.conditions, memberAuthor)) error(403)
 			}
 
 			// Check if member is free in this period
-			const memberPeriods = member.subscribes.map((sub) => sub.period)
+			const memberPeriods = subscribes.map((sub) => sub.period)
 			if (!isFreeRange(period, memberPeriods)) {
-				const startMessage = isSelfSubscribe ? 'You are' : 'This member is'
-				error(403, `${startMessage} already busy during this period`)
+				const startMessage = isSelfSubscribe ? 'Tu es' : 'Ce membre est'
+				error(403, `${startMessage} déjà occuper durant cette période`)
 			}
 
 			const subscribe = await prisma.subscribe.create({
@@ -94,13 +94,15 @@ export const actions = {
 			const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
 
 			if (to.length)
-				subscribeNotification.request({
-					from: subscribe.period.team.event.name,
-					to,
-					replyTo,
-					subject: 'Nouvelle inscription',
-					props: { subscribe, authorName: `${session.user.firstName} ${session.user.lastName}` },
-				})
+				subscribeNotification
+					.request({
+						from: subscribe.period.team.event.name,
+						to,
+						replyTo,
+						subject: 'Nouvelle inscription',
+						props: { subscribe, authorName: `${session.user.firstName} ${session.user.lastName}` },
+					})
+					.catch(console.error)
 		})
 	},
 }
