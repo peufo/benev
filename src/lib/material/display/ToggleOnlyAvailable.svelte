@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { mdiEyeCheckOutline, mdiEyeOutline } from '@mdi/js'
-	import { TabsSmall } from '$lib/material'
+	import { TabsIcon } from 'fuma'
 </script>
 
-<TabsSmall
+<TabsIcon
 	key="onlyAvailable"
 	defaultValue="false"
 	options={[

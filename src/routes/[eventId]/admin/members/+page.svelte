@@ -2,10 +2,11 @@
 	import { mdiFormatListBulleted, mdiSigma } from '@mdi/js'
 	import type { Field, Member } from '@prisma/client'
 	import { tick } from 'svelte'
+	import { TabsIcon } from 'fuma'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 
-	import { InputSearch, Pagination, Table, TabsSmall, TableViewSelect, Card } from '$lib/material'
+	import { InputSearch, Pagination, Table, TableViewSelect, Card } from '$lib/material'
 	import { component } from '$lib/utils'
 	import InviteDialog from '$lib/InviteDialog.svelte'
 	import { MemberActions, MemberCreateSubscribeDialog, MemberFieldDialog } from '$lib/member'
@@ -37,21 +38,18 @@
 	}
 </script>
 
-
-<Card> 
+<Card>
 	<h2 slot="title">Membres</h2>
 
 	<div class="flex flex-col gap-2">
-	
-	
 		<div class="flex gap-x-2 gap-y-2 flex-wrap">
 			<InputSearch class="max-w-[175px]" />
 			<MembersFilter />
-	
+
 			<div class="grow" />
-	
+
 			<TableViewSelect key="members" views={data.views} />
-			<TabsSmall
+			<TabsIcon
 				key="summary"
 				defaultValue="false"
 				options={{
@@ -59,7 +57,7 @@
 					true: { icon: mdiSigma, label: 'Synthèse' },
 				}}
 			/>
-	
+
 			<MembersCopy fields={data.fields} />
 			<MembersEmails />
 			<InviteDialog justIcon class="btn-sm" />
@@ -83,7 +81,7 @@
 				onCreateField={() => memberFieldDialog.open()}
 			/>
 		{/key}
-	
+
 		{#if !data.summary}
 			<div class="flex justify-end">
 				<Pagination />
@@ -92,7 +90,6 @@
 			<MembersStats {data} />
 		{/if}
 	</div>
-
 </Card>
 
 <MemberFieldDialog

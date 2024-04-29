@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { mdiFormatListBulleted, mdiCardMultipleOutline } from '@mdi/js'
-	import { TabsSmall } from '$lib/material'
+	import { TabsIcon } from 'fuma'
 </script>
 
-<TabsSmall
+<TabsIcon
 	key="display"
 	defaultValue="table"
 	options={[
