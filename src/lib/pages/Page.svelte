@@ -48,7 +48,7 @@
 			title="Copier le lien de la page"
 			value="https://benev.io{$eventPath}{page ? `/${page.path}` : ''}"
 			successMessage="Lien copier"
-			path={mdiLinkVariant}
+			icon={mdiLinkVariant}
 		/>
 	</div>
 </PageLayout>
