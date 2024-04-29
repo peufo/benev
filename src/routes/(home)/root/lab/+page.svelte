@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { Card } from '$lib/material'
+	import { Card } from 'fuma'
 	import { enhance } from '$app/forms'
 
 	let events: string[] = []

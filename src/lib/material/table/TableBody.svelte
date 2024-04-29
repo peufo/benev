@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 
-	import { TableCell, type TableField } from '$lib/material'
+	import { TableCell, type TableField } from 'fuma'
 	import type { ComponentAndProps } from '$lib/utils'
 
 	type Item = $$Generic<{ id: string }>

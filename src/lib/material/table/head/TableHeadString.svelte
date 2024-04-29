@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Instance as TippyInstance } from 'tippy.js'
 	import { mdiMagnify } from '@mdi/js'
-	import { DropDown, Icon, InputSearch, type TableField } from '$lib/material'
+	import { DropDown, Icon, InputSearch, type TableField } from 'fuma'
 	import { page } from '$app/stores'
 
 	export let field: TableField

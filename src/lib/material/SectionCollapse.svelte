@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
 	import { mdiChevronRight } from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { urlParam } from '$lib/store'
 	import { onDestroy } from 'svelte'
 

@@ -2,7 +2,7 @@
 	import type { Instance as TippyInstance } from 'tippy.js'
 	import { goto } from '$app/navigation'
 
-	import { DropDown, InputNumber } from '$lib/material'
+	import { DropDown, InputNumber } from 'fuma'
 	import { urlParam } from '$lib/store'
 	import { debounce } from '$lib/debounce'
 	import type { TableField } from '../field'

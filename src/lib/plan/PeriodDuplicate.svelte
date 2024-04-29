@@ -2,7 +2,7 @@
 	import { mdiContentDuplicate } from '@mdi/js'
 	import type { Period } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import axios from 'axios'
 	import { createEventDispatcher } from 'svelte'

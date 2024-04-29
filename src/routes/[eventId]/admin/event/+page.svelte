@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/material'
+	import { Card } from 'fuma'
 	import { EventForm } from '$lib/event'
 
 	import EventStateForm from './EventStateForm.svelte'

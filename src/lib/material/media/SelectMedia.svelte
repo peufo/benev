@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms'
 	import type { Media } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { DeleteButton, Dialog, Icon, InputText } from '$lib/material'
+	import { ButtonDelete, Dialog, Icon, InputText } from 'fuma'
 	import { useForm } from '$lib/validation'
 
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
@@ -147,7 +147,7 @@
 				<button formaction="/{$page.params.eventId}/admin?/edit_media" class="btn btn-primary">
 					Valider
 				</button>
-				<DeleteButton formaction="/{$page.params.eventId}/admin?/delete_media" />
+				<ButtonDelete formaction="/{$page.params.eventId}/admin?/delete_media" />
 
 				<InputText
 					key="name"

@@ -7,7 +7,7 @@
 		mdiPhoneOutline,
 	} from '@mdi/js'
 	import type { User } from '@prisma/client'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { getAge } from '$lib/utils'
 
 	export let user: User

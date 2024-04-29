@@ -5,7 +5,7 @@
 	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 	import { InputText, InputDate, FormControl, InputBoolean } from '$lib/material/input'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { page } from '$app/stores'
 
 	export let user: User

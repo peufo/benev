@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/material'
+	import { Card } from 'fuma'
 	import { useNotify } from '$lib/notify'
 	import { adminTabs } from '../../../lib/layout/adminTabs'
 	import { CheckoutWaitSSE } from '$lib/checkout'
@@ -17,7 +17,6 @@
 		}
 	}
 </script>
-
 
 <div class="flex flex-col gap-4 max-w-5xl m-auto">
 	{#if !!data.event.missingLicencesMember}
@@ -41,5 +40,4 @@
 	<CheckoutWaitSSE removeCheckoutId />
 
 	<slot />
-	
 </div>

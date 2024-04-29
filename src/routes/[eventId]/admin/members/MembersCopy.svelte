@@ -40,4 +40,3 @@
 </script>
 
 <CopyData {getData} {columns} />
-

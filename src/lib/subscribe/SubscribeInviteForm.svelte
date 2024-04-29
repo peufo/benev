@@ -3,7 +3,7 @@
 	import type { Member, User } from '@prisma/client'
 	import type { Props as TippyProps } from 'tippy.js'
 	import { createEventDispatcher } from 'svelte'
-	import { Dialog, Icon, InputRelation } from '$lib/material'
+	import { Dialog, Icon, InputRelation } from 'fuma'
 	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 	import InviteForm from '$lib/InviteForm.svelte'
@@ -40,7 +40,7 @@
 				key="memberId"
 				placeholder="Inscrire un membre"
 				search={$api.member.search}
-				bind:item={member}
+				bind:value={member}
 				on:input
 				{tippyProps}
 			>
@@ -49,7 +49,7 @@
 					{item?.user.lastName}
 				</div>
 
-				<div slot="listItem" let:item class="flex gap-2 items-center w-full">
+				<div slot="suggestion" let:item class="flex gap-2 items-center w-full">
 					{#if item}
 						<span>{item.user.firstName} {item.user.lastName}</span>
 						<div class="grow" />

@@ -3,7 +3,7 @@
 	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
-	import { Dialog, InputRelations } from '$lib/material'
+	import { Dialog, InputRelations } from 'fuma'
 	import { useForm } from '$lib/validation'
 	import { eventPath } from '$lib/store'
 
@@ -32,16 +32,9 @@
 			search={(search) => $api.team.search(search, { take: 10 })}
 			placeholder="Chercher un nouveau secteur"
 			classList="max-h-80 overflow-y-auto relative"
-			items={teams}
-		>
-			<svelte:fragment slot="badge" let:item>
-				<span>{item.name}</span>
-			</svelte:fragment>
-
-			<svelte:fragment slot="listItem" let:item>
-				<span>{item.name}</span>
-			</svelte:fragment>
-		</InputRelations>
+			value={teams}
+			slotItem={(team) => team.name}
+		/>
 
 		<div class="flex flex-row-reverse mt-2">
 			<button class="btn"> Valider </button>

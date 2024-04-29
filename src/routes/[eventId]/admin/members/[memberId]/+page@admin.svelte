@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropDown, Icon } from '$lib/material'
+	import { DropDown, Icon } from 'fuma'
 
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft, mdiClipboardTextOutline, mdiTrashCanOutline } from '@mdi/js'

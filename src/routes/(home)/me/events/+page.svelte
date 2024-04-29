@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { EventForm } from '$lib/event'
-	import { Dialog, Icon, Placeholder } from '$lib/material'
+	import { Dialog, Icon, Placeholder } from 'fuma'
 	import { mdiPlus } from '@mdi/js'
 	import MemberCard from './MemberCard.svelte'
 	import { IsOrganizerForm } from '$lib/me'

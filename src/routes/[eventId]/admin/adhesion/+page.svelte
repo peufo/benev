@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiLogin, mdiOpenInNew } from '@mdi/js'
 
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon } from 'fuma'
 
 	import { MemberFields, MemberSettingsForm } from '$lib/member'
 	import OnlyAdmin from '../OnlyAdmin.svelte'

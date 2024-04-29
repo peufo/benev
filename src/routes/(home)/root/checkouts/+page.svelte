@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Icon, Pagination } from '$lib/material'
+	import { Card, Icon, Pagination } from 'fuma'
 	import { mdiPlus } from '@mdi/js'
 
 	export let data

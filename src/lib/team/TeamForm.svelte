@@ -4,7 +4,7 @@
 	import { page } from '$app/stores'
 
 	import { useForm } from '$lib/validation'
-	import { InputText, InputTextarea, DeleteButton, Dialog, InputDate } from '$lib/material'
+	import { InputText, InputTextarea, ButtonDelete, Dialog, InputDate } from 'fuma'
 	import { eventPath } from '$lib/store'
 
 	import InviteForm from '$lib/InviteForm.svelte'
@@ -63,7 +63,7 @@
 	<div class="flex gap-2 flex-row-reverse mt-2">
 		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit"> Valider </button>
 		{#if isUpdate && $page.data.member?.roles.includes('admin')}
-			<DeleteButton formaction="?/delete" />
+			<ButtonDelete formaction="?/delete" />
 		{/if}
 		<div class="grow" />
 		<a class="btn btn-ghost" href={redirectTo}>Annuler</a>

@@ -6,7 +6,7 @@
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 
-	import { InputSearch, Pagination, Table, TableViewSelect, Card } from '$lib/material'
+	import { InputSearch, Pagination, Table, TableViewSelect, Card } from 'fuma'
 	import { component } from '$lib/utils'
 	import InviteDialog from '$lib/InviteDialog.svelte'
 	import { MemberActions, MemberCreateSubscribeDialog, MemberFieldDialog } from '$lib/member'

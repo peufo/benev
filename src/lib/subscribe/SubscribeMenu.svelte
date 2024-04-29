@@ -5,8 +5,7 @@
 		mdiDotsHorizontal,
 		mdiTrashCanOutline,
 	} from '@mdi/js'
-	import { DropDown, Icon } from '$lib/material'
-	import DeleteButton from '$lib/material/DeleteButton.svelte'
+	import { DropDown, Icon, ButtonDelete } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { useForm } from '$lib/validation'
 	import type { Subscribe } from '@prisma/client'
@@ -39,7 +38,7 @@
 			</button>
 		{/if}
 
-		<DeleteButton
+		<ButtonDelete
 			btn={false}
 			class="menu-item w-full"
 			formaction="{$eventPath}/subscribes/{subscribe.id}?/subscribe_delete"
@@ -53,6 +52,6 @@
 				<Icon path={mdiTrashCanOutline} class="fill-error/80" size={20} />
 				<span>T'es sur ?</span>
 			</svelte:fragment>
-		</DeleteButton>
+		</ButtonDelete>
 	</form>
 </DropDown>

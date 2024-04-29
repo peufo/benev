@@ -2,7 +2,7 @@
 	import { mdiMapMarkerRadiusOutline } from '@mdi/js'
 
 	import { eventPath } from '$lib/store'
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon } from 'fuma'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 
 	import { Teams, TeamsActions } from '$lib/team'
@@ -39,7 +39,6 @@
 			/>
 		{/if}
 	</div>
-
 
 	<div class="flex flex-col gap-20 mt-8">
 		<section>

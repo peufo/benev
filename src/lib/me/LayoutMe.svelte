@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { mdiCardAccountDetailsOutline, mdiCalendarMultiple, mdiLicense } from '@mdi/js'
 	import type { Tab } from '$lib/types'
-	import { Card, Tabs } from '$lib/material'
+	import { Card, Tabs } from 'fuma'
 	import { derived, type Readable } from 'svelte/store'
 	import { page } from '$app/stores'
-	import { dev } from '$app/environment'
 	import type { User } from '@prisma/client'
 
 	export let user: User

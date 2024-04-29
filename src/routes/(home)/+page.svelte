@@ -2,7 +2,7 @@
 	import logo from '$lib/assets/logo.svg'
 
 	import Benev from '$lib/Benev.svelte'
-	import { Card } from '$lib/material'
+	import { Card } from 'fuma'
 	import { Features } from '$lib/features'
 
 	export let data

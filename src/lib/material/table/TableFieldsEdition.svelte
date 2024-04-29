@@ -13,7 +13,7 @@
 	import { urlParam } from '$lib/store'
 	import { listEditable } from '$lib/action'
 	import { jsonParse } from '$lib/jsonParse'
-	import { Icon, DropDown, type TableField } from '$lib/material'
+	import { Icon, DropDown, type TableField } from 'fuma'
 	import { context } from '$lib/material/table'
 
 	type Item = $$Generic<{ id: string }>

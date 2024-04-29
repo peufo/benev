@@ -5,7 +5,7 @@
 
 	import type { TeamWithComputedValues } from '$lib/server'
 	import type { Member, Event } from '@prisma/client'
-	import { Placeholder, CardLink, Icon } from '$lib/material'
+	import { Placeholder, CardLink, Icon } from 'fuma'
 	import { eventPath, display, onlyAvailable } from '$lib/store'
 	import { rowLink, tip } from '$lib/action'
 	import Progress from '$lib/Progress.svelte'
@@ -40,7 +40,7 @@
 						<h2 class="font-medium">
 							{team.name}
 						</h2>
-						<div class="grow"></div>
+						<div class="grow" />
 						{#if team.closeSubscribing && event.selfSubscribeAllowed}
 							<span
 								class="badge ml-auto opacity-80 z-10"

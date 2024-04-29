@@ -12,8 +12,10 @@
 
 	import dayjs from 'dayjs'
 	import { onMount } from 'svelte'
-	import { Card, Icon, Placeholder, ToggleOnlyAvailable } from '$lib/material'
+	import { Card, Icon, Placeholder } from 'fuma'
 	import { goto } from '$app/navigation'
+
+	import { ToggleOnlyAvailable } from '$lib/material/display'
 	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
 	import { formatRange } from '$lib/formatRange'
 	import { SubscribeForm, SubscribeStateForm, SubscribesOfPeriod } from '$lib/subscribe'

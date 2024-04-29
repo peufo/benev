@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { mdiAccountCircleOutline, mdiShieldAccountOutline } from '@mdi/js'
 
 	export let createdBy: 'leader' | 'user'

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation'
-	import { Placeholder } from '$lib/material'
+	import { Placeholder } from 'fuma'
 	import type { ComponentAndProps } from '$lib/utils'
 
 	import {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon } from 'fuma'
 	import { mdiPlus } from '@mdi/js'
 	import Comparison from './Comparison.svelte'
 

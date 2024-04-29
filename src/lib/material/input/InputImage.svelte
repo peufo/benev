@@ -8,7 +8,7 @@
 	import type { Instance as TippyInstance } from 'tippy.js'
 	import { mdiTrayArrowUp } from '@mdi/js'
 
-	import { Dialog, DropDown, Icon } from '$lib/material'
+	import { Dialog, DropDown, Icon } from 'fuma'
 	import { onMount } from 'svelte'
 
 	export let aspect = 1
@@ -63,9 +63,13 @@
 	</button>
 	{#if $$slots.actions}
 		<div class="flex flex-col">
-			<button type="button" class="relative menu-item" on:click={() => {
-				inputFile.click()
-			}}>
+			<button
+				type="button"
+				class="relative menu-item"
+				on:click={() => {
+					inputFile.click()
+				}}
+			>
 				<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
 				<span>Charger une image</span>
 			</button>

@@ -2,7 +2,7 @@
 	import type { Page } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { mdiHomeOutline, mdiMapMarkerRadiusOutline } from '@mdi/js'
 	import { PAGE_TYPE } from '$lib/constant'
 

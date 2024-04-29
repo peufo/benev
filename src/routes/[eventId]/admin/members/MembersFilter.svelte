@@ -10,11 +10,11 @@
 	} from '@mdi/js'
 
 	import { urlParam } from '$lib/store'
-	import { InputOptionInParam } from '$lib/material'
+	import { InputOptionInParam } from 'fuma'
 </script>
 
 <InputOptionInParam
-  class="bg-base-200"
+	class="bg-base-200"
 	key="role"
 	removeKeys={['isAbsent']}
 	options={{

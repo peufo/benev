@@ -3,7 +3,7 @@
 	import type { GiftConditionType, GiftCondition as TGiftEdition } from '@prisma/client'
 	import GiftCondition from './GiftCondition.svelte'
 	import { GIFT_CONDITION_TYPE } from '$lib/constant'
-	import { Icon, InputSelect } from '$lib/material'
+	import { Icon, InputSelect } from 'fuma'
 
 	export let conditions: Partial<TGiftEdition>[] = []
 
@@ -33,11 +33,8 @@
 		on:select={addCondition}
 		bind:value={conditionType}
 		class="btn-square"
-	>
-		<svelte:fragment slot="placeholder">
-			<Icon path={mdiPlus} title="Ajouter une condition" tippyProps={{ appendTo: 'parent' }} />
-		</svelte:fragment>
-	</InputSelect>
+		placeholder="Ajouter un condition"
+	/>
 </div>
 
 {#each conditions as condition}

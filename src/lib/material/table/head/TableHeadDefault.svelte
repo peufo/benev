@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { TableField } from '$lib/material'
+	import type { TableField } from 'fuma'
 	import { tip } from '$lib/action'
 
 	export let field: TableField

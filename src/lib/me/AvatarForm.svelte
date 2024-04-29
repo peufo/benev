@@ -3,7 +3,7 @@
 	import { createEventDispatcher } from 'svelte'
 	import { mdiReload, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
 	import Avatar from './Avatar.svelte'

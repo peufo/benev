@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Page } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { mdiMenu } from '@mdi/js'
 	import DropDown from '$lib/material/DropDown.svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
@@ -27,12 +27,10 @@
 	</button>
 
 	<div class="flex flex-col gap-1">
-		
 		{#if adminIsVisible}
 			<h3 class="title-sm pl-3 pt-1">Public</h3>
 		{/if}
 		<EventPubliqueMenuItems {pages} />
-		
 
 		<!-- ADMIN -->
 		{#if adminIsVisible}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
-	import { DropDown, Icon } from '$lib/material'
+	import { DropDown, Icon } from 'fuma'
 	import type { Period } from '@prisma/client'
 	import PeriodForm from './PeriodForm.svelte'
 	import type { Props as TippyProps } from 'tippy.js'

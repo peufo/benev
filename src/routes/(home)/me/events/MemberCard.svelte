@@ -2,7 +2,7 @@
 	import type { PageData } from './$types'
 	import { MemberRole } from '$lib/member'
 	import { EVENT_STATES } from '$lib/constant'
-	import { CardLink, Icon } from '$lib/material'
+	import { CardLink, Icon } from 'fuma'
 	import logo from '$lib/assets/logo.svg'
 
 	export let member: PageData['members'][number]

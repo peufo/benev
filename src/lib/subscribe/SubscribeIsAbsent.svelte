@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tip } from '$lib/action'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { mdiAlertOutline } from '@mdi/js'
 
 	export let isAbsent: boolean

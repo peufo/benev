@@ -4,7 +4,7 @@
 	import { tick } from 'svelte'
 	import type { Props as TippyProps } from 'tippy.js'
 	import { formatRangeShort } from '$lib/formatRange'
-	import { ContextMenu, Icon } from '$lib/material'
+	import { ContextMenu, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { SubscribeInviteForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import PeriodDuplicate from './PeriodDuplicate.svelte'

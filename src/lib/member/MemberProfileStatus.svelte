@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tip } from '$lib/action'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import type { MemberWithComputedValues } from '$lib/server'
 	import { mdiAlertCircleOutline } from '@mdi/js'
 
@@ -13,7 +13,7 @@
 		class="badge badge-warning"
 		use:tip={{ content: `Champs manquants: "${fields.join('", "')}"` }}
 	>
-		<Icon path={mdiAlertCircleOutline} class="opacity-80 -translate-x-1" size={20}/>
+		<Icon path={mdiAlertCircleOutline} class="opacity-80 -translate-x-1" size={20} />
 		Profil incomplet
 	</div>
 {/if}

@@ -2,7 +2,7 @@
 	import { mdiCalendarMultiple, mdiForumOutline, mdiScaleBalance, mdiWalletOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import { eventPath } from '$lib/store'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 
 	const tabs: { path: string; label: string; icon: string }[] = [
 		{ path: '/contact', label: 'Contact', icon: mdiForumOutline },

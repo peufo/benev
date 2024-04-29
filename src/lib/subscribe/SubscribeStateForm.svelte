@@ -30,7 +30,7 @@
 	import { SubscribeState } from '$lib/subscribe'
 	import { useForm } from '$lib/validation'
 	import { enhance } from '$app/forms'
-	import { Icon, DropDown } from '$lib/material'
+	import { Icon, DropDown } from 'fuma'
 	import {
 		mdiCloseOctagonOutline,
 		mdiCheck,

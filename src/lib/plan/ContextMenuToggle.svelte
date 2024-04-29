@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiClipboardTextMultipleOutline, mdiPencilOutline } from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 
 	type Mode = 'subscribes' | 'edit'
 

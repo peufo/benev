@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { mdiTrayArrowDown } from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { useNotify } from '$lib/notify'
 
 	type Item = $$Generic
 
-  export let getData: () => Promise<Item[]>
-  export let columns: Record<string, (item: Item) => string | number>
+	export let getData: () => Promise<Item[]>
+	export let columns: Record<string, (item: Item) => string | number>
 
 	const notify = useNotify()
 	let isLoading = false
@@ -28,7 +28,6 @@
 	}
 
 	function getCSV(members: Item[]): string {
-
 		const headers = Object.keys(columns).join('\t')
 		const rows = members.map((m: Item) =>
 			Object.values(columns)

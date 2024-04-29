@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InputNumber } from '$lib/material'
+	import { InputNumber } from 'fuma'
 	import type { LicenceType } from '@prisma/client'
 
 	export let index: number

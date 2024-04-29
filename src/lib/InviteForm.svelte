@@ -5,7 +5,7 @@
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/validation'
 	import { eventPath } from '$lib/store'
-	import { InputText } from '$lib/material'
+	import { InputText } from 'fuma'
 
 	type MemberWithUser = Member & { user: User }
 	const dispatch = createEventDispatcher<{ success: MemberWithUser | undefined }>()

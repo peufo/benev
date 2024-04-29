@@ -3,7 +3,7 @@
 	import type { Event } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { useForm } from '$lib/validation'
-	import { InputBoolean, InputDate } from '$lib/material'
+	import { InputBoolean, InputDate } from 'fuma'
 	import { slide } from 'svelte/transition'
 
 	const form = useForm({

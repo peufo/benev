@@ -2,7 +2,7 @@
 	import type { Gift, GiftCondition } from '@prisma/client'
 	import { mdiAccountGroupOutline } from '@mdi/js'
 
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 
 	import { slide } from 'svelte/transition'
 	import Dialog from '$lib/material/Dialog.svelte'

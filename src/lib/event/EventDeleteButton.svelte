@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { Dialog } from '$lib/material'
+	import { Dialog } from 'fuma'
 	import { useForm } from '$lib/validation'
 	import type { Event } from '@prisma/client'
 

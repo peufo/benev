@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SelectorList from './SelectorList.svelte'
-	import { DropDown, Icon } from '$lib/material'
+	import { DropDown, Icon } from 'fuma'
 	import { type Options, parseOptions } from '.'
 	import { createEventDispatcher, onMount } from 'svelte'
 

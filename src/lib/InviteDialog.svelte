@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiAccountPlusOutline, mdiClose } from '@mdi/js'
 	import InviteForm from '$lib/InviteForm.svelte'
-	import { Icon, Dialog } from '$lib/material'
+	import { Icon, Dialog } from 'fuma'
 
 	let dialog: HTMLDialogElement
 	let klass = ''

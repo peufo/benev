@@ -7,7 +7,7 @@
 	import { useForm } from '$lib/validation'
 	import { InputNumber, InputDate, InputTime } from '$lib/material/input'
 	import type { Period } from '@prisma/client'
-	import { DeleteButton } from '$lib/material'
+	import { ButtonDelete } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 
@@ -109,7 +109,7 @@
 				<input type="hidden" name="disableRedirect" value="true" />
 			{/if}
 			<button class="btn" type="submit">Valider</button>
-			<DeleteButton formaction="{basePath}/{period.id}?/delete_period" />
+			<ButtonDelete formaction="{basePath}/{period.id}?/delete_period" />
 		{:else}
 			<button class="btn" type="submit">Ajouter</button>
 			<button

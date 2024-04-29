@@ -4,7 +4,7 @@
 	import { useForm } from '$lib/validation'
 	import { GIFT_CONDITION_MODE } from '$lib/constant'
 	import { enhance } from '$app/forms'
-	import { InputRadio, InputText } from '$lib/material'
+	import { InputRadio, InputText } from 'fuma'
 	import GiftConditions from './GiftConditions.svelte'
 
 	type GiftWithConditions = Gift & { conditions: GiftCondition[] }

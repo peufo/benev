@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { slide } from 'svelte/transition'
 	import { useNotify } from '$lib/notify'
 	import { listEditable } from '$lib/action'

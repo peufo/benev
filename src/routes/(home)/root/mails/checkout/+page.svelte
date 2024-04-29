@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Placeholder } from '$lib/material'
+	import { Placeholder } from 'fuma'
 	import { EmailCheckoutValidation } from '$lib/email'
 
 	export let data

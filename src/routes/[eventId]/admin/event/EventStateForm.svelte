@@ -3,7 +3,7 @@
 	import type { PageData } from './$types'
 	import { useForm } from '$lib/validation'
 	import { EVENT_STATES } from '$lib/constant'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'
 	import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'

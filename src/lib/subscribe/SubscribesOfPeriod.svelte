@@ -4,7 +4,7 @@
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { tip } from '$lib/action'
 
 	// TODO: Pourquoi user ne passe pas directement dans le type ???

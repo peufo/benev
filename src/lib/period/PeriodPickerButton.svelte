@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { Icon, DropDown, InputTime } from '$lib/material'
+	import { Icon, DropDown, InputTime } from 'fuma'
 	import type { Period } from './index'
 	import PeriodPicker from './PeriodPicker.svelte'
 	import { mdiCalendarMonthOutline, mdiClose } from '@mdi/js'

@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
 	import { enhance } from '$app/forms'
-	import { InputText, InputPassword, Dialog } from '$lib/material'
+	import { InputText, InputPassword, Dialog, InputBoolean } from 'fuma'
 	import { useForm } from '$lib/validation'
 	import { page } from '$app/stores'
-
-	import InputBoolean from '$lib/material/input/InputBoolean.svelte'
-	import { Oauth } from '$lib/me'
+	import Oauth from './Oauth.svelte'
 
 	export let onSuccess:
 		| ((action: URL, data?: Record<string, unknown> | undefined) => any)

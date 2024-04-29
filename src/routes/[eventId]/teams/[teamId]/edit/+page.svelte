@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/material'
+	import { Card } from 'fuma'
 	import { TeamForm } from '$lib/team'
 
 	export let data

@@ -6,7 +6,7 @@
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/validation'
 	import { eventPath, urlParam } from '$lib/store'
-	import { DeleteButton } from '$lib/material'
+	import { ButtonDelete } from 'fuma'
 	import { tiptap } from '$lib/pages'
 
 	export let event: Event
@@ -60,9 +60,9 @@
 		{#if $page.data.member?.isValidedByEvent && !$page.data.member?.isValidedByUser}
 			<form method="post" class="contents" use:enhance={form.submit}>
 				<input type="hidden" name="memberId" value={$page.data.member.id} />
-				<DeleteButton formaction="{$eventPath}/api/members?/delete_member" class="w-36">
+				<ButtonDelete formaction="{$eventPath}/api/members?/delete_member" class="w-36">
 					Refuser
-				</DeleteButton>
+				</ButtonDelete>
 			</form>
 		{/if}
 

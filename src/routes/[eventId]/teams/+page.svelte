@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
-	import { Card, Icon, InputSearch, ToggleListOrTable, ToggleOnlyAvailable } from '$lib/material'
+	import { Card, Icon, InputSearch } from 'fuma'
+	import { ToggleListOrTable, ToggleOnlyAvailable } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import { Teams } from '$lib/team'
 

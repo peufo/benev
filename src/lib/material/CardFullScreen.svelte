@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon } from 'fuma'
 	import { mdiArrowCollapse, mdiArrowExpand } from '@mdi/js'
 
 	export let isFullScreen = false

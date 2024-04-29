@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InputImage, ImagePlaceholder } from '$lib/material'
+	import { InputImage, PlaceholderImage } from 'fuma'
 	import type { Crop } from '$lib/material/input/InputImage.svelte'
 
 	export let key = ''
@@ -55,6 +55,6 @@
 			<img class="{klass} border rounded-lg" {src} {alt} width={x} height={y} />
 		</div>
 	{:else}
-		<ImagePlaceholder {x} {y}>{title}</ImagePlaceholder>
+		<PlaceholderImage {x} {y}>{title}</PlaceholderImage>
 	{/if}
 </InputImage>

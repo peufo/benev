@@ -58,10 +58,7 @@
 
 		<div class="border border-y-0 border-l-0 mx-1 my-auto h-6" />
 
-		<ToolMenuInsert
-			{editor}
-			on:insertMedia={() => selectMedia.show()}
-		/>
+		<ToolMenuInsert {editor} on:insertMedia={() => selectMedia.show()} />
 	</div>
 </div>
 

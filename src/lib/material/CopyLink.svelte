@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiLinkVariant } from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { useNotify } from '$lib/notify'
 
 	export let path: string

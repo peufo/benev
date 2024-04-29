@@ -11,6 +11,7 @@ export default {
 		require('@tailwindcss/container-queries'),
 	],
 	daisyui: {
+		logs: false,
 		themes: [
 			{
 				light: {

@@ -2,9 +2,9 @@
 	import type { Editor } from '@tiptap/core'
 	import { mdiPlus, mdiMinus, mdiImageOutline, mdiYoutube, mdiAt } from '@mdi/js'
 
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import ToolMenu from './ToolMenu.svelte'
-	import { suggestionItems} from './suggestion'
+	import { suggestionItems } from './suggestion'
 	import { createEventDispatcher } from 'svelte'
 
 	export let editor: Editor
@@ -33,17 +33,18 @@
 				if (!src) return
 				editor.commands.setYoutubeVideo({ src })
 			},
-		}, {
+		},
+		{
 			label: 'Valeur dynamic',
 			icon: mdiAt,
 			disable: !$suggestionItems.length,
 			action: () => {
-				const {from} = editor.state.selection
+				const { from } = editor.state.selection
 				const lastChar = editor.state.doc.textBetween(from - 1, from)
 				const charToAdd = lastChar === '' || lastChar === ' ' ? '@' : ' @'
 				editor.chain().insertContent(charToAdd).focus().run()
-			}
-		}
+			},
+		},
 	]}
 	hideLabel
 >

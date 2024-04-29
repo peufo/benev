@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { jsonParse } from '$lib/jsonParse'
-	import { type Options, type TableField, parseOptions, DropDown, Icon } from '$lib/material'
+	import { type Options, type TableField, parseOptions, DropDown, Icon } from 'fuma'
 	import { urlParam } from '$lib/store'
 	import { derived } from 'svelte/store'
 

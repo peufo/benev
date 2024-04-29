@@ -2,7 +2,7 @@
 	import type { Period, Subscribe, Team } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { formatRange } from '$lib/formatRange'
-	import { CardLink, Icon, Placeholder } from '$lib/material'
+	import { CardLink, Icon, Placeholder } from 'fuma'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
 	import { tip } from '$lib/action'

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Editor } from '@tiptap/core'
 	import { mdiLinkVariant } from '@mdi/js'
-	import { Dialog, InputText } from '$lib/material'
+	import { Dialog, InputText } from 'fuma'
 
 	import { z } from '$lib/validation'
 	import ToolMark from './ToolMark.svelte'

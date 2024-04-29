@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import type { Tab } from '$lib/types'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 
 	export let tabs: Tab[]
 	let klass = ''

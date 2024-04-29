@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiHelpCircleOutline } from '@mdi/js'
-	import { DropDown, Icon } from '$lib/material'
+	import { DropDown, Icon } from 'fuma'
 	import { PAGE_TYPE } from '$lib/constant'
 </script>
 

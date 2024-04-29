@@ -3,7 +3,7 @@
 	import { mdiCheck } from '@mdi/js'
 	import type { PageData } from './$types'
 	import { useForm } from '$lib/validation'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 
 	export let memberProfile: PageData['memberProfile']
 

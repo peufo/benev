@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/validation'
-	import { InputNumber, InputRelation, Card, InputText } from '$lib/material'
+	import { InputNumber, InputRelation, Card, InputText } from 'fuma'
 
 	import { api } from '$lib/api'
 	import InputsLicence from './InputsLicence.svelte'
@@ -17,12 +17,12 @@
 
 	<form action="/root/checkouts/new" method="post" use:enhance={form.submit}>
 		<InputText key="name" label="Name" value="Correction" />
-		<InputRelation key="user" search={$api.user.search} label="Owner" bind:item={owner}>
+		<InputRelation key="user" search={$api.user.search} label="Owner" bind:value={owner}>
 			<svelte:fragment slot="item" let:item>
 				<span>{item?.firstName} {item?.lastName}</span>
 				<span class="text-xs">{item?.email}</span>
 			</svelte:fragment>
-			<svelte:fragment slot="listItem" let:item>
+			<svelte:fragment slot="suggestion" let:item>
 				<div>
 					<div>{item.firstName} {item.lastName}</div>
 					<div class="text-xs">{item.email}</div>

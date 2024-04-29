@@ -2,7 +2,7 @@
 	import { mdiChartGantt } from '@mdi/js'
 	import Progress from '$lib/Progress.svelte'
 	import { formatRange } from '$lib/formatRange'
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { SubscribeInviteForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'

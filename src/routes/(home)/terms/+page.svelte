@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/material'
+	import { Card } from 'fuma'
 </script>
 
 <Card class="max-w-xl mx-auto">

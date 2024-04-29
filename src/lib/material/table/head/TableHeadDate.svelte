@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { DropDown, InputTime, type TableField } from '$lib/material'
+	import { DropDown, InputTime, type TableField } from 'fuma'
 	import { PeriodPicker } from '$lib/period'
 
 	import { formatRange } from '$lib/formatRange'

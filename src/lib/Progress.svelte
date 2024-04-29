@@ -1,7 +1,7 @@
 <script lang="ts">
 	import 'tippy.js/dist/tippy.css'
 	import type { Subscribe } from '@prisma/client'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { mdiSlashForward } from '@mdi/js'
 
 	export let period: { maxSubscribe: number; subscribes: Subscribe[] }

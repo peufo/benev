@@ -6,7 +6,7 @@
 	import { createEventDispatcher } from 'svelte'
 	import Cropper from 'svelte-easy-crop'
 
-	import { Dialog, InputText } from '$lib/material'
+	import { Dialog, InputText } from 'fuma'
 
 	export let aspect = 1
 	export let title = 'Nouvelle image'

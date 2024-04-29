@@ -6,7 +6,7 @@
 		mdiTrashCanOutline,
 	} from '@mdi/js'
 	import type { Subscribe } from '@prisma/client'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 
 	let klass = ''
 	export { klass as class }

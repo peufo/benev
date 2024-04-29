@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CardLink, Placeholder } from '$lib/material'
+	import { CardLink, Placeholder } from 'fuma'
 	import logo from '$lib/assets/logo.svg'
 
 	export let data

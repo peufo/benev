@@ -1,30 +1,29 @@
 <script lang="ts">
-	import { mdiPencilOutline } from '@mdi/js'
+	import { mdiLinkVariant, mdiPencilOutline } from '@mdi/js'
 	import { page as pageStore } from '$app/stores'
 
 	import { eventPath } from '$lib/store/index.js'
 
 	import type { Page } from '@prisma/client'
-	import { CopyLink, Icon } from '$lib/material'
+	import { ButtonCopy, Icon } from 'fuma'
 	import { tiptap } from '$lib/pages/tiptap'
 
 	import type { MemberWithComputedValues } from '$lib/server'
 	import PageLayout from './PageLayout.svelte'
 	import { getMemberReplacers } from './memberSuggestions'
-	import { injectValues} from './injectValues'
+	import { injectValues } from './injectValues'
 
 	export let page: Page | null
 	export let member: MemberWithComputedValues | undefined = undefined
-	
+
 	$: html = transformPage(tiptap.toHTML(page?.content || ''))
 	$: canEdit = $pageStore.data.member?.roles.includes('admin')
 
 	function transformPage(_html: string) {
 		if (page?.type !== 'member' || !member) return _html
-		const replacers = getMemberReplacers({member})
+		const replacers = getMemberReplacers({ member })
 		return injectValues(_html, replacers)
 	}
-
 </script>
 
 <PageLayout class="relative max-w-2xl py-16">
@@ -45,6 +44,11 @@
 				<Icon path={mdiPencilOutline} title="Éditer cette page" size={22} />
 			</a>
 		{/if}
-		<CopyLink path="{$eventPath}{page ? `/${page.path}` : ''}" />
+		<ButtonCopy
+			title="Copier le lien de la page"
+			value="https://benev.io{$eventPath}{page ? `/${page.path}` : ''}"
+			successMessage="Lien copier"
+			path={mdiLinkVariant}
+		/>
 	</div>
 </PageLayout>

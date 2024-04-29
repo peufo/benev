@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { Card, Icon, InputText, Placeholder } from '$lib/material'
+	import { Card, Icon, InputText, Placeholder } from 'fuma'
 	import InputTextarea from '$lib/material/input/InputTextarea.svelte'
 	import { useForm } from '$lib/validation'
 	import { mdiCheck } from '@mdi/js'

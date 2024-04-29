@@ -10,7 +10,7 @@
 
 <script lang="ts">
 	import type { MemberRole } from '$lib/server'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import {
 		mdiShieldAccountOutline,
 		mdiAccountCircleOutline,

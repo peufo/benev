@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Member, User } from '@prisma/client'
-	import { Icon, InputRelations } from '$lib/material'
+	import { Icon, InputRelations } from 'fuma'
 	import { api } from '$lib/api'
 	import { mdiAccountPlusOutline } from '@mdi/js'
 
@@ -11,19 +11,13 @@
 	export let inviteDialog: HTMLDialogElement
 </script>
 
-<InputRelations
-	{key}
-	{label}
-	placeholder="Chercher un membre"
-	search={$api.member.search}
-	items={value}
->
-	<span slot="badge" let:item>
+<InputRelations {key} {label} placeholder="Chercher un membre" search={$api.member.search} {value}>
+	<span slot="item" let:item>
 		{item.user.firstName}
 		{item.user.lastName}
 	</span>
 
-	<div slot="listItem" let:item class="contents items-end">
+	<div slot="suggestion" let:item class="contents items-end">
 		<span>{item.user.firstName} {item.user.lastName}</span>
 		<div class="grow" />
 		<span style="font-size: 0.6rem;">{item.user.email}</span>

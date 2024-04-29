@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiChevronDown } from '@mdi/js'
-	import { CardBasic, Icon } from '$lib/material'
+	import { CardBasic, Icon } from 'fuma'
 	import '$lib/style/animate.css'
 	import { features } from '$lib/features'
 

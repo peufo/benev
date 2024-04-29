@@ -5,7 +5,7 @@
 	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
-	import { Dialog, Icon, InputRelation, SelectorList } from '$lib/material'
+	import { Dialog, Icon, InputRelation, SelectorList } from 'fuma'
 	import { useForm } from '$lib/validation'
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft } from '@mdi/js'
@@ -76,7 +76,7 @@
 				classList="max-h-80 overflow-y-auto relative"
 				on:input={({ detail }) => handleSelectTeam(detail.value)}
 			>
-				<svelte:fragment slot="listItem" let:item>
+				<svelte:fragment slot="suggestion" let:item>
 					<span>{item.name}</span>
 					<Progress
 						class="ml-auto"

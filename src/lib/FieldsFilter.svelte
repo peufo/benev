@@ -2,7 +2,7 @@
 	import { mdiClose, mdiFilterOutline } from '@mdi/js'
 	import type { Field } from '@prisma/client'
 
-	import { Icon, InputSelect } from '$lib/material'
+	import { Icon, InputSelect } from 'fuma'
 	import { goto } from '$app/navigation'
 	import { urlParam } from '$lib/store'
 
@@ -32,12 +32,8 @@
 			.map((f) => ({ value: f.id, label: f.label || f.name }))}
 		class="join-item btn-sm {fieldId ? 'rounded-r-none' : ''}"
 		on:select={resetFieldValue}
-	>
-		<div class="contents" slot="placeholder">
-			<Icon path={mdiFilterOutline} class="opacity-70 fill-base-content scale-90" size={20} />
-			Plus
-		</div>
-	</InputSelect>
+		placeholder="Plus"
+	/>
 
 	{#if fieldId}
 		{@const field = fields.find((f) => f.id === fieldId)}
@@ -47,12 +43,8 @@
 				options={field.options || []}
 				class="btn-sm rounded-l-none {fieldValue ? 'btn-primary rounded-r-none' : ''}"
 				on:select={handleSelectFieldValue}
-			>
-				<div class="contents" slot="placeholder">
-					<Icon path={mdiFilterOutline} class="opacity-70 fill-base-content scale-90" />
-					...
-				</div>
-			</InputSelect>
+				placeholder="..."
+			/>
 			{#if fieldValue}
 				<button class="btn btn-square btn-sm rounded-l-none" on:click={resetFieldValue}>
 					<Icon path={mdiClose} />

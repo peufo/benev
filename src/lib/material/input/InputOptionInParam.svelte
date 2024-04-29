@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon, parseOptions, type Options } from '$lib/material'
+	import { Icon, parseOptions, type Options } from 'fuma'
 	import { urlParam } from '$lib/store'
 
 	let klass = ''

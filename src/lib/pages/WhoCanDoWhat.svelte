@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { rolesMap } from '$lib/member/MemberRole.svelte'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { mdiCheck, mdiHelp, mdiListStatus } from '@mdi/js'
 
 	type Permission = boolean | string | undefined

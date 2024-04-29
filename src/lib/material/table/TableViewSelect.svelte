@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiChevronDown, mdiContentSaveEditOutline, mdiPlus } from '@mdi/js'
 	import type { View } from '@prisma/client'
-	import { Dialog, DropDown, Icon, InputText } from '$lib/material'
+	import { Dialog, DropDown, Icon, InputText } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { useForm } from '$lib/validation'

@@ -6,8 +6,8 @@
 		mdiShieldAccountOutline,
 	} from '@mdi/js'
 	import type { PageData } from './$types'
-	import { Card, InputSearch, Pagination } from '$lib/material'
-	import { Table,  type TableField, TableViewSelect } from '$lib/material/table'
+	import { Card, InputSearch, Pagination } from 'fuma'
+	import { Table, type TableField, TableViewSelect } from '$lib/material/table'
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
 	import SubscribesCopy from './SubscribesCopy.svelte'
@@ -87,7 +87,7 @@
 	]
 </script>
 
-<Card> 
+<Card>
 	<h2 slot="title">Inscriptions</h2>
 
 	<div class="flex flex-col gap-2">
@@ -97,7 +97,7 @@
 			<TableViewSelect key="subscribes" views={data.views} />
 			<SubscribesCopy />
 		</div>
-	
+
 		<Table
 			key="subscribes"
 			{fields}
@@ -105,7 +105,7 @@
 			action={(subscribe) => component(SubscribeMenu, { subscribe })}
 			placholder="Aucune inscription trouvé"
 		/>
-	
+
 		<div class="flex justify-end">
 			<Pagination />
 		</div>

@@ -3,7 +3,7 @@
 	import { page } from '$app/stores'
 	import { mdiCheck, mdiClose, mdiPencilOutline } from '@mdi/js'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
-	import { CardBasic, Icon, Placeholder } from '$lib/material'
+	import { CardBasic, Icon, Placeholder } from 'fuma'
 	import { fade } from 'svelte/transition'
 
 	export let member: MemberProfile

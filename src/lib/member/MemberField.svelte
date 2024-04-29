@@ -12,7 +12,7 @@
 	} from '$lib/material/input'
 	import { page } from '$app/stores'
 	import { jsonParse } from '$lib/jsonParse'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 
 	export let field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
 	export let value: string | number | true | string[] = ''

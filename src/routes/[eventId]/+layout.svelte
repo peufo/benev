@@ -10,7 +10,7 @@
 	} from '@mdi/js'
 
 	import Header from '$lib/layout/Header.svelte'
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import Footer from '$lib/layout/Footer.svelte'
 	import EventMenu from './EventMenu.svelte'
@@ -103,7 +103,6 @@
 				</Card>
 			{/if}
 		</main>
-
 	</div>
 </div>
 <Footer class="z-10">
@@ -135,11 +134,7 @@
 		{/if}
 
 		{#if data.event.phone}
-			<a
-				class="btn btn-sm sm:btn-md btn-ghost flex"
-				href="tel:{data.event.phone}"
-				target="_blank"
-			>
+			<a class="btn btn-sm sm:btn-md btn-ghost flex" href="tel:{data.event.phone}" target="_blank">
 				<Icon path={mdiPhoneOutline} />
 				{data.event.phone}
 			</a>

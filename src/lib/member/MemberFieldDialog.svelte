@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Field } from '@prisma/client'
-	import { Dialog } from '$lib/material'
+	import { Dialog } from 'fuma'
 	import { MemberFieldForm } from '$lib/member'
 	import { createEventDispatcher } from 'svelte'
 

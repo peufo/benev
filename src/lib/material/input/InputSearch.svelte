@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiClose } from '@mdi/js'
-	import { Icon, InputText } from '$lib/material'
+	import { Icon, InputText } from 'fuma'
 	import { browser } from '$app/environment'
 	import { page } from '$app/stores'
 

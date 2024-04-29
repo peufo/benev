@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
-	import { Dialog, DropDown } from '$lib/material'
+	import { Dialog, DropDown } from 'fuma'
 	import { isMobile } from '$lib/store'
 	import type { Props as TippyProps } from 'tippy.js'
 

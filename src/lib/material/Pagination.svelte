@@ -1,20 +1,19 @@
 <script lang="ts">
 	import { mdiChevronLeft, mdiChevronRight } from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { urlParam } from '$lib/store'
 
-  export let take = 20
+	export let take = 20
 
 	$: skip = +($urlParam.get('skip') || 0)
 	$: _take = +($urlParam.get('take') || take)
-
 </script>
 
 <div class="join">
 	<a
 		href={$urlParam.with({ skip: skip - _take, take: _take })}
 		data-sveltekit-replacestate
-    class:btn-disabled={skip - _take < 0 }
+		class:btn-disabled={skip - _take < 0}
 		class="join-item btn btn-sm btn-square"
 	>
 		<Icon path={mdiChevronLeft} title="Afficher les données précédentes" />

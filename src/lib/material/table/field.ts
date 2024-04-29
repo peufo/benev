@@ -4,7 +4,7 @@ import type { ComponentAndProps, Primitive } from '$lib/utils'
 import type { FieldType } from '@prisma/client'
 import { jsonParse } from '$lib/jsonParse'
 import { createKeys } from '$lib/material/table/context'
-import type { Options } from '$lib/material'
+import type { Options } from 'fuma'
 
 export type TableFieldType = FieldType | 'date'
 

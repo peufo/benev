@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CardBasic } from '$lib/material'
+	import { CardBasic } from 'fuma'
 	import type { PageData } from './$types'
 	import { urlParam } from '$lib/store'
 

@@ -3,7 +3,7 @@
 	import { enhance } from '$app/forms'
 	import { slide } from 'svelte/transition'
 	import { useForm } from '$lib/validation'
-	import { InputText, InputTextarea, InputImagePreview } from '$lib/material'
+	import { InputText, InputTextarea, InputImagePreview } from 'fuma'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { debounce } from '$lib/debounce'

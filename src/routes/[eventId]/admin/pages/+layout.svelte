@@ -1,9 +1,9 @@
 <script lang="ts">
-	import {  mdiPlus } from '@mdi/js'
+	import { mdiPlus } from '@mdi/js'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { useForm } from '$lib/validation/index.js'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
@@ -53,7 +53,6 @@
 						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
 					</a>
 				{/each}
-
 			</div>
 
 			<div class="divider divider-horizontal" />

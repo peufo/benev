@@ -4,7 +4,7 @@
 	import { mdiChevronLeft, mdiChevronRight, mdiClose } from '@mdi/js'
 	import type { Event, Field, User, Page } from '@prisma/client'
 
-	import { Card, Dialog, Icon, Placeholder } from '$lib/material'
+	import { Card, Dialog, Icon, Placeholder } from 'fuma'
 	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
@@ -125,7 +125,7 @@
 
 	<div>
 		{#if stepIndex === 0}
-			<Login onSuccess={() => document.location.reload()}   />
+			<Login onSuccess={() => document.location.reload()} />
 		{:else if !event.selfRegisterAllowed && !member?.isValidedByEvent}
 			<Placeholder class="border text-center bg-base-100/90">
 				<h2 class="text-lg">Invitation requise</h2>

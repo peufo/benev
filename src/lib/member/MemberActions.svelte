@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiEmailOutline, mdiPhone, mdiClipboardTextOutline } from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import type { Member } from '@prisma/client'
 
 	export let member: Member & {

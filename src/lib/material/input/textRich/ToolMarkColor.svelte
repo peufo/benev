@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { tip } from '$lib/action'
 
 	export let icon: string

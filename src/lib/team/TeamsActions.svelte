@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { ToggleListOrTable, Icon } from '$lib/material'
+	import { Icon } from 'fuma'
+	import { ToggleListOrTable } from '$lib/material'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiAccountMultipleOutline,

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
 
-	import { Icon, Placeholder } from '$lib/material'
+	import { Icon, Placeholder } from 'fuma'
 	import { LICENCE_TYPE_LABEL } from '$lib/constant'
 	import type { PageData } from './$types.js'
 	import { page } from '$app/stores'

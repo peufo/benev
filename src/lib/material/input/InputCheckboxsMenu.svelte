@@ -4,7 +4,7 @@
 	import { mdiClose } from '@mdi/js'
 	import FormControl from './FormControl.svelte'
 	import { type InputProps, type Options, parseOptions } from '.'
-	import { DropDown, Icon } from '$lib/material'
+	import { DropDown, Icon } from 'fuma'
 	import { urlParam } from '$lib/store'
 	import { jsonParse } from '$lib/jsonParse'
 

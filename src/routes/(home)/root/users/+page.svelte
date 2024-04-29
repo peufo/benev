@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Pagination } from '$lib/material'
+	import { Card, Pagination } from 'fuma'
 
 	export let data
 </script>

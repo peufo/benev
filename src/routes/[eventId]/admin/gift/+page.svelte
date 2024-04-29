@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiGiftOutline } from '@mdi/js'
 
-	import { Card, Icon } from '$lib/material'
+	import { Card, Icon } from 'fuma'
 
 	import { GiftConfiguration } from '$lib/gift'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'

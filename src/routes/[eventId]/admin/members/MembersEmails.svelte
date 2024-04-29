@@ -3,7 +3,7 @@
 	import { mdiEmailMultipleOutline } from '@mdi/js'
 
 	import { page } from '$app/stores'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	import { api } from '$lib/api'
 
 	type Member = PageData['members'][number]

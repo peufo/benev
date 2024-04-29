@@ -6,7 +6,7 @@
 	import { debounce } from '$lib/debounce'
 
 	import { useNotify } from '$lib/notify'
-	import { Icon, DropDown } from '$lib/material'
+	import { Icon, DropDown } from 'fuma'
 	import FormControl from './FormControl.svelte'
 	import SelectorList from './SelectorList.svelte'
 	import RelationAfter from './RelationAfter.svelte'

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiCheck, mdiClose } from '@mdi/js'
-	import { Icon } from '$lib/material'
+	import { Icon } from 'fuma'
 	export let value: boolean
 </script>
 

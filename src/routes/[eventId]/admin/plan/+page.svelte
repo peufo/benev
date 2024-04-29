@@ -5,7 +5,7 @@
 		mdiMagnifyMinusOutline,
 		mdiMagnifyPlusOutline,
 	} from '@mdi/js'
-	import { Card, Icon, InputCheckboxsMenu } from '$lib/material'
+	import { Card, Icon, InputCheckboxsMenu } from 'fuma'
 	import { Plan } from '$lib/plan'
 	import { onMount, tick } from 'svelte'
 
@@ -66,9 +66,8 @@
 <Card>
 	<div class="bg-base-100" bind:this={wrapper} class:pl-4={isFullscreen} class:pt-4={isFullscreen}>
 		<div class="flex gap-3 mb-3" class:pr-4={isFullscreen}>
-
 			<h2 class="title">Planification</h2>
-			
+
 			<div class="grow" />
 
 			<InputCheckboxsMenu

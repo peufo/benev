@@ -7,7 +7,7 @@
 	import { page } from '$app/stores'
 	import PeriodCard from '$lib/plan/PeriodCard.svelte'
 	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
-	import { ContextMenu, Icon } from '$lib/material'
+	import { ContextMenu, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
 	import PeriodForm from '$lib/PeriodForm.svelte'

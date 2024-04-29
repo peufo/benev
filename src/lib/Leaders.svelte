@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiEmailOutline, mdiPhoneOutline, mdiShieldAccountOutline } from '@mdi/js'
-	import { Icon, DropDown } from '$lib/material'
+	import { Icon, DropDown } from 'fuma'
 	import { tip } from '$lib/action'
 	import type { Member } from '@prisma/client'
 	export let leaders: (Member & {

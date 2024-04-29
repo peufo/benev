@@ -5,7 +5,7 @@
 	import { enhance } from '$app/forms'
 	import { useForm } from '$lib/validation'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import { InputSelect, InputText, InputCheckboxs, DeleteButton, InputOptions } from '$lib/material'
+	import { InputSelect, InputText, InputCheckboxs, ButtonDelete, InputOptions } from 'fuma'
 	import { MemberField } from '$lib/member'
 	import { InputBoolean } from '$lib/material/input'
 	import { eventPath } from '$lib/store'
@@ -164,7 +164,7 @@
 			Valider
 		</button>
 		{#if field.id}
-			<DeleteButton formaction="{action}?/delete_field" />
+			<ButtonDelete formaction="{action}?/delete_field" />
 		{/if}
 	</div>
 </form>

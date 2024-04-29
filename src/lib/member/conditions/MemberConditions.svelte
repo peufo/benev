@@ -6,7 +6,7 @@
 	import type { Field, FieldType } from '@prisma/client'
 	import type { MemberCondition, MemberConditionOperator } from '$lib/validation'
 	import { jsonParse } from '$lib/jsonParse'
-	import { Icon, InputSelect, Placeholder } from '$lib/material'
+	import { Icon, InputSelect, Placeholder } from 'fuma'
 	import {
 		mdiAccountCheckOutline,
 		mdiCardAccountDetailsOutline,
@@ -29,7 +29,7 @@
 	async function getmemberAllowedCount() {
 		if (!conditions.length || !browser) return
 		try {
-			const {params} = get(page)
+			const { params } = get(page)
 			const conditionsParam = encodeURIComponent(JSON.stringify(conditions))
 			const res = await axios.get<number>(
 				`/${params.eventId}/teams/membersAllowed?conditions=${conditionsParam}`
@@ -126,11 +126,12 @@
 				</span>
 			</div>
 		</div>
-		<InputSelect options={addConditionOptions} on:select={handleAddCondition} class="btn-square">
-			<svelte:fragment slot="btn">
-				<Icon path={mdiPlus} title="Ajouter une condition" />
-			</svelte:fragment>
-		</InputSelect>
+		<InputSelect
+			options={addConditionOptions}
+			on:select={handleAddCondition}
+			placeholder="Ajouter une condition"
+			class="btn-square"
+		/>
 	</div>
 
 	<div class="flex flex-col gap-2">
@@ -157,8 +158,8 @@
 						<InputSelect
 							bind:value={condition.args.fieldId}
 							options={memberFields.map((f) => ({ value: f.id, label: f.name }))}
-							noBtnClass
 							class="label-text bg-base-200 hover:bg-base-300 p-2 pr-3 pl-1 rounded"
+							placeholder="Sélectioner un champ"
 							on:select={(e) => {
 								const field = memberFields.find((f) => f.id === e.detail)
 								if (!field) return
@@ -166,9 +167,7 @@
 								if (operators[field.type].includes(condition.args.operator)) return
 								condition.args.operator = operators[field.type][0]
 							}}
-						>
-							<svelte:fragment slot="placeholder">Sélectioner un champ</svelte:fragment>
-						</InputSelect>
+						/>
 
 						<!-- SELECT OPERATOR -->
 						{#if condition.args.fieldId}
@@ -181,7 +180,6 @@
 										value,
 										label: operatorLabel[value],
 									}))}
-									noBtnClass
 									class="label-text bg-base-200 hover:bg-base-300 px-3 py-2 rounded"
 								/>
 							{/if}

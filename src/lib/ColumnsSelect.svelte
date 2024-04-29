@@ -7,7 +7,7 @@
 </script>
 
 <script lang="ts">
-	import { Icon, InputCheckboxsMenu } from '$lib/material'
+	import { Icon, InputCheckboxsMenu } from 'fuma'
 	import { mdiViewColumnOutline } from '@mdi/js'
 
 	type Item = $$Generic<Record<string, unknown>>

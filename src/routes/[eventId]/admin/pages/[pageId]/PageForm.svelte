@@ -4,14 +4,7 @@
 	import type { Page } from '@prisma/client'
 
 	import { useForm } from '$lib/validation'
-	import {
-		DeleteButton,
-		FormControl,
-		Icon,
-		InputSelect,
-		InputText,
-		InputTextRich,
-	} from '$lib/material'
+	import { ButtonDelete, FormControl, Icon, InputSelect, InputText, InputTextRich } from 'fuma'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { PAGE_TYPE } from '$lib/constant'
@@ -86,7 +79,6 @@
 			{:else}
 				<InputSelect
 					key="type"
-					noBtnClass
 					class="menu-item rounded-lg border bordered h-12"
 					options={charterAlreadyExist && page.type !== 'charter'
 						? pageTypes
@@ -111,7 +103,7 @@
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
 
-		<DeleteButton
+		<ButtonDelete
 			formaction="?/delete_page"
 			disabled={page.type === 'home' || page.type === 'email'}
 		/>
