@@ -10,19 +10,19 @@ importers:
     dependencies:
       '@lucia-auth/adapter-prisma':
         specifier: ^3.0.2
-        version: 3.0.2(@prisma/client@5.11.0(prisma@5.11.0))(lucia@2.7.6)
+        version: 3.0.2(@prisma/client@5.13.0(prisma@5.13.0))(lucia@2.7.6)
       '@lucia-auth/oauth':
         specifier: ^3.5.1
         version: 3.5.1(lucia@2.7.6)
       '@mdi/js':
-        specifier: ^7.2.96
+        specifier: ^7.3.67
         version: 7.3.67
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
       '@prisma/client':
-        specifier: ^5.11.0
-        version: 5.11.0(prisma@5.11.0)
+        specifier: ^5.13.0
+        version: 5.13.0(prisma@5.13.0)
       '@stripe/stripe-js':
         specifier: ^2.2.0
         version: 2.2.0
@@ -30,7 +30,7 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1(tailwindcss@3.4.3)
       '@tailwindcss/typography':
-        specifier: ^0.5.9
+        specifier: ^0.5.10
         version: 0.5.10(tailwindcss@3.4.3)
       '@tiptap/core':
         specifier: ^2.1.13
@@ -75,10 +75,10 @@ importers:
         specifier: ^2.2.4
         version: 2.2.4(@tiptap/core@2.1.13(@tiptap/pm@2.1.13))(@tiptap/pm@2.1.13)
       axios:
-        specifier: ^1.4.0
+        specifier: ^1.6.2
         version: 1.6.2
       dayjs:
-        specifier: ^1.11.9
+        specifier: ^1.11.10
         version: 1.11.10
       debounce:
         specifier: ^1.2.1
@@ -88,7 +88,7 @@ importers:
         version: 4.3.2
       fuma:
         specifier: ^0.1.29
-        version: 0.1.29(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(prisma@5.11.0)(svelte@4.2.3)
+        version: 0.1.29(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(prisma@5.13.0)(svelte@4.2.3)
       happy-dom:
         specifier: ^13.6.2
         version: 13.6.2
@@ -102,7 +102,7 @@ importers:
         specifier: ^2.7.6
         version: 2.7.6
       nodemailer:
-        specifier: ^6.9.4
+        specifier: ^6.9.7
         version: 6.9.7
       object-path:
         specifier: ^0.11.8
@@ -129,86 +129,86 @@ importers:
         specifier: ^6.3.7
         version: 6.3.7
       zod:
-        specifier: ^3.21.4
+        specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
       '@playwright/test':
-        specifier: ^1.28.1
+        specifier: ^1.39.0
         version: 1.39.0
       '@sveltejs/adapter-node':
-        specifier: ^2.0.0
+        specifier: ^2.1.1
         version: 2.1.1(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))
       '@sveltejs/kit':
         specifier: ^2.5.7
         version: 2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0))
       '@sveltejs/vite-plugin-svelte':
-        specifier: ^3.0.0
+        specifier: ^3.0.1
         version: 3.0.1(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0))
       '@types/debounce':
-        specifier: ^1.2.1
+        specifier: ^1.2.4
         version: 1.2.4
       '@types/nodemailer':
-        specifier: ^6.4.9
+        specifier: ^6.4.14
         version: 6.4.14
       '@types/object-path':
         specifier: ^0.11.4
         version: 0.11.4
       '@typescript-eslint/eslint-plugin':
-        specifier: ^5.45.0
+        specifier: ^5.62.0
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.53.0)(typescript@5.2.2))(eslint@8.53.0)(typescript@5.2.2)
       '@typescript-eslint/parser':
-        specifier: ^5.45.0
+        specifier: ^5.62.0
         version: 5.62.0(eslint@8.53.0)(typescript@5.2.2)
       autoprefixer:
-        specifier: ^10.4.14
+        specifier: ^10.4.16
         version: 10.4.16(postcss@8.4.31)
       daisyui:
-        specifier: ^3.5.0
+        specifier: ^3.9.4
         version: 3.9.4
       eslint:
-        specifier: ^8.28.0
+        specifier: ^8.53.0
         version: 8.53.0
       eslint-config-prettier:
-        specifier: ^8.5.0
+        specifier: ^8.10.0
         version: 8.10.0(eslint@8.53.0)
       eslint-plugin-svelte:
-        specifier: ^2.30.0
+        specifier: ^2.35.0
         version: 2.35.0(eslint@8.53.0)(svelte@4.2.3)
       postcss:
-        specifier: ^8.4.27
+        specifier: ^8.4.31
         version: 8.4.31
       prettier:
-        specifier: ^2.8.0
+        specifier: ^2.8.8
         version: 2.8.8
       prettier-plugin-svelte:
         specifier: ^2.10.1
         version: 2.10.1(prettier@2.8.8)(svelte@4.2.3)
       prisma:
-        specifier: ^5.11.0
-        version: 5.11.0
+        specifier: ^5.13.0
+        version: 5.13.0
       prisma-json-types-generator:
         specifier: ^3.0.3
-        version: 3.0.3(prisma@5.11.0)(typescript@5.2.2)
+        version: 3.0.3(prisma@5.13.0)(typescript@5.2.2)
       svelte:
-        specifier: ^4.0.5
+        specifier: ^4.2.3
         version: 4.2.3
       svelte-check:
-        specifier: ^3.4.3
+        specifier: ^3.6.0
         version: 3.6.0(postcss-load-config@4.0.1(postcss@8.4.31))(postcss@8.4.31)(svelte@4.2.3)
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.3
       tslib:
-        specifier: ^2.4.1
+        specifier: ^2.6.2
         version: 2.6.2
       typescript:
-        specifier: ^5.0.0
+        specifier: ^5.2.2
         version: 5.2.2
       vite:
-        specifier: ^5.0.0
+        specifier: ^5.0.11
         version: 5.0.11(@types/node@20.9.0)
       vitest:
-        specifier: ^1.0.0
+        specifier: ^1.2.0
         version: 1.2.0(@types/node@20.9.0)(happy-dom@13.6.2)
 
 packages:
@@ -763,15 +763,6 @@ packages:
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
-  '@prisma/client@5.11.0':
-    resolution: {integrity: sha512-SWshvS5FDXvgJKM/a0y9nDC1rqd7KG0Q6ZVzd+U7ZXK5soe73DJxJJgbNBt2GNXOa+ysWB4suTpdK5zfFPhwiw==}
-    engines: {node: '>=16.13'}
-    peerDependencies:
-      prisma: '*'
-    peerDependenciesMeta:
-      prisma:
-        optional: true
-
   '@prisma/client@5.13.0':
     resolution: {integrity: sha512-uYdfpPncbZ/syJyiYBwGZS8Gt1PTNoErNYMuqHDa2r30rNSFtgTA/LXsSk55R7pdRTMi5pHkeP9B14K6nHmwkg==}
     engines: {node: '>=16.13'}
@@ -781,26 +772,26 @@ packages:
       prisma:
         optional: true
 
-  '@prisma/debug@5.11.0':
-    resolution: {integrity: sha512-N6yYr3AbQqaiUg+OgjkdPp3KPW1vMTAgtKX6+BiB/qB2i1TjLYCrweKcUjzOoRM5BriA4idrkTej9A9QqTfl3A==}
+  '@prisma/debug@5.13.0':
+    resolution: {integrity: sha512-699iqlEvzyCj9ETrXhs8o8wQc/eVW+FigSsHpiskSFydhjVuwTJEfj/nIYqTaWFYuxiWQRfm3r01meuW97SZaQ==}
 
   '@prisma/debug@5.5.2':
     resolution: {integrity: sha512-OeyuNABo1dgWHIQuJAdvW5qp5ccFfbI0CKNvdg8D34YWOfo6L+4J0gmnRI/j+h40HvM3S5WH2T8e3W9bPa7EVg==}
 
-  '@prisma/engines-version@5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102':
-    resolution: {integrity: sha512-WXCuyoymvrS4zLz4wQagSsc3/nE6CHy8znyiMv8RKazKymOMd5o9FP5RGwGHAtgoxd+aB/BWqxuP/Ckfu7/3MA==}
+  '@prisma/engines-version@5.13.0-23.b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b':
+    resolution: {integrity: sha512-AyUuhahTINGn8auyqYdmxsN+qn0mw3eg+uhkp8zwknXYIqoT3bChG4RqNY/nfDkPvzWAPBa9mrDyBeOnWSgO6A==}
 
-  '@prisma/engines@5.11.0':
-    resolution: {integrity: sha512-gbrpQoBTYWXDRqD+iTYMirDlF9MMlQdxskQXbhARhG6A/uFQjB7DZMYocMQLoiZXO/IskfDOZpPoZE8TBQKtEw==}
+  '@prisma/engines@5.13.0':
+    resolution: {integrity: sha512-hIFLm4H1boj6CBZx55P4xKby9jgDTeDG0Jj3iXtwaaHmlD5JmiDkZhh8+DYWkTGchu+rRF36AVROLnk0oaqhHw==}
 
-  '@prisma/fetch-engine@5.11.0':
-    resolution: {integrity: sha512-994viazmHTJ1ymzvWugXod7dZ42T2ROeFuH6zHPcUfp/69+6cl5r9u3NFb6bW8lLdNjwLYEVPeu3hWzxpZeC0w==}
+  '@prisma/fetch-engine@5.13.0':
+    resolution: {integrity: sha512-Yh4W+t6YKyqgcSEB3odBXt7QyVSm0OQlBSldQF2SNXtmOgMX8D7PF/fvH6E6qBCpjB/yeJLy/FfwfFijoHI6sA==}
 
   '@prisma/generator-helper@5.5.2':
     resolution: {integrity: sha512-qQz4JfhjjMs+C/dbZUoGAU+JV685Qe72iGonDM0c9H05A5s5MCWj5wV2kVi1/DNiy7jkfqGGM7bX8k0/8yO0FQ==}
 
-  '@prisma/get-platform@5.11.0':
-    resolution: {integrity: sha512-rxtHpMLxNTHxqWuGOLzR2QOyQi79rK1u1XYAVLZxDGTLz/A+uoDnjz9veBFlicrpWjwuieM4N6jcnjj/DDoidw==}
+  '@prisma/get-platform@5.13.0':
+    resolution: {integrity: sha512-B/WrQwYTzwr7qCLifQzYOmQhZcFmIFhR81xC45gweInSUn2hTEbfKUPd2keAog+y5WI5xLAFNJ3wkXplvSVkSw==}
 
   '@remirror/core-constants@2.0.2':
     resolution: {integrity: sha512-dyHY+sMF0ihPus3O27ODd4+agdHMEmuRdyiZJ2CCWjPV5UFmn17ZbElvk6WOGVE4rdCJKZQCrPV2BcikOMLUGQ==}
@@ -1541,8 +1532,8 @@ packages:
     resolution: {integrity: sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==}
     engines: {node: '>= 6'}
 
-  caniuse-lite@1.0.30001562:
-    resolution: {integrity: sha512-kfte3Hym//51EdX4239i+Rmp20EsLIYGdPkERegTgU19hQWCRhsRFGKHTliUlsry53tv17K7n077Kqa0WJU4ng==}
+  caniuse-lite@1.0.30001614:
+    resolution: {integrity: sha512-jmZQ1VpmlRwHgdP1/uiKzgiAuGOfLEJsYFP4+GBou/QQ4U6IOJCB4NP1c+1p9RGLpwObcT94jA5/uO+F1vBbog==}
 
   case-anything@2.1.13:
     resolution: {integrity: sha512-zlOQ80VrQ2Ue+ymH5OuM/DlDq64mEm+B9UTdHULv5osUMD6HalNTblf2b1u/m6QecjsnOkBpqVZ+XPwIVsy7Ng==}
@@ -2466,8 +2457,8 @@ packages:
       prisma: ^5.1
       typescript: ^5.1
 
-  prisma@5.11.0:
-    resolution: {integrity: sha512-KCLiug2cs0Je7kGkQBN9jDWoZ90ogE/kvZTUTgz2h94FEo8pczCkPH7fPNXkD1sGU7Yh65risGGD1HQ5DF3r3g==}
+  prisma@5.13.0:
+    resolution: {integrity: sha512-kGtcJaElNRAdAGsCNykFSZ7dBKpL14Cbs+VaQ8cECxQlRPDjBlMHNFYeYt0SKovAVy2Y65JXQwB3A5+zIQwnTg==}
     engines: {node: '>=16.13'}
     hasBin: true
 
@@ -3234,14 +3225,14 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.11.0(prisma@5.11.0))(lucia@2.7.6)':
+  '@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.13.0(prisma@5.13.0))(lucia@2.7.6)':
     dependencies:
-      '@prisma/client': 5.11.0(prisma@5.11.0)
+      '@prisma/client': 5.13.0(prisma@5.13.0)
       lucia: 2.7.6
 
-  '@lucia-auth/adapter-prisma@4.0.1(@prisma/client@5.13.0(prisma@5.11.0))(lucia@3.2.0)':
+  '@lucia-auth/adapter-prisma@4.0.1(@prisma/client@5.13.0(prisma@5.13.0))(lucia@3.2.0)':
     dependencies:
-      '@prisma/client': 5.13.0(prisma@5.11.0)
+      '@prisma/client': 5.13.0(prisma@5.13.0)
       lucia: 3.2.0
 
   '@lucia-auth/oauth@3.5.1(lucia@2.7.6)':
@@ -3406,15 +3397,11 @@ snapshots:
 
   '@popperjs/core@2.11.8': {}
 
-  '@prisma/client@5.11.0(prisma@5.11.0)':
+  '@prisma/client@5.13.0(prisma@5.13.0)':
     optionalDependencies:
-      prisma: 5.11.0
+      prisma: 5.13.0
 
-  '@prisma/client@5.13.0(prisma@5.11.0)':
-    optionalDependencies:
-      prisma: 5.11.0
-
-  '@prisma/debug@5.11.0': {}
+  '@prisma/debug@5.13.0': {}
 
   '@prisma/debug@5.5.2':
     dependencies:
@@ -3424,20 +3411,20 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@prisma/engines-version@5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102': {}
+  '@prisma/engines-version@5.13.0-23.b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b': {}
 
-  '@prisma/engines@5.11.0':
+  '@prisma/engines@5.13.0':
     dependencies:
-      '@prisma/debug': 5.11.0
-      '@prisma/engines-version': 5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102
-      '@prisma/fetch-engine': 5.11.0
-      '@prisma/get-platform': 5.11.0
+      '@prisma/debug': 5.13.0
+      '@prisma/engines-version': 5.13.0-23.b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
+      '@prisma/fetch-engine': 5.13.0
+      '@prisma/get-platform': 5.13.0
 
-  '@prisma/fetch-engine@5.11.0':
+  '@prisma/fetch-engine@5.13.0':
     dependencies:
-      '@prisma/debug': 5.11.0
-      '@prisma/engines-version': 5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102
-      '@prisma/get-platform': 5.11.0
+      '@prisma/debug': 5.13.0
+      '@prisma/engines-version': 5.13.0-23.b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
+      '@prisma/get-platform': 5.13.0
 
   '@prisma/generator-helper@5.5.2':
     dependencies:
@@ -3448,9 +3435,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@prisma/get-platform@5.11.0':
+  '@prisma/get-platform@5.13.0':
     dependencies:
-      '@prisma/debug': 5.11.0
+      '@prisma/debug': 5.13.0
 
   '@remirror/core-constants@2.0.2': {}
 
@@ -4187,7 +4174,7 @@ snapshots:
   autoprefixer@10.4.16(postcss@8.4.31):
     dependencies:
       browserslist: 4.22.1
-      caniuse-lite: 1.0.30001562
+      caniuse-lite: 1.0.30001614
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -4225,7 +4212,7 @@ snapshots:
 
   browserslist@4.22.1:
     dependencies:
-      caniuse-lite: 1.0.30001562
+      caniuse-lite: 1.0.30001614
       electron-to-chromium: 1.4.584
       node-releases: 2.0.13
       update-browserslist-db: 1.0.13(browserslist@4.22.1)
@@ -4246,7 +4233,7 @@ snapshots:
 
   camelcase-css@2.0.1: {}
 
-  caniuse-lite@1.0.30001562: {}
+  caniuse-lite@1.0.30001614: {}
 
   case-anything@2.1.13: {}
 
@@ -4625,11 +4612,11 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  fuma@0.1.29(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(prisma@5.11.0)(svelte@4.2.3):
+  fuma@0.1.29(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(prisma@5.13.0)(svelte@4.2.3):
     dependencies:
-      '@lucia-auth/adapter-prisma': 4.0.1(@prisma/client@5.13.0(prisma@5.11.0))(lucia@3.2.0)
+      '@lucia-auth/adapter-prisma': 4.0.1(@prisma/client@5.13.0(prisma@5.13.0))(lucia@3.2.0)
       '@mdi/js': 7.4.47
-      '@prisma/client': 5.13.0(prisma@5.11.0)
+      '@prisma/client': 5.13.0(prisma@5.13.0)
       '@sveltejs/kit': 2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.3)(vite@5.0.11(@types/node@20.9.0))
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-color': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))
@@ -5192,18 +5179,18 @@ snapshots:
       ansi-styles: 5.2.0
       react-is: 18.2.0
 
-  prisma-json-types-generator@3.0.3(prisma@5.11.0)(typescript@5.2.2):
+  prisma-json-types-generator@3.0.3(prisma@5.13.0)(typescript@5.2.2):
     dependencies:
       '@prisma/generator-helper': 5.5.2
-      prisma: 5.11.0
+      prisma: 5.13.0
       tslib: 2.6.2
       typescript: 5.2.2
     transitivePeerDependencies:
       - supports-color
 
-  prisma@5.11.0:
+  prisma@5.13.0:
     dependencies:
-      '@prisma/engines': 5.11.0
+      '@prisma/engines': 5.13.0
 
   prosemirror-changeset@2.2.1:
     dependencies:
