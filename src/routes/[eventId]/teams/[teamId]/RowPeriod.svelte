@@ -46,7 +46,7 @@
 
 	function handlePeriodClick() {
 		if ($page.data.isLeaderOfTeam) {
-			const url = $urlParam.with({ [PERIOD_OPEN_KEY]: period.id })
+			const url = $urlParam.toggle({ [PERIOD_OPEN_KEY]: period.id })
 			return goto(url, { replaceState: true, noScroll: true })
 		}
 		if (!state.disabled) handleSubscribeClick()
