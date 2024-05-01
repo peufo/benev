@@ -5,6 +5,7 @@
 	import { useForm } from '$lib/validation'
 	import { page } from '$app/stores'
 	import Oauth from './Oauth.svelte'
+	import TermsLabel from './TermsLabel.svelte'
 
 	export let onSuccess:
 		| ((action: URL, data?: Record<string, unknown> | undefined) => any)
@@ -85,11 +86,8 @@
 
 			{#if state === 'register'}
 				<div transition:slide|local class="flex flex-col mt-4">
-					<InputBoolean key="isOrganizer" label="Je suis organisateur" />
-					<InputBoolean key="isTermsAccepted">
-						J'accepte
-						<a class="text-sm link" href="/terms" target="_blank"> les conditions d'utilisation </a>
-					</InputBoolean>
+					<InputBoolean key="isOrganizer" label="Je suis organisateur" labelPosition="right" />
+					<InputBoolean key="isTermsAccepted" label={TermsLabel} labelPosition="right" />
 				</div>
 			{/if}
 
