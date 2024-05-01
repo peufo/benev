@@ -15,6 +15,8 @@ declare global {
 			member?: MemberWithComputedValues
 			event?: Event
 			medias?: Media[]
+			isLeader?: boolean
+			isLeaderOfTeam?: boolean
 		}
 		// interface Error {}
 		// interface Platform {}
