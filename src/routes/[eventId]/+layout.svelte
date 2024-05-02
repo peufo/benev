@@ -9,13 +9,12 @@
 		mdiWeb,
 	} from '@mdi/js'
 
-	import Header from '$lib/layout/Header.svelte'
-	import { Card, Icon } from 'fuma'
+	import { Card, Drawer, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
-	import Footer from '$lib/layout/Footer.svelte'
+	import { Header, Footer, AdminNavigation } from '$lib/layout'
 	import EventMenu from './EventMenu.svelte'
 	import Poster from './Poster.svelte'
-	import { Drawer } from '$lib/layout'
+	import InviteForm from '$lib/InviteForm.svelte'
 
 	export let data
 
@@ -61,7 +60,7 @@
 
 <div class="flex grow items-start relative p-2 gap-4">
 	{#if data.member?.roles.includes('leader')}
-		<Drawer />
+		<AdminNavigation />
 	{/if}
 
 	<div class="grow mx-auto">
@@ -105,6 +104,7 @@
 		</main>
 	</div>
 </div>
+
 <Footer class="z-10">
 	<div class="flex flex-wrap justify-center">
 		{#if data.event.web}
@@ -152,3 +152,9 @@
 		{/if}
 	</div>
 </Footer>
+
+{#if data.member?.roles.includes('leader')}
+	<Drawer key="form-invite" title="Inviter un nouveau membre" let:close>
+		<InviteForm on:success={close} />
+	</Drawer>
+{/if}

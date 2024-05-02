@@ -2,13 +2,14 @@
 	import type { PageData } from './$types'
 	import { page } from '$app/stores'
 	import { Icon, formatRange, urlParam } from 'fuma'
-	import { eventPath, onlyAvailable } from '$lib/store'
+	import { onlyAvailable } from '$lib/store'
 	import { createEventDispatcher } from 'svelte'
-	import { SubscribeStateForm, SubscribesOfPeriod } from '$lib/subscribe'
+	import { SubscribeInviteForm, SubscribeStateForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import Progress from '$lib/Progress.svelte'
 	import { goto } from '$app/navigation'
 	import { mdiClipboardTextOutline } from '@mdi/js'
 	import { slide } from 'svelte/transition'
+	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
 	type P = PageData['team']['periods'][number]
 
 	export let period: P
@@ -44,20 +45,20 @@
 
 	const dispatch = createEventDispatcher<{ subscribe: P }>()
 
-	function handlePeriodClick() {
+	function handlePeriodClick(event: MouseEvent) {
+		if (clickInteractiveElement(event)) return
 		if ($page.data.isLeaderOfTeam) {
 			const url = $urlParam.toggle({ [PERIOD_OPEN_KEY]: period.id })
-			return goto(url, { replaceState: true, noScroll: true })
+			return goto(url, { replaceState: true, noScroll: true, keepFocus: true })
 		}
-		if (!state.disabled) handleSubscribeClick()
+		if (!state.disabled) dispatch('subscribe', period)
 	}
 
-	function handleSubscribeClick() {
-		if (!$page.data.member?.isValidedByUser) {
-			const redirectTo = encodeURIComponent(`${location.pathname}?subscribeTo=${period.id}`)
-			return goto(`${$eventPath}/register?redirectTo=${redirectTo}`)
-		}
-		dispatch('subscribe', period)
+	function clickInteractiveElement(event: MouseEvent) {
+		const target = event.target as HTMLElement
+		const currentTarget = event.currentTarget as HTMLElement
+		const buttons = [...currentTarget.querySelectorAll('button, [data-tippy-root]')]
+		return !!buttons.filter((btn) => btn.contains(target)).length
 	}
 </script>
 
@@ -81,12 +82,16 @@
 			{#if $page.data.isLeaderOfTeam}
 				<div class="flex gap-2">
 					{#if state.available}
-						<button class="btn btn-square btn-sm" on:click|stopPropagation={handleSubscribeClick}>
+						<button
+							class="btn btn-square btn-sm"
+							on:click|stopPropagation={() => dispatch('subscribe', period)}
+						>
 							<Icon path={mdiClipboardTextOutline} size={20} title="M'inscrire à cette période" />
 						</button>
 					{:else}
 						<div class="w-8" />
 					{/if}
+					<PeriodEditMenu {period} />
 				</div>
 			{/if}
 		</td>
@@ -95,8 +100,10 @@
 	<tr class:border-0={!isOpen}>
 		<td class="py-0" colspan="3">
 			{#if isOpen}
-				<div class="py-3 pl-6" transition:slide>
+				<div class="py-3" transition:slide>
+					<Progress {period} withLabel />
 					<SubscribesOfPeriod subscribes={period.subscribes} />
+					<SubscribeInviteForm periodId={period.id} class="my-2" />
 				</div>
 			{/if}
 		</td>

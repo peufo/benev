@@ -12,6 +12,7 @@
 	const form = useForm<MemberWithUser>({
 		onSuccess: (action, member) => dispatch('success', member),
 		successMessage: 'Invitation envoyée',
+		successUpdate: false,
 	})
 </script>
 
@@ -21,7 +22,7 @@
 	use:enhance={form.submit}
 	class="flex flex-col gap-2"
 >
-	<InputText key="email" label="Email" input={{ autocomplete: 'off' }} />
+	<InputText key="email" label="Email" input={{ autocomplete: 'off', autofocus: true }} />
 	<div class="flex gap-2">
 		<InputText key="firstName" label="Prénom" class="grow" input={{ autocomplete: 'off' }} />
 		<InputText key="lastName" label="Nom" class="grow" input={{ autocomplete: 'off' }} />

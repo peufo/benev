@@ -26,22 +26,16 @@
 	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
 	import { page } from '$app/stores'
 	import RowPeriod from './RowPeriod.svelte'
+	import type { PageData } from './$types.js'
 
 	export let data
 
 	let subscribeDialog: HTMLDialogElement
 	let thanksDialog: ThanksDialog
-	type _Period = (typeof data.team.periods)[number]
-	let selectedPeriod: _Period | undefined = undefined
+	type P = PageData['team']['periods'][number]
+	let selectedPeriod: P | undefined = undefined
 
-	const periodOpenKey = 'periodOpen'
-
-	function handlePeriodClick(period: _Period & { disabled: boolean }) {
-		if (data.isLeaderOfTeam) return goto(`${$eventPath}/teams/${period.teamId}/${period.id}`)
-		if (!period.disabled) subscribe(period)
-	}
-
-	function subscribe(period: _Period) {
+	function subscribe(period: P) {
 		if (!data.member?.isValidedByUser) {
 			const redirectTo = encodeURIComponent(`${location.pathname}?subscribeTo=${period.id}`)
 			return goto(`${$eventPath}/register?redirectTo=${redirectTo}`)
@@ -164,7 +158,11 @@
 
 			<tbody>
 				{#each _periods as period (period.id)}
-					<RowPeriod {period} {isTeamClosedSubscribing} />
+					<RowPeriod
+						{period}
+						{isTeamClosedSubscribing}
+						on:subscribe={({ detail: _period }) => subscribe(_period)}
+					/>
 				{/each}
 			</tbody>
 		</table>

@@ -1,12 +1,8 @@
 <script lang="ts">
-	import { Card } from 'fuma'
 	import { useNotify } from '$lib/notify'
-	import { adminTabs } from '../../../lib/layout/adminTabs'
 	import { CheckoutWaitSSE } from '$lib/checkout'
 
 	export let data
-
-	$: activeTab = $adminTabs.find(({ isActive }) => isActive)
 
 	const notify = useNotify()
 

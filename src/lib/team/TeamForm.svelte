@@ -4,10 +4,9 @@
 	import { page } from '$app/stores'
 
 	import { useForm } from '$lib/validation'
-	import { InputText, InputTextarea, ButtonDelete, Dialog, InputDate } from 'fuma'
+	import { InputText, InputTextarea, ButtonDelete, InputDate } from 'fuma'
 	import { eventPath } from '$lib/store'
 
-	import InviteForm from '$lib/InviteForm.svelte'
 	import InputMembers from '$lib/InputMembers.svelte'
 	import { MemberConditions } from '$lib/member'
 
@@ -69,8 +68,3 @@
 		<a class="btn btn-ghost" href={redirectTo}>Annuler</a>
 	</div>
 </form>
-
-<Dialog bind:dialog={inviteDialog}>
-	<h2 slot="header" class="card-title">Inviter un nouveau membre</h2>
-	<InviteForm on:success={() => inviteDialog.close()} />
-</Dialog>
