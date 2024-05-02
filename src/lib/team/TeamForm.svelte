@@ -7,8 +7,8 @@
 	import { InputText, InputTextarea, ButtonDelete, InputDate } from 'fuma'
 	import { eventPath } from '$lib/store'
 
-	import InputMembers from '$lib/InputMembers.svelte'
 	import { MemberConditions } from '$lib/member'
+	import InputLeaders from '$lib/team/InputLeaders.svelte'
 
 	let klass = ''
 	export { klass as class }
@@ -24,8 +24,6 @@
 
 	const form = useForm({ successUpdate: false })
 
-	let inviteDialog: HTMLDialogElement
-
 	$: redirectTo =
 		$page.url.searchParams.get('redirectTo') || `${$eventPath}/teams${team ? `/${team.id}` : ''}`
 </script>
@@ -40,7 +38,7 @@
 	<InputText key="name" label="Nom du secteur" value={team?.name} />
 
 	{#if $page.data.member?.roles.includes('admin')}
-		<InputMembers key="leaders" label="Responsables" value={team?.leaders} {inviteDialog} />
+		<InputLeaders value={team?.leaders} />
 	{/if}
 	<InputTextarea key="description" label="Description" value={team?.description || ''} />
 
