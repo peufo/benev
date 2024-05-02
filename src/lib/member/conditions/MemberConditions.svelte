@@ -6,7 +6,7 @@
 	import type { Field, FieldType } from '@prisma/client'
 	import type { MemberCondition, MemberConditionOperator } from '$lib/validation'
 	import { jsonParse } from '$lib/jsonParse'
-	import { Icon, InputSelect, Placeholder } from 'fuma'
+	import { Icon, InputSelect, Placeholder, DropDownMenu } from 'fuma'
 	import {
 		mdiAccountCheckOutline,
 		mdiCardAccountDetailsOutline,
@@ -126,12 +126,11 @@
 				</span>
 			</div>
 		</div>
-		<InputSelect
-			options={addConditionOptions}
-			on:select={handleAddCondition}
-			placeholder="Ajouter une condition"
-			class="btn-square"
-		/>
+		<DropDownMenu options={addConditionOptions} on:select={handleAddCondition}>
+			<button type="button" class="btn btn-square">
+				<Icon path={mdiPlus} />
+			</button>
+		</DropDownMenu>
 	</div>
 
 	<div class="flex flex-col gap-2">
