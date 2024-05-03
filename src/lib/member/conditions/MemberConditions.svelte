@@ -126,7 +126,11 @@
 				</span>
 			</div>
 		</div>
-		<DropDownMenu options={addConditionOptions} on:select={handleAddCondition}>
+		<DropDownMenu
+			options={addConditionOptions}
+			on:select={handleAddCondition}
+			tippyProps={{ placement: 'bottom-end' }}
+		>
 			<button type="button" class="btn btn-square">
 				<Icon path={mdiPlus} />
 			</button>
