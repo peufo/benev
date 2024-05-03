@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { mdiFormatListBulleted, mdiSigma } from '@mdi/js'
+	import { mdiAccountPlusOutline, mdiFormatListBulleted, mdiSigma } from '@mdi/js'
 	import type { Field, Member } from '@prisma/client'
 	import { tick } from 'svelte'
-	import { TabsIcon } from 'fuma'
+	import { Icon, TabsIcon, urlParam } from 'fuma'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
-
 	import { InputSearch, Pagination, Table, TableViewSelect, Card } from 'fuma'
+
 	import { component } from '$lib/utils'
-	import InviteDialog from '$lib/InviteDialog.svelte'
 	import { MemberActions, MemberCreateSubscribeDialog, MemberFieldDialog } from '$lib/member'
 	import { jsonParse } from '$lib/jsonParse'
 	import { getMembersTableFields } from './membersTableFields'
@@ -60,7 +59,16 @@
 
 			<MembersCopy fields={data.fields} />
 			<MembersEmails />
-			<InviteDialog justIcon class="btn-sm" />
+
+			<a
+				type="button"
+				class="btn btn-square btn-sm"
+				href={$urlParam.with({ 'form-invite': 1 })}
+				data-sveltekit-noscroll
+				data-sveltekit-replacestate
+			>
+				<Icon path={mdiAccountPlusOutline} />
+			</a>
 		</div>
 		{#key tableFields}
 			<Table

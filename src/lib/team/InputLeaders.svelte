@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Member, User } from '@prisma/client'
+	import { mdiAccountPlusOutline } from '@mdi/js'
 	import { InputRelations, urlParam } from 'fuma'
 	import { api } from '$lib/api'
-	import { mdiAccountPlusOutline } from '@mdi/js'
 
 	export let value: (Member & { user: User })[] | undefined = undefined
 </script>

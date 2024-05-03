@@ -2,16 +2,16 @@
 	import { enhance } from '$app/forms'
 	import { mdiCheck, mdiLink, mdiLoading } from '@mdi/js'
 	import type { Page } from '@prisma/client'
+	import { invalidateAll } from '$app/navigation'
+	import { tick } from 'svelte'
+	import { ButtonDelete, FormControl, Icon, InputSelect, InputText, InputTextRich } from 'fuma'
 
 	import { useForm } from '$lib/validation'
-	import { ButtonDelete, FormControl, Icon, InputSelect, InputText, InputTextRich } from 'fuma'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { PAGE_TYPE } from '$lib/constant'
 	import { debounce } from '$lib/debounce'
 	import PageTypeHelp from './PageTypeHelp.svelte'
-	import { invalidateAll } from '$app/navigation'
-	import { tick } from 'svelte'
 
 	export let page: Page
 	export let charterAlreadyExist: boolean
