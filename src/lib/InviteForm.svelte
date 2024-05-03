@@ -3,9 +3,9 @@
 	import type { Member, User } from '@prisma/client'
 
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/validation'
+	import { modelInvite, useForm } from '$lib/validation'
 	import { eventPath } from '$lib/store'
-	import { InputText } from 'fuma'
+	import { Form, InputText, type UseFormOptions } from 'fuma'
 
 	type MemberWithUser = Member & { user: User }
 	const dispatch = createEventDispatcher<{ success: MemberWithUser | undefined }>()
@@ -14,6 +14,12 @@
 		successMessage: 'Invitation envoyée',
 		successUpdate: false,
 	})
+
+	const options: UseFormOptions<MemberWithUser> = {
+		onSuccess: (action, member) => dispatch('success', member),
+		successMessage: 'Invitation envoyée',
+		successUpdate: false,
+	}
 </script>
 
 <form
@@ -31,3 +37,36 @@
 		<button class="btn"> Valider </button>
 	</div>
 </form>
+
+<Form
+	action="/invite?/new_invite"
+	actionPrefix={$eventPath}
+	model={modelInvite}
+	{options}
+	fields={[
+		[
+			{
+				key: 'email',
+				colSpan: 4,
+				text: {
+					label: 'Email',
+					input: { autocomplete: 'off', autofocus: true },
+				},
+			},
+			{
+				key: 'firstName',
+				text: {
+					label: 'Prénom',
+					input: { autocomplete: 'off' },
+				},
+			},
+			{
+				key: 'lastName',
+				text: {
+					label: 'Nom',
+					input: { autocomplete: 'off' },
+				},
+			},
+		],
+	]}
+/>

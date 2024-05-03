@@ -1,9 +1,9 @@
 import { error, redirect } from '@sveltejs/kit'
-import { z } from '$lib/validation'
+import { parseFormData, tryOrFail } from 'fuma/server'
+import { z } from 'fuma'
+import { modelInvite } from '$lib/validation'
 import {
-	parseFormData,
 	prisma,
-	tryOrFail,
 	sendEmailComponent,
 	sendEmailModel,
 	auth,
@@ -23,11 +23,7 @@ export const actions = {
 	new_invite: async ({ request, locals, params: { eventId } }) => {
 		const { user: author } = await permission.leader(eventId, locals)
 
-		const { err, data } = await parseFormData(request, {
-			email: z.string().email().toLowerCase(),
-			firstName: z.string().min(2),
-			lastName: z.string().min(2),
-		})
+		const { err, data } = await parseFormData(request, modelInvite)
 		if (err) return err
 
 		return tryOrFail(async () => {

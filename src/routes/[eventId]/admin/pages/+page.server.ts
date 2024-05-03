@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit'
-import { prisma, tryOrFail, permission } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
+import { prisma, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ params: { eventId } }) => {

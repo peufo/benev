@@ -1,10 +1,10 @@
-import { tableHeadComponent, type TableField } from '$lib/material/table'
+import type { TableField } from '$lib/material/table'
 import { component, getAge } from '$lib/utils'
 import { MemberCell } from '$lib/member'
 import { formatRange } from '$lib/formatRange'
 import { jsonParse } from '$lib/jsonParse'
 import type { Member } from './getMembers'
-import type { Field, SubscribeState } from '@prisma/client'
+import type { Field } from '@prisma/client'
 
 function toHours(ms: number) {
 	const hours = ms / (1000 * 60 * 60)

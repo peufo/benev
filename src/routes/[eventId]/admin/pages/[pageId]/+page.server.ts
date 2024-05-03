@@ -1,6 +1,7 @@
 import { pageUpdate } from '$lib/validation'
 import { fail, redirect } from '@sveltejs/kit'
-import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
+import { parseFormData, prisma, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ params: { pageId, eventId } }) => {

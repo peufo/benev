@@ -1,5 +1,6 @@
+import { tryOrFail } from 'fuma/server'
 import { periodUpdate, periodValidation } from '$lib/validation'
-import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
+import { parseFormData, prisma, permission } from '$lib/server'
 import { z } from '$lib/validation'
 
 export const load = async ({ locals, params: { teamId, periodId } }) => {

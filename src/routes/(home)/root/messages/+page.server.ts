@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { parseFormData, parseQuery, prisma, tryOrFail } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
+import { parseFormData, parseQuery, prisma } from '$lib/server'
 import { toTuple, z } from '$lib/validation'
 import { MessageState, type Prisma } from '@prisma/client'
 
@@ -9,7 +10,7 @@ export const load = async ({ url }) => {
 		take: z.number().default(20),
 		state: z.enum(toTuple(MessageState)).optional(),
 	})
-	if (err) error(400);
+	if (err) error(400)
 
 	const where: Prisma.MessageWhereInput = {}
 	if (data.state) where.state = data.state

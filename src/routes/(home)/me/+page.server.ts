@@ -1,11 +1,11 @@
 import { fail, error, redirect } from '@sveltejs/kit'
+import { tryOrFail } from 'fuma/server'
 import {
 	auth,
 	generateToken,
 	parseFormData,
 	prisma,
 	sendEmailComponent,
-	tryOrFail,
 	createAvatarPlaceholder,
 	media,
 } from '$lib/server'

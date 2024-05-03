@@ -1,6 +1,6 @@
 import { defaultEmailModels } from '$lib/email/models.js'
-import { jsonParse } from '$lib/jsonParse.js'
-import { prisma, tryOrFail } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
+import { prisma } from '$lib/server'
 
 export const actions = {
 	generate_all_avatars: async () => {

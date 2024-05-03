@@ -1,7 +1,9 @@
-import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
+import { error } from '@sveltejs/kit'
+import { tryOrFail } from 'fuma/server'
+
+import { parseFormData, prisma, permission } from '$lib/server'
 import { periodCreate, periodValidation } from '$lib/validation'
 import { isMemberAllowed } from '$lib/member'
-import { error } from '@sveltejs/kit'
 
 export const load = async ({ locals, parent, params: { teamId } }) => {
 	const { member } = await parent()

@@ -1,7 +1,7 @@
+import { tryOrFail } from 'fuma/server'
 import {
 	parseFormData,
 	prisma,
-	tryOrFail,
 	permission,
 	media,
 	ensureLicenceEvent,

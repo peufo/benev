@@ -6,7 +6,7 @@ import type { MemberWithComputedValues } from '$lib/server'
 import { getAge } from '$lib/utils'
 import { domain } from '$lib/email'
 import type { NestedPaths } from './nestedPaths'
-import { type Replacer } from './injectValues'
+import type { Replacer } from './injectValues'
 
 type DataWithMember = { member: MemberWithComputedValues }
 

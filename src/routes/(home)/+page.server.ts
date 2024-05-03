@@ -1,6 +1,6 @@
-import { prisma } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
 import { error, fail, redirect } from '@sveltejs/kit'
-import { media, parseFormData, tryOrFail } from '$lib/server'
+import { prisma, media, parseFormData } from '$lib/server'
 import { eventCreate } from '$lib/validation'
 import { defaultEmailModels } from '$lib/email/models'
 

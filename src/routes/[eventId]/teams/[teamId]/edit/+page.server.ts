@@ -1,6 +1,7 @@
+import { tryOrFail } from 'fuma/server'
 import { teamUpdate } from '$lib/validation/models/team'
 import { parseFormData } from '$lib/server/formData'
-import { prisma, tryOrFail, permission } from '$lib/server'
+import { prisma, permission } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
 export const load = async ({ locals, params: { teamId } }) => {
@@ -27,7 +28,7 @@ export const actions = {
 		const { err, data } = await parseFormData(request, teamUpdate)
 
 		if (err) return err
-		if (!member.roles.includes('admin') && data.leaders) error(403);
+		if (!member.roles.includes('admin') && data.leaders) error(403)
 
 		return tryOrFail(
 			() =>

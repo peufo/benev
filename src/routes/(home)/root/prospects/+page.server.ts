@@ -1,4 +1,5 @@
-import { parseFormData, parseQuery, prisma, tryOrFail } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
+import { parseFormData, parseQuery, prisma } from '$lib/server'
 import { z } from '$lib/validation'
 import { sendProspectEmails } from './sendProspectEmails.js'
 

@@ -1,11 +1,11 @@
 import { error } from '@sveltejs/kit'
+import { tryOrFail } from 'fuma/server'
 import {
 	getUserIdOrRedirect,
 	parseFormData,
 	prisma,
 	sendEmail,
 	sendEmailComponent,
-	tryOrFail,
 } from '$lib/server'
 import { z } from '$lib/validation'
 import { SMTP_USER, ROOT_USER } from '$env/static/private'

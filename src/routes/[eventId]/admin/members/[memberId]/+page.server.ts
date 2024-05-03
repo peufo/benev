@@ -1,9 +1,9 @@
+import { tryOrFail } from 'fuma/server'
 import {
 	prisma,
 	getMemberProfile,
 	permission,
 	parseFormData,
-	tryOrFail,
 	ensureLicenceMembers,
 } from '$lib/server'
 import { z } from '$lib/validation'

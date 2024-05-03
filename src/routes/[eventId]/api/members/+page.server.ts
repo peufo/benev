@@ -1,5 +1,6 @@
 import { z } from '$lib/validation'
-import { parseFormData, permission, prisma, tryOrFail } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
+import { parseFormData, permission, prisma } from '$lib/server'
 
 export const actions = {
 	delete_member: async ({ request, locals, params: { eventId } }) => {

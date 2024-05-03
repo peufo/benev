@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit'
-import { tryOrFail, prisma, parseFormData, permission, media } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
+import { prisma, parseFormData, permission, media } from '$lib/server'
 import { viewCreate, z } from '$lib/validation'
 
 export const load = async ({ url }) => {

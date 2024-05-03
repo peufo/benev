@@ -2,9 +2,9 @@ import { error } from '@sveltejs/kit'
 import type { Prisma, SubscribeState } from '@prisma/client'
 import { isFreeRange } from 'perod'
 import type { Action } from './$types'
+import { tryOrFail } from 'fuma/server'
 import {
 	prisma,
-	tryOrFail,
 	permission,
 	ensureLicenceMembers,
 	type MemberWithComputedValues,

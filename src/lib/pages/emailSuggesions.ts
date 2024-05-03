@@ -1,8 +1,8 @@
+import type { Period, Subscribe, Team } from '@prisma/client'
 import type { MemberWithComputedValues } from '$lib/server'
 import { domain } from '$lib/email'
-import { type Replacer } from './injectValues'
+import type { Replacer } from './injectValues'
 import type { EmailEvent } from '$lib/email/models'
-import type { Period, Subscribe, Team } from '@prisma/client'
 import { formatRange } from '$lib/formatRange'
 
 export type SubscribeWithTeam = Subscribe & {

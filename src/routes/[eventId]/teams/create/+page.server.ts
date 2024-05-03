@@ -1,6 +1,7 @@
+import { tryOrFail } from 'fuma/server'
 import { teamCreate } from '$lib/validation/models/team'
 import { parseFormData } from '$lib/server/formData'
-import { prisma, tryOrFail, permission } from '$lib/server'
+import { prisma, permission } from '$lib/server'
 
 export const actions = {
 	default: async ({ request, locals, params: { eventId } }) => {

@@ -1,4 +1,5 @@
-import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
+import { parseFormData, prisma, permission } from '$lib/server'
 import { z } from '$lib/validation'
 
 import { eventMemberSettings, memberFieldCreate, memberFieldUpdate } from '$lib/validation'

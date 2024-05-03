@@ -1,4 +1,5 @@
-import { parseFormData, prisma, tryOrFail, permission } from '$lib/server'
+import { tryOrFail } from 'fuma/server'
+import { parseFormData, prisma, permission } from '$lib/server'
 
 import { giftCreate } from '$lib/validation'
 
