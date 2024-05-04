@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { enhance } from '$app/forms'
-	import { InputText, InputPassword, Dialog, InputBoolean } from 'fuma'
-	import { useForm } from '$lib/validation'
+	import { useForm, InputText, InputPassword, Dialog, InputBoolean } from 'fuma'
 	import { page } from '$app/stores'
 	import Oauth from './Oauth.svelte'
 	import TermsLabel from './TermsLabel.svelte'
@@ -11,7 +9,7 @@
 		| ((action: URL, data?: Record<string, unknown> | undefined) => any)
 		| undefined = undefined
 
-	const form = useForm({
+	const { enhance } = useForm({
 		onSuccess,
 		successMessage(action) {
 			if (action.search === '?/reset_password') {
@@ -67,11 +65,7 @@
 			</span>
 		</div>
 
-		<form
-			class="card-body border border-t-0 border-base-300"
-			method="post"
-			use:enhance={form.submit}
-		>
+		<form class="card-body border border-t-0 border-base-300" method="post" use:enhance>
 			{#if state === 'register'}
 				<div transition:slide|local class="flex flex-col gap-2">
 					<div class="grid grid-cols-2 gap-2">
