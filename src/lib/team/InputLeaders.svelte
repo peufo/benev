@@ -14,6 +14,6 @@
 	search={$api.member.search}
 	slotItem={({ user }) => `${user.firstName} ${user.lastName}`}
 	createTitle="Inviter un nouveau membre"
-	createIcon="{mdiAccountPlusOutline},"
+	createIcon={mdiAccountPlusOutline}
 	createUrl={$urlParam.with({ 'form-invite': 1 })}
 />
