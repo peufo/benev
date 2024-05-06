@@ -1,6 +1,6 @@
 import { tryOrFail, parseFormData } from 'fuma/server'
 import { permission, prisma } from '$lib/server'
-import { modelCheckout } from '$lib/validation'
+import { modelCheckout } from '$lib/models'
 import type { Prisma } from '@prisma/client'
 
 export const actions = {

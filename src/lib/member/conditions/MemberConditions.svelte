@@ -4,7 +4,7 @@
 	import { get } from 'svelte/store'
 	import { page } from '$app/stores'
 	import type { Field, FieldType } from '@prisma/client'
-	import type { MemberCondition, MemberConditionOperator } from '$lib/validation'
+	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
 	import { jsonParse } from '$lib/jsonParse'
 	import { Icon, InputSelect, Placeholder, DropDownMenu } from 'fuma'
 	import {

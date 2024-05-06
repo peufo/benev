@@ -2,7 +2,7 @@
 
 import type { MemberWithComputedValues } from '$lib/server'
 import type { Event, Media } from '@prisma/client'
-import { modelMemberCondition } from '$lib/validation'
+import { modelMemberCondition } from '$lib/models'
 
 // for information about these interfaces
 declare global {

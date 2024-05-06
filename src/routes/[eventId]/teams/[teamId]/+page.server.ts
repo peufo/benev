@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { tryOrFail, parseFormData } from 'fuma/server'
 
 import { prisma, permission } from '$lib/server'
-import { modelPeriodCreate, validationPeriod } from '$lib/validation'
+import { modelPeriodCreate, validationPeriod } from '$lib/models'
 import { isMemberAllowed } from '$lib/member'
 
 export const load = async ({ locals, parent, params: { teamId } }) => {

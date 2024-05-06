@@ -9,7 +9,7 @@ import {
 	createAvatarPlaceholder,
 	media,
 } from '$lib/server'
-import { modelUserLogin, modelUserCreate, modelUserUpdate } from '$lib/validation'
+import { modelUserLogin, modelUserCreate, modelUserUpdate } from '$lib/models'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
 
 export const load = () => {

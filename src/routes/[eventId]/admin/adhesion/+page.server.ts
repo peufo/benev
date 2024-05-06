@@ -6,7 +6,7 @@ import {
 	modelEventMemberSettings,
 	modelMemberFieldCreate,
 	modelMemberFieldUpdate,
-} from '$lib/validation'
+} from '$lib/models'
 
 export const load = async ({ parent, params: { eventId } }) => {
 	const { event } = await parent()

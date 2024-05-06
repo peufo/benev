@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
 import { z } from 'fuma/validation'
 import { prisma, json } from '$lib/server'
-import { modelMemberCondition } from '$lib/validation'
+import { modelMemberCondition } from '$lib/models'
 import { isMemberAllowed } from '$lib/member'
 
 export const GET = async ({ params: { eventId }, url }) => {

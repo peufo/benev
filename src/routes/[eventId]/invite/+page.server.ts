@@ -1,7 +1,7 @@
 import { error, redirect } from '@sveltejs/kit'
 import { parseFormData, tryOrFail } from 'fuma/server'
 import { z } from 'fuma'
-import { modelInvite } from '$lib/validation'
+import { modelInvite } from '$lib/models'
 import {
 	prisma,
 	sendEmailComponent,

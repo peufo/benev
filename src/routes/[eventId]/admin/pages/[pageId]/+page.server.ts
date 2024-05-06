@@ -1,4 +1,4 @@
-import { modelPageUpdate } from '$lib/validation'
+import { modelPageUpdate } from '$lib/models'
 import { fail, redirect } from '@sveltejs/kit'
 import { tryOrFail, parseFormData } from 'fuma/server'
 import { prisma, permission } from '$lib/server'

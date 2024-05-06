@@ -1,4 +1,4 @@
-import type { MemberConditionOperator } from '$lib/validation'
+import type { MemberConditionOperator } from '$lib/models'
 import type { Member, Team, User } from '@prisma/client'
 import dayjs from 'dayjs'
 

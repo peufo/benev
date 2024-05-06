@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit'
 import { tryOrFail, parseFormData } from 'fuma/server'
 import { z } from 'fuma/validation'
 import { prisma, permission, media } from '$lib/server'
-import { modelViewCreate } from '$lib/validation'
+import { modelViewCreate } from '$lib/models'
 
 export const load = async ({ url }) => {
 	redirect(302, `${url.pathname}/members`)

@@ -1,7 +1,7 @@
 import { formAction } from 'fuma/server'
 import { error, redirect } from '@sveltejs/kit'
 import { prisma, media } from '$lib/server'
-import { modelEventCreate } from '$lib/validation'
+import { modelEventCreate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
 
 export const load = async ({ url }) => {

@@ -1,5 +1,5 @@
 import { tryOrFail, parseFormData } from 'fuma/server'
-import { modelTeamUpdate } from '$lib/validation/models/team'
+import { modelTeamUpdate } from '$lib/models/team'
 import { prisma, permission } from '$lib/server'
 import { error } from '@sveltejs/kit'
 

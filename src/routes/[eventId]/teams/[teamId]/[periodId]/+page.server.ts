@@ -1,5 +1,5 @@
 import { tryOrFail, parseFormData } from 'fuma/server'
-import { modelPeriodUpdate, validationPeriod } from '$lib/validation'
+import { modelPeriodUpdate, validationPeriod } from '$lib/models'
 import { prisma, permission } from '$lib/server'
 import { z } from 'fuma/validation'
 

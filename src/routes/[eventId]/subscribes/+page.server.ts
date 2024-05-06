@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { isFreeRange } from 'perod'
 import { parseFormData, tryOrFail } from 'fuma/server'
-import { modelSubscribe } from '$lib/validation'
+import { modelSubscribe } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { subscribeNotification } from '$lib/email/subscribeNotification'

@@ -1,7 +1,7 @@
 import { tryOrFail, parseFormData } from 'fuma/server'
 import { prisma, permission } from '$lib/server'
 
-import { modelGiftCreate } from '$lib/validation'
+import { modelGiftCreate } from '$lib/models'
 
 export const load = async ({ params: { eventId } }) => {
 	return {
