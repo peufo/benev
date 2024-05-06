@@ -11,8 +11,7 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
 
-		const { err, data } = await parseFormData(request, modelSubscribe)
-		if (err) return err
+		const { data } = await parseFormData(request, modelSubscribe)
 
 		return tryOrFail(async () => {
 			const [period, memberAuthor, subscribes] = await Promise.all([

@@ -54,8 +54,7 @@ export const actions = {
 
 			const modelMemberProfile = buildModelMemberProfile(fields, isLeader && !editOwnProfile)
 
-			const { data, err } = await parseFormData(formData, modelMemberProfile)
-			if (err) return err
+			const { data } = await parseFormData(formData, modelMemberProfile)
 
 			const { memberId, ...values } = data
 			if (!memberId) throw Error('memberId is required')
