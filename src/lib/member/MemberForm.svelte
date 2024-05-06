@@ -4,7 +4,7 @@
 	import type { Event, Page as TPage } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { eventPath, urlParam } from '$lib/store'
 	import { ButtonDelete } from 'fuma'
 	import { tiptap } from '$lib/pages'

@@ -4,7 +4,7 @@
 	import FormControl from './FormControl.svelte'
 	import { type InputProps, type Options, parseOptions } from '.'
 	import { bindValueWithParams } from './action'
-	import { formContext } from '$lib/validation'
+	import { formContext } from 'fuma/validation'
 	type $$Props = InputProps & { options: Options; optionsClass?: string }
 	$: ({
 		input,

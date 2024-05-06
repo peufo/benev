@@ -1,9 +1,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
-import { z } from '$lib/validation'
+import { z } from 'fuma/validation'
+import { parseFormData } from 'fuma/server'
 import type { Prisma } from '@prisma/client'
-import { parseFormData } from './formData'
 import { prisma } from './prisma'
 import { MEDIA_DIR } from '$env/static/private'
 import { error } from '@sveltejs/kit'
@@ -18,7 +18,7 @@ export const media = {
 		const keyImage = opt.key ? `${opt.key}_image` : 'image'
 		const keyCrop = opt.key ? `${opt.key}_crop` : 'crop'
 
-		const { data, err, formData } = await parseFormData(requestOrFormData, {
+		const { data, formData } = await parseFormData(requestOrFormData, {
 			[keyImage]: z.instanceof(Blob),
 			[keyCrop]: z.optional(
 				z.json({
@@ -31,7 +31,6 @@ export const media = {
 		})
 
 		if (formData.get(keyCrop) === 'undefined') return
-		if (err) throw err
 
 		const image = data[keyImage] as Blob
 		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }

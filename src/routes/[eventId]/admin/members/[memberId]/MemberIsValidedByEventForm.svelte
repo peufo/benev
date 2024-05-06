@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms'
 	import { mdiCheck } from '@mdi/js'
 	import type { PageData } from './$types'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { Icon } from 'fuma'
 
 	export let memberProfile: PageData['memberProfile']

@@ -3,7 +3,7 @@
 	import type { Media } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { ButtonDelete, Dialog, Icon, InputText } from 'fuma'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'

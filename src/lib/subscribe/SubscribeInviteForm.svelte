@@ -4,7 +4,7 @@
 	import type { Props as TippyProps } from 'tippy.js'
 	import { createEventDispatcher } from 'svelte'
 	import { InputRelation, urlParam } from 'fuma'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { enhance } from '$app/forms'
 	import { api } from '$lib/api'
 	import { eventPath } from '$lib/store'

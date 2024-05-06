@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms'
 	import type { Event } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { InputBoolean, InputDate } from 'fuma'
 	import { slide } from 'svelte/transition'
 

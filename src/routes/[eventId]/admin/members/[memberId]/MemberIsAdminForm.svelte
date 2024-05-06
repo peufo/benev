@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { PageData } from './$types'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { rolesMap } from '$lib/member/MemberRole.svelte'
 	import { Icon } from 'fuma'
 

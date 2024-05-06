@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit'
-import { prisma, permission, parseQuery, json, addTeamComputedValues } from '$lib/server'
-import { z } from '$lib/validation'
+import { parseQuery } from 'fuma/server'
+import { z } from 'fuma/validation'
+import { prisma, permission, json, addTeamComputedValues } from '$lib/server'
 
 export const GET = async ({ params: { eventId }, url, locals }) => {
 	await permission.leader(eventId, locals)
@@ -11,7 +12,7 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 		take: z.number().default(5),
 		onlyAvailable: z.boolean().optional(),
 	})
-	if (err) error(400);
+	if (err) error(400)
 	const { search = '', ids, take } = data
 
 	if (ids)

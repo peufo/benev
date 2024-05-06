@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms'
 	import { Card, Icon, InputText, Placeholder } from 'fuma'
 	import InputTextarea from '$lib/material/input/InputTextarea.svelte'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { mdiCheck } from '@mdi/js'
 
 	const form = useForm({

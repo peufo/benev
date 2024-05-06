@@ -1,6 +1,6 @@
-import { tryOrFail } from 'fuma/server'
-import { parseFormData, parseQuery, prisma } from '$lib/server'
-import { z } from '$lib/validation'
+import { tryOrFail, parseFormData, parseQuery } from 'fuma/server'
+import { z } from 'fuma/validation'
+import { prisma } from '$lib/server'
 import { sendProspectEmails } from './sendProspectEmails.js'
 
 export const load = async ({ url }) => {
@@ -27,8 +27,7 @@ export const load = async ({ url }) => {
 export const actions = {
 	send_email: async ({ request }) => {
 		return tryOrFail(async () => {
-			const { err, data } = await parseFormData(request, { prospectId: z.string() })
-			if (err) return err
+			const { data } = await parseFormData(request, { prospectId: z.string() })
 			const prospect = await prisma.prospect.findUniqueOrThrow({ where: { id: data.prospectId } })
 			return sendProspectEmails([prospect])
 		})

@@ -1,5 +1,6 @@
-import { z } from '$lib/validation'
-import { parseQuery, prisma } from '$lib/server'
+import { z } from 'fuma/validation'
+import { parseQuery } from 'fuma/server'
+import { prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
 export const load = async ({ url }) => {

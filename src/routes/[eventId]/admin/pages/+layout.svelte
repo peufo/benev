@@ -5,7 +5,7 @@
 
 	import { Card, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/validation/index.js'
+	import { useForm } from 'fuma/validation'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { PAGE_TYPE } from '$lib/constant'
 

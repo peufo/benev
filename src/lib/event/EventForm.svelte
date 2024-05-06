@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte'
 	import { enhance } from '$app/forms'
 	import { slide } from 'svelte/transition'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { InputText, InputTextarea, InputImagePreview } from 'fuma'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'

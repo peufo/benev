@@ -2,7 +2,7 @@
 	import { page } from '$app/stores'
 	import { enhance } from '$app/forms'
 	import { InputPassword } from '$lib/material'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 
 	import { Oauth } from '$lib/me'
 

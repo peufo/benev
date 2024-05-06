@@ -4,7 +4,7 @@
 	import { Dialog, DropDown, Icon, InputText } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { enhance } from '$app/forms'
 	import { onMount } from 'svelte'
 

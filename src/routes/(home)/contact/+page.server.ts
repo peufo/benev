@@ -1,13 +1,7 @@
 import { error } from '@sveltejs/kit'
-import { tryOrFail } from 'fuma/server'
-import {
-	getUserIdOrRedirect,
-	parseFormData,
-	prisma,
-	sendEmail,
-	sendEmailComponent,
-} from '$lib/server'
-import { z } from '$lib/validation'
+import { tryOrFail, parseFormData } from 'fuma/server'
+import { z } from 'fuma/validation'
+import { getUserIdOrRedirect, prisma, sendEmail, sendEmailComponent } from '$lib/server'
 import { SMTP_USER, ROOT_USER } from '$env/static/private'
 import { EmailBasic } from '$lib/email'
 
@@ -22,13 +16,12 @@ export const actions = {
 	new_message: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) error(403)
-		const { data, err } = await parseFormData(request, {
-			subject: z.string().min(3).max(252),
-			content: z.string().min(10).max(10_000),
-		})
-		if (err) return err
 
 		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, {
+				subject: z.string().min(3).max(252),
+				content: z.string().min(10).max(10_000),
+			})
 			await Promise.all([
 				prisma.message.create({
 					data: {

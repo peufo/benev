@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Gift, GiftCondition } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { GIFT_CONDITION_MODE } from '$lib/constant'
 	import { enhance } from '$app/forms'
 	import { InputRadio, InputText } from 'fuma'

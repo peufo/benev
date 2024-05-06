@@ -4,7 +4,7 @@
 
 	import { api } from '$lib/api'
 	import { Dialog, InputRelations } from 'fuma'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { eventPath } from '$lib/store'
 
 	export let title = 'Secteur à charges'

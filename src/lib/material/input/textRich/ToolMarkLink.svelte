@@ -3,7 +3,7 @@
 	import { mdiLinkVariant } from '@mdi/js'
 	import { Dialog, InputText } from 'fuma'
 
-	import { z } from '$lib/validation'
+	import { z } from 'fuma/validation'
 	import ToolMark from './ToolMark.svelte'
 
 	export let editor: Editor

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { InputBoolean, InputTextarea } from 'fuma'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 
 	const form = useForm()
 </script>

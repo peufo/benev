@@ -1,13 +1,14 @@
 import { error } from '@sveltejs/kit'
-import { z } from '$lib/validation'
+import { z } from 'fuma/validation'
+import { parseQuery } from 'fuma/server'
 import type { Prisma } from '@prisma/client'
-import { parseQuery, prisma } from '$lib/server'
+import { prisma } from '$lib/server'
 
 export const load = async ({ url, params: { eventId } }) => {
 	const { data, err } = parseQuery(url, {
 		teams: z.array(z.string()).optional(),
 	})
-	if (err) error(400);
+	if (err) error(400)
 	const where: Prisma.TeamWhereInput = { eventId }
 
 	if (data.teams) where.id = { in: data.teams }

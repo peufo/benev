@@ -1,15 +1,15 @@
-import { parseFormData, validateToken } from '$lib/server'
+import { parseFormData } from 'fuma/server'
+import { z } from 'fuma/validation'
+import { validateToken } from '$lib/server'
 import { auth } from '$lib/server'
-import { error, redirect } from '@sveltejs/kit'
-import { z } from '$lib/validation'
+import { error, fail, redirect } from '@sveltejs/kit'
 
 export const actions = {
 	default: async ({ params, locals, request }) => {
-		const { err, data } = await parseFormData(request, {
+		const { data } = await parseFormData(request, {
 			password: z.string().min(8),
 			redirectTo: z.string().optional(),
-		})
-		if (err) return err
+		}).catch((err) => fail(400, err.issues))
 
 		try {
 			const userId = await validateToken('passwordReset', params.tokenId)
@@ -25,10 +25,10 @@ export const actions = {
 			const session = await auth.createSession({ userId, attributes: {} })
 			locals.auth.setSession(session)
 		} catch {
-			error(401, 'Invalid token');
+			error(401, 'Invalid token')
 		} finally {
-			if (data.redirectTo) redirect(302, data.redirectTo);
-			redirect(302, '/me');
+			if (data.redirectTo) redirect(302, data.redirectTo)
+			redirect(302, '/me')
 		}
 	},
 }

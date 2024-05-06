@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Event, EventState } from '@prisma/client'
 	import type { PageData } from './$types'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { EVENT_STATES } from '$lib/constant'
 	import { Icon } from 'fuma'
 	import { eventPath } from '$lib/store'

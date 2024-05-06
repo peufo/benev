@@ -6,7 +6,7 @@
 	import { tick } from 'svelte'
 	import { ButtonDelete, FormControl, Icon, InputSelect, InputText, InputTextRich } from 'fuma'
 
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { PAGE_TYPE } from '$lib/constant'

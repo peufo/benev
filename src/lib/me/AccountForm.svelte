@@ -2,7 +2,7 @@
 	import type { User } from '@prisma/client'
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 	import { createEventDispatcher, onMount } from 'svelte'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { enhance } from '$app/forms'
 	import { InputText, InputDate, FormControl, InputBoolean } from '$lib/material/input'
 	import { Icon } from 'fuma'

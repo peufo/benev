@@ -4,7 +4,7 @@
 	import 'dayjs/locale/fr-ch'
 	dayjs.locale('fr-ch')
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { InputNumber, InputDate, InputTime } from '$lib/material/input'
 	import type { Period } from '@prisma/client'
 	import { ButtonDelete } from 'fuma'

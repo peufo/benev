@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import type { Prospect } from '@prisma/client'
 
 	export let prospect: Prospect

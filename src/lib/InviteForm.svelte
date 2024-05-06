@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
+	import { useForm } from 'fuma/validation'
 	import type { Member, User } from '@prisma/client'
 
 	import { enhance } from '$app/forms'
-	import { modelInvite, useForm } from '$lib/validation'
+	import { modelInvite } from '$lib/validation'
 	import { eventPath } from '$lib/store'
 	import { Form, InputText, type UseFormOptions } from 'fuma'
 

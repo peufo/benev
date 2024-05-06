@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
 	import { onMount } from 'svelte'
-	import { formContext } from '$lib/validation'
+	import { formContext } from 'fuma/validation'
 
 	let klass = ''
 	export { klass as class }

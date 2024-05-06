@@ -1,5 +1,4 @@
-import { z, type ZodObj } from 'fuma/validation'
-import type { SuperRefinement } from 'zod'
+import { z, type ZodObj, type SuperRefinement } from 'fuma/validation'
 import type { Prisma } from '@prisma/client'
 
 type PeriodCreateForm = Omit<Prisma.PeriodCreateInput, 'team'>

@@ -6,7 +6,7 @@
 
 	import { api } from '$lib/api'
 	import { Dialog, Icon, InputRelation, SelectorList } from 'fuma'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft } from '@mdi/js'
 	import { formatRange } from '$lib/formatRange'

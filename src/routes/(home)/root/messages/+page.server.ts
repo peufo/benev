@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
-import { tryOrFail } from 'fuma/server'
-import { parseFormData, parseQuery, prisma } from '$lib/server'
-import { toTuple, z } from '$lib/validation'
+import { tryOrFail, parseFormData, parseQuery } from 'fuma/server'
+import { toTuple, z } from 'fuma/validation'
+import { prisma } from '$lib/server'
 import { MessageState, type Prisma } from '@prisma/client'
 
 export const load = async ({ url }) => {
@@ -30,17 +30,16 @@ export const load = async ({ url }) => {
 
 export const actions = {
 	set_state: async ({ request }) => {
-		const { data, err } = await parseFormData(request, {
-			messageId: z.string(),
-			state: z.enum(toTuple(MessageState)),
-		})
-		if (err) return err
+		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, {
+				messageId: z.string(),
+				state: z.enum(toTuple(MessageState)),
+			})
 
-		return tryOrFail(() =>
-			prisma.message.update({
+			return prisma.message.update({
 				where: { id: data.messageId },
 				data: { state: data.state },
 			})
-		)
+		})
 	},
 }

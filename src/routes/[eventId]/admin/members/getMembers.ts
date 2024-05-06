@@ -1,5 +1,5 @@
-import type { ZodRawShape } from 'zod'
-import { z } from '$lib/validation'
+import { z, type ZodObj } from 'fuma/validation'
+import { parseQuery } from 'fuma/server'
 import dayjs from 'dayjs'
 import type {
 	Event,
@@ -10,7 +10,7 @@ import type {
 	Subscribe,
 	SubscribeState,
 } from '@prisma/client'
-import { parseQuery, prisma, addMemberComputedValues } from '$lib/server'
+import { prisma, addMemberComputedValues } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
 export type Member = Awaited<ReturnType<typeof getMembers>>['members'][number]
@@ -28,7 +28,7 @@ export const membersFilterShape = {
 	isValidedByUser: z.filter.boolean,
 	isAbsent: z.filter.boolean,
 	role: z.enum(['member', 'leader', 'admin']).optional(),
-} satisfies ZodRawShape
+} satisfies ZodObj
 
 export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id

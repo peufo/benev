@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { enhance } from '$app/forms'
 	import { createEventDispatcher } from 'svelte'
 

@@ -1,16 +1,15 @@
-import { tryOrFail } from 'fuma/server'
-import { parseFormData, prisma } from '$lib/server'
-import { z } from '$lib/validation'
+import { tryOrFail, parseFormData } from 'fuma/server'
+import { z } from 'fuma/validation'
+import { prisma } from '$lib/server'
 import { sendProspectEmails } from '../sendProspectEmails'
 
 export const actions = {
 	add_prospects: async ({ request }) => {
 		return tryOrFail(async () => {
-			const { data, err } = await parseFormData(request, {
+			const { data } = await parseFormData(request, {
 				prospects: z.string(),
 				sendEmail: z.boolean(),
 			})
-			if (err) return err
 
 			const prospects = data.prospects
 				.split('\n')

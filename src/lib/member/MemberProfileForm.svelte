@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte'
 	import { enhance } from '$app/forms'
 
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { eventPath } from '$lib/store'
 	import MemberField from './MemberField.svelte'
 	import type { MemberProfile } from '$lib/server'

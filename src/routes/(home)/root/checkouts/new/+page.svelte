@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { InputNumber, InputRelation, Card, InputText } from 'fuma'
 
 	import { api } from '$lib/api'

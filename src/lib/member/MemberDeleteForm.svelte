@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { eventPath } from '$lib/store'
 	import { ButtonDelete } from 'fuma'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { enhance } from '$app/forms'
 
 	export let memberId: string

@@ -3,7 +3,7 @@
 
 	import type { Period, Team } from '@prisma/client'
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/validation'
+	import { useForm } from 'fuma/validation'
 	import { formatRange } from '$lib/formatRange'
 
 	export let team: Team

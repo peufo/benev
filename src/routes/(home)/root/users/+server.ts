@@ -1,5 +1,6 @@
-import { json, parseQuery, permission, prisma } from '$lib/server'
-import { z } from '$lib/validation'
+import { z } from 'fuma/validation'
+import { parseQuery } from 'fuma/server'
+import { json, permission, prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
 export const GET = async ({ locals, url }) => {
@@ -9,7 +10,7 @@ export const GET = async ({ locals, url }) => {
 		search: z.string().optional(),
 		take: z.number().default(5),
 	})
-	if (err) error(400);
+	if (err) error(400)
 	const { search = '', take } = data
 
 	const users = await prisma.user.findMany({

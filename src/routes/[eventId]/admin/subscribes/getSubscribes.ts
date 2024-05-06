@@ -1,9 +1,8 @@
-import type { ZodRawShape } from 'zod'
-import { jsonParse } from '$lib/jsonParse.js'
-import { addMemberComputedValues, parseQuery, prisma } from '$lib/server'
-import type { Event, Field, Prisma, SubscribeState } from '@prisma/client'
-import { z } from '$lib/validation'
 import { error } from '@sveltejs/kit'
+import { z, type ZodObj } from 'fuma/validation'
+import { parseQuery } from 'fuma/server'
+import { addMemberComputedValues, prisma } from '$lib/server'
+import type { Event, Field, Prisma, SubscribeState } from '@prisma/client'
 
 export const subscribesFilterShape = {
 	search: z.string().optional(),
@@ -12,7 +11,7 @@ export const subscribesFilterShape = {
 	states: z.filter.multiselect,
 	createdBy: z.enum(['leader', 'user']).optional(),
 	isAbsent: z.filter.boolean,
-} satisfies ZodRawShape
+} satisfies ZodObj
 
 export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
