@@ -1,15 +1,15 @@
 import { fail, error, redirect } from '@sveltejs/kit'
-import { tryOrFail } from 'fuma/server'
+import { tryOrFail, parseFormData } from 'fuma/server'
+import { z } from 'fuma/validation'
 import {
 	auth,
 	generateToken,
-	parseFormData,
 	prisma,
 	sendEmailComponent,
 	createAvatarPlaceholder,
 	media,
 } from '$lib/server'
-import { userLogin, userCreate, userUpdate, z } from '$lib/validation'
+import { modelUserLogin, modelUserCreate, modelUserUpdate } from '$lib/validation'
 import { EmailVerificationLink, EmailPasswordReset } from '$lib/email'
 
 export const load = () => {
@@ -18,32 +18,30 @@ export const load = () => {
 
 export const actions = {
 	register: async ({ request, locals }) => {
-		const { err, data } = await parseFormData(request, userCreate)
-		if (err) return err
-
-		const attributes = {
-			email: data.email,
-			firstName: data.firstName,
-			lastName: data.lastName,
-			isTermsAccepted: data.isTermsAccepted,
-			isOrganizer: data.isOrganizer,
-			isEmailVerified: false,
-			avatarPlaceholder: createAvatarPlaceholder(),
-		}
-
-		const user = await prisma.user.findUnique({
-			where: { email: data.email },
-			include: { members: { select: { isValidedByUser: true } } },
-		})
-		if (user) {
-			const isAccountFromInvitation =
-				user.members.filter((m) => m.isValidedByUser === false).length > 0 &&
-				user.members.filter((m) => m.isValidedByUser === true).length === 0
-			if (isAccountFromInvitation) error(401, 'This account already created from an invitation')
-			error(401, 'This account already exists')
-		}
-
 		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelUserCreate)
+
+			const attributes = {
+				email: data.email,
+				firstName: data.firstName,
+				lastName: data.lastName,
+				isTermsAccepted: data.isTermsAccepted,
+				isOrganizer: data.isOrganizer,
+				isEmailVerified: false,
+				avatarPlaceholder: createAvatarPlaceholder(),
+			}
+
+			const user = await prisma.user.findUnique({
+				where: { email: data.email },
+				include: { members: { select: { isValidedByUser: true } } },
+			})
+			if (user) {
+				const isAccountFromInvitation =
+					user.members.filter((m) => m.isValidedByUser === false).length > 0 &&
+					user.members.filter((m) => m.isValidedByUser === true).length === 0
+				if (isAccountFromInvitation) error(401, 'This account already created from an invitation')
+				error(401, 'This account already exists')
+			}
 			const newUser = await auth.createUser({
 				key: {
 					providerId: 'email',
@@ -59,9 +57,8 @@ export const actions = {
 		})
 	},
 	login: async ({ request, locals }) => {
-		const { err, data } = await parseFormData(request, userLogin)
-		if (err) return err
 		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelUserLogin)
 			const user = await auth.useKey('email', data.email, data.password)
 			const session = await auth.createSession({ userId: user.userId, attributes: {} })
 			locals.auth.setSession(session)
@@ -79,9 +76,8 @@ export const actions = {
 		await sendVerificationEmail(session.user)
 	},
 	reset_password: async ({ request }) => {
-		const { err, data } = await parseFormData(request, { email: z.string().email().toLowerCase() })
-		if (err) return err
 		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, { email: z.string().email().toLowerCase() })
 			const user = await prisma.user.findUniqueOrThrow({
 				where: { email: data.email },
 				select: { id: true },
@@ -103,25 +99,25 @@ export const actions = {
 		const eventId = formData.get('eventId') as string | null
 		const event = await prisma.event.findUnique({ where: { id: eventId || '' } })
 
-		const { err, data } = await parseFormData(formData, userUpdate, (value, ctx) => {
-			if (!event) return
-			const addIssue = (path: string, message: string) =>
-				ctx.addIssue({ code: 'custom', path: [path], message })
-
-			if (event.userBirthdayRequired && !value.birthday)
-				addIssue('birthday', 'Birthday is required')
-			if (event.userPhoneRequired && !value.phone) addIssue('phone', 'Phone is required')
-			if (event.userAddressRequired) {
-				if (!value.city) addIssue('city', 'Address is required')
-				if (!value.street) addIssue('street', 'Address is required')
-				if (!value.zipCode) addIssue('zipCode', 'Address is required')
-			}
-		})
-		if (err) return err
-
 		return tryOrFail(async () => {
 			const { userId } = session.user
 			const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } })
+
+			const { data } = await parseFormData(formData, modelUserUpdate, (value, ctx) => {
+				if (!event) return
+				const addIssue = (path: string, message: string) =>
+					ctx.addIssue({ code: 'custom', path: [path], message })
+
+				if (event.userBirthdayRequired && !value.birthday)
+					addIssue('birthday', 'Birthday is required')
+				if (event.userPhoneRequired && !value.phone) addIssue('phone', 'Phone is required')
+				if (event.userAddressRequired) {
+					if (!value.city) addIssue('city', 'Address is required')
+					if (!value.street) addIssue('street', 'Address is required')
+					if (!value.zipCode) addIssue('zipCode', 'Address is required')
+				}
+			})
+
 			const emailUpdated = data.email && user.email !== data.email
 			if (emailUpdated) sendVerificationEmail(user)
 			return prisma.user.update({

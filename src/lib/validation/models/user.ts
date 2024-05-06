@@ -1,13 +1,13 @@
-import { z, type ZodObj } from '$lib/validation'
+import { z, type ZodObj } from 'fuma/validation'
 import type { Prisma } from '@prisma/client'
 
-export const userLogin = {
+export const modelUserLogin = {
 	email: z.string().email().toLowerCase(),
 	password: z.string().min(8),
 }
 
-export const userCreate = {
-	...userLogin,
+export const modelUserCreate = {
+	...modelUserLogin,
 	firstName: z.string().min(2).trim(),
 	lastName: z.string().min(2).trim(),
 	isOrganizer: z.boolean().optional(),
@@ -17,7 +17,7 @@ export const userCreate = {
 		.transform((v) => true),
 } satisfies ZodObj<Omit<Prisma.UserCreateInput, 'id'> & { password: string }>
 
-export const userUpdate = {
+export const modelUserUpdate = {
 	email: z.string().email().toLowerCase().optional(),
 	firstName: z.string().min(2).optional(),
 	lastName: z.string().min(2).optional(),
