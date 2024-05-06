@@ -1,8 +1,8 @@
-import { z, toTuple, type ZodObj } from '$lib/validation'
+import { z, toTuple, type ZodObj } from 'fuma/validation'
 import type { Prisma } from '@prisma/client'
 import { LICENCE_TYPE_LABEL } from '$lib/constant'
 
-export const checkoutCreate = {
+export const modelCheckout = {
 	name: z.string(),
 	amount: z.number(),
 	currency: z.enum(['CHF', 'EUR']).optional(),
