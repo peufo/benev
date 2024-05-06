@@ -15,7 +15,7 @@ export const load = async ({ url }) => {
 }
 
 export const actions = {
-	create: formAction(
+	new_event: formAction(
 		modelEventCreate,
 		async ({ locals, data, formData }) => {
 			const session = await locals.auth.validate()
