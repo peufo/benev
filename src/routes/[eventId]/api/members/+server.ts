@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
-import { prisma, permission, json } from '$lib/server'
 import { z } from 'fuma/validation'
+import { prisma, permission, json } from '$lib/server'
 
 export const GET = async ({ params: { eventId }, url, locals }) => {
 	await permission.leader(eventId, locals)

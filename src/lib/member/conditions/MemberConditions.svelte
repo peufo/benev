@@ -132,7 +132,7 @@
 			tippyProps={{ placement: 'bottom-end' }}
 		>
 			<button type="button" class="btn btn-square">
-				<Icon path={mdiPlus} />
+				<Icon path={mdiPlus} title="Ajouter une condition" />
 			</button>
 		</DropDownMenu>
 	</div>
