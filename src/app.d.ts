@@ -2,7 +2,7 @@
 
 import type { MemberWithComputedValues } from '$lib/server'
 import type { Event, Media } from '@prisma/client'
-import { memberConditionModel } from '$lib/validation'
+import { modelMemberCondition } from '$lib/validation'
 import zod from 'zod'
 
 // for information about these interfaces
@@ -40,7 +40,7 @@ declare global {
 
 declare global {
 	namespace PrismaJson {
-		type MemberConditions = zod.infer<typeof memberConditionModel>[]
+		type MemberConditions = zod.infer<typeof modelMemberCondition>[]
 		type MemberProfile = Record<string, string | string[] | number | boolean | undefined>
 	}
 }

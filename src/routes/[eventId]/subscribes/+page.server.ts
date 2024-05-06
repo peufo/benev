@@ -11,9 +11,8 @@ export const actions = {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
 
-		const { data } = await parseFormData(request, modelSubscribe)
-
 		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelSubscribe)
 			const [period, memberAuthor, subscribes] = await Promise.all([
 				prisma.period.findUniqueOrThrow({
 					where: { id: data.periodId },

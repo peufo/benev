@@ -1,27 +1,25 @@
-import { tryOrFail } from 'fuma/server'
-import { teamCreate } from '$lib/validation/models/team'
-import { parseFormData } from '$lib/server/formData'
+import { tryOrFail, parseFormData } from 'fuma/server'
+import { modelTeam } from '$lib/validation/models/team'
 import { prisma, permission } from '$lib/server'
 
 export const actions = {
 	default: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 
-		const { err, data, formData } = await parseFormData(request, teamCreate)
-		if (err) return err
-
 		return tryOrFail(
-			() =>
-				prisma.team.create({
+			async () => {
+				const { data, formData } = await parseFormData(request, modelTeam)
+
+				const team = await prisma.team.create({
 					data: {
 						...data,
 						eventId,
 					},
-				}),
-			(team) => {
-				const redirectTo = formData.get('redirectTo') as string
+				})
+				const redirectTo = formData.get('redirectTo') as string | null
 				return redirectTo || `/${eventId}/teams/${team.id}`
-			}
+			},
+			(redirectTo) => redirectTo
 		)
 	},
 }

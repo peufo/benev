@@ -1,6 +1,5 @@
-import { tryOrFail } from 'fuma/server'
-import { teamUpdate } from '$lib/validation/models/team'
-import { parseFormData } from '$lib/server/formData'
+import { tryOrFail, parseFormData } from 'fuma/server'
+import { modelTeamUpdate } from '$lib/validation/models/team'
 import { prisma, permission } from '$lib/server'
 import { error } from '@sveltejs/kit'
 
@@ -25,19 +24,15 @@ export const actions = {
 	update: async ({ request, locals, params: { eventId, teamId } }) => {
 		const member = await permission.leaderOfTeam(teamId, locals)
 
-		const { err, data } = await parseFormData(request, teamUpdate)
+		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelTeamUpdate)
+			if (!member.roles.includes('admin') && data.leaders) error(403)
 
-		if (err) return err
-		if (!member.roles.includes('admin') && data.leaders) error(403)
-
-		return tryOrFail(
-			() =>
-				prisma.team.update({
-					where: { id: teamId },
-					data,
-				}),
-			`/${eventId}/teams/${teamId}`
-		)
+			return prisma.team.update({
+				where: { id: teamId },
+				data,
+			})
+		}, `/${eventId}/teams/${teamId}`)
 	},
 	delete: async ({ locals, params: { eventId, teamId } }) => {
 		await permission.admin(eventId, locals)
