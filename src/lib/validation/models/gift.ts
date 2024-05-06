@@ -1,13 +1,13 @@
-import { z, toTuple, type ZodObj } from '$lib/validation'
+import { z, toTuple, type ZodObj } from 'fuma/validation'
 import type { Prisma } from '@prisma/client'
 import { GIFT_CONDITION_MODE } from '$lib/constant'
 
-export const giftCreate = {
+export const modelGiftCreate = {
 	name: z.string().min(2),
 	conditionsMode: z.enum(toTuple(GIFT_CONDITION_MODE)).optional(),
 } satisfies ZodObj<Omit<Prisma.GiftUncheckedCreateInput, 'eventId'>>
 
-export const giftUpdate = {
+export const modelGiftUpdate = {
 	name: z.string().min(2).optional(),
 	conditionsMode: z.enum(toTuple(GIFT_CONDITION_MODE)).optional(),
 } satisfies ZodObj<Prisma.GiftUncheckedUpdateInput>
@@ -30,7 +30,7 @@ const giftConditionPeriodCreate = {
 	value: z.number(),
 } satisfies ZodObj<Prisma.GiftConditionCreateWithoutGiftInput>
 
-export const createGiftCondition = [
+export const modelGiftCondition = [
 	giftConditionTeamsCreate,
 	giftConditionHoursCreate,
 	giftConditionPeriodCreate,
