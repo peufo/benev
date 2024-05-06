@@ -1,8 +1,8 @@
 import { error } from '@sveltejs/kit'
-import { tryOrFail } from 'fuma/server'
+import { tryOrFail, parseFormData } from 'fuma/server'
 
-import { parseFormData, prisma, permission } from '$lib/server'
-import { periodCreate, periodValidation } from '$lib/validation'
+import { prisma, permission } from '$lib/server'
+import { modelPeriodCreate, validationPeriod } from '$lib/validation'
 import { isMemberAllowed } from '$lib/member'
 
 export const load = async ({ locals, parent, params: { teamId } }) => {
@@ -61,16 +61,15 @@ export const actions = {
 	new_period: async ({ request, locals, params: { teamId } }) => {
 		await permission.leaderOfTeam(teamId, locals)
 
-		const { err, data } = await parseFormData(request, periodCreate, periodValidation)
-		if (err) return err
+		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelPeriodCreate, validationPeriod)
 
-		return tryOrFail(() =>
-			prisma.period.create({
+			return prisma.period.create({
 				data: {
 					...data,
 					teamId,
 				},
 			})
-		)
+		})
 	},
 }

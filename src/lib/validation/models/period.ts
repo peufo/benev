@@ -1,21 +1,21 @@
-import { z, type ZodObj } from '$lib/validation'
+import { z, type ZodObj } from 'fuma/validation'
 import type { SuperRefinement } from 'zod'
 import type { Prisma } from '@prisma/client'
 
 type PeriodCreateForm = Omit<Prisma.PeriodCreateInput, 'team'>
 
-export const periodCreate = {
+export const modelPeriodCreate = {
 	maxSubscribe: z.number().min(1),
 	start: z.date(),
 	end: z.date(),
 } satisfies ZodObj<PeriodCreateForm>
 
-export const periodUpdate = {
+export const modelPeriodUpdate = {
 	id: z.string(),
-	...periodCreate,
+	...modelPeriodCreate,
 }
 
-export const periodValidation: SuperRefinement<{ start: Date; end: Date }> = (
+export const validationPeriod: SuperRefinement<{ start: Date; end: Date }> = (
 	{ start, end },
 	ctx
 ) => {
