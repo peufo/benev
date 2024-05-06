@@ -1,7 +1,7 @@
-import { z, type ZodObj } from '$lib/validation'
+import { z, type ZodObj } from 'fuma/validation'
 import type { Prisma } from '@prisma/client'
 
-export const viewCreate = {
+export const modelViewCreate = {
 	name: z.string().min(2),
 	query: z.string().min(2),
 	key: z.string(),
