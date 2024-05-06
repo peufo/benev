@@ -157,36 +157,38 @@
 					{:else}
 						<Icon path={mdiCardAccountDetailsOutline} class="opacity-70" />
 
-						<!-- SELECT FIELD -->
-						<InputSelect
-							bind:value={condition.args.fieldId}
-							options={memberFields.map((f) => ({ value: f.id, label: f.name }))}
-							class="label-text bg-base-200 hover:bg-base-300 p-2 pr-3 pl-1 rounded"
-							placeholder="Sélectioner un champ"
-							on:select={(e) => {
-								const field = memberFields.find((f) => f.id === e.detail)
-								if (!field) return
-								if (condition.type !== 'profile') return
-								if (operators[field.type].includes(condition.args.operator)) return
-								condition.args.operator = operators[field.type][0]
-							}}
-						/>
+						<div class="flex flex-wrap gap-2">
+							<!-- SELECT FIELD -->
+							<InputSelect
+								bind:value={condition.args.fieldId}
+								options={memberFields.map((f) => ({ value: f.id, label: f.name }))}
+								class="label-text whitespace-nowrap"
+								placeholder="Sélectioner un champ"
+								on:select={(e) => {
+									const field = memberFields.find((f) => f.id === e.detail)
+									if (!field) return
+									if (condition.type !== 'profile') return
+									if (operators[field.type].includes(condition.args.operator)) return
+									condition.args.operator = operators[field.type][0]
+								}}
+							/>
 
-						<!-- SELECT OPERATOR -->
-						{#if condition.args.fieldId}
-							{@const fieldId = condition.args.fieldId}
-							{@const field = memberFields.find((f) => f.id === fieldId)}
-							{#if field}
-								<InputSelect
-									bind:value={condition.args.operator}
-									options={operators[field.type].map((value) => ({
-										value,
-										label: operatorLabel[value],
-									}))}
-									class="label-text bg-base-200 hover:bg-base-300 px-3 py-2 rounded"
-								/>
+							<!-- SELECT OPERATOR -->
+							{#if condition.args.fieldId}
+								{@const fieldId = condition.args.fieldId}
+								{@const field = memberFields.find((f) => f.id === fieldId)}
+								{#if field}
+									<InputSelect
+										bind:value={condition.args.operator}
+										options={operators[field.type].map((value) => ({
+											value,
+											label: operatorLabel[value],
+										}))}
+										class="label-text whitespace-nowrap"
+									/>
+								{/if}
 							{/if}
-						{/if}
+						</div>
 					{/if}
 
 					<button

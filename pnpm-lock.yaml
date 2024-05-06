@@ -87,7 +87,7 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2
       fuma:
-        specifier: ^0.2.3
+        specifier: ^0.2.6
         version: link:../fuma
       happy-dom:
         specifier: ^13.6.2
