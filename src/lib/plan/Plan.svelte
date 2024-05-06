@@ -7,7 +7,7 @@
 	import { page } from '$app/stores'
 	import PeriodCard from '$lib/plan/PeriodCard.svelte'
 	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
-	import { ContextMenu, Icon } from 'fuma'
+	import { ContextMenu, Icon, urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { tip } from '$lib/action'
 	import PeriodForm from '$lib/PeriodForm.svelte'
@@ -156,7 +156,7 @@
 
 		<a
 			class="btn btn-sm z-50 sticky top-0"
-			href="{$eventPath}/teams/create?redirectTo={$page.url.pathname}"
+			href={$urlParam.with({ 'form-team': 1, redirectTo: $page.url.pathname })}
 		>
 			<Icon path={mdiPlus} title="Nouveau secteur" />
 			<span>Ajouter</span>

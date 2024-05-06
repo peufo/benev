@@ -1,10 +1,9 @@
 <script lang="ts">
 	import type { Team, Member, User, Event, Field } from '@prisma/client'
-	import { enhance } from '$app/forms'
+
 	import { page } from '$app/stores'
 
-	import { useForm } from 'fuma/validation'
-	import { InputText, InputTextarea, ButtonDelete, InputDate } from 'fuma'
+	import { InputText, InputTextarea, InputDate, Form } from 'fuma'
 	import { eventPath } from '$lib/store'
 
 	import { MemberConditions } from '$lib/member'
@@ -12,30 +11,18 @@
 
 	let klass = ''
 	export { klass as class }
-	export let isUpdate = false
 	export let event: Event & { memberFields: Field[] }
-	export let team:
-		| (Team & {
-				leaders: (Member & {
-					user: User
-				})[]
-		  })
-		| undefined = undefined
-
-	const form = useForm({ successUpdate: false })
-
-	$: redirectTo =
-		$page.url.searchParams.get('redirectTo') || `${$eventPath}/teams${team ? `/${team.id}` : ''}`
+	export let team: (Team & { leaders: (Member & { user: User })[] }) | undefined = undefined
 </script>
 
-<form method="post" class="{klass} flex flex-col gap-2" use:enhance={form.submit}>
-	{#if isUpdate}
-		<h3 class="card-title">Modification du secteur</h3>
-	{:else}
-		<h3 class="card-title">Nouveau secteur</h3>
-	{/if}
-
-	<InputText key="name" label="Nom du secteur" value={team?.name} />
+<Form data={team} class={klass} action="{$eventPath}/teams?/team" on:success>
+	<InputText
+		key="name"
+		label="Nom du secteur"
+		class="mt-6"
+		value={team?.name}
+		input={{ autofocus: true }}
+	/>
 
 	{#if $page.data.member?.roles.includes('admin')}
 		<InputLeaders value={team?.leaders} />
@@ -54,15 +41,4 @@
 	{/if}
 
 	<MemberConditions conditions={team?.conditions || []} memberFields={event.memberFields} />
-
-	<input type="hidden" name="redirectTo" value={$page.url.searchParams.get('redirectTo') || ''} />
-
-	<div class="flex gap-2 flex-row-reverse mt-2">
-		<button class="btn" formaction={isUpdate ? '?/update' : ''} type="submit"> Valider </button>
-		{#if isUpdate && $page.data.member?.roles.includes('admin')}
-			<ButtonDelete formaction="?/delete" />
-		{/if}
-		<div class="grow" />
-		<a class="btn btn-ghost" href={redirectTo}>Annuler</a>
-	</div>
-</form>
+</Form>
