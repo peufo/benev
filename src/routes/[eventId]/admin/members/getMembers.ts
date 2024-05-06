@@ -11,7 +11,6 @@ import type {
 	SubscribeState,
 } from '@prisma/client'
 import { prisma, addMemberComputedValues } from '$lib/server'
-import { error } from '@sveltejs/kit'
 
 export type Member = Awaited<ReturnType<typeof getMembers>>['members'][number]
 
@@ -33,7 +32,7 @@ export const membersFilterShape = {
 export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
 
-	const { data, err } = parseQuery(url, {
+	const query = parseQuery(url, {
 		...membersFilterShape,
 		skip: z.number().default(0),
 		take: z.number().default(20),
@@ -41,32 +40,30 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		all: z.boolean().default(false),
 	})
 
-	if (err) error(400)
-
 	const filters: Prisma.MemberWhereInput[] = []
 	const subscribesFilters: Prisma.SubscribeWhereInput[] = []
 
-	if (data.search) {
+	if (query.search) {
 		filters.push({
 			user: {
 				OR: [
-					{ firstName: { contains: data.search } },
-					{ lastName: { contains: data.search } },
-					{ email: { contains: data.search } },
+					{ firstName: { contains: query.search } },
+					{ lastName: { contains: query.search } },
+					{ email: { contains: query.search } },
 				],
 			},
 		})
 	}
 
-	if (data.subscribes_teams) {
+	if (query.subscribes_teams) {
 		subscribesFilters.push({
 			state: 'accepted',
-			period: { teamId: { in: data.subscribes_teams } },
+			period: { teamId: { in: query.subscribes_teams } },
 		})
 	}
 
-	if (data.subscribes_range) {
-		const { start, end } = data.subscribes_range
+	if (query.subscribes_range) {
+		const { start, end } = query.subscribes_range
 		subscribesFilters.push({
 			state: 'accepted',
 			period: {
@@ -76,19 +73,19 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		})
 	}
 
-	if (data.leaderOf) {
+	if (query.leaderOf) {
 		filters.push({
-			leaderOf: { some: { id: { in: data.leaderOf } } },
+			leaderOf: { some: { id: { in: query.leaderOf } } },
 		})
 	}
 
-	if (data.age) {
+	if (query.age) {
 		const getDate = (age?: number) => {
 			if (age === undefined) return undefined
 			return dayjs().subtract(age, 'year').toDate()
 		}
-		const start = getDate(data.age.max)
-		const end = getDate(data.age.min)
+		const start = getDate(query.age.max)
+		const end = getDate(query.age.min)
 		filters.push({
 			user: {
 				birthday: {
@@ -100,23 +97,23 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		})
 	}
 
-	if (data.isValidedByEvent !== undefined) {
-		filters.push({ isValidedByEvent: data.isValidedByEvent })
+	if (query.isValidedByEvent !== undefined) {
+		filters.push({ isValidedByEvent: query.isValidedByEvent })
 	}
-	if (data.isValidedByUser !== undefined) {
-		filters.push({ isValidedByUser: data.isValidedByUser })
+	if (query.isValidedByUser !== undefined) {
+		filters.push({ isValidedByUser: query.isValidedByUser })
 	}
-	if (data.isAbsent !== undefined) {
-		filters.push({ subscribes: { some: { isAbsent: data.isAbsent } } })
+	if (query.isAbsent !== undefined) {
+		filters.push({ subscribes: { some: { isAbsent: query.isAbsent } } })
 	}
 
-	if (data.role === 'admin') {
+	if (query.role === 'admin') {
 		filters.push({ isAdmin: true })
 	}
-	if (data.role === 'leader') {
+	if (query.role === 'leader') {
 		filters.push({ leaderOf: { some: { eventId } } })
 	}
-	if (data.role === 'member' || subscribesFilters.length) {
+	if (query.role === 'member' || subscribesFilters.length) {
 		subscribesFilters.push({ state: { in: ['request', 'accepted'] } })
 	}
 
@@ -163,11 +160,11 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	}
 
 	const filterOnComputedValues =
-		data.subscribes_count !== undefined ||
-		data.subscribes_hours !== undefined ||
-		data.isUserProfileCompleted !== undefined
+		query.subscribes_count !== undefined ||
+		query.subscribes_hours !== undefined ||
+		query.isUserProfileCompleted !== undefined
 
-	const paginationEnable = !data.summary && !data.all && !filterOnComputedValues
+	const paginationEnable = !query.summary && !query.all && !filterOnComputedValues
 
 	let members = await prisma.member
 		.findMany({
@@ -182,8 +179,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 					},
 				}),
 			},
-			skip: paginationEnable ? data.skip : undefined,
-			take: paginationEnable ? data.take : undefined,
+			skip: paginationEnable ? query.skip : undefined,
+			take: paginationEnable ? query.take : undefined,
 			include: {
 				user: true,
 				leaderOf: true,
@@ -207,26 +204,26 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	if (filterOnComputedValues) {
 		const conditions: ((member: (typeof members)[number]) => boolean)[] = []
 
-		if (data.subscribes_count) {
-			const { min, max } = data.subscribes_count
+		if (query.subscribes_count) {
+			const { min, max } = query.subscribes_count
 			if (min !== undefined)
 				conditions.push((m) => min <= m.subscribes.filter((s) => s.state === 'accepted').length)
 			if (max !== undefined)
 				conditions.push((m) => max >= m.subscribes.filter((s) => s.state === 'accepted').length)
 		}
 
-		if (data.subscribes_hours) {
-			const { min, max } = data.subscribes_hours
+		if (query.subscribes_hours) {
+			const { min, max } = query.subscribes_hours
 
 			const toHours = (ms: number) => ms / (1000 * 60 * 60)
 			if (min !== undefined) conditions.push((m) => min <= toHours(m.workTime))
 			if (max !== undefined) conditions.push((m) => max >= toHours(m.workTime))
 		}
 
-		if (data.isUserProfileCompleted === true) {
+		if (query.isUserProfileCompleted === true) {
 			conditions.push((m) => m.isMemberProfileCompleted && m.isUserProfileCompleted)
 		}
-		if (data.isUserProfileCompleted === false) {
+		if (query.isUserProfileCompleted === false) {
 			conditions.push((m) => !m.isMemberProfileCompleted || !m.isUserProfileCompleted)
 		}
 
@@ -238,9 +235,9 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		})
 	}
 
-	if (!data.summary) {
-		if (!data.all && !paginationEnable)
-			return { members: members.slice(data.skip, data.skip + data.take) }
+	if (!query.summary) {
+		if (!query.all && !paginationEnable)
+			return { members: members.slice(query.skip, query.skip + query.take) }
 		else return { members }
 	}
 
@@ -254,7 +251,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	const periods = Array.from(periodsMap.values())
 
 	return {
-		members: members.slice(data.skip, data.skip + data.take),
+		members: members.slice(query.skip, query.skip + query.take),
 		stats: {
 			nbMembers: members.length,
 			nbSubscribes: members.reduce((acc, cur) => acc + cur.subscribes.length, 0),

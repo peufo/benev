@@ -2,26 +2,25 @@ import path from 'node:path'
 import fs from 'node:fs/promises'
 import { MEDIA_DIR } from '$env/static/private'
 import { error } from '@sveltejs/kit'
+import sharp from 'sharp'
 import { parseQuery } from 'fuma/server'
 import { z, toTuple } from 'fuma/validation'
 import { MEDIA_PRESETS } from '$lib/constant'
-import sharp from 'sharp'
 
 export const GET = async ({ url, params: { mediaId } }) => {
-	const { data, err } = parseQuery(url, {
+	const query = parseQuery(url, {
 		size: z.enum(toTuple(MEDIA_PRESETS)).optional(),
 	})
-	if (err) error(400)
 
 	await ensurePngtoWebp(mediaId)
-	const fileName = `${data.size || 'original'}.webp`
+	const fileName = `${query.size || 'original'}.webp`
 	const filePath = path.resolve(MEDIA_DIR, mediaId, fileName)
 
 	const buffer = await fs.readFile(filePath).catch(async () => {
-		if (!data.size) return null
+		if (!query.size) return null
 		try {
 			const filePathOriginal = path.resolve(MEDIA_DIR, mediaId, 'original.webp')
-			const [x, y] = MEDIA_PRESETS[data.size]
+			const [x, y] = MEDIA_PRESETS[query.size]
 			const image = sharp(filePathOriginal).resize({ width: x, height: y })
 			await image.toFile(filePath)
 			return await image.toBuffer()

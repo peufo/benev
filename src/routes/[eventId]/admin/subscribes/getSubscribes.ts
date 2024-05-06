@@ -15,19 +15,18 @@ export const subscribesFilterShape = {
 
 export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
-	const { data, err } = parseQuery(url, {
+	const query = parseQuery(url, {
 		...subscribesFilterShape,
 		all: z.boolean().default(false),
 		skip: z.number().default(0),
 		take: z.number().default(20),
 	})
-	if (err) error(400)
 
 	const subscribesFilters: Prisma.SubscribeWhereInput[] = [{ period: { team: { eventId } } }]
 
-	if (data.teams) subscribesFilters.push({ period: { teamId: { in: data.teams } } })
-	if (data.period) {
-		const { start, end } = data.period
+	if (query.teams) subscribesFilters.push({ period: { teamId: { in: query.teams } } })
+	if (query.period) {
+		const { start, end } = query.period
 		subscribesFilters.push({
 			period: {
 				...(start && { end: { gte: start } }),
@@ -36,8 +35,8 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		})
 	}
 
-	if (data.search) {
-		const words = data.search.split(' ')
+	if (query.search) {
+		const words = query.search.split(' ')
 		subscribesFilters.push({
 			member: {
 				user: {
@@ -53,19 +52,19 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		})
 	}
 
-	if (data.states) {
-		subscribesFilters.push({ state: { in: data.states as SubscribeState[] } })
+	if (query.states) {
+		subscribesFilters.push({ state: { in: query.states as SubscribeState[] } })
 	}
 
-	if (data.createdBy) subscribesFilters.push({ createdBy: data.createdBy })
-	if (data.isAbsent !== undefined) subscribesFilters.push({ isAbsent: data.isAbsent })
+	if (query.createdBy) subscribesFilters.push({ createdBy: query.createdBy })
+	if (query.isAbsent !== undefined) subscribesFilters.push({ isAbsent: query.isAbsent })
 
 	return {
 		subscribes: await prisma.subscribe
 			.findMany({
 				where: { AND: subscribesFilters },
-				skip: data.all ? undefined : data.skip,
-				take: data.all ? undefined : data.take,
+				skip: query.all ? undefined : query.skip,
+				take: query.all ? undefined : query.take,
 				include: {
 					period: {
 						include: { team: true },
