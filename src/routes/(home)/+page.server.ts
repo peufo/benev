@@ -1,7 +1,7 @@
-import { tryOrFail } from 'fuma/server'
-import { error, fail, redirect } from '@sveltejs/kit'
-import { prisma, media, parseFormData } from '$lib/server'
-import { eventCreate } from '$lib/validation'
+import { formAction } from 'fuma/server'
+import { error, redirect } from '@sveltejs/kit'
+import { prisma, media } from '$lib/server'
+import { modelEventCreate } from '$lib/validation'
 import { defaultEmailModels } from '$lib/email/models'
 
 export const load = async ({ url }) => {
@@ -15,101 +15,101 @@ export const load = async ({ url }) => {
 }
 
 export const actions = {
-	new_event: async ({ request, locals }) => {
-		const session = await locals.auth.validate()
-		if (!session) error(401)
+	create: formAction(
+		modelEventCreate,
+		async ({ locals, data, formData }) => {
+			const session = await locals.auth.validate()
+			if (!session) error(401)
 
-		const { err, data, formData } = await parseFormData(request, eventCreate)
-		if (err) return err
+			const nameFail = (message: string) => {
+				throw { issues: [{ path: ['name'], message }] }
+			}
 
-		const nameFail = (message: string) => fail(400, { issues: [{ path: ['name'], message }] })
+			const exist = await prisma.event.findUnique({ where: { id: data.id } })
+			if (exist) return nameFail('Désolé, ce nom est déjà pris')
 
-		const exist = await prisma.event.findUnique({ where: { id: data.id } })
-		if (exist) return nameFail('Désolé, ce nom est déjà pris')
+			const reservedPaths = [
+				'auth',
+				'me',
+				'users',
+				'members',
+				'root',
+				'admin',
+				'token',
+				'api',
+				'media',
+				'help',
+				'terms',
+				'events',
+				'pricing',
+				'contact',
+				'licences',
+			]
+			if (reservedPaths.includes(data.id))
+				return nameFail(`Les noms suivant sont réservés: ${reservedPaths.join(', ')}`)
+			if (data.id.startsWith('deleted_'))
+				return nameFail('Les noms ne peuvent pas commencer par "deleted_"')
+			if (data.id.startsWith('archived_'))
+				return nameFail('Les noms ne peuvent pas commencer par "archived_"')
 
-		const reservedPaths = [
-			'auth',
-			'me',
-			'users',
-			'members',
-			'root',
-			'admin',
-			'token',
-			'api',
-			'media',
-			'help',
-			'terms',
-			'events',
-			'pricing',
-			'contact',
-			'licences',
-		]
-		if (reservedPaths.includes(data.id))
-			return nameFail(`Les noms suivant sont réservés: ${reservedPaths.join(', ')}`)
-		if (data.id.startsWith('deleted_'))
-			return nameFail('Les noms ne peuvent pas commencer par "deleted_"')
-		if (data.id.startsWith('archived_'))
-			return nameFail('Les noms ne peuvent pas commencer par "archived_"')
+			const { userId } = session.user
 
-		return tryOrFail(
-			async () => {
-				const { userId } = session.user
-
-				const event = await prisma.event.create({
-					data: {
-						...data,
-						ownerId: userId,
-						pages: {
-							createMany: {
-								data: [
-									{
-										type: 'home',
-										title: 'Bienvenue',
-										path: 'bienvenue',
-										content: 'null',
-									},
-									...defaultEmailModels,
-								],
-							},
-						},
-						members: {
-							create: {
-								userId,
-								isAdmin: true,
-								isValidedByEvent: true,
-								isValidedByUser: true,
-							},
+			const event = await prisma.event.create({
+				data: {
+					...data,
+					ownerId: userId,
+					pages: {
+						createMany: {
+							data: [
+								{
+									type: 'home',
+									title: 'Bienvenue',
+									path: 'bienvenue',
+									content: 'null',
+								},
+								...defaultEmailModels,
+							],
 						},
 					},
+					members: {
+						create: {
+							userId,
+							isAdmin: true,
+							isValidedByEvent: true,
+							isValidedByUser: true,
+						},
+					},
+				},
+			})
+
+			await media
+				.upload(formData, {
+					key: 'poster',
+					where: { posterOf: { id: event.id } },
+					data: {
+						name: `Affiche de ${event.name}`,
+						createdById: session.user.id,
+						posterOf: { connect: { id: event.id } },
+					},
 				})
+				.catch(console.error)
 
-				await media
-					.upload(formData, {
-						key: 'poster',
-						where: { posterOf: { id: event.id } },
-						data: {
-							name: `Affiche de ${event.name}`,
-							createdById: session.user.id,
-							posterOf: { connect: { id: event.id } },
-						},
-					})
-					.catch(console.error)
+			await media
+				.upload(formData, {
+					key: 'logo',
+					where: { logoOf: { id: event.id } },
+					data: {
+						name: `Logo de ${event.name}`,
+						createdById: session.user.id,
+						logoOf: { connect: { id: event.id } },
+					},
+				})
+				.catch(console.error)
 
-				await media
-					.upload(formData, {
-						key: 'logo',
-						where: { logoOf: { id: event.id } },
-						data: {
-							name: `Logo de ${event.name}`,
-							createdById: session.user.id,
-							logoOf: { connect: { id: event.id } },
-						},
-					})
-					.catch(console.error)
-
-				return event
-			},
-			(res) => `/${res.id}`
-		)
-	},
+			return event
+		},
+		{
+			redirectTo: (event) => `/${event.id}`,
+		}
+	),
 }

@@ -1,7 +1,7 @@
-import { pageUpdate } from '$lib/validation'
+import { modelPageUpdate } from '$lib/validation'
 import { fail, redirect } from '@sveltejs/kit'
-import { tryOrFail } from 'fuma/server'
-import { parseFormData, prisma, permission } from '$lib/server'
+import { tryOrFail, parseFormData } from 'fuma/server'
+import { prisma, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ params: { pageId, eventId } }) => {
@@ -19,43 +19,42 @@ export const load = async ({ params: { pageId, eventId } }) => {
 export const actions = {
 	update_page: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, pageUpdate)
-		if (err) return err
 
-		const path = normalizePath(data.title)
-		const reservedPaths = [
-			'admin',
-			'me',
-			'register',
-			'teams',
-			'subscribes',
-			'help',
-			'api',
-			'invite',
-			'members',
-		]
-		if (reservedPaths.includes(path))
-			return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
+		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelPageUpdate)
 
-		const samePageTitle = await prisma.page.findFirst({
-			where: { id: { not: data.id }, eventId, path },
-		})
-		if (samePageTitle) return fail(400, { message: 'Ce titre est déjà utilisé' })
+			const path = normalizePath(data.title)
+			const reservedPaths = [
+				'admin',
+				'me',
+				'register',
+				'teams',
+				'subscribes',
+				'help',
+				'api',
+				'invite',
+				'members',
+			]
+			if (reservedPaths.includes(path))
+				return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
 
-		if (data.type === 'charter') {
-			const charterAlreadyExist = await prisma.page.findFirst({
-				where: { id: { not: data.id }, eventId, type: 'charter' },
+			const samePageTitle = await prisma.page.findFirst({
+				where: { id: { not: data.id }, eventId, path },
 			})
-			if (charterAlreadyExist)
-				return fail(400, { message: 'Il existe déjà une charte des bénévoles' })
-		}
+			if (samePageTitle) return fail(400, { message: 'Ce titre est déjà utilisé' })
 
-		return tryOrFail(() =>
+			if (data.type === 'charter') {
+				const charterAlreadyExist = await prisma.page.findFirst({
+					where: { id: { not: data.id }, eventId, type: 'charter' },
+				})
+				if (charterAlreadyExist)
+					return fail(400, { message: 'Il existe déjà une charte des bénévoles' })
+			}
 			prisma.page.update({
 				where: { id: data.id },
 				data,
 			})
-		)
+		})
 	},
 	delete_page: async ({ locals, params: { eventId, pageId } }) => {
 		await permission.admin(eventId, locals)

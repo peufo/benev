@@ -1,8 +1,12 @@
-import { tryOrFail } from 'fuma/server'
-import { parseFormData, prisma, permission } from '$lib/server'
-import { z } from '$lib/validation'
+import { tryOrFail, parseFormData } from 'fuma/server'
+import { z } from 'fuma/validation'
 
-import { eventMemberSettings, memberFieldCreate, memberFieldUpdate } from '$lib/validation'
+import { prisma, permission } from '$lib/server'
+import {
+	modelEventMemberSettings,
+	modelMemberFieldCreate,
+	modelMemberFieldUpdate,
+} from '$lib/validation'
 
 export const load = async ({ parent, params: { eventId } }) => {
 	const { event } = await parent()
@@ -36,10 +40,9 @@ export const load = async ({ parent, params: { eventId } }) => {
 export const actions = {
 	create_field: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, memberFieldCreate)
-		if (err) return err
 
 		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelMemberFieldCreate)
 			const nbFields = await prisma.field.count({ where: { eventId } })
 			return prisma.field.create({
 				data: { ...data, eventId, position: nbFields },
@@ -48,27 +51,26 @@ export const actions = {
 	},
 	delete_field: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, { id: z.string() })
-		if (err) return err
 
-		return tryOrFail(() =>
-			prisma.field.delete({
+		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, { id: z.string() })
+
+			return prisma.field.delete({
 				where: { id: data.id, eventId },
 			})
-		)
+		})
 	},
 	update_field: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 
-		const { err, data } = await parseFormData(request, memberFieldUpdate)
-		if (err) return err
+		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelMemberFieldUpdate)
 
-		return tryOrFail(() =>
-			prisma.field.update({
+			return prisma.field.update({
 				where: { id: data.id },
 				data,
 			})
-		)
+		})
 	},
 	reorder_fields: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
@@ -89,13 +91,13 @@ export const actions = {
 	},
 	set_member_settings: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
-		const { err, data } = await parseFormData(request, eventMemberSettings)
-		if (err) return err
-		return tryOrFail(() =>
-			prisma.event.update({
+
+		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelEventMemberSettings)
+			return prisma.event.update({
 				where: { id: eventId },
 				data,
 			})
-		)
+		})
 	},
 }

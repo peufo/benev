@@ -1,14 +1,7 @@
-import { tryOrFail } from 'fuma/server'
-import {
-	parseFormData,
-	prisma,
-	permission,
-	media,
-	ensureLicenceEvent,
-	ensureLicenceMembers,
-} from '$lib/server'
+import { tryOrFail, parseFormData } from 'fuma/server'
+import { prisma, permission, media, ensureLicenceEvent, ensureLicenceMembers } from '$lib/server'
 
-import { eventState, eventUpdate } from '$lib/validation'
+import { modelEventState, modelEventUpdate } from '$lib/validation'
 
 export const load = async ({ parent, params: { eventId } }) => {
 	const { event } = await parent()
@@ -34,10 +27,9 @@ export const load = async ({ parent, params: { eventId } }) => {
 export const actions = {
 	set_state_event: async ({ request, locals, params: { eventId } }) => {
 		await permission.owner(eventId, locals)
-		const { err, data } = await parseFormData(request, eventState)
-		if (err) return err
 
 		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelEventState)
 			if (data.state !== 'draft') await ensureLicenceEvent(eventId)
 			await prisma.event.update({ where: { id: eventId }, data })
 			await ensureLicenceMembers(eventId)
@@ -46,38 +38,33 @@ export const actions = {
 	},
 	update_event: async ({ request, locals, params: { eventId } }) => {
 		const member = await permission.admin(eventId, locals)
-		const { err, data, formData } = await parseFormData(request, eventUpdate)
 
-		if (err) return err
+		return tryOrFail(async () => {
+			const { data, formData } = await parseFormData(request, modelEventUpdate)
+			await media.upload(formData, {
+				key: 'poster',
+				where: { posterOf: { id: eventId } },
+				data: {
+					name: `Affiche`,
+					createdById: member.user.id,
+					posterOf: { connect: { id: eventId } },
+				},
+			})
+			await media.upload(formData, {
+				key: 'logo',
+				where: { logoOf: { id: eventId } },
+				data: {
+					name: `Logo`,
+					createdById: member.user.id,
+					logoOf: { connect: { id: eventId } },
+				},
+			})
 
-		return tryOrFail(
-			async () => {
-				await media.upload(formData, {
-					key: 'poster',
-					where: { posterOf: { id: eventId } },
-					data: {
-						name: `Affiche`,
-						createdById: member.user.id,
-						posterOf: { connect: { id: eventId } },
-					},
-				})
-				await media.upload(formData, {
-					key: 'logo',
-					where: { logoOf: { id: eventId } },
-					data: {
-						name: `Logo`,
-						createdById: member.user.id,
-						logoOf: { connect: { id: eventId } },
-					},
-				})
-
-				return prisma.event.update({
-					where: { id: eventId },
-					data,
-				})
-			},
-			eventId !== data.id ? `/${data.id}/admin/event` : undefined
-		)
+			return prisma.event.update({
+				where: { id: eventId },
+				data,
+			})
+		})
 	},
 	delete_event: async ({ locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)

@@ -1,11 +1,11 @@
-import { z, toTuple, type ZodObj } from '$lib/validation'
+import { z, toTuple, type ZodObj } from 'fuma/validation'
 import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
 
 export type EventCreateInput = Omit<Prisma.EventCreateInput, 'owner'>
 export type EventUpdateInput = Omit<Prisma.EventUpdateInput, 'owner'>
 
-export const eventCreate = {
+export const modelEventCreate = {
 	id: z.string().toLowerCase().min(3),
 	name: z.string().min(3),
 	description: z.string().optional(),
@@ -16,16 +16,16 @@ export const eventCreate = {
 	address: z.string().optional(),
 } satisfies ZodObj<EventCreateInput>
 
-export const eventUpdate = {
-	...eventCreate,
+export const modelEventUpdate = {
+	...modelEventCreate,
 	name: z.string().min(3).optional(),
 } satisfies ZodObj<EventUpdateInput>
 
-export const eventState = {
+export const modelEventState = {
 	state: z.enum(toTuple(EVENT_STATES)).optional(),
 } satisfies ZodObj<EventUpdateInput>
 
-export const eventMemberSettings = {
+export const modelEventMemberSettings = {
 	selfRegisterAllowed: z.boolean(),
 	selfSubscribeAllowed: z.boolean(),
 	closeSubscribing: z.dateOptional(),
