@@ -1,9 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import { z, type ZodObj } from 'fuma/validation'
 
-type TeamShemaCreate = Omit<Prisma.TeamCreateInput, 'event'>
-type TeamShemaUpdate = Omit<Prisma.TeamUpdateInput, 'event'>
-
 const memberConditionOperator = z.enum([
 	'equals',
 	'string_contains',
@@ -22,7 +19,7 @@ export const modelMemberCondition = z.union([
 	z.object({ type: z.literal('valided') }),
 	z.object({
 		type: z.literal('age'),
-		args: z.number().transform(String),
+		args: z.number(),
 	}),
 	z.object({
 		type: z.literal('profile'),
@@ -41,12 +38,12 @@ export const modelTeam = {
 	name: z.string().min(3),
 	description: z.string().optional(),
 	leaders: z.relations.connect,
-	closeSubscribing: z.dateOptional(),
-	conditions: z.array(modelMemberCondition),
-} satisfies ZodObj<TeamShemaCreate>
+	closeSubscribing: z.date().optional(),
+	conditions: z.arrayRaw(modelMemberCondition),
+} satisfies ZodObj<Omit<Prisma.TeamCreateInput, 'event'>>
 
 export const modelTeamUpdate = {
 	...modelTeam,
 	id: z.string(),
 	leaders: z.relations.set,
-} satisfies ZodObj<TeamShemaUpdate>
+} satisfies ZodObj<Omit<Prisma.TeamUpdateInput, 'event'>>

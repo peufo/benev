@@ -8,15 +8,15 @@ export const load = async ({ depends, parent, params: { eventId }, url }) => {
 	depends('event')
 	const { user } = await parent()
 	const userId = user?.id || ''
-	const { teamId } = parseQuery(url, { teamId: z.string().optional() })
+	const { team_form } = parseQuery(url, { team_form: z.string().optional() })
 
 	const member = await getMemberProfile({ userId, eventId }).catch(() => undefined)
 	const isLeader = member?.roles.includes('leader')
 
-	if (teamId) {
+	if (team_form) {
 		const isLeaderOfTeam =
-			member?.roles.includes('admin') || member?.leaderOf.find((t) => t.id === teamId)
-		if (!isLeaderOfTeam) error(403, `You are not leader of team "${teamId}"`)
+			member?.roles.includes('admin') || member?.leaderOf.find((t) => t.id === team_form)
+		if (!isLeaderOfTeam) error(403, `You are not leader of team "${team_form}"`)
 	}
 
 	const event = await prisma.event.findUniqueOrThrow({
@@ -39,10 +39,10 @@ export const load = async ({ depends, parent, params: { eventId }, url }) => {
 			where: { eventId, type: { not: 'email' } },
 			select: { id: true, title: true, path: true, type: true },
 		}),
-		team: !teamId
+		team: !team_form
 			? undefined
 			: await prisma.team.findUniqueOrThrow({
-					where: { id: teamId },
+					where: { id: team_form },
 					include: {
 						leaders: {
 							include: {

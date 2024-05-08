@@ -120,7 +120,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	// TODO: use this in src/routes/[eventId]/teams/membersAllowed/+server.ts
 	const fieldFilterByType: Record<
 		FieldType,
-		(query: string) => Prisma.JsonNullableFilter<'Member'> | null
+		(query: string) => Prisma.JsonFilter<'Member'> | null
 	> = {
 		string: (query) => ({ string_contains: query }),
 		textarea: (query) => ({ string_contains: query }),
@@ -133,7 +133,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		number: (query) => {
 			const parsed = z.filter.number.safeParse(query)
 			if (!parsed.success) return null
-			const filter: Prisma.JsonNullableFilter<'Member'> = {}
+			const filter: Prisma.JsonFilter<'Member'> = {}
 			if (parsed.data?.min) filter.gte = parsed.data?.min
 			if (parsed.data?.max) filter.lte = parsed.data?.max
 			return filter

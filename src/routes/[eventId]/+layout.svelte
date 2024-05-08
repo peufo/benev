@@ -12,10 +12,11 @@
 	import { Card, Drawer, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { Header, Footer, AdminNavigation } from '$lib/layout'
+	import InviteForm from '$lib/InviteForm.svelte'
+	import { FormTeam } from '$lib/team'
 	import EventMenu from './EventMenu.svelte'
 	import Poster from './Poster.svelte'
-	import InviteForm from '$lib/InviteForm.svelte'
-	import { TeamForm } from '$lib/team'
+	import Drawers from './Drawers.svelte'
 
 	export let data
 
@@ -154,12 +155,4 @@
 	</div>
 </Footer>
 
-{#if data.member?.roles.includes('leader')}
-	<Drawer key="form-invite" title="Inviter un nouveau membre" let:close>
-		<InviteForm on:success={() => close()} />
-	</Drawer>
-
-	<Drawer key="form-team" title={data.team ? 'Modifier du secteur' : 'Nouveau secteur'} let:close>
-		<TeamForm event={data.event} team={data.team} on:success={() => close()} />
-	</Drawer>
-{/if}
+<Drawers {data} />

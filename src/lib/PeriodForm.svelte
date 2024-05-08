@@ -3,11 +3,10 @@
 	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	dayjs.locale('fr-ch')
-	import { enhance } from '$app/forms'
 	import { useForm } from 'fuma/validation'
-	import { InputNumber, InputDate, InputTime } from '$lib/material/input'
+	import { ButtonDelete, InputNumber, InputDate, InputTime } from 'fuma'
+	import { enhance } from '$app/forms'
 	import type { Period } from '@prisma/client'
-	import { ButtonDelete } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 
@@ -38,7 +37,7 @@
 	let date = period?.start
 	let startString = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
 	let endString = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
-	let maxSubscribe = String(period?.maxSubscribe || 1)
+	let maxSubscribe = period?.maxSubscribe || 1
 
 	$: dateString = dayjs(date).format('YYYY-MM-DD')
 	$: endIsNextDay = endString < startString
@@ -49,7 +48,7 @@
 		date = period?.start
 		startString = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
 		endString = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
-		if (period?.maxSubscribe) maxSubscribe = String(period.maxSubscribe)
+		if (period?.maxSubscribe) maxSubscribe = period.maxSubscribe
 	}
 
 	function getNextPeriod() {

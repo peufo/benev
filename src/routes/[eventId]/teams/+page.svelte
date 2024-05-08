@@ -16,7 +16,7 @@
 		<InputSearch />
 
 		{#if data.member?.roles.includes('admin')}
-			<a href={$urlParam.with({ 'form-team': 1 })} class="btn btn-sm btn-square">
+			<a href={$urlParam.with({ team_form: 1 })} class="btn btn-sm btn-square">
 				<Icon path={mdiPlus} title="Nouveau secteur" />
 			</a>
 		{/if}

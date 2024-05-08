@@ -30,7 +30,7 @@
 			</svelte:fragment>
 		</InputRelation>
 		<div class="flex gap-4">
-			<InputNumber key="amount" label="Amount" class="grow" hint="x 100" value="0" />
+			<InputNumber key="amount" label="Amount" class="grow" hint="x 100" value={0} />
 			<InputText key="currency" label="Currency" class="grow" value="CHF" />
 		</div>
 

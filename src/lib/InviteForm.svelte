@@ -1,26 +1,23 @@
+<svelte:options accessors={true} />
+
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte'
-
+	import { Form, type UseFormOptions } from 'fuma'
 	import type { Member, User } from '@prisma/client'
-
 	import { modelInvite } from '$lib/models'
 	import { eventPath } from '$lib/store'
-	import { Form, type UseFormOptions } from 'fuma'
 
 	type MemberWithUser = Member & { user: User }
-	const dispatch = createEventDispatcher<{ success: MemberWithUser | undefined }>()
+	export let options: UseFormOptions<MemberWithUser> = {}
 
-	const options: UseFormOptions<MemberWithUser> = {
-		onSuccess: (action, member) => dispatch('success', member),
+	const _options: UseFormOptions<MemberWithUser> = {
 		successMessage: 'Invitation envoyée',
-		successUpdate: false,
 	}
 </script>
 
 <Form
 	action="{$eventPath}/invite?/invite"
 	model={modelInvite}
-	{options}
+	options={{ ..._options, ...options }}
 	fields={[
 		[
 			{

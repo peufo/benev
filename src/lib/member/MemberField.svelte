@@ -1,18 +1,18 @@
 <script lang="ts">
-	import type { Prisma, FieldType } from '@prisma/client'
 	import type { ComponentType } from 'svelte'
 	import { mdiEyeOffOutline, mdiPencilOffOutline } from '@mdi/js'
+	import type { Prisma, FieldType } from '@prisma/client'
+	import { page } from '$app/stores'
 	import {
+		jsonParse,
+		Icon,
 		InputText,
 		InputTextarea,
 		InputNumber,
 		InputBoolean,
 		InputRadio,
 		InputCheckboxs,
-	} from '$lib/material/input'
-	import { page } from '$app/stores'
-	import { jsonParse } from '$lib/jsonParse'
-	import { Icon } from 'fuma'
+	} from 'fuma'
 
 	export let field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
 	export let value: string | number | true | string[] = ''

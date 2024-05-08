@@ -154,10 +154,7 @@
 			</div>
 		{/each}
 
-		<a
-			class="btn btn-sm z-50 sticky top-0"
-			href={$urlParam.with({ 'form-team': 1, redirectTo: $page.url.pathname })}
-		>
+		<a class="btn btn-sm z-50 sticky top-0" href={$urlParam.with({ team_form: 1 })}>
 			<Icon path={mdiPlus} title="Nouveau secteur" />
 			<span>Ajouter</span>
 		</a>

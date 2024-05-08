@@ -262,7 +262,7 @@ model Team {
   leaders          Member[]
   closeSubscribing DateTime?
   /// [MemberConditions]
-  conditions       Json?
+  conditions       Json
 
   eventId String
   event   Event    @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)

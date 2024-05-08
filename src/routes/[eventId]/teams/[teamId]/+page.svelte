@@ -138,7 +138,7 @@
 			</a>
 
 			<a
-				href={$urlParam.with({ 'form-team': 1, teamId: data.team.id })}
+				href={$urlParam.with({ 'team_form': data.team.id })}
 				class="btn btn-square btn-sm"
 			>
 				<Icon path={mdiPencilOutline} title="Éditer ce secteur" />
