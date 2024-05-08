@@ -36,6 +36,10 @@
 	.suggestion {
 		@apply border rounded px-2 mx-1 shadow text-sm !whitespace-nowrap inline-block;
 	}
+
+	.btn-primary {
+		@apply fill-white;
+	}
 }
 
 mark {

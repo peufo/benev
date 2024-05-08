@@ -35,7 +35,7 @@
 		class:btn-primary={data.user.isOrganizer && !data.members.length}
 		on:click={handleClickNewEvent}
 	>
-		<Icon path={mdiPlus} class="fill-white" />
+		<Icon path={mdiPlus} />
 		Organiser
 	</button>
 </div>
