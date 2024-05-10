@@ -15,6 +15,7 @@
 	import MembersFilter from './MembersFilter.svelte'
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
+	import { eventPath } from '$lib/store'
 
 	export let data
 
@@ -47,7 +48,7 @@
 
 			<div class="grow" />
 
-			<TableViewSelect key="members" views={data.views} />
+			<TableViewSelect key="members" views={data.views} action="{$eventPath}/admin" />
 			<TabsIcon
 				key="summary"
 				defaultValue="false"
@@ -75,7 +76,7 @@
 				key="members"
 				items={data.members}
 				fields={tableFields}
-				action={(member) =>
+				slotAction={(member) =>
 					component(MemberActions, {
 						member,
 						async onSubscribeDialog() {

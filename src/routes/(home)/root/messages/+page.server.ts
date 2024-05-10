@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit'
 import { tryOrFail, parseFormData, parseQuery } from 'fuma/server'
 import { toTuple, z } from 'fuma/validation'
 import { prisma } from '$lib/server'

@@ -1,4 +1,4 @@
-import { ensureFieldsWithFilterAreVisibles } from '$lib/material/table/server'
+import { ensureFieldsWithFilterAreVisibles } from 'fuma/server'
 import { getMembers, membersFilterShape } from './getMembers'
 import { prisma } from '$lib/server'
 

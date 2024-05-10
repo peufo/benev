@@ -1,5 +1,4 @@
 export * from './display'
-export * from './table'
 export * from './media'
 export { default as Icon } from './Icon.svelte'
 export { default as Card } from './Card.svelte'

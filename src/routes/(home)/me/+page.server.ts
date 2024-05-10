@@ -53,7 +53,7 @@ export const actions = {
 			const session = await auth.createSession({ userId: newUser.userId, attributes: {} })
 			locals.auth.setSession(session)
 
-			sendVerificationEmail(session.user, 'Bienvenue')
+			await sendVerificationEmail(session.user, 'Bienvenue')
 		})
 	},
 	login: async ({ request, locals }) => {

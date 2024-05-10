@@ -93,7 +93,7 @@ export const actions = {
 			const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
 
 			if (to.length)
-				subscribeNotification
+				await subscribeNotification
 					.request({
 						from: subscribe.period.team.event.name,
 						to,

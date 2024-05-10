@@ -9,7 +9,7 @@ export const load = async ({ url }) => {
 }
 
 export const actions = {
-	create_view: async ({ request, locals, params: { eventId } }) => {
+	view_create: async ({ request, locals, params: { eventId } }) => {
 		const member = await permission.leader(eventId, locals)
 
 		return tryOrFail(async () => {
@@ -24,7 +24,7 @@ export const actions = {
 			})
 		})
 	},
-	update_view: async ({ request, locals, params: { eventId } }) => {
+	view_update: async ({ request, locals, params: { eventId } }) => {
 		const member = await permission.leader(eventId, locals)
 
 		return tryOrFail(async () => {
@@ -39,7 +39,7 @@ export const actions = {
 			})
 		})
 	},
-	delete_view: async ({ request, locals, params: { eventId } }) => {
+	view_delete: async ({ request, locals, params: { eventId } }) => {
 		await permission.leader(eventId, locals)
 
 		return tryOrFail(async () => {
@@ -77,7 +77,7 @@ export const actions = {
 		return tryOrFail(async () => {
 			const { data } = await parseFormData(request, { id: z.string(), name: z.string() })
 
-			prisma.media.update({ where: { id: data.id, eventId }, data: { name: data.name } })
+			await prisma.media.update({ where: { id: data.id, eventId }, data: { name: data.name } })
 		})
 	},
 }

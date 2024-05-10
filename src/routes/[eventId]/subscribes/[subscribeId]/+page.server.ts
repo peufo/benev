@@ -127,7 +127,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 			}
 
 			if (emailOptions.to.length) {
-				subscribeNotification[state]({
+				await subscribeNotification[state]({
 					...emailOptions,
 					subject: subjects[state],
 					props: { subscribe, authorName: `${author.user.firstName} ${author.user.lastName}` },

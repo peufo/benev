@@ -1,8 +1,7 @@
-import type { TableField } from '$lib/material/table'
-import { component, getAge } from '$lib/utils'
+import { type TableField, jsonParse, component } from 'fuma'
+import { getAge } from '$lib/utils'
 import { MemberCell } from '$lib/member'
 import { formatRange } from '$lib/formatRange'
-import { jsonParse } from '$lib/jsonParse'
 import type { Member } from './getMembers'
 import type { Field } from '@prisma/client'
 
