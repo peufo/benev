@@ -63,46 +63,44 @@
 		<AdminNavigation />
 	{/if}
 
-	<div class="grow mx-auto">
-		<main class="grow">
-			{#if accessGranted}
-				<slot />
-			{:else if data.event.state === 'draft' || data.event.state === 'actived'}
-				<Card class="max-w-lg mx-auto">
-					<h2 slot="title" class="flex gap-2">
-						<Icon path={mdiTestTube} class="rotate-12 opacity-70" />
+	<main class="grow mx-auto overflow-hidden">
+		{#if accessGranted}
+			<slot />
+		{:else if data.event.state === 'draft' || data.event.state === 'actived'}
+			<Card class="max-w-lg mx-auto">
+				<h2 slot="title" class="flex gap-2">
+					<Icon path={mdiTestTube} class="rotate-12 opacity-70" />
 
-						<span>Bientôt disponible</span>
-					</h2>
+					<span>Bientôt disponible</span>
+				</h2>
 
-					<p class="mt-4">
-						L'espace bénévole de l'évènement <b>{data.event.name}</b> est cours d'élaboration.
-					</p>
+				<p class="mt-4">
+					L'espace bénévole de l'évènement <b>{data.event.name}</b> est cours d'élaboration.
+				</p>
 
-					<div class="mt-8">
-						<a href="/me" class="btn btn-sm">
-							<Icon path={mdiArrowLeft} />
-							<span>mon profil</span>
-						</a>
-					</div>
-				</Card>
-			{:else}
-				<Card class="max-w-lg mx-auto">
-					<h2 slot="title" class="flex gap-2">
-						<Icon path={mdiArchiveOutline} class="opacity-70" />
-						<span>Cet évènement est archivé</span>
-					</h2>
+				<div class="mt-8">
+					<a href="/me" class="btn btn-sm">
+						<Icon path={mdiArrowLeft} />
+						<span>mon profil</span>
+					</a>
+				</div>
+			</Card>
+		{:else}
+			<Card class="max-w-lg mx-auto">
+				<h2 slot="title" class="flex gap-2">
+					<Icon path={mdiArchiveOutline} class="opacity-70" />
+					<span>Cet évènement est archivé</span>
+				</h2>
 
-					<div class="mt-8">
-						<a href="/me" class="btn btn-sm">
-							<Icon path={mdiArrowLeft} />
-							<span>mon profil</span>
-						</a>
-					</div>
-				</Card>
-			{/if}
-		</main>
-	</div>
+				<div class="mt-8">
+					<a href="/me" class="btn btn-sm">
+						<Icon path={mdiArrowLeft} />
+						<span>mon profil</span>
+					</a>
+				</div>
+			</Card>
+		{/if}
+	</main>
 </div>
 
 <Footer class="z-10">
