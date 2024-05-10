@@ -50,7 +50,8 @@ export const actions = {
 				if (charterAlreadyExist)
 					return fail(400, { message: 'Il existe déjà une charte des bénévoles' })
 			}
-			prisma.page.update({
+
+			return prisma.page.update({
 				where: { id: data.id },
 				data,
 			})

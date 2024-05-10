@@ -79,7 +79,6 @@
 			{:else}
 				<InputSelect
 					key="type"
-					class="menu-item rounded-lg border bordered h-12"
 					options={charterAlreadyExist && page.type !== 'charter'
 						? pageTypes
 						: { charter, ...pageTypes }}
