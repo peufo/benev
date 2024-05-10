@@ -1,12 +1,10 @@
 <script lang="ts">
-	import type { User } from '@prisma/client'
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 	import { createEventDispatcher, onMount } from 'svelte'
-	import { useForm } from 'fuma/validation'
+	import { useForm, Icon, InputText, InputDate, FormControl, InputBoolean } from 'fuma'
 	import { enhance } from '$app/forms'
-	import { InputText, InputDate, FormControl, InputBoolean } from '$lib/material/input'
-	import { Icon } from 'fuma'
 	import { page } from '$app/stores'
+	import type { User } from '@prisma/client'
 
 	export let user: User
 	export let successReset = false

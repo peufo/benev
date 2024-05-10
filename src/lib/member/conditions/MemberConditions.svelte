@@ -4,9 +4,19 @@
 	import { get } from 'svelte/store'
 	import { page } from '$app/stores'
 	import type { Field, FieldType } from '@prisma/client'
+	import { browser } from '$app/environment'
 	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
 	import { jsonParse } from '$lib/jsonParse'
-	import { Icon, InputSelect, Placeholder, DropDownMenu } from 'fuma'
+	import {
+		Icon,
+		InputSelect,
+		Placeholder,
+		DropDownMenu,
+		InputNumber,
+		InputText,
+		InputCheckboxs,
+		InputRadio,
+	} from 'fuma'
 	import {
 		mdiAccountCheckOutline,
 		mdiCardAccountDetailsOutline,
@@ -14,11 +24,6 @@
 		mdiHumanMaleBoy,
 		mdiPlus,
 	} from '@mdi/js'
-	import InputNumber from '$lib/material/input/InputNumber.svelte'
-	import InputText from '$lib/material/input/InputText.svelte'
-	import InputCheckboxs from '$lib/material/input/InputCheckboxs.svelte'
-	import InputRadio from '$lib/material/input/InputRadio.svelte'
-	import { browser } from '$app/environment'
 
 	export let conditions: MemberCondition[] = []
 	export let memberFields: Field[]
@@ -49,7 +54,7 @@
 	function handleAddCondition(event: { detail: string }) {
 		const _type = event.detail as MemberCondition['type']
 		if (_type === 'valided') conditions = [...conditions, { type: 'valided' }]
-		if (_type === 'age') conditions = [...conditions, { type: 'age', args: '18' }]
+		if (_type === 'age') conditions = [...conditions, { type: 'age', args: 18 }]
 		if (_type === 'profile')
 			conditions = [
 				...conditions,

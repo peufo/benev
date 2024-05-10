@@ -1,6 +1,4 @@
 import objectPath from 'object-path'
-
-import type { SuggestionItem } from '$lib/material/input/textRich/suggestion'
 import type { Field } from '@prisma/client'
 import type { MemberWithComputedValues } from '$lib/server'
 import { getAge } from '$lib/utils'
@@ -8,6 +6,7 @@ import { domain } from '$lib/email'
 import type { NestedPaths } from './nestedPaths'
 import type { Replacer } from './injectValues'
 
+type SuggestionItem = { id: string; label: string }
 type DataWithMember = { member: MemberWithComputedValues }
 
 const memberStaticSuggestions: Partial<Record<NestedPaths<DataWithMember>, string>> = {

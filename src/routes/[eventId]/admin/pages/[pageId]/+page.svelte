@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getMemberSuggestions } from '$lib/pages/memberSuggestions'
-	import { suggestionItems, type SuggestionItem } from '$lib/material/input/textRich/suggestion'
+	import { suggestionItems, type SuggestionItem } from 'fuma'
 
 	import PageForm from './PageForm.svelte'
 	import type { Page } from '@prisma/client'
@@ -12,11 +12,13 @@
 	$: suggestionItems.set(getSuggestions(data.page))
 
 	function getSuggestions(page: Page): SuggestionItem[] {
-
 		if (page.type === 'member') return getMemberSuggestions(data.event.memberFields)
 		if (page.type !== 'email') return []
 		const path = page.path as EmailEvent
-		const suggestions = [ ...emailSuggestions[path], ...getMemberSuggestions(data.event.memberFields)]
+		const suggestions = [
+			...emailSuggestions[path],
+			...getMemberSuggestions(data.event.memberFields),
+		]
 		return suggestions || []
 	}
 </script>

@@ -1,4 +1,3 @@
-export * from './input'
 export * from './display'
 export * from './table'
 export * from './media'

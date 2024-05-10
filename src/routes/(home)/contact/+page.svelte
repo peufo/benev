@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { Card, Icon, InputText, Placeholder } from 'fuma'
-	import InputTextarea from '$lib/material/input/InputTextarea.svelte'
-	import { useForm } from 'fuma/validation'
 	import { mdiCheck } from '@mdi/js'
+	import { Card, Icon, InputText, InputTextarea, useForm } from 'fuma'
 
 	const form = useForm({
 		successMessage: 'Merci pour ton message',

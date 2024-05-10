@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { enhance } from '$app/forms'
-	import { InputPassword } from '$lib/material'
+	import { InputPassword } from 'fuma'
 	import { useForm } from 'fuma/validation'
 
 	import { Oauth } from '$lib/me'

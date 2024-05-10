@@ -22,7 +22,7 @@ export const modelMemberCondition = z.union([
 	z.object({ type: z.literal('valided') }),
 	z.object({
 		type: z.literal('age'),
-		args: z.number().transform(String),
+		args: z.number(),
 	}),
 	z.object({
 		type: z.literal('profile'),

@@ -5,7 +5,7 @@ import { prisma } from '$lib/server'
 import type { EmailEvent } from '$lib/email/models'
 import { emailReplacers, type EmailModelProps } from '$lib/pages/emailSuggesions'
 import { injectValues } from '$lib/pages/injectValues'
-import { tiptap } from '$lib/pages/tiptap'
+import { tiptapParser } from 'fuma'
 import EmailLayout from '$lib/email/EmailLayout.svelte'
 import { getMemberReplacers } from '$lib/pages/memberSuggestions'
 
@@ -81,7 +81,7 @@ export async function renderEmailModel<EmailPath extends EmailEvent>(
 	})
 
 	const replacers = [...emailReplacers[emailPath](props), ...getMemberReplacers(props)]
-	const modelHTML = tiptap.toHTML(model.content)
+	const modelHTML = tiptapParser.toHTML(model.content)
 	// @ts-ignore
 	const layout = EmailLayout.render({ title: model.event.name, subtitle: model.title }) as {
 		html: string

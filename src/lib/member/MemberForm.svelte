@@ -6,8 +6,7 @@
 	import { enhance } from '$app/forms'
 	import { useForm } from 'fuma/validation'
 	import { eventPath, urlParam } from '$lib/store'
-	import { ButtonDelete } from 'fuma'
-	import { tiptap } from '$lib/pages'
+	import { ButtonDelete, tiptapParser } from 'fuma'
 
 	export let event: Event
 	export let userId: string
@@ -29,7 +28,7 @@
 
 	{#if charter}
 		<div class="prose">
-			{@html tiptap.toHTML(charter.content || '')}
+			{@html tiptapParser.toHTML(charter.content || '')}
 		</div>
 
 		<div class="divider" />

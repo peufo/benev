@@ -5,8 +5,7 @@
 	import { eventPath } from '$lib/store/index.js'
 
 	import type { Page } from '@prisma/client'
-	import { ButtonCopy, Icon } from 'fuma'
-	import { tiptap } from '$lib/pages/tiptap'
+	import { ButtonCopy, Icon, tiptapParser } from 'fuma'
 
 	import type { MemberWithComputedValues } from '$lib/server'
 	import PageLayout from './PageLayout.svelte'
@@ -16,7 +15,7 @@
 	export let page: Page | null
 	export let member: MemberWithComputedValues | undefined = undefined
 
-	$: html = transformPage(tiptap.toHTML(page?.content || ''))
+	$: html = transformPage(tiptapParser.toHTML(page?.content || ''))
 	$: canEdit = $pageStore.data.member?.roles.includes('admin')
 
 	function transformPage(_html: string) {

@@ -7,7 +7,7 @@
 	import { useForm } from 'fuma/validation'
 	import { enhance } from '$app/forms'
 	import Avatar from './Avatar.svelte'
-	import { InputImage } from '$lib/material/input'
+	import { InputImage } from 'fuma'
 
 	export let user: User
 	let klass = ''

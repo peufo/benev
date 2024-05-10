@@ -3,11 +3,17 @@
 	import { slide } from 'svelte/transition'
 	import type { Field } from '@prisma/client'
 	import { enhance } from '$app/forms'
-	import { useForm } from 'fuma/validation'
+	import {
+		useForm,
+		InputSelect,
+		InputText,
+		InputBoolean,
+		InputCheckboxs,
+		ButtonDelete,
+		InputOptions,
+	} from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import { InputSelect, InputText, InputCheckboxs, ButtonDelete, InputOptions } from 'fuma'
 	import { MemberField } from '$lib/member'
-	import { InputBoolean } from '$lib/material/input'
 	import { eventPath } from '$lib/store'
 
 	export let successReset = true

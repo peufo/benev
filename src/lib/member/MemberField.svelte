@@ -9,10 +9,10 @@
 		InputBoolean,
 		InputRadio,
 		InputCheckboxs,
-	} from '$lib/material/input'
+		Icon,
+	} from 'fuma'
 	import { page } from '$app/stores'
 	import { jsonParse } from '$lib/jsonParse'
-	import { Icon } from 'fuma'
 
 	export let field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
 	export let value: string | number | true | string[] = ''
