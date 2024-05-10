@@ -6,13 +6,13 @@ import { prisma, permission, json, addTeamComputedValues } from '$lib/server'
 export const GET = async ({ params: { eventId }, url, locals }) => {
 	await permission.leader(eventId, locals)
 
-	const { err, data } = parseQuery(url, {
+	const data = parseQuery(url, {
 		search: z.string().optional(),
 		ids: z.array(z.string()).optional(),
 		take: z.number().default(5),
 		onlyAvailable: z.boolean().optional(),
 	})
-	if (err) error(400)
+
 	const { search = '', ids, take } = data
 
 	if (ids)

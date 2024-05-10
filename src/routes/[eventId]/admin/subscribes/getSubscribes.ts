@@ -15,13 +15,12 @@ export const subscribesFilterShape = {
 
 export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
-	const { data, err } = parseQuery(url, {
+	const data = parseQuery(url, {
 		...subscribesFilterShape,
 		all: z.boolean().default(false),
 		skip: z.number().default(0),
 		take: z.number().default(20),
 	})
-	if (err) error(400)
 
 	const subscribesFilters: Prisma.SubscribeWhereInput[] = [{ period: { team: { eventId } } }]
 

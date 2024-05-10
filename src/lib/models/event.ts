@@ -28,7 +28,7 @@ export const modelEventState = {
 export const modelEventMemberSettings = {
 	selfRegisterAllowed: z.boolean(),
 	selfSubscribeAllowed: z.boolean(),
-	closeSubscribing: z.dateOptional(),
+	closeSubscribing: z.date().optional(),
 	userAddressRequired: z.boolean(),
 	userPhoneRequired: z.boolean(),
 	userBirthdayRequired: z.boolean(),

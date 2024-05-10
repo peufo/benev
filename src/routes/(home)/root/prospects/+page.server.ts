@@ -4,16 +4,15 @@ import { prisma } from '$lib/server'
 import { sendProspectEmails } from './sendProspectEmails.js'
 
 export const load = async ({ url }) => {
-	const { data, err } = parseQuery(url, {
+	const query = parseQuery(url, {
 		skip: z.number().default(0),
 		take: z.number().default(100),
 	})
-	if (err) return err
 
 	return {
 		prospects: await prisma.prospect.findMany({
-			skip: data.skip,
-			take: data.take,
+			skip: query.skip,
+			take: query.take,
 			orderBy: {
 				lastContact: {
 					nulls: 'first',

@@ -6,12 +6,10 @@ import { error } from '@sveltejs/kit'
 export const GET = async ({ locals, url }) => {
 	await permission.root(locals)
 
-	const { err, data } = parseQuery(url, {
-		search: z.string().optional(),
+	const { search, take } = parseQuery(url, {
+		search: z.string().default(''),
 		take: z.number().default(5),
 	})
-	if (err) error(400)
-	const { search = '', take } = data
 
 	const users = await prisma.user.findMany({
 		take,

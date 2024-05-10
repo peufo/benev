@@ -57,7 +57,7 @@ export const actions = {
 			const { data } = await parseFormData(formData, modelMemberProfile)
 
 			const { memberId, ...values } = data
-			if (!memberId) throw Error('memberId is required')
+			if (typeof memberId !== 'string') throw Error('memberId is required')
 
 			return await prisma.member.update({
 				where: { id: memberId },

@@ -41,7 +41,7 @@ export const modelTeam = {
 	name: z.string().min(3),
 	description: z.string().optional(),
 	leaders: z.relations.connect,
-	closeSubscribing: z.dateOptional(),
+	closeSubscribing: z.date().optional(),
 	conditions: z.array(modelMemberCondition),
 } satisfies ZodObj<TeamShemaCreate>
 

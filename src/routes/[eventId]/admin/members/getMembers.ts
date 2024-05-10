@@ -33,15 +33,13 @@ export const membersFilterShape = {
 export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
 
-	const { data, err } = parseQuery(url, {
+	const data = parseQuery(url, {
 		...membersFilterShape,
 		skip: z.number().default(0),
 		take: z.number().default(20),
 		summary: z.boolean().default(false),
 		all: z.boolean().default(false),
 	})
-
-	if (err) error(400)
 
 	const filters: Prisma.MemberWhereInput[] = []
 	const subscribesFilters: Prisma.SubscribeWhereInput[] = []

@@ -8,10 +8,9 @@ import { MEDIA_PRESETS } from '$lib/constant'
 import sharp from 'sharp'
 
 export const GET = async ({ url, params: { mediaId } }) => {
-	const { data, err } = parseQuery(url, {
+	const data = parseQuery(url, {
 		size: z.enum(toTuple(MEDIA_PRESETS)).optional(),
 	})
-	if (err) error(400)
 
 	await ensurePngtoWebp(mediaId)
 	const fileName = `${data.size || 'original'}.webp`

@@ -6,8 +6,7 @@ import { modelMemberCondition } from '$lib/models'
 import { isMemberAllowed } from '$lib/member'
 
 export const GET = async ({ params: { eventId }, url }) => {
-	const { data, err } = parseQuery(url, { conditions: z.array(modelMemberCondition) })
-	if (err) error(400)
+	const data = parseQuery(url, { conditions: z.array(modelMemberCondition) })
 
 	const members = await prisma.member.findMany({
 		where: { eventId },

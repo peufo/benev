@@ -155,6 +155,6 @@
 
 {#if data.member?.roles.includes('leader')}
 	<Drawer key="form-invite" title="Inviter un nouveau membre" let:close>
-		<InviteForm on:success={close} />
+		<InviteForm on:success={() => close()} />
 	</Drawer>
 {/if}

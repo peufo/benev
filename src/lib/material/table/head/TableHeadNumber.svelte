@@ -19,10 +19,14 @@
 	onMount(() => page.subscribe(({ url }) => ({ min, max } = initRange(url))))
 
 	function initRange({ searchParams }: URL) {
-		return jsonParse<Range>(searchParams.get(field.key), {
+		const range = jsonParse<Range>(searchParams.get(field.key), {
 			min: undefined,
 			max: undefined,
 		})
+		return {
+			min: range.min === undefined ? undefined : +range.min,
+			max: range.max === undefined ? undefined : +range.max,
+		}
 	}
 
 	const udpateUrl = debounce(() => {
@@ -43,7 +47,7 @@
 		goto($urlParam.without(field.key, 'skip', 'take'), { noScroll: true, keepFocus: true })
 	}
 
-	function isDefined(v: string | undefined | null): v is string {
+	function isDefined(v: number | undefined | null): v is number {
 		return v !== undefined && v !== null
 	}
 

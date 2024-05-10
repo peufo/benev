@@ -20,7 +20,7 @@ export const load = async ({ params }) => {
 }
 
 export const actions = {
-	new_invite: async ({ request, locals, params: { eventId } }) => {
+	invite_create: async ({ request, locals, params: { eventId } }) => {
 		const { user: author } = await permission.leader(eventId, locals)
 
 		return tryOrFail(async () => {
