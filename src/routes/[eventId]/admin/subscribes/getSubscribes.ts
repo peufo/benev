@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit'
 import { z, type ZodObj } from 'fuma/validation'
 import { parseQuery } from 'fuma/server'
 import { addMemberComputedValues, prisma } from '$lib/server'
@@ -17,9 +16,9 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 	const eventId = event.id
 	const data = parseQuery(url, {
 		...subscribesFilterShape,
-		all: z.boolean().default(false),
-		skip: z.number().default(0),
-		take: z.number().default(20),
+		all: z.filter.boolean,
+		skip: z.coerce.number().default(0),
+		take: z.coerce.number().default(20),
 	})
 
 	const subscribesFilters: Prisma.SubscribeWhereInput[] = [{ period: { team: { eventId } } }]

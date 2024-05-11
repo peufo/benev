@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit'
 import { z } from 'fuma/validation'
 import { parseQuery } from 'fuma/server'
 import type { Prisma } from '@prisma/client'

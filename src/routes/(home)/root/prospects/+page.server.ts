@@ -5,8 +5,8 @@ import { sendProspectEmails } from './sendProspectEmails.js'
 
 export const load = async ({ url }) => {
 	const query = parseQuery(url, {
-		skip: z.number().default(0),
-		take: z.number().default(100),
+		skip: z.coerce.number().default(0),
+		take: z.coerce.number().default(100),
 	})
 
 	return {

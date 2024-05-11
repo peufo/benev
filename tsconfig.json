@@ -9,7 +9,6 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"verbatimModuleSyntax": true,
-		"importsNotUsedAsValues": "error"
+		"verbatimModuleSyntax": true
 	}
 }

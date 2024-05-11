@@ -5,8 +5,8 @@ import { MessageState, type Prisma } from '@prisma/client'
 
 export const load = async ({ url }) => {
 	const data = parseQuery(url, {
-		skip: z.number().default(0),
-		take: z.number().default(20),
+		skip: z.coerce.number().default(0),
+		take: z.coerce.number().default(20),
 		state: z.enum(toTuple(MessageState)).optional(),
 	})
 

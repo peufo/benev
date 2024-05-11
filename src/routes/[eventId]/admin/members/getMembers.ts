@@ -11,7 +11,6 @@ import type {
 	SubscribeState,
 } from '@prisma/client'
 import { prisma, addMemberComputedValues } from '$lib/server'
-import { error } from '@sveltejs/kit'
 
 export type Member = Awaited<ReturnType<typeof getMembers>>['members'][number]
 
@@ -35,10 +34,10 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 
 	const data = parseQuery(url, {
 		...membersFilterShape,
-		skip: z.number().default(0),
-		take: z.number().default(20),
-		summary: z.boolean().default(false),
-		all: z.boolean().default(false),
+		skip: z.coerce.number().default(0),
+		take: z.coerce.number().default(20),
+		summary: z.filter.boolean,
+		all: z.filter.boolean,
 	})
 
 	const filters: Prisma.MemberWhereInput[] = []
