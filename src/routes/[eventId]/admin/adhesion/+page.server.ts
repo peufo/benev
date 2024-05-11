@@ -42,7 +42,10 @@ export const actions = {
 		await permission.admin(eventId, locals)
 
 		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, modelMemberFieldCreate)
+			const formData = await request.formData()
+			const memberCanRead = formData.get('memberCanRead')
+			console.log({ memberCanRead })
+			const { data } = await parseFormData(formData, modelMemberFieldCreate)
 			const nbFields = await prisma.field.count({ where: { eventId } })
 			return prisma.field.create({
 				data: { ...data, eventId, position: nbFields },

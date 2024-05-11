@@ -11,6 +11,7 @@
 		InputCheckboxs,
 		ButtonDelete,
 		InputOptions,
+		USE_COERCE_BOOLEAN,
 	} from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { MemberField } from '$lib/member'
@@ -142,8 +143,16 @@
 			]}
 		/>
 
-		<input type="hidden" name="memberCanRead" value={field.memberCanRead ? 'true' : ''} />
-		<input type="hidden" name="memberCanWrite" value={field.memberCanWrite ? 'true' : ''} />
+		<input
+			type="hidden"
+			name="memberCanRead"
+			value="{USE_COERCE_BOOLEAN}{field.memberCanRead ? 'true' : ''}"
+		/>
+		<input
+			type="hidden"
+			name="memberCanWrite"
+			value="{USE_COERCE_BOOLEAN}{field.memberCanWrite ? 'true' : ''}"
+		/>
 
 		{#if field.memberCanWrite && field.type !== 'boolean' && field.type !== 'multiselect'}
 			<div transition:slide={{ duration: 200 }}>
@@ -151,7 +160,12 @@
 					<span class="label-text">Les membres doivent</span>
 				</div>
 
-				<InputBoolean key="required" value={field.required} label="Renseigner la valeur" />
+				<InputBoolean
+					key="required"
+					value={field.required}
+					label="Renseigner la valeur"
+					labelPosition="right"
+				/>
 			</div>
 		{/if}
 
