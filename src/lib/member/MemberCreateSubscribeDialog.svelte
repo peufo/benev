@@ -91,7 +91,7 @@
 	{:else}
 		<form
 			in:fly={{ x: offsetWidth, duration: 250 }}
-			action="{$eventPath}/subscribes?/new_subscribe"
+			action="{$eventPath}/subscribes?/subscribe_create"
 			method="post"
 			use:enhance={form.submit}
 		>

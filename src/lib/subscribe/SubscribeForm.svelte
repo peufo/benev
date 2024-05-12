@@ -18,7 +18,7 @@
 </script>
 
 <form
-	action="/{team.eventId}/subscribes?/new_subscribe"
+	action="/{team.eventId}/subscribes?/subscribe_create"
 	method="post"
 	class="modal-box flex flex-col gap-4"
 	use:enhance={form.submit}

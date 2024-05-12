@@ -28,19 +28,23 @@
 
 <form
 	method="post"
-	action="{$eventPath}/subscribes?/new_subscribe"
+	action="{$eventPath}/subscribes?/subscribe_create"
 	use:enhance={form.submit}
 	class="{klass} flex gap-2 justify-end"
 >
 	<input type="hidden" name="periodId" value={periodId} />
+	<input type="hidden" name="memberId" value={member?.id} />
 
 	<InputRelation
-		key="memberId"
+		key="member"
 		placeholder="Inscrire un membre"
 		search={$api.member.search}
 		createTitle="Inviter un nouveau membre"
 		createUrl={$urlParam.with({ 'form-invite': 1 })}
 		createIcon={mdiAccountPlusOutline}
+		input={{
+			size: 20,
+		}}
 		bind:value={member}
 		on:input
 		{tippyProps}

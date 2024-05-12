@@ -7,7 +7,7 @@ import { isMemberAllowed } from '$lib/member'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
 
 export const actions = {
-	new_subscribe: async ({ request, locals, params: { eventId } }) => {
+	subscribe_create: async ({ request, locals, params: { eventId } }) => {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
 
