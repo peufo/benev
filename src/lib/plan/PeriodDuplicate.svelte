@@ -27,7 +27,7 @@
 		form.append('maxSubscribe', String(period.maxSubscribe))
 		form.append('start', end.toUTCString())
 		form.append('end', new Date(end.getTime() + duration).toUTCString())
-		await axios.postForm(`${$eventPath}/teams/${period.teamId}?/new_period`, form)
+		await axios.postForm(`${$eventPath}/teams/${period.teamId}?/period_create`, form)
 		await invalidateAll()
 	}
 </script>

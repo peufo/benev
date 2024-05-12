@@ -58,7 +58,7 @@ export const load = async ({ locals, parent, params: { teamId } }) => {
 }
 
 export const actions = {
-	new_period: async ({ request, locals, params: { teamId } }) => {
+	period_create: async ({ request, locals, params: { teamId } }) => {
 		await permission.leaderOfTeam(teamId, locals)
 
 		return tryOrFail(async () => {

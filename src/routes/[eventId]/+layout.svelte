@@ -63,7 +63,7 @@
 		<AdminNavigation />
 	{/if}
 
-	<main class="grow mx-auto overflow-hidden">
+	<main class="grow mx-auto">
 		{#if accessGranted}
 			<slot />
 		{:else if data.event.state === 'draft' || data.event.state === 'actived'}

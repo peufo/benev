@@ -3,7 +3,7 @@
 	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	dayjs.locale('fr-ch')
-	import { useForm, InputNumber, InputDate, InputTime, ButtonDelete } from 'fuma'
+	import { useForm, InputNumber, InputDate, InputTime, ButtonDelete, USE_COERCE_DATE } from 'fuma'
 	import type { Period } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
@@ -16,9 +16,9 @@
 	const dispatch = createEventDispatcher<{ success: void }>()
 
 	const successMessages: Record<string, string> = {
-		'?/update_period': 'Période mise à jour',
-		'?/new_period': 'Période ajoutée',
-		'?/delete_period': 'Période supprimée',
+		'?/period_update': 'Période mise à jour',
+		'?/period_create': 'Période ajoutée',
+		'?/period_delete': 'Période supprimée',
 	}
 
 	const { enhance } = useForm({
@@ -32,7 +32,7 @@
 	let defaultStart = dayjs().startOf('hour').add(1, 'hour').format('HH:mm')
 	let defaultEnd = dayjs(period?.end).startOf('hour').add(4, 'hours').format('HH:mm')
 
-	let date = period?.start
+	let date = period?.start || new Date()
 	let startString = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
 	let endString = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
 	let maxSubscribe = period?.maxSubscribe || 1
@@ -65,7 +65,7 @@
 </script>
 
 <form
-	action="{basePath}{period?.id ? `/${$page.params.periodId}?/update_period` : '?/new_period'}"
+	action="{basePath}{period?.id ? `/${$page.params.periodId}?/period_update` : '?/period_create'}"
 	method="post"
 	use:enhance
 	class="p-2 flex flex-col gap-3 {klass}"
@@ -74,11 +74,17 @@
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
 
-	<input type="hidden" name="start" value={dayjs(`${dateString}T${startString}`).toJSON()} />
+	<input
+		type="hidden"
+		name="start"
+		value="{USE_COERCE_DATE}{dayjs(`${dateString}T${startString}`).toJSON()}"
+	/>
 	<input
 		type="hidden"
 		name="end"
-		value={dayjs(`${dateString}T${endString}`).add(+endIsNextDay, 'day').toJSON()}
+		value="{USE_COERCE_DATE}{dayjs(`${dateString}T${endString}`)
+			.add(+endIsNextDay, 'day')
+			.toJSON()}"
 	/>
 
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
@@ -106,7 +112,7 @@
 				<input type="hidden" name="disableRedirect" value="true" />
 			{/if}
 			<button class="btn" type="submit">Valider</button>
-			<ButtonDelete formaction="{basePath}/{period.id}?/delete_period" />
+			<ButtonDelete formaction="{basePath}/{period.id}?/period_delete" />
 		{:else}
 			<button class="btn" type="submit">Ajouter</button>
 			<button

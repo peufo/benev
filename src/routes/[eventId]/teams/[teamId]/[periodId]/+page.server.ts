@@ -16,7 +16,7 @@ export const load = async ({ locals, params: { teamId, periodId } }) => {
 // TODO: Avertire les membres inscrits
 
 export const actions = {
-	update_period: async ({ request, locals, params: { teamId } }) => {
+	period_update: async ({ request, locals, params: { teamId } }) => {
 		await permission.leaderOfTeam(teamId, locals)
 
 		return tryOrFail(async () => {
@@ -28,7 +28,7 @@ export const actions = {
 			})
 		})
 	},
-	delete_period: async ({ locals, request, params: { eventId, teamId, periodId } }) => {
+	period_delete: async ({ locals, request, params: { eventId, teamId, periodId } }) => {
 		await permission.leaderOfTeam(teamId, locals)
 
 		return tryOrFail(
