@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { tryOrFail, parseFormData } from 'fuma/server'
 import { z } from 'fuma'
 
-import { prisma, permission } from '$lib/server'
+import { prisma, permission, getTeam } from '$lib/server'
 import { modelPeriodCreate, modelPeriodUpdate, validationPeriod } from '$lib/models'
 import { isMemberAllowed } from '$lib/member'
 
@@ -14,47 +14,8 @@ export const load = async ({ locals, parent, params: { teamId } }) => {
 		.then(() => true)
 		.catch(() => false)
 
-	const team = await prisma.team.findUniqueOrThrow({
-		where: { id: teamId },
-		include: {
-			leaders: {
-				include: {
-					user: {
-						select: {
-							firstName: true,
-							lastName: true,
-							email: true,
-							phone: true,
-						},
-					},
-				},
-			},
-			periods: {
-				orderBy: { start: 'asc' },
-				include: {
-					subscribes: isLeaderOfTeam ? { include: { member: { include: { user: true } } } } : true,
-				},
-			},
-		},
-	})
-
-	// hide email if leader doesn't have valided his participation
-	team.leaders = team.leaders.map((leader) =>
-		leader.isValidedByUser
-			? leader
-			: {
-					...leader,
-					user: {
-						firstName: leader.user.firstName,
-						lastName: leader.user.lastName,
-						email: '',
-						phone: null,
-					},
-			  }
-	)
-
+	const team = await getTeam(teamId, isLeaderOfTeam)
 	if (!isLeaderOfTeam && !isMemberAllowed(team.conditions, member)) error(403)
-
 	return { isLeaderOfTeam, team }
 }
 
@@ -80,7 +41,7 @@ export const actions = {
 			const { data } = await parseFormData(request, modelPeriodUpdate, validationPeriod)
 
 			return prisma.period.update({
-				where: { id: data.id },
+				where: { id: data.id, teamId },
 				data,
 			})
 		})
@@ -91,7 +52,7 @@ export const actions = {
 		return tryOrFail(
 			async () => {
 				const { data } = await parseFormData(request, {
-					disableRedirect: z.boolean().default(false),
+					disableRedirect: z.filter.boolean,
 					id: z.string(),
 				})
 				await prisma.period.delete({ where: { id: data.id } })

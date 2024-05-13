@@ -1,6 +1,6 @@
 <script lang="ts">
 	import logo from '$lib/assets/logo.svg'
-	import { tip } from '../action'
+	import { tip } from 'fuma'
 	let klass = ''
 	export { klass as class }
 </script>

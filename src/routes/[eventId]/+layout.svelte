@@ -15,6 +15,7 @@
 	import EventMenu from './EventMenu.svelte'
 	import Poster from './Poster.svelte'
 	import InviteForm from '$lib/InviteForm.svelte'
+	import { TeamForm } from '$lib/team'
 
 	export let data
 
@@ -152,7 +153,11 @@
 </Footer>
 
 {#if data.member?.roles.includes('leader')}
-	<Drawer key="form-invite" title="Inviter un nouveau membre" let:close>
+	<Drawer key="form_invite" title="Inviter un nouveau membre" let:close>
 		<InviteForm on:success={() => close()} />
+	</Drawer>
+
+	<Drawer key="form_team" title={data.team ? 'Modifier le secteur' : 'Nouveau secteur'}>
+		<TeamForm team={data.team} event={data.event} />
 	</Drawer>
 {/if}

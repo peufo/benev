@@ -1,15 +1,17 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
-	import { mdiClockTimeFourOutline, mdiFilterOutline } from '@mdi/js'
+	import { mdiClockTimeFourOutline, mdiFilterOutline, mdiPencilOutline } from '@mdi/js'
 	import dayjs from 'dayjs'
 
 	import type { TeamWithComputedValues } from '$lib/server'
 	import type { Member, Event } from '@prisma/client'
-	import { Placeholder, CardLink, Icon } from 'fuma'
+	import { Placeholder, CardLink, Icon, urlParam, tip } from 'fuma'
 	import { eventPath, display, onlyAvailable } from '$lib/store'
-	import { rowLink, tip } from '$lib/action'
+
 	import Progress from '$lib/Progress.svelte'
 	import { formatRange, formatRangeShort } from '$lib/formatRange'
+	import { page } from '$app/stores'
+	import { goto } from '$app/navigation'
 
 	export let teams: (TeamWithComputedValues & {
 		leaders: (Member & {
@@ -110,7 +112,7 @@
 
 			<tbody>
 				{#each _teams as team (team.id)}
-					<tr use:rowLink={{ href: `${$eventPath}/teams/${team.id}` }}>
+					<tr class="hover cursor-pointer" on:click={() => goto(`${$eventPath}/teams/${team.id}`)}>
 						<td>
 							<span>{team.name}</span>
 							{#if team.range}
@@ -119,7 +121,7 @@
 								</div>
 							{/if}
 						</td>
-						<td data-prepend>
+						<td>
 							{#each team.leaders as member}
 								<span
 									class="badge badge-sm whitespace-nowrap mr-1"
@@ -143,6 +145,17 @@
 								}}
 							/>
 						</td>
+						{#if $page.data.member?.roles.includes('admin')}
+							<td>
+								<a
+									href={$urlParam.with({ form_team: team.id })}
+									class="btn btn-sm btn-square"
+									on:click|stopPropagation
+								>
+									<Icon path={mdiPencilOutline} title="Modifier le secteur" />
+								</a>
+							</td>
+						{/if}
 					</tr>
 				{/each}
 			</tbody>

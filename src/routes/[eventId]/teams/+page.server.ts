@@ -1,4 +1,4 @@
-import { addTeamComputedValues, prisma } from '$lib/server'
+import { addTeamComputedValues, hideTeamLeadersInfo, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 
 export const load = async ({ parent, params, url }) => {
@@ -31,6 +31,7 @@ export const load = async ({ parent, params, url }) => {
 			},
 		})
 		.then((teams) => teams.map(addTeamComputedValues))
+		.then((teams) => teams.map(hideTeamLeadersInfo))
 
 	return {
 		teams: teams.filter((team) => {

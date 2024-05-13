@@ -4,7 +4,9 @@
 	import { InputRelations, urlParam } from 'fuma'
 	import { api } from '$lib/api'
 
-	export let value: (Member & { user: User })[] | undefined = undefined
+	export let value:
+		| (Member & { user: Pick<User, 'firstName' | 'lastName' | 'email' | 'phone'> })[]
+		| undefined = undefined
 </script>
 
 <InputRelations
@@ -15,5 +17,5 @@
 	slotItem={({ user }) => `${user.firstName} ${user.lastName}`}
 	createTitle="Inviter un nouveau membre"
 	createIcon={mdiAccountPlusOutline}
-	createUrl={$urlParam.with({ 'form-invite': 1 })}
+	createUrl={$urlParam.with({ form_invite: 1 })}
 />

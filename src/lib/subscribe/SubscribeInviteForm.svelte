@@ -40,7 +40,7 @@
 		placeholder="Inscrire un membre"
 		search={$api.member.search}
 		createTitle="Inviter un nouveau membre"
-		createUrl={$urlParam.with({ 'form-invite': 1 })}
+		createUrl={$urlParam.with({ form_invite: 1 })}
 		createIcon={mdiAccountPlusOutline}
 		input={{
 			size: 20,

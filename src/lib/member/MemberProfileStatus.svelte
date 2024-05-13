@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { tip } from '$lib/action'
-	import { Icon } from 'fuma'
-	import type { MemberWithComputedValues } from '$lib/server'
 	import { mdiAlertCircleOutline } from '@mdi/js'
+	import { Icon, tip } from 'fuma'
+	import type { MemberWithComputedValues } from '$lib/server'
 
 	export let member: MemberWithComputedValues
 </script>

@@ -1,12 +1,16 @@
-import { prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
+import { parseQuery } from 'fuma/server'
+import { z } from 'fuma'
+import { getTeam, prisma } from '$lib/server'
 import { getMemberProfile } from '$lib/server'
 
-export const load = async ({ depends, parent, params: { eventId } }) => {
+export const load = async ({ depends, parent, url, params: { eventId } }) => {
 	depends('event')
 	const { user } = await parent()
 	const userId = user?.id || ''
 	try {
+		const { form_team } = parseQuery(url, { form_team: z.string().optional() })
+
 		const member = await getMemberProfile({ userId, eventId }).catch(() => undefined)
 		const isLeader = member?.roles.includes('leader')
 
@@ -32,6 +36,7 @@ export const load = async ({ depends, parent, params: { eventId } }) => {
 				where: { eventId, type: { not: 'email' } },
 				select: { id: true, title: true, path: true, type: true },
 			}),
+			team: form_team && form_team?.length > 5 ? await getTeam(form_team) : undefined,
 		}
 	} catch {
 		error(404, 'not found')

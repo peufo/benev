@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { FormEventHandler } from 'svelte/elements'
 	import { flip } from 'svelte/animate'
-	import { tip } from '$lib/action'
+	import { tip } from 'fuma'
 	import { debounce } from '$lib/debounce'
 	import { apps } from './comparison'
 

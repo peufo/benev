@@ -4,8 +4,7 @@
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
-	import { Icon } from 'fuma'
-	import { tip } from '$lib/action'
+	import { Icon, tip } from 'fuma'
 
 	// TODO: Pourquoi user ne passe pas directement dans le type ???
 	export let subscribes: (PageData['team']['periods'][number]['subscribes'][number] & {

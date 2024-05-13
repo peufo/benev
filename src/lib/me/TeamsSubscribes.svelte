@@ -5,7 +5,7 @@
 	import { CardLink, Icon, Placeholder } from 'fuma'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
-	import { tip } from '$lib/action'
+	import { tip } from 'fuma'
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
 

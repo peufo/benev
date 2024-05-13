@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiGithub } from '@mdi/js'
-	import { tip } from '$lib/action'
+	import { tip } from 'fuma'
 	import googleLogo from '$lib/assets/google.svg'
 	import { Icon } from '$lib/material'
 </script>

@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { tip } from '$lib/action'
-	import { Icon } from 'fuma'
+	import { Icon, tip } from 'fuma'
 	import { mdiAlertOutline } from '@mdi/js'
 	import type { Subscribe } from '@prisma/client'
 	export let subscribes: Subscribe[]

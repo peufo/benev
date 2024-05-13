@@ -17,7 +17,7 @@
 	export let team:
 		| (Team & {
 				leaders: (Member & {
-					user: User
+					user: Pick<User, 'firstName' | 'lastName' | 'email' | 'phone'>
 				})[]
 		  })
 		| undefined = undefined

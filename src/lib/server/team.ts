@@ -1,9 +1,13 @@
 import { getRangeOfTeam } from '$lib/plan/getRange'
-import type { Period, Subscribe, Team } from '@prisma/client'
-import type { Dayjs } from 'dayjs'
+import type { Member, Period, Prisma, Subscribe, Team, User } from '@prisma/client'
+import { prisma } from './prisma'
 
 export type TeamWithPeriods = Team & {
 	periods: (Period & { subscribes: Subscribe[] })[]
+}
+
+export type TeamWithLeaders = Team & {
+	leaders: (Member & { user: Pick<User, 'firstName' | 'lastName' | 'email' | 'phone'> })[]
 }
 
 export type TeamWithComputedValues = TeamWithPeriods & {
@@ -33,4 +37,58 @@ export function addTeamComputedValues<T extends TeamWithPeriods>(
 		isAvailable: nbSubscribes < maxSubscribes,
 		range: getRangeOfTeam(team),
 	}
+}
+
+export function hideTeamLeadersInfo<T extends TeamWithLeaders>(team: T): T {
+	return {
+		...team,
+		leaders: team.leaders.map((leader) =>
+			leader.isValidedByUser
+				? leader
+				: {
+						...leader,
+						user: {
+							firstName: leader.user.firstName,
+							lastName: leader.user.lastName,
+							email: '',
+							phone: null,
+						},
+				  }
+		),
+	}
+}
+
+export async function getTeam(teamId: string, includeSubscribeUser = false) {
+	let team = await prisma.team.findUniqueOrThrow({
+		where: { id: teamId },
+		include: {
+			leaders: {
+				include: {
+					user: {
+						select: { firstName: true, lastName: true, email: true, phone: true },
+					},
+				},
+			},
+			periods: {
+				orderBy: { start: 'asc' },
+				include: {
+					subscribes: includeSubscribeUser
+						? {
+								include: {
+									member: {
+										include: {
+											user: {
+												select: { firstName: true, lastName: true, email: true, phone: true },
+											},
+										},
+									},
+								},
+						  }
+						: true,
+				},
+			},
+		},
+	})
+
+	return addTeamComputedValues(hideTeamLeadersInfo(team))
 }

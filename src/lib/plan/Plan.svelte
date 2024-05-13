@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import dayjs, { type Dayjs } from 'dayjs'
+	import { tip } from 'fuma'
 	import 'dayjs/locale/fr-ch'
 	import type { Period, Subscribe, Team } from '@prisma/client'
 	import { mdiPlus } from '@mdi/js'
@@ -9,7 +10,6 @@
 	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
 	import { ContextMenu, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
-	import { tip } from '$lib/action'
 	import PeriodForm from '$lib/PeriodForm.svelte'
 	import { newPeriod } from './newPeriod'
 	import { getRangeOfTeams } from './getRange'
