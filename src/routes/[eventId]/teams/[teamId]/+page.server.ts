@@ -15,7 +15,7 @@ export const load = async ({ locals, parent, params: { teamId } }) => {
 		.catch(() => false)
 
 	const _team = team || (await getTeam(teamId, isLeaderOfTeam))
-	if (!isLeaderOfTeam && !isMemberAllowed(team.conditions, member)) error(403)
+	if (!isLeaderOfTeam && !isMemberAllowed(_team.conditions, member)) error(403)
 	return { isLeaderOfTeam, team: _team }
 }
 

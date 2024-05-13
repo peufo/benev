@@ -112,8 +112,8 @@
 
 			<tbody>
 				{#each _teams as team (team.id)}
-					<tr class="hover cursor-pointer" on:click={() => goto(`${$eventPath}/teams/${team.id}`)}>
-						<td>
+					<tr class="hover cursor-pointer">
+						<td on:click={() => goto(`${$eventPath}/teams/${team.id}`)}>
 							<span>{team.name}</span>
 							{#if team.range}
 								<div class="text-xs opacity-60 font-semibold">
@@ -121,7 +121,7 @@
 								</div>
 							{/if}
 						</td>
-						<td>
+						<td on:click={() => goto(`${$eventPath}/teams/${team.id}`)}>
 							{#each team.leaders as member}
 								<span
 									class="badge badge-sm whitespace-nowrap mr-1"
@@ -136,7 +136,7 @@
 								</span>
 							{/each}
 						</td>
-						<td>
+						<td on:click={() => goto(`${$eventPath}/teams/${team.id}`)}>
 							<Progress
 								class="mt-1"
 								period={{
@@ -146,11 +146,10 @@
 							/>
 						</td>
 						{#if $page.data.member?.roles.includes('admin')}
-							<td>
+							<td align="right">
 								<a
 									href={$urlParam.with({ form_team: team.id })}
 									class="btn btn-sm btn-square btn-ghost"
-									on:click|stopPropagation
 									data-sveltekit-replacestate
 									data-sveltekit-noscroll
 								>
