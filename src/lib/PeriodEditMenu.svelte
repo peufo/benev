@@ -26,9 +26,14 @@
 </script>
 
 <DropDown bind:this={dropdown} {tippyProps} class="max-h-none">
-	<button slot="activator" class="btn btn-sm btn-square">
+	<button slot="activator" class="btn btn-sm btn-square" class:btn-ghost={!!period}>
 		{#if !!period}
-			<Icon path={mdiPencilOutline} size={22} title="Éditer la période" />
+			<Icon
+				path={mdiPencilOutline}
+				size={22}
+				title="Éditer la période"
+				class="fill-base-content/70"
+			/>
 		{:else}
 			<Icon path={mdiPlus} size={22} title="Ajouter une période" />
 		{/if}

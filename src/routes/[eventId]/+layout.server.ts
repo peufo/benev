@@ -4,8 +4,7 @@ import { z } from 'fuma'
 import { getTeam, prisma } from '$lib/server'
 import { getMemberProfile } from '$lib/server'
 
-export const load = async ({ depends, parent, url, params: { eventId } }) => {
-	depends('event')
+export const load = async ({ parent, url, params: { eventId } }) => {
 	const { user } = await parent()
 	const userId = user?.id || ''
 	try {

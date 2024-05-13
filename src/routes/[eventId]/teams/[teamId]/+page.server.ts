@@ -7,16 +7,16 @@ import { modelPeriodCreate, modelPeriodUpdate, validationPeriod } from '$lib/mod
 import { isMemberAllowed } from '$lib/member'
 
 export const load = async ({ locals, parent, params: { teamId } }) => {
-	const { member } = await parent()
+	const { member, team } = await parent()
 
 	const isLeaderOfTeam = await permission
 		.leaderOfTeam(teamId, locals)
 		.then(() => true)
 		.catch(() => false)
 
-	const team = await getTeam(teamId, isLeaderOfTeam)
+	const _team = team || (await getTeam(teamId, isLeaderOfTeam))
 	if (!isLeaderOfTeam && !isMemberAllowed(team.conditions, member)) error(403)
-	return { isLeaderOfTeam, team }
+	return { isLeaderOfTeam, team: _team }
 }
 
 export const actions = {

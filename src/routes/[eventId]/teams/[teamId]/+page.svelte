@@ -137,7 +137,7 @@
 				<Icon path={mdiChartGantt} title="Voir le planning du secteur" />
 			</a>
 
-			<a href="{$eventPath}/teams/{data.team.id}/edit" class="btn btn-square btn-sm">
+			<a href={$urlParam.with({form_team: data.team.id})} class="btn btn-square btn-sm">
 				<Icon path={mdiPencilOutline} title="Éditer ce secteur" />
 			</a>
 
