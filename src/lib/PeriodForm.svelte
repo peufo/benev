@@ -43,7 +43,7 @@
 
 	export function setPeriod(_period?: Partial<Period>) {
 		period = _period
-		date = period?.start
+		date = period?.start || new Date()
 		startString = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
 		endString = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
 		if (period?.maxSubscribe) maxSubscribe = period.maxSubscribe
