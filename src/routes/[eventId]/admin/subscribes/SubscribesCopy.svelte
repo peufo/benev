@@ -1,18 +1,20 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { CopyData } from '$lib/material'
 	import { page } from '$app/stores'
 	import { api } from '$lib/api'
+	import { getCSV, ButtonCopy } from 'fuma'
+	import { mdiTrayArrowDown } from '@mdi/js'
 
 	type Subscribe = PageData['subscribes'][number]
 
-	const getData = async () => {
+	const getSubscribesCSV = async () => {
 		const searchParams = $page.url.searchParams
 		searchParams.append('all', 'true')
 		const { subscribes } = await $api.get<{ subscribes: Subscribe[] }>(
 			`/admin/subscribes?${searchParams.toString()}`
 		)
-		return subscribes
+
+		return getCSV(subscribes, columns)
 	}
 
 	const columns: Record<string, (subscribe: Subscribe) => string | number> = {
@@ -27,4 +29,4 @@
 	}
 </script>
 
-<CopyData {getData} {columns} />
+<ButtonCopy value={getSubscribesCSV} title="Copier les données" icon={mdiTrayArrowDown} />

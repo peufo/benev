@@ -87,8 +87,8 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2
       fuma:
-        specifier: ^0.3.22
-        version: 0.3.22(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2)
+        specifier: ^0.3.23
+        version: 0.3.23(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2)
       happy-dom:
         specifier: ^13.6.2
         version: 13.6.2
@@ -123,8 +123,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0(svelte@4.2.15)(typescript@5.2.2)
       svelte-sonner:
-        specifier: ^0.3.19
-        version: 0.3.19(svelte@4.2.15)
+        specifier: ^0.3.24
+        version: 0.3.24(svelte@4.2.15)
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -1903,8 +1903,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  fuma@0.3.22:
-    resolution: {integrity: sha512-ysknu8UUEUwFsRu0TiQCzvI2G6z9KJEynMsg4Vwmhm2S8VA3MWkHA1qD1kHTX4IW0mGpiYKULIpLs+WTat/KYg==}
+  fuma@0.3.23:
+    resolution: {integrity: sha512-kzZmQPQ5VkHlBg2SJwEoIDnA8UfODSlhd5lWieL6yHRXt+l6Nzgb82mAFUAAYWLxXlZaAB1pZXXvMfDQL8bfWA==}
     peerDependencies:
       '@sveltejs/kit': ^2.5.6
       svelte: ^4.0.0
@@ -2801,11 +2801,6 @@ packages:
         optional: true
       typescript:
         optional: true
-
-  svelte-sonner@0.3.19:
-    resolution: {integrity: sha512-jpPOgLtHwRaB6Vqo2dUQMv15/yUV/BQWTjKpEqQ11uqRSHKjAYUKZyGrHB2cQsGmyjR0JUzBD58btpgNqINQ/Q==}
-    peerDependencies:
-      svelte: '>=3 <5'
 
   svelte-sonner@0.3.24:
     resolution: {integrity: sha512-txuL0JBUs0v6qGrr0PGCsbXmKHuthdrAkfISYi8umuveF7+gINb6EXl6VmKY9aHhyxCqvVgqd6yophQNrnor4w==}
@@ -4704,7 +4699,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  fuma@0.3.22(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2):
+  fuma@0.3.23(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2):
     dependencies:
       '@lucia-auth/adapter-prisma': 4.0.1(@prisma/client@5.13.0(prisma@5.13.0))(lucia@3.2.0)
       '@mdi/js': 7.4.47
@@ -5661,10 +5656,6 @@ snapshots:
       postcss: 8.4.31
       postcss-load-config: 4.0.1(postcss@8.4.31)(ts-node@10.9.2(@types/node@20.9.0)(typescript@5.2.2))
       typescript: 5.2.2
-
-  svelte-sonner@0.3.19(svelte@4.2.15):
-    dependencies:
-      svelte: 4.2.15
 
   svelte-sonner@0.3.24(svelte@4.2.15):
     dependencies:
