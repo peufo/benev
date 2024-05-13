@@ -1,8 +1,9 @@
 import { error } from '@sveltejs/kit'
 import { tryOrFail, parseFormData } from 'fuma/server'
+import { z } from 'fuma'
 
 import { prisma, permission } from '$lib/server'
-import { modelPeriodCreate, validationPeriod } from '$lib/models'
+import { modelPeriodCreate, modelPeriodUpdate, validationPeriod } from '$lib/models'
 import { isMemberAllowed } from '$lib/member'
 
 export const load = async ({ locals, parent, params: { teamId } }) => {
@@ -71,5 +72,32 @@ export const actions = {
 				},
 			})
 		})
+	},
+	period_update: async ({ request, locals, params: { teamId } }) => {
+		await permission.leaderOfTeam(teamId, locals)
+
+		return tryOrFail(async () => {
+			const { data } = await parseFormData(request, modelPeriodUpdate, validationPeriod)
+
+			return prisma.period.update({
+				where: { id: data.id },
+				data,
+			})
+		})
+	},
+	period_delete: async ({ locals, request, params: { eventId, teamId } }) => {
+		await permission.leaderOfTeam(teamId, locals)
+
+		return tryOrFail(
+			async () => {
+				const { data } = await parseFormData(request, {
+					disableRedirect: z.boolean().default(false),
+					id: z.string(),
+				})
+				await prisma.period.delete({ where: { id: data.id } })
+				return data
+			},
+			(data) => (data.disableRedirect ? undefined : `/${eventId}/teams/${teamId}`)
+		)
 	},
 }

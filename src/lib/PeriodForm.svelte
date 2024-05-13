@@ -65,7 +65,7 @@
 </script>
 
 <form
-	action="{basePath}{period?.id ? `/${$page.params.periodId}?/period_update` : '?/period_create'}"
+	action="{basePath}{period?.id ? `?/period_update` : '?/period_create'}"
 	method="post"
 	use:enhance
 	class="p-2 flex flex-col gap-3 {klass}"
@@ -112,7 +112,7 @@
 				<input type="hidden" name="disableRedirect" value="true" />
 			{/if}
 			<button class="btn" type="submit">Valider</button>
-			<ButtonDelete formaction="{basePath}/{period.id}?/period_delete" />
+			<ButtonDelete formaction="{basePath}?/period_delete" />
 		{:else}
 			<button class="btn" type="submit">Ajouter</button>
 			<button
