@@ -5,14 +5,16 @@ import { modelTeam, modelTeamUpdate } from '$lib/models'
 import { error } from '@sveltejs/kit'
 import { z } from 'fuma'
 
-export const load = async ({ parent, params, url }) => {
+export const load = async ({ parent, url, params: { eventId }, locals }) => {
 	const search = url.searchParams.get('search')
 	const { member } = await parent()
+
+	const isLeader = await permission.leader(eventId, locals)
 
 	const teams = await prisma.team
 		.findMany({
 			where: {
-				eventId: params.eventId,
+				eventId,
 				...(search && { name: { contains: search } }),
 			},
 			include: {
@@ -36,12 +38,9 @@ export const load = async ({ parent, params, url }) => {
 		})
 		.then((teams) => teams.map(addTeamComputedValues))
 		.then((teams) => teams.map(hideTeamLeadersInfo))
+		.then((teams) => teams.filter((team) => isLeader || isMemberAllowed(team.conditions, member)))
 
-	return {
-		teams: teams.filter((team) => {
-			return isMemberAllowed(team.conditions, member)
-		}),
-	}
+	return { teams }
 }
 
 export const actions = {
