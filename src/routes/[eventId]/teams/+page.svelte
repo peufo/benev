@@ -17,10 +17,12 @@
 		<InputSearch />
 
 		{#if data.member?.roles.includes('admin')}
-			<a href={$urlParam.with({ form_team: 1 })} class="btn btn-sm btn-square">
-				<Icon path={mdiPlus} title="Nouveau secteur" />
-			</a>
-			<a href="{$eventPath}/teams/create" class="btn btn-sm btn-square">
+			<a
+				href={$urlParam.with({ form_team: 1 })}
+				class="btn btn-sm btn-square"
+				data-sveltekit-noscroll
+				data-sveltekit-replacestate
+			>
 				<Icon path={mdiPlus} title="Nouveau secteur" />
 			</a>
 		{/if}

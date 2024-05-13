@@ -157,7 +157,7 @@
 		<InviteForm on:success={() => close()} />
 	</Drawer>
 
-	<Drawer key="form_team" title={data.team ? 'Modifier le secteur' : 'Nouveau secteur'}>
-		<TeamForm team={data.team} event={data.event} />
+	<Drawer key="form_team" title={data.team ? 'Modifier le secteur' : 'Nouveau secteur'} let:close>
+		<TeamForm team={data.team} event={data.event} on:success={() => close()} />
 	</Drawer>
 {/if}

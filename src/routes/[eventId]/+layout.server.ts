@@ -36,7 +36,10 @@ export const load = async ({ depends, parent, url, params: { eventId } }) => {
 				where: { eventId, type: { not: 'email' } },
 				select: { id: true, title: true, path: true, type: true },
 			}),
-			team: form_team && form_team?.length > 5 ? await getTeam(form_team) : undefined,
+			team:
+				form_team && form_team?.length > 5
+					? await getTeam(form_team).catch(() => undefined)
+					: undefined,
 		}
 	} catch {
 		error(404, 'not found')

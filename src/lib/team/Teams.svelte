@@ -149,10 +149,16 @@
 							<td>
 								<a
 									href={$urlParam.with({ form_team: team.id })}
-									class="btn btn-sm btn-square"
+									class="btn btn-sm btn-square btn-ghost"
 									on:click|stopPropagation
+									data-sveltekit-replacestate
+									data-sveltekit-noscroll
 								>
-									<Icon path={mdiPencilOutline} title="Modifier le secteur" />
+									<Icon
+										path={mdiPencilOutline}
+										title="Modifier le secteur"
+										class="fill-base-content/60"
+									/>
 								</a>
 							</td>
 						{/if}
