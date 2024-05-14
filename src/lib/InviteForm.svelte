@@ -1,25 +1,26 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte'
 	import type { Member, User } from '@prisma/client'
 
 	import { modelInvite } from '$lib/models'
 	import { eventPath } from '$lib/store'
 	import { Form, type UseFormOptions } from 'fuma'
+	import type { ComponentType } from 'svelte'
 
 	type MemberWithUser = Member & { user: User }
-	const dispatch = createEventDispatcher<{ success: MemberWithUser | undefined }>()
-
-	const options: UseFormOptions<MemberWithUser> = {
-		onSuccess: (action, member) => dispatch('success', member),
-		successMessage: 'Invitation envoyée',
-		successUpdate: false,
-	}
+	const InviteForm: ComponentType<Form<typeof modelInvite, MemberWithUser>> = Form
 </script>
 
-<Form
+<InviteForm
 	action="{$eventPath}/invite?/invite"
 	model={modelInvite}
-	{options}
+	options={{
+		successMessage: 'Invitation envoyée',
+		successUpdate: false,
+	}}
+	on:created
+	on:updated
+	on:deleted
+	on:success
 	fields={[
 		[
 			{

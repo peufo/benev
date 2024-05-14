@@ -1,45 +1,62 @@
-<script lang="ts">
+<script lang="ts" context="module">
 	import type { Team, Member, User, Event, Field } from '@prisma/client'
+	import { Form } from 'fuma'
 
+	export type TeamWithLeaders = Team & {
+		leaders: (Member & {
+			user: Pick<User, 'firstName' | 'lastName' | 'email' | 'phone'>
+		})[]
+	}
+	export type TeamFormComponent = ComponentType<Form<typeof modelTeam, TeamWithLeaders>>
+	export type TeamFormInstance = InstanceType<TeamFormComponent>
+</script>
+
+<script lang="ts">
 	import { page } from '$app/stores'
-	import { InputText, InputTextarea, InputDate, Form } from 'fuma'
+	import { InputText, InputTextarea, InputDate } from 'fuma'
 
 	import { MemberConditions } from '$lib/member'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
 	import { eventPath } from '$lib/store'
+	import type { ComponentType } from 'svelte'
+	import { modelTeam } from '$lib/models'
 
 	let klass = ''
 	export { klass as class }
 
 	export let event: Event & { memberFields: Field[] }
-	export let team:
-		| (Team & {
-				leaders: (Member & {
-					user: Pick<User, 'firstName' | 'lastName' | 'email' | 'phone'>
-				})[]
-		  })
-		| undefined = undefined
+	export let team: Partial<TeamWithLeaders> = {}
+	export let teamForm: TeamFormInstance | undefined = undefined
+
+	const TeamForm: TeamFormComponent = Form
 </script>
 
-<Form class={klass} action="{$eventPath}/teams?/team" data={team || {}} on:success>
+<TeamForm
+	class={klass}
+	action="{$eventPath}/teams?/team"
+	model={modelTeam}
+	bind:data={team}
+	on:success
+	bind:this={teamForm}
+>
 	<InputText
 		key="name"
 		label="Nom du secteur"
-		value={team?.name}
+		bind:value={team.name}
 		class="mt-8"
 		input={{ autofocus: true }}
 	/>
 
 	{#if $page.data.member?.roles.includes('admin')}
-		<InputLeaders value={team?.leaders} />
+		<InputLeaders bind:value={team.leaders} />
 	{/if}
-	<InputTextarea key="description" label="Description" value={team?.description || ''} />
+	<InputTextarea key="description" label="Description" bind:value={team.description} />
 
 	{#if event.selfSubscribeAllowed}
 		<InputDate
 			key="closeSubscribing"
 			label="Fin des inscriptions"
-			value={team?.closeSubscribing}
+			bind:value={team.closeSubscribing}
 			hint={event.closeSubscribing && !team?.closeSubscribing
 				? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
 				: ''}
@@ -47,4 +64,4 @@
 	{/if}
 
 	<MemberConditions conditions={team?.conditions || []} memberFields={event.memberFields} />
-</Form>
+</TeamForm>

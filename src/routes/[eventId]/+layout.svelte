@@ -15,12 +15,14 @@
 	import EventMenu from './EventMenu.svelte'
 	import Poster from './Poster.svelte'
 	import InviteForm from '$lib/InviteForm.svelte'
-	import { TeamForm } from '$lib/team'
+	import { TeamForm, type TeamFormInstance } from '$lib/team'
 
 	export let data
 
 	$: accessGranted =
 		data.event.state === 'published' || data.member?.roles.includes('leader') || data.userIsRoot
+
+	let teamForm: TeamFormInstance
 </script>
 
 <svelte:head>
@@ -154,10 +156,16 @@
 
 {#if data.member?.roles.includes('leader')}
 	<Drawer key="form_invite" title="Inviter un nouveau membre" let:close>
-		<InviteForm on:success={() => close()} />
+		<InviteForm
+			on:created={async ({ detail: member }) => {
+				console.log(teamForm)
+				teamForm?.update((team) => ({ ...team, leaders: [...(team.leaders || []), member] }))
+				await close()
+			}}
+		/>
 	</Drawer>
 
 	<Drawer key="form_team" title={data.team ? 'Modifier le secteur' : 'Nouveau secteur'} let:close>
-		<TeamForm team={data.team} event={data.event} on:success={() => close()} />
+		<TeamForm bind:teamForm team={data.team || {}} event={data.event} on:success={() => close()} />
 	</Drawer>
 {/if}
