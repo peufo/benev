@@ -15,8 +15,14 @@
 	export let page: Page | null
 	export let member: MemberWithComputedValues | undefined = undefined
 
-	$: html = transformPage(tiptapParser.toHTML(page?.content || ''))
+	$: html = getHTML(page?.content)
 	$: canEdit = $pageStore.data.member?.roles.includes('admin')
+
+	function getHTML(content: null | undefined | string): string {
+		if (!content) return ''
+		if (content === 'null') return ''
+		return transformPage(tiptapParser.toHTML(content))
+	}
 
 	function transformPage(_html: string) {
 		if (page?.type !== 'member' || !member) return _html
