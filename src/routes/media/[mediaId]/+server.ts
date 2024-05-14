@@ -20,8 +20,9 @@ export const GET = async ({ url, params: { mediaId } }) => {
 		if (!data.size) return null
 		try {
 			const filePathOriginal = path.resolve(MEDIA_DIR, mediaId, 'original.webp')
+			const bufferOriginal = await fs.readFile(filePathOriginal)
 			const [x, y] = MEDIA_PRESETS[data.size]
-			const image = sharp(filePathOriginal).resize({ width: x, height: y })
+			const image = sharp(bufferOriginal).resize({ width: x, height: y })
 			await image.toFile(filePath)
 			return await image.toBuffer()
 		} catch {

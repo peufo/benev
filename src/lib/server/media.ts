@@ -19,18 +19,22 @@ export const media = {
 		const keyCrop = opt.key ? `${opt.key}_crop` : 'crop'
 
 		const { data, formData } = await parseFormData(requestOrFormData, {
-			[keyImage]: z.instanceof(Blob),
-			[keyCrop]: z.optional(
-				z.json({
-					x: z.number(),
-					y: z.number(),
-					width: z.number(),
-					height: z.number(),
-				})
-			),
+			[keyImage]: z.instanceof(File),
+			[keyCrop]: z
+				.string()
+				.transform((v) => (v === 'undefined' ? undefined : v))
+				.pipe(
+					z
+						.json({
+							x: z.number(),
+							y: z.number(),
+							width: z.number(),
+							height: z.number(),
+						})
+						.optional()
+				)
+				.optional(),
 		})
-
-		if (formData.get(keyCrop) === 'undefined') return
 
 		const image = data[keyImage] as Blob
 		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }

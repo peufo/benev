@@ -40,6 +40,7 @@
 <Form
 	action="/?/event"
 	options={{
+		successReset: false,
 		onSubmit: async () => {
 			if (event?.state !== 'actived') return
 			if (event.id === eventId) return
