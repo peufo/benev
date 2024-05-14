@@ -36,45 +36,4 @@ export const actions = {
 			return
 		})
 	},
-	update_event: async ({ request, locals, params: { eventId } }) => {
-		const member = await permission.admin(eventId, locals)
-
-		return tryOrFail(async () => {
-			const { data, formData } = await parseFormData(request, modelEventUpdate)
-			await media.upload(formData, {
-				key: 'poster',
-				where: { posterOf: { id: eventId } },
-				data: {
-					name: `Affiche`,
-					createdById: member.user.id,
-					posterOf: { connect: { id: eventId } },
-				},
-			})
-			await media.upload(formData, {
-				key: 'logo',
-				where: { logoOf: { id: eventId } },
-				data: {
-					name: `Logo`,
-					createdById: member.user.id,
-					logoOf: { connect: { id: eventId } },
-				},
-			})
-
-			return prisma.event.update({
-				where: { id: eventId },
-				data,
-			})
-		})
-	},
-	delete_event: async ({ locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-
-		return tryOrFail(
-			() =>
-				prisma.event.delete({
-					where: { id: eventId },
-				}),
-			'/'
-		)
-	},
 }

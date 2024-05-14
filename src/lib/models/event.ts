@@ -18,6 +18,7 @@ export const modelEventCreate = {
 
 export const modelEventUpdate = {
 	...modelEventCreate,
+	id: z.string(),
 	name: z.string().min(3).optional(),
 } satisfies ZodObj<EventUpdateInput>
 

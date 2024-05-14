@@ -66,5 +66,5 @@
 
 <Dialog bind:dialog={createDialog}>
 	<h2 slot="header" class="card-title">Nouvel évènement</h2>
-	<EventForm on:cancel={() => createDialog.close()} on:success={() => createDialog.close()} />
+	<EventForm on:success={() => createDialog.close()} />
 </Dialog>

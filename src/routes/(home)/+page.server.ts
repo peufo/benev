@@ -1,7 +1,9 @@
 import { formAction } from 'fuma/server'
 import { error, redirect } from '@sveltejs/kit'
-import { prisma, media } from '$lib/server'
-import { modelEventCreate } from '$lib/models'
+import { z } from 'fuma'
+import type { Event } from '@prisma/client'
+import { prisma, media, permission } from '$lib/server'
+import { modelEventCreate, modelEventUpdate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
 
 export const load = async ({ url }) => {
@@ -15,7 +17,7 @@ export const load = async ({ url }) => {
 }
 
 export const actions = {
-	create: formAction(
+	event_create: formAction(
 		modelEventCreate,
 		async ({ locals, data, formData }) => {
 			const session = await locals.auth.validate()
@@ -82,29 +84,7 @@ export const actions = {
 				},
 			})
 
-			await media
-				.upload(formData, {
-					key: 'poster',
-					where: { posterOf: { id: event.id } },
-					data: {
-						name: `Affiche de ${event.name}`,
-						createdById: session.user.id,
-						posterOf: { connect: { id: event.id } },
-					},
-				})
-				.catch(console.error)
-
-			await media
-				.upload(formData, {
-					key: 'logo',
-					where: { logoOf: { id: event.id } },
-					data: {
-						name: `Logo de ${event.name}`,
-						createdById: session.user.id,
-						logoOf: { connect: { id: event.id } },
-					},
-				})
-				.catch(console.error)
+			await uploadImages(formData, event.id, session.user.id)
 
 			return event
 		},
@@ -112,4 +92,47 @@ export const actions = {
 			redirectTo: (event) => `/${event.id}`,
 		}
 	),
+	event_update: formAction(modelEventUpdate, async ({ locals, data, formData }) => {
+		const member = await permission.admin(data.id, locals)
+
+		await uploadImages(formData, data.id, member.user.id)
+
+		return prisma.event.update({
+			where: { id: data.id },
+			data,
+		})
+	}),
+
+	event_delete: formAction(
+		{ id: z.string() },
+		async ({ data, locals }) => {
+			await permission.admin(data.id, locals)
+			await prisma.event.delete({
+				where: { id: data.id },
+			})
+		},
+		{ redirectTo: '/me' }
+	),
+}
+
+async function uploadImages(formData: FormData, eventId: string, authorId: string) {
+	await media.upload(formData, {
+		key: 'poster',
+		where: { posterOf: { id: eventId } },
+		data: {
+			name: 'Affiche',
+			createdById: authorId,
+			posterOf: { connect: { id: eventId } },
+		},
+	})
+
+	await media.upload(formData, {
+		key: 'logo',
+		where: { logoOf: { id: eventId } },
+		data: {
+			name: 'Logo',
+			createdById: authorId,
+			logoOf: { connect: { id: eventId } },
+		},
+	})
 }

@@ -1,35 +1,14 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte'
-	import { enhance } from '$app/forms'
+	import { InputText, InputTextarea, InputImagePreview, Form } from 'fuma'
 	import { slide } from 'svelte/transition'
-	import { useForm } from 'fuma/validation'
-	import { InputText, InputTextarea, InputImagePreview } from 'fuma'
+
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { debounce } from '$lib/debounce'
 	import { FORMAT_A3 } from '$lib/constant'
 	import EventDeleteButton from './EventDeleteButton.svelte'
 
-	let klass = ''
-	export { klass as class }
 	export let event: Event | undefined = undefined
-	export let successUpdate = true
-	export let successReset = true
-
-	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
-	const form = useForm({
-		onSuccess: () => dispatch('success'),
-		successUpdate,
-		successReset,
-		onSubmit: async () => {
-			if (event?.state !== 'actived') return
-			if (event.id === eventId) return
-			const msg = `Es tu sûr de vouloir modifier le lien de l'évènement de "/${event.id}" pour "${eventId} ?"`
-			if (!confirm(msg)) {
-				throw Error('Mise à jour annulé')
-			}
-		},
-	})
 
 	let name = event?.name || ''
 	let eventId = event?.id || ''
@@ -37,6 +16,7 @@
 	let scrapIconPending = false
 	let icon = event?.icon || null
 	let webValue = ''
+
 	const handleWebInput = debounce(async () => {
 		webValue = webInput.value ? `https://${webInput.value.replace(/https?:\/\//, '')}` : ''
 		scrapIconPending = true
@@ -57,12 +37,20 @@
 	}
 </script>
 
-<form
-	method="post"
-	enctype="multipart/form-data"
-	action={event ? '?/update_event' : '/?/new_event'}
-	class="{klass} flex flex-col gap-2"
-	use:enhance={form.submit}
+<Form
+	action="/?/event"
+	options={{
+		onSubmit: async () => {
+			if (event?.state !== 'actived') return
+			if (event.id === eventId) return
+			const msg = `Es tu sûr de vouloir modifier le lien de l'évènement de "/${event.id}" pour "${eventId} ?"`
+			if (!confirm(msg)) {
+				throw Error('Mise à jour annulé')
+			}
+		},
+	}}
+	on:success
+	data={event}
 >
 	<InputText key="name" label="Nom de l'évènement" bind:value={name} on:input={handleNameInput} />
 	<InputText
@@ -134,12 +122,7 @@
 	<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
 	<InputText key="address" label="Lieu" value={event?.address || ''} />
 
-	<div class="flex gap-2 flex-row-reverse">
-		<button class="btn" type="submit">Valider</button>
-	</div>
-</form>
-
-{#if event}
-	<hr />
-	<EventDeleteButton {event} />
-{/if}
+	<svelte:fragment slot="delete">
+		<EventDeleteButton {event} />
+	</svelte:fragment>
+</Form>
