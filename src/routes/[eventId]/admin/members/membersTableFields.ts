@@ -2,7 +2,7 @@ import { type TableField, jsonParse, component } from 'fuma'
 import { getAge } from '$lib/utils'
 import { MemberCell } from '$lib/member'
 import { formatRange } from '$lib/formatRange'
-import type { Member } from './getMembers'
+import type { MemberWithComputedValue } from './getMembers'
 import type { Field } from '@prisma/client'
 
 function toHours(ms: number) {
@@ -17,7 +17,7 @@ function toHours(ms: number) {
 }
 
 export function getMembersTableFields(teams: { id: string; name: string }[], fields: Field[]) {
-	const tableFields: TableField<Member>[] = [
+	const tableFields: TableField<MemberWithComputedValue>[] = [
 		{
 			key: 'member',
 			label: 'Membre',
@@ -131,7 +131,7 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			type: field.type,
 			label: field.name,
 			isEditable: true,
-			getCell: (m: Member) => m.profileJson[field.id],
+			getCell: (m: MemberWithComputedValue) => m.profileJson[field.id],
 			options: jsonParse<string[]>(field.options, []),
 		})),
 	]

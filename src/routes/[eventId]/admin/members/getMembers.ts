@@ -5,6 +5,7 @@ import type {
 	Event,
 	Field,
 	FieldType,
+	Member,
 	Period,
 	Prisma,
 	Subscribe,
@@ -12,7 +13,7 @@ import type {
 } from '@prisma/client'
 import { prisma, addMemberComputedValues } from '$lib/server'
 
-export type Member = Awaited<ReturnType<typeof getMembers>>['members'][number]
+export type MemberWithComputedValue = Awaited<ReturnType<typeof getMembers>>['members'][number]
 
 export const membersFilterShape = {
 	search: z.string().optional(),
@@ -242,25 +243,12 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	}
 
 	const fields = await prisma.field.findMany({ where: { eventId }, orderBy: { position: 'asc' } })
-	const periodsMap = new Map<string, Period>()
-	members.forEach(({ subscribes }) => {
-		subscribes.forEach(({ period }) => {
-			periodsMap.set(period.id, period)
-		})
-	})
-	const periods = Array.from(periodsMap.values())
 
 	return {
 		members: members.slice(data.skip, data.skip + data.take),
 		stats: {
 			nbMembers: members.length,
-			nbSubscribes: members.reduce((acc, cur) => acc + cur.subscribes.length, 0),
-			nbSubscribesTime: members.reduce((acc, cur) => acc + cur.workTime, 0),
-			totalSlots: periods.reduce((acc, cur) => acc + cur.maxSubscribe, 0),
-			totalSlotsTime: periods.reduce(
-				(acc, cur) => acc + cur.maxSubscribe * (cur.end.getTime() - cur.start.getTime()),
-				0
-			),
+			members: getMembersDistribution(members),
 			summary: fields
 				.map((field) => {
 					if (field.type === 'select' || field.type === 'multiselect') {
@@ -311,4 +299,22 @@ function getWorkTime(
 			const time = period.end.getTime() - period.start.getTime()
 			return acc + time
 		}, 0)
+}
+
+type MemberValidedDistKey = 'isValided' | 'isValidedByEvent' | 'isValidedByUser'
+
+function getMembersDistribution(members: Member[]): Record<MemberValidedDistKey, number> {
+	const dist = {
+		isValided: 0,
+		isValidedByEvent: 0,
+		isValidedByUser: 0,
+	} satisfies Record<MemberValidedDistKey, number>
+
+	members.forEach(({ isValidedByEvent, isValidedByUser }) => {
+		if (isValidedByEvent && isValidedByUser) dist.isValided++
+		if (!isValidedByEvent && isValidedByUser) dist.isValidedByUser++
+		if (isValidedByEvent && !isValidedByUser) dist.isValidedByEvent++
+	})
+
+	return dist
 }

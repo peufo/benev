@@ -1,17 +1,15 @@
-<script lang="ts">
+<script lang="ts" generics="Keys extends string">
 	import { CardBasic } from 'fuma'
 
 	export let title: string
 	let klass = ''
 	export { klass as class }
-	export let values: Record<string, number>
-	export let getHref: (key: string) => string
-	export let getLabel: (key: string) => string = (key) => key
+	export let values: Record<Keys, number>
+	export let getHref: (key: Keys) => string
+	export let getLabel: (key: Keys) => string = (key) => key
 
-	$: distribution = Object.entries(values)
-	$: total = Object.values(values)
-		.map((value) => value)
-		.reduce((acc, cur) => acc + cur, 0)
+	$: distribution = Object.entries(values) as [Keys, number][]
+	$: total = Object.values<number>(values).reduce((acc, cur) => acc + cur, 0)
 </script>
 
 <CardBasic {title} class={klass}>
