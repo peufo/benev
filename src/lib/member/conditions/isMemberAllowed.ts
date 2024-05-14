@@ -29,7 +29,7 @@ export function isMemberAllowed(
 	return conditions.length === conditionsOk.length
 }
 
-type ProfileValue = string | string[] | boolean | number
+type ProfileValue = string | string[] | boolean | number | undefined | null
 
 const testValue: Record<
 	MemberConditionOperator,
@@ -94,6 +94,7 @@ const testValue: Record<
 }
 
 function asArray(value: ProfileValue): (string | number | boolean)[] {
+	if (value === null || value === undefined) return []
 	return Array.isArray(value) ? value : [value]
 }
 

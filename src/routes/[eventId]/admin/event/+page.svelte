@@ -17,7 +17,7 @@
 		/>
 
 		<Card>
-			<EventForm successReset={false} event={data.event} class="grow" />
+			<EventForm event={data.event} />
 		</Card>
 	</div>
 </OnlyAdmin>

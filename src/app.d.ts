@@ -40,7 +40,7 @@ declare global {
 declare global {
 	namespace PrismaJson {
 		type MemberConditions = (typeof modelMemberCondition)['_output'][]
-		type MemberProfile = Record<string, string | string[] | number | boolean | undefined>
+		type MemberProfile = Record<string, string | string[] | number | boolean | undefined | null>
 	}
 }
 

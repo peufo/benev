@@ -73,23 +73,32 @@ export const actions = {
 }
 
 function buildModelMemberProfile(fields: Field[], isPartial: boolean) {
-	type ProfileValue = string | string[] | number | boolean | undefined
+	type ProfileValue = string | string[] | number | boolean | undefined | null
 	const model: ZodObj<{ memberId: string } & Record<string, ProfileValue>> = {
 		memberId: z.string(),
 	}
 
+	const requiredError = 'Valeur manquante'
+
 	const modelByType = {
 		boolean: z.boolean(),
-		number: z.number(),
-		string: z.string().min(1, { message: 'Valeur manquante' }),
-		textarea: z.string().min(1, { message: 'Valeur manquante' }),
-		select: z.string().min(1, { message: 'Valeur manquante' }),
+		number: z.number({
+			required_error: requiredError,
+			invalid_type_error: requiredError,
+		}),
+		string: z.string().min(1, { message: requiredError }),
+		textarea: z.string().min(1, { message: requiredError }),
+		select: z
+			.string({
+				required_error: requiredError,
+			})
+			.min(1, { message: requiredError }),
 		multiselect: z.array(z.string()),
 	} satisfies ZodObj<Record<FieldType, ProfileValue>>
 
 	const modelByTypeOptional = {
 		boolean: z.boolean().optional(),
-		number: z.number().optional(),
+		number: z.number().nullish(),
 		string: z.string().optional(),
 		textarea: z.string().optional(),
 		select: z.string().optional(),
