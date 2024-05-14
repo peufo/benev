@@ -1,5 +1,5 @@
 import { fail, error, redirect } from '@sveltejs/kit'
-import { tryOrFail, parseFormData } from 'fuma/server'
+import { tryOrFail, parseFormData, formAction } from 'fuma/server'
 import { z } from 'fuma/validation'
 import {
 	auth,
@@ -17,53 +17,46 @@ export const load = () => {
 }
 
 export const actions = {
-	register: async ({ request, locals }) => {
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, modelUserCreate)
+	register: formAction(modelUserCreate, async ({ locals, data }) => {
+		const attributes = {
+			email: data.email,
+			firstName: data.firstName,
+			lastName: data.lastName,
+			isTermsAccepted: data.isTermsAccepted,
+			isOrganizer: data.isOrganizer,
+			isEmailVerified: false,
+			avatarPlaceholder: createAvatarPlaceholder(),
+		}
 
-			const attributes = {
-				email: data.email,
-				firstName: data.firstName,
-				lastName: data.lastName,
-				isTermsAccepted: data.isTermsAccepted,
-				isOrganizer: data.isOrganizer,
-				isEmailVerified: false,
-				avatarPlaceholder: createAvatarPlaceholder(),
-			}
-
-			const user = await prisma.user.findUnique({
-				where: { email: data.email },
-				include: { members: { select: { isValidedByUser: true } } },
-			})
-			if (user) {
-				const isAccountFromInvitation =
-					user.members.filter((m) => m.isValidedByUser === false).length > 0 &&
-					user.members.filter((m) => m.isValidedByUser === true).length === 0
-				if (isAccountFromInvitation) error(401, 'This account already created from an invitation')
-				error(401, 'This account already exists')
-			}
-			const newUser = await auth.createUser({
-				key: {
-					providerId: 'email',
-					providerUserId: data.email,
-					password: data.password,
-				},
-				attributes,
-			})
-			const session = await auth.createSession({ userId: newUser.userId, attributes: {} })
-			locals.auth.setSession(session)
-
-			await sendVerificationEmail(session.user, 'Bienvenue')
+		const user = await prisma.user.findUnique({
+			where: { email: data.email },
+			include: { members: { select: { isValidedByUser: true } } },
 		})
-	},
-	login: async ({ request, locals }) => {
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, modelUserLogin)
-			const user = await auth.useKey('email', data.email, data.password)
-			const session = await auth.createSession({ userId: user.userId, attributes: {} })
-			locals.auth.setSession(session)
+		if (user) {
+			const isAccountFromInvitation =
+				user.members.filter((m) => m.isValidedByUser === false).length > 0 &&
+				user.members.filter((m) => m.isValidedByUser === true).length === 0
+			if (isAccountFromInvitation) error(401, 'This account already created from an invitation')
+			error(401, 'This account already exists')
+		}
+		const newUser = await auth.createUser({
+			key: {
+				providerId: 'email',
+				providerUserId: data.email,
+				password: data.password,
+			},
+			attributes,
 		})
-	},
+		const session = await auth.createSession({ userId: newUser.userId, attributes: {} })
+		locals.auth.setSession(session)
+
+		await sendVerificationEmail(session.user, 'Bienvenue')
+	}),
+	login: formAction(modelUserLogin, async ({ locals, data }) => {
+		const user = await auth.useKey('email', data.email, data.password)
+		const session = await auth.createSession({ userId: user.userId, attributes: {} })
+		locals.auth.setSession(session)
+	}),
 	logout: async ({ locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) return fail(401)

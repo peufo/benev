@@ -12,9 +12,8 @@ export const modelUserCreate = {
 	lastName: z.string().min(2).trim(),
 	isOrganizer: z.boolean().optional(),
 	isTermsAccepted: z
-		.string()
-		.refine((v) => v === 'true', { message: 'Tu dois accepter les conditions' })
-		.transform((v) => true),
+		.boolean()
+		.refine((v) => v === true, { message: 'Tu dois accepter les conditions' }),
 } satisfies ZodObj<Omit<Prisma.UserCreateInput, 'id'> & { password: string }>
 
 export const modelUserUpdate = {
