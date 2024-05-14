@@ -57,7 +57,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 
 	if (data.subscribes_teams) {
 		subscribesFilters.push({
-			state: 'accepted',
+			state: { in: ['accepted', 'request'] },
 			period: { teamId: { in: data.subscribes_teams } },
 		})
 	}

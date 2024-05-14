@@ -2,6 +2,7 @@
 	import { CardBasic } from 'fuma'
 	import type { PageData } from './$types'
 	import { urlParam } from '$lib/store'
+	import Distribution from './Distribution.svelte'
 
 	export let data: PageData
 
@@ -30,39 +31,20 @@
 		<div class="flex gap-4 flex-wrap justify-start items-start">
 			{#each data.stats.summary as stat}
 				{#if stat}
-					{@const fieldKey = `field_${stat.fieldId}`}
-					{@const distribution = Object.entries(stat.distribution)}
-					{@const total = distribution
-						.map(([key, value]) => value)
-						.reduce((acc, cur) => acc + cur, 0)}
-
-					<CardBasic title={stat.fieldName} class="grow">
-						<div
-							class="grid gap-2 text-sm items-center"
-							style:grid-template-columns="min-content auto"
-						>
-							{#each distribution as [key, value]}
-								{@const fieldValue = stat.fieldType === 'multiselect' ? JSON.stringify([key]) : key}
-
-								<span class="text-right font-medium">{value}</span>
-								<a
-									class="relative menu-item"
-									data-sveltekit-replacestate
-									href={$urlParam.with({ [fieldKey]: fieldValue }, 'skip', 'take', 'summary')}
-								>
-									<span class="z-10"
-										>{stat.fieldType !== 'boolean' ? key : key === 'true' ? 'Oui' : 'Non'}</span
-									>
-									<div
-										class="absolute bg-primary/10 bottom-0 top-0 left-0 rounded"
-										style:width="{(value / total) * 100}%"
-									/>
-								</a>
-							{:else}
-								<div class="col-span-2">Aucun</div>
-							{/each}
-						</div>
-					</CardBasic>
+					<Distribution
+						title={stat.fieldName}
+						values={stat.distribution}
+						class="grow"
+						getLabel={(key) => {
+							if (stat?.fieldType !== 'boolean') return key
+							return key === 'true' ? 'Oui' : 'Non'
+						}}
+						getHref={(key) => {
+							const fieldValue = stat?.fieldType === 'multiselect' ? JSON.stringify([key]) : key
+							const k = `field_${stat.fieldId}`
+							return $urlParam.with({ [k]: fieldValue }, 'skip', 'take', 'summary')
+						}}
+					/>
 				{/if}
 			{/each}
 		</div>
