@@ -12,8 +12,13 @@
 	$: total = Object.values<number>(values).reduce((acc, cur) => acc + cur, 0)
 </script>
 
-<CardBasic {title} class={klass}>
-	<div class="grid gap-2 text-sm items-center" style:grid-template-columns="min-content auto">
+<div class="{klass} border p-2 rounded-lg">
+	<h3 class="title-md p-2">{title}</h3>
+
+	<div
+		class="grid gap-y-1 gap-x-2 text-sm items-center p-1"
+		style:grid-template-columns="min-content auto"
+	>
 		{#each distribution as [key, value]}
 			{@const href = getHref(key)}
 			{@const label = getLabel(key)}
@@ -32,4 +37,4 @@
 			<div class="col-span-2">Aucun</div>
 		{/each}
 	</div>
-</CardBasic>
+</div>

@@ -14,7 +14,7 @@
 	}
 </script>
 
-<div class="flex flex-col gap-4 max-w-5xl m-auto">
+<div class="flex flex-col gap-4">
 	{#if !!data.event.missingLicencesMember}
 		<div class="bg-error/5 border-2 rounded-xl p-2 pl-4 border-error flex gap-4 items-center">
 			<span class="font-semibold">

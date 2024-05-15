@@ -31,7 +31,7 @@
 
 <Poster posterId={data.event.posterId} />
 
-<Header user={data.user} class="">
+<Header user={data.user}>
 	<a
 		slot="start"
 		href="{$eventPath}/me"
@@ -61,7 +61,7 @@
 	</svelte:fragment>
 </Header>
 
-<div class="flex grow items-start relative p-2 gap-4">
+<div class="flex grow items-start relative p-4 gap-4">
 	{#if data.member?.roles.includes('leader')}
 		<AdminNavigation />
 	{/if}

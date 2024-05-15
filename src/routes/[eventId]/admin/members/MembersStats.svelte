@@ -26,7 +26,7 @@
 </script>
 
 {#if data.stats}
-	<div class="flex gap-4 flex-wrap justify-start items-start">
+	
 		<Distribution
 			title="Adhésions ({data.stats.nbMembers})"
 			values={data.stats.membership}
@@ -51,8 +51,7 @@
 			getLabel={(key) =>
 				key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
 			getHref={(key) =>
-				$urlWith({ subscribes_count_accepted: JSON.stringify({ min: +key, max: +key }) })
-			}
+				$urlWith({ subscribes_count_accepted: JSON.stringify({ min: +key, max: +key }) })}
 		/>
 
 		<Distribution
@@ -60,7 +59,8 @@
 			values={data.stats.subscribes.request}
 			getLabel={(key) =>
 				key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
-			getHref={(key) => $urlWith({ subscribes_count_request: JSON.stringify({ min: +key, max: +key }) })}
+			getHref={(key) =>
+				$urlWith({ subscribes_count_request: JSON.stringify({ min: +key, max: +key }) })}
 		/>
 
 		{#each data.stats.summary as stat}
@@ -82,5 +82,5 @@
 				/>
 			{/if}
 		{/each}
-	</div>
+
 {/if}

@@ -1,13 +1,8 @@
 <script lang="ts">
-	import {
-		mdiAccountPlusOutline,
-		mdiFilterRemoveOutline,
-		mdiFormatListBulleted,
-		mdiSigma,
-	} from '@mdi/js'
+	import { mdiAccountPlusOutline, mdiFilterRemoveOutline } from '@mdi/js'
 	import type { Field, Member } from '@prisma/client'
 	import { tick } from 'svelte'
-	import { Icon, TabsIcon, urlParam } from 'fuma'
+	import { Icon, urlParam } from 'fuma'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 	import { InputSearch, Pagination, Table, TableViewSelect, Card } from 'fuma'
@@ -43,76 +38,67 @@
 	}
 </script>
 
-<Card>
-	<h2 slot="title">Membres</h2>
+<div class="flex gap-4 items-start">
+	<Card class="grow min-w-0" bodyClass="sm:px-2 sm:py-2">
+		<div class="flex flex-col gap-2">
+			<div class="flex gap-x-2 gap-y-2 flex-wrap">
+				<InputSearch class="max-w-[175px]" />
+				<MembersFilter />
 
-	<div class="flex flex-col gap-2">
-		<div class="flex gap-x-2 gap-y-2 flex-wrap">
-			<InputSearch class="max-w-[175px]" />
-			<MembersFilter />
+				<div class="grow" />
 
-			<div class="grow" />
+				<!-- RESET FILTER -->
+				<a
+					href={$urlParam.without(...tableFields.map((f) => f.key), 'skip', 'take')}
+					class="btn btn-square btn-sm"
+				>
+					<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
+				</a>
 
-			<TableViewSelect key="members" views={data.views} action="{$eventPath}/admin" />
+				<TableViewSelect key="members" views={data.views} action="{$eventPath}/admin" />
 
-			<a
-				href={$urlParam.without(...tableFields.map((f) => f.key), 'skip', 'take')}
-				class="btn btn-square btn-sm"
-			>
-				<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
-			</a>
+				<MembersCopy fields={data.fields} />
+				<MembersEmails />
 
-			<TabsIcon
-				key="summary"
-				defaultValue="false"
-				options={{
-					false: { icon: mdiFormatListBulleted, label: 'Données' },
-					true: { icon: mdiSigma, label: 'Synthèse' },
-				}}
-			/>
+				<a
+					type="button"
+					class="btn btn-square btn-sm"
+					href={$urlParam.with({ form_invite: 1 })}
+					data-sveltekit-noscroll
+					data-sveltekit-replacestate
+				>
+					<Icon path={mdiAccountPlusOutline} />
+				</a>
+			</div>
+			{#key tableFields}
+				<Table
+					key="members"
+					items={data.members}
+					fields={tableFields}
+					slotAction={(member) =>
+						component(MemberActions, {
+							member,
+							async onSubscribeDialog() {
+								selectedMember = member
+								await tick()
+								createSubscribeDialog.showModal()
+							},
+						})}
+					placholder="Aucun membre trouvé"
+					onCreateField={() => memberFieldDialog.open()}
+				/>
+			{/key}
 
-			<MembersCopy fields={data.fields} />
-			<MembersEmails />
-
-			<a
-				type="button"
-				class="btn btn-square btn-sm"
-				href={$urlParam.with({ form_invite: 1 })}
-				data-sveltekit-noscroll
-				data-sveltekit-replacestate
-			>
-				<Icon path={mdiAccountPlusOutline} />
-			</a>
-		</div>
-		{#key tableFields}
-			<Table
-				key="members"
-				items={data.members}
-				fields={tableFields}
-				slotAction={(member) =>
-					component(MemberActions, {
-						member,
-						async onSubscribeDialog() {
-							selectedMember = member
-							await tick()
-							createSubscribeDialog.showModal()
-						},
-					})}
-				placholder="Aucun membre trouvé"
-				hideBody={data.summary}
-				onCreateField={() => memberFieldDialog.open()}
-			/>
-		{/key}
-
-		{#if !data.summary}
 			<div class="flex justify-end">
 				<Pagination />
 			</div>
-		{:else}
-			<MembersStats {data} />
-		{/if}
-	</div>
-</Card>
+		</div>
+	</Card>
+
+	<Card bodyClass="sm:px-2 sm:py-2 flex flex-col gap-2 sticky top-14">
+		<MembersStats {data} />
+	</Card>
+</div>
 
 <MemberFieldDialog
 	successUpdate={false}
