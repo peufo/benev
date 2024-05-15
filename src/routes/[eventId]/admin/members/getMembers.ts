@@ -250,6 +250,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			nbMembers: members.length,
 			membership: getMembershipDistribution(members),
 			profileStatus: getMembersProfilStatusDistribution(members),
+			subscribes: getMembersSubscribesDistribution(members),
 			summary: fields
 				.map((field) => {
 					if (field.type === 'select' || field.type === 'multiselect') {
@@ -334,4 +335,22 @@ function getMembersProfilStatusDistribution(
 	})
 
 	return dist
+}
+
+function getMembersSubscribesDistribution(members: (Member & { subscribes: Subscribe[] })[]) {
+	const accepted: Record<string, number> = {}
+	const request: Record<string, number> = {}
+	members.forEach((m) => {
+		const acceptedCount = m.subscribes.filter((s) => s.state === 'accepted').length
+		const requestCount = m.subscribes.filter((s) => s.state === 'request').length
+		if (acceptedCount) {
+			if (!accepted[acceptedCount.toString()]) accepted[acceptedCount.toString()] = acceptedCount
+			else accepted[acceptedCount.toString()] += acceptedCount
+		}
+		if (requestCount) {
+			if (!request[requestCount.toString()]) request[requestCount.toString()] = requestCount
+			else request[requestCount.toString()] += requestCount
+		}
+	})
+	return { accepted, request }
 }

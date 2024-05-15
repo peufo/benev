@@ -30,7 +30,6 @@
 		<Distribution
 			title="Adhésions ({data.stats.nbMembers})"
 			values={data.stats.membership}
-			class="grow"
 			getLabel={(key) => DIST_MEMBERS_LABEL[key]}
 			getHref={(key) =>
 				$urlWith({
@@ -38,13 +37,30 @@
 					isValidedByEvent: key === 'isValided' || key === 'isValidedByEvent' ? 'true' : 'false',
 				})}
 		/>
+
 		<Distribution
 			title="Profils"
 			values={data.stats.profileStatus}
-			class="grow"
 			getLabel={(key) => DIST_PROFILE_LABEL[key]}
 			getHref={(key) => $urlWith({ isProfileComplet: key === 'isComplet' ? 'true' : 'false' })}
 		/>
+
+		<Distribution
+			title="Inscriptions acceptées"
+			values={data.stats.subscribes.accepted}
+			getLabel={(key) =>
+				key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
+			getHref={(key) => $urlWith({ isProfileComplet: key === 'isComplet' ? 'true' : 'false' })}
+		/>
+
+		<Distribution
+			title="Inscriptions en attentes"
+			values={data.stats.subscribes.request}
+			getLabel={(key) =>
+				key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
+			getHref={(key) => $urlWith({ isProfileComplet: key === 'isComplet' ? 'true' : 'false' })}
+		/>
+
 		{#each data.stats.summary as stat}
 			{#if stat}
 				<Distribution

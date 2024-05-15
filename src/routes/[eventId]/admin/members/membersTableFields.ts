@@ -1,9 +1,9 @@
-import { type TableField, jsonParse, component } from 'fuma'
+import { type TableField, jsonParse, component, Badge, type ComponentAndProps } from 'fuma'
+import type { Field } from '@prisma/client'
 import { getAge } from '$lib/utils'
 import { MemberCell } from '$lib/member'
 import { formatRange } from '$lib/formatRange'
 import type { MemberWithComputedValue } from './getMembers'
-import type { Field } from '@prisma/client'
 
 function toHours(ms: number) {
 	const hours = ms / (1000 * 60 * 60)
@@ -44,9 +44,11 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 					.filter((team) => !teamsAccepted.includes(team))
 
 				return [
-					...teamsAccepted.map((t) => badge(t)),
-					...teamsRequest.map((t) => badge(t, 'badge-warning badge-outline')),
-				].join('')
+					...teamsAccepted.map((content) => component(Badge, { content })),
+					...teamsRequest.map((content) =>
+						component(Badge, { content, class: 'badge-warning badge-outline' })
+					),
+				]
 			},
 			options: teams.map((team) => ({ label: team.name, value: team.id })),
 			visible: true,
@@ -58,10 +60,16 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			getCell(m) {
 				const nbAccepted = m.subscribes.filter((s) => s.state === 'accepted').length
 				const nbRequest = m.subscribes.filter((s) => s.state === 'request').length
-				let html = ''
-				if (nbAccepted) html += badge(nbAccepted)
-				if (nbRequest) html += badge(nbRequest, 'badge-warning badge-outline')
-				if (html) return html
+				const badges: ComponentAndProps[] = []
+				if (nbAccepted) badges.push(component(Badge, { content: nbAccepted.toString() }))
+				if (nbRequest)
+					badges.push(
+						component(Badge, {
+							content: nbRequest.toString(),
+							class: 'badge-warning badge-outline',
+						})
+					)
+				if (badges.length) return badges
 				return '-'
 			},
 		},
@@ -141,6 +149,3 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 function isUnique<Item extends any>(item: Item, index: number, self: Item[]): boolean {
 	return self.indexOf(item) === index
 }
-
-const badge = (content: string | number, klass = '') =>
-	`<span class="badge mr-1 whitespace-nowrap ${klass}">${content}</span>`
