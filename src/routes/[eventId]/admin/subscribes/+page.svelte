@@ -3,10 +3,20 @@
 		mdiAccountCircleOutline,
 		mdiAlertOutline,
 		mdiCheckCircleOutline,
+		mdiFilterRemoveOutline,
 		mdiShieldAccountOutline,
 	} from '@mdi/js'
 	import type { PageData } from './$types'
-	import { Card, InputSearch, Pagination, Table, type TableField, TableViewSelect } from 'fuma'
+	import {
+		Card,
+		InputSearch,
+		Pagination,
+		Table,
+		type TableField,
+		TableViewSelect,
+		urlParam,
+		Icon,
+	} from 'fuma'
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
 	import SubscribesCopy from './SubscribesCopy.svelte'
@@ -94,6 +104,14 @@
 			<InputSearch />
 			<div class="grow" />
 			<TableViewSelect key="subscribes" views={data.views} action="{$eventPath}/admin" />
+
+			<a
+				href={$urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
+				class="btn btn-square btn-sm"
+			>
+				<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
+			</a>
+
 			<SubscribesCopy />
 		</div>
 

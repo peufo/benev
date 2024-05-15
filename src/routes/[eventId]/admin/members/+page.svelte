@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { mdiAccountPlusOutline, mdiFormatListBulleted, mdiSigma } from '@mdi/js'
+	import {
+		mdiAccountPlusOutline,
+		mdiFilterRemoveOutline,
+		mdiFormatListBulleted,
+		mdiSigma,
+	} from '@mdi/js'
 	import type { Field, Member } from '@prisma/client'
 	import { tick } from 'svelte'
 	import { Icon, TabsIcon, urlParam } from 'fuma'
@@ -49,6 +54,14 @@
 			<div class="grow" />
 
 			<TableViewSelect key="members" views={data.views} action="{$eventPath}/admin" />
+
+			<a
+				href={$urlParam.without(...tableFields.map((f) => f.key), 'skip', 'take')}
+				class="btn btn-square btn-sm"
+			>
+				<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
+			</a>
+
 			<TabsIcon
 				key="summary"
 				defaultValue="false"
