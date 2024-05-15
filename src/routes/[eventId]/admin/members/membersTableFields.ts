@@ -54,22 +54,26 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			visible: true,
 		},
 		{
-			key: 'subscribes_count',
-			label: 'Inscriptions (nombre)',
+			key: 'subscribes_count_accepted',
+			label: 'Inscriptions acceptés',
 			type: 'number',
 			getCell(m) {
 				const nbAccepted = m.subscribes.filter((s) => s.state === 'accepted').length
+				if (nbAccepted) return component(Badge, { content: nbAccepted.toString() })
+				return '-'
+			},
+		},
+		{
+			key: 'subscribes_count_request',
+			label: 'Inscriptions en attente',
+			type: 'number',
+			getCell(m) {
 				const nbRequest = m.subscribes.filter((s) => s.state === 'request').length
-				const badges: ComponentAndProps[] = []
-				if (nbAccepted) badges.push(component(Badge, { content: nbAccepted.toString() }))
 				if (nbRequest)
-					badges.push(
-						component(Badge, {
-							content: nbRequest.toString(),
-							class: 'badge-warning badge-outline',
-						})
-					)
-				if (badges.length) return badges
+					return component(Badge, {
+						content: nbRequest.toString(),
+						class: 'badge-warning badge-outline',
+					})
 				return '-'
 			},
 		},

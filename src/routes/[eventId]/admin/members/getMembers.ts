@@ -17,7 +17,8 @@ export type MemberWithComputedValue = Awaited<ReturnType<typeof getMembers>>['me
 
 export const membersFilterShape = {
 	search: z.string().optional(),
-	subscribes_count: z.filter.number,
+	subscribes_count_accepted: z.filter.number,
+	subscribes_count_request: z.filter.number,
 	subscribes_teams: z.filter.multiselect,
 	subscribes_range: z.filter.range,
 	subscribes_hours: z.filter.number,
@@ -161,7 +162,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	}
 
 	const filterOnComputedValues =
-		data.subscribes_count !== undefined ||
+		data.subscribes_count_accepted !== undefined ||
+		data.subscribes_count_request !== undefined ||
 		data.subscribes_hours !== undefined ||
 		data.isProfileComplet !== undefined
 
@@ -205,12 +207,20 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	if (filterOnComputedValues) {
 		const conditions: ((member: (typeof members)[number]) => boolean)[] = []
 
-		if (data.subscribes_count) {
-			const { min, max } = data.subscribes_count
+		if (data.subscribes_count_accepted) {
+			const { min, max } = data.subscribes_count_accepted
 			if (min !== undefined)
 				conditions.push((m) => min <= m.subscribes.filter((s) => s.state === 'accepted').length)
 			if (max !== undefined)
 				conditions.push((m) => max >= m.subscribes.filter((s) => s.state === 'accepted').length)
+		}
+
+		if (data.subscribes_count_request) {
+			const { min, max } = data.subscribes_count_request
+			if (min !== undefined)
+				conditions.push((m) => min <= m.subscribes.filter((s) => s.state === 'request').length)
+			if (max !== undefined)
+				conditions.push((m) => max >= m.subscribes.filter((s) => s.state === 'request').length)
 		}
 
 		if (data.subscribes_hours) {

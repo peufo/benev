@@ -50,7 +50,9 @@
 			values={data.stats.subscribes.accepted}
 			getLabel={(key) =>
 				key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
-			getHref={(key) => $urlWith({ isProfileComplet: key === 'isComplet' ? 'true' : 'false' })}
+			getHref={(key) =>
+				$urlWith({ subscribes_count_accepted: JSON.stringify({ min: +key, max: +key }) })
+			}
 		/>
 
 		<Distribution
@@ -58,7 +60,7 @@
 			values={data.stats.subscribes.request}
 			getLabel={(key) =>
 				key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
-			getHref={(key) => $urlWith({ isProfileComplet: key === 'isComplet' ? 'true' : 'false' })}
+			getHref={(key) => $urlWith({ subscribes_count_request: JSON.stringify({ min: +key, max: +key }) })}
 		/>
 
 		{#each data.stats.summary as stat}
