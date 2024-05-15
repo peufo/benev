@@ -3,13 +3,19 @@
 	import { urlParam } from '$lib/store'
 	import Distribution from './Distribution.svelte'
 	import { derived } from 'svelte/store'
+	import type { MembersProfilDistKey, MembershipDistKey } from './getMembers'
 
 	export let data: PageData
 
-	const DIST_MEMBERS_LABEL: Record<string, string> = {
-		isValided: 'Validé par un responsable et par le membre',
-		isValidedByEvent: 'Validé par un responsable',
-		isValidedByUser: 'Validé par le membre',
+	const DIST_MEMBERS_LABEL: Record<MembershipDistKey, string> = {
+		isValided: 'Validé',
+		isValidedByEvent: 'Initié par un responsable',
+		isValidedByUser: 'Initié par le membre',
+	}
+
+	const DIST_PROFILE_LABEL: Record<MembersProfilDistKey, string> = {
+		isComplet: 'Complet',
+		isIncomplet: 'Incomplet',
 	}
 
 	const urlWith = derived(
@@ -22,15 +28,22 @@
 {#if data.stats}
 	<div class="flex gap-4 flex-wrap justify-start items-start">
 		<Distribution
-			title="Membres ({data.stats.nbMembers})"
-			values={data.stats.members}
-			class="grow min-w-[40%]"
-			getLabel={(key) => DIST_MEMBERS_LABEL[key] || ''}
+			title="Adhésions ({data.stats.nbMembers})"
+			values={data.stats.membership}
+			class="grow"
+			getLabel={(key) => DIST_MEMBERS_LABEL[key]}
 			getHref={(key) =>
 				$urlWith({
 					isValidedByUser: key === 'isValided' || key === 'isValidedByUser' ? 'true' : 'false',
 					isValidedByEvent: key === 'isValided' || key === 'isValidedByEvent' ? 'true' : 'false',
 				})}
+		/>
+		<Distribution
+			title="Profils"
+			values={data.stats.profileStatus}
+			class="grow"
+			getLabel={(key) => DIST_PROFILE_LABEL[key]}
+			getHref={(key) => $urlWith({ isProfileComplet: key === 'isComplet' ? 'true' : 'false' })}
 		/>
 		{#each data.stats.summary as stat}
 			{#if stat}

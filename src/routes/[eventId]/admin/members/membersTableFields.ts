@@ -107,7 +107,7 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			getCell: (m) => getAge(m.user.birthday),
 		},
 		{
-			key: 'isUserProfileCompleted',
+			key: 'isProfileComplet',
 			label: 'Profil complet',
 			type: 'boolean',
 			getCell: (m) => m.isMemberProfileCompleted && m.isUserProfileCompleted,

@@ -11,7 +11,7 @@ import type {
 	Subscribe,
 	SubscribeState,
 } from '@prisma/client'
-import { prisma, addMemberComputedValues } from '$lib/server'
+import { prisma, addMemberComputedValues, type MemberWithComputedValues } from '$lib/server'
 
 export type MemberWithComputedValue = Awaited<ReturnType<typeof getMembers>>['members'][number]
 
@@ -23,7 +23,7 @@ export const membersFilterShape = {
 	subscribes_hours: z.filter.number,
 	leaderOf: z.filter.multiselect,
 	age: z.filter.number,
-	isUserProfileCompleted: z.filter.boolean,
+	isProfileComplet: z.filter.boolean,
 	isValidedByEvent: z.filter.boolean,
 	isValidedByUser: z.filter.boolean,
 	isAbsent: z.filter.boolean,
@@ -163,7 +163,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	const filterOnComputedValues =
 		data.subscribes_count !== undefined ||
 		data.subscribes_hours !== undefined ||
-		data.isUserProfileCompleted !== undefined
+		data.isProfileComplet !== undefined
 
 	const paginationEnable = !data.summary && !data.all && !filterOnComputedValues
 
@@ -221,10 +221,10 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			if (max !== undefined) conditions.push((m) => max >= toHours(m.workTime))
 		}
 
-		if (data.isUserProfileCompleted === true) {
+		if (data.isProfileComplet === true) {
 			conditions.push((m) => m.isMemberProfileCompleted && m.isUserProfileCompleted)
 		}
-		if (data.isUserProfileCompleted === false) {
+		if (data.isProfileComplet === false) {
 			conditions.push((m) => !m.isMemberProfileCompleted || !m.isUserProfileCompleted)
 		}
 
@@ -248,7 +248,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		members: members.slice(data.skip, data.skip + data.take),
 		stats: {
 			nbMembers: members.length,
-			members: getMembersDistribution(members),
+			membership: getMembershipDistribution(members),
+			profileStatus: getMembersProfilStatusDistribution(members),
 			summary: fields
 				.map((field) => {
 					if (field.type === 'select' || field.type === 'multiselect') {
@@ -301,19 +302,35 @@ function getWorkTime(
 		}, 0)
 }
 
-type MemberValidedDistKey = 'isValided' | 'isValidedByEvent' | 'isValidedByUser'
-
-function getMembersDistribution(members: Member[]): Record<MemberValidedDistKey, number> {
+export type MembershipDistKey = 'isValided' | 'isValidedByEvent' | 'isValidedByUser'
+function getMembershipDistribution(members: Member[]): Record<MembershipDistKey, number> {
 	const dist = {
 		isValided: 0,
 		isValidedByEvent: 0,
 		isValidedByUser: 0,
-	} satisfies Record<MemberValidedDistKey, number>
+	} satisfies Record<MembershipDistKey, number>
 
 	members.forEach(({ isValidedByEvent, isValidedByUser }) => {
 		if (isValidedByEvent && isValidedByUser) dist.isValided++
-		if (!isValidedByEvent && isValidedByUser) dist.isValidedByUser++
-		if (isValidedByEvent && !isValidedByUser) dist.isValidedByEvent++
+		else if (!isValidedByEvent && isValidedByUser) dist.isValidedByUser++
+		else if (isValidedByEvent && !isValidedByUser) dist.isValidedByEvent++
+	})
+
+	return dist
+}
+
+export type MembersProfilDistKey = 'isComplet' | 'isIncomplet'
+function getMembersProfilStatusDistribution(
+	members: MemberWithComputedValues[]
+): Record<MembersProfilDistKey, number> {
+	const dist = {
+		isComplet: 0,
+		isIncomplet: 0,
+	} satisfies Record<MembersProfilDistKey, number>
+
+	members.forEach((m) => {
+		if (m.isMemberProfileCompleted && m.isUserProfileCompleted) dist.isComplet++
+		else dist.isIncomplet++
 	})
 
 	return dist
