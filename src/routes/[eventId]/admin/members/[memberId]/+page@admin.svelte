@@ -25,7 +25,7 @@
 	let createSubscribeDialog: HTMLDialogElement
 </script>
 
-<Card bodyClass="gap-12">
+<Card class="max-w-3xl mx-auto" bodyClass="gap-12">
 	<div class="flex justify-between gap-8">
 		<div>
 			<div class="flex gap-2 items-center flex-wrap">

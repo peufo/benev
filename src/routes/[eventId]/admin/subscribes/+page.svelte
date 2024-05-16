@@ -103,14 +103,14 @@
 		<div class="flex gap-x-2 gap-y-2 flex-wrap">
 			<InputSearch />
 			<div class="grow" />
-			<TableViewSelect key="subscribes" views={data.views} action="{$eventPath}/admin" />
-
+			<!-- RESET FILTERS -->
 			<a
 				href={$urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
 				class="btn btn-square btn-sm"
 			>
 				<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
 			</a>
+			<TableViewSelect key="subscribes" views={data.views} action="{$eventPath}/admin" />
 
 			<SubscribesCopy />
 		</div>
