@@ -1,23 +1,18 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import type { Event } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { useForm } from 'fuma/validation'
 	import { InputBoolean, InputDate } from 'fuma'
 	import { slide } from 'svelte/transition'
 
-	const form = useForm({
+	const { enhance } = useForm({
 		successReset: false,
 	})
 
 	export let event: Event
 </script>
 
-<form
-	method="post"
-	use:enhance={form.submit}
-	action="{$eventPath}/admin/adhesion?/set_member_settings"
->
+<form method="post" use:enhance action="{$eventPath}/admin/adhesion?/set_member_settings">
 	<div>
 		<h3 class="font-medium opacity-80 mb-2">Permissions</h3>
 		<InputBoolean
@@ -72,6 +67,6 @@
 	</div>
 
 	<div class="flex justify-end mt-2">
-		<button class="btn">Valider</button>
+		<button class="btn btn-primary">Valider</button>
 	</div>
 </form>

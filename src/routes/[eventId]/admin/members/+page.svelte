@@ -80,7 +80,7 @@
 		</div>
 	</Card>
 
-	<Card bodyClass="sm:px-2 sm:py-2 flex flex-col gap-2 sticky top-14">
+	<Card bodyClass="sm:px-2 sm:py-2 flex flex-col gap-2">
 		<MembersStats {data} />
 	</Card>
 </div>
