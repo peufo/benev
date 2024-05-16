@@ -107,7 +107,7 @@
 	</main>
 </div>
 
-<Footer class="z-10">
+<Footer>
 	<div class="flex flex-wrap justify-center">
 		{#if data.event.web}
 			<a class="btn btn-sm sm:btn-md btn-ghost flex" href={data.event.web} target="_blank">

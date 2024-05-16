@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { mdiAccountPlusOutline, mdiFilterRemoveOutline } from '@mdi/js'
+	import { mdiAccountPlusOutline, mdiFilterRemoveOutline, mdiSigma } from '@mdi/js'
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick } from 'svelte'
-	import { Icon, jsonParse, urlParam } from 'fuma'
+	import { Drawer, Icon, jsonParse, urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
 	import { InputSearch, Pagination, Table, TableViewSelect, Card } from 'fuma'
 
@@ -52,6 +52,11 @@
 
 				<div class="grow" />
 
+				<!-- SHOW MEMBERS STATS -->
+				<a href={$urlParam.with({ members_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
+					<Icon path={mdiSigma} title="Afficher le résumé des membres" size={18} />
+				</a>
+
 				<!-- RESET FILTER -->
 				<a
 					href={$urlParam.without(...tableFields.map((f) => f.key), 'skip', 'take')}
@@ -100,7 +105,7 @@
 		</div>
 	</Card>
 
-	<Card bodyClass="sm:px-2 sm:py-2 flex flex-col gap-2">
+	<Card bodyClass="sm:px-2 sm:py-2 hidden xl:block">
 		<MembersStats {data} />
 	</Card>
 </div>
@@ -112,3 +117,7 @@
 		title="Nouvelle inscription pour {selectedMember.user.firstName}"
 	/>
 {/if}
+
+<Drawer title="Résumé des membres" key="members_stats" class="xl:hidden" classBody="p-4 pb-10">
+	<MembersStats {data} />
+</Drawer>

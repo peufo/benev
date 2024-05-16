@@ -21,64 +21,66 @@
 	const urlWith = derived(
 		urlParam,
 		($urlParam) => (params: Record<string, string>) =>
-			$urlParam.with(params, 'skip', 'take', 'summary')
+			$urlParam.with(params, 'skip', 'take', 'summary', 'members_stats')
 	)
 </script>
 
 {#if data.stats}
-	<Distribution
-		title="Adhésions ({data.stats.nbMembers})"
-		values={data.stats.membership}
-		getLabel={(key) => DIST_MEMBERS_LABEL[key]}
-		getHref={(key) =>
-			$urlWith({
-				isValidedByUser: key === 'isValided' || key === 'isValidedByUser' ? 'true' : 'false',
-				isValidedByEvent: key === 'isValided' || key === 'isValidedByEvent' ? 'true' : 'false',
-			})}
-	/>
+	<div class="flex flex-col gap-2">
+		<Distribution
+			title="Adhésions ({data.stats.nbMembers})"
+			values={data.stats.membership}
+			getLabel={(key) => DIST_MEMBERS_LABEL[key]}
+			getHref={(key) =>
+				$urlWith({
+					isValidedByUser: key === 'isValided' || key === 'isValidedByUser' ? 'true' : 'false',
+					isValidedByEvent: key === 'isValided' || key === 'isValidedByEvent' ? 'true' : 'false',
+				})}
+		/>
 
-	<Distribution
-		title="Profils"
-		values={data.stats.profileStatus}
-		getLabel={(key) => DIST_PROFILE_LABEL[key]}
-		getHref={(key) => $urlWith({ isProfileComplet: key === 'isComplet' ? 'true' : 'false' })}
-	/>
+		<Distribution
+			title="Profils"
+			values={data.stats.profileStatus}
+			getLabel={(key) => DIST_PROFILE_LABEL[key]}
+			getHref={(key) => $urlWith({ isProfileComplet: key === 'isComplet' ? 'true' : 'false' })}
+		/>
 
-	<Distribution
-		title="Inscriptions acceptées"
-		values={data.stats.subscribes.accepted}
-		getLabel={(key) =>
-			key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
-		getHref={(key) =>
-			$urlWith({ subscribes_count_accepted: JSON.stringify({ min: +key, max: +key }) })}
-	/>
+		<Distribution
+			title="Inscriptions acceptées"
+			values={data.stats.subscribes.accepted}
+			getLabel={(key) =>
+				key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
+			getHref={(key) =>
+				$urlWith({ subscribes_count_accepted: JSON.stringify({ min: +key, max: +key }) })}
+		/>
 
-	<Distribution
-		title="Inscriptions en attentes"
-		values={data.stats.subscribes.request}
-		getLabel={(key) =>
-			key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
-		getHref={(key) =>
-			$urlWith({ subscribes_count_request: JSON.stringify({ min: +key, max: +key }) })}
-	/>
+		<Distribution
+			title="Inscriptions en attentes"
+			values={data.stats.subscribes.request}
+			getLabel={(key) =>
+				key === '0' ? "Pas d'inscription" : `${key} inscription${+key > 1 ? 's' : ''}`}
+			getHref={(key) =>
+				$urlWith({ subscribes_count_request: JSON.stringify({ min: +key, max: +key }) })}
+		/>
 
-	{#each data.stats.summary as stat}
-		{#if stat}
-			<Distribution
-				title={stat.fieldName}
-				values={stat.distribution}
-				class="grow"
-				getLabel={(key) => {
-					if (stat?.fieldType !== 'boolean') return key
-					return key === 'true' ? 'Oui' : 'Non'
-				}}
-				getHref={(key) => {
-					if (!stat) return ''
-					const fieldValue = stat.fieldType === 'multiselect' ? JSON.stringify([key]) : key
-					const k = `field_${stat.fieldId}`
-					return $urlWith({ [k]: fieldValue })
-				}}
-			/>
-		{/if}
-	{/each}
+		{#each data.stats.summary as stat}
+			{#if stat}
+				<Distribution
+					title={stat.fieldName}
+					values={stat.distribution}
+					class="grow"
+					getLabel={(key) => {
+						if (stat?.fieldType !== 'boolean') return key
+						return key === 'true' ? 'Oui' : 'Non'
+					}}
+					getHref={(key) => {
+						if (!stat) return ''
+						const fieldValue = stat.fieldType === 'multiselect' ? JSON.stringify([key]) : key
+						const k = `field_${stat.fieldId}`
+						return $urlWith({ [k]: fieldValue })
+					}}
+				/>
+			{/if}
+		{/each}
+	</div>
 {/if}
