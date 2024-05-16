@@ -62,12 +62,12 @@
 	</svelte:fragment>
 </Header>
 
-<div class="flex grow items-start relative p-4 gap-4">
+<div class="flex grow items-start relative">
 	{#if data.member?.roles.includes('leader')}
 		<AdminNavigation />
 	{/if}
 
-	<main class="grow mx-auto">
+	<main class="grow mx-auto overflow-x-hidden self-stretch p-4">
 		{#if accessGranted}
 			<slot />
 		{:else if data.event.state === 'draft' || data.event.state === 'actived'}

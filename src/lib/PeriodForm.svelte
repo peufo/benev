@@ -114,7 +114,7 @@
 			<button class="btn" type="submit">Valider</button>
 			<ButtonDelete formaction="{basePath}?/period_delete" />
 		{:else}
-			<button class="btn" type="submit">Ajouter</button>
+			<button class="btn btn-primary" type="submit">Ajouter</button>
 			<button
 				type="button"
 				class="btn btn-ghost"
