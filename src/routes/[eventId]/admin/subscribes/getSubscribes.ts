@@ -68,8 +68,6 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 	const subscribes = await prisma.subscribe
 		.findMany({
 			where: { AND: subscribesFilters },
-			skip: query.all ? undefined : query.skip,
-			take: query.all ? undefined : query.take,
 			include: {
 				period: {
 					include: { team: true },
