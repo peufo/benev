@@ -28,7 +28,7 @@
 				</span>
 				<div
 					class="absolute bg-primary/10 bottom-0 top-0 left-0 rounded"
-					style:width="{(value / total) * 100}%"
+					style:width="{total > 0 ? (value / total) * 100 : 0}%"
 				/>
 			</a>
 		{:else}
