@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { mdiAccountPlusOutline, mdiFilterRemoveOutline } from '@mdi/js'
-	import type { Member } from '@prisma/client'
-	import { tick } from 'svelte'
-	import { Icon, urlParam } from 'fuma'
+	import type { Field, Member } from '@prisma/client'
+	import { onMount, tick } from 'svelte'
+	import { Icon, jsonParse, urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
 	import { InputSearch, Pagination, Table, TableViewSelect, Card } from 'fuma'
 
@@ -14,13 +14,33 @@
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
 	import { eventPath } from '$lib/store'
+	import { globalEvents } from '$lib/globalEvents'
+	import { page } from '$app/stores'
 
 	export let data
 
-	$: tableFields = getMembersTableFields(data.teams, data.fields)
+	let tableFields = getMembersTableFields(data.teams, data.fields)
+
+	onMount(() => {
+		globalEvents.on('field_created', handleFieldCreated)
+		return () => {
+			globalEvents.off('field_created', handleFieldCreated)
+		}
+	})
 
 	let createSubscribeDialog: HTMLDialogElement
 	let selectedMember: (Member & { user: { firstName: string } }) | undefined = undefined
+
+	async function handleFieldCreated(field: Field) {
+		const url = new URL($page.url)
+		const PARAM_VISIBLE_KEY = 'members_fields_visible'
+		const fieldsVisible = jsonParse<string[]>(url.searchParams.get(PARAM_VISIBLE_KEY), [])
+		fieldsVisible.push(`field_${field.id}`)
+		url.searchParams.set(PARAM_VISIBLE_KEY, JSON.stringify(fieldsVisible))
+		url.searchParams.delete('form_field')
+		await goto(url, { noScroll: true, keepFocus: true, invalidateAll: true })
+		tableFields = getMembersTableFields(data.teams, data.fields)
+	}
 </script>
 
 <div class="flex gap-4 items-start">

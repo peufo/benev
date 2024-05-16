@@ -171,10 +171,6 @@
 	</Drawer>
 
 	<Drawer key="form_field" title="{data.field ? 'Modifier le' : 'Nouveau'} champ" let:close>
-		<MemberFieldForm field={data.field || {}} on:success={() => 
-			
-		close()
-		}
-		 />
+		<MemberFieldForm field={data.field || {}} on:success={() => close()} />
 	</Drawer>
 {/if}

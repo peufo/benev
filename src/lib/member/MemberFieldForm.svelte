@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { type ComponentType } from 'svelte'
 	import { slide } from 'svelte/transition'
-	import type { Field } from '@prisma/client'
-
 	import {
 		InputSelect,
 		InputText,
@@ -11,13 +9,12 @@
 		InputOptions,
 		USE_COERCE_BOOLEAN,
 		Form,
-		jsonParse,
 	} from 'fuma'
+	import type { Field } from '@prisma/client'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { eventPath } from '$lib/store'
 	import { modelMemberFieldCreate } from '$lib/models'
-	import { page } from '$app/stores'
-	import { goto } from '$app/navigation'
+	import { globalEvents } from '$lib/globalEvents'
 
 	const FormMemberField: ComponentType<Form<typeof modelMemberFieldCreate, Field>> = Form
 
@@ -39,23 +36,13 @@
 			if (!checked) field.memberCanWrite = false
 		}
 	}
-
-	async function handleFieldCreated(field: Field) {
-		const url = new URL($page.url)
-		const PARAM_VISIBLE_KEY = 'members_fields_visible'
-		const fieldsVisible = jsonParse<string[]>(url.searchParams.get(PARAM_VISIBLE_KEY), [])
-		fieldsVisible.push(`field_${field.id}`)
-		url.searchParams.set(PARAM_VISIBLE_KEY, JSON.stringify(fieldsVisible))
-		url.searchParams.delete('form_field')
-		await goto(url, { noScroll: true, keepFocus: true, invalidateAll: true })
-	}
 </script>
 
 <FormMemberField
 	model={modelMemberFieldCreate}
 	action="{$eventPath}/admin/adhesion?/field"
 	on:success
-	on:created={({ detail }) => handleFieldCreated(detail)}
+	on:created={({ detail }) => globalEvents.emit('field_created', detail)}
 	data={field}
 >
 	{#key field.id}
