@@ -137,7 +137,7 @@
 		</div>
 	</Card>
 
-	<Card bodyClass="sm:px-2 sm:py-2 hidden xl:block">
+	<Card class="hidden xl:block" bodyClass="sm:px-2 sm:py-2">
 		<SubscribesStats {data} />
 	</Card>
 </div>
