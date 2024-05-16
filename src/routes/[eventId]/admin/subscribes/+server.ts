@@ -6,6 +6,6 @@ export const GET = async ({ url, params: { eventId } }) => {
 		where: { id: eventId },
 		include: { memberFields: true },
 	})
-	const members = await getSubscribes(event, url)
-	return json(members)
+	const result = await getSubscribes(event, url)
+	return json(result)
 }

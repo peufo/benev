@@ -20,6 +20,7 @@
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
 	import SubscribesCopy from './SubscribesCopy.svelte'
+	import SubscribesStats from './SubscribesStats.svelte'
 	import {
 		SubscribeCreatedBy,
 		SubscribeIsAbsent,
@@ -96,35 +97,39 @@
 	]
 </script>
 
-<Card>
-	<h2 slot="title">Inscriptions</h2>
+<div class="flex gap-4 items-start">
+	<Card class="min-w-0 grow" bodyClass="sm:px-2 sm:py-2">
+		<div class="flex flex-col gap-2">
+			<div class="flex gap-x-2 gap-y-2 flex-wrap">
+				<InputSearch />
+				<div class="grow" />
+				<!-- RESET FILTERS -->
+				<a
+					href={$urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
+					class="btn btn-square btn-sm"
+				>
+					<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
+				</a>
+				<TableViewSelect key="subscribes" views={data.views} action="{$eventPath}/admin" />
 
-	<div class="flex flex-col gap-2">
-		<div class="flex gap-x-2 gap-y-2 flex-wrap">
-			<InputSearch />
-			<div class="grow" />
-			<!-- RESET FILTERS -->
-			<a
-				href={$urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
-				class="btn btn-square btn-sm"
-			>
-				<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
-			</a>
-			<TableViewSelect key="subscribes" views={data.views} action="{$eventPath}/admin" />
+				<SubscribesCopy />
+			</div>
 
-			<SubscribesCopy />
+			<Table
+				key="subscribes"
+				{fields}
+				items={data.subscribes}
+				slotAction={(subscribe) => component(SubscribeMenu, { subscribe })}
+				placholder="Aucune inscription trouvé"
+			/>
+
+			<div class="flex justify-end">
+				<Pagination />
+			</div>
 		</div>
+	</Card>
 
-		<Table
-			key="subscribes"
-			{fields}
-			items={data.subscribes}
-			slotAction={(subscribe) => component(SubscribeMenu, { subscribe })}
-			placholder="Aucune inscription trouvé"
-		/>
-
-		<div class="flex justify-end">
-			<Pagination />
-		</div>
-	</div>
-</Card>
+	<Card bodyClass="sm:px-2 sm:py-2 hidden xl:block">
+		<SubscribesStats {data} />
+	</Card>
+</div>

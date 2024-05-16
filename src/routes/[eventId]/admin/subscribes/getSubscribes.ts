@@ -1,7 +1,14 @@
 import { z, type ZodObj } from 'fuma/validation'
 import { parseQuery } from 'fuma/server'
 import { addMemberComputedValues, prisma } from '$lib/server'
-import type { Event, Field, Prisma, SubscribeState } from '@prisma/client'
+import type {
+	Event,
+	Field,
+	Prisma,
+	Subscribe,
+	SubscribeState,
+	SubscribeCreatedBy,
+} from '@prisma/client'
 
 export const subscribesFilterShape = {
 	search: z.string().optional(),
@@ -14,7 +21,7 @@ export const subscribesFilterShape = {
 
 export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
-	const data = parseQuery(url, {
+	const query = parseQuery(url, {
 		...subscribesFilterShape,
 		all: z.filter.boolean,
 		skip: z.coerce.number().default(0),
@@ -23,9 +30,9 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 
 	const subscribesFilters: Prisma.SubscribeWhereInput[] = [{ period: { team: { eventId } } }]
 
-	if (data.teams) subscribesFilters.push({ period: { teamId: { in: data.teams } } })
-	if (data.period) {
-		const { start, end } = data.period
+	if (query.teams) subscribesFilters.push({ period: { teamId: { in: query.teams } } })
+	if (query.period) {
+		const { start, end } = query.period
 		subscribesFilters.push({
 			period: {
 				...(start && { end: { gte: start } }),
@@ -34,8 +41,8 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		})
 	}
 
-	if (data.search) {
-		const words = data.search.split(' ')
+	if (query.search) {
+		const words = query.search.split(' ')
 		subscribesFilters.push({
 			member: {
 				user: {
@@ -51,37 +58,63 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		})
 	}
 
-	if (data.states) {
-		subscribesFilters.push({ state: { in: data.states as SubscribeState[] } })
+	if (query.states) {
+		subscribesFilters.push({ state: { in: query.states as SubscribeState[] } })
 	}
 
-	if (data.createdBy) subscribesFilters.push({ createdBy: data.createdBy })
-	if (data.isAbsent !== undefined) subscribesFilters.push({ isAbsent: data.isAbsent })
+	if (query.createdBy) subscribesFilters.push({ createdBy: query.createdBy })
+	if (query.isAbsent !== undefined) subscribesFilters.push({ isAbsent: query.isAbsent })
 
-	return {
-		subscribes: await prisma.subscribe
-			.findMany({
-				where: { AND: subscribesFilters },
-				skip: data.all ? undefined : data.skip,
-				take: data.all ? undefined : data.take,
-				include: {
-					period: {
-						include: { team: true },
-					},
-					member: {
-						include: {
-							user: true,
-							leaderOf: true,
-						},
+	const subscribes = await prisma.subscribe
+		.findMany({
+			where: { AND: subscribesFilters },
+			skip: query.all ? undefined : query.skip,
+			take: query.all ? undefined : query.take,
+			include: {
+				period: {
+					include: { team: true },
+				},
+				member: {
+					include: {
+						user: true,
+						leaderOf: true,
 					},
 				},
-				orderBy: { period: { start: 'asc' } },
-			})
-			.then((subs) =>
-				subs.map((sub) => ({
-					...sub,
-					member: addMemberComputedValues({ ...sub.member, event }),
-				}))
-			),
+			},
+			orderBy: { period: { start: 'asc' } },
+		})
+		.then((subs) =>
+			subs.map((sub) => ({
+				...sub,
+				member: addMemberComputedValues({ ...sub.member, event }),
+			}))
+		)
+
+	return {
+		subscribes: query.all ? subscribes : subscribes.slice(query.skip, query.skip + query.take),
+		stats: {
+			count: {
+				total: subscribes.length,
+				...subscribes.reduce((acc, cur) => ({ ...acc, [cur.createdBy]: acc[cur.createdBy] + 1 }), {
+					leader: 0,
+					user: 0,
+				}),
+			},
+			dist: getSubscribesDist(subscribes),
+		},
 	}
+}
+
+type SubscribesDist = Record<SubscribeCreatedBy, Record<SubscribeState, number>>
+
+function getSubscribesDist(subscribes: Subscribe[]): SubscribesDist {
+	const initialValues: Record<SubscribeState, number> = {
+		request: 0,
+		denied: 0,
+		accepted: 0,
+		cancelled: 0,
+	}
+	const dist: SubscribesDist = { leader: { ...initialValues }, user: { ...initialValues } }
+	subscribes.forEach((s) => dist[s.createdBy][s.state]++)
+	return dist
 }

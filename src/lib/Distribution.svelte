@@ -1,6 +1,4 @@
 <script lang="ts" generics="Keys extends string">
-	import { CardBasic } from 'fuma'
-
 	export let title: string
 	let klass = ''
 	export { klass as class }

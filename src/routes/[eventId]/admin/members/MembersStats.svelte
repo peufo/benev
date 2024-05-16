@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types'
 	import { urlParam } from '$lib/store'
-	import Distribution from './Distribution.svelte'
+	import Distribution from '$lib/Distribution.svelte'
 	import { derived } from 'svelte/store'
 	import type { MembersProfilDistKey, MembershipDistKey } from './getMembers'
 
