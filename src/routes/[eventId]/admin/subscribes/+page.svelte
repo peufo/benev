@@ -5,6 +5,7 @@
 		mdiCheckCircleOutline,
 		mdiFilterRemoveOutline,
 		mdiShieldAccountOutline,
+		mdiSigma,
 	} from '@mdi/js'
 	import type { PageData } from './$types'
 	import {
@@ -16,6 +17,7 @@
 		TableViewSelect,
 		urlParam,
 		Icon,
+		Drawer,
 	} from 'fuma'
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
@@ -103,6 +105,12 @@
 			<div class="flex gap-x-2 gap-y-2 flex-wrap">
 				<InputSearch />
 				<div class="grow" />
+
+				<!-- SHOW MEMBERS STATS -->
+				<a href={$urlParam.with({ subscribes_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
+					<Icon path={mdiSigma} title="Afficher le résumé des inscriptions" size={18} />
+				</a>
+
 				<!-- RESET FILTERS -->
 				<a
 					href={$urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
@@ -133,3 +141,12 @@
 		<SubscribesStats {data} />
 	</Card>
 </div>
+
+<Drawer
+	title="Résumé des inscriptions"
+	key="subscribes_stats"
+	class="xl:hidden"
+	classBody="p-4 pb-10"
+>
+	<SubscribesStats {data} />
+</Drawer>

@@ -12,21 +12,21 @@
 	const urlWith = derived(
 		urlParam,
 		($urlParam) => (params: Record<string, string>) =>
-			$urlParam.with(params, 'skip', 'take', 'summary', 'members_stats')
+			$urlParam.with(params, 'skip', 'take', 'summary', 'subscribes_stats')
 	)
 </script>
 
 {#if data.stats}
-	<div class="flex flex-col gap-2">
+	<div class="flex flex-col gap-2 min-w-56">
 		<Distribution
-			title="Inscription initié par un membre ({data.stats.count.user})"
+			title="Inscription par un membre ({data.stats.count.user})"
 			values={data.stats.dist.user}
 			getLabel={(key) => SUBSCRIBE_STATE[key]}
 			getHref={(key) => $urlWith({ createdBy: 'user', states: JSON.stringify([key]) })}
 		/>
 
 		<Distribution
-			title="Inscription initié par le responsable ({data.stats.count.leader})"
+			title="Inscription par le responsable ({data.stats.count.leader})"
 			values={data.stats.dist.leader}
 			getLabel={(key) => SUBSCRIBE_STATE[key]}
 			getHref={(key) => $urlWith({ createdBy: 'leader', states: JSON.stringify([key]) })}

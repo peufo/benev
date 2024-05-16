@@ -26,7 +26,7 @@
 </script>
 
 {#if data.stats}
-	<div class="flex flex-col gap-2">
+	<div class="flex flex-col gap-2 min-w-56">
 		<Distribution
 			title="Adhésions ({data.stats.nbMembers})"
 			values={data.stats.membership}

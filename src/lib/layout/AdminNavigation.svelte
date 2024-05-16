@@ -5,7 +5,7 @@
 </script>
 
 {#if $drawerOpen}
-	<Card class="sticky top-4 min-w-[220px] hidden lg:block mt-4 ml-4" bodyClass="sm:px-2 sm:py-2">
+	<Card class="sticky top-4 min-w-56 hidden lg:block mt-4 ml-4" bodyClass="sm:px-2 sm:py-2">
 		<div class="flex flex-col gap-1 text-sm">
 			{#each $adminTabs as { href, isActive, label, icon }}
 				<a {href} class="menu-item hover:bg-base-200/80" class:active={isActive}>
