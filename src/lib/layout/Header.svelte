@@ -7,7 +7,7 @@
 	export { klass as class }
 </script>
 
-<div class="px-4 sticky top-0 z-50 {klass}">
+<div class="px-4 {klass}">
 	<header class="navbar rounded-b-2xl bg-base-100 shadow-lg">
 		<slot name="start" />
 		<div class="grow" />

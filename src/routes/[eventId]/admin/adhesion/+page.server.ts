@@ -1,4 +1,4 @@
-import { tryOrFail, parseFormData } from 'fuma/server'
+import { tryOrFail, formAction } from 'fuma/server'
 import { z } from 'fuma/validation'
 
 import { prisma, permission } from '$lib/server'
@@ -38,43 +38,33 @@ export const load = async ({ parent, params: { eventId } }) => {
 }
 
 export const actions = {
-	create_field: async ({ request, locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-
-		return tryOrFail(async () => {
-			const formData = await request.formData()
-			const memberCanRead = formData.get('memberCanRead')
-			console.log({ memberCanRead })
-			const { data } = await parseFormData(formData, modelMemberFieldCreate)
+	field_create: formAction(
+		modelMemberFieldCreate,
+		async ({ locals, params: { eventId }, data }) => {
+			await permission.admin(eventId, locals)
 			const nbFields = await prisma.field.count({ where: { eventId } })
 			return prisma.field.create({
 				data: { ...data, eventId, position: nbFields },
 			})
-		})
-	},
-	delete_field: async ({ request, locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, { id: z.string() })
-
-			return prisma.field.delete({
-				where: { id: data.id, eventId },
-			})
-		})
-	},
-	update_field: async ({ request, locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, modelMemberFieldUpdate)
-
+		}
+	),
+	field_update: formAction(
+		modelMemberFieldUpdate,
+		async ({ locals, params: { eventId }, data }) => {
+			await permission.admin(eventId, locals)
 			return prisma.field.update({
 				where: { id: data.id },
 				data,
 			})
+		}
+	),
+	field_delete: formAction({ id: z.string() }, async ({ locals, params: { eventId }, data }) => {
+		await permission.admin(eventId, locals)
+		return prisma.field.delete({
+			where: { id: data.id, eventId },
 		})
-	},
+	}),
+
 	reorder_fields: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 		const formData: Record<string, unknown> = Object.fromEntries(await request.formData())
@@ -92,15 +82,14 @@ export const actions = {
 			)
 		)
 	},
-	set_member_settings: async ({ request, locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, modelEventMemberSettings)
+	set_member_settings: formAction(
+		modelEventMemberSettings,
+		async ({ locals, params: { eventId }, data }) => {
+			await permission.admin(eventId, locals)
 			return prisma.event.update({
 				where: { id: eventId },
 				data,
 			})
-		})
-	},
+		}
+	),
 }

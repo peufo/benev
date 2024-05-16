@@ -1,76 +1,29 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte'
+	import { type ComponentType } from 'svelte'
 	import { slide } from 'svelte/transition'
 	import type { Field } from '@prisma/client'
-	import { enhance } from '$app/forms'
+
 	import {
-		useForm,
 		InputSelect,
 		InputText,
 		InputBoolean,
 		InputCheckboxs,
-		ButtonDelete,
 		InputOptions,
 		USE_COERCE_BOOLEAN,
+		Form,
+		jsonParse,
 	} from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import { MemberField } from '$lib/member'
 	import { eventPath } from '$lib/store'
+	import { modelMemberFieldCreate } from '$lib/models'
+	import { page } from '$app/stores'
+	import { goto } from '$app/navigation'
 
-	export let successReset = true
-	export let successUpdate = true
+	const FormMemberField: ComponentType<Form<typeof modelMemberFieldCreate, Field>> = Form
 
-	const action = `${$eventPath}/admin/adhesion`
+	export let field: Partial<Field> = {}
 
-	const dispatch = createEventDispatcher<{ success: Field | undefined }>()
-	const form = useForm<Field>({
-		successReset,
-		successUpdate,
-		onSuccess: (url, field) => {
-			dispatch('success', field)
-			setField(null)
-		},
-	})
-
-	type NonNull<T> = { [P in keyof T]-?: NonNullable<T[P]> }
-	type FieldForm = { id?: string } & NonNull<
-		Pick<
-			Field,
-			| 'type'
-			| 'name'
-			| 'label'
-			| 'options'
-			| 'memberCanRead'
-			| 'memberCanWrite'
-			| 'allCombinations'
-			| 'required'
-		>
-	>
-	export function setField(value: Field | null) {
-		if (value === null) {
-			field = { ...defaultField }
-			return
-		}
-		field = {
-			...value,
-			label: value.label || '',
-			options: value.options || '[]',
-		}
-	}
-
-	const defaultField: FieldForm = {
-		type: 'string',
-		name: '',
-		label: '',
-		options: '[]',
-		allCombinations: false,
-		memberCanRead: true,
-		memberCanWrite: true,
-		required: true,
-	}
-	let field: FieldForm = { ...defaultField }
-
-	function getMemberRight(value: FieldForm): string[] {
+	function getMemberRight(value: Partial<Field>): string[] {
 		return [value.memberCanRead && 'read', value.memberCanWrite && 'write'].filter(
 			Boolean
 		) as string[]
@@ -86,18 +39,32 @@
 			if (!checked) field.memberCanWrite = false
 		}
 	}
+
+	async function handleFieldCreated(field: Field) {
+		const url = new URL($page.url)
+		const PARAM_VISIBLE_KEY = 'members_fields_visible'
+		const fieldsVisible = jsonParse<string[]>(url.searchParams.get(PARAM_VISIBLE_KEY), [])
+		fieldsVisible.push(`field_${field.id}`)
+		url.searchParams.set(PARAM_VISIBLE_KEY, JSON.stringify(fieldsVisible))
+		url.searchParams.delete('form_field')
+		await goto(url, { noScroll: true, keepFocus: true, invalidateAll: true })
+	}
 </script>
 
-<form method="post" use:enhance={form.submit} class="flex flex-col gap-2">
-	{#if field.id}
-		<input type="hidden" name="id" value={field.id} />
-	{/if}
+<FormMemberField
+	model={modelMemberFieldCreate}
+	action="{$eventPath}/admin/adhesion?/field"
+	on:success
+	on:created={({ detail }) => handleFieldCreated(detail)}
+	data={field}
+>
 	{#key field.id}
 		<InputSelect
 			key="type"
 			bind:value={field.type}
 			options={MEMBER_FIELD_TYPE}
-			class="w-full justify-start"
+			label="Type de champ"
+			class="w-full justify-start mt-4"
 		/>
 
 		<InputText
@@ -168,23 +135,5 @@
 				/>
 			</div>
 		{/if}
-
-		<h2 class="font-bold">Aperçu</h2>
-		<div class="rounded-box border border-neutral p-2 bg-base-200">
-			<MemberField {field} />
-		</div>
 	{/key}
-
-	<div class="flex gap-2 flex-row-reverse">
-		<button
-			class="btn"
-			formaction="{action}{field.id ? '?/update_field' : '?/create_field'}"
-			type="submit"
-		>
-			Valider
-		</button>
-		{#if field.id}
-			<ButtonDelete formaction="{action}?/delete_field" />
-		{/if}
-	</div>
-</form>
+</FormMemberField>

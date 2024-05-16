@@ -4,16 +4,14 @@
 	import axios from 'axios'
 	import type { Field } from '@prisma/client'
 	import { listEditable } from '$lib/action'
-	import { Icon, Placeholder } from 'fuma'
+	import { Icon, Placeholder, urlParam } from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import { MemberFieldDialog } from '$lib/member'
 	import { eventPath } from '$lib/store'
 	import { useNotify } from '$lib/notify'
+	import { goto } from '$app/navigation'
 
 	export let fields: Field[]
 	const notify = useNotify()
-
-	let memberFieldDialog: MemberFieldDialog
 
 	async function handleReorder(reorderedFields: Field[]) {
 		fields = reorderedFields
@@ -30,9 +28,14 @@
 
 <div class="flex items-center mb-2">
 	<h3 class="font-medium opacity-80 grow">Champs du profil de membre</h3>
-	<button class="btn btn-square btn-sm" on:click={() => memberFieldDialog.open()}>
+	<a
+		class="btn btn-square btn-sm btn-primary"
+		href={$urlParam.with({ form_field: 1 })}
+		data-sveltekit-replacestate
+		data-sveltekit-noscroll
+	>
 		<Icon path={mdiPlus} title="Ajouter un champ" />
-	</button>
+	</a>
 </div>
 
 <div
@@ -46,7 +49,8 @@
 	{#each fields as field (field.id)}
 		<button
 			transition:slide
-			on:click={() => memberFieldDialog.open(field)}
+			on:click={() =>
+				goto($urlParam.with({ form_field: field.id }), { replaceState: true, noScroll: true })}
 			class="
 				w-full flex gap-3 py-3 px-4 items-center border rounded-lg
 				bg-base-200/50 hover:bg-base-200 cursor-pointer
@@ -70,5 +74,3 @@
 {#if !fields.length}
 	<Placeholder />
 {/if}
-
-<MemberFieldDialog bind:this={memberFieldDialog} />

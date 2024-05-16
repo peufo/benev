@@ -8,7 +8,10 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 	const { user } = await parent()
 	const userId = user?.id || ''
 	try {
-		const { form_team } = parseQuery(url, { form_team: z.string().optional() })
+		const { form_team, form_field } = parseQuery(url, {
+			form_team: z.string().optional(),
+			form_field: z.string().optional(),
+		})
 
 		const member = await getMemberProfile({ userId, eventId }).catch(() => undefined)
 		const isLeader = member?.roles.includes('leader')
@@ -38,6 +41,10 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			team:
 				form_team && form_team?.length > 5
 					? await getTeam(form_team).catch(() => undefined)
+					: undefined,
+			field:
+				form_field && form_field?.length > 5
+					? await prisma.field.findUnique({ where: { id: form_field, eventId } })
 					: undefined,
 		}
 	} catch {

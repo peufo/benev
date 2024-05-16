@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { mdiAccountPlusOutline, mdiFilterRemoveOutline } from '@mdi/js'
-	import type { Field, Member } from '@prisma/client'
+	import type { Member } from '@prisma/client'
 	import { tick } from 'svelte'
 	import { Icon, urlParam } from 'fuma'
-	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 	import { InputSearch, Pagination, Table, TableViewSelect, Card } from 'fuma'
 
 	import { component } from '$lib/utils'
-	import { MemberActions, MemberCreateSubscribeDialog, MemberFieldDialog } from '$lib/member'
-	import { jsonParse } from '$lib/jsonParse'
+	import { MemberActions, MemberCreateSubscribeDialog } from '$lib/member'
 	import { getMembersTableFields } from './membersTableFields'
 	import MembersCopy from './MembersCopy.svelte'
 	import MembersFilter from './MembersFilter.svelte'
@@ -19,23 +17,10 @@
 
 	export let data
 
-	let tableFields = getMembersTableFields(data.teams, data.fields)
+	$: tableFields = getMembersTableFields(data.teams, data.fields)
 
-	let memberFieldDialog: MemberFieldDialog
 	let createSubscribeDialog: HTMLDialogElement
 	let selectedMember: (Member & { user: { firstName: string } }) | undefined = undefined
-
-	async function handleFieldCreated(field: Field | undefined) {
-		if (!field) return
-		const url = new URL($page.url)
-		const PARAM_VISIBLE_KEY = 'members_fields_visible'
-		const fieldsVisible = jsonParse<string[]>(url.searchParams.get(PARAM_VISIBLE_KEY), [])
-		fieldsVisible.push(`field_${field.id}`)
-		console.log(fieldsVisible)
-		url.searchParams.set(PARAM_VISIBLE_KEY, JSON.stringify(fieldsVisible))
-		await goto(url, { noScroll: true, keepFocus: true, invalidateAll: true })
-		tableFields = getMembersTableFields(data.teams, data.fields)
-	}
 </script>
 
 <div class="flex gap-4 items-start">
@@ -85,7 +70,7 @@
 							},
 						})}
 					placholder="Aucun membre trouvé"
-					onCreateField={() => memberFieldDialog.open()}
+					onCreateField={() => goto($urlParam.with({ form_field: 1 }))}
 				/>
 			{/key}
 
@@ -99,12 +84,6 @@
 		<MembersStats {data} />
 	</Card>
 </div>
-
-<MemberFieldDialog
-	successUpdate={false}
-	bind:this={memberFieldDialog}
-	on:success={({ detail }) => handleFieldCreated(detail)}
-/>
 
 {#if selectedMember}
 	<MemberCreateSubscribeDialog

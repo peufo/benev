@@ -16,6 +16,7 @@
 	import Poster from './Poster.svelte'
 	import InviteForm from '$lib/InviteForm.svelte'
 	import { TeamForm, type TeamFormInstance } from '$lib/team'
+	import { MemberFieldForm } from '$lib/member'
 
 	export let data
 
@@ -165,7 +166,15 @@
 		/>
 	</Drawer>
 
-	<Drawer key="form_team" title={data.team ? 'Modifier le secteur' : 'Nouveau secteur'} let:close>
+	<Drawer key="form_team" title="{data.team ? 'Modifier le' : 'Nouveau'} secteur" let:close>
 		<TeamForm bind:teamForm team={data.team || {}} event={data.event} on:success={() => close()} />
+	</Drawer>
+
+	<Drawer key="form_field" title="{data.field ? 'Modifier le' : 'Nouveau'} champ" let:close>
+		<MemberFieldForm field={data.field || {}} on:success={() => 
+			
+		close()
+		}
+		 />
 	</Drawer>
 {/if}
