@@ -9,7 +9,7 @@ export const load = async ({ parent, url, params: { eventId }, locals }) => {
 	const search = url.searchParams.get('search')
 	const { member } = await parent()
 
-	const isLeader = await permission.leader(eventId, locals)
+	const isLeader = member?.roles.includes('leader')
 
 	const teams = await prisma.team
 		.findMany({
