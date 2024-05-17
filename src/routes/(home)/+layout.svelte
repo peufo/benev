@@ -26,7 +26,7 @@
 	</svelte:fragment>
 </Header>
 
-<main class="grow p-2">
+<main class="grow p-2 sm:p-4">
 	<slot />
 </main>
 

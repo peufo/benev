@@ -9,7 +9,7 @@
 </script>
 
 <OnlyAdmin>
-	<div class="mx-auto flex flex-col gap-4" style="min-width: min(100%, 600px)">
+	<div class="mx-auto flex flex-col gap-2 sm:gap-4" style="min-width: min(100%, 600px)">
 		<EventStateForm
 			event={data.event}
 			eventCounts={data.eventCounts}

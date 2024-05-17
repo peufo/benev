@@ -11,32 +11,7 @@
 </script>
 
 <Card class="max-w-2xl mx-auto">
-	<div class="flex gap-2 items-center">
-		{#if data.event.logoId}
-			<img
-				class="inline-block h-10 mx-1"
-				src="/media/{data.event.logoId}?size=medium"
-				alt="logo of {data.event.name}"
-			/>
-		{:else if data.event.icon}
-			<img class="inline-block w-5 mx-1" src={data.event.icon} alt="icon of {data.event.name}" />
-		{/if}
-
-		<h1 class="title text-2xl">
-			{data.event.name}
-		</h1>
-
-		{#if data.event.state !== 'published'}
-			<Icon
-				class="opacity-70 ml-1 {data.event.state === 'draft' ? 'rotate-12' : ''}"
-				size={20}
-				path={EVENT_STATES[data.event.state].icon}
-				title={EVENT_STATES[data.event.state].label}
-			/>
-		{/if}
-	</div>
-
-	<div class="flex flex-col gap-20 mt-8">
+	<div class="flex flex-col gap-20">
 		<section>
 			<div class="flex gap-2 items-center mb-4">
 				<h3 class="title">Mes inscriptions</h3>
