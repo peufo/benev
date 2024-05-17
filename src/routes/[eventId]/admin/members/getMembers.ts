@@ -342,14 +342,12 @@ function getMembersSubscribesDistribution(members: (Member & { subscribes: Subsc
 	members.forEach((m) => {
 		const acceptedCount = m.subscribes.filter((s) => s.state === 'accepted').length
 		const requestCount = m.subscribes.filter((s) => s.state === 'request').length
-		if (acceptedCount) {
-			if (!accepted[acceptedCount.toString()]) accepted[acceptedCount.toString()] = acceptedCount
-			else accepted[acceptedCount.toString()] += acceptedCount
-		}
-		if (requestCount) {
-			if (!request[requestCount.toString()]) request[requestCount.toString()] = requestCount
-			else request[requestCount.toString()] += requestCount
-		}
+
+		if (!accepted[acceptedCount.toString()]) accepted[acceptedCount.toString()] = 1
+		else accepted[acceptedCount.toString()]++
+
+		if (!request[requestCount.toString()]) request[requestCount.toString()] = 1
+		else request[requestCount.toString()]++
 	})
 	return { accepted, request }
 }
