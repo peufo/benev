@@ -1,20 +1,18 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import { mdiCheck } from '@mdi/js'
 	import type { PageData } from './$types'
 	import { useForm } from 'fuma/validation'
-	import { Icon } from 'fuma'
+	import { Icon, USE_COERCE_BOOLEAN } from 'fuma'
 
 	export let memberProfile: PageData['memberProfile']
-
-	const form = useForm()
+	const { enhance } = useForm()
 </script>
 
-<form action="?/set_isValidedByEvent" method="post" use:enhance={form.submit} class="contents">
+<form action="?/set_isValidedByEvent" method="post" use:enhance class="contents">
 	<input
 		type="hidden"
 		name="isValidedByEvent"
-		value={memberProfile.isValidedByEvent ? '' : 'true'}
+		value="{USE_COERCE_BOOLEAN}{!memberProfile.isValidedByEvent}"
 	/>
 	<button class="menu-item w-full">
 		<Icon path={mdiCheck} size={21} class="opacity-80" />

@@ -1,19 +1,16 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import type { PageData } from './$types'
 	import { useForm } from 'fuma/validation'
 	import { rolesMap } from '$lib/member/MemberRole.svelte'
-	import { Icon } from 'fuma'
+	import { Icon, USE_COERCE_BOOLEAN } from 'fuma'
 
 	export let memberProfile: PageData['memberProfile']
-
 	$: isAdmin = memberProfile.roles.includes('admin')
-
-	const form = useForm()
+	const { enhance } = useForm()
 </script>
 
-<form action="?/set_isAdmin" method="post" use:enhance={form.submit} class="contents">
-	<input type="hidden" name="isAdmin" value={isAdmin ? '' : 'true'} />
+<form action="?/set_isAdmin" method="post" use:enhance class="contents">
+	<input type="hidden" name="isAdmin" value="{USE_COERCE_BOOLEAN}{!isAdmin}" />
 	<button class="menu-item">
 		<Icon path={rolesMap[isAdmin ? 'member' : 'admin'].icon} size={20} />
 		<span>{isAdmin ? 'Retirer' : 'Attribuer'} le rôle d'administrateur</span>

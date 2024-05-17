@@ -1,4 +1,4 @@
-import { tryOrFail, parseFormData } from 'fuma/server'
+import { tryOrFail, parseFormData, formAction } from 'fuma/server'
 import { prisma, getMemberProfile, permission, ensureLicenceMembers } from '$lib/server'
 import { z } from 'fuma/validation'
 
@@ -29,40 +29,26 @@ export const load = async ({ parent, params: { memberId, eventId } }) => {
 }
 
 export const actions = {
-	set_isAdmin: async ({ request, locals, params: { eventId, memberId } }) => {
-		await permission.owner(eventId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, { isAdmin: z.boolean() })
-
-			return prisma.member.update({
-				where: { id: memberId },
-				data: { ...data },
-			})
-		})
-	},
-	set_leader_of: async ({ request, locals, params: { eventId, memberId } }) => {
-		await permission.admin(eventId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, { leaderOf: z.relations.set })
-
-			return prisma.member.update({
-				where: { id: memberId },
-				data: { ...data },
-			})
-		})
-	},
-	set_isValidedByEvent: async ({ request, locals, params: { eventId, memberId } }) => {
-		await permission.leader(eventId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, { isValidedByEvent: z.boolean() })
-			await prisma.member.update({
-				where: { id: memberId },
-				data: { ...data },
-			})
+	set_isAdmin: formAction(
+		{ isAdmin: z.boolean() },
+		async ({ locals, params: { eventId, memberId }, data }) => {
+			await permission.owner(eventId, locals)
+			return prisma.member.update({ where: { id: memberId }, data })
+		}
+	),
+	set_leader_of: formAction(
+		{ leaderOf: z.relations.set },
+		async ({ locals, params: { eventId, memberId }, data }) => {
+			await permission.admin(eventId, locals)
+			return prisma.member.update({ where: { id: memberId }, data })
+		}
+	),
+	set_isValidedByEvent: formAction(
+		{ isValidedByEvent: z.boolean() },
+		async ({ locals, params: { eventId, memberId }, data }) => {
+			await permission.leader(eventId, locals)
+			await prisma.member.update({ where: { id: memberId }, data })
 			await ensureLicenceMembers(eventId)
-		})
-	},
+		}
+	),
 }
