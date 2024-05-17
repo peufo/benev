@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiCheck } from '@mdi/js'
+	import { mdiCancel, mdiCheck } from '@mdi/js'
 	import type { PageData } from './$types'
 	import { useForm } from 'fuma/validation'
 	import { Icon, USE_COERCE_BOOLEAN } from 'fuma'
@@ -15,7 +15,11 @@
 		value="{USE_COERCE_BOOLEAN}{!memberProfile.isValidedByEvent}"
 	/>
 	<button class="menu-item w-full">
-		<Icon path={mdiCheck} size={21} class="opacity-80" />
-		<span>{memberProfile.isValidedByEvent ? 'Invalider' : 'Valider'} la participation</span>
+		<Icon
+			path={memberProfile.isValidedByEvent ? mdiCheck : mdiCancel}
+			size={21}
+			class="opacity-80"
+		/>
+		<span>{memberProfile.isValidedByEvent ? 'Désapprouver' : 'Approuver'} la participation</span>
 	</button>
 </form>

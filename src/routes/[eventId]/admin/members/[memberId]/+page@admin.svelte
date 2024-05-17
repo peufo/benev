@@ -46,7 +46,7 @@
 						<button slot="activator" class="btn btn-sm ml-2">
 							<MemberRole roles={data.memberProfile.roles} mode="contents" />
 							{#if !data.memberProfile.roles.includes('leader') && data.memberProfile.isValidedByEvent}
-								validé
+								approuvé
 							{/if}
 						</button>
 
