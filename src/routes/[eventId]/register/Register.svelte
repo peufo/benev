@@ -139,7 +139,7 @@
 			<AvatarForm {user} on:success={onSucces} />
 			<AccountForm {user} on:success={onSucces} />
 		{:else if stepIndex === 3 && member}
-			<MemberProfileForm writeOnly {member} on:success={onSucces} />
+			<MemberProfileForm {member} on:success={onSucces} />
 		{/if}
 	</div>
 </Card>

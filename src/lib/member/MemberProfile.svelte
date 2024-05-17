@@ -3,15 +3,10 @@
 	import { page } from '$app/stores'
 	import { mdiCheck, mdiClose, mdiPencilOutline } from '@mdi/js'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
-	import { CardBasic, Icon, Placeholder } from 'fuma'
+	import { CardBasic, Drawer, Icon, Placeholder, urlParam } from 'fuma'
 	import { fade } from 'svelte/transition'
 
 	export let member: MemberProfile
-	export let readOnly = true
-	export let writeOnly = false
-	export let successUpdate = true
-	export let classForm = ''
-
 	export let title = 'Profil'
 	export let hideStatus = false
 
@@ -30,30 +25,18 @@
 		<MemberProfileStatus {member} />
 	{/if}
 	{#if $page.data.member?.roles.includes('leader') || member.event.memberFields.filter((f) => f.memberCanWrite).length}
-		<button
-			type="button"
+		<a
+			href={$urlParam.with({ form_member_profile: 1 })}
+			data-sveltekit-replacestate
+			data-sveltekit-noscroll
 			class="ml-auto btn btn-square btn-sm"
-			on:click={() => (readOnly = !readOnly)}
 		>
-			<Icon
-				path={readOnly ? mdiPencilOutline : mdiClose}
-				title="{readOnly ? 'Modifier' : 'Voire'} le profil"
-			/>
-		</button>
+			<Icon path={mdiPencilOutline} title="Modifier le profil de {member.user.firstName}" />
+		</a>
 	{/if}
 </div>
 
-{#if !readOnly}
-	<div in:fade>
-		<MemberProfileForm
-			{member}
-			class={classForm}
-			{writeOnly}
-			{successUpdate}
-			on:success={() => (readOnly = true)}
-		/>
-	</div>
-{:else if !profile.length}
+{#if !profile.length}
 	<Placeholder>Profil vide</Placeholder>
 {:else}
 	<div
@@ -86,3 +69,12 @@
 		{/each}
 	</div>
 {/if}
+
+<Drawer
+	title="Modifier le profil de {member.user.firstName}"
+	key="form_member_profile"
+	classBody="pt-4"
+	let:close
+>
+	<MemberProfileForm {member} on:success={() => close()} />
+</Drawer>
