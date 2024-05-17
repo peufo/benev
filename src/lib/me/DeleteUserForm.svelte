@@ -14,6 +14,6 @@
 		<p>Es-tu certain de vouloir supprimer ton compte ?</p>
 		<p>Attention, cette opération est <b>irréversibles</b> !</p>
 
-		<button slot="action" formaction="/me?/delete_user" class="btn btn-sm">Je confirme</button>
+		<button slot="action" formaction="/me?/delete_user" class="btn btn-error">Je confirme</button>
 	</DialogConfirm>
 </form>

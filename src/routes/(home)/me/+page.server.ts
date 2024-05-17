@@ -83,7 +83,7 @@ export const actions = {
 			})
 		})
 	},
-	update_account: async ({ locals, request }) => {
+	account_update: async ({ locals, request }) => {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
 

@@ -116,10 +116,6 @@ export const actions = {
 }
 
 async function uploadImages(formData: FormData, eventId: string, authorId: string) {
-	const image = formData.get('poster_image')
-	const crop = formData.get('poster_crop')
-	console.log({ image, crop })
-
 	await media.upload(formData, {
 		key: 'poster',
 		where: { posterOf: { id: eventId } },

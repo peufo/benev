@@ -46,7 +46,7 @@
 
 <form
 	method="post"
-	action="/me?/update_account"
+	action="/me?/account_update"
 	use:enhance={formProfile.submit}
 	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4"
 >
@@ -110,6 +110,6 @@
 	</div>
 
 	<div class="flex gap-1 items-center justify-end col-span-full">
-		<button class="btn">Sauvegarder </button>
+		<button class="btn btn-primary">Sauvegarder </button>
 	</div>
 </form>

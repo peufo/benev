@@ -3,6 +3,8 @@
 		mdiArchiveOutline,
 		mdiArrowLeft,
 		mdiEmailOutline,
+		mdiFacebook,
+		mdiInstagram,
 		mdiMapMarkerOutline,
 		mdiPhoneOutline,
 		mdiTestTube,
@@ -17,6 +19,7 @@
 	import InviteForm from '$lib/InviteForm.svelte'
 	import { TeamForm, type TeamFormInstance } from '$lib/team'
 	import { MemberFieldForm } from '$lib/member'
+	import FooterLink from './FooterLink.svelte'
 
 	export let data
 
@@ -109,8 +112,8 @@
 
 <Footer>
 	<div class="flex flex-wrap justify-center">
-		{#if data.event.web}
-			<a class="btn btn-sm sm:btn-md btn-ghost flex" href={data.event.web} target="_blank">
+		<FooterLink link={data.event.web}>
+			<svelte:fragment slot="icon">
 				{#if data.event.icon}
 					<img
 						class="inline-block w-5 mx-1"
@@ -120,38 +123,26 @@
 				{:else}
 					<Icon path={mdiWeb} />
 				{/if}
-				{data.event.web.replace(/^http(s)?:\/\/(www\.)?/, '').replace(/\/$/, '')}
-			</a>
-		{/if}
+			</svelte:fragment>
+		</FooterLink>
 
-		{#if data.event.email}
-			<a
-				class="btn btn-sm sm:btn-md btn-ghost flex"
-				href="mailto:{data.event.email}"
-				target="_blank"
-			>
-				<Icon path={mdiEmailOutline} />
-				{data.event.email}
-			</a>
-		{/if}
+		<FooterLink link={data.event.facebook} icon={mdiFacebook} let:label>
+			{label.replace(/^facebook.com\//, '')}
+		</FooterLink>
+		<FooterLink link={data.event.instagram} icon={mdiInstagram} let:label>
+			{label.replace(/^instagram.com\//, '')}
+		</FooterLink>
 
-		{#if data.event.phone}
-			<a class="btn btn-sm sm:btn-md btn-ghost flex" href="tel:{data.event.phone}" target="_blank">
-				<Icon path={mdiPhoneOutline} />
-				{data.event.phone}
-			</a>
-		{/if}
+		<FooterLink link={data.event.email} protocol="mailto:" icon={mdiEmailOutline} />
+		<FooterLink link={data.event.phone} protocol="tel:" icon={mdiPhoneOutline} />
 
-		{#if data.event.address}
-			<a
-				class="btn btn-sm sm:btn-md btn-ghost flex"
-				href="https://www.google.com/maps/place/{data.event.address}"
-				target="_blank"
-			>
-				<Icon path={mdiMapMarkerOutline} />
-				{data.event.address}
-			</a>
-		{/if}
+		<FooterLink
+			link={data.event.address}
+			protocol="https://www.google.com/maps/place/"
+			icon={mdiMapMarkerOutline}
+		>
+			{data.event.address}
+		</FooterLink>
 	</div>
 </Footer>
 
