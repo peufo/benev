@@ -87,8 +87,8 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2
       fuma:
-        specifier: ^0.3.32
-        version: 0.3.32(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2)
+        specifier: ^0.3.33
+        version: 0.3.33(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2)
       happy-dom:
         specifier: ^13.6.2
         version: 13.6.2
@@ -1903,8 +1903,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  fuma@0.3.32:
-    resolution: {integrity: sha512-3+7oPzAwlbsoMHmUw3eZjAbjnVXZzQ2px0dkHJzxDU68AOlBRR759t8OJQqAP+1+WQ4kQ+46RkXWeCdGVpe1zw==}
+  fuma@0.3.33:
+    resolution: {integrity: sha512-tfo3erQs8qRiPnatGbBj8XnwTSzBbS18cmSsNL9SKhVpQTVTsaw6G5AUd1ju1UUONGBYn+Dt2lZU7uw3RZD+IA==}
     peerDependencies:
       '@sveltejs/kit': ^2.5.6
       svelte: ^4.0.0
@@ -4699,7 +4699,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  fuma@0.3.32(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2):
+  fuma@0.3.33(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2):
     dependencies:
       '@lucia-auth/adapter-prisma': 4.0.1(@prisma/client@5.13.0(prisma@5.13.0))(lucia@3.2.0)
       '@mdi/js': 7.4.47

@@ -15,7 +15,7 @@
 	const formProfile = useForm({
 		successReset,
 		successUpdate,
-		successMessage: 'Profile sauvegardé',
+		successMessage: 'Profil sauvegardé',
 		onSuccess() {
 			dispatch('success')
 		},

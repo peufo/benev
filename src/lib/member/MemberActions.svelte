@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { mdiEmailOutline, mdiPhone, mdiClipboardTextOutline } from '@mdi/js'
-	import { Icon } from 'fuma'
+	import { mdiEmailOutline, mdiPhone, mdiClipboardTextOutline, mdiPencilOutline } from '@mdi/js'
+	import { Icon, urlParam } from 'fuma'
 	import type { Member } from '@prisma/client'
 
 	export let member: Member & {
@@ -22,6 +22,7 @@
 				size={18}
 				title="Téléphoner à {member.user.firstName} [{member.user.phone}]"
 				tippyProps={{ appendTo: 'parent' }}
+				class="fill-base-content/60"
 			/>
 		</a>
 	{/if}
@@ -36,6 +37,7 @@
 			size={18}
 			title="Envoyer un mail à {member.user.firstName} [{member.user.email}]"
 			tippyProps={{ appendTo: 'parent' }}
+			class="fill-base-content/60"
 		/>
 	</a>
 	{#if onSubscribeDialog}
@@ -44,7 +46,17 @@
 				path={mdiClipboardTextOutline}
 				size={20}
 				title="Inscrire {member.user.firstName} à un secteur"
+				class="fill-base-content/60"
 			/>
 		</button>
 	{/if}
+
+	<a
+		href={$urlParam.with({ form_member_profile: member.id })}
+		class="btn btn-sm btn-square btn-ghost"
+		data-sveltekit-replacestate
+		data-sveltekit-noscroll
+	>
+		<Icon path={mdiPencilOutline} title="Modifier le profil" class="fill-base-content/60" />
+	</a>
 </div>

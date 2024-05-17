@@ -6,6 +6,7 @@
 	import { eventPath } from '$lib/store'
 	import MemberField from './MemberField.svelte'
 	import type { MemberProfile } from '$lib/server'
+	import { Form } from 'fuma'
 
 	let klass = ''
 	export { klass as class }
@@ -23,11 +24,11 @@
 </script>
 
 <div class="@container">
-	<form
-		method="post"
-		action="{$eventPath}/me?/update_member_profile"
-		use:enhance={form.submit}
+	<Form
+		action="{$eventPath}/me?/member_profile"
+		actionCreate="_update"
 		class="grid grid-cols-3 @lg:grid-cols-6 @2xl:grid-cols-12 gap-4 {klass}"
+		on:success
 	>
 		<input type="hidden" name="memberId" value={member.id} />
 
@@ -35,9 +36,5 @@
 			{@const value = member.profileJson[field.id] || ''}
 			<MemberField {field} {value} class="col-span-3" />
 		{/each}
-
-		<div class="flex flex-row-reverse col-span-full">
-			<button class="btn"> Sauvegarder </button>
-		</div>
-	</form>
+	</Form>
 </div>

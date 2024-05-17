@@ -12,7 +12,7 @@
 	export let successUpdate = true
 	export let classForm = ''
 
-	export let title = 'Profile'
+	export let title = 'Profil'
 	export let hideStatus = false
 
 	$: profile = member.event.memberFields
@@ -37,7 +37,7 @@
 		>
 			<Icon
 				path={readOnly ? mdiPencilOutline : mdiClose}
-				title="{readOnly ? 'Modifier' : 'Voire'} le profile"
+				title="{readOnly ? 'Modifier' : 'Voire'} le profil"
 			/>
 		</button>
 	{/if}

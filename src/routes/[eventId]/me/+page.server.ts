@@ -36,7 +36,7 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 }
 
 export const actions = {
-	update_member_profile: async ({ locals, request, params: { eventId } }) => {
+	member_profile_update: async ({ locals, request, params: { eventId } }) => {
 		const member = await permission.member(eventId, locals)
 		const isLeader = member.roles.includes('leader')
 

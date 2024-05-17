@@ -16,6 +16,7 @@
 	import { eventPath } from '$lib/store'
 	import { globalEvents } from '$lib/globalEvents'
 	import { page } from '$app/stores'
+	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 
 	export let data
 
@@ -120,4 +121,15 @@
 
 <Drawer title="Résumé des membres" key="members_stats" class="xl:hidden" classBody="p-4 pb-10">
 	<MembersStats {data} />
+</Drawer>
+
+<Drawer
+	title="Modifier le profil de {data.memberProfile?.user.firstName}"
+	key="form_member_profile"
+	let:close
+	classBody="pt-4"
+>
+	{#if data.memberProfile}
+		<MemberProfileForm member={data.memberProfile} on:success={() => close()} />
+	{/if}
 </Drawer>
