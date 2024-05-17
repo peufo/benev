@@ -11,6 +11,8 @@ export const modelEventCreate = {
 	description: z.string().optional(),
 	icon: z.string().optional(),
 	web: z.string().url().optional().or(z.string().max(0)),
+	facebook: z.string().url().optional().or(z.string().max(0)),
+	instagram: z.string().url().optional().or(z.string().max(0)),
 	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
 	address: z.string().optional(),

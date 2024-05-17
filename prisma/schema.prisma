@@ -130,11 +130,13 @@ model Event {
   description String?
   icon        String?
 
-  web      String?
-  email    String?
-  phone    String?
-  address  String?
-  timezone Int     @default(-120)
+  email     String?
+  phone     String?
+  address   String?
+  timezone  Int     @default(-120)
+  web       String?
+  facebook  String?
+  instagram String?
 
   logoId   String? @unique
   logo     Media?  @relation(name: "logo", fields: [logoId], references: [id], onDelete: SetNull)

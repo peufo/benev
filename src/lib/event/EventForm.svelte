@@ -97,6 +97,10 @@
 
 	<input type="hidden" name="web" value={webValue} />
 
+	<InputText key="email" label="Email de contact" value={event?.email || ''} />
+	<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
+	<InputText key="address" label="Lieu" value={event?.address || ''} />
+
 	<InputText
 		label="Site web"
 		value={event?.web || ''}
@@ -116,12 +120,10 @@
 			{/if}
 		</div>
 	</InputText>
-
 	<input type="hidden" name="icon" value={icon} />
 
-	<InputText key="email" label="Email de contact" value={event?.email || ''} />
-	<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
-	<InputText key="address" label="Lieu" value={event?.address || ''} />
+	<InputText key="facebook" label="Page Facebook" value={event?.facebook || ''} />
+	<InputText key="instagram" label="Page Instagram" value={event?.instagram || ''} />
 
 	<svelte:fragment slot="delete">
 		<EventDeleteButton {event} />
