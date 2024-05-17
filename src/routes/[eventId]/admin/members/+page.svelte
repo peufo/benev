@@ -130,6 +130,6 @@
 	classBody="pt-4"
 >
 	{#if data.memberProfile}
-		<MemberProfileForm member={data.memberProfile} on:success={() => close()} />
+		<MemberProfileForm memberProfile={data.memberProfile} on:success={() => close()} />
 	{/if}
 </Drawer>

@@ -48,5 +48,5 @@ export const modelTeam = {
 export const modelTeamUpdate = {
 	...modelTeam,
 	id: z.string(),
-	leaders: z.relations.set,
+	leaders: z.optional(z.relations.set),
 } satisfies ZodObj<TeamShemaUpdate>

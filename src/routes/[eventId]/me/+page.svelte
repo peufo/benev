@@ -1,14 +1,10 @@
 <script lang="ts">
 	import { mdiMapMarkerRadiusOutline } from '@mdi/js'
-
-	import { eventPath } from '$lib/store'
 	import { Card, Icon } from 'fuma'
+	import { eventPath } from '$lib/store'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
-
 	import { Teams, TeamsActions } from '$lib/team'
 	import { MemberDeleteForm, MemberProfile } from '$lib/member'
-	import { EventPubliqueMenuItems } from '$lib/event'
-	import { adminTabs } from '../../../lib/layout/adminTabs'
 	import { EVENT_STATES } from '$lib/constant'
 
 	export let data

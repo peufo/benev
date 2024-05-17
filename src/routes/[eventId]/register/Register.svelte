@@ -18,8 +18,6 @@
 	export let member: MemberProfile | undefined
 	export let charter: Page | null
 
-	console.log(member)
-
 	const steps = ['Connexion', 'Adhésion', 'Mon compte']
 	const isMemberProfileRequired = !!event.memberFields.filter((f) => f.memberCanWrite).length
 	if (isMemberProfileRequired) steps.push(`Profil ${event.name}`)
@@ -139,7 +137,7 @@
 			<AvatarForm {user} on:success={onSucces} />
 			<AccountForm {user} on:success={onSucces} />
 		{:else if stepIndex === 3 && member}
-			<MemberProfileForm {member} on:success={onSucces} />
+			<MemberProfileForm memberProfile={member} on:success={onSucces} />
 		{/if}
 	</div>
 </Card>

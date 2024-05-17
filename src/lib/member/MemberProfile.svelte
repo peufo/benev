@@ -10,12 +10,10 @@
 	export let title = 'Profil'
 	export let hideStatus = false
 
-	$: profile = member.event.memberFields
-		.map((field) => ({
-			field,
-			value: member.profileJson[field.id],
-		}))
-		.filter((p) => p.value !== undefined)
+	$: profile = member.event.memberFields.map((field) => ({
+		field,
+		value: member.profileJson[field.id],
+	}))
 </script>
 
 <div class="flex gap-2 items-center mb-4">
@@ -76,5 +74,5 @@
 	classBody="pt-4"
 	let:close
 >
-	<MemberProfileForm {member} on:success={() => close()} />
+	<MemberProfileForm memberProfile={member} on:success={() => close()} />
 </Drawer>

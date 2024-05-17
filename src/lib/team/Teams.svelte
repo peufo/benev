@@ -12,6 +12,7 @@
 	import { formatRange, formatRangeShort } from '$lib/formatRange'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
+	import { derived } from 'svelte/store'
 
 	export let teams: (TeamWithComputedValues & {
 		leaders: (Member & {
@@ -26,6 +27,12 @@
 	$: _teams = teams.filter((team) => {
 		if (!$onlyAvailable || showAll) return true
 		return team.isAvailable
+	})
+
+	const canEditTeam = derived(page, ({ data: { member } }) => {
+		if (!member) return () => false
+		const leaderOf = member.leaderOf.map((t) => t.id)
+		return (teamId: string) => member.roles.includes('admin') || leaderOf.includes(teamId)
 	})
 </script>
 
@@ -145,7 +152,7 @@
 								}}
 							/>
 						</td>
-						{#if $page.data.member?.roles.includes('admin')}
+						{#if $canEditTeam(team.id)}
 							<td align="right">
 								<a
 									href={$urlParam.with({ form_team: team.id })}

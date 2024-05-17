@@ -6,9 +6,7 @@
 
 	let klass = ''
 	export { klass as class }
-	export let member: MemberProfile
-
-	$: memberIsLeader = member.roles.includes('leader')
+	export let memberProfile: MemberProfile
 </script>
 
 <div class="@container">
@@ -18,10 +16,10 @@
 		class="grid grid-cols-3 @lg:grid-cols-6 @2xl:grid-cols-12 gap-4 {klass}"
 		on:success
 	>
-		<input type="hidden" name="memberId" value={member.id} />
+		<input type="hidden" name="memberId" value={memberProfile.id} />
 
-		{#each member.event.memberFields.filter((f) => memberIsLeader || f.memberCanWrite) as field (field.id)}
-			{@const value = member.profileJson[field.id] || ''}
+		{#each memberProfile.event.memberFields as field (field.id)}
+			{@const value = memberProfile.profileJson[field.id] || ''}
 			<MemberField {field} {value} class="col-span-3" />
 		{/each}
 	</Form>
