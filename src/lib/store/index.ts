@@ -2,6 +2,7 @@ import { derived } from 'svelte/store'
 import { page } from '$app/stores'
 
 export * from './isMobile'
+
 export const eventPath = derived(page, ({ params }) => (params.eventId ? `/${params.eventId}` : ''))
 export const display = derived(page, ({ url }) =>
 	url.searchParams.get('display') === 'list' ? 'list' : 'table'

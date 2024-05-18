@@ -3,6 +3,8 @@
 	import logo from '$lib/assets/logo.png'
 	import { MetaTags, JsonLd } from 'svelte-meta-tags'
 	import '../app.css'
+	import { rootStyle } from './[eventId]/admin/theme/store'
+	
 </script>
 
 <svelte:head>
@@ -34,8 +36,9 @@
 		url: 'https://benev.io',
 	}}
 />
+
 <Toaster />
 
-<div class="flex min-h-screen flex-col bg-base-200/20">
+<div class="flex min-h-screen flex-col bg-base-200/20" style={$rootStyle}>
 	<slot />
 </div>

@@ -11,8 +11,8 @@
 
 <div class="@container">
 	<Form
-		action="{$eventPath}/me?/member_profile"
-		actionCreate="_update"
+		action="{$eventPath}/me?/member_profile_update"
+		simpleAction
 		class="grid grid-cols-3 @lg:grid-cols-6 @2xl:grid-cols-12 gap-4 {klass}"
 		on:success
 	>

@@ -37,3 +37,22 @@ export const modelEventMemberSettings = {
 	userBirthdayRequired: z.boolean(),
 	userAvatarRequired: z.boolean(),
 } satisfies ZodObj<EventUpdateInput>
+
+export type EventTheme = Pick<
+	EventCreateInput,
+	| 'backgroundBlur'
+	| 'backgroundBrightness'
+	| 'backgroundColor'
+	| 'backgroundPoster'
+	| 'backgroundWhiteness'
+	| 'cardOpacity'
+>
+
+export const modelEventTheme = {
+	backgroundColor: z.string().optional(),
+	backgroundBlur: z.number().optional(),
+	backgroundBrightness: z.number().optional(),
+	backgroundPoster: z.boolean().optional(),
+	backgroundWhiteness: z.number().optional(),
+	cardOpacity: z.number().optional(),
+} satisfies ZodObj<EventTheme>

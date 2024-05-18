@@ -15,11 +15,11 @@
 	import { eventPath } from '$lib/store'
 	import { Header, Footer, AdminNavigation } from '$lib/layout'
 	import EventMenu from './EventMenu.svelte'
-	import Poster from './Poster.svelte'
 	import InviteForm from '$lib/InviteForm.svelte'
 	import { TeamForm, type TeamFormInstance } from '$lib/team'
 	import { MemberFieldForm } from '$lib/member'
 	import FooterLink from './FooterLink.svelte'
+	import EventTheme from './admin/theme/EventTheme.svelte'
 
 	export let data
 
@@ -33,7 +33,7 @@
 	<title>Benev.io - {data.event.name}</title>
 </svelte:head>
 
-<Poster posterId={data.event.posterId} />
+<EventTheme event={data.event} />
 
 <Header user={data.user}>
 	<a

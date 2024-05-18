@@ -8,6 +8,7 @@ import {
 	mdiCalendarStar,
 	mdiLogin,
 	mdiGiftOutline,
+	mdiPaletteOutline,
 } from '@mdi/js'
 
 import { dev } from '$app/environment'
@@ -54,7 +55,11 @@ export const adminTabs = derived(param, ({ without, page }) => {
 			label: 'Adhésion',
 			icon: mdiLogin,
 		},
-
+		{
+			...getPath('/admin/theme'),
+			label: 'Thème',
+			icon: mdiPaletteOutline,
+		},
 		{
 			...getPath('/admin/pages'),
 			label: 'Publications',
