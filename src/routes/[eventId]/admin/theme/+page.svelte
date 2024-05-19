@@ -41,12 +41,12 @@
 					max="1"
 					step="0.02"
 					bind:value={$theme.cardOpacity}
-					class="range range-primary"
+					class="range range-primary range-sm"
 				/>
 			</FormControl>
 
 			{#if $theme.backgroundPoster}
-				<div transition:slide>
+				<div transition:slide class="flex flex-col gap-4">
 					<FormControl key="backgroundBlur" let:key label="Flou du fond" class="grow">
 						<input type="hidden" name={key} value="{USE_COERCE_NUMBER}{$theme.backgroundBlur}" />
 						<input
@@ -55,7 +55,7 @@
 							min="0"
 							max="200"
 							bind:value={$theme.backgroundBlur}
-							class="range range-primary"
+							class="range range-primary range-sm"
 						/>
 					</FormControl>
 
@@ -71,7 +71,7 @@
 							min="0"
 							max="300"
 							bind:value={$theme.backgroundBrightness}
-							class="range range-primary"
+							class="range range-primary range-sm"
 						/>
 					</FormControl>
 
@@ -93,7 +93,7 @@
 							max="1"
 							step="0.02"
 							bind:value={$theme.backgroundWhiteness}
-							class="range range-primary"
+							class="range range-primary range-sm"
 						/>
 					</FormControl>
 				</div>

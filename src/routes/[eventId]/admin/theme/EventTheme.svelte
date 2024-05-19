@@ -3,7 +3,7 @@
 	import { theme } from './store'
 
 	export let event: Event
-	// theme.set(event)
+	theme.set(event)
 	$: theme.set(event)
 </script>
 
