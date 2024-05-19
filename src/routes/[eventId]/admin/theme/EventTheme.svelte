@@ -1,15 +1,10 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { onDestroy } from 'svelte'
-	import { theme, rootStyle } from './store'
+	import { theme } from './store'
 
 	export let event: Event
-
-	$: rootStyle.set(`--card-opacity: ${$theme.cardOpacity};`)
+	// theme.set(event)
 	$: theme.set(event)
-	onDestroy(() => {
-		rootStyle.set('')
-	})
 </script>
 
 <div
