@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import dayjs, { type Dayjs } from 'dayjs'
-	import { tip } from 'fuma'
 	import 'dayjs/locale/fr-ch'
+	import { tip, ContextMenu, Icon, urlParam } from 'fuma'
 	import type { Period, Subscribe, Team } from '@prisma/client'
 	import { mdiPlus } from '@mdi/js'
-	import { page } from '$app/stores'
+
 	import PeriodCard from '$lib/plan/PeriodCard.svelte'
 	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
-	import { ContextMenu, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import PeriodForm from '$lib/PeriodForm.svelte'
 	import { newPeriod } from './newPeriod'
@@ -154,10 +153,7 @@
 			</div>
 		{/each}
 
-		<a
-			class="btn btn-sm z-50 sticky top-0"
-			href="{$eventPath}/teams/create?redirectTo={$page.url.pathname}"
-		>
+		<a class="btn btn-sm z-50 sticky top-0" href={$urlParam.with({ form_team: 1 })}>
 			<Icon path={mdiPlus} title="Nouveau secteur" />
 			<span>Ajouter</span>
 		</a>
