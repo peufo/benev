@@ -18,16 +18,19 @@ export const transporter = nodemailer.createTransport({
 	},
 })
 
+let transporterOK = false
 transporter.verify((err: unknown) => {
 	if (err) {
 		console.log('Mail config error')
 		console.error(err)
 	} else {
+		transporterOK = true
 		console.log('Mail config is ready')
 	}
 })
 
 export const sendEmail = async ({ from, ...options }: SendMailOptions) => {
+	if (!transporterOK) return
 	return new Promise((resolve) => {
 		transporter.sendMail(
 			{
