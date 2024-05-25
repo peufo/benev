@@ -3,7 +3,7 @@
 
 	import { modelInvite } from '$lib/models'
 	import { eventPath } from '$lib/store'
-	import { Form, type UseFormOptions } from 'fuma'
+	import { Form } from 'fuma'
 	import type { ComponentType } from 'svelte'
 
 	type MemberWithUser = Member & { user: User }
