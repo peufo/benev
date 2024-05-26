@@ -10,8 +10,9 @@ export const modelPeriodCreate = {
 } satisfies ZodObj<PeriodCreateForm>
 
 export const modelPeriodUpdate = {
-	id: z.string(),
 	...modelPeriodCreate,
+	id: z.string(),
+	maxSubscribe: z.number().min(1).optional(),
 }
 
 export const validationPeriod: SuperRefinement<{ start: Date; end: Date }> = (
