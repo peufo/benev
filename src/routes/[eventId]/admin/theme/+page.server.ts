@@ -4,7 +4,7 @@ import { formAction } from 'fuma/server'
 
 export const actions = {
 	theme_update: formAction(modelEventTheme, async ({ locals, params: { eventId }, data }) => {
-		await permission.owner(eventId, locals)
+		await permission.admin(eventId, locals)
 		return prisma.event.update({ where: { id: eventId }, data })
 	}),
 }
