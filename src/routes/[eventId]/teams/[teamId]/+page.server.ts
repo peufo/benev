@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { tryOrFail, parseFormData } from 'fuma/server'
+import { formAction } from 'fuma/server'
 import { z } from 'fuma'
 
 import { prisma, permission, getTeam } from '$lib/server'
@@ -20,45 +20,47 @@ export const load = async ({ locals, parent, params: { teamId } }) => {
 }
 
 export const actions = {
-	period_create: async ({ request, locals, params: { teamId } }) => {
-		await permission.leaderOfTeam(teamId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, modelPeriodCreate, validationPeriod)
-
+	period_create: formAction(
+		modelPeriodCreate,
+		async ({ data, locals, params: { teamId } }) => {
+			await permission.leaderOfTeam(teamId, locals)
 			return prisma.period.create({
 				data: {
 					...data,
 					teamId,
 				},
 			})
-		})
-	},
-	period_update: async ({ request, locals, params: { teamId } }) => {
-		await permission.leaderOfTeam(teamId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, modelPeriodUpdate, validationPeriod)
-
+		},
+		{
+			validation: validationPeriod,
+		}
+	),
+	period_update: formAction(
+		modelPeriodUpdate,
+		async ({ data, locals, params: { teamId } }) => {
+			await permission.leaderOfTeam(teamId, locals)
 			return prisma.period.update({
 				where: { id: data.id, teamId },
 				data,
 			})
-		})
-	},
-	period_delete: async ({ locals, request, params: { eventId, teamId } }) => {
-		await permission.leaderOfTeam(teamId, locals)
-
-		return tryOrFail(
-			async () => {
-				const { data } = await parseFormData(request, {
-					disableRedirect: z.filter.boolean,
-					id: z.string(),
-				})
-				await prisma.period.delete({ where: { id: data.id } })
-				return data
-			},
-			(data) => (data.disableRedirect ? undefined : `/${eventId}/teams/${teamId}`)
-		)
-	},
+		},
+		{
+			validation: validationPeriod,
+		}
+	),
+	period_delete: formAction(
+		{
+			disableRedirect: z.filter.boolean,
+			id: z.string(),
+		},
+		async ({ data, locals, request, params: { eventId, teamId } }) => {
+			await permission.leaderOfTeam(teamId, locals)
+			await prisma.period.delete({ where: { id: data.id } })
+			const redirectTo = data.disableRedirect ? '' : `/${eventId}/teams/${teamId}`
+			return redirectTo
+		},
+		{
+			redirectTo: (url) => url,
+		}
+	),
 }

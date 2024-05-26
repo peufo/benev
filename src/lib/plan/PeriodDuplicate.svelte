@@ -2,9 +2,9 @@
 	import { mdiContentDuplicate } from '@mdi/js'
 	import type { Period } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
-	import { Icon } from 'fuma'
-	import { eventPath } from '$lib/store'
 	import axios from 'axios'
+	import { Icon, USE_COERCE_DATE, USE_COERCE_NUMBER } from 'fuma'
+	import { eventPath } from '$lib/store'
 	import { createEventDispatcher } from 'svelte'
 
 	export let period: Period
@@ -23,10 +23,9 @@
 		const { start, end } = period
 		const duration = end.getTime() - start.getTime()
 		const form = new FormData()
-		form.append('id', period.id)
-		form.append('maxSubscribe', String(period.maxSubscribe))
-		form.append('start', end.toUTCString())
-		form.append('end', new Date(end.getTime() + duration).toUTCString())
+		form.append('maxSubscribe', USE_COERCE_NUMBER + period.maxSubscribe)
+		form.append('start', USE_COERCE_DATE + end.toUTCString())
+		form.append('end', USE_COERCE_DATE + new Date(end.getTime() + duration).toUTCString())
 		await axios.postForm(`${$eventPath}/teams/${period.teamId}?/period_create`, form)
 		await invalidateAll()
 	}

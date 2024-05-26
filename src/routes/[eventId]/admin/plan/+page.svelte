@@ -64,7 +64,7 @@
 </script>
 
 <Card>
-	<div class="bg-base-100" bind:this={wrapper} class:pl-4={isFullscreen} class:pt-4={isFullscreen}>
+	<div bind:this={wrapper} class:pl-4={isFullscreen} class:pt-4={isFullscreen}>
 		<div class="flex gap-3 mb-3" class:pr-4={isFullscreen}>
 			<h2 class="title">Planification</h2>
 

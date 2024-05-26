@@ -68,7 +68,7 @@
 	bind:this={scrollContainer}
 	class="
 		{klass}
-		max-w[100hw] bg-base-100
+		max-w[100hw] bg-base-100 rounded
 		overflow-auto table-pin-cols bordered
 		snap-x scroll-pl-16 scroll-p-20
 	"
