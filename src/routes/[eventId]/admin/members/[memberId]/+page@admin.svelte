@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropDown, Icon } from 'fuma'
+	import { DropDown, Icon, Card } from 'fuma'
 
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft, mdiClipboardTextOutline, mdiTrashCanOutline } from '@mdi/js'
@@ -18,7 +18,6 @@
 		MemberDeleteForm,
 		MemberCreateSubscribeDialog,
 	} from '$lib/member'
-	import Card from '$lib/material/Card.svelte'
 
 	export let data
 

@@ -1,11 +1,9 @@
 <script lang="ts">
 	import type { Gift, GiftCondition } from '@prisma/client'
 	import { mdiAccountGroupOutline } from '@mdi/js'
-
-	import { Icon } from 'fuma'
-
 	import { slide } from 'svelte/transition'
-	import Dialog from '$lib/material/Dialog.svelte'
+	import { Icon, Dialog } from 'fuma'
+
 	import GiftForm from './GiftForm.svelte'
 
 	type GiftWithConditions = Gift & { conditions: GiftCondition[] }

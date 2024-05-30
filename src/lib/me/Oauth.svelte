@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { mdiGithub } from '@mdi/js'
-	import { tip } from 'fuma'
+	import { tip, Icon } from 'fuma'
 	import googleLogo from '$lib/assets/google.svg'
-	import { Icon } from '$lib/material'
 </script>
 
 <div class="flex p-4 gap-4 justify-center">

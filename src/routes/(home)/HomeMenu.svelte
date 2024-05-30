@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { mdiMenu } from '@mdi/js'
-	import { Icon } from 'fuma'
-	import DropDown from '$lib/material/DropDown.svelte'
+	import { Icon, DropDown } from 'fuma'
 	import HomeMenuItems from './HomeMenuItems.svelte'
 </script>
 

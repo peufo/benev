@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { Icon } from 'fuma'
 	import { mdiAlertBoxOutline } from '@mdi/js'
-	import { Icon } from './material'
 </script>
 
 <div class="bg-base-300/50 p-4 rounded-box opacity-60">

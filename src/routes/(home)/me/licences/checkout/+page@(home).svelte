@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte'
 	import { loadStripe } from '@stripe/stripe-js'
 	import { PUBLIC_STRIPE_KEY } from '$env/static/public'
-	import Card from '$lib/material/Card.svelte'
+	import { Card } from 'fuma'
 
 	export let data
 

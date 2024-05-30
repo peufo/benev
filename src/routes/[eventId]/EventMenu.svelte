@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { Page } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { Icon } from 'fuma'
+	import { Icon, DropDown } from 'fuma'
 	import { mdiMenu } from '@mdi/js'
-	import DropDown from '$lib/material/DropDown.svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from '$lib/layout/adminTabs'
 
