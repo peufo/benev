@@ -1,9 +1,7 @@
 <script lang="ts">
 	import {
-		mdiClipboardTextOutline,
 		mdiAccountMultipleOutline,
 		mdiChartGantt,
-		mdiChevronRight,
 		mdiClipboardTextMultipleOutline,
 		mdiClockTimeFourOutline,
 		mdiPencilOutline,
@@ -17,13 +15,11 @@
 
 	import { ToggleOnlyAvailable } from '$lib/material/display'
 	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
-	import { formatRange } from '$lib/formatRange'
-	import { SubscribeForm, SubscribeStateForm, SubscribesOfPeriod } from '$lib/subscribe'
+	import { SubscribeForm } from '$lib/subscribe'
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Leaders from '$lib/Leaders.svelte'
-	import Progress from '$lib/Progress.svelte'
-	import { slide } from 'svelte/transition'
-	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
+
+	import PeriodEditMenu from '$lib/period/PeriodEditMenu.svelte'
 	import { page } from '$app/stores'
 	import RowPeriod from './RowPeriod.svelte'
 	import type { PageData } from './$types.js'
@@ -137,7 +133,7 @@
 				<Icon path={mdiChartGantt} title="Voir le planning du secteur" />
 			</a>
 
-			<a href={$urlParam.with({form_team: data.team.id})} class="btn btn-square btn-sm">
+			<a href={$urlParam.with({ form_team: data.team.id })} class="btn btn-square btn-sm">
 				<Icon path={mdiPencilOutline} title="Éditer ce secteur" />
 			</a>
 

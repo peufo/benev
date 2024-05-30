@@ -1,15 +1,16 @@
 <script lang="ts">
-	import type { PageData } from './$types'
-	import { page } from '$app/stores'
-	import { Icon, formatRange, urlParam } from 'fuma'
-	import { onlyAvailable } from '$lib/store'
+	import { slide } from 'svelte/transition'
 	import { createEventDispatcher } from 'svelte'
+	import { Icon, formatRange, urlParam } from 'fuma'
+	import { mdiClipboardTextOutline } from '@mdi/js'
+	import { goto } from '$app/navigation'
+	import { page } from '$app/stores'
+	import type { PageData } from './$types'
+
+	import { onlyAvailable } from '$lib/store'
 	import { SubscribeInviteForm, SubscribeStateForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import Progress from '$lib/Progress.svelte'
-	import { goto } from '$app/navigation'
-	import { mdiClipboardTextOutline } from '@mdi/js'
-	import { slide } from 'svelte/transition'
-	import PeriodEditMenu from '$lib/PeriodEditMenu.svelte'
+	import PeriodEditMenu from '$lib/period/PeriodEditMenu.svelte'
 	type P = PageData['team']['periods'][number]
 
 	export let period: P

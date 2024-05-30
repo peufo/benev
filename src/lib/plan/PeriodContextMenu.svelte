@@ -9,7 +9,7 @@
 	import { SubscribeInviteForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import PeriodDuplicate from './PeriodDuplicate.svelte'
 	import ContextMenuToggle from './ContextMenuToggle.svelte'
-	import PeriodForm from '$lib/PeriodForm.svelte'
+	import PeriodForm from '$lib/period/PeriodForm.svelte'
 	import { slide } from 'svelte/transition'
 
 	export let appendTo: TippyProps['appendTo'] = 'parent'

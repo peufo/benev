@@ -9,7 +9,7 @@
 	import PeriodCard from '$lib/plan/PeriodCard.svelte'
 	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
 	import { eventPath } from '$lib/store'
-	import PeriodForm from '$lib/PeriodForm.svelte'
+	import PeriodForm from '$lib/period/PeriodForm.svelte'
 	import { newPeriod } from './newPeriod'
 	import { getRangeOfTeams } from './getRange'
 	dayjs.locale('fr-ch')
