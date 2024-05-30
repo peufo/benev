@@ -221,6 +221,7 @@ model Member {
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
   licence Licence?
+  tags    Tag[]
 
   /// [MemberProfile]
   profileJson Json @default("{}")
@@ -277,6 +278,7 @@ model Team {
   eventId String
   event   Event    @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
   periods Period[]
+  tags    Tag[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -360,6 +362,17 @@ model Media {
 
   createdById String
   createdBy   User     @relation(references: [id], fields: [createdById], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Tag {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  color       String
+  teams       Team[]
+  members     Member[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
