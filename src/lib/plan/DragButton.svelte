@@ -29,6 +29,8 @@
 	}
 
 	function handleMouseUp(event: MouseEvent) {
+		event.preventDefault()
+		event.stopPropagation()
 		document.removeEventListener('mousemove', handleMouseMove)
 		const delta = event.clientY - origin
 		dispatch('done', delta)

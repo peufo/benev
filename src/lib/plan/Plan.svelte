@@ -2,16 +2,15 @@
 	import { onMount } from 'svelte'
 	import dayjs, { type Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
-	import { tip, ContextMenu, Icon, urlParam } from 'fuma'
+	import { tip, Icon, urlParam } from 'fuma'
 	import type { Period, Subscribe, Team } from '@prisma/client'
 	import { mdiPlus } from '@mdi/js'
 
 	import PeriodCard from '$lib/plan/PeriodCard.svelte'
-	import PeriodContextMenu from '$lib/plan/PeriodContextMenu.svelte'
 	import { eventPath } from '$lib/store'
-	import PeriodForm from '$lib/period/PeriodForm.svelte'
 	import { newPeriod } from './newPeriod'
 	import { getRangeOfTeams } from './getRange'
+	import { goto } from '$app/navigation'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -37,10 +36,6 @@
 		})
 	})
 
-	let periodContextMenu: PeriodContextMenu
-	let periodContextMenuEdit: ContextMenu
-	let periodForm: PeriodForm
-
 	let containerWidth = 0
 	let range: { start: Dayjs; end: Dayjs }
 	let days: Dayjs[] = []
@@ -59,8 +54,7 @@
 		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
 
 	const onCreate = (event: MouseEvent, newPeriod: { start?: Date; end?: Date }) => {
-		periodForm.setPeriod(newPeriod)
-		periodContextMenuEdit.show(event)
+		goto($urlParam.with({ form_period: 1 }))
 	}
 </script>
 
@@ -142,13 +136,7 @@
 				</div>
 
 				{#each team.periods as period}
-					<PeriodCard
-						{period}
-						origin={range.start}
-						{msHeight}
-						{headerHeight}
-						on:click={(event) => periodContextMenu.show(event, period)}
-					/>
+					<PeriodCard {period} origin={range.start} {msHeight} {headerHeight} />
 				{/each}
 			</div>
 		{/each}
@@ -159,16 +147,6 @@
 		</a>
 	</div>
 </div>
-
-<PeriodContextMenu bind:this={periodContextMenu} appendTo={scrollContainer} />
-
-<ContextMenu
-	bind:this={periodContextMenuEdit}
-	tippyProps={{ trigger: 'mouseenter mouseleave', interactiveDebounce: 500 }}
->
-	<h2 slot="header" class="font-semibold">Nouvelle période</h2>
-	<PeriodForm bind:this={periodForm} on:success={() => periodContextMenuEdit.hide()} />
-</ContextMenu>
 
 <style>
 	.scale {

@@ -5,7 +5,7 @@
 	import { formatRangeHour } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
 	import DragButton from './DragButton.svelte'
-	import { USE_COERCE_DATE } from 'fuma'
+	import { USE_COERCE_DATE, urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import axios from 'axios'
 	import { toast } from 'svelte-sonner'
@@ -49,10 +49,6 @@
 
 <div
 	id={period.id}
-	role="button"
-	tabindex="0"
-	on:click
-	on:keyup
 	class="
 		group
 		absolute left-0 right-0
@@ -98,4 +94,12 @@
 			})}
 		</span>
 	</Progress>
+	<a
+		href={$urlParam.with({ form_period: period.id })}
+		class="absolute inset-0"
+		data-sveltekit-noscroll
+		data-sveltekit-replacestate
+		data-sveltekit-preload-data="off"
+		data-sveltekit-preload-code="off">{' '}</a
+	>
 </div>
