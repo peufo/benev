@@ -62,6 +62,6 @@
 	</InputRelation>
 
 	{#if member}
-		<button class="btn"> Inscrire </button>
+		<button class="btn btn-primary"> Inscrire </button>
 	{/if}
 </form>
