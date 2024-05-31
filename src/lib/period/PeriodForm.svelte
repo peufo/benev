@@ -122,7 +122,7 @@
 			{#if disableRedirect}
 				<input type="hidden" name="disableRedirect" value="true" />
 			{/if}
-			<button class="btn" type="submit">Valider</button>
+			<button class="btn btn-primary" type="submit">Valider</button>
 			<ButtonDelete formaction="{basePath}?/period_delete" />
 		{:else}
 			<button class="btn btn-primary" type="submit">Ajouter</button>
