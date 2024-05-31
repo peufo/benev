@@ -14,10 +14,11 @@
 	import { Card, Drawer, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { Header, Footer, AdminNavigation } from '$lib/layout'
-	import EventMenu from './EventMenu.svelte'
 	import InviteForm from '$lib/InviteForm.svelte'
 	import { TeamForm, type TeamFormInstance } from '$lib/team'
 	import { MemberFieldForm } from '$lib/member'
+	import { PeriodDrawer } from '$lib/period'
+	import EventMenu from './EventMenu.svelte'
 	import FooterLink from './FooterLink.svelte'
 	import EventTheme from './admin/theme/EventTheme.svelte'
 
@@ -164,4 +165,6 @@
 	<Drawer key="form_field" title="{data.field ? 'Modifier le' : 'Nouveau'} champ" let:close>
 		<MemberFieldForm field={data.field || {}} on:success={() => close()} />
 	</Drawer>
+
+	<PeriodDrawer period={data.period || {}} />
 {/if}

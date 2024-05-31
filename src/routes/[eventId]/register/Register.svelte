@@ -4,13 +4,12 @@
 	import { mdiChevronLeft, mdiChevronRight, mdiClose } from '@mdi/js'
 	import type { Event, Field, User, Page } from '@prisma/client'
 
-	import { Card, Dialog, Icon, Placeholder } from 'fuma'
+	import { Card, Dialog, Icon, Placeholder, urlParam } from 'fuma'
 	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
 	import AccountForm from '$lib/me/AccountForm.svelte'
 	import type { MemberProfile } from '$lib/server'
-	import { urlParam } from '$lib/store'
 	import { slide } from 'svelte/transition'
 
 	export let event: Event & { memberFields: Field[] }

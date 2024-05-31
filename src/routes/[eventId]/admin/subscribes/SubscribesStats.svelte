@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { urlParam } from '$lib/store'
+	import { urlParam } from 'fuma'
 	import Distribution from '$lib/Distribution.svelte'
 	import { derived } from 'svelte/store'
 	import { SUBSCRIBE_STATE } from '$lib/constant'

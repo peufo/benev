@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { mdiClose, mdiFilterOutline } from '@mdi/js'
+	import { mdiClose } from '@mdi/js'
+	import { Icon, InputSelect, urlParam } from 'fuma'
 	import type { Field } from '@prisma/client'
 
-	import { Icon, InputSelect } from 'fuma'
 	import { goto } from '$app/navigation'
-	import { urlParam } from '$lib/store'
 
 	export let fields: Field[]
 

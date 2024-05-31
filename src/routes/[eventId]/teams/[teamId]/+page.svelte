@@ -10,11 +10,11 @@
 
 	import dayjs from 'dayjs'
 	import { onMount } from 'svelte'
-	import { Card, Icon, Placeholder } from 'fuma'
+	import { Card, Icon, Placeholder, urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
 
 	import { ToggleOnlyAvailable } from '$lib/material/display'
-	import { eventPath, urlParam, onlyAvailable } from '$lib/store'
+	import { eventPath, onlyAvailable } from '$lib/store'
 	import { SubscribeForm } from '$lib/subscribe'
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Leaders from '$lib/Leaders.svelte'

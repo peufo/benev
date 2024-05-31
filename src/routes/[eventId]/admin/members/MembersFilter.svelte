@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import type { Field } from '@prisma/client'
+	import { urlParam, InputOptionInParam } from 'fuma'
 	import {
 		mdiAccountCircleOutline,
 		mdiAlertOutline,
@@ -8,9 +8,6 @@
 		mdiShieldAccountOutline,
 		mdiStarOutline,
 	} from '@mdi/js'
-
-	import { urlParam } from '$lib/store'
-	import { InputOptionInParam } from 'fuma'
 </script>
 
 <InputOptionInParam

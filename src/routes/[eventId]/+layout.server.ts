@@ -8,9 +8,10 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 	const { user } = await parent()
 	const userId = user?.id || ''
 	try {
-		const { form_team, form_field } = parseQuery(url, {
+		const { form_team, form_field, form_period } = parseQuery(url, {
 			form_team: z.string().optional(),
 			form_field: z.string().optional(),
+			form_period: z.string().optional(),
 		})
 
 		const member = await getMemberProfile({ userId, eventId }).catch(() => undefined)
@@ -38,16 +39,23 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				where: { eventId, type: { not: 'email' } },
 				select: { id: true, title: true, path: true, type: true },
 			}),
-			team:
-				form_team && form_team?.length > 5
-					? await getTeam(form_team).catch(() => undefined)
-					: undefined,
-			field:
-				form_field && form_field?.length > 5
-					? await prisma.field.findUnique({ where: { id: form_field, eventId } })
-					: undefined,
+			team: await getIfDefined(form_team, (id) => getTeam(id).catch(() => undefined)),
+			field: await getIfDefined(form_field, (id) =>
+				prisma.field.findUnique({ where: { id, eventId } })
+			),
+			period: await getIfDefined(form_period, (id) =>
+				prisma.period.findUnique({ where: { id }, include: { subscribes: true } })
+			),
 		}
 	} catch {
 		error(404, 'not found')
 	}
+}
+
+function getIfDefined<Fun extends (id: string) => any>(
+	id: string | undefined,
+	fun: Fun
+): ReturnType<Fun> | undefined {
+	if (!id || id.length < 5) return undefined
+	return fun(id)
 }

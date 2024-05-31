@@ -11,9 +11,9 @@ import {
 	mdiPaletteOutline,
 } from '@mdi/js'
 
+import { param } from 'fuma'
 import { dev } from '$app/environment'
 import { derived } from 'svelte/store'
-import { param } from '$lib/store'
 
 export const adminTabs = derived(param, ({ without, page }) => {
 	const query = without('skip', 'take')

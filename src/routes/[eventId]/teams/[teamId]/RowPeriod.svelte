@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition'
 	import { createEventDispatcher } from 'svelte'
 	import { Icon, formatRange, urlParam } from 'fuma'
-	import { mdiClipboardTextOutline } from '@mdi/js'
+	import { mdiClipboardTextOutline, mdiPencilOutline } from '@mdi/js'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import type { PageData } from './$types'
@@ -10,7 +10,6 @@
 	import { onlyAvailable } from '$lib/store'
 	import { SubscribeInviteForm, SubscribeStateForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import Progress from '$lib/Progress.svelte'
-	import PeriodEditMenu from '$lib/period/PeriodEditMenu.svelte'
 	type P = PageData['team']['periods'][number]
 
 	export let period: P
@@ -92,7 +91,17 @@
 					{:else}
 						<div class="w-8" />
 					{/if}
-					<PeriodEditMenu {period} />
+					<a
+						href={$urlParam.with({ form_period: period.id })}
+						class="btn btn-sm btn-square btn-ghost"
+					>
+						<Icon
+							path={mdiPencilOutline}
+							size={22}
+							title="Éditer la période"
+							class="fill-base-content/70"
+						/>
+					</a>
 				</div>
 			{/if}
 		</td>

@@ -1,8 +1,8 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
+	import { urlParam } from 'fuma'
 	import { invalidateAll, goto } from '$app/navigation'
 	import { page } from '$app/stores'
-	import { urlParam } from '$lib/store'
-	import { onMount } from 'svelte'
 
 	export let allreadyLoaded: (checkoutId: string) => boolean = () => false
 	export let removeCheckoutId = false

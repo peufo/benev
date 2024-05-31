@@ -5,8 +5,8 @@
 	import { page } from '$app/stores'
 	import { enhance } from '$app/forms'
 	import { useForm } from 'fuma/validation'
-	import { eventPath, urlParam } from '$lib/store'
-	import { ButtonDelete, tiptapParser } from 'fuma'
+	import { eventPath } from '$lib/store'
+	import { ButtonDelete, tiptapParser, urlParam } from 'fuma'
 
 	export let event: Event
 	export let userId: string
