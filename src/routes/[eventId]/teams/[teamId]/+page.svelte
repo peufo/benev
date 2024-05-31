@@ -6,6 +6,7 @@
 		mdiClockTimeFourOutline,
 		mdiPencilOutline,
 		mdiFilterOutline,
+		mdiPlus,
 	} from '@mdi/js'
 
 	import dayjs from 'dayjs'
@@ -19,7 +20,6 @@
 	import ThanksDialog from './ThanksDialog.svelte'
 	import Leaders from '$lib/Leaders.svelte'
 
-	import PeriodEditMenu from '$lib/period/PeriodEditMenu.svelte'
 	import { page } from '$app/stores'
 	import RowPeriod from './RowPeriod.svelte'
 	import type { PageData } from './$types.js'
@@ -136,8 +136,9 @@
 			<a href={$urlParam.with({ form_team: data.team.id })} class="btn btn-square btn-sm">
 				<Icon path={mdiPencilOutline} title="Éditer ce secteur" />
 			</a>
-
-			<PeriodEditMenu />
+			<a href={$urlParam.with({ form_period: 1 })} class="btn btn-square btn-sm">
+				<Icon path={mdiPlus} title="Ajouter une période" />
+			</a>
 		{/if}
 	</div>
 

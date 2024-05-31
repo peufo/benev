@@ -12,9 +12,9 @@
 	})[]
 </script>
 
-<div class="flex flex-col gap-1 items-end">
+<div class="flex flex-col gap-1">
 	{#each subscribes as subscribe}
-		<div class="flex flex-wrap gap-1 justify-end items-center">
+		<div class="flex items-center gap-3 px-3 py-[5px] rounded-md border bg-base-100">
 			{#if subscribe.isAbsent}
 				<div use:tip={{ content: 'Ce membre a été absent à sa periode de travail' }}>
 					<Icon path={mdiAlertOutline} class="fill-warning" size={20} />
@@ -23,7 +23,7 @@
 
 			{#if subscribe.member}
 				<a
-					class="badge badge-lg whitespace-nowrap hover:bg-base-200"
+					class="whitespace-nowrap grow link link-hover"
 					title="Voir les infos de {subscribe.member.user.firstName}"
 					href="{$eventPath}/admin/members/{subscribe.memberId}"
 				>
