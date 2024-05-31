@@ -16,7 +16,6 @@
 	export let isTeamClosedSubscribing: boolean
 	const PERIOD_OPEN_KEY = 'periodOpen'
 
-	$: isOpen = $urlParam.hasValue(PERIOD_OPEN_KEY, period.id)
 	$: state = getPeriodComputedState(period)
 	function getPeriodComputedState(p: P) {
 		const data = $page.data as PageData
@@ -48,7 +47,7 @@
 	function handlePeriodClick(event: MouseEvent) {
 		if (clickInteractiveElement(event)) return
 		if ($page.data.isLeaderOfTeam) {
-			const url = $urlParam.toggle({ [PERIOD_OPEN_KEY]: period.id })
+			const url = $urlParam.toggle({ form_period: period.id })
 			return goto(url, { replaceState: true, noScroll: true, keepFocus: true })
 		}
 		if (!state.disabled) dispatch('subscribe', period)
@@ -64,24 +63,28 @@
 
 {#if !$onlyAvailable || !state.isComplete}
 	<tr
-		class:hover={!state.disabled}
 		class:cursor-pointer={!state.disabled}
-		class:border-0={$urlParam.hasValue(PERIOD_OPEN_KEY, period.id)}
+		class={$urlParam.hasValue('form_period', period.id)
+			? 'bg-base-300'
+			: state.disabled
+			? ''
+			: 'hover'}
 		on:click={handlePeriodClick}
 	>
 		<td class="w-full font-medium" class:opacity-80={state.disabled}>
 			{formatRange(period)}
 		</td>
 		<td class="flex flex-wrap md:flex-nowrap gap-2 items-center justify-end">
-			{#if state.mySubscribe}
-				<SubscribeStateForm subscribe={state.mySubscribe} isLeader={!!$page.data.isLeaderOfTeam} />
-			{/if}
-
 			<Progress {period} class="w-[60px]" />
 
 			{#if $page.data.isLeaderOfTeam}
 				<div class="flex gap-2">
-					{#if state.available}
+					{#if state.mySubscribe}
+						<SubscribeStateForm
+							subscribe={state.mySubscribe}
+							isLeader={!!$page.data.isLeaderOfTeam}
+						/>
+					{:else if state.available}
 						<button
 							class="btn btn-square btn-sm"
 							on:click|stopPropagation={() => dispatch('subscribe', period)}
@@ -91,29 +94,6 @@
 					{:else}
 						<div class="w-8" />
 					{/if}
-					<a
-						href={$urlParam.with({ form_period: period.id })}
-						class="btn btn-sm btn-square btn-ghost"
-					>
-						<Icon
-							path={mdiPencilOutline}
-							size={22}
-							title="Éditer la période"
-							class="fill-base-content/70"
-						/>
-					</a>
-				</div>
-			{/if}
-		</td>
-	</tr>
-
-	<tr class:border-0={!isOpen}>
-		<td class="py-0" colspan="3">
-			{#if isOpen}
-				<div class="py-3" transition:slide>
-					<Progress {period} withLabel />
-					<SubscribesOfPeriod subscribes={period.subscribes} />
-					<SubscribeInviteForm periodId={period.id} class="my-2" />
 				</div>
 			{/if}
 		</td>
