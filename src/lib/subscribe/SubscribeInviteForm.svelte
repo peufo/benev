@@ -30,7 +30,7 @@
 	method="post"
 	action="{$eventPath}/subscribes?/subscribe_create"
 	use:enhance={form.submit}
-	class="{klass} flex gap-2 justify-end"
+	class="{klass} flex gap-2 justify-end grow w-full"
 >
 	<input type="hidden" name="periodId" value={periodId} />
 	<input type="hidden" name="memberId" value={member?.id} />
@@ -42,9 +42,7 @@
 		createTitle="Inviter un nouveau membre"
 		createUrl={$urlParam.with({ form_invite: 1 })}
 		createIcon={mdiAccountPlusOutline}
-		input={{
-			size: 20,
-		}}
+		dropdownProps={{ wrapperClass: 'w-full' }}
 		bind:value={member}
 		on:input
 		{tippyProps}

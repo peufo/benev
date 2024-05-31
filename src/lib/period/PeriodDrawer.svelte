@@ -28,13 +28,15 @@
 >
 	<PeriodForm />
 
+	<div class="divider" />
+
 	<div class="p-2 flex flex-col gap-2">
 		{#if period.subscribes && period.maxSubscribe}
-			<SubscribesOfPeriod subscribes={period.subscribes} />
 			<Progress
 				period={{ maxSubscribe: period.maxSubscribe, subscribes: period.subscribes }}
 				withLabel
 			/>
+			<SubscribesOfPeriod subscribes={period.subscribes} />
 		{/if}
 
 		{#if period.id && !periodIsComplet(period)}

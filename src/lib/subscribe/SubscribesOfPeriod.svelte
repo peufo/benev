@@ -4,7 +4,7 @@
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
-	import { Icon, tip } from 'fuma'
+	import { Icon, Placeholder, tip } from 'fuma'
 
 	// TODO: Pourquoi user ne passe pas directement dans le type ???
 	export let subscribes: (PageData['team']['periods'][number]['subscribes'][number] & {
@@ -39,8 +39,8 @@
 			<SubscribeMenu {subscribe} />
 		</div>
 	{:else}
-		<div class="flex flex-end justify-center text-secondary px-4 py-2 opacity-70">
-			Pas d'inscription pour l'instant
+		<div class="w-full text-center opacity-60 text-sm px-2 py-4">
+			<span>Pas d'inscription pour l'instant</span>
 		</div>
 	{/each}
 </div>
