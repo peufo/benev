@@ -16,7 +16,7 @@ import { dev } from '$app/environment'
 import { derived } from 'svelte/store'
 
 export const adminTabs = derived(param, ({ without, page }) => {
-	const query = without('skip', 'take')
+	const query = without('skip', 'take', 'form_period')
 	const eventId = page.params.eventId
 
 	const getPath = (p: string) => ({
