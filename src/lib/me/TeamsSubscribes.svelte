@@ -2,7 +2,7 @@
 	import type { Period, Subscribe, Team } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { formatRange } from '$lib/formatRange'
-	import { CardLink, Icon, Placeholder } from 'fuma'
+	import { CardLink, Icon, Placeholder, urlParam } from 'fuma'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
 	import { tip } from 'fuma'
@@ -24,9 +24,15 @@
 								grow flex gap-2 items-center px-2 py-2 rounded
 								{isLeader ? 'relative z-10 hover:bg-base-200' : ''}
 							"
+							class:bg-base-200={isLeader && $urlParam.hasValue('form_period', period.id)}
 						>
 							{#if isLeader}
-								<a href="/{team.eventId}/teams/{team.id}/{period.id}" class="absolute inset-0">
+								<a
+									href={$urlParam.toggle({ form_period: period.id })}
+									class="absolute inset-0"
+									data-sveltekit-replacestate
+									data-sveltekit-noscroll
+								>
 									{' '}
 								</a>
 							{/if}
