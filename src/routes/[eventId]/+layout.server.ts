@@ -44,7 +44,22 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				prisma.field.findUnique({ where: { id, eventId } })
 			),
 			period: await getIfDefined(form_period, (id) =>
-				prisma.period.findUnique({ where: { id }, include: { subscribes: true } })
+				prisma.period.findUnique({
+					where: { id },
+					include: {
+						subscribes: {
+							include: {
+								member: {
+									include: {
+										user: {
+											select: { firstName: true, lastName: true, email: true, phone: true },
+										},
+									},
+								},
+							},
+						},
+					},
+				})
 			),
 		}
 	} catch {
