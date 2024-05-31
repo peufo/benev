@@ -168,5 +168,5 @@
 		<MemberFieldForm field={data.field || {}} on:success={() => close()} />
 	</Drawer>
 
-	<PeriodDrawer bind:this={periodDrawer} period={data.period || {}} />
+	<PeriodDrawer bind:this={periodDrawer} period={data.period} />
 {/if}

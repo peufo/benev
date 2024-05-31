@@ -10,7 +10,7 @@
 
 	let klass = ''
 	export { klass as class }
-	export let period: Partial<Period> | undefined = undefined
+	export let period: Partial<Period> | null | undefined = undefined
 	export let disableRedirect = false
 
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -29,6 +29,17 @@
 		},
 	})
 
+	const detectChange = useDetectChange(period)
+	$: if (detectChange(period)) setPeriod(period)
+	function useDetectChange(periodInitial: Partial<Period> | null | undefined) {
+		let currentId = periodInitial?.id
+		return (p: Partial<Period> | null | undefined) => {
+			const isChange = p?.id !== currentId
+			currentId = p?.id
+			return isChange
+		}
+	}
+
 	let defaultStart = dayjs().startOf('hour').add(1, 'hour').format('HH:mm')
 	let defaultEnd = dayjs(period?.end).startOf('hour').add(4, 'hours').format('HH:mm')
 
@@ -41,7 +52,7 @@
 	$: endIsNextDay = endString < startString
 	$: basePath = `${$eventPath}/teams/${period?.teamId || $page.params.teamId}`
 
-	export function setPeriod(_period?: Partial<Period>) {
+	export function setPeriod(_period?: Partial<Period> | null) {
 		period = _period
 		date = period?.start || new Date()
 		startString = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart

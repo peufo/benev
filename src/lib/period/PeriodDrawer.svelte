@@ -9,7 +9,7 @@
 	type _Period = Partial<Period & { subscribes: Subscribe[] }>
 	type MemberWithUser = Member & { user: User }
 
-	export let period: _Period
+	export let period: _Period | null | undefined = undefined
 
 	export function selectMember(m: MemberWithUser) {
 		member = m
@@ -30,33 +30,35 @@
 	key="form_period"
 	noOverlay
 	maxWidth="400px"
-	title="{period.id ? 'Édition' : 'Création'} d'une période"
+	title="{period?.id ? 'Édition' : 'Création'} d'une période"
 	bind:transitionX={$periodDrawerTransitionX}
 >
-	<PeriodForm />
+	<PeriodForm {period} />
 
-	<div class="divider" />
+	{#if period?.id}
+		<div class="divider" />
 
-	<div class="p-2 flex flex-col gap-2">
-		{#if period.subscribes && period.maxSubscribe}
-			<Progress
-				period={{ maxSubscribe: period.maxSubscribe, subscribes: period.subscribes }}
-				withLabel
-			/>
-			<SubscribesOfPeriod subscribes={period.subscribes} />
-		{/if}
+		<div class="p-2 flex flex-col gap-2">
+			{#if period.subscribes && period.maxSubscribe}
+				<Progress
+					period={{ maxSubscribe: period.maxSubscribe, subscribes: period.subscribes }}
+					withLabel
+				/>
+				<SubscribesOfPeriod subscribes={period.subscribes} />
+			{/if}
 
-		{#if period.id && !periodIsComplet(period)}
-			<SubscribeInviteForm
-				bind:member
-				periodId={period.id}
-				tippyProps={{
-					placement: 'bottom-start',
-					popperOptions: {
-						modifiers: [{ name: 'flip', enabled: false }],
-					},
-				}}
-			/>
-		{/if}
-	</div>
+			{#if period.id && !periodIsComplet(period)}
+				<SubscribeInviteForm
+					bind:member
+					periodId={period.id}
+					tippyProps={{
+						placement: 'bottom-start',
+						popperOptions: {
+							modifiers: [{ name: 'flip', enabled: false }],
+						},
+					}}
+				/>
+			{/if}
+		</div>
+	{/if}
 </Drawer>
