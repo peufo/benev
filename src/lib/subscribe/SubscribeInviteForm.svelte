@@ -13,6 +13,7 @@
 	export let tippyProps: Partial<TippyProps> = {}
 	let klass = ''
 	export { klass as class }
+	export let member: (Member & { user: User }) | null = null
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -23,7 +24,6 @@
 			dispatch('success')
 		},
 	})
-	let member: (Member & { user: User }) | null = null
 </script>
 
 <form

@@ -1,14 +1,21 @@
 <script lang="ts">
 	import { Drawer } from 'fuma'
 	import PeriodForm from './PeriodForm.svelte'
-	import type { Period, Subscribe } from '@prisma/client'
+	import type { Member, Period, Subscribe, User } from '@prisma/client'
 	import { SubscribeInviteForm, SubscribesOfPeriod } from '$lib/subscribe'
 	import Progress from '$lib/Progress.svelte'
 	import { periodDrawerTransitionX } from '$lib/store'
 
 	type _Period = Partial<Period & { subscribes: Subscribe[] }>
+	type MemberWithUser = Member & { user: User }
 
 	export let period: _Period
+
+	export function selectMember(m: MemberWithUser) {
+		member = m
+	}
+
+	let member: MemberWithUser | null = null
 
 	function periodIsComplet(period: _Period): boolean {
 		if (!period.subscribes) return true
@@ -41,6 +48,7 @@
 
 		{#if period.id && !periodIsComplet(period)}
 			<SubscribeInviteForm
+				bind:member
 				periodId={period.id}
 				tippyProps={{
 					placement: 'bottom-start',

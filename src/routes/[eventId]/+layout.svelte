@@ -28,6 +28,7 @@
 		data.event.state === 'published' || data.member?.roles.includes('leader') || data.userIsRoot
 
 	let teamForm: TeamFormInstance
+	let periodDrawer: PeriodDrawer
 </script>
 
 <svelte:head>
@@ -153,6 +154,7 @@
 			on:created={async ({ detail: member }) => {
 				console.log(teamForm)
 				teamForm?.update((team) => ({ ...team, leaders: [...(team.leaders || []), member] }))
+				periodDrawer?.selectMember(member)
 				await close()
 			}}
 		/>
@@ -166,5 +168,5 @@
 		<MemberFieldForm field={data.field || {}} on:success={() => close()} />
 	</Drawer>
 
-	<PeriodDrawer period={data.period || {}} />
+	<PeriodDrawer bind:this={periodDrawer} period={data.period || {}} />
 {/if}
