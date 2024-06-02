@@ -7,6 +7,7 @@
 	import type { Period } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
+	import { newPeriodGhost } from '$lib/plan/newPeriod'
 
 	let klass = ''
 	export { klass as class }
@@ -26,6 +27,7 @@
 		successMessage: (action) => successMessages[action.search] || 'Succès',
 		onSuccess: () => {
 			dispatch('success')
+			newPeriodGhost.emit('remove')
 		},
 	})
 

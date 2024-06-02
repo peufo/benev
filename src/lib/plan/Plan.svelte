@@ -54,10 +54,6 @@
 	$: hours = Array(Math.round(scale))
 		.fill(0)
 		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
-
-	const onCreate = (event: MouseEvent, newPeriod: Partial<Period>) => {
-		goto($urlParam.with({ form_period: JSON.stringify(newPeriod) }))
-	}
 </script>
 
 <div
@@ -73,7 +69,7 @@
 		class="flex min-w-max pr-2 z-10 gap-2"
 		style="--container-width: {containerWidth}px;"
 		bind:offsetWidth={containerWidth}
-		use:newPeriod={{ origin: range.start, headerHeight, msHeight, onCreate }}
+		use:newPeriod={{ origin: range.start, headerHeight, msHeight }}
 	>
 		<div class="sticky left-0 z-20 bg-base-100">
 			<!-- Header -->

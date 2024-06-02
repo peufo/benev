@@ -2,13 +2,17 @@ import type { Action } from 'svelte/action'
 import type { Dayjs } from 'dayjs'
 import { formatRangeHour } from '$lib/formatRange'
 import type { Period } from '@prisma/client'
+import { goto } from '$app/navigation'
+import { createEventEmitter, urlParam } from 'fuma'
+import { get } from 'svelte/store'
 
 type Params = {
 	origin: Dayjs
 	msHeight: number
 	headerHeight: number
-	onCreate: (event: MouseEvent, period: Partial<Period>) => unknown
 }
+
+export const newPeriodGhost = createEventEmitter<{ remove: void }>()
 
 export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 	function offsetYToTime(offsetY: number): Dayjs {
@@ -24,6 +28,7 @@ export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 		const teamId = target.dataset['team']
 		if (!teamId) return
 		event.preventDefault()
+		newPeriodGhost.emit('remove')
 
 		const originY = event.clientY
 		const start = offsetYToTime(event.offsetY)
@@ -31,7 +36,7 @@ export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 
 		const ghost = document.createElement('div')
 		const h3 = document.createElement('h3')
-		ghost.classList.add('absolute', 'left-0', 'right-0', 'bg-base-200', 'rounded-lg', 'border')
+		ghost.classList.add('absolute', 'left-0', 'right-0', 'bg-primary/30', 'rounded-lg', 'border')
 		h3.classList.add('text-xs', 'font-semibold', 'ml-1')
 		ghost.appendChild(h3)
 		const updateGhost = () => {
@@ -53,8 +58,8 @@ export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 			document.removeEventListener('mousemove', handleMouseMove)
 			const [_start, _end] = end.isAfter(start) ? [start, end] : [end, start]
 			const newPeriod: Partial<Period> = { teamId, start: _start.toDate(), end: _end.toDate() }
-			params.onCreate(_event, newPeriod)
-			ghost.remove()
+			await goto(get(urlParam).with({ form_period: JSON.stringify(newPeriod) }))
+			newPeriodGhost.on('remove', () => ghost.remove())
 		}
 
 		document.addEventListener('mousemove', handleMouseMove)
