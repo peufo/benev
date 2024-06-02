@@ -31,11 +31,16 @@
 
 	const detectChange = useDetectChange(period)
 	$: if (detectChange(period)) setPeriod(period)
+
 	function useDetectChange(periodInitial: Partial<Period> | null | undefined) {
-		let currentId = periodInitial?.id
+		let currentPeriod = periodInitial
 		return (p: Partial<Period> | null | undefined) => {
-			const isChange = p?.id !== currentId
-			currentId = p?.id
+			const isChange =
+				p?.id !== currentPeriod?.id ||
+				p?.maxSubscribe !== currentPeriod?.maxSubscribe ||
+				p?.start?.getTime() !== currentPeriod?.start?.getTime() ||
+				p!.end?.getTime() !== currentPeriod?.end?.getTime()
+			currentPeriod = p
 			return isChange
 		}
 	}
