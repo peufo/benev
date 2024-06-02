@@ -21,18 +21,23 @@ export const load = async ({ locals, parent, params: { teamId } }) => {
 
 export const actions = {
 	period_create: formAction(
-		modelPeriodCreate,
+		{ ...modelPeriodCreate, redirectTo: z.string() },
 		async ({ data, locals, params: { teamId } }) => {
 			await permission.leaderOfTeam(teamId, locals)
-			return prisma.period.create({
-				data: {
-					...data,
-					teamId,
-				},
+			const { redirectTo, ..._data } = data
+			const period = await prisma.period.create({
+				data: { ..._data, teamId },
 			})
+			return { period, redirectTo }
 		},
 		{
 			validation: validationPeriod,
+			redirectTo: ({ period, redirectTo }) => {
+				const [path, params] = redirectTo.split('?')
+				const searchParams = new URLSearchParams(params)
+				searchParams.set('form_period', period.id)
+				return `${path}?${searchParams.toString()}`
+			},
 		}
 	),
 	period_update: formAction(
@@ -50,8 +55,8 @@ export const actions = {
 	),
 	period_delete: formAction(
 		{
-			redirectTo: z.string(),
 			id: z.string(),
+			redirectTo: z.string(),
 		},
 		async ({ data, locals, params: { teamId } }) => {
 			await permission.leaderOfTeam(teamId, locals)
