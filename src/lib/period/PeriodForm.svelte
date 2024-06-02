@@ -11,11 +11,16 @@
 		ButtonDelete,
 		USE_COERCE_DATE,
 		urlParam,
+		USE_COERCE_NUMBER,
+		Icon,
 	} from 'fuma'
 	import type { Period } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { newPeriodGhost } from '$lib/plan/newPeriod'
+	import axios from 'axios'
+	import { goto, invalidateAll } from '$app/navigation'
+	import { mdiContentDuplicate } from '@mdi/js'
 
 	let klass = ''
 	export { klass as class }
@@ -75,7 +80,7 @@
 		if (period?.maxSubscribe) maxSubscribe = period.maxSubscribe
 	}
 
-	function getNextPeriod() {
+	async function createNextPeriod() {
 		if (!startString || !endString) return
 
 		let _start = dayjs(`${dateString}T${startString}`)
@@ -84,9 +89,15 @@
 		_start = _end.clone()
 		_end = _end.add(step, 'minute')
 
-		date = _start.toDate()
-		startString = _start.format('HH:mm')
-		endString = _end.format('HH:mm')
+		const form = new FormData()
+		form.append('redirectTo', $urlParam.without('form_period'))
+		form.append('start', USE_COERCE_DATE + _start.toJSON())
+		form.append('end', USE_COERCE_DATE + _end.toJSON())
+		form.append('maxSubscribe', USE_COERCE_NUMBER + maxSubscribe)
+		const res = await axios.postForm(`${basePath}?/period_create`, form)
+		if (res.data.type === 'redirect')
+			await goto(res.data.location, { invalidateAll: true, noScroll: true })
+		else await invalidateAll()
 	}
 </script>
 
@@ -140,18 +151,18 @@
 				<input type="hidden" name="disableRedirect" value="true" />
 			{/if}
 			<button class="btn btn-primary" type="submit">Valider</button>
+			<button
+				type="button"
+				class="btn btn-primary"
+				class:btn-disabled={!startString || !endString}
+				on:click|preventDefault={createNextPeriod}
+			>
+				<Icon path={mdiContentDuplicate} title="Dupliquer après" />
+			</button>
 			<div class="grow" />
 			<ButtonDelete formaction="{basePath}?/period_delete" />
 		{:else}
 			<button class="btn btn-primary" type="submit">Ajouter</button>
-			<button
-				type="button"
-				class="btn btn-ghost"
-				class:btn-disabled={!startString || !endString}
-				on:click|preventDefault={getNextPeriod}
-			>
-				Suivante
-			</button>
 		{/if}
 	</div>
 </form>
