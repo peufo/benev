@@ -25,10 +25,10 @@
 	$: msHeight = (hourHeight * (scale / 24)) / (1000 * 60 * 60)
 
 	onMount(() => {
-		if (!document.location.hash) return
-		const periodEl = document.querySelector<HTMLLinkElement>(document.location.hash)
+		const periodId = $urlParam.get('form_period')
+		if (!periodId) return
+		const periodEl = document.querySelector<HTMLLinkElement>(`#${periodId}`)
 		if (!periodEl) return
-		periodEl.classList.add('outline')
 		scrollContainer?.scroll({
 			top: periodEl.offsetTop - 80,
 			left: periodEl.parentElement!.offsetLeft,

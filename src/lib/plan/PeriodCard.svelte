@@ -9,7 +9,7 @@
 	import { eventPath } from '$lib/store'
 	import axios from 'axios'
 	import { toast } from 'svelte-sonner'
-	import { invalidateAll } from '$app/navigation'
+	import { goto, invalidateAll } from '$app/navigation'
 
 	export let period: Period & { subscribes: Subscribe[] }
 	export let origin: dayjs.Dayjs
@@ -44,6 +44,7 @@
 		deltaStart = 0
 		deltaEnd = 0
 		toast.success('Période mise à jour')
+		await invalidateAll()
 	}
 </script>
 
@@ -58,6 +59,7 @@
 		hover:outline outline-1 outline-secondary
 		overflow-visible shadow min-h-[30px]
 	"
+	class:outline={$urlParam.hasValue('form_period', period.id)}
 	style:top="{top}px"
 	style:height="{height}px"
 >
@@ -94,12 +96,11 @@
 			})}
 		</span>
 	</Progress>
+
 	<a
 		href={$urlParam.with({ form_period: period.id })}
 		class="absolute inset-0"
 		data-sveltekit-noscroll
-		data-sveltekit-replacestate
-		data-sveltekit-preload-data="off"
-		data-sveltekit-preload-code="off">{' '}</a
+		data-sveltekit-replacestate>{' '}</a
 	>
 </div>
