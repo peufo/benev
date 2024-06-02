@@ -27,6 +27,8 @@
 	onMount(() => {
 		const periodId = $urlParam.get('form_period')
 		if (!periodId) return
+		const periodIdIsCUID = periodId.length === 25 && periodId.match(/\w{25}/)
+		if (!periodIdIsCUID) return
 		const periodEl = document.querySelector<HTMLLinkElement>(`#${periodId}`)
 		if (!periodEl) return
 		scrollContainer?.scroll({
@@ -53,8 +55,8 @@
 		.fill(0)
 		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
 
-	const onCreate = (event: MouseEvent, newPeriod: { start?: Date; end?: Date }) => {
-		goto($urlParam.with({ form_period: 1 }))
+	const onCreate = (event: MouseEvent, newPeriod: Partial<Period>) => {
+		goto($urlParam.with({ form_period: JSON.stringify(newPeriod) }))
 	}
 </script>
 

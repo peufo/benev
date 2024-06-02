@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
-import { z } from 'fuma'
+import { jsonParse, z } from 'fuma'
 import { getTeam, prisma } from '$lib/server'
 import { getMemberProfile } from '$lib/server'
 
@@ -43,23 +43,33 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			field: await getIfDefined(form_field, (id) =>
 				prisma.field.findUnique({ where: { id, eventId } })
 			),
-			period: await getIfDefined(form_period, (id) =>
-				prisma.period.findUnique({
-					where: { id },
-					include: {
-						subscribes: {
-							include: {
-								member: {
-									include: {
-										user: {
-											select: { firstName: true, lastName: true, email: true, phone: true },
+			period: await parseFormKey(
+				form_period,
+				(id) =>
+					prisma.period.findUnique({
+						where: { id },
+						include: {
+							subscribes: {
+								include: {
+									member: {
+										include: {
+											user: {
+												select: { firstName: true, lastName: true, email: true, phone: true },
+											},
 										},
 									},
 								},
 							},
 						},
-					},
-				})
+					}),
+				(period) => {
+					if (!period) return undefined
+					return {
+						...period,
+						...(period.start ? { start: new Date(period.start) } : {}),
+						...(period.end ? { end: new Date(period.end) } : {}),
+					}
+				}
 			),
 		}
 	} catch {
@@ -73,4 +83,19 @@ function getIfDefined<Fun extends (id: string) => any>(
 ): ReturnType<Fun> | undefined {
 	if (!id || id.length < 5) return undefined
 	return fun(id)
+}
+
+// TODO: add to fuma ?
+function parseFormKey<Fun extends (key: string) => any>(
+	key: string | undefined,
+	fun: Fun,
+	transform?: (
+		data: Partial<Awaited<ReturnType<Fun>>>
+	) => undefined | Partial<Awaited<ReturnType<Fun>>>
+): undefined | ReturnType<Fun> | Partial<Awaited<ReturnType<Fun>>> {
+	if (key === undefined) return undefined
+	const isCUID = key.length === 25 && key.match(/\w{25}/)
+	if (isCUID) return fun(key)
+	const data = jsonParse<Partial<Awaited<ReturnType<Fun>>>>(key, {})
+	return transform ? transform(data) : data
 }
