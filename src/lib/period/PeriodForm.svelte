@@ -3,7 +3,15 @@
 	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	dayjs.locale('fr-ch')
-	import { useForm, InputNumber, InputDate, InputTime, ButtonDelete, USE_COERCE_DATE } from 'fuma'
+	import {
+		useForm,
+		InputNumber,
+		InputDate,
+		InputTime,
+		ButtonDelete,
+		USE_COERCE_DATE,
+		urlParam,
+	} from 'fuma'
 	import type { Period } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
@@ -88,6 +96,8 @@
 	use:enhance
 	class="p-2 flex flex-col gap-3 {klass}"
 >
+	<input type="hidden" name="redirectTo" value={$urlParam.without('form_period')} />
+
 	{#if period?.id}
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
@@ -130,6 +140,7 @@
 				<input type="hidden" name="disableRedirect" value="true" />
 			{/if}
 			<button class="btn btn-primary" type="submit">Valider</button>
+			<div class="grow" />
 			<ButtonDelete formaction="{basePath}?/period_delete" />
 		{:else}
 			<button class="btn btn-primary" type="submit">Ajouter</button>

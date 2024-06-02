@@ -50,17 +50,14 @@ export const actions = {
 	),
 	period_delete: formAction(
 		{
-			disableRedirect: z.filter.boolean,
+			redirectTo: z.string(),
 			id: z.string(),
 		},
-		async ({ data, locals, request, params: { eventId, teamId } }) => {
+		async ({ data, locals, params: { teamId } }) => {
 			await permission.leaderOfTeam(teamId, locals)
 			await prisma.period.delete({ where: { id: data.id } })
-			const redirectTo = data.disableRedirect ? '' : `/${eventId}/teams/${teamId}`
-			return redirectTo
+			return data.redirectTo
 		},
-		{
-			redirectTo: (url) => url,
-		}
+		{ redirectTo: (url) => url }
 	),
 }
