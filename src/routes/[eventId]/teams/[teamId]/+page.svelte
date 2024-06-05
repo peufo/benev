@@ -136,7 +136,12 @@
 			<a href={$urlParam.with({ form_team: data.team.id })} class="btn btn-square btn-sm">
 				<Icon path={mdiPencilOutline} title="Éditer ce secteur" />
 			</a>
-			<a href={$urlParam.with({ form_period: 1 })} class="btn btn-square btn-sm">
+			<a
+				href={$urlParam.with({
+					form_period: JSON.stringify({ team: { id: data.team.id, name: data.team.name } }),
+				})}
+				class="btn btn-square btn-sm"
+			>
 				<Icon path={mdiPlus} title="Ajouter une période" />
 			</a>
 		{/if}

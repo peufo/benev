@@ -56,7 +56,7 @@
 				p?.id !== currentPeriod?.id ||
 				p?.maxSubscribe !== currentPeriod?.maxSubscribe ||
 				p?.start?.getTime() !== currentPeriod?.start?.getTime() ||
-				p!.end?.getTime() !== currentPeriod?.end?.getTime()
+				p?.end?.getTime() !== currentPeriod?.end?.getTime()
 			currentPeriod = p
 			return isChange
 		}
