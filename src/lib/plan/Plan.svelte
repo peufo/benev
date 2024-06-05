@@ -10,7 +10,6 @@
 	import { eventPath } from '$lib/store'
 	import { newPeriod } from './newPeriod'
 	import { getRangeOfTeams } from './getRange'
-	import { goto } from '$app/navigation'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
@@ -112,7 +111,10 @@
 		</div>
 
 		{#each teams as team (team.id)}
-			<div class="snap-start scroll-mx-2 pl-0 relative" data-team={team.id}>
+			<div
+				class="snap-start scroll-mx-2 pl-0 relative"
+				data-team={JSON.stringify({ id: team.id, name: team.name })}
+			>
 				<div
 					class="w-36 sticky top-0 pb-2 z-10"
 					style:height="{headerHeight}px"

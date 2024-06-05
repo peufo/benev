@@ -1,9 +1,9 @@
 import type { Action } from 'svelte/action'
 import type { Dayjs } from 'dayjs'
 import { formatRangeHour } from '$lib/formatRange'
-import type { Period } from '@prisma/client'
+import type { Period, Team } from '@prisma/client'
 import { goto } from '$app/navigation'
-import { createEventEmitter, urlParam } from 'fuma'
+import { createEventEmitter, jsonParse, urlParam } from 'fuma'
 import { get } from 'svelte/store'
 
 type Params = {
@@ -25,8 +25,8 @@ export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 
 	function handleMouseDown(event: MouseEvent) {
 		const target = event.target as HTMLDivElement
-		const teamId = target.dataset['team']
-		if (!teamId) return
+		const team = jsonParse<Team | undefined>(target.dataset['team'], undefined)
+		if (!team) return
 		event.preventDefault()
 		newPeriodGhost.emit('remove')
 
@@ -57,7 +57,11 @@ export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 		const handleMouseUp = async (_event: MouseEvent) => {
 			document.removeEventListener('mousemove', handleMouseMove)
 			const [_start, _end] = end.isAfter(start) ? [start, end] : [end, start]
-			const newPeriod: Partial<Period> = { teamId, start: _start.toDate(), end: _end.toDate() }
+			const newPeriod: Partial<Period & { team: Team }> = {
+				team,
+				start: _start.toDate(),
+				end: _end.toDate(),
+			}
 			await goto(get(urlParam).with({ form_period: JSON.stringify(newPeriod) }))
 			newPeriodGhost.on('remove', () => ghost.remove())
 		}

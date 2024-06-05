@@ -49,6 +49,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 					prisma.period.findUnique({
 						where: { id },
 						include: {
+							team: true,
 							subscribes: {
 								include: {
 									member: {

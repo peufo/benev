@@ -5,7 +5,7 @@
 	import { formatRangeHour } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
 	import DragButton from './DragButton.svelte'
-	import { USE_COERCE_DATE, urlParam } from 'fuma'
+	import { USE_COERCE_DATE, USE_COERCE_JSON, urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import axios from 'axios'
 	import { toast } from 'svelte-sonner'
@@ -32,9 +32,10 @@
 		const end = new Date(period.end.getTime() + roundMs(deltaEnd / msHeight))
 		const form = new FormData()
 		form.append('id', period.id)
+		form.append('team', USE_COERCE_JSON + JSON.stringify({ id: period.teamId }))
 		form.append('start', USE_COERCE_DATE + start.toUTCString())
 		form.append('end', USE_COERCE_DATE + end.toUTCString())
-		const res = await axios.postForm(`${$eventPath}/teams/${period.teamId}?/period_update`, form)
+		const res = await axios.postForm(`${$eventPath}/admin?/period_update`, form)
 		if (res.data.status !== 200) {
 			toast.error('Erreur')
 			console.error(res.data)

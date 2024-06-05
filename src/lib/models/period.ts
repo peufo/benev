@@ -1,13 +1,12 @@
 import { z, type ZodObj, type SuperRefinement } from 'fuma/validation'
 import type { Prisma } from '@prisma/client'
 
-type PeriodCreateForm = Omit<Prisma.PeriodCreateInput, 'team'>
-
 export const modelPeriodCreate = {
 	maxSubscribe: z.number().min(1),
+	team: z.relation.connect,
 	start: z.date(),
 	end: z.date(),
-} satisfies ZodObj<PeriodCreateForm>
+} satisfies ZodObj<Prisma.PeriodCreateInput>
 
 export const modelPeriodUpdate = {
 	...modelPeriodCreate,

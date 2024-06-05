@@ -15,16 +15,18 @@
 		USE_COERCE_DATE,
 		USE_COERCE_NUMBER,
 		Icon,
+		InputRelation,
+		USE_COERCE_JSON,
 	} from 'fuma'
-	import type { Period } from '@prisma/client'
+	import type { Period, Team } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import { page } from '$app/stores'
 	import { newPeriodGhost } from '$lib/plan/newPeriod'
 	import { goto, invalidateAll } from '$app/navigation'
+	import { api } from '$lib/api'
 
 	let klass = ''
 	export { klass as class }
-	export let period: Partial<Period> | null | undefined = undefined
+	export let period: Partial<Period & { team: Team }> | null | undefined = undefined
 	export let disableRedirect = false
 
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -75,7 +77,7 @@
 		return getAbsoluteDay(d1) - getAbsoluteDay(d2)
 	}
 
-	$: basePath = `${$eventPath}/teams/${period?.teamId || $page.params.teamId}`
+	$: basePath = `${$eventPath}/admin`
 	$: diffDay = getDiffDay(end, start)
 	$: addADay = diffDay === 0 && end.getHours() < start.getHours()
 
@@ -90,6 +92,7 @@
 		const duration = dayjs(end).diff(start, 'minute')
 		const form = new FormData()
 		form.append('redirectTo', $urlParam.without('form_period'))
+		form.append('team', USE_COERCE_JSON + JSON.stringify({ id: period?.teamId }))
 		form.append('start', USE_COERCE_DATE + end.toJSON())
 		form.append('end', USE_COERCE_DATE + dayjs(end).add(duration, 'minute').toJSON())
 		form.append('maxSubscribe', USE_COERCE_NUMBER + maxSubscribe)
@@ -118,6 +121,16 @@
 		name="end"
 		value="{USE_COERCE_DATE}{dayjs(end).add(+addADay, 'day').toJSON()}"
 	/>
+
+	{#key period}
+		<InputRelation
+			value={period?.team}
+			key="team"
+			search={$api.team.search}
+			slotItem={(item) => item.name}
+			label="Secteur"
+		/>
+	{/key}
 
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
 		<InputDate label="Date" bind:value={start} />
