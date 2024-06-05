@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
+	import axios from 'axios'
+	import { mdiContentDuplicate } from '@mdi/js'
 	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	dayjs.locale('fr-ch')
@@ -9,8 +11,8 @@
 		InputDate,
 		InputTime,
 		ButtonDelete,
-		USE_COERCE_DATE,
 		urlParam,
+		USE_COERCE_DATE,
 		USE_COERCE_NUMBER,
 		Icon,
 	} from 'fuma'
@@ -18,9 +20,7 @@
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { newPeriodGhost } from '$lib/plan/newPeriod'
-	import axios from 'axios'
 	import { goto, invalidateAll } from '$app/navigation'
-	import { mdiContentDuplicate } from '@mdi/js'
 
 	let klass = ''
 	export { klass as class }
@@ -60,39 +60,38 @@
 		}
 	}
 
-	let defaultStart = dayjs().startOf('hour').add(1, 'hour').format('HH:mm')
-	let defaultEnd = dayjs(period?.end).startOf('hour').add(4, 'hours').format('HH:mm')
+	let defaultStart = dayjs(period?.start).startOf('hour').add(1, 'hour').toDate()
+	let defaultEnd = dayjs(period?.end).startOf('hour').add(3, 'hours').toDate()
 
-	let date = period?.start || new Date()
-	let startString = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
-	let endString = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
+	let start = period?.start || defaultStart
+	let end = period?.end || defaultEnd
 	let maxSubscribe = period?.maxSubscribe || 1
 
-	$: dateString = dayjs(date).format('YYYY-MM-DD')
-	$: endIsNextDay = endString < startString
+	function getAbsoluteDay(date: Date): number {
+		const minutes = date.getTime() / (1000 * 60)
+		return Math.floor((minutes - date.getTimezoneOffset()) / (60 * 24))
+	}
+	function getDiffDay(d1: Date, d2: Date): number {
+		return getAbsoluteDay(d1) - getAbsoluteDay(d2)
+	}
+
 	$: basePath = `${$eventPath}/teams/${period?.teamId || $page.params.teamId}`
+	$: diffDay = getDiffDay(end, start)
+	$: addADay = diffDay === 0 && end.getHours() < start.getHours()
 
 	export function setPeriod(_period?: Partial<Period> | null) {
 		period = _period
-		date = period?.start || new Date()
-		startString = period?.start ? dayjs(period.start).format('HH:mm') : defaultStart
-		endString = period?.end ? dayjs(period.end).format('HH:mm') : defaultEnd
-		if (period?.maxSubscribe) maxSubscribe = period.maxSubscribe
+		start = period?.start || defaultStart
+		end = period?.end || defaultEnd
+		maxSubscribe = period?.maxSubscribe || 1
 	}
 
 	async function createNextPeriod() {
-		if (!startString || !endString) return
-
-		let _start = dayjs(`${dateString}T${startString}`)
-		let _end = dayjs(`${dateString}T${endString}`).add(+endIsNextDay, 'day')
-		const step = _end.diff(_start, 'minute')
-		_start = _end.clone()
-		_end = _end.add(step, 'minute')
-
+		const duration = dayjs(end).diff(start, 'minute')
 		const form = new FormData()
 		form.append('redirectTo', $urlParam.without('form_period'))
-		form.append('start', USE_COERCE_DATE + _start.toJSON())
-		form.append('end', USE_COERCE_DATE + _end.toJSON())
+		form.append('start', USE_COERCE_DATE + end.toJSON())
+		form.append('end', USE_COERCE_DATE + dayjs(end).add(duration, 'minute').toJSON())
 		form.append('maxSubscribe', USE_COERCE_NUMBER + maxSubscribe)
 		const res = await axios.postForm(`${basePath}?/period_create`, form)
 		if (res.data.type === 'redirect')
@@ -113,21 +112,15 @@
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
 
-	<input
-		type="hidden"
-		name="start"
-		value="{USE_COERCE_DATE}{dayjs(`${dateString}T${startString}`).toJSON()}"
-	/>
+	<input type="hidden" name="start" value="{USE_COERCE_DATE}{start.toJSON()}" />
 	<input
 		type="hidden"
 		name="end"
-		value="{USE_COERCE_DATE}{dayjs(`${dateString}T${endString}`)
-			.add(+endIsNextDay, 'day')
-			.toJSON()}"
+		value="{USE_COERCE_DATE}{dayjs(end).add(+addADay, 'day').toJSON()}"
 	/>
 
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
-		<InputDate label="Date" bind:value={date} />
+		<InputDate label="Date" bind:value={start} />
 
 		<InputNumber
 			key="maxSubscribe"
@@ -136,11 +129,11 @@
 			input={{ min: 1, step: 1 }}
 		/>
 
-		<InputTime label="Début" bind:value={startString} input={{ step: 300 }} />
+		<InputTime label="Début" bind:value={start} input={{ step: 300 }} />
 		<InputTime
 			label="Fin"
-			bind:value={endString}
-			hint={endIsNextDay ? 'Le jour suivant' : ''}
+			bind:value={end}
+			hint={diffDay === 0 ? '' : diffDay === 1 ? 'Le jour suivant' : `+ ${diffDay} jours`}
 			input={{ step: 300 }}
 		/>
 	</div>
@@ -154,7 +147,7 @@
 			<button
 				type="button"
 				class="btn btn-primary"
-				class:btn-disabled={!startString || !endString}
+				class:btn-disabled={!start || !end}
 				on:click|preventDefault={createNextPeriod}
 			>
 				<Icon path={mdiContentDuplicate} title="Dupliquer après" />
