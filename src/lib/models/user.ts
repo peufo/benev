@@ -21,7 +21,7 @@ export const modelUserUpdate = {
 	firstName: z.string().min(2).optional(),
 	lastName: z.string().min(2).optional(),
 	phone: z.string().trim().optional(),
-	birthday: z.date().optional(),
+	birthday: z.date().nullish(),
 	street: z.string().optional(),
 	zipCode: z.string().optional(),
 	city: z.string().optional(),
