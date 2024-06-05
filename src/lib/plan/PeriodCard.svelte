@@ -44,7 +44,11 @@
 		deltaStart = 0
 		deltaEnd = 0
 		toast.success('Période mise à jour')
-		await invalidateAll()
+		await goto($urlParam.with({ form_period: period.id }), {
+			invalidateAll: true,
+			replaceState: true,
+			noScroll: true,
+		})
 	}
 </script>
 
@@ -101,6 +105,9 @@
 		href={$urlParam.with({ form_period: period.id })}
 		class="absolute inset-0"
 		data-sveltekit-noscroll
-		data-sveltekit-replacestate>{' '}</a
+		data-sveltekit-preload-data="off"
+		data-sveltekit-replacestate
 	>
+		{' '}
+	</a>
 </div>
