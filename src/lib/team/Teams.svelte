@@ -9,7 +9,7 @@
 	import { eventPath, display, onlyAvailable } from '$lib/store'
 
 	import Progress from '$lib/Progress.svelte'
-	import { formatRange, formatRangeShort } from '$lib/formatRange'
+	import { formatRange } from '$lib/formatRange'
 	import { page } from '$app/stores'
 	import { goto } from '$app/navigation'
 	import { derived } from 'svelte/store'
