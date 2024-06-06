@@ -17,11 +17,16 @@ const formaterShort = new Intl.DateTimeFormat('fr-ch', {
 	timeZone: 'Europe/Zurich',
 })
 
+const formaterDate = new Intl.DateTimeFormat('fr-ch', {
+	dateStyle: 'full',
+	timeZone: 'Europe/Zurich',
+})
+
 type Range = { start: Date | number; end: Date | number }
 
 export const formatRange = ({ start, end }: Range) => formater.formatRange(start, end)
-
 export const formatRangeShort = ({ start, end }: Range) => formaterShort.formatRange(start, end)
+export const formatRangeDate = ({ start, end }: Range) => formaterDate.formatRange(start, end)
 
 export const formatRangeHour = ({ start, end }: Range) => {
 	const _start = dayjs(start)

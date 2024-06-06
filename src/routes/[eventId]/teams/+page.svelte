@@ -1,20 +1,16 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
-	import { Card, Icon, InputSearch, urlParam } from 'fuma'
-	import { ToggleListOrTable, ToggleOnlyAvailable } from '$lib/material'
-	import { eventPath } from '$lib/store'
-	import { Teams } from '$lib/team'
+	import { Icon, InputSearch, urlParam } from 'fuma'
+	import { Teams, ToggleOnlyAvailable } from '$lib/team'
 
 	export let data
 </script>
 
-<Card class="max-w-4xl m-auto">
-	<span slot="title">Secteurs</span>
-
-	<div slot="action" class="flex gap-2">
-		<ToggleOnlyAvailable />
-		<ToggleListOrTable />
+<div class="max-w-xl m-auto flex flex-col gap-4">
+	<div class="flex gap-2 p-2 bg-base-100 rounded-2xl">
 		<InputSearch />
+		<div class="grow" />
+		<ToggleOnlyAvailable />
 
 		{#if data.member?.roles.includes('admin')}
 			<a
@@ -28,7 +24,5 @@
 		{/if}
 	</div>
 
-	<div class="overflow-x-auto">
-		<Teams teams={data.teams} event={data.event} />
-	</div>
-</Card>
+	<Teams teams={data.teams} />
+</div>

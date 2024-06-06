@@ -65,7 +65,7 @@
 	"
 >
 	<div
-		class="flex min-w-max pr-2 z-10 gap-2"
+		class="flex min-w-max pr-2 z-10 gap-2 p-1"
 		style="--container-width: {containerWidth}px;"
 		bind:offsetWidth={containerWidth}
 		use:newPeriod={{ origin: range.start, headerHeight, msHeight }}

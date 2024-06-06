@@ -14,7 +14,6 @@
 	import { Card, Icon, Placeholder, urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
 
-	import { ToggleOnlyAvailable } from '$lib/material/display'
 	import { eventPath, onlyAvailable } from '$lib/store'
 	import { SubscribeForm } from '$lib/subscribe'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -110,8 +109,6 @@
 		</div>
 	</div>
 	<div slot="action" class="flex gap-2">
-		<ToggleOnlyAvailable />
-
 		{#if data.isLeaderOfTeam}
 			<a
 				href={`${$eventPath}/admin/members?subscribes_teams=["${data.team.id}"]`}

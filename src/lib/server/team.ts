@@ -6,9 +6,10 @@ export type TeamWithPeriods = Team & {
 	periods: (Period & { subscribes: Subscribe[] })[]
 }
 
-export type TeamWithLeaders = Team & {
+export type TeamLeaders = {
 	leaders: (Member & { user: Pick<User, 'firstName' | 'lastName' | 'email' | 'phone'> })[]
 }
+export type TeamWithLeaders = Team & TeamLeaders
 
 export type TeamWithComputedValues = TeamWithPeriods & {
 	maxSubscribes: number
@@ -18,6 +19,8 @@ export type TeamWithComputedValues = TeamWithPeriods & {
 	isAvailable: boolean
 	range: { start: Date; end: Date } | null
 }
+
+export type TeamWithComputedValuesAndLeaders = TeamWithComputedValues & TeamLeaders
 
 export function addTeamComputedValues<T extends TeamWithPeriods>(
 	team: T
