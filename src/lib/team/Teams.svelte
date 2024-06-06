@@ -26,6 +26,11 @@
 		class="flex flex-col gap-4"
 		use:listEditable={{
 			dragElementsSelector: '.drag-button',
+			items: _teams,
+			onChange(newTeamsOrder) {
+				_teams = newTeamsOrder
+				// SAVE NEW ORDER ON DB
+			},
 			onDragStart() {
 				isDragged.set(true)
 			},

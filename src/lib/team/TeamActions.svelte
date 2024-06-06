@@ -51,18 +51,22 @@
 <a
 	href={$urlParam.with({
 		form_period: JSON.stringify({ team: { id: team.id, name: team.name } }),
+		section: team.id,
 	})}
 	class="btn btn-square btn-sm"
 	use:tip={{ content: 'Ajouter une période', disable: $isDragged }}
+	data-sveltekit-noscroll
+	data-sveltekit-replacestate
 >
 	<Icon path={mdiPlus} />
 </a>
 
 <a
-	href={$urlParam.with({ form_team: team.id })}
-	on:click|stopPropagation
+	href={$urlParam.with({ form_team: team.id, section: team.id })}
 	class="btn btn-square btn-sm"
 	use:tip={{ content: 'Éditer ce secteur', disable: $isDragged }}
+	data-sveltekit-noscroll
+	data-sveltekit-replacestate
 >
 	<Icon path={mdiPencilOutline} />
 </a>
