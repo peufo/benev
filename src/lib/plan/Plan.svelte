@@ -122,7 +122,7 @@
 					use:tip={{ content: team.name, appendTo: 'parent' }}
 				>
 					<a
-						href="{$eventPath}/teams/{team.id}"
+						href={$urlParam.with({ form_team: team.id })}
 						class="
 							flex items-center rounded bg-base-100
 							h-full px-2 outline outline-base-100
