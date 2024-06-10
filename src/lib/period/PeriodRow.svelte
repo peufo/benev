@@ -3,6 +3,9 @@
 	import { Icon, formatRange, urlParam } from 'fuma'
 	import { mdiClipboardTextOutline } from '@mdi/js'
 	import { goto } from '$app/navigation'
+	import dayjs from 'dayjs'
+	import 'dayjs/locale/fr-ch'
+	dayjs.locale('fr-ch')
 
 	import { SubscribeStateForm } from '$lib/subscribe'
 	import Progress from '$lib/Progress.svelte'
@@ -41,7 +44,9 @@
 	on:keydown={handlePeriodClick}
 >
 	<span class="text-sm" class:opacity-80={period.isDisabled}>
-		{formatRange(period)}
+		<!-- {formatRange(period)} -->
+		{dayjs(period.start).format('dddd, DD.MM.YY, HH:mm —')}
+		{dayjs(period.end).format('HH:mm')}
 	</span>
 
 	<div class="flex gap-3 ml-auto">
