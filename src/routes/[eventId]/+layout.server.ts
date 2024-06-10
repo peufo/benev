@@ -5,8 +5,8 @@ import { getTeam, prisma } from '$lib/server'
 import { getMemberProfile } from '$lib/server'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
-	const { user } = await parent()
-	const userId = user?.id || ''
+	const pageData = await parent()
+	const userId = pageData.user?.id || ''
 	try {
 		const { form_team, form_field, form_period } = parseQuery(url, {
 			form_team: z.string().optional(),
@@ -31,7 +31,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			!member?.isValidedByUser && (event.selfRegisterAllowed || member?.isValidedByEvent)
 
 		return {
-			userId: user?.id || '',
+			userId,
 			event,
 			member,
 			memberCanRegister,

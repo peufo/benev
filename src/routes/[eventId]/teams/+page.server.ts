@@ -36,7 +36,7 @@ export const load = async ({ parent, url, params: { eventId }, locals }) => {
 				name: 'asc',
 			},
 		})
-		.then((teams) => teams.map(addTeamComputedValues))
+		.then((teams) => teams.map((t) => addTeamComputedValues(t, member)))
 		.then((teams) => teams.map(hideTeamLeadersInfo))
 		.then((teams) => teams.filter((team) => isLeader || isMemberAllowed(team.conditions, member)))
 

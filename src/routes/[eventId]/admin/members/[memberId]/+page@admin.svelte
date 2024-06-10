@@ -113,7 +113,7 @@
 			<div class="grow" />
 			<TeamsActions teams={data.memberProfile.leaderOf} memberId={data.memberProfile.id} />
 		</div>
-		<Teams teams={data.memberProfile.leaderOf} event={data.event} showAll />
+		<Teams teams={data.memberProfile.leaderOf} showAll />
 	</section>
 </Card>
 

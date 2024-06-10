@@ -2,9 +2,10 @@
 	import { Drawer } from 'fuma'
 	import PeriodForm from './PeriodForm.svelte'
 	import type { Member, Period, Subscribe, User } from '@prisma/client'
-	import { SubscribeInviteForm, SubscribesOfPeriod } from '$lib/subscribe'
-	import Progress from '$lib/Progress.svelte'
 	import { periodDrawerTransitionX } from '$lib/store'
+	import { SubscribeInviteForm } from '$lib/subscribe'
+	import PeriodSubscribes from './PeriodSubscribes.svelte'
+	import Progress from '$lib/Progress.svelte'
 
 	type _Period = Partial<Period & { subscribes: Subscribe[] }>
 	type MemberWithUser = Member & { user: User }
@@ -44,7 +45,7 @@
 					period={{ maxSubscribe: period.maxSubscribe, subscribes: period.subscribes }}
 					withLabel
 				/>
-				<SubscribesOfPeriod subscribes={period.subscribes} />
+				<PeriodSubscribes subscribes={period.subscribes} />
 			{/if}
 
 			{#if period.id && !periodIsComplet(period)}

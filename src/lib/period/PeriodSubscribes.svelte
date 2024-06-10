@@ -1,15 +1,11 @@
 <script lang="ts">
-	import type { PageData } from '../../routes/[eventId]/teams/[teamId]/$types'
-	import type { User } from '@prisma/client'
+	import type { Subscribe, User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
-	import { Icon, Placeholder, tip } from 'fuma'
+	import { Icon, tip } from 'fuma'
 
-	// TODO: Pourquoi user ne passe pas directement dans le type ???
-	export let subscribes: (PageData['team']['periods'][number]['subscribes'][number] & {
-		member?: { user: User }
-	})[]
+	export let subscribes: (Subscribe & { member?: { user: User } })[]
 </script>
 
 <div class="flex flex-col gap-1">

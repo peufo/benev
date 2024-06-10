@@ -96,7 +96,7 @@ export function getMemberProfile(
 		.then((member) => hidePrivateProfilValues(member, accesor))
 		.then((member) => ({
 			...member,
-			leaderOf: member.leaderOf.map(addTeamComputedValues),
+			leaderOf: member.leaderOf.map((t) => addTeamComputedValues(t, accesor || member)),
 			event: {
 				...member.event,
 				memberFields: member.event.memberFields.filter(

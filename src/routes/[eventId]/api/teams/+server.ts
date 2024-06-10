@@ -3,7 +3,7 @@ import { z } from 'fuma/validation'
 import { prisma, permission, json, addTeamComputedValues } from '$lib/server'
 
 export const GET = async ({ params: { eventId }, url, locals }) => {
-	await permission.leader(eventId, locals)
+	const member = await permission.leader(eventId, locals)
 
 	const data = parseQuery(url, {
 		search: z.string().optional(),
@@ -28,10 +28,17 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 				eventId,
 				name: { contains: search },
 			},
-			include: { periods: { include: { subscribes: true } } },
+			include: {
+				periods: { include: { subscribes: true } },
+				leaders: {
+					include: {
+						user: { select: { firstName: true, lastName: true, email: true, phone: true } },
+					},
+				},
+			},
 			take,
 		})
-		.then((teams) => teams.map(addTeamComputedValues))
+		.then((teams) => teams.map((t) => addTeamComputedValues(t, member)))
 		.then((teams) => {
 			if (!data.onlyAvailable) return teams
 			return teams.filter((team) => team.isAvailable)

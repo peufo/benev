@@ -1,7 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 
 import type { MemberWithComputedValues } from '$lib/server'
-import type { Event, Media } from '@prisma/client'
+import type { Event, Media, Team } from '@prisma/client'
 import { modelMemberCondition } from '$lib/models'
 
 // for information about these interfaces
@@ -15,7 +15,7 @@ declare global {
 			event?: Event
 			medias?: Media[]
 			isLeader?: boolean
-			isLeaderOfTeam?: boolean
+			team?: Team
 		}
 		// interface Error {}
 		// interface Platform {}

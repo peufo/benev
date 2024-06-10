@@ -1,19 +1,22 @@
 <script lang="ts">
-	import type { TeamWithComputedValues } from '$lib/server'
-	import type { Member } from '@prisma/client'
+	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
 	import { Placeholder, listEditable } from 'fuma'
-	import { onlyAvailable } from '$lib/store'
 	import TeamCard from './TeamCard.svelte'
 	import { isDragged } from './isDragged'
+	import { derived } from 'svelte/store'
+	import { page } from '$app/stores'
+	import { createEventDispatcher } from 'svelte'
 
-	export let teams: (TeamWithComputedValues & {
-		leaders: (Member & {
-			user: { firstName: string; lastName: string; email: string; phone: string | null }
-		})[]
-	})[]
+	export let teams: TeamWithComputedValues[]
 
 	/** By pass $onlyAvailable store flag */
 	export let showAll = false
+
+	const dispatch = createEventDispatcher<{
+		clickPeriod: PeriodWithComputedValues & { team: TeamWithComputedValues }
+	}>()
+
+	const onlyAvailable = derived(page, ({ url }) => url.searchParams.get('onlyAvailable') === 'open')
 
 	$: _teams = teams.filter((team) => {
 		if (!$onlyAvailable || showAll) return true
@@ -40,7 +43,10 @@
 		}}
 	>
 		{#each _teams as team (team.id)}
-			<TeamCard {team} />
+			<TeamCard
+				{team}
+				on:clickPeriod={({ detail }) => dispatch('clickPeriod', { ...detail, team })}
+			/>
 		{/each}
 	</div>
 {:else}
