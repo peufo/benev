@@ -7,19 +7,12 @@
 	import { formatRangeDate } from '$lib/formatRange'
 	import type { TeamWithComputedValues } from '$lib/server'
 	dayjs.locale('fr-ch')
-
 	import { CardCollapse, Icon, Placeholder, tip } from 'fuma'
-	import { derived } from 'svelte/store'
+
 	import TeamActions from './TeamActions.svelte'
 	import TeamLeaders from './TeamLeaders.svelte'
 	import { PeriodRow } from '$lib/period'
 	export let team: TeamWithComputedValues
-
-	const canEditTeam = derived(page, ({ data: { member } }) => {
-		if (!member) return () => false
-		const leaderOf = member.leaderOf.map((t) => t.id)
-		return member.roles.includes('admin') || leaderOf.includes(team.id)
-	})
 
 	$: isTeamClosedSubscribing = dayjs().add(1, 'day').isAfter(team.closeSubscribing)
 </script>
@@ -28,7 +21,7 @@
 	<svelte:fragment slot="header">
 		<div class="flex gap-2">
 			<h2 class="title-md text-base-content">{team.name}</h2>
-			{#if $canEditTeam}
+			{#if team.isLeader}
 				<div class="flex gap-2 ml-auto">
 					<TeamActions {team} />
 				</div>
