@@ -102,13 +102,15 @@ function addPeriodsComputedValues<T extends TeamWithLeadersAndPeriodsSubscribes>
 				if (accesor.id) isDisabled = false
 				if (!accesor.id && accesor.event.selfRegisterAllowed) isDisabled = false
 			}
-			return {
+			const result: PeriodWithComputedValues = {
 				...period,
 				mySubscribe,
 				isAvailable,
 				isComplete,
 				isDisabled,
 			}
+
+			return result
 		}),
 	}
 }
