@@ -49,21 +49,16 @@
 	</span>
 
 	<div class="flex gap-3 ml-auto">
-		<Progress {period} class="w-[60px]" />
-
-		{#if period.team.isLeader}
-			{#if period.mySubscribe}
-				<SubscribeStateForm subscribe={period.mySubscribe} isLeader={!!period.team.isLeader} />
-			{:else if period.isAvailable}
-				<button
-					class="btn btn-square btn-sm"
-					on:click|stopPropagation={() => dispatch('clickPeriod', period)}
-				>
-					<Icon path={mdiClipboardTextOutline} size={20} title="M'inscrire à cette période" />
-				</button>
-			{:else}
-				<div class="w-8" />
-			{/if}
+		{#if period.mySubscribe}
+			<SubscribeStateForm subscribe={period.mySubscribe} isLeader={!!period.team.isLeader} />
+		{:else if period.team.isLeader && period.isAvailable}
+			<button
+				class="btn btn-square btn-sm"
+				on:click|stopPropagation={() => dispatch('clickPeriod', period)}
+			>
+				<Icon path={mdiClipboardTextOutline} size={20} title="M'inscrire à cette période" />
+			</button>
 		{/if}
+		<Progress {period} class="w-[60px]" />
 	</div>
 </div>

@@ -5,8 +5,8 @@ import { getTeam, prisma } from '$lib/server'
 import { getMemberProfile } from '$lib/server'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
-	const pageData = await parent()
-	const userId = pageData.user?.id || ''
+	const { user } = await parent()
+	const userId = user?.id || ''
 	try {
 		const { form_team, form_field, form_period } = parseQuery(url, {
 			form_team: z.string().optional(),

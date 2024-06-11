@@ -1,4 +1,4 @@
-import { tryOrFail, parseFormData, formAction } from 'fuma/server'
+import { formAction } from 'fuma/server'
 import { prisma, getMemberProfile, permission, ensureLicenceMembers } from '$lib/server'
 import { z } from 'fuma/validation'
 
@@ -6,7 +6,7 @@ export const load = async ({ parent, params: { memberId, eventId } }) => {
 	const { member } = await parent()
 
 	return {
-		memberProfile: await getMemberProfile({ id: memberId, eventId }, member),
+		memberProfile: await getMemberProfile({ id: memberId, eventId }, { member }),
 		event: await prisma.event.findUniqueOrThrow({
 			where: { id: eventId, deletedAt: null },
 			include: {

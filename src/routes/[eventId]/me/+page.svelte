@@ -5,7 +5,6 @@
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
 	import { MemberDeleteForm, MemberProfile } from '$lib/member'
-	import { EVENT_STATES } from '$lib/constant'
 
 	export let data
 </script>

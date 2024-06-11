@@ -69,43 +69,44 @@ function getMemberProfileRequiredFields({ profileJson, event }: MemberWithUserEv
 
 export type MemberProfile = Awaited<ReturnType<typeof getMemberProfile>>
 
-export function getMemberProfile(
+export async function getMemberProfile(
 	where: Prisma.MemberWhereInput,
 	ctx?: AddTeamComputedValuesContext
 ) {
-	const addTeamComputedValues = useAddTeamComputedValues(ctx)
-
-	return prisma.member
-		.findFirstOrThrow({
-			where,
-			include: {
-				user: true,
-				event: {
-					include: { memberFields: { orderBy: { position: 'asc' } } },
-				},
-				subscribes: {
-					include: { period: { include: { team: true } } },
-				},
-				leaderOf: {
-					include: {
-						leaders: { include: { user: true } },
-						periods: { include: { subscribes: true } },
-					},
-				},
-			},
-		})
-		.then(addMemberComputedValues)
-		.then((member) => hidePrivateProfilValues(member, ctx?.member))
-		.then((member) => ({
-			...member,
-			leaderOf: member.leaderOf.map(addTeamComputedValues),
+	const member = await prisma.member.findFirstOrThrow({
+		where,
+		include: {
+			user: true,
 			event: {
-				...member.event,
-				memberFields: member.event.memberFields.filter(
-					(field) => (ctx?.member || member).roles.includes('leader') || field.memberCanRead
-				),
+				include: { memberFields: { orderBy: { position: 'asc' } } },
 			},
-		}))
+			subscribes: {
+				include: { period: { include: { team: true } } },
+			},
+			leaderOf: {
+				include: {
+					leaders: { include: { user: true } },
+					periods: { include: { subscribes: true } },
+				},
+			},
+		},
+	})
+
+	// TODO: use pipeline ... J'ai honte
+	const addTeamComputedValues = useAddTeamComputedValues({ ...ctx, event: member.event })
+	const res1 = addMemberComputedValues(member)
+	const res2 = hidePrivateProfilValues(res1, ctx?.member)
+	const res3 = {
+		...res2,
+		leaderOf: member.leaderOf.map(addTeamComputedValues),
+		event: {
+			...member.event,
+			memberFields: member.event.memberFields.filter(
+				(field) => (ctx?.member || res2).roles.includes('leader') || field.memberCanRead
+			),
+		},
+	}
+	return res3
 }
 
 export function hidePrivateProfilValues<T extends MemberWithComputedValues>(

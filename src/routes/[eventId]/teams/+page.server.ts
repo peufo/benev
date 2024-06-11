@@ -45,7 +45,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			if (!onlyAvailable) return teams
 			return teams
 				.filter((team) => team.isAvailable)
-				.map((team) => ({ ...team, periods: team.periods.filter((p) => p.isAvailable) }))
+				.map((team) => ({ ...team, periods: team.periods.filter((p) => !p.isComplete) }))
 		})
 
 	return { teams }

@@ -15,7 +15,7 @@
 {#if teams.length}
 	<div class="grid gap-4 mt-2" style:grid-template-columns="repeat(auto-fill, minmax(325px, 1fr))">
 		{#each teams as team}
-			<CardLink title={team.name} href="/{team.eventId}/teams/{team.id}">
+			<CardLink title={team.name} href="/{team.eventId}/teams?section={team.id}#{team.id}">
 				{#each team.periods as period}
 					{@const subscribe = period.subscribes[0]}
 					<div class="flex gap-1 items-center mt-2">
