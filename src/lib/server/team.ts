@@ -13,6 +13,7 @@ type TeamWithLeadersAndPeriodsSubscribes = Team & {
 
 export type AddTeamComputedValuesContext = {
 	member?: MemberWithComputedValues
+	isLeader?: boolean
 	event: Event
 }
 
@@ -28,7 +29,9 @@ export function useAddTeamComputedValues(
 		const nbSubscribes = nbSubscribesAccepted + nbSubscribesRequest
 		const maxSubscribes = team.periods.map((p) => p.maxSubscribe).reduce((acc, cur) => acc + cur, 0)
 		const isLeader =
-			ctx?.member?.roles.includes('admin') || !!ctx?.member?.leaderOf.find((t) => t.id === team.id)
+			ctx?.isLeader ||
+			ctx?.member?.roles.includes('admin') ||
+			!!ctx?.member?.leaderOf.find((t) => t.id === team.id)
 		const closeSubscribing = team?.closeSubscribing || ctx?.event.closeSubscribing
 		const DAY = 1000 * 60 * 60 * 24
 		const isClosedSubscribing =

@@ -93,7 +93,11 @@ export async function getMemberProfile(
 	})
 
 	// TODO: use pipeline ... J'ai honte
-	const addTeamComputedValues = useAddTeamComputedValues({ ...ctx, event: member.event })
+	const addTeamComputedValues = useAddTeamComputedValues({
+		...ctx,
+		isLeader: true,
+		event: member.event,
+	})
 	const res1 = addMemberComputedValues(member)
 	const res2 = hidePrivateProfilValues(res1, ctx?.member)
 	const res3 = {
