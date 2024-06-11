@@ -1,14 +1,85 @@
 import { getRangeOfTeam } from '$lib/plan/getRange'
-import type { Member, Period, Subscribe, Team, User } from '@prisma/client'
+import type { Event, Member, Period, Subscribe, Team, User } from '@prisma/client'
 import { prisma } from './prisma'
 import type { MemberWithComputedValues } from './member'
 
-export type MemberWithUser = Member & {
+type MemberWithUser = Member & {
 	user: Pick<User, 'firstName' | 'lastName' | 'email' | 'phone'>
 }
-export type TeamWithLeadersAndPeriodsSubscribes = Team & {
+type TeamWithLeadersAndPeriodsSubscribes = Team & {
 	leaders: MemberWithUser[]
 	periods: (Period & { subscribes: Subscribe[] })[]
+}
+
+export type AddTeamComputedValuesContext = {
+	member?: MemberWithComputedValues
+	event: Event
+}
+
+export function useAddTeamComputedValues(
+	ctx?: AddTeamComputedValuesContext
+): <T extends TeamWithLeadersAndPeriodsSubscribes>(
+	team: T
+) => Omit<T, 'periods'> & TeamWithComputedValues {
+	return (team) => {
+		const subscribes = team.periods.map((p) => p.subscribes).flat()
+		const nbSubscribesAccepted = subscribes.filter((sub) => sub.state === 'accepted').length
+		const nbSubscribesRequest = subscribes.filter((sub) => sub.state === 'request').length
+		const nbSubscribes = nbSubscribesAccepted + nbSubscribesRequest
+		const maxSubscribes = team.periods.map((p) => p.maxSubscribe).reduce((acc, cur) => acc + cur, 0)
+		const isLeader =
+			ctx?.member?.roles.includes('admin') || !!ctx?.member?.leaderOf.find((t) => t.id === team.id)
+		const closeSubscribing = team?.closeSubscribing || ctx?.event.closeSubscribing
+		const DAY = 1000 * 60 * 60 * 24
+		const isClosedSubscribing =
+			!!closeSubscribing && closeSubscribing.getTime() + DAY < new Date().getTime()
+
+		return hideTeamLeadersInfo(
+			addPeriodsComputedValues({
+				...team,
+				isLeader,
+				isClosedSubscribing,
+				maxSubscribes,
+				nbSubscribes,
+				nbSubscribesAccepted,
+				nbSubscribesRequest,
+				isAvailable: nbSubscribes < maxSubscribes,
+				range: getRangeOfTeam(team),
+			})
+		)
+	}
+
+	function addPeriodsComputedValues<T extends ComputePeriodArg>(
+		team: T
+	): T & { periods: PeriodWithComputedValues[] } {
+		return {
+			...team,
+			periods: team.periods.map((period) => {
+				const nbSubscribe = period.subscribes.filter(
+					({ state }) => state === 'accepted' || state === 'request'
+				).length
+				const mySubscribe = period.subscribes.find((sub) => sub.memberId === ctx?.member?.id)
+				const isComplete = nbSubscribe >= period.maxSubscribe
+				const isAvailable = !mySubscribe && !isComplete
+
+				let isDisabled = true
+				if (team.isLeader) isDisabled = false
+
+				if (isAvailable && ctx?.event.selfSubscribeAllowed && !team.isClosedSubscribing) {
+					if (ctx?.member?.id) isDisabled = false
+					else if (ctx?.event.selfRegisterAllowed) isDisabled = false
+				}
+
+				return {
+					...period,
+					mySubscribe,
+					isAvailable,
+					isComplete,
+					isDisabled,
+				}
+			}),
+		}
+	}
 }
 
 export type PeriodWithComputedValues = Period & {
@@ -34,38 +105,7 @@ export type TeamWithComputedValues = Team & {
 type ComputePeriodArg = Omit<TeamWithComputedValues, 'periods'> &
 	TeamWithLeadersAndPeriodsSubscribes
 
-export function addTeamComputedValues<T extends TeamWithLeadersAndPeriodsSubscribes>(
-	team: T,
-	accesor?: MemberWithComputedValues
-): T & TeamWithComputedValues {
-	const subscribes = team.periods.map((p) => p.subscribes).flat()
-	const nbSubscribesAccepted = subscribes.filter((sub) => sub.state === 'accepted').length
-	const nbSubscribesRequest = subscribes.filter((sub) => sub.state === 'request').length
-	const nbSubscribes = nbSubscribesAccepted + nbSubscribesRequest
-	const maxSubscribes = team.periods.map((p) => p.maxSubscribe).reduce((acc, cur) => acc + cur, 0)
-	const isLeader =
-		accesor?.roles.includes('admin') || !!accesor?.leaderOf.find((t) => t.id === team.id)
-	const closeSubscribing = team?.closeSubscribing || accesor?.event?.closeSubscribing
-	const DAY = 1000 * 60 * 60 * 24
-	const isClosedSubscribing =
-		!!closeSubscribing && closeSubscribing.getTime() + DAY < new Date().getTime()
-
-	const _team: T & ComputePeriodArg = {
-		...team,
-		isLeader,
-		isClosedSubscribing,
-		maxSubscribes,
-		nbSubscribes,
-		nbSubscribesAccepted,
-		nbSubscribesRequest,
-		isAvailable: nbSubscribes < maxSubscribes,
-		range: getRangeOfTeam(team),
-	}
-
-	return addPeriodsComputedValues(_team, accesor)
-}
-
-export function hideTeamLeadersInfo<T extends TeamWithLeadersAndPeriodsSubscribes>(team: T): T {
+function hideTeamLeadersInfo<T extends { leaders: MemberWithUser[] }>(team: T): T {
 	return {
 		...team,
 		leaders: team.leaders.map((leader) =>
@@ -84,43 +124,9 @@ export function hideTeamLeadersInfo<T extends TeamWithLeadersAndPeriodsSubscribe
 	}
 }
 
-function addPeriodsComputedValues<T extends ComputePeriodArg>(
-	team: T,
-	accesor?: MemberWithComputedValues
-): T & { periods: PeriodWithComputedValues[] } {
-	return {
-		...team,
-		periods: team.periods.map((period) => {
-			const nbSubscribe = period.subscribes.filter(
-				({ state }) => state === 'accepted' || state === 'request'
-			).length
-			const mySubscribe = period.subscribes.find((sub) => sub.memberId === accesor?.id)
-			const isComplete = nbSubscribe >= period.maxSubscribe
-			const isAvailable = !mySubscribe && !isComplete
-
-			let isDisabled = true
-			if (team.isLeader) isDisabled = false
-
-			if (isAvailable && accesor?.event?.selfSubscribeAllowed && !team.isClosedSubscribing) {
-				if (accesor.id) isDisabled = false
-				if (!accesor.id && accesor.event.selfRegisterAllowed) isDisabled = false
-			}
-			const result: PeriodWithComputedValues = {
-				...period,
-				mySubscribe,
-				isAvailable,
-				isComplete,
-				isDisabled,
-			}
-
-			return result
-		}),
-	}
-}
-
-export async function getTeam(teamId: string, accesor?: MemberWithComputedValues) {
+export async function getTeam(teamId: string, ctx: AddTeamComputedValuesContext) {
 	const isLeaderOfTeam =
-		accesor?.roles.includes('admin') || !!accesor?.leaderOf.find((t) => t.id === teamId)
+		ctx.member?.roles.includes('admin') || !!ctx.member?.leaderOf.find((t) => t.id === teamId)
 
 	const team: TeamWithComputedValues = await prisma.team
 		.findUniqueOrThrow({
@@ -153,8 +159,7 @@ export async function getTeam(teamId: string, accesor?: MemberWithComputedValues
 				},
 			},
 		})
-		.then((team) => addTeamComputedValues(team, accesor))
-		.then(hideTeamLeadersInfo)
+		.then(useAddTeamComputedValues(ctx))
 
 	return team
 }

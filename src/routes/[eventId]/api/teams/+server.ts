@@ -1,6 +1,6 @@
 import { parseQuery } from 'fuma/server'
 import { z } from 'fuma/validation'
-import { prisma, permission, json, addTeamComputedValues } from '$lib/server'
+import { prisma, permission, json, useAddTeamComputedValues } from '$lib/server'
 
 export const GET = async ({ params: { eventId }, url, locals }) => {
 	const member = await permission.leader(eventId, locals)
@@ -22,6 +22,8 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 			})
 		)
 
+	const addTeamComputedValues = useAddTeamComputedValues({ member, event: member.event })
+
 	const teams = await prisma.team
 		.findMany({
 			where: {
@@ -38,7 +40,7 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 			},
 			take,
 		})
-		.then((teams) => teams.map((t) => addTeamComputedValues(t, member)))
+		.then((teams) => teams.map(addTeamComputedValues))
 		.then((teams) => {
 			if (!data.onlyAvailable) return teams
 			return teams.filter((team) => team.isAvailable)

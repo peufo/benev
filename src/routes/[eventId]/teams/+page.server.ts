@@ -1,17 +1,18 @@
+import { z } from 'fuma'
 import { formAction } from 'fuma/server'
-import { addTeamComputedValues, hideTeamLeadersInfo, permission, prisma } from '$lib/server'
+import { useAddTeamComputedValues, permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
 import { error } from '@sveltejs/kit'
-import { z } from 'fuma'
-import { Teams } from '$lib/team/index.js'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const search = url.searchParams.get('search')
 	const onlyAvailable = url.searchParams.get('onlyAvailable') === 'true'
-	const { member } = await parent()
+	const { member, event } = await parent()
 
 	const isLeader = member?.roles.includes('leader')
+
+	const addTeamComputedValues = useAddTeamComputedValues({ member, event })
 
 	const teams = await prisma.team
 		.findMany({
@@ -38,8 +39,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				name: 'asc',
 			},
 		})
-		.then((teams) => teams.map((t) => addTeamComputedValues(t, member)))
-		.then((teams) => teams.map(hideTeamLeadersInfo))
+		.then((teams) => teams.map(addTeamComputedValues))
 		.then((teams) => teams.filter((team) => isLeader || isMemberAllowed(team.conditions, member)))
 		.then((teams) => {
 			if (!onlyAvailable) return teams

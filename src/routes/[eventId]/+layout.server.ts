@@ -39,7 +39,9 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				where: { eventId, type: { not: 'email' } },
 				select: { id: true, title: true, path: true, type: true },
 			}),
-			team: await getIfDefined(form_team, (id) => getTeam(id).catch(() => undefined)),
+			team: await getIfDefined(form_team, (id) =>
+				getTeam(id, { member, event }).catch(() => undefined)
+			),
 			field: await getIfDefined(form_field, (id) =>
 				prisma.field.findUnique({ where: { id, eventId } })
 			),

@@ -1,7 +1,7 @@
 import { ROOT_USER } from '$env/static/private'
 import type { Prisma } from '@prisma/client'
 import type { Member, Team, User, Event, Field } from '@prisma/client'
-import { addTeamComputedValues, prisma } from '$lib/server'
+import { useAddTeamComputedValues, prisma, type AddTeamComputedValuesContext } from '$lib/server'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
 type MemberWithUserEventAndLeaderOf = Member & {
@@ -71,8 +71,10 @@ export type MemberProfile = Awaited<ReturnType<typeof getMemberProfile>>
 
 export function getMemberProfile(
 	where: Prisma.MemberWhereInput,
-	accesor?: MemberWithComputedValues
+	ctx?: AddTeamComputedValuesContext
 ) {
+	const addTeamComputedValues = useAddTeamComputedValues(ctx)
+
 	return prisma.member
 		.findFirstOrThrow({
 			where,
@@ -93,14 +95,14 @@ export function getMemberProfile(
 			},
 		})
 		.then(addMemberComputedValues)
-		.then((member) => hidePrivateProfilValues(member, accesor))
+		.then((member) => hidePrivateProfilValues(member, ctx?.member))
 		.then((member) => ({
 			...member,
-			leaderOf: member.leaderOf.map((t) => addTeamComputedValues(t, accesor || member)),
+			leaderOf: member.leaderOf.map(addTeamComputedValues),
 			event: {
 				...member.event,
 				memberFields: member.event.memberFields.filter(
-					(field) => (accesor || member).roles.includes('leader') || field.memberCanRead
+					(field) => (ctx?.member || member).roles.includes('leader') || field.memberCanRead
 				),
 			},
 		}))
