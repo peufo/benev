@@ -21,15 +21,18 @@ export type PeriodWithComputedValues = Period & {
 
 export type TeamWithComputedValues = Team & {
 	leaders: MemberWithUser[]
+	periods: PeriodWithComputedValues[]
 	isLeader: boolean
+	isAvailable: boolean
+	isClosedSubscribing: boolean
 	maxSubscribes: number
 	nbSubscribes: number
 	nbSubscribesAccepted: number
 	nbSubscribesRequest: number
-	isAvailable: boolean
 	range: { start: Date; end: Date } | null
-	periods: PeriodWithComputedValues[]
 }
+type ComputePeriodArg = Omit<TeamWithComputedValues, 'periods'> &
+	TeamWithLeadersAndPeriodsSubscribes
 
 export function addTeamComputedValues<T extends TeamWithLeadersAndPeriodsSubscribes>(
 	team: T,
@@ -42,10 +45,15 @@ export function addTeamComputedValues<T extends TeamWithLeadersAndPeriodsSubscri
 	const maxSubscribes = team.periods.map((p) => p.maxSubscribe).reduce((acc, cur) => acc + cur, 0)
 	const isLeader =
 		accesor?.roles.includes('admin') || !!accesor?.leaderOf.find((t) => t.id === team.id)
+	const closeSubscribing = team?.closeSubscribing || accesor?.event?.closeSubscribing
+	const DAY = 1000 * 60 * 60 * 24
+	const isClosedSubscribing =
+		!!closeSubscribing && closeSubscribing.getTime() + DAY < new Date().getTime()
 
-	const res: T & TeamWithComputedValues = {
-		...addPeriodsComputedValues(team, accesor),
+	const _team: T & ComputePeriodArg = {
+		...team,
 		isLeader,
+		isClosedSubscribing,
 		maxSubscribes,
 		nbSubscribes,
 		nbSubscribesAccepted,
@@ -53,7 +61,8 @@ export function addTeamComputedValues<T extends TeamWithLeadersAndPeriodsSubscri
 		isAvailable: nbSubscribes < maxSubscribes,
 		range: getRangeOfTeam(team),
 	}
-	return res
+
+	return addPeriodsComputedValues(_team, accesor)
 }
 
 export function hideTeamLeadersInfo<T extends TeamWithLeadersAndPeriodsSubscribes>(team: T): T {
@@ -75,17 +84,10 @@ export function hideTeamLeadersInfo<T extends TeamWithLeadersAndPeriodsSubscribe
 	}
 }
 
-function addPeriodsComputedValues<T extends TeamWithLeadersAndPeriodsSubscribes>(
+function addPeriodsComputedValues<T extends ComputePeriodArg>(
 	team: T,
 	accesor?: MemberWithComputedValues
 ): T & { periods: PeriodWithComputedValues[] } {
-	const isLeaderOfTeam =
-		accesor?.roles.includes('admin') || !!accesor?.leaderOf.find((t) => t.id === team.id)
-	const closeSubscribing = team?.closeSubscribing || accesor?.event?.closeSubscribing
-	const DAY = 1000 * 60 * 60 * 24
-	const isTeamClosedSubscribing =
-		!!closeSubscribing && closeSubscribing.getTime() < new Date().getTime() + DAY
-
 	return {
 		...team,
 		periods: team.periods.map((period) => {
@@ -97,8 +99,9 @@ function addPeriodsComputedValues<T extends TeamWithLeadersAndPeriodsSubscribes>
 			const isAvailable = !mySubscribe && !isComplete
 
 			let isDisabled = true
-			if (isLeaderOfTeam) isDisabled = false
-			if (isAvailable && accesor?.event?.selfSubscribeAllowed && !isTeamClosedSubscribing) {
+			if (team.isLeader) isDisabled = false
+
+			if (isAvailable && accesor?.event?.selfSubscribeAllowed && !team.isClosedSubscribing) {
 				if (accesor.id) isDisabled = false
 				if (!accesor.id && accesor.event.selfRegisterAllowed) isDisabled = false
 			}

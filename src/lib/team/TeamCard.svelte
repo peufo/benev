@@ -13,8 +13,6 @@
 	import TeamLeaders from './TeamLeaders.svelte'
 	import { PeriodRow } from '$lib/period'
 	export let team: TeamWithComputedValues
-
-	$: isTeamClosedSubscribing = dayjs().add(1, 'day').isAfter(team.closeSubscribing)
 </script>
 
 <CardCollapse value={team.id} class="p-1 md:py group" classHeader="sm:pr-3 sticky top-0">
@@ -53,7 +51,7 @@
 		{#if team.closeSubscribing && $page.data.event?.selfSubscribeAllowed}
 			<span
 				class="badge"
-				class:badge-warning={isTeamClosedSubscribing}
+				class:badge-warning={team.isClosedSubscribing}
 				use:tip={{
 					content: `Fin des inscriptions le ${team.closeSubscribing.toLocaleDateString()}`,
 				}}

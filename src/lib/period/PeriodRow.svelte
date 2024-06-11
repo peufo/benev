@@ -17,7 +17,7 @@
 
 	function handlePeriodClick(event: Event) {
 		if (clickInteractiveElement(event)) return
-
+		console.log({ period })
 		if (period.team.isLeader) {
 			const url = $urlParam.toggle({ form_period: period.id })
 			return goto(url, { replaceState: true, noScroll: true, keepFocus: true })
@@ -37,8 +37,7 @@
 	role="button"
 	tabindex="0"
 	class="menu-item flex-wrap"
-	class:cursor-pointer={!period.isDisabled}
-	class:hover={!period.isDisabled}
+	class:disabled={period.isDisabled}
 	class:active={$urlParam.hasValue('form_period', period.id)}
 	on:click={handlePeriodClick}
 	on:keydown={handlePeriodClick}
