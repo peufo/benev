@@ -3,10 +3,7 @@
 	import type { ComponentProps, ComponentType } from 'svelte'
 	import { get } from 'svelte/store'
 	import { page } from '$app/stores'
-	import type { Field, FieldType } from '@prisma/client'
-	import { browser } from '$app/environment'
-	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
-	import { jsonParse } from '$lib/jsonParse'
+	import type { Field } from '@prisma/client'
 	import {
 		Icon,
 		InputSelect,
@@ -16,6 +13,7 @@
 		InputText,
 		InputCheckboxs,
 		InputRadio,
+		jsonParse,
 	} from 'fuma'
 	import {
 		mdiAccountCheckOutline,
@@ -24,6 +22,9 @@
 		mdiHumanMaleBoy,
 		mdiPlus,
 	} from '@mdi/js'
+	import { browser } from '$app/environment'
+	import type { MemberCondition } from '$lib/models'
+	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
 
 	export let conditions: MemberCondition[] = []
 	export let memberFields: Field[]
@@ -67,29 +68,6 @@
 					},
 				},
 			]
-	}
-
-	const operators: Record<FieldType, MemberConditionOperator[]> = {
-		boolean: ['equals'],
-		number: ['equals', 'gt', 'gte', 'lt', 'lte'],
-		string: ['equals', 'not', 'string_contains'],
-		textarea: ['equals', 'not', 'string_contains', 'string_starts_with', 'string_ends_with'],
-		select: ['equals', 'array_contains', 'array_starts_with', 'array_ends_with'],
-		multiselect: ['equals', 'array_contains', 'array_starts_with', 'array_ends_with'],
-	}
-	const operatorLabel: Record<MemberConditionOperator, string> = {
-		equals: 'Est égal à',
-		not: "N'est pas égal à",
-		gt: 'Est plus grand que',
-		gte: 'Est plus grand ou égal à',
-		lt: 'Est plus petit que',
-		lte: 'Est plus petit ou égal à',
-		string_contains: 'Contient',
-		array_contains: 'Contient',
-		string_starts_with: 'Commence par',
-		array_starts_with: 'Commence par',
-		string_ends_with: 'Termine par',
-		array_ends_with: 'Termine par',
 	}
 
 	function component<Component extends ComponentType>(
@@ -173,8 +151,8 @@
 									const field = memberFields.find((f) => f.id === e.detail)
 									if (!field) return
 									if (condition.type !== 'profile') return
-									if (operators[field.type].includes(condition.args.operator)) return
-									condition.args.operator = operators[field.type][0]
+									if (CONDITION_OPERATOR[field.type].includes(condition.args.operator)) return
+									condition.args.operator = CONDITION_OPERATOR[field.type][0]
 								}}
 							/>
 
@@ -185,9 +163,9 @@
 								{#if field}
 									<InputSelect
 										bind:value={condition.args.operator}
-										options={operators[field.type].map((value) => ({
+										options={CONDITION_OPERATOR[field.type].map((value) => ({
 											value,
-											label: operatorLabel[value],
+											label: CONDITION_OPERATOR_LABEL[value],
 										}))}
 										class="label-text whitespace-nowrap"
 									/>

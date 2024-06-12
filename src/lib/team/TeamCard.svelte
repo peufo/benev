@@ -12,6 +12,7 @@
 	import TeamActions from './TeamActions.svelte'
 	import TeamLeaders from './TeamLeaders.svelte'
 	import { PeriodRow } from '$lib/period'
+	import { MemberConditionsBadges } from '$lib/member'
 	export let team: TeamWithComputedValues
 </script>
 
@@ -64,15 +65,10 @@
 			{/if}
 
 			<!-- BADGES CONDITIONS -->
-			{#if team.conditions?.length}
-				<span class="badge opacity-80">
-					<Icon path={mdiFilterOutline} size={16} />
-					<span class="ml-1">
-						{team.conditions.length}
-						condition{team.conditions.length > 1 ? 's' : ''}
-					</span>
-				</span>
-			{/if}
+			<MemberConditionsBadges
+				conditions={team.conditions || []}
+				memberFields={$page.data.member?.event.memberFields || []}
+			/>
 		</div>
 	</svelte:fragment>
 
