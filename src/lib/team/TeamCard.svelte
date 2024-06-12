@@ -15,7 +15,7 @@
 	export let team: TeamWithComputedValues
 </script>
 
-<CardCollapse value={team.id} class="p-1 md:py group" classHeader="sm:pr-3 sticky top-0">
+<CardCollapse value={team.id} class="p-1 md:py group max-w-xl" classHeader="sm:pr-3 sticky top-0">
 	<svelte:fragment slot="header">
 		<div class="flex gap-2">
 			<h2 class="title-md text-base-content">{team.name}</h2>
