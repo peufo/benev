@@ -79,10 +79,7 @@
 	</button>
 {:else}
 	<DropDown tippyProps={{ arrow: true, trigger: 'click', ...tippyProps }}>
-		<button
-			slot="activator"
-			class="relative btn btn-sm btn-square btn-ghost hover:bg-base-200 z-10"
-		>
+		<button slot="activator" class="relative btn btn-sm btn-square z-10">
 			<SubscribeState {subscribe} />
 		</button>
 

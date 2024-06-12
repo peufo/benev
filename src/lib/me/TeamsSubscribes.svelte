@@ -18,7 +18,7 @@
 			<CardLink title={team.name} href="/{team.eventId}/teams?section={team.id}#{team.id}">
 				{#each team.periods as period}
 					{@const subscribe = period.subscribes[0]}
-					<div class="flex gap-1 items-center mt-2">
+					<div class="flex gap-2 items-center mt-2">
 						<div
 							class="
 								grow flex gap-2 items-center px-2 py-2 rounded
@@ -37,8 +37,6 @@
 								</a>
 							{/if}
 
-							<SubscribeCreatedBy createdBy={subscribe.createdBy} size={22} />
-
 							{#if subscribe.isAbsent}
 								<div class="z-10" use:tip={{ content: 'Absent à la période de travail' }}>
 									<Icon path={mdiAlertOutline} class="fill-warning" size={20} />
@@ -48,6 +46,12 @@
 							<span class="text-sm">{formatRange(period)}</span>
 							<div class="grow" />
 						</div>
+
+						<SubscribeCreatedBy
+							createdBy={subscribe.createdBy}
+							size={22}
+							class="btn-square btn-sm relative z-10"
+						/>
 
 						<SubscribeStateForm
 							subscribe={period.subscribes[0]}
