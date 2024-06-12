@@ -17,7 +17,6 @@
 
 	function handlePeriodClick(event: Event) {
 		if (clickInteractiveElement(event)) return
-		console.log({ period })
 		if (period.team.isLeader) {
 			const url = $urlParam.toggle({ form_period: period.id })
 			return goto(url, { replaceState: true, noScroll: true, keepFocus: true })

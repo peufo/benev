@@ -22,7 +22,7 @@
 				url: logo,
 				width: 500,
 				height: 500,
-				alt: 'Logo de Benev',
+				alt: 'Logo de Benev.io',
 			},
 		],
 	}}

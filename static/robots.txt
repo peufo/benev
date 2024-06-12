@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://benev.io/sitemap.xml
