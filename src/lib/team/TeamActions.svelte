@@ -13,6 +13,7 @@
 	import { isDragged } from './isDragged'
 
 	export let team: Team
+	export let isReorderable = false
 </script>
 
 <a
@@ -40,13 +41,15 @@
 	<Icon path={mdiChartGantt} />
 </a>
 
-<button
-	on:click|stopPropagation
-	class="drag-button btn btn-square btn-sm btn-ghost opacity-0 group-hover:opacity-100"
-	use:tip={{ content: 'Changer la position du secteur', disable: $isDragged }}
->
-	<Icon path={mdiDrag} />
-</button>
+{#if isReorderable}
+	<button
+		on:click|stopPropagation
+		class="drag-button btn btn-square btn-sm btn-ghost opacity-0 group-hover:opacity-100"
+		use:tip={{ content: 'Changer la position du secteur', disable: $isDragged }}
+	>
+		<Icon path={mdiDrag} />
+	</button>
+{/if}
 
 <a
 	href={$urlParam.with({

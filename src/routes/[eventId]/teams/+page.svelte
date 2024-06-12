@@ -61,7 +61,11 @@
 		{/if}
 	</div>
 
-	<Teams teams={data.teams} on:clickPeriod={({ detail }) => handleClickPeriod(detail)} />
+	<Teams
+		teams={data.teams}
+		isReorderable={!$urlParam.hasValue('onlyAvailable', 'true')}
+		on:clickPeriod={({ detail }) => handleClickPeriod(detail)}
+	/>
 </div>
 
 <dialog class="modal" bind:this={subscribeDialog}>

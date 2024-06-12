@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
 	import { toast } from 'svelte-sonner'
-	import { Placeholder, USE_COERCE_JSON, listEditable } from 'fuma'
+	import { Placeholder, listEditable } from 'fuma'
 	import TeamCard from './TeamCard.svelte'
 	import { isDragged } from './isDragged'
 	import { createEventDispatcher } from 'svelte'
@@ -9,6 +9,7 @@
 	import { eventPath } from '$lib/store'
 
 	export let teams: TeamWithComputedValues[]
+	export let isReorderable = false
 
 	const dispatch = createEventDispatcher<{
 		clickPeriod: PeriodWithComputedValues & { team: TeamWithComputedValues }
@@ -18,7 +19,6 @@
 		teams = reorderedTeams
 		const form = new FormData()
 		form.append('teams', JSON.stringify(teams.map((t, i) => ({ id: t.id, position: i }))))
-
 		axios
 			.postForm(`${$eventPath}/teams?/teams_reorder`, form)
 			.then(() => toast.success('Nouvel ordre sauvegardé'))
@@ -44,6 +44,7 @@
 		{#each teams as team (team.id)}
 			<TeamCard
 				{team}
+				{isReorderable}
 				on:clickPeriod={({ detail }) => dispatch('clickPeriod', { ...detail, team })}
 			/>
 		{/each}
