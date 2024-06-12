@@ -1,11 +1,11 @@
-import ical from 'ical-generator'
+import ical, { ICalCalendarMethod } from 'ical-generator'
 
 export const GET = async ({ url }) => {
 	const token = url.searchParams.get('token')
 	console.log({ token })
 	// Create and use user token
 
-	const calendar = ical({ name: 'Mon bénévolat' })
+	const calendar = ical({ name: 'Mon bénévolat', method: ICalCalendarMethod.REFRESH })
 
 	const startTime = new Date()
 	const endTime = new Date()
