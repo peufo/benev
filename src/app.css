@@ -45,7 +45,7 @@
 mark {
 	border-radius: 0.25em;
 	box-decoration-break: clone;
-	padding: 0.125em 0;
+	padding: 0.125em 0.5rem;
 }
 
 .tiptap p.is-editor-empty:first-child::before {
