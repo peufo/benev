@@ -44,7 +44,7 @@
 			<p class="text-sm my-4">{team.description}</p>
 		{/if}
 
-		<div class="flex gap-2 flex-wrap mt-4">
+		<div class="flex gap-2 gap-y-1 flex-wrap mt-4">
 			<!-- BADGE LEADERS -->
 			<TeamLeaders leaders={team.leaders} />
 

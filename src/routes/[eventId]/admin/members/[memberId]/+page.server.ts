@@ -8,7 +8,7 @@ export const load = async ({ parent, params: { memberId, eventId } }) => {
 	return {
 		memberProfile: await getMemberProfile(
 			{ id: memberId, eventId },
-			{ member, event: member.event }
+			member && { member, event: member.event }
 		),
 		event: await prisma.event.findUniqueOrThrow({
 			where: { id: eventId, deletedAt: null },

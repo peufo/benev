@@ -8,7 +8,7 @@ export const CONDITION_OPERATOR: Record<FieldType, MemberConditionOperator[]> = 
 	textarea: ['equals', 'not', 'string_contains', 'string_starts_with', 'string_ends_with'],
 	select: ['equals', 'array_contains', 'array_starts_with', 'array_ends_with'],
 	multiselect: ['equals', 'array_contains', 'array_starts_with', 'array_ends_with'],
-} as const
+}
 
 export const CONDITION_OPERATOR_LABEL: Record<MemberConditionOperator, string> = {
 	equals: 'Est égal à',
@@ -23,4 +23,4 @@ export const CONDITION_OPERATOR_LABEL: Record<MemberConditionOperator, string> =
 	array_starts_with: 'Commence par',
 	string_ends_with: 'Termine par',
 	array_ends_with: 'Termine par',
-} as const
+}

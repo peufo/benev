@@ -27,7 +27,9 @@
 			<span>Âge minimum: {condition.args} ans</span>
 		{:else}
 			<Icon path={mdiCardAccountDetailsOutline} class="opacity-70" size={16} />
-			{@const field = memberFields.find((f) => f.id === condition.args.fieldId)}
+			{@const field = memberFields.find(
+				(f) => condition.type === 'profile' && f.id === condition.args.fieldId
+			)}
 			<span>{field?.name}</span>
 			<span>{CONDITION_OPERATOR_LABEL[condition.args.operator].toLocaleLowerCase()}</span>
 			<span>{condition.args.expectedValue}</span>
