@@ -39,46 +39,43 @@
 				}}
 			/>
 		</div>
+
+		{#if team.description}
+			<p class="text-sm my-4">{team.description}</p>
+		{/if}
+
+		<div class="flex gap-2 flex-wrap mt-4">
+			<!-- BADGE LEADERS -->
+			<TeamLeaders leaders={team.leaders} />
+
+			<!-- BADGE SUBSCRIBE CLOSED -->
+			{#if team.closeSubscribing && $page.data.event?.selfSubscribeAllowed}
+				<span
+					class="badge"
+					class:badge-warning={team.isClosedSubscribing}
+					use:tip={{
+						content: `Fin des inscriptions le ${team.closeSubscribing.toLocaleDateString()}`,
+					}}
+				>
+					<Icon path={mdiClockTimeFourOutline} size={16} />
+					<span class="ml-1">
+						{dayjs(team.closeSubscribing).format('DD MMMM')}
+					</span>
+				</span>
+			{/if}
+
+			<!-- BADGES CONDITIONS -->
+			{#if team.conditions?.length}
+				<span class="badge opacity-80">
+					<Icon path={mdiFilterOutline} size={16} />
+					<span class="ml-1">
+						{team.conditions.length}
+						condition{team.conditions.length > 1 ? 's' : ''}
+					</span>
+				</span>
+			{/if}
+		</div>
 	</svelte:fragment>
-
-	{#if team.description}
-		<p class="text-sm">{team.description}</p>
-	{/if}
-
-	<div class="flex gap-2 flex-wrap">
-		<TeamLeaders leaders={team.leaders} />
-
-		<!-- BADGE SUBSCRIBE CLOSED -->
-		{#if team.closeSubscribing && $page.data.event?.selfSubscribeAllowed}
-			<span
-				class="badge"
-				class:badge-warning={team.isClosedSubscribing}
-				use:tip={{
-					content: `Fin des inscriptions le ${team.closeSubscribing.toLocaleDateString()}`,
-				}}
-			>
-				<Icon path={mdiClockTimeFourOutline} size={16} />
-				<span class="ml-1">
-					{dayjs(team.closeSubscribing).format('DD MMMM')}
-				</span>
-			</span>
-		{/if}
-	</div>
-
-	<!-- TODO: display Condition badges -->
-	<div class="flex gap-2 items-center">
-		<div class="grow" />
-
-		{#if team.conditions?.length}
-			<span class="badge opacity-80">
-				<Icon path={mdiFilterOutline} size={16} />
-				<span class="ml-1">
-					{team.conditions.length}
-					condition{team.conditions.length > 1 ? 's' : ''}
-				</span>
-			</span>
-		{/if}
-	</div>
 
 	<div>
 		{#each team.periods as period (period.id)}
