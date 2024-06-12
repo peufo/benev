@@ -65,7 +65,7 @@ export const actions = {
 		})
 	}),
 
-	reorder_fields: async ({ request, locals, params: { eventId } }) => {
+	fields_reorder: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 		const formData: Record<string, unknown> = Object.fromEntries(await request.formData())
 

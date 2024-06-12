@@ -33,10 +33,10 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 						},
 					},
 				},
-				periods: { include: { subscribes: true } },
+				periods: { include: { subscribes: true }, orderBy: { start: 'asc' } },
 			},
 			orderBy: {
-				name: 'asc',
+				position: 'asc',
 			},
 		})
 		.then((teams) => teams.map(addTeamComputedValues))
@@ -67,4 +67,18 @@ export const actions = {
 		await permission.admin(eventId, locals)
 		return prisma.team.delete({ where: { id: data.id } })
 	}),
+	teams_reorder: formAction(
+		{ teams: z.array(z.object({ id: z.string(), position: z.number() })) },
+		async ({ locals, data, params: { eventId } }) => {
+			await permission.admin(eventId, locals)
+			return prisma.$transaction(
+				data.teams.map(({ id, position }) =>
+					prisma.team.update({
+						where: { id },
+						data: { position },
+					})
+				)
+			)
+		}
+	),
 }

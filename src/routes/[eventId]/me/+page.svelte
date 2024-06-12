@@ -30,7 +30,7 @@
 					<div class="grow" />
 					<TeamsActions teams={data.member.leaderOf} memberId={data.member.id} />
 				</div>
-				<Teams teams={data.member.leaderOf} showAll />
+				<Teams teams={data.member.leaderOf} />
 			</section>
 		{/if}
 

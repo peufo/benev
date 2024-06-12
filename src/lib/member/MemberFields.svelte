@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
+	import { goto } from '$app/navigation'
 	import { mdiDrag, mdiPlus } from '@mdi/js'
+	import { toast } from 'svelte-sonner'
 	import axios from 'axios'
 	import type { Field } from '@prisma/client'
 	import { listEditable } from '$lib/action'
 	import { Icon, Placeholder, urlParam } from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { eventPath } from '$lib/store'
-	import { useNotify } from '$lib/notify'
-	import { goto } from '$app/navigation'
 
 	export let fields: Field[]
-	const notify = useNotify()
 
 	async function handleReorder(reorderedFields: Field[]) {
 		fields = reorderedFields
@@ -20,9 +19,9 @@
 			form.append(field.id, String(index))
 		})
 		axios
-			.postForm(`${$eventPath}/admin/adhesion?/reorder_fields`, form)
-			.then(() => notify.success('Nouvel ordre sauvegardé'))
-			.catch((err) => notify.error(err))
+			.postForm(`${$eventPath}/admin/adhesion?/fields_reorder`, form)
+			.then(() => toast.success('Nouvel ordre sauvegardé'))
+			.catch((err) => toast.error(err))
 	}
 </script>
 
