@@ -13,7 +13,6 @@
 	import TeamLeaders from './TeamLeaders.svelte'
 	import { PeriodRow } from '$lib/period'
 	export let team: TeamWithComputedValues
-	export let isReorderable = false
 </script>
 
 <CardCollapse value={team.id} class="p-1 md:py group max-w-xl" classHeader="sm:pr-3 sticky top-0">
@@ -22,7 +21,7 @@
 			<h2 class="title-md text-base-content">{team.name}</h2>
 			{#if team.isLeader}
 				<div class="flex gap-2 ml-auto">
-					<TeamActions {team} {isReorderable} />
+					<TeamActions {team} />
 				</div>
 			{/if}
 		</div>

@@ -10,17 +10,15 @@
 	} from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import type { Team } from '@prisma/client'
-	import { isDragged } from './isDragged'
 
 	export let team: Team
-	export let isReorderable = false
 </script>
 
 <a
 	href={`${$eventPath}/admin/members?subscribes_teams=["${team.id}"]`}
 	on:click|stopPropagation
 	class="btn btn-square btn-sm btn-ghost opacity-0 group-hover:opacity-100"
-	use:tip={{ content: 'Tous les membres du secteur', disable: $isDragged }}
+	use:tip={{ content: 'Tous les membres du secteur' }}
 >
 	<Icon path={mdiAccountMultipleOutline} />
 </a>
@@ -28,7 +26,7 @@
 	href={`${$eventPath}/admin/subscribes?teams=["${team.id}"]`}
 	on:click|stopPropagation
 	class="btn btn-square btn-sm btn-ghost opacity-0 group-hover:opacity-100"
-	use:tip={{ content: 'Toutes les inscriptions du secteur', disable: $isDragged }}
+	use:tip={{ content: 'Toutes les inscriptions du secteur' }}
 >
 	<Icon path={mdiClipboardTextMultipleOutline} size={20} />
 </a>
@@ -36,20 +34,10 @@
 	href={`${$eventPath}/admin/plan?teams=["${team.id}"]`}
 	on:click|stopPropagation
 	class="btn btn-square btn-sm btn-ghost opacity-0 group-hover:opacity-100"
-	use:tip={{ content: 'Voir le planning du secteur', disable: $isDragged }}
+	use:tip={{ content: 'Voir le planning du secteur' }}
 >
 	<Icon path={mdiChartGantt} />
 </a>
-
-{#if isReorderable}
-	<button
-		on:click|stopPropagation
-		class="drag-button btn btn-square btn-sm btn-ghost opacity-0 group-hover:opacity-100"
-		use:tip={{ content: 'Changer la position du secteur', disable: $isDragged }}
-	>
-		<Icon path={mdiDrag} />
-	</button>
-{/if}
 
 <a
 	href={$urlParam.with({
@@ -57,7 +45,7 @@
 		section: team.id,
 	})}
 	class="btn btn-square btn-sm"
-	use:tip={{ content: 'Ajouter une période', disable: $isDragged }}
+	use:tip={{ content: 'Ajouter une période' }}
 	data-sveltekit-noscroll
 	data-sveltekit-replacestate
 >
@@ -67,7 +55,7 @@
 <a
 	href={$urlParam.with({ form_team: team.id, section: team.id })}
 	class="btn btn-square btn-sm"
-	use:tip={{ content: 'Éditer ce secteur', disable: $isDragged }}
+	use:tip={{ content: 'Éditer ce secteur' }}
 	data-sveltekit-noscroll
 	data-sveltekit-replacestate
 >

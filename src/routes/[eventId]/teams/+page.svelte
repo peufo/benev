@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { mdiPlus } from '@mdi/js'
+	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { onMount } from 'svelte'
-	import { Icon, InputSearch, urlParam } from 'fuma'
+	import { Drawer, Icon, InputSearch, urlParam } from 'fuma'
 
 	import { Teams, ToggleOnlyAvailable } from '$lib/team'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -10,6 +10,7 @@
 	import { goto } from '$app/navigation'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
+	import TeamsOrder from '$lib/team/TeamsOrder.svelte'
 
 	export let data
 
@@ -51,6 +52,14 @@
 
 		{#if data.member?.roles.includes('admin')}
 			<a
+				href={$urlParam.with({ teams_order: 1 })}
+				class="btn btn-sm btn-square"
+				data-sveltekit-noscroll
+				data-sveltekit-replacestate
+			>
+				<Icon path={mdiPencilOutline} title="Modifier l'ordre des secteur" />
+			</a>
+			<a
 				href={$urlParam.with({ form_team: 1 })}
 				class="btn btn-sm btn-square"
 				data-sveltekit-noscroll
@@ -61,11 +70,7 @@
 		{/if}
 	</div>
 
-	<Teams
-		teams={data.teams}
-		isReorderable={!$urlParam.hasValue('onlyAvailable', 'true')}
-		on:clickPeriod={({ detail }) => handleClickPeriod(detail)}
-	/>
+	<Teams teams={data.teams} on:clickPeriod={({ detail }) => handleClickPeriod(detail)} />
 </div>
 
 <dialog class="modal" bind:this={subscribeDialog}>
@@ -88,3 +93,9 @@
 </dialog>
 
 <ThanksDialog bind:this={thanksDialog} />
+
+{#if data.member?.roles.includes('admin')}
+	<Drawer key="teams_order" title="Ordre des secteurs" classBody="my-4" maxWidth="350px">
+		<TeamsOrder teams={data.allTeams} />
+	</Drawer>
+{/if}

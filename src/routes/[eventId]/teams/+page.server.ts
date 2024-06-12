@@ -8,6 +8,7 @@ import { error } from '@sveltejs/kit'
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const search = url.searchParams.get('search')
 	const onlyAvailable = url.searchParams.get('onlyAvailable') === 'true'
+	const teams_order = !!url.searchParams.get('teams_order')
 	const { member, event } = await parent()
 
 	const isLeader = member?.roles.includes('leader')
@@ -48,7 +49,16 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				.map((team) => ({ ...team, periods: team.periods.filter((p) => !p.isComplete) }))
 		})
 
-	return { teams }
+	const allTeams =
+		teams_order && member?.roles.includes('admin')
+			? await prisma.team.findMany({
+					where: { eventId },
+					select: { id: true, name: true },
+					orderBy: { position: 'asc' },
+			  })
+			: []
+
+	return { teams, allTeams }
 }
 
 export const actions = {
