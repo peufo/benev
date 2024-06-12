@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { JsonLd } from 'svelte-meta-tags'
 	import {
 		mdiArchiveOutline,
 		mdiArrowLeft,
@@ -34,6 +35,18 @@
 <svelte:head>
 	<title>Benev.io - {data.event.name}</title>
 </svelte:head>
+
+<JsonLd
+	schema={{
+		'@type': 'Event',
+		name: data.event.name,
+		...(data.event.description && { description: data.event.description }),
+		...(data.event.posterId && {
+			image: [`https://benev.io/media/${data.event.posterId}?size=medium`],
+		}),
+		url: 'https://benev.io',
+	}}
+/>
 
 <EventTheme event={data.event} />
 
