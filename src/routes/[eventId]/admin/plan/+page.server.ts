@@ -21,7 +21,7 @@ export const load = async ({ url, params: { eventId } }) => {
 					orderBy: { start: 'asc' },
 				},
 			},
-			orderBy: { name: 'asc' },
+			orderBy: { position: 'asc' },
 		}),
 	}
 }
