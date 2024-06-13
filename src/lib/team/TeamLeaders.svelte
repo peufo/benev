@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { mdiEmailOutline, mdiPhoneOutline, mdiShieldAccountOutline } from '@mdi/js'
+	import {
+		mdiAlertOutline,
+		mdiEmailOutline,
+		mdiPhoneOutline,
+		mdiShieldAccountOutline,
+	} from '@mdi/js'
 	import { Icon, DropDown, tip } from 'fuma'
 	import { Avatar } from '$lib/me'
 	import type { MemberWithUser } from '$lib/server'
@@ -36,9 +41,12 @@
 				{/if}
 			</ul>
 		{:else}
-			<span>Ce responsable n'a pas confirmé sa participation</span>
+			<div class="px-3 py-1 flex gap-2">
+				<Icon path={mdiAlertOutline} class="fill-warning" />
+				<span>{member.user.firstName} n'a pas confirmé sa participation</span>
+			</div>
 		{/if}
 	</DropDown>
 {:else}
-	<div class="text-error">Pas de responsable</div>
+	<div class="text-error text-sm">Pas de responsable</div>
 {/each}

@@ -126,8 +126,7 @@ function hideTeamLeadersInfo<T extends { leaders: MemberWithUser[] }>(team: T): 
 				: {
 						...leader,
 						user: {
-							firstName: leader.user.firstName,
-							lastName: leader.user.lastName,
+							...leader.user,
 							email: '',
 							phone: null,
 						},
