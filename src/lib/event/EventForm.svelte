@@ -60,9 +60,10 @@
 		on:input={handleEventIdInput}
 		bind:value={eventId}
 		input={{ class: 'pl-[5.4em]' }}
-		wrapperClass="flex items-center relative"
+		classWrapper="flex items-center relative"
+		
 	>
-		<span slot="prepend" class="absolute select-none pl-4 translate-y-[1px] opacity-50">
+		<span slot="prepend" class="absol$ute select-none pl-4 translate-y-[1px] opacity-50">
 			benev.io/
 		</span>
 	</InputText>
@@ -106,7 +107,7 @@
 		value={event?.web || ''}
 		bind:inputElement={webInput}
 		on:input={handleWebInput}
-		wrapperClass="flex items-center"
+		classWrapper="flex items-center"
 	>
 		<div slot="append">
 			{#if icon || scrapIconPending}

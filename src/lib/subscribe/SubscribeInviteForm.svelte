@@ -42,7 +42,7 @@
 		createTitle="Inviter un nouveau membre"
 		createUrl={$urlParam.with({ form_invite: 1 })}
 		createIcon={mdiAccountPlusOutline}
-		dropdownProps={{ wrapperClass: 'w-full' }}
+		dropdownProps={{ classWrapper: 'w-full' }}
 		bind:value={member}
 		on:input
 		{tippyProps}

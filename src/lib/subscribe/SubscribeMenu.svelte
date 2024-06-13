@@ -16,7 +16,7 @@
 	let form = useForm()
 </script>
 
-<DropDown tippyProps={{ arrow: true }} wrapperClass="w-min">
+<DropDown tippyProps={{ arrow: true }} classWrapper="w-min">
 	<button slot="activator" class=" relative z-10 btn btn-sm btn-square">
 		<Icon path={mdiDotsHorizontal} size={20} class="opacity-70" />
 	</button>

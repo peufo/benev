@@ -16,7 +16,7 @@
 	export let team: TeamWithComputedValues
 </script>
 
-<CardCollapse value={team.id} class="p-1 md:py group" classHeader="sm:pr-3 sticky top-0">
+<CardCollapse value={team.id} class="p-1 md:py group" classHeader="sm:pr-3">
 	<svelte:fragment slot="header">
 		<div class="flex gap-2">
 			<h2 class="title-md text-base-content">{team.name}</h2>
@@ -28,7 +28,7 @@
 		</div>
 
 		<div class="flex flex-wrap gap-2 items-center">
-			<span class="text-xs opacity-60 font-semibold mt-1 mb-2">
+			<span class="text-sm font-semibold mt-1 mb-2">
 				{team.range ? formatRangeDate(team.range) : 'Pas de périodes de travail'}
 			</span>
 			<Progress
@@ -40,10 +40,13 @@
 			/>
 		</div>
 
-		<div class="flex gap-2 gap-y-1 flex-wrap mt-4">
+		<span class="text-label text-sm">Responsable{team.leaders.length > 1 ? 's' : ''}</span>
+		<div class="flex gap-2 gap-y-1 flex-wrap">
 			<!-- BADGE LEADERS -->
 			<TeamLeaders leaders={team.leaders} />
+		</div>
 
+		<div class="flex gap-2 gap-y-1 flex-wrap mt-4">
 			<!-- BADGE SUBSCRIBE CLOSED -->
 			{#if team.closeSubscribing && $page.data.event?.selfSubscribeAllowed}
 				<span
@@ -69,7 +72,7 @@
 	</svelte:fragment>
 
 	{#if team.description}
-		<p class="text-sm my-4">{team.description}</p>
+		<p class="text-sm mb-4">{team.description}</p>
 	{/if}
 
 	<div>

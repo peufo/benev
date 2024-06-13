@@ -1,6 +1,6 @@
 import { z } from 'fuma'
 import { formAction } from 'fuma/server'
-import { useAddTeamComputedValues, permission, prisma } from '$lib/server'
+import { useAddTeamComputedValues, permission, prisma, safeUserSelect } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
 import { error } from '@sveltejs/kit'
@@ -25,12 +25,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				leaders: {
 					include: {
 						user: {
-							select: {
-								firstName: true,
-								lastName: true,
-								email: true,
-								phone: true,
-							},
+							select: safeUserSelect,
 						},
 					},
 				},

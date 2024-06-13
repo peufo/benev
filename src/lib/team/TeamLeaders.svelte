@@ -1,27 +1,24 @@
 <script lang="ts">
 	import { mdiEmailOutline, mdiPhoneOutline, mdiShieldAccountOutline } from '@mdi/js'
 	import { Icon, DropDown, tip } from 'fuma'
-	import type { Member } from '@prisma/client'
-	export let leaders: (Member & {
-		user: { firstName: string; lastName: string; email: string; phone: string | null }
-	})[]
+	import { Avatar } from '$lib/me'
+	import type { MemberWithUser } from '$lib/server'
+	export let leaders: MemberWithUser[]
 </script>
 
 {#each leaders as member}
-	{#if member.isValidedByUser}
-		<DropDown>
-			<button
-				slot="activator"
-				class="badge hover:bg-base-200 cursor-pointer"
-				use:tip={{ content: `${member.user.firstName} est responsable de ce secteur` }}
-			>
-				<Icon path={mdiShieldAccountOutline} size={16} />
-				<span class="ml-1">
-					{member.user.firstName}
-					{member.user.lastName}
-				</span>
-			</button>
-
+	<DropDown>
+		<button
+			slot="activator"
+			class="hover:bg-base-200 bg-base-200/40 cursor-pointer flex gap-2 border items-center pr-2 rounded"
+		>
+			<Avatar user={member.user} class="h-8 w-8 rounded border" />
+			<span class="text-sm">
+				{member.user.firstName}
+				{member.user.lastName}
+			</span>
+		</button>
+		{#if member.isValidedByUser}
 			<ul class="w-48">
 				<li>
 					<a class="menu-item" href="mailto:{member.user.email}" target="_blank">
@@ -38,19 +35,10 @@
 					</li>
 				{/if}
 			</ul>
-		</DropDown>
-	{:else}
-		<button
-			use:tip={{ content: "Ce responsable n'a pas confirmé sa participation" }}
-			class="badge badge-outline badge-warning"
-		>
-			<Icon path={mdiShieldAccountOutline} size={16} />
-			<span class="ml-1">
-				{member.user.firstName}
-				{member.user.lastName}
-			</span>
-		</button>
-	{/if}
+		{:else}
+			<span>Ce responsable n'a pas confirmé sa participation</span>
+		{/if}
+	</DropDown>
 {:else}
 	<div class="text-error">Pas de responsable</div>
 {/each}

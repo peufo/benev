@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
 
-	export let user: User
+	export let user: Pick<User, 'avatarId' | 'avatarPlaceholder'>
 	let klass = ''
 	export { klass as class }
 	export let size: 'medium' | 'large' = 'medium'
