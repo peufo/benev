@@ -20,24 +20,21 @@
 	<svelte:fragment slot="header">
 		<div class="flex gap-2">
 			<h2 class="title-md text-base-content">{team.name}</h2>
-			{#if team.isLeader}
-				<div class="flex gap-2 ml-auto">
-					<TeamActions {team} />
-				</div>
-			{/if}
-		</div>
 
-		<div class="flex flex-wrap gap-2 items-center">
-			<span class="text-sm font-semibold mt-1 mb-2">
-				{team.range ? formatRangeDate(team.range) : 'Pas de périodes de travail'}
-			</span>
 			<Progress
+				badgeClass="ml-auto"
 				class="mt-1 grow max-w-[50%] ml-auto"
 				period={{
 					maxSubscribe: team.maxSubscribes,
 					subscribes: team.periods.map((p) => p.subscribes).flat(),
 				}}
 			/>
+		</div>
+
+		<div class="flex flex-wrap gap-2 items-center">
+			<span class="text-sm font-semibold mt-1 mb-2">
+				{team.range ? formatRangeDate(team.range) : 'Pas de périodes de travail'}
+			</span>
 		</div>
 
 		<div class="flex flex-col gap-4 mt-4">
@@ -70,6 +67,11 @@
 				<div class="flex gap-2 gap-y-1 flex-wrap">
 					<!-- BADGE LEADERS -->
 					<TeamLeaders leaders={team.leaders} />
+					{#if team.isLeader}
+						<div class="flex gap-2 ml-auto">
+							<TeamActions {team} />
+						</div>
+					{/if}
 				</div>
 			</div>
 		</div>

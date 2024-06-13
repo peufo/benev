@@ -37,9 +37,9 @@
 				<input
 					id={key}
 					type="range"
-					min="0.2"
+					min="0.6"
 					max="1"
-					step="0.02"
+					step="0.001"
 					bind:value={$theme.cardOpacity}
 					class="range range-primary range-sm"
 				/>

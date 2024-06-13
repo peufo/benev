@@ -17,7 +17,7 @@
 <a
 	href={`${$eventPath}/admin/members?subscribes_teams=["${team.id}"]`}
 	on:click|stopPropagation
-	class="btn btn-square btn-sm btn-ghost opacity-0 group-hover:opacity-100"
+	class="btn btn-square btn-sm btn-ghost scale-0 group-hover:scale-95 opacity-80"
 	use:tip={{ content: 'Tous les membres du secteur' }}
 >
 	<Icon path={mdiAccountMultipleOutline} />
@@ -25,7 +25,7 @@
 <a
 	href={`${$eventPath}/admin/subscribes?teams=["${team.id}"]`}
 	on:click|stopPropagation
-	class="btn btn-square btn-sm btn-ghost opacity-0 group-hover:opacity-100"
+	class="btn btn-square btn-sm btn-ghost scale-0 group-hover:scale-95 opacity-80"
 	use:tip={{ content: 'Toutes les inscriptions du secteur' }}
 >
 	<Icon path={mdiClipboardTextMultipleOutline} size={20} />
@@ -33,7 +33,7 @@
 <a
 	href={`${$eventPath}/admin/plan?teams=["${team.id}"]`}
 	on:click|stopPropagation
-	class="btn btn-square btn-sm btn-ghost opacity-0 group-hover:opacity-100"
+	class="btn btn-square btn-sm btn-ghost scale-0 group-hover:scale-95 opacity-80"
 	use:tip={{ content: 'Voir le planning du secteur' }}
 >
 	<Icon path={mdiChartGantt} />
