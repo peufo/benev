@@ -5,8 +5,6 @@
 	let klass = ''
 	export { klass as class }
 	export let size: 'medium' | 'large' = 'medium'
-
-	console.log(user)
 </script>
 
 {#key user}
