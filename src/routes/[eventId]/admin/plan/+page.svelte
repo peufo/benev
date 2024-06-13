@@ -2,12 +2,14 @@
 	import {
 		mdiArrowCollapse,
 		mdiArrowExpand,
+		mdiChartTimeline,
 		mdiMagnifyMinusOutline,
 		mdiMagnifyPlusOutline,
 	} from '@mdi/js'
 	import { Card, Icon, InputCheckboxsMenu } from 'fuma'
 	import { Plan } from '$lib/plan'
 	import { onMount, tick } from 'svelte'
+	import { eventPath } from '$lib/store/index.js'
 
 	export let data
 
@@ -77,6 +79,10 @@
 				enhanceDisabled
 				badgePrimary
 			/>
+
+			<a href="{$eventPath}/admin/plan/table" class="btn btn-square btn-sm">
+				<Icon path={mdiChartTimeline} title="Vue en table" size={18} />
+			</a>
 
 			<!-- ZOOM -->
 			<div class="join">
