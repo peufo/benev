@@ -70,7 +70,7 @@
 		bind:offsetWidth={containerWidth}
 		use:newPeriod={{ origin: range.start, headerHeight, msHeight }}
 	>
-		<div class="sticky left-0 z-20 bg-base-100">
+		<div class="sticky left-1 z-20 bg-base-100">
 			<!-- Header -->
 			<div style:height="{headerHeight}px" />
 
@@ -78,7 +78,7 @@
 			{#each days as day}
 				<div class="w-16">
 					<div
-						class="sticky top-0 bg-base-100 pr-2 border-t border-r z-10 -translate-y-[1px]"
+						class="sticky top-1 bg-base-100 pr-2 border-t border-r z-10 -translate-y-[1px]"
 						style:height="{hourHeight}px"
 					>
 						<div class="text-sm font-medium">{day.format('ddd D')}</div>
@@ -116,7 +116,7 @@
 				data-team={JSON.stringify({ id: team.id, name: team.name })}
 			>
 				<div
-					class="w-36 sticky top-0 pb-2 z-10"
+					class="w-36 sticky top-1 pb-2 z-10"
 					style:height="{headerHeight}px"
 					style:scrollPaddingTop="{headerHeight}px"
 					use:tip={{ content: team.name, appendTo: 'parent' }}
@@ -141,7 +141,7 @@
 			</div>
 		{/each}
 
-		<a class="btn btn-sm z-50 sticky top-0" href={$urlParam.with({ form_team: 1 })}>
+		<a class="btn btn-sm z-50 sticky top-1" href={$urlParam.with({ form_team: 1 })}>
 			<Icon path={mdiPlus} title="Nouveau secteur" />
 			<span>Ajouter</span>
 		</a>
