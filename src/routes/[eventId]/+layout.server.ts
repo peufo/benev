@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
 import { jsonParse, z } from 'fuma'
-import { getTeam, prisma } from '$lib/server'
+import { getTeam, prisma, safeUserSelect } from '$lib/server'
 import { getMemberProfile } from '$lib/server'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
@@ -57,7 +57,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 									member: {
 										include: {
 											user: {
-												select: { firstName: true, lastName: true, email: true, phone: true },
+												select: safeUserSelect,
 											},
 										},
 									},

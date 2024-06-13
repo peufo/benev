@@ -1,11 +1,6 @@
 <script lang="ts">
-	import {
-		mdiAlertOutline,
-		mdiEmailOutline,
-		mdiPhoneOutline,
-		mdiShieldAccountOutline,
-	} from '@mdi/js'
-	import { Icon, DropDown, tip } from 'fuma'
+	import { mdiAlertOutline, mdiEmailOutline, mdiPhoneOutline } from '@mdi/js'
+	import { Icon, DropDown } from 'fuma'
 	import { Avatar } from '$lib/me'
 	import type { MemberWithUser } from '$lib/server'
 	export let leaders: MemberWithUser[]

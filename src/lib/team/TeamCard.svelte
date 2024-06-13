@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiClockTimeFourOutline, mdiFilterOutline, mdiShieldAccountOutline } from '@mdi/js'
+	import { mdiClockTimeFourOutline } from '@mdi/js'
 	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	import { page } from '$app/stores'
@@ -7,7 +7,7 @@
 	import { formatRangeDate } from '$lib/formatRange'
 	import type { TeamWithComputedValues } from '$lib/server'
 	dayjs.locale('fr-ch')
-	import { CardCollapse, Icon, Placeholder, tip } from 'fuma'
+	import { CardCollapse, Icon, Placeholder } from 'fuma'
 
 	import TeamActions from './TeamActions.svelte'
 	import TeamLeaders from './TeamLeaders.svelte'
@@ -40,40 +40,40 @@
 			/>
 		</div>
 
-		<span class="text-label text-sm">Responsable{team.leaders.length > 1 ? 's' : ''}</span>
-		<div class="flex gap-2 gap-y-1 flex-wrap">
-			<!-- BADGE LEADERS -->
-			<TeamLeaders leaders={team.leaders} />
-		</div>
+		<div class="flex flex-col gap-4 mt-4">
+			{#if team.conditions?.length || (team.closeSubscribing && $page.data.event?.selfSubscribeAllowed)}
+				<div class="flex gap-2 gap-y-1 flex-wrap">
+					<!-- BADGE SUBSCRIBE CLOSED -->
+					{#if team.closeSubscribing && $page.data.event?.selfSubscribeAllowed}
+						<span class="badge" class:badge-warning={team.isClosedSubscribing}>
+							<Icon path={mdiClockTimeFourOutline} size={16} />
+							<span class="ml-1">
+								Fin des inscriptions le {dayjs(team.closeSubscribing).format('DD MMMM YYYY')}
+							</span>
+						</span>
+					{/if}
 
-		<div class="flex gap-2 gap-y-1 flex-wrap mt-4">
-			<!-- BADGE SUBSCRIBE CLOSED -->
-			{#if team.closeSubscribing && $page.data.event?.selfSubscribeAllowed}
-				<span
-					class="badge"
-					class:badge-warning={team.isClosedSubscribing}
-					use:tip={{
-						content: `Fin des inscriptions le ${team.closeSubscribing.toLocaleDateString()}`,
-					}}
-				>
-					<Icon path={mdiClockTimeFourOutline} size={16} />
-					<span class="ml-1">
-						{dayjs(team.closeSubscribing).format('DD MMMM')}
-					</span>
-				</span>
+					<!-- BADGES CONDITIONS -->
+					<MemberConditionsBadges
+						conditions={team.conditions || []}
+						memberFields={$page.data.member?.event.memberFields || []}
+					/>
+				</div>
 			{/if}
 
-			<!-- BADGES CONDITIONS -->
-			<MemberConditionsBadges
-				conditions={team.conditions || []}
-				memberFields={$page.data.member?.event.memberFields || []}
-			/>
+			{#if team.description}
+				<p class="text-sm">{team.description}</p>
+			{/if}
+
+			<div>
+				<span class="text-label text-xs">Responsable{team.leaders.length > 1 ? 's' : ''} : </span>
+				<div class="flex gap-2 gap-y-1 flex-wrap">
+					<!-- BADGE LEADERS -->
+					<TeamLeaders leaders={team.leaders} />
+				</div>
+			</div>
 		</div>
 	</svelte:fragment>
-
-	{#if team.description}
-		<p class="text-sm mb-4">{team.description}</p>
-	{/if}
 
 	<div>
 		{#each team.periods as period (period.id)}
