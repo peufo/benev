@@ -27,9 +27,9 @@
 			</tr>
 			<tr class="text-center">
 				{#each days as day}
-					{#each Array(24) as _, index}
+					{#each Array(24) as _, hour}
 						<td colspan={12} class="border-l border-r">
-							{(index + 1).toString().padStart(2, '0')}h
+							{hour.toString().padStart(2, '0')}h
 						</td>
 					{/each}
 				{/each}
