@@ -133,7 +133,15 @@
 	{/key}
 
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
-		<InputDate label="Date" bind:value={start} />
+		<InputDate
+			label="Date"
+			bind:value={start}
+			on:input={() => {
+				const _end = new Date(start)
+				_end.setHours(end.getHours(), end.getMinutes())
+				end = _end
+			}}
+		/>
 
 		<InputNumber
 			key="maxSubscribe"
@@ -146,7 +154,11 @@
 		<InputTime
 			label="Fin"
 			bind:value={end}
-			hint={diffDay === 0 ? '' : diffDay === 1 ? 'Le jour suivant' : `+ ${diffDay} jours`}
+			hint={diffDay === 1 || addADay
+				? 'Le jour suivant'
+				: diffDay === 0
+				? ''
+				: `+ ${diffDay} jours`}
 			input={{ step: 300 }}
 		/>
 	</div>
