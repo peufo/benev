@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InputText, InputTextarea, InputImagePreview, Form } from 'fuma'
+	import { InputText, InputTextarea, InputImagePreview, Form, Icon } from 'fuma'
 	import { slide } from 'svelte/transition'
 
 	import type { Event } from '@prisma/client'
@@ -7,6 +7,8 @@
 	import { debounce } from '$lib/debounce'
 	import { FORMAT_A3 } from '$lib/constant'
 	import EventDeleteButton from './EventDeleteButton.svelte'
+	import { mdiTrashCanOutline } from '@mdi/js'
+	import EventImageRemove from './EventImageRemove.svelte'
 
 	export let event: Event | undefined = undefined
 
@@ -61,32 +63,41 @@
 		bind:value={eventId}
 		input={{ class: 'pl-[5.4em]' }}
 		classWrapper="flex items-center relative"
-		
 	>
-		<span slot="prepend" class="absol$ute select-none pl-4 translate-y-[1px] opacity-50">
+		<span slot="prepend" class="absolute select-none pl-4 translate-y-[1px] opacity-50">
 			benev.io/
 		</span>
 	</InputText>
 
 	<div class="flex pt-2 gap-4 items-center justify-center">
-		<InputImagePreview
-			key="poster"
-			src={event?.posterId ? `/media/${event.posterId}` : ''}
-			title="Affiche"
-			alt="Affiche de l'évènement"
-			aspect={FORMAT_A3.aspect}
-			x={FORMAT_A3.x / 2}
-			y={FORMAT_A3.y / 2}
-		/>
+		<div>
+			<InputImagePreview
+				key="poster"
+				src={event?.posterId ? `/media/${event.posterId}` : ''}
+				title="Affiche"
+				alt="Affiche de l'évènement"
+				aspect={FORMAT_A3.aspect}
+				x={FORMAT_A3.x / 2}
+				y={FORMAT_A3.y / 2}
+			/>
+			{#if event?.posterId}
+				<EventImageRemove formaction="/?/event_poster_delete" />
+			{/if}
+		</div>
 
-		<InputImagePreview
-			key="logo"
-			src={event?.logoId ? `/media/${event.logoId}` : ''}
-			title="Logo"
-			alt="Logo de l'évènement"
-			x={126}
-			y={126}
-		/>
+		<div>
+			<InputImagePreview
+				key="logo"
+				src={event?.logoId ? `/media/${event.logoId}` : ''}
+				title="Logo"
+				alt="Logo de l'évènement"
+				x={126}
+				y={126}
+			/>
+			{#if event?.logoId}
+				<EventImageRemove formaction="/?/event_logo_delete" />
+			{/if}
+		</div>
 	</div>
 
 	<InputTextarea

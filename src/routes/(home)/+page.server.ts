@@ -113,6 +113,16 @@ export const actions = {
 		},
 		{ redirectTo: '/me' }
 	),
+	event_poster_delete: formAction({ id: z.string() }, async ({ data, locals }) => {
+		await permission.admin(data.id, locals)
+		await media.delete({ posterOf: { id: data.id } })
+		return
+	}),
+	event_logo_delete: formAction({ id: z.string() }, async ({ data, locals }) => {
+		await permission.admin(data.id, locals)
+		await media.delete({ logoOf: { id: data.id } })
+		return
+	}),
 }
 
 async function uploadImages(formData: FormData, eventId: string, authorId: string) {
