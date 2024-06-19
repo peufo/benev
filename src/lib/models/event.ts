@@ -31,11 +31,13 @@ export const modelEventState = {
 export const modelEventMemberSettings = {
 	selfRegisterAllowed: z.boolean(),
 	selfSubscribeAllowed: z.boolean(),
+	selfSubscribeCancelAllowed: z.boolean(),
 	closeSubscribing: z.date().optional().nullable(),
 	userAddressRequired: z.boolean(),
 	userPhoneRequired: z.boolean(),
 	userBirthdayRequired: z.boolean(),
 	userAvatarRequired: z.boolean(),
+	overlapPeriodAllowed: z.number(),
 } satisfies ZodObj<EventUpdateInput>
 
 export type EventTheme = Pick<

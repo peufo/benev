@@ -2,7 +2,7 @@
 	import type { Event } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { useForm } from 'fuma/validation'
-	import { InputBoolean, InputDate } from 'fuma'
+	import { InputBoolean, InputDate, InputNumber, InputTime } from 'fuma'
 	import { slide } from 'svelte/transition'
 
 	const { enhance } = useForm({
@@ -18,23 +18,39 @@
 		<InputBoolean
 			key="selfRegisterAllowed"
 			label="Les utilisateurs peuvent devenir membre sans invitation"
+			labelPosition="right"
 			bind:value={event.selfRegisterAllowed}
 		/>
 		<InputBoolean
 			key="selfSubscribeAllowed"
 			label="Les membres peuvent s'inscrire aux périodes de travail"
+			labelPosition="right"
 			bind:value={event.selfSubscribeAllowed}
 		/>
 
 		{#if event.selfSubscribeAllowed}
-			<div transition:slide={{ duration: 200 }}>
+			<div transition:slide={{ duration: 200 }} class="flex flex-col gap-2">
 				<InputDate
 					key="closeSubscribing"
 					label="Fin des inscriptions par défaut"
 					value={event.closeSubscribing}
 				/>
+
+				<InputBoolean
+					key="selfSubscribeCancelAllowed"
+					label="Les membre peuvent annuler leurs inscriptions"
+					labelPosition="right"
+					value={event.selfSubscribeCancelAllowed}
+				/>
 			</div>
 		{/if}
+
+		<InputNumber
+			key="overlapPeriodAllowed"
+			label="Temps de chevauchement toléré entre les shifts d'un membre en minutes"
+			value={event.overlapPeriodAllowed}
+			input={{ min: 0 }}
+		/>
 	</div>
 
 	<div class="mt-10">

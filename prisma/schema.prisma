@@ -129,14 +129,12 @@ model Event {
 
   description String?
   icon        String?
-
-  email     String?
-  phone     String?
-  address   String?
-  timezone  Int     @default(-120)
-  web       String?
-  facebook  String?
-  instagram String?
+  email       String?
+  phone       String?
+  address     String?
+  web         String?
+  facebook    String?
+  instagram   String?
 
   // Theme
   backgroundColor      String  @default("#ffffff")
@@ -160,13 +158,15 @@ model Event {
   medias       Media[]
 
   // Settings
-  selfRegisterAllowed  Boolean   @default(true)
-  selfSubscribeAllowed Boolean   @default(true)
-  closeSubscribing     DateTime?
-  userAddressRequired  Boolean   @default(false)
-  userPhoneRequired    Boolean   @default(false)
-  userBirthdayRequired Boolean   @default(false)
-  userAvatarRequired   Boolean   @default(false)
+  closeSubscribing           DateTime?
+  selfRegisterAllowed        Boolean   @default(true)
+  selfSubscribeAllowed       Boolean   @default(true)
+  selfSubscribeCancelAllowed Boolean   @default(true)
+  userAddressRequired        Boolean   @default(false)
+  userPhoneRequired          Boolean   @default(false)
+  userBirthdayRequired       Boolean   @default(false)
+  userAvatarRequired         Boolean   @default(false)
+  overlapPeriodAllowed       Int       @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
