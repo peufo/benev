@@ -45,7 +45,7 @@
 	export let isLeader = false
 	export let tippyProps: Partial<TippyProps> = {}
 
-	let isMember = subscribe.memberId === $page.data.member?.id
+	let isSelf = subscribe.memberId === $page.data.member?.id
 	const dispatch = createEventDispatcher<{ success: void }>()
 
 	const form = useForm({
@@ -64,17 +64,22 @@
 		{}
 	)
 	$: isCreator =
-		(isMember && subscribe.createdBy === 'user') || (isLeader && subscribe.createdBy === 'leader')
+		(isSelf && subscribe.createdBy === 'user') || (isLeader && subscribe.createdBy === 'leader')
 	$: isSubscriber =
-		(isMember && subscribe.createdBy === 'leader') || (isLeader && subscribe.createdBy === 'user')
+		(isSelf && subscribe.createdBy === 'leader') || (isLeader && subscribe.createdBy === 'user')
+	$: isSelfCancelAllowed = $page.data.event?.selfSubscribeCancelAllowed || isLeader
 	$: editions = Object.entries({
 		...(isCreator && creatorStates),
 		...(isSubscriber && subscriberStates),
-	}).filter(([state]) => state !== subscribe.state)
+	}).filter(
+		([state]) =>
+			state !== subscribe.state &&
+			((state !== 'cancelled' && state !== 'denied') || isSelfCancelAllowed)
+	)
 </script>
 
 {#if !editions.length}
-	<button class="btn-square btn-sm btn-ghost opacity-70">
+	<button class="btn btn-square btn-sm btn-ghost opacity-70 relative">
 		<SubscribeState {subscribe} />
 	</button>
 {:else}

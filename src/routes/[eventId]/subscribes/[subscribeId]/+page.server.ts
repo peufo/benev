@@ -72,7 +72,14 @@ const setSubscribState: (state: SubscribeState) => Action =
 			}
 
 			const isSelfAction = author.id === _subscribe.memberId
-			if (!isLeaderAction && !isSelfAction) error(403)
+			if (!isLeaderAction) {
+				if (!isSelfAction) error(403)
+				if (
+					(state === 'cancelled' || state === 'denied') &&
+					!author.event.selfSubscribeCancelAllowed
+				)
+					error(403, "L'annulation ou le refus d'une inscription n'est pas authorisé. ")
+			}
 
 			if (state === 'accepted' || state === 'request') {
 				// Check if the period is already complet
