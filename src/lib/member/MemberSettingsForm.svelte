@@ -38,7 +38,7 @@
 
 				<InputBoolean
 					key="selfSubscribeCancelAllowed"
-					label="Les membre peuvent annuler leurs inscriptions"
+					label="Les membre peuvent refuser ou annuler leurs inscriptions"
 					labelPosition="right"
 					value={event.selfSubscribeCancelAllowed}
 				/>
