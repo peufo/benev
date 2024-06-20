@@ -16,7 +16,6 @@
 			<Icon path={mdiLogin} class="opacity-70" />
 			Adhésion des membres
 		</span>
-		<span slot="subtitle">Paramétrage du processus d'adhésion et d'inscription</span>
 
 		<section>
 			<MemberSettingsForm event={data.event} />

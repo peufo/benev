@@ -13,7 +13,7 @@
 </script>
 
 <form method="post" use:enhance action="{$eventPath}/admin/adhesion?/set_member_settings">
-	<div>
+	<div class="flex flex-col gap-2">
 		<h3 class="font-medium opacity-80 mb-2">Permissions</h3>
 		<InputBoolean
 			key="selfRegisterAllowed"
@@ -28,29 +28,31 @@
 			bind:value={event.selfSubscribeAllowed}
 		/>
 
+		<InputBoolean
+			key="selfSubscribeCancelAllowed"
+			label="Les membre peuvent {event.selfSubscribeAllowed
+				? 'annuler ou '
+				: ''}décliner leurs inscriptions"
+			labelPosition="right"
+			value={event.selfSubscribeCancelAllowed}
+		/>
+
+		<InputNumber
+			key="overlapPeriodAllowed"
+			label="Nombre de minutes de chevauchement toléré entre les shifts d'un membre"
+			value={event.overlapPeriodAllowed}
+			input={{ min: 0 }}
+		/>
+
 		{#if event.selfSubscribeAllowed}
-			<div transition:slide={{ duration: 200 }} class="flex flex-col gap-2">
+			<div transition:slide={{ duration: 200 }}>
 				<InputDate
 					key="closeSubscribing"
 					label="Fin des inscriptions par défaut"
 					value={event.closeSubscribing}
 				/>
-
-				<InputBoolean
-					key="selfSubscribeCancelAllowed"
-					label="Les membre peuvent refuser ou annuler leurs inscriptions"
-					labelPosition="right"
-					value={event.selfSubscribeCancelAllowed}
-				/>
 			</div>
 		{/if}
-
-		<InputNumber
-			key="overlapPeriodAllowed"
-			label="Temps de chevauchement toléré entre les shifts d'un membre en minutes"
-			value={event.overlapPeriodAllowed}
-			input={{ min: 0 }}
-		/>
 	</div>
 
 	<div class="mt-10">
