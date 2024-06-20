@@ -73,7 +73,7 @@
 		<br />
 		{#if $page.params.eventId}
 			{#if $page.data.event?.selfSubscribeAllowed}
-				<a href="/{$page.params.eventId}/teams" class="btn"> Voir les secteurs </a>
+				<a href="/{$page.params.eventId}/teams" class="btn btn-primary"> Voir les secteurs </a>
 			{/if}
 		{:else}
 			<a href="/" class="btn"> Trouve un évènement </a>
