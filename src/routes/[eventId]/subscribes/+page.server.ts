@@ -40,26 +40,30 @@ export const actions = {
 			}
 
 			// Check if author as the right to create this subscribe
-			const _isLeader = await permission
+			const isLeaderOfTeam = await permission
 				.leaderOfTeam(period.teamId, locals)
 				.then(() => true)
 				.catch(() => false)
 			const isSelfSubscribe = data.memberId === memberAuthor.id
-			if (!_isLeader && !isSelfSubscribe) error(403)
+			if (!isLeaderOfTeam && !isSelfSubscribe) error(403)
 
 			// Check if self subscribe conditions is respected
-			if (!_isLeader) {
+			if (!isLeaderOfTeam) {
 				if (!memberAuthor.event.selfSubscribeAllowed) error(403)
 				const closeSubscribing = period.team.closeSubscribing || memberAuthor.event.closeSubscribing
 				const DAY = 1000 * 60 * 60 * 24
 				if (closeSubscribing && closeSubscribing.getTime() < new Date().getTime() - DAY) error(403)
-
 				if (!isMemberAllowed(period.team.conditions, memberAuthor)) error(403)
 			}
 
 			// Check if member is free in this period
 			const memberPeriods = subscribes.map((sub) => sub.period)
-			if (!isFreeRange(period, memberPeriods)) {
+			const isMemberBusy = !isFreeRange(
+				period,
+				memberPeriods,
+				memberAuthor.event.overlapPeriodAllowed * (1000 * 60)
+			)
+			if (isMemberBusy) {
 				const startMessage = isSelfSubscribe ? 'Tu es' : 'Ce membre est'
 				error(403, `${startMessage} déjà occuper durant cette période`)
 			}
@@ -67,7 +71,7 @@ export const actions = {
 			const subscribe = await prisma.subscribe.create({
 				data: {
 					...data,
-					state: _isLeader && isSelfSubscribe ? 'accepted' : 'request',
+					state: isLeaderOfTeam && isSelfSubscribe ? 'accepted' : 'request',
 					createdBy: isSelfSubscribe ? 'user' : 'leader',
 				},
 				include: {
@@ -85,7 +89,7 @@ export const actions = {
 				},
 			})
 
-			if (_isLeader && isSelfSubscribe) return
+			if (isLeaderOfTeam && isSelfSubscribe) return
 
 			const memberMail = subscribe.member.user.email
 			const leadersMail = subscribe.period.team.leaders.map(({ user }) => user.email)

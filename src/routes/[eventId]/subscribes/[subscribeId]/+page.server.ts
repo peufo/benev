@@ -61,6 +61,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 
 			// Check author permission
 			const isLeaderAction = (_subscribe.createdBy === 'leader') === isCreatorEdition
+
 			let author: MemberWithComputedValues | null
 			if (isLeaderAction) {
 				author = await permission.leader(eventId, locals)
@@ -68,8 +69,10 @@ const setSubscribState: (state: SubscribeState) => Action =
 				if (!author.roles.includes('admin') && !isInLeaderTeams) error(403)
 			} else {
 				author = await permission.member(eventId, locals)
-				if (author.id !== _subscribe.memberId) error(403)
 			}
+
+			const isSelfAction = author.id === _subscribe.memberId
+			if (!isLeaderAction && !isSelfAction) error(403)
 
 			if (state === 'accepted' || state === 'request') {
 				// Check if the period is already complet
@@ -77,11 +80,21 @@ const setSubscribState: (state: SubscribeState) => Action =
 				if (maxSubscribe <= subscribes.length) {
 					error(403, 'Sorry, this period is already complet')
 				}
+			}
 
+			if (state === 'accepted') {
 				// Check if member is free in this period
-				const memberPeriods = _subscribe.member.subscribes.map((sub) => sub.period)
-				if (!isFreeRange(_subscribe.period, memberPeriods)) {
-					error(403, `Already busy during this period`)
+				const memberPeriodsAccepted = _subscribe.member.subscribes
+					.filter((sub) => sub.state === 'accepted')
+					.map((sub) => sub.period)
+				const memberIsBusy = !isFreeRange(
+					_subscribe.period,
+					memberPeriodsAccepted,
+					author.event.overlapPeriodAllowed * (1000 * 60)
+				)
+				if (memberIsBusy) {
+					const startMessage = isSelfAction ? 'Tu es' : 'Ce membre est'
+					error(403, `${startMessage} déjà occuper durant cette période`)
 				}
 			}
 

@@ -111,8 +111,8 @@ importers:
         specifier: ^0.11.8
         version: 0.11.8
       perod:
-        specifier: ^1.3.1
-        version: 1.3.1
+        specifier: ^1.4.1
+        version: 1.4.1
       sharp:
         specifier: ^0.33.3
         version: 0.33.3
@@ -2400,8 +2400,8 @@ packages:
   periscopic@3.1.0:
     resolution: {integrity: sha512-vKiQ8RRtkl9P+r/+oefh25C3fhybptkHKCZSPlcXiJux2tJF55GnEj3BVn4A5gKfq9NWWXXrxkHBwVPUfH0opw==}
 
-  perod@1.3.1:
-    resolution: {integrity: sha512-UbZmDjBAu7TmjoWeX9FlHBPmDTR9B2sm52OiOklL43kBc/XKKgn1O5vwDfK2dGzo9jS19E3d7b8YyiVk41QClQ==}
+  perod@1.4.1:
+    resolution: {integrity: sha512-ZjP2wEuA+0WGOdCzoJEdHY4GwPBYb6rmAmIo6gi/m6eLr4ogIM6HL0i/I3P2q2YoLzpbOWqoRhmc3TcaJFCXQA==}
 
   picocolors@1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
@@ -5204,7 +5204,7 @@ snapshots:
       estree-walker: 3.0.3
       is-reference: 3.0.2
 
-  perod@1.3.1: {}
+  perod@1.4.1: {}
 
   picocolors@1.0.0: {}
 
