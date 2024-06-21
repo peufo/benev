@@ -36,7 +36,7 @@ export const features: Feature[] = [
 		icon: mdiWeb,
 		src: webPng,
 		description:
-			'Créer un site pour centraliser la communication et la planification de ton évènement.',
+			'Crée un site pour centraliser la communication et la planification de ton évènement.',
 	},
 	{
 		name: 'Base de donnée des membres',
@@ -62,35 +62,35 @@ export const features: Feature[] = [
 		name: 'Documents opérationnels',
 		icon: mdiEyeOutline,
 		src: eyePng,
-		description: "Visualise ou exporte les vues essentiels au bon déroulement de l'organisation.",
+		description: "Visualise ou exporte les vues essentielles au bon déroulement de l'organisation.",
 	},
 	{
 		name: 'Tableau de bord bénévole',
 		icon: mdiViewDashboardOutline,
 		src: dashboardPng,
 		description:
-			'Chaque bénévole peut retrouver en tout temps les informations lié à sa participation.',
+			'Chaque bénévole peut retrouver en tout temps les informations liées à sa participation.',
 	},
 	{
-		name: 'Charte des bénévole',
+		name: 'Charte des bénévoles',
 		icon: mdiLicense,
 		src: licensePng,
 		description:
-			'Définit une charte à laquelle les bénévoles devront adhérer lors de leur inscription.',
+			'Définis une charte à laquelle les bénévoles devront adhérer lors de leur inscription.',
 	},
 	{
 		name: 'Système de compensation',
 		icon: mdiGiftOutline,
 		src: giftPng,
 		description:
-			"Définit des articles et les règles d'éligibilitées pour générer des listes d'attribution.",
+			"Définis des articles et les règles d'éligibilitées pour générer des listes d'attribution.",
 		comingSoon: 'Bientôt disponible',
 	},
 	{
 		name: 'Communication',
 		icon: mdiEmailOutline,
 		src: emailPng,
-		description: 'Personnalise tes notifications par email et édite des publipostage.',
+		description: 'Personnalise tes notifications par email et édite des publipostages.',
 		comingSoon: 'Bientôt disponible',
 	},
 ]

@@ -104,7 +104,7 @@
 	<div class="col-span-full">
 		<InputBoolean
 			key="wantsNotification"
-			label="Être notifié par mail quand mes inscriptions change de statut"
+			label="Être notifié par mail quand mes inscriptions changent de statut"
 			value={user.wantsNotification}
 		/>
 	</div>
