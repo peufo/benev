@@ -101,14 +101,6 @@
 	<InputText key="zipCode" label="Code postal" value={user.zipCode || ''} class="md:col-span-4" />
 	<InputText key="city" label="Localité" value={user.city || ''} class="md:col-span-4" />
 
-	<div class="col-span-full">
-		<InputBoolean
-			key="wantsNotification"
-			label="Être notifié par mail quand mes inscriptions changent de statut"
-			value={user.wantsNotification}
-		/>
-	</div>
-
 	<div class="flex gap-1 items-center justify-end col-span-full">
 		<button class="btn btn-primary">Sauvegarder </button>
 	</div>
