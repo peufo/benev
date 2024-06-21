@@ -1,3 +1,1 @@
-export * from './selector'
-export * from './portal'
-export * from './list'
+export * from './autoSubmit'
