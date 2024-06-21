@@ -116,10 +116,11 @@ const setSubscribState: (state: SubscribeState) => Action =
 								include: {
 									event: true,
 									leaders: {
-										select: {
+										where: {
+											isValidedByUser: true,
 											isNotifiedLeaderOfSubscribe: true,
-											user: { select: { email: true } },
 										},
+										select: { user: { select: { email: true } } },
 									},
 								},
 							},
@@ -138,9 +139,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 			}
 
 			const toMember = subscribe.member.isNotifiedSubscribe ? [subscribe.member.user.email] : []
-			const toLeaders = subscribe.period.team.leaders
-				.filter((l) => l.isNotifiedLeaderOfSubscribe)
-				.map((l) => l.user.email)
+			const toLeaders = subscribe.period.team.leaders.map((l) => l.user.email)
 			const emailOptions = {
 				from: subscribe.period.team.event.name,
 				to: isLeaderAction ? toMember : toLeaders,

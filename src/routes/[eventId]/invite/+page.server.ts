@@ -139,12 +139,15 @@ export const actions = {
 				const member = await getMemberProfile({ id })
 
 				const admins = await prisma.member.findMany({
-					where: { eventId, isAdmin: true },
-					select: { isNotifiedAdminOfNewMember: true, user: { select: { email: true } } },
+					where: {
+						eventId,
+						isAdmin: true,
+						isValidedByUser: true,
+						isNotifiedAdminOfNewMember: true,
+					},
+					select: { user: { select: { email: true } } },
 				})
-				const adminsEmail = admins
-					.filter((admin) => admin.isNotifiedAdminOfNewMember)
-					.map((a) => a.user.email)
+				const adminsEmail = admins.map((a) => a.user.email)
 
 				const emailOptions = {
 					from: member.event.name,
