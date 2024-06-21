@@ -51,7 +51,7 @@
 			type: 'multiselect',
 			options: data.teams.map((t) => ({ value: t.id, label: t.name })),
 			getCell: (sub) => `
-				<a href="${$eventPath}/teams/${sub.period.teamId}" class="link link-hover">
+				<a href="${$eventPath}/teams?section=${sub.period.teamId}" class="link link-hover">
 					${sub.period.team.name}
 				</a>
 			`,
@@ -62,7 +62,9 @@
 			label: 'Période',
 			type: 'date',
 			getCell: (sub) => `
-				<a href="${$eventPath}/teams/${sub.period.teamId}/${sub.periodId}" class="link link-hover">
+				<a href="${$eventPath}/teams?section=${sub.period.teamId}&form_period=${
+				sub.periodId
+			}" class="link link-hover">
 					${formatRange(sub.period)}
 				</a>
 			`,

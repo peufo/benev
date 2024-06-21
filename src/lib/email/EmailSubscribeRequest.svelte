@@ -29,8 +29,8 @@
 		et
 		<a
 			target="_blank"
-			href="{domain}/{subscribe.period.team.eventId}/teams/{subscribe.period
-				.teamId}/{subscribe.periodId}"
+			href="{domain}/{subscribe.period.team.eventId}/teams?section={subscribe.period
+				.teamId}&form_period={subscribe.periodId}"
 		>
 			valide son inscription
 		</a>
