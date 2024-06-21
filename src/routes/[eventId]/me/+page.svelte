@@ -4,7 +4,8 @@
 	import { eventPath } from '$lib/store'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
-	import { MemberDeleteForm, MemberProfile } from '$lib/member'
+	import { MemberDeleteForm, MemberProfile, MemberSettingsForm } from '$lib/member'
+	import { dev } from '$app/environment'
 
 	export let data
 </script>
@@ -44,5 +45,10 @@
 				<MemberDeleteForm memberId={data.member.id} class="w-max" />
 			</div>
 		</section>
+		{#if dev}
+			<section>
+				<MemberSettingsForm />
+			</section>
+		{/if}
 	</div>
 </Card>

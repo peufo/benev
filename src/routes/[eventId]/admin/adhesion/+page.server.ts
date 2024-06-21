@@ -2,11 +2,7 @@ import { tryOrFail, formAction } from 'fuma/server'
 import { z } from 'fuma/validation'
 
 import { prisma, permission } from '$lib/server'
-import {
-	modelEventMemberSettings,
-	modelMemberFieldCreate,
-	modelMemberFieldUpdate,
-} from '$lib/models'
+import { modelEventSettings, modelMemberFieldCreate, modelMemberFieldUpdate } from '$lib/models'
 
 export const load = async ({ parent, params: { eventId } }) => {
 	const { event } = await parent()
@@ -83,7 +79,7 @@ export const actions = {
 		)
 	},
 	set_member_settings: formAction(
-		modelEventMemberSettings,
+		modelEventSettings,
 		async ({ locals, params: { eventId }, data }) => {
 			await permission.admin(eventId, locals)
 			return prisma.event.update({

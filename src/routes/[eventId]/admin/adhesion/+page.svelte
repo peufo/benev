@@ -3,7 +3,8 @@
 
 	import { Card, Icon } from 'fuma'
 
-	import { MemberFields, MemberSettingsForm } from '$lib/member'
+	import { MemberFields } from '$lib/member'
+	import { EventSettingForm } from '$lib/event'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { eventPath } from '$lib/store'
 
@@ -18,7 +19,7 @@
 		</span>
 
 		<section>
-			<MemberSettingsForm event={data.event} />
+			<EventSettingForm event={data.event} />
 		</section>
 
 		<div class="divider" />

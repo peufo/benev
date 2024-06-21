@@ -28,7 +28,7 @@ export const modelEventState = {
 	state: z.enum(toTuple(EVENT_STATES)).optional(),
 } satisfies ZodObj<EventUpdateInput>
 
-export const modelEventMemberSettings = {
+export const modelEventSettings = {
 	selfRegisterAllowed: z.boolean(),
 	selfSubscribeAllowed: z.boolean(),
 	selfSubscribeCancelAllowed: z.boolean(),
