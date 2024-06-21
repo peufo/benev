@@ -4,8 +4,7 @@
 	import { eventPath } from '$lib/store'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
-	import { MemberDeleteForm, MemberProfile, MemberSettingsForm } from '$lib/member'
-	import { dev } from '$app/environment'
+	import { MemberProfile, MemberSettingsForm } from '$lib/member'
 
 	export let data
 </script>
@@ -38,17 +37,11 @@
 		<section>
 			{#if data.member.event.memberFields.filter((f) => f.memberCanRead).length}
 				<MemberProfile title="Mon profil" member={data.member} />
-				<hr class="my-3" />
 			{/if}
-
-			<div class="mt-3 flex justify-end">
-				<MemberDeleteForm memberId={data.member.id} class="w-max" />
-			</div>
 		</section>
-		{#if dev}
-			<section>
-				<MemberSettingsForm />
-			</section>
-		{/if}
+
+		<section>
+			<MemberSettingsForm member={data.member} />
+		</section>
 	</div>
 </Card>

@@ -5,8 +5,7 @@
 	import { toast } from 'svelte-sonner'
 	import axios from 'axios'
 	import type { Field } from '@prisma/client'
-	import { listEditable } from '$lib/action'
-	import { Icon, Placeholder, urlParam } from 'fuma'
+	import { Icon, Placeholder, urlParam, listEditable } from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { eventPath } from '$lib/store'
 

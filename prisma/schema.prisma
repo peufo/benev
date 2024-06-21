@@ -215,6 +215,10 @@ model Member {
   isValidedByEvent Boolean @default(false)
   isValidedByUser  Boolean @default(false)
 
+  isNotifiedSubscribe         Boolean @default(true)
+  isNotifiedLeaderOfSubscribe Boolean @default(true)
+  isNotifiedAdminOfNewMember  Boolean @default(true)
+
   userId  String
   user    User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   eventId String

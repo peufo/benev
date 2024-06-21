@@ -1,8 +1,9 @@
 import { error } from '@sveltejs/kit'
-import { tryOrFail, parseFormData } from 'fuma/server'
+import { tryOrFail, parseFormData, formAction } from 'fuma/server'
 import { z, type ZodObj } from 'fuma'
 import { permission, prisma, redirectToAuth, redirectToRegister } from '$lib/server'
 import type { Field, FieldType } from '@prisma/client'
+import { modelMemberSetting } from '$lib/models'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const { member, user } = await parent()
@@ -70,6 +71,16 @@ export const actions = {
 			})
 		})
 	},
+	member_setting_update: formAction(
+		modelMemberSetting,
+		async ({ data, locals, params: { eventId } }) => {
+			const member = await permission.member(eventId, locals)
+			return await prisma.member.update({
+				where: { id: member.id },
+				data,
+			})
+		}
+	),
 }
 
 function buildModelMemberProfile(fields: Field[], isPartial: boolean) {

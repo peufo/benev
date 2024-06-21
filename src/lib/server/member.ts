@@ -1,7 +1,12 @@
 import { ROOT_USER } from '$env/static/private'
-import type { Prisma } from '@prisma/client'
+import type { Prisma, Subscribe } from '@prisma/client'
 import type { Member, Team, User, Event, Field } from '@prisma/client'
-import { useAddTeamComputedValues, prisma, type AddTeamComputedValuesContext } from '$lib/server'
+import {
+	useAddTeamComputedValues,
+	prisma,
+	type AddTeamComputedValuesContext,
+	type TeamWithComputedValues,
+} from '$lib/server'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
 type MemberWithUserEventAndLeaderOf = Member & {
@@ -67,12 +72,15 @@ function getMemberProfileRequiredFields({ profileJson, event }: MemberWithUserEv
 	return requiredFields
 }
 
-export type MemberProfile = Awaited<ReturnType<typeof getMemberProfile>>
+export type MemberProfile = MemberWithComputedValues & {
+	leaderOf: TeamWithComputedValues[]
+	subscribes: Subscribe[]
+}
 
 export async function getMemberProfile(
 	where: Prisma.MemberWhereInput,
 	ctx?: AddTeamComputedValuesContext
-) {
+): Promise<MemberProfile> {
 	const member = await prisma.member.findFirstOrThrow({
 		where,
 		include: {

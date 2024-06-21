@@ -109,13 +109,18 @@ const setSubscribState: (state: SubscribeState) => Action =
 				where: { id: subscribeId },
 				data: { state },
 				include: {
-					member: { include: { user: true } },
+					member: { include: { user: { select: { email: true } } } },
 					period: {
 						include: {
 							team: {
 								include: {
 									event: true,
-									leaders: { select: { user: { select: { email: true } } } },
+									leaders: {
+										select: {
+											isNotifiedLeaderOfSubscribe: true,
+											user: { select: { email: true } },
+										},
+									},
 								},
 							},
 						},
@@ -132,8 +137,10 @@ const setSubscribState: (state: SubscribeState) => Action =
 				await ensureLicenceMembers(eventId)
 			}
 
-			const toMember = subscribe.member.user.wantsNotification ? [subscribe.member.user.email] : []
-			const toLeaders = subscribe.period.team.leaders.map((l) => l.user.email)
+			const toMember = subscribe.member.isNotifiedSubscribe ? [subscribe.member.user.email] : []
+			const toLeaders = subscribe.period.team.leaders
+				.filter((l) => l.isNotifiedLeaderOfSubscribe)
+				.map((l) => l.user.email)
 			const emailOptions = {
 				from: subscribe.period.team.event.name,
 				to: isLeaderAction ? toMember : toLeaders,
