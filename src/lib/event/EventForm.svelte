@@ -81,7 +81,7 @@
 				y={FORMAT_A3.y / 2}
 			/>
 			{#if event?.posterId}
-				<EventImageRemove formaction="/?/event_poster_delete" />
+				<EventImageRemove formaction="/?/event_poster_delete" eventId={event.id} />
 			{/if}
 		</div>
 
@@ -95,7 +95,7 @@
 				y={126}
 			/>
 			{#if event?.logoId}
-				<EventImageRemove formaction="/?/event_logo_delete" />
+				<EventImageRemove formaction="/?/event_logo_delete" eventId={event.id} />
 			{/if}
 		</div>
 	</div>
