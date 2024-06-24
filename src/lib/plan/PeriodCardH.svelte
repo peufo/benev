@@ -80,14 +80,14 @@
 		</Progress>
 
 		{#if showSubscribes}
-			<ul>
+			<ol class="px-1 py-2">
 				{#each period.subscribes as subscribe}
-					<li>
+					<li class="badge whitespace-nowrap">
 						{subscribe.member.user.firstName}
 						{subscribe.member.user.lastName}
 					</li>
 				{/each}
-			</ul>
+			</ol>
 		{/if}
 
 		<a
