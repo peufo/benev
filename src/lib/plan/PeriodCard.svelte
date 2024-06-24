@@ -5,11 +5,10 @@
 	import { formatRangeHour } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
 	import DragButton from './DragButton.svelte'
-	import { USE_COERCE_DATE, USE_COERCE_JSON, urlParam } from 'fuma'
-	import { eventPath } from '$lib/store'
-	import axios from 'axios'
-	import { toast } from 'svelte-sonner'
-	import { goto, invalidateAll } from '$app/navigation'
+	import { urlParam } from 'fuma'
+
+	import { roundMinute } from './utils'
+	import { updatePeriod } from './updatePeriod'
 
 	export let period: Period & { subscribes: Subscribe[] }
 	export let origin: dayjs.Dayjs
@@ -22,34 +21,13 @@
 	$: top = -origin.diff(period.start) * msHeight + headerHeight + deltaStart
 	$: height = dayjs(period.end).diff(period.start) * msHeight - deltaStart + deltaEnd
 
-	function roundMs(ms: number, nbMinutes = 15) {
-		const round = 60_000 * nbMinutes
-		return Math.round(ms / round) * round
-	}
-
-	async function updatePeriod() {
-		const start = new Date(period.start.getTime() + roundMs(deltaStart / msHeight))
-		const end = new Date(period.end.getTime() + roundMs(deltaEnd / msHeight))
-		const form = new FormData()
-		form.append('id', period.id)
-		form.append('team', USE_COERCE_JSON + JSON.stringify({ id: period.teamId }))
-		form.append('start', USE_COERCE_DATE + start.toUTCString())
-		form.append('end', USE_COERCE_DATE + end.toUTCString())
-		const res = await axios.postForm(`${$eventPath}/admin?/period_update`, form)
-		if (res.data.status !== 200) {
-			toast.error('Erreur')
-			console.error(res.data)
-			return
-		}
+	async function handleGrabDone() {
+		const start = new Date(period.start.getTime() + roundMinute(deltaStart / msHeight))
+		const end = new Date(period.end.getTime() + roundMinute(deltaEnd / msHeight))
+		await updatePeriod({ ...period, start, end })
 		period = { ...period, start, end }
 		deltaStart = 0
 		deltaEnd = 0
-		toast.success('Période mise à jour')
-		await goto($urlParam.with({ form_period: period.id }), {
-			invalidateAll: true,
-			replaceState: true,
-			noScroll: true,
-		})
 	}
 </script>
 
@@ -71,33 +49,33 @@
 	<DragButton
 		class="left-1/2"
 		orientation="horizontal"
-		on:done={updatePeriod}
+		on:done={handleGrabDone}
 		on:move={({ detail: delta }) => {
-			deltaStart = delta
+			deltaStart = delta.y
 		}}
 	/>
 	<DragButton
 		class="left-1/2 top-full"
 		orientation="horizontal"
-		on:done={updatePeriod}
+		on:done={handleGrabDone}
 		on:move={({ detail: delta }) => {
-			deltaEnd = delta
+			deltaEnd = delta.y
 		}}
 	/>
 	<DragButton
 		class="left-full top-1/2"
-		on:done={updatePeriod}
+		on:done={handleGrabDone}
 		on:move={({ detail: delta }) => {
-			deltaStart = delta
-			deltaEnd = delta
+			deltaStart = delta.y
+			deltaEnd = delta.y
 		}}
 	/>
 
 	<Progress {period} class="justify-between" badgeClass="mr-1" progressClass="bg-red-400">
 		<span slot="before-badge" class="text-xs font-semibold ml-1">
 			{formatRangeHour({
-				start: period.start.getTime() + roundMs(deltaStart / msHeight),
-				end: period.end.getTime() + roundMs(deltaEnd / msHeight),
+				start: period.start.getTime() + roundMinute(deltaStart / msHeight),
+				end: period.end.getTime() + roundMinute(deltaEnd / msHeight),
 			})}
 		</span>
 	</Progress>

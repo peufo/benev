@@ -2,53 +2,85 @@
 	import { getRangeOfTeams } from '$lib/plan'
 	import type { Dayjs } from 'dayjs'
 	import 'dayjs/locale/fr-ch'
-	import { Card } from 'fuma'
-	import TeamTableRow from './TeamTableRow.svelte'
+	import { Card, RangePickerButton, type Range } from 'fuma'
+	import TeamRow from '$lib/plan/TeamRow.svelte'
+	import dayjs from 'dayjs'
 
 	export let data
 
-	let range = getRangeOfTeams(data.teams)
-	let days: Dayjs[] = []
+	// TODO: Set limit on PeriodPicker
+	// TODO: PeriodPicker accept dayjs instances
+	let rangeLimit = getRangeOfTeams(data.teams)
+	let range: Range = { start: rangeLimit.start, end: rangeLimit.end }
 
-	for (let day = range.start; day.isBefore(range.end); day = day.add(1, 'day')) days.push(day)
+	const hourWidth = 30 //px
+	const teamColomnWidth = 100 //px
+
+	let days: Dayjs[] = []
+	$: getDays(range)
+	function getDays({ start, end }: Range) {
+		days = []
+		for (let day = dayjs(start); day.isBefore(end); day = day.add(1, 'day')) days.push(day)
+	}
+
+	function getHours(date: Dayjs): number[] {
+		if (!date.isSame(range.start, 'day') && !date.isSame(range.end, 'day'))
+			return Array(24)
+				.fill(0)
+				.map((_, h) => h)
+
+		const start = date.isSame(range.start, 'day') ? dayjs(range.start) : date.startOf('day')
+		const end = date.isSame(range.end, 'day') ? dayjs(range.end) : date.endOf('day')
+		const startHour = start.get('hour')
+		const nbHours = end.diff(start, 'hours') + 1
+		if (nbHours < 0) return []
+		return Array(nbHours)
+			.fill(0)
+			.map((_, h) => startHour + h)
+	}
 </script>
 
 <Card class="overflow-scroll">
-	<table>
-		<thead>
-			<tr class="text-center">
-				<td rowspan="3" />
+	<RangePickerButton bind:range />
 
-				{#each days as day}
-					<td colspan={288} class="border-l border-r">
+	<div class="overflow-auto bg-base-100/95 rounded">
+		<div class="flex" style:margin-left="{teamColomnWidth}px">
+			{#each days as day}
+				{@const hours = getHours(day)}
+				<div>
+					<!-- DAY -->
+					<div
+						style:left="{teamColomnWidth}px"
+						class="border-l font-medium sticky left-0 p-1 w-min whitespace-nowrap"
+					>
 						{day.format('dddd DD.MM')}
-					</td>
-				{/each}
-			</tr>
-			<tr class="text-center">
-				{#each days as day}
-					{#each Array(24) as _, hour}
-						<td colspan={12} class="border-l border-r">
-							{hour.toString().padStart(2, '0')}h
-						</td>
-					{/each}
-				{/each}
-			</tr>
-			<tr>
-				{#each days as day}
-					{#each Array(24) as _}
-						<td colspan={3} class="border-l border-r">00</td>
-						<td colspan={3} class="border-l border-r">15</td>
-						<td colspan={3} class="border-l border-r">30</td>
-						<td colspan={3} class="border-l border-r">45</td>
-					{/each}
-				{/each}
-			</tr>
-		</thead>
-		<tbody>
-			{#each data.teams as team}
-				<TeamTableRow {team} {range} />
+					</div>
+					<!-- HOURS -->
+					<div class="flex text-sm">
+						{#each hours as hour}
+							<div style:width="{hourWidth}px" class="opacity-0 odd:opacity-100 border-l px-1">
+								{hour.toString().padStart(2, '0')}
+							</div>
+						{/each}
+					</div>
+				</div>
 			{/each}
-		</tbody>
-	</table>
+		</div>
+
+		{#each data.teams as team}
+			<div class="flex border-t py-2">
+				<div
+					style:width="{teamColomnWidth}px"
+					class="p-1 sticky left-0 bg-base-100/95 z-50 font-medium"
+				>
+					{team.name}
+				</div>
+				<TeamRow
+					{team}
+					range={{ start: dayjs(range.start), end: dayjs(range.end) }}
+					msWidth={hourWidth / (1000 * 60 * 60)}
+				/>
+			</div>
+		{/each}
+	</div>
 </Card>

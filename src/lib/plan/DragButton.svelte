@@ -13,27 +13,31 @@
 		horizontal: mdiDragHorizontal,
 		vertical: mdiDragVertical,
 	}
+	type Dot = { x: number; y: number }
 
-	const dispatch = createEventDispatcher<{ move: number; done: number }>()
+	const dispatch = createEventDispatcher<{ move: Dot; done: Dot }>()
 
-	let origin = 0
+	let origin = { x: 0, y: 0 }
 	function handleMouseDown(event: MouseEvent) {
-		origin = event.clientY
+		origin.y = event.clientY
+		origin.x = event.clientX
 		document.addEventListener('mousemove', handleMouseMove)
 		document.addEventListener('mouseup', handleMouseUp, { once: true })
 	}
 
+	function getDelta({ clientX, clientY }: MouseEvent): Dot {
+		return { x: clientX - origin.x, y: clientY - origin.y }
+	}
+
 	function handleMouseMove(event: MouseEvent) {
-		const delta = event.clientY - origin
-		dispatch('move', delta)
+		dispatch('move', getDelta(event))
 	}
 
 	function handleMouseUp(event: MouseEvent) {
 		event.preventDefault()
 		event.stopPropagation()
 		document.removeEventListener('mousemove', handleMouseMove)
-		const delta = event.clientY - origin
-		dispatch('done', delta)
+		dispatch('done', getDelta(event))
 	}
 
 	onDestroy(() => {
