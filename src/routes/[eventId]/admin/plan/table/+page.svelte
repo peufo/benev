@@ -16,11 +16,13 @@
 	const hourWidth = 30 //px
 	const teamColomnWidth = 100 //px
 
-	let days: Dayjs[] = []
+	let days: { hours: number[]; date: Dayjs }[] = []
 	$: getDays(range)
+
 	function getDays({ start, end }: Range) {
 		days = []
-		for (let day = dayjs(start); day.isBefore(end); day = day.add(1, 'day')) days.push(day)
+		for (let day = dayjs(start); day.isBefore(end); day = day.add(1, 'day'))
+			days.push({ date: day, hours: getHours(day) })
 	}
 
 	function getHours(date: Dayjs): number[] {
@@ -38,6 +40,9 @@
 			.fill(0)
 			.map((_, h) => startHour + h)
 	}
+
+	$: totalWidth =
+		teamColomnWidth + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourWidth
 </script>
 
 <Card class="overflow-scroll">
@@ -45,15 +50,14 @@
 
 	<div class="overflow-auto bg-base-100/95 rounded">
 		<div class="flex" style:margin-left="{teamColomnWidth}px">
-			{#each days as day}
-				{@const hours = getHours(day)}
+			{#each days as { date, hours }}
 				<div>
 					<!-- DAY -->
 					<div
 						style:left="{teamColomnWidth}px"
 						class="border-l font-medium sticky left-0 p-1 w-min whitespace-nowrap"
 					>
-						{day.format('dddd DD.MM')}
+						{date.format('dddd DD.MM')}
 					</div>
 					<!-- HOURS -->
 					<div class="flex text-sm">
@@ -68,7 +72,7 @@
 		</div>
 
 		{#each data.teams as team}
-			<div class="flex border-t py-2">
+			<div class="flex border-t py-2" style:width="{totalWidth}px">
 				<div
 					style:width="{teamColomnWidth}px"
 					class="p-1 sticky left-0 bg-base-100/95 z-50 font-medium"
