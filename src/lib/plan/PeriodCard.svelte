@@ -36,7 +36,7 @@
 	class="
 		group
 		absolute left-0 right-0
-		bg-base-300/50
+		bg-base-200/50
 		border rounded-md p-0 text-sm
 		hover:z-10
 		hover:outline outline-1 outline-secondary
