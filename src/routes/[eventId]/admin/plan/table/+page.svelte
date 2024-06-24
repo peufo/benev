@@ -72,7 +72,7 @@
 		</div>
 
 		{#each data.teams as team}
-			<div class="flex border-t py-2" style:width="{totalWidth}px">
+			<div class="flex border-t" style:width="{totalWidth}px">
 				<div
 					style:width="{teamColomnWidth}px"
 					class="p-1 sticky left-0 bg-base-100/95 z-50 font-medium"

@@ -30,7 +30,7 @@
 	}
 </script>
 
-<div>
+<div class="pb-4">
 	{#each stacks as periods}
 		<div class="flex items-stretch">
 			{#each periods as period (period.id)}
