@@ -106,7 +106,7 @@
 		</div>
 	</Card>
 
-	<Card class="hidden xl:block" bodyClass="sm:px-2 sm:py-2">
+	<Card class="hidden xl:block max-w-xs" bodyClass="sm:px-2 sm:py-2">
 		<MembersStats {data} />
 	</Card>
 </div>

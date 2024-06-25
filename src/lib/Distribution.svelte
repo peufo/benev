@@ -22,8 +22,8 @@
 			{@const label = getLabel(key)}
 			<span class="text-right font-medium">{value}</span>
 
-			<a class="relative menu-item" data-sveltekit-replacestate {href}>
-				<span class="z-10">
+			<a class="relative menu-item min-w-0" data-sveltekit-replacestate {href}>
+				<span class="z-10 text-ellipsis overflow-hidden">
 					{label}
 				</span>
 				<div
