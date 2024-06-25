@@ -40,22 +40,13 @@
 	$: days = getDays(range)
 </script>
 
-<div
-	bind:this={scrollContainer}
-	class="
-		{klass}
-		max-w[100hw] bg-base-100 rounded
-		overflow-auto table-pin-cols bordered
-		snap-x scroll-pl-16 scroll-p-20
-	"
->
+<div bind:this={scrollContainer} class="{klass} max-h-full bg-base-100 overflow-auto">
 	<div
 		class="flex min-w-max pr-2 z-10 gap-2 p-1"
 		style="--container-width: {containerWidth}px;"
 		bind:offsetWidth={containerWidth}
 		use:newPeriod={{ origin: dayjs(range.start), headerHeight, msSize }}
 	>
-		msSize: msHeight
 		<div class="sticky left-1 z-20 bg-base-100">
 			<!-- Header -->
 			<div style:height="{headerHeight}px" />
@@ -97,10 +88,7 @@
 		</div>
 
 		{#each teams as team (team.id)}
-			<div
-				class="snap-start scroll-mx-2 pl-0 relative"
-				data-team={JSON.stringify({ id: team.id, name: team.name })}
-			>
+			<div class="pl-0 relative" data-team={JSON.stringify({ id: team.id, name: team.name })}>
 				<div
 					class="w-36 sticky top-1 pb-2 z-10"
 					style:height="{headerHeight}px"

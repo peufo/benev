@@ -19,10 +19,10 @@
 		TEAM_COLOMN_WIDTH + days.reduce((acc, { hours }) => acc + hours.length, 0) * msSize * MS_TO_HOUR
 </script>
 
-<div class="overflow-auto bg-base-100/95 rounded">
-	<div class="flex" style:margin-left="{TEAM_COLOMN_WIDTH}px">
+<div class="overflow-auto bg-base-100/95 max-h-full">
+	<div class="flex sticky top-0 z-10" style:margin-left="{TEAM_COLOMN_WIDTH}px">
 		{#each days as { date, hours }}
-			<div>
+			<div class="bg-base-100/95">
 				<!-- DAY -->
 				<div
 					style:left="{TEAM_COLOMN_WIDTH}px"
