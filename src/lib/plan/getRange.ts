@@ -1,26 +1,9 @@
-import type { Period, Team } from '@prisma/client'
-import type { Dayjs } from 'dayjs'
+import type { Period } from '@prisma/client'
 import dayjs from 'dayjs'
-
-type Range = {
-	start: Dayjs
-	end: Dayjs
-}
 
 type RangeOfDate = {
 	start: Date
 	end: Date
-}
-
-export function getRangeOfTeams(teams: (Team & { periods: Period[] })[]): Range {
-	const periods = teams
-		.map(({ periods }) => periods.map((p) => [p.start.getTime(), p.end.getTime()]))
-		.flat(2)
-		.toSorted()
-	return {
-		start: dayjs(periods[0]).startOf('day'),
-		end: dayjs(periods.at(-1)).endOf('day'),
-	}
 }
 
 export function getRangeOfTeam(team: { periods: Period[] }): RangeOfDate | null {

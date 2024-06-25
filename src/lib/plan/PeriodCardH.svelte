@@ -10,19 +10,20 @@
 	import type { PeriodWithSubscribesUserName } from './types'
 
 	export let period: PeriodWithSubscribesUserName
-	export let msWidth: number
-	export let start: dayjs.Dayjs
+	export let msSize: number
+	export let origin: dayjs.Dayjs
+	// TODO: use store for showSubscribes
 	export let showSubscribes = true
 
 	let deltaStart = 0
 	let deltaEnd = 0
 
-	$: left = -start.diff(period.start) * msWidth + deltaStart
-	$: width = dayjs(period.end).diff(period.start) * msWidth - deltaStart + deltaEnd
+	$: left = -origin.diff(period.start) * msSize + deltaStart
+	$: width = dayjs(period.end).diff(period.start) * msSize - deltaStart + deltaEnd
 
 	async function handleGrabDone() {
-		const start = new Date(period.start.getTime() + roundMinute(deltaStart / msWidth))
-		const end = new Date(period.end.getTime() + roundMinute(deltaEnd / msWidth))
+		const start = new Date(period.start.getTime() + roundMinute(deltaStart / msSize))
+		const end = new Date(period.end.getTime() + roundMinute(deltaEnd / msSize))
 		await updatePeriod({ ...period, start, end })
 		period = { ...period, start, end }
 		deltaStart = 0
@@ -73,8 +74,8 @@
 		<Progress {period} class="justify-between" badgeClass="mr-1" progressClass="bg-red-400">
 			<span slot="before-badge" class="text-xs font-semibold ml-1">
 				{formatRangeHour({
-					start: period.start.getTime() + roundMinute(deltaStart / msWidth),
-					end: period.end.getTime() + roundMinute(deltaEnd / msWidth),
+					start: period.start.getTime() + roundMinute(deltaStart / msSize),
+					end: period.end.getTime() + roundMinute(deltaEnd / msSize),
 				})}
 			</span>
 		</Progress>

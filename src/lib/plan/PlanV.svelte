@@ -1,27 +1,26 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import dayjs, { type Dayjs } from 'dayjs'
+	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
-	import { tip, Icon, urlParam } from 'fuma'
+	import { tip, Icon, urlParam, type Range } from 'fuma'
 	import type { Period, Subscribe, Team } from '@prisma/client'
 	import { mdiPlus } from '@mdi/js'
 
-	import PeriodCard from '$lib/plan/PeriodCard.svelte'
-	import { eventPath } from '$lib/store'
+	import PeriodCardV from '$lib/plan/PeriodCardV.svelte'
 	import { newPeriod } from './newPeriod'
-	import { getRangeOfTeams } from './getRange'
+	import { getDays } from './getDays'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
-	export let scale = 12
 	export let scrollContainer: HTMLDivElement | undefined = undefined
 	let klass = ''
 	export { klass as class }
+	export let range: Range
+	export let msSize: number
 
 	const headerHeight = 40
 	const hourHeight = 40
-
-	$: msHeight = (hourHeight * (scale / 24)) / (1000 * 60 * 60)
+	$: origin = dayjs(range.start).startOf('hour')
 
 	onMount(() => {
 		const periodId = $urlParam.get('form_period')
@@ -38,21 +37,7 @@
 	})
 
 	let containerWidth = 0
-	let range: { start: Dayjs; end: Dayjs }
-	let days: Dayjs[] = []
-
-	$: {
-		range = getRangeOfTeams(teams)
-		const newDays: Dayjs[] = []
-		for (let day = range.start; day.isBefore(range.end); day = day.add(1, 'day')) {
-			newDays.push(day)
-		}
-		days = newDays
-	}
-
-	$: hours = Array(Math.round(scale))
-		.fill(0)
-		.map((v, index) => ((24 / scale) * (index + 1)).toString().padStart(2, '0'))
+	$: days = getDays(range)
 </script>
 
 <div
@@ -68,8 +53,9 @@
 		class="flex min-w-max pr-2 z-10 gap-2 p-1"
 		style="--container-width: {containerWidth}px;"
 		bind:offsetWidth={containerWidth}
-		use:newPeriod={{ origin: range.start, headerHeight, msHeight }}
+		use:newPeriod={{ origin: dayjs(range.start), headerHeight, msSize }}
 	>
+		msSize: msHeight
 		<div class="sticky left-1 z-20 bg-base-100">
 			<!-- Header -->
 			<div style:height="{headerHeight}px" />
@@ -81,17 +67,17 @@
 						class="sticky top-1 bg-base-100 pr-2 border-t border-r z-10 -translate-y-[1px]"
 						style:height="{hourHeight}px"
 					>
-						<div class="text-sm font-medium">{day.format('ddd D')}</div>
-						<div class="text-xs">{day.format('MMMM')}</div>
+						<div class="text-sm font-medium">{day.date.format('ddd D')}</div>
+						<div class="text-xs">{day.date.format('MMMM')}</div>
 					</div>
 					<div>
-						{#each hours.slice(0, -1) as hour}
+						{#each day.hours as hour}
 							<div
 								class="flex items-center bg-base-100 text-center font-light border-r"
 								style:height="{hourHeight}px"
 							>
 								<span class="grow text-sm">
-									{hour}
+									{hour.toString().padStart(2, '0')}
 								</span>
 							</div>
 						{/each}
@@ -104,7 +90,7 @@
 		<div class="w-0">
 			<div class="scale" style:height="{headerHeight}px" />
 			{#each days as day}
-				{#each hours as hour}
+				{#each day.hours as hour}
 					<div class="scale" style:height="{hourHeight}px" />
 				{/each}
 			{/each}
@@ -136,7 +122,7 @@
 				</div>
 
 				{#each team.periods as period}
-					<PeriodCard {period} origin={range.start} {msHeight} {headerHeight} />
+					<PeriodCardV {period} {origin} {msSize} />
 				{/each}
 			</div>
 		{/each}

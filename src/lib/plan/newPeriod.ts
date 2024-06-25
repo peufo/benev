@@ -8,7 +8,7 @@ import { get } from 'svelte/store'
 
 type Params = {
 	origin: Dayjs
-	msHeight: number
+	msSize: number
 	headerHeight: number
 }
 
@@ -16,11 +16,11 @@ export const newPeriodGhost = createEventEmitter<{ remove: void }>()
 
 export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 	function offsetYToTime(offsetY: number): Dayjs {
-		const ms = roundMs((offsetY - params.headerHeight) / params.msHeight, 15)
+		const ms = roundMs((offsetY - params.headerHeight) / params.msSize, 15)
 		return params.origin.add(ms, 'ms')
 	}
 	function timeToOffsetY(time: Dayjs) {
-		return -params.origin.diff(time) * params.msHeight + params.headerHeight
+		return -params.origin.diff(time) * params.msSize + params.headerHeight
 	}
 
 	function handleMouseDown(event: MouseEvent) {
@@ -42,14 +42,14 @@ export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 		const updateGhost = () => {
 			const [top, bottom] = end.isAfter(start) ? [start, end] : [end, start]
 			ghost.style.top = `${timeToOffsetY(top)}px`
-			ghost.style.height = `${bottom.diff(top) * params.msHeight}px`
+			ghost.style.height = `${bottom.diff(top) * params.msSize}px`
 			h3.innerText = formatRangeHour({ start: top.toDate(), end: bottom.toDate() })
 		}
 		updateGhost()
 		target.appendChild(ghost)
 
 		const handleMouseMove = ({ clientY }: MouseEvent) => {
-			const delta = roundMs((clientY - originY) / params.msHeight, 15)
+			const delta = roundMs((clientY - originY) / params.msSize, 15)
 			end = start.add(delta, 'ms')
 			updateGhost()
 		}

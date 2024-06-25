@@ -1,130 +1,35 @@
 <script lang="ts">
-	import {
-		mdiArrowCollapse,
-		mdiArrowExpand,
-		mdiChartTimeline,
-		mdiMagnifyMinusOutline,
-		mdiMagnifyPlusOutline,
-	} from '@mdi/js'
-	import { Card, Icon, InputCheckboxsMenu } from 'fuma'
-	import { Plan } from '$lib/plan'
-	import { onMount, tick } from 'svelte'
-	import { eventPath } from '$lib/store/index.js'
+	import { jsonParse, RangePickerButton, urlParam, TabsIcon } from 'fuma'
+	import { mdiChartTimeline, mdiChartWaterfall } from '@mdi/js'
+	import { PlanV, PlanH } from '$lib/plan/index.js'
 
 	export let data
 
-	onMount(() => {
-		const updateFullscreenState = () => {
-			isFullscreen = document.fullscreenElement === wrapper
-		}
-		document.addEventListener('fullscreenchange', updateFullscreenState)
-		return () => {
-			document.removeEventListener('fullscreenchange', updateFullscreenState)
-		}
+	const MS_TO_HOUR = 3_600_000
+
+	let msSize = 40 * MS_TO_HOUR
+	let range = data.rangeOfEvent
+	urlParam.subscribe(({ get }) => {
+		range = jsonParse(get('range'), data.rangeOfEvent)
 	})
-
-	let scale = 12
-	let scrollContainer: HTMLDivElement | undefined
-	const scales = [1, 2, 4, 6, 12, 16, 24]
-	const zoom = (() => {
-		let index = scales.indexOf(scale) || 3
-
-		async function updateScroll(previousScale: number, newScale: number) {
-			if (!scrollContainer) return
-			const { scrollTop, clientHeight } = scrollContainer
-			const halfHeight = clientHeight / 2
-			const scrollCenter = scrollTop + halfHeight
-			const ratio = newScale / previousScale
-			const top = scrollCenter * ratio - halfHeight
-
-			await tick()
-			scrollContainer.scrollTo({ top, behavior: 'instant' })
-		}
-
-		return {
-			in: () => {
-				if (!scales[index + 1]) return
-				const previous = scale
-				scale = scales[++index]
-				updateScroll(previous, scale)
-			},
-			out: () => {
-				if (!scales[index - 1]) return
-				const previous = scale
-				scale = scales[--index]
-				updateScroll(previous, scale)
-			},
-		}
-	})()
-
-	let wrapper: HTMLDivElement
-	let isFullscreen = false
-	async function toggleFullscreen() {
-		if (isFullscreen) await document.exitFullscreen()
-		else await wrapper.requestFullscreen()
-	}
 </script>
 
-<Card>
-	<div bind:this={wrapper} class:pl-4={isFullscreen} class:pt-4={isFullscreen}>
-		<div class="flex gap-3 mb-3" class:pr-4={isFullscreen}>
-			<h2 class="title">Planification</h2>
+<div class="flex gap-2 p-2 bg-base-100 rounded-2xl">
+	<h2 class="title">Planification</h2>
+	<RangePickerButton bind:range />
 
-			<div class="grow" />
+	<TabsIcon
+		key="view"
+		defaultValue="h"
+		options={[
+			{ label: 'Vue horizontal', icon: mdiChartTimeline, value: 'h' },
+			{ label: 'Vue vertical', icon: mdiChartWaterfall, value: 'v' },
+		]}
+	/>
+</div>
 
-			<InputCheckboxsMenu
-				key="teams"
-				label="secteurs"
-				options={data.teams.map((t) => ({ value: t.id, label: t.name }))}
-				enhanceDisabled
-				badgePrimary
-			/>
-
-			<a href="{$eventPath}/admin/plan/table" class="btn btn-square btn-sm">
-				<Icon path={mdiChartTimeline} title="Vue en table" size={18} />
-			</a>
-
-			<!-- ZOOM -->
-			<div class="join">
-				<button
-					class="btn btn-square btn-sm join-item"
-					on:click={zoom.out}
-					disabled={scale <= scales[0]}
-				>
-					<Icon path={mdiMagnifyMinusOutline} title="Dézoomer" />
-				</button>
-				<button
-					class="btn btn-square btn-sm join-item"
-					on:click={zoom.in}
-					disabled={scale >= scales[scales.length - 1]}
-				>
-					<Icon path={mdiMagnifyPlusOutline} title="Zoomer" />
-				</button>
-			</div>
-
-			<!-- Full screen -->
-			<button class="btn btn-square btn-sm join-item" on:click={toggleFullscreen}>
-				{#if isFullscreen}
-					<Icon
-						path={mdiArrowCollapse}
-						title="Quitter le mode plein écran"
-						tippyProps={{ appendTo: 'parent' }}
-					/>
-				{:else}
-					<Icon
-						path={mdiArrowExpand}
-						title="Ouvrir le mode plein écran"
-						tippyProps={{ appendTo: 'parent' }}
-					/>
-				{/if}
-			</button>
-		</div>
-
-		<Plan
-			teams={data.teams_periods}
-			{scale}
-			bind:scrollContainer
-			class={isFullscreen ? 'max-h-[95vh]' : 'max-h-[70vh]'}
-		/>
-	</div>
-</Card>
+{#if $urlParam.hasValue('view', 'v')}
+	<PlanV teams={data.teams_periods} {range} {msSize} />
+{:else}
+	<PlanH teams={data.teams_periods} {range} {msSize} />
+{/if}

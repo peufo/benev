@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import type { Dayjs } from 'dayjs'
-	import PeriodCardH from '$lib/plan/PeriodCardH.svelte'
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { getStacks } from './getStacks'
+	import PeriodCard from './PeriodCardV.svelte'
 
 	export let team: Team & { periods: PeriodWithSubscribesUserName[] }
 	export let range: { start: Dayjs; end: Dayjs }
@@ -13,11 +13,11 @@
 	$: origin = range.start.startOf('hour')
 </script>
 
-<div class="pb-4">
+<div class="px-4">
 	{#each stacks as periods}
-		<div class="flex items-stretch">
+		<div class="flex flex-col">
 			{#each periods as period (period.id)}
-				<PeriodCardH {origin} {period} {msSize} />
+				<PeriodCard {origin} {period} {msSize} />
 			{/each}
 		</div>
 	{/each}
