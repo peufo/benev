@@ -5,19 +5,26 @@ import type { Prisma } from '@prisma/client'
 import { prisma } from '$lib/server'
 
 export const load = async ({ url, params: { eventId } }) => {
-	const data = parseQuery(url, {
+	const query = parseQuery(url, {
 		teams: z.array(z.string()).optional(),
+		range: z.json({ start: z.coerce.date(), end: z.coerce.date() }).optional(),
 	})
 
 	const where: Prisma.TeamWhereInput = { eventId }
-	if (data.teams) where.id = { in: data.teams }
+	if (query.teams) where.id = { in: query.teams }
 
+	const wherePeriods: Prisma.PeriodWhereInput = {}
+	if (query.range) {
+		wherePeriods.end = { gte: query.range.start }
+		wherePeriods.start = { lte: query.range.end }
+	}
 	return {
 		rangeOfEvent: await getRangeOfEvent(eventId),
 		teams_periods: await prisma.team.findMany({
 			where,
 			include: {
 				periods: {
+					where: wherePeriods,
 					include: {
 						subscribes: {
 							include: {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { jsonParse, RangePickerButton, urlParam, TabsIcon } from 'fuma'
-	import { mdiChartTimeline, mdiChartWaterfall } from '@mdi/js'
+	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop } from '@mdi/js'
 	import { PlanV, PlanH } from '$lib/plan/index.js'
 
 	export let data
@@ -16,14 +16,15 @@
 
 <div class="flex gap-2 p-2 bg-base-100 rounded-2xl">
 	<h2 class="title">Planification</h2>
+	<div class="grow" />
 	<RangePickerButton bind:range />
 
 	<TabsIcon
 		key="view"
 		defaultValue="h"
 		options={[
-			{ label: 'Vue horizontal', icon: mdiChartTimeline, value: 'h' },
-			{ label: 'Vue vertical', icon: mdiChartWaterfall, value: 'v' },
+			{ label: 'Vue horizontal', icon: mdiAlignHorizontalLeft, value: 'h' },
+			{ label: 'Vue vertical', icon: mdiAlignVerticalTop, value: 'v' },
 		]}
 	/>
 </div>
