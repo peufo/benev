@@ -3,21 +3,20 @@
 	import type { Dayjs } from 'dayjs'
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { getStacks } from './getStacks'
-	import PeriodCard from './PeriodCardV.svelte'
+	import PeriodCardV from './PeriodCardV.svelte'
 
 	export let team: Team & { periods: PeriodWithSubscribesUserName[] }
-	export let range: { start: Dayjs; end: Dayjs }
 	export let msSize: number
+	export let origin: Dayjs
 
 	$: stacks = getStacks(team.periods)
-	$: origin = range.start.startOf('hour')
 </script>
 
-<div class="px-4">
+<div class="pr-4 flex">
 	{#each stacks as periods}
-		<div class="flex flex-col">
+		<div class="relative w-full min-w-24">
 			{#each periods as period (period.id)}
-				<PeriodCard {origin} {period} {msSize} />
+				<PeriodCardV {origin} {period} {msSize} />
 			{/each}
 		</div>
 	{/each}

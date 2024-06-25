@@ -2,25 +2,19 @@
 	import { onMount } from 'svelte'
 	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
-	import { tip, Icon, urlParam, type Range } from 'fuma'
-	import type { Period, Subscribe, Team } from '@prisma/client'
-	import { mdiPlus } from '@mdi/js'
-
-	import PeriodCardV from '$lib/plan/PeriodCardV.svelte'
-	import { newPeriod } from './newPeriod'
+	import { urlParam, type Range } from 'fuma'
+	import type { Team } from '@prisma/client'
 	import { getDays } from './getDays'
+	import TeamCol from './TeamCol.svelte'
+	import type { PeriodWithSubscribesUserName } from './types'
 	dayjs.locale('fr-ch')
 
-	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
+	export let teams: (Team & { periods: PeriodWithSubscribesUserName[] })[]
 	export let scrollContainer: HTMLDivElement | undefined = undefined
 	let klass = ''
 	export { klass as class }
 	export let range: Range
 	export let msSize: number
-
-	const headerHeight = 40
-	const hourHeight = 40
-	$: origin = dayjs(range.start).startOf('hour')
 
 	onMount(() => {
 		const periodId = $urlParam.get('form_period')
@@ -36,90 +30,58 @@
 		})
 	})
 
-	let containerWidth = 0
+	const TEAM_HEADER_HEIGHT = 40
+	const MS_TO_HOUR = 3_600_000
+
+	$: origin = dayjs(range.start).startOf('hour')
 	$: days = getDays(range)
+	$: totalHeight =
+		TEAM_HEADER_HEIGHT +
+		days.reduce((acc, { hours }) => acc + hours.length, 0) * msSize * MS_TO_HOUR
 </script>
 
-<div bind:this={scrollContainer} class="{klass} max-h-full bg-base-100 overflow-auto">
-	<div
-		class="flex min-w-max pr-2 z-10 gap-2 p-1"
-		style="--container-width: {containerWidth}px;"
-		bind:offsetWidth={containerWidth}
-		use:newPeriod={{ origin: dayjs(range.start), headerHeight, msSize }}
-	>
-		<div class="sticky left-1 z-20 bg-base-100">
-			<!-- Header -->
-			<div style:height="{headerHeight}px" />
-
-			<!-- Scale -->
-			{#each days as day}
-				<div class="w-16">
-					<div
-						class="sticky top-1 bg-base-100 pr-2 border-t border-r z-10 -translate-y-[1px]"
-						style:height="{hourHeight}px"
-					>
-						<div class="text-sm font-medium">{day.date.format('ddd D')}</div>
-						<div class="text-xs">{day.date.format('MMMM')}</div>
-					</div>
-					<div>
-						{#each day.hours as hour}
-							<div
-								class="flex items-center bg-base-100 text-center font-light border-r"
-								style:height="{hourHeight}px"
-							>
-								<span class="grow text-sm">
-									{hour.toString().padStart(2, '0')}
-								</span>
-							</div>
-						{/each}
-					</div>
-				</div>
-			{/each}
-		</div>
-
-		<!-- Scale rows -->
-		<div class="w-0">
-			<div class="scale" style:height="{headerHeight}px" />
-			{#each days as day}
-				{#each day.hours as hour}
-					<div class="scale" style:height="{hourHeight}px" />
-				{/each}
-			{/each}
-		</div>
-
-		{#each teams as team (team.id)}
-			<div class="pl-0 relative" data-team={JSON.stringify({ id: team.id, name: team.name })}>
+<div bind:this={scrollContainer} class="{klass} flex max-h-full bg-base-100 overflow-auto">
+	<!-- SCALE -->
+	<div class="sticky left-0 z-10" style:margin-top="{TEAM_HEADER_HEIGHT}px">
+		{#each days as { date, hours }}
+			<div class="bg-base-100/95 px-1">
+				<!-- DAY -->
 				<div
-					class="w-36 sticky top-1 pb-2 z-10"
-					style:height="{headerHeight}px"
-					style:scrollPaddingTop="{headerHeight}px"
-					use:tip={{ content: team.name, appendTo: 'parent' }}
+					style:top="{TEAM_HEADER_HEIGHT}px"
+					class="font-medium sticky top-0 h-0 border-t text-sm"
 				>
-					<a
-						href={$urlParam.with({ form_team: team.id })}
-						class="
-							flex items-center rounded bg-base-100
-							h-full px-2 outline outline-base-100
-							text-sm font-semibold border
-					"
-					>
-						<span class="overflow-hidden whitespace-nowrap text-ellipsis">
-							{team.name}
-						</span>
-					</a>
+					<div class="text-sm font-medium bg-base-100 whitespace-nowrap">
+						{date.format('ddd D')}
+					</div>
+					<div class="text-xs bg-base-100">{date.format('MMMM')}</div>
 				</div>
-
-				{#each team.periods as period}
-					<PeriodCardV {period} {origin} {msSize} />
-				{/each}
+				<!-- HOURS -->
+				<div class="flex flex-col items-end text-sm text-right w-full">
+					{#each hours as hour}
+						<div
+							style:height="{msSize * MS_TO_HOUR}px"
+							class="opacity-0 odd:opacity-100 border-t px-1"
+						>
+							{hour.toString().padStart(2, '0')}
+						</div>
+					{/each}
+				</div>
 			</div>
 		{/each}
-
-		<a class="btn btn-sm z-50 sticky top-1" href={$urlParam.with({ form_team: 1 })}>
-			<Icon path={mdiPlus} title="Nouveau secteur" />
-			<span>Ajouter</span>
-		</a>
 	</div>
+
+	{#each teams as team}
+		<div class="border-t" style:height="{totalHeight}px">
+			<div
+				style:height="{TEAM_HEADER_HEIGHT}px"
+				class="p-1 sticky top-0 bg-base-100/95 z-50 font-medium"
+			>
+				{team.name}
+			</div>
+
+			<TeamCol {team} {origin} {msSize} />
+		</div>
+	{/each}
 </div>
 
 <style>
