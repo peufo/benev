@@ -11,9 +11,13 @@ type Params = {
 	origin: Dayjs
 	msSize: number
 	team: Team
+	isEnable?: (target: HTMLDivElement) => boolean
 }
 
-export const createPeriod: Action<HTMLDivElement, Params> = (node, params) => {
+export const createPeriod: Action<HTMLDivElement, Params> = (
+	node,
+	{ origin, msSize, team, isEnable = () => true }
+) => {
 	let ghost: HTMLDivElement | null = null
 	let preserveGhostOnLocationChange = false
 	const pageUnsubscribe = page.subscribe(() => {
@@ -22,15 +26,16 @@ export const createPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 	})
 
 	function offsetYToTime(offsetY: number): Dayjs {
-		const ms = roundMs(offsetY / params.msSize, 15)
-		return params.origin.add(ms, 'ms')
+		const ms = roundMs(offsetY / msSize, 15)
+		return origin.add(ms, 'ms')
 	}
 	function timeToOffsetY(time: Dayjs) {
-		return -params.origin.diff(time) * params.msSize
+		return -origin.diff(time) * msSize
 	}
 
 	function handleMouseDown(event: MouseEvent) {
 		const target = event.target as HTMLDivElement
+		if (!isEnable(target)) return
 		event.preventDefault()
 
 		const originY = event.clientY
@@ -47,14 +52,14 @@ export const createPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 			if (!ghost) return
 			const [top, bottom] = end.isAfter(start) ? [start, end] : [end, start]
 			ghost.style.top = `${timeToOffsetY(top)}px`
-			ghost.style.height = `${bottom.diff(top) * params.msSize}px`
+			ghost.style.height = `${bottom.diff(top) * msSize}px`
 			h3.innerText = formatRangeHour({ start: top.toDate(), end: bottom.toDate() })
 		}
 		updateGhost()
 		target.appendChild(ghost)
 
 		const handleMouseMove = ({ clientY }: MouseEvent) => {
-			const delta = roundMs((clientY - originY) / params.msSize, 15)
+			const delta = roundMs((clientY - originY) / msSize, 15)
 			end = start.add(delta, 'ms')
 			updateGhost()
 		}
@@ -63,7 +68,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 			document.removeEventListener('mousemove', handleMouseMove)
 			const [_start, _end] = end.isAfter(start) ? [start, end] : [end, start]
 			const newPeriod: Partial<Period & { team: Team }> = {
-				team: params.team,
+				team: team,
 				start: _start.toDate(),
 				end: _end.toDate(),
 			}
@@ -79,7 +84,10 @@ export const createPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 	node.addEventListener('mousedown', handleMouseDown)
 
 	return {
-		update: (newParams) => (params = newParams),
+		update: (newParams) => {
+			;({ origin, msSize, team } = newParams)
+			if (newParams.isEnable && newParams.isEnable !== isEnable) isEnable = newParams.isEnable
+		},
 		destroy: () => {
 			pageUnsubscribe()
 			node.removeEventListener('mousedown', handleMouseDown)

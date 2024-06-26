@@ -13,9 +13,17 @@
 	$: stacks = getStacks(team.periods)
 </script>
 
-<div class="pr-4 flex h-full" use:createPeriod={{ origin, msSize, team }}>
+<div
+	class="pr-4 flex h-full"
+	use:createPeriod={{
+		origin,
+		msSize,
+		team,
+		isEnable: (target) => target.classList.contains('stack-col'),
+	}}
+>
 	{#each stacks as periods}
-		<div class="relative w-full min-w-24">
+		<div class="relative w-full min-w-24 stack-col">
 			{#each periods as period (period.id)}
 				<PeriodCardV {origin} {period} {msSize} />
 			{/each}
