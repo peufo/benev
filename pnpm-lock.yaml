@@ -87,8 +87,8 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2
       fuma:
-        specifier: ^0.4.5
-        version: 0.4.5(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2)
+        specifier: ^0.4.7
+        version: 0.4.7(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2)
       happy-dom:
         specifier: ^13.6.2
         version: 13.6.2
@@ -1906,8 +1906,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  fuma@0.4.5:
-    resolution: {integrity: sha512-PRnEleqHFy5yJYnnJzQK6I/RXj0DBCcjXrCZLbySo4xs0q8QxsFFEjfHKRtOig95g5SU7jhQvRCLWaHp6BDUNw==}
+  fuma@0.4.7:
+    resolution: {integrity: sha512-+sVDhthtrOMEfSUsI4MIexZHXLoEQZLDk/ybzTB4MHa4HT9CGGYZBOaP9MwCiTm036/nXbOV/h3dlMTwRa6N9A==}
     peerDependencies:
       '@sveltejs/kit': ^2.5.6
       svelte: ^4.0.0
@@ -4454,8 +4454,8 @@ snapshots:
     dependencies:
       colord: 2.9.3
       css-selector-tokenizer: 0.8.0
-      postcss: 8.4.31
-      postcss-js: 4.0.1(postcss@8.4.31)
+      postcss: 8.4.33
+      postcss-js: 4.0.1(postcss@8.4.33)
       tailwindcss: 3.4.3(ts-node@10.9.2(@types/node@20.9.0)(typescript@5.2.2))
     transitivePeerDependencies:
       - ts-node
@@ -4738,7 +4738,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  fuma@0.4.5(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2):
+  fuma@0.4.7(@sveltejs/kit@2.5.7(@sveltejs/vite-plugin-svelte@3.0.1(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(svelte@4.2.15)(vite@5.0.11(@types/node@20.9.0)))(@types/node@20.9.0)(prisma@5.13.0)(svelte@4.2.15)(typescript@5.2.2):
     dependencies:
       '@lucia-auth/adapter-prisma': 4.0.1(@prisma/client@5.13.0(prisma@5.13.0))(lucia@3.2.0)
       '@mdi/js': 7.4.47
@@ -5234,11 +5234,6 @@ snapshots:
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
-
-  postcss-js@4.0.1(postcss@8.4.31):
-    dependencies:
-      camelcase-css: 2.0.1
-      postcss: 8.4.31
 
   postcss-js@4.0.1(postcss@8.4.33):
     dependencies:

@@ -18,11 +18,11 @@
 	})
 </script>
 
-<div class="flex gap-2 p-2 bg-base-100 rounded-2xl">
+<div class="flex gap-2 items-center p-2 bg-base-100 rounded-2xl" style="--btn-text-case: none;">
 	<h2 class="title">Planification</h2>
 	<div class="grow" />
 
-	<RangePickerButton bind:range />
+	<RangePickerButton />
 
 	<ZoomButton
 		bind:value={msSize}
@@ -52,7 +52,7 @@
 <div class="h-[80vh] overflow-hidden rounded-2xl">
 	{#if $urlParam.hasValue('view', 'v')}
 		<PlanV teams={data.teams_periods} {range} {msSize} />
-	{:else if $urlParam.hasValue('view', 'h')}
+	{:else}
 		<PlanH teams={data.teams_periods} {range} {msSize} />
 	{/if}
 </div>

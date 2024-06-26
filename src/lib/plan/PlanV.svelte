@@ -102,16 +102,3 @@
 		</a>
 	</div>
 </div>
-
-<style>
-	.scale {
-		position: relative;
-	}
-	.scale::after {
-		content: ' ';
-		position: absolute;
-		height: 100%;
-		width: calc(var(--container-width) - 64px);
-		border-bottom-width: 1px;
-	}
-</style>

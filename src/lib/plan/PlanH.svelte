@@ -57,7 +57,7 @@
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				style:width="{TEAM_HEADER_WIDTH}px"
-				class="p-1 sticky left-0 bg-base-100/95 z-50 font-medium text-sm cursor-pointer hover:bg-base-200"
+				class="p-1 sticky shrink-0 left-0 bg-base-100/95 z-50 font-medium text-sm cursor-pointer hover:bg-base-200"
 			>
 				{team.name}
 			</a>

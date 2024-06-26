@@ -1,5 +1,5 @@
 import { z } from 'fuma/validation'
-import type { Range } from 'fuma'
+import type { RangeAsDate } from 'fuma'
 import { parseQuery } from 'fuma/server'
 import type { Prisma } from '@prisma/client'
 import { prisma } from '$lib/server'
@@ -49,7 +49,7 @@ export const load = async ({ url, params: { eventId } }) => {
 	}
 }
 
-async function getRangeOfEvent(eventId: string): Promise<Range> {
+async function getRangeOfEvent(eventId: string): Promise<RangeAsDate> {
 	const { _min, _max } = await prisma.period.aggregate({
 		where: { team: { eventId } },
 		_min: { start: true },
