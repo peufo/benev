@@ -10,7 +10,8 @@
 
 	const MS_TO_HOUR = 3_600_000
 
-	let msSize = 80 / MS_TO_HOUR
+	let msSize = +($urlParam.get('msSize') || 80 / MS_TO_HOUR)
+
 	let range = data.rangeOfEvent
 	urlParam.subscribe(({ get }) => {
 		range = jsonParse(get('range'), data.rangeOfEvent)
@@ -51,7 +52,7 @@
 <div class="h-[80vh] overflow-hidden rounded-2xl">
 	{#if $urlParam.hasValue('view', 'v')}
 		<PlanV teams={data.teams_periods} {range} {msSize} />
-	{:else}
+	{:else if $urlParam.hasValue('view', 'h')}
 		<PlanH teams={data.teams_periods} {range} {msSize} />
 	{/if}
 </div>

@@ -1,14 +1,23 @@
 <script lang="ts">
+	import { goto } from '$app/navigation'
 	import { mdiMagnifyPlusOutline, mdiMinus, mdiPlus } from '@mdi/js'
-	import { DropDown, Icon } from 'fuma'
+	import { DropDown, Icon, urlParam } from 'fuma'
 
 	export let value: number
 	export let min: number
 	export let max: number
 	export let step: number
+
+	function setUrlParam() {
+		return goto($urlParam.with({ msSize: value }), {
+			keepFocus: true,
+			replaceState: true,
+			noScroll: true,
+		})
+	}
 </script>
 
-<DropDown tippyProps={{ trigger: 'mouseenter', placement: 'bottom' }}>
+<DropDown tippyProps={{ trigger: 'mouseenter', placement: 'bottom', onHidden: setUrlParam }}>
 	<button slot="activator" class="btn btn-sm btn-square">
 		<Icon path={mdiMagnifyPlusOutline} />
 	</button>
