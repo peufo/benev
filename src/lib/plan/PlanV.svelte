@@ -21,7 +21,7 @@
 		if (!periodId) return
 		const periodIdIsCUID = periodId.length === 25 && periodId.match(/\w{25}/)
 		if (!periodIdIsCUID) return
-		const periodEl = document.querySelector<HTMLLinkElement>(`#${periodId}`)
+		const periodEl = document.getElementById(periodId)
 		if (!periodEl) return
 		scrollContainer?.scroll({
 			top: periodEl.offsetTop - 80,
@@ -44,11 +44,11 @@
 	<!-- SCALE -->
 	<div class="sticky left-0 z-10" style:margin-top="{TEAM_HEADER_HEIGHT}px">
 		{#each days as { date, hours }}
-			<div class="bg-base-100/95 px-1">
+			<div class="bg-base-100/95">
 				<!-- DAY -->
 				<div
 					style:top="{TEAM_HEADER_HEIGHT}px"
-					class="font-medium sticky top-0 h-0 border-t text-sm"
+					class="font-medium sticky top-0 h-0 border-t text-sm px-1 -translate-y-[1px] z-10"
 				>
 					<div class="text-sm font-medium bg-base-100 whitespace-nowrap">
 						{date.format('ddd D')}
@@ -56,7 +56,7 @@
 					<div class="text-xs bg-base-100">{date.format('MMMM')}</div>
 				</div>
 				<!-- HOURS -->
-				<div class="flex flex-col items-end text-sm text-right w-full">
+				<div class="flex flex-col items-end text-sm text-right -translate-y-[2px]">
 					{#each hours as hour}
 						<div
 							style:height="{msSize * MS_TO_HOUR}px"
@@ -71,13 +71,18 @@
 	</div>
 
 	{#each teams as team}
-		<div class="border-t" style:height="{totalHeight}px">
-			<div
+		<div class="border-l" style:height="{totalHeight}px">
+			<a
 				style:height="{TEAM_HEADER_HEIGHT}px"
-				class="p-1 sticky top-0 bg-base-100/95 z-50 font-medium"
+				class="px-1 sticky top-0 bg-base-100/95 z-50 font-medium flex items-center border-b cursor-pointer hover:bg-base-200"
+				href={$urlParam.with({ form_team: team.id })}
+				data-sveltekit-replacestate
+				data-sveltekit-noscroll
 			>
-				{team.name}
-			</div>
+				<span class="text-sm">
+					{team.name}
+				</span>
+			</a>
 
 			<TeamCol {team} {origin} {msSize} />
 		</div>
