@@ -61,8 +61,10 @@
 				<!-- HOURS -->
 				<div class="flex flex-col items-end text-sm text-right -translate-y-[2px]">
 					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
-						<div style:height="{msSize * MS_TO_HOUR * hourSpan}px" class="border-t px-1">
-							{hour.toString().padStart(2, '0')}
+						{@const isEndNextDay = hour + hourSpan > 24}
+						{@const span = isEndNextDay ? 24 - hour : hourSpan}
+						<div style:height="{msSize * MS_TO_HOUR * span}px" class="border-t px-1">
+							{isEndNextDay ? '' : hour.toString().padStart(2, '0')}
 						</div>
 					{/each}
 				</div>
