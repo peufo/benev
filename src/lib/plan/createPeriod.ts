@@ -3,43 +3,48 @@ import type { Dayjs } from 'dayjs'
 import { formatRangeHour } from '$lib/formatRange'
 import type { Period, Team } from '@prisma/client'
 import { goto } from '$app/navigation'
-import { createEventEmitter, jsonParse, urlParam } from 'fuma'
+import { urlParam } from 'fuma'
 import { get } from 'svelte/store'
+import { page } from '$app/stores'
 
 type Params = {
 	origin: Dayjs
 	msSize: number
-	headerHeight: number
+	team: Team
 }
 
-export const newPeriodGhost = createEventEmitter<{ remove: void }>()
+export const createPeriod: Action<HTMLDivElement, Params> = (node, params) => {
+	let ghost: HTMLDivElement | null = null
+	let preserveGhostOnLocationChange = false
+	const pageUnsubscribe = page.subscribe(() => {
+		if (preserveGhostOnLocationChange) return
+		ghost?.remove()
+	})
 
-export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 	function offsetYToTime(offsetY: number): Dayjs {
-		const ms = roundMs((offsetY - params.headerHeight) / params.msSize, 15)
+		const ms = roundMs(offsetY / params.msSize, 15)
 		return params.origin.add(ms, 'ms')
 	}
 	function timeToOffsetY(time: Dayjs) {
-		return -params.origin.diff(time) * params.msSize + params.headerHeight
+		return -params.origin.diff(time) * params.msSize
 	}
 
 	function handleMouseDown(event: MouseEvent) {
 		const target = event.target as HTMLDivElement
-		const team = jsonParse<Team | undefined>(target.dataset['team'], undefined)
-		if (!team) return
 		event.preventDefault()
-		newPeriodGhost.emit('remove')
 
 		const originY = event.clientY
 		const start = offsetYToTime(event.offsetY)
 		let end = start.clone()
 
-		const ghost = document.createElement('div')
+		ghost?.remove()
+		ghost = document.createElement('div')
 		const h3 = document.createElement('h3')
 		ghost.classList.add('absolute', 'left-0', 'right-0', 'bg-primary/30', 'rounded-lg', 'border')
 		h3.classList.add('text-xs', 'font-semibold', 'ml-1')
 		ghost.appendChild(h3)
 		const updateGhost = () => {
+			if (!ghost) return
 			const [top, bottom] = end.isAfter(start) ? [start, end] : [end, start]
 			ghost.style.top = `${timeToOffsetY(top)}px`
 			ghost.style.height = `${bottom.diff(top) * params.msSize}px`
@@ -58,14 +63,15 @@ export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 			document.removeEventListener('mousemove', handleMouseMove)
 			const [_start, _end] = end.isAfter(start) ? [start, end] : [end, start]
 			const newPeriod: Partial<Period & { team: Team }> = {
-				team,
+				team: params.team,
 				start: _start.toDate(),
 				end: _end.toDate(),
 			}
-			await goto(get(urlParam).with({ form_period: JSON.stringify(newPeriod) }))
-			newPeriodGhost.on('remove', () => ghost.remove())
+			const urlCreatePeriod = get(urlParam).with({ form_period: JSON.stringify(newPeriod) })
+			preserveGhostOnLocationChange = true
+			await goto(urlCreatePeriod)
+			preserveGhostOnLocationChange = false
 		}
-
 		document.addEventListener('mousemove', handleMouseMove)
 		document.addEventListener('mouseup', handleMouseUp, { once: true })
 	}
@@ -75,6 +81,7 @@ export const newPeriod: Action<HTMLDivElement, Params> = (node, params) => {
 	return {
 		update: (newParams) => (params = newParams),
 		destroy: () => {
+			pageUnsubscribe()
 			node.removeEventListener('mousedown', handleMouseDown)
 		},
 	}

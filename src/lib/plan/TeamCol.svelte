@@ -4,6 +4,7 @@
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { getStacks } from './getStacks'
 	import PeriodCardV from './PeriodCardV.svelte'
+	import { createPeriod } from './createPeriod'
 
 	export let team: Team & { periods: PeriodWithSubscribesUserName[] }
 	export let msSize: number
@@ -12,7 +13,7 @@
 	$: stacks = getStacks(team.periods)
 </script>
 
-<div class="pr-4 flex">
+<div class="pr-4 flex h-full" use:createPeriod={{ origin, msSize, team }}>
 	{#each stacks as periods}
 		<div class="relative w-full min-w-24">
 			{#each periods as period (period.id)}

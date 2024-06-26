@@ -20,7 +20,6 @@
 	} from 'fuma'
 	import type { Period, Team } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import { newPeriodGhost } from '$lib/plan/newPeriod'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { api } from '$lib/api'
 
@@ -42,7 +41,6 @@
 		successMessage: (action) => successMessages[action.search] || 'Succès',
 		onSuccess: () => {
 			dispatch('success')
-			newPeriodGhost.emit('remove')
 		},
 	})
 
