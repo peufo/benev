@@ -6,17 +6,26 @@ import { goto } from '$app/navigation'
 import { urlParam } from 'fuma'
 import { get } from 'svelte/store'
 import { page } from '$app/stores'
+import { roundMinute } from './utils'
 
 type Params = {
+	axis: Axis
 	origin: Dayjs
 	msSize: number
 	team: Team
 	isEnable?: (target: HTMLDivElement) => boolean
 }
 
+type Axis = 'x' | 'y'
+
+const GHOST_CLASSES: Record<Axis, string[]> = {
+	x: [],
+	y: ['absolute', 'left-0', 'right-0'],
+}
+
 export const createPeriod: Action<HTMLDivElement, Params> = (
 	node,
-	{ origin, msSize, team, isEnable = () => true }
+	{ origin, msSize, team, axis, isEnable = () => true }
 ) => {
 	let ghost: HTMLDivElement | null = null
 	let preserveGhostOnLocationChange = false
@@ -25,11 +34,11 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		ghost?.remove()
 	})
 
-	function offsetYToTime(offsetY: number): Dayjs {
-		const ms = roundMs(offsetY / msSize, 15)
+	function offsetToTime(offset: number): Dayjs {
+		const ms = roundMinute(offset / msSize, 15)
 		return origin.add(ms, 'ms')
 	}
-	function timeToOffsetY(time: Dayjs) {
+	function timeToOffset(time: Dayjs) {
 		return -origin.diff(time) * msSize
 	}
 
@@ -38,30 +47,41 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		if (!isEnable(target)) return
 		event.preventDefault()
 
-		const originY = event.clientY
-		const start = offsetYToTime(event.offsetY)
+		const mouseOrigin = { x: event.clientX, y: event.clientY }
+		const start = offsetToTime(axis === 'x' ? event.offsetX : event.offsetY)
 		let end = start.clone()
 
 		ghost?.remove()
 		ghost = document.createElement('div')
+		ghost.classList.add(...GHOST_CLASSES[axis], 'bg-primary/30', 'rounded-lg', 'border')
 		const h3 = document.createElement('h3')
-		ghost.classList.add('absolute', 'left-0', 'right-0', 'bg-primary/30', 'rounded-lg', 'border')
 		h3.classList.add('text-xs', 'font-semibold', 'ml-1')
 		ghost.appendChild(h3)
-		const updateGhost = () => {
-			if (!ghost) return
-			const [top, bottom] = end.isAfter(start) ? [start, end] : [end, start]
-			ghost.style.top = `${timeToOffsetY(top)}px`
-			ghost.style.height = `${bottom.diff(top) * msSize}px`
-			h3.innerText = formatRangeHour({ start: top.toDate(), end: bottom.toDate() })
+
+		const updateGhost = {
+			x() {
+				if (!ghost) return
+				const [left, right] = end.isAfter(start) ? [start, end] : [end, start]
+				ghost.style.translate = `${timeToOffset(left)}px`
+				ghost.style.width = `${right.diff(left) * msSize}px`
+				h3.innerText = formatRangeHour({ start: left.toDate(), end: right.toDate() })
+			},
+			y() {
+				if (!ghost) return
+				const [top, bottom] = end.isAfter(start) ? [start, end] : [end, start]
+				ghost.style.top = `${timeToOffset(top)}px`
+				ghost.style.height = `${bottom.diff(top) * msSize}px`
+				h3.innerText = formatRangeHour({ start: top.toDate(), end: bottom.toDate() })
+			},
 		}
-		updateGhost()
+		updateGhost[axis]()
 		target.appendChild(ghost)
 
-		const handleMouseMove = ({ clientY }: MouseEvent) => {
-			const delta = roundMs((clientY - originY) / msSize, 15)
+		const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
+			const deltaPX = axis === 'x' ? clientX - mouseOrigin.x : clientY - mouseOrigin.y
+			const delta = roundMinute(deltaPX / msSize, 15)
 			end = start.add(delta, 'ms')
-			updateGhost()
+			updateGhost[axis]()
 		}
 
 		const handleMouseUp = async (_event: MouseEvent) => {
@@ -85,7 +105,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 
 	return {
 		update: (newParams) => {
-			;({ origin, msSize, team } = newParams)
+			;({ origin, msSize, team, axis } = newParams)
 			if (newParams.isEnable && newParams.isEnable !== isEnable) isEnable = newParams.isEnable
 		},
 		destroy: () => {
@@ -93,9 +113,4 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 			node.removeEventListener('mousedown', handleMouseDown)
 		},
 	}
-}
-
-function roundMs(ms: number, nbMinutes: number) {
-	const round = 60_000 * nbMinutes
-	return Math.round(ms / round) * round
 }

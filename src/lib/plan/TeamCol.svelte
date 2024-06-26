@@ -16,6 +16,7 @@
 <div
 	class="pr-4 flex h-full"
 	use:createPeriod={{
+		axis: 'y',
 		origin,
 		msSize,
 		team,
