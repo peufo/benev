@@ -89,7 +89,7 @@
 	{/each}
 
 	<!-- CREATE TEAM -->
-	<div class="grid place-content-center px-4" style:height="{TEAM_HEADER_HEIGHT}px">
+	<div class="grid place-content-center px-4 sticky top-0" style:height="{TEAM_HEADER_HEIGHT}px">
 		<a
 			class="btn btn-square btn-sm"
 			href={$urlParam.with({ form_team: 1 })}

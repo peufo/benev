@@ -24,7 +24,7 @@
 	}}
 >
 	{#each stacks as periods}
-		<div class="flex items-stretch stack-row">
+		<div class="flex items-stretch stack-row min-h-14">
 			{#each periods as period (period.id)}
 				<PeriodCardH {origin} {period} {msSize} />
 			{/each}

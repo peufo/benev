@@ -2,6 +2,7 @@ import { isFreeRange } from 'perod'
 import type { PeriodWithSubscribesUserName as P } from './types'
 
 export function getStacks(periods: P[]): P[][] {
+	if (!periods.length) return [[]]
 	const _stacks: P[][] = []
 
 	function getPeriodStackIndex(period: P, curentStackIndex = 0): number {
