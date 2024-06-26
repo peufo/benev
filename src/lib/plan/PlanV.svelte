@@ -2,11 +2,12 @@
 	import { onMount } from 'svelte'
 	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
-	import { urlParam, type Range } from 'fuma'
+	import { Icon, urlParam, type Range } from 'fuma'
 	import type { Team } from '@prisma/client'
 	import { getDays } from './getDays'
 	import TeamCol from './TeamCol.svelte'
 	import type { PeriodWithSubscribesUserName } from './types'
+	import { mdiPlus } from '@mdi/js'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: PeriodWithSubscribesUserName[] })[]
@@ -87,6 +88,18 @@
 			<TeamCol {team} {origin} {msSize} />
 		</div>
 	{/each}
+
+	<!-- CREATE TEAM -->
+	<div class="grid place-content-center px-4" style:height="{TEAM_HEADER_HEIGHT}px">
+		<a
+			class="btn btn-square btn-sm"
+			href={$urlParam.with({ form_team: 1 })}
+			data-sveltekit-replacestate
+			data-sveltekit-noscroll
+		>
+			<Icon path={mdiPlus} title="Ajouter un secteur" />
+		</a>
+	</div>
 </div>
 
 <style>
