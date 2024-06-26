@@ -33,7 +33,9 @@
 
 	const TEAM_HEADER_HEIGHT = 40
 	const MS_TO_HOUR = 3_600_000
+	const MIN_HOUR_HEIGHT = 30
 
+	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / (msSize * MS_TO_HOUR))
 	$: origin = dayjs(range.start).startOf('hour')
 	$: days = getDays(range)
 	$: totalHeight =
@@ -58,11 +60,8 @@
 				</div>
 				<!-- HOURS -->
 				<div class="flex flex-col items-end text-sm text-right -translate-y-[2px]">
-					{#each hours as hour}
-						<div
-							style:height="{msSize * MS_TO_HOUR}px"
-							class="opacity-0 odd:opacity-100 border-t px-1"
-						>
+					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
+						<div style:height="{msSize * MS_TO_HOUR * hourSpan}px" class="border-t px-1">
 							{hour.toString().padStart(2, '0')}
 						</div>
 					{/each}

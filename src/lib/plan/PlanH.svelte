@@ -15,7 +15,9 @@
 
 	const TEAM_HEADER_WIDTH = 100
 	const MS_TO_HOUR = 3_600_000
+	const MIN_HOUR_WIDTH = 40
 
+	$: hourSpan = Math.ceil(MIN_HOUR_WIDTH / (msSize * MS_TO_HOUR))
 	$: origin = dayjs(range.start).startOf('hour')
 	$: days = getDays(range)
 	$: totalWidth =
@@ -36,11 +38,8 @@
 				</div>
 				<!-- HOURS -->
 				<div class="flex text-sm">
-					{#each hours as hour}
-						<div
-							style:width="{msSize * MS_TO_HOUR}px"
-							class="opacity-0 odd:opacity-100 border-l px-1"
-						>
+					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
+						<div style:width="{msSize * MS_TO_HOUR * hourSpan}px" class="border-l px-1">
 							{hour.toString().padStart(2, '0')}
 						</div>
 					{/each}
