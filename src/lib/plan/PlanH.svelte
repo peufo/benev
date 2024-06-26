@@ -1,6 +1,6 @@
 <script lang="ts">
 	import 'dayjs/locale/fr-ch'
-	import type { Range } from 'fuma'
+	import { urlParam, type Range } from 'fuma'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
 	import dayjs from 'dayjs'
 	import type { Team } from '@prisma/client'
@@ -29,7 +29,7 @@
 				<!-- DAY -->
 				<div
 					style:left="{TEAM_HEADER_WIDTH}px"
-					class="border-l font-medium sticky left-0 p-1 w-min whitespace-nowrap"
+					class="border-l font-medium sticky left-0 p-1 w-min whitespace-nowrap text-sm"
 				>
 					{date.format('dddd DD.MM')}
 				</div>
@@ -50,12 +50,15 @@
 
 	{#each teams as team}
 		<div class="flex border-t" style:width="{totalWidth}px">
-			<div
+			<a
+				href={$urlParam.with({ form_team: team.id })}
+				data-sveltekit-replacestate
+				data-sveltekit-noscroll
 				style:width="{TEAM_HEADER_WIDTH}px"
-				class="p-1 sticky left-0 bg-base-100/95 z-50 font-medium"
+				class="p-1 sticky left-0 bg-base-100/95 z-50 font-medium text-sm cursor-pointer hover:bg-base-200"
 			>
 				{team.name}
-			</div>
+			</a>
 			<TeamRow {team} {origin} {msSize} />
 		</div>
 	{/each}

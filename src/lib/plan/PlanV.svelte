@@ -73,11 +73,11 @@
 	{#each teams as team}
 		<div class="border-l" style:height="{totalHeight}px">
 			<a
-				style:height="{TEAM_HEADER_HEIGHT}px"
-				class="px-1 sticky top-0 bg-base-100/95 z-50 font-medium flex items-center border-b cursor-pointer hover:bg-base-200"
 				href={$urlParam.with({ form_team: team.id })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
+				style:height="{TEAM_HEADER_HEIGHT}px"
+				class="px-1 sticky top-0 bg-base-100/95 z-50 font-medium flex items-center border-b cursor-pointer hover:bg-base-200"
 			>
 				<span class="text-sm">
 					{team.name}
