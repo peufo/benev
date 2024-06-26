@@ -1,7 +1,10 @@
 <script lang="ts">
-	import { jsonParse, RangePickerButton, urlParam, TabsIcon } from 'fuma'
-	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop } from '@mdi/js'
+	import { jsonParse, RangePickerButton, urlParam, TabsIcon, Icon } from 'fuma'
+	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop, mdiOpenInNew } from '@mdi/js'
 	import { PlanV, PlanH } from '$lib/plan/index.js'
+	import { eventPath } from '$lib/store/index.js'
+	import { page } from '$app/stores'
+	import ZoomButton from './ZoomButton.svelte'
 
 	export let data
 
@@ -18,15 +21,14 @@
 	<h2 class="title">Planification</h2>
 	<div class="grow" />
 
-	<input
-		type="number"
+	<RangePickerButton bind:range />
+
+	<ZoomButton
 		bind:value={msSize}
 		min={5 / MS_TO_HOUR}
 		max={100 / MS_TO_HOUR}
 		step={1 / MS_TO_HOUR}
 	/>
-
-	<RangePickerButton bind:range />
 
 	<TabsIcon
 		key="view"
@@ -36,6 +38,14 @@
 			{ label: 'Vue vertical', icon: mdiAlignVerticalTop, value: 'v' },
 		]}
 	/>
+
+	<a
+		href="{$eventPath}/admin/plan/fullsceen{$page.url.search}"
+		target="_blank"
+		class="btn btn-square btn-sm"
+	>
+		<Icon path={mdiOpenInNew} title="Ouvrir en plein écran" />
+	</a>
 </div>
 
 <div class="h-[80vh] overflow-hidden rounded-2xl">
