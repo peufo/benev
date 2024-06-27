@@ -8,6 +8,7 @@
 	import TeamCol from './TeamCol.svelte'
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { mdiPlus } from '@mdi/js'
+	import { keepScrollCenter } from './keepScrollCenter'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: PeriodWithSubscribesUserName[] })[]
@@ -41,7 +42,11 @@
 		TEAM_HEADER_HEIGHT + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourSize
 </script>
 
-<div bind:this={scrollContainer} class="{klass} flex max-h-full bg-base-100 overflow-auto">
+<div
+	bind:this={scrollContainer}
+	use:keepScrollCenter={{ scaleY: hourSize }}
+	class="{klass} flex max-h-full bg-base-100 overflow-auto"
+>
 	<!-- SCALE -->
 	<div class="sticky left-0 z-10" style:margin-top="{TEAM_HEADER_HEIGHT}px">
 		{#each days as { date, hours }}

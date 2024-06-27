@@ -7,6 +7,7 @@
 	import type { Team } from '@prisma/client'
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { getDays } from './getDays'
+	import { keepScrollCenter } from './keepScrollCenter'
 
 	dayjs.locale('fr-ch')
 
@@ -24,7 +25,7 @@
 		TEAM_HEADER_WIDTH + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourSize
 </script>
 
-<div class="overflow-auto bg-base-100/95 max-h-full">
+<div class="overflow-auto bg-base-100/95 max-h-full" use:keepScrollCenter={{ scaleX: hourSize }}>
 	<!-- SCALE -->
 	<div class="flex sticky top-0 z-10" style:margin-left="{TEAM_HEADER_WIDTH}px">
 		{#each days as { date, hours }}
