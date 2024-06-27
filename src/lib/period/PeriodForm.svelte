@@ -148,7 +148,7 @@
 			input={{ min: 1, step: 1 }}
 		/>
 
-		<InputTime label="Début" bind:value={start} input={{ step: 300 }} />
+		<InputTime label="Début" bind:value={start} />
 		<InputTime
 			label="Fin"
 			bind:value={end}
@@ -157,7 +157,6 @@
 				: diffDay === 0
 				? ''
 				: `+ ${diffDay} jours`}
-			input={{ step: 300 }}
 		/>
 	</div>
 

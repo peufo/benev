@@ -34,12 +34,13 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		ghost?.remove()
 	})
 
-	function offsetToTime(offset: number): Dayjs {
-		const hours = time(offset / hourSize, 'hour').roundBy(15, 'minute').value
-		return origin.add(hours, 'hour')
+	function pxToTime(px: number): Dayjs {
+		const hours = px / hourSize
+		const magnetValue = time(hours, 'hour').roundBy(15, 'minute')
+		return origin.add(magnetValue, 'hour')
 	}
-	function timeToOffset(time: Dayjs) {
-		return time.diff(origin, 'hour') * hourSize
+	function timeToPx(time: Dayjs): number {
+		return (time.diff(origin, 'ms') * hourSize) / 3_600_000
 	}
 
 	function handleMouseDown(event: MouseEvent) {
@@ -48,7 +49,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		event.preventDefault()
 
 		const mouseOrigin = { x: event.clientX, y: event.clientY }
-		const start = offsetToTime(axis === 'x' ? event.offsetX : event.offsetY)
+		const start = pxToTime(axis === 'x' ? event.offsetX : event.offsetY)
 		let end = start.clone()
 
 		ghost?.remove()
@@ -62,15 +63,15 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 			x() {
 				if (!ghost) return
 				const [left, right] = end.isAfter(start) ? [start, end] : [end, start]
-				ghost.style.translate = `${timeToOffset(left)}px`
-				ghost.style.width = `${right.diff(left) * hourSize}px`
+				ghost.style.translate = `${timeToPx(left)}px`
+				ghost.style.width = `${right.diff(left) * (hourSize / 3_600_000)}px`
 				h3.innerText = formatRangeHour({ start: left.toDate(), end: right.toDate() })
 			},
 			y() {
 				if (!ghost) return
 				const [top, bottom] = end.isAfter(start) ? [start, end] : [end, start]
-				ghost.style.top = `${timeToOffset(top)}px`
-				ghost.style.height = `${bottom.diff(top) * hourSize}px`
+				ghost.style.top = `${timeToPx(top)}px`
+				ghost.style.height = `${bottom.diff(top) * (hourSize / 3_600_000)}px`
 				h3.innerText = formatRangeHour({ start: top.toDate(), end: bottom.toDate() })
 			},
 		}
@@ -78,9 +79,10 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		target.appendChild(ghost)
 
 		const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
-			const deltaPX = axis === 'x' ? clientX - mouseOrigin.x : clientY - mouseOrigin.y
-			const delta = time(deltaPX / hourSize, 'hour').roundBy(15, 'minute').value
-			end = start.add(delta, 'ms')
+			const deltaPx = axis === 'x' ? clientX - mouseOrigin.x : clientY - mouseOrigin.y
+			const deltaHour = deltaPx / hourSize
+			const detlaMagnet = time(deltaHour, 'hour').roundBy(15, 'minute')
+			end = start.add(detlaMagnet, 'hour')
 			updateGhost[axis]()
 		}
 
