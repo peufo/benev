@@ -8,9 +8,7 @@
 
 	export let data
 
-	const MS_TO_HOUR = 3_600_000
-
-	let msSize = +($urlParam.get('msSize') || 80 / MS_TO_HOUR)
+	let hourSize = +($urlParam.get('hourSize') || 80)
 
 	let range = data.rangeOfEvent
 	urlParam.subscribe(({ get }) => {
@@ -24,12 +22,7 @@
 
 	<RangePickerButton />
 
-	<ZoomButton
-		bind:value={msSize}
-		min={5 / MS_TO_HOUR}
-		max={100 / MS_TO_HOUR}
-		step={1 / MS_TO_HOUR}
-	/>
+	<ZoomButton bind:value={hourSize} min={5} max={100} step={1} />
 
 	<TabsIcon
 		key="view"
@@ -51,8 +44,8 @@
 
 <div class="h-[80vh] overflow-hidden rounded-2xl">
 	{#if $urlParam.hasValue('view', 'v')}
-		<PlanV teams={data.teams_periods} {range} {msSize} />
+		<PlanV teams={data.teams_periods} {range} {hourSize} />
 	{:else}
-		<PlanH teams={data.teams_periods} {range} {msSize} />
+		<PlanH teams={data.teams_periods} {range} {hourSize} />
 	{/if}
 </div>

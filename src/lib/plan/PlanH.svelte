@@ -1,27 +1,27 @@
 <script lang="ts">
 	import 'dayjs/locale/fr-ch'
 	import { Icon, urlParam, type Range } from 'fuma'
+	import { mdiPlus } from '@mdi/js'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
 	import dayjs from 'dayjs'
 	import type { Team } from '@prisma/client'
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { getDays } from './getDays'
-	import { mdiPlus } from '@mdi/js'
+
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: PeriodWithSubscribesUserName[] })[]
 	export let range: Range
-	export let msSize: number
+	export let hourSize: number
 
 	const TEAM_HEADER_WIDTH = 100
-	const MS_TO_HOUR = 3_600_000
 	const MIN_HOUR_WIDTH = 40
 
-	$: hourSpan = Math.ceil(MIN_HOUR_WIDTH / (msSize * MS_TO_HOUR))
+	$: hourSpan = Math.ceil(MIN_HOUR_WIDTH / hourSize)
 	$: origin = dayjs(range.start).startOf('hour')
 	$: days = getDays(range)
 	$: totalWidth =
-		TEAM_HEADER_WIDTH + days.reduce((acc, { hours }) => acc + hours.length, 0) * msSize * MS_TO_HOUR
+		TEAM_HEADER_WIDTH + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourSize
 </script>
 
 <div class="overflow-auto bg-base-100/95 max-h-full">
@@ -41,7 +41,7 @@
 					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
 						{@const isEndNextDay = hour + hourSpan > 24}
 						{@const span = isEndNextDay ? 24 - hour : hourSpan}
-						<div style:width="{msSize * MS_TO_HOUR * span}px" class="border-l px-1">
+						<div style:width="{hourSize * span}px" class="border-l px-1">
 							{isEndNextDay ? '' : hour.toString().padStart(2, '0')}
 						</div>
 					{/each}
@@ -61,7 +61,7 @@
 			>
 				{team.name}
 			</a>
-			<TeamRow {team} {origin} {msSize} />
+			<TeamRow {team} {origin} {hourSize} />
 		</div>
 	{/each}
 

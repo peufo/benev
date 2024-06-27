@@ -7,22 +7,23 @@
 	import DragButton from './DragButton.svelte'
 	import { urlParam } from 'fuma'
 
-	import { roundMinute } from './utils'
+	import { time } from './utils'
 	import { updatePeriod } from './updatePeriod'
 
 	export let period: Period & { subscribes: Subscribe[] }
 	export let origin: dayjs.Dayjs
-	export let msSize: number
+	export let hourSize: number
 
 	let deltaStart = 0
 	let deltaEnd = 0
 
+	$: msSize = time(hourSize, 'ms').to('hour')
 	$: top = -origin.diff(period.start) * msSize + deltaStart
 	$: height = dayjs(period.end).diff(period.start) * msSize - deltaStart + deltaEnd
 
 	async function handleGrabDone() {
-		const start = new Date(period.start.getTime() + roundMinute(deltaStart / msSize))
-		const end = new Date(period.end.getTime() + roundMinute(deltaEnd / msSize))
+		const start = new Date(period.start.getTime() + deltaStart / msSize)
+		const end = new Date(period.end.getTime() + deltaEnd / msSize)
 		await updatePeriod({ ...period, start, end })
 		period = { ...period, start, end }
 		deltaStart = 0
@@ -73,8 +74,8 @@
 	<Progress {period} class="justify-between" badgeClass="mr-1" progressClass="bg-red-400">
 		<span slot="before-badge" class="text-xs font-semibold ml-1">
 			{formatRangeHour({
-				start: period.start.getTime() + roundMinute(deltaStart / msSize),
-				end: period.end.getTime() + roundMinute(deltaEnd / msSize),
+				start: period.start.getTime() + deltaStart / msSize,
+				end: period.end.getTime() + deltaEnd / msSize,
 			})}
 		</span>
 	</Progress>

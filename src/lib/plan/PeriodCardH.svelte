@@ -5,29 +5,37 @@
 	import Progress from '$lib/Progress.svelte'
 	import DragButton from './DragButton.svelte'
 	import { urlParam } from 'fuma'
-	import { roundMinute } from './utils'
+	import { time } from './utils'
 	import { updatePeriod } from './updatePeriod'
 	import type { PeriodWithSubscribesUserName } from './types'
+	import { ctrl } from '$lib/store'
 
 	export let period: PeriodWithSubscribesUserName
-	export let msSize: number
+	export let hourSize: number
 	export let origin: dayjs.Dayjs
 	// TODO: use store for showSubscribes
 	export let showSubscribes = true
 
-	let deltaStart = 0
-	let deltaEnd = 0
+	let deltaStartMs = 0
+	let deltaEndMs = 0
 
-	$: left = -origin.diff(period.start) * msSize + deltaStart
-	$: width = dayjs(period.end).diff(period.start) * msSize - deltaStart + deltaEnd
+	$: msSize = time(hourSize).to('hour')
+	$: left = msSize * (-origin.diff(period.start) + magnet(deltaStartMs))
+	$: width =
+		msSize * (dayjs(period.end).diff(period.start) - magnet(deltaStartMs) + magnet(deltaEndMs))
 
 	async function handleGrabDone() {
-		const start = new Date(period.start.getTime() + roundMinute(deltaStart / msSize))
-		const end = new Date(period.end.getTime() + roundMinute(deltaEnd / msSize))
+		const start = new Date(period.start.getTime() + magnet(deltaStartMs))
+		const end = new Date(period.end.getTime() + magnet(deltaEndMs))
 		await updatePeriod({ ...period, start, end })
 		period = { ...period, start, end }
-		deltaStart = 0
-		deltaEnd = 0
+		deltaStartMs = 0
+		deltaEndMs = 0
+	}
+
+	function magnet(ms: number): number {
+		if ($ctrl) return ms
+		return time(ms).roundBy(15, 'minute')
 	}
 </script>
 
@@ -40,7 +48,7 @@
 			border rounded-md p-0 text-sm
 			hover:z-10
 			hover:outline outline-1 outline-secondary
-			overflow-visible shadow min-h-14
+			overflow-visible shadow min-h-14 h-full
 		"
 		class:outline={$urlParam.hasValue('form_period', period.id)}
 		style:transform="translateX({left}px)"
@@ -51,7 +59,7 @@
 			orientation="horizontal"
 			on:done={handleGrabDone}
 			on:move={({ detail: delta }) => {
-				deltaStart = delta.x
+				deltaStartMs = delta.x / msSize
 			}}
 		/>
 		<DragButton
@@ -59,23 +67,23 @@
 			orientation="horizontal"
 			on:done={handleGrabDone}
 			on:move={({ detail: delta }) => {
-				deltaEnd = delta.x
+				deltaEndMs = delta.x / msSize
 			}}
 		/>
 		<DragButton
 			class="left-1/2 top-full"
 			on:done={handleGrabDone}
 			on:move={({ detail: delta }) => {
-				deltaStart = delta.x
-				deltaEnd = delta.x
+				deltaStartMs = delta.x / msSize
+				deltaEndMs = delta.x / msSize
 			}}
 		/>
 
 		<Progress {period} class="justify-between" badgeClass="mr-1" progressClass="bg-red-400">
 			<span slot="before-badge" class="text-xs font-semibold ml-1">
 				{formatRangeHour({
-					start: period.start.getTime() + roundMinute(deltaStart / msSize),
-					end: period.end.getTime() + roundMinute(deltaEnd / msSize),
+					start: period.start.getTime() + magnet(deltaStartMs),
+					end: period.end.getTime() + magnet(deltaEndMs),
 				})}
 			</span>
 		</Progress>

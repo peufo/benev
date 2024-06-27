@@ -9,7 +9,7 @@
 	export let step: number
 
 	function setUrlParam() {
-		return goto($urlParam.with({ msSize: value }), {
+		return goto($urlParam.with({ hourSize: value }), {
 			keepFocus: true,
 			replaceState: true,
 			noScroll: true,

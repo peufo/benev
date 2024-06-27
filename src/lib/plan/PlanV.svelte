@@ -15,7 +15,7 @@
 	let klass = ''
 	export { klass as class }
 	export let range: Range
-	export let msSize: number
+	export let hourSize: number
 
 	onMount(() => {
 		const periodId = $urlParam.get('form_period')
@@ -32,15 +32,13 @@
 	})
 
 	const TEAM_HEADER_HEIGHT = 40
-	const MS_TO_HOUR = 3_600_000
 	const MIN_HOUR_HEIGHT = 30
 
-	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / (msSize * MS_TO_HOUR))
+	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / hourSize)
 	$: origin = dayjs(range.start).startOf('hour')
 	$: days = getDays(range)
 	$: totalHeight =
-		TEAM_HEADER_HEIGHT +
-		days.reduce((acc, { hours }) => acc + hours.length, 0) * msSize * MS_TO_HOUR
+		TEAM_HEADER_HEIGHT + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourSize
 </script>
 
 <div bind:this={scrollContainer} class="{klass} flex max-h-full bg-base-100 overflow-auto">
@@ -63,7 +61,7 @@
 					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
 						{@const isEndNextDay = hour + hourSpan > 24}
 						{@const span = isEndNextDay ? 24 - hour : hourSpan}
-						<div style:height="{msSize * MS_TO_HOUR * span}px" class="border-t px-1">
+						<div style:height="{hourSize * span}px" class="border-t px-1">
 							{isEndNextDay ? '' : hour.toString().padStart(2, '0')}
 						</div>
 					{/each}
@@ -86,7 +84,7 @@
 				</span>
 			</a>
 
-			<TeamCol {team} {origin} {msSize} />
+			<TeamCol {team} {origin} {hourSize} />
 		</div>
 	{/each}
 

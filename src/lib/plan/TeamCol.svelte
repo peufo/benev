@@ -7,7 +7,7 @@
 	import { createPeriod } from './createPeriod'
 
 	export let team: Team & { periods: PeriodWithSubscribesUserName[] }
-	export let msSize: number
+	export let hourSize: number
 	export let origin: Dayjs
 
 	$: stacks = getStacks(team.periods)
@@ -18,7 +18,7 @@
 	use:createPeriod={{
 		axis: 'y',
 		origin,
-		msSize,
+		hourSize,
 		team,
 		isEnable: (target) => target.classList.contains('stack-col'),
 	}}
@@ -26,7 +26,7 @@
 	{#each stacks as periods}
 		<div class="relative w-full min-w-24 stack-col">
 			{#each periods as period (period.id)}
-				<PeriodCardV {origin} {period} {msSize} />
+				<PeriodCardV {origin} {period} {hourSize} />
 			{/each}
 		</div>
 	{/each}
