@@ -9,25 +9,32 @@
 
 	import { time } from './utils'
 	import { updatePeriod } from './updatePeriod'
+	import { ctrl } from '$lib/store'
 
 	export let period: Period & { subscribes: Subscribe[] }
 	export let origin: dayjs.Dayjs
 	export let hourSize: number
 
-	let deltaStart = 0
-	let deltaEnd = 0
+	let deltaStartMs = 0
+	let deltaEndMs = 0
 
 	$: msSize = time(hourSize, 'ms').to('hour')
-	$: top = -origin.diff(period.start) * msSize + deltaStart
-	$: height = dayjs(period.end).diff(period.start) * msSize - deltaStart + deltaEnd
+	$: top = msSize * (-origin.diff(period.start) + magnet(deltaStartMs))
+	$: height =
+		msSize * (dayjs(period.end).diff(period.start) - magnet(deltaStartMs) + magnet(deltaEndMs))
 
 	async function handleGrabDone() {
-		const start = new Date(period.start.getTime() + deltaStart / msSize)
-		const end = new Date(period.end.getTime() + deltaEnd / msSize)
+		const start = new Date(period.start.getTime() + magnet(deltaStartMs))
+		const end = new Date(period.end.getTime() + magnet(deltaEndMs))
 		await updatePeriod({ ...period, start, end })
 		period = { ...period, start, end }
-		deltaStart = 0
-		deltaEnd = 0
+		deltaStartMs = 0
+		deltaEndMs = 0
+	}
+
+	function magnet(ms: number): number {
+		if ($ctrl) return ms
+		return time(ms).roundBy(15, 'minute')
 	}
 </script>
 
@@ -51,7 +58,7 @@
 		orientation="horizontal"
 		on:done={handleGrabDone}
 		on:move={({ detail: delta }) => {
-			deltaStart = delta.y
+			deltaStartMs = delta.y / msSize
 		}}
 	/>
 	<DragButton
@@ -59,23 +66,23 @@
 		orientation="horizontal"
 		on:done={handleGrabDone}
 		on:move={({ detail: delta }) => {
-			deltaEnd = delta.y
+			deltaEndMs = delta.y / msSize
 		}}
 	/>
 	<DragButton
 		class="left-full top-1/2"
 		on:done={handleGrabDone}
 		on:move={({ detail: delta }) => {
-			deltaStart = delta.y
-			deltaEnd = delta.y
+			deltaStartMs = delta.y / msSize
+			deltaEndMs = delta.y / msSize
 		}}
 	/>
 
 	<Progress {period} class="justify-between" badgeClass="mr-1" progressClass="bg-red-400">
 		<span slot="before-badge" class="text-xs font-semibold ml-1">
 			{formatRangeHour({
-				start: period.start.getTime() + deltaStart / msSize,
-				end: period.end.getTime() + deltaEnd / msSize,
+				start: period.start.getTime() + magnet(deltaStartMs),
+				end: period.end.getTime() + magnet(deltaEndMs),
 			})}
 		</span>
 	</Progress>
