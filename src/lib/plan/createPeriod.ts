@@ -12,7 +12,7 @@ type Params = {
 	axis: Axis
 	origin: Dayjs
 	hourSize: number
-	team: Team
+	team: Team & { periods: any[] }
 	isEnable?: (target: HTMLDivElement) => boolean
 }
 
@@ -89,8 +89,9 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		const handleMouseUp = async (_event: MouseEvent) => {
 			document.removeEventListener('mousemove', handleMouseMove)
 			const [_start, _end] = end.isAfter(start) ? [start, end] : [end, start]
+			const { periods, ...teamWithoutPeriods } = team
 			const newPeriod: Partial<Period & { team: Team }> = {
-				team: team,
+				team: teamWithoutPeriods,
 				start: _start.toDate(),
 				end: _end.toDate(),
 			}
