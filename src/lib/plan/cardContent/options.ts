@@ -1,14 +1,16 @@
 import { page } from '$app/stores'
 import { mdiClockOutline, mdiPercent, mdiPlaylistCheck } from '@mdi/js'
-import type { OptionRecord } from 'fuma'
 import { derived } from 'svelte/store'
 
 type CardContentOption = 'showProgress' | 'hideRangetime' | 'showSlots'
 
-export const CARD_CONTENT_OPTIONS: OptionRecord<CardContentOption> = {
-	showProgress: { label: "Afficher l'état des inscriptions", icon: mdiPercent },
-	hideRangetime: { label: 'Afficher les heures', icon: mdiClockOutline },
-	showSlots: { label: 'Afficher les inscriptions', icon: mdiPlaylistCheck },
+export const CARD_CONTENT_OPTIONS: Record<
+	CardContentOption,
+	{ title: string; path: string; isReversed?: boolean }
+> = {
+	hideRangetime: { title: 'Afficher les heures', path: mdiClockOutline, isReversed: true },
+	showProgress: { title: "Afficher l'état des inscriptions", path: mdiPercent },
+	showSlots: { title: 'Afficher les inscriptions', path: mdiPlaylistCheck },
 }
 
 export const cardContentOptions = derived(page, ({ url }) =>

@@ -12,7 +12,7 @@
 </script>
 
 {#if $cardContentOptions.showProgress}
-	<Progress {period} class="justify-between" badgeClass="mr-1" progressClass="bg-red-400">
+	<Progress {period} class="justify-between" badgeClass="ml-1 mr-1 mb-1" progressClass="bg-red-400">
 		<svelte:fragment slot="before-badge">
 			{#if !$cardContentOptions.hideRangetime}
 				<div class="text-xs font-semibold m-1 whitespace-nowrap overflow-hidden text-ellipsis">

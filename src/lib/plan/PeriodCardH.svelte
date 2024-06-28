@@ -39,7 +39,7 @@
 			rounded-md p-0 text-sm
 			hover:z-10 h-full
 			outline outline-1 border-[1px] border-base-300
-			overflow-visible min-h-[30px]
+			overflow-visible
 			{$urlParam.hasValue('form_period', period.id)
 			? 'outline-secondary border-secondary z-20'
 			: 'outline-base-300'}

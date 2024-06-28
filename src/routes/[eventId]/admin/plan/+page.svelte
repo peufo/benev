@@ -4,6 +4,7 @@
 	import { page } from '$app/stores'
 	import { PlanV, PlanH, ZoomButton } from '$lib/plan'
 	import { eventPath } from '$lib/store'
+	import PeriodCardOptions from '$lib/plan/cardContent/PeriodCardOptions.svelte'
 
 	export let data
 
@@ -17,6 +18,8 @@
 <div class="flex gap-2 items-center p-2 bg-base-100 rounded-2xl" style="--btn-text-case: none;">
 	<h2 class="title">Planification</h2>
 	<div class="grow" />
+
+	<PeriodCardOptions />
 
 	<RangePickerButton />
 
@@ -36,7 +39,7 @@
 		target="_blank"
 		class="btn btn-square btn-sm"
 	>
-		<Icon path={mdiOpenInNew} title="Ouvrir en plein écran" />
+		<Icon path={mdiOpenInNew} title="Ouvrir en plein écran" class="opacity-80" />
 	</a>
 </div>
 

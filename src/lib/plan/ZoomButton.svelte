@@ -52,7 +52,7 @@
 	tippyProps={{ trigger: 'mouseenter', placement: 'bottom', onHidden: setUrlParam }}
 >
 	<button slot="activator" class="btn btn-sm btn-square">
-		<Icon path={mdiMagnifyPlusOutline} />
+		<Icon path={mdiMagnifyPlusOutline} class="opacity-80" />
 	</button>
 
 	<div class="flex gap-2 items-center">

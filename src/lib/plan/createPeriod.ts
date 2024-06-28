@@ -56,7 +56,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		ghost = document.createElement('div')
 		ghost.classList.add(...GHOST_CLASSES[axis], 'bg-primary/30', 'rounded-lg', 'border')
 		const h3 = document.createElement('h3')
-		h3.classList.add('text-xs', 'font-semibold', 'ml-1')
+		h3.classList.add('text-xs', 'font-semibold', 'm-1', 'whitespace-nowrap')
 		ghost.appendChild(h3)
 
 		const updateGhost = {
