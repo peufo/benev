@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeHour } from '$lib/formatRange'
-	import { urlParam } from 'fuma'
+	import { Icon, urlParam } from 'fuma'
 	import { magnet } from '../magnet'
 	import type { PeriodWithSubscribesUserName } from '../types'
 	import { cardContentOptions } from './options'
+	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 
 	export let period: PeriodWithSubscribesUserName
 	export let deltaStartMs: number
@@ -34,14 +35,28 @@
 {/if}
 
 {#if $cardContentOptions.showSlots}
-	<ol class="px-1 py-2">
+	{@const nbEmptySlot = Math.max(period.maxSubscribe - period.subscribes.length, 0)}
+	<ul class="px-1 py-2 flex flex-col">
 		{#each period.subscribes as subscribe}
 			<li class="badge whitespace-nowrap">
-				{subscribe.member.user.firstName}
-				{subscribe.member.user.lastName}
+				<span>
+					{subscribe.member.user.firstName}
+					{subscribe.member.user.lastName}
+				</span>
+				<Icon
+					path={subscribe.state === 'accepted' ? mdiCheck : mdiAlertOctagonOutline}
+					size={15}
+					class="opacity-70 translate-x-1 {subscribe.state === 'accepted'
+						? 'fill-success'
+						: 'fill-warning'}"
+				/>
 			</li>
 		{/each}
-	</ol>
+
+		{#each Array(nbEmptySlot).fill(0) as _}
+			<li class="badge whitespace-nowrap text-warning">Libre</li>
+		{/each}
+	</ul>
 {/if}
 
 <a

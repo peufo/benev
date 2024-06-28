@@ -27,6 +27,9 @@ export const load = async ({ url, params: { eventId } }) => {
 					where: wherePeriods,
 					include: {
 						subscribes: {
+							where: {
+								state: { in: ['request', 'accepted'] },
+							},
 							include: {
 								member: {
 									include: {
