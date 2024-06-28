@@ -33,8 +33,7 @@
 	}
 
 	function magnet(ms: number): number {
-		if ($ctrl) return ms
-		return time(ms).roundBy(15, 'minute')
+		return time(ms).roundBy($ctrl ? 1 : 15, 'minute')
 	}
 </script>
 

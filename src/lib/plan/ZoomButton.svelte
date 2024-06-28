@@ -23,6 +23,7 @@
 
 	function onWheel(event: WheelEvent) {
 		if (!$ctrl) return
+		event.preventDefault()
 		showDropDown()
 		hideDropDown()
 		const nextValue = value - event.deltaY / 20
@@ -32,9 +33,9 @@
 	}
 
 	onMount(() => {
-		document.addEventListener('wheel', onWheel)
+		window.addEventListener('wheel', onWheel)
 		return () => {
-			document.removeEventListener('wheel', onWheel)
+			window.removeEventListener('wheel', onWheel)
 		}
 	})
 
