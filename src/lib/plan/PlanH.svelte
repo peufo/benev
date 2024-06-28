@@ -8,6 +8,7 @@
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { getDays } from './getDays'
 	import { keepScrollCenter } from './keepScrollCenter'
+	import { scrollToPeriod } from './scrollToPeriod'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: PeriodWithSubscribesUserName[] })[]
@@ -26,6 +27,7 @@
 
 <div
 	class="overflow-auto bg-base-100/95 max-h-full"
+	use:scrollToPeriod={{ offsetX: -400, offsetY: -200 }}
 	use:keepScrollCenter={{ scaleX: hourSize, marginX: TEAM_HEADER_WIDTH }}
 >
 	<!-- SCALE -->

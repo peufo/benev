@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
 	import dayjs from 'dayjs'
 	import 'dayjs/locale/fr-ch'
 	import { Icon, urlParam, type Range } from 'fuma'
@@ -9,26 +8,13 @@
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { mdiPlus } from '@mdi/js'
 	import { keepScrollCenter } from './keepScrollCenter'
+	import { scrollToPeriod } from './scrollToPeriod'
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: PeriodWithSubscribesUserName[] })[]
 	export let range: Range
 	export let hourSize: number
 	export let scrollContainer: HTMLDivElement | undefined = undefined
-
-	onMount(() => {
-		const periodId = $urlParam.get('form_period')
-		if (!periodId) return
-		const periodIdIsCUID = periodId.length === 25 && periodId.match(/\w{25}/)
-		if (!periodIdIsCUID) return
-		const periodEl = document.getElementById(periodId)
-		if (!periodEl) return
-		scrollContainer?.scroll({
-			top: periodEl.offsetTop - 80,
-			left: periodEl.parentElement!.offsetLeft,
-			behavior: 'smooth',
-		})
-	})
 
 	const TEAM_HEADER_HEIGHT = 40
 	const MIN_HOUR_HEIGHT = 30
@@ -42,6 +28,7 @@
 
 <div
 	bind:this={scrollContainer}
+	use:scrollToPeriod={{ offsetY: -100 }}
 	use:keepScrollCenter={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
 	class="flex max-h-full bg-base-100 overflow-auto"
 >
