@@ -23,7 +23,6 @@
 
 	function onWheel(event: WheelEvent) {
 		if (!$ctrl) return
-		event.preventDefault()
 		showDropDown()
 		hideDropDown()
 		const nextValue = value - event.deltaY / 20

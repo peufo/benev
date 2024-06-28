@@ -3,7 +3,7 @@
 	import { urlParam } from 'fuma'
 	import type { PeriodWithSubscribesUserName } from './types'
 	import DragButton from './DragButton.svelte'
-	import PeriodCardContent from './PeriodCardContent.svelte'
+	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
 	import { updatePeriod } from './updatePeriod'
 	import { magnet } from './magnet'
@@ -36,12 +36,14 @@
 		class="
 			group relative
 			bg-base-200/50
-			border rounded-md p-0 text-sm
-			hover:z-10
-			hover:outline outline-1 outline-secondary
-			overflow-visible shadow min-h-14 h-full
+			rounded-md p-0 text-sm
+			hover:z-10 h-full
+			outline outline-1 border-[1px] border-base-300
+			overflow-visible min-h-[30px]
+			{$urlParam.hasValue('form_period', period.id)
+			? 'outline-secondary border-secondary z-20'
+			: 'outline-base-300'}
 		"
-		class:outline={$urlParam.hasValue('form_period', period.id)}
 		style:transform="translateX({left}px)"
 		style:width="{width}px"
 	>
