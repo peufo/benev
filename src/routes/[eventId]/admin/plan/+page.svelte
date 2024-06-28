@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { jsonParse, RangePickerButton, urlParam, TabsIcon, Icon } from 'fuma'
 	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop, mdiOpenInNew } from '@mdi/js'
-	import { PlanV, PlanH } from '$lib/plan/index.js'
-	import { eventPath } from '$lib/store/index.js'
 	import { page } from '$app/stores'
-	import ZoomButton from './ZoomButton.svelte'
+	import { PlanV, PlanH, ZoomButton } from '$lib/plan'
+	import { eventPath } from '$lib/store'
 
 	export let data
 
 	let hourSize = +($urlParam.get('hourSize') || 80)
-
 	let range = data.rangeOfEvent
 	urlParam.subscribe(({ get }) => {
 		range = jsonParse(get('range'), data.rangeOfEvent)

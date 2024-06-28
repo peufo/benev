@@ -12,11 +12,9 @@
 	dayjs.locale('fr-ch')
 
 	export let teams: (Team & { periods: PeriodWithSubscribesUserName[] })[]
-	export let scrollContainer: HTMLDivElement | undefined = undefined
-	let klass = ''
-	export { klass as class }
 	export let range: Range
 	export let hourSize: number
+	export let scrollContainer: HTMLDivElement | undefined = undefined
 
 	onMount(() => {
 		const periodId = $urlParam.get('form_period')
@@ -44,8 +42,8 @@
 
 <div
 	bind:this={scrollContainer}
-	use:keepScrollCenter={{ scaleY: hourSize }}
-	class="{klass} flex max-h-full bg-base-100 overflow-auto"
+	use:keepScrollCenter={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
+	class="flex max-h-full bg-base-100 overflow-auto"
 >
 	<!-- SCALE -->
 	<div class="sticky left-0 z-10" style:margin-top="{TEAM_HEADER_HEIGHT}px">

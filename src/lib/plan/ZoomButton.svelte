@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
+	import { debounce } from '$lib/debounce'
+	import { ctrl } from '$lib/store'
 	import { mdiMagnifyPlusOutline, mdiMinus, mdiPlus } from '@mdi/js'
-	import { DropDown, Icon, urlParam } from 'fuma'
+	import { DropDown, Icon, urlParam, type TippyInstance } from 'fuma'
+	import { onMount } from 'svelte'
 
 	export let value: number
 	export let min: number
 	export let max: number
 	export let step: number
+
+	let tip: TippyInstance
 
 	function setUrlParam() {
 		return goto($urlParam.with({ hourSize: value }), {
@@ -15,9 +20,37 @@
 			noScroll: true,
 		})
 	}
+
+	function onWheel(event: WheelEvent) {
+		if (!$ctrl) return
+		showDropDown()
+		hideDropDown()
+		const nextValue = value - event.deltaY / 20
+		if (nextValue < min) value = min
+		else if (nextValue > max) value = max
+		else value = nextValue
+	}
+
+	onMount(() => {
+		document.addEventListener('wheel', onWheel)
+		return () => {
+			document.removeEventListener('wheel', onWheel)
+		}
+	})
+
+	const showDropDown = () => {
+		if (tip.state.isVisible) return
+		tip.show()
+	}
+	const hideDropDown = debounce(() => {
+		tip.hide()
+	}, 400)
 </script>
 
-<DropDown tippyProps={{ trigger: 'mouseenter', placement: 'bottom', onHidden: setUrlParam }}>
+<DropDown
+	bind:tip
+	tippyProps={{ trigger: 'mouseenter', placement: 'bottom', onHidden: setUrlParam }}
+>
 	<button slot="activator" class="btn btn-sm btn-square">
 		<Icon path={mdiMagnifyPlusOutline} />
 	</button>
