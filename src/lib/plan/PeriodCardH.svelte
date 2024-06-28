@@ -1,40 +1,32 @@
 <script lang="ts">
 	import dayjs from 'dayjs'
-	import 'dayjs/locale/fr-ch'
-	import { formatRangeHour } from '$lib/formatRange'
-	import Progress from '$lib/Progress.svelte'
-	import DragButton from './DragButton.svelte'
 	import { urlParam } from 'fuma'
+	import type { PeriodWithSubscribesUserName } from './types'
+	import DragButton from './DragButton.svelte'
+	import PeriodCardContent from './PeriodCardContent.svelte'
 	import { time } from './utils'
 	import { updatePeriod } from './updatePeriod'
-	import type { PeriodWithSubscribesUserName } from './types'
-	import { ctrl } from '$lib/store'
+	import { magnet } from './magnet'
 
 	export let period: PeriodWithSubscribesUserName
 	export let hourSize: number
 	export let origin: dayjs.Dayjs
-	// TODO: use store for showSubscribes
-	export let showSubscribes = true
 
 	let deltaStartMs = 0
 	let deltaEndMs = 0
 
 	$: msSize = time(hourSize).to('hour')
-	$: left = msSize * (-origin.diff(period.start) + magnet(deltaStartMs))
+	$: left = msSize * (-origin.diff(period.start) + $magnet(deltaStartMs))
 	$: width =
-		msSize * (dayjs(period.end).diff(period.start) - magnet(deltaStartMs) + magnet(deltaEndMs))
+		msSize * (dayjs(period.end).diff(period.start) - $magnet(deltaStartMs) + $magnet(deltaEndMs))
 
 	async function handleGrabDone() {
-		const start = new Date(period.start.getTime() + magnet(deltaStartMs))
-		const end = new Date(period.end.getTime() + magnet(deltaEndMs))
+		const start = new Date(period.start.getTime() + $magnet(deltaStartMs))
+		const end = new Date(period.end.getTime() + $magnet(deltaEndMs))
 		await updatePeriod({ ...period, start, end })
 		period = { ...period, start, end }
 		deltaStartMs = 0
 		deltaEndMs = 0
-	}
-
-	function magnet(ms: number): number {
-		return time(ms).roundBy($ctrl ? 1 : 15, 'minute')
 	}
 </script>
 
@@ -78,34 +70,6 @@
 			}}
 		/>
 
-		<Progress {period} class="justify-between" badgeClass="mr-1" progressClass="bg-red-400">
-			<span slot="before-badge" class="text-xs font-semibold ml-1">
-				{formatRangeHour({
-					start: period.start.getTime() + magnet(deltaStartMs),
-					end: period.end.getTime() + magnet(deltaEndMs),
-				})}
-			</span>
-		</Progress>
-
-		{#if showSubscribes}
-			<ol class="px-1 py-2">
-				{#each period.subscribes as subscribe}
-					<li class="badge whitespace-nowrap">
-						{subscribe.member.user.firstName}
-						{subscribe.member.user.lastName}
-					</li>
-				{/each}
-			</ol>
-		{/if}
-
-		<a
-			href={$urlParam.with({ form_period: period.id })}
-			class="absolute inset-0"
-			data-sveltekit-noscroll
-			data-sveltekit-preload-data="off"
-			data-sveltekit-replacestate
-		>
-			{' '}
-		</a>
+		<PeriodCardContent {period} {deltaStartMs} {deltaEndMs} />
 	</div>
 </div>
