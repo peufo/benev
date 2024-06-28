@@ -3,8 +3,8 @@
 	import type { Dayjs } from 'dayjs'
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { getStacks } from './getStacks'
-	import PeriodCardV from './PeriodCardV.svelte'
 	import { createPeriod } from './createPeriod'
+	import PeriodCard from './PeriodCard.svelte'
 
 	export let team: Team & { periods: PeriodWithSubscribesUserName[] }
 	export let hourSize: number
@@ -26,7 +26,17 @@
 	{#each stacks as periods}
 		<div class="relative w-full min-w-24 stack-col">
 			{#each periods as period (period.id)}
-				<PeriodCardV {origin} {period} {hourSize} />
+				<PeriodCard
+					{period}
+					{hourSize}
+					{origin}
+					axis="y"
+					drags={[
+						{ class: 'left-1/2', axis: 'x', moveStart: true },
+						{ class: 'left-1/2 top-full', axis: 'x', moveEnd: true },
+						{ class: 'left-full top-1/2', moveStart: true, moveEnd: true },
+					]}
+				/>
 			{/each}
 		</div>
 	{/each}

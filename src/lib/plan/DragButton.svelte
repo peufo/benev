@@ -4,14 +4,14 @@
 	import { Icon } from 'fuma'
 	import { createEventDispatcher, onDestroy } from 'svelte'
 
-	type Orientation = 'any' | 'horizontal' | 'vertical'
-	export let orientation: Orientation = 'any'
+	type Axis = 'any' | 'x' | 'y'
+	export let axis: Axis = 'any'
 	let klass = ''
 	export { klass as class }
-	const paths: Record<Orientation, string> = {
+	const paths: Record<Axis, string> = {
 		any: mdiDrag,
-		horizontal: mdiDragHorizontal,
-		vertical: mdiDragVertical,
+		x: mdiDragHorizontal,
+		y: mdiDragVertical,
 	}
 	type Dot = { x: number; y: number }
 
@@ -57,5 +57,5 @@
     bg-base-100 hover:bg-base-200 rounded-md btn-xs btn-square
   "
 >
-	<Icon path={paths[orientation]} />
+	<Icon path={paths[axis]} />
 </button>

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import type { Dayjs } from 'dayjs'
-	import PeriodCardH from '$lib/plan/PeriodCardH.svelte'
 	import type { PeriodWithSubscribesUserName } from './types'
 	import { getStacks } from './getStacks'
 	import { createPeriod } from './createPeriod'
+	import PeriodCard from './PeriodCard.svelte'
 
 	export let team: Team & { periods: PeriodWithSubscribesUserName[] }
 	export let hourSize: number
@@ -26,7 +26,17 @@
 	{#each stacks as periods}
 		<div class="flex items-stretch stack-row min-h-[30px]">
 			{#each periods as period (period.id)}
-				<PeriodCardH {origin} {period} {hourSize} />
+				<PeriodCard
+					{period}
+					{hourSize}
+					{origin}
+					axis="x"
+					drags={[
+						{ class: 'top-1/2', axis: 'x', moveStart: true },
+						{ class: 'left-full top-1/2', axis: 'x', moveEnd: true },
+						{ class: 'left-1/2 top-full', moveStart: true, moveEnd: true },
+					]}
+				/>
 			{/each}
 		</div>
 	{/each}
