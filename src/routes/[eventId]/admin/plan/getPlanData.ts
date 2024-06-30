@@ -20,7 +20,7 @@ export async function getPlanData({ url, eventId }: { url: URL; eventId: string 
 	}
 
 	return {
-		rangeOfEvent: await getRangeOfEvent(eventId),
+		rangeOfEvent: await getRangeOfEvent(where),
 		teams_periods: await prisma.team.findMany({
 			where,
 			orderBy: { position: 'asc' },
@@ -53,9 +53,9 @@ export async function getPlanData({ url, eventId }: { url: URL; eventId: string 
 	}
 }
 
-async function getRangeOfEvent(eventId: string): Promise<RangeAsDate> {
+async function getRangeOfEvent(whereTeam: Prisma.TeamWhereInput): Promise<RangeAsDate> {
 	const { _min, _max } = await prisma.period.aggregate({
-		where: { team: { eventId } },
+		where: { team: whereTeam },
 		_min: { start: true },
 		_max: { end: true },
 	})
