@@ -23,14 +23,18 @@ type TeamWithLeadersAndPeriodsSubscribes = Team & {
 export type AddTeamComputedValuesContext = {
 	member?: MemberWithComputedValues
 	isLeader?: boolean
-	event: Event
+	event?: Event
 }
 
 export function useAddTeamComputedValues(
-	ctx?: AddTeamComputedValuesContext
+	ctx: AddTeamComputedValuesContext = {}
 ): <T extends TeamWithLeadersAndPeriodsSubscribes>(
 	team: T
 ) => Omit<T, 'periods'> & TeamWithComputedValues {
+	const event = ctx.member?.event || ctx.event
+	if (!event)
+		throw new Error('event need to be provided in context (directly or by member argument)')
+
 	return (team) => {
 		const subscribes = team.periods.map((p) => p.subscribes).flat()
 		const nbSubscribesAccepted = subscribes.filter((sub) => sub.state === 'accepted').length
@@ -41,7 +45,7 @@ export function useAddTeamComputedValues(
 			ctx?.isLeader ||
 			ctx?.member?.roles.includes('admin') ||
 			!!ctx?.member?.leaderOf.find((t) => t.id === team.id)
-		const closeSubscribing = team?.closeSubscribing || ctx?.event.closeSubscribing
+		const closeSubscribing = team?.closeSubscribing || event.closeSubscribing
 		const DAY = 1000 * 60 * 60 * 24
 		const isClosedSubscribing =
 			!!closeSubscribing && closeSubscribing.getTime() + DAY < new Date().getTime()
@@ -77,9 +81,9 @@ export function useAddTeamComputedValues(
 				let isDisabled = true
 				if (team.isLeader) isDisabled = false
 
-				if (isAvailable && ctx?.event.selfSubscribeAllowed && !team.isClosedSubscribing) {
+				if (isAvailable && event!.selfSubscribeAllowed && !team.isClosedSubscribing) {
 					if (ctx?.member?.id) isDisabled = false
-					else if (ctx?.event.selfRegisterAllowed) isDisabled = false
+					else if (event!.selfRegisterAllowed) isDisabled = false
 				}
 
 				return {
@@ -135,9 +139,9 @@ function hideTeamLeadersInfo<T extends { leaders: MemberWithUser[] }>(team: T): 
 	}
 }
 
-export async function getTeam(teamId: string, ctx: AddTeamComputedValuesContext) {
+export async function getTeam(teamId: string, ctx?: AddTeamComputedValuesContext) {
 	const isLeaderOfTeam =
-		ctx.member?.roles.includes('admin') || !!ctx.member?.leaderOf.find((t) => t.id === teamId)
+		ctx?.member?.roles.includes('admin') || !!ctx?.member?.leaderOf.find((t) => t.id === teamId)
 
 	const team: TeamWithComputedValues = await prisma.team
 		.findUniqueOrThrow({

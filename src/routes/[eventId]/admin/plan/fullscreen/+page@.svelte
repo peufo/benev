@@ -2,6 +2,7 @@
 	import { jsonParse, urlParam } from 'fuma'
 	import { PlanV, PlanH } from '$lib/plan'
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
+	import DrawersForm from '$lib/DrawersForm.svelte'
 
 	export let data
 
@@ -42,3 +43,5 @@
 		<PlanH teams={data.teams_periods} {range} {hourSize} />
 	{/if}
 </div>
+
+<DrawersForm event={data.member.event} team={data.team} period={data.period} />

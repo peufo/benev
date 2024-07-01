@@ -15,10 +15,8 @@
 	import { Card, Drawer, Icon } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { Header, Footer, AdminNavigation } from '$lib/layout'
-	import InviteForm from '$lib/InviteForm.svelte'
-	import { TeamForm, type TeamFormInstance } from '$lib/team'
 	import { MemberFieldForm } from '$lib/member'
-	import { PeriodDrawer } from '$lib/period'
+	import DrawersForm from '$lib/DrawersForm.svelte'
 	import EventMenu from './EventMenu.svelte'
 	import FooterLink from './FooterLink.svelte'
 	import EventTheme from './admin/theme/EventTheme.svelte'
@@ -27,9 +25,6 @@
 
 	$: accessGranted =
 		data.event.state === 'published' || data.member?.roles.includes('leader') || data.userIsRoot
-
-	let teamForm: TeamFormInstance
-	let periodDrawer: PeriodDrawer
 </script>
 
 <svelte:head>
@@ -162,24 +157,9 @@
 </Footer>
 
 {#if data.member?.roles.includes('leader')}
-	<Drawer key="form_invite" title="Inviter un nouveau membre" let:close>
-		<InviteForm
-			on:created={async ({ detail: member }) => {
-				console.log(teamForm)
-				teamForm?.update((team) => ({ ...team, leaders: [...(team.leaders || []), member] }))
-				periodDrawer?.selectMember(member)
-				await close()
-			}}
-		/>
-	</Drawer>
-
-	<Drawer key="form_team" title="{data.team ? 'Modifier le' : 'Nouveau'} secteur" let:close>
-		<TeamForm bind:teamForm team={data.team || {}} event={data.event} on:success={() => close()} />
-	</Drawer>
+	<DrawersForm event={data.event} team={data.team} period={data.period} />
 
 	<Drawer key="form_field" title="{data.field ? 'Modifier le' : 'Nouveau'} champ" let:close>
 		<MemberFieldForm field={data.field || {}} on:success={() => close()} />
 	</Drawer>
-
-	<PeriodDrawer bind:this={periodDrawer} period={data.period} />
 {/if}

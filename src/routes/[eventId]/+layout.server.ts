@@ -1,8 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
-import { jsonParse, z } from 'fuma'
-import { getTeam, prisma, safeUserSelect } from '$lib/server'
-import { getMemberProfile } from '$lib/server'
+import { z } from 'fuma'
+import { getTeam, prisma, getMemberProfile, parseFormKey, getPeriodForm } from '$lib/server'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const { user } = await parent()
@@ -39,66 +38,13 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				where: { eventId, type: { not: 'email' } },
 				select: { id: true, title: true, path: true, type: true },
 			}),
-			team: await getIfDefined(form_team, (id) =>
-				getTeam(id, { member, event }).catch(() => undefined)
-			),
-			field: await getIfDefined(form_field, (id) =>
+			field: await parseFormKey(form_field, (id) =>
 				prisma.field.findUnique({ where: { id, eventId } })
 			),
-			period: await parseFormKey(
-				form_period,
-				(id) =>
-					prisma.period.findUnique({
-						where: { id },
-						include: {
-							team: true,
-							subscribes: {
-								include: {
-									member: {
-										include: {
-											user: {
-												select: safeUserSelect,
-											},
-										},
-									},
-								},
-							},
-						},
-					}),
-				(period) => {
-					if (!period) return undefined
-					return {
-						...period,
-						...(period.start ? { start: new Date(period.start) } : {}),
-						...(period.end ? { end: new Date(period.end) } : {}),
-					}
-				}
-			),
+			team: await parseFormKey(form_team, (id) => getTeam(id, { member, event }).catch(() => null)),
+			period: await getPeriodForm(form_period),
 		}
 	} catch {
 		error(404, 'not found')
 	}
-}
-
-function getIfDefined<Fun extends (id: string) => any>(
-	id: string | undefined,
-	fun: Fun
-): ReturnType<Fun> | undefined {
-	if (!id || id.length < 5) return undefined
-	return fun(id)
-}
-
-// TODO: add to fuma ?
-function parseFormKey<Fun extends (key: string) => any>(
-	key: string | undefined,
-	fun: Fun,
-	transform?: (
-		data: Partial<Awaited<ReturnType<Fun>>>
-	) => undefined | Partial<Awaited<ReturnType<Fun>>>
-): undefined | ReturnType<Fun> | Partial<Awaited<ReturnType<Fun>>> {
-	if (key === undefined) return undefined
-	const isCUID = key.length === 25 && key.match(/\w{25}/)
-	if (isCUID) return fun(key)
-	const data = jsonParse<Partial<Awaited<ReturnType<Fun>>>>(key, {})
-	return transform ? transform(data) : data
 }
