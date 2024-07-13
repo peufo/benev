@@ -15,6 +15,7 @@ export const load = async ({ url }) => {
 			skip: data.skip,
 			include: {
 				licences: true,
+				auth_key: true,
 				_count: { select: { members: true, events: true } },
 			},
 			orderBy: { createdAt: 'desc' },

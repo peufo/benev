@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Card, Pagination } from 'fuma'
+	import { mdiCheck, mdiClose } from '@mdi/js'
+	import { Card, Icon, Pagination } from 'fuma'
 
 	export let data
 </script>
@@ -17,12 +18,14 @@
 				<td>Members</td>
 				<td>Licences (event)</td>
 				<td>Licences (member)</td>
+				<td>Clé</td>
 			</tr>
 		</thead>
 		<tbody>
 			{#each data.users as user}
 				{@const licencesEvent = user.licences.filter((l) => l.type === 'event')}
 				{@const licencesMember = user.licences.filter((l) => l.type === 'member')}
+				{@const isCorrectKey = user.auth_key.find((k) => k.id.endsWith(user.email))}
 
 				<tr>
 					<td>
@@ -46,6 +49,13 @@
 					</td>
 					<td>
 						{licencesMember.filter((l) => l.memberId).length} / {licencesMember.length}
+					</td>
+					<td>
+						<Icon
+							path={isCorrectKey ? mdiCheck : mdiClose}
+							class={isCorrectKey ? 'fill-success' : 'fill-error'}
+							title="{user.email} -> {user.auth_key.map((k) => k.id).join(', ')}"
+						/>
 					</td>
 				</tr>
 			{/each}
