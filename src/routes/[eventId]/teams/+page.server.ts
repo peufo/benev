@@ -73,7 +73,7 @@ export const actions = {
 		return prisma.team.delete({ where: { id: data.id } })
 	}),
 	teams_reorder: formAction(
-		{ teams: z.array(z.object({ id: z.string(), position: z.number() })) },
+		{ teams: z.jsonArray(z.object({ id: z.string(), position: z.number() })) },
 		async ({ locals, data, params: { eventId } }) => {
 			await permission.admin(eventId, locals)
 			return prisma.$transaction(

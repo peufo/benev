@@ -14,7 +14,7 @@ export const modelGiftUpdate = {
 
 const giftConditionTeamsCreate = {
 	type: z.literal('teams'),
-	content: z.array(z.string()).transform((v) => JSON.stringify(v)),
+	content: z.jsonArray(z.string()).transform((v) => JSON.stringify(v)),
 	value: z.number(),
 } satisfies ZodObj<Prisma.GiftConditionCreateWithoutGiftInput>
 

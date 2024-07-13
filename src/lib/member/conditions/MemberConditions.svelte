@@ -30,6 +30,8 @@
 	export let memberFields: Field[]
 	let memberAllowedCount = 0
 
+	$: console.log('prout', conditions)
+
 	$: if (conditions) getmemberAllowedCount()
 
 	async function getmemberAllowedCount() {
@@ -80,21 +82,18 @@
 		if (field.type === 'boolean')
 			return component(InputRadio, {
 				label: '',
-				key: field.id,
 				options: { true: 'Oui', false: 'Non' },
 			})
 		if (field.type === 'string' || field.type === 'textarea') return component(InputText, {})
 		if (field.type === 'number') return component(InputNumber, {})
 		return component(InputCheckboxs, {
 			label: '',
-			key: field.id,
 			options: jsonParse(field.options, []),
 		})
 	}
 </script>
 
 <div class="mt-4">
-	<input type="hidden" name="conditions" value={JSON.stringify(conditions)} />
 	<div class="flex items-center mb-2">
 		<div class="grow">
 			<div class="label flex-col items-start">
@@ -124,6 +123,7 @@
 		{#each conditions as condition, index}
 			<div class="flex flex-col gap-2 bg-base-200/40 border rounded p-2">
 				<div class="flex gap-2 items-center">
+					<input type="hidden" name="conditions.{index}.type" value={condition.type} />
 					{#if condition.type === 'valided'}
 						<Icon path={mdiAccountCheckOutline} class="opacity-70" />
 						<div class="label">
@@ -133,6 +133,7 @@
 						<Icon path={mdiHumanMaleBoy} class="opacity-70" />
 						<InputNumber
 							bind:value={condition.args}
+							key="conditions.{index}.args"
 							label="Âge minimum"
 							class="grid grid-cols-2"
 							input={{ min: 1 }}
@@ -144,6 +145,7 @@
 							<!-- SELECT FIELD -->
 							<InputSelect
 								bind:value={condition.args.fieldId}
+								key="conditions.{index}.args.fieldId"
 								options={memberFields.map((f) => ({ value: f.id, label: f.name }))}
 								class="label-text whitespace-nowrap"
 								placeholder="Sélectioner un champ"
@@ -163,6 +165,7 @@
 								{#if field}
 									<InputSelect
 										bind:value={condition.args.operator}
+										key="conditions.{index}.args.operator"
 										options={CONDITION_OPERATOR[field.type].map((value) => ({
 											value,
 											label: CONDITION_OPERATOR_LABEL[value],
@@ -193,6 +196,7 @@
 							this={component}
 							{...props}
 							bind:value={condition.args.expectedValue}
+							key="condition.{index}.args.expectedValue"
 						/>
 					{/if}
 				{/if}

@@ -104,7 +104,7 @@ function buildModelMemberProfile(fields: Field[], isPartial: boolean) {
 				required_error: requiredError,
 			})
 			.min(1, { message: requiredError }),
-		multiselect: z.array(z.string()),
+		multiselect: z.jsonArray(z.string()),
 	} satisfies ZodObj<Record<FieldType, ProfileValue>>
 
 	const modelByTypeOptional = {
@@ -113,7 +113,7 @@ function buildModelMemberProfile(fields: Field[], isPartial: boolean) {
 		string: z.string().optional(),
 		textarea: z.string().optional(),
 		select: z.string().optional(),
-		multiselect: z.array(z.string()).optional(),
+		multiselect: z.jsonArray(z.string()).optional(),
 	} satisfies ZodObj<Record<FieldType, ProfileValue>>
 
 	fields.forEach((f) => {

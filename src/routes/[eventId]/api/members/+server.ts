@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
 import { z } from 'fuma/validation'
 import { prisma, permission, json } from '$lib/server'
@@ -8,7 +7,7 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 
 	const data = parseQuery(url, {
 		search: z.string().optional(),
-		ids: z.array(z.string()).optional(),
+		ids: z.filter.multiselect,
 		take: z.coerce.number().default(5),
 	})
 
