@@ -111,18 +111,23 @@ export const actions = {
 				}
 			})
 
-			const emailUpdated = data.email && user.email !== data.email
-			if (emailUpdated) {
-				sendVerificationEmail(user)
-			}
-
-			return prisma.user.update({
+			const isEmailUpdated = data.email && user.email !== data.email
+			const userUpdated = await prisma.user.update({
 				where: { id: session.user.userId },
 				data: {
 					...data,
-					...(emailUpdated ? { isEmailVerified: false } : {}),
+					...(isEmailUpdated ? { isEmailVerified: false } : {}),
 				},
 			})
+
+			if (isEmailUpdated) {
+				sendVerificationEmail(userUpdated)
+				await prisma.key.updateMany({
+					where: { id: `email:${user.email}` },
+					data: { id: `email:${userUpdated.email}` },
+				})
+			}
+			return userUpdated
 		})
 	},
 	generate_avatar: async ({ locals }) => {

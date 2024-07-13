@@ -55,10 +55,7 @@ export async function sendEmailComponent<Component extends ComponentType>(
 ) {
 	// @ts-ignore
 	const { html } = component.render(options.props)
-	return sendEmail({
-		...options,
-		html,
-	})
+	return sendEmail({ ...options, html })
 }
 
 export async function sendEmailModel<EmailPath extends EmailEvent>(
