@@ -112,7 +112,10 @@ export const actions = {
 			})
 
 			const emailUpdated = data.email && user.email !== data.email
-			if (emailUpdated) sendVerificationEmail(user)
+			if (emailUpdated) {
+				sendVerificationEmail(user)
+			}
+
 			return prisma.user.update({
 				where: { id: session.user.userId },
 				data: {

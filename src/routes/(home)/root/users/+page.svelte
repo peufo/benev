@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { mdiCheck, mdiClose } from '@mdi/js'
-	import { Card, Icon, Pagination } from 'fuma'
+	import { Card, Icon, InputSearch, Pagination } from 'fuma'
 
 	export let data
 </script>
 
 <Card>
-	<h2 class="title">Users ({data.usersCount})</h2>
-
+	<h2 slot="title" class="title">Users ({data.usersCount})</h2>
+	<div slot="action">
+		<InputSearch />
+	</div>
 	<table class="table">
 		<thead>
 			<tr>
