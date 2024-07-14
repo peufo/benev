@@ -28,6 +28,9 @@ export const load = async ({ url }) => {
 			include: {
 				licences: true,
 				auth_key: true,
+				members: {
+					include: { event: true },
+				},
 				_count: { select: { members: true, events: true } },
 			},
 			orderBy: { createdAt: 'desc' },

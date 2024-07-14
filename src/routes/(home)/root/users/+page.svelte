@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiCheck, mdiClose } from '@mdi/js'
-	import { Card, Icon, InputSearch, Pagination } from 'fuma'
+	import { Card, DropDown, Icon, InputSearch, Pagination } from 'fuma'
 
 	export let data
 </script>
@@ -27,7 +27,9 @@
 			{#each data.users as user}
 				{@const licencesEvent = user.licences.filter((l) => l.type === 'event')}
 				{@const licencesMember = user.licences.filter((l) => l.type === 'member')}
-				{@const isCorrectKey = user.auth_key.find((k) => k.id.endsWith(user.email))}
+				{@const isCorrectKey =
+					(user.auth_key.length === 1 && user.auth_key[0].id.startsWith('google:')) ||
+					user.auth_key.find((k) => k.id.endsWith(user.email))}
 
 				<tr>
 					<td>
@@ -45,7 +47,18 @@
 						{user.createdAt.toLocaleDateString()}
 					</td>
 					<td>{user._count.events}</td>
-					<td>{user._count.members}</td>
+					<DropDown tippyProps={{ trigger: 'mouseenter' }}>
+						<td slot="activator">
+							{user._count.members}
+						</td>
+						<ul>
+							{#each user.members as member}
+								<li>
+									<a class="link link-hover" href="/{member.eventId}">{member.event.name}</a>
+								</li>
+							{/each}
+						</ul>
+					</DropDown>
 					<td>
 						{licencesEvent.filter((l) => l.eventId).length} / {licencesEvent.length}
 					</td>
