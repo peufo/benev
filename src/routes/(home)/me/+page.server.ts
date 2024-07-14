@@ -52,15 +52,19 @@ export const actions = {
 
 		await sendVerificationEmail(session.user, 'Bienvenue')
 	}),
-	login: formAction(modelUserLogin, async ({ locals, data }) => {
-		console.log('LOGIN')
-		const user = await auth.useKey('email', data.email, data.password)
-		console.log(user)
-		const session = await auth.createSession({ userId: user.userId, attributes: {} })
-		console.log(session)
-		locals.auth.setSession(session)
-		return
-	}),
+	login: ({ request, locals }) =>
+		tryOrFail(async () => {
+			console.log('LOGIN')
+			const { data } = await parseFormData(request, modelUserLogin)
+			console.log(data)
+			const user = await auth.useKey('email', data.email, data.password)
+			console.log(user)
+			const session = await auth.createSession({ userId: user.userId, attributes: {} })
+			console.log(session)
+			locals.auth.setSession(session)
+			return
+		}),
+
 	logout: async ({ locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) return fail(401)
