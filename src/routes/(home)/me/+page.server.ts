@@ -55,7 +55,8 @@ export const actions = {
 	login: ({ request, locals }) =>
 		tryOrFail(async () => {
 			console.log('LOGIN')
-			const formData = await request.formData()
+			const formData = await request.formData().catch(console.log)
+			if (!formData) throw fail(400, { message: 'FormData error' })
 			const email = formData.get('email')
 			const password = formData.get('password')
 
