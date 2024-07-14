@@ -55,9 +55,16 @@ export const actions = {
 	login: ({ request, locals }) =>
 		tryOrFail(async () => {
 			console.log('LOGIN')
-			const { data } = await parseFormData(request, modelUserLogin)
-			console.log(data)
-			const user = await auth.useKey('email', data.email, data.password)
+			const formData = await request.formData()
+			const email = formData.get('email')
+			const password = formData.get('password')
+
+			console.log({ email, password })
+			if (typeof email !== 'string') throw fail(400, { message: 'Email is not provided' })
+			if (typeof password !== 'string') throw fail(400, { message: 'Password is not provided' })
+			// const { data } = await parseFormData(request, modelUserLogin)
+			// console.log(data)
+			const user = await auth.useKey('email', email, password)
 			console.log(user)
 			const session = await auth.createSession({ userId: user.userId, attributes: {} })
 			console.log(session)
