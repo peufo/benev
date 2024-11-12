@@ -2,9 +2,9 @@
 
 import type { EventEmitter } from 'node:events'
 
-export function createSSE(last_id = 0, retry = 0) {
+export function createSSE<Data = any>(last_id = 0, retry = 0) {
 	let id = last_id
-	const { readable, writable } = new TransformStream({
+	const { readable, writable } = new TransformStream<{ event: string; data: Data }, string>({
 		start(controller) {
 			controller.enqueue(': hello\n\n')
 			if (retry > 0) controller.enqueue(`retry: ${retry}\n\n`)
@@ -26,7 +26,7 @@ export function createSSE(last_id = 0, retry = 0) {
 	return {
 		readable,
 		async subscribe(eventEmitter: EventEmitter, event: string) {
-			function listener(data: any) {
+			function listener(data: Data) {
 				writer.write({ event, data })
 			}
 
