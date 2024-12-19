@@ -55,13 +55,19 @@
 	on:success
 	data={event}
 >
-	<InputText key="name" label="Nom de l'évènement" bind:value={name} on:input={handleNameInput} />
+	<InputText
+		key="name"
+		label="Nom de l'évènement"
+		bind:value={name}
+		on:input={handleNameInput}
+		input={{ autocomplete: 'off' }}
+	/>
 	<InputText
 		key="id"
 		label="URL de l'évènement"
 		on:input={handleEventIdInput}
 		bind:value={eventId}
-		input={{ class: 'pl-[5.4em]' }}
+		input={{ class: 'pl-[5.4em]', autocomplete: 'off' }}
 		classWrapper="flex items-center relative"
 	>
 		<span slot="prepend" class="absolute select-none pl-4 translate-y-[1px] opacity-50">
