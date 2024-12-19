@@ -33,7 +33,7 @@
 			<Icon
 				path={mdiEmailAlertOutline}
 				class="opacity-70 fill-error"
-				title="Cette email n'a pas été validé par le membre"
+				title="Cet email n'a pas été validé par le membre"
 				size={20}
 			/>
 		{/if}
