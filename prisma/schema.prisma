@@ -160,6 +160,7 @@ model Event {
   selfRegisterAllowed        Boolean   @default(true)
   selfSubscribeAllowed       Boolean   @default(true)
   selfSubscribeCancelAllowed Boolean   @default(true)
+  userEmailVerifiedRequired  Boolean   @default(false)
   userAddressRequired        Boolean   @default(false)
   userPhoneRequired          Boolean   @default(false)
   userBirthdayRequired       Boolean   @default(false)

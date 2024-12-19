@@ -33,6 +33,7 @@ export const modelEventSettings = {
 	selfSubscribeAllowed: z.boolean(),
 	selfSubscribeCancelAllowed: z.boolean(),
 	closeSubscribing: z.date().optional().nullable(),
+	userEmailVerifiedRequired: z.boolean(),
 	userAddressRequired: z.boolean(),
 	userPhoneRequired: z.boolean(),
 	userBirthdayRequired: z.boolean(),

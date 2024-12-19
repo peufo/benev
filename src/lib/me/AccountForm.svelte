@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
-	import { createEventDispatcher, onMount } from 'svelte'
+	import { createEventDispatcher, onMount, tick } from 'svelte'
 	import { useForm, Icon, InputText, InputDate, FormControl, InputBoolean } from 'fuma'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
@@ -11,7 +11,7 @@
 	export let successUpdate = false
 
 	const dispatch = createEventDispatcher<{ success: void }>()
-
+	let emailError = getEmailError()
 	const formProfile = useForm({
 		successReset,
 		successUpdate,
@@ -31,10 +31,16 @@
 	})
 
 	onMount(() => {
-		$page.data.member?.userProfileRequiredFields.forEach((key) =>
+		$page.data.member?.userProfileRequiredFields.forEach((key) => {
 			formProfile.setError(key, 'Valeur manquante')
-		)
+		})
 	})
+
+	function getEmailError(): string {
+		if (!$page.data.event?.userEmailVerifiedRequired) return ''
+		if (user.isEmailVerified) return ''
+		return "Validation de l'email requise"
+	}
 </script>
 
 <form
@@ -83,6 +89,11 @@
 				</button>
 			{/if}
 		</div>
+		{#if emailError}
+			<div class="label">
+				<span class="label-text-alt text-warning">{emailError}</span>
+			</div>
+		{/if}
 	</FormControl>
 
 	<InputText

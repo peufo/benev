@@ -26,14 +26,14 @@
 			<Icon
 				path={mdiEmailCheckOutline}
 				class="opacity-70 fill-success"
-				title="Email verfifié"
+				title="Email validé par le membre"
 				size={20}
 			/>
 		{:else}
 			<Icon
 				path={mdiEmailAlertOutline}
 				class="opacity-70 fill-error"
-				title="Cette email n'a pas été verifié"
+				title="Cette email n'a pas été validé par le membre"
 				size={20}
 			/>
 		{/if}

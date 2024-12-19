@@ -59,8 +59,12 @@
 		<h3 class="font-medium opacity-75 mb-2">Informations de compte requises</h3>
 
 		<div class="grid grid-cols-2 gap-x-2">
-			<InputBoolean label="Nom & prénom" value={true} input={{ disabled: true }} />
-			<InputBoolean label="Adresse email" value={true} input={{ disabled: true }} />
+			<InputBoolean label="Nom, prénom et email" value={true} input={{ disabled: true }} />
+			<InputBoolean
+				label="Adresse email verifié"
+				key="userEmailVerifiedRequired"
+				value={event.userEmailVerifiedRequired}
+			/>
 			<InputBoolean
 				label="Adresse postale"
 				key="userAddressRequired"

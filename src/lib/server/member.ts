@@ -58,6 +58,8 @@ function getUserProfileRequiredFIelds({ event, user }: MemberWithUserEventAndLea
 	if (event.userAvatarRequired && !user.avatarId) requiredFields.push('avatarId')
 	if (event.userBirthdayRequired && !user.birthday) requiredFields.push('birthday')
 	if (event.userPhoneRequired && !user.phone) requiredFields.push('phone')
+	if (event.userEmailVerifiedRequired && !user.isEmailVerified)
+		requiredFields.push('isEmailVerified')
 	return requiredFields
 }
 
