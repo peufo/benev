@@ -16,7 +16,7 @@
 	/>
 	<button class="menu-item w-full">
 		<Icon
-			path={memberProfile.isValidedByEvent ? mdiCheck : mdiCancel}
+			path={memberProfile.isValidedByEvent ? mdiCancel : mdiCheck}
 			size={21}
 			class="opacity-80"
 		/>
