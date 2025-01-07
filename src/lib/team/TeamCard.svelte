@@ -59,7 +59,11 @@
 			{/if}
 
 			{#if team.description}
-				<p class="text-sm">{team.description}</p>
+				<p class="text-sm">
+					{@html team.description
+						.replaceAll('\n', '<br>')
+						.replaceAll(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '😇')}
+				</p>
 			{/if}
 
 			<div>
