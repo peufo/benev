@@ -1,7 +1,6 @@
 import { formAction } from 'fuma/server'
 import { error, redirect } from '@sveltejs/kit'
 import { z } from 'fuma'
-import type { Event } from '@prisma/client'
 import { prisma, media, permission } from '$lib/server'
 import { modelEventCreate, modelEventUpdate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
@@ -11,7 +10,7 @@ export const load = async ({ url }) => {
 	if (prospectId) {
 		await prisma.prospect
 			.update({ where: { id: prospectId }, data: { linkOpenAt: new Date() } })
-			.catch(() => {})
+			.catch(() => ({}))
 		redirect(302, '/')
 	}
 }

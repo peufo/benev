@@ -1,7 +1,7 @@
 import { tryOrFail, parseFormData } from 'fuma/server'
-import { prisma, permission, media, ensureLicenceEvent, ensureLicenceMembers } from '$lib/server'
+import { prisma, permission, ensureLicenceEvent, ensureLicenceMembers } from '$lib/server'
 
-import { modelEventState, modelEventUpdate } from '$lib/models'
+import { modelEventState } from '$lib/models'
 
 export const load = async ({ parent, params: { eventId } }) => {
 	const { event } = await parent()
