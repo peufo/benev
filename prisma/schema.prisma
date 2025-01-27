@@ -125,14 +125,15 @@ model Event {
   licence               Licence?
   missingLicencesMember Int      @default(0)
 
-  description String?
-  icon        String?
-  email       String?
-  phone       String?
-  address     String?
-  web         String?
-  facebook    String?
-  instagram   String?
+  description  String?
+  icon         String?
+  email        String?
+  phone        String?
+  address      String?
+  addressLabel String?
+  web          String?
+  facebook     String?
+  instagram    String?
 
   // Theme
   backgroundColor      String  @default("#ffffff")

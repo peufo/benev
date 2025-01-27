@@ -98,7 +98,6 @@ export const actions = {
 			data,
 		})
 		await uploadImages(formData, event.id, member.user.id)
-
 		return event
 	}),
 

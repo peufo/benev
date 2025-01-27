@@ -1,32 +1,16 @@
 <script lang="ts">
-	import { InputText, InputTextarea, InputImagePreview, Form, Icon } from 'fuma'
-	import { slide } from 'svelte/transition'
-
+	import { InputText, InputTextarea, InputImagePreview, Form } from 'fuma'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
-	import { debounce } from '$lib/debounce'
 	import { FORMAT_A3 } from '$lib/constant'
 	import EventDeleteButton from './EventDeleteButton.svelte'
-	import { mdiTrashCanOutline } from '@mdi/js'
 	import EventImageRemove from './EventImageRemove.svelte'
+	import EventFormInputWeb from './EventFormInputWeb.svelte'
 
 	export let event: Event | undefined = undefined
 
 	let name = event?.name || ''
 	let eventId = event?.id || ''
-	let webInput: HTMLInputElement
-	let scrapIconPending = false
-	let icon = event?.icon || null
-	let webValue = ''
-
-	const handleWebInput = debounce(async () => {
-		webValue = webInput.value ? `https://${webInput.value.replace(/https?:\/\//, '')}` : ''
-		scrapIconPending = true
-		const res = await fetch(`/api/scrap?site=${webValue}`)
-			.then((res) => res.json())
-			.finally(() => (scrapIconPending = false))
-		icon = res.icon
-	}, 400)
 
 	function handleNameInput() {
 		if (event?.state !== 'actived') {
@@ -113,32 +97,11 @@
 		textarea={{ rows: 4 }}
 	/>
 
-	<input type="hidden" name="web" value={webValue} />
-
 	<InputText key="email" label="Email de contact" value={event?.email || ''} />
 	<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
 	<InputText key="address" label="Lieu" value={event?.address || ''} />
 
-	<InputText
-		label="Site web"
-		value={event?.web || ''}
-		bind:inputElement={webInput}
-		on:input={handleWebInput}
-		classWrapper="flex items-center"
-	>
-		<div slot="append">
-			{#if icon || scrapIconPending}
-				<div transition:slide={{ axis: 'x' }} class="w-10 grid place-content-center">
-					{#if icon}
-						<img src={icon} alt="Icon de l'évènement" class="w-5" />
-					{:else if scrapIconPending}
-						<div class="loading loading-ring loading-xs" />
-					{/if}
-				</div>
-			{/if}
-		</div>
-	</InputText>
-	<input type="hidden" name="icon" value={icon} />
+	<EventFormInputWeb {event} />
 
 	<InputText key="facebook" label="Page Facebook" value={event?.facebook || ''} />
 	<InputText key="instagram" label="Page Instagram" value={event?.instagram || ''} />
