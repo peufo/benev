@@ -147,7 +147,7 @@
 		<FooterLink link={data.event.phone} protocol="tel:" icon={mdiPhoneOutline} />
 
 		<FooterLink link={data.event.address} icon={mdiMapMarkerOutline} let:label>
-			{label}
+			{data.event.addressLabel || label}
 		</FooterLink>
 	</div>
 </Footer>

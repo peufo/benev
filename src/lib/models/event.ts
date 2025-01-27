@@ -16,6 +16,7 @@ export const modelEventCreate = {
 	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
 	address: z.string().optional(),
+	addressLabel: z.string().optional(),
 } satisfies ZodObj<EventCreateInput>
 
 export const modelEventUpdate = {

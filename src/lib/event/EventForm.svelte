@@ -6,6 +6,7 @@
 	import EventDeleteButton from './EventDeleteButton.svelte'
 	import EventImageRemove from './EventImageRemove.svelte'
 	import EventFormInputWeb from './EventFormInputWeb.svelte'
+	import EventFormInputAddress from './EventFormInputAddress.svelte'
 
 	export let event: Event | undefined = undefined
 
@@ -99,8 +100,7 @@
 
 	<InputText key="email" label="Email de contact" value={event?.email || ''} />
 	<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
-	<InputText key="address" label="Lieu" value={event?.address || ''} />
-
+	<EventFormInputAddress {event} />
 	<EventFormInputWeb {event} />
 
 	<InputText key="facebook" label="Page Facebook" value={event?.facebook || ''} />
