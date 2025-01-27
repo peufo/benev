@@ -14,14 +14,15 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 	})
 
 	const { members, stats } = await getMembers(event, url)
-
 	return {
 		members,
 		stats,
 		views: await prisma.view.findMany({
 			where: { eventId, key: 'members' },
 		}),
-		memberProfile: await undefinedOr(form_member_profile, (id) => getMemberProfile({ id }, member)),
+		memberProfile: await undefinedOr(form_member_profile, (id) =>
+			getMemberProfile({ id }, { member })
+		),
 	}
 }
 
