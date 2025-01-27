@@ -3,6 +3,8 @@
 	export let link: string | null
 	export let icon = ''
 	export let protocol = ''
+
+	console.log(link.replace(/^http(s)?:\/\/(www\.)?/, ''))
 </script>
 
 {#if link}

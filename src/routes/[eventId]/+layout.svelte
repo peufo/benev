@@ -146,12 +146,8 @@
 		<FooterLink link={data.event.email} protocol="mailto:" icon={mdiEmailOutline} />
 		<FooterLink link={data.event.phone} protocol="tel:" icon={mdiPhoneOutline} />
 
-		<FooterLink
-			link={data.event.address}
-			protocol="https://www.google.com/maps/place/"
-			icon={mdiMapMarkerOutline}
-		>
-			{data.event.address}
+		<FooterLink link={data.event.address} icon={mdiMapMarkerOutline} let:label>
+			{label}
 		</FooterLink>
 	</div>
 </Footer>
