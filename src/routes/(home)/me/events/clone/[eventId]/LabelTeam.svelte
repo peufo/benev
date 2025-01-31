@@ -12,8 +12,8 @@
 <div class="flex flex-col gap-1">
 	<span>{team.name}</span>
 	{#if range}
-		<span class="text-xs text-error line-through">{formatRange(range)}</span>
-		<span class="text-xs">
+		<span class="text-xs opacity-50 line-through">{formatRange(range)}</span>
+		<span class="text-xs text-green-700">
 			{formatRange({
 				start: range.start.getTime() + deltaDays * DAY,
 				end: range.end.getTime() + deltaDays * DAY,
