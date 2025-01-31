@@ -27,14 +27,16 @@
 
 <fieldset style="border: 1px solid #bbb" class="p-2 rounded {klass}">
 	<legend class="px-2">{legend}</legend>
-	<slot />
-	<InputBoolean
-		key="{key}_all"
-		value={_items.filter((p) => p.selected).length === items.length}
-		on:change={({ detail: selected }) => (_items = mapSelected(_items, selected))}
-		label={labelAll}
-		labelPosition="right"
-	/>
+	<div class="flex gap-4 flex-wrap items-center">
+		<InputBoolean
+			key="{key}_all"
+			value={_items.filter((p) => p.selected).length === items.length}
+			on:change={({ detail: selected }) => (_items = mapSelected(_items, selected))}
+			label={labelAll}
+			labelPosition="right"
+		/>
+		<slot />
+	</div>
 	<div class="divider" />
 	{#each _items as item}
 		<InputBoolean

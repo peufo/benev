@@ -1,19 +1,23 @@
 <script lang="ts">
-	import { formatRangeDate } from '$lib/formatRange'
+	import { formatRange } from '$lib/formatRange'
 	import { getRangeOfTeam } from '$lib/plan'
 	import type { Period, Team } from '@prisma/client'
 
 	export let team: Team & { periods: Period[] }
-
-	const rang = getRangeOfTeam(team)
+	export let deltaDays: number
+	const range = getRangeOfTeam(team)
+	const DAY = 1000 * 60 * 60 * 24
 </script>
 
-<fieldset style="border: 1px solid #bbb" class="p-2 rounded">
-	<legend class="px-2">Secteurs</legend>
-
-	{#each teams as team}
-		<div class="border rounded">
-			<span>{team.name}</span>
-		</div>
-	{/each}
-</fieldset>
+<div class="flex flex-col gap-1">
+	<span>{team.name}</span>
+	{#if range}
+		<span class="text-xs text-error line-through">{formatRange(range)}</span>
+		<span class="text-xs">
+			{formatRange({
+				start: range.start.getTime() + deltaDays * DAY,
+				end: range.end.getTime() + deltaDays * DAY,
+			})}
+		</span>
+	{/if}
+</div>

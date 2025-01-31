@@ -1,29 +1,32 @@
 <script lang="ts">
-	import { component, Form, InputBoolean, Placeholder, USE_COERCE_JSON } from 'fuma'
+	import { component, Form, InputNumber } from 'fuma'
 	import LabelPage from './LabelPage.svelte'
 	import LabelField from './LabelField.svelte'
 	import CloneSelector from './CloneSelector.svelte'
+	import LabelTeam from './LabelTeam.svelte'
+
 	export let data
 
-	function mapSelected<T>(arr: T[], selected = true): (T & { selected: boolean })[] {
-		return arr.map((el) => ({ ...el, selected }))
-	}
-	function getJsonIds(arr: { id: string; selected: boolean }[]): string {
-		return [
-			USE_COERCE_JSON,
-			JSON.stringify(arr.filter((el) => el.selected).map((el) => el.id)),
-		].join('')
-	}
-
-	let pages = mapSelected(data.event.pages)
-	let fields = mapSelected(data.event.memberFields)
-	let views = mapSelected(data.event.views)
+	let deltaDays = 365
 </script>
 
 <h2 class="title">Cloner l'évènement "{data.event.name}"</h2>
 
 <Form action="?/event_clone" simpleAction>
-	<div class="grid grid-cols-2 gap-6 mt-4">
+	<div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+		<CloneSelector
+			class="sm:col-span-2"
+			items={data.event.teams}
+			key="teams"
+			legend="Secteurs"
+			labelAll="Tous les secteurs"
+			placeholder="Aucun secteur"
+			getLabel={(team) => component(LabelTeam, { team, deltaDays })}
+		>
+			<div class="grow" />
+			<InputNumber label="Nombre de jours de décalage" key="deltaDays" bind:value={deltaDays} />
+		</CloneSelector>
+
 		<CloneSelector
 			items={data.event.pages}
 			key="pages"
@@ -43,7 +46,7 @@
 		/>
 
 		<CloneSelector
-			class="col-span-2"
+			class="sm:col-span-2"
 			items={data.event.views}
 			key="views"
 			legend="Vues"
@@ -51,9 +54,5 @@
 			placeholder="Aucune vue"
 			getLabel={(view) => `${view.name} (${view.key})`}
 		/>
-
-		<fieldset style="border: 1px solid #bbb" class="p-2 rounded">
-			<legend class="px-2">Secteurs</legend>
-		</fieldset>
 	</div>
 </Form>
