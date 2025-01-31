@@ -13,7 +13,9 @@ export const load = async ({ parent, params: { eventId } }) => {
 	const event = await prisma.event.findUniqueOrThrow({
 		where: { id: eventId },
 		include: {
-			teams: true,
+			teams: {
+				include: { periods: true },
+			},
 			memberFields: true,
 			pages: true,
 			views: true,
@@ -25,6 +27,7 @@ export const load = async ({ parent, params: { eventId } }) => {
 const validationEventClone = {
 	pages: z.arrayRaw(z.string()),
 	fields: z.arrayRaw(z.string()),
+	views: z.arrayRaw(z.string()),
 }
 
 export const actions = {
