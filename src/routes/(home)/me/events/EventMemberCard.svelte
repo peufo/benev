@@ -4,6 +4,7 @@
 	import { EVENT_STATES } from '$lib/constant'
 	import { CardLink, Icon } from 'fuma'
 	import logo from '$lib/assets/logo.svg'
+	import { mdiContentDuplicate } from '@mdi/js'
 
 	export let member: PageData['members'][number]
 
@@ -43,6 +44,14 @@
 						path={EVENT_STATES[member.event.state].icon}
 						title={EVENT_STATES[member.event.state].label}
 					/>
+				{/if}
+
+				<div class="grow" />
+
+				{#if member.roles.includes('admin')}
+					<a class="btn btn-sm btn-square z-10" href="/me/events/clone/{member.eventId}">
+						<Icon path={mdiContentDuplicate} title="Cloner l'évènement" size={18} />
+					</a>
 				{/if}
 			</div>
 

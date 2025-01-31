@@ -2,13 +2,14 @@
 	import { EventForm } from '$lib/event'
 	import { Dialog, Icon, Placeholder } from 'fuma'
 	import { mdiPlus } from '@mdi/js'
-	import MemberCard from './MemberCard.svelte'
+	import EventMemberCard from './EventMemberCard.svelte'
 	import { IsOrganizerForm } from '$lib/me'
 
 	export let data
 
 	let createDialog: HTMLDialogElement
 	let isOrganizerDialog: HTMLDialogElement
+
 	function handleClickNewEvent() {
 		if (data.user.isOrganizer) createDialog.showModal()
 		else isOrganizerDialog.showModal()
@@ -20,7 +21,7 @@
 	<h2 class="title">Invitations</h2>
 	<div class="flex flex-col gap-3 mb-4">
 		{#each data.members.filter((m) => !m.isValidedByUser) as member}
-			<MemberCard {member} />
+			<EventMemberCard {member} />
 		{/each}
 	</div>
 {/if}
@@ -45,7 +46,7 @@
 
 <div class="flex flex-col gap-3">
 	{#each data.members.filter((m) => m.isValidedByUser) as member}
-		<MemberCard {member} />
+		<EventMemberCard {member} />
 	{:else}
 		<Placeholder class="gap-3 bg-base-300">
 			<p class="text-center">Tu n'es membre d'aucun évènement pour l'instant.</p>
