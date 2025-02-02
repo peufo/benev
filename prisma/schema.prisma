@@ -233,7 +233,6 @@ model Member {
   subscribes       Subscribe[]
   leaderOf         Team[]
   giftsAllocations GiftAllocation[]
-  views            View[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -331,10 +330,8 @@ model View {
   key   String
   query String @db.Text()
 
-  eventId  String
-  event    Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  authorId String
-  author   Member @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -5,6 +5,6 @@ export function normalizePath(str: string | undefined): string {
 		.normalize('NFD')
 		.replace(/[\u0300-\u036f]/g, '')
 		.replaceAll(' ', '-')
-		.replace(/[\.\:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]/g, '')
+		.replace(/[.:/?#[\]@!$&'()*+,;=]/g, '')
 		.toLowerCase()
 }

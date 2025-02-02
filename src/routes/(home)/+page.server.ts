@@ -59,6 +59,14 @@ export const actions = {
 				data: {
 					...data,
 					ownerId: userId,
+					members: {
+						create: {
+							userId,
+							isAdmin: true,
+							isValidedByEvent: true,
+							isValidedByUser: true,
+						},
+					},
 					pages: {
 						createMany: {
 							data: [
@@ -70,14 +78,6 @@ export const actions = {
 								},
 								...defaultEmailModels,
 							],
-						},
-					},
-					members: {
-						create: {
-							userId,
-							isAdmin: true,
-							isValidedByEvent: true,
-							isValidedByUser: true,
 						},
 					},
 				},
