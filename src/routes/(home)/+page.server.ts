@@ -1,7 +1,7 @@
 import { formAction } from 'fuma/server'
 import { error, redirect } from '@sveltejs/kit'
 import { z } from 'fuma'
-import { prisma, media, permission } from '$lib/server'
+import { prisma, media, permission, uploadImages } from '$lib/server'
 import { modelEventCreate, modelEventUpdate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
 
@@ -52,9 +52,7 @@ export const actions = {
 				return nameFail('Les noms ne peuvent pas commencer par "deleted_"')
 			if (data.id.startsWith('archived_'))
 				return nameFail('Les noms ne peuvent pas commencer par "archived_"')
-
 			const { userId } = session.user
-
 			const event = await prisma.event.create({
 				data: {
 					...data,
@@ -82,34 +80,12 @@ export const actions = {
 					},
 				},
 			})
-
 			await uploadImages(formData, event.id, session.user.id)
-
 			return event
 		},
 		{
 			redirectTo: (event) => `/${event.id}`,
 		}
-	),
-	event_update: formAction(modelEventUpdate, async ({ locals, data, formData }) => {
-		const member = await permission.admin(data.id, locals)
-		const event = await prisma.event.update({
-			where: { id: data.id },
-			data,
-		})
-		await uploadImages(formData, event.id, member.user.id)
-		return event
-	}),
-
-	event_delete: formAction(
-		{ id: z.string() },
-		async ({ data, locals }) => {
-			await permission.admin(data.id, locals)
-			await prisma.event.delete({
-				where: { id: data.id },
-			})
-		},
-		{ redirectTo: '/me' }
 	),
 	event_poster_delete: formAction({ id: z.string() }, async ({ data, locals }) => {
 		await permission.admin(data.id, locals)
@@ -121,26 +97,4 @@ export const actions = {
 		await media.delete({ logoOf: { id: data.id } })
 		return
 	}),
-}
-
-async function uploadImages(formData: FormData, eventId: string, authorId: string) {
-	await media.upload(formData, {
-		key: 'poster',
-		where: { posterOf: { id: eventId } },
-		data: {
-			name: 'Affiche',
-			createdById: authorId,
-			posterOf: { connect: { id: eventId } },
-		},
-	})
-
-	await media.upload(formData, {
-		key: 'logo',
-		where: { logoOf: { id: eventId } },
-		data: {
-			name: 'Logo',
-			createdById: authorId,
-			logoOf: { connect: { id: eventId } },
-		},
-	})
 }

@@ -14,9 +14,7 @@
 	let eventId = event?.id || ''
 
 	function handleNameInput() {
-		if (event?.state !== 'actived') {
-			eventId = normalizePath(name)
-		}
+		if (event?.state !== 'published') eventId = normalizePath(name)
 	}
 
 	function handleEventIdInput() {
@@ -25,11 +23,11 @@
 </script>
 
 <Form
-	action="/?/event"
+	action="/{event?.id ? event.id : ''}?/event"
 	options={{
 		successReset: false,
 		onSubmit: async () => {
-			if (event?.state !== 'actived') return
+			if (event?.state !== 'published') return
 			if (event.id === eventId) return
 			const msg = `Es tu sûr de vouloir modifier le lien de l'évènement de "/${event.id}" pour "${eventId} ?"`
 			if (!confirm(msg)) {
@@ -107,6 +105,8 @@
 	<InputText key="instagram" label="Page Instagram" value={event?.instagram || ''} />
 
 	<svelte:fragment slot="delete">
-		<EventDeleteButton {event} />
+		{#if event}
+			<EventDeleteButton {event} />
+		{/if}
 	</svelte:fragment>
 </Form>

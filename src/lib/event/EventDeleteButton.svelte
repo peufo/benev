@@ -4,7 +4,7 @@
 	import { useForm } from 'fuma/validation'
 	import type { Event } from '@prisma/client'
 
-	export let event: Event | undefined
+	export let event: Event
 	let dialog: HTMLDialogElement
 
 	const form = useForm({
@@ -20,7 +20,7 @@
 
 <Dialog bind:dialog>
 	<h2 slot="header" class="title">Supprimer "{event?.name}"</h2>
-	<form method="post" action="/?/event_delete" use:enhance={form.submit} class="contents">
+	<form method="post" action="/{event.id}?/event_delete" use:enhance={form.submit} class="contents">
 		<input type="hidden" name="id" value={event?.id} />
 		<p>
 			Es-tu certain de supprimer cette évènement ?<br />

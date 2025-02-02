@@ -6,7 +6,7 @@ import { prisma } from '$lib/server'
 
 export async function getPlanData({ url, eventId }: { url: URL; eventId: string }) {
 	const query = parseQuery(url, {
-		teams: z.array(z.string()).optional(),
+		teams: z.jsonArray(z.string()).optional(),
 		range: z.json({ start: z.coerce.date(), end: z.coerce.date() }).optional(),
 	})
 

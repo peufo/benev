@@ -29,7 +29,7 @@ export const modelMemberCondition = z.union([
 		args: z.object({
 			fieldId: z.string(),
 			operator: memberConditionOperator,
-			expectedValue: z.union([z.string(), z.arrayRaw(z.string()), z.boolean(), z.number()]),
+			expectedValue: z.union([z.string(), z.array(z.string()), z.boolean(), z.number()]),
 		}),
 	}),
 ])
@@ -42,7 +42,7 @@ export const modelTeam = {
 	description: z.string().optional(),
 	leaders: z.relations.connect,
 	closeSubscribing: z.date().optional().nullable(),
-	conditions: z.array(modelMemberCondition),
+	conditions: z.jsonArray(modelMemberCondition),
 } satisfies ZodObj<TeamShemaCreate>
 
 export const modelTeamUpdate = {

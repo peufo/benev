@@ -49,7 +49,7 @@ export const media = {
 
 		await fs
 			.access(mediaPath, fs.constants.R_OK)
-			.catch(() => {})
+			.catch(() => ({}))
 			.then(async () => await fs.rm(mediaPath, { recursive: true, force: true }))
 			.finally(async () => await fs.mkdir(mediaPath, { recursive: true }))
 
@@ -80,12 +80,34 @@ function createOrUpsertMedia(opt: UploadOption) {
 }
 
 async function upsertMedia(opt: UploadOption) {
-	let media = await prisma.media.findFirst({
+	const media = await prisma.media.findFirst({
 		where: opt.where,
 	})
 	return prisma.media.upsert({
 		where: { id: media?.id || '' },
 		update: opt.data,
 		create: opt.data,
+	})
+}
+
+export async function uploadImages(formData: FormData, eventId: string, authorId: string) {
+	await media.upload(formData, {
+		key: 'poster',
+		where: { posterOf: { id: eventId } },
+		data: {
+			name: 'Affiche',
+			createdById: authorId,
+			posterOf: { connect: { id: eventId } },
+		},
+	})
+
+	await media.upload(formData, {
+		key: 'logo',
+		where: { logoOf: { id: eventId } },
+		data: {
+			name: 'Logo',
+			createdById: authorId,
+			logoOf: { connect: { id: eventId } },
+		},
 	})
 }
