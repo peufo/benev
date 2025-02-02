@@ -77,19 +77,19 @@ const testValue: Record<
 	},
 	gt: (expectedValue, value) => {
 		if (!isNumber(expectedValue) || !isNumber(value)) return false
-		return expectedValue > value
+		return value > expectedValue
 	},
 	gte: (expectedValue, value) => {
 		if (!isNumber(expectedValue) || !isNumber(value)) return false
-		return expectedValue >= value
+		return value >= expectedValue
 	},
 	lt: (expectedValue, value) => {
 		if (!isNumber(expectedValue) || !isNumber(value)) return false
-		return expectedValue < value
+		return value < expectedValue
 	},
 	lte: (expectedValue, value) => {
 		if (!isNumber(expectedValue) || !isNumber(value)) return false
-		return expectedValue <= value
+		return value <= expectedValue
 	},
 }
 
