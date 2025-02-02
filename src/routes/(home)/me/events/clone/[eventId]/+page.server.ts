@@ -67,7 +67,7 @@ export const actions = {
 					},
 				},
 				teams: {
-					create: event.teams.map(pickTeam),
+					create: event.teams.map((t) => pickTeam(t, data.deltaDays)),
 				},
 				pages: {
 					create: getPages(event.pages),
@@ -107,28 +107,30 @@ function pickData<T extends object>(data: T) {
 	return rest as Omit<T, ExcludeProps>
 }
 
-const pickTeam: (team: Team & { periods: Period[] }) => Prisma.TeamCreateWithoutEventInput = ({
-	name,
-	description,
-	closeSubscribing,
-	conditions,
-	position,
-	periods,
-}) => ({
-	name,
-	description,
-	closeSubscribing,
-	conditions: conditions || undefined,
-	position,
-	periods: {
-		create: periods.map(pickPeriod),
-	},
-})
-const pickPeriod: (period: Period) => Prisma.PeriodCreateWithoutTeamInput = ({
-	start,
-	end,
-	maxSubscribe,
-}) => ({ start, end, maxSubscribe })
+function pickTeam(
+	team: Team & { periods: Period[] },
+	deltaDays: number
+): Prisma.TeamCreateWithoutEventInput {
+	return {
+		name: team.name,
+		description: team.description,
+		closeSubscribing: team.closeSubscribing,
+		conditions: team.conditions || undefined,
+		position: team.position,
+		periods: {
+			create: team.periods.map((p) => pickPeriod(p, deltaDays)),
+		},
+	}
+}
+
+function pickPeriod(period: Period, deltaDays: number): Prisma.PeriodCreateWithoutTeamInput {
+	const deltaTime = deltaDays * 1000 * 60 * 60 * 24
+	return {
+		maxSubscribe: period.maxSubscribe,
+		start: new Date(period.start.getTime() + deltaTime),
+		end: new Date(period.end.getTime() + deltaTime),
+	}
+}
 
 function getPages(eventPages: Page[]): Prisma.PageCreateManyEventInput[] {
 	const home = pickData(
