@@ -115,7 +115,8 @@ function pickTeam(
 		name: team.name,
 		description: team.description,
 		closeSubscribing: team.closeSubscribing,
-		conditions: team.conditions || undefined,
+		// TODO: fix fields references
+		//conditions: team.conditions || undefined,
 		position: team.position,
 		periods: {
 			create: team.periods.map((p) => pickPeriod(p, deltaDays)),
