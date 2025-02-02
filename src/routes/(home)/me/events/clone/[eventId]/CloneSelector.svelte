@@ -15,10 +15,7 @@
 		return arr.map((el) => ({ ...el, selected }))
 	}
 	function getJsonIds(arr: { id: string; selected: boolean }[]): string {
-		return [
-			USE_COERCE_JSON,
-			JSON.stringify(arr.filter((el) => el.selected).map((el) => el.id)),
-		].join('')
+		return JSON.stringify(arr.filter((el) => el.selected).map((el) => el.id))
 	}
 	let _items = mapSelected(items)
 </script>

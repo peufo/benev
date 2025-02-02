@@ -23,10 +23,10 @@ export const load = async ({ locals, params: { eventId } }) => {
 
 const validationEventClone = {
 	deltaDays: z.number(),
-	pages: z.array(z.string()),
-	fields: z.array(z.string()),
-	views: z.array(z.string()),
-	teams: z.array(z.string()),
+	pages: z.jsonArray(z.string()),
+	fields: z.jsonArray(z.string()),
+	views: z.jsonArray(z.string()),
+	teams: z.jsonArray(z.string()),
 }
 
 export const actions = {
