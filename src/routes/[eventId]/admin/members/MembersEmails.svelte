@@ -6,15 +6,11 @@
 	import { Icon } from 'fuma'
 	import { api } from '$lib/api'
 
-	type Member = PageData['members'][number]
-
 	const getMembersEmails = async () => {
-		const searchParams = $page.url.searchParams
-		searchParams.append('all', 'true')
-		const { members } = await $api.get<{ members: Member[] }>(
-			`/admin/members?${searchParams.toString()}`
+		const { emails } = await $api.get<{ emails: string[] }>(
+			`/admin/members/email?${$page.url.searchParams.toString()}`
 		)
-		return members.map((m) => m.user.email)
+		return emails
 	}
 
 	let isLoading = false

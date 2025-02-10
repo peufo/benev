@@ -9,7 +9,7 @@
 	import { component } from '$lib/utils'
 	import { MemberActions, MemberCreateSubscribeDialog } from '$lib/member'
 	import { getMembersTableFields } from './membersTableFields'
-	import MembersCopy from './MembersCopy.svelte'
+	import MembersImport from './MembersImport.svelte'
 	import MembersFilter from './MembersFilter.svelte'
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
@@ -68,7 +68,7 @@
 
 				<TableViewSelect key="members" views={data.views} action="{$eventPath}/admin" />
 
-				<MembersCopy fields={data.fields} />
+				<MembersImport />
 				<MembersEmails />
 
 				<a
