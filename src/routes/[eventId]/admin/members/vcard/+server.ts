@@ -1,5 +1,5 @@
-import { getMembers } from '../getMembers'
-import { prisma, permission, type MemberWithUser } from '$lib/server'
+import { getMembers, type MemberWithComputedValue } from '../getMembers'
+import { prisma, permission } from '$lib/server'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {
 	await permission.leader(eventId, locals)
@@ -18,6 +18,19 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 	})
 }
 
-function getVCard(member: MemberWithUser): string {
-	return 'prout'
+function getVCard(member: MemberWithComputedValue): string {
+	const { user } = member
+	const rows = [
+		'BEGIN:VCARD',
+		'VERSION:4.0',
+		`ORG:Benev.io;${member.event.name}`,
+		`FN:${user.firstName} ${user.lastName}`,
+		`EMAIL:${user.email}`,
+	]
+	if (user.phone) rows.push(`TEL:${user.phone}`)
+	if (user.birthday) rows.push(`BDAY:${user.birthday.toISOString()}`)
+	if (user.zipCode && user.city && user.street)
+		rows.push(`ADR:;;${user.street};${user.city};${user.zipCode};`)
+	rows.push('END:VCARD\n')
+	return rows.join('\n')
 }
