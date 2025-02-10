@@ -15,7 +15,7 @@ export const load = async ({ url }) => {
 
 export const actions = {
 	view_create: async ({ request, locals, params: { eventId } }) => {
-		const member = await permission.leader(eventId, locals)
+		await permission.leader(eventId, locals)
 
 		return tryOrFail(async () => {
 			const { data } = await parseFormData(request, modelViewCreate)
@@ -24,13 +24,12 @@ export const actions = {
 				data: {
 					...data,
 					eventId,
-					authorId: member.id,
 				},
 			})
 		})
 	},
 	view_update: async ({ request, locals, params: { eventId } }) => {
-		const member = await permission.leader(eventId, locals)
+		await permission.leader(eventId, locals)
 
 		return tryOrFail(async () => {
 			const { data } = await parseFormData(request, { ...modelViewCreate, id: z.string() })
@@ -39,7 +38,6 @@ export const actions = {
 				data: {
 					...data,
 					eventId,
-					authorId: member.id,
 				},
 			})
 		})
