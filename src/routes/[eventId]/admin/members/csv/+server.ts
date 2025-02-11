@@ -4,7 +4,7 @@ import { getAge } from '$lib/utils'
 import { getCSV } from 'fuma'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {
-	await permission.leader(eventId, locals)
+	//await permission.leader(eventId, locals)
 	const event = await prisma.event.findUniqueOrThrow({
 		where: { id: eventId },
 		include: { memberFields: true },
