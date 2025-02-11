@@ -7,6 +7,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		where: { id: eventId },
 		include: { memberFields: true },
 	})
+	url.searchParams.set('all', 'true')
 	const { members } = await getMembers(event, url)
 	const cards = members.map(getVCard).join('\n')
 
@@ -28,9 +29,17 @@ function getVCard(member: MemberWithComputedValue): string {
 		`EMAIL:${user.email}`,
 	]
 	if (user.phone) rows.push(`TEL:${user.phone}`)
-	if (user.birthday) rows.push(`BDAY:${user.birthday.toISOString()}`)
+	if (user.birthday) rows.push(`BDAY:${getBDAY(user.birthday)}`)
 	if (user.zipCode && user.city && user.street)
 		rows.push(`ADR:;;${user.street};${user.city};${user.zipCode};`)
 	rows.push('END:VCARD\n')
 	return rows.join('\n')
+}
+
+function getBDAY(date: Date): string {
+	return [
+		date.getFullYear().toString(),
+		(date.getMonth() + 1).toString().padStart(2, '0'),
+		date.getDate().toString().padStart(2, '0'),
+	].join('')
 }
