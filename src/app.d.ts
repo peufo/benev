@@ -16,6 +16,7 @@ declare global {
 			medias?: Media[]
 			isLeader?: boolean
 			team?: Team
+			userIsRoot?: boolean
 		}
 		// interface Error {}
 		// interface Platform {}

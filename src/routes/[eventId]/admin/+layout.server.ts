@@ -3,8 +3,8 @@ import { error } from '@sveltejs/kit'
 
 export const load = async ({ parent, url, locals, params: { eventId } }) => {
 	await getUserIdOrRedirect(url, locals)
-	const { member } = await parent()
-	if (!member?.roles.includes('leader')) error(403)
+	const { member, userIsRoot } = await parent()
+	if (!member?.roles.includes('leader') && !userIsRoot) error(403)
 
 	return {
 		teams: await prisma.team.findMany({

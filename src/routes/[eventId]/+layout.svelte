@@ -76,7 +76,7 @@
 </Header>
 
 <div class="flex grow items-start relative">
-	{#if data.member?.roles.includes('leader')}
+	{#if data.member?.roles.includes('leader') || data.userIsRoot}
 		<AdminNavigation />
 	{/if}
 

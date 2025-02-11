@@ -8,7 +8,7 @@
 
 	export let pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
 
-	$: adminIsVisible = $page.data.member?.roles.includes('leader')
+	$: adminIsVisible = $page.data.member?.roles.includes('leader') || $page.data.userIsRoot
 </script>
 
 <div class="gap-2 hidden lg:flex">
