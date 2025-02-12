@@ -28,7 +28,9 @@ function createEventPermission(role: MemberRole) {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
 		// TODO: a optimisé en utilisant parent() dans les load()
-		const member = await getMemberProfile({ userId: session.user.id, eventId })
+		const member = await getMemberProfile({ userId: session.user.id, eventId }).catch(() => {
+			error(403)
+		})
 		const allowed = member.roles.includes(role)
 		if (!allowed) error(403)
 		return member
