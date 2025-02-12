@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { tryOrFail, parseFormData, formAction } from 'fuma/server'
 import { z, type ZodObj } from 'fuma'
-import { permission, prisma, redirectToAuth, redirectToRegister } from '$lib/server'
+import { permission, prisma, redirectToAuth, redirectToRegister, safeUserSelect } from '$lib/server'
 import type { Field, FieldType } from '@prisma/client'
 import { modelMemberSetting } from '$lib/models'
 
@@ -22,6 +22,13 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 		memberTeams: await prisma.team.findMany({
 			where: { periods: { some: { subscribes: { some: { memberId } } } } },
 			include: {
+				leaders: {
+					include: {
+						user: {
+							select: safeUserSelect,
+						},
+					},
+				},
 				periods: {
 					where: { subscribes: { some: { memberId } } },
 					orderBy: { start: 'asc' },

@@ -1,5 +1,11 @@
 import { formAction } from 'fuma/server'
-import { prisma, getMemberProfile, permission, ensureLicenceMembers } from '$lib/server'
+import {
+	prisma,
+	getMemberProfile,
+	permission,
+	ensureLicenceMembers,
+	safeUserSelect,
+} from '$lib/server'
 import { z } from 'fuma/validation'
 
 export const load = async ({ parent, params: { memberId, eventId } }) => {
@@ -23,6 +29,13 @@ export const load = async ({ parent, params: { memberId, eventId } }) => {
 							where: { subscribes: { some: { memberId } } },
 							include: { subscribes: { where: { memberId } } },
 							orderBy: { start: 'asc' },
+						},
+						leaders: {
+							include: {
+								user: {
+									select: safeUserSelect,
+								},
+							},
 						},
 					},
 				},

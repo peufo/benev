@@ -6,9 +6,13 @@
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
 	import { tip } from 'fuma'
+	import TeamLeaders from '$lib/team/TeamLeaders.svelte'
+	import type { MemberWithUser } from '$lib/server'
 
-	export let teams: (Team & { periods: (Period & { subscribes: Subscribe[] })[] })[]
-
+	export let teams: (Team & {
+		leaders: MemberWithUser[]
+		periods: (Period & { subscribes: Subscribe[] })[]
+	})[]
 	export let isLeader = false
 </script>
 
@@ -64,6 +68,13 @@
 						{/if}
 					</div>
 				{/each}
+				<div class="relative z-10">
+					<span class="text-label text-xs">Responsable{team.leaders.length > 1 ? 's' : ''} : </span>
+					<div class="flex gap-2 gap-y-1 flex-wrap">
+						<!-- BADGE LEADERS -->
+						<TeamLeaders leaders={team.leaders} />
+					</div>
+				</div>
 			</CardLink>
 		{/each}
 	</div>
