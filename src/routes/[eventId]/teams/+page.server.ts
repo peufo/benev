@@ -4,6 +4,7 @@ import { useAddTeamComputedValues, permission, prisma, safeUserSelect } from '$l
 import { isMemberAllowed } from '$lib/member'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
 import { error } from '@sveltejs/kit'
+import type { Period } from '@prisma/client'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const search = url.searchParams.get('search')
@@ -14,6 +15,12 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 	const isLeader = member?.roles.includes('leader')
 
 	const addTeamComputedValues = useAddTeamComputedValues({ member, event })
+
+	const memberPeriodsId = member?.subscribes
+		.map((sub) => sub.periodId)
+		.filter((id, i, arr) => arr.indexOf(id) === i)
+	const isMemberSubscribeToTeam = (periods: Period[]) =>
+		!!(memberPeriodsId && periods.find((p) => memberPeriodsId.includes(p.id)))
 
 	const teams = await prisma.team
 		.findMany({
@@ -36,7 +43,14 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			},
 		})
 		.then((teams) => teams.map(addTeamComputedValues))
-		.then((teams) => teams.filter((team) => isLeader || isMemberAllowed(team.conditions, member)))
+		.then((teams) =>
+			teams.filter((team) => {
+				if (isLeader) return true
+				if (isMemberAllowed(team.conditions, member)) return true
+				if (isMemberSubscribeToTeam(team.periods)) return true
+				return false
+			})
+		)
 		.then((teams) => {
 			if (!onlyAvailable) return teams
 			return teams
