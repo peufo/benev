@@ -27,11 +27,11 @@
 			value={getMembersCSV}
 			label="Copier les données"
 		/>
-		<a href={urlMembersCSV} class="menu-item" data-sveltekit-preload-data={false}>
+		<a href={urlMembersCSV} class="menu-item" target="_parent">
 			<Icon path={mdiFileDelimitedOutline} size={20} />
 			<span>Télécharger un CSV</span>
 		</a>
-		<a href={urlMembersVCard} class="menu-item" data-sveltekit-preload-data={false}>
+		<a href={urlMembersVCard} class="menu-item" target="_parent">
 			<Icon path={mdiCardAccountMailOutline} size={20} />
 			<span>Télécharger les contacts</span>
 		</a>

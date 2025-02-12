@@ -2,7 +2,7 @@
 	import { page } from '$app/stores'
 </script>
 
-{#if $page.data.member?.roles.includes('admin')}
+{#if $page.data.member?.roles.includes('admin') || $page.data.userIsRoot}
 	<slot />
 {:else}
 	<div class="grid place-content-center py-20">
