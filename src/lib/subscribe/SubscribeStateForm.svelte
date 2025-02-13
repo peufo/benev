@@ -85,6 +85,10 @@
 {:else}
 	<DropDown tippyProps={{ arrow: true, trigger: 'click', ...tippyProps }}>
 		<button slot="activator" class="relative btn btn-sm btn-square z-10">
+			{#if !isCreator && subscribe.state === 'request'}
+				<div class="absolute w-3 h-3 bg-error -right-1.5 -top-1.5 rounded-full animate-ping" />
+				<div class="absolute w-2 h-2 bg-error -right-1 -top-1 rounded-full" />
+			{/if}
 			<SubscribeState {subscribe} />
 		</button>
 
