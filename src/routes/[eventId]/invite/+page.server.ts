@@ -30,7 +30,7 @@ export const actions = {
 				where: { email: data.email },
 				select: { id: true, email: true },
 			})
-			let isNewUser = !user
+			const isNewUser = !user
 			if (!user) {
 				user = await auth.createUser({
 					key: {
@@ -45,18 +45,17 @@ export const actions = {
 					},
 				})
 			}
-			const userId = user.id
 
 			if (
 				await prisma.member.findFirst({
-					where: { userId, eventId },
+					where: { userId: user.id, eventId },
 				})
 			)
 				throw new Error('Member already exists')
 
 			const { id } = await prisma.member.create({
 				data: {
-					userId,
+					userId: user.id,
 					eventId,
 					isValidedByEvent: true,
 				},

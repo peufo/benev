@@ -26,7 +26,7 @@ const memberStaticSuggestions: Partial<Record<NestedPaths<DataWithMember>, strin
 // TODO: add 'subscribes', 'teams'
 const memberComputedSuggestions: Record<
 	string,
-	[string, (data: DataWithMember) => string | string[]]
+	[string, (data: DataWithMember & { tokenId?: string }) => string | string[]]
 > = {
 	age: ['Age', ({ member }) => getAge(member.user.birthday)],
 	name: ['Nom et prénom', ({ member }) => `${member.user.firstName} ${member.user.lastName}`],
@@ -38,7 +38,12 @@ const memberComputedSuggestions: Record<
 	leaderOf: ['Secteurs à charge', ({ member }) => member.leaderOf.map((t) => t.name)],
 	me: [
 		'Lien vers le tableau de bord',
-		({ member }) => `<a href="${domain}/${member.eventId}/me">tableau de bord</a>`,
+		({ member, tokenId }) => {
+			const href = tokenId
+				? `${domain}/token/${tokenId}/reset_password?redirectTo=/${member.eventId}/me&newUser=${member.user.firstName}&eventName=${member.event.name}`
+				: `${domain}/${member.eventId}/me`
+			return `<a href="${href}">tableau de bord</a>`
+		},
 	],
 	teams: [
 		'Lien vers les secteurs',

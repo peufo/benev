@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { isFreeRange } from 'perod'
 import { parseFormData, tryOrFail } from 'fuma/server'
 import { modelSubscribe } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { generateToken, permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
 
@@ -10,7 +10,6 @@ export const actions = {
 	subscribe_create: async ({ request, locals, params: { eventId } }) => {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
-
 		return tryOrFail(async () => {
 			const { data } = await parseFormData(request, modelSubscribe)
 			const [period, memberAuthor, subscribes] = await Promise.all([
@@ -96,6 +95,31 @@ export const actions = {
 			const to = subscribe.createdBy === 'user' ? leadersMail : memberMail
 			const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
 
+			let tokenId: string | undefined = undefined
+			if (subscribe.createdBy == 'leader') {
+				const isActiveAccount = await prisma.key.count({
+					where: {
+						user_id: subscribe.member.userId,
+						OR: [
+							{
+								id: { startsWith: 'email:' },
+								hashed_password: { not: null },
+							},
+							{
+								id: { not: { startsWith: 'email:' } },
+							},
+						],
+					},
+				})
+				if (!isActiveAccount) {
+					tokenId = await generateToken(
+						'passwordReset',
+						subscribe.member.userId,
+						new Date().getTime() + 1000 * 60 * 60 * 24 * 7
+					)
+				}
+			}
+
 			if (to.length)
 				await subscribeNotification
 					.request({
@@ -103,7 +127,11 @@ export const actions = {
 						to,
 						replyTo,
 						subject: 'Nouvelle inscription',
-						props: { subscribe, authorName: `${session.user.firstName} ${session.user.lastName}` },
+						props: {
+							subscribe,
+							authorName: `${session.user.firstName} ${session.user.lastName}`,
+							tokenId,
+						},
 					})
 					.catch(console.error)
 		})

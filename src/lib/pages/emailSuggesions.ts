@@ -16,7 +16,7 @@ export type EmailModelProps = PropsWithMember<
 	{
 		invitation_create: { tokenId?: string; authorName: string }
 		invitation_accept: {}
-		subscribe_request: { subscribe: SubscribeWithTeam; authorName: string }
+		subscribe_request: { subscribe: SubscribeWithTeam; authorName: string; tokenId?: string }
 		subscribe_accepted: { subscribe: SubscribeWithTeam; authorName: string }
 		subscribe_denied: { subscribe: SubscribeWithTeam; authorName: string }
 		subscribe_cancelled: { subscribe: SubscribeWithTeam; authorName: string }
