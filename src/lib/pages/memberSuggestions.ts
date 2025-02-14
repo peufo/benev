@@ -59,19 +59,20 @@ export function getMemberSuggestions(fields: Field[]): SuggestionItem[] {
 	]
 }
 
-export function getMemberReplacers({ member }: DataWithMember): Replacer[] {
+export function getMemberReplacers(props: DataWithMember & { tokenId?: string }): Replacer[] {
 	return [
 		...Object.entries(memberStaticSuggestions).map(([id]) => ({
 			id,
-			value: objectPath.get({ member }, id),
+			value: objectPath.get(props, id),
 		})),
 		...Object.entries(memberComputedSuggestions).map(([id, [_, getValue]]) => ({
 			id,
-			value: getValue({ member }),
+			value: getValue(props),
 		})),
-		...member.event.memberFields.map((field) => ({
+		...props.member.event.memberFields.map((field) => ({
 			id: `field_${field.id}`,
-			value: member.profileJson[field.id] ?? `(valeur manquante pour le champ "${field.name}")`,
+			value:
+				props.member.profileJson[field.id] ?? `(valeur manquante pour le champ "${field.name}")`,
 		})),
 	]
 }
