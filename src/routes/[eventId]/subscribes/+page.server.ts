@@ -90,7 +90,7 @@ export const actions = {
 
 			if (isLeaderOfTeam && isSelfSubscribe) return
 
-			const memberMail = subscribe.member.user.email
+			const memberMail = subscribe.member.isNotifiedSubscribe ? [subscribe.member.user.email] : []
 			const leadersMail = subscribe.period.team.leaders.map(({ user }) => user.email)
 			const to = subscribe.createdBy === 'user' ? leadersMail : memberMail
 			const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
