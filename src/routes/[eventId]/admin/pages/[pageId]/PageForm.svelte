@@ -12,10 +12,12 @@
 	import { PAGE_TYPE } from '$lib/constant'
 	import { debounce } from '$lib/debounce'
 	import PageTypeHelp from './PageTypeHelp.svelte'
+	import { SelectMedia } from '$lib/material/media'
 
 	export let page: Page
 	export let charterAlreadyExist: boolean
 
+	let selectMedia: SelectMedia
 	let isDirty = false
 	let successInvalidateAll = false
 	const form = useForm({
@@ -96,7 +98,14 @@
 	{/if}
 
 	{#key page.id}
-		<InputTextRich key="content" value={page.content} on:change={handleChange} />
+		<InputTextRich
+			key="content"
+			value={page.content}
+			on:change={handleChange}
+			on:insertMedia={() => {
+				selectMedia.show()
+			}}
+		/>
 	{/key}
 
 	<div class="flex gap-2">
@@ -131,3 +140,11 @@
 		{/if}
 	</div>
 </form>
+
+<SelectMedia
+	bind:this={selectMedia}
+	on:select={({ detail: media }) => {
+		console.log('Do something with ')
+		console.log({ media })
+	}}
+/>
