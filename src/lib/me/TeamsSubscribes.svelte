@@ -60,6 +60,7 @@
 						<SubscribeStateForm
 							subscribe={period.subscribes[0]}
 							eventId={team.eventId}
+							canBeLarge
 							{isLeader}
 						/>
 

@@ -44,6 +44,7 @@
 	export let action = `/${eventId}/subscribes/${subscribe.id}`
 	export let isLeader = false
 	export let tippyProps: Partial<TippyProps> = {}
+	export let canBeLarge = false
 
 	let isSelf = subscribe.memberId === $page.data.member?.id
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -76,6 +77,7 @@
 			state !== subscribe.state &&
 			((state !== 'cancelled' && state !== 'denied') || isSelfCancelAllowed)
 	)
+	$: isConfirmation = !isCreator && subscribe.state === 'request'
 </script>
 
 {#if !editions.length}
@@ -84,12 +86,20 @@
 	</button>
 {:else}
 	<DropDown tippyProps={{ arrow: true, trigger: 'click', ...tippyProps }}>
-		<button slot="activator" class="relative btn btn-sm btn-square z-10">
-			{#if !isCreator && subscribe.state === 'request'}
+		<button
+			slot="activator"
+			class="relative btn btn-sm z-10 {!isConfirmation || !canBeLarge
+				? 'btn-square'
+				: 'max-sm:btn-square'}"
+		>
+			<SubscribeState {subscribe} />
+			{#if isConfirmation}
 				<div class="absolute w-3 h-3 bg-error -right-1.5 -top-1.5 rounded-full animate-ping" />
 				<div class="absolute w-2 h-2 bg-error -right-1 -top-1 rounded-full" />
+				{#if canBeLarge}
+					<span class="font-medium hidden sm:inline">à confirmer</span>
+				{/if}
 			{/if}
-			<SubscribeState {subscribe} />
 		</button>
 
 		<form method="post" use:enhance={form.submit} class="flex flex-col gap-1">
