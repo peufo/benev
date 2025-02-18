@@ -8,6 +8,7 @@ import { injectValues } from '$lib/pages/injectValues'
 import { tiptapParser } from 'fuma'
 import EmailLayout from '$lib/email/EmailLayout.svelte'
 import { getMemberReplacers } from '$lib/pages/memberSuggestions'
+import { domain } from '$lib/email'
 
 export const transporter = nodemailer.createTransport({
 	host: SMTP_HOST,
@@ -87,10 +88,14 @@ export async function renderEmailModel<EmailPath extends EmailEvent>(
 		html: string
 	}
 	const html = layout.html.replace('__SLOT__', injectValues(modelHTML, replacers))
-	return html
+	return injectDomain(html)
 }
 
 export async function generateEmail() {
 	const userCount = await prisma.user.count()
 	return `guest-${userCount + 1}@benev.io`
+}
+
+function injectDomain(html: string): string {
+	return html.replaceAll(/(<[^>]*)src="\//g, `$1src="${domain}/`)
 }
