@@ -30,6 +30,7 @@
 	})
 	const { home, charter, email, ...pageTypes } = PAGE_TYPE
 	let submitButton: HTMLButtonElement
+	let inputTextRich: InputTextRich
 
 	$: pagePath = `${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
 
@@ -99,6 +100,7 @@
 
 	{#key page.id}
 		<InputTextRich
+			bind:this={inputTextRich}
 			key="content"
 			value={page.content}
 			on:change={handleChange}
@@ -144,7 +146,9 @@
 <SelectMedia
 	bind:this={selectMedia}
 	on:select={({ detail: media }) => {
-		console.log('Do something with ')
-		console.log({ media })
+		inputTextRich.setImage({
+			src: `/media/${media.id}`,
+			alt: media.name,
+		})
 	}}
 />
