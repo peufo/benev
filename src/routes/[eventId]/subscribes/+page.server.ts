@@ -64,7 +64,7 @@ export const actions = {
 			)
 			if (isMemberBusy) {
 				const startMessage = isSelfSubscribe ? 'Tu es' : 'Ce membre est'
-				error(403, `${startMessage} déjà occuper durant cette période`)
+				error(403, `${startMessage} déjà occupé durant cette période`)
 			}
 
 			const subscribe = await prisma.subscribe.create({
