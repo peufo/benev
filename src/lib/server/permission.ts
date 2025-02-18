@@ -27,6 +27,7 @@ function createEventPermission(role: MemberRole) {
 	return async (eventId: string, locals: App.Locals): Promise<MemberWithComputedValues> => {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
+		console.log(`request permission "${role}":`, { userId: session.user.id, eventId })
 		// TODO: a optimisé en utilisant parent() dans les load()
 		const member = await getMemberProfile({ userId: session.user.id, eventId }).catch(() => {
 			error(403)
