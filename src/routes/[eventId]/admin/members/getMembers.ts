@@ -96,8 +96,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			return dayjs().subtract(age, 'year').toDate()
 		}
 		if (min || max || order) where.push({ user: { birthday: { not: null } } })
-		if (min) where.push({ user: { birthday: { gte: getDate(min) } } })
-		if (max) where.push({ user: { birthday: { lte: getDate(max) } } })
+		if (min) where.push({ user: { birthday: { lte: getDate(min) } } })
+		if (max) where.push({ user: { birthday: { gte: getDate(max) } } })
 		if (order) orderBy.push({ user: { birthday: order } })
 	}
 
