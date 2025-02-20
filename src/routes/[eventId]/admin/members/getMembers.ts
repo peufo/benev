@@ -90,21 +90,15 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	}
 
 	if (query.age) {
+		const { min, max, order } = query.age
 		const getDate = (age?: number) => {
 			if (age === undefined) return undefined
 			return dayjs().subtract(age, 'year').toDate()
 		}
-		const start = getDate(query.age.max)
-		const end = getDate(query.age.min)
-		where.push({
-			user: {
-				birthday: {
-					not: null,
-					...(start && { gte: start }),
-					...(end && { lte: end }),
-				},
-			},
-		})
+		if (min || max || order) where.push({ user: { birthday: { not: null } } })
+		if (min) where.push({ user: { birthday: { gte: getDate(min) } } })
+		if (max) where.push({ user: { birthday: { lte: getDate(max) } } })
+		if (order) orderBy.push({ user: { birthday: order } })
 	}
 
 	if (query.isValidedByEvent !== undefined) {
@@ -207,34 +201,47 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 				...addMemberComputedValues({ ...member, event }),
 				workTime: getWorkTime(member.subscribes, 'accepted'),
 				workTimeRequest: getWorkTime(member.subscribes, 'request'),
+				subscribesCountAccepted: member.subscribes.filter((s) => s.state === 'accepted').length,
+				subscribesCountRequest: member.subscribes.filter((s) => s.state === 'request').length,
 			}))
 		)
 
 	if (filterOnComputedValues) {
-		const conditions: ((member: (typeof members)[number]) => boolean)[] = []
-
+		type M = (typeof members)[number]
+		const conditions: ((member: M) => boolean)[] = []
+		const sorts: ((a: M, b: M) => number)[] = []
 		if (query.subscribes_count_accepted) {
-			const { min, max } = query.subscribes_count_accepted
-			if (min !== undefined)
-				conditions.push((m) => min <= m.subscribes.filter((s) => s.state === 'accepted').length)
-			if (max !== undefined)
-				conditions.push((m) => max >= m.subscribes.filter((s) => s.state === 'accepted').length)
+			const { min, max, order } = query.subscribes_count_accepted
+			if (min !== undefined) conditions.push((m) => min <= m.subscribesCountAccepted)
+			if (max !== undefined) conditions.push((m) => max >= m.subscribesCountAccepted)
+			if (order === 'desc')
+				sorts.push((a, b) => a.subscribesCountAccepted - b.subscribesCountAccepted)
+			if (order === 'asc')
+				sorts.push((a, b) => b.subscribesCountAccepted - a.subscribesCountAccepted)
 		}
 
 		if (query.subscribes_count_request) {
-			const { min, max } = query.subscribes_count_request
-			if (min !== undefined)
-				conditions.push((m) => min <= m.subscribes.filter((s) => s.state === 'request').length)
-			if (max !== undefined)
-				conditions.push((m) => max >= m.subscribes.filter((s) => s.state === 'request').length)
+			const { min, max, order } = query.subscribes_count_request
+			if (min !== undefined) conditions.push((m) => min <= m.subscribesCountRequest)
+			if (max !== undefined) conditions.push((m) => max >= m.subscribesCountRequest)
+			if (order === 'desc')
+				sorts.push((a, b) => a.subscribesCountAccepted - b.subscribesCountAccepted)
+			if (order === 'asc')
+				sorts.push((a, b) => b.subscribesCountAccepted - a.subscribesCountAccepted)
 		}
 
 		if (query.subscribes_hours) {
-			const { min, max } = query.subscribes_hours
-
-			const toHours = (ms: number) => ms / (1000 * 60 * 60)
-			if (min !== undefined) conditions.push((m) => min <= toHours(m.workTime))
-			if (max !== undefined) conditions.push((m) => max >= toHours(m.workTime))
+			const { min, max, order } = query.subscribes_hours
+			if (min !== undefined) {
+				const min_ms = min * (1000 * 60 * 60)
+				conditions.push((m) => min_ms <= m.workTime)
+			}
+			if (max !== undefined) {
+				const max_ms = max * (1000 * 60 * 60)
+				conditions.push((m) => max_ms >= m.workTime)
+			}
+			if (order === 'desc') sorts.push((a, b) => a.workTime - b.workTime)
+			if (order === 'asc') sorts.push((a, b) => b.workTime - a.workTime)
 		}
 
 		if (query.isProfileComplet === true) {
@@ -244,12 +251,21 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			conditions.push((m) => !m.isMemberProfileCompleted || !m.isUserProfileCompleted)
 		}
 
-		members = members.filter((member) => {
-			for (const condition of conditions) {
-				if (!condition(member)) return false
-			}
-			return true
-		})
+		members = members
+			.filter((member) => {
+				for (const condition of conditions) {
+					if (!condition(member)) return false
+				}
+				return true
+			})
+			.sort((a, b) => {
+				// TODO: sorts erase orderBy... tofix: edit sorts at the same time at orderBy
+				for (const sort of sorts) {
+					const res = sort(a, b)
+					if (res) return res
+				}
+				return 0
+			})
 	}
 
 	const fields = await prisma.field.findMany({ where: { eventId }, orderBy: { position: 'asc' } })
