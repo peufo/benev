@@ -17,6 +17,7 @@ export type MemberWithComputedValue = Awaited<ReturnType<typeof getMembers>>['me
 
 export const membersFilterShape = {
 	search: z.string().optional(),
+	createdAt: z.filter.range,
 	subscribes_count_accepted: z.filter.number,
 	subscribes_count_request: z.filter.number,
 	subscribes_teams: z.filter.multiselect,
@@ -41,11 +42,12 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		all: z.filter.boolean,
 	})
 
-	const filters: Prisma.MemberWhereInput[] = []
+	const where: Prisma.MemberWhereInput[] = []
 	const subscribesFilters: Prisma.SubscribeWhereInput[] = []
+	const orderBy: Prisma.MemberOrderByWithRelationInput[] = []
 
 	if (query.search) {
-		filters.push({
+		where.push({
 			user: {
 				OR: [
 					{ firstName: { contains: query.search } },
@@ -54,6 +56,13 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 				],
 			},
 		})
+	}
+
+	if (query.createdAt) {
+		const { start, end, order } = query.createdAt
+		if (start) where.push({ createdAt: { gte: start } })
+		if (end) where.push({ createdAt: { lte: end } })
+		if (order) orderBy.push({ createdAt: order })
 	}
 
 	if (query.subscribes_teams) {
@@ -75,7 +84,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	}
 
 	if (query.leaderOf) {
-		filters.push({
+		where.push({
 			leaderOf: { some: { id: { in: query.leaderOf } } },
 		})
 	}
@@ -87,7 +96,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		}
 		const start = getDate(query.age.max)
 		const end = getDate(query.age.min)
-		filters.push({
+		where.push({
 			user: {
 				birthday: {
 					not: null,
@@ -99,20 +108,20 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	}
 
 	if (query.isValidedByEvent !== undefined) {
-		filters.push({ isValidedByEvent: query.isValidedByEvent })
+		where.push({ isValidedByEvent: query.isValidedByEvent })
 	}
 	if (query.isValidedByUser !== undefined) {
-		filters.push({ isValidedByUser: query.isValidedByUser })
+		where.push({ isValidedByUser: query.isValidedByUser })
 	}
 	if (query.isAbsent !== undefined) {
-		filters.push({ subscribes: { some: { isAbsent: query.isAbsent } } })
+		where.push({ subscribes: { some: { isAbsent: query.isAbsent } } })
 	}
 
 	if (query.role === 'admin') {
-		filters.push({ isAdmin: true })
+		where.push({ isAdmin: true })
 	}
 	if (query.role === 'leader') {
-		filters.push({ leaderOf: { some: { eventId } } })
+		where.push({ leaderOf: { some: { eventId } } })
 	}
 	if (query.role === 'member' || subscribesFilters.length) {
 		subscribesFilters.push({ state: { in: ['request', 'accepted'] } })
@@ -152,7 +161,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		const field = await prisma.field.findUniqueOrThrow({ where: { id: fieldId, eventId } })
 		const fieldFilter = fieldFilterByType[field.type](value)
 		if (fieldFilter)
-			filters.push({
+			where.push({
 				profileJson: {
 					path: `$.${fieldId}`,
 					...fieldFilter,
@@ -166,11 +175,15 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		query.subscribes_hours !== undefined ||
 		query.isProfileComplet !== undefined
 
+	orderBy.push({
+		user: { firstName: 'asc' },
+	})
+
 	let members = await prisma.member
 		.findMany({
 			where: {
 				eventId,
-				...(filters.length && { AND: filters }),
+				...(where.length && { AND: where }),
 				...(subscribesFilters.length && {
 					subscribes: {
 						some: {
@@ -187,9 +200,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 					include: { period: true },
 				},
 			},
-			orderBy: {
-				user: { firstName: 'asc' },
-			},
+			orderBy,
 		})
 		.then((res) =>
 			res.map((member) => ({

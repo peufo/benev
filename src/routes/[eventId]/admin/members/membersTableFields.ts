@@ -133,7 +133,7 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 		{
 			key: 'age',
 			label: 'Age',
-			type: 'date',
+			type: 'number',
 			getCell: (m) => getAge(m.user.birthday),
 		},
 		{
