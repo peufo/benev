@@ -98,7 +98,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		if (min || max || order) where.push({ user: { birthday: { not: null } } })
 		if (min) where.push({ user: { birthday: { lte: getDate(min) } } })
 		if (max) where.push({ user: { birthday: { gte: getDate(max) } } })
-		if (order) orderBy.push({ user: { birthday: order } })
+		if (order === 'asc') orderBy.push({ user: { birthday: 'desc' } })
+		if (order === 'desc') orderBy.push({ user: { birthday: 'asc' } })
 	}
 
 	if (query.isValidedByEvent !== undefined) {
