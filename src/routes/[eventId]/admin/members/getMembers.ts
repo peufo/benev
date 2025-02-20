@@ -43,7 +43,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	})
 
 	const where: Prisma.MemberWhereInput[] = []
-	const subscribesFilters: Prisma.SubscribeWhereInput[] = []
+	const subscribesWhere: Prisma.SubscribeWhereInput[] = []
 	const orderBy: Prisma.MemberOrderByWithRelationInput[] = []
 
 	if (query.search) {
@@ -66,7 +66,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	}
 
 	if (query.subscribes_teams) {
-		subscribesFilters.push({
+		subscribesWhere.push({
 			state: { in: ['accepted', 'request'] },
 			period: { teamId: { in: query.subscribes_teams } },
 		})
@@ -74,7 +74,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 
 	if (query.subscribes_range) {
 		const { start, end } = query.subscribes_range
-		subscribesFilters.push({
+		subscribesWhere.push({
 			state: 'accepted',
 			period: {
 				...(start && { end: { gte: start } }),
@@ -117,8 +117,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	if (query.role === 'leader') {
 		where.push({ leaderOf: { some: { eventId } } })
 	}
-	if (query.role === 'member' || subscribesFilters.length) {
-		subscribesFilters.push({ state: { in: ['request', 'accepted'] } })
+	if (query.role === 'member' || subscribesWhere.length) {
+		subscribesWhere.push({ state: { in: ['request', 'accepted'] } })
 	}
 
 	// TODO: use this in src/routes/[eventId]/teams/membersAllowed/+server.ts
@@ -154,13 +154,14 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		const fieldId = key.replace('field_', '')
 		const field = await prisma.field.findUniqueOrThrow({ where: { id: fieldId, eventId } })
 		const fieldFilter = fieldFilterByType[field.type](value)
-		if (fieldFilter)
+		if (fieldFilter) {
 			where.push({
 				profileJson: {
 					path: `$.${fieldId}`,
 					...fieldFilter,
 				},
 			})
+		}
 	}
 
 	const filterOnComputedValues =
@@ -178,10 +179,10 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			where: {
 				eventId,
 				...(where.length && { AND: where }),
-				...(subscribesFilters.length && {
+				...(subscribesWhere.length && {
 					subscribes: {
 						some: {
-							AND: subscribesFilters,
+							AND: subscribesWhere,
 						},
 					},
 				}),
@@ -190,7 +191,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 				user: true,
 				leaderOf: true,
 				subscribes: {
-					where: { AND: [{ state: { in: ['accepted', 'request'] } }, ...subscribesFilters] },
+					where: { AND: [{ state: { in: ['accepted', 'request'] } }, ...subscribesWhere] },
 					include: { period: true },
 				},
 			},
