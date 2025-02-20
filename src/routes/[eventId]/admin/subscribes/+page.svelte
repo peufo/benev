@@ -50,6 +50,7 @@
 			label: 'Inscription',
 			getCell: (sub) => sub.createdAt.toLocaleDateString(),
 			visible: false,
+			type: 'date',
 		},
 		{
 			key: 'teams',

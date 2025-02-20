@@ -12,6 +12,7 @@ import type {
 
 export const subscribesFilterShape = {
 	search: z.string().optional(),
+	createdAt: z.filter.range,
 	teams: z.filter.multiselect,
 	period: z.filter.range,
 	states: z.filter.multiselect,
@@ -28,22 +29,27 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		take: z.coerce.number().default(20),
 	})
 
-	const subscribesFilters: Prisma.SubscribeWhereInput[] = [{ period: { team: { eventId } } }]
+	const where: Prisma.SubscribeWhereInput[] = [{ period: { team: { eventId } } }]
+	const orderBy: Prisma.SubscribeOrderByWithRelationInput[] = []
 
-	if (query.teams) subscribesFilters.push({ period: { teamId: { in: query.teams } } })
+	if (query.teams) where.push({ period: { teamId: { in: query.teams } } })
+	if (query.createdAt) {
+		const { start, end, order } = query.createdAt
+		if (start) where.push({ createdAt: { gte: start } })
+		if (end) where.push({ createdAt: { lte: end } })
+		if (order) orderBy.push({ createdAt: order })
+	}
+
 	if (query.period) {
-		const { start, end } = query.period
-		subscribesFilters.push({
-			period: {
-				...(start && { end: { gte: start } }),
-				...(end && { start: { lte: end } }),
-			},
-		})
+		const { start, end, order } = query.period
+		if (start) where.push({ period: { end: { gte: start } } })
+		if (end) where.push({ period: { start: { lte: end } } })
+		if (order) orderBy.push({ period: { start: order } })
 	}
 
 	if (query.search) {
 		const words = query.search.split(' ')
-		subscribesFilters.push({
+		where.push({
 			member: {
 				user: {
 					OR: words
@@ -59,15 +65,15 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 	}
 
 	if (query.states) {
-		subscribesFilters.push({ state: { in: query.states as SubscribeState[] } })
+		where.push({ state: { in: query.states as SubscribeState[] } })
 	}
 
-	if (query.createdBy) subscribesFilters.push({ createdBy: query.createdBy })
-	if (query.isAbsent !== undefined) subscribesFilters.push({ isAbsent: query.isAbsent })
+	if (query.createdBy) where.push({ createdBy: query.createdBy })
+	if (query.isAbsent !== undefined) where.push({ isAbsent: query.isAbsent })
 
 	const subscribes = await prisma.subscribe
 		.findMany({
-			where: { AND: subscribesFilters },
+			where: { AND: where },
 			include: {
 				period: {
 					include: { team: true },
@@ -79,7 +85,7 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 					},
 				},
 			},
-			orderBy: { period: { start: 'asc' } },
+			orderBy: orderBy.length ? orderBy : { period: { start: 'asc' } },
 		})
 		.then((subs) =>
 			subs.map((sub) => ({
