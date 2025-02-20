@@ -216,9 +216,9 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			const { min, max, order } = query.subscribes_count_accepted
 			if (min !== undefined) conditions.push((m) => min <= m.subscribesCountAccepted)
 			if (max !== undefined) conditions.push((m) => max >= m.subscribesCountAccepted)
-			if (order === 'desc')
-				sorts.push((a, b) => a.subscribesCountAccepted - b.subscribesCountAccepted)
 			if (order === 'asc')
+				sorts.push((a, b) => a.subscribesCountAccepted - b.subscribesCountAccepted)
+			if (order === 'desc')
 				sorts.push((a, b) => b.subscribesCountAccepted - a.subscribesCountAccepted)
 		}
 
@@ -226,9 +226,9 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			const { min, max, order } = query.subscribes_count_request
 			if (min !== undefined) conditions.push((m) => min <= m.subscribesCountRequest)
 			if (max !== undefined) conditions.push((m) => max >= m.subscribesCountRequest)
-			if (order === 'desc')
-				sorts.push((a, b) => a.subscribesCountAccepted - b.subscribesCountAccepted)
 			if (order === 'asc')
+				sorts.push((a, b) => a.subscribesCountAccepted - b.subscribesCountAccepted)
+			if (order === 'desc')
 				sorts.push((a, b) => b.subscribesCountAccepted - a.subscribesCountAccepted)
 		}
 
@@ -242,8 +242,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 				const max_ms = max * (1000 * 60 * 60)
 				conditions.push((m) => max_ms >= m.workTime)
 			}
-			if (order === 'desc') sorts.push((a, b) => a.workTime - b.workTime)
-			if (order === 'asc') sorts.push((a, b) => b.workTime - a.workTime)
+			if (order === 'asc') sorts.push((a, b) => a.workTime - b.workTime)
+			if (order === 'desc') sorts.push((a, b) => b.workTime - a.workTime)
 		}
 
 		if (query.isProfileComplet === true) {
