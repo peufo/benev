@@ -13,6 +13,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 	const { members } = await getMembers(event, url)
 	const columns: Record<string, (member: MemberWithComputedValue) => string | number> = {
 		name: (m) => `${m.user.firstName} ${m.user.lastName}`,
+		createdAt: (m) => m.createdAt.toISOString(),
 		email: (m) => m.user.email,
 		phone: (m) => m.user.phone?.replace(/^\+/, "'+") || '',
 		age: (m) => getAge(m.user.birthday),

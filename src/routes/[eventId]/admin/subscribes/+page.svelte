@@ -46,6 +46,12 @@
 			locked: true,
 		},
 		{
+			key: 'createdAt',
+			label: 'Inscription',
+			getCell: (sub) => sub.createdAt.toLocaleDateString(),
+			visible: false,
+		},
+		{
 			key: 'teams',
 			label: 'Secteur',
 			type: 'multiselect',
@@ -72,7 +78,7 @@
 		},
 		{
 			key: 'createdBy',
-			label: 'Inscription',
+			label: 'Inscrit par',
 			type: 'select',
 			options: {
 				leader: { label: 'Inscrit par un responsable', icon: mdiShieldAccountOutline },

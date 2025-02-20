@@ -25,6 +25,25 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			locked: true,
 		},
 		{
+			key: 'createdAt',
+			label: 'Adhésion',
+			getCell: (member) => member.createdAt.toLocaleDateString(),
+			type: 'date',
+			visible: false,
+		},
+		{
+			key: 'member.user.email',
+			label: 'Email',
+			getCell: (member) => member.user.email,
+			visible: false,
+		},
+		{
+			key: 'member.user.phone',
+			label: 'Téléphone',
+			getCell: (member) => member.user.phone,
+			visible: false,
+		},
+		{
 			key: 'subscribes_teams',
 			label: 'Inscriptions (secteur)',
 			type: 'multiselect',
@@ -108,7 +127,6 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			key: 'leaderOf',
 			label: 'Secteurs à charges',
 			type: 'multiselect',
-
 			getCell: (m) => m.leaderOf.map(({ name }) => name),
 			options: teams.map((team) => ({ label: team.name, value: team.id })),
 		},
@@ -150,6 +168,6 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 	return tableFields
 }
 
-function isUnique<Item extends any>(item: Item, index: number, self: Item[]): boolean {
+function isUnique<Item>(item: Item, index: number, self: Item[]): boolean {
 	return self.indexOf(item) === index
 }

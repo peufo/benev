@@ -25,6 +25,7 @@
 		member_phone: (s) => s.member.user.phone || '',
 		sector: (s) => s.period.team.name,
 		created_by: (s) => s.createdBy,
+		created_at: (s) => s.createdAt.toJSON(),
 		state: (s) => s.state,
 	}
 </script>
