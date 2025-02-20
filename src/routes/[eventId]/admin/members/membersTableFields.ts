@@ -158,6 +158,7 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			type: field.type,
 			label: field.name,
 			isEditable: true,
+			sortable: false,
 			getCell: (m: MemberWithComputedValue) => m.profileJson[field.id],
 			options: jsonParse<string[]>(field.options, []),
 		})),
