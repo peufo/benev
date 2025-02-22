@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { mdiCheck } from '@mdi/js'
+	import { mdiAlertCircleOutline, mdiCheck } from '@mdi/js'
 	import { Card, Icon, InputText, InputTextarea, useForm } from 'fuma'
 
 	const form = useForm({
@@ -10,8 +10,17 @@
 </script>
 
 <div class="max-w-xl mx-auto flex flex-col gap-4">
+	<div role="alert" class="alert alert-warning">
+		<Icon path={mdiAlertCircleOutline} />
+		<p class="text-sm">
+			Si tu souhaites contacter les responsables d'un événement,
+			<a href="/events" class="link">rends-toi dans son espace dédié</a>.
+			<br />
+			Les moyens de contact se trouvent généralement en pied de page.
+		</p>
+	</div>
 	<Card>
-		<h2 slot="title">Nouvelle prise de contact</h2>
+		<h2 slot="title">Nouvelle prise de contact avec Benev.io</h2>
 		<form
 			method="post"
 			action="/contact?/new_message"
