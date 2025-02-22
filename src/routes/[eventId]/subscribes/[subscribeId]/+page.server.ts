@@ -67,7 +67,8 @@ const setSubscribState: (state: SubscribeState) => Action =
 			if (isLeaderAction) {
 				author = await permission.leader(eventId, locals)
 				const isInLeaderTeams = author.leaderOf.find(({ id }) => id === _subscribe.period.teamId)
-				if (!isInLeaderTeams) error(403, "You're not leader of this team")
+				if (!author.roles.includes('admin') && !isInLeaderTeams)
+					error(403, "You're not leader of this team")
 			} else {
 				author = await permission.member(eventId, locals)
 			}
