@@ -47,6 +47,9 @@
 							{#if !data.memberProfile.roles.includes('leader') && data.memberProfile.isValidedByEvent}
 								approuvé
 							{/if}
+							{#if data.memberProfile.user.isHeadlessAccount}
+								sans compte
+							{/if}
 						</button>
 
 						<MemberIsValidedByEventForm memberProfile={data.memberProfile} />

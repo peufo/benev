@@ -5,6 +5,7 @@
 		mdiEmailAlertOutline,
 		mdiHomeCityOutline,
 		mdiPhoneOutline,
+		mdiGhostOutline,
 	} from '@mdi/js'
 	import type { User } from '@prisma/client'
 	import { Icon } from 'fuma'
@@ -22,24 +23,29 @@
 	"
 >
 	<div class="flex gap-4">
-		{#if user.isEmailVerified}
-			<Icon
-				path={mdiEmailCheckOutline}
-				class="opacity-70 fill-success"
-				title="Email validé par le membre"
-				size={20}
-			/>
+		{#if user.isHeadlessAccount}
+			<Icon path={mdiGhostOutline} class="opacity-70" size={20} />
+			<span>Pas d'email</span>
 		{:else}
-			<Icon
-				path={mdiEmailAlertOutline}
-				class="opacity-70 fill-error"
-				title="Cet email n'a pas été validé par le membre"
-				size={20}
-			/>
+			{#if user.isEmailVerified}
+				<Icon
+					path={mdiEmailCheckOutline}
+					class="opacity-70 fill-success"
+					title="Email validé par le membre"
+					size={20}
+				/>
+			{:else}
+				<Icon
+					path={mdiEmailAlertOutline}
+					class="opacity-70 fill-error"
+					title="Cet email n'a pas été validé par le membre"
+					size={20}
+				/>
+			{/if}
+			<a href="mailto:{user.email}" class="link link-hover" target="_blank">
+				{user.email}
+			</a>
 		{/if}
-		<a href="mailto:{user.email}" class="link link-hover" target="_blank">
-			{user.email}
-		</a>
 	</div>
 
 	<div class="flex gap-4">

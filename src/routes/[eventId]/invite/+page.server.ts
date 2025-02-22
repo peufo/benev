@@ -12,6 +12,7 @@ import {
 	createAvatarPlaceholder,
 	ensureLicenceMembers,
 	getMemberProfile,
+	generateEmail,
 } from '$lib/server'
 import { EmailAcceptInviteNotification } from '$lib/email'
 
@@ -26,21 +27,28 @@ export const actions = {
 		return tryOrFail(async () => {
 			const { data } = await parseFormData(request, modelInvite)
 
-			let user = await prisma.user.findUnique({
-				where: { email: data.email },
-				select: { id: true, email: true },
-			})
+			console.log({ data })
+
+			const email = data.email || (await generateEmail())
+			let user = !data.email
+				? null
+				: await prisma.user.findUnique({
+						where: { email: data.email },
+						select: { id: true, email: true },
+				  })
 			const isNewUser = !user
 			if (!user) {
 				user = await auth.createUser({
 					key: {
 						providerId: 'email',
-						providerUserId: data.email,
+						providerUserId: email,
 						password: null,
 					},
 					attributes: {
 						...data,
-						isEmailVerified: false,
+						email,
+						isHeadlessAccount: !data.email,
+						isEmailVerified: !data.email,
 						avatarPlaceholder: createAvatarPlaceholder(),
 					},
 				})
@@ -58,9 +66,14 @@ export const actions = {
 					userId: user.id,
 					eventId,
 					isValidedByEvent: true,
+					isNotifiedSubscribe: !!data.email,
+					isNotifiedLeaderOfSubscribe: !!data.email,
+					isNotifiedAdminOfNewMember: !!data.email,
 				},
 			})
 			const member = await getMemberProfile({ id })
+
+			if (member.user.isHeadlessAccount) return member
 
 			const tokenId = isNewUser
 				? await generateToken(

@@ -14,20 +14,21 @@ datasource db {
 model User {
   id String @id @unique
 
-  email           String  @unique
-  phone           String?
-  firstName       String
-  lastName        String
-  isOrganizer     Boolean @default(false)
-  isTermsAccepted Boolean @default(false)
+  email             String  @unique
+  phone             String?
+  firstName         String
+  lastName          String
+  isOrganizer       Boolean @default(false)
+  isTermsAccepted   Boolean @default(false)
+  isEmailVerified   Boolean @default(false)
+  isHeadlessAccount Boolean @default(false)
 
   birthday DateTime?
   street   String?
   zipCode  String?
   city     String?
 
-  tokens          Token[]
-  isEmailVerified Boolean @default(false)
+  tokens Token[]
 
   avatarId          String? @unique
   avatar            Media?  @relation(name: "avatar", references: [id], fields: [avatarId], onDelete: SetNull)

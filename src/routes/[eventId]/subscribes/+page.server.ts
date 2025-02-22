@@ -12,7 +12,7 @@ export const actions = {
 		if (!session) error(401)
 		return tryOrFail(async () => {
 			const { data } = await parseFormData(request, modelSubscribe)
-			const [period, memberAuthor, subscribes] = await Promise.all([
+			const [period, memberAuthor, memberInvited] = await Promise.all([
 				prisma.period.findUniqueOrThrow({
 					where: { id: data.periodId },
 					include: {
@@ -24,12 +24,15 @@ export const actions = {
 					where: { userId_eventId: { userId: session.user.id, eventId } },
 					include: { event: true, user: true },
 				}),
-				prisma.subscribe.findMany({
-					where: {
-						memberId: data.memberId,
-						state: { in: ['accepted', 'request'] },
+				prisma.member.findUniqueOrThrow({
+					where: { id: data.memberId },
+					include: {
+						user: true,
+						subscribes: {
+							where: { state: { in: ['accepted', 'request'] } },
+							include: { period: true },
+						},
 					},
-					include: { period: true },
 				}),
 			])
 
@@ -56,10 +59,9 @@ export const actions = {
 			}
 
 			// Check if member is free in this period
-			const memberPeriods = subscribes.map((sub) => sub.period)
 			const isMemberBusy = !isFreeRange(
 				period,
-				memberPeriods,
+				memberInvited.subscribes.map((sub) => sub.period),
 				memberAuthor.event.overlapPeriodAllowed * (1000 * 60)
 			)
 			if (isMemberBusy) {
@@ -67,10 +69,13 @@ export const actions = {
 				error(403, `${startMessage} déjà occupé durant cette période`)
 			}
 
+			const isAutoAccepted =
+				isLeaderOfTeam && (isSelfSubscribe || memberInvited.user.isHeadlessAccount)
+
 			const subscribe = await prisma.subscribe.create({
 				data: {
 					...data,
-					state: isLeaderOfTeam && isSelfSubscribe ? 'accepted' : 'request',
+					state: isAutoAccepted ? 'accepted' : 'request',
 					createdBy: isSelfSubscribe ? 'user' : 'leader',
 				},
 				include: {

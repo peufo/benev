@@ -39,6 +39,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 				include: {
 					member: {
 						include: {
+							user: { select: { isHeadlessAccount: true } },
 							subscribes: {
 								where: whereSubscribe,
 								include: { period: true },
@@ -57,7 +58,7 @@ const setSubscribState: (state: SubscribeState) => Action =
 
 			const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
 			const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
-			if (!isCreatorEdition && !isSubscriberEdition) error(403)
+			if (!isCreatorEdition && !isSubscriberEdition) error(403, 'Invalid edition')
 
 			// Check author permission
 			const isLeaderAction = (_subscribe.createdBy === 'leader') === isCreatorEdition
@@ -66,14 +67,14 @@ const setSubscribState: (state: SubscribeState) => Action =
 			if (isLeaderAction) {
 				author = await permission.leader(eventId, locals)
 				const isInLeaderTeams = author.leaderOf.find(({ id }) => id === _subscribe.period.teamId)
-				if (!author.roles.includes('admin') && !isInLeaderTeams) error(403)
+				if (!isInLeaderTeams) error(403, "You're not leader of this team")
 			} else {
 				author = await permission.member(eventId, locals)
 			}
 
 			const isSelfAction = author.id === _subscribe.memberId
 			if (!isLeaderAction) {
-				if (!isSelfAction) error(403)
+				if (!isSelfAction) error(403, "You can't self update subscribe status")
 				if (
 					(state === 'cancelled' || state === 'denied') &&
 					!author.event.selfSubscribeCancelAllowed
@@ -87,6 +88,10 @@ const setSubscribState: (state: SubscribeState) => Action =
 				if (maxSubscribe <= subscribes.length) {
 					error(403, 'Sorry, this period is already complet')
 				}
+			}
+
+			if (state === 'request' && _subscribe.member.user.isHeadlessAccount) {
+				state = 'accepted'
 			}
 
 			if (state === 'accepted') {

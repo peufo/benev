@@ -103,7 +103,7 @@
 		</button>
 
 		<form method="post" use:enhance={form.submit} class="flex flex-col gap-1">
-			{#each editions as [state, edit]}
+			{#each editions as [state, edit] (state)}
 				<button class="menu-item" formaction="{action}?/subscribe_{state}" on:click|stopPropagation>
 					<Icon path={edit.icon} class={edit.class} />
 					{edit.label}

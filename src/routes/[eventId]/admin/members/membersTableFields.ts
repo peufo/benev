@@ -34,7 +34,10 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 		{
 			key: 'member.user.email',
 			label: 'Email',
-			getCell: (member) => member.user.email,
+			getCell: (member) => {
+				if (member.user.isHeadlessAccount) return '-'
+				return member.user.email
+			},
 			visible: false,
 		},
 		{
