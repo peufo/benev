@@ -25,10 +25,11 @@ const subscriberEditions: Edtions = {
 	cancelled: [],
 }
 
-const setSubscribState: (state: SubscribeState) => Action =
-	(state) =>
+const setSubscribState: (_state: SubscribeState) => Action =
+	(_state) =>
 	({ locals, params: { eventId, subscribeId } }) => {
 		return tryOrFail(async () => {
+			let state = _state
 			const whereSubscribe: Prisma.SubscribeWhereInput = {
 				id: { not: subscribeId },
 				state: { in: ['accepted', 'request'] },
