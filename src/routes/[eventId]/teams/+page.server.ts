@@ -22,6 +22,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 	const isMemberSubscribeToTeam = (periods: Period[]) =>
 		!!(memberPeriodsId && periods.find((p) => memberPeriodsId.includes(p.id)))
 
+	let teamsHiddenCount = 0
 	const teams = await prisma.team
 		.findMany({
 			where: {
@@ -48,6 +49,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				if (isLeader) return true
 				if (isMemberAllowed(team.conditions, member)) return true
 				if (isMemberSubscribeToTeam(team.periods)) return true
+				teamsHiddenCount++
 				return false
 			})
 		)
@@ -67,7 +69,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			  })
 			: []
 
-	return { teams, allTeams }
+	return { teams, allTeams, teamsHiddenCount }
 }
 
 export const actions = {

@@ -23,6 +23,6 @@
 	</div>
 {:else}
 	<Placeholder>
-		<span>Pas de secteurs</span>
+		<slot name="placeholder">Pas de secteur publique</slot>
 	</Placeholder>
 {/if}

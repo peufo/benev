@@ -70,7 +70,18 @@
 		{/if}
 	</div>
 
-	<Teams teams={data.teams} on:clickPeriod={({ detail }) => handleClickPeriod(detail)} />
+	<Teams teams={data.teams} on:clickPeriod={({ detail }) => handleClickPeriod(detail)}>
+		<svelte:fragment slot="placeholder">
+			{#if !data.user && data.teamsHiddenCount}
+				<div class="grid place-content-center p-10 gap-4">
+					<p>Pas de secteur publique</p>
+					<a href="/auth?redirectTo=/{data.event.id}/teams" class="btn btn-primary"> Connexion </a>
+				</div>
+			{:else}
+				<span>Pas de secteur</span>
+			{/if}
+		</svelte:fragment>
+	</Teams>
 </div>
 
 <dialog class="modal" bind:this={subscribeDialog}>
