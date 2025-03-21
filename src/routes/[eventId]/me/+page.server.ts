@@ -33,6 +33,7 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 					where: { subscribes: { some: { memberId } } },
 					orderBy: { start: 'asc' },
 					include: {
+						tags: true,
 						subscribes: {
 							where: { memberId },
 						},

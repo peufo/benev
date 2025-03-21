@@ -11,6 +11,7 @@
 	import Progress from '$lib/Progress.svelte'
 
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server/team'
+	import { TagsList } from '$lib/tag'
 
 	export let period: PeriodWithComputedValues & { team: TeamWithComputedValues }
 	const dispatch = createEventDispatcher<{ clickPeriod: PeriodWithComputedValues }>()
@@ -47,20 +48,7 @@
 			{dayjs(period.start).format('dddd, DD.MM.YY, HH:mm —')}
 			{dayjs(period.end).format('HH:mm')}
 		</span>
-		<div class="flex gap-1">
-			{#each period.tags as tag}
-				<span
-					class="badge badge-xs"
-					style="
-					font-size: 0.6rem;
-					border-color: {tag.color};
-					background-color: {tag.color}20;
-				"
-				>
-					{tag.name}
-				</span>
-			{/each}
-		</div>
+		<TagsList tags={period.tags} />
 	</div>
 
 	<div class="flex gap-3 ml-auto">
