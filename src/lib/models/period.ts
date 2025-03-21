@@ -4,6 +4,7 @@ import type { Prisma } from '@prisma/client'
 export const modelPeriodCreate = {
 	maxSubscribe: z.number().min(1),
 	team: z.relation.connect,
+	tags: z.relations.connect,
 	start: z.date(),
 	end: z.date(),
 } satisfies ZodObj<Prisma.PeriodCreateInput>

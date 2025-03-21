@@ -1,6 +1,8 @@
 import { formAction } from 'fuma/server'
 import { modelEventUpdate } from '$lib/models'
 import { permission, prisma, uploadImages } from '$lib/server'
+import { modelTagCreate, modelTagUpdate } from '$lib/models'
+import { z } from 'fuma'
 
 export const load = async ({ params }) => ({
 	page: await prisma.page.findFirst({ where: { eventId: params.eventId, type: 'home' } }),
@@ -32,4 +34,26 @@ export const actions = {
 		},
 		{ redirectTo: '/me' }
 	),
+	tag_create: formAction(modelTagCreate, async ({ params: { eventId }, locals, data }) => {
+		await permission.leader(eventId, locals)
+		return prisma.tag.create({
+			data: {
+				...data,
+				eventId,
+			},
+		})
+	}),
+	tag_update: formAction(modelTagUpdate, async ({ params: { eventId }, locals, data }) => {
+		await permission.leader(eventId, locals)
+		return prisma.tag.update({
+			where: { id: data.id, eventId },
+			data,
+		})
+	}),
+	tag_delete: formAction({ id: z.string() }, async ({ params: { eventId }, locals, data }) => {
+		await permission.leader(eventId, locals)
+		return prisma.tag.delete({
+			where: { id: data.id, eventId },
+		})
+	}),
 }

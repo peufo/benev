@@ -17,15 +17,18 @@
 		Icon,
 		InputRelation,
 		USE_COERCE_JSON,
+		InputRelations,
 	} from 'fuma'
-	import type { Period, Team } from '@prisma/client'
+	import type { Period, Tag, Team } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { api } from '$lib/api'
 
+	type P = Partial<Period & { team: Team; tags: Tag[] }>
+
 	let klass = ''
 	export { klass as class }
-	export let period: Partial<Period & { team: Team }> | null | undefined = undefined
+	export let period: P | null | undefined = undefined
 	export let disableRedirect = false
 
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -47,9 +50,9 @@
 	const detectChange = useDetectChange(period)
 	$: if (detectChange(period)) setPeriod(period)
 
-	function useDetectChange(periodInitial: Partial<Period> | null | undefined) {
+	function useDetectChange(periodInitial: P | null | undefined) {
 		let currentPeriod = periodInitial
-		return (p: Partial<Period> | null | undefined) => {
+		return (p: P | null | undefined) => {
 			const isChange =
 				p?.id !== currentPeriod?.id ||
 				p?.maxSubscribe !== currentPeriod?.maxSubscribe ||
@@ -84,6 +87,10 @@
 		start = period?.start || defaultStart
 		end = period?.end || defaultEnd
 		maxSubscribe = period?.maxSubscribe || 1
+	}
+
+	export function updatePeriod(updater: (p: P) => P) {
+		period = updater(period || {})
 	}
 
 	async function createNextPeriod() {
@@ -129,6 +136,15 @@
 			label="Secteur"
 		/>
 	{/key}
+	<InputRelations
+		value={period?.tags}
+		key="tags"
+		search={$api.tag.search}
+		slotItem={(item) => item.name}
+		label="Étiquettes"
+		createUrl={$urlParam.with({ form_tag: 1 })}
+		createTitle="Nouvelle étiquette"
+	/>
 
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
 		<InputDate

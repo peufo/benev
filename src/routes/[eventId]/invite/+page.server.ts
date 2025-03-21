@@ -27,8 +27,6 @@ export const actions = {
 		return tryOrFail(async () => {
 			const { data } = await parseFormData(request, modelInvite)
 
-			console.log({ data })
-
 			const email = data.email || (await generateEmail())
 			let user = !data.email
 				? null

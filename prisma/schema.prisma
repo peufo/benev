@@ -156,6 +156,7 @@ model Event {
   gifts        Gift[]
   views        View[]
   medias       Media[]
+  Tag          Tag[]
 
   // Settings
   closeSubscribing           DateTime?
@@ -226,7 +227,6 @@ model Member {
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
   licence Licence?
-  tags    Tag[]
 
   /// [MemberProfile]
   profileJson Json @default("{}")
@@ -283,7 +283,6 @@ model Team {
   eventId  String
   event    Event    @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
   periods  Period[]
-  tags     Tag[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -300,6 +299,7 @@ model Period {
   teamId       String
   team         Team        @relation(references: [id], fields: [teamId], onDelete: Cascade)
   subscribes   Subscribe[]
+  tags         Tag[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 }
@@ -370,14 +370,16 @@ model Media {
 }
 
 model Tag {
-  id          String   @id @default(cuid())
-  name        String
-  description String
-  color       String
-  teams       Team[]
-  members     Member[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  color     String
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  periods   Period[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, eventId])
 }
 
 model Gift {

@@ -8,6 +8,7 @@ export const getPeriodForm = (periodIdOrJson: string | undefined) =>
 				where: { id },
 				include: {
 					team: true,
+					tags: true,
 					subscribes: {
 						include: {
 							member: {

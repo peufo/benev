@@ -12,6 +12,8 @@
 
 	export let period: _Period | null | undefined = undefined
 
+	export let periodForm: PeriodForm
+
 	export function selectMember(m: MemberWithUser) {
 		member = m
 	}
@@ -34,7 +36,7 @@
 	title="{period?.id ? 'Édition' : 'Création'} d'une période"
 	bind:transitionX={$periodDrawerTransitionX}
 >
-	<PeriodForm {period} />
+	<PeriodForm bind:this={periodForm} {period} />
 
 	{#if period?.id}
 		<div class="divider" />

@@ -2,10 +2,10 @@ import axios, { type AxiosRequestConfig, type RawAxiosResponseHeaders } from 'ax
 import { page } from '$app/stores'
 import { derived } from 'svelte/store'
 import * as devalue from 'devalue'
-import type { Member, User } from '@prisma/client'
+import type { Member, Tag, User } from '@prisma/client'
 import type { TeamWithComputedValues } from '$lib/server'
 
-interface RequestConfig<Params = any, Data = any> extends AxiosRequestConfig<Data> {
+interface RequestConfig<Params = object, Data = object> extends AxiosRequestConfig<Data> {
 	params: Params
 }
 
@@ -25,8 +25,8 @@ function ensureJson(headers: RawAxiosResponseHeaders, route: string) {
 		)
 	}
 }
-function search<T extends unknown, P = {}>(route: string) {
-	return async (search: string, params?: P & ParamsPagination) => {
+function search<T, Params>(route: string) {
+	return async (search: string, params?: Params & ParamsPagination) => {
 		const config: RequestConfig = { params: { search, ...params } }
 		const { data, headers } = await _api.get(route, config)
 		ensureJson(headers, route)
@@ -34,7 +34,7 @@ function search<T extends unknown, P = {}>(route: string) {
 	}
 }
 
-function findMany<T extends unknown, P = {}>(route: string, defaultParams?: P) {
+function findMany<T, Params>(route: string, defaultParams?: Params) {
 	return async (ids: string[], params = defaultParams) => {
 		const config: RequestConfig = { params: { ids, ...params } }
 		const { data, headers } = await _api.get(route, config)
@@ -43,15 +43,15 @@ function findMany<T extends unknown, P = {}>(route: string, defaultParams?: P) {
 	}
 }
 
-function methods<T extends unknown, P = {}>(route: string) {
+function methods<T, Params = object>(route: string) {
 	return {
-		findMany: findMany<T, P>(route),
-		search: search<T, P>(route),
+		findMany: findMany<T, Params>(route),
+		search: search<T, Params>(route),
 	}
 }
 
 export const api = derived(page, ({ params: { eventId } }) => {
-	async function get<T extends unknown>(route: string, config?: RequestConfig) {
+	async function get<T>(route: string, config?: RequestConfig) {
 		const { data, headers } = await _api.get(`/${eventId}${route}`, config)
 		ensureJson(headers, route)
 		return devalue.unflatten(data) as T
@@ -63,6 +63,7 @@ export const api = derived(page, ({ params: { eventId } }) => {
 			`/${eventId}/api/members`
 		),
 		team: methods<TeamWithComputedValues, { onlyAvailable?: boolean }>(`/${eventId}/api/teams`),
+		tag: methods<Tag>(`/${eventId}/api/tags`),
 		user: methods<User>(`/root/users`),
 	}
 })
