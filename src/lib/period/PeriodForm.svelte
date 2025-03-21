@@ -99,10 +99,14 @@
 		const duration = dayjs(end).diff(start, 'minute')
 		const form = new FormData()
 		form.append('redirectTo', $urlParam.without('form_period'))
-		form.append('team', USE_COERCE_JSON + JSON.stringify({ id: period?.teamId }))
+		form.append('team', USE_COERCE_JSON + JSON.stringify({ id: period.teamId }))
 		form.append('start', USE_COERCE_DATE + end.toJSON())
 		form.append('end', USE_COERCE_DATE + dayjs(end).add(duration, 'minute').toJSON())
 		form.append('maxSubscribe', USE_COERCE_NUMBER + maxSubscribe)
+		form.append(
+			'tags',
+			USE_COERCE_JSON + JSON.stringify(period.tags?.map((t) => ({ id: t.id })) || [])
+		)
 		const res = await axios.postForm(`${basePath}?/period_create`, form)
 		if (res.data.type === 'redirect')
 			await goto(res.data.location, { invalidateAll: true, noScroll: true })
