@@ -11,6 +11,7 @@
 	import Progress from '$lib/Progress.svelte'
 
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server/team'
+	import type { Tag } from '@prisma/client'
 
 	export let period: PeriodWithComputedValues & { team: TeamWithComputedValues }
 	const dispatch = createEventDispatcher<{ clickPeriod: PeriodWithComputedValues }>()

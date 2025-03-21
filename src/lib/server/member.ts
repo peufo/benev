@@ -96,7 +96,7 @@ export async function getMemberProfile(
 			leaderOf: {
 				include: {
 					leaders: { include: { user: true } },
-					periods: { include: { subscribes: true } },
+					periods: { include: { subscribes: true, tags: true } },
 				},
 			},
 		},

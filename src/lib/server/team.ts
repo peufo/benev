@@ -1,5 +1,5 @@
 import { getRangeOfTeam } from '$lib/plan/getRange'
-import type { Event, Member, Period, Subscribe, Team, User, Prisma } from '@prisma/client'
+import type { Event, Member, Period, Subscribe, Team, User, Prisma, Tag } from '@prisma/client'
 import { prisma } from './prisma'
 import type { MemberWithComputedValues } from './member'
 
@@ -17,7 +17,7 @@ export const safeUserSelect = {
 
 type TeamWithLeadersAndPeriodsSubscribes = Team & {
 	leaders: MemberWithUser[]
-	periods: (Period & { subscribes: Subscribe[] })[]
+	periods: (Period & { subscribes: Subscribe[]; tags: Tag[] })[]
 }
 
 export type AddTeamComputedValuesContext = {
@@ -99,6 +99,7 @@ export function useAddTeamComputedValues(
 }
 
 export type PeriodWithComputedValues = Period & {
+	tags: Tag[]
 	subscribes: Subscribe[]
 	mySubscribe?: Subscribe
 	isAvailable: boolean
@@ -155,6 +156,7 @@ export async function getTeam(teamId: string, ctx?: AddTeamComputedValuesContext
 				periods: {
 					orderBy: { start: 'asc' },
 					include: {
+						tags: true,
 						subscribes: isLeaderOfTeam
 							? {
 									include: {
