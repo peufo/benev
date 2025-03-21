@@ -12,6 +12,7 @@ export const modelPeriodCreate = {
 export const modelPeriodUpdate = {
 	...modelPeriodCreate,
 	id: z.string(),
+	tags: z.relations.set,
 	maxSubscribe: z.number().min(1).optional(),
 }
 
