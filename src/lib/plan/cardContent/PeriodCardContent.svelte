@@ -6,6 +6,7 @@
 	import type { PeriodWithSubscribesUserName } from '../types'
 	import { cardContentOptions } from './options'
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
+	import { TagsList } from '$lib/tag'
 
 	export let period: PeriodWithSubscribesUserName
 	export let deltaStartMs: number
@@ -32,6 +33,10 @@
 			end: period.end.getTime() + $magnet(deltaEndMs),
 		})}
 	</div>
+{/if}
+
+{#if $cardContentOptions.showTags}
+	<TagsList tags={period.tags} class="px-1 pb-1" />
 {/if}
 
 {#if $cardContentOptions.showSlots}

@@ -2,9 +2,11 @@
 	import type { Tag } from '@prisma/client'
 
 	export let tags: Tag[]
+	let klass = ''
+	export { klass as class }
 </script>
 
-<div class="flex gap-1">
+<div class="flex gap-1 {klass}">
 	{#each tags as tag}
 		<span
 			class="badge badge-xs"

@@ -29,6 +29,7 @@ export async function getPlanData({ url, eventId }: { url: URL; eventId: string 
 					where: wherePeriods,
 					orderBy: { start: 'asc' },
 					include: {
+						tags: true,
 						subscribes: {
 							where: {
 								state: { in: ['request', 'accepted'] },

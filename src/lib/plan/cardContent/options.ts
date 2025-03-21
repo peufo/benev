@@ -1,8 +1,8 @@
 import { page } from '$app/stores'
-import { mdiClockOutline, mdiPercent, mdiPlaylistCheck } from '@mdi/js'
+import { mdiClockOutline, mdiPercent, mdiPlaylistCheck, mdiTagMultipleOutline } from '@mdi/js'
 import { derived } from 'svelte/store'
 
-type CardContentOption = 'showProgress' | 'hideRangetime' | 'showSlots'
+type CardContentOption = 'showProgress' | 'hideRangetime' | 'showSlots' | 'showTags'
 
 export const CARD_CONTENT_OPTIONS: Record<
 	CardContentOption,
@@ -11,6 +11,7 @@ export const CARD_CONTENT_OPTIONS: Record<
 	hideRangetime: { title: 'Afficher les heures', path: mdiClockOutline, isReversed: true },
 	showProgress: { title: "Afficher l'état des inscriptions", path: mdiPercent },
 	showSlots: { title: 'Afficher les inscriptions', path: mdiPlaylistCheck },
+	showTags: { title: 'Afficher les étiquettes', path: mdiTagMultipleOutline },
 }
 
 export const cardContentOptions = derived(page, ({ url }) =>
