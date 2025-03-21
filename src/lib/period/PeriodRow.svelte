@@ -11,7 +11,6 @@
 	import Progress from '$lib/Progress.svelte'
 
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server/team'
-	import type { Tag } from '@prisma/client'
 
 	export let period: PeriodWithComputedValues & { team: TeamWithComputedValues }
 	const dispatch = createEventDispatcher<{ clickPeriod: PeriodWithComputedValues }>()
@@ -36,17 +35,33 @@
 <div
 	role="button"
 	tabindex="0"
-	class="menu-item flex-wrap"
+	class="menu-item flex-wrap gap-y-1"
 	class:disabled={period.isDisabled}
 	class:active={$urlParam.hasValue('form_period', period.id)}
 	on:click={handlePeriodClick}
 	on:keydown={handlePeriodClick}
 >
-	<span class="text-sm" class:opacity-80={period.isDisabled}>
-		<!-- {formatRange(period)} -->
-		{dayjs(period.start).format('dddd, DD.MM.YY, HH:mm —')}
-		{dayjs(period.end).format('HH:mm')}
-	</span>
+	<div class="flex gap-1 flex-wrap items-center">
+		<span class="text-sm" class:opacity-80={period.isDisabled}>
+			<!-- {formatRange(period)} -->
+			{dayjs(period.start).format('dddd, DD.MM.YY, HH:mm —')}
+			{dayjs(period.end).format('HH:mm')}
+		</span>
+		<div class="flex gap-1">
+			{#each period.tags as tag}
+				<span
+					class="badge badge-xs"
+					style="
+					font-size: 0.6rem;
+					border-color: {tag.color};
+					background-color: {tag.color}20;
+				"
+				>
+					{tag.name}
+				</span>
+			{/each}
+		</div>
+	</div>
 
 	<div class="flex gap-3 ml-auto">
 		{#if period.mySubscribe}
