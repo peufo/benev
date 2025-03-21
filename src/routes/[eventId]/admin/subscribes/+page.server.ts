@@ -10,6 +10,9 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 	return {
 		subscribes,
 		stats,
+		tags: await prisma.tag.findMany({
+			where: { eventId },
+		}),
 		views: await prisma.view.findMany({
 			where: { eventId, key: 'subscribes' },
 		}),

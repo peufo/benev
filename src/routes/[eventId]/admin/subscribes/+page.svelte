@@ -33,6 +33,7 @@
 
 	import { eventPath } from '$lib/store'
 	import { SUBSCRIBE_STATE } from '$lib/constant'
+	import { TagsList } from '$lib/tag'
 
 	export let data
 
@@ -63,6 +64,13 @@
 				</a>
 			`,
 			visible: true,
+		},
+		{
+			key: 'tags',
+			label: 'Étiquettes',
+			type: 'multiselect',
+			options: data.tags.map((t) => ({ value: t.id, label: t.name })),
+			getCell: (sub) => component(TagsList, { tags: sub.period.tags }),
 		},
 		{
 			key: 'period',

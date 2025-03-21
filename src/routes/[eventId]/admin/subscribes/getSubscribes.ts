@@ -16,6 +16,7 @@ export const subscribesFilterShape = {
 	teams: z.filter.multiselect,
 	period: z.filter.range,
 	states: z.filter.multiselect,
+	tags: z.filter.multiselect,
 	createdBy: z.enum(['leader', 'user']).optional(),
 	isAbsent: z.filter.boolean,
 } satisfies ZodObj
@@ -38,6 +39,10 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		if (start) where.push({ createdAt: { gte: start } })
 		if (end) where.push({ createdAt: { lte: end } })
 		if (order) orderBy.push({ createdAt: order })
+	}
+
+	if (query.tags) {
+		where.push({ period: { tags: { some: { id: { in: query.tags } } } } })
 	}
 
 	if (query.period) {
@@ -76,7 +81,7 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 			where: { AND: where },
 			include: {
 				period: {
-					include: { team: true },
+					include: { team: true, tags: true },
 				},
 				member: {
 					include: {
