@@ -12,7 +12,7 @@
 
 	export let event: Event & { memberFields: Field[] }
 	export let team: Partial<TeamWithLeaders> | null = null
-	export let period: Partial<Period & { subscribes: Subscribe[] }> | null = null
+	export let period: Partial<Period & { subscribes: Subscribe[]; tags: Tag[] }> = {}
 	export let tag: Partial<Tag> | null = null
 </script>
 

@@ -18,17 +18,19 @@
 		InputRelation,
 		USE_COERCE_JSON,
 		InputRelations,
+		component,
 	} from 'fuma'
 	import type { Period, Tag, Team } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { api } from '$lib/api'
+	import { TagSelectItem } from '$lib/tag'
 
 	type P = Partial<Period & { team: Team; tags: Tag[] }>
 
 	let klass = ''
 	export { klass as class }
-	export let period: P | null | undefined = undefined
+	export let period: P = {}
 	export let disableRedirect = false
 
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -50,9 +52,9 @@
 	const detectChange = useDetectChange(period)
 	$: if (detectChange(period)) setPeriod(period)
 
-	function useDetectChange(periodInitial: P | null | undefined) {
+	function useDetectChange(periodInitial: P) {
 		let currentPeriod = periodInitial
-		return (p: P | null | undefined) => {
+		return (p: P) => {
 			const isChange =
 				p?.id !== currentPeriod?.id ||
 				p?.maxSubscribe !== currentPeriod?.maxSubscribe ||
@@ -82,7 +84,7 @@
 	$: diffDay = getDiffDay(end, start)
 	$: addADay = diffDay === 0 && end.getHours() < start.getHours()
 
-	export function setPeriod(_period?: Partial<Period> | null) {
+	export function setPeriod(_period: P) {
 		period = _period
 		start = period?.start || defaultStart
 		end = period?.end || defaultEnd
@@ -129,22 +131,22 @@
 
 	{#key period}
 		<InputRelation
-			value={period?.team}
+			value={period.team}
 			key="team"
 			search={$api.team.search}
 			slotItem={(item) => item.name}
 			label="Secteur"
 		/>
+		<InputRelations
+			value={period.tags}
+			key="tags"
+			search={$api.tag.search}
+			slotItem={(tag) => component(TagSelectItem, { tag })}
+			label="Étiquettes"
+			createUrl={$urlParam.with({ form_tag: 1 })}
+			createTitle="Nouvelle étiquette"
+		/>
 	{/key}
-	<InputRelations
-		value={period?.tags}
-		key="tags"
-		search={$api.tag.search}
-		slotItem={(item) => item.name}
-		label="Étiquettes"
-		createUrl={$urlParam.with({ form_tag: 1 })}
-		createTitle="Nouvelle étiquette"
-	/>
 
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
 		<InputDate

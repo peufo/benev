@@ -11,6 +11,7 @@ export const modelUserCreate = {
 	firstName: z.string().min(2).trim(),
 	lastName: z.string().min(2).trim(),
 	isOrganizer: z.boolean().optional(),
+	isHeadlessAccount: z.boolean().default(false),
 	isTermsAccepted: z
 		.boolean()
 		.refine((v) => v === true, { message: 'Tu dois accepter les conditions' }),

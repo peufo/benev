@@ -7,8 +7,8 @@ export const GET = async ({ url, cookies, locals }) => {
 	const state = url.searchParams.get('state')
 	const code = url.searchParams.get('code')
 
-	if (!storedState || !state || !code) error(400);
-	if (storedState !== state) error(400);
+	if (!storedState || !state || !code) error(400)
+	if (storedState !== state) error(400)
 
 	try {
 		const { getExistingUser, googleUser, createUser } = await googleAuth.validateCallback(code)
@@ -27,6 +27,7 @@ export const GET = async ({ url, cookies, locals }) => {
 					firstName: googleUser.name.split(' ')[0],
 					lastName: googleUser.family_name,
 					avatarPlaceholder: googleUser.picture,
+					isHeadlessAccount: false,
 					email,
 					isEmailVerified: !!googleUser.email_verified,
 				},
@@ -47,8 +48,8 @@ export const GET = async ({ url, cookies, locals }) => {
 	} catch (e) {
 		if (e instanceof OAuthRequestError) {
 			// invalid code
-			error(400);
+			error(400)
 		}
-		error(500);
+		error(500)
 	}
 }

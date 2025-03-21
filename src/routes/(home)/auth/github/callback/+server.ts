@@ -7,8 +7,8 @@ export const GET = async ({ url, cookies, locals }) => {
 	const state = url.searchParams.get('state')
 	const code = url.searchParams.get('code')
 
-	if (!storedState || !state || !code) error(400);
-	if (storedState !== state) error(400);
+	if (!storedState || !state || !code) error(400)
+	if (storedState !== state) error(400)
 
 	try {
 		const { getExistingUser, githubUser, createUser } = await githubAuth.validateCallback(code)
@@ -28,6 +28,7 @@ export const GET = async ({ url, cookies, locals }) => {
 				attributes: {
 					firstName,
 					lastName,
+					isHeadlessAccount: false,
 					avatarPlaceholder: githubUser.avatar_url,
 					email,
 					isEmailVerified: !!githubUser.email,
@@ -49,8 +50,8 @@ export const GET = async ({ url, cookies, locals }) => {
 	} catch (e) {
 		if (e instanceof OAuthRequestError) {
 			// invalid code
-			error(400);
+			error(400)
 		}
-		error(500);
+		error(500)
 	}
 }

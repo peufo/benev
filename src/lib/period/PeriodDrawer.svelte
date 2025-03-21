@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { Drawer } from 'fuma'
 	import PeriodForm from './PeriodForm.svelte'
-	import type { Member, Period, Subscribe, User } from '@prisma/client'
+	import type { Member, Period, Subscribe, Tag, User } from '@prisma/client'
 	import { periodDrawerTransitionX } from '$lib/store'
 	import { SubscribeInviteForm } from '$lib/subscribe'
 	import PeriodSubscribes from './PeriodSubscribes.svelte'
 	import Progress from '$lib/Progress.svelte'
 
-	type _Period = Partial<Period & { subscribes: Subscribe[] }>
+	type _Period = Partial<Period & { subscribes: Subscribe[]; tags: Tag[] }>
 	type MemberWithUser = Member & { user: User }
 
-	export let period: _Period | null | undefined = undefined
+	export let period: _Period = {}
 
 	export let periodForm: PeriodForm
 
