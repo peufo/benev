@@ -26,6 +26,12 @@
 	/>
 </Drawer>
 
+<Drawer key="form_team" title="{team ? 'Modifier le' : 'Nouveau'} secteur" let:close>
+	<TeamForm bind:teamForm team={team || {}} {event} on:success={() => close()} />
+</Drawer>
+
+<PeriodDrawer bind:this={periodDrawer} bind:periodForm {period} />
+
 <Drawer
 	key="form_tag"
 	title="{tag?.id ? "Modifier l'" : 'Nouvelle '} étiquette"
@@ -33,15 +39,12 @@
 	let:close
 >
 	<TagForm
+		tag={tag || {}}
 		on:created={async ({ detail: tag }) => {
 			await close({ replaceState: true })
 			periodForm.updatePeriod((p) => ({ ...p, tags: [...(p.tags || []), tag] }))
 		}}
+		on:updated={() => close()}
+		on:deleted={() => close()}
 	/>
 </Drawer>
-
-<Drawer key="form_team" title="{team ? 'Modifier le' : 'Nouveau'} secteur" let:close>
-	<TeamForm bind:teamForm team={team || {}} {event} on:success={() => close()} />
-</Drawer>
-
-<PeriodDrawer bind:this={periodDrawer} bind:periodForm {period} />

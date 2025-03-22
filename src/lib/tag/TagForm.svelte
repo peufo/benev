@@ -27,7 +27,11 @@
 	model={modelTagCreate}
 	data={tag}
 	options={{
-		successMessage: tag.id ? 'Étiquette modifiée' : 'Étiquette crée',
+		successMessage: (url) => {
+			if (!tag.id) return 'Étiquette crée'
+			if (url.searchParams.get('/tag_update') !== null) return 'Étiquette modifiée'
+			return 'Étiquette supprimée'
+		},
 		successUpdate: false,
 	}}
 	on:created

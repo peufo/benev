@@ -145,9 +145,10 @@
 			value={period.tags}
 			key="tags"
 			search={$api.tag.search}
-			slotItem={(tag) => component(TagSelectItem, { tag })}
+			slotItem={(tag) => component(TagSelectItem, { tag, is_editable: true })}
+			slotSuggestion={(tag) => component(TagSelectItem, { tag })}
 			label="Étiquettes"
-			createUrl={$urlParam.with({ form_tag: 1 })}
+			createUrl={$urlParam.with({ form_tag: '{}' })}
 			createTitle="Nouvelle étiquette"
 		/>
 	{/key}
