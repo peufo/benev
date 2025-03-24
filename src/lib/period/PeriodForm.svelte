@@ -74,7 +74,8 @@
 
 	$: console.log({ start, end })
 
-	function getAbsoluteDay(date: Date): number {
+	function getAbsoluteDay(date?: Date): number {
+		if (!date) return 0
 		const minutes = date.getTime() / (1000 * 60)
 		return Math.floor((minutes - date.getTimezoneOffset()) / (60 * 24))
 	}
