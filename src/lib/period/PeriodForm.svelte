@@ -72,6 +72,8 @@
 	let end = period?.end || defaultEnd
 	let maxSubscribe = period?.maxSubscribe || 1
 
+	$: console.log({ start, end })
+
 	function getAbsoluteDay(date: Date): number {
 		const minutes = date.getTime() / (1000 * 60)
 		return Math.floor((minutes - date.getTimezoneOffset()) / (60 * 24))
