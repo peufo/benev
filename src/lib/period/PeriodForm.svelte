@@ -68,24 +68,22 @@
 	let defaultStart = dayjs(period?.start).startOf('hour').add(1, 'hour').toDate()
 	let defaultEnd = dayjs(period?.end).startOf('hour').add(3, 'hours').toDate()
 
-	let start = period?.start || defaultStart
+	let start: Date | null = period?.start || defaultStart
 	let end = period?.end || defaultEnd
 	let maxSubscribe = period?.maxSubscribe || 1
 
-	$: console.log({ start, end })
-
-	function getAbsoluteDay(date?: Date): number {
-		if (!date) return 0
+	function getAbsoluteDay(date: Date): number {
 		const minutes = date.getTime() / (1000 * 60)
 		return Math.floor((minutes - date.getTimezoneOffset()) / (60 * 24))
 	}
-	function getDiffDay(d1: Date, d2: Date): number {
+	function getDiffDay(d1: Date, d2: Date | null): number {
+		if (!d2) return 0
 		return getAbsoluteDay(d1) - getAbsoluteDay(d2)
 	}
 
 	$: basePath = `${$eventPath}/admin`
 	$: diffDay = getDiffDay(end, start)
-	$: addADay = diffDay === 0 && end.getHours() < start.getHours()
+	$: addADay = diffDay === 0 && end.getHours() < (start?.getHours() || 0)
 
 	export function setPeriod(_period: P) {
 		period = _period
@@ -128,8 +126,9 @@
 	{#if period?.id}
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
-
-	<input type="hidden" name="start" value="{USE_COERCE_DATE}{start.toJSON()}" />
+	{#if start}
+		<input type="hidden" name="start" value="{USE_COERCE_DATE}{start.toJSON()}" />
+	{/if}
 	<input
 		type="hidden"
 		name="end"
@@ -161,6 +160,7 @@
 			label="Date"
 			bind:value={start}
 			on:input={() => {
+				if (!start) return
 				const _end = new Date(start)
 				_end.setHours(end.getHours(), end.getMinutes())
 				end = _end
@@ -174,7 +174,7 @@
 			input={{ min: 1, step: 1 }}
 		/>
 
-		<InputTime label="Début" bind:value={start} />
+		<InputTime label="Début" bind:value={start} getDefaultDate={() => defaultStart} />
 		<InputTime
 			label="Fin"
 			bind:value={end}
