@@ -19,6 +19,8 @@ export const subscribesFilterShape = {
 	tags: z.filter.multiselect,
 	createdBy: z.enum(['leader', 'user']).optional(),
 	isAbsent: z.filter.boolean,
+	isValidedByEvent: z.filter.boolean,
+	isValidedByUser: z.filter.boolean,
 } satisfies ZodObj
 
 export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
@@ -75,6 +77,10 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 
 	if (query.createdBy) where.push({ createdBy: query.createdBy })
 	if (query.isAbsent !== undefined) where.push({ isAbsent: query.isAbsent })
+	if (query.isValidedByEvent !== undefined)
+		where.push({ member: { isValidedByEvent: query.isValidedByEvent } })
+	if (query.isValidedByUser !== undefined)
+		where.push({ member: { isValidedByUser: query.isValidedByUser } })
 
 	const subscribes = await prisma.subscribe
 		.findMany({

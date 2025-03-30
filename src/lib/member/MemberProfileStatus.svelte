@@ -7,14 +7,14 @@
 </script>
 
 {#if member.isValidedByUser}
-	<div class="badge badge-success" use:tip={{ content: 'Le membre a approuvé sa participation' }}>
+	<div class="badge badge-success" use:tip={{ content: 'Le membre a validé sa participation' }}>
 		<Icon path={mdiCheck} class="opacity-80 -translate-x-1" size={20} />
 		Actif
 	</div>
 {:else}
 	<div
 		class="badge badge-warning"
-		use:tip={{ content: `Le membre n'a pas approuvé sa participation` }}
+		use:tip={{ content: `Le membre n'a pas validé sa participation` }}
 	>
 		<Icon path={mdiAlertCircleOutline} class="opacity-80 -translate-x-1" size={20} />
 		Inactif

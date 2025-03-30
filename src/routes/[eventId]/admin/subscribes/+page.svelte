@@ -106,6 +106,20 @@
 			getCell: ({ isAbsent }) => component(SubscribeIsAbsent, { isAbsent }),
 		},
 		{
+			key: 'isValidedByEvent',
+			label: 'Membre approuvé',
+			type: 'boolean',
+			getCell: (sub) => sub.member.isValidedByEvent,
+			hint: "Un responsable à confirmé l'inscription du membre",
+		},
+		{
+			key: 'isValidedByUser',
+			label: 'Membre actif',
+			type: 'boolean',
+			getCell: (sub) => sub.member.isValidedByUser,
+			hint: `Le membre à confirmé sa participation à l'évenement`,
+		},
+		{
 			key: 'states',
 			label: 'Statut',
 			type: 'multiselect',

@@ -54,13 +54,13 @@
 								<Icon
 									path={mdiCheck}
 									class="fill-success"
-									title="Participation approuvé par l'organisation"
+									title="Membre approuvé par l'organisation"
 								/>
 							{:else}
 								<Icon
 									path={mdiClose}
 									class="fill-error"
-									title="Participation désapprouvé par l'organisation"
+									title="Membre non approuvé par l'organisation"
 								/>
 							{/if}
 						</button>
