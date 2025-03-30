@@ -2,7 +2,13 @@
 	import { DropDown, Icon, Card } from 'fuma'
 
 	import { eventPath } from '$lib/store'
-	import { mdiArrowLeft, mdiClipboardTextOutline, mdiTrashCanOutline } from '@mdi/js'
+	import {
+		mdiArrowLeft,
+		mdiCheck,
+		mdiClipboardTextOutline,
+		mdiClose,
+		mdiTrashCanOutline,
+	} from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
@@ -44,11 +50,18 @@
 					<DropDown hideOnBlur tippyProps={{ arrow: true }}>
 						<button slot="activator" class="btn btn-sm ml-2">
 							<MemberRole roles={data.memberProfile.roles} mode="contents" />
-							{#if !data.memberProfile.roles.includes('leader') && data.memberProfile.isValidedByEvent}
-								approuvé
-							{/if}
-							{#if data.memberProfile.user.isHeadlessAccount}
-								sans compte
+							{#if data.memberProfile.isValidedByEvent}
+								<Icon
+									path={mdiCheck}
+									class="fill-success"
+									title="Participation approuvé par l'organisation"
+								/>
+							{:else}
+								<Icon
+									path={mdiClose}
+									class="fill-error"
+									title="Participation désapprouvé par l'organisation"
+								/>
 							{/if}
 						</button>
 

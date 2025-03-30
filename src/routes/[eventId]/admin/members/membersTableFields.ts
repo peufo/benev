@@ -144,14 +144,14 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 		},
 		{
 			key: 'isValidedByEvent',
-			label: 'Validé par un responsable',
+			label: 'Approuvé par un responsable',
 			type: 'boolean',
 			getCell: (m) => m.isValidedByEvent,
 			hint: "Un responsable à confirmé l'inscription du membre",
 		},
 		{
 			key: 'isValidedByUser',
-			label: 'Validé par le membre',
+			label: 'Approuvé par le membre',
 			type: 'boolean',
 			getCell: (m) => m.isValidedByUser,
 			hint: 'Le membre à confirmé son invitation',
