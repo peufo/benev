@@ -33,7 +33,7 @@
 >
 	<div class="h-2 rounded w-full relative overflow-hidden bg-base-300 {progressClass}">
 		<div
-			class="h-2 bg-blue-400 absolute rounded-r"
+			class="h-2 bg-error absolute rounded-r"
 			style:width="{100 * ((accepted + request) / period.maxSubscribe)}%"
 		/>
 		<div

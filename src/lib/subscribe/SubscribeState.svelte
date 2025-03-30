@@ -22,7 +22,7 @@
 {#if subscribe.state === 'request' && subscribe.createdBy === 'leader' && !subscribe.member.isValidedByUser}
 	<Icon
 		path={mdiAlertOctagonOutline}
-		class="fill-blue-400 {klass}"
+		class="fill-error {klass}"
 		title="Le membre n'a pas encore approuvé sa participation à l'événement"
 		tippyProps={{ appendTo: 'parent' }}
 	/>
