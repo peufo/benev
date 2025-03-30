@@ -23,7 +23,7 @@
 	<Icon
 		path={mdiAlertOctagonOutline}
 		class="fill-error {klass}"
-		title="Le membre n'a pas encore approuvé sa participation à l'événement"
+		title="En attente de validation du membre (inactif)"
 		tippyProps={{ appendTo: 'parent' }}
 	/>
 {:else if subscribe.state === 'request'}
