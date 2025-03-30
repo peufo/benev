@@ -36,6 +36,13 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 						tags: true,
 						subscribes: {
 							where: { memberId },
+							include: {
+								member: {
+									select: {
+										isValidedByUser: true,
+									},
+								},
+							},
 						},
 					},
 				},

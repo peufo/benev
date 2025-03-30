@@ -6,7 +6,7 @@
 	import { Icon, tip } from 'fuma'
 	import { Avatar } from '$lib/me'
 
-	export let subscribes: (Subscribe & { member?: { user: User } })[]
+	export let subscribes: (Subscribe & { member: { user?: User; isValidedByUser: boolean } })[]
 </script>
 
 <div class="flex flex-col gap-1">
@@ -18,7 +18,7 @@
 				</div>
 			{/if}
 
-			{#if subscribe.member}
+			{#if subscribe.member.user}
 				<a
 					class="whitespace-nowrap grow flex gap-2 items-center pr-2 h-8 rounded hover:bg-base-200 bg-base-200/40 border"
 					title="Voir les infos de {subscribe.member.user.firstName}"

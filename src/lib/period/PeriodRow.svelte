@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
-	import { Icon, formatRange, urlParam } from 'fuma'
+	import { Icon, urlParam } from 'fuma'
 	import { mdiClipboardTextOutline } from '@mdi/js'
 	import { goto } from '$app/navigation'
 	import dayjs from 'dayjs'

@@ -10,7 +10,7 @@
 
 	let klass = ''
 	export { klass as class }
-	export let subscribe: Subscribe
+	export let subscribe: Subscribe & { member: { isValidedByUser: boolean } }
 
 	$: changeAuthor =
 		(subscribe.createdBy === 'user') ===
@@ -19,7 +19,14 @@
 			: 'par un responsable'
 </script>
 
-{#if subscribe.state === 'request'}
+{#if subscribe.state === 'request' && subscribe.createdBy === 'leader' && !subscribe.member.isValidedByUser}
+	<Icon
+		path={mdiAlertOctagonOutline}
+		class="fill-blue-400 {klass}"
+		title="Le membre n'a pas encore approuvé sa participation à l'événement"
+		tippyProps={{ appendTo: 'parent' }}
+	/>
+{:else if subscribe.state === 'request'}
 	<Icon
 		path={mdiAlertOctagonOutline}
 		class="fill-warning {klass}"

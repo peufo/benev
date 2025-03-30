@@ -20,6 +20,11 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 		const event = await prisma.event.findUniqueOrThrow({
 			where: { id: eventId, deletedAt: null },
 			include: {
+				owner: {
+					select: {
+						firstName: true,
+					},
+				},
 				memberFields: {
 					where: isLeader ? {} : { memberCanRead: true },
 					orderBy: { position: 'asc' },

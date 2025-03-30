@@ -4,7 +4,10 @@
 	import { Icon } from 'fuma'
 	import { mdiSlashForward } from '@mdi/js'
 
-	export let period: { maxSubscribe: number; subscribes: Subscribe[] }
+	export let period: {
+		maxSubscribe: number
+		subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
+	}
 
 	let klass = ''
 	export { klass as class }
@@ -14,6 +17,9 @@
 
 	$: accepted = period.subscribes.filter((sub) => sub.state === 'accepted').length
 	$: request = period.subscribes.filter((sub) => sub.state === 'request').length
+	$: requestWaitUser = period.subscribes.filter(
+		(sub) => sub.state === 'request' && sub.member.isValidedByUser
+	).length
 	$: isComplet = accepted + request >= period.maxSubscribe
 
 	const plurial = (n: number) => (n > 1 ? 's' : '')
@@ -27,8 +33,12 @@
 >
 	<div class="h-2 rounded w-full relative overflow-hidden bg-base-300 {progressClass}">
 		<div
-			class="h-2 bg-warning absolute rounded-r"
+			class="h-2 bg-blue-400 absolute rounded-r"
 			style:width="{100 * ((accepted + request) / period.maxSubscribe)}%"
+		/>
+		<div
+			class="h-2 bg-warning absolute rounded-r"
+			style:width="{100 * ((accepted + requestWaitUser) / period.maxSubscribe)}%"
 		/>
 		<div
 			class="h-2 bg-success absolute rounded-r"

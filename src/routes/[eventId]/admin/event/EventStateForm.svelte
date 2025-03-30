@@ -11,9 +11,10 @@
 	import { useNotify } from '$lib/notify'
 	import { goto } from '$app/navigation'
 
-	export let event: Event
+	export let event: Event & { owner: { firstName: string } }
 	export let eventCounts: PageData['eventCounts']
 	export let eventLicenceAvailable: boolean
+	export let isOwner: boolean
 
 	$: nextStates = getNextStates(eventLicenceAvailable)
 	function getNextStates(
@@ -120,24 +121,31 @@
 		</p>
 	</div>
 
-	<div class="flex gap-2 justify-end grow">
-		{#each nextStates[event.state] as { state, label }}
-			{@const form = useForm()}
-			<form
-				use:enhance={form.submit}
-				action="{$eventPath}/admin/event?/set_state_event"
-				method="post"
-				class="contents"
-			>
-				<input type="hidden" name="state" value={state} />
-				<button
-					class="btn btn-sm btn-primary"
-					on:click={(e) => handleClickState(e, state)}
-					on:keydown={(e) => handleClickState(e, state)}
+	{#if event.state == 'draft' && !isOwner}
+		<p class="badge badge-warning gap-1">
+			<b>{event.owner.firstName}</b>
+			doit activer l'évènement.
+		</p>
+	{:else}
+		<div class="flex gap-2 justify-end grow items-center">
+			{#each nextStates[event.state] as { state, label }}
+				{@const form = useForm()}
+				<form
+					use:enhance={form.submit}
+					action="{$eventPath}/admin/event?/set_state_event"
+					method="post"
+					class="contents"
 				>
-					{label}
-				</button>
-			</form>
-		{/each}
-	</div>
+					<input type="hidden" name="state" value={state} />
+					<button
+						class="btn btn-sm btn-primary"
+						on:click={(e) => handleClickState(e, state)}
+						on:keydown={(e) => handleClickState(e, state)}
+					>
+						{label}
+					</button>
+				</form>
+			{/each}
+		</div>
+	{/if}
 </div>

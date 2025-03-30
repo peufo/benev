@@ -37,7 +37,19 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 						},
 					},
 				},
-				periods: { include: { subscribes: true, tags: true }, orderBy: { start: 'asc' } },
+				periods: {
+					include: {
+						subscribes: {
+							include: {
+								member: {
+									select: { isValidedByUser: true },
+								},
+							},
+						},
+						tags: true,
+					},
+					orderBy: { start: 'asc' },
+				},
 			},
 			orderBy: {
 				position: 'asc',

@@ -31,7 +31,20 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 				name: { contains: search },
 			},
 			include: {
-				periods: { include: { subscribes: true, tags: true } },
+				periods: {
+					include: {
+						subscribes: {
+							include: {
+								member: {
+									select: {
+										isValidedByUser: true,
+									},
+								},
+							},
+						},
+						tags: true,
+					},
+				},
 				leaders: {
 					include: {
 						user: { select: safeUserSelect },

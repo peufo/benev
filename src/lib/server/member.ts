@@ -96,7 +96,18 @@ export async function getMemberProfile(
 			leaderOf: {
 				include: {
 					leaders: { include: { user: true } },
-					periods: { include: { subscribes: true, tags: true } },
+					periods: {
+						include: {
+							subscribes: {
+								include: {
+									member: {
+										select: { isValidedByUser: true },
+									},
+								},
+							},
+							tags: true,
+						},
+					},
 				},
 			},
 		},

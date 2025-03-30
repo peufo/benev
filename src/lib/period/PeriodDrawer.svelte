@@ -7,7 +7,9 @@
 	import PeriodSubscribes from './PeriodSubscribes.svelte'
 	import Progress from '$lib/Progress.svelte'
 
-	type _Period = Partial<Period & { subscribes: Subscribe[]; tags: Tag[] }>
+	type _Period = Partial<
+		Period & { subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]; tags: Tag[] }
+	>
 	type MemberWithUser = Member & { user: User }
 
 	export let period: _Period = {}

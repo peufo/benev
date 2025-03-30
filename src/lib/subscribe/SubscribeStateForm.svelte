@@ -39,7 +39,7 @@
 	} from '@mdi/js'
 	import { page } from '$app/stores'
 
-	export let subscribe: Subscribe
+	export let subscribe: Subscribe & { member: { isValidedByUser: boolean } }
 	export let eventId = $page.params.eventId
 	export let action = `/${eventId}/subscribes/${subscribe.id}`
 	export let isLeader = false

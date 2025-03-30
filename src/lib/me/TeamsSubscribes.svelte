@@ -12,7 +12,10 @@
 
 	export let teams: (Team & {
 		leaders: MemberWithUser[]
-		periods: (Period & { subscribes: Subscribe[]; tags: Tag[] })[]
+		periods: (Period & {
+			subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
+			tags: Tag[]
+		})[]
 	})[]
 	export let isLeader = false
 </script>

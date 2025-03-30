@@ -17,7 +17,10 @@ export const safeUserSelect = {
 
 type TeamWithLeadersAndPeriodsSubscribes = Team & {
 	leaders: MemberWithUser[]
-	periods: (Period & { subscribes: Subscribe[]; tags: Tag[] })[]
+	periods: (Period & {
+		subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
+		tags: Tag[]
+	})[]
 }
 
 export type AddTeamComputedValuesContext = {
@@ -81,9 +84,9 @@ export function useAddTeamComputedValues(
 				let isDisabled = true
 				if (team.isLeader) isDisabled = false
 
-				if (isAvailable && event!.selfSubscribeAllowed && !team.isClosedSubscribing) {
+				if (isAvailable && event?.selfSubscribeAllowed && !team.isClosedSubscribing) {
 					if (ctx?.member?.id) isDisabled = false
-					else if (event!.selfRegisterAllowed) isDisabled = false
+					else if (event?.selfRegisterAllowed) isDisabled = false
 				}
 
 				return {
@@ -101,7 +104,7 @@ export function useAddTeamComputedValues(
 export type PeriodWithComputedValues = Period & {
 	tags: Tag[]
 	subscribes: Subscribe[]
-	mySubscribe?: Subscribe
+	mySubscribe?: Subscribe & { member: { isValidedByUser: boolean } }
 	isAvailable: boolean
 	isComplete: boolean
 	isDisabled: boolean
@@ -164,10 +167,22 @@ export async function getTeam(teamId: string, ctx?: AddTeamComputedValuesContext
 											include: {
 												user: { select: safeUserSelect },
 											},
+											select: {
+												user: true,
+												isValidedByUser: true,
+											},
 										},
 									},
 							  }
-							: true,
+							: {
+									include: {
+										member: {
+											select: {
+												isValidedByUser: true,
+											},
+										},
+									},
+							  },
 					},
 				},
 			},

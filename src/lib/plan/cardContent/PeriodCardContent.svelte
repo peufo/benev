@@ -53,7 +53,9 @@
 					size={15}
 					class="opacity-70 translate-x-1 {subscribe.state === 'accepted'
 						? 'fill-success'
-						: 'fill-warning'}"
+						: subscribe.member.isValidedByUser
+						? 'fill-warning'
+						: 'fill-blue-400'}"
 				/>
 			</li>
 		{/each}
