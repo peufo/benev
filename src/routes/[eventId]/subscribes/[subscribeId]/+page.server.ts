@@ -57,8 +57,12 @@ const setSubscribState: (_state: SubscribeState) => Action =
 				},
 			})
 
-			const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
 			const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
+			const isCreatorEdition =
+				creatorEditions[_subscribe.state].includes(state) ||
+				(_subscribe.createdBy === 'leader' &&
+					!_subscribe.member.isValidedByUser &&
+					isSubscriberEdition)
 			if (!isCreatorEdition && !isSubscriberEdition) error(403, 'Invalid edition')
 
 			// Check author permission

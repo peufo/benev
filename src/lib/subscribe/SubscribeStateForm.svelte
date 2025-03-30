@@ -38,6 +38,7 @@
 		mdiAlertOctagonOutline,
 	} from '@mdi/js'
 	import { page } from '$app/stores'
+	import { toast } from 'svelte-sonner'
 
 	export let subscribe: Subscribe & { member: { isValidedByUser: boolean } }
 	export let eventId = $page.params.eventId
@@ -53,6 +54,9 @@
 		successMessage: 'Status changé',
 		successReset: false,
 		onSuccess: () => dispatch('success'),
+		onFail: (failure) => {
+			if (failure?.message) toast.error(failure.message)
+		},
 	})
 	let creatorStates: Partial<States> = {}
 	let subscriberStates: Partial<States> = {}
@@ -69,15 +73,20 @@
 	$: isSubscriber =
 		(isSelf && subscribe.createdBy === 'leader') || (isLeader && subscribe.createdBy === 'user')
 	$: isSelfCancelAllowed = $page.data.event?.selfSubscribeCancelAllowed || isLeader
+	$: isConfirmation = !isCreator && subscribe.state === 'request'
+	$: isConfirmationForced =
+		isLeader && isCreator && subscribe.state === 'request' && !subscribe.member.isValidedByUser
 	$: editions = Object.entries({
 		...(isCreator && creatorStates),
 		...(isSubscriber && subscriberStates),
+		...(isConfirmationForced && {
+			accepted: { ...states.accepted, label: 'Confirmer au nom du membre' },
+		}),
 	}).filter(
 		([state]) =>
 			state !== subscribe.state &&
 			((state !== 'cancelled' && state !== 'denied') || isSelfCancelAllowed)
 	)
-	$: isConfirmation = !isCreator && subscribe.state === 'request'
 </script>
 
 {#if !editions.length}
