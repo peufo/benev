@@ -60,7 +60,7 @@
 				<Icon path={mdiPencilOutline} title="Modifier l'ordre des secteur" />
 			</a>
 			<a
-				href={$urlParam.with({ form_team: 1 })}
+				href={$urlParam.with({ form_team: '{}' })}
 				class="btn btn-sm btn-square"
 				data-sveltekit-noscroll
 				data-sveltekit-replacestate

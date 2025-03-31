@@ -15,6 +15,7 @@
 	export let period: Partial<
 		Period & { subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]; tags: Tag[] }
 	> = {}
+
 	export let tag: Partial<Tag> | null = null
 </script>
 
@@ -28,7 +29,7 @@
 	/>
 </Drawer>
 
-<Drawer key="form_team" title="{team ? 'Modifier le' : 'Nouveau'} secteur" let:close>
+<Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur" let:close>
 	<TeamForm bind:teamForm team={team || {}} {event} on:success={() => close()} />
 </Drawer>
 

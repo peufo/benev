@@ -167,10 +167,6 @@ export async function getTeam(teamId: string, ctx?: AddTeamComputedValuesContext
 											include: {
 												user: { select: safeUserSelect },
 											},
-											select: {
-												user: true,
-												isValidedByUser: true,
-											},
 										},
 									},
 							  }
@@ -188,6 +184,5 @@ export async function getTeam(teamId: string, ctx?: AddTeamComputedValuesContext
 			},
 		})
 		.then(useAddTeamComputedValues(ctx))
-
 	return team
 }
