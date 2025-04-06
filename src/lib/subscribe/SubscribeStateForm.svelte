@@ -74,13 +74,12 @@
 		(isSelf && subscribe.createdBy === 'leader') || (isLeader && subscribe.createdBy === 'user')
 	$: isSelfCancelAllowed = $page.data.event?.selfSubscribeCancelAllowed || isLeader
 	$: isConfirmation = !isCreator && subscribe.state === 'request'
-	$: isConfirmationForced =
-		isLeader && isCreator && subscribe.state === 'request' && !subscribe.member.isValidedByUser
+	$: isConfirmationForced = isLeader && isCreator && subscribe.state === 'request'
 	$: editions = Object.entries({
 		...(isCreator && creatorStates),
 		...(isSubscriber && subscriberStates),
 		...(isConfirmationForced && {
-			accepted: { ...states.accepted, label: 'Confirmer au nom du membre' },
+			accepted: { ...states.accepted, label: 'Confirmer au nom du membre', class: 'fill-blue-500' },
 		}),
 	}).filter(
 		([state]) =>

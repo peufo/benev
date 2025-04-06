@@ -52,7 +52,9 @@
 					path={subscribe.state === 'accepted' ? mdiCheck : mdiAlertOctagonOutline}
 					size={15}
 					class="opacity-70 translate-x-1 {subscribe.state === 'accepted'
-						? 'fill-success'
+						? subscribe.isForcedValidation
+							? 'fill-blue-500'
+							: 'fill-success'
 						: subscribe.member.isValidedByUser
 						? 'fill-warning'
 						: 'fill-error'}"

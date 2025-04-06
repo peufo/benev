@@ -15,7 +15,10 @@
 	export let badgeClass = ''
 	export let progressClass = ''
 
-	$: accepted = period.subscribes.filter((sub) => sub.state === 'accepted').length
+	$: accepted = period.subscribes.filter(
+		(sub) => sub.state === 'accepted' && !sub.isForcedValidation
+	).length
+	$: acceptedForced = period.subscribes.filter((sub) => sub.state === 'accepted').length
 	$: request = period.subscribes.filter((sub) => sub.state === 'request').length
 	$: requestWaitUser = period.subscribes.filter(
 		(sub) => sub.state === 'request' && sub.member.isValidedByUser
@@ -39,6 +42,10 @@
 		<div
 			class="h-2 bg-warning absolute rounded-r"
 			style:width="{100 * ((accepted + requestWaitUser) / period.maxSubscribe)}%"
+		/>
+		<div
+			class="h-2 bg-blue-500 absolute rounded-r"
+			style:width="{100 * (acceptedForced / period.maxSubscribe)}%"
 		/>
 		<div
 			class="h-2 bg-success absolute rounded-r"

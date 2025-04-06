@@ -307,8 +307,9 @@ model Period {
 model Subscribe {
   id String @id @default(cuid())
 
-  state     SubscribeState     @default(request)
-  createdBy SubscribeCreatedBy @default(user)
+  state              SubscribeState     @default(request)
+  createdBy          SubscribeCreatedBy @default(user)
+  isForcedValidation Boolean            @default(false)
 
   periodId String
   period   Period @relation(references: [id], fields: [periodId], onDelete: Cascade)

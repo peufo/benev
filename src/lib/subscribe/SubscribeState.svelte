@@ -35,6 +35,13 @@
 			: `du membre`}"
 		tippyProps={{ appendTo: 'parent' }}
 	/>
+{:else if subscribe.state === 'accepted' && subscribe.isForcedValidation}
+	<Icon
+		path={mdiCheck}
+		class="fill-blue-500 {klass}"
+		title="Inscription confirmée par un responsable au nom du membre"
+		tippyProps={{ appendTo: 'parent' }}
+	/>
 {:else if subscribe.state === 'accepted'}
 	<Icon
 		path={mdiCheck}

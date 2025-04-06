@@ -30,6 +30,7 @@ const setSubscribState: (_state: SubscribeState) => Action =
 	({ locals, params: { eventId, subscribeId } }) => {
 		return tryOrFail(async () => {
 			let state = _state
+
 			const whereSubscribe: Prisma.SubscribeWhereInput = {
 				id: { not: subscribeId },
 				state: { in: ['accepted', 'request'] },
@@ -58,34 +59,30 @@ const setSubscribState: (_state: SubscribeState) => Action =
 			})
 
 			const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
-			const isCreatorEdition =
-				creatorEditions[_subscribe.state].includes(state) ||
-				(_subscribe.createdBy === 'leader' &&
-					!_subscribe.member.isValidedByUser &&
-					isSubscriberEdition)
+			const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
 			if (!isCreatorEdition && !isSubscriberEdition) error(403, 'Invalid edition')
 
 			// Check author permission
-			const isLeaderAction = (_subscribe.createdBy === 'leader') === isCreatorEdition
-
-			let author: MemberWithComputedValues | null
+			let author = await permission.member(eventId, locals)
+			const isSelfAction = author.id === _subscribe.memberId
+			let isForcedValidation =
+				state == 'accepted' && !isSelfAction && _subscribe.createdBy === 'leader'
+			const isLeaderAction =
+				isForcedValidation || (_subscribe.createdBy === 'leader') === isCreatorEdition
 			if (isLeaderAction) {
 				author = await permission.leader(eventId, locals)
 				const isInLeaderTeams = author.leaderOf.find(({ id }) => id === _subscribe.period.teamId)
 				if (!author.roles.includes('admin') && !isInLeaderTeams)
 					error(403, "You're not leader of this team")
-			} else {
-				author = await permission.member(eventId, locals)
 			}
 
-			const isSelfAction = author.id === _subscribe.memberId
 			if (!isLeaderAction) {
 				if (!isSelfAction) error(403, "You can't self update subscribe status")
 				if (
 					(state === 'cancelled' || state === 'denied') &&
 					!author.event.selfSubscribeCancelAllowed
 				)
-					error(403, "L'annulation ou le refus d'une inscription n'est pas authorisé. ")
+					error(403, "L'annulation ou le refus d'une inscription n'est pas authorisé.")
 			}
 
 			if (state === 'accepted' || state === 'request') {
@@ -98,6 +95,7 @@ const setSubscribState: (_state: SubscribeState) => Action =
 
 			if (state === 'request' && _subscribe.member.user.isHeadlessAccount) {
 				state = 'accepted'
+				isForcedValidation = true
 			}
 
 			if (state === 'accepted') {
@@ -118,7 +116,7 @@ const setSubscribState: (_state: SubscribeState) => Action =
 
 			const subscribe = await prisma.subscribe.update({
 				where: { id: subscribeId },
-				data: { state },
+				data: { state, isForcedValidation },
 				include: {
 					member: { include: { user: { select: { email: true } } } },
 					period: {
