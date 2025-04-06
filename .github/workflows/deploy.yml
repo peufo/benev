@@ -44,6 +44,7 @@ jobs:
             cd ~/tmp/app
             pnpm install
             pnpm build
+            if [ "$?" -ne "0" ] ; then exit $? ; fi 
             rm -rf ~/app
             mv ~/tmp/app ~/app
             cd ~/app
