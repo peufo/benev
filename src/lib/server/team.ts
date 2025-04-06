@@ -103,7 +103,7 @@ export function useAddTeamComputedValues(
 
 export type PeriodWithComputedValues = Period & {
 	tags: Tag[]
-	subscribes: Subscribe[]
+	subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
 	mySubscribe?: Subscribe & { member: { isValidedByUser: boolean } }
 	isAvailable: boolean
 	isComplete: boolean
