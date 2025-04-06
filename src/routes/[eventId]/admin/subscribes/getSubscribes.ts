@@ -23,6 +23,8 @@ export const subscribesFilterShape = {
 	isValidedByUser: z.filter.boolean,
 } satisfies ZodObj
 
+export type Subscribes = Awaited<ReturnType<typeof getSubscribes>>['subscribes'][number]
+
 export const getSubscribes = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
 	const query = parseQuery(url, {
@@ -81,7 +83,6 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 		where.push({ member: { isValidedByEvent: query.isValidedByEvent } })
 	if (query.isValidedByUser !== undefined)
 		where.push({ member: { isValidedByUser: query.isValidedByUser } })
-
 	const subscribes = await prisma.subscribe
 		.findMany({
 			where: { AND: where },

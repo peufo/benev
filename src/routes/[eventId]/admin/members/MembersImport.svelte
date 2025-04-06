@@ -5,8 +5,8 @@
 	import { page } from '$app/stores'
 
 	let dropdown: DropDown
-	$: urlMembersCSV = `${$eventPath}/admin/members/csv${$page.url.searchParams.toString()}`
-	$: urlMembersVCard = `${$eventPath}/admin/members/vcard${$page.url.searchParams.toString()}`
+	$: urlMembersCSV = `${$eventPath}/admin/members/csv?${$page.url.searchParams.toString()}`
+	$: urlMembersVCard = `${$eventPath}/admin/members/vcard?${$page.url.searchParams.toString()}`
 
 	const getMembersCSV = async () => {
 		const res = await fetch(urlMembersCSV)

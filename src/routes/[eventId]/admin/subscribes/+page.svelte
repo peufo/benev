@@ -21,7 +21,7 @@
 	} from 'fuma'
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
-	import SubscribesCopy from './SubscribesCopy.svelte'
+	import SubscribesImport from './SubscribesImport.svelte'
 	import SubscribesStats from './SubscribesStats.svelte'
 	import {
 		SubscribeCreatedBy,
@@ -151,7 +151,7 @@
 				</a>
 				<TableViewSelect key="subscribes" views={data.views} action="{$eventPath}/admin" />
 
-				<SubscribesCopy />
+				<SubscribesImport />
 			</div>
 
 			<Table
