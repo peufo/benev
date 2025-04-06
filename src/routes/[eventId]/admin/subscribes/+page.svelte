@@ -21,7 +21,7 @@
 	} from 'fuma'
 	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
-	import SubscribesImport from './SubscribesImport.svelte'
+	//import SubscribesImport from './SubscribesImport.svelte'
 	import SubscribesStats from './SubscribesStats.svelte'
 	import {
 		SubscribeCreatedBy,
@@ -150,8 +150,9 @@
 					<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
 				</a>
 				<TableViewSelect key="subscribes" views={data.views} action="{$eventPath}/admin" />
-
-				<SubscribesImport />
+				<!--
+					<SubscribesImport />
+				-->
 			</div>
 
 			<Table
