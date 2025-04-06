@@ -3,6 +3,7 @@
 	import { mdiCardAccountMailOutline, mdiFileDelimitedOutline, mdiTrayArrowDown } from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
+	import { toast } from 'svelte-sonner'
 
 	let dropdown: DropDown
 	$: urlMembersCSV = `${$eventPath}/admin/members/csv?${$page.url.searchParams.toString()}`
@@ -22,7 +23,10 @@
 
 	<div class="flex flex-col gap-1">
 		<ButtonCopy
-			on:success={() => dropdown.hide()}
+			on:success={() => {
+				dropdown.hide()
+				toast.success('Données copiées !')
+			}}
 			class="menu-item w-full"
 			value={getMembersCSV}
 			label="Copier les données"
