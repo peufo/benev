@@ -34,6 +34,7 @@
 	import { eventPath } from '$lib/store'
 	import { SUBSCRIBE_STATE } from '$lib/constant'
 	import { TagsList } from '$lib/tag'
+	import dayjs from 'dayjs'
 
 	export let data
 
@@ -76,13 +77,18 @@
 			key: 'period',
 			label: 'Période',
 			type: 'date',
-			getCell: (sub) => `
-				<a href="${$eventPath}/teams?section=${sub.period.teamId}&form_period=${
-				sub.periodId
-			}" class="link link-hover">
-					${formatRange(sub.period)}
-				</a>
-			`,
+			getCell: (sub) => {
+				let href = `${$eventPath}/teams`
+				href += `?section=${sub.period.teamId}`
+				href += `&form_period=${sub.periodId}`
+				const duration = dayjs(sub.period.end).diff(sub.period.start, 'minutes')
+				return `
+					<a href="${href}" class="link link-hover">
+						${formatRange(sub.period)}
+						<span class="badge badge-sm">${duration} min.</span>
+					</a>
+				`
+			},
 			visible: true,
 		},
 		{

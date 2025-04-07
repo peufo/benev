@@ -1,6 +1,7 @@
 import { getSubscribes, type Subscribes } from '../getSubscribes'
 import { prisma, permission } from '$lib/server'
 import { getCSV } from 'fuma'
+import dayjs from 'dayjs'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {
 	await permission.leader(eventId, locals)
@@ -10,6 +11,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 	})
 	url.searchParams.set('all', 'true')
 	const { subscribes } = await getSubscribes(event, url)
+
 	const columns: Record<string, (subscribe: Subscribes) => string | number> = {
 		member: (s) => `${s.member.user.firstName} ${s.member.user.lastName}`,
 		memberEmail: (s) => s.member.user.email,
@@ -18,6 +20,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		team: (s) => s.period.team.name,
 		shiftStart: (s) => s.period.start.toJSON(),
 		shiftEnd: (s) => s.period.end.toJSON(),
+		shiftMinutes: (s) => dayjs(s.period.end).diff(s.period.start, 'minutes'),
 		shiftTags: (s) => s.period.tags.map((t) => t.name).join(', '),
 		subscribeBy: (s) => (s.createdBy == 'leader' ? 'event' : 'member'),
 		isAbsent: (s) => s.isAbsent.toString(),
