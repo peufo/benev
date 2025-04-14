@@ -7,17 +7,32 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 	await permission.leader(eventId, locals)
 	const event = await prisma.event.findUniqueOrThrow({
 		where: { id: eventId },
-		include: { memberFields: true },
+		include: { memberFields: true, teams: true },
 	})
 	url.searchParams.set('all', 'true')
 	const { members } = await getMembers(event, url)
+	const teamsName = event.teams.reduce<Record<string, string>>(
+		(acc, t) => ({ ...acc, [t.id]: t.name }),
+		{}
+	)
 	const columns: Record<string, (member: MemberWithComputedValue) => string | number> = {
 		name: (m) => `${m.user.firstName} ${m.user.lastName}`,
 		createdAt: (m) => m.createdAt.toISOString(),
 		email: (m) => m.user.email,
 		phone: (m) => m.user.phone?.replace(/^\+/, "'+") || '',
 		age: (m) => getAge(m.user.birthday),
-		subscribes: (m) => m.subscribes.length,
+		subscribeTeamsValided: (m) =>
+			m.subscribes
+				.filter((s) => s.state === 'accepted')
+				.map((s) => teamsName[s.period.teamId])
+				.filter(isUnique)
+				.join(', '),
+		subscribesTeamsRequest: (m) =>
+			m.subscribes
+				.filter((s) => s.state === 'request')
+				.map((s) => teamsName[s.period.teamId])
+				.filter(isUnique)
+				.join(', '),
 		hours: (m) => m.workTime / (1000 * 60 * 60),
 		leaderOf: (m) => m.leaderOf.map((team) => team.name).join(', '),
 		...event.memberFields.reduce(
@@ -39,4 +54,8 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 			'Content-Disposition': 'attachment; filename="members.csv"',
 		},
 	})
+}
+
+function isUnique<Item>(item: Item, index: number, self: Item[]): boolean {
+	return self.indexOf(item) === index
 }
