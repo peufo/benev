@@ -3,7 +3,10 @@
 		{
 			"name": "benev",
 			"script": "./build/index.js",
-			"args": "-r dotenv/config"
+			"args": "-r dotenv/config",
+			"env": {
+				"BODY_SIZE_LIMIT": "3M"
+			}
 		}
 	]
 }
