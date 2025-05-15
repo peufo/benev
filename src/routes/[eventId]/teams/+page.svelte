@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { onMount } from 'svelte'
-	import { Drawer, Icon, InputSearch, urlParam } from 'fuma'
+	import { Drawer, Icon, InputSearch, RangePickerButton, urlParam } from 'fuma'
 
 	import { Teams, ToggleOnlyAvailable } from '$lib/team'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -11,6 +11,7 @@
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import TeamsOrder from '$lib/team/TeamsOrder.svelte'
+	import TeamsStats from './TeamsStats.svelte'
 
 	export let data
 
@@ -45,29 +46,34 @@
 </script>
 
 <div class="max-w-xl m-auto flex flex-col gap-4">
-	<div class="flex gap-2 p-2 bg-base-100 rounded-2xl">
-		<InputSearch />
-		<div class="grow" />
-		<ToggleOnlyAvailable />
+	<div class="p-2 flex flex-col gap-2 bg-base-100 rounded-2xl">
+		<div class="flex gap-2">
+			<InputSearch />
+			<div class="grow" />
+			<RangePickerButton key="range" />
+			<ToggleOnlyAvailable />
 
-		{#if data.member?.roles.includes('admin')}
-			<a
-				href={$urlParam.with({ teams_order: 1 })}
-				class="btn btn-sm btn-square"
-				data-sveltekit-noscroll
-				data-sveltekit-replacestate
-			>
-				<Icon path={mdiPencilOutline} title="Modifier l'ordre des secteur" />
-			</a>
-			<a
-				href={$urlParam.with({ form_team: '{}' })}
-				class="btn btn-sm btn-square"
-				data-sveltekit-noscroll
-				data-sveltekit-replacestate
-			>
-				<Icon path={mdiPlus} title="Nouveau secteur" />
-			</a>
-		{/if}
+			{#if data.member?.roles.includes('admin')}
+				<a
+					href={$urlParam.with({ teams_order: 1 })}
+					class="btn btn-sm btn-square"
+					data-sveltekit-noscroll
+					data-sveltekit-replacestate
+				>
+					<Icon path={mdiPencilOutline} title="Modifier l'ordre des secteur" />
+				</a>
+				<a
+					href={$urlParam.with({ form_team: '{}' })}
+					class="btn btn-sm btn-square"
+					data-sveltekit-noscroll
+					data-sveltekit-replacestate
+				>
+					<Icon path={mdiPlus} title="Nouveau secteur" />
+				</a>
+			{/if}
+		</div>
+
+		<TeamsStats teams={data.teams} />
 	</div>
 
 	<Teams teams={data.teams} on:clickPeriod={({ detail }) => handleClickPeriod(detail)}>

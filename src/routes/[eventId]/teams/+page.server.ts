@@ -1,5 +1,5 @@
 import { z } from 'fuma'
-import { formAction } from 'fuma/server'
+import { formAction, parseQuery } from 'fuma/server'
 import { useAddTeamComputedValues, permission, prisma, safeUserSelect } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
@@ -7,9 +7,16 @@ import { error } from '@sveltejs/kit'
 import type { Period } from '@prisma/client'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
-	const search = url.searchParams.get('search')
-	const onlyAvailable = url.searchParams.get('onlyAvailable') === 'true'
-	const teams_order = !!url.searchParams.get('teams_order')
+	const { search, range, onlyAvailable, teams_order } = parseQuery(url, {
+		search: z.string().nullish(),
+		range: z.filter.range,
+		onlyAvailable: z.filter.boolean,
+		teams_order: z
+			.string()
+			.nullish()
+			.transform((v) => !!v),
+	})
+
 	const { member, event } = await parent()
 
 	const isLeader = member?.roles.includes('leader')
@@ -49,6 +56,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 						tags: true,
 					},
 					orderBy: { start: 'asc' },
+					...(range && { where: { end: { gte: range.start }, start: { lte: range.end } } }),
 				},
 			},
 			orderBy: {
