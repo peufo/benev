@@ -18,7 +18,9 @@
 	$: accepted = period.subscribes.filter(
 		(sub) => sub.state === 'accepted' && !sub.isForcedValidation
 	).length
-	$: acceptedForced = period.subscribes.filter((sub) => sub.state === 'accepted').length
+	$: acceptedForced = period.subscribes.filter(
+		(sub) => sub.state === 'accepted' && sub.isForcedValidation
+	).length
 	$: request = period.subscribes.filter((sub) => sub.state === 'request').length
 	$: requestWaitUser = period.subscribes.filter(
 		(sub) => sub.state === 'request' && sub.member.isValidedByUser
@@ -45,7 +47,7 @@
 		/>
 		<div
 			class="h-2 bg-blue-500 absolute rounded-r"
-			style:width="{100 * (acceptedForced / period.maxSubscribe)}%"
+			style:width="{100 * ((accepted + acceptedForced) / period.maxSubscribe)}%"
 		/>
 		<div
 			class="h-2 bg-success absolute rounded-r"
@@ -56,9 +58,9 @@
 	{#if withLabel}
 		<div class="flex gap-1">
 			<span class="badge badge-success" title="confirmé">
-				{accepted}
+				{accepted + acceptedForced}
 				<span class="pl-1">
-					Confirmé{plurial(accepted)}
+					Confirmé{plurial(accepted + acceptedForced)}
 				</span>
 			</span>
 			<span class="badge badge-warning" title="En attente">
@@ -78,7 +80,7 @@
 	{:else}
 		<slot name="before-badge" />
 		<span class="badge badge-sm whitespace-nowrap {badgeClass}" class:bg-base-200={isComplet}>
-			{accepted + request} / {period.maxSubscribe}
+			{accepted + acceptedForced + request} / {period.maxSubscribe}
 		</span>
 		<slot name="after-badge" />
 	{/if}
