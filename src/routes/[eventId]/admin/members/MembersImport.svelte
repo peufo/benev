@@ -4,13 +4,21 @@
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { toast } from 'svelte-sonner'
+	import { derived } from 'svelte/store'
 
 	let dropdown: DropDown
-	$: urlMembersCSV = `${$eventPath}/admin/members/csv?${$page.url.searchParams.toString()}`
-	$: urlMembersVCard = `${$eventPath}/admin/members/vcard?${$page.url.searchParams.toString()}`
+	type Mode = 'csv' | 'vcard'
+
+	let urlMembers = derived(page, ({ url }) => {
+		const params = new URLSearchParams(url.searchParams)
+		const zone = Intl.DateTimeFormat().resolvedOptions()
+		params.set('locale', zone.locale)
+		params.set('timeZone', zone.timeZone)
+		return (mode: Mode) => `${$eventPath}/admin/members/${mode}?${params.toString()}`
+	})
 
 	const getMembersCSV = async () => {
-		const res = await fetch(urlMembersCSV)
+		const res = await fetch($urlMembers('csv'))
 		const csv = await res.text()
 		return csv
 	}
@@ -31,11 +39,11 @@
 			value={getMembersCSV}
 			label="Copier les données"
 		/>
-		<a href={urlMembersCSV} class="menu-item" target="_parent">
+		<a href={$urlMembers('csv')} class="menu-item" target="_parent">
 			<Icon path={mdiFileDelimitedOutline} size={20} />
 			<span>Télécharger un CSV</span>
 		</a>
-		<a href={urlMembersVCard} class="menu-item" target="_parent">
+		<a href={$urlMembers('vcard')} class="menu-item" target="_parent">
 			<Icon path={mdiCardAccountMailOutline} size={20} />
 			<span>Télécharger les contacts</span>
 		</a>

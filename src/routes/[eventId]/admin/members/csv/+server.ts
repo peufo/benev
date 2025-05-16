@@ -1,7 +1,8 @@
 import { getMembers, type MemberWithComputedValue } from '../getMembers'
 import { prisma, permission } from '$lib/server'
 import { getAge } from '$lib/utils'
-import { getCSV } from 'fuma'
+import { getCSV, z } from 'fuma'
+import { parseQuery } from 'fuma/server'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {
 	await permission.leader(eventId, locals)
@@ -15,9 +16,23 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		(acc, t) => ({ ...acc, [t.id]: t.name }),
 		{}
 	)
+	const { locale, timeZone } = parseQuery(url, {
+		locale: z.string().nullish(),
+		timeZone: z.string().nullish(),
+	})
+
+	function toLocaleString(date: Date): string {
+		if (!locale || !timeZone) return date.toJSON()
+		try {
+			return date.toLocaleString(locale, { timeZone })
+		} catch (e) {
+			return 'Error'
+		}
+	}
+
 	const columns: Record<string, (member: MemberWithComputedValue) => string | number> = {
 		name: (m) => `${m.user.firstName} ${m.user.lastName}`,
-		createdAt: (m) => m.createdAt.toISOString(),
+		createdAt: (m) => toLocaleString(m.createdAt),
 		email: (m) => m.user.email,
 		phone: (m) => m.user.phone?.replace(/^\+/, "'+") || '',
 		age: (m) => getAge(m.user.birthday),

@@ -1,15 +1,23 @@
 <script lang="ts">
+	import { derived } from 'svelte/store'
+	import { page } from '$app/stores'
 	import { ButtonCopy, DropDown, Icon } from 'fuma'
 	import { mdiFileDelimitedOutline, mdiTrayArrowDown } from '@mdi/js'
 	import { eventPath } from '$lib/store'
-	import { page } from '$app/stores'
 	import { toast } from 'svelte-sonner'
 
 	let dropdown: DropDown
-	$: urlSubscribesCSV = `${$eventPath}/admin/subscribes/csv?${$page.url.searchParams.toString()}`
+
+	let urlSubscribesCSV = derived(page, ({ url }) => {
+		const params = new URLSearchParams(url.searchParams)
+		const zone = Intl.DateTimeFormat().resolvedOptions()
+		params.set('locale', zone.locale)
+		params.set('timeZone', zone.timeZone)
+		return `${$eventPath}/admin/subscribes/csv?${params.toString()}`
+	})
 
 	const getSubscribesCSV = async () => {
-		const res = await fetch(urlSubscribesCSV)
+		const res = await fetch($urlSubscribesCSV)
 		const csv = await res.text()
 		return csv
 	}
@@ -30,7 +38,7 @@
 			value={getSubscribesCSV}
 			label="Copier les données"
 		/>
-		<a href={urlSubscribesCSV} class="menu-item" target="_parent">
+		<a href={$urlSubscribesCSV} class="menu-item" target="_parent">
 			<Icon path={mdiFileDelimitedOutline} size={20} />
 			<span>Télécharger un CSV</span>
 		</a>
