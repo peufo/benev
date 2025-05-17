@@ -4,17 +4,7 @@ import { getAge } from '$lib/utils'
 import { MemberCell } from '$lib/member'
 import { formatRange } from '$lib/formatRange'
 import type { MemberWithComputedValue } from './getMembers'
-
-function toHours(ms: number) {
-	const hours = ms / (1000 * 60 * 60)
-	return (
-		Math.round(hours).toString().padStart(2, '0') +
-		':' +
-		Math.round((hours % 1) * 60)
-			.toString()
-			.padStart(2, '0')
-	)
-}
+import { msToHours } from './msToHours'
 
 export function getMembersTableFields(teams: { id: string; name: string }[], fields: Field[]) {
 	const tableFields: TableField<MemberWithComputedValue>[] = [
@@ -114,11 +104,11 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			type: 'number',
 			visible: true,
 			getCell(m) {
-				if (!m.workTimeRequest) return toHours(m.workTime)
+				if (!m.workTimeRequest) return msToHours(m.workTime)
 				return `
 					<div class="flex items-center">
-						<span>${toHours(m.workTime)}</span>
-						<span class="opacity-80 ml-1 text-warning text-xs">+${toHours(m.workTimeRequest)}</span>
+						<span>${msToHours(m.workTime)}</span>
+						<span class="opacity-80 ml-1 text-warning text-xs">+${msToHours(m.workTimeRequest)}</span>
 					</div>
 				`
 			},

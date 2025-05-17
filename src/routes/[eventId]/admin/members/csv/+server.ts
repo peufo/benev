@@ -3,6 +3,7 @@ import { prisma, permission } from '$lib/server'
 import { getAge } from '$lib/utils'
 import { getCSV, z } from 'fuma'
 import { parseQuery } from 'fuma/server'
+import { msToHours } from '../msToHours'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {
 	await permission.leader(eventId, locals)
@@ -48,7 +49,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 				.map((s) => teamsName[s.period.teamId])
 				.filter(isUnique)
 				.join(', '),
-		hours: (m) => m.workTime / (1000 * 60 * 60),
+		hours: (m) => msToHours(m.workTime),
 		leaderOf: (m) => m.leaderOf.map((team) => team.name).join(', '),
 		...event.memberFields.reduce(
 			(acc, cur) => ({

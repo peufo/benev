@@ -20,7 +20,7 @@ async function rootPermission(locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) error(401)
 
-	session.user.email === ROOT_USER
+	return session.user.email === ROOT_USER
 }
 
 function createEventPermission(role: MemberRole) {
