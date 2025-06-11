@@ -23,7 +23,7 @@ export const GET = async ({ url, cookies, locals }) => {
 
 			const email = githubUser.email || (await generateEmail())
 			const firstName = githubUser.name?.split(' ')[0] || githubUser.login
-			const lastName = githubUser.name?.split(' ')[1] || githubUser.login
+			const lastName = githubUser.name?.split(' ')[1] || ''
 			const user = await createUser({
 				attributes: {
 					firstName,
