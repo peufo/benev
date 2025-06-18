@@ -24,7 +24,7 @@
 	{/if}
 	{#if $page.data.member?.roles.includes('leader') || member.event.memberFields.filter((f) => f.memberCanWrite).length}
 		<a
-			href={$urlParam.with({ form_member_profile: 1 })}
+			href={$urlParam.with({ form_member_profile: '{}' })}
 			data-sveltekit-replacestate
 			data-sveltekit-noscroll
 			class="ml-auto btn btn-square btn-sm"

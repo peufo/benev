@@ -28,7 +28,7 @@
 	<h3 class="font-medium opacity-80 grow">Champs du profil de membre</h3>
 	<a
 		class="btn btn-square btn-sm btn-primary"
-		href={$urlParam.with({ form_field: 1 })}
+		href={$urlParam.with({ form_field: '{}' })}
 		data-sveltekit-replacestate
 		data-sveltekit-noscroll
 	>

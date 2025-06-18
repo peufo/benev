@@ -155,7 +155,7 @@
 {#if data.member?.roles.includes('leader')}
 	<DrawersForm event={data.event} team={data.team} period={data.period || {}} tag={data.tag} />
 
-	<Drawer key="form_field" title="{data.field ? 'Modifier le' : 'Nouveau'} champ" let:close>
+	<Drawer key="form_field" title="{data.field?.id ? 'Modifier le' : 'Nouveau'} champ" let:close>
 		<MemberFieldForm field={data.field || {}} on:success={() => close()} />
 	</Drawer>
 {/if}

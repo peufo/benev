@@ -96,7 +96,7 @@
 							},
 						})}
 					placholder="Aucun membre trouvé"
-					onCreateField={() => goto($urlParam.with({ form_field: 1 }))}
+					onCreateField={() => goto($urlParam.with({ form_field: '{}' }))}
 				/>
 			{/key}
 
