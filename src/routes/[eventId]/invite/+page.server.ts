@@ -45,7 +45,7 @@ export const actions = {
 					attributes: {
 						...data,
 						email,
-						isHeadlessAccount: !data.email,
+						isHeadlessAccount: !data.email, // TODO: allwas true and change in first loggin ?
 						isEmailVerified: !data.email,
 						avatarPlaceholder: createAvatarPlaceholder(),
 					},
