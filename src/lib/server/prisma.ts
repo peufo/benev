@@ -15,26 +15,23 @@ export const prisma = new PrismaClient().$extends({
 		},
 		user: {
 			async update({ args, query }) {
-				// TODO: fail if where fields is updated...
-				const userUpdated = await query(args)
-				const data: Prisma.MemberUpdateInput = await prisma.user.findUniqueOrThrow({
-					where: args.where,
-					select: {
-						email: true,
-						isEmailVerified: true,
-						firstName: true,
-						lastName: true,
-						phone: true,
-						birthday: true,
-						street: true,
-						zipCode: true,
-						city: true,
-						avatarId: true,
-						avatarPlaceholder: true,
-					},
-				})
+				const data: Prisma.MemberUpdateInput = {}
+				function copy<K extends keyof User & keyof Member>(key: K) {
+					if (args.data[key] !== undefined) data[key] = args.data[key]
+				}
+				copy('email')
+				copy('isEmailVerified')
+				copy('firstName')
+				copy('lastName')
+				copy('phone')
+				copy('birthday')
+				copy('street')
+				copy('zipCode')
+				copy('city')
+				copy('avatarId')
+				copy('avatarPlaceholder')
 				await prisma.member.updateMany({ where: { user: args.where }, data })
-				return userUpdated
+				return query(args)
 			},
 			async delete({ args, query }) {
 				const user = await prisma.user.findUniqueOrThrow(args)
@@ -53,7 +50,6 @@ export const prisma = new PrismaClient().$extends({
 						avatarId: null,
 					},
 				})
-
 				return query(args)
 			},
 		},
