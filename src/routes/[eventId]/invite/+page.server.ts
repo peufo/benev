@@ -67,7 +67,8 @@ export const actions = {
 				.then(() => true)
 				.catch(() => false)
 
-			// Si le membre existe déjà, on le lie au user
+			// Si le membre existe déjà, on le link au user
+			// TODO: update member contact details from user
 			const memberAlreadyExist = await prisma.member.findFirst({
 				where: { eventId, email: session.user.email },
 			})
