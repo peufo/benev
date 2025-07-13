@@ -1,11 +1,10 @@
 import { isFreeRange } from 'perod'
-import type { PeriodWithSubscribesUserName as P } from './types'
 
-export function getStacks(periods: P[]): P[][] {
+export function getStacks<T extends {start: Date, end: Date}>(periods: T[]): T[][] {
 	if (!periods.length) return [[]]
-	const _stacks: P[][] = []
+	const _stacks: T[][] = []
 
-	function getPeriodStackIndex(period: P, curentStackIndex = 0): number {
+	function getPeriodStackIndex(period: T, curentStackIndex = 0): number {
 		const stack = _stacks[curentStackIndex] || []
 		if (isFreeRange(period, stack)) return curentStackIndex
 		return getPeriodStackIndex(period, curentStackIndex + 1)

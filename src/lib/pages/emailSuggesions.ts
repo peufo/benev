@@ -14,7 +14,7 @@ type PropsWithMember<Keys extends string, U extends Record<Keys, Record<string, 
 export type EmailModelProps = PropsWithMember<
 	EmailEvent,
 	{
-		invitation_create: { tokenId?: string; authorName: string }
+		invitation_create: { authorName: string }
 		invitation_accept: {}
 		subscribe_request: { subscribe: SubscribeWithTeam; authorName: string; tokenId?: string }
 		subscribe_accepted: { subscribe: SubscribeWithTeam; authorName: string }
@@ -62,12 +62,8 @@ export const emailSuggestions: EmailSuggestions = {
 		{
 			id: 'acceptURL',
 			label: "Lien pour accepter l'invitation",
-			getValue: (data) => {
-				const href = data.tokenId
-					? `${domain}/token/${data.tokenId}/reset_password?redirectTo=/${data.member.eventId}/me&newUser=${data.member.user.firstName}&eventName=${data.member.event.name}`
-					: `${domain}/${data.member.eventId}/me`
-				return `<a href="${href}" data-sveltekit-preload-data="off">ce lien</a>`
-			},
+			getValue: ({ member }) =>
+				`<a href="${domain}/${member.eventId}/me" data-sveltekit-preload-data="off">ce lien</a>`,
 		},
 	],
 	invitation_accept: [],

@@ -1,9 +1,9 @@
 <script lang="ts">
+	import type { Member } from '@prisma/client'
 	import { mdiAlertOutline, mdiEmailOutline, mdiPhoneOutline } from '@mdi/js'
 	import { Icon, DropDown } from 'fuma'
 	import { Avatar } from '$lib/me'
-	import type { MemberWithUser } from '$lib/server'
-	export let leaders: MemberWithUser[]
+	export let leaders: Member[]
 </script>
 
 {#each leaders as member}
@@ -12,23 +12,23 @@
 			slot="activator"
 			class="hover:bg-base-200 bg-base-200/40 cursor-pointer flex gap-2 border items-center pr-2 rounded"
 		>
-			<Avatar user={member.user} class="h-8 w-8 rounded border" />
+			<Avatar {...member} class="h-8 w-8 rounded border" />
 			<span class="text-sm">
-				{member.user.firstName}
-				{member.user.lastName}
+				{member.firstName}
+				{member.lastName}
 			</span>
 		</button>
 		{#if member.isValidedByUser}
 			<ul class="w-48">
 				<li>
-					<a class="menu-item" href="mailto:{member.user.email}" target="_blank">
+					<a class="menu-item" href="mailto:{member.email}" target="_blank">
 						<Icon path={mdiEmailOutline} />
 						Envoyer un mail
 					</a>
 				</li>
-				{#if member.user.phone}
+				{#if member.phone}
 					<li>
-						<a class="menu-item" href="tel:{member.user.phone}" target="_blank">
+						<a class="menu-item" href="tel:{member.phone}" target="_blank">
 							<Icon path={mdiPhoneOutline} />
 							Téléphoner
 						</a>
@@ -38,7 +38,7 @@
 		{:else}
 			<div class="px-3 py-1 flex gap-2">
 				<Icon path={mdiAlertOutline} class="fill-warning" />
-				<span>{member.user.firstName} n'a pas confirmé sa participation</span>
+				<span>{member.firstName} n'a pas confirmé sa participation</span>
 			</div>
 		{/if}
 	</DropDown>

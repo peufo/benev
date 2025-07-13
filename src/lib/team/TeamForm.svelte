@@ -3,9 +3,7 @@
 	import { Form } from 'fuma'
 
 	export type TeamWithLeaders = Team & {
-		leaders: (Member & {
-			user: Pick<User, 'firstName' | 'lastName' | 'email' | 'phone'>
-		})[]
+		leaders: Member[]
 	}
 	export type TeamFormComponent = ComponentType<Form<typeof modelTeam, TeamWithLeaders>>
 	export type TeamFormInstance = InstanceType<TeamFormComponent>

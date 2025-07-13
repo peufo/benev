@@ -9,13 +9,12 @@ import {
 } from '$lib/server'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
-type MemberWithUserEventAndLeaderOf = Member & {
-	user: User
+type MemberWithEventAndLeaderOf = Member & {
 	event: Event & { memberFields: Field[] }
 	leaderOf: Team[]
 }
 
-export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
+export type MemberWithComputedValues = MemberWithEventAndLeaderOf & {
 	roles: MemberRole[]
 	userProfileRequiredFields: string[]
 	isUserProfileCompleted: boolean
@@ -23,7 +22,7 @@ export type MemberWithComputedValues = MemberWithUserEventAndLeaderOf & {
 	isMemberProfileCompleted: boolean
 }
 
-export function addMemberComputedValues<T extends MemberWithUserEventAndLeaderOf>(
+export function addMemberComputedValues<T extends MemberWithEventAndLeaderOf>(
 	member: T
 ): T & MemberWithComputedValues {
 	const userProfileRequiredFields = getUserProfileRequiredFIelds(member)
@@ -38,32 +37,33 @@ export function addMemberComputedValues<T extends MemberWithUserEventAndLeaderOf
 	}
 }
 
-function getMemberRoles(member: MemberWithUserEventAndLeaderOf): MemberRole[] {
-	const isRoot = member.user.email === ROOT_USER
+function getMemberRoles(member: MemberWithEventAndLeaderOf): MemberRole[] {
+	//TODO: find better method for root user
+	//const isRoot = member.user.email === ROOT_USER
 	const isOwner = member.event.ownerId === member.userId
-	if (isRoot) return ['root', 'owner', 'admin', 'leader', 'member']
+	//if (isRoot) return ['root', 'owner', 'admin', 'leader', 'member']
 	if (isOwner) return ['owner', 'admin', 'leader', 'member']
 	if (member.isAdmin) return ['admin', 'leader', 'member']
 	if (member.leaderOf.length) return ['leader', 'member']
 	return ['member']
 }
 
-function getUserProfileRequiredFIelds({ event, user }: MemberWithUserEventAndLeaderOf) {
+function getUserProfileRequiredFIelds({ event, ...member }: MemberWithEventAndLeaderOf) {
 	const requiredFields: string[] = []
 	if (event.userAddressRequired) {
-		if (!user.street) requiredFields.push('street')
-		if (!user.zipCode) requiredFields.push('zipCode')
-		if (!user.city) requiredFields.push('city')
+		if (!member.street) requiredFields.push('street')
+		if (!member.zipCode) requiredFields.push('zipCode')
+		if (!member.city) requiredFields.push('city')
 	}
-	if (event.userAvatarRequired && !user.avatarId) requiredFields.push('avatarId')
-	if (event.userBirthdayRequired && !user.birthday) requiredFields.push('birthday')
-	if (event.userPhoneRequired && !user.phone) requiredFields.push('phone')
-	if (event.userEmailVerifiedRequired && !user.isEmailVerified)
+	if (event.userAvatarRequired && !member.avatarId) requiredFields.push('avatarId')
+	if (event.userBirthdayRequired && !member.birthday) requiredFields.push('birthday')
+	if (event.userPhoneRequired && !member.phone) requiredFields.push('phone')
+	if (event.userEmailVerifiedRequired && member.userId && !member.isEmailVerified)
 		requiredFields.push('isEmailVerified')
 	return requiredFields
 }
 
-function getMemberProfileRequiredFields({ profileJson, event }: MemberWithUserEventAndLeaderOf) {
+function getMemberProfileRequiredFields({ profileJson, event }: MemberWithEventAndLeaderOf) {
 	const requiredFields: string[] = []
 	event.memberFields.forEach((field) => {
 		if (!field.required || !field.memberCanRead) return
@@ -86,7 +86,6 @@ export async function getMemberProfile(
 	const member = await prisma.member.findFirstOrThrow({
 		where,
 		include: {
-			user: true,
 			event: {
 				include: { memberFields: { orderBy: { position: 'asc' } } },
 			},

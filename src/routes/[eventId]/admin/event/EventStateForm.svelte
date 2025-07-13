@@ -41,7 +41,7 @@
 	function handleClickLicence(e: MouseEvent | KeyboardEvent) {
 		if (!$page.data.member?.roles.includes('owner')) {
 			e.preventDefault()
-			const owner = `${$page.data.member!.user.firstName} ${$page.data.member!.user.lastName}`
+			const owner = `${$page.data.member?.firstName} ${$page.data.member?.lastName}`
 			notify.warning(`Seul le propriétaire, ${owner}, peut obtenir des licences pour cet évènement`)
 		}
 	}
@@ -49,7 +49,7 @@
 	function handleClickState(e: MouseEvent | KeyboardEvent, newState: EventState) {
 		if (!$page.data.member?.roles.includes('owner')) {
 			e.preventDefault()
-			const owner = `${$page.data.member!.user.firstName} ${$page.data.member!.user.lastName}`
+			const owner = `${$page.data.member?.firstName} ${$page.data.member?.lastName}`
 			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
 		}
 		if (event.state === 'draft' && !eventLicenceAvailable) {

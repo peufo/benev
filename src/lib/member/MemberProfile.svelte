@@ -29,7 +29,7 @@
 			data-sveltekit-noscroll
 			class="ml-auto btn btn-square btn-sm"
 		>
-			<Icon path={mdiPencilOutline} title="Modifier le profil de {member.user.firstName}" />
+			<Icon path={mdiPencilOutline} title="Modifier le profil de {member.firstName}" />
 		</a>
 	{/if}
 </div>
@@ -69,7 +69,7 @@
 {/if}
 
 <Drawer
-	title="Modifier le profil de {member.user.firstName}"
+	title="Modifier le profil de {member.firstName}"
 	key="form_member_profile"
 	classBody="pt-4"
 	let:close

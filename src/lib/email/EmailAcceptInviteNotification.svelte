@@ -3,12 +3,12 @@
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
 
-	export let member: Member & { user: User; event: Event }
+	export let member: Member & { event: Event }
 </script>
 
 <EmailLayout title={member.event.name} subtitle="Un nouveau membre a rejoint l'évènement">
 	<p>
-		<b>{member.user.firstName} {member.user.lastName}</b>
+		<b>{member.firstName} {member.lastName}</b>
 		fait désormais partie de l'évènement.
 	</p>
 	<p>

@@ -24,16 +24,13 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 		{
 			key: 'member.user.email',
 			label: 'Email',
-			getCell: (member) => {
-				if (member.user.isHeadlessAccount) return '-'
-				return member.user.email
-			},
+			getCell: (member) => member.email || '-',
 			visible: false,
 		},
 		{
 			key: 'member.user.phone',
 			label: 'Téléphone',
-			getCell: (member) => member.user.phone,
+			getCell: (member) => member.phone,
 			visible: false,
 		},
 		{
@@ -124,7 +121,7 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			key: 'age',
 			label: 'Age',
 			type: 'number',
-			getCell: (m) => getAge(m.user.birthday),
+			getCell: (m) => getAge(m.birthday),
 		},
 		{
 			key: 'isProfileComplet',

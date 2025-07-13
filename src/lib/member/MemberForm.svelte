@@ -9,7 +9,6 @@
 	import { ButtonDelete, tiptapParser, urlParam } from 'fuma'
 
 	export let event: Event
-	export let userId: string
 	export let charter: TPage | null
 	export let successReset = false
 	export let successUpdate = false
@@ -51,7 +50,6 @@
 			class="contents"
 			use:enhance={form.submit}
 		>
-			<input type="hidden" name="userId" value={userId} />
 			<input type="hidden" name="redirectTo" value={$urlParam.with({ section: 'profile' })} />
 			<button class="btn btn-primary">Oui je le veux !</button>
 		</form>

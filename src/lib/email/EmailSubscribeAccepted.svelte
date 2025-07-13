@@ -12,7 +12,7 @@
 <EmailLayout title={member.event.name} subtitle="Une inscription a été acceptée">
 	<p>
 		Bonne nouvelle ! <br />
-		<b>{member.user.firstName} {member.user.lastName}</b>
+		<b>{member.firstName} {member.lastName}</b>
 		a confirmé sa participation à la période suivante :
 	</p>
 
@@ -20,7 +20,7 @@
 	<b>{formatRange(subscribe.period)}</b>
 
 	<p>
-		Retrouve toutes les inscriptions de {member.user.firstName} sur
+		Retrouve toutes les inscriptions de {member.firstName} sur
 		<a href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}">
 			son profil.
 		</a>

@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { User } from '@prisma/client'
-
-	export let user: Pick<User, 'avatarId' | 'avatarPlaceholder' | 'firstName'>
+	export let avatarId: string | null
+	export let avatarPlaceholder: string
+	export let firstName: string
 	let klass = ''
 	export { klass as class }
 	export let size: 'medium' | 'large' = 'medium'
 </script>
 
-{#key user}
+{#key avatarId || avatarPlaceholder}
 	<img
-		src={user.avatarId ? `/media/${user.avatarId}?size=${size}` : user.avatarPlaceholder}
-		alt="Avatar de {user.firstName}"
+		src={avatarId ? `/media/${avatarId}?size=${size}` : avatarPlaceholder}
+		alt="Avatar de {firstName}"
 		class={klass}
 		style="margin: 0 !important;"
 	/>

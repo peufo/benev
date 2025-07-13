@@ -91,11 +91,6 @@ export async function renderEmailModel<EmailPath extends EmailEvent>(
 	return injectDomain(html)
 }
 
-export async function generateEmail() {
-	const userCount = await prisma.user.count()
-	return `guest-${userCount + 1}@benev.io`
-}
-
 function injectDomain(html: string): string {
 	return html.replaceAll(/(<[^>]*)src="\//g, `$1src="${domain}/`)
 }

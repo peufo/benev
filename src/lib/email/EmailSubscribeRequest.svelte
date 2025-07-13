@@ -11,7 +11,7 @@
 
 <EmailLayout title={member.event.name} subtitle="Nouvelle inscription">
 	<p>
-		<b>{member.user.firstName} {member.user.lastName}</b>
+		<b>{member.firstName} {member.lastName}</b>
 		souhaite participer à la période de travail suivante :
 	</p>
 

@@ -11,7 +11,7 @@
 <OnlyAdmin>
 	<div class="mx-auto flex flex-col gap-2 sm:gap-4" style="min-width: min(100%, 600px)">
 		<EventStateForm
-			isOwner={data.member?.user.id == data.event.ownerId}
+			isOwner={data.member?.userId == data.event.ownerId}
 			event={data.event}
 			eventCounts={data.eventCounts}
 			eventLicenceAvailable={!!data.eventLicenceAvailable}

@@ -30,7 +30,7 @@
 	})
 
 	let createSubscribeDialog: HTMLDialogElement
-	let selectedMember: (Member & { user: { firstName: string } }) | undefined = undefined
+	let selectedMember: Member | undefined = undefined
 
 	async function handleFieldCreated(field: Field) {
 		const url = new URL($page.url)
@@ -115,7 +115,7 @@
 	<MemberCreateSubscribeDialog
 		bind:dialog={createSubscribeDialog}
 		memberId={selectedMember.id}
-		title="Nouvelle inscription pour {selectedMember.user.firstName}"
+		title="Nouvelle inscription pour {selectedMember.firstName}"
 	/>
 {/if}
 
@@ -124,7 +124,7 @@
 </Drawer>
 
 <Drawer
-	title="Modifier le profil de {data.memberProfile?.user.firstName}"
+	title="Modifier le profil de {data.memberProfile?.firstName}"
 	key="form_member_profile"
 	let:close
 	classBody="pt-4"

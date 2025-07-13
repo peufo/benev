@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiAccountPlusOutline } from '@mdi/js'
-	import type { Member, User } from '@prisma/client'
+	import type { Member } from '@prisma/client'
 	import type { Props as TippyProps } from 'tippy.js'
 	import { createEventDispatcher } from 'svelte'
 	import { InputRelation, urlParam } from 'fuma'
@@ -13,7 +13,7 @@
 	export let tippyProps: Partial<TippyProps> = {}
 	let klass = ''
 	export { klass as class }
-	export let member: (Member & { user: User }) | null = null
+	export let member: Member | null = null
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -48,15 +48,15 @@
 		{tippyProps}
 	>
 		<div slot="item" class="contents" let:item>
-			{item?.user.firstName}
-			{item?.user.lastName}
+			{item?.firstName}
+			{item?.lastName}
 		</div>
 
 		<div slot="suggestion" let:item class="flex gap-2 items-center w-full">
 			{#if item}
-				<span>{item.user.firstName} {item.user.lastName}</span>
+				<span>{item.firstName} {item.lastName}</span>
 				<div class="grow" />
-				<span style="font-size: 0.6rem;">{item.user.email}</span>
+				<span style="font-size: 0.6rem;">{item.email}</span>
 			{/if}
 		</div>
 	</InputRelation>

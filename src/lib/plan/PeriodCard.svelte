@@ -1,14 +1,14 @@
 <script lang="ts">
 	import dayjs from 'dayjs'
 	import { urlParam } from 'fuma'
-	import type { PeriodWithSubscribesUserName } from './types'
+	import type { PeriodWithMembers } from './types'
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
 	import { updatePeriod } from './updatePeriod'
 	import { magnet } from './magnet'
 	import DragButton from './DragButton.svelte'
 
-	export let period: PeriodWithSubscribesUserName
+	export let period: PeriodWithMembers
 	export let hourSize: number
 	export let origin: dayjs.Dayjs
 	export let axis: 'x' | 'y'

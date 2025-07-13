@@ -10,7 +10,6 @@ export const load = async () => {
 		emailInvitation: await renderEmailModel(member.eventId, 'invitation_create', {
 			member,
 			authorName: 'Magicarp',
-			tokenId: 'prout',
 		}),
 		emailInvitationAccept: await renderEmailModel(member.eventId, 'invitation_accept', { member }),
 	}

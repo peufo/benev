@@ -14,13 +14,10 @@
 	class="menu-item pl-0 py-0 flex gap-2 items-center group"
 	href="{$eventPath}/admin/members/{member.id}{$page.url.search}"
 >
-	<Avatar
-		user={member.user}
-		class="h-8 w-8 rounded border group-hover:scale-125 transition-transform"
-	/>
+	<Avatar {...member} class="h-8 w-8 rounded border group-hover:scale-125 transition-transform" />
 	<span class="whitespace-nowrap">
-		{member.user.firstName}
-		{member.user.lastName}
+		{member.firstName}
+		{member.lastName}
 	</span>
 
 	<MemberRole roles={member.roles} mode="icon" />
