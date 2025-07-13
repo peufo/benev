@@ -13,7 +13,7 @@
 	import Avatar from '$lib/me/Avatar.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
-	import MemberAccount from './MemberAccount.svelte'
+	import MemberContactDetails from './MemberContactDetails.svelte'
 	import MemberIsAdminForm from './MemberIsAdminForm.svelte'
 	import MemberIsValidedByEventForm from './MemberIsValidedByEventForm.svelte'
 	import {
@@ -42,8 +42,8 @@
 				</a>
 
 				<span class="title">
-					{data.memberProfile.user.firstName}
-					{data.memberProfile.user.lastName}
+					{data.memberProfile.firstName}
+					{data.memberProfile.lastName}
 				</span>
 
 				{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}
@@ -88,14 +88,11 @@
 				<MemberAbsences subscribes={data.memberProfile.subscribes} />
 				<MemberProfileStatus member={data.memberProfile} />
 			</div>
-			<MemberAccount user={data.memberProfile.user} class="sm:pt-4 mt-4" />
+			<!-- TODO: ContactDetails component -->
+			<MemberContactDetails member={data.memberProfile} class="sm:pt-4 mt-4" />
 		</div>
 
-		<Avatar
-			user={data.memberProfile.user}
-			class="w-24 h-24 sm:w-36 sm:h-36 rounded-md"
-			size="medium"
-		/>
+		<Avatar {...data.memberProfile} class="w-24 h-24 sm:w-36 sm:h-36 rounded-md" size="medium" />
 	</div>
 
 	{#if data.event.memberFields.length}
@@ -116,7 +113,7 @@
 				<Icon
 					path={mdiClipboardTextOutline}
 					size={20}
-					title="Inscrire {data.memberProfile.user.firstName} à un secteur"
+					title="Inscrire {data.memberProfile.firstName} à un secteur"
 				/>
 			</button>
 		</div>
@@ -136,5 +133,5 @@
 <MemberCreateSubscribeDialog
 	bind:dialog={createSubscribeDialog}
 	memberId={data.memberProfile.id}
-	title="Nouvelle inscription pour {data.memberProfile.user.firstName}"
+	title="Nouvelle inscription pour {data.memberProfile.firstName}"
 />

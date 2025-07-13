@@ -24,7 +24,10 @@ async function rootPermission(locals: App.Locals) {
 }
 
 function createEventPermission(role: MemberRole) {
-	return async (eventId: string, locals: App.Locals): Promise<MemberWithComputedValues> => {
+	return async (
+		eventId: string,
+		locals: App.Locals
+	): Promise<MemberWithComputedValues & { email: string; userId: string }> => {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
 		// TODO: a optimisé en utilisant parent() dans les load()
@@ -33,11 +36,14 @@ function createEventPermission(role: MemberRole) {
 		})
 		const allowed = member.roles.includes(role)
 		if (!allowed) error(403)
-		return member
+		return { ...member, email: session.user.email, userId: session.user.id }
 	}
 }
 
-async function leaderOfTeam(teamId: string, locals: App.Locals): Promise<MemberWithComputedValues> {
+async function leaderOfTeam(
+	teamId: string,
+	locals: App.Locals
+): Promise<MemberWithComputedValues & { email: string }> {
 	const team = await prisma.team.findUniqueOrThrow({ where: { id: teamId } })
 	const member = await createEventPermission('leader')(team.eventId, locals)
 	if (!member.roles.includes('admin')) {

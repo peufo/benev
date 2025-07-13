@@ -32,11 +32,11 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 	}
 
 	const columns: Record<string, (member: MemberWithComputedValue) => string | number> = {
-		name: (m) => `${m.user.firstName} ${m.user.lastName}`,
+		name: (m) => `${m.firstName} ${m.lastName}`,
 		createdAt: (m) => toLocaleString(m.createdAt),
-		email: (m) => m.user.email,
-		phone: (m) => m.user.phone?.replace(/^\+/, "'+") || '',
-		age: (m) => getAge(m.user.birthday),
+		email: (m) => m.email || '',
+		phone: (m) => m.phone?.replace(/^\+/, "'+") || '',
+		age: (m) => getAge(m.birthday),
 		subscribesCountAccepted: (m) => m.subscribesCountAccepted,
 		subscribesCountRequest: (m) => m.subscribesCountRequest,
 		subscribeTeamsValided: (m) =>

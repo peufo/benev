@@ -3,12 +3,12 @@
 	import { formatRangeHour } from '$lib/formatRange'
 	import { Icon, urlParam } from 'fuma'
 	import { magnet } from '../magnet'
-	import type { PeriodWithSubscribesUserName } from '../types'
+	import type { PeriodWithMembers } from '../types'
 	import { cardContentOptions } from './options'
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 	import { TagsList } from '$lib/tag'
 
-	export let period: PeriodWithSubscribesUserName
+	export let period: PeriodWithMembers
 	export let deltaStartMs: number
 	export let deltaEndMs: number
 </script>
@@ -45,8 +45,8 @@
 		{#each period.subscribes as subscribe}
 			<li class="badge whitespace-nowrap">
 				<span>
-					{subscribe.member.user.firstName}
-					{subscribe.member.user.lastName}
+					{subscribe.member.firstName}
+					{subscribe.member.lastName}
 				</span>
 				<Icon
 					path={subscribe.state === 'accepted' ? mdiCheck : mdiAlertOctagonOutline}

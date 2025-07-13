@@ -17,7 +17,7 @@ export const actions = {
 				where: { id: params.eventId },
 				data,
 			})
-			await uploadImages(formData, event.id, member.user.id)
+			await uploadImages(formData, event.id, member.userId)
 			return event
 		},
 		{

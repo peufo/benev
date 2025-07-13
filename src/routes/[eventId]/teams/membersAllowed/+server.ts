@@ -8,7 +8,6 @@ export const GET = async ({ params: { eventId }, url }) => {
 	const data = parseQuery(url, { conditions: z.jsonArray(modelMemberCondition) })
 	const members = await prisma.member.findMany({
 		where: { eventId },
-		include: { user: true },
 	})
 	const count = members.filter((member) => isMemberAllowed(data.conditions, member)).length
 

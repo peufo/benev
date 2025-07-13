@@ -14,25 +14,25 @@ datasource db {
 model User {
   id String @id @unique
 
-  email             String  @unique
+  // DUPLICATED DATA ON MEMBER
+  email             String    @unique
   phone             String?
   firstName         String
   lastName          String
+  birthday          DateTime?
+  street            String?
+  zipCode           String?
+  city              String?
+  avatarId          String?   @unique
+  avatar            Media?    @relation(name: "avatar", references: [id], fields: [avatarId], onDelete: SetNull)
+  avatarPlaceholder String    @default("") // TODO: remove default value after migration
+
+  isEmailVerified   Boolean @default(false)
   isOrganizer       Boolean @default(false)
   isTermsAccepted   Boolean @default(false)
-  isEmailVerified   Boolean @default(false)
-  isHeadlessAccount Boolean @default(false)
-
-  birthday DateTime?
-  street   String?
-  zipCode  String?
-  city     String?
+  isHeadlessAccount Boolean @default(false) // TODO: REMOVE THIS SHIT
 
   tokens Token[]
-
-  avatarId          String? @unique
-  avatar            Media?  @relation(name: "avatar", references: [id], fields: [avatarId], onDelete: SetNull)
-  avatarPlaceholder String  @default("") // remove default value after migration
 
   members Member[]
   events  Event[] // ownerOf
@@ -213,18 +213,30 @@ enum FieldType {
 model Member {
   id String @id @default(cuid())
 
+  email             String?
+  isEmailVerified   Boolean   @default(false)
+  phone             String?
+  firstName         String    @default("MIGRATION") // TODO: remove default value after migration
+  lastName          String    @default("IN PROGRESS") // TODO: remove default value after migration
+  birthday          DateTime?
+  street            String?
+  zipCode           String?
+  city              String?
+  avatarId          String?
+  avatarPlaceholder String    @default("") // TODO: remove default value after migration
+
   isAdmin          Boolean @default(false)
   isValidedByEvent Boolean @default(false)
-  isValidedByUser  Boolean @default(false)
+  isValidedByUser  Boolean @default(false) // TODO: REMOVE THIS replaced by .userId
 
   isNotifiedSubscribe         Boolean @default(true)
   isNotifiedLeaderOfSubscribe Boolean @default(true)
   isNotifiedAdminOfNewMember  Boolean @default(true)
 
-  userId  String
-  user    User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+  userId  String?
+  user    User?   @relation(references: [id], fields: [userId], onDelete: SetNull)
   eventId String
-  event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
+  event   Event   @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
   licence Licence?
 
@@ -239,6 +251,7 @@ model Member {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, eventId])
+  @@unique([email, eventId])
 }
 
 model Page {

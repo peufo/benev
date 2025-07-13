@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 
 export function isMemberAllowed(
 	conditions: Team['conditions'] | null,
-	member?: (Member & { user: User }) | null
+	member?: Member | null
 ): boolean {
 	if (!conditions?.length) return true
 	if (!member) return false
@@ -13,7 +13,7 @@ export function isMemberAllowed(
 		.map((condition) => {
 			if (condition.type === 'valided') return member.isValidedByEvent
 			if (condition.type === 'age') {
-				const birthday = member.user.birthday
+				const birthday = member.birthday
 				if (!birthday) return false
 				// TODO: use periods date instead new Date()
 				const today = dayjs()

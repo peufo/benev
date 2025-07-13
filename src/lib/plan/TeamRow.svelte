@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import type { Dayjs } from 'dayjs'
-	import type { PeriodWithSubscribesUserName } from './types'
+	import type { PeriodWithMembers } from './types'
 	import { getStacks } from './getStacks'
 	import { createPeriod } from './createPeriod'
 	import PeriodCard from './PeriodCard.svelte'
 
-	export let team: Team & { periods: PeriodWithSubscribesUserName[] }
+	export let team: Team & { periods: PeriodWithMembers[] }
 	export let hourSize: number
 	export let origin: Dayjs
 

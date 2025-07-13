@@ -131,7 +131,7 @@
 				</p>
 			</Placeholder>
 		{:else if stepIndex === 1 && user}
-			<MemberForm userId={user.id} {event} {charter} on:success={onSucces} />
+			<MemberForm {event} {charter} on:success={onSucces} />
 		{:else if stepIndex === 2 && user}
 			<AvatarForm {user} on:success={onSucces} />
 			<AccountForm {user} on:success={onSucces} />

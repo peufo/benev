@@ -189,7 +189,6 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 				}),
 			},
 			include: {
-				user: true,
 				leaderOf: true,
 				subscribes: {
 					where: { AND: [{ state: { in: ['accepted', 'request'] } }, ...subscribesWhere] },

@@ -5,13 +5,13 @@
 	import type { Team } from '@prisma/client'
 	import { getDays } from './getDays'
 	import TeamCol from './TeamCol.svelte'
-	import type { PeriodWithSubscribesUserName } from './types'
+	import type { PeriodWithMembers } from './types'
 	import { mdiPlus } from '@mdi/js'
 	import { keepScrollCenter } from './keepScrollCenter'
 	import { scrollToPeriod } from './scrollToPeriod'
 	dayjs.locale('fr-ch')
 
-	export let teams: (Team & { periods: PeriodWithSubscribesUserName[] })[]
+	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let range: Range
 	export let hourSize: number
 	export let scrollContainer: HTMLDivElement | undefined = undefined

@@ -9,5 +9,5 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 	})
 	url.searchParams.set('all', 'true')
 	const { members } = await getMembers(event, url)
-	return json({ emails: members.map((m) => m.user.email) })
+	return json({ emails: members.map((m) => m.email).filter(Boolean) as string[] })
 }

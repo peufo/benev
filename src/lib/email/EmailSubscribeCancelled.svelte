@@ -11,7 +11,7 @@
 
 <EmailLayout title={member.event.name} subtitle="Une inscription a été annulée">
 	<p>
-		<b>{member.user.firstName} {member.user.lastName}</b>
+		<b>{member.firstName} {member.lastName}</b>
 		a annulé sa participation à la période de travail suivante :
 	</p>
 
@@ -19,7 +19,7 @@
 	<b>{formatRange(subscribe.period)}</b>
 
 	<p>
-		Retrouve toutes les inscriptions de {member.user.firstName} sur
+		Retrouve toutes les inscriptions de {member.firstName} sur
 		<a href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}">
 			son profil.
 		</a>

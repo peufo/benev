@@ -6,8 +6,7 @@
 	import { Form } from 'fuma'
 	import type { ComponentType } from 'svelte'
 
-	type MemberWithUser = Member & { user: User }
-	const InviteForm: ComponentType<Form<typeof modelInvite, MemberWithUser>> = Form
+	const InviteForm: ComponentType<Form<typeof modelInvite, Member>> = Form
 </script>
 
 <InviteForm

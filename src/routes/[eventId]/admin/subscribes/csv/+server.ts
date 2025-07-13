@@ -25,9 +25,9 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		}
 	}
 	const columns: Record<string, (subscribe: Subscribes) => string | number> = {
-		member: (s) => `${s.member.user.firstName} ${s.member.user.lastName}`,
-		memberEmail: (s) => s.member.user.email,
-		memberPhone: (s) => s.member.user.phone || '',
+		member: (s) => `${s.member.firstName} ${s.member.lastName}`,
+		memberEmail: (s) => s.member.email || '',
+		memberPhone: (s) => s.member.phone || '',
 		subscribeAt: (s) => toLocaleString(s.createdAt),
 		team: (s) => s.period.team.name,
 		shiftStart: (s) => toLocaleString(s.period.start),

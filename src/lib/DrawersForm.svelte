@@ -3,7 +3,7 @@
 	import InviteForm from './InviteForm.svelte'
 	import { TeamForm, type TeamFormInstance, type TeamWithLeaders } from './team'
 	import { PeriodDrawer, PeriodForm } from './period'
-	import type { Event, Field, Period, Subscribe, Tag } from '@prisma/client'
+	import type { Event, Field, Member, Period, Subscribe, Tag } from '@prisma/client'
 	import { TagForm } from './tag'
 
 	let teamForm: TeamFormInstance
@@ -13,7 +13,7 @@
 	export let event: Event & { memberFields: Field[] }
 	export let team: Partial<TeamWithLeaders> | null = null
 	export let period: Partial<
-		Period & { subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]; tags: Tag[] }
+		Period & { subscribes: (Subscribe & { member: Member })[]; tags: Tag[] }
 	> = {}
 
 	export let tag: Partial<Tag> | null = null

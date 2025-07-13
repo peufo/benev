@@ -5,13 +5,13 @@
 	import TeamRow from '$lib/plan/TeamRow.svelte'
 	import dayjs from 'dayjs'
 	import type { Team } from '@prisma/client'
-	import type { PeriodWithSubscribesUserName } from './types'
+	import type { PeriodWithMembers } from './types'
 	import { getDays } from './getDays'
 	import { keepScrollCenter } from './keepScrollCenter'
 	import { scrollToPeriod } from './scrollToPeriod'
 	dayjs.locale('fr-ch')
 
-	export let teams: (Team & { periods: PeriodWithSubscribesUserName[] })[]
+	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let range: Range
 	export let hourSize: number
 

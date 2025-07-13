@@ -7,11 +7,11 @@
 		mdiPhoneOutline,
 		mdiGhostOutline,
 	} from '@mdi/js'
-	import type { User } from '@prisma/client'
+	import type { Member } from '@prisma/client'
 	import { Icon } from 'fuma'
 	import { getAge } from '$lib/utils'
 
-	export let user: User
+	export let member: Member
 	let klass = ''
 	export { klass as class }
 </script>
@@ -23,11 +23,11 @@
 	"
 >
 	<div class="flex gap-4">
-		{#if user.isHeadlessAccount}
+		{#if !member.email}
 			<Icon path={mdiGhostOutline} class="opacity-70" size={20} />
 			<span>Pas d'email</span>
 		{:else}
-			{#if user.isEmailVerified}
+			{#if member.isEmailVerified}
 				<Icon
 					path={mdiEmailCheckOutline}
 					class="opacity-70 fill-success"
@@ -42,17 +42,17 @@
 					size={20}
 				/>
 			{/if}
-			<a href="mailto:{user.email}" class="link link-hover" target="_blank">
-				{user.email}
+			<a href="mailto:{member.email}" class="link link-hover" target="_blank">
+				{member.email}
 			</a>
 		{/if}
 	</div>
 
 	<div class="flex gap-4">
 		<Icon path={mdiPhoneOutline} class="opacity-70" size={20} />
-		{#if user.phone}
-			<a href="tel:{user.phone}" class="link link-hover" target="_blank">
-				{user.phone}
+		{#if member.phone}
+			<a href="tel:{member.phone}" class="link link-hover" target="_blank">
+				{member.phone}
 			</a>
 		{:else}
 			<span>-</span>
@@ -62,9 +62,9 @@
 	<div class="flex gap-4">
 		<Icon path={mdiCakeVariantOutline} class="opacity-70" size={20} />
 		<div>
-			{#if user.birthday}
-				{user.birthday.toLocaleDateString()}
-				({getAge(user.birthday)})
+			{#if member.birthday}
+				{member.birthday.toLocaleDateString()}
+				({getAge(member.birthday)})
 			{:else}
 				-
 			{/if}
@@ -74,13 +74,13 @@
 	<div class="flex gap-4">
 		<Icon path={mdiHomeCityOutline} class="opacity-70" size={20} />
 		<a
-			href="https://www.google.com/maps/search/{user.street} {user.zipCode} {user.city}"
+			href="https://www.google.com/maps/search/{member.street} {member.zipCode} {member.city}"
 			class="link link-hover"
 			target="_blank"
 		>
-			{user.street || '-'}<br />
-			{user.zipCode || ''}
-			{user.city || ''}
+			{member.street || '-'}<br />
+			{member.zipCode || ''}
+			{member.city || ''}
 		</a>
 	</div>
 </div>

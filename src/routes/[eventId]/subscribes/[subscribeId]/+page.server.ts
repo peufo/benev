@@ -93,7 +93,7 @@ const setSubscribState: (_state: SubscribeState) => Action =
 				}
 			}
 
-			if (state === 'request' && _subscribe.member.user.isHeadlessAccount) {
+			if (state === 'request' && !_subscribe.member.userId) {
 				state = 'accepted'
 				isForcedValidation = true
 			}
@@ -118,7 +118,7 @@ const setSubscribState: (_state: SubscribeState) => Action =
 				where: { id: subscribeId },
 				data: { state, isForcedValidation },
 				include: {
-					member: { include: { user: { select: { email: true } } } },
+					member: true,
 					period: {
 						include: {
 							team: {
@@ -126,10 +126,10 @@ const setSubscribState: (_state: SubscribeState) => Action =
 									event: true,
 									leaders: {
 										where: {
+											email: { not: null },
 											isValidedByUser: true,
 											isNotifiedLeaderOfSubscribe: true,
 										},
-										select: { user: { select: { email: true } } },
 									},
 								},
 							},
@@ -147,8 +147,11 @@ const setSubscribState: (_state: SubscribeState) => Action =
 				await ensureLicenceMembers(eventId)
 			}
 
-			const toMember = subscribe.member.isNotifiedSubscribe ? [subscribe.member.user.email] : []
-			const toLeaders = subscribe.period.team.leaders.map((l) => l.user.email)
+			const toMember =
+				subscribe.member.isNotifiedSubscribe && subscribe.member.email
+					? [subscribe.member.email]
+					: []
+			const toLeaders = subscribe.period.team.leaders.map(({ email }) => email as string)
 			const emailOptions = {
 				from: subscribe.period.team.event.name,
 				to: isLeaderAction ? toMember : toLeaders,
@@ -165,7 +168,7 @@ const setSubscribState: (_state: SubscribeState) => Action =
 				await subscribeNotification[state]({
 					...emailOptions,
 					subject: subjects[state],
-					props: { subscribe, authorName: `${author.user.firstName} ${author.user.lastName}` },
+					props: { subscribe, authorName: `${author.firstName} ${author.lastName}` },
 				})
 			}
 		})

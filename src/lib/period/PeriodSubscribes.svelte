@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Subscribe, User } from '@prisma/client'
+	import type { Member, Subscribe, User } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
 	import { Icon, tip } from 'fuma'
 	import { Avatar } from '$lib/me'
 
-	export let subscribes: (Subscribe & { member: { user?: User; isValidedByUser: boolean } })[]
+	export let subscribes: (Subscribe & { member: Member })[]
 </script>
 
 <div class="flex flex-col gap-1">
@@ -18,19 +18,17 @@
 				</div>
 			{/if}
 
-			{#if subscribe.member.user}
-				<a
-					class="whitespace-nowrap grow flex gap-2 items-center pr-2 h-8 rounded hover:bg-base-200 bg-base-200/40 border"
-					title="Voir les infos de {subscribe.member.user.firstName}"
-					href="{$eventPath}/admin/members/{subscribe.memberId}"
-				>
-					<Avatar user={subscribe.member.user} class="h-8 w-8 rounded border" />
-					<span class="text-sm">
-						{subscribe.member.user.firstName}
-						{subscribe.member.user.lastName}
-					</span>
-				</a>
-			{/if}
+			<a
+				class="whitespace-nowrap grow flex gap-2 items-center pr-2 h-8 rounded hover:bg-base-200 bg-base-200/40 border"
+				title="Voir les infos de {subscribe.member.firstName}"
+				href="{$eventPath}/admin/members/{subscribe.memberId}"
+			>
+				<Avatar {...subscribe.member} class="h-8 w-8 rounded border" />
+				<span class="text-sm">
+					{subscribe.member.firstName}
+					{subscribe.member.lastName}
+				</span>
+			</a>
 
 			<SubscribeCreatedBy createdBy={subscribe.createdBy} size={20} class="mr-auto w-8" />
 

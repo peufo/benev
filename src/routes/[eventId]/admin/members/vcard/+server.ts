@@ -20,18 +20,17 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 }
 
 function getVCard(member: MemberWithComputedValue): string {
-	const { user } = member
 	const rows = [
 		'BEGIN:VCARD',
 		'VERSION:4.0',
 		`ORG:Benev.io;${member.event.name}`,
-		`FN:${user.firstName} ${user.lastName}`,
-		`EMAIL:${user.email}`,
+		`FN:${member.firstName} ${member.lastName}`,
+		`EMAIL:${member.email}`,
 	]
-	if (user.phone) rows.push(`TEL:${user.phone}`)
-	if (user.birthday) rows.push(`BDAY:${getBDAY(user.birthday)}`)
-	if (user.zipCode && user.city && user.street)
-		rows.push(`ADR:;;${user.street};${user.city};${user.zipCode};`)
+	if (member.phone) rows.push(`TEL:${member.phone}`)
+	if (member.birthday) rows.push(`BDAY:${getBDAY(member.birthday)}`)
+	if (member.zipCode && member.city && member.street)
+		rows.push(`ADR:;;${member.street};${member.city};${member.zipCode};`)
 	rows.push('END:VCARD\n')
 	return rows.join('\n')
 }

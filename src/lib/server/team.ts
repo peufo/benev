@@ -3,9 +3,6 @@ import type { Event, Member, Period, Subscribe, Team, User, Prisma, Tag } from '
 import { prisma } from './prisma'
 import type { MemberWithComputedValues } from './member'
 
-export type MemberWithUser = Member & {
-	user: Pick<User, 'firstName' | 'lastName' | 'email' | 'phone' | 'avatarId' | 'avatarPlaceholder'>
-}
 export const safeUserSelect = {
 	firstName: true,
 	lastName: true,
@@ -16,7 +13,7 @@ export const safeUserSelect = {
 } satisfies Prisma.UserSelect
 
 type TeamWithLeadersAndPeriodsSubscribes = Team & {
-	leaders: MemberWithUser[]
+	leaders: Member[]
 	periods: (Period & {
 		subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
 		tags: Tag[]
@@ -53,19 +50,17 @@ export function useAddTeamComputedValues(
 		const isClosedSubscribing =
 			!!closeSubscribing && closeSubscribing.getTime() + DAY < new Date().getTime()
 
-		return hideTeamLeadersInfo(
-			addPeriodsComputedValues({
-				...team,
-				isLeader,
-				isClosedSubscribing,
-				maxSubscribes,
-				nbSubscribes,
-				nbSubscribesAccepted,
-				nbSubscribesRequest,
-				isAvailable: nbSubscribes < maxSubscribes,
-				range: getRangeOfTeam(team),
-			})
-		)
+		return addPeriodsComputedValues({
+			...team,
+			isLeader,
+			isClosedSubscribing,
+			maxSubscribes,
+			nbSubscribes,
+			nbSubscribesAccepted,
+			nbSubscribesRequest,
+			isAvailable: nbSubscribes < maxSubscribes,
+			range: getRangeOfTeam(team),
+		})
 	}
 
 	function addPeriodsComputedValues<T extends ComputePeriodArg>(
@@ -111,7 +106,7 @@ export type PeriodWithComputedValues = Period & {
 }
 
 export type TeamWithComputedValues = Team & {
-	leaders: MemberWithUser[]
+	leaders: Member[]
 	periods: PeriodWithComputedValues[]
 	isLeader: boolean
 	isAvailable: boolean
@@ -125,27 +120,10 @@ export type TeamWithComputedValues = Team & {
 type ComputePeriodArg = Omit<TeamWithComputedValues, 'periods'> &
 	TeamWithLeadersAndPeriodsSubscribes
 
-function hideTeamLeadersInfo<T extends { leaders: MemberWithUser[] }>(team: T): T {
-	return {
-		...team,
-		leaders: team.leaders.map((leader) =>
-			leader.isValidedByUser
-				? leader
-				: {
-						...leader,
-						user: {
-							...leader.user,
-							email: '',
-							phone: null,
-						},
-				  }
-		),
-	}
-}
-
 export async function getTeam(teamId: string, ctx?: AddTeamComputedValuesContext) {
-	const isLeaderOfTeam =
-		ctx?.member?.roles.includes('admin') || !!ctx?.member?.leaderOf.find((t) => t.id === teamId)
+	// TODO: hide email for public session
+	// const isLeaderOfTeam =
+	// 	ctx?.member?.roles.includes('admin') || !!ctx?.member?.leaderOf.find((t) => t.id === teamId)
 
 	const team: TeamWithComputedValues = await prisma.team
 		.findUniqueOrThrow({
@@ -160,25 +138,7 @@ export async function getTeam(teamId: string, ctx?: AddTeamComputedValuesContext
 					orderBy: { start: 'asc' },
 					include: {
 						tags: true,
-						subscribes: isLeaderOfTeam
-							? {
-									include: {
-										member: {
-											include: {
-												user: { select: safeUserSelect },
-											},
-										},
-									},
-							  }
-							: {
-									include: {
-										member: {
-											select: {
-												isValidedByUser: true,
-											},
-										},
-									},
-							  },
+						subscribes: { include: { member: true } },
 					},
 				},
 			},

@@ -10,11 +10,10 @@ type SuggestionItem = { id: string; label: string }
 type DataWithMember = { member: MemberWithComputedValues }
 
 const memberStaticSuggestions: Partial<Record<NestedPaths<DataWithMember>, string>> = {
-	'member.user.firstName': 'Prénom',
-	'member.user.lastName': 'Nom de famille',
-	'member.user.email': 'Email',
-	'member.user.phone': 'Téléphone',
-	'member.user.isTermsAccepted': 'Charte accepté',
+	'member.firstName': 'Prénom',
+	'member.lastName': 'Nom de famille',
+	'member.email': 'Email',
+	'member.phone': 'Téléphone',
 	'member.roles': 'Rôles',
 	'member.isMemberProfileCompleted': 'Profile de membre complet',
 	'member.isUserProfileCompleted': "Profile d'utilisateur complet",
@@ -26,22 +25,20 @@ const memberStaticSuggestions: Partial<Record<NestedPaths<DataWithMember>, strin
 // TODO: add 'subscribes', 'teams'
 const memberComputedSuggestions: Record<
 	string,
-	[string, (data: DataWithMember & { tokenId?: string }) => string | string[]]
+	[string, (data: DataWithMember) => string | string[]]
 > = {
-	age: ['Age', ({ member }) => getAge(member.user.birthday)],
-	name: ['Nom et prénom', ({ member }) => `${member.user.firstName} ${member.user.lastName}`],
+	age: ['Age', ({ member }) => getAge(member.birthday)],
+	name: ['Nom et prénom', ({ member }) => `${member.firstName} ${member.lastName}`],
 	address: [
 		'Adresse',
 		({ member }) =>
-			`${member.user.firstName} ${member.user.lastName}<br>${member.user.street}<br>${member.user.zipCode} ${member.user.city}`,
+			`${member.firstName} ${member.lastName}<br>${member.street}<br>${member.zipCode} ${member.city}`,
 	],
 	leaderOf: ['Secteurs à charge', ({ member }) => member.leaderOf.map((t) => t.name)],
 	me: [
 		'Lien vers le tableau de bord',
-		({ member, tokenId }) => {
-			const href = tokenId
-				? `${domain}/token/${tokenId}/reset_password?redirectTo=/${member.eventId}/me&newUser=${member.user.firstName}&eventName=${member.event.name}`
-				: `${domain}/${member.eventId}/me`
+		({ member }) => {
+			const href = `${domain}/${member.eventId}/me`
 			return `<a href="${href}">tableau de bord</a>`
 		},
 	],
@@ -59,7 +56,7 @@ export function getMemberSuggestions(fields: Field[]): SuggestionItem[] {
 	]
 }
 
-export function getMemberReplacers(props: DataWithMember & { tokenId?: string }): Replacer[] {
+export function getMemberReplacers(props: DataWithMember): Replacer[] {
 	return [
 		...Object.entries(memberStaticSuggestions).map(([id]) => ({
 			id,

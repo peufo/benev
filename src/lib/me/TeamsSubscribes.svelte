@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
+	import type { Member, Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { formatRange } from '$lib/formatRange'
 	import { CardLink, Icon, Placeholder, urlParam } from 'fuma'
@@ -7,11 +7,10 @@
 	import { mdiAlertOutline } from '@mdi/js'
 	import { tip } from 'fuma'
 	import TeamLeaders from '$lib/team/TeamLeaders.svelte'
-	import type { MemberWithUser } from '$lib/server'
 	import { TagsList } from '$lib/tag'
 
 	export let teams: (Team & {
-		leaders: MemberWithUser[]
+		leaders: Member[]
 		periods: (Period & {
 			subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
 			tags: Tag[]
