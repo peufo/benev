@@ -37,6 +37,8 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		email: (m) => m.user.email,
 		phone: (m) => m.user.phone?.replace(/^\+/, "'+") || '',
 		age: (m) => getAge(m.user.birthday),
+		subscribesCountAccepted: (m) => m.subscribesCountAccepted,
+		subscribesCountRequest: (m) => m.subscribesCountRequest,
 		subscribeTeamsValided: (m) =>
 			m.subscribes
 				.filter((s) => s.state === 'accepted')
