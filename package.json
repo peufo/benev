@@ -14,9 +14,9 @@
 		"migrate": "prisma migrate dev",
 		"migrate:deploy": "prisma migrate deploy",
 		"studio": "prisma studio",
-		"test": "vitest",
-		"test:integration": "playwright test --ui",
-		"test:integration-gen": "playwright codegen localhost:5173",
+		"vitest": "vitest",
+		"test": "playwright test --ui",
+		"test-gen": "playwright codegen localhost:5173",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
@@ -24,7 +24,7 @@
 		"dev:stripe": "stripe listen --forward-to localhost:5173/me/licences/checkout/validation"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.39.0",
+		"@playwright/test": "^1.54.2",
 		"@sveltejs/adapter-node": "^5.2.0",
 		"@sveltejs/kit": "^2.5.18",
 		"@sveltejs/vite-plugin-svelte": "^3.0.1",
@@ -98,7 +98,11 @@
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
-			"esbuild"
+			"@prisma/client",
+			"@prisma/engines",
+			"esbuild",
+			"prisma",
+			"svelte-preprocess"
 		]
 	}
 }
