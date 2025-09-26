@@ -31,7 +31,12 @@
 
 <form method="post" use:enhance={form.submit} enctype="multipart/form-data" class="contents">
 	<InputImage formaction="/me?/upload_avatar" title="Photo de profil">
-		<Avatar {...user} class="h-28 w-28 {klass}" />
+		<Avatar
+			firstName={user.firstName}
+			avatarId={user.avatarId}
+			avatarPlaceholder={user.avatarPlaceholder}
+			class="h-28 w-28 {klass}"
+		/>
 
 		<svelte:fragment slot="actions">
 			{#if user.avatarId}

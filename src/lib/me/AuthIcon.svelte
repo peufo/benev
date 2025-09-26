@@ -15,7 +15,12 @@
 	"
 >
 	{#if user}
-		<Avatar {...user} class="rounded-lg w-full h-full" />
+		<Avatar
+			firstName={user.firstName}
+			avatarId={user.avatarId}
+			avatarPlaceholder={user.avatarPlaceholder}
+			class="rounded-lg w-full h-full"
+		/>
 	{:else}
 		<Icon path={mdiAccountOutline} />
 	{/if}

@@ -12,7 +12,12 @@
 			slot="activator"
 			class="hover:bg-base-200 bg-base-200/40 cursor-pointer flex gap-2 border items-center pr-2 rounded"
 		>
-			<Avatar {...member} class="h-8 w-8 rounded border" />
+			<Avatar
+				firstName={member.firstName}
+				avatarId={member.avatarId}
+				avatarPlaceholder={member.avatarPlaceholder}
+				class="h-8 w-8 rounded border"
+			/>
 			<span class="text-sm">
 				{member.firstName}
 				{member.lastName}

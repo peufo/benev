@@ -92,7 +92,13 @@
 			<MemberContactDetails member={data.memberProfile} class="sm:pt-4 mt-4" />
 		</div>
 
-		<Avatar {...data.memberProfile} class="w-24 h-24 sm:w-36 sm:h-36 rounded-md" size="medium" />
+		<Avatar
+			firstName={data.memberProfile.firstName}
+			avatarId={data.memberProfile.avatarId}
+			avatarPlaceholder={data.memberProfile.avatarPlaceholder}
+			class="w-24 h-24 sm:w-36 sm:h-36 rounded-md"
+			size="medium"
+		/>
 	</div>
 
 	{#if data.event.memberFields.length}

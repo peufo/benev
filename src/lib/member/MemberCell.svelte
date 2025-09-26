@@ -14,7 +14,12 @@
 	class="menu-item pl-0 py-0 flex gap-2 items-center group"
 	href="{$eventPath}/admin/members/{member.id}{$page.url.search}"
 >
-	<Avatar {...member} class="h-8 w-8 rounded border group-hover:scale-125 transition-transform" />
+	<Avatar
+		firstName={member.firstName}
+		avatarId={member.avatarId}
+		avatarPlaceholder={member.avatarPlaceholder}
+		class="h-8 w-8 rounded border group-hover:scale-125 transition-transform"
+	/>
 	<span class="whitespace-nowrap">
 		{member.firstName}
 		{member.lastName}

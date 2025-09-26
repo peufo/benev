@@ -23,7 +23,12 @@
 				title="Voir les infos de {subscribe.member.firstName}"
 				href="{$eventPath}/admin/members/{subscribe.memberId}"
 			>
-				<Avatar {...subscribe.member} class="h-8 w-8 rounded border" />
+				<Avatar
+					firstName={subscribe.member.firstName}
+					avatarId={subscribe.member.avatarId}
+					avatarPlaceholder={subscribe.member.avatarPlaceholder}
+					class="h-8 w-8 rounded border"
+				/>
 				<span class="text-sm">
 					{subscribe.member.firstName}
 					{subscribe.member.lastName}
