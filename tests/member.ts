@@ -7,7 +7,7 @@ export function useMember(event: BenevEvent, name: string, email = '') {
 			await event.gotoAsOwner(page)
 			await page.getByRole('link', { name: 'Membres', exact: true }).click()
 			await page.getByRole('main').getByRole('link').filter({ hasText: /^$/ }).nth(1).click()
-			await page.waitForResponse(/.*\?form_invite=1/)
+			await page.waitForResponse(/.*\?form_invite={}/)
 			await page.getByRole('textbox', { name: 'Email' }).click()
 			await page.getByRole('textbox', { name: 'Email' }).fill(email)
 			await page.getByRole('textbox', { name: 'Prénom' }).click()

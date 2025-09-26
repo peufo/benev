@@ -7,7 +7,7 @@
 	import { api } from '$lib/api'
 
 	const getMembersEmails = async () => {
-		const { emails } = await $api.get<{ emails: string[] }>(
+		const { emails } = await $api.eventGet<{ emails: string[] }>(
 			`/admin/members/email?${$page.url.searchParams.toString()}`
 		)
 		return emails

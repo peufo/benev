@@ -6,7 +6,7 @@ import type { Member, Tag, User } from '@prisma/client'
 import type { TeamWithComputedValues } from '$lib/server'
 
 interface RequestConfig<Params = object, Data = object> extends AxiosRequestConfig<Data> {
-	params: Params
+	params?: Params
 }
 
 type ParamsPagination = {
@@ -16,6 +16,11 @@ type ParamsPagination = {
 }
 
 const _api = axios.create({ baseURL: '' })
+async function get<T>(route: string, config: RequestConfig = {}) {
+	const { data, headers } = await _api.get(route, config)
+	ensureJson(headers, route)
+	return devalue.unflatten(data) as T
+}
 
 function ensureJson(headers: RawAxiosResponseHeaders, route: string) {
 	const contentType = headers['content-type']
@@ -28,18 +33,14 @@ function ensureJson(headers: RawAxiosResponseHeaders, route: string) {
 function search<T, Params>(route: string) {
 	return async (search: string, params?: Params & ParamsPagination) => {
 		const config: RequestConfig = { params: { search, ...params } }
-		const { data, headers } = await _api.get(route, config)
-		ensureJson(headers, route)
-		return devalue.unflatten(data) as T[]
+		return get<T[]>(route, config)
 	}
 }
 
 function findMany<T, Params>(route: string, defaultParams?: Params) {
 	return async (ids: string[], params = defaultParams) => {
 		const config: RequestConfig = { params: { ids, ...params } }
-		const { data, headers } = await _api.get(route, config)
-		ensureJson(headers, route)
-		return devalue.unflatten(data) as T[]
+		return get<T[]>(route, config)
 	}
 }
 
@@ -51,19 +52,21 @@ function methods<T, Params = object>(route: string) {
 }
 
 export const api = derived(page, ({ params: { eventId } }) => {
-	async function get<T>(route: string, config?: RequestConfig) {
+	async function eventGet<T>(route: string, config?: RequestConfig) {
 		const { data, headers } = await _api.get(`/${eventId}${route}`, config)
 		ensureJson(headers, route)
 		return devalue.unflatten(data) as T
 	}
 
 	return {
-		get,
+		eventGet,
 		member: methods<Member & { user: { firstName: string; lastName: string; email: string } }>(
 			`/${eventId}/api/members`
 		),
 		team: methods<TeamWithComputedValues, { onlyAvailable?: boolean }>(`/${eventId}/api/teams`),
 		tag: methods<Tag>(`/${eventId}/api/tags`),
-		user: methods<User>(`/root/users`),
+		user: (email: string) =>
+			get<{ firstName: string; lastName: string }>(`/${eventId}/api/user`, { params: { email } }),
+		rootUser: methods<User>(`/root/users`),
 	}
 })

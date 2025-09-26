@@ -74,7 +74,7 @@
 				<a
 					type="button"
 					class="btn btn-square btn-sm"
-					href={$urlParam.with({ form_invite: 1 })}
+					href={$urlParam.with({ form_invite: '{}' })}
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
 				>

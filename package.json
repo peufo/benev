@@ -94,7 +94,8 @@
 		"svelte-easy-crop": "^2.0.2",
 		"svelte-meta-tags": "^3.1.0",
 		"svelte-sonner": "^0.3.24",
-		"tippy.js": "^6.3.7"
+		"tippy.js": "^6.3.7",
+		"zod": "^4.1.11"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [

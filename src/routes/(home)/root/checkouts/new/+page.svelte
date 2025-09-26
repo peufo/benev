@@ -17,13 +17,14 @@
 
 	<form action="/root/checkouts/new" method="post" use:enhance={form.submit}>
 		<InputText key="name" label="Name" value="Correction" />
-		<InputRelation key="user" search={$api.user.search} label="Owner" bind:value={owner}>
+		<InputRelation key="user" search={$api.rootUser.search} label="Owner" bind:value={owner}>
 			<svelte:fragment slot="item" let:item>
 				<span>{item?.firstName} {item?.lastName}</span>
 				<span class="text-xs">{item?.email}</span>
 			</svelte:fragment>
 			<svelte:fragment slot="suggestion" let:item>
 				<div>
+					rootUser
 					<div>{item.firstName} {item.lastName}</div>
 					<div class="text-xs">{item.email}</div>
 				</div>

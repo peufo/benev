@@ -15,5 +15,5 @@
 	slotItem={({ firstName, lastName }) => `${firstName} ${lastName}`}
 	createTitle="Inviter un nouveau membre"
 	createIcon={mdiAccountPlusOutline}
-	createUrl={$urlParam.with({ form_invite: 1 })}
+	createUrl={$urlParam.with({ form_invite: '{}' })}
 />

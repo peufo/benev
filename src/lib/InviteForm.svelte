@@ -1,49 +1,68 @@
 <script lang="ts">
-	import type { Member, User } from '@prisma/client'
-
+	import { Form, InputText } from 'fuma'
+	import z from 'zod'
+	import { slide } from 'svelte/transition'
+	import { toast } from 'svelte-sonner'
 	import { modelInvite } from '$lib/models'
 	import { eventPath } from '$lib/store'
-	import { Form } from 'fuma'
-	import type { ComponentType } from 'svelte'
+	import { api } from './api'
 
-	const InviteForm: ComponentType<Form<typeof modelInvite, Member>> = Form
+	let email = ''
+	let isLoadingUserExists = false
+	let user = { firstName: '', lastName: '' }
+
+	async function handleEmailInput() {
+		const { success } = z.safeParse(z.email(), email)
+		if (!success) return
+		isLoadingUserExists = true
+		const res = await $api.user(email).finally(() => (isLoadingUserExists = false))
+		user.firstName = res.firstName
+		user.lastName = res.lastName
+		if (res.firstName) {
+			toast.success('Utilisateur trouvé !')
+		}
+	}
 </script>
 
-<InviteForm
+<Form
 	action="{$eventPath}/invite?/invite"
 	model={modelInvite}
 	options={{
 		successMessage: 'Invitation envoyée',
 		successUpdate: false,
+		onFail(failure) {
+			if (failure) toast.error(failure.message)
+		},
 	}}
 	on:created
 	on:updated
 	on:deleted
 	on:success
-	fields={[
-		[
-			{
-				key: 'email',
-				colSpan: 4,
-				text: {
-					label: 'Email',
-					input: { autocomplete: 'off', autofocus: true },
-				},
-			},
-			{
-				key: 'firstName',
-				text: {
-					label: 'Prénom',
-					input: { autocomplete: 'off' },
-				},
-			},
-			{
-				key: 'lastName',
-				text: {
-					label: 'Nom',
-					input: { autocomplete: 'off' },
-				},
-			},
-		],
-	]}
-/>
+>
+	<div class="grid grid-cols-2 gap-4 my-6">
+		<InputText
+			label="Email"
+			key="email"
+			class="col-span-2"
+			classWrapper="flex items-center"
+			input={{ autocomplete: 'off' }}
+			bind:value={email}
+			on:input={handleEmailInput}
+		>
+			<div slot="append">
+				{#if isLoadingUserExists}
+					<div transition:slide={{ axis: 'x' }} class="w-10 grid place-content-center">
+						<div class="loading loading-ring loading-xs" />
+					</div>
+				{/if}
+			</div>
+		</InputText>
+		<InputText
+			label="Prénom"
+			key="firstName"
+			input={{ autocomplete: 'off' }}
+			value={user.firstName}
+		/>
+		<InputText label="Nom" key="lastName" input={{ autocomplete: 'off' }} value={user.lastName} />
+	</div>
+</Form>
