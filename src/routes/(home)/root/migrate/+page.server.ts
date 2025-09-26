@@ -1,38 +1,44 @@
-import { defaultEmailModels } from '$lib/email/models.js'
 import { tryOrFail } from 'fuma/server'
 import { prisma } from '$lib/server'
 
 export const actions = {
-	generate_all_avatars: async () => {
-		const users = await prisma.user.findMany()
-		return tryOrFail(async () => {
-			await Promise.all(
-				users.map(({ id }) => {
-					const avatarUrl = new URL('https://api.dicebear.com/7.x/thumbs/svg')
-					avatarUrl.searchParams.append('seed', String(Math.random()))
-					const avatarPlaceholder = avatarUrl.toString()
-					return prisma.user.update({ where: { id }, data: { avatarPlaceholder } })
+	copy_user_to_members: () =>
+		tryOrFail(async () => {
+			const members = await prisma.member.findMany()
+			let count = 0
+
+			for (const member of members) {
+				if (!member.userId) continue
+				const user = await prisma.user.findUniqueOrThrow({ where: { id: member.userId } })
+				await prisma.member.update({
+					where: { id: member.id },
+					data: {
+						email: user.email,
+						isEmailVerified: user.isEmailVerified,
+						firstName: user.firstName,
+						lastName: user.lastName,
+						phone: user.phone,
+						birthday: user.birthday,
+						street: user.street,
+						zipCode: user.zipCode,
+						city: user.city,
+						avatarId: user.avatarId,
+						avatarPlaceholder: user.avatarPlaceholder,
+					},
 				})
-			)
-			return
-		})
-	},
-	generate_emails_model: async () => {
-		return tryOrFail(async () => {
-			const events = await prisma.event.findMany({
-				include: { pages: { where: { type: 'email' } } },
-			})
-			await Promise.all(
-				events.map((event) => {
-					const emails = defaultEmailModels.filter(
-						(model) => !event.pages.find((p) => p.path === model.path)
-					)
-					return prisma.event.update({
-						where: { id: event.id },
-						data: { pages: { createMany: { data: emails } } },
-					})
-				})
-			)
-		})
-	},
+
+				console.log(`Member ${++count}/${members.length} copied`)
+			}
+
+			return {
+				updated: count,
+			}
+		}),
+	rm_headless_users: () =>
+		tryOrFail(async () => {
+			const res = await prisma.user.deleteMany({ where: { isHeadlessAccount: true } })
+			return {
+				deleted: res.count,
+			}
+		}),
 }
