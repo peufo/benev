@@ -12,6 +12,7 @@ import type {
 	SubscribeState,
 } from '@prisma/client'
 import { prisma, addMemberComputedValues, type MemberWithComputedValues } from '$lib/server'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export type MemberWithComputedValue = Awaited<ReturnType<typeof getMembers>>['members'][number]
 
@@ -153,15 +154,19 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	for (const [key, value] of url.searchParams.entries()) {
 		if (!key.startsWith('field_')) continue
 		const fieldId = key.replace('field_', '')
-		const field = await prisma.field.findUniqueOrThrow({ where: { id: fieldId, eventId } })
-		const fieldFilter = fieldFilterByType[field.type](value)
-		if (fieldFilter) {
-			where.push({
-				profileJson: {
-					path: `$.${fieldId}`,
-					...fieldFilter,
-				},
-			})
+		try {
+			const field = await prisma.field.findUniqueOrThrow({ where: { id: fieldId, eventId } })
+			const fieldFilter = fieldFilterByType[field.type](value)
+			if (fieldFilter) {
+				where.push({
+					profileJson: {
+						path: `$.${fieldId}`,
+						...fieldFilter,
+					},
+				})
+			}
+		} catch (error) {
+			console.error(error)
 		}
 	}
 
