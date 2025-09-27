@@ -7,6 +7,7 @@ import {
 	safeUserSelect,
 } from '$lib/server'
 import { z } from 'fuma/validation'
+import { modelUserContactUpdate } from '$lib/models'
 
 export const load = async ({ parent, params: { memberId, eventId } }) => {
 	const { member } = await parent()
@@ -77,6 +78,16 @@ export const actions = {
 			await permission.leader(eventId, locals)
 			await prisma.member.update({ where: { id: memberId }, data })
 			await ensureLicenceMembers(eventId)
+		}
+	),
+	member_contact_update: formAction(
+		modelUserContactUpdate,
+		async ({ locals, params: { eventId, memberId }, data }) => {
+			await permission.leader(eventId, locals)
+			return prisma.member.update({
+				where: { id: memberId },
+				data,
+			})
 		}
 	),
 }

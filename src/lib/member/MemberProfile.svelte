@@ -27,7 +27,7 @@
 			href={$urlParam.with({ form_member_profile: '{}' })}
 			data-sveltekit-replacestate
 			data-sveltekit-noscroll
-			class="ml-auto btn btn-square btn-sm"
+			class="btn btn-square btn-sm ml-2"
 		>
 			<Icon path={mdiPencilOutline} title="Modifier le profil de {member.firstName}" />
 		</a>

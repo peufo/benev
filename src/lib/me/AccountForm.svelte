@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
-	import { createEventDispatcher, onMount, tick } from 'svelte'
-	import { useForm, Icon, InputText, InputDate, FormControl, InputBoolean } from 'fuma'
+	import { createEventDispatcher, onMount } from 'svelte'
+	import { useForm, Icon, InputText, InputDate, FormControl } from 'fuma'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 	import type { User } from '@prisma/client'

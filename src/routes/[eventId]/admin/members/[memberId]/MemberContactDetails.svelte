@@ -12,14 +12,12 @@
 	import { getAge } from '$lib/utils'
 
 	export let member: Member
-	let klass = ''
-	export { klass as class }
 </script>
 
 <div
 	class="
-		grid grid-cols-1 sm:grid-cols-2 gap-2 gap-x-8 pl-0 p-2 items-center
-		font-medium text-base-content/70 text-sm md:text-base {klass}
+		grid grid-cols-1 sm:grid-cols-2 gap-2 gap-x-8 pl-1.5 p-2 items-center
+		font-medium text-base-content/70 text-sm md:text-base grow
 	"
 >
 	<div class="flex gap-4">

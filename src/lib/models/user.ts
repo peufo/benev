@@ -17,8 +17,8 @@ export const modelUserCreate = {
 		.refine((v) => v === true, { message: 'Tu dois accepter les conditions' }),
 } satisfies ZodObj<Omit<Prisma.UserCreateInput, 'id'> & { password: string }>
 
-export const modelUserUpdate = {
-	email: z.string().email().toLowerCase().optional(),
+export const modelUserContactUpdate = {
+	email: z.union([z.literal('').optional(), z.string().email().toLowerCase()]),
 	firstName: z.string().min(2).optional(),
 	lastName: z.string().min(2).optional(),
 	phone: z.string().trim().optional(),
@@ -26,5 +26,10 @@ export const modelUserUpdate = {
 	street: z.string().optional(),
 	zipCode: z.string().optional(),
 	city: z.string().optional(),
+}
+
+export const modelUserUpdate = {
+	...modelUserContactUpdate,
+	email: z.string().email().toLowerCase().optional(),
 	isOrganizer: z.boolean().optional(),
 } satisfies ZodObj<Prisma.UserUncheckedUpdateInput>

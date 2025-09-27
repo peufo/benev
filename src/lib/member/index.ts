@@ -13,4 +13,5 @@ export { default as MemberCreateSubscribeDialog } from './MemberCreateSubscribeD
 export { default as MemberCell } from './MemberCell.svelte'
 export { default as MemberActions } from './MemberActions.svelte'
 export { default as MemberSettingsForm } from './MemberSettingsForm.svelte'
+export { default as MemberContactForm } from './MemberContactForm.svelte'
 export * from './conditions'
