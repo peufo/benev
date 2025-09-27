@@ -4,7 +4,7 @@ export const load = async ({ parent }) => {
 	const { user } = await parent()
 
 	const members = await prisma.member.findMany({
-		where: { userId: user.id, event: { deletedAt: null } },
+		where: { OR: [{ userId: user.id }, { email: user.email }], event: { deletedAt: null } },
 		orderBy: { createdAt: 'desc' },
 		include: {
 			user: true,
@@ -13,6 +13,7 @@ export const load = async ({ parent }) => {
 			subscribes: true,
 		},
 	})
+
 	const membersWithRole = members
 		.map(addMemberComputedValues)
 		.map((member) => hidePrivateProfilValues(member))

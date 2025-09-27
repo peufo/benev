@@ -53,5 +53,42 @@ export const prisma = new PrismaClient().$extends({
 				return query(args)
 			},
 		},
+		member: {
+			async create({ args, query }) {
+				if (args.data.userId) {
+					const userContact = await prisma.user.findUniqueOrThrow({
+						where: { id: args.data.userId },
+						select: userContactSelect,
+					})
+					args.data = { ...args.data, ...userContact }
+				}
+				return query(args)
+			},
+			async update({ args, query }) {
+				const userId =
+					typeof args.data.userId === 'object' ? args.data.userId?.set : args.data.userId
+				if (userId) {
+					const userContact = await prisma.user.findUniqueOrThrow({
+						where: { id: userId },
+						select: userContactSelect,
+					})
+					args.data = { ...args.data, ...userContact }
+				}
+				return query(args)
+			},
+		},
 	},
 })
+
+const userContactSelect: Prisma.UserSelect = {
+	email: true,
+	isEmailVerified: true,
+	phone: true,
+	firstName: true,
+	lastName: true,
+	birthday: true,
+	street: true,
+	zipCode: true,
+	city: true,
+	avatarId: true,
+}

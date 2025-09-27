@@ -1,12 +1,11 @@
 import { error, redirect } from '@sveltejs/kit'
-import { formAction, parseFormData, tryOrFail } from 'fuma/server'
+import { formAction } from 'fuma/server'
 import { z } from 'fuma'
 import { modelInvite } from '$lib/models'
 import {
 	prisma,
 	sendEmailComponent,
 	sendEmailModel,
-	generateToken,
 	permission,
 	createAvatarPlaceholder,
 	ensureLicenceMembers,
@@ -78,11 +77,12 @@ export const actions = {
 					data: {
 						userId: session.user.id,
 						isValidedByEvent: isValidedByEvent || memberAlreadyExist.isValidedByEvent,
+						isValidedByUser: true,
 					},
 				})
 				await ensureLicenceMembers(eventId)
 				// TODO: mails to admins ?
-				return
+				return data
 			}
 
 			const { selfRegisterAllowed } = await prisma.event.findUniqueOrThrow({
@@ -134,7 +134,10 @@ export const actions = {
 			return data
 		},
 		{
-			redirectTo: (data) => data?.redirectTo,
+			redirectTo: (data) => {
+				console.log(data)
+				return data?.redirectTo
+			},
 		}
 	),
 }

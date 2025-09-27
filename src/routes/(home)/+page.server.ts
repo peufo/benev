@@ -57,14 +57,6 @@ export const actions = {
 				data: {
 					...data,
 					ownerId: userId,
-					members: {
-						create: {
-							userId,
-							isAdmin: true,
-							isValidedByEvent: true,
-							isValidedByUser: true,
-						},
-					},
 					pages: {
 						createMany: {
 							data: [
@@ -80,6 +72,16 @@ export const actions = {
 					},
 				},
 			})
+			await prisma.member.create({
+				data: {
+					userId,
+					eventId: event.id,
+					isAdmin: true,
+					isValidedByEvent: true,
+					isValidedByUser: true,
+				},
+			})
+
 			await uploadImages(formData, event.id, session.user.id)
 			return event
 		},
