@@ -134,10 +134,7 @@ export const actions = {
 			return data
 		},
 		{
-			redirectTo: (data) => {
-				console.log(data)
-				return data?.redirectTo
-			},
+			redirectTo: (data) => data?.redirectTo,
 		}
 	),
 }
