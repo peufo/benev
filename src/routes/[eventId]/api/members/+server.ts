@@ -1,6 +1,7 @@
 import { parseQuery } from 'fuma/server'
 import { z } from 'fuma/validation'
 import { prisma, permission, json } from '$lib/server'
+import type { Prisma } from '@prisma/client'
 
 export const GET = async ({ params: { eventId }, url, locals }) => {
 	await permission.leader(eventId, locals)
@@ -29,16 +30,6 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 					{ firstName: { contains: search } },
 					{ email: { contains: search } },
 				],
-			},
-		},
-		select: {
-			id: true,
-			user: {
-				select: {
-					firstName: true,
-					lastName: true,
-					email: true,
-				},
 			},
 		},
 		take,
