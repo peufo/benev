@@ -6,7 +6,9 @@
 	import { modelInvite } from '$lib/models'
 	import { eventPath } from '$lib/store'
 	import { api } from './api'
+	import type { Member } from '@prisma/client'
 
+	export let onCreate: (member: Member) => void = () => {}
 	let email = ''
 	let isLoadingUserExists = false
 	let user = { firstName: '', lastName: '' }
@@ -22,6 +24,10 @@
 			toast.success('Utilisateur trouvé !')
 		}
 	}
+
+	function onSuccess(action: URL, data: unknown) {
+		onCreate(data as Member)
+	}
 </script>
 
 <Form
@@ -30,6 +36,7 @@
 	options={{
 		successMessage: 'Invitation envoyée',
 		successUpdate: false,
+		onSuccess,
 		onFail(failure) {
 			if (failure) toast.error(failure.message)
 		},

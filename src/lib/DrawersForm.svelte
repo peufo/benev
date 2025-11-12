@@ -21,7 +21,7 @@
 
 <Drawer key="form_invite" title="Inviter un nouveau membre" let:close>
 	<InviteForm
-		on:created={async ({ detail: member }) => {
+		onCreate={async (member) => {
 			teamForm?.update((t) => ({ ...t, leaders: [...(t.leaders || []), member] }))
 			periodDrawer?.selectMember(member)
 			await close()

@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	import type { Team, Member, User, Event, Field } from '@prisma/client'
+	import type { Team, Member, Event, Field } from '@prisma/client'
 	import { Form } from 'fuma'
 
 	export type TeamWithLeaders = Team & {
