@@ -4,11 +4,9 @@
 	import Benev from '$lib/Benev.svelte'
 	import HomeMenu from './(home)/HomeMenu.svelte'
 	import { page } from '$app/stores'
-
-	export let data
 </script>
 
-<Header user={data.user}>
+<Header user={$page.data.user}>
 	<a
 		slot="start"
 		href="/"
