@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { EXCHANGE_RATE_KEY } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 
 // see https://app.exchangerate-api.com
-const API_URL = `https://v6.exchangerate-api.com/v6/${EXCHANGE_RATE_KEY}/latest/CHF`
+const API_URL = `https://v6.exchangerate-api.com/v6/${env.EXCHANGE_RATE_KEY}/latest/CHF`
 
 type ApiResponse = {
 	result: 'success' | 'error'

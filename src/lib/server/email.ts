@@ -1,4 +1,4 @@
-import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 import nodemailer, { type SendMailOptions } from 'nodemailer'
 import type { ComponentProps, ComponentType } from 'svelte'
 import { prisma } from '$lib/server'
@@ -11,11 +11,11 @@ import { getMemberReplacers } from '$lib/pages/memberSuggestions'
 import { domain } from '$lib/email'
 
 export const transporter = nodemailer.createTransport({
-	host: SMTP_HOST,
-	port: Number(SMTP_PORT),
+	host: env.SMTP_HOST,
+	port: Number(env.SMTP_PORT),
 	auth: {
-		user: SMTP_USER,
-		pass: SMTP_PASS,
+		user: env.SMTP_USER,
+		pass: env.SMTP_PASS,
 	},
 })
 
@@ -35,7 +35,7 @@ export const sendEmail = async ({ from, ...options }: SendMailOptions) => {
 	return new Promise((resolve) => {
 		transporter.sendMail(
 			{
-				from: `${from || 'Benev.io'} <${SMTP_USER}>`,
+				from: `${from || 'Benev.io'} <${env.SMTP_USER}>`,
 				...options,
 			},
 			(err: unknown, info: unknown) => {

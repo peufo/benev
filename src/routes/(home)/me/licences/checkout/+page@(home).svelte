@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import { loadStripe } from '@stripe/stripe-js'
-	import { PUBLIC_STRIPE_KEY } from '$env/static/public'
+	import { env } from '$env/dynamic/public'
 	import { Card } from 'fuma'
 
 	export let data
@@ -12,7 +12,7 @@
 
 	async function initCheckout() {
 		try {
-			const stripe = await loadStripe(PUBLIC_STRIPE_KEY)
+			const stripe = await loadStripe(env.PUBLIC_STRIPE_KEY)
 			if (!stripe) throw 'stripe is not defined'
 			const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret })
 			isLoading = false

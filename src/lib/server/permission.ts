@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { ROOT_USER } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 import { prisma } from '$lib/server'
 import {
 	type MemberRole,
@@ -20,7 +20,7 @@ async function rootPermission(locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) error(401)
 
-	return session.user.email === ROOT_USER
+	return session.user.email === env.ROOT_USER
 }
 
 function createEventPermission(role: MemberRole) {

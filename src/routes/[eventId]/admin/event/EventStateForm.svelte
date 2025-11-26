@@ -6,7 +6,7 @@
 	import { EVENT_STATES } from '$lib/constant'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'
-	import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
+	import { env } from '$env/dynamic/public'
 	import { page } from '$app/stores'
 	import { useNotify } from '$lib/notify'
 	import { goto } from '$app/navigation'
@@ -79,14 +79,14 @@
 			{#if event.state === 'draft'}
 				<div
 					use:tip={{
-						content: `${eventCounts.membersValided} membres validés pour ${PUBLIC_FREE_EVENT_MAX_MEMBERS} possibles`,
+						content: `${eventCounts.membersValided} membres validés pour ${env.PUBLIC_FREE_EVENT_MAX_MEMBERS} possibles`,
 					}}
 					role="progressbar"
 					class="radial-progress bg-warning text-xs opacity-80"
-					style="--value:{(eventCounts.membersValided / +PUBLIC_FREE_EVENT_MAX_MEMBERS) *
+					style="--value:{(eventCounts.membersValided / +env.PUBLIC_FREE_EVENT_MAX_MEMBERS) *
 						100}; --size: 3rem;"
 				>
-					{eventCounts.membersValided} / {PUBLIC_FREE_EVENT_MAX_MEMBERS}
+					{eventCounts.membersValided} / {env.PUBLIC_FREE_EVENT_MAX_MEMBERS}
 				</div>
 			{:else}
 				{@const maxMembers = eventCounts.membersLicenced + eventCounts.memberLicencesAvailable}

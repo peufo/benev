@@ -1,6 +1,5 @@
-import { ROOT_USER } from '$env/static/private'
 import type { Prisma, Subscribe } from '@prisma/client'
-import type { Member, Team, User, Event, Field } from '@prisma/client'
+import type { Member, Team, Event, Field } from '@prisma/client'
 import {
 	useAddTeamComputedValues,
 	prisma,

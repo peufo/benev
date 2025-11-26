@@ -1,15 +1,14 @@
 import { EventEmitter } from 'node:events'
 import Stripe from 'stripe'
-import { PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, ROOT_USER } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 import type { Prisma } from '@prisma/client'
 import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
 
-import { LICENCE_EVENT_PRICE, LICENCE_MEMBER_PRICE } from '$env/static/private'
 import { prisma, sendEmailComponent, ensureLicenceMembers, createSSE } from '$lib/server'
 import { EmailCheckoutValidation } from '$lib/email'
 
-export const stripe = new Stripe(PRIVATE_STRIPE_KEY)
+export const stripe = new Stripe(env.PRIVATE_STRIPE_KEY)
 
 const bus = new EventEmitter()
 
@@ -26,14 +25,14 @@ export const checkout = {
 		const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = []
 		if (+licenceEventQuantity)
 			line_items.push({
-				price: LICENCE_EVENT_PRICE,
+				price: env.LICENCE_EVENT_PRICE,
 				quantity: +licenceEventQuantity,
 				adjustable_quantity: { enabled: true, minimum: 0, maximum: 100 },
 			})
 
 		if (+licenceMemberQuantity)
 			line_items.push({
-				price: LICENCE_MEMBER_PRICE,
+				price: env.LICENCE_MEMBER_PRICE,
 				quantity: +licenceMemberQuantity,
 				adjustable_quantity: { enabled: true, minimum: 0, maximum: 10_000 },
 			})
@@ -60,7 +59,7 @@ export const checkout = {
 			const event = await stripe.webhooks.constructEventAsync(
 				payload,
 				signature,
-				PRIVATE_STRIPE_WEBHOOK_KEY
+				env.PRIVATE_STRIPE_WEBHOOK_KEY
 			)
 
 			if (event.type === 'checkout.session.completed') {
@@ -75,8 +74,8 @@ export const checkout = {
 					}),
 				])
 
-				const licenceEvent = items.find((item) => item.price?.id === LICENCE_EVENT_PRICE)
-				const licenceMember = items.find((item) => item.price?.id === LICENCE_MEMBER_PRICE)
+				const licenceEvent = items.find((item) => item.price?.id === env.LICENCE_EVENT_PRICE)
+				const licenceMember = items.find((item) => item.price?.id === env.LICENCE_MEMBER_PRICE)
 				const licences: Prisma.LicenceCreateManyCheckoutInput[] = []
 				if (licenceEvent)
 					licences.push(
@@ -109,7 +108,7 @@ export const checkout = {
 						},
 					}),
 					sendEmailComponent(EmailCheckoutValidation, {
-						to: ROOT_USER,
+						to: env.ROOT_USER,
 						subject: 'Nouvel achat de licence',
 						props: {
 							dest: 'root',

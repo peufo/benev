@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { tryOrFail, parseFormData } from 'fuma/server'
 import { z } from 'fuma/validation'
 import { getUserIdOrRedirect, prisma, sendEmail, sendEmailComponent } from '$lib/server'
-import { SMTP_USER, ROOT_USER } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 import { EmailBasic } from '$lib/email'
 
 export const load = async ({ url, locals }) => {
@@ -31,7 +31,7 @@ export const actions = {
 				}),
 				sendEmail({
 					from: `${session.user.firstName} ${session.user.lastName} depuis benev.io`,
-					to: [SMTP_USER, ROOT_USER],
+					to: [env.SMTP_USER, env.ROOT_USER],
 					replyTo: session.user.email,
 					subject: data.subject,
 					text: data.content,

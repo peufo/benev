@@ -1,4 +1,4 @@
-import { PUBLIC_FREE_EVENT_MAX_MEMBERS } from '$env/static/public'
+import { env } from '$env/dynamic/public'
 import type {
 	EventState,
 	Field,
@@ -51,7 +51,7 @@ export const EVENT_STATES: Record<
 		icon: mdiTestTube,
 		label: 'Évènement en projet',
 		class: 'border-warning',
-		description: `L'évènement est limité à ${PUBLIC_FREE_EVENT_MAX_MEMBERS} membres validés et seul les responsables y ont accès.`,
+		description: `L'évènement est limité à ${env.PUBLIC_FREE_EVENT_MAX_MEMBERS} membres validés et seul les responsables y ont accès.`,
 	},
 	actived: {
 		icon: mdiExcavator,

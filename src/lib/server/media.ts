@@ -5,7 +5,7 @@ import { z } from 'fuma/validation'
 import { parseFormData } from 'fuma/server'
 import type { Prisma } from '@prisma/client'
 import { prisma } from './prisma'
-import { MEDIA_DIR } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 import { error } from '@sveltejs/kit'
 
 type UploadOption = {
@@ -18,7 +18,7 @@ export const media = {
 		const keyImage = opt.key ? `${opt.key}_image` : 'image'
 		const keyCrop = opt.key ? `${opt.key}_crop` : 'crop'
 
-		const { data, formData } = await parseFormData(requestOrFormData, {
+		const { data } = await parseFormData(requestOrFormData, {
 			[keyImage]: z.instanceof(File),
 			[keyCrop]: z
 				.string()
@@ -45,7 +45,7 @@ export const media = {
 		const imageBuffer = await image.arrayBuffer()
 
 		const media = await createOrUpsertMedia(opt)
-		const mediaPath = path.resolve(MEDIA_DIR, media.id)
+		const mediaPath = path.resolve(env.MEDIA_DIR, media.id)
 
 		await fs
 			.access(mediaPath, fs.constants.R_OK)
@@ -68,7 +68,7 @@ export const media = {
 	async delete(where: Prisma.MediaWhereInput) {
 		const media = await prisma.media.findFirst({ where })
 		if (!media) error(404)
-		const mediaPath = path.resolve(MEDIA_DIR, media.id)
+		const mediaPath = path.resolve(env.MEDIA_DIR, media.id)
 		await fs.rm(mediaPath, { recursive: true, force: true })
 		return prisma.media.delete({ where: { id: media.id } })
 	},
