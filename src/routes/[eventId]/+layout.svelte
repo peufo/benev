@@ -24,12 +24,7 @@
 	export let data
 
 	$: accessGranted =
-		data.event.state === 'published' ||
-		data.member?.roles.includes('leader') ||
-		data.member?.roles.includes('admin') ||
-		data.userIsRoot
-
-	$: console.log(data.member)
+		data.event.state === 'published' || data.member?.roles.includes('leader') || data.userIsRoot
 </script>
 
 <svelte:head>
