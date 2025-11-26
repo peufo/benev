@@ -91,4 +91,5 @@ const userContactSelect: Prisma.UserSelect = {
 	zipCode: true,
 	city: true,
 	avatarId: true,
+	avatarPlaceholder: true,
 }
