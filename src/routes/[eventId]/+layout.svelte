@@ -28,6 +28,8 @@
 		data.member?.roles.includes('leader') ||
 		data.member?.roles.includes('admin') ||
 		data.userIsRoot
+
+	$: console.log(data.member)
 </script>
 
 <svelte:head>

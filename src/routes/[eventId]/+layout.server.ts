@@ -15,7 +15,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 		})
 
 		const member = await getMemberProfile({ userId, eventId }).catch(() => undefined)
-		const isLeader = member?.roles.includes('leader')
+		const isLeader = member?.roles.includes('leader') || member?.roles.includes('admin')
 
 		const event = await prisma.event.findUniqueOrThrow({
 			where: { id: eventId, deletedAt: null },
