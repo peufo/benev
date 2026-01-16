@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { DropDown, Icon, Card, urlParam, Drawer } from 'fuma'
-
+	import { DropDown, Icon, Card, urlParam, Drawer, tip } from 'fuma'
+	import { IdCardLanyardIcon } from 'lucide-svelte'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiArrowLeft,
@@ -57,6 +57,17 @@
 					path={mdiPencilOutline}
 					title="Modifier le coordonnées de {data.memberProfile.firstName}"
 				/>
+			</a>
+
+			<a
+				href="{$eventPath}/admin/members/badge?memberId={data.member?.id}"
+				use:tip={{ content: 'Imprimer le badge' }}
+				data-sveltekit-replacestate
+				data-sveltekit-noscroll
+				data-sveltekit-preload-data="off"
+				class="btn btn-square btn-sm"
+			>
+				<IdCardLanyardIcon size="20" opacity={0.9} />
 			</a>
 
 			<div class="grow" />

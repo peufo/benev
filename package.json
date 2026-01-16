@@ -57,6 +57,9 @@
 		"@lucia-auth/oauth": "^3.5.1",
 		"@mdi/js": "^7.3.67",
 		"@paralleldrive/cuid2": "^2.2.2",
+		"@pdfme/common": "^5.5.8",
+		"@pdfme/generator": "^5.5.8",
+		"@pdfme/schemas": "^5.5.8",
 		"@prisma/client": "^5.13.0",
 		"@stripe/stripe-js": "^2.2.0",
 		"@tailwindcss/container-queries": "^0.1.1",
@@ -86,6 +89,7 @@
 		"js-confetti": "^0.11.0",
 		"litepicker": "^2.0.12",
 		"lucia": "^2.7.6",
+		"lucide-svelte": "^0.562.0",
 		"nodemailer": "^6.9.7",
 		"object-path": "^0.11.8",
 		"perod": "^1.4.1",
@@ -101,6 +105,7 @@
 		"onlyBuiltDependencies": [
 			"@prisma/client",
 			"@prisma/engines",
+			"core-js",
 			"esbuild",
 			"prisma",
 			"svelte-preprocess"

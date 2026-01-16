@@ -12,11 +12,11 @@ import type {
 	SubscribeState,
 } from '@prisma/client'
 import { prisma, addMemberComputedValues, type MemberWithComputedValues } from '$lib/server'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export type MemberWithComputedValue = Awaited<ReturnType<typeof getMembers>>['members'][number]
 
 export const membersFilterShape = {
+	memberId: z.string().optional(),
 	search: z.string().optional(),
 	createdAt: z.filter.range,
 	subscribes_count_accepted: z.filter.number,
@@ -46,6 +46,10 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	const where: Prisma.MemberWhereInput[] = []
 	const subscribesWhere: Prisma.SubscribeWhereInput[] = []
 	const orderBy: Prisma.MemberOrderByWithRelationInput[] = []
+
+	if (query.memberId) {
+		where.push({ id: query.memberId })
+	}
 
 	if (query.search) {
 		where.push({
