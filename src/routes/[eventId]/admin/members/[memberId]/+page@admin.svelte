@@ -60,7 +60,7 @@
 			</a>
 
 			<a
-				href="{$eventPath}/admin/members/badge?memberId={data.member?.id}"
+				href="{$eventPath}/admin/members/badge?memberId={data.memberProfile?.id}"
 				use:tip={{ content: 'Imprimer le badge' }}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
