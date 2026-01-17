@@ -7,7 +7,17 @@ import type { Event, Member } from '@prisma/client'
 import path from 'node:path'
 import { env } from '$env/dynamic/private'
 import sharp from 'sharp'
-//import logo from '$lib/assets/logo.svg?raw' // TODO: a glisser quelque part ?
+import logoBenev from '$lib/assets/logo.svg?raw'
+import accessDaysIcon from '$lib/assets/calendar.svg?raw'
+import accessSectorsIcon from '$lib/assets/key.svg?raw'
+import z from 'zod'
+
+const formater = new Intl.DateTimeFormat('fr-ch', {
+	day: 'numeric',
+	month: 'numeric',
+	year: '2-digit',
+	timeZone: 'Europe/Zurich',
+})
 
 export const GET = async ({ url, locals, params: { eventId } }) => {
 	await permission.leader(eventId, locals)
@@ -27,6 +37,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		},
 	})
 	const logoImage = await getImageBase64(BADGE_LOGO_MEDIA_ID)
+	const footer = `Imprimé le ${formater.format(new Date())}\nPropulsé par benev.io`
 
 	const pdf = await generate({
 		plugins: { svg, text, image },
@@ -39,10 +50,15 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 					backgroundSVG: getBackgroundSVG(color),
 					backgroundImage,
 					logoImage,
-					layerSVG: getLayerSVG(color),
+					layerSVG: getLayerSVG(color, !!member.avatarId),
 					name: `${member.firstName} ${member.lastName}`,
 					badgeType: member.profileJson[BADGE_TYPE_FIELD_ID] || '',
 					avatar,
+					logoBenev,
+					footer,
+					accessDaysIcon,
+					accessSectorsIcon,
+					access: getAccessSVG(color, member),
 				}
 			})
 		),
@@ -64,6 +80,8 @@ const PADDING = 1
 const BOX_NAME_HEIGHT = 8
 const BOX_TYPE_HEIGHT = 5
 const AVATAR_SIZE = 36
+const LOGO_BENEV_SIZE = 6
+const SIZE_ACCESS = 5
 
 const template: Template = {
 	basePdf: { width: CARD_WIDTH, height: CARD_HEIGHT, padding: [0, 0, 0, 0] },
@@ -86,7 +104,7 @@ const template: Template = {
 			{
 				name: 'logoImage',
 				type: 'image',
-				position: { x: PADDING, y: PADDING },
+				position: { x: PADDING, y: BOX_TYPE_HEIGHT + PADDING },
 				width: CARD_WIDTH / 2,
 				height: 20, // TODO: auto ?
 				rotate: -12,
@@ -101,8 +119,8 @@ const template: Template = {
 			{
 				name: 'badgeType',
 				type: 'text',
-				position: { x: CARD_WIDTH / 2, y: PADDING },
-				width: CARD_WIDTH / 2 - PADDING,
+				position: { x: CARD_WIDTH / 3, y: PADDING },
+				width: CARD_WIDTH / 3,
 				height: BOX_TYPE_HEIGHT,
 				alignment: 'center',
 				verticalAlignment: 'middle',
@@ -124,11 +142,62 @@ const template: Template = {
 				name: 'avatar',
 				type: 'image',
 				position: {
-					x: CARD_WIDTH - AVATAR_SIZE - PADDING,
-					y: CARD_HEIGHT - AVATAR_SIZE - BOX_NAME_HEIGHT,
+					x: CARD_WIDTH / 2 - AVATAR_SIZE / 2,
+					y: CARD_HEIGHT - AVATAR_SIZE - BOX_NAME_HEIGHT - 2 * PADDING,
 				},
 				width: AVATAR_SIZE,
 				height: AVATAR_SIZE,
+			},
+			{
+				name: 'access',
+				type: 'svg',
+				position: { x: 0, y: 0 },
+				width: CARD_WIDTH,
+				height: CARD_HEIGHT,
+			},
+			{
+				name: 'accessDaysIcon',
+				type: 'svg',
+				position: {
+					x: CARD_WIDTH - PADDING - SIZE_ACCESS,
+					y: PADDING,
+				},
+				width: SIZE_ACCESS - 1.5,
+				height: SIZE_ACCESS,
+			},
+			{
+				name: 'accessSectorsIcon',
+				type: 'svg',
+				position: {
+					x: CARD_WIDTH - 2 * PADDING - 2 * SIZE_ACCESS,
+					y: PADDING,
+				},
+				width: SIZE_ACCESS - 1.5,
+				height: SIZE_ACCESS,
+			},
+		],
+		[
+			{
+				name: 'logoBenev',
+				type: 'svg',
+				position: {
+					x: PADDING + 7,
+					y: CARD_HEIGHT - PADDING - LOGO_BENEV_SIZE - 1,
+				},
+				width: LOGO_BENEV_SIZE,
+				height: LOGO_BENEV_SIZE,
+			},
+			{
+				name: 'footer',
+				type: 'text',
+				position: {
+					x: PADDING + LOGO_BENEV_SIZE + 9,
+					y: CARD_HEIGHT - PADDING - LOGO_BENEV_SIZE - 1,
+				},
+				width: CARD_WIDTH - PADDING * 2 - LOGO_BENEV_SIZE - 2,
+				height: LOGO_BENEV_SIZE,
+				fontSize: 8,
+				fontColor: '#666',
 			},
 		],
 	],
@@ -145,6 +214,8 @@ const BADGE_COLOR_MAP: Record<string, string> = {
 	Bénévole: '#119822', //'#BDBF09',
 }
 const BADGE_DEFAULT_COLOR = '#C7B198'
+const ACCESS_DAYS_FIELD_ID = 'cmkif4z1t0007d77e0mgz7qle'
+const ACCESS_SECTORS_FIELD_ID = 'cmkif5utz0009d77eakg8k5oj'
 
 function getBadgeColor(member?: Member & { event: Event }): string {
 	if (!member) return BADGE_DEFAULT_COLOR
@@ -155,7 +226,7 @@ function getBadgeColor(member?: Member & { event: Event }): string {
 }
 
 function getBackgroundSVG(color: string): string {
-	return /*html*/ `<svg  viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
+	return /*html*/ `<svg viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
         <rect
         width="${CARD_WIDTH}"
         height="${CARD_HEIGHT}"
@@ -167,8 +238,15 @@ function getBackgroundSVG(color: string): string {
     `
 }
 
-function getLayerSVG(color: string): string {
-	return /*html*/ `<svg  viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
+function getLayerSVG(color: string, isAvatarBackground: boolean): string {
+	const avatarBackground = /*html*/ `<rect
+        width="${AVATAR_SIZE + 2 * PADDING}"
+        height="${AVATAR_SIZE + 2 * PADDING}"
+        x="${CARD_WIDTH / 2 - AVATAR_SIZE / 2 - PADDING}"
+        y="${CARD_HEIGHT - AVATAR_SIZE - BOX_NAME_HEIGHT - 3 * PADDING}"
+        fill="${color}"
+    />`
+	return /*html*/ `<svg viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
         <rect
             width="${CARD_WIDTH}"
             height="${BOX_NAME_HEIGHT}"
@@ -177,12 +255,66 @@ function getLayerSVG(color: string): string {
             fill="${color}"
         />
         <rect
-            width="${CARD_WIDTH / 2 - PADDING}"
+            width="${CARD_WIDTH / 3}"
             height="${BOX_TYPE_HEIGHT}"
-            x="${CARD_WIDTH / 2}"
+            x="${CARD_WIDTH / 3}"
             y="${PADDING}"
             fill="${color}"
         />
+        ${isAvatarBackground ? avatarBackground : ''}
+    </svg>
+    `
+}
+
+function parseStringArray(anyData: unknown): string[] {
+	const res = z.array(z.string()).safeParse(anyData)
+	return res.success ? res.data : []
+}
+
+function getAccessSVG(color: string, member?: Member & { event: Event }): string {
+	if (!member) return BADGE_DEFAULT_COLOR
+	const accessSectors = parseStringArray(member.profileJson[ACCESS_SECTORS_FIELD_ID])
+	const accessDays = parseStringArray(member.profileJson[ACCESS_DAYS_FIELD_ID])
+
+	const getCell = (x: number, index: number, content: string) => /*html*/ `
+        <rect
+            width="${SIZE_ACCESS}"
+            height="${SIZE_ACCESS}"
+            x="${x}"
+            y="${PADDING + (index + 1) * SIZE_ACCESS}"
+            fill="${color}"
+        />
+        <text 
+            x="${x + SIZE_ACCESS / 2}"
+            y="${PADDING + (index + 1.7) * SIZE_ACCESS}"
+            fill="#fff"
+            font-size="${SIZE_ACCESS - 2.5}"
+            text-anchor="middle"
+            >
+            ${content}
+        </text>
+    `
+
+	const xSectors = CARD_WIDTH - 2 * PADDING - 2 * SIZE_ACCESS - 0.7
+	const xDays = CARD_WIDTH - PADDING - SIZE_ACCESS - 0.8
+
+	return /*html*/ `<svg viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
+        <rect
+            width="${SIZE_ACCESS}"
+            height="${SIZE_ACCESS}"
+            x="${xSectors}"
+            y="${PADDING}"
+            fill="${color}"
+        />
+        <rect
+            width="${SIZE_ACCESS}"
+            height="${SIZE_ACCESS}"
+            x="${xDays}"
+            y="${PADDING}"
+            fill="${color}"
+        />
+        ${accessSectors.map((sector, index) => getCell(xSectors, index, sector))}
+        ${accessDays.map((sector, index) => getCell(xDays, index, sector))}
     </svg>
     `
 }
