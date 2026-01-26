@@ -10,94 +10,26 @@ import PDFDocument from 'pdfkit'
 // import fontLight from '$lib/assets/Helvetica-Light.ttf'
 // const fontLightPath = path.resolve(`.${fontLight}`)
 
-// --- Configuration & Constants ---
-
 const formater = new Intl.DateTimeFormat('fr-ch', {
 	day: 'numeric',
 	month: 'numeric',
 	year: '2-digit',
 	timeZone: 'Europe/Zurich',
 })
-
-const MM_TO_PT = 2.83465
-
-// Dimensions de base (en mm)
-const DIMS_MM = {
+const DIMENSIONS_MM = {
 	width: 53.98,
 	height: 85.6,
 	padding: 1,
-	boxNameHeight: 8,
+	footerHeight: 8,
 	boxTypeHeight: 5,
+	accessCellSize: 5,
 	avatarSize: 36,
 	logoBenevSize: 6,
-	accessIconSize: 5,
-	borderRadius: 2,
+	borderRadius: 2.2,
 }
-
-// Conversion en points
-const PT = Object.fromEntries(
-	Object.entries(DIMS_MM).map(([key, val]) => [key, val * MM_TO_PT])
-) as Record<keyof typeof DIMS_MM, number>
-
-// --- LAYOUT DEFINITION (Nouvelle section) ---
-// On pré-calcule toutes les positions ici pour éviter les "magic numbers" dans le code de dessin.
-const LAYOUT = {
-	w: PT.width,
-	h: PT.height,
-	pad: PT.padding,
-	contentW: PT.width - 2 * PT.padding,
-	contentH: PT.height - 2 * PT.padding,
-
-	// La boîte de catégorie en haut au centre
-	typeBox: {
-		x: PT.width / 3,
-		y: PT.padding,
-		w: PT.width / 3,
-		h: PT.boxTypeHeight,
-		radius: PT.borderRadius,
-	},
-
-	// La zone du nom en bas
-	nameBox: {
-		x: 0,
-		y: PT.height - PT.boxNameHeight,
-		w: PT.width,
-		h: PT.boxNameHeight,
-	},
-
-	// L'avatar
-	avatar: {
-		size: PT.avatarSize,
-		x: PT.width / 2 - PT.avatarSize / 2,
-		// Positionné juste au-dessus de la nameBox avec du padding
-		y: PT.height - PT.boxNameHeight - PT.avatarSize - 2 * PT.padding,
-	},
-
-	// Le logo principal (en haut à gauche, avant rotation)
-	mainLogo: {
-		x: PT.padding,
-		y: PT.boxTypeHeight + PT.padding,
-		w: PT.width / 2,
-		h: 20 * MM_TO_PT, // Hauteur approximative
-	},
-
-	// Le pied de page
-	footer: {
-		y: PT.height - PT.padding - PT.logoBenevSize - 8,
-		logoSize: PT.logoBenevSize,
-		textXOffset: PT.logoBenevSize + 8,
-	},
-
-	// Les grilles d'accès à droite
-	access: {
-		size: PT.accessIconSize,
-		// Colonne des jours (la plus à droite)
-		xDays: PT.width - PT.padding - PT.accessIconSize - 0.8 * MM_TO_PT,
-		// Colonne des secteurs (à gauche des jours)
-		xSectors: PT.width - 2 * PT.padding - 2 * PT.accessIconSize - 0.7 * MM_TO_PT,
-		yStart: PT.padding * 2,
-	},
-}
+const LAYOUT = Object.fromEntries(
+	Object.entries(DIMENSIONS_MM).map(([key, val]) => [key, val * 2.83465])
+) as Record<keyof typeof DIMENSIONS_MM, number>
 
 // --- Config IDs ---
 const BADGE_BACKGROUND_MEDIA_ID = 'cmkgyriik0001d77er2sgcyu7'
@@ -121,11 +53,11 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 	url.searchParams.set('all', 'true')
 	const { members } = await getMembers(event, url)
 	const doc = new PDFDocument({
-		size: [LAYOUT.w, LAYOUT.h],
+		size: [LAYOUT.width, LAYOUT.height],
 		margin: 0,
 		autoFirstPage: false,
 	})
-	generateBadges()
+	generateBadges().catch(console.error)
 	const stream = new ReadableStream({
 		start(controller) {
 			doc.on('data', (chunk) => controller.enqueue(chunk))
@@ -147,12 +79,17 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		// doc.registerFont('Light', fontLightPath)
 		// doc.font('Light')
 
-		const logoBenevBuffer = await svgToPngBuffer(logoBenev)
-		const backgroundImageBuffer = await getImageBuffer(BADGE_BACKGROUND_MEDIA_ID, {
-			grayscale: true,
-			size: { width: Math.round(LAYOUT.w * 3), height: Math.round(LAYOUT.h * 3) },
-		})
-		const logoImageBuffer = await getImageBuffer(BADGE_LOGO_MEDIA_ID)
+		const images = {
+			logoBenev: await svgToPngBuffer(logoBenev),
+			logoEvent: await getImageBuffer(BADGE_LOGO_MEDIA_ID),
+			background: await getImageBuffer(BADGE_BACKGROUND_MEDIA_ID, {
+				grayscale: true,
+				size: {
+					width: Math.round(LAYOUT.width * 3),
+					height: Math.round(LAYOUT.height * 3),
+				},
+			}),
+		}
 
 		for (const member of members) {
 			doc.addPage()
@@ -162,183 +99,158 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 			const badgeType = (member.profileJson[BADGE_TYPE_FIELD_ID] as string) || ''
 			const footerText = `Imprimé le ${formater.format(new Date())}\nPropulsé par benev.io`
 
-			// --- Layer: Background Color ---
-			doc.rect(0, 0, LAYOUT.w, LAYOUT.h).fill(color)
+			layerBackground()
+			layerLogoEvent()
+			layerBadgeType()
+			layerUserName()
+			await layerAvatar()
+			layerAccess()
+			verso()
 
-			// --- Layer: Background Image ---
-			if (backgroundImageBuffer) {
+			function layerBackground() {
+				const contentW = LAYOUT.width - 2 * LAYOUT.padding
+				const contentH = LAYOUT.height - 2 * LAYOUT.padding
+				doc.rect(0, 0, LAYOUT.width, LAYOUT.height).fill(color)
 				doc.save()
-				doc.opacity(0.8)
+				doc.opacity(0.85)
 				roundedRect(
-					doc,
-					LAYOUT.pad,
-					LAYOUT.pad,
-					LAYOUT.contentW,
-					LAYOUT.contentH - LAYOUT.nameBox.h + LAYOUT.pad,
-					PT.borderRadius
+					LAYOUT.padding,
+					LAYOUT.padding,
+					contentW,
+					contentH - LAYOUT.footerHeight + LAYOUT.padding,
+					LAYOUT.borderRadius
 				).clip()
-				doc.image(backgroundImageBuffer, LAYOUT.pad, LAYOUT.pad, {
-					width: LAYOUT.contentW,
-					height: LAYOUT.contentH,
+				doc.image(images.background, LAYOUT.padding, LAYOUT.padding, {
+					width: contentW,
+					height: contentH,
 				})
 				doc.restore()
 			}
 
-			// --- Layer: Logo (Rotated) ---
-			if (logoImageBuffer) {
+			function layerLogoEvent() {
+				const x = LAYOUT.padding
+				const y = 2 * LAYOUT.boxTypeHeight
+				const w = LAYOUT.width / 2
 				doc.save()
-				const { x, y, w, h } = LAYOUT.mainLogo
 				doc.rotate(-12, { origin: [x, y] })
-				doc.image(logoImageBuffer, x, y, { width: w, height: h })
+				doc.image(images.logoEvent, x, y, { width: w })
 				doc.restore()
 			}
 
-			// --- Layer: Badge Type Box (Top Center) - Rounded Bottom ---
-			const tb = LAYOUT.typeBox
-			// On dessine un chemin manuel pour n'arrondir que le bas
-			doc
-				.moveTo(tb.x, tb.y) // Haut Gauche
-				.lineTo(tb.x + tb.w, tb.y) // Haut Droite
-				.lineTo(tb.x + tb.w, tb.y + tb.h - tb.radius) // Côté droit vers le bas
-				.quadraticCurveTo(tb.x + tb.w, tb.y + tb.h, tb.x + tb.w - tb.radius, tb.y + tb.h) // Coin Bas Droite
-				.lineTo(tb.x + tb.radius, tb.y + tb.h) // Bas vers la gauche
-				.quadraticCurveTo(tb.x, tb.y + tb.h, tb.x, tb.y + tb.h - tb.radius) // Coin Bas Gauche
-				.lineTo(tb.x, tb.y) // Retour Haut Gauche
-				.fill(color)
+			function layerBadgeType() {
+				const fontSize = 9
+				const w = LAYOUT.width / 3
+				const h = LAYOUT.boxTypeHeight
+				const x = LAYOUT.width / 3
+				const y = LAYOUT.padding * 2
+				const radius = LAYOUT.borderRadius - LAYOUT.padding
+				roundedRect(x, y, w, h, radius).fill(color)
+				textCenter(badgeType, { x, y, w, h, fontSize })
+			}
 
-			doc
-				.fillColor('#fff')
-				.fontSize(9)
-				.text(badgeType, tb.x, tb.y + tb.h / 2 - 4, {
-					width: tb.w,
+			function layerUserName() {
+				const fontSize = 11
+				const w = LAYOUT.width
+				const x = 0
+				const y = LAYOUT.height - LAYOUT.footerHeight / 2 - fontSize / 3
+
+				doc.fillColor('#fff').fontSize(fontSize).text(name, x, y, {
+					width: w,
 					align: 'center',
 					lineBreak: false,
 				})
+			}
 
-			// --- Layer: Name Box (Bottom) ---
-			const nb = LAYOUT.nameBox
-
-			doc
-				.fillColor('#fff')
-				.fontSize(11)
-				// Ajustement fin vertical (-4) pour centrer visuellement
-				.text(name, nb.x, nb.y + nb.h / 2 - 4, {
-					width: nb.w,
-					align: 'center',
-					lineBreak: false,
-				})
-
-			// --- Layer: Avatar ---
-			if (member.avatarId) {
-				const av = LAYOUT.avatar
-				// Bordure/Fond de l'avatar
+			async function layerAvatar() {
+				if (!member.avatarId) return
+				const size = LAYOUT.avatarSize
+				const x = LAYOUT.width / 2 - LAYOUT.avatarSize / 2
+				const y = LAYOUT.height - LAYOUT.footerHeight - LAYOUT.avatarSize - 2 * LAYOUT.padding
 				roundedRect(
-					doc,
-					av.x - LAYOUT.pad,
-					av.y - LAYOUT.pad,
-					av.size + 2 * LAYOUT.pad,
-					av.size + 2 * LAYOUT.pad,
-					PT.borderRadius
+					x - LAYOUT.padding,
+					y - LAYOUT.padding,
+					size + 2 * LAYOUT.padding,
+					size + 2 * LAYOUT.padding,
+					LAYOUT.borderRadius
 				).fill(color)
-				try {
-					const avatarBuffer = await getImageBuffer(member.avatarId)
-					if (avatarBuffer) {
-						// On ajoute un léger arrondi à l'image elle-même pour faire plus propre
-						doc.save()
-						roundedRect(doc, av.x, av.y, av.size, av.size, PT.borderRadius - PT.padding).clip()
-						doc.image(avatarBuffer, av.x, av.y, { width: av.size, height: av.size })
-						doc.restore()
-					}
-				} catch (e) {
-					/* ignore */
+				const avatarBuffer = await getImageBuffer(member.avatarId)
+				doc.save()
+				roundedRect(x, y, size, size, LAYOUT.borderRadius - LAYOUT.padding).clip()
+				doc.image(avatarBuffer, x, y, { width: size, height: size })
+				doc.restore()
+			}
+
+			function layerAccess() {
+				const fontSize = 8
+				const accessSectors = parseStringArray(member.profileJson[ACCESS_SECTORS_FIELD_ID])
+				const accessDays = parseStringArray(member.profileJson[ACCESS_DAYS_FIELD_ID])
+				const size = LAYOUT.accessCellSize
+				const xDays = LAYOUT.width - LAYOUT.padding * 2 - size
+				const xSectors = LAYOUT.width - LAYOUT.padding * 3 - size * 2
+				const yStart = LAYOUT.padding * 2
+
+				accessSectors.forEach((text, i) =>
+					drawAccessCell(xSectors, yStart + i * (size + LAYOUT.padding / 2), text)
+				)
+
+				accessDays.forEach((text, i) =>
+					drawAccessCell(xDays, yStart + i * (size + LAYOUT.padding / 2), text)
+				)
+
+				function drawAccessCell(x: number, y: number, text: string) {
+					roundedRect(x, y, size, size, LAYOUT.borderRadius - LAYOUT.padding).fill(color)
+					textCenter(text, { x, y, w: size, h: size, fontSize })
 				}
 			}
 
-			// --- Layer: Access Grids ---
-			const accessSectors = parseStringArray(member.profileJson[ACCESS_SECTORS_FIELD_ID])
-			const accessDays = parseStringArray(member.profileJson[ACCESS_DAYS_FIELD_ID])
-			const ac = LAYOUT.access
-
-			// Draw Data
-			accessSectors.forEach((s, i) =>
-				drawAccessCell(doc, ac.xSectors, ac.yStart + i * (ac.size + PT.padding / 2), color, null, s)
-			)
-
-			accessDays.forEach((d, i) =>
-				drawAccessCell(doc, ac.xDays, ac.yStart + i * (ac.size + PT.padding / 2), color, null, d)
-			)
-
-			// --- Layer: Footer ---
-			doc.addPage()
-			const foot = LAYOUT.footer
-
-			const deltaX = 24
-			if (logoBenevBuffer) {
-				doc.image(logoBenevBuffer, LAYOUT.pad + deltaX, foot.y, {
-					width: foot.logoSize,
-					height: foot.logoSize,
+			function verso() {
+				doc.addPage()
+				const padding = 8
+				const offsetX = 26
+				const y = LAYOUT.height - LAYOUT.padding - LAYOUT.logoBenevSize - padding
+				const logoX = LAYOUT.padding + offsetX
+				const textX = LAYOUT.padding + offsetX + LAYOUT.logoBenevSize + padding
+				doc.image(images.logoBenev, logoX, y, {
+					width: LAYOUT.logoBenevSize,
+					height: LAYOUT.logoBenevSize,
 				})
+				doc
+					.fillColor('#666')
+					.fontSize(7)
+					.text(footerText, textX, y, {
+						width: LAYOUT.width - textX,
+						align: 'left',
+					})
 			}
-
-			doc
-				.fillColor('#666')
-				.fontSize(7)
-				// Helvetica-Light est déjà actif
-				.text(footerText, LAYOUT.pad + foot.textXOffset + deltaX, foot.y + 1, {
-					width: LAYOUT.w,
-					align: 'left',
-				})
 		}
 
 		doc.end()
 	}
-}
 
-// Helper pour dessiner un rectangle arrondi standard (utilisé pour clipper l'avatar)
-function roundedRect(
-	doc: PDFKit.PDFDocument,
-	x: number,
-	y: number,
-	w: number,
-	h: number,
-	r: number
-) {
-	return doc
-		.moveTo(x + r, y)
-		.lineTo(x + w - r, y)
-		.quadraticCurveTo(x + w, y, x + w, y + r)
-		.lineTo(x + w, y + h - r)
-		.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
-		.lineTo(x + r, y + h)
-		.quadraticCurveTo(x, y + h, x, y + h - r)
-		.lineTo(x, y + r)
-		.quadraticCurveTo(x, y, x + r, y)
-}
+	function roundedRect(x: number, y: number, w: number, h: number, r: number) {
+		return doc
+			.moveTo(x + r, y)
+			.lineTo(x + w - r, y)
+			.quadraticCurveTo(x + w, y, x + w, y + r)
+			.lineTo(x + w, y + h - r)
+			.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
+			.lineTo(x + r, y + h)
+			.quadraticCurveTo(x, y + h, x, y + h - r)
+			.lineTo(x, y + r)
+			.quadraticCurveTo(x, y, x + r, y)
+	}
 
-function drawAccessCell(
-	doc: PDFKit.PDFDocument,
-	x: number,
-	y: number,
-	color: string,
-	icon?: Buffer | null,
-	text?: string
-) {
-	const size = LAYOUT.access.size
-	// On arrondit légèrement les cases d'accès aussi pour le style
-	roundedRect(doc, x, y, size, size, PT.borderRadius - PT.padding).fill(color)
-
-	if (icon) {
-		const iconPad = 1
-		doc.image(icon, x + iconPad, y + iconPad, {
-			width: size - 2 * iconPad,
-			height: size - 2 * iconPad,
-		})
-	} else if (text) {
+	function textCenter(
+		text: string,
+		opts: { x: number; y: number; w: number; h: number; fontSize: number }
+	) {
 		doc
 			.fillColor('#fff')
-			// Font très petite, Light est essentiel ici pour la lisibilité
-			.fontSize(size - 2.5 * MM_TO_PT)
-			.text(text, x, y + size / 2 - 2, { width: size, align: 'center', lineBreak: false })
+			.fontSize(opts.fontSize)
+			.text(text, opts.x, opts.y + opts.h / 2 - opts.fontSize * 0.4, {
+				width: opts.w,
+				align: 'center',
+			})
 	}
 }
 
@@ -368,13 +280,9 @@ async function getImageBuffer(
 		grayscale?: boolean
 	} = {}
 ) {
-	try {
-		const filePath = path.resolve(env.MEDIA_DIR, mediaId, 'original.webp')
-		let p = sharp(filePath)
-		if (opts.size) p = p.resize(opts.size.width, opts.size.height)
-		if (opts.grayscale) p = p.grayscale(true)
-		return await p.png().toBuffer()
-	} catch {
-		return null
-	}
+	const filePath = path.resolve(env.MEDIA_DIR, mediaId, 'original.webp')
+	let p = sharp(filePath)
+	if (opts.size) p = p.resize(opts.size.width, opts.size.height)
+	if (opts.grayscale) p = p.grayscale(true)
+	return await p.png().toBuffer()
 }
