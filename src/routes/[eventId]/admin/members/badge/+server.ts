@@ -1,12 +1,13 @@
-import { getMembers } from '../getMembers'
-import { prisma, permission } from '$lib/server'
-import type { Event, Member } from '@prisma/client'
 import path from 'node:path'
-import { env } from '$env/dynamic/private'
-import sharp from 'sharp'
-import logoBenev from '$lib/assets/logo.svg?raw'
 import z from 'zod'
+import sharp from 'sharp'
 import PDFDocument from 'pdfkit'
+import QrCode from 'qrcode'
+import { env } from '$env/dynamic/private'
+import type { Event, Member } from '@prisma/client'
+import { prisma, permission } from '$lib/server'
+import logoBenev from '$lib/assets/logo.svg?raw'
+import { getMembers } from '../getMembers'
 // import fontLight from '$lib/assets/Helvetica-Light.ttf'
 // const fontLightPath = path.resolve(`.${fontLight}`)
 
@@ -24,7 +25,7 @@ const DIMENSIONS_MM = {
 	boxTypeHeight: 5,
 	accessCellSize: 5,
 	avatarSize: 36,
-	logoBenevSize: 6,
+	qrCodeSize: 24,
 	borderRadius: 2.2,
 }
 const LAYOUT = Object.fromEntries(
@@ -101,7 +102,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 			layerUserName()
 			await layerAvatar()
 			layerAccess()
-			verso()
+			await verso()
 
 			function layerBackground() {
 				const contentW = LAYOUT.width - 2 * LAYOUT.padding
@@ -109,13 +110,15 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 				doc.rect(0, 0, LAYOUT.width, LAYOUT.height).fill(color)
 				doc.save()
 				doc.opacity(0.85)
-				roundedRect(
-					LAYOUT.padding,
-					LAYOUT.padding,
-					contentW,
-					contentH - LAYOUT.footerHeight + LAYOUT.padding,
-					LAYOUT.borderRadius
-				).clip()
+				doc
+					.roundedRect(
+						LAYOUT.padding,
+						LAYOUT.padding,
+						contentW,
+						contentH - LAYOUT.footerHeight + LAYOUT.padding,
+						LAYOUT.borderRadius
+					)
+					.clip()
 				doc.image(images.background, LAYOUT.padding, LAYOUT.padding, {
 					width: contentW,
 					height: contentH,
@@ -141,7 +144,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 				const y = LAYOUT.padding * 2
 				const radius = LAYOUT.borderRadius - LAYOUT.padding
 				const badgeType = (member.profileJson[BADGE_TYPE_FIELD_ID] as string) || ''
-				roundedRect(x, y, w, h, radius).fill(color)
+				doc.roundedRect(x, y, w, h, radius).fill(color)
 				textCenter(badgeType, { x, y, w, h, fontSize })
 			}
 
@@ -163,16 +166,18 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 				const size = LAYOUT.avatarSize
 				const x = LAYOUT.width / 2 - LAYOUT.avatarSize / 2
 				const y = LAYOUT.height - LAYOUT.footerHeight - LAYOUT.avatarSize - 2 * LAYOUT.padding
-				roundedRect(
-					x - LAYOUT.padding,
-					y - LAYOUT.padding,
-					size + 2 * LAYOUT.padding,
-					size + 2 * LAYOUT.padding,
-					LAYOUT.borderRadius
-				).fill(color)
+				doc
+					.roundedRect(
+						x - LAYOUT.padding,
+						y - LAYOUT.padding,
+						size + 2 * LAYOUT.padding,
+						size + 2 * LAYOUT.padding,
+						LAYOUT.borderRadius
+					)
+					.fill(color)
 				const avatarBuffer = await getImageBuffer(member.avatarId)
 				doc.save()
-				roundedRect(x, y, size, size, LAYOUT.borderRadius - LAYOUT.padding).clip()
+				doc.roundedRect(x, y, size, size, LAYOUT.borderRadius - LAYOUT.padding).clip()
 				doc.image(avatarBuffer, x, y, { width: size, height: size })
 				doc.restore()
 			}
@@ -195,24 +200,39 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 				)
 
 				function drawAccessCell(x: number, y: number, text: string) {
-					roundedRect(x, y, size, size, LAYOUT.borderRadius - LAYOUT.padding).fill(color)
+					doc.roundedRect(x, y, size, size, LAYOUT.borderRadius - LAYOUT.padding).fill(color)
 					textCenter(text, { x, y, w: size, h: size, fontSize })
 				}
 			}
 
-			function verso() {
+			async function verso() {
 				doc.addPage()
 				const padding = 8
 				const fontSize = 7
 				const textHeight = 2 * fontSize + padding
-				const logoX = LAYOUT.width / 2 - LAYOUT.logoBenevSize / 2
-				const logoY = LAYOUT.height - textHeight - LAYOUT.logoBenevSize
+				const qrCodeSize = 50
+				const qrX = LAYOUT.width / 2 - qrCodeSize / 2
+				const qrY = LAYOUT.height - textHeight - qrCodeSize
 				const text = `Imprimé le ${formater.format(new Date())} depuis benev.io`
-
-				doc.image(images.logoBenev, logoX, logoY, {
-					width: LAYOUT.logoBenevSize,
-					height: LAYOUT.logoBenevSize,
+				// const logoSize = qrCodeSize * 0.18
+				// const logoX = LAYOUT.width / 2 - logoSize / 2
+				// const logoY = qrY + qrCodeSize / 2 - logoSize / 2
+				const qrCode = await QrCode.toBuffer(`https://benev.io/qr/${member.id}`, {
+					margin: 0,
+					width: qrCodeSize,
 				})
+
+				doc.image(qrCode, qrX, qrY, {
+					align: 'center',
+					width: qrCodeSize,
+					height: qrCodeSize,
+				})
+
+				// doc.roundedRect(logoX, logoY, logoSize, logoSize, logoSize).fill('#fff')
+				// doc.image(images.logoBenev, logoX + 2, logoY + 2, {
+				// 	width: logoSize - 4,
+				// 	height: logoSize - 4,
+				// })
 
 				textCenter(text, {
 					x: 0,
@@ -226,19 +246,6 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		}
 
 		doc.end()
-	}
-
-	function roundedRect(x: number, y: number, w: number, h: number, r: number) {
-		return doc
-			.moveTo(x + r, y)
-			.lineTo(x + w - r, y)
-			.quadraticCurveTo(x + w, y, x + w, y + r)
-			.lineTo(x + w, y + h - r)
-			.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
-			.lineTo(x + r, y + h)
-			.quadraticCurveTo(x, y + h, x, y + h - r)
-			.lineTo(x, y + r)
-			.quadraticCurveTo(x, y, x + r, y)
 	}
 
 	function textCenter(

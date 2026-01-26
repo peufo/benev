@@ -12,6 +12,7 @@ import accessDaysIcon from '$lib/assets/calendar.svg?raw'
 import accessSectorsIcon from '$lib/assets/key.svg?raw'
 import z from 'zod'
 
+// TODO: supprimer pdfme une fois que pdfkit est validé
 const formater = new Intl.DateTimeFormat('fr-ch', {
 	day: 'numeric',
 	month: 'numeric',
