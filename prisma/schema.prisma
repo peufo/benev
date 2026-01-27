@@ -169,6 +169,7 @@ model Event {
   views        View[]
   medias       Media[]
   Tag          Tag[]
+  badges       Badge[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -194,9 +195,14 @@ model Field {
   allCombinations Boolean   @default(false)
   required        Boolean   @default(false)
   description     String?
-  options         String?   @db.Text()
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+
+  options      String? @db.Text() // TODO: Why this is not a json ?
+  badgesType   Badge[] @relation("BadgeType")
+  badgesDays   Badge[] @relation("BadgeDays")
+  badgesSector Badge[] @relation("BadgeSectors")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([eventId, name])
 }
@@ -280,6 +286,30 @@ enum PageType {
   public
   member
   email
+}
+
+model Badge {
+  id String @id @default(cuid())
+
+  name    String @default("Badge d'accès")
+  eventId String
+  event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
+
+  backgroundId String
+  background   Media  @relation("BadgeBackground", fields: [backgroundId], references: [id])
+  logoId       String
+  logo         Media  @relation("BadgeLogo", fields: [logoId], references: [id])
+
+  typeFieldId          String
+  typeField            Field  @relation("BadgeType", fields: [typeFieldId], references: [id])
+  accessDaysFieldId    String
+  accessDaysField      Field  @relation("BadgeDays", fields: [accessDaysFieldId], references: [id])
+  accessSectorsFieldId String
+  accessSectorsField   Field  @relation("BadgeSectors", fields: [accessSectorsFieldId], references: [id])
+
+  /// ![Record<string, string>]
+  colorMap     Json   @default("{}")
+  colorDefault String @default("#C7B198")
 }
 
 model Team {
@@ -376,6 +406,9 @@ model Media {
 
   eventId String?
   event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  badgesLogo       Badge[] @relation("BadgeLogo")
+  badgesBackground Badge[] @relation("BadgeBackground")
 
   createdById String
   createdBy   User     @relation(references: [id], fields: [createdById], onDelete: Cascade)
