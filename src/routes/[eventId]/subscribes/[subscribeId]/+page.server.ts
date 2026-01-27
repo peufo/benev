@@ -41,7 +41,6 @@ const setSubscribState: (_state: SubscribeState) => Action =
 				include: {
 					member: {
 						include: {
-							user: { select: { isHeadlessAccount: true } },
 							subscribes: {
 								where: whereSubscribe,
 								include: { period: true },

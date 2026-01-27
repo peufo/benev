@@ -29,7 +29,6 @@ export const GET = async ({ url, cookies, locals }) => {
 				firstName: googleUser.name.split(' ')[0],
 				lastName: googleUser.family_name,
 				avatarPlaceholder: googleUser.picture,
-				isHeadlessAccount: false,
 				email,
 				isEmailVerified: !!googleUser.email_verified,
 			},

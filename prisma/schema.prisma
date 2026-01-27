@@ -14,7 +14,7 @@ datasource db {
 model User {
   id String @id @unique
 
-  // DUPLICATED DATA ON MEMBER
+  // DUPLICATED USER DATA ON MEMBER
   email             String    @unique
   phone             String?
   firstName         String
@@ -27,10 +27,9 @@ model User {
   avatar            Media?    @relation(name: "avatar", references: [id], fields: [avatarId], onDelete: SetNull)
   avatarPlaceholder String    @default("") // TODO: remove default value after migration
 
-  isEmailVerified   Boolean @default(false)
-  isOrganizer       Boolean @default(false)
-  isTermsAccepted   Boolean @default(false)
-  isHeadlessAccount Boolean @default(false) // TODO: REMOVE THIS SHIT
+  isEmailVerified Boolean @default(false)
+  isOrganizer     Boolean @default(false)
+  isTermsAccepted Boolean @default(false)
 
   tokens Token[]
 
@@ -149,15 +148,6 @@ model Event {
   posterId String? @unique
   poster   Media?  @relation(name: "poster", fields: [posterId], references: [id], onDelete: SetNull)
 
-  teams        Team[]
-  pages        Page[]
-  members      Member[]
-  memberFields Field[]
-  gifts        Gift[]
-  views        View[]
-  medias       Media[]
-  Tag          Tag[]
-
   // Settings
   closeSubscribing           DateTime?
   selfRegisterAllowed        Boolean   @default(true)
@@ -169,6 +159,16 @@ model Event {
   userBirthdayRequired       Boolean   @default(false)
   userAvatarRequired         Boolean   @default(false)
   overlapPeriodAllowed       Int       @default(0)
+
+  // Relations
+  teams        Team[]
+  pages        Page[]
+  members      Member[]
+  memberFields Field[]
+  gifts        Gift[]
+  views        View[]
+  medias       Media[]
+  Tag          Tag[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

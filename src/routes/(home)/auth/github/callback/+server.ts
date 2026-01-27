@@ -29,7 +29,6 @@ export const GET = async ({ url, cookies, locals }) => {
 			attributes: {
 				firstName,
 				lastName,
-				isHeadlessAccount: false,
 				avatarPlaceholder: githubUser.avatar_url,
 				email,
 				isEmailVerified: !!githubUser.email,

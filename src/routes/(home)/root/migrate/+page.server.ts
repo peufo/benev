@@ -34,11 +34,4 @@ export const actions = {
 				updated: count,
 			}
 		}),
-	rm_headless_users: () =>
-		tryOrFail(async () => {
-			const res = await prisma.user.deleteMany({ where: { isHeadlessAccount: true } })
-			return {
-				deleted: res.count,
-			}
-		}),
 }

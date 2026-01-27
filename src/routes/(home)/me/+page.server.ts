@@ -22,7 +22,6 @@ export const actions = {
 			email: data.email,
 			firstName: data.firstName,
 			lastName: data.lastName,
-			isHeadlessAccount: data.isHeadlessAccount,
 			isTermsAccepted: data.isTermsAccepted,
 			isOrganizer: data.isOrganizer,
 			isEmailVerified: false,
