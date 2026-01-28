@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner'
 	import type { PageData } from './$types'
-	import { ButtonDelete, Icon, InputText, useForm } from 'fuma'
+	import { ButtonDelete, Icon, InputText, USE_COERCE_JSON, useForm } from 'fuma'
 	import { mdiAlertCircleOutline, mdiCheck, mdiLoading } from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
 	import InputMedia from './InputMedia.svelte'
@@ -47,14 +47,15 @@
 
 		<div class="flex gap-2 items-center">
 			<InputMedia
-				key="backgroundId"
 				label="Image de fond"
+				key="backgroundId"
 				value={badge.backgroundId}
 				x={FORMAT_CARD.x * 3}
 				y={FORMAT_CARD.y * 3}
+				oninput={autosave}
 			/>
 
-			<InputMedia key="logoId" label="Logo" value={badge.logoId} />
+			<InputMedia key="logoId" label="Logo" value={badge.logoId} oninput={autosave} />
 		</div>
 	</div>
 

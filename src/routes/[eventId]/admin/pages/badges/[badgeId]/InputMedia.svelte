@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SelectMedia } from '$lib/material'
+	import type { Media } from '@prisma/client'
 	import { PlaceholderImage, tip } from 'fuma'
-	import { eventPath } from '$lib/store'
 	import { Trash2Icon } from 'lucide-svelte'
 
 	export let key: string | null = null
@@ -9,6 +9,7 @@
 	export let value: string | null | undefined = undefined
 	export let x = 160
 	export let y = 160
+	export let oninput: (media: Media) => void = () => {}
 
 	let selectMedia: SelectMedia
 </script>
@@ -51,5 +52,6 @@
 	bind:this={selectMedia}
 	on:select={({ detail: media }) => {
 		value = media.id
+		oninput(media)
 	}}
 />

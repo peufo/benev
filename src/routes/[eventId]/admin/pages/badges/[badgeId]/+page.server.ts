@@ -18,11 +18,21 @@ export const load = async ({ params: { badgeId, eventId } }) => {
 export const actions = {
 	badge_update: formAction(
 		modelBadgeUpdate,
-		async ({ data, locals, params: { eventId, badgeId } }) => {
+		async ({ data: { backgroundId, logoId, ...data }, locals, params: { eventId, badgeId } }) => {
 			await permission.admin(eventId, locals)
+
+			function idToConnectionData(id?: string | null) {
+				if (!id) return { disconnect: true }
+				return { connect: { id } }
+			}
+
 			return prisma.badge.update({
 				where: { id: badgeId, eventId },
-				data,
+				data: {
+					background: idToConnectionData(backgroundId),
+					logo: idToConnectionData(logoId),
+					...data,
+				},
 			})
 		}
 	),
