@@ -1,11 +1,20 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner'
 	import type { PageData } from './$types'
-	import { ButtonDelete, Icon, InputText, USE_COERCE_JSON, useForm } from 'fuma'
+	import {
+		ButtonDelete,
+		Icon,
+		InputRelation,
+		InputText,
+		urlParam,
+		USE_COERCE_JSON,
+		useForm,
+	} from 'fuma'
 	import { mdiAlertCircleOutline, mdiCheck, mdiLoading } from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
 	import InputMedia from './InputMedia.svelte'
 	import { FORMAT_CARD } from '$lib/constant'
+	import { api } from '$lib/api'
 
 	export let badge: PageData['badge']
 
@@ -45,7 +54,7 @@
 			<span class="label-text">Illustrations</span>
 		</div>
 
-		<div class="flex gap-2 items-center">
+		<div class="flex gap-4 items-center">
 			<InputMedia
 				label="Image de fond"
 				key="backgroundId"
@@ -59,11 +68,15 @@
 		</div>
 	</div>
 
-	<!-- TODO: check aspect -->
+	<InputRelation
+		key="typeField"
+		search={(search) => $api.fields.search(search, { type: 'select' })}
+		label="Champ Type de membre"
+		createTitle="Nouveau champ"
+		createUrl={$urlParam.with({ form_field: JSON.stringify({ type: 'select' }) })}
+	/>
 
 	<pre>TODO: 
-background: z.relation.connect,
-logo: z.relation.connect,
 typeField: z.relation.connect,
 accessDaysField: z.relation.connect,
 accessSectorsField: z.relation.connect,

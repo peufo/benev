@@ -21,10 +21,7 @@ export const actions = {
 		async ({ data: { backgroundId, logoId, ...data }, locals, params: { eventId, badgeId } }) => {
 			await permission.admin(eventId, locals)
 
-			function idToConnectionData(id?: string | null) {
-				if (!id) return { disconnect: true }
-				return { connect: { id } }
-			}
+			// TODO: check field.type
 
 			return prisma.badge.update({
 				where: { id: badgeId, eventId },
@@ -43,4 +40,9 @@ export const actions = {
 			where: { id: badgeId },
 		})
 	}),
+}
+
+function idToConnectionData(id?: string | null) {
+	if (!id) return { disconnect: true }
+	return { connect: { id } }
 }

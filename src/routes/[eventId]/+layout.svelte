@@ -152,6 +152,7 @@
 	</div>
 </Footer>
 
+<!-- TODO: WHY THIS IS NOT IN /[eventId]/admin ???? -->
 {#if data.member?.roles.includes('leader')}
 	<DrawersForm event={data.event} team={data.team} period={data.period || {}} tag={data.tag} />
 
