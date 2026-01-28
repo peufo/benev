@@ -311,6 +311,9 @@ model Badge {
   colorMap     Json   @default("{}")
   colorDefault String @default("#C7B198")
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([eventId, name])
 }
 

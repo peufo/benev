@@ -24,7 +24,7 @@
 		successUpdate: false,
 		successMessage: false,
 		async onSuccess(action) {
-			if (successInvalidateAll || action.search === '?/delete_page') await invalidateAll()
+			if (successInvalidateAll || action.search === '?/page_delete') await invalidateAll()
 			isDirty = false
 		},
 	})
@@ -51,7 +51,7 @@
 	}, 800)
 </script>
 
-<form method="post" action="?/update_page" use:enhance={form.submit} class="flex flex-col gap-2">
+<form method="post" action="?/page_update" use:enhance={form.submit} class="flex flex-col gap-2">
 	<div class="flex gap-2 items-start">
 		<InputText
 			label="Titre"
@@ -114,7 +114,7 @@
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
 
 		<ButtonDelete
-			formaction="?/delete_page"
+			formaction="?/page_delete"
 			disabled={page.type === 'home' || page.type === 'email'}
 		/>
 		<div class="grow" />

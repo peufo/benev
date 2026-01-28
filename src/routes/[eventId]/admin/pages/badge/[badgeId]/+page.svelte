@@ -1,1 +1,0 @@
-TODO: Apercus du badge

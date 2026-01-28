@@ -5,7 +5,7 @@ import { prisma, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 
 export const load = async ({ params: { pageId, eventId } }) => {
-	const page = await prisma.page.findUnique({ where: { id: pageId } })
+	const page = await prisma.page.findUnique({ where: { id: pageId, eventId } })
 	if (!page) redirect(302, `/${eventId}/admin/pages`)
 
 	return {
@@ -17,7 +17,7 @@ export const load = async ({ params: { pageId, eventId } }) => {
 }
 
 export const actions = {
-	update_page: async ({ request, locals, params: { eventId } }) => {
+	page_update: async ({ request, locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 
 		return tryOrFail(async () => {
@@ -57,12 +57,12 @@ export const actions = {
 			})
 		})
 	},
-	delete_page: async ({ locals, params: { eventId, pageId } }) => {
+	page_delete: async ({ locals, params: { eventId, pageId } }) => {
 		await permission.admin(eventId, locals)
 
 		return tryOrFail(() =>
 			prisma.page.delete({
-				where: { id: pageId, type: { notIn: ['home', 'email'] } },
+				where: { id: pageId, eventId, type: { notIn: ['home', 'email'] } },
 			})
 		)
 	},

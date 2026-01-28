@@ -12,9 +12,11 @@ export const actions = {
 	page_create: async ({ locals, params: { eventId } }) => {
 		await permission.admin(eventId, locals)
 
-		const pagesCount = await prisma.page.count({ where: { eventId: eventId } })
+		const pagesCount = await prisma.page.count({
+			where: { eventId: eventId, type: { not: 'email' } },
+		})
 
-		const title = `Ma page ${pagesCount + 1}`
+		const title = `Page ${pagesCount + 1}`
 
 		return tryOrFail(
 			() =>
@@ -35,7 +37,7 @@ export const actions = {
 			where: { id: eventId },
 			include: { badges: { select: { name: true } } },
 		})
-		if (event.badges.length > 10)
+		if (event.badges.length >= 10)
 			throw new Error("You can't create more than 10 badge configuration")
 		const name = getNewBadgeName(event.badges)
 		return prisma.badge.create({

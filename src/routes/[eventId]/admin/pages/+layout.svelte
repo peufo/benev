@@ -64,7 +64,7 @@
 						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
 					</a>
 				{/each}
-				<div class="flex gap-2 mb-2 items-center">
+				<div class="flex gap-2 my-2 items-center">
 					<h2 class="title-md my-2">Models de badge</h2>
 
 					<form

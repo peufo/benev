@@ -79,6 +79,7 @@ function createOrUpsertMedia(opt: UploadOption) {
 	return prisma.media.create({ data: opt.data })
 }
 
+// WTF ???
 async function upsertMedia(opt: UploadOption) {
 	const media = await prisma.media.findFirst({
 		where: opt.where,

@@ -14,5 +14,5 @@
 		</a>
 		<a href="https://github.com/peufo" class="link link-hover"> Created by peufo</a>
 	</div>
-	<p class="opacity-80">©2023-2025 Dev Voisard - Switzerland</p>
+	<p class="opacity-80">©2023-{new Date().getFullYear()} Dev Voisard - Switzerland</p>
 </footer>
