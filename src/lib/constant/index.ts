@@ -32,6 +32,12 @@ export const FORMAT_A3 = {
 	aspect: 297 / 420,
 } as const
 
+export const FORMAT_CARD = {
+	x: 53.98,
+	y: 85.6,
+	aspect: 53.98 / 85.6,
+}
+
 export const MEDIA_PRESETS = {
 	medium: [256, 256],
 	large: [512, 512],

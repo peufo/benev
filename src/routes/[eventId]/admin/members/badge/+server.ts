@@ -8,6 +8,7 @@ import type { Event, Member } from '@prisma/client'
 import { prisma, permission } from '$lib/server'
 import logoBenev from '$lib/assets/logo.svg?raw'
 import { getMembers } from '../getMembers'
+import { FORMAT_CARD } from '$lib/constant'
 // import fontLight from '$lib/assets/Helvetica-Light.ttf'
 // const fontLightPath = path.resolve(`.${fontLight}`)
 
@@ -18,8 +19,8 @@ const formater = new Intl.DateTimeFormat('fr-ch', {
 	timeZone: 'Europe/Zurich',
 })
 const DIMENSIONS_MM = {
-	width: 53.98,
-	height: 85.6,
+	width: FORMAT_CARD.x,
+	height: FORMAT_CARD.y,
 	padding: 1,
 	footerHeight: 8,
 	boxTypeHeight: 5,

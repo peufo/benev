@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { Media } from '@prisma/client'
+	import { portal } from 'svelte-portal'
 	import { page } from '$app/stores'
 	import { ButtonDelete, Dialog, Icon, InputText } from 'fuma'
 	import { useForm } from 'fuma/validation'
@@ -9,6 +10,7 @@
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { createEventDispatcher, tick } from 'svelte'
 
+	// TODO: Chelous de récupérer medias en global:
 	let medias: Media[] = $page.data.medias || []
 	page.subscribe(({ data }) => (medias = data.medias || []))
 
@@ -119,43 +121,45 @@
 	</div>
 </Dialog>
 
-<form
-	method="post"
-	enctype="multipart/form-data"
-	use:enhance={formUpload.submit}
-	on:submit|preventDefault
->
-	<UploadMediaDialog
-		bind:this={dialogUploadMedia}
-		title="Nouvelle image"
-		formaction="/{$page.params.eventId}/admin?/upload_media"
-		freeName
-		freeAspect
-	/>
-</form>
+<div class="contents" use:portal={'body'}>
+	<form
+		use:enhance={formUpload.submit}
+		method="post"
+		enctype="multipart/form-data"
+		on:submit|preventDefault
+	>
+		<UploadMediaDialog
+			bind:this={dialogUploadMedia}
+			title="Nouvelle image"
+			formaction="/{$page.params.eventId}/admin?/upload_media"
+			freeName
+			freeAspect
+		/>
+	</form>
 
-{#if selectedMedia}
-	<Dialog bind:dialog={dialogEdit}>
-		<h3 slot="header" class="title">Edition d'une image</h3>
+	{#if selectedMedia}
+		<Dialog bind:dialog={dialogEdit}>
+			<h3 slot="header" class="title">Edition d'une image</h3>
 
-		<img src="/media/{selectedMedia.id}" alt={selectedMedia.name} class="mx-auto" />
+			<img src="/media/{selectedMedia.id}" alt={selectedMedia.name} class="mx-auto" />
 
-		<form method="post" class="contents" use:enhance={formEdit.submit}>
-			<div class="flex flex-row-reverse items-end gap-2 mt-4">
-				<input type="hidden" name="id" value={selectedMedia.id} />
+			<form method="post" class="contents" use:enhance={formEdit.submit}>
+				<div class="flex flex-row-reverse items-end gap-2 mt-4">
+					<input type="hidden" name="id" value={selectedMedia.id} />
 
-				<button formaction="/{$page.params.eventId}/admin?/edit_media" class="btn btn-primary">
-					Valider
-				</button>
-				<ButtonDelete formaction="/{$page.params.eventId}/admin?/delete_media" />
+					<button formaction="/{$page.params.eventId}/admin?/edit_media" class="btn btn-primary">
+						Valider
+					</button>
+					<ButtonDelete formaction="/{$page.params.eventId}/admin?/delete_media" />
 
-				<InputText
-					key="name"
-					input={{ placeholder: "Description de l'image", autocomplete: 'off' }}
-					class="grow"
-					value={selectedMedia.name}
-				/>
-			</div>
-		</form>
-	</Dialog>
-{/if}
+					<InputText
+						key="name"
+						input={{ placeholder: "Description de l'image", autocomplete: 'off' }}
+						class="grow"
+						value={selectedMedia.name}
+					/>
+				</div>
+			</form>
+		</Dialog>
+	{/if}
+</div>

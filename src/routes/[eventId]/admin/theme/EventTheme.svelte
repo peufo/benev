@@ -32,7 +32,8 @@
 		background-color: hsl(var(--b3) / var(--card-opacity, 1));
 	}
 	:global(.border, .card.bordered) {
-		border-color: hsl(var(--b2) / calc(var(--card-opacity, 1) / 2));
+		/* border-color: hsl(var(--b2) / calc(var(--card-opacity, 1))); */
+		border-color: hsl(var(--b2));
 	}
 
 	.background {

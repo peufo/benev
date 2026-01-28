@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { SelectMedia } from '$lib/material'
 	import { toast } from 'svelte-sonner'
 	import type { PageData } from './$types'
 	import { ButtonDelete, Icon, InputText, useForm } from 'fuma'
 	import { mdiAlertCircleOutline, mdiCheck, mdiLoading } from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
+	import InputMedia from './InputMedia.svelte'
+	import { FORMAT_CARD } from '$lib/constant'
 
 	export let badge: PageData['badge']
 
-	let selectMedia: SelectMedia
 	let submitButton: HTMLButtonElement
 	let isSuccess = true
 
@@ -38,18 +38,37 @@
 	use:enhance
 	class="flex flex-col gap-2"
 >
+	<InputText key="name" label="Nom de la configuration" value={badge.name} />
+
+	<div>
+		<div class="label">
+			<span class="label-text">Illustrations</span>
+		</div>
+
+		<div class="flex gap-2 items-center">
+			<InputMedia
+				key="backgroundId"
+				label="Image de fond"
+				value={badge.backgroundId}
+				x={FORMAT_CARD.x * 3}
+				y={FORMAT_CARD.y * 3}
+			/>
+
+			<InputMedia key="logoId" label="Logo" value={badge.logoId} />
+		</div>
+	</div>
+
+	<!-- TODO: check aspect -->
+
 	<pre>TODO: 
-	background: z.relation.connect,
-	logo: z.relation.connect,
-	typeField: z.relation.connect,
-	accessDaysField: z.relation.connect,
-	accessSectorsField: z.relation.connect,
-	colorMap: z.record(z.string()),
-	colorDefault: z.string(),
-    </pre>
-
-	<InputText key="name" label="Nom de la configuration" />
-
+background: z.relation.connect,
+logo: z.relation.connect,
+typeField: z.relation.connect,
+accessDaysField: z.relation.connect,
+accessSectorsField: z.relation.connect,
+colorMap: z.record(z.string()),
+colorDefault: z.string(),
+</pre>
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
 
@@ -74,10 +93,3 @@
 		{/if}
 	</div>
 </form>
-
-<SelectMedia
-	bind:this={selectMedia}
-	on:select={({ detail: media }) => {
-		toast.info('TODO: handle media select')
-	}}
-/>
