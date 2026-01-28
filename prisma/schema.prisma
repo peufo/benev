@@ -295,21 +295,23 @@ model Badge {
   eventId String
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
-  backgroundId String
-  background   Media  @relation("BadgeBackground", fields: [backgroundId], references: [id])
-  logoId       String
-  logo         Media  @relation("BadgeLogo", fields: [logoId], references: [id])
+  backgroundId String?
+  background   Media?  @relation("BadgeBackground", fields: [backgroundId], references: [id])
+  logoId       String?
+  logo         Media?  @relation("BadgeLogo", fields: [logoId], references: [id])
 
-  typeFieldId          String
-  typeField            Field  @relation("BadgeType", fields: [typeFieldId], references: [id])
-  accessDaysFieldId    String
-  accessDaysField      Field  @relation("BadgeDays", fields: [accessDaysFieldId], references: [id])
-  accessSectorsFieldId String
-  accessSectorsField   Field  @relation("BadgeSectors", fields: [accessSectorsFieldId], references: [id])
+  typeFieldId          String?
+  typeField            Field?  @relation("BadgeType", fields: [typeFieldId], references: [id])
+  accessDaysFieldId    String?
+  accessDaysField      Field?  @relation("BadgeDays", fields: [accessDaysFieldId], references: [id])
+  accessSectorsFieldId String?
+  accessSectorsField   Field?  @relation("BadgeSectors", fields: [accessSectorsFieldId], references: [id])
 
   /// ![Record<string, string>]
   colorMap     Json   @default("{}")
   colorDefault String @default("#C7B198")
+
+  @@unique([eventId, name])
 }
 
 model Team {

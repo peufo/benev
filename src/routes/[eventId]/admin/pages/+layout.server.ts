@@ -5,4 +5,7 @@ export const load = async ({ params: { eventId } }) => ({
 		where: { eventId, type: 'email' },
 		orderBy: { index: 'asc' },
 	}),
+	badges: await prisma.badge.findMany({
+		where: { eventId },
+	}),
 })
