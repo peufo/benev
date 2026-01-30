@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
+	import { mdiPencilOutline } from '@mdi/js'
 	import type { Field } from '@prisma/client'
-	import { Icon } from 'fuma'
+	import { Icon, urlParam } from 'fuma'
 
 	export let field: Field
+	export let updateLink = false
 </script>
 
 <div class="flex gap-2 items-center">
@@ -11,4 +13,9 @@
 	<span>
 		{field.name}
 	</span>
+	{#if updateLink}
+		<a href={$urlParam.with({ form_field: field.id })} class="btn btn-square btn-sm ml-auto">
+			<Icon path={mdiPencilOutline} title="Éditer le champ" />
+		</a>
+	{/if}
 </div>

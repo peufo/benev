@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner'
 	import type { PageData } from './$types'
-	import { ButtonDelete, Icon, InputRelation, InputText, urlParam, useForm, component } from 'fuma'
+	import { ButtonDelete, Icon, InputText, useForm } from 'fuma'
 	import { mdiAlertCircleOutline, mdiCheck, mdiLoading } from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
 	import InputMedia from './InputMedia.svelte'
 	import { FORMAT_CARD } from '$lib/constant'
-	import { api } from '$lib/api'
-	import MemberFieldSnippet from './MemberFieldSnippet.svelte'
+	import InputColorMap from './InputColorMap.svelte'
+	import InputRelationField from './InputRelationField.svelte'
+	import { debounce } from '$lib/debounce'
+	import InputColorPalette from './InputColorPalette.svelte'
+	import InputColor from './InputColor.svelte'
 
 	export let badge: PageData['badge']
 
@@ -28,11 +31,9 @@
 		},
 	})
 
-	function autosave() {
-		console.log('autosave')
-
+	const autosave = debounce(() => {
 		submitButton.click()
-	}
+	}, 300)
 </script>
 
 <form
@@ -63,43 +64,37 @@
 		</div>
 	</div>
 
-	<InputRelation
+	<InputRelationField
 		key="accessDaysField"
-		value={badge.accessDaysField}
-		search={(search) => $api.fields.search(search, { type: 'multiselect' })}
 		label="Champ: Jours d'accès (Liste à choix multiple)"
-		createTitle="Nouveau champ"
-		createUrl={$urlParam.with({ form_field: JSON.stringify({ type: 'multiselect' }) })}
-		slotItem={(field) => component(MemberFieldSnippet, { field })}
-		on:input={() => setTimeout(autosave, 0)}
+		value={badge.accessDaysField}
+		type="multiselect"
+		oninput={autosave}
 	/>
-
-	<InputRelation
+	<InputRelationField
 		key="accessSectorsField"
-		value={badge.accessSectorsField}
-		search={(search) => $api.fields.search(search, { type: 'multiselect' })}
 		label="Champ: Accès au secteurs (Liste à choix multiple)"
-		createTitle="Nouveau champ"
-		createUrl={$urlParam.with({ form_field: JSON.stringify({ type: 'multiselect' }) })}
-		slotItem={(field) => component(MemberFieldSnippet, { field })}
-		on:input={() => setTimeout(autosave, 0)}
+		value={badge.accessSectorsField}
+		type="multiselect"
+		oninput={autosave}
 	/>
-
-	<InputRelation
+	<InputRelationField
 		key="typeField"
-		value={badge.typeField}
-		search={(search) => $api.fields.search(search, { type: 'select' })}
 		label="Champ: Type de membre (Liste à choix)"
-		createTitle="Nouveau champ"
-		createUrl={$urlParam.with({ form_field: JSON.stringify({ type: 'select' }) })}
-		slotItem={(field) => component(MemberFieldSnippet, { field })}
-		on:input={() => setTimeout(autosave, 0)}
+		bind:value={badge.typeField}
+		type="select"
+		oninput={autosave}
 	/>
 
-	<pre>TODO: 
-colorMap: z.record(z.string()),
-colorDefault: z.string(),
-</pre>
+	<!-- Instance to place in /+layout.svelte -->
+	<InputColorPalette />
+
+	<InputColorMap field={badge.typeField} value={badge.colorMap} />
+
+	<hr />
+
+	<InputColor name="colorDefault" label="(Couleur par défaut)" value={badge.colorDefault} />
+
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
 
