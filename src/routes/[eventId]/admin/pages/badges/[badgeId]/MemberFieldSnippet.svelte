@@ -6,7 +6,7 @@
 	export let field: Field
 </script>
 
-<div class="flex gap-2">
+<div class="flex gap-2 items-center">
 	<Icon path={MEMBER_FIELD_TYPE[field.type].icon} class="opacity-70" />
 	<span>
 		{field.name}

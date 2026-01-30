@@ -1,13 +1,18 @@
 import type { Prisma } from '@prisma/client'
 import { z, type ZodObj } from 'fuma'
 
+const zodConnectNullish = z
+	.object({ id: z.string() })
+	.nullish()
+	.transform((item) => (item ? { connect: item } : { disconnect: true }))
+
 export const modelBadgeUpdate = {
 	name: z.string().min(2),
 	backgroundId: z.string().nullish(),
 	logoId: z.string().nullish(),
-	typeField: z.relation.connect,
-	accessDaysField: z.relation.connect,
-	accessSectorsField: z.relation.connect,
+	typeField: zodConnectNullish,
+	accessDaysField: zodConnectNullish,
+	accessSectorsField: zodConnectNullish,
 	colorMap: z.record(z.string()),
 	colorDefault: z.string(),
 } satisfies ZodObj<

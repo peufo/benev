@@ -29,6 +29,8 @@
 	})
 
 	function autosave() {
+		console.log('autosave')
+
 		submitButton.click()
 	}
 </script>
@@ -47,7 +49,7 @@
 			<span class="label-text">Illustrations</span>
 		</div>
 
-		<div class="flex gap-4 items-center">
+		<div class="flex gap-4 items-center justify-around">
 			<InputMedia
 				label="Image de fond"
 				key="backgroundId"
@@ -62,18 +64,39 @@
 	</div>
 
 	<InputRelation
+		key="accessDaysField"
+		value={badge.accessDaysField}
+		search={(search) => $api.fields.search(search, { type: 'multiselect' })}
+		label="Champ: Jours d'accès (Liste à choix multiple)"
+		createTitle="Nouveau champ"
+		createUrl={$urlParam.with({ form_field: JSON.stringify({ type: 'multiselect' }) })}
+		slotItem={(field) => component(MemberFieldSnippet, { field })}
+		on:input={() => setTimeout(autosave, 0)}
+	/>
+
+	<InputRelation
+		key="accessSectorsField"
+		value={badge.accessSectorsField}
+		search={(search) => $api.fields.search(search, { type: 'multiselect' })}
+		label="Champ: Accès au secteurs (Liste à choix multiple)"
+		createTitle="Nouveau champ"
+		createUrl={$urlParam.with({ form_field: JSON.stringify({ type: 'multiselect' }) })}
+		slotItem={(field) => component(MemberFieldSnippet, { field })}
+		on:input={() => setTimeout(autosave, 0)}
+	/>
+
+	<InputRelation
 		key="typeField"
+		value={badge.typeField}
 		search={(search) => $api.fields.search(search, { type: 'select' })}
-		label="Champ Type de membre"
+		label="Champ: Type de membre (Liste à choix)"
 		createTitle="Nouveau champ"
 		createUrl={$urlParam.with({ form_field: JSON.stringify({ type: 'select' }) })}
-		slotSuggestion={(field) => component(MemberFieldSnippet, { field })}
+		slotItem={(field) => component(MemberFieldSnippet, { field })}
+		on:input={() => setTimeout(autosave, 0)}
 	/>
 
 	<pre>TODO: 
-typeField: z.relation.connect,
-accessDaysField: z.relation.connect,
-accessSectorsField: z.relation.connect,
 colorMap: z.record(z.string()),
 colorDefault: z.string(),
 </pre>

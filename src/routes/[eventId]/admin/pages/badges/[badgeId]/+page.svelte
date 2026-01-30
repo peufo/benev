@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { SelectMedia } from '$lib/material'
 	import BadgeForm from './BadgeForm.svelte'
 
 	export let data
