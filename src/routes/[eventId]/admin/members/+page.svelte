@@ -2,11 +2,19 @@
 	import { mdiAccountPlusOutline, mdiFilterRemoveOutline, mdiSigma } from '@mdi/js'
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick } from 'svelte'
-	import { Drawer, Icon, jsonParse, urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
-	import { InputSearch, Pagination, Table, TableViewSelect, Card } from 'fuma'
-
-	import { component } from '$lib/utils'
+	import {
+		InputSearch,
+		Pagination,
+		Table,
+		TableViewSelect,
+		Card,
+		component,
+		Drawer,
+		Icon,
+		jsonParse,
+		urlParam,
+	} from 'fuma'
 	import { MemberActions, MemberCreateSubscribeDialog } from '$lib/member'
 	import { getMembersTableFields } from './membersTableFields'
 	import MembersImport from './MembersImport.svelte'

@@ -2,9 +2,8 @@
 	import { onMount } from 'svelte'
 	import type { Prospect } from '@prisma/client'
 	import { mdiPlus } from '@mdi/js'
-	import { Table, Pagination, Icon, type TableField } from 'fuma'
+	import { Table, Pagination, Icon, component, type TableField } from 'fuma'
 	import SendEmail from './SendEmail.svelte'
-	import { component } from '$lib/utils'
 
 	export let data
 

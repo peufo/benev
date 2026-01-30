@@ -1,20 +1,13 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner'
 	import type { PageData } from './$types'
-	import {
-		ButtonDelete,
-		Icon,
-		InputRelation,
-		InputText,
-		urlParam,
-		USE_COERCE_JSON,
-		useForm,
-	} from 'fuma'
+	import { ButtonDelete, Icon, InputRelation, InputText, urlParam, useForm, component } from 'fuma'
 	import { mdiAlertCircleOutline, mdiCheck, mdiLoading } from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
 	import InputMedia from './InputMedia.svelte'
 	import { FORMAT_CARD } from '$lib/constant'
 	import { api } from '$lib/api'
+	import MemberFieldSnippet from './MemberFieldSnippet.svelte'
 
 	export let badge: PageData['badge']
 
@@ -74,6 +67,7 @@
 		label="Champ Type de membre"
 		createTitle="Nouveau champ"
 		createUrl={$urlParam.with({ form_field: JSON.stringify({ type: 'select' }) })}
+		slotSuggestion={(field) => component(MemberFieldSnippet, { field })}
 	/>
 
 	<pre>TODO: 

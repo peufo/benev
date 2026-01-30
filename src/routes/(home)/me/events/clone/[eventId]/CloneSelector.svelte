@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InputBoolean, Placeholder, USE_COERCE_JSON, type ComponentAndProps } from 'fuma'
+	import { InputBoolean, Placeholder, type ComponentAndProps } from 'fuma'
 
 	type Item = $$Generic<{ id: string }>
 	export let items: Item[]

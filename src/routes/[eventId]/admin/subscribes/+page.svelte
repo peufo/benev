@@ -18,8 +18,8 @@
 		urlParam,
 		Icon,
 		Drawer,
+		component,
 	} from 'fuma'
-	import { component } from '$lib/utils'
 	import { MemberCell } from '$lib/member'
 	import SubscribesImport from './SubscribesImport.svelte'
 	import SubscribesStats from './SubscribesStats.svelte'

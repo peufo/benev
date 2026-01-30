@@ -11,7 +11,7 @@ const fieldTypes = [
 	'boolean',
 	'select',
 	'multiselect',
-] as const satisfies FieldType[]
+] as const satisfies readonly FieldType[]
 
 export const GET = async ({ params: { eventId }, url, locals }) => {
 	await permission.leader(eventId, locals)
