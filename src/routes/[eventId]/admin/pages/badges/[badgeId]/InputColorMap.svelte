@@ -9,7 +9,13 @@
 	export let field: Field | null
 
 	$: options = JSON.parse(field?.options || '[]') as string[]
-	$: value = options.reduce((acc, cur) => ({ ...acc, [cur]: value[cur] || getNextColor() }), {})
+	let currentOptions = options
+	$: {
+		if (options !== currentOptions) {
+			options.reduce((acc, cur) => ({ ...acc, [cur]: value[cur] || getNextColor() }), {})
+			currentOptions = options
+		}
+	}
 </script>
 
 <input type="hidden" name="colorMap" value="{USE_COERCE_JSON}{JSON.stringify(value)}" />

@@ -43,7 +43,7 @@
 	use:enhance
 	class="flex flex-col gap-2"
 >
-	<InputText key="name" label="Nom de la configuration" value={badge.name} />
+	<InputText key="name" label="Nom de la configuration" bind:value={badge.name} />
 
 	<div>
 		<div class="label">
@@ -54,27 +54,27 @@
 			<InputMedia
 				label="Image de fond"
 				key="backgroundId"
-				value={badge.backgroundId}
+				bind:value={badge.backgroundId}
 				x={FORMAT_CARD.x * 3}
 				y={FORMAT_CARD.y * 3}
 				oninput={autosave}
 			/>
 
-			<InputMedia key="logoId" label="Logo" value={badge.logoId} oninput={autosave} />
+			<InputMedia key="logoId" label="Logo" bind:value={badge.logoId} oninput={autosave} />
 		</div>
 	</div>
 
 	<InputRelationField
 		key="accessDaysField"
 		label="Champ: Jours d'accès (Liste à choix multiple)"
-		value={badge.accessDaysField}
+		bind:value={badge.accessDaysField}
 		type="multiselect"
 		oninput={autosave}
 	/>
 	<InputRelationField
 		key="accessSectorsField"
 		label="Champ: Accès au secteurs (Liste à choix multiple)"
-		value={badge.accessSectorsField}
+		bind:value={badge.accessSectorsField}
 		type="multiselect"
 		oninput={autosave}
 	/>
@@ -88,8 +88,8 @@
 
 	<!-- Instance to place in /+layout.svelte -->
 	<InputColorPalette />
-	<InputColorMap field={badge.typeField} value={badge.colorMap} />
-	<InputColor name="colorDefault" label="(Couleur par défaut)" value={badge.colorDefault} />
+	<InputColorMap field={badge.typeField} bind:value={badge.colorMap} />
+	<InputColor name="colorDefault" label="(Couleur par défaut)" bind:value={badge.colorDefault} />
 
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
