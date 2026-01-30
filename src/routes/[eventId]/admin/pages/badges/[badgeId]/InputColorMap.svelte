@@ -4,7 +4,6 @@
 	import InputColor from './InputColor.svelte'
 	import { getNextColor } from './InputColorPalette.svelte'
 	import { USE_COERCE_JSON } from 'fuma'
-	import { onMount } from 'svelte'
 
 	export let value: Record<string, string>
 	export let field: Field | null

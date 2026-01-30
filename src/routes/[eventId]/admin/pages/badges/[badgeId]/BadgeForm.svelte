@@ -88,11 +88,7 @@
 
 	<!-- Instance to place in /+layout.svelte -->
 	<InputColorPalette />
-
 	<InputColorMap field={badge.typeField} value={badge.colorMap} />
-
-	<hr />
-
 	<InputColor name="colorDefault" label="(Couleur par défaut)" value={badge.colorDefault} />
 
 	<div class="flex gap-2">

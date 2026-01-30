@@ -9,7 +9,7 @@
 	export let value: string | null | undefined = undefined
 	export let x = 160
 	export let y = 160
-	export let oninput: (media: Media) => void = () => {}
+	export let oninput: (media: Media | null) => void = () => {}
 
 	let selectMedia: SelectMedia
 </script>
@@ -30,7 +30,10 @@
 			<img src="/media/{value}" alt="Fond de badge" width={x} height={y} class="rounded-lg" />
 			<span class="text-xs">{label}</span>
 			<button
-				on:click|stopPropagation={() => (value = null)}
+				on:click|stopPropagation={() => {
+					value = null
+					oninput(null)
+				}}
 				class="ml-auto absolute right-2 bottom-1.5"
 				use:tip={{ content: 'Désélectionner' }}
 			>
