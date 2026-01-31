@@ -151,13 +151,14 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 			}
 
 			function layerBadgeType() {
+				const badgeType = getBadgeTypeValue(member)
+				if (!badgeType) return
 				const fontSize = 9
 				const w = LAYOUT.width / 3
 				const h = LAYOUT.boxTypeHeight
 				const x = LAYOUT.width / 3
 				const y = LAYOUT.padding * 2
 				const radius = LAYOUT.borderRadius - LAYOUT.padding
-				const badgeType = getBadgeTypeValue(member)
 				doc.roundedRect(x, y, w, h, radius).fill(color)
 				textCenter(badgeType, { x, y, w, h, fontSize, fontColor })
 			}
