@@ -28,8 +28,22 @@
 		placeholder="Choisir un membre pour l'aperçu"
 		bind:value={member}
 		search={$api.member.search}
-		slotItem={({ firstName, lastName }) => `${firstName} ${lastName}`}
-	/>
+	>
+		<div slot="item" let:item class="flex gap-2">
+			{@const badgeType = item?.profileJson[badge.typeFieldId || '']}
+			<span>{item?.firstName} {item?.lastName}</span>
+			{#if badgeType}
+				<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
+			{/if}
+		</div>
+		<div slot="suggestion" let:item class="flex gap-2 w-full">
+			{@const badgeType = item?.profileJson[badge.typeFieldId || '']}
+			<span>{item?.firstName} {item?.lastName}</span>
+			{#if badgeType}
+				<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
+			{/if}
+		</div>
+	</InputRelation>
 
 	{#if member}
 		<div class="rounded-lg overflow-hidden grow" bind:clientWidth bind:clientHeight>
