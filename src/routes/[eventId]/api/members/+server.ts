@@ -23,13 +23,11 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 	const members = await prisma.member.findMany({
 		where: {
 			eventId,
-			user: {
-				OR: [
-					{ lastName: { contains: search } },
-					{ firstName: { contains: search } },
-					{ email: { contains: search } },
-				],
-			},
+			OR: [
+				{ lastName: { contains: search } },
+				{ firstName: { contains: search } },
+				{ email: { contains: search } },
+			],
 		},
 		take,
 	})
