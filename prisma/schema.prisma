@@ -309,7 +309,7 @@ model Badge {
 
   /// ![Record<string, string>]
   colorMap     Json   @default("{}")
-  colorDefault String @default("#C7B198")
+  colorDefault String @default("#F8E7D4")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -7,8 +7,10 @@ import { env } from '$env/dynamic/private'
 import type { Event, Member } from '@prisma/client'
 import { prisma, permission } from '$lib/server'
 import logoBenev from '$lib/assets/logo.svg?raw'
-import { getMembers } from '../getMembers'
+import { getMembers } from '../../../../members/getMembers'
 import { FORMAT_CARD } from '$lib/constant'
+import { existsSync } from 'node:fs'
+import { getTextColor } from '$lib/utils'
 // import fontLight from '$lib/assets/Helvetica-Light.ttf'
 // const fontLightPath = path.resolve(`.${fontLight}`)
 
@@ -33,24 +35,14 @@ const LAYOUT = Object.fromEntries(
 	Object.entries(DIMENSIONS_MM).map(([key, val]) => [key, val * 2.83465])
 ) as Record<keyof typeof DIMENSIONS_MM, number>
 
-// --- Config IDs ---
-const BADGE_BACKGROUND_MEDIA_ID = 'cmkgyriik0001d77er2sgcyu7'
-const BADGE_LOGO_MEDIA_ID = 'cmkh1gdju0005d77ewby6t5fi'
-const BADGE_TYPE_FIELD_ID = 'cmkgt8m4h0001allfw8720z18'
-const ACCESS_DAYS_FIELD_ID = 'cmkif4z1t0007d77e0mgz7qle'
-const ACCESS_SECTORS_FIELD_ID = 'cmkif5utz0009d77eakg8k5oj'
-const BADGE_DEFAULT_COLOR = '#C7B198'
-const BADGE_COLOR_MAP: Record<string, string> = {
-	Comité: '#AA4465',
-	Artiste: '#5F0A87',
-	Bénévole: '#119822',
-}
-
-export const GET = async ({ url, locals, params: { eventId } }) => {
+export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 	await permission.leader(eventId, locals)
 	const event = await prisma.event.findUniqueOrThrow({
 		where: { id: eventId },
 		include: { memberFields: true, teams: true },
+	})
+	const badge = await prisma.badge.findUniqueOrThrow({
+		where: { id: badgeId, eventId },
 	})
 	url.searchParams.set('all', 'true')
 	const { members } = await getMembers(event, url)
@@ -59,7 +51,6 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		margin: 0,
 		autoFirstPage: false,
 	})
-	generateBadges().catch(console.error)
 	const stream = new ReadableStream({
 		start(controller) {
 			doc.on('data', (chunk) => controller.enqueue(chunk))
@@ -70,6 +61,11 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 			doc.end()
 		},
 	})
+	generateBadges().catch((err) => {
+		console.error(err)
+		doc.end()
+	})
+
 	return new Response(stream, {
 		headers: {
 			'Content-type': 'application/pdf',
@@ -77,14 +73,26 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		},
 	})
 
+	function getBadgeTypeValue(member: Member): string {
+		if (!badge.typeFieldId) return ''
+		const badgeTypeValue = member.profileJson[badge.typeFieldId]
+		if (typeof badgeTypeValue !== 'string') return ''
+		return badgeTypeValue
+	}
+
+	function getBadgeColor(member: Member): string {
+		const badgeTypeValue = getBadgeTypeValue(member)
+		return badge.colorMap[badgeTypeValue] || badge.colorDefault
+	}
+
 	async function generateBadges() {
 		// doc.registerFont('Light', fontLightPath)
 		// doc.font('Light')
 
 		const images = {
 			logoBenev: await svgToPngBuffer(logoBenev),
-			logoEvent: await getImageBuffer(BADGE_LOGO_MEDIA_ID),
-			background: await getImageBuffer(BADGE_BACKGROUND_MEDIA_ID, {
+			logoEvent: await getImageBuffer(badge.logoId),
+			background: await getImageBuffer(badge.backgroundId, {
 				grayscale: true,
 				size: {
 					width: Math.round(LAYOUT.width * 3),
@@ -96,6 +104,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		for (const member of members) {
 			doc.addPage()
 			const color = getBadgeColor(member)
+			const fontColor = getTextColor(color)
 
 			layerBackground()
 			layerLogoEvent()
@@ -111,23 +120,27 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 				doc.rect(0, 0, LAYOUT.width, LAYOUT.height).fill(color)
 				doc.save()
 				doc.opacity(0.85)
-				doc
-					.roundedRect(
-						LAYOUT.padding,
-						LAYOUT.padding,
-						contentW,
-						contentH - LAYOUT.footerHeight + LAYOUT.padding,
-						LAYOUT.borderRadius
-					)
-					.clip()
-				doc.image(images.background, LAYOUT.padding, LAYOUT.padding, {
-					width: contentW,
-					height: contentH,
-				})
+				doc.roundedRect(
+					LAYOUT.padding,
+					LAYOUT.padding,
+					contentW,
+					contentH - LAYOUT.footerHeight + LAYOUT.padding,
+					LAYOUT.borderRadius
+				)
+				if (images.background) {
+					doc.clip()
+					doc.image(images.background, LAYOUT.padding, LAYOUT.padding, {
+						width: contentW,
+						height: contentH,
+					})
+				} else {
+					doc.fill('#fff')
+				}
 				doc.restore()
 			}
 
 			function layerLogoEvent() {
+				if (!images.logoEvent) return
 				const x = LAYOUT.padding
 				const y = 2 * LAYOUT.boxTypeHeight
 				const w = LAYOUT.width / 2
@@ -144,9 +157,9 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 				const x = LAYOUT.width / 3
 				const y = LAYOUT.padding * 2
 				const radius = LAYOUT.borderRadius - LAYOUT.padding
-				const badgeType = (member.profileJson[BADGE_TYPE_FIELD_ID] as string) || ''
+				const badgeType = getBadgeTypeValue(member)
 				doc.roundedRect(x, y, w, h, radius).fill(color)
-				textCenter(badgeType, { x, y, w, h, fontSize })
+				textCenter(badgeType, { x, y, w, h, fontSize, fontColor })
 			}
 
 			function layerUserName() {
@@ -155,15 +168,21 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 				const x = 0
 				const y = LAYOUT.height - LAYOUT.footerHeight / 2 - fontSize / 3
 				const name = `${member.firstName} ${member.lastName}`
-				doc.fillColor('#fff').fontSize(fontSize).text(name, x, y, {
-					width: w,
-					align: 'center',
-					lineBreak: false,
+				textCenter(name, {
+					x,
+					y: LAYOUT.height - LAYOUT.footerHeight,
+					w: LAYOUT.width,
+					h: LAYOUT.footerHeight,
+					fontSize,
+					fontColor,
 				})
 			}
 
 			async function layerAvatar() {
 				if (!member.avatarId) return
+				const avatarBuffer = await getImageBuffer(member.avatarId)
+				if (!avatarBuffer) return
+
 				const size = LAYOUT.avatarSize
 				const x = LAYOUT.width / 2 - LAYOUT.avatarSize / 2
 				const y = LAYOUT.height - LAYOUT.footerHeight - LAYOUT.avatarSize - 2 * LAYOUT.padding
@@ -176,8 +195,8 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 						LAYOUT.borderRadius
 					)
 					.fill(color)
-				const avatarBuffer = await getImageBuffer(member.avatarId)
 				doc.save()
+
 				doc.roundedRect(x, y, size, size, LAYOUT.borderRadius - LAYOUT.padding).clip()
 				doc.image(avatarBuffer, x, y, { width: size, height: size })
 				doc.restore()
@@ -185,8 +204,8 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 
 			function layerAccess() {
 				const fontSize = 8
-				const accessSectors = parseStringArray(member.profileJson[ACCESS_SECTORS_FIELD_ID])
-				const accessDays = parseStringArray(member.profileJson[ACCESS_DAYS_FIELD_ID])
+				const accessSectors = parseStringArray(member.profileJson[badge.accessSectorsFieldId || ''])
+				const accessDays = parseStringArray(member.profileJson[badge.accessDaysFieldId || ''])
 				const size = LAYOUT.accessCellSize
 				const xDays = LAYOUT.width - LAYOUT.padding * 2 - size
 				const xSectors = LAYOUT.width - LAYOUT.padding * 3 - size * 2
@@ -202,7 +221,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 
 				function drawAccessCell(x: number, y: number, text: string) {
 					doc.roundedRect(x, y, size, size, LAYOUT.borderRadius - LAYOUT.padding).fill(color)
-					textCenter(text, { x, y, w: size, h: size, fontSize })
+					textCenter(text, { x, y, w: size, h: size, fontSize, fontColor })
 				}
 			}
 
@@ -253,25 +272,17 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		text: string,
 		opts: { x: number; y: number; w: number; h: number; fontSize: number; fontColor?: string }
 	) {
-		doc
-			.fillColor(opts.fontColor || '#fff')
-			.fontSize(opts.fontSize)
-			.text(text, opts.x, opts.y + opts.h / 2 - opts.fontSize * 0.4, {
-				width: opts.w,
-				align: 'center',
-			})
+		if (opts.fontColor) doc.fillColor(opts.fontColor)
+
+		doc.fontSize(opts.fontSize).text(text, opts.x, opts.y + opts.h / 2 - opts.fontSize * 0.4, {
+			width: opts.w,
+			align: 'center',
+		})
 	}
 }
 
 async function svgToPngBuffer(svg: string) {
 	return sharp(Buffer.from(svg)).png({}).toBuffer()
-}
-
-function getBadgeColor(member?: Member & { event: Event }): string {
-	if (!member) return BADGE_DEFAULT_COLOR
-	const badgeType = member.profileJson[BADGE_TYPE_FIELD_ID]
-	if (typeof badgeType !== 'string') return BADGE_DEFAULT_COLOR
-	return BADGE_COLOR_MAP[badgeType] || BADGE_DEFAULT_COLOR
 }
 
 function parseStringArray(anyData: unknown): string[] {
@@ -280,7 +291,7 @@ function parseStringArray(anyData: unknown): string[] {
 }
 
 async function getImageBuffer(
-	mediaId: string,
+	mediaId: string | null,
 	opts: {
 		size?: {
 			width: number
@@ -288,10 +299,12 @@ async function getImageBuffer(
 		}
 		grayscale?: boolean
 	} = {}
-) {
+): Promise<Buffer | null> {
+	if (!mediaId) return null
 	const filePath = path.resolve(env.MEDIA_DIR, mediaId, 'original.webp')
-	let p = sharp(filePath)
-	if (opts.size) p = p.resize(opts.size.width, opts.size.height)
-	if (opts.grayscale) p = p.grayscale(true)
-	return await p.png().toBuffer()
+	if (!existsSync(filePath)) return null
+	let pipe = sharp(filePath)
+	if (opts.size) pipe = pipe.resize(opts.size.width, opts.size.height)
+	if (opts.grayscale) pipe = pipe.grayscale(true)
+	return await pipe.png().toBuffer()
 }

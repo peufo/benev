@@ -5,8 +5,8 @@
 	export let data
 </script>
 
-<div class="flex">
-	<BadgeForm badge={data.badge} />
+<div class="flex gap-12 pl-12">
+	<BadgeForm bind:badge={data.badge} />
 	<div class="divider divider-horizontal" />
-	<BadgeView badge={data.badge} />
+	<BadgeView badge={data.badge} defaultMember={data.member} />
 </div>

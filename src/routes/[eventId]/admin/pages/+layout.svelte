@@ -25,7 +25,7 @@
 	})
 </script>
 
-<Card>
+<Card class="mx-auto" style="min-width: min(100%, 1280px)">
 	<OnlyAdmin>
 		<div class="flex items-start">
 			<div class="flex flex-col gap-1 max-w-[200px]">
