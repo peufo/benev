@@ -61,11 +61,22 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 	})
 	const stream = new ReadableStream({
 		start(controller) {
-			doc.on('data', (chunk) => controller.enqueue(chunk))
-			doc.on('end', () => controller.close())
+			doc.on('data', (chunk) => {
+				try {
+					controller.enqueue(chunk)
+				} catch (err) {
+					doc.removeAllListeners()
+				}
+			})
+			doc.on('end', () => {
+				try {
+					controller.close()
+				} catch (e) {}
+			})
 			doc.on('error', (err) => controller.error(err))
 		},
 		cancel() {
+			doc.removeAllListeners('data')
 			doc.end()
 		},
 	})
