@@ -11,6 +11,7 @@ import { getMembers } from '../../../../members/getMembers'
 import { FORMAT_CARD } from '$lib/constant'
 import { existsSync } from 'node:fs'
 import { getTextColor } from '$lib/utils'
+import { error } from '@sveltejs/kit'
 // import fontLight from '$lib/assets/Helvetica-Light.ttf'
 // const fontLightPath = path.resolve(`.${fontLight}`)
 
@@ -37,13 +38,20 @@ const LAYOUT = Object.fromEntries(
 
 export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 	await permission.leader(eventId, locals)
-	const event = await prisma.event.findUniqueOrThrow({
-		where: { id: eventId },
-		include: { memberFields: true, teams: true },
+
+	const [event, badge] = await Promise.all([
+		prisma.event.findUniqueOrThrow({
+			where: { id: eventId },
+			include: { memberFields: true, teams: true },
+		}),
+		prisma.badge.findUniqueOrThrow({
+			where: { id: badgeId, eventId },
+		}),
+	]).catch((err) => {
+		console.error(err)
+		error(404, `Not found: ${JSON.stringify({ eventId, badgeId })}`)
 	})
-	const badge = await prisma.badge.findUniqueOrThrow({
-		where: { id: badgeId, eventId },
-	})
+
 	url.searchParams.set('all', 'true')
 	const { members } = await getMembers(event, url)
 	const doc = new PDFDocument({

@@ -23,6 +23,10 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 		memberProfile: await undefinedOr(form_member_profile, (id) =>
 			getMemberProfile({ id }, { member })
 		),
+		badges: await prisma.badge.findMany({
+			where: { eventId },
+			select: { id: true, name: true },
+		}),
 	}
 }
 

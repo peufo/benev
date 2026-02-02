@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types'
 	import { mdiEmailMultipleOutline } from '@mdi/js'
 
 	import { page } from '$app/stores'

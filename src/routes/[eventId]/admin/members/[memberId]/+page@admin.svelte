@@ -26,6 +26,7 @@
 		MemberCreateSubscribeDialog,
 		MemberContactForm,
 	} from '$lib/member'
+	import MembersBadges from '../MembersBadges.svelte'
 
 	export let data
 
@@ -59,16 +60,11 @@
 				/>
 			</a>
 
-			<a
-				href="{$eventPath}/admin/members/badge?memberId={data.memberProfile?.id}"
-				use:tip={{ content: 'Imprimer le badge' }}
-				data-sveltekit-replacestate
-				data-sveltekit-noscroll
-				data-sveltekit-preload-data="off"
-				class="btn btn-square btn-sm"
-			>
-				<IdCardLanyardIcon size="20" opacity={0.9} />
-			</a>
+			<MembersBadges
+				title="Imprimer un badge"
+				params="memberId={data.memberProfile.id}"
+				badges={data.event.badges}
+			/>
 
 			<div class="grow" />
 

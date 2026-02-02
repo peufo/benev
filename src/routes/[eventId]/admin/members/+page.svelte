@@ -19,6 +19,7 @@
 	import { getMembersTableFields } from './membersTableFields'
 	import MembersImport from './MembersImport.svelte'
 	import MembersFilter from './MembersFilter.svelte'
+	import MembersBadges from './MembersBadges.svelte'
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
 	import { eventPath } from '$lib/store'
@@ -77,6 +78,7 @@
 				<TableViewSelect key="members" views={data.views} action="{$eventPath}/admin" />
 
 				<MembersImport />
+				<MembersBadges badges={data.badges} />
 				<MembersEmails />
 
 				<a
