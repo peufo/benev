@@ -126,11 +126,7 @@
 		<FooterLink link={data.event.web}>
 			<svelte:fragment slot="icon">
 				{#if data.event.icon}
-					<img
-						class="inline-block w-5 mx-1"
-						src={data.event.icon}
-						alt="logo of {data.event.name}"
-					/>
+					<EventIcon icon={data.event.icon} class="inline-block w-5 mx-1" />
 				{:else}
 					<Icon path={mdiWeb} />
 				{/if}
