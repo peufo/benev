@@ -12,7 +12,6 @@ export async function scrapIcon(site: string): Promise<string | null> {
 		const icon = 'https://' + path.join(site.replace(/https+:\/\//, ''), href.replace(site, ''))
 		const res = await fetch(icon)
 		if (!res.ok) throw 'logo not valid'
-
 		return icon
 	} catch (err) {
 		return null

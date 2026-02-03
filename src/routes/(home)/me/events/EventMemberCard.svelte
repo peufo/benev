@@ -5,6 +5,7 @@
 	import { CardLink, Icon } from 'fuma'
 	import logo from '$lib/assets/logo.svg'
 	import { mdiContentDuplicate } from '@mdi/js'
+	import { EventIcon } from '$lib/event'
 
 	export let member: PageData['members'][number]
 
@@ -33,7 +34,11 @@
 		<div class="grow flex flex-col gap-4">
 			<div class="flex gap-2 items-center">
 				{#if member.event.icon}
-					<img src={member.event.icon} alt="logo de {member.event.name}" class="w-7 inline-block" />
+					<EventIcon
+						icon={member.event.icon}
+						alt="logo de {member.event.name}"
+						class="w-7 inline-block"
+					/>
 				{/if}
 				<span class="font-medium">{member.event.name}</span>
 

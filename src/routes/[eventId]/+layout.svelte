@@ -20,6 +20,7 @@
 	import EventMenu from './EventMenu.svelte'
 	import FooterLink from './FooterLink.svelte'
 	import EventTheme from './admin/theme/EventTheme.svelte'
+	import { EventIcon } from '$lib/event'
 
 	export let data
 
@@ -61,7 +62,7 @@
 				alt="logo of {data.event.name}"
 			/>
 		{:else if data.event.icon}
-			<img class="inline-block w-5 mx-1" src={data.event.icon} alt="icon of {data.event.name}" />
+			<EventIcon icon={data.event.icon} class="inline-block w-5 mx-1" />
 		{/if}
 		<span class="whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0">
 			{data.event.name}

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { slide } from 'svelte/transition'
 	import { InputText } from 'fuma'
 	import { debounce } from '$lib/debounce'
+	import { EventIcon } from '.'
 
 	export let event: Event | undefined = undefined
 
@@ -19,6 +19,8 @@
 			.finally(() => (scrapPending = false))
 		icon = res.icon
 	}, 400)
+
+	$: console.log({ scrapPending })
 </script>
 
 <input type="hidden" name="icon" value={icon} />
@@ -33,11 +35,11 @@
 >
 	<div slot="append">
 		{#if icon || scrapPending}
-			<div transition:slide={{ axis: 'x' }} class="w-10 grid place-content-center">
-				{#if icon}
-					<img src={icon} alt="Icon de l'évènement" class="w-5" />
-				{:else if scrapPending}
+			<div class="w-10 grid place-content-center">
+				{#if scrapPending}
 					<div class="loading loading-ring loading-xs" />
+				{:else if icon}
+					<EventIcon {icon} class="w-5" />
 				{/if}
 			</div>
 		{/if}

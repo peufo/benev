@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { CardLink, Placeholder } from 'fuma'
 	import logo from '$lib/assets/logo.svg'
+	import { EventIcon } from '$lib/event/index.js'
 
 	export let data
 </script>
@@ -33,7 +34,7 @@
 					<div>
 						<div class="flex items-center gap-2 mt-2 mb-4">
 							{#if event.icon}
-								<img src={event.icon} alt="logo" class="h-6" />
+								<EventIcon icon={event.icon} class="h-6" />
 							{/if}
 							<span class="font-medium">{event.name}</span>
 						</div>
