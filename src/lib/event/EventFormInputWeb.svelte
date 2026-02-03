@@ -19,8 +19,6 @@
 			.finally(() => (scrapPending = false))
 		icon = res.icon
 	}, 400)
-
-	$: console.log({ scrapPending })
 </script>
 
 <input type="hidden" name="icon" value={icon} />
