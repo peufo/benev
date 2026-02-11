@@ -1,14 +1,14 @@
 <script lang="ts" context="module">
-	export type Crop = { width: number; height: number; x: number; y: number }
+	export type CropArea = { width: number; height: number; x: number; y: number }
 </script>
 
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 	import Cropper from 'svelte-easy-crop'
-
 	import { Dialog, InputText } from 'fuma'
+	import { RulerDimensionLineIcon } from 'lucide-svelte'
 
-	export let aspect = 1
+	export let aspect = { x: 4, y: 3 }
 	export let title = 'Nouvelle image'
 	export let formaction: string | undefined = undefined
 	export let key = ''
@@ -17,10 +17,10 @@
 
 	let dialog: HTMLDialogElement
 	let image = ''
-	let crop: Crop | undefined = undefined
+	let crop: CropArea | undefined = undefined
 	let inputFile: HTMLInputElement
 
-	const dispatch = createEventDispatcher<{ submit: { crop: Crop; image: string } }>()
+	const dispatch = createEventDispatcher<{ submit: { crop: CropArea; image: string } }>()
 
 	export function show() {
 		inputFile.click()
@@ -46,12 +46,12 @@
 		if (crop && image) dispatch('submit', { crop, image })
 	}
 
-	const aspects: { label: string; value: number }[] = [
-		{ label: '16:9', value: 16 / 9 },
-		{ label: '3:2', value: 3 / 2 },
-		{ label: '4:3', value: 4 / 3 },
-		{ label: '1:1', value: 1 },
-		{ label: '2:3', value: 2 / 3 },
+	const aspects: { label: string; value: { x: number; y: number } }[] = [
+		{ label: '16:9', value: { x: 16, y: 9 } },
+		{ label: '3:2', value: { x: 3, y: 2 } },
+		{ label: '4:3', value: { x: 4, y: 3 } },
+		{ label: '1:1', value: { x: 1, y: 1 } },
+		{ label: '2:3', value: { x: 2, y: 3 } },
 	]
 </script>
 
@@ -72,6 +72,28 @@
 					{label}
 				</button>
 			{/each}
+
+			<div class="grow" />
+			<label class="flex items-center gap-2 relative">
+				<RulerDimensionLineIcon opacity={0.6} size={16} class="absolute left-2" />
+				<input
+					type="number"
+					class="input input-bordered input-sm pr-0 pl-7 max-w-20"
+					min={1}
+					step={1}
+					bind:value={aspect.x}
+				/>
+			</label>
+			<label class="flex items-center gap-2 relative">
+				<RulerDimensionLineIcon opacity={0.6} size={16} class="absolute left-2 rotate-90" />
+				<input
+					type="number"
+					class="input input-bordered input-sm pr-0 pl-7 max-w-20"
+					min={1}
+					step={1}
+					bind:value={aspect.y}
+				/>
+			</label>
 		</div>
 	{/if}
 
@@ -79,7 +101,7 @@
 		{#key aspect}
 			<Cropper
 				{image}
-				{aspect}
+				aspect={aspect.x / aspect.y}
 				showGrid={false}
 				zoomSpeed={0.2}
 				on:cropcomplete={(e) => (crop = e.detail.pixels)}
