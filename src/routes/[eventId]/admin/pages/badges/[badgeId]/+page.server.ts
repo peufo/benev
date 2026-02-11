@@ -2,7 +2,7 @@ import { modelBadgeUpdate } from '$lib/models'
 import { redirect } from '@sveltejs/kit'
 import { formAction } from 'fuma/server'
 import { prisma, permission } from '$lib/server'
-import type { Field, FieldType } from '@prisma/client'
+import type { FieldType } from '@prisma/client'
 
 export const load = async ({ params: { badgeId, eventId } }) => {
 	const badge = await prisma.badge.findUnique({

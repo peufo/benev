@@ -13,7 +13,7 @@ export const modelBadgeUpdate = {
 	typeField: zodConnectNullish,
 	accessDaysField: zodConnectNullish,
 	accessSectorsField: zodConnectNullish,
-	colorMap: z.record(z.string()),
+	colorMap: z.record(z.string(), z.string()),
 	colorDefault: z.string(),
 } satisfies ZodObj<
 	Prisma.BadgeUpdateInput & Pick<Prisma.BadgeUncheckedUpdateInput, 'backgroundId' | 'logoId'>
