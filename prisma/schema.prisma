@@ -137,6 +137,8 @@ model Event {
 
   // Theme
   backgroundColor      String  @default("#ffffff")
+  backgroundImageId    String? @unique
+  backgroundImage      Media?  @relation(name: "background", fields: [backgroundImageId], references: [id], onDelete: SetNull)
   backgroundPoster     Boolean @default(false)
   backgroundBlur       Float   @default(0)
   backgroundBrightness Int     @default(100)
@@ -404,10 +406,11 @@ enum SubscribeState {
 model Media {
   id String @id @default(cuid())
 
-  name     String
-  avatarOf User?  @relation(name: "avatar")
-  logoOf   Event? @relation(name: "logo")
-  posterOf Event? @relation(name: "poster")
+  name         String
+  avatarOf     User?  @relation(name: "avatar")
+  logoOf       Event? @relation(name: "logo")
+  posterOf     Event? @relation(name: "poster")
+  backgroundOf Event? @relation(name: "background")
 
   eventId String?
   event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
