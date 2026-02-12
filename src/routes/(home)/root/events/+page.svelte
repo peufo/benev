@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from 'fuma'
+	import { Card, Pagination } from 'fuma'
 
 	export let data
 </script>
@@ -39,4 +39,7 @@
 			{/each}
 		</tbody>
 	</table>
+	<div class="ml-auto">
+		<Pagination />
+	</div>
 </Card>

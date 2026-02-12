@@ -12,6 +12,7 @@ export const load = async ({ url }) => {
 		events: await prisma.event.findMany({
 			take: data.take,
 			skip: data.skip,
+			orderBy: { createdAt: 'desc' },
 			include: {
 				owner: true,
 				_count: { select: { members: true } },
