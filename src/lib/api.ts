@@ -2,7 +2,7 @@ import axios, { type AxiosRequestConfig, type RawAxiosResponseHeaders } from 'ax
 import { page } from '$app/stores'
 import { derived } from 'svelte/store'
 import * as devalue from 'devalue'
-import type { Field, FieldType, Member, Tag, User } from '@prisma/client'
+import type { Field, FieldType, Media, Member, Tag, User } from '@prisma/client'
 import type { TeamWithComputedValues } from '$lib/server'
 
 interface RequestConfig<Params = object, Data = object> extends AxiosRequestConfig<Data> {
@@ -68,6 +68,9 @@ export const api = derived(page, ({ params: { eventId } }) => {
 		rootUser: methods<User>(`/root/users`),
 		fields: {
 			search: search<Field, { type?: FieldType }>(`/${eventId}/api/fields`),
+		},
+		media: {
+			search: search<Media, {}>(`/${eventId}/api/media`),
 		},
 	}
 })

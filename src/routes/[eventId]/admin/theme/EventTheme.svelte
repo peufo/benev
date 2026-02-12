@@ -9,14 +9,14 @@
 
 <div
 	class="background"
-	class:background-poster={$theme.backgroundPoster}
+	class:background-poster={!!$theme.backgroundImageId}
 	style="
-    --media: url(/media/{event.posterId});
-    --bg-blur: {$theme.backgroundBlur}px;
-    --bg-color: {$theme.backgroundColor};
-    --bg-brightness: {$theme.backgroundBrightness}%;
-    --bg-whiteness: {$theme.backgroundWhiteness};
-  "
+		--media: url(/media/{$theme.backgroundImageId});
+		--bg-blur: {$theme.backgroundBlur}px;
+		--bg-color: {$theme.backgroundColor};
+		--bg-brightness: {$theme.backgroundBrightness}%;
+		--bg-whiteness: {$theme.backgroundWhiteness};
+	"
 >
 	<div class="background-blur" />
 </div>

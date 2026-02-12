@@ -1,22 +1,41 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { Card, Form, FormControl, InputBoolean, USE_COERCE_NUMBER } from 'fuma'
+	import { Card, Form, FormControl, USE_COERCE_NUMBER } from 'fuma'
+	import { toast } from 'svelte-sonner'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { theme } from './store'
+	import { InputMedia } from '$lib/material'
 </script>
 
 <OnlyAdmin>
 	<Card class="mx-auto" style="min-width: min(100%, 600px)">
 		<h2 class="title">Thème du site</h2>
-		<Form class="mt-4" action="?/theme_update" simpleAction options={{ successReset: false }}>
+		<Form
+			class="mt-4"
+			action="?/theme_update"
+			simpleAction
+			options={{
+				successReset: false,
+				onSuccess: () => {
+					toast.success('Thème enregistré')
+				},
+			}}
+		>
 			<div class="flex gap-6">
+				<InputMedia
+					key="backgroundImageId"
+					label="Image de fond"
+					bind:value={$theme.backgroundImageId}
+				/>
+
 				<FormControl
 					key="backgroundColor"
 					label="Couleur de fond"
 					let:key
-					class={$theme.backgroundPoster ? 'opacity-40' : ''}
+					class={$theme.backgroundImageId ? 'opacity-40' : ''}
 				>
 					<input
+						disabled={!!$theme.backgroundImageId}
 						type="color"
 						name={key}
 						id={key}
@@ -24,12 +43,6 @@
 						class="w-32 bg-base-100 px-2 rounded border"
 					/>
 				</FormControl>
-
-				<InputBoolean
-					key="backgroundPoster"
-					bind:value={$theme.backgroundPoster}
-					label="Utiliser l'affiche comme fond"
-				/>
 			</div>
 
 			<FormControl key="cardOpacity" let:key label="Opacité des surfaces" class="grow">
@@ -45,7 +58,7 @@
 				/>
 			</FormControl>
 
-			{#if $theme.backgroundPoster}
+			{#if $theme.backgroundImageId}
 				<div transition:slide class="flex flex-col gap-4">
 					<FormControl key="backgroundBlur" let:key label="Flou du fond" class="grow">
 						<input type="hidden" name={key} value="{USE_COERCE_NUMBER}{$theme.backgroundBlur}" />

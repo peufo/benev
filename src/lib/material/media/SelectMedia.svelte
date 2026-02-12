@@ -9,11 +9,10 @@
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { createEventDispatcher, tick } from 'svelte'
+	import { api } from '$lib/api'
 
 	// TODO: Chelous de récupérer medias en global:
-	let medias: Media[] = $page.data.medias || []
-	page.subscribe(({ data }) => (medias = data.medias || []))
-
+	let medias: Media[] = []
 	let dialogMedias: HTMLDialogElement
 	let dialogEdit: HTMLDialogElement
 	let dialogUploadMedia: UploadMediaDialog
@@ -48,8 +47,13 @@
 	const dispatch = createEventDispatcher<{ select: Media }>()
 	let selectedMedia: Media | undefined = undefined
 
+	async function loadMedias() {
+		medias = await $api.media.search('')
+	}
+
 	export function show() {
 		dialogMedias.show()
+		loadMedias()
 	}
 
 	function handleAddMedia() {
@@ -72,52 +76,57 @@
 
 <Dialog bind:dialog={dialogMedias}>
 	<h3 slot="header" class="title">Médiatèque</h3>
+	<div>
+		<div
+			class="grid gap-3 items-start"
+			style:grid-template-columns="repeat(auto-fill, minmax(min(6rem, 100%), 1fr)"
+		>
+			{#each medias as media}
+				<button
+					type="button"
+					on:click={() => handleSelectMedia(media)}
+					class="text-left border rounded-lg outline-primary/50 outline-1 hover:outline p-1 flex flex-col gap-1"
+				>
+					<img src="/media/{media.id}?size=small" alt={media.name} class="rounded" />
 
-	<div
-		class="grid gap-3 items-start"
-		style:grid-template-columns="repeat(auto-fill, minmax(min(6rem, 100%), 1fr)"
-	>
-		{#each medias as media}
+					<div class="flex items-center w-full flex-wrap gap-2">
+						<span class="title-sm h-6">{media.name || '-'}</span>
+						{#if media.eventId}
+							<button
+								type="button"
+								on:click|stopPropagation={() => handleEditMedia(media)}
+								class="btn btn-xs btn-square btn-ghost ml-auto"
+							>
+								<Icon
+									path={mdiPencilOutline}
+									title="Modifier"
+									size={14}
+									class="fill-base-content/70"
+								/>
+							</button>
+						{/if}
+					</div>
+				</button>
+			{/each}
+
 			<button
 				type="button"
-				on:click={() => handleSelectMedia(media)}
-				class="text-left border rounded-lg outline-primary/50 outline-1 hover:outline p-1 flex flex-col gap-1"
+				class="border rounded-lg grid place-content-center aspect-square outline-primary/50 outline-1 hover:outline"
+				on:click={handleAddMedia}
 			>
-				<img src="/media/{media.id}" alt={media.name} class="rounded" />
-
-				<div class="flex items-center w-full flex-wrap gap-2">
-					<span class="title-sm h-6">{media.name || '-'}</span>
-					{#if media.eventId}
-						<button
-							type="button"
-							on:click|stopPropagation={() => handleEditMedia(media)}
-							class="btn btn-xs btn-square btn-ghost ml-auto"
-						>
-							<Icon
-								path={mdiPencilOutline}
-								title="Modifier"
-								size={14}
-								class="fill-base-content/70"
-							/>
-						</button>
-					{/if}
-				</div>
+				<Icon
+					path={mdiPlus}
+					class="fill-base-content/70"
+					title="Ajouter une nouvelle image"
+					size={42}
+					tippyProps={{ appendTo: 'parent' }}
+				/>
 			</button>
-		{/each}
-
-		<button
-			type="button"
-			class="border rounded-lg grid place-content-center aspect-square outline-primary/50 outline-1 hover:outline"
-			on:click={handleAddMedia}
-		>
-			<Icon
-				path={mdiPlus}
-				class="fill-base-content/70"
-				title="Ajouter une nouvelle image"
-				size={42}
-				tippyProps={{ appendTo: 'parent' }}
-			/>
-		</button>
+		</div>
+		<!-- <progress transition:slide class="progress my-0" />
+		{#if isLoading}
+			<progress transition:slide class="progress" />
+		{/if} -->
 	</div>
 </Dialog>
 

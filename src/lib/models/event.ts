@@ -2,8 +2,8 @@ import { z, toTuple, type ZodObj } from 'fuma/validation'
 import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
 
-export type EventCreateInput = Omit<Prisma.EventCreateInput, 'owner'>
-export type EventUpdateInput = Omit<Prisma.EventUpdateInput, 'owner'>
+export type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
+export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
 
 export const modelEventCreate = {
 	id: z.string().toLowerCase().min(3),
@@ -47,7 +47,7 @@ export type EventTheme = Pick<
 	| 'backgroundBlur'
 	| 'backgroundBrightness'
 	| 'backgroundColor'
-	| 'backgroundPoster'
+	| 'backgroundImageId'
 	| 'backgroundWhiteness'
 	| 'cardOpacity'
 >
@@ -56,7 +56,7 @@ export const modelEventTheme = {
 	backgroundColor: z.string().optional(),
 	backgroundBlur: z.number().optional(),
 	backgroundBrightness: z.number().optional(),
-	backgroundPoster: z.boolean().optional(),
+	backgroundImageId: z.string().nullish(),
 	backgroundWhiteness: z.number().optional(),
 	cardOpacity: z.number().optional(),
 } satisfies ZodObj<EventTheme>

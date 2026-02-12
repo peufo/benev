@@ -98,6 +98,7 @@ export async function uploadImages(formData: FormData, eventId: string, authorId
 		data: {
 			name: 'Affiche',
 			createdById: authorId,
+			eventId,
 			posterOf: { connect: { id: eventId } },
 		},
 	})
@@ -108,6 +109,7 @@ export async function uploadImages(formData: FormData, eventId: string, authorId
 		data: {
 			name: 'Logo',
 			createdById: authorId,
+			eventId,
 			logoOf: { connect: { id: eventId } },
 		},
 	})

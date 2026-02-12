@@ -4,11 +4,11 @@
 	import { ButtonDelete, Icon, InputText, useForm } from 'fuma'
 	import { mdiAlertCircleOutline, mdiCheck, mdiLoading } from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
-	import InputMedia from './InputMedia.svelte'
+	import { InputMedia } from '$lib/material/media'
 	import { FORMAT_CARD } from '$lib/constant'
+	import { debounce } from '$lib/debounce'
 	import InputColorMap from './InputColorMap.svelte'
 	import InputRelationField from './InputRelationField.svelte'
-	import { debounce } from '$lib/debounce'
 	import InputColorPalette from './InputColorPalette.svelte'
 	import InputColor from './InputColor.svelte'
 

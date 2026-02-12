@@ -39,6 +39,7 @@ export const FORMAT_CARD = {
 }
 
 export const MEDIA_PRESETS = {
+	small: [128, 128],
 	medium: [256, 256],
 	large: [512, 512],
 	a6: [105, 148],

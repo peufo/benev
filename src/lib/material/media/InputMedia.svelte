@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { SelectMedia } from '$lib/material'
 	import type { Media } from '@prisma/client'
 	import { PlaceholderImage, tip } from 'fuma'
 	import { Trash2Icon } from 'lucide-svelte'
+	import { SelectMedia } from '$lib/material'
 
 	export let key: string | null = null
 	export let label: string
@@ -15,11 +15,10 @@
 </script>
 
 <div style="width: {x}px;" class="border rounded-lg">
+	{#if key}
+		<input type="hidden" name={key} {value} />
+	{/if}
 	{#if value}
-		{#if key}
-			<input type="hidden" name={key} {value} />
-		{/if}
-
 		<button
 			on:click={() => {
 				selectMedia.show()

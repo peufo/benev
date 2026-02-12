@@ -17,9 +17,6 @@ export const load = async ({ params: { badgeId, eventId } }) => {
 
 	return {
 		badge,
-		medias: await prisma.media.findMany({
-			where: { OR: [{ eventId }, { logoOf: { id: eventId } }, { posterOf: { id: eventId } }] },
-		}),
 	}
 }
 
