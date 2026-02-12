@@ -109,6 +109,19 @@
 							class="range range-primary range-sm"
 						/>
 					</FormControl>
+					<div>
+						<button
+							type="button"
+							class="btn btn-ghost btn-sm"
+							on:click={() => {
+								$theme.backgroundBlur = 0
+								$theme.backgroundBrightness = 100
+								$theme.backgroundWhiteness = 0
+							}}
+						>
+							Restaurer les paramètres
+						</button>
+					</div>
 				</div>
 			{/if}
 		</Form>
