@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { DropDown, Icon, Card, urlParam, Drawer, tip } from 'fuma'
-	import { IdCardLanyardIcon } from 'lucide-svelte'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiArrowLeft,

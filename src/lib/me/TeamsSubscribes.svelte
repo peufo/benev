@@ -20,7 +20,7 @@
 </script>
 
 {#if teams.length}
-	<div class="grid gap-4 mt-2" style:grid-template-columns="repeat(auto-fill, minmax(325px, 1fr))">
+	<div class="flex flex-col gap-4">
 		{#each teams as team}
 			<CardLink title={team.name} href="/{team.eventId}/teams?section={team.id}#{team.id}">
 				{#each team.periods as period}
