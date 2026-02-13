@@ -322,12 +322,14 @@ model Badge {
 model Team {
   id String @id @default(cuid())
 
-  name             String
-  description      String?   @db.Text
-  leaders          Member[]
-  closeSubscribing DateTime?
+  name              String
+  description       String?   @db.Text
+  leaders           Member[]
+  closeSubscribing  DateTime?
+  overflowPermitted Boolean   @default(false)
+
   /// [MemberConditions]
-  conditions       Json?
+  conditions Json?
 
   position Int      @default(0)
   eventId  String

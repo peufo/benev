@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { isFreeRange } from 'perod'
 import { formAction } from 'fuma/server'
 import { modelSubscribe } from '$lib/models'
-import { generateToken, permission, prisma } from '$lib/server'
+import { permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
 
@@ -17,7 +17,7 @@ export const actions = {
 				where: { id: data.periodId },
 				include: {
 					subscribes: { where: { state: { in: ['accepted', 'request'] } } },
-					team: { select: { closeSubscribing: true, conditions: true } },
+					team: { select: { closeSubscribing: true, conditions: true, overflowPermitted: true } },
 				},
 			}),
 			prisma.member.findUniqueOrThrow({
@@ -37,7 +37,10 @@ export const actions = {
 		])
 
 		// Check if the period is already complet
-		if (period.maxSubscribe <= period.subscribes.length) {
+		const countSubscribes = period.team.overflowPermitted
+			? period.subscribes.filter((sub) => sub.state === 'accepted').length
+			: period.subscribes.length
+		if (period.maxSubscribe <= countSubscribes) {
 			error(403, 'Sorry, this period is already complet')
 		}
 

@@ -4,6 +4,7 @@
 	import { page } from '$app/stores'
 	import Oauth from './Oauth.svelte'
 	import TermsLabel from './TermsLabel.svelte'
+	import { toast } from 'svelte-sonner'
 
 	export let onSuccess:
 		| ((action: URL, data?: Record<string, unknown> | undefined) => any)
@@ -19,7 +20,11 @@
 			}
 			return 'Bienvenue'
 		},
+		onFail(failure) {
+			toast.error(JSON.stringify(failure))
+		},
 		onError(err) {
+			toast.error(err)
 			if (err === 'This account already exists') {
 				state = 'login'
 				return

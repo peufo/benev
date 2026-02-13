@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
-	import type { Period, Subscribe, Team } from '@prisma/client'
+	import type { Period, Subscribe } from '@prisma/client'
 	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
