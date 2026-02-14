@@ -18,10 +18,6 @@
 			if (url.searchParams.has('/page_create')) toast.success('Nouvelle page créer !')
 			if (url.searchParams.has('/badge_create')) toast.success('Nouveau badge créer !')
 		},
-		onFail(fail) {
-			toast.error('Erreur')
-			console.error(fail)
-		},
 	})
 </script>
 

@@ -26,7 +26,6 @@
 			if (url.searchParams.has('/badge_delete')) invalidateAll()
 		},
 		onFail(failure) {
-			toast.error(JSON.stringify(failure))
 			isSuccess = false
 		},
 	})

@@ -141,8 +141,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1
       svelte-sonner:
-        specifier: ^0.3.24
-        version: 0.3.24(svelte@4.2.18)
+        specifier: ^0.3.22
+        version: 0.3.28(svelte@4.2.18)
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -3129,11 +3129,6 @@ packages:
         optional: true
       typescript:
         optional: true
-
-  svelte-sonner@0.3.24:
-    resolution: {integrity: sha512-txuL0JBUs0v6qGrr0PGCsbXmKHuthdrAkfISYi8umuveF7+gINb6EXl6VmKY9aHhyxCqvVgqd6yophQNrnor4w==}
-    peerDependencies:
-      svelte: '>=3 <5'
 
   svelte-sonner@0.3.28:
     resolution: {integrity: sha512-K3AmlySeFifF/cKgsYNv5uXqMVNln0NBAacOYgmkQStLa/UoU0LhfAACU6Gr+YYC8bOCHdVmFNoKuDbMEsppJg==}
@@ -6276,10 +6271,6 @@ snapshots:
       postcss: 8.4.31
       postcss-load-config: 4.0.1(postcss@8.4.31)(ts-node@10.9.2(@types/node@20.9.0)(typescript@5.2.2))
       typescript: 5.2.2
-
-  svelte-sonner@0.3.24(svelte@4.2.18):
-    dependencies:
-      svelte: 4.2.18
 
   svelte-sonner@0.3.28(svelte@4.2.18):
     dependencies:

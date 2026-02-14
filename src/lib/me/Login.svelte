@@ -20,9 +20,6 @@
 			}
 			return 'Bienvenue'
 		},
-		onFail(failure) {
-			toast.error(JSON.stringify(failure))
-		},
 		onError(err) {
 			toast.error(err)
 			if (err === 'This account already exists') {

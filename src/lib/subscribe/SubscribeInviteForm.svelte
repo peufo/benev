@@ -24,9 +24,6 @@
 			member = null
 			dispatch('success')
 		},
-		onFail(failure) {
-			toast.error(failure?.message)
-		},
 	})
 </script>
 

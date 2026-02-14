@@ -29,9 +29,6 @@
 		onSuccess() {
 			dialog.close()
 		},
-		onFail(failure) {
-			toast.error(failure?.message)
-		},
 	})
 
 	async function handleClickReturn() {

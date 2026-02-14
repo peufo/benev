@@ -37,9 +37,6 @@
 		successMessage: 'Invitation envoyée',
 		successUpdate: false,
 		onSuccess,
-		onFail(failure) {
-			if (failure) toast.error(failure.message)
-		},
 	}}
 	on:created
 	on:updated

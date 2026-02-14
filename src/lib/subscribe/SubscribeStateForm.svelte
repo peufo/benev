@@ -54,9 +54,6 @@
 		successMessage: 'Status changé',
 		successReset: false,
 		onSuccess: () => dispatch('success'),
-		onFail: (failure) => {
-			if (failure?.message) toast.error(failure.message)
-		},
 	})
 	let creatorStates: Partial<States> = {}
 	let subscriberStates: Partial<States> = {}
