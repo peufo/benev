@@ -12,6 +12,7 @@
 	import { formatRange } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
 	import type { TeamWithComputedValues } from '$lib/server'
+	import { toast } from 'svelte-sonner'
 
 	export let dialog: HTMLDialogElement
 	export let memberId: string
@@ -28,6 +29,9 @@
 		onSuccess() {
 			dialog.close()
 		},
+		onFail(failure) {
+			toast.error(failure?.message)
+		},
 	})
 
 	async function handleClickReturn() {
@@ -38,7 +42,6 @@
 	function handleSelectTeam(team: TeamWithComputedValues) {
 		setTimeout(async () => {
 			selectedTeam = team
-
 			await tick()
 			dialog.focus()
 		}, 0)
@@ -46,7 +49,7 @@
 
 	async function onSelect(periodIndex: number) {
 		if (!selectedTeam) return
-		selectedPeriod = selectedTeam.periods.filter(periodIsAvailable)[periodIndex]
+		selectedPeriod = selectedTeam.periods.filter((p) => p.isAvailable)[periodIndex]
 		await tick()
 		submitButton.click()
 	}
@@ -58,10 +61,6 @@
 			dialog.removeEventListener('keydown', returnKey)
 		}
 	})
-
-	const periodIsAvailable = (period: Period & { subscribes: Subscribe[] }) =>
-		period.subscribes.filter(({ state }) => state === 'accepted' || state === 'request').length <
-		period.maxSubscribe
 </script>
 
 <Dialog bind:dialog class="overflow-x-hidden">
@@ -104,7 +103,7 @@
 
 			<SelectorList
 				trigger={dialog}
-				items={selectedTeam.periods.filter(periodIsAvailable)}
+				items={selectedTeam.periods.filter((p) => p.isAvailable)}
 				class="w-full max-h-80 mt-2 overflow-y-auto relative"
 				on:select={({ detail }) => onSelect(detail)}
 				let:item

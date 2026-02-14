@@ -8,6 +8,7 @@
 	import { enhance } from '$app/forms'
 	import { api } from '$lib/api'
 	import { eventPath } from '$lib/store'
+	import { toast } from 'svelte-sonner'
 
 	export let periodId: string
 	export let tippyProps: Partial<TippyProps> = {}
@@ -22,6 +23,9 @@
 		onSuccess: () => {
 			member = null
 			dispatch('success')
+		},
+		onFail(failure) {
+			toast.error(failure?.message)
 		},
 	})
 </script>

@@ -1,7 +1,8 @@
 import { getRangeOfTeam } from '$lib/plan/getRange'
-import type { Event, Member, Period, Subscribe, Team, User, Prisma, Tag } from '@prisma/client'
+import type { Event, Member, Period, Subscribe, Team, Prisma, Tag } from '@prisma/client'
 import { prisma } from './prisma'
 import type { MemberWithComputedValues } from './member'
+import { periodIsComplet } from '$lib/period'
 
 export const safeUserSelect = {
 	firstName: true,
@@ -58,7 +59,7 @@ export function useAddTeamComputedValues(
 			nbSubscribes,
 			nbSubscribesAccepted,
 			nbSubscribesRequest,
-			isAvailable: nbSubscribes < maxSubscribes,
+			isAvailable: (team.overflowPermitted ? nbSubscribesAccepted : nbSubscribes) < maxSubscribes,
 			range: getRangeOfTeam(team),
 		})
 	}
@@ -69,11 +70,8 @@ export function useAddTeamComputedValues(
 		return {
 			...team,
 			periods: team.periods.map((period) => {
-				const nbSubscribe = period.subscribes.filter(
-					({ state }) => state === 'accepted' || state === 'request'
-				).length
 				const mySubscribe = period.subscribes.find((sub) => sub.memberId === ctx?.member?.id)
-				const isComplete = nbSubscribe >= period.maxSubscribe
+				const isComplete = periodIsComplet({ ...period, team })
 				const isAvailable = !mySubscribe && !isComplete
 
 				let isDisabled = true
@@ -96,7 +94,7 @@ export function useAddTeamComputedValues(
 	}
 }
 
-export type PeriodWithComputedValues = Period & {
+export type PeriodWithComputedValues<P extends Period = Period> = P & {
 	tags: Tag[]
 	subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
 	mySubscribe?: Subscribe & { member: { isValidedByUser: boolean } }

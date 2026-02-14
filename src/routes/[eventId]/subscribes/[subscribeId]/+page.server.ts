@@ -3,13 +3,9 @@ import type { Prisma, SubscribeState } from '@prisma/client'
 import { isFreeRange } from 'perod'
 import type { Action } from './$types'
 import { tryOrFail } from 'fuma/server'
-import {
-	prisma,
-	permission,
-	ensureLicenceMembers,
-	type MemberWithComputedValues,
-} from '$lib/server'
+import { prisma, permission, ensureLicenceMembers } from '$lib/server'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
+import { periodIsComplet } from '$lib/period'
 
 type Edtions = Record<SubscribeState, SubscribeState[]>
 const creatorEditions: Edtions = {
@@ -49,6 +45,7 @@ const setSubscribState: (_state: SubscribeState) => Action =
 					},
 					period: {
 						include: {
+							team: { select: { overflowPermitted: true } },
 							subscribes: {
 								where: whereSubscribe,
 							},
@@ -84,21 +81,14 @@ const setSubscribState: (_state: SubscribeState) => Action =
 					error(403, "L'annulation ou le refus d'une inscription n'est pas authorisé.")
 			}
 
-			if (state === 'accepted' || state === 'request') {
-				// Check if the period is already complet
-				const { subscribes, maxSubscribe } = _subscribe.period
-				if (maxSubscribe <= subscribes.length) {
-					error(403, 'Sorry, this period is already complet')
-				}
-			}
-
+			// Enure auto accept if membre don't have user account behind
 			if (state === 'request' && !_subscribe.member.userId) {
 				state = 'accepted'
 				isForcedValidation = true
 			}
 
+			// Check if member is free in this period
 			if (state === 'accepted') {
-				// Check if member is free in this period
 				const memberPeriodsAccepted = _subscribe.member.subscribes
 					.filter((sub) => sub.state === 'accepted')
 					.map((sub) => sub.period)
@@ -110,6 +100,14 @@ const setSubscribState: (_state: SubscribeState) => Action =
 				if (memberIsBusy) {
 					const startMessage = isSelfAction ? 'Tu es' : 'Ce membre est'
 					error(403, `${startMessage} déjà occupé durant cette période`)
+				}
+			}
+
+			// Check if the period is already complet
+			const { overflowPermitted } = _subscribe.period.team
+			if (state === 'accepted' || (state === 'request' && !overflowPermitted)) {
+				if (periodIsComplet(_subscribe.period)) {
+					error(403, 'Sorry, this period is already complet')
 				}
 			}
 

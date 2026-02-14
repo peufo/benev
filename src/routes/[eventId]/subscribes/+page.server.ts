@@ -5,6 +5,7 @@ import { modelSubscribe } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
+import { periodIsComplet } from '$lib/period/index.js'
 
 export const actions = {
 	subscribe_create: formAction(modelSubscribe, async ({ data, event }) => {
@@ -37,10 +38,7 @@ export const actions = {
 		])
 
 		// Check if the period is already complet
-		const countSubscribes = period.team.overflowPermitted
-			? period.subscribes.filter((sub) => sub.state === 'accepted').length
-			: period.subscribes.length
-		if (period.maxSubscribe <= countSubscribes) {
+		if (periodIsComplet(period)) {
 			error(403, 'Sorry, this period is already complet')
 		}
 

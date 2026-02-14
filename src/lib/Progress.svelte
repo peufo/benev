@@ -26,6 +26,7 @@
 		(sub) => sub.state === 'request' && sub.member.isValidedByUser
 	).length
 	$: isComplet = accepted + request >= period.maxSubscribe
+	$: total = Math.max(accepted + request, period.maxSubscribe)
 
 	const plurial = (n: number) => (n > 1 ? 's' : '')
 </script>
@@ -39,20 +40,17 @@
 	<div class="h-2 rounded w-full relative overflow-hidden bg-base-300 {progressClass}">
 		<div
 			class="h-2 bg-error absolute rounded-r"
-			style:width="{100 * ((accepted + request) / period.maxSubscribe)}%"
+			style:width="{100 * ((accepted + request) / total)}%"
 		/>
 		<div
 			class="h-2 bg-warning absolute rounded-r"
-			style:width="{100 * ((accepted + requestWaitUser) / period.maxSubscribe)}%"
+			style:width="{100 * ((accepted + requestWaitUser) / total)}%"
 		/>
 		<div
 			class="h-2 bg-blue-500 absolute rounded-r"
-			style:width="{100 * ((accepted + acceptedForced) / period.maxSubscribe)}%"
+			style:width="{100 * ((accepted + acceptedForced) / total)}%"
 		/>
-		<div
-			class="h-2 bg-success absolute rounded-r"
-			style:width="{100 * (accepted / period.maxSubscribe)}%"
-		/>
+		<div class="h-2 bg-success absolute rounded-r" style:width="{100 * (accepted / total)}%" />
 	</div>
 
 	{#if withLabel}

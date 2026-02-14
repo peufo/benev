@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
 	import type { Team, Member, Event, Field } from '@prisma/client'
-	import { Form } from 'fuma'
+	import { Form, tip } from 'fuma'
 
 	export type TeamWithLeaders = Team & {
 		leaders: Member[]
@@ -11,7 +11,7 @@
 
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { InputText, InputTextarea, InputDate } from 'fuma'
+	import { InputText, InputTextarea, InputDate, InputBoolean } from 'fuma'
 
 	import { MemberConditions } from '$lib/member'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
@@ -51,14 +51,28 @@
 	<InputTextarea key="description" label="Description" bind:value={team.description} />
 
 	{#if event.selfSubscribeAllowed}
-		<InputDate
-			key="closeSubscribing"
-			label="Fin des inscriptions"
-			bind:value={team.closeSubscribing}
-			hint={event.closeSubscribing && !team?.closeSubscribing
-				? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
-				: ''}
-		/>
+		<div class="grid grid-cols-2 gap-2">
+			<InputDate
+				key="closeSubscribing"
+				label="Fin des inscriptions"
+				bind:value={team.closeSubscribing}
+				hint={event.closeSubscribing && !team?.closeSubscribing
+					? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
+					: ''}
+			/>
+			<div
+				use:tip={{
+					content:
+						'Les inscriptions en attentes de validation ne sont pas comptabilisées. Ainsi, elles ne bloquent pas de nouvelles inscriptions.',
+				}}
+			>
+				<InputBoolean
+					key="overflowPermitted"
+					label="Mode liste d'attente"
+					bind:value={team.overflowPermitted}
+				/>
+			</div>
+		</div>
 	{/if}
 
 	<MemberConditions conditions={team?.conditions || []} memberFields={event.memberFields} />

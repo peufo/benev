@@ -41,7 +41,8 @@ export const modelTeam = {
 	name: z.string().min(3),
 	description: z.string().optional(),
 	leaders: z.relations.connect,
-	closeSubscribing: z.date().optional().nullable(),
+	closeSubscribing: z.date().nullish(),
+	overflowPermitted: z.boolean().optional(),
 	conditions: z.jsonArray(modelMemberCondition),
 } satisfies ZodObj<TeamShemaCreate>
 

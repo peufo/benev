@@ -14,7 +14,7 @@
 
 	const form = useForm({
 		onSuccess() {
-			dialog.close()
+			dialog?.close()
 		},
 	})
 </script>
