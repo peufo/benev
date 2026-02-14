@@ -25,7 +25,7 @@
 				badgeClass="ml-auto"
 				class="mt-1 grow max-w-[50%] ml-auto"
 				period={{
-					maxSubscribe: team.maxSubscribes,
+					maxSubscribe: team.periods.map((p) => p.maxSubscribe).reduce((acc, cur) => acc + cur, 0),
 					subscribes: team.periods.map((p) => p.subscribes).flat(),
 				}}
 			/>
