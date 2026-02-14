@@ -46,17 +46,33 @@ export const actions = {
 					views: { where: { id: { in: data.views } } },
 				},
 			})
-			const name = await getAvailableCloneName(event.name)
+			const {
+				id,
+				name: eventName,
+				activedAt,
+				closeSubscribing,
+				createdAt,
+				deletedAt,
+				missingLicencesMember,
+				ownerId,
+				teams,
+				pages,
+				memberFields,
+				views,
+				backgroundImageId,
+				logoId,
+				posterId,
+				...copiedData
+			} = event
+			const deltaTime = data.deltaDays * 1000 * 60 * 60 * 24
+			const name = await getAvailableCloneName(eventName)
 			const newEvent: Prisma.EventCreateInput = {
+				...copiedData,
 				id: normalizePath(name),
 				name,
-				description: event.description,
-				email: event.email,
-				phone: event.phone,
-				web: event.web,
-				address: event.address,
-				facebook: event.facebook,
-				instagram: event.instagram,
+				closeSubscribing: closeSubscribing && new Date(closeSubscribing.getTime() + deltaTime),
+				backgroundImage: backgroundImageId ? { connect: { id: backgroundImageId } } : {},
+				logo: logoId ? { connect: { id: logoId } } : {},
 				owner: { connect: { id: member.userId } },
 				members: {
 					create: {
@@ -67,16 +83,16 @@ export const actions = {
 					},
 				},
 				teams: {
-					create: event.teams.map((t) => pickTeam(t, data.deltaDays)),
+					create: teams.map((t) => pickTeam(t, deltaTime)),
 				},
 				pages: {
-					create: getPages(event.pages),
+					create: getPages(pages),
 				},
 				memberFields: {
-					create: event.memberFields.map(pickData),
+					create: memberFields.map(pickData),
 				},
 				views: {
-					create: event.views.map(pickData),
+					create: views.map(pickData),
 				},
 			}
 			return prisma.event.create({
@@ -109,7 +125,7 @@ function pickData<T extends object>(data: T) {
 
 function pickTeam(
 	team: Team & { periods: Period[] },
-	deltaDays: number
+	deltaTime: number
 ): Prisma.TeamCreateWithoutEventInput {
 	return {
 		name: team.name,
@@ -119,13 +135,12 @@ function pickTeam(
 		//conditions: team.conditions || undefined,
 		position: team.position,
 		periods: {
-			create: team.periods.map((p) => pickPeriod(p, deltaDays)),
+			create: team.periods.map((p) => pickPeriod(p, deltaTime)),
 		},
 	}
 }
 
-function pickPeriod(period: Period, deltaDays: number): Prisma.PeriodCreateWithoutTeamInput {
-	const deltaTime = deltaDays * 1000 * 60 * 60 * 24
+function pickPeriod(period: Period, deltaTime: number): Prisma.PeriodCreateWithoutTeamInput {
 	return {
 		maxSubscribe: period.maxSubscribe,
 		start: new Date(period.start.getTime() + deltaTime),
