@@ -130,7 +130,8 @@ function pickTeam(
 	return {
 		name: team.name,
 		description: team.description,
-		closeSubscribing: team.closeSubscribing,
+		closeSubscribing:
+			team.closeSubscribing && new Date(team.closeSubscribing.getTime() + deltaTime),
 		// TODO: fix fields references
 		//conditions: team.conditions || undefined,
 		position: team.position,
