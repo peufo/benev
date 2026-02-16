@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { toast } from 'svelte-sonner'
 	import type { PageData } from './$types'
 	import { ButtonDelete, Icon, InputText, useForm } from 'fuma'
 	import { mdiAlertCircleOutline, mdiCheck, mdiLoading } from '@mdi/js'

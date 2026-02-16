@@ -2,18 +2,21 @@ import { tryOrFail } from 'fuma/server'
 import { prisma } from '$lib/server'
 
 export const actions = {
-	use_background_media_id: () =>
+	replace_member_user_by_member: () =>
 		tryOrFail(async () => {
-			const events = await prisma.event.findMany()
+			const pages = await prisma.page.findMany()
 			let count = 0
-			for (const event of events) {
-				if (event.backgroundPoster && event.posterId && !event.backgroundImageId) {
-					await prisma.event.update({
-						where: { id: event.id },
-						data: { backgroundImageId: event.posterId },
+			for (const page of pages) {
+				const found = page.content.match(/member\.user\./g)
+				const foundCount = found?.length || 0
+				if (foundCount) {
+					const content = page.content.replaceAll('member.user.', 'member.')
+					await prisma.page.update({
+						where: { id: page.id },
+						data: { content },
 					})
-					count++
 				}
+				count += foundCount
 			}
 
 			return {

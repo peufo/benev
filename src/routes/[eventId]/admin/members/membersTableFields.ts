@@ -22,13 +22,13 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			visible: false,
 		},
 		{
-			key: 'member.user.email',
+			key: 'member.email',
 			label: 'Email',
 			getCell: (member) => member.email || '-',
 			visible: false,
 		},
 		{
-			key: 'member.user.phone',
+			key: 'member.phone',
 			label: 'Téléphone',
 			getCell: (member) => member.phone,
 			visible: false,

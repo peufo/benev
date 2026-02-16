@@ -17,8 +17,8 @@
 				}
 			}}
 		>
-			<button formaction="?/use_background_media_id" class="btn">
-				USE BACKGROUND MEDIA ID INSTEAD BOOLEAN
+			<button formaction="?/replace_member_user_by_member" class="btn">
+				REPLACE 'member.user' by 'member' in pages
 			</button>
 		</form>
 	</Card>
