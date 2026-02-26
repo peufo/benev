@@ -12,7 +12,7 @@
 	})
 </script>
 
-<PlanHeader teams={data.teams} bind:hourSize />
+<PlanHeader teams={data.teams} views={data.views} bind:hourSize />
 
 <div class="h-[80vh] overflow-hidden rounded-2xl">
 	{#if $urlParam.hasValue('view', 'v')}

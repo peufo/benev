@@ -21,6 +21,9 @@ export async function getPlanData({ url, eventId }: { url: URL; eventId: string 
 
 	return {
 		rangeOfEvent: await getRangeOfEvent(where),
+		views: await prisma.view.findMany({
+			where: { eventId, key: 'plan' },
+		}),
 		teams_periods: await prisma.team.findMany({
 			where,
 			orderBy: { position: 'asc' },

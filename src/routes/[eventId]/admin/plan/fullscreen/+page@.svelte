@@ -33,7 +33,7 @@
 		: '-translate-y-full'}"
 	style:z-index={100}
 >
-	<PlanHeader teams={data.teams} bind:hourSize isFullscreen class="border-2" />
+	<PlanHeader teams={data.teams} views={data.views} bind:hourSize isFullscreen class="border-2" />
 </div>
 
 <div class="h-[100vh] overflow-hidden rounded-2xl" use:mouseOnTop>

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop, mdiOpenInNew } from '@mdi/js'
-	import { Icon, InputCheckboxsMenu, RangePickerButton, TabsIcon } from 'fuma'
+	import { Icon, InputCheckboxsMenu, RangePickerButton, TableViewSelect, TabsIcon } from 'fuma'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
 	import ZoomButton from './ZoomButton.svelte'
 	import { eventPath } from '$lib/store'
 
 	export let teams: { id: string; name: string }[]
+	export let views: { id: string; name: string; query: string }[]
 	export let hourSize: number
 	export let isFullscreen = false
 	let klass = ''
@@ -22,16 +23,20 @@
 		<div class="grow" />
 	{/if}
 
-	<InputCheckboxsMenu
-		key="teams"
-		options={teams.map((t) => ({ value: t.id, label: t.name }))}
-		enhanceDisabled
-		badgePrimary
-	>
-		<span slot="label" class="font-normal">secteurs</span>
-	</InputCheckboxsMenu>
+	<TableViewSelect key="plan" {views} action="{$eventPath}/admin" />
 
-	<RangePickerButton />
+	{#key $page.url.searchParams}
+		<InputCheckboxsMenu
+			key="teams"
+			options={teams.map((t) => ({ value: t.id, label: t.name }))}
+			enhanceDisabled
+			badgePrimary
+		>
+			<span slot="label" class="font-normal">secteurs</span>
+		</InputCheckboxsMenu>
+
+		<RangePickerButton />
+	{/key}
 
 	<PeriodCardOptions />
 
