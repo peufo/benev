@@ -92,6 +92,13 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 		},
 	})
 
+	function getBadgeLabelValue(member: Member): string {
+		if (!badge.labelFieldId) return ''
+		const badgelabelValue = member.profileJson[badge.labelFieldId]
+		if (typeof badgelabelValue !== 'string') return ''
+		return badgelabelValue
+	}
+
 	function getBadgeTypeValue(member: Member): string {
 		if (!badge.typeFieldId) return ''
 		const badgeTypeValue = member.profileJson[badge.typeFieldId]
@@ -127,7 +134,7 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 
 			layerBackground()
 			layerLogoEvent()
-			layerBadgeType()
+			layerBadgeLabel()
 			layerUserName()
 			await layerAvatar()
 			layerAccess()
@@ -169,9 +176,9 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 				doc.restore()
 			}
 
-			function layerBadgeType() {
-				const badgeType = getBadgeTypeValue(member)
-				if (!badgeType) return
+			function layerBadgeLabel() {
+				const label = getBadgeLabelValue(member) || getBadgeTypeValue(member)
+				if (!label) return
 				const fontSize = 9
 				const w = LAYOUT.width / 3
 				const h = LAYOUT.boxTypeHeight
@@ -179,14 +186,12 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 				const y = LAYOUT.padding * 2
 				const radius = LAYOUT.borderRadius - LAYOUT.padding
 				doc.roundedRect(x, y, w, h, radius).fill(color)
-				textCenter(badgeType, { x, y, w, h, fontSize, fontColor })
+				textCenter(label, { x, y, w, h, fontSize, fontColor })
 			}
 
 			function layerUserName() {
 				const fontSize = 11
-				const w = LAYOUT.width
 				const x = 0
-				const y = LAYOUT.height - LAYOUT.footerHeight / 2 - fontSize / 3
 				const name = `${member.firstName} ${member.lastName}`
 				textCenter(name, {
 					x,

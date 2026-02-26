@@ -8,6 +8,7 @@ export const load = async ({ params: { badgeId, eventId } }) => {
 	const badge = await prisma.badge.findUnique({
 		where: { id: badgeId, eventId },
 		include: {
+			labelField: true,
 			typeField: true,
 			accessDaysField: true,
 			accessSectorsField: true,
@@ -30,6 +31,7 @@ export const actions = {
 				checkFieldType(data.typeField.connect?.id, 'select'),
 				checkFieldType(data.accessDaysField.connect?.id, 'multiselect'),
 				checkFieldType(data.accessSectorsField.connect?.id, 'multiselect'),
+				checkFieldType(data.labelField.connect?.id, 'select', 'string'),
 			])
 
 			return prisma.badge.update({
@@ -56,8 +58,8 @@ function idToConnectionData(id?: string | null) {
 	return { connect: { id } }
 }
 
-async function checkFieldType(id: string | undefined, type: FieldType) {
+async function checkFieldType(id: string | undefined, ...types: FieldType[]) {
 	if (!id) return
 	const field = await prisma.field.findUniqueOrThrow({ where: { id } })
-	if (field.type !== type) throw new Error(`The "${field.label}" field is not of type "${type}"`)
+	if (!types.includes(field.type)) throw new Error(`The "${field.label}" field is not of type ["${types}"]`)
 }

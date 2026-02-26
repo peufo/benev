@@ -13,6 +13,7 @@ export const modelBadgeUpdate = {
 	typeField: zodConnectNullish,
 	accessDaysField: zodConnectNullish,
 	accessSectorsField: zodConnectNullish,
+	labelField: zodConnectNullish,
 	colorMap: z.record(z.string(), z.string()),
 	colorDefault: z.string(),
 } satisfies ZodObj<

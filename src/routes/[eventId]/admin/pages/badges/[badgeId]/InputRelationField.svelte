@@ -8,6 +8,7 @@
 	export let label: string
 	export let value: Field | null
 	export let type: FieldType
+	export let typesAccepted: FieldType[] = [type]
 	export let oninput: (field: Field) => void = () => {}
 </script>
 
@@ -15,7 +16,7 @@
 	{key}
 	{label}
 	bind:value
-	search={(search) => $api.fields.search(search, { type })}
+	search={(search) => $api.fields.search(search, { types: typesAccepted })}
 	createTitle="Nouveau champ"
 	createUrl={$urlParam.with({ form_field: JSON.stringify({ type }) })}
 	slotItem={(field) => component(MemberFieldSnippet, { field, updateLink: true })}

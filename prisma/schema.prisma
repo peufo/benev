@@ -201,10 +201,12 @@ model Field {
   options      String? @db.Text() // TODO: Why this is not a json ?
   badgesType   Badge[] @relation("BadgeType")
   badgesDays   Badge[] @relation("BadgeDays")
+  badgesLabel  Badge[] @relation("BadgeLabel")
   badgesSector Badge[] @relation("BadgeSectors")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  badges    Badge[]
 
   @@unique([eventId, name])
 }
@@ -293,7 +295,7 @@ enum PageType {
 model Badge {
   id String @id @default(cuid())
 
-  name    String @default("Badge d'accès")
+  name    String @default("Badge standard")
   eventId String
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
@@ -306,6 +308,8 @@ model Badge {
   typeField            Field?  @relation("BadgeType", fields: [typeFieldId], references: [id])
   accessDaysFieldId    String?
   accessDaysField      Field?  @relation("BadgeDays", fields: [accessDaysFieldId], references: [id])
+  labelFieldId         String?
+  labelField           Field?  @relation("BadgeLabel", fields: [labelFieldId], references: [id])
   accessSectorsFieldId String?
   accessSectorsField   Field?  @relation("BadgeSectors", fields: [accessSectorsFieldId], references: [id])
 
@@ -315,6 +319,8 @@ model Badge {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  field     Field?   @relation(fields: [fieldId], references: [id])
+  fieldId   String?
 
   @@unique([eventId, name])
 }

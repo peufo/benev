@@ -10,6 +10,7 @@
 	import InputRelationField from './InputRelationField.svelte'
 	import InputColorPalette from './InputColorPalette.svelte'
 	import InputColor from './InputColor.svelte'
+	import { browser } from '$app/environment'
 
 	export let badge: PageData['badge']
 
@@ -29,18 +30,22 @@
 		},
 	})
 
-	const autosave = debounce(() => {
-		submitButton.click()
-	}, 300)
+	// Not beautiful, but that work
+	function useAutosave() {
+		if (!browser) return () => {}
+		let firstCall = true
+		return debounce(() => {
+			if (!firstCall) {
+				submitButton?.click()
+			}
+			firstCall = false
+		}, 300)
+	}
+	const autosave = useAutosave()
+	$: if (badge) autosave()
 </script>
 
-<form
-	method="post"
-	action="?/badge_update"
-	on:input={autosave}
-	use:enhance
-	class="flex flex-col gap-2"
->
+<form method="post" action="?/badge_update" use:enhance class="flex flex-col gap-2">
 	<InputText key="name" label="Nom de la configuration" bind:value={badge.name} />
 
 	<div>
@@ -55,33 +60,36 @@
 				bind:value={badge.backgroundId}
 				x={FORMAT_CARD.x * 3}
 				y={FORMAT_CARD.y * 3}
-				oninput={autosave}
 			/>
 
-			<InputMedia key="logoId" label="Logo" bind:value={badge.logoId} oninput={autosave} />
+			<InputMedia key="logoId" label="Logo" bind:value={badge.logoId} />
 		</div>
 	</div>
 
 	<InputRelationField
 		key="accessDaysField"
-		label="Champ: Jours d'accès (Liste à choix multiple)"
+		label="Champ accès 1 (Liste à choix multiple)"
 		bind:value={badge.accessDaysField}
 		type="multiselect"
-		oninput={autosave}
 	/>
 	<InputRelationField
 		key="accessSectorsField"
-		label="Champ: Accès au secteurs (Liste à choix multiple)"
+		label="Champ accès 2 (Liste à choix multiple)"
 		bind:value={badge.accessSectorsField}
 		type="multiselect"
-		oninput={autosave}
+	/>
+	<InputRelationField
+		key="labelField"
+		label="Champ: Label (Liste à choix ou text)"
+		bind:value={badge.labelField}
+		type="select"
+		typesAccepted={['select', 'string']}
 	/>
 	<InputRelationField
 		key="typeField"
 		label="Champ: Type de membre (Liste à choix)"
 		bind:value={badge.typeField}
 		type="select"
-		oninput={autosave}
 	/>
 
 	<!-- Instance to place in /+layout.svelte -->

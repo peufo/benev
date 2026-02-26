@@ -6,6 +6,7 @@
 	import { eventPath } from '$lib/store'
 	import { debounce } from '$lib/debounce'
 	import { fade } from 'svelte/transition'
+	import { browser } from '$app/environment'
 
 	export let badge: PageData['badge']
 	export let defaultMember: Member | undefined
@@ -15,10 +16,18 @@
 	let clientWidth: number
 	let clientHeight: number
 
+	function useRefresh() {
+		if (!browser) return () => {}
+		let firstCall = true
+		return debounce(() => {
+			if (!firstCall) {
+				refreshKey = {}
+			}
+			firstCall = false
+		}, 400)
+	}
 	let refreshKey = {}
-	const refresh = debounce(() => {
-		refreshKey = {}
-	}, 400)
+	const refresh = useRefresh()
 	$: if (badge) refresh()
 </script>
 

@@ -67,7 +67,7 @@ export const api = derived(page, ({ params: { eventId } }) => {
 			get<{ firstName: string; lastName: string }>(`/${eventId}/api/user`, { params: { email } }),
 		rootUser: methods<User>(`/root/users`),
 		fields: {
-			search: search<Field, { type?: FieldType }>(`/${eventId}/api/fields`),
+			search: search<Field, { types?: FieldType[] }>(`/${eventId}/api/fields`),
 		},
 		media: {
 			search: search<Media, {}>(`/${eventId}/api/media`),
