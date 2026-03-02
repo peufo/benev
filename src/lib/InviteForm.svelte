@@ -18,9 +18,9 @@
 		if (!success) return
 		isLoadingUserExists = true
 		const res = await $api.user(email).finally(() => (isLoadingUserExists = false))
-		user.firstName = res.firstName
-		user.lastName = res.lastName
 		if (res.firstName) {
+			user.firstName = res.firstName
+			user.lastName = res.lastName
 			toast.success('Utilisateur trouvé !')
 		}
 	}
