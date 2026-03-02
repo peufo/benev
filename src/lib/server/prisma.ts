@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient, type Member, type User } from '@prisma/client'
 import { createId } from '@paralleldrive/cuid2'
+import { createAvatarPlaceholder } from 'fuma'
 
 export const prisma = new PrismaClient().$extends({
 	query: {
@@ -48,6 +49,7 @@ export const prisma = new PrismaClient().$extends({
 						zipCode: null,
 						city: null,
 						avatarId: null,
+						avatarPlaceholder: createAvatarPlaceholder()
 					},
 				})
 				return query(args)
