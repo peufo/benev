@@ -95,6 +95,7 @@ export async function getMemberProfile(
 				include: {
 					leaders: { include: { user: true } },
 					periods: {
+						//orderBy: { start: 'asc' },
 						include: {
 							subscribes: {
 								include: {
@@ -111,25 +112,32 @@ export async function getMemberProfile(
 		},
 	})
 
-	// TODO: use pipeline ... J'ai honte
 	const addTeamComputedValues = useAddTeamComputedValues({
 		...ctx,
 		isLeader: true,
 		event: member.event,
 	})
-	const res1 = addMemberComputedValues(member)
-	const res2 = hidePrivateProfilValues(res1, ctx?.member)
-	const res3 = {
-		...res2,
-		leaderOf: member.leaderOf.map(addTeamComputedValues),
-		event: {
-			...member.event,
-			memberFields: member.event.memberFields.filter(
-				(field) => (ctx?.member || res2).roles.includes('leader') || field.memberCanRead
-			),
+	return pipe(addMemberComputedValues(member))
+		.pipe((value) => hidePrivateProfilValues(value, ctx?.member))
+		.pipe((value) => ({
+			...value,
+			leaderOf: member.leaderOf.map(addTeamComputedValues),
+			event: {
+				...member.event,
+				memberFields: member.event.memberFields.filter(
+					(field) => (ctx?.member || value).roles.includes('leader') || field.memberCanRead
+				),
+			},
+		})).value
+}
+
+function pipe<In>(value: In) {
+	return {
+		value,
+		pipe<Out>(cb: (value: In) => Out) {
+			return pipe(cb(value))
 		},
 	}
-	return res3
 }
 
 export function hidePrivateProfilValues<T extends MemberWithComputedValues>(
