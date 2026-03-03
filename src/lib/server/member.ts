@@ -118,8 +118,8 @@ export async function getMemberProfile(
 		event: member.event,
 	})
 	return pipe(addMemberComputedValues(member))
-		.pipe((value) => hidePrivateProfilValues(value, ctx?.member))
-		.pipe((value) => ({
+		.then((value) => hidePrivateProfilValues(value, ctx?.member))
+		.then((value) => ({
 			...value,
 			leaderOf: member.leaderOf.map(addTeamComputedValues),
 			event: {
@@ -128,13 +128,14 @@ export async function getMemberProfile(
 					(field) => (ctx?.member || value).roles.includes('leader') || field.memberCanRead
 				),
 			},
-		})).value
+		}))
+		.get()
 }
 
 function pipe<In>(value: In) {
 	return {
-		value,
-		pipe<Out>(cb: (value: In) => Out) {
+		get: () => value,
+		then<Out>(cb: (value: In) => Out) {
 			return pipe(cb(value))
 		},
 	}
