@@ -17,7 +17,7 @@ export const modelUserCreate = {
 } satisfies ZodObj<Omit<Prisma.UserCreateInput, 'id'> & { password: string }>
 
 export const modelUserContactUpdate = {
-	email: z.union([z.literal('').optional(), z.string().email().toLowerCase()]),
+	email: z.union([z.string().email().toLowerCase(), z.literal('').transform(() => null)]).nullish(),
 	firstName: z.string().min(2).optional(),
 	lastName: z.string().min(2).optional(),
 	phone: z.string().trim().optional(),
