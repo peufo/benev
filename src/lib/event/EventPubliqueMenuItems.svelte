@@ -8,6 +8,7 @@
 
 	export let pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
 	export let hideIndex = false
+	export let hideTeams = false
 	export let classItem = ''
 
 	$: pageHome = pages.find((p) => p.type === 'home')
@@ -23,7 +24,7 @@
 {/if}
 
 <!-- TEAMS -->
-{#if $page.data.event?.selfSubscribeAllowed}
+{#if !hideTeams && $page.data.event?.selfSubscribeAllowed}
 	<a
 		href="{$eventPath}/teams"
 		class="menu-item {classItem}"

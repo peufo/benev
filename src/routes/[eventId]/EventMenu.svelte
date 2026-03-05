@@ -29,7 +29,7 @@
 		{#if adminIsVisible}
 			<h3 class="title-sm pl-3 pt-1">Public</h3>
 		{/if}
-		<EventPubliqueMenuItems {pages} />
+		<EventPubliqueMenuItems {pages} hideTeams={adminIsVisible} />
 
 		<!-- ADMIN -->
 		{#if adminIsVisible}
