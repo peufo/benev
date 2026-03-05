@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { mdiMapMarkerRadiusOutline } from '@mdi/js'
-	import { Card, Icon } from 'fuma'
+	import { Card, Icon, tip } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
 	import { MemberProfile, MemberSettingsForm } from '$lib/member'
+	import { CalendarArrowUp } from 'lucide-svelte'
 
 	export let data
 </script>
@@ -19,8 +20,18 @@
 						<Icon path={mdiMapMarkerRadiusOutline} title="Voir les secteurs" size={20} />
 					</a>
 				{/if}
+				{#if data.memberTeams.length}
+					<a
+						href="{$eventPath}/api/ical"
+						class="btn btn-square btn-sm"
+						download
+						use:tip={{ content: 'Ajouter à mon agenda' }}
+					>
+						<CalendarArrowUp size={20} />
+					</a>
+				{/if}
 			</div>
-			<TeamsSubscribes teams={data.memberTeams || []} />
+			<TeamsSubscribes teams={data.memberTeams} />
 		</section>
 
 		{#if data.member.leaderOf.length}
