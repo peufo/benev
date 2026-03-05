@@ -5,6 +5,7 @@ import { isMemberAllowed } from '$lib/member'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
 import { error } from '@sveltejs/kit'
 import type { Period } from '@prisma/client'
+import { cloneTeam } from '$lib/server/clone.js'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const { search, range, onlyAvailable, teams_order } = parseQuery(url, {
@@ -122,4 +123,38 @@ export const actions = {
 			)
 		}
 	),
+	teams_clone: formAction(
+		{ id: z.string(), deltaTime: z.number().default(0) },
+		async ({ locals, data, params: { eventId } }) => {
+			await permission.admin(eventId, locals)
+			const [teams, team] = await Promise.all([
+				prisma.team
+					.findMany({ where: { eventId }, select: { name: true } })
+					.then((res) => res.map((t) => t.name)),
+				prisma.team.findUniqueOrThrow({
+					where: { id: data.id, eventId },
+					include: { periods: true, leaders: true },
+				}),
+			])
+			const clone = cloneTeam(team, data.deltaTime)
+			// conditions and leaders are not parts of event.cloneTeam
+			clone.conditions = team.conditions || undefined
+			clone.leaders = { connect: team.leaders }
+			return prisma.team.create({
+				data: {
+					...clone,
+					eventId,
+					name: getTeamCopyName(clone.name, teams),
+				},
+			})
+		}
+	),
+}
+
+function getTeamCopyName(initalName: string, teams: string[]): string {
+	let name = initalName.endsWith(' copie') ? initalName : `${initalName} copie`
+	if (!teams.includes(name)) return name
+	let suffix = 2
+	while (teams.includes(`${name} ${suffix}`)) suffix++
+	return `${name} ${suffix}`
 }

@@ -9,27 +9,27 @@ export function cloneData<T extends object>(data: T) {
 
 export function cloneTeam(
 	team: Team & { periods: Period[] },
-	deltaTime: number
+	deltaTimeMS: number
 ): Prisma.TeamCreateWithoutEventInput {
 	return {
 		name: team.name,
 		description: team.description,
 		closeSubscribing:
-			team.closeSubscribing && new Date(team.closeSubscribing.getTime() + deltaTime),
+			team.closeSubscribing && new Date(team.closeSubscribing.getTime() + deltaTimeMS),
 		// TODO: fix fields references
 		//conditions: team.conditions || undefined,
 		position: team.position,
 		periods: {
-			create: team.periods.map((p) => clonePeriod(p, deltaTime)),
+			create: team.periods.map((p) => clonePeriod(p, deltaTimeMS)),
 		},
 	}
 }
 
-function clonePeriod(period: Period, deltaTime: number): Prisma.PeriodCreateWithoutTeamInput {
+function clonePeriod(period: Period, deltaTimeMS: number): Prisma.PeriodCreateWithoutTeamInput {
 	return {
 		maxSubscribe: period.maxSubscribe,
-		start: new Date(period.start.getTime() + deltaTime),
-		end: new Date(period.end.getTime() + deltaTime),
+		start: new Date(period.start.getTime() + deltaTimeMS),
+		end: new Date(period.end.getTime() + deltaTimeMS),
 	}
 }
 
