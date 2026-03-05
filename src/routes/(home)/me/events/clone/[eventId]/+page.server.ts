@@ -1,9 +1,9 @@
-import { defaultEmailModels } from '$lib/email/models'
-import { normalizePath } from '$lib/normalizePath'
-import { permission, prisma } from '$lib/server'
-import type { Page, PageType, Period, Prisma, Team } from '@prisma/client'
 import { z } from 'fuma'
 import { formAction } from 'fuma/server'
+import { normalizePath } from '$lib/normalizePath'
+import { permission, prisma } from '$lib/server'
+import { clonePages, cloneData, cloneTeam } from '$lib/server/clone'
+import type { Prisma } from '@prisma/client'
 
 export const load = async ({ locals, params: { eventId } }) => {
 	await permission.admin(eventId, locals)
@@ -83,16 +83,16 @@ export const actions = {
 					},
 				},
 				teams: {
-					create: teams.map((t) => pickTeam(t, deltaTime)),
+					create: teams.map((t) => cloneTeam(t, deltaTime)),
 				},
 				pages: {
-					create: getPages(pages),
+					create: clonePages(pages),
 				},
 				memberFields: {
-					create: memberFields.map(pickData),
+					create: memberFields.map(cloneData),
 				},
 				views: {
-					create: views.map(pickData),
+					create: views.map(cloneData),
 				},
 			}
 			return prisma.event.create({
@@ -115,53 +115,4 @@ async function getAvailableCloneName(eventName: string): Promise<string> {
 	let suffix = 1
 	while (names.includes(`${eventName}_${suffix}`)) suffix++
 	return `${eventName}_${suffix}`
-}
-
-type ExcludeProps = 'id' | 'createdAt' | 'updatedAt' | 'eventId'
-function pickData<T extends object>(data: T) {
-	const { id, createdAt, updatedAt, eventId, ...rest } = data as Record<ExcludeProps, unknown>
-	return rest as Omit<T, ExcludeProps>
-}
-
-function pickTeam(
-	team: Team & { periods: Period[] },
-	deltaTime: number
-): Prisma.TeamCreateWithoutEventInput {
-	return {
-		name: team.name,
-		description: team.description,
-		closeSubscribing:
-			team.closeSubscribing && new Date(team.closeSubscribing.getTime() + deltaTime),
-		// TODO: fix fields references
-		//conditions: team.conditions || undefined,
-		position: team.position,
-		periods: {
-			create: team.periods.map((p) => pickPeriod(p, deltaTime)),
-		},
-	}
-}
-
-function pickPeriod(period: Period, deltaTime: number): Prisma.PeriodCreateWithoutTeamInput {
-	return {
-		maxSubscribe: period.maxSubscribe,
-		start: new Date(period.start.getTime() + deltaTime),
-		end: new Date(period.end.getTime() + deltaTime),
-	}
-}
-
-function getPages(eventPages: Page[]): Prisma.PageCreateManyEventInput[] {
-	const home = pickData(
-		eventPages.find((p) => p.type === 'home') || {
-			type: 'home' as PageType,
-			title: 'Bienvenue',
-			path: 'bienvenue',
-			content: 'null',
-		}
-	)
-	const emails = defaultEmailModels.map((page) => {
-		const eventPage = eventPages.find((p) => p.path === page.path)
-		return eventPage ? pickData(eventPage) : page
-	})
-	const rest = eventPages.filter((p) => p.type !== 'home' && p.type !== 'email').map(pickData)
-	return [home, ...emails, ...rest]
 }
