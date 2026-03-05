@@ -21,7 +21,7 @@
 					</a>
 				{/if}
 				{#if data.memberTeams.length}
-					<DownloadSubscribes eventPath={$eventPath} />
+					<DownloadSubscribes />
 				{/if}
 			</div>
 			<TeamsSubscribes teams={data.memberTeams} />
