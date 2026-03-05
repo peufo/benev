@@ -14,6 +14,7 @@
 	{value}
 	search={$api.member.search}
 	slotItem={({ id, firstName, lastName }) => component(MemberLink, { id, firstName, lastName })}
+	slotSuggestion={({ firstName, lastName }) => `${firstName} ${lastName}`}
 	createTitle="Inviter un nouveau membre"
 	createIcon={mdiAccountPlusOutline}
 	createUrl={$urlParam.with({ form_invite: '{}' })}
