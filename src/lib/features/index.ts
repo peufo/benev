@@ -1,9 +1,9 @@
 import {
 	mdiAccountGroupOutline,
+	mdiCardAccountDetailsOutline,
 	mdiDatabaseOutline,
 	mdiEmailOutline,
 	mdiEyeOutline,
-	mdiGiftOutline,
 	mdiLicense,
 	mdiLogin,
 	mdiViewDashboardOutline,
@@ -14,7 +14,6 @@ const accountPng = '/icons/account-group-outline.png'
 const databasePng = '/icons/database-outline.png'
 const emailPng = '/icons/email-outline.png'
 const eyePng = '/icons/eye-outline.png'
-const giftPng = '/icons/gift-outline.png'
 const licensePng = '/icons/license.png'
 const loginPng = '/icons/login.png'
 const dashboardPng = '/icons/view-dashboard-outline.png'
@@ -23,7 +22,7 @@ const webPng = '/icons/web.png'
 type Feature = {
 	name: string
 	icon: string
-	src: string
+	src: string // @deprecated Only used in EmailProspect
 	description: string
 	comingSoon?: string
 }
@@ -79,18 +78,15 @@ export const features: Feature[] = [
 			'Définis une charte à laquelle les bénévoles devront adhérer lors de leur inscription.',
 	},
 	{
-		name: 'Système de compensation',
-		icon: mdiGiftOutline,
-		src: giftPng,
-		description:
-			"Définis des articles et les règles d'éligibilitées pour générer des listes d'attribution.",
-		comingSoon: 'Bientôt disponible',
+		name: 'Impressions de badges',
+		icon: mdiCardAccountDetailsOutline,
+		src: 'noop',
+		description: "Configure et génère facilement des badges d'accèes à l'image de ton festival.",
 	},
 	{
 		name: 'Communication',
 		icon: mdiEmailOutline,
 		src: emailPng,
-		description: 'Personnalise tes notifications par email et édite des publipostages.',
-		comingSoon: 'Bientôt disponible',
+		description: 'Personnalise tes notifications qui seront envoyées aux bénévoles.',
 	},
 ]
