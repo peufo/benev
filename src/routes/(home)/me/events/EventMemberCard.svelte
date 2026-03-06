@@ -6,6 +6,7 @@
 	import logo from '$lib/assets/logo.svg'
 	import { mdiContentDuplicate } from '@mdi/js'
 	import { EventIcon } from '$lib/event'
+	import { formatRangeDate } from '$lib/formatRange'
 
 	export let member: PageData['members'][number]
 
@@ -31,7 +32,7 @@
 			</div>
 		{/if}
 
-		<div class="grow flex flex-col gap-4">
+		<div class="grow flex flex-col gap-2">
 			<div class="flex gap-2 items-center">
 				{#if member.event.icon}
 					<EventIcon
@@ -79,6 +80,14 @@
 					</div>
 				{/if}
 			</div>
+
+			<div class="grow" />
+
+			{#if member.event.startDate && member.event.endDate}
+				<span class="text-sm opacity-70 italic">
+					{formatRangeDate({ start: member.event.startDate, end: member.event.endDate })}
+				</span>
+			{/if}
 		</div>
 	</div>
 </CardLink>

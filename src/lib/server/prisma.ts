@@ -4,6 +4,28 @@ import { createAvatarPlaceholder } from 'fuma'
 
 export const prisma = new PrismaClient().$extends({
 	query: {
+		period: {
+			async create({ args, query }) {
+				const result = await query(args)
+				if (result.id) {
+					await eventDatesIncludePeriod({ id: result.id })
+				}
+				return result
+			},
+			async update({ args, query }) {
+				const result = await query(args)
+				await eventDatesIncludePeriod(args.where)
+				return result
+			},
+			async delete({ args, query }) {
+				const { eventId } = await prisma.period
+					.findUniqueOrThrow({ where: args.where })
+					.team({ select: { eventId: true } })
+				const result = await query(args)
+				await eventDatesRefresh(eventId)
+				return result
+			},
+		},
 		event: {
 			async delete({ args: { where } }) {
 				const event = await prisma.event.findUniqueOrThrow({ where })
@@ -49,7 +71,7 @@ export const prisma = new PrismaClient().$extends({
 						zipCode: null,
 						city: null,
 						avatarId: null,
-						avatarPlaceholder: createAvatarPlaceholder()
+						avatarPlaceholder: createAvatarPlaceholder(),
 					},
 				})
 				return query(args)
@@ -81,6 +103,41 @@ export const prisma = new PrismaClient().$extends({
 		},
 	},
 })
+
+async function eventDatesIncludePeriod(periodWhere: Prisma.PeriodWhereUniqueInput) {
+	const [period, event] = await Promise.all([
+		prisma.period.findUniqueOrThrow({ where: periodWhere }),
+		prisma.period
+			.findUniqueOrThrow({ where: periodWhere })
+			.team()
+			.event({ select: { id: true, startDate: true, endDate: true } }),
+	])
+	let data: Prisma.EventUpdateInput = {}
+	if (!event.startDate || period.start < event.startDate) {
+		data.startDate = period.start
+	}
+	if (!event.endDate || period.end > event.endDate) {
+		data.endDate = period.end
+	}
+	await prisma.event.update({ where: { id: event.id }, data })
+}
+
+async function eventDatesRefresh(eventId: string) {
+	const periods = await prisma.period.findMany({
+		where: { team: { eventId } },
+		select: { start: true, end: true },
+	})
+	let startDate: null | Date = null
+	let endDate: null | Date = null
+	if (periods.length) {
+		startDate = new Date(Math.min(...periods.map((p) => p.start.getTime())))
+		endDate = new Date(Math.max(...periods.map((p) => p.end.getTime())))
+	}
+	await prisma.event.update({
+		where: { id: eventId },
+		data: { startDate, endDate },
+	})
+}
 
 const userContactSelect: Prisma.UserSelect = {
 	email: true,

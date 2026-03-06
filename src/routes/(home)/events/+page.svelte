@@ -2,6 +2,7 @@
 	import { CardLink, Placeholder } from 'fuma'
 	import logo from '$lib/assets/logo.svg'
 	import { EventIcon } from '$lib/event/index.js'
+	import { formatRangeDate } from '$lib/formatRange'
 
 	export let data
 </script>
@@ -14,7 +15,7 @@
 	<ul class="flex flex-col gap-2 mt-2">
 		{#each data.events as event}
 			<CardLink href="/{event.id}">
-				<div class="flex gap-4 items-start">
+				<div class="flex gap-4">
 					{#if event.posterId}
 						<img
 							src="/media/{event.posterId}?size=a6"
@@ -31,14 +32,19 @@
 						</div>
 					{/if}
 
-					<div>
-						<div class="flex items-center gap-2 mt-2 mb-4">
+					<div class="flex flex-col gap-2">
+						<div class="flex items-center gap-2 mt-2 mb-1">
 							{#if event.icon}
 								<EventIcon icon={event.icon} class="h-6" />
 							{/if}
 							<span class="font-medium">{event.name}</span>
 						</div>
-						<p class="opacity-90 text-sm pr-2 pb-2">{event.description}</p>
+						<p class="opacity-90 text-sm pr-2 grow">{event.description}</p>
+						{#if event.startDate && event.endDate}
+							<span class="text-sm opacity-70 mt-1 italic">
+								{formatRangeDate({ start: event.startDate, end: event.endDate })}
+							</span>
+						{/if}
 					</div>
 				</div>
 			</CardLink>

@@ -162,6 +162,9 @@ model Event {
   userAvatarRequired         Boolean   @default(false)
   overlapPeriodAllowed       Int       @default(0)
 
+  startDate DateTime?
+  endDate   DateTime?
+
   // Relations
   teams        Team[]
   pages        Page[]
