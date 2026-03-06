@@ -26,7 +26,7 @@
 						<div
 							style:width="105px"
 							style:height="148px"
-							class="bg-base-200/50 grid place-content-center rounded"
+							class="bg-base-200/50 grid place-content-center rounded shrink-0"
 						>
 							<img src={logo} alt="Affiche par défaut" class="w-16 grayscale opacity-50" />
 						</div>
