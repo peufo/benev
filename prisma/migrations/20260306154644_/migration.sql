@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Badge` ADD COLUMN `accessCellSize` INTEGER NOT NULL DEFAULT 5;

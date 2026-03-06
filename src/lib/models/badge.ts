@@ -8,6 +8,10 @@ const zodConnectNullish = z
 
 export const modelBadgeUpdate = {
 	name: z.string().min(2),
+	width: z.number().min(20),
+	height: z.number().min(20),
+	accessCellSize: z.number().min(3),
+	versoEnabled: z.boolean(),
 	backgroundId: z.string().nullish(),
 	logoId: z.string().nullish(),
 	typeField: zodConnectNullish,

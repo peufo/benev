@@ -1,7 +1,14 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { ButtonDelete, Icon, InputText, useForm } from 'fuma'
-	import { mdiAlertCircleOutline, mdiCheck, mdiLoading } from '@mdi/js'
+	import { ButtonDelete, Icon, InputText, InputNumber, InputBoolean, useForm } from 'fuma'
+	import {
+		mdiAlertCircleOutline,
+		mdiCheck,
+		mdiLoading,
+		mdiLink,
+		mdiLinkOff,
+		mdiRestore,
+	} from '@mdi/js'
 	import { invalidateAll } from '$app/navigation'
 	import { InputMedia } from '$lib/material/media'
 	import { FORMAT_CARD } from '$lib/constant'
@@ -11,11 +18,13 @@
 	import InputColorPalette from './InputColorPalette.svelte'
 	import InputColor from './InputColor.svelte'
 	import { browser } from '$app/environment'
+	import { fade } from 'svelte/transition'
 
 	export let badge: PageData['badge']
 
 	let submitButton: HTMLButtonElement
 	let isSuccess = true
+	let lockAspectRatio = true
 
 	const { enhance, isLoading } = useForm({
 		successUpdate: false,
@@ -43,10 +52,66 @@
 	}
 	const autosave = useAutosave()
 	$: if (badge) autosave()
+
+	function aspectRatioWidth(value: number): number {
+		return Math.round((value / FORMAT_CARD.aspect) * 100) / 100
+	}
+	function aspectRatioHeight(value: number): number {
+		return Math.round(value * FORMAT_CARD.aspect * 100) / 100
+	}
 </script>
 
 <form method="post" action="?/badge_update" use:enhance class="flex flex-col gap-2">
 	<InputText key="name" label="Nom de la configuration" bind:value={badge.name} />
+
+	<div class="flex gap-2">
+		<div class="w-28">
+			<InputNumber
+				key="width"
+				label="Largeur (mm)"
+				bind:value={badge.width}
+				input={{ step: 0.01 }}
+				on:input={() => {
+					if (lockAspectRatio) {
+						badge.height = aspectRatioWidth(badge.width)
+					}
+				}}
+			/>
+		</div>
+		<button
+			type="button"
+			class="btn btn-sm btn-ghost btn-square self-end mb-2"
+			on:click={() => (lockAspectRatio = !lockAspectRatio)}
+		>
+			<Icon path={lockAspectRatio ? mdiLink : mdiLinkOff} size={18} title="Conserver le ratio" />
+		</button>
+		<div class="w-28">
+			<InputNumber
+				key="height"
+				label="Hauteur (mm)"
+				bind:value={badge.height}
+				input={{ step: 0.01 }}
+				on:input={() => {
+					if (lockAspectRatio) {
+						badge.width = aspectRatioHeight(badge.height)
+					}
+				}}
+			/>
+		</div>
+		{#if badge.width !== FORMAT_CARD.x || badge.height !== FORMAT_CARD.y}
+			<button
+				in:fade
+				type="button"
+				class="btn btn-sm btn-ghost btn-square self-end mb-2"
+				on:click={() => {
+					badge.width = FORMAT_CARD.x
+					badge.height = FORMAT_CARD.y
+				}}
+			>
+				<Icon path={mdiRestore} size={18} title="Restaurer les dimensions par défaut" />
+			</button>
+		{/if}
+	</div>
 
 	<div>
 		<div class="label">
@@ -96,6 +161,17 @@
 	<InputColorPalette />
 	<InputColorMap field={badge.typeField} bind:value={badge.colorMap} />
 	<InputColor name="colorDefault" label="(Couleur par défaut)" bind:value={badge.colorDefault} />
+
+	<div class="flex gap-4">
+		<div class="w-28">
+			<InputNumber
+				key="accessCellSize"
+				label="Tailles cellules"
+				bind:value={badge.accessCellSize}
+			/>
+		</div>
+		<InputBoolean key="versoEnabled" label="Afficher le verso" bind:value={badge.versoEnabled} />
+	</div>
 
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>

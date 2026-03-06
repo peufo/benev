@@ -4,16 +4,17 @@ import sharp from 'sharp'
 import PDFDocument from 'pdfkit'
 import QrCode from 'qrcode'
 import { env } from '$env/dynamic/private'
-import type { Event, Member } from '@prisma/client'
+import type { Member } from '@prisma/client'
 import { prisma, permission } from '$lib/server'
 import logoBenev from '$lib/assets/logo.svg?raw'
 import { getMembers } from '../../../../members/getMembers'
-import { FORMAT_CARD } from '$lib/constant'
 import { existsSync } from 'node:fs'
 import { getTextColor } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 // import fontLight from '$lib/assets/Helvetica-Light.ttf'
 // const fontLightPath = path.resolve(`.${fontLight}`)
+
+const MM_TO_PT = 2.83465
 
 const formater = new Intl.DateTimeFormat('fr-ch', {
 	day: 'numeric',
@@ -21,20 +22,15 @@ const formater = new Intl.DateTimeFormat('fr-ch', {
 	year: '2-digit',
 	timeZone: 'Europe/Zurich',
 })
-const DIMENSIONS_MM = {
-	width: FORMAT_CARD.x,
-	height: FORMAT_CARD.y,
+
+const DIMENSIONS_DEFAULTS = {
 	padding: 1,
 	footerHeight: 8,
 	boxTypeHeight: 5,
-	accessCellSize: 5,
 	avatarSize: 36,
 	qrCodeSize: 24,
 	borderRadius: 2.2,
 }
-const LAYOUT = Object.fromEntries(
-	Object.entries(DIMENSIONS_MM).map(([key, val]) => [key, val * 2.83465])
-) as Record<keyof typeof DIMENSIONS_MM, number>
 
 export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 	await permission.leader(eventId, locals)
@@ -52,10 +48,22 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 		error(404, `Not found: ${JSON.stringify({ eventId, badgeId })}`)
 	})
 
+	const DIMENSIONS_MM = {
+		width: badge.width,
+		height: badge.height,
+		accessCellSize: badge.accessCellSize,
+		...DIMENSIONS_DEFAULTS,
+	}
+
+	const LAYOUT = Object.fromEntries(
+		Object.entries(DIMENSIONS_MM).map(([key, val]) => [key, val * MM_TO_PT])
+	) as Record<keyof typeof DIMENSIONS_MM, number>
+
 	url.searchParams.set('all', 'true')
 	const { members } = await getMembers(event, url)
 	const doc = new PDFDocument({
 		size: [LAYOUT.width, LAYOUT.height],
+		layout: 'portrait',
 		margin: 0,
 		autoFirstPage: false,
 	})
@@ -138,7 +146,7 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 			layerUserName()
 			await layerAvatar()
 			layerAccess()
-			await verso()
+			if (badge.versoEnabled) await verso()
 
 			function layerBackground() {
 				const contentW = LAYOUT.width - 2 * LAYOUT.padding
@@ -228,10 +236,10 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 			}
 
 			function layerAccess() {
-				const fontSize = 8
 				const accessSectors = parseStringArray(member.profileJson[badge.accessSectorsFieldId || ''])
 				const accessDays = parseStringArray(member.profileJson[badge.accessDaysFieldId || ''])
 				const size = LAYOUT.accessCellSize
+				const fontSize = size / 2
 				const xDays = LAYOUT.width - LAYOUT.padding * 2 - size
 				const xSectors = LAYOUT.width - LAYOUT.padding * 3 - size * 2
 				const yStart = LAYOUT.padding * 2

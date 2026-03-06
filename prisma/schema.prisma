@@ -320,6 +320,11 @@ model Badge {
   colorMap     Json   @default("{}")
   colorDefault String @default("#F8E7D4")
 
+  width          Float   @default(53.98)
+  height         Float   @default(85.6)
+  versoEnabled   Boolean @default(true)
+  accessCellSize Int     @default(5)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   field     Field?   @relation(fields: [fieldId], references: [id])
