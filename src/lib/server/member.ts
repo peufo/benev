@@ -21,6 +21,11 @@ export type MemberWithComputedValues = MemberWithEventAndLeaderOf & {
 	isMemberProfileCompleted: boolean
 }
 
+export type MemberWithComputedValuesAndAccount = MemberWithComputedValues & {
+	email: string
+	userId: string
+}
+
 export function addMemberComputedValues<T extends MemberWithEventAndLeaderOf>(
 	member: T
 ): T & MemberWithComputedValues {

@@ -47,7 +47,7 @@
 	}
 
 	function handleClickState(e: MouseEvent | KeyboardEvent, newState: EventState) {
-		if (!$page.data.member?.roles.includes('owner')) {
+		if (!$page.data.userIsRoot && !$page.data.member?.roles.includes('owner')) {
 			e.preventDefault()
 			const owner = `${$page.data.member?.firstName} ${$page.data.member?.lastName}`
 			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)

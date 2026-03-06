@@ -1,4 +1,4 @@
-import { tryOrFail, parseFormData } from 'fuma/server'
+import { tryOrFail, parseFormData, formAction } from 'fuma/server'
 import { prisma, permission, ensureLicenceEvent, ensureLicenceMembers } from '$lib/server'
 
 import { modelEventState } from '$lib/models'
@@ -25,15 +25,11 @@ export const load = async ({ parent, params: { eventId } }) => {
 }
 
 export const actions = {
-	set_state_event: async ({ request, locals, params: { eventId } }) => {
-		await permission.owner(eventId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, modelEventState)
-			if (data.state !== 'draft') await ensureLicenceEvent(eventId)
-			await prisma.event.update({ where: { id: eventId }, data })
-			await ensureLicenceMembers(eventId)
-			return
-		})
-	},
+	set_state_event: formAction(modelEventState, async ({ locals, params: { eventId }, data }) => {
+		await permission.ownerOrRoot(eventId, locals)
+		if (data.state !== 'draft') await ensureLicenceEvent(eventId)
+		await prisma.event.update({ where: { id: eventId }, data })
+		await ensureLicenceMembers(eventId)
+		return
+	}),
 }
