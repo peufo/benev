@@ -5,7 +5,7 @@ export const load = async ({ parent }) => {
 
 	const members = await prisma.member.findMany({
 		where: { OR: [{ userId: user.id }, { email: user.email }], event: { deletedAt: null } },
-		orderBy: [{ event: { startDate: 'desc' } }, { createdAt: 'desc' }],
+		orderBy: [{ event: { startDate: { sort: 'desc', nulls: 'first' } } }, { createdAt: 'desc' }],
 		include: {
 			user: true,
 			event: { include: { memberFields: true } },
