@@ -39,8 +39,8 @@ export const media = {
 		const image = data[keyImage] as Blob
 		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }
 
-		if (image.size === 0) return
-		if (crop === undefined) return
+		if (image.size === 0) throw new Error('image.size is equal to 0')
+		if (crop === undefined) throw new Error(`no crop data in  data[${keyCrop}]`)
 
 		const imageBuffer = await image.arrayBuffer()
 
@@ -75,7 +75,7 @@ export const media = {
 }
 
 async function createOrReplaceMedia({ where, data }: UploadOption) {
-	if (where) await media.delete(where)
+	if (where) await media.delete(where).catch(() => {})
 	return prisma.media.create({ data })
 }
 

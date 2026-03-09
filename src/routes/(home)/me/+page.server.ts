@@ -142,22 +142,28 @@ export const actions = {
 	delete_avatar: async ({ locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
-		return tryOrFail(() => media.delete({ avatarOf: { id: session.user.id } }))
+		const { user } = session
+		return tryOrFail(async () => {
+			await media.delete({ avatarOf: { id: user.id } })
+			await prisma.member.updateMany({ where: { userId: user.id }, data: { avatarId: null } })
+		})
 	},
 	upload_avatar: async ({ request, locals }) => {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
-
-		return tryOrFail(() =>
-			media.upload(request, {
-				where: { avatarOf: { id: session.user.id } },
+		const { user } = session
+		return tryOrFail(async () => {
+			const avatar = await media.upload(request, {
+				where: { avatarOf: { id: user.id } },
 				data: {
-					name: `Avatar de ${session.user.firstName} ${session.user.lastName}`,
-					createdById: session.user.id,
-					avatarOf: { connect: { id: session.user.id } },
+					name: `Avatar de ${user.firstName} ${user.lastName}`,
+					createdById: user.id,
+					avatarOf: { connect: { id: user.id } },
 				},
 			})
-		)
+			await prisma.member.updateMany({ where: { userId: user.id }, data: { avatarId: avatar.id } })
+			return avatar
+		})
 	},
 
 	delete_user: async ({ locals }) => {
