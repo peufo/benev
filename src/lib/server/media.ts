@@ -44,7 +44,7 @@ export const media = {
 
 		const imageBuffer = await image.arrayBuffer()
 
-		const media = await createOrUpsertMedia(opt)
+		const media = await createOrReplaceMedia(opt)
 		const mediaPath = path.resolve(env.MEDIA_DIR, media.id)
 
 		await fs
@@ -74,21 +74,9 @@ export const media = {
 	},
 }
 
-function createOrUpsertMedia(opt: UploadOption) {
-	if (opt.where) return upsertMedia(opt)
-	return prisma.media.create({ data: opt.data })
-}
-
-// WTF ???
-async function upsertMedia(opt: UploadOption) {
-	const media = await prisma.media.findFirst({
-		where: opt.where,
-	})
-	return prisma.media.upsert({
-		where: { id: media?.id || '' },
-		update: opt.data,
-		create: opt.data,
-	})
+async function createOrReplaceMedia({ where, data }: UploadOption) {
+	if (where) await media.delete(where)
+	return prisma.media.create({ data })
 }
 
 export async function uploadImages(formData: FormData, eventId: string, authorId: string) {
