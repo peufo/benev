@@ -17,8 +17,8 @@
 				}
 			}}
 		>
-			<button formaction="?/replace_member_user_by_member" class="btn">
-				REPLACE 'member.user' by 'member' in pages
+			<button formaction="?/update_members_avatarId" class="btn">
+				Update memmbers avatarId from user
 			</button>
 		</form>
 	</Card>

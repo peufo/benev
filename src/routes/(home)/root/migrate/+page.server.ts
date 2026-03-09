@@ -1,26 +1,18 @@
-import { tryOrFail } from 'fuma/server'
-import { prisma } from '$lib/server'
+import { formAction, tryOrFail } from 'fuma/server'
+import { permission, prisma } from '$lib/server'
 
 export const actions = {
-	replace_member_user_by_member: () =>
-		tryOrFail(async () => {
-			const pages = await prisma.page.findMany()
-			let count = 0
-			for (const page of pages) {
-				const found = page.content.match(/member\.user\./g)
-				const foundCount = found?.length || 0
-				if (foundCount) {
-					const content = page.content.replaceAll('member.user.', 'member.')
-					await prisma.page.update({
-						where: { id: page.id },
-						data: { content },
-					})
-				}
-				count += foundCount
-			}
-
-			return {
-				count,
-			}
-		}),
+	update_members_avatarId: formAction({}, async ({ locals }) => {
+		await permission.root(locals)
+		const users = await prisma.user.findMany()
+		let count = 0
+		for (const user of users) {
+			const res = await prisma.member.updateMany({
+				where: { userId: user.id, avatarId: { not: user.avatarId } },
+				data: { avatarId: user.avatarId },
+			})
+			count += res.count
+		}
+		return { count }
+	}),
 }
