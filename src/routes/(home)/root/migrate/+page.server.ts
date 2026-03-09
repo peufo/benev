@@ -1,4 +1,4 @@
-import { formAction, tryOrFail } from 'fuma/server'
+import { formAction } from 'fuma/server'
 import { permission, prisma } from '$lib/server'
 
 export const actions = {
@@ -8,7 +8,7 @@ export const actions = {
 		let count = 0
 		for (const user of users) {
 			const res = await prisma.member.updateMany({
-				where: { userId: user.id, avatarId: { not: user.avatarId } },
+				where: { userId: user.id },
 				data: { avatarId: user.avatarId },
 			})
 			count += res.count
