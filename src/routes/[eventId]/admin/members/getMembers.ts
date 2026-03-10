@@ -53,13 +53,11 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 
 	if (query.search) {
 		where.push({
-			user: {
-				OR: [
-					{ firstName: { contains: query.search } },
-					{ lastName: { contains: query.search } },
-					{ email: { contains: query.search } },
-				],
-			},
+			OR: [
+				{ firstName: { contains: query.search } },
+				{ lastName: { contains: query.search } },
+				{ email: { contains: query.search } },
+			],
 		})
 	}
 
@@ -100,11 +98,11 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			if (age === undefined) return undefined
 			return dayjs().subtract(age, 'year').toDate()
 		}
-		if (min || max || order) where.push({ user: { birthday: { not: null } } })
-		if (min) where.push({ user: { birthday: { lte: getDate(min) } } })
-		if (max) where.push({ user: { birthday: { gte: getDate(max) } } })
-		if (order === 'asc') orderBy.push({ user: { birthday: 'desc' } })
-		if (order === 'desc') orderBy.push({ user: { birthday: 'asc' } })
+		if (min || max || order) where.push({ birthday: { not: null } })
+		if (min) where.push({ birthday: { lte: getDate(min) } })
+		if (max) where.push({ birthday: { gte: getDate(max) } })
+		if (order === 'asc') orderBy.push({ birthday: 'desc' })
+		if (order === 'desc') orderBy.push({ birthday: 'asc' })
 	}
 
 	if (query.isValidedByEvent !== undefined) {
@@ -180,9 +178,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		query.subscribes_hours !== undefined ||
 		query.isProfileComplet !== undefined
 
-	orderBy.push({
-		user: { firstName: 'asc' },
-	})
+	orderBy.push({ firstName: 'asc' })
 
 	let members = await prisma.member
 		.findMany({
