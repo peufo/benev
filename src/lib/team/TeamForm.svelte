@@ -1,29 +1,28 @@
 <script lang="ts" context="module">
-	import type { Team, Member, Event, Field } from '@prisma/client'
+	import type { Event, Field } from '@prisma/client'
 	import { Form, tip } from 'fuma'
 
-	export type TeamWithLeaders = Team & {
-		leaders: Member[]
-	}
-	export type TeamFormComponent = ComponentType<Form<typeof modelTeam, TeamWithLeaders>>
+	export type TeamFormComponent = ComponentType<Form<typeof modelTeam, TeamWithComputedValues>>
 	export type TeamFormInstance = InstanceType<TeamFormComponent>
 </script>
 
 <script lang="ts">
 	import { page } from '$app/stores'
+	import { toast } from 'svelte-sonner'
 	import { InputText, InputTextarea, InputDate, InputBoolean } from 'fuma'
 
 	import { MemberConditions } from '$lib/member'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
 	import { eventPath } from '$lib/store'
-	import type { ComponentType } from 'svelte'
+	import { type ComponentType } from 'svelte'
 	import { modelTeam } from '$lib/models'
+	import type { TeamWithComputedValues } from '$lib/server'
 
 	let klass = ''
 	export { klass as class }
 
 	export let event: Event & { memberFields: Field[] }
-	export let team: Partial<TeamWithLeaders> = {}
+	export let team: Partial<TeamWithComputedValues> = {}
 	export let teamForm: TeamFormInstance | undefined = undefined
 
 	const TeamForm: TeamFormComponent = Form
@@ -36,6 +35,23 @@
 	bind:data={team}
 	on:success
 	bind:this={teamForm}
+	options={{
+		onSubmit({ action, cancel, submitter }) {
+			if (!action.searchParams.has('/team_delete')) return
+			const nb = team.nbSubscribes || 0
+			if (nb === 0) return
+			const msg = [
+				`Ce secteur contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
+				'Es-tu certain de vouloir le supprimer ?',
+			].join('\n')
+			if (confirm(msg)) return
+			cancel()
+			toast.info('Suppession du secteur annulée !')
+			setTimeout(() => {
+				submitter?.classList.remove('btn-disabled')
+			}, 200)
+		},
+	}}
 >
 	<InputText
 		key="name"

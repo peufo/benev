@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { Drawer } from 'fuma'
 	import InviteForm from './InviteForm.svelte'
-	import { TeamForm, type TeamFormInstance, type TeamWithLeaders } from './team'
+	import { TeamForm, type TeamFormInstance } from './team'
 	import { PeriodDrawer, PeriodForm } from './period'
 	import type { Event, Field, Tag } from '@prisma/client'
 	import { TagForm } from './tag'
-	import type { FormDataPeriod } from './server'
+	import type { FormDataPeriod, TeamWithComputedValues } from './server'
 
 	let teamForm: TeamFormInstance
 	let periodDrawer: PeriodDrawer
 	let periodForm: PeriodForm
 
 	export let event: Event & { memberFields: Field[] }
-	export let team: Partial<TeamWithLeaders> | null = null
+	export let team: Partial<TeamWithComputedValues> | null = null
 	export let period: Partial<FormDataPeriod> = {}
 
 	export let tag: Partial<Tag> | null = null
