@@ -20,17 +20,18 @@
 		InputRelations,
 		component,
 	} from 'fuma'
-	import type { Period, Tag, Team } from '@prisma/client'
+	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { api } from '$lib/api'
 	import { TagSelectItem } from '$lib/tag'
+	import { toast } from 'svelte-sonner'
 
-	type P = Partial<Period & { team: Team; tags: Tag[] }>
+	type PeriodProp = Partial<Period & { team: Team; tags: Tag[]; subscribes: Subscribe[] }>
 
 	let klass = ''
 	export { klass as class }
-	export let period: P = {}
+	export let period: PeriodProp = {}
 	export let disableRedirect = false
 
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -47,14 +48,29 @@
 		onSuccess: () => {
 			dispatch('success')
 		},
+		onSubmit({ action, cancel, submitter }) {
+			if (!action.searchParams.has('/period_delete')) return
+			const nb = period.subscribes?.length || 0
+			if (nb === 0) return
+			const msg = [
+				`Cette période de travail contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
+				'Es-tu certain de vouloir la supprimer ?',
+			].join('\n')
+			if (confirm(msg)) return
+			cancel()
+			toast.info('Suppession de la période annulée !')
+			setTimeout(() => {
+				submitter?.classList.remove('btn-disabled')
+			}, 200)
+		},
 	})
 
 	const detectChange = useDetectChange(period)
 	$: if (detectChange(period)) setPeriod(period)
 
-	function useDetectChange(periodInitial: P) {
+	function useDetectChange(periodInitial: PeriodProp) {
 		let currentPeriod = periodInitial
-		return (p: P) => {
+		return (p: PeriodProp) => {
 			const isChange =
 				p?.id !== currentPeriod?.id ||
 				p?.maxSubscribe !== currentPeriod?.maxSubscribe ||
@@ -85,14 +101,14 @@
 	$: diffDay = getDiffDay(end, start)
 	$: addADay = diffDay === 0 && end.getHours() < (start?.getHours() || 0)
 
-	export function setPeriod(_period: P) {
+	export function setPeriod(_period: PeriodProp) {
 		period = _period
 		start = period?.start || defaultStart
 		end = period?.end || defaultEnd
 		maxSubscribe = period?.maxSubscribe || 1
 	}
 
-	export function updatePeriod(updater: (p: P) => P) {
+	export function updatePeriod(updater: (p: PeriodProp) => PeriodProp) {
 		period = updater(period || {})
 	}
 
