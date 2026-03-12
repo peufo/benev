@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { Drawer } from 'fuma'
+	import { Drawer, Icon } from 'fuma'
 	import InviteForm from './InviteForm.svelte'
 	import { TeamForm, type TeamFormInstance } from './team'
 	import { PeriodDrawer, PeriodForm } from './period'
 	import type { Event, Field, Tag } from '@prisma/client'
 	import { TagForm } from './tag'
 	import type { FormDataPeriod, TeamWithComputedValues } from './server'
+	import MemberImportDialog from './member/MemberImportDialog.svelte'
+	import { mdiAccountMultiplePlus } from '@mdi/js'
 
 	let teamForm: TeamFormInstance
 	let periodDrawer: PeriodDrawer
@@ -16,6 +18,12 @@
 	export let period: Partial<FormDataPeriod> = {}
 
 	export let tag: Partial<Tag> | null = null
+
+	let importDialog: HTMLDialogElement
+
+	function openImportDialog() {
+		importDialog.showModal()
+	}
 </script>
 
 <Drawer key="form_invite" title="Inviter un nouveau membre" let:close>
@@ -26,7 +34,14 @@
 			await close()
 		}}
 	/>
+
+	<button class="menu-item" on:click={openImportDialog}>
+		<Icon path={mdiAccountMultiplePlus} size={20} />
+		<span>Importer des membres</span>
+	</button>
 </Drawer>
+
+<MemberImportDialog bind:dialog={importDialog} />
 
 <Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur" let:close>
 	<TeamForm bind:teamForm team={team || {}} {event} on:success={() => close()} />
