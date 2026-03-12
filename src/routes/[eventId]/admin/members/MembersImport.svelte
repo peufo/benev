@@ -1,12 +1,19 @@
 <script lang="ts">
 	import { ButtonCopy, DropDown, Icon, param } from 'fuma'
-	import { mdiCardAccountMailOutline, mdiFileDelimitedOutline, mdiTrayArrowDown } from '@mdi/js'
+	import {
+		mdiCardAccountMailOutline,
+		mdiFileDelimitedOutline,
+		mdiTrayArrowDown,
+		mdiAccountMultiplePlus,
+	} from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { toast } from 'svelte-sonner'
 	import { derived } from 'svelte/store'
+	import MemberImportDialog from '$lib/member/MemberImportDialog.svelte'
 
 	let dropdown: DropDown
+	let importDialog: HTMLDialogElement
 	type Mode = 'csv' | 'vcard'
 
 	let urlMembers = derived(page, ({ url }) => {
@@ -21,6 +28,11 @@
 		const res = await fetch($urlMembers('csv'))
 		const csv = await res.text()
 		return csv
+	}
+
+	function openImportDialog() {
+		dropdown.hide()
+		importDialog.showModal()
 	}
 </script>
 
@@ -47,5 +59,12 @@
 			<Icon path={mdiCardAccountMailOutline} size={20} />
 			<span>Télécharger les contacts</span>
 		</a>
+		<div class="divider my-1" />
+		<button class="menu-item" on:click={openImportDialog}>
+			<Icon path={mdiAccountMultiplePlus} size={20} />
+			<span>Importer des membres</span>
+		</button>
 	</div>
 </DropDown>
+
+<MemberImportDialog bind:dialog={importDialog} />
