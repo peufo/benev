@@ -209,7 +209,6 @@ model Field {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  badges    Badge[]
 
   @@unique([eventId, name])
 }
@@ -327,8 +326,6 @@ model Badge {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  field     Field?   @relation(fields: [fieldId], references: [id])
-  fieldId   String?
 
   @@unique([eventId, name])
 }
