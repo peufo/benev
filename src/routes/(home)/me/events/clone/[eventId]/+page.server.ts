@@ -75,14 +75,6 @@ export const actions = {
 					backgroundImage: backgroundImageId ? { connect: { id: backgroundImageId } } : {},
 					logo: logoId ? { connect: { id: logoId } } : {},
 					owner: { connect: { id: member.userId } },
-					members: {
-						create: {
-							userId: member.userId,
-							isAdmin: true,
-							isValidedByEvent: true,
-							isValidedByUser: true,
-						},
-					},
 					teams: {
 						create: teams.map((t) => cloneTeam(t, deltaTime)),
 					},
@@ -94,6 +86,16 @@ export const actions = {
 					},
 				},
 				include: { memberFields: true },
+			})
+
+			await prisma.member.create({
+				data: {
+					eventId: newEvent.id,
+					userId: member.userId,
+					isAdmin: true,
+					isValidedByEvent: true,
+					isValidedByUser: true,
+				},
 			})
 
 			const fieldsMap = createFieldsMap(newEvent.memberFields, event.memberFields)
