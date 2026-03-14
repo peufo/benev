@@ -3,7 +3,7 @@ import { formAction } from 'fuma/server'
 import { normalizePath } from '$lib/normalizePath'
 import { permission, prisma } from '$lib/server'
 import { clonePages, cloneData, cloneTeam } from '$lib/server/clone'
-import type { Prisma } from '@prisma/client'
+import { Prisma, type Field } from '@prisma/client'
 
 export const load = async ({ locals, params: { eventId } }) => {
 	await permission.admin(eventId, locals)
@@ -66,41 +66,55 @@ export const actions = {
 			} = event
 			const deltaTime = data.deltaDays * 1000 * 60 * 60 * 24
 			const name = await getAvailableCloneName(eventName)
-			const newEvent: Prisma.EventCreateInput = {
-				...copiedData,
-				id: normalizePath(name),
-				name,
-				closeSubscribing: closeSubscribing && new Date(closeSubscribing.getTime() + deltaTime),
-				backgroundImage: backgroundImageId ? { connect: { id: backgroundImageId } } : {},
-				logo: logoId ? { connect: { id: logoId } } : {},
-				owner: { connect: { id: member.userId } },
-				members: {
-					create: {
-						userId: member.userId,
-						isAdmin: true,
-						isValidedByEvent: true,
-						isValidedByUser: true,
+			const newEvent = await prisma.event.create({
+				data: {
+					...copiedData,
+					id: normalizePath(name),
+					name,
+					closeSubscribing: closeSubscribing && new Date(closeSubscribing.getTime() + deltaTime),
+					backgroundImage: backgroundImageId ? { connect: { id: backgroundImageId } } : {},
+					logo: logoId ? { connect: { id: logoId } } : {},
+					owner: { connect: { id: member.userId } },
+					members: {
+						create: {
+							userId: member.userId,
+							isAdmin: true,
+							isValidedByEvent: true,
+							isValidedByUser: true,
+						},
+					},
+					teams: {
+						create: teams.map((t) => cloneTeam(t, deltaTime)),
+					},
+					pages: {
+						create: clonePages(pages),
+					},
+					memberFields: {
+						create: memberFields.map(cloneData),
 					},
 				},
-				teams: {
-					create: teams.map((t) => cloneTeam(t, deltaTime)),
-				},
-				pages: {
-					create: clonePages(pages),
-				},
-				memberFields: {
-					create: memberFields.map(cloneData),
-				},
-				views: {
-					create: views.map(cloneData),
-				},
-			}
-			return prisma.event.create({
-				data: newEvent,
+				include: { memberFields: true },
 			})
+
+			const fieldsMap = createFieldsMap(newEvent.memberFields, event.memberFields)
+
+			// Importation des vues avec mapping des memberFields
+			await prisma.view.createMany({
+				data: event.views.map((sourceView) => {
+					let query = sourceView.query
+					for (const [fieldTarget, fieldSource] of fieldsMap) {
+						query = query.replaceAll(fieldSource.id, fieldTarget.id)
+					}
+					return { ...cloneData(sourceView), query, eventId: newEvent.id }
+				}),
+			})
+
+			// TODO: import members
+
+			return newEvent
 		},
 		{
-			redirectTo: (event) => `/${event.id}/admin/event`,
+			redirectTo: (newEvent) => `/${newEvent.id}/admin/event`,
 		}
 	),
 }
@@ -115,4 +129,13 @@ async function getAvailableCloneName(eventName: string): Promise<string> {
 	let suffix = 1
 	while (names.includes(`${eventName}_${suffix}`)) suffix++
 	return `${eventName}_${suffix}`
+}
+
+function createFieldsMap(fieldsSource: Field[], fieldsTarget: Field[]): Map<Field, Field> {
+	const fieldsMap = new Map<Field, Field>()
+	for (const fieldSource of fieldsSource) {
+		const fieldTarget = fieldsTarget.find((f) => f.name === fieldSource.name)
+		if (fieldTarget) fieldsMap.set(fieldSource, fieldTarget)
+	}
+	return fieldsMap
 }

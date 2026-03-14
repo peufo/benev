@@ -41,6 +41,18 @@
 	</button>
 </Drawer>
 
+<!--
+	TODO: remove this import members dialogue
+	instead, improve InviteForm like this:
+	- Invite form include member.profil part
+	- The event can be linked to previous events
+	- Each fields can be linked other event.field (filled if clone, editable)
+	- Events linked members (only one per account (more recent)) is proposed whene user tap email name or lastName
+	- Select a member autofill profil
+
+	NOTE: Le clonnage des vues est certainement peté à cause des fieldId
+-->
+
 <MemberImportDialog bind:dialog={importDialog} />
 
 <Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur" let:close>
