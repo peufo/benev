@@ -127,7 +127,7 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 			logoBenev: await svgToPngBuffer(logoBenev),
 			logoEvent: await getImageBuffer(badge.logoId),
 			background: await getImageBuffer(badge.backgroundId, {
-				grayscale: true,
+				// grayscale: true,
 				size: {
 					width: Math.round(LAYOUT.width * 3),
 					height: Math.round(LAYOUT.height * 3),
@@ -153,7 +153,7 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 				const contentH = LAYOUT.height - 2 * LAYOUT.padding
 				doc.rect(0, 0, LAYOUT.width, LAYOUT.height).fill(color)
 				doc.save()
-				doc.opacity(0.85)
+				// doc.opacity(0.85)
 				doc.roundedRect(
 					LAYOUT.padding,
 					LAYOUT.padding,
