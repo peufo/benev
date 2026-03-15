@@ -1,4 +1,4 @@
-import type { Prisma, Member, Event, Field } from '@prisma/client'
+import type { Prisma, Member, Event, Field, FieldType } from '@prisma/client'
 import { prisma } from '$lib/server'
 import { createAvatarPlaceholder } from '$lib/server'
 
@@ -119,11 +119,7 @@ export class MemberImportService {
 	/**
 	 * Transform profile data based on field mappings
 	 */
-	transformProfileData(
-		sourceProfileJson: any,
-		sourceFields: Field[],
-		fieldMappings: FieldMapping[]
-	): Record<string, any> {
+	transformProfileData(sourceProfileJson: any, fieldMappings: FieldMapping[]): Record<string, any> {
 		const transformedProfile: Record<string, any> = {}
 
 		fieldMappings.forEach((mapping) => {
@@ -170,7 +166,7 @@ export class MemberImportService {
 	/**
 	 * Main import function
 	 */
-	async importMembers(options: ImportOptions, authorUserId: string): Promise<ImportResult> {
+	async importMembers(options: ImportOptions): Promise<ImportResult> {
 		const result: ImportResult = {
 			success: false,
 			importedCount: 0,
@@ -186,13 +182,6 @@ export class MemberImportService {
 			// Get source members
 			const sourceMembers = await this.getSourceMembers(options.sourceEventId)
 			const selectedMembers = sourceMembers.filter((m) => options.selectedMemberIds.includes(m.id))
-
-			// Get target event fields
-			const targetFields = await this.getEventFields(options.targetEventId)
-			const targetEvent = await prisma.event.findUniqueOrThrow({
-				where: { id: options.targetEventId },
-				select: { name: true },
-			})
 
 			// Check for existing members
 			const memberEmails = selectedMembers.map((m) => m.email).filter(Boolean) as string[]
@@ -217,7 +206,6 @@ export class MemberImportService {
 					// Transform profile data
 					const transformedProfile = this.transformProfileData(
 						sourceMember.profileJson as Record<string, any>,
-						sourceMember.event.memberFields,
 						options.fieldMappings
 					)
 

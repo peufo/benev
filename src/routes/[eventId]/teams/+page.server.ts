@@ -137,8 +137,7 @@ export const actions = {
 				}),
 			])
 			const clone = cloneTeam(team, data.deltaTime)
-			// conditions and leaders are not parts of event.cloneTeam
-			clone.conditions = team.conditions || undefined
+			// leaders are not handle by cloneTeam()
 			clone.leaders = { connect: team.leaders }
 			return prisma.team.create({
 				data: {

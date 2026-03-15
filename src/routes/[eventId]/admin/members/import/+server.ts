@@ -110,7 +110,7 @@ export const POST = async ({ request, locals, params: { eventId } }) => {
 		}
 
 		// Execute import
-		const result = await memberImportService.importMembers(mappedOptions, member.userId)
+		const result = await memberImportService.importMembers(mappedOptions)
 
 		return json(result)
 	} catch (err) {

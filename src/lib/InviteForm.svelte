@@ -18,7 +18,7 @@
 		if (!success) return
 		isLoadingUserExists = true
 		const res = await $api.user(email).finally(() => (isLoadingUserExists = false))
-		if (res.firstName) {
+		if (res) {
 			user.firstName = res.firstName
 			user.lastName = res.lastName
 			toast.success('Utilisateur trouvé !')
@@ -28,6 +28,12 @@
 	function onSuccess(action: URL, data: unknown) {
 		onCreate(data as Member)
 	}
+
+	// TODO: ajouter l'édition du profile ici
+
+	// TODO: Lors de la recherche
+	// Si l'utilisateur est membre d'un évenement auquel on est admin ou responsable,
+	// Remplir automatiquement le profile depuis l'événement le plus récent
 </script>
 
 <Form

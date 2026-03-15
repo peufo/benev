@@ -64,7 +64,9 @@ export const api = derived(page, ({ params: { eventId } }) => {
 		team: methods<TeamWithComputedValues, { onlyAvailable?: boolean }>(`/${eventId}/api/teams`),
 		tag: methods<Tag>(`/${eventId}/api/tags`),
 		user: (email: string) =>
-			get<{ firstName: string; lastName: string }>(`/${eventId}/api/user`, { params: { email } }),
+			get<{ firstName: string; lastName: string } | null>(`/${eventId}/api/user`, {
+				params: { email },
+			}),
 		rootUser: methods<User>(`/root/users`),
 		fields: {
 			search: search<Field, { types?: FieldType[] }>(`/${eventId}/api/fields`),

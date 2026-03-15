@@ -17,8 +17,7 @@ export function cloneTeam(
 		overflowPermitted: team.overflowPermitted,
 		closeSubscribing:
 			team.closeSubscribing && new Date(team.closeSubscribing.getTime() + deltaTimeMS),
-		// TODO: fix fields references
-		//conditions: team.conditions || undefined,
+		conditions: team.conditions || undefined,
 		position: team.position,
 		periods: {
 			create: team.periods.map((p) => clonePeriod(p, deltaTimeMS)),

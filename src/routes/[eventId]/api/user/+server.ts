@@ -8,8 +8,9 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 		email: z.string().email(),
 	})
 	const user = await prisma.user.findFirst({ where: { email } })
+	if (!user) return json(null)
 	return json({
-		firstName: user?.firstName,
-		lastName: user ? `${user.lastName[0]}.` : undefined,
+		firstName: user.firstName,
+		lastName: `${user.lastName[0]}.`,
 	})
 }

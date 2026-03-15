@@ -31,7 +31,7 @@ export const GET = async ({ url, params: { mediaId } }) => {
 	})
 
 	if (!buffer) error(404)
-	return new Response(buffer, {
+	return new Response(new Uint8Array(buffer), {
 		headers: {
 			'content-type': 'image/webp',
 		},
