@@ -9,9 +9,10 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 		search: z.string().optional(),
 		ids: z.jsonArray(z.string()).optional(),
 		take: z.coerce.number().default(5),
+		anyEvents: z.coerce.boolean(),
 	})
 
-	const { search = '', take, ids } = data
+	const { search = '', take, ids, anyEvents } = data
 
 	if (ids)
 		return json(
@@ -20,15 +21,22 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 			})
 		)
 
+	const eventsId = anyEvents
+		? await prisma.member
+				.findMany({ where: { isAdmin: true }, select: { eventId: true } })
+				.then((members) => members.map((m) => m.eventId))
+		: [eventId]
+
 	const members = await prisma.member.findMany({
 		where: {
-			eventId,
+			eventId: { in: eventsId },
 			OR: [
 				{ lastName: { contains: search } },
 				{ firstName: { contains: search } },
 				{ email: { contains: search } },
 			],
 		},
+		orderBy: { updatedAt: 'desc' },
 		take,
 	})
 

@@ -60,7 +60,7 @@ export const api = derived(page, ({ params: { eventId } }) => {
 
 	return {
 		eventGet,
-		member: methods<Member>(`/${eventId}/api/members`),
+		member: methods<Member, { anyEvents?: boolean }>(`/${eventId}/api/members`),
 		team: methods<TeamWithComputedValues, { onlyAvailable?: boolean }>(`/${eventId}/api/teams`),
 		tag: methods<Tag>(`/${eventId}/api/tags`),
 		user: (email: string) =>

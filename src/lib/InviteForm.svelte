@@ -14,6 +14,7 @@
 	let user = { firstName: '', lastName: '' }
 
 	async function handleEmailInput() {
+		// Search member
 		const { success } = z.safeParse(z.email(), email)
 		if (!success) return
 		isLoadingUserExists = true
@@ -29,10 +30,10 @@
 		onCreate(data as Member)
 	}
 
-	// TODO: ajouter l'édition du profile ici
-
-	// TODO: Lors de la recherche
+	// TODO: ajouter l'édition du profile
+	// Lors de la recherche <-- Comment gérer la recherche dans L'ui ?
 	// Si l'utilisateur est membre d'un évenement auquel on est admin ou responsable,
+	// $api.member.search('xyz', { anyEvents: true })
 	// Remplir automatiquement le profile depuis l'événement le plus récent
 </script>
 
