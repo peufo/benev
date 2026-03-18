@@ -138,11 +138,11 @@ export const actions = {
 			])
 			const clone = cloneTeam(team, data.deltaTime)
 			// leaders are not handle by cloneTeam()
-			clone.leaders = { connect: team.leaders }
+			clone.leaders = { connect: team.leaders.map(({ id }) => ({ id })) }
 			return prisma.team.create({
 				data: {
 					...clone,
-					eventId,
+					event: { connect: { id: eventId } },
 					name: getTeamCopyName(clone.name, teams),
 				},
 			})
