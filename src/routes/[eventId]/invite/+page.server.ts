@@ -96,6 +96,7 @@ export const actions = {
 					userId: session.user.id,
 					eventId,
 					isValidedByEvent,
+					isValidedByUser: true,
 				},
 			})
 			const member = await getMemberProfile({ id })
