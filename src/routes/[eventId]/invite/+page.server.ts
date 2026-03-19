@@ -111,22 +111,20 @@ export const actions = {
 			})
 			const adminsEmail = admins.map((a) => a.email as string)
 
-			const emailOptions = {
-				from: member.event.name,
-				subject: 'Invitation acceptée',
-				props: { member },
-			}
-
 			await Promise.all([
 				sendEmailModel(eventId, 'invitation_accept', {
-					...emailOptions,
+					subject: 'Adhesion validée',
+					from: member.event.name,
 					to: member.email,
+					props: { member },
 					replyTo: adminsEmail,
 				}),
 				!!adminsEmail.length &&
 					sendEmailComponent(EmailAcceptInviteNotification, {
-						...emailOptions,
+						subject: 'Nouvelle adhesion',
+						from: member.event.name,
 						to: adminsEmail,
+						props: { member },
 						replyTo: member.email,
 					}),
 			])
