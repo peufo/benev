@@ -7,6 +7,12 @@
 	export let data
 </script>
 
+{#if data.memberCanRegister}
+	<div class="text-center my-8">
+		<a href="{$eventPath}/register" class="btn btn-primary"> Je veux devenir bénévole </a>
+	</div>
+{/if}
+
 <Page page={data.page}>
 	<svelte:fragment slot="placeholder">
 		{#if data.member?.roles.includes('admin')}
