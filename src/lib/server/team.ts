@@ -34,9 +34,9 @@ export function useAddTeamComputedValues(
 		const nbSubscribes = nbSubscribesAccepted + nbSubscribesRequest
 		const maxSubscribes = team.periods.map((p) => p.maxSubscribe).reduce((acc, cur) => acc + cur, 0)
 		const isLeader =
-			ctx?.isLeader ||
-			ctx?.member?.roles.includes('admin') ||
-			!!ctx?.member?.leaderOf.find((t) => t.id === team.id)
+			ctx.isLeader ||
+			ctx.member?.roles.includes('admin') ||
+			!!team.leaders.find((m) => ctx.member?.id === m.id)
 		const closeSubscribing = team?.closeSubscribing || event.closeSubscribing
 		const DAY = 1000 * 60 * 60 * 24
 		const isClosedSubscribing =
