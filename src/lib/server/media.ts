@@ -40,7 +40,7 @@ export const media = {
 		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }
 
 		if (image.size === 0) throw new Error('image.size is equal to 0')
-		if (crop === undefined) throw new Error(`no crop data in  data[${keyCrop}]`)
+		if (crop === undefined) throw new Error(`no crop data in data[${keyCrop}]`)
 
 		const imageBuffer = await image.arrayBuffer()
 
@@ -54,6 +54,7 @@ export const media = {
 			.finally(async () => await fs.mkdir(mediaPath, { recursive: true }))
 
 		await sharp(imageBuffer)
+			.rotate()
 			.extract({
 				left: crop.x,
 				top: crop.y,
