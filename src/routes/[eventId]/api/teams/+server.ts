@@ -1,6 +1,6 @@
 import { parseQuery } from 'fuma/server'
 import { z } from 'fuma/validation'
-import { prisma, permission, json, useAddTeamComputedValues, safeUserSelect } from '$lib/server'
+import { prisma, permission, json, useAddTeamComputedValues } from '$lib/server'
 
 export const GET = async ({ params: { eventId }, url, locals }) => {
 	const member = await permission.leader(eventId, locals)
@@ -31,6 +31,7 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 				name: { contains: search },
 			},
 			include: {
+				leaders: true,
 				periods: {
 					include: {
 						subscribes: {
@@ -43,11 +44,6 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 							},
 						},
 						tags: true,
-					},
-				},
-				leaders: {
-					include: {
-						user: { select: safeUserSelect },
 					},
 				},
 			},

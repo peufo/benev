@@ -1,5 +1,5 @@
 import { periodIsComplet } from '$lib/period'
-import { parseFormKey, prisma, safeUserSelect } from '$lib/server'
+import { parseFormKey, prisma } from '$lib/server'
 
 export type FormDataPeriod = Awaited<ReturnType<typeof getPeriod>>
 
@@ -11,13 +11,7 @@ async function getPeriod(id: string) {
 			tags: true,
 			subscribes: {
 				include: {
-					member: {
-						include: {
-							user: {
-								select: safeUserSelect,
-							},
-						},
-					},
+					member: true,
 				},
 			},
 		},

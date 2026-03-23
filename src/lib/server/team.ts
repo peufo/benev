@@ -4,15 +4,6 @@ import { prisma } from './prisma'
 import type { MemberWithComputedValues } from './member'
 import { periodIsComplet } from '$lib/period'
 
-export const safeUserSelect = {
-	firstName: true,
-	lastName: true,
-	email: true,
-	phone: true,
-	avatarId: true,
-	avatarPlaceholder: true,
-} satisfies Prisma.UserSelect
-
 type TeamWithLeadersAndPeriodsSubscribes = Team & {
 	leaders: Member[]
 	periods: (Period & {
@@ -127,11 +118,7 @@ export async function getTeam(teamId: string, ctx?: AddTeamComputedValuesContext
 		.findUniqueOrThrow({
 			where: { id: teamId },
 			include: {
-				leaders: {
-					include: {
-						user: { select: safeUserSelect },
-					},
-				},
+				leaders: true,
 				periods: {
 					orderBy: { start: 'asc' },
 					include: {

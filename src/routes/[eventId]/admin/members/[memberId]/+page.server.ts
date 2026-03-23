@@ -1,11 +1,5 @@
 import { formAction } from 'fuma/server'
-import {
-	prisma,
-	getMemberProfile,
-	permission,
-	ensureLicenceMembers,
-	safeUserSelect,
-} from '$lib/server'
+import { prisma, getMemberProfile, permission, ensureLicenceMembers } from '$lib/server'
 import { z } from 'fuma/validation'
 import { modelUserContactUpdate } from '$lib/models'
 
@@ -27,6 +21,7 @@ export const load = async ({ parent, params: { memberId, eventId } }) => {
 				teams: {
 					where: { periods: { some: { subscribes: { some: { memberId } } } } },
 					include: {
+						leaders: true,
 						periods: {
 							where: { subscribes: { some: { memberId } } },
 							include: {
@@ -43,13 +38,6 @@ export const load = async ({ parent, params: { memberId, eventId } }) => {
 								tags: true,
 							},
 							orderBy: { start: 'asc' },
-						},
-						leaders: {
-							include: {
-								user: {
-									select: safeUserSelect,
-								},
-							},
 						},
 					},
 				},

@@ -1,6 +1,6 @@
 import { z } from 'fuma'
 import { formAction, parseQuery } from 'fuma/server'
-import { useAddTeamComputedValues, permission, prisma, safeUserSelect } from '$lib/server'
+import { useAddTeamComputedValues, permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
 import { error } from '@sveltejs/kit'
@@ -38,13 +38,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				...(search && { name: { contains: search } }),
 			},
 			include: {
-				leaders: {
-					include: {
-						user: {
-							select: safeUserSelect,
-						},
-					},
-				},
+				leaders: true,
 				periods: {
 					include: {
 						subscribes: {
