@@ -15,7 +15,13 @@ export const actions = {
 			const userId = await validateToken('passwordReset', params.tokenId)
 			const user = await auth.getUser(userId)
 			await auth.invalidateAllUserSessions(user.id)
-			await auth.updateKeyPassword('email', user.email, data.password)
+			await auth.deleteKey('email', user.id)
+			await auth.createKey({
+				userId: user.id,
+				providerId: 'email',
+				password: data.password,
+				providerUserId: user.email,
+			})
 			if (!user.isEmailVerified) {
 				await auth.updateUserAttributes(user.id, {
 					isEmailVerified: true,
