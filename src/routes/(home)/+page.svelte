@@ -10,10 +10,6 @@
 </script>
 
 <div class="relative">
-	<div
-		class="absolute inset-0 bg-gradient-to-b from-primary/[0.06] via-secondary/[0.04] to-transparent -z-10"
-	/>
-
 	<div class="max-w-lg mx-auto flex flex-col py-16">
 		<Card class="border-base-200/60 shadow-xl">
 			<div class="text-center">

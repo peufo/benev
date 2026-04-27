@@ -7,6 +7,10 @@
 	export let data
 </script>
 
+<div
+	class="absolute inset-0 bg-gradient-to-b from-primary/[0.06] via-secondary/[0.04] to-transparent -z-10"
+/>
+
 <Header user={data.user}>
 	<a
 		slot="start"
