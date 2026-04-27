@@ -1,49 +1,13 @@
 <script lang="ts">
-	import { mdiChevronDown } from '@mdi/js'
 	import { CardBasic, Icon } from 'fuma'
-	import '$lib/style/animate.css'
+	import AnimatedTitle from '$lib/AnimatedTitle.svelte'
 	import { features } from '$lib/features'
 
 	export let title = 'Les possibilités'
-	const titleLength = title.length
-
-	const ANIMATION_STEP = 35
 </script>
 
 <section class="mt-8 mb-10 max-w-7xl mx-auto">
-	<div class="flex justify-center gap-4">
-		<Icon
-			path={mdiChevronDown}
-			size={30}
-			class="opacity-60 animate__pulse"
-			style="
-				--animate-rotate: {(titleLength / 2) * -2}deg;
-			"
-		/>
-		<h2 class="title text-2xl">
-			{#each title.split('') as char, index}
-				<span
-					class="inline-block animate__pulse"
-					class:mr-2={char === ' '}
-					style="
-						--animate-delay: {ANIMATION_STEP * (index + 1)}ms;
-						--animate-rotate: {(titleLength / 2 - index) * -2}deg;
-					"
-				>
-					{char}
-				</span>
-			{/each}
-		</h2>
-		<Icon
-			path={mdiChevronDown}
-			size={30}
-			class="opacity-60 animate__pulse"
-			style="
-				--animate-delay: {(titleLength + 2) * ANIMATION_STEP}ms;
-				--animate-rotate: {(titleLength / 2) * 2}deg;
-			"
-		/>
-	</div>
+	<AnimatedTitle {title} />
 	<div
 		class="grid gap-4 items-start overflow-auto mt-14"
 		style="grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr)"
