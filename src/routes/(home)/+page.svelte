@@ -4,34 +4,45 @@
 	import Benev from '$lib/Benev.svelte'
 	import { Card } from 'fuma'
 	import { Features } from '$lib/features'
+	import { Testimonials } from '$lib/testimonials'
 
 	export let data
 </script>
 
-<div class="max-w-lg mx-auto flex flex-col py-10">
-	<Card>
-		<div class="text-center">
-			<img src={logo} alt="Logo benev" class="w-36 mx-auto mt-8" />
+<div class="relative">
+	<div
+		class="absolute inset-0 bg-gradient-to-b from-primary/[0.06] via-secondary/[0.04] to-transparent -z-10"
+	/>
 
-			<h1 class="mt-2 text-4xl">
-				<Benev />
-			</h1>
+	<div class="max-w-lg mx-auto flex flex-col py-16">
+		<Card class="border-base-200/60 shadow-xl">
+			<div class="text-center">
+				<img src={logo} alt="Logo benev" class="w-36 mx-auto mt-8" />
 
-			<h2 class="text-base-content/80 mt-12">Ta plateforme de gestion de bénévoles</h2>
+				<h1 class="mt-2 text-4xl">
+					<Benev />
+				</h1>
 
-			<div class="mt-3 flex justify-center gap-2">
-				<span class="badge text-base-content/80 shadow-md">simple</span>
-				<span class="badge text-base-content/80 shadow-md">open source</span>
-				<span class="badge text-base-content/80 shadow-md">abordable</span>
+				<h2 class="text-base-content/70 mt-12 text-lg font-medium">
+					Ta plateforme de gestion de bénévoles
+				</h2>
+
+				<div class="mt-4 flex justify-center gap-2 flex-wrap">
+					<span class="badge badge-primary badge-outline shadow-sm">simple</span>
+					<span class="badge badge-secondary badge-outline shadow-sm">open source</span>
+					<span class="badge badge-primary badge-outline shadow-sm">abordable</span>
+				</div>
 			</div>
-		</div>
 
-		<div class="grid place-content-center mt-12 mb-10">
-			<a href="/me" class="btn btn-primary">
-				{data.user ? 'Voir mes évènements' : 'Essayer maintenant'}
-			</a>
-		</div>
-	</Card>
+			<div class="grid place-content-center mt-12 mb-10">
+				<a href="/me" class="btn btn-primary shadow-lg hover:shadow-xl transition-shadow">
+					{data.user ? 'Voir mes évènements' : 'Essayer maintenant'}
+				</a>
+			</div>
+		</Card>
+	</div>
 </div>
 
 <Features />
+
+<Testimonials />
