@@ -7,8 +7,9 @@
 	export let data
 </script>
 
+<!-- Background gradient -->
 <div
-	class="absolute inset-0 bg-gradient-to-b from-primary/[0.06] via-secondary/[0.04] to-transparent -z-10"
+	class="absolute inset-0 bg-gradient-to-b from-[#c7b198]/10 via-[#c7b198]/5 to-transparent -z-10"
 />
 
 <Header user={data.user}>
@@ -30,7 +31,10 @@
 	</svelte:fragment>
 </Header>
 
-<main class="grow p-2 sm:p-4">
+<main class="grow p-2 sm:p-4 relative">
+	<div
+		class="absolute inset-0 bg-gradient-to-b from-[#c7b198]/10 via-[#c7b198]/5 to-transparent -z-10"
+	/>
 	<slot />
 </main>
 

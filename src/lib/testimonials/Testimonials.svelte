@@ -1,51 +1,67 @@
 <script lang="ts">
 	import { mdiOpenInNew } from '@mdi/js'
-	import { CardBasic, Icon } from 'fuma'
-	import AnimatedTitle from '$lib/AnimatedTitle.svelte'
+	import { Icon } from 'fuma'
 	import { testimonials } from './testimonials'
-
-	export let title = 'Ils nous font confiance'
 </script>
 
-<section class="mt-8 mb-10 max-w-7xl mx-auto">
-	<AnimatedTitle {title} />
+<section class="py-20 md:py-28">
+	<div class="max-w-5xl mx-auto px-4 sm:px-6">
+		<div class="text-center mb-16 md:mb-20">
+			<h2 class="text-3xl md:text-4xl font-bold text-[#0d3b66]">
+				Ils nous font confiance
+			</h2>
+			<p class="mt-4 text-lg text-base-content/70">
+				Des organisateurs qui ont simplifié leur gestion bénévole.
+			</p>
+		</div>
 
-	<div class="grid gap-6 mt-14 md:grid-cols-2">
-		{#each testimonials as t}
-			<CardBasic class="shadow p-6 relative overflow-hidden">
-				<div class="flex flex-col gap-5">
-					<div class="flex items-center gap-4">
-						<img
-							src={t.image}
-							alt="Photo de {t.name}"
-							class="w-20 h-20 rounded-full object-cover border-2 border-primary/20 shadow-sm"
-						/>
-						<div>
-							<p class="font-semibold text-lg text-base-content/90">{t.name}</p>
-							<p class="text-sm text-base-content/60">{t.role}</p>
-							<a
-								href={t.eventUrl}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="text-sm text-primary hover:underline inline-flex items-center gap-1 mt-1"
-							>
-								{t.eventName}
-								<Icon path={mdiOpenInNew} size={14} class="opacity-70" />
-							</a>
-							<span class="text-xs text-base-content/50 ml-1">({t.volunteersCount})</span>
-						</div>
-					</div>
+		<div class="grid gap-8 md:grid-cols-2">
+			{#each testimonials as t}
+				<blockquote
+					class="
+						relative p-8 rounded-2xl
+						bg-base-100 border border-base-200/60
+						hover:shadow-lg hover:border-[#c7b198]/30
+						transition-shadow duration-300
+					"
+				>
+					<!-- Quote mark -->
+					<span class="absolute top-6 left-6 text-6xl text-[#c7b198]/20 font-serif leading-none">
+						&ldquo;
+					</span>
 
-					<blockquote class="relative">
-						<span class="absolute -top-2 -left-1 text-4xl text-primary/10 font-serif leading-none">
-							&ldquo;
-						</span>
-						<p class="italic text-base-content/80 leading-relaxed pl-5">
+					<div class="relative">
+						<p class="text-base-content/80 leading-relaxed text-base italic pl-4">
 							{t.quote}
 						</p>
-					</blockquote>
-				</div>
-			</CardBasic>
-		{/each}
+
+						<footer class="mt-6 flex items-center gap-4">
+							<img
+								src={t.image}
+								alt="Photo de {t.name}"
+								class="w-14 h-14 rounded-full object-cover border-2 border-[#c7b198]/30"
+							/>
+							<div>
+								<cite class="not-italic font-semibold text-base-content/90">
+									{t.name}
+								</cite>
+								<p class="text-sm text-base-content/60">
+									{t.role}, {t.eventName}
+								</p>
+								<a
+									href={t.eventUrl}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="inline-flex items-center gap-1 text-sm text-[#0d3b66] hover:underline mt-0.5"
+								>
+									<span>{t.volunteersCount}</span>
+									<Icon path={mdiOpenInNew} size={12} class="opacity-60" />
+								</a>
+							</div>
+						</footer>
+					</div>
+				</blockquote>
+			{/each}
+		</div>
 	</div>
 </section>
