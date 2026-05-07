@@ -8,5 +8,5 @@ export default defineConfig({
 		environment: 'happy-dom',
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 	},
-	server: { fs: { allow: ['media'] } },
+	server: { fs: { allow: ['media'] }, allowedHosts: ['mac-de-jo.local'] },
 })
