@@ -115,43 +115,43 @@ The application is built as a server-rendered full-stack app with a rich admin i
 
 ## Build and Development Commands
 
-Use **pnpm** (lockfile is `pnpm-lock.yaml`). `.npmrc` enforces `engine-strict=true`.
+Use **Bun** (lockfile is `bun.lock`).
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Development server (Vite, host enabled)
-pnpm dev
+bun dev
 
 # Build for production
-pnpm build
+bun build
 
 # Preview production build
-pnpm preview
+bun preview
 
 # Prisma
-pnpm generate          # Generate Prisma client
-pnpm migrate           # Run migrations in dev mode
-pnpm migrate:deploy    # Run migrations in production
-pnpm studio            # Open Prisma Studio
+bun generate          # Generate Prisma client
+bun migrate           # Run migrations in dev mode
+bun migrate:deploy    # Run migrations in production
+bun studio            # Open Prisma Studio
 
 # Testing
-pnpm vitest            # Unit tests (Vitest + happy-dom)
-pnpm test              # E2E tests (Playwright with UI)
-pnpm test-gen          # Generate Playwright tests via codegen
+bun vitest            # Unit tests (Vitest + happy-dom)
+bun test              # E2E tests (Playwright with UI)
+bun test-gen          # Generate Playwright tests via codegen
 
 # Linting and formatting
-pnpm lint              # Prettier check + ESLint
-pnpm format            # Prettier write
-pnpm check             # Svelte type-checking
-pnpm check:watch       # Svelte type-checking in watch mode
+bun lint              # Prettier check + ESLint
+bun format            # Prettier write
+bun check             # Svelte type-checking
+bun check:watch       # Svelte type-checking in watch mode
 
 # Production start (requires build first)
-pnpm start             # Runs prisma migrate deploy then node ./build/index.js
+bun start             # Runs prisma migrate deploy then node ./build/index.js
 
 # Stripe webhook forwarding (dev)
-pnpm dev:stripe        # Forward Stripe webhooks to localhost
+bun dev:stripe        # Forward Stripe webhooks to localhost
 ```
 
 ### Important Build Notes
@@ -244,13 +244,13 @@ pnpm vitest
 - Tests use fixture helpers (`tests/user.ts`, `tests/event.ts`, `tests/member.ts`) to create isolated test users and events with unique CUIDs.
 
 ```bash
-pnpm test        # UI mode
-pnpm test-gen    # Codegen against dev server (localhost:5173)
+bun test        # UI mode
+bun test-gen    # Codegen against dev server (localhost:5173)
 ```
 
 ### Running E2E Against Dev Server
 
-For faster iteration, you can run the dev server (`pnpm dev`) and use Playwright codegen or UI mode against `localhost:5173`.
+For faster iteration, you can run the dev server (`bun dev`) and use Playwright codegen or UI mode against `localhost:5173`.
 
 ---
 
@@ -267,7 +267,7 @@ For faster iteration, you can run the dev server (`pnpm dev`) and use Playwright
 Run migrations before starting the app:
 
 ```bash
-pnpm migrate:deploy
+bun migrate:deploy
 ```
 
 ---
@@ -330,7 +330,7 @@ The project is containerized and deployed via Docker:
 
 1. **Dockerfile**: uses `oven/bun:latest`, installs OpenSSL, installs deps with `bun`, builds the app, and runs `bun start`.
 2. **GitHub Actions** (`.github/workflows/`): on every push to `main`, builds and pushes the Docker image to `ghcr.io`.
-3. **Runtime**: `pnpm start` runs Prisma migrations then starts the Node server from `./build/index.js`.
+3. **Runtime**: `bun start` runs Prisma migrations then starts the Node server from `./build/index.js`.
 
 ---
 

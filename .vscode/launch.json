@@ -5,7 +5,7 @@
       "type": "node",
       "request": "launch",
       "name": "Debug Server",
-      "runtimeExecutable": "pnpm",
+      "runtimeExecutable": "bun",
       "runtimeArgs": ["run", "dev"],
       "console": "integratedTerminal"
     },
