@@ -15,7 +15,7 @@
 				<!-- Texte -->
 				<div class="text-left">
 					<h1
-						class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0d3b66] leading-[1.1] tracking-tight"
+						class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary leading-[1.1] tracking-tight"
 					>
 						Moins d'admin,
 						<br />
@@ -31,10 +31,9 @@
 						<a
 							href="/me"
 							class="
-								btn btn-lg btn-primary bg-[#0d3b66] border-[#0d3b66] text-white
-								hover:bg-[#092b4d] hover:border-[#092b4d]
+								btn btn-lg btn-primary
 								shadow-lg hover:shadow-xl
-								transition-all duration-200
+								transition-shadow duration-200
 								min-w-[220px]
 							"
 						>
@@ -44,8 +43,8 @@
 						<a
 							href="#workflow"
 							class="
-								btn btn-lg btn-ghost text-[#0d3b66]
-								hover:bg-[#0d3b66]/5
+								btn btn-lg btn-ghost text-primary
+								hover:bg-primary/5
 								transition-colors duration-200
 							"
 						>
@@ -57,7 +56,7 @@
 				<!-- Logo animé -->
 				<div class="hidden md:flex items-center justify-center relative">
 					<div
-						class="w-72 h-72 rounded-full bg-gradient-to-br from-[#c7b198]/40 to-[#0d3b66]/10 blur-2xl absolute"
+						class="w-72 h-72 rounded-full bg-gradient-to-br from-brand-beige/40 to-primary/10 blur-2xl absolute"
 					/>
 					<div class="relative w-64">
 						<AnimatedLogo />
@@ -68,7 +67,7 @@
 	</section>
 
 	<!-- Trust band -->
-	<section class="border-y border-[#c7b198]/20 bg-[#c7b198]/5">
+	<section class="border-y border-brand-beige/20 bg-brand-beige/5">
 		<div class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
 			<div class="flex flex-col md:flex-row items-center justify-between gap-4">
 				<div
@@ -79,15 +78,15 @@
 						Gratuit et open source
 					</span>
 					<span class="flex items-center gap-2">
-						<span class="w-2 h-2 rounded-full bg-[#c7b198]" />
+						<span class="w-2 h-2 rounded-full bg-brand-beige" />
 						Solide et éprouvé
 					</span>
 					<span class="flex items-center gap-2">
-						<span class="w-2 h-2 rounded-full bg-[#0d3b66]" />
+						<span class="w-2 h-2 rounded-full bg-primary" />
 						Simple et flexible
 					</span>
 				</div>
-				<a href="/about" class="btn btn-sm btn-ghost text-[#0d3b66] hover:bg-[#0d3b66]/5">
+				<a href="/about" class="btn btn-sm btn-ghost text-primary hover:bg-primary/5">
 					Vraiment gratuit ?
 				</a>
 			</div>

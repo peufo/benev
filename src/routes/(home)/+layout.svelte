@@ -9,7 +9,7 @@
 
 <!-- Background gradient -->
 <div
-	class="absolute inset-0 bg-gradient-to-b from-[#c7b198]/10 via-[#c7b198]/5 to-transparent -z-10"
+	class="absolute inset-0 bg-gradient-to-b from-brand-beige/10 via-brand-beige/5 to-transparent -z-10"
 />
 
 <Header user={data.user}>
@@ -33,7 +33,7 @@
 
 <main class="grow p-2 sm:p-4 relative">
 	<div
-		class="absolute inset-0 bg-gradient-to-b from-[#c7b198]/10 via-[#c7b198]/5 to-transparent -z-10"
+		class="absolute inset-0 bg-gradient-to-b from-brand-beige/10 via-brand-beige/5 to-transparent -z-10"
 	/>
 	<slot />
 </main>

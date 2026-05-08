@@ -2,7 +2,7 @@
 	export let user: { email?: string } | null = null
 </script>
 
-<section class="py-20 md:py-28 bg-[#0d3b66]">
+<section class="py-20 md:py-28 bg-primary">
 	<div class="max-w-4xl mx-auto px-4 sm:px-6">
 		<div class="grid md:grid-cols-2 gap-10 items-center">
 			<div>
@@ -19,10 +19,10 @@
 				<a
 					href="/me"
 					class="
-						btn btn-lg bg-[#c7b198] border-[#c7b198] text-[#0d3b66]
+						btn btn-lg bg-brand-beige border-brand-beige text-primary
 						hover:bg-[#b8a58a] hover:border-[#b8a58a]
 						shadow-lg hover:shadow-xl
-						transition-all duration-200
+						transition-shadow duration-200
 					"
 				>
 					{user ? 'Voir mes événements' : 'Essayer Benev'}

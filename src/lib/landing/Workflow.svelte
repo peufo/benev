@@ -5,7 +5,7 @@
 			description: 'Configure les équipes, les shifts et les besoins en bénévoles.',
 		},
 		{
-			title: 'Les bénévoles s\'inscrivent',
+			title: "Les bénévoles s'inscrivent",
 			description: 'Ils parcourent les secteurs et choisissent leurs créneaux en autonomie.',
 		},
 		{
@@ -22,19 +22,17 @@
 <section id="workflow" class="py-20 md:py-28">
 	<div class="max-w-6xl mx-auto px-4 sm:px-6">
 		<div class="mb-16 md:mb-20">
-			<h2 class="text-3xl md:text-4xl font-extrabold text-[#0d3b66] tracking-tight">
+			<h2 class="text-3xl md:text-4xl font-extrabold text-primary tracking-tight">
 				Comment ça marche
 			</h2>
 			<p class="mt-4 text-lg text-base-content/70 max-w-xl">
-				Quatre étapes simples pour passer de l'idée à l'organisation sans friction.
+				Quatre étapes simples pour se débarasser de tes fichiers Excel rudimentaires.
 			</p>
 		</div>
 
 		<div class="relative">
 			<!-- Connecting line -->
-			<div
-				class="hidden md:block absolute top-3 left-0 right-0 h-px bg-[#c7b198]/30"
-			/>
+			<div class="hidden md:block absolute top-3 left-0 right-0 h-px bg-brand-beige/30" />
 
 			<div class="grid gap-12 md:gap-6 md:grid-cols-4">
 				{#each steps as step, i}
@@ -43,14 +41,14 @@
 						<div
 							class="
 								relative z-10 w-6 h-6 rounded-full flex items-center justify-center
-								bg-[#0d3b66] text-white text-xs font-bold
+								bg-primary text-white text-xs font-bold
 							"
 						>
 							{i + 1}
 						</div>
 
 						<div class="mt-6">
-							<h3 class="text-lg font-bold text-[#0d3b66]">
+							<h3 class="text-lg font-bold text-primary">
 								{step.title}
 							</h3>
 							<p class="mt-2 text-base-content/60 text-sm leading-relaxed max-w-[260px]">

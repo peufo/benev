@@ -13,11 +13,14 @@
 				shape.style.strokeDashoffset = `${length}`
 				shape.getBoundingClientRect() // force reflow
 
-				// Animation du stroke (dessin)
+				const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+				const delay = prefersReduced ? 0 : 200 + i * 250
+				const duration = prefersReduced ? '0.01s' : '1.8s'
+
 				setTimeout(() => {
-					shape.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+					shape.style.transition = `stroke-dashoffset ${duration} cubic-bezier(0.25, 0.46, 0.45, 0.94)`
 					shape.style.strokeDashoffset = '0'
-				}, 200 + i * 250)
+				}, delay)
 
 
 			} catch {
@@ -34,6 +37,8 @@
 		class="w-full h-auto overflow-visible"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
+		role="img"
+		aria-label="Logo Benev qui se dessine"
 	>
 		<path
 			d="M85.245,222.000L34.745,222.000C34.745,222.000,31.245,222.000,31.245,218.500C31.245,215.000,34.745,215.000,34.745,215.000L50.245,215.000C50.245,215.000,-11.000,172.480,1.745,129.000C17.395,75.609,69.869,78.954,83.745,84.000C105.745,92.000,122.000,125.500,122.000,147.000C122.000,178.000,100.000,178.000,97.000,147.000C95.215,128.559,104.977,114.523,110.500,109.000C115.000,104.500,119.500,101.500,122.500,104.500C126.324,108.324,123.500,115.000,117.500,119.500C113.726,122.330,103.500,134.500,105.000,147.000C106.500,159.500,115.000,157.500,116.000,146.000C116.709,137.841,113.426,131.312,111.000,127.000C110.007,125.234,102.745,110.000,81.745,102.000C57.864,92.902,25.745,109.000,17.745,133.000C3.467,175.835,58.245,215.000,58.245,215.000L85.245,215.000C85.245,215.000,88.745,215.000,88.745,218.500C88.745,222.000,85.245,222.000,85.245,222.000Z"

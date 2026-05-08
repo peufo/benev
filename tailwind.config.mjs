@@ -5,7 +5,12 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				sans: ['Epilogue', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+				sans: ['Barlow', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+			},
+			colors: {
+				brand: {
+					beige: '#c7b198',
+				},
 			},
 		},
 	},
