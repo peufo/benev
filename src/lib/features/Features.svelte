@@ -1,61 +1,75 @@
 <script lang="ts">
-	import { mdiWeb, mdiAccountGroupOutline, mdiViewDashboardOutline } from '@mdi/js'
-	import { Icon } from 'fuma'
-
 	const benefits = [
 		{
-			icon: mdiWeb,
+			number: '01',
 			title: 'Ton événement, ton site',
 			description:
-				'Crée un espace dédié avec des pages personnalisables pour centraliser toute la communication.',
+				'Crée un espace dédié avec des pages personnalisables pour centraliser toute la communication. Chaque événement a son propre mini-site, accessible aux bénévoles sans création de compte compliquée.',
+			color: 'bg-[#0d3b66]',
 		},
 		{
-			icon: mdiAccountGroupOutline,
+			number: '02',
 			title: 'Gestion d\'équipe collaborative',
 			description:
-				'Désigne des administrateurs et des responsables de secteur pour t\'aider dans l\'organisation.',
+				'Désigne des administrateurs et des responsables de secteur pour t\'aider dans l\'organisation. Chacun a les droits adaptés à son rôle, sans accès superflu.',
+			color: 'bg-[#c7b198]',
 		},
 		{
-			icon: mdiViewDashboardOutline,
+			number: '03',
 			title: 'Bénévoles autonomes',
 			description:
-				'Chaque bénévole gère ses inscriptions, accède à son tableau de bord et reçoit les notifications.',
+				'Chaque bénévole gère ses inscriptions, accède à son tableau de bord et reçoit les notifications. Moins de questions en privé, plus d\'autonomie sur le terrain.',
+			color: 'bg-[#0d3b66]',
 		},
 	]
 </script>
 
-<section class="py-20 md:py-28 bg-[#c7b198]/15">
-	<div class="max-w-5xl mx-auto px-4 sm:px-6">
-		<div class="text-center mb-16 md:mb-20">
-			<h2 class="text-3xl md:text-4xl font-bold text-[#0d3b66]">
+<section class="py-20 md:py-28 bg-[#c7b198]/10">
+	<div class="max-w-6xl mx-auto px-4 sm:px-6">
+		<div class="mb-16 md:mb-20">
+			<h2 class="text-3xl md:text-4xl font-extrabold text-[#0d3b66] tracking-tight">
 				Ce que Benev fait pour toi
 			</h2>
-			<p class="mt-4 text-lg text-base-content/70 max-w-xl mx-auto">
+			<p class="mt-4 text-lg text-base-content/70 max-w-xl">
 				Pas une liste interminable de fonctionnalités. Juste l'essentiel, bien fait.
 			</p>
 		</div>
 
-		<div class="grid gap-8 md:grid-cols-3">
-			{#each benefits as benefit}
-				<div class="group text-center">
-					<div
-						class="
-							inline-flex items-center justify-center w-14 h-14 rounded-2xl
-							bg-[#0d3b66] text-white
-							group-hover:bg-[#092b4d]
-							transition-colors duration-300
-						"
-					>
-						<Icon path={benefit.icon} size={28} class="[&_path]:fill-white" />
+		<div class="flex flex-col gap-20 md:gap-28">
+			{#each benefits as benefit, i}
+				<div
+					class="grid md:grid-cols-2 gap-10 items-center"
+					class:md:flex-row-reverse={i % 2 === 1}
+				>
+					<!-- Texte -->
+					<div class={i % 2 === 1 ? 'md:order-2' : ''}>
+						<span
+							class="text-7xl md:text-8xl font-extrabold text-[#0d3b66]/10 leading-none select-none"
+						>
+							{benefit.number}
+						</span>
+						<h3 class="text-2xl md:text-3xl font-bold text-[#0d3b66] mt-2 tracking-tight">
+							{benefit.title}
+						</h3>
+						<p class="mt-4 text-base-content/70 leading-relaxed text-lg max-w-md">
+							{benefit.description}
+						</p>
 					</div>
 
-					<h3 class="mt-5 text-xl font-semibold text-[#0d3b66]">
-						{benefit.title}
-					</h3>
-
-					<p class="mt-3 text-base-content/70 leading-relaxed">
-						{benefit.description}
-					</p>
+					<!-- Visuel abstrait -->
+					<div class={i % 2 === 1 ? 'md:order-1' : ''}>
+						<div
+							class="{benefit.color} rounded-3xl aspect-[4/3] flex items-center justify-center relative overflow-hidden"
+						>
+							<div
+								class="absolute inset-0 opacity-20"
+								style="background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 40px)"
+							/>
+							<span class="text-6xl font-extrabold text-white/90 relative z-10">
+								{benefit.number}
+							</span>
+						</div>
+					</div>
 				</div>
 			{/each}
 		</div>

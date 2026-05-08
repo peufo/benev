@@ -1,9 +1,18 @@
 <script lang="ts">
-	import { mdiCalendarMultiple, mdiForumOutline, mdiScaleBalance, mdiWalletOutline } from '@mdi/js'
+	import {
+		mdiCalendarMultiple,
+		mdiForumOutline,
+		mdiScaleBalance,
+		mdiWalletOutline,
+		mdiInformationOutline,
+		mdiHeartOutline,
+	} from '@mdi/js'
 	import { page } from '$app/stores'
 	import { Icon } from 'fuma'
 
 	const tabs: { path: string; label: string; icon: string }[] = [
+		{ path: '/about', label: 'À propos', icon: mdiInformationOutline },
+		{ path: '/support', label: 'Soutenir', icon: mdiHeartOutline },
 		{ path: '/contact', label: 'Contact', icon: mdiForumOutline },
 		{ path: '/events', label: 'Évènements', icon: mdiCalendarMultiple },
 		{ path: '/pricing', label: 'Prix', icon: mdiWalletOutline },

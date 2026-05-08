@@ -3,7 +3,11 @@ export default {
 	content: ['./src/**/*.{html,svelte,ts,js}', './node_modules/**/fuma/dist/**/*.svelte'],
 	darkMode: 'class',
 	theme: {
-		extend: {},
+		extend: {
+			fontFamily: {
+				sans: ['Epilogue', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+			},
+		},
 	},
 	plugins: [
 		require('daisyui'),

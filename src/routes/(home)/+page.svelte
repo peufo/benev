@@ -2,65 +2,95 @@
 	import logo from '$lib/assets/logo.svg'
 	import { Features } from '$lib/features'
 	import { Testimonials } from '$lib/testimonials'
-	import { Workflow, LandingCTA } from '$lib/landing'
+	import { Workflow, LandingCTA, AnimatedLogo } from '$lib/landing'
 
 	export let data
 </script>
 
 <div class="-mx-2 sm:-mx-4">
-	<!-- Hero -->
+	<!-- Hero: asymétrique -->
 	<section class="relative overflow-hidden">
-		<div class="max-w-4xl mx-auto px-4 sm:px-6 py-20 md:py-32 text-center">
-			<!-- Logo -->
-			<div class="inline-flex items-center justify-center gap-3 mb-8">
-				<img src={logo} alt="Logo benev" class="w-12 h-12" />
-				<span class="text-2xl font-bold text-[#0d3b66]">benevio</span>
+		<div class="max-w-6xl mx-auto px-4 sm:px-6 py-20 md:py-28">
+			<div class="grid md:grid-cols-2 gap-12 items-center">
+				<!-- Texte -->
+				<div class="text-left">
+					<h1
+						class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0d3b66] leading-[1.1] tracking-tight"
+					>
+						Moins d'admin,
+						<br />
+						plus d'événement
+					</h1>
+
+					<p class="mt-6 text-lg md:text-xl text-base-content/70 max-w-lg leading-relaxed">
+						Inscriptions, planning et communication : centralise la gestion de tes bénévoles dans un
+						outil moderne et accessible.
+					</p>
+
+					<div class="mt-8 flex flex-col sm:flex-row items-start gap-4">
+						<a
+							href="/me"
+							class="
+								btn btn-lg btn-primary bg-[#0d3b66] border-[#0d3b66] text-white
+								hover:bg-[#092b4d] hover:border-[#092b4d]
+								shadow-lg hover:shadow-xl
+								transition-all duration-200
+								min-w-[220px]
+							"
+						>
+							{data.user ? 'Voir mes événements' : 'Organiser mon événement'}
+						</a>
+
+						<a
+							href="#workflow"
+							class="
+								btn btn-lg btn-ghost text-[#0d3b66]
+								hover:bg-[#0d3b66]/5
+								transition-colors duration-200
+							"
+						>
+							Comment ça marche
+						</a>
+					</div>
+				</div>
+
+				<!-- Logo animé -->
+				<div class="hidden md:flex items-center justify-center relative">
+					<div
+						class="w-72 h-72 rounded-full bg-gradient-to-br from-[#c7b198]/40 to-[#0d3b66]/10 blur-2xl absolute"
+					/>
+					<div class="relative w-64">
+						<AnimatedLogo />
+					</div>
+				</div>
 			</div>
+		</div>
+	</section>
 
-			<!-- Headline -->
-			<h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-[#0d3b66] leading-tight">
-				Moins d'admin,
-				<br />
-				plus d'événement
-			</h1>
-
-			<!-- Subheadline -->
-			<p class="mt-6 text-lg md:text-xl text-base-content/70 max-w-2xl mx-auto leading-relaxed">
-				Inscriptions, planning et communication : centralise la gestion de tes bénévoles dans un
-				outil simple, transparent et open source.
-			</p>
-
-			<!-- CTA Group -->
-			<div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-				<a
-					href="/me"
-					class="
-					btn btn-lg btn-primary bg-[#0d3b66] border-[#0d3b66] text-white
-					hover:bg-[#092b4d] hover:border-[#092b4d]
-					shadow-lg hover:shadow-xl
-					transition-all duration-200
-					min-w-[220px]
-				"
+	<!-- Trust band -->
+	<section class="border-y border-[#c7b198]/20 bg-[#c7b198]/5">
+		<div class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+			<div class="flex flex-col md:flex-row items-center justify-between gap-4">
+				<div
+					class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-base-content/70"
 				>
-					{data.user ? 'Voir mes événements' : 'Créer mon événement'}
-				</a>
-
-				<a
-					href="/pricing"
-					class="
-					btn btn-lg btn-ghost text-[#0d3b66]
-					hover:bg-[#0d3b66]/5
-					transition-colors duration-200
-				"
-				>
-					Voir les tarifs
+					<span class="flex items-center gap-2">
+						<span class="w-2 h-2 rounded-full bg-green-500" />
+						Gratuit et open source
+					</span>
+					<span class="flex items-center gap-2">
+						<span class="w-2 h-2 rounded-full bg-[#c7b198]" />
+						Solide et éprouvé
+					</span>
+					<span class="flex items-center gap-2">
+						<span class="w-2 h-2 rounded-full bg-[#0d3b66]" />
+						Simple et flexible
+					</span>
+				</div>
+				<a href="/about" class="btn btn-sm btn-ghost text-[#0d3b66] hover:bg-[#0d3b66]/5">
+					Vraiment gratuit ?
 				</a>
 			</div>
-
-			<!-- Trust mention -->
-			<p class="mt-5 text-sm text-base-content/50">
-				Gratuit jusqu'à 20 bénévoles · Open source · Sans engagement
-			</p>
 		</div>
 	</section>
 
