@@ -10,12 +10,12 @@
 					Prêt à simplifier ta prochaine édition ?
 				</h2>
 				<p class="mt-4 text-lg text-white/70 leading-relaxed">
-					Rejoins les organisateurs qui consacrent moins de temps à l'administration et plus à
-					leur événement.
+					Rejoins les organisateurs qui consacrent moins de temps à l'administration et plus à leur
+					événement.
 				</p>
 			</div>
 
-			<div class="flex flex-col items-start md:items-end gap-4">
+			<div class="flex flex-col items-center gap-4">
 				<a
 					href="/me"
 					class="
@@ -38,10 +38,6 @@
 				>
 					Soutenir le projet
 				</a>
-
-				<p class="text-sm text-white/50 mt-2">
-					Gratuit. Pas de carte de crédit requise.
-				</p>
 			</div>
 		</div>
 	</div>

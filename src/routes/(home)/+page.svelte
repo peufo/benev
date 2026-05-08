@@ -1,6 +1,5 @@
 <script lang="ts">
 	import logo from '$lib/assets/logo.svg'
-	import { Features } from '$lib/features'
 	import { Testimonials } from '$lib/testimonials'
 	import { Workflow, LandingCTA, AnimatedLogo } from '$lib/landing'
 
@@ -96,8 +95,6 @@
 	<!-- Workflow -->
 	<Workflow />
 
-	<!-- Features -->
-	<Features />
 
 	<!-- Testimonials -->
 	<Testimonials />

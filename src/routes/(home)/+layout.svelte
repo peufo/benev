@@ -32,9 +32,6 @@
 </Header>
 
 <main class="grow p-2 sm:p-4 relative">
-	<div
-		class="absolute inset-0 bg-gradient-to-b from-brand-beige/10 via-brand-beige/5 to-transparent -z-10"
-	/>
 	<slot />
 </main>
 
