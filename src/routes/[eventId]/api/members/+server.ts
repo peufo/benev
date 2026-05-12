@@ -9,7 +9,7 @@ export const GET = async ({ params: { eventId }, url, locals }) => {
 		search: z.string().optional(),
 		ids: z.jsonArray(z.string()).optional(),
 		take: z.coerce.number().default(5),
-		anyEvents: z.coerce.boolean(),
+		anyEvents: z.coerce.boolean().default(false),
 	})
 
 	const { search = '', take, ids, anyEvents } = data
