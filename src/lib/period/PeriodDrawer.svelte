@@ -45,9 +45,6 @@
 					periodId={period.id}
 					tippyProps={{
 						placement: 'bottom-start',
-						popperOptions: {
-							modifiers: [{ name: 'flip', enabled: false }],
-						},
 					}}
 				/>
 			{/if}
