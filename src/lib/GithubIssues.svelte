@@ -20,7 +20,7 @@
 						href={titleHref}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="block text-xl font-semibold text-base-content/90 hover:text-primary transition-colors"
+						class="block text-xl font-semibold text-base-content/90 hover:text-primary transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary/50 rounded-sm"
 					>
 						{title}
 					</a>
@@ -50,32 +50,33 @@
 					href={issue.url}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="group block px-5 py-4 hover:bg-base-200/40 transition-colors"
+					class="group block px-5 py-4 hover:bg-base-200/40 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary/50"
 				>
 					<div class="flex items-baseline gap-2">
-						<span class="text-xs font-mono shrink-0 text-base-content/40">
+						<span class="font-mono shrink-0 text-base-content/50">
 							#{issue.number}
 						</span>
 						<span
-							class="text-sm font-medium transition-colors text-base-content/90 group-hover:text-primary"
+							class="font-medium transition-colors text-base-content/90 group-hover:text-primary"
 						>
 							{issue.title}
 						</span>
 					</div>
 
 					<div
-						class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-xstext-base-content/50"
+						class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-sm text-base-content/50"
 					>
 						<span class="flex items-center gap-1.5">
 							<img
 								src={issue.author.avatar}
 								alt="Avatar de {issue.author.name}"
 								class="w-4 h-4 rounded-full"
+								loading="lazy"
 							/>
 							{issue.author.name}
 						</span>
 						<span>·</span>
-						<span>{dayjs(issue.createdAt).fromNow()}</span>
+						<span>{dayjs(issue.updatedAt).fromNow()}</span>
 						{#if issue.comments > 0}
 							<span>·</span>
 							<span class="inline-flex items-center gap-1">

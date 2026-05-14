@@ -16,6 +16,7 @@ export interface GithubIssue {
 	description: string | null
 	comments: number
 	createdAt: string
+	updatedAt: string
 	author: GithubIssueAuthor
 	labels: GithubIssueLabel[]
 }

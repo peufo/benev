@@ -18,6 +18,7 @@ interface GitHubApiIssue {
 	body: string | null
 	comments: number
 	created_at: string
+	updated_at: string
 	user: GitHubApiUser
 	labels: GitHubApiLabel[]
 	pull_request?: unknown
@@ -59,6 +60,7 @@ export const load = async () => {
 			description: truncate(i.body),
 			comments: i.comments,
 			createdAt: i.created_at,
+			updatedAt: i.updated_at,
 			author: {
 				name: i.user.login,
 				avatar: i.user.avatar_url,
@@ -72,7 +74,12 @@ export const load = async () => {
 			closedCount: closedData.total_count ?? 0,
 			recentIssues: issues.filter((i) => !i.pull_request).map(mapIssue),
 			recentClosedIssues: closedIssues.filter((i) => !i.pull_request).map(mapIssue),
-		} satisfies { openCount: number; closedCount: number; recentIssues: GithubIssue[]; recentClosedIssues: GithubIssue[] }
+		} satisfies {
+			openCount: number
+			closedCount: number
+			recentIssues: GithubIssue[]
+			recentClosedIssues: GithubIssue[]
+		}
 	} catch {
 		return { openCount: 0, closedCount: 0, recentIssues: [], recentClosedIssues: [] }
 	}

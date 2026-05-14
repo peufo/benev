@@ -71,7 +71,7 @@
 
 		<GithubIssues
 			issues={data.recentClosedIssues}
-			title="{data.closedCount} Sujet{data.openCount > 1 ? 's' : ''} clôturé{data.closedCount > 1
+			title="{data.closedCount} Sujet{data.closedCount > 1 ? 's' : ''} clôturé{data.closedCount > 1
 				? 's'
 				: ''}"
 			titleHref="https://github.com/peufo/benev/issues?q=is%3Aissue+is%3Aclosed"

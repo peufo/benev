@@ -25,6 +25,8 @@ The application is built as a server-rendered full-stack app with a rich admin i
 | Language | TypeScript v5 (strict mode, `verbatimModuleSyntax: true`) |
 | Build Tool | Vite v5 |
 | UI | Svelte v4, [Tailwind CSS](https://tailwindcss.com/) v3, [DaisyUI](https://daisyui.com/) v3 |
+| Font | [Barlow](https://fonts.google.com/specimen/Barlow) (400–800) via Google Fonts in `src/app.html` |
+| Icons | [Lucide](https://lucide.dev/) (`lucide-svelte`) — migration from MDI in progress |
 | Component Lib | [`fuma`](https://www.npmjs.com/package/fuma) — custom internal UI/component library (used extensively for inputs, forms, tables, icons, etc.) |
 | ORM | [Prisma](https://www.prisma.io/) v5 (client + generator) with `prisma-json-types-generator` |
 | Database | MySQL |
@@ -87,6 +89,7 @@ The application is built as a server-rendered full-stack app with a rich admin i
 ### Route Conventions
 
 - `(home)` — layout group for public/marketing pages, authentication, and user dashboard (`/me`).
+  - `/support` — donation & participation page with live GitHub issues integration. |
 - `[eventId]` — dynamic event slug. All event pages live here:
   - `[eventId]/[pagePath]` — public CMS-like pages for the event.
   - `[eventId]/admin/*` — organizer/admin tools (members, teams, plan, pages, theme, etc.).
@@ -110,6 +113,9 @@ The application is built as a server-rendered full-stack app with a rich admin i
 | `$lib/email` | Svelte components for transactional emails (verification, password reset, subscribe notifications, etc.). |
 | `$lib/plan` | Drag-and-drop planning grid components for team/period visualization. |
 | `$lib/pages` | CMS page rendering, suggestions, and nested path logic. |
+| `$lib/dayjs.ts` | Pre-configured dayjs instance (relativeTime plugin + French locale). |
+| `$lib/types/` | Shared TypeScript types. Re-exported from `index.ts`. |
+| `$lib/landing/` | Landing page components (AnimatedLogo, etc.). |
 
 ---
 
@@ -341,3 +347,6 @@ The project is containerized and deployed via Docker:
 - **Event-scoped data**: Most entities (teams, members, pages, fields, gifts, badges) belong to an `Event` and queries should filter by `eventId`.
 - **Computed member values**: `getMemberProfile` in `$lib/server/member.ts` enriches raw `Member` records with roles, subscription stats, and gift allocations. Prefer using this over raw Prisma queries when member context is needed.
 - **Planning grid**: The volunteer schedule visualization is a custom drag-and-drop grid in `$lib/plan/`. It uses custom period stacking and scroll-centering logic.
+- **Manual edits between prompts**: The user frequently edits files manually between prompts. **Always re-read the file before modifying it** to ensure you are working on the latest version. Do not assume the file content matches your last edit.
+- **Brand naming in UI**: Use "benevio" (lowercase) in all user-facing copy. Technical references (URLs, repo names) may still use "benev".
+- **Color tokens**: `primary` is `#0d3b66` (deep blue), `brand-beige` is `#c7b198`. Prefer Tailwind token classes (`text-primary`, `bg-brand-beige`) over hard-coded hex values.
