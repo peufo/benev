@@ -30,16 +30,16 @@ export const actions = {
 					},
 				}),
 				sendEmail({
-					from: `${session.user.firstName} ${session.user.lastName} depuis benev.io`,
+					from: `${session.user.firstName} ${session.user.lastName} depuis benevio`,
 					to: [env.SMTP_USER, env.ROOT_USER],
 					replyTo: session.user.email,
 					subject: data.subject,
 					text: data.content,
 				}),
 				sendEmailComponent(EmailBasic, {
-					from: `Nouvelle prise de contact avec benev.io`,
+					from: `Nouvelle prise de contact avec benevio`,
 					to: session.user.email,
-					subject: `Prise de contact avec benev.io`,
+					subject: `Prise de contact avec benevio`,
 					props: {
 						title: `Prise de contact`,
 						subtitle: data.subject,

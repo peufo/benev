@@ -20,7 +20,7 @@
 		</p>
 	</div>
 	<Card>
-		<h2 slot="title">Nouvelle prise de contact avec Benev.io</h2>
+		<h2 slot="title">Nouvelle prise de contact avec benevio</h2>
 		<form
 			method="post"
 			action="/contact?/new_message"

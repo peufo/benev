@@ -21,7 +21,7 @@
 			whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0
 		"
 	>
-		<img src={logo} alt="logo benev" class="w-9 h-9" height="512" width="512" />
+		<img src={logo} alt="logo benevio" class="w-9 h-9" height="512" width="512" />
 
 		<Benev class="mx-2 text-2xl" />
 	</a>

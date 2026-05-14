@@ -46,7 +46,7 @@
 			<p>Tu peux supprimer ton compte et toutes les données qui sont associées via ton profil.</p>
 			<p>Tu peux également supprimer ta participation à un évènement via ton profil de membre.</p>
 			<p>
-				Benev.io n'utilise pas de cookies tiers. Nous respectons ta vie privée et ne suivons pas tes
+				benevio n'utilise pas de cookies tiers. Nous respectons ta vie privée et ne suivons pas tes
 				activités en dehors de benev.io.
 			</p>
 		</section>

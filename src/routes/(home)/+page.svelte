@@ -85,7 +85,7 @@
 						Simple et flexible
 					</span>
 				</div>
-				<a href="/about" class="btn btn-sm btn-ghost text-primary hover:bg-primary/5">
+				<a href="/support" class="btn btn-sm btn-ghost text-primary hover:bg-primary/5">
 					Vraiment gratuit ?
 				</a>
 			</div>
