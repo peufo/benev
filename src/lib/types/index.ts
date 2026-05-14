@@ -4,3 +4,5 @@ export type Tab = {
 	label: string
 	icon: string
 }
+
+export * from './github'
