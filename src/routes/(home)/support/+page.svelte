@@ -31,9 +31,21 @@
 				<p class="mt-2 text-base-content/70 leading-relaxed">
 					Un don ponctuel ou régulier permet de financer l'hébergement et le temps de développement.
 				</p>
-				<a href="/me/donations/checkout" class="btn btn-sm btn-soft mt-5 group">
-					<span>Je veux faire un don</span>
-					<HeartIcon size={16} class="fill-red-600 stroke-red-600" />
+				<a
+					href="/me/donations/checkout"
+					class="btn btn-primary btn-md mt-6
+						shadow-lg hover:shadow-xl hover:shadow-primary/25
+						hover:scale-105
+						transition-all duration-200 ease-out
+						group"
+				>
+					<span class="font-semibold">Je veux faire un don</span>
+					<HeartIcon
+						size={18}
+						class="fill-primary-content stroke-primary-content
+							group-hover:scale-125 group-hover:rotate-12
+							transition-transform duration-300 ease-out"
+					/>
 				</a>
 			</div>
 
