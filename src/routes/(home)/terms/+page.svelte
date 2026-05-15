@@ -6,7 +6,7 @@
 	<div class="prose">
 		<h1>Conditions d'utilisation</h1>
 		<p>
-			Date d'effet : <b>1 Janvier 2024</b> <br />
+			Date d'effet : <b>8 Mai 2026</b> <br />
 			Temps de lecture : <b>2 minutes</b>
 		</p>
 		<p>En utilisant notre application, tu acceptes les règles ci-dessous.</p>
@@ -14,7 +14,7 @@
 		<section>
 			<h2>1. Utilise le service correctement</h2>
 			<p>
-				Tu peux utiliser benev.io conformément aux règles et aux lois. C'est une application open
+				Tu peux utiliser benevio conformément aux règles et aux lois. C'est une application open
 				source sous
 				<a
 					href="https://github.com/peufo/benev/blob/main/LICENSE"
@@ -23,9 +23,9 @@
 				>
 					licence GPL-3
 				</a>. Donc, si tu es curieux, tu es libre de jeter un œil au code source, de contribuer au
-				projet ou d’héberger ta propres version de l’application. Mais garde à l'esprit que ses
+				projet ou d’héberger ta propre version de l’application. Mais garde à l'esprit que ces
 				libertés sont soumises aux termes de la licence.<br />
-				Le logo, le domaine et la marque de benev.io sont détenus et exploités l'entreprise Dev Voisard.
+				Le logo, le domaine et la marque de benevio sont détenus et exploités par l'entreprise Dev Voisard.
 			</p>
 		</section>
 
@@ -33,7 +33,7 @@
 			<h2>2. Ton compte et tes données personnelles</h2>
 			<p>
 				L'utilisation de l’application nécessite une authentification et le renseignement de données
-				personnelles. Tes donnée ne sont disponible que par les utilisateurs suivants :
+				personnelles. Tes données ne sont disponibles que par les utilisateurs suivants :
 			</p>
 			<ol>
 				<li>Toi-même</li>
@@ -47,7 +47,7 @@
 			<p>Tu peux également supprimer ta participation à un évènement via ton profil de membre.</p>
 			<p>
 				benevio n'utilise pas de cookies tiers. Nous respectons ta vie privée et ne suivons pas tes
-				activités en dehors de benev.io.
+				activités en dehors de benevio.
 			</p>
 		</section>
 
@@ -56,7 +56,7 @@
 			<p>
 				Nous faisons de notre mieux, mais nous ne pouvons malheureusement pas promettre que tout
 				sera parfait. Nous déclinons la responsabilité des problèmes qui pourraient survenir en
-				utilisant benev.io.
+				utilisant benevio.
 			</p>
 		</section>
 
@@ -67,18 +67,15 @@
 				si tu ne respectes pas ces règles.
 			</p>
 		</section>
-
 		<section>
-			<h2>5. Conditions de Vente</h2>
+			<h2>5. Gratuité du service</h2>
 			<p>
-				Open source n’est pas synonyme de gratuit. Nous aimerions que ce soit le cas, mais la mise
-				en place de benev.io à un coût. Cependant, l’objectif étant de rendre le projet accessible
-				au plus grand nombre d'utilisateurs possibles, les prix appliqués sont radicalement
-				inférieurs aux applications concurrentes.
+				Le service benevio est entièrement gratuit. Aucun paiement n'est requis pour créer un
+				événement, gérer des membres ou utiliser l'ensemble des fonctionnalités de l'application.
 			</p>
 			<p>
-				Nous demandons 10 CHF par évènement et un coût additionnel de 0.50 CHF par membre
-				participant à l'évènement.
+				Le projet est financé par des contributions volontaires. Si tu souhaites soutenir
+				benevio, tu peux faire un don via la page <a href="/support" class="link link-hover">Soutenir benevio</a>.
 			</p>
 		</section>
 
@@ -86,7 +83,7 @@
 			<h2>6. Les règles peuvent changer</h2>
 			<p>
 				Nous nous réservons le droit de changer ces règles à tout moment. Les changements prennent
-				effet dès qu'ils sont publiés sur benev.io.
+				effet dès qu'ils sont publiés sur benevio.
 			</p>
 		</section>
 	</div>
