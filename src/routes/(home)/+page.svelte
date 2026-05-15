@@ -1,5 +1,4 @@
 <script lang="ts">
-	import logo from '$lib/assets/logo.svg'
 	import { Testimonials } from '$lib/testimonials'
 	import { Workflow, LandingCTA, AnimatedLogo } from '$lib/landing'
 
@@ -16,9 +15,7 @@
 					<h1
 						class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary leading-[1.1] tracking-tight"
 					>
-						Moins d'admin,
-						<br />
-						plus d'événement
+						Moins d'admin pour ton événement
 					</h1>
 
 					<p class="mt-6 text-lg md:text-xl text-base-content/70 max-w-lg leading-relaxed">
@@ -94,7 +91,6 @@
 
 	<!-- Workflow -->
 	<Workflow />
-
 
 	<!-- Testimonials -->
 	<Testimonials />
