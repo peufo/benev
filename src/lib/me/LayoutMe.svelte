@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiCardAccountDetailsOutline, mdiCalendarMultiple, mdiLicense } from '@mdi/js'
+	import { mdiCardAccountDetailsOutline, mdiCalendarMultiple, mdiCardsHeartOutline } from '@mdi/js'
 	import type { Tab } from '$lib/types'
 	import { Card, Tabs } from 'fuma'
 	import { derived, type Readable } from 'svelte/store'
@@ -26,9 +26,9 @@
 
 		if (user.isOrganizer)
 			tabs.push({
-				href: '/me/licences',
-				label: 'Mes licences',
-				icon: mdiLicense,
+				href: '/me/donations',
+				label: 'Mes dons',
+				icon: mdiCardsHeartOutline,
 			})
 
 		return tabs

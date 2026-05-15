@@ -1,5 +1,6 @@
 <script lang="ts">
 	import GithubIssues from '$lib/GithubIssues.svelte'
+	import { HeartIcon } from 'lucide-svelte'
 
 	export let data
 </script>
@@ -30,7 +31,10 @@
 				<p class="mt-2 text-base-content/70 leading-relaxed">
 					Un don ponctuel ou régulier permet de financer l'hébergement et le temps de développement.
 				</p>
-				<button class="btn btn-sm btn-outline mt-5" disabled> Bientôt disponible </button>
+				<a href="/me/donations/checkout" class="btn btn-sm btn-soft mt-5 group">
+					<span>Je veux faire un don</span>
+					<HeartIcon size={16} class="fill-red-600 stroke-red-600" />
+				</a>
 			</div>
 
 			<div>

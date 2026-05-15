@@ -1,7 +1,7 @@
-import { getUserOrRedirect, checkout } from '$lib/server'
+import { getUserOrRedirect, checkoutLicence } from '$lib/server'
 
 export const load = async ({ url, locals }) => {
 	const user = await getUserOrRedirect(url, locals)
-	const { clientSecret } = await checkout.create(user, url)
+	const { clientSecret } = await checkoutLicence.create(user, url)
 	return { clientSecret }
 }

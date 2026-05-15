@@ -6,6 +6,7 @@
 
 	export let allreadyLoaded: (checkoutId: string) => boolean = () => false
 	export let removeCheckoutId = false
+	export let eventSource = '/me/licences/checkout/validation'
 
 	let checkoutId = $page.url.searchParams.get('checkoutId')
 	let isNewCheckoutAwaited = !!checkoutId && !allreadyLoaded(checkoutId)
@@ -21,7 +22,7 @@
 		if (!isNewCheckoutAwaited) return
 
 		const timeout = setTimeout(handleCheckoutNotification, 5000)
-		const subscription = new EventSource(`/me/licences/checkout/validation${location.search}`)
+		const subscription = new EventSource(`${eventSource}${location.search}`)
 		subscription.addEventListener(checkoutId, handleCheckoutNotification)
 
 		return () => {

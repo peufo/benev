@@ -71,14 +71,15 @@ enum LicenceType {
 }
 
 model Checkout {
-  id        String    @id @unique @default(cuid())
-  name      String?
-  licences  Licence[]
-  amount    Int
-  currency  String    @default("CHF")
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime  @default(now())
+  id         String    @id @unique @default(cuid())
+  name       String?
+  licences   Licence[]
+  isDonation Boolean   @default(false)
+  amount     Int
+  currency   String    @default("CHF")
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
 }
 
 model Session {
