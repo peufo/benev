@@ -39,7 +39,7 @@ export const media = {
 		const image = data[keyImage] as Blob
 		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }
 
-		if (image.size === 0) throw new Error('image.size is equal to 0')
+		if (image.size === 0) throw new Error('image is not defined')
 		if (crop === undefined) throw new Error(`no crop data in data[${keyCrop}]`)
 
 		const imageBuffer = await image.arrayBuffer()
@@ -76,30 +76,33 @@ export const media = {
 }
 
 async function createOrReplaceMedia({ where, data }: UploadOption) {
-	if (where) await media.delete(where).catch(() => {})
+	if (where) await media.delete(where).catch(() => undefined)
 	return prisma.media.create({ data })
 }
 
 export async function uploadImages(formData: FormData, eventId: string, authorId: string) {
-	await media.upload(formData, {
-		key: 'poster',
-		where: { posterOf: { id: eventId } },
-		data: {
-			name: 'Affiche',
-			createdById: authorId,
-			eventId,
-			posterOf: { connect: { id: eventId } },
-		},
-	})
-
-	await media.upload(formData, {
-		key: 'logo',
-		where: { logoOf: { id: eventId } },
-		data: {
-			name: 'Logo',
-			createdById: authorId,
-			eventId,
-			logoOf: { connect: { id: eventId } },
-		},
+	await Promise.all([
+		media.upload(formData, {
+			key: 'poster',
+			where: { posterOf: { id: eventId } },
+			data: {
+				name: 'Affiche',
+				createdById: authorId,
+				eventId,
+				posterOf: { connect: { id: eventId } },
+			},
+		}),
+		media.upload(formData, {
+			key: 'logo',
+			where: { logoOf: { id: eventId } },
+			data: {
+				name: 'Logo',
+				createdById: authorId,
+				eventId,
+				logoOf: { connect: { id: eventId } },
+			},
+		}),
+	]).catch((err) => {
+		console.error(err)
 	})
 }
