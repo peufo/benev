@@ -75,6 +75,7 @@ export const actions = {
 		const subscribe = await prisma.subscribe.create({
 			data: {
 				...data,
+				isForcedValidation: isAutoAccepted && !memberInvited.userId,
 				state: isAutoAccepted ? 'accepted' : 'request',
 				createdBy: isSelfSubscribe ? 'user' : 'leader',
 			},
