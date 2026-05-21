@@ -37,3 +37,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Trigger deploy webhook
+        if: success()
+        run: curl -X POST ${{ secrets.DEPLOY_HOOK_URL }}
