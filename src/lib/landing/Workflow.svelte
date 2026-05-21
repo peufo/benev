@@ -12,7 +12,7 @@
 				{ src: '/videos/create-event.mp4', title: "Créer l'événement" },
 				{ src: '/videos/edit-theme.mp4', title: 'Personnaliser le thème' },
 				{ src: '/videos/create-pages.mp4', title: 'Créer la charte et des pages' },
-				{ src: '/videos/edit-theme.mp4', title: 'Créer les secteurs' },
+				{ src: '/videos/create-teams.mp4', title: 'Créer les secteurs' },
 				{ src: '/videos/edit-theme.mp4', title: 'Planifier les shifts' },
 			],
 		},
