@@ -49,13 +49,13 @@
 	function handleLoadedData() {
 		isLoading = false
 		if ($activeVideoIndex === index) {
-			videoElement?.play().catch(() => {})
+			videoElement?.play().catch(() => undefined)
 		}
 	}
 
 	$: if (videoElement && $activeVideoIndex !== undefined) {
 		if ($activeVideoIndex === index) {
-			videoElement.play().catch(() => {})
+			videoElement.play().catch(() => undefined)
 		} else {
 			videoElement.pause()
 		}
@@ -81,14 +81,17 @@
 		{#each videos as _, i}
 			{@const isActive = i === activeIndex}
 			<button
-				transition:slide={{ axis: 'x' }}
 				on:click={() => setActive(i)}
-				class="badge badge-primary {isActive ? '' : 'w-5 badge-outline hover:bg-primary/10'}"
+				class="badge badge-lg badge-primary transition-opacity duration-300 {isActive
+					? 'opacity-100'
+					: 'opacity-40 hover:opacity-70'}"
 				aria-label="Voir {videos[i].title}"
 				use:tip={{ content: videos[i].title, disable: isActive }}
 			>
 				{#if isActive}
-					<span>{videos[i].title}</span>
+					<div class="whitespace-nowrap text-center" transition:slide={{ axis: 'x' }}>
+						{videos[i].title}
+					</div>
 				{/if}
 			</button>
 		{/each}
