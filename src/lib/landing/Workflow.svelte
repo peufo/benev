@@ -5,32 +5,35 @@
 	const steps = [
 		{
 			number: '01',
-			title: 'Tu crées ton événement',
+			title: "Création de l'événement",
 			description:
 				'Configure les équipes, les shifts et les besoins en bénévoles. Chaque événement a son propre mini-site avec des pages personnalisables pour centraliser toute la communication.',
 			videos: [
-				{ src: '/videos/create-event.mp4', title: 'Créer ton événement' },
+				{ src: '/videos/create-event.mp4', title: "Créer l'événement" },
 				{ src: '/videos/edit-theme.mp4', title: 'Personnaliser le thème' },
+				{ src: '/videos/create-pages.mp4', title: 'Créer la charte et des pages' },
+				{ src: '/videos/edit-theme.mp4', title: 'Créer les secteurs' },
+				{ src: '/videos/edit-theme.mp4', title: 'Planifier les shifts' },
 			],
 		},
 		{
 			number: '02',
-			title: "Les bénévoles s'inscrivent",
+			title: 'Inscription et validation',
 			description:
-				'Ils parcourent les secteurs et choisissent leurs créneaux en autonomie. Chacun gère ses inscriptions, accède à son tableau de bord et reçoit les notifications.',
+				'Tu peux permettre aux bénévoles de parcourir les secteurs et de choisir leurs créneaux en autonomie. Mais tu peux également garder le contrôle et gérer les inscription à la main.',
 			videos: [
-				{ src: '/videos/create-event.mp4', title: 'Inscription des bénévoles' },
-				{ src: '/videos/edit-theme.mp4', title: 'Gestion des créneaux' },
+				{ src: '/videos/edit-theme.mp4', title: "Configuration de l'adhésion" },
+				{ src: '/videos/edit-theme.mp4', title: 'Inscriptions par bénévoles' },
+				{ src: '/videos/edit-theme.mp4', title: 'Valider une inscription' },
 			],
 		},
 		{
 			number: '03',
-			title: 'Tu valides et tu organises',
-			description:
-				"Notification instantanée, validation ou refus en un clic. Désigne des responsables de secteur pour t'aider. Planning rempli, informations accessibles, zéro stress.",
+			title: 'Suivi et organisation',
+			description: 'Toutes les données sont facilement accessible et exportable.',
 			videos: [
-				{ src: '/videos/create-event.mp4', title: 'Valider une inscription' },
-				{ src: '/videos/edit-theme.mp4', title: 'Organiser le planning' },
+				{ src: '/videos/create-event.mp4', title: 'Créer une vues pour le planning' },
+				{ src: '/videos/edit-theme.mp4', title: 'Suivi des statistiques' },
 			],
 		},
 	]
