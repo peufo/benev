@@ -7,13 +7,13 @@
 			number: '01',
 			title: "Création de l'événement",
 			description:
-				'Configure les équipes, les shifts et les besoins en bénévoles. Chaque événement a son propre mini-site avec des pages personnalisables pour centraliser toute la communication.',
+				'Configure les secteurs, les shifts et les besoins en bénévoles. Chaque événement a son propre mini-site avec des pages personnalisables pour centraliser toute la communication.',
 			videos: [
 				{ src: '/videos/create-event.mp4', title: "Créer l'événement" },
 				{ src: '/videos/edit-theme.mp4', title: 'Personnaliser le thème' },
-				{ src: '/videos/create-pages.mp4', title: 'Créer la charte et des pages' },
+				{ src: '/videos/create-pages.mp4', title: 'Créer la charte et les pages' },
 				{ src: '/videos/create-teams.mp4', title: 'Créer les secteurs' },
-				{ src: '/videos/edit-theme.mp4', title: 'Planifier les shifts' },
+				{ src: '/videos/planif.mp4', title: 'Planifier les shifts' },
 			],
 		},
 		{
@@ -22,9 +22,9 @@
 			description:
 				'Tu peux permettre aux bénévoles de parcourir les secteurs et de choisir leurs créneaux en autonomie. Mais tu peux également garder le contrôle et gérer les inscription à la main.',
 			videos: [
-				{ src: '/videos/edit-theme.mp4', title: "Configuration de l'adhésion" },
-				{ src: '/videos/edit-theme.mp4', title: 'Inscriptions par bénévoles' },
-				{ src: '/videos/edit-theme.mp4', title: 'Valider une inscription' },
+				{ src: '/videos/config-fields.mp4', title: "Configuration de l'adhésion" },
+				{ src: '/videos/subscribe.mp4', title: "Inscriptions d'un bénévoles" },
+				{ src: '/videos/subscribe-validation.mp4', title: 'Valider une inscription' },
 			],
 		},
 		{
@@ -46,7 +46,7 @@
 				Comment ça marche
 			</h2>
 			<p class="mt-4 text-lg text-base-content/70 max-w-xl">
-				Trois étapes simples pour se débarrasser de tes fichiers Excel rudimentaires.
+				Trois étapes simples pour se débarrasser de tes fichiers Excel.
 			</p>
 		</div>
 

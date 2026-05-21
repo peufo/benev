@@ -25,7 +25,7 @@
 						transition-shadow duration-200
 					"
 				>
-					{user ? 'Voir mes événements' : 'Essayer Benev'}
+					{user ? 'Voir mes événements' : 'Essayer Benevio'}
 				</a>
 
 				<a
