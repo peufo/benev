@@ -37,6 +37,7 @@
 	}
 
 	function setActive(index: number) {
+		if (index === activeIndex) return
 		isLoading = true
 		activeIndex = index
 	}
