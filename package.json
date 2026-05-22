@@ -55,6 +55,7 @@
 		"vitest": "^1.2.0"
 	},
 	"dependencies": {
+		"@faker-js/faker": "^10.4.0",
 		"@lucia-auth/adapter-prisma": "^3.0.2",
 		"@lucia-auth/oauth": "^3.5.1",
 		"@mdi/js": "^7.3.67",

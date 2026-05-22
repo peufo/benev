@@ -13,7 +13,7 @@
 				{ src: '/videos/edit-theme.mp4', title: 'Personnaliser le thème' },
 				{ src: '/videos/create-pages.mp4', title: 'Créer la charte et les pages' },
 				{ src: '/videos/create-teams.mp4', title: 'Créer les secteurs' },
-				{ src: '/videos/planif.mp4', title: 'Planifier les shifts' },
+				{ src: '/videos/planif-edit.mp4', title: 'Planifier les shifts' },
 			],
 		},
 		{
@@ -32,8 +32,9 @@
 			title: 'Suivi et organisation',
 			description: 'Toutes les données sont facilement accessible et exportable.',
 			videos: [
-				{ src: '/videos/create-event.mp4', title: 'Créer une vues pour le planning' },
-				{ src: '/videos/edit-theme.mp4', title: 'Suivi des statistiques' },
+				{ src: '/videos/create-view.mp4', title: 'Créer des vues' },
+				{ src: '/videos/planif-view.mp4', title: 'Suivi de la planification' },
+				{ src: '/videos/export-data.mp4', title: 'Exporter les données' },
 			],
 		},
 	]

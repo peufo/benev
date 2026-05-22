@@ -9,4 +9,7 @@ export default defineConfig({
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 	},
 	server: { fs: { allow: ['media'] }, allowedHosts: ['mac-de-jo.local'] },
+	optimizeDeps: {
+		include: ['litepicker'],
+	},
 })

@@ -21,5 +21,27 @@
 				Update memmbers avatarId from user
 			</button>
 		</form>
+		<form
+			method="post"
+			class="flex flex-col gap-2"
+			use:enhance={() => {
+				return (res) => {
+					toast.info(JSON.stringify(res.result))
+				}
+			}}
+		>
+			<button formaction="?/anonymise" class="btn"> Anonymise all users for demo </button>
+		</form>
+		<form
+			method="post"
+			class="flex flex-col gap-2"
+			use:enhance={() => {
+				return (res) => {
+					toast.info(JSON.stringify(res.result))
+				}
+			}}
+		>
+			<button formaction="?/update_period_dates" class="btn"> Update periods for demo</button>
+		</form>
 	</Card>
 </div>
