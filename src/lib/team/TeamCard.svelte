@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { mdiClockTimeFourOutline } from '@mdi/js'
-	import dayjs from 'dayjs'
-	import 'dayjs/locale/fr-ch'
+	import dayjs from '$lib/dayjs'
 	import { page } from '$app/stores'
+	import { getEventTimeZone } from '$lib/timezone'
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeDate } from '$lib/formatRange'
 	import type { TeamWithComputedValues } from '$lib/server'
-	dayjs.locale('fr-ch')
 	import { CardCollapse, Icon, Placeholder } from 'fuma'
 
 	import TeamActions from './TeamActions.svelte'
@@ -45,7 +44,7 @@
 						<span class="badge" class:badge-warning={team.isClosedSubscribing}>
 							<Icon path={mdiClockTimeFourOutline} size={16} />
 							<span class="ml-1">
-								Fin des inscriptions le {dayjs(team.closeSubscribing).format('DD MMMM YYYY')}
+								Fin des inscriptions le {dayjs(team.closeSubscribing).tz(getEventTimeZone()).format('DD MMMM YYYY')}
 							</span>
 						</span>
 					{/if}

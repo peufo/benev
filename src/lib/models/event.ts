@@ -17,6 +17,7 @@ export const modelEventCreate = {
 	phone: z.string().optional(),
 	address: z.string().optional(),
 	addressLabel: z.string().optional(),
+	timezone: z.string().optional(),
 } satisfies ZodObj<EventCreateInput>
 
 export const modelEventUpdate = {

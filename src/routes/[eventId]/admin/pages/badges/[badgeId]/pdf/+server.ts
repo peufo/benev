@@ -16,12 +16,14 @@ import { error } from '@sveltejs/kit'
 
 const MM_TO_PT = 2.83465
 
-const formater = new Intl.DateTimeFormat('fr-ch', {
-	day: 'numeric',
-	month: 'numeric',
-	year: '2-digit',
-	timeZone: 'Europe/Zurich',
-})
+function getFormater(timeZone: string) {
+	return new Intl.DateTimeFormat('fr-ch', {
+		day: 'numeric',
+		month: 'numeric',
+		year: '2-digit',
+		timeZone,
+	})
+}
 
 const DIMENSIONS_DEFAULTS = {
 	padding: 1,
@@ -266,7 +268,7 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 				const qrCodeSize = 50
 				const qrX = LAYOUT.width / 2 - qrCodeSize / 2
 				const qrY = LAYOUT.height - textHeight - qrCodeSize
-				const text = `Imprimé le ${formater.format(new Date())} depuis benev.io`
+				const text = `Imprimé le ${getFormater(event.timezone).format(new Date())} depuis benev.io`
 				// const logoSize = qrCodeSize * 0.18
 				// const logoX = LAYOUT.width / 2 - logoSize / 2
 				// const logoY = qrY + qrCodeSize / 2 - logoSize / 2

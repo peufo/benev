@@ -1,7 +1,7 @@
 import { getSubscribes, type Subscribes } from '../getSubscribes'
 import { prisma, permission } from '$lib/server'
 import { getCSV, z } from 'fuma'
-import dayjs from 'dayjs'
+import dayjs from '$lib/dayjs'
 import { parseQuery } from 'fuma/server'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {
@@ -12,14 +12,13 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 	})
 	url.searchParams.set('all', 'true')
 	const { subscribes } = await getSubscribes(event, url)
-	const { locale, timeZone } = parseQuery(url, {
+	const { locale } = parseQuery(url, {
 		locale: z.string().nullish(),
-		timeZone: z.string().nullish(),
 	})
 	function toLocaleString(date: Date): string {
-		if (!locale || !timeZone) return date.toJSON()
+		if (!locale) return date.toJSON()
 		try {
-			return date.toLocaleString(locale, { timeZone })
+			return date.toLocaleString(locale, { timeZone: event.timezone })
 		} catch (e) {
 			return 'Error'
 		}

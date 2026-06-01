@@ -16,7 +16,7 @@
 	</p>
 
 	<b>{subscribe.period.team.name}</b><br />
-	<b>{formatRange(subscribe.period)}</b>
+	<b>{formatRange(subscribe.period, member.event.timezone)}</b>
 
 	<p>
 		Verifie

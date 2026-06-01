@@ -165,6 +165,7 @@ model Event {
 
   startDate DateTime?
   endDate   DateTime?
+  timezone  String    @default("Europe/Zurich")
 
   // Relations
   teams        Team[]

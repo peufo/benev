@@ -18,7 +18,6 @@
 		const params = new URLSearchParams(url.searchParams)
 		const zone = Intl.DateTimeFormat().resolvedOptions()
 		params.set('locale', zone.locale)
-		params.set('timeZone', zone.timeZone)
 		return (mode: Mode) => `${$eventPath}/admin/members/${mode}?${params.toString()}`
 	})
 

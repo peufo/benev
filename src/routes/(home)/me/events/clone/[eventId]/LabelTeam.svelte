@@ -5,6 +5,7 @@
 
 	export let team: Team & { periods: Period[] }
 	export let deltaDays: number
+
 	const range = getRangeOfTeam(team)
 	const DAY = 1000 * 60 * 60 * 24
 </script>

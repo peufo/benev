@@ -2,7 +2,7 @@ import { formAction } from 'fuma/server'
 import { permission, prisma } from '$lib/server'
 import { faker } from '@faker-js/faker'
 import { dev } from '$app/environment'
-import dayjs from 'dayjs'
+import dayjs from '$lib/dayjs'
 
 export const actions = {
 	update_members_avatarId: formAction({}, async ({ locals }) => {

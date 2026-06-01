@@ -1,6 +1,6 @@
 import { z, type ZodObj } from 'fuma/validation'
 import { parseQuery } from 'fuma/server'
-import dayjs from 'dayjs'
+import dayjs from '$lib/dayjs'
 import type {
 	Event,
 	Field,

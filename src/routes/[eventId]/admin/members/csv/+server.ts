@@ -17,15 +17,14 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		(acc, t) => ({ ...acc, [t.id]: t.name }),
 		{}
 	)
-	const { locale, timeZone } = parseQuery(url, {
+	const { locale } = parseQuery(url, {
 		locale: z.string().nullish(),
-		timeZone: z.string().nullish(),
 	})
 
 	function toLocaleString(date: Date): string {
-		if (!locale || !timeZone) return date.toJSON()
+		if (!locale) return date.toJSON()
 		try {
-			return date.toLocaleString(locale, { timeZone })
+			return date.toLocaleString(locale, { timeZone: event.timezone })
 		} catch (e) {
 			return 'Error'
 		}

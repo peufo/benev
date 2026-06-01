@@ -52,7 +52,7 @@ const suggestionsSubscribe: Suggestion<
 	{
 		id: 'subscribe.period',
 		label: 'Période de travail',
-		getValue: (data) => formatRange(data.subscribe.period),
+		getValue: (data) => formatRange(data.subscribe.period, data.member.event.timezone),
 	},
 ]
 

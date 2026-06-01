@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InputText, InputTextarea, InputImagePreview, Form } from 'fuma'
+	import { InputText, InputTextarea, InputImagePreview, InputSelect, Form } from 'fuma'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { FORMAT_A3 } from '$lib/constant'
@@ -9,6 +9,14 @@
 	import EventFormInputAddress from './EventFormInputAddress.svelte'
 
 	export let event: Event | undefined = undefined
+
+	const timeZones = (() => {
+		try {
+			return Intl.supportedValuesOf('timeZone')
+		} catch {
+			return ['Europe/Zurich', 'Europe/Paris', 'Europe/Berlin', 'America/New_York', 'America/Los_Angeles', 'Asia/Tokyo', 'Asia/Shanghai', 'Australia/Sydney', 'Pacific/Auckland']
+		}
+	})()
 
 	let name = event?.name || ''
 	let eventId = event?.id || ''
@@ -103,6 +111,12 @@
 
 	<InputText key="facebook" label="Page Facebook" value={event?.facebook || ''} />
 	<InputText key="instagram" label="Page Instagram" value={event?.instagram || ''} />
+	<InputSelect
+		key="timezone"
+		label="Fuseau horaire"
+		value={event?.timezone || 'Europe/Zurich'}
+		options={timeZones}
+	/>
 
 	<svelte:fragment slot="delete">
 		{#if event}

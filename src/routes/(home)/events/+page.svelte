@@ -42,7 +42,7 @@
 						<p class="opacity-90 text-sm pr-2 grow">{event.description}</p>
 						{#if event.startDate && event.endDate}
 							<span class="text-sm opacity-70 mt-1 italic">
-								{formatRangeDate({ start: event.startDate, end: event.endDate })}
+								{formatRangeDate({ start: event.startDate, end: event.endDate }, event.timezone)}
 							</span>
 						{/if}
 					</div>

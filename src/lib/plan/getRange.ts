@@ -1,5 +1,5 @@
 import type { Period } from '@prisma/client'
-import dayjs from 'dayjs'
+import dayjs from '$lib/dayjs'
 
 type RangeOfDate = {
 	start: Date

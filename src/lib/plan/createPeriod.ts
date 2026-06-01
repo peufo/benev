@@ -1,5 +1,5 @@
 import type { Action } from 'svelte/action'
-import type { Dayjs } from 'dayjs'
+import type { Dayjs } from '$lib/dayjs'
 import { formatRangeHour } from '$lib/formatRange'
 import type { Period, Team } from '@prisma/client'
 import { goto } from '$app/navigation'
@@ -12,7 +12,7 @@ type Params = {
 	axis: Axis
 	origin: Dayjs
 	hourSize: number
-	team: Team & { periods: any[] }
+	team: Team & { periods: Period[] }
 	isEnable?: (target: HTMLDivElement) => boolean
 }
 
@@ -108,7 +108,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 
 	return {
 		update: (newParams) => {
-			;({ origin, hourSize: hourSize, team, axis } = newParams)
+			;({ origin, hourSize, team, axis } = newParams)
 			if (newParams.isEnable && newParams.isEnable !== isEnable) isEnable = newParams.isEnable
 		},
 		destroy: () => {

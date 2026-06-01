@@ -5,13 +5,11 @@ import { z } from 'fuma'
 
 export const load = async ({ locals, url, params: { eventId } }) => {
 	const member = await permission.leader(eventId, locals)
-	member.event
+
 	const { form_team, form_period } = parseQuery(url, {
 		form_team: z.string().optional(),
 		form_period: z.string().optional(),
 	})
-
-	const p = await getPeriodForm(form_period)
 
 	return {
 		...(await getPlanData({ url, eventId })),

@@ -2,9 +2,7 @@
 	import { createEventDispatcher } from 'svelte'
 	import axios from 'axios'
 	import { mdiContentDuplicate } from '@mdi/js'
-	import dayjs from 'dayjs'
-	import 'dayjs/locale/fr-ch'
-	dayjs.locale('fr-ch')
+	import dayjs from '$lib/dayjs'
 	import {
 		useForm,
 		InputNumber,
@@ -26,6 +24,7 @@
 	import { api } from '$lib/api'
 	import { TagSelectItem } from '$lib/tag'
 	import { toast } from 'svelte-sonner'
+	import { getEventTimeZone } from '$lib/timezone'
 
 	type PeriodProp = Partial<Period & { team: Team; tags: Tag[]; subscribes: Subscribe[] }>
 
@@ -33,6 +32,7 @@
 	export { klass as class }
 	export let period: PeriodProp = {}
 	export let disableRedirect = false
+
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -81,11 +81,22 @@
 		}
 	}
 
-	let defaultStart = dayjs(period?.start).startOf('hour').add(1, 'hour').toDate()
-	let defaultEnd = dayjs(period?.end).startOf('hour').add(3, 'hours').toDate()
+	function toEventDate(date: Date): Date {
+		const str = dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+		return dayjs.tz(str, getEventTimeZone()).toDate()
+	}
 
-	let start: Date | null = period?.start || defaultStart
-	let end = period?.end || defaultEnd
+	function fromEventDate(date: Date | undefined | null): Date {
+		if (!date) return dayjs().startOf('hour').add(1, 'hour').toDate()
+		const str = dayjs(date).tz(getEventTimeZone()).format('YYYY-MM-DD HH:mm:ss')
+		return dayjs(str).toDate()
+	}
+
+	let defaultStart = fromEventDate(period?.start)
+	let defaultEnd = fromEventDate(period?.end)
+
+	let start: Date | null = period?.start ? fromEventDate(period.start) : defaultStart
+	let end = period?.end ? fromEventDate(period.end) : defaultEnd
 	let maxSubscribe = period?.maxSubscribe || 1
 
 	function getAbsoluteDay(date: Date): number {
@@ -103,8 +114,8 @@
 
 	export function setPeriod(_period: PeriodProp) {
 		period = _period
-		start = period?.start || defaultStart
-		end = period?.end || defaultEnd
+		start = period?.start ? fromEventDate(period.start) : defaultStart
+		end = period?.end ? fromEventDate(period.end) : defaultEnd
 		maxSubscribe = period?.maxSubscribe || 1
 	}
 
@@ -117,8 +128,11 @@
 		const form = new FormData()
 		form.append('redirectTo', $urlParam.without('form_period'))
 		form.append('team', USE_COERCE_JSON + JSON.stringify({ id: period.teamId }))
-		form.append('start', USE_COERCE_DATE + end.toJSON())
-		form.append('end', USE_COERCE_DATE + dayjs(end).add(duration, 'minute').toJSON())
+		form.append('start', USE_COERCE_DATE + toEventDate(end).toJSON())
+		form.append(
+			'end',
+			USE_COERCE_DATE + toEventDate(dayjs(end).add(duration, 'minute').toDate()).toJSON()
+		)
 		form.append('maxSubscribe', USE_COERCE_NUMBER + maxSubscribe)
 		form.append(
 			'tags',
@@ -143,12 +157,18 @@
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
 	{#if start}
-		<input type="hidden" name="start" value="{USE_COERCE_DATE}{start.toJSON()}" />
+		<input
+			type="hidden"
+			name="start"
+			value="{USE_COERCE_DATE}{toEventDate(start).toJSON()}"
+		/>
 	{/if}
 	<input
 		type="hidden"
 		name="end"
-		value="{USE_COERCE_DATE}{dayjs(end).add(+addADay, 'day').toJSON()}"
+		value="{USE_COERCE_DATE}{toEventDate(
+			dayjs(end).add(+addADay, 'day').toDate(),
+		).toJSON()}"
 	/>
 
 	{#key period}

@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import dayjs from '$lib/dayjs'
 
 export const getAge = (date: Date | null) => {
 	const day = dayjs()

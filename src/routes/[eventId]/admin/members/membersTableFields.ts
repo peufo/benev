@@ -6,7 +6,10 @@ import { formatRange } from '$lib/formatRange'
 import type { MemberWithComputedValue } from './getMembers'
 import { msToHours } from './msToHours'
 
-export function getMembersTableFields(teams: { id: string; name: string }[], fields: Field[]) {
+export function getMembersTableFields(
+	teams: { id: string; name: string }[],
+	fields: Field[]
+) {
 	const tableFields: TableField<MemberWithComputedValue>[] = [
 		{
 			key: 'member',

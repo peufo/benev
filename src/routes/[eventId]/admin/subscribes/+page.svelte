@@ -34,7 +34,7 @@
 	import { eventPath } from '$lib/store'
 	import { SUBSCRIBE_STATE } from '$lib/constant'
 	import { TagsList } from '$lib/tag'
-	import dayjs from 'dayjs'
+	import dayjs from '$lib/dayjs'
 
 	export let data
 
