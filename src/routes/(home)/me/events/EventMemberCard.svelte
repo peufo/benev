@@ -85,7 +85,10 @@
 
 			{#if member.event.startDate && member.event.endDate}
 				<span class="text-sm opacity-70 italic">
-					{formatRangeDate({ start: member.event.startDate, end: member.event.endDate })}
+					{formatRangeDate(
+						{ start: member.event.startDate, end: member.event.endDate },
+						member.event.timezone
+					)}
 				</span>
 			{/if}
 		</div>

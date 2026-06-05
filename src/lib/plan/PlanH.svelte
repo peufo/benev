@@ -2,26 +2,23 @@
 	import { Icon, urlParam, type Range } from 'fuma'
 	import { mdiPlus } from '@mdi/js'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
-	import dayjs from '$lib/dayjs'
+	import { daytz } from '$lib/dayjs'
 	import type { Team } from '@prisma/client'
 	import type { PeriodWithMembers } from './types'
 	import { getDays } from './getDays'
 	import { keepScrollCenter } from './keepScrollCenter'
 	import { scrollToPeriod } from './scrollToPeriod'
-	import { getEventTimeZone } from '$lib/timezone'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let range: Range
 	export let hourSize: number
 
-	const timeZone = getEventTimeZone()
-
 	const TEAM_HEADER_WIDTH = 100
 	const MIN_HOUR_WIDTH = 40
 
 	$: hourSpan = Math.ceil(MIN_HOUR_WIDTH / hourSize)
-	$: origin = dayjs(range.start).tz(timeZone).startOf('hour')
-	$: days = getDays(range, timeZone)
+	$: origin = daytz(range.start).startOf('hour')
+	$: days = getDays(range)
 	$: totalWidth =
 		TEAM_HEADER_WIDTH + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourSize
 </script>

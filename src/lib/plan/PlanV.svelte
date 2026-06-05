@@ -1,5 +1,5 @@
 <script lang="ts">
-	import dayjs from '$lib/dayjs'
+	import { daytz } from '$lib/dayjs'
 	import { Icon, urlParam, type Range } from 'fuma'
 	import type { Team } from '@prisma/client'
 	import { getDays } from './getDays'
@@ -8,21 +8,18 @@
 	import { mdiPlus } from '@mdi/js'
 	import { keepScrollCenter } from './keepScrollCenter'
 	import { scrollToPeriod } from './scrollToPeriod'
-	import { getEventTimeZone } from '$lib/timezone'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let range: Range
 	export let hourSize: number
 	export let scrollContainer: HTMLDivElement | undefined = undefined
 
-	const timeZone = getEventTimeZone()
-
 	const TEAM_HEADER_HEIGHT = 40
 	const MIN_HOUR_HEIGHT = 30
 
 	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / hourSize)
-	$: origin = dayjs(range.start).tz(timeZone).startOf('hour')
-	$: days = getDays(range, timeZone)
+	$: origin = daytz(range.start).startOf('hour')
+	$: days = getDays(range)
 	$: totalHeight =
 		TEAM_HEADER_HEIGHT + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourSize
 </script>

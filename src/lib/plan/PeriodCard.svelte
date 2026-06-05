@@ -1,5 +1,5 @@
 <script lang="ts">
-	import dayjs from '$lib/dayjs'
+	import { daytz, type Dayjs } from '$lib/dayjs'
 	import { urlParam } from 'fuma'
 	import type { PeriodWithMembers } from './types'
 	import { PeriodCardContent } from './cardContent'
@@ -7,11 +7,10 @@
 	import { updatePeriod } from './updatePeriod'
 	import { magnet } from './magnet'
 	import DragButton from './DragButton.svelte'
-	import { getEventTimeZone } from '$lib/timezone'
 
 	export let period: PeriodWithMembers
 	export let hourSize: number
-	export let origin: dayjs.Dayjs
+	export let origin: Dayjs
 	export let axis: 'x' | 'y'
 	export let drags: {
 		class?: string
@@ -20,17 +19,14 @@
 		moveEnd?: boolean
 	}[]
 
-	const timeZone = getEventTimeZone()
 	let deltaStartMs = 0
 	let deltaEndMs = 0
 
 	$: msSize = time(hourSize).to('hour')
-	$: startPx = msSize * (-origin.diff(dayjs(period.start).tz(timeZone)) + $magnet(deltaStartMs))
+	$: startPx = msSize * (-origin.diff(daytz(period.start)) + $magnet(deltaStartMs))
 	$: sizePx =
 		msSize *
-		(dayjs(period.end).tz(timeZone).diff(dayjs(period.start).tz(timeZone)) -
-			$magnet(deltaStartMs) +
-			$magnet(deltaEndMs))
+		(daytz(period.end).diff(daytz(period.start)) - $magnet(deltaStartMs) + $magnet(deltaEndMs))
 
 	async function handleGrabDone() {
 		const start = new Date(period.start.getTime() + $magnet(deltaStartMs))

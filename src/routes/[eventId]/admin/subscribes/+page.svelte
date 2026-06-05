@@ -30,7 +30,6 @@
 		SubscribeStateForm,
 	} from '$lib/subscribe'
 	import { formatRange } from '$lib/formatRange'
-
 	import { eventPath } from '$lib/store'
 	import { SUBSCRIBE_STATE } from '$lib/constant'
 	import { TagsList } from '$lib/tag'

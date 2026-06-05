@@ -1,5 +1,5 @@
 import type { Period } from '@prisma/client'
-import dayjs from '$lib/dayjs'
+import { daytz } from '$lib/dayjs'
 
 type RangeOfDate = {
 	start: Date
@@ -13,7 +13,7 @@ export function getRangeOfTeam(team: { periods: Period[] }): RangeOfDate | null 
 		.flat(1)
 		.toSorted()
 	return {
-		start: dayjs(periods[0]).toDate(),
-		end: dayjs(periods.at(-1)).toDate(),
+		start: daytz(periods[0]).toDate(),
+		end: daytz(periods.at(-1)).toDate(),
 	}
 }

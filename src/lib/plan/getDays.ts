@@ -1,14 +1,14 @@
-import dayjs, { type Dayjs } from '$lib/dayjs'
+import { daytz, type Dayjs } from '$lib/dayjs'
 import type { Range } from 'fuma'
 
 type Day = { hours: number[]; date: Dayjs }
 
-export function getDays(range: Range, timeZone: string): Day[] {
+export function getDays(range: Range): Day[] {
 	const days = []
 
 	function getHours(date: Dayjs): number[] {
-		const rangeStart = dayjs(range.start).tz(timeZone)
-		const rangeEnd = dayjs(range.end).tz(timeZone)
+		const rangeStart = daytz(range.start)
+		const rangeEnd = daytz(range.end)
 
 		if (!date.isSame(rangeStart, 'day') && !date.isSame(rangeEnd, 'day'))
 			return Array(24)
@@ -25,7 +25,7 @@ export function getDays(range: Range, timeZone: string): Day[] {
 			.map((_, h) => startHour + h)
 	}
 
-	for (let day = dayjs(range.start).tz(timeZone); day.isBefore(dayjs(range.end).tz(timeZone)); day = day.add(1, 'day'))
+	for (let day = daytz(range.start); day.isBefore(daytz(range.end)); day = day.add(1, 'day'))
 		days.push({ date: day, hours: getHours(day) })
 
 	return days

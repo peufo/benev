@@ -1,9 +1,8 @@
 import dayjs from '$lib/dayjs'
 
 export const getAge = (date: Date | null) => {
-	const day = dayjs()
 	if (!date) return '-'
-	return day.diff(dayjs(date), 'year') + ' ans'
+	return dayjs().diff(dayjs(date), 'year') + ' ans'
 }
 
 export function getTextColor(bg: string): string {

@@ -3,8 +3,7 @@
 	import { Icon, urlParam } from 'fuma'
 	import { mdiClipboardTextOutline } from '@mdi/js'
 	import { goto } from '$app/navigation'
-	import dayjs from '$lib/dayjs'
-	import { getEventTimeZone } from '$lib/timezone'
+	import { daytz } from '$lib/dayjs'
 
 	import { SubscribeStateForm } from '$lib/subscribe'
 	import Progress from '$lib/Progress.svelte'
@@ -44,8 +43,8 @@
 	<div class="flex gap-1 flex-wrap items-center">
 		<span class="text-sm" class:opacity-80={period.isDisabled}>
 			<!-- {formatRange(period)} -->
-			{dayjs(period.start).tz(getEventTimeZone()).format('dddd, DD.MM.YY, HH:mm —')}
-			{dayjs(period.end).tz(getEventTimeZone()).format('HH:mm')}
+			{daytz(period.start).format('dddd, DD.MM.YY, HH:mm —')}
+			{daytz(period.end).format('HH:mm')}
 		</span>
 		<TagsList tags={period.tags} />
 	</div>
