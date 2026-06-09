@@ -14,7 +14,17 @@
 		try {
 			return Intl.supportedValuesOf('timeZone')
 		} catch {
-			return ['Europe/Zurich', 'Europe/Paris', 'Europe/Berlin', 'America/New_York', 'America/Los_Angeles', 'Asia/Tokyo', 'Asia/Shanghai', 'Australia/Sydney', 'Pacific/Auckland']
+			return [
+				'Europe/Zurich',
+				'Europe/Paris',
+				'Europe/Berlin',
+				'America/New_York',
+				'America/Los_Angeles',
+				'Asia/Tokyo',
+				'Asia/Shanghai',
+				'Australia/Sydney',
+				'Pacific/Auckland',
+			]
 		}
 	})()
 

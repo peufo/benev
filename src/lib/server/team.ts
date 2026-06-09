@@ -1,5 +1,5 @@
 import { getRangeOfTeam } from '$lib/plan/getRange'
-import type { Event, Member, Period, Subscribe, Team, Prisma, Tag } from '@prisma/client'
+import type { Event, Member, Period, Subscribe, Team, Tag } from '@prisma/client'
 import { prisma } from './prisma'
 import type { MemberWithComputedValues } from './member'
 import { periodIsComplet } from '$lib/period'

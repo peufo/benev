@@ -2,12 +2,11 @@
 	import { createEventDispatcher } from 'svelte'
 	import axios from 'axios'
 	import { mdiContentDuplicate } from '@mdi/js'
-	import { daytz } from '$lib/dayjs'
+	import { daytz, type Dayjs } from '$lib/dayjs'
 	import {
 		useForm,
 		InputNumber,
 		InputDate,
-		InputTime,
 		ButtonDelete,
 		urlParam,
 		USE_COERCE_DATE,
@@ -79,30 +78,41 @@
 		}
 	}
 
-	let defaultStart = daytz(period?.start).startOf('hour').add(1, 'hour').toDate()
-	let defaultEnd = daytz(period?.end).startOf('hour').add(3, 'hours').toDate()
-	let start: Date | null = period?.start || defaultStart
-	let end = period?.end || defaultEnd
+	let defaultStart = daytz().startOf('hour').add(1, 'hour')
+	let defaultEnd = daytz().startOf('hour').add(3, 'hours')
+	let start = daytz(period.start || defaultStart)
+	let end = daytz(period?.end || defaultEnd)
+	let startTime = start.format('HH:mm')
+	let endTime = end.format('HH:mm')
 
 	let maxSubscribe = period?.maxSubscribe || 1
 
-	function getAbsoluteDay(date: Date): number {
-		const minutes = date.getTime() / (1000 * 60)
-		return Math.floor((minutes - date.getTimezoneOffset()) / (60 * 24))
+	function setTime(date: Dayjs, time: string): Dayjs {
+		if (!time) return date
+		const [h, m] = time.split(':').map(Number)
+		return date.set('h', h).set('m', m)
 	}
-	function getDiffDay(d1: Date, d2: Date | null): number {
-		if (!d2) return 0
-		return getAbsoluteDay(d1) - getAbsoluteDay(d2)
+	function ensureAfterStart(date: Dayjs) {
+		if (date.isBefore(_start) || date.isSame(_start)) return date.add(1, 'day')
+		return date
 	}
 
 	$: basePath = `${$eventPath}/admin`
-	$: diffDay = getDiffDay(end, start)
-	$: addADay = diffDay === 0 && end.getHours() < (start?.getHours() || 0)
+	$: _start = setTime(start, startTime)
+	$: _end = ensureAfterStart(setTime(end, endTime))
+	$: diffDay = _end.startOf('day').diff(_start.startOf('day'), 'day')
+
+	$: console.log({
+		_start: _start.format('YY-MM-DD HH:mm'),
+		_end: _end.format('YY-MM-DD HH:mm'),
+	})
 
 	export function setPeriod(_period: PeriodProp) {
 		period = _period
-		start = period?.start || defaultStart
-		end = period?.end || defaultEnd
+		start = daytz(period?.start || defaultStart)
+		end = daytz(period?.end || defaultEnd)
+		startTime = start.format('HH:mm')
+		endTime = end.format('HH:mm')
 		maxSubscribe = period?.maxSubscribe || 1
 	}
 
@@ -112,11 +122,14 @@
 
 	async function createNextPeriod() {
 		const duration = daytz(end).diff(start, 'minute')
+		console.log({ duration })
+		const nextStart = end
+		const nextEnd = end.add(duration, 'minute')
 		const form = new FormData()
 		form.append('redirectTo', $urlParam.without('form_period'))
 		form.append('team', USE_COERCE_JSON + JSON.stringify({ id: period.teamId }))
-		form.append('start', USE_COERCE_DATE + end.toJSON())
-		form.append('end', USE_COERCE_DATE + daytz(end).add(duration, 'minute').toJSON())
+		form.append('start', USE_COERCE_DATE + nextStart.toJSON())
+		form.append('end', USE_COERCE_DATE + nextEnd.toJSON())
 		form.append('maxSubscribe', USE_COERCE_NUMBER + maxSubscribe)
 		form.append(
 			'tags',
@@ -140,14 +153,10 @@
 	{#if period?.id}
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
-	{#if start}
-		<input type="hidden" name="start" value="{USE_COERCE_DATE}{start.toJSON()}" />
+	{#if _start}
+		<input type="hidden" name="start" value="{USE_COERCE_DATE}{_start.toJSON()}" />
 	{/if}
-	<input
-		type="hidden"
-		name="end"
-		value="{USE_COERCE_DATE}{daytz(end).add(+addADay, 'day').toJSON()}"
-	/>
+	<input type="hidden" name="end" value="{USE_COERCE_DATE}{_end.toJSON()}" />
 
 	{#key period}
 		<InputRelation
@@ -172,12 +181,11 @@
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
 		<InputDate
 			label="Date"
-			bind:value={start}
-			on:input={() => {
-				if (!start) return
-				const _end = new Date(start)
-				_end.setHours(end.getHours(), end.getMinutes())
-				end = _end
+			value={start.toDate()}
+			on:input={({ detail: value }) => {
+				if (!value) return
+				// start.toDate() is not a good idea !
+				start = daytz(value)
 			}}
 		/>
 
@@ -187,17 +195,46 @@
 			bind:value={maxSubscribe}
 			input={{ min: 1, step: 1 }}
 		/>
-
-		<InputTime label="Début" bind:value={start} getDefaultDate={() => defaultStart} />
-		<InputTime
-			label="Fin"
-			bind:value={end}
-			hint={diffDay === 1 || addADay
-				? 'Le jour suivant'
-				: diffDay === 0
-				? ''
-				: `+ ${diffDay} jours`}
-		/>
+		<div class="form-control">
+			<label for="startTime" class="label">
+				<span class="label-text">Début</span>
+			</label>
+			<input
+				type="time"
+				id="startTime"
+				class="input input-bordered"
+				step={300}
+				bind:value={startTime}
+			/>
+		</div>
+		<div class="form-control">
+			<label for="endTime" class="label">
+				<span class="label-text">Fin</span>
+				{#if diffDay !== 0}
+					<span class="label-text-alt">
+						+ {diffDay} jours
+					</span>
+				{/if}
+			</label>
+			<input
+				type="time"
+				id="endTime"
+				class="input input-bordered"
+				step={300}
+				bind:value={endTime}
+			/>
+			{#if diffDay !== 0}
+				<div class="flex pt-1 join">
+					<button type="button" class="btn btn-xs join-item">-</button>
+					<input
+						type="date"
+						name="end"
+						class="input input-xs input-bordered input-ghost join-item"
+					/>
+					<button type="button" class="btn btn-xs join-item">+</button>
+				</div>
+			{/if}
+		</div>
 	</div>
 
 	<div class="flex flex-row-reverse gap-3 grow">
