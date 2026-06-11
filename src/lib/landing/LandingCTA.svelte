@@ -20,7 +20,7 @@
 					href="/me"
 					class="
 						btn btn-lg bg-brand-beige border-brand-beige text-primary
-						hover:bg-[#b8a58a] hover:border-[#b8a58a]
+						hover:bg-brand-beige-dark hover:border-brand-beige-dark
 						shadow-lg hover:shadow-xl
 						transition-shadow duration-200
 					"

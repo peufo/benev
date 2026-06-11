@@ -22,7 +22,7 @@
 
 <input type="hidden" name={key} value={getJsonIds(_items)} />
 
-<fieldset style="border: 1px solid #bbb" class="p-2 rounded {klass}">
+<fieldset class="p-2 rounded border border-base-300 {klass}">
 	<legend class="px-2">{legend}</legend>
 	<div class="flex gap-4 flex-wrap items-center">
 		<InputBoolean
