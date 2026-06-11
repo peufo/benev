@@ -88,6 +88,7 @@
 	$: basePath = `${$eventPath}/admin`
 
 	function formatDuration(_start: Dayjs, _end: Dayjs) {
+		// @ts-ignore svelte-check is not updated
 		return new Intl.DurationFormat('fr-ch').format({
 			days: _end.diff(_start, 'days'),
 			hours: _end.diff(_start, 'hours') % 24,

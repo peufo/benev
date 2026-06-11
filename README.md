@@ -30,3 +30,7 @@ Platforme de gestion de bénévole
 - [x] Visualiser ses inscriptions
 - [x] Renseigner toute les infos util à l'organisation
 - [x] Parcourir les pages d'un évènement
+
+## Licence
+
+Ce projet est sous licence [AGPL-3.0](LICENSE).

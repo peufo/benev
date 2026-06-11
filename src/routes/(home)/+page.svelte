@@ -69,10 +69,10 @@
 				<div
 					class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-base-content/70"
 				>
-					<span class="flex items-center gap-2">
+					<a class="flex items-center gap-2 link link-hover" href="/open-source">
 						<span class="w-2 h-2 rounded-full bg-green-500" />
-						Gratuit et open source
-					</span>
+						Open source
+					</a>
 					<span class="flex items-center gap-2">
 						<span class="w-2 h-2 rounded-full bg-brand-beige" />
 						Solide et éprouvé
@@ -82,9 +82,6 @@
 						Simple et flexible
 					</span>
 				</div>
-				<a href="/support" class="btn btn-sm btn-ghost text-primary hover:bg-primary/5">
-					Vraiment gratuit ?
-				</a>
 			</div>
 		</div>
 	</section>
