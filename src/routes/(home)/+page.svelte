@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Testimonials } from '$lib/testimonials'
-	import { Workflow, LandingCTA, AnimatedLogo } from '$lib/landing'
+	import { Workflow, LandingCTA, AnimatedLogo, PricingSection } from '$lib/landing'
 
 	export let data
 </script>
@@ -88,6 +88,9 @@
 
 	<!-- Workflow -->
 	<Workflow />
+
+	<!-- Pricing -->
+	<PricingSection />
 
 	<!-- Testimonials -->
 	<Testimonials />

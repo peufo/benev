@@ -10,58 +10,57 @@
 
 <div class="max-w-5xl mx-auto flex flex-col gap-24 py-12 px-4 md:px-8">
 	<!-- Hero -->
-	<section class="flex flex-col lg:flex-row lg:items-end gap-10 lg:gap-16 py-8 md:py-16">
-		<div class="max-w-2xl">
-			<h1
-				class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-primary tracking-tight leading-[0.95]"
-			>
-				Le code est libre.
-				<span class="block mt-2 text-base-content/70">L'hébergement est un service.</span>
-			</h1>
-			<p class="mt-6 md:mt-8 text-lg md:text-xl text-base-content/70 leading-relaxed max-w-xl">
-				benevio est un logiciel open source sous licence AGPL-3.0. Tu peux l'utiliser, le modifier et le redistribuer
-				librement. L'hébergement clé en main sur benev.io est payant, car les serveurs et le support
-				on un coût réel.
-			</p>
-			<div class="mt-8 flex flex-col sm:flex-row gap-4">
-				<a
-					href="/events"
-					class="btn btn-primary btn-lg
-						shadow-lg hover:shadow-xl hover:shadow-primary/20
-						transition-all duration-200 ease-out"
+	<section>
+		<div class="flex flex-col lg:flex-row lg:items-end gap-10 lg:gap-16 py-8 md:py-16">
+			<div class="max-w-2xl">
+				<h1
+					class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-primary tracking-tight leading-[0.95]"
 				>
-					<span class="font-semibold">Créer mon événement</span>
-					<ArrowRight size={18} />
-				</a>
-				<a
-					href="https://github.com/peufo/benev"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="btn btn-outline btn-lg"
-				>
-					<Code size={18} />
-					<span>Voir le code</span>
-				</a>
-			</div>
-		</div>
-
-		<div class="hidden lg:block shrink-0">
-			<div class="bg-base-200 rounded-2xl p-6 font-mono text-sm shadow-inner w-80">
-				<div class="flex gap-2 mb-4">
-					<div class="w-3 h-3 rounded-full bg-red-400"></div>
-					<div class="w-3 h-3 rounded-full bg-yellow-400"></div>
-					<div class="w-3 h-3 rounded-full bg-green-400"></div>
+					Le code est libre.
+					<span class="block mt-2 text-base-content/70">L'hébergement est un service.</span>
+				</h1>
+				<p class="mt-6 md:mt-8 text-lg md:text-xl text-base-content/70 leading-relaxed max-w-xl">
+					benevio est un logiciel open source sous licence AGPL-3.0. Tu peux l'utiliser, le modifier
+					et le redistribuer librement. L'hébergement clé en main sur benev.io est payant, car les
+					serveurs et le support on un coût réel.
+				</p>
+				<div class="mt-8 flex flex-col sm:flex-row gap-4">
+					<a
+						href="/me/events?new-event"
+						class="btn btn-primary btn-lg
+							shadow-lg hover:shadow-xl hover:shadow-primary/20
+							transition-all duration-200 ease-out"
+					>
+						<span class="font-semibold">Créer mon événement</span>
+						<ArrowRight size={18} />
+					</a>
+					<a
+						href="https://github.com/peufo/benev"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn btn-outline btn-lg"
+					>
+						<Code size={18} />
+						<span>Voir le code</span>
+					</a>
 				</div>
-				<p class="text-base-content/50"># benevio est open source</p>
-				<p class="text-base-content/50"># sous licence AGPL-3.0</p>
-				<p class="text-primary font-semibold mt-3">git clone https://github.com/peufo/benev</p>
+			</div>
+
+			<div class="hidden lg:block shrink-0">
+				<div class="bg-base-200 rounded-2xl p-6 font-mono text-sm shadow-inner w-80">
+					<div class="flex gap-2 mb-4">
+						<div class="w-3 h-3 rounded-full bg-red-400" />
+						<div class="w-3 h-3 rounded-full bg-yellow-400" />
+						<div class="w-3 h-3 rounded-full bg-green-400" />
+					</div>
+					<p class="text-base-content/50"># benevio est open source</p>
+					<p class="text-base-content/50"># sous licence AGPL-3.0</p>
+					<p class="text-primary font-semibold mt-3">git clone https://github.com/peufo/benev</p>
+				</div>
 			</div>
 		</div>
-	</section>
 
-	<!-- Auto-hébergement -->
-	<section class="max-w-2xl">
-		<p class="text-base-content/70 leading-relaxed">
+		<p class="text-base-content/70 leading-relaxed max-w-2xl">
 			Si les limites de l'hébergement officiel te posent problème, tu peux
 			<a
 				href="https://github.com/peufo/benev"
@@ -69,7 +68,7 @@
 				rel="noopener noreferrer"
 				class="link link-primary"
 			>
-				auto-héberger benevio gratuitement
+				héberger benevio
 			</a>
 			sur ton propre serveur. C'est la même application, mais sur ton infrastructure.
 		</p>
@@ -94,8 +93,8 @@
 						class="link link-primary"
 					>
 						GitHub
-					</a>. Chaque retour, idée ou bug reporté sous forme d'<em>issue</em> fait avancer le
-					projet. Tu n'as pas besoin de savoir coder pour participer.
+					</a>. Chaque retour, idée ou bug reporté sous forme d'<em>issue</em> fait avancer le projet.
+					Tu n'as pas besoin de savoir coder pour participer.
 				</p>
 			</div>
 		</div>
@@ -104,9 +103,7 @@
 			{#if data.recentIssues.length > 0}
 				<GithubIssues
 					issues={data.recentIssues}
-					title="{openCount} sujet{openCount > 1 ? 's' : ''} ouvert{openCount > 1
-						? 's'
-						: ''}"
+					title="{openCount} sujet{openCount > 1 ? 's' : ''} ouvert{openCount > 1 ? 's' : ''}"
 					titleHref="https://github.com/peufo/benev/issues"
 					showNewIssueButton
 				/>
