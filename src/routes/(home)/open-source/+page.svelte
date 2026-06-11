@@ -145,7 +145,7 @@
 			être simple.
 		</p>
 		<a
-			href="/events"
+			href="/me/events"
 			class="btn btn-primary btn-lg mt-8
 				shadow-lg hover:shadow-xl hover:shadow-primary/20
 				transition-all duration-200 ease-out"
