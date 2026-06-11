@@ -85,8 +85,10 @@ export const actions = {
 					include: {
 						team: {
 							include: {
-								event: true,
 								leaders: true,
+								event: {
+									include: { owner: { select: { email: true } } },
+								},
 							},
 						},
 					},
@@ -99,6 +101,9 @@ export const actions = {
 		const memberMail =
 			subscribe.member.isNotifiedSubscribe && subscribe.member.email ? [subscribe.member.email] : []
 		const leadersMail = subscribe.period.team.leaders.map(({ email }) => email as string)
+		if (leadersMail.length === 0) {
+			leadersMail.push(subscribe.period.team.event.owner.email)
+		}
 		const to = subscribe.createdBy === 'user' ? leadersMail : memberMail
 		const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
 
