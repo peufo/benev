@@ -6,7 +6,6 @@
 	import {
 		useForm,
 		InputNumber,
-		InputDate,
 		ButtonDelete,
 		urlParam,
 		USE_COERCE_DATE,
@@ -23,6 +22,7 @@
 	import { api } from '$lib/api'
 	import { TagSelectItem } from '$lib/tag'
 	import { toast } from 'svelte-sonner'
+	import InputDateTime from './InputDateTime.svelte'
 
 	type PeriodProp = Partial<Period & { team: Team; tags: Tag[]; subscribes: Subscribe[] }>
 
@@ -82,37 +82,23 @@
 	let defaultEnd = daytz().startOf('hour').add(3, 'hours')
 	let start = daytz(period.start || defaultStart)
 	let end = daytz(period?.end || defaultEnd)
-	let startTime = start.format('HH:mm')
-	let endTime = end.format('HH:mm')
 
 	let maxSubscribe = period?.maxSubscribe || 1
 
-	function setTime(date: Dayjs, time: string): Dayjs {
-		if (!time) return date
-		const [h, m] = time.split(':').map(Number)
-		return date.set('h', h).set('m', m)
-	}
-	function ensureAfterStart(date: Dayjs) {
-		if (date.isBefore(_start) || date.isSame(_start)) return date.add(1, 'day')
-		return date
-	}
-
 	$: basePath = `${$eventPath}/admin`
-	$: _start = setTime(start, startTime)
-	$: _end = ensureAfterStart(setTime(end, endTime))
-	$: diffDay = _end.startOf('day').diff(_start.startOf('day'), 'day')
 
-	$: console.log({
-		_start: _start.format('YY-MM-DD HH:mm'),
-		_end: _end.format('YY-MM-DD HH:mm'),
-	})
+	function formatDuration(_start: Dayjs, _end: Dayjs) {
+		return new Intl.DurationFormat('fr-ch').format({
+			days: _end.diff(_start, 'days'),
+			hours: _end.diff(_start, 'hours') % 24,
+			minutes: _end.diff(_start, 'minutes') % 60,
+		})
+	}
 
 	export function setPeriod(_period: PeriodProp) {
 		period = _period
 		start = daytz(period?.start || defaultStart)
 		end = daytz(period?.end || defaultEnd)
-		startTime = start.format('HH:mm')
-		endTime = end.format('HH:mm')
 		maxSubscribe = period?.maxSubscribe || 1
 	}
 
@@ -122,7 +108,6 @@
 
 	async function createNextPeriod() {
 		const duration = daytz(end).diff(start, 'minute')
-		console.log({ duration })
 		const nextStart = end
 		const nextEnd = end.add(duration, 'minute')
 		const form = new FormData()
@@ -149,14 +134,9 @@
 	class="p-2 flex flex-col gap-3 {klass}"
 >
 	<input type="hidden" name="redirectTo" value={$urlParam.without('form_period')} />
-
 	{#if period?.id}
 		<input type="hidden" name="id" value={period.id} />
 	{/if}
-	{#if _start}
-		<input type="hidden" name="start" value="{USE_COERCE_DATE}{_start.toJSON()}" />
-	{/if}
-	<input type="hidden" name="end" value="{USE_COERCE_DATE}{_end.toJSON()}" />
 
 	{#key period}
 		<InputRelation
@@ -178,63 +158,36 @@
 		/>
 	{/key}
 
+	<InputNumber
+		key="maxSubscribe"
+		label="Nombre de bénévoles"
+		bind:value={maxSubscribe}
+		input={{ min: 1, step: 1 }}
+	/>
+
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
-		<InputDate
-			label="Date"
-			value={start.toDate()}
-			on:input={({ detail: value }) => {
-				if (!value) return
-				// start.toDate() is not a good idea !
-				start = daytz(value)
+		<InputDateTime
+			label="Début"
+			name="start"
+			bind:value={start}
+			onSetValue={(newStart) => {
+				const duration = end.diff(start)
+				end = newStart.add(duration)
+				return newStart
 			}}
 		/>
-
-		<InputNumber
-			key="maxSubscribe"
-			label="Bénévoles"
-			bind:value={maxSubscribe}
-			input={{ min: 1, step: 1 }}
+		<InputDateTime
+			label="Fin"
+			name="end"
+			bind:value={end}
+			hint={formatDuration(start, end)}
+			onSetValue={(newEnd) => {
+				if (newEnd.isBefore(start) || newEnd.isSame(start)) {
+					return newEnd.add(1, 'day')
+				}
+				return newEnd
+			}}
 		/>
-		<div class="form-control">
-			<label for="startTime" class="label">
-				<span class="label-text">Début</span>
-			</label>
-			<input
-				type="time"
-				id="startTime"
-				class="input input-bordered"
-				step={300}
-				bind:value={startTime}
-			/>
-		</div>
-		<div class="form-control">
-			<label for="endTime" class="label">
-				<span class="label-text">Fin</span>
-				{#if diffDay !== 0}
-					<span class="label-text-alt">
-						+ {diffDay} jours
-					</span>
-				{/if}
-			</label>
-			<input
-				type="time"
-				id="endTime"
-				class="input input-bordered"
-				step={300}
-				bind:value={endTime}
-			/>
-			{#if diffDay !== 0}
-				<div class="flex pt-1 join">
-					<button type="button" class="btn btn-xs join-item">-</button>
-					<input
-						type="date"
-						name="end"
-						class="input input-xs input-bordered input-ghost join-item"
-					/>
-					<button type="button" class="btn btn-xs join-item">+</button>
-				</div>
-			{/if}
-		</div>
 	</div>
 
 	<div class="flex flex-row-reverse gap-3 grow">
