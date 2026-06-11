@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiCalendarMultiple, mdiForumOutline, mdiScaleBalance, mdiHeartOutline } from '@mdi/js'
+	import { mdiCalendarMultiple, mdiForumOutline, mdiHeartOutline } from '@mdi/js'
 	import { page } from '$app/stores'
 	import { Icon } from 'fuma'
 
@@ -8,7 +8,6 @@
 		{ path: '/contact', label: 'Contact', icon: mdiForumOutline },
 		{ path: '/events', label: 'Évènements', icon: mdiCalendarMultiple },
 		// { path: '/pricing', label: 'Prix', icon: mdiWalletOutline },
-		{ path: '/terms', label: 'Conditions', icon: mdiScaleBalance },
 	]
 </script>
 

@@ -71,7 +71,7 @@
 			>
 				auto-héberger benevio gratuitement
 			</a>
-			sur ton propre serveur. Le code est identique.
+			sur ton propre serveur. C'est la même application, mais sur ton infrastructure.
 		</p>
 	</section>
 

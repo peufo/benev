@@ -19,25 +19,25 @@ The application is built as a server-rendered full-stack app with a rich admin i
 
 ## Technology Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | [SvelteKit](https://kit.svelte.dev/) v2 (full-stack, file-based routing) |
-| Language | TypeScript v5 (strict mode, `verbatimModuleSyntax: true`) |
-| Build Tool | Vite v5 |
-| UI | Svelte v4, [Tailwind CSS](https://tailwindcss.com/) v3, [DaisyUI](https://daisyui.com/) v3 |
-| Font | [Barlow](https://fonts.google.com/specimen/Barlow) (400–800) via Google Fonts in `src/app.html` |
-| Icons | [Lucide](https://lucide.dev/) (`lucide-svelte`) — migration from MDI in progress |
-| Component Lib | [`fuma`](https://www.npmjs.com/package/fuma) — custom internal UI/component library (used extensively for inputs, forms, tables, icons, etc.) |
-| ORM | [Prisma](https://www.prisma.io/) v5 (client + generator) with `prisma-json-types-generator` |
-| Database | MySQL |
-| Auth | [Lucia](https://lucia-auth.com/) v2 with `@lucia-auth/adapter-prisma` |
-| OAuth Providers | GitHub, Google |
-| Payments | [Stripe](https://stripe.com/) (server-side `stripe` + client-side `@stripe/stripe-js`) |
-| Email | Nodemailer (SMTP via Infomaniak) |
-| E2E Tests | [Playwright](https://playwright.dev/) |
-| Unit Tests | [Vitest](https://vitest.dev/) with `happy-dom` |
-| Runtime (Docker) | [Bun](https://bun.sh/) (`oven/bun:latest`) |
-| Deployment | Docker image built via GitHub Actions, pushed to GHCR |
+| Layer            | Technology                                                                                                                                    |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework        | [SvelteKit](https://kit.svelte.dev/) v2 (full-stack, file-based routing)                                                                      |
+| Language         | TypeScript v5 (strict mode, `verbatimModuleSyntax: true`)                                                                                     |
+| Build Tool       | Vite v5                                                                                                                                       |
+| UI               | Svelte v4, [Tailwind CSS](https://tailwindcss.com/) v3, [DaisyUI](https://daisyui.com/) v3                                                    |
+| Font             | [Barlow](https://fonts.google.com/specimen/Barlow) (400–800) via Google Fonts in `src/app.html`                                               |
+| Icons            | [Lucide](https://lucide.dev/) (`lucide-svelte`) — migration from MDI in progress                                                              |
+| Component Lib    | [`fuma`](https://www.npmjs.com/package/fuma) — custom internal UI/component library (used extensively for inputs, forms, tables, icons, etc.) |
+| ORM              | [Prisma](https://www.prisma.io/) v5 (client + generator) with `prisma-json-types-generator`                                                   |
+| Database         | MySQL                                                                                                                                         |
+| Auth             | [Lucia](https://lucia-auth.com/) v2 with `@lucia-auth/adapter-prisma`                                                                         |
+| OAuth Providers  | GitHub, Google                                                                                                                                |
+| Payments         | [Stripe](https://stripe.com/) (server-side `stripe` + client-side `@stripe/stripe-js`)                                                        |
+| Email            | Nodemailer (SMTP via Infomaniak)                                                                                                              |
+| E2E Tests        | [Playwright](https://playwright.dev/)                                                                                                         |
+| Unit Tests       | [Vitest](https://vitest.dev/) with `happy-dom`                                                                                                |
+| Runtime (Docker) | [Bun](https://bun.sh/) (`oven/bun:latest`)                                                                                                    |
+| Deployment       | Docker image built via GitHub Actions, pushed to GHCR                                                                                         |
 
 ---
 
@@ -100,22 +100,22 @@ The application is built as a server-rendered full-stack app with a rich admin i
 
 ### Key Modules
 
-| Module | Purpose |
-|--------|---------|
-| `$lib/server` | Re-exports all server-only utilities. **Must only be imported in `*.server.ts`, `hooks.server.ts`, or `+server.ts` files.** |
-| `$lib/server/prisma.ts` | Extended Prisma client with query middleware for event date syncing, soft deletes, and user/member data duplication. |
-| `$lib/server/lucia.ts` | Lucia auth instance, GitHub/Google OAuth providers. |
-| `$lib/server/permission.ts` | Role-based guards: `member`, `leader`, `admin`, `owner`, `root`, plus `leaderOfTeam`. |
-| `$lib/server/member.ts` | Member profile resolution with computed values (roles, stats). |
-| `$lib/server/stripe.ts` | Checkout session creation and Stripe webhook handling. |
-| `$lib/server/email.ts` | SMTP transport and email rendering/sending. |
-| `$lib/models` | Zod schemas for form validation (used with `fuma/validation` and `fuma/server` helpers). |
-| `$lib/email` | Svelte components for transactional emails (verification, password reset, subscribe notifications, etc.). |
-| `$lib/plan` | Drag-and-drop planning grid components for team/period visualization. |
-| `$lib/pages` | CMS page rendering, suggestions, and nested path logic. |
-| `$lib/dayjs.ts` | Pre-configured dayjs instance (relativeTime plugin + French locale). |
-| `$lib/types/` | Shared TypeScript types. Re-exported from `index.ts`. |
-| `$lib/landing/` | Landing page components (AnimatedLogo, etc.). |
+| Module                      | Purpose                                                                                                                     |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `$lib/server`               | Re-exports all server-only utilities. **Must only be imported in `*.server.ts`, `hooks.server.ts`, or `+server.ts` files.** |
+| `$lib/server/prisma.ts`     | Extended Prisma client with query middleware for event date syncing, soft deletes, and user/member data duplication.        |
+| `$lib/server/lucia.ts`      | Lucia auth instance, GitHub/Google OAuth providers.                                                                         |
+| `$lib/server/permission.ts` | Role-based guards: `member`, `leader`, `admin`, `owner`, `root`, plus `leaderOfTeam`.                                       |
+| `$lib/server/member.ts`     | Member profile resolution with computed values (roles, stats).                                                              |
+| `$lib/server/stripe.ts`     | Checkout session creation and Stripe webhook handling.                                                                      |
+| `$lib/server/email.ts`      | SMTP transport and email rendering/sending.                                                                                 |
+| `$lib/models`               | Zod schemas for form validation (used with `fuma/validation` and `fuma/server` helpers).                                    |
+| `$lib/email`                | Svelte components for transactional emails (verification, password reset, subscribe notifications, etc.).                   |
+| `$lib/plan`                 | Drag-and-drop planning grid components for team/period visualization.                                                       |
+| `$lib/pages`                | CMS page rendering, suggestions, and nested path logic.                                                                     |
+| `$lib/dayjs.ts`             | Pre-configured dayjs instance (relativeTime plugin + French locale).                                                        |
+| `$lib/types/`               | Shared TypeScript types. Re-exported from `index.ts`.                                                                       |
+| `$lib/landing/`             | Landing page components (AnimatedLogo, etc.).                                                                               |
 
 ---
 
@@ -193,7 +193,6 @@ GOOGLE_CLIENT_SECRET="..."
 
 # Monetization / Stripe
 PUBLIC_FREE_EVENT_MAX_MEMBERS=20
-EXCHANGE_RATE_KEY="..."
 PRIVATE_STRIPE_KEY="..."
 PUBLIC_STRIPE_KEY="..."
 PRIVATE_STRIPE_WEBHOOK_KEY="..."

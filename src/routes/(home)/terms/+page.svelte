@@ -6,7 +6,7 @@
 	<div class="prose">
 		<h1>Conditions d'utilisation</h1>
 		<p>
-			Date d'effet : <b>8 Mai 2026</b> <br />
+			Date d'effet : <b>11 Juin 2026</b> <br />
 			Temps de lecture : <b>2 minutes</b>
 		</p>
 		<p>En utilisant notre application, tu acceptes les règles ci-dessous.</p>
@@ -21,7 +21,7 @@
 					target="_blank"
 					class="link link-hover"
 				>
-					licence GPL-3
+					licence AGPL-3.0
 				</a>. Donc, si tu es curieux, tu es libre de jeter un œil au code source, de contribuer au
 				projet ou d’héberger ta propre version de l’application. Mais garde à l'esprit que ces
 				libertés sont soumises aux termes de la licence.<br />
@@ -68,14 +68,15 @@
 			</p>
 		</section>
 		<section>
-			<h2>5. Gratuité du service</h2>
+			<h2>5. Hébergement et tarification</h2>
 			<p>
-				Le service benevio est entièrement gratuit. Aucun paiement n'est requis pour créer un
-				événement, gérer des membres ou utiliser l'ensemble des fonctionnalités de l'application.
+				L'hébergement clé en main sur benev.io est soumis à des limites dans sa version gratuite.
+				Au-delà de ces limites, l'utilisation du service est payante. Les tarifs en vigueur sont
+				consultables sur la page principale.
 			</p>
 			<p>
-				Le projet est financé par des contributions volontaires. Si tu souhaites soutenir
-				benevio, tu peux faire un don via la page <a href="/support" class="link link-hover">Soutenir benevio</a>.
+				Si tu préfères ne pas être soumis à ces limites, tu peux
+				<a href="/open-source" class="link link-hover">auto-héberger benevio gratuitement</a>.
 			</p>
 		</section>
 
