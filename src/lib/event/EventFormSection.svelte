@@ -2,8 +2,8 @@
 	import { ChevronDown } from 'lucide-svelte'
 
 	export let title: string
-	export let step: number
-	export let required = false
+	export let step: number | undefined = undefined
+	export let required: boolean | undefined = undefined
 	export let open = false
 	export let collapsible = true
 
@@ -20,18 +20,22 @@
 		class:cursor-default={!collapsible}
 		on:click={toggle}
 	>
-		<div
-			class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 transition-colors duration-200"
-			class:bg-primary={open}
-			class:text-primary-content={open}
-			class:bg-base-200={!open}
-			class:text-base-content={!open}
-		>
-			{step}
-		</div>
+		{#if step !== undefined}
+			<div
+				class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 transition-colors duration-200"
+				class:bg-primary={open}
+				class:text-primary-content={open}
+				class:bg-base-200={!open}
+				class:text-base-content={!open}
+			>
+				{step}
+			</div>
+		{/if}
 		<div class="flex-1">
 			<h3 class="font-bold text-base-content leading-tight">{title}</h3>
-			<p class="text-xs text-base-content/60">{required ? 'Obligatoire' : 'Optionnel'}</p>
+			{#if required !== undefined}
+				<p class="text-xs text-base-content/60">{required ? 'Obligatoire' : 'Optionnel'}</p>
+			{/if}
 		</div>
 		{#if collapsible}
 			<div class="transition-transform duration-300" class:rotate-180={open}>

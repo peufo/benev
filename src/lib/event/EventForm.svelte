@@ -13,6 +13,7 @@
 
 	export let event: Event | undefined = undefined
 
+	const isUpdate = !!event
 	let plan = $page.url.searchParams.get('plan') || 'basic'
 
 	const timeZones = (() => {
@@ -66,7 +67,13 @@
 	{/if}
 
 	<div class="flex flex-col gap-3">
-		<EventFormSection title="L'essentiel" step={1} required open collapsible={false}>
+		<EventFormSection
+			title="L'essentiel"
+			step={isUpdate ? undefined : 1}
+			required={isUpdate ? undefined : true}
+			open
+			collapsible={false}
+		>
 			<div class="flex flex-col gap-4">
 				<InputText
 					key="name"
@@ -103,7 +110,13 @@
 			</div>
 		</EventFormSection>
 
-		<EventFormSection title="Identitée" step={2}>
+		<EventFormSection
+			title="Identitée"
+			step={isUpdate ? undefined : 2}
+			required={isUpdate ? undefined : false}
+			open={isUpdate}
+			collapsible={!isUpdate}
+		>
 			<div class="flex flex-col gap-4">
 				<div class="flex pt-2 gap-4 items-center justify-center">
 					<div>
@@ -145,7 +158,13 @@
 			</div>
 		</EventFormSection>
 
-		<EventFormSection title="Pied de page" step={3}>
+		<EventFormSection
+			title="Pied de page"
+			step={isUpdate ? undefined : 3}
+			required={isUpdate ? undefined : false}
+			open={isUpdate}
+			collapsible={!isUpdate}
+		>
 			<div class="flex flex-col gap-4">
 				<InputText key="email" label="Email de contact" value={event?.email || ''} />
 				<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
