@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { EventForm } from '$lib/event'
+	import { goto } from '$app/navigation'
 	import { Dialog, Icon, Placeholder } from 'fuma'
 	import { mdiPlus } from '@mdi/js'
 	import EventMemberCard from './EventMemberCard.svelte'
@@ -7,13 +7,7 @@
 
 	export let data
 
-	let createDialog: HTMLDialogElement
 	let isOrganizerDialog: HTMLDialogElement
-
-	function handleClickNewEvent() {
-		if (data.user.isOrganizer) createDialog.showModal()
-		else isOrganizerDialog.showModal()
-	}
 </script>
 
 <!-- INVITATIONS -->
@@ -29,19 +23,27 @@
 <!-- MES EVENEMENTS -->
 <div class="flex gap-2 justify-between items-center mb-3">
 	<h2 class="title">Mes évènements</h2>
-	<button
-		class="btn btn-ghost"
-		class:btn-ghost={!data.user.isOrganizer}
-		class:text-primary={!data.user.isOrganizer && !data.members.length}
-		class:btn-primary={data.user.isOrganizer && !data.members.length}
-		on:click={handleClickNewEvent}
-	>
-		<Icon
-			path={mdiPlus}
-			class={data.user.isOrganizer && !data.members.length ? 'fill-primary-content' : ''}
-		/>
-		Organiser
-	</button>
+
+	{#if data.user.isOrganizer}
+		<a
+			href="/me/events/create"
+			class="btn"
+			class:btn-primary={!data.members.length}
+			class:btn-ghost={data.members.length > 0}
+		>
+			<Icon path={mdiPlus} class={!data.members.length ? 'fill-primary-content' : ''} />
+			Organiser
+		</a>
+	{:else}
+		<button
+			class="btn btn-ghost"
+			class:text-primary={!data.members.length}
+			on:click={() => isOrganizerDialog.showModal()}
+		>
+			<Icon path={mdiPlus} />
+			Organiser
+		</button>
+	{/if}
 </div>
 
 <div class="flex flex-col gap-3">
@@ -63,12 +65,7 @@
 		on:cancel={() => isOrganizerDialog.close()}
 		on:success={() => {
 			isOrganizerDialog.close()
-			createDialog.showModal()
+			goto('/me/events/create')
 		}}
 	/>
-</Dialog>
-
-<Dialog bind:dialog={createDialog}>
-	<h2 slot="header" class="card-title">Nouvel évènement</h2>
-	<EventForm />
 </Dialog>
