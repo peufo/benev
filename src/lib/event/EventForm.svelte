@@ -96,7 +96,7 @@
 				</InputText>
 
 				<label class="form-control w-full">
-					<span class="label-text text-base-content/70">Fuseau horaire</span>
+					<span class="label-text p-1">Fuseau horaire</span>
 					<select
 						name="timezone"
 						class="select select-bordered w-full"
