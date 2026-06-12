@@ -81,8 +81,8 @@ async function createOrReplaceMedia({ where, data }: UploadOption) {
 }
 
 export async function uploadImages(formData: FormData, eventId: string, authorId: string) {
-	await Promise.all([
-		media.upload(formData, {
+	try {
+		await media.upload(formData, {
 			key: 'poster',
 			where: { posterOf: { id: eventId } },
 			data: {
@@ -91,8 +91,8 @@ export async function uploadImages(formData: FormData, eventId: string, authorId
 				eventId,
 				posterOf: { connect: { id: eventId } },
 			},
-		}),
-		media.upload(formData, {
+		})
+		await media.upload(formData, {
 			key: 'logo',
 			where: { logoOf: { id: eventId } },
 			data: {
@@ -101,8 +101,9 @@ export async function uploadImages(formData: FormData, eventId: string, authorId
 				eventId,
 				logoOf: { connect: { id: eventId } },
 			},
-		}),
-	]).catch((err) => {
+		})
+	} catch (err) {
+		console.error('Upload event images failed')
 		console.error(err)
-	})
+	}
 }
