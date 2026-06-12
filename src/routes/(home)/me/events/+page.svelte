@@ -7,7 +7,7 @@
 
 	export let data
 
-	let isOrganizerDialog: HTMLDialogElement
+	let becomeOrganizerDialog: HTMLDialogElement
 </script>
 
 <!-- INVITATIONS -->
@@ -38,7 +38,7 @@
 		<button
 			class="btn btn-ghost"
 			class:text-primary={!data.members.length}
-			on:click={() => isOrganizerDialog.showModal()}
+			on:click={() => becomeOrganizerDialog.showModal()}
 		>
 			<Icon path={mdiPlus} />
 			Organiser
@@ -59,12 +59,12 @@
 	{/each}
 </div>
 
-<Dialog bind:dialog={isOrganizerDialog}>
+<Dialog bind:dialog={becomeOrganizerDialog}>
 	<h2 slot="header" class="card-title">Devenir organisateur</h2>
 	<IsOrganizerForm
-		on:cancel={() => isOrganizerDialog.close()}
+		on:cancel={() => becomeOrganizerDialog.close()}
 		on:success={() => {
-			isOrganizerDialog.close()
+			becomeOrganizerDialog.close()
 			goto('/me/events/create')
 		}}
 	/>
