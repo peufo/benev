@@ -1,6 +1,8 @@
 import { EventEmitter } from 'node:events'
 import Stripe from 'stripe'
 import { env } from '$env/dynamic/private'
+import { env as publicEnv } from '$env/dynamic/public'
+
 import type { EventTier, Prisma } from '@prisma/client'
 import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
@@ -15,11 +17,7 @@ const bus = new EventEmitter()
 type CheckoutOptions = {
 	getLineItems: (user: User, url: URL) => Stripe.Checkout.SessionCreateParams.LineItem[]
 	returnPath: string
-	onSuccess: (
-		checkout: Stripe.Checkout.Session,
-		items: Stripe.LineItem[],
-		request: Request
-	) => Promise<void>
+	onSuccess: (checkout: Stripe.Checkout.Session, items: Stripe.LineItem[]) => Promise<void>
 	hookSecretKey: string
 }
 
@@ -40,13 +38,15 @@ export function useCheckout(options: CheckoutOptions) {
 		async create(user: User, url: URL) {
 			const lineItems = options.getLineItems(user, url)
 			if (!lineItems.length) throw Error('Once on item is required')
-			const params = `checkoutId={CHECKOUT_SESSION_ID}&${url.searchParams.toString()}`
 			const { client_secret } = await stripe.checkout.sessions.create({
 				mode: 'payment',
 				ui_mode: 'embedded',
 				customer: await getStripCustomerId(user),
 				line_items: lineItems,
-				return_url: `${url.origin}${options.returnPath}?${params}`,
+				return_url: `${url.origin}${options.returnPath}?checkoutId={CHECKOUT_SESSION_ID}`,
+				metadata: {
+					eventId: url.searchParams.get('eventId') || '',
+				},
 			})
 			if (!client_secret) throw Error('Create checkout failed')
 			return { clientSecret: client_secret }
@@ -64,7 +64,7 @@ export function useCheckout(options: CheckoutOptions) {
 				if (event.type === 'checkout.session.completed') {
 					const newCheckout = event.data.object
 					const { data: items } = await stripe.checkout.sessions.listLineItems(newCheckout.id)
-					await options.onSuccess(newCheckout, items, request)
+					await options.onSuccess(newCheckout, items)
 					bus.emit(newCheckout.id)
 				}
 				return new Response('success', { status: 200 })
@@ -94,7 +94,7 @@ export const checkout = useCheckout({
 		if (!price) throw new Error(`Url param "price" is required`)
 		return [{ price, quantity: 1 }]
 	},
-	async onSuccess(checkout, items, request) {
+	async onSuccess(checkout, items) {
 		const userEmail = checkout.customer_details?.email || ''
 		const { id: userId } = await prisma.user.findUniqueOrThrow({
 			where: { email: userEmail },
@@ -120,11 +120,8 @@ export const checkout = useCheckout({
 		})
 
 		async function autoUseProduct() {
-			// TODO: eventId ne passe pas
-			const params = new URLSearchParams(request.url)
-			const eventId = params.get('eventId')
-			const product = checkoutCreated.products.at(0) // We handle only the first product
-			console.log(eventId, product)
+			const eventId = checkout.metadata?.eventId
+			const product = checkoutCreated.products.at(0) // Yes, we handle only the first product...
 			if (eventId && product)
 				return useProduct(eventId, product.id).catch((err) =>
 					console.error('Somthing wrong with auto use product', err)
@@ -167,13 +164,13 @@ async function useProduct(eventId: string, productId: string) {
 	if (event.tier === 'premium' || event.tier === 'pro') {
 		throw new Error('The event is already on tier "premium" or "pro"')
 	}
-	if (event.tier === 'standard' && product.priceId === env.PUBLIC_PRICE_STANDARD_TO_PREMIUM) {
+	if (event.tier === 'standard' && product.priceId === publicEnv.PUBLIC_PRICE_STANDARD_TO_PREMIUM) {
 		return setEventTier('premium')
 	}
-	if (event.tier === 'basic' && product.priceId === env.PUBLIC_PRICE_PREMIUM) {
+	if (event.tier === 'basic' && product.priceId === publicEnv.PUBLIC_PRICE_PREMIUM) {
 		return setEventTier('premium')
 	}
-	if (event.tier === 'basic' && product.priceId === env.PUBLIC_PRICE_STANDARD) {
+	if (event.tier === 'basic' && product.priceId === publicEnv.PUBLIC_PRICE_STANDARD) {
 		return setEventTier('standard')
 	}
 	throw new Error('This product cannot be actived')

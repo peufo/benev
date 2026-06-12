@@ -20,14 +20,14 @@
 	<a
 		class="btn"
 		data-sveltekit-preload-data="off"
-		href="/me/checkouts/create?price={env.PUBLIC_PRICE_STANDARD_TO_PREMIUM}&eventId=prout"
+		href="/me/checkouts/create?price={env.PUBLIC_PRICE_STANDARD_TO_PREMIUM}"
 	>
 		standard to premium
 	</a>
 	<a
 		class="btn"
 		data-sveltekit-preload-data="off"
-		href="/me/checkouts/create?price={env.PUBLIC_PRICE_PREMIUM}"
+		href="/me/checkouts/create?price={env.PUBLIC_PRICE_PREMIUM}&eventId=festival-des-fleurs-2026"
 	>
 		premium
 	</a>
