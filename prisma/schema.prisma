@@ -76,6 +76,7 @@ model Product {
   id   String @id @unique @default(cuid())
   name String
 
+  priceId    String
   eventId    String?  @unique
   event      Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   checkoutId String

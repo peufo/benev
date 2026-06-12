@@ -6,14 +6,14 @@ export const load = async ({ url, locals }) => {
 	return {
 		checkouts: await prisma.checkout.findMany({
 			where: { userId: user.id },
+			include: {
+				products: {
+					include: { event: { select: { id: true, name: true } } },
+				},
+			},
 			orderBy: {
 				createdAt: 'desc',
 			},
-		}),
-		licences: await prisma.licence.groupBy({
-			where: { checkout: { userId: user.id } },
-			by: ['checkoutId', 'type'],
-			_count: { _all: true },
 		}),
 	}
 }

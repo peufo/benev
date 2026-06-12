@@ -192,12 +192,11 @@ GOOGLE_CLIENT_ID="..."
 GOOGLE_CLIENT_SECRET="..."
 
 # Monetization / Stripe
-PUBLIC_FREE_EVENT_MAX_MEMBERS=20
 PRIVATE_STRIPE_KEY="..."
 PUBLIC_STRIPE_KEY="..."
 PRIVATE_STRIPE_WEBHOOK_KEY="..."
-LICENCE_EVENT_PRICE="price_..."
-LICENCE_MEMBER_PRICE="price_..."
+LICENCE_EVENT_PRICE="PUBLIC_PRICE_..."
+LICENCE_MEMBER_PRICE="PUBLIC_PRICE_..."
 ```
 
 All `PUBLIC_*` variables are exposed to the browser. All others are server-only (`$env/dynamic/private`).

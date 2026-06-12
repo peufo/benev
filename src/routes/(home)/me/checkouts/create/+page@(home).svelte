@@ -30,7 +30,6 @@
 </script>
 
 <Card class="max-w-[1060px] mx-auto">
-	<h2 slot="title" class="text-center mb-6">Merci pour ton soutien ❤️</h2>
 	{#if isLoading}
 		<div class="h-[600px] grid place-content-center">
 			<span class="loading loading-ring loading-lg" />

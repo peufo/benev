@@ -1,27 +1,24 @@
 <script lang="ts">
-	import type { Checkout, User, Licence } from '@prisma/client'
+	import type { Checkout, User, Product } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
 	import { LICENCE_TYPE_LABEL } from '$lib/constant'
 
-	export let checkout: Checkout & { user: User; licences: Licence[] }
+	export let checkout: Checkout & { user: User; products: Product[] }
 	export let dest: 'user' | 'root' = 'user'
-
-	const licencesEvent = checkout.licences.filter((l) => l.type === 'event')
-	const licencesMember = checkout.licences.filter((l) => l.type === 'member')
 </script>
 
-<EmailLayout title={dest === 'user' ? 'Merci pour ton achat' : 'Nouvel achat de licences'}>
+<EmailLayout title={dest === 'user' ? 'Merci pour ton achat' : 'Nouvel achat'}>
 	{#if dest === 'user'}
 		<p>
 			Salut {checkout.user.firstName},<br />
-			Nous te confirmons l'achat des licences suivantes :
+			Nous te confirmons l'achat des produits suivantes :
 		</p>
 	{:else}
 		<p>
 			Salut,<br />
 			<b>{checkout.user.firstName} {checkout.user.lastName}</b>
-			a acheté les licences suivantes :
+			a acheté les produits suivantes :
 		</p>
 	{/if}
 
@@ -33,19 +30,12 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#if licencesEvent.length}
+			{#each checkout.products as product}
 				<tr>
-					<th>{LICENCE_TYPE_LABEL.event}</th>
-					<th align="right">{licencesEvent.length}</th>
+					<th>{product.name}</th>
+					<th align="right">1</th>
 				</tr>
-			{/if}
-
-			{#if licencesMember.length}
-				<tr>
-					<th>{LICENCE_TYPE_LABEL.member}</th>
-					<th align="right">{licencesMember.length}</th>
-				</tr>
-			{/if}
+			{/each}
 		</tbody>
 	</table>
 

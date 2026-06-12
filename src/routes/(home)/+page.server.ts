@@ -2,7 +2,7 @@ import { formAction } from 'fuma/server'
 import { error, redirect } from '@sveltejs/kit'
 import { z } from 'fuma'
 import { prisma, media, permission, uploadImages } from '$lib/server'
-import { modelEventCreate, modelEventUpdate } from '$lib/models'
+import { modelEventCreate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
 
 export const load = async ({ url }) => {
@@ -83,6 +83,9 @@ export const actions = {
 			})
 
 			await uploadImages(formData, event.id, session.user.id)
+
+			// TODO: handle data.tier
+
 			return event
 		},
 		{
