@@ -8,7 +8,7 @@
 	import EventImageRemove from './EventImageRemove.svelte'
 	import EventFormInputWeb from './EventFormInputWeb.svelte'
 	import EventFormInputAddress from './EventFormInputAddress.svelte'
-	import EventPlanSelector from './EventPlanSelector.svelte'
+	import EventTierSelector from './EventTierSelector.svelte'
 	import EventFormSection from './EventFormSection.svelte'
 
 	export let event: Event | undefined = undefined
@@ -63,7 +63,7 @@
 	data={event}
 >
 	{#if !event}
-		<EventPlanSelector bind:value={plan} />
+		<EventTierSelector bind:value={plan} />
 	{/if}
 
 	<div class="flex flex-col gap-3">

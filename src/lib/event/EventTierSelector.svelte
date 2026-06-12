@@ -66,4 +66,4 @@
 	{/each}
 </div>
 
-<input type="hidden" name="plan" {value} />
+<input type="hidden" name="tier" {value} />

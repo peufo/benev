@@ -47,6 +47,7 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+// TODO: remove
 model Licence {
   id   String      @id @default(cuid())
   type LicenceType
@@ -65,18 +66,32 @@ model Licence {
   createdAt DateTime @default(now())
 }
 
+// TODO: remove
 enum LicenceType {
   event
   member
 }
 
+model Product {
+  id   String @id @unique @default(cuid())
+  name String
+
+  eventId    String?  @unique
+  event      Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  checkoutId String
+  checkout   Checkout @relation(fields: [checkoutId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
 model Checkout {
   id         String    @id @unique @default(cuid())
   name       String?
-  licences   Licence[]
-  isDonation Boolean   @default(false)
+  licences   Licence[] // TODO: remove
+  isDonation Boolean   @default(false) // TODO: remove
   amount     Int
   currency   String    @default("CHF")
+  products   Product[]
   userId     String
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime  @default(now())
@@ -123,8 +138,9 @@ model Event {
   ownerId   String
   owner     User       @relation(references: [id], fields: [ownerId], onDelete: Cascade)
 
-  licence               Licence?
-  missingLicencesMember Int      @default(0)
+  licence               Licence? //TODO:  REMOVE
+  missingLicencesMember Int       @default(0) // TODO: REMOVE
+  tier                  EventTier @default(basic)
 
   description  String?
   icon         String?
@@ -177,6 +193,7 @@ model Event {
   medias       Media[]
   Tag          Tag[]
   badges       Badge[]
+  products     Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -187,6 +204,13 @@ enum EventState {
   actived
   published
   archived
+}
+
+enum EventTier {
+  basic
+  standard
+  premium
+  pro
 }
 
 model Field {
@@ -252,7 +276,7 @@ model Member {
   eventId String
   event   Event   @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
-  licence Licence?
+  licence Licence? // TODO: REMOVE
 
   /// [MemberProfile]
   profileJson Json @default("{}")

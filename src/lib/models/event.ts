@@ -18,6 +18,7 @@ export const modelEventCreate = {
 	address: z.string().optional(),
 	addressLabel: z.string().optional(),
 	timezone: z.string().optional(),
+	tier: z.enum(['basic', 'standard', 'premium', 'pro']),
 } satisfies ZodObj<EventCreateInput>
 
 export const modelEventUpdate = {
