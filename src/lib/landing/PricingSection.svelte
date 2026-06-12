@@ -32,7 +32,9 @@
 							</li>
 						</ul>
 					</div>
-					<a href="/me/events" class="btn btn-outline btn-primary mt-6 w-full"> Commencer </a>
+					<a href="/me/events/create?plan=basic" class="btn btn-outline btn-primary mt-6 w-full">
+						Commencer
+					</a>
 				</div>
 			</div>
 
@@ -56,7 +58,7 @@
 							</li>
 						</ul>
 					</div>
-					<a href="/me/licences" class="btn btn-outline btn-primary mt-6 w-full">
+					<a href="/me/events/create?plan=standard" class="btn btn-outline btn-primary mt-6 w-full">
 						Choisir Standard
 					</a>
 				</div>
@@ -85,7 +87,7 @@
 						</ul>
 					</div>
 					<a
-						href="/me/licences"
+						href="/me/events/create?plan=premium"
 						class="btn btn-primary mt-6 w-full shadow-md hover:shadow-lg transition-shadow duration-200"
 					>
 						Choisir Premium

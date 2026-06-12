@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import { InputText, InputTextarea, InputImagePreview, InputSelect, Form } from 'fuma'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
@@ -7,8 +8,11 @@
 	import EventImageRemove from './EventImageRemove.svelte'
 	import EventFormInputWeb from './EventFormInputWeb.svelte'
 	import EventFormInputAddress from './EventFormInputAddress.svelte'
+	import EventPlanSelector from './EventPlanSelector.svelte'
 
 	export let event: Event | undefined = undefined
+
+	let plan = $page.url.searchParams.get('plan') || 'basic'
 
 	const timeZones = (() => {
 		try {
@@ -56,6 +60,10 @@
 	on:success
 	data={event}
 >
+	{#if !event}
+		<EventPlanSelector bind:value={plan} />
+	{/if}
+
 	<InputText
 		key="name"
 		label="Nom de l'évènement"
