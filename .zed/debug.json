@@ -1,0 +1,12 @@
+[
+	{
+		"label": "Debug Server (Node)",
+		"adapter": "JavaScript",
+		"type": "node",
+		"request": "launch",
+		"runtimeExecutable": "node",
+		"runtimeArgs": ["--inspect", "./node_modules/.bin/vite", "dev", "--host"],
+		"sourceMaps": true,
+		"skipFiles": ["<node_internals>/**"]
+	}
+]
