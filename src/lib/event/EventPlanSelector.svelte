@@ -33,7 +33,7 @@
 	}
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-2" role="radiogroup" aria-label="Choisir un plan">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-2" role="radiogroup" aria-label="Choisir un plan">
 	{#each plans as plan}
 		{@const selected = value === plan.value}
 		<button
