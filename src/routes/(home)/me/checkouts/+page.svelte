@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { env } from '$env/dynamic/public'
 	import { mdiCartCheck, mdiCheckCircle, mdiGiftOutline, mdiTagOutline } from '@mdi/js'
 	import { Card, Icon, Placeholder } from 'fuma'
 
@@ -14,30 +13,6 @@
 <div class="flex flex-col gap-6">
 	<div class="flex flex-col sm:flex-row sm:items-center gap-4">
 		<h1 class="title">Mes achats</h1>
-
-		<div class="sm:ml-auto flex flex-wrap gap-2">
-			<a
-				class="btn"
-				data-sveltekit-preload-data="off"
-				href="/me/checkouts/create?price={env.PUBLIC_PRICE_STANDARD}"
-			>
-				Licence standard
-			</a>
-			<a
-				class="btn"
-				data-sveltekit-preload-data="off"
-				href="/me/checkouts/create?price={env.PUBLIC_PRICE_STANDARD_TO_PREMIUM}"
-			>
-				Passer premium
-			</a>
-			<a
-				class="btn btn-primary"
-				data-sveltekit-preload-data="off"
-				href="/me/checkouts/create?price={env.PUBLIC_PRICE_PREMIUM}"
-			>
-				Licence premium
-			</a>
-		</div>
 	</div>
 
 	<CheckoutWaitSSE
