@@ -11,7 +11,7 @@ export const load = async ({ url, locals }) => {
 		where: { userId: user.id },
 		include: {
 			products: {
-				include: { event: { select: { id: true, name: true } } },
+				include: { event: { select: { id: true, name: true, deletedAt: true } } },
 			},
 		},
 		orderBy: {

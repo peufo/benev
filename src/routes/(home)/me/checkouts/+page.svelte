@@ -53,7 +53,12 @@
 						</div>
 
 						<div class="flex flex-col sm:items-end sm:w-80">
-							{#if product.event}
+							{#if product.event?.deletedAt}
+								<div class="inline-flex items-center gap-1.5 text-sm text-primary">
+									<Icon path={mdiCheckCircle} size={14} />
+									<span>Actif sur un événement supprimé</span>
+								</div>
+							{:else if product.event}
 								<a
 									href="/{product.event.id}"
 									class="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
