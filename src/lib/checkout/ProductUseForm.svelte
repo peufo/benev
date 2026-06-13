@@ -3,6 +3,7 @@
 	import { mdiLink } from '@mdi/js'
 	import { Icon, InputRelation } from 'fuma'
 	import { useForm } from 'fuma/validation'
+	import { slide } from 'svelte/transition'
 
 	export let product: { id: string; name: string }
 	export let action = '?/use_product'
@@ -36,9 +37,13 @@
 			slotItem={(event) => `${event.name} · ${event.tier}`}
 			slotSuggestion={(event) => `${event.name} · ${event.tier}`}
 		/>
-		<button type="submit" class="btn btn-sm btn-primary ml-auto" disabled={!selectedEvent}>
-			<Icon path={mdiLink} size={16} />
-			Associer
-		</button>
+		{#if selectedEvent}
+			<div transition:slide class="ml-auto">
+				<button type="submit" class="btn btn-sm btn-primary">
+					<Icon path={mdiLink} size={16} />
+					Associer
+				</button>
+			</div>
+		{/if}
 	</form>
 </div>
