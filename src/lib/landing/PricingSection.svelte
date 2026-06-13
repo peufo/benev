@@ -10,7 +10,7 @@
 				Des tarifs simples et transparents
 			</h2>
 			<p class="mt-4 text-lg text-base-content/70 max-w-xl">
-				Commencez gratuitement. Évoluez quand vous voulez.
+				Commence gratuitement. Passe à un plan supérieur quand tu veux.
 			</p>
 		</div>
 
@@ -118,12 +118,12 @@
 				<div class="collapse collapse-arrow bg-base-100 border border-base-200">
 					<input type="checkbox" aria-label="Afficher la réponse" />
 					<div class="collapse-title text-lg font-medium pr-12">
-						Est-ce que je dois anticiper le nombre de bénévoles ?
+						Faut-il anticiper le nombre de bénévoles ?
 					</div>
 					<div class="collapse-content">
 						<p class="text-base-content/80 leading-relaxed">
-							Non, vous pouvez changer de plan à tout moment selon vos besoins. Commencez avec
-							l'offre gratuite et passez à un plan supérieur quand votre événement grandit.
+							Non. Tu peux changer de plan à tout moment selon tes besoins. Commence avec l'offre
+							gratuite et passe à un plan supérieur quand ton événement grandit.
 						</p>
 					</div>
 				</div>
@@ -131,11 +131,11 @@
 				<div class="collapse collapse-arrow bg-base-100 border border-base-200">
 					<input type="checkbox" aria-label="Afficher la réponse" />
 					<div class="collapse-title text-lg font-medium pr-12">
-						Que se passe-t-il si je dépasse la limite de mon plan ?
+						Que se passe-t-il en cas de dépassement ?
 					</div>
 					<div class="collapse-content">
 						<p class="text-base-content/80 leading-relaxed">
-							Nous vous prévenons à l'avance. Vous avez le temps de passer à un plan supérieur sans
+							Tu reçois une alerte à l'avance. Tu as le temps de passer à un plan supérieur sans
 							interruption de service.
 						</p>
 					</div>

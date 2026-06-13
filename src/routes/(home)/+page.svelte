@@ -75,11 +75,11 @@
 					</a>
 					<span class="flex items-center gap-2">
 						<span class="w-2 h-2 rounded-full bg-brand-beige" />
-						Solide et éprouvé
+						Gratuit jusqu'à 50 bénévoles
 					</span>
 					<span class="flex items-center gap-2">
 						<span class="w-2 h-2 rounded-full bg-primary" />
-						Simple et flexible
+						Personnalisable à ton image
 					</span>
 				</div>
 			</div>

@@ -8,7 +8,7 @@
 	<div class="max-w-5xl mx-auto px-4 sm:px-6">
 		<div class="mb-16 md:mb-20">
 			<h2 class="text-3xl md:text-4xl font-extrabold text-primary tracking-tight">
-				Ils l'utilisent
+				Ils l'utilisent déjà
 			</h2>
 			<p class="mt-4 text-lg text-base-content/70">
 				Pas de marketing, juste des retours de terrain.

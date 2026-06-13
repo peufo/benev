@@ -7,30 +7,31 @@
 			number: '01',
 			title: "Création de l'événement",
 			description:
-				'Configure les secteurs, les shifts et les besoins en bénévoles. Chaque événement a son propre mini-site avec des pages personnalisables pour centraliser toute la communication.',
+				'Configure les secteurs, les créneaux et les besoins en bénévoles. Chaque événement a son propre mini-site avec des pages personnalisables pour centraliser toute la communication.',
 			videos: [
 				{ src: '/videos/create-event.mp4', title: "Créer l'événement" },
 				{ src: '/videos/edit-theme.mp4', title: 'Personnaliser le thème' },
 				{ src: '/videos/create-pages.mp4', title: 'Créer la charte et les pages' },
 				{ src: '/videos/create-teams.mp4', title: 'Créer les secteurs' },
-				{ src: '/videos/planif-edit.mp4', title: 'Planifier les shifts' },
+				{ src: '/videos/planif-edit.mp4', title: 'Planifier les créneaux' },
 			],
 		},
 		{
 			number: '02',
 			title: 'Inscription et validation',
 			description:
-				'Tu peux permettre aux bénévoles de parcourir les secteurs et de choisir leurs créneaux en autonomie. Mais tu peux également garder le contrôle et gérer les inscription à la main.',
+				'Laisse les bénévoles choisir leurs créneaux en autonomie. Ou garde le contrôle et gère les inscriptions toi-même.',
 			videos: [
 				{ src: '/videos/config-fields.mp4', title: "Configuration de l'adhésion" },
-				{ src: '/videos/subscribe.mp4', title: "Inscriptions d'un bénévoles" },
+				{ src: '/videos/subscribe.mp4', title: "Inscription d'un bénévole" },
 				{ src: '/videos/subscribe-validation.mp4', title: 'Valider une inscription' },
 			],
 		},
 		{
 			number: '03',
 			title: 'Suivi et organisation',
-			description: 'Toutes les données sont facilement accessible et exportable.',
+			description:
+				'Consulte et exporte la liste des bénévoles, les créneaux et les contacts en quelques clics.',
 			videos: [
 				{ src: '/videos/create-view.mp4', title: 'Créer des vues' },
 				{ src: '/videos/planif-view.mp4', title: 'Suivi de la planification' },
