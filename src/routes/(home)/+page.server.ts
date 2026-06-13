@@ -4,6 +4,8 @@ import { z } from 'fuma'
 import { prisma, media, permission, uploadImages } from '$lib/server'
 import { modelEventCreate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
+import { env } from '$env/dynamic/public'
+import { TIERS_PRICE } from '$lib/member/conditions/constants.js'
 
 export const load = async ({ url }) => {
 	const prospectId = url.searchParams.get('prospectId')
@@ -56,6 +58,7 @@ export const actions = {
 			const event = await prisma.event.create({
 				data: {
 					...data,
+					tier: 'basic',
 					ownerId: userId,
 					pages: {
 						createMany: {
@@ -81,15 +84,16 @@ export const actions = {
 					isValidedByUser: true,
 				},
 			})
-
 			await uploadImages(formData, event.id, session.user.id)
 
-			// TODO: handle data.tier
-
-			return event
+			return { event, tier: data.tier }
 		},
 		{
-			redirectTo: (event) => `/${event.id}`,
+			redirectTo: ({ event, tier }) => {
+				if (tier === 'basic') return `/${event.id}`
+				const price = TIERS_PRICE[tier]
+				return `/me/checkouts/create?price=${price}&eventId=${event.id}`
+			},
 		}
 	),
 	event_poster_delete: formAction({ id: z.string() }, async ({ data, locals }) => {
