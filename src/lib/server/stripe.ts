@@ -1,13 +1,13 @@
 import { EventEmitter } from 'node:events'
 import Stripe from 'stripe'
 import { env } from '$env/dynamic/private'
-import { env as publicEnv } from '$env/dynamic/public'
 
-import type { EventTier, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
 
 import { prisma, sendEmailComponent, createSSE } from '$lib/server'
+import { useProduct } from '$lib/server/useProduct'
 import { EmailCheckoutValidation } from '$lib/email'
 
 export const stripe = new Stripe(env.PRIVATE_STRIPE_KEY)
@@ -148,37 +148,3 @@ export const checkout = useCheckout({
 		])
 	},
 })
-
-// TODO, use this function for manual product use
-async function useProduct(eventId: string, productId: string) {
-	const [event, product] = await Promise.all([
-		prisma.event.findUniqueOrThrow({ where: { id: eventId } }),
-		prisma.product.findUniqueOrThrow({ where: { id: productId }, include: { checkout: true } }),
-	])
-	if (product.eventId) {
-		throw new Error('This product is aldready actived for an event')
-	}
-	if (event.ownerId !== product.checkout.userId) {
-		throw new Error('The event owner and product owner must be the same person')
-	}
-	if (event.tier === 'premium' || event.tier === 'pro') {
-		throw new Error('The event is already on tier "premium" or "pro"')
-	}
-	if (event.tier === 'standard' && product.priceId === publicEnv.PUBLIC_PRICE_STANDARD_TO_PREMIUM) {
-		return setEventTier('premium')
-	}
-	if (event.tier === 'basic' && product.priceId === publicEnv.PUBLIC_PRICE_PREMIUM) {
-		return setEventTier('premium')
-	}
-	if (event.tier === 'basic' && product.priceId === publicEnv.PUBLIC_PRICE_STANDARD) {
-		return setEventTier('standard')
-	}
-	throw new Error('This product cannot be actived')
-
-	async function setEventTier(tier: EventTier) {
-		return prisma.$transaction([
-			prisma.event.update({ where: { id: event.id }, data: { tier } }),
-			prisma.product.update({ where: { id: product.id }, data: { eventId: event.id } }),
-		])
-	}
-}

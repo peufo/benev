@@ -1,84 +1,95 @@
 <script lang="ts">
-	import { Placeholder } from 'fuma'
 	import { page } from '$app/stores'
-	import { CheckoutWaitSSE } from '$lib/checkout'
 	import { env } from '$env/dynamic/public'
+	import { mdiCartCheck, mdiCheckCircle, mdiGiftOutline, mdiTagOutline } from '@mdi/js'
+	import { Card, Icon, Placeholder } from 'fuma'
+
+	import { CheckoutWaitSSE, ProductUseForm } from '$lib/checkout'
 
 	export let data
 
 	const checkoutId = $page.url.searchParams.get('checkoutId')
 </script>
 
-<div class="flex items-center">
-	<div class="title">Mes achats</div>
+<div class="flex flex-col gap-6">
+	<div class="flex flex-col sm:flex-row sm:items-center gap-4">
+		<h1 class="title">Mes achats</h1>
 
-	<a
-		class="btn ml-auto"
-		data-sveltekit-preload-data="off"
-		href="/me/checkouts/create?price={env.PUBLIC_PRICE_STANDARD}">standard</a
-	>
-	<a
-		class="btn"
-		data-sveltekit-preload-data="off"
-		href="/me/checkouts/create?price={env.PUBLIC_PRICE_STANDARD_TO_PREMIUM}"
-	>
-		standard to premium
-	</a>
-	<a
-		class="btn"
-		data-sveltekit-preload-data="off"
-		href="/me/checkouts/create?price={env.PUBLIC_PRICE_PREMIUM}&eventId=festival-des-fleurs-2026"
-	>
-		premium
-	</a>
+		<div class="sm:ml-auto flex flex-wrap gap-2">
+			<a
+				class="btn"
+				data-sveltekit-preload-data="off"
+				href="/me/checkouts/create?price={env.PUBLIC_PRICE_STANDARD}"
+			>
+				Licence standard
+			</a>
+			<a
+				class="btn"
+				data-sveltekit-preload-data="off"
+				href="/me/checkouts/create?price={env.PUBLIC_PRICE_STANDARD_TO_PREMIUM}"
+			>
+				Passer premium
+			</a>
+			<a
+				class="btn btn-primary"
+				data-sveltekit-preload-data="off"
+				href="/me/checkouts/create?price={env.PUBLIC_PRICE_PREMIUM}"
+			>
+				Licence premium
+			</a>
+		</div>
+	</div>
 
-	<!-- TODO: use this link for create checkout: /me/checkouts/create?price=${env.PUBLIC_PRICE_PREMIUM} -->
-</div>
-
-<div class="flex flex-col gap-2">
 	<CheckoutWaitSSE
 		allreadyLoaded={(checkoutId) => !!data.checkouts.find(({ id }) => id === checkoutId)}
 		eventSource="/me/checkouts/validation"
 	/>
 
 	{#each data.checkouts as checkout}
-		<section
-			class="border rounded p-4 pt-2"
-			class:border-primary={checkout.id === checkoutId}
-			class:border-2={checkout.id === checkoutId}
+		<Card
+			class={checkout.id === checkoutId ? 'border-2 border-primary' : ''}
+			bodyClass="flex flex-col gap-4"
 		>
-			<div class="flex gap-2 items-top">
-				<div class="flex flex-wrap gap-x-2 gap-y-0 items-center">
-					<h3 class="font-semibold opacity-80">{checkout.name || ''}</h3>
-					<span class="text-xs italic opacity-70">
-						{checkout.createdAt.toLocaleDateString()}
-					</span>
-				</div>
-
-				<div class="ml-auto whitespace-nowrap mt-1 text-sm">
-					{(checkout.amount / 100).toFixed(2)}
-					{checkout.currency?.toUpperCase()}
-				</div>
+			<div slot="title" class="flex items-center gap-2">
+				<Icon path={mdiCartCheck} class="text-primary" />
+				<span>{checkout.name || 'Achat'}</span>
 			</div>
 
-			<div class="flex flex-col mt-2 gap-2">
+			<div slot="subtitle" class="text-sm opacity-70">
+				{checkout.createdAt.toLocaleDateString()}
+			</div>
+
+			<div slot="action" class="font-semibold whitespace-nowrap">
+				{(checkout.amount / 100).toFixed(2)}
+				{checkout.currency?.toUpperCase()}
+			</div>
+
+			<div class="flex flex-col gap-2">
 				{#each checkout.products as product}
-					<div class="flex gap-2">
-						<div>{product.name}</div>
-						{#if product.event}
-							<div>
-								Utilisé sur <span class="bold">{product.event.name}</span>
-							</div>
-						{:else}
-							<div>Non utilisé</div>
-						{/if}
+					<div class="flex flex-col sm:flex-row sm:items-start gap-3 p-3 rounded-lg bg-base-200/50">
+						<div class="flex items-center gap-2 min-w-0 grow">
+							<Icon path={mdiTagOutline} class="opacity-70 shrink-0" />
+							<span>{product.name}</span>
+						</div>
+
+						<div class="flex flex-col gap-2 sm:items-end sm:w-80">
+							{#if product.event}
+								<span class="badge badge-success gap-1">
+									<Icon path={mdiCheckCircle} size={14} />
+									Utilisé sur {product.event.name}
+								</span>
+							{:else}
+								<ProductUseForm {product} />
+							{/if}
+						</div>
 					</div>
 				{/each}
 			</div>
-		</section>
+		</Card>
 	{:else}
-		<Placeholder>
-			<span>Tu n'as fait aucune achats</span>
+		<Placeholder class="gap-3">
+			<Icon path={mdiGiftOutline} size={48} class="opacity-40" />
+			<p>Tu n'as fait aucun achat</p>
 		</Placeholder>
 	{/each}
 </div>
