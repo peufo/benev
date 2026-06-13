@@ -10,16 +10,23 @@ export const actions = {
 		return tryOrFail(async () => {
 			const { data } = await parseFormData(request, modelCheckout)
 
-			const licencesArray = Array.isArray(data.licences.create)
-				? data.licences.create
-				: [data.licences.create]
-			const licences = licencesArray
-				.map(({ type, ownerId, quantity }) =>
-					Array<Prisma.LicenceUncheckedCreateWithoutCheckoutInput>(quantity).fill({ type, ownerId })
+			const productsArray = Array.isArray(data.products.create)
+				? data.products.create
+				: [data.products.create]
+			const products = productsArray
+				.filter(({ quantity }) => quantity > 0)
+				.map(({ priceId, name, quantity }) =>
+					Array<Prisma.ProductUncheckedCreateWithoutCheckoutInput>(quantity).fill({
+						priceId,
+						name,
+					})
 				)
 				.flat()
+
+			if (products.length === 0) throw new Error('Aucun produit sélectionné')
+
 			return prisma.checkout.create({
-				data: { ...data, licences: { create: licences } },
+				data: { ...data, products: { create: products } },
 			})
 		}, '/root/checkouts')
 	},

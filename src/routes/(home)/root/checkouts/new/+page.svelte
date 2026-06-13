@@ -4,7 +4,7 @@
 	import { InputNumber, InputRelation, Card, InputText } from 'fuma'
 
 	import { api } from '$lib/api'
-	import InputsLicence from './InputsLicence.svelte'
+	import InputProduct from './InputProduct.svelte'
 	import type { User } from '@prisma/client'
 
 	const form = useForm()
@@ -24,7 +24,6 @@
 			</svelte:fragment>
 			<svelte:fragment slot="suggestion" let:item>
 				<div>
-					rootUser
 					<div>{item.firstName} {item.lastName}</div>
 					<div class="text-xs">{item.email}</div>
 				</div>
@@ -36,8 +35,7 @@
 		</div>
 
 		<div class="flex gap-4 flex-wrap mt-4">
-			<InputsLicence index={0} type="event" ownerId={owner?.id} />
-			<InputsLicence index={1} type="member" ownerId={owner?.id} />
+			<InputProduct />
 		</div>
 
 		<div class="flex justify-end mt-2">
