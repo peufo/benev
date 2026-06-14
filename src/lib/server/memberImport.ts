@@ -1,5 +1,5 @@
 import type { Prisma, Member, Event, Field, FieldType } from '@prisma/client'
-import { prisma } from '$lib/server'
+import { prisma, notifyTierQuotaIfNeeded } from '$lib/server'
 import { createAvatarPlaceholder } from '$lib/server'
 
 export interface FieldMapping {
@@ -248,6 +248,10 @@ export class MemberImportService {
 			}
 
 			result.success = result.errors.length === 0
+
+			if (result.importedCount > 0) {
+				await notifyTierQuotaIfNeeded(options.targetEventId)
+			}
 		} catch (error) {
 			result.errors.push(`Erreur générale: ${error}`)
 		}

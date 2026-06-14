@@ -1,5 +1,11 @@
 import { formAction } from 'fuma/server'
-import { prisma, getMemberProfile, permission, ensureLicenceMembers } from '$lib/server'
+import {
+	prisma,
+	getMemberProfile,
+	permission,
+	ensureLicenceMembers,
+	notifyTierQuotaIfNeeded,
+} from '$lib/server'
 import { z } from 'fuma/validation'
 import { modelUserContactUpdate } from '$lib/models'
 
@@ -67,6 +73,7 @@ export const actions = {
 			await permission.leader(eventId, locals)
 			await prisma.member.update({ where: { id: memberId }, data })
 			await ensureLicenceMembers(eventId)
+			if (data.isValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
 		}
 	),
 	member_contact_update: formAction(

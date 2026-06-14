@@ -142,6 +142,9 @@ model Event {
   licence               Licence? //TODO:  REMOVE
   missingLicencesMember Int       @default(0) // TODO: REMOVE
   tier                  EventTier @default(basic)
+  notifiedQuota80       DateTime?
+  notifiedQuota90       DateTime?
+  notifiedQuota100      DateTime?
 
   description  String?
   icon         String?

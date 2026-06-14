@@ -10,6 +10,7 @@ import {
 	createAvatarPlaceholder,
 	ensureLicenceMembers,
 	getMemberProfile,
+	notifyTierQuotaIfNeeded,
 } from '$lib/server'
 import { EmailAcceptInviteNotification } from '$lib/email'
 
@@ -34,6 +35,8 @@ export const actions = {
 			},
 			include: { event: true },
 		})
+
+		await notifyTierQuotaIfNeeded(eventId)
 
 		if (!member.email) return member
 
@@ -72,15 +75,17 @@ export const actions = {
 				where: { eventId, email: session.user.email },
 			})
 			if (memberAlreadyExist) {
+				const newIsValidedByEvent = isValidedByEvent || memberAlreadyExist.isValidedByEvent
 				await prisma.member.update({
 					where: { id: memberAlreadyExist.id },
 					data: {
 						userId: session.user.id,
-						isValidedByEvent: isValidedByEvent || memberAlreadyExist.isValidedByEvent,
+						isValidedByEvent: newIsValidedByEvent,
 						isValidedByUser: true,
 					},
 				})
 				await ensureLicenceMembers(eventId)
+				if (newIsValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
 				// TODO: mails to admins ?
 				return data
 			}
@@ -99,6 +104,7 @@ export const actions = {
 					isValidedByUser: true,
 				},
 			})
+			if (isValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
 			const member = await getMemberProfile({ id })
 			if (!member.email) return data // TODO: impossible ... DRAW A DIAGRAM PLEASE
 

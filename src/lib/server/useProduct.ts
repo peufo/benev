@@ -33,7 +33,15 @@ export async function useProduct(eventId: string, productId: string) {
 
 	async function setEventTier(tier: EventTier) {
 		return prisma.$transaction([
-			prisma.event.update({ where: { id: event.id }, data: { tier } }),
+			prisma.event.update({
+				where: { id: event.id },
+				data: {
+					tier,
+					notifiedQuota80: null,
+					notifiedQuota90: null,
+					notifiedQuota100: null,
+				},
+			}),
 			prisma.product.update({ where: { id: product.id }, data: { eventId: event.id } }),
 		])
 	}
