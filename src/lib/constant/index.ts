@@ -1,6 +1,7 @@
 import { env } from '$env/dynamic/public'
 import type {
 	EventState,
+	EventTier,
 	Field,
 	GiftConditionType,
 	GiftConditionsMode,
@@ -78,6 +79,13 @@ export const EVENT_STATES: Record<
 		class: '',
 		description: `Seul les responsables ont accès au site de l'évènement.`,
 	},
+} as const
+
+export const EVENT_TIER: Record<EventTier, { label: string; max: number | null; price: string }> = {
+	basic: { label: 'Basique', max: 50, price: '0 CHF' },
+	standard: { label: 'Standard', max: 200, price: '99 CHF' },
+	premium: { label: 'Premium', max: null, price: '249 CHF' },
+	pro: { label: 'Pro', max: null, price: 'Sur mesure' },
 } as const
 
 export const GIFT_CONDITION_MODE: Record<GiftConditionsMode, string> = {

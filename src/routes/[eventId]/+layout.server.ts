@@ -38,11 +38,16 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 		const memberCanRegister =
 			!member?.isValidedByUser && (event.selfRegisterAllowed || member?.isValidedByEvent)
 
+		const membersValided = await prisma.member.count({
+			where: { eventId, isValidedByEvent: true },
+		})
+
 		return {
 			userId,
 			event,
 			member,
 			memberCanRegister,
+			membersValided,
 			pages: await prisma.page.findMany({
 				where: { eventId, type: { not: 'email' } },
 				select: { id: true, title: true, path: true, type: true },

@@ -20,7 +20,7 @@
 	import EventMenu from './EventMenu.svelte'
 	import FooterLink from './FooterLink.svelte'
 	import EventTheme from './admin/theme/EventTheme.svelte'
-	import { EventIcon } from '$lib/event'
+	import { EventIcon, EventTierMenu } from '$lib/event'
 
 	export let data
 
@@ -78,7 +78,14 @@
 
 <div class="flex grow items-start relative">
 	{#if data.member?.roles.includes('leader') || data.userIsRoot}
-		<AdminNavigation />
+		<div class="hidden lg:flex flex-col gap-2 sticky top-4 mt-4 ml-4 shrink-0">
+			<AdminNavigation />
+			<EventTierMenu
+				event={data.event}
+				membersValided={data.membersValided}
+				isOwner={data.member?.roles.includes('owner') || data.userIsRoot}
+			/>
+		</div>
 	{/if}
 
 	<main class="grow mx-auto overflow-x-hidden self-stretch p-2 sm:p-4">
