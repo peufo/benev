@@ -54,8 +54,9 @@
 				title="Plan {tier.label}"
 			>
 				<span class="text-xs font-medium leading-none flex items-center gap-0.5">
+					{membersValided} /
 					{#if max !== null}
-						{membersValided}/{max}
+						{max}
 					{:else}
 						<Infinity size={14} />
 					{/if}
@@ -85,8 +86,6 @@
 					{membersValided}
 					{#if max !== null}
 						/ {max}
-					{:else}
-						<Infinity size={12} class="inline" />
 					{/if}
 					bénévoles validés
 				</span>
