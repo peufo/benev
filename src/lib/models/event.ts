@@ -5,7 +5,7 @@ import { EVENT_STATES } from '$lib/constant'
 export type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
 export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
 
-export const modelEventCreate = {
+export const modelEventUpdate = {
 	id: z.string().toLowerCase().min(3),
 	name: z.string().min(3),
 	description: z.string().optional(),
@@ -18,14 +18,12 @@ export const modelEventCreate = {
 	address: z.string().optional(),
 	addressLabel: z.string().optional(),
 	timezone: z.string().optional(),
+} satisfies ZodObj<EventUpdateInput>
+
+export const modelEventCreate = {
+	...modelEventUpdate,
 	tier: z.enum(['basic', 'standard', 'premium', 'pro']),
 } satisfies ZodObj<EventCreateInput>
-
-export const modelEventUpdate = {
-	...modelEventCreate,
-	id: z.string(),
-	name: z.string().min(3).optional(),
-} satisfies ZodObj<EventUpdateInput>
 
 export const modelEventState = {
 	state: z.enum(toTuple(EVENT_STATES)).optional(),

@@ -16,7 +16,7 @@
 <div class="card bg-base-100 border border-base-200 rounded-2xl overflow-hidden">
 	<button
 		type="button"
-		class="w-full py-4 px-5 flex items-center gap-3 text-left"
+		class="w-full py-4 px-5 flex items-center gap-3 text-left rounded-2xl"
 		class:cursor-default={!collapsible}
 		on:click={toggle}
 	>
