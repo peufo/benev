@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { adminTabs } from '$lib/layout/adminTabs'
-	import { Card, Icon } from 'fuma'
+	import { Card } from 'fuma'
 </script>
 
 <Card
@@ -9,9 +9,11 @@
 	bodyClass="sm:px-2 sm:py-2"
 >
 	<div class="flex flex-col gap-1 text-sm">
-		{#each $adminTabs as { href, isActive, label, icon }}
+		{#each $adminTabs as { href, isActive, label, icon: Icon }}
 			<a {href} class="menu-item hover:bg-base-200/80 overflow-hidden" class:active={isActive}>
-				<Icon path={icon} size={20} class="opacity-70 py-1" />
+				<span class="py-1">
+					<Icon size={18} class="opacity-70" />
+				</span>
 				<span class="opacity-0 group-hover:opacity-100 transition-opacity">
 					{label}
 				</span>

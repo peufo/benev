@@ -1,15 +1,16 @@
+import type { ComponentType, SvelteComponent } from 'svelte'
 import {
-	mdiChartGantt,
-	mdiFileDocumentMultipleOutline,
-	mdiAccountMultipleOutline,
-	mdiClipboardTextMultipleOutline,
-	mdiHelp,
-	mdiMapMarkerRadiusOutline,
-	mdiCalendarStar,
-	mdiLogin,
-	mdiGiftOutline,
-	mdiPaletteOutline,
-} from '@mdi/js'
+	ChartGantt,
+	FileText,
+	Users,
+	ClipboardList,
+	CircleQuestionMark,
+	MapPin,
+	Calendar,
+	LogIn,
+	Gift,
+	Palette,
+} from 'lucide-svelte'
 
 import { param } from 'fuma'
 import { dev } from '$app/environment'
@@ -24,51 +25,56 @@ export const adminTabs = derived(param, ({ without, page }) => {
 		isActive: !!page.route.id?.startsWith(`/[eventId]${p}`),
 	})
 
-	const tabs = [
+	const tabs: {
+		href: string
+		isActive: boolean
+		label: string
+		icon: ComponentType<SvelteComponent>
+	}[] = [
 		{
 			...getPath('/teams'),
 			label: 'Secteurs',
-			icon: mdiMapMarkerRadiusOutline,
+			icon: MapPin,
 		},
 		{
 			...getPath('/admin/members'),
 			label: 'Membres',
-			icon: mdiAccountMultipleOutline,
+			icon: Users,
 		},
 		{
 			...getPath('/admin/subscribes'),
 			label: 'Inscriptions',
-			icon: mdiClipboardTextMultipleOutline,
+			icon: ClipboardList,
 		},
 		{
 			...getPath('/admin/plan'),
 			label: 'Planification',
-			icon: mdiChartGantt,
+			icon: ChartGantt,
 		},
 		{
 			...getPath('/admin/event'),
 			label: "L'évènement",
-			icon: mdiCalendarStar,
+			icon: Calendar,
 		},
 		{
 			...getPath('/admin/adhesion'),
 			label: 'Adhésion',
-			icon: mdiLogin,
+			icon: LogIn,
 		},
 		{
 			...getPath('/admin/theme'),
 			label: 'Thème',
-			icon: mdiPaletteOutline,
+			icon: Palette,
 		},
 		{
 			...getPath('/admin/pages'),
 			label: 'Publications',
-			icon: mdiFileDocumentMultipleOutline,
+			icon: FileText,
 		},
 		{
 			...getPath('/help'),
 			label: 'Aide',
-			icon: mdiHelp,
+			icon: CircleQuestionMark,
 		},
 	]
 
@@ -76,7 +82,7 @@ export const adminTabs = derived(param, ({ without, page }) => {
 		tabs.splice(6, 0, {
 			...getPath('/admin/gift'),
 			label: 'Prestations',
-			icon: mdiGiftOutline,
+			icon: Gift,
 		})
 
 	return tabs

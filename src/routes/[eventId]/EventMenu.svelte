@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Page } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { Icon, DropDown } from 'fuma'
-	import { mdiMenu } from '@mdi/js'
+	import { DropDown } from 'fuma'
+	import { Menu, Gauge } from 'lucide-svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from '$lib/layout/adminTabs'
 
@@ -22,7 +22,7 @@
 			btn btn-square ml-2 lg:hidden
 		"
 	>
-		<Icon path={mdiMenu} />
+		<Menu size={24} />
 	</button>
 
 	<div class="flex flex-col gap-1">
@@ -35,12 +35,22 @@
 		{#if adminIsVisible}
 			<hr class="block lg:hidden" />
 			<h3 class="title-sm pl-3 pt-1">Gestion</h3>
-			{#each $adminTabs as { href, isActive, label, icon }}
+			{#each $adminTabs as { href, isActive, label, icon: Icon }}
 				<a {href} class="menu-item" class:active={isActive}>
-					<Icon path={icon} size={20} class="opacity-70" />
+					<Icon size={20} class="opacity-70" />
 					{label}
 				</a>
 			{/each}
+
+			{@const quotaHref = `/${$page.params.eventId}/admin/quota`}
+			<a
+				href={quotaHref}
+				class="menu-item"
+				class:active={$page.route.id?.startsWith('/[eventId]/admin/quota')}
+			>
+				<Gauge size={20} class="opacity-70" />
+				Quota
+			</a>
 		{/if}
 	</div>
 </DropDown>
