@@ -1,11 +1,9 @@
-import { env } from '$env/dynamic/public'
 import type {
 	EventState,
 	EventTier,
 	Field,
 	GiftConditionType,
 	GiftConditionsMode,
-	LicenceType,
 	Page,
 	Subscribe,
 } from '@prisma/client'
@@ -59,7 +57,7 @@ export const EVENT_STATES: Record<
 		icon: mdiTestTube,
 		label: 'Évènement en projet',
 		class: 'border-warning',
-		description: `L'évènement est limité à ${env.PUBLIC_FREE_EVENT_MAX_MEMBERS} membres validés et seul les responsables y ont accès.`,
+		description: `L'évènement est en mode basique et seuls les responsables y ont accès.`,
 	},
 	actived: {
 		icon: mdiExcavator,
@@ -96,11 +94,6 @@ export const GIFT_CONDITION_TYPE: Record<GiftConditionType, string> = {
 	teams: `Doit être inscrit à l'un de ces secteurs`,
 	hours: `Doit avoir un minimum d'heure de travail de`,
 	period: `Doit travailer durant la période de`,
-} as const
-
-export const LICENCE_TYPE_LABEL: Record<LicenceType, string> = {
-	event: 'Évènement',
-	member: 'Membre',
 } as const
 
 export const MEMBER_FIELD_TYPE: Record<Field['type'], { label: string; icon: string }> = {

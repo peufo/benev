@@ -18,15 +18,11 @@
 				<td>CreatedAt</td>
 				<td>Events</td>
 				<td>Members</td>
-				<td>Licences (event)</td>
-				<td>Licences (member)</td>
 				<td>Clé</td>
 			</tr>
 		</thead>
 		<tbody>
 			{#each data.users as user}
-				{@const licencesEvent = user.licences.filter((l) => l.type === 'event')}
-				{@const licencesMember = user.licences.filter((l) => l.type === 'member')}
 				{@const isCorrectKey =
 					(user.auth_key.length === 1 && user.auth_key[0].id.startsWith('google:')) ||
 					user.auth_key.find((k) => k.id.endsWith(user.email))}
@@ -59,12 +55,6 @@
 							{/each}
 						</ul>
 					</DropDown>
-					<td>
-						{licencesEvent.filter((l) => l.eventId).length} / {licencesEvent.length}
-					</td>
-					<td>
-						{licencesMember.filter((l) => l.memberId).length} / {licencesMember.length}
-					</td>
 					<td>
 						<Icon
 							path={isCorrectKey ? mdiCheck : mdiClose}

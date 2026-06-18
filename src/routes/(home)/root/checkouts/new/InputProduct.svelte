@@ -3,9 +3,9 @@
 	import { InputNumber } from 'fuma'
 
 	const products = [
-		{ priceId: env.PUBLIC_PRICE_STANDARD, name: 'Licence standard' },
-		{ priceId: env.PUBLIC_PRICE_PREMIUM, name: 'Licence premium' },
-		{ priceId: env.PUBLIC_PRICE_STANDARD_TO_PREMIUM, name: 'Licence premium (upgrade)' },
+		{ priceId: env.PUBLIC_PRICE_STANDARD, name: 'Plan standard' },
+		{ priceId: env.PUBLIC_PRICE_PREMIUM, name: 'Plan premium' },
+		{ priceId: env.PUBLIC_PRICE_STANDARD_TO_PREMIUM, name: 'Plan premium (upgrade)' },
 	]
 </script>
 

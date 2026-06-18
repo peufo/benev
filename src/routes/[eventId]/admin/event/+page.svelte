@@ -14,7 +14,6 @@
 			isOwner={data.member?.userId == data.event.ownerId}
 			event={data.event}
 			eventCounts={data.eventCounts}
-			eventLicenceAvailable={!!data.eventLicenceAvailable}
 		/>
 
 		<Card>

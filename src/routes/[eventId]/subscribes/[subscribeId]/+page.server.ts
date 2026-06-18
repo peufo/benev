@@ -3,7 +3,7 @@ import type { Prisma, SubscribeState } from '@prisma/client'
 import { isFreeRange } from 'perod'
 import type { Action } from './$types'
 import { tryOrFail } from 'fuma/server'
-import { prisma, permission, ensureLicenceMembers, notifyTierQuotaIfNeeded } from '$lib/server'
+import { prisma, permission, notifyTierQuotaIfNeeded } from '$lib/server'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
 import { periodIsComplet } from '$lib/period'
 
@@ -141,7 +141,6 @@ const setSubscribState: (_state: SubscribeState) => Action =
 					where: { id: subscribe.memberId },
 					data: { isValidedByEvent: true },
 				})
-				await ensureLicenceMembers(eventId)
 				await notifyTierQuotaIfNeeded(eventId)
 			}
 

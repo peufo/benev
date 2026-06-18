@@ -4,7 +4,6 @@ import { z } from 'fuma'
 import { prisma, media, permission, uploadImages } from '$lib/server'
 import { modelEventCreate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
-import { env } from '$env/dynamic/public'
 import { TIERS_PRICE } from '$lib/member/conditions/constants.js'
 
 export const load = async ({ url }) => {
@@ -46,7 +45,6 @@ export const actions = {
 				'events',
 				'pricing',
 				'contact',
-				'licences',
 			]
 			if (reservedPaths.includes(data.id))
 				return nameFail(`Les noms suivant sont réservés: ${reservedPaths.join(', ')}`)

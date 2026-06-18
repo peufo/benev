@@ -26,7 +26,6 @@ export const load = async ({ url }) => {
 		users: await prisma.user.findMany({
 			where,
 			include: {
-				licences: true,
 				auth_key: true,
 				members: {
 					include: { event: true },

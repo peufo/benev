@@ -32,8 +32,8 @@
 		Le profil de base des membres contient déjà des informations essentielles telles que leur
 		addresse, leur numéro de téléphone, leur email et leur âge.<br />
 		Tu peux
-		<a href="{$eventPath}/admin/adhesion">paramétrer le processus d'adhésion</a> et
-		définir les informations que tu souhaites récolter auprès des membres.
+		<a href="{$eventPath}/admin/adhesion">paramétrer le processus d'adhésion</a> et définir les informations
+		que tu souhaites récolter auprès des membres.
 	</p>
 </section>
 

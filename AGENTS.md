@@ -290,12 +290,11 @@ bun migrate:deploy
 
 ---
 
-## Payments and Licensing
+## Payments and Tiers
 
-- Events and members require paid **licenses** beyond free tiers.
+- Events are on a tiered plan (`basic`, `standard`, `premium`, `pro`) with member quotas.
 - Stripe is used for checkout sessions and webhook validation.
-- Webhook endpoint: `/me/licences/checkout/validation` (POST).
-- Free tier limit: `PUBLIC_FREE_EVENT_MAX_MEMBERS` (default 20 members per event).
+- Webhook endpoint: `/me/checkouts/validation` (POST).
 
 ---
 

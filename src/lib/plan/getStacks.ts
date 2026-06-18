@@ -1,6 +1,6 @@
 import { isFreeRange } from 'perod'
 
-export function getStacks<T extends {start: Date, end: Date}>(periods: T[]): T[][] {
+export function getStacks<T extends { start: Date; end: Date }>(periods: T[]): T[][] {
 	if (!periods.length) return [[]]
 	const _stacks: T[][] = []
 

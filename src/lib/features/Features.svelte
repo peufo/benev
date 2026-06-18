@@ -9,16 +9,16 @@
 		},
 		{
 			number: '02',
-			title: 'Gestion d\'équipe collaborative',
+			title: "Gestion d'équipe collaborative",
 			description:
-				'Désigne des administrateurs et des responsables de secteur pour t\'aider dans l\'organisation. Chacun a les droits adaptés à son rôle, sans accès superflu.',
+				"Désigne des administrateurs et des responsables de secteur pour t'aider dans l'organisation. Chacun a les droits adaptés à son rôle, sans accès superflu.",
 			color: 'bg-brand-beige',
 		},
 		{
 			number: '03',
 			title: 'Bénévoles autonomes',
 			description:
-				'Chaque bénévole gère ses inscriptions, accède à son tableau de bord et reçoit les notifications. Moins de questions en privé, plus d\'autonomie sur le terrain.',
+				"Chaque bénévole gère ses inscriptions, accède à son tableau de bord et reçoit les notifications. Moins de questions en privé, plus d'autonomie sur le terrain.",
 			color: 'bg-primary',
 		},
 	]

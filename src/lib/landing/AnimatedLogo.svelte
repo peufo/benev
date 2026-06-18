@@ -21,8 +21,6 @@
 					shape.style.transition = `stroke-dashoffset ${duration} cubic-bezier(0.25, 0.46, 0.45, 0.94)`
 					shape.style.strokeDashoffset = '0'
 				}, delay)
-
-
 			} catch {
 				// fallback
 			}

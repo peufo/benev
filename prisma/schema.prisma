@@ -40,36 +40,10 @@ model User {
   auth_key     Key[]
   medias       Media[]
   messages     Message[]
-  licences     Licence[]
   checkouts    Checkout[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-// TODO: remove
-model Licence {
-  id   String      @id @default(cuid())
-  type LicenceType
-
-  memberId String? @unique
-  member   Member? @relation(references: [id], fields: [memberId], onDelete: SetNull)
-  eventId  String? @unique
-  event    Event?  @relation(references: [id], fields: [eventId], onDelete: SetNull, onUpdate: Cascade)
-
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-
-  checkoutId String
-  checkout   Checkout @relation(fields: [checkoutId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-}
-
-// TODO: remove
-enum LicenceType {
-  event
-  member
 }
 
 model Product {
@@ -86,16 +60,14 @@ model Product {
 }
 
 model Checkout {
-  id         String    @id @unique @default(cuid())
-  name       String?
-  licences   Licence[] // TODO: remove
-  isDonation Boolean   @default(false) // TODO: remove
-  amount     Int
-  currency   String    @default("CHF")
-  products   Product[]
-  userId     String
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt  DateTime  @default(now())
+  id        String    @id @unique @default(cuid())
+  name      String?
+  amount    Int
+  currency  String    @default("CHF")
+  products  Product[]
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
 }
 
 model Session {
@@ -139,12 +111,10 @@ model Event {
   ownerId   String
   owner     User       @relation(references: [id], fields: [ownerId], onDelete: Cascade)
 
-  licence               Licence? //TODO:  REMOVE
-  missingLicencesMember Int       @default(0) // TODO: REMOVE
-  tier                  EventTier @default(basic)
-  notifiedQuota80       DateTime?
-  notifiedQuota90       DateTime?
-  notifiedQuota100      DateTime?
+  tier             EventTier @default(basic)
+  notifiedQuota80  DateTime?
+  notifiedQuota90  DateTime?
+  notifiedQuota100 DateTime?
 
   description  String?
   icon         String?
@@ -279,8 +249,6 @@ model Member {
   user    User?   @relation(references: [id], fields: [userId], onDelete: SetNull)
   eventId String
   event   Event   @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
-
-  licence Licence? // TODO: REMOVE
 
   /// [MemberProfile]
   profileJson Json @default("{}")

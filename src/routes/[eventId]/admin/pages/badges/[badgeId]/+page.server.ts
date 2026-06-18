@@ -61,5 +61,6 @@ function idToConnectionData(id?: string | null) {
 async function checkFieldType(id: string | undefined, ...types: FieldType[]) {
 	if (!id) return
 	const field = await prisma.field.findUniqueOrThrow({ where: { id } })
-	if (!types.includes(field.type)) throw new Error(`The "${field.label}" field is not of type ["${types}"]`)
+	if (!types.includes(field.type))
+		throw new Error(`The "${field.label}" field is not of type ["${types}"]`)
 }

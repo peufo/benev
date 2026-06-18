@@ -16,21 +16,22 @@ const fieldTypes = [
 export const GET = async ({ params: { eventId }, url, locals }) => {
 	await permission.leader(eventId, locals)
 
-	
 	const query = parseQuery(url, {
 		search: z.string().optional(),
 		take: z.coerce.number().default(5),
 	})
-	// Shuuut 
-	const queryTypes = z.array(z.enum(fieldTypes)).optional()
-		.parse(url.searchParams.getAll('types[]')) 
+	// Shuuut
+	const queryTypes = z
+		.array(z.enum(fieldTypes))
+		.optional()
+		.parse(url.searchParams.getAll('types[]'))
 
 	const where: Prisma.FieldWhereInput = { eventId }
 	if (query.search) {
 		where.name = { contains: query.search }
 	}
 	if (queryTypes) {
-		where.type = { 'in': queryTypes }
+		where.type = { in: queryTypes }
 	}
 
 	const fields = await prisma.field.findMany({

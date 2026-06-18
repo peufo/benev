@@ -3,27 +3,19 @@
 	import { useForm } from 'fuma/validation'
 	import { Icon, tip } from 'fuma'
 	import type { PageData } from './$types'
-	import { EVENT_STATES } from '$lib/constant'
+	import { EVENT_STATES, EVENT_TIER } from '$lib/constant'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'
-	import { env } from '$env/dynamic/public'
 	import { page } from '$app/stores'
 	import { useNotify } from '$lib/notify'
-	import { goto } from '$app/navigation'
 
 	export let event: Event & { owner: { firstName: string } }
 	export let eventCounts: PageData['eventCounts']
-	export let eventLicenceAvailable: boolean
 	export let isOwner: boolean
 
-	$: nextStates = getNextStates(eventLicenceAvailable)
-	function getNextStates(
-		_eventLicenceAvailable: boolean
-	): Record<EventState, { state: EventState; label: string }[]> {
+	function getNextStates(): Record<EventState, { state: EventState; label: string }[]> {
 		return {
-			draft: [
-				{ state: 'actived', label: _eventLicenceAvailable ? 'Activer' : 'Obtenir une licence' },
-			],
+			draft: [{ state: 'actived', label: 'Activer' }],
 			actived: [
 				{ state: 'published', label: 'Publier' },
 				{ state: 'archived', label: 'Archiver' },
@@ -38,27 +30,23 @@
 
 	const notify = useNotify()
 
-	function handleClickLicence(e: MouseEvent | KeyboardEvent) {
-		if (!$page.data.member?.roles.includes('owner')) {
-			e.preventDefault()
-			const owner = `${$page.data.member?.firstName} ${$page.data.member?.lastName}`
-			notify.warning(`Seul le propriétaire, ${owner}, peut obtenir des licences pour cet évènement`)
-		}
-	}
-
-	function handleClickState(e: MouseEvent | KeyboardEvent, newState: EventState) {
+	function handleClickState(e: MouseEvent | KeyboardEvent) {
 		if (!$page.data.userIsRoot && !$page.data.member?.roles.includes('owner')) {
 			e.preventDefault()
 			const owner = `${$page.data.member?.firstName} ${$page.data.member?.lastName}`
 			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
 		}
-		if (event.state === 'draft' && !eventLicenceAvailable) {
-			e.preventDefault()
-			goto(
-				`/me/licences/checkout?return_url=${$eventPath}/admin/event?checkoutId={CHECKOUT_SESSION_ID}`
-			)
-		}
 	}
+
+	$: tier = EVENT_TIER[event.tier]
+	$: maxMembers = tier.max
+	$: membersLabel = maxMembers
+		? `${eventCounts.membersValided} / ${maxMembers}`
+		: `${eventCounts.membersValided}`
+	$: progressValue = maxMembers ? (eventCounts.membersValided / maxMembers) * 100 : 0
+	$: quotaContent = maxMembers
+		? `${eventCounts.membersValided} membres validés sur ${maxMembers} possibles avec le plan ${tier.label}`
+		: `Aucune limite de membres avec le plan ${tier.label}`
 </script>
 
 <div
@@ -76,44 +64,14 @@
 			<h3 class="title">{EVENT_STATES[event.state].label}</h3>
 			<div class="grow" />
 
-			{#if event.state === 'draft'}
-				<div
-					use:tip={{
-						content: `${eventCounts.membersValided} membres validés pour ${env.PUBLIC_FREE_EVENT_MAX_MEMBERS} possibles`,
-					}}
-					role="progressbar"
-					class="radial-progress bg-warning text-xs opacity-80"
-					style="--value:{(eventCounts.membersValided / +env.PUBLIC_FREE_EVENT_MAX_MEMBERS) *
-						100}; --size: 3rem;"
-				>
-					{eventCounts.membersValided} / {env.PUBLIC_FREE_EVENT_MAX_MEMBERS}
-				</div>
-			{:else}
-				{@const maxMembers = eventCounts.membersLicenced + eventCounts.memberLicencesAvailable}
-				{@const content = event.missingLicencesMember
-					? `Il manque ${event.missingLicencesMember} licences de membre`
-					: eventCounts.memberLicencesAvailable
-					? `Encore ${eventCounts.memberLicencesAvailable} licences de membre disponibles`
-					: `Pas de licence de membre disponible`}
-
-				<a
-					href="/me/licences"
-					on:click={handleClickLicence}
-					on:keydown={handleClickLicence}
-					use:tip={{ content }}
-				>
-					<div
-						role="progressbar"
-						class="
-							radial-progress text-xs opacity-80
-							{event.missingLicencesMember ? 'text-error opacity-100' : ''}
-						"
-						style="--value:{(eventCounts.membersLicenced / maxMembers) * 100}; --size: 3rem;"
-					>
-						{eventCounts.membersLicenced + event.missingLicencesMember} / {maxMembers}
-					</div>
-				</a>
-			{/if}
+			<div
+				use:tip={{ content: quotaContent }}
+				role="progressbar"
+				class="radial-progress text-xs opacity-80"
+				style="--value:{progressValue}; --size: 3rem;"
+			>
+				{membersLabel}
+			</div>
 		</div>
 
 		<p class="text-sm opacity-80 mt-1">
@@ -128,7 +86,7 @@
 		</p>
 	{:else}
 		<div class="flex gap-2 justify-end grow items-center">
-			{#each nextStates[event.state] as { state, label }}
+			{#each getNextStates()[event.state] as { state, label }}
 				{@const form = useForm()}
 				<form
 					use:enhance={form.submit}
@@ -139,8 +97,8 @@
 					<input type="hidden" name="state" value={state} />
 					<button
 						class="btn btn-sm btn-primary"
-						on:click={(e) => handleClickState(e, state)}
-						on:keydown={(e) => handleClickState(e, state)}
+						on:click={handleClickState}
+						on:keydown={handleClickState}
 					>
 						{label}
 					</button>

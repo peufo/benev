@@ -7,6 +7,6 @@
 {@html data.emailInvitation}
 {@html data.emailInvitationAccept}
 
-<hr>
+<hr />
 
 <EmailAcceptInviteNotification {...data} />

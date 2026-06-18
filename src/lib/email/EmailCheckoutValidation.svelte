@@ -2,7 +2,6 @@
 	import type { Checkout, User, Product } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
-	import { LICENCE_TYPE_LABEL } from '$lib/constant'
 
 	export let checkout: Checkout & { user: User; products: Product[] }
 	export let dest: 'user' | 'root' = 'user'
@@ -25,7 +24,7 @@
 	<table style="width: 100%; border: #ccc solid 1px;">
 		<thead>
 			<tr>
-				<th style="border-bottom: #ccc solid 1px;">Licence</th>
+				<th style="border-bottom: #ccc solid 1px;">Produit</th>
 				<th style="border-bottom: #ccc solid 1px;" align="right">Quantité</th>
 			</tr>
 		</thead>
@@ -49,7 +48,7 @@
 	{#if dest === 'user'}
 		<p>
 			Tu peux retrouver tous tes achats sur
-			<a href="{domain}/me/licences">ton profil.</a>
+			<a href="{domain}/me/checkouts">ton profil.</a>
 		</p>
 
 		<p>Merci pour ta confiance !</p>

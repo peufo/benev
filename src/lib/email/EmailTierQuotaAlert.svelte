@@ -34,9 +34,9 @@
 		<p style="margin: 0 0 8px 0; font-size: 14px;">Plan actif : <b>{tierConfig.label}</b></p>
 		<p style="margin: 0 0 8px 0; font-size: 14px;">
 			Bénévoles validés :
-			<b
-				>{membersValided}{#if max !== null} / {max}{/if}</b
-			>
+			<b>
+				{membersValided}{#if max !== null} / {max}{/if}
+			</b>
 		</p>
 		<p style="margin: 0; font-size: 24px; font-weight: bold; color: #0d3b66;">
 			{Math.round(ratio * 100)} %

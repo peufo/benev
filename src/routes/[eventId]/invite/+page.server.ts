@@ -8,7 +8,6 @@ import {
 	sendEmailModel,
 	permission,
 	createAvatarPlaceholder,
-	ensureLicenceMembers,
 	getMemberProfile,
 	notifyTierQuotaIfNeeded,
 } from '$lib/server'
@@ -84,7 +83,6 @@ export const actions = {
 						isValidedByUser: true,
 					},
 				})
-				await ensureLicenceMembers(eventId)
 				if (newIsValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
 				// TODO: mails to admins ?
 				return data

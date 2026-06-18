@@ -6,7 +6,7 @@
 
 	export let allreadyLoaded: (checkoutId: string) => boolean = () => false
 	export let removeCheckoutId = false
-	export let eventSource = '/me/licences/checkout/validation'
+	export let eventSource = '/me/checkouts/validation'
 
 	let checkoutId = $page.url.searchParams.get('checkoutId')
 	let isNewCheckoutAwaited = !!checkoutId && !allreadyLoaded(checkoutId)

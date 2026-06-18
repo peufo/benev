@@ -13,7 +13,7 @@ export const load = async ({ url }) => {
 			...data,
 			include: {
 				user: true,
-				licences: true,
+				products: true,
 			},
 			orderBy: { createdAt: 'desc' },
 		}),

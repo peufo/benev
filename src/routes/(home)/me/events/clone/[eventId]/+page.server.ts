@@ -51,7 +51,6 @@ export const actions = {
 				activedAt,
 				closeSubscribing,
 				deletedAt,
-				missingLicencesMember,
 				ownerId,
 				teams,
 				pages,

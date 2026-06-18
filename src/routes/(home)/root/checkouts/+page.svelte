@@ -10,7 +10,7 @@
 		<h2 class="title">Checkouts</h2>
 
 		<a href="/root/checkouts/new" class="btn btn-square btn-sm ml-auto">
-			<Icon path={mdiPlus} title="Créer des licences manuellement" />
+			<Icon path={mdiPlus} title="Créer un checkout manuellement" />
 		</a>
 	</div>
 
@@ -22,15 +22,11 @@
 				<th>CreatedAt</th>
 				<th>Amount</th>
 				<th>Currency</th>
-				<th>Licence event</th>
-				<th>Licence member</th>
+				<th>Products</th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each data.checkouts as checkout}
-				{@const licencesEvent = checkout.licences.filter((l) => l.type === 'event')}
-				{@const licencesMember = checkout.licences.filter((l) => l.type === 'member')}
-
 				<tr>
 					<td>
 						<a href="/root/users/{checkout.user.id}" class="link link-hover">
@@ -46,12 +42,7 @@
 					</td>
 					<td align="right">{(checkout.amount / 100).toFixed(2)}</td>
 					<td>{checkout.currency}</td>
-					<td align="right">
-						{licencesEvent.filter((l) => l.eventId).length} / {licencesEvent.length}
-					</td>
-					<td align="right">
-						{licencesMember.filter((l) => l.memberId).length} / {licencesMember.length}
-					</td>
+					<td align="right">{checkout.products.length}</td>
 				</tr>
 			{/each}
 		</tbody>

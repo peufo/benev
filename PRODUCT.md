@@ -11,6 +11,7 @@ Organisateurs d'événements (associations, festivals, collectifs sportifs, mani
 ## Product Purpose
 
 Convaincre l'organisateur en 30 secondes que Benev est l'outil qu'il lui faut. La landing page doit :
+
 - Démontrer la simplicité du produit sans le montrer en action (pas de démo vidéo)
 - Créer la confiance par la transparence (open source, prix clair)
 - Inciter à l'essai immédiat avec un CTA clair et bas-friction
