@@ -29,14 +29,14 @@
 				</a>
 
 				<a
-					href="/support"
+					href="/open-source"
 					class="
 						btn btn-lg btn-ghost text-white
 						hover:bg-white/10
 						transition-colors duration-200
 					"
 				>
-					Soutenir le projet
+					Contribuer
 				</a>
 			</div>
 		</div>
