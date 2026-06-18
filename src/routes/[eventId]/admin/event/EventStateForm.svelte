@@ -36,8 +36,9 @@
 <div
 	class="
     {EVENT_STATES[event.state].class}
-    md:px-8 p-4 rounded-2xl flex flex-col gap-3 bg-base-100 border
+    md:px-8 p-4 rounded-2xl flex flex-col gap-3 bg-base-100
   "
+	style="border-width: 1px; border-style: solid;"
 >
 	<div>
 		<div class="flex gap-2 items-center flex-wrap">
