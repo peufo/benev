@@ -28,7 +28,7 @@
 						<div class="flex gap-4">
 							{#if event.posterId}
 								<img
-									src="/media/{event.posterId}?size=a6"
+									src="/media/{event.posterId}?size=a4"
 									alt="Affiche de {event.name}"
 									class="w-24 sm:w-28 md:w-32 aspect-[3/4] object-cover rounded-lg border border-base-200 shrink-0"
 								/>

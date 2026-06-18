@@ -27,7 +27,7 @@
 		<div class="shrink-0">
 			{#if member.event.posterId}
 				<img
-					src="/media/{member.event.posterId}?size=a6"
+					src="/media/{member.event.posterId}?size=a4"
 					alt="Affiche de {member.event.name}"
 					class="w-20 h-28 object-cover rounded border border-base-200"
 				/>
