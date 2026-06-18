@@ -18,12 +18,10 @@
 
 <div class="card bg-base-100 shadow">
 	<div class="card-body">
-		<h2 class="card-title">Plan actif</h2>
-
-		<div class="flex items-center gap-2 text-lg font-semibold">
-			<span>{tier.label}</span>
+		<h2 class="card-title">
+			<span>Plan {tier.label}</span>
 			<span class="text-base-content/60">— {tier.price}</span>
-		</div>
+		</h2>
 
 		<div class="mt-4 flex items-center gap-1.5 text-sm opacity-80">
 			<Users size={16} />
@@ -52,6 +50,10 @@
 			</p>
 		{:else}
 			<p class="text-sm opacity-70 mt-2">Aucune limite de bénévoles.</p>
+		{/if}
+
+		{#if tier.max !== null && membersValided > tier.max}
+			<p>L'interface admin est maintenant limitée, mais les bénévoles peuvent encore s'inscrire.</p>
 		{/if}
 	</div>
 </div>
