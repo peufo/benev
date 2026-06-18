@@ -1,6 +1,7 @@
 import { error, redirect } from '@sveltejs/kit'
 import { env } from '$env/dynamic/private'
 import { prisma } from '$lib/server'
+import { isTierQuotaReached } from '$lib/server/tierQuota'
 import {
 	type MemberRole,
 	type MemberWithComputedValuesAndAccount,
@@ -19,6 +20,7 @@ export const permission = {
 	adminOrRoot: createMemberOrRootPermission('admin'),
 	ownerOrRoot: createMemberOrRootPermission('owner'),
 	leaderOfTeam,
+	leaderWithoutQuotaCheck: createMemberPermissionWithoutQuotaCheck('leader'),
 }
 
 async function rootPermission(locals: App.Locals) {
@@ -50,16 +52,32 @@ function createMemberOrRootPermission(role: MemberRole) {
 	}
 }
 
+function createMemberPermissionWithoutQuotaCheck(role: MemberRole) {
+	return async (
+		eventId: string,
+		locals: App.Locals
+	): Promise<MemberWithComputedValuesAndAccount> => {
+		const session = await locals.auth.validate()
+		if (!session) error(401)
+		return checkMemberRole(session, eventId, role, false)
+	}
+}
+
 async function checkMemberRole(
 	session: Session,
 	eventId: string,
-	role: MemberRole
+	role: MemberRole,
+	checkQuota = true
 ): Promise<MemberWithComputedValuesAndAccount> {
 	try {
 		const member = await getMemberProfile({ userId: session.user.id, eventId })
 		if (!member.roles.includes(role)) throw new Error(`Member don't have role '${role}'`)
+		if (checkQuota && (await isTierQuotaReached(member.event))) {
+			throw new Error('Tier quota reached')
+		}
 		return { ...member, email: session.user.email, userId: session.user.id }
-	} catch (e) {
+	} catch (err: unknown) {
+		if (err instanceof Error) error(403, err.message)
 		error(403)
 	}
 }

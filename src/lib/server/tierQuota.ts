@@ -1,8 +1,18 @@
-import type { Event, User } from '@prisma/client'
+import type { Event, EventTier, User } from '@prisma/client'
 import { prisma } from '$lib/server/prisma'
 import { sendEmailComponent } from '$lib/server/email'
 import { EVENT_TIER } from '$lib/constant'
+import { computeIsTierQuotaReached } from '$lib/tierQuota'
 import { EmailTierQuotaAlert } from '$lib/email'
+
+export { computeIsTierQuotaReached } from '$lib/tierQuota'
+
+export async function isTierQuotaReached(event: { id: string; tier: EventTier }): Promise<boolean> {
+	const membersValided = await prisma.member.count({
+		where: { eventId: event.id, isValidedByEvent: true },
+	})
+	return computeIsTierQuotaReached(membersValided, event.tier)
+}
 
 export async function notifyTierQuotaIfNeeded(eventId: string) {
 	const event = await prisma.event.findUniqueOrThrow({

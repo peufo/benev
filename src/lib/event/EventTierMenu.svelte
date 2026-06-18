@@ -99,21 +99,17 @@
 				/>
 			{/if}
 
-			{#if status !== 'success' && max !== null}
+			{#if max === null}
+				<p class="text-xs opacity-70">Aucune limite de bénévoles.</p>
+			{:else if status !== 'success'}
 				<p
 					class="text-xs flex items-start gap-1.5 {status === 'error'
 						? 'text-error'
 						: 'text-warning'}"
 				>
 					<TriangleAlert size={12} class="shrink-0 mt-0.5" />
-					{#if status === 'error'}
-						90 % de la limite atteinte. Passe à un plan supérieur pour continuer.
-					{:else}
-						{Math.round(ratio * 100)} % de la limite utilisée.
-					{/if}
+					{Math.round(ratio * 100)} % de la limite utilisée.
 				</p>
-			{:else if max === null}
-				<p class="text-xs opacity-70">Aucune limite de bénévoles.</p>
 			{/if}
 
 			{#if isOwner && upgradeOptions.length}

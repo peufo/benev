@@ -135,8 +135,8 @@
 					</div>
 					<div class="collapse-content">
 						<p class="text-base-content/80 leading-relaxed">
-							Tu reçois une alerte à l'avance. Tu as le temps de passer à un plan supérieur sans
-							interruption de service.
+							Les bénévoles peuvent continuer à s'inscrire, mais l'accès à l'espace administrateur
+							est restreint. Passe à un plan supérieur pour retrouver toutes les fonctionnalités.
 						</p>
 					</div>
 				</div>

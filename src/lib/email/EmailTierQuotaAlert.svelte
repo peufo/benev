@@ -48,8 +48,9 @@
 
 	{#if isMaxReached}
 		<p>
-			Tu ne peux plus accepter de nouveaux bénévoles tant que tu n'as pas passé ton évènement à un
-			plan supérieur.
+			La limite de ton plan est atteinte. Les bénévoles peuvent toujours s'inscrire, mais certaines
+			fonctionnalités de l'espace administrateur sont restreintes jusqu'à ce que tu passes à un plan
+			supérieur.
 		</p>
 	{:else}
 		<p>Pense à passer à un plan supérieur si tu prévois d'accueillir plus de bénévoles.</p>
