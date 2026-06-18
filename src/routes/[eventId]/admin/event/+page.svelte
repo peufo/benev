@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Card } from 'fuma'
 	import { EventForm } from '$lib/event'
 
 	import EventStateForm from './EventStateForm.svelte'
@@ -10,14 +9,8 @@
 
 <OnlyAdmin>
 	<div class="mx-auto flex flex-col gap-2 sm:gap-4" style="min-width: min(100%, 600px)">
-		<EventStateForm
-			isOwner={data.member?.userId == data.event.ownerId}
-			event={data.event}
-			eventCounts={data.eventCounts}
-		/>
+		<EventStateForm isOwner={data.member?.userId == data.event.ownerId} event={data.event} />
 
-		<Card>
-			<EventForm event={data.event} />
-		</Card>
+		<EventForm event={data.event} />
 	</div>
 </OnlyAdmin>

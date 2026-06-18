@@ -1,16 +1,14 @@
 <script lang="ts">
 	import type { Event, EventState } from '@prisma/client'
 	import { useForm } from 'fuma/validation'
-	import { Icon, tip } from 'fuma'
-	import type { PageData } from './$types'
-	import { EVENT_STATES, EVENT_TIER } from '$lib/constant'
+	import { Icon } from 'fuma'
+	import { EVENT_STATES } from '$lib/constant'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 	import { useNotify } from '$lib/notify'
 
 	export let event: Event & { owner: { firstName: string } }
-	export let eventCounts: PageData['eventCounts']
 	export let isOwner: boolean
 
 	function getNextStates(): Record<EventState, { state: EventState; label: string }[]> {
@@ -33,21 +31,11 @@
 			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
 		}
 	}
-
-	$: tier = EVENT_TIER[event.tier]
-	$: maxMembers = tier.max
-	$: membersLabel = maxMembers
-		? `${eventCounts.membersValided} / ${maxMembers}`
-		: `${eventCounts.membersValided}`
-	$: progressValue = maxMembers ? (eventCounts.membersValided / maxMembers) * 100 : 0
-	$: quotaContent = maxMembers
-		? `${eventCounts.membersValided} membres validés sur ${maxMembers} possibles avec le plan ${tier.label}`
-		: `Aucune limite de membres avec le plan ${tier.label}`
 </script>
 
 <div
 	class="
-    md:px-8 p-4 rounded-lg border flex flex-col gap-3 bg-base-100
+    md:px-8 p-4 rounded-2xl border flex flex-col gap-3 bg-base-100
     {EVENT_STATES[event.state].class}
   "
 >
@@ -58,16 +46,6 @@
 				class="opacity-80 {event.state === 'draft' ? 'rotate-12' : ''}"
 			/>
 			<h3 class="title">{EVENT_STATES[event.state].label}</h3>
-			<div class="grow" />
-
-			<div
-				use:tip={{ content: quotaContent }}
-				role="progressbar"
-				class="radial-progress text-xs opacity-80"
-				style="--value:{progressValue}; --size: 3rem;"
-			>
-				{membersLabel}
-			</div>
 		</div>
 
 		<p class="text-sm opacity-80 mt-1">
