@@ -10,7 +10,6 @@ import type {
 import {
 	mdiArchiveOutline,
 	mdiEarth,
-	mdiTestTube,
 	mdiTextShort,
 	mdiText,
 	mdiNumeric,
@@ -54,12 +53,6 @@ export const EVENT_STATES: Record<
 	{ label: string; icon: string; description: string; class: string }
 > = {
 	draft: {
-		icon: mdiTestTube,
-		label: 'Évènement en projet',
-		class: 'border-warning',
-		description: `L'évènement est en mode basique et seuls les responsables y ont accès.`,
-	},
-	actived: {
 		icon: mdiExcavator,
 		label: 'Évènement en construction',
 		class: 'border-warning',

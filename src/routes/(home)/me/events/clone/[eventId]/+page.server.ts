@@ -48,7 +48,6 @@ export const actions = {
 			})
 			const {
 				name: eventName,
-				activedAt,
 				closeSubscribing,
 				deletedAt,
 				ownerId,

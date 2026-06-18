@@ -15,13 +15,9 @@
 
 	function getNextStates(): Record<EventState, { state: EventState; label: string }[]> {
 		return {
-			draft: [{ state: 'actived', label: 'Activer' }],
-			actived: [
-				{ state: 'published', label: 'Publier' },
-				{ state: 'archived', label: 'Archiver' },
-			],
+			draft: [{ state: 'published', label: 'Publier' }],
 			published: [
-				{ state: 'actived', label: 'Maintenance' },
+				{ state: 'draft', label: 'Repasser en brouillon' },
 				{ state: 'archived', label: 'Archiver' },
 			],
 			archived: [{ state: 'published', label: 'Republier' }],
@@ -82,7 +78,7 @@
 	{#if event.state == 'draft' && !isOwner}
 		<p class="badge badge-warning gap-1">
 			<b>{event.owner.firstName}</b>
-			doit activer l'évènement.
+			doit publier l'évènement.
 		</p>
 	{:else}
 		<div class="flex gap-2 justify-end grow items-center">

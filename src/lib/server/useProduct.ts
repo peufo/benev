@@ -12,7 +12,7 @@ export async function useProduct(eventId: string, productId: string) {
 		}),
 	])
 	if (product.eventId) {
-		throw new Error('This product is aldready actived for an event')
+		throw new Error('This product is already activated for an event')
 	}
 	if (event.ownerId !== product.checkout.userId) {
 		throw new Error('The event owner and product owner must be the same person')
@@ -29,7 +29,7 @@ export async function useProduct(eventId: string, productId: string) {
 	if (event.tier === 'basic' && product.priceId === env.PUBLIC_PRICE_STANDARD) {
 		return setEventTier('standard')
 	}
-	throw new Error('This product cannot be actived')
+	throw new Error('This product cannot be activated')
 
 	async function setEventTier(tier: EventTier) {
 		return prisma.$transaction([

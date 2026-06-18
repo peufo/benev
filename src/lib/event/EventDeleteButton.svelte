@@ -27,9 +27,6 @@
 			Cette opération est <b>irréversible !</b>
 		</p>
 
-		{#if event?.activedAt}
-			<p>La license utilisé pour cette évènement n'est pas récupérée.</p>
-		{/if}
 		<div class="flex justify-end">
 			<button class="btn btn-error" type="submit"> Je confirme </button>
 		</div>
