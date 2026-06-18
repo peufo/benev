@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Check, Infinity } from 'lucide-svelte'
+	import { TierCard } from '$lib/event'
 </script>
 
 <section class="py-20 md:py-28" id="pricing">
@@ -16,84 +16,20 @@
 
 		<!-- Pricing grid -->
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-			<!-- Basique -->
-			<div class="card bg-base-100 border border-base-200 shadow-sm flex flex-col">
-				<div class="card-body flex flex-col flex-1">
-					<div class="flex-1">
-						<h3 class="text-xl font-bold text-base-content">Basique</h3>
-						<div class="mt-2 flex items-baseline gap-1">
-							<span class="text-4xl font-extrabold text-primary tracking-tight">0</span>
-							<span class="text-lg text-base-content/60">CHF</span>
-						</div>
-						<ul class="mt-4 space-y-2 text-base-content/80">
-							<li class="flex items-start gap-2">
-								<Check class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
-								<span>Jusqu'à 50 bénévoles</span>
-							</li>
-						</ul>
-					</div>
-					<a href="/me/events/create?plan=basic" class="btn btn-outline btn-primary mt-6 w-full">
-						Commencer
-					</a>
-				</div>
-			</div>
-
-			<!-- Standard -->
-			<div class="card bg-base-100 border border-base-200 shadow-sm flex flex-col">
-				<div class="card-body flex flex-col flex-1">
-					<div class="flex-1">
-						<h3 class="text-xl font-bold text-base-content">Standard</h3>
-						<div class="mt-2 flex items-baseline gap-1">
-							<span class="text-4xl font-extrabold text-primary tracking-tight">99</span>
-							<span class="text-lg text-base-content/60">CHF</span>
-						</div>
-						<ul class="mt-4 space-y-2 text-base-content/80">
-							<li class="flex items-start gap-2">
-								<Check class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
-								<span>Jusqu'à 200 bénévoles</span>
-							</li>
-							<li class="flex items-start gap-2">
-								<Check class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
-								<span>Support email — réponse en 5 jours ouvrables</span>
-							</li>
-						</ul>
-					</div>
-					<a href="/me/events/create?plan=standard" class="btn btn-outline btn-primary mt-6 w-full">
-						Choisir Standard
-					</a>
-				</div>
-			</div>
-
-			<!-- Premium -->
-			<div class="card bg-base-100 border border-base-200 shadow-sm flex flex-col">
-				<div class="card-body flex flex-col flex-1">
-					<div class="flex-1">
-						<h3 class="text-xl font-bold text-base-content">Premium</h3>
-						<div class="mt-2 flex items-baseline gap-1">
-							<span class="text-4xl font-extrabold text-primary tracking-tight">249</span>
-							<span class="text-lg text-base-content/60">CHF</span>
-						</div>
-						<ul class="mt-4 space-y-2 text-base-content/80">
-							<li class="flex items-start gap-2">
-								<Infinity class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
-								<span>
-									Bénévoles <span class="font-bold text-primary">illimités</span>
-								</span>
-							</li>
-							<li class="flex items-start gap-2">
-								<Check class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
-								<span>Support email 7/7 — réponse en 24h</span>
-							</li>
-						</ul>
-					</div>
-					<a
-						href="/me/events/create?plan=premium"
-						class="btn btn-primary mt-6 w-full shadow-md hover:shadow-lg transition-shadow duration-200"
-					>
-						Choisir Premium
-					</a>
-				</div>
-			</div>
+			<TierCard
+				tier="basic"
+				action={{ label: 'Commencer', href: '/me/events/create?plan=basic' }}
+			/>
+			<TierCard
+				tier="standard"
+				features={['Support email — réponse en 5 jours ouvrables']}
+				action={{ label: 'Choisir Standard', href: '/me/events/create?plan=standard' }}
+			/>
+			<TierCard
+				tier="premium"
+				features={['Support email 7/7 — réponse en 24h']}
+				action={{ label: 'Choisir Premium', href: '/me/events/create?plan=premium' }}
+			/>
 		</div>
 
 		<!-- Pro: horizontal, subdued -->

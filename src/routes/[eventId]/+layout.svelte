@@ -20,7 +20,7 @@
 	import EventMenu from './EventMenu.svelte'
 	import FooterLink from './FooterLink.svelte'
 	import EventTheme from './admin/theme/EventTheme.svelte'
-	import { EventIcon, EventTierMenu } from '$lib/event'
+	import { EventIcon, EventTierBadge } from '$lib/event'
 
 	export let data
 
@@ -80,11 +80,7 @@
 	{#if data.member?.roles.includes('leader') || data.userIsRoot}
 		<div class="hidden lg:flex flex-col gap-2 sticky top-4 mt-4 ml-4 shrink-0">
 			<AdminNavigation />
-			<EventTierMenu
-				event={data.event}
-				membersValided={data.membersValided}
-				isOwner={data.member?.roles.includes('owner') || data.userIsRoot}
-			/>
+			<EventTierBadge event={data.event} membersValided={data.membersValided} />
 		</div>
 	{/if}
 

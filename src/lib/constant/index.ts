@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/public'
 import type {
 	EventState,
 	EventTier,
@@ -72,11 +73,41 @@ export const EVENT_STATES: Record<
 	},
 } as const
 
-export const EVENT_TIER: Record<EventTier, { label: string; max: number | null; price: string }> = {
-	basic: { label: 'Basique', max: 5, price: '0 CHF' },
-	standard: { label: 'Standard', max: 10, price: '99 CHF' },
-	premium: { label: 'Premium', max: null, price: '249 CHF' },
-	pro: { label: 'Pro', max: null, price: 'Sur mesure' },
+export const EVENT_TIER: Record<
+	EventTier,
+	{
+		label: string
+		max: number | null
+		price: string
+		priceId: string | null
+		upgradePriceId?: Partial<Record<EventTier, string>>
+	}
+> = {
+	basic: {
+		label: 'Basique',
+		max: 50,
+		price: '0 CHF',
+		priceId: null,
+	},
+	standard: {
+		label: 'Standard',
+		max: 200,
+		price: '99 CHF',
+		priceId: env.PUBLIC_PRICE_STANDARD,
+	},
+	premium: {
+		label: 'Premium',
+		max: null,
+		price: '249 CHF',
+		priceId: env.PUBLIC_PRICE_PREMIUM,
+		upgradePriceId: { standard: env.PUBLIC_PRICE_STANDARD_TO_PREMIUM },
+	},
+	pro: {
+		label: 'Pro',
+		max: null,
+		price: 'Sur mesure',
+		priceId: null,
+	},
 } as const
 
 export const GIFT_CONDITION_MODE: Record<GiftConditionsMode, string> = {

@@ -1,6 +1,5 @@
-import { env } from '$env/dynamic/public'
 import type { MemberConditionOperator } from '$lib/models'
-import type { EventTier, FieldType } from '@prisma/client'
+import type { FieldType } from '@prisma/client'
 
 export const CONDITION_OPERATOR: Record<FieldType, MemberConditionOperator[]> = {
 	boolean: ['equals'],
@@ -24,11 +23,4 @@ export const CONDITION_OPERATOR_LABEL: Record<MemberConditionOperator, string> =
 	array_starts_with: 'Commence par',
 	string_ends_with: 'Termine par',
 	array_ends_with: 'Termine par',
-}
-
-export const TIERS_PRICE: Record<EventTier, string> = {
-	basic: '',
-	standard: env.PUBLIC_PRICE_STANDARD,
-	premium: env.PUBLIC_PRICE_PREMIUM,
-	pro: env.PUBLIC_PRICE_PREMIUM, // TODO: créer le produit pro à l'occase
 }

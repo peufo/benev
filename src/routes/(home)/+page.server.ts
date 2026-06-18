@@ -4,7 +4,7 @@ import { z } from 'fuma'
 import { prisma, media, permission, uploadImages } from '$lib/server'
 import { modelEventCreate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
-import { TIERS_PRICE } from '$lib/member/conditions/constants.js'
+import { EVENT_TIER } from '$lib/constant'
 
 export const load = async ({ url }) => {
 	const prospectId = url.searchParams.get('prospectId')
@@ -89,7 +89,8 @@ export const actions = {
 		{
 			redirectTo: ({ event, tier }) => {
 				if (tier === 'basic') return `/${event.id}`
-				const price = TIERS_PRICE[tier]
+				const price = EVENT_TIER[tier].priceId
+				if (!price) return `/${event.id}`
 				return `/me/checkouts/create?price=${price}&eventId=${event.id}`
 			},
 		}
