@@ -35,8 +35,8 @@
 
 <div
 	class="
-    md:px-8 p-4 rounded-2xl border flex flex-col gap-3 bg-base-100
     {EVENT_STATES[event.state].class}
+    md:px-8 p-4 rounded-2xl flex flex-col gap-3 bg-base-100 border
   "
 >
 	<div>
@@ -49,6 +49,7 @@
 		</div>
 
 		<p class="text-sm opacity-80 mt-1">
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 			{@html EVENT_STATES[event.state].description}
 		</p>
 	</div>
