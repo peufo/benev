@@ -24,18 +24,23 @@
 </script>
 
 <div
-	class="overflow-auto bg-base-100 h-full"
+	class="overflow-scroll bg-base-100 grow"
 	use:scrollToPeriod={{ offsetX: -400, offsetY: -200 }}
 	use:keepScrollCenter={{ scaleX: hourSize, marginX: TEAM_HEADER_WIDTH }}
 >
 	<!-- SCALE -->
-	<div class="flex sticky top-0 z-10 bg-base-100" style:margin-left="{TEAM_HEADER_WIDTH}px">
+	<div class="sticky top-0 z-20 border-b bg-base-100 flex" style:width="{totalWidth}px">
+		<div
+			class="sticky z-20 bg-base-100 left-0 border-r shrink-0"
+			style:width="{TEAM_HEADER_WIDTH}px"
+		/>
+
 		{#each days as { date, hours }}
-			<div>
+			<div class="-translate-x-[1px]">
 				<!-- DAY -->
 				<div
 					style:left="{TEAM_HEADER_WIDTH}px"
-					class="border-l font-medium sticky left-0 p-1 w-min whitespace-nowrap text-sm"
+					class="font-medium sticky border-l left-0 p-1 w-min whitespace-nowrap text-sm"
 				>
 					{date.format('dddd DD.MM')}
 				</div>
@@ -55,7 +60,7 @@
 
 	{#each teams as team (team.id)}
 		<div
-			class="flex items-stretch border-t bg-base-100 hover:bg-accent/5"
+			class="flex items-stretch border-b bg-base-100 hover:bg-accent/5"
 			style:width="{totalWidth}px"
 		>
 			<a
@@ -63,7 +68,10 @@
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				style:width="{TEAM_HEADER_WIDTH}px"
-				class="p-1 sticky shrink-0 left-0 z-50 font-medium text-sm cursor-pointer bg-base-100 hover:bg-accent/10"
+				class="
+					p-1 sticky shrink-0 left-0 z-10 font-medium text-sm border-r
+					cursor-pointer bg-base-100
+				"
 			>
 				{team.name}
 			</a>

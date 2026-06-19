@@ -13,7 +13,7 @@
 </script>
 
 <div
-	class="flex flex-col w-full border-l relative py-2 gap-2"
+	class="flex flex-col w-full relative py-2 gap-2"
 	use:createPeriod={{
 		axis: 'x',
 		origin,

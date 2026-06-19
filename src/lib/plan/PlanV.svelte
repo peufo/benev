@@ -12,7 +12,6 @@
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let range: Range
 	export let hourSize: number
-	export let scrollContainer: HTMLDivElement | undefined = undefined
 
 	const TEAM_HEADER_HEIGHT = 40
 	const MIN_HOUR_HEIGHT = 30
@@ -25,27 +24,25 @@
 </script>
 
 <div
-	bind:this={scrollContainer}
+	class="overflow-scroll bg-base-100 grow flex"
 	use:scrollToPeriod={{ offsetY: -100 }}
 	use:keepScrollCenter={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
-	class="flex h-full bg-base-100 overflow-auto"
 >
 	<!-- SCALE -->
-	<div class="sticky left-0 z-10 bg-base-100" style:margin-top="{TEAM_HEADER_HEIGHT}px">
+	<div class="sticky left-0 z-20 border-r bg-base-100" style:height="{totalHeight}px">
+		<div class="sticky z-20 bg-base-100 top-0 border-b" style:height="{TEAM_HEADER_HEIGHT}px" />
+
 		{#each days as { date, hours }}
-			<div class="bg-base-100">
+			<div class="flex items-start -translate-y-[1px]">
 				<!-- DAY -->
-				<div
-					style:top="{TEAM_HEADER_HEIGHT}px"
-					class="font-medium sticky top-0 h-0 border-t text-sm px-1 -translate-y-[1px] z-10"
-				>
+				<div style:top="{TEAM_HEADER_HEIGHT}px" class="font-medium sticky border-t text-sm px-1">
 					<div class="text-sm font-medium whitespace-nowrap">
 						{date.format('ddd D')}
 					</div>
 					<div class="text-xs">{date.format('MMMM')}</div>
 				</div>
 				<!-- HOURS -->
-				<div class="flex flex-col items-end text-sm text-right -translate-y-[2px]">
+				<div class="flex flex-col items-end text-sm text-right">
 					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
 						{@const isEndNextDay = hour + hourSpan > 24}
 						{@const span = isEndNextDay ? 24 - hour : hourSpan}
@@ -59,7 +56,7 @@
 	</div>
 
 	{#each teams as team (team.id)}
-		<div class="border-l hover:bg-accent/5" style:height="{totalHeight}px">
+		<div class="border-r hover:bg-accent/5" style:height="{totalHeight}px">
 			<a
 				href={$urlParam.with({ form_team: team.id })}
 				data-sveltekit-replacestate
