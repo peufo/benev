@@ -1,9 +1,8 @@
 import { get } from 'svelte/store'
-import { USE_COERCE_DATE, USE_COERCE_JSON, urlParam } from 'fuma'
+import { USE_COERCE_DATE, USE_COERCE_JSON } from 'fuma'
 import { eventPath } from '$lib/store'
 import axios from 'axios'
 import { toast } from 'svelte-sonner'
-import { goto } from '$app/navigation'
 
 export async function updatePeriod(period: { id: string; start: Date; end: Date; teamId: string }) {
 	const form = new FormData()
@@ -18,9 +17,4 @@ export async function updatePeriod(period: { id: string; start: Date; end: Date;
 		return
 	}
 	toast.success('Période mise à jour')
-	await goto(get(urlParam).with({ form_period: period.id }), {
-		invalidateAll: true,
-		replaceState: true,
-		noScroll: true,
-	})
 }
