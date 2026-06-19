@@ -60,6 +60,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		const target = event.target as HTMLDivElement
 		if (target !== node && !isEnable(target)) return
 		event.preventDefault()
+		node.classList.add('drag-button-hidden')
 		const mouseOrigin = { x: event.clientX, y: event.clientY }
 		const start = pxToTime(axis === 'x' ? event.offsetX : event.offsetY)
 		let end = start.clone()
@@ -90,6 +91,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 
 		const handleMouseUp = async (_event: MouseEvent) => {
 			document.removeEventListener('mousemove', handleMouseMove)
+			node.classList.remove('drag-button-hidden')
 			const [_start, _end] = end.isAfter(start) ? [start, end] : [end, start]
 			const { periods, ...teamWithoutPeriods } = team
 			const newPeriod: Partial<Period & { team: Team }> = {

@@ -51,7 +51,7 @@
 	on:click|stopPropagation
 	on:mousedown={handleMouseDown}
 	class="
-    {klass}
+    {klass} drag-button
     absolute z-10 -translate-x-1/2 -translate-y-1/2
     hidden group-hover:block outline outline-2 outline-base-300
     bg-base-100 hover:bg-base-200 rounded-md btn-xs btn-square
@@ -59,3 +59,9 @@
 >
 	<Icon path={paths[axis]} />
 </button>
+
+<style>
+	:global(:has(.drag-button-hidden) .group:hover .drag-button) {
+		display: none;
+	}
+</style>

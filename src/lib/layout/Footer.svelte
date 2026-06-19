@@ -22,3 +22,9 @@
 	</div>
 	<p class="opacity-80">©2023-{new Date().getFullYear()} Dev Voisard - Switzerland</p>
 </footer>
+
+<style>
+	:global(:has(.footer-hidden) footer) {
+		display: none;
+	}
+</style>

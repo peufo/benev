@@ -55,7 +55,3 @@ mark {
 	height: 0;
 	pointer-events: none;
 }
-
-:has(.footer-hidden) footer {
-	display: none;
-}
