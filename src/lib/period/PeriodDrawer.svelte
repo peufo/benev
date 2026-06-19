@@ -28,8 +28,9 @@
 	maxWidth="400px"
 	title="{period?.id ? 'Édition' : 'Création'} d'une période"
 	bind:transitionX
+	let:close
 >
-	<PeriodForm bind:this={periodForm} {period} />
+	<PeriodForm bind:this={periodForm} {period} on:success={() => noOverlay || close()} />
 
 	{#if period?.id}
 		<div class="divider" />
