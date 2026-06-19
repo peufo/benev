@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Drawer } from 'fuma'
+	import { page } from '$app/stores'
 	import PeriodForm from './PeriodForm.svelte'
 	import type { Member } from '@prisma/client'
 	import { periodDrawerTransitionX } from '$lib/store'
@@ -7,7 +8,6 @@
 	import PeriodSubscribes from './PeriodSubscribes.svelte'
 	import Progress from '$lib/Progress.svelte'
 	import type { FormDataPeriod } from '$lib/server'
-
 	export let period: Partial<FormDataPeriod> = {}
 	export let periodForm: PeriodForm
 
@@ -16,14 +16,18 @@
 	}
 
 	let member: Member | null = null
+
+	let transitionX = 0
+	$: noOverlay = !$page.route.id?.startsWith('/[eventId]/admin/plan')
+	$: if (noOverlay) $periodDrawerTransitionX = transitionX
 </script>
 
 <Drawer
 	key="form_period"
-	noOverlay
+	{noOverlay}
 	maxWidth="400px"
 	title="{period?.id ? 'Édition' : 'Création'} d'une période"
-	bind:transitionX={$periodDrawerTransitionX}
+	bind:transitionX
 >
 	<PeriodForm bind:this={periodForm} {period} />
 
