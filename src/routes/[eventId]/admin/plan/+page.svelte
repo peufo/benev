@@ -12,9 +12,8 @@
 	})
 </script>
 
-<PlanHeader teams={data.teams} views={data.views} bind:hourSize />
-
-<div class="h-[80vh] overflow-hidden rounded-2xl">
+<div style="height: calc(100vh - 96px)" class="overflow-hidden rounded-2xl border footer-hidden">
+	<PlanHeader teams={data.teams} views={data.views} bind:hourSize class="border-b" />
 	{#if $urlParam.hasValue('view', 'v')}
 		<PlanV teams={data.teams_periods} {range} {hourSize} />
 	{:else}

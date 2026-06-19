@@ -13,7 +13,7 @@
 </script>
 
 <div
-	class="pr-4 flex h-full"
+	class="flex h-full relative px-2 gap-2"
 	use:createPeriod={{
 		axis: 'y',
 		origin,

@@ -19,19 +19,32 @@ type Params = {
 type Axis = 'x' | 'y'
 
 const GHOST_CLASSES: Record<Axis, string[]> = {
-	x: [],
-	y: ['absolute', 'left-0', 'right-0'],
+	x: ['h-full'],
+	y: ['w-full'],
 }
 
 export const createPeriod: Action<HTMLDivElement, Params> = (
 	node,
 	{ origin, hourSize, team, axis, isEnable = () => true }
 ) => {
-	let ghost: HTMLDivElement | null = null
+	const ghost = document.createElement('div')
+	const title = document.createElement('h3')
+	ghost.classList.add(
+		...GHOST_CLASSES[axis],
+		'bg-accent/50',
+		'rounded-md',
+		'border',
+		'absolute',
+		'top-0',
+		'left-0'
+	)
+	title.classList.add('text-xs', 'font-semibold', 'm-1', 'whitespace-nowrap')
+	ghost.appendChild(title)
+
 	let preserveGhostOnLocationChange = false
 	const pageUnsubscribe = page.subscribe(() => {
 		if (preserveGhostOnLocationChange) return
-		ghost?.remove()
+		if (ghost.parentElement === node) node.removeChild(ghost)
 	})
 
 	function pxToTime(px: number): Dayjs {
@@ -45,38 +58,27 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 
 	function handleMouseDown(event: MouseEvent) {
 		const target = event.target as HTMLDivElement
-		if (!isEnable(target)) return
+		if (target !== node && !isEnable(target)) return
 		event.preventDefault()
-
 		const mouseOrigin = { x: event.clientX, y: event.clientY }
 		const start = pxToTime(axis === 'x' ? event.offsetX : event.offsetY)
 		let end = start.clone()
-
-		ghost?.remove()
-		ghost = document.createElement('div')
-		ghost.classList.add(...GHOST_CLASSES[axis], 'bg-primary/30', 'rounded-lg', 'border')
-		const h3 = document.createElement('h3')
-		h3.classList.add('text-xs', 'font-semibold', 'm-1', 'whitespace-nowrap')
-		ghost.appendChild(h3)
-
 		const updateGhost = {
 			x() {
-				if (!ghost) return
 				const [left, right] = end.isAfter(start) ? [start, end] : [end, start]
 				ghost.style.translate = `${timeToPx(left)}px`
 				ghost.style.width = `${right.diff(left) * (hourSize / 3_600_000)}px`
-				h3.innerText = formatRangeHour({ start: left.toDate(), end: right.toDate() })
+				title.innerText = formatRangeHour({ start: left.toDate(), end: right.toDate() })
 			},
 			y() {
-				if (!ghost) return
 				const [top, bottom] = end.isAfter(start) ? [start, end] : [end, start]
 				ghost.style.top = `${timeToPx(top)}px`
 				ghost.style.height = `${bottom.diff(top) * (hourSize / 3_600_000)}px`
-				h3.innerText = formatRangeHour({ start: top.toDate(), end: bottom.toDate() })
+				title.innerText = formatRangeHour({ start: top.toDate(), end: bottom.toDate() })
 			},
 		}
 		updateGhost[axis]()
-		target.appendChild(ghost)
+		node.appendChild(ghost)
 
 		const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
 			const deltaPx = axis === 'x' ? clientX - mouseOrigin.x : clientY - mouseOrigin.y

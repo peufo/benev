@@ -24,14 +24,14 @@
 </script>
 
 <div
-	class="overflow-auto bg-base-100/95 max-h-full"
+	class="overflow-auto bg-base-100 h-full"
 	use:scrollToPeriod={{ offsetX: -400, offsetY: -200 }}
 	use:keepScrollCenter={{ scaleX: hourSize, marginX: TEAM_HEADER_WIDTH }}
 >
 	<!-- SCALE -->
-	<div class="flex sticky top-0 z-10" style:margin-left="{TEAM_HEADER_WIDTH}px">
+	<div class="flex sticky top-0 z-10 bg-base-100" style:margin-left="{TEAM_HEADER_WIDTH}px">
 		{#each days as { date, hours }}
-			<div class="bg-base-100/95">
+			<div>
 				<!-- DAY -->
 				<div
 					style:left="{TEAM_HEADER_WIDTH}px"
@@ -54,13 +54,16 @@
 	</div>
 
 	{#each teams as team}
-		<div class="flex border-t" style:width="{totalWidth}px">
+		<div
+			class="flex items-stretch border-t bg-base-100 hover:bg-accent/5"
+			style:width="{totalWidth}px"
+		>
 			<a
 				href={$urlParam.with({ form_team: team.id })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				style:width="{TEAM_HEADER_WIDTH}px"
-				class="p-1 sticky shrink-0 left-0 bg-base-100/95 z-50 font-medium text-sm cursor-pointer hover:bg-base-200"
+				class="p-1 sticky shrink-0 left-0 z-50 font-medium text-sm cursor-pointer bg-base-100 hover:bg-accent/10"
 			>
 				{team.name}
 			</a>

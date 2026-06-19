@@ -35,7 +35,7 @@
 	</div>
 {/if}
 
-{#if $cardContentOptions.showTags}
+{#if $cardContentOptions.showTags && period.tags.length}
 	<TagsList tags={period.tags} class="px-1 pb-1" />
 {/if}
 

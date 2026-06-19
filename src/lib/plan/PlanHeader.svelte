@@ -14,10 +14,7 @@
 	export { klass as class }
 </script>
 
-<div
-	class="flex gap-2 items-center p-2 bg-base-100 rounded-2xl {klass}"
-	style="--btn-text-case: none;"
->
+<div class="flex gap-2 items-center p-2 bg-base-100 {klass}" style="--btn-text-case: none;">
 	{#if !isFullscreen}
 		<h2 class="title px-2">Planification</h2>
 		<div class="grow" />

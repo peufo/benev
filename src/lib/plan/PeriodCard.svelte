@@ -38,7 +38,7 @@
 	}
 </script>
 
-<div class:w-0={axis === 'x'} class:h-0={axis === 'y'}>
+<div class={axis === 'x' ? 'w-0' : 'h-0'}>
 	<div
 		id={period.id}
 		class:h-full={axis === 'x'}
@@ -50,7 +50,6 @@
 			group relative
 			bg-base-200/50
 			rounded-md p-0 text-sm
-			hover:z-10
 			outline outline-1 border-[1px] border-base-300
 			overflow-visible min-h-[30px]
 			{$urlParam.hasValue('form_period', period.id)
