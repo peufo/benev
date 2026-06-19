@@ -35,7 +35,10 @@
 		{#each days as { date, hours }}
 			<div class="flex items-start -translate-y-[1px]">
 				<!-- DAY -->
-				<div style:top="{TEAM_HEADER_HEIGHT}px" class="font-medium sticky border-t text-sm px-1">
+				<div
+					style:top="{TEAM_HEADER_HEIGHT}px"
+					class="font-medium sticky border-t text-sm px-1 grow"
+				>
 					<div class="text-sm font-medium whitespace-nowrap">
 						{date.format('ddd D')}
 					</div>
