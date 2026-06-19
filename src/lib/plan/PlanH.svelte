@@ -53,7 +53,7 @@
 		{/each}
 	</div>
 
-	{#each teams as team}
+	{#each teams as team (team.id)}
 		<div
 			class="flex items-stretch border-t bg-base-100 hover:bg-accent/5"
 			style:width="{totalWidth}px"
@@ -67,7 +67,7 @@
 			>
 				{team.name}
 			</a>
-			<TeamRow {team} {origin} {hourSize} />
+			<TeamRow bind:team {origin} {hourSize} />
 		</div>
 	{/each}
 

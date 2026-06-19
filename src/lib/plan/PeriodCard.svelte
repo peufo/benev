@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
 	import { urlParam } from 'fuma'
 	import type { PeriodWithMembers } from './types'
@@ -28,11 +29,14 @@
 		msSize *
 		(daytz(period.end).diff(daytz(period.start)) - $magnet(deltaStartMs) + $magnet(deltaEndMs))
 
+	const dispatch = createEventDispatcher<{ update: PeriodWithMembers }>()
+
 	async function handleGrabDone() {
 		const start = new Date(period.start.getTime() + $magnet(deltaStartMs))
 		const end = new Date(period.end.getTime() + $magnet(deltaEndMs))
+		// period = { ...period, start, end }
 		await updatePeriod({ ...period, start, end })
-		period = { ...period, start, end }
+		dispatch('update', { ...period, start, end })
 		deltaStartMs = 0
 		deltaEndMs = 0
 	}
@@ -47,8 +51,8 @@
 			? `left: ${startPx}px; width: ${sizePx}px`
 			: `top: ${startPx}px; height: ${sizePx}px`}
 		class="
-			group relative
-			bg-base-200/50
+			group relative hover:z-20
+			bg-base-200
 			rounded-md p-0 text-sm
 			outline outline-1 border-[1px] border-base-300
 			overflow-visible min-h-[30px]

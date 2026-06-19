@@ -35,6 +35,9 @@
 						{ class: 'left-1/2 top-full', axis: 'x', moveEnd: true },
 						{ class: 'left-full top-1/2', moveStart: true, moveEnd: true },
 					]}
+					on:update={({ detail: newPeriod }) => {
+						team.periods = team.periods.map((p) => (p.id === newPeriod.id ? newPeriod : p))
+					}}
 				/>
 			{/each}
 		</div>

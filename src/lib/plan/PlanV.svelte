@@ -58,7 +58,7 @@
 		{/each}
 	</div>
 
-	{#each teams as team}
+	{#each teams as team (team.id)}
 		<div class="border-l hover:bg-accent/5" style:height="{totalHeight}px">
 			<a
 				href={$urlParam.with({ form_team: team.id })}
@@ -72,7 +72,7 @@
 				</span>
 			</a>
 
-			<TeamCol {team} {origin} {hourSize} />
+			<TeamCol bind:team {origin} {hourSize} />
 		</div>
 	{/each}
 
