@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Dayjs } from '$lib/dayjs'
 	import { USE_COERCE_DATE } from 'fuma'
+	import { MinusIcon, PlusIcon } from 'lucide-svelte'
 
 	export let label: string
 	export let value: Dayjs
@@ -53,10 +54,10 @@
 	<div class="flex pt-1 join">
 		<button
 			type="button"
-			class="btn btn-xs join-item bg-base-200/30"
+			class="btn btn-xs btn-square join-item bg-base-200/30"
 			on:click={() => setValue(value.add(-1, 'day'))}
 		>
-			<span>-</span>
+			<MinusIcon size={12} />
 		</button>
 		<input
 			type="date"
@@ -66,10 +67,10 @@
 		/>
 		<button
 			type="button"
-			class="btn btn-xs join-item bg-base-200/30"
+			class="btn btn-xs btn-square join-item bg-base-200/30"
 			on:click={() => setValue(value.add(1, 'day'))}
 		>
-			<span>+</span>
+			<PlusIcon size={12} />
 		</button>
 	</div>
 </div>
