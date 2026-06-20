@@ -59,13 +59,17 @@
 	</div>
 
 	{#each teams as team (team.id)}
-		<div class="border-r hover:bg-accent/5" style:height="{totalHeight}px">
+		<div class="border-r hover:bg-accent/5 group/team" style:height="{totalHeight}px">
 			<a
 				href={$urlParam.with({ form_team: team.id })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				style:height="{TEAM_HEADER_HEIGHT}px"
-				class="px-1 sticky top-0 z-10 font-medium flex items-center border-b cursor-pointer bg-base-100 hover:bg-accent/10"
+				class="
+					px-1 sticky top-0 z-10 font-medium flex items-center border-b
+					cursor-pointer bg-base-100
+					group-hover/team:bg-base-200 hover:underline
+				"
 			>
 				<span class="text-sm">
 					{team.name}

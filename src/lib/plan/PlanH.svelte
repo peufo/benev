@@ -60,7 +60,7 @@
 
 	{#each teams as team (team.id)}
 		<div
-			class="flex items-stretch border-b bg-base-100 hover:bg-accent/5"
+			class="flex items-stretch border-b bg-base-100 hover:bg-accent/5 group/team"
 			style:width="{totalWidth}px"
 		>
 			<a
@@ -71,6 +71,7 @@
 				class="
 					p-1 sticky shrink-0 left-0 z-10 font-medium text-sm border-r
 					cursor-pointer bg-base-100
+					group-hover/team:bg-base-200 hover:underline
 				"
 			>
 				{team.name}
