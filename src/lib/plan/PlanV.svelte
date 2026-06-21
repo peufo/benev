@@ -8,6 +8,7 @@
 	import { mdiPlus } from '@mdi/js'
 	import { keepScrollCenter } from './keepScrollCenter'
 	import { scrollToPeriod } from './scrollToPeriod'
+	import { usePositionIndicator } from './positionIndicator'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let range: Range
@@ -15,6 +16,8 @@
 
 	const TEAM_HEADER_HEIGHT = 40
 	const MIN_HOUR_HEIGHT = 30
+
+	const indicator = usePositionIndicator('y')
 
 	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / hourSize)
 	$: origin = daytz(range.start).startOf('hour')
@@ -27,18 +30,20 @@
 	class="overflow-scroll bg-base-100 grow flex"
 	use:scrollToPeriod={{ offsetY: -100 }}
 	use:keepScrollCenter={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
+	use:indicator.container
 >
 	<!-- SCALE -->
-	<div class="sticky left-0 z-20 border-r bg-base-100" style:height="{totalHeight}px">
+	<div
+		class="sticky left-0 z-20 border-r bg-base-100"
+		style:height="{totalHeight}px"
+		use:indicator.scale
+	>
 		<div class="sticky z-20 bg-base-100 top-0 border-b" style:height="{TEAM_HEADER_HEIGHT}px" />
 
 		{#each days as { date, hours }}
 			<div class="flex items-start -translate-y-[1px]">
 				<!-- DAY -->
-				<div
-					style:top="{TEAM_HEADER_HEIGHT}px"
-					class="font-medium sticky border-t text-sm px-1 grow"
-				>
+				<div class="font-medium sticky border-t text-sm px-1 grow">
 					<div class="text-sm font-medium whitespace-nowrap">
 						{date.format('ddd D')}
 					</div>

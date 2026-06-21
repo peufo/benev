@@ -8,6 +8,7 @@
 	import { getDays } from './getDays'
 	import { keepScrollCenter } from './keepScrollCenter'
 	import { scrollToPeriod } from './scrollToPeriod'
+	import { usePositionIndicator } from './positionIndicator'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let range: Range
@@ -15,6 +16,8 @@
 
 	const TEAM_HEADER_WIDTH = 100
 	const MIN_HOUR_WIDTH = 40
+
+	const indicator = usePositionIndicator('x')
 
 	$: hourSpan = Math.ceil(MIN_HOUR_WIDTH / hourSize)
 	$: origin = daytz(range.start).startOf('hour')
@@ -27,9 +30,14 @@
 	class="overflow-scroll bg-base-100 grow"
 	use:scrollToPeriod={{ offsetX: -400, offsetY: -200 }}
 	use:keepScrollCenter={{ scaleX: hourSize, marginX: TEAM_HEADER_WIDTH }}
+	use:indicator.container
 >
 	<!-- SCALE -->
-	<div class="sticky top-0 z-20 border-b bg-base-100 flex" style:width="{totalWidth}px">
+	<div
+		class="sticky top-0 z-20 border-b bg-base-100 flex"
+		style:width="{totalWidth}px"
+		use:indicator.scale
+	>
 		<div
 			class="sticky z-20 bg-base-100 left-0 border-r shrink-0"
 			style:width="{TEAM_HEADER_WIDTH}px"
@@ -38,10 +46,7 @@
 		{#each days as { date, hours }}
 			<div class="-translate-x-[1px]">
 				<!-- DAY -->
-				<div
-					style:left="{TEAM_HEADER_WIDTH}px"
-					class="font-medium sticky border-l left-0 p-1 w-min whitespace-nowrap text-sm"
-				>
+				<div class="font-medium sticky border-l left-0 p-1 w-min whitespace-nowrap text-sm">
 					{date.format('dddd DD.MM')}
 				</div>
 				<!-- HOURS -->
