@@ -1,15 +1,18 @@
 <script lang="ts">
 	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop, mdiOpenInNew } from '@mdi/js'
-	import { Icon, InputCheckboxsMenu, RangePickerButton, TableViewSelect, TabsIcon } from 'fuma'
+	import { Icon, InputCheckboxsMenu, TableViewSelect, TabsIcon } from 'fuma'
+	import type { Dayjs } from 'dayjs'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
 	import ZoomButton from './ZoomButton.svelte'
 	import { eventPath } from '$lib/store'
+	import PlanCursor from './PlanCursor.svelte'
 
 	export let teams: { id: string; name: string }[]
 	export let views: { id: string; name: string; query: string }[]
 	export let hourSize: number
 	export let isFullscreen = false
+	export let cursor: Dayjs
 	let klass = ''
 	export { klass as class }
 </script>
@@ -32,7 +35,7 @@
 			<span slot="label" class="font-normal">secteurs</span>
 		</InputCheckboxsMenu>
 
-		<RangePickerButton />
+		<PlanCursor {cursor} />
 	{/key}
 
 	<PeriodCardOptions />
