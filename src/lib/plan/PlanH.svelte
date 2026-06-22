@@ -46,7 +46,10 @@
 		{#each days as { date, hours }}
 			<div class="-translate-x-[1px]">
 				<!-- DAY -->
-				<div class="font-medium sticky border-l left-0 p-1 w-min whitespace-nowrap text-sm">
+				<div
+					style:left="{TEAM_HEADER_WIDTH}px"
+					class="font-medium sticky border-l left-0 p-1 w-min whitespace-nowrap text-sm"
+				>
 					{date.format('dddd DD.MM')}
 				</div>
 				<!-- HOURS -->
