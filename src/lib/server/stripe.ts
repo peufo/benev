@@ -42,6 +42,7 @@ export function useCheckout(options: CheckoutOptions) {
 				mode: 'payment',
 				ui_mode: 'embedded',
 				customer: await getStripCustomerId(user),
+				allow_promotion_codes: true,
 				line_items: lineItems,
 				return_url: `${url.origin}${options.returnPath}?checkoutId={CHECKOUT_SESSION_ID}`,
 				metadata: {
