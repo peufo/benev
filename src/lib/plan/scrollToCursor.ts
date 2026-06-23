@@ -20,7 +20,7 @@ export function scrollToCursor(node: HTMLElement, { axis, cursor }: ScrollToCurs
 		update(options: ScrollToCursor) {
 			if (!current.isSame(options.cursor)) {
 				current = options.cursor
-				scroll('smooth')
+				scroll()
 			}
 		},
 	}

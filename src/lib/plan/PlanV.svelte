@@ -9,6 +9,7 @@
 	import { scrollOnWheel } from './scrollOnWheel'
 	import { scrollToCursor } from './scrollToCursor'
 	import { usePositionIndicator } from './positionIndicator'
+	import { navigateOnScroll } from './navigateOnScroll'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let cursor: Dayjs
@@ -31,6 +32,7 @@
 	class="overflow-scroll bg-base-100 grow flex"
 	use:scrollOnWheel={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
 	use:scrollToCursor={{ cursor, axis: 'y' }}
+	use:navigateOnScroll={{ cursor, axis: 'y' }}
 	use:indicator.container
 >
 	<!-- SCALE -->
