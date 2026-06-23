@@ -30,7 +30,12 @@
 	bind:transitionX
 	let:close
 >
-	<PeriodForm bind:this={periodForm} {period} on:success={() => noOverlay || close()} />
+	<PeriodForm
+		bind:this={periodForm}
+		{period}
+		on:success={() => noOverlay || close()}
+		disableRedirect={!noOverlay}
+	/>
 
 	{#if period?.id}
 		<div class="divider" />

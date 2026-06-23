@@ -84,7 +84,7 @@ export const actions = {
 		})
 	},
 	period_create: formAction(
-		{ ...modelPeriodCreate, redirectTo: z.string() },
+		{ ...modelPeriodCreate, redirectTo: z.string().optional() },
 		async ({ data, locals }) => {
 			await permission.leaderOfTeam(data.team.connect.id, locals)
 			const { redirectTo, ..._data } = data
@@ -96,6 +96,7 @@ export const actions = {
 		{
 			validation: validationPeriod,
 			redirectTo: ({ period, redirectTo }) => {
+				if (!redirectTo) return undefined
 				const [path, params] = redirectTo.split('?')
 				const searchParams = new URLSearchParams(params)
 				searchParams.set('form_period', period.id)

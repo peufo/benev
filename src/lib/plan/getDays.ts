@@ -5,6 +5,9 @@ type Day = { hours: number[]; date: Dayjs }
 
 export function getDays(range: Range): Day[] {
 	const days = []
+	for (let day = daytz(range.start); day.isBefore(daytz(range.end)); day = day.add(1, 'day'))
+		days.push({ date: day, hours: getHours(day) })
+	return days
 
 	function getHours(date: Dayjs): number[] {
 		const rangeStart = daytz(range.start)
@@ -24,9 +27,4 @@ export function getDays(range: Range): Day[] {
 			.fill(0)
 			.map((_, h) => startHour + h)
 	}
-
-	for (let day = daytz(range.start); day.isBefore(daytz(range.end)); day = day.add(1, 'day'))
-		days.push({ date: day, hours: getHours(day) })
-
-	return days
 }

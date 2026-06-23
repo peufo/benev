@@ -15,8 +15,8 @@ export async function getPlanData({ url, eventId }: { url: URL; eventId: string 
 
 	const cursor = query.cursor || (await getDefaultCursor(eventId))
 	const range = {
-		start: dayjs(cursor).add(-RANGE_DAYS, 'day').toDate(),
-		end: dayjs(cursor).add(RANGE_DAYS, 'day').toDate(),
+		start: dayjs(cursor).add(-RANGE_DAYS, 'day').startOf('day').toDate(),
+		end: dayjs(cursor).add(RANGE_DAYS, 'day').endOf('day').toDate(),
 	}
 	const where: Prisma.TeamWhereInput = { eventId }
 	if (query.teams) where.id = { in: query.teams }
@@ -85,5 +85,6 @@ async function getDefaultCursor(eventId: string): Promise<Date> {
 	if (!startDate || !endDate) return now
 	if (now < startDate) return startDate
 	if (endDate < now) return endDate
+	now.setHours(12, 0, 0, 0)
 	return now
 }

@@ -4,6 +4,8 @@
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
 	import DrawersForm from '$lib/DrawersForm.svelte'
 	import { daytz } from '$lib/dayjs.js'
+	import { afterNavigate } from '$app/navigation'
+	import { scrollToActive } from '$lib/plan/scrollToActive.js'
 
 	export let data
 
@@ -21,6 +23,13 @@
 			},
 		}
 	}
+
+	$: cursor = daytz(data.cursor)
+
+	afterNavigate(async (navigation) => {
+		await navigation.complete
+		scrollToActive()
+	})
 </script>
 
 <div
@@ -32,7 +41,7 @@
 	<PlanHeader
 		teams={data.teams}
 		views={data.views}
-		cursor={daytz(data.cursor)}
+		{cursor}
 		bind:hourSize
 		isFullscreen
 		class="border-2 rounded-2xl"
@@ -41,9 +50,9 @@
 
 <div class="h-[100vh] overflow-hidden rounded-2xl" use:mouseOnTop>
 	{#if $urlParam.hasValue('view', 'v')}
-		<PlanV teams={data.teams_periods} range={data.range} {hourSize} />
+		<PlanV teams={data.teams_periods} range={data.range} {cursor} {hourSize} />
 	{:else}
-		<PlanH teams={data.teams_periods} range={data.range} {hourSize} />
+		<PlanH teams={data.teams_periods} range={data.range} {cursor} {hourSize} />
 	{/if}
 </div>
 

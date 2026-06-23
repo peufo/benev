@@ -1,16 +1,17 @@
 <script lang="ts">
-	import { daytz } from '$lib/dayjs'
 	import { Icon, urlParam, type Range } from 'fuma'
+	import { mdiPlus } from '@mdi/js'
+	import { daytz, type Dayjs } from '$lib/dayjs'
 	import type { Team } from '@prisma/client'
 	import { getDays } from './getDays'
 	import TeamCol from './TeamCol.svelte'
 	import type { PeriodWithMembers } from './types'
-	import { mdiPlus } from '@mdi/js'
-	import { keepScrollCenter } from './keepScrollCenter'
-	import { scrollToPeriod } from './scrollToPeriod'
+	import { scrollOnWheel } from './scrollOnWheel'
+	import { scrollToCursor } from './scrollToCursor'
 	import { usePositionIndicator } from './positionIndicator'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
+	export let cursor: Dayjs
 	export let range: Range
 	export let hourSize: number
 
@@ -28,8 +29,8 @@
 
 <div
 	class="overflow-scroll bg-base-100 grow flex"
-	use:scrollToPeriod={{ offsetY: -100 }}
-	use:keepScrollCenter={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
+	use:scrollOnWheel={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
+	use:scrollToCursor={{ cursor, axis: 'y' }}
 	use:indicator.container
 >
 	<!-- SCALE -->

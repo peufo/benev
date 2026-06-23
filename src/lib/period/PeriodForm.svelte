@@ -134,9 +134,12 @@
 	use:enhance
 	class="p-2 flex flex-col gap-3 {klass}"
 >
-	<input type="hidden" name="redirectTo" value={$urlParam.without('form_period')} />
 	{#if period?.id}
 		<input type="hidden" name="id" value={period.id} />
+	{/if}
+
+	{#if !disableRedirect}
+		<input type="hidden" name="redirectTo" value={$urlParam.without('form_period')} />
 	{/if}
 
 	{#key period}
@@ -193,9 +196,6 @@
 
 	<div class="flex flex-row-reverse gap-3 grow">
 		{#if period?.id}
-			{#if disableRedirect}
-				<input type="hidden" name="disableRedirect" value="true" />
-			{/if}
 			<button class="btn btn-primary" type="submit">Valider</button>
 			<button
 				type="button"

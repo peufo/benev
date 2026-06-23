@@ -2,7 +2,7 @@ import { ctrl } from '$lib/store'
 import { tick } from 'svelte'
 import { get } from 'svelte/store'
 
-type KeepScrollCenterOptions = {
+type scrollOnWheelOptions = {
 	scaleX?: number
 	scaleY?: number
 	marginX?: number
@@ -10,19 +10,19 @@ type KeepScrollCenterOptions = {
 }
 
 /** Ensure the scroll keep center when the zoom change */
-export function keepScrollCenter(
+export function scrollOnWheel(
 	node: HTMLElement,
 	{
 		scaleX: currentScaleX = 1,
 		scaleY: currentScaleY = 1,
 		marginX = 0,
 		marginY = 0,
-	}: KeepScrollCenterOptions
+	}: scrollOnWheelOptions
 ) {
 	let cursorX: number | null = null
 	let cursorY: number | null = null
 
-	async function updateScroll({ scaleX = 1, scaleY = 1 }: KeepScrollCenterOptions) {
+	async function updateScroll({ scaleX = 1, scaleY = 1 }: scrollOnWheelOptions) {
 		const offsetX = cursorX ?? node.clientWidth / 2
 		const offsetY = cursorY ?? node.clientHeight / 2
 
