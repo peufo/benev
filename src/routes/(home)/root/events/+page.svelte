@@ -1,10 +1,14 @@
 <script lang="ts">
-	import { Card, Pagination } from 'fuma'
+	import { Card, InputSearch, Pagination } from 'fuma'
 
 	export let data
 </script>
 
 <Card>
+	<h2 slot="title" class="title">Evenements ({data.eventsCount})</h2>
+	<div slot="action">
+		<InputSearch />
+	</div>
 	<table class="table">
 		<thead>
 			<tr>
