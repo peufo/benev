@@ -10,5 +10,4 @@ export { default as EmailVerificationLink } from './EmailVerificationLink.svelte
 export { default as EmailPasswordReset } from './EmailPasswordReset.svelte'
 export { default as EmailAcceptInviteNotification } from './EmailAcceptInviteNotification.svelte'
 export { default as EmailCheckoutValidation } from './EmailCheckoutValidation.svelte'
-export { default as EmailProspect } from './EmailProspect.svelte'
 export { default as EmailTierQuotaAlert } from './EmailTierQuotaAlert.svelte'

@@ -1,20 +1,10 @@
 import { formAction } from 'fuma/server'
-import { error, redirect } from '@sveltejs/kit'
+import { error } from '@sveltejs/kit'
 import { z } from 'fuma'
 import { prisma, media, permission, uploadImages } from '$lib/server'
 import { modelEventCreate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
 import { EVENT_TIER } from '$lib/constant'
-
-export const load = async ({ url }) => {
-	const prospectId = url.searchParams.get('prospectId')
-	if (prospectId) {
-		await prisma.prospect
-			.update({ where: { id: prospectId }, data: { linkOpenAt: new Date() } })
-			.catch(() => ({}))
-		redirect(302, '/')
-	}
-}
 
 export const actions = {
 	event_create: formAction(
