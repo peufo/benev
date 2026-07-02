@@ -5,7 +5,7 @@ import { prisma } from '$lib/server'
 import dayjs from 'dayjs'
 
 // TODO: Computed from hourSize
-const RANGE_DAYS = 4
+const RANGE_DAYS = 8
 
 export async function getPlanData({ url, eventId }: { url: URL; eventId: string }) {
 	const query = parseQuery(url, {
