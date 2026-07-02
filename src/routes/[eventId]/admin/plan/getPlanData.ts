@@ -83,8 +83,8 @@ async function getDefaultCursor(eventId: string): Promise<Date> {
 	})
 	const now = new Date()
 	if (!startDate || !endDate) return now
-	if (now < startDate) return startDate
-	if (endDate < now) return endDate
+	if (now < startDate) return dayjs(startDate).add(RANGE_DAYS, 'day').toDate()
+	if (endDate < now) return dayjs(endDate).add(-RANGE_DAYS, 'day').toDate()
 	now.setHours(12, 0, 0, 0)
 	return now
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Icon, urlParam, type Range } from 'fuma'
-	import { mdiPlus } from '@mdi/js'
+	import { tip, urlParam, type Range } from 'fuma'
+	import { PlusIcon } from 'lucide-svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
 	import type { Team } from '@prisma/client'
 	import { getDays } from './getDays'
@@ -102,8 +102,9 @@
 			href={$urlParam.with({ form_team: '{}' })}
 			data-sveltekit-replacestate
 			data-sveltekit-noscroll
+			use:tip={{ content: 'Ajouter un secteur' }}
 		>
-			<Icon path={mdiPlus} title="Ajouter un secteur" />
+			<PlusIcon />
 		</a>
 	</div>
 </div>
