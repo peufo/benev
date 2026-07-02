@@ -55,7 +55,7 @@
 				<div class="flex items-start gap-3">
 					<AlertCircle size={22} class="text-primary shrink-0 mt-0.5" />
 					<div>
-						<h3 class="font-semibold text-primary">Tu organises un événement ?</h3>
+						<h3 class="font-semibold text-primary">Tu n'organises pas d'événement ?</h3>
 						<p class="text-sm text-base-content/80 mt-1 leading-relaxed">
 							Si tu souhaites contacter les responsables d'un événement,
 							<a href="/events" class="link link-primary">rends-toi dans son espace dédié</a>. Les
