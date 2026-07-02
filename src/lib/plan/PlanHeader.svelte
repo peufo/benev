@@ -37,10 +37,9 @@
 	{/key}
 
 	<PlanCursor {cursor} />
+	<ZoomButton bind:value={hourSize} min={5} max={100} step={1} />
 
 	<PeriodCardOptions />
-
-	<ZoomButton bind:value={hourSize} min={5} max={100} step={1} />
 
 	<TabsIcon
 		key="view"

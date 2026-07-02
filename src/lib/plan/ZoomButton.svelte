@@ -2,8 +2,8 @@
 	import { goto } from '$app/navigation'
 	import { debounce } from '$lib/debounce'
 	import { ctrl } from '$lib/store'
-	import { mdiMagnifyPlusOutline, mdiMinus, mdiPlus } from '@mdi/js'
-	import { DropDown, Icon, urlParam, type TippyInstance } from 'fuma'
+	import { DropDown, urlParam, type TippyInstance } from 'fuma'
+	import { ZoomInIcon, ZoomOutIcon } from 'lucide-svelte'
 	import { onMount } from 'svelte'
 
 	export let value: number
@@ -51,17 +51,23 @@
 	bind:tip
 	tippyProps={{ trigger: 'mouseenter', placement: 'bottom', onHidden: setUrlParam }}
 >
-	<button slot="activator" class="btn btn-sm btn-square">
-		<Icon path={mdiMagnifyPlusOutline} class="opacity-80" />
-	</button>
-
-	<div class="flex gap-2 items-center">
-		<button class="btn btn-sm btn-square" on:click={() => (value = Math.max(min, value * 0.75))}>
-			<Icon path={mdiMinus} />
-		</button>
+	<svelte:fragment slot="activator">
+		<div class="join">
+			<button
+				class="btn btn-sm btn-square join-item"
+				on:click={() => (value = Math.max(min, value * 0.75))}
+			>
+				<ZoomOutIcon size={18} opacity={0.8} />
+			</button>
+			<button
+				class="btn btn-sm btn-square join-item"
+				on:click={() => (value = Math.min(max, value * 1.25))}
+			>
+				<ZoomInIcon size={18} opacity={0.8} />
+			</button>
+		</div>
+	</svelte:fragment>
+	<div class="px-2 pt-1">
 		<input type="range" class="range" bind:value {min} {max} {step} />
-		<button class="btn btn-sm btn-square" on:click={() => (value = Math.min(max, value * 1.25))}>
-			<Icon path={mdiPlus} />
-		</button>
 	</div>
 </DropDown>

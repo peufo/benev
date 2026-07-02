@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-svelte'
 	import { tip, urlParam } from 'fuma'
 	import type { Dayjs } from 'dayjs'
 	import { goto } from '$app/navigation'
@@ -15,7 +16,7 @@
 		href={$urlParam.with({ cursor: cursor.add(-7, 'day').toJSON() })}
 		data-sveltekit-replacestate
 	>
-		-
+		<ChevronLeftIcon size={16} />
 	</a>
 
 	<input
@@ -35,6 +36,6 @@
 		href={$urlParam.with({ cursor: cursor.add(7, 'day').toJSON() })}
 		data-sveltekit-replacestate
 	>
-		+
+		<ChevronRightIcon size={16} />
 	</a>
 </div>

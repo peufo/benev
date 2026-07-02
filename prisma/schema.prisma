@@ -167,6 +167,7 @@ model Event {
   Tag          Tag[]
   badges       Badge[]
   products     Product[]
+  milestones   Milestone[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -440,6 +441,20 @@ model Tag {
   eventId   String
   event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   periods   Period[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, eventId])
+}
+
+model Milestone {
+  id String @id @default(cuid())
+
+  name      String
+  timestamp DateTime
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
