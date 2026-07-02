@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { Card, InputSearch, Pagination } from 'fuma'
+	import { ChartPie } from 'lucide-svelte'
 
 	export let data
 </script>
 
-<Card>
+<Card class="min-w-0" bodyClass="overflow-auto">
 	<h2 slot="title" class="title">Evenements ({data.eventsCount})</h2>
 	<div slot="action">
 		<InputSearch />
@@ -19,14 +20,15 @@
 				<th>State</th>
 				<th>Owner</th>
 				<th>Members</th>
+				<th />
 			</tr>
 		</thead>
-		<tbody>
+		<tbody class="">
 			{#each data.events as event}
 				<tr>
 					<td>{event.id}</td>
 					<td>
-						<a href="/{event.id}" class="link link-hover">
+						<a href="/root/events/{event.id}" class="link link-hover">
 							{event.name}
 						</a>
 					</td>

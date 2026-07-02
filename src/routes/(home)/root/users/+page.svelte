@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiCheck, mdiClose } from '@mdi/js'
 	import { Card, DropDown, Icon, InputSearch, Pagination } from 'fuma'
+	import TDSortable from './TDSortable.svelte'
 
 	export let data
 </script>
@@ -16,8 +17,8 @@
 				<td>Name</td>
 				<td>Email</td>
 				<td>CreatedAt</td>
-				<td>Events</td>
-				<td>Members</td>
+				<TDSortable key="events">Events</TDSortable>
+				<TDSortable key="members">Members</TDSortable>
 				<td>Clé</td>
 			</tr>
 		</thead>

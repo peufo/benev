@@ -13,7 +13,7 @@
 		<hr class="my-2" />
 		<Tree {tree} />
 	</div>
-	<div class="grow">
+	<div class="grow min-w-0">
 		<slot />
 	</div>
 </div>

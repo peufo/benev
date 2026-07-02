@@ -12,7 +12,7 @@ export const load = async ({ params }) => {
 		orderBy: [{ event: { startDate: { sort: 'desc', nulls: 'first' } } }, { createdAt: 'desc' }],
 		include: {
 			user: true,
-			event: { include: { memberFields: true } },
+			event: { include: { memberFields: true, _count: { select: { members: true } } } },
 			leaderOf: true,
 		},
 	})

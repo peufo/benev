@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Card } from 'fuma'
 	import { MemberRole } from '$lib/member'
+	import { EVENT_TIER } from '$lib/constant'
 	import { formatRangeDate } from '$lib/formatRange'
 	import { CalendarDaysIcon, MailIcon, PhoneIcon, MapPinIcon } from 'lucide-svelte'
 
@@ -64,6 +65,9 @@
 				<thead>
 					<tr>
 						<th>Événement</th>
+						<th>Plan</th>
+						<th>Membres</th>
+						<th>Créé le</th>
 						<th>Dates</th>
 						<th>Rôle</th>
 					</tr>
@@ -72,9 +76,20 @@
 					{#each data.members as member}
 						<tr>
 							<td>
-								<a href="/{member.eventId}" class="link link-hover font-medium">
+								<a href="/root/events/{member.eventId}" class="link link-hover font-medium">
 									{member.event.name}
 								</a>
+							</td>
+							<td>
+								<span class="badge badge-sm badge-ghost">
+									{EVENT_TIER[member.event.tier].label}
+								</span>
+							</td>
+							<td>
+								{member.event._count.members}
+							</td>
+							<td>
+								{member.event.createdAt.toLocaleDateString()}
 							</td>
 							<td>
 								{#if member.event.startDate && member.event.endDate}
