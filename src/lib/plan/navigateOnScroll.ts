@@ -9,12 +9,14 @@ type NavigateOnScrollOptions = {
 	cursor: Dayjs
 }
 
+const MARGIN = 10
+
 export function navigateOnScroll(node: HTMLElement, { axis, cursor }: NavigateOnScrollOptions) {
-	const isStart = axis === 'x' ? () => node.scrollLeft <= 0 : () => node.scrollTop <= 0
+	const isStart = axis === 'x' ? () => node.scrollLeft <= MARGIN : () => node.scrollTop <= MARGIN
 	const isEnd =
 		axis === 'x'
-			? () => node.scrollLeft + node.clientWidth >= node.scrollWidth
-			: () => node.scrollTop + node.clientHeight >= node.scrollHeight
+			? () => node.scrollLeft + node.clientWidth + MARGIN >= node.scrollWidth
+			: () => node.scrollTop + node.clientHeight + MARGIN >= node.scrollHeight
 
 	const onScroll = debounce(() => {
 		if (isStart()) goto(get(urlParam).with({ cursor: cursor.add(-4, 'day').toJSON() }))

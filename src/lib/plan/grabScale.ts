@@ -1,7 +1,14 @@
 export function useGrabScale(axis: 'x' | 'y') {
 	let container: HTMLDivElement | null = null
+	let originScroll = 0
+
+	function setScrollOrigin() {
+		if (!container) return
+		originScroll = axis === 'x' ? container.scrollLeft : container.scrollTop
+	}
 
 	return {
+		setScrollOrigin,
 		container(node: HTMLDivElement) {
 			container = node
 			return {
@@ -11,14 +18,12 @@ export function useGrabScale(axis: 'x' | 'y') {
 			}
 		},
 		scale(node: HTMLDivElement) {
-			let originScroll = 0
 			let originMouse = 0
 
 			function onMouseDown(event: MouseEvent) {
-				if (!container) throw new Error('container is not initialized')
 				event.preventDefault()
 				originMouse = event[axis]
-				originScroll = axis === 'x' ? container.scrollLeft : container.scrollTop
+				setScrollOrigin()
 				node.classList.add('cursor-grabbing')
 				document.addEventListener('mousemove', onMouseMove)
 				document.addEventListener('mouseup', onMouseUp, { once: true })
@@ -28,7 +33,7 @@ export function useGrabScale(axis: 'x' | 'y') {
 				if (!container) throw new Error('container is not initialized')
 				event.preventDefault()
 				const deltaMouse = event[axis] - originMouse
-				container.scrollTo({ [axis === 'x' ? 'left' : 'top']: originScroll - deltaMouse })
+				container.scroll({ [axis === 'x' ? 'left' : 'top']: originScroll - deltaMouse })
 			}
 
 			function onMouseUp() {

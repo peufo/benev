@@ -3,9 +3,10 @@ import type { Dayjs } from 'dayjs'
 type ScrollToCursor = {
 	axis: 'x' | 'y'
 	cursor: Dayjs
+	onScroll?: () => void
 }
 
-export function scrollToCursor(node: HTMLElement, { axis, cursor }: ScrollToCursor) {
+export function scrollToCursor(node: HTMLElement, { axis, cursor, onScroll }: ScrollToCursor) {
 	let current = cursor
 	scroll()
 
@@ -14,6 +15,7 @@ export function scrollToCursor(node: HTMLElement, { axis, cursor }: ScrollToCurs
 		const top = (node.scrollHeight - node.clientHeight) / 2
 		if (axis === 'x') node.scroll({ left, behavior })
 		else node.scroll({ top, behavior })
+		onScroll?.()
 	}
 
 	return {

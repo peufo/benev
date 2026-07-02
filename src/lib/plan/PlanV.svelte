@@ -33,7 +33,7 @@
 <div
 	class="overflow-scroll bg-base-100 grow flex"
 	use:scrollOnWheel={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
-	use:scrollToCursor={{ cursor, axis: 'y' }}
+	use:scrollToCursor={{ cursor, axis: 'y', onScroll: grabScale.setScrollOrigin }}
 	use:navigateOnScroll={{ cursor, axis: 'y' }}
 	use:indicator.container
 	use:grabScale.container
