@@ -9,7 +9,7 @@
 
 	export let data
 
-	let hourSize = +($urlParam.get('hourSize') || 80)
+	let hourSize = +($urlParam.get('hourSize') || 20)
 	let isMouseOnTop = false
 
 	function mouseOnTop(node: HTMLElement) {

@@ -7,7 +7,7 @@
 	import { scrollToActive } from '$lib/plan/scrollToActive.js'
 
 	export let data
-	let hourSize = +($urlParam.get('hourSize') || 80)
+	let hourSize = +($urlParam.get('hourSize') || 20)
 
 	$: cursor = daytz(data.cursor)
 
