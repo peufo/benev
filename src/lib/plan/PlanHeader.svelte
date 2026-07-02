@@ -34,9 +34,9 @@
 		>
 			<span slot="label" class="font-normal">secteurs</span>
 		</InputCheckboxsMenu>
-
-		<PlanCursor {cursor} />
 	{/key}
+
+	<PlanCursor {cursor} />
 
 	<PeriodCardOptions />
 
