@@ -99,17 +99,24 @@
 		</div>
 	{/each}
 
-	<!-- CREATE TEAM -->
-	<div style:width="{TEAM_HEADER_WIDTH}px" class="grid place-content-center p-4 sticky left-0">
-		<a
-			class="btn btn-square btn-sm"
-			href={$urlParam.with({ form_team: '{}' })}
-			data-sveltekit-replacestate
-			data-sveltekit-noscroll
-			use:tip={{ content: 'Ajouter un secteur' }}
+	<!-- BOTTOM ROW -->
+	<div class="flex items-stretch border-b bg-base-200/40" style:width="{totalWidth}px">
+		<div
+			style:width="{TEAM_HEADER_WIDTH}px"
+			class="p-1 sticky shrink-0 left-0 z-10 font-medium text-sm border-r bg-base-100 grid place-content-center"
 		>
-			<PlusIcon />
-		</a>
+			<a
+				class="btn btn-sm btn-square"
+				href={$urlParam.with({ form_team: '{}' })}
+				data-sveltekit-replacestate
+				data-sveltekit-noscroll
+				use:tip={{ content: 'Ajouter un secteur' }}
+			>
+				<PlusIcon />
+			</a>
+		</div>
+		<div class="w-full" />
 	</div>
+
 	<div class="h-48" />
 </div>
