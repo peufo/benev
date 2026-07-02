@@ -34,6 +34,7 @@
 		bind:this={periodForm}
 		{period}
 		on:success={() => noOverlay || close()}
+		on:delete={() => noOverlay || close()}
 		disableRedirect={!noOverlay}
 	/>
 

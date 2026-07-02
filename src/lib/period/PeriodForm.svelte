@@ -31,7 +31,7 @@
 	export let period: PeriodProp = {}
 	export let disableRedirect = false
 
-	const dispatch = createEventDispatcher<{ success: void }>()
+	const dispatch = createEventDispatcher<{ success: void; delete: void }>()
 
 	const successMessages: Record<string, string> = {
 		'?/period_update': 'Période mise à jour',
@@ -48,12 +48,12 @@
 		onSubmit({ action, cancel, submitter }) {
 			if (!action.searchParams.has('/period_delete')) return
 			const nb = period.subscribes?.length || 0
-			if (nb === 0) return
+			if (nb === 0) return dispatch('delete')
 			const msg = [
 				`Cette période de travail contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
 				'Es-tu certain de vouloir la supprimer ?',
 			].join('\n')
-			if (confirm(msg)) return
+			if (confirm(msg)) return dispatch('delete')
 			cancel()
 			toast.info('Suppession de la période annulée !')
 			setTimeout(() => {

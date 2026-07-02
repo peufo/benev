@@ -120,7 +120,7 @@ export const actions = {
 	period_delete: formAction(
 		{
 			id: z.string(),
-			redirectTo: z.string(),
+			redirectTo: z.string().optional(),
 		},
 		async ({ data, locals }) => {
 			const period = await prisma.period.findUniqueOrThrow({ where: { id: data.id } })
