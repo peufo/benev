@@ -1,10 +1,14 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import { Toaster } from 'svelte-sonner'
 	import { MetaTags, JsonLd } from 'svelte-meta-tags'
 	import { theme } from './[eventId]/admin/theme/store'
-	import logo from '$lib/assets/logo.png'
 	import { periodDrawerTransitionX } from '$lib/store'
 	import '../app.css'
+
+	$: siteUrl = $page.url.origin
+	$: pageUrl = $page.url.href
+	$: ogImage = `${siteUrl}/logo.png`
 </script>
 
 <svelte:head>
@@ -12,28 +16,53 @@
 </svelte:head>
 
 <MetaTags
-	title="Benev.io"
-	description="Ta plateforme de gestion de bénévoles"
+	title="benevio"
+	titleTemplate="%s | Plateforme de gestion de bénévoles"
+	description="Gère simplement tes bénévoles avec benevio : inscriptions, planification, suivi et communication regroupés dans un outil gratuit pour les petits événements, open source et sans engagement."
+	canonical={pageUrl}
 	openGraph={{
-		title: 'Benev.io',
-		description: 'Ta plateforme de gestion de bénévoles',
+		type: 'website',
+		url: pageUrl,
+		locale: 'fr_FR',
+		siteName: 'benevio',
+		title: 'benevio | Plateforme de gestion de bénévoles',
+		description:
+			'Gère simplement tes bénévoles avec benevio : inscriptions, planification, suivi et communication regroupés dans un outil gratuit pour les petits événements, open source et sans engagement.',
 		images: [
 			{
-				url: logo,
+				url: ogImage,
 				width: 500,
 				height: 500,
-				alt: 'Logo de Benev.io',
+				alt: 'Logo de benevio',
 			},
 		],
+	}}
+	twitter={{
+		cardType: 'summary_large_image',
+		title: 'benevio | Plateforme de gestion de bénévoles',
+		description:
+			'Gère simplement tes bénévoles avec benevio : inscriptions, planification, suivi et communication.',
+		image: ogImage,
+		imageAlt: 'Logo de benevio',
 	}}
 />
 
 <JsonLd
 	schema={{
+		'@context': 'https://schema.org',
 		'@type': 'Organization',
-		name: 'Benev',
-		logo,
-		url: 'https://benev.io',
+		name: 'benevio',
+		url: siteUrl,
+		logo: ogImage,
+	}}
+/>
+
+<JsonLd
+	schema={{
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: 'benevio',
+		url: siteUrl,
 	}}
 />
 

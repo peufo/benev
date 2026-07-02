@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { JsonLd } from 'svelte-meta-tags'
+	import { page } from '$app/stores'
+	import { JsonLd, MetaTags } from 'svelte-meta-tags'
 	import {
 		mdiArchiveOutline,
 		mdiArrowLeft,
@@ -26,21 +27,61 @@
 
 	$: accessGranted =
 		data.event.state === 'published' || data.member?.roles.includes('leader') || data.userIsRoot
+
+	$: eventUrl = $page.url.href
+	$: eventImage = data.event.posterId
+		? `${$page.url.origin}/media/${data.event.posterId}?size=medium`
+		: undefined
+	$: eventDescription =
+		data.event.description || `Rejoins l'équipe de bénévoles de ${data.event.name} sur benevio.`
 </script>
 
 <svelte:head>
-	<title>Benev.io - {data.event.name}</title>
+	{#if data.event.state !== 'published'}
+		<meta name="robots" content="noindex" />
+	{/if}
 </svelte:head>
+
+<MetaTags
+	title={data.event.name}
+	titleTemplate="%s | benevio"
+	description={eventDescription}
+	canonical={eventUrl}
+	openGraph={{
+		type: 'website',
+		url: eventUrl,
+		locale: 'fr_FR',
+		siteName: 'benevio',
+		title: `${data.event.name} | benevio`,
+		description: eventDescription,
+		images: eventImage ? [{ url: eventImage, alt: `Affiche de ${data.event.name}` }] : undefined,
+	}}
+	twitter={{
+		cardType: 'summary_large_image',
+		title: `${data.event.name} | benevio`,
+		description: eventDescription,
+		image: eventImage,
+		imageAlt: eventImage ? `Affiche de ${data.event.name}` : undefined,
+	}}
+/>
 
 <JsonLd
 	schema={{
+		'@context': 'https://schema.org',
 		'@type': 'Event',
 		name: data.event.name,
+		url: eventUrl,
 		...(data.event.description && { description: data.event.description }),
-		...(data.event.posterId && {
-			image: [`https://benev.io/media/${data.event.posterId}?size=medium`],
+		...(eventImage && { image: [eventImage] }),
+		...(data.event.startDate && { startDate: data.event.startDate.toISOString() }),
+		...(data.event.endDate && { endDate: data.event.endDate.toISOString() }),
+		...(data.event.address && {
+			location: {
+				'@type': 'Place',
+				name: data.event.addressLabel || data.event.address,
+				address: data.event.address,
+			},
 		}),
-		url: 'https://benev.io',
 	}}
 />
 
