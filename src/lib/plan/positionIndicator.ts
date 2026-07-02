@@ -1,7 +1,7 @@
 const INDICATOR_WIDTH = 3
 const INDICATOR_LENGHT = 26
 
-export function usePositionIndicator(orientation: 'x' | 'y') {
+export function usePositionIndicator(axis: 'x' | 'y') {
 	let indicator: HTMLDivElement | null = null
 
 	return {
@@ -18,7 +18,7 @@ export function usePositionIndicator(orientation: 'x' | 'y') {
 			function updateIndicator() {
 				if (!indicator) return
 				indicator.style.display = 'block'
-				if (orientation === 'x') {
+				if (axis === 'x') {
 					const positionX = node.scrollLeft + mousePosition.x
 					indicator.style.translate = `${positionX}px 0px`
 				} else {
@@ -44,7 +44,7 @@ export function usePositionIndicator(orientation: 'x' | 'y') {
 			indicator = document.createElement('div')
 			indicator.style.position = 'absolute'
 			indicator.classList.add('bg-accent', 'rounded')
-			if (orientation === 'x') {
+			if (axis === 'x') {
 				indicator.style.width = `${INDICATOR_WIDTH}px`
 				indicator.style.height = `${INDICATOR_LENGHT}px`
 				indicator.style.left = `-${INDICATOR_WIDTH * 0.66}px`

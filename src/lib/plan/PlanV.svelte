@@ -10,6 +10,7 @@
 	import { scrollToCursor } from './scrollToCursor'
 	import { usePositionIndicator } from './positionIndicator'
 	import { navigateOnScroll } from './navigateOnScroll'
+	import { useGrabScale } from './grabScale'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let cursor: Dayjs
@@ -20,6 +21,7 @@
 	const MIN_HOUR_HEIGHT = 30
 
 	const indicator = usePositionIndicator('y')
+	const grabScale = useGrabScale('y')
 
 	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / hourSize)
 	$: origin = daytz(range.start).startOf('hour')
@@ -34,12 +36,14 @@
 	use:scrollToCursor={{ cursor, axis: 'y' }}
 	use:navigateOnScroll={{ cursor, axis: 'y' }}
 	use:indicator.container
+	use:grabScale.container
 >
 	<!-- SCALE -->
 	<div
 		class="sticky left-0 z-20 border-r bg-base-100"
 		style:height="{totalHeight}px"
 		use:indicator.scale
+		use:grabScale.scale
 	>
 		<div class="sticky z-20 bg-base-100 top-0 border-b" style:height="{TEAM_HEADER_HEIGHT}px" />
 
