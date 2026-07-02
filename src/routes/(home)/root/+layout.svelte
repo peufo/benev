@@ -5,6 +5,7 @@
 		.map((p) => p.replace('./', '').replace(/\/?\+page.svelte/, ''))
 		.filter(Boolean)
 		.map((link) => link.split('/'))
+		.filter((slugs) => !slugs.find((slug) => slug.startsWith('[')))
 </script>
 
 <div class="flex gap-4">
