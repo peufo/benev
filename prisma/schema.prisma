@@ -457,8 +457,6 @@ model Milestone {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@unique([name, eventId])
 }
 
 model Gift {
