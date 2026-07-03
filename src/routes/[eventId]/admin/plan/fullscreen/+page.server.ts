@@ -6,9 +6,10 @@ import { z } from 'fuma'
 export const load = async ({ locals, url, params: { eventId } }) => {
 	const member = await permission.leader(eventId, locals)
 
-	const { form_team, form_period } = parseQuery(url, {
+	const { form_team, form_period, form_milestone } = parseQuery(url, {
 		form_team: z.string().optional(),
 		form_period: z.string().optional(),
+		form_milestone: z.string().optional(),
 	})
 
 	return {
@@ -21,5 +22,8 @@ export const load = async ({ locals, url, params: { eventId } }) => {
 		}),
 		team: await parseFormKey(form_team, (id) => getTeam(id, { member }).catch(() => null)),
 		period: await getPeriodForm(form_period),
+		milestone: await parseFormKey(form_milestone, (id) =>
+			prisma.milestone.findUnique({ where: { id, eventId } })
+		),
 	}
 }

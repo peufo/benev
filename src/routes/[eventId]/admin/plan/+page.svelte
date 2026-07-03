@@ -2,6 +2,7 @@
 	import { urlParam } from 'fuma'
 	import { PlanV, PlanH } from '$lib/plan'
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
+	import { MilestoneDrawer } from '$lib/milestone'
 	import { daytz } from '$lib/dayjs.js'
 	import { afterNavigate } from '$app/navigation'
 	import { scrollToActive } from '$lib/plan/scrollToActive.js'
@@ -25,6 +26,14 @@
 	{#if $urlParam.hasValue('view', 'v')}
 		<PlanV bind:teams={data.teams_periods} range={data.range} {cursor} {hourSize} />
 	{:else}
-		<PlanH bind:teams={data.teams_periods} range={data.range} {cursor} {hourSize} />
+		<PlanH
+			bind:teams={data.teams_periods}
+			milestones={data.milestones}
+			range={data.range}
+			{cursor}
+			{hourSize}
+		/>
 	{/if}
+
+	<MilestoneDrawer milestone={data.milestone} />
 </div>

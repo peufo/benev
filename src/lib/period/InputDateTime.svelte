@@ -5,7 +5,7 @@
 
 	export let label: string
 	export let value: Dayjs
-	export let name: string
+	export let key: string
 	export let hint = ''
 	export let onSetValue: (newValue: Dayjs) => Dayjs = (v) => v
 
@@ -31,10 +31,10 @@
 	}
 </script>
 
-<input type="hidden" {name} value="{USE_COERCE_DATE}{value.toJSON()}" />
+<input type="hidden" name={key} value="{USE_COERCE_DATE}{value.toJSON()}" />
 
 <div class="form-control">
-	<label for="control-{name}" class="label">
+	<label for="control-{key}" class="label">
 		<span class="label-text">{label}</span>
 		{#if hint}
 			<span class="label-text-alt">
@@ -44,7 +44,7 @@
 	</label>
 	<input
 		type="time"
-		id="control-{name}"
+		id="control-{key}"
 		class="input input-bordered"
 		step={300}
 		value={value.format('HH:mm')}

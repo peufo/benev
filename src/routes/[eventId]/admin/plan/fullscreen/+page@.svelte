@@ -3,6 +3,7 @@
 	import { PlanV, PlanH } from '$lib/plan'
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
 	import DrawersForm from '$lib/DrawersForm.svelte'
+	import { MilestoneDrawer } from '$lib/milestone'
 	import { daytz } from '$lib/dayjs.js'
 	import { afterNavigate } from '$app/navigation'
 	import { scrollToActive } from '$lib/plan/scrollToActive.js'
@@ -52,8 +53,16 @@
 	{#if $urlParam.hasValue('view', 'v')}
 		<PlanV teams={data.teams_periods} range={data.range} {cursor} {hourSize} />
 	{:else}
-		<PlanH teams={data.teams_periods} range={data.range} {cursor} {hourSize} />
+		<PlanH
+			teams={data.teams_periods}
+			milestones={data.milestones}
+			range={data.range}
+			{cursor}
+			{hourSize}
+		/>
 	{/if}
 </div>
 
 <DrawersForm event={data.member.event} team={data.team} period={data.period || {}} />
+
+<MilestoneDrawer milestone={data.milestone} />

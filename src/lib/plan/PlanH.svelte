@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { tip, urlParam, type Range } from 'fuma'
 	import { PlusIcon } from 'lucide-svelte'
-	import type { Team } from '@prisma/client'
+	import type { Milestone, Team } from '@prisma/client'
+	import { goto } from '$app/navigation'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
 	import type { PeriodWithMembers } from './types'
@@ -11,11 +12,22 @@
 	import { usePositionIndicator } from './positionIndicator'
 	import { navigateOnScroll } from './navigateOnScroll'
 	import { useGrabScale } from './grabScale'
+	import { time } from './utils'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
+	export let milestones: Milestone[] = []
 	export let cursor: Dayjs
 	export let range: Range
 	export let hourSize: number
+
+	function createMilestoneAt(event: MouseEvent) {
+		const offsetX = event.offsetX
+		const timestamp = origin.add(offsetX / hourSize, 'hour')
+		goto($urlParam.with({ form_milestone: JSON.stringify({ timestamp: timestamp.toJSON() }) }), {
+			replaceState: true,
+			noScroll: true,
+		})
+	}
 
 	const TEAM_HEADER_WIDTH = 100
 	const MIN_HOUR_WIDTH = 40
@@ -115,7 +127,37 @@
 				<PlusIcon />
 			</a>
 		</div>
-		<div class="w-full" />
+		<div class="w-full relative h-12">
+			<button
+				type="button"
+				class="absolute inset-0 w-full h-full cursor-crosshair hover:bg-base-200/60 transition-colors"
+				aria-label="Ajouter un jalon"
+				on:click={createMilestoneAt}
+			/>
+			{#each milestones as milestone (milestone.id)}
+				{@const leftPx = time(hourSize).to('hour') * daytz(milestone.timestamp).diff(origin)}
+				<a
+					href={$urlParam.with({ form_milestone: milestone.id })}
+					data-sveltekit-replacestate
+					data-sveltekit-noscroll
+					style:left="{leftPx}px"
+					class="absolute top-0 bottom-0 w-px bg-secondary hover:bg-primary group z-10"
+				>
+					<span
+						class="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-secondary group-hover:bg-primary"
+					/>
+					<span
+						class="
+							absolute top-2 left-1 text-xs whitespace-nowrap
+							opacity-0 group-hover:opacity-100 transition-opacity
+							bg-base-100 px-1 py-0.5 rounded border shadow
+						"
+					>
+						{milestone.name}
+					</span>
+				</a>
+			{/each}
+		</div>
 	</div>
 
 	<div class="h-48" />

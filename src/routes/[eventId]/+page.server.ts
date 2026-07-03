@@ -1,7 +1,12 @@
 import { formAction } from 'fuma/server'
 import { modelEventUpdate } from '$lib/models'
 import { permission, prisma, uploadImages } from '$lib/server'
-import { modelTagCreate, modelTagUpdate } from '$lib/models'
+import {
+	modelTagCreate,
+	modelTagUpdate,
+	modelMilestoneCreate,
+	modelMilestoneUpdate,
+} from '$lib/models'
 import { z } from 'fuma'
 
 export const load = async ({ params }) => ({
@@ -56,4 +61,32 @@ export const actions = {
 			where: { id: data.id, eventId },
 		})
 	}),
+	milestone_create: formAction(
+		modelMilestoneCreate,
+		async ({ params: { eventId }, locals, data }) => {
+			await permission.leader(eventId, locals)
+			return prisma.milestone.create({
+				data: { ...data, eventId },
+			})
+		}
+	),
+	milestone_update: formAction(
+		modelMilestoneUpdate,
+		async ({ params: { eventId }, locals, data }) => {
+			await permission.leader(eventId, locals)
+			return prisma.milestone.update({
+				where: { id: data.id, eventId },
+				data,
+			})
+		}
+	),
+	milestone_delete: formAction(
+		{ id: z.string() },
+		async ({ params: { eventId }, locals, data }) => {
+			await permission.leader(eventId, locals)
+			return prisma.milestone.delete({
+				where: { id: data.id, eventId },
+			})
+		}
+	),
 }

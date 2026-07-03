@@ -172,7 +172,7 @@
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
 		<InputDateTime
 			label="Début"
-			name="start"
+			key="start"
 			bind:value={start}
 			onSetValue={(newStart) => {
 				const duration = end.diff(start)
@@ -182,7 +182,7 @@
 		/>
 		<InputDateTime
 			label="Fin"
-			name="end"
+			key="end"
 			bind:value={end}
 			hint={formatDuration(start, end)}
 			onSetValue={(newEnd) => {
