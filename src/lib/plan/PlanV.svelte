@@ -42,9 +42,9 @@
 	<div
 		class="sticky left-0 z-20 border-r bg-base-100"
 		style:height="{totalHeight}px"
-		use:indicator.scale
 		use:grabScale.scale
 	>
+		<div class="bg-accent rounded h-[3px] w-8 right-0" use:indicator.element />
 		<div class="sticky z-20 bg-base-100 top-0 border-b" style:height="{TEAM_HEADER_HEIGHT}px" />
 
 		{#each days as { date, hours }}

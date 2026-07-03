@@ -1,8 +1,5 @@
-const INDICATOR_WIDTH = 3
-const INDICATOR_LENGHT = 26
-
 export function usePositionIndicator(axis: 'x' | 'y') {
-	let indicator: HTMLDivElement | null = null
+	const indicators = new Set<HTMLElement>()
 
 	return {
 		container(node: HTMLDivElement) {
@@ -12,26 +9,29 @@ export function usePositionIndicator(axis: 'x' | 'y') {
 				const clientRect = node.getClientRects().item(0) || { x: 0, y: 0 }
 				mousePosition.x = event.x - clientRect.x
 				mousePosition.y = event.y - clientRect.y
-				updateIndicator()
+				updateIndicators()
 			}
 
-			function updateIndicator() {
-				if (!indicator) return
-				indicator.style.display = 'block'
-				if (axis === 'x') {
-					const positionX = node.scrollLeft + mousePosition.x
-					indicator.style.translate = `${positionX}px 0px`
-				} else {
-					const positionY = node.scrollTop + mousePosition.y
-					indicator.style.translate = `0px ${positionY}px`
+			function updateIndicators() {
+				for (const indicator of indicators.values()) {
+					indicator.style.display = 'block'
+					if (axis === 'x') {
+						const positionX = node.scrollLeft + mousePosition.x - indicator.offsetWidth / 2
+						indicator.style.translate = `${positionX}px 0px`
+					} else {
+						const positionY = node.scrollTop + mousePosition.y - indicator.offsetHeight / 2
+						indicator.style.translate = `0px ${positionY}px`
+					}
 				}
 			}
 
 			function onMouseLeave() {
-				if (indicator) indicator.style.display = 'none'
+				for (const indicator of indicators.values()) {
+					indicator.style.display = 'none'
+				}
 			}
 			node.addEventListener('mousemove', trackMousePosition)
-			node.addEventListener('scroll', updateIndicator)
+			node.addEventListener('scroll', updateIndicators)
 			node.addEventListener('mouseleave', onMouseLeave)
 			return {
 				destroy() {
@@ -40,26 +40,11 @@ export function usePositionIndicator(axis: 'x' | 'y') {
 				},
 			}
 		},
-		scale(node: HTMLDivElement) {
-			indicator = document.createElement('div')
-			indicator.style.position = 'absolute'
-			indicator.classList.add('bg-accent', 'rounded')
-			if (axis === 'x') {
-				indicator.style.width = `${INDICATOR_WIDTH}px`
-				indicator.style.height = `${INDICATOR_LENGHT}px`
-				indicator.style.left = `-${INDICATOR_WIDTH * 0.66}px`
-				indicator.style.bottom = '0px'
-			} else {
-				indicator.style.width = `${INDICATOR_LENGHT}px`
-				indicator.style.height = `${INDICATOR_WIDTH}px`
-				indicator.style.top = `-${INDICATOR_WIDTH}px`
-				indicator.style.right = '0px'
-			}
-			node.appendChild(indicator)
+		element(node: HTMLElement) {
+			indicators.add(node)
+			node.style.position = 'absolute'
 			return {
-				destroy() {
-					if (indicator) node.removeChild(indicator)
-				},
+				destroy: () => indicators.delete(node),
 			}
 		},
 	}

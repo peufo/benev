@@ -51,7 +51,7 @@
 			? `left: ${startPx}px; width: ${sizePx}px`
 			: `top: ${startPx}px; height: ${sizePx}px`}
 		class="
-			group relative hover:z-20
+			group relative z-10 hover:z-20
 			bg-base-200
 			rounded-md p-0 text-sm
 			outline outline-1 border-[1px] border-base-300

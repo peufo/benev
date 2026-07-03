@@ -20,8 +20,7 @@
 				.set('D', d)
 				.set('h', h)
 				.set('m', m)
-				.set('s', 0)
-				.set('ms', 0)
+				.startOf('m')
 		)
 	}
 
