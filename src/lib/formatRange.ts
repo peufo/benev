@@ -37,6 +37,10 @@ export const formatRangeShort = ({ start, end }: Range, timeZone?: string) =>
 	getFormaterShort(timeZone ?? getEventTimeZone()).formatRange(start, end)
 export const formatRangeDate = ({ start, end }: Range, timeZone?: string) =>
 	getFormaterDate(timeZone ?? getEventTimeZone()).formatRange(start, end)
+export const formatDatetime = (date: number | Date, timeZone?: string) =>
+	getFormater(timeZone ?? getEventTimeZone()).format(date)
+export const formatDatetimeShort = (date: number | Date, timeZone?: string) =>
+	getFormaterShort(timeZone ?? getEventTimeZone()).format(date)
 
 export const formatRangeHour = ({ start, end }: Range, timeZone?: string) => {
 	const tz = timeZone ?? getEventTimeZone()

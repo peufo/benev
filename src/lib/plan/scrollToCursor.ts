@@ -8,7 +8,7 @@ type ScrollToCursor = {
 
 export function scrollToCursor(node: HTMLElement, { axis, cursor, onScroll }: ScrollToCursor) {
 	let current = cursor
-	scroll()
+	scroll('smooth')
 
 	function scroll(behavior: ScrollBehavior = 'instant') {
 		const left = (node.scrollWidth - node.clientWidth) / 2 + 50
@@ -22,7 +22,7 @@ export function scrollToCursor(node: HTMLElement, { axis, cursor, onScroll }: Sc
 		update(options: ScrollToCursor) {
 			if (!current.isSame(options.cursor)) {
 				current = options.cursor
-				scroll()
+				scroll('smooth')
 			}
 		},
 	}

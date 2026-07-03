@@ -2,6 +2,7 @@
 	import { tip, urlParam, type Range } from 'fuma'
 	import { PinIcon, PlusIcon } from 'lucide-svelte'
 	import type { Milestone, Team } from '@prisma/client'
+	import { slide } from 'svelte/transition'
 	import { goto } from '$app/navigation'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
@@ -13,6 +14,8 @@
 	import { navigateOnScroll } from './navigateOnScroll'
 	import { useGrabScale } from './grabScale'
 	import { time } from './utils'
+	import { trackView, type View } from './trackView'
+	import { formatDatetime } from '$lib/formatRange'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let milestones: Milestone[] = []
@@ -30,52 +33,6 @@
 		})
 	}
 
-	function useMilestonesObserver() {
-		let observer: IntersectionObserver | null = null
-		const milestonesMap = new Map<Element, Milestone>()
-		let next = new Set<Milestone>()
-		let previous = new Set<Milestone>()
-
-		function connect(node: Element) {
-			if (!observer)
-				observer = new IntersectionObserver((entries) => {
-					entries.forEach((entry) => {
-						const milestone = milestonesMap.get(entry.target)
-						if (!milestone) return
-						if (entry.isIntersecting) next.delete(milestone)
-						else next.add(milestone)
-						console.log([...next.values()])
-					})
-				})
-			observer.observe(node)
-		}
-
-		function disconnect(node: Element) {
-			observer?.unobserve(node)
-			if (milestonesMap.size === 0) {
-				observer?.disconnect()
-				observer = null
-			}
-		}
-
-		return {
-			next,
-			previous,
-			milestone(node: Element, { milestone }: { milestone: Milestone }) {
-				milestonesMap.set(node, milestone)
-				connect(node)
-				return {
-					destroy() {
-						milestonesMap.delete(node)
-						disconnect(node)
-					},
-				}
-			},
-		}
-	}
-
-	const milestonesObserver = useMilestonesObserver()
-
 	const TEAM_HEADER_WIDTH = 100
 	const MIN_HOUR_WIDTH = 40
 
@@ -87,6 +44,18 @@
 	$: days = getDays(range)
 	$: totalWidth =
 		TEAM_HEADER_WIDTH + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourSize
+	$: _milestones = milestones.map((m) => ({ ...m, time: daytz(m.timestamp) }))
+	$: milestonesInRange = _milestones.filter(
+		({ time }) => time.isAfter(range.start) && time.isBefore(range.end)
+	)
+
+	let milestonesBefore: (Milestone & { time: Dayjs })[] = []
+	let milestonesAfter: (Milestone & { time: Dayjs })[] = []
+
+	function onViewChange({ start, end }: View) {
+		milestonesBefore = _milestones.filter(({ time }) => time.isBefore(start)).toReversed()
+		milestonesAfter = _milestones.filter(({ time }) => time.isAfter(end))
+	}
 </script>
 
 <div
@@ -96,6 +65,13 @@
 	use:navigateOnScroll={{ cursor, axis: 'x' }}
 	use:indicator.container
 	use:grabScale.container
+	use:trackView={{
+		axis: 'x',
+		hourSize,
+		origin,
+		padding: TEAM_HEADER_WIDTH,
+		onChange: onViewChange,
+	}}
 	style="
 		scroll-padding-left: {TEAM_HEADER_WIDTH + 20}px;
 		scroll-padding-top: 100px;
@@ -180,10 +156,9 @@
 		</div>
 
 		<div class="w-full h-14 relative">
-			{#each milestones as milestone (milestone.id)}
+			{#each milestonesInRange as milestone (milestone.id)}
 				{@const leftPx = time(hourSize).to('hour') * daytz(milestone.timestamp).diff(origin)}
 				<span
-					use:milestonesObserver.milestone={{ milestone }}
 					class="absolute w-px -left-[1px] bg-secondary/40 h-screen bottom-0"
 					style:translate="{leftPx}px"
 				/>
@@ -214,11 +189,25 @@
 	</div>
 
 	<!-- MILESTONE NAVIGATION -->
-	<div class="flex gap-2 justify-between">
-		<div>previous</div>
+	<div class="flex gap-2 justify-between sticky left-0 w-full p-2">
+		<div class="flex flex-col space-y-1">
+			{#each milestonesBefore as milestone (milestone.id)}
+				<a
+					transition:slide={{ duration: 200 }}
+					class="badge badge-secondary badge-outline group hover:bg-secondary/10"
+					href={$urlParam.with({ cursor: milestone.time.toJSON() })}
+				>
+					<PinIcon class="rotate-45 -translate-x-1 group-hover:fill-secondary" size={14} />
+					<span>{milestone.name}</span>
+					<span class="pl-2 opacity-80 text-xs font-semibold">
+						{formatDatetime(milestone.timestamp)}
+					</span>
+				</a>
+			{/each}
+		</div>
 
 		<div class="flex flex-col gap-1">
-			{#each milestonesObserver.next.values() as milestone}
+			{#each milestonesAfter as milestone (milestone.id)}
 				<span>
 					{milestone.name}
 				</span>
