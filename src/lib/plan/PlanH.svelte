@@ -30,6 +30,52 @@
 		})
 	}
 
+	function useMilestonesObserver() {
+		let observer: IntersectionObserver | null = null
+		const milestonesMap = new Map<Element, Milestone>()
+		let next = new Set<Milestone>()
+		let previous = new Set<Milestone>()
+
+		function connect(node: Element) {
+			if (!observer)
+				observer = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						const milestone = milestonesMap.get(entry.target)
+						if (!milestone) return
+						if (entry.isIntersecting) next.delete(milestone)
+						else next.add(milestone)
+						console.log([...next.values()])
+					})
+				})
+			observer.observe(node)
+		}
+
+		function disconnect(node: Element) {
+			observer?.unobserve(node)
+			if (milestonesMap.size === 0) {
+				observer?.disconnect()
+				observer = null
+			}
+		}
+
+		return {
+			next,
+			previous,
+			milestone(node: Element, { milestone }: { milestone: Milestone }) {
+				milestonesMap.set(node, milestone)
+				connect(node)
+				return {
+					destroy() {
+						milestonesMap.delete(node)
+						disconnect(node)
+					},
+				}
+			},
+		}
+	}
+
+	const milestonesObserver = useMilestonesObserver()
+
 	const TEAM_HEADER_WIDTH = 100
 	const MIN_HOUR_WIDTH = 40
 
@@ -113,7 +159,7 @@
 		</div>
 	{/each}
 
-	<!-- BOTTOM ROW -->
+	<!-- CREATE TEAM + MILESTONES -->
 	<div
 		class="flex items-stretch border-b bg-base-200/40 group relative"
 		style:width="{totalWidth}px"
@@ -137,6 +183,7 @@
 			{#each milestones as milestone (milestone.id)}
 				{@const leftPx = time(hourSize).to('hour') * daytz(milestone.timestamp).diff(origin)}
 				<span
+					use:milestonesObserver.milestone={{ milestone }}
 					class="absolute w-px -left-[1px] bg-secondary/40 h-screen bottom-0"
 					style:translate="{leftPx}px"
 				/>
@@ -164,6 +211,19 @@
 		>
 			<PinIcon size={16} class="translate-x-[3px] opacity-70" />
 		</button>
+	</div>
+
+	<!-- MILESTONE NAVIGATION -->
+	<div class="flex gap-2 justify-between">
+		<div>previous</div>
+
+		<div class="flex flex-col gap-1">
+			{#each milestonesObserver.next.values() as milestone}
+				<span>
+					{milestone.name}
+				</span>
+			{/each}
+		</div>
 	</div>
 
 	<div class="h-48" />

@@ -63,10 +63,7 @@ export async function getPlanData({ url, eventId }: { url: URL; eventId: string 
 			},
 		}),
 		milestones: await prisma.milestone.findMany({
-			where: {
-				eventId,
-				timestamp: { gte: range.start, lte: range.end },
-			},
+			where: { eventId },
 			orderBy: { timestamp: 'asc' },
 		}),
 	}
