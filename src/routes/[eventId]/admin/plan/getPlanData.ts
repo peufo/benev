@@ -1,11 +1,9 @@
 import { z } from 'fuma/validation'
 import { parseQuery } from 'fuma/server'
 import type { Prisma } from '@prisma/client'
-import { prisma } from '$lib/server'
 import dayjs from 'dayjs'
-
-// TODO: Computed from hourSize
-const RANGE_DAYS = 8
+import { prisma } from '$lib/server'
+import { RANGE_DAYS } from '$lib/plan/constants'
 
 export async function getPlanData({ url, eventId }: { url: URL; eventId: string }) {
 	const query = parseQuery(url, {

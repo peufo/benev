@@ -9,13 +9,14 @@
 	import type { PeriodWithMembers } from './types'
 	import { getDays } from './getDays'
 	import { scrollOnWheel } from './scrollOnWheel'
-	import { scrollToCursor } from './scrollToCursor'
+	// import { scrollToCursor } from './scrollToCursor'
 	import { usePositionIndicator } from './positionIndicator'
 	import { navigateOnScroll } from './navigateOnScroll'
 	import { useGrabScale } from './grabScale'
 	import { time } from './utils'
 	import { trackView, type View } from './trackView'
 	import { formatDatetime } from '$lib/formatRange'
+	import { scrollOnNavigate } from './scrollOnNavigate'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let milestones: Milestone[] = []
@@ -61,7 +62,13 @@
 <div
 	class="overflow-scroll bg-base-100 grow relative"
 	use:scrollOnWheel={{ scaleX: hourSize, marginX: TEAM_HEADER_WIDTH }}
-	use:scrollToCursor={{ cursor, axis: 'x', onScroll: grabScale.setScrollOrigin }}
+	use:scrollOnNavigate={{
+		cursor,
+		axis: 'x',
+		origin,
+		hourSize,
+		onScroll: grabScale.setScrollOrigin,
+	}}
 	use:navigateOnScroll={{ cursor, axis: 'x' }}
 	use:indicator.container
 	use:grabScale.container

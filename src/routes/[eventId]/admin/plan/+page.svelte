@@ -4,18 +4,11 @@
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
 	import { MilestoneDrawer } from '$lib/milestone'
 	import { daytz } from '$lib/dayjs.js'
-	import { afterNavigate } from '$app/navigation'
-	import { scrollToActive } from '$lib/plan/scrollToActive.js'
 
 	export let data
 	let hourSize = +($urlParam.get('hourSize') || 20)
 
 	$: cursor = daytz(data.cursor)
-
-	afterNavigate(async (navigation) => {
-		await navigation.complete
-		scrollToActive()
-	})
 </script>
 
 <div

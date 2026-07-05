@@ -7,10 +7,10 @@
 	import TeamCol from './TeamCol.svelte'
 	import type { PeriodWithMembers } from './types'
 	import { scrollOnWheel } from './scrollOnWheel'
-	import { scrollToCursor } from './scrollToCursor'
 	import { usePositionIndicator } from './positionIndicator'
 	import { navigateOnScroll } from './navigateOnScroll'
 	import { useGrabScale } from './grabScale'
+	import { scrollOnNavigate } from './scrollOnNavigate'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let cursor: Dayjs
@@ -33,8 +33,14 @@
 <div
 	class="overflow-scroll bg-base-100 grow flex"
 	use:scrollOnWheel={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
-	use:scrollToCursor={{ cursor, axis: 'y', onScroll: grabScale.setScrollOrigin }}
 	use:navigateOnScroll={{ cursor, axis: 'y' }}
+	use:scrollOnNavigate={{
+		cursor,
+		axis: 'x',
+		origin,
+		hourSize,
+		onScroll: grabScale.setScrollOrigin,
+	}}
 	use:indicator.container
 	use:grabScale.container
 >
