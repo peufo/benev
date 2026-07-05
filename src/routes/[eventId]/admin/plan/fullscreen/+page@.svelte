@@ -5,8 +5,6 @@
 	import DrawersForm from '$lib/DrawersForm.svelte'
 	import { MilestoneDrawer } from '$lib/milestone'
 	import { daytz } from '$lib/dayjs.js'
-	import { afterNavigate } from '$app/navigation'
-	import { scrollToActive } from '$lib/plan/scrollToActive.js'
 
 	export let data
 
@@ -26,11 +24,6 @@
 	}
 
 	$: cursor = daytz(data.cursor)
-
-	afterNavigate(async (navigation) => {
-		await navigation.complete
-		scrollToActive()
-	})
 </script>
 
 <div
