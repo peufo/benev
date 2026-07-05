@@ -18,8 +18,7 @@ export function scrollOnNavigate(node: HTMLElement, params: ScrollOnNavigatePara
 		const toActiveElement = getActiveElement(to.url)
 		if (toActiveElement) return scrollToActiveElement(toActiveElement)
 		if (!from) return scrollToCursor('instant')
-		const fromActiveElement = getActiveElement(from.url)
-		if (fromActiveElement) return
+		if (from.url.searchParams.get('form_period')) return
 		if (isScrollStart(node, params.axis)) return scrollToCursor('instant')
 		if (isScrollEnd(node, params.axis)) return scrollToCursor('instant')
 		scrollToCursor('smooth')
@@ -28,7 +27,9 @@ export function scrollOnNavigate(node: HTMLElement, params: ScrollOnNavigatePara
 	function getActiveElement(url: URL): HTMLElement | null {
 		const periodId = url.searchParams.get('form_period')
 		if (!periodId) return null
-		return document.getElementById(periodId)
+		const element = document.getElementById(periodId)
+		if (element) return element
+		return document.getElementById('ghost_create_period')
 	}
 
 	function scrollToActiveElement(element: HTMLElement) {

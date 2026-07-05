@@ -29,6 +29,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 ) => {
 	const ghost = document.createElement('div')
 	const title = document.createElement('h3')
+	ghost.id = 'ghost_create_period'
 	ghost.classList.add(
 		...GHOST_CLASSES[axis],
 		'bg-accent/50',

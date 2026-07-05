@@ -4,6 +4,7 @@ import type { Dayjs } from 'dayjs'
 import { urlParam } from 'fuma'
 import { get } from 'svelte/store'
 import { RANGE_DAYS } from './constants'
+import { page } from '$app/state'
 
 type NavigateOnScrollOptions = {
 	axis: 'x' | 'y'
@@ -27,6 +28,7 @@ export function navigateOnScroll(node: HTMLElement, { axis, cursor }: NavigateOn
 	const isEnd = () => isScrollEnd(node, axis)
 
 	const onScroll = debounce(() => {
+		if (page.url.searchParams.get('form_period')) return
 		if (isStart()) goto(get(urlParam).with({ cursor: cursor.add(-RANGE_DAYS, 'day').toJSON() }))
 		else if (isEnd()) goto(get(urlParam).with({ cursor: cursor.add(RANGE_DAYS, 'day').toJSON() }))
 	}, 200)
