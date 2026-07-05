@@ -17,6 +17,7 @@
 	import { trackView, type View } from './trackView'
 	import { formatDatetime } from '$lib/formatRange'
 	import { scrollOnNavigate } from './scrollOnNavigate'
+	import MilestonesLink from './MilestonesLink.svelte'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let milestones: Milestone[] = []
@@ -196,31 +197,7 @@
 	</div>
 
 	<!-- MILESTONE NAVIGATION -->
-	<div class="flex gap-2 justify-between sticky left-0 w-full p-2">
-		<div class="flex flex-col space-y-1">
-			{#each milestonesBefore as milestone (milestone.id)}
-				<a
-					transition:slide={{ duration: 200 }}
-					class="badge badge-secondary badge-outline group hover:bg-secondary/10"
-					href={$urlParam.with({ cursor: milestone.time.toJSON() })}
-				>
-					<PinIcon class="rotate-45 -translate-x-1 group-hover:fill-secondary" size={14} />
-					<span>{milestone.name}</span>
-					<span class="pl-2 opacity-80 text-xs font-semibold">
-						{formatDatetime(milestone.timestamp)}
-					</span>
-				</a>
-			{/each}
-		</div>
-
-		<div class="flex flex-col gap-1">
-			{#each milestonesAfter as milestone (milestone.id)}
-				<span>
-					{milestone.name}
-				</span>
-			{/each}
-		</div>
-	</div>
+	<MilestonesLink {milestonesBefore} {milestonesAfter} />
 
 	<div class="h-48" />
 </div>
