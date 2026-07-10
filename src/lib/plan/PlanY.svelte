@@ -1,21 +1,20 @@
 <script lang="ts">
-	import { tip, urlParam, type Range } from 'fuma'
+	import { tip, urlParam } from 'fuma'
 	import { PlusIcon } from 'lucide-svelte'
-	import { daytz, type Dayjs } from '$lib/dayjs'
 	import type { Team } from '@prisma/client'
-	import { getDays } from './getDays'
+	import { afterNavigate } from '$app/navigation'
 	import TeamCol from './TeamCol.svelte'
-	import type { PeriodWithMembers } from './types'
-	import { scrollOnWheel } from './scrollOnWheel'
-	import { usePositionIndicator } from './positionIndicator'
+	import type { PeriodWithMembers, Plan } from './types'
+	import { scrollOnZoom } from './scrollOnZoom'
 	import { navigateOnScroll } from './navigateOnScroll'
-	import { useGrabScale } from './grabScale'
 	import { scrollOnNavigate } from './scrollOnNavigate'
+	import { usePositionIndicator } from './positionIndicator'
+	import { useGrabScale } from './grabScale'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
-	export let cursor: Dayjs
-	export let range: Range
-	export let hourSize: number
+	export let plan: Plan
+
+	let container: HTMLElement
 
 	const TEAM_HEADER_HEIGHT = 40
 	const MIN_HOUR_HEIGHT = 30
@@ -23,24 +22,31 @@
 	const indicator = usePositionIndicator('y')
 	const grabScale = useGrabScale('y')
 
-	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / hourSize)
-	$: origin = daytz(range.start).startOf('hour')
-	$: days = getDays(range)
-	$: totalHeight =
-		TEAM_HEADER_HEIGHT + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourSize
+	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / plan.hourSize)
+	$: totalHeight = TEAM_HEADER_HEIGHT + plan.length
+
+	afterNavigate(async (navigation) => {
+		scrollOnNavigate(navigation, {
+			node: container,
+			plan,
+			onScroll: grabScale.setScrollOrigin,
+		})
+	})
 </script>
 
 <div
 	class="overflow-scroll bg-base-100 grow flex"
-	use:scrollOnWheel={{ scaleY: hourSize, marginY: TEAM_HEADER_HEIGHT }}
-	use:navigateOnScroll={{ cursor, axis: 'y' }}
-	use:scrollOnNavigate={{
-		cursor,
-		axis: 'x',
-		origin,
-		hourSize,
-		onScroll: grabScale.setScrollOrigin,
+	bind:this={container}
+	use:scrollOnZoom={{
+		scaleY: plan.hourSize,
+		marginY: TEAM_HEADER_HEIGHT,
+		onZoom({ scaleY }) {
+			// Pas ouf mais j'en ai marre
+			plan.hourSize = scaleY
+			plan.length = plan.days.reduce((acc, { hours }) => acc + hours.length, 0) * plan.hourSize
+		},
 	}}
+	use:navigateOnScroll={plan}
 	use:indicator.container
 	use:grabScale.container
 >
@@ -53,7 +59,7 @@
 		<div class="bg-accent rounded h-[3px] w-8 right-0" use:indicator.element />
 		<div class="sticky z-20 bg-base-100 top-0 border-b" style:height="{TEAM_HEADER_HEIGHT}px" />
 
-		{#each days as { date, hours }}
+		{#each plan.days as { date, hours }}
 			<div class="flex items-start -translate-y-[1px]">
 				<!-- DAY -->
 				<div
@@ -70,7 +76,7 @@
 					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
 						{@const isEndNextDay = hour + hourSpan > 24}
 						{@const span = isEndNextDay ? 24 - hour : hourSpan}
-						<div style:height="{hourSize * span}px" class="border-t px-1">
+						<div style:height="{plan.hourSize * span}px" class="border-t px-1">
 							{isEndNextDay ? '' : hour.toString().padStart(2, '0')}
 						</div>
 					{/each}
@@ -97,7 +103,7 @@
 				</span>
 			</a>
 
-			<TeamCol bind:team {origin} {hourSize} />
+			<TeamCol bind:team {plan} />
 		</div>
 	{/each}
 

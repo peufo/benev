@@ -1,51 +1,59 @@
-import { afterNavigate } from '$app/navigation'
-import type { Dayjs } from 'dayjs'
+import type { AfterNavigate } from '@sveltejs/kit'
 import { isScrollEnd, isScrollStart } from './navigateOnScroll'
+import type { Plan } from './types'
 
 type ScrollOnNavigateParams = {
-	axis: 'x' | 'y'
-	cursor: Dayjs
-	hourSize: number
-	origin: Dayjs
+	node: HTMLElement
+	plan: Plan
 	onScroll?: () => void
 }
 
-export function scrollOnNavigate(node: HTMLElement, params: ScrollOnNavigateParams) {
-	afterNavigate(async (navigation) => {
-		await navigation.complete
-		const { from, to } = navigation
-		if (!to) return
-		const toActiveElement = getActiveElement(to.url)
-		if (toActiveElement) return scrollToActiveElement(toActiveElement)
-		if (!from) return scrollToCursor('instant')
-		if (from.url.searchParams.get('form_period')) return
-		if (isScrollStart(node, params.axis)) return scrollToCursor('instant')
-		if (isScrollEnd(node, params.axis)) return scrollToCursor('instant')
-		scrollToCursor('smooth')
-	})
+function getActiveElement(url: URL): HTMLElement | null {
+	const periodId = url.searchParams.get('form_period')
+	if (!periodId) return null
+	const element = document.getElementById(periodId)
+	if (element) return element
+	return document.getElementById('ghost_create_period')
+}
 
-	function getActiveElement(url: URL): HTMLElement | null {
-		const periodId = url.searchParams.get('form_period')
-		if (!periodId) return null
-		const element = document.getElementById(periodId)
-		if (element) return element
-		return document.getElementById('ghost_create_period')
-	}
+function scrollToActiveElement(element: HTMLElement) {
+	element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+}
 
-	function scrollToActiveElement(element: HTMLElement) {
-		element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+function scrollToCursor({ node, plan, onScroll }: ScrollOnNavigateParams) {
+	const isScrollStartOrEnd = isScrollStart(node, plan.axis) || isScrollEnd(node, plan.axis)
+	const behavior = isScrollStartOrEnd ? 'instant' : 'smooth'
+	const offset = plan.cursor.diff(plan.start, 'hours') * plan.hourSize
+	if (plan.axis === 'x') {
+		node.scroll({ left: offset, behavior })
+	} else {
+		node.scroll({ top: offset, behavior })
 	}
+	onScroll?.()
+}
 
-	function scrollToCursor(behavior: ScrollBehavior) {
-		const offset = params.cursor.diff(params.origin, 'hours') * params.hourSize
-		if (params.axis === 'x') node.scroll({ left: offset - node.clientWidth / 4, behavior })
-		else node.scroll({ top: offset - node.clientHeight / 4, behavior })
-		params.onScroll?.()
-	}
+export async function scrollOnNavigate(navigation: AfterNavigate, params: ScrollOnNavigateParams) {
+	await navigation.complete
+	if (!navigation.to) return
+	const toActiveElement = getActiveElement(navigation.to.url)
+	if (toActiveElement) return scrollToActiveElement(toActiveElement)
+	if (isFromOrToForms(navigation)) return
+	if (isHourSizeUpdated(navigation)) return
+	scrollToCursor(params)
+}
 
-	return {
-		update(newParams: ScrollOnNavigateParams) {
-			params = newParams
-		},
+const FORMS = ['form_period', 'form_milestone', 'form_team']
+function isFromOrToForms(navigation: AfterNavigate): boolean {
+	for (const form of FORMS) {
+		if (navigation.from?.url.searchParams.has(form)) return true
+		if (navigation.to?.url.searchParams.has(form)) return true
 	}
+	return false
+}
+
+function isHourSizeUpdated(navigation: AfterNavigate): boolean {
+	const from = navigation.from?.url.searchParams.get('hourSize')
+	const to = navigation.to?.url.searchParams.get('hourSize')
+	if (!from) return false
+	return from !== to
 }

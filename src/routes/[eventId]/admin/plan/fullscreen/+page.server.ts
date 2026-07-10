@@ -1,7 +1,6 @@
-import { permission, prisma, parseFormKey, getTeam, getPeriodForm } from '$lib/server'
 import { parseQuery } from 'fuma/server'
-import { getPlanData } from '../getPlanData'
 import { z } from 'fuma'
+import { permission, prisma, parseFormKey, getTeam, getPeriodForm, getPlanData } from '$lib/server'
 
 export const load = async ({ locals, url, params: { eventId } }) => {
 	const member = await permission.leader(eventId, locals)
@@ -13,7 +12,7 @@ export const load = async ({ locals, url, params: { eventId } }) => {
 	})
 
 	return {
-		...(await getPlanData({ url, eventId })),
+		...(await getPlanData({ url, event: member.event })),
 		member,
 		teams: await prisma.team.findMany({
 			where: { eventId },

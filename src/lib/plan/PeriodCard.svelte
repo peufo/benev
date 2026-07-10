@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
-	import { daytz, type Dayjs } from '$lib/dayjs'
+	import { daytz } from '$lib/dayjs'
 	import { urlParam } from 'fuma'
-	import type { PeriodWithMembers } from './types'
+	import type { PeriodWithMembers, Plan } from './types'
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
 	import { updatePeriod } from './updatePeriod'
@@ -10,9 +10,7 @@
 	import DragButton from './DragButton.svelte'
 
 	export let period: PeriodWithMembers
-	export let hourSize: number
-	export let origin: Dayjs
-	export let axis: 'x' | 'y'
+	export let plan: Plan
 	export let drags: {
 		class?: string
 		axis?: 'x' | 'y' | 'any'
@@ -23,8 +21,8 @@
 	let deltaStartMs = 0
 	let deltaEndMs = 0
 
-	$: msSize = time(hourSize).to('hour')
-	$: startPx = msSize * (-origin.diff(daytz(period.start)) + $magnet(deltaStartMs))
+	$: msSize = time(plan.hourSize).to('hour')
+	$: startPx = msSize * (-plan.start.diff(daytz(period.start)) + $magnet(deltaStartMs))
 	$: sizePx =
 		msSize *
 		(daytz(period.end).diff(daytz(period.start)) - $magnet(deltaStartMs) + $magnet(deltaEndMs))
@@ -42,12 +40,12 @@
 	}
 </script>
 
-<div class={axis === 'x' ? 'w-0' : 'h-0'}>
+<div class={plan.axis === 'x' ? 'w-0' : 'h-0'}>
 	<div
 		id={period.id}
-		class:h-full={axis === 'x'}
-		class:w-full={axis === 'y'}
-		style={axis === 'x'
+		class:h-full={plan.axis === 'x'}
+		class:w-full={plan.axis === 'y'}
+		style={plan.axis === 'x'
 			? `left: ${startPx}px; width: ${sizePx}px`
 			: `top: ${startPx}px; height: ${sizePx}px`}
 		class="
@@ -67,8 +65,8 @@
 				axis={drag.axis}
 				on:done={handleGrabDone}
 				on:move={({ detail: delta }) => {
-					if (drag.moveStart) deltaStartMs = delta[axis] / msSize
-					if (drag.moveEnd) deltaEndMs = delta[axis] / msSize
+					if (drag.moveStart) deltaStartMs = delta[plan.axis] / msSize
+					if (drag.moveEnd) deltaEndMs = delta[plan.axis] / msSize
 				}}
 			/>
 		{/each}

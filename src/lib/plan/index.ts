@@ -1,3 +1,3 @@
-export { default as PlanV } from './PlanV.svelte'
-export { default as PlanH } from './PlanH.svelte'
+export { default as PlanY } from './PlanY.svelte'
+export { default as PlanX } from './PlanX.svelte'
 export * from './getRange'

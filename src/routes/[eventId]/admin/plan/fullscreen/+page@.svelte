@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { urlParam } from 'fuma'
-	import { PlanV, PlanH } from '$lib/plan'
+	import { PlanX, PlanY } from '$lib/plan'
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
 	import DrawersForm from '$lib/DrawersForm.svelte'
 	import { MilestoneDrawer } from '$lib/milestone'
-	import { daytz } from '$lib/dayjs.js'
+	import { getPlan } from '$lib/plan/getPlan.js'
 
 	export let data
+	$: plan = getPlan(data)
 
-	let hourSize = +($urlParam.get('hourSize') || 20)
 	let isMouseOnTop = false
 
 	function mouseOnTop(node: HTMLElement) {
@@ -22,8 +22,6 @@
 			},
 		}
 	}
-
-	$: cursor = daytz(data.cursor)
 </script>
 
 <div
@@ -33,26 +31,19 @@
 	style:z-index={100}
 >
 	<PlanHeader
+		{plan}
 		teams={data.teams}
 		views={data.views}
-		{cursor}
-		bind:hourSize
 		isFullscreen
 		class="border-2 rounded-2xl"
 	/>
 </div>
 
 <div class="h-[100vh] overflow-hidden rounded-2xl" use:mouseOnTop>
-	{#if $urlParam.hasValue('view', 'v')}
-		<PlanV teams={data.teams_periods} range={data.range} {cursor} {hourSize} />
+	{#if $urlParam.hasValue('axis', 'y')}
+		<PlanY {plan} bind:teams={data.teams_periods} />
 	{:else}
-		<PlanH
-			teams={data.teams_periods}
-			milestones={data.milestones}
-			range={data.range}
-			{cursor}
-			{hourSize}
-		/>
+		<PlanX {plan} bind:teams={data.teams_periods} />
 	{/if}
 </div>
 

@@ -1,22 +1,24 @@
 import { z } from 'fuma/validation'
 import { parseQuery } from 'fuma/server'
-import type { Prisma } from '@prisma/client'
-import dayjs from 'dayjs'
+import type { Event, Prisma } from '@prisma/client'
 import { prisma } from '$lib/server'
 import { RANGE_DAYS } from '$lib/plan/constants'
+import dayjs from '$lib/dayjs'
 
-export async function getPlanData({ url, eventId }: { url: URL; eventId: string }) {
+export type PlanData = Awaited<ReturnType<typeof getPlanData>>
+
+export async function getPlanData({ url, event }: { url: URL; event: Event }) {
 	const query = parseQuery(url, {
 		teams: z.jsonArray(z.string()).optional(),
 		cursor: z.coerce.date().optional(),
 	})
 
-	const cursor = query.cursor || (await getDefaultCursor(eventId))
+	const cursor = dayjs(query.cursor || (await getDefaultCursor(event))).tz(event.timezone)
 	const range = {
-		start: dayjs(cursor).add(-RANGE_DAYS, 'day').startOf('day').toDate(),
-		end: dayjs(cursor).add(RANGE_DAYS, 'day').endOf('day').toDate(),
+		start: cursor.add(-RANGE_DAYS, 'day').startOf('day').toDate(),
+		end: cursor.add(RANGE_DAYS, 'day').endOf('day').toDate(),
 	}
-	const where: Prisma.TeamWhereInput = { eventId }
+	const where: Prisma.TeamWhereInput = { eventId: event.id }
 	if (query.teams) where.id = { in: query.teams }
 
 	const wherePeriods: Prisma.PeriodWhereInput = {
@@ -25,10 +27,12 @@ export async function getPlanData({ url, eventId }: { url: URL; eventId: string 
 	}
 
 	return {
-		cursor,
+		cursor: cursor.toDate(),
 		range,
+		axis: url.searchParams.get('axis') === 'y' ? ('y' as const) : ('x' as const),
+		hourSize: +(url.searchParams.get('hourSize') || 20),
 		views: await prisma.view.findMany({
-			where: { eventId, key: 'plan' },
+			where: { eventId: event.id, key: 'plan' },
 		}),
 		teams_periods: await prisma.team.findMany({
 			where,
@@ -61,7 +65,7 @@ export async function getPlanData({ url, eventId }: { url: URL; eventId: string 
 			},
 		}),
 		milestones: await prisma.milestone.findMany({
-			where: { eventId },
+			where: { eventId: event.id },
 			orderBy: { timestamp: 'asc' },
 		}),
 	}
@@ -78,15 +82,11 @@ export async function getPlanData({ url, eventId }: { url: URL; eventId: string 
 // 	return { start: _min.start, end: _max.end }
 // }
 
-async function getDefaultCursor(eventId: string): Promise<Date> {
-	const { startDate, endDate } = await prisma.event.findUniqueOrThrow({
-		where: { id: eventId },
-		select: { startDate: true, endDate: true },
-	})
+async function getDefaultCursor({ startDate, endDate }: Event): Promise<Date> {
 	const now = new Date()
+	now.setHours(0, 0, 0, 0)
 	if (!startDate || !endDate) return now
 	if (now < startDate) return dayjs(startDate).add(RANGE_DAYS, 'day').toDate()
 	if (endDate < now) return dayjs(endDate).add(-RANGE_DAYS, 'day').toDate()
-	now.setHours(12, 0, 0, 0)
 	return now
 }

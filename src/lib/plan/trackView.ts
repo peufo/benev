@@ -1,26 +1,22 @@
 import type { Dayjs } from 'dayjs'
+import type { Plan } from './types'
 
 export type View = {
 	start: Dayjs
 	end: Dayjs
 }
 type TrackViewParam = {
-	axis: 'x' | 'y'
-	hourSize: number
-	origin: Dayjs
+	plan: Plan
 	padding: number
 	onChange: (view: View) => void
 }
 
-export function trackView(
-	node: HTMLDivElement,
-	{ axis, hourSize, origin, padding, onChange }: TrackViewParam
-) {
+export function trackView(node: HTMLDivElement, { plan, padding, onChange }: TrackViewParam) {
 	function computeView() {
-		const offset = axis === 'x' ? node.scrollLeft : node.scrollTop
-		const len = (axis === 'x' ? node.clientWidth : node.clientHeight) - padding
-		const start = origin.add(offset / hourSize, 'hours')
-		const end = start.add(len / hourSize, 'hours')
+		const offset = plan.axis === 'x' ? node.scrollLeft : node.scrollTop
+		const len = (plan.axis === 'x' ? node.clientWidth : node.clientHeight) - padding
+		const start = plan.start.add(offset / plan.hourSize, 'hours')
+		const end = start.add(len / plan.hourSize, 'hours')
 		onChange({ start, end })
 	}
 
@@ -32,8 +28,7 @@ export function trackView(
 			node.removeEventListener('scroll', computeView)
 		},
 		update(params: TrackViewParam) {
-			if (params.hourSize !== hourSize) hourSize = params.hourSize
-			if (params.origin !== origin) origin = params.origin
+			plan = params.plan
 			computeView()
 		},
 	}

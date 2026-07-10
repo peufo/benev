@@ -5,8 +5,9 @@
 	import { DropDown, urlParam, type TippyInstance } from 'fuma'
 	import { ZoomInIcon, ZoomOutIcon } from 'lucide-svelte'
 	import { onMount } from 'svelte'
+	import type { Plan } from './types'
 
-	export let value: number
+	export let plan: Plan
 	export let min: number
 	export let max: number
 	export let step: number
@@ -14,7 +15,7 @@
 	let tip: TippyInstance
 
 	function setUrlParam() {
-		return goto($urlParam.with({ hourSize: value }), {
+		return goto($urlParam.with({ hourSize: plan.hourSize }), {
 			keepFocus: true,
 			replaceState: true,
 			noScroll: true,
@@ -25,10 +26,10 @@
 		if (!$ctrl) return
 		showDropDown()
 		hideDropDown()
-		const nextValue = value - event.deltaY / 20
-		if (nextValue < min) value = min
-		else if (nextValue > max) value = max
-		else value = nextValue
+		const nextValue = plan.hourSize - event.deltaY / 20
+		if (nextValue < min) plan.setHourSize(min)
+		else if (nextValue > max) plan.setHourSize(max)
+		else plan.setHourSize(nextValue)
 	}
 
 	onMount(() => {
@@ -55,19 +56,19 @@
 		<div class="join">
 			<button
 				class="btn btn-sm btn-square join-item"
-				on:click={() => (value = Math.max(min, value * 0.75))}
+				on:click={() => (plan.hourSize = Math.max(min, plan.hourSize * 0.75))}
 			>
 				<ZoomOutIcon size={18} opacity={0.8} />
 			</button>
 			<button
 				class="btn btn-sm btn-square join-item"
-				on:click={() => (value = Math.min(max, value * 1.25))}
+				on:click={() => (plan.hourSize = Math.min(max, plan.hourSize * 1.25))}
 			>
 				<ZoomInIcon size={18} opacity={0.8} />
 			</button>
 		</div>
 	</svelte:fragment>
 	<div class="px-2 pt-1">
-		<input type="range" class="range" bind:value {min} {max} {step} />
+		<input type="range" class="range" bind:value={plan.hourSize} {min} {max} {step} />
 	</div>
 </DropDown>

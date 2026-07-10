@@ -7,31 +7,28 @@ import { urlParam } from 'fuma'
 import { get } from 'svelte/store'
 import { page } from '$app/stores'
 import { time } from './utils'
+import type { Plan } from './types'
 
 type Params = {
-	axis: Axis
-	origin: Dayjs
-	hourSize: number
+	plan: Plan
 	team: Team & { periods: Period[] }
 	isEnable?: (target: HTMLDivElement) => boolean
 }
 
-type Axis = 'x' | 'y'
-
-const GHOST_CLASSES: Record<Axis, string[]> = {
+const GHOST_CLASSES: Record<Plan['axis'], string[]> = {
 	x: ['h-full'],
 	y: ['w-full'],
 }
 
 export const createPeriod: Action<HTMLDivElement, Params> = (
 	node,
-	{ origin, hourSize, team, axis, isEnable = () => true }
+	{ plan, team, isEnable = () => true }
 ) => {
 	const ghost = document.createElement('div')
 	const title = document.createElement('h3')
 	ghost.id = 'ghost_create_period'
 	ghost.classList.add(
-		...GHOST_CLASSES[axis],
+		...GHOST_CLASSES[plan.axis],
 		'bg-accent/50',
 		'rounded-md',
 		'border',
@@ -49,12 +46,12 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 	})
 
 	function pxToTime(px: number): Dayjs {
-		const hours = px / hourSize
+		const hours = px / plan.hourSize
 		const magnetValue = time(hours, 'hour').roundBy(15, 'minute')
-		return origin.add(magnetValue, 'hour')
+		return plan.start.add(magnetValue, 'hour')
 	}
 	function timeToPx(time: Dayjs): number {
-		return (time.diff(origin, 'ms') * hourSize) / 3_600_000
+		return (time.diff(plan.start, 'ms') * plan.hourSize) / 3_600_000
 	}
 
 	function handleMouseDown(event: MouseEvent) {
@@ -63,34 +60,34 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		event.preventDefault()
 		node.classList.add('drag-button-hidden')
 		const mouseOrigin = { x: event.clientX, y: event.clientY }
-		const start = pxToTime(axis === 'x' ? event.offsetX : event.offsetY)
+		const start = pxToTime(plan.axis === 'x' ? event.offsetX : event.offsetY)
 		let end = start.clone()
 		const updateGhost = {
 			x() {
 				const [left, right] = end.isAfter(start) ? [start, end] : [end, start]
 				ghost.style.translate = `${timeToPx(left)}px`
-				ghost.style.width = `${right.diff(left) * (hourSize / 3_600_000)}px`
+				ghost.style.width = `${right.diff(left) * (plan.hourSize / 3_600_000)}px`
 				title.innerText = formatRangeHour({ start: left.toDate(), end: right.toDate() })
 			},
 			y() {
 				const [top, bottom] = end.isAfter(start) ? [start, end] : [end, start]
 				ghost.style.top = `${timeToPx(top)}px`
-				ghost.style.height = `${bottom.diff(top) * (hourSize / 3_600_000)}px`
+				ghost.style.height = `${bottom.diff(top) * (plan.hourSize / 3_600_000)}px`
 				title.innerText = formatRangeHour({ start: top.toDate(), end: bottom.toDate() })
 			},
 		}
-		updateGhost[axis]()
+		updateGhost[plan.axis]()
 		node.appendChild(ghost)
 
 		const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
-			const deltaPx = axis === 'x' ? clientX - mouseOrigin.x : clientY - mouseOrigin.y
-			const deltaHour = deltaPx / hourSize
+			const deltaPx = plan.axis === 'x' ? clientX - mouseOrigin.x : clientY - mouseOrigin.y
+			const deltaHour = deltaPx / plan.hourSize
 			const detlaMagnet = time(deltaHour, 'hour').roundBy(15, 'minute')
 			end = start.add(detlaMagnet, 'hour')
-			updateGhost[axis]()
+			updateGhost[plan.axis]()
 		}
 
-		const handleMouseUp = async (_event: MouseEvent) => {
+		const handleMouseUp = async () => {
 			document.removeEventListener('mousemove', handleMouseMove)
 			node.classList.remove('drag-button-hidden')
 			const [_start, _end] = end.isAfter(start) ? [start, end] : [end, start]
@@ -113,7 +110,8 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 
 	return {
 		update: (newParams) => {
-			;({ origin, hourSize, team, axis } = newParams)
+			plan = newParams.plan
+			team = newParams.team
 			if (newParams.isEnable && newParams.isEnable !== isEnable) isEnable = newParams.isEnable
 		},
 		destroy: () => {

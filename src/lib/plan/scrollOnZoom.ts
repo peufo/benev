@@ -2,21 +2,26 @@ import { ctrl } from '$lib/store'
 import { tick } from 'svelte'
 import { get } from 'svelte/store'
 
+const SCALE_MIN = 5
+const SCALE_MAX = 100
+
 type scrollOnWheelOptions = {
 	scaleX?: number
 	scaleY?: number
 	marginX?: number
 	marginY?: number
+	onZoom: (zoom: { scaleX: number; scaleY: number }) => void
 }
 
 /** Ensure the scroll keep center when the zoom change */
-export function scrollOnWheel(
+export function scrollOnZoom(
 	node: HTMLElement,
 	{
 		scaleX: currentScaleX = 1,
 		scaleY: currentScaleY = 1,
 		marginX = 0,
 		marginY = 0,
+		onZoom,
 	}: scrollOnWheelOptions
 ) {
 	let cursorX: number | null = null
@@ -51,7 +56,18 @@ export function scrollOnWheel(
 	}
 
 	function onWheel(event: WheelEvent) {
-		if (get(ctrl)) event.preventDefault()
+		if (!get(ctrl)) return
+		event.preventDefault()
+		const scaleX = getNextScale(currentScaleX, event.deltaY)
+		const scaleY = getNextScale(currentScaleY, event.deltaY)
+		onZoom({ scaleX, scaleY })
+	}
+
+	function getNextScale(scale: number, delta: number) {
+		const nextScale = scale - delta / 20
+		if (nextScale < SCALE_MIN) return SCALE_MIN
+		else if (nextScale > SCALE_MAX) SCALE_MAX
+		return nextScale
 	}
 
 	node.addEventListener('mousemove', onMouseMove)

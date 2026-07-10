@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop, mdiOpenInNew } from '@mdi/js'
-	import { Icon, InputCheckboxsMenu, TableViewSelect, TabsIcon } from 'fuma'
-	import type { Dayjs } from 'dayjs'
+	import { Icon, InputCheckboxsMenu, TableViewSelect, TabsIcon, urlParam } from 'fuma'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
 	import ZoomButton from './ZoomButton.svelte'
 	import { eventPath } from '$lib/store'
 	import PlanCursor from './PlanCursor.svelte'
+	import type { Plan } from './types'
+	import { ZoomInIcon, ZoomOutIcon } from 'lucide-svelte'
 
 	export let teams: { id: string; name: string }[]
 	export let views: { id: string; name: string; query: string }[]
-	export let hourSize: number
 	export let isFullscreen = false
-	export let cursor: Dayjs
+	export let plan: Plan
 	let klass = ''
 	export { klass as class }
 </script>
@@ -36,17 +36,31 @@
 		</InputCheckboxsMenu>
 	{/key}
 
-	<PlanCursor {cursor} />
-	<ZoomButton bind:value={hourSize} min={5} max={100} step={1} />
+	<PlanCursor cursor={plan.cursor} />
+	<div class="join">
+		<a
+			class="btn btn-sm btn-square join-item"
+			href={$urlParam.with({ hourSize: Math.max(5, plan.hourSize * 0.85) })}
+			data-sveltekit-replacestate
+		>
+			<ZoomOutIcon size={18} opacity={0.8} />
+		</a>
+		<a
+			class="btn btn-sm btn-square join-item"
+			href={$urlParam.with({ hourSize: Math.min(100, plan.hourSize * 1.15) })}
+		>
+			<ZoomInIcon size={18} opacity={0.8} />
+		</a>
+	</div>
 
 	<PeriodCardOptions />
 
 	<TabsIcon
-		key="view"
-		defaultValue="h"
+		key="axis"
+		defaultValue="x"
 		options={[
-			{ label: 'Vue horizontal', icon: mdiAlignHorizontalLeft, value: 'h' },
-			{ label: 'Vue vertical', icon: mdiAlignVerticalTop, value: 'v' },
+			{ label: 'Vue horizontal', icon: mdiAlignHorizontalLeft, value: 'x' },
+			{ label: 'Vue vertical', icon: mdiAlignVerticalTop, value: 'y' },
 		]}
 	/>
 

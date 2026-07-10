@@ -1,15 +1,10 @@
 import { goto } from '$app/navigation'
 import { debounce } from '$lib/debounce'
-import type { Dayjs } from 'dayjs'
 import { urlParam } from 'fuma'
 import { get } from 'svelte/store'
 import { RANGE_DAYS } from './constants'
 import { page } from '$app/state'
-
-type NavigateOnScrollOptions = {
-	axis: 'x' | 'y'
-	cursor: Dayjs
-}
+import type { Plan } from './types'
 
 const MARGIN = 10
 
@@ -23,7 +18,7 @@ export function isScrollEnd(node: HTMLElement, axis: 'x' | 'y') {
 		: node.scrollTop + node.clientHeight + MARGIN >= node.scrollHeight
 }
 
-export function navigateOnScroll(node: HTMLElement, { axis, cursor }: NavigateOnScrollOptions) {
+export function navigateOnScroll(node: HTMLElement, { axis, cursor }: Plan) {
 	const isStart = () => isScrollStart(node, axis)
 	const isEnd = () => isScrollEnd(node, axis)
 
@@ -35,7 +30,7 @@ export function navigateOnScroll(node: HTMLElement, { axis, cursor }: NavigateOn
 
 	node.addEventListener('scroll', onScroll)
 	return {
-		update(options: NavigateOnScrollOptions) {
+		update(options: Plan) {
 			axis = options.axis
 			cursor = options.cursor
 		},

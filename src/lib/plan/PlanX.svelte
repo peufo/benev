@@ -1,34 +1,29 @@
 <script lang="ts">
-	import { tip, urlParam, type Range } from 'fuma'
+	import { tip, urlParam } from 'fuma'
 	import { PinIcon, PlusIcon } from 'lucide-svelte'
 	import type { Milestone, Team } from '@prisma/client'
-	import { slide } from 'svelte/transition'
-	import { goto } from '$app/navigation'
+	import { afterNavigate, goto } from '$app/navigation'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
-	import type { PeriodWithMembers } from './types'
-	import { getDays } from './getDays'
-	import { scrollOnWheel } from './scrollOnWheel'
-	// import { scrollToCursor } from './scrollToCursor'
-	import { usePositionIndicator } from './positionIndicator'
+	import type { PeriodWithMembers, Plan } from './types'
+	import { scrollOnZoom } from './scrollOnZoom'
+	import { scrollOnNavigate } from './scrollOnNavigate'
 	import { navigateOnScroll } from './navigateOnScroll'
+	import { usePositionIndicator } from './positionIndicator'
 	import { useGrabScale } from './grabScale'
 	import { time } from './utils'
 	import { trackView, type View } from './trackView'
-	import { formatDatetime } from '$lib/formatRange'
-	import { scrollOnNavigate } from './scrollOnNavigate'
 	import MilestonesLink from './MilestonesLink.svelte'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
-	export let milestones: Milestone[] = []
-	export let cursor: Dayjs
-	export let range: Range
-	export let hourSize: number
+	export let plan: Plan
+
+	let container: HTMLElement
 
 	function createMilestoneAt(event: MouseEvent) {
 		const element = event.currentTarget as HTMLElement
 		const offsetX = parseInt(element.style.translate) - TEAM_HEADER_WIDTH + element.offsetWidth / 2
-		const timestamp = origin.add(offsetX / hourSize, 'hour').startOf('hour')
+		const timestamp = plan.start.add(offsetX / plan.hourSize, 'hour').startOf('hour')
 		goto($urlParam.with({ form_milestone: JSON.stringify({ timestamp: timestamp.toJSON() }) }), {
 			replaceState: true,
 			noScroll: true,
@@ -41,45 +36,41 @@
 	const indicator = usePositionIndicator('x')
 	const grabScale = useGrabScale('x')
 
-	$: hourSpan = Math.ceil(MIN_HOUR_WIDTH / hourSize)
-	$: origin = daytz(range.start).startOf('hour')
-	$: days = getDays(range)
-	$: totalWidth =
-		TEAM_HEADER_WIDTH + days.reduce((acc, { hours }) => acc + hours.length, 0) * hourSize
-	$: _milestones = milestones.map((m) => ({ ...m, time: daytz(m.timestamp) }))
-	$: milestonesInRange = _milestones.filter(
-		({ time }) => time.isAfter(range.start) && time.isBefore(range.end)
-	)
+	$: hourSpan = Math.ceil(MIN_HOUR_WIDTH / plan.hourSize)
+	$: totalWidth = TEAM_HEADER_WIDTH + plan.length
 
 	let milestonesBefore: (Milestone & { time: Dayjs })[] = []
 	let milestonesAfter: (Milestone & { time: Dayjs })[] = []
 
 	function onViewChange({ start, end }: View) {
-		milestonesBefore = _milestones.filter(({ time }) => time.isBefore(start)).toReversed()
-		milestonesAfter = _milestones.filter(({ time }) => time.isAfter(end))
+		milestonesBefore = plan.milestones.filter(({ time }) => time.isBefore(start)).toReversed()
+		milestonesAfter = plan.milestones.filter(({ time }) => time.isAfter(end))
 	}
+
+	afterNavigate(async (navigation) => {
+		scrollOnNavigate(navigation, {
+			node: container,
+			plan,
+			onScroll: grabScale.setScrollOrigin,
+		})
+	})
 </script>
 
 <div
 	class="overflow-scroll bg-base-100 grow relative"
-	use:scrollOnWheel={{ scaleX: hourSize, marginX: TEAM_HEADER_WIDTH }}
-	use:scrollOnNavigate={{
-		cursor,
-		axis: 'x',
-		origin,
-		hourSize,
-		onScroll: grabScale.setScrollOrigin,
+	bind:this={container}
+	use:scrollOnZoom={{
+		scaleX: plan.hourSize,
+		marginX: TEAM_HEADER_WIDTH,
+		onZoom({ scaleX }) {
+			plan.hourSize = scaleX
+			plan.length = plan.days.reduce((acc, { hours }) => acc + hours.length, 0) * plan.hourSize
+		},
 	}}
-	use:navigateOnScroll={{ cursor, axis: 'x' }}
+	use:navigateOnScroll={plan}
 	use:indicator.container
 	use:grabScale.container
-	use:trackView={{
-		axis: 'x',
-		hourSize,
-		origin,
-		padding: TEAM_HEADER_WIDTH,
-		onChange: onViewChange,
-	}}
+	use:trackView={{ plan, padding: TEAM_HEADER_WIDTH, onChange: onViewChange }}
 	style="
 		scroll-padding-left: {TEAM_HEADER_WIDTH + 20}px;
 		scroll-padding-top: 100px;
@@ -98,7 +89,7 @@
 			style:width="{TEAM_HEADER_WIDTH}px"
 		/>
 
-		{#each days as { date, hours }}
+		{#each plan.days as { date, hours }}
 			<div class="-translate-x-[1px]">
 				<!-- DAY -->
 				<div
@@ -112,7 +103,7 @@
 					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
 						{@const isEndNextDay = hour + hourSpan > 24}
 						{@const span = isEndNextDay ? 24 - hour : hourSpan}
-						<div style:width="{hourSize * span}px" class="border-l px-1">
+						<div style:width="{plan.hourSize * span}px" class="border-l px-1">
 							{isEndNextDay ? '' : hour.toString().padStart(2, '0')}
 						</div>
 					{/each}
@@ -139,7 +130,7 @@
 			>
 				{team.name}
 			</a>
-			<TeamRow bind:team {origin} {hourSize} />
+			<TeamRow bind:team {plan} />
 		</div>
 	{/each}
 
@@ -164,8 +155,9 @@
 		</div>
 
 		<div class="w-full h-14 relative">
-			{#each milestonesInRange as milestone (milestone.id)}
-				{@const leftPx = time(hourSize).to('hour') * daytz(milestone.timestamp).diff(origin)}
+			{#each plan.milestonesInRange as milestone (milestone.id)}
+				{@const leftPx =
+					time(plan.hourSize).to('hour') * daytz(milestone.timestamp).diff(plan.start)}
 				<span
 					class="absolute w-px -left-[1px] bg-secondary/40 h-screen bottom-0"
 					style:translate="{leftPx}px"
