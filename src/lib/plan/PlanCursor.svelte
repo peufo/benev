@@ -25,6 +25,7 @@
 		value={cursor.format('YYYY-MM-DD')}
 		on:input={async (event) => {
 			const newDate = daytz(event.currentTarget.value)
+			if (!newDate.isValid()) return
 			goto($urlParam.with({ cursor: newDate.toJSON() }), { keepFocus: true, replaceState: true })
 		}}
 	/>

@@ -32,7 +32,7 @@
 			</span>
 			<a
 				class="badge badge-secondary badge-outline group hover:bg-secondary/10 ml-auto"
-				href={$urlParam.with({ cursor: milestone.time.add(3, 'hour').toJSON() })}
+				href={$urlParam.with({ cursor: milestone.time.add(-3, 'hour').toJSON() })}
 			>
 				<PinIcon class="rotate-45  group-hover:fill-secondary -translate-x-1" size={14} />
 				<span>{milestone.name}</span>
