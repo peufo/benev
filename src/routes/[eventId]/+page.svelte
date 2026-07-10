@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { mdiMenu } from '@mdi/js'
-	import { Icon } from 'fuma'
 	import { Page, PageHelp } from '$lib/pages'
 	import { eventPath } from '$lib/store'
+	import { CircleQuestionMarkIcon } from 'lucide-svelte'
 
 	export let data
 </script>
@@ -21,8 +20,8 @@
 				Bienvenue dans l'espace réservé à ton évènement.<br />
 				Voici une petite aide pour bien démarrer.<br />
 				Tu peux la retrouver à tout moment en passant par le menu
-				<span class="ml-1 p-0 btn btn-xs w-6 rounded cursor-default hover:bg-base-200">
-					<Icon path={mdiMenu} size={14} />
+				<span class="inline-block ml-1">
+					<CircleQuestionMarkIcon size={16} />
 				</span>
 			</p>
 			<PageHelp />

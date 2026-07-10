@@ -2,7 +2,7 @@
 	import type { Page } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { DropDown } from 'fuma'
-	import { Menu, Gauge } from 'lucide-svelte'
+	import { MenuIcon, GaugeIcon } from 'lucide-svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from '$lib/layout/adminTabs'
 
@@ -22,7 +22,7 @@
 			btn btn-square ml-2 lg:hidden
 		"
 	>
-		<Menu size={24} />
+		<MenuIcon size={24} />
 	</button>
 
 	<div class="flex flex-col gap-1">
@@ -48,7 +48,7 @@
 				class="menu-item"
 				class:active={$page.route.id?.startsWith('/[eventId]/admin/quota')}
 			>
-				<Gauge size={20} class="opacity-70" />
+				<GaugeIcon size={20} class="opacity-70" />
 				Quota
 			</a>
 		{/if}
