@@ -32,28 +32,39 @@ function scrollToCursor({ node, plan, onScroll }: ScrollOnNavigateParams) {
 	onScroll?.()
 }
 
+// We can't just check if cursor change because milestones already selected can't be handled by this way
 export async function scrollOnNavigate(navigation: AfterNavigate, params: ScrollOnNavigateParams) {
 	await navigation.complete
 	if (!navigation.to) return
 	const toActiveElement = getActiveElement(navigation.to.url)
 	if (toActiveElement) return scrollToActiveElement(toActiveElement)
-	if (isFromOrToForms(navigation)) return
+	if (isIgnoredParamChange(navigation)) return
 	if (isHourSizeUpdated(navigation)) return
 	scrollToCursor(params)
 }
 
-const FORMS = ['form_period', 'form_milestone', 'form_team']
-function isFromOrToForms(navigation: AfterNavigate): boolean {
-	for (const form of FORMS) {
-		if (navigation.from?.url.searchParams.has(form)) return true
-		if (navigation.to?.url.searchParams.has(form)) return true
+const INGNORED_PARAMS = [
+	'form_period',
+	'form_milestone',
+	'form_team',
+	'hideRangetime',
+	'showProgress',
+	'showSlots',
+	'showTags',
+]
+function isIgnoredParamChange(navigation: AfterNavigate): boolean {
+	if (!navigation.from) return false
+	for (const param of INGNORED_PARAMS) {
+		const fromParam = navigation.from.url.searchParams.get(param)
+		const toParam = navigation.to?.url.searchParams.get(param)
+		if (fromParam !== toParam) return true
 	}
 	return false
 }
 
 function isHourSizeUpdated(navigation: AfterNavigate): boolean {
-	const from = navigation.from?.url.searchParams.get('hourSize')
-	const to = navigation.to?.url.searchParams.get('hourSize')
-	if (!from) return false
-	return from !== to
+	if (!navigation.from) return false
+	const fromHourSize = navigation.from.url.searchParams.get('hourSize')
+	const toHourSize = navigation.to?.url.searchParams.get('hourSize')
+	return fromHourSize !== toHourSize
 }

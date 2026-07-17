@@ -13,7 +13,7 @@
 		class="btn btn-square btn-sm join-item"
 		type="button"
 		use:tip={{ content: 'Semaine précédente' }}
-		href={$urlParam.with({ cursor: cursor.add(-7, 'day').toJSON() })}
+		href={$urlParam.with({ cursor: cursor.add(-7, 'day').startOf('day').toJSON() })}
 		data-sveltekit-replacestate
 	>
 		<ChevronLeftIcon size={16} />
@@ -34,7 +34,7 @@
 		class="btn btn-square btn-sm join-item"
 		type="button"
 		use:tip={{ content: 'Semaine suivante' }}
-		href={$urlParam.with({ cursor: cursor.add(7, 'day').toJSON() })}
+		href={$urlParam.with({ cursor: cursor.add(7, 'day').startOf('day').toJSON() })}
 		data-sveltekit-replacestate
 	>
 		<ChevronRightIcon size={16} />
