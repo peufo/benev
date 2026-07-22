@@ -16,7 +16,7 @@
 	$: isMaxReached = ratio >= 1
 </script>
 
-<EmailLayout title="Alerte quota bénévoles - {event.name}">
+<EmailLayout eventId={event.id} title="Alerte quota bénévoles - {event.name}">
 	<p>
 		Salut {owner.firstName},<br />
 		L'évènement <b>{event.name}</b> approche de la limite de son plan.

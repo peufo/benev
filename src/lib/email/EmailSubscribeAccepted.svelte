@@ -9,7 +9,11 @@
 	export let subscribe: SubscribeWithTeam
 </script>
 
-<EmailLayout title={member.event.name} subtitle="Une inscription a été acceptée">
+<EmailLayout
+	eventId={member.event.id}
+	title={member.event.name}
+	subtitle="Une inscription a été acceptée"
+>
 	<p>
 		Bonne nouvelle ! <br />
 		<b>{member.firstName} {member.lastName}</b>

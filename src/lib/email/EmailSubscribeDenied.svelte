@@ -9,7 +9,11 @@
 	export let subscribe: SubscribeWithTeam
 </script>
 
-<EmailLayout title={member.event.name} subtitle="Une inscription a été déclinée">
+<EmailLayout
+	eventId={member.event.id}
+	title={member.event.name}
+	subtitle="Une inscription a été déclinée"
+>
 	<p>
 		<b>{member.firstName} {member.lastName}</b>
 		a décliné de participer à la période de travail suivante :

@@ -9,7 +9,7 @@
 	const { enhance } = useForm({ successReset: false, successMessage: 'Préférences sauvegardées' })
 </script>
 
-<h3 class="title mb-4">Mes préférences</h3>
+<h3 id="email-settings" class="title mb-4">Mes préférences</h3>
 
 <form
 	id="form_member_setting"

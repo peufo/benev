@@ -9,7 +9,7 @@
 	export let subscribe: SubscribeWithTeam
 </script>
 
-<EmailLayout title={member.event.name} subtitle="Nouvelle inscription">
+<EmailLayout eventId={member.event.id} title={member.event.name} subtitle="Nouvelle inscription">
 	<p>
 		<b>{member.firstName} {member.lastName}</b>
 		souhaite participer à la période de travail suivante :
@@ -19,7 +19,7 @@
 	<b>{formatRange(subscribe.period, member.event.timezone)}</b>
 
 	<p>
-		Verifie
+		Vérifie
 		<a
 			href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
 			target="_blank"

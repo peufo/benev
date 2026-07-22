@@ -4,6 +4,7 @@
 	export let title = ''
 	export let subtitle = ''
 	export let showLogo = false
+	export let eventId = ''
 
 	let fontFamily =
 		"font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif"
@@ -100,15 +101,18 @@
 																target="_blank"
 															>
 																benev.io
-															</a><br />
-															Définis tes préfèrences concernant les emails
-															<a
-																href="{domain}/me?section=profile"
-																style="color:#067df7; text-decoration:none"
-																target="_blank"
-															>
-																sur ton profil
 															</a>
+															{#if eventId}
+																<br />
+																Définis tes préférences concernant les emails
+																<a
+																	href="{domain}/{eventId}/me#email-settings"
+																	style="color:#067df7; text-decoration:none"
+																	target="_blank"
+																>
+																	sur ton profil
+																</a>
+															{/if}
 														</p>
 													</td>
 												</tr>

@@ -3,7 +3,6 @@
 	import { Icon, InputCheckboxsMenu, TableViewSelect, TabsIcon, urlParam } from 'fuma'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
-	import ZoomButton from './ZoomButton.svelte'
 	import { eventPath } from '$lib/store'
 	import PlanCursor from './PlanCursor.svelte'
 	import type { Plan } from './types'

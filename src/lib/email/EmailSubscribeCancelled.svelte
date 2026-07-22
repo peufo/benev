@@ -9,7 +9,11 @@
 	export let subscribe: SubscribeWithTeam
 </script>
 
-<EmailLayout title={member.event.name} subtitle="Une inscription a été annulée">
+<EmailLayout
+	eventId={member.event.id}
+	title={member.event.name}
+	subtitle="Une inscription a été annulée"
+>
 	<p>
 		<b>{member.firstName} {member.lastName}</b>
 		a annulé sa participation à la période de travail suivante :
