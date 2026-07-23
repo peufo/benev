@@ -1,6 +1,6 @@
 import { prisma } from '$lib/server'
 
-const staticPaths = ['/', '/events', '/open-source', '/terms', '/contact']
+const staticPaths = ['/', '/events', '/events/past', '/open-source', '/terms', '/contact']
 
 export async function GET({ url }) {
 	const origin = url.origin

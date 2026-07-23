@@ -8,10 +8,10 @@
 	<!-- Hero -->
 	<section class="max-w-2xl mb-6 md:mb-8">
 		<h1 class="text-4xl md:text-5xl font-extrabold text-primary tracking-tight leading-[1.05]">
-			Événements à venir
+			Événements passés
 		</h1>
 		<p class="mt-4 text-lg md:text-xl text-base-content/70 leading-relaxed">
-			Découvre les prochaines éditions gérées avec benevio et rejoins l'équipe de bénévoles.
+			Retrouve les éditions précédentes qui ont eu lieu avec benevio.
 		</p>
 	</section>
 
@@ -19,9 +19,9 @@
 
 	<EventList
 		events={data.events}
-		emptyTitle="Aucun événement à venir"
-		emptyDescription="Il n'y a pas d'événement public à venir pour le moment. Reviens plus tard ou crée le tien."
-		emptyActionHref="/me"
-		emptyActionLabel="Organiser mon événement"
+		emptyTitle="Aucun événement passé"
+		emptyDescription="Il n'y a pas encore d'événement passé à afficher."
+		emptyActionHref="/events"
+		emptyActionLabel="Voir les événements à venir"
 	/>
 </div>
