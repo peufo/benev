@@ -2,7 +2,7 @@
 	import { tip, urlParam } from 'fuma'
 	import { PlusIcon } from 'lucide-svelte'
 	import type { Team } from '@prisma/client'
-	import { afterNavigate } from '$app/navigation'
+	import { afterNavigate, goto } from '$app/navigation'
 	import TeamCol from './TeamCol.svelte'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { scrollOnZoom } from './scrollOnZoom'
@@ -10,6 +10,7 @@
 	import { scrollOnNavigate } from './scrollOnNavigate'
 	import { usePositionIndicator } from './positionIndicator'
 	import { useGrabScale } from './grabScale'
+	import { debounce } from '$lib/debounce'
 
 	export let teams: (Team & { periods: PeriodWithMembers[] })[]
 	export let plan: Plan
@@ -21,6 +22,10 @@
 
 	const indicator = usePositionIndicator('y')
 	const grabScale = useGrabScale('y')
+
+	const persistZoom = debounce((hourSize: number) => {
+		goto($urlParam.with({ hourSize }), { replaceState: true, noScroll: true, keepFocus: true })
+	}, 300)
 
 	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / plan.hourSize)
 	$: totalHeight = TEAM_HEADER_HEIGHT + plan.length
@@ -44,6 +49,7 @@
 			// Pas ouf mais j'en ai marre
 			plan.hourSize = scaleY
 			plan.length = plan.days.reduce((acc, { hours }) => acc + hours.length, 0) * plan.hourSize
+			persistZoom(scaleY)
 		},
 	}}
 	use:navigateOnScroll={plan}

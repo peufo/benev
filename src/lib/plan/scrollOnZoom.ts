@@ -66,7 +66,7 @@ export function scrollOnZoom(
 	function getNextScale(scale: number, delta: number) {
 		const nextScale = scale - delta / 20
 		if (nextScale < SCALE_MIN) return SCALE_MIN
-		else if (nextScale > SCALE_MAX) SCALE_MAX
+		else if (nextScale > SCALE_MAX) return SCALE_MAX
 		return nextScale
 	}
 

@@ -47,6 +47,7 @@
 		<a
 			class="btn btn-sm btn-square join-item"
 			href={$urlParam.with({ hourSize: Math.min(100, plan.hourSize * 1.15) })}
+			data-sveltekit-replacestate
 		>
 			<ZoomInIcon size={18} opacity={0.8} />
 		</a>
