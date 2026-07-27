@@ -88,7 +88,7 @@
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
 				>
-					<Icon path={mdiAccountPlusOutline} title="Invité des membres" />
+					<Icon path={mdiAccountPlusOutline} title="Inviter des membres" />
 				</a>
 			</div>
 			{#key tableFields}
