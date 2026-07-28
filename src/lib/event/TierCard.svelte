@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { EventTier } from '@prisma/client'
-	import { Check, Infinity } from 'lucide-svelte'
+	import { CheckIcon, InfinityIcon } from 'lucide-svelte'
 	import { EVENT_TIER } from '$lib/constant'
 
 	export let tier: EventTier
@@ -41,18 +41,18 @@
 			<ul class="mt-4 space-y-2 text-base-content/80">
 				<li class="flex items-start gap-2">
 					{#if config.max === null}
-						<Infinity class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
+						<InfinityIcon class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
 						<span>
 							Bénévoles <span class="font-bold text-primary">illimités</span>
 						</span>
 					{:else}
-						<Check class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
+						<CheckIcon class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
 						<span>Jusqu'à {config.max} bénévoles</span>
 					{/if}
 				</li>
 				{#each features as feature}
 					<li class="flex items-start gap-2">
-						<Check class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
+						<CheckIcon class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
 						<span>{feature}</span>
 					</li>
 				{/each}

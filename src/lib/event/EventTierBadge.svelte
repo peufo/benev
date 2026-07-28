@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { Infinity } from 'lucide-svelte'
+	import { InfinityIcon } from 'lucide-svelte'
 	import { EVENT_TIER } from '$lib/constant'
 
 	export let event: Event
@@ -32,7 +32,7 @@
 		{#if max !== null}
 			{max}
 		{:else}
-			<Infinity size={14} />
+			<InfinityIcon size={14} />
 		{/if}
 	</span>
 </a>

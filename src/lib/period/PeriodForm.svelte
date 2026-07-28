@@ -87,6 +87,9 @@
 
 	$: basePath = `${$eventPath}/admin`
 
+	// ATTENTION runtime: `Intl.DurationFormat` n'est pas disponible partout. Bun l'a
+	// (vérifié en 1.2.22), Node ne l'a pas avant la v23. Le Dockerfile lance l'app avec
+	// Bun, donc le SSR passe; sur un hôte Node plus ancien l'appel lèverait un TypeError.
 	function formatDuration(_start: Dayjs, _end: Dayjs) {
 		return new Intl.DurationFormat('fr-ch').format({
 			days: _end.diff(_start, 'days'),

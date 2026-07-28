@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { Users, Infinity, TriangleAlert } from 'lucide-svelte'
+	import { UsersIcon, InfinityIcon, TriangleAlertIcon } from 'lucide-svelte'
 	import { EVENT_TIER } from '$lib/constant'
 
 	export let event: Event
@@ -24,13 +24,13 @@
 		</h2>
 
 		<div class="mt-4 flex items-center gap-1.5 text-sm opacity-80">
-			<Users size={16} />
+			<UsersIcon size={16} />
 			<span>
 				{membersValided}
 				{#if tier.max !== null}
 					/ {tier.max}
 				{:else}
-					<Infinity size={14} class="inline" />
+					<InfinityIcon size={14} class="inline" />
 				{/if}
 				bénévoles validés
 			</span>
@@ -44,7 +44,7 @@
 			/>
 			<p class="text-sm flex items-start gap-1.5 mt-2 {klass}">
 				{#if ratio >= 0.8}
-					<TriangleAlert size={16} class="shrink-0 mt-0.5" />
+					<TriangleAlertIcon size={16} class="shrink-0 mt-0.5" />
 				{/if}
 				{Math.round(ratio * 100)} % de la limite utilisée.
 			</p>

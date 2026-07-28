@@ -22,7 +22,7 @@ The application is built as a server-rendered full-stack app with a rich admin i
 | Layer            | Technology                                                                                                                                    |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Framework        | [SvelteKit](https://kit.svelte.dev/) v2 (full-stack, file-based routing)                                                                      |
-| Language         | TypeScript v5 (strict mode, `verbatimModuleSyntax: true`)                                                                                     |
+| Language         | TypeScript v6 (strict mode, `verbatimModuleSyntax: true`)                                                                                     |
 | Build Tool       | Vite v5                                                                                                                                       |
 | UI               | Svelte v4, [Tailwind CSS](https://tailwindcss.com/) v3, [DaisyUI](https://daisyui.com/) v3                                                    |
 | Font             | [Barlow](https://fonts.google.com/specimen/Barlow) (400–800) via Google Fonts in `src/app.html`                                               |
@@ -82,7 +82,7 @@ The application is built as a server-rendered full-stack app with a rich admin i
 ├── tailwind.config.mjs
 ├── postcss.config.cjs
 ├── prettier.config.cjs
-├── .eslintrc.cjs
+├── eslint.config.js
 └── playwright.config.ts
 ```
 
@@ -213,7 +213,7 @@ The project follows these conventions:
   - Semicolons: **none** (`semi: false`)
   - Trailing commas: **ES5** (`trailingComma: 'es5'`)
   - Print width: **100**
-- **Linter**: ESLint with `@typescript-eslint`, `plugin:svelte/recommended`, and `prettier`.
+- **Linter**: ESLint v10 en _flat config_ (`eslint.config.js`) avec `typescript-eslint`, `eslint-plugin-svelte` et `eslint-config-prettier`.
 - **Imports**: Use `verbatimModuleSyntax: true`. Always use `import type` for type-only imports.
 - **Language**: UI text and most comments are in **French**.
 

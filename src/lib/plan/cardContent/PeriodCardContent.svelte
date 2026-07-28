@@ -75,5 +75,7 @@
 	data-sveltekit-preload-data="off"
 	data-sveltekit-replacestate
 >
+	<!-- Espace explicite: le lien recouvre la carte et ne doit pas être vide. -->
+	<!-- eslint-disable-next-line svelte/no-useless-mustaches -->
 	{' '}
 </a>

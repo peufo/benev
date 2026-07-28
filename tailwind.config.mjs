@@ -1,3 +1,7 @@
+import containerQueries from '@tailwindcss/container-queries'
+import typography from '@tailwindcss/typography'
+import daisyui from 'daisyui'
+
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ['./src/**/*.{html,svelte,ts,js}', './node_modules/**/fuma/dist/**/*.svelte'],
@@ -15,11 +19,7 @@ export default {
 			},
 		},
 	},
-	plugins: [
-		require('daisyui'),
-		require('@tailwindcss/typography'),
-		require('@tailwindcss/container-queries'),
-	],
+	plugins: [daisyui, typography, containerQueries],
 	daisyui: {
 		logs: false,
 		themes: [
