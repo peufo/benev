@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
 import { z } from 'fuma'
 import { getTeam, prisma, getMemberProfile, parseFormKey, getPeriodForm } from '$lib/server'
+import { eventMetaTags } from '$lib/seo'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const { user } = await parent()
@@ -48,6 +49,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			member,
 			memberCanRegister,
 			membersValided,
+			metaTags: eventMetaTags(event, url),
 			pages: await prisma.page.findMany({
 				where: { eventId, type: { not: 'email' } },
 				select: { id: true, title: true, path: true, type: true },

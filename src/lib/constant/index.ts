@@ -110,6 +110,16 @@ export const EVENT_TIER: Record<
 	},
 } as const
 
+/**
+ * Découpe le prix d'un plan en valeur et devise.
+ * `unit` est absent pour les plans sans montant chiffré (« Sur mesure »).
+ */
+export function parseTierPrice(price: string): { value: string; unit?: string } {
+	const [value, unit] = price.split(' ')
+	if (!unit || isNaN(+value)) return { value: price }
+	return { value, unit }
+}
+
 export const GIFT_CONDITION_MODE: Record<GiftConditionsMode, string> = {
 	sum: 'Somme des conditions',
 	highest: 'Plus haute condition',

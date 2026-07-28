@@ -6,6 +6,8 @@
 	import { page } from '$app/stores'
 </script>
 
+<!-- Les metas d'erreur sont posées par le layout racine, qui reste monté ici -->
+
 <Header user={$page.data.user}>
 	<a
 		slot="start"

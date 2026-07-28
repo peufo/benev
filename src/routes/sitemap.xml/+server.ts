@@ -1,6 +1,7 @@
 import { prisma } from '$lib/server'
 
-const staticPaths = ['/', '/events', '/events/past', '/open-source', '/terms', '/contact']
+// `/contact` en est absent : la page redirige vers `/auth` pour les visiteurs anonymes
+const staticPaths = ['/', '/events', '/events/past', '/open-source', '/terms']
 
 export async function GET({ url }) {
 	const origin = url.origin
@@ -17,7 +18,10 @@ export async function GET({ url }) {
 			const homePage = event.pages.find((p) => p.type === 'home')
 			if (!homePage) return ''
 			const indexUrlElement = urlElement(origin, basePath, homePage.updatedAt)
-			const teamsUrlElement = urlElement(origin, basePath + '/teams', event.updatedAt)
+			// Sans inscription libre, /teams répond 401 aux visiteurs anonymes
+			const teamsUrlElement = event.selfSubscribeAllowed
+				? urlElement(origin, basePath + '/teams', event.updatedAt)
+				: ''
 			const pagesUrlElement = event.pages
 				.filter((p) => p.type === 'public' || p.type === 'charter')
 				.map((p) => urlElement(origin, `${basePath}/${p.path}`, p.updatedAt))

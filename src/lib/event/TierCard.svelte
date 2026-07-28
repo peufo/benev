@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { EventTier } from '@prisma/client'
 	import { CheckIcon, InfinityIcon } from 'lucide-svelte'
-	import { EVENT_TIER } from '$lib/constant'
+	import { EVENT_TIER, parseTierPrice } from '$lib/constant'
 
 	export let tier: EventTier
 	export let action: { label: string; href: string } | 'current' | undefined = undefined
@@ -10,13 +10,7 @@
 	$: config = EVENT_TIER[tier]
 	$: isCurrent = action === 'current'
 	$: actionConfig = action && action !== 'current' ? action : null
-	$: price = parsePrice(config.price)
-
-	function parsePrice(priceStr: string): { value: string; unit?: string } {
-		if (priceStr === 'Sur mesure') return { value: 'Sur mesure' }
-		const [value, unit] = priceStr.split(' ')
-		return { value, unit }
-	}
+	$: price = parseTierPrice(config.price)
 </script>
 
 <div class="card bg-base-100 border border-base-200 shadow-sm flex flex-col">

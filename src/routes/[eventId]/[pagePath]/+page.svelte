@@ -1,8 +1,22 @@
 <script lang="ts">
+	import { page as currentPage } from '$app/stores'
+	import { JsonLd } from 'svelte-meta-tags'
 	import Page from '$lib/pages/Page.svelte'
 	import { eventPath } from '$lib/store'
+	import { breadcrumbSchema, SITE_NAME } from '$lib/seo'
 	export let data
+
+	$: origin = $currentPage.url.origin
+	$: breadcrumb = breadcrumbSchema([
+		{ name: SITE_NAME, url: `${origin}/` },
+		{ name: data.event.name, url: `${origin}/${data.event.id}` },
+		{ name: data.page.title, url: `${origin}/${data.event.id}/${data.page.path}` },
+	])
 </script>
+
+{#if breadcrumb}
+	<JsonLd schema={breadcrumb} />
+{/if}
 
 <Page page={data.page} member={data.member} />
 

@@ -1,5 +1,6 @@
 import { prisma, isTierQuotaReached } from '$lib/server'
 import { error, redirect } from '@sveltejs/kit'
+import { NOINDEX } from '$lib/seo'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const { member, userIsRoot, event } = await parent()
@@ -11,6 +12,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 	}
 
 	return {
+		metaTags: NOINDEX,
 		teams: await prisma.team.findMany({
 			where: { eventId },
 			select: { id: true, name: true },

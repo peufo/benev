@@ -1,8 +1,9 @@
 import { prisma } from '$lib/server'
 import { error } from '@sveltejs/kit'
+import { mergeMetaTags, pageMetaTags, tiptapExcerpt } from '$lib/seo'
 
 export const load = async ({ params, parent }) => {
-	const { member } = await parent()
+	const { member, event, metaTags } = await parent()
 
 	// TODO: tryOr404
 	const page = await prisma.page.findFirst({
@@ -13,5 +14,16 @@ export const load = async ({ params, parent }) => {
 		},
 	})
 	if (!page) error(404)
-	return { page }
+	return {
+		page,
+		// Surcharge les metas de l'évènement, dont on conserve l'affiche et la carte sociale
+		metaTags: mergeMetaTags(
+			metaTags,
+			pageMetaTags({
+				title: `${page.title} — ${event.name}`,
+				titleTemplate: '%s',
+				description: page.description || tiptapExcerpt(page.content) || undefined,
+			})
+		),
+	}
 }

@@ -1,4 +1,5 @@
 import type { GithubIssue } from '$lib/types/github'
+import { pageMetaTags } from '$lib/seo'
 
 interface GitHubApiLabel {
 	name: string
@@ -35,7 +36,41 @@ function truncate(text: string | null, maxLength = 360): string | null {
 	return cleaned.slice(0, maxLength).trimEnd() + '...'
 }
 
+type GithubActivity = {
+	openCount: number
+	closedCount: number
+	recentIssues: GithubIssue[]
+	recentClosedIssues: GithubIssue[]
+}
+
+const EMPTY_ACTIVITY: GithubActivity = {
+	openCount: 0,
+	closedCount: 0,
+	recentIssues: [],
+	recentClosedIssues: [],
+}
+
+/**
+ * L'API GitHub est limitée en débit et la page est indexable : sans cache, une rafale de crawl
+ * suffit à servir une page vide. 15 minutes suffisent pour de l'activité de dépôt.
+ */
+const CACHE_TTL = 15 * 60 * 1000
+let cache: { at: number; activity: GithubActivity } | null = null
+
 export const load = async () => {
+	return {
+		...(await fetchGithubActivity()),
+		metaTags: pageMetaTags({
+			title: 'Open source',
+			description:
+				'benevio est open source : consulte le code, suis les évolutions en cours et propose des améliorations sur GitHub.',
+		}),
+	}
+}
+
+async function fetchGithubActivity(): Promise<GithubActivity> {
+	if (cache && Date.now() - cache.at < CACHE_TTL) return cache.activity
+
 	try {
 		const [openRes, closedRes, issuesRes, closedIssuesRes] = await Promise.all([
 			fetch('https://api.github.com/search/issues?q=repo:peufo/benev+is:issue+state:open'),
@@ -69,18 +104,16 @@ export const load = async () => {
 			labels: i.labels.map((l) => ({ name: l.name, color: l.color })),
 		})
 
-		return {
+		const activity: GithubActivity = {
 			openCount: openData.total_count ?? 0,
 			closedCount: closedData.total_count ?? 0,
 			recentIssues: issues.filter((i) => !i.pull_request).map(mapIssue),
 			recentClosedIssues: closedIssues.filter((i) => !i.pull_request).map(mapIssue),
-		} satisfies {
-			openCount: number
-			closedCount: number
-			recentIssues: GithubIssue[]
-			recentClosedIssues: GithubIssue[]
 		}
+		cache = { at: Date.now(), activity }
+		return activity
 	} catch {
-		return { openCount: 0, closedCount: 0, recentIssues: [], recentClosedIssues: [] }
+		// On resert le dernier succès plutôt qu'une page vide, même expiré
+		return cache?.activity ?? EMPTY_ACTIVITY
 	}
 }

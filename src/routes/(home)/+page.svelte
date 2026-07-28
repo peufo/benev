@@ -1,9 +1,15 @@
 <script lang="ts">
+	import { page } from '$app/stores'
+	import { JsonLd } from 'svelte-meta-tags'
 	import { Testimonials } from '$lib/testimonials'
 	import { Workflow, LandingCTA, AnimatedLogo, PricingSection } from '$lib/landing'
+	import { softwareApplicationSchema } from '$lib/seo'
 
 	export let data
 </script>
+
+<!-- Le produit n'est décrit que sur l'accueil : le layout racine couvre aussi les évènements -->
+<JsonLd schema={softwareApplicationSchema($page.url.origin)} />
 
 <div class="-mx-2 sm:-mx-4">
 	<!-- Hero: asymétrique -->

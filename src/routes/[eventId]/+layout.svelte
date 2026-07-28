@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { JsonLd, MetaTags } from 'svelte-meta-tags'
+	import { JsonLd } from 'svelte-meta-tags'
 	import {
 		mdiArchiveOutline,
 		mdiArrowLeft,
@@ -23,75 +23,31 @@
 	import EventTheme from './admin/theme/EventTheme.svelte'
 	import { EventIcon, EventTierBadge } from '$lib/event'
 	import { mapUrl } from '$lib/location'
+	import { eventSchema } from '$lib/seo'
 
 	export let data
 
 	$: accessGranted =
 		data.event.state === 'published' || data.member?.roles.includes('leader') || data.userIsRoot
 
-	$: eventUrl = $page.url.href
+	// Les metas de l'évènement sont publiées par le `load` et rendues par le layout racine
+	$: eventUrl = `${$page.url.origin}/${data.event.id}`
 	$: eventImage = data.event.posterId
-		? `${$page.url.origin}/media/${data.event.posterId}?size=medium`
+		? `${$page.url.origin}/media/${data.event.posterId}?size=large`
 		: undefined
-	$: eventDescription =
-		data.event.description || `Rejoins l'équipe de bénévoles de ${data.event.name} sur benevio.`
 </script>
 
-<svelte:head>
-	{#if data.event.state !== 'published'}
-		<meta name="robots" content="noindex" />
-	{/if}
-</svelte:head>
-
-<MetaTags
-	title={data.event.name}
-	titleTemplate="%s | benevio"
-	description={eventDescription}
-	canonical={eventUrl}
-	openGraph={{
-		type: 'website',
-		url: eventUrl,
-		locale: 'fr_FR',
-		siteName: 'benevio',
-		title: `${data.event.name} | benevio`,
-		description: eventDescription,
-		images: eventImage ? [{ url: eventImage, alt: `Affiche de ${data.event.name}` }] : undefined,
-	}}
-	twitter={{
-		cardType: 'summary_large_image',
-		title: `${data.event.name} | benevio`,
-		description: eventDescription,
-		image: eventImage,
-		imageAlt: eventImage ? `Affiche de ${data.event.name}` : undefined,
-	}}
-/>
-
 <JsonLd
-	schema={{
-		'@context': 'https://schema.org',
-		'@type': 'Event',
+	schema={eventSchema({
 		name: data.event.name,
 		url: eventUrl,
-		...(data.event.description && { description: data.event.description }),
-		...(eventImage && { image: [eventImage] }),
-		...(data.event.startDate && { startDate: data.event.startDate.toISOString() }),
-		...(data.event.endDate && { endDate: data.event.endDate.toISOString() }),
-		...(data.event.location && {
-			location: {
-				'@type': 'Place',
-				name: data.event.location.label,
-				address: data.event.location.label,
-				url: mapUrl(data.event.location),
-				...(data.event.location.coords && {
-					geo: {
-						'@type': 'GeoCoordinates',
-						latitude: data.event.location.coords.lat,
-						longitude: data.event.location.coords.lon,
-					},
-				}),
-			},
-		}),
-	}}
+		description: data.event.description,
+		image: eventImage,
+		startDate: data.event.startDate,
+		endDate: data.event.endDate,
+		location: data.event.location,
+		web: data.event.web,
+	})}
 />
 
 <EventTheme event={data.event} />
