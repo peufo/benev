@@ -79,7 +79,7 @@
 	/>
 
 	<div class="flex gap-2 items-center justify-center py-2">
-		{#each videos as _, i}
+		{#each videos as _, i (i)}
 			{@const isActive = i === activeIndex}
 			<button
 				on:click={() => setActive(i)}

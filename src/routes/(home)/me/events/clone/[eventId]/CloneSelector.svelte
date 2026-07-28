@@ -35,7 +35,7 @@
 		<slot />
 	</div>
 	<div class="divider" />
-	{#each _items as item}
+	{#each _items as item (item.id)}
 		<InputBoolean
 			key="{key}_{item.id}"
 			bind:value={item.selected}

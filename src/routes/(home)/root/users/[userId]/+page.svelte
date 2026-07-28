@@ -73,7 +73,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each data.members as member}
+					{#each data.members as member (member.id)}
 						<tr>
 							<td>
 								<a href="/root/events/{member.eventId}" class="link link-hover font-medium">

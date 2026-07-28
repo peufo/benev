@@ -26,7 +26,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.checkouts as checkout}
+			{#each data.checkouts as checkout (checkout.id)}
 				<tr>
 					<td>
 						<a href="/root/users/{checkout.user.id}" class="link link-hover">

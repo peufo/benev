@@ -65,7 +65,7 @@
 		<div class="bg-accent rounded h-[3px] w-8 right-0" use:indicator.element />
 		<div class="sticky z-20 bg-base-100 top-0 border-b" style:height="{TEAM_HEADER_HEIGHT}px" />
 
-		{#each plan.days as { date, hours }}
+		{#each plan.days as { date, hours } (date.valueOf())}
 			<div class="flex items-start -translate-y-[1px]">
 				<!-- DAY -->
 				<div
@@ -79,7 +79,7 @@
 				</div>
 				<!-- HOURS -->
 				<div class="flex flex-col items-end text-sm text-right">
-					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
+					{#each hours.filter((h, i) => !(i % hourSpan)) as hour (hour)}
 						{@const isEndNextDay = hour + hourSpan > 24}
 						{@const span = isEndNextDay ? 24 - hour : hourSpan}
 						<div style:height="{plan.hourSize * span}px" class="border-t px-1">

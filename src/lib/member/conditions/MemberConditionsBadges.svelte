@@ -12,7 +12,7 @@
 	export { klass as class }
 </script>
 
-{#each conditions as condition}
+{#each conditions as condition, i (i)}
 	<div class="badge flex gap-1 {klass}">
 		{#if condition.type === 'valided'}
 			<Icon path={mdiAccountCheckOutline} class="opacity-70" size={16} />

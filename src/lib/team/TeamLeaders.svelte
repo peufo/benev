@@ -6,7 +6,7 @@
 	export let leaders: Member[]
 </script>
 
-{#each leaders as member}
+{#each leaders as member (member.id)}
 	<DropDown>
 		<button
 			slot="activator"

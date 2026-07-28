@@ -121,7 +121,7 @@
 	</div>
 
 	<div class="flex flex-col gap-2">
-		{#each conditions as condition, index}
+		{#each conditions as condition, index (index)}
 			<div class="flex flex-col gap-2 bg-base-200/40 border rounded p-2">
 				<div class="flex gap-2 items-center">
 					{#if condition.type === 'valided'}

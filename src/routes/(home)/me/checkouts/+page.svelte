@@ -20,7 +20,7 @@
 		eventSource="/me/checkouts/validation"
 	/>
 
-	{#each data.checkouts as checkout}
+	{#each data.checkouts as checkout (checkout.id)}
 		<Card
 			class={checkout.id === checkoutId ? 'border-2 border-primary' : ''}
 			bodyClass="flex flex-col gap-4"
@@ -41,7 +41,7 @@
 			</div>
 
 			<div class="flex flex-col">
-				{#each checkout.products as product, index}
+				{#each checkout.products as product, index (product.id)}
 					<div
 						class="flex flex-col sm:flex-row sm:items-center gap-3 py-3"
 						class:border-t={index > 0}

@@ -23,7 +23,7 @@
 			</tr>
 		</thead>
 		<tbody class="">
-			{#each data.events as event}
+			{#each data.events as event (event.id)}
 				<tr>
 					<td>{event.id}</td>
 					<td>

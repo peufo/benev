@@ -17,7 +17,7 @@
 		class="grid gap-y-1 gap-x-2 text-sm items-center p-1"
 		style:grid-template-columns="min-content auto"
 	>
-		{#each distribution as [key, value]}
+		{#each distribution as [key, value] (key)}
 			{@const href = getHref(key)}
 			{@const label = getLabel(key)}
 			<span class="text-right font-medium">{value}</span>

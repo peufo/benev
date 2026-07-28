@@ -57,7 +57,7 @@
 			list="colors"
 		/>
 		<datalist id="colors">
-			{#each colors as color}
+			{#each colors as color (color)}
 				<option value={color} />
 			{/each}
 		</datalist>

@@ -42,7 +42,7 @@
 {#if $cardContentOptions.showSlots}
 	{@const nbEmptySlot = Math.max(period.maxSubscribe - period.subscribes.length, 0)}
 	<ul class="px-1 py-2 flex flex-col">
-		{#each period.subscribes as subscribe}
+		{#each period.subscribes as subscribe (subscribe.id)}
 			<li class="badge whitespace-nowrap">
 				<span>
 					{subscribe.member.firstName}
@@ -62,7 +62,7 @@
 			</li>
 		{/each}
 
-		{#each Array(nbEmptySlot).fill(0) as _}
+		{#each Array(nbEmptySlot).fill(0) as _, i (i)}
 			<li class="badge whitespace-nowrap text-warning">Libre</li>
 		{/each}
 	</ul>

@@ -102,7 +102,7 @@
 						class="select select-bordered w-full"
 						value={event?.timezone || 'Europe/Zurich'}
 					>
-						{#each timeZones as timezone}
+						{#each timeZones as timezone (timezone)}
 							<option value={timezone}>{timezone}</option>
 						{/each}
 					</select>

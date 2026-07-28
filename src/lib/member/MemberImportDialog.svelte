@@ -28,7 +28,7 @@
 		lastName: string
 		email: string | null
 		phone: string | null
-		profileData: Array<{ fieldName: string; value: any }>
+		profileData: Array<{ fieldName: string; value: PrismaJson.MemberProfile[string] }>
 	}
 
 	interface Field {
@@ -48,6 +48,19 @@
 		targetFieldType: string | null
 	}
 
+	// Réponse de POST /admin/members/import, cf. `ImportResult` dans $lib/server/memberImport.
+	// Redéclaré ici (comme les interfaces ci-dessus) pour ne pas importer un module serveur.
+	interface ImportResults {
+		success: boolean
+		importedCount: number
+		skippedCount: number
+		errors: string[]
+		details: {
+			imported: Array<{ id: string; name: string; email: string }>
+			skipped: Array<{ name: string; email: string; reason: string }>
+		}
+	}
+
 	// State management
 	let step: 'events' | 'members' | 'fields' | 'confirm' | 'results' = 'events'
 	let selectedEvent: ImportableEvent | null = null
@@ -55,7 +68,7 @@
 	let selectedMemberIds: Set<string> = new Set()
 	let targetFields: Field[] = []
 	let fieldMappings: FieldMapping[] = []
-	let importResults: any = null
+	let importResults: ImportResults | null = null
 	let isLoading = false
 
 	// UI state
@@ -159,11 +172,12 @@
 				throw new Error(await response.text())
 			}
 
-			importResults = await response.json()
+			const results: ImportResults = await response.json()
+			importResults = results
 			step = 'results'
 
-			if (importResults.success && importResults.importedCount > 0) {
-				toast.success(`${importResults.importedCount} membres importés avec succès`)
+			if (results.success && results.importedCount > 0) {
+				toast.success(`${results.importedCount} membres importés avec succès`)
 			}
 		} catch (error) {
 			toast.error(`Erreur lors de l'import: ${error}`)
@@ -295,7 +309,7 @@
 						</label>
 					</div>
 					<div class="max-h-80 overflow-y-auto">
-						{#each sourceMembers as member}
+						{#each sourceMembers as member (member.id)}
 							<div
 								class="border-b last:border-b-0 p-3 hover:bg-gray-50 cursor-pointer"
 								role="button"
@@ -369,7 +383,7 @@
 					<div>Compatible</div>
 				</div>
 				<div class="max-h-80 overflow-y-auto">
-					{#each fieldMappings as mapping}
+					{#each fieldMappings as mapping (mapping.sourceFieldId)}
 						<div class="border-b last:border-b-0 p-3 grid grid-cols-3 gap-4 items-center">
 							<div>
 								<div class="font-medium">{mapping.sourceFieldName}</div>
@@ -382,7 +396,7 @@
 									on:change={(e) => handleFieldMappingChange(mapping.sourceFieldId, e)}
 								>
 									<option value="">-- Ignorer ce champ --</option>
-									{#each targetFields as field}
+									{#each targetFields as field (field.id)}
 										<option value={field.id}>{field.name}</option>
 									{/each}
 								</select>
@@ -486,7 +500,7 @@
 								Membres ignorés ({importResults.skippedCount})
 							</h4>
 							<div class="text-sm text-yellow-800 max-h-32 overflow-y-auto">
-								{#each importResults.details.skipped as skipped}
+								{#each importResults.details.skipped as skipped, i (i)}
 									<div>{skipped.name} ({skipped.email}) - {skipped.reason}</div>
 								{/each}
 							</div>
@@ -497,7 +511,7 @@
 						<div class="bg-red-50 border border-red-200 rounded-lg p-4">
 							<h4 class="font-medium text-red-900 mb-2">Erreurs</h4>
 							<div class="text-sm text-red-800 max-h-32 overflow-y-auto">
-								{#each importResults.errors as error}
+								{#each importResults.errors as error, i (i)}
 									<div>{error}</div>
 								{/each}
 							</div>

@@ -27,7 +27,7 @@
 			<IdCardLanyardIcon size="20" opacity={0.9} />
 		</button>
 		<ul class="menu">
-			{#each badges as badge}
+			{#each badges as badge (badge.id)}
 				<li>
 					<a href="{$eventPath}/admin/pages/badges/{badge.id}/pdf?{_params}" target="_blank">
 						{badge.name}

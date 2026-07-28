@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex gap-1 {klass}">
-	{#each tags as tag}
+	{#each tags as tag (tag.id)}
 		<span
 			class="badge badge-xs"
 			style="

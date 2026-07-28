@@ -49,7 +49,7 @@
 				bordered sticky top-0 z-20 flex gap-2 rounded-t-2xl border-b bg-base-100 p-2 shadow-sm
 			"
 		>
-			{#each $tabs as { href, isActive, label, icon: Icon }}
+			{#each $tabs as { href, isActive, label, icon: Icon } (href)}
 				{@const active = isActive ?? $page.url.pathname.startsWith(href)}
 				<a
 					{href}

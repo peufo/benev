@@ -62,7 +62,7 @@
 		</p>
 	{:else}
 		<div class="flex gap-2 justify-end grow items-center">
-			{#each getNextStates()[event.state] as { state, label }}
+			{#each getNextStates()[event.state] as { state, label } (state)}
 				{@const form = useForm()}
 				<form
 					use:enhance={form.submit}

@@ -18,7 +18,7 @@
 		isEnable: (target) => target.classList.contains('stack-row'),
 	}}
 >
-	{#each stacks as periods}
+	{#each stacks as periods, i (i)}
 		<div class="flex items-stretch stack-row min-h-[30px]">
 			{#each periods as period (period.id)}
 				<PeriodCard

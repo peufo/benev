@@ -50,15 +50,13 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 					lastName: member.lastName,
 					email: member.email,
 					phone: member.phone,
-					profileData: Object.entries((member.profileJson as Record<string, any>) || {}).map(
-						([fieldId, value]) => {
-							const field = sourceFields.find((f) => f.id === fieldId)
-							return {
-								fieldName: field?.name || fieldId,
-								value: value,
-							}
+					profileData: Object.entries(member.profileJson || {}).map(([fieldId, value]) => {
+						const field = sourceFields.find((f) => f.id === fieldId)
+						return {
+							fieldName: field?.name || fieldId,
+							value: value,
 						}
-					),
+					}),
 				})),
 				sourceFields: sourceFields.map((field) => ({
 					id: field.id,

@@ -18,7 +18,7 @@
 		isEnable: (target) => target.classList.contains('stack-col'),
 	}}
 >
-	{#each stacks as periods}
+	{#each stacks as periods, i (i)}
 		<div class="relative w-full min-w-24 stack-col">
 			{#each periods as period (period.id)}
 				<PeriodCard

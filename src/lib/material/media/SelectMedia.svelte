@@ -81,7 +81,7 @@
 			class="grid gap-3 items-start"
 			style:grid-template-columns="repeat(auto-fill, minmax(min(6rem, 100%), 1fr)"
 		>
-			{#each medias as media}
+			{#each medias as media (media.id)}
 				<button
 					type="button"
 					on:click={() => handleSelectMedia(media)}

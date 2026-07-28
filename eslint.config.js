@@ -61,9 +61,6 @@ export default ts.config(
 			// `() => {}` sert de valeur par défaut aux props callback et de no-op de
 			// nettoyage: c'est intentionnel, pas un oubli.
 			'@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
-			// `any` reste toléré ponctuellement (interop avec des libs non typées):
-			// avertissement, comme avant le passage à typescript-eslint 8.
-			'@typescript-eslint/no-explicit-any': 'warn',
 			'@typescript-eslint/no-unused-vars': [
 				'error',
 				{
@@ -82,8 +79,6 @@ export default ts.config(
 			// chaque href/goto. C'est une migration SvelteKit à part entière (plus de
 			// 150 occurrences), pas un prérequis du lint.
 			'svelte/no-navigation-without-resolve': 'off',
-			// Idem: les `{#each}` sans clé existants sont à reprendre progressivement.
-			'svelte/require-each-key': 'warn',
 		},
 	}
 )

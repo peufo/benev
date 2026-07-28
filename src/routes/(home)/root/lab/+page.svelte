@@ -27,7 +27,7 @@
 
 	<hr />
 
-	{#each events as event}
+	{#each events as event, i (i)}
 		{JSON.stringify(event)}
 	{/each}
 </Card>

@@ -23,7 +23,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.users as user}
+			{#each data.users as user (user.id)}
 				{@const isCorrectKey =
 					(user.auth_key.length === 1 && user.auth_key[0].id.startsWith('google:')) ||
 					user.auth_key.find((k) => k.id.endsWith(user.email))}
@@ -49,7 +49,7 @@
 							{user._count.members}
 						</td>
 						<ul>
-							{#each user.members as member}
+							{#each user.members as member (member.id)}
 								<li>
 									<a class="link link-hover" href="/{member.eventId}">{member.event.name}</a>
 								</li>

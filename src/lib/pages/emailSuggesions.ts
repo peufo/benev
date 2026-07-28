@@ -80,7 +80,11 @@ export const emailSuggestions: EmailSuggestions = {
 export const emailReplacers: EmailReplacers = Object.entries(emailSuggestions).reduce(
 	(acc, [path, suggestions]) => ({
 		...acc,
-		[path]: (data: any) => suggestions.map(({ id, getValue }) => ({ id, value: getValue(data) })),
+		// `Object.entries` perd la corrélation entre `path` et son type de props:
+		// `suggestions` devient l'union de tous les `Suggestion<Path>[]`, dont les
+		// `getValue` n'acceptent plus qu'un paramètre commun. `never` satisfait toutes
+		// les signatures; le cast final en EmailReplacers rétablit le type par chemin.
+		[path]: (data: never) => suggestions.map(({ id, getValue }) => ({ id, value: getValue(data) })),
 	}),
 	{} as EmailReplacers
 )

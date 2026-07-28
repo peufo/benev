@@ -27,7 +27,7 @@
 </script>
 
 <datalist id="palette">
-	{#each palette as color}
+	{#each palette as color (color)}
 		<option value={color} />
 	{/each}
 </datalist>

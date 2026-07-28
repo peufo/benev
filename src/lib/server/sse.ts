@@ -2,7 +2,7 @@
 
 import type { EventEmitter } from 'node:events'
 
-export function createSSE<Data = any>(last_id = 0, retry = 0) {
+export function createSSE<Data = unknown>(last_id = 0, retry = 0) {
 	let id = last_id
 	const { readable, writable } = new TransformStream<{ event: string; data: Data }, string>({
 		start(controller) {

@@ -15,7 +15,7 @@
 
 {#if events.length}
 	<ul class="grid md:grid-cols-2 gap-4">
-		{#each events as event}
+		{#each events as event (event.id)}
 			<li>
 				<CardLink href="/{event.id}" class="h-full group">
 					<div class="flex gap-4">

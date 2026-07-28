@@ -36,6 +36,6 @@
 	/>
 </div>
 
-{#each conditions as condition}
+{#each conditions as condition, i (i)}
 	<GiftCondition {condition} />
 {/each}

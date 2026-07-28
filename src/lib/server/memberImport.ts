@@ -119,8 +119,11 @@ class MemberImportService {
 	/**
 	 * Transform profile data based on field mappings
 	 */
-	transformProfileData(sourceProfileJson: any, fieldMappings: FieldMapping[]): Record<string, any> {
-		const transformedProfile: Record<string, any> = {}
+	transformProfileData(
+		sourceProfileJson: PrismaJson.MemberProfile,
+		fieldMappings: FieldMapping[]
+	): PrismaJson.MemberProfile {
+		const transformedProfile: PrismaJson.MemberProfile = {}
 
 		fieldMappings.forEach((mapping) => {
 			if (!mapping.targetFieldId) return // Skip unmapped fields
@@ -205,7 +208,7 @@ class MemberImportService {
 				try {
 					// Transform profile data
 					const transformedProfile = this.transformProfileData(
-						sourceMember.profileJson as Record<string, any>,
+						sourceMember.profileJson,
 						options.fieldMappings
 					)
 

@@ -38,7 +38,7 @@
 						</button>
 					</form>
 				</div>
-				{#each data.pages as { id, title, type }}
+				{#each data.pages as { id, title, type } (id)}
 					<a
 						href="{$eventPath}/admin/pages/{id}"
 						class="menu-item"
@@ -50,7 +50,7 @@
 				{/each}
 
 				<h2 class="title-md my-2">Models d'email</h2>
-				{#each data.emails as { id, title, type }}
+				{#each data.emails as { id, title, type } (id)}
 					<a
 						href="{$eventPath}/admin/pages/{id}"
 						class="menu-item"
@@ -74,7 +74,7 @@
 						</button>
 					</form>
 				</div>
-				{#each data.badges as badge}
+				{#each data.badges as badge (badge.id)}
 					<a
 						href="{$eventPath}/admin/pages/badges/{badge.id}"
 						class="menu-item"

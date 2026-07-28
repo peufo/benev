@@ -42,7 +42,7 @@
 		class="grid gap-4 mb-4 items-start"
 		style:grid-template-columns="repeat(auto-fill, minmax(min(230px, 100%), 1fr))"
 	>
-		{#each profile as { field, value }}
+		{#each profile as { field, value } (field.id)}
 			<CardBasic title={field.name}>
 				{#if typeof value === 'string' || typeof value === 'number'}
 					<p>{value || '-'}</p>
@@ -58,7 +58,7 @@
 					</span>
 				{:else if Array.isArray(value)}
 					<ul>
-						{#each value as item}
+						{#each value as item, i (i)}
 							<li>• {item}</li>
 						{/each}
 					</ul>

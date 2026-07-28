@@ -35,7 +35,7 @@
 		{#if adminIsVisible}
 			<hr class="block lg:hidden" />
 			<h3 class="title-sm pl-3 pt-1">Gestion</h3>
-			{#each $adminTabs as { href, isActive, label, icon: Icon }}
+			{#each $adminTabs as { href, isActive, label, icon: Icon } (href)}
 				<a {href} class="menu-item" class:active={isActive}>
 					<Icon size={20} class="opacity-70" />
 					{label}

@@ -87,7 +87,7 @@
 		<section class="mt-16 md:mt-24">
 			<h2 class="text-2xl md:text-3xl font-bold text-primary tracking-tight mb-6">Mes demandes</h2>
 			<div class="grid md:grid-cols-2 gap-4">
-				{#each data.messages as message}
+				{#each data.messages as message (message.id)}
 					<article
 						class="border border-base-200 rounded-2xl p-5 bg-base-100 hover:border-brand-beige/40 transition-colors"
 					>

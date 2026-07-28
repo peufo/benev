@@ -63,7 +63,7 @@
 				$urlWith({ subscribes_count_request: JSON.stringify({ min: +key, max: +key }) })}
 		/>
 
-		{#each data.stats.summary as stat}
+		{#each data.stats.summary as stat, i (i)}
 			{#if stat}
 				<Distribution
 					title={stat.fieldName}

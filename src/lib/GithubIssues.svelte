@@ -45,7 +45,7 @@
 		<div
 			class="divide-y divide-base-200 border border-base-200 rounded-xl overflow-hidden bg-base-100 shadow-sm"
 		>
-			{#each issues as issue}
+			{#each issues as issue (issue.number)}
 				<a
 					href={issue.url}
 					target="_blank"
@@ -96,7 +96,7 @@
 
 					{#if showLabels && issue.labels.length > 0}
 						<div class="flex flex-wrap gap-1.5 mt-2">
-							{#each issue.labels as label}
+							{#each issue.labels as label (label.name)}
 								<span
 									class="badge border-0 text-base-content/70"
 									style="background-color: #{label.color}30;"

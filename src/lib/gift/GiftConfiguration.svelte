@@ -18,7 +18,7 @@
 	}
 </script>
 
-{#each gifts as gift}
+{#each gifts as gift (gift.id)}
 	<button
 		transition:slide
 		on:click={() => openEditDialog(gift)}

@@ -95,7 +95,7 @@
 			style:width="{TEAM_HEADER_WIDTH}px"
 		/>
 
-		{#each plan.days as { date, hours }}
+		{#each plan.days as { date, hours } (date.valueOf())}
 			<div class="-translate-x-[1px]">
 				<!-- DAY -->
 				<div
@@ -106,7 +106,7 @@
 				</div>
 				<!-- HOURS -->
 				<div class="flex text-sm">
-					{#each hours.filter((h, i) => !(i % hourSpan)) as hour}
+					{#each hours.filter((h, i) => !(i % hourSpan)) as hour (hour)}
 						{@const isEndNextDay = hour + hourSpan > 24}
 						{@const span = isEndNextDay ? 24 - hour : hourSpan}
 						<div style:width="{plan.hourSize * span}px" class="border-l px-1">

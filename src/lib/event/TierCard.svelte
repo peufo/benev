@@ -50,7 +50,7 @@
 						<span>Jusqu'à {config.max} bénévoles</span>
 					{/if}
 				</li>
-				{#each features as feature}
+				{#each features as feature (feature)}
 					<li class="flex items-start gap-2">
 						<CheckIcon class="w-5 h-5 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
 						<span>{feature}</span>

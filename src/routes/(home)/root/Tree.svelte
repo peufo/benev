@@ -5,7 +5,7 @@
 </script>
 
 <ul>
-	{#each tree.filter((p) => p.length === level + 1) as path, index}
+	{#each tree.filter((p) => p.length === level + 1) as path, index (path.join('/'))}
 		{@const pathname = path.join('/')}
 		{@const children = tree.filter((p, i) => i !== index && p.join('/').startsWith(pathname))}
 		{@const isActive = $page.url.pathname.endsWith(pathname)}

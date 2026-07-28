@@ -62,7 +62,7 @@
 
 	{#if freeAspect}
 		<div class="flex gap-2 mb-2">
-			{#each aspects as { label, value }}
+			{#each aspects as { label, value } (label)}
 				<button
 					type="button"
 					class="btn btn-square btn-sm"

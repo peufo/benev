@@ -14,7 +14,7 @@
 {#if data.members.filter((m) => !m.isValidedByUser).length}
 	<h2 class="title">Invitations</h2>
 	<div class="flex flex-col gap-3 mb-4">
-		{#each data.members.filter((m) => !m.isValidedByUser) as member}
+		{#each data.members.filter((m) => !m.isValidedByUser) as member (member.id)}
 			<EventMemberCard {member} />
 		{/each}
 	</div>
@@ -47,7 +47,7 @@
 </div>
 
 <div class="flex flex-col gap-3">
-	{#each data.members.filter((m) => m.isValidedByUser) as member}
+	{#each data.members.filter((m) => m.isValidedByUser) as member (member.id)}
 		<EventMemberCard {member} />
 	{:else}
 		<Placeholder class="gap-3 bg-base-300">

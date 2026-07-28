@@ -36,7 +36,7 @@
 			<div class="card-body">
 				<h2 class="card-title">Changer de plan</h2>
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-					{#each upgradeOptions as option}
+					{#each upgradeOptions as option (option.tier)}
 						<TierCard
 							tier={option.tier}
 							features={upgradeFeatures(option.tier)}

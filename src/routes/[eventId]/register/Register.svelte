@@ -109,7 +109,7 @@
 	</div>
 
 	<ul class="steps">
-		{#each steps as step, index}
+		{#each steps as step, index (step)}
 			<li class="step text-sm" class:step-primary={stepIndex >= index}>
 				<a href={$urlParam.with({ forcedStepIndex: index })} class:btn-disabled={index === 0}>
 					{step}

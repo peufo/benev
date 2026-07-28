@@ -53,7 +53,7 @@
 		</div>
 
 		<div class="flex flex-col gap-20 md:gap-28">
-			{#each steps as step, i}
+			{#each steps as step, i (step.number)}
 				{@const isActive = $activeVideoIndex === i}
 				<div
 					class="grid md:grid-cols-2 gap-10 items-center transition-opacity duration-700"

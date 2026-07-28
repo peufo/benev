@@ -95,7 +95,7 @@
 	<thead>
 		<tr>
 			<th class="align-middle">Qui peut faire quoi ?</th>
-			{#each Object.values(rolesMap).slice(1) as { icon, label }}
+			{#each Object.values(rolesMap).slice(1) as { icon, label } (label)}
 				<th>
 					<Icon path={icon} title={label} class="opacity-70" />
 				</th>
@@ -103,12 +103,12 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each permissions as [name, values]}
+		{#each permissions as [name, values] (name)}
 			<tr>
 				<td class="align-middle">
 					{name}
 				</td>
-				{#each values as value}
+				{#each values as value, i (i)}
 					{#if value === true}
 						<td><Icon path={mdiCheck} class="fill-success" /></td>
 					{:else if value === false}

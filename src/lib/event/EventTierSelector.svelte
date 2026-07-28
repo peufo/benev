@@ -17,7 +17,7 @@
 </script>
 
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" role="radiogroup" aria-label="Choisir un plan">
-	{#each plans as plan}
+	{#each plans as plan (plan)}
 		{@const config = EVENT_TIER[plan]}
 		{@const selected = value === plan}
 		<button

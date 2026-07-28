@@ -9,7 +9,7 @@
 	]
 </script>
 
-{#each tabs as { path, label, icon }}
+{#each tabs as { path, label, icon } (path)}
 	{@const active = $page.route.id?.startsWith(`/(home)${path}`)}
 	<a href={path} class="menu-item" class:active>
 		<svelte:component this={icon} size={20} class="opacity-70" />

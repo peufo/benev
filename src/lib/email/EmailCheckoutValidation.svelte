@@ -29,7 +29,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each checkout.products as product}
+			{#each checkout.products as product (product.id)}
 				<tr>
 					<th>{product.name}</th>
 					<th align="right">1</th>

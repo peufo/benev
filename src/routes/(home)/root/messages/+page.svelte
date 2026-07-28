@@ -63,7 +63,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.messages as message}
+			{#each data.messages as message (message.id)}
 				{@const state = statesMap[message.state]}
 				<tr>
 					<td>
@@ -72,7 +72,7 @@
 								<Icon path={state.icon} class={state.class} title={state.label} />
 							</button>
 
-							{#each Object.values(statesMap) as state}
+							{#each Object.values(statesMap) as state (state.state)}
 								<button
 									type="button"
 									class="menu-item w-full"

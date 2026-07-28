@@ -4,7 +4,7 @@
 </script>
 
 <div class="flex items-center gap-[3px] rounded-lg bg-base-200 p-1">
-	{#each Object.entries(CARD_CONTENT_OPTIONS) as [key, { title, path, isReversed }]}
+	{#each Object.entries(CARD_CONTENT_OPTIONS) as [key, { title, path, isReversed }] (key)}
 		{@const isKeyInParam = $urlParam.has(key)}
 		{@const isActive = isReversed ? !isKeyInParam : isKeyInParam}
 		<a

@@ -21,9 +21,9 @@
 
 {#if teams.length}
 	<div class="flex flex-col gap-4">
-		{#each teams as team}
+		{#each teams as team (team.id)}
 			<CardLink title={team.name} href="/{team.eventId}/teams?section={team.id}#{team.id}">
-				{#each team.periods as period}
+				{#each team.periods as period (period.id)}
 					{@const subscribe = period.subscribes[0]}
 					<div class="flex gap-2 items-center mt-2">
 						<div

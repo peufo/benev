@@ -13,7 +13,7 @@
 	<h3 class="title text-base">Produits</h3>
 
 	<div class="flex flex-col gap-3 mt-2">
-		{#each products as product, index}
+		{#each products as product, index (product.priceId)}
 			{@const prefix = `products.${index}.`}
 			<div class="flex items-center gap-3">
 				<input type="hidden" name="{prefix}priceId" value={product.priceId} />

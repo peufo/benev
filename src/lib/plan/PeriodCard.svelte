@@ -59,7 +59,7 @@
 			: 'outline-base-300'}
 		"
 	>
-		{#each drags as drag}
+		{#each drags as drag, i (i)}
 			<DragButton
 				class={drag.class || ''}
 				axis={drag.axis}
