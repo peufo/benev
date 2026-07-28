@@ -31,18 +31,4 @@ export const actions = {
 		}
 		return { count }
 	}),
-
-	update_members_avatarId: formAction({}, async ({ locals }) => {
-		await permission.root(locals)
-		const users = await prisma.user.findMany()
-		let count = 0
-		for (const user of users) {
-			const res = await prisma.member.updateMany({
-				where: { userId: user.id },
-				data: { avatarId: user.avatarId },
-			})
-			count += res.count
-		}
-		return { count }
-	}),
 }

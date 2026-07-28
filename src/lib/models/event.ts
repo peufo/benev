@@ -1,7 +1,7 @@
 import { z, toTuple, type ZodObj } from 'fuma/validation'
 // `Prisma` est importé en valeur (et pas seulement en type) pour `Prisma.DbNull`:
 // $lib/models n'est consommé que par des fichiers serveur, jamais par le bundle client
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
 import { isHttpUrl } from '$lib/url'
 
@@ -35,7 +35,7 @@ export const modelEventUpdate = {
 			coords: z.object({ lat: z.number(), lon: z.number() }).optional(),
 		})
 		.nullish()
-		.transform((value) => (value === null ? Prisma.DbNull : value)),
+		.transform((value) => value === null),
 	timezone: z.string().optional(),
 } satisfies ZodObj<EventUpdateInput>
 
