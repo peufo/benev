@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import type { Event } from '@prisma/client'
 	import { theme } from './store'
 
 	interface Props {
-		event: Event;
+		event: Event
 	}
 
-	let { event }: Props = $props();
+	let { event }: Props = $props()
 	theme.set(event)
 	run(() => {
 		theme.set(event)
-	});
+	})
 </script>
 
 <div

@@ -8,10 +8,10 @@
 	import InputTzDateTime from './InputTzDateTime.svelte'
 
 	interface Props {
-		milestone?: Partial<Milestone>;
+		milestone?: Partial<Milestone>
 	}
 
-	let { milestone = {} }: Props = $props();
+	let { milestone = {} }: Props = $props()
 
 	const MilestoneForm: ComponentType<Form<typeof modelMilestoneCreate, Milestone>> = Form
 </script>

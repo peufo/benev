@@ -3,10 +3,10 @@
 	import { domain } from '.'
 
 	interface Props {
-		tokenId: string;
+		tokenId: string
 	}
 
-	let { tokenId }: Props = $props();
+	let { tokenId }: Props = $props()
 </script>
 
 <EmailLayout title="Reinitialisation du mot de passe">

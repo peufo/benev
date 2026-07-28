@@ -1,10 +1,9 @@
 <script lang="ts">
 	interface Props {
-		class?: string;
+		class?: string
 	}
 
-	let { class: klass = '' }: Props = $props();
-	
+	let { class: klass = '' }: Props = $props()
 </script>
 
 <span class="logo-text font-medium tracking-wide text-base-content/75 {klass}">benevio</span>

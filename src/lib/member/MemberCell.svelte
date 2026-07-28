@@ -8,10 +8,10 @@
 	import type { Subscribe } from '@prisma/client'
 
 	interface Props {
-		member: MemberWithComputedValues & { subscribes?: Subscribe[] };
+		member: MemberWithComputedValues & { subscribes?: Subscribe[] }
 	}
 
-	let { member }: Props = $props();
+	let { member }: Props = $props()
 </script>
 
 <a

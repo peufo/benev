@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createBubbler } from 'svelte/legacy';
+	import { createBubbler } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import type { FormEventHandler, HTMLInputAttributes } from 'svelte/elements'
 	import { USE_COERCE_DATE } from '$lib/fuma/utils/constant.js'
 	import { FormControl, type InputProps } from '$lib/fuma/ui/input/index.js'
@@ -10,12 +10,12 @@
 
 	type $$Props = InputProps<Date | null | undefined>
 	interface Props {
-		value?: Date | null | undefined;
-		input?: HTMLInputAttributes;
+		value?: Date | null | undefined
+		input?: HTMLInputAttributes
 		[key: string]: any
 	}
 
-	let { value = $bindable(undefined), input = {}, ...rest }: Props = $props();
+	let { value = $bindable(undefined), input = {}, ...rest }: Props = $props()
 	let { class: inputClass = '', ...inputProps } = $derived(input)
 
 	const dispatch = createEventDispatcher<{ input: Date | null }>()
@@ -31,7 +31,7 @@
 	}
 </script>
 
-<FormControl {...rest} >
+<FormControl {...rest}>
 	{#snippet children({ key })}
 		<input
 			value={value && dayjs(value).format('YYYY-MM-DDTHH:mm')}
@@ -40,7 +40,7 @@
 			onblur={bubble('blur')}
 			type="datetime-local"
 			id={key}
-			class="input input-bordered {inputClass}"
+			class="input {inputClass}"
 			{...inputProps}
 		/>
 

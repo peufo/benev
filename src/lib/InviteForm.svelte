@@ -9,10 +9,10 @@
 	import type { Member } from '@prisma/client'
 
 	interface Props {
-		onCreate?: (member: Member) => void;
+		onCreate?: (member: Member) => void
 	}
 
-	let { onCreate = () => {} }: Props = $props();
+	let { onCreate = () => {} }: Props = $props()
 	let email = $state('')
 	let isLoadingUserExists = $state(false)
 	let user = $state({ firstName: '', lastName: '' })
@@ -65,14 +65,14 @@
 			on:input={handleEmailInput}
 		>
 			{#snippet append()}
-						<div >
+				<div>
 					{#if isLoadingUserExists}
 						<div transition:slide={{ axis: 'x' }} class="w-10 grid place-content-center">
 							<div class="loading loading-ring loading-xs"></div>
 						</div>
 					{/if}
 				</div>
-					{/snippet}
+			{/snippet}
 		</InputText>
 		<InputText
 			label="Prénom"

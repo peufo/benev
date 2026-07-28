@@ -12,10 +12,10 @@
 	import { getAge } from '$lib/utils'
 
 	interface Props {
-		member: Member;
+		member: Member
 	}
 
-	let { member }: Props = $props();
+	let { member }: Props = $props()
 </script>
 
 <div

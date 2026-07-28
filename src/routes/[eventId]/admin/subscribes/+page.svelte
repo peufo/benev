@@ -35,7 +35,7 @@
 	import { TagsList } from '$lib/tag'
 	import dayjs from '$lib/dayjs'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	type Subscribe = PageData['subscribes'][number]
 

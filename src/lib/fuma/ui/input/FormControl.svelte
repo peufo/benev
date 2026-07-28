@@ -5,20 +5,19 @@
 	import type { ComponentAndProps } from '$lib/fuma/utils/index.js'
 	import { Slot } from '$lib/fuma/ui/index.js'
 
-	
 	interface Props {
-		class?: string;
-		classLabel?: string;
-		key?: string;
-		label?: ComponentAndProps | ComponentType | string;
-		error?: string;
-		hint?: string;
-		prefix?: string | number;
-		prefixFor?: string | number;
-		enhanceDisabled?: boolean;
-		labelPosition?: LabelPosition;
-		label_append?: import('svelte').Snippet;
-		children?: import('svelte').Snippet<[any]>;
+		class?: string
+		classLabel?: string
+		key?: string
+		label?: ComponentAndProps | ComponentType | string
+		error?: string
+		hint?: string
+		prefix?: string | number
+		prefixFor?: string | number
+		enhanceDisabled?: boolean
+		labelPosition?: LabelPosition
+		label_append?: import('svelte').Snippet
+		children?: import('svelte').Snippet<[any]>
 	}
 
 	let {
@@ -33,8 +32,8 @@
 		enhanceDisabled = false,
 		labelPosition = 'top',
 		label_append,
-		children
-	}: Props = $props();
+		children,
+	}: Props = $props()
 
 	type LabelPosition = 'top' | 'left' | 'right'
 
@@ -75,7 +74,7 @@
 			</label>
 		{/if}
 
-		{@render children?.({ key: _key, })}
+		{@render children?.({ key: _key })}
 	</div>
 
 	{#if error}

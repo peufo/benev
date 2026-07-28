@@ -6,10 +6,10 @@
 	import { daytz } from '$lib/dayjs'
 
 	interface Props {
-		cursor: Dayjs;
+		cursor: Dayjs
 	}
 
-	let { cursor }: Props = $props();
+	let { cursor }: Props = $props()
 </script>
 
 <div class="flex join join-horizontal">
@@ -24,7 +24,7 @@
 	</a>
 
 	<input
-		class="input input-sm input-bordered join-item"
+		class="input input-sm join-item"
 		type="date"
 		value={cursor.format('YYYY-MM-DD')}
 		oninput={async (event) => {

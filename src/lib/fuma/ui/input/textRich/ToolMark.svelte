@@ -4,20 +4,14 @@
 	import { tip } from '$lib/fuma/action/tip.js'
 
 	interface Props {
-		editor: Editor;
-		key: string;
-		label: string;
-		icon: string;
-		action: () => void;
+		editor: Editor
+		key: string
+		label: string
+		icon: string
+		action: () => void
 	}
 
-	let {
-		editor,
-		key,
-		label,
-		icon,
-		action
-	}: Props = $props();
+	let { editor, key, label, icon, action }: Props = $props()
 
 	let isActive = $derived(editor.isActive(key))
 </script>

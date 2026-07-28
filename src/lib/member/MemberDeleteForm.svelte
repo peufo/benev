@@ -4,22 +4,15 @@
 	import { useForm } from '$lib/fuma'
 	import { enhance } from '$app/forms'
 
-	
 	interface Props {
-		memberId: string;
-		redirectTo?: string;
-		class?: string;
-		btn?: boolean;
-		children?: import('svelte').Snippet;
+		memberId: string
+		redirectTo?: string
+		class?: string
+		btn?: boolean
+		children?: import('svelte').Snippet
 	}
 
-	let {
-		memberId,
-		redirectTo = '/me',
-		class: klass = '',
-		btn = true,
-		children
-	}: Props = $props();
+	let { memberId, redirectTo = '/me', class: klass = '', btn = true, children }: Props = $props()
 
 	const form = useForm({
 		successMessage: 'Membre supprimé',

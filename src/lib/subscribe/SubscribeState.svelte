@@ -8,19 +8,19 @@
 	import type { Subscribe } from '@prisma/client'
 	import { Icon } from '$lib/fuma'
 
-	
 	interface Props {
-		class?: string;
-		subscribe: Subscribe & { member: { isValidedByUser: boolean } };
+		class?: string
+		subscribe: Subscribe & { member: { isValidedByUser: boolean } }
 	}
 
-	let { class: klass = '', subscribe }: Props = $props();
+	let { class: klass = '', subscribe }: Props = $props()
 
-	let changeAuthor =
-		$derived((subscribe.createdBy === 'user') ===
-		(subscribe.state === 'cancelled' || subscribe.state === 'request')
+	let changeAuthor = $derived(
+		(subscribe.createdBy === 'user') ===
+			(subscribe.state === 'cancelled' || subscribe.state === 'request')
 			? 'par le membre'
-			: 'par un responsable')
+			: 'par un responsable'
+	)
 </script>
 
 {#if subscribe.state === 'request' && subscribe.createdBy === 'leader' && !subscribe.member.isValidedByUser}

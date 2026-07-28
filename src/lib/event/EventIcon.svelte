@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { ImageOff } from '@lucide/svelte'
 
-	
 	interface Props {
-		icon: string;
-		class?: string;
-		alt?: string;
+		icon: string
+		class?: string
+		alt?: string
 	}
 
-	let { icon, class: klass = '', alt = "Icon de l'évènement" }: Props = $props();
+	let { icon, class: klass = '', alt = "Icon de l'évènement" }: Props = $props()
 
 	let isError = $state(false)
 

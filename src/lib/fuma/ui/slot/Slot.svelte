@@ -15,15 +15,13 @@
 
 	type Args = Slot extends (...args: any) => any ? Parameters<Slot>[0] : undefined
 
-	
-
 	interface Props {
-		slot?: Slot | null;
-		args?: Args | null;
-		children?: import('svelte').Snippet;
+		slot?: Slot | null
+		args?: Args | null
+		children?: import('svelte').Snippet
 	}
 
-	let { slot = undefined, args = undefined, children }: Props = $props();
+	let { slot = undefined, args = undefined, children }: Props = $props()
 
 	function getComponentAndProps(_slot: Slot): ComponentAndProps | null {
 		if (typeof _slot === 'function') {

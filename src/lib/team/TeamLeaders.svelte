@@ -4,17 +4,16 @@
 	import { Icon, DropDown } from '$lib/fuma'
 	import { Avatar } from '$lib/me'
 	interface Props {
-		leaders: Member[];
+		leaders: Member[]
 	}
 
-	let { leaders }: Props = $props();
+	let { leaders }: Props = $props()
 </script>
 
 {#each leaders as member (member.id)}
 	<DropDown>
 		{#snippet activator()}
-				<button
-				
+			<button
 				class="hover:bg-base-200 bg-base-200/40 cursor-pointer flex gap-2 border items-center pr-2 rounded"
 			>
 				<Avatar
@@ -28,7 +27,7 @@
 					{member.lastName}
 				</span>
 			</button>
-			{/snippet}
+		{/snippet}
 		{#if member.isValidedByUser}
 			<ul class="w-48">
 				<li>

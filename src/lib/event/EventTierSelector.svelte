@@ -5,10 +5,10 @@
 	import { EVENT_TIER } from '$lib/constant'
 
 	interface Props {
-		value?: string;
+		value?: string
 	}
 
-	let { value = $bindable('basic') }: Props = $props();
+	let { value = $bindable('basic') }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ change: string }>()
 

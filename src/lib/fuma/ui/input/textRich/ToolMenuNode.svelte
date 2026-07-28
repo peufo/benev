@@ -12,10 +12,10 @@
 	import ToolMenu from '$lib/fuma/ui/input/textRich/ToolMenu.svelte'
 
 	interface Props {
-		editor: Editor;
+		editor: Editor
 	}
 
-	let { editor }: Props = $props();
+	let { editor }: Props = $props()
 </script>
 
 <ToolMenu

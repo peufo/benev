@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Tree from './Tree.svelte';
+	import Tree from './Tree.svelte'
 	import { page } from '$app/stores'
 	interface Props {
-		tree: string[][];
-		level?: number;
+		tree: string[][]
+		level?: number
 	}
 
-	let { tree, level = 0 }: Props = $props();
+	let { tree, level = 0 }: Props = $props()
 </script>
 
 <ul>

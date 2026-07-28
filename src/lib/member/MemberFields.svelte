@@ -10,10 +10,10 @@
 	import { eventPath } from '$lib/store'
 
 	interface Props {
-		fields: Field[];
+		fields: Field[]
 	}
 
-	let { fields = $bindable() }: Props = $props();
+	let { fields = $bindable() }: Props = $props()
 
 	async function handleReorder(reorderedFields: Field[]) {
 		fields = reorderedFields

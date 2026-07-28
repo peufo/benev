@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
+	import { preventDefault } from 'svelte/legacy'
 
 	import { createEventDispatcher } from 'svelte'
 
@@ -9,12 +9,12 @@
 	import { formatRange } from '$lib/formatRange'
 
 	interface Props {
-		team: Team;
-		memberId: string;
-		period: Period;
+		team: Team
+		memberId: string
+		period: Period
 	}
 
-	let { team, memberId, period }: Props = $props();
+	let { team, memberId, period }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 

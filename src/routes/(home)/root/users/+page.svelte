@@ -3,15 +3,15 @@
 	import { Card, DropDown, Icon, InputSearch, Pagination } from '$lib/fuma'
 	import TDSortable from './TDSortable.svelte'
 
-	let { data } = $props();
+	let { data } = $props()
 </script>
 
 <Card>
 	{#snippet title()}
-		<h2  class="title">Users ({data.usersCount})</h2>
+		<h2 class="title">Users ({data.usersCount})</h2>
 	{/snippet}
 	{#snippet action()}
-		<div >
+		<div>
 			<InputSearch />
 		</div>
 	{/snippet}
@@ -50,10 +50,10 @@
 					<td>{user._count.events}</td>
 					<DropDown tippyProps={{ trigger: 'mouseenter' }}>
 						{#snippet activator()}
-												<td >
+							<td>
 								{user._count.members}
 							</td>
-											{/snippet}
+						{/snippet}
 						<ul>
 							{#each user.members as member (member.id)}
 								<li>

@@ -5,10 +5,10 @@
 	import Avatar from '$lib/me/Avatar.svelte'
 
 	interface Props {
-		user?: User | undefined;
+		user?: User | undefined
 	}
 
-	let { user = undefined }: Props = $props();
+	let { user = undefined }: Props = $props()
 </script>
 
 <a

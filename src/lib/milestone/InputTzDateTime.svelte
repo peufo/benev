@@ -3,20 +3,14 @@
 	import { USE_COERCE_DATE } from '$lib/fuma'
 
 	interface Props {
-		label: string;
-		value: Dayjs;
-		key: string;
-		hint?: string;
-		onSetValue?: (newValue: Dayjs) => Dayjs;
+		label: string
+		value: Dayjs
+		key: string
+		hint?: string
+		onSetValue?: (newValue: Dayjs) => Dayjs
 	}
 
-	let {
-		label,
-		value = $bindable(),
-		key,
-		hint = '',
-		onSetValue = (v) => v
-	}: Props = $props();
+	let { label, value = $bindable(), key, hint = '', onSetValue = (v) => v }: Props = $props()
 
 	function setDateTime(datetime: string) {
 		if (!datetime) return
@@ -53,7 +47,7 @@
 	<input
 		type="datetime-local"
 		id="control-{key}"
-		class="input input-bordered"
+		class="input"
 		step={300}
 		value={value.format('YYYY-MM-DDTHH:mm')}
 		oninput={(event) => setDateTime(event.currentTarget.value)}

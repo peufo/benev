@@ -4,12 +4,11 @@
 	import { Icon } from '$lib/fuma/ui/icon/index.js'
 
 	interface Props {
-		tabs: Tab[];
-		class?: string;
+		tabs: Tab[]
+		class?: string
 	}
 
-	let { tabs, class: klass = '' }: Props = $props();
-	
+	let { tabs, class: klass = '' }: Props = $props()
 </script>
 
 <div

@@ -6,11 +6,11 @@
 	import { createEventDispatcher } from 'svelte'
 
 	interface Props {
-		teams: TeamWithComputedValues[];
-		placeholder?: import('svelte').Snippet;
+		teams: TeamWithComputedValues[]
+		placeholder?: import('svelte').Snippet
 	}
 
-	let { teams, placeholder }: Props = $props();
+	let { teams, placeholder }: Props = $props()
 
 	const dispatch = createEventDispatcher<{
 		clickPeriod: PeriodWithComputedValues & { team: TeamWithComputedValues }

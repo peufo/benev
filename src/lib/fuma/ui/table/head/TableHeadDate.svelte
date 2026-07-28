@@ -1,5 +1,5 @@
 <script lang="ts" generics="Item extends {id: string}">
-	import { preventDefault } from 'svelte/legacy';
+	import { preventDefault } from 'svelte/legacy'
 
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
@@ -20,10 +20,10 @@
 	import OrderButtons from '$lib/fuma/ui/table/head/OrderButtons.svelte'
 
 	interface Props {
-		field: Omit<TableField<Item>, 'getCell' | 'type'>;
+		field: Omit<TableField<Item>, 'getCell' | 'type'>
 	}
 
-	let { field }: Props = $props();
+	let { field }: Props = $props()
 
 	let dropDown: DropDown = $state()
 	let rangePicker: RangePicker = $state()
@@ -31,7 +31,9 @@
 		$page.url.searchParams.get(field.key),
 		{}
 	)
-	let { order } = $state(jsonParse<{ order?: 'asc' | 'desc' }>($page.url.searchParams.get(field.key), {}))
+	let { order } = $state(
+		jsonParse<{ order?: 'asc' | 'desc' }>($page.url.searchParams.get(field.key), {})
+	)
 
 	let range: RangeAsDate = $state({
 		start: initialValue.start ? new Date(initialValue.start) : null,
@@ -92,7 +94,7 @@
 		class="max-h-none"
 	>
 		{#snippet activator()}
-				<button  class="menu-item min-h-8 w-full flex-wrap gap-y-1">
+			<button class="menu-item min-h-8 w-full flex-wrap gap-y-1">
 				<div class="flex gap-2">
 					<span>{field.label}</span>
 					{#if !isValidPeriod}
@@ -113,7 +115,7 @@
 					/>
 				{/if}
 			</button>
-			{/snippet}
+		{/snippet}
 
 		{#if field.sortable !== false}
 			<OrderButtons

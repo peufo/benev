@@ -19,10 +19,10 @@
 	const FormMemberField: ComponentType<Form<typeof modelMemberFieldCreate, Field>> = Form
 
 	interface Props {
-		field?: Partial<Field>;
+		field?: Partial<Field>
 	}
 
-	let { field = $bindable({}) }: Props = $props();
+	let { field = $bindable({}) }: Props = $props()
 
 	function getMemberRight(value: Partial<Field>): string[] {
 		return [value.memberCanRead && 'read', value.memberCanWrite && 'write'].filter(

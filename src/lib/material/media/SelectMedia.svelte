@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { stopPropagation, createBubbler, preventDefault } from 'svelte/legacy';
+	import { stopPropagation, createBubbler, preventDefault } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import { enhance } from '$app/forms'
 	import type { Media } from '@prisma/client'
 	import { portal } from 'svelte-portal'
@@ -79,7 +79,7 @@
 
 <Dialog bind:dialog={dialogMedias}>
 	{#snippet header()}
-		<h3  class="title">Médiatèque</h3>
+		<h3 class="title">Médiatèque</h3>
 	{/snippet}
 	<div>
 		<div
@@ -154,8 +154,8 @@
 	{#if selectedMedia}
 		<Dialog bind:dialog={dialogEdit}>
 			{#snippet header()}
-						<h3  class="title">Edition d'une image</h3>
-					{/snippet}
+				<h3 class="title">Edition d'une image</h3>
+			{/snippet}
 
 			<img src="/media/{selectedMedia.id}" alt={selectedMedia.name} class="mx-auto" />
 

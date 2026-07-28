@@ -4,14 +4,16 @@
 	import Page from '$lib/pages/Page.svelte'
 	import { eventPath } from '$lib/store'
 	import { breadcrumbSchema, SITE_NAME } from '$lib/seo'
-	let { data } = $props();
+	let { data } = $props()
 
 	let origin = $derived($currentPage.url.origin)
-	let breadcrumb = $derived(breadcrumbSchema([
-		{ name: SITE_NAME, url: `${origin}/` },
-		{ name: data.event.name, url: `${origin}/${data.event.id}` },
-		{ name: data.page.title, url: `${origin}/${data.event.id}/${data.page.path}` },
-	]))
+	let breadcrumb = $derived(
+		breadcrumbSchema([
+			{ name: SITE_NAME, url: `${origin}/` },
+			{ name: data.event.name, url: `${origin}/${data.event.id}` },
+			{ name: data.page.title, url: `${origin}/${data.event.id}/${data.page.path}` },
+		])
+	)
 </script>
 
 {#if breadcrumb}

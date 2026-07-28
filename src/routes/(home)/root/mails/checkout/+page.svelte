@@ -2,7 +2,7 @@
 	import { Placeholder } from '$lib/fuma'
 	import { EmailCheckoutValidation } from '$lib/email'
 
-	let { data } = $props();
+	let { data } = $props()
 </script>
 
 {#if data.checkout}

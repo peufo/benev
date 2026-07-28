@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
+	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import { mdiEmailOutline, mdiPhone, mdiClipboardTextOutline, mdiPencilOutline } from '@mdi/js'
 	import { Icon, urlParam } from '$lib/fuma'
 	import type { Member } from '@prisma/client'
 
 	interface Props {
-		member: Member;
-		onSubscribeDialog?: (() => void) | undefined;
+		member: Member
+		onSubscribeDialog?: (() => void) | undefined
 	}
 
-	let { member, onSubscribeDialog = undefined }: Props = $props();
+	let { member, onSubscribeDialog = undefined }: Props = $props()
 </script>
 
 <div class="flex gap-1 justify-end fill-base-content">

@@ -3,11 +3,11 @@
 	import { ArrowDownIcon, ArrowUpIcon } from '@lucide/svelte'
 
 	interface Props {
-		key: string;
-		children?: import('svelte').Snippet;
+		key: string
+		children?: import('svelte').Snippet
 	}
 
-	let { key, children }: Props = $props();
+	let { key, children }: Props = $props()
 
 	let currentSort = $derived($urlParam.get('sort'))
 	let currentOrder = $derived($urlParam.get('order') || 'desc')

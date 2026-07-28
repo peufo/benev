@@ -14,27 +14,28 @@
 	let dropDown: DropDown = $state()
 	let rangePicker: RangePicker = $state()
 
-	
 	interface Props {
-		class?: string;
-		key?: string;
-		range?: RangeAsDate;
-		minDate?: Date | number | string | undefined;
-		maxDate?: Date | number | string | undefined;
-		classLabel?: string;
+		class?: string
+		key?: string
+		range?: RangeAsDate
+		minDate?: Date | number | string | undefined
+		maxDate?: Date | number | string | undefined
+		classLabel?: string
 	}
 
 	let {
 		class: klass = '',
 		key = 'range',
-		range = $bindable(jsonParse<RangeAsDate>($urlParam.get(key), {
-		start: null,
-		end: null,
-	})),
+		range = $bindable(
+			jsonParse<RangeAsDate>($urlParam.get(key), {
+				start: null,
+				end: null,
+			})
+		),
 		minDate = undefined,
 		maxDate = undefined,
-		classLabel = ''
-	}: Props = $props();
+		classLabel = '',
+	}: Props = $props()
 
 	let isValidPeriod = $derived(!!range.start && !!range.end)
 
@@ -59,7 +60,7 @@
 
 <DropDown bind:this={dropDown} tippyProps={{ onHidden: writeURL }} class="max-h-full">
 	{#snippet activator()}
-		<button  class="min-width-0 btn btn-sm flex-nowrap {klass}">
+		<button class="min-width-0 btn btn-sm flex-nowrap {klass}">
 			<Icon path={mdiCalendarMonthOutline} class="opacity-60" size={20} />
 			{#if isValidPeriod}
 				<span

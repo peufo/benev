@@ -5,14 +5,17 @@
 	import { Icon } from '$lib/fuma/ui/icon/index.js'
 	import { InputText } from '$lib/fuma/ui/input/index.js'
 
-	
 	interface Props {
-		class?: string;
-		key?: string;
-		value?: any;
+		class?: string
+		key?: string
+		value?: any
 	}
 
-	let { class: klass = '', key = 'search', value = $bindable($page.url.searchParams.get(key) || '') }: Props = $props();
+	let {
+		class: klass = '',
+		key = 'search',
+		value = $bindable($page.url.searchParams.get(key) || ''),
+	}: Props = $props()
 
 	let inputElement: HTMLInputElement = $state()
 </script>
@@ -37,14 +40,13 @@
 >
 	{#snippet append()}
 		<button
-			
 			class="btn btn-square btn-sm absolute right-0"
 			class:hidden={!browser}
 			style:scale={!!value ? 0.75 : 0}
 			onclick={() => {
-			value = ''
-			inputElement.dispatchEvent(new Event('input', { bubbles: true }))
-		}}
+				value = ''
+				inputElement.dispatchEvent(new Event('input', { bubbles: true }))
+			}}
 			tabindex={!!value ? 0 : -1}
 		>
 			<Icon path={mdiClose} />

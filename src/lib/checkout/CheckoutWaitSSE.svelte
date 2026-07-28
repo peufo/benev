@@ -5,12 +5,16 @@
 	import { page } from '$app/stores'
 
 	interface Props {
-		allreadyLoaded?: (checkoutId: string) => boolean;
-		removeCheckoutId?: boolean;
-		eventSource?: string;
+		allreadyLoaded?: (checkoutId: string) => boolean
+		removeCheckoutId?: boolean
+		eventSource?: string
 	}
 
-	let { allreadyLoaded = () => false, removeCheckoutId = false, eventSource = '/me/checkouts/validation' }: Props = $props();
+	let {
+		allreadyLoaded = () => false,
+		removeCheckoutId = false,
+		eventSource = '/me/checkouts/validation',
+	}: Props = $props()
 
 	let checkoutId = $page.url.searchParams.get('checkoutId')
 	let isNewCheckoutAwaited = $state(!!checkoutId && !allreadyLoaded(checkoutId))

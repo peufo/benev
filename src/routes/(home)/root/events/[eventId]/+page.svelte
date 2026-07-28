@@ -11,7 +11,7 @@
 		ExternalLinkIcon,
 	} from '@lucide/svelte'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	let event = $derived(data.event)
 	let stats = $derived(data.stats)
@@ -26,13 +26,13 @@
 
 	<Card>
 		{#snippet title()}
-				<h2  class="title flex items-center">
+			<h2 class="title flex items-center">
 				<span>{event.name}</span>
 				<a href="/{event.id}" class="ml-auto" target="_blank">
 					<ExternalLinkIcon />
 				</a>
 			</h2>
-			{/snippet}
+		{/snippet}
 
 		<div class="flex flex-col gap-2 text-sm">
 			<div class="flex flex-wrap gap-x-4 gap-y-1 text-base-content/80">
@@ -99,8 +99,8 @@
 
 	<Card>
 		{#snippet title()}
-				<h3  class="title">Inscriptions ({totalSubscribes})</h3>
-			{/snippet}
+			<h3 class="title">Inscriptions ({totalSubscribes})</h3>
+		{/snippet}
 		<div class="flex flex-wrap gap-4">
 			<div class="flex items-center gap-2">
 				<span class="badge badge-warning badge-sm">{stats.subscribesByState.request}</span>

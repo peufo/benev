@@ -14,12 +14,12 @@
 	import type { TeamWithComputedValues } from '$lib/server'
 
 	interface Props {
-		dialog: HTMLDialogElement;
-		memberId: string;
-		title?: string;
+		dialog: HTMLDialogElement
+		memberId: string
+		title?: string
 	}
 
-	let { dialog = $bindable(), memberId, title = 'Nouvelle inscription' }: Props = $props();
+	let { dialog = $bindable(), memberId, title = 'Nouvelle inscription' }: Props = $props()
 
 	let selectedTeam: TeamWithComputedValues | null = $state(null)
 	let selectedPeriod: Period | null = $state(null)
@@ -65,7 +65,7 @@
 
 <Dialog bind:dialog class="overflow-x-hidden">
 	{#snippet header()}
-		<h2  class="title" bind:offsetWidth>{title}</h2>
+		<h2 class="title" bind:offsetWidth>{title}</h2>
 	{/snippet}
 	{#if !selectedTeam}
 		<div class="content" in:fly={{ x: -offsetWidth, duration: 250 }}>
@@ -78,17 +78,15 @@
 				on:input={({ detail }) => handleSelectTeam(detail.value)}
 			>
 				{#snippet suggestion({ item })}
-							
-						<span>{item.name}</span>
-						<Progress
-							class="ml-auto"
-							period={{
-								maxSubscribe: item.maxSubscribes,
-								subscribes: item.periods.map((p) => p.subscribes).flat(),
-							}}
-						/>
-					
-							{/snippet}
+					<span>{item.name}</span>
+					<Progress
+						class="ml-auto"
+						period={{
+							maxSubscribe: item.maxSubscribes,
+							subscribes: item.periods.map((p) => p.subscribes).flat(),
+						}}
+					/>
+				{/snippet}
 			</InputRelation>
 		</div>
 	{:else}
@@ -110,13 +108,12 @@
 				items={selectedTeam.periods.filter((p) => p.isAvailable)}
 				class="w-full max-h-80 mt-2 overflow-y-auto relative"
 				on:select={({ detail }) => onSelect(detail)}
-				
 			>
 				{#snippet children({ item })}
-								<span>{formatRange(item)}</span>
+					<span>{formatRange(item)}</span>
 					<Progress period={item} class="ml-auto" />
-											{/snippet}
-						</SelectorList>
+				{/snippet}
+			</SelectorList>
 			<input type="hidden" name="memberId" value={memberId} />
 			<input type="hidden" name="periodId" value={selectedPeriod?.id} />
 			<button type="submit" bind:this={submitButton} class="hidden">submit</button>

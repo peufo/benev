@@ -2,10 +2,10 @@
 	import type { GiftCondition } from '@prisma/client'
 
 	interface Props {
-		condition: Partial<GiftCondition>;
+		condition: Partial<GiftCondition>
 	}
 
-	let { condition }: Props = $props();
+	let { condition }: Props = $props()
 </script>
 
 <div>

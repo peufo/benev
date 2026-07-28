@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { LayoutMe } from '$lib/me'
 
-	let { data, children } = $props();
+	let { data, children } = $props()
 </script>
 
 <LayoutMe user={data.user}>

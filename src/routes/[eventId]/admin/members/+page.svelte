@@ -27,7 +27,7 @@
 	import { page } from '$app/stores'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	let tableFields = $state(getMembersTableFields(data.teams, data.fields))
 
@@ -136,7 +136,6 @@
 <Drawer
 	title="Modifier le profil de {data.memberProfile?.firstName}"
 	key="form_member_profile"
-	
 	classBody="pt-4"
 >
 	{#snippet children({ close })}

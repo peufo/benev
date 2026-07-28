@@ -2,11 +2,11 @@
 	import type { TableField } from '$lib/fuma/ui/table/index.js'
 
 	interface Props {
-		value: string;
-		field: TableField<Item>;
+		value: string
+		field: TableField<Item>
 	}
 
-	let { value, field }: Props = $props();
+	let { value, field }: Props = $props()
 </script>
 
 <td data-field-key={field.key} data-field-type={field.type === 'textarea' ? 'textarea' : 'string'}>

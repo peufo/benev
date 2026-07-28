@@ -4,11 +4,11 @@
 	import { domain } from '.'
 
 	interface Props {
-		checkout: Checkout & { user: User; products: Product[] };
-		dest?: 'user' | 'root';
+		checkout: Checkout & { user: User; products: Product[] }
+		dest?: 'user' | 'root'
 	}
 
-	let { checkout, dest = 'user' }: Props = $props();
+	let { checkout, dest = 'user' }: Props = $props()
 </script>
 
 <EmailLayout title={dest === 'user' ? 'Merci pour ton achat' : 'Nouvel achat'}>

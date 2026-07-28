@@ -3,11 +3,11 @@
 	import { domain } from '.'
 
 	interface Props {
-		isNewUser?: boolean;
-		tokenId: string;
+		isNewUser?: boolean
+		tokenId: string
 	}
 
-	let { isNewUser = false, tokenId }: Props = $props();
+	let { isNewUser = false, tokenId }: Props = $props()
 </script>
 
 <EmailLayout title={isNewUser ? 'Bienvenue sur benev.io' : 'Verification de ton adresse mail'}>

@@ -9,12 +9,12 @@
 	import type { TippyProps } from '$lib/fuma/utils/tippy.js'
 
 	interface Props {
-		options: Options;
-		tippyProps?: Partial<TippyProps>;
-		children?: import('svelte').Snippet;
+		options: Options
+		tippyProps?: Partial<TippyProps>
+		children?: import('svelte').Snippet
 	}
 
-	let { options, tippyProps = {}, children }: Props = $props();
+	let { options, tippyProps = {}, children }: Props = $props()
 
 	let _options = $derived(parseOptions(options))
 
@@ -32,7 +32,7 @@
 
 <DropDown bind:this={dropDown} {tippyProps}>
 	{#snippet activator()}
-		<div class="contents" bind:this={trigger} >
+		<div class="contents" bind:this={trigger}>
 			{#if children}{@render children()}{:else}
 				<button type="button" class="flex h-12 items-center gap-2 rounded-lg border pl-4 pr-2">
 					<span>Menu</span>
@@ -45,15 +45,14 @@
 	<SelectorList
 		{trigger}
 		items={_options.map((opt) => ({ id: opt.value, ...opt }))}
-		
 		on:select={({ detail }) => onSelect(detail)}
 		class="w-full"
 	>
 		{#snippet children({ item })}
-				{#if item.icon}
+			{#if item.icon}
 				<Icon path={item.icon} size={18} class="opacity-70" />
 			{/if}
 			<span class="whitespace-nowrap pr-4">{item.label}</span>
-					{/snippet}
-		</SelectorList>
+		{/snippet}
+	</SelectorList>
 </DropDown>

@@ -9,18 +9,13 @@
 	import { ButtonDelete, tiptapParser, urlParam } from '$lib/fuma'
 
 	interface Props {
-		event: Event;
-		charter: TPage | null;
-		successReset?: boolean;
-		successUpdate?: boolean;
+		event: Event
+		charter: TPage | null
+		successReset?: boolean
+		successUpdate?: boolean
 	}
 
-	let {
-		event,
-		charter,
-		successReset = false,
-		successUpdate = false
-	}: Props = $props();
+	let { event, charter, successReset = false, successUpdate = false }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 

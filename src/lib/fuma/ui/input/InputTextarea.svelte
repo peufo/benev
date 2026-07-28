@@ -37,9 +37,8 @@
 			{onblur}
 			name={key}
 			id={key}
-			class="textarea textarea-bordered {inputClass || ''}"
+			class="textarea {inputClass || ''}"
 			rows="4"
-			{...inputProps}
-		></textarea>
+			{...inputProps}></textarea>
 	{/snippet}
 </FormControl>

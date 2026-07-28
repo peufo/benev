@@ -5,12 +5,12 @@
 	import MemberFieldSnippet from './MemberFieldSnippet.svelte'
 
 	interface Props {
-		key: string;
-		label: string;
-		value: Field | null;
-		type: FieldType;
-		typesAccepted?: FieldType[];
-		oninput?: (field: Field) => void;
+		key: string
+		label: string
+		value: Field | null
+		type: FieldType
+		typesAccepted?: FieldType[]
+		oninput?: (field: Field) => void
 	}
 
 	let {
@@ -19,8 +19,8 @@
 		value = $bindable(),
 		type,
 		typesAccepted = [type],
-		oninput = () => {}
-	}: Props = $props();
+		oninput = () => {},
+	}: Props = $props()
 </script>
 
 <InputRelation

@@ -11,15 +11,13 @@
 	} from '@mdi/js'
 	import { MemberSetLeaderOf } from '$lib/member'
 
-
-	
 	interface Props {
-		teams: Team[];
+		teams: Team[]
 		// memberId used in actions
-		memberId: string;
+		memberId: string
 	}
 
-	let { teams, memberId }: Props = $props();
+	let { teams, memberId }: Props = $props()
 
 	let teamsId = $derived(JSON.stringify(teams.map((team) => team.id)))
 

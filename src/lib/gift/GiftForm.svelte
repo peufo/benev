@@ -9,10 +9,10 @@
 
 	type GiftWithConditions = Gift & { conditions: GiftCondition[] }
 	interface Props {
-		gift?: GiftWithConditions | undefined;
+		gift?: GiftWithConditions | undefined
 	}
 
-	let { gift = $bindable(undefined) }: Props = $props();
+	let { gift = $bindable(undefined) }: Props = $props()
 
 	const createAction = '?/create_gift'
 	const updateAction = '?/update_gift'

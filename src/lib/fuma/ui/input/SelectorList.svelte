@@ -2,18 +2,16 @@
 	import { createEventDispatcher } from 'svelte'
 	import { selector } from '$lib/fuma/action/selector.js'
 
-	
-
 	interface Props {
-		class?: string;
-		items: Item[];
-		isError?: boolean;
-		isLoading?: boolean;
-		focusIndex?: number;
-		trigger?: HTMLElement | undefined;
-		keyDownEvent?: KeyboardEvent | undefined;
-		keyDownPreventDefault?: boolean;
-		children?: import('svelte').Snippet<[any]>;
+		class?: string
+		items: Item[]
+		isError?: boolean
+		isLoading?: boolean
+		focusIndex?: number
+		trigger?: HTMLElement | undefined
+		keyDownEvent?: KeyboardEvent | undefined
+		keyDownPreventDefault?: boolean
+		children?: import('svelte').Snippet<[any]>
 	}
 
 	let {
@@ -25,8 +23,8 @@
 		trigger = undefined,
 		keyDownEvent = undefined,
 		keyDownPreventDefault = true,
-		children
-	}: Props = $props();
+		children,
+	}: Props = $props()
 
 	const dispatch = createEventDispatcher<{ select: number }>()
 </script>
@@ -54,7 +52,7 @@
 				class="flex cursor-pointer items-center justify-start gap-3 rounded px-3 py-2 hover:bg-base-200"
 				class:bg-base-300={isFocused}
 			>
-				{@render children?.({ item, index, })}
+				{@render children?.({ item, index })}
 			</li>
 		{:else}
 			<li class="px-3 py-2 rounded opacity-70">

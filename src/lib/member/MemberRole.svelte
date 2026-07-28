@@ -19,20 +19,14 @@
 		mdiShieldCrownOutline,
 	} from '@mdi/js'
 
-	
 	interface Props {
-		roles: MemberRole[];
-		class?: string;
-		mode?: 'badge' | 'icon' | 'contents';
-		iconSize?: number;
+		roles: MemberRole[]
+		class?: string
+		mode?: 'badge' | 'icon' | 'contents'
+		iconSize?: number
 	}
 
-	let {
-		roles,
-		class: klass = '',
-		mode = 'badge',
-		iconSize = 21
-	}: Props = $props();
+	let { roles, class: klass = '', mode = 'badge', iconSize = 21 }: Props = $props()
 
 	const rolesOrder: MemberRole[] = ['root', 'owner', 'admin', 'leader', 'member']
 	let role = $derived(rolesOrder.find((r) => roles.includes(r)))

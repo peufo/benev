@@ -7,12 +7,14 @@
 	import { adminTabs } from '$lib/layout/adminTabs'
 
 	interface Props {
-		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[];
+		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
 	}
 
-	let { pages }: Props = $props();
+	let { pages }: Props = $props()
 
-	let adminIsVisible = $derived($page.data.member?.roles.includes('leader') || $page.data.userIsRoot)
+	let adminIsVisible = $derived(
+		$page.data.member?.roles.includes('leader') || $page.data.userIsRoot
+	)
 </script>
 
 <div class="gap-2 hidden lg:flex">
@@ -22,7 +24,6 @@
 <DropDown class="max-h-none min-w-[200px]" hideOnBlur>
 	{#snippet activator()}
 		<button
-			
 			class="
 				btn btn-square ml-2 lg:hidden
 			"

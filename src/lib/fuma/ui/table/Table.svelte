@@ -12,17 +12,16 @@
 		syncFieldsWithParams,
 	} from '$lib/fuma/ui/table/index.js'
 
-	
 	interface Props {
-		key?: string;
-		fields: TableField<Item>[];
-		items: Item[];
-		slotAction?: ((item: Item) => ComponentAndProps) | undefined;
-		placholder?: string;
-		class?: string;
-		classRow?: string;
-		hideBody?: boolean;
-		onCreateField?: (() => void) | undefined;
+		key?: string
+		fields: TableField<Item>[]
+		items: Item[]
+		slotAction?: ((item: Item) => ComponentAndProps) | undefined
+		placholder?: string
+		class?: string
+		classRow?: string
+		hideBody?: boolean
+		onCreateField?: (() => void) | undefined
 	}
 
 	let {
@@ -34,8 +33,8 @@
 		class: klass = '',
 		classRow = '',
 		hideBody = false,
-		onCreateField = undefined
-	}: Props = $props();
+		onCreateField = undefined,
+	}: Props = $props()
 
 	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = createKeys(key)
 	context.set(key, {

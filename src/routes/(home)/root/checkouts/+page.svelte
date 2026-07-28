@@ -2,7 +2,7 @@
 	import { Card, Icon, Pagination } from '$lib/fuma'
 	import { mdiPlus } from '@mdi/js'
 
-	let { data } = $props();
+	let { data } = $props()
 </script>
 
 <Card>

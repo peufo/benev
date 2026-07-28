@@ -6,10 +6,10 @@
 	import { SUBSCRIBE_STATE } from '$lib/constant'
 
 	interface Props {
-		data: PageData;
+		data: PageData
 	}
 
-	let { data }: Props = $props();
+	let { data }: Props = $props()
 
 	const urlWith = derived(
 		urlParam,

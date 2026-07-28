@@ -6,18 +6,13 @@
 	import Icon from '$lib/fuma/ui/icon/Icon.svelte'
 
 	interface Props {
-		isLoading: boolean;
-		createUrl?: string;
-		createTitle?: string;
-		createIcon?: any;
+		isLoading: boolean
+		createUrl?: string
+		createTitle?: string
+		createIcon?: any
 	}
 
-	let {
-		isLoading,
-		createUrl = '',
-		createTitle = '',
-		createIcon = mdiPlus
-	}: Props = $props();
+	let { isLoading, createUrl = '', createTitle = '', createIcon = mdiPlus }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ unselect: void; create: void }>()
 </script>

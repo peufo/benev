@@ -27,7 +27,7 @@
 	} from '$lib/member'
 	import MembersBadges from '../MembersBadges.svelte'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	let createSubscribeDialog: HTMLDialogElement = $state()
 </script>
@@ -73,7 +73,7 @@
 			{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}
 				<DropDown hideOnBlur tippyProps={{ arrow: true }}>
 					{#snippet activator()}
-										<button  class="btn btn-sm ml-2 whitespace-nowrap">
+						<button class="btn btn-sm ml-2 whitespace-nowrap">
 							<MemberRole roles={data.memberProfile.roles} mode="contents" />
 							{#if data.memberProfile.isValidedByEvent}
 								<Icon
@@ -89,7 +89,7 @@
 								/>
 							{/if}
 						</button>
-									{/snippet}
+					{/snippet}
 
 					<MemberIsValidedByEventForm memberProfile={data.memberProfile} />
 
@@ -167,7 +167,6 @@
 	title="Modifier le coordonnées de {data.memberProfile.firstName}"
 	key="form_member_contact"
 	classBody="pt-4"
-	
 >
 	{#snippet children({ close })}
 		<MemberContactForm member={data.memberProfile} on:success={() => close()} />

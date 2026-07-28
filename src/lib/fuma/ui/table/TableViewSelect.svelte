@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
+	import { preventDefault } from 'svelte/legacy'
 
 	import { onMount } from 'svelte'
 	import { mdiChevronDown, mdiContentSaveEditOutline, mdiPlus } from '@mdi/js'
@@ -19,12 +19,12 @@
 	}
 
 	interface Props {
-		key: string;
-		views: View[];
-		action?: string;
-		actionCreate?: string;
-		actionUpdate?: string;
-		actionDelete?: string;
+		key: string
+		views: View[]
+		action?: string
+		actionCreate?: string
+		actionUpdate?: string
+		actionDelete?: string
 	}
 
 	let {
@@ -33,8 +33,8 @@
 		action = '',
 		actionCreate = '?/view_create',
 		actionUpdate = '?/view_update',
-		actionDelete = '?/view_delete'
-	}: Props = $props();
+		actionDelete = '?/view_delete',
+	}: Props = $props()
 
 	let dialog: HTMLDialogElement = $state()
 	const form = useForm({
@@ -56,6 +56,8 @@
 	)
 
 	function getQuery({ searchParams }: URL) {
+		// Construit puis sérialisé immédiatement: pas un état réactif.
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity
 		const searchParam = new URLSearchParams(searchParams)
 		searchParam.delete('skip')
 		searchParam.delete('take')
@@ -67,7 +69,6 @@
 	{#snippet activator()}
 		<button
 			type="button"
-			
 			class="menu-item bordered btn-sm gap-1 rounded-lg border font-semibold opacity-90"
 		>
 			<span>{isNewView ? 'Nouvelle vue' : selectedView?.name || 'Vue simple'}</span>
@@ -130,7 +131,7 @@
 
 <Dialog bind:dialog>
 	{#snippet header()}
-		<h2  class="title">
+		<h2 class="title">
 			{#if selectedView}
 				Modifier la vue
 			{:else}

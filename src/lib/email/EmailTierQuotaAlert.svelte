@@ -5,22 +5,15 @@
 	import { EVENT_TIER } from '$lib/constant'
 
 	interface Props {
-		event: Event;
-		owner: User;
-		membersValided: number;
-		ratio: number;
-		threshold: 80 | 90 | 100;
-		tier: EventTier;
+		event: Event
+		owner: User
+		membersValided: number
+		ratio: number
+		threshold: 80 | 90 | 100
+		tier: EventTier
 	}
 
-	let {
-		event,
-		owner,
-		membersValided,
-		ratio,
-		threshold,
-		tier
-	}: Props = $props();
+	let { event, owner, membersValided, ratio, threshold, tier }: Props = $props()
 
 	let tierConfig = $derived(EVENT_TIER[tier])
 	let max = $derived(tierConfig.max)

@@ -5,12 +5,12 @@
 	import { contextContainer } from '$lib/fuma/ui/context.js'
 
 	interface Props {
-		dialog: HTMLDialogElement;
-		hideCloseButton?: boolean;
-		class?: string;
-		header?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
-		footer?: import('svelte').Snippet;
+		dialog: HTMLDialogElement
+		hideCloseButton?: boolean
+		class?: string
+		header?: import('svelte').Snippet
+		children?: import('svelte').Snippet
+		footer?: import('svelte').Snippet
 	}
 
 	let {
@@ -19,9 +19,8 @@
 		class: klass = '',
 		header,
 		children,
-		footer
-	}: Props = $props();
-	
+		footer,
+	}: Props = $props()
 
 	const dispatch = createEventDispatcher<{ open: void; close: void }>()
 	contextContainer.set('dialog')

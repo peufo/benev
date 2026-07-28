@@ -4,10 +4,10 @@
 	import { urlParam } from '$lib/fuma/store/index.js'
 
 	interface Props {
-		take?: number;
+		take?: number
 	}
 
-	let { take = 20 }: Props = $props();
+	let { take = 20 }: Props = $props()
 
 	let skip = $derived(+($urlParam.get('skip') || 0))
 	let _take = $derived(+($urlParam.get('take') || take))

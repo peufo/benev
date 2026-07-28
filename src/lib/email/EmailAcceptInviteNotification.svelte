@@ -4,10 +4,10 @@
 	import { domain } from '.'
 
 	interface Props {
-		member: Member & { event: Event };
+		member: Member & { event: Event }
 	}
 
-	let { member }: Props = $props();
+	let { member }: Props = $props()
 </script>
 
 <EmailLayout

@@ -4,11 +4,11 @@
 	import type { Period, Team } from '@prisma/client'
 
 	interface Props {
-		team: Team & { periods: Period[] };
-		deltaDays: number;
+		team: Team & { periods: Period[] }
+		deltaDays: number
 	}
 
-	let { team, deltaDays }: Props = $props();
+	let { team, deltaDays }: Props = $props()
 
 	const range = getRangeOfTeam(team)
 	const DAY = 1000 * 60 * 60 * 24

@@ -13,18 +13,13 @@
 	import { slide } from 'svelte/transition'
 
 	interface Props {
-		event: Event & { memberFields: Field[] };
-		user: User | undefined;
-		member: MemberProfile | undefined;
-		charter: Page | null;
+		event: Event & { memberFields: Field[] }
+		user: User | undefined
+		member: MemberProfile | undefined
+		charter: Page | null
 	}
 
-	let {
-		event,
-		user,
-		member,
-		charter
-	}: Props = $props();
+	let { event, user, member, charter }: Props = $props()
 
 	const steps = ['Connexion', 'Adhésion', 'Mon compte']
 	const isMemberProfileRequired = !!event.memberFields.filter((f) => f.memberCanWrite).length
@@ -153,8 +148,8 @@
 {#if member}
 	<Dialog bind:dialog={dialogRemoveMember}>
 		{#snippet header()}
-				<h2  class="title">On abandonne ?</h2>
-			{/snippet}
+			<h2 class="title">On abandonne ?</h2>
+		{/snippet}
 		<div class="flex gap-2 justify-end">
 			<MemberDeleteForm memberId={member.id}>Supprimer ma participation</MemberDeleteForm>
 			<button type="button" class="btn" onclick={() => dialogRemoveMember.close()}>

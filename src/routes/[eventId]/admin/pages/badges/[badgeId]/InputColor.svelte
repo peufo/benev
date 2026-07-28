@@ -3,12 +3,12 @@
 	import { getNextColor } from './InputColorPalette.svelte'
 
 	interface Props {
-		name?: string;
-		label?: any;
-		value?: any;
+		name?: string
+		label?: string
+		value?: string
 	}
 
-	let { name = '', label = name, value = $bindable(getNextColor()) }: Props = $props();
+	let { name = '', label = name, value = $bindable(getNextColor()) }: Props = $props()
 
 	let input: HTMLInputElement = $state()
 </script>

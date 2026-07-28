@@ -5,12 +5,16 @@
 
 	type Order = 'asc' | 'desc' | undefined
 	interface Props {
-		order: Order;
-		iconAsc?: any;
-		iconDesc?: any;
+		order: Order
+		iconAsc?: any
+		iconDesc?: any
 	}
 
-	let { order = $bindable(), iconAsc = mdiSortAscending, iconDesc = mdiSortDescending }: Props = $props();
+	let {
+		order = $bindable(),
+		iconAsc = mdiSortAscending,
+		iconDesc = mdiSortDescending,
+	}: Props = $props()
 
 	const dispatch = createEventDispatcher<{ change: Order }>()
 

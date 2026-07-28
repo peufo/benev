@@ -4,12 +4,12 @@
 	import { EVENT_TIER, parseTierPrice } from '$lib/constant'
 
 	interface Props {
-		tier: EventTier;
-		action?: { label: string; href: string } | 'current' | undefined;
-		features?: string[];
+		tier: EventTier
+		action?: { label: string; href: string } | 'current' | undefined
+		features?: string[]
 	}
 
-	let { tier, action = undefined, features = [] }: Props = $props();
+	let { tier, action = undefined, features = [] }: Props = $props()
 
 	let config = $derived(EVENT_TIER[tier])
 	let isCurrent = $derived(action === 'current')

@@ -4,10 +4,10 @@
 	import { Icon } from '$lib/fuma'
 
 	interface Props {
-		page: Page;
+		page: Page
 	}
 
-	let { page }: Props = $props();
+	let { page }: Props = $props()
 </script>
 
 <div class="flex gap-2">

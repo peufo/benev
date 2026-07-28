@@ -15,11 +15,11 @@
 	import { SelectMedia } from '$lib/material/media'
 
 	interface Props {
-		page: Page;
-		charterAlreadyExist: boolean;
+		page: Page
+		charterAlreadyExist: boolean
 	}
 
-	let { page, charterAlreadyExist }: Props = $props();
+	let { page, charterAlreadyExist }: Props = $props()
 
 	let selectMedia: SelectMedia = $state()
 	let isDirty = $state(false)
@@ -36,7 +36,9 @@
 	let submitButton: HTMLButtonElement = $state()
 	let inputTextRich: InputTextRich = $state()
 
-	let pagePath = $derived(`${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`)
+	let pagePath = $derived(
+		`${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
+	)
 
 	function handleChange() {
 		isDirty = true
@@ -68,10 +70,8 @@
 
 		<FormControl label="Type de page">
 			{#snippet label_append()}
-					
-					<PageTypeHelp />
-				
-					{/snippet}
+				<PageTypeHelp />
+			{/snippet}
 
 			{#if page.type === 'home'}
 				<input type="hidden" name="type" value="home" />

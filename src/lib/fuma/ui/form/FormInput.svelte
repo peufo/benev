@@ -10,17 +10,16 @@
 		value: FormInputProps<InputType>['value']
 	}
 
-	
 	interface Props {
-		type: InputType;
-		value: FormInputProps<InputType>['value'];
+		type: InputType
+		value: FormInputProps<InputType>['value']
 		[key: string]: any
 	}
 
-	let { type: inputType, value = $bindable(), ...rest }: Props = $props();
+	let { type: inputType, value = $bindable(), ...rest }: Props = $props()
 	let component = $derived(formInputs[inputType] as any)
 
-	const SvelteComponent = $derived(component);
+	const SvelteComponent = $derived(component)
 </script>
 
 <SvelteComponent bind:value {...rest} />

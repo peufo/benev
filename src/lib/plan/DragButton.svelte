@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
+	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import { browser } from '$app/environment'
 	import { mdiDrag, mdiDragHorizontal, mdiDragVertical } from '@mdi/js'
 	import { Icon } from '$lib/fuma'
@@ -9,12 +9,12 @@
 
 	type Axis = 'any' | 'x' | 'y'
 	interface Props {
-		axis?: Axis;
-		class?: string;
+		axis?: Axis
+		class?: string
 	}
 
-	let { axis = 'any', class: klass = '' }: Props = $props();
-	
+	let { axis = 'any', class: klass = '' }: Props = $props()
+
 	const paths: Record<Axis, string> = {
 		any: mdiDrag,
 		x: mdiDragHorizontal,

@@ -5,12 +5,12 @@
 	import dayjs from 'dayjs'
 
 	interface Props {
-		numberOfMonths?: number;
-		numberOfColumns?: any;
-		showWeekNumbers?: boolean;
-		range?: RangeAsDate | undefined;
-		minDate?: Date | number | string | undefined;
-		maxDate?: Date | number | string | undefined;
+		numberOfMonths?: number
+		numberOfColumns?: any
+		showWeekNumbers?: boolean
+		range?: RangeAsDate | undefined
+		minDate?: Date | number | string | undefined
+		maxDate?: Date | number | string | undefined
 	}
 
 	let {
@@ -19,8 +19,8 @@
 		showWeekNumbers = true,
 		range = $bindable(undefined),
 		minDate = undefined,
-		maxDate = undefined
-	}: Props = $props();
+		maxDate = undefined,
+	}: Props = $props()
 
 	let startElement: HTMLInputElement = $state()
 	let endElement: HTMLInputElement = $state()

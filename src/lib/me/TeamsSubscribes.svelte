@@ -11,16 +11,16 @@
 
 	interface Props {
 		teams: (Team & {
-		leaders: Member[]
-		periods: (Period & {
-			subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
-			tags: Tag[]
+			leaders: Member[]
+			periods: (Period & {
+				subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
+				tags: Tag[]
+			})[]
 		})[]
-	})[];
-		isLeader?: boolean;
+		isLeader?: boolean
 	}
 
-	let { teams, isLeader = false }: Props = $props();
+	let { teams, isLeader = false }: Props = $props()
 </script>
 
 {#if teams.length}

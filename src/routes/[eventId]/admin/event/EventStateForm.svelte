@@ -9,11 +9,11 @@
 	import { useNotify } from '$lib/notify'
 
 	interface Props {
-		event: Event & { owner: { firstName: string } };
-		isOwner: boolean;
+		event: Event & { owner: { firstName: string } }
+		isOwner: boolean
 	}
 
-	let { event, isOwner }: Props = $props();
+	let { event, isOwner }: Props = $props()
 
 	function getNextStates(): Record<EventState, { state: EventState; label: string }[]> {
 		return {

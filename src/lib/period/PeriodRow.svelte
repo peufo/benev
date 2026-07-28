@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { stopPropagation } from 'svelte/legacy';
+	import { stopPropagation } from 'svelte/legacy'
 
 	import { createEventDispatcher } from 'svelte'
 	import { Icon, urlParam } from '$lib/fuma'
@@ -14,10 +14,10 @@
 	import { TagsList } from '$lib/tag'
 
 	interface Props {
-		period: PeriodWithComputedValues & { team: TeamWithComputedValues };
+		period: PeriodWithComputedValues & { team: TeamWithComputedValues }
 	}
 
-	let { period }: Props = $props();
+	let { period }: Props = $props()
 	const dispatch = createEventDispatcher<{ clickPeriod: PeriodWithComputedValues }>()
 
 	function handlePeriodClick(event: Event) {

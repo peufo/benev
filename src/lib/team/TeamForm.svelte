@@ -18,21 +18,19 @@
 	import { modelTeam } from '$lib/models'
 	import type { TeamWithComputedValues } from '$lib/server'
 
-	
-
 	interface Props {
-		class?: string;
-		event: Event & { memberFields: Field[] };
-		team?: Partial<TeamWithComputedValues>;
-		teamForm?: TeamFormInstance | undefined;
+		class?: string
+		event: Event & { memberFields: Field[] }
+		team?: Partial<TeamWithComputedValues>
+		teamForm?: TeamFormInstance | undefined
 	}
 
 	let {
 		class: klass = '',
 		event,
 		team = $bindable({}),
-		teamForm = $bindable(undefined)
-	}: Props = $props();
+		teamForm = $bindable(undefined),
+	}: Props = $props()
 
 	const TeamForm: TeamFormComponent = Form
 </script>

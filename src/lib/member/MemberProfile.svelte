@@ -7,17 +7,19 @@
 	import { fade } from 'svelte/transition'
 
 	interface Props {
-		member: MemberProfile;
-		title?: string;
-		hideStatus?: boolean;
+		member: MemberProfile
+		title?: string
+		hideStatus?: boolean
 	}
 
-	let { member, title = 'Profil', hideStatus = false }: Props = $props();
+	let { member, title = 'Profil', hideStatus = false }: Props = $props()
 
-	let profile = $derived(member.event.memberFields.map((field) => ({
-		field,
-		value: member.profileJson[field.id],
-	})))
+	let profile = $derived(
+		member.event.memberFields.map((field) => ({
+			field,
+			value: member.profileJson[field.id],
+		}))
+	)
 </script>
 
 <div class="flex gap-2 items-center mb-4">
@@ -72,12 +74,7 @@
 	</div>
 {/if}
 
-<Drawer
-	title="Modifier le profil de {member.firstName}"
-	key="form_member_profile"
-	classBody="pt-4"
-	
->
+<Drawer title="Modifier le profil de {member.firstName}" key="form_member_profile" classBody="pt-4">
 	{#snippet children({ close })}
 		<MemberProfileForm memberProfile={member} on:success={() => close()} />
 	{/snippet}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import axios from 'axios'
 	import type { ComponentProps, ComponentType } from 'svelte'
@@ -29,13 +29,12 @@
 	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
 
 	interface Props {
-		conditions?: MemberCondition[];
-		memberFields: Field[];
+		conditions?: MemberCondition[]
+		memberFields: Field[]
 	}
 
-	let { conditions = $bindable([]), memberFields }: Props = $props();
+	let { conditions = $bindable([]), memberFields }: Props = $props()
 	let memberAllowedCount = $state(0)
-
 
 	async function getmemberAllowedCount() {
 		if (!conditions.length || !browser) return
@@ -50,7 +49,6 @@
 			console.error(err)
 		}
 	}
-
 
 	function handleAddCondition(event: { detail: string }) {
 		const _type = event.detail as MemberCondition['type']
@@ -93,7 +91,7 @@
 	}
 	run(() => {
 		if (conditions) getmemberAllowedCount()
-	});
+	})
 	let addConditionOptions = $derived({
 		...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre approuvé' }),
 		...(!conditions.find((c) => c.type === 'age') && { age: 'Âge minimum' }),
@@ -198,10 +196,7 @@
 					{#if field}
 						{@const { component, props } = getFieldInput(field)}
 						{@const SvelteComponent = component}
-						<SvelteComponent
-							{...props}
-							bind:value={condition.args.expectedValue}
-						/>
+						<SvelteComponent {...props} bind:value={condition.args.expectedValue} />
 					{/if}
 				{/if}
 			</div>

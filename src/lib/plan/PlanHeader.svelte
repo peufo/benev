@@ -9,21 +9,14 @@
 	import { ZoomInIcon, ZoomOutIcon } from '@lucide/svelte'
 
 	interface Props {
-		teams: { id: string; name: string }[];
-		views: { id: string; name: string; query: string }[];
-		isFullscreen?: boolean;
-		plan: Plan;
-		class?: string;
+		teams: { id: string; name: string }[]
+		views: { id: string; name: string; query: string }[]
+		isFullscreen?: boolean
+		plan: Plan
+		class?: string
 	}
 
-	let {
-		teams,
-		views,
-		isFullscreen = false,
-		plan,
-		class: klass = ''
-	}: Props = $props();
-	
+	let { teams, views, isFullscreen = false, plan, class: klass = '' }: Props = $props()
 </script>
 
 <div class="flex gap-2 items-center p-2 bg-base-100 {klass}" style="--btn-text-case: none;">
@@ -42,8 +35,8 @@
 			badgePrimary
 		>
 			{#snippet label()}
-						<span  class="font-normal">secteurs</span>
-					{/snippet}
+				<span class="font-normal">secteurs</span>
+			{/snippet}
 		</InputCheckboxsMenu>
 	{/key}
 

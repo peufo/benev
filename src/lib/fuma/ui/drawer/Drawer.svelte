@@ -10,22 +10,19 @@
 	import { contextContainer } from '$lib/fuma/ui/context.js'
 	import { drawerFly } from '$lib/fuma/ui/drawer/drawerFly.js'
 
-	
-
-	
 	interface Props {
-		title?: string;
+		title?: string
 		/** Key used in url query params */
-		key: string;
-		class?: string;
-		maxWidth?: string;
-		classHeader?: string;
-		classBody?: string;
-		duration?: number;
-		noOverlay?: boolean;
-		transitionX?: number;
-		zIndex?: number;
-		children?: import('svelte').Snippet<[any]>;
+		key: string
+		class?: string
+		maxWidth?: string
+		classHeader?: string
+		classBody?: string
+		duration?: number
+		noOverlay?: boolean
+		transitionX?: number
+		zIndex?: number
+		children?: import('svelte').Snippet<[any]>
 	}
 
 	let {
@@ -39,8 +36,8 @@
 		noOverlay = false,
 		transitionX = $bindable(0),
 		zIndex = 50,
-		children
-	}: Props = $props();
+		children,
+	}: Props = $props()
 
 	type GotoOptions = Parameters<typeof goto>[1]
 	export function open(value = 1, options: GotoOptions = {}) {
@@ -112,7 +109,7 @@
 		</div>
 
 		<div class="{classBody} grow pl-8 pr-4">
-			{@render children?.({ open, close, })}
+			{@render children?.({ open, close })}
 		</div>
 	</aside>
 {/if}

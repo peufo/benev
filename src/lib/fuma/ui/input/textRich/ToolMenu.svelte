@@ -16,18 +16,13 @@
 	}
 
 	interface Props {
-		editor: Editor;
-		tools: Tool[];
-		hideLabel?: boolean;
-		activator?: import('svelte').Snippet;
+		editor: Editor
+		tools: Tool[]
+		hideLabel?: boolean
+		activator?: import('svelte').Snippet
 	}
 
-	let {
-		editor,
-		tools,
-		hideLabel = false,
-		activator
-	}: Props = $props();
+	let { editor, tools, hideLabel = false, activator }: Props = $props()
 
 	let dropdown: DropDown = $state()
 
@@ -36,19 +31,20 @@
 		dropdown.hide()
 	}
 
-	let toolSelected =
-		$derived(tools.find((t) => {
+	let toolSelected = $derived(
+		tools.find((t) => {
 			if (t.key) return editor.isActive(t.key, t.attributes)
 			if (t.attributes) return editor.isActive(t.attributes)
 			return false
-		}) || tools[0])
+		}) || tools[0]
+	)
 
-	const activator_render = $derived(activator);
+	const activator_render = $derived(activator)
 </script>
 
 <DropDown hideOnBlur bind:this={dropdown}>
 	{#snippet activator()}
-		<button  type="button" class="menu-item gap-2">
+		<button type="button" class="menu-item gap-2">
 			{#if activator_render}{@render activator_render()}{:else}
 				<Icon path={toolSelected.icon} size={20} class="opacity-70" />
 				{#if !hideLabel}

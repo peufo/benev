@@ -7,11 +7,11 @@
 	import type { Event } from '@prisma/client'
 
 	interface Props {
-		events: Event[];
-		emptyTitle?: string;
-		emptyDescription?: string;
-		emptyActionHref?: string;
-		emptyActionLabel?: string;
+		events: Event[]
+		emptyTitle?: string
+		emptyDescription?: string
+		emptyActionHref?: string
+		emptyActionLabel?: string
 	}
 
 	let {
@@ -19,8 +19,8 @@
 		emptyTitle = 'Aucun événement',
 		emptyDescription = '',
 		emptyActionHref = '/me',
-		emptyActionLabel = 'Organiser mon événement'
-	}: Props = $props();
+		emptyActionLabel = 'Organiser mon événement',
+	}: Props = $props()
 </script>
 
 {#if events.length}

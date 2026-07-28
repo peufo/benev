@@ -2,10 +2,10 @@
 	import { Icon } from '$lib/fuma'
 	import { mdiAlertBoxOutline } from '@mdi/js'
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import('svelte').Snippet
 	}
 
-	let { children }: Props = $props();
+	let { children }: Props = $props()
 </script>
 
 <div class="bg-base-300/50 p-4 rounded-box opacity-60">

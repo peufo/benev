@@ -5,11 +5,11 @@
 	import { createPeriod } from './createPeriod'
 	import PeriodCard from './PeriodCard.svelte'
 	interface Props {
-		team: Team & { periods: PeriodWithMembers[] };
-		plan: Plan;
+		team: Team & { periods: PeriodWithMembers[] }
+		plan: Plan
 	}
 
-	let { team = $bindable(), plan }: Props = $props();
+	let { team = $bindable(), plan }: Props = $props()
 
 	let stacks = $derived(getStacks(team.periods))
 </script>

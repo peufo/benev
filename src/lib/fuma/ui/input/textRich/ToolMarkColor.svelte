@@ -3,18 +3,13 @@
 	import { tip } from '$lib/fuma/action/tip.js'
 
 	interface Props {
-		icon: string;
-		label: string;
-		color: string;
-		setColor: (color: string) => void;
+		icon: string
+		label: string
+		color: string
+		setColor: (color: string) => void
 	}
 
-	let {
-		icon,
-		label,
-		color = $bindable(),
-		setColor
-	}: Props = $props();
+	let { icon, label, color = $bindable(), setColor }: Props = $props()
 
 	let inputColor: HTMLInputElement = $state()
 

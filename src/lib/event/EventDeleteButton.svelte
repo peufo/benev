@@ -5,10 +5,10 @@
 	import type { Event } from '@prisma/client'
 
 	interface Props {
-		event: Event;
+		event: Event
 	}
 
-	let { event }: Props = $props();
+	let { event }: Props = $props()
 	let dialog: HTMLDialogElement = $state()
 
 	const form = useForm({
@@ -24,7 +24,7 @@
 
 <Dialog bind:dialog>
 	{#snippet header()}
-		<h2  class="title">Supprimer "{event?.name}"</h2>
+		<h2 class="title">Supprimer "{event?.name}"</h2>
 	{/snippet}
 	<form method="post" action="/{event.id}?/event_delete" use:enhance={form.submit} class="contents">
 		<input type="hidden" name="id" value={event?.id} />

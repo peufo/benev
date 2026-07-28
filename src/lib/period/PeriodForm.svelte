@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run, preventDefault } from 'svelte/legacy';
+	import { run, preventDefault } from 'svelte/legacy'
 
 	import { createEventDispatcher } from 'svelte'
 	import axios from 'axios'
@@ -28,14 +28,13 @@
 
 	type PeriodProp = Partial<Period & { team: Team; tags: Tag[]; subscribes: Subscribe[] }>
 
-	
 	interface Props {
-		class?: string;
-		period?: PeriodProp;
-		disableRedirect?: boolean;
+		class?: string
+		period?: PeriodProp
+		disableRedirect?: boolean
 	}
 
-	let { class: klass = '', period = $bindable({}), disableRedirect = false }: Props = $props();
+	let { class: klass = '', period = $bindable({}), disableRedirect = false }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ success: void; delete: void }>()
 
@@ -90,7 +89,6 @@
 
 	let maxSubscribe = $state(period?.maxSubscribe || 1)
 
-
 	// ATTENTION runtime: `Intl.DurationFormat` n'est pas disponible partout. Bun l'a
 	// (vérifié en 1.2.22), Node ne l'a pas avant la v23. Le Dockerfile lance l'app avec
 	// Bun, donc le SSR passe; sur un hôte Node plus ancien l'appel lèverait un TypeError.
@@ -134,7 +132,7 @@
 	}
 	run(() => {
 		if (detectChange(period)) setPeriod(period)
-	});
+	})
 	let basePath = $derived(`${$eventPath}/admin`)
 </script>
 

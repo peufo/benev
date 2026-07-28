@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import { getMemberSuggestions } from '$lib/pages/memberSuggestions'
 	import { suggestionItems, type SuggestionItem } from '$lib/fuma'
@@ -9,8 +9,7 @@
 	import { emailSuggestions } from '$lib/pages/emailSuggesions'
 	import type { EmailEvent } from '$lib/email/models'
 
-	let { data } = $props();
-
+	let { data } = $props()
 
 	function getSuggestions(page: Page): SuggestionItem[] {
 		if (page.type === 'member') return getMemberSuggestions(data.event.memberFields)
@@ -24,7 +23,7 @@
 	}
 	run(() => {
 		suggestionItems.set(getSuggestions(data.page))
-	});
+	})
 </script>
 
 <PageForm page={data.page} charterAlreadyExist={!!data.pages.find((p) => p.type === 'charter')} />

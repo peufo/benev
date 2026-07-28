@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
+	import { SvelteSet } from 'svelte/reactivity'
 	import { Dialog, Icon, InputRelation } from '$lib/fuma'
 	import {
 		mdiArrowLeft,
@@ -12,11 +13,11 @@
 	import { toast } from 'svelte-sonner'
 
 	interface Props {
-		dialog: HTMLDialogElement;
-		title?: string;
+		dialog: HTMLDialogElement
+		title?: string
 	}
 
-	let { dialog = $bindable(), title = 'Importer des membres' }: Props = $props();
+	let { dialog = $bindable(), title = 'Importer des membres' }: Props = $props()
 
 	interface ImportableEvent {
 		id: string
@@ -69,7 +70,9 @@
 	let step: 'events' | 'members' | 'fields' | 'confirm' | 'results' = $state('events')
 	let selectedEvent: ImportableEvent | null = $state(null)
 	let sourceMembers: SourceMember[] = $state([])
-	let selectedMemberIds: Set<string> = $state(new Set())
+	// `SvelteSet`: en mode runes, muter un `Set` natif ne déclenche aucun rendu, et la
+	// réassignation `x = x` qui servait de contournement en Svelte 4 est sans effet.
+	let selectedMemberIds = new SvelteSet<string>()
 	let targetFields: Field[] = $state([])
 	let fieldMappings: FieldMapping[] = $state([])
 	let importResults: ImportResults | null = $state(null)
@@ -119,16 +122,16 @@
 		} else {
 			selectedMemberIds.add(memberId)
 		}
-		selectedMemberIds = selectedMemberIds // trigger reactivity
 	}
 
 	function toggleSelectAll() {
-		if (selectedMemberIds.size === sourceMembers.length) {
-			selectedMemberIds.clear()
-		} else {
-			selectedMemberIds = new Set(sourceMembers.map((m) => m.id))
+		// La variable n'est pas un `$state`: c'est le SvelteSet lui-même qui est réactif.
+		// On le mute donc au lieu de le remplacer, sinon le rendu ne suit pas.
+		const allSelected = selectedMemberIds.size === sourceMembers.length
+		selectedMemberIds.clear()
+		if (!allSelected) {
+			for (const { id } of sourceMembers) selectedMemberIds.add(id)
 		}
-		selectedMemberIds = selectedMemberIds // trigger reactivity
 	}
 
 	function updateFieldMapping(sourceFieldId: string, targetFieldId: string | null) {
@@ -144,7 +147,7 @@
 				mapping.targetFieldType = null
 			}
 		}
-		fieldMappings = fieldMappings // trigger reactivity
+		// Pas de réassignation: `$state` proxifie en profondeur, la mutation ci-dessus suffit.
 	}
 
 	function handleFieldMappingChange(sourceFieldId: string, e: Event) {
@@ -250,7 +253,7 @@
 
 <Dialog bind:dialog class="max-w-4xl overflow-x-hidden" on:close={resetDialog}>
 	{#snippet header()}
-		<h2  class="title flex items-center gap-2" bind:offsetWidth>
+		<h2 class="title flex items-center gap-2" bind:offsetWidth>
 			<Icon path={mdiAccountMultiplePlus} size={24} />
 			{title}
 		</h2>
@@ -270,18 +273,16 @@
 				on:input={({ detail }) => handleSelectEvent(detail.value)}
 			>
 				{#snippet suggestion({ item })}
-							
-						<div>
-							<div class="font-medium">{item.name}</div>
-							<div class="text-sm text-gray-500">
-								{item.memberCount} membres
-								{#if item.startDate}
-									• {new Date(item.startDate).getFullYear()}
-								{/if}
-							</div>
+					<div>
+						<div class="font-medium">{item.name}</div>
+						<div class="text-sm text-gray-500">
+							{item.memberCount} membres
+							{#if item.startDate}
+								• {new Date(item.startDate).getFullYear()}
+							{/if}
 						</div>
-					
-							{/snippet}
+					</div>
+				{/snippet}
 			</InputRelation>
 		</div>
 	{:else if step === 'members'}

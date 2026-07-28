@@ -9,20 +9,14 @@
 	import { api } from '$lib/api'
 	import { eventPath } from '$lib/store'
 
-	
 	interface Props {
-		periodId: string;
-		tippyProps?: Partial<TippyProps>;
-		class?: string;
-		member?: Member | null;
+		periodId: string
+		tippyProps?: Partial<TippyProps>
+		class?: string
+		member?: Member | null
 	}
 
-	let {
-		periodId,
-		tippyProps = {},
-		class: klass = '',
-		member = $bindable(null)
-	}: Props = $props();
+	let { periodId, tippyProps = {}, class: klass = '', member = $bindable(null) }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -57,21 +51,21 @@
 		{tippyProps}
 	>
 		{#snippet item({ item })}
-				<div  class="contents" >
+			<div class="contents">
 				{item?.firstName}
 				{item?.lastName}
 			</div>
-			{/snippet}
+		{/snippet}
 
 		{#snippet suggestion({ item })}
-				<div   class="flex gap-2 items-center w-full">
+			<div class="flex gap-2 items-center w-full">
 				{#if item}
 					<span>{item.firstName} {item.lastName}</span>
 					<div class="grow"></div>
 					<span style="font-size: 0.6rem;">{item.email}</span>
 				{/if}
 			</div>
-			{/snippet}
+		{/snippet}
 	</InputRelation>
 
 	{#if member}

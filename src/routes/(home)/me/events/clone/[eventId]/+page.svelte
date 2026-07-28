@@ -5,7 +5,7 @@
 	import CloneSelector from './CloneSelector.svelte'
 	import LabelTeam from './LabelTeam.svelte'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	let deltaDays = $state(365)
 </script>

@@ -13,13 +13,12 @@
 	import { injectValues } from './injectValues'
 
 	interface Props {
-		page: Page | null;
-		member?: MemberWithComputedValues | undefined;
-		placeholder?: import('svelte').Snippet;
+		page: Page | null
+		member?: MemberWithComputedValues | undefined
+		placeholder?: import('svelte').Snippet
 	}
 
-	let { page, member = undefined, placeholder }: Props = $props();
-
+	let { page, member = undefined, placeholder }: Props = $props()
 
 	function getHTML(content: null | undefined | string): string {
 		if (!content) return ''

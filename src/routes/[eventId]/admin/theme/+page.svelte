@@ -31,11 +31,10 @@
 				<FormControl
 					key="backgroundColor"
 					label="Couleur de fond"
-					
 					class={$theme.backgroundImageId ? 'opacity-40' : ''}
 				>
 					{#snippet children({ key })}
-										<input
+						<input
 							disabled={!!$theme.backgroundImageId}
 							type="color"
 							name={key}
@@ -43,13 +42,13 @@
 							bind:value={$theme.backgroundColor}
 							class="w-32 bg-base-100 px-2 rounded border"
 						/>
-														{/snippet}
-								</FormControl>
+					{/snippet}
+				</FormControl>
 			</div>
 
-			<FormControl key="cardOpacity"  label="Opacité des surfaces" class="grow">
+			<FormControl key="cardOpacity" label="Opacité des surfaces" class="grow">
 				{#snippet children({ key })}
-								<input type="hidden" name={key} value="{USE_COERCE_NUMBER}{$theme.cardOpacity}" />
+					<input type="hidden" name={key} value="{USE_COERCE_NUMBER}{$theme.cardOpacity}" />
 					<input
 						id={key}
 						type="range"
@@ -59,14 +58,14 @@
 						bind:value={$theme.cardOpacity}
 						class="range range-primary range-sm"
 					/>
-											{/snippet}
-						</FormControl>
+				{/snippet}
+			</FormControl>
 
 			{#if $theme.backgroundImageId}
 				<div transition:slide class="flex flex-col gap-4">
-					<FormControl key="backgroundBlur"  label="Flou du fond" class="grow">
+					<FormControl key="backgroundBlur" label="Flou du fond" class="grow">
 						{#snippet children({ key })}
-												<input type="hidden" name={key} value="{USE_COERCE_NUMBER}{$theme.backgroundBlur}" />
+							<input type="hidden" name={key} value="{USE_COERCE_NUMBER}{$theme.backgroundBlur}" />
 							<input
 								id={key}
 								type="range"
@@ -75,12 +74,12 @@
 								bind:value={$theme.backgroundBlur}
 								class="range range-primary range-sm"
 							/>
-																	{/snippet}
-										</FormControl>
+						{/snippet}
+					</FormControl>
 
-					<FormControl key="backgroundBrightness"  label="Brillance du fond" class="grow">
+					<FormControl key="backgroundBrightness" label="Brillance du fond" class="grow">
 						{#snippet children({ key })}
-												<input
+							<input
 								type="hidden"
 								name={key}
 								value="{USE_COERCE_NUMBER}{$theme.backgroundBrightness}"
@@ -93,17 +92,12 @@
 								bind:value={$theme.backgroundBrightness}
 								class="range range-primary range-sm"
 							/>
-																	{/snippet}
-										</FormControl>
+						{/snippet}
+					</FormControl>
 
-					<FormControl
-						key="backgroundWhiteness"
-						
-						label="Blanchissement du fond"
-						class="grow"
-					>
+					<FormControl key="backgroundWhiteness" label="Blanchissement du fond" class="grow">
 						{#snippet children({ key })}
-												<input
+							<input
 								type="hidden"
 								name={key}
 								value="{USE_COERCE_NUMBER}{$theme.backgroundWhiteness}"
@@ -117,8 +111,8 @@
 								bind:value={$theme.backgroundWhiteness}
 								class="range range-primary range-sm"
 							/>
-																	{/snippet}
-										</FormControl>
+						{/snippet}
+					</FormControl>
 					<div>
 						<button
 							type="button"

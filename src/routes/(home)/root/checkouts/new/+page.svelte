@@ -14,26 +14,22 @@
 
 <Card class="max-w-2xl mx-auto">
 	{#snippet title()}
-		<h2  class="title">New checkout</h2>
+		<h2 class="title">New checkout</h2>
 	{/snippet}
 
 	<form action="/root/checkouts/new" method="post" use:enhance={form.submit}>
 		<InputText key="name" label="Name" value="Correction" />
 		<InputRelation key="user" search={$api.rootUser.search} label="Owner" bind:value={owner}>
 			{#snippet item({ item })}
-					
-					<span>{item?.firstName} {item?.lastName}</span>
-					<span class="text-xs">{item?.email}</span>
-				
-					{/snippet}
+				<span>{item?.firstName} {item?.lastName}</span>
+				<span class="text-xs">{item?.email}</span>
+			{/snippet}
 			{#snippet suggestion({ item })}
-					
-					<div>
-						<div>{item.firstName} {item.lastName}</div>
-						<div class="text-xs">{item.email}</div>
-					</div>
-				
-					{/snippet}
+				<div>
+					<div>{item.firstName} {item.lastName}</div>
+					<div class="text-xs">{item.email}</div>
+				</div>
+			{/snippet}
 		</InputRelation>
 		<div class="flex gap-4">
 			<InputNumber key="amount" label="Amount" class="grow" hint="x 100" value={0} />

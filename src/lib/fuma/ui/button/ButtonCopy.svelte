@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
+	import { preventDefault } from 'svelte/legacy'
 
 	import { mdiClipboardTextOutline } from '@mdi/js'
 	import { toast } from 'svelte-sonner'
 	import { Icon } from '$lib/fuma/ui/icon/index.js'
 	import { createEventDispatcher } from 'svelte'
-	
+
 	interface Props {
-		value: string | (() => Promise<string>);
-		title?: string;
-		label?: string;
-		icon?: any;
-		successMessage?: string;
-		class?: string;
+		value: string | (() => Promise<string>)
+		title?: string
+		label?: string
+		icon?: any
+		successMessage?: string
+		class?: string
 	}
 
 	let {
@@ -21,9 +21,8 @@
 		label = '',
 		icon = mdiClipboardTextOutline,
 		successMessage = 'Copied',
-		class: klass = ''
-	}: Props = $props();
-	
+		class: klass = '',
+	}: Props = $props()
 
 	let isLoading = $state(false)
 	const disptach = createEventDispatcher<{ success: void }>()

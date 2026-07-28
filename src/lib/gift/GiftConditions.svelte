@@ -5,10 +5,10 @@
 	import { InputSelect } from '$lib/fuma'
 
 	interface Props {
-		conditions?: Partial<TGiftEdition>[];
+		conditions?: Partial<TGiftEdition>[]
 	}
 
-	let { conditions = $bindable([]) }: Props = $props();
+	let { conditions = $bindable([]) }: Props = $props()
 
 	let conditionType = $state('')
 	function addCondition() {

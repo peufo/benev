@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createBubbler } from 'svelte/legacy';
+	import { createBubbler } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import { USE_COERCE_NUMBER } from '$lib/fuma/utils/constant.js'
 	import { FormControl, type InputProps } from '$lib/fuma/ui/input/index.js'
 	import type { HTMLInputAttributes } from 'svelte/elements'
@@ -9,10 +9,10 @@
 	type $$Props = InputProps<number>
 
 	interface Props {
-		value?: number | null | undefined;
-		input?: HTMLInputAttributes | undefined;
-		inputElement?: HTMLInputElement | undefined;
-		label_append?: import('svelte').Snippet;
+		value?: number | null | undefined
+		input?: HTMLInputAttributes | undefined
+		inputElement?: HTMLInputElement | undefined
+		label_append?: import('svelte').Snippet
 		[key: string]: any
 	}
 
@@ -22,12 +22,12 @@
 		inputElement = $bindable(undefined),
 		label_append,
 		...rest
-	}: Props = $props();
+	}: Props = $props()
 
-	const label_append_render = $derived(label_append);
+	const label_append_render = $derived(label_append)
 </script>
 
-<FormControl {...rest} >
+<FormControl {...rest}>
 	{#snippet label_append()}
 		{@render label_append_render?.()}
 	{/snippet}
@@ -41,7 +41,7 @@
 			type="number"
 			id={key}
 			inputmode="numeric"
-			class="input input-bordered"
+			class="input"
 			{...input}
 		/>
 		{#if value !== undefined}

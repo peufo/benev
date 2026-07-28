@@ -3,10 +3,10 @@
 	import { mdiAlertOutline } from '@mdi/js'
 
 	interface Props {
-		isAbsent: boolean;
+		isAbsent: boolean
 	}
 
-	let { isAbsent }: Props = $props();
+	let { isAbsent }: Props = $props()
 </script>
 
 {#if isAbsent}

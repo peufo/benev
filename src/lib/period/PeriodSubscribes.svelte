@@ -7,10 +7,10 @@
 	import { Avatar } from '$lib/me'
 
 	interface Props {
-		subscribes: (Subscribe & { member: Member })[];
+		subscribes: (Subscribe & { member: Member })[]
 	}
 
-	let { subscribes }: Props = $props();
+	let { subscribes }: Props = $props()
 </script>
 
 <div class="flex flex-col gap-1">

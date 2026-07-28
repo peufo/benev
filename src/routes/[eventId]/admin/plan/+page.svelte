@@ -5,7 +5,7 @@
 	import { MilestoneDrawer } from '$lib/milestone'
 	import { getPlan } from '$lib/plan/getPlan.js'
 
-	let { data = $bindable() } = $props();
+	let { data = $bindable() } = $props()
 	let plan = $derived(getPlan(data))
 </script>
 

@@ -3,10 +3,10 @@
 	import { tip } from '$lib/fuma/action/tip.js'
 
 	interface Props {
-		field: TableField<Item>;
+		field: TableField<Item>
 	}
 
-	let { field }: Props = $props();
+	let { field }: Props = $props()
 </script>
 
 <th use:tip={{ disable: !field.hint, content: field.hint }}>

@@ -9,6 +9,8 @@
 	let dropdown: DropDown = $state()
 
 	let urlSubscribesCSV = derived(page, ({ url }) => {
+		// Construit puis sérialisé immédiatement: pas un état réactif.
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity
 		const params = new URLSearchParams(url.searchParams)
 		const zone = Intl.DateTimeFormat().resolvedOptions()
 		params.set('locale', zone.locale)
@@ -24,7 +26,7 @@
 
 <DropDown bind:this={dropdown} hideOnBlur>
 	{#snippet activator()}
-		<button  class="btn btn-square btn-sm">
+		<button class="btn btn-square btn-sm">
 			<Icon path={mdiTrayArrowDown} size={20} />
 		</button>
 	{/snippet}

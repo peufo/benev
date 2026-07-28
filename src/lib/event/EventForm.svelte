@@ -12,10 +12,10 @@
 	import EventFormSection from './EventFormSection.svelte'
 
 	interface Props {
-		event?: Event | undefined;
+		event?: Event | undefined
 	}
 
-	let { event = undefined }: Props = $props();
+	let { event = undefined }: Props = $props()
 
 	const isUpdate = !!event
 	let plan = $state($page.url.searchParams.get('plan') || 'basic')
@@ -95,19 +95,13 @@
 					classWrapper="flex items-center relative"
 				>
 					{#snippet prepend()}
-										<span  class="absolute select-none pl-4 translate-y-[1px] opacity-50">
-							benev.io/
-						</span>
-									{/snippet}
+						<span class="absolute select-none pl-4 translate-y-[1px] opacity-50"> benev.io/ </span>
+					{/snippet}
 				</InputText>
 
 				<label class="form-control w-full">
 					<span class="label-text p-1">Fuseau horaire</span>
-					<select
-						name="timezone"
-						class="select select-bordered w-full"
-						value={event?.timezone || 'Europe/Zurich'}
-					>
+					<select name="timezone" class="select w-full" value={event?.timezone || 'Europe/Zurich'}>
 						{#each timeZones as timezone (timezone)}
 							<option value={timezone}>{timezone}</option>
 						{/each}

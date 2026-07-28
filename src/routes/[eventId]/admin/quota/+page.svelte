@@ -3,8 +3,7 @@
 	import { EventTierDetails, TierCard } from '$lib/event'
 	import { EVENT_TIER } from '$lib/constant'
 
-	let { data } = $props();
-
+	let { data } = $props()
 
 	function getUpgradeOptions(currentTier: EventTier): { tier: EventTier; priceId: string }[] {
 		if (currentTier === 'premium' || currentTier === 'pro') return []

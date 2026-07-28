@@ -3,10 +3,10 @@
 	import { mdiAlertOutline } from '@mdi/js'
 	import type { Subscribe } from '@prisma/client'
 	interface Props {
-		subscribes: Subscribe[];
+		subscribes: Subscribe[]
 	}
 
-	let { subscribes }: Props = $props();
+	let { subscribes }: Props = $props()
 
 	let nbAbsences = $derived(subscribes.filter((s) => s.isAbsent).length || 0)
 </script>

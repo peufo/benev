@@ -2,12 +2,11 @@
 	import logo from '$lib/assets/logo.svg'
 	import { tip } from '$lib/fuma'
 	interface Props {
-		class?: string;
-		children?: import('svelte').Snippet;
+		class?: string
+		children?: import('svelte').Snippet
 	}
 
-	let { class: klass = '', children }: Props = $props();
-	
+	let { class: klass = '', children }: Props = $props()
 </script>
 
 <footer class="footer footer-center border-t p-6 bg-base-100 gap-5 mt-2 overflow-hidden {klass}">

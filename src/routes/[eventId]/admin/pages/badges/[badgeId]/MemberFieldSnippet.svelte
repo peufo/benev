@@ -5,11 +5,11 @@
 	import { Icon, urlParam } from '$lib/fuma'
 
 	interface Props {
-		field: Field;
-		updateLink?: boolean;
+		field: Field
+		updateLink?: boolean
 	}
 
-	let { field, updateLink = false }: Props = $props();
+	let { field, updateLink = false }: Props = $props()
 </script>
 
 <div class="flex gap-2 items-center">

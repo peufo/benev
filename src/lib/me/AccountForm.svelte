@@ -7,12 +7,12 @@
 	import type { User } from '@prisma/client'
 
 	interface Props {
-		user: User;
-		successReset?: boolean;
-		successUpdate?: boolean;
+		user: User
+		successReset?: boolean
+		successUpdate?: boolean
 	}
 
-	let { user, successReset = false, successUpdate = false }: Props = $props();
+	let { user, successReset = false, successUpdate = false }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 	let emailError = getEmailError()
@@ -75,7 +75,7 @@
 				type="text"
 				name="email"
 				id="email"
-				class="input-bordered input join-item grow"
+				class=" input join-item grow"
 				inputmode="email"
 			/>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
+	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import { Icon, tip, urlParam, useForm } from '$lib/fuma'
 	import {
 		mdiAccountMultipleOutline,
@@ -16,10 +16,10 @@
 	import Delayed from './Delayed.svelte'
 
 	interface Props {
-		team: Team;
+		team: Team
 	}
 
-	let { team }: Props = $props();
+	let { team }: Props = $props()
 	const { enhance } = useForm()
 </script>
 

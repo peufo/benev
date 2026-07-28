@@ -5,12 +5,12 @@
 	import TableHeadDefault from '$lib/fuma/ui/table/head/TableHeadDefault.svelte'
 
 	interface Props {
-		fields: TableField<Item>[];
-		key: string;
-		onCreateField?: (() => void) | undefined;
+		fields: TableField<Item>[]
+		key: string
+		onCreateField?: (() => void) | undefined
 	}
 
-	let { fields, key, onCreateField = undefined }: Props = $props();
+	let { fields, key, onCreateField = undefined }: Props = $props()
 
 	function getComponent(field: TableField<Item>): ComponentAndProps {
 		if (field.type === 'select' || field.type === 'multiselect')

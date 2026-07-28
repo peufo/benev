@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createBubbler } from 'svelte/legacy';
+	import { createBubbler } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import { createEventDispatcher } from 'svelte'
 	import type { HTMLInputAttributes } from 'svelte/elements'
 	import { FormControl, type InputProps, bindCheckedWithParams } from '$lib/fuma/ui/input/index.js'
@@ -9,10 +9,10 @@
 
 	type $$Props = InputProps<boolean> & { isRow?: boolean }
 	interface Props {
-		value?: boolean | null | undefined;
-		input?: HTMLInputAttributes;
-		inputElement?: HTMLInputElement | undefined;
-		bindWithParams?: boolean;
+		value?: boolean | null | undefined
+		input?: HTMLInputAttributes
+		inputElement?: HTMLInputElement | undefined
+		bindWithParams?: boolean
 		[key: string]: any
 	}
 
@@ -22,12 +22,12 @@
 		inputElement = $bindable(undefined),
 		bindWithParams = false,
 		...rest
-	}: Props = $props();
+	}: Props = $props()
 
 	const dispatch = createEventDispatcher<{ change: boolean }>()
 </script>
 
-<FormControl {...rest}  class="">
+<FormControl {...rest} class="">
 	{#snippet children({ key })}
 		<input
 			bind:this={inputElement}

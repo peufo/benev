@@ -5,10 +5,10 @@
 	import { autoSubmit } from '$lib/action'
 
 	interface Props {
-		member: MemberWithComputedValues;
+		member: MemberWithComputedValues
 	}
 
-	let { member }: Props = $props();
+	let { member }: Props = $props()
 
 	const { enhance } = useForm({ successReset: false, successMessage: 'Préférences sauvegardées' })
 </script>

@@ -32,8 +32,8 @@
 <div class="mx-auto flex max-w-2xl flex-col gap-4 p-4">
 	<Card>
 		{#snippet title()}
-				<h2 >InputLocation (Photon / OpenStreetMap)</h2>
-			{/snippet}
+			<h2>InputLocation (Photon / OpenStreetMap)</h2>
+		{/snippet}
 
 		<InputLocation bind:value={location} />
 
@@ -43,8 +43,8 @@
 	{#if location}
 		<Card>
 			{#snippet title()}
-						<h2 >Affichage</h2>
-					{/snippet}
+				<h2>Affichage</h2>
+			{/snippet}
 
 			<div class="flex flex-col gap-4">
 				<div>

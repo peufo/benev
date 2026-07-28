@@ -2,12 +2,11 @@
 	import type { Tag } from '@prisma/client'
 
 	interface Props {
-		tags: Tag[];
-		class?: string;
+		tags: Tag[]
+		class?: string
 	}
 
-	let { tags, class: klass = '' }: Props = $props();
-	
+	let { tags, class: klass = '' }: Props = $props()
 </script>
 
 <div class="flex gap-1 {klass}">

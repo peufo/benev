@@ -4,20 +4,21 @@
 	import { EVENT_TIER } from '$lib/constant'
 
 	interface Props {
-		event: Event;
-		membersValided: number;
+		event: Event
+		membersValided: number
 	}
 
-	let { event, membersValided }: Props = $props();
+	let { event, membersValided }: Props = $props()
 
 	let tier = $derived(EVENT_TIER[event.tier])
 	let ratio = $derived(tier.max ? membersValided / tier.max : 0)
-	let klass =
-		$derived(ratio >= 0.9
+	let klass = $derived(
+		ratio >= 0.9
 			? 'text-error progress-error'
 			: ratio >= 0.8
 				? 'text-warning progress-warning'
-				: 'progress-success')
+				: 'progress-success'
+	)
 </script>
 
 <div class="card bg-base-100 shadow">

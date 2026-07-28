@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import { Drawer } from '$lib/fuma'
 	import { page } from '$app/stores'
@@ -11,11 +11,11 @@
 	import Progress from '$lib/Progress.svelte'
 	import type { FormDataPeriod } from '$lib/server'
 	interface Props {
-		period?: Partial<FormDataPeriod>;
-		periodForm: PeriodForm;
+		period?: Partial<FormDataPeriod>
+		periodForm: PeriodForm
 	}
 
-	let { period = {}, periodForm = $bindable() }: Props = $props();
+	let { period = {}, periodForm = $bindable() }: Props = $props()
 
 	export function selectMember(m: Member) {
 		member = m
@@ -27,7 +27,7 @@
 	let noOverlay = $derived(!$page.route.id?.startsWith('/[eventId]/admin/plan'))
 	run(() => {
 		if (noOverlay) $periodDrawerTransitionX = transitionX
-	});
+	})
 </script>
 
 <Drawer
@@ -36,7 +36,6 @@
 	maxWidth="400px"
 	title="{period?.id ? 'Édition' : 'Création'} d'une période"
 	bind:transitionX
-	
 >
 	{#snippet children({ close })}
 		<PeriodForm

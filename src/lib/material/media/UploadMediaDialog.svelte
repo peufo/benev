@@ -9,12 +9,12 @@
 	import { RulerDimensionLineIcon } from '@lucide/svelte'
 
 	interface Props {
-		aspect?: any;
-		title?: string;
-		formaction?: string | undefined;
-		key?: string;
-		freeName?: boolean;
-		freeAspect?: boolean;
+		aspect?: { x: number; y: number }
+		title?: string
+		formaction?: string | undefined
+		key?: string
+		freeName?: boolean
+		freeAspect?: boolean
 	}
 
 	let {
@@ -23,8 +23,8 @@
 		formaction = undefined,
 		key = '',
 		freeName = false,
-		freeAspect = false
-	}: Props = $props();
+		freeAspect = false,
+	}: Props = $props()
 
 	let dialog: HTMLDialogElement = $state()
 	let image = $state('')
@@ -68,7 +68,7 @@
 
 <Dialog bind:dialog>
 	{#snippet header()}
-		<h2  class="card-title">
+		<h2 class="card-title">
 			{title}
 		</h2>
 	{/snippet}
@@ -91,7 +91,7 @@
 				<RulerDimensionLineIcon opacity={0.6} size={16} class="absolute left-2" />
 				<input
 					type="number"
-					class="input input-bordered input-sm pr-0 pl-7 max-w-20"
+					class="input input-sm pr-0 pl-7 max-w-20"
 					min={1}
 					step={1}
 					bind:value={aspect.x}
@@ -101,7 +101,7 @@
 				<RulerDimensionLineIcon opacity={0.6} size={16} class="absolute left-2 rotate-90" />
 				<input
 					type="number"
-					class="input input-bordered input-sm pr-0 pl-7 max-w-20"
+					class="input input-sm pr-0 pl-7 max-w-20"
 					min={1}
 					step={1}
 					bind:value={aspect.y}

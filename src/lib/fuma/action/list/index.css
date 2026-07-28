@@ -31,7 +31,7 @@
 }
 
 .item-content {
-	flex-grow: 1;
+	grow: 1;
 }
 
 .item-placeholder {

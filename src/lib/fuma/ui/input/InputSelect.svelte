@@ -47,7 +47,7 @@
 				bind:this={button}
 				id={key}
 				type="button"
-				class="input-bordered flex h-12 items-center gap-2 rounded-lg border pl-4 pr-2 hover:bg-base-200/50"
+				class=" flex h-12 items-center gap-2 rounded-lg border pl-4 pr-2 hover:bg-base-200/50"
 			>
 				{#if selectedOption}
 					{#if selectedOption.icon}

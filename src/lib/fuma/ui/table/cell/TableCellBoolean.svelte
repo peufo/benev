@@ -2,10 +2,10 @@
 	import { mdiCheck, mdiClose } from '@mdi/js'
 	import { Icon } from '$lib/fuma/ui/icon/index.js'
 	interface Props {
-		value: boolean;
+		value: boolean
 	}
 
-	let { value }: Props = $props();
+	let { value }: Props = $props()
 </script>
 
 <td>

@@ -1,11 +1,10 @@
 <script lang="ts">
-	
 	interface Props {
-		avatarId: string | null;
-		avatarPlaceholder: string;
-		firstName: string;
-		class?: string;
-		size?: 'medium' | 'large';
+		avatarId: string | null
+		avatarPlaceholder: string
+		firstName: string
+		class?: string
+		size?: 'medium' | 'large'
 	}
 
 	let {
@@ -13,8 +12,8 @@
 		avatarPlaceholder,
 		firstName,
 		class: klass = '',
-		size = 'medium'
-	}: Props = $props();
+		size = 'medium',
+	}: Props = $props()
 </script>
 
 {#key avatarId || avatarPlaceholder}

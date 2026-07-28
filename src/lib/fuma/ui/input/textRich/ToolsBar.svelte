@@ -11,12 +11,11 @@
 	import ToolMenuInsert from '$lib/fuma/ui/input/textRich/ToolMenuInsert.svelte'
 
 	interface Props {
-		editor: Editor;
-		class?: string;
+		editor: Editor
+		class?: string
 	}
 
-	let { editor, class: klass = '' }: Props = $props();
-	
+	let { editor, class: klass = '' }: Props = $props()
 </script>
 
 <div

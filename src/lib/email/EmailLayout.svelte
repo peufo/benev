@@ -2,12 +2,12 @@
 	import { domain } from '.'
 
 	interface Props {
-		title?: string;
-		subtitle?: string;
-		showLogo?: boolean;
-		eventId?: string;
-		children?: import('svelte').Snippet;
-		signature?: import('svelte').Snippet;
+		title?: string
+		subtitle?: string
+		showLogo?: boolean
+		eventId?: string
+		children?: import('svelte').Snippet
+		signature?: import('svelte').Snippet
 	}
 
 	let {
@@ -16,8 +16,8 @@
 		showLogo = false,
 		eventId = '',
 		children,
-		signature
-	}: Props = $props();
+		signature,
+	}: Props = $props()
 
 	let fontFamily =
 		"font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif"

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { AccountForm, AvatarForm, DeleteUserForm } from '$lib/me'
 
-	let { data } = $props();
+	let { data } = $props()
 </script>
 
 <div class="flex justify-between gap-4">

@@ -3,13 +3,12 @@
 	import { Form, InputDate, InputText } from '$lib/fuma'
 	import { modelUserContactUpdate } from '$lib/models'
 
-	
 	interface Props {
-		class?: string;
-		member: MemberProfile;
+		class?: string
+		member: MemberProfile
 	}
 
-	let { class: klass = '', member }: Props = $props();
+	let { class: klass = '', member }: Props = $props()
 </script>
 
 <Form

@@ -6,11 +6,11 @@
 	import { slide } from 'svelte/transition'
 
 	interface Props {
-		product: { id: string; name: string };
-		action?: string;
+		product: { id: string; name: string }
+		action?: string
 	}
 
-	let { product, action = '?/use_product' }: Props = $props();
+	let { product, action = '?/use_product' }: Props = $props()
 
 	const form = useForm({
 		successMessage: 'Produit associé',

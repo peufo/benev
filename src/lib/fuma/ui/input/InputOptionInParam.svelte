@@ -3,20 +3,14 @@
 	import { parseOptions, type Options } from '$lib/fuma/utils/options.js'
 	import { urlParam } from '$lib/fuma/store/param.js'
 
-	
 	interface Props {
-		class?: string;
-		key: string;
-		options: Options;
-		removeKeys?: string[];
+		class?: string
+		key: string
+		options: Options
+		removeKeys?: string[]
 	}
 
-	let {
-		class: klass = '',
-		key,
-		options,
-		removeKeys = []
-	}: Props = $props();
+	let { class: klass = '', key, options, removeKeys = [] }: Props = $props()
 
 	let _options = $derived(parseOptions(options))
 </script>

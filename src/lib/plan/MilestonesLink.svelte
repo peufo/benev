@@ -6,11 +6,11 @@
 	import { PinIcon } from '@lucide/svelte'
 
 	interface Props {
-		milestonesBefore: (Milestone & { time: Dayjs })[];
-		milestonesAfter: (Milestone & { time: Dayjs })[];
+		milestonesBefore: (Milestone & { time: Dayjs })[]
+		milestonesAfter: (Milestone & { time: Dayjs })[]
 	}
 
-	let { milestonesBefore, milestonesAfter }: Props = $props();
+	let { milestonesBefore, milestonesAfter }: Props = $props()
 </script>
 
 <div class="flex gap-2 justify-between items-start sticky left-0 w-full p-2">

@@ -4,13 +4,12 @@
 	import type { MemberProfile } from '$lib/server'
 	import { Form } from '$lib/fuma'
 
-	
 	interface Props {
-		class?: string;
-		memberProfile: MemberProfile;
+		class?: string
+		memberProfile: MemberProfile
 	}
 
-	let { class: klass = '', memberProfile }: Props = $props();
+	let { class: klass = '', memberProfile }: Props = $props()
 </script>
 
 <div class="@container">

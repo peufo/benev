@@ -13,12 +13,12 @@
 	import { Dialog } from '$lib/fuma/ui/dialog/index.js'
 
 	interface Props {
-		aspect?: number;
-		title?: string;
-		formaction?: string | undefined;
-		key?: string;
-		actions?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
+		aspect?: number
+		title?: string
+		formaction?: string | undefined
+		key?: string
+		actions?: import('svelte').Snippet
+		children?: import('svelte').Snippet
 	}
 
 	let {
@@ -27,8 +27,8 @@
 		formaction = undefined,
 		key = '',
 		actions,
-		children
-	}: Props = $props();
+		children,
+	}: Props = $props()
 	let dialog: HTMLDialogElement = $state()
 	let tip: TippyInstance = $state()
 	let image = $state('')
@@ -69,7 +69,6 @@
 <DropDown tippyProps={{ arrow: true }} hideOnBlur bind:tip>
 	{#snippet activator()}
 		<button
-			
 			type="button"
 			class="block overflow-hidden rounded-lg transition-shadow hover:shadow-lg"
 			onclick={handleClickActivator}
@@ -96,7 +95,7 @@
 
 <Dialog bind:dialog>
 	{#snippet header()}
-		<h2  class="card-title">
+		<h2 class="card-title">
 			{title}
 		</h2>
 	{/snippet}

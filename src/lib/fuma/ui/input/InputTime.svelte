@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createBubbler } from 'svelte/legacy';
+	import { createBubbler } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import { createEventDispatcher } from 'svelte'
 	import type { HTMLInputAttributes, FormEventHandler } from 'svelte/elements'
 	import { FormControl, type InputProps } from '$lib/fuma/ui/input/index.js'
@@ -9,13 +9,18 @@
 	type $$Props = InputProps<Date> & { getDefaultDate?: () => Date }
 
 	interface Props {
-		value?: Date | null | undefined;
-		input?: HTMLInputAttributes;
-		getDefaultDate?: any;
+		value?: Date | null | undefined
+		input?: HTMLInputAttributes
+		getDefaultDate?: any
 		[key: string]: any
 	}
 
-	let { value = $bindable(undefined), input = {}, getDefaultDate = () => new Date(0), ...rest }: Props = $props();
+	let {
+		value = $bindable(undefined),
+		input = {},
+		getDefaultDate = () => new Date(0),
+		...rest
+	}: Props = $props()
 
 	let { class: inputClass = '', ...inputProps } = $derived(input)
 
@@ -38,7 +43,7 @@
 	}
 </script>
 
-<FormControl {...rest} >
+<FormControl {...rest}>
 	{#snippet children({ key })}
 		<input
 			value={value && dayjs(value).format('HH:mm')}
@@ -48,7 +53,7 @@
 			type="time"
 			name={key}
 			id={key}
-			class="input input-bordered {inputClass}"
+			class="input {inputClass}"
 			{...inputProps}
 		/>
 	{/snippet}

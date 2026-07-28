@@ -7,11 +7,11 @@
 	import { listEditable } from '$lib/fuma/action/list/index.js'
 
 	interface Props {
-		key: string;
-		value?: string | undefined | null;
+		key: string
+		value?: string | undefined | null
 	}
 
-	let { key, value = $bindable('[]') }: Props = $props();
+	let { key, value = $bindable('[]') }: Props = $props()
 
 	let options: string[] = $state(JSON.parse(value || '[]'))
 	let newOption = $state('')
@@ -73,7 +73,7 @@
 			bind:this={optionInput}
 			type="text"
 			placeholder="Nouvelle option"
-			class="input join-item input-bordered grow"
+			class="input join-item grow"
 			bind:value={newOption}
 			onkeydown={handleKeyDown}
 		/>

@@ -10,26 +10,27 @@
 	import DragButton from './DragButton.svelte'
 
 	interface Props {
-		period: PeriodWithMembers;
-		plan: Plan;
+		period: PeriodWithMembers
+		plan: Plan
 		drags: {
-		class?: string
-		axis?: 'x' | 'y' | 'any'
-		moveStart?: boolean
-		moveEnd?: boolean
-	}[];
+			class?: string
+			axis?: 'x' | 'y' | 'any'
+			moveStart?: boolean
+			moveEnd?: boolean
+		}[]
 	}
 
-	let { period, plan, drags }: Props = $props();
+	let { period, plan, drags }: Props = $props()
 
 	let deltaStartMs = $state(0)
 	let deltaEndMs = $state(0)
 
 	let msSize = $derived(time(plan.hourSize).to('hour'))
 	let startPx = $derived(msSize * (-plan.start.diff(daytz(period.start)) + $magnet(deltaStartMs)))
-	let sizePx =
-		$derived(msSize *
-		(daytz(period.end).diff(daytz(period.start)) - $magnet(deltaStartMs) + $magnet(deltaEndMs)))
+	let sizePx = $derived(
+		msSize *
+			(daytz(period.end).diff(daytz(period.start)) - $magnet(deltaStartMs) + $magnet(deltaEndMs))
+	)
 
 	const dispatch = createEventDispatcher<{ update: PeriodWithMembers }>()
 

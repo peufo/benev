@@ -2,22 +2,15 @@
 	import AuthIcon from '$lib/me/AuthIcon.svelte'
 	import type { User } from '@prisma/client'
 
-	
 	interface Props {
-		user?: User | undefined;
-		class?: string;
-		style?: string;
-		start?: import('svelte').Snippet;
-		end?: import('svelte').Snippet;
+		user?: User | undefined
+		class?: string
+		style?: string
+		start?: import('svelte').Snippet
+		end?: import('svelte').Snippet
 	}
 
-	let {
-		user = undefined,
-		class: klass = '',
-		style = '',
-		start,
-		end
-	}: Props = $props();
+	let { user = undefined, class: klass = '', style = '', start, end }: Props = $props()
 </script>
 
 <div class="px-2 sm:px-4 {klass}" {style}>

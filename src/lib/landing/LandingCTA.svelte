@@ -1,9 +1,9 @@
 <script lang="ts">
 	interface Props {
-		user?: { email?: string } | null;
+		user?: { email?: string } | null
 	}
 
-	let { user = null }: Props = $props();
+	let { user = null }: Props = $props()
 </script>
 
 <section class="py-20 md:py-28 bg-primary">

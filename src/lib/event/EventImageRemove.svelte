@@ -6,11 +6,11 @@
 	import { toast } from 'svelte-sonner'
 
 	interface Props {
-		formaction: string;
-		eventId: string;
+		formaction: string
+		eventId: string
 	}
 
-	let { formaction, eventId }: Props = $props();
+	let { formaction, eventId }: Props = $props()
 
 	let isLoading = $state(false)
 

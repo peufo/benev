@@ -4,10 +4,10 @@
 	import type { MemberWithComputedValues } from '$lib/server'
 
 	interface Props {
-		member: MemberWithComputedValues;
+		member: MemberWithComputedValues
 	}
 
-	let { member }: Props = $props();
+	let { member }: Props = $props()
 </script>
 
 {#if member.isValidedByUser}

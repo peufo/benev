@@ -3,14 +3,14 @@
 
 	type Item = $$Generic<{ id: string }>
 	interface Props {
-		items: Item[];
-		key: string;
-		placeholder: string;
-		legend: string;
-		labelAll: string;
-		getLabel: (item: Item) => string | ComponentAndProps;
-		class?: string;
-		children?: import('svelte').Snippet;
+		items: Item[]
+		key: string
+		placeholder: string
+		legend: string
+		labelAll: string
+		getLabel: (item: Item) => string | ComponentAndProps
+		class?: string
+		children?: import('svelte').Snippet
 	}
 
 	let {
@@ -21,9 +21,8 @@
 		labelAll,
 		getLabel,
 		class: klass = '',
-		children
-	}: Props = $props();
-	
+		children,
+	}: Props = $props()
 
 	function mapSelected(arr: Item[], selected = true): (Item & { selected: boolean })[] {
 		return arr.map((el) => ({ ...el, selected }))

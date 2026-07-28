@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
+	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import type { Gift, GiftCondition } from '@prisma/client'
 	import { mdiAccountGroupOutline } from '@mdi/js'
 	import { slide } from 'svelte/transition'
@@ -11,10 +11,10 @@
 
 	type GiftWithConditions = Gift & { conditions: GiftCondition[] }
 	interface Props {
-		gifts: GiftWithConditions[];
+		gifts: GiftWithConditions[]
 	}
 
-	let { gifts }: Props = $props();
+	let { gifts }: Props = $props()
 
 	let dialog: HTMLDialogElement = $state()
 	let selectedGift: GiftWithConditions | undefined = $state(undefined)
@@ -39,7 +39,11 @@
 			<span class="text-sm opacity-70">10 / 17 distributions</span>
 		</div>
 
-		<a href="#todo" class="btn btn-square btn-sm btn-ghost ml-auto" onclick={stopPropagation(bubble('click'))}>
+		<a
+			href="#todo"
+			class="btn btn-square btn-sm btn-ghost ml-auto"
+			onclick={stopPropagation(bubble('click'))}
+		>
 			<Icon path={mdiAccountGroupOutline} title="Voir les attributions de {gift.name}" />
 		</a>
 	</button>
@@ -49,7 +53,7 @@
 
 <Dialog bind:dialog>
 	{#snippet header()}
-		<h2  class="card-title">
+		<h2 class="card-title">
 			{selectedGift ? 'Édition de la' : 'Nouvelle'} prestation
 		</h2>
 	{/snippet}

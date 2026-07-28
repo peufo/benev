@@ -4,7 +4,7 @@
 	import Benev from '$lib/Benev.svelte'
 	import HomeMenu from './HomeMenu.svelte'
 
-	let { data, children } = $props();
+	let { data, children } = $props()
 </script>
 
 <!-- Background gradient -->
@@ -15,11 +15,10 @@
 <Header user={data.user}>
 	{#snippet start()}
 		<a
-			
 			href="/"
 			class="
 				text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg
-				whitespace-nowrap overflow-hidden overflow-ellipsis min-w-0
+				whitespace-nowrap overflow-hidden text-ellipsis min-w-0
 			"
 		>
 			<img src={logo} alt="logo benevio" class="w-9 h-9" height="512" width="512" />
@@ -29,9 +28,7 @@
 	{/snippet}
 
 	{#snippet end()}
-	
-			<HomeMenu />
-		
+		<HomeMenu />
 	{/snippet}
 </Header>
 

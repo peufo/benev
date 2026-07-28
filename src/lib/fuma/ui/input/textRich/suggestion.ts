@@ -3,7 +3,7 @@ import { writable, get } from 'svelte/store'
 import { tippy, type TippyInstance } from '$lib/fuma/utils/tippy.js'
 
 import SuggesionList from '$lib/fuma/ui/input/textRich/SuggesionList.svelte'
-import { mount } from "svelte";
+import { mount } from 'svelte'
 
 export type SuggestionItem = { id: string; label: string }
 export let suggestionItems = writable<SuggestionItem[]>([])

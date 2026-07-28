@@ -11,7 +11,7 @@
 	import { Icon, DropDown, Pagination, InputOptionInParam } from '$lib/fuma'
 	import { useNotify } from '$lib/notify'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	const statesMap: Record<
 		MessageState,
@@ -69,10 +69,10 @@
 					<td>
 						<DropDown>
 							{#snippet activator()}
-														<button  class="btn btn-square btn-sm btn-ghost">
+								<button class="btn btn-square btn-sm btn-ghost">
 									<Icon path={state.icon} class={state.class} title={state.label} />
 								</button>
-													{/snippet}
+							{/snippet}
 
 							{#each Object.values(statesMap) as state (state.state)}
 								<button

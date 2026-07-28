@@ -1,19 +1,18 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import { tippy, type TippyProps, type TippyInstance } from '$lib/fuma/utils/tippy.js'
 	import { onMount } from 'svelte'
 
-	
 	interface Props {
-		path: string;
-		title?: string;
-		size?: number;
-		class?: string;
-		style?: string;
-		classSVG?: string;
-		tippyProps?: Partial<TippyProps>;
-		disableTitlePropagation?: boolean;
+		path: string
+		title?: string
+		size?: number
+		class?: string
+		style?: string
+		classSVG?: string
+		tippyProps?: Partial<TippyProps>
+		disableTitlePropagation?: boolean
 	}
 
 	let {
@@ -24,8 +23,8 @@
 		style = '',
 		classSVG = '',
 		tippyProps = {},
-		disableTitlePropagation = false
-	}: Props = $props();
+		disableTitlePropagation = false,
+	}: Props = $props()
 	const viewWidth = 24
 	const viewHeight = 24
 
@@ -34,7 +33,7 @@
 	let tip: TippyInstance | null = $state(null)
 	run(() => {
 		tip?.setContent(title)
-	});
+	})
 
 	onMount(() => {
 		if (!title) return

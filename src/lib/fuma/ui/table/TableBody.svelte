@@ -5,18 +5,13 @@
 	import type { ComponentAndProps } from '$lib/fuma/utils/component.js'
 
 	interface Props {
-		items: Item[];
-		fields: TableField<Item>[];
-		action?: ((item: Item) => ComponentAndProps) | undefined;
-		classRow?: string;
+		items: Item[]
+		fields: TableField<Item>[]
+		action?: ((item: Item) => ComponentAndProps) | undefined
+		classRow?: string
 	}
 
-	let {
-		items,
-		fields,
-		action = undefined,
-		classRow = ''
-	}: Props = $props();
+	let { items, fields, action = undefined, classRow = '' }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ click: Item }>()
 

@@ -57,7 +57,7 @@
 				type="text"
 				name={key}
 				id={key}
-				class="input input-bordered w-full {inputClass || ''}"
+				class="input w-full {inputClass || ''}"
 				{...inputProps}
 			/>
 			{@render append?.(value)}

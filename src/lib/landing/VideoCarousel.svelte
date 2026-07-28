@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import { tip } from '$lib/fuma'
 	import { slide } from 'svelte/transition'
@@ -10,15 +10,13 @@
 		title: string
 	}
 
-
-	
 	interface Props {
-		class?: string;
-		videos: Video[];
-		index: number;
+		class?: string
+		videos: Video[]
+		index: number
 	}
 
-	let { class: klass = '', videos, index }: Props = $props();
+	let { class: klass = '', videos, index }: Props = $props()
 
 	let activeIndex = $state(0)
 	let isLoading = $state(false)
@@ -68,7 +66,7 @@
 				videoElement.pause()
 			}
 		}
-	});
+	})
 </script>
 
 <div class={klass}>

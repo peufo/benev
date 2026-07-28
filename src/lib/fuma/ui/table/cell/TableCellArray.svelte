@@ -3,10 +3,10 @@
 	import { component, type ComponentAndProps } from '$lib/fuma/utils/component.js'
 
 	interface Props {
-		value: (ComponentAndProps | string | number | boolean)[];
+		value: (ComponentAndProps | string | number | boolean)[]
 	}
 
-	let { value }: Props = $props();
+	let { value }: Props = $props()
 </script>
 
 <td>

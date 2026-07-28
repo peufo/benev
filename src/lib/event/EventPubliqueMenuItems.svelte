@@ -7,18 +7,13 @@
 	import { PAGE_TYPE } from '$lib/constant'
 
 	interface Props {
-		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[];
-		hideIndex?: boolean;
-		hideTeams?: boolean;
-		classItem?: string;
+		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
+		hideIndex?: boolean
+		hideTeams?: boolean
+		classItem?: string
 	}
 
-	let {
-		pages,
-		hideIndex = false,
-		hideTeams = false,
-		classItem = ''
-	}: Props = $props();
+	let { pages, hideIndex = false, hideTeams = false, classItem = '' }: Props = $props()
 
 	let pageHome = $derived(pages.find((p) => p.type === 'home'))
 	let isMember = $derived(!!$page.data.member)

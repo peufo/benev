@@ -1,7 +1,7 @@
 <script lang="ts" generics="Item extends {id: string}">
-	import { createBubbler, preventDefault } from 'svelte/legacy';
+	import { createBubbler, preventDefault } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import {
 		mdiCheck,
 		mdiCheckCircleOutline,
@@ -22,12 +22,12 @@
 	import type { TableField } from '$lib/fuma/ui/table/index.js'
 
 	interface Props {
-		fields: TableField<Item>[];
-		key: string;
-		onCreateField?: (() => void) | undefined;
+		fields: TableField<Item>[]
+		key: string
+		onCreateField?: (() => void) | undefined
 	}
 
-	let { fields = $bindable(), key, onCreateField = undefined }: Props = $props();
+	let { fields = $bindable(), key, onCreateField = undefined }: Props = $props()
 
 	let tip: TippyInstance = $state()
 
@@ -72,10 +72,10 @@
 		tippyProps={{ appendTo: () => document.body, placement: 'bottom-end' }}
 	>
 		{#snippet activator()}
-				<button  type="button" class="btn btn-square btn-ghost btn-sm backdrop-blur">
+			<button type="button" class="btn btn-square btn-ghost btn-sm backdrop-blur">
 				<Icon path={mdiDotsHorizontal} title="Définir les champs" />
 			</button>
-			{/snippet}
+		{/snippet}
 
 		{#if onCreateField}
 			<div class="bordered flex items-center gap-2 border-b pb-1 pl-2 pr-1">

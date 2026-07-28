@@ -11,12 +11,12 @@
 	type $$Props = ComponentProps<FormControl> & { value?: string; classToolbar?: string }
 
 	interface Props {
-		value?: string;
-		classToolbar?: string;
+		value?: string
+		classToolbar?: string
 		[key: string]: any
 	}
 
-	let { value = $bindable(''), classToolbar = '', ...rest }: Props = $props();
+	let { value = $bindable(''), classToolbar = '', ...rest }: Props = $props()
 
 	let element: HTMLDivElement = $state()
 	let editor: Editor | null = $state(null)
@@ -62,7 +62,7 @@
 	}, 120)
 </script>
 
-<FormControl {...rest} >
+<FormControl {...rest}>
 	{#snippet children({ key })}
 		<div class="bordered relative rounded-lg border">
 			{#if editor}

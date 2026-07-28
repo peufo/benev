@@ -5,7 +5,7 @@
 	import EventMemberCard from './EventMemberCard.svelte'
 	import { IsOrganizerForm } from '$lib/me'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	let becomeOrganizerDialog: HTMLDialogElement = $state()
 </script>
@@ -61,7 +61,7 @@
 
 <Dialog bind:dialog={becomeOrganizerDialog}>
 	{#snippet header()}
-		<h2  class="card-title">Devenir organisateur</h2>
+		<h2 class="card-title">Devenir organisateur</h2>
 	{/snippet}
 	<IsOrganizerForm
 		on:cancel={() => becomeOrganizerDialog.close()}

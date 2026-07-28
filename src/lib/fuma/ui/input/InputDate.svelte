@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createBubbler } from 'svelte/legacy';
+	import { createBubbler } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import { createEventDispatcher } from 'svelte'
 	import type { FormEventHandler, HTMLInputAttributes } from 'svelte/elements'
 	import dayjs from 'dayjs'
@@ -11,12 +11,12 @@
 
 	type $$Props = InputProps<Date | null | undefined>
 	interface Props {
-		value?: Date | null | undefined;
-		input?: HTMLInputAttributes;
+		value?: Date | null | undefined
+		input?: HTMLInputAttributes
 		[key: string]: any
 	}
 
-	let { value = $bindable(undefined), input = {}, ...rest }: Props = $props();
+	let { value = $bindable(undefined), input = {}, ...rest }: Props = $props()
 	let { class: inputClass = '', ...inputProps } = $derived(input)
 
 	const dispatch = createEventDispatcher<{ input: Date | null }>()
@@ -30,7 +30,7 @@
 	}
 </script>
 
-<FormControl {...rest} >
+<FormControl {...rest}>
 	{#snippet children({ key })}
 		<input
 			value={value && dayjs(value).format('YYYY-MM-DD')}
@@ -39,7 +39,7 @@
 			onblur={bubble('blur')}
 			type="date"
 			id={key}
-			class="input input-bordered {inputClass}"
+			class="input {inputClass}"
 			{...inputProps}
 		/>
 

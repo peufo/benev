@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import type { PageData } from './$types'
 	import { ButtonDelete, Icon, InputText, InputNumber, InputBoolean, useForm } from '$lib/fuma'
@@ -23,10 +23,10 @@
 	import { fade } from 'svelte/transition'
 
 	interface Props {
-		badge: PageData['badge'];
+		badge: PageData['badge']
 	}
 
-	let { badge = $bindable() }: Props = $props();
+	let { badge = $bindable() }: Props = $props()
 
 	let submitButton: HTMLButtonElement = $state()
 	let isSuccess = $state(true)
@@ -59,7 +59,7 @@
 	const autosave = useAutosave()
 	run(() => {
 		if (badge) autosave()
-	});
+	})
 
 	function aspectRatioWidth(value: number): number {
 		return Math.round((value / FORMAT_CARD.aspect) * 100) / 100

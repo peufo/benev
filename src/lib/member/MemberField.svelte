@@ -15,13 +15,12 @@
 	import { jsonParse } from '$lib/jsonParse'
 
 	interface Props {
-		field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>;
-		value?: string | number | true | string[];
-		class?: string;
+		field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
+		value?: string | number | true | string[]
+		class?: string
 	}
 
-	let { field, value = '', class: klass = '' }: Props = $props();
-	
+	let { field, value = '', class: klass = '' }: Props = $props()
 
 	const components: Record<FieldType, ComponentType> = {
 		string: InputText,
@@ -43,7 +42,7 @@
 
 	let isLeader = $derived($page.data.member?.roles.includes('leader'))
 
-	const SvelteComponent = $derived(components[field.type]);
+	const SvelteComponent = $derived(components[field.type])
 </script>
 
 <SvelteComponent
@@ -55,7 +54,7 @@
 	input={{ disabled: !field.memberCanWrite && !isLeader }}
 >
 	{#snippet label_append()}
-		<div class="h-5 mr-auto" >
+		<div class="h-5 mr-auto">
 			{#if !field.memberCanRead}
 				<Icon
 					path={mdiEyeOffOutline}

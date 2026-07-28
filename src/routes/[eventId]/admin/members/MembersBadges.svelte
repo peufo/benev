@@ -5,12 +5,12 @@
 	import { IdCardLanyardIcon } from '@lucide/svelte'
 
 	interface Props {
-		params?: string;
-		title?: string;
-		badges: { id: string; name: string }[];
+		params?: string
+		title?: string
+		badges: { id: string; name: string }[]
 	}
 
-	let { params = '', title = 'Imprimer les badges', badges }: Props = $props();
+	let { params = '', title = 'Imprimer les badges', badges }: Props = $props()
 
 	let _params = $derived(params || $page.url.searchParams.toString())
 </script>
@@ -28,10 +28,10 @@
 {:else if badges.length > 1}
 	<DropDown>
 		{#snippet activator()}
-						<button  class="btn btn-square btn-sm" use:tip={{ content: title }}>
+			<button class="btn btn-square btn-sm" use:tip={{ content: title }}>
 				<IdCardLanyardIcon size="20" opacity={0.9} />
 			</button>
-					{/snippet}
+		{/snippet}
 		<ul class="menu">
 			{#each badges as badge (badge.id)}
 				<li>

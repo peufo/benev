@@ -7,7 +7,7 @@
 	const form = useForm({
 		successMessage: 'Merci pour ton message',
 	})
-	let { data } = $props();
+	let { data } = $props()
 </script>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
@@ -28,10 +28,8 @@
 		<div class="lg:col-span-3">
 			<Card>
 				{#snippet title()}
-								<h2  class="text-xl font-bold text-primary">
-						Nouvelle prise de contact avec benevio
-					</h2>
-							{/snippet}
+					<h2 class="text-xl font-bold text-primary">Nouvelle prise de contact avec benevio</h2>
+				{/snippet}
 
 				<form
 					method="post"

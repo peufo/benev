@@ -2,12 +2,12 @@
 	import { ChevronDown } from '@lucide/svelte'
 
 	interface Props {
-		title: string;
-		step?: number | undefined;
-		required?: boolean | undefined;
-		open?: boolean;
-		collapsible?: boolean;
-		children?: import('svelte').Snippet;
+		title: string
+		step?: number | undefined
+		required?: boolean | undefined
+		open?: boolean
+		collapsible?: boolean
+		children?: import('svelte').Snippet
 	}
 
 	let {
@@ -16,8 +16,8 @@
 		required = undefined,
 		open = $bindable(false),
 		collapsible = true,
-		children
-	}: Props = $props();
+		children,
+	}: Props = $props()
 
 	function toggle() {
 		if (!collapsible) return

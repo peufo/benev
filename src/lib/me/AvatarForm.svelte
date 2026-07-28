@@ -10,12 +10,11 @@
 	import { InputImage } from '$lib/fuma'
 
 	interface Props {
-		user: User;
-		class?: string;
+		user: User
+		class?: string
 	}
 
-	let { user, class: klass = '' }: Props = $props();
-	
+	let { user, class: klass = '' }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -43,20 +42,18 @@
 		/>
 
 		{#snippet actions()}
-			
-				{#if user.avatarId}
-					<button formaction="/me?/delete_avatar" class="menu-item">
-						<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
-						<span>Supprimer cette photo</span>
-					</button>
-				{:else}
-					<button formaction="/me?/generate_avatar" class="menu-item">
-						<Icon path={mdiReload} class="opacity-70" size={20} />
-						<span>Générer un autre avatar</span>
-					</button>
-				{/if}
-			
-			{/snippet}
+			{#if user.avatarId}
+				<button formaction="/me?/delete_avatar" class="menu-item">
+					<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
+					<span>Supprimer cette photo</span>
+				</button>
+			{:else}
+				<button formaction="/me?/generate_avatar" class="menu-item">
+					<Icon path={mdiReload} class="opacity-70" size={20} />
+					<span>Générer un autre avatar</span>
+				</button>
+			{/if}
+		{/snippet}
 	</InputImage>
 	{#if $page.data.member?.userProfileRequiredFields.includes('avatarId')}
 		<span class="text-xs text-warning">Photo de profil requise</span>

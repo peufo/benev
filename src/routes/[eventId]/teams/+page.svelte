@@ -13,7 +13,7 @@
 	import TeamsOrder from '$lib/team/TeamsOrder.svelte'
 	import TeamsStats from './TeamsStats.svelte'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	let subscribeDialog: HTMLDialogElement = $state()
 	let thanksDialog: ThanksDialog = $state()
@@ -78,17 +78,15 @@
 
 	<Teams teams={data.teams} on:clickPeriod={({ detail }) => handleClickPeriod(detail)}>
 		{#snippet placeholder()}
-			
-				{#if !data.user && data.teamsHiddenCount}
-					<div class="grid place-content-center p-10 gap-4">
-						<p>Pas de secteur publique</p>
-						<a href="/auth?redirectTo=/{data.event.id}/teams" class="btn btn-primary"> Connexion </a>
-					</div>
-				{:else}
-					<span>Pas de secteur</span>
-				{/if}
-			
-			{/snippet}
+			{#if !data.user && data.teamsHiddenCount}
+				<div class="grid place-content-center p-10 gap-4">
+					<p>Pas de secteur publique</p>
+					<a href="/auth?redirectTo=/{data.event.id}/teams" class="btn btn-primary"> Connexion </a>
+				</div>
+			{:else}
+				<span>Pas de secteur</span>
+			{/if}
+		{/snippet}
 	</Teams>
 </div>
 

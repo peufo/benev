@@ -8,11 +8,11 @@
 	import type { TableField } from '$lib/fuma/ui/table/index.js'
 
 	interface Props {
-		item: Item;
-		field: TableField<Item>;
+		item: Item
+		field: TableField<Item>
 	}
 
-	let { item, field }: Props = $props();
+	let { item, field }: Props = $props()
 
 	let value = $derived(field.getCell(item))
 </script>

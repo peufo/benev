@@ -7,19 +7,13 @@
 	import { isSmallScreen } from '$lib/fuma/store/index.js'
 
 	interface Props {
-		tippyProps?: Partial<TippyProps>;
-		class?: string;
-		header?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
+		tippyProps?: Partial<TippyProps>
+		class?: string
+		header?: import('svelte').Snippet
+		children?: import('svelte').Snippet
 	}
 
-	let {
-		tippyProps = {},
-		class: klass = '',
-		header,
-		children
-	}: Props = $props();
-	
+	let { tippyProps = {}, class: klass = '', header, children }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ show: void; hide: void }>()
 
@@ -47,16 +41,16 @@
 		dispatch('hide')
 	}
 
-	const header_render = $derived(header);
+	const header_render = $derived(header)
 </script>
 
 {#if $isSmallScreen}
 	<Dialog bind:dialog class={klass}>
 		{#snippet header()}
-				<div  class="contents">
+			<div class="contents">
 				{@render header_render?.()}
 			</div>
-			{/snippet}
+		{/snippet}
 		{@render children?.()}
 	</Dialog>
 {:else}

@@ -6,7 +6,7 @@
 		EmailSubscribeCancelled,
 	} from '$lib/email'
 
-	let { data } = $props();
+	let { data } = $props()
 </script>
 
 <EmailSubscribeRequest {...data} />

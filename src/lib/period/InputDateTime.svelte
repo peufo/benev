@@ -4,20 +4,14 @@
 	import { MinusIcon, PlusIcon } from '@lucide/svelte'
 
 	interface Props {
-		label: string;
-		value: Dayjs;
-		key: string;
-		hint?: string;
-		onSetValue?: (newValue: Dayjs) => Dayjs;
+		label: string
+		value: Dayjs
+		key: string
+		hint?: string
+		onSetValue?: (newValue: Dayjs) => Dayjs
 	}
 
-	let {
-		label,
-		value = $bindable(),
-		key,
-		hint = '',
-		onSetValue = (v) => v
-	}: Props = $props();
+	let { label, value = $bindable(), key, hint = '', onSetValue = (v) => v }: Props = $props()
 
 	function setTime(time: string) {
 		if (!time) return
@@ -55,7 +49,7 @@
 	<input
 		type="time"
 		id="control-{key}"
-		class="input input-bordered"
+		class="input"
 		step={300}
 		value={value.format('HH:mm')}
 		oninput={(event) => setTime(event.currentTarget.value)}
@@ -71,7 +65,7 @@
 		</button>
 		<input
 			type="date"
-			class="input input-xs input-bordered input-ghost join-item max-w-[110px]"
+			class="input input-xs input-ghost join-item max-w-[110px]"
 			value={value.format('YYYY-MM-DD')}
 			oninput={(event) => setDate(event.currentTarget.value)}
 		/>

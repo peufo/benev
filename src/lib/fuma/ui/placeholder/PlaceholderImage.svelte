@@ -3,12 +3,12 @@
 	import { Icon } from '$lib/fuma/ui/icon/index.js'
 
 	interface Props {
-		x: number;
-		y: number;
-		children?: import('svelte').Snippet;
+		x: number
+		y: number
+		children?: import('svelte').Snippet
 	}
 
-	let { x, y, children }: Props = $props();
+	let { x, y, children }: Props = $props()
 </script>
 
 <div style:width="{x}px" style:height="{y}px" class="rounded-lg bg-base-200 p-2">

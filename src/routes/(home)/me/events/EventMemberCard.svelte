@@ -9,10 +9,10 @@
 	import { formatRangeDate } from '$lib/formatRange'
 
 	interface Props {
-		member: PageData['members'][number];
+		member: PageData['members'][number]
 	}
 
-	let { member }: Props = $props();
+	let { member }: Props = $props()
 
 	let nbSubscribes = $derived(member.subscribes.length)
 	let nbLeaderOf = $derived(member.leaderOf.length)

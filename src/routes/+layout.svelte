@@ -13,10 +13,10 @@
 	} from '$lib/seo'
 	import '../app.css'
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import('svelte').Snippet
 	}
 
-	let { children }: Props = $props();
+	let { children }: Props = $props()
 
 	let siteUrl = $derived($page.url.origin)
 
@@ -25,10 +25,12 @@
 	 * dédoublonner, donc deux instances empilées produiraient des balises en double.
 	 * Chaque `load` publie ses surcharges via `metaTags` dans ses données.
 	 */
-	let metaTags = $derived(mergeMetaTags(
-		defaultMetaTags($page.url),
-		$page.error ? errorMetaTags($page.status) : $page.data.metaTags
-	))
+	let metaTags = $derived(
+		mergeMetaTags(
+			defaultMetaTags($page.url),
+			$page.error ? errorMetaTags($page.status) : $page.data.metaTags
+		)
+	)
 </script>
 
 <svelte:head>

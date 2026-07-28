@@ -7,13 +7,12 @@
 	import { Icon } from '$lib/fuma'
 
 	interface Props {
-		conditions?: MemberCondition[];
-		memberFields: Field[];
-		class?: string;
+		conditions?: MemberCondition[]
+		memberFields: Field[]
+		class?: string
 	}
 
-	let { conditions = [], memberFields, class: klass = '' }: Props = $props();
-	
+	let { conditions = [], memberFields, class: klass = '' }: Props = $props()
 </script>
 
 {#each conditions as condition, i (i)}

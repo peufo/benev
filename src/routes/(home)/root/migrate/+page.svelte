@@ -7,8 +7,8 @@
 <div class="max-w-md">
 	<Card>
 		{#snippet title()}
-				<h2 >Actions</h2>
-			{/snippet}
+			<h2>Actions</h2>
+		{/snippet}
 
 		<!-- <form
 			method="post"

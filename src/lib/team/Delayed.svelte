@@ -6,12 +6,12 @@
 
 <script lang="ts">
 	interface Props {
-		index: number;
-		max: number;
-		children?: import('svelte').Snippet;
+		index: number
+		max: number
+		children?: import('svelte').Snippet
 	}
 
-	let { index, max, children }: Props = $props();
+	let { index, max, children }: Props = $props()
 
 	const delayIn = DELAY_IN + index * DELAY_STEP
 	const delayOut = DELAY_OUT + (max - index) * DELAY_STEP

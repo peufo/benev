@@ -4,7 +4,7 @@
 	import { env } from '$env/dynamic/public'
 	import { Card } from '$lib/fuma'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	let checkoutElement: HTMLDivElement = $state()
 	let destroy: () => void = () => {}

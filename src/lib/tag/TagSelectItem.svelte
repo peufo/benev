@@ -4,11 +4,11 @@
 	import { Icon, param } from '$lib/fuma'
 
 	interface Props {
-		tag: Tag;
-		is_editable?: boolean;
+		tag: Tag
+		is_editable?: boolean
 	}
 
-	let { tag, is_editable = false }: Props = $props();
+	let { tag, is_editable = false }: Props = $props()
 </script>
 
 <div class="flex items-center">

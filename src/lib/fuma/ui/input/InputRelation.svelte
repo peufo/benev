@@ -88,7 +88,7 @@
 	<div class="contents" slot="activator">
 		<FormControl {key} {label} {error} class={klass} let:key>
 			<div class="flex grow gap-2" class:hidden={item}>
-				<div class="input input-bordered flex grow items-center pr-2">
+				<div class="input flex grow items-center pr-2">
 					<input
 						type="text"
 						id={key}

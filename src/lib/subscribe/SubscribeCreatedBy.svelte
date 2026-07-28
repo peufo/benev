@@ -3,13 +3,12 @@
 	import { mdiAccountCircleOutline, mdiShieldAccountOutline } from '@mdi/js'
 
 	interface Props {
-		createdBy: 'leader' | 'user';
-		size?: number;
-		class?: string;
+		createdBy: 'leader' | 'user'
+		size?: number
+		class?: string
 	}
 
-	let { createdBy, size = 24, class: klass = '' }: Props = $props();
-	
+	let { createdBy, size = 24, class: klass = '' }: Props = $props()
 </script>
 
 <div class="w-min">

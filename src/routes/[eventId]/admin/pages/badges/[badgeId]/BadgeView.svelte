@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import { InputRelation } from '$lib/fuma'
 	import type { PageData } from './$types'
@@ -11,11 +11,11 @@
 	import { browser } from '$app/environment'
 
 	interface Props {
-		badge: PageData['badge'];
-		defaultMember: Member | undefined;
+		badge: PageData['badge']
+		defaultMember: Member | undefined
 	}
 
-	let { badge, defaultMember }: Props = $props();
+	let { badge, defaultMember }: Props = $props()
 
 	let member: Member | undefined = $state(defaultMember)
 
@@ -36,7 +36,7 @@
 	const refresh = useRefresh()
 	run(() => {
 		if (badge) refresh()
-	});
+	})
 </script>
 
 <div class="grow flex flex-col gap-4 h-auto max-w-sm">
@@ -54,7 +54,7 @@
 					<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
 				{/if}
 			</div>
-			{/snippet}
+		{/snippet}
 		{#snippet suggestion({ item })}
 			{@const badgeType = item?.profileJson[badge.typeFieldId || '']}
 			<div class="flex gap-2 w-full">
@@ -63,7 +63,7 @@
 					<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
 				{/if}
 			</div>
-			{/snippet}
+		{/snippet}
 	</InputRelation>
 
 	{#if member}

@@ -2,16 +2,15 @@
 	import { InputImage, type Crop } from '$lib/fuma/ui/input/index.js'
 	import { PlaceholderImage } from '$lib/fuma/ui/placeholder/index.js'
 
-	
 	interface Props {
-		key?: string;
-		src?: string;
-		alt?: string;
-		class?: string;
-		title?: string;
-		x: number;
-		y: number;
-		aspect?: any;
+		key?: string
+		src?: string
+		alt?: string
+		class?: string
+		title?: string
+		x: number
+		y: number
+		aspect?: any
 	}
 
 	let {
@@ -22,8 +21,8 @@
 		title = 'Image',
 		x,
 		y,
-		aspect = x / y
-	}: Props = $props();
+		aspect = x / y,
+	}: Props = $props()
 
 	let crop: Crop | null = $state(null)
 	let image = $state('')

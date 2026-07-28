@@ -123,7 +123,7 @@
 					</div>
 				{/if}
 				<div class="flex grow gap-2">
-					<div class="input input-bordered flex grow items-center pr-2">
+					<div class="input flex grow items-center pr-2">
 						<input
 							type="text"
 							id={key}

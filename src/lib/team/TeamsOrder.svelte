@@ -9,10 +9,10 @@
 	type _Team = Pick<Team, 'id' | 'name'>
 
 	interface Props {
-		teams: _Team[];
+		teams: _Team[]
 	}
 
-	let { teams = $bindable() }: Props = $props();
+	let { teams = $bindable() }: Props = $props()
 
 	async function handleReorder(reorderedTeams: _Team[]) {
 		teams = reorderedTeams

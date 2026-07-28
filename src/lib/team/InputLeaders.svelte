@@ -6,10 +6,10 @@
 	import MemberLink from './MemberLink.svelte'
 
 	interface Props {
-		value?: Member[] | undefined;
+		value?: Member[] | undefined
 	}
 
-	let { value = undefined }: Props = $props();
+	let { value = undefined }: Props = $props()
 </script>
 
 <InputRelations

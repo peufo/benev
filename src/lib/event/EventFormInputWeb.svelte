@@ -6,10 +6,10 @@
 	import { EventIcon } from '.'
 
 	interface Props {
-		event?: Event | undefined;
+		event?: Event | undefined
 	}
 
-	let { event = undefined }: Props = $props();
+	let { event = undefined }: Props = $props()
 
 	let input: HTMLInputElement = $state()
 	let scrapPending = $state(false)
@@ -37,7 +37,7 @@
 	classWrapper="flex items-center"
 >
 	{#snippet append()}
-		<div >
+		<div>
 			{#if icon || scrapPending}
 				<div class="w-10 grid place-content-center">
 					{#if scrapPending}

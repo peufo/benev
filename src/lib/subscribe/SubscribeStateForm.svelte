@@ -24,9 +24,9 @@
 </script>
 
 <script lang="ts">
-	import { run, createBubbler, stopPropagation } from 'svelte/legacy';
+	import { run, createBubbler, stopPropagation } from 'svelte/legacy'
 
-	const bubble = createBubbler();
+	const bubble = createBubbler()
 	import { createEventDispatcher } from 'svelte'
 	import type { Props as TippyProps } from 'tippy.js'
 	import type { Subscribe } from '@prisma/client'
@@ -43,12 +43,12 @@
 	import { page } from '$app/stores'
 
 	interface Props {
-		subscribe: Subscribe & { member: { isValidedByUser: boolean } };
-		eventId?: any;
-		action?: any;
-		isLeader?: boolean;
-		tippyProps?: Partial<TippyProps>;
-		canBeLarge?: boolean;
+		subscribe: Subscribe & { member: { isValidedByUser: boolean } }
+		eventId?: string
+		action?: string
+		isLeader?: boolean
+		tippyProps?: Partial<TippyProps>
+		canBeLarge?: boolean
 	}
 
 	let {
@@ -57,8 +57,8 @@
 		action = `/${eventId}/subscribes/${subscribe.id}`,
 		isLeader = false,
 		tippyProps = {},
-		canBeLarge = false
-	}: Props = $props();
+		canBeLarge = false,
+	}: Props = $props()
 
 	let isSelf = subscribe.memberId === $page.data.member?.id
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -75,31 +75,39 @@
 			(acc, cur) => ({ ...acc, [cur]: states[cur] }),
 			{}
 		)
-	});
+	})
 	run(() => {
 		subscriberStates = subscriberEditions[subscribe.state].reduce(
 			(acc, cur) => ({ ...acc, [cur]: states[cur] }),
 			{}
 		)
-	});
-	let isCreator =
-		$derived((isSelf && subscribe.createdBy === 'user') || (isLeader && subscribe.createdBy === 'leader'))
-	let isSubscriber =
-		$derived((isSelf && subscribe.createdBy === 'leader') || (isLeader && subscribe.createdBy === 'user'))
+	})
+	let isCreator = $derived(
+		(isSelf && subscribe.createdBy === 'user') || (isLeader && subscribe.createdBy === 'leader')
+	)
+	let isSubscriber = $derived(
+		(isSelf && subscribe.createdBy === 'leader') || (isLeader && subscribe.createdBy === 'user')
+	)
 	let isSelfCancelAllowed = $derived($page.data.event?.selfSubscribeCancelAllowed || isLeader)
 	let isConfirmation = $derived(!isCreator && subscribe.state === 'request')
 	let isConfirmationForced = $derived(isLeader && isCreator && subscribe.state === 'request')
-	let editions = $derived(Object.entries({
-		...(isCreator && creatorStates),
-		...(isSubscriber && subscriberStates),
-		...(isConfirmationForced && {
-			accepted: { ...states.accepted, label: 'Confirmer au nom du membre', class: 'fill-blue-500' },
-		}),
-	}).filter(
-		([state]) =>
-			state !== subscribe.state &&
-			((state !== 'cancelled' && state !== 'denied') || isSelfCancelAllowed)
-	))
+	let editions = $derived(
+		Object.entries({
+			...(isCreator && creatorStates),
+			...(isSubscriber && subscriberStates),
+			...(isConfirmationForced && {
+				accepted: {
+					...states.accepted,
+					label: 'Confirmer au nom du membre',
+					class: 'fill-blue-500',
+				},
+			}),
+		}).filter(
+			([state]) =>
+				state !== subscribe.state &&
+				((state !== 'cancelled' && state !== 'denied') || isSelfCancelAllowed)
+		)
+	)
 </script>
 
 {#if !editions.length}
@@ -109,26 +117,31 @@
 {:else}
 	<DropDown tippyProps={{ arrow: true, trigger: 'click', ...tippyProps }}>
 		{#snippet activator()}
-				<button
-				
+			<button
 				class="relative btn btn-sm z-10 {!isConfirmation || !canBeLarge
 					? 'btn-square'
 					: 'max-sm:btn-square'}"
 			>
 				<SubscribeState {subscribe} />
 				{#if isConfirmation}
-					<div class="absolute w-3 h-3 bg-error -right-1.5 -top-1.5 rounded-full animate-ping"></div>
+					<div
+						class="absolute w-3 h-3 bg-error -right-1.5 -top-1.5 rounded-full animate-ping"
+					></div>
 					<div class="absolute w-2 h-2 bg-error -right-1 -top-1 rounded-full"></div>
 					{#if canBeLarge}
 						<span class="font-medium hidden sm:inline">à confirmer</span>
 					{/if}
 				{/if}
 			</button>
-			{/snippet}
+		{/snippet}
 
 		<form method="post" use:enhance={form.submit} class="flex flex-col gap-1">
 			{#each editions as [state, edit] (state)}
-				<button class="menu-item" formaction="{action}?/subscribe_{state}" onclick={stopPropagation(bubble('click'))}>
+				<button
+					class="menu-item"
+					formaction="{action}?/subscribe_{state}"
+					onclick={stopPropagation(bubble('click'))}
+				>
 					<Icon path={edit.icon} class={edit.class} />
 					{edit.label}
 				</button>

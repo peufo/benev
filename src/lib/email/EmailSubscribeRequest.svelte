@@ -6,11 +6,11 @@
 	import { domain } from '.'
 
 	interface Props {
-		member: MemberWithComputedValues;
-		subscribe: SubscribeWithTeam;
+		member: MemberWithComputedValues
+		subscribe: SubscribeWithTeam
 	}
 
-	let { member, subscribe }: Props = $props();
+	let { member, subscribe }: Props = $props()
 </script>
 
 <EmailLayout eventId={member.event.id} title={member.event.name} subtitle="Nouvelle inscription">

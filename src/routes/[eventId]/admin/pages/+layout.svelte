@@ -11,7 +11,7 @@
 	import { IdCardLanyardIcon } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
 
-	let { data, children } = $props();
+	let { data, children } = $props()
 
 	const form = useForm({
 		onSuccess(url) {

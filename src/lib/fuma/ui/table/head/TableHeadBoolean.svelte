@@ -4,10 +4,10 @@
 	import TableHeadSelect from '$lib/fuma/ui/table/head/TableHeadSelect.svelte'
 
 	interface Props {
-		field: TableField<Item>;
+		field: TableField<Item>
 	}
 
-	let { field }: Props = $props();
+	let { field }: Props = $props()
 </script>
 
 <TableHeadSelect

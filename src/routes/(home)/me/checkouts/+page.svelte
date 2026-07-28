@@ -5,7 +5,7 @@
 
 	import { CheckoutWaitSSE, ProductUseForm } from '$lib/checkout'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	const checkoutId = $page.url.searchParams.get('checkoutId')
 </script>
@@ -26,23 +26,23 @@
 			bodyClass="flex flex-col gap-4"
 		>
 			{#snippet title()}
-						<div  class="flex flex-col">
+				<div class="flex flex-col">
 					<div class="flex items-center gap-2">
 						<Icon path={mdiCartCheck} class="text-primary" />
 						<span class="font-semibold">{checkout.name || 'Achat'}</span>
 					</div>
 					<span class="text-sm opacity-70">{checkout.createdAt.toLocaleDateString()}</span>
 				</div>
-					{/snippet}
+			{/snippet}
 
 			{#snippet action()}
-						<div  class="text-right">
+				<div class="text-right">
 					<div class="text-lg font-bold">
 						{(checkout.amount / 100).toFixed(2)}
 						{checkout.currency?.toUpperCase()}
 					</div>
 				</div>
-					{/snippet}
+			{/snippet}
 
 			<div class="flex flex-col">
 				{#each checkout.products as product, index (product.id)}

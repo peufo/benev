@@ -1,5 +1,5 @@
 <script lang="ts" generics="Item extends {id: string}">
-	import { preventDefault } from 'svelte/legacy';
+	import { preventDefault } from 'svelte/legacy'
 
 	import { onMount } from 'svelte'
 	import type { TippyInstance } from '$lib/fuma/utils/tippy.js'
@@ -17,10 +17,10 @@
 	import OrderButtons from '$lib/fuma/ui/table/head/OrderButtons.svelte'
 
 	interface Props {
-		field: TableField<Item>;
+		field: TableField<Item>
 	}
 
-	let { field }: Props = $props();
+	let { field }: Props = $props()
 
 	let tip: TippyInstance = $state()
 	type Range = { min: number | undefined; max: number | undefined }
@@ -83,7 +83,7 @@
 		tippyProps={{ appendTo: () => document.body }}
 	>
 		{#snippet activator()}
-				<button  class="menu-item min-h-8 w-full flex-wrap gap-y-1">
+			<button class="menu-item min-h-8 w-full flex-wrap gap-y-1">
 				<div class="flex gap-2">
 					<span>{field.label}</span>
 					{#if !isDefined(min) && !isDefined(max)}
@@ -110,7 +110,7 @@
 					/>
 				{/if}
 			</button>
-			{/snippet}
+		{/snippet}
 
 		{#if field.sortable !== false}
 			<OrderButtons

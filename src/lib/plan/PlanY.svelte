@@ -13,11 +13,11 @@
 	import { debounce } from '$lib/debounce'
 
 	interface Props {
-		teams: (Team & { periods: PeriodWithMembers[] })[];
-		plan: Plan;
+		teams: (Team & { periods: PeriodWithMembers[] })[]
+		plan: Plan
 	}
 
-	let { teams, plan = $bindable() }: Props = $props();
+	let { teams, plan = $bindable() }: Props = $props()
 
 	let container: HTMLElement = $state()
 

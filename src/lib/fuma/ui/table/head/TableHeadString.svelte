@@ -9,10 +9,10 @@
 	import type { TableField } from '$lib/fuma/ui/table/index.js'
 
 	interface Props {
-		field: TableField<Item>;
+		field: TableField<Item>
 	}
 
-	let { field }: Props = $props();
+	let { field }: Props = $props()
 
 	let tip: TippyInstance = $state()
 	let searchValue = $state($page.url.searchParams.get(field.key) || '')
@@ -27,7 +27,7 @@
 		tippyProps={{ appendTo: () => document.body }}
 	>
 		{#snippet activator()}
-				<button  class="menu-item min-h-8 w-full flex-wrap gap-y-1">
+			<button class="menu-item min-h-8 w-full flex-wrap gap-y-1">
 				<div class="flex items-center gap-2">
 					<span>{field.label}</span>
 					{#if !searchValue}
@@ -42,7 +42,7 @@
 					</span>
 				{/if}
 			</button>
-			{/snippet}
+		{/snippet}
 
 		<InputSearch
 			class="m-1"

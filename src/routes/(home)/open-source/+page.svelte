@@ -2,7 +2,7 @@
 	import GithubIssues from '$lib/GithubIssues.svelte'
 	import { Code, GitBranch, ArrowRight } from '@lucide/svelte'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	let openCount = $derived(data.openCount || data.recentIssues.length)
 	let closedCount = $derived(data.closedCount || data.recentClosedIssues.length)

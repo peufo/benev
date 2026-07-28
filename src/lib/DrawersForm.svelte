@@ -13,20 +13,14 @@
 	let periodDrawer: PeriodDrawer = $state()
 	let periodForm: PeriodForm = $state()
 
-
 	interface Props {
-		event: Event & { memberFields: Field[] };
-		team?: Partial<TeamWithComputedValues> | null;
-		period?: Partial<FormDataPeriod>;
-		tag?: Partial<Tag> | null;
+		event: Event & { memberFields: Field[] }
+		team?: Partial<TeamWithComputedValues> | null
+		period?: Partial<FormDataPeriod>
+		tag?: Partial<Tag> | null
 	}
 
-	let {
-		event,
-		team = null,
-		period = {},
-		tag = null
-	}: Props = $props();
+	let { event, team = null, period = {}, tag = null }: Props = $props()
 
 	let importDialog: HTMLDialogElement = $state()
 
@@ -35,7 +29,7 @@
 	}
 </script>
 
-<Drawer key="form_invite" title="Inviter un nouveau membre" >
+<Drawer key="form_invite" title="Inviter un nouveau membre">
 	{#snippet children({ close })}
 		<InviteForm
 			onCreate={async (member) => {
@@ -66,7 +60,7 @@
 
 <MemberImportDialog bind:dialog={importDialog} />
 
-<Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur" >
+<Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur">
 	{#snippet children({ close })}
 		<TeamForm bind:teamForm team={team || {}} {event} on:success={() => close()} />
 	{/snippet}
@@ -74,12 +68,7 @@
 
 <PeriodDrawer bind:this={periodDrawer} bind:periodForm {period} />
 
-<Drawer
-	key="form_tag"
-	title="{tag?.id ? "Modifier l'" : 'Nouvelle '} étiquette"
-	maxWidth="400px"
-	
->
+<Drawer key="form_tag" title="{tag?.id ? "Modifier l'" : 'Nouvelle '} étiquette" maxWidth="400px">
 	{#snippet children({ close })}
 		<TagForm
 			tag={tag || {}}

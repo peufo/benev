@@ -6,7 +6,7 @@
 
 <DropDown tippyProps={{ trigger: 'mouseenter' }}>
 	{#snippet activator()}
-		<button  type="button" class="contents">
+		<button type="button" class="contents">
 			<Icon path={mdiHelpCircleOutline} size={19} class="opacity-70 rotate-12 ml-2" />
 		</button>
 	{/snippet}

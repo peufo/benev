@@ -10,7 +10,7 @@
 
 <DropDown class="max-h-none min-w-[200px]" hideOnBlur>
 	{#snippet activator()}
-		<button  class="btn btn-square ml-2 lg:hidden">
+		<button class="btn btn-square ml-2 lg:hidden">
 			<Menu />
 		</button>
 	{/snippet}

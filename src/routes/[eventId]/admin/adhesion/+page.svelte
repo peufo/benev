@@ -8,17 +8,17 @@
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { eventPath } from '$lib/store'
 
-	let { data } = $props();
+	let { data } = $props()
 </script>
 
 <OnlyAdmin>
 	<Card class="mx-auto" style="min-width: min(100%, 600px)">
 		{#snippet title()}
-				<span  class="flex gap-3">
+			<span class="flex gap-3">
 				<Icon path={mdiLogin} class="opacity-70" />
 				Adhésion des membres
 			</span>
-			{/snippet}
+		{/snippet}
 
 		<section>
 			<EventSettingForm event={data.event} />

@@ -7,11 +7,11 @@
 	import type { User } from '@prisma/client'
 
 	interface Props {
-		user: User;
-		children?: import('svelte').Snippet;
+		user: User
+		children?: import('svelte').Snippet
 	}
 
-	let { user, children }: Props = $props();
+	let { user, children }: Props = $props()
 
 	type Tab = {
 		href: string
@@ -49,29 +49,27 @@
 
 <Card class="max-w-2xl mx-auto">
 	{#snippet top()}
-	
-			<div
-				class="
+		<div
+			class="
 					bordered sticky top-0 z-20 flex gap-2 rounded-t-2xl border-b bg-base-100 p-2 shadow-sm
 				"
-			>
-				{#each $tabs as { href, isActive, label, icon: Icon } (href)}
-					{@const active = isActive ?? $page.url.pathname.startsWith(href)}
-					<a
-						{href}
-						data-sveltekit-noscroll
-						class="
+		>
+			{#each $tabs as { href, isActive, label, icon: Icon } (href)}
+				{@const active = isActive ?? $page.url.pathname.startsWith(href)}
+				<a
+					{href}
+					data-sveltekit-noscroll
+					class="
 							menu-item grow flex-col justify-center gap-0 rounded-lg py-2
 							text-sm lg:flex-row lg:gap-3 lg:text-base
 						"
-						class:active
-					>
-						<Icon size={20} class="opacity-70" />
-						<span class="hidden whitespace-nowrap sm:block">{label}</span>
-					</a>
-				{/each}
-			</div>
-		
+					class:active
+				>
+					<Icon size={20} class="opacity-70" />
+					<span class="hidden whitespace-nowrap sm:block">{label}</span>
+				</a>
+			{/each}
+		</div>
 	{/snippet}
 	{@render children?.()}
 </Card>

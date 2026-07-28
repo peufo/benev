@@ -5,10 +5,10 @@
 	import { Icon, USE_COERCE_BOOLEAN } from '$lib/fuma'
 
 	interface Props {
-		memberProfile: PageData['memberProfile'];
+		memberProfile: PageData['memberProfile']
 	}
 
-	let { memberProfile }: Props = $props();
+	let { memberProfile }: Props = $props()
 	let isAdmin = $derived(memberProfile.roles.includes('admin'))
 	const { enhance } = useForm()
 </script>

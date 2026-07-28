@@ -12,17 +12,17 @@
 	import { enhance } from '$app/forms'
 
 	interface Props {
-		subscribe: Subscribe;
+		subscribe: Subscribe
 	}
 
-	let { subscribe }: Props = $props();
+	let { subscribe }: Props = $props()
 
 	let form = useForm()
 </script>
 
 <DropDown tippyProps={{ arrow: true }} classWrapper="w-min">
 	{#snippet activator()}
-		<button  class=" relative z-10 btn btn-sm btn-square">
+		<button class=" relative z-10 btn btn-sm btn-square">
 			<Icon path={mdiDotsHorizontal} size={20} class="opacity-70" />
 		</button>
 	{/snippet}
@@ -49,19 +49,13 @@
 			class="menu-item w-full"
 			formaction="{$eventPath}/subscribes/{subscribe.id}?/subscribe_delete"
 		>
-			{#snippet children()}
-					
-					<Icon path={mdiTrashCanOutline} class="fill-error/80" size={20} />
-					<span>Supprimer</span>
-				
-					{/snippet}
+			<Icon path={mdiTrashCanOutline} class="fill-error/80" size={20} />
+			<span>Supprimer</span>
 
 			{#snippet ready()}
-					
-					<Icon path={mdiTrashCanOutline} class="fill-error/80" size={20} />
-					<span>T'es sur ?</span>
-				
-					{/snippet}
+				<Icon path={mdiTrashCanOutline} class="fill-error/80" size={20} />
+				<span>T'es sur ?</span>
+			{/snippet}
 		</ButtonDelete>
 	</form>
 </DropDown>

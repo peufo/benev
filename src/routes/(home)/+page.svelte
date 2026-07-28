@@ -5,7 +5,7 @@
 	import { Workflow, LandingCTA, AnimatedLogo, PricingSection } from '$lib/landing'
 	import { softwareApplicationSchema } from '$lib/seo'
 
-	let { data } = $props();
+	let { data } = $props()
 </script>
 
 <!-- Le produit n'est décrit que sur l'accueil : le layout racine couvre aussi les évènements -->

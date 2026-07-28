@@ -5,7 +5,7 @@
 	import { formatRangeDate } from '$lib/formatRange'
 	import { CalendarDaysIcon, MailIcon, PhoneIcon, MapPinIcon } from '@lucide/svelte'
 
-	let { data } = $props();
+	let { data } = $props()
 
 	let user = $derived(data.user)
 	let fullAddress = $derived([user.street, user.zipCode, user.city].filter(Boolean).join(', '))
@@ -14,8 +14,8 @@
 <div class="flex flex-col gap-4 p-4">
 	<Card>
 		{#snippet title()}
-				<h2  class="title">{user.firstName} {user.lastName}</h2>
-			{/snippet}
+			<h2 class="title">{user.firstName} {user.lastName}</h2>
+		{/snippet}
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 			<div class="flex items-center gap-2">
@@ -61,8 +61,8 @@
 
 	<Card>
 		{#snippet title()}
-				<h2  class="title">Événements ({data.members.length})</h2>
-			{/snippet}
+			<h2 class="title">Événements ({data.members.length})</h2>
+		{/snippet}
 
 		{#if data.members.length}
 			<table class="table">

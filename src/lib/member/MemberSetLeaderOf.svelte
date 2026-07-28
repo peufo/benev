@@ -8,18 +8,18 @@
 	import { eventPath } from '$lib/store'
 
 	interface Props {
-		title?: string;
-		dialog: HTMLDialogElement;
-		teams: Team[];
-		memberId: string;
+		title?: string
+		dialog: HTMLDialogElement
+		teams: Team[]
+		memberId: string
 	}
 
 	let {
 		title = 'Secteur à charges',
 		dialog = $bindable(),
 		teams = $bindable(),
-		memberId
-	}: Props = $props();
+		memberId,
+	}: Props = $props()
 
 	const form = useForm({
 		onSuccess() {
@@ -30,7 +30,7 @@
 
 <Dialog bind:dialog on:open={() => (teams = teams)}>
 	{#snippet header()}
-		<h2  class="title">{title}</h2>
+		<h2 class="title">{title}</h2>
 	{/snippet}
 	<form
 		action="{$eventPath}/admin/members/{memberId}?/set_leader_of"

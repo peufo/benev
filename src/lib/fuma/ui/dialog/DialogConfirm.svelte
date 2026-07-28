@@ -3,23 +3,16 @@
 
 	let dialog: HTMLDialogElement = $state()
 	interface Props {
-		class?: string;
-		activator?: import('svelte').Snippet;
-		header?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
-		action?: import('svelte').Snippet;
+		class?: string
+		activator?: import('svelte').Snippet
+		header?: import('svelte').Snippet
+		children?: import('svelte').Snippet
+		action?: import('svelte').Snippet
 	}
 
-	let {
-		class: klass = '',
-		activator,
-		header,
-		children,
-		action
-	}: Props = $props();
-	
+	let { class: klass = '', activator, header, children, action }: Props = $props()
 
-	const header_render = $derived(header);
+	const header_render = $derived(header)
 </script>
 
 <button type="button" onclick={() => dialog.showModal()} class="btn btn-ghost {klass}">
@@ -28,7 +21,7 @@
 
 <Dialog bind:dialog>
 	{#snippet header()}
-		<div  class="contents">
+		<div class="contents">
 			{#if header_render}{@render header_render()}{:else}Confirmation{/if}
 		</div>
 	{/snippet}

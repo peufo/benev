@@ -10,10 +10,10 @@
 	})
 
 	interface Props {
-		event: Event;
+		event: Event
 	}
 
-	let { event = $bindable() }: Props = $props();
+	let { event = $bindable() }: Props = $props()
 </script>
 
 <form method="post" use:enhance action="{$eventPath}/admin/adhesion?/set_member_settings">

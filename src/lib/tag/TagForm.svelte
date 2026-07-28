@@ -6,10 +6,10 @@
 	import type { ComponentType } from 'svelte'
 
 	interface Props {
-		tag?: Partial<Tag>;
+		tag?: Partial<Tag>
 	}
 
-	let { tag = $bindable({}) }: Props = $props();
+	let { tag = $bindable({}) }: Props = $props()
 	const TagForm: ComponentType<Form<typeof modelTagCreate, Tag>> = Form
 	const colors = [
 		'#6CBEED',
@@ -53,13 +53,7 @@
 		<div class="label">
 			<span class="label-text">Couleur</span>
 		</div>
-		<input
-			name="color"
-			type="color"
-			class="input input-bordered w-full"
-			value={tag.color}
-			list="colors"
-		/>
+		<input name="color" type="color" class="input w-full" value={tag.color} list="colors" />
 		<datalist id="colors">
 			{#each colors as color (color)}
 				<option value={color}></option>

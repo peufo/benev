@@ -31,7 +31,7 @@
 			type="password"
 			name={key}
 			id={key}
-			class="input input-bordered"
+			class="input"
 			{autocomplete}
 			{...input}
 		/>

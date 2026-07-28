@@ -8,10 +8,10 @@
 	import ToolMark from '$lib/fuma/ui/input/textRich/ToolMark.svelte'
 
 	interface Props {
-		editor: Editor;
+		editor: Editor
 	}
 
-	let { editor }: Props = $props();
+	let { editor }: Props = $props()
 	let dialogLink: HTMLDialogElement = $state()
 	let linkHref = $state('')
 	let linkError = $state('')
@@ -64,7 +64,7 @@
 
 <Dialog bind:dialog={dialogLink}>
 	{#snippet header()}
-		<h3  class="title">Éditer un lien</h3>
+		<h3 class="title">Éditer un lien</h3>
 	{/snippet}
 	<div class="flex flex-col gap-2">
 		<InputText bind:value={linkHref} bind:error={linkError} on:keydown={handleKeyDown} />

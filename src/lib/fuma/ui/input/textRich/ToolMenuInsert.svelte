@@ -8,10 +8,10 @@
 	import { suggestionItems } from '$lib/fuma/ui/input/textRich/suggestion.js'
 
 	interface Props {
-		editor: Editor;
+		editor: Editor
 	}
 
-	let { editor }: Props = $props();
+	let { editor }: Props = $props()
 
 	const dispatch = createEventDispatcher<{ insertMedia: void }>()
 </script>
@@ -53,8 +53,6 @@
 	hideLabel
 >
 	{#snippet activator()}
-	
-			<Icon path={mdiPlus} size={20} class="opacity-70" />
-		
+		<Icon path={mdiPlus} size={20} class="opacity-70" />
 	{/snippet}
 </ToolMenu>

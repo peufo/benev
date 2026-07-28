@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import { Icon, InputRelation, USE_COERCE_JSON } from '$lib/fuma'
 	import { mdiMapMarkerOutline } from '@mdi/js'
@@ -21,18 +21,18 @@
 	}
 
 	interface Props {
-		key?: string;
-		label?: string;
-		value?: PrismaJson.Location | null;
-		placeholder?: string;
+		key?: string
+		label?: string
+		value?: PrismaJson.Location | null
+		placeholder?: string
 	}
 
 	let {
 		key = 'location',
 		label = 'Lieu',
 		value = $bindable(null),
-		placeholder = 'Commence à taper une adresse ou un lieu…'
-	}: Props = $props();
+		placeholder = 'Commence à taper une adresse ou un lieu…',
+	}: Props = $props()
 
 	// InputRelation sérialise déjà un `{ id }` sous son propre `key`: on lui en donne
 	// un distinct pour que notre champ caché reste seul à porter la valeur soumise
@@ -64,6 +64,8 @@
 		const { features }: { features: PhotonFeature[] } = await res.json()
 		// un même lieu existe souvent en plusieurs objets OSM (noeud, chemin, relation):
 		// à libellé identique, on n'en garde qu'un
+		// Aide locale de déduplication, jamais lue par le rendu: pas besoin de SvelteSet.
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity
 		const seen = new Set<string>()
 		return features.map(toSuggestion).filter(({ label }) => {
 			if (seen.has(label)) return false
@@ -74,19 +76,21 @@
 
 	// la valeur enregistrée n'a ni `title` ni `detail`: on la réhydrate pour l'affichage.
 	// Un lieu hérité de l'ancien champ texte n'a pas de coordonnées.
-	let selected: Suggestion | null = $state(value && {
-		...value,
-		id: value.label,
-		title: value.label,
-		detail: '',
-	})
+	let selected: Suggestion | null = $state(
+		value && {
+			...value,
+			id: value.label,
+			title: value.label,
+			detail: '',
+		}
+	)
 
 	run(() => {
 		value = selected && {
 			label: selected.label,
 			...(selected.coords && { coords: selected.coords }),
 		}
-	});
+	})
 </script>
 
 <input type="hidden" name={key} value="{USE_COERCE_JSON}{JSON.stringify(value)}" />
@@ -101,18 +105,16 @@
 	on:input
 >
 	{#snippet suggestion({ item })}
-	
-			<div class="flex flex-col py-1">
-				<span>{item.title}</span>
-				{#if item.detail}
-					<span class="text-sm opacity-60">{item.detail}</span>
-				{/if}
-			</div>
-		
+		<div class="flex flex-col py-1">
+			<span>{item.title}</span>
+			{#if item.detail}
+				<span class="text-sm opacity-60">{item.detail}</span>
+			{/if}
+		</div>
 	{/snippet}
 
 	{#snippet item({ item })}
-		<div  class="flex items-center gap-2" >
+		<div class="flex items-center gap-2">
 			<Icon path={mdiMapMarkerOutline} class="opacity-70" />
 			<span>{item?.label}</span>
 		</div>

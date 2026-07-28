@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from 'svelte/legacy'
 
 	import type { Field } from '@prisma/client'
 	import { fade } from 'svelte/transition'
@@ -8,11 +8,11 @@
 	import { USE_COERCE_JSON } from '$lib/fuma'
 
 	interface Props {
-		value: Record<string, string>;
-		field: Field | null;
+		value: Record<string, string>
+		field: Field | null
 	}
 
-	let { value = $bindable(), field }: Props = $props();
+	let { value = $bindable(), field }: Props = $props()
 
 	let options = $derived(JSON.parse(field?.options || '[]') as string[])
 	let currentOptions = $state(options)
@@ -21,7 +21,7 @@
 			options.reduce((acc, cur) => ({ ...acc, [cur]: value[cur] || getNextColor() }), {})
 			currentOptions = options
 		}
-	});
+	})
 </script>
 
 <input type="hidden" name="colorMap" value="{USE_COERCE_JSON}{JSON.stringify(value)}" />

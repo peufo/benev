@@ -3,18 +3,17 @@
 	import { Icon } from '$lib/fuma/ui/icon/index.js'
 	import { contextContainer } from '$lib/fuma/ui/context.js'
 
-	
 	interface Props {
-		class?: string;
-		bodyClass?: string;
-		headerClass?: string;
-		returnUrl?: string;
-		style?: string;
-		top?: import('svelte').Snippet;
-		title?: import('svelte').Snippet;
-		action?: import('svelte').Snippet;
-		subtitle?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
+		class?: string
+		bodyClass?: string
+		headerClass?: string
+		returnUrl?: string
+		style?: string
+		top?: import('svelte').Snippet
+		title?: import('svelte').Snippet
+		action?: import('svelte').Snippet
+		subtitle?: import('svelte').Snippet
+		children?: import('svelte').Snippet
 	}
 
 	let {
@@ -27,8 +26,8 @@
 		title,
 		action,
 		subtitle,
-		children
-	}: Props = $props();
+		children,
+	}: Props = $props()
 
 	contextContainer.set('card')
 </script>

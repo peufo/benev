@@ -7,7 +7,7 @@
 	import { MemberProfile, MemberSettingsForm } from '$lib/member'
 	import DownloadSubscribes from '$lib/me/DownloadSubscribes.svelte'
 
-	let { data } = $props();
+	let { data } = $props()
 </script>
 
 <Card class="max-w-2xl mx-auto">

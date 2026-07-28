@@ -1,20 +1,13 @@
 <script lang="ts" generics="Keys extends string">
-	
 	interface Props {
-		title: string;
-		class?: string;
-		values: Record<Keys, number>;
-		getHref: (key: Keys) => string;
-		getLabel?: (key: Keys) => string;
+		title: string
+		class?: string
+		values: Record<Keys, number>
+		getHref: (key: Keys) => string
+		getLabel?: (key: Keys) => string
 	}
 
-	let {
-		title,
-		class: klass = '',
-		values,
-		getHref,
-		getLabel = (key) => key
-	}: Props = $props();
+	let { title, class: klass = '', values, getHref, getLabel = (key) => key }: Props = $props()
 
 	let distribution = $derived(Object.entries(values) as [Keys, number][])
 	let total = $derived(Object.values<number>(values).reduce((acc, cur) => acc + cur, 0))

@@ -4,12 +4,12 @@
 	import { MessageSquare } from '@lucide/svelte'
 
 	interface Props {
-		issues: GithubIssue[];
-		title: string;
-		titleHref?: string | undefined;
-		showNewIssueButton?: boolean;
-		showDescription?: boolean;
-		showLabels?: boolean;
+		issues: GithubIssue[]
+		title: string
+		titleHref?: string | undefined
+		showNewIssueButton?: boolean
+		showDescription?: boolean
+		showLabels?: boolean
 	}
 
 	let {
@@ -18,8 +18,8 @@
 		titleHref = undefined,
 		showNewIssueButton = false,
 		showDescription = true,
-		showLabels = true
-	}: Props = $props();
+		showLabels = true,
+	}: Props = $props()
 </script>
 
 {#if issues.length > 0}

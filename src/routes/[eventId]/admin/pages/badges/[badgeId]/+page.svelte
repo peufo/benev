@@ -2,7 +2,7 @@
 	import BadgeForm from './BadgeForm.svelte'
 	import BadgeView from './BadgeView.svelte'
 
-	let { data = $bindable() } = $props();
+	let { data = $bindable() } = $props()
 </script>
 
 <div class="flex gap-12 pl-12">

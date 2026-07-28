@@ -7,18 +7,13 @@
 	import { parseOptions, type Options, type Option } from '$lib/fuma/utils/options.js'
 
 	interface Props {
-		options: Options;
-		showLabel?: boolean;
-		key: string;
-		defaultValue?: string | undefined;
+		options: Options
+		showLabel?: boolean
+		key: string
+		defaultValue?: string | undefined
 	}
 
-	let {
-		options,
-		showLabel = false,
-		key,
-		defaultValue = undefined
-	}: Props = $props();
+	let { options, showLabel = false, key, defaultValue = undefined }: Props = $props()
 
 	let _options = $state(getOptions($page.url))
 	onMount(() =>
