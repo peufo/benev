@@ -7,12 +7,16 @@
 
 {#if link}
 	{@const label = link.replace(/^http(s)?:\/\/(www\.)?/, '').replace(/\/$/, '')}
-	<a class="btn btn-sm sm:btn-md btn-ghost flex" href="{protocol}{link}" target="_blank">
+	<a
+		class="btn btn-sm sm:btn-md btn-ghost flex flex-nowrap items-center max-w-96"
+		href="{protocol}{link}"
+		target="_blank"
+	>
 		<slot name="icon">
 			{#if icon}
 				<Icon path={icon} />
 			{/if}
 		</slot>
-		<slot {label}>{label}</slot>
+		<slot {label}><span>{label}</span></slot>
 	</a>
 {/if}

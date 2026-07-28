@@ -30,6 +30,19 @@
 				}
 			}}
 		>
+			<button formaction="?/event_address_to_location" class="btn">
+				Migrate events address to location
+			</button>
+		</form>
+		<form
+			method="post"
+			class="flex flex-col gap-2"
+			use:enhance={() => {
+				return (res) => {
+					toast.info(JSON.stringify(res.result))
+				}
+			}}
+		>
 			<button formaction="?/anonymise" class="btn"> Anonymise all users for demo </button>
 		</form>
 		<form

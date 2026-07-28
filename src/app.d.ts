@@ -42,6 +42,13 @@ declare global {
 	namespace PrismaJson {
 		type MemberConditions = (typeof modelMemberCondition)['_output'][]
 		type MemberProfile = Record<string, string | string[] | number | boolean | undefined | null>
+		/**
+		 * Lieu, partagé par Event et à terme Team / Period.
+		 * `coords` est groupé (et non deux champs optionnels) pour rendre impossible
+		 * une latitude sans longitude. Absent pour les lieux issus de l'ancien champ
+		 * texte, qui n'ont jamais été géocodés: le lien retombe sur une recherche.
+		 */
+		type Location = { label: string; coords?: { lat: number; lon: number } }
 	}
 }
 

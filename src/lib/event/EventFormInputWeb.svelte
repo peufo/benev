@@ -2,6 +2,7 @@
 	import type { Event } from '@prisma/client'
 	import { InputText } from 'fuma'
 	import { debounce } from '$lib/debounce'
+	import { normalizeUrl } from '$lib/url'
 	import { EventIcon } from '.'
 
 	export let event: Event | undefined = undefined
@@ -12,7 +13,7 @@
 	let value = ''
 
 	const handleInput = debounce(async () => {
-		value = input.value ? `https://${input.value.replace(/https?:\/\//, '')}` : ''
+		value = normalizeUrl(input.value)
 		scrapPending = true
 		const res = await fetch(`/api/scrap-icon?site=${value}`)
 			.then((res) => res.json())

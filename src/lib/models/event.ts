@@ -1,22 +1,41 @@
 import { z, toTuple, type ZodObj } from 'fuma/validation'
-import type { Prisma } from '@prisma/client'
+// `Prisma` est importé en valeur (et pas seulement en type) pour `Prisma.DbNull`:
+// $lib/models n'est consommé que par des fichiers serveur, jamais par le bundle client
+import { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
+import { isHttpUrl } from '$lib/url'
 
 export type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
 export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
+
+// .url() accepte n'importe quel schéma (javascript:, data:, …), or ces liens sont
+// rendus tels quels dans un href par FooterLink: on restreint à http(s)
+const httpUrl = z
+	.string()
+	.url()
+	.refine(isHttpUrl, 'Le lien doit commencer par https://')
+	.optional()
+	.or(z.string().max(0))
 
 export const modelEventUpdate = {
 	id: z.string().toLowerCase().min(3),
 	name: z.string().min(3),
 	description: z.string().optional(),
 	icon: z.string().optional(),
-	web: z.string().url().optional().or(z.string().max(0)),
-	facebook: z.string().url().optional().or(z.string().max(0)),
-	instagram: z.string().url().optional().or(z.string().max(0)),
+	web: httpUrl,
+	facebook: httpUrl,
+	instagram: httpUrl,
 	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
-	address: z.string().optional(),
-	addressLabel: z.string().optional(),
+	// le champ caché soumet `null` quand le lieu est effacé, or Prisma exige `DbNull`
+	// pour vider une colonne Json. `undefined` (champ absent) laisse la valeur en place.
+	location: z
+		.json({
+			label: z.string().min(1),
+			coords: z.object({ lat: z.number(), lon: z.number() }).optional(),
+		})
+		.nullish()
+		.transform((value) => (value === null ? Prisma.DbNull : value)),
 	timezone: z.string().optional(),
 } satisfies ZodObj<EventUpdateInput>
 

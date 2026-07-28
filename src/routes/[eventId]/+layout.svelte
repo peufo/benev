@@ -22,6 +22,7 @@
 	import FooterLink from './FooterLink.svelte'
 	import EventTheme from './admin/theme/EventTheme.svelte'
 	import { EventIcon, EventTierBadge } from '$lib/event'
+	import { mapUrl } from '$lib/location'
 
 	export let data
 
@@ -75,11 +76,19 @@
 		...(eventImage && { image: [eventImage] }),
 		...(data.event.startDate && { startDate: data.event.startDate.toISOString() }),
 		...(data.event.endDate && { endDate: data.event.endDate.toISOString() }),
-		...(data.event.address && {
+		...(data.event.location && {
 			location: {
 				'@type': 'Place',
-				name: data.event.addressLabel || data.event.address,
-				address: data.event.address,
+				name: data.event.location.label,
+				address: data.event.location.label,
+				url: mapUrl(data.event.location),
+				...(data.event.location.coords && {
+					geo: {
+						'@type': 'GeoCoordinates',
+						latitude: data.event.location.coords.lat,
+						longitude: data.event.location.coords.lon,
+					},
+				}),
 			},
 		}),
 	}}
@@ -187,9 +196,15 @@
 		<FooterLink link={data.event.email} protocol="mailto:" icon={mdiEmailOutline} />
 		<FooterLink link={data.event.phone} protocol="tel:" icon={mdiPhoneOutline} />
 
-		<FooterLink link={data.event.address} icon={mdiMapMarkerOutline} let:label>
-			{data.event.addressLabel || label}
-		</FooterLink>
+		{#if data.event.location}
+			<FooterLink link={mapUrl(data.event.location)} icon={mdiMapMarkerOutline}>
+				{data.event.location.label}
+			</FooterLink>
+		{:else}
+			<FooterLink link={data.event.address} icon={mdiMapMarkerOutline} let:label>
+				{data.event.addressLabel || label}
+			</FooterLink>
+		{/if}
 	</div>
 </Footer>
 

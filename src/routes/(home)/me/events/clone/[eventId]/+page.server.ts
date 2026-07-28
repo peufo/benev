@@ -58,6 +58,7 @@ export const actions = {
 				backgroundImageId,
 				logoId,
 				posterId,
+				location,
 				...copiedData
 			} = cloneData(event)
 			const deltaTime = data.deltaDays * 1000 * 60 * 60 * 24
@@ -68,6 +69,7 @@ export const actions = {
 					id: normalizePath(name),
 					name,
 					closeSubscribing: closeSubscribing && new Date(closeSubscribing.getTime() + deltaTime),
+					location: location ?? Prisma.DbNull,
 					backgroundImage: backgroundImageId ? { connect: { id: backgroundImageId } } : {},
 					logo: logoId ? { connect: { id: logoId } } : {},
 					owner: { connect: { id: member.userId } },

@@ -7,7 +7,7 @@
 	import EventDeleteButton from './EventDeleteButton.svelte'
 	import EventImageRemove from './EventImageRemove.svelte'
 	import EventFormInputWeb from './EventFormInputWeb.svelte'
-	import EventFormInputAddress from './EventFormInputAddress.svelte'
+	import { InputLocation } from '$lib/location'
 	import EventTierSelector from './EventTierSelector.svelte'
 	import EventFormSection from './EventFormSection.svelte'
 
@@ -168,7 +168,7 @@
 			<div class="flex flex-col gap-4">
 				<InputText key="email" label="Email de contact" value={event?.email || ''} />
 				<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
-				<EventFormInputAddress {event} />
+				<InputLocation key="location" value={event?.location ?? null} />
 				<EventFormInputWeb {event} />
 
 				<InputText key="facebook" label="Page Facebook" value={event?.facebook || ''} />

@@ -121,6 +121,8 @@ model Event {
   phone        String?
   address      String?
   addressLabel String?
+  /// [Location]
+  location     Json?
   web          String?
   facebook     String?
   instagram    String?
