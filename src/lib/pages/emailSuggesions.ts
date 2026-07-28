@@ -15,6 +15,10 @@ export type EmailModelProps = PropsWithMember<
 	EmailEvent,
 	{
 		invitation_create: { authorName: string }
+		// `{}` est ici le seul type d'« aucune prop » viable: il doit satisfaire la
+		// contrainte Record<string, unknown> sans index signature, sinon l'intersection
+		// `& { member }` de PropsWithMember réduit `member` à never.
+		// eslint-disable-next-line @typescript-eslint/ban-types
 		invitation_accept: {}
 		subscribe_request: { subscribe: SubscribeWithTeam; authorName: string; tokenId?: string }
 		subscribe_accepted: { subscribe: SubscribeWithTeam; authorName: string }

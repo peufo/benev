@@ -4,7 +4,7 @@
 	import { tip, DropDown } from 'fuma'
 	import { IdCardLanyardIcon } from 'lucide-svelte'
 
-	export let params: string = ''
+	export let params = ''
 	export let title = 'Imprimer les badges'
 	export let badges: { id: string; name: string }[]
 

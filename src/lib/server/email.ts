@@ -57,7 +57,7 @@ export const sendEmail = async ({ from, ...options }: SendMailOptions) => {
 	})
 }
 
-export type SendMailOptionsWithProps<Props extends any> = Omit<SendMailOptions, 'html'> & {
+export type SendMailOptionsWithProps<Props> = Omit<SendMailOptions, 'html'> & {
 	props: Props
 }
 
@@ -65,7 +65,7 @@ export async function sendEmailComponent<Component extends ComponentType>(
 	component: Component,
 	options: SendMailOptionsWithProps<ComponentProps<InstanceType<Component>>>
 ) {
-	// @ts-ignore
+	// @ts-expect-error `render` est ajouté au composant par la compilation SSR de Svelte, absent du type ComponentType
 	const { html } = component.render(options.props)
 	return sendEmail({ ...options, html })
 }
@@ -94,7 +94,7 @@ export async function renderEmailModel<EmailPath extends EmailEvent>(
 
 	const replacers = [...emailReplacers[emailPath](props), ...getMemberReplacers(props)]
 	const modelHTML = tiptapParser.toHTML(model.content)
-	// @ts-ignore
+	// @ts-expect-error `render` est ajouté au composant par la compilation SSR de Svelte, absent du type importé
 	const layout = EmailLayout.render({ title: model.event.name, subtitle: model.title }) as {
 		html: string
 	}

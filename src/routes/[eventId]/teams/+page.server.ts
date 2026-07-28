@@ -145,7 +145,7 @@ export const actions = {
 }
 
 function getTeamCopyName(initalName: string, teams: string[]): string {
-	let name = initalName.endsWith(' copie') ? initalName : `${initalName} copie`
+	const name = initalName.endsWith(' copie') ? initalName : `${initalName} copie`
 	if (!teams.includes(name)) return name
 	let suffix = 2
 	while (teams.includes(`${name} ${suffix}`)) suffix++

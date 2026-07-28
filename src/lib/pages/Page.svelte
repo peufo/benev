@@ -33,6 +33,8 @@
 
 <PageLayout class="relative max-w-2xl py-16">
 	{#if html && html !== '<p></p>'}
+		<!-- page rédigée par les admins de l'événement dans l'éditeur tiptap -->
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		{@html html}
 	{:else}
 		<slot name="placeholder">

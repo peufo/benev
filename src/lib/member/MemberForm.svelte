@@ -27,6 +27,8 @@
 
 	{#if charter}
 		<div class="prose">
+			<!-- charte rédigée par les admins de l'événement dans l'éditeur tiptap -->
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 			{@html tiptapParser.toHTML(charter.content || '')}
 		</div>
 

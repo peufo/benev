@@ -81,7 +81,9 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 			doc.on('end', () => {
 				try {
 					controller.close()
-				} catch (e) {}
+				} catch (e) {
+					// Le flux est déjà clos (client déconnecté): rien à faire
+				}
 			})
 			doc.on('error', (err) => controller.error(err))
 		},

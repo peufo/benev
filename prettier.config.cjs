@@ -7,5 +7,4 @@ module.exports = {
 	pluginSearchDirs: ['.'],
 	plugins: [require('prettier-plugin-svelte')],
 	overrides: [{ files: '*.svelte', options: { parser: 'svelte' } }],
-	tailwindConfig: './tailwind.config.cjs',
 }

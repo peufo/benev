@@ -19,6 +19,7 @@
 			a.click()
 			URL.revokeObjectURL(url)
 		} catch {
+			// Échec silencieux: le téléchargement est accessoire, `finally` rend la main
 		} finally {
 			loading = false
 		}

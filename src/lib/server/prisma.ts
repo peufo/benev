@@ -112,7 +112,7 @@ async function eventDatesIncludePeriod(periodWhere: Prisma.PeriodWhereUniqueInpu
 			.team()
 			.event({ select: { id: true, startDate: true, endDate: true } }),
 	])
-	let data: Prisma.EventUpdateInput = {}
+	const data: Prisma.EventUpdateInput = {}
 	if (!event.startDate || period.start < event.startDate) {
 		data.startDate = period.start
 	}

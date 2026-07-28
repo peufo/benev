@@ -57,11 +57,9 @@
 			{/if}
 
 			{#if team.description}
-				<p class="text-sm">
-					{@html team.description
-						.replaceAll('\n', '<br>')
-						.replaceAll(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '😇')}
-				</p>
+				<!-- Description saisie librement par les responsables: rendue en texte
+				     (échappée par Svelte), `whitespace-pre-line` conserve les retours ligne -->
+				<p class="text-sm whitespace-pre-line">{team.description}</p>
 			{/if}
 
 			<div>

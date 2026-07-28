@@ -72,7 +72,7 @@ export const api = derived(page, ({ params: { eventId } }) => {
 			search: search<Field, { types?: FieldType[] }>(`/${eventId}/api/fields`),
 		},
 		media: {
-			search: search<Media, {}>(`/${eventId}/api/media`),
+			search: search<Media, object>(`/${eventId}/api/media`),
 		},
 	}
 })

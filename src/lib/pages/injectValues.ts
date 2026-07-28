@@ -3,7 +3,7 @@ export type Replacer = { id: string; value: string }
 export function injectValues(html: string, replacers: Replacer[]): string {
 	for (const { id, value } of replacers) {
 		const regexp = new RegExp(
-			`<span class="suggestion" data-key="${id.replace('.', '\\.')}".*?<\/span>`,
+			`<span class="suggestion" data-key="${id.replace('.', '\\.')}".*?</span>`,
 			'g'
 		)
 		html = html.replaceAll(regexp, valueToHTML(value))
