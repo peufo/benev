@@ -1,6 +1,6 @@
 import { formAction } from 'fuma/server'
 import { modelEventUpdate } from '$lib/models'
-import { permission, prisma, uploadImages } from '$lib/server'
+import { jsonOrDbNull, permission, prisma, uploadImages } from '$lib/server'
 import {
 	modelTagCreate,
 	modelTagUpdate,
@@ -20,7 +20,7 @@ export const actions = {
 			const member = await permission.admin(params.eventId, locals)
 			const event = await prisma.event.update({
 				where: { id: params.eventId },
-				data,
+				data: { ...data, location: jsonOrDbNull(data.location) },
 			})
 			await uploadImages(formData, event.id, member.userId)
 			return event

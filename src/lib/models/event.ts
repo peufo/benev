@@ -1,12 +1,17 @@
 import { z, toTuple, type ZodObj } from 'fuma/validation'
-// `Prisma` est importé en valeur (et pas seulement en type) pour `Prisma.DbNull`:
-// $lib/models n'est consommé que par des fichiers serveur, jamais par le bundle client
 import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
 import { isHttpUrl } from '$lib/url'
 
 export type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
 export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
+
+/**
+ * Le formulaire soumet `null` pour effacer un lieu, là où Prisma attend `DbNull`.
+ * La conversion se fait côté action via `jsonOrDbNull` ($lib/server): ce module est
+ * importé par des composants Svelte, il doit rester exempt de runtime Prisma.
+ */
+type FormInput<T> = Omit<T, 'location'> & { location?: PrismaJson.Location | null }
 
 // .url() accepte n'importe quel schéma (javascript:, data:, …), or ces liens sont
 // rendus tels quels dans un href par FooterLink: on restreint à http(s)
@@ -27,22 +32,20 @@ export const modelEventUpdate = {
 	instagram: httpUrl,
 	email: z.string().email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
-	// le champ caché soumet `null` quand le lieu est effacé, or Prisma exige `DbNull`
-	// pour vider une colonne Json. `undefined` (champ absent) laisse la valeur en place.
+	// `null` = le lieu a été effacé, `undefined` = champ absent, valeur inchangée
 	location: z
 		.json({
 			label: z.string().min(1),
 			coords: z.object({ lat: z.number(), lon: z.number() }).optional(),
 		})
-		.nullish()
-		.transform((value) => value === null),
+		.nullish(),
 	timezone: z.string().optional(),
-} satisfies ZodObj<EventUpdateInput>
+} satisfies ZodObj<FormInput<EventUpdateInput>>
 
 export const modelEventCreate = {
 	...modelEventUpdate,
 	tier: z.enum(['basic', 'standard', 'premium', 'pro']),
-} satisfies ZodObj<EventCreateInput>
+} satisfies ZodObj<FormInput<EventCreateInput>>
 
 export const modelEventState = {
 	state: z.enum(toTuple(EVENT_STATES)).optional(),

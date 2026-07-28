@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client'
 import { USE_COERCE_JSON } from 'fuma'
 import { parseFormData } from 'fuma/server'
 import { modelEventUpdate } from '$lib/models'
+import { jsonOrDbNull } from '$lib/server'
 import { mapUrl } from '$lib/location'
 
 /** Reproduit la charge utile envoyée par InputLocation dans EventForm */
@@ -33,10 +34,8 @@ describe('champ location du formulaire évènement', () => {
 		expect((await submit({ label: 'Saignelégier' })).location).toEqual({ label: 'Saignelégier' })
 	})
 
-	it('convertit un effacement en DbNull, seule façon de vider une colonne Json', async ({
-		expect,
-	}) => {
-		expect((await submit(null)).location).toBe(Prisma.DbNull)
+	it('transmet `null` quand le lieu est effacé', async ({ expect }) => {
+		expect((await submit(null)).location).toBeNull()
 	})
 
 	it('laisse la valeur en place quand le champ est absent', async ({ expect }) => {
@@ -59,6 +58,18 @@ describe('champ location du formulaire évènement', () => {
 
 	it("ignore le champ de recherche interne d'InputRelation", async ({ expect }) => {
 		expect(await submit({ label: 'X' })).not.toHaveProperty('location_search')
+	})
+})
+
+// la conversion vit côté serveur pour garder $lib/models exempt de runtime Prisma
+describe('jsonOrDbNull', () => {
+	it('convertit un effacement en DbNull, seule façon de vider une colonne Json', ({ expect }) => {
+		expect(jsonOrDbNull(null)).toBe(Prisma.DbNull)
+	})
+
+	it('laisse passer une valeur et un champ absent', ({ expect }) => {
+		expect(jsonOrDbNull({ label: 'X' })).toEqual({ label: 'X' })
+		expect(jsonOrDbNull(undefined)).toBeUndefined()
 	})
 })
 

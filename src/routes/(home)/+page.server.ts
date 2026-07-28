@@ -1,7 +1,7 @@
 import { formAction } from 'fuma/server'
 import { error } from '@sveltejs/kit'
 import { z } from 'fuma'
-import { prisma, media, permission, uploadImages } from '$lib/server'
+import { prisma, media, permission, uploadImages, jsonOrDbNull } from '$lib/server'
 import { modelEventCreate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'
 import { EVENT_TIER } from '$lib/constant'
@@ -46,6 +46,7 @@ export const actions = {
 			const event = await prisma.event.create({
 				data: {
 					...data,
+					location: jsonOrDbNull(data.location),
 					tier: 'basic',
 					ownerId: userId,
 					pages: {
