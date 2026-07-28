@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { z, type ZodObj } from '$lib/fuma'
+import { z, type ZodObj } from '$lib/fuma-legacy/validation'
 
 type TeamShemaCreate = Omit<Prisma.TeamCreateInput, 'event'>
 type TeamShemaUpdate = Omit<Prisma.TeamUpdateInput, 'event'>

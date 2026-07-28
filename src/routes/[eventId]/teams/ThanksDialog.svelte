@@ -1,7 +1,7 @@
 <script lang="ts">
 	import JSConfetti from 'js-confetti'
 
-	let dialog: HTMLDialogElement = $state()
+	let dialog: HTMLDialogElement = $state()!
 
 	export function open() {
 		dialog.showModal()

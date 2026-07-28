@@ -10,7 +10,7 @@
 		InputRadio,
 		InputCheckboxs,
 		Icon,
-	} from '$lib/fuma'
+	} from '$lib/fuma-legacy'
 	import { page } from '$app/stores'
 	import { jsonParse } from '$lib/jsonParse'
 

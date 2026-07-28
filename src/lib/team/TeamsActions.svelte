@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiAccountMultipleOutline,
@@ -21,7 +21,7 @@
 
 	let teamsId = $derived(JSON.stringify(teams.map((team) => team.id)))
 
-	let teamDialog: HTMLDialogElement = $state()
+	let teamDialog: HTMLDialogElement = $state()!
 </script>
 
 {#if teams.length}

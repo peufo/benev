@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Menu } from '@lucide/svelte'
-	import { DropDown } from '$lib/fuma'
+	import { DropDown } from 'fuma'
 	import HomeMenuItems from './HomeMenuItems.svelte'
 </script>
 

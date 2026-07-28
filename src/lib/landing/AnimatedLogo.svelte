@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 
-	let svgEl: SVGSVGElement = $state()
+	let svgEl: SVGSVGElement = $state()!
 
 	onMount(() => {
 		if (!svgEl) return

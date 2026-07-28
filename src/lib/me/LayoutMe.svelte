@@ -3,7 +3,7 @@
 	import { Calendar, IdCard, CircleDollarSign } from '@lucide/svelte'
 	import { derived, type Readable } from 'svelte/store'
 	import { page } from '$app/stores'
-	import { Card } from '$lib/fuma'
+	import { Card } from '$lib/fuma-legacy'
 	import type { User } from '@prisma/client'
 
 	interface Props {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { urlParam } from '$lib/fuma'
+	import { urlParam } from 'fuma'
 	import { ArrowDownIcon, ArrowUpIcon } from '@lucide/svelte'
 
 	interface Props {
@@ -9,13 +9,13 @@
 
 	let { key, children }: Props = $props()
 
-	let currentSort = $derived($urlParam.get('sort'))
-	let currentOrder = $derived($urlParam.get('order') || 'desc')
+	let currentSort = $derived(urlParam.get('sort'))
+	let currentOrder = $derived(urlParam.get('order') || 'desc')
 
 	function getSortUrl(sort: string | null, order: string | null) {
-		if (sort !== key) return $urlParam.with({ sort: key, order: 'desc' })
-		if (order === 'desc') return $urlParam.with({ sort: key, order: 'asc' })
-		return $urlParam.without('sort', 'order')
+		if (sort !== key) return urlParam.with({ sort: key, order: 'desc' })
+		if (order === 'desc') return urlParam.with({ sort: key, order: 'asc' })
+		return urlParam.without('sort', 'order')
 	}
 </script>
 

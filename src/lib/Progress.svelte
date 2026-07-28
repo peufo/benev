@@ -2,7 +2,7 @@
 <script lang="ts">
 	import 'tippy.js/dist/tippy.css'
 	import type { Subscribe } from '@prisma/client'
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 	import { mdiSlashForward } from '@mdi/js'
 
 	export let period: {

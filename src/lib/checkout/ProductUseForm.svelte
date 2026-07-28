@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { mdiLink } from '@mdi/js'
-	import { Icon, InputRelation } from '$lib/fuma'
-	import { useForm } from '$lib/fuma'
+	import { Icon, InputRelation } from '$lib/fuma-legacy'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { slide } from 'svelte/transition'
 
 	interface Props {

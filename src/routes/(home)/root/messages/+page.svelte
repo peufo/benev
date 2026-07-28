@@ -8,7 +8,9 @@
 	import type { Message, MessageState } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
 	import axios from 'axios'
-	import { Icon, DropDown, Pagination, InputOptionInParam } from '$lib/fuma'
+	import { Icon, InputOptionInParam } from '$lib/fuma-legacy'
+	import { DropDown } from 'fuma'
+	import { Pagination } from 'fuma'
 	import { useNotify } from '$lib/notify'
 
 	let { data } = $props()

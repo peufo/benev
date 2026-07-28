@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { InputText, InputTextarea, InputImagePreview, Form } from '$lib/fuma'
+	import { InputText, InputTextarea, InputImagePreview, Form } from '$lib/fuma-legacy'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { FORMAT_A3 } from '$lib/constant'
@@ -63,7 +63,7 @@
 			}
 		},
 	}}
-	on:success
+	{onsuccess}
 	data={event}
 >
 	{#if !event}
@@ -83,13 +83,13 @@
 					key="name"
 					label="Nom de l'évènement"
 					bind:value={name}
-					on:input={handleNameInput}
+					oninput={handleNameInput}
 					input={{ autocomplete: 'off' }}
 				/>
 				<InputText
 					key="id"
 					label="URL de l'évènement"
-					on:input={handleEventIdInput}
+					oninput={handleEventIdInput}
 					bind:value={eventId}
 					input={{ class: 'pl-[5.4em]', autocomplete: 'off' }}
 					classWrapper="flex items-center relative"

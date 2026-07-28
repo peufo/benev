@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { component, InputRelation, urlParam } from '$lib/fuma'
+	import { component, InputRelation } from '$lib/fuma-legacy'
+	import { urlParam } from 'fuma'
 	import type { Field, FieldType } from '@prisma/client'
 	import { api } from '$lib/api'
 	import MemberFieldSnippet from './MemberFieldSnippet.svelte'
@@ -29,8 +30,8 @@
 	bind:value
 	search={(search) => $api.fields.search(search, { types: typesAccepted })}
 	createTitle="Nouveau champ"
-	createUrl={$urlParam.with({ form_field: JSON.stringify({ type }) })}
+	createUrl={urlParam.with({ form_field: JSON.stringify({ type }) })}
 	slotItem={(field) => component(MemberFieldSnippet, { field, updateLink: true })}
 	slotSuggestion={(field) => component(MemberFieldSnippet, { field })}
-	on:input={(event) => oninput(event.detail.value)}
+	oninput={(value) => oninput(value)}
 />

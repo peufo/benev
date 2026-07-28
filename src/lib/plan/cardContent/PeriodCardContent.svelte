@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeHour } from '$lib/formatRange'
-	import { Icon, urlParam } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { urlParam } from 'fuma'
 	import { magnet } from '../magnet'
 	import type { PeriodWithMembers } from '../types'
 	import { cardContentOptions } from './options'
@@ -74,7 +75,7 @@
 {/if}
 
 <a
-	href={$urlParam.with({ form_period: period.id })}
+	href={urlParam.with({ form_period: period.id })}
 	class="absolute inset-0"
 	data-sveltekit-noscroll
 	data-sveltekit-preload-data="off"

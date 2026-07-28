@@ -1,6 +1,7 @@
 <script lang="ts" module>
 	import type { Event, Field } from '@prisma/client'
-	import { Form, tip } from '$lib/fuma'
+	import { Form } from '$lib/fuma-legacy'
+	import { tip } from 'fuma'
 
 	export type TeamFormComponent = ComponentType<Form<typeof modelTeam, TeamWithComputedValues>>
 	export type TeamFormInstance = InstanceType<TeamFormComponent>
@@ -9,7 +10,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { toast } from 'svelte-sonner'
-	import { InputText, InputTextarea, InputDate, InputBoolean } from '$lib/fuma'
+	import { InputText, InputTextarea, InputDate, InputBoolean } from '$lib/fuma-legacy'
 
 	import { MemberConditions } from '$lib/member'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
@@ -40,7 +41,7 @@
 	action="{$eventPath}/teams?/team"
 	model={modelTeam}
 	bind:data={team}
-	on:success
+	{onsuccess}
 	bind:this={teamForm}
 	options={{
 		onSubmit({ action, cancel, submitter }) {

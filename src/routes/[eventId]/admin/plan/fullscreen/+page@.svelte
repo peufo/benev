@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { urlParam } from '$lib/fuma'
+	import { urlParam } from 'fuma'
 	import { PlanX, PlanY } from '$lib/plan'
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
 	import DrawersForm from '$lib/DrawersForm.svelte'
@@ -40,7 +40,7 @@
 </div>
 
 <div class="h-[100vh] overflow-hidden rounded-2xl" use:mouseOnTop>
-	{#if $urlParam.hasValue('axis', 'y')}
+	{#if urlParam.has('axis', 'y')}
 		<PlanY {plan} bind:teams={data.teams_periods} />
 	{:else}
 		<PlanX {plan} bind:teams={data.teams_periods} />

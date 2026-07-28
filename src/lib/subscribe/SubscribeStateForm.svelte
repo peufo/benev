@@ -27,13 +27,13 @@
 	import { run, createBubbler, stopPropagation } from 'svelte/legacy'
 
 	const bubble = createBubbler()
-	import { createEventDispatcher } from 'svelte'
 	import type { Props as TippyProps } from 'tippy.js'
 	import type { Subscribe } from '@prisma/client'
 	import { SubscribeState } from '$lib/subscribe'
-	import { useForm } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { enhance } from '$app/forms'
-	import { Icon, DropDown } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { DropDown } from 'fuma'
 	import {
 		mdiCloseOctagonOutline,
 		mdiCheck,
@@ -49,6 +49,8 @@
 		isLeader?: boolean
 		tippyProps?: Partial<TippyProps>
 		canBeLarge?: boolean
+		/** Remplacent les évènements de la version Svelte 4. */
+		onsuccess?: () => void
 	}
 
 	let {
@@ -58,15 +60,15 @@
 		isLeader = false,
 		tippyProps = {},
 		canBeLarge = false,
+		onsuccess,
 	}: Props = $props()
 
 	let isSelf = subscribe.memberId === $page.data.member?.id
-	const dispatch = createEventDispatcher<{ success: void }>()
 
 	const form = useForm({
 		successMessage: 'Status changé',
 		successReset: false,
-		onSuccess: () => dispatch('success'),
+		onSuccess: () => onsuccess?.(),
 	})
 	let creatorStates: Partial<States> = $state({})
 	let subscriberStates: Partial<States> = $state({})

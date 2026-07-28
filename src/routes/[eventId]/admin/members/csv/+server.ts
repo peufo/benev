@@ -1,8 +1,9 @@
 import { getMembers, type MemberWithComputedValue } from '../getMembers'
 import { prisma, permission } from '$lib/server'
 import { getAge } from '$lib/utils'
-import { getCSV, z } from '$lib/fuma'
-import { parseQuery } from '$lib/server/fuma'
+import { z } from '$lib/fuma-legacy'
+import { getCSV } from 'fuma'
+import { parseQuery } from 'fuma/server'
 import { msToHours } from '../msToHours'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {

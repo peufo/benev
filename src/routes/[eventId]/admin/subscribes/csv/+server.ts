@@ -1,8 +1,9 @@
 import { getSubscribes, type Subscribes } from '../getSubscribes'
 import { prisma, permission } from '$lib/server'
-import { getCSV, z } from '$lib/fuma'
+import { z } from '$lib/fuma-legacy'
+import { getCSV } from 'fuma'
 import dayjs from '$lib/dayjs'
-import { parseQuery } from '$lib/server/fuma'
+import { parseQuery } from 'fuma/server'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {
 	await permission.leader(eventId, locals)

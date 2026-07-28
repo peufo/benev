@@ -1,4 +1,4 @@
-import { z } from '$lib/fuma'
+import { z } from '$lib/fuma-legacy/validation'
 
 const modelFieldMapping = z.object({
 	sourceFieldId: z.string(),

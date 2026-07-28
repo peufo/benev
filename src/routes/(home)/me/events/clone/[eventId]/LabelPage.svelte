@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PAGE_TYPE } from '$lib/constant'
 	import type { Page } from '@prisma/client'
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 
 	interface Props {
 		page: Page

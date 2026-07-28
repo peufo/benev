@@ -2,7 +2,7 @@
 	import { modelTagCreate } from '$lib/models'
 	import { eventPath } from '$lib/store'
 	import type { Tag } from '@prisma/client'
-	import { Form, InputText } from '$lib/fuma'
+	import { Form, InputText } from '$lib/fuma-legacy'
 	import type { ComponentType } from 'svelte'
 
 	interface Props {
@@ -38,10 +38,10 @@
 		},
 		successUpdate: false,
 	}}
-	on:created
-	on:updated
-	on:deleted
-	on:success
+	{oncreated}
+	{onupdated}
+	{ondeleted}
+	{onsuccess}
 >
 	<InputText
 		key="name"

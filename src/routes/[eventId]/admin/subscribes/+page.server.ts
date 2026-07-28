@@ -1,4 +1,4 @@
-import { ensureFieldsWithFilterAreVisibles } from '$lib/server/fuma'
+import { ensureFieldsWithFilterAreVisibles } from 'fuma/server'
 import { prisma } from '$lib/server'
 import { getSubscribes, subscribesFilterShape } from './getSubscribes'
 

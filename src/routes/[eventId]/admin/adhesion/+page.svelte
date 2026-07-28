@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiLogin, mdiOpenInNew } from '@mdi/js'
 
-	import { Card, Icon } from '$lib/fuma'
+	import { Card, Icon } from '$lib/fuma-legacy'
 
 	import { MemberFields } from '$lib/member'
 	import { EventSettingForm } from '$lib/event'

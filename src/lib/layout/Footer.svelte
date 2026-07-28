@@ -1,6 +1,6 @@
 <script lang="ts">
 	import logo from '$lib/assets/logo.svg'
-	import { tip } from '$lib/fuma'
+	import { tip } from 'fuma'
 	interface Props {
 		class?: string
 		children?: import('svelte').Snippet

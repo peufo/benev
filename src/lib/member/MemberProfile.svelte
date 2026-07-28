@@ -3,7 +3,9 @@
 	import { page } from '$app/stores'
 	import { mdiCheck, mdiClose, mdiPencilOutline } from '@mdi/js'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
-	import { CardBasic, Drawer, Icon, Placeholder, urlParam } from '$lib/fuma'
+	import { CardBasic, Icon, Placeholder } from '$lib/fuma-legacy'
+	import { Drawer } from 'fuma'
+	import { urlParam } from 'fuma'
 	import { fade } from 'svelte/transition'
 
 	interface Props {
@@ -30,7 +32,7 @@
 	{/if}
 	{#if $page.data.member?.roles.includes('leader') || member.event.memberFields.filter((f) => f.memberCanWrite).length}
 		<a
-			href={$urlParam.with({ form_member_profile: '{}' })}
+			href={urlParam.with({ form_member_profile: '{}' })}
 			data-sveltekit-replacestate
 			data-sveltekit-noscroll
 			class="btn btn-square btn-sm ml-2"
@@ -76,6 +78,6 @@
 
 <Drawer title="Modifier le profil de {member.firstName}" key="form_member_profile" classBody="pt-4">
 	{#snippet children({ close })}
-		<MemberProfileForm memberProfile={member} on:success={() => close()} />
+		<MemberProfileForm memberProfile={member} onsuccess={() => close()} />
 	{/snippet}
 </Drawer>

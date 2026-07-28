@@ -2,7 +2,8 @@
 	import { run } from 'svelte/legacy'
 
 	import type { PageData } from './$types'
-	import { ButtonDelete, Icon, InputText, InputNumber, InputBoolean, useForm } from '$lib/fuma'
+	import { Icon, InputText, InputNumber, InputBoolean, useForm } from '$lib/fuma-legacy'
+	import { ButtonDelete } from 'fuma'
 	import {
 		mdiAlertCircleOutline,
 		mdiCheck,
@@ -28,7 +29,7 @@
 
 	let { badge = $bindable() }: Props = $props()
 
-	let submitButton: HTMLButtonElement = $state()
+	let submitButton: HTMLButtonElement = $state()!
 	let isSuccess = $state(true)
 	let lockAspectRatio = $state(true)
 
@@ -79,7 +80,7 @@
 				label="Largeur (mm)"
 				bind:value={badge.width}
 				input={{ step: 0.01 }}
-				on:input={() => {
+				oninput={() => {
 					if (lockAspectRatio) {
 						badge.height = aspectRatioWidth(badge.width)
 					}
@@ -99,7 +100,7 @@
 				label="Hauteur (mm)"
 				bind:value={badge.height}
 				input={{ step: 0.01 }}
-				on:input={() => {
+				oninput={() => {
 					if (lockAspectRatio) {
 						badge.width = aspectRatioHeight(badge.height)
 					}

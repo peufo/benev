@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Drawer } from '$lib/fuma'
+	import { Drawer } from 'fuma'
 	import { MilestoneForm } from '$lib/milestone'
 	import type { Milestone } from '@prisma/client'
 
@@ -18,9 +18,9 @@
 	{#snippet children({ close })}
 		<MilestoneForm
 			milestone={milestone || {}}
-			on:created={() => close({ replaceState: true })}
-			on:updated={() => close()}
-			on:deleted={() => close()}
+			oncreated={() => close({ replaceState: true })}
+			onupdated={() => close()}
+			ondeleted={() => close()}
 		/>
 	{/snippet}
 </Drawer>

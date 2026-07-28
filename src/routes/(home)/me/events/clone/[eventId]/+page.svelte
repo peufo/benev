@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { component, Form, InputNumber } from '$lib/fuma'
+	import { component, Form, InputNumber } from '$lib/fuma-legacy'
 	import LabelPage from './LabelPage.svelte'
 	import LabelField from './LabelField.svelte'
 	import CloneSelector from './CloneSelector.svelte'

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop, mdiOpenInNew } from '@mdi/js'
-	import { Icon, InputCheckboxsMenu, TableViewSelect, TabsIcon, urlParam } from '$lib/fuma'
+	import { Icon, InputCheckboxsMenu, TableViewSelect, TabsIcon } from '$lib/fuma-legacy'
+	import { urlParam } from 'fuma'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
 	import { eventPath } from '$lib/store'
@@ -44,14 +45,14 @@
 	<div class="join">
 		<a
 			class="btn btn-sm btn-square join-item"
-			href={$urlParam.with({ hourSize: Math.max(5, plan.hourSize * 0.85) })}
+			href={urlParam.with({ hourSize: Math.max(5, plan.hourSize * 0.85) })}
 			data-sveltekit-replacestate
 		>
 			<ZoomOutIcon size={18} opacity={0.8} />
 		</a>
 		<a
 			class="btn btn-sm btn-square join-item"
-			href={$urlParam.with({ hourSize: Math.min(100, plan.hourSize * 1.15) })}
+			href={urlParam.with({ hourSize: Math.min(100, plan.hourSize * 1.15) })}
 			data-sveltekit-replacestate
 		>
 			<ZoomInIcon size={18} opacity={0.8} />

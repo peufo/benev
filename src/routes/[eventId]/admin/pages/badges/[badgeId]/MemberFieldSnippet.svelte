@@ -2,7 +2,8 @@
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { mdiPencilOutline } from '@mdi/js'
 	import type { Field } from '@prisma/client'
-	import { Icon, urlParam } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { urlParam } from 'fuma'
 
 	interface Props {
 		field: Field
@@ -18,7 +19,7 @@
 		{field.name}
 	</span>
 	{#if updateLink}
-		<a href={$urlParam.with({ form_field: field.id })} class="btn btn-square btn-sm ml-auto">
+		<a href={urlParam.with({ form_field: field.id })} class="btn btn-square btn-sm ml-auto">
 			<Icon path={mdiPencilOutline} title="Éditer le champ" />
 		</a>
 	{/if}

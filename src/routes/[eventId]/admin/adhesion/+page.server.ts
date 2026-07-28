@@ -1,5 +1,5 @@
-import { tryOrFail, formAction } from '$lib/server/fuma'
-import { z } from '$lib/fuma'
+import { tryOrFail, formAction } from '$lib/server/fuma-legacy'
+import { z } from '$lib/fuma-legacy/validation'
 
 import { prisma, permission } from '$lib/server'
 import { modelEventSettings, modelMemberFieldCreate, modelMemberFieldUpdate } from '$lib/models'

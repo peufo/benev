@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Event, EventState } from '@prisma/client'
-	import { useForm } from '$lib/fuma'
-	import { Icon } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
+	import { Icon } from '$lib/fuma-legacy'
 	import { EVENT_STATES } from '$lib/constant'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'

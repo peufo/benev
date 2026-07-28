@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { mdiPencilOutline } from '@mdi/js'
 	import type { Tag } from '@prisma/client'
-	import { Icon, param } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { param } from 'fuma'
 
 	interface Props {
 		tag: Tag
@@ -16,7 +17,7 @@
 	<div>{tag.name}</div>
 	{#if is_editable}
 		<a
-			href={$param.with({ form_tag: tag.id })}
+			href={param.with({ form_tag: tag.id })}
 			data-sveltekit-replacestate
 			class="btn btn-xs btn-circle btn-ghost min-h-[18px] w-[18px] h-[18px] opacity-80 ml-1 -mr-1"
 		>

@@ -4,7 +4,9 @@
 	import { mdiChevronLeft, mdiChevronRight, mdiClose } from '@mdi/js'
 	import type { Event, Field, User, Page } from '@prisma/client'
 
-	import { Card, Dialog, Icon, Placeholder, urlParam } from '$lib/fuma'
+	import { Card, Icon, Placeholder } from '$lib/fuma-legacy'
+	import { Dialog } from 'fuma'
+	import { urlParam } from 'fuma'
 	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'
 	import AvatarForm from '$lib/me/AvatarForm.svelte'
 	import Login from '$lib/me/Login.svelte'
@@ -25,7 +27,7 @@
 	const isMemberProfileRequired = !!event.memberFields.filter((f) => f.memberCanWrite).length
 	if (isMemberProfileRequired) steps.push(`Profil ${event.name}`)
 
-	let dialogRemoveMember: HTMLDialogElement = $state()
+	let dialogRemoveMember: HTMLDialogElement = $state()!
 	let forcedStepIndex = 0
 	let stepIndexMax = $state(getStepIndexMax())
 	let stepIndex = $state(getStepIndex($page.url))
@@ -66,7 +68,7 @@
 		}
 
 		if (forcedStepIndex) {
-			await goto($urlParam.with({ forcedStepIndex: stepIndex + 1 }))
+			await goto(urlParam.with({ forcedStepIndex: stepIndex + 1 }))
 			return
 		}
 	}
@@ -77,7 +79,7 @@
 		<h1 class="title">Participer à {event.name}</h1>
 		<div class="join ml-auto border">
 			<a
-				href={$urlParam.with({ forcedStepIndex: stepIndex - 1 })}
+				href={urlParam.with({ forcedStepIndex: stepIndex - 1 })}
 				class="btn btn-sm btn-square join-item btn-ghost btn-disabled"
 				class:btn-disabled={stepIndex <= 1}
 			>
@@ -89,7 +91,7 @@
 			</a>
 
 			<a
-				href={$urlParam.with({ forcedStepIndex: stepIndex + 1 })}
+				href={urlParam.with({ forcedStepIndex: stepIndex + 1 })}
 				class="btn btn-sm btn-square join-item btn-ghost"
 				class:btn-disabled={stepIndex >= stepIndexMax}
 			>
@@ -115,7 +117,7 @@
 	<ul class="steps">
 		{#each steps as step, index (step)}
 			<li class="step text-sm" class:step-primary={stepIndex >= index}>
-				<a href={$urlParam.with({ forcedStepIndex: index })} class:btn-disabled={index === 0}>
+				<a href={urlParam.with({ forcedStepIndex: index })} class:btn-disabled={index === 0}>
 					{step}
 				</a>
 			</li>
@@ -135,12 +137,12 @@
 				</p>
 			</Placeholder>
 		{:else if stepIndex === 1 && user}
-			<MemberForm {event} {charter} on:success={onSucces} />
+			<MemberForm {event} {charter} onsuccess={onSucces} />
 		{:else if stepIndex === 2 && user}
-			<AvatarForm {user} on:success={onSucces} />
-			<AccountForm {user} on:success={onSucces} />
+			<AvatarForm {user} onsuccess={onSucces} />
+			<AccountForm {user} onsuccess={onSucces} />
 		{:else if stepIndex === 3 && member}
-			<MemberProfileForm memberProfile={member} on:success={onSucces} />
+			<MemberProfileForm memberProfile={member} onsuccess={onSucces} />
 		{/if}
 	</div>
 </Card>

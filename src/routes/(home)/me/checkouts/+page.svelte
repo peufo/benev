@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { mdiCartCheck, mdiCheckCircle, mdiGiftOutline, mdiTagOutline } from '@mdi/js'
-	import { Card, Icon, Placeholder } from '$lib/fuma'
+	import { Card, Icon, Placeholder } from '$lib/fuma-legacy'
 
 	import { CheckoutWaitSSE, ProductUseForm } from '$lib/checkout'
 

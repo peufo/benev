@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiEyeCheckOutline, mdiEyeOutline } from '@mdi/js'
-	import { TabsIcon } from '$lib/fuma'
+	import { TabsIcon } from '$lib/fuma-legacy'
 </script>
 
 <TabsIcon

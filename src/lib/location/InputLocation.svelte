@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy'
 
-	import { Icon, InputRelation, USE_COERCE_JSON } from '$lib/fuma'
+	import { Icon, InputRelation } from '$lib/fuma-legacy'
+	import { USE_COERCE_JSON } from 'fuma'
 	import { mdiMapMarkerOutline } from '@mdi/js'
 
 	type Suggestion = PrismaJson.Location & { id: string; title: string; detail: string }
@@ -25,6 +26,8 @@
 		label?: string
 		value?: PrismaJson.Location | null
 		placeholder?: string
+		/** Transféré à InputRelation; remplace `on:input`. */
+		oninput?: (value: unknown) => void
 	}
 
 	let {
@@ -32,6 +35,7 @@
 		label = 'Lieu',
 		value = $bindable(null),
 		placeholder = 'Commence à taper une adresse ou un lieu…',
+		oninput,
 	}: Props = $props()
 
 	// InputRelation sérialise déjà un `{ id }` sous son propre `key`: on lui en donne
@@ -102,7 +106,7 @@
 	{placeholder}
 	bind:value={selected}
 	classList="max-h-80 overflow-y-auto"
-	on:input
+	{oninput}
 >
 	{#snippet suggestion({ item })}
 		<div class="flex flex-col py-1">

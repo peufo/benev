@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit'
-import { tryOrFail, parseFormData, formAction } from '$lib/server/fuma'
-import { z } from '$lib/fuma'
+import { tryOrFail, parseFormData, formAction } from '$lib/server/fuma-legacy'
+import { z } from '$lib/fuma-legacy/validation'
 import { prisma, permission, media } from '$lib/server'
 import {
 	modelPeriodCreate,

@@ -13,7 +13,8 @@
 		mdiWeb,
 	} from '@mdi/js'
 
-	import { Card, Drawer, Icon } from '$lib/fuma'
+	import { Card, Icon } from '$lib/fuma-legacy'
+	import { Drawer } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { Header, Footer, AdminNavigation } from '$lib/layout'
 	import { MemberFieldForm } from '$lib/member'
@@ -176,7 +177,7 @@
 
 	<Drawer key="form_field" title="{data.field?.id ? 'Modifier le' : 'Nouveau'} champ">
 		{#snippet children({ close })}
-			<MemberFieldForm field={data.field || {}} on:success={() => close()} />
+			<MemberFieldForm field={data.field || {}} onsuccess={() => close()} />
 		{/snippet}
 	</Drawer>
 {/if}

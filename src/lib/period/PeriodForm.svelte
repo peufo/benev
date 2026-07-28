@@ -1,23 +1,20 @@
 <script lang="ts">
 	import { run, preventDefault } from 'svelte/legacy'
 
-	import { createEventDispatcher } from 'svelte'
 	import axios from 'axios'
 	import { mdiContentDuplicate } from '@mdi/js'
 	import { daytz, type Dayjs } from '$lib/dayjs'
 	import {
 		useForm,
 		InputNumber,
-		ButtonDelete,
-		urlParam,
-		USE_COERCE_DATE,
-		USE_COERCE_NUMBER,
 		Icon,
 		InputRelation,
-		USE_COERCE_JSON,
 		InputRelations,
 		component,
-	} from '$lib/fuma'
+	} from '$lib/fuma-legacy'
+	import { ButtonDelete } from 'fuma'
+	import { urlParam } from 'fuma'
+	import { USE_COERCE_DATE, USE_COERCE_NUMBER, USE_COERCE_JSON } from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { goto, invalidateAll } from '$app/navigation'
@@ -32,11 +29,18 @@
 		class?: string
 		period?: PeriodProp
 		disableRedirect?: boolean
+		/** Remplacent les évènements de la version Svelte 4. */
+		onsuccess?: () => void
+		ondelete?: () => void
 	}
 
-	let { class: klass = '', period = $bindable({}), disableRedirect = false }: Props = $props()
-
-	const dispatch = createEventDispatcher<{ success: void; delete: void }>()
+	let {
+		class: klass = '',
+		period = $bindable({}),
+		disableRedirect = false,
+		onsuccess,
+		ondelete,
+	}: Props = $props()
 
 	const successMessages: Record<string, string> = {
 		'?/period_update': 'Période mise à jour',
@@ -48,17 +52,17 @@
 		successReset: false,
 		successMessage: (action) => successMessages[action.search] || 'Succès',
 		onSuccess: () => {
-			dispatch('success')
+			onsuccess?.()
 		},
 		onSubmit({ action, cancel, submitter }) {
 			if (!action.searchParams.has('/period_delete')) return
 			const nb = period.subscribes?.length || 0
-			if (nb === 0) return dispatch('delete')
+			if (nb === 0) return ondelete?.()
 			const msg = [
 				`Cette période de travail contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
 				'Es-tu certain de vouloir la supprimer ?',
 			].join('\n')
-			if (confirm(msg)) return dispatch('delete')
+			if (confirm(msg)) return ondelete?.()
 			cancel()
 			toast.info('Suppession de la période annulée !')
 			setTimeout(() => {
@@ -116,7 +120,7 @@
 		const nextStart = end
 		const nextEnd = end.add(duration, 'minute')
 		const form = new FormData()
-		form.append('redirectTo', $urlParam.without('form_period'))
+		form.append('redirectTo', urlParam.without('form_period'))
 		form.append('team', USE_COERCE_JSON + JSON.stringify({ id: period.teamId }))
 		form.append('start', USE_COERCE_DATE + nextStart.toJSON())
 		form.append('end', USE_COERCE_DATE + nextEnd.toJSON())
@@ -147,7 +151,7 @@
 	{/if}
 
 	{#if !disableRedirect}
-		<input type="hidden" name="redirectTo" value={$urlParam.without('form_period')} />
+		<input type="hidden" name="redirectTo" value={urlParam.without('form_period')} />
 	{/if}
 
 	{#key period}
@@ -165,7 +169,7 @@
 			slotItem={(tag) => component(TagSelectItem, { tag, is_editable: true })}
 			slotSuggestion={(tag) => component(TagSelectItem, { tag })}
 			label="Étiquettes"
-			createUrl={$urlParam.with({ form_tag: '{}' })}
+			createUrl={urlParam.with({ form_tag: '{}' })}
 			createTitle="Nouvelle étiquette"
 		/>
 	{/key}

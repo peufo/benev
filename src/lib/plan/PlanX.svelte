@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { tip, urlParam } from '$lib/fuma'
+	import { tip } from 'fuma'
+	import { urlParam } from 'fuma'
 	import { PinIcon, PlusIcon } from '@lucide/svelte'
 	import type { Milestone, Team } from '@prisma/client'
 	import { afterNavigate, goto } from '$app/navigation'
@@ -23,13 +24,13 @@
 
 	let { teams, plan = $bindable() }: Props = $props()
 
-	let container: HTMLElement = $state()
+	let container: HTMLElement = $state()!
 
 	function createMilestoneAt(event: MouseEvent) {
 		const element = event.currentTarget as HTMLElement
 		const offsetX = parseInt(element.style.translate) - TEAM_HEADER_WIDTH + element.offsetWidth / 2
 		const timestamp = plan.start.add(offsetX / plan.hourSize, 'hour').startOf('hour')
-		goto($urlParam.with({ form_milestone: JSON.stringify({ timestamp: timestamp.toJSON() }) }), {
+		goto(urlParam.with({ form_milestone: JSON.stringify({ timestamp: timestamp.toJSON() }) }), {
 			replaceState: true,
 			noScroll: true,
 		})
@@ -42,7 +43,7 @@
 	const grabScale = useGrabScale('x')
 
 	const persistZoom = debounce((hourSize: number) => {
-		goto($urlParam.with({ hourSize }), { replaceState: true, noScroll: true, keepFocus: true })
+		goto(urlParam.with({ hourSize }), { replaceState: true, noScroll: true, keepFocus: true })
 	}, 300)
 
 	let hourSpan = $derived(Math.ceil(MIN_HOUR_WIDTH / plan.hourSize))
@@ -128,7 +129,7 @@
 			style:width="{totalWidth}px"
 		>
 			<a
-				href={$urlParam.with({ form_team: team.id })}
+				href={urlParam.with({ form_team: team.id })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				style:width="{TEAM_HEADER_WIDTH}px"
@@ -155,7 +156,7 @@
 		>
 			<a
 				class="btn btn-sm btn-square"
-				href={$urlParam.with({ form_team: '{}' })}
+				href={urlParam.with({ form_team: '{}' })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				use:tip={{ content: 'Ajouter un secteur' }}
@@ -178,7 +179,7 @@
 				></span>
 				<div class="absolute top-1" style:translate="{leftPx}px">
 					<a
-						href={$urlParam.with({ form_milestone: milestone.id })}
+						href={urlParam.with({ form_milestone: milestone.id })}
 						data-sveltekit-replacestate
 						data-sveltekit-noscroll
 						class="z-10 badge badge-secondary badge-outline bg-base-100 hover:ring-1 ring-secondary -translate-x-1/2"

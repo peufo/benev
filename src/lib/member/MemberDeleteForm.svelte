@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { eventPath } from '$lib/store'
-	import { ButtonDelete } from '$lib/fuma'
-	import { useForm } from '$lib/fuma'
+	import { ButtonDelete } from 'fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { enhance } from '$app/forms'
 
 	interface Props {

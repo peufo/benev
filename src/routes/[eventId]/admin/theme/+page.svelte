@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { Card, Form, FormControl, USE_COERCE_NUMBER } from '$lib/fuma'
+	import { Card, Form, FormControl } from '$lib/fuma-legacy'
+	import { USE_COERCE_NUMBER } from 'fuma'
 	import { toast } from 'svelte-sonner'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { theme } from './store'

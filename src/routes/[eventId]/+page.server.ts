@@ -1,4 +1,4 @@
-import { formAction } from '$lib/server/fuma'
+import { formAction } from '$lib/server/fuma-legacy'
 import { modelEventUpdate } from '$lib/models'
 import { jsonOrDbNull, permission, prisma, uploadImages } from '$lib/server'
 import {
@@ -7,7 +7,7 @@ import {
 	modelMilestoneCreate,
 	modelMilestoneUpdate,
 } from '$lib/models'
-import { z } from '$lib/fuma'
+import { z } from '$lib/fuma-legacy/validation'
 
 export const load = async ({ params }) => ({
 	page: await prisma.page.findFirst({ where: { eventId: params.eventId, type: 'home' } }),

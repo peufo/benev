@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { tip, urlParam } from '$lib/fuma'
+	import { tip } from 'fuma'
+	import { urlParam } from 'fuma'
 	import { PlusIcon } from '@lucide/svelte'
 	import type { Team } from '@prisma/client'
 	import { afterNavigate, goto } from '$app/navigation'
@@ -19,7 +20,7 @@
 
 	let { teams, plan = $bindable() }: Props = $props()
 
-	let container: HTMLElement = $state()
+	let container: HTMLElement = $state()!
 
 	const TEAM_HEADER_HEIGHT = 40
 	const MIN_HOUR_HEIGHT = 30
@@ -28,7 +29,7 @@
 	const grabScale = useGrabScale('y')
 
 	const persistZoom = debounce((hourSize: number) => {
-		goto($urlParam.with({ hourSize }), { replaceState: true, noScroll: true, keepFocus: true })
+		goto(urlParam.with({ hourSize }), { replaceState: true, noScroll: true, keepFocus: true })
 	}, 300)
 
 	let hourSpan = $derived(Math.ceil(MIN_HOUR_HEIGHT / plan.hourSize))
@@ -98,7 +99,7 @@
 	{#each teams as team, teamIndex (team.id)}
 		<div class="border-r hover:bg-accent/5 group/team" style:height="{totalHeight}px">
 			<a
-				href={$urlParam.with({ form_team: team.id })}
+				href={urlParam.with({ form_team: team.id })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				style:height="{TEAM_HEADER_HEIGHT}px"
@@ -121,7 +122,7 @@
 	<div class="grid place-content-center px-4 sticky top-0" style:height="{TEAM_HEADER_HEIGHT}px">
 		<a
 			class="btn btn-square btn-sm"
-			href={$urlParam.with({ form_team: '{}' })}
+			href={urlParam.with({ form_team: '{}' })}
 			data-sveltekit-replacestate
 			data-sveltekit-noscroll
 			use:tip={{ content: 'Ajouter un secteur' }}

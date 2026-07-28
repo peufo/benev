@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy'
 
-	import { InputRelation } from '$lib/fuma'
+	import { InputRelation } from '$lib/fuma-legacy'
 	import type { PageData } from './$types'
 	import type { Member } from '@prisma/client'
 	import { api } from '$lib/api'
@@ -19,8 +19,8 @@
 
 	let member: Member | undefined = $state(defaultMember)
 
-	let clientWidth: number = $state()
-	let clientHeight: number = $state()
+	let clientWidth: number = $state()!
+	let clientHeight: number = $state()!
 
 	function useRefresh() {
 		if (!browser) return () => {}

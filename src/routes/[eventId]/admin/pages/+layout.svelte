@@ -3,9 +3,10 @@
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 
-	import { Card, Icon, tip } from '$lib/fuma'
+	import { Card, Icon } from '$lib/fuma-legacy'
+	import { tip } from 'fuma'
 	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { PAGE_TYPE } from '$lib/constant'
 	import { IdCardLanyardIcon } from '@lucide/svelte'

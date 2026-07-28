@@ -1,5 +1,5 @@
 import { get } from 'svelte/store'
-import { USE_COERCE_DATE, USE_COERCE_JSON } from '$lib/fuma'
+import { USE_COERCE_DATE, USE_COERCE_JSON } from 'fuma'
 import { eventPath } from '$lib/store'
 import axios from 'axios'
 import { toast } from 'svelte-sonner'

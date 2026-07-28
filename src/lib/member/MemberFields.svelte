@@ -5,7 +5,9 @@
 	import { toast } from 'svelte-sonner'
 	import axios from 'axios'
 	import type { Field } from '@prisma/client'
-	import { Icon, Placeholder, urlParam, listEditable } from '$lib/fuma'
+	import { Icon, Placeholder } from '$lib/fuma-legacy'
+	import { listEditable } from 'fuma'
+	import { urlParam } from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { eventPath } from '$lib/store'
 
@@ -32,7 +34,7 @@
 	<h3 class="font-medium opacity-80 grow">Champs du profil de membre</h3>
 	<a
 		class="btn btn-square btn-sm btn-primary"
-		href={$urlParam.with({ form_field: '{}' })}
+		href={urlParam.with({ form_field: '{}' })}
 		data-sveltekit-replacestate
 		data-sveltekit-noscroll
 	>
@@ -52,7 +54,7 @@
 		<button
 			transition:slide
 			onclick={() =>
-				goto($urlParam.with({ form_field: field.id }), { replaceState: true, noScroll: true })}
+				goto(urlParam.with({ form_field: field.id }), { replaceState: true, noScroll: true })}
 			class="
 				w-full flex gap-3 py-3 px-4 items-center border rounded-lg
 				bg-base-200/50 hover:bg-base-200 cursor-pointer

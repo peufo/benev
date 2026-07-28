@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte'
 	import { daytz } from '$lib/dayjs'
-	import { urlParam } from '$lib/fuma'
+	import { urlParam } from 'fuma'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
@@ -18,9 +17,11 @@
 			moveStart?: boolean
 			moveEnd?: boolean
 		}[]
+		/** Remplacent les évènements de la version Svelte 4. */
+		onupdate?: (value: PeriodWithMembers) => void
 	}
 
-	let { period, plan, drags }: Props = $props()
+	let { period, plan, drags, onupdate }: Props = $props()
 
 	let deltaStartMs = $state(0)
 	let deltaEndMs = $state(0)
@@ -32,14 +33,12 @@
 			(daytz(period.end).diff(daytz(period.start)) - $magnet(deltaStartMs) + $magnet(deltaEndMs))
 	)
 
-	const dispatch = createEventDispatcher<{ update: PeriodWithMembers }>()
-
 	async function handleGrabDone() {
 		const start = new Date(period.start.getTime() + $magnet(deltaStartMs))
 		const end = new Date(period.end.getTime() + $magnet(deltaEndMs))
 		// period = { ...period, start, end }
 		await updatePeriod({ ...period, start, end })
-		dispatch('update', { ...period, start, end })
+		onupdate?.({ ...period, start, end })
 		deltaStartMs = 0
 		deltaEndMs = 0
 	}
@@ -59,7 +58,7 @@
 			rounded-md p-0 text-sm
 			outline outline-1 border-[1px] border-base-300
 			overflow-visible min-h-[30px]
-			{$urlParam.hasValue('form_period', period.id)
+			{urlParam.has('form_period', period.id)
 			? 'outline-secondary border-secondary z-20'
 			: 'outline-base-300'}
 		"
@@ -68,8 +67,8 @@
 			<DragButton
 				class={drag.class || ''}
 				axis={drag.axis}
-				on:done={handleGrabDone}
-				on:move={({ detail: delta }) => {
+				ondone={handleGrabDone}
+				onmove={(delta) => {
 					if (drag.moveStart) deltaStartMs = delta[plan.axis] / msSize
 					if (drag.moveEnd) deltaEndMs = delta[plan.axis] / msSize
 				}}

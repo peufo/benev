@@ -1,22 +1,21 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
-	import { createEventDispatcher } from 'svelte'
 	import { mdiReload, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
-	import { Icon } from '$lib/fuma'
-	import { useForm } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { enhance } from '$app/forms'
 	import Avatar from './Avatar.svelte'
-	import { InputImage } from '$lib/fuma'
+	import { InputImage } from '$lib/fuma-legacy'
 
 	interface Props {
 		user: User
 		class?: string
+		/** Remplacent les évènements de la version Svelte 4. */
+		onsuccess?: () => void
 	}
 
-	let { user, class: klass = '' }: Props = $props()
-
-	const dispatch = createEventDispatcher<{ success: void }>()
+	let { user, class: klass = '', onsuccess }: Props = $props()
 
 	const successMessages: Record<string, string> = {
 		'?/generate_avatar': 'Nouvel avatar généré',
@@ -24,7 +23,7 @@
 	}
 	const form = useForm({
 		onSuccess() {
-			dispatch('success')
+			onsuccess?.()
 		},
 		successMessage(action) {
 			return successMessages[action.search] || 'Succès'

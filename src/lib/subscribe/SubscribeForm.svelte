@@ -1,25 +1,24 @@
 <script lang="ts">
 	import { preventDefault } from 'svelte/legacy'
 
-	import { createEventDispatcher } from 'svelte'
-
 	import type { Period, Team } from '@prisma/client'
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { formatRange } from '$lib/formatRange'
 
 	interface Props {
 		team: Team
 		memberId: string
 		period: Period
+		/** Remplacent les évènements de la version Svelte 4. */
+		onclose?: () => void
+		onsuccess?: () => void
 	}
 
-	let { team, memberId, period }: Props = $props()
-
-	const dispatch = createEventDispatcher<{ close: void; success: void }>()
+	let { team, memberId, period, onclose, onsuccess }: Props = $props()
 
 	const form = useForm({
-		onSuccess: () => dispatch('success'),
+		onSuccess: () => onsuccess?.(),
 	})
 </script>
 
@@ -39,6 +38,6 @@
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn btn-primary">Oui je le veux !</button>
-		<button class="btn btn-ghost" onclick={preventDefault(() => dispatch('close'))}> Non </button>
+		<button class="btn btn-ghost" onclick={preventDefault(() => onclose?.())}> Non </button>
 	</div>
 </form>

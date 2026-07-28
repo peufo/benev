@@ -1,14 +1,19 @@
 <script lang="ts">
-	import { useForm } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { enhance } from '$app/forms'
-	import { createEventDispatcher } from 'svelte'
-	import { USE_COERCE_BOOLEAN } from '$lib/fuma'
+	import { USE_COERCE_BOOLEAN } from 'fuma'
 
 	const form = useForm({
-		onSuccess: () => dispatch('success'),
+		onSuccess: () => onsuccess?.(),
 	})
 
-	const dispatch = createEventDispatcher<{ cancel: void; success: void }>()
+	interface Props {
+		/** Remplacent les évènements de la version Svelte 4. */
+		oncancel?: () => void
+		onsuccess?: () => void
+	}
+
+	let { oncancel, onsuccess }: Props = $props()
 </script>
 
 <form method="post" action="/me?/account_update" use:enhance={form.submit}>
@@ -18,6 +23,6 @@
 
 	<div class="flex flex-row-reverse gap-2 items-center mt-4">
 		<button class="btn btn-primary">Oui, je le veux </button>
-		<button type="button" class="btn btn-ghost" onclick={() => dispatch('cancel')}>Annuler</button>
+		<button type="button" class="btn btn-ghost" onclick={() => oncancel?.()}>Annuler</button>
 	</div>
 </form>

@@ -1,7 +1,7 @@
-import { ensureFieldsWithFilterAreVisibles, parseQuery } from '$lib/server/fuma'
+import { ensureFieldsWithFilterAreVisibles, parseQuery } from 'fuma/server'
 import { getMemberProfile, prisma } from '$lib/server'
 import { getMembers, membersFilterShape } from './getMembers'
-import { z } from '$lib/fuma'
+import { z } from '$lib/fuma-legacy/validation'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const isFilterKey = (key: string) => key.startsWith('field_') || key in membersFilterShape

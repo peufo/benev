@@ -1,7 +1,6 @@
 import { goto } from '$app/navigation'
 import { debounce } from '$lib/debounce'
-import { urlParam } from '$lib/fuma'
-import { get } from 'svelte/store'
+import { urlParam } from 'fuma'
 import { RANGE_DAYS } from './constants'
 import { page } from '$app/state'
 import type { Plan } from './types'
@@ -24,8 +23,8 @@ export function navigateOnScroll(node: HTMLElement, { axis, cursor }: Plan) {
 
 	const onScroll = debounce(() => {
 		if (page.url.searchParams.get('form_period')) return
-		if (isStart()) goto(get(urlParam).with({ cursor: cursor.add(-RANGE_DAYS, 'day').toJSON() }))
-		else if (isEnd()) goto(get(urlParam).with({ cursor: cursor.add(RANGE_DAYS, 'day').toJSON() }))
+		if (isStart()) goto(urlParam.with({ cursor: cursor.add(-RANGE_DAYS, 'day').toJSON() }))
+		else if (isEnd()) goto(urlParam.with({ cursor: cursor.add(RANGE_DAYS, 'day').toJSON() }))
 	}, 200)
 
 	node.addEventListener('scroll', onScroll)

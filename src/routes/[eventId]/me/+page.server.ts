@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { tryOrFail, parseFormData, formAction } from '$lib/server/fuma'
-import { z, type ZodObj } from '$lib/fuma'
+import { tryOrFail, parseFormData, formAction } from '$lib/server/fuma-legacy'
+import { z, type ZodObj } from '$lib/fuma-legacy/validation'
 import { permission, prisma, redirectToAuth, redirectToRegister } from '$lib/server'
 import type { Field, FieldType } from '@prisma/client'
 import { modelMemberSetting } from '$lib/models'

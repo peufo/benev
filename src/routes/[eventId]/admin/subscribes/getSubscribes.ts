@@ -1,5 +1,5 @@
-import { z, type ZodObj } from '$lib/fuma'
-import { parseQuery } from '$lib/server/fuma'
+import { z, type ZodObj } from '$lib/fuma-legacy/validation'
+import { parseQuery } from 'fuma/server'
 import { addMemberComputedValues, prisma } from '$lib/server'
 import type {
 	Event,

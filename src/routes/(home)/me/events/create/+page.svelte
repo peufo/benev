@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiArrowLeft } from '@mdi/js'
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 	import { EventForm } from '$lib/event'
 </script>
 

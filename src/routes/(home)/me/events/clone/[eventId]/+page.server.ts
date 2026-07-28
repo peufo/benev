@@ -1,5 +1,5 @@
-import { z } from '$lib/fuma'
-import { formAction } from '$lib/server/fuma'
+import { z } from '$lib/fuma-legacy/validation'
+import { formAction } from '$lib/server/fuma-legacy'
 import { normalizePath } from '$lib/normalizePath'
 import { permission, prisma } from '$lib/server'
 import { clonePages, cloneData, cloneTeam } from '$lib/server/clone'

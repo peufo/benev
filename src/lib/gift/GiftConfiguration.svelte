@@ -5,7 +5,8 @@
 	import type { Gift, GiftCondition } from '@prisma/client'
 	import { mdiAccountGroupOutline } from '@mdi/js'
 	import { slide } from 'svelte/transition'
-	import { Icon, Dialog } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { Dialog } from 'fuma'
 
 	import GiftForm from './GiftForm.svelte'
 
@@ -16,7 +17,7 @@
 
 	let { gifts }: Props = $props()
 
-	let dialog: HTMLDialogElement = $state()
+	let dialog: HTMLDialogElement = $state()!
 	let selectedGift: GiftWithConditions | undefined = $state(undefined)
 
 	function openEditDialog(gift?: GiftWithConditions) {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiMapMarkerRadiusOutline } from '@mdi/js'
-	import { Card, Icon } from '$lib/fuma'
+	import { Card, Icon } from '$lib/fuma-legacy'
 	import { eventPath } from '$lib/store'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Teams, TeamsActions } from '$lib/team'

@@ -7,9 +7,9 @@
 		InputBoolean,
 		InputCheckboxs,
 		InputOptions,
-		USE_COERCE_BOOLEAN,
 		Form,
-	} from '$lib/fuma'
+	} from '$lib/fuma-legacy'
+	import { USE_COERCE_BOOLEAN } from 'fuma'
 	import type { Field } from '@prisma/client'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { eventPath } from '$lib/store'
@@ -45,8 +45,8 @@
 <FormMemberField
 	model={modelMemberFieldCreate}
 	action="{$eventPath}/admin/adhesion?/field"
-	on:success
-	on:created={({ detail }) => globalEvents.emit('field_created', detail)}
+	{onsuccess}
+	oncreated={(detail) => globalEvents.emit('field_created', detail)}
 	data={field}
 >
 	{#key field.id}
@@ -92,7 +92,7 @@
 
 		<InputCheckboxs
 			value={getMemberRight(field)}
-			on:input={handleInputMemberRight}
+			oninput={handleInputMemberRight}
 			label="Les membres peuvent"
 			checkboxesClass="flex gap-6"
 			options={[

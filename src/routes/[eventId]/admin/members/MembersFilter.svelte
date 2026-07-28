@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { urlParam, InputOptionInParam } from '$lib/fuma'
+	import { InputOptionInParam } from '$lib/fuma-legacy'
+	import { urlParam } from 'fuma'
 	import {
 		mdiAccountCircleOutline,
 		mdiAlertOutline,
@@ -30,7 +31,7 @@
 	}}
 />
 
-{#if $urlParam.hasValue('role', 'member')}
+{#if urlParam.has('role', 'member')}
 	<div transition:slide={{ axis: 'x' }}>
 		<InputOptionInParam
 			key="isAbsent"

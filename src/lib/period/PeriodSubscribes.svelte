@@ -3,7 +3,8 @@
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
-	import { Icon, tip } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { tip } from 'fuma'
 	import { Avatar } from '$lib/me'
 
 	interface Props {
@@ -41,7 +42,7 @@
 
 			<SubscribeCreatedBy createdBy={subscribe.createdBy} size={20} class="mr-auto w-8" />
 
-			<SubscribeStateForm {subscribe} isLeader on:success />
+			<SubscribeStateForm {subscribe} isLeader {onsuccess} />
 
 			<SubscribeMenu {subscribe} />
 		</div>

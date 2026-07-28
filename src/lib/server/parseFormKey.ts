@@ -1,4 +1,4 @@
-import { jsonParse } from '$lib/fuma'
+import { jsonParse } from 'fuma'
 
 export function parseFormKey<Fun extends (key: string) => unknown>(
 	key: string | undefined,

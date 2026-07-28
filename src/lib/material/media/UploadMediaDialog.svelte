@@ -3,9 +3,9 @@
 </script>
 
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte'
 	import Cropper from 'svelte-easy-crop'
-	import { Dialog, InputText } from '$lib/fuma'
+	import { InputText } from '$lib/fuma-legacy'
+	import { Dialog } from 'fuma'
 	import { RulerDimensionLineIcon } from '@lucide/svelte'
 
 	interface Props {
@@ -15,6 +15,8 @@
 		key?: string
 		freeName?: boolean
 		freeAspect?: boolean
+		/** Remplacent les évènements de la version Svelte 4. */
+		onsubmit?: (value: { crop: CropArea; image: string }) => void
 	}
 
 	let {
@@ -24,14 +26,13 @@
 		key = '',
 		freeName = false,
 		freeAspect = false,
+		onsubmit,
 	}: Props = $props()
 
-	let dialog: HTMLDialogElement = $state()
+	let dialog: HTMLDialogElement = $state()!
 	let image = $state('')
 	let crop: CropArea | undefined = $state(undefined)
-	let inputFile: HTMLInputElement = $state()
-
-	const dispatch = createEventDispatcher<{ submit: { crop: CropArea; image: string } }>()
+	let inputFile: HTMLInputElement = $state()!
 
 	export function show() {
 		inputFile.click()
@@ -54,7 +55,7 @@
 
 	function handleValidation() {
 		close()
-		if (crop && image) dispatch('submit', { crop, image })
+		if (crop && image) onsubmit?.({ crop, image })
 	}
 
 	const aspects: { label: string; value: { x: number; y: number } }[] = [
@@ -117,7 +118,7 @@
 				aspect={aspect.x / aspect.y}
 				showGrid={false}
 				zoomSpeed={0.2}
-				on:cropcomplete={(e) => (crop = e.detail.pixels)}
+				oncropcomplete={(e) => (crop = e.detail.pixels)}
 			/>
 		{/key}
 	</div>

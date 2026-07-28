@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { DropDown, Icon, Card, urlParam, Drawer } from '$lib/fuma'
+	import { Icon, Card } from '$lib/fuma-legacy'
+	import { DropDown } from 'fuma'
+	import { Drawer } from 'fuma'
+	import { urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiArrowLeft,
@@ -29,7 +32,7 @@
 
 	let { data } = $props()
 
-	let createSubscribeDialog: HTMLDialogElement = $state()
+	let createSubscribeDialog: HTMLDialogElement = $state()!
 </script>
 
 <Card class="max-w-3xl mx-auto w-full" bodyClass="gap-12">
@@ -48,7 +51,7 @@
 			</span>
 
 			<a
-				href={$urlParam.with({ form_member_contact: '{}' })}
+				href={urlParam.with({ form_member_contact: '{}' })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				class="btn btn-square btn-sm ml-2"
@@ -169,6 +172,6 @@
 	classBody="pt-4"
 >
 	{#snippet children({ close })}
-		<MemberContactForm member={data.memberProfile} on:success={() => close()} />
+		<MemberContactForm member={data.memberProfile} onsuccess={() => close()} />
 	{/snippet}
 </Drawer>

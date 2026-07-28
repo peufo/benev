@@ -5,8 +5,9 @@
 	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
-	import { Dialog, Icon, InputRelation, SelectorList } from '$lib/fuma'
-	import { useForm } from '$lib/fuma'
+	import { Icon, InputRelation, SelectorList } from '$lib/fuma-legacy'
+	import { Dialog } from 'fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft } from '@mdi/js'
 	import { formatRange } from '$lib/formatRange'
@@ -23,10 +24,10 @@
 
 	let selectedTeam: TeamWithComputedValues | null = $state(null)
 	let selectedPeriod: Period | null = $state(null)
-	let inputRelationTeam: InputRelation<TeamWithComputedValues> = $state()
-	let offsetWidth: number = $state()
+	let inputRelationTeam: InputRelation<TeamWithComputedValues> = $state()!
+	let offsetWidth: number = $state()!
 
-	let submitButton: HTMLButtonElement = $state()
+	let submitButton: HTMLButtonElement = $state()!
 	const form = useForm({
 		successReset: false,
 		onSuccess() {
@@ -75,7 +76,7 @@
 				search={(search) => $api.team.search(search, { take: 10, onlyAvailable: true })}
 				placeholder="Chercher un secteur"
 				classList="max-h-80 overflow-y-auto relative"
-				on:input={({ detail }) => handleSelectTeam(detail.value)}
+				oninput={handleSelectTeam}
 			>
 				{#snippet suggestion({ item })}
 					<span>{item.name}</span>
@@ -107,7 +108,7 @@
 				trigger={dialog}
 				items={selectedTeam.periods.filter((p) => p.isAvailable)}
 				class="w-full max-h-80 mt-2 overflow-y-auto relative"
-				on:select={({ detail }) => onSelect(detail)}
+				onselect={(detail) => onSelect(detail)}
 			>
 				{#snippet children({ item })}
 					<span>{formatRange(item)}</span>

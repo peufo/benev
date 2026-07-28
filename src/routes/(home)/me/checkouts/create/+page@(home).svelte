@@ -2,11 +2,11 @@
 	import { onMount } from 'svelte'
 	import { loadStripe } from '@stripe/stripe-js'
 	import { env } from '$env/dynamic/public'
-	import { Card } from '$lib/fuma'
+	import { Card } from '$lib/fuma-legacy'
 
 	let { data } = $props()
 
-	let checkoutElement: HTMLDivElement = $state()
+	let checkoutElement: HTMLDivElement = $state()!
 	let destroy: () => void = () => {}
 	let isLoading = $state(true)
 

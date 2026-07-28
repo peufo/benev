@@ -3,7 +3,8 @@
 
 	const bubble = createBubbler()
 	import { mdiEmailOutline, mdiPhone, mdiClipboardTextOutline, mdiPencilOutline } from '@mdi/js'
-	import { Icon, urlParam } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { urlParam } from 'fuma'
 	import type { Member } from '@prisma/client'
 
 	interface Props {
@@ -59,7 +60,7 @@
 	{/if}
 
 	<a
-		href={$urlParam.with({ form_member_profile: member.id })}
+		href={urlParam.with({ form_member_profile: member.id })}
 		class="btn btn-sm btn-square btn-ghost"
 		data-sveltekit-replacestate
 		data-sveltekit-noscroll

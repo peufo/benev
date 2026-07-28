@@ -2,7 +2,7 @@
 	import { eventPath } from '$lib/store'
 	import MemberField from './MemberField.svelte'
 	import type { MemberProfile } from '$lib/server'
-	import { Form } from '$lib/fuma'
+	import { Form } from '$lib/fuma-legacy'
 
 	interface Props {
 		class?: string
@@ -17,7 +17,7 @@
 		action="{$eventPath}/me?/member_profile_update"
 		simpleAction
 		class="grid grid-cols-3 @lg:grid-cols-6 @2xl:grid-cols-12 gap-4 {klass}"
-		on:success
+		{onsuccess}
 	>
 		<input type="hidden" name="memberId" value={memberProfile.id} />
 

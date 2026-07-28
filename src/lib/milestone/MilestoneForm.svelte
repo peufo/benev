@@ -3,7 +3,7 @@
 	import { eventPath } from '$lib/store'
 	import { daytz } from '$lib/dayjs'
 	import type { Milestone } from '@prisma/client'
-	import { Form, InputText } from '$lib/fuma'
+	import { Form, InputText } from '$lib/fuma-legacy'
 	import type { ComponentType } from 'svelte'
 	import InputTzDateTime from './InputTzDateTime.svelte'
 
@@ -20,10 +20,10 @@
 	action="{$eventPath}?/milestone"
 	model={modelMilestoneCreate}
 	data={milestone}
-	on:created
-	on:updated
-	on:deleted
-	on:success
+	{oncreated}
+	{onupdated}
+	{ondeleted}
+	{onsuccess}
 >
 	<InputText
 		key="name"

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/fuma'
-	import { InputBoolean, InputDate, InputNumber } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
+	import { InputBoolean, InputDate, InputNumber } from '$lib/fuma-legacy'
 	import { slide } from 'svelte/transition'
 
 	const { enhance } = useForm({

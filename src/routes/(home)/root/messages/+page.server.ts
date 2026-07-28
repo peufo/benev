@@ -1,5 +1,6 @@
-import { tryOrFail, parseFormData, parseQuery } from '$lib/server/fuma'
-import { toTuple, z } from '$lib/fuma'
+import { tryOrFail, parseFormData } from '$lib/server/fuma-legacy'
+import { parseQuery } from 'fuma/server'
+import { toTuple, z } from '$lib/fuma-legacy/validation'
 import { prisma } from '$lib/server'
 import { MessageState, type Prisma } from '@prisma/client'
 

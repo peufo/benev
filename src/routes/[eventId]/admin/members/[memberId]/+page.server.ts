@@ -1,6 +1,6 @@
-import { formAction } from '$lib/server/fuma'
+import { formAction } from '$lib/server/fuma-legacy'
 import { prisma, getMemberProfile, permission, notifyTierQuotaIfNeeded } from '$lib/server'
-import { z } from '$lib/fuma'
+import { z } from '$lib/fuma-legacy/validation'
 import { modelUserContactUpdate } from '$lib/models'
 
 export const load = async ({ parent, params: { memberId, eventId } }) => {

@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Member } from '@prisma/client'
 	import { mdiAccountPlusOutline } from '@mdi/js'
-	import { component, InputRelations, urlParam } from '$lib/fuma'
+	import { component, InputRelations } from '$lib/fuma-legacy'
+	import { urlParam } from 'fuma'
 	import { api } from '$lib/api'
 	import MemberLink from './MemberLink.svelte'
 
@@ -21,5 +22,5 @@
 	slotSuggestion={({ firstName, lastName }) => `${firstName} ${lastName}`}
 	createTitle="Inviter un nouveau membre"
 	createIcon={mdiAccountPlusOutline}
-	createUrl={$urlParam.with({ form_invite: '{}' })}
+	createUrl={urlParam.with({ form_invite: '{}' })}
 />

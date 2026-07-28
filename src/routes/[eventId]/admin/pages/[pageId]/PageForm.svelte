@@ -4,9 +4,10 @@
 	import type { Page } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
-	import { ButtonDelete, FormControl, Icon, InputSelect, InputText, InputTextRich } from '$lib/fuma'
+	import { FormControl, Icon, InputSelect, InputText, InputTextRich } from '$lib/fuma-legacy'
+	import { ButtonDelete } from 'fuma'
 
-	import { useForm } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { PAGE_TYPE } from '$lib/constant'
@@ -21,7 +22,7 @@
 
 	let { page, charterAlreadyExist }: Props = $props()
 
-	let selectMedia: SelectMedia = $state()
+	let selectMedia: SelectMedia = $state()!
 	let isDirty = $state(false)
 	let successInvalidateAll = false
 	const form = useForm({
@@ -33,8 +34,8 @@
 		},
 	})
 	const { home, charter, email, ...pageTypes } = PAGE_TYPE
-	let submitButton: HTMLButtonElement = $state()
-	let inputTextRich: InputTextRich = $state()
+	let submitButton: HTMLButtonElement = $state()!
+	let inputTextRich: InputTextRich = $state()!
 
 	let pagePath = $derived(
 		`${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
@@ -64,7 +65,7 @@
 			class="grow"
 			key="title"
 			value={page.title}
-			on:input={handleChangeImediat}
+			oninput={handleChangeImediat}
 			hint={page.description || ''}
 		/>
 
@@ -92,7 +93,7 @@
 						? pageTypes
 						: { charter, ...pageTypes }}
 					value={page.type}
-					on:select={handleChangeImediat}
+					onselect={handleChangeImediat}
 				/>
 			{/if}
 		</FormControl>
@@ -109,8 +110,8 @@
 			bind:this={inputTextRich}
 			key="content"
 			value={page.content}
-			on:change={handleChange}
-			on:insertMedia={() => {
+			onchange={handleChange}
+			oninsertMedia={() => {
 				selectMedia.show()
 			}}
 		/>
@@ -151,7 +152,7 @@
 
 <SelectMedia
 	bind:this={selectMedia}
-	on:select={({ detail: media }) => {
+	onselect={(media) => {
 		inputTextRich.setImage({
 			src: `/media/${media.id}`,
 			alt: media.name,

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/fuma'
-	import { InputNumber, InputRelation, Card, InputText } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
+	import { InputNumber, InputRelation, Card, InputText } from '$lib/fuma-legacy'
 
 	import { api } from '$lib/api'
 	import InputProduct from './InputProduct.svelte'

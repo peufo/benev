@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { Dialog, Icon, Placeholder } from '$lib/fuma'
+	import { Icon, Placeholder } from '$lib/fuma-legacy'
+	import { Dialog } from 'fuma'
 	import { mdiPlus } from '@mdi/js'
 	import EventMemberCard from './EventMemberCard.svelte'
 	import { IsOrganizerForm } from '$lib/me'
 
 	let { data } = $props()
 
-	let becomeOrganizerDialog: HTMLDialogElement = $state()
+	let becomeOrganizerDialog: HTMLDialogElement = $state()!
 </script>
 
 <!-- INVITATIONS -->
@@ -64,8 +65,8 @@
 		<h2 class="card-title">Devenir organisateur</h2>
 	{/snippet}
 	<IsOrganizerForm
-		on:cancel={() => becomeOrganizerDialog.close()}
-		on:success={() => {
+		oncancel={() => becomeOrganizerDialog.close()}
+		onsuccess={() => {
 			becomeOrganizerDialog.close()
 			goto('/me/events/create')
 		}}

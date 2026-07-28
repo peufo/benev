@@ -6,19 +6,20 @@
 	import type { Media } from '@prisma/client'
 	import { portal } from 'svelte-portal'
 	import { page } from '$app/state'
-	import { ButtonDelete, Dialog, Icon, InputText } from '$lib/fuma'
-	import { useForm } from '$lib/fuma'
+	import { Icon, InputText } from '$lib/fuma-legacy'
+	import { ButtonDelete, Dialog } from 'fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
-	import { createEventDispatcher, tick } from 'svelte'
+	import { tick } from 'svelte'
 	import { api } from '$lib/api'
 
 	// TODO: Chelous de récupérer medias en global:
 	let medias: Media[] = $state([])
-	let dialogMedias: HTMLDialogElement = $state()
-	let dialogEdit: HTMLDialogElement = $state()
-	let dialogUploadMedia: UploadMediaDialog = $state()
+	let dialogMedias: HTMLDialogElement = $state()!
+	let dialogEdit: HTMLDialogElement = $state()!
+	let dialogUploadMedia: UploadMediaDialog = $state()!
 	const formUpload = useForm<Media>({
 		successUpdate: false,
 		successMessage: 'Nouvelle image',
@@ -26,7 +27,7 @@
 			dialogUploadMedia.close()
 			if (media) {
 				medias = [...medias, media]
-				dispatch('select', media)
+				onselect?.(media)
 			}
 		},
 	})
@@ -47,7 +48,12 @@
 		},
 	})
 
-	const dispatch = createEventDispatcher<{ select: Media }>()
+	interface Props {
+		/** Remplace l'évènement `select` de la version Svelte 4. */
+		onselect?: (media: Media) => void
+	}
+
+	let { onselect }: Props = $props()
 	let selectedMedia: Media | undefined = $state(undefined)
 
 	async function loadMedias() {
@@ -66,7 +72,7 @@
 
 	function handleSelectMedia(media: Media) {
 		dialogMedias.close()
-		dispatch('select', media)
+		onselect?.(media)
 	}
 
 	async function handleEditMedia(media: Media) {

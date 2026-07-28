@@ -5,7 +5,7 @@
 	import { fade } from 'svelte/transition'
 	import InputColor from './InputColor.svelte'
 	import { getNextColor } from './InputColorPalette.svelte'
-	import { USE_COERCE_JSON } from '$lib/fuma'
+	import { USE_COERCE_JSON } from 'fuma'
 
 	interface Props {
 		value: Record<string, string>

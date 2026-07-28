@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiAlertCircleOutline, mdiCheck } from '@mdi/js'
-	import { Icon, tip } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { tip } from 'fuma'
 	import type { MemberWithComputedValues } from '$lib/server'
 
 	interface Props {

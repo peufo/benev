@@ -1,7 +1,9 @@
 import { describe, it } from 'vitest'
 import { Prisma } from '@prisma/client'
-import { USE_COERCE_JSON } from '$lib/fuma'
-import { parseFormData } from '$lib/server/fuma'
+// Import direct des modules et non du barrel racine: celui-ci tire tout l'arbre UI,
+// donc le CSS de tippy, que Vitest ne sait pas charger en environnement `node`.
+import { USE_COERCE_JSON } from 'fuma'
+import { parseFormData } from '$lib/server/fuma-legacy/parseFormData'
 import { modelEventUpdate } from '$lib/models'
 import { jsonOrDbNull } from '$lib/server'
 import { mapUrl } from '$lib/location'

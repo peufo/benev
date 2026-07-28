@@ -2,7 +2,8 @@
      Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { useForm, InputText, InputPassword, Dialog, InputBoolean } from '$lib/fuma'
+	import { useForm, InputText, InputPassword, InputBoolean } from '$lib/fuma-legacy'
+	import { Dialog } from 'fuma'
 	import { page } from '$app/stores'
 	import Oauth from './Oauth.svelte'
 	import TermsLabel from './TermsLabel.svelte'
@@ -51,8 +52,8 @@
 				tabindex="0"
 				class="tab tab-lg grow tab-lifted rounded-t-2xl"
 				class:tab-active={state === 'login'}
-				on:click={() => (state = 'login')}
-				on:keyup={() => (state = 'login')}
+				onclick={() => (state = 'login')}
+				onkeyup={() => (state = 'login')}
 			>
 				Connexion
 			</span>
@@ -61,8 +62,8 @@
 				tabindex="0"
 				class="tab tab-lg grow tab-lifted rounded-t-2xl"
 				class:tab-active={state === 'register'}
-				on:click={() => (state = 'register')}
-				on:keyup={() => (state = 'register')}
+				onclick={() => (state = 'register')}
+				onkeyup={() => (state = 'register')}
 			>
 				Nouveau compte
 			</span>

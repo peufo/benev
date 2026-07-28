@@ -4,16 +4,19 @@
 	const bubble = createBubbler()
 	import { browser } from '$app/environment'
 	import { mdiDrag, mdiDragHorizontal, mdiDragVertical } from '@mdi/js'
-	import { Icon } from '$lib/fuma'
-	import { createEventDispatcher, onDestroy } from 'svelte'
+	import { Icon } from '$lib/fuma-legacy'
+	import { onDestroy } from 'svelte'
 
 	type Axis = 'any' | 'x' | 'y'
 	interface Props {
 		axis?: Axis
 		class?: string
+		/** Remplacent les évènements de la version Svelte 4. */
+		onmove?: (value: Dot) => void
+		ondone?: (value: Dot) => void
 	}
 
-	let { axis = 'any', class: klass = '' }: Props = $props()
+	let { axis = 'any', class: klass = '', onmove, ondone }: Props = $props()
 
 	const paths: Record<Axis, string> = {
 		any: mdiDrag,
@@ -21,8 +24,6 @@
 		y: mdiDragVertical,
 	}
 	type Dot = { x: number; y: number }
-
-	const dispatch = createEventDispatcher<{ move: Dot; done: Dot }>()
 
 	let origin = { x: 0, y: 0 }
 	function handleMouseDown(event: MouseEvent) {
@@ -37,14 +38,14 @@
 	}
 
 	function handleMouseMove(event: MouseEvent) {
-		dispatch('move', getDelta(event))
+		onmove?.(getDelta(event))
 	}
 
 	function handleMouseUp(event: MouseEvent) {
 		event.preventDefault()
 		event.stopPropagation()
 		document.removeEventListener('mousemove', handleMouseMove)
-		dispatch('done', getDelta(event))
+		ondone?.(getDelta(event))
 	}
 
 	onDestroy(() => {

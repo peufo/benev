@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { eventPath } from '$lib/store'
-	import { tip, DropDown } from '$lib/fuma'
+	import { DropDown } from 'fuma'
+	import { tip } from 'fuma'
 	import { IdCardLanyardIcon } from '@lucide/svelte'
 
 	interface Props {

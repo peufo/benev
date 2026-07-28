@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Placeholder } from '$lib/fuma'
+	import { Placeholder } from '$lib/fuma-legacy'
 	import { EmailCheckoutValidation } from '$lib/email'
 
 	let { data } = $props()

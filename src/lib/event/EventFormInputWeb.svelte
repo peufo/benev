@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { InputText } from '$lib/fuma'
+	import { InputText } from '$lib/fuma-legacy'
 	import { debounce } from '$lib/debounce'
 	import { normalizeUrl } from '$lib/url'
 	import { EventIcon } from '.'
@@ -11,7 +11,7 @@
 
 	let { event = undefined }: Props = $props()
 
-	let input: HTMLInputElement = $state()
+	let input: HTMLInputElement = $state()!
 	let scrapPending = $state(false)
 	let icon = $state(event?.icon || null)
 	let value = $state('')
@@ -33,7 +33,7 @@
 	label="Site web"
 	value={event?.web || ''}
 	bind:inputElement={input}
-	on:input={handleInput}
+	oninput={handleInput}
 	classWrapper="flex items-center"
 >
 	{#snippet append()}

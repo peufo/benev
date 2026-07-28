@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 	import { mdiAlertBoxOutline } from '@mdi/js'
 	interface Props {
 		children?: import('svelte').Snippet

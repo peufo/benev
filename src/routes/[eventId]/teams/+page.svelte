@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { onMount } from 'svelte'
-	import { Drawer, Icon, InputSearch, RangePickerButton, urlParam } from '$lib/fuma'
+	import { Icon, InputSearch } from '$lib/fuma-legacy'
+	import { RangePickerButton } from 'fuma'
+	import { Drawer } from 'fuma'
+	import { urlParam } from 'fuma'
 
 	import { Teams, ToggleOnlyAvailable } from '$lib/team'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -15,8 +18,8 @@
 
 	let { data } = $props()
 
-	let subscribeDialog: HTMLDialogElement = $state()
-	let thanksDialog: ThanksDialog = $state()
+	let subscribeDialog: HTMLDialogElement = $state()!
+	let thanksDialog: ThanksDialog = $state()!
 
 	type PeriodWithTeam = PeriodWithComputedValues & { team: TeamWithComputedValues }
 	let selectedPeriod: PeriodWithTeam | undefined = $state(undefined)
@@ -55,7 +58,7 @@
 
 			{#if data.member?.roles.includes('admin')}
 				<a
-					href={$urlParam.with({ teams_order: 1 })}
+					href={urlParam.with({ teams_order: 1 })}
 					class="btn btn-sm btn-square"
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
@@ -63,7 +66,7 @@
 					<Icon path={mdiPencilOutline} title="Modifier l'ordre des secteur" />
 				</a>
 				<a
-					href={$urlParam.with({ form_team: '{}' })}
+					href={urlParam.with({ form_team: '{}' })}
 					class="btn btn-sm btn-square"
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
@@ -76,7 +79,7 @@
 		<TeamsStats teams={data.teams} />
 	</div>
 
-	<Teams teams={data.teams} on:clickPeriod={({ detail }) => handleClickPeriod(detail)}>
+	<Teams teams={data.teams} onclickPeriod={(detail) => handleClickPeriod(detail)}>
 		{#snippet placeholder()}
 			{#if !data.user && data.teamsHiddenCount}
 				<div class="grid place-content-center p-10 gap-4">
@@ -96,12 +99,12 @@
 			memberId={data.member.id}
 			team={selectedPeriod.team}
 			period={selectedPeriod}
-			on:close={() => {
+			onclose={() => {
 				subscribeDialog.close()
 				if ($page.url.searchParams.has('subscribeTo'))
-					goto($urlParam.without('subscribeTo'), { replaceState: true })
+					goto(urlParam.without('subscribeTo'), { replaceState: true })
 			}}
-			on:success={() => {
+			onsuccess={() => {
 				subscribeDialog.close()
 				thanksDialog.open()
 			}}

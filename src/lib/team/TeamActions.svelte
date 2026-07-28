@@ -2,7 +2,9 @@
 	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
 	const bubble = createBubbler()
-	import { Icon, tip, urlParam, useForm } from '$lib/fuma'
+	import { Icon, useForm } from '$lib/fuma-legacy'
+	import { tip } from 'fuma'
+	import { urlParam } from 'fuma'
 	import {
 		mdiAccountMultipleOutline,
 		mdiChartGantt,
@@ -66,7 +68,7 @@
 </Delayed>
 
 <a
-	href={$urlParam.with({
+	href={urlParam.with({
 		form_period: JSON.stringify({ team: { id: team.id, name: team.name } }),
 		section: team.id,
 	})}
@@ -79,7 +81,7 @@
 </a>
 
 <a
-	href={$urlParam.with({ form_team: team.id, section: team.id })}
+	href={urlParam.with({ form_team: team.id, section: team.id })}
 	class="btn btn-square btn-sm"
 	use:tip={{ content: 'Éditer ce secteur' }}
 	data-sveltekit-noscroll

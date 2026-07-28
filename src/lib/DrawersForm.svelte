@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Drawer, Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { Drawer } from 'fuma'
 	import InviteForm from './InviteForm.svelte'
 	import { TeamForm, type TeamFormInstance } from './team'
 	import { PeriodDrawer, PeriodForm } from './period'
@@ -9,9 +10,9 @@
 	import MemberImportDialog from './member/MemberImportDialog.svelte'
 	import { mdiAccountMultiplePlus } from '@mdi/js'
 
-	let teamForm: TeamFormInstance = $state()
-	let periodDrawer: PeriodDrawer = $state()
-	let periodForm: PeriodForm = $state()
+	let teamForm: TeamFormInstance = $state()!
+	let periodDrawer: PeriodDrawer = $state()!
+	let periodForm: PeriodForm = $state()!
 
 	interface Props {
 		event: Event & { memberFields: Field[] }
@@ -22,7 +23,7 @@
 
 	let { event, team = null, period = {}, tag = null }: Props = $props()
 
-	let importDialog: HTMLDialogElement = $state()
+	let importDialog: HTMLDialogElement = $state()!
 
 	function openImportDialog() {
 		importDialog.showModal()
@@ -62,7 +63,7 @@
 
 <Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur">
 	{#snippet children({ close })}
-		<TeamForm bind:teamForm team={team || {}} {event} on:success={() => close()} />
+		<TeamForm bind:teamForm team={team || {}} {event} onsuccess={() => close()} />
 	{/snippet}
 </Drawer>
 
@@ -72,12 +73,12 @@
 	{#snippet children({ close })}
 		<TagForm
 			tag={tag || {}}
-			on:created={async ({ detail: tag }) => {
+			oncreated={async ({ detail: tag }) => {
 				await close({ replaceState: true })
 				periodForm.updatePeriod((p) => ({ ...p, tags: [...(p.tags || []), tag] }))
 			}}
-			on:updated={() => close()}
-			on:deleted={() => close()}
+			onupdated={() => close()}
+			ondeleted={() => close()}
 		/>
 	{/snippet}
 </Drawer>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { Card } from '$lib/fuma'
+	import { Card } from '$lib/fuma-legacy'
 	import { enhance } from '$app/forms'
 
 	let events: string[] = $state([])

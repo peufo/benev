@@ -2,7 +2,7 @@
 	import { formatDatetime } from '$lib/formatRange'
 	import type { Milestone } from '@prisma/client'
 	import type { Dayjs } from 'dayjs'
-	import { urlParam } from '$lib/fuma'
+	import { urlParam } from 'fuma'
 	import { PinIcon } from '@lucide/svelte'
 
 	interface Props {
@@ -18,7 +18,7 @@
 		{#each milestonesBefore as milestone (milestone.id)}
 			<a
 				class="badge badge-secondary badge-outline group hover:bg-secondary/10"
-				href={$urlParam.with({ cursor: milestone.time.add(-3, 'hour').toJSON() })}
+				href={urlParam.with({ cursor: milestone.time.add(-3, 'hour').toJSON() })}
 			>
 				<PinIcon class="rotate-45  group-hover:fill-secondary -translate-x-1" size={14} />
 				<span>{milestone.name}</span>
@@ -36,7 +36,7 @@
 			</span>
 			<a
 				class="badge badge-secondary badge-outline group hover:bg-secondary/10 ml-auto"
-				href={$urlParam.with({ cursor: milestone.time.add(-3, 'hour').toJSON() })}
+				href={urlParam.with({ cursor: milestone.time.add(-3, 'hour').toJSON() })}
 			>
 				<PinIcon class="rotate-45  group-hover:fill-secondary -translate-x-1" size={14} />
 				<span>{milestone.name}</span>

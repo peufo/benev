@@ -1,5 +1,5 @@
-import { z } from '$lib/fuma'
-import { parseQuery } from '$lib/server/fuma'
+import { z } from '$lib/fuma-legacy/validation'
+import { parseQuery } from 'fuma/server'
 import { json, permission, prisma } from '$lib/server'
 
 export const GET = async ({ locals, url }) => {

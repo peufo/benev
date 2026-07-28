@@ -5,9 +5,11 @@
 		mdiDotsHorizontal,
 		mdiTrashCanOutline,
 	} from '@mdi/js'
-	import { DropDown, Icon, ButtonDelete } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { DropDown } from 'fuma'
+	import { ButtonDelete } from 'fuma'
 	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import type { Subscribe } from '@prisma/client'
 	import { enhance } from '$app/forms'
 

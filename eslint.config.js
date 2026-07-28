@@ -87,7 +87,7 @@ export default ts.config(
 		// compliquerait le tri de ce qui doit être supprimé au profit du paquet.
 		// Placé en dernier pour l'emporter sur les blocs généraux ci-dessus.
 		// Ces exceptions disparaissent avec le dossier.
-		files: ['src/lib/fuma/**', 'src/lib/server/fuma/**'],
+		files: ['src/lib/fuma-legacy/**', 'src/lib/server/fuma-legacy/**'],
 		rules: {
 			'@typescript-eslint/no-explicit-any': 'off',
 			'@typescript-eslint/no-unused-vars': 'off',

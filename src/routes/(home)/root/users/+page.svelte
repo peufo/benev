@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { mdiCheck, mdiClose } from '@mdi/js'
-	import { Card, DropDown, Icon, InputSearch, Pagination } from '$lib/fuma'
+	import { Card, Icon, InputSearch } from '$lib/fuma-legacy'
+	import { DropDown } from 'fuma'
+	import { Pagination } from 'fuma'
 	import TDSortable from './TDSortable.svelte'
 
 	let { data } = $props()

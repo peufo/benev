@@ -5,7 +5,7 @@
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeDate } from '$lib/formatRange'
 	import type { TeamWithComputedValues } from '$lib/server'
-	import { CardCollapse, Icon, Placeholder } from '$lib/fuma'
+	import { CardCollapse, Icon, Placeholder } from '$lib/fuma-legacy'
 
 	import TeamActions from './TeamActions.svelte'
 	import TeamLeaders from './TeamLeaders.svelte'
@@ -83,7 +83,7 @@
 
 	<div>
 		{#each team.periods as period (period.id)}
-			<PeriodRow period={{ ...period, team }} on:clickPeriod />
+			<PeriodRow period={{ ...period, team }} {onclickPeriod} />
 		{:else}
 			<Placeholder>Aucune période de travail</Placeholder>
 		{/each}

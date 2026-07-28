@@ -3,8 +3,9 @@
 	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
-	import { Dialog, InputRelations } from '$lib/fuma'
-	import { useForm } from '$lib/fuma'
+	import { InputRelations } from '$lib/fuma-legacy'
+	import { Dialog } from 'fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { eventPath } from '$lib/store'
 
 	interface Props {
@@ -28,7 +29,7 @@
 	})
 </script>
 
-<Dialog bind:dialog on:open={() => (teams = teams)}>
+<Dialog bind:dialog onopen={() => (teams = teams)}>
 	{#snippet header()}
 		<h2 class="title">{title}</h2>
 	{/snippet}

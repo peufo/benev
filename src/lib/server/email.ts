@@ -1,11 +1,12 @@
 import { env } from '$env/dynamic/private'
 import nodemailer, { type SendMailOptions } from 'nodemailer'
-import type { ComponentProps, ComponentType } from 'svelte'
+import type { Component, ComponentProps } from 'svelte'
+import { render } from 'svelte/server'
 import { prisma } from '$lib/server'
 import type { EmailEvent } from '$lib/email/models'
 import { emailReplacers, type EmailModelProps } from '$lib/pages/emailSuggesions'
 import { injectValues } from '$lib/pages/injectValues'
-import { tiptapParser } from '$lib/fuma'
+import { tiptapParser } from '$lib/fuma-legacy/ui/input/textRich/tiptapParser'
 import EmailLayout from '$lib/email/EmailLayout.svelte'
 import { getMemberReplacers } from '$lib/pages/memberSuggestions'
 import { domain } from '$lib/email'
@@ -61,13 +62,15 @@ export type SendMailOptionsWithProps<Props> = Omit<SendMailOptions, 'html'> & {
 	props: Props
 }
 
-export async function sendEmailComponent<Component extends ComponentType>(
-	component: Component,
-	options: SendMailOptionsWithProps<ComponentProps<InstanceType<Component>>>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function sendEmailComponent<Comp extends Component<any, any, any>>(
+	component: Comp,
+	options: SendMailOptionsWithProps<ComponentProps<Comp>>
 ) {
-	// @ts-expect-error `render` est ajouté au composant par la compilation SSR de Svelte, absent du type ComponentType
-	const { html } = component.render(options.props)
-	return sendEmail({ ...options, html })
+	// Svelte 5: le rendu serveur passe par `render()` de `svelte/server`, qui renvoie
+	// `{ head, body }` — la méthode statique `Component.render()` a disparu.
+	const { body } = render(component, { props: options.props })
+	return sendEmail({ ...options, html: body })
 }
 
 export async function sendEmailModel<EmailPath extends EmailEvent>(
@@ -94,11 +97,10 @@ export async function renderEmailModel<EmailPath extends EmailEvent>(
 
 	const replacers = [...emailReplacers[emailPath](props), ...getMemberReplacers(props)]
 	const modelHTML = tiptapParser.toHTML(model.content)
-	// @ts-expect-error `render` est ajouté au composant par la compilation SSR de Svelte, absent du type importé
-	const layout = EmailLayout.render({ title: model.event.name, subtitle: model.title }) as {
-		html: string
-	}
-	const html = layout.html.replace('__SLOT__', injectValues(modelHTML, replacers))
+	const layout = render(EmailLayout, {
+		props: { title: model.event.name, subtitle: model.title },
+	})
+	const html = layout.body.replace('__SLOT__', injectValues(modelHTML, replacers))
 	return injectDomain(html)
 }
 

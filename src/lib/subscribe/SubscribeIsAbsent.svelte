@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Icon, tip } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { tip } from 'fuma'
 	import { mdiAlertOutline } from '@mdi/js'
 
 	interface Props {

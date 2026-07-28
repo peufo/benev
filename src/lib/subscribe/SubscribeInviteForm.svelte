@@ -2,9 +2,9 @@
 	import { mdiAccountPlusOutline } from '@mdi/js'
 	import type { Member } from '@prisma/client'
 	import type { Props as TippyProps } from 'tippy.js'
-	import { createEventDispatcher } from 'svelte'
-	import { InputRelation, urlParam } from '$lib/fuma'
-	import { useForm } from '$lib/fuma'
+	import { InputRelation } from '$lib/fuma-legacy'
+	import { urlParam } from 'fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { enhance } from '$app/forms'
 	import { api } from '$lib/api'
 	import { eventPath } from '$lib/store'
@@ -14,17 +14,26 @@
 		tippyProps?: Partial<TippyProps>
 		class?: string
 		member?: Member | null
+		/** Transféré à InputRelation; remplace `on:input`. */
+		oninput?: (value: Member) => void
+		/** Remplacent les évènements de la version Svelte 4. */
+		onsuccess?: () => void
 	}
 
-	let { periodId, tippyProps = {}, class: klass = '', member = $bindable(null) }: Props = $props()
-
-	const dispatch = createEventDispatcher<{ success: void }>()
+	let {
+		periodId,
+		tippyProps = {},
+		class: klass = '',
+		member = $bindable(null),
+		oninput,
+		onsuccess,
+	}: Props = $props()
 
 	const form = useForm({
 		successMessage: 'Inscription créée',
 		onSuccess: () => {
 			member = null
-			dispatch('success')
+			onsuccess?.()
 		},
 	})
 </script>
@@ -43,11 +52,11 @@
 		placeholder="Inscrire un membre"
 		search={$api.member.search}
 		createTitle="Inviter un nouveau membre"
-		createUrl={$urlParam.with({ form_invite: '{}' })}
+		createUrl={urlParam.with({ form_invite: '{}' })}
 		createIcon={mdiAccountPlusOutline}
 		dropdownProps={{ classWrapper: 'w-full' }}
 		bind:value={member}
-		on:input
+		{oninput}
 		{tippyProps}
 	>
 		{#snippet item({ item })}

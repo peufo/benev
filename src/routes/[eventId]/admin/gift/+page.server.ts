@@ -1,4 +1,4 @@
-import { tryOrFail, parseFormData } from '$lib/server/fuma'
+import { tryOrFail, parseFormData } from '$lib/server/fuma-legacy'
 import { prisma, permission } from '$lib/server'
 
 import { modelGiftCreate } from '$lib/models'

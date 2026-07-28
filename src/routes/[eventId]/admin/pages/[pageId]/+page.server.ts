@@ -1,6 +1,6 @@
 import { modelPageUpdate } from '$lib/models'
 import { fail, redirect } from '@sveltejs/kit'
-import { tryOrFail, parseFormData } from '$lib/server/fuma'
+import { tryOrFail, parseFormData } from '$lib/server/fuma-legacy'
 import { prisma, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 

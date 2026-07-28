@@ -1,6 +1,6 @@
-import { formAction } from '$lib/server/fuma'
+import { formAction } from '$lib/server/fuma-legacy'
 import { error } from '@sveltejs/kit'
-import { z } from '$lib/fuma'
+import { z } from '$lib/fuma-legacy/validation'
 import { prisma, media, permission, uploadImages, jsonOrDbNull } from '$lib/server'
 import { modelEventCreate } from '$lib/models'
 import { defaultEmailModels } from '$lib/email/models'

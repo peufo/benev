@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { MemberProfile } from '$lib/server'
-	import { Form, InputDate, InputText } from '$lib/fuma'
+	import { Form, InputDate, InputText } from '$lib/fuma-legacy'
 	import { modelUserContactUpdate } from '$lib/models'
 
 	interface Props {
@@ -16,7 +16,7 @@
 	model={modelUserContactUpdate}
 	simpleAction
 	class="grid grid-cols-2 gap-4 {klass}"
-	on:success
+	{onsuccess}
 >
 	<InputText
 		key="email"

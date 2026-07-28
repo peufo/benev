@@ -1,5 +1,5 @@
 import type { Member } from '@prisma/client'
-import { z, type ZodObj } from '$lib/fuma'
+import { z, type ZodObj } from '$lib/fuma-legacy/validation'
 
 export const modelMemberSetting = {
 	isNotifiedSubscribe: z.boolean(),

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { derived } from 'svelte/store'
 	import { page } from '$app/stores'
-	import { ButtonCopy, DropDown, Icon } from '$lib/fuma'
+	import { ButtonCopy, Icon } from '$lib/fuma-legacy'
+	import { DropDown } from 'fuma'
 	import { mdiFileDelimitedOutline, mdiTrayArrowDown } from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { toast } from 'svelte-sonner'
 
-	let dropdown: DropDown = $state()
+	let dropdown: DropDown = $state()!
 
 	let urlSubscribesCSV = derived(page, ({ url }) => {
 		// Construit puis sérialisé immédiatement: pas un état réactif.
@@ -33,7 +34,7 @@
 
 	<div class="flex flex-col gap-1">
 		<ButtonCopy
-			on:success={() => {
+			onsuccess={() => {
 				dropdown.hide()
 				toast.success('Données copiées !')
 			}}

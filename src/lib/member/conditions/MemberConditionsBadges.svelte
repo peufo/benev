@@ -4,7 +4,7 @@
 	import { mdiAccountCheckOutline, mdiCardAccountDetailsOutline, mdiHumanMaleBoy } from '@mdi/js'
 	import type { MemberCondition } from '$lib/models'
 	import { CONDITION_OPERATOR_LABEL } from './constants'
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 
 	interface Props {
 		conditions?: MemberCondition[]

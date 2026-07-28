@@ -15,8 +15,8 @@
 		InputText,
 		InputCheckboxs,
 		InputRadio,
-		jsonParse,
-	} from '$lib/fuma'
+	} from '$lib/fuma-legacy'
+	import { jsonParse } from 'fuma'
 	import {
 		mdiAccountCheckOutline,
 		mdiCardAccountDetailsOutline,
@@ -117,7 +117,7 @@
 		</div>
 		<DropDownMenu
 			options={addConditionOptions}
-			on:select={handleAddCondition}
+			onselect={handleAddCondition}
 			tippyProps={{ placement: 'bottom-end' }}
 		>
 			<button type="button" class="btn btn-square">
@@ -153,7 +153,7 @@
 								options={memberFields.map((f) => ({ value: f.id, label: f.name }))}
 								class="label-text whitespace-nowrap"
 								placeholder="Sélectioner un champ"
-								on:select={(e) => {
+								onselect={(e) => {
 									const field = memberFields.find((f) => f.id === e.detail)
 									if (!field) return
 									if (condition.type !== 'profile') return

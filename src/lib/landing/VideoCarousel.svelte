@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy'
 
-	import { tip } from '$lib/fuma'
+	import { tip } from 'fuma'
 	import { slide } from 'svelte/transition'
 	import { activeVideoIndex, reportVisibility } from './videoStore'
 
@@ -20,7 +20,7 @@
 
 	let activeIndex = $state(0)
 	let isLoading = $state(false)
-	let videoElement: HTMLVideoElement = $state()
+	let videoElement: HTMLVideoElement = $state()!
 
 	function observeVisibility(node: HTMLVideoElement) {
 		const observer = new IntersectionObserver(

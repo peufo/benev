@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Icon } from '$lib/fuma'
+	import { Card, Icon } from '$lib/fuma-legacy'
 	import { mdiMapMarkerOutline, mdiOpenInNew } from '@mdi/js'
 	import { InputLocation, mapUrl } from '$lib/location'
 

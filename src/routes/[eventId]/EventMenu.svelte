@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { Page } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { DropDown } from '$lib/fuma'
+	import { DropDown } from 'fuma'
 	import { MenuIcon, GaugeIcon } from '@lucide/svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
-	import { adminTabs } from '$lib/layout/adminTabs'
+	import { adminTabs } from '$lib/layout/adminTabs.svelte'
 
 	interface Props {
 		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
@@ -42,7 +42,7 @@
 		{#if adminIsVisible}
 			<hr class="block lg:hidden" />
 			<h3 class="title-sm pl-3 pt-1">Gestion</h3>
-			{#each $adminTabs as { href, isActive, label, icon: Icon } (href)}
+			{#each adminTabs() as { href, isActive, label, icon: Icon } (href)}
 				<a {href} class="menu-item" class:active={isActive}>
 					<Icon size={20} class="opacity-70" />
 					{label}

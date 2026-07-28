@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { mdiCancel, mdiCheck } from '@mdi/js'
 	import type { PageData } from './$types'
-	import { useForm } from '$lib/fuma'
-	import { Icon, USE_COERCE_BOOLEAN } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
+	import { Icon } from '$lib/fuma-legacy'
+	import { USE_COERCE_BOOLEAN } from 'fuma'
 
 	interface Props {
 		memberProfile: PageData['memberProfile']

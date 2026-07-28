@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import { toast } from 'svelte-sonner'
-	import { Placeholder, listEditable } from '$lib/fuma'
+	import { Placeholder } from '$lib/fuma-legacy'
+	import { listEditable } from 'fuma'
 	import axios from 'axios'
 	import { eventPath } from '$lib/store'
 	import { invalidateAll } from '$app/navigation'

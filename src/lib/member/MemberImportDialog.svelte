@@ -2,7 +2,8 @@
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import { SvelteSet } from 'svelte/reactivity'
-	import { Dialog, Icon, InputRelation } from '$lib/fuma'
+	import { Icon, InputRelation } from '$lib/fuma-legacy'
+	import { Dialog } from 'fuma'
 	import {
 		mdiArrowLeft,
 		mdiAccountMultiplePlus,
@@ -79,8 +80,8 @@
 	let isLoading = $state(false)
 
 	// UI state
-	let offsetWidth: number = $state()
-	let inputRelationEvent: InputRelation<ImportableEvent> = $state()
+	let offsetWidth: number = $state()!
+	let inputRelationEvent: InputRelation<ImportableEvent> = $state()!
 
 	async function loadImportableEvents(): Promise<ImportableEvent[]> {
 		const response = await fetch(`${$eventPath}/admin/members/import`)
@@ -251,7 +252,7 @@
 	})
 </script>
 
-<Dialog bind:dialog class="max-w-4xl overflow-x-hidden" on:close={resetDialog}>
+<Dialog bind:dialog class="max-w-4xl overflow-x-hidden" onClose={resetDialog}>
 	{#snippet header()}
 		<h2 class="title flex items-center gap-2" bind:offsetWidth>
 			<Icon path={mdiAccountMultiplePlus} size={24} />
@@ -270,7 +271,7 @@
 				search={loadImportableEvents}
 				placeholder="Chercher un événement"
 				classList="max-h-80 overflow-y-auto"
-				on:input={({ detail }) => handleSelectEvent(detail.value)}
+				oninput={handleSelectEvent}
 			>
 				{#snippet suggestion({ item })}
 					<div>

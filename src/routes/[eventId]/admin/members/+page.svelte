@@ -3,18 +3,11 @@
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick } from 'svelte'
 	import { goto } from '$app/navigation'
-	import {
-		InputSearch,
-		Pagination,
-		Table,
-		TableViewSelect,
-		Card,
-		component,
-		Drawer,
-		Icon,
-		jsonParse,
-		urlParam,
-	} from '$lib/fuma'
+	import { InputSearch, Table, TableViewSelect, Card, component, Icon } from '$lib/fuma-legacy'
+	import { Drawer } from 'fuma'
+	import { Pagination } from 'fuma'
+	import { urlParam } from 'fuma'
+	import { jsonParse } from 'fuma'
 	import { MemberActions, MemberCreateSubscribeDialog } from '$lib/member'
 	import { getMembersTableFields } from './membersTableFields'
 	import MembersExport from './MembersExport.svelte'
@@ -38,7 +31,7 @@
 		}
 	})
 
-	let createSubscribeDialog: HTMLDialogElement = $state()
+	let createSubscribeDialog: HTMLDialogElement = $state()!
 	let selectedMember: Member | undefined = $state(undefined)
 
 	async function handleFieldCreated(field: Field) {
@@ -63,13 +56,13 @@
 				<div class="grow"></div>
 
 				<!-- SHOW MEMBERS STATS -->
-				<a href={$urlParam.with({ members_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
+				<a href={urlParam.with({ members_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
 					<Icon path={mdiSigma} title="Afficher le résumé des membres" size={18} />
 				</a>
 
 				<!-- RESET FILTER -->
 				<a
-					href={$urlParam.without(...tableFields.map((f) => f.key), 'skip', 'take')}
+					href={urlParam.without(...tableFields.map((f) => f.key), 'skip', 'take')}
 					class="btn btn-square btn-sm"
 				>
 					<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
@@ -84,7 +77,7 @@
 				<a
 					type="button"
 					class="btn btn-square btn-sm"
-					href={$urlParam.with({ form_invite: '{}' })}
+					href={urlParam.with({ form_invite: '{}' })}
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
 				>
@@ -106,7 +99,7 @@
 							},
 						})}
 					placholder="Aucun membre trouvé"
-					onCreateField={() => goto($urlParam.with({ form_field: '{}' }))}
+					onCreateField={() => goto(urlParam.with({ form_field: '{}' }))}
 				/>
 			{/key}
 
@@ -140,7 +133,7 @@
 >
 	{#snippet children({ close })}
 		{#if data.memberProfile}
-			<MemberProfileForm memberProfile={data.memberProfile} on:success={() => close()} />
+			<MemberProfileForm memberProfile={data.memberProfile} onsuccess={() => close()} />
 		{/if}
 	{/snippet}
 </Drawer>

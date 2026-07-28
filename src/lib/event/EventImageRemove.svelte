@@ -2,7 +2,7 @@
 	import { invalidateAll } from '$app/navigation'
 	import { mdiTrashCanOutline } from '@mdi/js'
 	import axios from 'axios'
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 	import { toast } from 'svelte-sonner'
 
 	interface Props {

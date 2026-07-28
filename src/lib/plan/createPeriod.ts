@@ -3,8 +3,7 @@ import type { Dayjs } from '$lib/dayjs'
 import { formatRangeHour } from '$lib/formatRange'
 import type { Period, Team } from '@prisma/client'
 import { goto } from '$app/navigation'
-import { urlParam } from '$lib/fuma'
-import { get } from 'svelte/store'
+import { urlParam } from 'fuma'
 import { page } from '$app/stores'
 import { time } from './utils'
 import type { Plan } from './types'
@@ -97,7 +96,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 				start: _start.toDate(),
 				end: _end.toDate(),
 			}
-			const urlCreatePeriod = get(urlParam).with({ form_period: JSON.stringify(newPeriod) })
+			const urlCreatePeriod = urlParam.with({ form_period: JSON.stringify(newPeriod) })
 			preserveGhostOnLocationChange = true
 			await goto(urlCreatePeriod)
 			preserveGhostOnLocationChange = false

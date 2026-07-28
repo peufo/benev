@@ -1,4 +1,4 @@
-import { toTuple, z, type ZodObj } from '$lib/fuma'
+import { toTuple, z, type ZodObj } from '$lib/fuma-legacy/validation'
 import { PAGE_TYPE } from '$lib/constant'
 import type { Prisma } from '@prisma/client'
 

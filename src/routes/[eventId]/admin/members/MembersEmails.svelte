@@ -2,7 +2,7 @@
 	import { mdiEmailMultipleOutline } from '@mdi/js'
 
 	import { page } from '$app/state'
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 	import { api } from '$lib/api'
 
 	const getMembersEmails = async () => {

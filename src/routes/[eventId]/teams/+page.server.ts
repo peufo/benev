@@ -1,5 +1,6 @@
-import { z } from '$lib/fuma'
-import { formAction, parseQuery } from '$lib/server/fuma'
+import { z } from '$lib/fuma-legacy/validation'
+import { formAction } from '$lib/server/fuma-legacy'
+import { parseQuery } from 'fuma/server'
 import { useAddTeamComputedValues, permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { modelTeam, modelTeamUpdate } from '$lib/models'

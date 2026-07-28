@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Member } from '@prisma/client'
 	import { mdiAlertOutline, mdiEmailOutline, mdiPhoneOutline } from '@mdi/js'
-	import { Icon, DropDown } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { DropDown } from 'fuma'
 	import { Avatar } from '$lib/me'
 	interface Props {
 		leaders: Member[]

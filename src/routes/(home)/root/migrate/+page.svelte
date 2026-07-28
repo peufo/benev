@@ -1,6 +1,6 @@
 <script lang="ts">
 	// import { toast } from 'svelte-sonner'
-	import { Card } from '$lib/fuma'
+	import { Card } from '$lib/fuma-legacy'
 	// import { enhance } from '$app/forms'
 </script>
 

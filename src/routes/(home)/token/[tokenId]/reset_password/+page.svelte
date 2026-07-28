@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { enhance } from '$app/forms'
-	import { InputPassword } from '$lib/fuma'
-	import { useForm } from '$lib/fuma'
+	import { InputPassword } from '$lib/fuma-legacy'
+	import { useForm } from '$lib/fuma-legacy/validation'
 
 	import { Oauth } from '$lib/me'
 

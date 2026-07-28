@@ -1,22 +1,21 @@
 <script lang="ts">
 	import { Check } from '@lucide/svelte'
-	import { createEventDispatcher } from 'svelte'
 	import type { EventTier } from '@prisma/client'
 	import { EVENT_TIER } from '$lib/constant'
 
 	interface Props {
 		value?: string
+		/** Remplacent les évènements de la version Svelte 4. */
+		onchange?: (value: string) => void
 	}
 
-	let { value = $bindable('basic') }: Props = $props()
-
-	const dispatch = createEventDispatcher<{ change: string }>()
+	let { value = $bindable('basic'), onchange }: Props = $props()
 
 	const plans: EventTier[] = ['basic', 'standard', 'premium']
 
 	function select(plan: EventTier) {
 		value = plan
-		dispatch('change', plan)
+		onchange?.(plan)
 	}
 </script>
 

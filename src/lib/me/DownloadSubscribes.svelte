@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { eventPath } from '$lib/store'
-	import { tip } from '$lib/fuma'
+	import { tip } from 'fuma'
 	import { CalendarArrowUp } from '@lucide/svelte'
 	import { page } from '$app/state'
 

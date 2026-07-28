@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/fuma'
-	import { DialogConfirm } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
+	import { DialogConfirm } from '$lib/fuma-legacy'
 
 	const form = useForm()
 </script>

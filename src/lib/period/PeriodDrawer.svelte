@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy'
-
-	import { Drawer } from '$lib/fuma'
+	// fuma 2 n'exporte pas `transitionX` (défini dans le module de son Drawer mais
+	// réexporté par aucun barrel): ce Drawer-ci reste sur la version rapatriée.
+	import Drawer from '$lib/fuma-legacy/ui/drawer/Drawer.svelte'
 	import { page } from '$app/stores'
 	import PeriodForm from './PeriodForm.svelte'
 	import type { Member } from '@prisma/client'
@@ -23,9 +23,9 @@
 
 	let member: Member | null = $state(null)
 
-	let transitionX = $state(0)
 	let noOverlay = $derived(!$page.route.id?.startsWith('/[eventId]/admin/plan'))
-	run(() => {
+	let transitionX = $state(0)
+	$effect(() => {
 		if (noOverlay) $periodDrawerTransitionX = transitionX
 	})
 </script>
@@ -41,8 +41,8 @@
 		<PeriodForm
 			bind:this={periodForm}
 			{period}
-			on:success={() => noOverlay || close()}
-			on:delete={() => noOverlay || close()}
+			onsuccess={() => noOverlay || close()}
+			ondelete={() => noOverlay || close()}
 			disableRedirect={!noOverlay}
 		/>
 

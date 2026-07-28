@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 	import { mdiAccountOutline } from '@mdi/js'
 	import Avatar from '$lib/me/Avatar.svelte'
 

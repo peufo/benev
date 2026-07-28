@@ -11,15 +11,15 @@
 	import {
 		Card,
 		InputSearch,
-		Pagination,
 		Table,
 		type TableField,
 		TableViewSelect,
-		urlParam,
 		Icon,
-		Drawer,
 		component,
-	} from '$lib/fuma'
+	} from '$lib/fuma-legacy'
+	import { Drawer } from 'fuma'
+	import { Pagination } from 'fuma'
+	import { urlParam } from 'fuma'
 	import { MemberCell } from '$lib/member'
 	import SubscribesImport from './SubscribesImport.svelte'
 	import SubscribesStats from './SubscribesStats.svelte'
@@ -143,13 +143,13 @@
 				<div class="grow"></div>
 
 				<!-- SHOW MEMBERS STATS -->
-				<a href={$urlParam.with({ subscribes_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
+				<a href={urlParam.with({ subscribes_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
 					<Icon path={mdiSigma} title="Afficher le résumé des inscriptions" size={18} />
 				</a>
 
 				<!-- RESET FILTERS -->
 				<a
-					href={$urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
+					href={urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
 					class="btn btn-square btn-sm"
 				>
 					<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />

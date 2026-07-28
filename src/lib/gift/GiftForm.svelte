@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { Gift, GiftCondition } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { GIFT_CONDITION_MODE } from '$lib/constant'
 	import { enhance } from '$app/forms'
-	import { InputRadio, InputText } from '$lib/fuma'
+	import { InputRadio, InputText } from '$lib/fuma-legacy'
 	import GiftConditions from './GiftConditions.svelte'
 
 	type GiftWithConditions = Gift & { conditions: GiftCondition[] }

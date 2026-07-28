@@ -1,6 +1,6 @@
 <script lang="ts">
 	import MemberDeleteForm from './MemberDeleteForm.svelte'
-	import { InputBoolean, useForm } from '$lib/fuma'
+	import { InputBoolean, useForm } from '$lib/fuma-legacy'
 	import type { MemberWithComputedValues } from '$lib/server'
 	import { autoSubmit } from '$lib/action'
 

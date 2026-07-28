@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms'
 	import { mdiCheck } from '@mdi/js'
 	import { AlertCircle, Clock, HelpCircle, Send } from '@lucide/svelte'
-	import { Card, Icon, InputText, InputTextarea, useForm } from '$lib/fuma'
+	import { Card, Icon, InputText, InputTextarea, useForm } from '$lib/fuma-legacy'
 
 	const form = useForm({
 		successMessage: 'Merci pour ton message',

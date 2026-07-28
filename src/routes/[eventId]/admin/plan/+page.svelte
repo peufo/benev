@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { urlParam } from '$lib/fuma'
+	import { urlParam } from 'fuma'
 	import { PlanX, PlanY } from '$lib/plan'
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
 	import { MilestoneDrawer } from '$lib/milestone'
@@ -14,7 +14,7 @@
 	class="overflow-hidden rounded-2xl border footer-hidden flex flex-col"
 >
 	<PlanHeader {plan} teams={data.teams} views={data.views} class="border-b" />
-	{#if $urlParam.hasValue('axis', 'y')}
+	{#if urlParam.has('axis', 'y')}
 		<PlanY {plan} bind:teams={data.teams_periods} />
 	{:else}
 		<PlanX {plan} bind:teams={data.teams_periods} />

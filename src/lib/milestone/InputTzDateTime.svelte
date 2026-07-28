@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type Dayjs } from '$lib/dayjs'
-	import { USE_COERCE_DATE } from '$lib/fuma'
+	import { USE_COERCE_DATE } from 'fuma'
 
 	interface Props {
 		label: string

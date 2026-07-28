@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
-	import { createEventDispatcher, onMount } from 'svelte'
-	import { useForm, Icon, InputText, InputDate, FormControl } from '$lib/fuma'
+	import { onMount } from 'svelte'
+	import { useForm, Icon, InputText, InputDate, FormControl } from '$lib/fuma-legacy'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 	import type { User } from '@prisma/client'
@@ -10,18 +10,18 @@
 		user: User
 		successReset?: boolean
 		successUpdate?: boolean
+		/** Remplacent les évènements de la version Svelte 4. */
+		onsuccess?: () => void
 	}
 
-	let { user, successReset = false, successUpdate = false }: Props = $props()
-
-	const dispatch = createEventDispatcher<{ success: void }>()
+	let { user, successReset = false, successUpdate = false, onsuccess }: Props = $props()
 	let emailError = getEmailError()
 	const formProfile = useForm({
 		successReset,
 		successUpdate,
 		successMessage: 'Profil sauvegardé',
 		onSuccess() {
-			dispatch('success')
+			onsuccess?.()
 		},
 	})
 

@@ -1,28 +1,28 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte'
-
 	import type { Event, Page as TPage } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import { eventPath } from '$lib/store'
-	import { ButtonDelete, tiptapParser, urlParam } from '$lib/fuma'
+	import { tiptapParser } from '$lib/fuma-legacy'
+	import { ButtonDelete } from 'fuma'
+	import { urlParam } from 'fuma'
 
 	interface Props {
 		event: Event
 		charter: TPage | null
 		successReset?: boolean
 		successUpdate?: boolean
+		/** Remplacent les évènements de la version Svelte 4. */
+		onsuccess?: () => void
 	}
 
-	let { event, charter, successReset = false, successUpdate = false }: Props = $props()
-
-	const dispatch = createEventDispatcher<{ close: void; success: void }>()
+	let { event, charter, successReset = false, successUpdate = false, onsuccess }: Props = $props()
 
 	const form = useForm({
 		successReset,
 		successUpdate,
-		onSuccess: () => dispatch('success'),
+		onSuccess: () => onsuccess?.(),
 	})
 </script>
 
@@ -56,7 +56,7 @@
 			class="contents"
 			use:enhance={form.submit}
 		>
-			<input type="hidden" name="redirectTo" value={$urlParam.with({ section: 'profile' })} />
+			<input type="hidden" name="redirectTo" value={urlParam.with({ section: 'profile' })} />
 			<button class="btn btn-primary">Oui je le veux !</button>
 		</form>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { Dialog } from '$lib/fuma'
-	import { useForm } from '$lib/fuma'
+	import { Dialog } from 'fuma'
+	import { useForm } from '$lib/fuma-legacy/validation'
 	import type { Event } from '@prisma/client'
 
 	interface Props {
@@ -9,7 +9,7 @@
 	}
 
 	let { event }: Props = $props()
-	let dialog: HTMLDialogElement = $state()
+	let dialog: HTMLDialogElement = $state()!
 
 	const form = useForm({
 		successMessage: 'Évènement supprimé',

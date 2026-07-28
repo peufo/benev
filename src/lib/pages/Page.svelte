@@ -5,7 +5,7 @@
 	import { eventPath } from '$lib/store/index.js'
 
 	import type { Page } from '@prisma/client'
-	import { ButtonCopy, Icon, tiptapParser } from '$lib/fuma'
+	import { ButtonCopy, Icon, tiptapParser } from '$lib/fuma-legacy'
 
 	import type { MemberWithComputedValues } from '$lib/server'
 	import PageLayout from './PageLayout.svelte'

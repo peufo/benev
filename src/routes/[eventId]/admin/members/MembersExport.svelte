@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { ButtonCopy, DropDown, Icon } from '$lib/fuma'
+	import { ButtonCopy, Icon } from '$lib/fuma-legacy'
+	import { DropDown } from 'fuma'
 	import { mdiCardAccountMailOutline, mdiFileDelimitedOutline, mdiTrayArrowDown } from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { toast } from 'svelte-sonner'
 	import { derived } from 'svelte/store'
 
-	let dropdown: DropDown = $state()
+	let dropdown: DropDown = $state()!
 	type Mode = 'csv' | 'vcard'
 
 	let urlMembers = derived(page, ({ url }) => {
@@ -34,7 +35,7 @@
 
 	<div class="flex flex-col gap-1">
 		<ButtonCopy
-			on:success={() => {
+			onsuccess={() => {
 				dropdown.hide()
 				toast.success('Données copiées !')
 			}}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InputBoolean, Placeholder, type ComponentAndProps } from '$lib/fuma'
+	import { InputBoolean, Placeholder, type ComponentAndProps } from '$lib/fuma-legacy'
 
 	type Item = $$Generic<{ id: string }>
 	interface Props {
@@ -41,7 +41,7 @@
 		<InputBoolean
 			key="{key}_all"
 			value={_items.filter((p) => p.selected).length === items.length}
-			on:change={({ detail: selected }) => (_items = mapSelected(_items, selected))}
+			onchange={(selected) => (_items = mapSelected(_items, selected))}
 			label={labelAll}
 			labelPosition="right"
 		/>

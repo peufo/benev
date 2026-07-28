@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { urlParam } from '$lib/fuma'
+	import { urlParam } from 'fuma'
 	import { invalidateAll, goto } from '$app/navigation'
 	import { page } from '$app/stores'
 
@@ -22,7 +22,7 @@
 	const handleCheckoutNotification = async () => {
 		isNewCheckoutAwaited = false
 		if (!removeCheckoutId) invalidateAll()
-		else goto($urlParam.without('checkoutId'), { noScroll: true, invalidateAll: true })
+		else goto(urlParam.without('checkoutId'), { noScroll: true, invalidateAll: true })
 	}
 
 	function awaitCheckoutNotification() {

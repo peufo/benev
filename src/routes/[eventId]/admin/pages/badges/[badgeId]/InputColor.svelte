@@ -10,7 +10,7 @@
 
 	let { name = '', label = name, value = $bindable(getNextColor()) }: Props = $props()
 
-	let input: HTMLInputElement = $state()
+	let input: HTMLInputElement = $state()!
 </script>
 
 <button

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Media } from '@prisma/client'
-	import { PlaceholderImage, tip } from '$lib/fuma'
+	import { PlaceholderImage } from '$lib/fuma-legacy'
+	import { tip } from 'fuma'
 	import { Trash2Icon } from '@lucide/svelte'
 	import { SelectMedia } from '$lib/material'
 
@@ -59,7 +60,7 @@
 
 <SelectMedia
 	bind:this={selectMedia}
-	on:select={({ detail: media }) => {
+	onselect={(media) => {
 		value = media.id
 		oninput(media)
 	}}

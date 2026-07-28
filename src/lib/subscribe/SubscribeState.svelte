@@ -6,7 +6,7 @@
 		mdiTrashCanOutline,
 	} from '@mdi/js'
 	import type { Subscribe } from '@prisma/client'
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 
 	interface Props {
 		class?: string

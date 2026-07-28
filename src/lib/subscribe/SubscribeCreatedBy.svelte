@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon } from '$lib/fuma'
+	import { Icon } from '$lib/fuma-legacy'
 	import { mdiAccountCircleOutline, mdiShieldAccountOutline } from '@mdi/js'
 
 	interface Props {

@@ -1,4 +1,4 @@
-import { z, type ZodObj, type SuperRefinement } from '$lib/fuma'
+import { z, type ZodObj, type SuperRefinement } from '$lib/fuma-legacy/validation'
 import type { Prisma } from '@prisma/client'
 
 export const modelPeriodCreate = {

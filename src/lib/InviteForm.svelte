@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Form, InputText } from '$lib/fuma'
+	import { Form, InputText } from '$lib/fuma-legacy'
 	import z from 'zod'
 	import { slide } from 'svelte/transition'
 	import { toast } from 'svelte-sonner'
@@ -49,10 +49,10 @@
 		successUpdate: false,
 		onSuccess,
 	}}
-	on:created
-	on:updated
-	on:deleted
-	on:success
+	{oncreated}
+	{onupdated}
+	{ondeleted}
+	{onsuccess}
 >
 	<div class="grid grid-cols-2 gap-4 my-6">
 		<InputText
@@ -62,7 +62,7 @@
 			classWrapper="flex items-center"
 			input={{ autocomplete: 'off' }}
 			bind:value={email}
-			on:input={handleEmailInput}
+			oninput={handleEmailInput}
 		>
 			{#snippet append()}
 				<div>

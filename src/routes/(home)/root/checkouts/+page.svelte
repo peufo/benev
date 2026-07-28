@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Card, Icon, Pagination } from '$lib/fuma'
+	import { Card, Icon } from '$lib/fuma-legacy'
+	import { Pagination } from 'fuma'
 	import { mdiPlus } from '@mdi/js'
 
 	let { data } = $props()

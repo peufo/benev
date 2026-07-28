@@ -2,7 +2,7 @@
 	import type { GiftConditionType, GiftCondition as TGiftEdition } from '@prisma/client'
 	import GiftCondition from './GiftCondition.svelte'
 	import { GIFT_CONDITION_TYPE } from '$lib/constant'
-	import { InputSelect } from '$lib/fuma'
+	import { InputSelect } from '$lib/fuma-legacy'
 
 	interface Props {
 		conditions?: Partial<TGiftEdition>[]
@@ -33,7 +33,7 @@
 
 	<InputSelect
 		options={GIFT_CONDITION_TYPE}
-		on:select={addCondition}
+		onselect={addCondition}
 		bind:value={conditionType}
 		class="btn-square"
 		placeholder="Ajouter un condition"
