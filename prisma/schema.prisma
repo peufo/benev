@@ -115,17 +115,15 @@ model Event {
   notifiedQuota90  DateTime?
   notifiedQuota100 DateTime?
 
-  description  String?
-  icon         String?
-  email        String?
-  phone        String?
-  address      String?
-  addressLabel String?
+  description String?
+  icon        String?
+  email       String?
+  phone       String?
   /// [Location]
-  location     Json?
-  web          String?
-  facebook     String?
-  instagram    String?
+  location    Json?
+  web         String?
+  facebook    String?
+  instagram   String?
 
   // Theme
   backgroundColor   String  @default("#ffffff")

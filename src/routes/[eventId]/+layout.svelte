@@ -200,10 +200,6 @@
 			<FooterLink link={mapUrl(data.event.location)} icon={mdiMapMarkerOutline}>
 				{data.event.location.label}
 			</FooterLink>
-		{:else}
-			<FooterLink link={data.event.address} icon={mdiMapMarkerOutline} let:label>
-				{data.event.addressLabel || label}
-			</FooterLink>
 		{/if}
 	</div>
 </Footer>
