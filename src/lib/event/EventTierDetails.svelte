@@ -12,8 +12,8 @@
 		ratio >= 0.9
 			? 'text-error progress-error'
 			: ratio >= 0.8
-			? 'text-warning progress-warning'
-			: 'progress-success'
+				? 'text-warning progress-warning'
+				: 'progress-success'
 </script>
 
 <div class="card bg-base-100 shadow">

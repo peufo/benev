@@ -7,8 +7,7 @@
 	import { toast } from 'svelte-sonner'
 
 	export let onSuccess:
-		| ((action: URL, data?: Record<string, unknown> | undefined) => unknown)
-		| undefined = undefined
+		((action: URL, data?: Record<string, unknown> | undefined) => unknown) | undefined = undefined
 
 	const { enhance } = useForm({
 		onSuccess,

@@ -25,7 +25,7 @@
 							coords.lon
 						}(${encodeURIComponent(label)})`,
 					},
-			  ]
+				]
 			: []
 </script>
 

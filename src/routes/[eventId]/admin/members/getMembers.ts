@@ -290,31 +290,37 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 							fieldId: field.id,
 							fieldName: field.name,
 							fieldType: field.type,
-							distribution: members.reduce((acc, { profileJson }) => {
-								const value = profileJson[field.id]
-								if (value === undefined) return acc
-								const keys = Array.isArray(value) ? value : [String(value)]
-								keys.forEach((key) => {
-									if (!key) return
-									if (acc[key]) acc = { ...acc, [key]: acc[key] + 1 }
-									else acc = { ...acc, [key]: 1 }
-								})
-								return acc
-							}, {} as Record<string, number>),
+							distribution: members.reduce(
+								(acc, { profileJson }) => {
+									const value = profileJson[field.id]
+									if (value === undefined) return acc
+									const keys = Array.isArray(value) ? value : [String(value)]
+									keys.forEach((key) => {
+										if (!key) return
+										if (acc[key]) acc = { ...acc, [key]: acc[key] + 1 }
+										else acc = { ...acc, [key]: 1 }
+									})
+									return acc
+								},
+								{} as Record<string, number>
+							),
 						}
 					} else if (field.type === 'boolean') {
 						return {
 							fieldId: field.id,
 							fieldName: field.name,
 							fieldType: field.type,
-							distribution: members.reduce((acc, { profileJson }) => {
-								const value = profileJson[field.id]
-								if (typeof value !== 'boolean') return acc
-								const key = value ? 'true' : 'false'
-								if (acc[key]) acc = { ...acc, [key]: acc[key] + 1 }
-								else acc = { ...acc, [key]: 1 }
-								return acc
-							}, {} as Record<string, number>),
+							distribution: members.reduce(
+								(acc, { profileJson }) => {
+									const value = profileJson[field.id]
+									if (typeof value !== 'boolean') return acc
+									const key = value ? 'true' : 'false'
+									if (acc[key]) acc = { ...acc, [key]: acc[key] + 1 }
+									else acc = { ...acc, [key]: 1 }
+									return acc
+								},
+								{} as Record<string, number>
+							),
 						}
 					}
 				})

@@ -56,8 +56,8 @@
 							? 'fill-blue-500'
 							: 'fill-success'
 						: subscribe.member.isValidedByUser
-						? 'fill-warning'
-						: 'fill-error'}"
+							? 'fill-warning'
+							: 'fill-error'}"
 				/>
 			</li>
 		{/each}

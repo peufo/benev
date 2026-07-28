@@ -22,8 +22,8 @@
 		"test-gen": "playwright codegen localhost:5173",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && bun run lint",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write .",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
 		"dev:stripe": "stripe listen --forward-to localhost:5173/me/checkouts/validation"
 	},
 	"devDependencies": {
@@ -44,8 +44,8 @@
 		"eslint-plugin-svelte": "^3.22.0",
 		"globals": "^17.8.0",
 		"postcss": "^8.4.31",
-		"prettier": "^2.8.8",
-		"prettier-plugin-svelte": "^2.10.1",
+		"prettier": "^3.9.6",
+		"prettier-plugin-svelte": "^3.5.1",
 		"prisma": "^6.19.3",
 		"prisma-json-types-generator": "^3.6.2",
 		"svelte": "^4.2.18",

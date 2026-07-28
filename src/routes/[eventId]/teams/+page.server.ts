@@ -81,7 +81,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 					where: { eventId },
 					select: { id: true, name: true },
 					orderBy: { position: 'asc' },
-			  })
+				})
 			: []
 
 	return { teams, allTeams, teamsHiddenCount }

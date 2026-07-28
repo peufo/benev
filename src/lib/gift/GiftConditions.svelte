@@ -19,8 +19,8 @@
 			{conditions.length === 0
 				? 'Pas de condition'
 				: conditions.length === 1
-				? 'Une condition'
-				: `${conditions.length} conditions`}
+					? 'Une condition'
+					: `${conditions.length} conditions`}
 		</h3>
 		{#if conditions.length === 0}
 			<span class="text-sm opacity-75">Touts les membres ont droit à un exemplaire</span>

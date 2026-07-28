@@ -3,22 +3,21 @@
 type GenericObject = Record<PropertyKey, unknown>
 
 type Join<L extends PropertyKey | undefined, R extends PropertyKey | undefined> = L extends
-	| string
-	| number
+	string | number
 	? R extends string | number
 		? `${L}.${R}`
 		: L
 	: R extends string | number
-	? R
-	: undefined
+		? R
+		: undefined
 
 type Union<L extends unknown | undefined, R extends unknown | undefined> = L extends undefined
 	? R extends undefined
 		? undefined
 		: R
 	: R extends undefined
-	? L
-	: L | R
+		? L
+		: L | R
 
 /**
  * NestedPaths
@@ -30,7 +29,7 @@ type Union<L extends unknown | undefined, R extends unknown | undefined> = L ext
 export type NestedPaths<
 	T extends GenericObject,
 	Prev extends PropertyKey | undefined = undefined,
-	Path extends PropertyKey | undefined = undefined
+	Path extends PropertyKey | undefined = undefined,
 > = {
 	[K in keyof T]: Required<T>[K] extends GenericObject
 		? NestedPaths<Required<T>[K], Union<Prev, Path>, Join<Path, K>>
