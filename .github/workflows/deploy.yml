@@ -24,12 +24,29 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
+    # `svelte-kit sync` type les clés de $env/dynamic d'après l'environnement présent:
+    # une variable absente devient `string | undefined` et fait échouer `svelte-check`.
+    # Toutes les clés du .env.example doivent donc être définies, même en factice.
     env:
       DATABASE_URL: mysql://root:root@127.0.0.1:3306/benev_test
       EMAIL_DISABLED: 'true'
       MEDIA_DIR: /tmp/benev-media
       ROOT_USER: root@benevio.test
       BODY_SIZE_LIMIT: '10000000'
+      SMTP_HOST: localhost
+      SMTP_PORT: '1025'
+      SMTP_USER: ci@benevio.test
+      SMTP_PASS: ci
+      GITHUB_CLIENT_ID: ci
+      GITHUB_CLIENT_SECRET: ci
+      GOOGLE_CLIENT_ID: ci
+      GOOGLE_CLIENT_SECRET: ci
+      PRIVATE_STRIPE_KEY: sk_test_ci
+      PRIVATE_STRIPE_WEBHOOK_KEY: whsec_ci
+      PUBLIC_STRIPE_KEY: pk_test_ci
+      PUBLIC_PRICE_STANDARD: price_ci_standard
+      PUBLIC_PRICE_PREMIUM: price_ci_premium
+      PUBLIC_PRICE_STANDARD_TO_PREMIUM: price_ci_standard_to_premium
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
