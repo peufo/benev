@@ -1,8 +1,12 @@
 <script lang="ts">
-	import { Icon, tip } from 'fuma'
+	import { Icon, tip } from '$lib/fuma'
 	import { mdiAlertOutline } from '@mdi/js'
 
-	export let isAbsent: boolean
+	interface Props {
+		isAbsent: boolean;
+	}
+
+	let { isAbsent }: Props = $props();
 </script>
 
 {#if isAbsent}

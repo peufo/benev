@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { env } from '$env/dynamic/public'
-	import { InputNumber } from 'fuma'
+	import { InputNumber } from '$lib/fuma'
 
 	const products = [
 		{ priceId: env.PUBLIC_PRICE_STANDARD, name: 'Plan standard' },

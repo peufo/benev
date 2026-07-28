@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropDown, Icon, Card, urlParam, Drawer } from 'fuma'
+	import { DropDown, Icon, Card, urlParam, Drawer } from '$lib/fuma'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiArrowLeft,
@@ -27,9 +27,9 @@
 	} from '$lib/member'
 	import MembersBadges from '../MembersBadges.svelte'
 
-	export let data
+	let { data } = $props();
 
-	let createSubscribeDialog: HTMLDialogElement
+	let createSubscribeDialog: HTMLDialogElement = $state()
 </script>
 
 <Card class="max-w-3xl mx-auto w-full" bodyClass="gap-12">
@@ -65,29 +65,31 @@
 				badges={data.event.badges}
 			/>
 
-			<div class="grow" />
+			<div class="grow"></div>
 
 			<MemberAbsences subscribes={data.memberProfile.subscribes} />
 			<MemberProfileStatus member={data.memberProfile} />
 
 			{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}
 				<DropDown hideOnBlur tippyProps={{ arrow: true }}>
-					<button slot="activator" class="btn btn-sm ml-2 whitespace-nowrap">
-						<MemberRole roles={data.memberProfile.roles} mode="contents" />
-						{#if data.memberProfile.isValidedByEvent}
-							<Icon
-								path={mdiCheck}
-								class="fill-success"
-								title="Membre approuvé par l'organisation"
-							/>
-						{:else}
-							<Icon
-								path={mdiClose}
-								class="fill-error"
-								title="Membre non approuvé par l'organisation"
-							/>
-						{/if}
-					</button>
+					{#snippet activator()}
+										<button  class="btn btn-sm ml-2 whitespace-nowrap">
+							<MemberRole roles={data.memberProfile.roles} mode="contents" />
+							{#if data.memberProfile.isValidedByEvent}
+								<Icon
+									path={mdiCheck}
+									class="fill-success"
+									title="Membre approuvé par l'organisation"
+								/>
+							{:else}
+								<Icon
+									path={mdiClose}
+									class="fill-error"
+									title="Membre non approuvé par l'organisation"
+								/>
+							{/if}
+						</button>
+									{/snippet}
 
 					<MemberIsValidedByEventForm memberProfile={data.memberProfile} />
 
@@ -134,7 +136,7 @@
 			<button
 				type="button"
 				class="btn btn-square btn-sm ml-2"
-				on:click={() => createSubscribeDialog.showModal()}
+				onclick={() => createSubscribeDialog.showModal()}
 			>
 				<Icon
 					path={mdiClipboardTextOutline}
@@ -165,7 +167,9 @@
 	title="Modifier le coordonnées de {data.memberProfile.firstName}"
 	key="form_member_contact"
 	classBody="pt-4"
-	let:close
+	
 >
-	<MemberContactForm member={data.memberProfile} on:success={() => close()} />
+	{#snippet children({ close })}
+		<MemberContactForm member={data.memberProfile} on:success={() => close()} />
+	{/snippet}
 </Drawer>

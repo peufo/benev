@@ -1,4 +1,4 @@
-import { formAction } from 'fuma/server'
+import { formAction } from '$lib/server/fuma'
 import { prisma, permission } from '$lib/server'
 
 import { modelEventState } from '$lib/models'

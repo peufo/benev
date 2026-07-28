@@ -4,7 +4,7 @@
 	import EventStateForm from './EventStateForm.svelte'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 
-	export let data
+	let { data } = $props();
 </script>
 
 <OnlyAdmin>

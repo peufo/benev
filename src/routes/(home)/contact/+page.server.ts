@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { tryOrFail, parseFormData } from 'fuma/server'
-import { z } from 'fuma/validation'
+import { tryOrFail, parseFormData } from '$lib/server/fuma'
+import { z } from '$lib/fuma'
 import { getUserIdOrRedirect, prisma, sendEmail, sendEmailComponent } from '$lib/server'
 import { env } from '$env/dynamic/private'
 import { EmailBasic } from '$lib/email'

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
-	import { Dialog, Icon, InputRelation } from 'fuma'
+	import { Dialog, Icon, InputRelation } from '$lib/fuma'
 	import {
 		mdiArrowLeft,
 		mdiAccountMultiplePlus,
@@ -11,8 +11,12 @@
 	import { eventPath } from '$lib/store'
 	import { toast } from 'svelte-sonner'
 
-	export let dialog: HTMLDialogElement
-	export let title = 'Importer des membres'
+	interface Props {
+		dialog: HTMLDialogElement;
+		title?: string;
+	}
+
+	let { dialog = $bindable(), title = 'Importer des membres' }: Props = $props();
 
 	interface ImportableEvent {
 		id: string
@@ -62,18 +66,18 @@
 	}
 
 	// State management
-	let step: 'events' | 'members' | 'fields' | 'confirm' | 'results' = 'events'
-	let selectedEvent: ImportableEvent | null = null
-	let sourceMembers: SourceMember[] = []
-	let selectedMemberIds: Set<string> = new Set()
-	let targetFields: Field[] = []
-	let fieldMappings: FieldMapping[] = []
-	let importResults: ImportResults | null = null
-	let isLoading = false
+	let step: 'events' | 'members' | 'fields' | 'confirm' | 'results' = $state('events')
+	let selectedEvent: ImportableEvent | null = $state(null)
+	let sourceMembers: SourceMember[] = $state([])
+	let selectedMemberIds: Set<string> = $state(new Set())
+	let targetFields: Field[] = $state([])
+	let fieldMappings: FieldMapping[] = $state([])
+	let importResults: ImportResults | null = $state(null)
+	let isLoading = $state(false)
 
 	// UI state
-	let offsetWidth: number
-	let inputRelationEvent: InputRelation<ImportableEvent>
+	let offsetWidth: number = $state()
+	let inputRelationEvent: InputRelation<ImportableEvent> = $state()
 
 	async function loadImportableEvents(): Promise<ImportableEvent[]> {
 		const response = await fetch(`${$eventPath}/admin/members/import`)
@@ -245,10 +249,12 @@
 </script>
 
 <Dialog bind:dialog class="max-w-4xl overflow-x-hidden" on:close={resetDialog}>
-	<h2 slot="header" class="title flex items-center gap-2" bind:offsetWidth>
-		<Icon path={mdiAccountMultiplePlus} size={24} />
-		{title}
-	</h2>
+	{#snippet header()}
+		<h2  class="title flex items-center gap-2" bind:offsetWidth>
+			<Icon path={mdiAccountMultiplePlus} size={24} />
+			{title}
+		</h2>
+	{/snippet}
 
 	{#if step === 'events'}
 		<div class="content" in:fly={{ x: -offsetWidth, duration: 250 }}>
@@ -263,23 +269,25 @@
 				classList="max-h-80 overflow-y-auto"
 				on:input={({ detail }) => handleSelectEvent(detail.value)}
 			>
-				<svelte:fragment slot="suggestion" let:item>
-					<div>
-						<div class="font-medium">{item.name}</div>
-						<div class="text-sm text-gray-500">
-							{item.memberCount} membres
-							{#if item.startDate}
-								• {new Date(item.startDate).getFullYear()}
-							{/if}
+				{#snippet suggestion({ item })}
+							
+						<div>
+							<div class="font-medium">{item.name}</div>
+							<div class="text-sm text-gray-500">
+								{item.memberCount} membres
+								{#if item.startDate}
+									• {new Date(item.startDate).getFullYear()}
+								{/if}
+							</div>
 						</div>
-					</div>
-				</svelte:fragment>
+					
+							{/snippet}
 			</InputRelation>
 		</div>
 	{:else if step === 'members'}
 		<div class="content" in:fly={{ x: offsetWidth, duration: 250 }}>
 			<div class="flex gap-2 items-center mb-4">
-				<button type="button" class="btn btn-square btn-ghost btn-sm" on:click={goBack}>
+				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={goBack}>
 					<Icon path={mdiArrowLeft} />
 				</button>
 				<div>
@@ -290,7 +298,7 @@
 
 			{#if isLoading}
 				<div class="flex justify-center py-8">
-					<span class="loading loading-spinner loading-lg" />
+					<span class="loading loading-spinner loading-lg"></span>
 				</div>
 			{:else}
 				<div class="border rounded-lg overflow-hidden mb-4">
@@ -303,7 +311,7 @@
 									sourceMembers.length > 0}
 								indeterminate={selectedMemberIds.size > 0 &&
 									selectedMemberIds.size < sourceMembers.length}
-								on:change={toggleSelectAll}
+								onchange={toggleSelectAll}
 							/>
 							<span>Sélectionner tout ({sourceMembers.length} membres)</span>
 						</label>
@@ -314,15 +322,15 @@
 								class="border-b last:border-b-0 p-3 hover:bg-gray-50 cursor-pointer"
 								role="button"
 								tabindex="0"
-								on:click={() => toggleMemberSelection(member.id)}
-								on:keydown={(e) => e.key === 'Enter' && toggleMemberSelection(member.id)}
+								onclick={() => toggleMemberSelection(member.id)}
+								onkeydown={(e) => e.key === 'Enter' && toggleMemberSelection(member.id)}
 							>
 								<div class="flex items-start gap-3">
 									<input
 										type="checkbox"
 										class="checkbox checkbox-sm mt-1"
 										checked={selectedMemberIds.has(member.id)}
-										on:change={() => toggleMemberSelection(member.id)}
+										onchange={() => toggleMemberSelection(member.id)}
 									/>
 									<div class="min-w-0 flex-1">
 										<div class="font-medium">
@@ -357,7 +365,7 @@
 						type="button"
 						class="btn btn-primary"
 						disabled={selectedMemberIds.size === 0}
-						on:click={goToFieldMapping}
+						onclick={goToFieldMapping}
 					>
 						Configurer les champs
 					</button>
@@ -367,7 +375,7 @@
 	{:else if step === 'fields'}
 		<div class="content" in:fly={{ x: offsetWidth, duration: 250 }}>
 			<div class="flex gap-2 items-center mb-4">
-				<button type="button" class="btn btn-square btn-ghost btn-sm" on:click={goBack}>
+				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={goBack}>
 					<Icon path={mdiArrowLeft} />
 				</button>
 				<div>
@@ -393,7 +401,7 @@
 								<select
 									class="select select-sm w-full"
 									bind:value={mapping.targetFieldId}
-									on:change={(e) => handleFieldMappingChange(mapping.sourceFieldId, e)}
+									onchange={(e) => handleFieldMappingChange(mapping.sourceFieldId, e)}
 								>
 									<option value="">-- Ignorer ce champ --</option>
 									{#each targetFields as field (field.id)}
@@ -421,7 +429,7 @@
 			</div>
 
 			<div class="flex justify-end">
-				<button type="button" class="btn btn-primary" on:click={goToConfirmation}>
+				<button type="button" class="btn btn-primary" onclick={goToConfirmation}>
 					Confirmer l'import
 				</button>
 			</div>
@@ -429,7 +437,7 @@
 	{:else if step === 'confirm'}
 		<div class="content" in:fly={{ x: offsetWidth, duration: 250 }}>
 			<div class="flex gap-2 items-center mb-4">
-				<button type="button" class="btn btn-square btn-ghost btn-sm" on:click={goBack}>
+				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={goBack}>
 					<Icon path={mdiArrowLeft} />
 				</button>
 				<div>
@@ -466,10 +474,10 @@
 			</div>
 
 			<div class="flex justify-end gap-2">
-				<button type="button" class="btn" on:click={goBack}> Retour </button>
-				<button type="button" class="btn btn-primary" disabled={isLoading} on:click={executeImport}>
+				<button type="button" class="btn" onclick={goBack}> Retour </button>
+				<button type="button" class="btn btn-primary" disabled={isLoading} onclick={executeImport}>
 					{#if isLoading}
-						<span class="loading loading-spinner loading-sm" />
+						<span class="loading loading-spinner loading-sm"></span>
 						Import en cours...
 					{:else}
 						Importer {selectedMemberIds.size} membre(s)
@@ -524,7 +532,7 @@
 				<button
 					type="button"
 					class="btn btn-primary"
-					on:click={() => {
+					onclick={() => {
 						dialog.close()
 						window.location.reload() // Refresh to show new members
 					}}

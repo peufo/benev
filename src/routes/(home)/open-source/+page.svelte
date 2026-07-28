@@ -1,11 +1,11 @@
 <script lang="ts">
 	import GithubIssues from '$lib/GithubIssues.svelte'
-	import { Code, GitBranch, ArrowRight } from 'lucide-svelte'
+	import { Code, GitBranch, ArrowRight } from '@lucide/svelte'
 
-	export let data
+	let { data } = $props();
 
-	$: openCount = data.openCount || data.recentIssues.length
-	$: closedCount = data.closedCount || data.recentClosedIssues.length
+	let openCount = $derived(data.openCount || data.recentIssues.length)
+	let closedCount = $derived(data.closedCount || data.recentClosedIssues.length)
 </script>
 
 <div class="max-w-5xl mx-auto flex flex-col gap-24 py-12 px-4 md:px-8">
@@ -49,9 +49,9 @@
 			<div class="hidden lg:block shrink-0">
 				<div class="bg-base-200 rounded-2xl p-6 font-mono text-sm shadow-inner w-80">
 					<div class="flex gap-2 mb-4">
-						<div class="w-3 h-3 rounded-full bg-red-400" />
-						<div class="w-3 h-3 rounded-full bg-yellow-400" />
-						<div class="w-3 h-3 rounded-full bg-green-400" />
+						<div class="w-3 h-3 rounded-full bg-red-400"></div>
+						<div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+						<div class="w-3 h-3 rounded-full bg-green-400"></div>
 					</div>
 					<p class="text-base-content/50"># benevio est open source</p>
 					<p class="text-base-content/50"># sous licence AGPL-3.0</p>

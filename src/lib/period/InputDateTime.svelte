@@ -1,13 +1,23 @@
 <script lang="ts">
 	import type { Dayjs } from '$lib/dayjs'
-	import { USE_COERCE_DATE } from 'fuma'
-	import { MinusIcon, PlusIcon } from 'lucide-svelte'
+	import { USE_COERCE_DATE } from '$lib/fuma'
+	import { MinusIcon, PlusIcon } from '@lucide/svelte'
 
-	export let label: string
-	export let value: Dayjs
-	export let key: string
-	export let hint = ''
-	export let onSetValue: (newValue: Dayjs) => Dayjs = (v) => v
+	interface Props {
+		label: string;
+		value: Dayjs;
+		key: string;
+		hint?: string;
+		onSetValue?: (newValue: Dayjs) => Dayjs;
+	}
+
+	let {
+		label,
+		value = $bindable(),
+		key,
+		hint = '',
+		onSetValue = (v) => v
+	}: Props = $props();
 
 	function setTime(time: string) {
 		if (!time) return
@@ -48,14 +58,14 @@
 		class="input input-bordered"
 		step={300}
 		value={value.format('HH:mm')}
-		on:input={(event) => setTime(event.currentTarget.value)}
+		oninput={(event) => setTime(event.currentTarget.value)}
 	/>
 
 	<div class="flex pt-1 join">
 		<button
 			type="button"
 			class="btn btn-xs btn-square join-item bg-base-200/30"
-			on:click={() => setValue(value.add(-1, 'day'))}
+			onclick={() => setValue(value.add(-1, 'day'))}
 		>
 			<MinusIcon size={12} />
 		</button>
@@ -63,12 +73,12 @@
 			type="date"
 			class="input input-xs input-bordered input-ghost join-item max-w-[110px]"
 			value={value.format('YYYY-MM-DD')}
-			on:input={(event) => setDate(event.currentTarget.value)}
+			oninput={(event) => setDate(event.currentTarget.value)}
 		/>
 		<button
 			type="button"
 			class="btn btn-xs btn-square join-item bg-base-200/30"
-			on:click={() => setValue(value.add(1, 'day'))}
+			onclick={() => setValue(value.add(1, 'day'))}
 		>
 			<PlusIcon size={12} />
 		</button>

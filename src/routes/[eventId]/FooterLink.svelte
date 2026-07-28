@@ -1,5 +1,6 @@
+<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (icon to icon_1) making the component unusable -->
 <script lang="ts">
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	export let link: string | null
 	export let icon = ''
 	export let protocol = ''

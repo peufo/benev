@@ -14,7 +14,7 @@
 		Icon,
 		jsonParse,
 		urlParam,
-	} from 'fuma'
+	} from '$lib/fuma'
 	import { MemberActions, MemberCreateSubscribeDialog } from '$lib/member'
 	import { getMembersTableFields } from './membersTableFields'
 	import MembersExport from './MembersExport.svelte'
@@ -27,9 +27,9 @@
 	import { page } from '$app/stores'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 
-	export let data
+	let { data } = $props();
 
-	let tableFields = getMembersTableFields(data.teams, data.fields)
+	let tableFields = $state(getMembersTableFields(data.teams, data.fields))
 
 	onMount(() => {
 		globalEvents.on('field_created', handleFieldCreated)
@@ -38,8 +38,8 @@
 		}
 	})
 
-	let createSubscribeDialog: HTMLDialogElement
-	let selectedMember: Member | undefined = undefined
+	let createSubscribeDialog: HTMLDialogElement = $state()
+	let selectedMember: Member | undefined = $state(undefined)
 
 	async function handleFieldCreated(field: Field) {
 		const url = new URL($page.url)
@@ -60,7 +60,7 @@
 				<InputSearch class="max-w-[175px]" />
 				<MembersFilter />
 
-				<div class="grow" />
+				<div class="grow"></div>
 
 				<!-- SHOW MEMBERS STATS -->
 				<a href={$urlParam.with({ members_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
@@ -136,10 +136,12 @@
 <Drawer
 	title="Modifier le profil de {data.memberProfile?.firstName}"
 	key="form_member_profile"
-	let:close
+	
 	classBody="pt-4"
 >
-	{#if data.memberProfile}
-		<MemberProfileForm memberProfile={data.memberProfile} on:success={() => close()} />
-	{/if}
+	{#snippet children({ close })}
+		{#if data.memberProfile}
+			<MemberProfileForm memberProfile={data.memberProfile} on:success={() => close()} />
+		{/if}
+	{/snippet}
 </Drawer>

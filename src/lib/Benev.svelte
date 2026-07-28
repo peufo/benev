@@ -1,6 +1,10 @@
 <script lang="ts">
-	let klass = ''
-	export { klass as class }
+	interface Props {
+		class?: string;
+	}
+
+	let { class: klass = '' }: Props = $props();
+	
 </script>
 
 <span class="logo-text font-medium tracking-wide text-base-content/75 {klass}">benevio</span>

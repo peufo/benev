@@ -1,14 +1,18 @@
 <script lang="ts">
 	import type { Gift, GiftCondition } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import { useForm } from 'fuma/validation'
+	import { useForm } from '$lib/fuma'
 	import { GIFT_CONDITION_MODE } from '$lib/constant'
 	import { enhance } from '$app/forms'
-	import { InputRadio, InputText } from 'fuma'
+	import { InputRadio, InputText } from '$lib/fuma'
 	import GiftConditions from './GiftConditions.svelte'
 
 	type GiftWithConditions = Gift & { conditions: GiftCondition[] }
-	export let gift: GiftWithConditions | undefined = undefined
+	interface Props {
+		gift?: GiftWithConditions | undefined;
+	}
+
+	let { gift = $bindable(undefined) }: Props = $props();
 
 	const createAction = '?/create_gift'
 	const updateAction = '?/update_gift'

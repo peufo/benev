@@ -1,16 +1,26 @@
 <script lang="ts">
-	import { CardLink } from 'fuma'
-	import { ArrowRight, CalendarX2 } from 'lucide-svelte'
+	import { CardLink } from '$lib/fuma'
+	import { ArrowRight, CalendarX2 } from '@lucide/svelte'
 	import logo from '$lib/assets/logo.svg'
 	import { EventIcon } from '$lib/event/index.js'
 	import { formatRangeDate } from '$lib/formatRange'
 	import type { Event } from '@prisma/client'
 
-	export let events: Event[]
-	export let emptyTitle = 'Aucun événement'
-	export let emptyDescription = ''
-	export let emptyActionHref = '/me'
-	export let emptyActionLabel = 'Organiser mon événement'
+	interface Props {
+		events: Event[];
+		emptyTitle?: string;
+		emptyDescription?: string;
+		emptyActionHref?: string;
+		emptyActionLabel?: string;
+	}
+
+	let {
+		events,
+		emptyTitle = 'Aucun événement',
+		emptyDescription = '',
+		emptyActionHref = '/me',
+		emptyActionLabel = 'Organiser mon événement'
+	}: Props = $props();
 </script>
 
 {#if events.length}

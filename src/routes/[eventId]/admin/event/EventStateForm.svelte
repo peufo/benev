@@ -1,15 +1,19 @@
 <script lang="ts">
 	import type { Event, EventState } from '@prisma/client'
-	import { useForm } from 'fuma/validation'
-	import { Icon } from 'fuma'
+	import { useForm } from '$lib/fuma'
+	import { Icon } from '$lib/fuma'
 	import { EVENT_STATES } from '$lib/constant'
 	import { eventPath } from '$lib/store'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 	import { useNotify } from '$lib/notify'
 
-	export let event: Event & { owner: { firstName: string } }
-	export let isOwner: boolean
+	interface Props {
+		event: Event & { owner: { firstName: string } };
+		isOwner: boolean;
+	}
+
+	let { event, isOwner }: Props = $props();
 
 	function getNextStates(): Record<EventState, { state: EventState; label: string }[]> {
 		return {
@@ -73,8 +77,8 @@
 					<input type="hidden" name="state" value={state} />
 					<button
 						class="btn btn-sm btn-primary"
-						on:click={handleClickState}
-						on:keydown={handleClickState}
+						onclick={handleClickState}
+						onkeydown={handleClickState}
 					>
 						{label}
 					</button>

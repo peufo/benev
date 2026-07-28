@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-svelte'
-	import { tip, urlParam } from 'fuma'
+	import { ChevronLeftIcon, ChevronRightIcon } from '@lucide/svelte'
+	import { tip, urlParam } from '$lib/fuma'
 	import type { Dayjs } from 'dayjs'
 	import { goto } from '$app/navigation'
 	import { daytz } from '$lib/dayjs'
 
-	export let cursor: Dayjs
+	interface Props {
+		cursor: Dayjs;
+	}
+
+	let { cursor }: Props = $props();
 </script>
 
 <div class="flex join join-horizontal">
@@ -23,7 +27,7 @@
 		class="input input-sm input-bordered join-item"
 		type="date"
 		value={cursor.format('YYYY-MM-DD')}
-		on:input={async (event) => {
+		oninput={async (event) => {
 			const newDate = daytz(event.currentTarget.value)
 			if (!newDate.isValid()) return
 			goto($urlParam.with({ cursor: newDate.toJSON() }), { keepFocus: true, replaceState: true })

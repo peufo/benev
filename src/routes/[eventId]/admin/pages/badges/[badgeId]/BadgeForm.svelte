@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import type { PageData } from './$types'
-	import { ButtonDelete, Icon, InputText, InputNumber, InputBoolean, useForm } from 'fuma'
+	import { ButtonDelete, Icon, InputText, InputNumber, InputBoolean, useForm } from '$lib/fuma'
 	import {
 		mdiAlertCircleOutline,
 		mdiCheck,
@@ -20,11 +22,15 @@
 	import { browser } from '$app/environment'
 	import { fade } from 'svelte/transition'
 
-	export let badge: PageData['badge']
+	interface Props {
+		badge: PageData['badge'];
+	}
 
-	let submitButton: HTMLButtonElement
-	let isSuccess = true
-	let lockAspectRatio = true
+	let { badge = $bindable() }: Props = $props();
+
+	let submitButton: HTMLButtonElement = $state()
+	let isSuccess = $state(true)
+	let lockAspectRatio = $state(true)
 
 	const { enhance, isLoading } = useForm({
 		successUpdate: false,
@@ -51,7 +57,9 @@
 		}, 300)
 	}
 	const autosave = useAutosave()
-	$: if (badge) autosave()
+	run(() => {
+		if (badge) autosave()
+	});
 
 	function aspectRatioWidth(value: number): number {
 		return Math.round((value / FORMAT_CARD.aspect) * 100) / 100
@@ -81,7 +89,7 @@
 		<button
 			type="button"
 			class="btn btn-sm btn-ghost btn-square self-end mb-2"
-			on:click={() => (lockAspectRatio = !lockAspectRatio)}
+			onclick={() => (lockAspectRatio = !lockAspectRatio)}
 		>
 			<Icon path={lockAspectRatio ? mdiLink : mdiLinkOff} size={18} title="Conserver le ratio" />
 		</button>
@@ -103,7 +111,7 @@
 				in:fade
 				type="button"
 				class="btn btn-sm btn-ghost btn-square self-end mb-2"
-				on:click={() => {
+				onclick={() => {
 					badge.width = FORMAT_CARD.x
 					badge.height = FORMAT_CARD.y
 				}}
@@ -177,7 +185,7 @@
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
 
 		<ButtonDelete formaction="?/badge_delete" />
-		<div class="grow" />
+		<div class="grow"></div>
 
 		{#if $isLoading}
 			<div class="flex gap-1 items-center">

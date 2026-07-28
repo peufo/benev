@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { stopPropagation } from 'svelte/legacy';
+
 	import { createEventDispatcher } from 'svelte'
-	import { Icon, urlParam } from 'fuma'
+	import { Icon, urlParam } from '$lib/fuma'
 	import { mdiClipboardTextOutline } from '@mdi/js'
 	import { goto } from '$app/navigation'
 	import { daytz } from '$lib/dayjs'
@@ -11,7 +13,11 @@
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server/team'
 	import { TagsList } from '$lib/tag'
 
-	export let period: PeriodWithComputedValues & { team: TeamWithComputedValues }
+	interface Props {
+		period: PeriodWithComputedValues & { team: TeamWithComputedValues };
+	}
+
+	let { period }: Props = $props();
 	const dispatch = createEventDispatcher<{ clickPeriod: PeriodWithComputedValues }>()
 
 	function handlePeriodClick(event: Event) {
@@ -37,8 +43,8 @@
 	class="menu-item flex-wrap gap-y-1"
 	class:disabled={period.isDisabled}
 	class:active={$urlParam.hasValue('form_period', period.id)}
-	on:click={handlePeriodClick}
-	on:keydown={handlePeriodClick}
+	onclick={handlePeriodClick}
+	onkeydown={handlePeriodClick}
 >
 	<div class="flex gap-1 flex-wrap items-center">
 		<span class="text-sm" class:opacity-80={period.isDisabled}>
@@ -55,7 +61,7 @@
 		{:else if period.team.isLeader && period.isAvailable}
 			<button
 				class="btn btn-square btn-sm"
-				on:click|stopPropagation={() => dispatch('clickPeriod', period)}
+				onclick={stopPropagation(() => dispatch('clickPeriod', period))}
 			>
 				<Icon path={mdiClipboardTextOutline} size={20} title="M'inscrire à cette période" />
 			</button>

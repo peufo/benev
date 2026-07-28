@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Placeholder } from 'fuma'
+	import { Placeholder } from '$lib/fuma'
 	import { EmailCheckoutValidation } from '$lib/email'
 
-	export let data
+	let { data } = $props();
 </script>
 
 {#if data.checkout}

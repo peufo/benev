@@ -1,19 +1,23 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { UsersIcon, InfinityIcon, TriangleAlertIcon } from 'lucide-svelte'
+	import { UsersIcon, InfinityIcon, TriangleAlertIcon } from '@lucide/svelte'
 	import { EVENT_TIER } from '$lib/constant'
 
-	export let event: Event
-	export let membersValided: number
+	interface Props {
+		event: Event;
+		membersValided: number;
+	}
 
-	$: tier = EVENT_TIER[event.tier]
-	$: ratio = tier.max ? membersValided / tier.max : 0
-	$: klass =
-		ratio >= 0.9
+	let { event, membersValided }: Props = $props();
+
+	let tier = $derived(EVENT_TIER[event.tier])
+	let ratio = $derived(tier.max ? membersValided / tier.max : 0)
+	let klass =
+		$derived(ratio >= 0.9
 			? 'text-error progress-error'
 			: ratio >= 0.8
 				? 'text-warning progress-warning'
-				: 'progress-success'
+				: 'progress-success')
 </script>
 
 <div class="card bg-base-100 shadow">
@@ -41,7 +45,7 @@
 				class="progress progress-md w-full mt-3 {klass}"
 				value={membersValided}
 				max={tier.max}
-			/>
+			></progress>
 			<p class="text-sm flex items-start gap-1.5 mt-2 {klass}">
 				{#if ratio >= 0.8}
 					<TriangleAlertIcon size={16} class="shrink-0 mt-0.5" />

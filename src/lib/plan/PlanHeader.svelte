@@ -1,25 +1,35 @@
 <script lang="ts">
 	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop, mdiOpenInNew } from '@mdi/js'
-	import { Icon, InputCheckboxsMenu, TableViewSelect, TabsIcon, urlParam } from 'fuma'
+	import { Icon, InputCheckboxsMenu, TableViewSelect, TabsIcon, urlParam } from '$lib/fuma'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
 	import { eventPath } from '$lib/store'
 	import PlanCursor from './PlanCursor.svelte'
 	import type { Plan } from './types'
-	import { ZoomInIcon, ZoomOutIcon } from 'lucide-svelte'
+	import { ZoomInIcon, ZoomOutIcon } from '@lucide/svelte'
 
-	export let teams: { id: string; name: string }[]
-	export let views: { id: string; name: string; query: string }[]
-	export let isFullscreen = false
-	export let plan: Plan
-	let klass = ''
-	export { klass as class }
+	interface Props {
+		teams: { id: string; name: string }[];
+		views: { id: string; name: string; query: string }[];
+		isFullscreen?: boolean;
+		plan: Plan;
+		class?: string;
+	}
+
+	let {
+		teams,
+		views,
+		isFullscreen = false,
+		plan,
+		class: klass = ''
+	}: Props = $props();
+	
 </script>
 
 <div class="flex gap-2 items-center p-2 bg-base-100 {klass}" style="--btn-text-case: none;">
 	{#if !isFullscreen}
 		<h2 class="title px-2">Planification</h2>
-		<div class="grow" />
+		<div class="grow"></div>
 	{/if}
 
 	<TableViewSelect key="plan" {views} action="{$eventPath}/admin" />
@@ -31,7 +41,9 @@
 			enhanceDisabled
 			badgePrimary
 		>
-			<span slot="label" class="font-normal">secteurs</span>
+			{#snippet label()}
+						<span  class="font-normal">secteurs</span>
+					{/snippet}
 		</InputCheckboxsMenu>
 	{/key}
 

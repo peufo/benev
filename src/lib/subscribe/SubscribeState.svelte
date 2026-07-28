@@ -6,17 +6,21 @@
 		mdiTrashCanOutline,
 	} from '@mdi/js'
 	import type { Subscribe } from '@prisma/client'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 
-	let klass = ''
-	export { klass as class }
-	export let subscribe: Subscribe & { member: { isValidedByUser: boolean } }
+	
+	interface Props {
+		class?: string;
+		subscribe: Subscribe & { member: { isValidedByUser: boolean } };
+	}
 
-	$: changeAuthor =
-		(subscribe.createdBy === 'user') ===
+	let { class: klass = '', subscribe }: Props = $props();
+
+	let changeAuthor =
+		$derived((subscribe.createdBy === 'user') ===
 		(subscribe.state === 'cancelled' || subscribe.state === 'request')
 			? 'par le membre'
-			: 'par un responsable'
+			: 'par un responsable')
 </script>
 
 {#if subscribe.state === 'request' && subscribe.createdBy === 'leader' && !subscribe.member.isValidedByUser}

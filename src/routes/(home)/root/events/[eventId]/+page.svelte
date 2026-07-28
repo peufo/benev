@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from 'fuma'
+	import { Card } from '$lib/fuma'
 	import { msToHours } from '$lib/utils'
 	import { formatRangeDate } from '$lib/formatRange'
 	import {
@@ -9,13 +9,13 @@
 		ClockIcon,
 		CheckCircleIcon,
 		ExternalLinkIcon,
-	} from 'lucide-svelte'
+	} from '@lucide/svelte'
 
-	export let data
+	let { data } = $props();
 
-	$: event = data.event
-	$: stats = data.stats
-	$: totalSubscribes = Object.values(stats.subscribesByState).reduce((a, b) => a + b, 0)
+	let event = $derived(data.event)
+	let stats = $derived(data.stats)
+	let totalSubscribes = $derived(Object.values(stats.subscribesByState).reduce((a, b) => a + b, 0))
 </script>
 
 <div class="p-4 flex flex-col gap-4">
@@ -25,12 +25,14 @@
 	</a>
 
 	<Card>
-		<h2 slot="title" class="title flex items-center">
-			<span>{event.name}</span>
-			<a href="/{event.id}" class="ml-auto" target="_blank">
-				<ExternalLinkIcon />
-			</a>
-		</h2>
+		{#snippet title()}
+				<h2  class="title flex items-center">
+				<span>{event.name}</span>
+				<a href="/{event.id}" class="ml-auto" target="_blank">
+					<ExternalLinkIcon />
+				</a>
+			</h2>
+			{/snippet}
 
 		<div class="flex flex-col gap-2 text-sm">
 			<div class="flex flex-wrap gap-x-4 gap-y-1 text-base-content/80">
@@ -96,7 +98,9 @@
 	</div>
 
 	<Card>
-		<h3 slot="title" class="title">Inscriptions ({totalSubscribes})</h3>
+		{#snippet title()}
+				<h3  class="title">Inscriptions ({totalSubscribes})</h3>
+			{/snippet}
 		<div class="flex flex-wrap gap-4">
 			<div class="flex items-center gap-2">
 				<span class="badge badge-warning badge-sm">{stats.subscribesByState.request}</span>

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { useForm } from 'fuma/validation'
+	import { useForm } from '$lib/fuma'
 	import { enhance } from '$app/forms'
 	import { createEventDispatcher } from 'svelte'
-	import { USE_COERCE_BOOLEAN } from 'fuma'
+	import { USE_COERCE_BOOLEAN } from '$lib/fuma'
 
 	const form = useForm({
 		onSuccess: () => dispatch('success'),
@@ -18,6 +18,6 @@
 
 	<div class="flex flex-row-reverse gap-2 items-center mt-4">
 		<button class="btn btn-primary">Oui, je le veux </button>
-		<button type="button" class="btn btn-ghost" on:click={() => dispatch('cancel')}>Annuler</button>
+		<button type="button" class="btn btn-ghost" onclick={() => dispatch('cancel')}>Annuler</button>
 	</div>
 </form>

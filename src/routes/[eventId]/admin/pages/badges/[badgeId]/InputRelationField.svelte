@@ -1,15 +1,26 @@
 <script lang="ts">
-	import { component, InputRelation, urlParam } from 'fuma'
+	import { component, InputRelation, urlParam } from '$lib/fuma'
 	import type { Field, FieldType } from '@prisma/client'
 	import { api } from '$lib/api'
 	import MemberFieldSnippet from './MemberFieldSnippet.svelte'
 
-	export let key: string
-	export let label: string
-	export let value: Field | null
-	export let type: FieldType
-	export let typesAccepted: FieldType[] = [type]
-	export let oninput: (field: Field) => void = () => {}
+	interface Props {
+		key: string;
+		label: string;
+		value: Field | null;
+		type: FieldType;
+		typesAccepted?: FieldType[];
+		oninput?: (field: Field) => void;
+	}
+
+	let {
+		key,
+		label,
+		value = $bindable(),
+		type,
+		typesAccepted = [type],
+		oninput = () => {}
+	}: Props = $props();
 </script>
 
 <InputRelation

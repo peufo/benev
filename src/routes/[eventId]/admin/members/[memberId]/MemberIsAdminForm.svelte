@@ -1,11 +1,15 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { useForm } from 'fuma/validation'
+	import { useForm } from '$lib/fuma'
 	import { rolesMap } from '$lib/member/MemberRole.svelte'
-	import { Icon, USE_COERCE_BOOLEAN } from 'fuma'
+	import { Icon, USE_COERCE_BOOLEAN } from '$lib/fuma'
 
-	export let memberProfile: PageData['memberProfile']
-	$: isAdmin = memberProfile.roles.includes('admin')
+	interface Props {
+		memberProfile: PageData['memberProfile'];
+	}
+
+	let { memberProfile }: Props = $props();
+	let isAdmin = $derived(memberProfile.roles.includes('admin'))
 	const { enhance } = useForm()
 </script>
 

@@ -1,10 +1,17 @@
 <script lang="ts">
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { mdiEmailOutline, mdiPhone, mdiClipboardTextOutline, mdiPencilOutline } from '@mdi/js'
-	import { Icon, urlParam } from 'fuma'
+	import { Icon, urlParam } from '$lib/fuma'
 	import type { Member } from '@prisma/client'
 
-	export let member: Member
-	export let onSubscribeDialog: (() => void) | undefined = undefined
+	interface Props {
+		member: Member;
+		onSubscribeDialog?: (() => void) | undefined;
+	}
+
+	let { member, onSubscribeDialog = undefined }: Props = $props();
 </script>
 
 <div class="flex gap-1 justify-end fill-base-content">
@@ -13,7 +20,7 @@
 			href="tel:{member.phone}"
 			target="_blank"
 			class="btn btn-square btn-sm btn-ghost relative"
-			on:click|stopPropagation
+			onclick={stopPropagation(bubble('click'))}
 		>
 			<Icon
 				path={mdiPhone}
@@ -29,7 +36,7 @@
 			href="mailto:{member.email}"
 			target="_blank"
 			class="btn btn-square btn-sm btn-ghost relative"
-			on:click|stopPropagation
+			onclick={stopPropagation(bubble('click'))}
 		>
 			<Icon
 				path={mdiEmailOutline}
@@ -41,7 +48,7 @@
 		</a>
 	{/if}
 	{#if onSubscribeDialog}
-		<button type="button" class="btn btn-square btn-sm btn-ghost" on:click={onSubscribeDialog}>
+		<button type="button" class="btn btn-square btn-sm btn-ghost" onclick={onSubscribeDialog}>
 			<Icon
 				path={mdiClipboardTextOutline}
 				size={20}

@@ -3,14 +3,23 @@
 	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
-	import { Dialog, InputRelations } from 'fuma'
-	import { useForm } from 'fuma/validation'
+	import { Dialog, InputRelations } from '$lib/fuma'
+	import { useForm } from '$lib/fuma'
 	import { eventPath } from '$lib/store'
 
-	export let title = 'Secteur à charges'
-	export let dialog: HTMLDialogElement
-	export let teams: Team[]
-	export let memberId: string
+	interface Props {
+		title?: string;
+		dialog: HTMLDialogElement;
+		teams: Team[];
+		memberId: string;
+	}
+
+	let {
+		title = 'Secteur à charges',
+		dialog = $bindable(),
+		teams = $bindable(),
+		memberId
+	}: Props = $props();
 
 	const form = useForm({
 		onSuccess() {
@@ -20,7 +29,9 @@
 </script>
 
 <Dialog bind:dialog on:open={() => (teams = teams)}>
-	<h2 slot="header" class="title">{title}</h2>
+	{#snippet header()}
+		<h2  class="title">{title}</h2>
+	{/snippet}
 	<form
 		action="{$eventPath}/admin/members/{memberId}?/set_leader_of"
 		method="post"

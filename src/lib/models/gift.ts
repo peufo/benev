@@ -1,4 +1,4 @@
-import { z, toTuple, type ZodObj } from 'fuma/validation'
+import { z, toTuple, type ZodObj } from '$lib/fuma'
 import type { Prisma } from '@prisma/client'
 import { GIFT_CONDITION_MODE } from '$lib/constant'
 

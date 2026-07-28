@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
-import { parseQuery } from 'fuma/server'
-import { z } from 'fuma/validation'
+import { parseQuery } from '$lib/server/fuma'
+import { z } from '$lib/fuma'
 import { prisma, permission, json } from '$lib/server'
 import type { FieldType } from '@prisma/client'
 

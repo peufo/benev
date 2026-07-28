@@ -1,13 +1,20 @@
 <script lang="ts">
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { browser } from '$app/environment'
 	import { mdiDrag, mdiDragHorizontal, mdiDragVertical } from '@mdi/js'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { createEventDispatcher, onDestroy } from 'svelte'
 
 	type Axis = 'any' | 'x' | 'y'
-	export let axis: Axis = 'any'
-	let klass = ''
-	export { klass as class }
+	interface Props {
+		axis?: Axis;
+		class?: string;
+	}
+
+	let { axis = 'any', class: klass = '' }: Props = $props();
+	
 	const paths: Record<Axis, string> = {
 		any: mdiDrag,
 		x: mdiDragHorizontal,
@@ -48,8 +55,8 @@
 </script>
 
 <button
-	on:click|stopPropagation
-	on:mousedown={handleMouseDown}
+	onclick={stopPropagation(bubble('click'))}
+	onmousedown={handleMouseDown}
 	class="
     {klass} drag-button
     absolute z-10 -translate-x-1/2 -translate-y-1/2

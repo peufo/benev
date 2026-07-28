@@ -1,14 +1,20 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { createEventDispatcher } from 'svelte'
 
 	import type { Period, Team } from '@prisma/client'
 	import { enhance } from '$app/forms'
-	import { useForm } from 'fuma/validation'
+	import { useForm } from '$lib/fuma'
 	import { formatRange } from '$lib/formatRange'
 
-	export let team: Team
-	export let memberId: string
-	export let period: Period
+	interface Props {
+		team: Team;
+		memberId: string;
+		period: Period;
+	}
+
+	let { team, memberId, period }: Props = $props();
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
@@ -33,6 +39,6 @@
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn btn-primary">Oui je le veux !</button>
-		<button class="btn btn-ghost" on:click|preventDefault={() => dispatch('close')}> Non </button>
+		<button class="btn btn-ghost" onclick={preventDefault(() => dispatch('close'))}> Non </button>
 	</div>
 </form>

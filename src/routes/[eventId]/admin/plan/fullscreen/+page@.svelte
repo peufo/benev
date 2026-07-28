@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { urlParam } from 'fuma'
+	import { urlParam } from '$lib/fuma'
 	import { PlanX, PlanY } from '$lib/plan'
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
 	import DrawersForm from '$lib/DrawersForm.svelte'
 	import { MilestoneDrawer } from '$lib/milestone'
 	import { getPlan } from '$lib/plan/getPlan.js'
 
-	export let data
-	$: plan = getPlan(data)
+	let { data = $bindable() } = $props();
+	let plan = $derived(getPlan(data))
 
-	let isMouseOnTop = false
+	let isMouseOnTop = $state(false)
 
 	function mouseOnTop(node: HTMLElement) {
 		function onMouseMove(event: MouseEvent) {

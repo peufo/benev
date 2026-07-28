@@ -80,5 +80,30 @@ export default ts.config(
 			// 150 occurrences), pas un prérequis du lint.
 			'svelte/no-navigation-without-resolve': 'off',
 		},
+	},
+	{
+		// Code rapatrié tel quel depuis fuma 1.0.21 (branche `sv-4`), en attendant la
+		// bascule vers fuma 2. Le reformater le ferait diverger de l'amont et
+		// compliquerait le tri de ce qui doit être supprimé au profit du paquet.
+		// Placé en dernier pour l'emporter sur les blocs généraux ci-dessus.
+		// Ces exceptions disparaissent avec le dossier.
+		files: ['src/lib/fuma/**', 'src/lib/server/fuma/**'],
+		rules: {
+			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/no-unused-vars': 'off',
+			'@typescript-eslint/ban-ts-comment': 'off',
+			'@typescript-eslint/no-empty-object-type': 'off',
+			'@typescript-eslint/no-unused-expressions': 'off',
+			'@typescript-eslint/no-unsafe-function-type': 'off',
+			'@typescript-eslint/no-unnecessary-type-constraint': 'off',
+			'svelte/require-each-key': 'off',
+			'svelte/no-dupe-on-directives': 'off',
+			'svelte/no-useless-mustaches': 'off',
+			'svelte/no-at-html-tags': 'off',
+			'no-extra-boolean-cast': 'off',
+			'no-unassigned-vars': 'off',
+			'no-unsafe-finally': 'off',
+			'prefer-const': 'off',
+		},
 	}
 )

@@ -3,8 +3,12 @@
 	import { getRangeOfTeam } from '$lib/plan'
 	import type { Period, Team } from '@prisma/client'
 
-	export let team: Team & { periods: Period[] }
-	export let deltaDays: number
+	interface Props {
+		team: Team & { periods: Period[] };
+		deltaDays: number;
+	}
+
+	let { team, deltaDays }: Props = $props();
 
 	const range = getRangeOfTeam(team)
 	const DAY = 1000 * 60 * 60 * 24

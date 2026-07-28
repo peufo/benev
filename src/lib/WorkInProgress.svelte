@@ -1,6 +1,11 @@
 <script lang="ts">
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { mdiAlertBoxOutline } from '@mdi/js'
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 </script>
 
 <div class="bg-base-300/50 p-4 rounded-box opacity-60">
@@ -9,5 +14,5 @@
 		Zone en développement
 	</div>
 
-	<slot />
+	{@render children?.()}
 </div>

@@ -1,20 +1,24 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { InfinityIcon } from 'lucide-svelte'
+	import { InfinityIcon } from '@lucide/svelte'
 	import { EVENT_TIER } from '$lib/constant'
 
-	export let event: Event
-	export let membersValided: number
+	interface Props {
+		event: Event;
+		membersValided: number;
+	}
 
-	$: tier = EVENT_TIER[event.tier]
-	$: max = tier.max
-	$: ratio = max ? membersValided / max : 0
-	$: status = ratio >= 0.9 ? 'error' : ratio >= 0.8 ? 'warning' : 'success'
-	$: statusClass = {
+	let { event, membersValided }: Props = $props();
+
+	let tier = $derived(EVENT_TIER[event.tier])
+	let max = $derived(tier.max)
+	let ratio = $derived(max ? membersValided / max : 0)
+	let status = $derived(ratio >= 0.9 ? 'error' : ratio >= 0.8 ? 'warning' : 'success')
+	let statusClass = $derived({
 		error: 'border-error bg-error/10 text-error',
 		warning: 'border-warning bg-warning/10 text-warning',
 		success: 'border-success bg-success/10 text-success',
-	}[status]
+	}[status])
 </script>
 
 <a

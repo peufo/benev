@@ -3,11 +3,15 @@
 	import { eventPath } from '$lib/store'
 	import { daytz } from '$lib/dayjs'
 	import type { Milestone } from '@prisma/client'
-	import { Form, InputText } from 'fuma'
+	import { Form, InputText } from '$lib/fuma'
 	import type { ComponentType } from 'svelte'
 	import InputTzDateTime from './InputTzDateTime.svelte'
 
-	export let milestone: Partial<Milestone> = {}
+	interface Props {
+		milestone?: Partial<Milestone>;
+	}
+
+	let { milestone = {} }: Props = $props();
 
 	const MilestoneForm: ComponentType<Form<typeof modelMilestoneCreate, Milestone>> = Form
 </script>

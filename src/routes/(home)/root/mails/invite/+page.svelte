@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { EmailAcceptInviteNotification } from '$lib/email'
 
-	export let data
+	let { data } = $props();
 </script>
 
 <!-- Prévisualisation réservée au root: emails rendus côté serveur, pas de saisie visiteur -->

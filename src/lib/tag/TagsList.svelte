@@ -1,9 +1,13 @@
 <script lang="ts">
 	import type { Tag } from '@prisma/client'
 
-	export let tags: Tag[]
-	let klass = ''
-	export { klass as class }
+	interface Props {
+		tags: Tag[];
+		class?: string;
+	}
+
+	let { tags, class: klass = '' }: Props = $props();
+	
 </script>
 
 <div class="flex gap-1 {klass}">

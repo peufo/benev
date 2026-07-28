@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	export const palette = [
 		'#FFD1DC',
 		'#FFDAC1',
@@ -28,6 +28,6 @@
 
 <datalist id="palette">
 	{#each palette as color (color)}
-		<option value={color} />
+		<option value={color}></option>
 	{/each}
 </datalist>

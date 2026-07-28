@@ -2,7 +2,11 @@
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
 	import { domain } from '.'
 
-	export let tokenId: string
+	interface Props {
+		tokenId: string;
+	}
+
+	let { tokenId }: Props = $props();
 </script>
 
 <EmailLayout title="Reinitialisation du mot de passe">

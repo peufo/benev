@@ -1,10 +1,14 @@
 <script lang="ts">
 	import type { User } from '@prisma/client'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { mdiAccountOutline } from '@mdi/js'
 	import Avatar from '$lib/me/Avatar.svelte'
 
-	export let user: User | undefined = undefined
+	interface Props {
+		user?: User | undefined;
+	}
+
+	let { user = undefined }: Props = $props();
 </script>
 
 <a

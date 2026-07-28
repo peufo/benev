@@ -1,6 +1,8 @@
+<!-- @migration-task Error while migrating Svelte code: can't migrate `let state: 'login' | 'register' = 'login'` to `$state` because there's a variable named state.
+     Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { useForm, InputText, InputPassword, Dialog, InputBoolean } from 'fuma'
+	import { useForm, InputText, InputPassword, Dialog, InputBoolean } from '$lib/fuma'
 	import { page } from '$app/stores'
 	import Oauth from './Oauth.svelte'
 	import TermsLabel from './TermsLabel.svelte'

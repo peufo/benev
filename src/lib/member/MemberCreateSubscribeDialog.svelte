@@ -5,24 +5,28 @@
 	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
-	import { Dialog, Icon, InputRelation, SelectorList } from 'fuma'
-	import { useForm } from 'fuma/validation'
+	import { Dialog, Icon, InputRelation, SelectorList } from '$lib/fuma'
+	import { useForm } from '$lib/fuma'
 	import { eventPath } from '$lib/store'
 	import { mdiArrowLeft } from '@mdi/js'
 	import { formatRange } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
 	import type { TeamWithComputedValues } from '$lib/server'
 
-	export let dialog: HTMLDialogElement
-	export let memberId: string
-	export let title = 'Nouvelle inscription'
+	interface Props {
+		dialog: HTMLDialogElement;
+		memberId: string;
+		title?: string;
+	}
 
-	let selectedTeam: TeamWithComputedValues | null = null
-	let selectedPeriod: Period | null = null
-	let inputRelationTeam: InputRelation<TeamWithComputedValues>
-	let offsetWidth: number
+	let { dialog = $bindable(), memberId, title = 'Nouvelle inscription' }: Props = $props();
 
-	let submitButton: HTMLButtonElement
+	let selectedTeam: TeamWithComputedValues | null = $state(null)
+	let selectedPeriod: Period | null = $state(null)
+	let inputRelationTeam: InputRelation<TeamWithComputedValues> = $state()
+	let offsetWidth: number = $state()
+
+	let submitButton: HTMLButtonElement = $state()
 	const form = useForm({
 		successReset: false,
 		onSuccess() {
@@ -60,7 +64,9 @@
 </script>
 
 <Dialog bind:dialog class="overflow-x-hidden">
-	<h2 slot="header" class="title" bind:offsetWidth>{title}</h2>
+	{#snippet header()}
+		<h2  class="title" bind:offsetWidth>{title}</h2>
+	{/snippet}
 	{#if !selectedTeam}
 		<div class="content" in:fly={{ x: -offsetWidth, duration: 250 }}>
 			<InputRelation
@@ -71,16 +77,18 @@
 				classList="max-h-80 overflow-y-auto relative"
 				on:input={({ detail }) => handleSelectTeam(detail.value)}
 			>
-				<svelte:fragment slot="suggestion" let:item>
-					<span>{item.name}</span>
-					<Progress
-						class="ml-auto"
-						period={{
-							maxSubscribe: item.maxSubscribes,
-							subscribes: item.periods.map((p) => p.subscribes).flat(),
-						}}
-					/>
-				</svelte:fragment>
+				{#snippet suggestion({ item })}
+							
+						<span>{item.name}</span>
+						<Progress
+							class="ml-auto"
+							period={{
+								maxSubscribe: item.maxSubscribes,
+								subscribes: item.periods.map((p) => p.subscribes).flat(),
+							}}
+						/>
+					
+							{/snippet}
 			</InputRelation>
 		</div>
 	{:else}
@@ -91,7 +99,7 @@
 			use:enhance={form.submit}
 		>
 			<div class="flex gap-2 items-center">
-				<button type="button" class="btn btn-square btn-ghost btn-sm" on:click={handleClickReturn}>
+				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={handleClickReturn}>
 					<Icon path={mdiArrowLeft} />
 				</button>
 				<h3 class="title text-lg">{selectedTeam.name}</h3>
@@ -102,11 +110,13 @@
 				items={selectedTeam.periods.filter((p) => p.isAvailable)}
 				class="w-full max-h-80 mt-2 overflow-y-auto relative"
 				on:select={({ detail }) => onSelect(detail)}
-				let:item
+				
 			>
-				<span>{formatRange(item)}</span>
-				<Progress period={item} class="ml-auto" />
-			</SelectorList>
+				{#snippet children({ item })}
+								<span>{formatRange(item)}</span>
+					<Progress period={item} class="ml-auto" />
+											{/snippet}
+						</SelectorList>
 			<input type="hidden" name="memberId" value={memberId} />
 			<input type="hidden" name="periodId" value={selectedPeriod?.id} />
 			<button type="submit" bind:this={submitButton} class="hidden">submit</button>

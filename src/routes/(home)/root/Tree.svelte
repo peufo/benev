@@ -1,7 +1,12 @@
 <script lang="ts">
+	import Tree from './Tree.svelte';
 	import { page } from '$app/stores'
-	export let tree: string[][]
-	export let level = 0
+	interface Props {
+		tree: string[][];
+		level?: number;
+	}
+
+	let { tree, level = 0 }: Props = $props();
 </script>
 
 <ul>
@@ -16,7 +21,7 @@
 			</a>
 
 			{#if children.length}
-				<svelte:self tree={children} level={level + 1} />
+				<Tree tree={children} level={level + 1} />
 			{/if}
 		</li>
 	{/each}

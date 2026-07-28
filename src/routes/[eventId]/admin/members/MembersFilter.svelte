@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { urlParam, InputOptionInParam } from 'fuma'
+	import { urlParam, InputOptionInParam } from '$lib/fuma'
 	import {
 		mdiAccountCircleOutline,
 		mdiAlertOutline,

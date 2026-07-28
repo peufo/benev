@@ -1,11 +1,23 @@
 <script lang="ts">
-	import { ChevronDown } from 'lucide-svelte'
+	import { ChevronDown } from '@lucide/svelte'
 
-	export let title: string
-	export let step: number | undefined = undefined
-	export let required: boolean | undefined = undefined
-	export let open = false
-	export let collapsible = true
+	interface Props {
+		title: string;
+		step?: number | undefined;
+		required?: boolean | undefined;
+		open?: boolean;
+		collapsible?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		title,
+		step = undefined,
+		required = undefined,
+		open = $bindable(false),
+		collapsible = true,
+		children
+	}: Props = $props();
 
 	function toggle() {
 		if (!collapsible) return
@@ -18,7 +30,7 @@
 		type="button"
 		class="w-full py-4 px-5 flex items-center gap-3 text-left rounded-2xl"
 		class:cursor-default={!collapsible}
-		on:click={toggle}
+		onclick={toggle}
 	>
 		{#if step !== undefined}
 			<div
@@ -50,7 +62,7 @@
 		class:grid-rows-[0fr]={!open}
 	>
 		<div class="overflow-hidden px-5" class:pb-5={open}>
-			<slot />
+			{@render children?.()}
 		</div>
 	</div>
 </div>

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { mdiCartCheck, mdiCheckCircle, mdiGiftOutline, mdiTagOutline } from '@mdi/js'
-	import { Card, Icon, Placeholder } from 'fuma'
+	import { Card, Icon, Placeholder } from '$lib/fuma'
 
 	import { CheckoutWaitSSE, ProductUseForm } from '$lib/checkout'
 
-	export let data
+	let { data } = $props();
 
 	const checkoutId = $page.url.searchParams.get('checkoutId')
 </script>
@@ -25,20 +25,24 @@
 			class={checkout.id === checkoutId ? 'border-2 border-primary' : ''}
 			bodyClass="flex flex-col gap-4"
 		>
-			<div slot="title" class="flex flex-col">
-				<div class="flex items-center gap-2">
-					<Icon path={mdiCartCheck} class="text-primary" />
-					<span class="font-semibold">{checkout.name || 'Achat'}</span>
+			{#snippet title()}
+						<div  class="flex flex-col">
+					<div class="flex items-center gap-2">
+						<Icon path={mdiCartCheck} class="text-primary" />
+						<span class="font-semibold">{checkout.name || 'Achat'}</span>
+					</div>
+					<span class="text-sm opacity-70">{checkout.createdAt.toLocaleDateString()}</span>
 				</div>
-				<span class="text-sm opacity-70">{checkout.createdAt.toLocaleDateString()}</span>
-			</div>
+					{/snippet}
 
-			<div slot="action" class="text-right">
-				<div class="text-lg font-bold">
-					{(checkout.amount / 100).toFixed(2)}
-					{checkout.currency?.toUpperCase()}
+			{#snippet action()}
+						<div  class="text-right">
+					<div class="text-lg font-bold">
+						{(checkout.amount / 100).toFixed(2)}
+						{checkout.currency?.toUpperCase()}
+					</div>
 				</div>
-			</div>
+					{/snippet}
 
 			<div class="flex flex-col">
 				{#each checkout.products as product, index (product.id)}

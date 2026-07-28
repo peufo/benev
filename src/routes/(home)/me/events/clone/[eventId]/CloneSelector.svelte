@@ -1,15 +1,29 @@
 <script lang="ts">
-	import { InputBoolean, Placeholder, type ComponentAndProps } from 'fuma'
+	import { InputBoolean, Placeholder, type ComponentAndProps } from '$lib/fuma'
 
 	type Item = $$Generic<{ id: string }>
-	export let items: Item[]
-	export let key: string
-	export let placeholder: string
-	export let legend: string
-	export let labelAll: string
-	export let getLabel: (item: Item) => string | ComponentAndProps
-	let klass = ''
-	export { klass as class }
+	interface Props {
+		items: Item[];
+		key: string;
+		placeholder: string;
+		legend: string;
+		labelAll: string;
+		getLabel: (item: Item) => string | ComponentAndProps;
+		class?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		items,
+		key,
+		placeholder,
+		legend,
+		labelAll,
+		getLabel,
+		class: klass = '',
+		children
+	}: Props = $props();
+	
 
 	function mapSelected(arr: Item[], selected = true): (Item & { selected: boolean })[] {
 		return arr.map((el) => ({ ...el, selected }))
@@ -17,7 +31,7 @@
 	function getJsonIds(arr: { id: string; selected: boolean }[]): string {
 		return JSON.stringify(arr.filter((el) => el.selected).map((el) => el.id))
 	}
-	let _items = mapSelected(items)
+	let _items = $state(mapSelected(items))
 </script>
 
 <input type="hidden" name={key} value={getJsonIds(_items)} />
@@ -32,9 +46,9 @@
 			label={labelAll}
 			labelPosition="right"
 		/>
-		<slot />
+		{@render children?.()}
 	</div>
-	<div class="divider" />
+	<div class="divider"></div>
 	{#each _items as item (item.id)}
 		<InputBoolean
 			key="{key}_{item.id}"

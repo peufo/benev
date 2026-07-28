@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { eventPath } from '$lib/store'
-	import { tip } from 'fuma'
-	import { CalendarArrowUp } from 'lucide-svelte'
-	import { page } from '$app/stores'
+	import { tip } from '$lib/fuma'
+	import { CalendarArrowUp } from '@lucide/svelte'
+	import { page } from '$app/state'
 
-	let loading = false
+	let loading = $state(false)
 
 	async function downloadCalendar() {
 		loading = true
@@ -15,7 +15,7 @@
 			const url = URL.createObjectURL(blob)
 			const a = document.createElement('a')
 			a.href = url
-			a.download = `${$page.data.event?.name || 'mon-benevolat'}.ics`
+			a.download = `${page.data.event?.name || 'mon-benevolat'}.ics`
 			a.click()
 			URL.revokeObjectURL(url)
 		} catch {
@@ -29,11 +29,11 @@
 <button
 	class="btn btn-square btn-sm"
 	disabled={loading}
-	on:click={downloadCalendar}
+	onclick={downloadCalendar}
 	use:tip={{ content: 'Ajouter à mon agenda' }}
 >
 	{#if loading}
-		<span class="loading loading-spinner loading-xs" />
+		<span class="loading loading-spinner loading-xs"></span>
 	{:else}
 		<CalendarArrowUp size={20} />
 	{/if}

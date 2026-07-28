@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { mdiCancel, mdiCheck } from '@mdi/js'
 	import type { PageData } from './$types'
-	import { useForm } from 'fuma/validation'
-	import { Icon, USE_COERCE_BOOLEAN } from 'fuma'
+	import { useForm } from '$lib/fuma'
+	import { Icon, USE_COERCE_BOOLEAN } from '$lib/fuma'
 
-	export let memberProfile: PageData['memberProfile']
+	interface Props {
+		memberProfile: PageData['memberProfile'];
+	}
+
+	let { memberProfile }: Props = $props();
 	const { enhance } = useForm()
 </script>
 

@@ -1,6 +1,6 @@
 import { goto } from '$app/navigation'
 import { debounce } from '$lib/debounce'
-import { urlParam } from 'fuma'
+import { urlParam } from '$lib/fuma'
 import { get } from 'svelte/store'
 import { RANGE_DAYS } from './constants'
 import { page } from '$app/state'

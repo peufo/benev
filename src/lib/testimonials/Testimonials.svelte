@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiOpenInNew } from '@mdi/js'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { testimonials } from './testimonials'
 </script>
 

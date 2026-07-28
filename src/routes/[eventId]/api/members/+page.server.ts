@@ -1,5 +1,5 @@
-import { z } from 'fuma/validation'
-import { tryOrFail, parseFormData } from 'fuma/server'
+import { z } from '$lib/fuma'
+import { tryOrFail, parseFormData } from '$lib/server/fuma'
 import { permission, prisma } from '$lib/server'
 
 export const actions = {

@@ -1,12 +1,17 @@
 <script lang="ts">
 	import logo from '$lib/assets/logo.svg'
-	import { tip } from 'fuma'
-	let klass = ''
-	export { klass as class }
+	import { tip } from '$lib/fuma'
+	interface Props {
+		class?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { class: klass = '', children }: Props = $props();
+	
 </script>
 
 <footer class="footer footer-center border-t p-6 bg-base-100 gap-5 mt-2 overflow-hidden {klass}">
-	<slot />
+	{@render children?.()}
 
 	<div class="flex gap-4 text-sm opacity-70">
 		<a href="/open-source" class="link link-hover">Open source</a>

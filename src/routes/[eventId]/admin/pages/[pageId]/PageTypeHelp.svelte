@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { mdiHelpCircleOutline } from '@mdi/js'
-	import { DropDown, Icon } from 'fuma'
+	import { DropDown, Icon } from '$lib/fuma'
 	import { PAGE_TYPE } from '$lib/constant'
 </script>
 
 <DropDown tippyProps={{ trigger: 'mouseenter' }}>
-	<button slot="activator" type="button" class="contents">
-		<Icon path={mdiHelpCircleOutline} size={19} class="opacity-70 rotate-12 ml-2" />
-	</button>
+	{#snippet activator()}
+		<button  type="button" class="contents">
+			<Icon path={mdiHelpCircleOutline} size={19} class="opacity-70 rotate-12 ml-2" />
+		</button>
+	{/snippet}
 	<div class="p-4">
 		<section>
 			<h3 class="title-sm text-base flex items-center gap-2 mb-2">
@@ -20,7 +22,7 @@
 			</p>
 		</section>
 
-		<div class="divider" />
+		<div class="divider"></div>
 
 		<section>
 			<h3 class="title-sm text-base flex items-center gap-2 mb-2">
@@ -32,7 +34,7 @@
 			</p>
 		</section>
 
-		<div class="divider" />
+		<div class="divider"></div>
 
 		<section>
 			<h3 class="title-sm text-base flex items-center gap-2 mb-2">
@@ -42,7 +44,7 @@
 			<p class="text-base-content/80">Page statique visible par tous le monde.</p>
 		</section>
 
-		<div class="divider" />
+		<div class="divider"></div>
 
 		<section>
 			<h3 class="title-sm text-base flex items-center gap-2 mb-2">

@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { Icon, InputRelation, USE_COERCE_JSON } from 'fuma'
+	import { run } from 'svelte/legacy';
+
+	import { Icon, InputRelation, USE_COERCE_JSON } from '$lib/fuma'
 	import { mdiMapMarkerOutline } from '@mdi/js'
 
 	type Suggestion = PrismaJson.Location & { id: string; title: string; detail: string }
@@ -18,10 +20,19 @@
 		geometry: { coordinates: [number, number] }
 	}
 
-	export let key = 'location'
-	export let label = 'Lieu'
-	export let value: PrismaJson.Location | null = null
-	export let placeholder = 'Commence à taper une adresse ou un lieu…'
+	interface Props {
+		key?: string;
+		label?: string;
+		value?: PrismaJson.Location | null;
+		placeholder?: string;
+	}
+
+	let {
+		key = 'location',
+		label = 'Lieu',
+		value = $bindable(null),
+		placeholder = 'Commence à taper une adresse ou un lieu…'
+	}: Props = $props();
 
 	// InputRelation sérialise déjà un `{ id }` sous son propre `key`: on lui en donne
 	// un distinct pour que notre champ caché reste seul à porter la valeur soumise
@@ -63,17 +74,19 @@
 
 	// la valeur enregistrée n'a ni `title` ni `detail`: on la réhydrate pour l'affichage.
 	// Un lieu hérité de l'ancien champ texte n'a pas de coordonnées.
-	let selected: Suggestion | null = value && {
+	let selected: Suggestion | null = $state(value && {
 		...value,
 		id: value.label,
 		title: value.label,
 		detail: '',
-	}
+	})
 
-	$: value = selected && {
-		label: selected.label,
-		...(selected.coords && { coords: selected.coords }),
-	}
+	run(() => {
+		value = selected && {
+			label: selected.label,
+			...(selected.coords && { coords: selected.coords }),
+		}
+	});
 </script>
 
 <input type="hidden" name={key} value="{USE_COERCE_JSON}{JSON.stringify(value)}" />
@@ -87,17 +100,21 @@
 	classList="max-h-80 overflow-y-auto"
 	on:input
 >
-	<svelte:fragment slot="suggestion" let:item>
-		<div class="flex flex-col py-1">
-			<span>{item.title}</span>
-			{#if item.detail}
-				<span class="text-sm opacity-60">{item.detail}</span>
-			{/if}
-		</div>
-	</svelte:fragment>
+	{#snippet suggestion({ item })}
+	
+			<div class="flex flex-col py-1">
+				<span>{item.title}</span>
+				{#if item.detail}
+					<span class="text-sm opacity-60">{item.detail}</span>
+				{/if}
+			</div>
+		
+	{/snippet}
 
-	<div slot="item" class="flex items-center gap-2" let:item>
-		<Icon path={mdiMapMarkerOutline} class="opacity-70" />
-		<span>{item?.label}</span>
-	</div>
+	{#snippet item({ item })}
+		<div  class="flex items-center gap-2" >
+			<Icon path={mdiMapMarkerOutline} class="opacity-70" />
+			<span>{item?.label}</span>
+		</div>
+	{/snippet}
 </InputRelation>

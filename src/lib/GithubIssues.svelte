@@ -1,14 +1,25 @@
 <script lang="ts">
 	import dayjs from '$lib/dayjs'
 	import type { GithubIssue } from '$lib/types/github'
-	import { MessageSquare } from 'lucide-svelte'
+	import { MessageSquare } from '@lucide/svelte'
 
-	export let issues: GithubIssue[]
-	export let title: string
-	export let titleHref: string | undefined = undefined
-	export let showNewIssueButton = false
-	export let showDescription = true
-	export let showLabels = true
+	interface Props {
+		issues: GithubIssue[];
+		title: string;
+		titleHref?: string | undefined;
+		showNewIssueButton?: boolean;
+		showDescription?: boolean;
+		showLabels?: boolean;
+	}
+
+	let {
+		issues,
+		title,
+		titleHref = undefined,
+		showNewIssueButton = false,
+		showDescription = true,
+		showLabels = true
+	}: Props = $props();
 </script>
 
 {#if issues.length > 0}

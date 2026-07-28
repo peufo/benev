@@ -2,8 +2,12 @@
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
 	import { domain } from '.'
 
-	export let isNewUser = false
-	export let tokenId: string
+	interface Props {
+		isNewUser?: boolean;
+		tokenId: string;
+	}
+
+	let { isNewUser = false, tokenId }: Props = $props();
 </script>
 
 <EmailLayout title={isNewUser ? 'Bienvenue sur benev.io' : 'Verification de ton adresse mail'}>

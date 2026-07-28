@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Media } from '@prisma/client'
-	import { PlaceholderImage, tip } from 'fuma'
-	import { Trash2Icon } from 'lucide-svelte'
+	import { PlaceholderImage, tip } from '$lib/fuma'
+	import { Trash2Icon } from '@lucide/svelte'
 	import { SelectMedia } from '$lib/material'
 
 	export let key: string | null = null
@@ -19,17 +19,24 @@
 		<input type="hidden" name={key} {value} />
 	{/if}
 	{#if value}
-		<button
-			on:click={() => {
-				selectMedia.show()
-			}}
-			type="button"
-			class="hover:shadow-lg shadow transition-shadow rounded-lg relative"
-		>
-			<img src="/media/{value}" alt="Fond de badge" width={x} height={y} class="rounded-lg" />
-			<span class="text-xs">{label}</span>
+		<!-- Le bouton « désélectionner » était imbriqué dans le bouton de sélection: HTML
+		     invalide, que Svelte 5 refuse désormais de compiler. Les deux sont maintenant
+		     frères dans un conteneur positionné. -->
+		<div class="hover:shadow-lg shadow transition-shadow rounded-lg relative">
 			<button
-				on:click|stopPropagation={() => {
+				onclick={() => {
+					selectMedia.show()
+				}}
+				type="button"
+				class="rounded-lg"
+			>
+				<img src="/media/{value}" alt="Fond de badge" width={x} height={y} class="rounded-lg" />
+				<span class="text-xs">{label}</span>
+			</button>
+			<button
+				type="button"
+				onclick={(event) => {
+					event.stopPropagation()
 					value = null
 					oninput(null)
 				}}
@@ -38,10 +45,10 @@
 			>
 				<Trash2Icon size={12} opacity={0.8} class="hover:fill-error" />
 			</button>
-		</button>
+		</div>
 	{:else}
 		<button
-			on:click={() => selectMedia.show()}
+			onclick={() => selectMedia.show()}
 			type="button"
 			class="hover:shadow-lg shadow transition-shadow rounded-lg"
 		>

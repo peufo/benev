@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export const rolesMap: Record<MemberRole, { icon: string; label: string }> = {
 		root: { label: '__ROOT_USER__', icon: mdiShieldCrownOutline },
 		owner: { label: 'Propriétaire', icon: mdiCrownOutline },
@@ -10,7 +10,7 @@
 
 <script lang="ts">
 	import type { MemberRole } from '$lib/server'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import {
 		mdiShieldAccountOutline,
 		mdiAccountCircleOutline,
@@ -19,14 +19,23 @@
 		mdiShieldCrownOutline,
 	} from '@mdi/js'
 
-	export let roles: MemberRole[]
-	let klass = ''
-	export { klass as class }
-	export let mode: 'badge' | 'icon' | 'contents' = 'badge'
-	export let iconSize = 21
+	
+	interface Props {
+		roles: MemberRole[];
+		class?: string;
+		mode?: 'badge' | 'icon' | 'contents';
+		iconSize?: number;
+	}
+
+	let {
+		roles,
+		class: klass = '',
+		mode = 'badge',
+		iconSize = 21
+	}: Props = $props();
 
 	const rolesOrder: MemberRole[] = ['root', 'owner', 'admin', 'leader', 'member']
-	$: role = rolesOrder.find((r) => roles.includes(r))
+	let role = $derived(rolesOrder.find((r) => roles.includes(r)))
 </script>
 
 {#if role && role !== 'root'}

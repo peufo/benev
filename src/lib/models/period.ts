@@ -1,4 +1,4 @@
-import { z, type ZodObj, type SuperRefinement } from 'fuma/validation'
+import { z, type ZodObj, type SuperRefinement } from '$lib/fuma'
 import type { Prisma } from '@prisma/client'
 
 export const modelPeriodCreate = {
@@ -22,13 +22,17 @@ export const validationPeriod: SuperRefinement<{ start: Date; end: Date }> = (
 ) => {
 	if (start.getTime() > end.getTime()) {
 		ctx.addIssue({
-			code: 'invalid_date',
+			// zod 4 a retiré le code `invalid_date`; une règle métier inter-champs
+			// relève de `custom`.
+			code: 'custom',
 			path: ['start'],
 			message: 'Doit être avant la fin',
 			fatal: true,
 		})
 		ctx.addIssue({
-			code: 'invalid_date',
+			// zod 4 a retiré le code `invalid_date`; une règle métier inter-champs
+			// relève de `custom`.
+			code: 'custom',
 			path: ['end'],
 			message: 'Doit être après le début',
 			fatal: true,

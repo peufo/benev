@@ -1,14 +1,18 @@
 <script lang="ts">
-	import { Card, InputSearch, Pagination } from 'fuma'
+	import { Card, InputSearch, Pagination } from '$lib/fuma'
 
-	export let data
+	let { data } = $props();
 </script>
 
 <Card class="min-w-0" bodyClass="overflow-auto">
-	<h2 slot="title" class="title">Evenements ({data.eventsCount})</h2>
-	<div slot="action">
-		<InputSearch />
-	</div>
+	{#snippet title()}
+		<h2  class="title">Evenements ({data.eventsCount})</h2>
+	{/snippet}
+	{#snippet action()}
+		<div >
+			<InputSearch />
+		</div>
+	{/snippet}
 	<table class="table">
 		<thead>
 			<tr>
@@ -19,7 +23,7 @@
 				<th>State</th>
 				<th>Owner</th>
 				<th>Members</th>
-				<th />
+				<th></th>
 			</tr>
 		</thead>
 		<tbody class="">

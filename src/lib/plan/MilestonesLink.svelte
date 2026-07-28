@@ -2,11 +2,15 @@
 	import { formatDatetime } from '$lib/formatRange'
 	import type { Milestone } from '@prisma/client'
 	import type { Dayjs } from 'dayjs'
-	import { urlParam } from 'fuma'
-	import { PinIcon } from 'lucide-svelte'
+	import { urlParam } from '$lib/fuma'
+	import { PinIcon } from '@lucide/svelte'
 
-	export let milestonesBefore: (Milestone & { time: Dayjs })[]
-	export let milestonesAfter: (Milestone & { time: Dayjs })[]
+	interface Props {
+		milestonesBefore: (Milestone & { time: Dayjs })[];
+		milestonesAfter: (Milestone & { time: Dayjs })[];
+	}
+
+	let { milestonesBefore, milestonesAfter }: Props = $props();
 </script>
 
 <div class="flex gap-2 justify-between items-start sticky left-0 w-full p-2">

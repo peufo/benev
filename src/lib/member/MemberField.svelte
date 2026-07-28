@@ -10,14 +10,18 @@
 		InputRadio,
 		InputCheckboxs,
 		Icon,
-	} from 'fuma'
+	} from '$lib/fuma'
 	import { page } from '$app/stores'
 	import { jsonParse } from '$lib/jsonParse'
 
-	export let field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
-	export let value: string | number | true | string[] = ''
-	let klass = ''
-	export { klass as class }
+	interface Props {
+		field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>;
+		value?: string | number | true | string[];
+		class?: string;
+	}
+
+	let { field, value = '', class: klass = '' }: Props = $props();
+	
 
 	const components: Record<FieldType, ComponentType> = {
 		string: InputText,
@@ -37,11 +41,12 @@
 		multiselect: '',
 	}
 
-	$: isLeader = $page.data.member?.roles.includes('leader')
+	let isLeader = $derived($page.data.member?.roles.includes('leader'))
+
+	const SvelteComponent = $derived(components[field.type]);
 </script>
 
-<svelte:component
-	this={components[field.type]}
+<SvelteComponent
 	{value}
 	class="{classes[field.type]} {klass}"
 	key={field.id}
@@ -49,24 +54,26 @@
 	options={jsonParse(field.options, [])}
 	input={{ disabled: !field.memberCanWrite && !isLeader }}
 >
-	<div class="h-5 mr-auto" slot="label_append">
-		{#if !field.memberCanRead}
-			<Icon
-				path={mdiEyeOffOutline}
-				size={20}
-				title="Les membres ne peuvent pas voir ce champ"
-				class="ml-3 opacity-75"
-			/>
-		{:else if !field.memberCanWrite}
-			<Icon
-				path={mdiPencilOffOutline}
-				size={20}
-				title="Les membres ne peuvent pas éditer ce champ"
-				class="ml-3 opacity-75"
-			/>
-		{:else if field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
-			<span class="text-error text-xl ml-1">*</span>
-		{/if}
-		<div class="grow" />
-	</div>
-</svelte:component>
+	{#snippet label_append()}
+		<div class="h-5 mr-auto" >
+			{#if !field.memberCanRead}
+				<Icon
+					path={mdiEyeOffOutline}
+					size={20}
+					title="Les membres ne peuvent pas voir ce champ"
+					class="ml-3 opacity-75"
+				/>
+			{:else if !field.memberCanWrite}
+				<Icon
+					path={mdiPencilOffOutline}
+					size={20}
+					title="Les membres ne peuvent pas éditer ce champ"
+					class="ml-3 opacity-75"
+				/>
+			{:else if field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
+				<span class="text-error text-xl ml-1">*</span>
+			{/if}
+			<div class="grow"></div>
+		</div>
+	{/snippet}
+</SvelteComponent>

@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { z, type ZodObj } from 'fuma'
+import { z, type ZodObj } from '$lib/fuma'
 
 const zodConnectNullish = z
 	.object({ id: z.string() })

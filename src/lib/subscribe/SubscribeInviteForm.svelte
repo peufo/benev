@@ -3,17 +3,26 @@
 	import type { Member } from '@prisma/client'
 	import type { Props as TippyProps } from 'tippy.js'
 	import { createEventDispatcher } from 'svelte'
-	import { InputRelation, urlParam } from 'fuma'
-	import { useForm } from 'fuma/validation'
+	import { InputRelation, urlParam } from '$lib/fuma'
+	import { useForm } from '$lib/fuma'
 	import { enhance } from '$app/forms'
 	import { api } from '$lib/api'
 	import { eventPath } from '$lib/store'
 
-	export let periodId: string
-	export let tippyProps: Partial<TippyProps> = {}
-	let klass = ''
-	export { klass as class }
-	export let member: Member | null = null
+	
+	interface Props {
+		periodId: string;
+		tippyProps?: Partial<TippyProps>;
+		class?: string;
+		member?: Member | null;
+	}
+
+	let {
+		periodId,
+		tippyProps = {},
+		class: klass = '',
+		member = $bindable(null)
+	}: Props = $props();
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -47,18 +56,22 @@
 		on:input
 		{tippyProps}
 	>
-		<div slot="item" class="contents" let:item>
-			{item?.firstName}
-			{item?.lastName}
-		</div>
+		{#snippet item({ item })}
+				<div  class="contents" >
+				{item?.firstName}
+				{item?.lastName}
+			</div>
+			{/snippet}
 
-		<div slot="suggestion" let:item class="flex gap-2 items-center w-full">
-			{#if item}
-				<span>{item.firstName} {item.lastName}</span>
-				<div class="grow" />
-				<span style="font-size: 0.6rem;">{item.email}</span>
-			{/if}
-		</div>
+		{#snippet suggestion({ item })}
+				<div   class="flex gap-2 items-center w-full">
+				{#if item}
+					<span>{item.firstName} {item.lastName}</span>
+					<div class="grow"></div>
+					<span style="font-size: 0.6rem;">{item.email}</span>
+				{/if}
+			</div>
+			{/snippet}
 	</InputRelation>
 
 	{#if member}

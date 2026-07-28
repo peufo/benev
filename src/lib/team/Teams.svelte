@@ -1,11 +1,16 @@
 <script lang="ts">
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
-	import { Placeholder } from 'fuma'
+	import { Placeholder } from '$lib/fuma'
 	import TeamCard from './TeamCard.svelte'
 
 	import { createEventDispatcher } from 'svelte'
 
-	export let teams: TeamWithComputedValues[]
+	interface Props {
+		teams: TeamWithComputedValues[];
+		placeholder?: import('svelte').Snippet;
+	}
+
+	let { teams, placeholder }: Props = $props();
 
 	const dispatch = createEventDispatcher<{
 		clickPeriod: PeriodWithComputedValues & { team: TeamWithComputedValues }
@@ -23,6 +28,6 @@
 	</div>
 {:else}
 	<Placeholder>
-		<slot name="placeholder">Pas de secteur publique</slot>
+		{#if placeholder}{@render placeholder()}{:else}Pas de secteur publique{/if}
 	</Placeholder>
 {/if}

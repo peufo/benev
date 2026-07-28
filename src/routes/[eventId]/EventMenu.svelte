@@ -1,14 +1,18 @@
 <script lang="ts">
 	import type { Page } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { DropDown } from 'fuma'
-	import { MenuIcon, GaugeIcon } from 'lucide-svelte'
+	import { DropDown } from '$lib/fuma'
+	import { MenuIcon, GaugeIcon } from '@lucide/svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from '$lib/layout/adminTabs'
 
-	export let pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
+	interface Props {
+		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[];
+	}
 
-	$: adminIsVisible = $page.data.member?.roles.includes('leader') || $page.data.userIsRoot
+	let { pages }: Props = $props();
+
+	let adminIsVisible = $derived($page.data.member?.roles.includes('leader') || $page.data.userIsRoot)
 </script>
 
 <div class="gap-2 hidden lg:flex">
@@ -16,14 +20,16 @@
 </div>
 
 <DropDown class="max-h-none min-w-[200px]" hideOnBlur>
-	<button
-		slot="activator"
-		class="
-			btn btn-square ml-2 lg:hidden
-		"
-	>
-		<MenuIcon size={24} />
-	</button>
+	{#snippet activator()}
+		<button
+			
+			class="
+				btn btn-square ml-2 lg:hidden
+			"
+		>
+			<MenuIcon size={24} />
+		</button>
+	{/snippet}
 
 	<div class="flex flex-col gap-1">
 		{#if adminIsVisible}

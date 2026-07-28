@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { LayoutMe } from '$lib/me'
 
-	export let data
+	let { data, children } = $props();
 </script>
 
 <LayoutMe user={data.user}>
-	<slot />
+	{@render children?.()}
 </LayoutMe>

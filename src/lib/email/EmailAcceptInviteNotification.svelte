@@ -3,7 +3,11 @@
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
 
-	export let member: Member & { event: Event }
+	interface Props {
+		member: Member & { event: Event };
+	}
+
+	let { member }: Props = $props();
 </script>
 
 <EmailLayout

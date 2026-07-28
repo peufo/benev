@@ -1,10 +1,20 @@
 <script lang="ts">
-	export let avatarId: string | null
-	export let avatarPlaceholder: string
-	export let firstName: string
-	let klass = ''
-	export { klass as class }
-	export let size: 'medium' | 'large' = 'medium'
+	
+	interface Props {
+		avatarId: string | null;
+		avatarPlaceholder: string;
+		firstName: string;
+		class?: string;
+		size?: 'medium' | 'large';
+	}
+
+	let {
+		avatarId,
+		avatarPlaceholder,
+		firstName,
+		class: klass = '',
+		size = 'medium'
+	}: Props = $props();
 </script>
 
 {#key avatarId || avatarPlaceholder}

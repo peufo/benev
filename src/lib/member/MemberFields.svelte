@@ -5,11 +5,15 @@
 	import { toast } from 'svelte-sonner'
 	import axios from 'axios'
 	import type { Field } from '@prisma/client'
-	import { Icon, Placeholder, urlParam, listEditable } from 'fuma'
+	import { Icon, Placeholder, urlParam, listEditable } from '$lib/fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { eventPath } from '$lib/store'
 
-	export let fields: Field[]
+	interface Props {
+		fields: Field[];
+	}
+
+	let { fields = $bindable() }: Props = $props();
 
 	async function handleReorder(reorderedFields: Field[]) {
 		fields = reorderedFields
@@ -47,7 +51,7 @@
 	{#each fields as field (field.id)}
 		<button
 			transition:slide
-			on:click={() =>
+			onclick={() =>
 				goto($urlParam.with({ form_field: field.id }), { replaceState: true, noScroll: true })}
 			class="
 				w-full flex gap-3 py-3 px-4 items-center border rounded-lg

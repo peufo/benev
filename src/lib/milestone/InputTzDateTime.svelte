@@ -1,12 +1,22 @@
 <script lang="ts">
 	import { type Dayjs } from '$lib/dayjs'
-	import { USE_COERCE_DATE } from 'fuma'
+	import { USE_COERCE_DATE } from '$lib/fuma'
 
-	export let label: string
-	export let value: Dayjs
-	export let key: string
-	export let hint = ''
-	export let onSetValue: (newValue: Dayjs) => Dayjs = (v) => v
+	interface Props {
+		label: string;
+		value: Dayjs;
+		key: string;
+		hint?: string;
+		onSetValue?: (newValue: Dayjs) => Dayjs;
+	}
+
+	let {
+		label,
+		value = $bindable(),
+		key,
+		hint = '',
+		onSetValue = (v) => v
+	}: Props = $props();
 
 	function setDateTime(datetime: string) {
 		if (!datetime) return
@@ -46,6 +56,6 @@
 		class="input input-bordered"
 		step={300}
 		value={value.format('YYYY-MM-DDTHH:mm')}
-		on:input={(event) => setDateTime(event.currentTarget.value)}
+		oninput={(event) => setDateTime(event.currentTarget.value)}
 	/>
 </div>

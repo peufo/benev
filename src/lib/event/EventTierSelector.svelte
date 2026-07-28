@@ -1,10 +1,14 @@
 <script lang="ts">
-	import { Check } from 'lucide-svelte'
+	import { Check } from '@lucide/svelte'
 	import { createEventDispatcher } from 'svelte'
 	import type { EventTier } from '@prisma/client'
 	import { EVENT_TIER } from '$lib/constant'
 
-	export let value = 'basic'
+	interface Props {
+		value?: string;
+	}
+
+	let { value = $bindable('basic') }: Props = $props();
 
 	const dispatch = createEventDispatcher<{ change: string }>()
 
@@ -27,7 +31,7 @@
 			class="card text-left border rounded-2xl p-4 transition-all duration-200 {selected
 				? 'border-primary ring-1 ring-primary bg-primary/5'
 				: 'border-base-200 bg-base-100 hover:border-primary/50 hover:bg-base-200/30'}"
-			on:click={() => select(plan)}
+			onclick={() => select(plan)}
 		>
 			<div class="flex items-start justify-between gap-3">
 				<div>

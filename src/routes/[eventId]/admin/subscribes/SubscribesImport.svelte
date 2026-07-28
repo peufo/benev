@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { derived } from 'svelte/store'
 	import { page } from '$app/stores'
-	import { ButtonCopy, DropDown, Icon } from 'fuma'
+	import { ButtonCopy, DropDown, Icon } from '$lib/fuma'
 	import { mdiFileDelimitedOutline, mdiTrayArrowDown } from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { toast } from 'svelte-sonner'
 
-	let dropdown: DropDown
+	let dropdown: DropDown = $state()
 
 	let urlSubscribesCSV = derived(page, ({ url }) => {
 		const params = new URLSearchParams(url.searchParams)
@@ -23,9 +23,11 @@
 </script>
 
 <DropDown bind:this={dropdown} hideOnBlur>
-	<button slot="activator" class="btn btn-square btn-sm">
-		<Icon path={mdiTrayArrowDown} size={20} />
-	</button>
+	{#snippet activator()}
+		<button  class="btn btn-square btn-sm">
+			<Icon path={mdiTrayArrowDown} size={20} />
+		</button>
+	{/snippet}
 
 	<div class="flex flex-col gap-1">
 		<ButtonCopy

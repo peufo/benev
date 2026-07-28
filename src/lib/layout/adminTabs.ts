@@ -10,9 +10,9 @@ import {
 	LogIn,
 	Gift,
 	Palette,
-} from 'lucide-svelte'
+} from '@lucide/svelte'
 
-import { param } from 'fuma'
+import { param } from '$lib/fuma'
 import { dev } from '$app/environment'
 import { derived } from 'svelte/store'
 

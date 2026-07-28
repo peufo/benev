@@ -1,5 +1,5 @@
-import { z } from 'fuma/validation'
-import { parseQuery } from 'fuma/server'
+import { z } from '$lib/fuma'
+import { parseQuery } from '$lib/server/fuma'
 import type { Event, Prisma } from '@prisma/client'
 import { prisma } from '$lib/server'
 import { RANGE_DAYS } from '$lib/plan/constants'

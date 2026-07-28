@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { Icon, tip, urlParam, useForm } from 'fuma'
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+	import { Icon, tip, urlParam, useForm } from '$lib/fuma'
 	import {
 		mdiAccountMultipleOutline,
 		mdiChartGantt,
@@ -9,17 +12,21 @@
 	} from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import type { Team } from '@prisma/client'
-	import { CopyPlus } from 'lucide-svelte'
+	import { CopyPlus } from '@lucide/svelte'
 	import Delayed from './Delayed.svelte'
 
-	export let team: Team
+	interface Props {
+		team: Team;
+	}
+
+	let { team }: Props = $props();
 	const { enhance } = useForm()
 </script>
 
 <Delayed index={3} max={3}>
 	<a
 		href={`${$eventPath}/admin/members?subscribes_teams=["${team.id}"]`}
-		on:click|stopPropagation
+		onclick={stopPropagation(bubble('click'))}
 		class="btn btn-square btn-sm btn-ghost"
 		use:tip={{ content: 'Tous les membres du secteur' }}
 	>
@@ -30,7 +37,7 @@
 <Delayed index={2} max={3}>
 	<a
 		href={`${$eventPath}/admin/subscribes?teams=["${team.id}"]`}
-		on:click|stopPropagation
+		onclick={stopPropagation(bubble('click'))}
 		class="btn btn-square btn-sm btn-ghost"
 		use:tip={{ content: 'Toutes les inscriptions du secteur' }}
 	>
@@ -41,7 +48,7 @@
 <Delayed index={1} max={3}>
 	<a
 		href={`${$eventPath}/admin/plan?teams=["${team.id}"]`}
-		on:click|stopPropagation
+		onclick={stopPropagation(bubble('click'))}
 		class="btn btn-square btn-sm btn-ghost"
 		use:tip={{ content: 'Voir le planning du secteur' }}
 	>

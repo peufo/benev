@@ -1,10 +1,14 @@
 <script lang="ts">
-	import { Icon, tip } from 'fuma'
+	import { Icon, tip } from '$lib/fuma'
 	import { mdiAlertOutline } from '@mdi/js'
 	import type { Subscribe } from '@prisma/client'
-	export let subscribes: Subscribe[]
+	interface Props {
+		subscribes: Subscribe[];
+	}
 
-	$: nbAbsences = subscribes.filter((s) => s.isAbsent).length || 0
+	let { subscribes }: Props = $props();
+
+	let nbAbsences = $derived(subscribes.filter((s) => s.isAbsent).length || 0)
 </script>
 
 {#if nbAbsences}

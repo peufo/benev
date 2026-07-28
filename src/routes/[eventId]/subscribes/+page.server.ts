@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { isFreeRange } from 'perod'
-import { formAction } from 'fuma/server'
+import { formAction } from '$lib/server/fuma'
 import { modelSubscribe } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'

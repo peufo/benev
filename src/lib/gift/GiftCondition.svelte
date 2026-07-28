@@ -1,7 +1,11 @@
 <script lang="ts">
 	import type { GiftCondition } from '@prisma/client'
 
-	export let condition: Partial<GiftCondition>
+	interface Props {
+		condition: Partial<GiftCondition>;
+	}
+
+	let { condition }: Props = $props();
 </script>
 
 <div>

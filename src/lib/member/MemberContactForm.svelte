@@ -1,11 +1,15 @@
 <script lang="ts">
 	import type { MemberProfile } from '$lib/server'
-	import { Form, InputDate, InputText } from 'fuma'
+	import { Form, InputDate, InputText } from '$lib/fuma'
 	import { modelUserContactUpdate } from '$lib/models'
 
-	let klass = ''
-	export { klass as class }
-	export let member: MemberProfile
+	
+	interface Props {
+		class?: string;
+		member: MemberProfile;
+	}
+
+	let { class: klass = '', member }: Props = $props();
 </script>
 
 <Form

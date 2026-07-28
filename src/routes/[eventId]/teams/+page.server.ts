@@ -1,5 +1,5 @@
-import { z } from 'fuma'
-import { formAction, parseQuery } from 'fuma/server'
+import { z } from '$lib/fuma'
+import { formAction, parseQuery } from '$lib/server/fuma'
 import { useAddTeamComputedValues, permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { modelTeam, modelTeamUpdate } from '$lib/models'

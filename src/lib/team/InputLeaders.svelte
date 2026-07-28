@@ -1,11 +1,15 @@
 <script lang="ts">
 	import type { Member } from '@prisma/client'
 	import { mdiAccountPlusOutline } from '@mdi/js'
-	import { component, InputRelations, urlParam } from 'fuma'
+	import { component, InputRelations, urlParam } from '$lib/fuma'
 	import { api } from '$lib/api'
 	import MemberLink from './MemberLink.svelte'
 
-	export let value: Member[] | undefined = undefined
+	interface Props {
+		value?: Member[] | undefined;
+	}
+
+	let { value = undefined }: Props = $props();
 </script>
 
 <InputRelations

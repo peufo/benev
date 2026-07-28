@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run, preventDefault } from 'svelte/legacy';
+
 	import { createEventDispatcher } from 'svelte'
 	import axios from 'axios'
 	import { mdiContentDuplicate } from '@mdi/js'
@@ -15,7 +17,7 @@
 		USE_COERCE_JSON,
 		InputRelations,
 		component,
-	} from 'fuma'
+	} from '$lib/fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { goto, invalidateAll } from '$app/navigation'
@@ -26,10 +28,14 @@
 
 	type PeriodProp = Partial<Period & { team: Team; tags: Tag[]; subscribes: Subscribe[] }>
 
-	let klass = ''
-	export { klass as class }
-	export let period: PeriodProp = {}
-	export let disableRedirect = false
+	
+	interface Props {
+		class?: string;
+		period?: PeriodProp;
+		disableRedirect?: boolean;
+	}
+
+	let { class: klass = '', period = $bindable({}), disableRedirect = false }: Props = $props();
 
 	const dispatch = createEventDispatcher<{ success: void; delete: void }>()
 
@@ -63,7 +69,6 @@
 	})
 
 	const detectChange = useDetectChange(period)
-	$: if (detectChange(period)) setPeriod(period)
 
 	function useDetectChange(periodInitial: PeriodProp) {
 		let currentPeriod = periodInitial
@@ -80,12 +85,11 @@
 
 	let defaultStart = daytz().startOf('hour').add(1, 'hour')
 	let defaultEnd = daytz().startOf('hour').add(3, 'hours')
-	let start = daytz(period.start || defaultStart)
-	let end = daytz(period?.end || defaultEnd)
+	let start = $state(daytz(period.start || defaultStart))
+	let end = $state(daytz(period?.end || defaultEnd))
 
-	let maxSubscribe = period?.maxSubscribe || 1
+	let maxSubscribe = $state(period?.maxSubscribe || 1)
 
-	$: basePath = `${$eventPath}/admin`
 
 	// ATTENTION runtime: `Intl.DurationFormat` n'est pas disponible partout. Bun l'a
 	// (vérifié en 1.2.22), Node ne l'a pas avant la v23. Le Dockerfile lance l'app avec
@@ -128,6 +132,10 @@
 			await goto(res.data.location, { invalidateAll: true, noScroll: true })
 		else await invalidateAll()
 	}
+	run(() => {
+		if (detectChange(period)) setPeriod(period)
+	});
+	let basePath = $derived(`${$eventPath}/admin`)
 </script>
 
 <form
@@ -203,11 +211,11 @@
 				type="button"
 				class="btn btn-primary"
 				class:btn-disabled={!start || !end}
-				on:click|preventDefault={createNextPeriod}
+				onclick={preventDefault(createNextPeriod)}
 			>
 				<Icon path={mdiContentDuplicate} title="Dupliquer après" />
 			</button>
-			<div class="grow" />
+			<div class="grow"></div>
 			<ButtonDelete formaction="{basePath}?/period_delete" />
 		{:else}
 			<button class="btn btn-primary" type="submit">Ajouter</button>

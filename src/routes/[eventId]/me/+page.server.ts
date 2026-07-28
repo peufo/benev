@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { tryOrFail, parseFormData, formAction } from 'fuma/server'
-import { z, type ZodObj } from 'fuma'
+import { tryOrFail, parseFormData, formAction } from '$lib/server/fuma'
+import { z, type ZodObj } from '$lib/fuma'
 import { permission, prisma, redirectToAuth, redirectToRegister } from '$lib/server'
 import type { Field, FieldType } from '@prisma/client'
 import { modelMemberSetting } from '$lib/models'
@@ -103,14 +103,15 @@ function buildModelMemberProfile(fields: Field[], isPartial: boolean) {
 	const modelByType = {
 		boolean: z.boolean(),
 		number: z.number({
-			required_error: requiredError,
-			invalid_type_error: requiredError,
+			// zod 4 fusionne `required_error`/`invalid_type_error` dans `error`.
+			error: requiredError,
 		}),
 		string: z.string().min(1, { message: requiredError }),
 		textarea: z.string().min(1, { message: requiredError }),
 		select: z
 			.string({
-				required_error: requiredError,
+				// zod 4 fusionne `required_error`/`invalid_type_error` dans `error`.
+				error: requiredError,
 			})
 			.min(1, { message: requiredError }),
 		multiselect: z.jsonArray(z.string()),

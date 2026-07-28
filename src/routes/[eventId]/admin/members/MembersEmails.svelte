@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { mdiEmailMultipleOutline } from '@mdi/js'
 
-	import { page } from '$app/stores'
-	import { Icon } from 'fuma'
+	import { page } from '$app/state'
+	import { Icon } from '$lib/fuma'
 	import { api } from '$lib/api'
 
 	const getMembersEmails = async () => {
 		const { emails } = await $api.eventGet<{ emails: string[] }>(
-			`/admin/members/email?${$page.url.searchParams.toString()}`
+			`/admin/members/email?${page.url.searchParams.toString()}`
 		)
 		return emails
 	}
 
-	let isLoading = false
+	let isLoading = $state(false)
 
 	async function handleMailing() {
 		if (isLoading) return
@@ -28,9 +28,9 @@
 	}
 </script>
 
-<button class="btn btn-square btn-sm" on:click={handleMailing} class:btn-disabled={isLoading}>
+<button class="btn btn-square btn-sm" onclick={handleMailing} class:btn-disabled={isLoading}>
 	{#if isLoading}
-		<span class="loading loading-spinner scale-125 text-secondary" />
+		<span class="loading loading-spinner scale-125 text-secondary"></span>
 	{:else}
 		<Icon
 			path={mdiEmailMultipleOutline}

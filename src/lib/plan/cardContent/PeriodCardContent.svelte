@@ -1,21 +1,26 @@
 <script lang="ts">
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeHour } from '$lib/formatRange'
-	import { Icon, urlParam } from 'fuma'
+	import { Icon, urlParam } from '$lib/fuma'
 	import { magnet } from '../magnet'
 	import type { PeriodWithMembers } from '../types'
 	import { cardContentOptions } from './options'
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 	import { TagsList } from '$lib/tag'
 
-	export let period: PeriodWithMembers
-	export let deltaStartMs: number
-	export let deltaEndMs: number
+	interface Props {
+		period: PeriodWithMembers;
+		deltaStartMs: number;
+		deltaEndMs: number;
+	}
+
+	let { period, deltaStartMs, deltaEndMs }: Props = $props();
 </script>
 
 {#if $cardContentOptions.showProgress}
 	<Progress {period} class="justify-between" badgeClass="ml-1 mr-1 mb-1" progressClass="bg-red-400">
-		<svelte:fragment slot="before-badge">
+		<!-- @migration-task: migrate this slot by hand, `before-badge` is an invalid identifier -->
+	<svelte:fragment slot="before-badge">
 			{#if !$cardContentOptions.hideRangetime}
 				<div class="text-xs font-semibold m-1 whitespace-nowrap overflow-hidden text-ellipsis">
 					{formatRangeHour({

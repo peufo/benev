@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Drawer, Icon } from 'fuma'
+	import { Drawer, Icon } from '$lib/fuma'
 	import InviteForm from './InviteForm.svelte'
 	import { TeamForm, type TeamFormInstance } from './team'
 	import { PeriodDrawer, PeriodForm } from './period'
@@ -9,36 +9,47 @@
 	import MemberImportDialog from './member/MemberImportDialog.svelte'
 	import { mdiAccountMultiplePlus } from '@mdi/js'
 
-	let teamForm: TeamFormInstance
-	let periodDrawer: PeriodDrawer
-	let periodForm: PeriodForm
+	let teamForm: TeamFormInstance = $state()
+	let periodDrawer: PeriodDrawer = $state()
+	let periodForm: PeriodForm = $state()
 
-	export let event: Event & { memberFields: Field[] }
-	export let team: Partial<TeamWithComputedValues> | null = null
-	export let period: Partial<FormDataPeriod> = {}
 
-	export let tag: Partial<Tag> | null = null
+	interface Props {
+		event: Event & { memberFields: Field[] };
+		team?: Partial<TeamWithComputedValues> | null;
+		period?: Partial<FormDataPeriod>;
+		tag?: Partial<Tag> | null;
+	}
 
-	let importDialog: HTMLDialogElement
+	let {
+		event,
+		team = null,
+		period = {},
+		tag = null
+	}: Props = $props();
+
+	let importDialog: HTMLDialogElement = $state()
 
 	function openImportDialog() {
 		importDialog.showModal()
 	}
 </script>
 
-<Drawer key="form_invite" title="Inviter un nouveau membre" let:close>
-	<InviteForm
-		onCreate={async (member) => {
-			teamForm?.update((t) => ({ ...t, leaders: [...(t.leaders || []), member] }))
-			periodDrawer?.selectMember(member)
-			await close()
-		}}
-	/>
+<Drawer key="form_invite" title="Inviter un nouveau membre" >
+	{#snippet children({ close })}
+		<InviteForm
+			onCreate={async (member) => {
+				teamForm?.update((t) => ({ ...t, leaders: [...(t.leaders || []), member] }))
+				periodDrawer?.selectMember(member)
+				await close()
+			}}
+		/>
 
-	<button class="menu-item" on:click={openImportDialog}>
-		<Icon path={mdiAccountMultiplePlus} size={20} />
-		<span>Importer des membres</span>
-	</button>
+		<button class="menu-item" onclick={openImportDialog}>
+			<Icon path={mdiAccountMultiplePlus} size={20} />
+			<span>Importer des membres</span>
+		</button>
+	{/snippet}
 </Drawer>
 
 <!--
@@ -55,8 +66,10 @@
 
 <MemberImportDialog bind:dialog={importDialog} />
 
-<Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur" let:close>
-	<TeamForm bind:teamForm team={team || {}} {event} on:success={() => close()} />
+<Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur" >
+	{#snippet children({ close })}
+		<TeamForm bind:teamForm team={team || {}} {event} on:success={() => close()} />
+	{/snippet}
 </Drawer>
 
 <PeriodDrawer bind:this={periodDrawer} bind:periodForm {period} />
@@ -65,15 +78,17 @@
 	key="form_tag"
 	title="{tag?.id ? "Modifier l'" : 'Nouvelle '} étiquette"
 	maxWidth="400px"
-	let:close
+	
 >
-	<TagForm
-		tag={tag || {}}
-		on:created={async ({ detail: tag }) => {
-			await close({ replaceState: true })
-			periodForm.updatePeriod((p) => ({ ...p, tags: [...(p.tags || []), tag] }))
-		}}
-		on:updated={() => close()}
-		on:deleted={() => close()}
-	/>
+	{#snippet children({ close })}
+		<TagForm
+			tag={tag || {}}
+			on:created={async ({ detail: tag }) => {
+				await close({ replaceState: true })
+				periodForm.updatePeriod((p) => ({ ...p, tags: [...(p.tags || []), tag] }))
+			}}
+			on:updated={() => close()}
+			on:deleted={() => close()}
+		/>
+	{/snippet}
 </Drawer>

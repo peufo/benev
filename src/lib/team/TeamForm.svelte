@@ -1,6 +1,6 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { Event, Field } from '@prisma/client'
-	import { Form, tip } from 'fuma'
+	import { Form, tip } from '$lib/fuma'
 
 	export type TeamFormComponent = ComponentType<Form<typeof modelTeam, TeamWithComputedValues>>
 	export type TeamFormInstance = InstanceType<TeamFormComponent>
@@ -9,7 +9,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { toast } from 'svelte-sonner'
-	import { InputText, InputTextarea, InputDate, InputBoolean } from 'fuma'
+	import { InputText, InputTextarea, InputDate, InputBoolean } from '$lib/fuma'
 
 	import { MemberConditions } from '$lib/member'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
@@ -18,12 +18,21 @@
 	import { modelTeam } from '$lib/models'
 	import type { TeamWithComputedValues } from '$lib/server'
 
-	let klass = ''
-	export { klass as class }
+	
 
-	export let event: Event & { memberFields: Field[] }
-	export let team: Partial<TeamWithComputedValues> = {}
-	export let teamForm: TeamFormInstance | undefined = undefined
+	interface Props {
+		class?: string;
+		event: Event & { memberFields: Field[] };
+		team?: Partial<TeamWithComputedValues>;
+		teamForm?: TeamFormInstance | undefined;
+	}
+
+	let {
+		class: klass = '',
+		event,
+		team = $bindable({}),
+		teamForm = $bindable(undefined)
+	}: Props = $props();
 
 	const TeamForm: TeamFormComponent = Form
 </script>

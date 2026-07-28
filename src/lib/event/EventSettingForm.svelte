@@ -1,15 +1,19 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
 	import { eventPath } from '$lib/store'
-	import { useForm } from 'fuma/validation'
-	import { InputBoolean, InputDate, InputNumber } from 'fuma'
+	import { useForm } from '$lib/fuma'
+	import { InputBoolean, InputDate, InputNumber } from '$lib/fuma'
 	import { slide } from 'svelte/transition'
 
 	const { enhance } = useForm({
 		successReset: false,
 	})
 
-	export let event: Event
+	interface Props {
+		event: Event;
+	}
+
+	let { event = $bindable() }: Props = $props();
 </script>
 
 <form method="post" use:enhance action="{$eventPath}/admin/adhesion?/set_member_settings">

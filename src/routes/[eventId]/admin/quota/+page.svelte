@@ -3,11 +3,8 @@
 	import { EventTierDetails, TierCard } from '$lib/event'
 	import { EVENT_TIER } from '$lib/constant'
 
-	export let data
+	let { data } = $props();
 
-	$: ({ event, member, membersValided, userIsRoot } = data)
-	$: isOwner = member?.roles.includes('owner') || userIsRoot
-	$: upgradeOptions = getUpgradeOptions(event.tier)
 
 	function getUpgradeOptions(currentTier: EventTier): { tier: EventTier; priceId: string }[] {
 		if (currentTier === 'premium' || currentTier === 'pro') return []
@@ -26,6 +23,9 @@
 		if (tier === 'premium') return ['Support email 7/7 — réponse en 24h']
 		return []
 	}
+	let { event, member, membersValided, userIsRoot } = $derived(data)
+	let isOwner = $derived(member?.roles.includes('owner') || userIsRoot)
+	let upgradeOptions = $derived(getUpgradeOptions(event.tier))
 </script>
 
 <div class="max-w-4xl mx-auto p-6 flex flex-col gap-6">

@@ -3,15 +3,19 @@
 	import { createEventDispatcher } from 'svelte'
 	import { mdiReload, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/stores'
-	import { Icon } from 'fuma'
-	import { useForm } from 'fuma/validation'
+	import { Icon } from '$lib/fuma'
+	import { useForm } from '$lib/fuma'
 	import { enhance } from '$app/forms'
 	import Avatar from './Avatar.svelte'
-	import { InputImage } from 'fuma'
+	import { InputImage } from '$lib/fuma'
 
-	export let user: User
-	let klass = ''
-	export { klass as class }
+	interface Props {
+		user: User;
+		class?: string;
+	}
+
+	let { user, class: klass = '' }: Props = $props();
+	
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 
@@ -38,19 +42,21 @@
 			class="h-28 w-28 {klass}"
 		/>
 
-		<svelte:fragment slot="actions">
-			{#if user.avatarId}
-				<button formaction="/me?/delete_avatar" class="menu-item">
-					<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
-					<span>Supprimer cette photo</span>
-				</button>
-			{:else}
-				<button formaction="/me?/generate_avatar" class="menu-item">
-					<Icon path={mdiReload} class="opacity-70" size={20} />
-					<span>Générer un autre avatar</span>
-				</button>
-			{/if}
-		</svelte:fragment>
+		{#snippet actions()}
+			
+				{#if user.avatarId}
+					<button formaction="/me?/delete_avatar" class="menu-item">
+						<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
+						<span>Supprimer cette photo</span>
+					</button>
+				{:else}
+					<button formaction="/me?/generate_avatar" class="menu-item">
+						<Icon path={mdiReload} class="opacity-70" size={20} />
+						<span>Générer un autre avatar</span>
+					</button>
+				{/if}
+			
+			{/snippet}
 	</InputImage>
 	{#if $page.data.member?.userProfileRequiredFields.includes('avatarId')}
 		<span class="text-xs text-warning">Photo de profil requise</span>

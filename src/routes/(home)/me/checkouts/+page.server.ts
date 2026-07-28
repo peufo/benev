@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { formAction } from 'fuma/server'
-import { z } from 'fuma/validation'
+import { formAction } from '$lib/server/fuma'
+import { z } from '$lib/fuma'
 
 import { getUserOrRedirect, prisma, useProduct } from '$lib/server'
 

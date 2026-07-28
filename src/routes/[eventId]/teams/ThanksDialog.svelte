@@ -1,7 +1,7 @@
 <script lang="ts">
 	import JSConfetti from 'js-confetti'
 
-	let dialog: HTMLDialogElement
+	let dialog: HTMLDialogElement = $state()
 
 	export function open() {
 		dialog.showModal()
@@ -20,7 +20,7 @@
 		<p>Tu recevras une confirmation par mail dès que ton inscription sera validée.</p>
 
 		<div class="flex gap-2 justify-end">
-			<button class="btn" on:click={() => dialog.close()}>OK, ça joue !</button>
+			<button class="btn" onclick={() => dialog.close()}>OK, ça joue !</button>
 		</div>
 	</div>
 </dialog>

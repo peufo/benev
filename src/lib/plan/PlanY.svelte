@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { tip, urlParam } from 'fuma'
-	import { PlusIcon } from 'lucide-svelte'
+	import { tip, urlParam } from '$lib/fuma'
+	import { PlusIcon } from '@lucide/svelte'
 	import type { Team } from '@prisma/client'
 	import { afterNavigate, goto } from '$app/navigation'
 	import TeamCol from './TeamCol.svelte'
@@ -12,10 +12,14 @@
 	import { useGrabScale } from './grabScale'
 	import { debounce } from '$lib/debounce'
 
-	export let teams: (Team & { periods: PeriodWithMembers[] })[]
-	export let plan: Plan
+	interface Props {
+		teams: (Team & { periods: PeriodWithMembers[] })[];
+		plan: Plan;
+	}
 
-	let container: HTMLElement
+	let { teams, plan = $bindable() }: Props = $props();
+
+	let container: HTMLElement = $state()
 
 	const TEAM_HEADER_HEIGHT = 40
 	const MIN_HOUR_HEIGHT = 30
@@ -27,8 +31,8 @@
 		goto($urlParam.with({ hourSize }), { replaceState: true, noScroll: true, keepFocus: true })
 	}, 300)
 
-	$: hourSpan = Math.ceil(MIN_HOUR_HEIGHT / plan.hourSize)
-	$: totalHeight = TEAM_HEADER_HEIGHT + plan.length
+	let hourSpan = $derived(Math.ceil(MIN_HOUR_HEIGHT / plan.hourSize))
+	let totalHeight = $derived(TEAM_HEADER_HEIGHT + plan.length)
 
 	afterNavigate(async (navigation) => {
 		scrollOnNavigate(navigation, {
@@ -62,8 +66,8 @@
 		style:height="{totalHeight}px"
 		use:grabScale.scale
 	>
-		<div class="bg-accent rounded h-[3px] w-8 right-0" use:indicator.element />
-		<div class="sticky z-20 bg-base-100 top-0 border-b" style:height="{TEAM_HEADER_HEIGHT}px" />
+		<div class="bg-accent rounded h-[3px] w-8 right-0" use:indicator.element></div>
+		<div class="sticky z-20 bg-base-100 top-0 border-b" style:height="{TEAM_HEADER_HEIGHT}px"></div>
 
 		{#each plan.days as { date, hours } (date.valueOf())}
 			<div class="flex items-start -translate-y-[1px]">
@@ -91,7 +95,7 @@
 		{/each}
 	</div>
 
-	{#each teams as team (team.id)}
+	{#each teams as team, teamIndex (team.id)}
 		<div class="border-r hover:bg-accent/5 group/team" style:height="{totalHeight}px">
 			<a
 				href={$urlParam.with({ form_team: team.id })}
@@ -109,7 +113,7 @@
 				</span>
 			</a>
 
-			<TeamCol bind:team {plan} />
+			<TeamCol bind:team={teams[teamIndex]} {plan} />
 		</div>
 	{/each}
 

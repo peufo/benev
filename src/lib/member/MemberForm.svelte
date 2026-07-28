@@ -4,14 +4,23 @@
 	import type { Event, Page as TPage } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { enhance } from '$app/forms'
-	import { useForm } from 'fuma/validation'
+	import { useForm } from '$lib/fuma'
 	import { eventPath } from '$lib/store'
-	import { ButtonDelete, tiptapParser, urlParam } from 'fuma'
+	import { ButtonDelete, tiptapParser, urlParam } from '$lib/fuma'
 
-	export let event: Event
-	export let charter: TPage | null
-	export let successReset = false
-	export let successUpdate = false
+	interface Props {
+		event: Event;
+		charter: TPage | null;
+		successReset?: boolean;
+		successUpdate?: boolean;
+	}
+
+	let {
+		event,
+		charter,
+		successReset = false,
+		successUpdate = false
+	}: Props = $props();
 
 	const dispatch = createEventDispatcher<{ close: void; success: void }>()
 
@@ -32,7 +41,7 @@
 			{@html tiptapParser.toHTML(charter.content || '')}
 		</div>
 
-		<div class="divider" />
+		<div class="divider"></div>
 
 		<p class="mt-2">
 			En acceptant, tu affirmes avoir pris connaissance et respecter la chartes des bénévoles

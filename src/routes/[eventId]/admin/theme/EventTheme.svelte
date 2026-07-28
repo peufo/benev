@@ -1,10 +1,18 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import type { Event } from '@prisma/client'
 	import { theme } from './store'
 
-	export let event: Event
+	interface Props {
+		event: Event;
+	}
+
+	let { event }: Props = $props();
 	theme.set(event)
-	$: theme.set(event)
+	run(() => {
+		theme.set(event)
+	});
 </script>
 
 <div
@@ -18,7 +26,7 @@
 		--bg-whiteness: {$theme.backgroundWhiteness};
 	"
 >
-	<div class="background-blur" />
+	<div class="background-blur"></div>
 </div>
 
 <style>

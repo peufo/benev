@@ -2,21 +2,25 @@
 	import type { Member, Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { formatRange } from '$lib/formatRange'
-	import { CardLink, Icon, Placeholder, urlParam } from 'fuma'
+	import { CardLink, Icon, Placeholder, urlParam } from '$lib/fuma'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
-	import { tip } from 'fuma'
+	import { tip } from '$lib/fuma'
 	import TeamLeaders from '$lib/team/TeamLeaders.svelte'
 	import { TagsList } from '$lib/tag'
 
-	export let teams: (Team & {
+	interface Props {
+		teams: (Team & {
 		leaders: Member[]
 		periods: (Period & {
 			subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
 			tags: Tag[]
 		})[]
-	})[]
-	export let isLeader = false
+	})[];
+		isLeader?: boolean;
+	}
+
+	let { teams, isLeader = false }: Props = $props();
 </script>
 
 {#if teams.length}
@@ -54,7 +58,7 @@
 
 							<span class="text-sm">{formatRange(period)}</span>
 							<TagsList tags={period.tags} />
-							<div class="grow" />
+							<div class="grow"></div>
 						</div>
 
 						<SubscribeCreatedBy

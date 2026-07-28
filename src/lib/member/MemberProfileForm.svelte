@@ -2,11 +2,15 @@
 	import { eventPath } from '$lib/store'
 	import MemberField from './MemberField.svelte'
 	import type { MemberProfile } from '$lib/server'
-	import { Form } from 'fuma'
+	import { Form } from '$lib/fuma'
 
-	let klass = ''
-	export { klass as class }
-	export let memberProfile: MemberProfile
+	
+	interface Props {
+		class?: string;
+		memberProfile: MemberProfile;
+	}
+
+	let { class: klass = '', memberProfile }: Props = $props();
 </script>
 
 <div class="@container">

@@ -1,16 +1,20 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { InputText } from 'fuma'
+	import { InputText } from '$lib/fuma'
 	import { debounce } from '$lib/debounce'
 	import { normalizeUrl } from '$lib/url'
 	import { EventIcon } from '.'
 
-	export let event: Event | undefined = undefined
+	interface Props {
+		event?: Event | undefined;
+	}
 
-	let input: HTMLInputElement
-	let scrapPending = false
-	let icon = event?.icon || null
-	let value = ''
+	let { event = undefined }: Props = $props();
+
+	let input: HTMLInputElement = $state()
+	let scrapPending = $state(false)
+	let icon = $state(event?.icon || null)
+	let value = $state('')
 
 	const handleInput = debounce(async () => {
 		value = normalizeUrl(input.value)
@@ -32,15 +36,17 @@
 	on:input={handleInput}
 	classWrapper="flex items-center"
 >
-	<div slot="append">
-		{#if icon || scrapPending}
-			<div class="w-10 grid place-content-center">
-				{#if scrapPending}
-					<div class="loading loading-ring loading-xs" />
-				{:else if icon}
-					<EventIcon {icon} class="w-5" />
-				{/if}
-			</div>
-		{/if}
-	</div>
+	{#snippet append()}
+		<div >
+			{#if icon || scrapPending}
+				<div class="w-10 grid place-content-center">
+					{#if scrapPending}
+						<div class="loading loading-ring loading-xs"></div>
+					{:else if icon}
+						<EventIcon {icon} class="w-5" />
+					{/if}
+				</div>
+			{/if}
+		</div>
+	{/snippet}
 </InputText>

@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { PAGE_TYPE } from '$lib/constant'
 	import type { Page } from '@prisma/client'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 
-	export let page: Page
+	interface Props {
+		page: Page;
+	}
+
+	let { page }: Props = $props();
 </script>
 
 <div class="flex gap-2">

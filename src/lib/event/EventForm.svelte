@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { InputText, InputTextarea, InputImagePreview, Form } from 'fuma'
+	import { InputText, InputTextarea, InputImagePreview, Form } from '$lib/fuma'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { FORMAT_A3 } from '$lib/constant'
@@ -11,10 +11,14 @@
 	import EventTierSelector from './EventTierSelector.svelte'
 	import EventFormSection from './EventFormSection.svelte'
 
-	export let event: Event | undefined = undefined
+	interface Props {
+		event?: Event | undefined;
+	}
+
+	let { event = undefined }: Props = $props();
 
 	const isUpdate = !!event
-	let plan = $page.url.searchParams.get('plan') || 'basic'
+	let plan = $state($page.url.searchParams.get('plan') || 'basic')
 
 	const timeZones = (() => {
 		try {
@@ -34,8 +38,8 @@
 		}
 	})()
 
-	let name = event?.name || ''
-	let eventId = event?.id || ''
+	let name = $state(event?.name || '')
+	let eventId = $state(event?.id || '')
 
 	function handleNameInput() {
 		if (event?.state !== 'published') eventId = normalizePath(name)
@@ -90,9 +94,11 @@
 					input={{ class: 'pl-[5.4em]', autocomplete: 'off' }}
 					classWrapper="flex items-center relative"
 				>
-					<span slot="prepend" class="absolute select-none pl-4 translate-y-[1px] opacity-50">
-						benev.io/
-					</span>
+					{#snippet prepend()}
+										<span  class="absolute select-none pl-4 translate-y-[1px] opacity-50">
+							benev.io/
+						</span>
+									{/snippet}
 				</InputText>
 
 				<label class="form-control w-full">
@@ -177,6 +183,7 @@
 		</EventFormSection>
 	</div>
 
+	<!-- @migration-task: migrate this slot by hand, `delete` is an invalid identifier -->
 	<svelte:fragment slot="delete">
 		{#if event}
 			<EventDeleteButton {event} />

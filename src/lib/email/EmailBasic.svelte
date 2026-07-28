@@ -1,8 +1,12 @@
 <script lang="ts">
 	import EmailLayout from './EmailLayout.svelte'
-	export let title = ''
-	export let subtitle = ''
-	export let content = ''
+	interface Props {
+		title?: string;
+		subtitle?: string;
+		content?: string;
+	}
+
+	let { title = '', subtitle = '', content = '' }: Props = $props();
 </script>
 
 <EmailLayout {title} {subtitle}>

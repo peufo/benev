@@ -4,12 +4,16 @@
 	import { mdiAccountCheckOutline, mdiCardAccountDetailsOutline, mdiHumanMaleBoy } from '@mdi/js'
 	import type { MemberCondition } from '$lib/models'
 	import { CONDITION_OPERATOR_LABEL } from './constants'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 
-	export let conditions: MemberCondition[] = []
-	export let memberFields: Field[]
-	let klass = ''
-	export { klass as class }
+	interface Props {
+		conditions?: MemberCondition[];
+		memberFields: Field[];
+		class?: string;
+	}
+
+	let { conditions = [], memberFields, class: klass = '' }: Props = $props();
+	
 </script>
 
 {#each conditions as condition, i (i)}

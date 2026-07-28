@@ -2,10 +2,14 @@
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { mdiPencilOutline } from '@mdi/js'
 	import type { Field } from '@prisma/client'
-	import { Icon, urlParam } from 'fuma'
+	import { Icon, urlParam } from '$lib/fuma'
 
-	export let field: Field
-	export let updateLink = false
+	interface Props {
+		field: Field;
+		updateLink?: boolean;
+	}
+
+	let { field, updateLink = false }: Props = $props();
 </script>
 
 <div class="flex gap-2 items-center">

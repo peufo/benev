@@ -1,14 +1,18 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { eventPath } from '$lib/store'
-	import { tip, DropDown } from 'fuma'
-	import { IdCardLanyardIcon } from 'lucide-svelte'
+	import { tip, DropDown } from '$lib/fuma'
+	import { IdCardLanyardIcon } from '@lucide/svelte'
 
-	export let params = ''
-	export let title = 'Imprimer les badges'
-	export let badges: { id: string; name: string }[]
+	interface Props {
+		params?: string;
+		title?: string;
+		badges: { id: string; name: string }[];
+	}
 
-	$: _params = params || $page.url.searchParams.toString()
+	let { params = '', title = 'Imprimer les badges', badges }: Props = $props();
+
+	let _params = $derived(params || $page.url.searchParams.toString())
 </script>
 
 {#if badges.length === 1}
@@ -23,9 +27,11 @@
 	</a>
 {:else if badges.length > 1}
 	<DropDown>
-		<button slot="activator" class="btn btn-square btn-sm" use:tip={{ content: title }}>
-			<IdCardLanyardIcon size="20" opacity={0.9} />
-		</button>
+		{#snippet activator()}
+						<button  class="btn btn-square btn-sm" use:tip={{ content: title }}>
+				<IdCardLanyardIcon size="20" opacity={0.9} />
+			</button>
+					{/snippet}
 		<ul class="menu">
 			{#each badges as badge (badge.id)}
 				<li>

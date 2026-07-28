@@ -2,17 +2,21 @@
 	import type { PageData } from './$types'
 	import { MemberRole } from '$lib/member'
 	import { EVENT_STATES } from '$lib/constant'
-	import { CardLink, tip } from 'fuma'
+	import { CardLink, tip } from '$lib/fuma'
 	import logo from '$lib/assets/logo.svg'
-	import { CopyPlusIcon, CalendarDaysIcon } from 'lucide-svelte'
+	import { CopyPlusIcon, CalendarDaysIcon } from '@lucide/svelte'
 	import { EventIcon } from '$lib/event'
 	import { formatRangeDate } from '$lib/formatRange'
 
-	export let member: PageData['members'][number]
+	interface Props {
+		member: PageData['members'][number];
+	}
 
-	$: nbSubscribes = member.subscribes.length
-	$: nbLeaderOf = member.leaderOf.length
-	$: isOwner = member.roles.includes('owner')
+	let { member }: Props = $props();
+
+	let nbSubscribes = $derived(member.subscribes.length)
+	let nbLeaderOf = $derived(member.leaderOf.length)
+	let isOwner = $derived(member.roles.includes('owner'))
 
 	const TIER_LABEL: Record<string, string> = {
 		basic: 'Basique',

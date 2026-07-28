@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { InputRelation } from 'fuma'
+	import { run } from 'svelte/legacy';
+
+	import { InputRelation } from '$lib/fuma'
 	import type { PageData } from './$types'
 	import type { Member } from '@prisma/client'
 	import { api } from '$lib/api'
@@ -8,13 +10,17 @@
 	import { fade } from 'svelte/transition'
 	import { browser } from '$app/environment'
 
-	export let badge: PageData['badge']
-	export let defaultMember: Member | undefined
+	interface Props {
+		badge: PageData['badge'];
+		defaultMember: Member | undefined;
+	}
 
-	let member: Member | undefined = defaultMember
+	let { badge, defaultMember }: Props = $props();
 
-	let clientWidth: number
-	let clientHeight: number
+	let member: Member | undefined = $state(defaultMember)
+
+	let clientWidth: number = $state()
+	let clientHeight: number = $state()
 
 	function useRefresh() {
 		if (!browser) return () => {}
@@ -26,9 +32,11 @@
 			firstCall = false
 		}, 400)
 	}
-	let refreshKey = {}
+	let refreshKey = $state({})
 	const refresh = useRefresh()
-	$: if (badge) refresh()
+	run(() => {
+		if (badge) refresh()
+	});
 </script>
 
 <div class="grow flex flex-col gap-4 h-auto max-w-sm">
@@ -38,20 +46,24 @@
 		bind:value={member}
 		search={$api.member.search}
 	>
-		<div slot="item" let:item class="flex gap-2">
+		{#snippet item({ item })}
 			{@const badgeType = item?.profileJson[badge.typeFieldId || '']}
-			<span>{item?.firstName} {item?.lastName}</span>
-			{#if badgeType}
-				<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
-			{/if}
-		</div>
-		<div slot="suggestion" let:item class="flex gap-2 w-full">
+			<div class="flex gap-2">
+				<span>{item?.firstName} {item?.lastName}</span>
+				{#if badgeType}
+					<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
+				{/if}
+			</div>
+			{/snippet}
+		{#snippet suggestion({ item })}
 			{@const badgeType = item?.profileJson[badge.typeFieldId || '']}
-			<span>{item?.firstName} {item?.lastName}</span>
-			{#if badgeType}
-				<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
-			{/if}
-		</div>
+			<div class="flex gap-2 w-full">
+				<span>{item?.firstName} {item?.lastName}</span>
+				{#if badgeType}
+					<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
+				{/if}
+			</div>
+			{/snippet}
 	</InputRelation>
 
 	{#if member}
@@ -64,7 +76,7 @@
 					type="application/pdf"
 					width={clientWidth}
 					height={clientHeight}
-				/>
+				></object>
 			{/key}
 		</div>
 	{/if}

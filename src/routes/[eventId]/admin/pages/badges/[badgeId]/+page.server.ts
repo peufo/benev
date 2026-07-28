@@ -1,6 +1,6 @@
 import { modelBadgeUpdate } from '$lib/models'
 import { redirect } from '@sveltejs/kit'
-import { formAction } from 'fuma/server'
+import { formAction } from '$lib/server/fuma'
 import { prisma, permission } from '$lib/server'
 import type { FieldType } from '@prisma/client'
 

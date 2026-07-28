@@ -8,10 +8,10 @@
 	import type { Message, MessageState } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
 	import axios from 'axios'
-	import { Icon, DropDown, Pagination, InputOptionInParam } from 'fuma'
+	import { Icon, DropDown, Pagination, InputOptionInParam } from '$lib/fuma'
 	import { useNotify } from '$lib/notify'
 
-	export let data
+	let { data } = $props();
 
 	const statesMap: Record<
 		MessageState,
@@ -68,15 +68,17 @@
 				<tr>
 					<td>
 						<DropDown>
-							<button slot="activator" class="btn btn-square btn-sm btn-ghost">
-								<Icon path={state.icon} class={state.class} title={state.label} />
-							</button>
+							{#snippet activator()}
+														<button  class="btn btn-square btn-sm btn-ghost">
+									<Icon path={state.icon} class={state.class} title={state.label} />
+								</button>
+													{/snippet}
 
 							{#each Object.values(statesMap) as state (state.state)}
 								<button
 									type="button"
 									class="menu-item w-full"
-									on:click={() => setMessageState(message, state.state)}
+									onclick={() => setMessageState(message, state.state)}
 								>
 									<Icon path={state.icon} class={state.class} />
 									{state.label}

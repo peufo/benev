@@ -5,21 +5,27 @@
 		mdiDotsHorizontal,
 		mdiTrashCanOutline,
 	} from '@mdi/js'
-	import { DropDown, Icon, ButtonDelete } from 'fuma'
+	import { DropDown, Icon, ButtonDelete } from '$lib/fuma'
 	import { eventPath } from '$lib/store'
-	import { useForm } from 'fuma/validation'
+	import { useForm } from '$lib/fuma'
 	import type { Subscribe } from '@prisma/client'
 	import { enhance } from '$app/forms'
 
-	export let subscribe: Subscribe
+	interface Props {
+		subscribe: Subscribe;
+	}
+
+	let { subscribe }: Props = $props();
 
 	let form = useForm()
 </script>
 
 <DropDown tippyProps={{ arrow: true }} classWrapper="w-min">
-	<button slot="activator" class=" relative z-10 btn btn-sm btn-square">
-		<Icon path={mdiDotsHorizontal} size={20} class="opacity-70" />
-	</button>
+	{#snippet activator()}
+		<button  class=" relative z-10 btn btn-sm btn-square">
+			<Icon path={mdiDotsHorizontal} size={20} class="opacity-70" />
+		</button>
+	{/snippet}
 
 	<form
 		use:enhance={form.submit}
@@ -43,15 +49,19 @@
 			class="menu-item w-full"
 			formaction="{$eventPath}/subscribes/{subscribe.id}?/subscribe_delete"
 		>
-			<svelte:fragment>
-				<Icon path={mdiTrashCanOutline} class="fill-error/80" size={20} />
-				<span>Supprimer</span>
-			</svelte:fragment>
+			{#snippet children()}
+					
+					<Icon path={mdiTrashCanOutline} class="fill-error/80" size={20} />
+					<span>Supprimer</span>
+				
+					{/snippet}
 
-			<svelte:fragment slot="ready">
-				<Icon path={mdiTrashCanOutline} class="fill-error/80" size={20} />
-				<span>T'es sur ?</span>
-			</svelte:fragment>
+			{#snippet ready()}
+					
+					<Icon path={mdiTrashCanOutline} class="fill-error/80" size={20} />
+					<span>T'es sur ?</span>
+				
+					{/snippet}
 		</ButtonDelete>
 	</form>
 </DropDown>

@@ -4,16 +4,27 @@
 	import { domain } from '.'
 	import { EVENT_TIER } from '$lib/constant'
 
-	export let event: Event
-	export let owner: User
-	export let membersValided: number
-	export let ratio: number
-	export let threshold: 80 | 90 | 100
-	export let tier: EventTier
+	interface Props {
+		event: Event;
+		owner: User;
+		membersValided: number;
+		ratio: number;
+		threshold: 80 | 90 | 100;
+		tier: EventTier;
+	}
 
-	$: tierConfig = EVENT_TIER[tier]
-	$: max = tierConfig.max
-	$: isMaxReached = ratio >= 1
+	let {
+		event,
+		owner,
+		membersValided,
+		ratio,
+		threshold,
+		tier
+	}: Props = $props();
+
+	let tierConfig = $derived(EVENT_TIER[tier])
+	let max = $derived(tierConfig.max)
+	let isMaxReached = $derived(ratio >= 1)
 </script>
 
 <EmailLayout eventId={event.id} title="Alerte quota bénévoles - {event.name}">

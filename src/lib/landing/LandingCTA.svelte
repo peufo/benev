@@ -1,5 +1,9 @@
 <script lang="ts">
-	export let user: { email?: string } | null = null
+	interface Props {
+		user?: { email?: string } | null;
+	}
+
+	let { user = null }: Props = $props();
 </script>
 
 <section class="py-20 md:py-28 bg-primary">

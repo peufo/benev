@@ -3,17 +3,21 @@
 	import { page } from '$app/stores'
 	import { mdiCheck, mdiClose, mdiPencilOutline } from '@mdi/js'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
-	import { CardBasic, Drawer, Icon, Placeholder, urlParam } from 'fuma'
+	import { CardBasic, Drawer, Icon, Placeholder, urlParam } from '$lib/fuma'
 	import { fade } from 'svelte/transition'
 
-	export let member: MemberProfile
-	export let title = 'Profil'
-	export let hideStatus = false
+	interface Props {
+		member: MemberProfile;
+		title?: string;
+		hideStatus?: boolean;
+	}
 
-	$: profile = member.event.memberFields.map((field) => ({
+	let { member, title = 'Profil', hideStatus = false }: Props = $props();
+
+	let profile = $derived(member.event.memberFields.map((field) => ({
 		field,
 		value: member.profileJson[field.id],
-	}))
+	})))
 </script>
 
 <div class="flex gap-2 items-center mb-4">
@@ -72,7 +76,9 @@
 	title="Modifier le profil de {member.firstName}"
 	key="form_member_profile"
 	classBody="pt-4"
-	let:close
+	
 >
-	<MemberProfileForm memberProfile={member} on:success={() => close()} />
+	{#snippet children({ close })}
+		<MemberProfileForm memberProfile={member} on:success={() => close()} />
+	{/snippet}
 </Drawer>

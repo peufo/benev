@@ -1,6 +1,6 @@
 import { modelEventTheme } from '$lib/models'
 import { permission, prisma } from '$lib/server'
-import { formAction } from 'fuma/server'
+import { formAction } from '$lib/server/fuma'
 
 export const actions = {
 	theme_update: formAction(

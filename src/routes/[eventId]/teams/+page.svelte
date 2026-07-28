@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { onMount } from 'svelte'
-	import { Drawer, Icon, InputSearch, RangePickerButton, urlParam } from 'fuma'
+	import { Drawer, Icon, InputSearch, RangePickerButton, urlParam } from '$lib/fuma'
 
 	import { Teams, ToggleOnlyAvailable } from '$lib/team'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -13,13 +13,13 @@
 	import TeamsOrder from '$lib/team/TeamsOrder.svelte'
 	import TeamsStats from './TeamsStats.svelte'
 
-	export let data
+	let { data } = $props();
 
-	let subscribeDialog: HTMLDialogElement
-	let thanksDialog: ThanksDialog
+	let subscribeDialog: HTMLDialogElement = $state()
+	let thanksDialog: ThanksDialog = $state()
 
 	type PeriodWithTeam = PeriodWithComputedValues & { team: TeamWithComputedValues }
-	let selectedPeriod: PeriodWithTeam | undefined = undefined
+	let selectedPeriod: PeriodWithTeam | undefined = $state(undefined)
 
 	function handleClickPeriod(period: PeriodWithTeam) {
 		if (!data.member?.isValidedByUser) {
@@ -49,7 +49,7 @@
 	<div class="p-2 flex flex-col gap-2 bg-base-100 rounded-2xl">
 		<div class="flex gap-2">
 			<InputSearch />
-			<div class="grow" />
+			<div class="grow"></div>
 			<RangePickerButton key="range" />
 			<ToggleOnlyAvailable />
 
@@ -77,16 +77,18 @@
 	</div>
 
 	<Teams teams={data.teams} on:clickPeriod={({ detail }) => handleClickPeriod(detail)}>
-		<svelte:fragment slot="placeholder">
-			{#if !data.user && data.teamsHiddenCount}
-				<div class="grid place-content-center p-10 gap-4">
-					<p>Pas de secteur publique</p>
-					<a href="/auth?redirectTo=/{data.event.id}/teams" class="btn btn-primary"> Connexion </a>
-				</div>
-			{:else}
-				<span>Pas de secteur</span>
-			{/if}
-		</svelte:fragment>
+		{#snippet placeholder()}
+			
+				{#if !data.user && data.teamsHiddenCount}
+					<div class="grid place-content-center p-10 gap-4">
+						<p>Pas de secteur publique</p>
+						<a href="/auth?redirectTo=/{data.event.id}/teams" class="btn btn-primary"> Connexion </a>
+					</div>
+				{:else}
+					<span>Pas de secteur</span>
+				{/if}
+			
+			{/snippet}
 	</Teams>
 </div>
 

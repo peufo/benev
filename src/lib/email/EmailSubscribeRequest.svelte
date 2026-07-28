@@ -5,8 +5,12 @@
 	import { formatRange } from '$lib/formatRange'
 	import { domain } from '.'
 
-	export let member: MemberWithComputedValues
-	export let subscribe: SubscribeWithTeam
+	interface Props {
+		member: MemberWithComputedValues;
+		subscribe: SubscribeWithTeam;
+	}
+
+	let { member, subscribe }: Props = $props();
 </script>
 
 <EmailLayout eventId={member.event.id} title={member.event.name} subtitle="Nouvelle inscription">

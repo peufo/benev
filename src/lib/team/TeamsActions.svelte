@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiAccountMultipleOutline,
@@ -11,14 +11,19 @@
 	} from '@mdi/js'
 	import { MemberSetLeaderOf } from '$lib/member'
 
-	export let teams: Team[]
 
-	// memberId used in actions
-	export let memberId: string
+	
+	interface Props {
+		teams: Team[];
+		// memberId used in actions
+		memberId: string;
+	}
 
-	$: teamsId = JSON.stringify(teams.map((team) => team.id))
+	let { teams, memberId }: Props = $props();
 
-	let teamDialog: HTMLDialogElement
+	let teamsId = $derived(JSON.stringify(teams.map((team) => team.id)))
+
+	let teamDialog: HTMLDialogElement = $state()
 </script>
 
 {#if teams.length}
@@ -34,7 +39,7 @@
 {/if}
 
 {#if $page.data.member?.roles.includes('admin')}
-	<button type="button" class="btn btn-square btn-sm" on:click={() => teamDialog.showModal()}>
+	<button type="button" class="btn btn-square btn-sm" onclick={() => teamDialog.showModal()}>
 		<Icon path={mdiPencilOutline} title="Éditer les secteurs à charge" />
 	</button>
 {/if}

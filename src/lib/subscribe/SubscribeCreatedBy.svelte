@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { mdiAccountCircleOutline, mdiShieldAccountOutline } from '@mdi/js'
 
-	export let createdBy: 'leader' | 'user'
-	export let size = 24
-	let klass = ''
-	export { klass as class }
+	interface Props {
+		createdBy: 'leader' | 'user';
+		size?: number;
+		class?: string;
+	}
+
+	let { createdBy, size = 24, class: klass = '' }: Props = $props();
+	
 </script>
 
 <div class="w-min">

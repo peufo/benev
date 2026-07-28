@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { component, Form, InputNumber } from 'fuma'
+	import { component, Form, InputNumber } from '$lib/fuma'
 	import LabelPage from './LabelPage.svelte'
 	import LabelField from './LabelField.svelte'
 	import CloneSelector from './CloneSelector.svelte'
 	import LabelTeam from './LabelTeam.svelte'
 
-	export let data
+	let { data } = $props();
 
-	let deltaDays = 365
+	let deltaDays = $state(365)
 </script>
 
 <h2 class="title">Cloner l'évènement "{data.event.name}"</h2>
@@ -23,7 +23,7 @@
 			placeholder="Aucun secteur"
 			getLabel={(team) => component(LabelTeam, { team, deltaDays })}
 		>
-			<div class="grow" />
+			<div class="grow"></div>
 			<InputNumber label="Nombre de jours de décalage" key="deltaDays" bind:value={deltaDays} />
 		</CloneSelector>
 

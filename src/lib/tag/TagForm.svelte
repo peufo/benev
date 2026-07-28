@@ -2,10 +2,14 @@
 	import { modelTagCreate } from '$lib/models'
 	import { eventPath } from '$lib/store'
 	import type { Tag } from '@prisma/client'
-	import { Form, InputText } from 'fuma'
+	import { Form, InputText } from '$lib/fuma'
 	import type { ComponentType } from 'svelte'
 
-	export let tag: Partial<Tag> = {}
+	interface Props {
+		tag?: Partial<Tag>;
+	}
+
+	let { tag = $bindable({}) }: Props = $props();
 	const TagForm: ComponentType<Form<typeof modelTagCreate, Tag>> = Form
 	const colors = [
 		'#6CBEED',
@@ -58,7 +62,7 @@
 		/>
 		<datalist id="colors">
 			{#each colors as color (color)}
-				<option value={color} />
+				<option value={color}></option>
 			{/each}
 		</datalist>
 	</label>

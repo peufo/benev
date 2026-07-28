@@ -3,10 +3,14 @@
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'
-	import { Icon, tip } from 'fuma'
+	import { Icon, tip } from '$lib/fuma'
 	import { Avatar } from '$lib/me'
 
-	export let subscribes: (Subscribe & { member: Member })[]
+	interface Props {
+		subscribes: (Subscribe & { member: Member })[];
+	}
+
+	let { subscribes }: Props = $props();
 </script>
 
 <div class="flex flex-col gap-1">

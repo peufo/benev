@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Form, InputText } from 'fuma'
+	import { Form, InputText } from '$lib/fuma'
 	import z from 'zod'
 	import { slide } from 'svelte/transition'
 	import { toast } from 'svelte-sonner'
@@ -8,10 +8,14 @@
 	import { api } from './api'
 	import type { Member } from '@prisma/client'
 
-	export let onCreate: (member: Member) => void = () => {}
-	let email = ''
-	let isLoadingUserExists = false
-	let user = { firstName: '', lastName: '' }
+	interface Props {
+		onCreate?: (member: Member) => void;
+	}
+
+	let { onCreate = () => {} }: Props = $props();
+	let email = $state('')
+	let isLoadingUserExists = $state(false)
+	let user = $state({ firstName: '', lastName: '' })
 
 	async function handleEmailInput() {
 		// Search member
@@ -60,13 +64,15 @@
 			bind:value={email}
 			on:input={handleEmailInput}
 		>
-			<div slot="append">
-				{#if isLoadingUserExists}
-					<div transition:slide={{ axis: 'x' }} class="w-10 grid place-content-center">
-						<div class="loading loading-ring loading-xs" />
-					</div>
-				{/if}
-			</div>
+			{#snippet append()}
+						<div >
+					{#if isLoadingUserExists}
+						<div transition:slide={{ axis: 'x' }} class="w-10 grid place-content-center">
+							<div class="loading loading-ring loading-xs"></div>
+						</div>
+					{/if}
+				</div>
+					{/snippet}
 		</InputText>
 		<InputText
 			label="Prénom"

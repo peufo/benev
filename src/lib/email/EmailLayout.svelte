@@ -1,10 +1,23 @@
 <script lang="ts">
 	import { domain } from '.'
 
-	export let title = ''
-	export let subtitle = ''
-	export let showLogo = false
-	export let eventId = ''
+	interface Props {
+		title?: string;
+		subtitle?: string;
+		showLogo?: boolean;
+		eventId?: string;
+		children?: import('svelte').Snippet;
+		signature?: import('svelte').Snippet;
+	}
+
+	let {
+		title = '',
+		subtitle = '',
+		showLogo = false,
+		eventId = '',
+		children,
+		signature
+	}: Props = $props();
 
 	let fontFamily =
 		"font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif"
@@ -71,13 +84,13 @@
 												<td
 													style="font-size: 14px;padding-bottom:8px;padding-left:4px;padding-right:4px;padding-top:8px"
 												>
-													<slot>__SLOT__</slot>
+													{#if children}{@render children()}{:else}__SLOT__{/if}
 												</td>
 											</tr>
 										</tbody>
 									</table>
 
-									<slot name="signature">
+									{#if signature}{@render signature()}{:else}
 										<hr style="border:none;border-top:1px solid #eaeaea;margin:26px 0;width:100%" />
 
 										<table width="100%" cellpadding="0" cellspacing="0">
@@ -118,7 +131,7 @@
 												</tr>
 											</tbody>
 										</table>
-									</slot>
+									{/if}
 								</div>
 							</td>
 						</tr>

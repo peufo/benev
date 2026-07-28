@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import axios from 'axios'
 	import type { ComponentProps, ComponentType } from 'svelte'
 	import { get } from 'svelte/store'
@@ -14,7 +16,7 @@
 		InputCheckboxs,
 		InputRadio,
 		jsonParse,
-	} from 'fuma'
+	} from '$lib/fuma'
 	import {
 		mdiAccountCheckOutline,
 		mdiCardAccountDetailsOutline,
@@ -26,11 +28,14 @@
 	import type { MemberCondition } from '$lib/models'
 	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
 
-	export let conditions: MemberCondition[] = []
-	export let memberFields: Field[]
-	let memberAllowedCount = 0
+	interface Props {
+		conditions?: MemberCondition[];
+		memberFields: Field[];
+	}
 
-	$: if (conditions) getmemberAllowedCount()
+	let { conditions = $bindable([]), memberFields }: Props = $props();
+	let memberAllowedCount = $state(0)
+
 
 	async function getmemberAllowedCount() {
 		if (!conditions.length || !browser) return
@@ -46,11 +51,6 @@
 		}
 	}
 
-	$: addConditionOptions = {
-		...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre approuvé' }),
-		...(!conditions.find((c) => c.type === 'age') && { age: 'Âge minimum' }),
-		profile: 'Profil du membre',
-	}
 
 	function handleAddCondition(event: { detail: string }) {
 		const _type = event.detail as MemberCondition['type']
@@ -91,6 +91,14 @@
 			options: jsonParse(field.options, []),
 		})
 	}
+	run(() => {
+		if (conditions) getmemberAllowedCount()
+	});
+	let addConditionOptions = $derived({
+		...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre approuvé' }),
+		...(!conditions.find((c) => c.type === 'age') && { age: 'Âge minimum' }),
+		profile: 'Profil du membre',
+	})
 </script>
 
 <div class="mt-4">
@@ -177,7 +185,7 @@
 					<button
 						type="button"
 						class="btn btn-square btn-sm ml-auto"
-						on:click={() =>
+						onclick={() =>
 							(conditions = [...conditions.slice(0, index), ...conditions.slice(index + 1)])}
 					>
 						<Icon path={mdiClose} class="opacity-70" />
@@ -189,8 +197,8 @@
 					{@const field = memberFields.find((f) => f.id === fieldId)}
 					{#if field}
 						{@const { component, props } = getFieldInput(field)}
-						<svelte:component
-							this={component}
+						{@const SvelteComponent = component}
+						<SvelteComponent
 							{...props}
 							bind:value={condition.args.expectedValue}
 						/>

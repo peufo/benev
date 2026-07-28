@@ -4,9 +4,9 @@
 	import type { Page } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
-	import { ButtonDelete, FormControl, Icon, InputSelect, InputText, InputTextRich } from 'fuma'
+	import { ButtonDelete, FormControl, Icon, InputSelect, InputText, InputTextRich } from '$lib/fuma'
 
-	import { useForm } from 'fuma/validation'
+	import { useForm } from '$lib/fuma'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { PAGE_TYPE } from '$lib/constant'
@@ -14,11 +14,15 @@
 	import PageTypeHelp from './PageTypeHelp.svelte'
 	import { SelectMedia } from '$lib/material/media'
 
-	export let page: Page
-	export let charterAlreadyExist: boolean
+	interface Props {
+		page: Page;
+		charterAlreadyExist: boolean;
+	}
 
-	let selectMedia: SelectMedia
-	let isDirty = false
+	let { page, charterAlreadyExist }: Props = $props();
+
+	let selectMedia: SelectMedia = $state()
+	let isDirty = $state(false)
 	let successInvalidateAll = false
 	const form = useForm({
 		successUpdate: false,
@@ -29,10 +33,10 @@
 		},
 	})
 	const { home, charter, email, ...pageTypes } = PAGE_TYPE
-	let submitButton: HTMLButtonElement
-	let inputTextRich: InputTextRich
+	let submitButton: HTMLButtonElement = $state()
+	let inputTextRich: InputTextRich = $state()
 
-	$: pagePath = `${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
+	let pagePath = $derived(`${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`)
 
 	function handleChange() {
 		isDirty = true
@@ -63,9 +67,11 @@
 		/>
 
 		<FormControl label="Type de page">
-			<svelte:fragment slot="label_append">
-				<PageTypeHelp />
-			</svelte:fragment>
+			{#snippet label_append()}
+					
+					<PageTypeHelp />
+				
+					{/snippet}
 
 			{#if page.type === 'home'}
 				<input type="hidden" name="type" value="home" />
@@ -117,7 +123,7 @@
 			formaction="?/page_delete"
 			disabled={page.type === 'home' || page.type === 'email'}
 		/>
-		<div class="grow" />
+		<div class="grow"></div>
 
 		{#if page.type !== 'email'}
 			<a

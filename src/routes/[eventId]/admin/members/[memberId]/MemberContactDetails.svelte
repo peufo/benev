@@ -8,10 +8,14 @@
 		mdiGhostOutline,
 	} from '@mdi/js'
 	import type { Member } from '@prisma/client'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { getAge } from '$lib/utils'
 
-	export let member: Member
+	interface Props {
+		member: Member;
+	}
+
+	let { member }: Props = $props();
 </script>
 
 <div

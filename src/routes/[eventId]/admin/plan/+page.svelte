@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { urlParam } from 'fuma'
+	import { urlParam } from '$lib/fuma'
 	import { PlanX, PlanY } from '$lib/plan'
 	import PlanHeader from '$lib/plan/PlanHeader.svelte'
 	import { MilestoneDrawer } from '$lib/milestone'
 	import { getPlan } from '$lib/plan/getPlan.js'
 
-	export let data
-	$: plan = getPlan(data)
+	let { data = $bindable() } = $props();
+	let plan = $derived(getPlan(data))
 </script>
 
 <div

@@ -1,12 +1,14 @@
 <script lang="ts">
 	// import { toast } from 'svelte-sonner'
-	import { Card } from 'fuma'
+	import { Card } from '$lib/fuma'
 	// import { enhance } from '$app/forms'
 </script>
 
 <div class="max-w-md">
 	<Card>
-		<h2 slot="title">Actions</h2>
+		{#snippet title()}
+				<h2 >Actions</h2>
+			{/snippet}
 
 		<!-- <form
 			method="post"

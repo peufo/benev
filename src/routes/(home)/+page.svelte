@@ -5,7 +5,7 @@
 	import { Workflow, LandingCTA, AnimatedLogo, PricingSection } from '$lib/landing'
 	import { softwareApplicationSchema } from '$lib/seo'
 
-	export let data
+	let { data } = $props();
 </script>
 
 <!-- Le produit n'est décrit que sur l'accueil : le layout racine couvre aussi les évènements -->
@@ -59,7 +59,7 @@
 				<div class="hidden md:flex items-center justify-center relative">
 					<div
 						class="w-72 h-72 rounded-full bg-gradient-to-br from-brand-beige/40 to-primary/10 blur-2xl absolute"
-					/>
+					></div>
 					<div class="relative w-64">
 						<AnimatedLogo />
 					</div>
@@ -76,15 +76,15 @@
 					class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-base-content/70"
 				>
 					<a class="flex items-center gap-2 link link-hover" href="/open-source">
-						<span class="w-2 h-2 rounded-full bg-green-500" />
+						<span class="w-2 h-2 rounded-full bg-green-500"></span>
 						Open source
 					</a>
 					<span class="flex items-center gap-2">
-						<span class="w-2 h-2 rounded-full bg-brand-beige" />
+						<span class="w-2 h-2 rounded-full bg-brand-beige"></span>
 						Gratuit jusqu'à 50 bénévoles
 					</span>
 					<span class="flex items-center gap-2">
-						<span class="w-2 h-2 rounded-full bg-primary" />
+						<span class="w-2 h-2 rounded-full bg-primary"></span>
 						Personnalisable à ton image
 					</span>
 				</div>

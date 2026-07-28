@@ -1,24 +1,35 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type CropArea = { width: number; height: number; x: number; y: number }
 </script>
 
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 	import Cropper from 'svelte-easy-crop'
-	import { Dialog, InputText } from 'fuma'
-	import { RulerDimensionLineIcon } from 'lucide-svelte'
+	import { Dialog, InputText } from '$lib/fuma'
+	import { RulerDimensionLineIcon } from '@lucide/svelte'
 
-	export let aspect = { x: 4, y: 3 }
-	export let title = 'Nouvelle image'
-	export let formaction: string | undefined = undefined
-	export let key = ''
-	export let freeName = false
-	export let freeAspect = false
+	interface Props {
+		aspect?: any;
+		title?: string;
+		formaction?: string | undefined;
+		key?: string;
+		freeName?: boolean;
+		freeAspect?: boolean;
+	}
 
-	let dialog: HTMLDialogElement
-	let image = ''
-	let crop: CropArea | undefined = undefined
-	let inputFile: HTMLInputElement
+	let {
+		aspect = $bindable({ x: 4, y: 3 }),
+		title = 'Nouvelle image',
+		formaction = undefined,
+		key = '',
+		freeName = false,
+		freeAspect = false
+	}: Props = $props();
+
+	let dialog: HTMLDialogElement = $state()
+	let image = $state('')
+	let crop: CropArea | undefined = $state(undefined)
+	let inputFile: HTMLInputElement = $state()
 
 	const dispatch = createEventDispatcher<{ submit: { crop: CropArea; image: string } }>()
 
@@ -56,9 +67,11 @@
 </script>
 
 <Dialog bind:dialog>
-	<h2 slot="header" class="card-title">
-		{title}
-	</h2>
+	{#snippet header()}
+		<h2  class="card-title">
+			{title}
+		</h2>
+	{/snippet}
 
 	{#if freeAspect}
 		<div class="flex gap-2 mb-2">
@@ -67,13 +80,13 @@
 					type="button"
 					class="btn btn-square btn-sm"
 					class:btn-primary={aspect === value}
-					on:click={() => (aspect = value)}
+					onclick={() => (aspect = value)}
 				>
 					{label}
 				</button>
 			{/each}
 
-			<div class="grow" />
+			<div class="grow"></div>
 			<label class="flex items-center gap-2 relative">
 				<RulerDimensionLineIcon opacity={0.6} size={16} class="absolute left-2" />
 				<input
@@ -116,7 +129,7 @@
 			name="{key ? `${key}_` : ''}image"
 			accept="image/jpeg, image/png, image/webp, image/gif, image/avif, image/tiff"
 			bind:this={inputFile}
-			on:change={onFileSelected}
+			onchange={onFileSelected}
 		/>
 
 		{#if freeName}
@@ -131,7 +144,7 @@
 			{formaction}
 			type={formaction ? 'submit' : 'button'}
 			class="btn btn-primary"
-			on:click={handleValidation}
+			onclick={handleValidation}
 		>
 			Valider
 		</button>

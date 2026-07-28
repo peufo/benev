@@ -1,5 +1,5 @@
-import { tryOrFail, formAction } from 'fuma/server'
-import { z } from 'fuma/validation'
+import { tryOrFail, formAction } from '$lib/server/fuma'
+import { z } from '$lib/fuma'
 
 import { prisma, permission } from '$lib/server'
 import { modelEventSettings, modelMemberFieldCreate, modelMemberFieldUpdate } from '$lib/models'

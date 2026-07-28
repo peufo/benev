@@ -1,14 +1,18 @@
 <script lang="ts">
 	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 	import { createEventDispatcher, onMount } from 'svelte'
-	import { useForm, Icon, InputText, InputDate, FormControl } from 'fuma'
+	import { useForm, Icon, InputText, InputDate, FormControl } from '$lib/fuma'
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 	import type { User } from '@prisma/client'
 
-	export let user: User
-	export let successReset = false
-	export let successUpdate = false
+	interface Props {
+		user: User;
+		successReset?: boolean;
+		successUpdate?: boolean;
+	}
+
+	let { user, successReset = false, successUpdate = false }: Props = $props();
 
 	const dispatch = createEventDispatcher<{ success: void }>()
 	let emailError = getEmailError()
@@ -21,7 +25,7 @@
 		},
 	})
 
-	let verificationEmailSent = false
+	let verificationEmailSent = $state(false)
 	const verificationEmailMessage = 'Un email de verification à été envoyé'
 	const formEmailVerification = useForm({
 		successMessage: verificationEmailMessage,
@@ -48,7 +52,7 @@
 	method="post"
 	action="/me?/verify_email"
 	use:enhance={formEmailVerification.submit}
-/>
+></form>
 
 <form
 	method="post"

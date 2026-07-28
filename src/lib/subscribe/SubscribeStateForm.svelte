@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { SubscribeState as ISubscribeState } from '@prisma/client'
 
 	type Edtitions = Record<ISubscribeState, ISubscribeState[]>
@@ -24,13 +24,16 @@
 </script>
 
 <script lang="ts">
+	import { run, createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { createEventDispatcher } from 'svelte'
 	import type { Props as TippyProps } from 'tippy.js'
 	import type { Subscribe } from '@prisma/client'
 	import { SubscribeState } from '$lib/subscribe'
-	import { useForm } from 'fuma/validation'
+	import { useForm } from '$lib/fuma'
 	import { enhance } from '$app/forms'
-	import { Icon, DropDown } from 'fuma'
+	import { Icon, DropDown } from '$lib/fuma'
 	import {
 		mdiCloseOctagonOutline,
 		mdiCheck,
@@ -39,12 +42,23 @@
 	} from '@mdi/js'
 	import { page } from '$app/stores'
 
-	export let subscribe: Subscribe & { member: { isValidedByUser: boolean } }
-	export let eventId = $page.params.eventId
-	export let action = `/${eventId}/subscribes/${subscribe.id}`
-	export let isLeader = false
-	export let tippyProps: Partial<TippyProps> = {}
-	export let canBeLarge = false
+	interface Props {
+		subscribe: Subscribe & { member: { isValidedByUser: boolean } };
+		eventId?: any;
+		action?: any;
+		isLeader?: boolean;
+		tippyProps?: Partial<TippyProps>;
+		canBeLarge?: boolean;
+	}
+
+	let {
+		subscribe,
+		eventId = $page.params.eventId,
+		action = `/${eventId}/subscribes/${subscribe.id}`,
+		isLeader = false,
+		tippyProps = {},
+		canBeLarge = false
+	}: Props = $props();
 
 	let isSelf = subscribe.memberId === $page.data.member?.id
 	const dispatch = createEventDispatcher<{ success: void }>()
@@ -54,24 +68,28 @@
 		successReset: false,
 		onSuccess: () => dispatch('success'),
 	})
-	let creatorStates: Partial<States> = {}
-	let subscriberStates: Partial<States> = {}
-	$: creatorStates = creatorEditions[subscribe.state].reduce(
-		(acc, cur) => ({ ...acc, [cur]: states[cur] }),
-		{}
-	)
-	$: subscriberStates = subscriberEditions[subscribe.state].reduce(
-		(acc, cur) => ({ ...acc, [cur]: states[cur] }),
-		{}
-	)
-	$: isCreator =
-		(isSelf && subscribe.createdBy === 'user') || (isLeader && subscribe.createdBy === 'leader')
-	$: isSubscriber =
-		(isSelf && subscribe.createdBy === 'leader') || (isLeader && subscribe.createdBy === 'user')
-	$: isSelfCancelAllowed = $page.data.event?.selfSubscribeCancelAllowed || isLeader
-	$: isConfirmation = !isCreator && subscribe.state === 'request'
-	$: isConfirmationForced = isLeader && isCreator && subscribe.state === 'request'
-	$: editions = Object.entries({
+	let creatorStates: Partial<States> = $state({})
+	let subscriberStates: Partial<States> = $state({})
+	run(() => {
+		creatorStates = creatorEditions[subscribe.state].reduce(
+			(acc, cur) => ({ ...acc, [cur]: states[cur] }),
+			{}
+		)
+	});
+	run(() => {
+		subscriberStates = subscriberEditions[subscribe.state].reduce(
+			(acc, cur) => ({ ...acc, [cur]: states[cur] }),
+			{}
+		)
+	});
+	let isCreator =
+		$derived((isSelf && subscribe.createdBy === 'user') || (isLeader && subscribe.createdBy === 'leader'))
+	let isSubscriber =
+		$derived((isSelf && subscribe.createdBy === 'leader') || (isLeader && subscribe.createdBy === 'user'))
+	let isSelfCancelAllowed = $derived($page.data.event?.selfSubscribeCancelAllowed || isLeader)
+	let isConfirmation = $derived(!isCreator && subscribe.state === 'request')
+	let isConfirmationForced = $derived(isLeader && isCreator && subscribe.state === 'request')
+	let editions = $derived(Object.entries({
 		...(isCreator && creatorStates),
 		...(isSubscriber && subscriberStates),
 		...(isConfirmationForced && {
@@ -81,7 +99,7 @@
 		([state]) =>
 			state !== subscribe.state &&
 			((state !== 'cancelled' && state !== 'denied') || isSelfCancelAllowed)
-	)
+	))
 </script>
 
 {#if !editions.length}
@@ -90,25 +108,27 @@
 	</button>
 {:else}
 	<DropDown tippyProps={{ arrow: true, trigger: 'click', ...tippyProps }}>
-		<button
-			slot="activator"
-			class="relative btn btn-sm z-10 {!isConfirmation || !canBeLarge
-				? 'btn-square'
-				: 'max-sm:btn-square'}"
-		>
-			<SubscribeState {subscribe} />
-			{#if isConfirmation}
-				<div class="absolute w-3 h-3 bg-error -right-1.5 -top-1.5 rounded-full animate-ping" />
-				<div class="absolute w-2 h-2 bg-error -right-1 -top-1 rounded-full" />
-				{#if canBeLarge}
-					<span class="font-medium hidden sm:inline">à confirmer</span>
+		{#snippet activator()}
+				<button
+				
+				class="relative btn btn-sm z-10 {!isConfirmation || !canBeLarge
+					? 'btn-square'
+					: 'max-sm:btn-square'}"
+			>
+				<SubscribeState {subscribe} />
+				{#if isConfirmation}
+					<div class="absolute w-3 h-3 bg-error -right-1.5 -top-1.5 rounded-full animate-ping"></div>
+					<div class="absolute w-2 h-2 bg-error -right-1 -top-1 rounded-full"></div>
+					{#if canBeLarge}
+						<span class="font-medium hidden sm:inline">à confirmer</span>
+					{/if}
 				{/if}
-			{/if}
-		</button>
+			</button>
+			{/snippet}
 
 		<form method="post" use:enhance={form.submit} class="flex flex-col gap-1">
 			{#each editions as [state, edit] (state)}
-				<button class="menu-item" formaction="{action}?/subscribe_{state}" on:click|stopPropagation>
+				<button class="menu-item" formaction="{action}?/subscribe_{state}" onclick={stopPropagation(bubble('click'))}>
 					<Icon path={edit.icon} class={edit.class} />
 					{edit.label}
 				</button>

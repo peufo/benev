@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 	import { daytz } from '$lib/dayjs'
-	import { urlParam } from 'fuma'
+	import { urlParam } from '$lib/fuma'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
@@ -9,23 +9,27 @@
 	import { magnet } from './magnet'
 	import DragButton from './DragButton.svelte'
 
-	export let period: PeriodWithMembers
-	export let plan: Plan
-	export let drags: {
+	interface Props {
+		period: PeriodWithMembers;
+		plan: Plan;
+		drags: {
 		class?: string
 		axis?: 'x' | 'y' | 'any'
 		moveStart?: boolean
 		moveEnd?: boolean
-	}[]
+	}[];
+	}
 
-	let deltaStartMs = 0
-	let deltaEndMs = 0
+	let { period, plan, drags }: Props = $props();
 
-	$: msSize = time(plan.hourSize).to('hour')
-	$: startPx = msSize * (-plan.start.diff(daytz(period.start)) + $magnet(deltaStartMs))
-	$: sizePx =
-		msSize *
-		(daytz(period.end).diff(daytz(period.start)) - $magnet(deltaStartMs) + $magnet(deltaEndMs))
+	let deltaStartMs = $state(0)
+	let deltaEndMs = $state(0)
+
+	let msSize = $derived(time(plan.hourSize).to('hour'))
+	let startPx = $derived(msSize * (-plan.start.diff(daytz(period.start)) + $magnet(deltaStartMs)))
+	let sizePx =
+		$derived(msSize *
+		(daytz(period.end).diff(daytz(period.start)) - $magnet(deltaStartMs) + $magnet(deltaEndMs)))
 
 	const dispatch = createEventDispatcher<{ update: PeriodWithMembers }>()
 

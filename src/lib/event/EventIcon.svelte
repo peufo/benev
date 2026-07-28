@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { ImageOff } from 'lucide-svelte'
+	import { ImageOff } from '@lucide/svelte'
 
-	export let icon: string
-	let klass = ''
-	export { klass as class }
-	export let alt = "Icon de l'évènement"
+	
+	interface Props {
+		icon: string;
+		class?: string;
+		alt?: string;
+	}
 
-	let isError = false
+	let { icon, class: klass = '', alt = "Icon de l'évènement" }: Props = $props();
+
+	let isError = $state(false)
 
 	function hideOnError(node: HTMLImageElement) {
 		function onError() {

@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { mdiCheck } from '@mdi/js'
-	import { AlertCircle, Clock, HelpCircle, Send } from 'lucide-svelte'
-	import { Card, Icon, InputText, InputTextarea, useForm } from 'fuma'
+	import { AlertCircle, Clock, HelpCircle, Send } from '@lucide/svelte'
+	import { Card, Icon, InputText, InputTextarea, useForm } from '$lib/fuma'
 
 	const form = useForm({
 		successMessage: 'Merci pour ton message',
 	})
-	export let data
+	let { data } = $props();
 </script>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
@@ -27,9 +27,11 @@
 	<div class="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
 		<div class="lg:col-span-3">
 			<Card>
-				<h2 slot="title" class="text-xl font-bold text-primary">
-					Nouvelle prise de contact avec benevio
-				</h2>
+				{#snippet title()}
+								<h2  class="text-xl font-bold text-primary">
+						Nouvelle prise de contact avec benevio
+					</h2>
+							{/snippet}
 
 				<form
 					method="post"

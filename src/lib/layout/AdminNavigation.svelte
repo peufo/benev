@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { adminTabs } from '$lib/layout/adminTabs'
-	import { Card } from 'fuma'
+	import { Card } from '$lib/fuma'
 </script>
 
 <Card

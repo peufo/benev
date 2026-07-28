@@ -1,6 +1,10 @@
 <script lang="ts">
 	import type { PageServerData } from './$types'
-	export let teams: PageServerData['teams']
+	interface Props {
+		teams: PageServerData['teams'];
+	}
+
+	let { teams }: Props = $props();
 </script>
 
 <div class="flex gap-2">

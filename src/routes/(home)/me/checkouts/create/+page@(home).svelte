@@ -2,13 +2,13 @@
 	import { onMount } from 'svelte'
 	import { loadStripe } from '@stripe/stripe-js'
 	import { env } from '$env/dynamic/public'
-	import { Card } from 'fuma'
+	import { Card } from '$lib/fuma'
 
-	export let data
+	let { data } = $props();
 
-	let checkoutElement: HTMLDivElement
+	let checkoutElement: HTMLDivElement = $state()
 	let destroy: () => void = () => {}
-	let isLoading = true
+	let isLoading = $state(true)
 
 	async function initCheckout() {
 		try {
@@ -32,8 +32,8 @@
 <Card class="max-w-[1060px] mx-auto">
 	{#if isLoading}
 		<div class="h-[600px] grid place-content-center">
-			<span class="loading loading-ring loading-lg" />
+			<span class="loading loading-ring loading-lg"></span>
 		</div>
 	{/if}
-	<div bind:this={checkoutElement} />
+	<div bind:this={checkoutElement}></div>
 </Card>

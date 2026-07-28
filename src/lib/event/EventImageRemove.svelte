@@ -2,13 +2,17 @@
 	import { invalidateAll } from '$app/navigation'
 	import { mdiTrashCanOutline } from '@mdi/js'
 	import axios from 'axios'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { toast } from 'svelte-sonner'
 
-	export let formaction: string
-	export let eventId: string
+	interface Props {
+		formaction: string;
+		eventId: string;
+	}
 
-	let isLoading = false
+	let { formaction, eventId }: Props = $props();
+
+	let isLoading = $state(false)
 
 	function onclick() {
 		if (isLoading) return
@@ -30,7 +34,7 @@
 	type="button"
 	disabled={isLoading}
 	class:opacity-50={isLoading}
-	on:click={onclick}
+	{onclick}
 	class="link link-hover text-xs flex gap-1 items-center"
 >
 	<Icon path={mdiTrashCanOutline} size={14} />

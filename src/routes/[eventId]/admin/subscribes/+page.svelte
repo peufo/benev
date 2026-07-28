@@ -19,7 +19,7 @@
 		Icon,
 		Drawer,
 		component,
-	} from 'fuma'
+	} from '$lib/fuma'
 	import { MemberCell } from '$lib/member'
 	import SubscribesImport from './SubscribesImport.svelte'
 	import SubscribesStats from './SubscribesStats.svelte'
@@ -35,7 +35,7 @@
 	import { TagsList } from '$lib/tag'
 	import dayjs from '$lib/dayjs'
 
-	export let data
+	let { data } = $props();
 
 	type Subscribe = PageData['subscribes'][number]
 
@@ -140,7 +140,7 @@
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-x-2 gap-y-2 flex-wrap">
 				<InputSearch />
-				<div class="grow" />
+				<div class="grow"></div>
 
 				<!-- SHOW MEMBERS STATS -->
 				<a href={$urlParam.with({ subscribes_stats: 1 })} class="btn btn-square btn-sm xl:hidden">

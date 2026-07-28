@@ -1,11 +1,15 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { urlParam } from 'fuma'
+	import { urlParam } from '$lib/fuma'
 	import Distribution from '$lib/Distribution.svelte'
 	import { derived } from 'svelte/store'
 	import type { MembersProfilDistKey, MembershipDistKey } from './getMembers'
 
-	export let data: PageData
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	const DIST_MEMBERS_LABEL: Record<MembershipDistKey, string> = {
 		isValided: 'Validé',

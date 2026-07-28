@@ -1,5 +1,5 @@
-import { parseQuery } from 'fuma/server'
-import { z } from 'fuma'
+import { parseQuery } from '$lib/server/fuma'
+import { z } from '$lib/fuma'
 import { permission, prisma, parseFormKey, getTeam, getPeriodForm, getPlanData } from '$lib/server'
 
 export const load = async ({ locals, url, params: { eventId } }) => {

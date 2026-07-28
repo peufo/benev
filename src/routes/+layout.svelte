@@ -12,18 +12,23 @@
 		websiteSchema,
 	} from '$lib/seo'
 	import '../app.css'
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	$: siteUrl = $page.url.origin
+	let { children }: Props = $props();
+
+	let siteUrl = $derived($page.url.origin)
 
 	/**
 	 * Unique point de rendu des metas du site : `MetaTags` écrit dans `<svelte:head>` sans
 	 * dédoublonner, donc deux instances empilées produiraient des balises en double.
 	 * Chaque `load` publie ses surcharges via `metaTags` dans ses données.
 	 */
-	$: metaTags = mergeMetaTags(
+	let metaTags = $derived(mergeMetaTags(
 		defaultMetaTags($page.url),
 		$page.error ? errorMetaTags($page.status) : $page.data.metaTags
-	)
+	))
 </script>
 
 <svelte:head>
@@ -44,5 +49,5 @@
 		padding-right: {$periodDrawerTransitionX}px;
 	"
 >
-	<slot />
+	{@render children?.()}
 </div>

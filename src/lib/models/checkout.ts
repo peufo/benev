@@ -1,4 +1,4 @@
-import { z, type ZodObj } from 'fuma/validation'
+import { z, type ZodObj } from '$lib/fuma'
 import type { Prisma } from '@prisma/client'
 
 export const modelCheckout = {

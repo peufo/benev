@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { rolesMap } from '$lib/member/MemberRole.svelte'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { mdiCheck, mdiHelp, mdiListStatus } from '@mdi/js'
 
 	type Permission = boolean | string | undefined
@@ -112,7 +112,7 @@
 					{#if value === true}
 						<td><Icon path={mdiCheck} class="fill-success" /></td>
 					{:else if value === false}
-						<td />
+						<td></td>
 					{:else if value === undefined}
 						<td><Icon path={mdiHelp} class="fill-warning" title="Paramétrable" /></td>
 					{:else}

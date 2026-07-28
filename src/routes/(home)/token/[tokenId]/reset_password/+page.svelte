@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { enhance } from '$app/forms'
-	import { InputPassword } from 'fuma'
-	import { useForm } from 'fuma/validation'
+	import { InputPassword } from '$lib/fuma'
+	import { useForm } from '$lib/fuma'
 
 	import { Oauth } from '$lib/me'
 
 	const form = useForm()
 
-	const redirectTo = $page.url.searchParams.get('redirectTo')
-	const newUser = $page.url.searchParams.get('newUser')
-	const eventName = $page.url.searchParams.get('eventName')
+	const redirectTo = page.url.searchParams.get('redirectTo')
+	const newUser = page.url.searchParams.get('newUser')
+	const eventName = page.url.searchParams.get('eventName')
 </script>
 
 <div class="card bg-base-100 max-w-md m-auto shadow-lg">
@@ -27,7 +27,7 @@
 
 			<p>Pour accéder à ton compte, tu peux utiliser un des ces services :</p>
 			<Oauth />
-			<div class="divider" />
+			<div class="divider"></div>
 			<p>Ou alors, tu peux définir ton mot de passe</p>
 		{:else}
 			<h2 class="title mb-4">Réinitialisation de ton mot de passe</h2>

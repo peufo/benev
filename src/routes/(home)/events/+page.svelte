@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { EventList, EventsTabs } from '$lib/event/index.js'
 
-	export let data
+	let { data } = $props();
 </script>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">

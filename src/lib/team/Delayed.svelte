@@ -1,12 +1,17 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	const DELAY_IN = 300
 	const DELAY_STEP = 50
 	const DELAY_OUT = 0
 </script>
 
 <script lang="ts">
-	export let index: number
-	export let max: number
+	interface Props {
+		index: number;
+		max: number;
+		children?: import('svelte').Snippet;
+	}
+
+	let { index, max, children }: Props = $props();
 
 	const delayIn = DELAY_IN + index * DELAY_STEP
 	const delayOut = DELAY_OUT + (max - index) * DELAY_STEP
@@ -19,5 +24,5 @@
         delay-[--delay-out] group-hover:delay-[--delay-in]
     "
 >
-	<slot />
+	{@render children?.()}
 </div>

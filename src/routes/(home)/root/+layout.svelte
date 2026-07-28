@@ -1,5 +1,10 @@
 <script lang="ts">
 	import Tree from './Tree.svelte'
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	let tree = Object.keys(import.meta.glob('./**/+page.svelte'))
 		.map((p) => p.replace('./', '').replace(/\/?\+page.svelte/, ''))
@@ -15,6 +20,6 @@
 		<Tree {tree} />
 	</div>
 	<div class="grow min-w-0">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>

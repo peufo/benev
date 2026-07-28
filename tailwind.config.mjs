@@ -4,7 +4,7 @@ import daisyui from 'daisyui'
 
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: ['./src/**/*.{html,svelte,ts,js}', './node_modules/**/fuma/dist/**/*.svelte'],
+	content: ['./src/**/*.{html,svelte,ts,js}'],
 	darkMode: 'class',
 	theme: {
 		extend: {

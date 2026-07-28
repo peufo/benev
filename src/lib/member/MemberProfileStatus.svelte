@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { mdiAlertCircleOutline, mdiCheck } from '@mdi/js'
-	import { Icon, tip } from 'fuma'
+	import { Icon, tip } from '$lib/fuma'
 	import type { MemberWithComputedValues } from '$lib/server'
 
-	export let member: MemberWithComputedValues
+	interface Props {
+		member: MemberWithComputedValues;
+	}
+
+	let { member }: Props = $props();
 </script>
 
 {#if member.isValidedByUser}

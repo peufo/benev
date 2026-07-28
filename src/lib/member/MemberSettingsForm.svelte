@@ -1,10 +1,14 @@
 <script lang="ts">
 	import MemberDeleteForm from './MemberDeleteForm.svelte'
-	import { InputBoolean, useForm } from 'fuma'
+	import { InputBoolean, useForm } from '$lib/fuma'
 	import type { MemberWithComputedValues } from '$lib/server'
 	import { autoSubmit } from '$lib/action'
 
-	export let member: MemberWithComputedValues
+	interface Props {
+		member: MemberWithComputedValues;
+	}
+
+	let { member }: Props = $props();
 
 	const { enhance } = useForm({ successReset: false, successMessage: 'Préférences sauvegardées' })
 </script>

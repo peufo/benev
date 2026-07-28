@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon, urlParam } from 'fuma'
+	import { Icon, urlParam } from '$lib/fuma'
 	import { CARD_CONTENT_OPTIONS } from './options'
 </script>
 

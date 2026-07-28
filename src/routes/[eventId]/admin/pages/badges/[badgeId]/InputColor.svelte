@@ -2,18 +2,22 @@
 	import { getTextColor } from '$lib/utils'
 	import { getNextColor } from './InputColorPalette.svelte'
 
-	export let name = ''
-	export let label = name
-	export let value = getNextColor()
+	interface Props {
+		name?: string;
+		label?: any;
+		value?: any;
+	}
 
-	let input: HTMLInputElement
+	let { name = '', label = name, value = $bindable(getNextColor()) }: Props = $props();
+
+	let input: HTMLInputElement = $state()
 </script>
 
 <button
 	type="button"
 	style="background: {value}; color: {getTextColor(value)};"
 	class="btn btn-sm"
-	on:click={() => input.click()}
+	onclick={() => input.click()}
 >
 	<span class="lowercase">{label}</span>
 	<input

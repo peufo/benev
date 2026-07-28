@@ -1,4 +1,4 @@
-import { z } from 'fuma'
+import { z } from '$lib/fuma'
 
 const modelFieldMapping = z.object({
 	sourceFieldId: z.string(),

@@ -1,4 +1,4 @@
-import { z } from 'fuma'
+import { z } from '$lib/fuma'
 
 export const modelInvite = {
 	email: z.union([z.string().email().toLowerCase(), z.literal('').transform(() => null)]).nullish(),

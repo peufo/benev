@@ -3,15 +3,15 @@
 	import { enhance } from '$app/forms'
 	import { page } from '$app/stores'
 
-	import { Card, Icon, tip } from 'fuma'
+	import { Card, Icon, tip } from '$lib/fuma'
 	import { eventPath } from '$lib/store'
-	import { useForm } from 'fuma/validation'
+	import { useForm } from '$lib/fuma'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { PAGE_TYPE } from '$lib/constant'
-	import { IdCardLanyardIcon } from 'lucide-svelte'
+	import { IdCardLanyardIcon } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
 
-	export let data
+	let { data, children } = $props();
 
 	const form = useForm({
 		onSuccess(url) {
@@ -88,10 +88,10 @@
 				{/each}
 			</div>
 
-			<div class="divider divider-horizontal" />
+			<div class="divider divider-horizontal"></div>
 
 			<div class="grow">
-				<slot />
+				{@render children?.()}
 			</div>
 		</div>
 	</OnlyAdmin>

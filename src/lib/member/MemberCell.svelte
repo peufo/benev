@@ -7,7 +7,11 @@
 
 	import type { Subscribe } from '@prisma/client'
 
-	export let member: MemberWithComputedValues & { subscribes?: Subscribe[] }
+	interface Props {
+		member: MemberWithComputedValues & { subscribes?: Subscribe[] };
+	}
+
+	let { member }: Props = $props();
 </script>
 
 <a

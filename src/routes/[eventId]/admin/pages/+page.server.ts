@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit'
-import { formAction, tryOrFail } from 'fuma/server'
+import { formAction, tryOrFail } from '$lib/server/fuma'
 import { prisma, permission } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 

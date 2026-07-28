@@ -1,8 +1,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
-import { z } from 'fuma/validation'
-import { parseFormData } from 'fuma/server'
+import { z } from '$lib/fuma'
+import { jsonParse } from '$lib/jsonParse'
+import { parseFormData } from '$lib/server/fuma'
 import type { Prisma } from '@prisma/client'
 import { prisma } from './prisma'
 import { env } from '$env/dynamic/private'
@@ -20,17 +21,24 @@ export const media = {
 
 		const { data } = await parseFormData(requestOrFormData, {
 			[keyImage]: z.instanceof(File),
+			// `pipe` exige en zod 4 que l'entrée de la cible corresponde exactement à la
+			// sortie de la source (`string | undefined`). `z.json()` accepte aussi l'objet
+			// déjà décodé, entrée trop large: on cible directement la branche chaîne.
 			[keyCrop]: z
 				.string()
 				.transform((v) => (v === 'undefined' ? undefined : v))
 				.pipe(
 					z
-						.json({
-							x: z.number(),
-							y: z.number(),
-							width: z.number(),
-							height: z.number(),
-						})
+						.string()
+						.transform((value) => jsonParse<unknown>(value, null))
+						.pipe(
+							z.object({
+								x: z.number(),
+								y: z.number(),
+								width: z.number(),
+								height: z.number(),
+							})
+						)
 						.optional()
 				)
 				.optional(),

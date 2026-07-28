@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { tip, urlParam } from 'fuma'
-	import { PinIcon, PlusIcon } from 'lucide-svelte'
+	import { tip, urlParam } from '$lib/fuma'
+	import { PinIcon, PlusIcon } from '@lucide/svelte'
 	import type { Milestone, Team } from '@prisma/client'
 	import { afterNavigate, goto } from '$app/navigation'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
@@ -16,10 +16,14 @@
 	import { trackView, type View } from './trackView'
 	import MilestonesLink from './MilestonesLink.svelte'
 
-	export let teams: (Team & { periods: PeriodWithMembers[] })[]
-	export let plan: Plan
+	interface Props {
+		teams: (Team & { periods: PeriodWithMembers[] })[];
+		plan: Plan;
+	}
 
-	let container: HTMLElement
+	let { teams, plan = $bindable() }: Props = $props();
+
+	let container: HTMLElement = $state()
 
 	function createMilestoneAt(event: MouseEvent) {
 		const element = event.currentTarget as HTMLElement
@@ -41,11 +45,11 @@
 		goto($urlParam.with({ hourSize }), { replaceState: true, noScroll: true, keepFocus: true })
 	}, 300)
 
-	$: hourSpan = Math.ceil(MIN_HOUR_WIDTH / plan.hourSize)
-	$: totalWidth = TEAM_HEADER_WIDTH + plan.length
+	let hourSpan = $derived(Math.ceil(MIN_HOUR_WIDTH / plan.hourSize))
+	let totalWidth = $derived(TEAM_HEADER_WIDTH + plan.length)
 
-	let milestonesBefore: (Milestone & { time: Dayjs })[] = []
-	let milestonesAfter: (Milestone & { time: Dayjs })[] = []
+	let milestonesBefore: (Milestone & { time: Dayjs })[] = $state([])
+	let milestonesAfter: (Milestone & { time: Dayjs })[] = $state([])
 
 	function onViewChange({ start, end }: View) {
 		milestonesBefore = plan.milestones.filter(({ time }) => time.isBefore(start)).toReversed()
@@ -88,12 +92,12 @@
 		style:width="{totalWidth}px"
 		use:grabScale.scale
 	>
-		<div class="bg-accent rounded w-[3px] h-8 bottom-0" use:indicator.element />
+		<div class="bg-accent rounded w-[3px] h-8 bottom-0" use:indicator.element></div>
 
 		<div
 			class="sticky z-20 bg-base-100 left-0 border-r shrink-0"
 			style:width="{TEAM_HEADER_WIDTH}px"
-		/>
+		></div>
 
 		{#each plan.days as { date, hours } (date.valueOf())}
 			<div class="-translate-x-[1px]">
@@ -118,7 +122,7 @@
 		{/each}
 	</div>
 
-	{#each teams as team (team.id)}
+	{#each teams as team, teamIndex (team.id)}
 		<div
 			class="flex items-stretch border-b bg-base-100 hover:bg-accent/5 group/team"
 			style:width="{totalWidth}px"
@@ -136,7 +140,7 @@
 			>
 				{team.name}
 			</a>
-			<TeamRow bind:team {plan} />
+			<TeamRow bind:team={teams[teamIndex]} {plan} />
 		</div>
 	{/each}
 
@@ -167,11 +171,11 @@
 				<span
 					class="absolute w-px -left-[1px] bg-secondary/40 h-screen bottom-0"
 					style:translate="{leftPx}px"
-				/>
+				></span>
 				<span
 					class="absolute bottom-0 -left-[4.5px] w-2 h-2 rounded-full bg-secondary"
 					style:translate="{leftPx}px"
-				/>
+				></span>
 				<div class="absolute top-1" style:translate="{leftPx}px">
 					<a
 						href={$urlParam.with({ form_milestone: milestone.id })}
@@ -186,7 +190,7 @@
 		</div>
 		<button
 			class="btn btn-ghost btn-circle btn-xs opacity-0 group-hover:opacity-100 transition-opacity bottom-0"
-			on:click={createMilestoneAt}
+			onclick={createMilestoneAt}
 			use:indicator.element
 			title="Ajouter un jalon"
 		>
@@ -197,5 +201,5 @@
 	<!-- MILESTONE NAVIGATION -->
 	<MilestonesLink {milestonesBefore} {milestonesAfter} />
 
-	<div class="h-48" />
+	<div class="h-48"></div>
 </div>

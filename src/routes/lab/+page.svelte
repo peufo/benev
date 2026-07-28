@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Card, Icon } from 'fuma'
+	import { Card, Icon } from '$lib/fuma'
 	import { mdiMapMarkerOutline, mdiOpenInNew } from '@mdi/js'
 	import { InputLocation, mapUrl } from '$lib/location'
 
-	let location: PrismaJson.Location | null = null
+	let location: PrismaJson.Location | null = $state(null)
 
 	// alternatives à comparer avant de figer le format du lien
 	const alternatives = ({ label, coords }: PrismaJson.Location) =>
@@ -31,7 +31,9 @@
 
 <div class="mx-auto flex max-w-2xl flex-col gap-4 p-4">
 	<Card>
-		<h2 slot="title">InputLocation (Photon / OpenStreetMap)</h2>
+		{#snippet title()}
+				<h2 >InputLocation (Photon / OpenStreetMap)</h2>
+			{/snippet}
 
 		<InputLocation bind:value={location} />
 
@@ -40,7 +42,9 @@
 
 	{#if location}
 		<Card>
-			<h2 slot="title">Affichage</h2>
+			{#snippet title()}
+						<h2 >Affichage</h2>
+					{/snippet}
 
 			<div class="flex flex-col gap-4">
 				<div>

@@ -1,11 +1,16 @@
 <script lang="ts">
-	import { urlParam } from 'fuma'
-	import { ArrowDownIcon, ArrowUpIcon } from 'lucide-svelte'
+	import { urlParam } from '$lib/fuma'
+	import { ArrowDownIcon, ArrowUpIcon } from '@lucide/svelte'
 
-	export let key: string
+	interface Props {
+		key: string;
+		children?: import('svelte').Snippet;
+	}
 
-	$: currentSort = $urlParam.get('sort')
-	$: currentOrder = $urlParam.get('order') || 'desc'
+	let { key, children }: Props = $props();
+
+	let currentSort = $derived($urlParam.get('sort'))
+	let currentOrder = $derived($urlParam.get('order') || 'desc')
 
 	function getSortUrl(sort: string | null, order: string | null) {
 		if (sort !== key) return $urlParam.with({ sort: key, order: 'desc' })
@@ -19,7 +24,7 @@
 		href={getSortUrl(currentSort, currentOrder)}
 		class="inline-flex items-center gap-1 link link-hover"
 	>
-		<slot />
+		{@render children?.()}
 		{#if currentSort === key}
 			{#if currentOrder === 'asc'}
 				<ArrowUpIcon size={14} />

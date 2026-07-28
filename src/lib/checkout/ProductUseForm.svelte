@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { mdiLink } from '@mdi/js'
-	import { Icon, InputRelation } from 'fuma'
-	import { useForm } from 'fuma/validation'
+	import { Icon, InputRelation } from '$lib/fuma'
+	import { useForm } from '$lib/fuma'
 	import { slide } from 'svelte/transition'
 
-	export let product: { id: string; name: string }
-	export let action = '?/use_product'
+	interface Props {
+		product: { id: string; name: string };
+		action?: string;
+	}
+
+	let { product, action = '?/use_product' }: Props = $props();
 
 	const form = useForm({
 		successMessage: 'Produit associé',
@@ -14,7 +18,7 @@
 
 	type EventSuggestion = { id: string; name: string; tier: string }
 
-	let selectedEvent: EventSuggestion | null = null
+	let selectedEvent: EventSuggestion | null = $state(null)
 
 	async function searchEvent(q: string) {
 		const res = await fetch(`/me/events/search?q=${encodeURIComponent(q)}`)

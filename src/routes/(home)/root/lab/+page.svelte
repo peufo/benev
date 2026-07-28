@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { Card } from 'fuma'
+	import { Card } from '$lib/fuma'
 	import { enhance } from '$app/forms'
 
-	let events: string[] = []
+	let events: string[] = $state([])
 
 	onMount(() => {
 		const subscription = new EventSource('/root/lab')

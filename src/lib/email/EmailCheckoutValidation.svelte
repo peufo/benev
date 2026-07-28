@@ -3,8 +3,12 @@
 	import EmailLayout from './EmailLayout.svelte'
 	import { domain } from '.'
 
-	export let checkout: Checkout & { user: User; products: Product[] }
-	export let dest: 'user' | 'root' = 'user'
+	interface Props {
+		checkout: Checkout & { user: User; products: Product[] };
+		dest?: 'user' | 'root';
+	}
+
+	let { checkout, dest = 'user' }: Props = $props();
 </script>
 
 <EmailLayout title={dest === 'user' ? 'Merci pour ton achat' : 'Nouvel achat'}>

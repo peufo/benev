@@ -1,14 +1,18 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import { toast } from 'svelte-sonner'
-	import { Placeholder, listEditable } from 'fuma'
+	import { Placeholder, listEditable } from '$lib/fuma'
 	import axios from 'axios'
 	import { eventPath } from '$lib/store'
 	import { invalidateAll } from '$app/navigation'
 
 	type _Team = Pick<Team, 'id' | 'name'>
 
-	export let teams: _Team[]
+	interface Props {
+		teams: _Team[];
+	}
+
+	let { teams = $bindable() }: Props = $props();
 
 	async function handleReorder(reorderedTeams: _Team[]) {
 		teams = reorderedTeams

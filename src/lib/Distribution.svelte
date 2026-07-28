@@ -1,13 +1,23 @@
 <script lang="ts" generics="Keys extends string">
-	export let title: string
-	let klass = ''
-	export { klass as class }
-	export let values: Record<Keys, number>
-	export let getHref: (key: Keys) => string
-	export let getLabel: (key: Keys) => string = (key) => key
+	
+	interface Props {
+		title: string;
+		class?: string;
+		values: Record<Keys, number>;
+		getHref: (key: Keys) => string;
+		getLabel?: (key: Keys) => string;
+	}
 
-	$: distribution = Object.entries(values) as [Keys, number][]
-	$: total = Object.values<number>(values).reduce((acc, cur) => acc + cur, 0)
+	let {
+		title,
+		class: klass = '',
+		values,
+		getHref,
+		getLabel = (key) => key
+	}: Props = $props();
+
+	let distribution = $derived(Object.entries(values) as [Keys, number][])
+	let total = $derived(Object.values<number>(values).reduce((acc, cur) => acc + cur, 0))
 </script>
 
 <div class="{klass} border p-2 rounded-lg">
@@ -29,7 +39,7 @@
 				<div
 					class="absolute bg-primary/10 bottom-0 top-0 left-0 rounded"
 					style:width="{total > 0 ? (value / total) * 100 : 0}%"
-				/>
+				></div>
 			</a>
 		{:else}
 			<div class="col-span-2">Aucun</div>

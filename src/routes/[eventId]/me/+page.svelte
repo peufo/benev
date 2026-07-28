@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { mdiMapMarkerRadiusOutline } from '@mdi/js'
-	import { Card, Icon } from 'fuma'
+	import { Card, Icon } from '$lib/fuma'
 	import { eventPath } from '$lib/store'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
 	import { MemberProfile, MemberSettingsForm } from '$lib/member'
 	import DownloadSubscribes from '$lib/me/DownloadSubscribes.svelte'
 
-	export let data
+	let { data } = $props();
 </script>
 
 <Card class="max-w-2xl mx-auto">
@@ -31,7 +31,7 @@
 			<section class="relative">
 				<div class="flex gap-2 items-center mb-4">
 					<h3 class="title">Secteurs à charge</h3>
-					<div class="grow" />
+					<div class="grow"></div>
 					<TeamsActions teams={data.member.leaderOf} memberId={data.member.id} />
 				</div>
 				<Teams teams={data.member.leaderOf} />

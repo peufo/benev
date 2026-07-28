@@ -2,17 +2,26 @@
 	import type { Page } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
-	import { Icon } from 'fuma'
+	import { Icon } from '$lib/fuma'
 	import { mdiHomeOutline, mdiMapMarkerRadiusOutline } from '@mdi/js'
 	import { PAGE_TYPE } from '$lib/constant'
 
-	export let pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
-	export let hideIndex = false
-	export let hideTeams = false
-	export let classItem = ''
+	interface Props {
+		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[];
+		hideIndex?: boolean;
+		hideTeams?: boolean;
+		classItem?: string;
+	}
 
-	$: pageHome = pages.find((p) => p.type === 'home')
-	$: isMember = !!$page.data.member
+	let {
+		pages,
+		hideIndex = false,
+		hideTeams = false,
+		classItem = ''
+	}: Props = $props();
+
+	let pageHome = $derived(pages.find((p) => p.type === 'home'))
+	let isMember = $derived(!!$page.data.member)
 </script>
 
 <!-- HOME -->

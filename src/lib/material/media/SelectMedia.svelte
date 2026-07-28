@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { stopPropagation, createBubbler, preventDefault } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { enhance } from '$app/forms'
 	import type { Media } from '@prisma/client'
 	import { portal } from 'svelte-portal'
-	import { page } from '$app/stores'
-	import { ButtonDelete, Dialog, Icon, InputText } from 'fuma'
-	import { useForm } from 'fuma/validation'
+	import { page } from '$app/state'
+	import { ButtonDelete, Dialog, Icon, InputText } from '$lib/fuma'
+	import { useForm } from '$lib/fuma'
 
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
@@ -12,10 +15,10 @@
 	import { api } from '$lib/api'
 
 	// TODO: Chelous de récupérer medias en global:
-	let medias: Media[] = []
-	let dialogMedias: HTMLDialogElement
-	let dialogEdit: HTMLDialogElement
-	let dialogUploadMedia: UploadMediaDialog
+	let medias: Media[] = $state([])
+	let dialogMedias: HTMLDialogElement = $state()
+	let dialogEdit: HTMLDialogElement = $state()
+	let dialogUploadMedia: UploadMediaDialog = $state()
 	const formUpload = useForm<Media>({
 		successUpdate: false,
 		successMessage: 'Nouvelle image',
@@ -45,7 +48,7 @@
 	})
 
 	const dispatch = createEventDispatcher<{ select: Media }>()
-	let selectedMedia: Media | undefined = undefined
+	let selectedMedia: Media | undefined = $state(undefined)
 
 	async function loadMedias() {
 		medias = await $api.media.search('')
@@ -75,7 +78,9 @@
 </script>
 
 <Dialog bind:dialog={dialogMedias}>
-	<h3 slot="header" class="title">Médiatèque</h3>
+	{#snippet header()}
+		<h3  class="title">Médiatèque</h3>
+	{/snippet}
 	<div>
 		<div
 			class="grid gap-3 items-start"
@@ -84,7 +89,7 @@
 			{#each medias as media (media.id)}
 				<button
 					type="button"
-					on:click={() => handleSelectMedia(media)}
+					onclick={() => handleSelectMedia(media)}
 					class="text-left border rounded-lg outline-primary/50 outline-1 hover:outline p-1 flex flex-col gap-1"
 				>
 					<img src="/media/{media.id}?size=small" alt={media.name} class="rounded" />
@@ -94,7 +99,7 @@
 						{#if media.eventId}
 							<button
 								type="button"
-								on:click|stopPropagation={() => handleEditMedia(media)}
+								onclick={stopPropagation(() => handleEditMedia(media))}
 								class="btn btn-xs btn-square btn-ghost ml-auto"
 							>
 								<Icon
@@ -112,7 +117,7 @@
 			<button
 				type="button"
 				class="border rounded-lg grid place-content-center aspect-square outline-primary/50 outline-1 hover:outline"
-				on:click={handleAddMedia}
+				onclick={handleAddMedia}
 			>
 				<Icon
 					path={mdiPlus}
@@ -135,7 +140,7 @@
 		use:enhance={formUpload.submit}
 		method="post"
 		enctype="multipart/form-data"
-		on:submit|preventDefault
+		onsubmit={preventDefault(bubble('submit'))}
 	>
 		<UploadMediaDialog
 			bind:this={dialogUploadMedia}
@@ -148,7 +153,9 @@
 
 	{#if selectedMedia}
 		<Dialog bind:dialog={dialogEdit}>
-			<h3 slot="header" class="title">Edition d'une image</h3>
+			{#snippet header()}
+						<h3  class="title">Edition d'une image</h3>
+					{/snippet}
 
 			<img src="/media/{selectedMedia.id}" alt={selectedMedia.name} class="mx-auto" />
 

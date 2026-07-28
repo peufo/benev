@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { tip } from 'fuma'
+	import { run } from 'svelte/legacy';
+
+	import { tip } from '$lib/fuma'
 	import { slide } from 'svelte/transition'
 	import { activeVideoIndex, reportVisibility } from './videoStore'
 
@@ -8,15 +10,19 @@
 		title: string
 	}
 
-	let klass = ''
 
-	export let videos: Video[]
-	export { klass as class }
-	export let index: number
+	
+	interface Props {
+		class?: string;
+		videos: Video[];
+		index: number;
+	}
 
-	let activeIndex = 0
-	let isLoading = false
-	let videoElement: HTMLVideoElement
+	let { class: klass = '', videos, index }: Props = $props();
+
+	let activeIndex = $state(0)
+	let isLoading = $state(false)
+	let videoElement: HTMLVideoElement = $state()
 
 	function observeVisibility(node: HTMLVideoElement) {
 		const observer = new IntersectionObserver(
@@ -54,13 +60,15 @@
 		}
 	}
 
-	$: if (videoElement && $activeVideoIndex !== undefined) {
-		if ($activeVideoIndex === index) {
-			videoElement.play().catch(() => undefined)
-		} else {
-			videoElement.pause()
+	run(() => {
+		if (videoElement && $activeVideoIndex !== undefined) {
+			if ($activeVideoIndex === index) {
+				videoElement.play().catch(() => undefined)
+			} else {
+				videoElement.pause()
+			}
 		}
-	}
+	});
 </script>
 
 <div class={klass}>
@@ -70,19 +78,19 @@
 		muted
 		playsinline
 		use:observeVisibility
-		on:loadeddata={handleLoadedData}
-		on:ended={nextActive}
+		onloadeddata={handleLoadedData}
+		onended={nextActive}
 		class="
 			w-full aspect-[1.59] rounded-lg
 			{isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity
 		"
-	/>
+	></video>
 
 	<div class="flex gap-2 items-center justify-center py-2">
 		{#each videos as _, i (i)}
 			{@const isActive = i === activeIndex}
 			<button
-				on:click={() => setActive(i)}
+				onclick={() => setActive(i)}
 				class="badge badge-lg badge-primary transition-opacity duration-300 {isActive
 					? 'opacity-100'
 					: 'opacity-40 hover:opacity-70'}"

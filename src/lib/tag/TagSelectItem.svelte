@@ -1,14 +1,18 @@
 <script lang="ts">
 	import { mdiPencilOutline } from '@mdi/js'
 	import type { Tag } from '@prisma/client'
-	import { Icon, param } from 'fuma'
+	import { Icon, param } from '$lib/fuma'
 
-	export let tag: Tag
-	export let is_editable = false
+	interface Props {
+		tag: Tag;
+		is_editable?: boolean;
+	}
+
+	let { tag, is_editable = false }: Props = $props();
 </script>
 
 <div class="flex items-center">
-	<div class="rounded-full w-3 h-3 -translate-x-1" style="background-color: {tag.color};" />
+	<div class="rounded-full w-3 h-3 -translate-x-1" style="background-color: {tag.color};"></div>
 	<div>{tag.name}</div>
 	{#if is_editable}
 		<a

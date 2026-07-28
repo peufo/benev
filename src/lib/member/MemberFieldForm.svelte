@@ -9,7 +9,7 @@
 		InputOptions,
 		USE_COERCE_BOOLEAN,
 		Form,
-	} from 'fuma'
+	} from '$lib/fuma'
 	import type { Field } from '@prisma/client'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { eventPath } from '$lib/store'
@@ -18,7 +18,11 @@
 
 	const FormMemberField: ComponentType<Form<typeof modelMemberFieldCreate, Field>> = Form
 
-	export let field: Partial<Field> = {}
+	interface Props {
+		field?: Partial<Field>;
+	}
+
+	let { field = $bindable({}) }: Props = $props();
 
 	function getMemberRight(value: Partial<Field>): string[] {
 		return [value.memberCanRead && 'read', value.memberCanWrite && 'write'].filter(

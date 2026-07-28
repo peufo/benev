@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 </script>
 
 <div class="tabs mb-8">
-	<a href="/events" class="tab tab-lg" class:tab-active={$page.url.pathname === '/events'}>
+	<a href="/events" class="tab tab-lg" class:tab-active={page.url.pathname === '/events'}>
 		À venir
 	</a>
 	<a
 		href="/events/past"
 		class="tab tab-lg"
-		class:tab-active={$page.url.pathname === '/events/past'}
+		class:tab-active={page.url.pathname === '/events/past'}
 	>
 		Passés
 	</a>

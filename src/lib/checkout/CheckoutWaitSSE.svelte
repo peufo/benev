@@ -1,15 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { urlParam } from 'fuma'
+	import { urlParam } from '$lib/fuma'
 	import { invalidateAll, goto } from '$app/navigation'
 	import { page } from '$app/stores'
 
-	export let allreadyLoaded: (checkoutId: string) => boolean = () => false
-	export let removeCheckoutId = false
-	export let eventSource = '/me/checkouts/validation'
+	interface Props {
+		allreadyLoaded?: (checkoutId: string) => boolean;
+		removeCheckoutId?: boolean;
+		eventSource?: string;
+	}
+
+	let { allreadyLoaded = () => false, removeCheckoutId = false, eventSource = '/me/checkouts/validation' }: Props = $props();
 
 	let checkoutId = $page.url.searchParams.get('checkoutId')
-	let isNewCheckoutAwaited = !!checkoutId && !allreadyLoaded(checkoutId)
+	let isNewCheckoutAwaited = $state(!!checkoutId && !allreadyLoaded(checkoutId))
 
 	const handleCheckoutNotification = async () => {
 		isNewCheckoutAwaited = false
@@ -36,6 +40,6 @@
 
 {#if isNewCheckoutAwaited}
 	<div class="h-20 grid place-content-center border-primary border rounded">
-		<span class="loading loading-infinity loading-lg text-primary" />
+		<span class="loading loading-infinity loading-lg text-primary"></span>
 	</div>
 {/if}

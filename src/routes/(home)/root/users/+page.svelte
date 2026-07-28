@@ -1,16 +1,20 @@
 <script lang="ts">
 	import { mdiCheck, mdiClose } from '@mdi/js'
-	import { Card, DropDown, Icon, InputSearch, Pagination } from 'fuma'
+	import { Card, DropDown, Icon, InputSearch, Pagination } from '$lib/fuma'
 	import TDSortable from './TDSortable.svelte'
 
-	export let data
+	let { data } = $props();
 </script>
 
 <Card>
-	<h2 slot="title" class="title">Users ({data.usersCount})</h2>
-	<div slot="action">
-		<InputSearch />
-	</div>
+	{#snippet title()}
+		<h2  class="title">Users ({data.usersCount})</h2>
+	{/snippet}
+	{#snippet action()}
+		<div >
+			<InputSearch />
+		</div>
+	{/snippet}
 	<table class="table">
 		<thead>
 			<tr>
@@ -45,9 +49,11 @@
 					</td>
 					<td>{user._count.events}</td>
 					<DropDown tippyProps={{ trigger: 'mouseenter' }}>
-						<td slot="activator">
-							{user._count.members}
-						</td>
+						{#snippet activator()}
+												<td >
+								{user._count.members}
+							</td>
+											{/snippet}
 						<ul>
 							{#each user.members as member (member.id)}
 								<li>

@@ -1,5 +1,5 @@
-import { formAction } from 'fuma/server'
-import { z } from 'fuma/validation'
+import { formAction } from '$lib/server/fuma'
+import { z } from '$lib/fuma'
 import { validateToken } from '$lib/server'
 import { auth } from '$lib/server'
 import { NOINDEX, pageMetaTags } from '$lib/seo'

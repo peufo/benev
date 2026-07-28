@@ -2,11 +2,15 @@
 	import type { GiftConditionType, GiftCondition as TGiftEdition } from '@prisma/client'
 	import GiftCondition from './GiftCondition.svelte'
 	import { GIFT_CONDITION_TYPE } from '$lib/constant'
-	import { InputSelect } from 'fuma'
+	import { InputSelect } from '$lib/fuma'
 
-	export let conditions: Partial<TGiftEdition>[] = []
+	interface Props {
+		conditions?: Partial<TGiftEdition>[];
+	}
 
-	let conditionType = ''
+	let { conditions = $bindable([]) }: Props = $props();
+
+	let conditionType = $state('')
 	function addCondition() {
 		conditions = [...conditions, { type: conditionType as GiftConditionType }]
 		conditionType = ''
