@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Member, Subscribe, User } from '@prisma/client'
+	import type { Member, Subscribe } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { mdiAlertOutline } from '@mdi/js'

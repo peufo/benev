@@ -1,6 +1,6 @@
 import { writable, derived } from 'svelte/store'
 
-export const videoVisibilities = writable<Map<number, number>>(new Map())
+const videoVisibilities = writable<Map<number, number>>(new Map())
 
 export const activeVideoIndex = derived(videoVisibilities, ($map) => {
 	if ($map.size === 0) return -1

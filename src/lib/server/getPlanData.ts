@@ -71,16 +71,7 @@ export async function getPlanData({ url, event }: { url: URL; event: Event }) {
 	}
 }
 
-// TODO: use this instead of startDate and endDate ?
-// async function getRangeOfEvent(whereTeam: Prisma.TeamWhereInput): Promise<RangeAsDate> {
-// 	const { _min, _max } = await prisma.period.aggregate({
-// 		where: { team: whereTeam },
-// 		_min: { start: true },
-// 		_max: { end: true },
-// 	})
-
-// 	return { start: _min.start, end: _max.end }
-// }
+// TODO: déduire la plage des périodes existantes plutôt que de startDate / endDate ?
 
 async function getDefaultCursor({ startDate, endDate }: Event): Promise<Date> {
 	const now = new Date()

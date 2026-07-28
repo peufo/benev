@@ -5,8 +5,6 @@
 	import { derived } from 'svelte/store'
 	import { SUBSCRIBE_STATE } from '$lib/constant'
 
-	// import type { MembersProfilDistKey, MembershipDistKey } from './getMembers'
-
 	export let data: PageData
 
 	const urlWith = derived(

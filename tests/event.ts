@@ -54,5 +54,3 @@ export function useEvent(owner: User, name: string) {
 		},
 	}
 }
-
-export type BenevEvent = ReturnType<typeof useEvent>

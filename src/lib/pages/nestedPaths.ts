@@ -1,6 +1,6 @@
 // thanks https://javascript.plainenglish.io/advanced-typescript-type-level-nested-object-paths-7f3d8901f29a
 
-export type GenericObject = Record<PropertyKey, unknown>
+type GenericObject = Record<PropertyKey, unknown>
 
 type Join<L extends PropertyKey | undefined, R extends PropertyKey | undefined> = L extends
 	| string
@@ -36,23 +36,3 @@ export type NestedPaths<
 		? NestedPaths<Required<T>[K], Union<Prev, Path>, Join<Path, K>>
 		: Union<Union<Prev, Path>, Join<Path, K>>
 }[keyof T]
-
-/**
- * TypeFromPath
- * Get the type of the element specified by the path
- * @example
- * type TypeOfAB = TypeFromPath<{ a: { b: { c: string } }, 'a.b'>
- * // { c: string }
- */
-export type TypeFromPath<
-	T extends GenericObject,
-	Path extends string // Or, if you prefer, NestedPaths<T>
-> = {
-	[K in Path]: K extends keyof T
-		? T[K]
-		: K extends `${infer P}.${infer S}`
-		? T[P] extends GenericObject
-			? TypeFromPath<T[P], S>
-			: never
-		: never
-}[Path]

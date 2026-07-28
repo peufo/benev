@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropDown, Icon, Card, urlParam, Drawer, tip } from 'fuma'
+	import { DropDown, Icon, Card, urlParam, Drawer } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import {
 		mdiArrowLeft,

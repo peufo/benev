@@ -10,7 +10,7 @@ import EmailLayout from '$lib/email/EmailLayout.svelte'
 import { getMemberReplacers } from '$lib/pages/memberSuggestions'
 import { domain } from '$lib/email'
 
-export const transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
 	host: env.SMTP_HOST,
 	port: Number(env.SMTP_PORT),
 	auth: {

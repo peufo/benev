@@ -38,7 +38,6 @@
 		mdiAlertOctagonOutline,
 	} from '@mdi/js'
 	import { page } from '$app/stores'
-	import { toast } from 'svelte-sonner'
 
 	export let subscribe: Subscribe & { member: { isValidedByUser: boolean } }
 	export let eventId = $page.params.eventId

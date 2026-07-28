@@ -42,10 +42,8 @@ export function addMemberComputedValues<T extends MemberWithEventAndLeaderOf>(
 }
 
 function getMemberRoles(member: MemberWithEventAndLeaderOf): MemberRole[] {
-	//TODO: find better method for root user
-	//const isRoot = member.user.email === ROOT_USER
+	// TODO: trouver une meilleure méthode pour identifier l'utilisateur root
 	const isOwner = member.event.ownerId === member.userId
-	//if (isRoot) return ['root', 'owner', 'admin', 'leader', 'member']
 	if (isOwner) return ['owner', 'admin', 'leader', 'member']
 	if (member.isAdmin) return ['admin', 'leader', 'member']
 	if (member.leaderOf.length) return ['leader', 'member']

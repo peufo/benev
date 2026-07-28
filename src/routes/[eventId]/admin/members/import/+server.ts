@@ -1,5 +1,4 @@
 import { json, error } from '@sveltejs/kit'
-import { z } from 'fuma'
 import { permission } from '$lib/server'
 import { memberImportService, type ImportOptions } from '$lib/server/memberImport'
 import { modelImportOptions } from '$lib/models/memberImport'
@@ -87,7 +86,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
  * POST: Execute member import
  */
 export const POST = async ({ request, locals, params: { eventId } }) => {
-	const member = await permission.admin(eventId, locals)
+	await permission.admin(eventId, locals)
 
 	try {
 		const data = await request.json()

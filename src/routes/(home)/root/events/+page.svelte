@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Card, InputSearch, Pagination } from 'fuma'
-	import { ChartPie } from 'lucide-svelte'
 
 	export let data
 </script>

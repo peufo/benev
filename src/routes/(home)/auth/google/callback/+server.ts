@@ -1,4 +1,3 @@
-import { OAuthRequestError } from '@lucia-auth/oauth'
 import { error } from '@sveltejs/kit'
 import { auth, googleAuth, prisma } from '$lib/server'
 

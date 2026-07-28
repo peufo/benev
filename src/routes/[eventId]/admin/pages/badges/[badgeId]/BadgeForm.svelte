@@ -34,7 +34,7 @@
 			isSuccess = true
 			if (url.searchParams.has('/badge_delete')) invalidateAll()
 		},
-		onFail(failure) {
+		onFail() {
 			isSuccess = false
 		},
 	})

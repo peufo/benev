@@ -1,4 +1,4 @@
-import type { Prisma, Member, Event, Field, FieldType } from '@prisma/client'
+import type { Member, Event, Field } from '@prisma/client'
 import { prisma, notifyTierQuotaIfNeeded } from '$lib/server'
 import { createAvatarPlaceholder } from '$lib/server'
 
@@ -20,7 +20,7 @@ export interface ImportOptions {
 	sendInvitationEmails: boolean
 }
 
-export interface ImportResult {
+interface ImportResult {
 	success: boolean
 	importedCount: number
 	skippedCount: number
@@ -39,7 +39,7 @@ type ImportableEvent = Event & {
 	_count: { members: number }
 }
 
-export class MemberImportService {
+class MemberImportService {
 	/**
 	 * Get events that the user can import from (admin/owner only)
 	 */

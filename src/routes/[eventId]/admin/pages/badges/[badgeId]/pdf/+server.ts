@@ -11,8 +11,6 @@ import { getMembers } from '../../../../members/getMembers'
 import { existsSync } from 'node:fs'
 import { getTextColor } from '$lib/utils'
 import { error } from '@sveltejs/kit'
-// import fontLight from '$lib/assets/Helvetica-Light.ttf'
-// const fontLightPath = path.resolve(`.${fontLight}`)
 
 const MM_TO_PT = 2.83465
 
@@ -271,9 +269,6 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 				const qrX = LAYOUT.width / 2 - qrCodeSize / 2
 				const qrY = LAYOUT.height - textHeight - qrCodeSize
 				const text = `Imprimé le ${getFormater(event.timezone).format(new Date())} depuis benev.io`
-				// const logoSize = qrCodeSize * 0.18
-				// const logoX = LAYOUT.width / 2 - logoSize / 2
-				// const logoY = qrY + qrCodeSize / 2 - logoSize / 2
 				const qrCode = await QrCode.toBuffer(`https://benev.io/qr/${member.id}`, {
 					margin: 0,
 					width: qrCodeSize,
@@ -284,12 +279,6 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 					width: qrCodeSize,
 					height: qrCodeSize,
 				})
-
-				// doc.roundedRect(logoX, logoY, logoSize, logoSize, logoSize).fill('#fff')
-				// doc.image(images.logoBenev, logoX + 2, logoY + 2, {
-				// 	width: logoSize - 4,
-				// 	height: logoSize - 4,
-				// })
 
 				textCenter(text, {
 					x: 0,

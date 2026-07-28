@@ -1,11 +1,6 @@
 <script lang="ts">
 	import { ButtonCopy, DropDown, Icon } from 'fuma'
-	import {
-		mdiCardAccountMailOutline,
-		mdiFileDelimitedOutline,
-		mdiTrayArrowDown,
-		mdiAccountMultiplePlus,
-	} from '@mdi/js'
+	import { mdiCardAccountMailOutline, mdiFileDelimitedOutline, mdiTrayArrowDown } from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { toast } from 'svelte-sonner'

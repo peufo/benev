@@ -1,12 +1,7 @@
 <script lang="ts">
 	import type { Field } from '@prisma/client'
 
-	import {
-		mdiAccountCheckOutline,
-		mdiCardAccountDetailsOutline,
-		mdiFilterOutline,
-		mdiHumanMaleBoy,
-	} from '@mdi/js'
+	import { mdiAccountCheckOutline, mdiCardAccountDetailsOutline, mdiHumanMaleBoy } from '@mdi/js'
 	import type { MemberCondition } from '$lib/models'
 	import { CONDITION_OPERATOR_LABEL } from './constants'
 	import { Icon } from 'fuma'

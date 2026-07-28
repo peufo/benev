@@ -2,7 +2,7 @@
 	import type { Event } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { useForm } from 'fuma/validation'
-	import { InputBoolean, InputDate, InputNumber, InputTime } from 'fuma'
+	import { InputBoolean, InputDate, InputNumber } from 'fuma'
 	import { slide } from 'svelte/transition'
 
 	const { enhance } = useForm({

@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
 import { isHttpUrl } from '$lib/url'
 
-export type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
+type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
 export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
 
 /**

@@ -33,7 +33,7 @@ async function getStripCustomerId(user: User): Promise<string> {
 	return newCustomer.id
 }
 
-export function useCheckout(options: CheckoutOptions) {
+function useCheckout(options: CheckoutOptions) {
 	return {
 		async create(user: User, url: URL) {
 			const lineItems = options.getLineItems(user, url)

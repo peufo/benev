@@ -110,9 +110,7 @@ type ComputePeriodArg = Omit<TeamWithComputedValues, 'periods'> &
 	TeamWithLeadersAndPeriodsSubscribes
 
 export async function getTeam(teamId: string, ctx?: AddTeamComputedValuesContext) {
-	// TODO: hide email for public session
-	// const isLeaderOfTeam =
-	// 	ctx?.member?.roles.includes('admin') || !!ctx?.member?.leaderOf.find((t) => t.id === teamId)
+	// TODO: masquer les emails pour une session publique (réservé aux admins / responsables du secteur)
 
 	const team: TeamWithComputedValues = await prisma.team
 		.findUniqueOrThrow({

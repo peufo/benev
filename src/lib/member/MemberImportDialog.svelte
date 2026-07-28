@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
-	import { Dialog, Icon, InputRelation, InputBoolean } from 'fuma'
+	import { Dialog, Icon, InputRelation } from 'fuma'
 	import {
 		mdiArrowLeft,
 		mdiAccountMultiplePlus,
@@ -53,7 +53,6 @@
 	let selectedEvent: ImportableEvent | null = null
 	let sourceMembers: SourceMember[] = []
 	let selectedMemberIds: Set<string> = new Set()
-	let sourceFields: Field[] = []
 	let targetFields: Field[] = []
 	let fieldMappings: FieldMapping[] = []
 	let importResults: any = null
@@ -77,7 +76,6 @@
 
 			if (data.type === 'members_and_fields') {
 				sourceMembers = data.members
-				sourceFields = data.sourceFields
 				targetFields = data.targetFields
 				fieldMappings = data.suggestedMappings
 				step = 'members'
@@ -179,7 +177,6 @@
 		selectedEvent = null
 		sourceMembers = []
 		selectedMemberIds.clear()
-		sourceFields = []
 		targetFields = []
 		fieldMappings = []
 		importResults = null

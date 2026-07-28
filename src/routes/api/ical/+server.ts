@@ -1,6 +1,6 @@
 import ical, { ICalCalendarMethod } from 'ical-generator'
 
-export const GET = async ({ url }) => {
+export const GET = async () => {
 	// Create and use user token
 
 	const calendar = ical({ name: 'Mon bénévolat', method: ICalCalendarMethod.REFRESH })
