@@ -2,34 +2,37 @@ import { expect, type Page } from '@playwright/test'
 import cuid from '@paralleldrive/cuid2'
 
 export function useUser(name: string) {
-	const email = `${name}-${cuid.createId()}@benev.io`
+	// domaine .test (RFC 2606): jamais routable, aucun mail ne peut y arriver
+	const email = `${name.toLowerCase()}-${cuid.createId()}@benevio.test`
 	const password = '12341234'
 
 	return {
+		email,
 		async register(page: Page) {
-			await page.goto('/me')
+			await page.goto('/auth')
 			await page.getByRole('button', { name: 'Nouveau compte' }).click()
-			await page.getByLabel('Prénom').click()
 			await page.getByLabel('Prénom').fill(name)
-			await page.getByLabel('Prénom').press('Tab')
 			await page.getByLabel('Nom', { exact: true }).fill('The Tester')
-			await page.getByLabel('Nom', { exact: true }).press('Tab')
 			await page.getByLabel('Email').fill(email)
-			await page.getByLabel('Email').press('Tab')
 			await page.getByLabel('Mot de passe').fill(password)
-			await page.getByRole('checkbox', { name: "J'accepte les conditions d'" }).check()
+			await page.getByLabel('Je suis organisateur').check()
+			await page.getByLabel("J'accepte les conditions d'utilisation").check()
 			await page.getByRole('button', { name: 'Valider' }).click()
-			await page.waitForURL('/me/events')
+			await page.waitForURL('**/me/events')
 		},
 		async login(page: Page) {
-			await page.goto('/me')
+			await page.goto('/auth')
 			await page.getByLabel('Email').fill(email)
 			await page.getByLabel('Mot de passe').fill(password)
-			await page.locator('button').filter({ hasText: 'Connexion' }).click()
-			await page.waitForURL('/me/events')
+			// l'onglet "Connexion" est un <span role=button>: on cible le vrai bouton
+			await page
+				.locator('button')
+				.filter({ hasText: /^connexion$/i })
+				.click()
+			await page.waitForURL('**/me/events')
 		},
-		expectConnected(page: Page) {
-			expect(page.getByRole('heading', { name: 'Mes évènements' })).toBeVisible()
+		async expectConnected(page: Page) {
+			await expect(page.getByRole('heading', { name: 'Mes évènements' })).toBeVisible()
 		},
 	}
 }

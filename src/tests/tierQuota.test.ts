@@ -13,9 +13,10 @@ describe('computeIsTierQuotaReached', () => {
 		expect(computeIsTierQuotaReached(199, 'standard')).toBe(false)
 	})
 
-	it('returns true when quota is reached', ({ expect }) => {
-		expect(computeIsTierQuotaReached(50, 'basic')).toBe(true)
-		expect(computeIsTierQuotaReached(200, 'standard')).toBe(true)
+	// les formules annoncent « Jusqu'à {max} bénévoles »: être pile à max reste permis
+	it('returns false at exactly the quota', ({ expect }) => {
+		expect(computeIsTierQuotaReached(50, 'basic')).toBe(false)
+		expect(computeIsTierQuotaReached(200, 'standard')).toBe(false)
 	})
 
 	it('returns true when quota is exceeded', ({ expect }) => {

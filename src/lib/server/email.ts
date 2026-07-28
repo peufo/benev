@@ -19,16 +19,27 @@ export const transporter = nodemailer.createTransport({
 	},
 })
 
+/**
+ * Les tests créent des comptes sur des adresses inexistantes: sans ce garde-fou,
+ * une machine dotée d'un SMTP valide leur enverrait de vrais mails (et collectionnerait
+ * les bounces). Positionné par la CI et par le webServer Playwright.
+ */
+const emailDisabled = env.EMAIL_DISABLED === 'true'
+
 let transporterOK = false
-transporter.verify((err: unknown) => {
-	if (err) {
-		console.log('Mail config error')
-		console.error(err)
-	} else {
-		transporterOK = true
-		console.log('Mail config is ready')
-	}
-})
+if (emailDisabled) {
+	console.log('Mail disabled (EMAIL_DISABLED=true)')
+} else {
+	transporter.verify((err: unknown) => {
+		if (err) {
+			console.log('Mail config error')
+			console.error(err)
+		} else {
+			transporterOK = true
+			console.log('Mail config is ready')
+		}
+	})
+}
 
 export const sendEmail = async ({ from, ...options }: SendMailOptions) => {
 	if (!transporterOK) return

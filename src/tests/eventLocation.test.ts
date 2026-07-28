@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { describe, it } from 'vitest'
 import { Prisma } from '@prisma/client'
 import { USE_COERCE_JSON } from 'fuma'

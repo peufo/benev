@@ -5,7 +5,7 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
 	plugins: [sveltekit(), devtoolsJson()],
 	test: {
-		environment: 'happy-dom',
+		environment: 'node',
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 	},
 	server: { fs: { allow: ['media'] }, allowedHosts: ['mac-de-jo.local'] },

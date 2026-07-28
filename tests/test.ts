@@ -1,40 +1,43 @@
-import { expect, test } from '@playwright/test'
-import cuid from '@paralleldrive/cuid2'
+import { expect, test, type Page } from '@playwright/test'
 import { useUser } from './user'
 import { useEvent } from './event'
-import { useMember } from './member'
 
-test('Open landing page', async ({ page }) => {
+test('Page vitrine', async ({ page }) => {
 	await page.goto('/')
-	await expect(page.getByRole('heading', { name: 'Benev.io' })).toBeVisible()
-	await expect(page).toHaveTitle(/Benev\.io/)
+	await expect(page).toHaveTitle(/benevio/i)
+	await expect(page.getByRole('heading', { name: /Moins d'admin/i })).toBeVisible()
 })
 
-test.describe('Bob and Alice journey', () => {
+// serial + page partagée: la session doit survivre d'une étape à l'autre
+test.describe.serial("Parcours d'un organisateur", () => {
 	const bob = useUser('Bob')
-	const alice = useUser('Alice')
 	const event = useEvent(bob, 'Aperture')
-	const claude = useMember(event, 'Claude')
-	const dylan = useMember(event, 'Dylan', 'dylan-the-tester@benev.io')
+	let page: Page
 
-	test('Register Bob', async ({ page }) => {
+	test.beforeAll(async ({ browser }) => {
+		page = await browser.newPage()
+	})
+	test.afterAll(async () => {
+		await page.close()
+	})
+
+	test("Création d'un compte", async () => {
 		await bob.register(page)
-		bob.expectConnected(page)
-	})
-	test('Register Alice', async ({ page }) => {
-		await alice.register(page)
-		alice.expectConnected(page)
-	})
-	test('Login Bob', async ({ page }) => {
-		await bob.login(page)
-		bob.expectConnected(page)
+		await bob.expectConnected(page)
 	})
 
-	test('Create an event', async ({ page }) => {
+	// contexte neuf: connecté, /auth redirige et le formulaire n'existe plus
+	test('Reconnexion depuis une session vierge', async ({ page: freshPage }) => {
+		await bob.login(freshPage)
+		await bob.expectConnected(freshPage)
+	})
+
+	test("Création d'un évènement avec un lieu", async () => {
 		await event.create(page)
 	})
 
-	test('Create a members', async ({ page }) => {
-		await claude.create(page)
+	test("Navigation sur l'évènement", async () => {
+		await event.gotoPublic(page)
+		await event.expectLocationInFooter(page)
 	})
 })

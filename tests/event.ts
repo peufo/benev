@@ -1,29 +1,56 @@
 import { expect, type Page } from '@playwright/test'
-import type { User } from './user'
 import cuid from '@paralleldrive/cuid2'
+import type { User } from './user'
+import { mockPhoton, testPlace } from './photon'
 
 export function useEvent(owner: User, name: string) {
 	const eventCuid = cuid.createId()
-	const eventName = `Test event ${eventCuid}`
-	const eventUrl = `test-event-${eventCuid}`
+	const eventName = `${name} ${eventCuid}`
+	const eventId = `${name.toLowerCase()}-${eventCuid}`
 
 	return {
+		eventId,
+		eventName,
 		async create(page: Page) {
-			await owner.login(page)
-			await page.getByRole('button', { name: 'Organiser' }).click()
-			await page.getByRole('button', { name: 'Oui, je le veux' }).click()
-			await page.waitForResponse(/.*\?\/.+/)
-			await page.waitForTimeout(300)
+			await mockPhoton(page)
+			await page.goto('/me/events/create')
+
 			await page.getByLabel("Nom de l'évènement").fill(eventName)
-			await expect(page.getByLabel("URL de l'évènement")).toHaveValue(eventUrl)
-			await page.getByRole('button', { name: 'Valider' }).nth(2).click()
-			await page.waitForResponse(/.*\?\/.+/)
-			await expect(page).toHaveTitle(`Benev.io - ${eventName}`)
+			await expect(page.getByLabel("URL de l'évènement")).toHaveValue(eventId)
+
+			await page
+				.getByRole('button', { name: /Pied de page/i })
+				.first()
+				.click()
+			await page.locator('input[placeholder*="adresse"]').first().fill('salle des fetes')
+			await page
+				.locator('li, [role="option"]')
+				.filter({ hasText: 'Salle des fêtes' })
+				.first()
+				.click()
+
+			await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
+			await page.waitForURL(`**/${eventId}`)
+			await expect(page).toHaveTitle(new RegExp(eventName))
 		},
-		async gotoAsOwner(page: Page) {
-			await owner.login(page)
-			await page.goto(eventUrl)
-			await expect(page).toHaveTitle(`Benev.io - ${eventName}`)
+		async gotoPublic(page: Page) {
+			await page.goto(`/${eventId}`)
+			await expect(page).toHaveTitle(new RegExp(eventName))
+		},
+		/**
+		 * Le lieu est stocké en Json (`Event.location`) puis rendu en pied de page.
+		 * Un bug de sérialisation a déjà écrit un booléen dans cette colonne sans que
+		 * rien ne le détecte: cette assertion ferme la porte.
+		 */
+		async expectLocationInFooter(page: Page) {
+			const link = page.getByRole('link', { name: new RegExp(testPlace.label, 'i') })
+			await expect(link).toBeVisible()
+			await expect(link).toHaveAttribute(
+				'href',
+				`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+					`${testPlace.lat},${testPlace.lon}`
+				)}`
+			)
 		},
 	}
 }
