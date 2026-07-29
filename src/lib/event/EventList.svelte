@@ -24,20 +24,20 @@
 </script>
 
 {#if events.length}
-	<ul class="grid md:grid-cols-2 gap-4">
+	<ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
 		{#each events as event (event.id)}
-			<li>
+			<li class="min-w-0">
 				<CardLink href="/{event.id}" class="h-full group">
 					<div class="flex gap-4">
 						{#if event.posterId}
 							<img
 								src="/media/{event.posterId}?size=a4"
 								alt="Affiche de {event.name}"
-								class="w-24 sm:w-28 md:w-32 aspect-[3/4] object-cover rounded-lg border border-soft shrink-0"
+								class="w-24 sm:w-28 md:w-32 aspect-3/4 object-cover rounded-lg border border-soft shrink-0"
 							/>
 						{:else}
 							<div
-								class="w-24 sm:w-28 md:w-32 aspect-[3/4] bg-base-200/50 grid place-content-center rounded-lg border border-soft shrink-0"
+								class="w-24 sm:w-28 md:w-32 aspect-3/4 bg-base-200/50 grid place-content-center rounded-lg border border-soft shrink-0"
 							>
 								<img
 									src={logo}
@@ -57,7 +57,7 @@
 									<span class="badge ml-auto">Archivé</span>
 								{/if}
 							</div>
-							<p class="text-sm text-base-content/80 line-clamp-3 pr-2 grow">
+							<p class="text-sm text-base-content/80 line-clamp-3 pr-2 grow wrap-break-word">
 								{event.description}
 							</p>
 							{#if event.startDate && event.endDate}

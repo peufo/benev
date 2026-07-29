@@ -13,7 +13,7 @@
 	class="
 		{klass} relative
     shadow hover:shadow-md transition-all
-    bg-base-100 border rounded-lg p-2 sm:p-5
+    bg-base-100 border border-hard rounded-lg p-2 sm:p-5
   "
 >
 	{#if title}
