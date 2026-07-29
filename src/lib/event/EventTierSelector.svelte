@@ -29,7 +29,7 @@
 			aria-checked={selected}
 			class="card text-left border rounded-2xl p-4 transition-all duration-200 {selected
 				? 'border-primary ring-1 ring-primary bg-primary/5'
-				: 'border-base-200 bg-base-100 hover:border-primary/50 hover:bg-base-200/30'}"
+				: 'border-soft bg-base-100 hover:border-primary/50 hover:bg-base-200/30'}"
 			onclick={() => select(plan)}
 		>
 			<div class="flex items-start justify-between gap-3">

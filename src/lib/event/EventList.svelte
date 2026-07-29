@@ -33,11 +33,11 @@
 							<img
 								src="/media/{event.posterId}?size=a4"
 								alt="Affiche de {event.name}"
-								class="w-24 sm:w-28 md:w-32 aspect-[3/4] object-cover rounded-lg border border-base-200 shrink-0"
+								class="w-24 sm:w-28 md:w-32 aspect-[3/4] object-cover rounded-lg border border-soft shrink-0"
 							/>
 						{:else}
 							<div
-								class="w-24 sm:w-28 md:w-32 aspect-[3/4] bg-base-200/50 grid place-content-center rounded-lg border border-base-200 shrink-0"
+								class="w-24 sm:w-28 md:w-32 aspect-[3/4] bg-base-200/50 grid place-content-center rounded-lg border border-soft shrink-0"
 							>
 								<img
 									src={logo}
@@ -72,7 +72,7 @@
 		{/each}
 	</ul>
 {:else}
-	<div class="text-center py-20 md:py-28 bg-base-100 border border-base-200 rounded-2xl">
+	<div class="text-center py-20 md:py-28 bg-base-100 border border-soft rounded-2xl">
 		<CalendarX2 size={48} class="mx-auto text-secondary mb-4" />
 		<h2 class="text-2xl font-bold text-primary">{emptyTitle}</h2>
 		{#if emptyDescription}

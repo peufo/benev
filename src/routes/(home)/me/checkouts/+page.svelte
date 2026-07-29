@@ -49,7 +49,7 @@
 					<div
 						class="flex flex-col sm:flex-row sm:items-center gap-3 py-3"
 						class:border-t={index > 0}
-						class:border-base-200={index > 0}
+						class:border-soft={index > 0}
 					>
 						<div class="flex items-center gap-2 min-w-0 grow">
 							<Icon path={mdiTagOutline} class="opacity-60 shrink-0" size={18} />

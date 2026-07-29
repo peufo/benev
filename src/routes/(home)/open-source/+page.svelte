@@ -77,7 +77,7 @@
 	<!-- Contribuer -->
 	<section class="flex flex-col gap-8">
 		<div class="flex items-start gap-5">
-			<div class="bg-base-100 rounded-xl p-3 shadow-sm border border-base-200 shrink-0">
+			<div class="bg-base-100 rounded-xl p-3 shadow-sm border border-soft shrink-0">
 				<GitBranch size={28} class="text-primary" />
 			</div>
 			<div>

@@ -33,7 +33,7 @@
 		</div>
 
 		<!-- Pro: horizontal, subdued -->
-		<div class="mt-6 card bg-base-100 border border-base-200 shadow-sm">
+		<div class="mt-6 card bg-base-100 border border-soft shadow-sm">
 			<div class="card-body flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 				<div>
 					<h3 class="text-xl font-bold text-base-content">Pro</h3>
@@ -51,7 +51,7 @@
 				Questions fréquentes
 			</h3>
 			<div class="space-y-3">
-				<div class="collapse collapse-arrow bg-base-100 border border-base-200">
+				<div class="collapse collapse-arrow bg-base-100 border border-soft">
 					<input type="checkbox" aria-label="Afficher la réponse" />
 					<div class="collapse-title text-lg font-medium pr-12">
 						Faut-il anticiper le nombre de bénévoles ?
@@ -64,7 +64,7 @@
 					</div>
 				</div>
 
-				<div class="collapse collapse-arrow bg-base-100 border border-base-200">
+				<div class="collapse collapse-arrow bg-base-100 border border-soft">
 					<input type="checkbox" aria-label="Afficher la réponse" />
 					<div class="collapse-title text-lg font-medium pr-12">
 						Que se passe-t-il en cas de dépassement ?

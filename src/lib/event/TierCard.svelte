@@ -17,7 +17,7 @@
 	let price = $derived(parseTierPrice(config.price))
 </script>
 
-<div class="card bg-base-100 border border-base-200 shadow-sm flex flex-col">
+<div class="card bg-base-100 border border-soft shadow-sm flex flex-col">
 	<div class="card-body flex flex-col flex-1">
 		<div class="flex-1">
 			<div class="flex items-start justify-between gap-3">

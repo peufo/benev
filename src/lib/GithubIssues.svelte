@@ -54,7 +54,7 @@
 		</div>
 
 		<div
-			class="divide-y divide-base-200 border border-base-200 rounded-xl overflow-hidden bg-base-100 shadow-sm"
+			class="divide-y divide-base-200 border border-soft rounded-xl overflow-hidden bg-base-100 shadow-sm"
 		>
 			{#each issues as issue (issue.number)}
 				<a

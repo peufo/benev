@@ -34,10 +34,10 @@
 				<img
 					src="/media/{member.event.posterId}?size=a4"
 					alt="Affiche de {member.event.name}"
-					class="w-20 h-28 object-cover rounded border border-base-200"
+					class="w-20 h-28 object-cover rounded border border-soft"
 				/>
 			{:else}
-				<div class="w-20 h-28 grid place-content-center rounded border border-base-200 bg-base-100">
+				<div class="w-20 h-28 grid place-content-center rounded border border-soft bg-base-100">
 					<img src={logo} alt="Affiche par défaut" class="w-10 grayscale opacity-40" />
 				</div>
 			{/if}

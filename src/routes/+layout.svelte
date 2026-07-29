@@ -42,7 +42,7 @@
 <JsonLd schema={organizationSchema(siteUrl)} />
 <JsonLd schema={websiteSchema(siteUrl)} />
 
-<Toaster />
+<Toaster richColors />
 
 <div
 	class="flex min-h-screen flex-col bg-base-200/20"

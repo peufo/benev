@@ -5,8 +5,11 @@
 	import { InputString, InputTextarea } from 'fuma'
 	import { toast } from 'svelte-sonner'
 	import { sendMessage } from './contact.remote'
+	import { isHttpError } from '@sveltejs/kit'
 
 	let { data } = $props()
+
+	let isSubmitting = $state(false)
 </script>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
@@ -31,9 +34,23 @@
 				{/snippet}
 
 				<form
-					{...sendMessage.enhance(async ({ submit }) => {
-						await submit()
-						toast.success('Merci pour ton message')
+					{...sendMessage.enhance(async ({ submit, fields }) => {
+						isSubmitting = true
+						const id = toast.loading('Envoie...')
+						try {
+							if (await submit()) {
+								toast.success('Merci pour ton message', { id })
+								fields.set({})
+							} else {
+								toast.warning('Formulaire incorrect', { id })
+							}
+						} catch (err) {
+							if (isHttpError(err)) toast.error(err.body.message, { id })
+							console.error(err)
+							toast.error('Une erreur est survenue', { id })
+						} finally {
+							isSubmitting = false
+						}
 					})}
 					class="flex flex-col gap-4 mt-2"
 				>
@@ -52,7 +69,7 @@
 					/>
 
 					<div class="flex justify-end">
-						<button class="btn btn-primary gap-2">
+						<button class="btn btn-primary gap-2" disabled={isSubmitting}>
 							<SendIcon size={18} />
 							Envoyer
 						</button>
@@ -62,7 +79,7 @@
 		</div>
 
 		<div class="lg:col-span-2 flex flex-col gap-6">
-			<div class="bg-secondary/10 border border-secondary/20 rounded-2xl p-6">
+			<div class="bg-secondary/10 border border-soft rounded-2xl p-6">
 				<div class="flex items-start gap-3">
 					<CircleAlertIcon size={22} class="text-primary shrink-0 mt-0.5" />
 					<div>
@@ -100,7 +117,7 @@
 			<div class="grid md:grid-cols-2 gap-4">
 				{#each data.messages as message (message.id)}
 					<article
-						class="border border-base-200 rounded-2xl p-5 bg-base-100 hover:border-secondary/40 transition-colors"
+						class="border border-soft rounded-2xl p-5 bg-base-100 hover:border-secondary/40 transition-colors"
 					>
 						<div class="flex gap-3 items-start">
 							<div class="grow">

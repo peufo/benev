@@ -1,6 +1,5 @@
 <script lang="ts">
 	import logo from '$lib/assets/logo.svg'
-	import { tip } from 'fuma'
 	interface Props {
 		class?: string
 		children?: import('svelte').Snippet
@@ -9,22 +8,26 @@
 	let { class: klass = '', children }: Props = $props()
 </script>
 
-<footer class="footer footer-center border-t p-6 bg-base-100 gap-5 mt-2 overflow-hidden {klass}">
+<footer
+	class="footer footer-center border-t border-hard p-6 bg-base-100 gap-5 overflow-hidden {klass}"
+>
 	{@render children?.()}
 
-	<div class="flex gap-4 text-sm opacity-70">
+	<div class="flex gap-4 text-sm">
 		<a href="/open-source" class="link link-hover">Open source</a>
 		<a href="/contact" class="link link-hover">Contact</a>
 		<a href="/terms" class="link link-hover">Conditions</a>
 	</div>
 
-	<div class="flex">
-		<a href="/" class="btn btn-sm btn-square" use:tip={{ content: 'benev.io' }}>
-			<img src={logo} alt="logo de benev.io" class="h-5" />
+	<div class="text-left">
+		<a href="/" class="btn btn-sm btn-soft ml-auto">
+			<img src={logo} alt="logo de benev.io" class="h-5 -translate-x-1" />
+			<span>Benevio</span>
 		</a>
-		<a href="https://github.com/peufo" class="link link-hover">Created by peufo</a>
+		<span class="text-xs opacity-60"
+			>©2023-{new Date().getFullYear()} Dev Voisard - Switzerland</span
+		>
 	</div>
-	<p class="opacity-80">©2023-{new Date().getFullYear()} Dev Voisard - Switzerland</p>
 </footer>
 
 <style>
