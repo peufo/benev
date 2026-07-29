@@ -3,13 +3,12 @@
 	import { goto } from '$app/navigation'
 	import { mdiDrag, mdiPlus } from '@mdi/js'
 	import { toast } from 'svelte-sonner'
-	import axios from 'axios'
 	import type { Field } from '@prisma/client'
 	import { Icon, Placeholder } from '$lib/fuma-legacy'
 	import { listEditable } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import { eventPath } from '$lib/store'
+	import { reorderMemberFields } from './memberField.remote'
 
 	interface Props {
 		fields: Field[]
@@ -19,14 +18,12 @@
 
 	async function handleReorder(reorderedFields: Field[]) {
 		fields = reorderedFields
-		const form = new FormData()
-		reorderedFields.forEach((field, index) => {
-			form.append(field.id, String(index))
-		})
-		axios
-			.postForm(`${$eventPath}/admin/adhesion?/fields_reorder`, form)
-			.then(() => toast.success('Nouvel ordre sauvegardé'))
-			.catch((err) => toast.error(err))
+		try {
+			await reorderMemberFields(reorderedFields.map(({ id }) => id))
+			toast.success('Nouvel ordre sauvegardé')
+		} catch (err) {
+			toast.error(err instanceof Error ? err.message : 'Réordonnancement impossible')
+		}
 	}
 </script>
 

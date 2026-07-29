@@ -4,7 +4,6 @@
 	import { slide } from 'svelte/transition'
 
 	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
-	import { formContext } from '$lib/fuma-legacy/validation/form.js'
 	import {
 		FormControl,
 		bindValueWithParams,
@@ -32,10 +31,9 @@
 	let _options = $derived(parseOptions(options))
 
 	let formControl: HTMLDivElement
-	const { setError } = formContext.get()
+	// Le contexte `useForm` a disparu avec la migration: les erreurs viennent maintenant
+	// des `fields` de la remote function, ce composant ne sert plus qu'à choisir.
 	onMount(() => {
-		if (props.key) setError[props.key] = (err) => (error = err)
-
 		const inputs = formControl.querySelectorAll('input')
 		const handleInput = () => (error = '')
 		inputs.forEach((input) => input.addEventListener('input', handleInput))

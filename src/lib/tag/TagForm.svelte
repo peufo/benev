@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { modelTagCreate } from '$lib/models'
-	import { eventPath } from '$lib/store'
 	import type { Tag } from '@prisma/client'
-	import { Form, InputText } from '$lib/fuma-legacy'
-	import type { ComponentType } from 'svelte'
+	import { ButtonDelete, InputString } from 'fuma'
+	import { toast } from 'svelte-sonner'
+	import { createTag, deleteTag, updateTag } from './tag.remote'
 
 	interface Props {
 		tag?: Partial<Tag>
+		oncreated?: (tag: Tag) => void
+		onupdated?: () => void
+		ondeleted?: () => void
 	}
 
-	let { tag = $bindable({}) }: Props = $props()
-	const TagForm: ComponentType<Form<typeof modelTagCreate, Tag>> = Form
+	let { tag = $bindable({}), oncreated, onupdated, ondeleted }: Props = $props()
+
 	const colors = [
 		'#6CBEED',
 		'#D7F171',
@@ -24,30 +26,33 @@
 		'#846358',
 	]
 	if (!tag.color) tag.color = colors[Math.round(Math.random() * (colors.length - 1))]
+
+	const remoteForm = $derived(tag.id ? updateTag : createTag)
 </script>
 
-<TagForm
-	action="{$eventPath}?/tag"
-	model={modelTagCreate}
-	data={tag}
-	options={{
-		successMessage: (url) => {
-			if (!tag.id) return 'Étiquette crée'
-			if (url.searchParams.get('/tag_update') !== null) return 'Étiquette modifiée'
-			return 'Étiquette supprimée'
-		},
-		successUpdate: false,
-	}}
-	{oncreated}
-	{onupdated}
-	{ondeleted}
-	{onsuccess}
+<form
+	{...remoteForm.enhance(async ({ submit }) => {
+		await submit()
+		if (tag.id) {
+			toast.success('Étiquette modifiée')
+			onupdated?.()
+		} else {
+			toast.success('Étiquette crée')
+			const created = createTag.result
+			if (created) oncreated?.(created)
+		}
+	})}
+	class="flex flex-col gap-4"
 >
-	<InputText
-		key="name"
+	{#if tag.id}
+		<input type="hidden" name="id" value={tag.id} />
+	{/if}
+
+	<InputString
+		field={remoteForm.fields.name}
 		label="Nom"
-		value={tag.name}
-		input={{ autocomplete: 'off', autofocus: true }}
+		defaultValue={tag.name}
+		autocomplete="off"
 	/>
 	<label class="form-control w-full max-w-xs">
 		<div class="label">
@@ -60,4 +65,22 @@
 			{/each}
 		</datalist>
 	</label>
-</TagForm>
+
+	<div class="flex flex-row-reverse gap-2 border-t pt-4">
+		<button class="btn btn-primary">Valider</button>
+	</div>
+</form>
+
+{#if tag.id}
+	<form
+		{...deleteTag.enhance(async ({ submit }) => {
+			await submit()
+			toast.success('Étiquette supprimée')
+			ondeleted?.()
+		})}
+		class="flex"
+	>
+		<input type="hidden" name="id" value={tag.id} />
+		<ButtonDelete formaction={deleteTag.action}>Supprimer</ButtonDelete>
+	</form>
+{/if}

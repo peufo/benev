@@ -1,44 +1,42 @@
-<!-- @migration-task Error while migrating Svelte code: can't migrate `let state: 'login' | 'register' = 'login'` to `$state` because there's a variable named state.
-     Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { useForm, InputText, InputPassword, InputBoolean } from '$lib/fuma-legacy'
-	import { Dialog } from 'fuma'
-	import { page } from '$app/stores'
+	import { Dialog, InputBoolean, InputString } from 'fuma'
+	import { page } from '$app/state'
 	import Oauth from './Oauth.svelte'
 	import TermsLabel from './TermsLabel.svelte'
 	import { toast } from 'svelte-sonner'
+	import { loginUser, registerUser, resetPassword } from './user.remote'
 
-	export let onSuccess:
-		((action: URL, data?: Record<string, unknown> | undefined) => unknown) | undefined = undefined
+	interface Props {
+		onSuccess?: () => unknown
+	}
 
-	const { enhance } = useForm({
-		onSuccess,
-		successMessage(action) {
-			if (action.search === '?/reset_password') {
-				recorverDialog.close()
-				state = 'login'
-				return "Un lien de récupération t'a été envoyé par email"
-			}
-			return 'Bienvenue'
-		},
-		onError(err) {
-			toast.error(err)
-			if (err === 'This account already exists') {
-				state = 'login'
+	let { onSuccess }: Props = $props()
+
+	// `state` était le nom de la variable de mode, ce qui bloquait la migration vers les runes.
+	let mode = $state<'login' | 'register'>('login')
+
+	let redirectTo = $derived(page.url.searchParams.get('redirectTo'))
+
+	let recorverDialog: HTMLDialogElement = $state()!
+
+	async function handleAuth(submit: () => Promise<unknown>) {
+		try {
+			await submit()
+			toast.success('Bienvenue')
+			await onSuccess?.()
+		} catch (err) {
+			const message = err instanceof Error ? err.message : String(err)
+			toast.error(message)
+			if (message.includes('This account already exists')) {
+				mode = 'login'
 				return
 			}
-			if (err === 'This account already created from an invitation') {
+			if (message.includes('This account already created from an invitation')) {
 				recorverDialog.showModal()
-				return
 			}
-		},
-	})
-	let state: 'login' | 'register' = 'login'
-
-	$: redirectTo = $page.url.searchParams.get('redirectTo')
-
-	let recorverDialog: HTMLDialogElement
+		}
+	}
 </script>
 
 <div class="grid place-content-center p-10">
@@ -51,9 +49,9 @@
 				role="button"
 				tabindex="0"
 				class="tab tab-lg grow tab-lifted rounded-t-2xl"
-				class:tab-active={state === 'login'}
-				onclick={() => (state = 'login')}
-				onkeyup={() => (state = 'login')}
+				class:tab-active={mode === 'login'}
+				onclick={() => (mode = 'login')}
+				onkeyup={() => (mode = 'login')}
 			>
 				Connexion
 			</span>
@@ -61,31 +59,59 @@
 				role="button"
 				tabindex="0"
 				class="tab tab-lg grow tab-lifted rounded-t-2xl"
-				class:tab-active={state === 'register'}
-				onclick={() => (state = 'register')}
-				onkeyup={() => (state = 'register')}
+				class:tab-active={mode === 'register'}
+				onclick={() => (mode = 'register')}
+				onkeyup={() => (mode = 'register')}
 			>
 				Nouveau compte
 			</span>
 		</div>
 
-		<form class="card-body border border-t-0 border-base-300" method="post" use:enhance>
-			{#if state === 'register'}
+		<!-- Trois remote functions sur un même `<form>`: SvelteKit n'exécute que celle dont
+		     l'`action` correspond au `formaction` du bouton pressé. -->
+		<form
+			class="card-body border border-t-0 border-base-300"
+			{...loginUser.enhance(({ submit }) => handleAuth(submit))}
+			{...registerUser.enhance(({ submit }) => handleAuth(submit))}
+			{...resetPassword.enhance(async ({ submit }) => {
+				await submit()
+				recorverDialog.close()
+				mode = 'login'
+				toast.success("Un lien de récupération t'a été envoyé par email")
+			})}
+		>
+			{#if mode === 'register'}
 				<div transition:slide|local class="flex flex-col gap-2">
 					<div class="grid grid-cols-2 gap-2">
-						<InputText key="firstName" label="Prénom" />
-						<InputText key="lastName" label="Nom" />
+						<InputString field={registerUser.fields.firstName} label="Prénom" />
+						<InputString field={registerUser.fields.lastName} label="Nom" />
 					</div>
 				</div>
 			{/if}
 
-			<InputText key="email" label="Email" input={{ autocomplete: 'email', inputmode: 'email' }} />
-			<InputPassword key="password" label="Mot de passe" />
+			<InputString
+				field={mode === 'login' ? loginUser.fields.email : registerUser.fields.email}
+				label="Email"
+				type="email"
+				autocomplete="email"
+				inputmode="email"
+			/>
+			<InputString
+				field={mode === 'login' ? loginUser.fields.password : registerUser.fields.password}
+				label="Mot de passe"
+				type="password"
+			/>
 
-			{#if state === 'register'}
+			{#if mode === 'register'}
 				<div transition:slide|local class="flex flex-col mt-4">
-					<InputBoolean key="isOrganizer" label="Je suis organisateur" labelPosition="right" />
-					<InputBoolean key="isTermsAccepted" label={TermsLabel} labelPosition="right" />
+					<InputBoolean field={registerUser.fields.isOrganizer} label="Je suis organisateur" />
+					<!-- `InputBoolean` de fuma 2 ne prend qu'un libellé texte: le lien vers les
+					     conditions se place juste en dessous. -->
+					<InputBoolean
+						field={registerUser.fields.isTermsAccepted}
+						label="J'accepte les conditions d'utilisation"
+					/>
+					<div class="px-3 pt-1"><TermsLabel /></div>
 				</div>
 			{/if}
 
@@ -94,21 +120,23 @@
 			{/if}
 
 			<div class="card-actions flex-row-reverse items-center pt-4">
-				<button class="btn" formaction="/me{state === 'login' ? '?/login' : '?/register'}">
-					{state === 'login' ? 'Connexion' : 'Valider'}
+				<button class="btn" formaction={mode === 'login' ? loginUser.action : registerUser.action}>
+					{mode === 'login' ? 'Connexion' : 'Valider'}
 				</button>
-				<div class="grow" />
+				<div class="grow"></div>
 
-				<button class="link link-hover" formaction="/me?/reset_password">
+				<button class="link link-hover" formaction={resetPassword.action}>
 					Mot de passe oublié
 				</button>
 			</div>
 
 			<Dialog bind:dialog={recorverDialog}>
-				<h2 class="title" slot="header">Ce compte éxiste déjà</h2>
+				{#snippet header()}
+					<h2 class="title">Ce compte éxiste déjà</h2>
+				{/snippet}
 				<p>Tu as été invité par un organisateur.</p>
 				<div class="flex justify-end mt-4">
-					<button formaction="/me?/reset_password" class="btn">Récupérer mon compte</button>
+					<button formaction={resetPassword.action} class="btn">Récupérer mon compte</button>
 				</div>
 			</Dialog>
 		</form>

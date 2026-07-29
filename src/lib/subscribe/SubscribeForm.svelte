@@ -2,9 +2,8 @@
 	import { preventDefault } from 'svelte/legacy'
 
 	import type { Period, Team } from '@prisma/client'
-	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/fuma-legacy/validation'
 	import { formatRange } from '$lib/formatRange'
+	import { createSubscribe } from './subscribe.remote'
 
 	interface Props {
 		team: Team
@@ -16,17 +15,14 @@
 	}
 
 	let { team, memberId, period, onclose, onsuccess }: Props = $props()
-
-	const form = useForm({
-		onSuccess: () => onsuccess?.(),
-	})
 </script>
 
 <form
-	action="/{team.eventId}/subscribes?/subscribe_create"
-	method="post"
+	{...createSubscribe.enhance(async ({ submit }) => {
+		await submit()
+		onsuccess?.()
+	})}
 	class="modal-box flex flex-col gap-4"
-	use:enhance={form.submit}
 >
 	<input type="hidden" name="memberId" value={memberId} />
 	<input type="hidden" name="periodId" value={period.id} />

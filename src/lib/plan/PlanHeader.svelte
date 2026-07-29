@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop, mdiOpenInNew } from '@mdi/js'
-	import { Icon, InputCheckboxsMenu, TableViewSelect, TabsIcon } from '$lib/fuma-legacy'
+	import { Icon, InputCheckboxsMenu, TabsIcon } from '$lib/fuma-legacy'
+	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { urlParam } from 'fuma'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
@@ -26,7 +27,7 @@
 		<div class="grow"></div>
 	{/if}
 
-	<TableViewSelect key="plan" {views} action="{$eventPath}/admin" />
+	<TableViewSelect key="plan" {views} />
 
 	{#key $page.url.searchParams}
 		<InputCheckboxsMenu

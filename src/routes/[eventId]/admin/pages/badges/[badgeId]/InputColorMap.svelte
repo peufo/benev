@@ -1,11 +1,8 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy'
-
 	import type { Field } from '@prisma/client'
 	import { fade } from 'svelte/transition'
 	import InputColor from './InputColor.svelte'
 	import { getNextColor } from './InputColorPalette.svelte'
-	import { USE_COERCE_JSON } from 'fuma'
 
 	interface Props {
 		value: Record<string, string>
@@ -16,7 +13,7 @@
 
 	let options = $derived(JSON.parse(field?.options || '[]') as string[])
 	let currentOptions = $state(options)
-	run(() => {
+	$effect.pre(() => {
 		if (options !== currentOptions) {
 			options.reduce((acc, cur) => ({ ...acc, [cur]: value[cur] || getNextColor() }), {})
 			currentOptions = options
@@ -24,7 +21,9 @@
 	})
 </script>
 
-<input type="hidden" name="colorMap" value="{USE_COERCE_JSON}{JSON.stringify(value)}" />
+<!-- La remote function attend du JSON en clair: `zJson` le désérialise, là où `parseFormData`
+     réclamait le jeton `USE_COERCE_JSON`. -->
+<input type="hidden" name="colorMap" value={JSON.stringify(value)} />
 
 {#if field?.type === 'select'}
 	<div in:fade class="flex gap-1 flex-wrap justify-stretch max-w-80">

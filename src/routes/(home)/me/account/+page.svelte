@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { AccountForm, AvatarForm, DeleteUserForm } from '$lib/me'
+	import { logoutUser } from '$lib/me/user.remote'
 
 	let { data } = $props()
 </script>
@@ -21,7 +22,7 @@
 <hr class="my-3" />
 <div class="flex gap-2 flex-wrap justify-end">
 	<DeleteUserForm />
-	<form method="POST" action="/me?/logout" class="contents">
+	<form {...logoutUser} class="contents">
 		<button class="btn btn-sm btn-ghost"> Déconnexion </button>
 	</form>
 </div>

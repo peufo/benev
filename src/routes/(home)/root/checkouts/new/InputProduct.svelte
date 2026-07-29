@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { env } from '$env/dynamic/public'
-	import { InputNumber } from '$lib/fuma-legacy'
+	import { InputNumber } from 'fuma'
+	import { createCheckout } from './checkout.remote'
 
 	const products = [
 		{ priceId: env.PUBLIC_PRICE_STANDARD, name: 'Plan standard' },
@@ -14,12 +15,17 @@
 
 	<div class="flex flex-col gap-3 mt-2">
 		{#each products as product, index (product.priceId)}
-			{@const prefix = `products.${index}.`}
+			{@const prefix = `products[${index}]`}
 			<div class="flex items-center gap-3">
-				<input type="hidden" name="{prefix}priceId" value={product.priceId} />
-				<input type="hidden" name="{prefix}name" value={product.name} />
+				<input type="hidden" name="{prefix}.priceId" value={product.priceId} />
+				<input type="hidden" name="{prefix}.name" value={product.name} />
 				<span class="grow">{product.name}</span>
-				<InputNumber key="{prefix}quantity" label="Qté" value={0} class="w-24" />
+				<InputNumber
+					field={createCheckout.fields.products[index].quantity}
+					label="Qté"
+					defaultValue={0}
+					class="w-24"
+				/>
 			</div>
 		{/each}
 	</div>

@@ -1,54 +1,25 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
-import { z } from '$lib/fuma-legacy/validation'
-import { jsonParse } from '$lib/jsonParse'
-import { parseFormData } from '$lib/server/fuma-legacy/parseFormData'
 import type { Prisma } from '@prisma/client'
 import { prisma } from './prisma'
 import { env } from '$env/dynamic/private'
 import { error } from '@sveltejs/kit'
+import type { EventImagesInput, MediaImageInput } from '$lib/models/media'
 
 type UploadOption = {
-	key?: string
 	where?: Prisma.MediaWhereInput
 	data: Prisma.MediaCreateArgs['data']
 }
+
 export const media = {
-	async upload(requestOrFormData: Request | FormData, opt: UploadOption) {
-		const keyImage = opt.key ? `${opt.key}_image` : 'image'
-		const keyCrop = opt.key ? `${opt.key}_crop` : 'crop'
-
-		const { data } = await parseFormData(requestOrFormData, {
-			[keyImage]: z.instanceof(File),
-			// `pipe` exige en zod 4 que l'entrée de la cible corresponde exactement à la
-			// sortie de la source (`string | undefined`). `z.json()` accepte aussi l'objet
-			// déjà décodé, entrée trop large: on cible directement la branche chaîne.
-			[keyCrop]: z
-				.string()
-				.transform((v) => (v === 'undefined' ? undefined : v))
-				.pipe(
-					z
-						.string()
-						.transform((value) => jsonParse<unknown>(value, null))
-						.pipe(
-							z.object({
-								x: z.number(),
-								y: z.number(),
-								width: z.number(),
-								height: z.number(),
-							})
-						)
-						.optional()
-				)
-				.optional(),
-		})
-
-		const image = data[keyImage] as Blob
-		const crop = data[keyCrop] as { x: number; y: number; width: number; height: number }
-
-		if (image.size === 0) throw new Error('image is not defined')
-		if (crop === undefined) throw new Error(`no crop data in data[${keyCrop}]`)
+	/**
+	 * Le fichier et son recadrage arrivent déjà validés par le schéma de la remote function
+	 * (`modelMediaImage` / `modelEventImages`): ce module ne relit plus le `FormData`.
+	 */
+	async upload({ image, crop }: MediaImageInput, opt: UploadOption) {
+		if (!image || image.size === 0) throw new Error('image is not defined')
+		if (crop === undefined) throw new Error('no crop data')
 
 		const imageBuffer = await image.arrayBuffer()
 
@@ -88,30 +59,37 @@ async function createOrReplaceMedia({ where, data }: UploadOption) {
 	return prisma.media.create({ data })
 }
 
-export async function uploadImages(formData: FormData, eventId: string, authorId: string) {
+/**
+ * Une image absente fait échouer `media.upload`. Les deux envois sont donc isolés: avant, un
+ * seul `try` les enveloppait, et ne rien changer à l'affiche empêchait le logo de partir.
+ */
+export async function uploadImages(images: EventImagesInput, eventId: string, authorId: string) {
+	await uploadOrLog({ image: images.poster_image, crop: images.poster_crop }, 'Affiche', {
+		where: { posterOf: { id: eventId } },
+		data: {
+			name: 'Affiche',
+			createdById: authorId,
+			eventId,
+			posterOf: { connect: { id: eventId } },
+		},
+	})
+	await uploadOrLog({ image: images.logo_image, crop: images.logo_crop }, 'Logo', {
+		where: { logoOf: { id: eventId } },
+		data: {
+			name: 'Logo',
+			createdById: authorId,
+			eventId,
+			logoOf: { connect: { id: eventId } },
+		},
+	})
+}
+
+async function uploadOrLog(input: MediaImageInput, label: string, opt: UploadOption) {
+	if (!input.image) return
 	try {
-		await media.upload(formData, {
-			key: 'poster',
-			where: { posterOf: { id: eventId } },
-			data: {
-				name: 'Affiche',
-				createdById: authorId,
-				eventId,
-				posterOf: { connect: { id: eventId } },
-			},
-		})
-		await media.upload(formData, {
-			key: 'logo',
-			where: { logoOf: { id: eventId } },
-			data: {
-				name: 'Logo',
-				createdById: authorId,
-				eventId,
-				logoOf: { connect: { id: eventId } },
-			},
-		})
+		await media.upload(input, opt)
 	} catch (err) {
-		console.error('Upload event images failed')
+		console.error(`Upload event image failed: ${label}`)
 		console.error(err)
 	}
 }

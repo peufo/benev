@@ -1,13 +1,9 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/fuma-legacy/validation'
-	import { InputBoolean, InputDate, InputNumber } from '$lib/fuma-legacy'
+	import { InputBoolean, InputNumber, InputString } from 'fuma'
 	import { slide } from 'svelte/transition'
-
-	const { enhance } = useForm({
-		successReset: false,
-	})
+	import { toast } from 'svelte-sonner'
+	import { updateEventSettings as remoteForm } from './event.remote'
 
 	interface Props {
 		event: Event
@@ -16,44 +12,52 @@
 	let { event = $bindable() }: Props = $props()
 </script>
 
-<form method="post" use:enhance action="{$eventPath}/admin/adhesion?/set_member_settings">
+<form
+	{...remoteForm.enhance(async ({ submit }) => {
+		await submit()
+		toast.success('Succès')
+	})}
+>
 	<div class="flex flex-col gap-2">
 		<h3 class="font-medium opacity-80 mb-2">Permissions</h3>
 		<InputBoolean
-			key="selfRegisterAllowed"
+			field={remoteForm.fields.selfRegisterAllowed}
 			label="Les utilisateurs peuvent devenir membre sans invitation"
-			labelPosition="right"
-			bind:value={event.selfRegisterAllowed}
+			checked={event.selfRegisterAllowed}
+			defaultChecked={event.selfRegisterAllowed}
+			onchange={(e) => (event.selfRegisterAllowed = e.currentTarget.checked)}
 		/>
 		<InputBoolean
-			key="selfSubscribeAllowed"
+			field={remoteForm.fields.selfSubscribeAllowed}
 			label="Les membres peuvent s'inscrire aux périodes de travail"
-			labelPosition="right"
-			bind:value={event.selfSubscribeAllowed}
+			checked={event.selfSubscribeAllowed}
+			defaultChecked={event.selfSubscribeAllowed}
+			onchange={(e) => (event.selfSubscribeAllowed = e.currentTarget.checked)}
 		/>
 
 		<InputBoolean
-			key="selfSubscribeCancelAllowed"
+			field={remoteForm.fields.selfSubscribeCancelAllowed}
 			label="Les membre peuvent {event.selfSubscribeAllowed
 				? 'annuler ou '
 				: ''}décliner leurs inscriptions"
-			labelPosition="right"
-			value={event.selfSubscribeCancelAllowed}
+			checked={event.selfSubscribeCancelAllowed}
+			defaultChecked={event.selfSubscribeCancelAllowed}
 		/>
 
 		<InputNumber
-			key="overlapPeriodAllowed"
+			field={remoteForm.fields.overlapPeriodAllowed}
 			label="Nombre de minutes de chevauchement toléré entre les shifts d'un membre"
-			value={event.overlapPeriodAllowed}
-			input={{ min: 0 }}
+			defaultValue={event.overlapPeriodAllowed}
+			min={0}
 		/>
 
 		{#if event.selfSubscribeAllowed}
 			<div transition:slide={{ duration: 200 }}>
-				<InputDate
-					key="closeSubscribing"
+				<InputString
+					field={remoteForm.fields.closeSubscribing}
+					type="date"
 					label="Fin des inscriptions par défaut"
-					value={event.closeSubscribing}
+					defaultValue={event.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
 				/>
 			</div>
 		{/if}
@@ -63,31 +67,36 @@
 		<h3 class="font-medium opacity-75 mb-2">Informations de compte requises</h3>
 
 		<div class="grid grid-cols-2 gap-x-2">
-			<InputBoolean label="Nom, prénom et email" value={true} input={{ disabled: true }} />
+			<InputBoolean label="Nom, prénom et email" checked disabled />
 			<InputBoolean
 				label="Adresse email verifié"
-				key="userEmailVerifiedRequired"
-				value={event.userEmailVerifiedRequired}
+				field={remoteForm.fields.userEmailVerifiedRequired}
+				checked={event.userEmailVerifiedRequired}
+				defaultChecked={event.userEmailVerifiedRequired}
 			/>
 			<InputBoolean
 				label="Adresse postale"
-				key="userAddressRequired"
-				value={event.userAddressRequired}
+				field={remoteForm.fields.userAddressRequired}
+				checked={event.userAddressRequired}
+				defaultChecked={event.userAddressRequired}
 			/>
 			<InputBoolean
 				label="Numéro de téléphone"
-				key="userPhoneRequired"
-				value={event.userPhoneRequired}
+				field={remoteForm.fields.userPhoneRequired}
+				checked={event.userPhoneRequired}
+				defaultChecked={event.userPhoneRequired}
 			/>
 			<InputBoolean
 				label="Date de naissance"
-				key="userBirthdayRequired"
-				value={event.userBirthdayRequired}
+				field={remoteForm.fields.userBirthdayRequired}
+				checked={event.userBirthdayRequired}
+				defaultChecked={event.userBirthdayRequired}
 			/>
 			<InputBoolean
 				label="Photo de profil"
-				key="userAvatarRequired"
-				value={event.userAvatarRequired}
+				field={remoteForm.fields.userAvatarRequired}
+				checked={event.userAvatarRequired}
+				defaultChecked={event.userAvatarRequired}
 			/>
 		</div>
 	</div>

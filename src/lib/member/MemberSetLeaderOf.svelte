@@ -1,12 +1,10 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
-	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
 	import { InputRelations } from '$lib/fuma-legacy'
 	import { Dialog } from 'fuma'
-	import { useForm } from '$lib/fuma-legacy/validation'
-	import { eventPath } from '$lib/store'
+	import { setMemberLeaderOf } from './memberAdmin.remote'
 
 	interface Props {
 		title?: string
@@ -15,36 +13,31 @@
 		memberId: string
 	}
 
-	let {
-		title = 'Secteur à charges',
-		dialog = $bindable(),
-		teams = $bindable(),
-		memberId,
-	}: Props = $props()
-
-	const form = useForm({
-		onSuccess() {
-			dialog?.close()
-		},
-	})
+	let { title = 'Secteur à charges', dialog = $bindable(), teams = $bindable() }: Props = $props()
 </script>
 
-<Dialog bind:dialog onopen={() => (teams = teams)}>
+<Dialog bind:dialog>
 	{#snippet header()}
 		<h2 class="title">{title}</h2>
 	{/snippet}
+	<!-- `InputRelations` ne sert qu'à choisir: les ids partent dans les champs cachés. -->
 	<form
-		action="{$eventPath}/admin/members/{memberId}?/set_leader_of"
-		method="post"
-		use:enhance={form.submit}
+		{...setMemberLeaderOf.enhance(async ({ submit }) => {
+			await submit()
+			dialog?.close()
+		})}
 	>
+		{#each teams ?? [] as team (team.id)}
+			<input type="hidden" name="leaderOf[]" value={team.id} />
+		{/each}
+
 		<InputRelations
-			key="leaderOf"
+			key="leaderOf_search"
 			flatMode
 			search={(search) => $api.team.search(search, { take: 10 })}
 			placeholder="Chercher un nouveau secteur"
 			classList="max-h-80 overflow-y-auto relative"
-			value={teams}
+			bind:value={teams}
 			slotItem={(team) => team.name}
 		/>
 

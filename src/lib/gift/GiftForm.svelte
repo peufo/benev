@@ -1,11 +1,9 @@
 <script lang="ts">
 	import type { Gift, GiftCondition } from '@prisma/client'
-	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/fuma-legacy/validation'
 	import { GIFT_CONDITION_MODE } from '$lib/constant'
-	import { enhance } from '$app/forms'
-	import { InputRadio, InputText } from '$lib/fuma-legacy'
+	import { InputRadio, InputString } from 'fuma'
 	import GiftConditions from './GiftConditions.svelte'
+	import { createGift } from './gift.remote'
 
 	type GiftWithConditions = Gift & { conditions: GiftCondition[] }
 	interface Props {
@@ -14,39 +12,28 @@
 
 	let { gift = $bindable(undefined) }: Props = $props()
 
-	const createAction = '?/create_gift'
-	const updateAction = '?/update_gift'
-
-	const form = useForm<GiftWithConditions>({
-		onSuccess: (url, data) => {
-			if (url.search === createAction) gift = data
-		},
-		successReset: (url) => url.search !== createAction,
-	})
+	// L'édition d'une prestation existante n'a jamais eu d'action côté serveur (fonction
+	// en chantier): seule la création est branchée.
 </script>
 
 <form
-	action="{$eventPath}/admin/gift{gift ? updateAction : createAction}"
-	method="post"
-	use:enhance={form.submit}
+	{...createGift.enhance(async ({ submit }) => {
+		await submit()
+		gift = createGift.result
+	})}
 	class="flex flex-col gap-2"
 >
-	{#if gift}
-		<input type="hidden" name="id" value={gift.id} />
-	{/if}
-	<InputText
-		key="name"
-		value={gift?.name}
+	<InputString
+		field={createGift.fields.name}
 		label="Nom de la prestation"
-		input={{ placeholder: 'T-Shirt, Boisson, Repas, ...' }}
+		defaultValue={gift?.name}
+		placeholder="T-Shirt, Boisson, Repas, ..."
 	/>
 	{#if gift?.conditions.length}
 		<InputRadio
-			key="conditionsMode"
+			field={createGift.fields.conditionsMode}
 			label="Méthode de calcul"
-			optionsClass="flex gap-4"
 			options={GIFT_CONDITION_MODE}
-			value={gift?.conditionsMode}
 		/>
 	{/if}
 

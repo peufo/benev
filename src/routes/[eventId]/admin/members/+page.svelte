@@ -3,7 +3,8 @@
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick } from 'svelte'
 	import { goto } from '$app/navigation'
-	import { InputSearch, Table, TableViewSelect, Card, component, Icon } from '$lib/fuma-legacy'
+	import { InputSearch, Table, Card, component, Icon } from '$lib/fuma-legacy'
+	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { Drawer } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { urlParam } from 'fuma'
@@ -15,7 +16,6 @@
 	import MembersBadges from './MembersBadges.svelte'
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
-	import { eventPath } from '$lib/store'
 	import { globalEvents } from '$lib/globalEvents'
 	import { page } from '$app/stores'
 	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
@@ -68,7 +68,7 @@
 					<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
 				</a>
 
-				<TableViewSelect key="members" views={data.views} action="{$eventPath}/admin" />
+				<TableViewSelect key="members" views={data.views} />
 
 				<MembersExport />
 				<MembersBadges badges={data.badges} />

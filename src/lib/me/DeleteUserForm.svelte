@@ -1,12 +1,9 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/fuma-legacy/validation'
 	import { DialogConfirm } from '$lib/fuma-legacy'
-
-	const form = useForm()
+	import { deleteUser } from './user.remote'
 </script>
 
-<form method="post" use:enhance={form.submit}>
+<form {...deleteUser}>
 	<DialogConfirm class="btn-sm">
 		{#snippet header()}
 			<h2 class="font-medium text-lg opacity-75">Supprimer mon compte</h2>
@@ -19,7 +16,7 @@
 		<p>Attention, cette opération est <b>irréversibles</b> !</p>
 
 		{#snippet action()}
-			<button formaction="/me?/delete_user" class="btn btn-error">Je confirme</button>
+			<button formaction={deleteUser.action} class="btn btn-error">Je confirme</button>
 		{/snippet}
 	</DialogConfirm>
 </form>

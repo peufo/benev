@@ -1,27 +1,15 @@
 <script lang="ts">
-	import { run, preventDefault } from 'svelte/legacy'
-
-	import axios from 'axios'
 	import { mdiContentDuplicate } from '@mdi/js'
 	import { daytz, type Dayjs } from '$lib/dayjs'
-	import {
-		useForm,
-		InputNumber,
-		Icon,
-		InputRelation,
-		InputRelations,
-		component,
-	} from '$lib/fuma-legacy'
-	import { ButtonDelete } from 'fuma'
-	import { urlParam } from 'fuma'
-	import { USE_COERCE_DATE, USE_COERCE_NUMBER, USE_COERCE_JSON } from 'fuma'
+	import { Icon, InputRelation, InputRelations, component } from '$lib/fuma-legacy'
+	import { ButtonDelete, urlParam } from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
-	import { eventPath } from '$lib/store'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { api } from '$lib/api'
 	import { TagSelectItem } from '$lib/tag'
 	import { toast } from 'svelte-sonner'
 	import InputDateTime from './InputDateTime.svelte'
+	import { createPeriod, deletePeriod, duplicatePeriod, updatePeriod } from './period.remote'
 
 	type PeriodProp = Partial<Period & { team: Team; tags: Tag[]; subscribes: Subscribe[] }>
 
@@ -42,34 +30,7 @@
 		ondelete,
 	}: Props = $props()
 
-	const successMessages: Record<string, string> = {
-		'?/period_update': 'Période mise à jour',
-		'?/period_create': 'Période ajoutée',
-		'?/period_delete': 'Période supprimée',
-	}
-
-	const { enhance } = useForm({
-		successReset: false,
-		successMessage: (action) => successMessages[action.search] || 'Succès',
-		onSuccess: () => {
-			onsuccess?.()
-		},
-		onSubmit({ action, cancel, submitter }) {
-			if (!action.searchParams.has('/period_delete')) return
-			const nb = period.subscribes?.length || 0
-			if (nb === 0) return ondelete?.()
-			const msg = [
-				`Cette période de travail contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
-				'Es-tu certain de vouloir la supprimer ?',
-			].join('\n')
-			if (confirm(msg)) return ondelete?.()
-			cancel()
-			toast.info('Suppession de la période annulée !')
-			setTimeout(() => {
-				submitter?.classList.remove('btn-disabled')
-			}, 200)
-		},
-	})
+	const remoteForm = $derived(period?.id ? updatePeriod : createPeriod)
 
 	const detectChange = useDetectChange(period)
 
@@ -92,6 +53,8 @@
 	let end = $state(daytz(period?.end || defaultEnd))
 
 	let maxSubscribe = $state(period?.maxSubscribe || 1)
+	let selectedTeam: Team | null = $state(period.team ?? null)
+	let selectedTags: Tag[] | null = $state(period.tags ?? null)
 
 	// ATTENTION runtime: `Intl.DurationFormat` n'est pas disponible partout. Bun l'a
 	// (vérifié en 1.2.22), Node ne l'a pas avant la v23. Le Dockerfile lance l'app avec
@@ -109,41 +72,60 @@
 		start = daytz(period?.start || defaultStart)
 		end = daytz(period?.end || defaultEnd)
 		maxSubscribe = period?.maxSubscribe || 1
+		selectedTeam = period?.team ?? null
+		selectedTags = period?.tags ?? null
 	}
 
-	export function updatePeriod(updater: (p: PeriodProp) => PeriodProp) {
+	export function updatePeriodProp(updater: (p: PeriodProp) => PeriodProp) {
 		period = updater(period || {})
 	}
 
 	async function createNextPeriod() {
 		const duration = daytz(end).diff(start, 'minute')
-		const nextStart = end
-		const nextEnd = end.add(duration, 'minute')
-		const form = new FormData()
-		form.append('redirectTo', urlParam.without('form_period'))
-		form.append('team', USE_COERCE_JSON + JSON.stringify({ id: period.teamId }))
-		form.append('start', USE_COERCE_DATE + nextStart.toJSON())
-		form.append('end', USE_COERCE_DATE + nextEnd.toJSON())
-		form.append('maxSubscribe', USE_COERCE_NUMBER + maxSubscribe)
-		form.append(
-			'tags',
-			USE_COERCE_JSON + JSON.stringify(period.tags?.map((t) => ({ id: t.id })) || [])
-		)
-		const res = await axios.postForm(`${basePath}?/period_create`, form)
-		if (res.data.type === 'redirect')
-			await goto(res.data.location, { invalidateAll: true, noScroll: true })
-		else await invalidateAll()
+		const teamId = selectedTeam?.id ?? period.teamId
+		if (!teamId) return
+		await duplicatePeriod({
+			teamId,
+			start: end.toDate(),
+			end: end.add(duration, 'minute').toDate(),
+			maxSubscribe,
+			tagIds: (selectedTags ?? []).map((t) => t.id),
+		})
+		if (disableRedirect) await invalidateAll()
+		else await goto(urlParam.without('form_period'), { invalidateAll: true, noScroll: true })
 	}
-	run(() => {
+
+	$effect.pre(() => {
 		if (detectChange(period)) setPeriod(period)
 	})
-	let basePath = $derived(`${$eventPath}/admin`)
+
+	function confirmDelete() {
+		const nb = period.subscribes?.length || 0
+		if (nb === 0) {
+			ondelete?.()
+			return true
+		}
+		const msg = [
+			`Cette période de travail contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
+			'Es-tu certain de vouloir la supprimer ?',
+		].join('\n')
+		if (confirm(msg)) {
+			ondelete?.()
+			return true
+		}
+		toast.info('Suppession de la période annulée !')
+		return false
+	}
 </script>
 
+<!-- `InputRelation`/`InputRelations` ne servent qu'à choisir: la valeur soumise est portée
+     par les champs cachés ci-dessous, en ids clairs. -->
 <form
-	action="{basePath}{period?.id ? `?/period_update` : '?/period_create'}"
-	method="post"
-	use:enhance
+	{...remoteForm.enhance(async ({ submit }) => {
+		await submit()
+		toast.success(period?.id ? 'Période mise à jour' : 'Période ajoutée')
+		onsuccess?.()
+	})}
 	class="p-2 flex flex-col gap-3 {klass}"
 >
 	{#if period?.id}
@@ -154,17 +136,22 @@
 		<input type="hidden" name="redirectTo" value={urlParam.without('form_period')} />
 	{/if}
 
+	<input type="hidden" name="team" value={selectedTeam?.id ?? ''} />
+	{#each selectedTags ?? [] as tag (tag.id)}
+		<input type="hidden" name="tags[]" value={tag.id} />
+	{/each}
+
 	{#key period}
 		<InputRelation
-			value={period.team}
-			key="team"
+			bind:value={selectedTeam}
+			key="team_search"
 			search={$api.team.search}
 			slotItem={(item) => item.name}
 			label="Secteur"
 		/>
 		<InputRelations
-			value={period.tags}
-			key="tags"
+			bind:value={selectedTags}
+			key="tags_search"
 			search={$api.tag.search}
 			slotItem={(tag) => component(TagSelectItem, { tag, is_editable: true })}
 			slotSuggestion={(tag) => component(TagSelectItem, { tag })}
@@ -174,12 +161,17 @@
 		/>
 	{/key}
 
-	<InputNumber
-		key="maxSubscribe"
-		label="Nombre de bénévoles"
-		bind:value={maxSubscribe}
-		input={{ min: 1, step: 1 }}
-	/>
+	<label class="floating-label">
+		<span>Nombre de bénévoles</span>
+		<input
+			class="input w-full"
+			type="number"
+			name="maxSubscribe"
+			min="1"
+			step="1"
+			bind:value={maxSubscribe}
+		/>
+	</label>
 
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
 		<InputDateTime
@@ -206,6 +198,10 @@
 		/>
 	</div>
 
+	{#each remoteForm.fields.allIssues() ?? [] as issue (issue.path.join('.') + issue.message)}
+		<p class="text-error text-sm">{issue.message}</p>
+	{/each}
+
 	<div class="flex flex-row-reverse gap-3 grow">
 		{#if period?.id}
 			<button class="btn btn-primary" type="submit">Valider</button>
@@ -213,14 +209,30 @@
 				type="button"
 				class="btn btn-primary"
 				class:btn-disabled={!start || !end}
-				onclick={preventDefault(createNextPeriod)}
+				onclick={createNextPeriod}
 			>
 				<Icon path={mdiContentDuplicate} title="Dupliquer après" />
 			</button>
 			<div class="grow"></div>
-			<ButtonDelete formaction="{basePath}?/period_delete" />
 		{:else}
 			<button class="btn btn-primary" type="submit">Ajouter</button>
 		{/if}
 	</div>
 </form>
+
+{#if period?.id}
+	<form
+		{...deletePeriod.enhance(async ({ submit }) => {
+			if (!confirmDelete()) return
+			await submit()
+			toast.success('Période supprimée')
+		})}
+		class="p-2 flex"
+	>
+		<input type="hidden" name="id" value={period.id} />
+		{#if !disableRedirect}
+			<input type="hidden" name="redirectTo" value={urlParam.without('form_period')} />
+		{/if}
+		<ButtonDelete formaction={deletePeriod.action} />
+	</form>
+{/if}

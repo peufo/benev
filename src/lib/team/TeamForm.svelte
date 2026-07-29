@@ -1,29 +1,28 @@
 <script lang="ts" module>
-	import type { Event, Field } from '@prisma/client'
-	import { Form } from '$lib/fuma-legacy'
-	import { tip } from 'fuma'
-
-	export type TeamFormComponent = ComponentType<Form<typeof modelTeam, TeamWithComputedValues>>
-	export type TeamFormInstance = InstanceType<TeamFormComponent>
+	export type TeamFormInstance = {
+		update: (
+			updater: (team: Partial<TeamWithComputedValues>) => Partial<TeamWithComputedValues>
+		) => void
+	}
 </script>
 
 <script lang="ts">
-	import { page } from '$app/stores'
+	import type { Event, Field } from '@prisma/client'
+	import { page } from '$app/state'
 	import { toast } from 'svelte-sonner'
-	import { InputText, InputTextarea, InputDate, InputBoolean } from '$lib/fuma-legacy'
+	import { ButtonDelete, InputBoolean, InputString, InputTextarea, tip } from 'fuma'
 
 	import { MemberConditions } from '$lib/member'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
-	import { eventPath } from '$lib/store'
-	import { type ComponentType } from 'svelte'
-	import { modelTeam } from '$lib/models'
 	import type { TeamWithComputedValues } from '$lib/server'
+	import { createTeam, deleteTeam, updateTeam } from './team.remote'
 
 	interface Props {
 		class?: string
 		event: Event & { memberFields: Field[] }
 		team?: Partial<TeamWithComputedValues>
 		teamForm?: TeamFormInstance | undefined
+		onsuccess?: () => void
 	}
 
 	let {
@@ -31,56 +30,67 @@
 		event,
 		team = $bindable({}),
 		teamForm = $bindable(undefined),
+		onsuccess,
 	}: Props = $props()
 
-	const TeamForm: TeamFormComponent = Form
+	const remoteForm = $derived(team.id ? updateTeam : createTeam)
+
+	// `DrawersForm` s'en sert pour injecter un responsable fraîchement invité.
+	teamForm = {
+		update(updater) {
+			team = updater(team)
+		},
+	}
+
+	function confirmDelete() {
+		const nb = team.nbSubscribes || 0
+		if (nb === 0) return true
+		const msg = [
+			`Ce secteur contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
+			'Es-tu certain de vouloir le supprimer ?',
+		].join('\n')
+		if (confirm(msg)) return true
+		toast.info('Suppession du secteur annulée !')
+		return false
+	}
 </script>
 
-<TeamForm
-	class={klass}
-	action="{$eventPath}/teams?/team"
-	model={modelTeam}
-	bind:data={team}
-	{onsuccess}
-	bind:this={teamForm}
-	options={{
-		onSubmit({ action, cancel, submitter }) {
-			if (!action.searchParams.has('/team_delete')) return
-			const nb = team.nbSubscribes || 0
-			if (nb === 0) return
-			const msg = [
-				`Ce secteur contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
-				'Es-tu certain de vouloir le supprimer ?',
-			].join('\n')
-			if (confirm(msg)) return
-			cancel()
-			toast.info('Suppession du secteur annulée !')
-			setTimeout(() => {
-				submitter?.classList.remove('btn-disabled')
-			}, 200)
-		},
-	}}
+<form
+	{...remoteForm.enhance(async ({ submit }) => {
+		await submit()
+		toast.success('Succès')
+		onsuccess?.()
+	})}
+	class="flex flex-col gap-4 {klass}"
 >
-	<InputText
-		key="name"
+	{#if team.id}
+		<input type="hidden" name="id" value={team.id} />
+	{/if}
+
+	<InputString
+		field={remoteForm.fields.name}
 		label="Nom du secteur"
-		bind:value={team.name}
+		defaultValue={team.name}
 		class="mt-8"
-		input={{ autofocus: true }}
 	/>
 
-	{#if $page.data.member?.roles.includes('admin')}
+	{#if page.data.member?.roles.includes('admin')}
 		<InputLeaders bind:value={team.leaders} />
 	{/if}
-	<InputTextarea key="description" label="Description" bind:value={team.description} />
+	<InputTextarea
+		field={remoteForm.fields.description}
+		label="Description"
+		defaultValue={team.description ?? ''}
+	/>
 
 	{#if event.selfSubscribeAllowed}
 		<div class="grid grid-cols-2 gap-2">
-			<InputDate
-				key="closeSubscribing"
+			<InputString
+				field={remoteForm.fields.closeSubscribing}
+				type="date"
 				label="Fin des inscriptions"
-				bind:value={team.closeSubscribing}
-				hint={event.closeSubscribing && !team?.closeSubscribing
+				defaultValue={team.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
+				placeholder={event.closeSubscribing && !team?.closeSubscribing
 					? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
 					: ''}
 			/>
@@ -91,13 +101,33 @@
 				}}
 			>
 				<InputBoolean
-					key="overflowPermitted"
+					field={remoteForm.fields.overflowPermitted}
 					label="Mode liste d'attente"
-					bind:value={team.overflowPermitted}
+					checked={team.overflowPermitted ?? false}
+					defaultChecked={team.overflowPermitted ?? false}
 				/>
 			</div>
 		</div>
 	{/if}
 
 	<MemberConditions conditions={team?.conditions || []} memberFields={event.memberFields} />
-</TeamForm>
+
+	<div class="flex flex-row-reverse gap-2 border-t pt-4">
+		<button class="btn btn-primary">Valider</button>
+	</div>
+</form>
+
+{#if team.id}
+	<form
+		{...deleteTeam.enhance(async ({ submit }) => {
+			if (!confirmDelete()) return
+			await submit()
+			toast.success('Secteur supprimé')
+			onsuccess?.()
+		})}
+		class="flex"
+	>
+		<input type="hidden" name="id" value={team.id} />
+		<ButtonDelete formaction={deleteTeam.action}>Supprimer</ButtonDelete>
+	</form>
+{/if}

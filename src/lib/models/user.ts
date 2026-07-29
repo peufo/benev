@@ -1,5 +1,5 @@
-import { z, type ZodObj } from '$lib/fuma-legacy/validation'
-import type { Prisma } from '@prisma/client'
+import z from 'zod'
+import { zDateNullable } from './form'
 
 export const modelUserLogin = {
 	email: z.string().email().toLowerCase(),
@@ -11,17 +11,26 @@ export const modelUserCreate = {
 	firstName: z.string().min(2).trim(),
 	lastName: z.string().min(2).trim(),
 	isOrganizer: z.boolean().optional(),
+	// Le défaut est indispensable: une case décochée n'envoie rien, et `form()` refuse un
+	// booléen non optionnel. Le refus est donc formulé par le refinement, pas par le type.
 	isTermsAccepted: z
 		.boolean()
+		.default(false)
 		.refine((v) => v === true, { message: 'Tu dois accepter les conditions' }),
-} satisfies ZodObj<Omit<Prisma.UserCreateInput, 'id'> & { password: string }>
+}
 
 export const modelUserContactUpdate = {
-	email: z.union([z.string().email().toLowerCase(), z.literal('').transform(() => null)]).nullish(),
+	// Un email vidé détache l'adresse; `null` n'étant pas un `RemoteFormInput`, la conversion
+	// se fait à la sortie. Un champ absent reste `undefined`: un formulaire partiel ne doit
+	// pas effacer l'adresse.
+	email: z
+		.union([z.string().email().toLowerCase(), z.literal('')])
+		.optional()
+		.transform((value) => (value === undefined ? undefined : value || null)),
 	firstName: z.string().min(2).optional(),
 	lastName: z.string().min(2).optional(),
 	phone: z.string().trim().optional(),
-	birthday: z.date().nullish(),
+	birthday: zDateNullable,
 	street: z.string().optional(),
 	zipCode: z.string().optional(),
 	city: z.string().optional(),
@@ -31,4 +40,4 @@ export const modelUserUpdate = {
 	...modelUserContactUpdate,
 	email: z.string().email().toLowerCase().optional(),
 	isOrganizer: z.boolean().optional(),
-} satisfies ZodObj<Prisma.UserUncheckedUpdateInput>
+}

@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { component, Form, InputNumber } from '$lib/fuma-legacy'
+	import { component } from '$lib/fuma-legacy'
 	import LabelPage from './LabelPage.svelte'
 	import LabelField from './LabelField.svelte'
 	import CloneSelector from './CloneSelector.svelte'
 	import LabelTeam from './LabelTeam.svelte'
+	import { cloneEvent } from './clone.remote'
 
 	let { data } = $props()
 
@@ -12,7 +13,7 @@
 
 <h2 class="title">Cloner l'évènement "{data.event.name}"</h2>
 
-<Form action="?/event_clone" simpleAction>
+<form {...cloneEvent} class="flex flex-col gap-4">
 	<div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
 		<CloneSelector
 			class="sm:col-span-2"
@@ -24,7 +25,11 @@
 			getLabel={(team) => component(LabelTeam, { team, deltaDays })}
 		>
 			<div class="grow"></div>
-			<InputNumber label="Nombre de jours de décalage" key="deltaDays" bind:value={deltaDays} />
+			<!-- Champ brut: `deltaDays` pilote aussi l'aperçu des dates dans `LabelTeam`. -->
+			<label class="floating-label">
+				<span>Nombre de jours de décalage</span>
+				<input class="input" type="number" name="deltaDays" bind:value={deltaDays} />
+			</label>
 		</CloneSelector>
 
 		<CloneSelector
@@ -55,4 +60,8 @@
 			getLabel={(view) => `${view.name} (${view.key})`}
 		/>
 	</div>
-</Form>
+
+	<div class="flex flex-row-reverse gap-2 border-t pt-4">
+		<button class="btn btn-primary">Valider</button>
+	</div>
+</form>

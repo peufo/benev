@@ -8,15 +8,8 @@
 		mdiSigma,
 	} from '@mdi/js'
 	import type { PageData } from './$types'
-	import {
-		Card,
-		InputSearch,
-		Table,
-		type TableField,
-		TableViewSelect,
-		Icon,
-		component,
-	} from '$lib/fuma-legacy'
+	import { Card, InputSearch, Table, type TableField, Icon, component } from '$lib/fuma-legacy'
+	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { Drawer } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { urlParam } from 'fuma'
@@ -154,7 +147,7 @@
 				>
 					<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
 				</a>
-				<TableViewSelect key="subscribes" views={data.views} action="{$eventPath}/admin" />
+				<TableViewSelect key="subscribes" views={data.views} />
 				<SubscribesImport />
 			</div>
 

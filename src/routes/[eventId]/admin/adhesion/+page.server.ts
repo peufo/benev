@@ -1,8 +1,4 @@
-import { tryOrFail, formAction } from '$lib/server/fuma-legacy'
-import { z } from '$lib/fuma-legacy/validation'
-
-import { prisma, permission } from '$lib/server'
-import { modelEventSettings, modelMemberFieldCreate, modelMemberFieldUpdate } from '$lib/models'
+import { prisma } from '$lib/server'
 
 export const load = async ({ parent, params: { eventId } }) => {
 	await parent()
@@ -17,61 +13,4 @@ export const load = async ({ parent, params: { eventId } }) => {
 			include: { conditions: true },
 		}),
 	}
-}
-
-export const actions = {
-	field_create: formAction(
-		modelMemberFieldCreate,
-		async ({ locals, params: { eventId }, data }) => {
-			await permission.admin(eventId, locals)
-			const nbFields = await prisma.field.count({ where: { eventId } })
-			return prisma.field.create({
-				data: { ...data, eventId, position: nbFields },
-			})
-		}
-	),
-	field_update: formAction(
-		modelMemberFieldUpdate,
-		async ({ locals, params: { eventId }, data }) => {
-			await permission.admin(eventId, locals)
-			return prisma.field.update({
-				where: { id: data.id },
-				data,
-			})
-		}
-	),
-	field_delete: formAction({ id: z.string() }, async ({ locals, params: { eventId }, data }) => {
-		await permission.admin(eventId, locals)
-		return prisma.field.delete({
-			where: { id: data.id, eventId },
-		})
-	}),
-
-	fields_reorder: async ({ request, locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-		const formData: Record<string, unknown> = Object.fromEntries(await request.formData())
-
-		const updates: { id: string; position: number }[] = []
-		Object.entries(formData).forEach(([id, position]) => {
-			if (typeof position === 'string') updates.push({ id, position: +position })
-		})
-
-		return tryOrFail(() =>
-			prisma.$transaction(
-				updates.map(({ id, position }) =>
-					prisma.field.update({ where: { id }, data: { position } })
-				)
-			)
-		)
-	},
-	set_member_settings: formAction(
-		modelEventSettings,
-		async ({ locals, params: { eventId }, data }) => {
-			await permission.admin(eventId, locals)
-			return prisma.event.update({
-				where: { id: eventId },
-				data,
-			})
-		}
-	),
 }

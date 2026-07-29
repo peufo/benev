@@ -7,11 +7,11 @@
 	} from '@mdi/js'
 	import type { Message, MessageState } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
-	import axios from 'axios'
 	import { Icon, InputOptionInParam } from '$lib/fuma-legacy'
 	import { DropDown } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { useNotify } from '$lib/notify'
+	import { setMessageState } from './message.remote'
 
 	let { data } = $props()
 
@@ -36,20 +36,15 @@
 
 	const notifiy = useNotify()
 
-	async function setMessageState(message: Message, state: Message['state']) {
-		const formData = new FormData()
-		formData.append('messageId', message.id)
-		formData.append('state', state)
-		axios
-			.postForm('/root/messages?/set_state', formData)
-			.then(() => {
-				notifiy.success('State updated')
-				invalidateAll()
-			})
-			.catch((err) => {
-				console.error(err)
-				notifiy.error('error')
-			})
+	async function updateMessageState(message: Message, state: Message['state']) {
+		try {
+			await setMessageState({ messageId: message.id, state })
+			notifiy.success('State updated')
+			await invalidateAll()
+		} catch (err) {
+			console.error(err)
+			notifiy.error('error')
+		}
 	}
 </script>
 
@@ -80,7 +75,7 @@
 								<button
 									type="button"
 									class="menu-item w-full"
-									onclick={() => setMessageState(message, state.state)}
+									onclick={() => updateMessageState(message, state.state)}
 								>
 									<Icon path={state.icon} class={state.class} />
 									{state.label}

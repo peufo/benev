@@ -1,8 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { z, type ZodObj } from '$lib/fuma-legacy/validation'
-
-type TeamShemaCreate = Omit<Prisma.TeamCreateInput, 'event'>
-type TeamShemaUpdate = Omit<Prisma.TeamUpdateInput, 'event'>
+import z from 'zod'
+import { zConnectMany, zDateNullable, zJson, zSet } from './form'
 
 const memberConditionOperator = z.enum([
 	'equals',
@@ -18,6 +15,8 @@ const memberConditionOperator = z.enum([
 	'gte',
 	'not',
 ])
+
+/** Aussi parsé depuis un corps JSON par `[eventId]/teams/membersAllowed`: reste tel quel. */
 export const modelMemberCondition = z.union([
 	z.object({ type: z.literal('valided') }),
 	z.object({
@@ -40,14 +39,18 @@ export type MemberConditionOperator = (typeof memberConditionOperator)['_output'
 export const modelTeam = {
 	name: z.string().min(3),
 	description: z.string().optional(),
-	leaders: z.relations.connect,
-	closeSubscribing: z.date().nullish(),
+	// `InputLeaders` ne sert qu'à choisir: les ids partent dans des champs `leaders[]`.
+	leaders: zConnectMany,
+	// Champ rendu conditionnellement (inscription libre): absent, il ne touche à rien.
+	closeSubscribing: zDateNullable,
 	overflowPermitted: z.boolean().optional(),
-	conditions: z.jsonArray(modelMemberCondition),
-} satisfies ZodObj<TeamShemaCreate>
+	// `MemberConditions` sérialise sa liste dans un champ caché.
+	conditions: zJson(z.array(modelMemberCondition)),
+}
 
 export const modelTeamUpdate = {
 	...modelTeam,
 	id: z.string(),
-	leaders: z.optional(z.relations.set),
-} satisfies ZodObj<TeamShemaUpdate>
+	// En mise à jour, la liste transmise remplace l'existante.
+	leaders: zSet.optional(),
+}

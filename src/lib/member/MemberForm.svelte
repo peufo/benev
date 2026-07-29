@@ -1,29 +1,19 @@
 <script lang="ts">
 	import type { Event, Page as TPage } from '@prisma/client'
-	import { page } from '$app/stores'
-	import { enhance } from '$app/forms'
-	import { useForm } from '$lib/fuma-legacy/validation'
-	import { eventPath } from '$lib/store'
+	import { page } from '$app/state'
 	import { tiptapParser } from '$lib/fuma-legacy'
-	import { ButtonDelete } from 'fuma'
 	import { urlParam } from 'fuma'
+	import MemberDeleteForm from './MemberDeleteForm.svelte'
+	import { acceptInvite } from './member.remote'
 
 	interface Props {
 		event: Event
 		charter: TPage | null
-		successReset?: boolean
-		successUpdate?: boolean
 		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 	}
 
-	let { event, charter, successReset = false, successUpdate = false, onsuccess }: Props = $props()
-
-	const form = useForm({
-		successReset,
-		successUpdate,
-		onSuccess: () => onsuccess?.(),
-	})
+	let { event, charter, onsuccess }: Props = $props()
 </script>
 
 <section>
@@ -51,22 +41,18 @@
 
 	<div class="flex flex-row-reverse gap-2 mt-4">
 		<form
-			action="{$eventPath}/invite?/accept_invite"
-			method="post"
+			{...acceptInvite.enhance(async ({ submit }) => {
+				await submit()
+				onsuccess?.()
+			})}
 			class="contents"
-			use:enhance={form.submit}
 		>
 			<input type="hidden" name="redirectTo" value={urlParam.with({ section: 'profile' })} />
 			<button class="btn btn-primary">Oui je le veux !</button>
 		</form>
 
-		{#if $page.data.member?.isValidedByEvent && !$page.data.member?.isValidedByUser}
-			<form method="post" class="contents" use:enhance={form.submit}>
-				<input type="hidden" name="memberId" value={$page.data.member.id} />
-				<ButtonDelete formaction="{$eventPath}/api/members?/delete_member" class="w-36">
-					Refuser
-				</ButtonDelete>
-			</form>
+		{#if page.data.member?.isValidedByEvent && !page.data.member?.isValidedByUser}
+			<MemberDeleteForm memberId={page.data.member.id} class="w-36">Refuser</MemberDeleteForm>
 		{/if}
 
 		<a href="/me" class="btn btn-ghost"> Non </a>

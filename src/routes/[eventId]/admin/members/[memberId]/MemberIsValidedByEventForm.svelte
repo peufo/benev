@@ -1,23 +1,22 @@
 <script lang="ts">
 	import { mdiCancel, mdiCheck } from '@mdi/js'
 	import type { PageData } from './$types'
-	import { useForm } from '$lib/fuma-legacy/validation'
 	import { Icon } from '$lib/fuma-legacy'
-	import { USE_COERCE_BOOLEAN } from 'fuma'
+	import { setMemberIsValidedByEvent } from '$lib/member/memberAdmin.remote'
 
 	interface Props {
 		memberProfile: PageData['memberProfile']
 	}
 
 	let { memberProfile }: Props = $props()
-	const { enhance } = useForm()
 </script>
 
-<form action="?/set_isValidedByEvent" method="post" use:enhance class="contents">
+<form {...setMemberIsValidedByEvent} class="contents">
 	<input
-		type="hidden"
-		name="isValidedByEvent"
-		value="{USE_COERCE_BOOLEAN}{!memberProfile.isValidedByEvent}"
+		{...setMemberIsValidedByEvent.fields.isValidedByEvent.as(
+			'hidden',
+			!memberProfile.isValidedByEvent
+		)}
 	/>
 	<button class="menu-item w-full">
 		<Icon

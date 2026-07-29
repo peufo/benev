@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import { mdiCheck } from '@mdi/js'
 	import { AlertCircle, Clock, HelpCircle, Send } from '@lucide/svelte'
-	import { Card, Icon, InputText, InputTextarea, useForm } from '$lib/fuma-legacy'
+	import { Card, Icon } from '$lib/fuma-legacy'
+	import { InputString, InputTextarea } from 'fuma'
+	import { toast } from 'svelte-sonner'
+	import { sendMessage } from './contact.remote'
 
-	const form = useForm({
-		successMessage: 'Merci pour ton message',
-	})
 	let { data } = $props()
 </script>
 
@@ -32,13 +31,14 @@
 				{/snippet}
 
 				<form
-					method="post"
-					action="/contact?/new_message"
-					use:enhance={form.submit}
+					{...sendMessage.enhance(async ({ submit }) => {
+						await submit()
+						toast.success('Merci pour ton message')
+					})}
 					class="flex flex-col gap-4 mt-2"
 				>
-					<InputText key="subject" label="Sujet" />
-					<InputTextarea key="content" label="Ton message" textarea={{ rows: 6 }} />
+					<InputString field={sendMessage.fields.subject} label="Sujet" />
+					<InputTextarea field={sendMessage.fields.content} label="Ton message" rows={6} />
 
 					<div class="flex justify-end">
 						<button class="btn btn-primary gap-2">

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import { Dialog } from 'fuma'
-	import { useForm } from '$lib/fuma-legacy/validation'
+	import { toast } from 'svelte-sonner'
 	import type { Event } from '@prisma/client'
+	import { deleteEvent } from './event.remote'
 
 	interface Props {
 		event: Event
@@ -10,10 +10,6 @@
 
 	let { event }: Props = $props()
 	let dialog: HTMLDialogElement = $state()!
-
-	const form = useForm({
-		successMessage: 'Évènement supprimé',
-	})
 </script>
 
 <div class="flex justify-end">
@@ -26,8 +22,13 @@
 	{#snippet header()}
 		<h2 class="title">Supprimer "{event?.name}"</h2>
 	{/snippet}
-	<form method="post" action="/{event.id}?/event_delete" use:enhance={form.submit} class="contents">
-		<input type="hidden" name="id" value={event?.id} />
+	<form
+		{...deleteEvent.enhance(async ({ submit }) => {
+			await submit()
+			toast.success('Évènement supprimé')
+		})}
+		class="contents"
+	>
 		<p>
 			Es-tu certain de supprimer cette évènement ?<br />
 			Cette opération est <b>irréversible !</b>

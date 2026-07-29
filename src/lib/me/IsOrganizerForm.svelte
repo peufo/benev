@@ -1,11 +1,5 @@
 <script lang="ts">
-	import { useForm } from '$lib/fuma-legacy/validation'
-	import { enhance } from '$app/forms'
-	import { USE_COERCE_BOOLEAN } from 'fuma'
-
-	const form = useForm({
-		onSuccess: () => onsuccess?.(),
-	})
+	import { updateAccount } from './user.remote'
 
 	interface Props {
 		/** Remplacent les évènements de la version Svelte 4. */
@@ -16,8 +10,15 @@
 	let { oncancel, onsuccess }: Props = $props()
 </script>
 
-<form method="post" action="/me?/account_update" use:enhance={form.submit}>
-	<input type="hidden" name="isOrganizer" value="{USE_COERCE_BOOLEAN}true" />
+<form
+	{...updateAccount.enhance(async ({ submit }) => {
+		await submit()
+		onsuccess?.()
+	})}
+>
+	<!-- `as('hidden', true)` nomme le champ `b:isOrganizer`, que SvelteKit reconvertit en
+	     booléen. Le jeton `USE_COERCE_BOOLEAN` n'a plus cours. -->
+	<input {...updateAccount.fields.isOrganizer.as('hidden', true)} />
 
 	<p>Souhaite-tu devenir organisateur d'évenements ?</p>
 

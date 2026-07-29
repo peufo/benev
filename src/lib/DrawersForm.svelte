@@ -73,9 +73,9 @@
 	{#snippet children({ close })}
 		<TagForm
 			tag={tag || {}}
-			oncreated={async ({ detail: tag }) => {
+			oncreated={async (tag) => {
 				await close({ replaceState: true })
-				periodForm.updatePeriod((p) => ({ ...p, tags: [...(p.tags || []), tag] }))
+				periodForm.updatePeriodProp((p) => ({ ...p, tags: [...(p.tags || []), tag] }))
 			}}
 			onupdated={() => close()}
 			ondeleted={() => close()}

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/stores'
-	import { InputText, InputTextarea, InputImagePreview, Form } from '$lib/fuma-legacy'
+	import { page } from '$app/state'
+	import { InputImagePreview } from '$lib/fuma-legacy'
+	import { InputString, InputTextarea } from 'fuma'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { FORMAT_A3 } from '$lib/constant'
@@ -10,15 +11,20 @@
 	import { InputLocation } from '$lib/location'
 	import EventTierSelector from './EventTierSelector.svelte'
 	import EventFormSection from './EventFormSection.svelte'
+	import { createEvent, updateEvent } from './event.remote'
 
 	interface Props {
 		event?: Event | undefined
+		onsuccess?: () => void
 	}
 
-	let { event = undefined }: Props = $props()
+	let { event = undefined, onsuccess }: Props = $props()
 
 	const isUpdate = !!event
-	let plan = $state($page.url.searchParams.get('plan') || 'basic')
+	// Deux remote functions distinctes, l'ancienne action `?/event` étant suffixée par
+	// `_create` ou `_update` selon la présence d'un id.
+	const remoteForm = $derived(event ? updateEvent : createEvent)
+	let plan = $state(page.url.searchParams.get('plan') || 'basic')
 
 	const timeZones = (() => {
 		try {
@@ -38,6 +44,7 @@
 		}
 	})()
 
+	// `name` et `id` sont couplés (l'un dérive l'autre): ils restent des champs bruts liés.
 	let name = $state(event?.name || '')
 	let eventId = $state(event?.id || '')
 
@@ -48,26 +55,28 @@
 	function handleEventIdInput() {
 		eventId = normalizePath(eventId)
 	}
+
+	function confirmIdChange() {
+		if (!event || event.state !== 'published') return true
+		if (event.id === eventId) return true
+		return confirm(
+			`Es tu sûr de vouloir modifier le lien de l'évènement de "/${event.id}" pour "${eventId} ?"`
+		)
+	}
 </script>
 
-<Form
-	action="/{event?.id ? event.id : ''}?/event"
-	options={{
-		successReset: false,
-		onSubmit: async () => {
-			if (event?.state !== 'published') return
-			if (event.id === eventId) return
-			const msg = `Es tu sûr de vouloir modifier le lien de l'évènement de "/${event.id}" pour "${eventId} ?"`
-			if (!confirm(msg)) {
-				throw Error('Mise à jour annulé')
-			}
-		},
-	}}
-	{onsuccess}
-	data={event}
+<form
+	{...remoteForm.enhance(async ({ submit }) => {
+		if (!confirmIdChange()) return
+		await submit()
+		onsuccess?.()
+	})}
+	enctype="multipart/form-data"
+	class="flex flex-col gap-4"
 >
 	{#if !event}
 		<EventTierSelector bind:value={plan} />
+		<input type="hidden" name="tier" value={plan} />
 	{/if}
 
 	<div class="flex flex-col gap-3">
@@ -79,25 +88,32 @@
 			collapsible={false}
 		>
 			<div class="flex flex-col gap-4">
-				<InputText
-					key="name"
-					label="Nom de l'évènement"
-					bind:value={name}
-					oninput={handleNameInput}
-					input={{ autocomplete: 'off' }}
-				/>
-				<InputText
-					key="id"
-					label="URL de l'évènement"
-					oninput={handleEventIdInput}
-					bind:value={eventId}
-					input={{ class: 'pl-[5.4em]', autocomplete: 'off' }}
-					classWrapper="flex items-center relative"
-				>
-					{#snippet prepend()}
-						<span class="absolute select-none pl-4 translate-y-[1px] opacity-50"> benev.io/ </span>
-					{/snippet}
-				</InputText>
+				<label class="floating-label">
+					<span>Nom de l'évènement</span>
+					<input
+						class="input w-full"
+						type="text"
+						name="name"
+						autocomplete="off"
+						bind:value={name}
+						oninput={handleNameInput}
+					/>
+				</label>
+
+				<label class="floating-label relative">
+					<span>URL de l'évènement</span>
+					<span class="absolute z-1 select-none pl-4 translate-y-[0.7em] opacity-50">
+						benev.io/
+					</span>
+					<input
+						class="input w-full pl-[5.4em]"
+						type="text"
+						name="id"
+						autocomplete="off"
+						bind:value={eventId}
+						oninput={handleEventIdInput}
+					/>
+				</label>
 
 				<label class="form-control w-full">
 					<span class="label-text p-1">Fuseau horaire</span>
@@ -130,7 +146,7 @@
 							y={FORMAT_A3.y / 2}
 						/>
 						{#if event?.posterId}
-							<EventImageRemove formaction="/?/event_poster_delete" eventId={event.id} />
+							<EventImageRemove kind="poster" eventId={event.id} />
 						{/if}
 					</div>
 
@@ -144,16 +160,16 @@
 							y={126}
 						/>
 						{#if event?.logoId}
-							<EventImageRemove formaction="/?/event_logo_delete" eventId={event.id} />
+							<EventImageRemove kind="logo" eventId={event.id} />
 						{/if}
 					</div>
 				</div>
 
 				<InputTextarea
-					key="description"
+					field={remoteForm.fields.description}
 					label="Description"
-					value={event?.description || ''}
-					textarea={{ rows: 4 }}
+					defaultValue={event?.description || ''}
+					rows={4}
 				/>
 			</div>
 		</EventFormSection>
@@ -166,21 +182,42 @@
 			collapsible={!isUpdate}
 		>
 			<div class="flex flex-col gap-4">
-				<InputText key="email" label="Email de contact" value={event?.email || ''} />
-				<InputText key="phone" label="Téléphone de contact" value={event?.phone || ''} />
+				<InputString
+					field={remoteForm.fields.email}
+					label="Email de contact"
+					defaultValue={event?.email || ''}
+				/>
+				<InputString
+					field={remoteForm.fields.phone}
+					label="Téléphone de contact"
+					defaultValue={event?.phone || ''}
+				/>
 				<InputLocation key="location" value={event?.location ?? null} />
 				<EventFormInputWeb {event} />
 
-				<InputText key="facebook" label="Page Facebook" value={event?.facebook || ''} />
-				<InputText key="instagram" label="Page Instagram" value={event?.instagram || ''} />
+				<InputString
+					field={remoteForm.fields.facebook}
+					label="Page Facebook"
+					defaultValue={event?.facebook || ''}
+				/>
+				<InputString
+					field={remoteForm.fields.instagram}
+					label="Page Instagram"
+					defaultValue={event?.instagram || ''}
+				/>
 			</div>
 		</EventFormSection>
 	</div>
 
-	<!-- @migration-task: migrate this slot by hand, `delete` is an invalid identifier -->
-	<svelte:fragment slot="delete">
-		{#if event}
-			<EventDeleteButton {event} />
-		{/if}
-	</svelte:fragment>
-</Form>
+	{#each remoteForm.fields.allIssues() ?? [] as issue (issue.path.join('.') + issue.message)}
+		<p class="text-error text-sm">{issue.message}</p>
+	{/each}
+
+	<div class="flex flex-row-reverse gap-2 border-t pt-4">
+		<button class="btn btn-primary">Valider</button>
+	</div>
+</form>
+
+{#if event}
+	<EventDeleteButton {event} />
+{/if}

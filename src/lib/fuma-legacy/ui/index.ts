@@ -1,6 +1,5 @@
 export * from './card/index.js'
 export * from './input/index.js'
-export * from './form/index.js'
 export * from './menu/index.js'
 export * from './table/index.js'
 export * from './tabs/index.js'

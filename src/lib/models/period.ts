@@ -1,24 +1,33 @@
-import { z, type ZodObj, type SuperRefinement } from '$lib/fuma-legacy/validation'
 import type { Prisma } from '@prisma/client'
+import type { ShapeOf } from 'fuma'
+import z from 'zod'
+import { zConnect, zConnectMany, zDate, zNumber, zSet } from './form'
 
 export const modelPeriodCreate = {
-	maxSubscribe: z.number().min(1),
-	team: z.relation.connect,
-	tags: z.relations.connect,
-	start: z.date(),
-	end: z.date(),
-} satisfies ZodObj<Prisma.PeriodCreateInput>
+	// Champ brut lié par `bind:value` (il sert aussi à dupliquer la période).
+	maxSubscribe: zNumber(1),
+	// `InputRelation`/`InputRelations` de fuma 1 ne servent plus qu'à choisir: les ids partent
+	// dans des champs cachés, en clair.
+	team: zConnect,
+	tags: zConnectMany,
+	start: zDate,
+	end: zDate,
+} satisfies ShapeOf<Prisma.PeriodCreateInput>
 
 export const modelPeriodUpdate = {
 	...modelPeriodCreate,
 	id: z.string(),
-	tags: z.relations.set.optional(),
-	maxSubscribe: z.number().min(1).optional(),
+	tags: zSet,
+	maxSubscribe: zNumber(1).optional(),
 }
 
-export const validationPeriod: SuperRefinement<{ start: Date; end: Date }> = (
-	{ start, end },
-	ctx
+/**
+ * Règle inter-champs, appliquée par `.superRefine()` sur l'objet complet. `fatal` empêche les
+ * refinements suivants de tourner sur des dates incohérentes.
+ */
+export const validationPeriod = (
+	{ start, end }: { start: Date; end: Date },
+	ctx: z.RefinementCtx<{ start: Date; end: Date }>
 ) => {
 	if (start.getTime() > end.getTime()) {
 		ctx.addIssue({
@@ -30,8 +39,6 @@ export const validationPeriod: SuperRefinement<{ start: Date; end: Date }> = (
 			fatal: true,
 		})
 		ctx.addIssue({
-			// zod 4 a retiré le code `invalid_date`; une règle métier inter-champs
-			// relève de `custom`.
 			code: 'custom',
 			path: ['end'],
 			message: 'Doit être après le début',

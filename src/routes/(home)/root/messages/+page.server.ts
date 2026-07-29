@@ -1,4 +1,3 @@
-import { tryOrFail, parseFormData } from '$lib/server/fuma-legacy'
 import { parseQuery } from 'fuma/server'
 import { toTuple, z } from '$lib/fuma-legacy/validation'
 import { prisma } from '$lib/server'
@@ -25,20 +24,4 @@ export const load = async ({ url }) => {
 			},
 		}),
 	}
-}
-
-export const actions = {
-	set_state: async ({ request }) => {
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, {
-				messageId: z.string(),
-				state: z.enum(toTuple(MessageState)),
-			})
-
-			return prisma.message.update({
-				where: { id: data.messageId },
-				data: { state: data.state },
-			})
-		})
-	},
 }

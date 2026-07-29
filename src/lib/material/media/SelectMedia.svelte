@@ -1,52 +1,21 @@
 <script lang="ts">
-	import { stopPropagation, createBubbler, preventDefault } from 'svelte/legacy'
-
-	const bubble = createBubbler()
-	import { enhance } from '$app/forms'
 	import type { Media } from '@prisma/client'
 	import { portal } from 'svelte-portal'
-	import { page } from '$app/state'
-	import { Icon, InputText } from '$lib/fuma-legacy'
-	import { ButtonDelete, Dialog } from 'fuma'
-	import { useForm } from '$lib/fuma-legacy/validation'
+	import { ButtonDelete, Dialog, InputString } from 'fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { toast } from 'svelte-sonner'
 
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
 	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { tick } from 'svelte'
 	import { api } from '$lib/api'
+	import { deleteMedia, editMedia, uploadMedia } from './media.remote'
 
 	// TODO: Chelous de récupérer medias en global:
 	let medias: Media[] = $state([])
 	let dialogMedias: HTMLDialogElement = $state()!
 	let dialogEdit: HTMLDialogElement = $state()!
 	let dialogUploadMedia: UploadMediaDialog = $state()!
-	const formUpload = useForm<Media>({
-		successUpdate: false,
-		successMessage: 'Nouvelle image',
-		onSuccess(action, media) {
-			dialogUploadMedia.close()
-			if (media) {
-				medias = [...medias, media]
-				onselect?.(media)
-			}
-		},
-	})
-
-	const formEdit = useForm<Media>({
-		successUpdate: false,
-		onSuccess(action, media) {
-			dialogEdit.close()
-			if (!media) return
-			if (action.search === '?/delete_media') {
-				const index = medias.findIndex((m) => m.id === media.id)
-				medias = [...medias.slice(0, index), ...medias.slice(index + 1)]
-			}
-			if (action.search === '?/edit_media') {
-				medias = medias.map((m) => (m.id === media.id ? media : m))
-			}
-			dialogMedias.show()
-		},
-	})
 
 	interface Props {
 		/** Remplace l'évènement `select` de la version Svelte 4. */
@@ -105,7 +74,10 @@
 						{#if media.eventId}
 							<button
 								type="button"
-								onclick={stopPropagation(() => handleEditMedia(media))}
+								onclick={(event) => {
+									event.stopPropagation()
+									handleEditMedia(media)
+								}}
 								class="btn btn-xs btn-square btn-ghost ml-auto"
 							>
 								<Icon
@@ -143,15 +115,21 @@
 
 <div class="contents" use:portal={'body'}>
 	<form
-		use:enhance={formUpload.submit}
-		method="post"
+		{...uploadMedia.enhance(async ({ submit }) => {
+			await submit()
+			const media = uploadMedia.result
+			dialogUploadMedia.close()
+			if (!media) return
+			toast.success('Nouvelle image')
+			medias = [...medias, media]
+			onselect?.(media)
+		})}
 		enctype="multipart/form-data"
-		onsubmit={preventDefault(bubble('submit'))}
 	>
 		<UploadMediaDialog
 			bind:this={dialogUploadMedia}
 			title="Nouvelle image"
-			formaction="/{$page.params.eventId}/admin?/upload_media"
+			formaction={uploadMedia.action}
 			freeName
 			freeAspect
 		/>
@@ -165,20 +143,37 @@
 
 			<img src="/media/{selectedMedia.id}" alt={selectedMedia.name} class="mx-auto" />
 
-			<form method="post" class="contents" use:enhance={formEdit.submit}>
+			<!-- Un seul `<form>` porte les deux remote functions: le `formaction` du bouton
+			     pressé décide laquelle s'exécute. -->
+			<form
+				class="contents"
+				{...editMedia.enhance(async ({ submit }) => {
+					await submit()
+					dialogEdit.close()
+					const media = editMedia.result
+					if (media) medias = medias.map((m) => (m.id === media.id ? media : m))
+					dialogMedias.show()
+				})}
+				{...deleteMedia.enhance(async ({ submit }) => {
+					await submit()
+					dialogEdit.close()
+					const media = deleteMedia.result
+					if (media) medias = medias.filter((m) => m.id !== media.id)
+					dialogMedias.show()
+				})}
+			>
 				<div class="flex flex-row-reverse items-end gap-2 mt-4">
 					<input type="hidden" name="id" value={selectedMedia.id} />
 
-					<button formaction="/{$page.params.eventId}/admin?/edit_media" class="btn btn-primary">
-						Valider
-					</button>
-					<ButtonDelete formaction="/{$page.params.eventId}/admin?/delete_media" />
+					<button formaction={editMedia.action} class="btn btn-primary"> Valider </button>
+					<ButtonDelete formaction={deleteMedia.action} />
 
-					<InputText
-						key="name"
-						input={{ placeholder: "Description de l'image", autocomplete: 'off' }}
+					<InputString
+						field={editMedia.fields.name}
+						label="Description de l'image"
 						class="grow"
-						value={selectedMedia.name}
+						autocomplete="off"
+						defaultValue={selectedMedia.name}
 					/>
 				</div>
 			</form>

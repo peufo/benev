@@ -1,32 +1,32 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
 	import { mdiTrashCanOutline } from '@mdi/js'
-	import axios from 'axios'
 	import { Icon } from '$lib/fuma-legacy'
 	import { toast } from 'svelte-sonner'
+	import { deleteEventLogo, deleteEventPoster } from './event.remote'
 
 	interface Props {
-		formaction: string
+		kind: 'poster' | 'logo'
 		eventId: string
 	}
 
-	let { formaction, eventId }: Props = $props()
+	let { kind, eventId }: Props = $props()
 
 	let isLoading = $state(false)
 
-	function onclick() {
+	async function onclick() {
 		if (isLoading) return
 		isLoading = true
-		const formDate = new FormData()
-		formDate.set('id', eventId)
-		axios
-			.postForm(formaction, formDate)
-			.catch((err) => typeof err === 'object' && 'message' in err && toast.error(err.message))
-			.then(() => {
-				toast.success('Image supprimée')
-				invalidateAll()
-			})
-			.finally(() => (isLoading = false))
+		const remove = kind === 'poster' ? deleteEventPoster : deleteEventLogo
+		try {
+			await remove({ id: eventId })
+			toast.success('Image supprimée')
+			await invalidateAll()
+		} catch (err) {
+			toast.error(err instanceof Error ? err.message : 'Suppression impossible')
+		} finally {
+			isLoading = false
+		}
 	}
 </script>
 

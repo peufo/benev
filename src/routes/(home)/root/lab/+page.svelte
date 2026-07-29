@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import { Card } from '$lib/fuma-legacy'
-	import { enhance } from '$app/forms'
+	import { sendEvent } from './lab.remote'
 
 	let events: string[] = $state([])
 
@@ -21,7 +21,7 @@
 </script>
 
 <Card class="max-w-3xl mx-auto">
-	<form action="?/send_event" method="post" use:enhance>
+	<form {...sendEvent}>
 		<button class="btn"> send event</button>
 	</form>
 

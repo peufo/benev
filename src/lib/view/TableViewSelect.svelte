@@ -1,16 +1,10 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy'
-
-	import { onMount } from 'svelte'
 	import { mdiChevronDown, mdiContentSaveEditOutline, mdiPlus } from '@mdi/js'
-	import { page } from '$app/stores'
-	import { enhance } from '$app/forms'
+	import { page } from '$app/state'
 
 	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
-	import { Dialog } from 'fuma'
-	import { DropDown } from 'fuma'
-	import { InputText } from '$lib/fuma-legacy/ui/input/index.js'
-	import { useForm } from '$lib/fuma-legacy/validation/form.js'
+	import { Dialog, DropDown, InputString } from 'fuma'
+	import { createView, deleteView, updateView } from './view.remote'
 
 	type View = {
 		id: string
@@ -21,39 +15,18 @@
 	interface Props {
 		key: string
 		views: View[]
-		action?: string
-		actionCreate?: string
-		actionUpdate?: string
-		actionDelete?: string
 	}
 
-	let {
-		key,
-		views,
-		action = '',
-		actionCreate = '?/view_create',
-		actionUpdate = '?/view_update',
-		actionDelete = '?/view_delete',
-	}: Props = $props()
+	let { key, views }: Props = $props()
 
 	let dialog: HTMLDialogElement = $state()!
-	const form = useForm({
-		onSuccess() {
-			dialog.close()
-		},
-	})
 
-	let query = $state(getQuery($page.url))
-	let selectedView = $state(views.find((v) => v.query === query))
-	let isNewView = $state(!!query && !selectedView)
-
-	onMount(() =>
-		page.subscribe(({ url }) => {
-			query = getQuery(url)
-			selectedView = views.find((v) => v.query === query)
-			isNewView = !!query && !selectedView
-		})
-	)
+	// Sorti de `fuma-legacy`: fuma 2 ne propose qu'un `TableViewSelect` limité à `views`,
+	// et l'enregistrement passe maintenant par des remote functions.
+	let query = $derived(getQuery(page.url))
+	let selectedView = $derived(views.find((v) => v.query === query))
+	let isNewView = $derived(!!query && !selectedView)
+	let editedView = $state<View | undefined>(undefined)
 
 	function getQuery({ searchParams }: URL) {
 		// Construit puis sérialisé immédiatement: pas un état réactif.
@@ -83,7 +56,7 @@
 					type="button"
 					class="menu-item w-full pr-[6px]"
 					onclick={() => {
-						selectedView = undefined
+						editedView = undefined
 						dialog.showModal()
 					}}
 				>
@@ -95,7 +68,7 @@
 		{/if}
 
 		<li>
-			<a href={$page.url.pathname} class="menu-item" class:active={!query}>
+			<a href={page.url.pathname} class="menu-item" class:active={!query}>
 				<span class="grow">Vue simple</span>
 			</a>
 		</li>
@@ -103,7 +76,7 @@
 		{#each views as view (view.id)}
 			<li>
 				<a
-					href="{$page.url.pathname}?{view.query}"
+					href="{page.url.pathname}?{view.query}"
 					class="menu-item group pr-1"
 					class:active={view.id === selectedView?.id}
 				>
@@ -111,10 +84,11 @@
 					<button
 						type="button"
 						class="btn btn-square btn-ghost btn-xs rounded"
-						onclick={preventDefault(() => {
-							selectedView = view
+						onclick={(event) => {
+							event.preventDefault()
+							editedView = view
 							dialog.showModal()
-						})}
+						}}
 					>
 						<Icon
 							path={mdiContentSaveEditOutline}
@@ -132,7 +106,7 @@
 <Dialog bind:dialog>
 	{#snippet header()}
 		<h2 class="title">
-			{#if selectedView}
+			{#if editedView}
 				Modifier la vue
 			{:else}
 				Ajouter la nouvelle vue
@@ -140,29 +114,35 @@
 		</h2>
 	{/snippet}
 
+	{@const remoteForm = editedView ? updateView : createView}
 	<form
-		action="{action}{selectedView ? actionUpdate : actionCreate}"
-		method="post"
-		use:enhance={form.submit}
+		{...remoteForm.enhance(async ({ submit }) => {
+			await submit()
+			dialog.close()
+		})}
+		{...deleteView.enhance(async ({ submit }) => {
+			await submit()
+			dialog.close()
+		})}
 	>
-		{#if selectedView}
-			<input type="hidden" name="id" value={selectedView.id} />
+		{#if editedView}
+			<input type="hidden" name="id" value={editedView.id} />
 		{/if}
 		<input type="hidden" name="key" value={key} />
 		<input type="hidden" name="query" value={query} />
 
-		<InputText
-			key="name"
-			input={{ placeholder: 'Nom de la vue' }}
-			value={selectedView?.name || ''}
+		<InputString
+			field={remoteForm.fields.name}
+			label="Nom de la vue"
+			defaultValue={editedView?.name || ''}
 		/>
 
 		<div class="mt-2 flex flex-row-reverse gap-2">
 			<button class="btn"> Valider </button>
 
-			<button formaction="{action}{actionDelete}" class="btn btn-ghost text-error">
-				Supprimer
-			</button>
+			{#if editedView}
+				<button formaction={deleteView.action} class="btn btn-ghost text-error"> Supprimer </button>
+			{/if}
 		</div>
 	</form>
 </Dialog>

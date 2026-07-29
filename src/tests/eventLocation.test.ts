@@ -1,25 +1,26 @@
 import { describe, it } from 'vitest'
 import { Prisma } from '@prisma/client'
+import z from 'zod'
 // Import direct des modules et non du barrel racine: celui-ci tire tout l'arbre UI,
 // donc le CSS de tippy, que Vitest ne sait pas charger en environnement `node`.
-import { USE_COERCE_JSON } from 'fuma'
-import { parseFormData } from '$lib/server/fuma-legacy/parseFormData'
 import { modelEventUpdate } from '$lib/models'
 import { jsonOrDbNull } from '$lib/server'
 import { mapUrl } from '$lib/location'
 
-/** Reproduit la charge utile envoyée par InputLocation dans EventForm */
+const schema = z.object(modelEventUpdate)
+
+/**
+ * Reproduit ce que `form()` transmet au schéma: le POJO issu du `FormData`, où le champ
+ * `location` d'`InputLocation` est déjà une chaîne JSON — plus de jeton `USE_COERCE_JSON`.
+ */
 const submit = async (location?: unknown) => {
-	const formData = new FormData()
-	formData.append('id', 'mon-event')
-	formData.append('name', 'Mon Event')
+	const input: Record<string, string> = { id: 'mon-event', name: 'Mon Event' }
 	if (location !== undefined) {
 		// InputRelation sérialise aussi son propre champ de recherche
-		formData.append('location_search', USE_COERCE_JSON + JSON.stringify({ id: 'W123' }))
-		formData.append('location', USE_COERCE_JSON + JSON.stringify(location))
+		input.location_search = JSON.stringify({ id: 'W123' })
+		input.location = JSON.stringify(location)
 	}
-	const { data } = await parseFormData(formData, modelEventUpdate)
-	return data
+	return schema.parseAsync(input)
 }
 
 describe('champ location du formulaire évènement', () => {
@@ -49,11 +50,11 @@ describe('champ location du formulaire évènement', () => {
 		})
 	})
 
-	// `z.json()` est une union (objet | chaîne JSON): une erreur imbriquée remonte
-	// au niveau du champ et non sur le sous-champ fautif
+	// `.pipe()` conserve le chemin du sous-champ fautif, là où l'ancienne union
+	// (objet | chaîne JSON) faisait remonter l'erreur au niveau du champ
 	it('refuse des coordonnées incomplètes', async ({ expect }) => {
 		await expect(submit({ label: 'X', coords: { lat: 1 } })).rejects.toMatchObject({
-			issues: [{ path: ['location'] }],
+			issues: [{ path: ['location', 'coords', 'lon'] }],
 		})
 	})
 

@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { eventPath } from '$lib/store'
 	import { ButtonDelete } from 'fuma'
-	import { useForm } from '$lib/fuma-legacy/validation'
-	import { enhance } from '$app/forms'
+	import { deleteMember } from './member.remote'
 
 	interface Props {
 		memberId: string
@@ -13,16 +11,12 @@
 	}
 
 	let { memberId, redirectTo = '/me', class: klass = '', btn = true, children }: Props = $props()
-
-	const form = useForm({
-		successMessage: 'Membre supprimé',
-	})
 </script>
 
-<form method="post" class="contents" use:enhance={form.submit}>
+<form {...deleteMember.for(memberId)} class="contents">
 	<input type="hidden" name="memberId" value={memberId} />
 	<input type="hidden" name="redirectTo" value={redirectTo} />
-	<ButtonDelete formaction="{$eventPath}/api/members?/delete_member" class={klass} {btn}>
+	<ButtonDelete formaction={deleteMember.action} class={klass} {btn}>
 		{#if children}{@render children()}{:else}Supprimer ma participation{/if}
 	</ButtonDelete>
 </form>

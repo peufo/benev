@@ -1,19 +1,18 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import { mdiCheck, mdiLink, mdiLoading } from '@mdi/js'
 	import type { Page } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
-	import { FormControl, Icon, InputSelect, InputText, InputTextRich } from '$lib/fuma-legacy'
-	import { ButtonDelete } from 'fuma'
+	import { FormControl, Icon, InputSelect, InputTextRich } from '$lib/fuma-legacy'
+	import { ButtonDelete, InputString } from 'fuma'
 
-	import { useForm } from '$lib/fuma-legacy/validation'
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { PAGE_TYPE } from '$lib/constant'
 	import { debounce } from '$lib/debounce'
 	import PageTypeHelp from './PageTypeHelp.svelte'
 	import { SelectMedia } from '$lib/material/media'
+	import { deletePage, updatePage } from './page.remote'
 
 	interface Props {
 		page: Page
@@ -25,14 +24,6 @@
 	let selectMedia: SelectMedia = $state()!
 	let isDirty = $state(false)
 	let successInvalidateAll = false
-	const form = useForm({
-		successUpdate: false,
-		successMessage: false,
-		async onSuccess(action) {
-			if (successInvalidateAll || action.search === '?/page_delete') await invalidateAll()
-			isDirty = false
-		},
-	})
 	const { home, charter, email, ...pageTypes } = PAGE_TYPE
 	let submitButton: HTMLButtonElement = $state()!
 	let inputTextRich: InputTextRich = $state()!
@@ -58,18 +49,25 @@
 	}, 800)
 </script>
 
-<form method="post" action="?/page_update" use:enhance={form.submit} class="flex flex-col gap-2">
+<form
+	{...updatePage.enhance(async ({ submit }) => {
+		await submit()
+		// Le titre et le type se répercutent sur la barre latérale et sur le chemin public.
+		if (successInvalidateAll) await invalidateAll()
+		isDirty = false
+	})}
+	class="flex flex-col gap-2"
+>
 	<div class="flex gap-2 items-start">
-		<InputText
+		<InputString
 			label="Titre"
 			class="grow"
-			key="title"
-			value={page.title}
+			field={updatePage.fields.title}
+			defaultValue={page.title}
 			oninput={handleChangeImediat}
-			hint={page.description || ''}
 		/>
 
-		<FormControl label="Type de page">
+		<FormControl label="Type de page" enhanceDisabled>
 			{#snippet label_append()}
 				<PageTypeHelp />
 			{/snippet}
@@ -89,6 +87,7 @@
 			{:else}
 				<InputSelect
 					key="type"
+					enhanceDisabled
 					options={charterAlreadyExist && page.type !== 'charter'
 						? pageTypes
 						: { charter, ...pageTypes }}
@@ -100,7 +99,6 @@
 	</div>
 
 	<input type="hidden" name="id" value={page.id} />
-	<input type="hidden" name="eventId" value={page.eventId} />
 	{#if page.type !== 'email'}
 		<input type="hidden" name="path" value={normalizePath(page.title)} />
 	{/if}
@@ -109,6 +107,7 @@
 		<InputTextRich
 			bind:this={inputTextRich}
 			key="content"
+			enhanceDisabled
 			value={page.content}
 			onchange={handleChange}
 			oninsertMedia={() => {
@@ -117,14 +116,13 @@
 		/>
 	{/key}
 
+	<!-- Les refus métier (titre déjà pris, charte en double) remontent au niveau du formulaire -->
+	{#each updatePage.fields.issues() ?? [] as issue (issue.message)}
+		<p class="text-error text-sm">{issue.message}</p>
+	{/each}
+
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
-
-		<ButtonDelete
-			formaction="?/page_delete"
-			disabled={page.type === 'home' || page.type === 'email'}
-		/>
-		<div class="grow"></div>
 
 		{#if page.type !== 'email'}
 			<a
@@ -148,6 +146,13 @@
 			</div>
 		{/if}
 	</div>
+</form>
+
+<form {...deletePage}>
+	<ButtonDelete
+		formaction={deletePage.action}
+		disabled={page.type === 'home' || page.type === 'email'}
+	/>
 </form>
 
 <SelectMedia

@@ -24,8 +24,13 @@
 	}: Props = $props()
 </script>
 
+<!-- `InputRelation` de fuma 1 sérialise l'objet entier en JSON: la remote function n'attend
+     que l'id, transmis par le champ caché. Le champ interne du composant porte un autre nom,
+     que le schéma écarte. -->
+<input type="hidden" name={key} value={value?.id ?? ''} />
+
 <InputRelation
-	{key}
+	key="{key}_search"
 	{label}
 	bind:value
 	search={(search) => $api.fields.search(search, { types: typesAccepted })}

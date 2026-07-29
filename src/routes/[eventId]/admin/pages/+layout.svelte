@@ -1,25 +1,17 @@
 <script lang="ts">
 	import { mdiPlus } from '@mdi/js'
-	import { enhance } from '$app/forms'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 
 	import { Card, Icon } from '$lib/fuma-legacy'
 	import { tip } from 'fuma'
 	import { eventPath } from '$lib/store'
-	import { useForm } from '$lib/fuma-legacy/validation'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { PAGE_TYPE } from '$lib/constant'
 	import { IdCardLanyardIcon } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
+	import { createBadge, createPage } from './pages.remote'
 
 	let { data, children } = $props()
-
-	const form = useForm({
-		onSuccess(url) {
-			if (url.searchParams.has('/page_create')) toast.success('Nouvelle page créer !')
-			if (url.searchParams.has('/badge_create')) toast.success('Nouveau badge créer !')
-		},
-	})
 </script>
 
 <Card class="mx-auto" style="min-width: min(100%, 1280px)">
@@ -29,10 +21,11 @@
 				<div class="flex gap-2 mb-2 items-center">
 					<h2 class="title-md">Pages du site</h2>
 					<form
-						action="{$eventPath}/admin/pages?/page_create"
-						method="post"
+						{...createPage.enhance(async ({ submit }) => {
+							await submit()
+							toast.success('Nouvelle page créer !')
+						})}
 						class="contents"
-						use:enhance={form.submit}
 					>
 						<button class="btn btn-square btn-sm ml-auto" use:tip={{ content: 'Nouvelle page' }}>
 							<Icon path={mdiPlus} class="opacity-70" />
@@ -43,7 +36,7 @@
 					<a
 						href="{$eventPath}/admin/pages/{id}"
 						class="menu-item"
-						class:active={$page.params.pageId === id}
+						class:active={page.params.pageId === id}
 					>
 						<Icon path={PAGE_TYPE[type].icon} class="opacity-60 w-6 shrink-0" size={20} />
 						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
@@ -55,7 +48,7 @@
 					<a
 						href="{$eventPath}/admin/pages/{id}"
 						class="menu-item"
-						class:active={$page.params.pageId === id}
+						class:active={page.params.pageId === id}
 					>
 						<Icon path={PAGE_TYPE[type].icon} class="opacity-60 w-6 shrink-0" size={20} />
 						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
@@ -65,10 +58,11 @@
 					<h2 class="title-md my-2">Models de badge</h2>
 
 					<form
-						action="{$eventPath}/admin/pages?/badge_create"
-						method="post"
+						{...createBadge.enhance(async ({ submit }) => {
+							await submit()
+							toast.success('Nouveau badge créer !')
+						})}
 						class="contents"
-						use:enhance={form.submit}
 					>
 						<button class="btn btn-square btn-sm ml-auto" use:tip={{ content: 'Nouveau badge' }}>
 							<Icon path={mdiPlus} class="opacity-70" />
@@ -79,7 +73,7 @@
 					<a
 						href="{$eventPath}/admin/pages/badges/{badge.id}"
 						class="menu-item"
-						class:active={$page.params.badgeId === badge.id}
+						class:active={page.params.badgeId === badge.id}
 					>
 						<IdCardLanyardIcon size="20" opacity={0.6} />
 						<span class="overflow-hidden text-ellipsis text-sm">

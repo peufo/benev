@@ -4,10 +4,9 @@
 	import type { Props as TippyProps } from 'tippy.js'
 	import { InputRelation } from '$lib/fuma-legacy'
 	import { urlParam } from 'fuma'
-	import { useForm } from '$lib/fuma-legacy/validation'
-	import { enhance } from '$app/forms'
 	import { api } from '$lib/api'
-	import { eventPath } from '$lib/store'
+	import { useNotify } from '$lib/notify'
+	import { createSubscribe } from './subscribe.remote'
 
 	interface Props {
 		periodId: string
@@ -29,19 +28,18 @@
 		onsuccess,
 	}: Props = $props()
 
-	const form = useForm({
-		successMessage: 'Inscription créée',
-		onSuccess: () => {
-			member = null
-			onsuccess?.()
-		},
-	})
+	const notify = useNotify()
 </script>
 
+<!-- `InputRelation` ne sert qu'à choisir le membre: la valeur soumise est le champ caché.
+     Son propre champ, sérialisé en JSON, est écarté par le schéma. -->
 <form
-	method="post"
-	action="{$eventPath}/subscribes?/subscribe_create"
-	use:enhance={form.submit}
+	{...createSubscribe.enhance(async ({ submit }) => {
+		await submit()
+		notify.success('Inscription créée')
+		member = null
+		onsuccess?.()
+	})}
 	class="{klass} flex gap-2 justify-end grow w-full"
 >
 	<input type="hidden" name="periodId" value={periodId} />

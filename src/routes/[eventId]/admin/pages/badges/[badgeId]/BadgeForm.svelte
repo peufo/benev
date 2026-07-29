@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy'
-
 	import type { PageData } from './$types'
-	import { Icon, InputText, InputNumber, InputBoolean, useForm } from '$lib/fuma-legacy'
-	import { ButtonDelete } from 'fuma'
+	import { Icon } from '$lib/fuma-legacy'
+	import { ButtonDelete, InputBoolean } from 'fuma'
 	import {
 		mdiAlertCircleOutline,
 		mdiCheck,
@@ -12,7 +10,6 @@
 		mdiLinkOff,
 		mdiRestore,
 	} from '@mdi/js'
-	import { invalidateAll } from '$app/navigation'
 	import { InputMedia } from '$lib/material/media'
 	import { FORMAT_CARD } from '$lib/constant'
 	import { debounce } from '$lib/debounce'
@@ -22,6 +19,7 @@
 	import InputColor from './InputColor.svelte'
 	import { browser } from '$app/environment'
 	import { fade } from 'svelte/transition'
+	import { deleteBadge, updateBadge } from './badge.remote'
 
 	interface Props {
 		badge: PageData['badge']
@@ -33,20 +31,8 @@
 	let isSuccess = $state(true)
 	let lockAspectRatio = $state(true)
 
-	const { enhance, isLoading } = useForm({
-		successUpdate: false,
-		successMessage: false,
-		submitOnChange: true,
-		onSuccess(url) {
-			isSuccess = true
-			if (url.searchParams.has('/badge_delete')) invalidateAll()
-		},
-		onFail() {
-			isSuccess = false
-		},
-	})
-
-	// Not beautiful, but that work
+	// Les champs restent des `<input>` bruts liés à `badge`: ils pilotent l'aperçu en direct et
+	// s'écrivent aussi par programme (ratio, restauration). Le schéma convertit à l'arrivée.
 	function useAutosave() {
 		if (!browser) return () => {}
 		let firstCall = true
@@ -58,7 +44,9 @@
 		}, 300)
 	}
 	const autosave = useAutosave()
-	run(() => {
+	// `run()` de svelte/legacy, réécrit à l'identique: le pré-effet relance la sauvegarde
+	// à chaque écriture sur `badge`.
+	$effect.pre(() => {
 		if (badge) autosave()
 	})
 
@@ -70,22 +58,37 @@
 	}
 </script>
 
-<form method="post" action="?/badge_update" use:enhance class="flex flex-col gap-2">
-	<InputText key="name" label="Nom de la configuration" bind:value={badge.name} />
+<form
+	{...updateBadge.enhance(async ({ submit }) => {
+		try {
+			await submit()
+			isSuccess = true
+		} catch {
+			isSuccess = false
+		}
+	})}
+	class="flex flex-col gap-2"
+>
+	<label class="floating-label">
+		<span>Nom de la configuration</span>
+		<input class="input w-full" type="text" name="name" bind:value={badge.name} />
+	</label>
 
 	<div class="flex gap-2">
 		<div class="w-28">
-			<InputNumber
-				key="width"
-				label="Largeur (mm)"
-				bind:value={badge.width}
-				input={{ step: 0.01 }}
-				oninput={() => {
-					if (lockAspectRatio) {
-						badge.height = aspectRatioWidth(badge.width)
-					}
-				}}
-			/>
+			<label class="floating-label">
+				<span>Largeur (mm)</span>
+				<input
+					class="input"
+					type="number"
+					name="width"
+					step="0.01"
+					bind:value={badge.width}
+					oninput={() => {
+						if (lockAspectRatio) badge.height = aspectRatioWidth(badge.width)
+					}}
+				/>
+			</label>
 		</div>
 		<button
 			type="button"
@@ -95,17 +98,19 @@
 			<Icon path={lockAspectRatio ? mdiLink : mdiLinkOff} size={18} title="Conserver le ratio" />
 		</button>
 		<div class="w-28">
-			<InputNumber
-				key="height"
-				label="Hauteur (mm)"
-				bind:value={badge.height}
-				input={{ step: 0.01 }}
-				oninput={() => {
-					if (lockAspectRatio) {
-						badge.width = aspectRatioHeight(badge.height)
-					}
-				}}
-			/>
+			<label class="floating-label">
+				<span>Hauteur (mm)</span>
+				<input
+					class="input"
+					type="number"
+					name="height"
+					step="0.01"
+					bind:value={badge.height}
+					oninput={() => {
+						if (lockAspectRatio) badge.width = aspectRatioHeight(badge.height)
+					}}
+				/>
+			</label>
 		</div>
 		{#if badge.width !== FORMAT_CARD.x || badge.height !== FORMAT_CARD.y}
 			<button
@@ -173,22 +178,31 @@
 
 	<div class="flex gap-4">
 		<div class="w-28">
-			<InputNumber
-				key="accessCellSize"
-				label="Tailles cellules"
-				bind:value={badge.accessCellSize}
-			/>
+			<label class="floating-label">
+				<span>Tailles cellules</span>
+				<input
+					class="input"
+					type="number"
+					name="accessCellSize"
+					bind:value={badge.accessCellSize}
+				/>
+			</label>
 		</div>
-		<InputBoolean key="versoEnabled" label="Afficher le verso" bind:value={badge.versoEnabled} />
+		<InputBoolean
+			field={updateBadge.fields.versoEnabled}
+			label="Afficher le verso"
+			checked={badge.versoEnabled}
+			defaultChecked={badge.versoEnabled}
+			onchange={(event) => (badge.versoEnabled = event.currentTarget.checked)}
+		/>
 	</div>
 
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
 
-		<ButtonDelete formaction="?/badge_delete" />
 		<div class="grow"></div>
 
-		{#if $isLoading}
+		{#if updateBadge.pending > 0}
 			<div class="flex gap-1 items-center">
 				<Icon path={mdiLoading} class="animate-spin fill-warning" size={20} />
 				<span class="text-sm text-base-content/70">Sauvegarde</span>
@@ -205,4 +219,8 @@
 			</div>
 		{/if}
 	</div>
+</form>
+
+<form {...deleteBadge}>
+	<ButtonDelete formaction={deleteBadge.action} />
 </form>

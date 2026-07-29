@@ -1,35 +1,59 @@
 <script lang="ts">
-	import { modelMilestoneCreate } from '$lib/models'
-	import { eventPath } from '$lib/store'
 	import { daytz } from '$lib/dayjs'
 	import type { Milestone } from '@prisma/client'
-	import { Form, InputText } from '$lib/fuma-legacy'
-	import type { ComponentType } from 'svelte'
+	import { ButtonDelete, InputString } from 'fuma'
+	import { toast } from 'svelte-sonner'
 	import InputTzDateTime from './InputTzDateTime.svelte'
+	import { createMilestone, deleteMilestone, updateMilestone } from './milestone.remote'
 
 	interface Props {
 		milestone?: Partial<Milestone>
+		oncreated?: () => void
+		onupdated?: () => void
+		ondeleted?: () => void
 	}
 
-	let { milestone = {} }: Props = $props()
+	let { milestone = {}, oncreated, onupdated, ondeleted }: Props = $props()
 
-	const MilestoneForm: ComponentType<Form<typeof modelMilestoneCreate, Milestone>> = Form
+	const remoteForm = $derived(milestone.id ? updateMilestone : createMilestone)
 </script>
 
-<MilestoneForm
-	action="{$eventPath}?/milestone"
-	model={modelMilestoneCreate}
-	data={milestone}
-	{oncreated}
-	{onupdated}
-	{ondeleted}
-	{onsuccess}
+<form
+	{...remoteForm.enhance(async ({ submit }) => {
+		await submit()
+		toast.success('Succès')
+		if (milestone.id) onupdated?.()
+		else oncreated?.()
+	})}
+	class="flex flex-col gap-4"
 >
-	<InputText
-		key="name"
+	{#if milestone.id}
+		<input type="hidden" name="id" value={milestone.id} />
+	{/if}
+
+	<InputString
+		field={remoteForm.fields.name}
 		label="Nom"
-		value={milestone.name}
-		input={{ autocomplete: 'off', autofocus: true }}
+		defaultValue={milestone.name}
+		autocomplete="off"
 	/>
 	<InputTzDateTime key="timestamp" label="Date" value={daytz(milestone.timestamp)} />
-</MilestoneForm>
+
+	<div class="flex flex-row-reverse gap-2 border-t pt-4">
+		<button class="btn btn-primary">Valider</button>
+	</div>
+</form>
+
+{#if milestone.id}
+	<form
+		{...deleteMilestone.enhance(async ({ submit }) => {
+			await submit()
+			toast.success('Jalon supprimé')
+			ondeleted?.()
+		})}
+		class="flex"
+	>
+		<input type="hidden" name="id" value={milestone.id} />
+		<ButtonDelete formaction={deleteMilestone.action}>Supprimer</ButtonDelete>
+	</form>
+{/if}

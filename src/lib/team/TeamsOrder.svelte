@@ -3,9 +3,8 @@
 	import { toast } from 'svelte-sonner'
 	import { Placeholder } from '$lib/fuma-legacy'
 	import { listEditable } from 'fuma'
-	import axios from 'axios'
-	import { eventPath } from '$lib/store'
 	import { invalidateAll } from '$app/navigation'
+	import { reorderTeams } from './team.remote'
 
 	type _Team = Pick<Team, 'id' | 'name'>
 
@@ -17,15 +16,13 @@
 
 	async function handleReorder(reorderedTeams: _Team[]) {
 		teams = reorderedTeams
-		const form = new FormData()
-		form.append('teams', JSON.stringify(teams.map((t, i) => ({ id: t.id, position: i }))))
-		axios
-			.postForm(`${$eventPath}/teams?/teams_reorder`, form)
-			.then(async () => {
-				toast.success('Nouvel ordre sauvegardé')
-				await invalidateAll()
-			})
-			.catch((err) => toast.error(err))
+		try {
+			await reorderTeams(teams.map(({ id }) => id))
+			toast.success('Nouvel ordre sauvegardé')
+			await invalidateAll()
+		} catch (err) {
+			toast.error(err instanceof Error ? err.message : 'Réordonnancement impossible')
+		}
 	}
 </script>
 

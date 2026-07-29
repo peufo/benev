@@ -2,7 +2,7 @@
 	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
 	const bubble = createBubbler()
-	import { Icon, useForm } from '$lib/fuma-legacy'
+	import { Icon } from '$lib/fuma-legacy'
 	import { tip } from 'fuma'
 	import { urlParam } from 'fuma'
 	import {
@@ -16,13 +16,13 @@
 	import type { Team } from '@prisma/client'
 	import { CopyPlus } from '@lucide/svelte'
 	import Delayed from './Delayed.svelte'
+	import { cloneTeamForm } from './team.remote'
 
 	interface Props {
 		team: Team
 	}
 
 	let { team }: Props = $props()
-	const { enhance } = useForm()
 </script>
 
 <Delayed index={3} max={3}>
@@ -59,7 +59,7 @@
 </Delayed>
 
 <Delayed index={0} max={3}>
-	<form action="{$eventPath}/teams?/teams_clone" method="post" class="contents" use:enhance>
+	<form {...cloneTeamForm.for(team.id)} class="contents">
 		<input type="hidden" name="id" value={team.id} />
 		<button class="btn btn-square btn-sm btn-ghost" use:tip={{ content: 'Dupliquer le secteur' }}>
 			<CopyPlus size="18" />

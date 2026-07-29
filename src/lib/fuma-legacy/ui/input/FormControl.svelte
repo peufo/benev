@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
 	import { onMount } from 'svelte'
-	import { formContext } from '$lib/fuma-legacy/validation/form.js'
 	import type { AnyComponent, ComponentAndProps } from '$lib/fuma-legacy/utils/index.js'
 	import { Slot } from '$lib/fuma-legacy/ui/index.js'
 
@@ -14,6 +13,10 @@
 		hint?: string
 		prefix?: string | number
 		prefixFor?: string | number
+		/**
+		 * Sans effet depuis la migration: les erreurs remontent par les `fields` de la remote
+		 * function, plus par le contexte de `useForm`. La prop est gardée pour les appelants.
+		 */
 		enhanceDisabled?: boolean
 		labelPosition?: LabelPosition
 		label_append?: import('svelte').Snippet
@@ -38,11 +41,6 @@
 	type LabelPosition = 'top' | 'left' | 'right'
 
 	let _key = $derived(prefix && key ? `${prefix}_${key}` : key || '')
-
-	if (!enhanceDisabled) {
-		const { setError } = formContext.get()
-		setError[key] = (err) => (error = err)
-	}
 
 	let formControl: HTMLDivElement = $state()!
 	onMount(() => {

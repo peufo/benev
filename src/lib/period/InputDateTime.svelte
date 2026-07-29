@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Dayjs } from '$lib/dayjs'
-	import { USE_COERCE_DATE } from 'fuma'
 	import { MinusIcon, PlusIcon } from '@lucide/svelte'
 
 	interface Props {
@@ -35,7 +34,8 @@
 	}
 </script>
 
-<input type="hidden" name={key} value="{USE_COERCE_DATE}{value.toJSON()}" />
+<!-- La date part en ISO: c'est le schéma (`zDate`) qui la reconstruit côté serveur. -->
+<input type="hidden" name={key} value={value.toJSON()} />
 
 <div class="form-control">
 	<label for="control-{key}" class="label">

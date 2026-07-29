@@ -1,12 +1,8 @@
 import { z } from '$lib/fuma-legacy/validation'
-import { formAction } from '$lib/server/fuma-legacy'
 import { parseQuery } from 'fuma/server'
-import { useAddTeamComputedValues, permission, prisma } from '$lib/server'
+import { useAddTeamComputedValues, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
-import { modelTeam, modelTeamUpdate } from '$lib/models'
-import { error } from '@sveltejs/kit'
 import type { Period } from '@prisma/client'
-import { cloneTeam } from '$lib/server/clone.js'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const { search, range, onlyAvailable, teams_order } = parseQuery(url, {
@@ -86,69 +82,4 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			: []
 
 	return { teams, allTeams, teamsHiddenCount }
-}
-
-export const actions = {
-	team_create: formAction(modelTeam, async ({ locals, params: { eventId }, data }) => {
-		await permission.admin(eventId, locals)
-		return prisma.team.create({
-			data: { ...data, eventId },
-		})
-	}),
-	team_update: formAction(modelTeamUpdate, async ({ locals, data }) => {
-		const member = await permission.leaderOfTeam(data.id, locals)
-		if (!member.roles.includes('admin') && data.leaders) error(403)
-		return prisma.team.update({ where: { id: data.id }, data })
-	}),
-	team_delete: formAction({ id: z.string() }, async ({ locals, params: { eventId }, data }) => {
-		await permission.admin(eventId, locals)
-		return prisma.team.delete({ where: { id: data.id } })
-	}),
-	teams_reorder: formAction(
-		{ teams: z.jsonArray(z.object({ id: z.string(), position: z.number() })) },
-		async ({ locals, data, params: { eventId } }) => {
-			await permission.admin(eventId, locals)
-			return prisma.$transaction(
-				data.teams.map(({ id, position }) =>
-					prisma.team.update({
-						where: { id },
-						data: { position },
-					})
-				)
-			)
-		}
-	),
-	teams_clone: formAction(
-		{ id: z.string(), deltaTime: z.number().default(0) },
-		async ({ locals, data, params: { eventId } }) => {
-			await permission.admin(eventId, locals)
-			const [teams, team] = await Promise.all([
-				prisma.team
-					.findMany({ where: { eventId }, select: { name: true } })
-					.then((res) => res.map((t) => t.name)),
-				prisma.team.findUniqueOrThrow({
-					where: { id: data.id, eventId },
-					include: { periods: true, leaders: true },
-				}),
-			])
-			const clone = cloneTeam(team, data.deltaTime)
-			// leaders are not handle by cloneTeam()
-			clone.leaders = { connect: team.leaders.map(({ id }) => ({ id })) }
-			return prisma.team.create({
-				data: {
-					...clone,
-					event: { connect: { id: eventId } },
-					name: getTeamCopyName(clone.name, teams),
-				},
-			})
-		}
-	),
-}
-
-function getTeamCopyName(initalName: string, teams: string[]): string {
-	const name = initalName.endsWith(' copie') ? initalName : `${initalName} copie`
-	if (!teams.includes(name)) return name
-	let suffix = 2
-	while (teams.includes(`${name} ${suffix}`)) suffix++
-	return `${name} ${suffix}`
 }

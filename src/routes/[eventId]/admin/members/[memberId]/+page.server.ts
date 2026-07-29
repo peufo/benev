@@ -1,7 +1,4 @@
-import { formAction } from '$lib/server/fuma-legacy'
-import { prisma, getMemberProfile, permission, notifyTierQuotaIfNeeded } from '$lib/server'
-import { z } from '$lib/fuma-legacy/validation'
-import { modelUserContactUpdate } from '$lib/models'
+import { getMemberProfile, prisma } from '$lib/server'
 
 export const load = async ({ parent, params: { memberId, eventId } }) => {
 	const { member } = await parent()
@@ -44,39 +41,4 @@ export const load = async ({ parent, params: { memberId, eventId } }) => {
 			},
 		}),
 	}
-}
-
-export const actions = {
-	set_isAdmin: formAction(
-		{ isAdmin: z.boolean() },
-		async ({ locals, params: { eventId, memberId }, data }) => {
-			await permission.owner(eventId, locals)
-			return prisma.member.update({ where: { id: memberId }, data })
-		}
-	),
-	set_leader_of: formAction(
-		{ leaderOf: z.relations.set },
-		async ({ locals, params: { eventId, memberId }, data }) => {
-			await permission.admin(eventId, locals)
-			return prisma.member.update({ where: { id: memberId }, data })
-		}
-	),
-	set_isValidedByEvent: formAction(
-		{ isValidedByEvent: z.boolean() },
-		async ({ locals, params: { eventId, memberId }, data }) => {
-			await permission.leader(eventId, locals)
-			await prisma.member.update({ where: { id: memberId }, data })
-			if (data.isValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
-		}
-	),
-	member_contact_update: formAction(
-		modelUserContactUpdate,
-		async ({ locals, params: { eventId, memberId }, data }) => {
-			await permission.leader(eventId, locals)
-			return prisma.member.update({
-				where: { id: memberId },
-				data,
-			})
-		}
-	),
 }

@@ -1,12 +1,10 @@
 <script lang="ts">
 	import type { Event, EventState } from '@prisma/client'
-	import { useForm } from '$lib/fuma-legacy/validation'
 	import { Icon } from '$lib/fuma-legacy'
 	import { EVENT_STATES } from '$lib/constant'
-	import { eventPath } from '$lib/store'
-	import { enhance } from '$app/forms'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { useNotify } from '$lib/notify'
+	import { setEventState } from './event.remote'
 
 	interface Props {
 		event: Event & { owner: { firstName: string } }
@@ -29,9 +27,9 @@
 	const notify = useNotify()
 
 	function handleClickState(e: MouseEvent | KeyboardEvent) {
-		if (!$page.data.userIsRoot && !$page.data.member?.roles.includes('owner')) {
+		if (!page.data.userIsRoot && !page.data.member?.roles.includes('owner')) {
 			e.preventDefault()
-			const owner = `${$page.data.member?.firstName} ${$page.data.member?.lastName}`
+			const owner = `${page.data.member?.firstName} ${page.data.member?.lastName}`
 			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
 		}
 	}
@@ -67,13 +65,8 @@
 	{:else}
 		<div class="flex gap-2 justify-end grow items-center">
 			{#each getNextStates()[event.state] as { state, label } (state)}
-				{@const form = useForm()}
-				<form
-					use:enhance={form.submit}
-					action="{$eventPath}/admin/event?/set_state_event"
-					method="post"
-					class="contents"
-				>
+				<!-- Un `<form>` par transition: `.for()` leur donne à chacun son instance -->
+				<form {...setEventState.for(state)} class="contents">
 					<input type="hidden" name="state" value={state} />
 					<button
 						class="btn btn-sm btn-primary"

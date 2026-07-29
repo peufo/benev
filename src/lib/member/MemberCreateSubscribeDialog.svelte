@@ -2,13 +2,11 @@
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import type { Period } from '@prisma/client'
-	import { enhance } from '$app/forms'
 
 	import { api } from '$lib/api'
 	import { Icon, InputRelation, SelectorList } from '$lib/fuma-legacy'
 	import { Dialog } from 'fuma'
-	import { useForm } from '$lib/fuma-legacy/validation'
-	import { eventPath } from '$lib/store'
+	import { createSubscribe } from '$lib/subscribe/subscribe.remote'
 	import { mdiArrowLeft } from '@mdi/js'
 	import { formatRange } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
@@ -28,12 +26,6 @@
 	let offsetWidth: number = $state()!
 
 	let submitButton: HTMLButtonElement = $state()!
-	const form = useForm({
-		successReset: false,
-		onSuccess() {
-			dialog.close()
-		},
-	})
 
 	async function handleClickReturn() {
 		selectedTeam = null
@@ -93,9 +85,10 @@
 	{:else}
 		<form
 			in:fly={{ x: offsetWidth, duration: 250 }}
-			action="{$eventPath}/subscribes?/subscribe_create"
-			method="post"
-			use:enhance={form.submit}
+			{...createSubscribe.enhance(async ({ submit }) => {
+				await submit()
+				dialog.close()
+			})}
 		>
 			<div class="flex gap-2 items-center">
 				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={handleClickReturn}>

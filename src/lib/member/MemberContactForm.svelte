@@ -1,43 +1,68 @@
 <script lang="ts">
 	import type { MemberProfile } from '$lib/server'
-	import { Form, InputDate, InputText } from '$lib/fuma-legacy'
-	import { modelUserContactUpdate } from '$lib/models'
+	import { InputString } from 'fuma'
+	import { toast } from 'svelte-sonner'
+	import { updateMemberContact as remoteForm } from './memberAdmin.remote'
 
 	interface Props {
 		class?: string
 		member: MemberProfile
+		onsuccess?: () => void
 	}
 
-	let { class: klass = '', member }: Props = $props()
+	let { class: klass = '', member, onsuccess }: Props = $props()
 </script>
 
-<Form
-	action="?/member_contact_update"
-	model={modelUserContactUpdate}
-	simpleAction
+<form
+	{...remoteForm.enhance(async ({ submit }) => {
+		await submit()
+		toast.success('Contact mis à jour')
+		onsuccess?.()
+	})}
 	class="grid grid-cols-2 gap-4 {klass}"
-	{onsuccess}
 >
-	<InputText
-		key="email"
+	<InputString
+		field={remoteForm.fields.email}
 		label="Email"
-		value={member.email}
+		defaultValue={member.email ?? ''}
 		class="col-span-2"
-		input={{ inputmode: 'email' }}
+		inputmode="email"
 	/>
 
-	<InputText key="firstName" label="Prénom" value={member.firstName} />
-	<InputText key="lastName" label="Nom de famille" value={member.lastName} />
+	<InputString field={remoteForm.fields.firstName} label="Prénom" defaultValue={member.firstName} />
+	<InputString
+		field={remoteForm.fields.lastName}
+		label="Nom de famille"
+		defaultValue={member.lastName}
+	/>
 
-	<InputDate key="birthday" label="Date de naissance" value={member.birthday} />
-	<InputText
-		key="phone"
+	<InputString
+		field={remoteForm.fields.birthday}
+		type="date"
+		label="Date de naissance"
+		defaultValue={member.birthday?.toISOString().slice(0, 10) ?? ''}
+	/>
+	<InputString
+		field={remoteForm.fields.phone}
 		label="Téléphone"
-		value={member.phone || ''}
-		input={{ inputmode: 'tel' }}
+		defaultValue={member.phone || ''}
+		inputmode="tel"
 	/>
 
-	<InputText key="street" label="Rue et numéro" value={member.street || ''} class="col-span-2" />
-	<InputText key="zipCode" label="Code postal" value={member.zipCode || ''} />
-	<InputText key="city" label="Localité" value={member.city || ''} />
-</Form>
+	<InputString
+		field={remoteForm.fields.street}
+		label="Rue et numéro"
+		defaultValue={member.street || ''}
+		class="col-span-2"
+	/>
+	<InputString
+		field={remoteForm.fields.zipCode}
+		label="Code postal"
+		defaultValue={member.zipCode || ''}
+	/>
+	<InputString field={remoteForm.fields.city} label="Localité" defaultValue={member.city || ''} />
+
+	<div class="col-span-2 flex flex-row-reverse">
+		<button class="btn btn-primary">Valider</button>
+	</div>
+</form>

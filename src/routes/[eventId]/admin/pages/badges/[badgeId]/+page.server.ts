@@ -1,8 +1,5 @@
-import { modelBadgeUpdate } from '$lib/models'
 import { redirect } from '@sveltejs/kit'
-import { formAction } from '$lib/server/fuma-legacy'
-import { prisma, permission } from '$lib/server'
-import type { FieldType } from '@prisma/client'
+import { prisma } from '$lib/server'
 
 export const load = async ({ params: { badgeId, eventId } }) => {
 	const badge = await prisma.badge.findUnique({
@@ -19,48 +16,4 @@ export const load = async ({ params: { badgeId, eventId } }) => {
 	return {
 		badge,
 	}
-}
-
-export const actions = {
-	badge_update: formAction(
-		modelBadgeUpdate,
-		async ({ data: { backgroundId, logoId, ...data }, locals, params: { eventId, badgeId } }) => {
-			await permission.admin(eventId, locals)
-
-			await Promise.all([
-				checkFieldType(data.typeField.connect?.id, 'select'),
-				checkFieldType(data.accessDaysField.connect?.id, 'multiselect'),
-				checkFieldType(data.accessSectorsField.connect?.id, 'multiselect'),
-				checkFieldType(data.labelField.connect?.id, 'select', 'string'),
-			])
-
-			return prisma.badge.update({
-				where: { id: badgeId, eventId },
-				data: {
-					background: idToConnectionData(backgroundId),
-					logo: idToConnectionData(logoId),
-					...data,
-				},
-			})
-		}
-	),
-	badge_delete: formAction({}, async ({ locals, params: { eventId, badgeId } }) => {
-		await permission.admin(eventId, locals)
-
-		return prisma.badge.delete({
-			where: { id: badgeId },
-		})
-	}),
-}
-
-function idToConnectionData(id?: string | null) {
-	if (!id) return { disconnect: true }
-	return { connect: { id } }
-}
-
-async function checkFieldType(id: string | undefined, ...types: FieldType[]) {
-	if (!id) return
-	const field = await prisma.field.findUniqueOrThrow({ where: { id } })
-	if (!types.includes(field.type))
-		throw new Error(`The "${field.label}" field is not of type ["${types}"]`)
 }

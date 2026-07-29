@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy'
-
 	import { Icon, InputRelation } from '$lib/fuma-legacy'
-	import { USE_COERCE_JSON } from 'fuma'
 	import { mdiMapMarkerOutline } from '@mdi/js'
 
 	type Suggestion = PrismaJson.Location & { id: string; title: string; detail: string }
@@ -89,7 +86,7 @@
 		}
 	)
 
-	run(() => {
+	$effect.pre(() => {
 		value = selected && {
 			label: selected.label,
 			...(selected.coords && { coords: selected.coords }),
@@ -97,7 +94,8 @@
 	})
 </script>
 
-<input type="hidden" name={key} value="{USE_COERCE_JSON}{JSON.stringify(value)}" />
+<!-- La remote function reçoit du JSON en clair: `"null"` signifie « lieu effacé ». -->
+<input type="hidden" name={key} value={JSON.stringify(value)} />
 
 <InputRelation
 	key={searchKey}

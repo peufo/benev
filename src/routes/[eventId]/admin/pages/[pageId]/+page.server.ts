@@ -1,8 +1,5 @@
-import { modelPageUpdate } from '$lib/models'
-import { fail, redirect } from '@sveltejs/kit'
-import { tryOrFail, parseFormData } from '$lib/server/fuma-legacy'
-import { prisma, permission } from '$lib/server'
-import { normalizePath } from '$lib/normalizePath.js'
+import { redirect } from '@sveltejs/kit'
+import { prisma } from '$lib/server'
 
 export const load = async ({ params: { pageId, eventId } }) => {
 	const page = await prisma.page.findUnique({ where: { id: pageId, eventId } })
@@ -11,56 +8,4 @@ export const load = async ({ params: { pageId, eventId } }) => {
 	return {
 		page,
 	}
-}
-
-export const actions = {
-	page_update: async ({ request, locals, params: { eventId } }) => {
-		await permission.admin(eventId, locals)
-
-		return tryOrFail(async () => {
-			const { data } = await parseFormData(request, modelPageUpdate)
-
-			const path = normalizePath(data.title)
-			const reservedPaths = [
-				'admin',
-				'me',
-				'register',
-				'teams',
-				'subscribes',
-				'help',
-				'api',
-				'invite',
-				'members',
-			]
-			if (reservedPaths.includes(path))
-				return fail(400, { message: `Les noms suivant sont réservés: ${reservedPaths.join(', ')}` })
-
-			const samePageTitle = await prisma.page.findFirst({
-				where: { id: { not: data.id }, eventId, path },
-			})
-			if (samePageTitle) return fail(400, { message: 'Ce titre est déjà utilisé' })
-
-			if (data.type === 'charter') {
-				const charterAlreadyExist = await prisma.page.findFirst({
-					where: { id: { not: data.id }, eventId, type: 'charter' },
-				})
-				if (charterAlreadyExist)
-					return fail(400, { message: 'Il existe déjà une charte des bénévoles' })
-			}
-
-			return prisma.page.update({
-				where: { id: data.id },
-				data,
-			})
-		})
-	},
-	page_delete: async ({ locals, params: { eventId, pageId } }) => {
-		await permission.admin(eventId, locals)
-
-		return tryOrFail(() =>
-			prisma.page.delete({
-				where: { id: pageId, eventId, type: { notIn: ['home', 'email'] } },
-			})
-		)
-	},
 }
