@@ -1,94 +1,167 @@
 {
 	"schemaVersion": 2,
-	"generatedAt": "2026-06-11T19:56:06.724Z",
+	"generatedAt": "2026-07-29T00:00:00.000Z",
 	"title": "Design System: benevio",
 	"extensions": {
+		"themeSource": {
+			"file": "src/app.css",
+			"mechanism": "@plugin 'daisyui/theme'",
+			"stack": "Tailwind CSS v4 + DaisyUI v5",
+			"themes": ["light"],
+			"note": "Aucune couleur ne vit hors de ce bloc. Il n'y a ni tailwind.config.mjs, ni postcss.config.cjs, ni theme.extend.colors. Les valeurs ci-dessous en sont une transcription, pas une source."
+		},
 		"colorMeta": {
 			"primary": {
 				"role": "primary",
 				"displayName": "Bleu ardoise profond",
-				"canonical": "oklch(33% 0.08 245)",
-				"tokenRef": "DaisyUI theme primary",
+				"canonical": "oklch(34.7% 0.089 251)",
+				"hex": "#0d3b66",
+				"tokenRef": "--color-primary",
+				"usage": "Titres, boutons principaux, liens actifs, étapes franchies.",
 				"tonalRamp": [
-					"oklch(15% 0.08 245)",
-					"oklch(25% 0.08 245)",
-					"oklch(35% 0.08 245)",
-					"oklch(45% 0.08 245)",
-					"oklch(55% 0.08 245)",
-					"oklch(70% 0.08 245)",
-					"oklch(85% 0.08 245)",
-					"oklch(95% 0.08 245)"
+					"oklch(15% 0.089 251)",
+					"oklch(25% 0.089 251)",
+					"oklch(34.7% 0.089 251)",
+					"oklch(45% 0.089 251)",
+					"oklch(55% 0.089 251)",
+					"oklch(70% 0.089 251)",
+					"oklch(85% 0.089 251)",
+					"oklch(95% 0.089 251)"
+				]
+			},
+			"primary-content": {
+				"role": "neutral",
+				"displayName": "Blanc sur primary",
+				"canonical": "oklch(100% 0 0)",
+				"hex": "#ffffff",
+				"tokenRef": "--color-primary-content",
+				"usage": "Texte sur fond primary. Contraste 11.45:1.",
+				"tonalRamp": [
+					"oklch(15% 0 0)",
+					"oklch(30% 0 0)",
+					"oklch(45% 0 0)",
+					"oklch(60% 0 0)",
+					"oklch(75% 0 0)",
+					"oklch(85% 0 0)",
+					"oklch(95% 0 0)",
+					"oklch(100% 0 0)"
 				]
 			},
 			"secondary": {
 				"role": "secondary",
-				"displayName": "Rose vif",
-				"canonical": "oklch(55% 0.22 5)",
-				"tokenRef": "DaisyUI theme secondary",
-				"tonalRamp": [
-					"oklch(15% 0.22 5)",
-					"oklch(25% 0.22 5)",
-					"oklch(35% 0.22 5)",
-					"oklch(45% 0.22 5)",
-					"oklch(55% 0.22 5)",
-					"oklch(70% 0.22 5)",
-					"oklch(85% 0.22 5)",
-					"oklch(95% 0.22 5)"
-				]
-			},
-			"brand-beige": {
-				"role": "accent",
 				"displayName": "Beige sable",
-				"canonical": "oklch(75% 0.05 75)",
-				"tokenRef": "Tailwind theme.extend.colors.brand.beige",
+				"canonical": "oklch(73.1% 0.044 77)",
+				"hex": "#b8a58a",
+				"tokenRef": "--color-secondary",
+				"usage": "Tonalité de confort: fonds secondary/5–secondary/10, bordures secondary/20, dégradé de page, pastilles, traits. Jamais du texte ni un fond de bouton.",
 				"tonalRamp": [
-					"oklch(15% 0.05 75)",
-					"oklch(25% 0.05 75)",
-					"oklch(35% 0.05 75)",
-					"oklch(45% 0.05 75)",
-					"oklch(55% 0.05 75)",
-					"oklch(70% 0.05 75)",
-					"oklch(85% 0.05 75)",
-					"oklch(95% 0.05 75)"
+					"oklch(15% 0.044 77)",
+					"oklch(25% 0.044 77)",
+					"oklch(35% 0.044 77)",
+					"oklch(45% 0.044 77)",
+					"oklch(55% 0.044 77)",
+					"oklch(73.1% 0.044 77)",
+					"oklch(85% 0.044 77)",
+					"oklch(95% 0.044 77)"
 				]
 			},
-			"brand-beige-dark": {
-				"role": "accent",
-				"displayName": "Beige sable foncé",
-				"canonical": "oklch(70% 0.05 75)",
-				"tokenRef": "Tailwind theme.extend.colors.brand.beige-dark",
-				"tonalRamp": [
-					"oklch(15% 0.05 75)",
-					"oklch(25% 0.05 75)",
-					"oklch(35% 0.05 75)",
-					"oklch(45% 0.05 75)",
-					"oklch(55% 0.05 75)",
-					"oklch(70% 0.05 75)",
-					"oklch(85% 0.05 75)",
-					"oklch(95% 0.05 75)"
-				]
-			},
-			"body": {
+			"secondary-content": {
 				"role": "neutral",
-				"displayName": "Gris ardoise chaud",
-				"canonical": "oklch(32% 0.03 250)",
-				"tokenRef": "DaisyUI base-content",
+				"displayName": "Blanc sur secondary",
+				"canonical": "oklch(100% 0 0)",
+				"hex": "#ffffff",
+				"tokenRef": "--color-secondary-content",
+				"usage": "Texte sur fond secondary. Contraste 2.39:1 — échoue WCAG AA. Ne pas utiliser btn-secondary ni badge-secondary pleins tant que ce token n'a pas été assombri.",
 				"tonalRamp": [
-					"oklch(15% 0.03 250)",
-					"oklch(20% 0.03 250)",
-					"oklch(30% 0.03 250)",
-					"oklch(40% 0.03 250)",
-					"oklch(50% 0.03 250)",
-					"oklch(65% 0.03 250)",
-					"oklch(80% 0.03 250)",
-					"oklch(95% 0.03 250)"
+					"oklch(15% 0 0)",
+					"oklch(30% 0 0)",
+					"oklch(45% 0 0)",
+					"oklch(60% 0 0)",
+					"oklch(75% 0 0)",
+					"oklch(85% 0 0)",
+					"oklch(95% 0 0)",
+					"oklch(100% 0 0)"
 				]
 			},
-			"surface": {
+			"accent": {
+				"role": "accent",
+				"displayName": "Rouge brique",
+				"canonical": "oklch(47.4% 0.166 27)",
+				"hex": "#a52422",
+				"tokenRef": "--color-accent",
+				"usage": "Marqueur de position temporelle dans les plannings (filet bg-accent de 3px, hover:bg-accent/5). Jamais décoratif ailleurs.",
+				"tonalRamp": [
+					"oklch(15% 0.166 27)",
+					"oklch(25% 0.166 27)",
+					"oklch(35% 0.166 27)",
+					"oklch(47.4% 0.166 27)",
+					"oklch(60% 0.166 27)",
+					"oklch(72% 0.166 27)",
+					"oklch(85% 0.166 27)",
+					"oklch(95% 0.166 27)"
+				]
+			},
+			"accent-content": {
+				"role": "neutral",
+				"displayName": "Rose pâle sur accent",
+				"canonical": "oklch(92.5% 0.016 17)",
+				"hex": "#f1e2e2",
+				"tokenRef": "--color-accent-content",
+				"usage": "Texte sur fond accent. Contraste 5.81:1.",
+				"tonalRamp": [
+					"oklch(15% 0.016 17)",
+					"oklch(30% 0.016 17)",
+					"oklch(45% 0.016 17)",
+					"oklch(60% 0.016 17)",
+					"oklch(75% 0.016 17)",
+					"oklch(85% 0.016 17)",
+					"oklch(92.5% 0.016 17)",
+					"oklch(97% 0.016 17)"
+				]
+			},
+			"neutral": {
+				"role": "neutral",
+				"displayName": "Gris ardoise",
+				"canonical": "oklch(32.2% 0.025 256)",
+				"hex": "#2b3440",
+				"tokenRef": "--color-neutral",
+				"usage": "Textes d'aide discrets (label-text-alt).",
+				"tonalRamp": [
+					"oklch(15% 0.025 256)",
+					"oklch(22% 0.025 256)",
+					"oklch(32.2% 0.025 256)",
+					"oklch(42% 0.025 256)",
+					"oklch(52% 0.025 256)",
+					"oklch(66% 0.025 256)",
+					"oklch(80% 0.025 256)",
+					"oklch(95% 0.025 256)"
+				]
+			},
+			"neutral-content": {
+				"role": "neutral",
+				"displayName": "Gris clair sur neutral",
+				"canonical": "oklch(89.5% 0.012 252)",
+				"hex": "#d7dde4",
+				"tokenRef": "--color-neutral-content",
+				"usage": "Texte sur fond neutral. Contraste 9.20:1.",
+				"tonalRamp": [
+					"oklch(15% 0.012 252)",
+					"oklch(30% 0.012 252)",
+					"oklch(45% 0.012 252)",
+					"oklch(60% 0.012 252)",
+					"oklch(75% 0.012 252)",
+					"oklch(85% 0.012 252)",
+					"oklch(89.5% 0.012 252)",
+					"oklch(96% 0.012 252)"
+				]
+			},
+			"base-100": {
 				"role": "neutral",
 				"displayName": "Blanc",
 				"canonical": "oklch(100% 0 0)",
-				"tokenRef": "DaisyUI base-100",
+				"hex": "#ffffff",
+				"tokenRef": "--color-base-100",
+				"usage": "Surfaces: cards, navbar, champs, modales.",
 				"tonalRamp": [
 					"oklch(15% 0 0)",
 					"oklch(30% 0 0)",
@@ -100,27 +173,81 @@
 					"oklch(100% 0 0)"
 				]
 			},
-			"border": {
+			"base-200": {
 				"role": "neutral",
-				"displayName": "Gris clair",
-				"canonical": "oklch(95% 0 0)",
-				"tokenRef": "DaisyUI base-200 / Tailwind border",
+				"displayName": "Gris très clair",
+				"canonical": "oklch(96.1% 0 0)",
+				"hex": "#f2f2f2",
+				"tokenRef": "--color-base-200",
+				"usage": "Fond de hover léger, fond d'application (bg-base-200/20), lignes alternées.",
 				"tonalRamp": [
 					"oklch(15% 0 0)",
 					"oklch(30% 0 0)",
 					"oklch(45% 0 0)",
 					"oklch(60% 0 0)",
 					"oklch(75% 0 0)",
-					"oklch(85% 0 0)",
-					"oklch(95% 0 0)",
+					"oklch(88% 0 0)",
+					"oklch(96.1% 0 0)",
 					"oklch(100% 0 0)"
+				]
+			},
+			"base-300": {
+				"role": "neutral",
+				"displayName": "Gris clair",
+				"canonical": "oklch(92.4% 0.001 197)",
+				"hex": "#e5e6e6",
+				"tokenRef": "--color-base-300",
+				"usage": "État actif (menu-item.active via base-300/80), séparateurs appuyés.",
+				"tonalRamp": [
+					"oklch(15% 0.001 197)",
+					"oklch(30% 0.001 197)",
+					"oklch(45% 0.001 197)",
+					"oklch(60% 0.001 197)",
+					"oklch(75% 0.001 197)",
+					"oklch(85% 0.001 197)",
+					"oklch(92.4% 0.001 197)",
+					"oklch(98% 0.001 197)"
+				]
+			},
+			"base-content": {
+				"role": "neutral",
+				"displayName": "Gris ardoise chaud",
+				"canonical": "oklch(27.8% 0.030 257)",
+				"hex": "#1f2937",
+				"tokenRef": "--color-base-content",
+				"usage": "Texte principal (14.68:1 sur base-100). Atténué jusqu'à /70 (5.54:1) au plus bas; /60 tombe à 4.04:1 et échoue AA. Source des utilitaires border-soft (18%) et border-hard (30%).",
+				"tonalRamp": [
+					"oklch(15% 0.030 257)",
+					"oklch(20% 0.030 257)",
+					"oklch(27.8% 0.030 257)",
+					"oklch(40% 0.030 257)",
+					"oklch(50% 0.030 257)",
+					"oklch(65% 0.030 257)",
+					"oklch(80% 0.030 257)",
+					"oklch(95% 0.030 257)"
 				]
 			}
 		},
+		"stateColors": {
+			"note": "info, success, warning et error ne sont pas redéfinis dans le thème: ils sont hérités des valeurs par défaut de DaisyUI v5 et servent uniquement de signaux d'état (badge-success, badge-warning, --color-error sur les champs invalides).",
+			"tokens": ["info", "success", "warning", "error"]
+		},
+		"borderUtilities": [
+			{
+				"name": "border-soft",
+				"value": "color-mix(in oklab, var(--color-base-content) 18%, #0000)",
+				"purpose": "Bordure par défaut: cards internes, champs, encarts, séparateurs."
+			},
+			{
+				"name": "border-hard",
+				"value": "color-mix(in oklab, var(--color-base-content) 30%, #0000)",
+				"purpose": "Bordure des conteneurs autonomes: card principale, pied de page."
+			}
+		],
 		"typographyMeta": {
 			"display": {
 				"displayName": "Display",
-				"purpose": "Titres de hero, un seul par page."
+				"purpose": "Titre de hero, un seul par page."
 			},
 			"headline": {
 				"displayName": "Headline",
@@ -128,7 +255,7 @@
 			},
 			"title": {
 				"displayName": "Title",
-				"purpose": "Titres de cards, sous-sections, sujets de messages."
+				"purpose": "Titres de cards et de sous-sections. Classe utilitaire .title dans app.css."
 			},
 			"body": {
 				"displayName": "Body",
@@ -141,22 +268,22 @@
 		},
 		"shadows": [
 			{
-				"name": "cta",
+				"name": "surface",
 				"value": "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)",
 				"tokenRef": "Tailwind shadow-lg",
-				"purpose": "Boutons primaires et navbar au repos."
+				"purpose": "Élévation par défaut des cards et de la navbar."
 			},
 			{
-				"name": "cta-hover",
+				"name": "float",
 				"value": "0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)",
 				"tokenRef": "Tailwind shadow-xl",
-				"purpose": "Élévation au hover des CTA."
+				"purpose": "Hover des CTA et surfaces flottantes (dropdowns, modales)."
 			},
 			{
-				"name": "card",
+				"name": "dense",
 				"value": "0 1px 2px 0 rgba(0,0,0,0.05)",
 				"tokenRef": "Tailwind shadow-sm",
-				"purpose": "Détachement subtil des cards."
+				"purpose": "Détachement minimal des éléments denses en liste."
 			}
 		],
 		"motion": [
@@ -169,6 +296,11 @@
 				"name": "ease-out-quart",
 				"value": "cubic-bezier(0.25, 1, 0.5, 1)",
 				"purpose": "Reveals et animations de page quand elles existent."
+			},
+			{
+				"name": "ease-overshoot",
+				"value": "cubic-bezier(0.275, 0.485, 0.515, 1.45)",
+				"purpose": "Bascules d'état des contrôles (case cochée, interrupteur) — 200ms, via fuma."
 			}
 		],
 		"breakpoints": [
@@ -184,41 +316,49 @@
 			"name": "Primary Button",
 			"kind": "button",
 			"refersTo": "button-primary",
-			"description": "Bouton d'action principale DaisyUI (btn btn-primary btn-lg) avec ombre Tailwind au repos et au hover.",
-			"html": "<button class=\"ds-btn-primary\">Organiser mon événement</button>",
-			"css": ".ds-btn-primary { background: #0d3b66; color: #ffffff; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 18px; font-weight: 600; line-height: 1; padding: 0 24px; height: 48px; border: 1px solid #0d3b66; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); cursor: pointer; transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); } .ds-btn-primary:focus-visible { outline: 2px solid #0d3b66; outline-offset: 2px; }"
+			"description": "Action principale et unique d'un écran ou d'un formulaire (btn btn-primary).",
+			"html": "<button class=\"ds-btn-primary\">Se connecter</button>",
+			"css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #0d3b66; color: #ffffff; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; font-weight: 600; line-height: 1; padding: 0 16px; height: 40px; border: 1px solid #0d3b66; border-radius: 8px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { background: #0a2f52; } .ds-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; } .ds-btn-primary:focus-visible { outline: 2px solid #0d3b66; outline-offset: 2px; }"
 		},
 		{
-			"name": "Ghost Button",
+			"name": "Neutral Button",
 			"kind": "button",
 			"refersTo": "button-ghost",
-			"description": "Bouton secondaire transparent DaisyUI (btn btn-ghost text-primary) avec fond au hover.",
-			"html": "<button class=\"ds-btn-ghost\">Comment ça marche</button>",
-			"css": ".ds-btn-ghost { background: transparent; color: #0d3b66; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 18px; font-weight: 600; line-height: 1; padding: 0 24px; height: 48px; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-ghost:hover { background: rgba(13, 59, 102, 0.05); } .ds-btn-ghost:focus-visible { outline: 2px solid #0d3b66; outline-offset: 2px; }"
+			"description": "Toute action qui n'est pas l'action principale (btn par défaut de DaisyUI).",
+			"html": "<button class=\"ds-btn\">Créer un compte</button>",
+			"css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; font-weight: 600; line-height: 1; padding: 0 16px; height: 40px; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 8px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn:hover { background: #f2f2f2; } .ds-btn:focus-visible { outline: 2px solid #0d3b66; outline-offset: 2px; }"
 		},
 		{
 			"name": "Card",
 			"kind": "card",
 			"refersTo": "card",
-			"description": "Conteneur DaisyUI (card bordered border bg-base-100 shadow-lg) avec bordure légère et ombre discrète.",
-			"html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Titre de la card</h3><p class=\"ds-card-body\">Contenu de la card.</p></div>",
-			"css": ".ds-card { background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid #f2f2f2; border-radius: 16px; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); padding: 32px; } .ds-card-title { color: #0d3b66; font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin: 0 0 8px; } .ds-card-body { font-size: 1rem; font-weight: 400; line-height: 1.5; margin: 0; }"
+			"description": "Conteneur autonome de $lib/fuma-legacy (card border border-hard bg-base-100 shadow-lg), corps en p-2 sm:p-8. Ne s'imbrique jamais dans une autre card.",
+			"html": "<div class=\"ds-card\"><h2 class=\"ds-card-title\">Titre de la card</h2><p class=\"ds-card-body\">Contenu de la card.</p></div>",
+			"css": ".ds-card { background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid rgba(31, 41, 55, 0.3); border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); padding: 32px; } .ds-card-title { color: rgba(31, 41, 55, 0.7); font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin: 0 0 8px; } .ds-card-body { font-size: 1rem; font-weight: 400; line-height: 1.5; margin: 0; }"
+		},
+		{
+			"name": "Inset Panel",
+			"kind": "card",
+			"refersTo": "inset-panel",
+			"description": "Bloc secondaire à l'intérieur d'une card (border border-soft rounded-2xl p-5). Remplace la card imbriquée.",
+			"html": "<div class=\"ds-inset\"><h3 class=\"ds-inset-title\">Tu n'organises pas d'événement ?</h3><p class=\"ds-inset-body\">Rends-toi dans l'espace dédié de l'événement.</p></div>",
+			"css": ".ds-inset { background: rgba(184, 165, 138, 0.1); color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 16px; padding: 20px; } .ds-inset-title { color: #0d3b66; font-size: 1rem; font-weight: 600; margin: 0; } .ds-inset-body { color: rgba(31, 41, 55, 0.8); font-size: 0.875rem; line-height: 1.6; margin: 4px 0 0; }"
 		},
 		{
 			"name": "Text Input",
 			"kind": "input",
 			"refersTo": "input",
-			"description": "Champ de saisie DaisyUI (input input-bordered) avec bordure grise et coins arrondis.",
-			"html": "<label class=\"ds-input-label\" for=\"name\">Nom</label><input class=\"ds-input\" id=\"name\" type=\"text\" placeholder=\"Votre nom\" />",
-			"css": ".ds-input-label { display: block; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 0.875rem; font-weight: 500; margin-bottom: 4px; } .ds-input { width: 100%; background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 1rem; font-weight: 400; line-height: 1.5; height: 48px; padding: 0 16px; border: 1px solid rgba(31, 41, 55, 0.2); border-radius: 8px; outline: none; transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-input:focus { border-color: #0d3b66; } .ds-input::placeholder { color: rgba(31, 41, 55, 0.4); }"
+			"description": "Champ fuma InputString en variant=\"block\": libellé au-dessus, dans un fieldset. Variante par défaut des formulaires du produit.",
+			"html": "<label class=\"ds-input-label\" for=\"email\">Email</label><input class=\"ds-input\" id=\"email\" type=\"email\" autocomplete=\"email\" />",
+			"css": ".ds-input-label { display: block; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 0.875rem; font-weight: 500; margin-bottom: 4px; } .ds-input { width: 100%; background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 1rem; font-weight: 400; line-height: 1.5; height: 40px; padding: 0 12px; border: 1px solid rgba(31, 41, 55, 0.2); border-radius: 8px; outline: none; transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-input:focus { border-color: #0d3b66; } .ds-input[aria-invalid='true'] { border-color: #dc2626; } .ds-input::placeholder { color: rgba(31, 41, 55, 0.4); }"
 		},
 		{
-			"name": "Navbar",
+			"name": "Header",
 			"kind": "nav",
 			"refersTo": "navbar",
-			"description": "Barre de navigation DaisyUI (navbar rounded-b-2xl bg-base-100 shadow-lg) avec coins arrondis en bas et ombre fonctionnelle.",
-			"html": "<header class=\"ds-navbar\"><span class=\"ds-navbar-brand\">benevio</span><nav class=\"ds-navbar-nav\"><a href=\"/contact\">Contact</a></nav></header>",
-			"css": ".ds-navbar { display: flex; align-items: center; gap: 16px; background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; padding: 8px; border-radius: 0 0 16px 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); } .ds-navbar-brand { color: #0d3b66; font-size: 1.5rem; font-weight: 800; } .ds-navbar-nav a { color: rgba(31, 41, 55, 0.7); text-decoration: none; font-size: 1rem; font-weight: 500; transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-navbar-nav a:hover { color: #0d3b66; }"
+			"description": "Barre supérieure détachée des bords (px-2 md:px-4) avec coins arrondis en bas, ombre et bordure border-soft.",
+			"html": "<header class=\"ds-header\"><span class=\"ds-header-brand\">benevio</span><nav class=\"ds-header-nav\"><a href=\"/contact\">Contact</a></nav></header>",
+			"css": ".ds-header { display: flex; align-items: center; gap: 16px; background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; padding: 8px; border: 1px solid rgba(31, 41, 55, 0.18); border-top: 0; border-radius: 0 0 12px 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); } .ds-header-brand { color: #0d3b66; font-size: 1.5rem; font-weight: 800; } .ds-header-nav a { color: rgba(31, 41, 55, 0.7); text-decoration: none; font-size: 1rem; font-weight: 500; transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-header-nav a:hover { color: #0d3b66; }"
 		},
 		{
 			"name": "Menu Item",
@@ -226,68 +366,88 @@
 			"refersTo": "menu-item",
 			"description": "Lien de menu avec icône Lucide, fond base-200 au hover et état actif base-300/80.",
 			"html": "<a href=\"/contact\" class=\"ds-menu-item\"><svg class=\"ds-menu-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z\"/></svg><span>Contact</span></a>",
-			"css": ".ds-menu-item { display: flex; align-items: center; gap: 12px; padding: 5px 12px; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 1rem; font-weight: 400; text-decoration: none; border-radius: 6px; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-menu-item:hover { background: rgba(31, 41, 55, 0.1); } .ds-menu-item.active { background: rgba(31, 41, 55, 0.16); } .ds-menu-icon { width: 20px; height: 20px; opacity: 0.7; }"
+			"css": ".ds-menu-item { display: flex; align-items: center; gap: 12px; padding: 5px 12px; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 1rem; font-weight: 400; text-decoration: none; border-radius: 6px; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-menu-item:hover { background: #f2f2f2; } .ds-menu-item.active { background: rgba(229, 230, 230, 0.8); } .ds-menu-icon { width: 20px; height: 20px; opacity: 0.7; }"
 		},
 		{
 			"name": "Trust Band",
 			"kind": "custom",
 			"refersTo": "trust-band",
-			"description": "Bande horizontale de confiance avec fond brand-beige/5 et bordures brand-beige/20.",
+			"description": "Bande horizontale de confiance pleine largeur, fond secondary/5 et bordures secondary/20.",
 			"html": "<div class=\"ds-trust-band\"><span class=\"ds-trust-dot ds-trust-dot--green\"></span><span>Open source</span><span class=\"ds-trust-dot ds-trust-dot--beige\"></span><span>Solide et éprouvé</span><span class=\"ds-trust-dot ds-trust-dot--primary\"></span><span>Simple et flexible</span></div>",
-			"css": ".ds-trust-band { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 24px; background: rgba(199, 177, 152, 0.05); border-top: 1px solid rgba(199, 177, 152, 0.2); border-bottom: 1px solid rgba(199, 177, 152, 0.2); padding: 24px; color: rgba(31, 41, 55, 0.7); font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 0.875rem; font-weight: 400; } .ds-trust-dot { width: 8px; height: 8px; border-radius: 9999px; } .ds-trust-dot--green { background: #22c55e; } .ds-trust-dot--beige { background: #c7b198; } .ds-trust-dot--primary { background: #0d3b66; }"
+			"css": ".ds-trust-band { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 24px; background: rgba(184, 165, 138, 0.05); border-top: 1px solid rgba(184, 165, 138, 0.2); border-bottom: 1px solid rgba(184, 165, 138, 0.2); padding: 24px; color: rgba(31, 41, 55, 0.7); font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 0.875rem; font-weight: 400; } .ds-trust-dot { width: 8px; height: 8px; border-radius: 9999px; } .ds-trust-dot--green { background: #00a96e; } .ds-trust-dot--beige { background: #b8a58a; } .ds-trust-dot--primary { background: #0d3b66; }"
 		}
 	],
 	"narrative": {
 		"northStar": "Le carnet de bord bien tenu",
-		"overview": "benevio est un outil de gestion de bénévoles pensé comme un carnet de bord: clair, structuré, sans fioriture. L'interface ne cherche pas à impressionner par des effets visuels; elle gagne la confiance par l'ordre, la lisibilité et la chaleur discrète. L'atmosphère est franche et utile. On évite le ton corporate, les illustrations 3D stériles, les grilles de cartes identiques et les gradients agressifs. Le thème visuel est configuré dans tailwind.config.mjs via DaisyUI v3: les composants utilisent les classes sémantiques DaisyUI et les utilitaires Tailwind, pas des valeurs en dur.",
+		"overview": "benevio est un outil de gestion de bénévoles pensé comme un carnet de bord: clair, structuré, sans fioriture. L'interface ne cherche pas à impressionner par des effets visuels; elle gagne la confiance par l'ordre, la lisibilité et la chaleur discrète. L'atmosphère est franche et utile. On évite le ton corporate, les illustrations 3D stériles, les grilles de cartes identiques et les gradients agressifs. Le thème visuel est défini dans src/app.css via le bloc @plugin 'daisyui/theme' de Tailwind CSS v4 + DaisyUI v5: les composants utilisent les classes sémantiques DaisyUI et les utilitaires Tailwind adossés aux mêmes tokens, jamais des valeurs en dur.",
 		"keyCharacteristics": [
 			"Une seule police, Barlow, porte toute la hiérarchie par le poids et la taille.",
-			"Le bleu ardoise (DaisyUI primary, #0d3b66) est l'accent principal; il est présent mais jamais étouffant.",
-			"Le beige sable (Tailwind brand-beige, #c7b198) sert de tonalité de confort: fonds subtils, bandes de confiance, hover doux.",
-			"Les surfaces sont planes par défaut; les ombres Tailwind apparaissent seulement sur les éléments interactifs majeurs et la navigation.",
-			"Les coins sont arrondis de manière modérée (8px pour les boutons et champs, 16px pour les cards et la navbar)."
+			"Le bleu ardoise (primary, #0d3b66) est l'accent principal; il est présent mais jamais étouffant.",
+			"Le beige sable (secondary, #b8a58a) est la tonalité de confort: fonds subtils, bordures, dégradé de page, pastilles.",
+			"Le rouge brique (accent, #a52422) est un marqueur fonctionnel rare, réservé au repérage temporel des plannings.",
+			"Les surfaces sont planes par défaut; les ombres apparaissent seulement sur les cards, la navigation et les éléments interactifs majeurs.",
+			"Les coins sont arrondis de manière modérée: 8px pour les boutons et champs, 16px pour les cards et la navbar."
 		],
 		"rules": [
 			{
-				"name": "The DaisyUI-First Rule",
-				"body": "Aucune valeur hex ne doit être écrite en dur dans un composant. On utilise primary, secondary, base-*, brand-beige et leurs variantes d'opacité. Si une couleur n'existe pas dans le thème, on l'y ajoute plutôt que de l'écrire en dur.",
+				"name": "The Theme-Only Rule",
+				"body": "Aucune couleur ne vit en dehors de src/app.css. Pas de hex en dur, pas de palette Tailwind brute (slate, red, emerald), pas d'ajout dans un fichier de config. On utilise primary, secondary, accent, neutral, base-*, les états DaisyUI et leurs variantes d'opacité. S'il manque une couleur, on l'ajoute au bloc @plugin 'daisyui/theme'.",
 				"section": "colors"
 			},
 			{
 				"name": "The One Accent Rule",
-				"body": "Le bleu ardoise (primary) est le seul accent sur la plupart des écrans. Le rose vif (secondary) et le beige sable (brand-beige) ont des rôles fonctionnels précis; ils ne deviennent pas des accents décoratifs.",
+				"body": "Le bleu ardoise (primary) est le seul accent de la plupart des écrans. Le beige (secondary) porte l'atmosphère, jamais l'action. Le rouge brique (accent) est réservé au repérage temporel des plannings; il ne devient pas un accent décoratif ailleurs.",
+				"section": "colors"
+			},
+			{
+				"name": "The Beige-Is-A-Ground Rule",
+				"body": "secondary ne passe jamais au premier plan: pas de btn-secondary plein, pas de badge-secondary plein, pas de text-secondary sur du texte à lire. Son contraste avec secondary-content (#fff) est de 2.39:1, et avec base-100 de 2.39:1 également. Il fonctionne comme fond, bordure, pastille ou trait. badge-secondary badge-outline sur base-100 reste légitime.",
+				"section": "colors"
+			},
+			{
+				"name": "The /70 Floor Rule",
+				"body": "Le texte atténué descend à base-content/70 (5.54:1) au plus bas. base-content/60 tombe à 4.04:1 et échoue AA sur du texte courant; on le réserve aux libellés non essentiels en gras (.title-sm), là où l'information est aussi portée ailleurs.",
 				"section": "colors"
 			},
 			{
 				"name": "The Weight Contrast Rule",
-				"body": "Ne pas créer de tailles intermédiaires plates. Sauter d'au moins un poids (400 → 600 → 800) et d'au moins 1.25× en taille entre deux niveaux de hiérarchie.",
+				"body": "Ne pas créer de tailles intermédiaires plates. Sauter d'au moins un poids (400 → 600 → 700/800) et d'au moins 1.25× en taille entre deux niveaux de hiérarchie.",
 				"section": "typography"
 			},
 			{
 				"name": "The Purposeful Lift Rule",
 				"body": "Une ombre ne justifie sa place que si elle guide l'œil vers une action ou délimite une surface cliquable. Pas d'ombres sur du texte statique ou des conteneurs purement informatifs. On utilise les utilitaires Tailwind (shadow-sm, shadow-lg, shadow-xl) plutôt que des valeurs d'ombre écrites en dur.",
 				"section": "elevation"
+			},
+			{
+				"name": "The No-Nested-Card Rule",
+				"body": "Une card ne contient jamais une autre card. Un composant réutilisable susceptible d'être monté dans une card (Login, les formulaires d'étape de Register) ne fournit pas sa propre surface: il lit le contexte contextContainer de $lib/fuma-legacy et se rend nu quand il est déjà porté.",
+				"section": "elevation"
 			}
 		],
 		"dos": [
-			"Do définir les couleurs dans tailwind.config.mjs via le thème DaisyUI ou theme.extend.colors.",
-			"Do utiliser primary, secondary, base-*, brand-beige et leurs variantes d'opacité dans le code.",
+			"Do définir toute couleur dans le bloc @plugin 'daisyui/theme' de src/app.css.",
+			"Do utiliser primary, secondary, accent, neutral, base-*, les états DaisyUI et leurs variantes d'opacité.",
+			"Do utiliser border-soft / border-hard plutôt que border-base-300 ou une couleur de bordure choisie au cas par cas.",
 			"Do utiliser Barlow pour tout le texte, de l'UI au marketing.",
-			"Do laisser beaucoup d'air autour des sections (py-20 md:py-28) pour respecter le rythme de lecture.",
+			"Do passer variant=\"block\" aux champs fuma dans les formulaires.",
+			"Do laisser beaucoup d'air autour des sections (py-20 md:py-28 en hero, py-12 md:py-20 en contenu).",
 			"Do préférer des icônes Lucide fines et simples aux icônes MDI chargées.",
-			"Do garder les cards blanches avec une bordure base-200 plutôt que des ombres lourdes.",
-			"Do utiliser brand-beige comme fond subtil ou couleur de hover, jamais comme texte principal."
+			"Do utiliser secondary comme fond, bordure ou pastille, jamais comme texte ni comme fond de bouton."
 		],
 		"donts": [
 			"Don't écrire de valeurs hex en dur dans les composants (ex: bg-[#0d3b66]).",
+			"Don't utiliser la palette Tailwind brute (slate, red, emerald…): elle court-circuite le thème.",
 			"Don't écrire de valeurs de rayon, d'ombre ou d'espacement en dur si un token Tailwind ou DaisyUI existe.",
-			"Don't utiliser de gradients flashy ou de « hero metric » (gros chiffre + petit label), comme le rejette PRODUCT.md.",
+			"Don't imbriquer une card dans une card, ni faire porter sa propre surface à un composant montable.",
+			"Don't utiliser btn-secondary plein ni text-secondary sur du texte: 2.39:1, sous le seuil AA.",
+			"Don't descendre le texte atténué sous base-content/70.",
+			"Don't utiliser de gradients flashy ou de « hero metric » (gros chiffre + petit label).",
 			"Don't tomber dans le template startup: pas de grille de cartes identiques icône + titre + texte.",
 			"Don't utiliser d'illustrations 3D stériles ou un ton « transformez votre workflow ».",
 			"Don't éparpiller des emojis partout ou adopter un ton « hey poto »; on reste adulte et décontracté.",
 			"Don't employer de side-stripe borders (bordures verticales colorées de plus de 1px) comme accent sur les listes ou cards.",
-			"Don't utiliser de glassmorphism ou de gradient text à des fins décoratives.",
-			"Don't laisser secondary devenir un accent principal; il est réservé aux erreurs et aux mises en garde."
+			"Don't utiliser de glassmorphism ou de gradient text à des fins décoratives."
 		]
 	}
 }

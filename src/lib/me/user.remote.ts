@@ -52,7 +52,11 @@ export const registerUser = form(z.object(modelUserCreate), async (data) => {
 
 export const loginUser = form(z.object(modelUserLogin), async ({ email, password }) => {
 	const { locals } = getRequestEvent()
-	const user = await auth.useKey('email', email, password)
+	// Lucia distingue clé inconnue et mot de passe faux; l'exposer permettrait d'énumérer les
+	// comptes. Sans ce `catch`, l'erreur remonte en 500 « Internal Error » côté client.
+	const user = await auth.useKey('email', email, password).catch(() => {
+		error(401, 'Invalid credentials')
+	})
 	const session = await auth.createSession({ userId: user.userId, attributes: {} })
 	locals.auth.setSession(session)
 })
@@ -75,7 +79,12 @@ export const sendEmailVerification = form(async () => {
 export const resetPassword = form(
 	z.object({ email: z.string().email().toLowerCase() }),
 	async ({ email }) => {
-		const user = await prisma.user.findUniqueOrThrow({ where: { email }, select: { id: true } })
+		// Adresse inconnue: on ne le dit pas et on ne lève pas non plus. Répondre différemment
+		// selon l'existence du compte permettrait d'énumérer les utilisateurs — et `findUniqueOrThrow`
+		// remontait en 500 chez la personne qui s'est simplement trompée d'adresse.
+		const user = await prisma.user.findUnique({ where: { email }, select: { id: true } })
+		if (!user) return
+
 		const tokenId = await generateToken('passwordReset', user.id)
 		await sendEmailComponent(EmailPasswordReset, {
 			to: email,

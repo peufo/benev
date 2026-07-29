@@ -8,9 +8,7 @@
 	import { Dialog } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'
-	import AvatarForm from '$lib/me/AvatarForm.svelte'
-	import Login from '$lib/me/Login.svelte'
-	import AccountForm from '$lib/me/AccountForm.svelte'
+	import { Login, AvatarForm, AccountForm } from '$lib/me'
 	import type { MemberProfile } from '$lib/server'
 	import { slide } from 'svelte/transition'
 
