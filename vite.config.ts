@@ -13,8 +13,9 @@ export default defineConfig({
 		// chargeur ESM de Node qui le refuse: on le fait traiter par Vite.
 		server: { deps: { inline: ['tippy.js'] } },
 	},
-	server: { fs: { allow: ['media'] }, allowedHosts: ['mac-de-jo.local'] },
+	server: { fs: { allow: ['media', '../fuma'] }, allowedHosts: ['mac-de-jo.local'] },
 	optimizeDeps: {
 		include: ['litepicker'],
+		exclude: ['fuma'],
 	},
 })

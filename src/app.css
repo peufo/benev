@@ -21,6 +21,8 @@
 	--color-base-300: #e5e6e6;
 	--color-base-content: #1f2937;
 }
+/* @source '../node_modules/fuma/dist'; */
+@source '../../fuma/src/lib';
 
 @layer components {
 	.menu-item {
