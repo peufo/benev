@@ -1,26 +1,26 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { Card, Form, FormControl } from '$lib/fuma-legacy'
-	import { USE_COERCE_NUMBER } from 'fuma'
+	import { Card } from '$lib/fuma-legacy'
 	import { toast } from 'svelte-sonner'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { theme } from './store'
 	import { InputMedia } from '$lib/material'
+	import { updateTheme } from './theme.remote'
+
+	// Les valeurs restent pilotées par le store `theme` (aperçu en direct). Les champs
+	// portent maintenant leur `name` en clair: la remote function valide avec zod, sans
+	// le jeton `USE_COERCE_NUMBER` que réclamait `parseFormData`.
 </script>
 
 <OnlyAdmin>
 	<Card class="mx-auto" style="min-width: min(100%, 600px)">
 		<h2 class="title">Thème du site</h2>
-		<Form
-			class="mt-4"
-			action="?/theme_update"
-			simpleAction
-			options={{
-				successReset: false,
-				onSuccess: () => {
-					toast.success('Thème enregistré')
-				},
-			}}
+		<form
+			{...updateTheme.enhance(async ({ submit }) => {
+				await submit()
+				toast.success('Thème enregistré')
+			})}
+			class="mt-4 flex flex-col gap-4"
 		>
 			<div class="flex gap-6">
 				<InputMedia
@@ -29,91 +29,69 @@
 					bind:value={$theme.backgroundImageId}
 				/>
 
-				<FormControl
-					key="backgroundColor"
-					label="Couleur de fond"
-					class={$theme.backgroundImageId ? 'opacity-40' : ''}
-				>
-					{#snippet children({ key })}
-						<input
-							disabled={!!$theme.backgroundImageId}
-							type="color"
-							name={key}
-							id={key}
-							bind:value={$theme.backgroundColor}
-							class="w-32 bg-base-100 px-2 rounded border"
-						/>
-					{/snippet}
-				</FormControl>
+				<label class="flex flex-col gap-1 {$theme.backgroundImageId ? 'opacity-40' : ''}">
+					<span class="label-text">Couleur de fond</span>
+					<input
+						disabled={!!$theme.backgroundImageId}
+						type="color"
+						name="backgroundColor"
+						bind:value={$theme.backgroundColor}
+						class="w-32 bg-base-100 px-2 rounded border"
+					/>
+				</label>
 			</div>
 
-			<FormControl key="cardOpacity" label="Opacité des surfaces" class="grow">
-				{#snippet children({ key })}
-					<input type="hidden" name={key} value="{USE_COERCE_NUMBER}{$theme.cardOpacity}" />
-					<input
-						id={key}
-						type="range"
-						min="0.6"
-						max="1"
-						step="0.001"
-						bind:value={$theme.cardOpacity}
-						class="range range-primary range-sm"
-					/>
-				{/snippet}
-			</FormControl>
+			<label class="flex grow flex-col gap-1">
+				<span class="label-text">Opacité des surfaces</span>
+				<input
+					type="range"
+					name="cardOpacity"
+					min="0.6"
+					max="1"
+					step="0.001"
+					bind:value={$theme.cardOpacity}
+					class="range range-primary range-sm"
+				/>
+			</label>
 
 			{#if $theme.backgroundImageId}
 				<div transition:slide class="flex flex-col gap-4">
-					<FormControl key="backgroundBlur" label="Flou du fond" class="grow">
-						{#snippet children({ key })}
-							<input type="hidden" name={key} value="{USE_COERCE_NUMBER}{$theme.backgroundBlur}" />
-							<input
-								id={key}
-								type="range"
-								min="0"
-								max="200"
-								bind:value={$theme.backgroundBlur}
-								class="range range-primary range-sm"
-							/>
-						{/snippet}
-					</FormControl>
+					<label class="flex grow flex-col gap-1">
+						<span class="label-text">Flou du fond</span>
+						<input
+							type="range"
+							name="backgroundBlur"
+							min="0"
+							max="200"
+							bind:value={$theme.backgroundBlur}
+							class="range range-primary range-sm"
+						/>
+					</label>
 
-					<FormControl key="backgroundBrightness" label="Brillance du fond" class="grow">
-						{#snippet children({ key })}
-							<input
-								type="hidden"
-								name={key}
-								value="{USE_COERCE_NUMBER}{$theme.backgroundBrightness}"
-							/>
-							<input
-								id={key}
-								type="range"
-								min="0"
-								max="300"
-								bind:value={$theme.backgroundBrightness}
-								class="range range-primary range-sm"
-							/>
-						{/snippet}
-					</FormControl>
+					<label class="flex grow flex-col gap-1">
+						<span class="label-text">Brillance du fond</span>
+						<input
+							type="range"
+							name="backgroundBrightness"
+							min="0"
+							max="300"
+							bind:value={$theme.backgroundBrightness}
+							class="range range-primary range-sm"
+						/>
+					</label>
 
-					<FormControl key="backgroundWhiteness" label="Blanchissement du fond" class="grow">
-						{#snippet children({ key })}
-							<input
-								type="hidden"
-								name={key}
-								value="{USE_COERCE_NUMBER}{$theme.backgroundWhiteness}"
-							/>
-							<input
-								id={key}
-								type="range"
-								min="0"
-								max="1"
-								step="0.02"
-								bind:value={$theme.backgroundWhiteness}
-								class="range range-primary range-sm"
-							/>
-						{/snippet}
-					</FormControl>
+					<label class="flex grow flex-col gap-1">
+						<span class="label-text">Blanchissement du fond</span>
+						<input
+							type="range"
+							name="backgroundWhiteness"
+							min="0"
+							max="1"
+							step="0.02"
+							bind:value={$theme.backgroundWhiteness}
+							class="range range-primary range-sm"
+						/>
+					</label>
 					<div>
 						<button
 							type="button"
@@ -129,6 +107,10 @@
 					</div>
 				</div>
 			{/if}
-		</Form>
+
+			<div class="flex justify-end">
+				<button class="btn btn-primary">Valider</button>
+			</div>
+		</form>
 	</Card>
 </OnlyAdmin>

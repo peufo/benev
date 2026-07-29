@@ -1,12 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { enhance } from '$app/forms'
-	import { InputPassword } from '$lib/fuma-legacy'
-	import { useForm } from '$lib/fuma-legacy/validation'
+	import { InputString } from 'fuma'
 
 	import { Oauth } from '$lib/me'
-
-	const form = useForm()
+	import { resetPassword } from './reset_password.remote'
 
 	const redirectTo = page.url.searchParams.get('redirectTo')
 	const newUser = page.url.searchParams.get('newUser')
@@ -14,7 +11,7 @@
 </script>
 
 <div class="card bg-base-100 max-w-md m-auto shadow-lg">
-	<form method="post" class="card-body" use:enhance={form.submit}>
+	<form {...resetPassword} class="card-body">
 		{#if newUser}
 			<h2 class="title mb-4">Salut {newUser}👋</h2>
 			{#if eventName}
@@ -33,7 +30,12 @@
 			<h2 class="title mb-4">Réinitialisation de ton mot de passe</h2>
 		{/if}
 
-		<InputPassword key="password" label="Nouveau mot de passe" autocomplete="new-password" />
+		<InputString
+			field={resetPassword.fields.password}
+			type="password"
+			label="Nouveau mot de passe"
+			autocomplete="new-password"
+		/>
 
 		{#if redirectTo}
 			<input type="hidden" name="redirectTo" value={redirectTo} />

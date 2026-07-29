@@ -9,5 +9,15 @@ export default {
 	// Aucun test du dépôt ne s'appuyait dessus.
 	kit: {
 		adapter: adapter(),
+		// Requis par les remote functions (`form()`/`query()` de `$app/server`), sur
+		// lesquelles reposent les composants d'input de fuma 2.
+		experimental: {
+			remoteFunctions: true,
+		},
+	},
+	compilerOptions: {
+		experimental: {
+			async: true,
+		},
 	},
 }

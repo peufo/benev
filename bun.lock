@@ -30,7 +30,7 @@
         "dayjs": "^1.11.10",
         "debounce": "^1.2.1",
         "devalue": "^4.3.2",
-        "fuma": "^2.1.4",
+        "fuma": "^2.1.5",
         "ical-generator": "^8.1.1",
         "js-confetti": "^0.11.0",
         "litepicker": "^2.0.12",
@@ -696,7 +696,7 @@
 
     "fsevents": ["fsevents@2.3.3", "", { "os": "darwin" }, "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="],
 
-    "fuma": ["fuma@2.1.4", "", { "dependencies": { "@faker-js/faker": "^10.4.0", "@lucide/svelte": "^1.14.0", "dayjs": "^1.11.20", "debounce": "^3.0.0", "devalue": "^5.7.1", "dotenv": "^17.4.2", "fuse.js": "^7.3.0", "litepicker": "^2.0.12", "perod": "^1.4.1", "runed": "^0.37.1", "svelte": "^5.55.5", "svelte-easy-crop": "^5.0.1", "svelte-sonner": "^1.1.1", "tippy.js": "^6.3.7", "zod": "^4.4.1" }, "peerDependencies": { "daisyui": "^5.5.17", "tailwindcss": "^4.1.18" } }, "sha512-a+xH15x2HqtmTL68xqeWsNMDLXu1IR0k4mW52Milz3bdgNv6CU7T6Y12LVfVEvyNo2JMYvOKZjKNz0udQ9+7pg=="],
+    "fuma": ["fuma@2.1.5", "", { "dependencies": { "@faker-js/faker": "^10.4.0", "@lucide/svelte": "^1.14.0", "dayjs": "^1.11.20", "debounce": "^3.0.0", "devalue": "^5.7.1", "dotenv": "^17.4.2", "fuse.js": "^7.3.0", "litepicker": "^2.0.12", "perod": "^1.4.1", "runed": "^0.37.1", "svelte": "^5.55.5", "svelte-easy-crop": "^5.0.1", "svelte-sonner": "^1.1.1", "tippy.js": "^6.3.7", "zod": "^4.4.1" }, "peerDependencies": { "daisyui": "^5.5.17", "tailwindcss": "^4.1.18" } }, "sha512-z3yO3kz8fc0aypTp2v+F9P+tn3MJjPd0K2O7x/f3D6+qGhLKpAZBsJfWIYWK+TamHIjJrryzJ1Db46S17gxfzg=="],
 
     "function-bind": ["function-bind@1.1.2", "", {}, "sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA=="],
 
