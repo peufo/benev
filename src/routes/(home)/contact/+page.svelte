@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiCheck } from '@mdi/js'
-	import { AlertCircle, Clock, HelpCircle, Send } from '@lucide/svelte'
+	import { CircleAlertIcon, ClockIcon, CircleQuestionMarkIcon, SendIcon } from '@lucide/svelte'
 	import { Card, Icon } from '$lib/fuma-legacy'
 	import { InputString, InputTextarea } from 'fuma'
 	import { toast } from 'svelte-sonner'
@@ -37,12 +37,23 @@
 					})}
 					class="flex flex-col gap-4 mt-2"
 				>
-					<InputString field={sendMessage.fields.subject} label="Sujet" />
-					<InputTextarea field={sendMessage.fields.content} label="Ton message" rows={6} />
+					<InputString
+						field={sendMessage.fields.subject}
+						label="Sujet"
+						variant="block"
+						class="w-full"
+					/>
+					<InputTextarea
+						field={sendMessage.fields.content}
+						label="Ton message"
+						rows={6}
+						variant="block"
+						class="w-full"
+					/>
 
 					<div class="flex justify-end">
 						<button class="btn btn-primary gap-2">
-							<Send size={18} />
+							<SendIcon size={18} />
 							Envoyer
 						</button>
 					</div>
@@ -53,7 +64,7 @@
 		<div class="lg:col-span-2 flex flex-col gap-6">
 			<div class="bg-secondary/10 border border-secondary/20 rounded-2xl p-6">
 				<div class="flex items-start gap-3">
-					<AlertCircle size={22} class="text-primary shrink-0 mt-0.5" />
+					<CircleAlertIcon size={22} class="text-primary shrink-0 mt-0.5" />
 					<div>
 						<h3 class="font-semibold text-primary">Tu n'organises pas d'événement ?</h3>
 						<p class="text-sm text-base-content/80 mt-1 leading-relaxed">
@@ -67,13 +78,13 @@
 
 			<div class="flex flex-col gap-4 text-base-content/80 px-1">
 				<div class="flex items-start gap-3">
-					<Clock size={20} class="shrink-0 mt-0.5" />
+					<ClockIcon size={20} class="shrink-0 mt-0.5" />
 					<p class="text-sm leading-relaxed">
 						Réponse sous quelques jours ouvrables, souvent plus vite.
 					</p>
 				</div>
 				<div class="flex items-start gap-3">
-					<HelpCircle size={20} class="shrink-0 mt-0.5" />
+					<CircleQuestionMarkIcon size={20} class="shrink-0 mt-0.5" />
 					<p class="text-sm leading-relaxed">
 						Plus ton message est détaillé, plus notre réponse sera utile.
 					</p>
