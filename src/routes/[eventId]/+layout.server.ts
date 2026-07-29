@@ -15,9 +15,9 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			form_tag: z.string().optional(),
 		})
 
-		const member = await getMemberProfile({
+		const member = user && await getMemberProfile({
 			eventId,
-			OR: [{ userId }, { event: { state: 'draft' }, email: user?.email }],
+			OR: [{ userId }, { event: { state: 'draft' }, email: user.email }],
 		}).catch(() => undefined)
 		const isLeader = member?.roles.includes('leader') || member?.roles.includes('admin')
 
