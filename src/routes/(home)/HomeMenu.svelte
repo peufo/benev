@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Menu } from '@lucide/svelte'
-	import { DropDown } from 'fuma'
+	import { Popover } from 'fuma'
 	import HomeMenuItems from './HomeMenuItems.svelte'
 </script>
 
@@ -8,14 +8,14 @@
 	<HomeMenuItems />
 </div>
 
-<DropDown class="max-h-none min-w-[200px]" hideOnBlur>
-	{#snippet activator()}
-		<button class="btn btn-square ml-2 lg:hidden">
+<Popover class="my-1 min-w-50">
+	{#snippet trigger({ trigger })}
+		<button {...trigger} class="btn btn-square ml-2 lg:hidden">
 			<Menu />
 		</button>
 	{/snippet}
 
-	<div class="flex flex-col gap-1">
+	<div class="menu w-full p-1 gap-1">
 		<HomeMenuItems />
 	</div>
-</DropDown>
+</Popover>

@@ -20,13 +20,13 @@
 	</div>
 
 	<div class="text-left">
-		<a href="/" class="btn btn-sm btn-soft ml-auto">
+		<a href="/" class="btn btn-sm btn-outline ml-auto border-soft">
 			<img src={logo} alt="logo de benev.io" class="h-5 -translate-x-1" />
 			<span>Benevio</span>
 		</a>
-		<span class="text-xs opacity-60"
-			>©2023-{new Date().getFullYear()} Dev Voisard - Switzerland</span
-		>
+		<span class="text-xs opacity-60">
+			©2023-{new Date().getFullYear()} Dev Voisard - Switzerland
+		</span>
 	</div>
 </footer>
 

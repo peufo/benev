@@ -6,7 +6,7 @@
 	let { class: klass = '' }: Props = $props()
 </script>
 
-<span class="logo-text font-medium tracking-wide text-base-content/75 {klass}">benevio</span>
+<span class="font-medium tracking-wide text-base-content/75 {klass}">benevio</span>
 
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500&display=swap');
