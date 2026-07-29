@@ -1,25 +1,19 @@
 @import 'tailwindcss';
-
-/* Tailwind 4: la configuration vit dans le CSS. `tailwind.config.mjs` et
-   `postcss.config.cjs` ont disparu au profit de `@tailwindcss/vite`. */
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui' {
 	logs: false;
 	themes: light --default;
 }
-
-/* Thème daisyUI 5: déclaré via `@plugin 'daisyui/theme'` et non plus dans
-   l'objet `daisyui.themes` de la config JS. */
 @plugin 'daisyui/theme' {
 	name: 'light';
 	default: true;
 	color-scheme: light;
 	--color-primary: #0d3b66;
-	--color-primary-content: #e0d2fe;
-	--color-secondary: #e41e66;
-	--color-secondary-content: #ffd1f4;
-	--color-accent: #1ecebc;
-	--color-accent-content: #07312d;
+	--color-primary-content: #fff;
+	--color-secondary: #b8a58a;
+	--color-secondary-content: #fff;
+	--color-accent: #a52422;
+	--color-accent-content: #f1e2e2;
 	--color-neutral: #2b3440;
 	--color-neutral-content: #d7dde4;
 	--color-base-100: #ffffff;
@@ -28,20 +22,9 @@
 	--color-base-content: #1f2937;
 }
 
-/* `darkMode: 'class'` de la config JS. */
-@custom-variant dark (&:where(.dark, .dark *));
-
-/* `theme.extend` de la config JS. Les requêtes de conteneur sont intégrées à
-   Tailwind 4: le plugin `@tailwindcss/container-queries` a été retiré. */
-@theme {
-	--font-sans: 'Barlow', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-	--color-brand-beige: #c7b198;
-	--color-brand-beige-dark: #b8a58a;
-}
-
 @layer components {
 	.menu-item {
-		@apply flex items-center gap-3 px-3 py-[5px] cursor-pointer hover:bg-base-200 rounded-md whitespace-nowrap text-ellipsis;
+		@apply flex items-center gap-3 px-3 py-1.25 cursor-pointer hover:bg-base-200 rounded-md whitespace-nowrap text-ellipsis;
 	}
 	.menu-item.active {
 		@apply bg-base-300/80;
@@ -62,21 +45,17 @@
 		@apply font-semibold text-base-content/60;
 	}
 
-	.btn-primary {
-		@apply text-white;
-	}
-
-	.btn-primary svg {
-		@apply fill-primary-content;
-	}
-
 	.tiptap .ProseMirror-selectednode {
-		@apply outline outline-2 outline-primary rounded;
+		@apply outline outline-primary rounded;
 	}
+}
 
-	.suggestion {
-		@apply border rounded px-2 mx-1 shadow text-sm !whitespace-nowrap inline-block;
-	}
+.border-soft {
+	border-color: color-mix(in oklab, var(--color-base-content) 18%, #0000);
+}
+
+.border-hard {
+	border-color: color-mix(in oklab, var(--color-base-content) 30%, #0000);
 }
 
 mark {

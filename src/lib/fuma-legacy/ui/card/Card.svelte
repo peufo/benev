@@ -32,7 +32,7 @@
 	contextContainer.set('card')
 </script>
 
-<div class="card bordered border bg-base-100 shadow-lg {klass}" {style}>
+<div class="card border border-hard bg-base-100 shadow-lg {klass}" {style}>
 	{@render top?.()}
 
 	<div class="card-body rounded-b-2xl p-2 sm:p-8 {bodyClass}">

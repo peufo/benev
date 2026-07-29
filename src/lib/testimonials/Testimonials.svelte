@@ -1,19 +1,13 @@
 <script lang="ts">
-	import { mdiOpenInNew } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy'
+	import { ExternalLinkIcon } from '@lucide/svelte'
 	import { testimonials } from './testimonials'
 </script>
 
 <section class="py-20 md:py-28">
 	<div class="max-w-5xl mx-auto px-4 sm:px-6">
-		<div class="mb-16 md:mb-20">
-			<h2 class="text-3xl md:text-4xl font-extrabold text-primary tracking-tight">
-				Ils l'utilisent déjà
-			</h2>
-			<p class="mt-4 text-lg text-base-content/70">
-				Pas de marketing, juste des retours de terrain.
-			</p>
-		</div>
+		<h2 class=" mb-16 md:mb-20 text-3xl md:text-4xl font-extrabold text-primary tracking-tight">
+			Ils l'utilisent déjà
+		</h2>
 
 		<div class="grid gap-8 md:grid-cols-2">
 			{#each testimonials as t (t.name)}
@@ -40,7 +34,7 @@
 								class="inline-flex items-center gap-1 text-sm text-primary hover:underline"
 							>
 								<span>{t.volunteersCount}</span>
-								<Icon path={mdiOpenInNew} size={12} class="opacity-60" />
+								<ExternalLinkIcon size={12} class="opacity-60" />
 							</a>
 						</div>
 					</footer>

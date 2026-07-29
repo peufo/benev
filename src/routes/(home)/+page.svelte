@@ -58,7 +58,7 @@
 				<!-- Logo animé -->
 				<div class="hidden md:flex items-center justify-center relative">
 					<div
-						class="w-72 h-72 rounded-full bg-gradient-to-br from-brand-beige/40 to-primary/10 blur-2xl absolute"
+						class="w-72 h-72 rounded-full bg-gradient-to-br from-secondary/40 to-primary/10 blur-2xl absolute"
 					></div>
 					<div class="relative w-64">
 						<AnimatedLogo />
@@ -69,7 +69,7 @@
 	</section>
 
 	<!-- Trust band -->
-	<section class="border-y border-brand-beige/20 bg-brand-beige/5">
+	<section class="border-y border-secondary/20 bg-secondary/5">
 		<div class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
 			<div class="flex flex-col md:flex-row items-center justify-between gap-4">
 				<div
@@ -80,7 +80,7 @@
 						Open source
 					</a>
 					<span class="flex items-center gap-2">
-						<span class="w-2 h-2 rounded-full bg-brand-beige"></span>
+						<span class="w-2 h-2 rounded-full bg-secondary"></span>
 						Gratuit jusqu'à 50 bénévoles
 					</span>
 					<span class="flex items-center gap-2">

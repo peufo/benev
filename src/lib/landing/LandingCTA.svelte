@@ -22,23 +22,14 @@
 			<div class="flex flex-col items-center gap-4">
 				<a
 					href="/me"
-					class="
-						btn btn-lg bg-brand-beige border-brand-beige text-primary
-						hover:bg-brand-beige-dark hover:border-brand-beige-dark
-						shadow-lg hover:shadow-xl
-						transition-shadow duration-200
-					"
+					class="btn btn-lg btn-secondary"
 				>
 					{user ? 'Voir mes événements' : 'Essayer Benevio'}
 				</a>
 
 				<a
 					href="/open-source"
-					class="
-						btn btn-lg btn-ghost text-white
-						hover:bg-white/10
-						transition-colors duration-200
-					"
+					class="btn btn-lg btn-ghost text-white hover:text-primary"
 				>
 					Contribuer
 				</a>

@@ -73,7 +73,7 @@
 	</ul>
 {:else}
 	<div class="text-center py-20 md:py-28 bg-base-100 border border-base-200 rounded-2xl">
-		<CalendarX2 size={48} class="mx-auto text-brand-beige mb-4" />
+		<CalendarX2 size={48} class="mx-auto text-secondary mb-4" />
 		<h2 class="text-2xl font-bold text-primary">{emptyTitle}</h2>
 		{#if emptyDescription}
 			<p class="mt-2 text-base-content/70 max-w-md mx-auto">{emptyDescription}</p>

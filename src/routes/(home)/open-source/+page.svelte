@@ -17,7 +17,7 @@
 					class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-primary tracking-tight leading-[0.95]"
 				>
 					Le code est libre.
-					<span class="block mt-2 text-base-content/70">L'hébergement est un service.</span>
+					<span class="block mt-2 text-secondary">L'hébergement est un service.</span>
 				</h1>
 				<p class="mt-6 md:mt-8 text-lg md:text-xl text-base-content/70 leading-relaxed max-w-xl">
 					benevio est un logiciel open source sous licence AGPL-3.0. Tu peux l'utiliser, le modifier

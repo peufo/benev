@@ -4,8 +4,8 @@ description: Plateforme de gestion de bénévoles pour associations, festivals e
 colors:
   primary: '#0d3b66'
   secondary: '#e41e66'
-  brand-beige: '#c7b198'
-  brand-beige-dark: '#b8a58a'
+  secondary: '#c7b198'
+  secondary-dark: '#b8a58a'
   body: '#1f2937'
   surface: '#ffffff'
   border: '#f2f2f2'
@@ -80,13 +80,13 @@ benevio est un outil de gestion de bénévoles pensé comme un carnet de bord: c
 
 L'atmosphère est **franche et utile**. On évite le ton corporate (« transformez votre workflow »), les illustrations 3D stériles, les grilles de cartes identiques et les gradients agressifs. On parle à des bénévoles pressés, pas à des chefs d'entreprise. La transparence open source est un atout visuel: le design doit sentir l'outil accessible et le service honnête.
 
-**Source de vérité.** Le thème est configuré dans `tailwind.config.mjs` via **DaisyUI v3**. Les composants utilisent les classes sémantiques de DaisyUI (`btn-primary`, `card`, `input`, `navbar`, `base-100`, `base-content`...) et les tokens Tailwind (`bg-brand-beige`, `text-primary`). Les valeurs hex ci-dessous sont les valeurs canoniques du thème; elles ne doivent pas être recopiées en dur dans les composants.
+**Source de vérité.** Le thème est configuré dans `tailwind.config.mjs` via **DaisyUI v3**. Les composants utilisent les classes sémantiques de DaisyUI (`btn-primary`, `card`, `input`, `navbar`, `base-100`, `base-content`...) et les tokens Tailwind (`bg-secondary`, `text-primary`). Les valeurs hex ci-dessous sont les valeurs canoniques du thème; elles ne doivent pas être recopiées en dur dans les composants.
 
 **Key Characteristics:**
 
 - Une seule police, Barlow, porte toute la hiérarchie par le poids et la taille.
 - Le bleu ardoise (`primary`) est l'accent principal; il est présent mais jamais étouffant.
-- Le beige sable (`brand-beige`) sert de tonalité de confort: fonds subtils, bandes de confiance, hover doux.
+- Le beige sable (`secondary`) sert de tonalité de confort: fonds subtils, bandes de confiance, hover doux.
 - Les surfaces sont planes par défaut; les ombres apparaissent seulement sur les éléments interactifs majeurs et la navigation.
 - Les coins sont arrondis de manière modérée (8px pour les boutons et champs, 16px pour les cards et la navbar).
 
@@ -104,16 +104,11 @@ La palette est volontairement resserrée: un accent froid et stable, une nuance 
 - **`base-content`**: hérité du thème light — texte principal, légèrement atténué via `base-content/70` pour les secondaires.
 - **`primary-content`**: hérité du thème light — texte sur fond `primary` (blanc par défaut).
 
-### Tokens Tailwind personnalisés
-
-- **`brand-beige`**: `#c7b198` — beige sable. Défini dans `theme.extend.colors` de `tailwind.config.mjs`. Utilisé comme accent chaud pour les fonds subtils (`bg-brand-beige/5`), les bandes de confiance et les hover secondaires.
-- **`brand-beige-dark`**: `#b8a58a` — beige sable foncé. Variante plus soutenue du beige, utilisée pour les états hover des boutons sur fond beige (`LandingCTA`).
-
 ### Named Rules
 
-**The DaisyUI-First Rule.** Aucune valeur hex ne doit être écrite en dur dans un composant. On utilise `primary`, `secondary`, `base-*`, `brand-beige` et leurs variantes d'opacité (`/5`, `/10`, `/20`, `/70`). Si une couleur n'existe pas dans le thème, on l'y ajoute plutôt que de l'écrire en dur.
+**The DaisyUI-First Rule.** Aucune valeur hex ne doit être écrite en dur dans un composant. On utilise `primary`, `secondary`, `base-*`, `secondary` et leurs variantes d'opacité (`/5`, `/10`, `/20`, `/70`). Si une couleur n'existe pas dans le thème, on l'y ajoute plutôt que de l'écrire en dur.
 
-**The One Accent Rule.** Le bleu ardoise (`primary`) est le seul accent sur la plupart des écrans. Le rose vif (`secondary`) et le beige sable (`brand-beige`) ont des rôles fonctionnels précis; ils ne deviennent pas des accents décoratifs.
+**The One Accent Rule.** Le bleu ardoise (`primary`) est le seul accent sur la plupart des écrans. Le rose vif (`secondary`) et le beige sable (`secondary`) ont des rôles fonctionnels précis; ils ne deviennent pas des accents décoratifs.
 
 ## 3. Typography
 
@@ -183,19 +178,19 @@ Tous les composants s'appuient sur DaisyUI v3. Les classes utilitaires Tailwind 
 
 ### Signature Component: Trust Band
 
-Bande horizontale avec fond `bg-brand-beige/5` et bordures `border-brand-beige/20`. Elle porte les preuves de confiance (open source, solide, simple) sous forme de petites pastilles colorées. C'est le moment où le design dit « tu peux y aller » sans être tape-à-l'œil.
+Bande horizontale avec fond `bg-secondary/5` et bordures `border-secondary/20`. Elle porte les preuves de confiance (open source, solide, simple) sous forme de petites pastilles colorées. C'est le moment où le design dit « tu peux y aller » sans être tape-à-l'œil.
 
 ## 6. Do's and Don'ts
 
 ### Do:
 
 - **Do** définir les couleurs dans `tailwind.config.mjs` via le thème DaisyUI ou `theme.extend.colors`.
-- **Do** utiliser `primary`, `secondary`, `base-*`, `brand-beige` et leurs variantes d'opacité dans le code.
+- **Do** utiliser `primary`, `secondary`, `base-*`, `secondary` et leurs variantes d'opacité dans le code.
 - **Do** utiliser Barlow pour tout le texte, de l'UI au marketing.
 - **Do** laisser beaucoup d'air autour des sections (`py-20 md:py-28`) pour respecter le rythme de lecture.
 - **Do** préférer des icônes Lucide fines et simples aux icônes MDI chargées.
 - **Do** garder les cards blanches avec une bordure `base-200` plutôt que des ombres lourdes.
-- **Do** utiliser `brand-beige` comme fond subtil ou couleur de hover, jamais comme texte principal.
+- **Do** utiliser `secondary` comme fond subtil ou couleur de hover, jamais comme texte principal.
 
 ### Don't:
 

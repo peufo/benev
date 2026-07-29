@@ -14,7 +14,7 @@
 </script>
 
 <div class="px-2 sm:px-4 {klass}" {style}>
-	<header class="navbar rounded-b-2xl bg-base-100 shadow-lg">
+	<header class="navbar rounded-b-2xl border-soft border-b border-x bg-base-100 shadow-lg">
 		{@render start?.()}
 		<div class="grow"></div>
 		{@render end?.()}

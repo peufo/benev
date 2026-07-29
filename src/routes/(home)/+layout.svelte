@@ -9,7 +9,7 @@
 
 <!-- Background gradient -->
 <div
-	class="absolute inset-0 bg-gradient-to-b from-brand-beige/10 via-brand-beige/5 to-transparent -z-10"
+	class="absolute inset-0 bg-gradient-to-b from-secondary/10 via-secondary/5 to-transparent -z-10"
 ></div>
 
 <Header user={data.user}>
