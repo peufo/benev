@@ -1,4 +1,4 @@
-import { getSubscribes } from './getSubscribes'
+import { getSubscribes } from './getSubscribes.server'
 import { prisma, json } from '$lib/server'
 
 export const GET = async ({ url, params: { eventId } }) => {

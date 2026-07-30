@@ -1,9 +1,8 @@
 <script lang="ts">
-	import type { ComponentType, SvelteComponent } from 'svelte'
-	import { Calendar, IdCard, CircleDollarSign } from '@lucide/svelte'
-	import { derived, type Readable } from 'svelte/store'
-	import { page } from '$app/stores'
-	import { Card } from '$lib/fuma-legacy'
+	import type { Component } from 'svelte'
+	import { Calendar, IdCard, CircleDollarSign, type IconProps } from '@lucide/svelte'
+	import { page } from '$app/state'
+	import { contextContainer } from '$lib/fuma-legacy/ui/context.js'
 	import type { User } from '@prisma/client'
 
 	interface Props {
@@ -13,15 +12,18 @@
 
 	let { user, children }: Props = $props()
 
+	// Les enfants (formulaires, Login…) ne doivent pas remonter leur propre surface.
+	contextContainer.set('card')
+
 	type Tab = {
 		href: string
 		label: string
-		icon: ComponentType<SvelteComponent>
+		icon: Component<IconProps>
 		isActive?: boolean
 	}
 
-	const tabs: Readable<Tab[]> = derived(page, (_page) => {
-		const routeId = _page.route.id
+	const tabs: Tab[] = $derived.by(() => {
+		const routeId = page.route.id
 		const tabs: Tab[] = [
 			{
 				href: '/me/events',
@@ -47,29 +49,30 @@
 	})
 </script>
 
-<Card class="max-w-2xl mx-auto">
-	{#snippet top()}
-		<div
-			class="
-					bordered sticky top-0 z-20 flex gap-2 rounded-t-2xl border-b bg-base-100 p-2 shadow-sm
-				"
-		>
-			{#each $tabs as { href, isActive, label, icon: Icon } (href)}
-				{@const active = isActive ?? $page.url.pathname.startsWith(href)}
-				<a
-					{href}
-					data-sveltekit-noscroll
-					class="
-							menu-item grow flex-col justify-center gap-0 rounded-lg py-2
-							text-sm lg:flex-row lg:gap-3 lg:text-base
-						"
-					class:active
-				>
-					<Icon size={20} class="opacity-70" />
-					<span class="hidden whitespace-nowrap sm:block">{label}</span>
-				</a>
-			{/each}
-		</div>
-	{/snippet}
-	{@render children?.()}
-</Card>
+<div class="card mx-auto max-w-3xl border border-hard bg-base-100 shadow-lg">
+	<nav
+		aria-label="Espace personnel"
+		class={['sticky top-0 flex gap-1 p-1', 'rounded-t-box border-b border-hard bg-base-100']}
+	>
+		{#each tabs as { href, isActive, label, icon: Icon } (href)}
+			{@const _isActive = isActive ?? page.url.pathname.startsWith(href)}
+			<a
+				{href}
+				data-sveltekit-noscroll
+				aria-current={_isActive ? 'page' : undefined}
+				class={[
+					'btn btn-ghost grow',
+					'max-sm:flex-col max-sm:h-12 max-sm:gap-0 max-sm:text-xs max-sm:px-1 max-sm:font-normal',
+					_isActive && 'btn-active',
+				]}
+			>
+				<Icon size={20} class="opacity-70 shrink-0" />
+				<span class="whitespace-nowrap">{label}</span>
+			</a>
+		{/each}
+	</nav>
+
+	<div class="card-body rounded-b-2xl p-3 sm:p-8">
+		{@render children?.()}
+	</div>
+</div>

@@ -4,7 +4,7 @@ import type { Field } from '@prisma/client'
 import { getAge } from '$lib/utils'
 import { MemberCell } from '$lib/member'
 import { formatRange } from '$lib/formatRange'
-import type { MemberWithComputedValue } from './getMembers'
+import type { MemberWithComputedValue } from './getMembers.server'
 import { msToHours } from './msToHours'
 
 export function getMembersTableFields(teams: { id: string; name: string }[], fields: Field[]) {

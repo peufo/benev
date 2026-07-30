@@ -1,4 +1,4 @@
-import { getSubscribes, type Subscribes } from '../getSubscribes'
+import { getSubscribes, type Subscribes } from '../getSubscribes.server'
 import { prisma, permission } from '$lib/server'
 import { z } from '$lib/fuma-legacy'
 import { getCSV } from 'fuma'

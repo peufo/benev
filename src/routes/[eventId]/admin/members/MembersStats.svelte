@@ -2,7 +2,7 @@
 	import type { PageData } from './$types'
 	import { urlParam } from 'fuma'
 	import Distribution from '$lib/Distribution.svelte'
-	import type { MembersProfilDistKey, MembershipDistKey } from './getMembers'
+	import type { MembersProfilDistKey, MembershipDistKey } from './getMembers.server'
 
 	interface Props {
 		data: PageData

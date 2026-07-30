@@ -1,6 +1,6 @@
 import { ensureFieldsWithFilterAreVisibles, parseQuery } from 'fuma/server'
 import { getMemberProfile, prisma } from '$lib/server'
-import { getMembers, membersFilterShape } from './getMembers'
+import { getMembers, membersFilterShape } from './getMembers.server'
 import { z } from '$lib/fuma-legacy/validation'
 
 export const load = async ({ url, parent, params: { eventId } }) => {

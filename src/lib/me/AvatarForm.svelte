@@ -3,7 +3,7 @@
 	import { mdiReload, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/state'
 	import { Icon, InputImage } from '$lib/fuma-legacy'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import Avatar from './Avatar.svelte'
 	import { deleteAvatar, generateAvatar, uploadAvatar } from './user.remote'
 
@@ -14,21 +14,17 @@
 		onsuccess?: () => void
 	}
 
-	let { user, class: klass = '', onsuccess }: Props = $props()
+	// La taille par défaut vit dans la valeur du prop: la fusionner à une taille
+	// passée par le parent créerait un conflit d'utilitaires (h-28 vs h-20).
+	let { user, class: klass = 'h-28 w-28', onsuccess }: Props = $props()
 
 	// Un même `<form>` porte trois remote functions: SvelteKit choisit celle dont l'`action`
 	// correspond au `formaction` du bouton pressé, les autres attachements s'abstiennent.
-	function notify(message: string) {
-		return async ({ submit }: { submit: () => Promise<unknown> }) => {
-			await submit()
-			toast.success(message)
-			onsuccess?.()
-		}
-	}
+	const notify = (success: string) => enhanceForm({ success, onsuccess: () => onsuccess?.() })
 </script>
 
 <form
-	{...uploadAvatar.enhance(notify('Nouvel photo de profil enregistré'))}
+	{...uploadAvatar.enhance(notify('Nouvelle photo de profil enregistrée'))}
 	{...deleteAvatar.enhance(notify('Photo supprimée'))}
 	{...generateAvatar.enhance(notify('Nouvel avatar généré'))}
 	enctype="multipart/form-data"
@@ -39,17 +35,17 @@
 			firstName={user.firstName}
 			avatarId={user.avatarId}
 			avatarPlaceholder={user.avatarPlaceholder}
-			class="h-28 w-28 {klass}"
+			class={klass}
 		/>
 
-		{#snippet actions()}
+		{#snippet actions({ hide })}
 			{#if user.avatarId}
-				<button formaction={deleteAvatar.action} class="menu-item">
+				<button formaction={deleteAvatar.action} class="menu-item" onclick={hide}>
 					<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
 					<span>Supprimer cette photo</span>
 				</button>
 			{:else}
-				<button formaction={generateAvatar.action} class="menu-item">
+				<button formaction={generateAvatar.action} class="menu-item" onclick={hide}>
 					<Icon path={mdiReload} class="opacity-70" size={20} />
 					<span>Générer un autre avatar</span>
 				</button>

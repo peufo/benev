@@ -1,24 +1,12 @@
-import { addMemberComputedValues, prisma, hidePrivateProfilValues } from '$lib/server'
+import { getEventMembers, partitionEventMembers } from './events.server'
 
 export const load = async ({ parent }) => {
 	const { user } = await parent()
+	const { invitations, upcoming, undated, past } = partitionEventMembers(
+		await getEventMembers(user)
+	)
 
-	const members = await prisma.member.findMany({
-		where: { OR: [{ userId: user.id }, { email: user.email }], event: { deletedAt: null } },
-		orderBy: [{ event: { startDate: { sort: 'desc', nulls: 'first' } } }, { createdAt: 'desc' }],
-		include: {
-			user: true,
-			event: { include: { memberFields: true } },
-			leaderOf: true,
-			subscribes: true,
-		},
-	})
-
-	const membersWithRole = members
-		.map(addMemberComputedValues)
-		.map((member) => hidePrivateProfilValues(member))
-
-	return {
-		members: membersWithRole,
-	}
+	// Les évènements terminés vivent sur `/me/events/past`: ici on n'en garde que le
+	// compte, qui sert de libellé au bouton d'accès.
+	return { invitations, upcoming, undated, nbPast: past.length }
 }

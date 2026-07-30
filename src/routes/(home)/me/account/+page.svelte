@@ -5,24 +5,29 @@
 	let { data } = $props()
 </script>
 
-<div class="flex justify-between gap-4">
-	<div class="shrink">
-		<div class="title mt-2">Mon compte</div>
-		<p class="text-xs opacity-70 mt-3 max-w-sm">
+<header class="flex items-center gap-4 sm:gap-6">
+	<AvatarForm user={data.user} class="h-20 w-20 sm:h-24 sm:w-24" />
+	<div class="min-w-0">
+		<h1 class="truncate text-xl font-semibold">
+			{data.user.firstName}
+			{data.user.lastName}
+		</h1>
+		<p class="truncate text-sm text-base-content/70">{data.user.email}</p>
+		<p class="mt-2 max-w-md text-xs text-base-content/70">
 			Tes informations personnelles sont uniquement partagées avec les responsables des évènements
 			auquels tu participes.
 		</p>
 	</div>
-	<div class="shrink-0">
-		<AvatarForm user={data.user} />
-	</div>
-</div>
-<AccountForm user={data.user} />
+</header>
 
-<hr class="my-3" />
-<div class="flex gap-2 flex-wrap justify-end">
+<div class="mt-6">
+	<AccountForm user={data.user} />
+</div>
+
+<hr class="my-6 border-soft" />
+<div class="flex flex-wrap justify-end gap-2">
 	<DeleteUserForm />
 	<form {...logoutUser} class="contents">
-		<button class="btn btn-sm btn-ghost"> Déconnexion </button>
+		<button class="btn btn-ghost btn-sm"> Déconnexion </button>
 	</form>
 </div>

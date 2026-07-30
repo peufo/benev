@@ -3,13 +3,10 @@
 	import { CircleAlertIcon, ClockIcon, CircleQuestionMarkIcon, SendIcon } from '@lucide/svelte'
 	import { Card, Icon } from '$lib/fuma-legacy'
 	import { InputString, InputTextarea } from 'fuma'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { sendMessage } from './contact.remote'
-	import { isHttpError } from '@sveltejs/kit'
 
 	let { data } = $props()
-
-	let isSubmitting = $state(false)
 </script>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
@@ -34,24 +31,13 @@
 				{/snippet}
 
 				<form
-					{...sendMessage.enhance(async ({ submit, fields }) => {
-						isSubmitting = true
-						const id = toast.loading('Envoie...')
-						try {
-							if (await submit()) {
-								toast.success('Merci pour ton message', { id })
-								fields.set({})
-							} else {
-								toast.warning('Formulaire incorrect', { id })
-							}
-						} catch (err) {
-							if (isHttpError(err)) toast.error(err.body.message, { id })
-							console.error(err)
-							toast.error('Une erreur est survenue', { id })
-						} finally {
-							isSubmitting = false
-						}
-					})}
+					{...sendMessage.enhance(
+						enhanceForm({
+							pending: 'Envoie...',
+							success: 'Merci pour ton message',
+							reset: true,
+						})
+					)}
 					class="flex flex-col gap-4 mt-2"
 				>
 					<InputString
@@ -69,7 +55,7 @@
 					/>
 
 					<div class="flex justify-end">
-						<button class="btn btn-primary gap-2" disabled={isSubmitting}>
+						<button class="btn btn-primary gap-2" disabled={sendMessage.pending > 0}>
 							<SendIcon size={18} />
 							Envoyer
 						</button>

@@ -3,21 +3,19 @@
 </script>
 
 <script lang="ts">
-	import { onMount } from 'svelte'
 	import Cropper from 'svelte-easy-crop'
 	import { mdiTrayArrowUp } from '@mdi/js'
 
-	import type { TippyInstance } from 'fuma'
 	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
-	import { DropDown } from 'fuma'
-	import { Dialog } from 'fuma'
+	import { Popover, Dialog } from 'fuma'
 
 	interface Props {
 		aspect?: number
 		title?: string
 		formaction?: string | undefined
 		key?: string
-		actions?: import('svelte').Snippet
+		/** Reçoit `hide` pour fermer le menu depuis un bouton de soumission (formaction). */
+		actions?: import('svelte').Snippet<[{ hide: () => void }]>
 		children?: import('svelte').Snippet
 		/** Remplacent les évènements de la version Svelte 4. */
 		onsubmit?: (value: { crop: Crop; image: string }) => void
@@ -33,7 +31,6 @@
 		onsubmit,
 	}: Props = $props()
 	let dialog: HTMLDialogElement = $state()!
-	let tip: TippyInstance = $state()!
 	let image = $state('')
 	let crop: Crop | undefined = $state(undefined)
 	let inputFile: HTMLInputElement = $state()!
@@ -50,15 +47,7 @@
 	}
 
 	export function close() {
-		tip?.hide()
 		dialog?.close()
-	}
-
-	onMount(() => {
-		if (!actions) tip.disable()
-	})
-	function handleClickActivator() {
-		if (!actions) inputFile.click()
 	}
 
 	function handleValidation() {
@@ -67,32 +56,50 @@
 	}
 </script>
 
-<DropDown tippyProps={{ arrow: true }} hideOnBlur bind:tip>
-	{#snippet activator()}
-		<button
-			type="button"
-			class="block overflow-hidden rounded-lg transition-shadow hover:shadow-lg"
-			onclick={handleClickActivator}
-		>
-			{#if children}{@render children()}{:else}image{/if}
-		</button>
-	{/snippet}
-	{#if actions}
-		<div class="flex flex-col">
+{#snippet preview()}
+	{#if children}{@render children()}{:else}image{/if}
+{/snippet}
+
+<!-- Sans `actions`, il n'y a rien à mettre dans un menu: on ouvre directement le sélecteur de
+     fichier. `DropDown` (tippy) est déprécié au profit de `Popover` (popover natif + anchor
+     positioning), utilisé partout où c'est possible. -->
+{#if actions}
+	<Popover placement="bottom-start">
+		{#snippet trigger(popover)}
 			<button
 				type="button"
-				class="menu-item relative"
-				onclick={() => {
-					inputFile.click()
-				}}
+				class="block overflow-hidden rounded-lg transition-shadow hover:shadow-lg"
+				{...popover.trigger}
 			>
-				<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
-				<span>Charger une image</span>
+				{@render preview()}
 			</button>
-			{@render actions?.()}
-		</div>
-	{/if}
-</DropDown>
+		{/snippet}
+		{#snippet children(popover)}
+			<div class="flex flex-col p-1">
+				<button
+					type="button"
+					class="menu-item relative"
+					onclick={() => {
+						inputFile.click()
+						popover.hide()
+					}}
+				>
+					<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
+					<span>Charger une image</span>
+				</button>
+				{@render actions({ hide: popover.hide })}
+			</div>
+		{/snippet}
+	</Popover>
+{:else}
+	<button
+		type="button"
+		class="block overflow-hidden rounded-lg transition-shadow hover:shadow-lg"
+		onclick={() => inputFile.click()}
+	>
+		{@render preview()}
+	</button>
+{/if}
 
 <Dialog bind:dialog>
 	{#snippet header()}
@@ -102,13 +109,17 @@
 	{/snippet}
 
 	<div class="relative aspect-square overflow-hidden rounded-lg">
-		<Cropper
-			{image}
-			{aspect}
-			showGrid={false}
-			zoomSpeed={0.2}
-			oncropcomplete={(e) => (crop = e.detail.pixels)}
-		/>
+		<!-- Tant qu'aucun fichier n'est choisi, pas de Cropper: monté avec `image=''` il se
+		     plante dans son propre `$effect`, ce qui interrompt l'hydratation de toute la page. -->
+		{#if image}
+			<Cropper
+				{image}
+				{aspect}
+				showGrid={false}
+				zoomSpeed={0.2}
+				oncropcomplete={({ pixels }) => (crop = pixels)}
+			/>
+		{/if}
 	</div>
 	<div class="mt-2 flex justify-end">
 		<input type="hidden" name="{key ? `${key}_` : ''}crop" value={JSON.stringify(crop)} />

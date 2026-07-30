@@ -1,4 +1,4 @@
-import { getMembers, type MemberWithComputedValue } from '../getMembers'
+import { getMembers, type MemberWithComputedValue } from '../getMembers.server'
 import { prisma, permission } from '$lib/server'
 import { getAge } from '$lib/utils'
 import { z } from '$lib/fuma-legacy'

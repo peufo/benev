@@ -1,6 +1,6 @@
 import { ensureFieldsWithFilterAreVisibles } from 'fuma/server'
 import { prisma } from '$lib/server'
-import { getSubscribes, subscribesFilterShape } from './getSubscribes'
+import { getSubscribes, subscribesFilterShape } from './getSubscribes.server'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const { event } = await parent()

@@ -1,4 +1,4 @@
-import { getMembers } from '../getMembers'
+import { getMembers } from '../getMembers.server'
 import { prisma, json, permission } from '$lib/server'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {

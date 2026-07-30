@@ -1,5 +1,6 @@
 import { toast } from 'svelte-sonner'
 
+/** @deprecated use directly svelte-sonner instead */
 export function useNotify() {
 	return {
 		simple: toast.info,

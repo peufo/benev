@@ -112,15 +112,19 @@
 	{/if}
 
 	<div class="relative rounded-lg overflow-hidden aspect-square">
-		{#key aspect}
-			<Cropper
-				{image}
-				aspect={aspect.x / aspect.y}
-				showGrid={false}
-				zoomSpeed={0.2}
-				oncropcomplete={(e) => (crop = e.detail.pixels)}
-			/>
-		{/key}
+		<!-- Tant qu'aucun fichier n'est choisi, pas de Cropper: monté avec `image=''` il se
+		     plante dans son propre `$effect`, ce qui interrompt l'hydratation de toute la page. -->
+		{#if image}
+			{#key aspect}
+				<Cropper
+					{image}
+					aspect={aspect.x / aspect.y}
+					showGrid={false}
+					zoomSpeed={0.2}
+					oncropcomplete={({ pixels }) => (crop = pixels)}
+				/>
+			{/key}
+		{/if}
 	</div>
 	<div class="flex justify-end items-end gap-2 mt-2">
 		<input type="hidden" name="{key ? `${key}_` : ''}crop" value={JSON.stringify(crop)} />

@@ -1,4 +1,4 @@
-import { getMembers, type MemberWithComputedValue } from '../getMembers'
+import { getMembers, type MemberWithComputedValue } from '../getMembers.server'
 import { prisma, permission } from '$lib/server'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {

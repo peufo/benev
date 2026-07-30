@@ -1,87 +1,108 @@
 <script lang="ts">
-	import { page } from '$app/stores'
-	import { mdiCartCheck, mdiCheckCircle, mdiGiftOutline, mdiTagOutline } from '@mdi/js'
-	import { Card, Icon, Placeholder } from '$lib/fuma-legacy'
+	import { page } from '$app/state'
+	import { CircleCheckIcon, GiftIcon, TagIcon } from '@lucide/svelte'
+	import { Placeholder } from '$lib/fuma-legacy'
 
 	import { CheckoutWaitSSE, ProductUseForm } from '$lib/checkout'
 
 	let { data } = $props()
 
-	const checkoutId = $page.url.searchParams.get('checkoutId')
+	let checkoutId = $derived(page.url.searchParams.get('checkoutId'))
+
+	const dayFormater = new Intl.DateTimeFormat('fr-ch', { day: 'numeric', month: 'short' })
+
+	let productsToAssign = $derived(data.checkouts.flatMap((c) => c.products).filter((p) => !p.event))
 </script>
 
-<div class="flex flex-col gap-6">
-	<div class="flex flex-col sm:flex-row sm:items-center gap-4">
-		<h1 class="title">Mes achats</h1>
-	</div>
+<h1 class="sr-only">Mes achats</h1>
 
+<div class="mt-4 flex flex-col gap-4">
 	<CheckoutWaitSSE
 		allreadyLoaded={(checkoutId) => !!data.checkouts.find(({ id }) => id === checkoutId)}
 		eventSource="/me/checkouts/validation"
 	/>
 
-	{#each data.checkouts as checkout (checkout.id)}
-		<Card
-			class={checkout.id === checkoutId ? 'border-2 border-primary' : ''}
-			bodyClass="flex flex-col gap-4"
-		>
-			{#snippet title()}
-				<div class="flex flex-col">
-					<div class="flex items-center gap-2">
-						<Icon path={mdiCartCheck} class="text-primary" />
-						<span class="font-semibold">{checkout.name || 'Achat'}</span>
-					</div>
-					<span class="text-sm opacity-70">{checkout.createdAt.toLocaleDateString()}</span>
-				</div>
-			{/snippet}
+	{#if productsToAssign.length}
+		<p class="rounded-2xl border border-soft bg-secondary/10 p-4 text-sm">
+			<b>{productsToAssign.length}</b>
+			produit{productsToAssign.length > 1 ? 's' : ''} à affecter à un évènement ci-dessous.
+		</p>
+	{/if}
 
-			{#snippet action()}
-				<div class="text-right">
-					<div class="text-lg font-bold">
+	<ul>
+		{#each data.checkouts as checkout (checkout.id)}
+			<li
+				class={[
+					'border-t border-soft px-2 py-3 first:border-t-0 sm:px-3',
+					checkout.id === checkoutId && 'rounded-lg border-t-0 bg-secondary/10',
+				]}
+			>
+				<div class="flex items-center gap-3 sm:gap-4">
+					<!-- Le bord gauche du registre: la date d'achat -->
+					<div class="w-12 shrink-0 text-center sm:w-14">
+						<div class="text-sm leading-tight font-semibold whitespace-nowrap tabular-nums">
+							{dayFormater.format(checkout.createdAt)}
+						</div>
+						<div class="text-xs text-base-content/70 tabular-nums">
+							{checkout.createdAt.getFullYear()}
+						</div>
+					</div>
+
+					<div class="min-w-0 grow">
+						<div class="truncate font-medium">{checkout.name || 'Achat'}</div>
+						{#if !checkout.products.length}
+							<!-- Sans cette ligne, une écriture sans produit n'est qu'un montant nu:
+							     l'utilisateur ne peut pas savoir si quelque chose manque. On ne
+							     déduit rien du montant — un achat à 0 CHF reste un achat. -->
+							<div class="text-sm text-base-content/70">Aucun produit rattaché</div>
+						{/if}
+					</div>
+
+					<div class="shrink-0 font-semibold tabular-nums">
 						{(checkout.amount / 100).toFixed(2)}
 						{checkout.currency?.toUpperCase()}
 					</div>
 				</div>
-			{/snippet}
 
-			<div class="flex flex-col">
-				{#each checkout.products as product, index (product.id)}
-					<div
-						class="flex flex-col sm:flex-row sm:items-center gap-3 py-3"
-						class:border-t={index > 0}
-						class:border-soft={index > 0}
-					>
-						<div class="flex items-center gap-2 min-w-0 grow">
-							<Icon path={mdiTagOutline} class="opacity-60 shrink-0" size={18} />
-							<span>{product.name}</span>
-						</div>
-
-						<div class="flex flex-col sm:items-end sm:w-80">
-							{#if product.event?.deletedAt}
-								<div class="inline-flex items-center gap-1.5 text-sm text-primary">
-									<Icon path={mdiCheckCircle} size={14} />
-									<span>Actif sur un événement supprimé</span>
+				{#if checkout.products.length}
+					<!-- Aligné sur la colonne principale: date (w-12/w-14) + gap (3/4) -->
+					<ul class="mt-1 ml-15 sm:ml-18">
+						{#each checkout.products as product (product.id)}
+							<li
+								class="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-soft py-2 first:border-t-0"
+							>
+								<div class="flex min-w-0 grow items-center gap-2">
+									<TagIcon size={16} class="shrink-0 opacity-60" />
+									<span class="truncate">{product.name}</span>
 								</div>
-							{:else if product.event}
-								<a
-									href="/{product.event.id}"
-									class="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
-								>
-									<Icon path={mdiCheckCircle} size={14} />
-									<span>Actif sur <span class="font-medium">{product.event.name}</span></span>
-								</a>
-							{:else}
-								<ProductUseForm {product} />
-							{/if}
-						</div>
-					</div>
-				{/each}
-			</div>
-		</Card>
-	{:else}
-		<Placeholder class="gap-3">
-			<Icon path={mdiGiftOutline} size={48} class="opacity-40" />
-			<p>Tu n'as fait aucun achat</p>
-		</Placeholder>
-	{/each}
+
+								<div class="flex flex-col sm:w-80 sm:items-end">
+									{#if product.event?.deletedAt}
+										<span class="text-sm text-base-content/70">
+											Affecté à un évènement supprimé
+										</span>
+									{:else if product.event}
+										<a
+											href="/{product.event.id}"
+											class="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+										>
+											<CircleCheckIcon size={14} />
+											<span>Actif sur <span class="font-medium">{product.event.name}</span></span>
+										</a>
+									{:else}
+										<ProductUseForm {product} />
+									{/if}
+								</div>
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			</li>
+		{:else}
+			<Placeholder class="gap-3">
+				<GiftIcon size={48} class="opacity-40" />
+				<p>Tu n'as fait aucun achat</p>
+			</Placeholder>
+		{/each}
+	</ul>
 </div>
