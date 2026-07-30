@@ -70,7 +70,7 @@
 	<InputString
 		field={remoteForm.fields.name}
 		label="Nom du secteur"
-		defaultValue={team.name}
+		value={team.name}
 		class="mt-8"
 	/>
 
@@ -80,7 +80,7 @@
 	<InputTextarea
 		field={remoteForm.fields.description}
 		label="Description"
-		defaultValue={team.description ?? ''}
+		value={team.description ?? ''}
 	/>
 
 	{#if event.selfSubscribeAllowed}
@@ -89,7 +89,7 @@
 				field={remoteForm.fields.closeSubscribing}
 				type="date"
 				label="Fin des inscriptions"
-				defaultValue={team.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
+				value={team.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
 				placeholder={event.closeSubscribing && !team?.closeSubscribing
 					? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
 					: ''}

@@ -47,7 +47,7 @@
 		<InputNumber
 			field={remoteForm.fields.overlapPeriodAllowed}
 			label="Nombre de minutes de chevauchement toléré entre les shifts d'un membre"
-			defaultValue={event.overlapPeriodAllowed}
+			value={event.overlapPeriodAllowed}
 			min={0}
 		/>
 
@@ -57,7 +57,7 @@
 					field={remoteForm.fields.closeSubscribing}
 					type="date"
 					label="Fin des inscriptions par défaut"
-					defaultValue={event.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
+					value={event.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
 				/>
 			</div>
 		{/if}

@@ -67,13 +67,13 @@
 			label="Prénom"
 			field={createInvite.fields.firstName}
 			autocomplete="off"
-			defaultValue={user.firstName}
+			value={user.firstName}
 		/>
 		<InputString
 			label="Nom"
 			field={createInvite.fields.lastName}
 			autocomplete="off"
-			defaultValue={user.lastName}
+			value={user.lastName}
 		/>
 	</div>
 

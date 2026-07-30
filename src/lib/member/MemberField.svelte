@@ -19,8 +19,8 @@
 	// donc `unchecked`, et ses `fields` s'indexent par l'id du champ.
 	const formField = $derived(updateMemberProfile.fields[field.id!])
 
-	// Les composants de fuma 2 n'acceptent pas de valeur initiale via `field`: `defaultValue`
-	// est étalé après `field.as(…)` et sert de repli tant que rien n'a été soumis.
+	// Avec un `field`, les composants de fuma prennent `value` comme valeur initiale: elle
+	// sert de repli tant que le champ n'a rien.
 	const text = $derived(typeof value === 'object' ? '' : String(value))
 
 	let isLeader = $derived(page.data.member?.roles.includes('leader'))
@@ -60,16 +60,11 @@
 		<InputNumber
 			field={formField}
 			label={field.label || field.name}
-			defaultValue={typeof value === 'number' ? value : undefined}
+			value={typeof value === 'number' ? value : undefined}
 			{disabled}
 		/>
 	{:else if field.type === 'textarea'}
-		<InputTextarea
-			field={formField}
-			label={field.label || field.name}
-			defaultValue={text}
-			{disabled}
-		/>
+		<InputTextarea field={formField} label={field.label || field.name} value={text} {disabled} />
 	{:else if field.type === 'select'}
 		<InputRadio field={formField} label={field.label || field.name} options={field.options ?? []} />
 	{:else if field.type === 'multiselect'}
@@ -80,11 +75,6 @@
 			{disabled}
 		/>
 	{:else}
-		<InputString
-			field={formField}
-			label={field.label || field.name}
-			defaultValue={text}
-			{disabled}
-		/>
+		<InputString field={formField} label={field.label || field.name} value={text} {disabled} />
 	{/if}
 </div>

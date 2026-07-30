@@ -12,7 +12,7 @@
 	{/snippet}
 
 	<form {...createCheckout} class="flex flex-col gap-4">
-		<InputString field={createCheckout.fields.name} label="Name" defaultValue="Correction" />
+		<InputString field={createCheckout.fields.name} label="Name" value="Correction" />
 		<InputRelation
 			field={createCheckout.fields.user}
 			searchItems={searchUsers}
@@ -30,17 +30,12 @@
 			{/snippet}
 		</InputRelation>
 		<div class="flex gap-4">
-			<InputNumber
-				field={createCheckout.fields.amount}
-				label="Amount"
-				class="grow"
-				defaultValue={0}
-			/>
+			<InputNumber field={createCheckout.fields.amount} label="Amount" class="grow" value={0} />
 			<InputString
 				field={createCheckout.fields.currency}
 				label="Currency"
 				class="grow"
-				defaultValue="CHF"
+				value="CHF"
 			/>
 		</div>
 

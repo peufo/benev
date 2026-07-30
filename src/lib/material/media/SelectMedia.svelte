@@ -173,7 +173,7 @@
 						label="Description de l'image"
 						class="grow"
 						autocomplete="off"
-						defaultValue={selectedMedia.name}
+						value={selectedMedia.name}
 					/>
 				</div>
 			</form>

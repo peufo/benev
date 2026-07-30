@@ -26,7 +26,7 @@
 	<InputString
 		field={createGift.fields.name}
 		label="Nom de la prestation"
-		defaultValue={gift?.name}
+		value={gift?.name}
 		placeholder="T-Shirt, Boisson, Repas, ..."
 	/>
 	{#if gift?.conditions.length}

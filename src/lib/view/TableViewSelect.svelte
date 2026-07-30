@@ -134,7 +134,7 @@
 		<InputString
 			field={remoteForm.fields.name}
 			label="Nom de la vue"
-			defaultValue={editedView?.name || ''}
+			value={editedView?.name || ''}
 		/>
 
 		<div class="mt-2 flex flex-row-reverse gap-2">

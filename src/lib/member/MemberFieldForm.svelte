@@ -61,16 +61,11 @@
 			class="w-full justify-start mt-4"
 		/>
 
-		<InputString
-			field={remoteForm.fields.name}
-			label="Nom"
-			defaultValue={field.name}
-			autocomplete="off"
-		/>
+		<InputString field={remoteForm.fields.name} label="Nom" value={field.name} autocomplete="off" />
 		<InputString
 			field={remoteForm.fields.label}
 			label="Label"
-			defaultValue={field.label ?? ''}
+			value={field.label ?? ''}
 			autocomplete="off"
 		/>
 

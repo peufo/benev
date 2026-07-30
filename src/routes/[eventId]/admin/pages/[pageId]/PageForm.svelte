@@ -63,7 +63,7 @@
 			label="Titre"
 			class="grow"
 			field={updatePage.fields.title}
-			defaultValue={page.title}
+			value={page.title}
 			oninput={handleChangeImediat}
 		/>
 

@@ -34,7 +34,7 @@
 	<InputString
 		field={remoteForm.fields.name}
 		label="Nom"
-		defaultValue={milestone.name}
+		value={milestone.name}
 		autocomplete="off"
 	/>
 	<InputTzDateTime key="timestamp" label="Date" value={daytz(milestone.timestamp)} />

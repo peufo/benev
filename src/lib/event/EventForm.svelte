@@ -168,7 +168,7 @@
 				<InputTextarea
 					field={remoteForm.fields.description}
 					label="Description"
-					defaultValue={event?.description || ''}
+					value={event?.description || ''}
 					rows={4}
 				/>
 			</div>
@@ -185,12 +185,12 @@
 				<InputString
 					field={remoteForm.fields.email}
 					label="Email de contact"
-					defaultValue={event?.email || ''}
+					value={event?.email || ''}
 				/>
 				<InputString
 					field={remoteForm.fields.phone}
 					label="Téléphone de contact"
-					defaultValue={event?.phone || ''}
+					value={event?.phone || ''}
 				/>
 				<InputLocation key="location" value={event?.location ?? null} />
 				<EventFormInputWeb {event} />
@@ -198,12 +198,12 @@
 				<InputString
 					field={remoteForm.fields.facebook}
 					label="Page Facebook"
-					defaultValue={event?.facebook || ''}
+					value={event?.facebook || ''}
 				/>
 				<InputString
 					field={remoteForm.fields.instagram}
 					label="Page Instagram"
-					defaultValue={event?.instagram || ''}
+					value={event?.instagram || ''}
 				/>
 			</div>
 		</EventFormSection>

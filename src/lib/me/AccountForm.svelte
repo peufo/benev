@@ -92,7 +92,7 @@
 		field={updateAccount.fields.phone}
 		label="Téléphone"
 		variant="block"
-		defaultValue={user.phone || ''}
+		value={user.phone || ''}
 		class="md:col-span-6"
 		inputmode="tel"
 	/>
@@ -101,14 +101,14 @@
 		field={updateAccount.fields.firstName}
 		label="Prénom"
 		variant="block"
-		defaultValue={user.firstName}
+		value={user.firstName}
 		class="md:col-span-4"
 	/>
 	<InputString
 		field={updateAccount.fields.lastName}
 		label="Nom de famille"
 		variant="block"
-		defaultValue={user.lastName}
+		value={user.lastName}
 		class="md:col-span-4"
 	/>
 	<InputString
@@ -116,7 +116,7 @@
 		type="date"
 		label="Date de naissance"
 		variant="block"
-		defaultValue={user.birthday?.toISOString().slice(0, 10) ?? ''}
+		value={user.birthday?.toISOString().slice(0, 10) ?? ''}
 		class="md:col-span-4"
 	/>
 
@@ -124,21 +124,21 @@
 		field={updateAccount.fields.street}
 		label="Rue et numéro"
 		variant="block"
-		defaultValue={user.street || ''}
+		value={user.street || ''}
 		class="md:col-span-4"
 	/>
 	<InputString
 		field={updateAccount.fields.zipCode}
 		label="Code postal"
 		variant="block"
-		defaultValue={user.zipCode || ''}
+		value={user.zipCode || ''}
 		class="md:col-span-4"
 	/>
 	<InputString
 		field={updateAccount.fields.city}
 		label="Localité"
 		variant="block"
-		defaultValue={user.city || ''}
+		value={user.city || ''}
 		class="md:col-span-4"
 	/>
 

@@ -23,7 +23,7 @@
 				<InputNumber
 					field={createCheckout.fields.products[index].quantity}
 					label="Qté"
-					defaultValue={0}
+					value={0}
 					class="w-24"
 				/>
 			</div>

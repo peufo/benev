@@ -48,12 +48,7 @@
 		<input type="hidden" name="id" value={tag.id} />
 	{/if}
 
-	<InputString
-		field={remoteForm.fields.name}
-		label="Nom"
-		defaultValue={tag.name}
-		autocomplete="off"
-	/>
+	<InputString field={remoteForm.fields.name} label="Nom" value={tag.name} autocomplete="off" />
 	<label class="form-control w-full max-w-xs">
 		<div class="label">
 			<span class="label-text">Couleur</span>

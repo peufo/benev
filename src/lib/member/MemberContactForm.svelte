@@ -24,43 +24,35 @@
 	<InputString
 		field={remoteForm.fields.email}
 		label="Email"
-		defaultValue={member.email ?? ''}
+		value={member.email ?? ''}
 		class="col-span-2"
 		inputmode="email"
 	/>
 
-	<InputString field={remoteForm.fields.firstName} label="Prénom" defaultValue={member.firstName} />
-	<InputString
-		field={remoteForm.fields.lastName}
-		label="Nom de famille"
-		defaultValue={member.lastName}
-	/>
+	<InputString field={remoteForm.fields.firstName} label="Prénom" value={member.firstName} />
+	<InputString field={remoteForm.fields.lastName} label="Nom de famille" value={member.lastName} />
 
 	<InputString
 		field={remoteForm.fields.birthday}
 		type="date"
 		label="Date de naissance"
-		defaultValue={member.birthday?.toISOString().slice(0, 10) ?? ''}
+		value={member.birthday?.toISOString().slice(0, 10) ?? ''}
 	/>
 	<InputString
 		field={remoteForm.fields.phone}
 		label="Téléphone"
-		defaultValue={member.phone || ''}
+		value={member.phone || ''}
 		inputmode="tel"
 	/>
 
 	<InputString
 		field={remoteForm.fields.street}
 		label="Rue et numéro"
-		defaultValue={member.street || ''}
+		value={member.street || ''}
 		class="col-span-2"
 	/>
-	<InputString
-		field={remoteForm.fields.zipCode}
-		label="Code postal"
-		defaultValue={member.zipCode || ''}
-	/>
-	<InputString field={remoteForm.fields.city} label="Localité" defaultValue={member.city || ''} />
+	<InputString field={remoteForm.fields.zipCode} label="Code postal" value={member.zipCode || ''} />
+	<InputString field={remoteForm.fields.city} label="Localité" value={member.city || ''} />
 
 	<div class="col-span-2 flex flex-row-reverse">
 		<button class="btn btn-primary">Valider</button>
