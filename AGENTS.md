@@ -190,6 +190,18 @@ Two surfaces coexist during the fuma 1 → 2 migration:
 
 Both are still widely used, so check which one a file already imports before adding to it.
 
+### Known replacements
+
+Whenever you touch a file that still uses the left column, convert it — that is how the migration
+advances. Never introduce a new usage of the left column.
+
+| fuma-legacy (out)                  | fuma 2 / lucide (in)              | Note                                          |
+| ---------------------------------- | --------------------------------- | --------------------------------------------- |
+| `DropDown`, `DropDownMenu` (tippy) | `Popover`                         | Native popover + CSS anchor positioning       |
+| `Icon` + `@mdi/js` paths           | `@lucide/svelte`, `Icon`-suffixed | `<UploadIcon size={20} class="opacity-70" />` |
+
+Still to convert: **~97 files import `@mdi/js`**, **~25 still use `DropDown`**.
+
 ---
 
 ## Build and Development Commands
@@ -292,6 +304,11 @@ All `PUBLIC_*` variables are exposed to the browser. All others are server-only 
 - **Linter**: ESLint v10 in _flat config_ (`eslint.config.js`) with `typescript-eslint`, `eslint-plugin-svelte`, `eslint-config-prettier`.
 - **Imports**: `verbatimModuleSyntax: true`. Always use `import type` for type-only imports.
 - **Language**: UI text and most comments are in **French**. Comments explain _why_, not _what_.
+- **No changelog comments.** A comment must still be true and useful a year from now. Never write what
+  a change replaced, what used to be there, or what is deprecated (`// remplace l'ancien X`,
+  `/** Remplacent les évènements de la version Svelte 4 */`, `// le jeton Y n'a plus cours`).
+  That belongs in the commit message and the report, not in the source. Keep only comments that
+  explain a non-obvious constraint the reader would otherwise trip on.
 
 ### Naming and Patterns
 
@@ -300,6 +317,7 @@ All `PUBLIC_*` variables are exposed to the browser. All others are server-only 
 - Mutations live in `*.remote.ts` next to the feature they serve.
 - API routes (`+server.ts`) return JSON. Client-side consumption in `$lib/api.ts` uses `axios` + `devalue`.
 - fuma 2 components import from `'fuma'`; read-side server helpers from `'fuma/server'`; the vendored fuma 1 surface from `'$lib/fuma-legacy'`.
+- **Icons**: always `@lucide/svelte`, with the `Icon` suffix — `import { CheckIcon, UploadIcon } from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. **Never add a new `@mdi/js` import or a new `Icon` from `$lib/fuma-legacy`**: both are on the way out, and touching a file that still uses them is the moment to convert it.
 
 ---
 

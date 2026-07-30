@@ -4,9 +4,8 @@
 
 <script lang="ts">
 	import Cropper from 'svelte-easy-crop'
-	import { mdiTrayArrowUp } from '@mdi/js'
+	import { UploadIcon } from '@lucide/svelte'
 
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { Popover, Dialog } from 'fuma'
 
 	interface Props {
@@ -17,7 +16,6 @@
 		/** Reçoit `hide` pour fermer le menu depuis un bouton de soumission (formaction). */
 		actions?: import('svelte').Snippet<[{ hide: () => void }]>
 		children?: import('svelte').Snippet
-		/** Remplacent les évènements de la version Svelte 4. */
 		onsubmit?: (value: { crop: Crop; image: string }) => void
 	}
 
@@ -60,9 +58,8 @@
 	{#if children}{@render children()}{:else}image{/if}
 {/snippet}
 
-<!-- Sans `actions`, il n'y a rien à mettre dans un menu: on ouvre directement le sélecteur de
-     fichier. `DropDown` (tippy) est déprécié au profit de `Popover` (popover natif + anchor
-     positioning), utilisé partout où c'est possible. -->
+<!-- Sans `actions`, il n'y a rien à mettre dans un menu: on ouvre directement le sélecteur
+     de fichier. -->
 {#if actions}
 	<Popover placement="bottom-start">
 		{#snippet trigger(popover)}
@@ -84,7 +81,7 @@
 						popover.hide()
 					}}
 				>
-					<Icon path={mdiTrayArrowUp} class="opacity-70" size={20} />
+					<UploadIcon class="opacity-70" size={20} />
 					<span>Charger une image</span>
 				</button>
 				{@render actions({ hide: popover.hide })}
