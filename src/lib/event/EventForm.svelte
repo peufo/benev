@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { InputImagePreview } from '$lib/fuma-legacy'
-	import { InputString, InputTextarea } from 'fuma'
+	import { InputSelectNative, InputString, InputTextarea } from 'fuma'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'
 	import { FORMAT_A3 } from '$lib/constant'
@@ -11,6 +11,7 @@
 	import { InputLocation } from '$lib/location'
 	import EventTierSelector from './EventTierSelector.svelte'
 	import EventFormSection from './EventFormSection.svelte'
+	import { timezoneOptions } from '$lib/timezone'
 	import { createEvent, updateEvent } from './event.remote'
 
 	interface Props {
@@ -25,24 +26,6 @@
 	// `_create` ou `_update` selon la présence d'un id.
 	const remoteForm = $derived(event ? updateEvent : createEvent)
 	let plan = $state(page.url.searchParams.get('plan') || 'basic')
-
-	const timeZones = (() => {
-		try {
-			return Intl.supportedValuesOf('timeZone')
-		} catch {
-			return [
-				'Europe/Zurich',
-				'Europe/Paris',
-				'Europe/Berlin',
-				'America/New_York',
-				'America/Los_Angeles',
-				'Asia/Tokyo',
-				'Asia/Shanghai',
-				'Australia/Sydney',
-				'Pacific/Auckland',
-			]
-		}
-	})()
 
 	// `name` et `id` sont couplés (l'un dérive l'autre): la saisie du nom écrit dans le champ
 	// `id`, dont le remote form est la source de vérité une fois le formulaire monté.
@@ -116,14 +99,12 @@
 					/>
 				</div>
 
-				<label class="form-control w-full">
-					<span class="label-text p-1">Fuseau horaire</span>
-					<select name="timezone" class="select w-full" value={event?.timezone || 'Europe/Zurich'}>
-						{#each timeZones as timezone (timezone)}
-							<option value={timezone}>{timezone}</option>
-						{/each}
-					</select>
-				</label>
+				<InputSelectNative
+					field={remoteForm.fields.timezone}
+					label="Fuseau horaire"
+					options={timezoneOptions(event?.timezone)}
+					value={event?.timezone || 'Europe/Zurich'}
+				/>
 			</div>
 		</EventFormSection>
 
