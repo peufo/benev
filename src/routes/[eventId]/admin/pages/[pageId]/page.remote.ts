@@ -1,6 +1,5 @@
 import { form, getRequestEvent } from '$app/server'
 import { invalid, redirect } from '@sveltejs/kit'
-import z from 'zod'
 import { modelPageUpdate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
@@ -17,7 +16,7 @@ const RESERVED_PATHS = [
 	'members',
 ]
 
-export const updatePage = form(z.object(modelPageUpdate), async (data) => {
+export const updatePage = form(modelPageUpdate, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.admin(eventId, locals)

@@ -1,14 +1,13 @@
 import { error } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import { isFreeRange } from 'perod'
-import z from 'zod'
 import { modelSubscribe } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
 import { periodIsComplet } from '$lib/period/index.js'
 
-export const createSubscribe = form(z.object(modelSubscribe), async (data) => {
+export const createSubscribe = form(modelSubscribe, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	const session = await locals.auth.validate()

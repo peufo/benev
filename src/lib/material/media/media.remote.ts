@@ -4,7 +4,7 @@ import { modelMediaImage } from '$lib/models/media'
 import { media, permission, prisma } from '$lib/server'
 
 export const uploadMedia = form(
-	z.object({ ...modelMediaImage, name: z.string() }),
+	modelMediaImage.extend({ name: z.string() }),
 	async ({ name, image, crop }) => {
 		const { locals, params } = getRequestEvent()
 		const eventId = params.eventId!

@@ -1,12 +1,11 @@
-import { z, type ZodObj } from '$lib/fuma-legacy/validation'
+import z from 'zod'
 import type { Prisma } from '@prisma/client'
 
-export const modelTagCreate = {
+export const modelTagCreate = z.object({
 	name: z.string().min(2),
 	color: z.string(),
-} satisfies ZodObj<Omit<Prisma.TagCreateInput, 'event'>>
+}) satisfies z.ZodType<Omit<Prisma.TagCreateInput, 'event'>>
 
-export const modelTagUpdate = {
-	...modelTagCreate,
+export const modelTagUpdate = modelTagCreate.extend({
 	id: z.string(),
-}
+})

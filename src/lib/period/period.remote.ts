@@ -5,9 +5,7 @@ import { modelPeriodCreate, modelPeriodUpdate, validationPeriod } from '$lib/mod
 import { permission, prisma } from '$lib/server'
 
 export const createPeriod = form(
-	z
-		.object({ ...modelPeriodCreate, redirectTo: z.string().optional() })
-		.superRefine(validationPeriod),
+	modelPeriodCreate.extend({ redirectTo: z.string().optional() }).superRefine(validationPeriod),
 	async ({ redirectTo, ...data }) => {
 		const { locals } = getRequestEvent()
 		await permission.leaderOfTeam(data.team.connect.id, locals)
@@ -21,14 +19,11 @@ export const createPeriod = form(
 	}
 )
 
-export const updatePeriod = form(
-	z.object(modelPeriodUpdate).superRefine(validationPeriod),
-	async (data) => {
-		const { locals } = getRequestEvent()
-		await permission.leaderOfTeam(data.team.connect.id, locals)
-		return prisma.period.update({ where: { id: data.id }, data })
-	}
-)
+export const updatePeriod = form(modelPeriodUpdate.superRefine(validationPeriod), async (data) => {
+	const { locals } = getRequestEvent()
+	await permission.leaderOfTeam(data.team.connect.id, locals)
+	return prisma.period.update({ where: { id: data.id }, data })
+})
 
 export const deletePeriod = form(
 	z.object({ id: z.string(), redirectTo: z.string().optional() }),

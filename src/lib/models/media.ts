@@ -31,17 +31,17 @@ const zCropField = z
 	})
 	.pipe(zCrop.optional())
 
-export const modelMediaImage = {
+export const modelMediaImage = z.object({
 	image: z.instanceof(File).optional(),
 	crop: zCropField,
-}
+})
 
-export const modelEventImages = {
+export const modelEventImages = z.object({
 	poster_image: z.instanceof(File).optional(),
 	poster_crop: zCropField,
 	logo_image: z.instanceof(File).optional(),
 	logo_crop: zCropField,
-}
+})
 
 export type MediaImageInput = { image?: File; crop?: Crop }
 export type EventImagesInput = {

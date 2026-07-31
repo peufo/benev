@@ -20,7 +20,7 @@ import { modelInvite, modelMemberSetting } from '$lib/models'
  * reste renseigné dans tous les cas — SvelteKit rejoue le matching depuis la page appelante.
  */
 
-export const updateMemberSettings = form(z.object(modelMemberSetting), async (data) => {
+export const updateMemberSettings = form(modelMemberSetting, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const member = await permission.member(params.eventId!, locals)
 	return prisma.member.update({ where: { id: member.id }, data })
@@ -100,7 +100,7 @@ function buildModelMemberProfile(fields: Field[], isPartial: boolean) {
 	return model
 }
 
-export const createInvite = form(z.object(modelInvite), async (data) => {
+export const createInvite = form(modelInvite, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	const author = await permission.leader(eventId, locals)

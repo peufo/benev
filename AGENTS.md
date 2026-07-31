@@ -150,10 +150,9 @@ Code is **runes-only**: `$state`, `$derived`, `$props`, `$effect`, snippets (`{#
 ```ts
 // src/lib/me/user.remote.ts
 import { form, getRequestEvent } from '$app/server'
-import z from 'zod'
 import { modelUserLogin } from '$lib/models'
 
-export const loginUser = form(z.object(modelUserLogin), async ({ email, password }) => {
+export const loginUser = form(modelUserLogin, async ({ email, password }) => {
 	/* … */
 })
 ```

@@ -1,4 +1,5 @@
-import { z } from '$lib/fuma-legacy/validation'
+import z from 'zod'
+import { filterBoolean, filterRange } from '$lib/models/filter'
 import { parseQuery } from 'fuma/server'
 import { useAddTeamComputedValues, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
@@ -7,8 +8,8 @@ import type { Period } from '@prisma/client'
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const { search, range, onlyAvailable, teams_order } = parseQuery(url, {
 		search: z.string().nullish(),
-		range: z.filter.range,
-		onlyAvailable: z.filter.boolean,
+		range: filterRange,
+		onlyAvailable: filterBoolean,
 		teams_order: z
 			.string()
 			.nullish()

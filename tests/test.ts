@@ -40,4 +40,8 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		await event.gotoPublic(page)
 		await event.expectLocationInFooter(page)
 	})
+
+	test('Filtres des tables admin', async () => {
+		await event.expectAdminFiltersAccepted(page)
+	})
 })

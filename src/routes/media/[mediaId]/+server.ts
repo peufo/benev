@@ -3,13 +3,13 @@ import fs from 'node:fs/promises'
 import { env } from '$env/dynamic/private'
 import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
-import { z, toTuple } from '$lib/fuma-legacy/validation'
+import { zEnumKeys } from '$lib/models/form'
 import { MEDIA_PRESETS } from '$lib/constant'
 import sharp from 'sharp'
 
 export const GET = async ({ url, params: { mediaId } }) => {
 	const data = parseQuery(url, {
-		size: z.enum(toTuple(MEDIA_PRESETS)).optional(),
+		size: zEnumKeys(MEDIA_PRESETS).optional(),
 	})
 
 	await ensurePngtoWebp(mediaId)

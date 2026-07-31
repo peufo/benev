@@ -1,4 +1,5 @@
-import { z } from '$lib/fuma-legacy/validation'
+import z from 'zod'
+import { zJsonOr } from '$lib/models/form'
 import { parseQuery } from 'fuma/server'
 import type { Event, Prisma } from '@prisma/client'
 import { prisma } from '$lib/server'
@@ -9,7 +10,7 @@ export type PlanData = Awaited<ReturnType<typeof getPlanData>>
 
 export async function getPlanData({ url, event }: { url: URL; event: Event }) {
 	const query = parseQuery(url, {
-		teams: z.jsonArray(z.string()).optional(),
+		teams: zJsonOr(z.array(z.string())).optional(),
 		cursor: z.coerce.date().optional(),
 	})
 

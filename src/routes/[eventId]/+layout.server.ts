@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
-import { z } from '$lib/fuma-legacy/validation'
+import z from 'zod'
 import { getTeam, prisma, getMemberProfile, parseFormKey, getPeriodForm } from '$lib/server'
 import { eventMetaTags } from '$lib/seo'
 

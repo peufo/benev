@@ -1,16 +1,14 @@
 import type { Prisma } from '@prisma/client'
-import type { ShapeOf } from 'fuma'
 import z from 'zod'
 import { zDate } from './form'
 
-export const modelMilestoneCreate = {
+export const modelMilestoneCreate = z.object({
 	name: z.string().min(2),
 	// `InputTzDateTime` transmet une date ISO: la conversion se fait dans le schéma, là où
 	// `parseFormData` la faisait à partir du jeton `USE_COERCE_DATE`.
 	timestamp: zDate,
-} satisfies ShapeOf<Omit<Prisma.MilestoneCreateInput, 'event'>>
+}) satisfies z.ZodType<Omit<Prisma.MilestoneCreateInput, 'event'>>
 
-export const modelMilestoneUpdate = {
-	...modelMilestoneCreate,
+export const modelMilestoneUpdate = modelMilestoneCreate.extend({
 	id: z.string(),
-}
+})

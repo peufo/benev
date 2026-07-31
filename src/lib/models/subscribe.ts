@@ -1,7 +1,7 @@
-import { z, type ZodObj } from '$lib/fuma-legacy/validation'
+import z from 'zod'
 import type { Prisma } from '@prisma/client'
 
-export const modelSubscribe = {
+export const modelSubscribe = z.object({
 	memberId: z.string(),
 	periodId: z.string(),
-} satisfies ZodObj<Prisma.SubscribeUncheckedCreateInput>
+}) satisfies z.ZodType<Prisma.SubscribeUncheckedCreateInput>

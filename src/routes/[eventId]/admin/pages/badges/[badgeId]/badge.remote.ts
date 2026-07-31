@@ -1,34 +1,30 @@
 import type { FieldType } from '@prisma/client'
 import { form, getRequestEvent } from '$app/server'
 import { redirect } from '@sveltejs/kit'
-import z from 'zod'
 import { modelBadgeUpdate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 
-export const updateBadge = form(
-	z.object(modelBadgeUpdate),
-	async ({ backgroundId, logoId, ...data }) => {
-		const { locals, params } = getRequestEvent()
-		const eventId = params.eventId!
-		await permission.admin(eventId, locals)
+export const updateBadge = form(modelBadgeUpdate, async ({ backgroundId, logoId, ...data }) => {
+	const { locals, params } = getRequestEvent()
+	const eventId = params.eventId!
+	await permission.admin(eventId, locals)
 
-		await Promise.all([
-			checkFieldType(connectedId(data.typeField), 'select'),
-			checkFieldType(connectedId(data.accessDaysField), 'multiselect'),
-			checkFieldType(connectedId(data.accessSectorsField), 'multiselect'),
-			checkFieldType(connectedId(data.labelField), 'select', 'string'),
-		])
+	await Promise.all([
+		checkFieldType(connectedId(data.typeField), 'select'),
+		checkFieldType(connectedId(data.accessDaysField), 'multiselect'),
+		checkFieldType(connectedId(data.accessSectorsField), 'multiselect'),
+		checkFieldType(connectedId(data.labelField), 'select', 'string'),
+	])
 
-		return prisma.badge.update({
-			where: { id: params.badgeId!, eventId },
-			data: {
-				background: idToConnectionData(backgroundId),
-				logo: idToConnectionData(logoId),
-				...data,
-			},
-		})
-	}
-)
+	return prisma.badge.update({
+		where: { id: params.badgeId!, eventId },
+		data: {
+			background: idToConnectionData(backgroundId),
+			logo: idToConnectionData(logoId),
+			...data,
+		},
+	})
+})
 
 export const deleteBadge = form(async () => {
 	const { locals, params } = getRequestEvent()

@@ -1,7 +1,7 @@
 import { getMembers, type MemberWithComputedValue } from '../getMembers.server'
 import { prisma, permission } from '$lib/server'
 import { getAge } from '$lib/utils'
-import { z } from '$lib/fuma-legacy'
+import z from 'zod'
 import { getCSV } from 'fuma'
 import { parseQuery } from 'fuma/server'
 import { msToHours } from '../msToHours'

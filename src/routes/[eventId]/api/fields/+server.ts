@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import { parseQuery } from 'fuma/server'
-import { z } from '$lib/fuma-legacy/validation'
+import z from 'zod'
 import { prisma, permission, json } from '$lib/server'
 import type { FieldType } from '@prisma/client'
 

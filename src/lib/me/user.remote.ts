@@ -13,7 +13,7 @@ import { modelUserCreate, modelUserLogin, modelUserUpdate } from '$lib/models'
 import { modelMediaImage } from '$lib/models/media'
 import { EmailPasswordReset, EmailVerificationLink } from '$lib/email'
 
-export const registerUser = form(z.object(modelUserCreate), async (data) => {
+export const registerUser = form(modelUserCreate, async (data) => {
 	const { locals } = getRequestEvent()
 	const attributes = {
 		email: data.email,
@@ -50,7 +50,7 @@ export const registerUser = form(z.object(modelUserCreate), async (data) => {
 	await sendVerificationEmail(session.user, 'Bienvenue')
 })
 
-export const loginUser = form(z.object(modelUserLogin), async ({ email, password }) => {
+export const loginUser = form(modelUserLogin, async ({ email, password }) => {
 	const { locals } = getRequestEvent()
 	// Lucia distingue clé inconnue et mot de passe faux; l'exposer permettrait d'énumérer les
 	// comptes. Sans ce `catch`, l'erreur remonte en 500 « Internal Error » côté client.
@@ -99,7 +99,7 @@ export const resetPassword = form(
  * validation ne peut pas vivre dans le schéma, elle est rejouée ici via `invalid()`.
  */
 export const updateAccount = form(
-	z.object({ ...modelUserUpdate, eventId: z.string().optional() }),
+	modelUserUpdate.extend({ eventId: z.string().optional() }),
 	async ({ eventId, ...data }, issue) => {
 		const { locals } = getRequestEvent()
 		const session = await locals.auth.validate()
@@ -163,7 +163,7 @@ export const deleteAvatar = form(async () => {
 	await prisma.member.updateMany({ where: { userId: user.id }, data: { avatarId: null } })
 })
 
-export const uploadAvatar = form(z.object(modelMediaImage), async (image) => {
+export const uploadAvatar = form(modelMediaImage, async (image) => {
 	const { locals } = getRequestEvent()
 	const session = await locals.auth.validate()
 	if (!session) error(401)

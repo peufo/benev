@@ -1,8 +1,8 @@
-import { z, toTuple, type ZodObj } from '$lib/fuma-legacy/validation'
+import z from 'zod'
 import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
 import { isHttpUrl } from '$lib/url'
-import { zDateNullable } from './form'
+import { zDateNullable, zEnumKeys } from './form'
 
 type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
 export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
@@ -47,7 +47,7 @@ const httpUrl = z
 	.optional()
 	.or(z.string().max(0))
 
-export const modelEventUpdate = {
+export const modelEventUpdate = z.object({
 	id: z.string().toLowerCase().min(3),
 	name: z.string().min(3),
 	description: z.string().optional(),
@@ -60,18 +60,17 @@ export const modelEventUpdate = {
 	// `null` = le lieu a été effacé, `undefined` = champ absent, valeur inchangée
 	location: zLocationField,
 	timezone: z.string().optional(),
-} satisfies ZodObj<FormInput<EventUpdateInput>>
+}) satisfies z.ZodType<FormInput<EventUpdateInput>>
 
-export const modelEventCreate = {
-	...modelEventUpdate,
+export const modelEventCreate = modelEventUpdate.extend({
 	tier: z.enum(['basic', 'standard', 'premium', 'pro']),
-} satisfies ZodObj<FormInput<EventCreateInput>>
+}) satisfies z.ZodType<FormInput<EventCreateInput>>
 
-export const modelEventState = {
-	state: z.enum(toTuple(EVENT_STATES)).optional(),
-} satisfies ZodObj<EventUpdateInput>
+export const modelEventState = z.object({
+	state: zEnumKeys(EVENT_STATES).optional(),
+}) satisfies z.ZodType<EventUpdateInput>
 
-export const modelEventSettings = {
+export const modelEventSettings = z.object({
 	// Ces cases sont toutes rendues: leur absence signifie bien « décochée ».
 	selfRegisterAllowed: z.boolean().default(false),
 	selfSubscribeAllowed: z.boolean().default(false),
@@ -84,7 +83,7 @@ export const modelEventSettings = {
 	userBirthdayRequired: z.boolean().default(false),
 	userAvatarRequired: z.boolean().default(false),
 	overlapPeriodAllowed: z.number(),
-} satisfies ZodObj<EventUpdateInput>
+}) satisfies z.ZodType<EventUpdateInput>
 
 export type EventTheme = Pick<
 	EventCreateInput,

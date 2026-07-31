@@ -1,4 +1,4 @@
-import { z } from '$lib/fuma-legacy/validation'
+import z from 'zod'
 import { parseQuery } from 'fuma/server'
 import { json, permission, prisma } from '$lib/server'
 

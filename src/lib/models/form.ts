@@ -1,12 +1,32 @@
+import { zodCoerceJson } from 'fuma'
 import z from 'zod'
 
 /**
- * Conversions récurrentes entre ce qu'un formulaire transmet et ce que Prisma attend.
+ * Helpers zod partagés: conversions entre ce qu'un formulaire (ou une URL) transmet et ce que
+ * Prisma attend.
  *
  * `form()` contraint l'ENTRÉE du schéma à `RemoteFormInput` — chaîne, nombre, booléen, `File`,
- * ou objet/tableau de ceux-ci. Tout ce qui suit part donc d'une chaîne (ou d'un tableau de
- * chaînes) et produit la forme métier. Voir l'en-tête de `$lib/models` pour la démarche.
+ * ou objet/tableau de ceux-ci. La plupart de ce qui suit part donc d'une chaîne (ou d'un tableau
+ * de chaînes) et produit la forme métier. Voir l'en-tête de `$lib/models` pour la démarche.
  */
+
+/**
+ * `z.enum` sur les **clés** d'un registre applicatif. `z.enum(RECORD)` ne conviendrait pas: zod
+ * lit les valeurs, or nos registres associent la clé à un descriptif (`{ label, icon }`) ou à un
+ * libellé français. Le retour reste littéral, donc `z.infer` donne bien l'union des clés.
+ */
+export function zEnumKeys<Registry extends Record<string, unknown>>(registry: Registry) {
+	type Key = keyof Registry & string
+	return z.enum(Object.keys(registry) as [Key, ...Key[]])
+}
+
+/**
+ * Une valeur qui arrive soit déjà désérialisée, soit en JSON sérialisé — le cas d'un paramètre
+ * d'URL ou d'un corps de requête où le même champ peut prendre les deux formes.
+ */
+export function zJsonOr<Schema extends z.ZodType>(schema: Schema) {
+	return z.union([schema, zodCoerceJson.pipe(schema)])
+}
 
 /**
  * Champ numérique **brut**, c'est-à-dire un `<input type="number">` écrit à la main plutôt que

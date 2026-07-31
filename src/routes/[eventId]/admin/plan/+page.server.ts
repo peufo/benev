@@ -1,6 +1,6 @@
 import { parseFormKey, prisma, getPlanData } from '$lib/server'
 import { parseQuery } from 'fuma/server'
-import { z } from '$lib/fuma-legacy/validation'
+import z from 'zod'
 
 export const load = async ({ url, params: { eventId }, parent }) => {
 	const { event } = await parent()

@@ -1,11 +1,15 @@
 /**
  * ## Modèles zod et remote functions
  *
- * Ces modèles sont réécrits **en place** pour être compatibles `form()`, plutôt que dédoublés
- * en « schéma formulaire + schéma métier ». Raison: 15 des 17 modèles n'existent que pour valider
- * une soumission de formulaire — les deux exceptions (`modelMemberCondition`, `modelImportOptions`)
- * parsent un corps JSON dans un `+server.ts` et restent inchangées. Dédoubler reviendrait à tenir
- * deux fois les mêmes règles métier (longueurs minimales, email, url) pour qu'elles divergent.
+ * Ces modèles sont écrits **en place** pour être compatibles `form()`, plutôt que dédoublés
+ * en « schéma formulaire + schéma métier »: la quasi-totalité n'existe que pour valider une
+ * soumission de formulaire, et dédoubler reviendrait à tenir deux fois les mêmes règles métier
+ * (longueurs minimales, email, url) pour qu'elles divergent.
+ *
+ * Chacun est un `z.object()` annoté `satisfies z.ZodType<Prisma.XInput>`, qui confronte la
+ * **sortie** du schéma au type Prisma correspondant. Un `satisfies` sur la forme brute ne le
+ * permettait pas: il ne sait pas décrire la sortie d'un `transform`, or `zConnect`, `zDate` et
+ * `zJson` en sont. Se passer de l'annotation laisserait un champ mal typé filer jusqu'à Prisma.
  *
  * La contrainte de `form()` porte sur l'**entrée** du schéma, qui doit être un `RemoteFormInput`:
  * chaîne, nombre, booléen, `File`, ou objet/tableau de ceux-ci — jamais `null`, jamais `unknown`.

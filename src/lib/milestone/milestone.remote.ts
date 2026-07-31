@@ -3,14 +3,14 @@ import z from 'zod'
 import { modelMilestoneCreate, modelMilestoneUpdate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 
-export const createMilestone = form(z.object(modelMilestoneCreate), async (data) => {
+export const createMilestone = form(modelMilestoneCreate, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.leader(eventId, locals)
 	return prisma.milestone.create({ data: { ...data, eventId } })
 })
 
-export const updateMilestone = form(z.object(modelMilestoneUpdate), async (data) => {
+export const updateMilestone = form(modelMilestoneUpdate, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.leader(eventId, locals)

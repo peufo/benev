@@ -1,4 +1,5 @@
-import { z, type ZodObj } from '$lib/fuma-legacy/validation'
+import z from 'zod'
+import { filterBoolean, filterMultiselect, filterNumber, filterRange } from '$lib/models/filter'
 import { parseQuery } from 'fuma/server'
 import dayjs from '$lib/dayjs'
 import type {
@@ -18,20 +19,20 @@ export type MemberWithComputedValue = Awaited<ReturnType<typeof getMembers>>['me
 export const membersFilterShape = {
 	memberId: z.string().optional(),
 	search: z.string().optional(),
-	createdAt: z.filter.range,
-	subscribes_count_accepted: z.filter.number,
-	subscribes_count_request: z.filter.number,
-	subscribes_teams: z.filter.multiselect,
-	subscribes_range: z.filter.range,
-	subscribes_hours: z.filter.number,
-	leaderOf: z.filter.multiselect,
-	age: z.filter.number,
-	isProfileComplet: z.filter.boolean,
-	isValidedByEvent: z.filter.boolean,
-	isValidedByUser: z.filter.boolean,
-	isAbsent: z.filter.boolean,
+	createdAt: filterRange,
+	subscribes_count_accepted: filterNumber,
+	subscribes_count_request: filterNumber,
+	subscribes_teams: filterMultiselect,
+	subscribes_range: filterRange,
+	subscribes_hours: filterNumber,
+	leaderOf: filterMultiselect,
+	age: filterNumber,
+	isProfileComplet: filterBoolean,
+	isValidedByEvent: filterBoolean,
+	isValidedByUser: filterBoolean,
+	isAbsent: filterBoolean,
 	role: z.enum(['member', 'leader', 'admin']).optional(),
-} satisfies ZodObj
+}
 
 export const getMembers = async (event: Event & { memberFields: Field[] }, url: URL) => {
 	const eventId = event.id
@@ -40,7 +41,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		...membersFilterShape,
 		skip: z.coerce.number().default(0),
 		take: z.coerce.number().default(20),
-		all: z.filter.boolean,
+		all: filterBoolean,
 	})
 
 	const where: Prisma.MemberWhereInput[] = []
@@ -134,12 +135,12 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 		textarea: (query) => ({ string_contains: query }),
 		select: (query) => ({ equals: query }),
 		boolean: (query) => {
-			const parsed = z.filter.boolean.safeParse(query)
+			const parsed = filterBoolean.safeParse(query)
 			if (!parsed.success || parsed.data === undefined) return null
 			return { equals: parsed.data }
 		},
 		number: (query) => {
-			const parsed = z.filter.number.safeParse(query)
+			const parsed = filterNumber.safeParse(query)
 			if (!parsed.success) return null
 			const filter: Prisma.JsonNullableFilter<'Member'> = {}
 			if (parsed.data?.min) filter.gte = parsed.data?.min
@@ -147,7 +148,7 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			return filter
 		},
 		multiselect: (query) => {
-			const parsed = z.filter.multiselect.safeParse(query)
+			const parsed = filterMultiselect.safeParse(query)
 			if (!parsed.success || !parsed.data) return null
 			return { array_contains: parsed.data }
 		},

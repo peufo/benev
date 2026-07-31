@@ -1,13 +1,12 @@
 import z from 'zod'
 import { zDateNullable } from './form'
 
-export const modelUserLogin = {
+export const modelUserLogin = z.object({
 	email: z.string().email().toLowerCase(),
 	password: z.string().min(8),
-}
+})
 
-export const modelUserCreate = {
-	...modelUserLogin,
+export const modelUserCreate = modelUserLogin.extend({
 	firstName: z.string().min(2).trim(),
 	lastName: z.string().min(2).trim(),
 	isOrganizer: z.boolean().optional(),
@@ -17,9 +16,9 @@ export const modelUserCreate = {
 		.boolean()
 		.default(false)
 		.refine((v) => v === true, { message: 'Tu dois accepter les conditions' }),
-}
+})
 
-export const modelUserContactUpdate = {
+export const modelUserContactUpdate = z.object({
 	// Un email vidé détache l'adresse; `null` n'étant pas un `RemoteFormInput`, la conversion
 	// se fait à la sortie. Un champ absent reste `undefined`: un formulaire partiel ne doit
 	// pas effacer l'adresse.
@@ -34,10 +33,9 @@ export const modelUserContactUpdate = {
 	street: z.string().optional(),
 	zipCode: z.string().optional(),
 	city: z.string().optional(),
-}
+})
 
-export const modelUserUpdate = {
-	...modelUserContactUpdate,
+export const modelUserUpdate = modelUserContactUpdate.extend({
 	email: z.string().email().toLowerCase().optional(),
 	isOrganizer: z.boolean().optional(),
-}
+})

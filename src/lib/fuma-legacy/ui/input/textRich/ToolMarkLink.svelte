@@ -4,7 +4,7 @@
 
 	import { Dialog } from 'fuma'
 	import { InputText } from '$lib/fuma-legacy/ui/input/index.js'
-	import { z } from '$lib/fuma-legacy/validation/zod.js'
+	import z from 'zod'
 	import ToolMark from '$lib/fuma-legacy/ui/input/textRich/ToolMark.svelte'
 
 	interface Props {

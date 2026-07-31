@@ -35,7 +35,7 @@ export const setMemberIsValidedByEvent = form(
 	}
 )
 
-export const updateMemberContact = form(z.object(modelUserContactUpdate), async (data) => {
+export const updateMemberContact = form(modelUserContactUpdate, async (data) => {
 	const { locals, params } = getRequestEvent()
 	await permission.leader(params.eventId!, locals)
 	return prisma.member.update({ where: { id: params.memberId! }, data })

@@ -1,6 +1,6 @@
 import { getSubscribes, type Subscribes } from '../getSubscribes.server'
 import { prisma, permission } from '$lib/server'
-import { z } from '$lib/fuma-legacy'
+import z from 'zod'
 import { getCSV } from 'fuma'
 import dayjs from '$lib/dayjs'
 import { parseQuery } from 'fuma/server'

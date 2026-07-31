@@ -30,7 +30,7 @@ const RESERVED_IDS = [
 ]
 
 export const createEvent = form(
-	z.object({ ...modelEventCreate, ...modelEventImages }),
+	modelEventCreate.extend(modelEventImages.shape),
 	async ({ tier, poster_image, poster_crop, logo_image, logo_crop, ...data }, issue) => {
 		const { locals } = getRequestEvent()
 		const session = await locals.auth.validate()
@@ -86,7 +86,7 @@ export const createEvent = form(
 )
 
 export const updateEvent = form(
-	z.object({ ...modelEventUpdate, ...modelEventImages }),
+	modelEventUpdate.extend(modelEventImages.shape),
 	async ({ poster_image, poster_crop, logo_image, logo_crop, ...data }) => {
 		const { locals, params } = getRequestEvent()
 		const member = await permission.admin(params.eventId!, locals)
@@ -125,7 +125,7 @@ export const deleteEventLogo = command(z.object({ id: z.string() }), async ({ id
 	await media.delete({ logoOf: { id } })
 })
 
-export const updateEventSettings = form(z.object(modelEventSettings), async (data) => {
+export const updateEventSettings = form(modelEventSettings, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.admin(eventId, locals)

@@ -1,9 +1,8 @@
 import type { Prisma } from '@prisma/client'
-import type { ShapeOf } from 'fuma'
 import z from 'zod'
 import { zConnect, zConnectMany, zDate, zNumber, zSet } from './form'
 
-export const modelPeriodCreate = {
+export const modelPeriodCreate = z.object({
 	// Champ brut lié par `bind:value` (il sert aussi à dupliquer la période).
 	maxSubscribe: zNumber(1),
 	// `InputRelation`/`InputRelations` de fuma 1 ne servent plus qu'à choisir: les ids partent
@@ -12,14 +11,13 @@ export const modelPeriodCreate = {
 	tags: zConnectMany,
 	start: zDate,
 	end: zDate,
-} satisfies ShapeOf<Prisma.PeriodCreateInput>
+}) satisfies z.ZodType<Prisma.PeriodCreateInput>
 
-export const modelPeriodUpdate = {
-	...modelPeriodCreate,
+export const modelPeriodUpdate = modelPeriodCreate.extend({
 	id: z.string(),
 	tags: zSet,
 	maxSubscribe: zNumber(1).optional(),
-}
+})
 
 /**
  * Règle inter-champs, appliquée par `.superRefine()` sur l'objet complet. `fatal` empêche les

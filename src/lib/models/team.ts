@@ -36,7 +36,7 @@ export const modelMemberCondition = z.union([
 export type MemberCondition = (typeof modelMemberCondition)['_output']
 export type MemberConditionOperator = (typeof memberConditionOperator)['_output']
 
-export const modelTeam = {
+export const modelTeam = z.object({
 	name: z.string().min(3),
 	description: z.string().optional(),
 	// `InputLeaders` ne sert qu'à choisir: les ids partent dans des champs `leaders[]`.
@@ -46,11 +46,10 @@ export const modelTeam = {
 	overflowPermitted: z.boolean().optional(),
 	// `MemberConditions` sérialise sa liste dans un champ caché.
 	conditions: zJson(z.array(modelMemberCondition)),
-}
+})
 
-export const modelTeamUpdate = {
-	...modelTeam,
+export const modelTeamUpdate = modelTeam.extend({
 	id: z.string(),
 	// En mise à jour, la liste transmise remplace l'existante.
 	leaders: zSet.optional(),
-}
+})

@@ -5,14 +5,14 @@ import { modelTeam, modelTeamUpdate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 import { cloneTeam } from '$lib/server/clone.js'
 
-export const createTeam = form(z.object(modelTeam), async (data) => {
+export const createTeam = form(modelTeam, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.admin(eventId, locals)
 	return prisma.team.create({ data: { ...data, eventId } })
 })
 
-export const updateTeam = form(z.object(modelTeamUpdate), async (data) => {
+export const updateTeam = form(modelTeamUpdate, async (data) => {
 	const { locals } = getRequestEvent()
 	const member = await permission.leaderOfTeam(data.id, locals)
 	if (!member.roles.includes('admin') && data.leaders) error(403)

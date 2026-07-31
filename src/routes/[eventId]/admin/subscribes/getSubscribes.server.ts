@@ -1,4 +1,5 @@
-import { z, type ZodObj } from '$lib/fuma-legacy/validation'
+import z from 'zod'
+import { filterBoolean, filterMultiselect, filterRange } from '$lib/models/filter'
 import { parseQuery } from 'fuma/server'
 import { addMemberComputedValues, prisma } from '$lib/server'
 import type {
@@ -12,16 +13,16 @@ import type {
 
 export const subscribesFilterShape = {
 	search: z.string().optional(),
-	createdAt: z.filter.range,
-	teams: z.filter.multiselect,
-	period: z.filter.range,
-	states: z.filter.multiselect,
-	tags: z.filter.multiselect,
+	createdAt: filterRange,
+	teams: filterMultiselect,
+	period: filterRange,
+	states: filterMultiselect,
+	tags: filterMultiselect,
 	createdBy: z.enum(['leader', 'user']).optional(),
-	isAbsent: z.filter.boolean,
-	isValidedByEvent: z.filter.boolean,
-	isValidedByUser: z.filter.boolean,
-} satisfies ZodObj
+	isAbsent: filterBoolean,
+	isValidedByEvent: filterBoolean,
+	isValidedByUser: filterBoolean,
+}
 
 export type Subscribes = Awaited<ReturnType<typeof getSubscribes>>['subscribes'][number]
 
@@ -29,7 +30,7 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 	const eventId = event.id
 	const query = parseQuery(url, {
 		...subscribesFilterShape,
-		all: z.filter.boolean,
+		all: filterBoolean,
 		skip: z.coerce.number().default(0),
 		take: z.coerce.number().default(20),
 	})

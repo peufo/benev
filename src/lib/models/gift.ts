@@ -1,34 +1,37 @@
-import { z, toTuple, type ZodObj } from '$lib/fuma-legacy/validation'
+import z from 'zod'
+import { zEnumKeys, zJsonOr } from './form'
 import type { Prisma } from '@prisma/client'
 import { GIFT_CONDITION_MODE } from '$lib/constant'
 
-export const modelGiftCreate = {
+export const modelGiftCreate = z.object({
 	name: z.string().min(2),
-	conditionsMode: z.enum(toTuple(GIFT_CONDITION_MODE)).optional(),
-} satisfies ZodObj<Omit<Prisma.GiftUncheckedCreateInput, 'eventId'>>
+	conditionsMode: zEnumKeys(GIFT_CONDITION_MODE).optional(),
+}) satisfies z.ZodType<Omit<Prisma.GiftUncheckedCreateInput, 'eventId'>>
 
-export const modelGiftUpdate = {
+export const modelGiftUpdate = z.object({
 	name: z.string().min(2).optional(),
-	conditionsMode: z.enum(toTuple(GIFT_CONDITION_MODE)).optional(),
-} satisfies ZodObj<Prisma.GiftUncheckedUpdateInput>
+	conditionsMode: zEnumKeys(GIFT_CONDITION_MODE).optional(),
+}) satisfies z.ZodType<Prisma.GiftUncheckedUpdateInput>
 
-const giftConditionTeamsCreate = {
+const giftConditionTeamsCreate = z.object({
 	type: z.literal('teams'),
 	content: z.array(z.string()).transform((v) => JSON.stringify(v)),
 	value: z.number(),
-} satisfies ZodObj<Prisma.GiftConditionCreateWithoutGiftInput>
+}) satisfies z.ZodType<Prisma.GiftConditionCreateWithoutGiftInput>
 
-const giftConditionHoursCreate = {
+const giftConditionHoursCreate = z.object({
 	type: z.literal('hours'),
 	content: z.number().transform((v) => JSON.stringify(v)),
 	value: z.number(),
-} satisfies ZodObj<Prisma.GiftConditionCreateWithoutGiftInput>
+}) satisfies z.ZodType<Prisma.GiftConditionCreateWithoutGiftInput>
 
-const giftConditionPeriodCreate = {
+const giftConditionPeriodCreate = z.object({
 	type: z.literal('period'),
-	content: z.json({ start: z.date(), end: z.date() }).transform((v) => JSON.stringify(v)),
+	content: zJsonOr(z.object({ start: z.date(), end: z.date() })).transform((v) =>
+		JSON.stringify(v)
+	),
 	value: z.number(),
-} satisfies ZodObj<Prisma.GiftConditionCreateWithoutGiftInput>
+}) satisfies z.ZodType<Prisma.GiftConditionCreateWithoutGiftInput>
 
 export const modelGiftCondition = [
 	giftConditionTeamsCreate,

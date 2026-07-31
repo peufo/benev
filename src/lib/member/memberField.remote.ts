@@ -3,7 +3,7 @@ import z from 'zod'
 import { modelMemberFieldCreate, modelMemberFieldUpdate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 
-export const createMemberField = form(z.object(modelMemberFieldCreate), async (data) => {
+export const createMemberField = form(modelMemberFieldCreate, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.admin(eventId, locals)
@@ -11,7 +11,7 @@ export const createMemberField = form(z.object(modelMemberFieldCreate), async (d
 	return prisma.field.create({ data: { ...data, eventId, position: nbFields } })
 })
 
-export const updateMemberField = form(z.object(modelMemberFieldUpdate), async (data) => {
+export const updateMemberField = form(modelMemberFieldUpdate, async (data) => {
 	const { locals, params } = getRequestEvent()
 	await permission.admin(params.eventId!, locals)
 	return prisma.field.update({ where: { id: data.id }, data })

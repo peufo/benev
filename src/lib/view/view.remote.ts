@@ -3,7 +3,7 @@ import z from 'zod'
 import { modelViewCreate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 
-export const createView = form(z.object(modelViewCreate), async (data) => {
+export const createView = form(modelViewCreate, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.leader(eventId, locals)
@@ -11,7 +11,7 @@ export const createView = form(z.object(modelViewCreate), async (data) => {
 })
 
 export const updateView = form(
-	z.object({ ...modelViewCreate, id: z.string() }),
+	modelViewCreate.extend({ id: z.string() }),
 	async ({ id, ...data }) => {
 		const { locals, params } = getRequestEvent()
 		const eventId = params.eventId!

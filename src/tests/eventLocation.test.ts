@@ -1,13 +1,10 @@
 import { describe, it } from 'vitest'
 import { Prisma } from '@prisma/client'
-import z from 'zod'
 // Import direct des modules et non du barrel racine: celui-ci tire tout l'arbre UI,
 // donc le CSS de tippy, que Vitest ne sait pas charger en environnement `node`.
 import { modelEventUpdate } from '$lib/models'
 import { jsonOrDbNull } from '$lib/server'
 import { mapUrl } from '$lib/location'
-
-const schema = z.object(modelEventUpdate)
 
 /**
  * Reproduit ce que `form()` transmet au schéma: le POJO issu du `FormData`, où le champ
@@ -20,7 +17,7 @@ const submit = async (location?: unknown) => {
 		input.location_search = JSON.stringify({ id: 'W123' })
 		input.location = JSON.stringify(location)
 	}
-	return schema.parseAsync(input)
+	return modelEventUpdate.parseAsync(input)
 }
 
 describe('champ location du formulaire évènement', () => {

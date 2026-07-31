@@ -4,5 +4,4 @@
 // pourra être supprimé d'ici et réimporté du paquet.
 export * from './ui/index.js'
 export * from './utils/index.js'
-export * from './validation/index.js'
 export * from './action/index.js'

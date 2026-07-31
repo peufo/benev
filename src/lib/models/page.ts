@@ -1,11 +1,12 @@
-import { toTuple, z, type ZodObj } from '$lib/fuma-legacy/validation'
+import z from 'zod'
+import { zEnumKeys } from './form'
 import { PAGE_TYPE } from '$lib/constant'
 import type { Prisma } from '@prisma/client'
 
-export const modelPageUpdate = {
+export const modelPageUpdate = z.object({
 	id: z.string(),
-	type: z.enum(toTuple(PAGE_TYPE)),
+	type: zEnumKeys(PAGE_TYPE),
 	path: z.string().optional(),
 	title: z.string().min(2),
 	content: z.string(),
-} satisfies ZodObj<Prisma.PageUpdateWithoutEventInput>
+}) satisfies z.ZodType<Prisma.PageUpdateWithoutEventInput>

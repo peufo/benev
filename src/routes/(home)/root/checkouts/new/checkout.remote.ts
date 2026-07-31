@@ -22,7 +22,7 @@ export const searchUsers = query(z.object({ search: z.string() }), async ({ sear
 	})
 })
 
-export const createCheckout = form(z.object(modelCheckout), async (data) => {
+export const createCheckout = form(modelCheckout, async (data) => {
 	const { locals } = getRequestEvent()
 	await permission.root(locals)
 
