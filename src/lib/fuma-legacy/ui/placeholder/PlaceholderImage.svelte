@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { mdiPlus } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
+	import { PlusIcon } from '@lucide/svelte'
 
 	interface Props {
 		x: number
@@ -16,6 +15,6 @@
 		<span class="text-center text-sm font-medium text-base-content/60">
 			{#if children}{@render children()}{:else}Pas d'image{/if}
 		</span>
-		<Icon path={mdiPlus} size={30} class="fill-base-content/60" />
+		<PlusIcon size={30} class="text-base-content/60" />
 	</div>
 </div>

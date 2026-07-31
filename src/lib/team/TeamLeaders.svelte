@@ -1,7 +1,6 @@
 <script lang="ts">
+	import { MailIcon, PhoneIcon, TriangleAlertIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
-	import { mdiAlertOutline, mdiEmailOutline, mdiPhoneOutline } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy'
 	import { DropDown } from 'fuma'
 	import { Avatar } from '$lib/me'
 	interface Props {
@@ -33,14 +32,14 @@
 			<ul class="w-48">
 				<li>
 					<a class="menu-item" href="mailto:{member.email}" target="_blank">
-						<Icon path={mdiEmailOutline} />
+						<MailIcon />
 						Envoyer un mail
 					</a>
 				</li>
 				{#if member.phone}
 					<li>
 						<a class="menu-item" href="tel:{member.phone}" target="_blank">
-							<Icon path={mdiPhoneOutline} />
+							<PhoneIcon />
 							Téléphoner
 						</a>
 					</li>
@@ -48,7 +47,7 @@
 			</ul>
 		{:else}
 			<div class="px-3 py-1 flex gap-2">
-				<Icon path={mdiAlertOutline} class="fill-warning" />
+				<TriangleAlertIcon class="text-warning" />
 				<span>{member.firstName} n'a pas confirmé sa participation</span>
 			</div>
 		{/if}

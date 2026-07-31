@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { LinkIcon } from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
-	import { mdiLinkVariant } from '@mdi/js'
 
 	import { Dialog } from 'fuma'
 	import { InputText } from '$lib/fuma-legacy/ui/input/index.js'
@@ -54,7 +54,7 @@
 	{editor}
 	key="link"
 	label="Lien"
-	icon={mdiLinkVariant}
+	icon={LinkIcon}
 	action={() => {
 		const firstChild = editor.state.selection.content().content.firstChild
 		linkHref = editor.getAttributes('link').href || firstChild?.textContent || ''

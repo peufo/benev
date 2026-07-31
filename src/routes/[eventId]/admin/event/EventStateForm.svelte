@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Event, EventState } from '@prisma/client'
-	import { Icon } from '$lib/fuma-legacy'
 	import { EVENT_STATES } from '$lib/constant'
 	import { page } from '$app/state'
 	import { useNotify } from '$lib/notify'
@@ -33,6 +32,7 @@
 			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
 		}
 	}
+	const StateIcon = $derived(EVENT_STATES[event.state].icon)
 </script>
 
 <div
@@ -44,10 +44,7 @@
 >
 	<div>
 		<div class="flex gap-2 items-center flex-wrap">
-			<Icon
-				path={EVENT_STATES[event.state].icon}
-				class="opacity-80 {event.state === 'draft' ? 'rotate-12' : ''}"
-			/>
+			<StateIcon class="opacity-80 {event.state === 'draft' ? 'rotate-12' : ''}" />
 			<h3 class="title">{EVENT_STATES[event.state].label}</h3>
 		</div>
 

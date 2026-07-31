@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { DownloadIcon, FileSpreadsheetIcon } from '@lucide/svelte'
 	import { derived } from 'svelte/store'
 	import { page } from '$app/stores'
-	import { ButtonCopy, Icon } from '$lib/fuma-legacy'
+	import { ButtonCopy } from '$lib/fuma-legacy'
 	import { DropDown } from 'fuma'
-	import { mdiFileDelimitedOutline, mdiTrayArrowDown } from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { toast } from 'svelte-sonner'
 
@@ -28,7 +28,7 @@
 <DropDown bind:this={dropdown} hideOnBlur>
 	{#snippet activator()}
 		<button class="btn btn-square btn-sm">
-			<Icon path={mdiTrayArrowDown} size={20} />
+			<DownloadIcon size={20} />
 		</button>
 	{/snippet}
 
@@ -43,7 +43,7 @@
 			label="Copier les données"
 		/>
 		<a href={$urlSubscribesCSV} class="menu-item" target="_parent">
-			<Icon path={mdiFileDelimitedOutline} size={20} />
+			<FileSpreadsheetIcon size={20} />
 			<span>Télécharger un CSV</span>
 		</a>
 	</div>

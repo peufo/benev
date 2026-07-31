@@ -1,9 +1,8 @@
 <!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (before-badge to before_badge) making the component unusable -->
 <script lang="ts">
+	import { SlashIcon } from '@lucide/svelte'
 	import 'tippy.js/dist/tippy.css'
 	import type { Subscribe } from '@prisma/client'
-	import { Icon } from '$lib/fuma-legacy'
-	import { mdiSlashForward } from '@mdi/js'
 
 	export let period: {
 		maxSubscribe: number
@@ -68,7 +67,7 @@
 					En attente{plurial(request)}
 				</span>
 			</span>
-			<Icon path={mdiSlashForward} size={18} class="opacity-60" />
+			<SlashIcon size={18} class="opacity-60" />
 			<span class="badge">
 				{period.maxSubscribe}
 				<span class="pl-1">

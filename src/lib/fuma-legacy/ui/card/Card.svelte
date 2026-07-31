@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { mdiArrowLeft } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
+	import { ArrowLeftIcon } from '@lucide/svelte'
 	import { contextContainer } from '$lib/fuma-legacy/ui/context.js'
 
 	interface Props {
@@ -40,7 +39,7 @@
 			<div class="flex flex-wrap items-center gap-2 {headerClass}">
 				{#if returnUrl}
 					<a href={returnUrl} class="btn btn-square btn-ghost btn-sm">
-						<Icon path={mdiArrowLeft} size={20} />
+						<ArrowLeftIcon size={20} />
 					</a>
 				{/if}
 

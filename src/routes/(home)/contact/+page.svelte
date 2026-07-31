@@ -1,7 +1,12 @@
 <script lang="ts">
-	import { mdiCheck } from '@mdi/js'
-	import { CircleAlertIcon, ClockIcon, CircleQuestionMarkIcon, SendIcon } from '@lucide/svelte'
-	import { Card, Icon } from '$lib/fuma-legacy'
+	import {
+		CheckIcon,
+		CircleAlertIcon,
+		CircleQuestionMarkIcon,
+		ClockIcon,
+		SendIcon,
+	} from '@lucide/svelte'
+	import { Card } from '$lib/fuma-legacy'
 	import { InputString, InputTextarea } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { sendMessage } from './contact.remote'
@@ -117,7 +122,7 @@
 								<div class="badge badge-warning badge-outline whitespace-nowrap">En traitement</div>
 							{:else if message.state === 'done'}
 								<div class="badge badge-success badge-outline whitespace-nowrap">
-									<Icon path={mdiCheck} class="fill-success -translate-x-1" size={16} />
+									<CheckIcon class="text-success -translate-x-1" size={16} />
 									Terminé
 								</div>
 							{/if}

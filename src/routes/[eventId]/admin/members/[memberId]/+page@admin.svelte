@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { Icon, Card } from '$lib/fuma-legacy'
-	import { DropDown } from 'fuma'
+	import {
+		ArrowLeftIcon,
+		CheckIcon,
+		ClipboardListIcon,
+		PencilIcon,
+		Trash2Icon,
+		XIcon,
+	} from '@lucide/svelte'
+	import { Card } from '$lib/fuma-legacy'
+	import { DropDown, tip } from 'fuma'
 	import { Drawer } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
-	import {
-		mdiArrowLeft,
-		mdiCheck,
-		mdiClipboardTextOutline,
-		mdiClose,
-		mdiPencilOutline,
-		mdiTrashCanOutline,
-	} from '@mdi/js'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
@@ -42,7 +42,7 @@
 				href="{$eventPath}/admin/members{$page.url.search}"
 				class="btn btn-square btn-ghost btn-sm"
 			>
-				<Icon path={mdiArrowLeft} size={20} />
+				<ArrowLeftIcon size={20} />
 			</a>
 
 			<span class="title">
@@ -56,10 +56,11 @@
 				data-sveltekit-noscroll
 				class="btn btn-square btn-sm ml-2"
 			>
-				<Icon
-					path={mdiPencilOutline}
-					title="Modifier le coordonnées de {data.memberProfile.firstName}"
-				/>
+				<span
+					class="inline-flex"
+					use:tip={{ content: `Modifier le coordonnées de ${data.memberProfile.firstName}` }}
+					><PencilIcon /></span
+				>
 			</a>
 
 			<MembersBadges
@@ -79,17 +80,17 @@
 						<button class="btn btn-sm ml-2 whitespace-nowrap">
 							<MemberRole roles={data.memberProfile.roles} mode="contents" />
 							{#if data.memberProfile.isValidedByEvent}
-								<Icon
-									path={mdiCheck}
-									class="fill-success"
-									title="Membre approuvé par l'organisation"
-								/>
+								<span
+									class="inline-flex"
+									use:tip={{ content: "Membre approuvé par l'organisation" }}
+									><CheckIcon class="text-success" /></span
+								>
 							{:else}
-								<Icon
-									path={mdiClose}
-									class="fill-error"
-									title="Membre non approuvé par l'organisation"
-								/>
+								<span
+									class="inline-flex"
+									use:tip={{ content: "Membre non approuvé par l'organisation" }}
+									><XIcon class="text-error" /></span
+								>
 							{/if}
 						</button>
 					{/snippet}
@@ -106,7 +107,7 @@
 						btn={false}
 						class="menu-item w-full"
 					>
-						<Icon path={mdiTrashCanOutline} size={20} class="fill-error" />
+						<Trash2Icon size={20} class="text-error" />
 						<span>Supprimer le membre</span>
 					</MemberDeleteForm>
 				</DropDown>
@@ -141,11 +142,11 @@
 				class="btn btn-square btn-sm ml-2"
 				onclick={() => createSubscribeDialog.showModal()}
 			>
-				<Icon
-					path={mdiClipboardTextOutline}
-					size={20}
-					title="Inscrire {data.memberProfile.firstName} à un secteur"
-				/>
+				<span
+					class="inline-flex"
+					use:tip={{ content: `Inscrire ${data.memberProfile.firstName} à un secteur` }}
+					><ClipboardListIcon size={20} /></span
+				>
 			</button>
 		</div>
 		<TeamsSubscribes teams={data.event.teams} isLeader />

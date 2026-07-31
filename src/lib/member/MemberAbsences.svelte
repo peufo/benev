@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { Icon } from '$lib/fuma-legacy'
+	import { TriangleAlertIcon } from '@lucide/svelte'
 	import { tip } from 'fuma'
-	import { mdiAlertOutline } from '@mdi/js'
 	import type { Subscribe } from '@prisma/client'
 	interface Props {
 		subscribes: Subscribe[]
@@ -15,6 +14,6 @@
 {#if nbAbsences}
 	{@const content = `Absent à ${nbAbsences} période${nbAbsences > 1 ? 's' : ''}`}
 	<div use:tip={{ content }}>
-		<Icon path={mdiAlertOutline} class="fill-warning" size={20} />
+		<TriangleAlertIcon class="text-warning" size={20} />
 	</div>
 {/if}

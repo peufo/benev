@@ -1,11 +1,10 @@
 <script lang="ts" generics="Item extends {id: string}">
+	import { SearchIcon } from '@lucide/svelte'
 	import type { TippyInstance } from 'fuma'
 	import { untrack } from 'svelte'
-	import { mdiMagnify } from '@mdi/js'
 	import { page } from '$app/stores'
 
 	import { DropDown } from 'fuma'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { InputSearch } from '$lib/fuma-legacy/ui/input/index.js'
 	import type { TableField } from '$lib/fuma-legacy/ui/table/index.js'
 
@@ -33,13 +32,13 @@
 				<div class="flex items-center gap-2">
 					<span>{field.label}</span>
 					{#if !searchValue}
-						<Icon path={mdiMagnify} size={15} class="opacity-50" />
+						<SearchIcon size={15} class="opacity-50" />
 					{/if}
 				</div>
 
 				{#if searchValue}
 					<span class="badge badge-primary badge-xs text-[0.7rem] font-normal text-white">
-						<Icon path={mdiMagnify} size={10} class="-translate-x-1 fill-white/80" />
+						<SearchIcon size={10} class="-translate-x-1 text-white/80" />
 						<span>{searchValue}</span>
 					</span>
 				{/if}

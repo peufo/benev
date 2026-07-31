@@ -1,10 +1,9 @@
 <script lang="ts">
+	import { ClipboardListIcon, MailIcon, PencilIcon, PhoneIcon } from '@lucide/svelte'
 	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
 	const bubble = createBubbler()
-	import { mdiEmailOutline, mdiPhone, mdiClipboardTextOutline, mdiPencilOutline } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy'
-	import { urlParam } from 'fuma'
+	import { tip, urlParam } from 'fuma'
 	import type { Member } from '@prisma/client'
 
 	interface Props {
@@ -15,21 +14,16 @@
 	let { member, onSubscribeDialog = undefined }: Props = $props()
 </script>
 
-<div class="flex gap-1 justify-end fill-base-content">
+<div class="flex gap-1 justify-end text-base-content">
 	{#if member.phone}
 		<a
 			href="tel:{member.phone}"
 			target="_blank"
 			class="btn btn-square btn-sm btn-ghost relative"
 			onclick={stopPropagation(bubble('click'))}
+			use:tip={{ content: `Téléphoner à ${member.firstName} [${member.phone}]` }}
 		>
-			<Icon
-				path={mdiPhone}
-				size={18}
-				title="Téléphoner à {member.firstName} [{member.phone}]"
-				tippyProps={{ appendTo: 'parent' }}
-				class="fill-base-content/60"
-			/>
+			<PhoneIcon size={18} class="text-base-content/60" />
 		</a>
 	{/if}
 	{#if member.email}
@@ -38,24 +32,16 @@
 			target="_blank"
 			class="btn btn-square btn-sm btn-ghost relative"
 			onclick={stopPropagation(bubble('click'))}
+			use:tip={{ content: `Envoyer un mail à ${member.firstName} [${member.email}]` }}
 		>
-			<Icon
-				path={mdiEmailOutline}
-				size={18}
-				title="Envoyer un mail à {member.firstName} [{member.email}]"
-				tippyProps={{ appendTo: 'parent' }}
-				class="fill-base-content/60"
-			/>
+			<MailIcon size={18} class="text-base-content/60" />
 		</a>
 	{/if}
 	{#if onSubscribeDialog}
 		<button type="button" class="btn btn-square btn-sm btn-ghost" onclick={onSubscribeDialog}>
-			<Icon
-				path={mdiClipboardTextOutline}
-				size={20}
-				title="Inscrire {member.firstName} à un secteur"
-				class="fill-base-content/60"
-			/>
+			<span class="inline-flex" use:tip={{ content: `Inscrire ${member.firstName} à un secteur` }}
+				><ClipboardListIcon size={20} class="text-base-content/60" /></span
+			>
 		</button>
 	{/if}
 
@@ -65,6 +51,8 @@
 		data-sveltekit-replacestate
 		data-sveltekit-noscroll
 	>
-		<Icon path={mdiPencilOutline} title="Modifier le profil" class="fill-base-content/60" />
+		<span class="inline-flex" use:tip={{ content: 'Modifier le profil' }}
+			><PencilIcon class="text-base-content/60" /></span
+		>
 	</a>
 </div>

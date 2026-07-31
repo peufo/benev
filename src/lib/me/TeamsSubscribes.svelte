@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { TriangleAlertIcon } from '@lucide/svelte'
 	import type { Member, Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { formatRange } from '$lib/formatRange'
-	import { CardLink, Icon, Placeholder } from '$lib/fuma-legacy'
+	import { CardLink, Placeholder } from '$lib/fuma-legacy'
 	import { urlParam } from 'fuma'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
-	import { mdiAlertOutline } from '@mdi/js'
 	import { tip } from 'fuma'
 	import TeamLeaders from '$lib/team/TeamLeaders.svelte'
 	import { TagsList } from '$lib/tag'
@@ -53,7 +53,7 @@
 
 							{#if subscribe.isAbsent}
 								<div class="z-10" use:tip={{ content: 'Absent à la période de travail' }}>
-									<Icon path={mdiAlertOutline} class="fill-warning" size={20} />
+									<TriangleAlertIcon class="text-warning" size={20} />
 								</div>
 							{/if}
 

@@ -1,14 +1,14 @@
 <script lang="ts">
+	import {
+		CircleCheckIcon,
+		CircleUserIcon,
+		ShieldUserIcon,
+		StarIcon,
+		TriangleAlertIcon,
+	} from '@lucide/svelte'
 	import { slide } from 'svelte/transition'
 	import { InputOptionInParam } from '$lib/fuma-legacy'
 	import { urlParam } from 'fuma'
-	import {
-		mdiAccountCircleOutline,
-		mdiAlertOutline,
-		mdiCheckCircleOutline,
-		mdiShieldAccountOutline,
-		mdiStarOutline,
-	} from '@mdi/js'
 </script>
 
 <InputOptionInParam
@@ -17,15 +17,15 @@
 	removeKeys={['isAbsent']}
 	options={{
 		admin: {
-			icon: mdiStarOutline,
+			icon: StarIcon,
 			label: 'Administrateurs',
 		},
 		leader: {
-			icon: mdiShieldAccountOutline,
+			icon: ShieldUserIcon,
 			label: 'Responsables (au moins un secteur à charge)',
 		},
 		member: {
-			icon: mdiAccountCircleOutline,
+			icon: CircleUserIcon,
 			label: 'Bénévoles (au moins une inscription)',
 		},
 	}}
@@ -36,8 +36,8 @@
 		<InputOptionInParam
 			key="isAbsent"
 			options={{
-				false: { label: 'Présent à toutes ses périodes', icon: mdiCheckCircleOutline },
-				true: { label: 'Absent à une période ou plus', icon: mdiAlertOutline },
+				false: { label: 'Présent à toutes ses périodes', icon: CircleCheckIcon },
+				true: { label: 'Absent à une période ou plus', icon: TriangleAlertIcon },
 			}}
 		/>
 	</div>

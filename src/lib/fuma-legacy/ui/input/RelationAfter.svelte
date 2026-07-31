@@ -1,14 +1,14 @@
 <script lang="ts">
+	import { type IconProps, LoaderCircleIcon, PlusIcon } from '@lucide/svelte'
+	import { tip } from 'fuma'
+	import type { Component } from 'svelte'
 	import { fade } from 'svelte/transition'
-	import { mdiLoading, mdiPlus } from '@mdi/js'
-
-	import Icon from '$lib/fuma-legacy/ui/icon/Icon.svelte'
 
 	interface Props {
 		isLoading: boolean
 		createUrl?: string
 		createTitle?: string
-		createIcon?: any
+		createIcon?: Component<IconProps>
 		/** Remplacent les évènements de la version Svelte 4. */
 		onunselect?: () => void
 		oncreate?: () => void
@@ -18,19 +18,15 @@
 		isLoading,
 		createUrl = '',
 		createTitle = '',
-		createIcon = mdiPlus,
+		createIcon: CreateIcon = PlusIcon,
 		onunselect,
 		oncreate,
 	}: Props = $props()
 </script>
 
 {#if isLoading}
-	<div in:fade|local>
-		<Icon
-			path={mdiLoading}
-			class="w-9"
-			classSVG="animate-spin fill-primary-ligther stroke-primary-ligther"
-		/>
+	<div class="grid w-9 place-content-center" in:fade|local>
+		<LoaderCircleIcon class="animate-spin text-primary" size={20} />
 	</div>
 {:else if createUrl}
 	<a
@@ -40,7 +36,8 @@
 		data-sveltekit-noscroll
 		data-sveltekit-replacestate
 		onclick={() => oncreate?.()}
+		use:tip={{ content: createTitle }}
 	>
-		<Icon path={createIcon} title={createTitle} />
+		<CreateIcon size={20} />
 	</a>
 {/if}

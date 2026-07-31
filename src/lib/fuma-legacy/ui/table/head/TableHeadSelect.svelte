@@ -1,13 +1,12 @@
 <script lang="ts" generics="Item extends {id: string}">
+	import { ListFilterIcon } from '@lucide/svelte'
 	import { page } from '$app/stores'
 
 	import { jsonParse } from 'fuma'
 	import type { TableField } from '$lib/fuma-legacy/ui/table/index.js'
 	import { DropDown } from 'fuma'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
 	import { urlParam } from 'fuma'
-	import { mdiOrderBoolAscendingVariant } from '@mdi/js'
 
 	interface Props {
 		field: TableField<Item>
@@ -61,16 +60,17 @@
 				<div class="flex gap-2">
 					{field.label}
 					{#if !optionsActive.length}
-						<Icon path={mdiOrderBoolAscendingVariant} size={15} class="opacity-50" />
+						<ListFilterIcon size={15} class="opacity-50" />
 					{/if}
 				</div>
 
 				{#if optionsActive.length}
 					<div class="flex flex-wrap gap-1">
 						{#each optionsActive as option (option.value)}
+							{@const OptionIcon = option.icon}
 							<span class="badge badge-primary badge-xs text-[0.7rem] font-normal text-white">
-								{#if option.icon}
-									<Icon path={option.icon} size={10} class="-translate-x-1 fill-white/80" />
+								{#if OptionIcon}
+									<OptionIcon size={10} class="-translate-x-1 text-white/80" />
 								{/if}
 								{option.label}
 							</span>
@@ -81,7 +81,7 @@
 		{/snippet}
 
 		<div class="flex flex-col gap-1">
-			{#each _options as { isActive, icon, label, value } (value)}
+			{#each _options as { isActive, icon: OptionIcon, label, value } (value)}
 				<a
 					href={getHref(value)}
 					class="menu-item px-3 py-2"
@@ -89,8 +89,8 @@
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
 				>
-					{#if icon}
-						<Icon path={icon} size={18} class="opacity-60" />
+					{#if OptionIcon}
+						<OptionIcon size={18} class="opacity-60" />
 					{/if}
 					<span class="whitespace-nowrap font-normal">{label}</span>
 				</a>

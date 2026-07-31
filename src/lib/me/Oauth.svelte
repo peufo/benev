@@ -14,15 +14,6 @@
 </a>
 
 <!--
-	TODO: ensure user share his email
- 	https://github.com/peufo/benev/issues/136
-
-	<a
-		href="/auth/github"
-		class="btn btn-square"
-		data-sveltekit-preload-data="off"
-		data-sveltekit-preload-code="off"
-	>
-		<Icon path={mdiGithub} title="Connexion avec Github" />
-	</a>
+	La connexion Github reste désactivée tant qu'on ne sait pas garantir le partage de l'email:
+	https://github.com/peufo/benev/issues/136
 -->

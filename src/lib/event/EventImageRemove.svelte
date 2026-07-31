@@ -1,7 +1,6 @@
 <script lang="ts">
+	import { Trash2Icon } from '@lucide/svelte'
 	import { invalidateAll } from '$app/navigation'
-	import { mdiTrashCanOutline } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy'
 	import { toast } from 'svelte-sonner'
 	import { deleteEventLogo, deleteEventPoster } from './event.remote'
 
@@ -37,6 +36,6 @@
 	{onclick}
 	class="link link-hover text-xs flex gap-1 items-center"
 >
-	<Icon path={mdiTrashCanOutline} size={14} />
+	<Trash2Icon size={14} />
 	<span>Supprimer</span>
 </button>

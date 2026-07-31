@@ -1,8 +1,8 @@
 <script lang="ts">
+	import { RefreshCwIcon, Trash2Icon } from '@lucide/svelte'
 	import type { User } from '@prisma/client'
-	import { mdiReload, mdiTrashCanOutline } from '@mdi/js'
 	import { page } from '$app/state'
-	import { Icon, InputImage } from '$lib/fuma-legacy'
+	import { InputImage } from '$lib/fuma-legacy'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import Avatar from './Avatar.svelte'
 	import { deleteAvatar, generateAvatar, uploadAvatar } from './user.remote'
@@ -41,12 +41,12 @@
 		{#snippet actions({ hide })}
 			{#if user.avatarId}
 				<button formaction={deleteAvatar.action} class="menu-item" onclick={hide}>
-					<Icon path={mdiTrashCanOutline} class="opacity-70" size={20} />
+					<Trash2Icon class="opacity-70" size={20} />
 					<span>Supprimer cette photo</span>
 				</button>
 			{:else}
 				<button formaction={generateAvatar.action} class="menu-item" onclick={hide}>
-					<Icon path={mdiReload} class="opacity-70" size={20} />
+					<RefreshCwIcon class="opacity-70" size={20} />
 					<span>Générer un autre avatar</span>
 				</button>
 			{/if}

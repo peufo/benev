@@ -1,12 +1,7 @@
 <script lang="ts">
-	import {
-		mdiAlertOctagonOutline,
-		mdiCheck,
-		mdiCloseOctagonOutline,
-		mdiTrashCanOutline,
-	} from '@mdi/js'
+	import { tip } from 'fuma'
+	import { CheckIcon, OctagonAlertIcon, OctagonXIcon, Trash2Icon } from '@lucide/svelte'
 	import type { Subscribe } from '@prisma/client'
-	import { Icon } from '$lib/fuma-legacy'
 
 	interface Props {
 		class?: string
@@ -24,47 +19,35 @@
 </script>
 
 {#if subscribe.state === 'request' && subscribe.createdBy === 'leader' && !subscribe.member.isValidedByUser}
-	<Icon
-		path={mdiAlertOctagonOutline}
-		class="fill-error {klass}"
-		title="En attente de validation du membre (inactif)"
-		tippyProps={{ appendTo: 'parent' }}
-	/>
+	<span class="inline-flex" use:tip={{ content: 'En attente de validation du membre (inactif)' }}>
+		<OctagonAlertIcon class="text-error {klass}" />
+	</span>
 {:else if subscribe.state === 'request'}
-	<Icon
-		path={mdiAlertOctagonOutline}
-		class="fill-warning {klass}"
-		title="En attente de validation {subscribe.createdBy === 'user'
-			? `d'un responsable`
-			: `du membre`}"
-		tippyProps={{ appendTo: 'parent' }}
-	/>
+	<span
+		class="inline-flex"
+		use:tip={{
+			content: `En attente de validation ${subscribe.createdBy === 'user' ? `d'un responsable` : `du membre`}`,
+		}}
+	>
+		<OctagonAlertIcon class="text-warning {klass}" />
+	</span>
 {:else if subscribe.state === 'accepted' && subscribe.isForcedValidation}
-	<Icon
-		path={mdiCheck}
-		class="fill-blue-500 {klass}"
-		title="Inscription confirmée par un responsable au nom du membre"
-		tippyProps={{ appendTo: 'parent' }}
-	/>
+	<span
+		class="inline-flex"
+		use:tip={{ content: 'Inscription confirmée par un responsable au nom du membre' }}
+	>
+		<CheckIcon class="text-blue-500 {klass}" />
+	</span>
 {:else if subscribe.state === 'accepted'}
-	<Icon
-		path={mdiCheck}
-		class="fill-success {klass}"
-		title="Inscription confirmée {changeAuthor}"
-		tippyProps={{ appendTo: 'parent' }}
-	/>
+	<span class="inline-flex" use:tip={{ content: `Inscription confirmée ${changeAuthor}` }}>
+		<CheckIcon class="text-success {klass}" />
+	</span>
 {:else if subscribe.state === 'denied'}
-	<Icon
-		path={mdiCloseOctagonOutline}
-		class="fill-error {klass}"
-		title="Inscription déclinée {changeAuthor}"
-		tippyProps={{ appendTo: 'parent' }}
-	/>
+	<span class="inline-flex" use:tip={{ content: `Inscription déclinée ${changeAuthor}` }}>
+		<OctagonXIcon class="text-error {klass}" />
+	</span>
 {:else if subscribe.state === 'cancelled'}
-	<Icon
-		path={mdiTrashCanOutline}
-		class="fill-error {klass}"
-		title="Inscription annulée {changeAuthor}"
-		tippyProps={{ appendTo: 'parent' }}
-	/>
+	<span class="inline-flex" use:tip={{ content: `Inscription annulée ${changeAuthor}` }}>
+		<Trash2Icon class="text-error {klass}" />
+	</span>
 {/if}

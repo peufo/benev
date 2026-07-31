@@ -7,7 +7,6 @@
         "@lucia-auth/adapter-prisma": "^3.0.2",
         "@lucia-auth/oauth": "^3.5.1",
         "@lucide/svelte": "^1.27.0",
-        "@mdi/js": "^7.3.67",
         "@paralleldrive/cuid2": "^2.2.2",
         "@prisma/client": "^6.19.3",
         "@stripe/stripe-js": "^2.2.0",
@@ -245,8 +244,6 @@
     "@lucia-auth/oauth": ["@lucia-auth/oauth@3.5.3", "", { "peerDependencies": { "lucia": "^2.0.0" } }, "sha512-3blBldenf2zXsSJTZUwzB+NxI+0KJljfMHT0WR7hyLNwi4Ijss7F2cQqk2xW1lGH3lzdmsV93ZsY9Yv8ekBRUw=="],
 
     "@lucide/svelte": ["@lucide/svelte@1.27.0", "", { "peerDependencies": { "svelte": "^5" } }, "sha512-qzNBHdqy/MKp2qxuy/DcYELuep6h19fjo+4ech8fZsS4GtZeBtg5jgCTRQvLvwhppt0mhRN6qt8Nt8rPb/J4Ag=="],
-
-    "@mdi/js": ["@mdi/js@7.4.47", "", {}, "sha512-KPnNOtm5i2pMabqZxpUz7iQf+mfrYZyKCZ8QNz85czgEt7cuHcGorWfdzUMWYA0SD+a6Hn4FmJ+YhzzzjkTZrQ=="],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.0", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^2.0.0-alpha.3", "@emnapi/runtime": "^2.0.0-alpha.3" } }, "sha512-kDoONqMa+VnZ4vvvu/ZUurpJ4gkZU57e7g69qpNgWhYcZFPUHZM2CEMKm+cG6ufDVALbjMvfmMjFVqaK7uEMnA=="],
 

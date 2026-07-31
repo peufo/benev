@@ -1,12 +1,11 @@
 <script lang="ts">
+	import { PencilIcon, PlusIcon } from '@lucide/svelte'
 	import type { Media } from '@prisma/client'
 	import { portal } from 'svelte-portal'
-	import { ButtonDelete, Dialog, InputString } from 'fuma'
-	import { Icon } from '$lib/fuma-legacy'
+	import { ButtonDelete, Dialog, InputString, tip } from 'fuma'
 	import { toast } from 'svelte-sonner'
 
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
-	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
 	import { tick } from 'svelte'
 	import { api } from '$lib/api'
 	import { deleteMedia, editMedia, uploadMedia } from './media.remote'
@@ -86,12 +85,9 @@
 							onclick={() => handleEditMedia(media)}
 							class="btn btn-xs btn-square btn-ghost absolute bottom-1 right-1"
 						>
-							<Icon
-								path={mdiPencilOutline}
-								title="Modifier"
-								size={14}
-								class="fill-base-content/70"
-							/>
+							<span class="inline-flex" use:tip={{ content: 'Modifier' }}
+								><PencilIcon size={14} class="text-base-content/70" /></span
+							>
 						</button>
 					{/if}
 				</div>
@@ -101,14 +97,9 @@
 				type="button"
 				class="border rounded-lg grid place-content-center aspect-square outline-primary/50 outline-1 hover:outline"
 				onclick={handleAddMedia}
+				use:tip={{ content: 'Ajouter une nouvelle image' }}
 			>
-				<Icon
-					path={mdiPlus}
-					class="fill-base-content/70"
-					title="Ajouter une nouvelle image"
-					size={42}
-					tippyProps={{ appendTo: 'parent' }}
-				/>
+				<PlusIcon class="text-base-content/70" size={42} />
 			</button>
 		</div>
 		<!-- <progress transition:slide class="progress my-0" />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiEyeCheckOutline, mdiEyeOutline } from '@mdi/js'
+	import { EyeIcon } from '@lucide/svelte'
 	import { TabsIcon } from '$lib/fuma-legacy'
 </script>
 
@@ -7,7 +7,7 @@
 	key="onlyAvailable"
 	defaultValue="false"
 	options={[
-		{ value: 'true', label: "N'afficher que les périodes disponibles", icon: mdiEyeCheckOutline },
-		{ value: 'false', label: 'Tout afficher', icon: mdiEyeOutline },
+		{ value: 'true', label: "N'afficher que les périodes disponibles", icon: EyeIcon },
+		{ value: 'false', label: 'Tout afficher', icon: EyeIcon },
 	]}
 />

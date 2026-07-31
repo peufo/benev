@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Card, Icon } from '$lib/fuma-legacy'
-	import { mdiMapMarkerOutline, mdiOpenInNew } from '@mdi/js'
+	import { ExternalLinkIcon, MapPinIcon } from '@lucide/svelte'
+	import { Card } from '$lib/fuma-legacy'
 	import { InputLocation, mapUrl } from '$lib/location'
 
 	let location: PrismaJson.Location | null = $state(null)
@@ -55,7 +55,7 @@
 						rel="noopener noreferrer"
 						class="btn btn-ghost btn-sm sm:btn-md"
 					>
-						<Icon path={mdiMapMarkerOutline} />
+						<MapPinIcon />
 						<span>{location.label}</span>
 					</a>
 				</div>
@@ -71,7 +71,7 @@
 						{#each alternatives(location) as { name, href } (name)}
 							<a {href} target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-xs">
 								<span>{name}</span>
-								<Icon path={mdiOpenInNew} size={16} />
+								<ExternalLinkIcon size={16} />
 							</a>
 						{/each}
 					</div>

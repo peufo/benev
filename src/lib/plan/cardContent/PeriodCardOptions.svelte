@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { Icon } from '$lib/fuma-legacy'
-	import { urlParam } from 'fuma'
+	import { tip, urlParam } from 'fuma'
 	import { CARD_CONTENT_OPTIONS } from './options'
 </script>
 
 <div class="flex items-center gap-[3px] rounded-lg bg-base-200 p-1">
-	{#each Object.entries(CARD_CONTENT_OPTIONS) as [key, { title, path, isReversed }] (key)}
+	{#each Object.entries(CARD_CONTENT_OPTIONS) as [key, { title, icon: OptionIcon, isReversed }] (key)}
 		{@const isKeyInParam = urlParam.has(key)}
 		{@const isActive = isReversed ? !isKeyInParam : isKeyInParam}
 		<a
@@ -15,8 +14,9 @@
 			href={urlParam.toggle({ [key]: '1' })}
 			data-sveltekit-replacestate
 			data-sveltekit-noscroll
+			use:tip={{ content: title }}
 		>
-			<Icon {path} {title} size={17} class="opacity-70" />
+			<OptionIcon size={17} class="opacity-70" />
 		</a>
 	{/each}
 </div>

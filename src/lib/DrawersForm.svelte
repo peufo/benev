@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon } from '$lib/fuma-legacy'
+	import { UserRoundPlusIcon } from '@lucide/svelte'
 	import { Drawer } from 'fuma'
 	import InviteForm from './InviteForm.svelte'
 	import { TeamForm, type TeamFormInstance } from './team'
@@ -8,7 +8,6 @@
 	import { TagForm } from './tag'
 	import type { FormDataPeriod, TeamWithComputedValues } from './server'
 	import MemberImportDialog from './member/MemberImportDialog.svelte'
-	import { mdiAccountMultiplePlus } from '@mdi/js'
 
 	let teamForm: TeamFormInstance = $state()!
 	let periodDrawer: PeriodDrawer = $state()!
@@ -41,7 +40,7 @@
 		/>
 
 		<button class="menu-item" onclick={openImportDialog}>
-			<Icon path={mdiAccountMultiplePlus} size={20} />
+			<UserRoundPlusIcon size={20} />
 			<span>Importer des membres</span>
 		</button>
 	{/snippet}

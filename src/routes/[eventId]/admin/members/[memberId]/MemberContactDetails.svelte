@@ -1,14 +1,14 @@
 <script lang="ts">
+	import { tip } from 'fuma'
 	import {
-		mdiCakeVariantOutline,
-		mdiEmailCheckOutline,
-		mdiEmailAlertOutline,
-		mdiHomeCityOutline,
-		mdiPhoneOutline,
-		mdiGhostOutline,
-	} from '@mdi/js'
+		Building2Icon,
+		CakeIcon,
+		GhostIcon,
+		MailCheckIcon,
+		MailWarningIcon,
+		PhoneIcon,
+	} from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
-	import { Icon } from '$lib/fuma-legacy'
 	import { getAge } from '$lib/utils'
 
 	interface Props {
@@ -26,23 +26,19 @@
 >
 	<div class="flex gap-4">
 		{#if !member.email}
-			<Icon path={mdiGhostOutline} class="opacity-70" size={20} />
+			<GhostIcon class="opacity-70" size={20} />
 			<span>Pas d'email</span>
 		{:else}
 			{#if member.isEmailVerified}
-				<Icon
-					path={mdiEmailCheckOutline}
-					class="opacity-70 fill-success"
-					title="Email validé par le membre"
-					size={20}
-				/>
+				<span class="inline-flex" use:tip={{ content: 'Email validé par le membre' }}
+					><MailCheckIcon class="opacity-70 text-success" size={20} /></span
+				>
 			{:else}
-				<Icon
-					path={mdiEmailAlertOutline}
-					class="opacity-70 fill-error"
-					title="Cet email n'a pas été validé par le membre"
-					size={20}
-				/>
+				<span
+					class="inline-flex"
+					use:tip={{ content: "Cet email n'a pas été validé par le membre" }}
+					><MailWarningIcon class="opacity-70 text-error" size={20} /></span
+				>
 			{/if}
 			<a href="mailto:{member.email}" class="link link-hover" target="_blank">
 				{member.email}
@@ -51,7 +47,7 @@
 	</div>
 
 	<div class="flex gap-4">
-		<Icon path={mdiPhoneOutline} class="opacity-70" size={20} />
+		<PhoneIcon class="opacity-70" size={20} />
 		{#if member.phone}
 			<a href="tel:{member.phone}" class="link link-hover" target="_blank">
 				{member.phone}
@@ -62,7 +58,7 @@
 	</div>
 
 	<div class="flex gap-4">
-		<Icon path={mdiCakeVariantOutline} class="opacity-70" size={20} />
+		<CakeIcon class="opacity-70" size={20} />
 		<div>
 			{#if member.birthday}
 				{member.birthday.toLocaleDateString()}
@@ -74,7 +70,7 @@
 	</div>
 
 	<div class="flex gap-4">
-		<Icon path={mdiHomeCityOutline} class="opacity-70" size={20} />
+		<Building2Icon class="opacity-70" size={20} />
 		<a
 			href="https://www.google.com/maps/search/{member.street} {member.zipCode} {member.city}"
 			class="link link-hover"

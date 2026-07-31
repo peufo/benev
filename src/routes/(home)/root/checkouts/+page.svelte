@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Card, Icon } from '$lib/fuma-legacy'
-	import { Pagination } from 'fuma'
-	import { mdiPlus } from '@mdi/js'
+	import { PlusIcon } from '@lucide/svelte'
+	import { Card } from '$lib/fuma-legacy'
+	import { Pagination, tip } from 'fuma'
 
 	let { data } = $props()
 </script>
@@ -11,7 +11,9 @@
 		<h2 class="title">Checkouts</h2>
 
 		<a href="/root/checkouts/new" class="btn btn-square btn-sm ml-auto">
-			<Icon path={mdiPlus} title="Créer un checkout manuellement" />
+			<span class="inline-flex" use:tip={{ content: 'Créer un checkout manuellement' }}
+				><PlusIcon /></span
+			>
 		</a>
 	</div>
 

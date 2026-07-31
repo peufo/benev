@@ -1,9 +1,8 @@
 <script lang="ts">
+	import { XIcon } from '@lucide/svelte'
 	import type { FocusEventHandler, FormEventHandler, KeyboardEventHandler } from 'svelte/elements'
-	import { mdiClose } from '@mdi/js'
 	import { browser } from '$app/environment'
 	import { page } from '$app/stores'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { InputText } from '$lib/fuma-legacy/ui/input/index.js'
 
 	interface Props {
@@ -59,7 +58,7 @@
 			}}
 			tabindex={!!value ? 0 : -1}
 		>
-			<Icon path={mdiClose} />
+			<XIcon />
 		</button>
 	{/snippet}
 </InputText>

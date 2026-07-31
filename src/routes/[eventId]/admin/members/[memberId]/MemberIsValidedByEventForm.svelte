@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { mdiCancel, mdiCheck } from '@mdi/js'
+	import { BanIcon, CheckIcon } from '@lucide/svelte'
 	import type { PageData } from './$types'
-	import { Icon } from '$lib/fuma-legacy'
 	import { setMemberIsValidedByEvent } from '$lib/member/memberAdmin.remote'
 
 	interface Props {
@@ -9,6 +8,7 @@
 	}
 
 	let { memberProfile }: Props = $props()
+	const ValidationIcon = $derived(memberProfile.isValidedByEvent ? BanIcon : CheckIcon)
 </script>
 
 <form {...setMemberIsValidedByEvent} class="contents">
@@ -19,11 +19,7 @@
 		)}
 	/>
 	<button class="menu-item w-full">
-		<Icon
-			path={memberProfile.isValidedByEvent ? mdiCancel : mdiCheck}
-			size={21}
-			class="opacity-80"
-		/>
+		<ValidationIcon size={21} class="opacity-80" />
 		<span>{memberProfile.isValidedByEvent ? 'Désapprouver' : 'Approuver'} la participation</span>
 	</button>
 </form>

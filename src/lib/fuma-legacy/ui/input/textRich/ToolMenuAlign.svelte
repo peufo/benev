@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Editor } from '@tiptap/core'
 	import {
-		mdiAlignHorizontalLeft,
-		mdiAlignHorizontalCenter,
-		mdiAlignHorizontalRight,
-		mdiFormatIndentIncrease,
-		mdiFormatIndentDecrease,
-	} from '@mdi/js'
+		AlignCenterIcon,
+		AlignLeftIcon,
+		AlignRightIcon,
+		IndentDecreaseIcon,
+		IndentIncreaseIcon,
+	} from '@lucide/svelte'
+	import type { Editor } from '@tiptap/core'
 
 	import ToolMenu from '$lib/fuma-legacy/ui/input/textRich/ToolMenu.svelte'
 
@@ -24,30 +24,30 @@
 		{
 			attributes: { textAlign: 'left' },
 			label: 'Aligner à gauche',
-			icon: mdiAlignHorizontalLeft,
+			icon: AlignLeftIcon,
 			action: () => editor.commands.setTextAlign('left'),
 		},
 		{
 			attributes: { textAlign: 'center' },
 			label: 'Aligner au centre',
-			icon: mdiAlignHorizontalCenter,
+			icon: AlignCenterIcon,
 			action: () => editor.commands.setTextAlign('center'),
 		},
 		{
 			attributes: { textAlign: 'right' },
 			label: 'Aligner à droite',
-			icon: mdiAlignHorizontalRight,
+			icon: AlignRightIcon,
 			action: () => editor.commands.setTextAlign('right'),
 		},
 		{
 			newSection: true,
 			label: 'Retrait à droite',
-			icon: mdiFormatIndentIncrease,
+			icon: IndentIncreaseIcon,
 			action: () => editor.commands.indent(),
 		},
 		{
 			label: 'Retrait à droite',
-			icon: mdiFormatIndentDecrease,
+			icon: IndentDecreaseIcon,
 			action: () => editor.commands.outdent(),
 		},
 	]}

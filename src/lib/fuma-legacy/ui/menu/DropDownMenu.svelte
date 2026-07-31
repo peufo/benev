@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { mdiUnfoldMoreHorizontal } from '@mdi/js'
-
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
+	import { ChevronsUpDownIcon } from '@lucide/svelte'
 	import { DropDown } from 'fuma'
 	import { SelectorList } from '$lib/fuma-legacy/ui/input/index.js'
 	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
@@ -36,7 +34,7 @@
 			{#if children}{@render children()}{:else}
 				<button type="button" class="flex h-12 items-center gap-2 rounded-lg border pl-4 pr-2">
 					<span>Menu</span>
-					<Icon class="ml-auto" path={mdiUnfoldMoreHorizontal} size={18} />
+					<ChevronsUpDownIcon class="ml-auto" size={18} />
 				</button>
 			{/if}
 		</div>
@@ -49,8 +47,9 @@
 		class="w-full"
 	>
 		{#snippet children({ item })}
+			{@const ItemIcon = item.icon}
 			{#if item.icon}
-				<Icon path={item.icon} size={18} class="opacity-70" />
+				<ItemIcon size={18} class="opacity-70" />
 			{/if}
 			<span class="whitespace-nowrap pr-4">{item.label}</span>
 		{/snippet}

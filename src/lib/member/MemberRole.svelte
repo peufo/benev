@@ -1,23 +1,26 @@
 <script lang="ts" module>
-	export const rolesMap: Record<MemberRole, { icon: string; label: string }> = {
-		root: { label: '__ROOT_USER__', icon: mdiShieldCrownOutline },
-		owner: { label: 'Propriétaire', icon: mdiCrownOutline },
-		admin: { label: 'Administrateur', icon: mdiStarOutline },
-		leader: { label: 'Responsable', icon: mdiShieldAccountOutline },
-		member: { label: 'Membre', icon: mdiAccountCircleOutline },
+	import {
+		CircleUserIcon,
+		CrownIcon,
+		type IconProps,
+		ShieldIcon,
+		ShieldUserIcon,
+		StarIcon,
+	} from '@lucide/svelte'
+	import type { Component } from 'svelte'
+	import type { MemberRole } from '$lib/server'
+
+	export const rolesMap: Record<MemberRole, { icon: Component<IconProps>; label: string }> = {
+		root: { label: '__ROOT_USER__', icon: ShieldIcon },
+		owner: { label: 'Propriétaire', icon: CrownIcon },
+		admin: { label: 'Administrateur', icon: StarIcon },
+		leader: { label: 'Responsable', icon: ShieldUserIcon },
+		member: { label: 'Membre', icon: CircleUserIcon },
 	}
 </script>
 
 <script lang="ts">
-	import type { MemberRole } from '$lib/server'
-	import { Icon } from '$lib/fuma-legacy'
-	import {
-		mdiShieldAccountOutline,
-		mdiAccountCircleOutline,
-		mdiCrownOutline,
-		mdiStarOutline,
-		mdiShieldCrownOutline,
-	} from '@mdi/js'
+	import { tip } from 'fuma'
 
 	interface Props {
 		roles: MemberRole[]
@@ -30,24 +33,21 @@
 
 	const rolesOrder: MemberRole[] = ['root', 'owner', 'admin', 'leader', 'member']
 	let role = $derived(rolesOrder.find((r) => roles.includes(r)))
+	let RoleIcon = $derived(role ? rolesMap[role].icon : undefined)
 </script>
 
-{#if role && role !== 'root'}
+{#if role && role !== 'root' && RoleIcon}
 	{#if mode === 'badge'}
 		<div class="badge badge-ghost font-normal opacity-80 {klass}">
-			<Icon path={rolesMap[role].icon} class="-translate-x-1" size={iconSize} />
+			<RoleIcon class="-translate-x-1" size={iconSize} />
 			<span>{rolesMap[role].label}</span>
 		</div>
 	{:else if mode === 'contents'}
-		<Icon path={rolesMap[role].icon} class="-translate-x-1" size={iconSize} />
+		<RoleIcon class="-translate-x-1" size={iconSize} />
 		<span>{rolesMap[role].label}</span>
 	{:else if role !== 'member'}
-		<Icon
-			path={rolesMap[role].icon}
-			class="opacity-70"
-			size={iconSize}
-			title={rolesMap[role].label}
-			disableTitlePropagation
-		/>
+		<span class="inline-flex" use:tip={{ content: rolesMap[role].label }}>
+			<RoleIcon class="opacity-70" size={iconSize} />
+		</span>
 	{/if}
 {/if}

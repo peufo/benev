@@ -1,16 +1,16 @@
 <script lang="ts">
 	import {
-		mdiAccountCircleOutline,
-		mdiAlertOutline,
-		mdiCheckCircleOutline,
-		mdiFilterRemoveOutline,
-		mdiShieldAccountOutline,
-		mdiSigma,
-	} from '@mdi/js'
+		CircleCheckIcon,
+		CircleUserIcon,
+		FilterXIcon,
+		ShieldUserIcon,
+		SigmaIcon,
+		TriangleAlertIcon,
+	} from '@lucide/svelte'
 	import type { PageData } from './$types'
-	import { Card, InputSearch, Table, type TableField, Icon, component } from '$lib/fuma-legacy'
+	import { Card, InputSearch, Table, type TableField, component } from '$lib/fuma-legacy'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
-	import { Drawer } from 'fuma'
+	import { Drawer, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MemberCell } from '$lib/member'
@@ -91,8 +91,8 @@
 				label: 'Inscrit par',
 				type: 'select',
 				options: {
-					leader: { label: 'Inscrit par un responsable', icon: mdiShieldAccountOutline },
-					user: { label: 'Inscrit par le membre', icon: mdiAccountCircleOutline },
+					leader: { label: 'Inscrit par un responsable', icon: ShieldUserIcon },
+					user: { label: 'Inscrit par le membre', icon: CircleUserIcon },
 				},
 				getCell: ({ createdBy }) => component(SubscribeCreatedBy, { createdBy }),
 			},
@@ -101,8 +101,8 @@
 				label: 'Absent',
 				type: 'select',
 				options: {
-					true: { label: 'Marqué comme absent', icon: mdiAlertOutline },
-					false: { label: 'Marqué comme présent', icon: mdiCheckCircleOutline },
+					true: { label: 'Marqué comme absent', icon: TriangleAlertIcon },
+					false: { label: 'Marqué comme présent', icon: CircleCheckIcon },
 				},
 				getCell: ({ isAbsent }) => component(SubscribeIsAbsent, { isAbsent }),
 			},
@@ -142,7 +142,9 @@
 
 				<!-- SHOW MEMBERS STATS -->
 				<a href={urlParam.with({ subscribes_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
-					<Icon path={mdiSigma} title="Afficher le résumé des inscriptions" size={18} />
+					<span class="inline-flex" use:tip={{ content: 'Afficher le résumé des inscriptions' }}
+						><SigmaIcon size={18} /></span
+					>
 				</a>
 
 				<!-- RESET FILTERS -->
@@ -150,7 +152,9 @@
 					href={urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
 					class="btn btn-square btn-sm"
 				>
-					<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
+					<span class="inline-flex" use:tip={{ content: 'Effacer les filtres' }}
+						><FilterXIcon size={18} /></span
+					>
 				</a>
 				<TableViewSelect key="subscribes" views={data.views} />
 				<SubscribesImport />

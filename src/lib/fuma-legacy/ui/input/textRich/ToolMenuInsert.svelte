@@ -1,8 +1,7 @@
 <script lang="ts">
+	import { AtSignIcon, ImageIcon, MinusIcon, PlusIcon, VideoIcon } from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
-	import { mdiPlus, mdiMinus, mdiImageOutline, mdiYoutube, mdiAt } from '@mdi/js'
 
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import ToolMenu from '$lib/fuma-legacy/ui/input/textRich/ToolMenu.svelte'
 	import { suggestionItems } from '$lib/fuma-legacy/ui/input/textRich/suggestion.svelte.js'
 
@@ -20,17 +19,17 @@
 	tools={[
 		{
 			label: 'Séparateur',
-			icon: mdiMinus,
+			icon: MinusIcon,
 			action: () => editor.commands.setHorizontalRule(),
 		},
 		{
 			label: 'Image',
-			icon: mdiImageOutline,
+			icon: ImageIcon,
 			action: () => oninsertMedia?.(),
 		},
 		{
 			label: 'Vidéo',
-			icon: mdiYoutube,
+			icon: VideoIcon,
 			action: () => {
 				const src = prompt('Lien youtube')
 				if (!src) return
@@ -39,7 +38,7 @@
 		},
 		{
 			label: 'Valeur dynamic',
-			icon: mdiAt,
+			icon: AtSignIcon,
 			disable: !$suggestionItems.length,
 			action: () => {
 				const { from } = editor.state.selection
@@ -52,6 +51,6 @@
 	hideLabel
 >
 	{#snippet activator()}
-		<Icon path={mdiPlus} size={20} class="opacity-70" />
+		<PlusIcon size={20} class="opacity-70" />
 	{/snippet}
 </ToolMenu>

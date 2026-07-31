@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { ButtonCopy, Icon } from '$lib/fuma-legacy'
-	import { DropDown } from 'fuma'
-	import { mdiCardAccountMailOutline, mdiFileDelimitedOutline, mdiTrayArrowDown } from '@mdi/js'
+	import { ContactIcon, DownloadIcon, FileSpreadsheetIcon } from '@lucide/svelte'
+	import { ButtonCopy } from '$lib/fuma-legacy'
+	import { DropDown, tip } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import { toast } from 'svelte-sonner'
@@ -29,7 +29,9 @@
 <DropDown bind:this={dropdown} hideOnBlur>
 	{#snippet activator()}
 		<button class="btn btn-square btn-sm">
-			<Icon path={mdiTrayArrowDown} size={20} title="Exporter les données des membres" />
+			<span class="inline-flex" use:tip={{ content: 'Exporter les données des membres' }}
+				><DownloadIcon size={20} /></span
+			>
 		</button>
 	{/snippet}
 
@@ -44,11 +46,11 @@
 			label="Copier les données"
 		/>
 		<a href={$urlMembers('csv')} class="menu-item" target="_parent">
-			<Icon path={mdiFileDelimitedOutline} size={20} />
+			<FileSpreadsheetIcon size={20} />
 			<span>Télécharger un CSV</span>
 		</a>
 		<a href={$urlMembers('vcard')} class="menu-item" target="_parent">
-			<Icon path={mdiCardAccountMailOutline} size={20} />
+			<ContactIcon size={20} />
 			<span>Télécharger les contacts</span>
 		</a>
 	</div>

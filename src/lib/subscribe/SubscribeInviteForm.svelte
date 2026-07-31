@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiAccountPlusOutline } from '@mdi/js'
+	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
 	import type { Props as TippyProps } from 'tippy.js'
 	import { InputRelation } from '$lib/fuma-legacy'
@@ -51,7 +51,7 @@
 		search={$api.member.search}
 		createTitle="Inviter un nouveau membre"
 		createUrl={urlParam.with({ form_invite: '{}' })}
-		createIcon={mdiAccountPlusOutline}
+		createIcon={UserPlusIcon}
 		dropdownProps={{ classWrapper: 'w-full' }}
 		bind:value={member}
 		{oninput}

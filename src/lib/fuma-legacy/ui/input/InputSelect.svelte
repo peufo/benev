@@ -1,8 +1,7 @@
 <script lang="ts">
+	import { ChevronsUpDownIcon } from '@lucide/svelte'
 	import { onMount } from 'svelte'
-	import { mdiUnfoldMoreHorizontal } from '@mdi/js'
 
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { DropDown } from 'fuma'
 	import { SelectorList, FormControl, type InputProps } from '$lib/fuma-legacy/ui/input/index.js'
 
@@ -60,14 +59,15 @@
 					class="flex h-12 items-center gap-2 rounded-lg border pl-4 pr-2 hover:bg-base-200/50"
 				>
 					{#if selectedOption}
-						{#if selectedOption.icon}
-							<Icon path={selectedOption.icon} size={21} class="opacity-70" />
+						{@const SelectedIcon = selectedOption.icon}
+						{#if SelectedIcon}
+							<SelectedIcon size={21} class="opacity-70" />
 						{/if}
 						<span>{selectedOption.label}</span>
 					{:else if placeholder}
 						<span class="opacity-60">{placeholder}</span>
 					{/if}
-					<Icon class="ml-auto" path={mdiUnfoldMoreHorizontal} size={18} />
+					<ChevronsUpDownIcon class="ml-auto" size={18} />
 				</button>
 				{#if value !== undefined}
 					<input type="hidden" name={key} {value} />
@@ -84,8 +84,9 @@
 		class="w-full"
 	>
 		{#snippet children({ item })}
-			{#if item.icon}
-				<Icon path={item.icon} size={18} class="opacity-70" />
+			{@const ItemIcon = item.icon}
+			{#if ItemIcon}
+				<ItemIcon size={18} class="opacity-70" />
 			{/if}
 			<span class="whitespace-nowrap pr-4">{item.label}</span>
 		{/snippet}

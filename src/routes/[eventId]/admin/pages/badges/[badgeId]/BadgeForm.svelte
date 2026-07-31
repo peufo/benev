@@ -1,15 +1,14 @@
 <script lang="ts">
-	import type { PageData } from './$types'
-	import { Icon } from '$lib/fuma-legacy'
-	import { ButtonDelete, InputBoolean } from 'fuma'
 	import {
-		mdiAlertCircleOutline,
-		mdiCheck,
-		mdiLoading,
-		mdiLink,
-		mdiLinkOff,
-		mdiRestore,
-	} from '@mdi/js'
+		CheckIcon,
+		CircleAlertIcon,
+		LinkIcon,
+		LoaderCircleIcon,
+		RotateCcwIcon,
+		UnlinkIcon,
+	} from '@lucide/svelte'
+	import type { PageData } from './$types'
+	import { ButtonDelete, InputBoolean, tip } from 'fuma'
 	import { InputMedia } from '$lib/material/media'
 	import { FORMAT_CARD } from '$lib/constant'
 	import { debounce } from '$lib/debounce'
@@ -56,6 +55,7 @@
 	function aspectRatioHeight(value: number): number {
 		return Math.round(value * FORMAT_CARD.aspect * 100) / 100
 	}
+	const RatioIcon = $derived(lockAspectRatio ? LinkIcon : UnlinkIcon)
 </script>
 
 <form
@@ -94,8 +94,9 @@
 			type="button"
 			class="btn btn-sm btn-ghost btn-square self-end mb-2"
 			onclick={() => (lockAspectRatio = !lockAspectRatio)}
+			use:tip={{ content: 'Conserver le ratio' }}
 		>
-			<Icon path={lockAspectRatio ? mdiLink : mdiLinkOff} size={18} title="Conserver le ratio" />
+			<RatioIcon size={18} />
 		</button>
 		<div class="w-28">
 			<label class="floating-label">
@@ -122,7 +123,9 @@
 					badge.height = FORMAT_CARD.y
 				}}
 			>
-				<Icon path={mdiRestore} size={18} title="Restaurer les dimensions par défaut" />
+				<span class="inline-flex" use:tip={{ content: 'Restaurer les dimensions par défaut' }}
+					><RotateCcwIcon size={18} /></span
+				>
 			</button>
 		{/if}
 	</div>
@@ -204,17 +207,17 @@
 
 		{#if updateBadge.pending > 0}
 			<div class="flex gap-1 items-center">
-				<Icon path={mdiLoading} class="animate-spin fill-warning" size={20} />
+				<LoaderCircleIcon class="animate-spin text-warning" size={20} />
 				<span class="text-sm text-base-content/70">Sauvegarde</span>
 			</div>
 		{:else if isSuccess}
 			<div class="flex gap-1 items-center">
-				<Icon path={mdiCheck} class="fill-success" size={20} />
+				<CheckIcon class="text-success" size={20} />
 				<span class="text-sm text-base-content/70">Sauvegardé</span>
 			</div>
 		{:else}
 			<div class="flex gap-1 items-center">
-				<Icon path={mdiAlertCircleOutline} class="fill-error" size={20} />
+				<CircleAlertIcon class="text-error" size={20} />
 				<span class="text-sm text-base-content/70">Erreur</span>
 			</div>
 		{/if}

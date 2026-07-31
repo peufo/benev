@@ -1,16 +1,17 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte'
-	import { Icon } from '$lib/fuma-legacy'
+	import type { IconProps } from '@lucide/svelte'
+	import type { Component, Snippet } from 'svelte'
 
 	interface Props {
 		link: string | null
-		/** Chemin d'icône `@mdi/js`, ou un snippet pour une icône sur mesure. */
-		icon?: string | Snippet
+		icon?: Component<IconProps>
+		/** Pour ce que Lucide ne fournit pas: un logo de marque, l'icône propre à l'évènement. */
+		logo?: Snippet
 		protocol?: string
 		children?: Snippet<[{ label: string }]>
 	}
 
-	let { link, icon = '', protocol = '', children }: Props = $props()
+	let { link, icon: Icon, logo, protocol = '', children }: Props = $props()
 </script>
 
 {#if link}
@@ -20,11 +21,7 @@
 		href="{protocol}{link}"
 		target="_blank"
 	>
-		{#if typeof icon === 'string'}
-			{#if icon}<Icon path={icon} />{/if}
-		{:else}
-			{@render icon()}
-		{/if}
+		{#if logo}{@render logo()}{:else if Icon}<Icon />{/if}
 
 		{#if children}{@render children({ label })}{:else}<span>{label}</span>{/if}
 	</a>

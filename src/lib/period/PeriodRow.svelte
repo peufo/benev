@@ -1,9 +1,8 @@
 <script lang="ts">
+	import { ClipboardListIcon } from '@lucide/svelte'
 	import { stopPropagation } from 'svelte/legacy'
 
-	import { Icon } from '$lib/fuma-legacy'
-	import { urlParam } from 'fuma'
-	import { mdiClipboardTextOutline } from '@mdi/js'
+	import { tip, urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
 	import { daytz } from '$lib/dayjs'
 
@@ -64,7 +63,9 @@
 				class="btn btn-square btn-sm"
 				onclick={stopPropagation(() => onclickPeriod?.(period))}
 			>
-				<Icon path={mdiClipboardTextOutline} size={20} title="M'inscrire à cette période" />
+				<span class="inline-flex" use:tip={{ content: "M'inscrire à cette période" }}
+					><ClipboardListIcon size={20} /></span
+				>
 			</button>
 		{/if}
 		<Progress {period} class="w-[60px]" />

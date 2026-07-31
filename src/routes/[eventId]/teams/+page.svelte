@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { mdiPencilOutline, mdiPlus } from '@mdi/js'
+	import { PencilIcon, PlusIcon } from '@lucide/svelte'
 	import { onMount } from 'svelte'
-	import { Icon, InputSearch } from '$lib/fuma-legacy'
-	import { RangePickerButton } from 'fuma'
+	import { InputSearch } from '$lib/fuma-legacy'
+	import { RangePickerButton, tip } from 'fuma'
 	import { Drawer } from 'fuma'
 	import { urlParam } from 'fuma'
 
@@ -63,7 +63,9 @@
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
 				>
-					<Icon path={mdiPencilOutline} title="Modifier l'ordre des secteur" />
+					<span class="inline-flex" use:tip={{ content: "Modifier l'ordre des secteur" }}
+						><PencilIcon /></span
+					>
 				</a>
 				<a
 					href={urlParam.with({ form_team: '{}' })}
@@ -71,7 +73,7 @@
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
 				>
-					<Icon path={mdiPlus} title="Nouveau secteur" />
+					<span class="inline-flex" use:tip={{ content: 'Nouveau secteur' }}><PlusIcon /></span>
 				</a>
 			{/if}
 		</div>

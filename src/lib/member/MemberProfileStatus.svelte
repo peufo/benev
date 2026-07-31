@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { mdiAlertCircleOutline, mdiCheck } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy'
+	import { CheckIcon, CircleAlertIcon } from '@lucide/svelte'
 	import { tip } from 'fuma'
 	import type { MemberWithComputedValues } from '$lib/server'
 
@@ -13,7 +12,7 @@
 
 {#if member.isValidedByUser}
 	<div class="badge badge-success" use:tip={{ content: 'Le membre a validé sa participation' }}>
-		<Icon path={mdiCheck} class="opacity-80 -translate-x-1" size={20} />
+		<CheckIcon class="opacity-80 -translate-x-1" size={20} />
 		Actif
 	</div>
 {:else}
@@ -21,7 +20,7 @@
 		class="badge badge-warning"
 		use:tip={{ content: `Le membre n'a pas validé sa participation` }}
 	>
-		<Icon path={mdiAlertCircleOutline} class="opacity-80 -translate-x-1" size={20} />
+		<CircleAlertIcon class="opacity-80 -translate-x-1" size={20} />
 		Inactif
 	</div>
 {/if}
@@ -32,7 +31,7 @@
 		class="badge badge-warning"
 		use:tip={{ content: `Champs manquants: "${fields.join('", "')}"` }}
 	>
-		<Icon path={mdiAlertCircleOutline} class="opacity-80 -translate-x-1" size={20} />
+		<CircleAlertIcon class="opacity-80 -translate-x-1" size={20} />
 		Profil incomplet
 	</div>
 {/if}

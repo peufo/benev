@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { mdiPlus } from '@mdi/js'
 	import { page } from '$app/state'
 
-	import { Card, Icon } from '$lib/fuma-legacy'
+	import { Card } from '$lib/fuma-legacy'
 	import { tip } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { PAGE_TYPE } from '$lib/constant'
-	import { IdCardLanyardIcon } from '@lucide/svelte'
+	import { IdCardLanyardIcon, PlusIcon } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
 	import { createBadge, createPage } from './pages.remote'
 
@@ -28,29 +27,31 @@
 						class="contents"
 					>
 						<button class="btn btn-square btn-sm ml-auto" use:tip={{ content: 'Nouvelle page' }}>
-							<Icon path={mdiPlus} class="opacity-70" />
+							<PlusIcon class="opacity-70" />
 						</button>
 					</form>
 				</div>
 				{#each data.pages as { id, title, type } (id)}
+					{@const PageIcon = PAGE_TYPE[type].icon}
 					<a
 						href="{$eventPath}/admin/pages/{id}"
 						class="menu-item"
 						class:active={page.params.pageId === id}
 					>
-						<Icon path={PAGE_TYPE[type].icon} class="opacity-60 w-6 shrink-0" size={20} />
+						<PageIcon class="opacity-60 w-6 shrink-0" size={20} />
 						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
 					</a>
 				{/each}
 
 				<h2 class="title-md my-2">Models d'email</h2>
 				{#each data.emails as { id, title, type } (id)}
+					{@const EmailIcon = PAGE_TYPE[type].icon}
 					<a
 						href="{$eventPath}/admin/pages/{id}"
 						class="menu-item"
 						class:active={page.params.pageId === id}
 					>
-						<Icon path={PAGE_TYPE[type].icon} class="opacity-60 w-6 shrink-0" size={20} />
+						<EmailIcon class="opacity-60 w-6 shrink-0" size={20} />
 						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
 					</a>
 				{/each}
@@ -65,7 +66,7 @@
 						class="contents"
 					>
 						<button class="btn btn-square btn-sm ml-auto" use:tip={{ content: 'Nouveau badge' }}>
-							<Icon path={mdiPlus} class="opacity-70" />
+							<PlusIcon class="opacity-70" />
 						</button>
 					</form>
 				</div>

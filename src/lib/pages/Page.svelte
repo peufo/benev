@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { mdiLinkVariant, mdiPencilOutline } from '@mdi/js'
+	import { tip } from 'fuma'
+	import { LinkIcon, PencilIcon } from '@lucide/svelte'
 	import { page as pageStore } from '$app/stores'
 
 	import { eventPath } from '$lib/store/index.js'
 
 	import type { Page } from '@prisma/client'
-	import { ButtonCopy, Icon, tiptapParser } from '$lib/fuma-legacy'
+	import { ButtonCopy, tiptapParser } from '$lib/fuma-legacy'
 
 	import type { MemberWithComputedValues } from '$lib/server'
 	import PageLayout from './PageLayout.svelte'
@@ -52,14 +53,16 @@
 				href="{$eventPath}/admin/pages{page ? `/${page.id}` : ''}"
 				class="btn btn-sm btn-square btn-ghost"
 			>
-				<Icon path={mdiPencilOutline} title="Éditer cette page" size={22} />
+				<span class="inline-flex" use:tip={{ content: 'Éditer cette page' }}
+					><PencilIcon size={22} /></span
+				>
 			</a>
 		{/if}
 		<ButtonCopy
 			title="Copier le lien de la page"
 			value="https://benev.io{$eventPath}{page ? `/${page.path}` : ''}"
 			successMessage="Lien copier"
-			icon={mdiLinkVariant}
+			icon={LinkIcon}
 		/>
 	</div>
 </PageLayout>

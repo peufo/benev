@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { mdiMapMarkerRadiusOutline } from '@mdi/js'
-	import { Card, Icon } from '$lib/fuma-legacy'
+	import { tip } from 'fuma'
+	import { MapPinnedIcon } from '@lucide/svelte'
+	import { Card } from '$lib/fuma-legacy'
 	import { eventPath } from '$lib/store'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
@@ -17,7 +18,9 @@
 				<h3 class="title">Mes inscriptions</h3>
 				{#if data.event.selfSubscribeAllowed}
 					<a href="{$eventPath}/teams" class="btn btn-square btn-sm ml-auto">
-						<Icon path={mdiMapMarkerRadiusOutline} title="Voir les secteurs" size={20} />
+						<span class="inline-flex" use:tip={{ content: 'Voir les secteurs' }}
+							><MapPinnedIcon size={20} /></span
+						>
 					</a>
 				{/if}
 				{#if data.memberTeams.length}

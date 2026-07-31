@@ -1,4 +1,12 @@
 <script lang="ts" module>
+	import {
+		CheckIcon,
+		type IconProps,
+		OctagonAlertIcon,
+		OctagonXIcon,
+		Trash2Icon,
+	} from '@lucide/svelte'
+	import type { Component } from 'svelte'
 	import type { SubscribeState as ISubscribeState } from '@prisma/client'
 
 	type Edtitions = Record<ISubscribeState, ISubscribeState[]>
@@ -14,12 +22,15 @@
 		denied: ['accepted'],
 		cancelled: [],
 	}
-	type States = Record<ISubscribeState, { icon: string; class: string; label: string }>
+	type States = Record<
+		ISubscribeState,
+		{ icon: Component<IconProps>; class: string; label: string }
+	>
 	const states: States = {
-		request: { label: 'Rétablir', icon: mdiAlertOctagonOutline, class: 'fill-warning' },
-		accepted: { label: 'Confirmer', icon: mdiCheck, class: 'fill-success' },
-		denied: { label: 'Décliner', icon: mdiCloseOctagonOutline, class: 'fill-error' },
-		cancelled: { label: 'Annuler', icon: mdiTrashCanOutline, class: 'fill-error' },
+		request: { label: 'Rétablir', icon: OctagonAlertIcon, class: 'text-warning' },
+		accepted: { label: 'Confirmer', icon: CheckIcon, class: 'text-success' },
+		denied: { label: 'Décliner', icon: OctagonXIcon, class: 'text-error' },
+		cancelled: { label: 'Annuler', icon: Trash2Icon, class: 'text-error' },
 	}
 </script>
 
@@ -27,15 +38,8 @@
 	import type { Props as TippyProps } from 'tippy.js'
 	import type { Subscribe } from '@prisma/client'
 	import { SubscribeState } from '$lib/subscribe'
-	import { Icon } from '$lib/fuma-legacy'
 	import { DropDown } from 'fuma'
 	import { toast } from 'svelte-sonner'
-	import {
-		mdiCloseOctagonOutline,
-		mdiCheck,
-		mdiTrashCanOutline,
-		mdiAlertOctagonOutline,
-	} from '@mdi/js'
 	import { page } from '$app/state'
 	import { setSubscribeState } from './subscribeState.remote'
 
@@ -84,7 +88,7 @@
 				accepted: {
 					...states.accepted,
 					label: 'Confirmer au nom du membre',
-					class: 'fill-blue-500',
+					class: 'text-blue-500',
 				},
 			}),
 		}).filter(
@@ -130,13 +134,14 @@
 		>
 			<input type="hidden" name="subscribeId" value={subscribe.id} />
 			{#each editions as [state, edit] (state)}
+				{@const EditIcon = edit.icon}
 				<button
 					class="menu-item"
 					name="state"
 					value={state}
 					onclick={(event) => event.stopPropagation()}
 				>
-					<Icon path={edit.icon} class={edit.class} />
+					<EditIcon class={edit.class} />
 					{edit.label}
 				</button>
 			{/each}

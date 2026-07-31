@@ -1,14 +1,14 @@
 <script lang="ts" generics="RelationItem extends {id: string}">
+	import type { Component } from 'svelte'
+	import { XIcon, type IconProps } from '@lucide/svelte'
 	import type { HTMLInputAttributes } from 'svelte/elements'
 
 	import { tick, type Snippet } from 'svelte'
 	import { slide } from 'svelte/transition'
 	import { toast } from 'svelte-sonner'
-	import { mdiClose } from '@mdi/js'
 	import debounce from 'debounce'
 
 	import { USE_COERCE_JSON } from 'fuma'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { Slot } from '$lib/fuma-legacy/ui/slot/index.js'
 	import { FormControl, SelectorList } from '$lib/fuma-legacy/ui/input/index.js'
 	import { DropDown } from 'fuma'
@@ -21,7 +21,7 @@
 		search: (q: string) => Promise<RelationItem[]>
 		createUrl?: string
 		createTitle?: string
-		createIcon?: string
+		createIcon?: Component<IconProps>
 		error?: string
 		placeholder?: string
 		flatMode?: boolean
@@ -141,7 +141,7 @@
 										onclick={() => remove(index)}
 										onkeyup={(event) => event.key === 'Enter' && remove(index)}
 									>
-										<Icon path={mdiClose} size={16} />
+										<XIcon size={16} />
 									</div>
 								</div>
 							{/each}

@@ -1,4 +1,5 @@
 <script lang="ts" generics="Item extends {id: string}">
+	import { ArrowDownWideNarrowIcon, ArrowUpNarrowWideIcon, ListFilterIcon } from '@lucide/svelte'
 	import { preventDefault } from 'svelte/legacy'
 
 	import { onMount } from 'svelte'
@@ -12,8 +13,6 @@
 	import { urlParam } from 'fuma'
 	import { jsonParse } from 'fuma'
 	import type { TableField } from '$lib/fuma-legacy/ui/table/field.js'
-	import { mdiFilterMultipleOutline, mdiSortAscending, mdiSortDescending } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import OrderButtons from '$lib/fuma-legacy/ui/table/head/OrderButtons.svelte'
 
 	interface Props {
@@ -87,7 +86,7 @@
 				<div class="flex gap-2">
 					<span>{field.label}</span>
 					{#if !isDefined(min) && !isDefined(max)}
-						<Icon path={mdiFilterMultipleOutline} size={15} class="opacity-50" />
+						<ListFilterIcon size={15} class="opacity-50" />
 					{/if}
 				</div>
 
@@ -103,11 +102,8 @@
 					</span>
 				{/if}
 				{#if order}
-					<Icon
-						path={order === 'asc' ? mdiSortAscending : mdiSortDescending}
-						size={18}
-						class="fill-primary"
-					/>
+					{@const OrderIcon = order === 'asc' ? ArrowUpNarrowWideIcon : ArrowDownWideNarrowIcon}
+					<OrderIcon size={18} class="text-primary" />
 				{/if}
 			</button>
 		{/snippet}

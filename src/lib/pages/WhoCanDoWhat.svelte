@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { tip } from 'fuma'
+	import { CheckIcon, CircleHelpIcon, ListTodoIcon } from '@lucide/svelte'
 	import { rolesMap } from '$lib/member/MemberRole.svelte'
-	import { Icon } from '$lib/fuma-legacy'
-	import { mdiCheck, mdiHelp, mdiListStatus } from '@mdi/js'
 
 	type Permission = boolean | string | undefined
 
@@ -49,13 +49,19 @@
 			],
 		],
 	]
+	const {
+		owner: { icon: OwnerIcon },
+		admin: { icon: AdminIcon },
+		leader: { icon: LeaderIcon },
+		member: { icon: MemberIcon },
+	} = rolesMap
 </script>
 
 <h3>Les rôles au sein de l'évènement</h3>
 
 <section>
 	<h4 class="flex gap-2">
-		<Icon path={rolesMap.owner.icon} class="opacity-70" />
+		<OwnerIcon class="opacity-70" />
 		Propriétaire
 	</h4>
 	<p>C'est le créateur de l’évènement.</p>
@@ -63,7 +69,7 @@
 
 <section>
 	<h4 class="flex gap-2">
-		<Icon path={rolesMap.admin.icon} class="opacity-70" />
+		<AdminIcon class="opacity-70" />
 		Administrateur
 	</h4>
 	<p>Nommé par le propriétaire, il hérite pratiquement de tous les droits de celui-ci.</p>
@@ -71,7 +77,7 @@
 
 <section>
 	<h4 class="flex gap-2">
-		<Icon path={rolesMap.leader.icon} class="opacity-70" />
+		<LeaderIcon class="opacity-70" />
 		Responsable de secteur
 	</h4>
 	<p>
@@ -82,7 +88,7 @@
 
 <section>
 	<h4 class="flex gap-2">
-		<Icon path={rolesMap.member.icon} class="opacity-70" />
+		<MemberIcon class="opacity-70" />
 		Membre
 	</h4>
 	<p>
@@ -95,9 +101,11 @@
 	<thead>
 		<tr>
 			<th class="align-middle">Qui peut faire quoi ?</th>
-			{#each Object.values(rolesMap).slice(1) as { icon, label } (label)}
+			{#each Object.values(rolesMap).slice(1) as { icon: RoleIcon, label } (label)}
 				<th>
-					<Icon path={icon} title={label} class="opacity-70" />
+					<span class="inline-flex" use:tip={{ content: label }}>
+						<RoleIcon class="opacity-70" />
+					</span>
 				</th>
 			{/each}
 		</tr>
@@ -110,14 +118,20 @@
 				</td>
 				{#each values as value, i (i)}
 					{#if value === true}
-						<td><Icon path={mdiCheck} class="fill-success" /></td>
+						<td><CheckIcon class="text-success" /></td>
 					{:else if value === false}
 						<td></td>
 					{:else if value === undefined}
-						<td><Icon path={mdiHelp} class="fill-warning" title="Paramétrable" /></td>
+						<td>
+							<span class="inline-flex" use:tip={{ content: 'Paramétrable' }}>
+								<CircleHelpIcon class="text-warning" />
+							</span>
+						</td>
 					{:else}
 						<td>
-							<Icon path={mdiListStatus} class="fill-info" title={value} />
+							<span class="inline-flex" use:tip={{ content: value }}>
+								<ListTodoIcon class="text-info" />
+							</span>
 						</td>
 					{/if}
 				{/each}

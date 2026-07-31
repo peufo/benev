@@ -1,10 +1,9 @@
 <script lang="ts">
+	import { PlusIcon, Trash2Icon } from '@lucide/svelte'
 	import { slide } from 'svelte/transition'
-	import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
 	import { toast } from 'svelte-sonner'
 
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
-	import { listEditable } from 'fuma'
+	import { listEditable, tip } from 'fuma'
 
 	interface Props {
 		key: string
@@ -62,7 +61,7 @@
 					class="btn btn-square btn-ghost btn-sm"
 					onclick={() => removeOption(index)}
 				>
-					<Icon path={mdiTrashCanOutline} size={20} class="fill-error" />
+					<Trash2Icon size={20} class="text-error" />
 				</button>
 			</div>
 		{/each}
@@ -83,7 +82,7 @@
 			disabled={!newOption}
 			onclick={createOption}
 		>
-			<Icon path={mdiPlus} title="Ajouter" />
+			<span class="inline-flex" use:tip={{ content: 'Ajouter' }}><PlusIcon /></span>
 		</button>
 	</div>
 </div>

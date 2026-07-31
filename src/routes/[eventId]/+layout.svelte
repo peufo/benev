@@ -1,19 +1,19 @@
 <script lang="ts">
+	import {
+		ArchiveIcon,
+		ArrowLeftIcon,
+		FlaskConicalIcon,
+		GlobeIcon,
+		MailIcon,
+		MapPinIcon,
+		PhoneIcon,
+	} from '@lucide/svelte'
+	import facebookLogo from '$lib/assets/facebook.svg'
+	import instagramLogo from '$lib/assets/instagram.svg'
 	import { page } from '$app/stores'
 	import { JsonLd } from 'svelte-meta-tags'
-	import {
-		mdiArchiveOutline,
-		mdiArrowLeft,
-		mdiEmailOutline,
-		mdiFacebook,
-		mdiInstagram,
-		mdiMapMarkerOutline,
-		mdiPhoneOutline,
-		mdiTestTube,
-		mdiWeb,
-	} from '@mdi/js'
 
-	import { Card, Icon } from '$lib/fuma-legacy'
+	import { Card } from '$lib/fuma-legacy'
 	import { Drawer } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { Header, Footer, AdminNavigation } from '$lib/layout'
@@ -100,7 +100,7 @@
 			<Card class="max-w-lg mx-auto">
 				{#snippet title()}
 					<h2 class="flex gap-2">
-						<Icon path={mdiTestTube} class="rotate-12 opacity-70" />
+						<FlaskConicalIcon class="rotate-12 opacity-70" />
 
 						<span>Bientôt disponible</span>
 					</h2>
@@ -112,7 +112,7 @@
 
 				<div class="mt-8">
 					<a href="/me" class="btn btn-sm">
-						<Icon path={mdiArrowLeft} />
+						<ArrowLeftIcon />
 						<span>mon profil</span>
 					</a>
 				</div>
@@ -121,14 +121,14 @@
 			<Card class="max-w-lg mx-auto">
 				{#snippet title()}
 					<h2 class="flex gap-2">
-						<Icon path={mdiArchiveOutline} class="opacity-70" />
+						<ArchiveIcon class="opacity-70" />
 						<span>Cet évènement est archivé</span>
 					</h2>
 				{/snippet}
 
 				<div class="mt-8">
 					<a href="/me" class="btn btn-sm">
-						<Icon path={mdiArrowLeft} />
+						<ArrowLeftIcon />
 						<span>mon profil</span>
 					</a>
 				</div>
@@ -140,31 +140,37 @@
 <Footer>
 	<div class="flex flex-wrap justify-center">
 		<FooterLink link={data.event.web}>
-			{#snippet icon()}
+			{#snippet logo()}
 				{#if data.event.icon}
 					<EventIcon icon={data.event.icon} class="inline-block w-5 mx-1" />
 				{:else}
-					<Icon path={mdiWeb} />
+					<GlobeIcon />
 				{/if}
 			{/snippet}
 		</FooterLink>
 
-		<FooterLink link={data.event.facebook} icon={mdiFacebook}>
+		<FooterLink link={data.event.facebook}>
+			{#snippet logo()}
+				<img src={facebookLogo} alt="" width="20" height="20" aria-hidden="true" />
+			{/snippet}
 			{#snippet children({ label })}
 				{label.replace(/^facebook.com\//, '')}
 			{/snippet}
 		</FooterLink>
-		<FooterLink link={data.event.instagram} icon={mdiInstagram}>
+		<FooterLink link={data.event.instagram}>
+			{#snippet logo()}
+				<img src={instagramLogo} alt="" width="20" height="20" aria-hidden="true" />
+			{/snippet}
 			{#snippet children({ label })}
 				{label.replace(/^instagram.com\//, '')}
 			{/snippet}
 		</FooterLink>
 
-		<FooterLink link={data.event.email} protocol="mailto:" icon={mdiEmailOutline} />
-		<FooterLink link={data.event.phone} protocol="tel:" icon={mdiPhoneOutline} />
+		<FooterLink link={data.event.email} protocol="mailto:" icon={MailIcon} />
+		<FooterLink link={data.event.phone} protocol="tel:" icon={PhoneIcon} />
 
 		{#if data.event.location}
-			<FooterLink link={mapUrl(data.event.location)} icon={mdiMapMarkerOutline}>
+			<FooterLink link={mapUrl(data.event.location)} icon={MapPinIcon}>
 				{data.event.location.label}
 			</FooterLink>
 		{/if}

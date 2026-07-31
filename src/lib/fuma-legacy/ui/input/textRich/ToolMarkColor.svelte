@@ -1,15 +1,16 @@
 <script lang="ts">
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
+	import type { IconProps } from '@lucide/svelte'
+	import type { Component } from 'svelte'
 	import { tip } from 'fuma'
 
 	interface Props {
-		icon: string
+		icon: Component<IconProps>
 		label: string
 		color: string
 		setColor: (color: string) => void
 	}
 
-	let { icon, label, color = $bindable(), setColor }: Props = $props()
+	let { icon: Icon, label, color = $bindable(), setColor }: Props = $props()
 
 	let inputColor: HTMLInputElement = $state()!
 
@@ -34,7 +35,7 @@
 				class="badge indicator-item badge-xs scale-75 border transition-none"
 				style:background={color}
 			></span>
-			<Icon path={icon} size={19} class="opacity-70" />
+			<Icon size={19} class="opacity-70" />
 		</div>
 	</button>
 </div>

@@ -1,15 +1,15 @@
 <script lang="ts">
+	import { ChevronDownIcon, type IconProps } from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
-	import { mdiChevronDown } from '@mdi/js'
 
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { DropDown } from 'fuma'
+	import type { Component } from 'svelte'
 
 	type Tool = {
 		key?: string
 		attributes?: {}
 		label: string
-		icon: string
+		icon: Component<IconProps>
 		action: () => unknown
 		newSection?: true
 		disable?: boolean
@@ -40,22 +40,24 @@
 	)
 
 	const activator_render = $derived(activator)
+	const IconSelected = $derived(toolSelected.icon)
 </script>
 
 <DropDown hideOnBlur bind:this={dropdown}>
 	{#snippet activator()}
 		<button type="button" class="menu-item gap-2">
 			{#if activator_render}{@render activator_render()}{:else}
-				<Icon path={toolSelected.icon} size={20} class="opacity-70" />
+				<IconSelected size={20} class="opacity-70" />
 				{#if !hideLabel}
 					<span class="text-sm font-light">{toolSelected.label}</span>
 				{/if}
 			{/if}
-			<Icon path={mdiChevronDown} size={20} class="translate-y-[1px] opacity-70" />
+			<ChevronDownIcon size={20} class="translate-y-[1px] opacity-70" />
 		</button>
 	{/snippet}
 
 	{#each tools as tool}
+		{@const ToolIcon = tool.icon}
 		{#if tool.newSection}
 			<hr class="my-2" />
 		{/if}
@@ -67,7 +69,7 @@
 			class:opacity-60={tool.disable}
 			onclick={() => handleClick(tool)}
 		>
-			<Icon path={tool.icon} size={20} class="opacity-70" />
+			<ToolIcon size={20} class="opacity-70" />
 			<span>
 				{tool.label}
 			</span>

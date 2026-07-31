@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { mdiEmailMultipleOutline } from '@mdi/js'
-
+	import { tip } from 'fuma'
+	import { MailsIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
-	import { Icon } from '$lib/fuma-legacy'
 	import { api } from '$lib/api'
 
 	const getMembersEmails = async () => {
@@ -32,11 +31,8 @@
 	{#if isLoading}
 		<span class="loading loading-spinner scale-125 text-secondary"></span>
 	{:else}
-		<Icon
-			path={mdiEmailMultipleOutline}
-			size={18}
-			title="Envoyer un email aux membres"
-			class="transition-transform {isLoading ? 'scale-75' : ''}"
-		/>
+		<span class="inline-flex" use:tip={{ content: 'Envoyer un email aux membres' }}
+			><MailsIcon size={18} class="transition-transform {isLoading ? 'scale-75' : ''}" /></span
+		>
 	{/if}
 </button>

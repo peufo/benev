@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { GripHorizontalIcon, GripIcon, GripVerticalIcon, type IconProps } from '@lucide/svelte'
+	import type { Component } from 'svelte'
 	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
 	const bubble = createBubbler()
 	import { browser } from '$app/environment'
-	import { mdiDrag, mdiDragHorizontal, mdiDragVertical } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy'
 	import { onDestroy } from 'svelte'
 
 	type Axis = 'any' | 'x' | 'y'
@@ -18,11 +18,12 @@
 
 	let { axis = 'any', class: klass = '', onmove, ondone }: Props = $props()
 
-	const paths: Record<Axis, string> = {
-		any: mdiDrag,
-		x: mdiDragHorizontal,
-		y: mdiDragVertical,
+	const icons: Record<Axis, Component<IconProps>> = {
+		any: GripIcon,
+		x: GripHorizontalIcon,
+		y: GripVerticalIcon,
 	}
+	const AxisIcon = $derived(icons[axis])
 	type Dot = { x: number; y: number }
 
 	let origin = { x: 0, y: 0 }
@@ -65,7 +66,7 @@
     bg-base-100 hover:bg-base-200 rounded-md btn-xs btn-square
   "
 >
-	<Icon path={paths[axis]} />
+	<AxisIcon />
 </button>
 
 <style>

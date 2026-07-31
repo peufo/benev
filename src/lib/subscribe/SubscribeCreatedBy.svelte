@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Icon } from '$lib/fuma-legacy'
-	import { mdiAccountCircleOutline, mdiShieldAccountOutline } from '@mdi/js'
+	import { tip } from 'fuma'
+	import { CircleUserIcon, ShieldUserIcon } from '@lucide/svelte'
 
 	interface Props {
 		createdBy: 'leader' | 'user'
@@ -9,26 +9,16 @@
 	}
 
 	let { createdBy, size = 24, class: klass = '' }: Props = $props()
+
+	const label = $derived(
+		createdBy === 'leader' ? 'Inscrit par un responsable' : 'Inscrit par le membre'
+	)
 </script>
 
-<div class="w-min">
+<div class="w-min" use:tip={{ content: label }}>
 	{#if createdBy === 'leader'}
-		<Icon
-			path={mdiShieldAccountOutline}
-			title="Inscrit par un responsable"
-			class="opacity-60 {klass}"
-			{size}
-			disableTitlePropagation
-			tippyProps={{ appendTo: 'parent' }}
-		/>
+		<ShieldUserIcon class="opacity-60 {klass}" {size} />
 	{:else}
-		<Icon
-			path={mdiAccountCircleOutline}
-			title="Inscrit par le membre"
-			class="opacity-60 {klass}"
-			{size}
-			disableTitlePropagation
-			tippyProps={{ appendTo: 'parent' }}
-		/>
+		<CircleUserIcon class="opacity-60 {klass}" {size} />
 	{/if}
 </div>

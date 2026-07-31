@@ -61,7 +61,6 @@
 		"@lucia-auth/adapter-prisma": "^3.0.2",
 		"@lucia-auth/oauth": "^3.5.1",
 		"@lucide/svelte": "^1.27.0",
-		"@mdi/js": "^7.3.67",
 		"@paralleldrive/cuid2": "^2.2.2",
 		"@prisma/client": "^6.19.3",
 		"@stripe/stripe-js": "^2.2.0",

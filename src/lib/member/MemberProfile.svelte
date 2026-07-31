@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { CheckIcon, PencilIcon, XIcon } from '@lucide/svelte'
 	import type { MemberProfile } from '$lib/server'
 	import { page } from '$app/stores'
-	import { mdiCheck, mdiClose, mdiPencilOutline } from '@mdi/js'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
-	import { CardBasic, Icon, Placeholder } from '$lib/fuma-legacy'
-	import { Drawer } from 'fuma'
+	import { CardBasic, Placeholder } from '$lib/fuma-legacy'
+	import { Drawer, tip } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { fade } from 'svelte/transition'
 
@@ -37,7 +37,9 @@
 			data-sveltekit-noscroll
 			class="btn btn-square btn-sm ml-2"
 		>
-			<Icon path={mdiPencilOutline} title="Modifier le profil de {member.firstName}" />
+			<span class="inline-flex" use:tip={{ content: `Modifier le profil de ${member.firstName}` }}
+				><PencilIcon /></span
+			>
 		</a>
 	{/if}
 </div>
@@ -56,12 +58,12 @@
 					<p>{value || '-'}</p>
 				{:else if value === true}
 					<div class="badge">
-						<Icon path={mdiCheck} size={14} class="fill-success" />
+						<CheckIcon size={14} class="text-success" />
 						<span class="ml-1">Oui</span>
 					</div>
 				{:else if value === false}
 					<span class="badge">
-						<Icon path={mdiClose} size={14} class="fill-error" />
+						<XIcon size={14} class="text-error" />
 						<span class="ml-1">Non</span>
 					</span>
 				{:else if Array.isArray(value)}

@@ -1,12 +1,11 @@
 <script lang="ts">
+	import { UsersRoundIcon } from '@lucide/svelte'
 	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
 	const bubble = createBubbler()
 	import type { Gift, GiftCondition } from '@prisma/client'
-	import { mdiAccountGroupOutline } from '@mdi/js'
 	import { slide } from 'svelte/transition'
-	import { Icon } from '$lib/fuma-legacy'
-	import { Dialog } from 'fuma'
+	import { Dialog, tip } from 'fuma'
 
 	import GiftForm from './GiftForm.svelte'
 
@@ -45,7 +44,9 @@
 			class="btn btn-square btn-sm btn-ghost ml-auto"
 			onclick={stopPropagation(bubble('click'))}
 		>
-			<Icon path={mdiAccountGroupOutline} title="Voir les attributions de {gift.name}" />
+			<span class="inline-flex" use:tip={{ content: `Voir les attributions de ${gift.name}` }}>
+				<UsersRoundIcon />
+			</span>
 		</a>
 	</button>
 {/each}

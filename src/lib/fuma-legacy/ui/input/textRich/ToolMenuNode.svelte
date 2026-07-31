@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { Editor } from '@tiptap/core'
 	import {
-		mdiText,
-		mdiFormatListBulleted,
-		mdiFormatListNumbered,
-		mdiFormatHeader1,
-		mdiFormatHeader3,
-		mdiFormatHeader2,
-	} from '@mdi/js'
+		AlignLeftIcon,
+		Heading1Icon,
+		Heading2Icon,
+		Heading3Icon,
+		ListIcon,
+		ListOrderedIcon,
+	} from '@lucide/svelte'
+	import type { Editor } from '@tiptap/core'
 
 	import ToolMenu from '$lib/fuma-legacy/ui/input/textRich/ToolMenu.svelte'
 
@@ -24,40 +24,40 @@
 		{
 			key: 'paragraph',
 			label: 'Texte',
-			icon: mdiText,
+			icon: AlignLeftIcon,
 			action: () => editor.commands.setParagraph(),
 		},
 		{
 			key: 'heading',
 			attributes: { level: 1 },
 			label: 'Titre 1',
-			icon: mdiFormatHeader1,
+			icon: Heading1Icon,
 			action: () => editor.commands.setHeading({ level: 1 }),
 		},
 		{
 			key: 'heading',
 			attributes: { level: 2 },
 			label: 'Titre 2',
-			icon: mdiFormatHeader2,
+			icon: Heading2Icon,
 			action: () => editor.commands.setHeading({ level: 2 }),
 		},
 		{
 			key: 'heading',
 			attributes: { level: 3 },
 			label: 'Titre 3',
-			icon: mdiFormatHeader3,
+			icon: Heading3Icon,
 			action: () => editor.commands.setHeading({ level: 3 }),
 		},
 		{
 			key: 'orderedList',
 			label: 'Liste numéroter',
-			icon: mdiFormatListNumbered,
+			icon: ListOrderedIcon,
 			action: () => editor.commands.toggleOrderedList(),
 		},
 		{
 			key: 'bulletList',
 			label: 'Liste à puces',
-			icon: mdiFormatListBulleted,
+			icon: ListIcon,
 			action: () => editor.commands.toggleBulletList(),
 		},
 	]}

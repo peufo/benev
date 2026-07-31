@@ -1,9 +1,8 @@
 <script lang="ts">
+	import { PencilIcon } from '@lucide/svelte'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import { mdiPencilOutline } from '@mdi/js'
 	import type { Field } from '@prisma/client'
-	import { Icon } from '$lib/fuma-legacy'
-	import { urlParam } from 'fuma'
+	import { tip, urlParam } from 'fuma'
 
 	interface Props {
 		field: Field
@@ -11,16 +10,17 @@
 	}
 
 	let { field, updateLink = false }: Props = $props()
+	const FieldIcon = $derived(MEMBER_FIELD_TYPE[field.type].icon)
 </script>
 
 <div class="flex gap-2 items-center">
-	<Icon path={MEMBER_FIELD_TYPE[field.type].icon} class="opacity-70" />
+	<FieldIcon class="opacity-70" />
 	<span>
 		{field.name}
 	</span>
 	{#if updateLink}
 		<a href={urlParam.with({ form_field: field.id })} class="btn btn-square btn-sm ml-auto">
-			<Icon path={mdiPencilOutline} title="Éditer le champ" />
+			<span class="inline-flex" use:tip={{ content: 'Éditer le champ' }}><PencilIcon /></span>
 		</a>
 	{/if}
 </div>

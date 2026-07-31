@@ -1,8 +1,7 @@
 <script lang="ts">
+	import { EyeOffIcon, PencilOffIcon } from '@lucide/svelte'
 	import type { Prisma } from '@prisma/client'
-	import { mdiEyeOffOutline, mdiPencilOffOutline } from '@mdi/js'
-	import { InputBoolean, InputNumber, InputRadio, InputString, InputTextarea } from 'fuma'
-	import { Icon } from '$lib/fuma-legacy'
+	import { InputBoolean, InputNumber, InputRadio, InputString, InputTextarea, tip } from 'fuma'
 	import { page } from '$app/state'
 	import InputCheckboxes from './InputCheckboxes.svelte'
 	import { updateMemberProfile } from './member.remote'
@@ -30,19 +29,13 @@
 <div class="{field.type === 'textarea' ? '@lg:col-span-6' : ''} {klass}">
 	<div class="h-5">
 		{#if !field.memberCanRead}
-			<Icon
-				path={mdiEyeOffOutline}
-				size={20}
-				title="Les membres ne peuvent pas voir ce champ"
-				class="ml-3 opacity-75"
-			/>
+			<span class="inline-flex" use:tip={{ content: 'Les membres ne peuvent pas voir ce champ' }}
+				><EyeOffIcon size={20} class="ml-3 opacity-75" /></span
+			>
 		{:else if !field.memberCanWrite}
-			<Icon
-				path={mdiPencilOffOutline}
-				size={20}
-				title="Les membres ne peuvent pas éditer ce champ"
-				class="ml-3 opacity-75"
-			/>
+			<span class="inline-flex" use:tip={{ content: 'Les membres ne peuvent pas éditer ce champ' }}
+				><PencilOffIcon size={20} class="ml-3 opacity-75" /></span
+			>
 		{:else if field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
 			<span class="text-error text-xl ml-3">*</span>
 		{/if}

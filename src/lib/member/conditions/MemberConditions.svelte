@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { IdCardIcon, PersonStandingIcon, PlusIcon, UserCheckIcon, XIcon } from '@lucide/svelte'
 	import { run } from 'svelte/legacy'
 
 	import axios from 'axios'
@@ -6,7 +7,6 @@
 	import { page } from '$app/stores'
 	import type { Field } from '@prisma/client'
 	import {
-		Icon,
 		InputSelect,
 		Placeholder,
 		DropDownMenu,
@@ -17,14 +17,7 @@
 		component,
 		type ComponentAndProps,
 	} from '$lib/fuma-legacy'
-	import { jsonParse } from 'fuma'
-	import {
-		mdiAccountCheckOutline,
-		mdiCardAccountDetailsOutline,
-		mdiClose,
-		mdiHumanMaleBoy,
-		mdiPlus,
-	} from '@mdi/js'
+	import { jsonParse, tip } from 'fuma'
 	import { browser } from '$app/environment'
 	import type { MemberCondition } from '$lib/models'
 	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
@@ -116,7 +109,7 @@
 			tippyProps={{ placement: 'bottom-end' }}
 		>
 			<button type="button" class="btn btn-square">
-				<Icon path={mdiPlus} title="Ajouter une condition" />
+				<span class="inline-flex" use:tip={{ content: 'Ajouter une condition' }}><PlusIcon /></span>
 			</button>
 		</DropDownMenu>
 	</div>
@@ -126,12 +119,12 @@
 			<div class="flex flex-col gap-2 bg-base-200/40 border rounded p-2">
 				<div class="flex gap-2 items-center">
 					{#if condition.type === 'valided'}
-						<Icon path={mdiAccountCheckOutline} class="opacity-70" />
+						<UserCheckIcon class="opacity-70" />
 						<div class="label">
 							<span class="label-text">Membre approuvé</span>
 						</div>
 					{:else if condition.type === 'age'}
-						<Icon path={mdiHumanMaleBoy} class="opacity-70" />
+						<PersonStandingIcon class="opacity-70" />
 						<InputNumber
 							bind:value={condition.args}
 							label="Âge minimum"
@@ -139,7 +132,7 @@
 							input={{ min: 1 }}
 						/>
 					{:else}
-						<Icon path={mdiCardAccountDetailsOutline} class="opacity-70" />
+						<IdCardIcon class="opacity-70" />
 
 						<div class="flex flex-wrap gap-2">
 							<!-- SELECT FIELD -->
@@ -181,7 +174,7 @@
 						onclick={() =>
 							(conditions = [...conditions.slice(0, index), ...conditions.slice(index + 1)])}
 					>
-						<Icon path={mdiClose} class="opacity-70" />
+						<XIcon class="opacity-70" />
 					</button>
 				</div>
 

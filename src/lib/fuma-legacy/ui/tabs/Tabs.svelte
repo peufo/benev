@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import type { Tab } from '$lib/fuma-legacy/ui/tabs/index.js'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 
 	interface Props {
 		tabs: Tab[]
@@ -18,6 +17,7 @@
 	"
 >
 	{#each tabs as tab}
+		{@const TabIcon = tab.icon}
 		{@const active = tab.isActive ?? $page.url.pathname.startsWith(tab.href)}
 		<a
 			href={tab.href}
@@ -28,7 +28,7 @@
       "
 			class:active
 		>
-			<Icon path={tab.icon} size={20} class="opacity-70" />
+			<TabIcon size={20} class="opacity-70" />
 			<span class="hidden whitespace-nowrap sm:block">{tab.label}</span>
 		</a>
 	{/each}

@@ -1,3 +1,21 @@
+import {
+	AlignLeftIcon,
+	ArchiveIcon,
+	CircleUserIcon,
+	ConstructionIcon,
+	FileTextIcon,
+	GlobeIcon,
+	HashIcon,
+	HouseIcon,
+	type IconProps,
+	ListChecksIcon,
+	ListIcon,
+	MailIcon,
+	ScrollTextIcon,
+	SquareCheckIcon,
+	TypeIcon,
+} from '@lucide/svelte'
+import type { Component } from 'svelte'
 import { env } from '$env/dynamic/public'
 import type {
 	EventState,
@@ -8,22 +26,6 @@ import type {
 	Page,
 	Subscribe,
 } from '@prisma/client'
-import {
-	mdiArchiveOutline,
-	mdiEarth,
-	mdiTextShort,
-	mdiText,
-	mdiNumeric,
-	mdiCheckboxIntermediateVariant,
-	mdiOrderBoolDescending,
-	mdiOrderBoolAscendingVariant,
-	mdiExcavator,
-	mdiHomeOutline,
-	mdiLicense,
-	mdiFileDocumentOutline,
-	mdiAccountCircleOutline,
-	mdiEmailOutline,
-} from '@mdi/js'
 
 export const FORMAT_A3 = {
 	x: 297,
@@ -51,22 +53,22 @@ export const MEDIA_PRESETS = {
 
 export const EVENT_STATES: Record<
 	EventState,
-	{ label: string; icon: string; description: string; class: string }
+	{ label: string; icon: Component<IconProps>; description: string; class: string }
 > = {
 	draft: {
-		icon: mdiExcavator,
+		icon: ConstructionIcon,
 		label: 'Évènement en construction',
 		class: 'border-warning',
 		description: `Seul les responsables ont accès au site de l'évènement.`,
 	},
 	published: {
-		icon: mdiEarth,
+		icon: GlobeIcon,
 		label: 'Évènement publié',
 		class: 'border-success',
 		description: `Le site est publiquement disponible.`,
 	},
 	archived: {
-		icon: mdiArchiveOutline,
+		icon: ArchiveIcon,
 		label: 'Évènement archivé',
 		class: '',
 		description: `Seul les responsables ont accès au site de l'évènement.`,
@@ -130,13 +132,16 @@ export const GIFT_CONDITION_TYPE: Record<GiftConditionType, string> = {
 	period: `Doit travailer durant la période de`,
 } as const
 
-export const MEMBER_FIELD_TYPE: Record<Field['type'], { label: string; icon: string }> = {
-	string: { label: 'Text', icon: mdiTextShort },
-	textarea: { label: 'Text long', icon: mdiText },
-	number: { label: 'Nombre', icon: mdiNumeric },
-	boolean: { label: 'Oui / Non', icon: mdiCheckboxIntermediateVariant },
-	select: { label: 'Liste à choix', icon: mdiOrderBoolDescending },
-	multiselect: { label: 'Liste à choix multiple', icon: mdiOrderBoolAscendingVariant },
+export const MEMBER_FIELD_TYPE: Record<
+	Field['type'],
+	{ label: string; icon: Component<IconProps> }
+> = {
+	string: { label: 'Text', icon: TypeIcon },
+	textarea: { label: 'Text long', icon: AlignLeftIcon },
+	number: { label: 'Nombre', icon: HashIcon },
+	boolean: { label: 'Oui / Non', icon: SquareCheckIcon },
+	select: { label: 'Liste à choix', icon: ListIcon },
+	multiselect: { label: 'Liste à choix multiple', icon: ListChecksIcon },
 } as const
 
 export const SUBSCRIBE_STATE: Record<Subscribe['state'], string> = {
@@ -146,10 +151,10 @@ export const SUBSCRIBE_STATE: Record<Subscribe['state'], string> = {
 	cancelled: 'Annulé',
 } as const
 
-export const PAGE_TYPE: Record<Page['type'], { label: string; icon: string }> = {
-	home: { label: 'Accueil', icon: mdiHomeOutline },
-	charter: { label: 'Charte des bénévoles', icon: mdiLicense },
-	public: { label: 'Page publique', icon: mdiFileDocumentOutline },
-	member: { label: 'Page de membre', icon: mdiAccountCircleOutline },
-	email: { label: "Model d'email", icon: mdiEmailOutline },
+export const PAGE_TYPE: Record<Page['type'], { label: string; icon: Component<IconProps> }> = {
+	home: { label: 'Accueil', icon: HouseIcon },
+	charter: { label: 'Charte des bénévoles', icon: ScrollTextIcon },
+	public: { label: 'Page publique', icon: FileTextIcon },
+	member: { label: 'Page de membre', icon: CircleUserIcon },
+	email: { label: "Model d'email", icon: MailIcon },
 } as const

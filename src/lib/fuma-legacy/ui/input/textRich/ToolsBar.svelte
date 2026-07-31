@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { BaselineIcon, BoldIcon, ItalicIcon, PaintBucketIcon } from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
-	import { mdiFormatBold, mdiFormatColorFill, mdiFormatColorText, mdiFormatItalic } from '@mdi/js'
 	import { toast } from 'svelte-sonner'
 
 	import ToolMenuNode from '$lib/fuma-legacy/ui/input/textRich/ToolMenuNode.svelte'
@@ -35,25 +35,25 @@
 			{editor}
 			key="bold"
 			label="Gras (Ctrl+B)"
-			icon={mdiFormatBold}
+			icon={BoldIcon}
 			action={() => editor.chain().focus().toggleBold().run()}
 		/>
 		<ToolMark
 			{editor}
 			key="italic"
 			label="Italic (Ctrl+C)"
-			icon={mdiFormatItalic}
+			icon={ItalicIcon}
 			action={() => editor.chain().focus().toggleItalic().run()}
 		/>
 		<ToolMarkLink {editor} />
 		<ToolMarkColor
-			icon={mdiFormatColorText}
+			icon={BaselineIcon}
 			label="Couleur du text"
 			color={editor.getAttributes('textStyle').color || '#000000'}
 			setColor={editor.commands.setColor}
 		/>
 		<ToolMarkColor
-			icon={mdiFormatColorFill}
+			icon={PaintBucketIcon}
 			label="Couleur du fond"
 			color={editor.getAttributes('highlight').color || '#e51f68'}
 			setColor={(color) => editor.commands.setHighlight({ color })}

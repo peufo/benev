@@ -1,10 +1,9 @@
 <script lang="ts">
+	import { IdCardIcon, PersonStandingIcon, UserCheckIcon } from '@lucide/svelte'
 	import type { Field } from '@prisma/client'
 
-	import { mdiAccountCheckOutline, mdiCardAccountDetailsOutline, mdiHumanMaleBoy } from '@mdi/js'
 	import type { MemberCondition } from '$lib/models'
 	import { CONDITION_OPERATOR_LABEL } from './constants'
-	import { Icon } from '$lib/fuma-legacy'
 
 	interface Props {
 		conditions?: MemberCondition[]
@@ -18,13 +17,13 @@
 {#each conditions as condition, i (i)}
 	<div class="badge flex gap-1 {klass}">
 		{#if condition.type === 'valided'}
-			<Icon path={mdiAccountCheckOutline} class="opacity-70" size={16} />
+			<UserCheckIcon class="opacity-70" size={16} />
 			<span>Membre approuvé</span>
 		{:else if condition.type === 'age'}
-			<Icon path={mdiHumanMaleBoy} class="opacity-70" size={16} />
+			<PersonStandingIcon class="opacity-70" size={16} />
 			<span>Âge minimum: {condition.args} ans</span>
 		{:else}
-			<Icon path={mdiCardAccountDetailsOutline} class="opacity-70" size={16} />
+			<IdCardIcon class="opacity-70" size={16} />
 			{@const field = memberFields.find(
 				(f) => condition.type === 'profile' && f.id === condition.args.fieldId
 			)}

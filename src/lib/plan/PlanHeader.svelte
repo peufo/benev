@@ -1,14 +1,19 @@
 <script lang="ts">
-	import { mdiAlignHorizontalLeft, mdiAlignVerticalTop, mdiOpenInNew } from '@mdi/js'
-	import { Icon, InputCheckboxsMenu, TabsIcon } from '$lib/fuma-legacy'
+	import { InputCheckboxsMenu, TabsIcon } from '$lib/fuma-legacy'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
-	import { urlParam } from 'fuma'
+	import { tip, urlParam } from 'fuma'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
 	import { eventPath } from '$lib/store'
 	import PlanCursor from './PlanCursor.svelte'
 	import type { Plan } from './types'
-	import { ZoomInIcon, ZoomOutIcon } from '@lucide/svelte'
+	import {
+		AlignLeftIcon,
+		Columns3Icon,
+		ExternalLinkIcon,
+		ZoomInIcon,
+		ZoomOutIcon,
+	} from '@lucide/svelte'
 
 	interface Props {
 		teams: { id: string; name: string }[]
@@ -36,7 +41,7 @@
 			enhanceDisabled
 			badgePrimary
 		>
-			{#snippet label()}
+			{#snippet labelSnippet()}
 				<span class="font-normal">secteurs</span>
 			{/snippet}
 		</InputCheckboxsMenu>
@@ -66,8 +71,8 @@
 		key="axis"
 		defaultValue="x"
 		options={[
-			{ label: 'Vue horizontal', icon: mdiAlignHorizontalLeft, value: 'x' },
-			{ label: 'Vue vertical', icon: mdiAlignVerticalTop, value: 'y' },
+			{ label: 'Vue horizontal', icon: AlignLeftIcon, value: 'x' },
+			{ label: 'Vue vertical', icon: Columns3Icon, value: 'y' },
 		]}
 	/>
 
@@ -75,11 +80,9 @@
 		href="{$eventPath}/admin/plan{isFullscreen ? '' : '/fullscreen'}{$page.url.search}"
 		class="btn btn-square btn-sm"
 	>
-		<Icon
-			path={mdiOpenInNew}
-			title="Ouvrir en plein écran"
-			class="opacity-80 {isFullscreen ? 'rotate-180' : ''}"
-		/>
+		<span class="inline-flex" use:tip={{ content: 'Ouvrir en plein écran' }}
+			><ExternalLinkIcon class="opacity-80 {isFullscreen ? 'rotate-180' : ''}" /></span
+		>
 	</a>
 </div>
 

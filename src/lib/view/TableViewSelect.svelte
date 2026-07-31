@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { mdiChevronDown, mdiContentSaveEditOutline, mdiPlus } from '@mdi/js'
+	import { ChevronDownIcon, PlusIcon, SaveIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
 
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
-	import { Dialog, DropDown, InputString } from 'fuma'
+	import { Dialog, DropDown, InputString, tip } from 'fuma'
 	import { createView, deleteView, updateView } from './view.remote'
 
 	type View = {
@@ -45,7 +44,7 @@
 			class="menu-item bordered btn-sm gap-1 rounded-lg border font-semibold opacity-90"
 		>
 			<span>{isNewView ? 'Nouvelle vue' : selectedView?.name || 'Vue simple'}</span>
-			<Icon path={mdiChevronDown} size={20} class="translate-x-1 translate-y-[1px] opacity-90" />
+			<ChevronDownIcon size={20} class="translate-x-1 translate-y-px opacity-90" />
 		</button>
 	{/snippet}
 
@@ -61,7 +60,7 @@
 					}}
 				>
 					<span>Ajouter la nouvelle vue</span>
-					<Icon path={mdiPlus} class="ml-auto opacity-80" size={21} />
+					<PlusIcon class="ml-auto opacity-80" size={21} />
 				</button>
 				<hr class="my-1" />
 			</li>
@@ -90,12 +89,9 @@
 							dialog.showModal()
 						}}
 					>
-						<Icon
-							path={mdiContentSaveEditOutline}
-							class="opacity-50 group-hover:opacity-80"
-							size={18}
-							title="Modifier la vue '{view.name}'"
-						/>
+						<span class="inline-flex" use:tip={{ content: `Modifier la vue '${view.name}'` }}
+							><SaveIcon class="opacity-50 group-hover:opacity-80" size={18} /></span
+						>
 					</button>
 				</a>
 			</li>

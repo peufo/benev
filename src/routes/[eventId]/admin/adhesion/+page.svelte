@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { mdiLogin, mdiOpenInNew } from '@mdi/js'
-
-	import { Card, Icon } from '$lib/fuma-legacy'
+	import { ExternalLinkIcon, LogInIcon } from '@lucide/svelte'
+	import { Card } from '$lib/fuma-legacy'
 
 	import { MemberFields } from '$lib/member'
 	import { EventSettingForm } from '$lib/event'
@@ -15,7 +14,7 @@
 	<Card class="mx-auto" style="min-width: min(100%, 600px)">
 		{#snippet title()}
 			<span class="flex gap-3">
-				<Icon path={mdiLogin} class="opacity-70" />
+				<LogInIcon class="opacity-70" />
 				Adhésion des membres
 			</span>
 		{/snippet}
@@ -35,7 +34,7 @@
 		<div class="flex justify-end">
 			<a href="{$eventPath}/register?forcedStepIndex=1" target="_blank" class="btn btn-ghost">
 				Aperçu du formulaire d'adhésion
-				<Icon path={mdiOpenInNew} size={20} class="opacity-70" />
+				<ExternalLinkIcon size={20} class="opacity-70" />
 			</a>
 		</div>
 	</Card>

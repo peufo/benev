@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { GripIcon, PlusIcon } from '@lucide/svelte'
 	import { slide } from 'svelte/transition'
 	import { goto } from '$app/navigation'
-	import { mdiDrag, mdiPlus } from '@mdi/js'
 	import { toast } from 'svelte-sonner'
 	import type { Field } from '@prisma/client'
-	import { Icon, Placeholder } from '$lib/fuma-legacy'
-	import { listEditable } from 'fuma'
+	import { Placeholder } from '$lib/fuma-legacy'
+	import { listEditable, tip } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { reorderMemberFields } from './memberField.remote'
@@ -35,7 +35,7 @@
 		data-sveltekit-replacestate
 		data-sveltekit-noscroll
 	>
-		<Icon path={mdiPlus} title="Ajouter un champ" />
+		<span class="inline-flex" use:tip={{ content: 'Ajouter un champ' }}><PlusIcon /></span>
 	</a>
 </div>
 
@@ -48,6 +48,7 @@
 	class="flex flex-col gap-2"
 >
 	{#each fields as field (field.id)}
+		{@const FieldIcon = MEMBER_FIELD_TYPE[field.type].icon}
 		<button
 			transition:slide
 			onclick={() =>
@@ -57,7 +58,7 @@
 				bg-base-200/50 hover:bg-base-200 cursor-pointer
 			"
 		>
-			<Icon path={MEMBER_FIELD_TYPE[field.type].icon} class="opacity-70" />
+			<FieldIcon class="opacity-70" />
 			<span>
 				{field.name}
 				{#if field.required && field.memberCanWrite}
@@ -66,7 +67,7 @@
 			</span>
 
 			<span class="drag-button btn btn-sm btn-square btn-ghost ml-auto">
-				<Icon path={mdiDrag} />
+				<GripIcon />
 			</span>
 		</button>
 	{/each}

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { mdiCheck, mdiLink, mdiLoading } from '@mdi/js'
+	import { CheckIcon, LinkIcon, LoaderCircleIcon } from '@lucide/svelte'
 	import type { Page } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
-	import { FormControl, Icon, InputSelect, InputTextRich } from '$lib/fuma-legacy'
+	import { FormControl, InputSelect, InputTextRich } from '$lib/fuma-legacy'
 	import { ButtonDelete, InputString } from 'fuma'
 
 	import { normalizePath } from '$lib/normalizePath'
@@ -75,13 +75,13 @@
 			{#if page.type === 'home'}
 				<input type="hidden" name="type" value="home" />
 				<div class="menu-item rounded-lg disabled border bordered h-12">
-					<Icon path={home.icon} size={21} class="opacity-70" />
+					<home.icon size={21} class="opacity-70" />
 					<span>{home.label}</span>
 				</div>
 			{:else if page.type === 'email'}
 				<input type="hidden" name="type" value="email" />
 				<div class="menu-item rounded-lg disabled border bordered h-12">
-					<Icon path={email.icon} size={21} class="opacity-70" />
+					<email.icon size={21} class="opacity-70" />
 					<span>{email.label}</span>
 				</div>
 			{:else}
@@ -129,19 +129,19 @@
 				href={pagePath}
 				class="flex items-center gap-1 mr-auto link link-hover text-sm opacity-70 pr-4"
 			>
-				<Icon path={mdiLink} class="opacity-60 -rotate-45" size={18} />
+				<LinkIcon class="opacity-60 -rotate-45" size={18} />
 				<span>{pagePath}</span>
 			</a>
 		{/if}
 
 		{#if isDirty}
 			<div class="flex gap-1 items-center">
-				<Icon path={mdiLoading} class="animate-spin fill-warning" size={20} />
+				<LoaderCircleIcon class="animate-spin text-warning" size={20} />
 				<span class="text-sm text-base-content/70">Sauvegarde</span>
 			</div>
 		{:else}
 			<div class="flex gap-1 items-center">
-				<Icon path={mdiCheck} class="fill-success" size={20} />
+				<CheckIcon class="text-success" size={20} />
 				<span class="text-sm text-base-content/70">Sauvegardé</span>
 			</div>
 		{/if}

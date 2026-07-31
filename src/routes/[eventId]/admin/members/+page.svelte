@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { mdiAccountPlusOutline, mdiFilterRemoveOutline, mdiSigma } from '@mdi/js'
+	import { FilterXIcon, SigmaIcon, UserPlusIcon } from '@lucide/svelte'
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick, untrack } from 'svelte'
 	import { goto } from '$app/navigation'
-	import { InputSearch, Table, Card, component, Icon } from '$lib/fuma-legacy'
+	import { InputSearch, Table, Card, component } from '$lib/fuma-legacy'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
-	import { Drawer } from 'fuma'
+	import { Drawer, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { jsonParse } from 'fuma'
@@ -58,7 +58,9 @@
 
 				<!-- SHOW MEMBERS STATS -->
 				<a href={urlParam.with({ members_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
-					<Icon path={mdiSigma} title="Afficher le résumé des membres" size={18} />
+					<span class="inline-flex" use:tip={{ content: 'Afficher le résumé des membres' }}
+						><SigmaIcon size={18} /></span
+					>
 				</a>
 
 				<!-- RESET FILTER -->
@@ -66,7 +68,9 @@
 					href={urlParam.without(...tableFields.map((f) => f.key), 'skip', 'take')}
 					class="btn btn-square btn-sm"
 				>
-					<Icon path={mdiFilterRemoveOutline} title="Effacer les filtres" size={18} />
+					<span class="inline-flex" use:tip={{ content: 'Effacer les filtres' }}
+						><FilterXIcon size={18} /></span
+					>
 				</a>
 
 				<TableViewSelect key="members" views={data.views} />
@@ -82,7 +86,9 @@
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
 				>
-					<Icon path={mdiAccountPlusOutline} title="Inviter des membres" />
+					<span class="inline-flex" use:tip={{ content: 'Inviter des membres' }}
+						><UserPlusIcon /></span
+					>
 				</a>
 			</div>
 			{#key tableFields}

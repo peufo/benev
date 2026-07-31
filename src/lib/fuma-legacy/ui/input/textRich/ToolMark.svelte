@@ -1,17 +1,18 @@
 <script lang="ts">
+	import type { IconProps } from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { tip } from 'fuma'
+	import type { Component } from 'svelte'
 
 	interface Props {
 		editor: Editor
 		key: string
 		label: string
-		icon: string
+		icon: Component<IconProps>
 		action: () => void
 	}
 
-	let { editor, key, label, icon, action }: Props = $props()
+	let { editor, key, label, icon: Icon, action }: Props = $props()
 
 	let isActive = $derived(editor.isActive(key))
 </script>
@@ -22,5 +23,5 @@
 	class="menu-item {isActive ? 'bg-base-200/60' : ''}"
 	onclick={action}
 >
-	<Icon path={icon} size={19} class={isActive ? 'opacity-90' : 'opacity-60'} />
+	<Icon size={19} class={isActive ? 'opacity-90' : 'opacity-60'} />
 </button>

@@ -1,10 +1,9 @@
 <script lang="ts">
+	import { ChevronRightIcon } from '@lucide/svelte'
 	import type { Snippet } from 'svelte'
 	import { onDestroy } from 'svelte'
 	import { slide } from 'svelte/transition'
-	import { mdiChevronRight } from '@mdi/js'
 
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
 
@@ -72,8 +71,7 @@
 				<div class="min-w-0 overflow-hidden text-ellipsis font-medium {classTitle}">
 					{@render title?.()}
 				</div>
-				<Icon
-					path={mdiChevronRight}
+				<ChevronRightIcon
 					class="ml-auto opacity-80 transition-transform {isOpen ? 'rotate-90' : ''}"
 				/>
 			</div>

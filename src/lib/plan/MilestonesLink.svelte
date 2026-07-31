@@ -20,7 +20,7 @@
 				class="badge badge-secondary badge-outline group hover:bg-secondary/10"
 				href={urlParam.with({ cursor: milestone.time.add(-3, 'hour').toJSON() })}
 			>
-				<PinIcon class="rotate-45  group-hover:fill-secondary -translate-x-1" size={14} />
+				<PinIcon class="rotate-45  group-hover:text-secondary -translate-x-1" size={14} />
 				<span>{milestone.name}</span>
 			</a>
 			<span class="text-base-content/70 text-xs font-semibold col-span-2">
@@ -38,7 +38,7 @@
 				class="badge badge-secondary badge-outline group hover:bg-secondary/10 ml-auto"
 				href={urlParam.with({ cursor: milestone.time.add(-3, 'hour').toJSON() })}
 			>
-				<PinIcon class="rotate-45  group-hover:fill-secondary -translate-x-1" size={14} />
+				<PinIcon class="rotate-45  group-hover:text-secondary -translate-x-1" size={14} />
 				<span>{milestone.name}</span>
 			</a>
 		{/each}

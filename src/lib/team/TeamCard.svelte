@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { mdiClockTimeFourOutline } from '@mdi/js'
+	import { ClockIcon } from '@lucide/svelte'
 	import { daytz } from '$lib/dayjs'
 	import { page } from '$app/stores'
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeDate } from '$lib/formatRange'
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
-	import { CardCollapse, Icon, Placeholder } from '$lib/fuma-legacy'
+	import { CardCollapse, Placeholder } from '$lib/fuma-legacy'
 
 	import TeamActions from './TeamActions.svelte'
 	import TeamLeaders from './TeamLeaders.svelte'
@@ -46,7 +46,7 @@
 					<!-- BADGE SUBSCRIBE CLOSED -->
 					{#if team.closeSubscribing && $page.data.event?.selfSubscribeAllowed}
 						<span class="badge" class:badge-warning={team.isClosedSubscribing}>
-							<Icon path={mdiClockTimeFourOutline} size={16} />
+							<ClockIcon size={16} />
 							<span class="ml-1">
 								Fin des inscriptions le {daytz(team.closeSubscribing).format('DD MMMM YYYY')}
 							</span>

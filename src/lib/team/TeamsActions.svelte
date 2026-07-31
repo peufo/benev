@@ -1,14 +1,9 @@
 <script lang="ts">
+	import { tip } from 'fuma'
+	import { ChartGanttIcon, ClipboardCopyIcon, PencilIcon, UsersIcon } from '@lucide/svelte'
 	import type { Team } from '@prisma/client'
 	import { page } from '$app/stores'
-	import { Icon } from '$lib/fuma-legacy'
 	import { eventPath } from '$lib/store'
-	import {
-		mdiAccountMultipleOutline,
-		mdiChartGantt,
-		mdiClipboardTextMultipleOutline,
-		mdiPencilOutline,
-	} from '@mdi/js'
 	import { MemberSetLeaderOf } from '$lib/member'
 
 	interface Props {
@@ -26,19 +21,27 @@
 
 {#if teams.length}
 	<a href="{$eventPath}/admin/members?subscribes_teams={teamsId}" class="btn btn-square btn-sm">
-		<Icon path={mdiAccountMultipleOutline} title="Tous les membres de ces secteurs" />
+		<span class="inline-flex" use:tip={{ content: 'Tous les membres de ces secteurs' }}
+			><UsersIcon /></span
+		>
 	</a>
 	<a href="{$eventPath}/admin/subscribes?teams={teamsId}" class="btn btn-square btn-sm">
-		<Icon path={mdiClipboardTextMultipleOutline} title="Toutes les inscriptions de ces secteurs" />
+		<span class="inline-flex" use:tip={{ content: 'Toutes les inscriptions de ces secteurs' }}
+			><ClipboardCopyIcon /></span
+		>
 	</a>
 	<a href="{$eventPath}/admin/plan?teams={teamsId}" class="btn btn-square btn-sm">
-		<Icon path={mdiChartGantt} size={20} title="Voir ces secteurs sur le planning" />
+		<span class="inline-flex" use:tip={{ content: 'Voir ces secteurs sur le planning' }}
+			><ChartGanttIcon size={20} /></span
+		>
 	</a>
 {/if}
 
 {#if $page.data.member?.roles.includes('admin')}
 	<button type="button" class="btn btn-square btn-sm" onclick={() => teamDialog.showModal()}>
-		<Icon path={mdiPencilOutline} title="Éditer les secteurs à charge" />
+		<span class="inline-flex" use:tip={{ content: 'Éditer les secteurs à charge' }}
+			><PencilIcon /></span
+		>
 	</button>
 {/if}
 

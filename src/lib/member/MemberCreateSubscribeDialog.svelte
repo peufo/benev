@@ -1,13 +1,13 @@
 <script lang="ts">
+	import { ArrowLeftIcon } from '@lucide/svelte'
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import type { Period } from '@prisma/client'
 
 	import { api } from '$lib/api'
-	import { Icon, InputRelation, SelectorList } from '$lib/fuma-legacy'
+	import { InputRelation, SelectorList } from '$lib/fuma-legacy'
 	import { Dialog } from 'fuma'
 	import { createSubscribe } from '$lib/subscribe/subscribe.remote'
-	import { mdiArrowLeft } from '@mdi/js'
 	import { formatRange } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
 	import type { TeamWithComputedValues } from '$lib/server'
@@ -92,7 +92,7 @@
 		>
 			<div class="flex gap-2 items-center">
 				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={handleClickReturn}>
-					<Icon path={mdiArrowLeft} />
+					<ArrowLeftIcon />
 				</button>
 				<h3 class="title text-lg">{selectedTeam.name}</h3>
 			</div>

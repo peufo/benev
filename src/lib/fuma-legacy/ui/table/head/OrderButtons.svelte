@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
-	import { mdiSortAscending, mdiSortDescending } from '@mdi/js'
+	import { ArrowDownWideNarrowIcon, ArrowUpNarrowWideIcon, type IconProps } from '@lucide/svelte'
+	import type { Component } from 'svelte'
 
 	type Order = 'asc' | 'desc' | undefined
 	interface Props {
 		order: Order
-		iconAsc?: any
-		iconDesc?: any
+		iconAsc?: Component<IconProps>
+		iconDesc?: Component<IconProps>
 		/** Remplacent les évènements de la version Svelte 4. */
 		onchange?: (value: Order) => void
 	}
 
 	let {
 		order = $bindable(),
-		iconAsc = mdiSortAscending,
-		iconDesc = mdiSortDescending,
+		iconAsc: IconAsc = ArrowUpNarrowWideIcon,
+		iconDesc: IconDesc = ArrowDownWideNarrowIcon,
 		onchange,
 	}: Props = $props()
 
@@ -33,7 +33,7 @@
 			class:ring-2={order === 'asc'}
 			onclick={handleOrderClick('asc')}
 		>
-			<Icon path={iconAsc} />
+			<IconAsc size={20} />
 			<span>Ascendant</span>
 		</button>
 		<button
@@ -41,7 +41,7 @@
 			class:ring-2={order === 'desc'}
 			onclick={handleOrderClick('desc')}
 		>
-			<Icon path={iconDesc} />
+			<IconDesc size={20} />
 			<span>Descendant</span>
 		</button>
 	</div>

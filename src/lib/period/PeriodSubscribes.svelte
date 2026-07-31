@@ -1,9 +1,8 @@
 <script lang="ts">
+	import { TriangleAlertIcon } from '@lucide/svelte'
 	import type { Member, Subscribe } from '@prisma/client'
 	import { eventPath } from '$lib/store'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
-	import { mdiAlertOutline } from '@mdi/js'
-	import { Icon } from '$lib/fuma-legacy'
 	import { tip } from 'fuma'
 	import { Avatar } from '$lib/me'
 
@@ -20,7 +19,7 @@
 		<div class="flex items-center gap-2 px-3 py-2 pr-2 rounded-md border bg-base-100">
 			{#if subscribe.isAbsent}
 				<div use:tip={{ content: 'Ce membre a été absent à sa periode de travail' }}>
-					<Icon path={mdiAlertOutline} class="fill-warning" size={20} />
+					<TriangleAlertIcon class="text-warning" size={20} />
 				</div>
 			{/if}
 

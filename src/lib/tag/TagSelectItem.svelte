@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { mdiPencilOutline } from '@mdi/js'
+	import { PencilIcon } from '@lucide/svelte'
 	import type { Tag } from '@prisma/client'
-	import { Icon } from '$lib/fuma-legacy'
 	import { param } from 'fuma'
 
 	interface Props {
@@ -19,9 +18,9 @@
 		<a
 			href={param.with({ form_tag: tag.id })}
 			data-sveltekit-replacestate
-			class="btn btn-xs btn-circle btn-ghost min-h-[18px] w-[18px] h-[18px] opacity-80 ml-1 -mr-1"
+			class="btn btn-xs btn-circle btn-ghost min-h-4.5 w-4.5 h-4.5 opacity-80 ml-1 -mr-1"
 		>
-			<Icon path={mdiPencilOutline} size={16} />
+			<PencilIcon size={16} />
 		</a>
 	{/if}
 </div>

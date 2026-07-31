@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { tip } from 'fuma'
+	import { ClipboardListIcon } from '@lucide/svelte'
 	import { preventDefault } from 'svelte/legacy'
 
-	import { mdiClipboardTextOutline } from '@mdi/js'
 	import { toast } from 'svelte-sonner'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 
 	interface Props {
 		value: string | (() => Promise<string>)
@@ -20,7 +20,7 @@
 		value: valueOrGetValue,
 		title = '',
 		label = '',
-		icon = mdiClipboardTextOutline,
+		icon: Icon = ClipboardListIcon,
 		successMessage = 'Copied',
 		class: klass = '',
 		onsuccess,
@@ -58,13 +58,9 @@
 		class={klass ? klass : `btn btn-sm ${label ? '' : ' btn-square'}`}
 		onclick={preventDefault(handleClick)}
 		class:btn-disabled={isLoading}
+		use:tip={{ content: title }}
 	>
-		<Icon
-			path={icon}
-			size={20}
-			{title}
-			class="transition-transform {isLoading ? 'scale-75' : ''}"
-		/>
+		<Icon size={20} class="transition-transform {isLoading ? 'scale-75' : ''}" />
 		{#if label}
 			<span>{label}</span>
 		{/if}

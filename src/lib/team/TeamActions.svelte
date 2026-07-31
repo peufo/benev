@@ -2,19 +2,18 @@
 	import { createBubbler, stopPropagation } from 'svelte/legacy'
 
 	const bubble = createBubbler()
-	import { Icon } from '$lib/fuma-legacy'
 	import { tip } from 'fuma'
 	import { urlParam } from 'fuma'
-	import {
-		mdiAccountMultipleOutline,
-		mdiChartGantt,
-		mdiClipboardTextMultipleOutline,
-		mdiPencilOutline,
-		mdiPlus,
-	} from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import type { Team } from '@prisma/client'
-	import { CopyPlus } from '@lucide/svelte'
+	import {
+		ChartGanttIcon,
+		ClipboardCopyIcon,
+		CopyPlus,
+		PencilIcon,
+		PlusIcon,
+		UsersIcon,
+	} from '@lucide/svelte'
 	import Delayed from './Delayed.svelte'
 	import { cloneTeamForm } from './team.remote'
 
@@ -32,7 +31,7 @@
 		class="btn btn-square btn-sm btn-ghost"
 		use:tip={{ content: 'Tous les membres du secteur' }}
 	>
-		<Icon path={mdiAccountMultipleOutline} />
+		<UsersIcon />
 	</a>
 </Delayed>
 
@@ -43,7 +42,7 @@
 		class="btn btn-square btn-sm btn-ghost"
 		use:tip={{ content: 'Toutes les inscriptions du secteur' }}
 	>
-		<Icon path={mdiClipboardTextMultipleOutline} size={20} />
+		<ClipboardCopyIcon size={20} />
 	</a>
 </Delayed>
 
@@ -54,7 +53,7 @@
 		class="btn btn-square btn-sm btn-ghost"
 		use:tip={{ content: 'Voir le planning du secteur' }}
 	>
-		<Icon path={mdiChartGantt} />
+		<ChartGanttIcon />
 	</a>
 </Delayed>
 
@@ -77,7 +76,7 @@
 	data-sveltekit-noscroll
 	data-sveltekit-replacestate
 >
-	<Icon path={mdiPlus} />
+	<PlusIcon />
 </a>
 
 <a
@@ -87,5 +86,5 @@
 	data-sveltekit-noscroll
 	data-sveltekit-replacestate
 >
-	<Icon path={mdiPencilOutline} />
+	<PencilIcon />
 </a>

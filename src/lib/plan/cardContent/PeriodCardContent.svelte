@@ -1,12 +1,11 @@
 <script lang="ts">
+	import { CheckIcon, OctagonAlertIcon } from '@lucide/svelte'
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeHour } from '$lib/formatRange'
-	import { Icon } from '$lib/fuma-legacy'
 	import { urlParam } from 'fuma'
 	import { magnet } from '../magnet'
 	import type { PeriodWithMembers } from '../types'
 	import { cardContentOptions } from './options'
-	import { mdiAlertOctagonOutline, mdiCheck } from '@mdi/js'
 	import { TagsList } from '$lib/tag'
 
 	interface Props {
@@ -49,21 +48,21 @@
 	{@const nbEmptySlot = Math.max(period.maxSubscribe - period.subscribes.length, 0)}
 	<ul class="px-1 py-2 flex flex-col">
 		{#each period.subscribes as subscribe (subscribe.id)}
+			{@const StateIcon = subscribe.state === 'accepted' ? CheckIcon : OctagonAlertIcon}
 			<li class="badge whitespace-nowrap">
 				<span>
 					{subscribe.member.firstName}
 					{subscribe.member.lastName}
 				</span>
-				<Icon
-					path={subscribe.state === 'accepted' ? mdiCheck : mdiAlertOctagonOutline}
+				<StateIcon
 					size={15}
 					class="opacity-70 translate-x-1 {subscribe.state === 'accepted'
 						? subscribe.isForcedValidation
-							? 'fill-blue-500'
-							: 'fill-success'
+							? 'text-blue-500'
+							: 'text-success'
 						: subscribe.member.isValidedByUser
-							? 'fill-warning'
-							: 'fill-error'}"
+							? 'text-warning'
+							: 'text-error'}"
 				/>
 			</li>
 		{/each}

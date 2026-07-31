@@ -1,15 +1,10 @@
 <script lang="ts">
+	import { ArrowLeftIcon, SquareCheckBigIcon, SquareIcon, UserRoundPlusIcon } from '@lucide/svelte'
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import { SvelteSet } from 'svelte/reactivity'
-	import { Icon, InputRelation } from '$lib/fuma-legacy'
+	import { InputRelation } from '$lib/fuma-legacy'
 	import { Dialog } from 'fuma'
-	import {
-		mdiArrowLeft,
-		mdiAccountMultiplePlus,
-		mdiCheckboxMarked,
-		mdiCheckboxBlankOutline,
-	} from '@mdi/js'
 	import { eventPath } from '$lib/store'
 	import { toast } from 'svelte-sonner'
 
@@ -255,7 +250,7 @@
 <Dialog bind:dialog class="max-w-4xl overflow-x-hidden" onClose={resetDialog}>
 	{#snippet header()}
 		<h2 class="title flex items-center gap-2" bind:offsetWidth>
-			<Icon path={mdiAccountMultiplePlus} size={24} />
+			<UserRoundPlusIcon size={24} />
 			{title}
 		</h2>
 	{/snippet}
@@ -290,7 +285,7 @@
 		<div class="content" in:fly={{ x: offsetWidth, duration: 250 }}>
 			<div class="flex gap-2 items-center mb-4">
 				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={goBack}>
-					<Icon path={mdiArrowLeft} />
+					<ArrowLeftIcon />
 				</button>
 				<div>
 					<h3 class="title text-lg">{selectedEvent?.name}</h3>
@@ -378,7 +373,7 @@
 		<div class="content" in:fly={{ x: offsetWidth, duration: 250 }}>
 			<div class="flex gap-2 items-center mb-4">
 				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={goBack}>
-					<Icon path={mdiArrowLeft} />
+					<ArrowLeftIcon />
 				</button>
 				<div>
 					<h3 class="title text-lg">Correspondance des champs</h3>
@@ -417,9 +412,9 @@
 							<div class="text-center">
 								{#if mapping.targetFieldId}
 									{#if mapping.sourceFieldType === mapping.targetFieldType}
-										<Icon path={mdiCheckboxMarked} class="text-green-600" size={20} />
+										<SquareCheckBigIcon class="text-green-600" size={20} />
 									{:else}
-										<Icon path={mdiCheckboxBlankOutline} class="text-orange-500" size={20} />
+										<SquareIcon class="text-orange-500" size={20} />
 									{/if}
 								{:else}
 									<span class="text-gray-400">-</span>
@@ -440,7 +435,7 @@
 		<div class="content" in:fly={{ x: offsetWidth, duration: 250 }}>
 			<div class="flex gap-2 items-center mb-4">
 				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={goBack}>
-					<Icon path={mdiArrowLeft} />
+					<ArrowLeftIcon />
 				</button>
 				<div>
 					<h3 class="title text-lg">Confirmation</h3>

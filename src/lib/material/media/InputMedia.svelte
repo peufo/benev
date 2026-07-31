@@ -44,7 +44,7 @@
 				class="ml-auto absolute right-2 bottom-1.5"
 				use:tip={{ content: 'Désélectionner' }}
 			>
-				<Trash2Icon size={12} opacity={0.8} class="hover:fill-error" />
+				<Trash2Icon size={12} opacity={0.8} class="hover:text-error" />
 			</button>
 		</div>
 	{:else}

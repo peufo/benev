@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { mdiGiftOutline } from '@mdi/js'
-
-	import { Card, Icon } from '$lib/fuma-legacy'
+	import { GiftIcon } from '@lucide/svelte'
+	import { Card } from '$lib/fuma-legacy'
 
 	import { GiftConfiguration } from '$lib/gift'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'
@@ -14,7 +13,7 @@
 	<Card class="mx-auto" style="min-width: min(100%, 600px)">
 		{#snippet title()}
 			<span class="flex gap-3">
-				<Icon path={mdiGiftOutline} class="opacity-70 -rotate-6" />
+				<GiftIcon class="opacity-70 -rotate-6" />
 				Prestations offertes
 			</span>
 		{/snippet}

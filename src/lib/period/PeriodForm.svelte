@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { mdiContentDuplicate } from '@mdi/js'
+	import { CopyIcon } from '@lucide/svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
-	import { Icon, InputRelation, InputRelations, component } from '$lib/fuma-legacy'
-	import { ButtonDelete, urlParam } from 'fuma'
+	import { InputRelation, InputRelations, component } from '$lib/fuma-legacy'
+	import { ButtonDelete, tip, urlParam } from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { api } from '$lib/api'
@@ -211,7 +211,7 @@
 				class:btn-disabled={!start || !end}
 				onclick={createNextPeriod}
 			>
-				<Icon path={mdiContentDuplicate} title="Dupliquer après" />
+				<span class="inline-flex" use:tip={{ content: 'Dupliquer après' }}><CopyIcon /></span>
 			</button>
 			<div class="grow"></div>
 		{:else}

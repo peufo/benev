@@ -1,24 +1,23 @@
 <script lang="ts" generics="Item extends {id: string}">
+	import {
+		CheckIcon,
+		CircleCheckIcon,
+		DotIcon,
+		EllipsisIcon,
+		GripIcon,
+		PlusIcon,
+	} from '@lucide/svelte'
 	import { createBubbler, preventDefault } from 'svelte/legacy'
 	import { untrack } from 'svelte'
 
 	const bubble = createBubbler()
-	import {
-		mdiCheck,
-		mdiCheckCircleOutline,
-		mdiCircleSmall,
-		mdiDotsHorizontal,
-		mdiDrag,
-		mdiPlus,
-	} from '@mdi/js'
 	import type { TippyInstance } from 'fuma'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
-	import { urlParam } from 'fuma'
+	import { tip as tipAction, urlParam } from 'fuma'
 	import { listEditable } from 'fuma'
 	import { jsonParse } from 'fuma'
 	import { context } from '$lib/fuma-legacy/ui/table/context.js'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { DropDown } from 'fuma'
 	import type { TableField } from '$lib/fuma-legacy/ui/table/index.js'
 
@@ -77,7 +76,9 @@
 	>
 		{#snippet activator()}
 			<button type="button" class="btn btn-square btn-ghost btn-sm backdrop-blur">
-				<Icon path={mdiDotsHorizontal} title="Définir les champs" />
+				<span class="inline-flex" use:tipAction={{ content: 'Définir les champs' }}
+					><EllipsisIcon /></span
+				>
 			</button>
 		{/snippet}
 
@@ -92,7 +93,9 @@
 						tip.hide()
 					}}
 				>
-					<Icon path={mdiPlus} title="Ajouter un champ" />
+					<span class="inline-flex" use:tipAction={{ content: 'Ajouter un champ' }}
+						><PlusIcon /></span
+					>
 				</button>
 			</div>
 		{/if}
@@ -116,13 +119,13 @@
 						data-sveltekit-noscroll
 					>
 						{#if field.locked}
-							<Icon path={mdiCheck} class="fill-base-content/50" size={21} />
+							<CheckIcon class="text-base-content/50" size={21} />
 						{:else if urlParam.has(field.key)}
-							<Icon path={mdiCheckCircleOutline} class="fill-primary" size={21} />
+							<CircleCheckIcon class="text-primary" size={21} />
 						{:else if field._visible}
-							<Icon path={mdiCheck} class="fill-success" size={21} />
+							<CheckIcon class="text-success" size={21} />
 						{:else}
-							<Icon path={mdiCircleSmall} class="fill-base-content/50" size={21} />
+							<DotIcon class="text-base-content/50" size={21} />
 						{/if}
 
 						<span>{field.label}</span>
@@ -132,7 +135,7 @@
 							onclick={preventDefault(bubble('click'))}
 							role="none"
 						>
-							<Icon path={mdiDrag} size={18} class="fill-base-content/80" />
+							<GripIcon size={18} class="text-base-content/80" />
 						</span>
 					</a>
 				{/each}

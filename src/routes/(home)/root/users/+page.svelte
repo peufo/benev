@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { mdiCheck, mdiClose } from '@mdi/js'
-	import { Card, Icon, InputSearch } from '$lib/fuma-legacy'
-	import { DropDown } from 'fuma'
+	import { CheckIcon, XIcon } from '@lucide/svelte'
+	import { Card, InputSearch } from '$lib/fuma-legacy'
+	import { DropDown, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import TDSortable from './TDSortable.svelte'
 
@@ -33,6 +33,7 @@
 				{@const isCorrectKey =
 					(user.auth_key.length === 1 && user.auth_key[0].id.startsWith('google:')) ||
 					user.auth_key.find((k) => k.id.endsWith(user.email))}
+				{@const KeyIcon = isCorrectKey ? CheckIcon : XIcon}
 
 				<tr>
 					<td>
@@ -65,11 +66,12 @@
 						</ul>
 					</DropDown>
 					<td>
-						<Icon
-							path={isCorrectKey ? mdiCheck : mdiClose}
-							class={isCorrectKey ? 'fill-success' : 'fill-error'}
-							title="{user.email} -> {user.auth_key.map((k) => k.id).join(', ')}"
-						/>
+						<span
+							class="inline-flex"
+							use:tip={{ content: `${user.email} -> ${user.auth_key.map((k) => k.id).join(', ')}` }}
+						>
+							<KeyIcon class={isCorrectKey ? 'text-success' : 'text-error'} />
+						</span>
 					</td>
 				</tr>
 			{/each}

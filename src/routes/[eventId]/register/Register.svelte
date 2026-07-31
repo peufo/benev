@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { ChevronLeftIcon, ChevronRightIcon, XIcon } from '@lucide/svelte'
 	import { page } from '$app/stores'
 	import { afterNavigate, goto, invalidateAll } from '$app/navigation'
-	import { mdiChevronLeft, mdiChevronRight, mdiClose } from '@mdi/js'
 	import type { Event, Field, User, Page } from '@prisma/client'
 
-	import { Card, Icon, Placeholder } from '$lib/fuma-legacy'
-	import { Dialog } from 'fuma'
+	import { Card, Placeholder } from '$lib/fuma-legacy'
+	import { Dialog, tip } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'
 	import { Login, AvatarForm, AccountForm } from '$lib/me'
@@ -87,11 +87,9 @@
 				class="btn btn-sm btn-square join-item btn-ghost btn-disabled"
 				class:btn-disabled={stepIndex <= 1}
 			>
-				<Icon
-					title="Précédent"
-					path={mdiChevronLeft}
-					class={stepIndex <= 1 ? 'opacity-20' : 'opacity-70'}
-				/>
+				<span class="inline-flex" use:tip={{ content: 'Précédent' }}
+					><ChevronLeftIcon class={stepIndex <= 1 ? 'opacity-20' : 'opacity-70'} /></span
+				>
 			</a>
 
 			<a
@@ -99,11 +97,11 @@
 				class="btn btn-sm btn-square join-item btn-ghost"
 				class:btn-disabled={stepIndex >= stepIndexMax}
 			>
-				<Icon
-					title="Suivant"
-					path={mdiChevronRight}
-					class={stepIndex >= stepIndexMax ? 'opacity-20' : 'opacity-70'}
-				/>
+				<span class="inline-flex" use:tip={{ content: 'Suivant' }}
+					><ChevronRightIcon
+						class={stepIndex >= stepIndexMax ? 'opacity-20' : 'opacity-70'}
+					/></span
+				>
 			</a>
 		</div>
 		{#if !!member}
@@ -113,7 +111,9 @@
 				transition:slide={{ axis: 'x' }}
 				onclick={() => dialogRemoveMember.showModal()}
 			>
-				<Icon path={mdiClose} title="Annuler et supprimer ma participation" />
+				<span class="inline-flex" use:tip={{ content: 'Annuler et supprimer ma participation' }}
+					><XIcon /></span
+				>
 			</button>
 		{/if}
 	</div>

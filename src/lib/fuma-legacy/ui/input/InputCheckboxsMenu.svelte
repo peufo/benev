@@ -1,13 +1,12 @@
 <script lang="ts">
+	import { XIcon } from '@lucide/svelte'
 	import { untrack, type Snippet } from 'svelte'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
-	import { mdiClose } from '@mdi/js'
 
 	import { urlParam } from 'fuma'
 	import { jsonParse } from 'fuma'
 	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import { DropDown } from 'fuma'
 	import { FormControl, type InputProps } from '$lib/fuma-legacy/ui/input/index.js'
 
@@ -80,7 +79,7 @@
 			</button>
 			{#if !!value?.length}
 				<button class="btn btn-square join-item btn-sm" onclick={handleReset}>
-					<Icon path={mdiClose} class="fill-base-content" />
+					<XIcon class="text-base-content" />
 				</button>
 			{/if}
 		</div>

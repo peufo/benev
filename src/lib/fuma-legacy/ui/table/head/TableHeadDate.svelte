@@ -1,14 +1,10 @@
 <script lang="ts" generics="Item extends {id: string}">
+	import { CalendarArrowDownIcon, CalendarArrowUpIcon, CalendarSearchIcon } from '@lucide/svelte'
 	import { preventDefault } from 'svelte/legacy'
 	import { untrack } from 'svelte'
 
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
-	import {
-		mdiCalendarFilterOutline,
-		mdiSortClockAscendingOutline,
-		mdiSortClockDescendingOutline,
-	} from '@mdi/js'
 
 	import { DropDown } from 'fuma'
 	import { InputTime } from '$lib/fuma-legacy/ui/input/index.js'
@@ -17,7 +13,6 @@
 	import { RangePicker, type RangeAsDate } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { jsonParse } from 'fuma'
-	import { Icon } from '$lib/fuma-legacy/ui/icon/index.js'
 	import OrderButtons from '$lib/fuma-legacy/ui/table/head/OrderButtons.svelte'
 
 	interface Props {
@@ -100,7 +95,7 @@
 				<div class="flex gap-2">
 					<span>{field.label}</span>
 					{#if !isValidPeriod}
-						<Icon path={mdiCalendarFilterOutline} size={15} class="opacity-50" />
+						<CalendarSearchIcon size={15} class="opacity-50" />
 					{/if}
 				</div>
 
@@ -110,11 +105,8 @@
 					</span>
 				{/if}
 				{#if order}
-					<Icon
-						path={order === 'asc' ? mdiSortClockAscendingOutline : mdiSortClockDescendingOutline}
-						size={18}
-						class="fill-primary"
-					/>
+					{@const OrderIcon = order === 'asc' ? CalendarArrowUpIcon : CalendarArrowDownIcon}
+					<OrderIcon size={18} class="text-primary" />
 				{/if}
 			</button>
 		{/snippet}
@@ -126,8 +118,8 @@
 					updateUrl()
 					dropDown.hide()
 				}}
-				iconAsc={mdiSortClockAscendingOutline}
-				iconDesc={mdiSortClockDescendingOutline}
+				iconAsc={CalendarArrowUpIcon}
+				iconDesc={CalendarArrowDownIcon}
 			/>
 		{/if}
 
