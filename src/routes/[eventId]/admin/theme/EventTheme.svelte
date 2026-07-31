@@ -16,7 +16,7 @@
 </script>
 
 <div
-	class="background"
+	class="event-background background"
 	class:background-poster={!!$theme.backgroundImageId}
 	style="
 		--media: url(/media/{$theme.backgroundImageId});
@@ -30,18 +30,31 @@
 </div>
 
 <style>
-	:global(.bg-base-100) {
-		background-color: hsl(var(--b1) / var(--card-opacity, 1));
+	/* Les surfaces se translucident pour laisser voir le fond de l'évènement. Ces règles
+	   sont `:global` donc elles partent dans la feuille de style de la route, que SvelteKit
+	   charge dès le préchargement au survol d'un lien: sans le `:has`, survoler un lien
+	   vers un évènement repeindrait tout le site. Le `:has` les arrime au montage réel du
+	   fond. */
+	:global(body:has(.event-background) .bg-base-100) {
+		background-color: color-mix(
+			in oklab,
+			var(--color-base-100) calc(var(--card-opacity, 1) * 100%),
+			transparent
+		);
 	}
-	:global(.bg-base-200) {
-		background-color: hsl(var(--b2) / var(--card-opacity, 1));
+	:global(body:has(.event-background) .bg-base-200) {
+		background-color: color-mix(
+			in oklab,
+			var(--color-base-200) calc(var(--card-opacity, 1) * 100%),
+			transparent
+		);
 	}
-	:global(.bg-base-300) {
-		background-color: hsl(var(--b3) / var(--card-opacity, 1));
-	}
-	:global(.border, .card.bordered) {
-		/* border-color: hsl(var(--b2) / calc(var(--card-opacity, 1))); */
-		border-color: hsl(var(--b2));
+	:global(body:has(.event-background) .bg-base-300) {
+		background-color: color-mix(
+			in oklab,
+			var(--color-base-300) calc(var(--card-opacity, 1) * 100%),
+			transparent
+		);
 	}
 
 	.background {
@@ -62,7 +75,11 @@
 	.background-poster > .background-blur {
 		position: fixed;
 		inset: 0;
-		background-color: hsl(var(--b1) / var(--bg-whiteness));
+		background-color: color-mix(
+			in oklab,
+			var(--color-base-100) calc(var(--bg-whiteness) * 100%),
+			transparent
+		);
 		backdrop-filter: blur(var(--bg-blur)) brightness(var(--bg-brightness));
 	}
 </style>
