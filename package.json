@@ -11,6 +11,7 @@
 		"build": "vite build",
 		"preview": "vite preview --host",
 		"generate": "prisma generate",
+		"timezones": "node scripts/timezones.mjs",
 		"migrate": "prisma migrate dev",
 		"migrate:deploy": "prisma migrate deploy",
 		"studio": "prisma studio",

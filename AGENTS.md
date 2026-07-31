@@ -227,6 +227,9 @@ bun run migrate           # Run migrations in dev mode
 bun run migrate:deploy    # Run migrations in production
 bun run studio            # Open Prisma Studio
 
+# Codegen
+bun run timezones         # Regenerate src/lib/timezone.data.ts from the runtime's IANA database
+
 # Testing
 bun run test:unit         # Vitest (node environment)
 bun run test:e2e          # Playwright

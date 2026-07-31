@@ -52,7 +52,7 @@
 <div class="card mx-auto max-w-3xl border border-hard bg-base-100 shadow-lg">
 	<nav
 		aria-label="Espace personnel"
-		class={['sticky top-0 flex gap-1 p-1', 'rounded-t-box border-b border-hard bg-base-100']}
+		class={['sticky top-0 flex gap-1 p-1 z-20', 'rounded-t-box border-b border-hard bg-base-100']}
 	>
 		{#each tabs as { href, isActive, label, icon: Icon } (href)}
 			{@const _isActive = isActive ?? page.url.pathname.startsWith(href)}
