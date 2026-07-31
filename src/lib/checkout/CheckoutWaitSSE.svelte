@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { onMount, untrack } from 'svelte'
 	import { urlParam } from 'fuma'
 	import { invalidateAll, goto } from '$app/navigation'
 	import { page } from '$app/stores'
@@ -17,7 +17,8 @@
 	}: Props = $props()
 
 	let checkoutId = $page.url.searchParams.get('checkoutId')
-	let isNewCheckoutAwaited = $state(!!checkoutId && !allreadyLoaded(checkoutId))
+	// État d'attente amorcé au montage puis piloté par la notification SSE.
+	let isNewCheckoutAwaited = $state(!!checkoutId && !untrack(() => allreadyLoaded)(checkoutId))
 
 	const handleCheckoutNotification = async () => {
 		isNewCheckoutAwaited = false

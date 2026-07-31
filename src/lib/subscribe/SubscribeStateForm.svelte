@@ -56,7 +56,7 @@
 		onsuccess,
 	}: Props = $props()
 
-	let isSelf = subscribe.memberId === page.data.member?.id
+	let isSelf = $derived(subscribe.memberId === page.data.member?.id)
 
 	// Un formulaire par inscription: le composant est rendu en liste.
 	const remoteForm = $derived(setSubscribeState.for(subscribe.id))

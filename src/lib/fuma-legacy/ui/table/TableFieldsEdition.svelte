@@ -1,5 +1,6 @@
 <script lang="ts" generics="Item extends {id: string}">
 	import { createBubbler, preventDefault } from 'svelte/legacy'
+	import { untrack } from 'svelte'
 
 	const bubble = createBubbler()
 	import {
@@ -31,7 +32,10 @@
 
 	let tip: TippyInstance = $state()!
 
-	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = context.get(key)
+	// Même `key` que la `Table` parente, fixe pour toute la durée de vie du composant.
+	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = context.get(
+		untrack(() => key)
+	)
 
 	function getFieldHref(field: TableField<Item>) {
 		if (field.locked) return

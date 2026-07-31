@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
+	import { untrack } from 'svelte'
 	import { InputText } from '$lib/fuma-legacy'
 	import { debounce } from '$lib/debounce'
 	import { normalizeUrl } from '$lib/url'
@@ -13,7 +14,8 @@
 
 	let input: HTMLInputElement = $state()!
 	let scrapPending = $state(false)
-	let icon = $state(event?.icon || null)
+	// Icône affichée: remplacée par le scraping dès que l'URL change.
+	let icon = $state(untrack(() => event?.icon) || null)
 	let value = $state('')
 
 	const handleInput = debounce(async () => {

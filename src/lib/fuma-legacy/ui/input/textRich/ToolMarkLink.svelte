@@ -67,7 +67,7 @@
 		<h3 class="title">Éditer un lien</h3>
 	{/snippet}
 	<div class="flex flex-col gap-2">
-		<InputText bind:value={linkHref} bind:error={linkError} onkeydown={handleKeyDown} />
+		<InputText bind:value={linkHref} error={linkError} onkeydown={handleKeyDown} />
 		<div class="flex flex-row-reverse gap-2">
 			<button type="button" class="btn" onclick={handleNewLink}> Valider </button>
 			<button type="button" class="btn btn-ghost text-error" onclick={handleRemoveLink}>

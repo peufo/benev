@@ -1,5 +1,6 @@
 <script lang="ts" generics="Item extends {id: string}">
 	import { preventDefault } from 'svelte/legacy'
+	import { untrack } from 'svelte'
 
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
@@ -27,12 +28,14 @@
 
 	let dropDown: DropDown = $state()!
 	let rangePicker: RangePicker = $state()!
+	// `field.key` identifie la colonne pour toute la durée de vie du composant.
+	const fieldKey = untrack(() => field.key)
 	const initialValue = jsonParse<{ start?: string; end?: string }>(
-		$page.url.searchParams.get(field.key),
+		$page.url.searchParams.get(fieldKey),
 		{}
 	)
 	let { order } = $state(
-		jsonParse<{ order?: 'asc' | 'desc' }>($page.url.searchParams.get(field.key), {})
+		jsonParse<{ order?: 'asc' | 'desc' }>($page.url.searchParams.get(fieldKey), {})
 	)
 
 	let range: RangeAsDate = $state({
@@ -40,10 +43,9 @@
 		end: initialValue.end ? new Date(initialValue.end) : null,
 	})
 
-	let isValidPeriod = $state(!!range.start && !!range.end)
+	let isValidPeriod = $derived(!!range.start && !!range.end)
 
 	function updateUrl() {
-		isValidPeriod = !!range.start && !!range.end
 		if (!isValidPeriod && !order) {
 			goto(urlParam.without(field.key, 'skip', 'take'), {
 				replaceState: true,

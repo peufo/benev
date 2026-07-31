@@ -9,9 +9,10 @@
 
 	interface Props {
 		subscribes: (Subscribe & { member: Member })[]
+		onsuccess?: () => void
 	}
 
-	let { subscribes }: Props = $props()
+	let { subscribes, onsuccess }: Props = $props()
 </script>
 
 <div class="flex flex-col gap-1">

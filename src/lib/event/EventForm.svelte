@@ -20,7 +20,7 @@
 
 	let { event = undefined, onsuccess }: Props = $props()
 
-	const isUpdate = !!event
+	const isUpdate = $derived(!!event)
 	// Deux remote functions distinctes, l'ancienne action `?/event` étant suffixée par
 	// `_create` ou `_update` selon la présence d'un id.
 	const remoteForm = $derived(event ? updateEvent : createEvent)
@@ -44,20 +44,22 @@
 		}
 	})()
 
-	// `name` et `id` sont couplés (l'un dérive l'autre): ils restent des champs bruts liés.
-	let name = $state(event?.name || '')
-	let eventId = $state(event?.id || '')
-
-	function handleNameInput() {
-		if (event?.state !== 'published') eventId = normalizePath(name)
+	// `name` et `id` sont couplés (l'un dérive l'autre): la saisie du nom écrit dans le champ
+	// `id`, dont le remote form est la source de vérité une fois le formulaire monté.
+	// `Event` désignant ici le modèle Prisma, l'évènement DOM se type par sa cible.
+	function handleNameInput({ currentTarget }: { currentTarget: HTMLInputElement }) {
+		if (event?.state === 'published') return
+		remoteForm.fields.id.set(normalizePath(currentTarget.value))
 	}
 
-	function handleEventIdInput() {
-		eventId = normalizePath(eventId)
+	function handleEventIdInput({ currentTarget }: { currentTarget: HTMLInputElement }) {
+		remoteForm.fields.id.set(normalizePath(currentTarget.value))
 	}
 
 	function confirmIdChange() {
 		if (!event || event.state !== 'published') return true
+		// Tant que rien n'a été saisi, le champ n'a pas de valeur: c'est celle d'origine.
+		const eventId = remoteForm.fields.id.value() ?? event.id
 		if (event.id === eventId) return true
 		return confirm(
 			`Es tu sûr de vouloir modifier le lien de l'évènement de "/${event.id}" pour "${eventId} ?"`
@@ -88,32 +90,31 @@
 			collapsible={false}
 		>
 			<div class="flex flex-col gap-4">
-				<label class="floating-label">
-					<span>Nom de l'évènement</span>
-					<input
-						class="input w-full"
-						type="text"
-						name="name"
-						autocomplete="off"
-						bind:value={name}
-						oninput={handleNameInput}
-					/>
-				</label>
+				<InputString
+					field={remoteForm.fields.name}
+					label="Nom de l'évènement"
+					value={event?.name || ''}
+					autocomplete="off"
+					oninput={handleNameInput}
+				/>
 
-				<label class="floating-label relative">
-					<span>URL de l'évènement</span>
-					<span class="absolute z-1 select-none pl-4 translate-y-[0.7em] opacity-50">
+				<!-- Le préfixe se pose par-dessus le champ, hors du `fieldset` que rend `InputString`:
+				     `top-7` = padding du fieldset + hauteur du label + gap, `h-10` = hauteur de `.input`. -->
+				<div class="relative">
+					<span
+						class="absolute top-7 z-1 flex h-10 items-center pl-4 text-sm opacity-50 select-none pointer-events-none"
+					>
 						benev.io/
 					</span>
-					<input
-						class="input w-full pl-[5.4em]"
-						type="text"
-						name="id"
+					<InputString
+						field={remoteForm.fields.id}
+						label="URL de l'évènement"
+						value={event?.id || ''}
 						autocomplete="off"
-						bind:value={eventId}
+						class="[&_input]:pl-[5.4em]"
 						oninput={handleEventIdInput}
 					/>
-				</label>
+				</div>
 
 				<label class="form-control w-full">
 					<span class="label-text p-1">Fuseau horaire</span>

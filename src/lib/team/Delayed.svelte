@@ -13,8 +13,8 @@
 
 	let { index, max, children }: Props = $props()
 
-	const delayIn = DELAY_IN + index * DELAY_STEP
-	const delayOut = DELAY_OUT + (max - index) * DELAY_STEP
+	const delayIn = $derived(DELAY_IN + index * DELAY_STEP)
+	const delayOut = $derived(DELAY_OUT + (max - index) * DELAY_STEP)
 </script>
 
 <div

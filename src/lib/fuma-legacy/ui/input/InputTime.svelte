@@ -13,7 +13,7 @@
 		getDefaultDate?: any
 		[key: string]: any
 		/** Remplacent les évènements de la version Svelte 4. */
-		oninput?: (value: Date | null) => void
+		oninput?: (value: Date | null | undefined) => void
 	}
 
 	let {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy'
+	import { untrack } from 'svelte'
 
 	import { InputRelation } from '$lib/fuma-legacy'
 	import type { PageData } from './$types'
@@ -17,7 +18,8 @@
 
 	let { badge, defaultMember }: Props = $props()
 
-	let member: Member | undefined = $state(defaultMember)
+	// Membre affiché en aperçu: `defaultMember` n'en est que la valeur de départ.
+	let member: Member | undefined = $state(untrack(() => defaultMember))
 
 	let clientWidth: number = $state()!
 	let clientHeight: number = $state()!

@@ -69,7 +69,11 @@ export async function sendEmailComponent<Comp extends Component<any, any, any>>(
 ) {
 	// Svelte 5: le rendu serveur passe par `render()` de `svelte/server`, qui renvoie
 	// `{ head, body }` — la méthode statique `Component.render()` a disparu.
-	const { body } = render(component, { props: options.props })
+	// La surcharge de `render()` est conditionnée par `{} extends ComponentProps<Comp>`,
+	// qui ne se résout pas sur un générique non instancié: on l'instancie ici.
+	const { body } = render(component as Component<Record<string, unknown>>, {
+		props: options.props as Record<string, unknown>,
+	})
 	return sendEmail({ ...options, html: body })
 }
 

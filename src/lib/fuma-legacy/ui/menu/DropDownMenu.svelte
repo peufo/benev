@@ -45,7 +45,7 @@
 	<SelectorList
 		{trigger}
 		items={_options.map((opt) => ({ id: opt.value, ...opt }))}
-		onselect={(detail) => onSelect(detail)}
+		{onSelect}
 		class="w-full"
 	>
 		{#snippet children({ item })}

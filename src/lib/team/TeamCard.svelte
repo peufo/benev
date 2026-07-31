@@ -4,7 +4,7 @@
 	import { page } from '$app/stores'
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeDate } from '$lib/formatRange'
-	import type { TeamWithComputedValues } from '$lib/server'
+	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
 	import { CardCollapse, Icon, Placeholder } from '$lib/fuma-legacy'
 
 	import TeamActions from './TeamActions.svelte'
@@ -13,9 +13,10 @@
 	import { MemberConditionsBadges } from '$lib/member'
 	interface Props {
 		team: TeamWithComputedValues
+		onclickPeriod?: (value: PeriodWithComputedValues) => void
 	}
 
-	let { team }: Props = $props()
+	let { team, onclickPeriod }: Props = $props()
 </script>
 
 <CardCollapse value={team.id} class="p-1 md:py group" classHeader="sm:pr-3">

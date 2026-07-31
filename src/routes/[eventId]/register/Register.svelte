@@ -21,9 +21,15 @@
 
 	let { event, user, member, charter }: Props = $props()
 
-	const steps = ['Connexion', 'Adhésion', 'Mon compte']
-	const isMemberProfileRequired = !!event.memberFields.filter((f) => f.memberCanWrite).length
-	if (isMemberProfileRequired) steps.push(`Profil ${event.name}`)
+	const isMemberProfileRequired = $derived(
+		!!event.memberFields.filter((f) => f.memberCanWrite).length
+	)
+	const steps = $derived([
+		'Connexion',
+		'Adhésion',
+		'Mon compte',
+		...(isMemberProfileRequired ? [`Profil ${event.name}`] : []),
+	])
 
 	let dialogRemoveMember: HTMLDialogElement = $state()!
 	let forcedStepIndex = 0

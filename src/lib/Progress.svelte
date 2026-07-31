@@ -42,16 +42,16 @@
 		<div
 			class="h-2 bg-error absolute rounded-r"
 			style:width="{100 * ((accepted + request) / total)}%"
-		/>
+		></div>
 		<div
 			class="h-2 bg-warning absolute rounded-r"
 			style:width="{100 * ((accepted + requestWaitUser) / total)}%"
-		/>
+		></div>
 		<div
 			class="h-2 bg-blue-500 absolute rounded-r"
 			style:width="{100 * ((accepted + acceptedForced) / total)}%"
-		/>
-		<div class="h-2 bg-success absolute rounded-r" style:width="{100 * (accepted / total)}%" />
+		></div>
+		<div class="h-2 bg-success absolute rounded-r" style:width="{100 * (accepted / total)}%"></div>
 	</div>
 
 	{#if withLabel}

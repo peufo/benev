@@ -68,7 +68,7 @@
 	let searchValue = $state('')
 
 	let dropdown: DropDown
-	let inputSearch: HTMLInputElement
+	let inputSearch: HTMLInputElement = $state()!
 
 	async function select(index = focusIndex) {
 		const proposedItem = proposedItems[index]

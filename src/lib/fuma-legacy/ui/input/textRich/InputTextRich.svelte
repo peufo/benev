@@ -16,9 +16,16 @@
 		[key: string]: any
 		/** Remplacent les évènements de la version Svelte 4. */
 		onchange?: () => void
+		oninsertMedia?: () => void
 	}
 
-	let { value = $bindable(''), classToolbar = '', onchange, ...rest }: Props = $props()
+	let {
+		value = $bindable(''),
+		classToolbar = '',
+		onchange,
+		oninsertMedia,
+		...rest
+	}: Props = $props()
 
 	let element: HTMLDivElement = $state()!
 	let editor: Editor | null = $state(null)

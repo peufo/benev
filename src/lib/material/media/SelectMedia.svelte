@@ -62,34 +62,39 @@
 			style:grid-template-columns="repeat(auto-fill, minmax(min(6rem, 100%), 1fr)"
 		>
 			{#each medias as media (media.id)}
-				<button
-					type="button"
-					onclick={() => handleSelectMedia(media)}
-					class="text-left border rounded-lg outline-primary/50 outline-1 hover:outline p-1 flex flex-col gap-1"
-				>
-					<img src="/media/{media.id}?size=small" alt={media.name} class="rounded" />
+				<!--
+					Le bouton d'édition est frère et non enfant du bouton de sélection: un
+					`<button>` dans un `<button>` est du HTML invalide, que le navigateur
+					réarrange à l'hydratation.
+				-->
+				<div class="relative">
+					<button
+						type="button"
+						onclick={() => handleSelectMedia(media)}
+						class="w-full text-left border rounded-lg outline-primary/50 outline-1 hover:outline p-1 flex flex-col gap-1"
+					>
+						<img src="/media/{media.id}?size=small" alt={media.name} class="rounded" />
 
-					<div class="flex items-center w-full flex-wrap gap-2">
-						<span class="title-sm h-6">{media.name || '-'}</span>
-						{#if media.eventId}
-							<button
-								type="button"
-								onclick={(event) => {
-									event.stopPropagation()
-									handleEditMedia(media)
-								}}
-								class="btn btn-xs btn-square btn-ghost ml-auto"
-							>
-								<Icon
-									path={mdiPencilOutline}
-									title="Modifier"
-									size={14}
-									class="fill-base-content/70"
-								/>
-							</button>
-						{/if}
-					</div>
-				</button>
+						<div class="flex items-center w-full flex-wrap gap-2" class:pr-7={media.eventId}>
+							<span class="title-sm h-6">{media.name || '-'}</span>
+						</div>
+					</button>
+
+					{#if media.eventId}
+						<button
+							type="button"
+							onclick={() => handleEditMedia(media)}
+							class="btn btn-xs btn-square btn-ghost absolute bottom-1 right-1"
+						>
+							<Icon
+								path={mdiPencilOutline}
+								title="Modifier"
+								size={14}
+								class="fill-base-content/70"
+							/>
+						</button>
+					{/if}
+				</div>
 			{/each}
 
 			<button

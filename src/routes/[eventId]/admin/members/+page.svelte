@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mdiAccountPlusOutline, mdiFilterRemoveOutline, mdiSigma } from '@mdi/js'
 	import type { Field, Member } from '@prisma/client'
-	import { onMount, tick } from 'svelte'
+	import { onMount, tick, untrack } from 'svelte'
 	import { goto } from '$app/navigation'
 	import { InputSearch, Table, Card, component, Icon } from '$lib/fuma-legacy'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
@@ -22,7 +22,8 @@
 
 	let { data } = $props()
 
-	let tableFields = $state(getMembersTableFields(data.teams, data.fields))
+	// Recalculé à la main par `handleFieldCreated`: c'est de l'état, pas un dérivé.
+	let tableFields = $state(untrack(() => getMembersTableFields(data.teams, data.fields)))
 
 	onMount(() => {
 		globalEvents.on('field_created', handleFieldCreated)

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte'
 	import { InputBoolean, Placeholder, type ComponentAndProps } from '$lib/fuma-legacy'
 
 	type Item = $$Generic<{ id: string }>
@@ -30,7 +31,7 @@
 	function getJsonIds(arr: { id: string; selected: boolean }[]): string {
 		return JSON.stringify(arr.filter((el) => el.selected).map((el) => el.id))
 	}
-	let _items = $state(mapSelected(items))
+	let _items = $state(mapSelected(untrack(() => items)))
 </script>
 
 <input type="hidden" name={key} value={getJsonIds(_items)} />

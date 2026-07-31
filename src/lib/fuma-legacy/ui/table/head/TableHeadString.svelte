@@ -1,5 +1,6 @@
 <script lang="ts" generics="Item extends {id: string}">
 	import type { TippyInstance } from 'fuma'
+	import { untrack } from 'svelte'
 	import { mdiMagnify } from '@mdi/js'
 	import { page } from '$app/stores'
 
@@ -15,7 +16,8 @@
 	let { field }: Props = $props()
 
 	let tip: TippyInstance = $state()!
-	let searchValue = $state($page.url.searchParams.get(field.key) || '')
+	// Saisie de l'utilisateur, amorcée par l'URL: `field.key` ne change pas d'une colonne.
+	let searchValue = $state($page.url.searchParams.get(untrack(() => field.key)) || '')
 </script>
 
 <th class="p-1">

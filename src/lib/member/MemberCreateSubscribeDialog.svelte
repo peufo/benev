@@ -101,7 +101,7 @@
 				trigger={dialog}
 				items={selectedTeam.periods.filter((p) => p.isAvailable)}
 				class="w-full max-h-80 mt-2 overflow-y-auto relative"
-				onselect={(detail) => onSelect(detail)}
+				{onSelect}
 			>
 				{#snippet children({ item })}
 					<span>{formatRange(item)}</span>

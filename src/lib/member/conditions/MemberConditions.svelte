@@ -2,7 +2,6 @@
 	import { run } from 'svelte/legacy'
 
 	import axios from 'axios'
-	import type { ComponentProps, ComponentType } from 'svelte'
 	import { get } from 'svelte/store'
 	import { page } from '$app/stores'
 	import type { Field } from '@prisma/client'
@@ -15,6 +14,8 @@
 		InputText,
 		InputCheckboxs,
 		InputRadio,
+		component,
+		type ComponentAndProps,
 	} from '$lib/fuma-legacy'
 	import { jsonParse } from 'fuma'
 	import {
@@ -50,8 +51,8 @@
 		}
 	}
 
-	function handleAddCondition(event: { detail: string }) {
-		const _type = event.detail as MemberCondition['type']
+	function handleAddCondition(value: string) {
+		const _type = value as MemberCondition['type']
 		if (_type === 'valided') conditions = [...conditions, { type: 'valided' }]
 		if (_type === 'age') conditions = [...conditions, { type: 'age', args: 18 }]
 		if (_type === 'profile')
@@ -68,13 +69,7 @@
 			]
 	}
 
-	function component<Component extends ComponentType>(
-		component: Component,
-		props: ComponentProps<InstanceType<Component>>
-	) {
-		return { component, props }
-	}
-	function getFieldInput(field: Field): ReturnType<typeof component> {
+	function getFieldInput(field: Field): ComponentAndProps {
 		if (field.type === 'boolean')
 			return component(InputRadio, {
 				label: '',
@@ -153,8 +148,8 @@
 								options={memberFields.map((f) => ({ value: f.id, label: f.name }))}
 								class="label-text whitespace-nowrap"
 								placeholder="Sélectioner un champ"
-								onselect={(e) => {
-									const field = memberFields.find((f) => f.id === e.detail)
+								onselect={(fieldId) => {
+									const field = memberFields.find((f) => f.id === fieldId)
 									if (!field) return
 									if (condition.type !== 'profile') return
 									if (CONDITION_OPERATOR[field.type].includes(condition.args.operator)) return

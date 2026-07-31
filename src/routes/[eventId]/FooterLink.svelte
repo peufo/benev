@@ -1,9 +1,16 @@
-<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (icon to icon_1) making the component unusable -->
 <script lang="ts">
+	import type { Snippet } from 'svelte'
 	import { Icon } from '$lib/fuma-legacy'
-	export let link: string | null
-	export let icon = ''
-	export let protocol = ''
+
+	interface Props {
+		link: string | null
+		/** Chemin d'icône `@mdi/js`, ou un snippet pour une icône sur mesure. */
+		icon?: string | Snippet
+		protocol?: string
+		children?: Snippet<[{ label: string }]>
+	}
+
+	let { link, icon = '', protocol = '', children }: Props = $props()
 </script>
 
 {#if link}
@@ -13,11 +20,12 @@
 		href="{protocol}{link}"
 		target="_blank"
 	>
-		<slot name="icon">
-			{#if icon}
-				<Icon path={icon} />
-			{/if}
-		</slot>
-		<slot {label}><span>{label}</span></slot>
+		{#if typeof icon === 'string'}
+			{#if icon}<Icon path={icon} />{/if}
+		{:else}
+			{@render icon()}
+		{/if}
+
+		{#if children}{@render children({ label })}{:else}<span>{label}</span>{/if}
 	</a>
 {/if}

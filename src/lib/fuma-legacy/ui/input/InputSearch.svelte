@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { FocusEventHandler, FormEventHandler, KeyboardEventHandler } from 'svelte/elements'
 	import { mdiClose } from '@mdi/js'
 	import { browser } from '$app/environment'
 	import { page } from '$app/stores'
@@ -9,12 +10,22 @@
 		class?: string
 		key?: string
 		value?: any
+		// En mode runes le transfert d'événements passe par des props explicites, comme
+		// dans InputText: sans elles, `{oninput}` retomberait sur le global `window.oninput`.
+		oninput?: FormEventHandler<HTMLInputElement>
+		onblur?: FocusEventHandler<HTMLInputElement>
+		onkeydown?: KeyboardEventHandler<HTMLInputElement>
+		onkeyup?: KeyboardEventHandler<HTMLInputElement>
 	}
 
 	let {
 		class: klass = '',
 		key = 'search',
 		value = $bindable($page.url.searchParams.get(key) || ''),
+		oninput,
+		onblur,
+		onkeydown,
+		onkeyup,
 	}: Props = $props()
 
 	let inputElement: HTMLInputElement = $state()!

@@ -18,7 +18,7 @@
 		plan: Plan
 	}
 
-	let { teams, plan = $bindable() }: Props = $props()
+	let { teams = $bindable(), plan = $bindable() }: Props = $props()
 
 	let container: HTMLElement = $state()!
 

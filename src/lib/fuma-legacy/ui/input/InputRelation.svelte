@@ -25,7 +25,9 @@
 		error?: string
 		placeholder?: string
 		tippyProps?: Partial<TippyProps>
-		dropdownProps?: ComponentProps<typeof DropDown>
+		// `children` et `activator` sont fournis par le corps de ce composant: les exiger
+		// de l'appelant rendrait `dropdownProps` inutilisable.
+		dropdownProps?: Omit<ComponentProps<typeof DropDown>, 'children' | 'activator'>
 		flatMode?: boolean
 		slotItem?: ((item: RelationItem) => ComponentAndProps | string) | null
 		slotSuggestion?: ((item: RelationItem) => ComponentAndProps | string) | null
@@ -65,7 +67,7 @@
 		append,
 	}: Props = $props()
 
-	let inputElement: HTMLInputElement
+	let inputElement: HTMLInputElement = $state()!
 	let proposedItems: RelationItem[] = $state([])
 
 	let isLoading = $state(false)

@@ -37,7 +37,7 @@
 
 	// InputRelation sérialise déjà un `{ id }` sous son propre `key`: on lui en donne
 	// un distinct pour que notre champ caché reste seul à porter la valeur soumise
-	const searchKey = `${key}_search`
+	const searchKey = $derived(`${key}_search`)
 
 	const toSuggestion = ({ properties: p, geometry }: PhotonFeature): Suggestion => {
 		const [lon, lat] = geometry.coordinates

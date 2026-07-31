@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Field } from '@prisma/client'
+	import { untrack } from 'svelte'
 	import { fade } from 'svelte/transition'
 	import InputColor from './InputColor.svelte'
 	import { getNextColor } from './InputColorPalette.svelte'
@@ -12,7 +13,8 @@
 	let { value = $bindable(), field }: Props = $props()
 
 	let options = $derived(JSON.parse(field?.options || '[]') as string[])
-	let currentOptions = $state(options)
+	// Photo des options déjà traitées, comparée à `options` par l'effet ci-dessous.
+	let currentOptions = $state(untrack(() => options))
 	$effect.pre(() => {
 		if (options !== currentOptions) {
 			options.reduce((acc, cur) => ({ ...acc, [cur]: value[cur] || getNextColor() }), {})

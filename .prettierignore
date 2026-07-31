@@ -13,6 +13,7 @@ node_modules
 /dumps
 /media
 .claude/settings.local.json
+.impeccable/hook.cache.json
 
 # Ignore lockfiles for NPM, YARN and BUN
 package-lock.json

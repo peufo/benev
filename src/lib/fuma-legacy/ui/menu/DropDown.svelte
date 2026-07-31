@@ -56,7 +56,7 @@
 		children,
 	}: Props = $props()
 
-	let activator: HTMLDivElement
+	let activator: HTMLDivElement = $state()!
 
 	beforeNavigate(() => hideOnNav && hide())
 

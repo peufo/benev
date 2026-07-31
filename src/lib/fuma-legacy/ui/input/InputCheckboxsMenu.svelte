@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte'
+	import { untrack, type Snippet } from 'svelte'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { mdiClose } from '@mdi/js'
@@ -36,7 +36,7 @@
 	}: Props = $props()
 
 	// Valeur initiale reprise de l'URL quand l'appelant n'en fournit pas.
-	if (value === undefined) value = jsonParse($page.url.searchParams.get(key), [])
+	if (value === undefined) value = jsonParse($page.url.searchParams.get(untrack(() => key)), [])
 
 	let dropdown: DropDown
 

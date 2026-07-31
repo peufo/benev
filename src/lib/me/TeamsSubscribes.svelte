@@ -68,12 +68,7 @@
 							class="btn-square btn-sm relative z-10"
 						/>
 
-						<SubscribeStateForm
-							subscribe={period.subscribes[0]}
-							eventId={team.eventId}
-							canBeLarge
-							{isLeader}
-						/>
+						<SubscribeStateForm subscribe={period.subscribes[0]} canBeLarge {isLeader} />
 
 						{#if isLeader}
 							<SubscribeMenu {subscribe} />

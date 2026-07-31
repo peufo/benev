@@ -39,7 +39,8 @@
 		in:fade|local={{ duration: 200 }}
 		data-sveltekit-noscroll
 		data-sveltekit-replacestate
+		onclick={() => oncreate?.()}
 	>
-		<Icon path={createIcon} onclick={() => oncreate?.()} title={createTitle} />
+		<Icon path={createIcon} title={createTitle} />
 	</a>
 {/if}

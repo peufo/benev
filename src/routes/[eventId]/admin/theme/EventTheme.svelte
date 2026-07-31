@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy'
+	import { untrack } from 'svelte'
 
 	import type { Event } from '@prisma/client'
 	import { theme } from './store'
@@ -9,7 +10,9 @@
 	}
 
 	let { event }: Props = $props()
-	theme.set(event)
+	// Appliqué une première fois hors rendu réactif pour couvrir le SSR, où `run()` —
+	// comme tout effet — ne s'exécute pas.
+	untrack(() => theme.set(event))
 	run(() => {
 		theme.set(event)
 	})

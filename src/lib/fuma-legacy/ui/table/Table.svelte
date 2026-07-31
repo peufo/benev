@@ -1,4 +1,5 @@
 <script lang="ts" generics="Item extends {id: string}">
+	import { untrack } from 'svelte'
 	import { afterNavigate } from '$app/navigation'
 	import { Placeholder } from '$lib/fuma-legacy/ui/placeholder/index.js'
 	import type { ComponentAndProps } from '$lib/fuma-legacy/utils/component.js'
@@ -22,6 +23,8 @@
 		classRow?: string
 		hideBody?: boolean
 		onCreateField?: (() => void) | undefined
+		/** Remplacent les évènements de la version Svelte 4. */
+		onclick?: (value: Item) => void
 	}
 
 	let {
@@ -34,14 +37,19 @@
 		classRow = '',
 		hideBody = false,
 		onCreateField = undefined,
+		onclick,
 	}: Props = $props()
 
-	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = createKeys(key)
-	context.set(key, {
-		KEY_FIELDS_VISIBLE,
-		KEY_FIELDS_HIDDEN,
-		KEY_FIELDS_ORDER,
-	})
+	// `key` identifie la table pour toute sa durée de vie: le contexte est posé une fois.
+	const { KEY_FIELDS_VISIBLE, KEY_FIELDS_HIDDEN, KEY_FIELDS_ORDER } = createKeys(untrack(() => key))
+	context.set(
+		untrack(() => key),
+		{
+			KEY_FIELDS_VISIBLE,
+			KEY_FIELDS_HIDDEN,
+			KEY_FIELDS_ORDER,
+		}
+	)
 
 	const initFields = () => (fields = syncFieldsWithParams(key, fields))
 	initFields()

@@ -20,7 +20,7 @@
 		"test:e2e": "playwright test",
 		"test:ui": "playwright test --ui",
 		"test-gen": "playwright codegen localhost:5173",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && bun run lint",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings && bun run lint",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",

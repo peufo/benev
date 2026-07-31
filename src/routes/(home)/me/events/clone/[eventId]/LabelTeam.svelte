@@ -10,7 +10,7 @@
 
 	let { team, deltaDays }: Props = $props()
 
-	const range = getRangeOfTeam(team)
+	const range = $derived(getRangeOfTeam(team))
 	const DAY = 1000 * 60 * 60 * 24
 </script>
 
