@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy'
 	import { untrack } from 'svelte'
 
 	import { InputRelation } from '$lib/fuma-legacy'
@@ -36,7 +35,7 @@
 	}
 	let refreshKey = $state({})
 	const refresh = useRefresh()
-	run(() => {
+	$effect.pre(() => {
 		if (badge) refresh()
 	})
 </script>
