@@ -22,7 +22,9 @@ export function useEvent(owner: User, name: string) {
 				.getByRole('button', { name: /Pied de page/i })
 				.first()
 				.click()
-			await page.locator('input[placeholder*="adresse"]').first().fill('salle des fetes')
+			// Le champ de recherche vit dans le popover d'`InputRelation`: il faut l'ouvrir d'abord.
+			await page.getByLabel('Lieu', { exact: true }).click()
+			await page.locator('input[placeholder="Recherche"]:visible').fill('salle des fetes')
 			await page
 				.locator('li, [role="option"]')
 				.filter({ hasText: 'Salle des fêtes' })

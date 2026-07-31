@@ -10,25 +10,27 @@ export function useUser(name: string) {
 		email,
 		async register(page: Page) {
 			await page.goto('/auth')
-			await page.getByRole('button', { name: 'Nouveau compte' }).click()
+			await page.getByRole('button', { name: 'Créer un compte' }).click()
 			await page.getByLabel('Prénom').fill(name)
 			await page.getByLabel('Nom', { exact: true }).fill('The Tester')
 			await page.getByLabel('Email').fill(email)
 			await page.getByLabel('Mot de passe').fill(password)
-			await page.getByLabel('Je suis organisateur').check()
-			await page.getByLabel("J'accepte les conditions d'utilisation").check()
-			await page.getByRole('button', { name: 'Valider' }).click()
+			// `InputBoolean` réduit la vraie case à `w-0` et dessine son état à côté:
+			// Playwright la juge invisible, on clique donc le label qui l'enveloppe.
+			// Le viser par `label` évite le lien homonyme du pied de formulaire.
+			await page.locator('label').filter({ hasText: 'Je suis organisateur' }).click()
+			await page
+				.locator('label')
+				.filter({ hasText: "J'accepte les conditions d'utilisation" })
+				.click()
+			await page.getByRole('button', { name: 'Créer mon compte' }).click()
 			await page.waitForURL('**/me/events')
 		},
 		async login(page: Page) {
 			await page.goto('/auth')
 			await page.getByLabel('Email').fill(email)
 			await page.getByLabel('Mot de passe').fill(password)
-			// l'onglet "Connexion" est un <span role=button>: on cible le vrai bouton
-			await page
-				.locator('button')
-				.filter({ hasText: /^connexion$/i })
-				.click()
+			await page.getByRole('button', { name: 'Se connecter' }).click()
 			await page.waitForURL('**/me/events')
 		},
 		async expectConnected(page: Page) {
