@@ -61,7 +61,6 @@
 >
 	{#if !event}
 		<EventTierSelector bind:value={plan} />
-		<input type="hidden" name="tier" value={plan} />
 	{/if}
 
 	<div class="flex flex-col gap-3">

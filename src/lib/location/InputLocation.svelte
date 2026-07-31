@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { Icon, InputRelation } from '$lib/fuma-legacy'
-	import { mdiMapMarkerOutline } from '@mdi/js'
+	import { MapPinIcon } from '@lucide/svelte'
+	import type { RemoteQueryFunction } from '@sveltejs/kit'
+	import debounce from 'debounce'
+	import { InputRelation } from 'fuma'
 
 	type Suggestion = PrismaJson.Location & { id: string; title: string; detail: string }
 
@@ -23,8 +25,8 @@
 		label?: string
 		value?: PrismaJson.Location | null
 		placeholder?: string
-		/** Transféré à InputRelation; remplace `on:input`. */
-		oninput?: (value: unknown) => void
+		/** Notifie le choix d'un lieu, ou son effacement (`undefined`). */
+		oninput?: (value: Suggestion | undefined) => void
 	}
 
 	let {
@@ -34,10 +36,6 @@
 		placeholder = 'Commence à taper une adresse ou un lieu…',
 		oninput,
 	}: Props = $props()
-
-	// InputRelation sérialise déjà un `{ id }` sous son propre `key`: on lui en donne
-	// un distinct pour que notre champ caché reste seul à porter la valeur soumise
-	const searchKey = $derived(`${key}_search`)
 
 	const toSuggestion = ({ properties: p, geometry }: PhotonFeature): Suggestion => {
 		const [lon, lat] = geometry.coordinates
@@ -57,7 +55,7 @@
 
 	// Photon renvoie `Access-Control-Allow-Origin: *`, l'appel se fait donc
 	// directement depuis le navigateur, sans endpoint proxy ni clé d'API
-	async function search(q: string): Promise<Suggestion[]> {
+	async function searchPhoton(q: string): Promise<Suggestion[]> {
 		if (q.trim().length < 3) return []
 		const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lang=fr`
 		const res = await fetch(url)
@@ -75,22 +73,50 @@
 		})
 	}
 
+	// `InputRelation` consomme une remote query. La recherche restant dans le navigateur,
+	// on lui présente une ressource de même forme — seuls `current`, `loading`, `error` et
+	// `ready` sont lus, par la liste et son indicateur de chargement.
+	const resource = $state({
+		current: [] as Suggestion[],
+		loading: false,
+		error: undefined as unknown,
+		ready: false,
+	})
+
+	const runSearch = debounce(async (q: string) => {
+		try {
+			resource.loading = true
+			resource.error = undefined
+			resource.current = await searchPhoton(q)
+			resource.ready = true
+		} catch (err) {
+			resource.error = err
+			console.error(err)
+		} finally {
+			resource.loading = false
+		}
+	}, 150)
+
+	const searchItems = ((arg: { search: string }) => {
+		runSearch(arg.search)
+		return resource
+	}) as unknown as RemoteQueryFunction<{ search: string }, Suggestion[]>
+
 	// la valeur enregistrée n'a ni `title` ni `detail`: on la réhydrate pour l'affichage.
 	// Un lieu hérité de l'ancien champ texte n'a pas de coordonnées.
-	let selected: Suggestion | null = $state(
-		value && {
-			...value,
-			id: value.label,
-			title: value.label,
-			detail: '',
-		}
+	let place: Suggestion | undefined = $state(
+		value
+			? {
+					...value,
+					id: value.label,
+					title: value.label,
+					detail: '',
+				}
+			: undefined
 	)
 
 	$effect.pre(() => {
-		value = selected && {
-			label: selected.label,
-			...(selected.coords && { coords: selected.coords }),
-		}
+		value = place ? { label: place.label, ...(place.coords && { coords: place.coords }) } : null
 	})
 </script>
 
@@ -98,27 +124,27 @@
 <input type="hidden" name={key} value={JSON.stringify(value)} />
 
 <InputRelation
-	key={searchKey}
 	{label}
-	{search}
+	{searchItems}
 	{placeholder}
-	bind:value={selected}
-	classList="max-h-80 overflow-y-auto"
-	{oninput}
+	bind:value={place}
+	nullable
+	class="w-full"
+	onSelect={(item) => oninput?.(item)}
 >
-	{#snippet suggestion({ item })}
-		<div class="flex flex-col py-1">
+	{#snippet selected(item)}
+		<span class="flex items-center gap-2">
+			<MapPinIcon size={18} class="opacity-70" />
+			<span>{item.label}</span>
+		</span>
+	{/snippet}
+
+	{#snippet proposal(item)}
+		<span class="flex flex-col py-1">
 			<span>{item.title}</span>
 			{#if item.detail}
 				<span class="text-sm opacity-60">{item.detail}</span>
 			{/if}
-		</div>
-	{/snippet}
-
-	{#snippet item({ item })}
-		<div class="flex items-center gap-2">
-			<Icon path={mdiMapMarkerOutline} class="opacity-70" />
-			<span>{item?.label}</span>
-		</div>
+		</span>
 	{/snippet}
 </InputRelation>
