@@ -3,6 +3,7 @@ import nodemailer, { type SendMailOptions } from 'nodemailer'
 import type { Component, ComponentProps } from 'svelte'
 import { render } from 'svelte/server'
 import { prisma } from '$lib/server'
+import { withoutTestRecipients } from '$lib/server/recipients'
 import type { EmailEvent } from '$lib/email/models'
 import { emailReplacers, type EmailModelProps } from '$lib/pages/emailSuggesions'
 import { injectValues } from '$lib/pages/injectValues'
@@ -21,9 +22,9 @@ const transporter = nodemailer.createTransport({
 })
 
 /**
- * Les tests créent des comptes sur des adresses inexistantes: sans ce garde-fou,
- * une machine dotée d'un SMTP valide leur enverrait de vrais mails (et collectionnerait
- * les bounces). Positionné par la CI et par le webServer Playwright.
+ * Coupe tout envoi, quelle que soit l'adresse. Positionné par la CI et par le webServer
+ * Playwright. Les adresses en `.test` sont filtrées de toute façon (voir `sendEmail`);
+ * ce drapeau couvre le reste, par exemple un jeu de données de démo.
  */
 const emailDisabled = env.EMAIL_DISABLED === 'true'
 
@@ -42,12 +43,26 @@ if (emailDisabled) {
 	})
 }
 
-export const sendEmail = async ({ from, ...options }: SendMailOptions) => {
+export const sendEmail = async ({ from, to, cc, bcc, ...options }: SendMailOptions) => {
 	if (!transporterOK) return
+
+	const recipients = {
+		to: withoutTestRecipients(to),
+		cc: withoutTestRecipients(cc),
+		bcc: withoutTestRecipients(bcc),
+	}
+	const dropped = [...recipients.to.dropped, ...recipients.cc.dropped, ...recipients.bcc.dropped]
+	if (dropped.length) console.log(`Mail: adresses .test écartées (${dropped.join(', ')})`)
+	// Plus personne à qui écrire: le message était entièrement destiné à des fixtures.
+	if (!recipients.to.kept && !recipients.cc.kept && !recipients.bcc.kept) return
+
 	return new Promise((resolve) => {
 		transporter.sendMail(
 			{
 				from: `${from || 'Benev.io'} <${env.SMTP_USER}>`,
+				to: recipients.to.kept,
+				cc: recipients.cc.kept,
+				bcc: recipients.bcc.kept,
 				...options,
 			},
 			(err: unknown, info: unknown) => {
