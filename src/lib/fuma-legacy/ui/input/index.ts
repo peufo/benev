@@ -1,8 +1,0 @@
-export { default as InputText } from './InputText.svelte'
-export { default as InputTextarea } from './InputTextarea.svelte'
-export { default as InputRelations } from './InputRelations.svelte'
-export { default as InputRelation } from './InputRelation.svelte'
-export { default as InputNumber } from './InputNumber.svelte'
-export { default as InputBoolean } from './InputBoolean.svelte'
-export { default as InputRadio } from './InputRadio.svelte'
-export { default as InputSelect } from './InputSelect.svelte'

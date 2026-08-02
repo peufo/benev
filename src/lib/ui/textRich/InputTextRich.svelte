@@ -4,25 +4,25 @@
 	import debounce from 'debounce'
 
 	import { jsonParse } from 'fuma'
-	import { FormControl } from '$lib/ui'
 	import ToolsBar from '$lib/ui/textRich/ToolsBar.svelte'
 	import { extensions } from '$lib/ui/textRich/extensions.js'
 
 	interface Props {
+		/** Nom du champ caché portant la valeur. Vide, l'éditeur ne soumet rien. */
+		key?: string
 		value?: string
 		classToolbar?: string
-		[key: string]: unknown
 		/** Remplacent les évènements de la version Svelte 4. */
 		onchange?: () => void
 		oninsertMedia?: () => void
 	}
 
 	let {
+		key = '',
 		value = $bindable(''),
 		classToolbar = '',
 		onchange,
 		oninsertMedia,
-		...rest
 	}: Props = $props()
 
 	let element: HTMLDivElement = $state()!
@@ -67,16 +67,12 @@
 	}, 120)
 </script>
 
-<FormControl {...rest}>
-	{#snippet children({ key })}
-		<div class="bordered relative rounded-lg border">
-			{#if editor}
-				<ToolsBar {editor} class={classToolbar} {oninsertMedia} />
-			{/if}
-			<div bind:this={element} class="min-h-[20rem] p-4 pb-10"></div>
-		</div>
-		{#if key}
-			<input type="hidden" name={key} {value} />
-		{/if}
-	{/snippet}
-</FormControl>
+<div class="bordered relative rounded-lg border">
+	{#if editor}
+		<ToolsBar {editor} class={classToolbar} {oninsertMedia} />
+	{/if}
+	<div bind:this={element} class="min-h-[20rem] p-4 pb-10"></div>
+</div>
+{#if key}
+	<input type="hidden" name={key} {value} />
+{/if}

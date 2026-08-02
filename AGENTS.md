@@ -29,8 +29,8 @@ Product intent, audiences and design system are recorded in `PRODUCT.md` and `DE
 | UI               | **Svelte v5 (runes mode)**, [Tailwind CSS](https://tailwindcss.com/) **v4**, [DaisyUI](https://daisyui.com/) **v5**          |
 | CSS config       | **No `tailwind.config.mjs`, no PostCSS.** Tailwind is a Vite plugin (`@tailwindcss/vite`); the theme lives in `src/app.css`. |
 | Font             | [Barlow](https://fonts.google.com/specimen/Barlow) (400–800) via Google Fonts in `src/app.html`                              |
-| Icons            | [Lucide](https://lucide.dev/) (`@lucide/svelte` v1) — migration from `@mdi/js` still in progress                             |
-| Component Lib    | [`fuma`](https://github.com/peufo/fuma) v2, linked locally via `"fuma": "file:../fuma"` — **not an npm release**             |
+| Icons            | [Lucide](https://lucide.dev/) (`@lucide/svelte` v1) — the only icon set                                                      |
+| Component Lib    | [`fuma`](https://github.com/peufo/fuma) v2, published on npm but linked locally via `"fuma": "file:../fuma"`                 |
 | Validation       | [Zod](https://zod.dev/) v4, schemas in `$lib/models`                                                                         |
 | ORM              | [Prisma](https://www.prisma.io/) v6 (client + generator) with `prisma-json-types-generator`                                  |
 | Database         | MySQL                                                                                                                        |
@@ -74,7 +74,6 @@ Code is **runes-only**: `$state`, `$derived`, `$props`, `$effect`, snippets (`{#
 │   │   └── sitemap.xml/       # SEO sitemap
 │   ├── lib/
 │   │   ├── server/            # Server-only modules (auth, prisma, permissions, email, stripe…)
-│   │   ├── fuma-legacy/       # Vendored fuma 1.0.21 surface — see "Fuma" below
 │   │   ├── models/            # Zod schemas (modelUserCreate, modelEventUpdate…)
 │   │   ├── email/             # Svelte email template components
 │   │   ├── event/, team/, period/, subscribe/, member/, gift/, tag/, pages/, plan/,
@@ -133,7 +132,7 @@ Code is **runes-only**: `$state`, `$derived`, `$props`, `$effect`, snippets (`{#
 | `$lib/server/stripe.ts`     | Checkout session creation and Stripe webhook handling.                                                               |
 | `$lib/server/email.ts`      | SMTP transport and email rendering/sending. Honours `EMAIL_DISABLED=true`.                                           |
 | `$lib/models`               | Zod v4 schemas, consumed by `form()` remote functions.                                                               |
-| `$lib/fuma-legacy`          | Vendored fuma 1 surface, to be dismantled as fuma 2 catches up.                                                      |
+| `$lib/ui`                   | Components fuma 2 does not cover: `Card`, `Placeholder`, `Badge`, `Tabs`, `InputTextRich`…                           |
 | `$lib/email`                | Svelte components for transactional emails.                                                                          |
 | `$lib/plan`                 | Drag-and-drop planning grid for team/period visualization.                                                           |
 | `$lib/pages`                | CMS page rendering, suggestions, and nested path logic.                                                              |
@@ -178,28 +177,58 @@ Things to know when touching this layer:
 
 ---
 
-## Fuma: two import surfaces
+## Fuma
 
-The UI depends on a local sibling checkout at `../fuma` (`"fuma": "file:../fuma"`). Vite is configured to serve it (`server.fs.allow`) and to skip pre-bundling it (`optimizeDeps.exclude`). **Changes to fuma are picked up live; there is no publish step.**
+The UI depends on a local sibling checkout at `../fuma` (`"fuma": "file:../fuma"`). fuma 2 is
+published on npm, but the link is what benev builds against: fixes land in `../fuma` as they are
+found, and the checkout is usually ahead of the registry. Switching the dependency to a version
+range means publishing first. **Changes to fuma are picked up live; there is no publish step.**
+Three Vite settings make the link work:
 
-Two surfaces coexist during the fuma 1 → 2 migration:
+- `server.fs.allow` — serve files from outside the project root.
+- `optimizeDeps.exclude` — no pre-bundling, so edits are seen immediately.
+- `resolve.dedupe: ['@sveltejs/kit', 'svelte']` — `node_modules/fuma` is a symlink to a checkout
+  that keeps its own copies for development. Without dedupe, `fuma/server` throws a `redirect()`
+  built by _its_ copy of kit, benev's copy does not recognise it, and the redirect surfaces as a 500.
 
-- **`from 'fuma'`** — fuma 2. Runes-based, remote-function-aware. `InputString`, `InputBoolean`, `InputTextarea`, `InputSelect`, `Dialog`, … Prefer this for new code.
-- **`from '$lib/fuma-legacy'`** — fuma 1.0.21 vendored into the repo (`Card`, `Icon`, `Placeholder`, tables, menus…). Being dismantled: every symbol fuma 2 re-exposes should be deleted from here and re-imported from the package.
+There is one import surface:
 
-Both are still widely used, so check which one a file already imports before adding to it.
+- **`from 'fuma'`** — components, actions, client helpers (`InputString`, `InputRelation`, `Table`,
+  `Dialog`, `Drawer`, `Popover`, `tip`, `urlParam`, `parseOptions`…).
+- **`from 'fuma/server'`** — read-side helpers for `load` functions: `parseQuery`,
+  `ensureFieldsWithFilterAreVisibles`.
 
-### Known replacements
+The vendored fuma 1 copy is gone. What fuma 2 does not cover lives in `$lib/ui` and belongs to
+benev — `Card`, `Placeholder`, `Badge`, `Tabs`, `InputTextRich` and the tiptap toolbar,
+`SelectorList`, `InputImage`, `InputSearch`. `$lib/ui` never imports from a fuma-1 shim; the
+dependency runs one way, from benev to the package.
 
-Whenever you touch a file that still uses the left column, convert it — that is how the migration
-advances. Never introduce a new usage of the left column.
+Field labels come from fuma, which renders them as `fieldset.fieldset > label.label`. A bespoke
+control that has to sit next to a fuma input reproduces that markup by hand — see the "Type de
+page" field of `PageForm.svelte`. There is no `FormControl` wrapper any more, and `form-control` /
+`label-text` are daisyUI 4 classes that do nothing in daisyUI 5.
 
-| fuma-legacy (out)                  | fuma 2 / lucide (in)              | Note                                          |
-| ---------------------------------- | --------------------------------- | --------------------------------------------- |
-| `DropDown`, `DropDownMenu` (tippy) | `Popover`                         | Native popover + CSS anchor positioning       |
-| `Icon` + `@mdi/js` paths           | `@lucide/svelte`, `Icon`-suffixed | `<UploadIcon size={20} class="opacity-70" />` |
+### Search inputs take a remote query
 
-Still to convert: **~97 files import `@mdi/js`**, **~25 still use `DropDown`**.
+`InputRelation` / `InputRelations` want a `RemoteQueryFunction<{ search: string }, Item[]>`, not a
+promise-returning callback. Write a `query()` next to the domain's other remote functions —
+`searchMembers` in `$lib/member/member.remote.ts`, `searchTeams` in `$lib/team/team.remote.ts`, and
+so on. To fix an extra argument, wrap it at the call site rather than widening the query:
+
+```ts
+const searchItems: RemoteQueryFunction<{ search: string }, Field[]> = ({ search }) =>
+	searchMemberFields({ search, types: typesAccepted })
+```
+
+A search that must stay in the browser (Photon geocoding, mocked in E2E) uses the hand-rolled
+resource shim in `$lib/location/InputLocation.svelte`.
+
+### Fixing fuma
+
+Gaps found while using it are fixed upstream in `../fuma`, then `bun run package` there. Bump the
+version in the same change. Most bugs found so far only appeared during **server rendering**
+(context set in an `$effect`, `null` reaching a zod `.default()`) — a component that works in the
+browser is not proof.
 
 ---
 
@@ -255,7 +284,7 @@ bun run dev:stripe        # Forward Stripe webhooks to localhost
 - `prestart` runs `prisma migrate deploy` before starting the Node server.
 - Vite's `server.fs.allow` covers `media/` (uploads) **and `../fuma`** (the linked component library).
 - `bun run check` runs `svelte-kit sync` first: without it, `$env/dynamic` keys are untyped and `svelte-check` fails.
-- `svelte-check` currently reports a standing backlog of errors, nearly all inside `$lib/fuma-legacy`. Compare against the baseline rather than expecting zero.
+- `bun run check` is expected to report **0 errors and 0 warnings**. It runs with `--fail-on-warnings`; there is no baseline to compare against.
 
 ---
 
@@ -318,8 +347,8 @@ All `PUBLIC_*` variables are exposed to the browser. All others are server-only 
 - Validation schemas live in `$lib/models/` and are named `modelUserCreate`, `modelEventUpdate`, etc.
 - Mutations live in `*.remote.ts` next to the feature they serve.
 - API routes (`+server.ts`) return JSON. Client-side consumption in `$lib/api.ts` uses `axios` + `devalue`.
-- fuma 2 components import from `'fuma'`; read-side server helpers from `'fuma/server'`; the vendored fuma 1 surface from `'$lib/fuma-legacy'`.
-- **Icons**: always `@lucide/svelte`, with the `Icon` suffix — `import { CheckIcon, UploadIcon } from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. **Never add a new `@mdi/js` import or a new `Icon` from `$lib/fuma-legacy`**: both are on the way out, and touching a file that still uses them is the moment to convert it.
+- fuma components import from `'fuma'`; read-side server helpers from `'fuma/server'`; benev's own components from `'$lib/ui'`.
+- **Icons**: always `@lucide/svelte`, with the `Icon` suffix — `import { CheckIcon, UploadIcon } from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. Lucide strokes its icons: colour them with `text-*`, never `fill-*`, which renders them invisible.
 
 ---
 
@@ -446,10 +475,10 @@ bun run migrate:deploy
 - **French-first**: all user-facing strings are in French, including error messages. Server-side sentinel strings (`'Invalid credentials'`, `'This account already exists'`) stay in English and are translated at the component boundary.
 - **Manual edits between prompts**: the user frequently edits files manually between prompts. **Always re-read a file before modifying it.** Do not assume it still matches your last edit.
 - **Never commit**: leave changes in the working tree. The user commits.
-- **Fuma first**: before writing a new input, table or dialog, check whether `fuma` already exports one — and whether `$lib/fuma-legacy` has an older twin you should be migrating away from.
+- **Fuma first**: before writing a new input, table or dialog, check whether `fuma` already exports one. If it almost fits, fix it in `../fuma` rather than growing a local twin — that is how `$lib/fuma-legacy` came to exist.
 - **Event-scoped data**: most entities (teams, members, pages, fields, gifts, badges) belong to an `Event`; queries should filter by `eventId`.
 - **Computed member values**: `getMemberProfile` in `$lib/server/member.ts` enriches raw `Member` records with roles, subscription stats and gift allocations. Prefer it over raw Prisma queries when member context is needed.
 - **Planning grid**: the volunteer schedule visualization is a custom drag-and-drop grid in `$lib/plan/`, with its own period stacking and scroll-centering logic.
-- **Reusable components must not own their surface**: a component that can be mounted inside a `Card` (like `Login`) reads `contextContainer` from `$lib/fuma-legacy/ui/context.js` and renders bare when it is already carried. No nested cards.
+- **Reusable components must not own their surface**: a component that can be mounted inside a `Card` (like `Login`) reads `contextContainer` from `$lib/ui/context.js` and renders bare when it is already carried. No nested cards.
 - **Meta tags render once**: `MetaTags` does not deduplicate, so only the root layout renders it. Pages publish overrides through `metaTags` in their `load` data.
 - **Brand naming in UI**: use "benevio" (lowercase) in user-facing copy. Technical references (URLs, repo names) may still use "benev".

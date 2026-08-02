@@ -20,6 +20,10 @@ export default defineConfig({
 	resolve: { dedupe: ['@sveltejs/kit', 'svelte'] },
 	server: { fs: { allow: ['media', '../fuma'] }, allowedHosts: ['mac-de-jo.local'] },
 	optimizeDeps: {
+		// `litepicker` n'est importé nulle part dans `src/`: c'est une dépendance CommonJS du
+		// `RangePicker` de fuma. Comme `fuma` est exclu du pré-bundling pour que ses
+		// modifications soient vues à chaud, la sienne doit être demandée explicitement — sans
+		// quoi le serveur de dev sert du CJS brut. Elle reste donc déclarée dans package.json.
 		include: ['litepicker'],
 		exclude: ['fuma'],
 	},

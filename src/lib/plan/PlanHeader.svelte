@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { InputCheckboxsMenu, TabsIcon } from '$lib/ui'
+	import { TabsIcon } from '$lib/ui'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
-	import { tip, urlParam } from 'fuma'
+	import { InputRelations, jsonParse, tip, urlParam, type PopoverType } from 'fuma'
+	import type { RemoteQueryFunction } from '@sveltejs/kit'
+	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
 	import { eventPath } from '$lib/store'
@@ -15,8 +17,10 @@
 		ZoomOutIcon,
 	} from '@lucide/svelte'
 
+	type TeamOption = { id: string; name: string }
+
 	interface Props {
-		teams: { id: string; name: string }[]
+		teams: TeamOption[]
 		views: { id: string; name: string; query: string }[]
 		isFullscreen?: boolean
 		plan: Plan
@@ -24,6 +28,44 @@
 	}
 
 	let { teams, views, isFullscreen = false, plan, class: klass = '' }: Props = $props()
+
+	// `InputRelations` consomme une remote query. Le layout admin charge déjà tous les secteurs
+	// de l'évènement: on filtre en local et on lui présente une ressource de même forme — seuls
+	// `current`, `loading`, `error` et `ready` sont lus. Rien à attendre, donc `ready` d'emblée.
+	const searchTeams = (({ search }: { search: string }) => {
+		const needle = search.trim().toLowerCase()
+		return {
+			current: teams.filter((team) => team.name.toLowerCase().includes(needle)),
+			loading: false,
+			error: undefined,
+			ready: true,
+		}
+	}) as unknown as RemoteQueryFunction<{ search: string }, TeamOption[]>
+
+	// Dérivé assignable: la sélection vit dans l'URL — c'est le contrat que lit `getPlanData` —
+	// mais `InputRelations` la porte en items. Le dérivé se ré-amorce à chaque navigation, ce
+	// qui fait suivre les boutons précédent/suivant du navigateur.
+	let selectedTeams = $derived(
+		jsonParse<string[]>($page.url.searchParams.get('teams'), []).flatMap(
+			(id) => teams.find((team) => team.id === id) ?? []
+		)
+	)
+
+	let teamsMenu = $state<{ popover: PopoverType }>()
+	let menuWasOpen = false
+	// Le plan est la page la plus lourde de l'application: l'URL n'est écrite qu'à la fermeture
+	// du menu, pas à chaque secteur coché, pour ne la recharger qu'une fois.
+	$effect(() => {
+		const isOpen = !!teamsMenu?.popover.isOpen
+		if (menuWasOpen && !isOpen) {
+			const ids = selectedTeams.map(({ id }) => id)
+			const url = ids.length
+				? urlParam.with({ teams: JSON.stringify(ids) })
+				: urlParam.without('teams')
+			goto(url, { replaceState: true, noScroll: true })
+		}
+		menuWasOpen = isOpen
+	})
 </script>
 
 <div class="flex gap-2 items-center p-2 bg-base-100 {klass}" style="--btn-text-case: none;">
@@ -34,18 +76,20 @@
 
 	<TableViewSelect key="plan" {views} />
 
-	{#key $page.url.searchParams}
-		<InputCheckboxsMenu
-			key="teams"
-			options={teams.map((t) => ({ value: t.id, label: t.name }))}
-			enhanceDisabled
-			badgePrimary
-		>
-			{#snippet labelSnippet()}
-				<span class="font-normal">secteurs</span>
-			{/snippet}
-		</InputCheckboxsMenu>
-	{/key}
+	<InputRelations
+		bind:this={teamsMenu}
+		bind:value={selectedTeams}
+		searchItems={searchTeams}
+		placeholder="Tous les secteurs"
+		class="w-52"
+	>
+		{#snippet selected(team)}
+			<span>{team.name}</span>
+		{/snippet}
+		{#snippet proposal(team)}
+			<span>{team.name}</span>
+		{/snippet}
+	</InputRelations>
 
 	<PlanCursor cursor={plan.cursor} />
 	<div class="join">

@@ -3,7 +3,7 @@
 	import type { Page } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
-	import { FormControl, InputTextRich } from '$lib/ui'
+	import { InputTextRich } from '$lib/ui'
 	import { ButtonDelete, InputSelect, InputString } from 'fuma'
 
 	import { normalizePath } from '$lib/normalizePath'
@@ -77,10 +77,13 @@
 			oninput={handleChangeImediat}
 		/>
 
-		<FormControl label="Type de page" enhanceDisabled>
-			{#snippet label_append()}
+		<!-- Même structure que le `label` de l'`InputString` voisin, pour que les deux champs
+		     s'alignent: fuma rend ses libellés dans un `fieldset.fieldset > label.label`. -->
+		<fieldset class="fieldset">
+			<span class="label">
+				<span>Type de page</span>
 				<PageTypeHelp />
-			{/snippet}
+			</span>
 
 			{#if page.type === 'home'}
 				<input type="hidden" name="type" value="home" />
@@ -117,7 +120,7 @@
 					{/snippet}
 				</InputSelect>
 			{/if}
-		</FormControl>
+		</fieldset>
 	</div>
 
 	<input type="hidden" name="id" value={page.id} />
@@ -129,7 +132,6 @@
 		<InputTextRich
 			bind:this={inputTextRich}
 			key="content"
-			enhanceDisabled
 			value={page.content}
 			onchange={handleChange}
 			oninsertMedia={() => {
