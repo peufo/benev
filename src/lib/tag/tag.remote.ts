@@ -1,4 +1,4 @@
-import { form, getRequestEvent } from '$app/server'
+import { form, getRequestEvent, query } from '$app/server'
 import z from 'zod'
 import { modelTagCreate, modelTagUpdate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
@@ -22,4 +22,15 @@ export const deleteTag = form(z.object({ id: z.string() }), async ({ id }) => {
 	const eventId = params.eventId!
 	await permission.leader(eventId, locals)
 	return prisma.tag.delete({ where: { id, eventId } })
+})
+
+/** Alimente l'`InputRelations` des étiquettes de `PeriodForm`. */
+export const searchTags = query(z.object({ search: z.string() }), async ({ search }) => {
+	const { locals, params } = getRequestEvent()
+	const eventId = params.eventId!
+	await permission.leader(eventId, locals)
+	return prisma.tag.findMany({
+		where: { eventId, name: { contains: search } },
+		take: 10,
+	})
 })

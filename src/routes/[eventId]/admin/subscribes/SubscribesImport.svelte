@@ -2,10 +2,8 @@
 	import { DownloadIcon, FileSpreadsheetIcon } from '@lucide/svelte'
 	import { derived } from 'svelte/store'
 	import { page } from '$app/stores'
-	import { ButtonCopy } from '$lib/fuma-legacy'
-	import { DropDown } from 'fuma'
+	import { ButtonCopy, DropDown } from 'fuma'
 	import { eventPath } from '$lib/store'
-	import { toast } from 'svelte-sonner'
 
 	let dropdown: DropDown = $state()!
 
@@ -34,10 +32,8 @@
 
 	<div class="flex flex-col gap-1">
 		<ButtonCopy
-			onsuccess={() => {
-				dropdown.hide()
-				toast.success('Données copiées !')
-			}}
+			onSuccess={() => dropdown.hide()}
+			successMessage="Données copiées !"
 			class="menu-item w-full"
 			value={getSubscribesCSV}
 			label="Copier les données"

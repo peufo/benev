@@ -1,17 +1,15 @@
 <script lang="ts">
-	import { ArrowLeftIcon } from '@lucide/svelte'
+	import { ArrowLeftIcon, SearchIcon } from '@lucide/svelte'
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import type { Period } from '@prisma/client'
 
-	import { api } from '$lib/api'
 	import { SelectorList } from '$lib/ui'
-	import { InputRelation } from '$lib/fuma-legacy'
 	import { Dialog } from 'fuma'
+	import { searchAvailableTeams } from '$lib/team/team.remote'
 	import { createSubscribe } from '$lib/subscribe/subscribe.remote'
 	import { formatRange } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
-	import type { TeamWithComputedValues } from '$lib/server'
 
 	interface Props {
 		dialog: HTMLDialogElement
@@ -21,19 +19,26 @@
 
 	let { dialog = $bindable(), memberId, title = 'Nouvelle inscription' }: Props = $props()
 
-	let selectedTeam: TeamWithComputedValues | null = $state(null)
+	let search = $state('')
+	let searchInput: HTMLInputElement = $state()!
+	const teamsQuery = $derived(searchAvailableTeams({ search }))
+	const teams = $derived(teamsQuery.current ?? [])
+
+	type Team = (typeof teams)[number]
+
+	let selectedTeam: Team | null = $state(null)
 	let selectedPeriod: Period | null = $state(null)
-	let inputRelationTeam: InputRelation<TeamWithComputedValues> = $state()!
 	let offsetWidth: number = $state()!
 
 	let submitButton: HTMLButtonElement = $state()!
 
 	async function handleClickReturn() {
 		selectedTeam = null
+		search = ''
 		await tick()
-		inputRelationTeam.clear()
+		searchInput.focus()
 	}
-	function handleSelectTeam(team: TeamWithComputedValues) {
+	function handleSelectTeam(team: Team) {
 		setTimeout(async () => {
 			selectedTeam = team
 			await tick()
@@ -63,15 +68,26 @@
 	{/snippet}
 	{#if !selectedTeam}
 		<div class="content" in:fly={{ x: -offsetWidth, duration: 250 }}>
-			<InputRelation
-				bind:this={inputRelationTeam}
-				flatMode
-				search={(search) => $api.team.search(search, { take: 10, onlyAvailable: true })}
-				placeholder="Chercher un secteur"
-				classList="max-h-80 overflow-y-auto relative"
-				oninput={handleSelectTeam}
+			<label class="input w-full">
+				<SearchIcon size={20} opacity={0.6} />
+				<input
+					bind:this={searchInput}
+					bind:value={search}
+					type="search"
+					placeholder="Chercher un secteur"
+					autocomplete="off"
+				/>
+			</label>
+
+			<SelectorList
+				trigger={searchInput}
+				items={teams}
+				isLoading={teamsQuery.loading}
+				isError={!!teamsQuery.error}
+				class="w-full max-h-80 mt-2 overflow-y-auto relative"
+				onSelect={(index) => handleSelectTeam(teams[index])}
 			>
-				{#snippet suggestion({ item })}
+				{#snippet children({ item })}
 					<span>{item.name}</span>
 					<Progress
 						class="ml-auto"
@@ -81,7 +97,7 @@
 						}}
 					/>
 				{/snippet}
-			</InputRelation>
+			</SelectorList>
 		</div>
 	{:else}
 		<form

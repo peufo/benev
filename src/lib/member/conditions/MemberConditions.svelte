@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { IdCardIcon, PersonStandingIcon, PlusIcon, UserCheckIcon, XIcon } from '@lucide/svelte'
-	import { run } from 'svelte/legacy'
 
 	import axios from 'axios'
 	import { get } from 'svelte/store'
 	import { page } from '$app/stores'
 	import type { Field } from '@prisma/client'
-	import { Placeholder, InputCheckboxs, component, type ComponentAndProps } from '$lib/ui'
-	import { InputSelect, DropDownMenu, InputNumber, InputText, InputRadio } from '$lib/fuma-legacy'
-	import { jsonParse, tip } from 'fuma'
+	import { Placeholder } from '$lib/ui'
+	import { InputNumber, InputSelect, parseOptions, Popover, tip } from 'fuma'
 	import { browser } from '$app/environment'
-	import type { MemberCondition } from '$lib/models'
+	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
 	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
+	import ConditionValue from './ConditionValue.svelte'
 
 	interface Props {
 		conditions?: MemberCondition[]
@@ -35,7 +34,7 @@
 		}
 	}
 
-	function handleAddCondition(value: string) {
+	function addCondition(value: string) {
 		const _type = value as MemberCondition['type']
 		if (_type === 'valided') conditions = [...conditions, { type: 'valided' }]
 		if (_type === 'age') conditions = [...conditions, { type: 'age', args: 18 }]
@@ -53,29 +52,26 @@
 			]
 	}
 
-	function getFieldInput(field: Field): ComponentAndProps {
-		if (field.type === 'boolean')
-			return component(InputRadio, {
-				label: '',
-				key: field.id,
-				options: { true: 'Oui', false: 'Non' },
-			})
-		if (field.type === 'string' || field.type === 'textarea') return component(InputText, {})
-		if (field.type === 'number') return component(InputNumber, {})
-		return component(InputCheckboxs, {
-			label: '',
-			key: field.id,
-			options: jsonParse(field.options, []),
-		})
-	}
-	run(() => {
+	$effect(() => {
 		if (conditions) getmemberAllowedCount()
 	})
-	let addConditionOptions = $derived({
-		...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre approuvé' }),
-		...(!conditions.find((c) => c.type === 'age') && { age: 'Âge minimum' }),
-		profile: 'Profil du membre',
-	})
+
+	let addConditionOptions = $derived(
+		parseOptions({
+			...(!conditions.find((c) => c.type === 'valided') && { valided: 'Membre approuvé' }),
+			...(!conditions.find((c) => c.type === 'age') && { age: 'Âge minimum' }),
+			profile: 'Profil du membre',
+		})
+	)
+
+	const fieldOptions = $derived(memberFields.map((f) => ({ value: f.id, label: f.name })))
+
+	function operatorOptions(field: Field) {
+		return CONDITION_OPERATOR[field.type].map((value) => ({
+			value,
+			label: CONDITION_OPERATOR_LABEL[value],
+		}))
+	}
 </script>
 
 <div class="mt-4">
@@ -94,15 +90,33 @@
 				</span>
 			</div>
 		</div>
-		<DropDownMenu
-			options={addConditionOptions}
-			onselect={handleAddCondition}
-			tippyProps={{ placement: 'bottom-end' }}
-		>
-			<button type="button" class="btn btn-square">
-				<span class="inline-flex" use:tip={{ content: 'Ajouter une condition' }}><PlusIcon /></span>
-			</button>
-		</DropDownMenu>
+
+		<Popover placement="bottom-end">
+			{#snippet trigger(popover)}
+				<button type="button" class="btn btn-square" {...popover.trigger}>
+					<span class="inline-flex" use:tip={{ content: 'Ajouter une condition' }}>
+						<PlusIcon />
+					</span>
+				</button>
+			{/snippet}
+			{#snippet children(popover)}
+				<ul class="menu w-56">
+					{#each addConditionOptions as option (option.value)}
+						<li>
+							<button
+								type="button"
+								onclick={() => {
+									addCondition(option.value)
+									popover.hide()
+								}}
+							>
+								{option.label}
+							</button>
+						</li>
+					{/each}
+				</ul>
+			{/snippet}
+		</Popover>
 	</div>
 
 	<div class="flex flex-col gap-2">
@@ -116,23 +130,18 @@
 						</div>
 					{:else if condition.type === 'age'}
 						<PersonStandingIcon class="opacity-70" />
-						<InputNumber
-							bind:value={condition.args}
-							label="Âge minimum"
-							class="grid grid-cols-2"
-							input={{ min: 1 }}
-						/>
+						<InputNumber bind:value={condition.args} label="Âge minimum" min={1} />
 					{:else}
 						<IdCardIcon class="opacity-70" />
 
 						<div class="flex flex-wrap gap-2">
 							<!-- SELECT FIELD -->
 							<InputSelect
+								items={fieldOptions}
+								getValue={(option) => option.value}
 								bind:value={condition.args.fieldId}
-								options={memberFields.map((f) => ({ value: f.id, label: f.name }))}
-								class="label-text whitespace-nowrap"
 								placeholder="Sélectioner un champ"
-								onselect={(fieldId) => {
+								onSelect={({ value: fieldId }) => {
 									const field = memberFields.find((f) => f.id === fieldId)
 									if (!field) return
 									if (condition.type !== 'profile') return
@@ -147,12 +156,13 @@
 								{@const field = memberFields.find((f) => f.id === fieldId)}
 								{#if field}
 									<InputSelect
-										bind:value={condition.args.operator}
-										options={CONDITION_OPERATOR[field.type].map((value) => ({
-											value,
-											label: CONDITION_OPERATOR_LABEL[value],
-										}))}
-										class="label-text whitespace-nowrap"
+										items={operatorOptions(field)}
+										getValue={(option) => option.value}
+										value={condition.args.operator}
+										onSelect={({ value }) => {
+											if (condition.type !== 'profile') return
+											condition.args.operator = value as MemberConditionOperator
+										}}
 									/>
 								{/if}
 							{/if}
@@ -173,9 +183,7 @@
 					{@const fieldId = condition.args.fieldId}
 					{@const field = memberFields.find((f) => f.id === fieldId)}
 					{#if field}
-						{@const { component, props } = getFieldInput(field)}
-						{@const SvelteComponent = component}
-						<SvelteComponent {...props} bind:value={condition.args.expectedValue} />
+						<ConditionValue {field} {condition} />
 					{/if}
 				{/if}
 			</div>

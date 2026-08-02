@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tip } from 'fuma'
+	import { ButtonCopy, tip } from 'fuma'
 	import { LinkIcon, PencilIcon } from '@lucide/svelte'
 	import { page as pageStore } from '$app/stores'
 
@@ -7,7 +7,6 @@
 
 	import type { Page } from '@prisma/client'
 	import { tiptapParser } from '$lib/ui'
-	import { ButtonCopy } from '$lib/fuma-legacy'
 
 	import type { MemberWithComputedValues } from '$lib/server'
 	import PageLayout from './PageLayout.svelte'
@@ -63,7 +62,7 @@
 			title="Copier le lien de la page"
 			value="https://benev.io{$eventPath}{page ? `/${page.path}` : ''}"
 			successMessage="Lien copier"
-			icon={LinkIcon}
+			Icon={LinkIcon}
 		/>
 	</div>
 </PageLayout>

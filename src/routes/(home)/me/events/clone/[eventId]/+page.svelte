@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { component } from '$lib/ui'
 	import LabelPage from './LabelPage.svelte'
 	import LabelField from './LabelField.svelte'
 	import CloneSelector from './CloneSelector.svelte'
@@ -22,8 +21,11 @@
 			legend="Secteurs"
 			labelAll="Tous les secteurs"
 			placeholder="Aucun secteur"
-			getLabel={(team) => component(LabelTeam, { team, deltaDays })}
 		>
+			{#snippet label(team)}
+				<LabelTeam {team} {deltaDays} />
+			{/snippet}
+
 			<div class="grow"></div>
 			<!-- Champ brut: `deltaDays` pilote aussi l'aperçu des dates dans `LabelTeam`. -->
 			<label class="floating-label">
@@ -38,8 +40,11 @@
 			legend="Publications"
 			labelAll="Toutes les publications"
 			placeholder="Aucune pages"
-			getLabel={(page) => component(LabelPage, { page })}
-		/>
+		>
+			{#snippet label(page)}
+				<LabelPage {page} />
+			{/snippet}
+		</CloneSelector>
 
 		<CloneSelector
 			items={data.event.memberFields}
@@ -47,8 +52,11 @@
 			legend="Champs de membres"
 			labelAll="Tous les champs de membres"
 			placeholder="Aucun champs"
-			getLabel={(field) => component(LabelField, { field })}
-		/>
+		>
+			{#snippet label(field)}
+				<LabelField {field} />
+			{/snippet}
+		</CloneSelector>
 
 		<CloneSelector
 			class="sm:col-span-2"
@@ -57,8 +65,11 @@
 			legend="Vues"
 			labelAll="Toutes les vues"
 			placeholder="Aucune vue"
-			getLabel={(view) => `${view.name} (${view.key})`}
-		/>
+		>
+			{#snippet label(view)}
+				<span>{view.name} ({view.key})</span>
+			{/snippet}
+		</CloneSelector>
 	</div>
 
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">

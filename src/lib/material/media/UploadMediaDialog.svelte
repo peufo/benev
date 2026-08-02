@@ -4,8 +4,8 @@
 
 <script lang="ts">
 	import Cropper from 'svelte-easy-crop'
-	import { InputText } from '$lib/fuma-legacy'
-	import { Dialog } from 'fuma'
+	import type { RemoteFormField } from '@sveltejs/kit'
+	import { Dialog, InputString } from 'fuma'
 	import { RulerDimensionLineIcon } from '@lucide/svelte'
 
 	interface Props {
@@ -13,7 +13,8 @@
 		title?: string
 		formaction?: string | undefined
 		key?: string
-		freeName?: boolean
+		/** Champ du formulaire englobant; fourni, il ouvre la saisie du nom de l'image. */
+		nameField?: RemoteFormField<string>
 		freeAspect?: boolean
 		/** Remplacent les évènements de la version Svelte 4. */
 		onsubmit?: (value: { crop: CropArea; image: string }) => void
@@ -24,7 +25,7 @@
 		title = 'Nouvelle image',
 		formaction = undefined,
 		key = '',
-		freeName = false,
+		nameField = undefined,
 		freeAspect = false,
 		onsubmit,
 	}: Props = $props()
@@ -137,10 +138,12 @@
 			onchange={onFileSelected}
 		/>
 
-		{#if freeName}
-			<InputText
-				key="name"
-				input={{ placeholder: "Description de l'image", autocomplete: 'off' }}
+		{#if nameField}
+			<InputString
+				label="Description de l'image"
+				variant="floating"
+				field={nameField}
+				autocomplete="off"
 				class="grow"
 			/>
 		{/if}

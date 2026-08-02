@@ -126,7 +126,7 @@
 			bind:this={dialogUploadMedia}
 			title="Nouvelle image"
 			formaction={uploadMedia.action}
-			freeName
+			nameField={uploadMedia.fields.name}
 			freeAspect
 		/>
 	</form>

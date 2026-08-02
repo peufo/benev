@@ -1,66 +1,77 @@
-import { Badge, component } from '$lib/ui'
-import { type TableField } from '$lib/fuma-legacy'
-import { jsonParse } from 'fuma'
+import type { Snippet } from 'svelte'
+import { jsonParse, type TableField } from 'fuma'
 import type { Field } from '@prisma/client'
 import { getAge } from '$lib/utils'
-import { MemberCell } from '$lib/member'
 import { formatRange } from '$lib/formatRange'
 import type { MemberWithComputedValue } from './getMembers.server'
-import { msToHours } from './msToHours'
 
-export function getMembersTableFields(teams: { id: string; name: string }[], fields: Field[]) {
+type Team = { id: string; name: string }
+
+/**
+ * Les colonnes qui rendent autre chose qu'une valeur brute prennent leur markup de la page:
+ * un snippet ne se déclare que dans un composant.
+ */
+type MemberCellSnippets = {
+	member: Snippet<[MemberWithComputedValue]>
+	subscribesTeams: Snippet<[MemberWithComputedValue]>
+	subscribesCountRequest: Snippet<[MemberWithComputedValue]>
+	subscribesHours: Snippet<[MemberWithComputedValue]>
+}
+
+/** Secteurs auxquels le membre est inscrit, séparés par état: le rendu les distingue. */
+export function getSubscribedTeams(member: MemberWithComputedValue, teams: Team[]) {
+	const teamsName = teams.reduce<Record<string, string>>(
+		(acc, t) => ({ ...acc, [t.id]: t.name }),
+		{}
+	)
+	const accepted = member.subscribes
+		.filter((s) => s.state === 'accepted')
+		.map((s) => teamsName[s.period.teamId])
+		.filter(isUnique)
+	const request = member.subscribes
+		.filter((s) => s.state === 'request')
+		.map((s) => teamsName[s.period.teamId])
+		.filter(isUnique)
+		.filter((team) => !accepted.includes(team))
+	return { accepted, request }
+}
+
+export function getMembersTableFields(
+	teams: Team[],
+	fields: Field[],
+	snippets: MemberCellSnippets
+) {
 	const tableFields: TableField<MemberWithComputedValue>[] = [
 		{
 			key: 'member',
 			label: 'Membre',
-			getCell: (member) => component(MemberCell, { member }),
+			cell: () => snippets.member,
 			locked: true,
 		},
 		{
 			key: 'createdAt',
 			label: 'Adhésion',
-			getCell: (member) => member.createdAt.toLocaleDateString(),
+			cell: (member) => member.createdAt.toLocaleDateString(),
 			type: 'date',
 			visible: false,
 		},
 		{
 			key: 'member.email',
 			label: 'Email',
-			getCell: (member) => member.email || '-',
+			cell: (member) => member.email || '-',
 			visible: false,
 		},
 		{
 			key: 'member.phone',
 			label: 'Téléphone',
-			getCell: (member) => member.phone,
+			cell: (member) => member.phone,
 			visible: false,
 		},
 		{
 			key: 'subscribes_teams',
 			label: 'Inscriptions (secteur)',
 			type: 'multiselect',
-			getCell(m) {
-				const teamsName = teams.reduce<Record<string, string>>(
-					(acc, t) => ({ ...acc, [t.id]: t.name }),
-					{}
-				)
-				const teamsAccepted = m.subscribes
-					.filter((s) => s.state === 'accepted')
-					.map((s) => teamsName[s.period.teamId])
-					.filter(isUnique)
-				const teamsRequest = m.subscribes
-					.filter((s) => s.state === 'request')
-					.map((s) => teamsName[s.period.teamId])
-					.filter(isUnique)
-					.filter((team) => !teamsAccepted.includes(team))
-
-				return [
-					...teamsAccepted.map((content) => component(Badge, { content })),
-					...teamsRequest.map((content) =>
-						component(Badge, { content, class: 'badge-warning badge-outline' })
-					),
-				]
-			},
+			cell: () => snippets.subscribesTeams,
 			options: teams.map((team) => ({ label: team.name, value: team.id })),
 			visible: true,
 		},
@@ -68,28 +79,20 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			key: 'subscribes_count_accepted',
 			label: 'Inscriptions acceptés',
 			type: 'number',
-			getCell(m) {
-				if (!m.subscribesCountAccepted) return '-'
-				return component(Badge, { content: m.subscribesCountAccepted.toString() })
-			},
+			// Un nombre se rend déjà dans un badge; à zéro on affiche un tiret.
+			cell: (m) => m.subscribesCountAccepted || '-',
 		},
 		{
 			key: 'subscribes_count_request',
 			label: 'Inscriptions en attente',
 			type: 'number',
-			getCell(m) {
-				if (!m.subscribesCountRequest) return '-'
-				return component(Badge, {
-					content: m.subscribesCountRequest.toString(),
-					class: 'badge-warning badge-outline',
-				})
-			},
+			cell: () => snippets.subscribesCountRequest,
 		},
 		{
 			key: 'subscribes_range',
 			label: 'Inscriptions (période)',
 			type: 'date',
-			getCell(m) {
+			cell(m) {
 				const subscribesAccepted = m.subscribes.filter(({ state }) => state === 'accepted')
 				if (!subscribesAccepted.length) return '-'
 				const start = Math.min(...subscribesAccepted.map((s) => s.period.start.getTime()))
@@ -102,56 +105,47 @@ export function getMembersTableFields(teams: { id: string; name: string }[], fie
 			label: 'Heures de travail',
 			type: 'number',
 			visible: true,
-			getCell(m) {
-				if (!m.workTimeRequest) return msToHours(m.workTime)
-				return `
-					<div class="flex items-center">
-						<span>${msToHours(m.workTime)}</span>
-						<span class="opacity-80 ml-1 text-warning text-xs">+${msToHours(m.workTimeRequest)}</span>
-					</div>
-				`
-			},
+			cell: () => snippets.subscribesHours,
 		},
 		{
 			key: 'leaderOf',
 			label: 'Secteurs à charges',
 			type: 'multiselect',
-			getCell: (m) => m.leaderOf.map(({ name }) => name),
+			cell: (m) => m.leaderOf.map(({ name }) => name),
 			options: teams.map((team) => ({ label: team.name, value: team.id })),
 		},
 		{
 			key: 'age',
 			label: 'Age',
 			type: 'number',
-			getCell: (m) => getAge(m.birthday),
+			cell: (m) => getAge(m.birthday),
 		},
 		{
 			key: 'isProfileComplet',
 			label: 'Profil complet',
 			type: 'boolean',
-			getCell: (m) => m.isMemberProfileCompleted && m.isUserProfileCompleted,
+			cell: (m) => m.isMemberProfileCompleted && m.isUserProfileCompleted,
 		},
 		{
 			key: 'isValidedByEvent',
 			label: 'Membre approuvé',
 			type: 'boolean',
-			getCell: (m) => m.isValidedByEvent,
+			cell: (m) => m.isValidedByEvent,
 			hint: "Un responsable à confirmé l'inscription du membre",
 		},
 		{
 			key: 'isValidedByUser',
 			label: 'Membre actif',
 			type: 'boolean',
-			getCell: (m) => m.isValidedByUser,
+			cell: (m) => m.isValidedByUser,
 			hint: 'Le membre à confirmé son invitation',
 		},
 		...fields.map((field) => ({
 			key: `field_${field.id}`,
 			type: field.type,
 			label: field.name,
-			isEditable: true,
 			sortable: false,
-			getCell: (m: MemberWithComputedValue) => m.profileJson[field.id],
+			cell: (m: MemberWithComputedValue) => m.profileJson[field.id],
 			options: jsonParse<string[]>(field.options, []),
 		})),
 	]

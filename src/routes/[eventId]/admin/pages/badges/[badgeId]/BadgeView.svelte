@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { untrack } from 'svelte'
 
-	import { InputRelation } from '$lib/fuma-legacy'
+	import { InputRelation } from 'fuma'
 	import type { PageData } from './$types'
 	import type { Member } from '@prisma/client'
-	import { api } from '$lib/api'
+	import { searchMembers } from '$lib/member/member.remote'
 	import { eventPath } from '$lib/store'
 	import { debounce } from '$lib/debounce'
 	import { fade } from 'svelte/transition'
@@ -45,25 +45,23 @@
 		label="Aperçu du badge de"
 		placeholder="Choisir un membre pour l'aperçu"
 		bind:value={member}
-		search={$api.member.search}
+		searchItems={searchMembers}
 	>
-		{#snippet item({ item })}
-			{@const badgeType = item?.profileJson[badge.typeFieldId || '']}
-			<div class="flex gap-2">
-				<span>{item?.firstName} {item?.lastName}</span>
+		{#snippet selected(item)}
+			{@const badgeType = item.profileJson[badge.typeFieldId || '']}
+			<span class="flex gap-2">
+				<span>{item.firstName} {item.lastName}</span>
 				{#if badgeType}
 					<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
 				{/if}
-			</div>
+			</span>
 		{/snippet}
-		{#snippet suggestion({ item })}
-			{@const badgeType = item?.profileJson[badge.typeFieldId || '']}
-			<div class="flex gap-2 w-full">
-				<span>{item?.firstName} {item?.lastName}</span>
-				{#if badgeType}
-					<span class="ml-auto mr-3 italic opacity-70">{badgeType}</span>
-				{/if}
-			</div>
+		{#snippet proposal(item)}
+			{@const badgeType = item.profileJson[badge.typeFieldId || '']}
+			<span>{item.firstName} {item.lastName}</span>
+			{#if badgeType}
+				<span class="ml-auto italic opacity-70">{badgeType}</span>
+			{/if}
 		{/snippet}
 	</InputRelation>
 

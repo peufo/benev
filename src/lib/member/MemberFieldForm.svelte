@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
 	import { InputOptions } from '$lib/ui'
-	import { InputSelect } from '$lib/fuma-legacy'
-	import { ButtonDelete, InputBoolean, InputString } from 'fuma'
+	import { ButtonDelete, InputBoolean, InputSelect, InputString } from 'fuma'
 	import type { Field } from '@prisma/client'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { toast } from 'svelte-sonner'
@@ -17,6 +16,18 @@
 	let { field = $bindable({}), onsuccess }: Props = $props()
 
 	const remoteForm = $derived(field.id ? updateMemberField : createMemberField)
+
+	// `Object.entries` élargirait la clé en `string`: on la garde typée pour que la sélection
+	// s'écrive sans cast.
+	const fieldTypes = Object.keys(MEMBER_FIELD_TYPE).map((key) => {
+		const type = key as Field['type']
+		return { value: type, ...MEMBER_FIELD_TYPE[type] }
+	})
+
+	// Sur un nouveau champ, `field` est un objet nu monté par le layout: y écrire ne déclenche
+	// aucun rendu. Le type pilote l'affichage conditionnel et la valeur soumise, il lui faut
+	// donc son propre état — dérivé assignable, pour suivre `field` d'un champ à l'autre.
+	let type = $derived(field.type)
 
 	function getMemberRight(value: Partial<Field>): string[] {
 		return [value.memberCanRead && 'read', value.memberCanWrite && 'write'].filter(
@@ -51,16 +62,29 @@
 	{/if}
 
 	{#key field.id}
-		<!-- `InputSelect` de fuma 1 reste ici: ses options portent des icônes `@mdi`, là où
-		     `Option.icon` de fuma 2 attend un composant Lucide. Il transmet une chaîne simple. -->
+		<!-- Le type n'est pas un `field` de la remote function: c'est ce champ caché qui le
+		     soumet, et l'affichage conditionnel ci-dessous s'y accroche aussi. -->
+		<input type="hidden" name="type" value={type ?? ''} />
+
 		<InputSelect
-			key="type"
-			enhanceDisabled
-			bind:value={field.type}
-			options={MEMBER_FIELD_TYPE}
 			label="Type de champ"
-			class="w-full justify-start mt-4"
-		/>
+			items={fieldTypes}
+			getValue={(option) => option.value}
+			value={type}
+			onSelect={(option) => (type = option.value)}
+			placeholder="Choisir un type"
+		>
+			{#snippet selected(option)}
+				<span class="flex items-center gap-2">
+					<option.icon size={18} class="opacity-70" />
+					<span>{option.label}</span>
+				</span>
+			{/snippet}
+			{#snippet proposal(option)}
+				<option.icon size={18} class="opacity-70" />
+				<span>{option.label}</span>
+			{/snippet}
+		</InputSelect>
 
 		<InputString field={remoteForm.fields.name} label="Nom" value={field.name} autocomplete="off" />
 		<InputString
@@ -70,13 +94,13 @@
 			autocomplete="off"
 		/>
 
-		{#if field.type === 'select' || field.type === 'multiselect'}
+		{#if type === 'select' || type === 'multiselect'}
 			<div transition:slide>
 				<InputOptions key="options" bind:value={field.options} />
 			</div>
 		{/if}
 
-		{#if field.type === 'multiselect'}
+		{#if type === 'multiselect'}
 			<div transition:slide>
 				<InputBoolean
 					field={remoteForm.fields.allCombinations}
@@ -114,7 +138,7 @@
 		<input {...remoteForm.fields.memberCanRead.as('hidden', !!field.memberCanRead)} />
 		<input {...remoteForm.fields.memberCanWrite.as('hidden', !!field.memberCanWrite)} />
 
-		{#if field.memberCanWrite && field.type !== 'boolean' && field.type !== 'multiselect'}
+		{#if field.memberCanWrite && type !== 'boolean' && type !== 'multiselect'}
 			<div transition:slide={{ duration: 200 }}>
 				<InputBoolean
 					field={remoteForm.fields.required}

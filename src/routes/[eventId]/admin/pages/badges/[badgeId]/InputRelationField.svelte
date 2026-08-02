@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { component } from '$lib/ui'
-	import { InputRelation } from '$lib/fuma-legacy'
-	import { urlParam } from 'fuma'
+	import { PlusIcon } from '@lucide/svelte'
+	import type { RemoteQueryFunction } from '@sveltejs/kit'
+	import { InputRelation, tip, urlParam } from 'fuma'
 	import type { Field, FieldType } from '@prisma/client'
-	import { api } from '$lib/api'
+	import { searchMemberFields } from '$lib/member/memberField.remote'
 	import MemberFieldSnippet from './MemberFieldSnippet.svelte'
 
 	interface Props {
 		key: string
 		label: string
+		/** `null` et non `undefined`: c'est ce que Prisma rend pour une relation absente. */
 		value: Field | null
 		type: FieldType
 		typesAccepted?: FieldType[]
@@ -23,21 +24,42 @@
 		typesAccepted = [type],
 		oninput = () => {},
 	}: Props = $props()
+
+	// `InputRelation` n'appelle sa recherche qu'avec `{ search }`: le filtre par type est
+	// propre à cette instance, il se fixe ici.
+	const searchItems: RemoteQueryFunction<{ search: string }, Field[]> = ({ search }) =>
+		searchMemberFields({ search, types: typesAccepted })
 </script>
 
-<!-- `InputRelation` de fuma 1 sérialise l'objet entier en JSON: la remote function n'attend
-     que l'id, transmis par le champ caché. Le champ interne du composant porte un autre nom,
-     que le schéma écarte. -->
+<!-- `InputRelation` ne sert qu'à choisir: la remote function n'attend que l'id, transmis par
+     ce champ caché. -->
 <input type="hidden" name={key} value={value?.id ?? ''} />
 
 <InputRelation
-	key="{key}_search"
 	{label}
-	bind:value
-	search={(search) => $api.fields.search(search, { types: typesAccepted })}
-	createTitle="Nouveau champ"
-	createUrl={urlParam.with({ form_field: JSON.stringify({ type }) })}
-	slotItem={(field) => component(MemberFieldSnippet, { field, updateLink: true })}
-	slotSuggestion={(field) => component(MemberFieldSnippet, { field })}
-	oninput={(value) => oninput(value)}
-/>
+	value={value ?? undefined}
+	nullable
+	{searchItems}
+	onSelect={(field) => {
+		value = field ?? null
+		if (field) oninput(field)
+	}}
+>
+	{#snippet selected(field)}
+		<MemberFieldSnippet {field} updateLink />
+	{/snippet}
+	{#snippet proposal(field)}
+		<MemberFieldSnippet {field} />
+	{/snippet}
+	{#snippet append()}
+		<a
+			href={urlParam.with({ form_field: JSON.stringify({ type }) })}
+			class="btn btn-square btn-soft btn-sm"
+			data-sveltekit-noscroll
+			data-sveltekit-replacestate
+			use:tip={{ content: 'Nouveau champ' }}
+		>
+			<PlusIcon size={20} />
+		</a>
+	{/snippet}
+</InputRelation>

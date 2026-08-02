@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { CopyIcon } from '@lucide/svelte'
+	import { CopyIcon, PlusIcon } from '@lucide/svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
-	import { component } from '$lib/ui'
-	import { InputRelation, InputRelations } from '$lib/fuma-legacy'
-	import { ButtonDelete, tip, urlParam } from 'fuma'
+	import { ButtonDelete, InputRelation, InputRelations, tip, urlParam } from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { goto, invalidateAll } from '$app/navigation'
-	import { api } from '$lib/api'
+	import { searchTeams } from '$lib/team/team.remote'
+	import { searchTags } from '$lib/tag/tag.remote'
 	import { TagSelectItem } from '$lib/tag'
 	import { toast } from 'svelte-sonner'
 	import InputDateTime from './InputDateTime.svelte'
@@ -54,8 +53,8 @@
 	let end = $state(daytz(period?.end || defaultEnd))
 
 	let maxSubscribe = $state(period?.maxSubscribe || 1)
-	let selectedTeam: Team | null = $state(period.team ?? null)
-	let selectedTags: Tag[] | null = $state(period.tags ?? null)
+	let selectedTeam: Team | undefined = $state(period.team)
+	let selectedTags: Tag[] = $state(period.tags ?? [])
 
 	// ATTENTION runtime: `Intl.DurationFormat` n'est pas disponible partout. Bun l'a
 	// (vérifié en 1.2.22), Node ne l'a pas avant la v23. Le Dockerfile lance l'app avec
@@ -73,8 +72,8 @@
 		start = daytz(period?.start || defaultStart)
 		end = daytz(period?.end || defaultEnd)
 		maxSubscribe = period?.maxSubscribe || 1
-		selectedTeam = period?.team ?? null
-		selectedTags = period?.tags ?? null
+		selectedTeam = period?.team
+		selectedTags = period?.tags ?? []
 	}
 
 	export function updatePeriodProp(updater: (p: PeriodProp) => PeriodProp) {
@@ -90,7 +89,7 @@
 			start: end.toDate(),
 			end: end.add(duration, 'minute').toDate(),
 			maxSubscribe,
-			tagIds: (selectedTags ?? []).map((t) => t.id),
+			tagIds: selectedTags.map((t) => t.id),
 		})
 		if (disableRedirect) await invalidateAll()
 		else await goto(urlParam.without('form_period'), { invalidateAll: true, noScroll: true })
@@ -138,28 +137,39 @@
 	{/if}
 
 	<input type="hidden" name="team" value={selectedTeam?.id ?? ''} />
-	{#each selectedTags ?? [] as tag (tag.id)}
+	{#each selectedTags as tag (tag.id)}
 		<input type="hidden" name="tags[]" value={tag.id} />
 	{/each}
 
 	{#key period}
-		<InputRelation
-			bind:value={selectedTeam}
-			key="team_search"
-			search={$api.team.search}
-			slotItem={(item) => item.name}
-			label="Secteur"
-		/>
-		<InputRelations
-			bind:value={selectedTags}
-			key="tags_search"
-			search={$api.tag.search}
-			slotItem={(tag) => component(TagSelectItem, { tag, is_editable: true })}
-			slotSuggestion={(tag) => component(TagSelectItem, { tag })}
-			label="Étiquettes"
-			createUrl={urlParam.with({ form_tag: '{}' })}
-			createTitle="Nouvelle étiquette"
-		/>
+		<InputRelation bind:value={selectedTeam} searchItems={searchTeams} label="Secteur">
+			{#snippet selected(team)}
+				<span>{team.name}</span>
+			{/snippet}
+			{#snippet proposal(team)}
+				<span>{team.name}</span>
+			{/snippet}
+		</InputRelation>
+
+		<InputRelations bind:value={selectedTags} searchItems={searchTags} label="Étiquettes">
+			{#snippet selected(tag)}
+				<TagSelectItem {tag} is_editable />
+			{/snippet}
+			{#snippet proposal(tag)}
+				<TagSelectItem {tag} />
+			{/snippet}
+			{#snippet append()}
+				<a
+					href={urlParam.with({ form_tag: '{}' })}
+					class="btn btn-square btn-soft btn-sm"
+					data-sveltekit-noscroll
+					data-sveltekit-replacestate
+					use:tip={{ content: 'Nouvelle étiquette' }}
+				>
+					<PlusIcon size={20} />
+				</a>
+			{/snippet}
+		</InputRelations>
 	{/key}
 
 	<label class="floating-label">

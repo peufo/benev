@@ -46,7 +46,7 @@
 			action: () => editor.commands.indent(),
 		},
 		{
-			label: 'Retrait à droite',
+			label: 'Retrait à gauche',
 			icon: IndentDecreaseIcon,
 			action: () => editor.commands.outdent(),
 		},

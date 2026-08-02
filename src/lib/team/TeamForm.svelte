@@ -75,7 +75,7 @@
 	/>
 
 	{#if page.data.member?.roles.includes('admin')}
-		<InputLeaders bind:value={team.leaders} />
+		<InputLeaders value={team.leaders} />
 	{/if}
 	<InputTextarea
 		field={remoteForm.fields.description}

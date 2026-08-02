@@ -2,7 +2,7 @@
 	import type { GiftConditionType, GiftCondition as TGiftEdition } from '@prisma/client'
 	import GiftCondition from './GiftCondition.svelte'
 	import { GIFT_CONDITION_TYPE } from '$lib/constant'
-	import { InputSelect } from '$lib/fuma-legacy'
+	import { InputSelect, parseOptions } from 'fuma'
 
 	interface Props {
 		conditions?: Partial<TGiftEdition>[]
@@ -10,9 +10,13 @@
 
 	let { conditions = $bindable([]) }: Props = $props()
 
+	const conditionTypes = parseOptions(GIFT_CONDITION_TYPE)
+
+	// La valeur choisie est consommée aussitôt: on la remet à vide pour que le champ
+	// réaffiche son invite.
 	let conditionType = $state('')
-	function addCondition() {
-		conditions = [...conditions, { type: conditionType as GiftConditionType }]
+	function addCondition(type: string) {
+		conditions = [...conditions, { type: type as GiftConditionType }]
 		conditionType = ''
 	}
 </script>
@@ -32,11 +36,11 @@
 	</div>
 
 	<InputSelect
-		options={GIFT_CONDITION_TYPE}
-		onselect={addCondition}
+		items={conditionTypes}
+		getValue={(option) => option.value}
+		onSelect={(option) => addCondition(option.value)}
 		bind:value={conditionType}
-		class="btn-square"
-		placeholder="Ajouter un condition"
+		placeholder="Ajouter une condition"
 	/>
 </div>
 

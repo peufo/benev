@@ -1,8 +1,8 @@
-import { command, form, getRequestEvent } from '$app/server'
+import { command, form, getRequestEvent, query } from '$app/server'
 import { error } from '@sveltejs/kit'
 import z from 'zod'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { permission, prisma, useAddTeamComputedValues } from '$lib/server'
 import { cloneTeam } from '$lib/server/clone.js'
 
 export const createTeam = form(modelTeam, async (data) => {
@@ -69,3 +69,41 @@ function getTeamCopyName(initalName: string, teams: string[]): string {
 	while (teams.includes(`${name} ${suffix}`)) suffix++
 	return `${name} ${suffix}`
 }
+
+/** Alimente l'`InputRelation` de secteur de `PeriodForm` et `MemberSetLeaderOf`. */
+export const searchTeams = query(z.object({ search: z.string() }), async ({ search }) => {
+	const { locals, params } = getRequestEvent()
+	const eventId = params.eventId!
+	await permission.leader(eventId, locals)
+	return prisma.team.findMany({
+		where: { eventId, name: { contains: search } },
+		take: 10,
+	})
+})
+
+/**
+ * Alimente l'`InputRelation` de `MemberCreateSubscribeDialog`, qui a besoin des périodes et
+ * de leur disponibilité: un responsable ne peut inscrire quelqu'un que sur une place libre.
+ */
+export const searchAvailableTeams = query(z.object({ search: z.string() }), async ({ search }) => {
+	const { locals, params } = getRequestEvent()
+	const eventId = params.eventId!
+	const member = await permission.leader(eventId, locals)
+	const addTeamComputedValues = useAddTeamComputedValues({ member, event: member.event })
+
+	return prisma.team
+		.findMany({
+			where: { eventId, name: { contains: search } },
+			include: {
+				leaders: true,
+				periods: {
+					include: {
+						subscribes: { include: { member: { select: { isValidedByUser: true } } } },
+						tags: true,
+					},
+				},
+			},
+			take: 10,
+		})
+		.then((teams) => teams.map(addTeamComputedValues).filter((team) => team.isAvailable))
+})

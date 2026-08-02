@@ -8,11 +8,11 @@
 		TriangleAlertIcon,
 	} from '@lucide/svelte'
 	import type { PageData } from './$types'
-	import { Card, InputSearch, component } from '$lib/ui'
-	import { Table, type TableField } from '$lib/fuma-legacy'
+	import { Card, InputSearch } from '$lib/ui'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { Drawer, tip } from 'fuma'
 	import { Pagination } from 'fuma'
+	import { Table, type TableField } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MemberCell } from '$lib/member'
 	import SubscribesImport from './SubscribesImport.svelte'
@@ -40,13 +40,13 @@
 			{
 				key: 'member',
 				label: 'Membre',
-				getCell: (sub) => component(MemberCell, { member: sub.member }),
+				cell: () => memberCell,
 				locked: true,
 			},
 			{
 				key: 'createdAt',
 				label: 'Inscription',
-				getCell: (sub) => sub.createdAt.toLocaleDateString(),
+				cell: (sub) => sub.createdAt.toLocaleDateString(),
 				visible: false,
 				type: 'date',
 			},
@@ -55,11 +55,7 @@
 				label: 'Secteur',
 				type: 'multiselect',
 				options: data.teams.map((t) => ({ value: t.id, label: t.name })),
-				getCell: (sub) => `
-				<a href="${$eventPath}/teams?section=${sub.period.teamId}" class="link link-hover">
-					${sub.period.team.name}
-				</a>
-			`,
+				cell: () => teamCell,
 				visible: true,
 			},
 			{
@@ -67,24 +63,13 @@
 				label: 'Étiquettes',
 				type: 'multiselect',
 				options: data.tags.map((t) => ({ value: t.id, label: t.name })),
-				getCell: (sub) => component(TagsList, { tags: sub.period.tags }),
+				cell: () => tagsCell,
 			},
 			{
 				key: 'period',
 				label: 'Période',
 				type: 'date',
-				getCell: (sub) => {
-					let href = `${$eventPath}/teams`
-					href += `?section=${sub.period.teamId}`
-					href += `&form_period=${sub.periodId}`
-					const duration = dayjs(sub.period.end).diff(sub.period.start, 'minutes')
-					return `
-					<a href="${href}" class="link link-hover">
-						${formatRange(sub.period)}
-						<span class="badge badge-sm">${duration} min.</span>
-					</a>
-				`
-				},
+				cell: () => periodCell,
 				visible: true,
 			},
 			{
@@ -95,7 +80,7 @@
 					leader: { label: 'Inscrit par un responsable', icon: ShieldUserIcon },
 					user: { label: 'Inscrit par le membre', icon: CircleUserIcon },
 				},
-				getCell: ({ createdBy }) => component(SubscribeCreatedBy, { createdBy }),
+				cell: () => createdByCell,
 			},
 			{
 				key: 'isAbsent',
@@ -105,20 +90,20 @@
 					true: { label: 'Marqué comme absent', icon: TriangleAlertIcon },
 					false: { label: 'Marqué comme présent', icon: CircleCheckIcon },
 				},
-				getCell: ({ isAbsent }) => component(SubscribeIsAbsent, { isAbsent }),
+				cell: () => isAbsentCell,
 			},
 			{
 				key: 'isValidedByEvent',
 				label: 'Membre approuvé',
 				type: 'boolean',
-				getCell: (sub) => sub.member.isValidedByEvent,
+				cell: (sub) => sub.member.isValidedByEvent,
 				hint: "Un responsable à confirmé l'inscription du membre",
 			},
 			{
 				key: 'isValidedByUser',
 				label: 'Membre actif',
 				type: 'boolean',
-				getCell: (sub) => sub.member.isValidedByUser,
+				cell: (sub) => sub.member.isValidedByUser,
 				hint: `Le membre à confirmé sa participation à l'évenement`,
 			},
 			{
@@ -126,13 +111,50 @@
 				label: 'Statut',
 				type: 'multiselect',
 				options: SUBSCRIBE_STATE,
-				getCell: (subscribe) => component(SubscribeStateForm, { subscribe, isLeader: true }),
+				cell: () => stateCell,
 				visible: true,
 			},
 		]
 		return columns
 	})
 </script>
+
+{#snippet memberCell(subscribe: Subscribe)}
+	<MemberCell member={subscribe.member} />
+{/snippet}
+
+{#snippet teamCell(subscribe: Subscribe)}
+	<a href="{$eventPath}/teams?section={subscribe.period.teamId}" class="link link-hover">
+		{subscribe.period.team.name}
+	</a>
+{/snippet}
+
+{#snippet tagsCell(subscribe: Subscribe)}
+	<TagsList tags={subscribe.period.tags} />
+{/snippet}
+
+{#snippet periodCell(subscribe: Subscribe)}
+	{@const duration = dayjs(subscribe.period.end).diff(subscribe.period.start, 'minutes')}
+	<a
+		href="{$eventPath}/teams?section={subscribe.period.teamId}&form_period={subscribe.periodId}"
+		class="link link-hover whitespace-nowrap"
+	>
+		{formatRange(subscribe.period)}
+		<span class="badge badge-sm">{duration} min.</span>
+	</a>
+{/snippet}
+
+{#snippet createdByCell(subscribe: Subscribe)}
+	<SubscribeCreatedBy createdBy={subscribe.createdBy} />
+{/snippet}
+
+{#snippet isAbsentCell(subscribe: Subscribe)}
+	<SubscribeIsAbsent isAbsent={subscribe.isAbsent} />
+{/snippet}
+
+{#snippet stateCell(subscribe: Subscribe)}
+	<SubscribeStateForm {subscribe} isLeader />
+{/snippet}
 
 <div class="flex gap-4 items-start">
 	<Card class="min-w-0 grow" bodyClass="sm:px-2 sm:py-2">
@@ -165,9 +187,12 @@
 				key="subscribes"
 				{fields}
 				items={data.subscribes}
-				slotAction={(subscribe) => component(SubscribeMenu, { subscribe })}
 				placholder="Aucune inscription trouvé"
-			/>
+			>
+				{#snippet actions(subscribe)}
+					<SubscribeMenu {subscribe} />
+				{/snippet}
+			</Table>
 
 			<div class="flex justify-end">
 				<Pagination />

@@ -1,11 +1,18 @@
 <script lang="ts">
-	import { ArrowLeftIcon, SquareCheckBigIcon, SquareIcon, UserRoundPlusIcon } from '@lucide/svelte'
+	import {
+		ArrowLeftIcon,
+		SearchIcon,
+		SquareCheckBigIcon,
+		SquareIcon,
+		UserRoundPlusIcon,
+	} from '@lucide/svelte'
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import { SvelteSet } from 'svelte/reactivity'
-	import { InputRelation } from '$lib/fuma-legacy'
 	import { Dialog } from 'fuma'
+	import { SelectorList } from '$lib/ui'
 	import { eventPath } from '$lib/store'
+	import { searchImportableEvents } from './memberImport.remote'
 	import { toast } from 'svelte-sonner'
 
 	interface Props {
@@ -14,14 +21,6 @@
 	}
 
 	let { dialog = $bindable(), title = 'Importer des membres' }: Props = $props()
-
-	interface ImportableEvent {
-		id: string
-		name: string
-		memberCount: number
-		startDate: string | null
-		endDate: string | null
-	}
 
 	interface SourceMember {
 		id: string
@@ -62,6 +61,13 @@
 		}
 	}
 
+	let search = $state('')
+	let searchInput: HTMLInputElement = $state()!
+	const eventsQuery = $derived(searchImportableEvents({ search }))
+	const importableEvents = $derived(eventsQuery.current ?? [])
+
+	type ImportableEvent = (typeof importableEvents)[number]
+
 	// State management
 	let step: 'events' | 'members' | 'fields' | 'confirm' | 'results' = $state('events')
 	let selectedEvent: ImportableEvent | null = $state(null)
@@ -76,13 +82,6 @@
 
 	// UI state
 	let offsetWidth: number = $state()!
-	let inputRelationEvent: InputRelation<ImportableEvent> = $state()!
-
-	async function loadImportableEvents(): Promise<ImportableEvent[]> {
-		const response = await fetch(`${$eventPath}/admin/members/import`)
-		const data = await response.json()
-		return data.events || []
-	}
 
 	async function loadSourceMembers(eventId: string) {
 		isLoading = true
@@ -197,15 +196,16 @@
 		targetFields = []
 		fieldMappings = []
 		importResults = null
-		inputRelationEvent?.clear()
+		search = ''
 	}
 
 	async function goBack() {
 		if (step === 'members') {
 			step = 'events'
 			selectedEvent = null
+			search = ''
 			await tick()
-			inputRelationEvent?.clear()
+			searchInput?.focus()
 		} else if (step === 'fields') {
 			step = 'members'
 		} else if (step === 'confirm') {
@@ -263,18 +263,29 @@
 			<p class="text-sm text-gray-600 mb-4">
 				Sélectionnez l'événement depuis lequel importer les profils de membres.
 			</p>
-			<InputRelation
-				bind:this={inputRelationEvent}
-				flatMode
-				search={loadImportableEvents}
-				placeholder="Chercher un événement"
-				classList="max-h-80 overflow-y-auto"
-				oninput={handleSelectEvent}
+			<label class="input w-full">
+				<SearchIcon size={20} opacity={0.6} />
+				<input
+					bind:this={searchInput}
+					bind:value={search}
+					type="search"
+					placeholder="Chercher un évènement"
+					autocomplete="off"
+				/>
+			</label>
+
+			<SelectorList
+				trigger={searchInput}
+				items={importableEvents}
+				isLoading={eventsQuery.loading}
+				isError={!!eventsQuery.error}
+				class="w-full max-h-80 mt-2 overflow-y-auto"
+				onSelect={(index) => handleSelectEvent(importableEvents[index])}
 			>
-				{#snippet suggestion({ item })}
+				{#snippet children({ item })}
 					<div>
 						<div class="font-medium">{item.name}</div>
-						<div class="text-sm text-gray-500">
+						<div class="text-sm opacity-70">
 							{item.memberCount} membres
 							{#if item.startDate}
 								• {new Date(item.startDate).getFullYear()}
@@ -282,7 +293,7 @@
 						</div>
 					</div>
 				{/snippet}
-			</InputRelation>
+			</SelectorList>
 		</div>
 	{:else if step === 'members'}
 		<div class="content" in:fly={{ x: offsetWidth, duration: 250 }}>

@@ -1,18 +1,17 @@
-<script lang="ts">
+<script lang="ts" generics="Item extends { id: string }">
+	import type { Snippet } from 'svelte'
 	import { untrack } from 'svelte'
-	import { Placeholder, type ComponentAndProps } from '$lib/ui'
-	import { InputBoolean } from '$lib/fuma-legacy'
+	import { Placeholder } from '$lib/ui'
 
-	type Item = $$Generic<{ id: string }>
 	interface Props {
 		items: Item[]
 		key: string
 		placeholder: string
 		legend: string
 		labelAll: string
-		getLabel: (item: Item) => string | ComponentAndProps
+		label: Snippet<[Item]>
 		class?: string
-		children?: import('svelte').Snippet
+		children?: Snippet
 	}
 
 	let {
@@ -21,7 +20,7 @@
 		placeholder,
 		legend,
 		labelAll,
-		getLabel,
+		label,
 		class: klass = '',
 		children,
 	}: Props = $props()
@@ -33,30 +32,32 @@
 		return JSON.stringify(arr.filter((el) => el.selected).map((el) => el.id))
 	}
 	let _items = $state(mapSelected(untrack(() => items)))
+	let allSelected = $derived(_items.every((item) => item.selected))
 </script>
 
+<!-- Seul ce champ est soumis: les cases ci-dessous ne servent qu'à le composer. -->
 <input type="hidden" name={key} value={getJsonIds(_items)} />
 
 <fieldset class="p-2 rounded border border-base-300 {klass}">
 	<legend class="px-2">{legend}</legend>
 	<div class="flex gap-4 flex-wrap items-center">
-		<InputBoolean
-			key="{key}_all"
-			value={_items.filter((p) => p.selected).length === items.length}
-			onchange={(selected) => (_items = mapSelected(_items, selected))}
-			label={labelAll}
-			labelPosition="right"
-		/>
+		<label class="flex items-center gap-2 cursor-pointer">
+			<input
+				type="checkbox"
+				class="checkbox"
+				checked={allSelected}
+				onchange={({ currentTarget: { checked } }) => (_items = mapSelected(_items, checked))}
+			/>
+			<span>{labelAll}</span>
+		</label>
 		{@render children?.()}
 	</div>
 	<div class="divider"></div>
 	{#each _items as item (item.id)}
-		<InputBoolean
-			key="{key}_{item.id}"
-			bind:value={item.selected}
-			label={getLabel(item)}
-			labelPosition="right"
-		/>
+		<label class="flex items-center gap-2 cursor-pointer">
+			<input type="checkbox" class="checkbox" bind:checked={item.selected} />
+			{@render label(item)}
+		</label>
 	{:else}
 		<Placeholder>{placeholder}</Placeholder>
 	{/each}

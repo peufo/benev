@@ -4,8 +4,7 @@
 	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
 	import { FormControl, InputTextRich } from '$lib/ui'
-	import { InputSelect } from '$lib/fuma-legacy'
-	import { ButtonDelete, InputString } from 'fuma'
+	import { ButtonDelete, InputSelect, InputString } from 'fuma'
 
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
@@ -26,6 +25,16 @@
 	let isDirty = $state(false)
 	let successInvalidateAll = false
 	const { home, charter, email, ...pageTypes } = PAGE_TYPE
+
+	// Une charte déjà publiée disparaît des choix, sauf si c'est celle qu'on édite.
+	const selectableTypes = $derived(
+		Object.entries(
+			charterAlreadyExist && page.type !== 'charter' ? pageTypes : { charter, ...pageTypes }
+		).map(([value, option]) => ({ value: value as Page['type'], ...option }))
+	)
+	// Dérivé assignable: le type choisi est soumis avant que le serveur ne réponde, et `page`
+	// change d'une publication à l'autre sans que le composant soit remonté.
+	let pageType = $derived(page.type)
 	let submitButton: HTMLButtonElement = $state()!
 	let inputTextRich: InputTextRich = $state()!
 
@@ -86,15 +95,27 @@
 					<span>{email.label}</span>
 				</div>
 			{:else}
+				<input type="hidden" name="type" value={pageType} />
 				<InputSelect
-					key="type"
-					enhanceDisabled
-					options={charterAlreadyExist && page.type !== 'charter'
-						? pageTypes
-						: { charter, ...pageTypes }}
-					value={page.type}
-					onselect={handleChangeImediat}
-				/>
+					items={selectableTypes}
+					getValue={(option) => option.value}
+					value={pageType}
+					onSelect={(option) => {
+						pageType = option.value
+						handleChangeImediat()
+					}}
+				>
+					{#snippet selected(option)}
+						<span class="flex items-center gap-2">
+							<option.icon size={21} class="opacity-70" />
+							<span>{option.label}</span>
+						</span>
+					{/snippet}
+					{#snippet proposal(option)}
+						<option.icon size={18} class="opacity-70" />
+						<span>{option.label}</span>
+					{/snippet}
+				</InputSelect>
 			{/if}
 		</FormControl>
 	</div>

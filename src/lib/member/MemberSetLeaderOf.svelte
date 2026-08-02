@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 
-	import { api } from '$lib/api'
-	import { InputRelations } from '$lib/fuma-legacy'
-	import { Dialog } from 'fuma'
+	import { Dialog, InputRelations } from 'fuma'
+	import { searchTeams } from '$lib/team/team.remote'
 	import { setMemberLeaderOf } from './memberAdmin.remote'
 
 	interface Props {
@@ -32,14 +31,17 @@
 		{/each}
 
 		<InputRelations
-			key="leaderOf_search"
-			flatMode
-			search={(search) => $api.team.search(search, { take: 10 })}
+			searchItems={searchTeams}
 			placeholder="Chercher un nouveau secteur"
-			classList="max-h-80 overflow-y-auto relative"
 			bind:value={teams}
-			slotItem={(team) => team.name}
-		/>
+		>
+			{#snippet selected(team)}
+				<span>{team.name}</span>
+			{/snippet}
+			{#snippet proposal(team)}
+				<span>{team.name}</span>
+			{/snippet}
+		</InputRelations>
 
 		<div class="flex flex-row-reverse mt-2">
 			<button class="btn"> Valider </button>

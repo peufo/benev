@@ -3,15 +3,17 @@
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick, untrack } from 'svelte'
 	import { goto } from '$app/navigation'
-	import { InputSearch, Card, component } from '$lib/ui'
-	import { Table } from '$lib/fuma-legacy'
+	import { InputSearch, Card, Badge } from '$lib/ui'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { Drawer, tip } from 'fuma'
 	import { Pagination } from 'fuma'
+	import { Table } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { jsonParse } from 'fuma'
-	import { MemberActions, MemberCreateSubscribeDialog } from '$lib/member'
-	import { getMembersTableFields } from './membersTableFields'
+	import { MemberActions, MemberCell, MemberCreateSubscribeDialog } from '$lib/member'
+	import { getMembersTableFields, getSubscribedTeams } from './membersTableFields'
+	import { msToHours } from './msToHours'
+	import type { MemberWithComputedValue } from './getMembers.server'
 	import MembersExport from './MembersExport.svelte'
 	import MembersFilter from './MembersFilter.svelte'
 	import MembersBadges from './MembersBadges.svelte'
@@ -23,8 +25,19 @@
 
 	let { data } = $props()
 
+	// Les colonnes non triviales se rendent par snippet: Svelte les déclare avant le corps du
+	// script, elles sont donc lisibles ici.
+	const cellSnippets = {
+		member: memberCell,
+		subscribesTeams: subscribesTeamsCell,
+		subscribesCountRequest: subscribesCountRequestCell,
+		subscribesHours: subscribesHoursCell,
+	}
+
 	// Recalculé à la main par `handleFieldCreated`: c'est de l'état, pas un dérivé.
-	let tableFields = $state(untrack(() => getMembersTableFields(data.teams, data.fields)))
+	let tableFields = $state(
+		untrack(() => getMembersTableFields(data.teams, data.fields, cellSnippets))
+	)
 
 	onMount(() => {
 		globalEvents.on('field_created', handleFieldCreated)
@@ -44,9 +57,44 @@
 		url.searchParams.set(PARAM_VISIBLE_KEY, JSON.stringify(fieldsVisible))
 		url.searchParams.delete('form_field')
 		await goto(url, { noScroll: true, keepFocus: true, invalidateAll: true })
-		tableFields = getMembersTableFields(data.teams, data.fields)
+		tableFields = getMembersTableFields(data.teams, data.fields, cellSnippets)
 	}
 </script>
+
+{#snippet memberCell(member: MemberWithComputedValue)}
+	<MemberCell {member} />
+{/snippet}
+
+{#snippet subscribesTeamsCell(member: MemberWithComputedValue)}
+	{@const { accepted, request } = getSubscribedTeams(member, data.teams)}
+	{#each accepted as name (name)}
+		<Badge content={name} />
+	{/each}
+	{#each request as name (name)}
+		<Badge content={name} class="badge-warning badge-outline" />
+	{/each}
+{/snippet}
+
+{#snippet subscribesCountRequestCell(member: MemberWithComputedValue)}
+	{#if member.subscribesCountRequest}
+		<Badge content={member.subscribesCountRequest.toString()} class="badge-warning badge-outline" />
+	{:else}
+		-
+	{/if}
+{/snippet}
+
+{#snippet subscribesHoursCell(member: MemberWithComputedValue)}
+	{#if member.workTimeRequest}
+		<div class="flex items-center">
+			<span>{msToHours(member.workTime)}</span>
+			<span class="opacity-80 ml-1 text-warning text-xs">
+				+{msToHours(member.workTimeRequest)}
+			</span>
+		</div>
+	{:else}
+		{msToHours(member.workTime)}
+	{/if}
+{/snippet}
 
 <div class="flex gap-4 items-start">
 	<Card class="grow min-w-0" bodyClass="sm:px-2 sm:py-2">
@@ -97,18 +145,20 @@
 					key="members"
 					items={data.members}
 					fields={tableFields}
-					slotAction={(member) =>
-						component(MemberActions, {
-							member,
-							async onSubscribeDialog() {
+					placholder="Aucun membre trouvé"
+					onCreateField={() => goto(urlParam.with({ form_field: '{}' }))}
+				>
+					{#snippet actions(member)}
+						<MemberActions
+							{member}
+							onSubscribeDialog={async () => {
 								selectedMember = member
 								await tick()
 								createSubscribeDialog.showModal()
-							},
-						})}
-					placholder="Aucun membre trouvé"
-					onCreateField={() => goto(urlParam.with({ form_field: '{}' }))}
-				/>
+							}}
+						/>
+					{/snippet}
+				</Table>
 			{/key}
 
 			<div class="flex justify-end">

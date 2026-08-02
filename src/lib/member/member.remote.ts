@@ -1,5 +1,5 @@
 import { error, invalid, redirect, type RemoteFormInput } from '@sveltejs/kit'
-import { form, getRequestEvent } from '$app/server'
+import { form, getRequestEvent, query } from '$app/server'
 import type { Field, FieldType } from '@prisma/client'
 import z from 'zod'
 import {
@@ -237,3 +237,22 @@ export const deleteMember = form(
 		redirect(303, redirectTo || '/me')
 	}
 )
+
+/** Alimente les `InputRelation(s)` de membre: invitation, responsables, aperçu de badge. */
+export const searchMembers = query(z.object({ search: z.string() }), async ({ search }) => {
+	const { locals, params } = getRequestEvent()
+	const eventId = params.eventId!
+	await permission.leader(eventId, locals)
+	return prisma.member.findMany({
+		where: {
+			eventId,
+			OR: [
+				{ lastName: { contains: search } },
+				{ firstName: { contains: search } },
+				{ email: { contains: search } },
+			],
+		},
+		orderBy: { updatedAt: 'desc' },
+		take: 10,
+	})
+})

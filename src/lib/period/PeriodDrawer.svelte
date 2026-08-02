@@ -19,7 +19,7 @@
 		member = m
 	}
 
-	let member: Member | null = $state(null)
+	let member: Member | undefined = $state(undefined)
 
 	let noOverlay = $derived(!$page.route.id?.startsWith('/[eventId]/admin/plan'))
 	// fuma 2 expose `transitionX` comme store de module, plus comme prop bindable.
@@ -56,13 +56,7 @@
 				{/if}
 
 				{#if period.id && !period.isComplet}
-					<SubscribeInviteForm
-						bind:member
-						periodId={period.id}
-						tippyProps={{
-							placement: 'bottom-start',
-						}}
-					/>
+					<SubscribeInviteForm bind:member periodId={period.id} />
 				{/if}
 			</div>
 		{/if}

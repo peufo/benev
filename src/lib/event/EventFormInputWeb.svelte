@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
 	import { untrack } from 'svelte'
-	import { InputText } from '$lib/fuma-legacy'
+	import { InputString } from 'fuma'
 	import { debounce } from '$lib/debounce'
 	import { normalizeUrl } from '$lib/url'
 	import { EventIcon } from '.'
@@ -12,14 +12,17 @@
 
 	let { event = undefined }: Props = $props()
 
-	let input: HTMLInputElement = $state()!
 	let scrapPending = $state(false)
 	// Icône affichée: remplacée par le scraping dès que l'URL change.
 	let icon = $state(untrack(() => event?.icon) || null)
-	let value = $state('')
+	// Ce qui est saisi, puis ce qui est soumis: `normalizeUrl` préfixe le schéma. Les deux
+	// partent de la valeur enregistrée, sinon un formulaire validé sans toucher au champ
+	// effacerait le site web.
+	let typed = $state(untrack(() => event?.web) || '')
+	let value = $state(untrack(() => event?.web) || '')
 
 	const handleInput = debounce(async () => {
-		value = normalizeUrl(input.value)
+		value = normalizeUrl(typed)
 		scrapPending = true
 		const res = await fetch(`/api/scrap-icon?site=${value}`)
 			.then((res) => res.json())
@@ -31,24 +34,16 @@
 <input type="hidden" name="icon" value={icon} />
 <input type="hidden" name="web" {value} />
 
-<InputText
-	label="Site web"
-	value={event?.web || ''}
-	bind:inputElement={input}
-	oninput={handleInput}
-	classWrapper="flex items-center"
->
-	{#snippet append()}
-		<div>
-			{#if icon || scrapPending}
-				<div class="w-10 grid place-content-center">
-					{#if scrapPending}
-						<div class="loading loading-ring loading-xs"></div>
-					{:else if icon}
-						<EventIcon {icon} class="w-5" />
-					{/if}
-				</div>
+<div class="flex items-end gap-2">
+	<InputString label="Site web" class="grow" bind:value={typed} oninput={handleInput} />
+
+	{#if icon || scrapPending}
+		<div class="w-10 h-10 grid place-content-center">
+			{#if scrapPending}
+				<div class="loading loading-ring loading-xs"></div>
+			{:else if icon}
+				<EventIcon {icon} class="w-5" />
 			{/if}
 		</div>
-	{/snippet}
-</InputText>
+	{/if}
+</div>

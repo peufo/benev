@@ -1,4 +1,5 @@
-import { command, form, getRequestEvent } from '$app/server'
+import { command, form, getRequestEvent, query } from '$app/server'
+import type { FieldType } from '@prisma/client'
 import z from 'zod'
 import { modelMemberFieldCreate, modelMemberFieldUpdate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
@@ -35,3 +36,26 @@ export const reorderMemberFields = command(z.array(z.string()), async (ids) => {
 		ids.map((id, position) => prisma.field.update({ where: { id }, data: { position } }))
 	)
 })
+
+const fieldTypes = [
+	'string',
+	'textarea',
+	'number',
+	'boolean',
+	'select',
+	'multiselect',
+] as const satisfies readonly FieldType[]
+
+/** Alimente l'`InputRelation` de `InputRelationField`, sur la page des badges. */
+export const searchMemberFields = query(
+	z.object({ search: z.string(), types: z.array(z.enum(fieldTypes)).optional() }),
+	async ({ search, types }) => {
+		const { locals, params } = getRequestEvent()
+		const eventId = params.eventId!
+		await permission.leader(eventId, locals)
+		return prisma.field.findMany({
+			where: { eventId, name: { contains: search }, ...(types && { type: { in: types } }) },
+			take: 10,
+		})
+	}
+)

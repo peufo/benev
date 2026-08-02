@@ -1,43 +1,30 @@
 <script lang="ts">
 	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
-	import type { Props as TippyProps } from 'tippy.js'
-	import { InputRelation } from '$lib/fuma-legacy'
-	import { urlParam } from 'fuma'
-	import { api } from '$lib/api'
+	import { InputRelation, tip, urlParam } from 'fuma'
+	import { searchMembers } from '$lib/member/member.remote'
 	import { useNotify } from '$lib/notify'
 	import { createSubscribe } from './subscribe.remote'
 
 	interface Props {
 		periodId: string
-		tippyProps?: Partial<TippyProps>
 		class?: string
-		member?: Member | null
-		/** Transféré à InputRelation; remplace `on:input`. */
-		oninput?: (value: Member) => void
+		member?: Member | undefined
 		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 	}
 
-	let {
-		periodId,
-		tippyProps = {},
-		class: klass = '',
-		member = $bindable(null),
-		oninput,
-		onsuccess,
-	}: Props = $props()
+	let { periodId, class: klass = '', member = $bindable(undefined), onsuccess }: Props = $props()
 
 	const notify = useNotify()
 </script>
 
-<!-- `InputRelation` ne sert qu'à choisir le membre: la valeur soumise est le champ caché.
-     Son propre champ, sérialisé en JSON, est écarté par le schéma. -->
+<!-- `InputRelation` ne sert qu'à choisir le membre: la valeur soumise est le champ caché. -->
 <form
 	{...createSubscribe.enhance(async ({ submit }) => {
 		await submit()
 		notify.success('Inscription créée')
-		member = null
+		member = undefined
 		onsuccess?.()
 	})}
 	class="{klass} flex gap-2 justify-end grow w-full"
@@ -46,32 +33,30 @@
 	<input type="hidden" name="memberId" value={member?.id} />
 
 	<InputRelation
-		key="member"
+		class="w-full"
 		placeholder="Inscrire un membre"
-		search={$api.member.search}
-		createTitle="Inviter un nouveau membre"
-		createUrl={urlParam.with({ form_invite: '{}' })}
-		createIcon={UserPlusIcon}
-		dropdownProps={{ classWrapper: 'w-full' }}
+		searchItems={searchMembers}
 		bind:value={member}
-		{oninput}
-		{tippyProps}
 	>
-		{#snippet item({ item })}
-			<div class="contents">
-				{item?.firstName}
-				{item?.lastName}
-			</div>
+		{#snippet selected(item)}
+			<span>{item.firstName} {item.lastName}</span>
 		{/snippet}
 
-		{#snippet suggestion({ item })}
-			<div class="flex gap-2 items-center w-full">
-				{#if item}
-					<span>{item.firstName} {item.lastName}</span>
-					<div class="grow"></div>
-					<span style="font-size: 0.6rem;">{item.email}</span>
-				{/if}
-			</div>
+		{#snippet proposal(item)}
+			<span>{item.firstName} {item.lastName}</span>
+			<span class="ml-auto text-xs opacity-70">{item.email}</span>
+		{/snippet}
+
+		{#snippet append()}
+			<a
+				href={urlParam.with({ form_invite: '{}' })}
+				class="btn btn-square btn-soft btn-sm"
+				data-sveltekit-noscroll
+				data-sveltekit-replacestate
+				use:tip={{ content: 'Inviter un nouveau membre' }}
+			>
+				<UserPlusIcon size={20} />
+			</a>
 		{/snippet}
 	</InputRelation>
 
