@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ExternalLinkIcon, LogInIcon } from '@lucide/svelte'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 
 	import { MemberFields } from '$lib/member'
 	import { EventSettingForm } from '$lib/event'

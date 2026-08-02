@@ -22,5 +22,5 @@
 		</h2>
 	{/if}
 	{@render children?.()}
-	<a {href} class="absolute inset-0">{' '}</a>
+	<a {href} class="absolute inset-0" aria-hidden="true" tabindex="-1"></a>
 </div>

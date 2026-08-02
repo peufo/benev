@@ -8,7 +8,8 @@
 		TriangleAlertIcon,
 	} from '@lucide/svelte'
 	import type { PageData } from './$types'
-	import { Card, InputSearch, Table, type TableField, component } from '$lib/fuma-legacy'
+	import { Card, InputSearch, component } from '$lib/ui'
+	import { Table, type TableField } from '$lib/fuma-legacy'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { Drawer, tip } from 'fuma'
 	import { Pagination } from 'fuma'

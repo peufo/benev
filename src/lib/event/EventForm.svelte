@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { InputImagePreview } from '$lib/fuma-legacy'
+	import { InputImagePreview } from '$lib/ui'
 	import { InputSelectNative, InputString, InputTextarea } from 'fuma'
 	import type { Event } from '@prisma/client'
 	import { normalizePath } from '$lib/normalizePath'

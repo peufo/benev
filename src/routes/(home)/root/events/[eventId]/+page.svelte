@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { msToHours } from '$lib/utils'
 	import { formatRangeDate } from '$lib/formatRange'
 	import {

@@ -7,11 +7,11 @@
 	import { toast } from 'svelte-sonner'
 
 	import { USE_COERCE_JSON } from 'fuma'
-	import { Slot } from '$lib/fuma-legacy/ui/slot/index.js'
+	import { Slot } from '$lib/ui/slot/index.js'
 	import { DropDown } from 'fuma'
-	import { FormControl, SelectorList } from '$lib/fuma-legacy/ui/input/index.js'
+	import { FormControl, SelectorList } from '$lib/ui'
 	import type { TippyProps } from 'fuma'
-	import type { ComponentAndProps } from '$lib/fuma-legacy/utils/component.js'
+	import type { ComponentAndProps } from '$lib/ui/component.js'
 	import RelationAfter from '$lib/fuma-legacy/ui/input/RelationAfter.svelte'
 
 	interface Props {

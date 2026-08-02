@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
 	import { onMount } from 'svelte'
-	import type { AnyComponent, ComponentAndProps } from '$lib/fuma-legacy/utils/index.js'
-	import { Slot } from '$lib/fuma-legacy/ui/index.js'
+	import type { AnyComponent, ComponentAndProps } from '$lib/ui/component.js'
+	import { Slot } from '$lib/ui'
 
 	interface Props {
 		class?: string
@@ -20,7 +20,7 @@
 		enhanceDisabled?: boolean
 		labelPosition?: LabelPosition
 		label_append?: import('svelte').Snippet
-		children?: import('svelte').Snippet<[any]>
+		children?: import('svelte').Snippet<[{ key: string }]>
 	}
 
 	let {
@@ -32,7 +32,9 @@
 		hint = '',
 		prefix = '',
 		prefixFor = '',
-		enhanceDisabled = false,
+		// Consommé par les appelants pour désactiver l'amélioration progressive du formulaire;
+		// ce composant ne fait que l'accepter pour ne pas le laisser fuir dans les attributs.
+		enhanceDisabled: _enhanceDisabled = false,
 		labelPosition = 'top',
 		label_append,
 		children,

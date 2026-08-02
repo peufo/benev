@@ -5,7 +5,7 @@
 	import { jsonParse } from 'fuma'
 	import type { TableField } from '$lib/fuma-legacy/ui/table/index.js'
 	import { DropDown } from 'fuma'
-	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
+	import { type Options, parseOptions } from 'fuma'
 	import { urlParam } from 'fuma'
 
 	interface Props {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 </script>
 
 <Card class="max-w-xl mx-auto">

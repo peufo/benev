@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import type { FocusEventHandler, FormEventHandler } from 'svelte/elements'
-	import { FormControl, type TextareaProps } from '$lib/fuma-legacy/ui/input/index.js'
+	import { FormControl, type TextareaProps } from '$lib/ui'
 
 	type Props = TextareaProps & {
 		// En mode runes le transfert d'événements passe par des props explicites.

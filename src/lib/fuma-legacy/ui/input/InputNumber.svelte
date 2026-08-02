@@ -3,7 +3,7 @@
 
 	const bubble = createBubbler()
 	import { USE_COERCE_NUMBER } from 'fuma'
-	import { FormControl, type InputProps } from '$lib/fuma-legacy/ui/input/index.js'
+	import { FormControl, type InputProps } from '$lib/ui'
 	import type { HTMLInputAttributes } from 'svelte/elements'
 
 	type $$Props = InputProps<number>

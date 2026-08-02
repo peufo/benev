@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import type { Tab } from '$lib/fuma-legacy/ui/tabs/index.js'
+	import type { Tab } from '$lib/ui/tabs/index.js'
 
 	interface Props {
 		tabs: Tab[]
@@ -16,7 +16,7 @@
 	{klass}
 	"
 >
-	{#each tabs as tab}
+	{#each tabs as tab (tab.href)}
 		{@const TabIcon = tab.icon}
 		{@const active = tab.isActive ?? $page.url.pathname.startsWith(tab.href)}
 		<a

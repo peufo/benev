@@ -1,19 +1,17 @@
 <script lang="ts">
-	import { onMount, type ComponentProps } from 'svelte'
+	import { onMount } from 'svelte'
 	import { Editor } from '@tiptap/core'
 	import debounce from 'debounce'
 
 	import { jsonParse } from 'fuma'
-	import { FormControl } from '$lib/fuma-legacy/ui/input/index.js'
-	import ToolsBar from '$lib/fuma-legacy/ui/input/textRich/ToolsBar.svelte'
-	import { extensions } from '$lib/fuma-legacy/ui/input/textRich/extensions.js'
-
-	type $$Props = ComponentProps<typeof FormControl> & { value?: string; classToolbar?: string }
+	import { FormControl } from '$lib/ui'
+	import ToolsBar from '$lib/ui/textRich/ToolsBar.svelte'
+	import { extensions } from '$lib/ui/textRich/extensions.js'
 
 	interface Props {
 		value?: string
 		classToolbar?: string
-		[key: string]: any
+		[key: string]: unknown
 		/** Remplacent les évènements de la version Svelte 4. */
 		onchange?: () => void
 		oninsertMedia?: () => void

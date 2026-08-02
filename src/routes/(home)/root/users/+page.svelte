@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CheckIcon, XIcon } from '@lucide/svelte'
-	import { Card, InputSearch } from '$lib/fuma-legacy'
+	import { Card, InputSearch } from '$lib/ui'
 	import { DropDown, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import TDSortable from './TDSortable.svelte'

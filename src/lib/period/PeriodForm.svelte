@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { CopyIcon } from '@lucide/svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
-	import { InputRelation, InputRelations, component } from '$lib/fuma-legacy'
+	import { component } from '$lib/ui'
+	import { InputRelation, InputRelations } from '$lib/fuma-legacy'
 	import { ButtonDelete, tip, urlParam } from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { goto, invalidateAll } from '$app/navigation'

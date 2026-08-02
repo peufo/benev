@@ -6,7 +6,7 @@
 		ClockIcon,
 		SendIcon,
 	} from '@lucide/svelte'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { InputString, InputTextarea } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { sendMessage } from './contact.remote'

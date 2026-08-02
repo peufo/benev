@@ -1,5 +1,5 @@
 <script lang="ts" generics="Item extends {id: string}">
-	import { component, type ComponentAndProps } from '$lib/fuma-legacy/utils/component.js'
+	import { component, type ComponentAndProps } from '$lib/ui/component.js'
 	import { type TableField, TableFieldsEdition } from '$lib/fuma-legacy/ui/table/index.js'
 	import { tableHeadComponent } from '$lib/fuma-legacy/ui/table/head/index.js'
 	import TableHeadDefault from '$lib/fuma-legacy/ui/table/head/TableHeadDefault.svelte'

@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import type { AnyComponent, ComponentAndProps } from '$lib/fuma-legacy/utils/component.js'
+	import type { AnyComponent, ComponentAndProps } from '$lib/ui/component.js'
 
 	type _Slot =
 		| ((...args: any) => ComponentAndProps | AnyComponent | string)
@@ -10,8 +10,8 @@
 </script>
 
 <script lang="ts" generics="Slot extends _Slot">
-	import { component } from '$lib/fuma-legacy/utils/component.js'
-	import Span from '$lib/fuma-legacy/ui/slot/Span.svelte'
+	import { component } from '$lib/ui/component.js'
+	import Span from '$lib/ui/slot/Span.svelte'
 
 	type Args = Slot extends (...args: any) => any ? Parameters<Slot>[0] : undefined
 

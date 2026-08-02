@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { Placeholder } from '$lib/fuma-legacy'
+	import { Placeholder } from '$lib/ui'
 	import { Dialog } from 'fuma'
 	import { PlusIcon, ChevronRightIcon, HistoryIcon } from '@lucide/svelte'
 	import EventEntry from './EventEntry.svelte'

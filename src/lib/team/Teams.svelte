@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
-	import { Placeholder } from '$lib/fuma-legacy'
+	import { Placeholder } from '$lib/ui'
 	import TeamCard from './TeamCard.svelte'
 
 	interface Props {

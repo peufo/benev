@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { ChevronsUpDownIcon } from '@lucide/svelte'
 	import { DropDown } from 'fuma'
-	import { SelectorList } from '$lib/fuma-legacy/ui/input/index.js'
-	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
+	import { SelectorList } from '$lib/ui'
+	import { type Options, parseOptions } from 'fuma'
 	import type { TippyProps } from 'fuma'
 
 	interface Props {

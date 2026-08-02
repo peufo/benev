@@ -105,5 +105,16 @@ export default ts.config(
 			'no-unsafe-finally': 'off',
 			'prefer-const': 'off',
 		},
+	},
+	{
+		// `component()` et `Slot` sont l'idiome fuma 1 « composant passé en valeur », que les
+		// snippets de Svelte 5 remplacent. Ils ne survivent que le temps de convertir les
+		// tables et les `InputRelation` qui les consomment, et leur signature est
+		// irréductiblement générique: la typer finement serait du travail jeté.
+		files: ['src/lib/ui/component.ts', 'src/lib/ui/slot/**'],
+		rules: {
+			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/no-unsafe-function-type': 'off',
+		},
 	}
 )

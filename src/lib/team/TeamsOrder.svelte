@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import { toast } from 'svelte-sonner'
-	import { Placeholder } from '$lib/fuma-legacy'
+	import { Placeholder } from '$lib/ui'
 	import { listEditable } from 'fuma'
 	import { invalidateAll } from '$app/navigation'
 	import { reorderTeams } from './team.remote'

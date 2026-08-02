@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte'
-	import { InputBoolean, Placeholder, type ComponentAndProps } from '$lib/fuma-legacy'
+	import { Placeholder, type ComponentAndProps } from '$lib/ui'
+	import { InputBoolean } from '$lib/fuma-legacy'
 
 	type Item = $$Generic<{ id: string }>
 	interface Props {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { tip } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import OnlyAdmin from '../OnlyAdmin.svelte'

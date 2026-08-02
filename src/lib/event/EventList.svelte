@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CardLink } from '$lib/fuma-legacy'
+	import { CardLink } from '$lib/ui'
 	import { ArrowRight, CalendarX2 } from '@lucide/svelte'
 	import logo from '$lib/assets/logo.svg'
 	import { EventIcon } from '$lib/event/index.js'

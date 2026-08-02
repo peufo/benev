@@ -3,9 +3,9 @@
 	import { onMount } from 'svelte'
 
 	import { DropDown } from 'fuma'
-	import { SelectorList, FormControl, type InputProps } from '$lib/fuma-legacy/ui/input/index.js'
+	import { SelectorList, FormControl, type InputProps } from '$lib/ui'
 
-	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
+	import { type Options, parseOptions } from 'fuma'
 	import type { TippyProps } from 'fuma'
 
 	type Props = Omit<InputProps, 'input' | 'inputElement'> & {

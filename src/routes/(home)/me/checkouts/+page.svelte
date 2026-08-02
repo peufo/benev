@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { CircleCheckIcon, GiftIcon, TagIcon } from '@lucide/svelte'
-	import { Placeholder } from '$lib/fuma-legacy'
+	import { Placeholder } from '$lib/ui'
 
 	import { CheckoutWaitSSE, ProductUseForm } from '$lib/checkout'
 

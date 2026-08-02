@@ -9,7 +9,7 @@
 	} from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
 
-	import ToolMenu from '$lib/fuma-legacy/ui/input/textRich/ToolMenu.svelte'
+	import ToolMenu from '$lib/ui/textRich/ToolMenu.svelte'
 
 	interface Props {
 		editor: Editor

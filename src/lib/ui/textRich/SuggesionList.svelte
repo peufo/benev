@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { SuggestionProps } from '@tiptap/suggestion'
-	import { SelectorList } from '$lib/fuma-legacy/ui/input/index.js'
-	import type { SuggestionItem } from '$lib/fuma-legacy/ui/input/textRich/suggestion.svelte.js'
+	import { SelectorList } from '$lib/ui'
+	import type { SuggestionItem } from '$lib/ui/textRich/suggestion.svelte.js'
 
 	interface ComponentProps {
 		suggestion: SuggestionProps<SuggestionItem> | undefined

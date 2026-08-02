@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { toast } from 'svelte-sonner'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { theme } from './store'

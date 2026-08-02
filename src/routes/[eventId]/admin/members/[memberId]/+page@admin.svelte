@@ -7,7 +7,7 @@
 		Trash2Icon,
 		XIcon,
 	} from '@lucide/svelte'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { DropDown, tip } from 'fuma'
 	import { Drawer } from 'fuma'
 	import { urlParam } from 'fuma'

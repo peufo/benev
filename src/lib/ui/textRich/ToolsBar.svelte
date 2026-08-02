@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { BaselineIcon, BoldIcon, ItalicIcon, PaintBucketIcon } from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
-	import { toast } from 'svelte-sonner'
 
-	import ToolMenuNode from '$lib/fuma-legacy/ui/input/textRich/ToolMenuNode.svelte'
-	import ToolMark from '$lib/fuma-legacy/ui/input/textRich/ToolMark.svelte'
-	import ToolMarkColor from '$lib/fuma-legacy/ui/input/textRich/ToolMarkColor.svelte'
-	import ToolMarkLink from '$lib/fuma-legacy/ui/input/textRich/ToolMarkLink.svelte'
-	import ToolMenuAlign from '$lib/fuma-legacy/ui/input/textRich/ToolMenuAlign.svelte'
-	import ToolMenuInsert from '$lib/fuma-legacy/ui/input/textRich/ToolMenuInsert.svelte'
+	import ToolMenuNode from '$lib/ui/textRich/ToolMenuNode.svelte'
+	import ToolMark from '$lib/ui/textRich/ToolMark.svelte'
+	import ToolMarkColor from '$lib/ui/textRich/ToolMarkColor.svelte'
+	import ToolMarkLink from '$lib/ui/textRich/ToolMarkLink.svelte'
+	import ToolMenuAlign from '$lib/ui/textRich/ToolMenuAlign.svelte'
+	import ToolMenuInsert from '$lib/ui/textRich/ToolMenuInsert.svelte'
 
 	interface Props {
 		editor: Editor

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { adminTabs } from '$lib/layout/adminTabs.svelte'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 </script>
 
 <Card

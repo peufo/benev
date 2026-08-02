@@ -6,17 +6,8 @@
 	import { get } from 'svelte/store'
 	import { page } from '$app/stores'
 	import type { Field } from '@prisma/client'
-	import {
-		InputSelect,
-		Placeholder,
-		DropDownMenu,
-		InputNumber,
-		InputText,
-		InputCheckboxs,
-		InputRadio,
-		component,
-		type ComponentAndProps,
-	} from '$lib/fuma-legacy'
+	import { Placeholder, InputCheckboxs, component, type ComponentAndProps } from '$lib/ui'
+	import { InputSelect, DropDownMenu, InputNumber, InputText, InputRadio } from '$lib/fuma-legacy'
 	import { jsonParse, tip } from 'fuma'
 	import { browser } from '$app/environment'
 	import type { MemberCondition } from '$lib/models'

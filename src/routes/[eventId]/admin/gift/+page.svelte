@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { GiftIcon } from '@lucide/svelte'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 
 	import { GiftConfiguration } from '$lib/gift'
 	import WorkInProgress from '$lib/WorkInProgress.svelte'

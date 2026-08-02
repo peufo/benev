@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Badge } from '$lib/fuma-legacy/ui/badge/index.js'
-	import { component, type ComponentAndProps } from '$lib/fuma-legacy/utils/component.js'
+	import { Badge } from '$lib/ui/badge/index.js'
+	import { component, type ComponentAndProps } from '$lib/ui/component.js'
 
 	interface Props {
 		value: (ComponentAndProps | string | number | boolean)[]

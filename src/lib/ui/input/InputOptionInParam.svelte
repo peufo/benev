@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { parseOptions, type Options } from '$lib/fuma-legacy/utils/options'
-	import { tip, urlParam } from 'fuma'
+	import { type Options, parseOptions, tip, urlParam } from 'fuma'
 
 	interface Props {
 		class?: string
@@ -15,7 +14,7 @@
 </script>
 
 <div class="join {klass}">
-	{#each _options as opt}
+	{#each _options as opt (opt.value)}
 		{@const active = urlParam.has(key, opt.value)}
 		{@const OptIcon = opt.icon}
 		<a

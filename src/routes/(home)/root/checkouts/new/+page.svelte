@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { InputNumber, InputRelation, InputString } from 'fuma'
 
 	import InputProduct from './InputProduct.svelte'

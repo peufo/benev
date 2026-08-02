@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { InputSelect, InputOptions } from '$lib/fuma-legacy'
+	import { InputOptions } from '$lib/ui'
+	import { InputSelect } from '$lib/fuma-legacy'
 	import { ButtonDelete, InputBoolean, InputString } from 'fuma'
 	import type { Field } from '@prisma/client'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'

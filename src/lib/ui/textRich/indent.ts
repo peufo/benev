@@ -104,7 +104,7 @@ export const Indent = Extension.create({
 	addCommands() {
 		const createCommand =
 			(transaction: (tr: Transaction) => Transaction) =>
-			({ tr, dispatch, editor, state, chain }: CommandProps) => {
+			({ tr, dispatch, editor, state }: CommandProps) => {
 				tr = tr.setSelection(state.selection)
 				tr = transaction(tr)
 				if (tr.docChanged) {

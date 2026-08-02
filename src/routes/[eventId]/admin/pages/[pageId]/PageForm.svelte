@@ -3,7 +3,8 @@
 	import type { Page } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
 	import { tick } from 'svelte'
-	import { FormControl, InputSelect, InputTextRich } from '$lib/fuma-legacy'
+	import { FormControl, InputTextRich } from '$lib/ui'
+	import { InputSelect } from '$lib/fuma-legacy'
 	import { ButtonDelete, InputString } from 'fuma'
 
 	import { normalizePath } from '$lib/normalizePath'

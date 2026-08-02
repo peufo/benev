@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ExternalLinkIcon, MapPinIcon } from '@lucide/svelte'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { InputLocation, mapUrl } from '$lib/location'
 
 	let location: PrismaJson.Location | null = $state(null)

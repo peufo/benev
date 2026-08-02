@@ -1,4 +1,5 @@
-import { type TableField, component, Badge } from '$lib/fuma-legacy'
+import { Badge, component } from '$lib/ui'
+import { type TableField } from '$lib/fuma-legacy'
 import { jsonParse } from 'fuma'
 import type { Field } from '@prisma/client'
 import { getAge } from '$lib/utils'

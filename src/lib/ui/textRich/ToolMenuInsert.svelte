@@ -2,8 +2,8 @@
 	import { AtSignIcon, ImageIcon, MinusIcon, PlusIcon, VideoIcon } from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
 
-	import ToolMenu from '$lib/fuma-legacy/ui/input/textRich/ToolMenu.svelte'
-	import { suggestionItems } from '$lib/fuma-legacy/ui/input/textRich/suggestion.svelte.js'
+	import ToolMenu from '$lib/ui/textRich/ToolMenu.svelte'
+	import { suggestionItems } from '$lib/ui/textRich/suggestion.svelte.js'
 
 	interface Props {
 		editor: Editor

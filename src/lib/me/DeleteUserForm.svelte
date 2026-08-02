@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DialogConfirm } from '$lib/fuma-legacy'
+	import { DialogConfirm } from '$lib/ui'
 	import { deleteUser } from './user.remote'
 </script>
 

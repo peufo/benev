@@ -9,7 +9,7 @@
 	import { page } from '$app/stores'
 
 	import { DropDown } from 'fuma'
-	import { InputNumber } from '$lib/fuma-legacy/ui/input/index.js'
+	import { InputNumber } from '$lib/fuma-legacy'
 	import { urlParam } from 'fuma'
 	import { jsonParse } from 'fuma'
 	import type { TableField } from '$lib/fuma-legacy/ui/table/field.js'

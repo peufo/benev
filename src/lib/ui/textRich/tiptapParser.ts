@@ -1,6 +1,6 @@
 import { generateHTML, generateJSON } from '@tiptap/html'
 import type { JSONContent } from '@tiptap/core'
-import { extensions } from '$lib/fuma-legacy/ui/input/textRich/extensions.js'
+import { extensions } from '$lib/ui/textRich/extensions.js'
 import { jsonParse } from 'fuma'
 
 export const tiptapParser = {

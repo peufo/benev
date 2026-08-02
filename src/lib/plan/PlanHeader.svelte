@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InputCheckboxsMenu, TabsIcon } from '$lib/fuma-legacy'
+	import { InputCheckboxsMenu, TabsIcon } from '$lib/ui'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { tip, urlParam } from 'fuma'
 	import { page } from '$app/stores'

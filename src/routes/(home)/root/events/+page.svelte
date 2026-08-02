@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, InputSearch } from '$lib/fuma-legacy'
+	import { Card, InputSearch } from '$lib/ui'
 	import { Pagination } from 'fuma'
 
 	let { data } = $props()

@@ -1,11 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import type { FocusEventHandler, FormEventHandler, KeyboardEventHandler } from 'svelte/elements'
-	import {
-		FormControl,
-		bindValueWithParams,
-		type InputProps,
-	} from '$lib/fuma-legacy/ui/input/index.js'
+	import { FormControl, bindValueWithParams, type InputProps } from '$lib/ui'
 
 	type Props = InputProps & {
 		inputElement?: HTMLInputElement

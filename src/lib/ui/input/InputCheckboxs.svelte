@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import { slide } from 'svelte/transition'
-	import { FormControl, type InputProps } from '$lib/fuma-legacy/ui/input/index.js'
-	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
+	import { FormControl, type InputProps } from '$lib/ui'
+	import { type Options, parseOptions } from 'fuma'
 
 	type Props = InputProps<string[]> & {
 		options: Options

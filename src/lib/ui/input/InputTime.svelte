@@ -3,15 +3,13 @@
 
 	const bubble = createBubbler()
 	import type { HTMLInputAttributes, FormEventHandler } from 'svelte/elements'
-	import { FormControl, type InputProps } from '$lib/fuma-legacy/ui/input/index.js'
+	import { FormControl } from '$lib/ui'
 	import dayjs from 'dayjs'
-	type $$Props = InputProps<Date> & { getDefaultDate?: () => Date }
-
 	interface Props {
 		value?: Date | null | undefined
 		input?: HTMLInputAttributes
-		getDefaultDate?: any
-		[key: string]: any
+		getDefaultDate?: () => Date
+		[key: string]: unknown
 		/** Remplacent les évènements de la version Svelte 4. */
 		oninput?: (value: Date | null | undefined) => void
 	}

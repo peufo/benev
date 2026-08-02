@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ArrowLeftIcon } from '@lucide/svelte'
-	import { contextContainer } from '$lib/fuma-legacy/ui/context.js'
+	import { contextContainer } from '$lib/ui/context.js'
 
 	interface Props {
 		class?: string

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PencilIcon, PlusIcon } from '@lucide/svelte'
 	import { onMount } from 'svelte'
-	import { InputSearch } from '$lib/fuma-legacy'
+	import { InputSearch } from '$lib/ui'
 	import { RangePickerButton, tip } from 'fuma'
 	import { Drawer } from 'fuma'
 	import { urlParam } from 'fuma'

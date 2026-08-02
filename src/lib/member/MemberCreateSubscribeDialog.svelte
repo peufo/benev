@@ -5,7 +5,8 @@
 	import type { Period } from '@prisma/client'
 
 	import { api } from '$lib/api'
-	import { InputRelation, SelectorList } from '$lib/fuma-legacy'
+	import { SelectorList } from '$lib/ui'
+	import { InputRelation } from '$lib/fuma-legacy'
 	import { Dialog } from 'fuma'
 	import { createSubscribe } from '$lib/subscribe/subscribe.remote'
 	import { formatRange } from '$lib/formatRange'

@@ -3,7 +3,7 @@
 	import type { Member, Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { page } from '$app/stores'
 	import { formatRange } from '$lib/formatRange'
-	import { CardLink, Placeholder } from '$lib/fuma-legacy'
+	import { CardLink, Placeholder } from '$lib/ui'
 	import { urlParam } from 'fuma'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { tip } from 'fuma'

@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation'
 	import { toast } from 'svelte-sonner'
 	import type { Field } from '@prisma/client'
-	import { Placeholder } from '$lib/fuma-legacy'
+	import { Placeholder } from '$lib/ui'
 	import { listEditable, tip } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'

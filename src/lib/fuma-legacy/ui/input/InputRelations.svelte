@@ -9,10 +9,10 @@
 	import debounce from 'debounce'
 
 	import { USE_COERCE_JSON } from 'fuma'
-	import { Slot } from '$lib/fuma-legacy/ui/slot/index.js'
-	import { FormControl, SelectorList } from '$lib/fuma-legacy/ui/input/index.js'
+	import { Slot } from '$lib/ui/slot/index.js'
+	import { FormControl, SelectorList } from '$lib/ui'
 	import { DropDown } from 'fuma'
-	import type { ComponentAndProps } from '$lib/fuma-legacy/utils/component.js'
+	import type { ComponentAndProps } from '$lib/ui/component.js'
 	import RelationAfter from '$lib/fuma-legacy/ui/input/RelationAfter.svelte'
 
 	interface Props {

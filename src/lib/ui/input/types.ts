@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'svelte'
 import type { HTMLInputAttributes, HTMLTextareaAttributes } from 'svelte/elements'
-import { default as FormControl } from '$lib/fuma-legacy/ui/input/FormControl.svelte'
+import { default as FormControl } from '$lib/ui/input/FormControl.svelte'
 
 export type InputProps<T = string> = ComponentProps<typeof FormControl> & {
 	input?: HTMLInputAttributes

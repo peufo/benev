@@ -5,7 +5,7 @@
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeDate } from '$lib/formatRange'
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
-	import { CardCollapse, Placeholder } from '$lib/fuma-legacy'
+	import { CardCollapse, Placeholder } from '$lib/ui'
 
 	import TeamActions from './TeamActions.svelte'
 	import TeamLeaders from './TeamLeaders.svelte'

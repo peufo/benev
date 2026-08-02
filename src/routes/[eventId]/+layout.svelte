@@ -13,7 +13,7 @@
 	import { page } from '$app/stores'
 	import { JsonLd } from 'svelte-meta-tags'
 
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { Drawer } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { Header, Footer, AdminNavigation } from '$lib/layout'

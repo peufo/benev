@@ -7,7 +7,7 @@
 	import { page } from '$app/stores'
 
 	import { DropDown } from 'fuma'
-	import { InputTime } from '$lib/fuma-legacy/ui/input/index.js'
+	import { InputTime } from '$lib/ui'
 	import type { TableField } from '$lib/fuma-legacy/ui/table/index.js'
 	import { formatRange } from 'fuma'
 	import { RangePicker, type RangeAsDate } from 'fuma'

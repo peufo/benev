@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte'
 
 	import { tip, urlParam } from 'fuma'
-	import { parseOptions, type Options, type Option } from '$lib/fuma-legacy/utils/options'
+	import { parseOptions, type Options, type Option } from 'fuma'
 
 	interface Props {
 		options: Options
@@ -35,7 +35,7 @@
 </script>
 
 <div class="flex items-center gap-[3px] rounded-lg bg-base-200 p-1">
-	{#each _options as { value, label, icon: OptionIcon, isActive }}
+	{#each _options as { value, label, icon: OptionIcon, isActive } (value)}
 		<a
 			href={urlParam.with({ [key]: value })}
 			data-sveltekit-noscroll

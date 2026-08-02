@@ -1,8 +1,8 @@
 import { page } from '$app/stores'
 import { get } from 'svelte/store'
-import type { ComponentAndProps, Primitive } from '$lib/fuma-legacy/utils/component.js'
+import type { ComponentAndProps, Primitive } from '$lib/ui/component.js'
 import { jsonParse } from 'fuma'
-import type { Options } from '$lib/fuma-legacy/utils/options'
+import type { Options } from 'fuma'
 import { createKeys } from '$lib/fuma-legacy/ui/table/context.js'
 
 export type ItemBase = { id: string }

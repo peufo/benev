@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Media } from '@prisma/client'
-	import { PlaceholderImage } from '$lib/fuma-legacy'
+	import { PlaceholderImage } from '$lib/ui'
 	import { tip } from 'fuma'
 	import { Trash2Icon } from '@lucide/svelte'
 	import { SelectMedia } from '$lib/material'

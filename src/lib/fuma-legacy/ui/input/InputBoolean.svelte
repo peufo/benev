@@ -3,11 +3,7 @@
 
 	const bubble = createBubbler()
 	import type { HTMLInputAttributes } from 'svelte/elements'
-	import {
-		FormControl,
-		type InputProps,
-		bindCheckedWithParams,
-	} from '$lib/fuma-legacy/ui/input/index.js'
+	import { FormControl, type InputProps, bindCheckedWithParams } from '$lib/ui'
 	import { USE_COERCE_BOOLEAN } from 'fuma'
 
 	type $$Props = InputProps<boolean> & { isRow?: boolean }

@@ -5,7 +5,7 @@
 	import { page } from '$app/stores'
 
 	import { DropDown } from 'fuma'
-	import { InputSearch } from '$lib/fuma-legacy/ui/input/index.js'
+	import { InputSearch } from '$lib/ui'
 	import type { TableField } from '$lib/fuma-legacy/ui/table/index.js'
 
 	interface Props {

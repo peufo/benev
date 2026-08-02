@@ -6,9 +6,9 @@
 
 	import { urlParam } from 'fuma'
 	import { jsonParse } from 'fuma'
-	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
+	import { type Options, parseOptions } from 'fuma'
 	import { DropDown } from 'fuma'
-	import { FormControl, type InputProps } from '$lib/fuma-legacy/ui/input/index.js'
+	import { FormControl, type InputProps } from '$lib/ui'
 
 	type Props = InputProps<string[]> & {
 		key: string

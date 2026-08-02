@@ -2,10 +2,9 @@
 	import { LinkIcon } from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
 
-	import { Dialog } from 'fuma'
-	import { InputText } from '$lib/fuma-legacy/ui/input/index.js'
+	import { Dialog, InputString } from 'fuma'
 	import z from 'zod'
-	import ToolMark from '$lib/fuma-legacy/ui/input/textRich/ToolMark.svelte'
+	import ToolMark from '$lib/ui/textRich/ToolMark.svelte'
 
 	interface Props {
 		editor: Editor
@@ -67,7 +66,10 @@
 		<h3 class="title">Éditer un lien</h3>
 	{/snippet}
 	<div class="flex flex-col gap-2">
-		<InputText bind:value={linkHref} error={linkError} onkeydown={handleKeyDown} />
+		<InputString label="Lien" bind:value={linkHref} onkeydown={handleKeyDown} />
+		{#if linkError}
+			<p class="text-error text-sm">{linkError}</p>
+		{/if}
 		<div class="flex flex-row-reverse gap-2">
 			<button type="button" class="btn" onclick={handleNewLink}> Valider </button>
 			<button type="button" class="btn btn-ghost text-error" onclick={handleRemoveLink}>

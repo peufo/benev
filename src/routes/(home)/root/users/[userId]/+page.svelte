@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { MemberRole } from '$lib/member'
 	import { EVENT_TIER } from '$lib/constant'
 	import { formatRangeDate } from '$lib/formatRange'

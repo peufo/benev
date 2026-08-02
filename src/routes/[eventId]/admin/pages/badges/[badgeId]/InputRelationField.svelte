@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { component, InputRelation } from '$lib/fuma-legacy'
+	import { component } from '$lib/ui'
+	import { InputRelation } from '$lib/fuma-legacy'
 	import { urlParam } from 'fuma'
 	import type { Field, FieldType } from '@prisma/client'
 	import { api } from '$lib/api'

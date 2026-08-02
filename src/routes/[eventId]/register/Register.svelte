@@ -4,7 +4,7 @@
 	import { afterNavigate, goto, invalidateAll } from '$app/navigation'
 	import type { Event, Field, User, Page } from '@prisma/client'
 
-	import { Card, Placeholder } from '$lib/fuma-legacy'
+	import { Card, Placeholder } from '$lib/ui'
 	import { Dialog, tip } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'

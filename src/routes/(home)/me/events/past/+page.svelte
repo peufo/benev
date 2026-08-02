@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ArrowLeftIcon } from '@lucide/svelte'
-	import { Placeholder } from '$lib/fuma-legacy'
+	import { Placeholder } from '$lib/ui'
 	import EventPastRow from './EventPastRow.svelte'
 
 	let { data } = $props()

@@ -229,6 +229,9 @@
 
 	// Keyboard navigation
 	onMount(() => {
+		// `bind:dialog` remet la référence à null avant que le teardown ne tourne: on capture
+		// l'élément à l'abonnement pour pouvoir s'en désabonner.
+		const dialogElement = dialog
 		const handleKeydown = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				if (step !== 'events') {
@@ -240,9 +243,9 @@
 				goBack()
 			}
 		}
-		dialog.addEventListener('keydown', handleKeydown)
+		dialogElement.addEventListener('keydown', handleKeydown)
 		return () => {
-			dialog.removeEventListener('keydown', handleKeydown)
+			dialogElement.removeEventListener('keydown', handleKeydown)
 		}
 	})
 </script>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Event, Page as TPage } from '@prisma/client'
 	import { page } from '$app/state'
-	import { tiptapParser } from '$lib/fuma-legacy'
+	import { tiptapParser } from '$lib/ui'
 	import { urlParam } from 'fuma'
 	import MemberDeleteForm from './MemberDeleteForm.svelte'
 	import { acceptInvite } from './member.remote'

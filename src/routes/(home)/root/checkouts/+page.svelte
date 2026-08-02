@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { PlusIcon } from '@lucide/svelte'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { Pagination, tip } from 'fuma'
 
 	let { data } = $props()

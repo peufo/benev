@@ -2,7 +2,7 @@
 	import { RefreshCwIcon, Trash2Icon } from '@lucide/svelte'
 	import type { User } from '@prisma/client'
 	import { page } from '$app/state'
-	import { InputImage } from '$lib/fuma-legacy'
+	import { InputImage } from '$lib/ui'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import Avatar from './Avatar.svelte'
 	import { deleteAvatar, generateAvatar, uploadAvatar } from './user.remote'

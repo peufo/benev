@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte'
 	import { loadStripe } from '@stripe/stripe-js'
 	import { env } from '$env/dynamic/public'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 
 	let { data } = $props()
 

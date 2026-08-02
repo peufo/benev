@@ -1,7 +1,3 @@
-// Surface publique de fuma 1.0.21, rapatriée depuis la branche `sv-4` du dépôt fuma.
-// Remplace les imports `from 'fuma'`, `from 'fuma/validation'` et `from 'fuma/utils'`.
-// Destiné à être démantelé au profit de fuma 2 : chaque symbole que fuma 2 réexpose
-// pourra être supprimé d'ici et réimporté du paquet.
+// Ce qui reste de fuma 1.0.21: uniquement les composants dont fuma 2 a déjà l'équivalent.
+// Chacun disparaît au profit du paquet — voir la table des remplacements dans AGENTS.md.
 export * from './ui/index.js'
-export * from './utils/index.js'
-export * from './action/index.js'

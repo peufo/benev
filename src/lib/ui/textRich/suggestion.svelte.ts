@@ -2,12 +2,12 @@ import type { SuggestionOptions } from '@tiptap/suggestion'
 import { writable, get } from 'svelte/store'
 import { tippy, type TippyInstance } from 'fuma'
 
-import SuggesionList from '$lib/fuma-legacy/ui/input/textRich/SuggesionList.svelte'
+import SuggesionList from '$lib/ui/textRich/SuggesionList.svelte'
 import { mount, unmount } from 'svelte'
 import type { SuggestionProps } from '@tiptap/suggestion'
 
 export type SuggestionItem = { id: string; label: string }
-export let suggestionItems = writable<SuggestionItem[]>([])
+export const suggestionItems = writable<SuggestionItem[]>([])
 
 export const suggestion: Omit<SuggestionOptions<SuggestionItem>, 'editor'> = {
 	items: ({ query }) => {
@@ -17,7 +17,7 @@ export const suggestion: Omit<SuggestionOptions<SuggestionItem>, 'editor'> = {
 
 	render: () => {
 		let popup: TippyInstance
-		let target = document.createElement('div')
+		const target = document.createElement('div')
 		let component: ReturnType<typeof mount> | undefined
 
 		// Svelte 5: `mount()` renvoie les exports du composant, pas une instance avec

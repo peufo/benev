@@ -1,6 +1,6 @@
 <script lang="ts" generics="Item extends {id: string}">
 	import { TableCell, type TableField } from '$lib/fuma-legacy/ui/table/index.js'
-	import type { ComponentAndProps } from '$lib/fuma-legacy/utils/component.js'
+	import type { ComponentAndProps } from '$lib/ui/component.js'
 
 	interface Props {
 		items: Item[]

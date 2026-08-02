@@ -1,5 +1,5 @@
 <script lang="ts" generics="Item extends {id: string}">
-	import { selector } from '$lib/fuma-legacy/action/selector.js'
+	import { selector } from '$lib/ui/input/selector.js'
 
 	interface Props {
 		class?: string

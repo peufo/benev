@@ -7,7 +7,7 @@
 
 	type Tool = {
 		key?: string
-		attributes?: {}
+		attributes?: Record<string, unknown>
 		label: string
 		icon: Component<IconProps>
 		action: () => unknown
@@ -56,7 +56,7 @@
 		</button>
 	{/snippet}
 
-	{#each tools as tool}
+	{#each tools as tool (tool.label)}
 		{@const ToolIcon = tool.icon}
 		{#if tool.newSection}
 			<hr class="my-2" />

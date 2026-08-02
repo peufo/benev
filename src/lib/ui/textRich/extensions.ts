@@ -9,8 +9,8 @@ import Placeholder from '@tiptap/extension-placeholder'
 import Image from '@tiptap/extension-image'
 import Youtube from '@tiptap/extension-youtube'
 import Mention from '@tiptap/extension-mention'
-import { Indent } from '$lib/fuma-legacy/ui/input/textRich/indent.js'
-import { suggestion } from '$lib/fuma-legacy/ui/input/textRich/suggestion.svelte.js'
+import { Indent } from '$lib/ui/textRich/indent.js'
+import { suggestion } from '$lib/ui/textRich/suggestion.svelte.js'
 
 export const extensions: Extensions = [
 	StarterKit.configure({
@@ -38,7 +38,7 @@ export const extensions: Extensions = [
 		},
 	}),
 	Youtube.configure({
-		// @ts-ignore
+		// @ts-expect-error: `width` accepte une chaîne, la déclaration de types dit `number`
 		width: '100%',
 		height: 360,
 		nocookie: true,

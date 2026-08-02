@@ -3,7 +3,7 @@
 	import type { MemberProfile } from '$lib/server'
 	import { page } from '$app/stores'
 	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
-	import { CardBasic, Placeholder } from '$lib/fuma-legacy'
+	import { CardBasic, Placeholder } from '$lib/ui'
 	import { Drawer, tip } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { fade } from 'svelte/transition'

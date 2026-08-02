@@ -1,8 +1,8 @@
 <script lang="ts" generics="Item extends {id: string}">
 	import { untrack } from 'svelte'
 	import { afterNavigate } from '$app/navigation'
-	import { Placeholder } from '$lib/fuma-legacy/ui/placeholder/index.js'
-	import type { ComponentAndProps } from '$lib/fuma-legacy/utils/component.js'
+	import { Placeholder } from '$lib/ui/placeholder/index.js'
+	import type { ComponentAndProps } from '$lib/ui/component.js'
 
 	import {
 		type TableField,

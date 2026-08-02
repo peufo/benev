@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { tip } from 'fuma'
 	import { MapPinnedIcon } from '@lucide/svelte'
-	import { Card } from '$lib/fuma-legacy'
+	import { Card } from '$lib/ui'
 	import { eventPath } from '$lib/store'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Teams, TeamsActions } from '$lib/team'

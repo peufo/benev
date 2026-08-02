@@ -3,7 +3,7 @@
 	import { CheckIcon, ClockIcon, MailIcon, OctagonAlertIcon, type IconProps } from '@lucide/svelte'
 	import type { Message, MessageState } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
-	import { InputOptionInParam } from '$lib/fuma-legacy'
+	import { InputOptionInParam } from '$lib/ui'
 	import { DropDown, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { useNotify } from '$lib/notify'

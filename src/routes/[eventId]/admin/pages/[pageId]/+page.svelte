@@ -2,7 +2,7 @@
 	import { run } from 'svelte/legacy'
 
 	import { getMemberSuggestions } from '$lib/pages/memberSuggestions'
-	import { suggestionItems, type SuggestionItem } from '$lib/fuma-legacy'
+	import { suggestionItems, type SuggestionItem } from '$lib/ui'
 
 	import PageForm from './PageForm.svelte'
 	import type { Page } from '@prisma/client'

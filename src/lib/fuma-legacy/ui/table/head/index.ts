@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'svelte'
 
-import type { AnyComponent, ComponentAndProps } from '$lib/fuma-legacy/utils/component.js'
+import type { AnyComponent, ComponentAndProps } from '$lib/ui/component.js'
 import type { ItemBase, TableField, TableFieldType } from '$lib/fuma-legacy/ui/table/field.js'
 import { default as TableHeadSelect } from '$lib/fuma-legacy/ui/table/head/TableHeadSelect.svelte'
 import { default as TableHeadDate } from '$lib/fuma-legacy/ui/table/head/TableHeadDate.svelte'

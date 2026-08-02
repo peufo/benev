@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
-	import { component, InputRelations } from '$lib/fuma-legacy'
+	import { component } from '$lib/ui'
+	import { InputRelations } from '$lib/fuma-legacy'
 	import { urlParam } from 'fuma'
 	import { api } from '$lib/api'
 	import MemberLink from './MemberLink.svelte'

@@ -3,12 +3,8 @@
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
 
-	import { type Options, parseOptions } from '$lib/fuma-legacy/utils/options'
-	import {
-		FormControl,
-		bindValueWithParams,
-		type InputProps,
-	} from '$lib/fuma-legacy/ui/input/index.js'
+	import { type Options, parseOptions } from 'fuma'
+	import { FormControl, bindValueWithParams, type InputProps } from '$lib/ui'
 
 	type Props = InputProps & {
 		options: Options

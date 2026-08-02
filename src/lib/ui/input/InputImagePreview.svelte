@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { InputImage, type Crop } from '$lib/fuma-legacy/ui/input/index.js'
-	import { PlaceholderImage } from '$lib/fuma-legacy/ui/placeholder/index.js'
+	import { InputImage, type Crop } from '$lib/ui'
+	import { PlaceholderImage } from '$lib/ui/placeholder/index.js'
 
 	interface Props {
 		key?: string
@@ -10,7 +10,7 @@
 		title?: string
 		x: number
 		y: number
-		aspect?: any
+		aspect?: number
 	}
 
 	let {

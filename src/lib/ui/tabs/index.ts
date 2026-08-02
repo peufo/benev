@@ -1,5 +1,5 @@
-export { default as Tabs } from '$lib/fuma-legacy/ui/tabs/Tabs.svelte'
-export { default as TabsIcon } from '$lib/fuma-legacy/ui/tabs/TabsIcon.svelte'
+export { default as Tabs } from '$lib/ui/tabs/Tabs.svelte'
+export { default as TabsIcon } from '$lib/ui/tabs/TabsIcon.svelte'
 
 import type { IconProps } from '@lucide/svelte'
 import type { Component } from 'svelte'

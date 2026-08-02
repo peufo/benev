@@ -13,6 +13,11 @@ export default defineConfig({
 		// chargeur ESM de Node qui le refuse: on le fait traiter par Vite.
 		server: { deps: { inline: ['tippy.js'] } },
 	},
+	// fuma est lié par `file:../fuma`, donc `node_modules/fuma` est un lien symbolique vers un
+	// dossier qui garde ses propres `@sveltejs/kit` et `svelte` pour son développement. Sans
+	// dédoublonnage, `fuma/server` lève un `redirect()` issu de son exemplaire de kit, que
+	// celui de benev ne reconnaît pas: la redirection remonte alors en erreur 500.
+	resolve: { dedupe: ['@sveltejs/kit', 'svelte'] },
 	server: { fs: { allow: ['media', '../fuma'] }, allowedHosts: ['mac-de-jo.local'] },
 	optimizeDeps: {
 		include: ['litepicker'],
