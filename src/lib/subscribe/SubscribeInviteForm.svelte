@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
-	import { InputRelation, tip, urlParam } from 'fuma'
+	import { InputSelect, tip, urlParam } from 'fuma'
 	import { searchMembers } from '$lib/member/member.remote'
 	import { useNotify } from '$lib/notify'
 	import { createSubscribe } from './subscribe.remote'
@@ -19,7 +19,7 @@
 	const notify = useNotify()
 </script>
 
-<!-- `InputRelation` ne sert qu'à choisir le membre: la valeur soumise est le champ caché. -->
+<!-- `InputSelect` ne sert qu'à choisir le membre: la valeur soumise est le champ caché. -->
 <form
 	{...createSubscribe.enhance(async ({ submit }) => {
 		await submit()
@@ -32,10 +32,10 @@
 	<input type="hidden" name="periodId" value={periodId} />
 	<input type="hidden" name="memberId" value={member?.id} />
 
-	<InputRelation
+	<InputSelect
 		class="w-full"
 		placeholder="Inscrire un membre"
-		searchItems={searchMembers}
+		items={searchMembers}
 		bind:value={member}
 	>
 		{#snippet selected(item)}
@@ -58,7 +58,7 @@
 				<UserPlusIcon size={20} />
 			</a>
 		{/snippet}
-	</InputRelation>
+	</InputSelect>
 
 	{#if member}
 		<button class="btn btn-primary"> Inscrire </button>

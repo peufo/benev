@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { CopyIcon, PlusIcon } from '@lucide/svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
-	import { ButtonDelete, InputRelation, InputRelations, tip, urlParam } from 'fuma'
+	import { ButtonDelete, InputSelect, InputMultiSelect, tip, urlParam } from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { searchTeams } from '$lib/team/team.remote'
@@ -118,7 +118,7 @@
 	}
 </script>
 
-<!-- `InputRelation`/`InputRelations` ne servent qu'à choisir: la valeur soumise est portée
+<!-- `InputSelect`/`InputMultiSelect` ne servent qu'à choisir: la valeur soumise est portée
      par les champs cachés ci-dessous, en ids clairs. -->
 <form
 	{...remoteForm.enhance(async ({ submit }) => {
@@ -142,16 +142,16 @@
 	{/each}
 
 	{#key period}
-		<InputRelation bind:value={selectedTeam} searchItems={searchTeams} label="Secteur">
+		<InputSelect bind:value={selectedTeam} items={searchTeams} label="Secteur">
 			{#snippet selected(team)}
 				<span>{team.name}</span>
 			{/snippet}
 			{#snippet proposal(team)}
 				<span>{team.name}</span>
 			{/snippet}
-		</InputRelation>
+		</InputSelect>
 
-		<InputRelations bind:value={selectedTags} searchItems={searchTags} label="Étiquettes">
+		<InputMultiSelect bind:value={selectedTags} items={searchTags} label="Étiquettes">
 			{#snippet selected(tag)}
 				<TagSelectItem {tag} is_editable />
 			{/snippet}
@@ -169,7 +169,7 @@
 					<PlusIcon size={20} />
 				</a>
 			{/snippet}
-		</InputRelations>
+		</InputMultiSelect>
 	{/key}
 
 	<label class="floating-label">

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Card } from '$lib/ui'
-	import { InputNumber, InputRelation, InputString } from 'fuma'
+	import { InputNumber, InputSelect, InputString } from 'fuma'
 
 	import InputProduct from './InputProduct.svelte'
 	import { createCheckout, searchUsers } from './checkout.remote'
@@ -13,9 +13,9 @@
 
 	<form {...createCheckout} class="flex flex-col gap-4">
 		<InputString field={createCheckout.fields.name} label="Name" value="Correction" />
-		<InputRelation
+		<InputSelect
 			field={createCheckout.fields.user}
-			searchItems={searchUsers}
+			items={searchUsers}
 			getValue={(user) => user.id}
 			label="Owner"
 		>
@@ -28,7 +28,7 @@
 					<div class="text-xs">{user.email}</div>
 				</div>
 			{/snippet}
-		</InputRelation>
+		</InputSelect>
 		<div class="flex gap-4">
 			<InputNumber field={createCheckout.fields.amount} label="Amount" class="grow" value={0} />
 			<InputString

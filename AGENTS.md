@@ -193,7 +193,7 @@ Three Vite settings make the link work:
 
 There is one import surface:
 
-- **`from 'fuma'`** — components, actions, client helpers (`InputString`, `InputRelation`, `Table`,
+- **`from 'fuma'`** — components, actions, client helpers (`InputString`, `InputSelect`, `Table`,
   `Dialog`, `Drawer`, `Popover`, `tip`, `urlParam`, `parseOptions`…).
 - **`from 'fuma/server'`** — read-side helpers for `load` functions: `parseQuery`,
   `ensureFieldsWithFilterAreVisibles`.
@@ -208,20 +208,42 @@ control that has to sit next to a fuma input reproduces that markup by hand — 
 page" field of `PageForm.svelte`. There is no `FormControl` wrapper any more, and `form-control` /
 `label-text` are daisyUI 4 classes that do nothing in daisyUI 5.
 
-### Search inputs take a remote query
+### `InputSelect` / `InputMultiSelect` take one of three sources
 
-`InputRelation` / `InputRelations` want a `RemoteQueryFunction<{ search: string }, Item[]>`, not a
-promise-returning callback. Write a `query()` next to the domain's other remote functions —
-`searchMembers` in `$lib/member/member.remote.ts`, `searchTeams` in `$lib/team/team.remote.ts`, and
-so on. To fix an extra argument, wrap it at the call site rather than widening the query:
+Both take a single `items` prop. Pick the source by where the filtering belongs — never wrap one
+form to look like another:
 
-```ts
-const searchItems: RemoteQueryFunction<{ search: string }, Field[]> = ({ search }) =>
-	searchMemberFields({ search, types: typesAccepted })
-```
+- **A remote query**, `RemoteQueryFunction<{ search: string }, Item[]>` — the default when the list
+  lives in the database. Write a `query()` next to the domain's other remote functions:
+  `searchMembers` in `$lib/member/member.remote.ts`, `searchTeams` in `$lib/team/team.remote.ts`.
+  To fix an extra argument, wrap it at the call site rather than widening the query — see
+  `InputFieldSelect.svelte` on the badges page:
 
-A search that must stay in the browser (Photon geocoding, mocked in E2E) uses the hand-rolled
-resource shim in `$lib/location/InputLocation.svelte`.
+  ```ts
+  const searchItems = ({ search }: { search: string }) =>
+  	searchMemberFields({ search, types: typesAccepted })
+  ```
+
+- **A function returning a promise**, for a search that must stay in the browser — Photon
+  geocoding in `$lib/location/InputLocation.svelte` (mocked in E2E). fuma tempers the keystrokes,
+  drops out-of-order responses and renders loading then error; do not re-implement any of that.
+
+- **A plain array**, when the data is already loaded — the secteurs of `PlanHeader.svelte`, an
+  enum passed through `parseOptions`. fuma filters it locally on `getLabel`, or on `filter` if the
+  match has to span several fields.
+
+`value` holds the item, never its submitted value: pass `items.find(…)` on the way in and read
+`option.value` in `onSelect`. `getValue` defaults to `item.id` then `item.value`, so options built
+by `parseOptions` need no `getValue` at all. The search box appears on its own above 7 entries;
+`searchable` forces it either way.
+
+**A parent that repilots `value` after a user selection must bind it.** Passed as a plain prop,
+a `$bindable` stops following the parent as soon as the component has written to it — the display
+then sticks to the user's last choice while the model moves on. `bind:value` takes the setter path
+and has no such problem (`GiftConditions.svelte`, which clears the field after each pick). Where
+binding is impossible because the model holds a string rather than the item, wrap the input in
+`{#key}` on whatever invalidates the selection — the operator select of `MemberConditions.svelte`,
+keyed on the field id, and the `{#key period}` of `PeriodForm.svelte`.
 
 ### Fixing fuma
 

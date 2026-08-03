@@ -3,7 +3,7 @@ import { form, getRequestEvent, query } from '$app/server'
 import z from 'zod'
 import { prisma, useProduct } from '$lib/server'
 
-/** Alimente l'`InputRelation` de `ProductUseForm`. */
+/** Alimente l'`InputSelect` de `ProductUseForm`. */
 export const searchOwnedEvents = query(z.object({ search: z.string() }), async ({ search }) => {
 	const { locals } = getRequestEvent()
 	const session = await locals.auth.validate()

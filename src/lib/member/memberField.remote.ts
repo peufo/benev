@@ -46,7 +46,7 @@ const fieldTypes = [
 	'multiselect',
 ] as const satisfies readonly FieldType[]
 
-/** Alimente l'`InputRelation` de `InputRelationField`, sur la page des badges. */
+/** Alimente l'`InputSelect` de `InputFieldSelect`, sur la page des badges. */
 export const searchMemberFields = query(
 	z.object({ search: z.string(), types: z.array(z.enum(fieldTypes)).optional() }),
 	async ({ search, types }) => {

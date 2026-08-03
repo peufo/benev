@@ -13,7 +13,7 @@
 	import { FORMAT_CARD } from '$lib/constant'
 	import { debounce } from '$lib/debounce'
 	import InputColorMap from './InputColorMap.svelte'
-	import InputRelationField from './InputRelationField.svelte'
+	import InputFieldSelect from './InputFieldSelect.svelte'
 	import InputColorPalette from './InputColorPalette.svelte'
 	import InputColor from './InputColor.svelte'
 	import { browser } from '$app/environment'
@@ -148,26 +148,26 @@
 		</div>
 	</div>
 
-	<InputRelationField
+	<InputFieldSelect
 		key="accessDaysField"
 		label="Champ accès 1 (Liste à choix multiple)"
 		bind:value={badge.accessDaysField}
 		type="multiselect"
 	/>
-	<InputRelationField
+	<InputFieldSelect
 		key="accessSectorsField"
 		label="Champ accès 2 (Liste à choix multiple)"
 		bind:value={badge.accessSectorsField}
 		type="multiselect"
 	/>
-	<InputRelationField
+	<InputFieldSelect
 		key="labelField"
 		label="Champ: Label (Liste à choix ou text)"
 		bind:value={badge.labelField}
 		type="select"
 		typesAccepted={['select', 'string']}
 	/>
-	<InputRelationField
+	<InputFieldSelect
 		key="typeField"
 		label="Champ: Type de membre (Liste à choix)"
 		bind:value={badge.typeField}

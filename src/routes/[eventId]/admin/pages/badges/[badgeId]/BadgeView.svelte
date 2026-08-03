@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte'
 
-	import { InputRelation } from 'fuma'
+	import { InputSelect } from 'fuma'
 	import type { PageData } from './$types'
 	import type { Member } from '@prisma/client'
 	import { searchMembers } from '$lib/member/member.remote'
@@ -41,11 +41,11 @@
 </script>
 
 <div class="grow flex flex-col gap-4 h-auto max-w-sm">
-	<InputRelation
+	<InputSelect
 		label="Aperçu du badge de"
 		placeholder="Choisir un membre pour l'aperçu"
 		bind:value={member}
-		searchItems={searchMembers}
+		items={searchMembers}
 	>
 		{#snippet selected(item)}
 			{@const badgeType = item.profileJson[badge.typeFieldId || '']}
@@ -63,7 +63,7 @@
 				<span class="ml-auto italic opacity-70">{badgeType}</span>
 			{/if}
 		{/snippet}
-	</InputRelation>
+	</InputSelect>
 
 	{#if member}
 		<div class="rounded-lg overflow-hidden grow" bind:clientWidth bind:clientHeight>

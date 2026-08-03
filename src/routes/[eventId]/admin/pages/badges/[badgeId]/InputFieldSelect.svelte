@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { PlusIcon } from '@lucide/svelte'
-	import type { RemoteQueryFunction } from '@sveltejs/kit'
-	import { InputRelation, tip, urlParam } from 'fuma'
+	import { InputSelect, tip, urlParam } from 'fuma'
 	import type { Field, FieldType } from '@prisma/client'
 	import { searchMemberFields } from '$lib/member/memberField.remote'
 	import MemberFieldSnippet from './MemberFieldSnippet.svelte'
@@ -25,21 +24,21 @@
 		oninput = () => {},
 	}: Props = $props()
 
-	// `InputRelation` n'appelle sa recherche qu'avec `{ search }`: le filtre par type est
+	// `InputSelect` n'appelle sa recherche qu'avec `{ search }`: le filtre par type est
 	// propre à cette instance, il se fixe ici.
-	const searchItems: RemoteQueryFunction<{ search: string }, Field[]> = ({ search }) =>
+	const searchItems = ({ search }: { search: string }) =>
 		searchMemberFields({ search, types: typesAccepted })
 </script>
 
-<!-- `InputRelation` ne sert qu'à choisir: la remote function n'attend que l'id, transmis par
+<!-- `InputSelect` ne sert qu'à choisir: la remote function n'attend que l'id, transmis par
      ce champ caché. -->
 <input type="hidden" name={key} value={value?.id ?? ''} />
 
-<InputRelation
+<InputSelect
 	{label}
 	value={value ?? undefined}
 	nullable
-	{searchItems}
+	items={searchItems}
 	onSelect={(field) => {
 		value = field ?? null
 		if (field) oninput(field)
@@ -62,4 +61,4 @@
 			<PlusIcon size={20} />
 		</a>
 	{/snippet}
-</InputRelation>
+</InputSelect>

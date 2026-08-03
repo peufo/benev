@@ -70,7 +70,7 @@ function getTeamCopyName(initalName: string, teams: string[]): string {
 	return `${name} ${suffix}`
 }
 
-/** Alimente l'`InputRelation` de secteur de `PeriodForm` et `MemberSetLeaderOf`. */
+/** Alimente l'`InputSelect` de secteur de `PeriodForm` et `MemberSetLeaderOf`. */
 export const searchTeams = query(z.object({ search: z.string() }), async ({ search }) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
@@ -82,7 +82,7 @@ export const searchTeams = query(z.object({ search: z.string() }), async ({ sear
 })
 
 /**
- * Alimente l'`InputRelation` de `MemberCreateSubscribeDialog`, qui a besoin des périodes et
+ * Alimente le choix de secteur de `MemberCreateSubscribeDialog`, qui a besoin des périodes et
  * de leur disponibilité: un responsable ne peut inscrire quelqu'un que sur une place libre.
  */
 export const searchAvailableTeams = query(z.object({ search: z.string() }), async ({ search }) => {

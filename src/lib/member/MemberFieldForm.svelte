@@ -69,9 +69,8 @@
 		<InputSelect
 			label="Type de champ"
 			items={fieldTypes}
-			getValue={(option) => option.value}
-			value={type}
-			onSelect={(option) => (type = option.value)}
+			value={fieldTypes.find((option) => option.value === type)}
+			onSelect={(option) => (type = option?.value)}
 			placeholder="Choisir un type"
 		>
 			{#snippet selected(option)}

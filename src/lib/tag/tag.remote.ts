@@ -24,7 +24,7 @@ export const deleteTag = form(z.object({ id: z.string() }), async ({ id }) => {
 	return prisma.tag.delete({ where: { id, eventId } })
 })
 
-/** Alimente l'`InputRelations` des étiquettes de `PeriodForm`. */
+/** Alimente l'`InputMultiSelect` des étiquettes de `PeriodForm`. */
 export const searchTags = query(z.object({ search: z.string() }), async ({ search }) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!

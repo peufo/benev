@@ -6,7 +6,7 @@ export const modelCheckout = z.object({
 	name: z.string(),
 	amount: z.number(),
 	currency: z.enum(['CHF', 'EUR']).optional(),
-	// `InputRelation` de fuma 2 transmet l'id du propriétaire, pas l'objet `{ id }`.
+	// `InputSelect` de fuma 2 transmet l'id du propriétaire, pas l'objet `{ id }`.
 	user: zConnect,
 	products: z
 		.array(

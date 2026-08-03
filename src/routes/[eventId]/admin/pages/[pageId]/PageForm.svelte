@@ -101,9 +101,9 @@
 				<input type="hidden" name="type" value={pageType} />
 				<InputSelect
 					items={selectableTypes}
-					getValue={(option) => option.value}
-					value={pageType}
+					value={selectableTypes.find((option) => option.value === pageType)}
 					onSelect={(option) => {
+						if (!option) return
 						pageType = option.value
 						handleChangeImediat()
 					}}

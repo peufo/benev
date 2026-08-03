@@ -238,7 +238,7 @@ export const deleteMember = form(
 	}
 )
 
-/** Alimente les `InputRelation(s)` de membre: invitation, responsables, aperçu de badge. */
+/** Alimente les selects de membre: invitation, responsables, aperçu de badge. */
 export const searchMembers = query(z.object({ search: z.string() }), async ({ search }) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!

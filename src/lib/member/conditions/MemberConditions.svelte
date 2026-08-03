@@ -138,13 +138,13 @@
 							<!-- SELECT FIELD -->
 							<InputSelect
 								items={fieldOptions}
-								getValue={(option) => option.value}
-								bind:value={condition.args.fieldId}
+								value={fieldOptions.find((option) => option.value === condition.args.fieldId)}
 								placeholder="Sélectioner un champ"
-								onSelect={({ value: fieldId }) => {
-									const field = memberFields.find((f) => f.id === fieldId)
+								onSelect={(option) => {
+									if (condition.type !== 'profile' || !option) return
+									condition.args.fieldId = option.value
+									const field = memberFields.find((f) => f.id === option.value)
 									if (!field) return
-									if (condition.type !== 'profile') return
 									if (CONDITION_OPERATOR[field.type].includes(condition.args.operator)) return
 									condition.args.operator = CONDITION_OPERATOR[field.type][0]
 								}}
@@ -155,15 +155,20 @@
 								{@const fieldId = condition.args.fieldId}
 								{@const field = memberFields.find((f) => f.id === fieldId)}
 								{#if field}
-									<InputSelect
-										items={operatorOptions(field)}
-										getValue={(option) => option.value}
-										value={condition.args.operator}
-										onSelect={({ value }) => {
-											if (condition.type !== 'profile') return
-											condition.args.operator = value as MemberConditionOperator
-										}}
-									/>
+									{@const options = operatorOptions(field)}
+									<!-- Sans `key`, l'opérateur resterait sur le choix précédent: une `value` passée
+									     sans `bind:` cesse de suivre le parent dès que le select y a écrit, et
+									     changer de champ le réinitialise justement depuis le parent. -->
+									{#key fieldId}
+										<InputSelect
+											items={options}
+											value={options.find((option) => option.value === condition.args.operator)}
+											onSelect={(option) => {
+												if (condition.type !== 'profile' || !option) return
+												condition.args.operator = option.value as MemberConditionOperator
+											}}
+										/>
+									{/key}
 								{/if}
 							{/if}
 						</div>

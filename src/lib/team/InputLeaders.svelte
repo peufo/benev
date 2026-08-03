@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
-	import { InputRelations, tip, urlParam } from 'fuma'
+	import { InputMultiSelect, tip, urlParam } from 'fuma'
 	import { searchMembers } from '$lib/member/member.remote'
 	import MemberLink from './MemberLink.svelte'
 
@@ -18,16 +18,16 @@
 	let leaders = $derived(value ?? [])
 </script>
 
-<!-- `InputRelations` ne sert qu'à choisir: les ids partent dans des champs `leaders[]`. -->
+<!-- `InputMultiSelect` ne sert qu'à choisir: les ids partent dans des champs `leaders[]`. -->
 {#each leaders as leader (leader.id)}
 	<input type="hidden" name="leaders[]" value={leader.id} />
 {/each}
 
-<InputRelations
+<InputMultiSelect
 	label="Responsables"
 	value={leaders}
 	onSelect={(selection) => (leaders = selection)}
-	searchItems={searchMembers}
+	items={searchMembers}
 >
 	{#snippet selected(member)}
 		<MemberLink id={member.id} firstName={member.firstName} lastName={member.lastName} />
@@ -46,4 +46,4 @@
 			<UserPlusIcon size={20} />
 		</a>
 	{/snippet}
-</InputRelations>
+</InputMultiSelect>

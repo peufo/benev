@@ -13,7 +13,7 @@ import { mapUrl } from '$lib/location'
 const submit = async (location?: unknown) => {
 	const input: Record<string, string> = { id: 'mon-event', name: 'Mon Event' }
 	if (location !== undefined) {
-		// InputRelation sérialise aussi son propre champ de recherche
+		// le select sérialise aussi son propre champ de recherche
 		input.location_search = JSON.stringify({ id: 'W123' })
 		input.location = JSON.stringify(location)
 	}
@@ -55,7 +55,7 @@ describe('champ location du formulaire évènement', () => {
 		})
 	})
 
-	it("ignore le champ de recherche interne d'InputRelation", async ({ expect }) => {
+	it('ignore le champ de recherche interne du select', async ({ expect }) => {
 		expect(await submit({ label: 'X' })).not.toHaveProperty('location_search')
 	})
 })

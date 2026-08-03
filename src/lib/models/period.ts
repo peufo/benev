@@ -5,7 +5,7 @@ import { zConnect, zConnectMany, zDate, zNumber, zSet } from './form'
 export const modelPeriodCreate = z.object({
 	// Champ brut lié par `bind:value` (il sert aussi à dupliquer la période).
 	maxSubscribe: zNumber(1),
-	// `InputRelation`/`InputRelations` de fuma 1 ne servent plus qu'à choisir: les ids partent
+	// `InputSelect`/`InputMultiSelect` ne servent qu'à choisir: les ids partent
 	// dans des champs cachés, en clair.
 	team: zConnect,
 	tags: zConnectMany,

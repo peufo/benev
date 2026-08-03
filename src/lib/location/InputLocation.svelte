@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { MapPinIcon } from '@lucide/svelte'
-	import type { RemoteQueryFunction } from '@sveltejs/kit'
-	import debounce from 'debounce'
-	import { InputRelation } from 'fuma'
+	import { InputSelect } from 'fuma'
 
 	type Suggestion = PrismaJson.Location & { id: string; title: string; detail: string }
 
@@ -73,35 +71,6 @@
 		})
 	}
 
-	// `InputRelation` consomme une remote query. La recherche restant dans le navigateur,
-	// on lui présente une ressource de même forme — seuls `current`, `loading`, `error` et
-	// `ready` sont lus, par la liste et son indicateur de chargement.
-	const resource = $state({
-		current: [] as Suggestion[],
-		loading: false,
-		error: undefined as unknown,
-		ready: false,
-	})
-
-	const runSearch = debounce(async (q: string) => {
-		try {
-			resource.loading = true
-			resource.error = undefined
-			resource.current = await searchPhoton(q)
-			resource.ready = true
-		} catch (err) {
-			resource.error = err
-			console.error(err)
-		} finally {
-			resource.loading = false
-		}
-	}, 150)
-
-	const searchItems = ((arg: { search: string }) => {
-		runSearch(arg.search)
-		return resource
-	}) as unknown as RemoteQueryFunction<{ search: string }, Suggestion[]>
-
 	// la valeur enregistrée n'a ni `title` ni `detail`: on la réhydrate pour l'affichage.
 	// Un lieu hérité de l'ancien champ texte n'a pas de coordonnées.
 	let place: Suggestion | undefined = $state(
@@ -123,9 +92,11 @@
 <!-- La remote function reçoit du JSON en clair: `"null"` signifie « lieu effacé ». -->
 <input type="hidden" name={key} value={JSON.stringify(value)} />
 
-<InputRelation
+<!-- La recherche reste dans le navigateur: `items` prend la fonction telle quelle, et le
+     composant se charge de temporiser la frappe et d'afficher chargement et erreur. -->
+<InputSelect
 	{label}
-	{searchItems}
+	items={({ search }) => searchPhoton(search)}
 	{placeholder}
 	bind:value={place}
 	nullable
@@ -147,4 +118,4 @@
 			{/if}
 		</span>
 	{/snippet}
-</InputRelation>
+</InputSelect>

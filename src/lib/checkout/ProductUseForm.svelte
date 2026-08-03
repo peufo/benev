@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { LinkIcon } from '@lucide/svelte'
-	import { InputRelation } from 'fuma'
+	import { InputSelect } from 'fuma'
 	import { slide } from 'svelte/transition'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { searchOwnedEvents, useProductOnEvent } from './checkout.remote'
@@ -24,9 +24,9 @@
 		class="flex flex-col gap-2 w-full"
 	>
 		<input type="hidden" name="productId" value={product.id} />
-		<InputRelation
+		<InputSelect
 			field={form.fields.eventId}
-			searchItems={searchOwnedEvents}
+			items={searchOwnedEvents}
 			getValue={(event) => event.id}
 			placeholder="Chercher un évènement"
 			class="w-full"
@@ -38,7 +38,7 @@
 			{#snippet proposal(event)}
 				<span>{event.name} · {event.tier}</span>
 			{/snippet}
-		</InputRelation>
+		</InputSelect>
 		{#if hasSelection}
 			<div transition:slide class="ml-auto">
 				<button type="submit" class="btn btn-sm btn-primary">

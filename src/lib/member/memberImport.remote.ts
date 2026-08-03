@@ -4,7 +4,7 @@ import { permission } from '$lib/server'
 import { memberImportService } from '$lib/server/memberImport'
 
 /**
- * Alimente l'`InputRelation` de `MemberImportDialog`. Le reste du parcours d'import passe
+ * Alimente la liste de recherche de `MemberImportDialog`. Le reste du parcours d'import passe
  * encore par `[eventId]/admin/members/import/+server.ts`.
  */
 export const searchImportableEvents = query(

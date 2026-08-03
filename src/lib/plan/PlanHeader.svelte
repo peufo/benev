@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { TabsIcon } from '$lib/ui'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
-	import { InputRelations, jsonParse, tip, urlParam, type PopoverType } from 'fuma'
-	import type { RemoteQueryFunction } from '@sveltejs/kit'
+	import { InputMultiSelect, jsonParse, tip, urlParam, type PopoverType } from 'fuma'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
@@ -29,21 +28,8 @@
 
 	let { teams, views, isFullscreen = false, plan, class: klass = '' }: Props = $props()
 
-	// `InputRelations` consomme une remote query. Le layout admin charge déjà tous les secteurs
-	// de l'évènement: on filtre en local et on lui présente une ressource de même forme — seuls
-	// `current`, `loading`, `error` et `ready` sont lus. Rien à attendre, donc `ready` d'emblée.
-	const searchTeams = (({ search }: { search: string }) => {
-		const needle = search.trim().toLowerCase()
-		return {
-			current: teams.filter((team) => team.name.toLowerCase().includes(needle)),
-			loading: false,
-			error: undefined,
-			ready: true,
-		}
-	}) as unknown as RemoteQueryFunction<{ search: string }, TeamOption[]>
-
 	// Dérivé assignable: la sélection vit dans l'URL — c'est le contrat que lit `getPlanData` —
-	// mais `InputRelations` la porte en items. Le dérivé se ré-amorce à chaque navigation, ce
+	// mais `InputMultiSelect` la porte en items. Le dérivé se ré-amorce à chaque navigation, ce
 	// qui fait suivre les boutons précédent/suivant du navigateur.
 	let selectedTeams = $derived(
 		jsonParse<string[]>($page.url.searchParams.get('teams'), []).flatMap(
@@ -76,20 +62,17 @@
 
 	<TableViewSelect key="plan" {views} />
 
-	<InputRelations
+	<!-- Le layout admin a déjà chargé tous les secteurs: le filtre reste local. `searchable`
+	     explicite, leur nombre variant d'un évènement à l'autre. -->
+	<InputMultiSelect
 		bind:this={teamsMenu}
 		bind:value={selectedTeams}
-		searchItems={searchTeams}
+		items={teams}
+		getLabel={(team) => team.name}
+		searchable
 		placeholder="Tous les secteurs"
 		class="w-52"
-	>
-		{#snippet selected(team)}
-			<span>{team.name}</span>
-		{/snippet}
-		{#snippet proposal(team)}
-			<span>{team.name}</span>
-		{/snippet}
-	</InputRelations>
+	/>
 
 	<PlanCursor cursor={plan.cursor} />
 	<div class="join">
