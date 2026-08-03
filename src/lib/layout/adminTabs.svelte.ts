@@ -21,9 +21,8 @@ import { page } from '$app/state'
 export function adminTabs() {
 	const query = param.without('skip', 'take', 'form_period')
 	const eventId = page.params.eventId
-
 	const getPath = (p: string) => ({
-		href: `/${eventId}${p}${query}`,
+		href: `/${eventId}${p}?${query}`,
 		isActive: !!page.route.id?.startsWith(`/[eventId]${p}`),
 	})
 
