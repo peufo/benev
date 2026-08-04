@@ -102,5 +102,8 @@
 		"tippy.js": "^6.3.7",
 		"zod": "^4.1.11"
 	},
-	"license": "AGPL-3.0"
+	"license": "AGPL-3.0",
+	"volta": {
+		"node": "24.19.0"
+	}
 }
