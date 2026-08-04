@@ -3,8 +3,8 @@
 	import type { Member } from '@prisma/client'
 	import { InputSelect, tip, urlParam } from 'fuma'
 	import { searchMembers } from '$lib/member/member.remote'
-	import { useNotify } from '$lib/notify'
 	import { createSubscribe } from './subscribe.remote'
+	import { toast } from 'svelte-sonner'
 
 	interface Props {
 		periodId: string
@@ -15,24 +15,21 @@
 	}
 
 	let { periodId, class: klass = '', member = $bindable(undefined), onsuccess }: Props = $props()
-
-	const notify = useNotify()
 </script>
 
 <form
 	{...createSubscribe.enhance(async ({ submit }) => {
 		await submit()
-		notify.success('Inscription créée')
+		toast.success('Inscription créée')
 		member = undefined
 		onsuccess?.()
 	})}
 	class="{klass} flex gap-2 justify-end grow w-full"
 >
 	<input type="hidden" name="periodId" value={periodId} />
-
 	<InputSelect
 		field={createSubscribe.fields.memberId}
-		class="w-full"
+		class="grow"
 		placeholder="Inscrire un membre"
 		items={searchMembers}
 		bind:value={member}

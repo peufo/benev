@@ -31,6 +31,7 @@
 	}: Props = $props()
 
 	const remoteForm = $derived(period?.id ? updatePeriod : createPeriod)
+	const deleteFormId = $props.id()
 
 	const detectChange = useDetectChange(period)
 
@@ -121,6 +122,25 @@
 		return false
 	}
 </script>
+
+{#if period?.id}
+	<!-- HTML interdit les <form> imbriqués: ce formulaire ne porte que les champs cachés, son
+	bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
+	<form
+		{...deletePeriod.enhance(async ({ submit }) => {
+			if (!confirmDelete()) return
+			await submit()
+			toast.success('Période supprimée')
+		})}
+		id={deleteFormId}
+		class="hidden"
+	>
+		<input type="hidden" name="id" value={period.id} />
+		{#if !disableRedirect}
+			<input type="hidden" name="redirectTo" value={urlParam.without('form_period')} />
+		{/if}
+	</form>
+{/if}
 
 <form
 	{...remoteForm.enhance(async ({ submit }) => {
@@ -230,25 +250,9 @@
 				<CopyIcon size={18} />
 			</button>
 			<div class="grow"></div>
+			<ButtonDelete form={deleteFormId} formaction={deletePeriod.action} />
 		{:else}
 			<button class="btn btn-primary" type="submit">Ajouter</button>
 		{/if}
 	</div>
 </form>
-
-{#if period?.id}
-	<form
-		{...deletePeriod.enhance(async ({ submit }) => {
-			if (!confirmDelete()) return
-			await submit()
-			toast.success('Période supprimée')
-		})}
-		class="p-2 flex"
-	>
-		<input type="hidden" name="id" value={period.id} />
-		{#if !disableRedirect}
-			<input type="hidden" name="redirectTo" value={urlParam.without('form_period')} />
-		{/if}
-		<ButtonDelete formaction={deletePeriod.action} />
-	</form>
-{/if}

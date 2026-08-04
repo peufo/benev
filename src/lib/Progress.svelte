@@ -67,7 +67,7 @@
 					En attente{plurial(request)}
 				</span>
 			</span>
-			<SlashIcon size={18} class="opacity-60" />
+			<span class="opacity-50 px-1">/</span>
 			<span class="badge">
 				{period.maxSubscribe}
 				<span class="pl-1">
