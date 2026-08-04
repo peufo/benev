@@ -1,7 +1,7 @@
 <script lang="ts">
 	import MemberField from './MemberField.svelte'
 	import type { MemberProfile } from '$lib/server'
-	import { useNotify } from '$lib/notify'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { updateMemberProfile } from './member.remote'
 
 	interface Props {
@@ -11,17 +11,13 @@
 	}
 
 	let { class: klass = '', memberProfile, onsuccess }: Props = $props()
-
-	const notify = useNotify()
 </script>
 
 <div class="@container">
 	<form
-		{...updateMemberProfile.enhance(async ({ submit }) => {
-			await submit()
-			notify.success('Profil enregistré')
-			onsuccess?.()
-		})}
+		{...updateMemberProfile.enhance(
+			enhanceForm({ success: 'Profil enregistré', onsuccess: () => onsuccess?.() })
+		)}
 		class="grid grid-cols-3 @lg:grid-cols-6 @2xl:grid-cols-12 gap-4 {klass}"
 	>
 		<input type="hidden" name="memberId" value={memberProfile.id} />

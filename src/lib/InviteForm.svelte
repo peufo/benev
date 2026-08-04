@@ -5,6 +5,7 @@
 	import { toast } from 'svelte-sonner'
 	import type { Member } from '@prisma/client'
 	import { api } from './api'
+	import { enhanceForm } from './enhanceForm'
 	import { createInvite } from './member/member.remote'
 
 	interface Props {
@@ -38,14 +39,13 @@
 </script>
 
 <form
-	{...createInvite.enhance(async ({ submit }) => {
-		await submit()
-		// `result` porte le membre créé une fois la soumission résolue.
-		const member = createInvite.result
-		if (!member) return
-		toast.success('Invitation envoyée')
-		onCreate(member)
-	})}
+	{...createInvite.enhance(
+		enhanceForm({
+			success: 'Invitation envoyée',
+			// `result` porte le membre créé une fois la soumission résolue.
+			onsuccess: () => createInvite.result && onCreate(createInvite.result),
+		})
+	)}
 	class="flex flex-col gap-4"
 >
 	<div class="grid grid-cols-2 gap-4 my-6">

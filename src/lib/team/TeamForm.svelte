@@ -13,6 +13,7 @@
 	import { ButtonDelete, InputBoolean, InputString, InputTextarea, tip } from 'fuma'
 
 	import { MemberConditions } from '$lib/member'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
 	import type { TeamWithComputedValues } from '$lib/server'
 	import { createTeam, deleteTeam, updateTeam } from './team.remote'
@@ -56,11 +57,7 @@
 </script>
 
 <form
-	{...remoteForm.enhance(async ({ submit }) => {
-		await submit()
-		toast.success('Succès')
-		onsuccess?.()
-	})}
+	{...remoteForm.enhance(enhanceForm({ success: 'Succès', onsuccess: () => onsuccess?.() }))}
 	class="flex flex-col gap-4 {klass}"
 >
 	{#if team.id}
@@ -119,12 +116,13 @@
 
 {#if team.id}
 	<form
-		{...deleteTeam.enhance(async ({ submit }) => {
-			if (!confirmDelete()) return
-			await submit()
-			toast.success('Secteur supprimé')
-			onsuccess?.()
-		})}
+		{...deleteTeam.enhance(
+			enhanceForm({
+				before: confirmDelete,
+				success: 'Secteur supprimé',
+				onsuccess: () => onsuccess?.(),
+			})
+		)}
 		class="flex"
 	>
 		<input type="hidden" name="id" value={team.id} />

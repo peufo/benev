@@ -3,11 +3,11 @@
 	import type { Media } from '@prisma/client'
 	import { portal } from 'svelte-portal'
 	import { ButtonDelete, Dialog, InputString, tip } from 'fuma'
-	import { toast } from 'svelte-sonner'
 
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
 	import { tick } from 'svelte'
 	import { api } from '$lib/api'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { deleteMedia, editMedia, uploadMedia } from './media.remote'
 
 	// TODO: Chelous de récupérer medias en global:
@@ -111,15 +111,18 @@
 
 <div class="contents" use:portal={'body'}>
 	<form
-		{...uploadMedia.enhance(async ({ submit }) => {
-			await submit()
-			const media = uploadMedia.result
-			dialogUploadMedia.close()
-			if (!media) return
-			toast.success('Nouvelle image')
-			medias = [...medias, media]
-			onselect?.(media)
-		})}
+		{...uploadMedia.enhance(
+			enhanceForm({
+				success: 'Nouvelle image',
+				onsuccess: () => {
+					dialogUploadMedia.close()
+					const media = uploadMedia.result
+					if (!media) return
+					medias = [...medias, media]
+					onselect?.(media)
+				},
+			})
+		)}
 		enctype="multipart/form-data"
 	>
 		<UploadMediaDialog
@@ -143,20 +146,26 @@
 			     pressé décide laquelle s'exécute. -->
 			<form
 				class="contents"
-				{...editMedia.enhance(async ({ submit }) => {
-					await submit()
-					dialogEdit.close()
-					const media = editMedia.result
-					if (media) medias = medias.map((m) => (m.id === media.id ? media : m))
-					dialogMedias.show()
-				})}
-				{...deleteMedia.enhance(async ({ submit }) => {
-					await submit()
-					dialogEdit.close()
-					const media = deleteMedia.result
-					if (media) medias = medias.filter((m) => m.id !== media.id)
-					dialogMedias.show()
-				})}
+				{...editMedia.enhance(
+					enhanceForm({
+						onsuccess: () => {
+							dialogEdit.close()
+							const media = editMedia.result
+							if (media) medias = medias.map((m) => (m.id === media.id ? media : m))
+							dialogMedias.show()
+						},
+					})
+				)}
+				{...deleteMedia.enhance(
+					enhanceForm({
+						onsuccess: () => {
+							dialogEdit.close()
+							const media = deleteMedia.result
+							if (media) medias = medias.filter((m) => m.id !== media.id)
+							dialogMedias.show()
+						},
+					})
+				)}
 			>
 				<div class="flex flex-row-reverse items-end gap-2 mt-4">
 					<input type="hidden" name="id" value={selectedMedia.id} />

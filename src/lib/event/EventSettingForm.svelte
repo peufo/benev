@@ -2,7 +2,7 @@
 	import type { Event } from '@prisma/client'
 	import { InputBoolean, InputNumber, InputString } from 'fuma'
 	import { slide } from 'svelte/transition'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { updateEventSettings as remoteForm } from './event.remote'
 
 	interface Props {
@@ -12,12 +12,7 @@
 	let { event = $bindable() }: Props = $props()
 </script>
 
-<form
-	{...remoteForm.enhance(async ({ submit }) => {
-		await submit()
-		toast.success('Succès')
-	})}
->
+<form {...remoteForm.enhance(enhanceForm({ success: 'Succès' }))}>
 	<div class="flex flex-col gap-2">
 		<h3 class="font-medium opacity-80 mb-2">Permissions</h3>
 		<InputBoolean

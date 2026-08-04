@@ -14,3 +14,5 @@
       at Renderer.component (node_modules/svelte/src/internal/server/renderer.js:319:22)
       at PeriodForm (src/lib/period/PeriodForm.svelte:36:13)
       at children (src/lib/period/PeriodDrawer.svelte:49:40)
+
+- [ ] Les boutons pour modifier les périods doivent être plus représentatif de ce qu'il permettent de faire.

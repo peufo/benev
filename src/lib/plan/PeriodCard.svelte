@@ -56,7 +56,6 @@
 			'group relative z-10 hover:z-20',
 			'rounded-md p-0 text-sm border border-hard',
 			'overflow-visible min-h-7.5',
-
 			urlParam.has('form_period', period.id) ? 'bg-accent/40 z-20' : 'bg-secondary/35',
 		]}
 	>

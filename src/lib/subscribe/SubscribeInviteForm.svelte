@@ -4,7 +4,7 @@
 	import { InputSelect, tip, urlParam } from 'fuma'
 	import { searchMembers } from '$lib/member/member.remote'
 	import { createSubscribe } from './subscribe.remote'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 
 	interface Props {
 		periodId: string
@@ -18,12 +18,15 @@
 </script>
 
 <form
-	{...createSubscribe.enhance(async ({ submit }) => {
-		await submit()
-		toast.success('Inscription créée')
-		member = undefined
-		onsuccess?.()
-	})}
+	{...createSubscribe.enhance(
+		enhanceForm({
+			success: 'Inscription créée',
+			onsuccess: () => {
+				member = undefined
+				onsuccess?.()
+			},
+		})
+	)}
 	class="{klass} flex gap-2 justify-end grow w-full"
 >
 	<input type="hidden" name="periodId" value={periodId} />

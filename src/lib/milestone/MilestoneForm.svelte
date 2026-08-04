@@ -2,7 +2,7 @@
 	import { daytz } from '$lib/dayjs'
 	import type { Milestone } from '@prisma/client'
 	import { ButtonDelete, InputString } from 'fuma'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import InputTzDateTime from './InputTzDateTime.svelte'
 	import { createMilestone, deleteMilestone, updateMilestone } from './milestone.remote'
 
@@ -19,12 +19,12 @@
 </script>
 
 <form
-	{...remoteForm.enhance(async ({ submit }) => {
-		await submit()
-		toast.success('Succès')
-		if (milestone.id) onupdated?.()
-		else oncreated?.()
-	})}
+	{...remoteForm.enhance(
+		enhanceForm({
+			success: 'Succès',
+			onsuccess: () => (milestone.id ? onupdated?.() : oncreated?.()),
+		})
+	)}
 	class="flex flex-col gap-4"
 >
 	{#if milestone.id}
@@ -46,11 +46,9 @@
 
 {#if milestone.id}
 	<form
-		{...deleteMilestone.enhance(async ({ submit }) => {
-			await submit()
-			toast.success('Jalon supprimé')
-			ondeleted?.()
-		})}
+		{...deleteMilestone.enhance(
+			enhanceForm({ success: 'Jalon supprimé', onsuccess: () => ondeleted?.() })
+		)}
 		class="flex"
 	>
 		<input type="hidden" name="id" value={milestone.id} />

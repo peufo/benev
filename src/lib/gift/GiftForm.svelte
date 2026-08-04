@@ -3,6 +3,7 @@
 	import { GIFT_CONDITION_MODE } from '$lib/constant'
 	import { InputRadio, InputString } from 'fuma'
 	import GiftConditions from './GiftConditions.svelte'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { createGift } from './gift.remote'
 
 	type GiftWithConditions = Gift & { conditions: GiftCondition[] }
@@ -17,10 +18,7 @@
 </script>
 
 <form
-	{...createGift.enhance(async ({ submit }) => {
-		await submit()
-		gift = createGift.result
-	})}
+	{...createGift.enhance(enhanceForm({ onsuccess: () => (gift = createGift.result) }))}
 	class="flex flex-col gap-2"
 >
 	<InputString

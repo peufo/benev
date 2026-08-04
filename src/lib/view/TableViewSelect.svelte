@@ -3,6 +3,7 @@
 	import { page } from '$app/state'
 
 	import { Dialog, DropDown, InputString, tip } from 'fuma'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { createView, deleteView, updateView } from './view.remote'
 
 	type View = {
@@ -112,14 +113,8 @@
 
 	{@const remoteForm = editedView ? updateView : createView}
 	<form
-		{...remoteForm.enhance(async ({ submit }) => {
-			await submit()
-			dialog.close()
-		})}
-		{...deleteView.enhance(async ({ submit }) => {
-			await submit()
-			dialog.close()
-		})}
+		{...remoteForm.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
+		{...deleteView.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
 	>
 		{#if editedView}
 			<input type="hidden" name="id" value={editedView.id} />

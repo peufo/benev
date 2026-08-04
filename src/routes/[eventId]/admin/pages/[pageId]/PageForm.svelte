@@ -11,6 +11,7 @@
 	import { PAGE_TYPE } from '$lib/constant'
 	import { debounce } from '$lib/debounce'
 	import PageTypeHelp from './PageTypeHelp.svelte'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { SelectMedia } from '$lib/material/media'
 	import { deletePage, updatePage } from './page.remote'
 
@@ -60,12 +61,18 @@
 </script>
 
 <form
-	{...updatePage.enhance(async ({ submit }) => {
-		await submit()
-		// Le titre et le type se répercutent sur la barre latérale et sur le chemin public.
-		if (successInvalidateAll) await invalidateAll()
-		isDirty = false
-	})}
+	{...updatePage.enhance(
+		enhanceForm({
+			// Sauvegarde automatique: un toast à chaque frappe invalide serait du bruit,
+			// les messages sont déjà rendus sous les champs.
+			invalid: false,
+			onsuccess: async () => {
+				// Le titre et le type se répercutent sur la barre latérale et sur le chemin public.
+				if (successInvalidateAll) await invalidateAll()
+				isDirty = false
+			},
+		})
+	)}
 	class="flex flex-col gap-2"
 >
 	<div class="flex gap-2 items-start">

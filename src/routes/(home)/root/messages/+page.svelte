@@ -6,7 +6,7 @@
 	import { InputOptionInParam } from '$lib/ui'
 	import { DropDown, tip } from 'fuma'
 	import { Pagination } from 'fuma'
-	import { useNotify } from '$lib/notify'
+	import { toast } from 'svelte-sonner'
 	import { setMessageState } from './message.remote'
 
 	let { data } = $props()
@@ -30,16 +30,14 @@
 		done: { state: 'done', label: 'Terminé', icon: CheckIcon, class: 'text-success' },
 	}
 
-	const notifiy = useNotify()
-
 	async function updateMessageState(message: Message, state: Message['state']) {
 		try {
 			await setMessageState({ messageId: message.id, state })
-			notifiy.success('State updated')
+			toast.success('State updated')
 			await invalidateAll()
 		} catch (err) {
 			console.error(err)
-			notifiy.error('error')
+			toast.error('error')
 		}
 	}
 </script>

@@ -4,6 +4,7 @@
 	import { tiptapParser } from '$lib/ui'
 	import { urlParam } from 'fuma'
 	import MemberDeleteForm from './MemberDeleteForm.svelte'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { acceptInvite } from './member.remote'
 
 	interface Props {
@@ -41,10 +42,7 @@
 
 	<div class="flex flex-row-reverse gap-2 mt-4">
 		<form
-			{...acceptInvite.enhance(async ({ submit }) => {
-				await submit()
-				onsuccess?.()
-			})}
+			{...acceptInvite.enhance(enhanceForm({ onsuccess: () => onsuccess?.() }))}
 			class="contents"
 		>
 			<input type="hidden" name="redirectTo" value={urlParam.with({ section: 'profile' })} />

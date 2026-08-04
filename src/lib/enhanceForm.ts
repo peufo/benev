@@ -1,13 +1,18 @@
 import { isHttpError } from '@sveltejs/kit'
 import { toast } from 'svelte-sonner'
-import type { RemoteForm, RemoteFormInput } from '@sveltejs/kit'
 
-type EnhanceCallback<Input extends RemoteFormInput | void> = Parameters<
-	RemoteForm<Input, unknown>['enhance']
->[0]
-type EnhanceInstance<Input extends RemoteFormInput | void> = Parameters<EnhanceCallback<Input>>[0]
+/**
+ * Surface minimale d'une instance de formulaire distant, volontairement plus large
+ * que `RemoteFormEnhanceInstance<Input>`: le callback reste ainsi acceptable par
+ * n'importe quel `enhance()`, y compris celui d'un `createX | updateX` unifié dont
+ * les deux entrées n'ont pas les mêmes champs.
+ */
+type EnhanceInstance = {
+	submit(): Promise<boolean>
+	readonly element: HTMLFormElement
+}
 
-type EnhanceFormOptions<Input extends RemoteFormInput | void> = {
+type EnhanceFormOptions = {
 	/** Toast d'attente affiché pendant la soumission. Aucun si absent. */
 	pending?: string
 	/** Toast de succès. Aucun si absent. */
@@ -16,8 +21,10 @@ type EnhanceFormOptions<Input extends RemoteFormInput | void> = {
 	invalid?: string | false
 	/** Vide le formulaire après un succès. */
 	reset?: boolean
+	/** Joué avant la soumission: retourner `false` l'annule (confirmation, garde…). */
+	before?: () => boolean | Promise<boolean>
 	/** Joué après un succès uniquement. */
-	onsuccess?: (instance: EnhanceInstance<Input>) => void
+	onsuccess?: (instance: EnhanceInstance) => void
 }
 
 /**
@@ -29,24 +36,22 @@ type EnhanceFormOptions<Input extends RemoteFormInput | void> = {
  * - Une erreur levée est un `HttpError`, qui n'étend pas `Error`: son message se lit
  *   dans `err.body.message` après `isHttpError(err)`.
  *
- * Le callback reçoit l'instance du formulaire (`submit`, `fields`, `element`…).
- * `data` et `form` ont été retirés de cet objet: leurs accesseurs lèvent une
- * exception, donc ne jamais les déstructurer.
- *
  * ```svelte
  * <form {...sendMessage.enhance(enhanceForm({
  *   pending: 'Envoie...', success: 'Merci pour ton message', reset: true,
  * }))}>
  * ```
  */
-export function enhanceForm<Input extends RemoteFormInput | void>({
+export function enhanceForm({
 	pending,
 	success,
 	invalid = 'Formulaire incorrect',
 	reset = false,
+	before,
 	onsuccess,
-}: EnhanceFormOptions<Input> = {}): EnhanceCallback<Input> {
-	return async (instance) => {
+}: EnhanceFormOptions = {}) {
+	return async (instance: EnhanceInstance) => {
+		if (before && !(await before())) return
 		const id = pending ? toast.loading(pending) : undefined
 		// `toast.dismiss()` sans argument ferme *tous* les toasts: ne l'appeler qu'avec un id.
 		const clearPending = () => id !== undefined && toast.dismiss(id)

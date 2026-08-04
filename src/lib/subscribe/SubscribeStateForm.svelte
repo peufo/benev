@@ -39,7 +39,7 @@
 	import type { Subscribe } from '@prisma/client'
 	import { SubscribeState } from '$lib/subscribe'
 	import { DropDown } from 'fuma'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { page } from '$app/state'
 	import { setSubscribeState } from './subscribeState.remote'
 
@@ -125,11 +125,9 @@
 		{/snippet}
 
 		<form
-			{...remoteForm.enhance(async ({ submit }) => {
-				await submit()
-				toast.success('Status changé')
-				onsuccess?.()
-			})}
+			{...remoteForm.enhance(
+				enhanceForm({ success: 'Status changé', onsuccess: () => onsuccess?.() })
+			)}
 			class="flex flex-col gap-1"
 		>
 			<input type="hidden" name="subscribeId" value={subscribe.id} />

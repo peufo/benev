@@ -12,6 +12,7 @@
 	import EventTierSelector from './EventTierSelector.svelte'
 	import EventFormSection from './EventFormSection.svelte'
 	import { timezoneOptions } from '$lib/timezone'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { createEvent, updateEvent } from './event.remote'
 
 	interface Props {
@@ -51,11 +52,7 @@
 </script>
 
 <form
-	{...remoteForm.enhance(async ({ submit }) => {
-		if (!confirmIdChange()) return
-		await submit()
-		onsuccess?.()
-	})}
+	{...remoteForm.enhance(enhanceForm({ before: confirmIdChange, onsuccess: () => onsuccess?.() }))}
 	enctype="multipart/form-data"
 	class="flex flex-col gap-4"
 >

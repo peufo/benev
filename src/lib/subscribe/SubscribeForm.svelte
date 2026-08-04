@@ -3,6 +3,7 @@
 
 	import type { Period, Team } from '@prisma/client'
 	import { formatRange } from '$lib/formatRange'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { createSubscribe } from './subscribe.remote'
 
 	interface Props {
@@ -18,10 +19,7 @@
 </script>
 
 <form
-	{...createSubscribe.enhance(async ({ submit }) => {
-		await submit()
-		onsuccess?.()
-	})}
+	{...createSubscribe.enhance(enhanceForm({ onsuccess: () => onsuccess?.() }))}
 	class="modal-box flex flex-col gap-4"
 >
 	<input type="hidden" name="memberId" value={memberId} />

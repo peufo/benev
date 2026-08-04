@@ -2,7 +2,7 @@
 	import type { Event, EventState } from '@prisma/client'
 	import { EVENT_STATES } from '$lib/constant'
 	import { page } from '$app/state'
-	import { useNotify } from '$lib/notify'
+	import { toast } from 'svelte-sonner'
 	import { setEventState } from './event.remote'
 
 	interface Props {
@@ -23,13 +23,11 @@
 		}
 	}
 
-	const notify = useNotify()
-
 	function handleClickState(e: MouseEvent | KeyboardEvent) {
 		if (!page.data.userIsRoot && !page.data.member?.roles.includes('owner')) {
 			e.preventDefault()
 			const owner = `${page.data.member?.firstName} ${page.data.member?.lastName}`
-			notify.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
+			toast.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
 		}
 	}
 	const StateIcon = $derived(EVENT_STATES[event.state].icon)

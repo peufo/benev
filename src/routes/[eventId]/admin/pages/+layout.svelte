@@ -7,7 +7,7 @@
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { PAGE_TYPE } from '$lib/constant'
 	import { IdCardLanyardIcon, PlusIcon } from '@lucide/svelte'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { createBadge, createPage } from './pages.remote'
 
 	let { data, children } = $props()
@@ -20,10 +20,7 @@
 				<div class="flex gap-2 mb-2 items-center">
 					<h2 class="title-md">Pages du site</h2>
 					<form
-						{...createPage.enhance(async ({ submit }) => {
-							await submit()
-							toast.success('Nouvelle page créer !')
-						})}
+						{...createPage.enhance(enhanceForm({ success: 'Nouvelle page créer !' }))}
 						class="contents"
 					>
 						<button class="btn btn-square btn-sm ml-auto" use:tip={{ content: 'Nouvelle page' }}>
@@ -59,10 +56,7 @@
 					<h2 class="title-md my-2">Models de badge</h2>
 
 					<form
-						{...createBadge.enhance(async ({ submit }) => {
-							await submit()
-							toast.success('Nouveau badge créer !')
-						})}
+						{...createBadge.enhance(enhanceForm({ success: 'Nouveau badge créer !' }))}
 						class="contents"
 					>
 						<button class="btn btn-square btn-sm ml-auto" use:tip={{ content: 'Nouveau badge' }}>

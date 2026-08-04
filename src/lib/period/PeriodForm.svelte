@@ -8,6 +8,7 @@
 	import { searchTags } from '$lib/tag/tag.remote'
 	import { TagSelectItem } from '$lib/tag'
 	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import InputDateTime from './InputDateTime.svelte'
 	import { createPeriod, deletePeriod, duplicatePeriod, updatePeriod } from './period.remote'
 
@@ -127,11 +128,7 @@
 	<!-- HTML interdit les <form> imbriqués: ce formulaire ne porte que les champs cachés, son
 	bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
 	<form
-		{...deletePeriod.enhance(async ({ submit }) => {
-			if (!confirmDelete()) return
-			await submit()
-			toast.success('Période supprimée')
-		})}
+		{...deletePeriod.enhance(enhanceForm({ before: confirmDelete, success: 'Période supprimée' }))}
 		id={deleteFormId}
 		class="hidden"
 	>
@@ -143,11 +140,12 @@
 {/if}
 
 <form
-	{...remoteForm.enhance(async ({ submit }) => {
-		await submit()
-		toast.success(period?.id ? 'Période mise à jour' : 'Période ajoutée')
-		onsuccess?.()
-	})}
+	{...remoteForm.enhance(
+		enhanceForm({
+			success: period?.id ? 'Période mise à jour' : 'Période ajoutée',
+			onsuccess: () => onsuccess?.(),
+		})
+	)}
 	class="p-2 flex flex-col gap-3 {klass}"
 >
 	{#if period?.id}

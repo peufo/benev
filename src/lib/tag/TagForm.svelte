@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Tag } from '@prisma/client'
 	import { ButtonDelete, InputString } from 'fuma'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { createTag, deleteTag, updateTag } from './tag.remote'
 
 	interface Props {
@@ -31,17 +31,16 @@
 </script>
 
 <form
-	{...remoteForm.enhance(async ({ submit }) => {
-		await submit()
-		if (tag.id) {
-			toast.success('Étiquette modifiée')
-			onupdated?.()
-		} else {
-			toast.success('Étiquette crée')
-			const created = createTag.result
-			if (created) oncreated?.(created)
-		}
-	})}
+	{...remoteForm.enhance(
+		enhanceForm({
+			success: tag.id ? 'Étiquette modifiée' : 'Étiquette crée',
+			onsuccess: () => {
+				if (tag.id) return onupdated?.()
+				const created = createTag.result
+				if (created) oncreated?.(created)
+			},
+		})
+	)}
 	class="flex flex-col gap-4"
 >
 	{#if tag.id}
@@ -68,11 +67,9 @@
 
 {#if tag.id}
 	<form
-		{...deleteTag.enhance(async ({ submit }) => {
-			await submit()
-			toast.success('Étiquette supprimée')
-			ondeleted?.()
-		})}
+		{...deleteTag.enhance(
+			enhanceForm({ success: 'Étiquette supprimée', onsuccess: () => ondeleted?.() })
+		)}
 		class="flex"
 	>
 		<input type="hidden" name="id" value={tag.id} />

@@ -4,7 +4,7 @@
 	import { ButtonDelete, InputBoolean, InputSelect, InputString } from 'fuma'
 	import type { Field } from '@prisma/client'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { globalEvents } from '$lib/globalEvents'
 	import { createMemberField, deleteMemberField, updateMemberField } from './memberField.remote'
 
@@ -48,13 +48,16 @@
 </script>
 
 <form
-	{...remoteForm.enhance(async ({ submit }) => {
-		await submit()
-		toast.success('Succès')
-		const created = createMemberField.result
-		if (!field.id && created) globalEvents.emit('field_created', created)
-		onsuccess?.()
-	})}
+	{...remoteForm.enhance(
+		enhanceForm({
+			success: 'Succès',
+			onsuccess: () => {
+				const created = createMemberField.result
+				if (!field.id && created) globalEvents.emit('field_created', created)
+				onsuccess?.()
+			},
+		})
+	)}
 	class="flex flex-col gap-4"
 >
 	{#if field.id}
@@ -154,11 +157,9 @@
 
 {#if field.id}
 	<form
-		{...deleteMemberField.enhance(async ({ submit }) => {
-			await submit()
-			toast.success('Champ supprimé')
-			onsuccess?.()
-		})}
+		{...deleteMemberField.enhance(
+			enhanceForm({ success: 'Champ supprimé', onsuccess: () => onsuccess?.() })
+		)}
 		class="flex"
 	>
 		<input type="hidden" name="id" value={field.id} />

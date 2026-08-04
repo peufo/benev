@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
 	import { Card } from '$lib/ui'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { theme } from './store'
 	import { InputMedia } from '$lib/material'
@@ -16,10 +16,7 @@
 	<Card class="mx-auto" style="min-width: min(100%, 600px)">
 		<h2 class="title">Thème du site</h2>
 		<form
-			{...updateTheme.enhance(async ({ submit }) => {
-				await submit()
-				toast.success('Thème enregistré')
-			})}
+			{...updateTheme.enhance(enhanceForm({ success: 'Thème enregistré' }))}
 			class="mt-4 flex flex-col gap-4"
 		>
 			<div class="flex gap-6">

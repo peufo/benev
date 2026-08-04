@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { MemberProfile } from '$lib/server'
 	import { InputString } from 'fuma'
-	import { toast } from 'svelte-sonner'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { updateMemberContact as remoteForm } from './memberAdmin.remote'
 
 	interface Props {
@@ -14,11 +14,9 @@
 </script>
 
 <form
-	{...remoteForm.enhance(async ({ submit }) => {
-		await submit()
-		toast.success('Contact mis à jour')
-		onsuccess?.()
-	})}
+	{...remoteForm.enhance(
+		enhanceForm({ success: 'Contact mis à jour', onsuccess: () => onsuccess?.() })
+	)}
 	class="grid grid-cols-2 gap-4 {klass}"
 >
 	<InputString

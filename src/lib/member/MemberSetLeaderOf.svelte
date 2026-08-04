@@ -3,6 +3,7 @@
 
 	import { Dialog, InputMultiSelect } from 'fuma'
 	import { searchTeams } from '$lib/team/team.remote'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { setMemberLeaderOf } from './memberAdmin.remote'
 
 	interface Props {
@@ -19,12 +20,7 @@
 	{#snippet header()}
 		<h2 class="title">{title}</h2>
 	{/snippet}
-	<form
-		{...setMemberLeaderOf.enhance(async ({ submit }) => {
-			await submit()
-			dialog?.close()
-		})}
-	>
+	<form {...setMemberLeaderOf.enhance(enhanceForm({ onsuccess: () => dialog?.close() }))}>
 		<InputMultiSelect
 			field={setMemberLeaderOf.fields.leaderOf}
 			items={searchTeams}

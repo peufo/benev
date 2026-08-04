@@ -8,6 +8,7 @@
 	import { Dialog } from 'fuma'
 	import { searchAvailableTeams } from '$lib/team/team.remote'
 	import { createSubscribe } from '$lib/subscribe/subscribe.remote'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { formatRange } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
 
@@ -102,10 +103,7 @@
 	{:else}
 		<form
 			in:fly={{ x: offsetWidth, duration: 250 }}
-			{...createSubscribe.enhance(async ({ submit }) => {
-				await submit()
-				dialog.close()
-			})}
+			{...createSubscribe.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
 		>
 			<div class="flex gap-2 items-center">
 				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={handleClickReturn}>

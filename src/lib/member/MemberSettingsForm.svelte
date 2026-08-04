@@ -3,7 +3,7 @@
 	import MemberDeleteForm from './MemberDeleteForm.svelte'
 	import type { MemberWithComputedValues } from '$lib/server'
 	import { autoSubmit } from '$lib/action'
-	import { useNotify } from '$lib/notify'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { updateMemberSettings } from './member.remote'
 
 	interface Props {
@@ -11,18 +11,13 @@
 	}
 
 	let { member }: Props = $props()
-
-	const notify = useNotify()
 </script>
 
 <h3 id="email-settings" class="title mb-4">Mes préférences</h3>
 
 <form
 	id="form_member_setting"
-	{...updateMemberSettings.enhance(async ({ submit }) => {
-		await submit()
-		notify.success('Préférences sauvegardées')
-	})}
+	{...updateMemberSettings.enhance(enhanceForm({ success: 'Préférences sauvegardées' }))}
 	use:autoSubmit
 >
 	<InputBoolean
