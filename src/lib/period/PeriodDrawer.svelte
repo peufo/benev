@@ -33,6 +33,8 @@
 	{noOverlay}
 	maxWidth="400px"
 	title="{period?.id ? 'Édition' : 'Création'} d'une période"
+	class="border-l border-hard"
+	classHeader="border-hard"
 >
 	{#snippet children({ close })}
 		<PeriodForm

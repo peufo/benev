@@ -16,7 +16,12 @@
 
 <div class="flex flex-col gap-1">
 	{#each subscribes as subscribe (subscribe.id)}
-		<div class="flex items-center gap-2 px-3 py-2 pr-2 rounded-md border bg-base-100">
+		<div
+			class="
+			flex items-center gap-2 px-3 py-2 pr-2 rounded-md
+			border border-hard bg-base-100
+		"
+		>
 			{#if subscribe.isAbsent}
 				<div use:tip={{ content: 'Ce membre a été absent à sa periode de travail' }}>
 					<TriangleAlertIcon class="text-warning" size={20} />
@@ -24,7 +29,10 @@
 			{/if}
 
 			<a
-				class="whitespace-nowrap grow flex gap-2 items-center pr-2 h-8 rounded hover:bg-base-200 bg-base-200/40 border"
+				class="
+					whitespace-nowrap grow flex gap-2 items-center pr-2 h-8 rounded
+					hover:bg-base-200 bg-base-200/40 border border-soft
+				"
 				title="Voir les infos de {subscribe.member.firstName}"
 				href="{$eventPath}/admin/members/{subscribe.memberId}"
 			>
