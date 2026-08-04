@@ -4,9 +4,10 @@
 	import type { PeriodWithMembers, Plan } from './types'
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
-	import { updatePeriod } from './updatePeriod'
+	import { movePeriod } from '$lib/period/period.remote'
 	import { magnet } from './magnet'
 	import DragButton from './DragButton.svelte'
+	import { toast } from 'svelte-sonner'
 
 	interface Props {
 		period: PeriodWithMembers
@@ -37,7 +38,12 @@
 		const start = new Date(period.start.getTime() + $magnet(deltaStartMs))
 		const end = new Date(period.end.getTime() + $magnet(deltaEndMs))
 		// period = { ...period, start, end }
-		await updatePeriod({ ...period, start, end })
+		await movePeriod({ id: period.id, teamId: period.teamId, start, end })
+			.then(() => toast.success('Période mise à jour'))
+			.catch((err) => {
+				toast.error('Erreur')
+				console.error(err)
+			})
 		onupdate?.({ ...period, start, end })
 		deltaStartMs = 0
 		deltaEndMs = 0
