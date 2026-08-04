@@ -15,7 +15,7 @@
 </script>
 
 <div
-	class="flex flex-col w-full relative py-2 gap-2"
+	class="flex flex-col w-full relative py-1 gap-2"
 	use:createPeriod={{
 		plan,
 		team,
@@ -23,7 +23,7 @@
 	}}
 >
 	{#each stacks as periods, i (i)}
-		<div class="flex items-stretch stack-row min-h-[30px]">
+		<div class="flex items-stretch stack-row min-h-7.5">
 			{#each periods as period (period.id)}
 				<PeriodCard
 					{period}

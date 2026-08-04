@@ -93,7 +93,7 @@
 		style:width="{totalWidth}px"
 		use:grabScale.scale
 	>
-		<div class="bg-accent rounded w-[3px] h-8 bottom-0" use:indicator.element></div>
+		<div class="bg-accent rounded w-0.75 h-8 bottom-0" use:indicator.element></div>
 
 		<div
 			class="sticky z-20 bg-base-100 left-0 border-r shrink-0"
@@ -101,7 +101,7 @@
 		></div>
 
 		{#each plan.days as { date, hours } (date.valueOf())}
-			<div class="-translate-x-[1px]">
+			<div class="-translate-x-px">
 				<!-- DAY -->
 				<div
 					style:left="{TEAM_HEADER_WIDTH}px"
@@ -170,11 +170,11 @@
 				{@const leftPx =
 					time(plan.hourSize).to('hour') * daytz(milestone.timestamp).diff(plan.start)}
 				<span
-					class="absolute w-px -left-[1px] bg-secondary/40 h-screen bottom-0"
+					class="absolute w-px -left-px bg-secondary/40 h-screen bottom-0"
 					style:translate="{leftPx}px"
 				></span>
 				<span
-					class="absolute bottom-0 -left-[4.5px] w-2 h-2 rounded-full bg-secondary"
+					class="absolute bottom-0 left-[-4.5px] w-2 h-2 rounded-full bg-secondary"
 					style:translate="{leftPx}px"
 				></span>
 				<div class="absolute top-1" style:translate="{leftPx}px">
@@ -195,7 +195,7 @@
 			use:indicator.element
 			title="Ajouter un jalon"
 		>
-			<PinIcon size={16} class="translate-x-[3px] opacity-70" />
+			<PinIcon size={16} class="translate-x-0.75 opacity-70" />
 		</button>
 	</div>
 

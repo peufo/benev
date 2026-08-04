@@ -15,8 +15,8 @@ type Params = {
 }
 
 const GHOST_CLASSES: Record<Plan['axis'], string[]> = {
-	x: ['h-full'],
-	y: ['w-full'],
+	x: ['h-[calc(100%-8px)]', 'my-1'],
+	y: ['w-full', 'mx-1'],
 }
 
 export const createPeriod: Action<HTMLDivElement, Params> = (
@@ -31,6 +31,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		'bg-accent/50',
 		'rounded-md',
 		'border',
+		'border-hard',
 		'absolute',
 		'top-0',
 		'left-0'

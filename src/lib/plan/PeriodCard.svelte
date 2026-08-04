@@ -52,16 +52,13 @@
 		style={plan.axis === 'x'
 			? `left: ${startPx}px; width: ${sizePx}px`
 			: `top: ${startPx}px; height: ${sizePx}px`}
-		class="
-			group relative z-10 hover:z-20
-			bg-base-200
-			rounded-md p-0 text-sm
-			outline outline-1 border-[1px] border-base-300
-			overflow-visible min-h-[30px]
-			{urlParam.has('form_period', period.id)
-			? 'outline-secondary border-secondary z-20'
-			: 'outline-base-300'}
-		"
+		class={[
+			'group relative z-10 hover:z-20',
+			'rounded-md p-0 text-sm border border-hard',
+			'overflow-visible min-h-7.5',
+
+			urlParam.has('form_period', period.id) ? 'bg-accent/40 z-20' : 'bg-secondary/35',
+		]}
 	>
 		{#each drags as drag, i (i)}
 			<DragButton
