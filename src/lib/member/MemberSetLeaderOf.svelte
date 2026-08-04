@@ -19,18 +19,14 @@
 	{#snippet header()}
 		<h2 class="title">{title}</h2>
 	{/snippet}
-	<!-- `InputMultiSelect` ne sert qu'à choisir: les ids partent dans les champs cachés. -->
 	<form
 		{...setMemberLeaderOf.enhance(async ({ submit }) => {
 			await submit()
 			dialog?.close()
 		})}
 	>
-		{#each teams ?? [] as team (team.id)}
-			<input type="hidden" name="leaderOf[]" value={team.id} />
-		{/each}
-
 		<InputMultiSelect
+			field={setMemberLeaderOf.fields.leaderOf}
 			items={searchTeams}
 			placeholder="Chercher un nouveau secteur"
 			bind:value={teams}

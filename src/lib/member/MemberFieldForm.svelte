@@ -62,11 +62,9 @@
 	{/if}
 
 	{#key field.id}
-		<!-- Le type n'est pas un `field` de la remote function: c'est ce champ caché qui le
-		     soumet, et l'affichage conditionnel ci-dessous s'y accroche aussi. -->
-		<input type="hidden" name="type" value={type ?? ''} />
-
+		<!-- `type` reste aussi en état local: l'affichage conditionnel ci-dessous s'y accroche. -->
 		<InputSelect
+			field={remoteForm.fields.type}
 			label="Type de champ"
 			items={fieldTypes}
 			value={fieldTypes.find((option) => option.value === type)}

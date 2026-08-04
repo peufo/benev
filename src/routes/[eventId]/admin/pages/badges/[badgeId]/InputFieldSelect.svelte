@@ -2,21 +2,23 @@
 	import { PlusIcon } from '@lucide/svelte'
 	import { InputSelect, tip, urlParam } from 'fuma'
 	import type { Field, FieldType } from '@prisma/client'
+	import type { RemoteFormField } from '@sveltejs/kit'
 	import { searchMemberFields } from '$lib/member/memberField.remote'
 	import MemberFieldSnippet from './MemberFieldSnippet.svelte'
 
 	interface Props {
-		key: string
+		/** Le formulaire vit dans `BadgeForm`: c'est lui qui passe le champ à alimenter. */
+		field: RemoteFormField<string>
 		label: string
 		/** `null` et non `undefined`: c'est ce que Prisma rend pour une relation absente. */
 		value: Field | null
 		type: FieldType
 		typesAccepted?: FieldType[]
-		oninput?: (field: Field) => void
+		oninput?: (memberField: Field) => void
 	}
 
 	let {
-		key,
+		field,
 		label,
 		value = $bindable(),
 		type,
@@ -30,25 +32,22 @@
 		searchMemberFields({ search, types: typesAccepted })
 </script>
 
-<!-- `InputSelect` ne sert qu'à choisir: la remote function n'attend que l'id, transmis par
-     ce champ caché. -->
-<input type="hidden" name={key} value={value?.id ?? ''} />
-
 <InputSelect
+	{field}
 	{label}
 	value={value ?? undefined}
 	nullable
 	items={searchItems}
-	onSelect={(field) => {
-		value = field ?? null
-		if (field) oninput(field)
+	onSelect={(memberField) => {
+		value = memberField ?? null
+		if (memberField) oninput(memberField)
 	}}
 >
-	{#snippet selected(field)}
-		<MemberFieldSnippet {field} updateLink />
+	{#snippet selected(memberField)}
+		<MemberFieldSnippet field={memberField} updateLink />
 	{/snippet}
-	{#snippet proposal(field)}
-		<MemberFieldSnippet {field} />
+	{#snippet proposal(memberField)}
+		<MemberFieldSnippet field={memberField} />
 	{/snippet}
 	{#snippet append()}
 		<a

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { CopyIcon, PlusIcon } from '@lucide/svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
-	import { ButtonDelete, InputSelect, InputMultiSelect, tip, urlParam } from 'fuma'
+	import { ButtonDelete, InputSelect, InputMultiSelect, tip, urlParam, InputNumber } from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { searchTeams } from '$lib/team/team.remote'
@@ -72,6 +72,9 @@
 		start = daytz(period?.start || defaultStart)
 		end = daytz(period?.end || defaultEnd)
 		maxSubscribe = period?.maxSubscribe || 1
+		// Le champ distant est la source de vérité une fois monté: sans ce `set`, la saisie
+		// faite sur la période précédente resterait affichée en passant à la suivante.
+		remoteForm.fields.maxSubscribe.set(maxSubscribe)
 		selectedTeam = period?.team
 		selectedTags = period?.tags ?? []
 	}
@@ -88,7 +91,8 @@
 			teamId,
 			start: end.toDate(),
 			end: end.add(duration, 'minute').toDate(),
-			maxSubscribe,
+			// `value()` suit la saisie en cours; il reste vide tant que le champ n'a pas été touché.
+			maxSubscribe: remoteForm.fields.maxSubscribe.value() ?? maxSubscribe,
 			tagIds: selectedTags.map((t) => t.id),
 		})
 		if (disableRedirect) await invalidateAll()
@@ -118,8 +122,6 @@
 	}
 </script>
 
-<!-- `InputSelect`/`InputMultiSelect` ne servent qu'à choisir: la valeur soumise est portée
-     par les champs cachés ci-dessous, en ids clairs. -->
 <form
 	{...remoteForm.enhance(async ({ submit }) => {
 		await submit()
@@ -136,13 +138,14 @@
 		<input type="hidden" name="redirectTo" value={urlParam.without('form_period')} />
 	{/if}
 
-	<input type="hidden" name="team" value={selectedTeam?.id ?? ''} />
-	{#each selectedTags as tag (tag.id)}
-		<input type="hidden" name="tags[]" value={tag.id} />
-	{/each}
-
 	{#key period}
-		<InputSelect bind:value={selectedTeam} items={searchTeams} label="Secteur">
+		<InputSelect
+			field={remoteForm.fields.team}
+			bind:value={selectedTeam}
+			items={searchTeams}
+			label="Secteur"
+			class="w-full"
+		>
 			{#snippet selected(team)}
 				<span>{team.name}</span>
 			{/snippet}
@@ -151,7 +154,12 @@
 			{/snippet}
 		</InputSelect>
 
-		<InputMultiSelect bind:value={selectedTags} items={searchTags} label="Étiquettes">
+		<InputMultiSelect
+			field={remoteForm.fields.tags}
+			bind:value={selectedTags}
+			items={searchTags}
+			label="Étiquettes"
+		>
 			{#snippet selected(tag)}
 				<TagSelectItem {tag} is_editable />
 			{/snippet}
@@ -172,17 +180,13 @@
 		</InputMultiSelect>
 	{/key}
 
-	<label class="floating-label">
-		<span>Nombre de bénévoles</span>
-		<input
-			class="input w-full"
-			type="number"
-			name="maxSubscribe"
-			min="1"
-			step="1"
-			bind:value={maxSubscribe}
-		/>
-	</label>
+	<InputNumber
+		field={remoteForm.fields.maxSubscribe}
+		label="Nombre de bénévoles"
+		value={maxSubscribe}
+		min={1}
+		step={1}
+	/>
 
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
 		<InputDateTime
@@ -218,11 +222,12 @@
 			<button class="btn btn-primary" type="submit">Valider</button>
 			<button
 				type="button"
-				class="btn btn-primary"
+				class="btn btn-soft btn-primary btn-square"
 				class:btn-disabled={!start || !end}
 				onclick={createNextPeriod}
+				use:tip={{ content: 'Dupliquer après' }}
 			>
-				<span class="inline-flex" use:tip={{ content: 'Dupliquer après' }}><CopyIcon /></span>
+				<CopyIcon size={18} />
 			</button>
 			<div class="grow"></div>
 		{:else}

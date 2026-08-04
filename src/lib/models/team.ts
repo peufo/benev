@@ -39,7 +39,8 @@ export type MemberConditionOperator = (typeof memberConditionOperator)['_output'
 export const modelTeam = z.object({
 	name: z.string().min(3),
 	description: z.string().optional(),
-	// `InputLeaders` ne sert qu'à choisir: les ids partent dans des champs `leaders[]`.
+	// `InputLeaders` soumet lui-même les ids, en `leaders[]`, depuis le champ que lui passe
+	// `TeamForm`.
 	leaders: zConnectMany,
 	// Champ rendu conditionnellement (inscription libre): absent, il ne touche à rien.
 	closeSubscribing: zDateNullable,
@@ -50,6 +51,8 @@ export const modelTeam = z.object({
 
 export const modelTeamUpdate = modelTeam.extend({
 	id: z.string(),
-	// En mise à jour, la liste transmise remplace l'existante.
+	// En mise à jour, la liste transmise remplace l'existante. Optionnelle parce que `TeamForm`
+	// ne rend `InputLeaders` qu'aux admins: c'est `updateTeam` qui interprète l'absence, le
+	// schéma ne connaît pas le rôle.
 	leaders: zSet.optional(),
 })

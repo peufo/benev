@@ -19,7 +19,6 @@
 	const notify = useNotify()
 </script>
 
-<!-- `InputSelect` ne sert qu'à choisir le membre: la valeur soumise est le champ caché. -->
 <form
 	{...createSubscribe.enhance(async ({ submit }) => {
 		await submit()
@@ -30,9 +29,9 @@
 	class="{klass} flex gap-2 justify-end grow w-full"
 >
 	<input type="hidden" name="periodId" value={periodId} />
-	<input type="hidden" name="memberId" value={member?.id} />
 
 	<InputSelect
+		field={createSubscribe.fields.memberId}
 		class="w-full"
 		placeholder="Inscrire un membre"
 		items={searchMembers}

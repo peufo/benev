@@ -12,11 +12,19 @@ export const createTeam = form(modelTeam, async (data) => {
 	return prisma.team.create({ data: { ...data, eventId } })
 })
 
-export const updateTeam = form(modelTeamUpdate, async (data) => {
+export const updateTeam = form(modelTeamUpdate, async ({ leaders, ...data }) => {
 	const { locals } = getRequestEvent()
 	const member = await permission.leaderOfTeam(data.id, locals)
-	if (!member.roles.includes('admin') && data.leaders) error(403)
-	return prisma.team.update({ where: { id: data.id }, data })
+	const isAdmin = member.roles.includes('admin')
+	if (!isAdmin && leaders) error(403)
+	return prisma.team.update({
+		where: { id: data.id },
+		// Retirer le dernier responsable ne transmet aucune clé, exactement comme un formulaire
+		// où `InputLeaders` n'a pas été rendu. C'est le rôle qui tranche: un admin voit toujours
+		// le champ, donc l'absence vaut « plus aucun responsable »; pour les autres elle vaut
+		// « champ jamais rendu », et la relation ne bouge pas.
+		data: { ...data, leaders: isAdmin ? (leaders ?? { set: [] }) : undefined },
+	})
 })
 
 export const deleteTeam = form(z.object({ id: z.string() }), async ({ id }) => {

@@ -98,8 +98,8 @@
 					<span>{email.label}</span>
 				</div>
 			{:else}
-				<input type="hidden" name="type" value={pageType} />
 				<InputSelect
+					field={updatePage.fields.type}
 					items={selectableTypes}
 					value={selectableTypes.find((option) => option.value === pageType)}
 					onSelect={(option) => {

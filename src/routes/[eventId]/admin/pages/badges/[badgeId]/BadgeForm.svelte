@@ -149,26 +149,26 @@
 	</div>
 
 	<InputFieldSelect
-		key="accessDaysField"
+		field={updateBadge.fields.accessDaysField}
 		label="Champ accès 1 (Liste à choix multiple)"
 		bind:value={badge.accessDaysField}
 		type="multiselect"
 	/>
 	<InputFieldSelect
-		key="accessSectorsField"
+		field={updateBadge.fields.accessSectorsField}
 		label="Champ accès 2 (Liste à choix multiple)"
 		bind:value={badge.accessSectorsField}
 		type="multiselect"
 	/>
 	<InputFieldSelect
-		key="labelField"
+		field={updateBadge.fields.labelField}
 		label="Champ: Label (Liste à choix ou text)"
 		bind:value={badge.labelField}
 		type="select"
 		typesAccepted={['select', 'string']}
 	/>
 	<InputFieldSelect
-		key="typeField"
+		field={updateBadge.fields.typeField}
 		label="Champ: Type de membre (Liste à choix)"
 		bind:value={badge.typeField}
 		type="select"

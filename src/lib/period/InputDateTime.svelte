@@ -37,44 +37,46 @@
 <!-- La date part en ISO: c'est le schéma (`zDate`) qui la reconstruit côté serveur. -->
 <input type="hidden" name={key} value={value.toJSON()} />
 
-<div class="form-control">
+<fieldset class="fieldset">
 	<label for="control-{key}" class="label">
-		<span class="label-text">{label}</span>
+		<span>{label}</span>
 		{#if hint}
-			<span class="label-text-alt">
+			<span class="ml-auto">
 				{hint}
 			</span>
 		{/if}
 	</label>
-	<input
-		type="time"
-		id="control-{key}"
-		class="input"
-		step={300}
-		value={value.format('HH:mm')}
-		oninput={(event) => setTime(event.currentTarget.value)}
-	/>
-
-	<div class="flex pt-1 join">
-		<button
-			type="button"
-			class="btn btn-xs btn-square join-item bg-base-200/30"
-			onclick={() => setValue(value.add(-1, 'day'))}
-		>
-			<MinusIcon size={12} />
-		</button>
+	<div>
 		<input
-			type="date"
-			class="input input-xs input-ghost join-item max-w-[110px]"
-			value={value.format('YYYY-MM-DD')}
-			oninput={(event) => setDate(event.currentTarget.value)}
+			type="time"
+			id="control-{key}"
+			class="input"
+			step={300}
+			value={value.format('HH:mm')}
+			oninput={(event) => setTime(event.currentTarget.value)}
 		/>
-		<button
-			type="button"
-			class="btn btn-xs btn-square join-item bg-base-200/30"
-			onclick={() => setValue(value.add(1, 'day'))}
-		>
-			<PlusIcon size={12} />
-		</button>
+
+		<div class="flex join w-full mt-1">
+			<button
+				type="button"
+				class="btn btn-xs btn-square join-item bg-base-200/30"
+				onclick={() => setValue(value.add(-1, 'day'))}
+			>
+				<MinusIcon size={12} />
+			</button>
+			<input
+				type="date"
+				class="input input-xs input-ghost join-item border-soft border-x-0"
+				value={value.format('YYYY-MM-DD')}
+				oninput={(event) => setDate(event.currentTarget.value)}
+			/>
+			<button
+				type="button"
+				class="btn btn-xs btn-square join-item bg-base-200/30"
+				onclick={() => setValue(value.add(1, 'day'))}
+			>
+				<PlusIcon size={12} />
+			</button>
+		</div>
 	</div>
-</div>
+</fieldset>

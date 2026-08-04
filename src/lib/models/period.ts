@@ -1,12 +1,11 @@
 import type { Prisma } from '@prisma/client'
 import z from 'zod'
-import { zConnect, zConnectMany, zDate, zNumber, zSet } from './form'
+import { zConnect, zConnectMany, zDate, zSet } from './form'
 
 export const modelPeriodCreate = z.object({
-	// Champ brut lié par `bind:value` (il sert aussi à dupliquer la période).
-	maxSubscribe: zNumber(1),
-	// `InputSelect`/`InputMultiSelect` ne servent qu'à choisir: les ids partent
-	// dans des champs cachés, en clair.
+	maxSubscribe: z.number().min(1),
+	// `InputSelect`/`InputMultiSelect` soumettent eux-mêmes l'id de l'item choisi, en clair:
+	// un `hidden` pour `team`, une case masquée par étiquette pour `tags[]`.
 	team: zConnect,
 	tags: zConnectMany,
 	start: zDate,
@@ -16,7 +15,7 @@ export const modelPeriodCreate = z.object({
 export const modelPeriodUpdate = modelPeriodCreate.extend({
 	id: z.string(),
 	tags: zSet,
-	maxSubscribe: zNumber(1).optional(),
+	maxSubscribe: z.number().min(1).optional(),
 })
 
 /**

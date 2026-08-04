@@ -1,15 +1,18 @@
 <script lang="ts">
 	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
+	import type { RemoteFormField } from '@sveltejs/kit'
 	import { InputMultiSelect, tip, urlParam } from 'fuma'
 	import { searchMembers } from '$lib/member/member.remote'
 	import MemberLink from './MemberLink.svelte'
 
 	interface Props {
+		/** Le formulaire vit chez le parent: c'est lui qui passe le champ à alimenter. */
+		field: RemoteFormField<string[]>
 		value?: Member[]
 	}
 
-	let { value }: Props = $props()
+	let { field, value }: Props = $props()
 
 	// Dérivé assignable, et non une liaison remontant vers `team.leaders`: `TeamForm` porte
 	// `team` en objet nu, donc y écrire une propriété ne redéclencherait aucun rendu. Le
@@ -18,12 +21,8 @@
 	let leaders = $derived(value ?? [])
 </script>
 
-<!-- `InputMultiSelect` ne sert qu'à choisir: les ids partent dans des champs `leaders[]`. -->
-{#each leaders as leader (leader.id)}
-	<input type="hidden" name="leaders[]" value={leader.id} />
-{/each}
-
 <InputMultiSelect
+	{field}
 	label="Responsables"
 	value={leaders}
 	onSelect={(selection) => (leaders = selection)}
