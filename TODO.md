@@ -2,7 +2,8 @@
 
 - [x] benev/src/lib/period/PeriodForm.svelte:87 Une fois la période suivante créer à l'aide du bouton "Dupliquer après", c'est elle qui doit remplir le formulaire.
 
-- [ ] benev/src/lib/period/PeriodForm.svelte:203 Le champ ne se met pas à jour quand on change de période
+- [x] benev/src/lib/period/PeriodForm.svelte:203 Le champ ne se met pas à jour quand on change de période
+	(non reproductible : corrigé par 054bc959, `setPeriod()` fait déjà `fields.maxSubscribe.set()`)
 
 - [ ] Si une étiquette est créer et que PeriodForm est ouvert, on peut séléctionné l'étiquette
 
