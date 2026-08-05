@@ -114,7 +114,7 @@
 				</span>
 			</a>
 
-			<TeamCol bind:team={teams[teamIndex]} {plan} />
+			<TeamCol {team} {plan} onupdate={(newTeam) => (teams = teams.with(teamIndex, newTeam))} />
 		</div>
 	{/each}
 

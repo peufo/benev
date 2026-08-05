@@ -6,8 +6,10 @@
 	import { MilestoneDrawer } from '$lib/milestone'
 	import { getPlan } from '$lib/plan/getPlan.js'
 
-	let { data = $bindable() } = $props()
+	let { data } = $props()
 	let plan = $derived(getPlan(data))
+
+	let teams = $derived(data.teams_periods)
 
 	let isMouseOnTop = $state(false)
 
@@ -39,11 +41,11 @@
 	/>
 </div>
 
-<div class="h-[100vh] overflow-hidden rounded-2xl" use:mouseOnTop>
+<div class="h-screen overflow-hidden rounded-2xl" use:mouseOnTop>
 	{#if urlParam.has('axis', 'y')}
-		<PlanY {plan} bind:teams={data.teams_periods} />
+		<PlanY {plan} bind:teams />
 	{:else}
-		<PlanX {plan} bind:teams={data.teams_periods} />
+		<PlanX {plan} bind:teams />
 	{/if}
 </div>
 

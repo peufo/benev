@@ -35,16 +35,21 @@
 	)
 
 	async function handleGrabDone() {
+		// Un simple clic sur une poignée ne déplace rien: inutile d'appeler le serveur.
+		if (!$magnet(deltaStartMs) && !$magnet(deltaEndMs)) return
+
 		const start = new Date(period.start.getTime() + $magnet(deltaStartMs))
 		const end = new Date(period.end.getTime() + $magnet(deltaEndMs))
-		// period = { ...period, start, end }
-		await movePeriod({ id: period.id, teamId: period.teamId, start, end })
-			.then(() => toast.success('Période mise à jour'))
-			.catch((err) => {
-				toast.error('Erreur')
-				console.error(err)
-			})
-		onupdate?.({ ...period, start, end })
+		try {
+			const moved = await movePeriod({ id: period.id, teamId: period.teamId, start, end })
+			// Les dates viennent du serveur, et les deltas ne retombent à zéro qu'une fois la carte
+			// repositionnée dessus: dans l'autre ordre elle reviendrait un instant à sa place d'origine.
+			onupdate?.({ ...period, start: moved.start, end: moved.end })
+			toast.success('Période mise à jour')
+		} catch (err) {
+			toast.error('Erreur')
+			console.error(err)
+		}
 		deltaStartMs = 0
 		deltaEndMs = 0
 	}

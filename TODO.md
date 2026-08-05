@@ -1,4 +1,4 @@
-- [ ] src/lib/plan/PeriodCard.svelte:36 Les périodes ne sont pas mise à jour correctement handleGrabDone() à peut être un problème.
+- [x] src/lib/plan/PeriodCard.svelte:36 Les périodes ne sont pas mise à jour. handleGrabDone() a peut être un problème.
 
 - [ ] benev/src/lib/period/PeriodForm.svelte:87 Une fois la période suivante créer, c'est elle qui doit remplir le formulaire.
 
@@ -9,3 +9,7 @@
 - [ ] Sur le plan ,les boutons pour modifier les périods doivent être plus représentatif de ce qu'il permettent de faire.
 
 - [ ] L'effet de hover ne fonctionne plus sur les lignes du plan
+
+- [ ] Le clique sur le label de InputMultiSelect ne déclenche pas le popover
+
+- [ ] Le focusout de InputSelect et InputMultiSelect devrait fermer le popover

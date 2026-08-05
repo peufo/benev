@@ -5,8 +5,10 @@
 	import { MilestoneDrawer } from '$lib/milestone'
 	import { getPlan } from '$lib/plan/getPlan.js'
 
-	let { data = $bindable() } = $props()
+	let { data } = $props()
 	let plan = $derived(getPlan(data))
+
+	let teams = $derived(data.teams_periods)
 </script>
 
 <div
@@ -15,9 +17,9 @@
 >
 	<PlanHeader {plan} teams={data.teams} views={data.views} class="border-b" />
 	{#if urlParam.has('axis', 'y')}
-		<PlanY {plan} bind:teams={data.teams_periods} />
+		<PlanY {plan} bind:teams />
 	{:else}
-		<PlanX {plan} bind:teams={data.teams_periods} />
+		<PlanX {plan} bind:teams />
 	{/if}
 
 	<MilestoneDrawer milestone={data.milestone} />

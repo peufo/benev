@@ -7,9 +7,10 @@
 	interface Props {
 		team: Team & { periods: PeriodWithMembers[] }
 		plan: Plan
+		onupdate?: (value: Team & { periods: PeriodWithMembers[] }) => void
 	}
 
-	let { team = $bindable(), plan }: Props = $props()
+	let { team, plan, onupdate }: Props = $props()
 
 	let stacks = $derived(getStacks(team.periods))
 </script>
@@ -34,7 +35,10 @@
 						{ class: 'left-1/2 top-full', moveStart: true, moveEnd: true },
 					]}
 					onupdate={(newPeriod) => {
-						team.periods = team.periods.map((p) => (p.id === newPeriod.id ? newPeriod : p))
+						onupdate?.({
+							...team,
+							periods: team.periods.map((p) => (p.id === newPeriod.id ? newPeriod : p)),
+						})
 					}}
 				/>
 			{/each}

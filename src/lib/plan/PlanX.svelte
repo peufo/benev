@@ -141,7 +141,7 @@
 			>
 				{team.name}
 			</a>
-			<TeamRow bind:team={teams[teamIndex]} {plan} />
+			<TeamRow {team} {plan} onupdate={(newTeam) => (teams = teams.with(teamIndex, newTeam))} />
 		</div>
 	{/each}
 
