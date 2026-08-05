@@ -52,12 +52,20 @@
 	}
 }
 
-.border-soft {
+@utility border-soft {
 	border-color: color-mix(in oklab, var(--color-base-content) 18%, #0000);
 }
 
-.border-hard {
+@utility border-hard {
 	border-color: color-mix(in oklab, var(--color-base-content) 40%, #0000);
+}
+
+@utility bg-accent-soft {
+	background-color: color-mix(in oklab, var(--color-accent) 12%, var(--color-base-100));
+}
+
+@utility bg-accent-softer {
+	background-color: color-mix(in oklab, var(--color-accent) 6%, var(--color-base-100));
 }
 
 mark {

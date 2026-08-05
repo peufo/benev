@@ -89,14 +89,14 @@
 >
 	<!-- SCALE -->
 	<div
-		class="sticky top-0 z-20 border-b bg-base-100 flex cursor-grab"
+		class="sticky top-0 z-30 border-b border-hard bg-base-100 flex cursor-grab"
 		style:width="{totalWidth}px"
 		use:grabScale.scale
 	>
 		<div class="bg-accent rounded w-0.75 h-8 bottom-0" use:indicator.element></div>
 
 		<div
-			class="sticky z-20 bg-base-100 left-0 border-r shrink-0"
+			class="sticky bg-base-100 left-0 border-r shrink-0 z-10"
 			style:width="{TEAM_HEADER_WIDTH}px"
 		></div>
 
@@ -105,7 +105,11 @@
 				<!-- DAY -->
 				<div
 					style:left="{TEAM_HEADER_WIDTH}px"
-					class="font-medium sticky border-l left-0 p-1 w-min whitespace-nowrap text-sm"
+					class="
+						font-medium sticky
+						border-l
+						left-0 p-1 w-min whitespace-nowrap text-sm
+					"
 				>
 					{date.format('dddd DD.MM')}
 				</div>
@@ -125,7 +129,7 @@
 
 	{#each teams as team, teamIndex (team.id)}
 		<div
-			class="flex items-stretch border-b bg-base-100 hover:bg-accent/5 group/team"
+			class="flex items-stretch border-b border-hard hover:bg-accent-softer group/team"
 			style:width="{totalWidth}px"
 		>
 			<a
@@ -134,9 +138,12 @@
 				data-sveltekit-noscroll
 				style:width="{TEAM_HEADER_WIDTH}px"
 				class="
-					p-1 sticky shrink-0 left-0 z-20 font-medium text-sm border-r
-					cursor-pointer bg-base-100
-					group-hover/team:bg-base-200 hover:underline
+					p-1 sticky shrink-0 left-0 z-20 font-medium text-sm
+					border-r border-hard
+					cursor-pointer
+					not-group-hover/team:bg-base-100
+					group-hover/team:bg-accent-soft
+					hover:underline
 				"
 			>
 				{team.name}
@@ -147,12 +154,12 @@
 
 	<!-- CREATE TEAM + MILESTONES -->
 	<div
-		class="flex items-stretch border-b bg-base-200/40 group relative"
+		class="flex items-stretch border-b border-hard bg-base-200/40 group relative"
 		style:width="{totalWidth}px"
 	>
 		<div
 			style:width="{TEAM_HEADER_WIDTH}px"
-			class="p-1 sticky shrink-0 left-0 z-10 font-medium text-sm border-r bg-base-100 flex items-center justify-around"
+			class="p-1 sticky shrink-0 left-0 z-10 font-medium text-sm border-r border-hard bg-base-100 flex items-center justify-around"
 		>
 			<a
 				class="btn btn-sm btn-square"
