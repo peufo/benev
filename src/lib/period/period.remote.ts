@@ -42,13 +42,15 @@ export const deletePeriod = form(
  * devalue: les dates restent des dates, sans jeton de coercition.
  */
 export const duplicatePeriod = command(
-	z.object({
-		teamId: z.string(),
-		start: z.date(),
-		end: z.date(),
-		maxSubscribe: z.number().min(1),
-		tagIds: z.array(z.string()),
-	}),
+	z
+		.object({
+			teamId: z.string(),
+			start: z.date(),
+			end: z.date(),
+			maxSubscribe: z.number().min(1),
+			tagIds: z.array(z.string()),
+		})
+		.superRefine(validationPeriod),
 	async ({ teamId, tagIds, ...data }) => {
 		const { locals } = getRequestEvent()
 		await permission.leaderOfTeam(teamId, locals)
@@ -62,8 +64,12 @@ export const duplicatePeriod = command(
 	}
 )
 
+// Le planning laisse glisser librement: c'est ici que la durée minimale est refusée, comme
+// pour les formulaires.
 export const movePeriod = command(
-	z.object({ id: z.string(), teamId: z.string(), start: z.date(), end: z.date() }),
+	z
+		.object({ id: z.string(), teamId: z.string(), start: z.date(), end: z.date() })
+		.superRefine(validationPeriod),
 	async ({ id, teamId, start, end }) => {
 		const { locals } = getRequestEvent()
 		await permission.leaderOfTeam(teamId, locals)

@@ -27,6 +27,10 @@ import type {
 	Subscribe,
 } from '@prisma/client'
 
+/** Durée minimale d'une période de travail. */
+export const PERIOD_MIN_MINUTES = 15
+export const PERIOD_MIN_MS = PERIOD_MIN_MINUTES * 60_000
+
 export const FORMAT_A3 = {
 	x: 297,
 	y: 420,

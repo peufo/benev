@@ -236,9 +236,11 @@
 		/>
 	</div>
 
-	{#each remoteForm.fields.allIssues() ?? [] as issue (issue.path.join('.') + issue.message)}
-		<p class="text-error text-sm">{issue.message}</p>
-	{/each}
+	<div class="flex flex-col gap-1">
+		{#each remoteForm.fields.allIssues() ?? [] as issue (issue.path.join('.') + issue.message)}
+			<span class="text-error text-sm">{issue.message}</span>
+		{/each}
+	</div>
 
 	<div class="flex flex-row-reverse gap-3 grow">
 		{#if period?.id}

@@ -1,5 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import z from 'zod'
+import { PERIOD_MIN_MINUTES, PERIOD_MIN_MS } from '$lib/constant'
 import { zConnect, zConnectMany, zDate, zSet } from './form'
 
 export const modelPeriodCreate = z.object({
@@ -18,27 +19,15 @@ export const modelPeriodUpdate = modelPeriodCreate.extend({
 	maxSubscribe: z.number().min(1).optional(),
 })
 
-/**
- * Règle inter-champs, appliquée par `.superRefine()` sur l'objet complet. `fatal` empêche les
- * refinements suivants de tourner sur des dates incohérentes.
- */
 export const validationPeriod = (
 	{ start, end }: { start: Date; end: Date },
 	ctx: z.RefinementCtx<{ start: Date; end: Date }>
 ) => {
-	if (start.getTime() > end.getTime()) {
-		ctx.addIssue({
-			// zod 4 a retiré le code `invalid_date`; une règle métier inter-champs
-			// relève de `custom`.
-			code: 'custom',
-			path: ['start'],
-			message: 'Doit être avant la fin',
-			fatal: true,
-		})
+	if (end.getTime() - start.getTime() < PERIOD_MIN_MS) {
 		ctx.addIssue({
 			code: 'custom',
 			path: ['end'],
-			message: 'Doit être après le début',
+			message: `La période doit durer au moins ${PERIOD_MIN_MINUTES} minutes`,
 			fatal: true,
 		})
 	}
