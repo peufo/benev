@@ -63,15 +63,15 @@
 >
 	<!-- SCALE -->
 	<div
-		class="sticky left-0 z-20 border-r bg-base-100"
+		class="sticky left-0 z-20 border-r bg-base-100 cursor-grab"
 		style:height="{totalHeight}px"
 		use:grabScale.scale
 	>
-		<div class="bg-accent rounded h-[3px] w-8 right-0" use:indicator.element></div>
+		<div class="bg-accent rounded h-0.75 w-8 right-0" use:indicator.element></div>
 		<div class="sticky z-20 bg-base-100 top-0 border-b" style:height="{TEAM_HEADER_HEIGHT}px"></div>
 
 		{#each plan.days as { date, hours } (date.valueOf())}
-			<div class="flex items-start -translate-y-[1px]">
+			<div class="flex items-start -translate-y-px">
 				<!-- DAY -->
 				<div
 					style:top="{TEAM_HEADER_HEIGHT}px"

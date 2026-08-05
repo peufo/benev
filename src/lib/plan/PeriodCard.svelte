@@ -1,20 +1,23 @@
 <script lang="ts">
-	import { daytz } from '$lib/dayjs'
+	import { toast } from 'svelte-sonner'
+	import type { Component } from 'svelte'
+	import type { IconProps } from '@lucide/svelte'
+	import type { ClassValue } from 'svelte/elements'
 	import { urlParam } from 'fuma'
+	import { daytz } from '$lib/dayjs'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
 	import { movePeriod } from '$lib/period/period.remote'
 	import { magnet } from './magnet'
 	import DragButton from './DragButton.svelte'
-	import { toast } from 'svelte-sonner'
 
 	interface Props {
 		period: PeriodWithMembers
 		plan: Plan
 		drags: {
-			class?: string
-			axis?: 'x' | 'y' | 'any'
+			icon?: Component<IconProps>
+			class?: ClassValue
 			moveStart?: boolean
 			moveEnd?: boolean
 		}[]
@@ -72,8 +75,8 @@
 	>
 		{#each drags as drag, i (i)}
 			<DragButton
-				class={drag.class || ''}
-				axis={drag.axis}
+				class={drag.class}
+				icon={drag.icon}
 				ondone={handleGrabDone}
 				onmove={(delta) => {
 					if (drag.moveStart) deltaStartMs = delta[plan.axis] / msSize

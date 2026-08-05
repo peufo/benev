@@ -6,10 +6,12 @@
 
 - [ ] Si une étiquette est créer et que PeriodForm est ouvert, on peut séléctionné l'étiquette
 
-- [ ] Sur le plan ,les boutons pour modifier les périods doivent être plus représentatif de ce qu'il permettent de faire.
+- [x] Sur le plan ,les boutons pour modifier les périods doivent être plus représentatif de ce qu'il permettent de faire.
 
 - [ ] L'effet de hover ne fonctionne plus sur les lignes du plan
 
 - [ ] Le clique sur le label de InputMultiSelect ne déclenche pas le popover
 
 - [ ] Le focusout de InputSelect et InputMultiSelect devrait fermer le popover
+
+- [ ] Dans le plan, le zoom à la souris n'est pas du tous fluide. Je crois qu'il n'y a pas de debounce stocker la valeur dans l'url.

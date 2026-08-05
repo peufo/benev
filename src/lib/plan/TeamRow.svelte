@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
+	import { ArrowLeftToLineIcon, ArrowRightToLineIcon, MoveHorizontalIcon } from '@lucide/svelte'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { getStacks } from './getStacks'
 	import { createPeriod } from './createPeriod'
@@ -30,9 +31,14 @@
 					{period}
 					{plan}
 					drags={[
-						{ class: 'top-1/2', axis: 'x', moveStart: true },
-						{ class: 'left-full top-1/2', axis: 'x', moveEnd: true },
-						{ class: 'left-1/2 top-full', moveStart: true, moveEnd: true },
+						{ class: 'top-full', moveStart: true, icon: ArrowLeftToLineIcon },
+						{ class: 'left-full top-full', moveEnd: true, icon: ArrowRightToLineIcon },
+						{
+							class: 'left-1/2 top-full',
+							moveStart: true,
+							moveEnd: true,
+							icon: MoveHorizontalIcon,
+						},
 					]}
 					onupdate={(newPeriod) => {
 						onupdate?.({

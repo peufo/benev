@@ -1,76 +1,71 @@
 <script lang="ts">
-	import { GripHorizontalIcon, GripIcon, GripVerticalIcon, type IconProps } from '@lucide/svelte'
+	import { GripIcon, type IconProps } from '@lucide/svelte'
 	import type { Component } from 'svelte'
-	import { createBubbler, stopPropagation } from 'svelte/legacy'
+	import type { ClassValue } from 'svelte/elements'
+	import type { Attachment } from 'svelte/attachments'
+	import { on } from 'svelte/events'
 
-	const bubble = createBubbler()
-	import { browser } from '$app/environment'
-	import { onDestroy } from 'svelte'
-
-	type Axis = 'any' | 'x' | 'y'
+	type Dot = { x: number; y: number }
 	interface Props {
-		axis?: Axis
-		class?: string
-		/** Remplacent les évènements de la version Svelte 4. */
+		icon?: Component<IconProps>
+		class?: ClassValue
 		onmove?: (value: Dot) => void
 		ondone?: (value: Dot) => void
 	}
 
-	let { axis = 'any', class: klass = '', onmove, ondone }: Props = $props()
+	let { icon: Icon = GripIcon, class: klass = '', onmove, ondone }: Props = $props()
 
-	const icons: Record<Axis, Component<IconProps>> = {
-		any: GripIcon,
-		x: GripHorizontalIcon,
-		y: GripVerticalIcon,
+	const drag: Attachment<HTMLButtonElement> = (node) => {
+		let origin = { x: 0, y: 0 }
+		let stopDragging = () => {}
+
+		function getDelta({ clientX, clientY }: MouseEvent): Dot {
+			return { x: clientX - origin.x, y: clientY - origin.y }
+		}
+
+		const stopMouseDown = on(node, 'mousedown', (event) => {
+			node.classList.add('cursor-grabbing')
+			stopDragging()
+			origin = { x: event.clientX, y: event.clientY }
+
+			const stopMouseMove = on(document, 'mousemove', (event) => onmove?.(getDelta(event)))
+			const stopMouseUp = on(document, 'mouseup', (event) => {
+				node.classList.remove('cursor-grabbing')
+				event.preventDefault()
+				event.stopPropagation()
+				stopDragging()
+				ondone?.(getDelta(event))
+			})
+
+			stopDragging = () => {
+				stopMouseMove()
+				stopMouseUp()
+				stopDragging = () => {}
+			}
+		})
+
+		return () => {
+			stopMouseDown()
+			stopDragging()
+		}
 	}
-	const AxisIcon = $derived(icons[axis])
-	type Dot = { x: number; y: number }
-
-	let origin = { x: 0, y: 0 }
-	function handleMouseDown(event: MouseEvent) {
-		origin.y = event.clientY
-		origin.x = event.clientX
-		document.addEventListener('mousemove', handleMouseMove)
-		document.addEventListener('mouseup', handleMouseUp, { once: true })
-	}
-
-	function getDelta({ clientX, clientY }: MouseEvent): Dot {
-		return { x: clientX - origin.x, y: clientY - origin.y }
-	}
-
-	function handleMouseMove(event: MouseEvent) {
-		onmove?.(getDelta(event))
-	}
-
-	function handleMouseUp(event: MouseEvent) {
-		event.preventDefault()
-		event.stopPropagation()
-		document.removeEventListener('mousemove', handleMouseMove)
-		ondone?.(getDelta(event))
-	}
-
-	onDestroy(() => {
-		if (!browser) return
-		document.removeEventListener('mousemove', handleMouseMove)
-		document.removeEventListener('mouseup', handleMouseUp)
-	})
 </script>
 
 <button
-	onclick={stopPropagation(bubble('click'))}
-	onmousedown={handleMouseDown}
-	class="
-    {klass} drag-button
-    absolute z-10 -translate-x-1/2 -translate-y-1/2
-    hidden group-hover:block outline outline-2 outline-base-300
-    bg-base-100 hover:bg-base-200 rounded-md btn-xs btn-square
-  "
+	{@attach drag}
+	class={[
+		'drag-button cursor-grab',
+		'absolute z-10 -translate-x-1/2 -translate-y-1/2',
+		'hidden group-hover:block',
+		'btn btn-circle btn-primary btn-soft h-6 w-6',
+		klass,
+	]}
 >
-	<AxisIcon />
+	<Icon size={14} class="mx-auto" />
 </button>
 
 <style>
-	:global(:has(.drag-button-hidden) .group:hover .drag-button) {
+	:global(:has(.drag-button-hidden) .drag-button) {
 		display: none;
 	}
 </style>
