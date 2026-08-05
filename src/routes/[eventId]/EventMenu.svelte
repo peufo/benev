@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Page } from '@prisma/client'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { DropDown } from 'fuma'
 	import { MenuIcon, GaugeIcon } from '@lucide/svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
@@ -12,16 +12,14 @@
 
 	let { pages }: Props = $props()
 
-	let adminIsVisible = $derived(
-		$page.data.member?.roles.includes('leader') || $page.data.userIsRoot
-	)
+	let adminIsVisible = $derived(page.data.member?.roles.includes('leader') || page.data.userIsRoot)
 </script>
 
 <div class="gap-2 hidden lg:flex">
-	<EventPubliqueMenuItems {pages} />
+	<EventPubliqueMenuItems {pages} class="btn btn-ghost" classActive="btn-active" />
 </div>
 
-<DropDown class="max-h-none min-w-[200px]" hideOnBlur>
+<DropDown class="max-h-none min-w-50" hideOnBlur>
 	{#snippet activator()}
 		<button
 			class="
@@ -36,7 +34,12 @@
 		{#if adminIsVisible}
 			<h3 class="title-sm pl-3 pt-1">Public</h3>
 		{/if}
-		<EventPubliqueMenuItems {pages} hideTeams={adminIsVisible} />
+		<EventPubliqueMenuItems
+			{pages}
+			hideTeams={adminIsVisible}
+			class="menu-item"
+			classActive="active"
+		/>
 
 		<!-- ADMIN -->
 		{#if adminIsVisible}
@@ -49,11 +52,11 @@
 				</a>
 			{/each}
 
-			{@const quotaHref = `/${$page.params.eventId}/admin/quota`}
+			{@const quotaHref = `/${page.params.eventId}/admin/quota`}
 			<a
 				href={quotaHref}
 				class="menu-item"
-				class:active={$page.route.id?.startsWith('/[eventId]/admin/quota')}
+				class:active={page.route.id?.startsWith('/[eventId]/admin/quota')}
 			>
 				<GaugeIcon size={20} class="opacity-70" />
 				Quota

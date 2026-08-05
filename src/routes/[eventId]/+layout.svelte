@@ -59,7 +59,7 @@
 		<a
 			href="{$eventPath}/me"
 			class="
-				text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg
+				text-lg hover:bg-base-200 h-10 px-2 flex items-center gap-2 rounded-lg
 				whitespace-nowrap overflow-hidden text-ellipsis min-w-0
 			"
 		>
