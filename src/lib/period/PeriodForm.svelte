@@ -3,7 +3,7 @@
 	import { daytz, type Dayjs } from '$lib/dayjs'
 	import { ButtonDelete, InputSelect, InputMultiSelect, tip, urlParam, InputNumber } from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
-	import { goto, invalidateAll } from '$app/navigation'
+	import { goto } from '$app/navigation'
 	import { searchTeams } from '$lib/team/team.remote'
 	import { searchTags } from '$lib/tag/tag.remote'
 	import { TagSelectItem } from '$lib/tag'
@@ -89,7 +89,7 @@
 		const duration = daytz(end).diff(start, 'minute')
 		const teamId = selectedTeam?.id ?? period.teamId
 		if (!teamId) return
-		await duplicatePeriod({
+		const nextPeriod = await duplicatePeriod({
 			teamId,
 			start: end.toDate(),
 			end: end.add(duration, 'minute').toDate(),
@@ -97,8 +97,13 @@
 			maxSubscribe: remoteForm.fields.maxSubscribe.value() ?? maxSubscribe,
 			tagIds: selectedTags.map((t) => t.id),
 		})
-		if (disableRedirect) await invalidateAll()
-		else await goto(urlParam.without('form_period'), { invalidateAll: true, noScroll: true })
+		// La période créée devient celle du formulaire: `form_period` la recharge via le `load`,
+		// ce qui permet d'enchaîner les duplications sans rouvrir le tiroir.
+		await goto(urlParam.with({ form_period: nextPeriod.id }), {
+			invalidateAll: true,
+			noScroll: true,
+			keepFocus: true,
+		})
 	}
 
 	$effect.pre(() => {

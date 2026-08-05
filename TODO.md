@@ -1,6 +1,6 @@
 - [x] src/lib/plan/PeriodCard.svelte:36 Les périodes ne sont pas mise à jour. handleGrabDone() a peut être un problème.
 
-- [ ] benev/src/lib/period/PeriodForm.svelte:87 Une fois la période suivante créer, c'est elle qui doit remplir le formulaire.
+- [x] benev/src/lib/period/PeriodForm.svelte:87 Une fois la période suivante créer à l'aide du bouton "Dupliquer après", c'est elle qui doit remplir le formulaire.
 
 - [ ] benev/src/lib/period/PeriodForm.svelte:203 Le champ ne se met pas à jour quand on change de période
 
