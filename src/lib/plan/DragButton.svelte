@@ -57,7 +57,7 @@
 		'drag-button cursor-grab',
 		'absolute z-10 -translate-x-1/2 -translate-y-1/2',
 		'hidden group-hover:block',
-		'btn btn-circle btn-primary btn-soft h-6 w-6',
+		'btn btn-circle btn-accent btn-soft  h-6 w-6',
 		klass,
 	]}
 >

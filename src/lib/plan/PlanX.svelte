@@ -177,11 +177,11 @@
 				{@const leftPx =
 					time(plan.hourSize).to('hour') * daytz(milestone.timestamp).diff(plan.start)}
 				<span
-					class="absolute w-px -left-px bg-secondary/40 h-screen bottom-0"
+					class="absolute w-px -left-px bg-accent/40 h-screen bottom-0"
 					style:translate="{leftPx}px"
 				></span>
 				<span
-					class="absolute bottom-0 left-[-4.5px] w-2 h-2 rounded-full bg-secondary"
+					class="absolute bottom-0 left-[-4.5px] w-2 h-2 rounded-full bg-accent"
 					style:translate="{leftPx}px"
 				></span>
 				<div class="absolute top-1" style:translate="{leftPx}px">
@@ -189,7 +189,7 @@
 						href={urlParam.with({ form_milestone: milestone.id })}
 						data-sveltekit-replacestate
 						data-sveltekit-noscroll
-						class="z-10 badge badge-secondary badge-outline bg-base-100 hover:ring-1 ring-secondary -translate-x-1/2"
+						class="z-10 badge badge-accent badge-outline bg-base-100 hover:ring-1 ring-accent -translate-x-1/2"
 					>
 						{milestone.name}
 					</a>

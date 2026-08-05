@@ -32,13 +32,13 @@
 					{plan}
 					drags={[
 						{ class: 'top-full', moveStart: true, icon: ArrowLeftToLineIcon },
-						{ class: 'left-full top-full', moveEnd: true, icon: ArrowRightToLineIcon },
 						{
 							class: 'left-1/2 top-full',
 							moveStart: true,
 							moveEnd: true,
 							icon: MoveHorizontalIcon,
 						},
+						{ class: 'left-full top-full', moveEnd: true, icon: ArrowRightToLineIcon },
 					]}
 					onupdate={(newPeriod) => {
 						onupdate?.({
