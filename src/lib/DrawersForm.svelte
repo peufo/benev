@@ -74,7 +74,7 @@
 			tag={tag || {}}
 			oncreated={async (tag) => {
 				await close({ replaceState: true })
-				periodForm.updatePeriodProp((p) => ({ ...p, tags: [...(p.tags || []), tag] }))
+				periodForm.selectTag(tag)
 			}}
 			onupdated={() => close()}
 			ondeleted={() => close()}

@@ -81,8 +81,9 @@
 		selectedTags = period?.tags ?? []
 	}
 
-	export function updatePeriodProp(updater: (p: PeriodProp) => PeriodProp) {
-		period = updater(period || {})
+	export function selectTag(tag: Tag) {
+		if (selectedTags.some(({ id }) => id === tag.id)) return
+		selectedTags = [...selectedTags, tag]
 	}
 
 	async function createNextPeriod() {
