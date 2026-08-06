@@ -9,7 +9,7 @@
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
 	import { movePeriod } from '$lib/period/period.remote'
-	import { magnet } from './magnet'
+	import { magnet } from './magnet.svelte'
 	import DragButton from './DragButton.svelte'
 
 	interface Props {
@@ -31,18 +31,18 @@
 	let deltaEndMs = $state(0)
 
 	let msSize = $derived(time(plan.hourSize).to('hour'))
-	let startPx = $derived(msSize * (-plan.start.diff(daytz(period.start)) + $magnet(deltaStartMs)))
+	let startPx = $derived(msSize * (-plan.start.diff(daytz(period.start)) + magnet(deltaStartMs)))
 	let sizePx = $derived(
 		msSize *
-			(daytz(period.end).diff(daytz(period.start)) - $magnet(deltaStartMs) + $magnet(deltaEndMs))
+			(daytz(period.end).diff(daytz(period.start)) - magnet(deltaStartMs) + magnet(deltaEndMs))
 	)
 
 	async function handleGrabDone() {
 		// Un simple clic sur une poignée ne déplace rien: inutile d'appeler le serveur.
-		if (!$magnet(deltaStartMs) && !$magnet(deltaEndMs)) return
+		if (!magnet(deltaStartMs) && !magnet(deltaEndMs)) return
 
-		const start = new Date(period.start.getTime() + $magnet(deltaStartMs))
-		const end = new Date(period.end.getTime() + $magnet(deltaEndMs))
+		const start = new Date(period.start.getTime() + magnet(deltaStartMs))
+		const end = new Date(period.end.getTime() + magnet(deltaEndMs))
 		try {
 			const moved = await movePeriod({ id: period.id, teamId: period.teamId, start, end })
 			// Les dates viennent du serveur, et les deltas ne retombent à zéro qu'une fois la carte

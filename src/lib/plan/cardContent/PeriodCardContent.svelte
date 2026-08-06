@@ -3,7 +3,7 @@
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeHour } from '$lib/formatRange'
 	import { urlParam } from 'fuma'
-	import { magnet } from '../magnet'
+	import { magnet } from '../magnet.svelte'
 	import type { PeriodWithMembers } from '../types'
 	import { cardContentOptions } from './options'
 	import { TagsList } from '$lib/tag'
@@ -24,8 +24,8 @@
 			{#if !$cardContentOptions.hideRangetime}
 				<div class="text-xs font-semibold m-1 whitespace-nowrap overflow-hidden text-ellipsis">
 					{formatRangeHour({
-						start: period.start.getTime() + $magnet(deltaStartMs),
-						end: period.end.getTime() + $magnet(deltaEndMs),
+						start: period.start.getTime() + magnet(deltaStartMs),
+						end: period.end.getTime() + magnet(deltaEndMs),
 					})}
 				</div>
 			{/if}
@@ -34,8 +34,8 @@
 {:else if !$cardContentOptions.hideRangetime}
 	<div class="text-xs font-semibold m-1 whitespace-nowrap overflow-hidden text-ellipsis">
 		{formatRangeHour({
-			start: period.start.getTime() + $magnet(deltaStartMs),
-			end: period.end.getTime() + $magnet(deltaEndMs),
+			start: period.start.getTime() + magnet(deltaStartMs),
+			end: period.end.getTime() + magnet(deltaEndMs),
 		})}
 	</div>
 {/if}
