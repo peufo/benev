@@ -33,7 +33,7 @@
 	style:z-index={100}
 >
 	<PlanHeader
-		{plan}
+		bind:plan
 		teams={data.teams}
 		views={data.views}
 		isFullscreen
@@ -43,9 +43,9 @@
 
 <div class="h-screen overflow-hidden rounded-2xl" use:mouseOnTop>
 	{#if urlParam.has('axis', 'y')}
-		<PlanY {plan} bind:teams />
+		<PlanY bind:plan bind:teams />
 	{:else}
-		<PlanX {plan} bind:teams />
+		<PlanX bind:plan bind:teams />
 	{/if}
 </div>
 

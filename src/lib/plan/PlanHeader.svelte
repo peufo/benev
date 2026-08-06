@@ -8,6 +8,7 @@
 	import { eventPath } from '$lib/store'
 	import PlanCursor from './PlanCursor.svelte'
 	import type { Plan } from './types'
+	import { clampScale, persistHourSize, withHourSize } from './zoom'
 	import {
 		AlignLeftIcon,
 		Columns3Icon,
@@ -26,7 +27,21 @@
 		class?: string
 	}
 
-	let { teams, views, isFullscreen = false, plan, class: klass = '' }: Props = $props()
+	let {
+		teams,
+		views,
+		isFullscreen = false,
+		plan = $bindable(),
+		class: klass = '',
+	}: Props = $props()
+
+	// L'échelle est un réglage d'affichage, pas une destination: elle s'applique ici et ne passe
+	// par l'URL que pour y laisser une trace. Un lien rechargerait le plan à chaque cran.
+	function zoom(factor: number) {
+		const hourSize = clampScale(plan.hourSize * factor)
+		plan = withHourSize(plan, hourSize)
+		persistHourSize(hourSize)
+	}
 
 	// Dérivé assignable: la sélection vit dans l'URL — c'est le contrat que lit `getPlanData` —
 	// mais `InputMultiSelect` la porte en items. Le dérivé se ré-amorce à chaque navigation, ce
@@ -76,20 +91,22 @@
 
 	<PlanCursor cursor={plan.cursor} />
 	<div class="join">
-		<a
+		<button
+			type="button"
 			class="btn btn-sm btn-square join-item"
-			href={urlParam.with({ hourSize: Math.max(5, plan.hourSize * 0.85) })}
-			data-sveltekit-replacestate
+			aria-label="Dézoomer"
+			onclick={() => zoom(0.85)}
 		>
 			<ZoomOutIcon size={18} opacity={0.8} />
-		</a>
-		<a
+		</button>
+		<button
+			type="button"
 			class="btn btn-sm btn-square join-item"
-			href={urlParam.with({ hourSize: Math.min(100, plan.hourSize * 1.15) })}
-			data-sveltekit-replacestate
+			aria-label="Zoomer"
+			onclick={() => zoom(1.15)}
 		>
 			<ZoomInIcon size={18} opacity={0.8} />
-		</a>
+		</button>
 	</div>
 
 	<PeriodCardOptions />

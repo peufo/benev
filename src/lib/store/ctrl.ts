@@ -12,7 +12,7 @@ export const ctrl = readable(false, (set) => {
 	document.addEventListener('keydown', onKeyDown)
 	document.addEventListener('keyup', onKeyUp)
 	return () => {
-		document.removeEventListener('keypress', onKeyDown)
-		document.removeEventListener('keyup', onKeyDown)
+		document.removeEventListener('keydown', onKeyDown)
+		document.removeEventListener('keyup', onKeyUp)
 	}
 })

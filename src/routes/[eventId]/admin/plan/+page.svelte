@@ -15,11 +15,11 @@
 	style="height: calc(100vh - 96px)"
 	class="overflow-hidden rounded-2xl border footer-hidden flex flex-col"
 >
-	<PlanHeader {plan} teams={data.teams} views={data.views} class="border-b" />
+	<PlanHeader bind:plan teams={data.teams} views={data.views} class="border-b" />
 	{#if urlParam.has('axis', 'y')}
-		<PlanY {plan} bind:teams />
+		<PlanY bind:plan bind:teams />
 	{:else}
-		<PlanX {plan} bind:teams />
+		<PlanX bind:plan bind:teams />
 	{/if}
 
 	<MilestoneDrawer milestone={data.milestone} />

@@ -6,8 +6,8 @@
 	import { afterNavigate, goto } from '$app/navigation'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
-	import { debounce } from '$lib/debounce'
 	import type { PeriodWithMembers, Plan } from './types'
+	import { persistHourSize, withHourSize } from './zoom'
 	import { scrollOnZoom } from './scrollOnZoom'
 	import { scrollOnNavigate } from './scrollOnNavigate'
 	import { navigateOnScroll } from './navigateOnScroll'
@@ -42,10 +42,6 @@
 	const indicator = usePositionIndicator('x')
 	const grabScale = useGrabScale('x')
 
-	const persistZoom = debounce((hourSize: number) => {
-		goto(urlParam.with({ hourSize }), { replaceState: true, noScroll: true, keepFocus: true })
-	}, 300)
-
 	let hourSpan = $derived(Math.ceil(MIN_HOUR_WIDTH / plan.hourSize))
 	let totalWidth = $derived(TEAM_HEADER_WIDTH + plan.length)
 
@@ -73,9 +69,8 @@
 		scaleX: plan.hourSize,
 		marginX: TEAM_HEADER_WIDTH,
 		onZoom({ scaleX }) {
-			plan.hourSize = scaleX
-			plan.length = plan.days.reduce((acc, { hours }) => acc + hours.length, 0) * plan.hourSize
-			persistZoom(scaleX)
+			plan = withHourSize(plan, scaleX)
+			persistHourSize(scaleX)
 		},
 	}}
 	use:navigateOnScroll={plan}

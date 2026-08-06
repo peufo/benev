@@ -8,7 +8,15 @@ import dayjs from '$lib/dayjs'
 
 export type PlanData = Awaited<ReturnType<typeof getPlanData>>
 
-export async function getPlanData({ url, event }: { url: URL; event: Event }) {
+export async function getPlanData({
+	url,
+	untrack,
+	event,
+}: {
+	url: URL
+	untrack: <T>(fn: () => T) => T
+	event: Event
+}) {
 	const query = parseQuery(url, {
 		teams: zJsonOr(z.array(z.string())).optional(),
 		cursor: z.coerce.date().optional(),
@@ -31,7 +39,8 @@ export async function getPlanData({ url, event }: { url: URL; event: Event }) {
 		cursor: cursor.toDate(),
 		range,
 		axis: url.searchParams.get('axis') === 'y' ? ('y' as const) : ('x' as const),
-		hourSize: +(url.searchParams.get('hourSize') || 20),
+		// Purement visuel: le lire hors suivi évite que chaque cran de zoom relance le `load`
+		hourSize: untrack(() => +(url.searchParams.get('hourSize') || 20)),
 		views: await prisma.view.findMany({
 			where: { eventId: event.id, key: 'plan' },
 		}),

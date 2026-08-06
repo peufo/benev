@@ -15,8 +15,15 @@ export function useEvent(owner: User, name: string) {
 			await mockPhoton(page)
 			await page.goto('/me/events/create')
 
-			await page.getByLabel("Nom de l'évènement").fill(eventName)
-			await expect(page.getByLabel("URL de l'évènement")).toHaveValue(eventId)
+			// L'URL se dérive du nom par un `oninput`: tant que la page n'est pas hydratée, la
+			// saisie ne déclenche rien. Rejouer le couple saisie/vérification attend l'hydratation
+			// sans avoir à la deviner.
+			await expect(async () => {
+				await page.getByLabel("Nom de l'évènement").fill(eventName)
+				await expect(page.getByLabel("URL de l'évènement")).toHaveValue(eventId, {
+					timeout: 1000,
+				})
+			}).toPass()
 
 			await page
 				.getByRole('button', { name: /Pied de page/i })

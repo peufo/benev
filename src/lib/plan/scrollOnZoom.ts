@@ -1,9 +1,5 @@
-import { ctrl } from '$lib/store'
 import { tick } from 'svelte'
-import { get } from 'svelte/store'
-
-const SCALE_MIN = 5
-const SCALE_MAX = 100
+import { clampScale, markZoomScroll } from './zoom'
 
 type scrollOnWheelOptions = {
 	scaleX?: number
@@ -42,6 +38,7 @@ export function scrollOnZoom(
 		const left = centerX * ratioX - offsetX
 		const top = centerY * ratioY - offsetY
 		await tick()
+		markZoomScroll()
 		node.scrollTo({ top, left, behavior: 'instant' })
 	}
 
@@ -56,23 +53,20 @@ export function scrollOnZoom(
 	}
 
 	function onWheel(event: WheelEvent) {
-		if (!get(ctrl)) return
+		// L'état lu sur l'évènement, et non un store clavier: il est exact même quand la touche
+		// était déjà enfoncée à l'arrivée sur la page. Le pincement du trackpad le pose aussi,
+		// et zoome donc le plan plutôt que la page.
+		if (!event.ctrlKey && !event.metaKey) return
 		event.preventDefault()
-		const scaleX = getNextScale(currentScaleX, event.deltaY)
-		const scaleY = getNextScale(currentScaleY, event.deltaY)
-		onZoom({ scaleX, scaleY })
-	}
-
-	function getNextScale(scale: number, delta: number) {
-		const nextScale = scale - delta / 20
-		if (nextScale < SCALE_MIN) return SCALE_MIN
-		else if (nextScale > SCALE_MAX) return SCALE_MAX
-		return nextScale
+		onZoom({
+			scaleX: clampScale(currentScaleX - event.deltaY / 20),
+			scaleY: clampScale(currentScaleY - event.deltaY / 20),
+		})
 	}
 
 	node.addEventListener('mousemove', onMouseMove)
 	node.addEventListener('mouseleave', onMouseLeave)
-	node.addEventListener('wheel', onWheel)
+	node.addEventListener('wheel', onWheel, { passive: false })
 
 	return {
 		update: updateScroll,
