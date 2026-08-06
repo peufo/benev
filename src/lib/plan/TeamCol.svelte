@@ -3,7 +3,7 @@
 	import { ArrowDownToLineIcon, ArrowUpToLineIcon, MoveVerticalIcon } from '@lucide/svelte'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { getStacks } from './getStacks'
-	import { createPeriod } from './createPeriod'
+	import { createPeriod } from './createPeriod.svelte'
 	import PeriodCard from './PeriodCard.svelte'
 	interface Props {
 		team: Team & { periods: PeriodWithMembers[] }

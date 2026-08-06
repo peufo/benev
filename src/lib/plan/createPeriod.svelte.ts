@@ -1,10 +1,13 @@
 import type { Action } from 'svelte/action'
+import { tick } from 'svelte'
+import { toast } from 'svelte-sonner'
 import type { Dayjs } from '$lib/dayjs'
 import { formatRangeHour } from '$lib/formatRange'
 import type { Period, Team } from '@prisma/client'
 import { goto } from '$app/navigation'
 import { urlParam } from 'fuma'
-import { page } from '$app/stores'
+import { page } from '$app/state'
+import { PERIOD_MIN_MINUTES, PERIOD_MIN_MS } from '$lib/constant'
 import { time } from './utils'
 import type { Plan } from './types'
 
@@ -40,7 +43,10 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 	ghost.appendChild(title)
 
 	let preserveGhostOnLocationChange = false
-	const pageUnsubscribe = page.subscribe(() => {
+	// `page` de `$app/state` n'est plus un store: l'action tourne déjà dans un effet, l'effet
+	// enfant créé ici est donc détruit avec le nœud, sans désabonnement à tenir.
+	$effect(() => {
+		void page.url // seule dépendance: n'importe quelle navigation
 		if (preserveGhostOnLocationChange) return
 		if (ghost.parentElement === node) node.removeChild(ghost)
 	})
@@ -91,6 +97,17 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 			document.removeEventListener('mousemove', handleMouseMove)
 			node.classList.remove('drag-button-hidden')
 			const [_start, _end] = end.isAfter(start) ? [start, end] : [end, start]
+
+			// Un simple clic (ou un glissé trop court pour l'aimant) ne définit aucune durée: on invite
+			// au cliqué-glissé au lieu d'ouvrir un formulaire que la validation refuserait.
+			if (_end.diff(_start) < PERIOD_MIN_MS) {
+				if (ghost.parentElement === node) node.removeChild(ghost)
+				toast.info(
+					`Cliquez-glissez pour définir la durée de la période (${PERIOD_MIN_MINUTES} minutes minimum)`
+				)
+				return
+			}
+
 			const { periods, ...teamWithoutPeriods } = team
 			const newPeriod: Partial<Period & { team: Team }> = {
 				team: teamWithoutPeriods,
@@ -100,6 +117,9 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 			const urlCreatePeriod = urlParam.with({ form_period: JSON.stringify(newPeriod) })
 			preserveGhostOnLocationChange = true
 			await goto(urlCreatePeriod)
+			// L'effet ne lit la nouvelle URL qu'au prochain flush: baisser le drapeau avant de
+			// l'attendre reviendrait à ne jamais le lever.
+			await tick()
 			preserveGhostOnLocationChange = false
 		}
 		document.addEventListener('mousemove', handleMouseMove)
@@ -115,7 +135,6 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 			if (newParams.isEnable && newParams.isEnable !== isEnable) isEnable = newParams.isEnable
 		},
 		destroy: () => {
-			pageUnsubscribe()
 			node.removeEventListener('mousedown', handleMouseDown)
 		},
 	}
