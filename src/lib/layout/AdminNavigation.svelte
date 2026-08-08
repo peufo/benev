@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { adminTabs } from '$lib/layout/adminTabs.svelte'
 	import { Card } from '$lib/ui'
+	import type { Snippet } from 'svelte'
+
+	let { children }: { children?: Snippet } = $props()
 </script>
 
 <Card
-	class="max-w-[60px] hover:max-w-[300px] transition-[max-width] duration-300 overflow-hidden
-		whitespace-nowrap shrink-0 group"
+	class={[
+		'max-w-15 hover:max-w-75 transition-[max-width] duration-300 overflow-hidden',
+		'whitespace-nowrap shrink-0 group',
+	]}
 	bodyClass="sm:px-2 sm:py-2"
 >
 	<div class="flex flex-col gap-1 text-sm">
@@ -19,5 +24,6 @@
 				</span>
 			</a>
 		{/each}
+		{@render children?.()}
 	</div>
 </Card>

@@ -2,6 +2,7 @@
 	import type { Event } from '@prisma/client'
 	import { InfinityIcon } from '@lucide/svelte'
 	import { EVENT_TIER } from '$lib/constant'
+	import { tip } from 'fuma'
 
 	interface Props {
 		event: Event
@@ -26,12 +27,12 @@
 <a
 	href="/{event.id}/admin/quota"
 	class="
-		w-[58px] h-[58px] flex items-center justify-center shrink-0
-		border-2 rounded-[15px]
-		transition-transform duration-200 hover:scale-105
+		w-11 h-11 flex items-center justify-center shrink-0
+		border-2 rounded-field -translate-x-px
+		transition-transform duration-200 hover:scale-110
 		{statusClass}
 	"
-	title="Plan {tier.label} — voir le quota"
+	use:tip={{ content: `Plan ${tier.label} — voir le quota`, placement: 'bottom' }}
 >
 	<span class="text-xs font-medium leading-none flex items-center gap-0.5">
 		{membersValided} /

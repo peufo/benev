@@ -100,7 +100,7 @@
 	<Card class="grow min-w-0" bodyClass="sm:px-2 sm:py-2">
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-x-2 gap-y-2 flex-wrap">
-				<InputSearch class="max-w-[175px]" />
+				<InputSearch class="max-w-43.75" />
 				<MembersFilter />
 
 				<div class="grow"></div>

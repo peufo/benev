@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { ArrowLeftIcon } from '@lucide/svelte'
 	import { contextContainer } from '$lib/ui/context.js'
+	import type { ClassValue } from 'svelte/elements'
 
 	interface Props {
-		class?: string
-		bodyClass?: string
-		headerClass?: string
+		class?: ClassValue
+		bodyClass?: ClassValue
+		headerClass?: ClassValue
 		returnUrl?: string
 		style?: string
 		top?: import('svelte').Snippet
@@ -16,9 +17,9 @@
 	}
 
 	let {
-		class: klass = '',
-		bodyClass = '',
-		headerClass = '',
+		class: klass,
+		bodyClass,
+		headerClass,
 		returnUrl = '',
 		style = '',
 		top,
@@ -31,7 +32,7 @@
 	contextContainer.set('card')
 </script>
 
-<div class="card border border-hard bg-base-100 shadow-lg {klass}" {style}>
+<div class={['card border border-soft bg-base-100', klass]} {style}>
 	{@render top?.()}
 
 	<div class="card-body rounded-b-2xl p-2 sm:p-8 {bodyClass}">

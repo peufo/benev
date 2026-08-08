@@ -16,10 +16,10 @@
 	{#snippet start()}
 		<a
 			href="/"
-			class="
-				text-lg hover:bg-base-200 h-10 px-2 flex items-center gap-2 rounded-lg
-				whitespace-nowrap overflow-hidden text-ellipsis min-w-0
-			"
+			class={[
+				'text-lg hover:bg-base-200 h-10 px-2 flex items-center gap-2 rounded-field',
+				'whitespace-nowrap overflow-hidden text-ellipsis min-w-0',
+			]}
 		>
 			<img src={logo} alt="logo benevio" class="w-8 h-8" height="512" width="512" />
 			<Benev class="mx-2 text-2xl" />

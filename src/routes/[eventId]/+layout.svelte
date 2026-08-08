@@ -54,6 +54,11 @@
 
 <EventTheme event={data.event} />
 
+<!-- Background gradient -->
+<div
+	class="absolute inset-0 bg-linear-to-b from-secondary/15 via-secondary/6 to-transparent -z-10"
+></div>
+
 <Header user={data.user}>
 	{#snippet start()}
 		<a
@@ -87,13 +92,14 @@
 
 <div class="flex grow items-start relative max-w-full">
 	{#if data.member?.roles.includes('leader') || data.userIsRoot}
-		<div class="hidden lg:flex flex-col gap-2 sticky top-4 mt-4 ml-4 shrink-0">
-			<AdminNavigation />
-			<EventTierBadge event={data.event} membersValided={data.membersValided} />
+		<div class="hidden lg:flex flex-col gap-2 sticky top-1 ml-1 shrink-0">
+			<AdminNavigation>
+				<EventTierBadge event={data.event} membersValided={data.membersValided} />
+			</AdminNavigation>
 		</div>
 	{/if}
 
-	<main class="grow mx-auto overflow-x-clip self-stretch p-2 sm:p-4 min-w-0">
+	<main class="grow mx-auto overflow-x-clip self-stretch px-1 min-w-0">
 		{#if accessGranted}
 			{@render children?.()}
 		{:else if data.event.state === 'draft'}

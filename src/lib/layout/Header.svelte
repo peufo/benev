@@ -11,8 +11,8 @@
 	let { user = undefined, start, end }: Props = $props()
 </script>
 
-<div class="px-2 md:px-4">
-	<header class={['flex p-2 rounded-b-xl bg-base-100 shadow-lg', 'border-soft border-b border-x']}>
+<div class="p-1">
+	<header class={['flex p-1 bg-base-100 rounded-box', 'border border-soft']}>
 		{@render start?.()}
 		<div class="grow"></div>
 		{@render end?.()}
