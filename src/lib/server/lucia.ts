@@ -19,10 +19,12 @@ export const githubAuth = github(auth, {
 	clientSecret: env.GITHUB_CLIENT_SECRET,
 })
 
+const origin = dev ? 'http://localhost:5173' : 'https://benev.io'
+
 export const googleAuth = google(auth, {
 	clientId: env.GOOGLE_CLIENT_ID,
 	clientSecret: env.GOOGLE_CLIENT_SECRET,
-	redirectUri: 'https://benev.io/auth/google/callback',
+	redirectUri: `${origin}/auth/google/callback`,
 	scope: ['email', 'profile'],
 })
 

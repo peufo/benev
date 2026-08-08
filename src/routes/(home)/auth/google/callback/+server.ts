@@ -6,12 +6,13 @@ export const GET = async ({ url, cookies, locals }) => {
 	const state = url.searchParams.get('state')
 	const code = url.searchParams.get('code')
 
-	if (!storedState || !state || !code) error(400)
-	if (storedState !== state) error(400)
+	if (!storedState || !state || !code) error(400, 'Requête OAuth incomplète')
+	if (storedState !== state) error(400, 'État OAuth invalide')
+	cookies.delete('google_oauth_state', { path: '/' })
 
 	const { getExistingUser, googleUser, createUser } = await googleAuth
 		.validateCallback(code)
-		.catch(() => error(400))
+		.catch(() => error(400, 'Échec de la validation du code OAuth'))
 
 	const getUser = async () => {
 		const existingUser = await getExistingUser()
