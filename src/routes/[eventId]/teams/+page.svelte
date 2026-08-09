@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PencilIcon, PlusIcon } from '@lucide/svelte'
+	import { PlusIcon, ShuffleIcon } from '@lucide/svelte'
 	import { onMount } from 'svelte'
 	import { InputSearch } from '$lib/ui'
 	import { RangePickerButton, tip } from 'fuma'
@@ -49,8 +49,8 @@
 </script>
 
 <div class="max-w-xl m-auto flex flex-col gap-4">
-	<div class="p-2 flex flex-col gap-2 bg-base-100 rounded-2xl">
-		<div class="flex gap-2">
+	<div class="surface flex flex-col gap-2">
+		<div class="flex gap-1">
 			<InputSearch />
 			<div class="grow"></div>
 			<RangePickerButton key="range" />
@@ -59,21 +59,21 @@
 			{#if data.member?.roles.includes('admin')}
 				<a
 					href={urlParam.with({ teams_order: 1 })}
-					class="btn btn-sm btn-square"
+					class="btn btn-sm btn-square btn-secondary"
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
+					use:tip={{ content: "Modifier l'ordre des secteur" }}
 				>
-					<span class="inline-flex" use:tip={{ content: "Modifier l'ordre des secteur" }}
-						><PencilIcon /></span
-					>
+					<ShuffleIcon size={18} />
 				</a>
 				<a
 					href={urlParam.with({ form_team: '{}' })}
-					class="btn btn-sm btn-square"
+					class="btn btn-sm btn-square btn-secondary"
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
+					use:tip={{ content: 'Nouveau secteur' }}
 				>
-					<span class="inline-flex" use:tip={{ content: 'Nouveau secteur' }}><PlusIcon /></span>
+					<PlusIcon />
 				</a>
 			{/if}
 		</div>

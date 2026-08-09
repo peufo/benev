@@ -55,9 +55,7 @@
 <EventTheme event={data.event} />
 
 <!-- Background gradient -->
-<div
-	class="absolute inset-0 bg-linear-to-b from-secondary/15 via-secondary/6 to-transparent -z-10"
-></div>
+<div class="absolute inset-0 bg-linear-to-b from-accent/15 via-accent/6 to-transparent -z-10"></div>
 
 <Header user={data.user}>
 	{#snippet start()}

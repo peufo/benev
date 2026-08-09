@@ -71,7 +71,7 @@
 		form_period: JSON.stringify({ team: { id: team.id, name: team.name } }),
 		section: team.id,
 	})}
-	class="btn btn-square btn-sm"
+	class="btn btn-square btn-sm btn-secondary btn-soft"
 	use:tip={{ content: 'Ajouter une période' }}
 	data-sveltekit-noscroll
 	data-sveltekit-replacestate
@@ -81,7 +81,7 @@
 
 <a
 	href={urlParam.with({ form_team: team.id, section: team.id })}
-	class="btn btn-square btn-sm"
+	class="btn btn-square btn-sm btn-secondary"
 	use:tip={{ content: 'Éditer ce secteur' }}
 	data-sveltekit-noscroll
 	data-sveltekit-replacestate

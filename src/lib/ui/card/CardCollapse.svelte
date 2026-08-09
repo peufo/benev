@@ -54,7 +54,7 @@
 	})
 </script>
 
-<section class="card bordered border bg-base-100 shadow-md {klass}">
+<section class="card border border-soft bg-base-100 {klass}">
 	<div
 		id={value}
 		bind:this={header}

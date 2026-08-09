@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/stores'
-	import { onMount } from 'svelte'
-
 	import { tip, urlParam } from 'fuma'
 	import { parseOptions, type Options, type Option } from 'fuma'
+	import { page } from '$app/state'
 
 	interface Props {
 		options: Options
@@ -14,12 +12,7 @@
 
 	let { options, showLabel = false, key, defaultValue = undefined }: Props = $props()
 
-	let _options = $state(getOptions($page.url))
-	onMount(() =>
-		page.subscribe(({ url }) => {
-			_options = getOptions(url)
-		})
-	)
+	let _options = $derived(getOptions(page.url))
 
 	function getOptions(url: URL) {
 		return parseOptions(options).map((option) => ({
@@ -34,13 +27,13 @@
 	}
 </script>
 
-<div class="flex items-center gap-[3px] rounded-lg bg-base-200 p-1">
+<div class={['flex items-center gap-0.75 rounded-field bg-base-200 p-0.5', '']}>
 	{#each _options as { value, label, icon: OptionIcon, isActive } (value)}
 		<a
 			href={urlParam.with({ [key]: value })}
 			data-sveltekit-noscroll
 			data-sveltekit-replacestate
-			class="flex h-6 items-center justify-center gap-2 rounded p-1"
+			class="flex h-7 w-7 items-center justify-center gap-2 rounded p-1"
 			class:px-2={showLabel}
 			class:w-6={OptionIcon && !showLabel}
 			class:whitespace-nowrap={showLabel}
@@ -53,7 +46,7 @@
 				</span>
 			{/if}
 			{#if !OptionIcon || showLabel}
-				<span class="text-sm font-medium opacity-80">{label}</span>
+				<span class="text-sm font-medium opacity-70">{label}</span>
 			{/if}
 		</a>
 	{/each}

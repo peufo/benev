@@ -8,12 +8,12 @@
 	name: 'light';
 	default: true;
 	color-scheme: light;
-	--color-primary: #0d3b66;
+	--color-primary: #2663eb;
 	--color-primary-content: #fff;
-	--color-secondary: #b8a58a;
+	--color-secondary: #11b981;
 	--color-secondary-content: #fff;
-	--color-accent: #a52422;
-	--color-accent-content: #f1e2e2;
+	--color-accent: #e6574c;
+	--color-accent-content: #fff;
 	--color-neutral: #2b3440;
 	--color-neutral-content: #d7dde4;
 	--color-base-100: #ffffff;
@@ -25,8 +25,12 @@
 @source '../../fuma/src/lib';
 
 @layer components {
+	.surface {
+		@apply bg-base-100 rounded-box border border-soft p-1;
+	}
+
 	.menu-item {
-		@apply flex items-center gap-3 px-3 py-1.25 cursor-pointer hover:bg-base-200 rounded-md whitespace-nowrap text-ellipsis;
+		@apply flex items-center gap-3 px-3 py-1.25 cursor-pointer hover:bg-base-200 rounded-field whitespace-nowrap text-ellipsis;
 	}
 	.menu-item.active {
 		@apply bg-base-300/80;

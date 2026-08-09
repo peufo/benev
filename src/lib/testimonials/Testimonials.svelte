@@ -12,7 +12,7 @@
 		<div class="grid gap-8 md:grid-cols-2">
 			{#each testimonials as t (t.name)}
 				<blockquote class="flex flex-col gap-6">
-					<p class="text-xl md:text-2xl text-primary font-medium leading-relaxed">
+					<p class="text-xl md:text-2xl font-medium leading-relaxed">
 						&ldquo;{t.quote}&rdquo;
 					</p>
 
