@@ -1,7 +1,6 @@
 <script lang="ts">
-	import logo from '$lib/assets/logo.svg'
+	import benevio from '$lib/assets/benevio.svg'
 	import { Header, Footer } from '$lib/layout'
-	import Benev from '$lib/Benev.svelte'
 	import HomeMenu from './(home)/HomeMenu.svelte'
 	import { page } from '$app/state'
 </script>
@@ -12,14 +11,12 @@
 	{#snippet start()}
 		<a
 			href="/"
-			class="
-				text-lg hover:bg-base-200 h-12 px-2 flex items-center gap-2 rounded-lg
-				whitespace-nowrap overflow-hidden text-ellipsis min-w-0
-			"
+			class={[
+				'text-lg hover:bg-base-200 h-10 px-2 flex items-center gap-2 rounded-field',
+				'whitespace-nowrap overflow-hidden text-ellipsis min-w-0',
+			]}
 		>
-			<img src={logo} alt="logo benev" class="w-9 h-9" height="512" width="512" />
-
-			<Benev class="mx-2 text-2xl" />
+			<img src={benevio} alt="logo benevio" class="h-9" />
 		</a>
 	{/snippet}
 
