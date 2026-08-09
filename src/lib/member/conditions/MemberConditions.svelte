@@ -1,11 +1,16 @@
 <script lang="ts">
-	import { IdCardIcon, PersonStandingIcon, PlusIcon, UserCheckIcon, XIcon } from '@lucide/svelte'
+	import {
+		IdCardIcon,
+		PersonStandingIcon,
+		PlusIcon,
+		Trash2Icon,
+		UserCheckIcon,
+	} from '@lucide/svelte'
 
 	import axios from 'axios'
 	import { get } from 'svelte/store'
 	import { page } from '$app/stores'
 	import type { Field } from '@prisma/client'
-	import { Placeholder } from '$lib/ui'
 	import { InputNumber, InputSelect, parseOptions, Popover, tip } from 'fuma'
 	import { browser } from '$app/environment'
 	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
@@ -93,7 +98,7 @@
 
 		<Popover placement="bottom-end">
 			{#snippet trigger(popover)}
-				<button type="button" class="btn btn-square" {...popover.trigger}>
+				<button type="button" class="btn btn-square btn-secondary btn-soft" {...popover.trigger}>
 					<span class="inline-flex" use:tip={{ content: 'Ajouter une condition' }}>
 						<PlusIcon />
 					</span>
@@ -121,8 +126,8 @@
 
 	<div class="flex flex-col gap-2">
 		{#each conditions as condition, index (index)}
-			<div class="flex flex-col gap-2 bg-base-200/40 border rounded p-2">
-				<div class="flex gap-2 items-center">
+			<div class="flex flex-col gap-2 bg-base-200/40 border border-hard rounded-field p-2">
+				<div class="flex gap-2 items-start">
 					{#if condition.type === 'valided'}
 						<UserCheckIcon class="opacity-70" />
 						<div class="label">
@@ -130,7 +135,16 @@
 						</div>
 					{:else if condition.type === 'age'}
 						<PersonStandingIcon class="opacity-70" />
-						<InputNumber bind:value={condition.args} label="Âge minimum" min={1} />
+						<InputNumber
+							value={condition.args}
+							label="Âge minimum"
+							min={1}
+							oninput={(event) =>
+								(conditions = conditions.map((c, i) => {
+									if (i !== index || c.type !== 'age') return c
+									return { ...c, args: event.currentTarget.valueAsNumber }
+								}))}
+						/>
 					{:else}
 						<IdCardIcon class="opacity-70" />
 
@@ -176,11 +190,11 @@
 
 					<button
 						type="button"
-						class="btn btn-square btn-sm ml-auto"
+						class="btn btn-square btn-sm ml-auto btn-error btn-soft"
 						onclick={() =>
 							(conditions = [...conditions.slice(0, index), ...conditions.slice(index + 1)])}
 					>
-						<XIcon class="opacity-70" />
+						<Trash2Icon size={18} class="opacity-70" />
 					</button>
 				</div>
 
@@ -192,8 +206,6 @@
 					{/if}
 				{/if}
 			</div>
-		{:else}
-			<Placeholder style="height: 80px;">Pas de conditions d'inscription</Placeholder>
 		{/each}
 	</div>
 </div>

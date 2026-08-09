@@ -19,7 +19,7 @@ export function organizationSchema(siteUrl: string): WithContext<Thing> {
 		'@id': organizationId(siteUrl),
 		name: SITE_NAME,
 		url: siteUrl,
-		logo: `${siteUrl}/logo.png`,
+		logo: `${siteUrl}/logo.webp`,
 		description: SITE_DESCRIPTION,
 		areaServed: { '@type': 'Country', name: 'Suisse' },
 		sameAs: [REPOSITORY_URL],

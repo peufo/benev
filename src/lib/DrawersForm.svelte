@@ -60,7 +60,7 @@
 
 <MemberImportDialog bind:dialog={importDialog} />
 
-<Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur">
+<Drawer key="form_team" title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur" maxWidth="26em">
 	{#snippet children({ close })}
 		<TeamForm bind:teamForm team={team || {}} {event} onsuccess={() => close()} />
 	{/snippet}

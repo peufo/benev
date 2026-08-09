@@ -57,7 +57,7 @@
 													<div>
 														{#if showLogo}
 															<img
-																src="{domain}/logo.png"
+																src="{domain}/logo.webp"
 																alt="Logo de benev.io"
 																style="height: 100px;"
 															/>
@@ -98,7 +98,7 @@
 												<tr>
 													<td>
 														<img
-															src="{domain}/logo.png"
+															src="{domain}/logo.webp"
 															alt="Logo de Benev.io"
 															style="height: 50px"
 														/>

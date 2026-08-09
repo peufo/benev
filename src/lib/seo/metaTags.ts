@@ -7,7 +7,7 @@ export const SITE_DESCRIPTION =
 
 /** Metas de base, surchargées par le `metaTags` publié dans les données de page */
 export function defaultMetaTags(url: URL): MetaTagsProps {
-	const image = `${url.origin}/logo.png`
+	const image = `${url.origin}/logo.webp`
 	// Sans la query string : filtres et paramètres de tracking pointent la même page canonique
 	const canonical = `${url.origin}${url.pathname}`
 	return {

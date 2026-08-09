@@ -114,35 +114,34 @@
 	/>
 
 	{#if event.selfSubscribeAllowed}
-		<div class="grid grid-cols-2 gap-2">
-			<InputString
-				field={remoteForm.fields.closeSubscribing}
-				type="date"
-				label="Fin des inscriptions"
-				value={team.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
-				placeholder={event.closeSubscribing && !team?.closeSubscribing
-					? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
-					: ''}
+		<InputString
+			field={remoteForm.fields.closeSubscribing}
+			type="date"
+			label="Fin des inscriptions"
+			value={team.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
+			placeholder={event.closeSubscribing && !team?.closeSubscribing
+				? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
+				: ''}
+		/>
+		<div
+			use:tip={{
+				content:
+					'Les inscriptions en attentes de validation ne sont pas comptabilisées. Ainsi, elles ne bloquent pas de nouvelles inscriptions.',
+			}}
+		>
+			<InputBoolean
+				field={remoteForm.fields.overflowPermitted}
+				label="Mode liste d'attente"
+				checked={team.overflowPermitted ?? false}
+				defaultChecked={team.overflowPermitted ?? false}
+				class="w-full"
 			/>
-			<div
-				use:tip={{
-					content:
-						'Les inscriptions en attentes de validation ne sont pas comptabilisées. Ainsi, elles ne bloquent pas de nouvelles inscriptions.',
-				}}
-			>
-				<InputBoolean
-					field={remoteForm.fields.overflowPermitted}
-					label="Mode liste d'attente"
-					checked={team.overflowPermitted ?? false}
-					defaultChecked={team.overflowPermitted ?? false}
-				/>
-			</div>
 		</div>
 	{/if}
 
 	<MemberConditions conditions={team?.conditions || []} memberFields={event.memberFields} />
 
-	<div class="flex flex-row-reverse gap-2 border-t pt-4">
+	<div class="flex flex-row-reverse gap-2 border-t py-4">
 		<button class="btn btn-primary">Valider</button>
 		{#if team.id}
 			<button
