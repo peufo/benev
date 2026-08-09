@@ -29,6 +29,10 @@
 		@apply bg-base-100 rounded-box border border-soft p-1;
 	}
 
+	.surface-drawer {
+		@apply rounded-box border border-hard m-1;
+	}
+
 	.menu-item {
 		@apply flex items-center gap-3 px-3 py-1.25 cursor-pointer hover:bg-base-200 rounded-field whitespace-nowrap text-ellipsis;
 	}

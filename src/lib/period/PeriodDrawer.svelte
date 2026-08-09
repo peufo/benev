@@ -8,6 +8,7 @@
 	import PeriodSubscribes from './PeriodSubscribes.svelte'
 	import Progress from '$lib/Progress.svelte'
 	import type { FormDataPeriod } from '$lib/server'
+
 	interface Props {
 		period?: Partial<FormDataPeriod>
 		periodForm: PeriodForm
@@ -33,8 +34,7 @@
 	{noOverlay}
 	maxWidth="400px"
 	title="{period?.id ? 'Édition' : 'Création'} d'une période"
-	class="border-l border-hard"
-	classHeader="border-hard"
+	class="surface-drawer"
 >
 	{#snippet children({ close })}
 		<PeriodForm
