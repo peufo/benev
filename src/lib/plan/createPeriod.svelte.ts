@@ -53,7 +53,8 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 		// et il clignoterait.
 		'pointer-events-none',
 		// Le trait traverse toute la ligne (resp. la colonne) et croise les cartes en `z-10`.
-		'z-20'
+		'z-20',
+		'hide-on-zoom'
 	)
 	// Positionné, le titre ne peut plus élargir le trait de 2px; en mode bloc, seul enfant du
 	// ghost, il se rend exactement au même endroit qu'en flux.

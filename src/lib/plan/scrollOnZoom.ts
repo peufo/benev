@@ -1,4 +1,5 @@
 import { tick } from 'svelte'
+import { debounce } from '$lib/debounce'
 import { clampScale, markZoomScroll } from './zoom'
 
 type scrollOnWheelOptions = {
@@ -22,6 +23,15 @@ export function scrollOnZoom(
 ) {
 	let cursorX: number | null = null
 	let cursorY: number | null = null
+
+	/**
+	 * Les indicateurs qui suivent le curseur se replacent sur l'évènement `scroll`, que le
+	 * navigateur ne dispatche qu'au frame suivant: le temps du geste, ils décrocheraient de la
+	 * grille redessinée. On les efface plutôt que de les recaler, et ils reviennent en place une
+	 * fois l'échelle stabilisée. Le délai n'a qu'à dépasser l'espacement des crans d'un même geste,
+	 * sans quoi ils clignoteraient en plein zoom.
+	 */
+	const endZoom = debounce(() => node.classList.remove('zooming'), 200)
 
 	async function updateScroll({ scaleX = 1, scaleY = 1 }: scrollOnWheelOptions) {
 		const offsetX = cursorX ?? node.clientWidth / 2
@@ -58,6 +68,8 @@ export function scrollOnZoom(
 		// et zoome donc le plan plutôt que la page.
 		if (!event.ctrlKey && !event.metaKey) return
 		event.preventDefault()
+		node.classList.add('zooming')
+		endZoom()
 		onZoom({
 			scaleX: clampScale(currentScaleX - event.deltaY / 20),
 			scaleY: clampScale(currentScaleY - event.deltaY / 20),

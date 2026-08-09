@@ -58,6 +58,12 @@
 	.tiptap .ProseMirror-selectednode {
 		@apply outline outline-primary rounded;
 	}
+
+	/* Le zoom repeint l'échelle et le défilement un frame avant que les indicateurs ne se
+	   replacent: ils décrocheraient du curseur. On les efface le temps du geste. */
+	.zooming .hide-on-zoom {
+		visibility: hidden;
+	}
 }
 
 @utility border-soft {
