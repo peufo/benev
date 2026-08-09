@@ -38,6 +38,7 @@
 	let pageType = $derived(page.type)
 	let submitButton: HTMLButtonElement = $state()!
 	let inputTextRich: InputTextRich = $state()!
+	const deleteFormId = $props.id()
 
 	let pagePath = $derived(
 		`${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
@@ -59,6 +60,10 @@
 		submitButton.click()
 	}, 800)
 </script>
+
+<!-- HTML interdit les <form> imbriqués: ce formulaire vide n'existe que pour porter l'action,
+son bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
+<form {...deletePage} id={deleteFormId} class="hidden"></form>
 
 <form
 	{...updatePage.enhance(
@@ -152,8 +157,14 @@
 		<p class="text-error text-sm">{issue.message}</p>
 	{/each}
 
-	<div class="flex gap-2">
+	<div class="flex gap-2 items-center">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
+
+		<ButtonDelete
+			form={deleteFormId}
+			formaction={deletePage.action}
+			disabled={page.type === 'home' || page.type === 'email'}
+		/>
 
 		{#if page.type !== 'email'}
 			<a
@@ -177,13 +188,6 @@
 			</div>
 		{/if}
 	</div>
-</form>
-
-<form {...deletePage}>
-	<ButtonDelete
-		formaction={deletePage.action}
-		disabled={page.type === 'home' || page.type === 'email'}
-	/>
 </form>
 
 <SelectMedia

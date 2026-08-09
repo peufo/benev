@@ -28,7 +28,22 @@
 	if (!tag.color) tag.color = colors[Math.round(Math.random() * (colors.length - 1))]
 
 	const remoteForm = $derived(tag.id ? updateTag : createTag)
+	const deleteFormId = $props.id()
 </script>
+
+{#if tag.id}
+	<!-- HTML interdit les <form> imbriqués: ce formulaire ne porte que les champs cachés, son
+	bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
+	<form
+		{...deleteTag.enhance(
+			enhanceForm({ success: 'Étiquette supprimée', onsuccess: () => ondeleted?.() })
+		)}
+		id={deleteFormId}
+		class="hidden"
+	>
+		<input type="hidden" name="id" value={tag.id} />
+	</form>
+{/if}
 
 <form
 	{...remoteForm.enhance(
@@ -62,17 +77,9 @@
 
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">
 		<button class="btn btn-primary">Valider</button>
+		{#if tag.id}
+			<div class="grow"></div>
+			<ButtonDelete form={deleteFormId} formaction={deleteTag.action} />
+		{/if}
 	</div>
 </form>
-
-{#if tag.id}
-	<form
-		{...deleteTag.enhance(
-			enhanceForm({ success: 'Étiquette supprimée', onsuccess: () => ondeleted?.() })
-		)}
-		class="flex"
-	>
-		<input type="hidden" name="id" value={tag.id} />
-		<ButtonDelete formaction={deleteTag.action}>Supprimer</ButtonDelete>
-	</form>
-{/if}

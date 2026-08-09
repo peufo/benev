@@ -29,6 +29,7 @@
 	let submitButton: HTMLButtonElement = $state()!
 	let isSuccess = $state(true)
 	let lockAspectRatio = $state(true)
+	const deleteFormId = $props.id()
 
 	// Les champs restent des `<input>` bruts liés à `badge`: ils pilotent l'aperçu en direct et
 	// s'écrivent aussi par programme (ratio, restauration). Le schéma convertit à l'arrivée.
@@ -57,6 +58,10 @@
 	}
 	const RatioIcon = $derived(lockAspectRatio ? LinkIcon : UnlinkIcon)
 </script>
+
+<!-- HTML interdit les <form> imbriqués: ce formulaire vide n'existe que pour porter l'action,
+son bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
+<form {...deleteBadge} id={deleteFormId} class="hidden"></form>
 
 <form
 	{...updateBadge.enhance(async ({ submit }) => {
@@ -203,6 +208,8 @@
 	<div class="flex gap-2">
 		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
 
+		<ButtonDelete form={deleteFormId} formaction={deleteBadge.action} />
+
 		<div class="grow"></div>
 
 		{#if updateBadge.pending > 0}
@@ -222,8 +229,4 @@
 			</div>
 		{/if}
 	</div>
-</form>
-
-<form {...deleteBadge}>
-	<ButtonDelete formaction={deleteBadge.action} />
 </form>

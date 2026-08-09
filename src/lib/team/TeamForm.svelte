@@ -35,6 +35,7 @@
 	}: Props = $props()
 
 	const remoteForm = $derived(team.id ? updateTeam : createTeam)
+	const deleteFormId = $props.id()
 
 	// `DrawersForm` s'en sert pour injecter un responsable fraîchement invité.
 	teamForm = {
@@ -55,6 +56,24 @@
 		return false
 	}
 </script>
+
+{#if team.id}
+	<!-- HTML interdit les <form> imbriqués: ce formulaire ne porte que les champs cachés, son
+	bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
+	<form
+		{...deleteTeam.enhance(
+			enhanceForm({
+				before: confirmDelete,
+				success: 'Secteur supprimé',
+				onsuccess: () => onsuccess?.(),
+			})
+		)}
+		id={deleteFormId}
+		class="hidden"
+	>
+		<input type="hidden" name="id" value={team.id} />
+	</form>
+{/if}
 
 <form
 	{...remoteForm.enhance(enhanceForm({ success: 'Succès', onsuccess: () => onsuccess?.() }))}
@@ -111,21 +130,9 @@
 
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">
 		<button class="btn btn-primary">Valider</button>
+		{#if team.id}
+			<div class="grow"></div>
+			<ButtonDelete form={deleteFormId} formaction={deleteTeam.action} />
+		{/if}
 	</div>
 </form>
-
-{#if team.id}
-	<form
-		{...deleteTeam.enhance(
-			enhanceForm({
-				before: confirmDelete,
-				success: 'Secteur supprimé',
-				onsuccess: () => onsuccess?.(),
-			})
-		)}
-		class="flex"
-	>
-		<input type="hidden" name="id" value={team.id} />
-		<ButtonDelete formaction={deleteTeam.action}>Supprimer</ButtonDelete>
-	</form>
-{/if}

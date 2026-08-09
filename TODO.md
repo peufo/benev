@@ -6,7 +6,7 @@
 
 - [x] Quand on clique sur le plan, au lieu d'ouvrir le formulaire de création de période sans durée, on devrais plutôt inviter l'utilisateur à faire un cliqué-glissé.
 
-- [ ]
+- [ ] Normaliser le style des drawers
 
 - [ ] Dans le plan, il faut afficher le ghost de la création de période au survole de la souris
 

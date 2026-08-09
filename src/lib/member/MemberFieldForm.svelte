@@ -16,6 +16,7 @@
 	let { field = $bindable({}), onsuccess }: Props = $props()
 
 	const remoteForm = $derived(field.id ? updateMemberField : createMemberField)
+	const deleteFormId = $props.id()
 
 	// `Object.entries` élargirait la clé en `string`: on la garde typée pour que la sélection
 	// s'écrive sans cast.
@@ -46,6 +47,20 @@
 		}
 	}
 </script>
+
+{#if field.id}
+	<!-- HTML interdit les <form> imbriqués: ce formulaire ne porte que les champs cachés, son
+	bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
+	<form
+		{...deleteMemberField.enhance(
+			enhanceForm({ success: 'Champ supprimé', onsuccess: () => onsuccess?.() })
+		)}
+		id={deleteFormId}
+		class="hidden"
+	>
+		<input type="hidden" name="id" value={field.id} />
+	</form>
+{/if}
 
 <form
 	{...remoteForm.enhance(
@@ -152,17 +167,9 @@
 
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">
 		<button class="btn btn-primary">Valider</button>
+		{#if field.id}
+			<div class="grow"></div>
+			<ButtonDelete form={deleteFormId} formaction={deleteMemberField.action} />
+		{/if}
 	</div>
 </form>
-
-{#if field.id}
-	<form
-		{...deleteMemberField.enhance(
-			enhanceForm({ success: 'Champ supprimé', onsuccess: () => onsuccess?.() })
-		)}
-		class="flex"
-	>
-		<input type="hidden" name="id" value={field.id} />
-		<ButtonDelete formaction={deleteMemberField.action}>Supprimer</ButtonDelete>
-	</form>
-{/if}

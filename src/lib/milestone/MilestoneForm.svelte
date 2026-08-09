@@ -16,7 +16,22 @@
 	let { milestone = {}, oncreated, onupdated, ondeleted }: Props = $props()
 
 	const remoteForm = $derived(milestone.id ? updateMilestone : createMilestone)
+	const deleteFormId = $props.id()
 </script>
+
+{#if milestone.id}
+	<!-- HTML interdit les <form> imbriqués: ce formulaire ne porte que les champs cachés, son
+	bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
+	<form
+		{...deleteMilestone.enhance(
+			enhanceForm({ success: 'Jalon supprimé', onsuccess: () => ondeleted?.() })
+		)}
+		id={deleteFormId}
+		class="hidden"
+	>
+		<input type="hidden" name="id" value={milestone.id} />
+	</form>
+{/if}
 
 <form
 	{...remoteForm.enhance(
@@ -41,17 +56,9 @@
 
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">
 		<button class="btn btn-primary">Valider</button>
+		{#if milestone.id}
+			<div class="grow"></div>
+			<ButtonDelete form={deleteFormId} formaction={deleteMilestone.action} />
+		{/if}
 	</div>
 </form>
-
-{#if milestone.id}
-	<form
-		{...deleteMilestone.enhance(
-			enhanceForm({ success: 'Jalon supprimé', onsuccess: () => ondeleted?.() })
-		)}
-		class="flex"
-	>
-		<input type="hidden" name="id" value={milestone.id} />
-		<ButtonDelete formaction={deleteMilestone.action}>Supprimer</ButtonDelete>
-	</form>
-{/if}
