@@ -1,11 +1,5 @@
 <script lang="ts" module>
-	import {
-		CheckIcon,
-		type IconProps,
-		OctagonAlertIcon,
-		OctagonXIcon,
-		Trash2Icon,
-	} from '@lucide/svelte'
+	import { CheckIcon, type IconProps, OctagonAlertIcon, OctagonXIcon, XIcon } from '@lucide/svelte'
 	import type { Component } from 'svelte'
 	import type { SubscribeState as ISubscribeState } from '@prisma/client'
 
@@ -30,15 +24,14 @@
 		request: { label: 'Rétablir', icon: OctagonAlertIcon, class: 'text-warning' },
 		accepted: { label: 'Confirmer', icon: CheckIcon, class: 'text-success' },
 		denied: { label: 'Décliner', icon: OctagonXIcon, class: 'text-error' },
-		cancelled: { label: 'Annuler', icon: Trash2Icon, class: 'text-error' },
+		cancelled: { label: 'Annuler', icon: XIcon, class: 'text-error' },
 	}
 </script>
 
 <script lang="ts">
-	import type { Props as TippyProps } from 'tippy.js'
 	import type { Subscribe } from '@prisma/client'
 	import { SubscribeState } from '$lib/subscribe'
-	import { DropDown } from 'fuma'
+	import { Popover } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { page } from '$app/state'
 	import { setSubscribeState } from './subscribeState.remote'
@@ -46,24 +39,20 @@
 	interface Props {
 		subscribe: Subscribe & { member: { isValidedByUser: boolean } }
 		isLeader?: boolean
-		tippyProps?: Partial<TippyProps>
 		canBeLarge?: boolean
 		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 	}
 
-	let {
-		subscribe,
-		isLeader = false,
-		tippyProps = {},
-		canBeLarge = false,
-		onsuccess,
-	}: Props = $props()
+	let { subscribe, isLeader = false, canBeLarge = false, onsuccess }: Props = $props()
 
 	let isSelf = $derived(subscribe.memberId === page.data.member?.id)
 
-	// Un formulaire par inscription: le composant est rendu en liste.
-	const remoteForm = $derived(setSubscribeState.for(subscribe.id))
+	// Une clé par montage, pas par inscription: la même inscription peut être affichée deux fois
+	// simultanément (ligne de période + tiroir de période, `/me` + tiroir…), et deux `<form>` ne
+	// peuvent pas partager une même instance de remote form.
+	const uid = $props.id()
+	const remoteForm = setSubscribeState.for(uid)
 
 	let creatorStates: Partial<States> = $derived(
 		creatorEditions[subscribe.state].reduce((acc, cur) => ({ ...acc, [cur]: states[cur] }), {})
@@ -104,12 +93,14 @@
 		<SubscribeState {subscribe} />
 	</button>
 {:else}
-	<DropDown tippyProps={{ arrow: true, trigger: 'click', ...tippyProps }}>
-		{#snippet activator()}
+	<Popover listenFocus={false} class="p-1">
+		{#snippet trigger({ trigger })}
 			<button
+				type="button"
 				class="relative btn btn-sm z-10 {!isConfirmation || !canBeLarge
 					? 'btn-square'
 					: 'max-sm:btn-square'}"
+				{...trigger}
 			>
 				<SubscribeState {subscribe} />
 				{#if isConfirmation}
@@ -124,25 +115,35 @@
 			</button>
 		{/snippet}
 
-		<form
-			{...remoteForm.enhance(
-				enhanceForm({ success: 'Status changé', onsuccess: () => onsuccess?.() })
-			)}
-			class="flex flex-col gap-1"
-		>
-			<input type="hidden" name="subscribeId" value={subscribe.id} />
-			{#each editions as [state, edit] (state)}
-				{@const EditIcon = edit.icon}
-				<button
-					class="menu-item"
-					name="state"
-					value={state}
-					onclick={(event) => event.stopPropagation()}
-				>
-					<EditIcon class={edit.class} />
-					{edit.label}
-				</button>
-			{/each}
-		</form>
-	</DropDown>
+		{#snippet children({ hide })}
+			<form
+				{...remoteForm.enhance(
+					enhanceForm({
+						success: 'Status changé',
+						onsuccess: () => {
+							hide()
+							onsuccess?.()
+						},
+					})
+				)}
+				class="flex flex-col gap-1"
+			>
+				<input type="hidden" name="subscribeId" value={subscribe.id} />
+				{#each editions as [state, edit] (state)}
+					{@const EditIcon = edit.icon}
+					<!-- `stopPropagation`: le popover reste dans le flux DOM de la ligne de période,
+					     dont le clic ouvre le tiroir. -->
+					<button
+						class="menu-item w-full"
+						name="state"
+						value={state}
+						onclick={(event) => event.stopPropagation()}
+					>
+						<EditIcon class={edit.class} />
+						{edit.label}
+					</button>
+				{/each}
+			</form>
+		{/snippet}
+	</Popover>
 {/if}

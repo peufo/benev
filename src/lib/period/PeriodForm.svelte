@@ -152,7 +152,7 @@
 			onsuccess: () => onsuccess?.(),
 		})
 	)}
-	class="p-2 flex flex-col gap-3 {klass}"
+	class="flex flex-col gap-3 {klass}"
 >
 	{#if period?.id}
 		<input type="hidden" name="id" value={period.id} />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tip } from 'fuma'
-	import { CheckIcon, OctagonAlertIcon, OctagonXIcon, Trash2Icon } from '@lucide/svelte'
+	import { CheckIcon, OctagonAlertIcon, OctagonXIcon, XIcon } from '@lucide/svelte'
 	import type { Subscribe } from '@prisma/client'
 
 	interface Props {
@@ -48,6 +48,6 @@
 	</span>
 {:else if subscribe.state === 'cancelled'}
 	<span class="inline-flex" use:tip={{ content: `Inscription annulée ${changeAuthor}` }}>
-		<Trash2Icon class="text-error {klass}" />
+		<XIcon class="text-error {klass}" />
 	</span>
 {/if}
