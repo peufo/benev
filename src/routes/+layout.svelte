@@ -44,11 +44,12 @@
 
 <Toaster richColors />
 
+<!-- On doit forcer un padding supplémentaire de 6 à cause de la marge des drawers -->
 <div
 	class="flex min-h-screen flex-col bg-base-200/20"
 	style="
 		--card-opacity: {$theme.cardOpacity ?? 1};
-		padding-right: {$periodDrawerTransitionX}px;
+		padding-right: {$periodDrawerTransitionX + ($periodDrawerTransitionX ? 6 : 0)}px;
 	"
 >
 	{@render children?.()}
