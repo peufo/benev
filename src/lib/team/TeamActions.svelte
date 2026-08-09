@@ -6,7 +6,13 @@
 	import { urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import type { Team } from '@prisma/client'
-	import { ChartGanttIcon, ClipboardCopyIcon, PencilIcon, PlusIcon, UsersIcon } from '@lucide/svelte'
+	import {
+		ChartGanttIcon,
+		ClipboardCopyIcon,
+		PencilIcon,
+		PlusIcon,
+		UsersIcon,
+	} from '@lucide/svelte'
 	import Delayed from './Delayed.svelte'
 
 	interface Props {
@@ -69,5 +75,5 @@
 	data-sveltekit-noscroll
 	data-sveltekit-replacestate
 >
-	<PencilIcon />
+	<PencilIcon size={18} />
 </a>
