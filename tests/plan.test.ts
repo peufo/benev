@@ -124,11 +124,37 @@ test.describe.serial('Plan', () => {
 		await expect(addTag).toBeVisible()
 		await addTag.click()
 
-		const tagDrawer = page.locator('aside').filter({ hasText: 'Nouvelle étiquette' })
+		const tagDrawer = page.getByRole('dialog', { name: 'Nouvelle étiquette' })
 		await expect(tagDrawer).toBeVisible()
 		await tagDrawer.getByLabel('Nom', { exact: true }).fill('Urgent')
 		await tagDrawer.getByRole('button', { name: 'Valider' }).click()
 
 		await expect(tags.getByText('Urgent')).toBeVisible()
+	})
+
+	/**
+	 * Un clic seul ne crée plus de période: c'est le survol qui doit annoncer le geste. Le ghost
+	 * prend alors la forme d'un trait d'accroche daté, à l'heure aimantée où commencerait le
+	 * cliqué-glissé, et seulement là où ce geste crée — jamais sur l'entête de secteur.
+	 */
+	test('Le survol du plan annonce la création par un trait daté', async () => {
+		await gotoPlan('?form_team={}')
+
+		const teamDrawer = page.getByRole('dialog', { name: 'Nouveau secteur' })
+		await expect(teamDrawer).toBeVisible()
+		await teamDrawer.getByLabel('Nom du secteur').fill('Bar')
+		await teamDrawer.getByRole('button', { name: 'Valider' }).click()
+
+		// Un secteur sans période garde une pile vide: la ligne survolable existe malgré tout.
+		const row = page.locator('.stack-row').first()
+		await expect(row).toBeVisible()
+		await row.hover()
+
+		const ghost = page.locator('#ghost_create_period')
+		await expect(ghost).toBeVisible()
+		await expect(ghost).toHaveText(/^\d{2}:\d{2}$/)
+
+		await page.getByRole('link', { name: 'Bar' }).hover()
+		await expect(ghost).toBeHidden()
 	})
 })

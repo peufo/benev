@@ -58,7 +58,7 @@
 				<!-- Logo animé -->
 				<div class="hidden md:flex items-center justify-center relative">
 					<div
-						class="w-72 h-72 rounded-full bg-gradient-to-br from-secondary/40 to-primary/10 blur-2xl absolute"
+						class="w-72 h-72 rounded-full bg-linear-to-br from-secondary/40 to-primary/10 blur-2xl absolute"
 					></div>
 					<div class="relative w-64">
 						<AnimatedLogo />
