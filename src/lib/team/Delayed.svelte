@@ -21,7 +21,7 @@
 	style="--delay-in: {delayIn}ms; --delay-out: {delayOut}ms;"
 	class="
         scale-0 opacity-0 transition-all group-hover:scale-95 group-hover:opacity-100
-        delay-[--delay-out] group-hover:delay-[--delay-in]
+        delay-(--delay-out) group-hover:delay-(--delay-in)
     "
 >
 	{@render children?.()}
