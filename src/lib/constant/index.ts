@@ -1,6 +1,7 @@
 import {
 	AlignLeftIcon,
 	ArchiveIcon,
+	CheckIcon,
 	CircleUserIcon,
 	ConstructionIcon,
 	FileTextIcon,
@@ -11,9 +12,12 @@ import {
 	ListChecksIcon,
 	ListIcon,
 	MailIcon,
+	OctagonAlertIcon,
+	OctagonXIcon,
 	ScrollTextIcon,
 	SquareCheckIcon,
 	TypeIcon,
+	XIcon,
 } from '@lucide/svelte'
 import type { Component } from 'svelte'
 import { env } from '$env/dynamic/public'
@@ -26,6 +30,7 @@ import type {
 	Page,
 	Subscribe,
 } from '@prisma/client'
+import type { OptionRecord } from 'fuma'
 
 /** Durée minimale d'une période de travail. */
 export const PERIOD_MIN_MINUTES = 15
@@ -136,10 +141,7 @@ export const GIFT_CONDITION_TYPE: Record<GiftConditionType, string> = {
 	period: `Doit travailer durant la période de`,
 } as const
 
-export const MEMBER_FIELD_TYPE: Record<
-	Field['type'],
-	{ label: string; icon: Component<IconProps> }
-> = {
+export const MEMBER_FIELD_TYPE: OptionRecord<Field['type']> = {
 	string: { label: 'Text', icon: TypeIcon },
 	textarea: { label: 'Text long', icon: AlignLeftIcon },
 	number: { label: 'Nombre', icon: HashIcon },
@@ -148,14 +150,21 @@ export const MEMBER_FIELD_TYPE: Record<
 	multiselect: { label: 'Liste à choix multiple', icon: ListChecksIcon },
 } as const
 
-export const SUBSCRIBE_STATE: Record<Subscribe['state'], string> = {
-	request: 'Demande en cours',
-	accepted: 'Validé',
-	denied: 'Décliné',
-	cancelled: 'Annulé',
+export const SUBSCRIBE_STATE: OptionRecord<Subscribe['state']> = {
+	request: { label: 'Demande en cours', icon: OctagonAlertIcon, class: 'text-warning' },
+	accepted: { label: 'Validé', icon: CheckIcon, class: 'text-success' },
+	denied: { label: 'Décliné', icon: OctagonXIcon, class: 'text-error' },
+	cancelled: { label: 'Annulé', icon: XIcon, class: 'text-error' },
 } as const
 
-export const PAGE_TYPE: Record<Page['type'], { label: string; icon: Component<IconProps> }> = {
+export const SUBSCRIBE_STATE_ACTION: OptionRecord<Subscribe['state']> = {
+	request: { ...SUBSCRIBE_STATE.request, label: 'Rétablir' },
+	accepted: { ...SUBSCRIBE_STATE.accepted, label: 'Confirmer' },
+	denied: { ...SUBSCRIBE_STATE.denied, label: 'Décliner' },
+	cancelled: { ...SUBSCRIBE_STATE.cancelled, label: 'Annuler' },
+}
+
+export const PAGE_TYPE: OptionRecord<Page['type']> = {
 	home: { label: 'Accueil', icon: HouseIcon },
 	charter: { label: 'Charte des bénévoles', icon: ScrollTextIcon },
 	public: { label: 'Page publique', icon: FileTextIcon },

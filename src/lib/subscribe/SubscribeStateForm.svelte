@@ -1,6 +1,4 @@
 <script lang="ts" module>
-	import { CheckIcon, type IconProps, OctagonAlertIcon, OctagonXIcon, XIcon } from '@lucide/svelte'
-	import type { Component } from 'svelte'
 	import type { SubscribeState as ISubscribeState } from '@prisma/client'
 
 	type Edtitions = Record<ISubscribeState, ISubscribeState[]>
@@ -16,16 +14,7 @@
 		denied: ['accepted'],
 		cancelled: [],
 	}
-	type States = Record<
-		ISubscribeState,
-		{ icon: Component<IconProps>; class: string; label: string }
-	>
-	const states: States = {
-		request: { label: 'Rétablir', icon: OctagonAlertIcon, class: 'text-warning' },
-		accepted: { label: 'Confirmer', icon: CheckIcon, class: 'text-success' },
-		denied: { label: 'Décliner', icon: OctagonXIcon, class: 'text-error' },
-		cancelled: { label: 'Annuler', icon: XIcon, class: 'text-error' },
-	}
+	type States = typeof SUBSCRIBE_STATE_ACTION
 </script>
 
 <script lang="ts">
@@ -35,6 +24,7 @@
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { page } from '$app/state'
 	import { setSubscribeState } from './subscribeState.remote'
+	import { SUBSCRIBE_STATE_ACTION } from '$lib/constant'
 
 	interface Props {
 		subscribe: Subscribe & { member: { isValidedByUser: boolean } }
@@ -55,10 +45,16 @@
 	const remoteForm = setSubscribeState.for(uid)
 
 	let creatorStates: Partial<States> = $derived(
-		creatorEditions[subscribe.state].reduce((acc, cur) => ({ ...acc, [cur]: states[cur] }), {})
+		creatorEditions[subscribe.state].reduce(
+			(acc, cur) => ({ ...acc, [cur]: SUBSCRIBE_STATE_ACTION[cur] }),
+			{}
+		)
 	)
 	let subscriberStates: Partial<States> = $derived(
-		subscriberEditions[subscribe.state].reduce((acc, cur) => ({ ...acc, [cur]: states[cur] }), {})
+		subscriberEditions[subscribe.state].reduce(
+			(acc, cur) => ({ ...acc, [cur]: SUBSCRIBE_STATE_ACTION[cur] }),
+			{}
+		)
 	)
 	let isCreator = $derived(
 		(isSelf && subscribe.createdBy === 'user') || (isLeader && subscribe.createdBy === 'leader')
@@ -75,7 +71,7 @@
 			...(isSubscriber && subscriberStates),
 			...(isConfirmationForced && {
 				accepted: {
-					...states.accepted,
+					...SUBSCRIBE_STATE_ACTION.accepted,
 					label: 'Confirmer au nom du membre',
 					class: 'text-blue-500',
 				},
