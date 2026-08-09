@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { daytz } from '$lib/dayjs'
 	import type { Milestone } from '@prisma/client'
-	import { ButtonDelete, InputString } from 'fuma'
+	import { ButtonDelete, InputDateTime, InputString } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
-	import InputTzDateTime from './InputTzDateTime.svelte'
+	import { getEventTimeZone } from '$lib/timezone'
 	import { createMilestone, deleteMilestone, updateMilestone } from './milestone.remote'
 
 	interface Props {
@@ -52,7 +51,13 @@
 		value={milestone.name}
 		autocomplete="off"
 	/>
-	<InputTzDateTime key="timestamp" label="Date" value={daytz(milestone.timestamp)} />
+	<InputDateTime
+		field={remoteForm.fields.timestamp}
+		label="Date"
+		layout="datetime"
+		value={milestone.timestamp ?? new Date()}
+		timezone={getEventTimeZone()}
+	/>
 
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">
 		<button class="btn btn-primary">Valider</button>

@@ -1,4 +1,4 @@
-import { parseFormKey, prisma, getPlanData } from '$lib/server'
+import { getMilestoneForm, getPlanData } from '$lib/server'
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
 
@@ -10,8 +10,6 @@ export const load = async ({ url, untrack, params: { eventId }, parent }) => {
 
 	return {
 		...(await getPlanData({ url, untrack, event })),
-		milestone: await parseFormKey(form_milestone, (id) =>
-			prisma.milestone.findUnique({ where: { id, eventId } })
-		),
+		milestone: await getMilestoneForm(form_milestone, eventId),
 	}
 }

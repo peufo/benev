@@ -4,7 +4,7 @@ import { zDate } from './form'
 
 export const modelMilestoneCreate = z.object({
 	name: z.string().min(2),
-	// `InputTzDateTime` transmet une date ISO: la conversion se fait dans le schéma, là où
+	// `InputDateTime` transmet une date ISO: la conversion se fait dans le schéma, là où
 	// `parseFormData` la faisait à partir du jeton `USE_COERCE_DATE`.
 	timestamp: zDate,
 }) satisfies z.ZodType<Omit<Prisma.MilestoneCreateInput, 'event'>>

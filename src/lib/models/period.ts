@@ -9,6 +9,7 @@ export const modelPeriodCreate = z.object({
 	// un `hidden` pour `team`, une case masquée par étiquette pour `tags[]`.
 	team: zConnect,
 	tags: zConnectMany,
+	// `InputDateTime` transmet une date ISO dans un champ caché: au schéma de la reconstruire.
 	start: zDate,
 	end: zDate,
 }) satisfies z.ZodType<Prisma.PeriodCreateInput>

@@ -1,6 +1,14 @@
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
-import { permission, prisma, parseFormKey, getTeam, getPeriodForm, getPlanData } from '$lib/server'
+import {
+	permission,
+	prisma,
+	parseFormKey,
+	getTeam,
+	getPeriodForm,
+	getMilestoneForm,
+	getPlanData,
+} from '$lib/server'
 
 export const load = async ({ locals, url, untrack, params: { eventId } }) => {
 	const member = await permission.leader(eventId, locals)
@@ -21,8 +29,6 @@ export const load = async ({ locals, url, untrack, params: { eventId } }) => {
 		}),
 		team: await parseFormKey(form_team, (id) => getTeam(id, { member }).catch(() => null)),
 		period: await getPeriodForm(form_period),
-		milestone: await parseFormKey(form_milestone, (id) =>
-			prisma.milestone.findUnique({ where: { id, eventId } })
-		),
+		milestone: await getMilestoneForm(form_milestone, eventId),
 	}
 }

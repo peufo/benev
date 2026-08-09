@@ -1,7 +1,15 @@
 <script lang="ts">
 	import { CopyIcon, PlusIcon } from '@lucide/svelte'
-	import { daytz, type Dayjs } from '$lib/dayjs'
-	import { ButtonDelete, InputSelect, InputMultiSelect, tip, urlParam, InputNumber } from 'fuma'
+	import { daytz } from '$lib/dayjs'
+	import {
+		ButtonDelete,
+		InputSelect,
+		InputMultiSelect,
+		tip,
+		urlParam,
+		InputNumber,
+		InputDateTime,
+	} from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { goto } from '$app/navigation'
 	import { searchTeams } from '$lib/team/team.remote'
@@ -9,7 +17,7 @@
 	import { TagSelectItem } from '$lib/tag'
 	import { toast } from 'svelte-sonner'
 	import { enhanceForm } from '$lib/enhanceForm'
-	import InputDateTime from './InputDateTime.svelte'
+	import { getEventTimeZone } from '$lib/timezone'
 	import { createPeriod, deletePeriod, duplicatePeriod, updatePeriod } from './period.remote'
 
 	type PeriodProp = Partial<Period & { team: Team; tags: Tag[]; subscribes: Subscribe[] }>
@@ -49,10 +57,10 @@
 		}
 	}
 
-	let defaultStart = daytz().startOf('hour').add(1, 'hour')
-	let defaultEnd = daytz().startOf('hour').add(3, 'hours')
-	let start = $state(daytz(period.start || defaultStart))
-	let end = $state(daytz(period?.end || defaultEnd))
+	let defaultStart = daytz().startOf('hour').add(1, 'hour').toDate()
+	let defaultEnd = daytz().startOf('hour').add(3, 'hours').toDate()
+	let start = $state(period.start || defaultStart)
+	let end = $state(period?.end || defaultEnd)
 
 	let maxSubscribe = $state(period?.maxSubscribe || 1)
 	let selectedTeam: Team | undefined = $state(period.team)
@@ -61,18 +69,20 @@
 	// ATTENTION runtime: `Intl.DurationFormat` n'est pas disponible partout. Bun l'a
 	// (vérifié en 1.2.22), Node ne l'a pas avant la v23. Le Dockerfile lance l'app avec
 	// Bun, donc le SSR passe; sur un hôte Node plus ancien l'appel lèverait un TypeError.
-	function formatDuration(_start: Dayjs, _end: Dayjs) {
+	function formatDuration(_start: Date, _end: Date) {
+		const from = daytz(_start)
+		const to = daytz(_end)
 		return new Intl.DurationFormat('fr-ch').format({
-			days: _end.diff(_start, 'days'),
-			hours: _end.diff(_start, 'hours') % 24,
-			minutes: _end.diff(_start, 'minutes') % 60,
+			days: to.diff(from, 'days'),
+			hours: to.diff(from, 'hours') % 24,
+			minutes: to.diff(from, 'minutes') % 60,
 		})
 	}
 
 	export function setPeriod(_period: PeriodProp) {
 		period = _period
-		start = daytz(period?.start || defaultStart)
-		end = daytz(period?.end || defaultEnd)
+		start = period?.start || defaultStart
+		end = period?.end || defaultEnd
 		maxSubscribe = period?.maxSubscribe || 1
 		// Le champ distant est la source de vérité une fois monté: sans ce `set`, la saisie
 		// faite sur la période précédente resterait affichée en passant à la suivante.
@@ -92,8 +102,8 @@
 		if (!teamId) return
 		const nextPeriod = await duplicatePeriod({
 			teamId,
-			start: end.toDate(),
-			end: end.add(duration, 'minute').toDate(),
+			start: end,
+			end: daytz(end).add(duration, 'minute').toDate(),
 			// `value()` suit la saisie en cours; il reste vide tant que le champ n'a pas été touché.
 			maxSubscribe: remoteForm.fields.maxSubscribe.value() ?? maxSubscribe,
 			tagIds: selectedTags.map((t) => t.id),
@@ -215,23 +225,23 @@
 	<div class="grid gap-3" style:grid-template-columns="repeat(2, minmax(80px, 1fr))">
 		<InputDateTime
 			label="Début"
-			key="start"
+			field={remoteForm.fields.start}
 			bind:value={start}
-			onSetValue={(newStart) => {
-				const duration = end.diff(start)
-				end = newStart.add(duration)
+			timezone={getEventTimeZone()}
+			transform={(newStart) => {
+				const duration = daytz(end).diff(start)
+				end = daytz(newStart).add(duration).toDate()
 				return newStart
 			}}
 		/>
 		<InputDateTime
 			label="Fin"
-			key="end"
+			field={remoteForm.fields.end}
 			bind:value={end}
+			timezone={getEventTimeZone()}
 			hint={formatDuration(start, end)}
-			onSetValue={(newEnd) => {
-				if (newEnd.isBefore(start) || newEnd.isSame(start)) {
-					return newEnd.add(1, 'day')
-				}
+			transform={(newEnd) => {
+				if (newEnd.getTime() <= start.getTime()) return daytz(newEnd).add(1, 'day').toDate()
 				return newEnd
 			}}
 		/>
