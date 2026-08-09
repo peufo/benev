@@ -16,12 +16,7 @@
 
 <div class="flex flex-col gap-1">
 	{#each subscribes as subscribe (subscribe.id)}
-		<div
-			class="
-			flex items-center gap-2 px-3 py-2 pr-2 rounded-md
-			border border-hard bg-base-100
-		"
-		>
+		<div class="flex items-center gap-1">
 			{#if subscribe.isAbsent}
 				<div use:tip={{ content: 'Ce membre a été absent à sa periode de travail' }}>
 					<TriangleAlertIcon class="text-warning" size={20} />

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ButtonDelete } from 'fuma'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import { deleteMember } from './member.remote'
 
 	interface Props {
@@ -11,12 +12,15 @@
 	}
 
 	let { memberId, redirectTo = '/me', class: klass = '', btn = true, children }: Props = $props()
+
+	const uid = $props.id()
+	const remoteForm = deleteMember.for(uid)
 </script>
 
-<form {...deleteMember.for(memberId)} class="contents">
+<form {...remoteForm.enhance(enhanceForm())} class="contents">
 	<input type="hidden" name="memberId" value={memberId} />
 	<input type="hidden" name="redirectTo" value={redirectTo} />
-	<ButtonDelete formaction={deleteMember.action} class={klass} {btn}>
+	<ButtonDelete formaction={remoteForm.action} class={klass} {btn}>
 		{#if children}{@render children()}{:else}Supprimer ma participation{/if}
 	</ButtonDelete>
 </form>
