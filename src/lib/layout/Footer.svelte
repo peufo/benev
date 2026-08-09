@@ -1,5 +1,5 @@
 <script lang="ts">
-	import logo from '$lib/assets/logo.svg'
+	import benevio from '$lib/assets/benevio.svg'
 	interface Props {
 		class?: string
 		children?: import('svelte').Snippet
@@ -21,8 +21,7 @@
 
 	<div class="text-left">
 		<a href="/" class="btn btn-sm btn-outline ml-auto border-soft">
-			<img src={logo} alt="logo de benev.io" class="h-5 -translate-x-1" />
-			<span>Benevio</span>
+			<img src={benevio} alt="logo de benev.io" class="h-5" />
 		</a>
 		<span class="text-xs opacity-60">
 			©2023-{new Date().getFullYear()} Dev Voisard - Switzerland
