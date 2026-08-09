@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Page } from '@prisma/client'
 	import { page } from '$app/state'
-	import { DropDown } from 'fuma'
+	import { Popover } from 'fuma'
 	import { MenuIcon, GaugeIcon } from '@lucide/svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from '$lib/layout/adminTabs.svelte'
@@ -19,18 +19,14 @@
 	<EventPubliqueMenuItems {pages} class="btn btn-ghost" classActive="btn-active" />
 </div>
 
-<DropDown class="max-h-none min-w-50" hideOnBlur>
-	{#snippet activator()}
-		<button
-			class="
-				btn btn-square ml-2 lg:hidden
-			"
-		>
+<Popover class="max-h-none min-w-50">
+	{#snippet trigger({ trigger })}
+		<button {...trigger} class="btn btn-square ml-2 lg:hidden">
 			<MenuIcon size={24} />
 		</button>
 	{/snippet}
 
-	<div class="flex flex-col gap-1">
+	<div class="menu w-full p-1 gap-1">
 		{#if adminIsVisible}
 			<h3 class="title-sm pl-3 pt-1">Public</h3>
 		{/if}
@@ -43,7 +39,6 @@
 
 		<!-- ADMIN -->
 		{#if adminIsVisible}
-			<hr class="block lg:hidden" />
 			<h3 class="title-sm pl-3 pt-1">Gestion</h3>
 			{#each adminTabs() as { href, isActive, label, icon: Icon } (href)}
 				<a {href} class="menu-item" class:active={isActive}>
@@ -63,4 +58,4 @@
 			</a>
 		{/if}
 	</div>
-</DropDown>
+</Popover>
