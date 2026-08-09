@@ -8,6 +8,7 @@
 
 <script lang="ts">
 	import type { Event, Field } from '@prisma/client'
+	import { CopyPlus } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { toast } from 'svelte-sonner'
 	import { ButtonDelete, InputBoolean, InputString, InputTextarea, tip } from 'fuma'
@@ -16,7 +17,7 @@
 	import { enhanceForm } from '$lib/enhanceForm'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
 	import type { TeamWithComputedValues } from '$lib/server'
-	import { createTeam, deleteTeam, updateTeam } from './team.remote'
+	import { cloneTeamForm, createTeam, deleteTeam, updateTeam } from './team.remote'
 
 	interface Props {
 		class?: string
@@ -35,7 +36,10 @@
 	}: Props = $props()
 
 	const remoteForm = $derived(team.id ? updateTeam : createTeam)
-	const deleteFormId = $props.id()
+	// `$props.id()` ne s'appelle qu'une fois par composant: les deux formulaires cachés en dérivent.
+	const uid = $props.id()
+	const deleteFormId = `${uid}-delete`
+	const cloneFormId = `${uid}-clone`
 
 	// `DrawersForm` s'en sert pour injecter un responsable fraîchement invité.
 	teamForm = {
@@ -58,8 +62,8 @@
 </script>
 
 {#if team.id}
-	<!-- HTML interdit les <form> imbriqués: ce formulaire ne porte que les champs cachés, son
-	bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
+	<!-- HTML interdit les <form> imbriqués: ces formulaires ne portent que les champs cachés, leurs
+	boutons vivent dans la barre d'actions du formulaire principal, associés par l'attribut `form`. -->
 	<form
 		{...deleteTeam.enhance(
 			enhanceForm({
@@ -69,6 +73,16 @@
 			})
 		)}
 		id={deleteFormId}
+		class="hidden"
+	>
+		<input type="hidden" name="id" value={team.id} />
+	</form>
+
+	<form
+		{...cloneTeamForm.enhance(
+			enhanceForm({ success: 'Secteur dupliqué', onsuccess: () => onsuccess?.() })
+		)}
+		id={cloneFormId}
 		class="hidden"
 	>
 		<input type="hidden" name="id" value={team.id} />
@@ -131,6 +145,14 @@
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">
 		<button class="btn btn-primary">Valider</button>
 		{#if team.id}
+			<button
+				type="submit"
+				form={cloneFormId}
+				class="btn btn-soft btn-primary btn-square"
+				use:tip={{ content: 'Dupliquer le secteur' }}
+			>
+				<CopyPlus size={18} />
+			</button>
 			<div class="grow"></div>
 			<ButtonDelete form={deleteFormId} formaction={deleteTeam.action} />
 		{/if}

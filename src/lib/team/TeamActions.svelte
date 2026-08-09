@@ -6,16 +6,8 @@
 	import { urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import type { Team } from '@prisma/client'
-	import {
-		ChartGanttIcon,
-		ClipboardCopyIcon,
-		CopyPlus,
-		PencilIcon,
-		PlusIcon,
-		UsersIcon,
-	} from '@lucide/svelte'
+	import { ChartGanttIcon, ClipboardCopyIcon, PencilIcon, PlusIcon, UsersIcon } from '@lucide/svelte'
 	import Delayed from './Delayed.svelte'
-	import { cloneTeamForm } from './team.remote'
 
 	interface Props {
 		team: Team
@@ -24,7 +16,7 @@
 	let { team }: Props = $props()
 </script>
 
-<Delayed index={3} max={3}>
+<Delayed index={2} max={2}>
 	<a
 		href={`${$eventPath}/admin/members?subscribes_teams=["${team.id}"]`}
 		onclick={stopPropagation(bubble('click'))}
@@ -35,7 +27,7 @@
 	</a>
 </Delayed>
 
-<Delayed index={2} max={3}>
+<Delayed index={1} max={2}>
 	<a
 		href={`${$eventPath}/admin/subscribes?teams=["${team.id}"]`}
 		onclick={stopPropagation(bubble('click'))}
@@ -46,7 +38,7 @@
 	</a>
 </Delayed>
 
-<Delayed index={1} max={3}>
+<Delayed index={0} max={2}>
 	<a
 		href={`${$eventPath}/admin/plan?teams=["${team.id}"]`}
 		onclick={stopPropagation(bubble('click'))}
@@ -55,15 +47,6 @@
 	>
 		<ChartGanttIcon />
 	</a>
-</Delayed>
-
-<Delayed index={0} max={3}>
-	<form {...cloneTeamForm.for(team.id)} class="contents">
-		<input type="hidden" name="id" value={team.id} />
-		<button class="btn btn-square btn-sm btn-ghost" use:tip={{ content: 'Dupliquer le secteur' }}>
-			<CopyPlus size="18" />
-		</button>
-	</form>
 </Delayed>
 
 <a
