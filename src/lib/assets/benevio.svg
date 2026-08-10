@@ -2,7 +2,7 @@
   <g transform="translate(40,20)" fill="none" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
 
     <!-- "bene" en bleu -->
-    <g stroke="#2563eb">
+    <g stroke="#2663eb">
       <!-- b : rayon 40, identique au logo -->
       <line x1="12" y1="40" x2="12" y2="160"/>
       <circle cx="52" cy="120" r="40"/>
@@ -25,12 +25,12 @@
     </g>
 
     <!-- "io" en vert -->
-    <g stroke="#10b981">
+    <g stroke="#11b981">
       <line x1="536" y1="80" x2="536" y2="160"/>
       <circle cx="606" cy="120" r="40"/>
     </g>
   </g>
 
   <!-- Point du i -->
-  <circle cx="576" cy="64" r="18" fill="#10b981"/>
+  <circle cx="576" cy="64" r="18" fill="#11b981"/>
 </svg>

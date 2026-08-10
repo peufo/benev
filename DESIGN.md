@@ -2,12 +2,12 @@
 name: benevio
 description: Plateforme de gestion de bénévoles pour associations, festivals et collectifs
 colors:
-  primary: '#0d3b66'
+  primary: '#2663eb'
   primary-content: '#ffffff'
-  secondary: '#b8a58a'
-  secondary-content: '#ffffff'
-  accent: '#a52422'
-  accent-content: '#f1e2e2'
+  secondary: '#11b981'
+  secondary-content: '#1f2937'
+  accent: '#e69214'
+  accent-content: '#1f2937'
   neutral: '#2b3440'
   neutral-content: '#d7dde4'
   base-100: '#ffffff'
@@ -100,32 +100,35 @@ Un seul thème est déclaré (`light`), rendu par défaut. Les composants n'util
 **Key Characteristics:**
 
 - Une seule police, Barlow, porte toute la hiérarchie par le poids et la taille.
-- Le bleu ardoise (`primary`) est l'accent principal; il est présent mais jamais étouffant.
-- Le beige sable (`secondary`) est la tonalité de confort: fonds subtils, bordures, dégradé de page, pastilles.
-- Le rouge brique (`accent`) est un marqueur fonctionnel rare, réservé au repérage temporel des plannings.
+- Le bleu franc (`primary`) est l'accent principal et porte l'action; il est présent mais jamais étouffant.
+- Le vert (`secondary`) est la couleur de la marque — c'est le point du logo. Il porte l'atmosphère, la confirmation et le dégradé de page.
+- L'orange (`accent`) est un marqueur fonctionnel rare, réservé au repérage temporel des plannings.
+- Le bleu et le vert sont les deux couleurs du logo; la charte ne fait que prolonger la marque à l'écran.
 - Les surfaces sont planes par défaut; les ombres apparaissent seulement sur les cards, la navigation et les éléments interactifs majeurs.
 - Les coins sont arrondis de manière modérée: 8px pour les boutons et champs, 16px pour les cards et la navbar.
 
 ## 2. Colors
 
-La palette est volontairement resserrée: un accent froid et stable, une nuance chaude pour l'atmosphère, un rouge de repérage, et des neutres quasi purs. **Toutes les couleurs viennent du thème DaisyUI de `src/app.css` — il n'existe aucune couleur de marque en dehors de lui.**
+La palette est volontairement resserrée et sort directement du logo: un bleu qui porte l'action, un vert qui signe la marque, un orange de repérage, et des neutres quasi purs. **Toutes les couleurs viennent du thème DaisyUI de `src/app.css` — il n'existe aucune couleur de marque en dehors de lui.**
+
+Bleu et vert sont deux teintes claires (L≈55% et L≈70% en OKLCH). Elles se tiennent en aplat, mais aucune des deux n'a la réserve de contraste de l'ancien bleu ardoise: les règles ci-dessous encadrent précisément ce que chacune peut porter.
 
 ### Tokens du thème
 
-| Token               | Valeur    | Rôle                                                                                                                 |
-| ------------------- | --------- | -------------------------------------------------------------------------------------------------------------------- |
-| `primary`           | `#0d3b66` | Bleu ardoise profond. Couleur de marque: titres, boutons principaux, liens actifs, étapes franchies.                 |
-| `primary-content`   | `#ffffff` | Texte sur fond `primary`. Contraste 11.45:1.                                                                         |
-| `secondary`         | `#b8a58a` | Beige sable. Atmosphère: fonds `secondary/5`–`secondary/10`, bordures `secondary/20`, dégradé de page, pastilles.    |
-| `secondary-content` | `#ffffff` | Texte sur fond `secondary`. **Contraste 2.39:1 — échoue AA** (voir la règle ci-dessous).                             |
-| `accent`            | `#a52422` | Rouge brique. Marqueur de position temporelle dans les plannings (`bg-accent` en filet de 3px, `hover:bg-accent/5`). |
-| `accent-content`    | `#f1e2e2` | Texte sur fond `accent`. Contraste 5.81:1.                                                                           |
-| `neutral`           | `#2b3440` | Gris ardoise. Textes d'aide discrets (`label-text-alt`).                                                             |
-| `neutral-content`   | `#d7dde4` | Texte sur fond `neutral`. Contraste 9.20:1.                                                                          |
-| `base-100`          | `#ffffff` | Surfaces: cards, navbar, champs, modales.                                                                            |
-| `base-200`          | `#f2f2f2` | Fond de hover léger, fond d'application (`bg-base-200/20`), lignes alternées.                                        |
-| `base-300`          | `#e5e6e6` | État actif (`menu-item.active` via `base-300/80`), séparateurs appuyés.                                              |
-| `base-content`      | `#1f2937` | Texte principal. Contraste 14.68:1 sur `base-100`.                                                                   |
+| Token               | Valeur    | Rôle                                                                                                                                                                                                      |
+| ------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `primary`           | `#2663eb` | Bleu franc. Couleur d'action: titres, boutons principaux, liens actifs, étapes franchies. Contraste 5.16:1 sur `base-100`.                                                                                |
+| `primary-content`   | `#ffffff` | Texte sur fond `primary`. Contraste 5.16:1.                                                                                                                                                               |
+| `secondary`         | `#11b981` | Vert. Couleur de marque (le point du logo): aplats de confirmation, fonds `secondary/5`–`secondary/10`, bordures `secondary/20`, dégradé de page, pastilles. **2.54:1 sur `base-100` — jamais en texte.** |
+| `secondary-content` | `#1f2937` | Texte sur fond `secondary`. Contraste 5.79:1.                                                                                                                                                             |
+| `accent`            | `#e69214` | Orange. Marqueur de position temporelle dans les plannings (`bg-accent` en filet de 3px, `hover:bg-accent/5`). **2.47:1 sur `base-100` — jamais en texte.**                                               |
+| `accent-content`    | `#1f2937` | Texte sur fond `accent`. Contraste 5.93:1.                                                                                                                                                                |
+| `neutral`           | `#2b3440` | Gris ardoise. Textes d'aide discrets (`label-text-alt`).                                                                                                                                                  |
+| `neutral-content`   | `#d7dde4` | Texte sur fond `neutral`. Contraste 9.20:1.                                                                                                                                                               |
+| `base-100`          | `#ffffff` | Surfaces: cards, navbar, champs, modales.                                                                                                                                                                 |
+| `base-200`          | `#f2f2f2` | Fond de hover léger, fond d'application (`bg-base-200/20`), lignes alternées.                                                                                                                             |
+| `base-300`          | `#e5e6e6` | État actif (`menu-item.active` via `base-300/80`), séparateurs appuyés.                                                                                                                                   |
+| `base-content`      | `#1f2937` | Texte principal. Contraste 14.68:1 sur `base-100`.                                                                                                                                                        |
 
 `info`, `success`, `warning` et `error` ne sont pas redéfinis: ils sont hérités des valeurs par défaut de DaisyUI v5 et servent uniquement de signaux d'état (`badge-success`, `badge-warning`, `--color-error` sur les champs invalides).
 
@@ -134,17 +137,19 @@ La palette est volontairement resserrée: un accent froid et stable, une nuance 
 Deux utilitaires dérivent la bordure de `base-content` plutôt que d'introduire une couleur:
 
 - **`.border-soft`** — `color-mix(in oklab, var(--color-base-content) 18%, #0000)`. Bordure par défaut des cards internes, champs, encarts, séparateurs.
-- **`.border-hard`** — `color-mix(in oklab, var(--color-base-content) 30%, #0000)`. Bordure des conteneurs qui doivent tenir seuls: card principale, pied de page.
+- **`.border-hard`** — `color-mix(in oklab, var(--color-base-content) 40%, #0000)`. Bordure des conteneurs qui doivent tenir seuls: card principale, pied de page.
 
 ### Named Rules
 
-**The Theme-Only Rule.** Aucune couleur ne vit en dehors de `src/app.css`. Pas de hex en dur (`bg-[#0d3b66]`), pas de palette Tailwind brute (`text-slate-700`, `bg-red-500`), pas d'ajout dans un fichier de config. On utilise `primary`, `secondary`, `accent`, `neutral`, `base-*`, les états DaisyUI et leurs variantes d'opacité (`/5`, `/10`, `/20`, `/40`, `/70`). S'il manque une couleur, on l'ajoute au bloc `@plugin 'daisyui/theme'`.
+**The Theme-Only Rule.** Aucune couleur ne vit en dehors de `src/app.css`. Pas de hex en dur (`bg-[#2663eb]`), pas de palette Tailwind brute (`text-slate-700`, `bg-green-500`), pas d'ajout dans un fichier de config. On utilise `primary`, `secondary`, `accent`, `neutral`, `base-*`, les états DaisyUI et leurs variantes d'opacité (`/5`, `/10`, `/20`, `/40`, `/70`). S'il manque une couleur, on l'ajoute au bloc `@plugin 'daisyui/theme'`.
 
-**The One Accent Rule.** Le bleu ardoise (`primary`) est le seul accent de la plupart des écrans. Le beige (`secondary`) porte l'atmosphère, jamais l'action. Le rouge brique (`accent`) est réservé au repérage temporel des plannings; il ne devient pas un accent décoratif ailleurs.
+Deux fichiers échappent au thème par nécessité: les logos `src/lib/assets/logo.svg`, `src/lib/assets/benevio.svg` et `static/favicon.svg` sont servis en `<img>` et ne peuvent pas hériter de `currentColor`. Leurs hex sont donc écrits en dur et **doivent être tenus à jour avec `primary` et `secondary`**. Quand la marque est rendue inline dans un composant Svelte, elle repasse par `text-primary` / `text-secondary` et `currentColor`.
 
-**The Beige-Is-A-Ground Rule.** `secondary` ne passe jamais au premier plan: pas de `btn-secondary` plein, pas de `badge-secondary` plein, pas de `text-secondary` sur du texte à lire. Son contraste avec `secondary-content` (#fff) est de 2.39:1, et avec `base-100` de 2.39:1 également. Il fonctionne comme fond (`bg-secondary/5`, `bg-secondary/10`), comme bordure (`border-secondary/20`), comme pastille ou comme trait — pas comme surface de lecture. `badge-secondary badge-outline` sur fond `base-100` reste légitime: c'est le contour qui porte la couleur, pas le fond.
+**The One Accent Rule.** Le bleu (`primary`) porte l'action et reste l'accent dominant de la plupart des écrans. Le vert (`secondary`) porte la marque, l'atmosphère et la confirmation — il peut prendre un aplat, mais il ne dispute jamais au bleu l'action principale d'un écran: deux boutons pleins de couleurs différentes côte à côte, c'est une hiérarchie ratée. L'orange (`accent`) est réservé au repérage temporel des plannings; il ne devient pas un accent décoratif ailleurs.
 
-**The /70 Floor Rule.** Le texte atténué descend à `base-content/70` (5.54:1) au plus bas. `base-content/60` tombe à 4.04:1 et échoue AA sur du texte courant; on le réserve aux libellés non essentiels en gras (`.title-sm`), là où l'information est aussi portée ailleurs.
+**The Chromatic-Never-Reads Rule.** Ni `secondary` (2.54:1 sur `base-100`) ni `accent` (2.47:1) ne portent du texte: pas de `text-secondary` ni de `text-accent` sur une phrase à lire, pas d'icône seule porteuse d'information dans ces teintes. Ils fonctionnent comme fond, aplat, bordure, pastille ou trait. En aplat plein, leur texte est `secondary-content` / `accent-content` — l'encre `#1f2937`, qui remonte à 5.79:1 et 5.93:1. `badge-secondary badge-outline` sur `base-100` reste légitime: c'est le contour qui porte la couleur, pas la lecture.
+
+**The /70 Floor Rule.** Le texte atténué descend à `base-content/70` (5.54:1) au plus bas. `base-content/60` tombe à 4.04:1 et échoue AA sur du texte courant; on le réserve aux libellés non essentiels en gras (`.title-sm`), là où l'information est aussi portée ailleurs. La règle vaut aussi pour `primary`: à 5.16:1 le bleu n'a plus la réserve de l'ancien bleu ardoise (11.45:1), donc **`text-primary` ne s'atténue pas** — `text-primary/70` tombe à 2.68:1.
 
 ## 3. Typography
 
@@ -220,7 +225,9 @@ Tous les composants s'appuient sur DaisyUI v5 et sur la bibliothèque `fuma` (li
 
 ### Signature Component: Trust Band
 
-Bande horizontale pleine largeur, fond `bg-secondary/5`, bordures `border-y border-secondary/20`, contenu centré en `py-6`. Elle porte les preuves de confiance (open source, solide, simple) sous forme de petites pastilles colorées suivies d'un mot. C'est le moment où le design dit « tu peux y aller » sans être tape-à-l'œil.
+Bande horizontale pleine largeur, fond `bg-secondary/5`, bordures `border-y border-secondary/20`, contenu centré en `py-6`. Elle porte les preuves de confiance (open source, gratuit, personnalisable) sous forme de petites pastilles suivies d'un mot. C'est le moment où le design dit « tu peux y aller » sans être tape-à-l'œil.
+
+Les pastilles sont **toutes `bg-secondary`**. La couleur n'encode rien ici — les trois affirmations sont indépendantes, pas des catégories: trois teintes différentes inventeraient une taxonomie qui n'existe pas.
 
 ## 6. Do's and Don'ts
 
@@ -233,16 +240,17 @@ Bande horizontale pleine largeur, fond `bg-secondary/5`, bordures `border-y bord
 - **Do** passer `variant="block"` aux champs `fuma` dans les formulaires.
 - **Do** laisser beaucoup d'air autour des sections (`py-20 md:py-28` en hero, `py-12 md:py-20` en contenu).
 - **Do** préférer des icônes Lucide fines et simples aux icônes MDI chargées.
-- **Do** utiliser `secondary` comme fond, bordure ou pastille, jamais comme texte ni comme fond de bouton.
+- **Do** utiliser `secondary` comme fond, aplat, bordure ou pastille — jamais comme texte.
+- **Do** tenir les hex des logos SVG (`logo.svg`, `benevio.svg`, `favicon.svg`) alignés sur `primary` et `secondary`.
 
 ### Don't:
 
-- **Don't** écrire de valeurs hex en dur dans les composants (ex: `bg-[#0d3b66]`).
-- **Don't** utiliser la palette Tailwind brute (`slate`, `red`, `emerald`…): elle court-circuite le thème.
+- **Don't** écrire de valeurs hex en dur dans les composants (ex: `bg-[#2663eb]`).
+- **Don't** utiliser la palette Tailwind brute (`slate`, `red`, `emerald`…): elle court-circuite le thème. `bg-green-500` est d'autant plus inutile que `secondary` _est_ le vert.
 - **Don't** écrire de valeurs de rayon, d'ombre ou d'espacement en dur si un token Tailwind ou DaisyUI existe.
 - **Don't** imbriquer une card dans une card, ni faire porter sa propre surface à un composant montable.
-- **Don't** utiliser `btn-secondary` plein ni `text-secondary` sur du texte: 2.39:1, sous le seuil AA.
-- **Don't** descendre le texte atténué sous `base-content/70`.
+- **Don't** utiliser `text-secondary` (2.54:1) ni `text-accent` (2.47:1) sur du texte à lire: sous le seuil AA.
+- **Don't** descendre le texte atténué sous `base-content/70`, ni atténuer `text-primary` du tout.
 - **Don't** utiliser de gradients flashy ou de « hero metric » (gros chiffre + petit label).
 - **Don't** tomber dans le template startup: pas de grille de cartes identiques icône + titre + texte.
 - **Don't** utiliser d'illustrations 3D stériles ou un ton « transformez votre workflow ».

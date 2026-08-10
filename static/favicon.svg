@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="120" height="120">
   <!-- Tige du "b" -->
-  <line x1="60" y1="40" x2="60" y2="160" stroke="#2563eb" stroke-width="24" stroke-linecap="round"/>
+  <line x1="60" y1="40" x2="60" y2="160" stroke="#2663eb" stroke-width="24" stroke-linecap="round"/>
   
   <!-- Boucle du "b" -->
-  <circle cx="100" cy="120" r="40" fill="none" stroke="#2563eb" stroke-width="24"/>
+  <circle cx="100" cy="120" r="40" fill="none" stroke="#2663eb" stroke-width="24"/>
   
   <!-- Point d'accent (l'humain / le ".io") -->
-  <circle cx="140" cy="60" r="18" fill="#10b981"/>
+  <circle cx="140" cy="60" r="18" fill="#11b981"/>
 </svg>

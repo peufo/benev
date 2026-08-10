@@ -6,8 +6,11 @@
 	let { data, children } = $props()
 </script>
 
-<!-- Background gradient -->
-<div class="absolute inset-0 bg-linear-to-b from-accent/10 via-accent/5 to-transparent -z-10"></div>
+<!-- Dégradé de page. `secondary` et non `accent`: l'orange est réservé au repérage temporel
+     des plannings, et le vert rattache le fond au point du logo. -->
+<div
+	class="absolute inset-0 bg-linear-to-b from-secondary/10 via-secondary/5 to-transparent -z-10"
+></div>
 
 <Header user={data.user}>
 	{#snippet start()}

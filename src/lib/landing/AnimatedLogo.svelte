@@ -1,84 +1,123 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import benevio from '$lib/assets/benevio.svg'
 
-	let svgEl: SVGSVGElement = $state()!
+	interface Props {
+		class?: string
+	}
 
-	onMount(() => {
-		if (!svgEl) return
-		const shapes = svgEl.querySelectorAll<SVGGeometryElement>('path, ellipse')
-		shapes.forEach((shape, i) => {
-			try {
-				const length = shape.getTotalLength()
-				shape.style.strokeDasharray = `${length}`
-				shape.style.strokeDashoffset = `${length}`
-				shape.getBoundingClientRect() // force reflow
-
-				const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-				const delay = prefersReduced ? 0 : 200 + i * 250
-				const duration = prefersReduced ? '0.01s' : '1.8s'
-
-				setTimeout(() => {
-					shape.style.transition = `stroke-dashoffset ${duration} cubic-bezier(0.25, 0.46, 0.45, 0.94)`
-					shape.style.strokeDashoffset = '0'
-				}, delay)
-			} catch {
-				// fallback
-			}
-		})
-	})
+	let { class: klass = '' }: Props = $props()
 </script>
 
-<div class="relative w-full max-w-[280px] mx-auto p-6">
+<!--
+	La marque se dessine: la hampe du « b » descend, la boucle se referme, puis le point vert
+	arrive. Le tracé est en CSS pur — les longueurs de `logo.svg` sont connues (hampe 120,
+	boucle 2π·40 ≈ 251.33), donc rien ne justifie de les mesurer au montage.
+
+	La géométrie est reprise de `src/lib/assets/logo.svg` mais rendue inline pour que la marque
+	suive `primary` / `secondary` via `currentColor`, comme l'exige la Theme-Only Rule.
+-->
+<!-- Les tailles internes sont relatives: le hero pilote l'échelle par la largeur du conteneur. -->
+<div class="flex flex-col items-center gap-5 {klass}">
 	<svg
-		bind:this={svgEl}
-		viewBox="0 0 218.006 222"
-		class="w-full h-auto overflow-visible"
+		class="w-3/5 h-auto aspect-square"
+		viewBox="0 0 200 200"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
-		role="img"
-		aria-label="Logo Benev qui se dessine"
+		aria-hidden="true"
 	>
-		<g class="text-primary">
-			<path
-				d="M85.245,222.000L34.745,222.000C34.745,222.000,31.245,222.000,31.245,218.500C31.245,215.000,34.745,215.000,34.745,215.000L50.245,215.000C50.245,215.000,-11.000,172.480,1.745,129.000C17.395,75.609,69.869,78.954,83.745,84.000C105.745,92.000,122.000,125.500,122.000,147.000C122.000,178.000,100.000,178.000,97.000,147.000C95.215,128.559,104.977,114.523,110.500,109.000C115.000,104.500,119.500,101.500,122.500,104.500C126.324,108.324,123.500,115.000,117.500,119.500C113.726,122.330,103.500,134.500,105.000,147.000C106.500,159.500,115.000,157.500,116.000,146.000C116.709,137.841,113.426,131.312,111.000,127.000C110.007,125.234,102.745,110.000,81.745,102.000C57.864,92.902,25.745,109.000,17.745,133.000C3.467,175.835,58.245,215.000,58.245,215.000L85.245,215.000C85.245,215.000,88.745,215.000,88.745,218.500C88.745,222.000,85.245,222.000,85.245,222.000Z"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2.5"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			/>
-			<ellipse
-				rx="21"
-				ry="25.5"
-				cx="63.1"
-				cy="43.8"
-				transform="rotate(-6 63.1 43.8)"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2.5"
-				stroke-linecap="round"
-			/>
-		</g>
-		<g class="text-secondary">
-			<path
-				d="M119.745,99.577C119.745,99.577,123.293,99.041,126.758,103.074C129.764,106.572,127.760,112.069,127.760,112.069C127.760,112.069,148.719,85.813,171.745,88.000C192.785,89.999,209.782,105.968,208.745,135.000C206.745,191.000,158.847,215.005,158.847,215.005L138.745,215.004C138.745,215.004,135.245,215.000,135.245,218.500C135.245,222.000,138.745,222.000,138.745,222.000L189.745,222.000C189.745,222.000,193.245,222.000,193.245,218.500C193.245,215.000,189.745,215.000,189.745,215.000L166.745,215.000C166.745,215.000,209.745,191.000,216.745,146.000C222.909,106.376,206.241,66.549,171.745,64.000C144.694,62.001,119.745,99.577,119.745,99.577Z"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2.5"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			/>
-			<ellipse
-				rx="21"
-				ry="25.5"
-				cx="160.6"
-				cy="27.8"
-				transform="rotate(-6.75 160.6 27.8)"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2.5"
-				stroke-linecap="round"
-			/>
-		</g>
+		<line
+			class="stem text-primary"
+			x1="60"
+			y1="40"
+			x2="60"
+			y2="160"
+			stroke="currentColor"
+			stroke-width="24"
+			stroke-linecap="round"
+		/>
+		<!-- Départ à 9 h (rotation d'un demi-tour) pour que la boucle parte de la hampe -->
+		<circle
+			class="bowl text-primary"
+			cx="100"
+			cy="120"
+			r="40"
+			transform="rotate(180 100 120)"
+			stroke="currentColor"
+			stroke-width="24"
+		/>
+		<circle class="dot text-secondary" cx="140" cy="60" r="18" fill="currentColor" />
 	</svg>
+
+	<img src={benevio} alt="benevio" class="wordmark w-full" />
 </div>
+
+<style>
+	/* Un cran au-dessus de la longueur réelle: le tiret couvre alors tout le tracé sans
+	   risque de liseré résiduel, et un décalage de la même valeur l'efface entièrement. */
+	.stem {
+		--len: 121;
+	}
+	.bowl {
+		--len: 252;
+	}
+
+	.stem,
+	.bowl {
+		stroke-dasharray: var(--len);
+	}
+
+	.stem {
+		animation: draw 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.15s backwards;
+	}
+
+	.bowl {
+		animation: draw 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.6s backwards;
+	}
+
+	/* Pas de rebond ici. `ease-overshoot` sert aux bascules de contrôles dans le produit;
+	   sur la marque il ferait tape-à-l'œil. Toute la séquence garde la même décélération. */
+	.dot {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: pop 0.5s cubic-bezier(0.25, 1, 0.5, 1) 1.35s backwards;
+	}
+
+	.wordmark {
+		animation: rise 0.6s cubic-bezier(0.25, 1, 0.5, 1) 1.5s backwards;
+	}
+
+	@keyframes draw {
+		from {
+			stroke-dashoffset: var(--len);
+		}
+	}
+
+	@keyframes pop {
+		from {
+			transform: scale(0);
+			opacity: 0;
+		}
+	}
+
+	@keyframes rise {
+		from {
+			transform: translateY(0.75rem);
+			opacity: 0;
+		}
+	}
+
+	/* Sans animation, les valeurs de base sont déjà l'état final: il suffit de couper. */
+	@media (prefers-reduced-motion: reduce) {
+		.stem,
+		.bowl,
+		.dot,
+		.wordmark {
+			animation: none;
+		}
+
+		.stem,
+		.bowl {
+			stroke-dasharray: none;
+		}
+	}
+</style>

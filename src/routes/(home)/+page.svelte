@@ -55,14 +55,13 @@
 					</div>
 				</div>
 
-				<!-- Logo animé -->
+				<!-- Marque animée. Absente en mobile: le header porte déjà le mot-marque, et la
+				     colonne repousserait les CTA sous la ligne de flottaison. -->
 				<div class="hidden md:flex items-center justify-center relative">
 					<div
-						class="w-72 h-72 rounded-full bg-linear-to-br from-secondary/40 to-primary/10 blur-2xl absolute"
+						class="w-80 h-80 lg:w-96 lg:h-96 rounded-full bg-linear-to-br from-secondary/30 to-primary/10 blur-3xl absolute"
 					></div>
-					<div class="relative w-64">
-						<AnimatedLogo />
-					</div>
+					<AnimatedLogo class="relative w-72 lg:w-80" />
 				</div>
 			</div>
 		</div>
@@ -75,8 +74,10 @@
 				<div
 					class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-base-content/70"
 				>
+					<!-- Pastilles toutes secondary: les trois affirmations sont indépendantes,
+					     pas des catégories — trois teintes inventeraient une taxonomie. -->
 					<a class="flex items-center gap-2 link link-hover" href="/open-source">
-						<span class="w-2 h-2 rounded-full bg-green-500"></span>
+						<span class="w-2 h-2 rounded-full bg-secondary"></span>
 						Open source
 					</a>
 					<span class="flex items-center gap-2">
@@ -84,7 +85,7 @@
 						Gratuit jusqu'à 50 bénévoles
 					</span>
 					<span class="flex items-center gap-2">
-						<span class="w-2 h-2 rounded-full bg-primary"></span>
+						<span class="w-2 h-2 rounded-full bg-secondary"></span>
 						Personnalisable à ton image
 					</span>
 				</div>

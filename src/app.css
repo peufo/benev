@@ -11,9 +11,11 @@
 	--color-primary: #2663eb;
 	--color-primary-content: #fff;
 	--color-secondary: #11b981;
-	--color-secondary-content: #fff;
+	/* #fff sur le vert et sur l'orange tombe a 2.54:1 et 2.48:1, sous AA. L'encre de
+	   base-content y remonte a 5.79:1 et 5.93:1 sans introduire de teinte supplementaire. */
+	--color-secondary-content: #1f2937;
 	--color-accent: #e69214;
-	--color-accent-content: #fff;
+	--color-accent-content: #1f2937;
 	--color-neutral: #2b3440;
 	--color-neutral-content: #d7dde4;
 	--color-base-100: #ffffff;
