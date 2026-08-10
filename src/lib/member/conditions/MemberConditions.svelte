@@ -8,11 +8,11 @@
 	} from '@lucide/svelte'
 
 	import axios from 'axios'
-	import { get } from 'svelte/store'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import type { Field } from '@prisma/client'
 	import { InputNumber, InputSelect, parseOptions, Popover, tip } from 'fuma'
 	import { browser } from '$app/environment'
+	import { debounce } from '$lib/debounce'
 	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
 	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
 	import ConditionValue from './ConditionValue.svelte'
@@ -22,22 +22,35 @@
 		memberFields: Field[]
 	}
 
-	let { conditions = $bindable([]), memberFields }: Props = $props()
+	let { conditions: initialConditions = [], memberFields }: Props = $props()
+
+	// Le tableau vient de `page.data`: ce n'est pas un proxy `$state`, écrire dans une condition
+	// existante passerait donc inaperçu. On en prend une copie réactive — le formulaire se soumet
+	// par l'input caché, le parent n'a rien à relire. Le `Drawer` démonte son contenu à la
+	// fermeture: la copie est refaite à chaque ouverture.
+	// svelte-ignore state_referenced_locally
+	let conditions = $state(structuredClone(initialConditions))
 	let memberAllowedCount = $state(0)
 
-	async function getmemberAllowedCount() {
-		if (!conditions.length || !browser) return
+	// Sert autant à soumettre qu'à réveiller l'effet: lire `conditions` ne suivrait que les
+	// réassignations du tableau, pas les écritures dans une condition.
+	const serializedConditions = $derived(JSON.stringify(conditions))
+
+	const refreshMemberAllowedCount = debounce(async (serialized: string) => {
 		try {
-			const { params } = get(page)
-			const conditionsParam = encodeURIComponent(JSON.stringify(conditions))
 			const res = await axios.get<number>(
-				`/${params.eventId}/teams/membersAllowed?conditions=${conditionsParam}`
+				`/${page.params.eventId}/teams/membersAllowed?conditions=${encodeURIComponent(serialized)}`
 			)
 			memberAllowedCount = res.data
 		} catch (err) {
 			console.error(err)
 		}
-	}
+	}, 300)
+
+	$effect(() => {
+		if (!conditions.length || !browser) return
+		refreshMemberAllowedCount(serializedConditions)
+	})
 
 	function addCondition(value: string) {
 		const _type = value as MemberCondition['type']
@@ -56,10 +69,6 @@
 				},
 			]
 	}
-
-	$effect(() => {
-		if (conditions) getmemberAllowedCount()
-	})
 
 	let addConditionOptions = $derived(
 		parseOptions({
@@ -80,7 +89,7 @@
 </script>
 
 <div class="mt-4">
-	<input type="hidden" name="conditions" value={JSON.stringify(conditions)} />
+	<input type="hidden" name="conditions" value={serializedConditions} />
 	<div class="flex items-center mb-2">
 		<div class="grow">
 			<div class="label flex-col items-start">
@@ -98,7 +107,12 @@
 
 		<Popover placement="bottom-end">
 			{#snippet trigger(popover)}
-				<button type="button" class="btn btn-square btn-secondary btn-soft" {...popover.trigger}>
+				<button
+					type="button"
+					class="btn btn-square btn-secondary btn-soft"
+					aria-label="Ajouter une condition"
+					{...popover.trigger}
+				>
 					<span class="inline-flex" use:tip={{ content: 'Ajouter une condition' }}>
 						<PlusIcon />
 					</span>
@@ -136,32 +150,44 @@
 					{:else if condition.type === 'age'}
 						<PersonStandingIcon class="opacity-70" />
 						<InputNumber
-							value={condition.args}
 							label="Âge minimum"
 							min={1}
-							oninput={(event) =>
-								(conditions = conditions.map((c, i) => {
-									if (i !== index || c.type !== 'age') return c
-									return { ...c, args: event.currentTarget.valueAsNumber }
-								}))}
+							bind:value={
+								() => condition.args,
+								// Vider le champ donne `undefined`: on garde la dernière valeur valide plutôt
+								// que d'écrire un `undefined` que le `z.number()` du modèle refuserait — et
+								// surtout sans réécrire dans le champ, ce qui empêcherait de le retaper.
+								(age) => {
+									if (condition.type !== 'age' || age === undefined) return
+									condition.args = age
+								}
+							}
 						/>
 					{:else}
 						<IdCardIcon class="opacity-70" />
 
 						<div class="flex flex-wrap gap-2">
 							<!-- SELECT FIELD -->
+							<!-- Le getter re-dérive l'item du modèle à chaque fois: contrairement à une
+							     `value` passée en simple prop, la liaison continue de suivre le parent. -->
 							<InputSelect
 								items={fieldOptions}
-								value={fieldOptions.find((option) => option.value === condition.args.fieldId)}
 								placeholder="Sélectioner un champ"
-								onSelect={(option) => {
-									if (condition.type !== 'profile' || !option) return
-									condition.args.fieldId = option.value
-									const field = memberFields.find((f) => f.id === option.value)
-									if (!field) return
-									if (CONDITION_OPERATOR[field.type].includes(condition.args.operator)) return
-									condition.args.operator = CONDITION_OPERATOR[field.type][0]
-								}}
+								bind:value={
+									() => fieldOptions.find((option) => option.value === condition.args.fieldId),
+									(option) => {
+										if (condition.type !== 'profile' || !option) return
+										if (option.value === condition.args.fieldId) return
+										condition.args.fieldId = option.value
+										// Changer de champ périme la valeur attendue: un `string[]` laissé sur un
+										// champ `string` serait enregistré tel quel et ne matcherait jamais.
+										condition.args.expectedValue = ''
+										const field = memberFields.find((f) => f.id === option.value)
+										if (!field) return
+										if (CONDITION_OPERATOR[field.type].includes(condition.args.operator)) return
+										condition.args.operator = CONDITION_OPERATOR[field.type][0]
+									}
+								}
 							/>
 
 							<!-- SELECT OPERATOR -->
@@ -170,19 +196,16 @@
 								{@const field = memberFields.find((f) => f.id === fieldId)}
 								{#if field}
 									{@const options = operatorOptions(field)}
-									<!-- Sans `key`, l'opérateur resterait sur le choix précédent: une `value` passée
-									     sans `bind:` cesse de suivre le parent dès que le select y a écrit, et
-									     changer de champ le réinitialise justement depuis le parent. -->
-									{#key fieldId}
-										<InputSelect
-											items={options}
-											value={options.find((option) => option.value === condition.args.operator)}
-											onSelect={(option) => {
+									<InputSelect
+										items={options}
+										bind:value={
+											() => options.find((option) => option.value === condition.args.operator),
+											(option) => {
 												if (condition.type !== 'profile' || !option) return
 												condition.args.operator = option.value as MemberConditionOperator
-											}}
-										/>
-									{/key}
+											}
+										}
+									/>
 								{/if}
 							{/if}
 						</div>

@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { EyeOffIcon, PencilOffIcon } from '@lucide/svelte'
 	import type { Prisma } from '@prisma/client'
-	import { InputBoolean, InputNumber, InputRadio, InputString, InputTextarea, tip } from 'fuma'
+	import {
+		InputBoolean,
+		InputCheckboxes,
+		InputNumber,
+		InputRadio,
+		InputString,
+		InputTextarea,
+		tip,
+	} from 'fuma'
 	import { page } from '$app/state'
-	import InputCheckboxes from './InputCheckboxes.svelte'
 	import { updateMemberProfile } from './member.remote'
 
 	interface Props {
@@ -64,6 +71,7 @@
 		<InputCheckboxes
 			field={formField}
 			label={field.label || field.name}
+			value={Array.isArray(value) ? value : []}
 			options={field.options ?? []}
 			{disabled}
 		/>

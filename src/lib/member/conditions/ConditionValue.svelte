@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Field } from '@prisma/client'
-	import { parseOptions } from 'fuma'
+	import { InputCheckboxes, InputNumber, InputRadio, InputString } from 'fuma'
 	import type { MemberCondition } from '$lib/models'
 
 	type ProfileCondition = Extract<MemberCondition, { type: 'profile' }>
@@ -11,65 +11,51 @@
 	}
 
 	// `condition` est un proxy `$state` du parent: écrire dans `args.expectedValue` suffit.
-	// Pas de `bind:` ici, il faudrait rétrécir l'union du modèle au type du champ, ce que
-	// les liaisons ne savent pas faire.
+	// Les liaisons sont fonctionnelles, faute de pouvoir rétrécir l'union du modèle au type du
+	// champ — ce que `bind:` ne sait pas faire.
 	let { field, condition }: Props = $props()
 
 	let asString = $derived(
 		typeof condition.args.expectedValue === 'string' ? condition.args.expectedValue : ''
 	)
+	let asNumber = $derived(
+		typeof condition.args.expectedValue === 'number' ? condition.args.expectedValue : undefined
+	)
 	let asArray = $derived(
 		Array.isArray(condition.args.expectedValue) ? condition.args.expectedValue : []
 	)
-
-	function toggle(value: string, checked: boolean) {
-		condition.args.expectedValue = checked
-			? [...asArray, value]
-			: asArray.filter((v) => v !== value)
-	}
 </script>
 
 {#if field.type === 'string' || field.type === 'textarea'}
-	<input
-		class="input w-full"
-		type="text"
-		value={asString}
-		oninput={({ currentTarget }) => (condition.args.expectedValue = currentTarget.value)}
+	<InputString
+		label="Valeur"
+		bind:value={() => asString, (value) => (condition.args.expectedValue = value ?? '')}
 	/>
 {:else if field.type === 'number'}
-	<input
-		class="input w-full"
-		type="number"
-		value={typeof condition.args.expectedValue === 'number' ? condition.args.expectedValue : ''}
-		oninput={({ currentTarget }) => (condition.args.expectedValue = currentTarget.valueAsNumber)}
+	<!-- Vider le champ donne `undefined`: on garde la dernière valeur saisie, sans quoi la
+	     réécriture dans le champ empêcherait de le retaper. -->
+	<InputNumber
+		label="Valeur"
+		bind:value={
+			() => asNumber,
+			(value) => {
+				if (value === undefined) return
+				condition.args.expectedValue = value
+			}
+		}
 	/>
 {:else if field.type === 'boolean'}
-	<div class="flex gap-4">
-		{#each [{ value: 'true', label: 'Oui' }, { value: 'false', label: 'Non' }] as option (option.value)}
-			<label class="flex items-center gap-2 cursor-pointer">
-				<input
-					type="radio"
-					class="radio"
-					name="condition_{field.id}"
-					checked={asString === option.value}
-					onchange={() => (condition.args.expectedValue = option.value)}
-				/>
-				<span>{option.label}</span>
-			</label>
-		{/each}
-	</div>
+	<!-- La valeur reste la chaîne `'true'`/`'false'`: `isMemberAllowed` stringifie celle du
+	     membre pour la comparer. -->
+	<InputRadio
+		label="Valeur"
+		options={{ true: 'Oui', false: 'Non' }}
+		bind:value={() => asString, (value) => (condition.args.expectedValue = value ?? '')}
+	/>
 {:else}
-	<div class="flex gap-4 flex-wrap">
-		{#each parseOptions(field.options ?? []) as option (option.value)}
-			<label class="flex items-center gap-2 cursor-pointer">
-				<input
-					type="checkbox"
-					class="checkbox"
-					checked={asArray.includes(option.value)}
-					onchange={({ currentTarget }) => toggle(option.value, currentTarget.checked)}
-				/>
-				<span>{option.label}</span>
-			</label>
-		{/each}
-	</div>
+	<InputCheckboxes
+		label="Valeur"
+		options={field.options ?? []}
+		bind:value={() => asArray, (value) => (condition.args.expectedValue = value)}
+	/>
 {/if}

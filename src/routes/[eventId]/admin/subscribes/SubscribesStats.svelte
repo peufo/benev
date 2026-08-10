@@ -21,14 +21,14 @@
 		<Distribution
 			title="Inscription par un membre ({data.stats.count.user})"
 			values={data.stats.dist.user}
-			getLabel={(key) => SUBSCRIBE_STATE[key]}
+			getLabel={(key) => SUBSCRIBE_STATE[key].label}
 			getHref={(key) => urlWith({ createdBy: 'user', states: JSON.stringify([key]) })}
 		/>
 
 		<Distribution
 			title="Inscription par le responsable ({data.stats.count.leader})"
 			values={data.stats.dist.leader}
-			getLabel={(key) => SUBSCRIBE_STATE[key]}
+			getLabel={(key) => SUBSCRIBE_STATE[key].label}
 			getHref={(key) => urlWith({ createdBy: 'leader', states: JSON.stringify([key]) })}
 		/>
 	</div>

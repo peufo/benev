@@ -172,7 +172,7 @@
 				{@const leftPx =
 					time(plan.hourSize).to('hour') * daytz(milestone.timestamp).diff(plan.start)}
 				<span
-					class="absolute w-px -left-px bg-accent/40 h-screen bottom-0"
+					class="absolute w-px -left-px bg-accent/40 h-[9999px] bottom-0"
 					style:translate="{leftPx}px"
 				></span>
 				<span
