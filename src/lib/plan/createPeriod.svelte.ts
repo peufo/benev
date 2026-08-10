@@ -21,7 +21,7 @@ type Params = {
 // tracée ne dure encore rien.
 const GHOST_CLASSES: Record<Plan['axis'], string[]> = {
 	x: ['h-[calc(100%-8px)]', 'my-1', 'min-w-0.5'],
-	y: ['w-full', 'mx-1', 'min-h-0.5'],
+	y: ['w-[calc(100%-8px)]', 'mx-1', 'min-h-0.5'],
 }
 
 /**
@@ -30,7 +30,7 @@ const GHOST_CLASSES: Record<Plan['axis'], string[]> = {
  * donc en bloc depuis l'heure exacte qu'il annonçait.
  */
 const GHOST_MODE_CLASSES = {
-	hover: ['bg-accent', 'rounded'],
+	hover: ['bg-accent/50', 'rounded'],
 	drag: ['bg-accent/50', 'rounded-md', 'border', 'border-hard'],
 }
 
