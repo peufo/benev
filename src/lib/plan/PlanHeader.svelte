@@ -10,8 +10,8 @@
 	import type { Plan } from './types'
 	import { clampScale, persistHourSize, withHourSize } from './zoom'
 	import {
-		AlignLeftIcon,
-		Columns3Icon,
+		AlignStartHorizontalIcon,
+		AlignStartVerticalIcon,
 		ExternalLinkIcon,
 		ZoomInIcon,
 		ZoomOutIcon,
@@ -115,8 +115,8 @@
 		key="axis"
 		defaultValue="x"
 		options={[
-			{ label: 'Vue horizontal', icon: AlignLeftIcon, value: 'x' },
-			{ label: 'Vue vertical', icon: Columns3Icon, value: 'y' },
+			{ label: 'Vue horizontal', icon: AlignStartVerticalIcon, value: 'x' },
+			{ label: 'Vue vertical', icon: AlignStartHorizontalIcon, value: 'y' },
 		]}
 	/>
 
