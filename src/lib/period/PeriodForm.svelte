@@ -227,6 +227,7 @@
 			label="Début"
 			field={remoteForm.fields.start}
 			bind:value={start}
+			step="300"
 			timezone={getEventTimeZone()}
 			transform={(newStart) => {
 				const duration = daytz(end).diff(start)
@@ -238,6 +239,7 @@
 			label="Fin"
 			field={remoteForm.fields.end}
 			bind:value={end}
+			step="300"
 			timezone={getEventTimeZone()}
 			hint={formatDuration(start, end)}
 			transform={(newEnd) => {
