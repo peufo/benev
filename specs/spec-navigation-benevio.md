@@ -30,11 +30,11 @@ Ces quatre choses ne sont pas parallèles, elles sont hiérarchiques : le compte
 
 Il existe **deux espaces** et **une zone de compte**.
 
-| | Contenu | Accès |
-|---|---|---|
-| Espace **Benevio** | Landing, tarifs, open source, CGU, documentation, annuaire des événements, « mes événements » | Sélecteur de contexte |
-| Espace **Événement** | Tableau de bord, secteurs, pages d'info, mes créneaux, + mode administration | Sélecteur de contexte |
-| Zone **compte** | Profil, achats, préférences, déconnexion | Menu avatar uniquement |
+|                      | Contenu                                                                                       | Accès                  |
+| -------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
+| Espace **Benevio**   | Landing, tarifs, open source, CGU, documentation, annuaire des événements, « mes événements » | Sélecteur de contexte  |
+| Espace **Événement** | Tableau de bord, secteurs, pages d'info, mes créneaux, + mode administration                  | Sélecteur de contexte  |
+| Zone **compte**      | Profil, achats, préférences, déconnexion                                                      | Menu avatar uniquement |
 
 **Règle de partage :** le sélecteur répond à « quelles données je regarde », l'avatar répond à « qui je suis ». La zone de compte n'apparaît jamais dans le sélecteur. Les pages de compte appartiennent à l'espace Benevio (le sélecteur y affiche « Benevio »).
 
@@ -81,7 +81,7 @@ Le déclencheur du sélecteur **est aussi le logo**. Il n'y a jamais deux logos 
 
 - Les **invitations en attente** figurent dans le menu, badgées. C'est le seul cas où quelqu'un doit entrer dans un espace auquel il n'appartient pas encore ; sans cela le mail d'invitation reste le seul chemin.
 - Les **événements passés sont repliés** par défaut. Ils s'accumulent : un bénévole régulier en aura une quinzaine au bout de quelques années, pour deux ou trois actifs.
-- Pas d'entrée « voir tous mes événements » : l'espace Benevio *est* cette page une fois connecté.
+- Pas d'entrée « voir tous mes événements » : l'espace Benevio _est_ cette page une fois connecté.
 
 **Page d'arrivée après bascule :** conserver la section courante si elle existe dans l'événement cible et que le rôle y donne droit, sinon retomber sur l'accueil de l'événement. Ne **jamais** transposer l'URL complète — `/[a]/membres/42` → `/[b]/membres/42` n'a aucun sens.
 
@@ -106,12 +106,12 @@ Deux lignes :
 
 **Ligne 2 (navigation de contexte)** — dépend du contexte et du rôle :
 
-| Contexte | Entrées |
-|---|---|
-| Benevio, anonyme | Accueil · Fonctionnalités · Tarifs · Documentation |
-| Benevio, connecté | Mes événements · Découvrir · Documentation |
-| Compte | Mon profil · Mes achats · Préférences |
-| Événement, bénévole | Tableau de bord · Secteurs · Mes créneaux · *pages d'info* |
+| Contexte                  | Entrées                                                     |
+| ------------------------- | ----------------------------------------------------------- |
+| Benevio, anonyme          | Accueil · Fonctionnalités · Tarifs · Documentation          |
+| Benevio, connecté         | Mes événements · Découvrir · Documentation                  |
+| Compte                    | Mon profil · Mes achats · Préférences                       |
+| Événement, bénévole       | Tableau de bord · Secteurs · Mes créneaux · _pages d'info_  |
 | Événement, administration | Membres · Inscriptions · Planification · Pages · Paramètres |
 
 En mode administration, la ligne 2 porte à droite l'entrée « Vue bénévole ». En vue bénévole, elle porte à droite l'entrée « Administration », visible seulement si le rôle le permet. **Pas de fond teinté sur le mode administration** : c'est l'état par défaut d'un organisateur, et on signale l'exception, pas la norme (voir 5.5).
@@ -133,7 +133,7 @@ Le changement de disposition au moment de la bascule est **voulu** : il signale 
   - Vue bénévole : Accueil · Secteurs · Mes créneaux · Infos
   - Mode administration : Membres · Inscriptions · Planification · Paramètres
 - La bascule de mode descend dans la feuille de l'avatar.
-- **Pas de sidebar, pas de menu hamburger côté bénévole.** La barre du bas *est* la ligne 2 : mêmes entrées, même ordre, même état actif.
+- **Pas de sidebar, pas de menu hamburger côté bénévole.** La barre du bas _est_ la ligne 2 : mêmes entrées, même ordre, même état actif.
 - L'espace Benevio n'a **pas** de barre du bas — on y passe une fois, un menu depuis le header suffit. La barre du bas est réservée aux endroits où l'utilisateur travaille de façon répétée.
 - La recherche s'ouvre en plein écran.
 
@@ -162,7 +162,7 @@ Les trois shells (top bar, sidebar, barre du bas) consomment la même source et 
 
 Certaines pages servent les deux audiences sur la même URL — `/teams` au premier chef, ainsi que le tableau de bord et les pages d'info.
 
-**Une même entrée peut figurer dans les deux navigations, à condition de pointer vers la même URL.** Ce qui est interdit, c'est deux *pages* pour le même objet, pas deux points d'entrée vers une page unique. « Secteurs » apparaît donc à la fois dans la top bar en vue bénévole et dans la sidebar d'administration, avec le même `href`.
+**Une même entrée peut figurer dans les deux navigations, à condition de pointer vers la même URL.** Ce qui est interdit, c'est deux _pages_ pour le même objet, pas deux points d'entrée vers une page unique. « Secteurs » apparaît donc à la fois dans la top bar en vue bénévole et dans la sidebar d'administration, avec le même `href`.
 
 Le mode est un **paramètre de rendu, pas une route**. Sur une page partagée, il contrôle exactement trois choses :
 
@@ -210,14 +210,14 @@ L'aperçu est donc annoncé par un **bandeau persistant** en haut de page :
 
 Griser les formulaires rendrait l'aperçu inutile — le formulaire d'adhésion est précisément ce qu'un organisateur veut vérifier avant d'ouvrir les inscriptions. Écrire réellement lui créerait des inscriptions fantômes et fausserait ses compteurs. L'écriture doit donc être **complète mais non persistée**.
 
-| Élément | Comportement en aperçu |
-|---|---|
-| Contenu, visibilité, brouillons | Fidèle, filtré côté serveur |
-| Formulaire d'adhésion | S'affiche, valide, affiche ses erreurs, soumission simulée |
-| Bouton « S'inscrire » | Actif, vérifie réellement la capacité, écran de confirmation affiché |
-| Compteurs de places | Réels, jamais décrémentés |
-| Mails et notifications | Supprimés |
-| Paiement | Jamais déclenché — arrêt explicite avant la redirection vers le prestataire |
+| Élément                         | Comportement en aperçu                                                      |
+| ------------------------------- | --------------------------------------------------------------------------- |
+| Contenu, visibilité, brouillons | Fidèle, filtré côté serveur                                                 |
+| Formulaire d'adhésion           | S'affiche, valide, affiche ses erreurs, soumission simulée                  |
+| Bouton « S'inscrire »           | Actif, vérifie réellement la capacité, écran de confirmation affiché        |
+| Compteurs de places             | Réels, jamais décrémentés                                                   |
+| Mails et notifications          | Supprimés                                                                   |
+| Paiement                        | Jamais déclenché — arrêt explicite avant la redirection vers le prestataire |
 
 **Implémentation :** exécuter la mutation dans une **transaction systématiquement annulée**. Toute la validation serveur réelle est obtenue gratuitement — contraintes d'unicité, secteur complet, période chevauchante, adhésion déjà existante — avec les vrais messages d'erreur.
 
@@ -261,11 +261,11 @@ Le tableau de bord de l'événement liste **toutes** les pages d'info en cartes,
 
 ### 7.1 Choix du traitement
 
-| Mode d'usage | Traitement |
-|---|---|
-| On y arrive de l'extérieur (mail, notification, recherche), on partage le lien | **Page dédiée** |
-| Les enfants sont courts, homogènes et terminaux (on agit dessus directement) | **Accordéon** |
-| Le détail est riche et hétérogène, on travaille dans un seul parent à la fois | **Vue liste-détail** |
+| Mode d'usage                                                                   | Traitement           |
+| ------------------------------------------------------------------------------ | -------------------- |
+| On y arrive de l'extérieur (mail, notification, recherche), on partage le lien | **Page dédiée**      |
+| Les enfants sont courts, homogènes et terminaux (on agit dessus directement)   | **Accordéon**        |
+| Le détail est riche et hétérogène, on travaille dans un seul parent à la fois  | **Vue liste-détail** |
 
 - **Profil de membre → page dédiée.** Conserver l'existant.
 - **Secteur → accordéon.** Conserver l'existant. Les périodes sont terminales : un bénévole les parcourt et s'inscrit. Il a intérêt à survoler plusieurs secteurs avant de choisir, ce que la liste-détail interdit. Sur mobile, l'accordéon évite en plus un aller-retour par secteur.
@@ -279,7 +279,7 @@ La hiérarchie ne compte que deux niveaux — un secteur, ses périodes. Il n'ex
 
 ### 7.2 Pas de fil d'Ariane
 
-Le chrome reste **totalement invariant** sur les pages de détail : les onglets ne changent pas, l'onglet parent reste actif (un profil de membre *est* dans la section Membres). La navigation latérale reste à un clic.
+Le chrome reste **totalement invariant** sur les pages de détail : les onglets ne changent pas, l'onglet parent reste actif (un profil de membre _est_ dans la section Membres). La navigation latérale reste à un clic.
 
 Le retour à la liste est un **élément de la page**, au même titre que son titre ou ses boutons d'action :
 
@@ -395,7 +395,7 @@ Structure, par intention plutôt que par fonctionnalité :
 
 - **Démarrer** — un tutoriel linéaire, de la création du compte à un événement publié avec un premier bénévole inscrit.
 - **Guides** — par rôle (organisateur, responsable, bénévole), une page par tâche.
-- **Concepts** — le modèle de domaine : événement, secteur, période, membre, inscription, adhésion. *À écrire en premier* : le vocabulaire du produit n'est explicite nulle part, et c'est la cause racine commune de la confusion de navigation et du besoin de documentation.
+- **Concepts** — le modèle de domaine : événement, secteur, période, membre, inscription, adhésion. _À écrire en premier_ : le vocabulaire du produit n'est explicite nulle part, et c'est la cause racine commune de la confusion de navigation et du besoin de documentation.
 - **Référence** — écran par écran, champ par champ. Cible de l'aide contextuelle.
 - **Auto-hébergement et contribution** — remplace la page « Open source » actuelle.
 
@@ -456,15 +456,15 @@ Les trois premiers lots sont indépendants et livrables séparément.
 
 Ne pas réintroduire sans nouvelle discussion.
 
-| Alternative | Motif du rejet |
-|---|---|
-| Fil d'Ariane dans le chrome | Ajoute un élément et fait varier la barre. Le retour intégré à la page fait le même travail sans toucher au chrome. |
-| Deux logos (Benevio + événement) en fil d'Ariane | Coûte de la largeur, hiérarchie fragile face à un logo téléversé fort, et perd la sensation « site de l'événement ». |
-| Sidebar partout, y compris côté bénévole | Fait « back-office » sur les pages publiques, alors que la partie bénévole représente l'essentiel du trafic. |
-| Fusion des deux lignes du header | Serré dès 900px en mode administration, et la teinte signalant les coulisses perd sa surface. |
-| Pastille de portée dans le champ de recherche | Redondante avec le placeholder. |
-| Recherche globale avec résultats locaux en tête | Homonymes indiscernables entre événements, risque d'agir sur la mauvaise donnée, résultats imprévisibles. |
-| Débordement mesuré (priority+) | Saut visuel après hydratation, incompatible avec le SSR. Plafond fixe à la place. |
-| Menu hamburger mobile côté bénévole | Cache la navigation derrière un tap pour la population la plus nombreuse et la moins experte. |
+| Alternative                                                        | Motif du rejet                                                                                                                                                                                                                           |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Fil d'Ariane dans le chrome                                        | Ajoute un élément et fait varier la barre. Le retour intégré à la page fait le même travail sans toucher au chrome.                                                                                                                      |
+| Deux logos (Benevio + événement) en fil d'Ariane                   | Coûte de la largeur, hiérarchie fragile face à un logo téléversé fort, et perd la sensation « site de l'événement ».                                                                                                                     |
+| Sidebar partout, y compris côté bénévole                           | Fait « back-office » sur les pages publiques, alors que la partie bénévole représente l'essentiel du trafic.                                                                                                                             |
+| Fusion des deux lignes du header                                   | Serré dès 900px en mode administration, et la teinte signalant les coulisses perd sa surface.                                                                                                                                            |
+| Pastille de portée dans le champ de recherche                      | Redondante avec le placeholder.                                                                                                                                                                                                          |
+| Recherche globale avec résultats locaux en tête                    | Homonymes indiscernables entre événements, risque d'agir sur la mauvaise donnée, résultats imprévisibles.                                                                                                                                |
+| Débordement mesuré (priority+)                                     | Saut visuel après hydratation, incompatible avec le SSR. Plafond fixe à la place.                                                                                                                                                        |
+| Menu hamburger mobile côté bénévole                                | Cache la navigation derrière un tap pour la population la plus nombreuse et la moins experte.                                                                                                                                            |
 | Navigations publique et admin visibles en permanence (état actuel) | Impossible à tenir sur mobile, donc deux modèles mentaux selon la taille d'écran. Produit deux états actifs simultanés sur les pages partagées comme `/teams`. Fait apparaître la sidebar sans explication lorsqu'un bénévole est promu. |
-| Troisième barre persistante | Recrée exactement le croisement de contextes que cette refonte supprime. Le niveau 3 est en onglets dans la page. |
+| Troisième barre persistante                                        | Recrée exactement le croisement de contextes que cette refonte supprime. Le niveau 3 est en onglets dans la page.                                                                                                                        |
