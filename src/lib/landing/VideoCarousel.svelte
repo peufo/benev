@@ -70,9 +70,13 @@
 </script>
 
 <div class={klass}>
+	<!-- `preload` explicite: sans lui Safari desktop retient `auto` et télécharge les trois
+	     vidéos en entier dès le chargement, alors qu'elles sont toutes sous la ligne de
+	     flottaison. `metadata` suffit à peindre la première image. -->
 	<video
 		bind:this={videoElement}
 		src={videos[activeIndex].src}
+		preload="metadata"
 		muted
 		playsinline
 		use:observeVisibility

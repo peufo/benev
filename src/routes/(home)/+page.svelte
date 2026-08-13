@@ -21,12 +21,11 @@
 					<h1
 						class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary leading-[1.1] tracking-tight"
 					>
-						Moins d'admin pour ton événement
+						Tes bénévoles s'inscrivent tout seuls
 					</h1>
 
 					<p class="mt-6 text-lg md:text-xl text-base-content/70 max-w-lg leading-relaxed">
-						Inscriptions, planning et communication : centralise la gestion de tes bénévoles dans un
-						outil moderne et accessible.
+						Tu poses les secteurs et les créneaux, ils choisissent leur poste. Simple et précis.
 					</p>
 
 					<div class="mt-8 flex flex-col sm:flex-row items-start gap-4">
@@ -61,7 +60,7 @@
 					<div
 						class="w-80 h-80 lg:w-96 lg:h-96 rounded-full bg-linear-to-br from-secondary/30 to-primary/10 blur-3xl absolute"
 					></div>
-					<AnimatedLogo class="relative w-72 lg:w-80" />
+					<AnimatedLogo class="relative w-80 lg:w-96" />
 				</div>
 			</div>
 		</div>

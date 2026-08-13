@@ -5,7 +5,7 @@ import { useEvent } from './event'
 test('Page vitrine', async ({ page }) => {
 	await page.goto('/')
 	await expect(page).toHaveTitle(/benevio/i)
-	await expect(page.getByRole('heading', { name: /Moins d'admin/i })).toBeVisible()
+	await expect(page.getByRole('heading', { name: /s'inscrivent tout seuls/i })).toBeVisible()
 })
 
 // serial + page partagée: la session doit survivre d'une étape à l'autre
