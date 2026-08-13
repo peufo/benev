@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { Drawer, transitionX } from 'fuma'
+	import { Drawer } from 'fuma'
 	import { page } from '$app/state'
 	import PeriodForm from './PeriodForm.svelte'
 	import type { Member } from '@prisma/client'
-	import { periodDrawerTransitionX } from '$lib/store'
 	import { SubscribeInviteForm } from '$lib/subscribe'
 	import PeriodSubscribes from './PeriodSubscribes.svelte'
 	import Progress from '$lib/Progress.svelte'
@@ -23,10 +22,6 @@
 	let member: Member | undefined = $state(undefined)
 
 	let noOverlay = $derived(!page.route.id?.startsWith('/[eventId]/admin/plan'))
-	// fuma 2 expose `transitionX` comme store de module, plus comme prop bindable.
-	$effect(() => {
-		if (noOverlay) $periodDrawerTransitionX = $transitionX
-	})
 </script>
 
 <Drawer

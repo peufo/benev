@@ -3,7 +3,7 @@
 	import { Toaster } from 'svelte-sonner'
 	import { MetaTags, JsonLd } from 'svelte-meta-tags'
 	import { theme } from './[eventId]/admin/theme/store'
-	import { periodDrawerTransitionX } from '$lib/store'
+	import { transitionX } from 'fuma'
 	import {
 		defaultMetaTags,
 		errorMetaTags,
@@ -49,7 +49,7 @@
 	class="flex min-h-screen flex-col bg-base-200/20"
 	style="
 		--card-opacity: {$theme.cardOpacity ?? 1};
-		padding-right: {$periodDrawerTransitionX + ($periodDrawerTransitionX ? 6 : 0)}px;
+		padding-right: {transitionX.current + (transitionX.current ? 6 : 0)}px;
 	"
 >
 	{@render children?.()}
