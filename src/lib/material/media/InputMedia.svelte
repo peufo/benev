@@ -15,7 +15,10 @@
 	let selectMedia: SelectMedia
 </script>
 
-<div style="width: {x}px;" class="border rounded-lg">
+<div
+	style="width: {x}px;"
+	class="border border-hard rounded-field overflow-hidden cursor-pointer hover:outline-1"
+>
 	{#if key}
 		<input type="hidden" name={key} {value} />
 	{/if}
@@ -23,15 +26,14 @@
 		<!-- Le bouton « désélectionner » était imbriqué dans le bouton de sélection: HTML
 		     invalide, que Svelte 5 refuse désormais de compiler. Les deux sont maintenant
 		     frères dans un conteneur positionné. -->
-		<div class="hover:shadow-lg shadow transition-shadow rounded-lg relative">
+		<div>
 			<button
 				onclick={() => {
 					selectMedia.show()
 				}}
 				type="button"
-				class="rounded-lg"
 			>
-				<img src="/media/{value}" alt="Fond de badge" width={x} height={y} class="rounded-lg" />
+				<img src="/media/{value}" alt="Fond de badge" width={x} height={y} />
 				<span class="text-xs">{label}</span>
 			</button>
 			<button
@@ -48,11 +50,7 @@
 			</button>
 		</div>
 	{:else}
-		<button
-			onclick={() => selectMedia.show()}
-			type="button"
-			class="hover:shadow-lg shadow transition-shadow rounded-lg"
-		>
+		<button onclick={() => selectMedia.show()} type="button">
 			<PlaceholderImage {x} {y}>{label}</PlaceholderImage>
 		</button>
 	{/if}

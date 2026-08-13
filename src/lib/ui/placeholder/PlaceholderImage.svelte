@@ -10,8 +10,13 @@
 	let { x, y, children }: Props = $props()
 </script>
 
-<div style:width="{x}px" style:height="{y}px" class="rounded-lg bg-base-200 p-2">
-	<div class="grid h-full w-full content-center rounded-md border-4 border-dashed">
+<div style:width="{x}px" style:height="{y}px" class="p-1.5">
+	<div
+		class={[
+			'grid h-full w-full content-center justify-items-center',
+			'gap-2 border-4 border-dotted border-hard',
+		]}
+	>
 		<span class="text-center text-sm font-medium text-base-content/60">
 			{#if children}{@render children()}{:else}Pas d'image{/if}
 		</span>

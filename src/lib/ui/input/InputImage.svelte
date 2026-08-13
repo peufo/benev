@@ -91,7 +91,7 @@
 {:else}
 	<button
 		type="button"
-		class="block overflow-hidden rounded-lg transition-shadow hover:shadow-lg"
+		class="block overflow-hidden rounded-field border border-hard cursor-pointer hover:outline-1"
 		onclick={() => inputFile.click()}
 	>
 		{@render preview()}

@@ -29,7 +29,7 @@
 	}
 
 	export function show() {
-		dialogMedias.show()
+		dialogMedias.showModal()
 		loadMedias()
 	}
 
@@ -58,7 +58,7 @@
 	<div>
 		<div
 			class="grid gap-3 items-start"
-			style:grid-template-columns="repeat(auto-fill, minmax(min(6rem, 100%), 1fr)"
+			style:grid-template-columns="repeat(auto-fill, minmax(min(8rem, 100%), 1fr))"
 		>
 			{#each medias as media (media.id)}
 				<!--
@@ -70,13 +70,22 @@
 					<button
 						type="button"
 						onclick={() => handleSelectMedia(media)}
-						class="w-full text-left border rounded-lg outline-primary/50 outline-1 hover:outline p-1 flex flex-col gap-1"
+						class="border-soft flex w-full flex-col gap-1 rounded-lg border p-1 text-left outline-1 outline-primary/50 hover:outline"
 					>
-						<img src="/media/{media.id}?size=small" alt={media.name} class="rounded" />
+						<!-- Les médias n'ont pas tous le même ratio: sans cadrage, la grille devient
+						     irrégulière et les libellés ne s'alignent plus d'une tuile à l'autre. -->
+						<img
+							src="/media/{media.id}?size=small"
+							alt={media.name}
+							class="aspect-square w-full rounded bg-base-200 object-cover"
+						/>
 
-						<div class="flex items-center w-full flex-wrap gap-2" class:pr-7={media.eventId}>
-							<span class="title-sm h-6">{media.name || '-'}</span>
-						</div>
+						<span
+							class="line-clamp-2 min-h-8 text-xs font-medium text-base-content/70"
+							class:pr-7={media.eventId}
+						>
+							{media.name || '-'}
+						</span>
 					</button>
 
 					{#if media.eventId}
@@ -95,7 +104,7 @@
 
 			<button
 				type="button"
-				class="border rounded-lg grid place-content-center aspect-square outline-primary/50 outline-1 hover:outline"
+				class="border-soft grid aspect-square place-content-center rounded-lg border outline-1 outline-primary/50 hover:outline"
 				onclick={handleAddMedia}
 				use:tip={{ content: 'Ajouter une nouvelle image' }}
 			>
@@ -152,7 +161,7 @@
 							dialogEdit.close()
 							const media = editMedia.result
 							if (media) medias = medias.map((m) => (m.id === media.id ? media : m))
-							dialogMedias.show()
+							dialogMedias.showModal()
 						},
 					})
 				)}
@@ -162,7 +171,7 @@
 							dialogEdit.close()
 							const media = deleteMedia.result
 							if (media) medias = medias.filter((m) => m.id !== media.id)
-							dialogMedias.show()
+							dialogMedias.showModal()
 						},
 					})
 				)}
