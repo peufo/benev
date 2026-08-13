@@ -1,56 +1,55 @@
 # Benev.io — Agent Guide
 
-> **Project language**: French (UI, comments, and documentation are in French).  
+> **Project language**: French (UI, comments, and documentation are in French).
 > **Repository**: Full-stack web application for volunteer event management ("Plateforme de gestion de bénévoles").
 
 ---
 
 ## Project Overview
 
-Benev.io is a platform that helps event organizers manage volunteers. It supports:
+Benev.io helps event organizers manage volunteers:
 
-- **Organizers**: create events, edit teams and pages, manage members, set themes, configure registration rules, and handle payments for licenses.
-- **Leaders (Responsables)**: manage team periods, validate subscriptions, and view volunteer lists.
-- **Volunteers (Bénévoles)**: browse events, register for time slots (periods), track their subscriptions, and update their profile.
+- **Organizers**: create events, edit teams and pages, manage members, set themes, configure
+  registration rules, and pay for their event tier.
+- **Leaders (Responsables)**: manage team periods, validate subscriptions, view volunteer lists.
+- **Volunteers (Bénévoles)**: browse events, register for time slots (periods), track their
+  subscriptions, update their profile.
 
-The application is built as a server-rendered full-stack app with a rich admin interface for each event.
+Server-rendered full-stack app with a rich admin interface per event.
 
-Product intent, audiences and design system are recorded in `PRODUCT.md` and `DESIGN.md` at the repo root. Read them before changing anything user-facing.
+Product intent, audiences and design system are recorded in `PRODUCT.md` and `DESIGN.md` at the
+repo root. **Read them before changing anything user-facing** — `DESIGN.md` is the authority on
+colour, type and spacing, not this file. `TODO.md` is the user's running task list.
 
 ---
 
 ## Technology Stack
 
-| Layer            | Technology                                                                                                                   |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Framework        | [SvelteKit](https://svelte.dev/docs/kit) v2 (full-stack, file-based routing) with **remote functions enabled**               |
-| Language         | TypeScript v6 (strict mode, `verbatimModuleSyntax: true`)                                                                    |
-| Build Tool       | Vite v8                                                                                                                      |
-| UI               | **Svelte v5 (runes mode)**, [Tailwind CSS](https://tailwindcss.com/) **v4**, [DaisyUI](https://daisyui.com/) **v5**          |
-| CSS config       | **No `tailwind.config.mjs`, no PostCSS.** Tailwind is a Vite plugin (`@tailwindcss/vite`); the theme lives in `src/app.css`. |
-| Font             | [Barlow](https://fonts.google.com/specimen/Barlow) (400–800) via Google Fonts in `src/app.html`                              |
-| Icons            | [Lucide](https://lucide.dev/) (`@lucide/svelte` v1) — the only icon set                                                      |
-| Component Lib    | [`fuma`](https://github.com/peufo/fuma) v2, published on npm but linked locally via `"fuma": "file:../fuma"`                 |
-| Validation       | [Zod](https://zod.dev/) v4, schemas in `$lib/models`                                                                         |
-| ORM              | [Prisma](https://www.prisma.io/) v6 (client + generator) with `prisma-json-types-generator`                                  |
-| Database         | MySQL                                                                                                                        |
-| Auth             | [Lucia](https://lucia-auth.com/) v2 with `@lucia-auth/adapter-prisma`                                                        |
-| OAuth Providers  | GitHub, Google                                                                                                               |
-| Payments         | [Stripe](https://stripe.com/) (server-side `stripe` + client-side `@stripe/stripe-js`)                                       |
-| Email            | Nodemailer (SMTP via Infomaniak), templates rendered with `render()` from `svelte/server`                                    |
-| E2E Tests        | [Playwright](https://playwright.dev/)                                                                                        |
-| Unit Tests       | [Vitest](https://vitest.dev/), `node` environment                                                                            |
-| Runtime (Docker) | [Bun](https://bun.sh/) (`oven/bun:latest`)                                                                                   |
-| Deployment       | Docker image built via GitHub Actions, pushed to GHCR                                                                        |
+SvelteKit v2 (**remote functions enabled**) · TypeScript v6 (strict, `verbatimModuleSyntax`) ·
+Vite v8 · Svelte v5 **runes-only** · Tailwind v4 + DaisyUI v5 · Zod v4 · Prisma v6 / MySQL ·
+Lucia v2 (GitHub + Google OAuth) · Stripe · Nodemailer (SMTP Infomaniak) · Playwright + Vitest ·
+Bun runtime, Docker image built by GitHub Actions to GHCR.
+
+The non-obvious parts:
+
+- **No `tailwind.config`, no PostCSS.** Tailwind is a Vite plugin (`@tailwindcss/vite`); the
+  theme lives in `src/app.css`, alongside `@plugin '@tailwindcss/typography'`.
+- **Lucide (`@lucide/svelte`) is the only icon set.**
+- **Font**: Barlow (400–800) via Google Fonts in `src/app.html`.
+- **`fuma` v2 is linked to a sibling checkout**, not the registry — see [Fuma](#fuma).
+- Emails are Svelte components rendered with `render()` from `svelte/server`.
 
 ### Svelte 5 and SvelteKit experimental flags
 
 `svelte.config.js` turns on two experimental features the codebase depends on:
 
-- `kit.experimental.remoteFunctions: true` — required by every `*.remote.ts` file and by fuma 2's input components.
+- `kit.experimental.remoteFunctions: true` — required by every `*.remote.ts` file and by fuma 2's
+  input components.
 - `compilerOptions.experimental.async: true` — async SSR / `await` in components.
 
-Code is **runes-only**: `$state`, `$derived`, `$props`, `$effect`, snippets (`{#snippet}` / `{@render}`), and event attributes (`onclick`, not `on:click`). `export let` and stores-as-component-state are legacy and should not be introduced.
+Code is **runes-only**: `$state`, `$derived`, `$props`, `$effect`, snippets and event attributes
+(`onclick`, not `on:click`). `export let` and stores-as-component-state are legacy and should not
+be introduced.
 
 ---
 
@@ -58,54 +57,49 @@ Code is **runes-only**: `$state`, `$derived`, `$props`, `$effect`, snippets (`{#
 
 ```
 /
-├── prisma/
-│   └── schema.prisma          # Database schema (MySQL)
+├── prisma/schema.prisma       # Database schema (MySQL)
 ├── src/
 │   ├── app.html               # HTML template (lang="fr"), Barlow webfont
 │   ├── app.d.ts               # Global App types + Lucia/PrismaJson types
-│   ├── app.css                # Tailwind v4 entry + DaisyUI theme + custom utilities
+│   ├── app.css                # Tailwind v4 entry + DaisyUI theme + @utility layer
 │   ├── hooks.server.ts        # Auth middleware (Lucia session handling)
-│   ├── routes/                # SvelteKit routes (file-based)
+│   ├── routes/
 │   │   ├── (home)/            # Layout group: marketing, auth, /me, /root, /terms, /contact…
 │   │   ├── [eventId]/         # Event-specific pages (public + admin)
 │   │   ├── api/               # Global API routes (ical, scrap-icon)
 │   │   ├── lab/               # Scratch space for UI experiments
 │   │   ├── media/             # Media file serving
-│   │   └── sitemap.xml/       # SEO sitemap
+│   │   └── sitemap.xml/
 │   ├── lib/
 │   │   ├── server/            # Server-only modules (auth, prisma, permissions, email, stripe…)
 │   │   ├── models/            # Zod schemas (modelUserCreate, modelEventUpdate…)
+│   │   ├── ui/                # Components fuma 2 does not cover
 │   │   ├── email/             # Svelte email template components
 │   │   ├── event/, team/, period/, subscribe/, member/, gift/, tag/, pages/, plan/,
-│   │   │   milestone/, view/, me/, layout/, checkout/, landing/, material/, location/
+│   │   │   milestone/, view/, me/, layout/, checkout/, landing/, material/, location/,
+│   │   │   testimonials/
 │   │   ├── seo/               # Meta tags + JSON-LD schemas
 │   │   ├── constant/          # EVENT_TIER quotas and other shared constants
-│   │   ├── store/             # Svelte stores (ctrl, isMobile…)
-│   │   ├── action/            # DOM actions (autoSubmit…)
-│   │   ├── style/             # Shared CSS (animate.css)
-│   │   ├── types/             # Shared TypeScript types
-│   │   └── api.ts             # Client-side API helpers (axios + devalue)
+│   │   ├── store/             # Svelte stores (eventPath, isMobile)
+│   │   ├── action/, style/, types/, assets/
+│   │   └── *.ts               # Shared helpers: api.ts (axios + devalue), dayjs.ts,
+│   │                          #   tierQuota.ts, timezone.ts, url.ts, enhanceForm.ts…
 │   └── tests/                 # Vitest unit tests
 ├── tests/                     # Playwright E2E tests + fixtures
 ├── media/                     # Uploaded media storage (local filesystem)
 ├── dumps/                     # SQL dumps
-├── PRODUCT.md                 # Product record: audiences, purpose, principles
-├── DESIGN.md                  # Design system: theme tokens, type, components, rules
+├── PRODUCT.md, DESIGN.md      # Product record and design system
+├── TODO.md                    # User's running task list
 ├── .impeccable/design.json    # Machine-readable sidecar of DESIGN.md
-├── Dockerfile
-├── .github/workflows/deploy.yml
-├── package.json
+├── Dockerfile, .github/workflows/deploy.yml
 ├── svelte.config.js           # Node adapter + experimental flags
-├── vite.config.ts             # Tailwind plugin, Vitest config, fs allow-list
-├── tsconfig.json
-├── prettier.config.cjs
-├── eslint.config.js
-└── playwright.config.ts
+├── vite.config.ts             # Tailwind plugin, Vitest config, fuma linking
+└── prettier.config.cjs, eslint.config.js, playwright.config.ts, tsconfig.json
 ```
 
 ### Route Conventions
 
-- `(home)` — layout group for public/marketing pages, auth, and the user dashboard.
+- `(home)` — public/marketing pages, auth, user dashboard.
   - `/`, `/events`, `/contact`, `/open-source`, `/terms`, `/qr`
   - `/auth` — login / account creation (`$lib/me/Login.svelte`)
   - `/me/*` — personal dashboard, events, checkouts
@@ -113,11 +107,12 @@ Code is **runes-only**: `$state`, `$derived`, `$props`, `$effect`, snippets (`{#
   - `/token/[tokenId]/*` — email-link landings (verification, password reset)
 - `[eventId]` — dynamic event slug. All event pages live here:
   - `[eventId]/[pagePath]` — public CMS-like pages for the event.
-  - `[eventId]/admin/*` — organizer tools (event, members, teams, plan, pages, theme, gift, quota, subscribes, adhesion).
-  - `[eventId]/register`, `[eventId]/me`, `[eventId]/teams`, `[eventId]/help`, `[eventId]/invite` — volunteer-facing pages.
+  - `[eventId]/admin/*` — organizer tools: event, members, pages, plan, theme, gift, quota,
+    subscribes, adhesion.
+  - `[eventId]/register`, `/me`, `/teams`, `/help`, `/invite` — volunteer-facing pages.
   - `[eventId]/api/*` — event-scoped REST endpoints.
 - `+layout.server.ts` / `+page.server.ts` — server `load` functions.
-- `+server.ts` — API endpoints (REST handlers: GET, POST, PATCH, DELETE).
+- `+server.ts` — REST endpoints (GET, POST, PATCH, DELETE).
 - `*.remote.ts` — remote functions. **This is where mutations live** (see below).
 
 ### Key Modules
@@ -132,7 +127,7 @@ Code is **runes-only**: `$state`, `$derived`, `$props`, `$effect`, snippets (`{#
 | `$lib/server/stripe.ts`     | Checkout session creation and Stripe webhook handling.                                                               |
 | `$lib/server/email.ts`      | SMTP transport and email rendering/sending. Honours `EMAIL_DISABLED=true`.                                           |
 | `$lib/models`               | Zod v4 schemas, consumed by `form()` remote functions.                                                               |
-| `$lib/ui`                   | Components fuma 2 does not cover: `Card`, `Placeholder`, `Badge`, `Tabs`, `InputTextRich`…                           |
+| `$lib/ui`                   | Components fuma 2 does not cover: `card`, `badge`, `tabs`, `dialog`, `placeholder`, `textRich`, `input`.             |
 | `$lib/email`                | Svelte components for transactional emails.                                                                          |
 | `$lib/plan`                 | Drag-and-drop planning grid for team/period visualization.                                                           |
 | `$lib/pages`                | CMS page rendering, suggestions, and nested path logic.                                                              |
@@ -144,7 +139,8 @@ Code is **runes-only**: `$state`, `$derived`, `$props`, `$effect`, snippets (`{#
 
 ## Mutations: Remote Functions, not Form Actions
 
-**There is not a single `export const actions` left in the repo.** Every mutation goes through a SvelteKit remote function declared in a `*.remote.ts` file (26 of them at time of writing):
+**There is not a single `export const actions` left in the repo.** Every mutation goes through a
+SvelteKit remote function declared in a `*.remote.ts` file:
 
 ```ts
 // src/lib/me/user.remote.ts
@@ -167,13 +163,21 @@ Consumed in a component by spreading `enhance` onto the `<form>`:
 
 Things to know when touching this layer:
 
-- **`await submit()` returns a boolean.** `false` means validation failed and the issues are already rendered under the fields — do not treat it as success.
-- **Thrown errors are `HttpError`, which does _not_ extend `Error`.** Use `isHttpError(err)` from `@sveltejs/kit` and read `err.body.message`. `err instanceof Error` is false and `String(err)` yields JSON.
-- Uncaught exceptions in a remote function surface to the client as a generic 500. Wrap expected failures in `error(status, message)` so the UI can say something useful.
-- Several remote functions can be spread onto the same `<form>`; SvelteKit runs the one whose `action` matches the pressed button's `formaction`. The **first submit button in DOM order** is what the Enter key triggers.
-- `form.pending` (a counter) and `form.fields.x.value()` / `.set()` are available for loading states and cross-form value carry-over.
+- **`await submit()` returns a boolean.** `false` means validation failed and the issues are
+  already rendered under the fields — do not treat it as success.
+- **Thrown errors are `HttpError`, which does _not_ extend `Error`.** Use `isHttpError(err)` from
+  `@sveltejs/kit` and read `err.body.message`. `err instanceof Error` is false and `String(err)`
+  yields JSON.
+- Uncaught exceptions in a remote function surface to the client as a generic 500. Wrap expected
+  failures in `error(status, message)` so the UI can say something useful.
+- Several remote functions can be spread onto the same `<form>`; SvelteKit runs the one whose
+  `action` matches the pressed button's `formaction`. The **first submit button in DOM order** is
+  what the Enter key triggers.
+- `form.pending` (a counter) and `form.fields.x.value()` / `.set()` are available for loading
+  states and cross-form value carry-over.
 
-`fuma/server` still provides read-side helpers — `parseQuery`, `ensureFieldsWithFilterAreVisibles` — used in `load` functions. Those stay.
+`fuma/server` still provides read-side helpers — `parseQuery`,
+`ensureFieldsWithFilterAreVisibles` — used in `load` functions. Those stay.
 
 ---
 
@@ -183,13 +187,18 @@ The UI depends on a local sibling checkout at `../fuma` (`"fuma": "file:../fuma"
 published on npm, but the link is what benev builds against: fixes land in `../fuma` as they are
 found, and the checkout is usually ahead of the registry. Switching the dependency to a version
 range means publishing first. **Changes to fuma are picked up live; there is no publish step.**
-Three Vite settings make the link work:
+Four settings make the link work — three in `vite.config.ts`, one in `app.css`:
 
-- `server.fs.allow` — serve files from outside the project root.
-- `optimizeDeps.exclude` — no pre-bundling, so edits are seen immediately.
+- `server.fs.allow` — serve files from outside the project root (`media` and `../fuma`).
+- `optimizeDeps.exclude: ['fuma']` — no pre-bundling, so edits are seen immediately.
+- `optimizeDeps.include: ['litepicker']` — the consequence of that exclusion. `litepicker` is a
+  CommonJS dependency of fuma's `RangePicker`, imported nowhere in `src/`; without an explicit
+  include the dev server serves raw CJS. It stays declared in `package.json` for that reason.
 - `resolve.dedupe: ['@sveltejs/kit', 'svelte']` — `node_modules/fuma` is a symlink to a checkout
   that keeps its own copies for development. Without dedupe, `fuma/server` throws a `redirect()`
   built by _its_ copy of kit, benev's copy does not recognise it, and the redirect surfaces as a 500.
+- `@source '../../fuma/src/lib'` in `app.css` — Tailwind scans fuma's **source**, not `dist`, so
+  classes used only inside fuma components still get generated.
 
 There is one import surface:
 
@@ -198,10 +207,9 @@ There is one import surface:
 - **`from 'fuma/server'`** — read-side helpers for `load` functions: `parseQuery`,
   `ensureFieldsWithFilterAreVisibles`.
 
-The vendored fuma 1 copy is gone. What fuma 2 does not cover lives in `$lib/ui` and belongs to
-benev — `Card`, `Placeholder`, `Badge`, `Tabs`, `InputTextRich` and the tiptap toolbar,
-`SelectorList`, `InputImage`, `InputSearch`. `$lib/ui` never imports from a fuma-1 shim; the
-dependency runs one way, from benev to the package.
+What fuma 2 does not cover lives in `$lib/ui` and belongs to benev — `Card`, `Placeholder`,
+`Badge`, `Tabs`, `Dialog`, `InputTextRich` and the tiptap toolbar, `SelectorList`, `InputImage`,
+`InputSearch`. The dependency runs one way, from benev to the package.
 
 Field labels come from fuma, which renders them as `fieldset.fieldset > label.label`. A bespoke
 control that has to sit next to a fuma input reproduces that markup by hand — see the "Type de
@@ -258,55 +266,46 @@ browser is not proof.
 
 Use **Bun** (lockfile is `bun.lock`).
 
-> ⚠️ Always write `bun run <script>`. Bare `bun build`, `bun test` and `bun check` hit Bun's own builtins, not the package.json scripts.
+> ⚠️ Always write `bun run <script>`. Bare `bun build`, `bun test` and `bun check` hit Bun's own
+> builtins, not the package.json scripts.
 
 ```bash
-# Install dependencies
-bun install
-
-# Development server (Vite, host enabled)
-bun run dev
-
-# Build for production / preview it
+bun install               # postinstall runs `prisma generate`
+bun run dev               # Vite dev server, host enabled
 bun run build
 bun run preview
 
 # Prisma
 bun run generate          # Generate Prisma client
-bun run migrate           # Run migrations in dev mode
-bun run migrate:deploy    # Run migrations in production
-bun run studio            # Open Prisma Studio
+bun run migrate           # Migrations, dev mode
+bun run migrate:deploy    # Migrations, production
+bun run studio
 
 # Codegen
 bun run timezones         # Regenerate src/lib/timezone.data.ts from the runtime's IANA database
 
 # Testing
-bun run test:unit         # Vitest (node environment)
+bun run test:unit         # Vitest, single run (node environment)
+bun run vitest            # Vitest, watch mode
 bun run test:e2e          # Playwright
-bun run test              # Both, in that order
+bun run test              # test:unit then test:e2e
 bun run test:ui           # Playwright UI mode
 bun run test-gen          # Playwright codegen against localhost:5173
 
 # Linting, formatting, type-checking
-bun run lint              # Prettier check + ESLint
-bun run format            # Prettier write
-bun run check             # svelte-kit sync + svelte-check + lint
-bun run check:watch       # svelte-check in watch mode
+bun run check             # svelte-kit sync + svelte-check --fail-on-warnings + lint
+bun run check:watch
+bun run lint              # prettier --check . && eslint .
+bun run format            # prettier --write .
 
-# Production start (requires build first)
-bun start                 # prisma migrate deploy, then node ./build/index.js
-
-# Stripe webhook forwarding (dev)
-bun run dev:stripe        # Forward Stripe webhooks to localhost
+bun start                 # Production: prestart runs `prisma migrate deploy`, then node ./build/index.js
+bun run dev:stripe        # Forward Stripe webhooks to localhost:5173/me/checkouts/validation
 ```
 
-### Important Build Notes
-
-- `postinstall` runs `prisma generate` automatically.
-- `prestart` runs `prisma migrate deploy` before starting the Node server.
-- Vite's `server.fs.allow` covers `media/` (uploads) **and `../fuma`** (the linked component library).
-- `bun run check` runs `svelte-kit sync` first: without it, `$env/dynamic` keys are untyped and `svelte-check` fails.
-- `bun run check` is expected to report **0 errors and 0 warnings**. It runs with `--fail-on-warnings`; there is no baseline to compare against.
+- `bun run check` runs `svelte-kit sync` first: without it, `$env/dynamic` keys are untyped and
+  `svelte-check` fails.
+- `bun run check` is expected to report **0 errors and 0 warnings**. It runs with
+  `--fail-on-warnings`; there is no baseline to compare against.
 
 ---
 
@@ -321,66 +320,72 @@ MEDIA_DIR="./media"                        # Local media storage path
 BODY_SIZE_LIMIT=0                          # Disable body size limit for uploads
 
 # EMAIL
-SMTP_HOST="mail.infomaniak.com"
-SMTP_PORT="465"
-SMTP_USER="salut@benev.io"
-SMTP_PASS="..."
-EMAIL_DISABLED="true"                      # Optional: log instead of sending (used in CI/E2E)
+SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
 
 # AUTHENTICATION
-GITHUB_CLIENT_ID="..."
-GITHUB_CLIENT_SECRET="..."
-GOOGLE_CLIENT_ID="..."
-GOOGLE_CLIENT_SECRET="..."
+GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
 
 # MONETISATION
-PRIVATE_STRIPE_KEY="..."
-PRIVATE_STRIPE_WEBHOOK_KEY="..."
-PUBLIC_STRIPE_KEY="..."
-PUBLIC_PRICE_STANDARD="price_..."
-PUBLIC_PRICE_PREMIUM="price_..."
-PUBLIC_PRICE_STANDARD_TO_PREMIUM="price_..."
+PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, PUBLIC_STRIPE_KEY,
+PUBLIC_PRICE_STANDARD, PUBLIC_PRICE_PREMIUM, PUBLIC_PRICE_STANDARD_TO_PREMIUM
 ```
 
-All `PUBLIC_*` variables are exposed to the browser. All others are server-only (`$env/dynamic/private`).
+`EMAIL_DISABLED="true"` is **not** in `.env.example`: it is set by `playwright.config.ts` and by
+CI to log emails instead of sending them.
+
+All `PUBLIC_*` variables are exposed to the browser. All others are server-only
+(`$env/dynamic/private`).
 
 ---
 
 ## Code Style Guidelines
 
-- **Formatter**: Prettier v3 with `prettier-plugin-svelte`.
-  - Indentation: **tabs** (`useTabs: true`)
-  - Quotes: **single quotes**
-  - Semicolons: **none** (`semi: false`)
-  - Trailing commas: **ES5** (`trailingComma: 'es5'`)
-  - Print width: **100**
-- **Linter**: ESLint v10 in _flat config_ (`eslint.config.js`) with `typescript-eslint`, `eslint-plugin-svelte`, `eslint-config-prettier`.
+- **Formatter**: Prettier v3 with `prettier-plugin-svelte` (`prettier.config.cjs`) — tabs, single
+  quotes, **no semicolons**, `trailingComma: 'es5'`, print width 100.
+- **Linter**: ESLint v10 flat config (`eslint.config.js`) with `typescript-eslint`,
+  `eslint-plugin-svelte`, `eslint-config-prettier`.
 - **Imports**: `verbatimModuleSyntax: true`. Always use `import type` for type-only imports.
 - **Language**: UI text and most comments are in **French**. Comments explain _why_, not _what_.
-- **No changelog comments.** A comment must still be true and useful a year from now. Never write what
-  a change replaced, what used to be there, or what is deprecated (`// remplace l'ancien X`,
-  `/** Remplacent les évènements de la version Svelte 4 */`, `// le jeton Y n'a plus cours`).
-  That belongs in the commit message and the report, not in the source. Keep only comments that
-  explain a non-obvious constraint the reader would otherwise trip on.
+- **No changelog comments.** A comment must still be true and useful a year from now. Never write
+  what a change replaced, what used to be there, or what is deprecated (`// remplace l'ancien X`,
+  `/** Remplacent les évènements de la version Svelte 4 */`, `// le jeton Y n'a plus cours`). That
+  belongs in the commit message and the report, not in the source. Keep only comments that explain
+  a non-obvious constraint the reader would otherwise trip on.
 
 ### Naming and Patterns
 
-- Server-only files that must not run in the browser live in `$lib/server/` or are named `*.server.ts`.
-- Validation schemas live in `$lib/models/` and are named `modelUserCreate`, `modelEventUpdate`, etc.
+- Server-only files that must not run in the browser live in `$lib/server/` or are named
+  `*.server.ts`.
+- Validation schemas live in `$lib/models/` and are named `modelUserCreate`, `modelEventUpdate`…
 - Mutations live in `*.remote.ts` next to the feature they serve.
-- API routes (`+server.ts`) return JSON. Client-side consumption in `$lib/api.ts` uses `axios` + `devalue`.
-- fuma components import from `'fuma'`; read-side server helpers from `'fuma/server'`; benev's own components from `'$lib/ui'`.
-- **Icons**: always `@lucide/svelte`, with the `Icon` suffix — `import { CheckIcon, UploadIcon } from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. Lucide strokes its icons: colour them with `text-*`, never `fill-*`, which renders them invisible.
+- API routes (`+server.ts`) return JSON. Client-side consumption in `$lib/api.ts` uses `axios` +
+  `devalue`.
+- fuma components import from `'fuma'`; read-side server helpers from `'fuma/server'`; benev's own
+  components from `'$lib/ui'`.
+- **Icons**: always `@lucide/svelte`, with the `Icon` suffix — `import { CheckIcon, UploadIcon }
+from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. Lucide strokes
+  its icons: colour them with `text-*`, never `fill-*`, which renders them invisible.
 
 ---
 
 ## Styling and Design System
 
-- **The DaisyUI theme in `src/app.css` is the only source of colour.** No hex in components, no raw Tailwind palette (`slate`, `red`…), no config file. A colour that doesn't exist gets added to the `@plugin 'daisyui/theme'` block.
-- Current tokens: `primary` `#0d3b66` (deep blue), `secondary` `#b8a58a` (sand beige), `accent` `#a52422` (brick red, planning time-marker only), `neutral` `#2b3440`, `base-100/200/300`, `base-content` `#1f2937`. `info` / `success` / `warning` / `error` are inherited from DaisyUI v5.
-- Custom utilities in `app.css`: `.border-soft` / `.border-hard` (borders derived from `base-content`), `.menu-item`, `.title` / `.title-md` / `.title-sm`.
-- Form fields use `variant="block"` and need an explicit full width — DaisyUI's `.input` caps at `20rem`.
-- **Read `DESIGN.md` before any UI change.** It carries the named rules, the measured contrast ratios, and the do/don't list. `PRODUCT.md` carries the audiences and the tone.
+- **The DaisyUI theme in `src/app.css` is the only source of colour.** No hex in components, no
+  raw Tailwind palette (`slate`, `red`…), no config file. A colour that doesn't exist gets added
+  to the `@plugin 'daisyui/theme'` block.
+- A **single theme** is declared — `light`, rendered by default. There is no dark theme.
+- Tokens: `primary` `#2663eb` (frank blue, carries action), `secondary` `#11b981` (green — the
+  brand colour, the dot in the logo; **2.54:1, never as text**), `accent` `#e69214` (orange,
+  reserved for the planning time-marker; **2.47:1, never as text**), `neutral` `#2b3440`,
+  `base-100/200/300` `#ffffff`/`#f2f2f2`/`#e5e6e6`, `base-content` `#1f2937`. `info` / `success` /
+  `warning` / `error` are inherited from DaisyUI v5.
+- Custom `@utility` rules in `app.css`: `border-soft` / `border-hard` (borders derived from
+  `base-content`), `bg-accent-soft` / `bg-accent-softer`. Component classes: `.surface` /
+  `.surface-drawer`, `.menu-item`, `.title` / `.title-md` / `.title-sm`.
+- Form fields use `variant="block"` and need an explicit full width — DaisyUI's `.input` caps at
+  `20rem`.
+- **Read `DESIGN.md` before any UI change.** It carries the named rules, the measured contrast
+  ratios, and the do/don't list. `PRODUCT.md` carries the audiences and the tone.
 
 ---
 
@@ -388,119 +393,117 @@ All `PUBLIC_*` variables are exposed to the browser. All others are server-only 
 
 ### Unit Tests (Vitest)
 
-- Config: the `test` block in `vite.config.ts`
-- Environment: `node`
-- Test files: `src/**/*.{test,spec}.{js,ts}` — currently `src/tests/eventLocation.test.ts` and `src/tests/tierQuota.test.ts`
-- `tippy.js` is force-inlined: the email SSR path pulls editor extensions that import CSS, which Node's ESM loader refuses.
-
-```bash
-bun run test:unit
-```
+- Config: the `test` block in `vite.config.ts`; environment `node`.
+- Test files: `src/**/*.{test,spec}.{js,ts}`, living in `src/tests/`.
+- `tippy.js` is force-inlined: the email SSR path pulls editor extensions that import CSS, which
+  Node's ESM loader refuses.
 
 ### E2E Tests (Playwright)
 
-- Config: `playwright.config.ts`
-- Test directory: `tests/` (fixtures: `tests/user.ts`, `tests/event.ts`, `tests/test.ts`, `tests/photon.ts`)
+- Config: `playwright.config.ts`; test directory `tests/`.
+- Fixtures: `tests/user.ts`, `tests/event.ts`, `tests/test.ts`, `tests/photon.ts` — they create
+  isolated users and events with unique CUIDs.
 - The config builds and previews the app on port 4173 with `EMAIL_DISABLED=true` before running.
-- Fixtures create isolated users and events with unique CUIDs.
 
-```bash
-bun run test:e2e
-bun run test:ui     # UI mode
-bun run test-gen    # Codegen against the dev server (localhost:5173)
-```
+### CI and Deployment
 
-### CI
+`.github/workflows/deploy.yml` runs on push to `main`: spins up MySQL 8, runs
+`bunx prisma migrate deploy`, then `bun run check`, `bun run test:unit`, and `bun run test:e2e`
+(Chromium only). Playwright reports are uploaded on failure. The Docker build job (`oven/bun:latest`,
+pushed to `ghcr.io`) only runs if that job passes.
 
-`.github/workflows/deploy.yml` runs on push to `main`: spins up MySQL 8, runs `bunx prisma migrate deploy`, then `bun run check`, `bun run test:unit`, and `bun run test:e2e` (Chromium only). Playwright reports are uploaded on failure. The Docker build job only runs if that job passes.
-
-Every key in `.env.example` must be set in CI, even with dummy values: `svelte-kit sync` types `$env/dynamic` from the present environment, and a missing key becomes `string | undefined` and breaks `svelte-check`.
+Every key in `.env.example` must be set in CI, even with dummy values: `svelte-kit sync` types
+`$env/dynamic` from the present environment, and a missing key becomes `string | undefined` and
+breaks `svelte-check`.
 
 ---
 
 ## Database and Migrations
 
-- **Provider**: MySQL
-- **ORM**: Prisma v6
-- **Key models**: `User`, `Member`, `Event`, `Team`, `Period`, `Subscribe`, `Page`, `Field`, `Gift`, `Badge`, `Media`, `Message`, `Prospect`, `Licence`, `Checkout`
-- Prisma client is extended with custom query middleware in `$lib/server/prisma.ts`:
+- **MySQL** + **Prisma v6**, schema in `prisma/schema.prisma`, with `prisma-json-types-generator`.
+- Models: `User`, `Session`, `Key`, `Token`, `Event`, `Member`, `Team`, `Period`, `Subscribe`,
+  `Page`, `Field`, `View`, `Tag`, `Milestone`, `Gift`, `GiftCondition`, `GiftAllocation`, `Badge`,
+  `Media`, `Message`, `Product`, `Checkout`.
+- The Prisma client is extended with query middleware in `$lib/server/prisma.ts`:
   - Event soft deletes (renames ID/name instead of hard delete).
   - Event date auto-sync when periods are created/updated/deleted.
-  - User data is duplicated onto linked `Member` records on create/update.
-
-```bash
-bun run migrate:deploy
-```
+  - User data duplicated onto linked `Member` records on create/update.
 
 ---
 
 ## Authentication and Authorization
 
-- Sessions are handled by **Lucia v2** with a Prisma adapter; `hooks.server.ts` attaches `locals.auth`.
-- Users can authenticate via email + password, GitHub OAuth, or Google OAuth.
-- Accounts can also be **created by an organizer through an invitation**: such a user exists but has no password, and must go through the password-reset link to claim the account. `$lib/me/Login.svelte` handles this case explicitly.
+- Sessions are handled by **Lucia v2** with a Prisma adapter; `hooks.server.ts` attaches
+  `locals.auth`.
+- Users authenticate via email + password, GitHub OAuth, or Google OAuth.
+- Accounts can also be **created by an organizer through an invitation**: such a user exists but
+  has no password, and must go through the password-reset link to claim the account.
+  `$lib/me/Login.svelte` handles this case explicitly.
 - Role hierarchy within an event: `member` → `leader` → `admin` → `owner`.
 - A special `ROOT_USER` email bypasses all permission checks.
-- Permission checks go through `permission.*` helpers from `$lib/server/permission.ts` in `load` functions and remote functions.
-- Member roles are computed dynamically (`isAdmin`, `leaderOf`…) and merged into `MemberWithComputedValues`.
+- Permission checks go through `permission.*` helpers from `$lib/server/permission.ts`, in `load`
+  functions and remote functions.
+- Member roles are computed dynamically (`isAdmin`, `leaderOf`…) and merged into
+  `MemberWithComputedValues`.
 
 ---
 
-## Payments and Tiers
+## Payments, Email, Media
 
-- Events sit on a tiered plan — `basic`, `standard`, `premium`, `pro` (`EventTier` enum) — with member quotas defined in `$lib/constant` and enforced by `computeIsTierQuotaReached` in `$lib/tierQuota.ts`.
-- Stripe handles checkout sessions and webhook validation.
-- Webhook endpoint: `/me/checkouts/validation` (`+server.ts`, POST).
-
----
-
-## Email System
-
-- Emails are Svelte components in `$lib/email/`, rendered server-side with **`render()` from `svelte/server`** (Svelte 5 — the old static `Component.render()` is gone).
-- SMTP via Nodemailer. `EMAIL_DISABLED=true` logs instead of sending; CI and E2E rely on it.
-- Transactional emails: verification links, password reset, subscribe notifications (request/accepted/denied/cancelled), checkout validation, prospect outreach.
-- `/root/mails/*` previews templates in the browser.
-
----
-
-## Media and File Storage
-
-- Uploaded files (avatars, event backgrounds, logos, posters, badge assets) are stored on the local filesystem under `MEDIA_DIR` (default `./media`).
-- Media records live in the `Media` table with relations to `User`, `Event`, and `Badge`.
-- The `/media/[mediaId]` route serves files.
-- `sharp` handles image processing.
+- **Tiers**: events sit on `basic`, `standard`, `premium` or `pro` (`EventTier` enum), with member
+  quotas in `$lib/constant` enforced by `computeIsTierQuotaReached` in `$lib/tierQuota.ts`. Stripe
+  handles checkout sessions and webhook validation; the webhook endpoint is
+  `/me/checkouts/validation` (`+server.ts`, POST), and signatures are verified with
+  `PRIVATE_STRIPE_WEBHOOK_KEY`.
+- **Email**: Svelte components in `$lib/email/`, rendered server-side with `render()` from
+  `svelte/server` (the old static `Component.render()` is gone). SMTP via Nodemailer.
+  `EMAIL_DISABLED=true` logs instead of sending; CI and E2E rely on it. Transactional emails cover
+  verification links, password reset, subscribe notifications
+  (request/accepted/denied/cancelled) and checkout validation. `/root/mails/*` previews templates
+  in the browser.
+- **Media**: uploads (avatars, event backgrounds, logos, posters, badge assets) are stored on the
+  local filesystem under `MEDIA_DIR` (default `./media`), recorded in the `Media` table with
+  relations to `User`, `Event` and `Badge`, and served by `/media/[mediaId]`. `sharp` handles
+  image processing.
 
 ---
 
 ## Security Considerations
 
-- **Server-only imports**: never import `$lib/server` or Prisma into client code. SvelteKit errors at build time, but stay vigilant with dynamic imports.
+- **Server-only imports**: never import `$lib/server` or Prisma into client code. SvelteKit errors
+  at build time, but stay vigilant with dynamic imports.
 - **Validation**: every remote function takes a Zod schema. Do not hand-parse `FormData`.
-- **Account enumeration**: auth flows must answer identically whether or not an account exists. `loginUser` returns a single `Invalid credentials` for both unknown email and wrong password; `resetPassword` returns silently for unknown addresses.
-- **Auth redirects**: unauthenticated users go to `/auth?redirectTo=...`. Unauthorized users get HTTP 403.
-- **Stripe webhooks**: verify signatures with `PRIVATE_STRIPE_WEBHOOK_KEY`.
-- **Secrets**: Stripe keys, SMTP passwords and OAuth secrets stay in server-only env vars.
-- **Soft deletes**: events are soft-deleted by renaming their ID/name and setting `deletedAt`, preserving referential integrity.
-
----
-
-## Deployment
-
-1. **Dockerfile**: `oven/bun:latest`, installs OpenSSL, `bun install`, `bun run build`, runs `bun start`.
-2. **GitHub Actions** (`.github/workflows/deploy.yml`): on push to `main`, tests then builds and pushes the image to `ghcr.io`.
-3. **Runtime**: `bun start` runs Prisma migrations then starts the Node server from `./build/index.js`.
+- **Account enumeration**: auth flows must answer identically whether or not an account exists.
+  `loginUser` returns a single `Invalid credentials` for both unknown email and wrong password;
+  `resetPassword` returns silently for unknown addresses.
+- **Auth redirects**: unauthenticated users go to `/auth?redirectTo=...`. Unauthorized users get
+  HTTP 403.
+- **Soft deletes**: events are soft-deleted by renaming their ID/name and setting `deletedAt`,
+  preserving referential integrity.
 
 ---
 
 ## Useful Context for Agents
 
-- **French-first**: all user-facing strings are in French, including error messages. Server-side sentinel strings (`'Invalid credentials'`, `'This account already exists'`) stay in English and are translated at the component boundary.
-- **Manual edits between prompts**: the user frequently edits files manually between prompts. **Always re-read a file before modifying it.** Do not assume it still matches your last edit.
+- **French-first**: all user-facing strings are in French, including error messages. Server-side
+  sentinel strings (`'Invalid credentials'`, `'This account already exists'`) stay in English and
+  are translated at the component boundary.
+- **Manual edits between prompts**: the user frequently edits files manually between prompts.
+  **Always re-read a file before modifying it.** Do not assume it still matches your last edit.
 - **Never commit**: leave changes in the working tree. The user commits.
-- **Fuma first**: before writing a new input, table or dialog, check whether `fuma` already exports one. If it almost fits, fix it in `../fuma` rather than growing a local twin — that is how `$lib/fuma-legacy` came to exist.
-- **Event-scoped data**: most entities (teams, members, pages, fields, gifts, badges) belong to an `Event`; queries should filter by `eventId`.
-- **Computed member values**: `getMemberProfile` in `$lib/server/member.ts` enriches raw `Member` records with roles, subscription stats and gift allocations. Prefer it over raw Prisma queries when member context is needed.
-- **Planning grid**: the volunteer schedule visualization is a custom drag-and-drop grid in `$lib/plan/`, with its own period stacking and scroll-centering logic.
-- **Reusable components must not own their surface**: a component that can be mounted inside a `Card` (like `Login`) reads `contextContainer` from `$lib/ui/context.js` and renders bare when it is already carried. No nested cards.
-- **Meta tags render once**: `MetaTags` does not deduplicate, so only the root layout renders it. Pages publish overrides through `metaTags` in their `load` data.
-- **Brand naming in UI**: use "benevio" (lowercase) in user-facing copy. Technical references (URLs, repo names) may still use "benev".
+- **Fuma first**: before writing a new input, table or dialog, check whether `fuma` already exports
+  one. If it almost fits, fix it in `../fuma` rather than growing a local twin.
+- **Event-scoped data**: most entities (teams, members, pages, fields, gifts, badges) belong to an
+  `Event`; queries should filter by `eventId`.
+- **Computed member values**: `getMemberProfile` in `$lib/server/member.ts` enriches raw `Member`
+  records with roles, subscription stats and gift allocations. Prefer it over raw Prisma queries
+  when member context is needed.
+- **Planning grid**: the volunteer schedule visualization is a custom drag-and-drop grid in
+  `$lib/plan/`, with its own period stacking and scroll-centering logic.
+- **Reusable components must not own their surface**: a component that can be mounted inside a
+  `Card` (like `Login`) reads `contextContainer` from `$lib/ui/context.js` and renders bare when it
+  is already carried. No nested cards.
+- **Meta tags render once**: `MetaTags` does not deduplicate, so only the root layout renders it.
+  Pages publish overrides through `metaTags` in their `load` data.
+- **Brand naming in UI**: use "benevio" (lowercase) in user-facing copy. Technical references
+  (URLs, repo names) may still use "benev".
