@@ -4,6 +4,7 @@
 	import { page } from '$app/state'
 	import { toast } from 'svelte-sonner'
 	import { setEventState } from './event.remote'
+	import { enhanceForm } from '$lib/enhanceForm'
 
 	interface Props {
 		event: Event & { owner: { firstName: string } }
@@ -33,23 +34,16 @@
 	const StateIcon = $derived(EVENT_STATES[event.state].icon)
 </script>
 
-<div
-	class="
-    {EVENT_STATES[event.state].class}
-    md:px-8 p-4 rounded-2xl flex flex-col gap-3 bg-base-100
-  "
-	style="border-width: 1px; border-style: solid;"
->
-	<div>
-		<div class="flex gap-2 items-center flex-wrap">
-			<StateIcon class="opacity-80 {event.state === 'draft' ? 'rotate-12' : ''}" />
-			<h3 class="title">{EVENT_STATES[event.state].label}</h3>
-		</div>
+<div class={['flex gap-4 flex-wrap items-end', 'border border-hard rounded-box p-1']}>
+	<div class="flex gap-4 items-center pl-4 py-2">
+		<StateIcon class={[EVENT_STATES[event.state].class]} size={42} />
 
-		<p class="text-sm opacity-80 mt-1">
-			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-			{@html EVENT_STATES[event.state].description}
-		</p>
+		<div>
+			<h3 class="title-md">{EVENT_STATES[event.state].label}</h3>
+			<p class="text-sm opacity-80 mt-1">
+				{EVENT_STATES[event.state].description}
+			</p>
+		</div>
 	</div>
 
 	{#if event.state == 'draft' && !isOwner}
@@ -61,7 +55,10 @@
 		<div class="flex gap-2 justify-end grow items-center">
 			{#each getNextStates()[event.state] as { state, label } (state)}
 				<!-- Un `<form>` par transition: `.for()` leur donne à chacun son instance -->
-				<form {...setEventState.for(state)} class="contents">
+				<form
+					{...setEventState.for(state).enhance(enhanceForm({ success: EVENT_STATES[state].label }))}
+					class="contents"
+				>
 					<input type="hidden" name="state" value={state} />
 					<button
 						class="btn btn-sm btn-primary"
