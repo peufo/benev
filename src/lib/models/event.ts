@@ -1,7 +1,6 @@
 import z from 'zod'
 import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
-import { isHttpUrl } from '$lib/url'
 import { zDateNullable, zEnumKeys } from './form'
 import { zMediaId } from './media'
 
@@ -42,8 +41,7 @@ const zLocationField = z
 // .url() accepte n'importe quel schéma (javascript:, data:, …), or ces liens sont
 // rendus tels quels dans un href par FooterLink: on restreint à http(s)
 const httpUrl = z
-	.url('Doit être un URL valide')
-	.refine(isHttpUrl, 'Le lien doit commencer par https://')
+	.url({ error: 'Doit être un URL valide', protocol: /https?/ })
 	.optional()
 	.or(z.string().max(0))
 
