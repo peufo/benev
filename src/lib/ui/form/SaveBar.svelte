@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { tick } from 'svelte'
 	import { fly } from 'svelte/transition'
+	import { elasticOut } from 'svelte/easing'
 	import { TriangleAlertIcon } from '@lucide/svelte'
 	import { beforeNavigate } from '$app/navigation'
 	import { transitionX } from 'fuma'
+	import { on } from 'svelte/events'
 
 	interface Props {
 		/** Le formulaire surveillé. */
@@ -60,16 +62,14 @@
 		// Le scraping d'icône d'`EventFormInputWeb` réécrit un champ caché 400 ms après la
 		// frappe, sans évènement: la sortie du champ rattrape ce cas.
 		const refreshLater = () => void tick().then(refresh)
-
-		element.addEventListener('input', refresh)
-		element.addEventListener('change', refresh)
-		element.addEventListener('focusout', refreshLater)
-		element.addEventListener('reset', refreshLater)
+		const cleanups = [
+			on(element, 'input', refresh),
+			on(element, 'change', refresh),
+			on(element, 'focusout', refreshLater),
+			on(element, 'reset', refreshLater),
+		]
 		return () => {
-			element.removeEventListener('input', refresh)
-			element.removeEventListener('change', refresh)
-			element.removeEventListener('focusout', refreshLater)
-			element.removeEventListener('reset', refreshLater)
+			for (const cleanup of cleanups) cleanup()
 		}
 	})
 
@@ -102,39 +102,30 @@
 	<div
 		class="fixed bottom-0 left-0 z-30 p-2 sm:p-4"
 		style="right: {transitionX.current + (transitionX.current ? 6 : 0)}px"
-		transition:fly={{ y: 80, duration: 250 }}
+		transition:fly={{ y: 80, duration: 1000, easing: elasticOut }}
 	>
-		<!-- `border-hard` plutôt que le `border-soft` de `.surface`: la barre flotte au-dessus
-		     d'un contenu quelconque et doit tenir seule. -->
 		<div
-			class="surface mx-auto flex max-w-3xl flex-wrap items-center gap-3 border-hard p-3 shadow-xl"
+			class={[
+				'surface flex flex-wrap items-center gap-3 p-3 ',
+				'mx-auto max-w-xl border-2 border-primary shadow-xl',
+			]}
 		>
-			<TriangleAlertIcon size={20} class="text-warning shrink-0" />
+			<div class="flex gap-3">
+				<TriangleAlertIcon size={20} class="text-warning shrink-0" />
 
-			<div class="min-w-0 grow">
-				<p class="text-sm">Tes modifications ne sont pas enregistrées !</p>
-				{#if issues?.length}
-					<span>Champ{issues.length}</span>
-
-					<ul class="mt-1 flex flex-col text-xs text-base-content/70">
-						{#each issues.slice(0, 3) as issue (issue.message)}
-							<li>{issue.message}</li>
-						{/each}
-						{#if issues.length > 3}
-							<li>et {issues.length - 3} autre(s)</li>
-						{/if}
-					</ul>
-				{/if}
+				<p class="text-sm">Modification en cours !</p>
 			</div>
 
-			<button type="button" class="btn btn-ghost btn-sm" onclick={handleReset}>
-				Réinitialiser
-			</button>
-			<!-- Un vrai bouton de soumission rattaché par `form`: garde la sémantique de la
-			     touche Entrée et fonctionne sans JS, ce qu'un `requestSubmit()` perdrait. -->
-			<button form={formId} type="submit" class="btn btn-primary btn-sm" disabled={pending}>
-				Enregistrer les modifications
-			</button>
+			<div class="flex gap-3 ml-auto">
+				<button type="button" class="btn btn-ghost btn-sm" onclick={handleReset}>
+					Réinitialiser
+				</button>
+				<!-- Un vrai bouton de soumission rattaché par `form`: garde la sémantique de la
+					 touche Entrée et fonctionne sans JS, ce qu'un `requestSubmit()` perdrait. -->
+				<button form={formId} type="submit" class="btn btn-primary btn-sm" disabled={pending}>
+					Enregistrer les modifications
+				</button>
+			</div>
 		</div>
 	</div>
 {/if}

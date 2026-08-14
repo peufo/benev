@@ -1,7 +1,3 @@
-- [ ] Regrouper les pages settings
-  - [ ] EventForm.svelte, utilisé pour la création, peut ne contenir que l'essentiel du formulaire (on supprime les cartes "Identitée" et "Pied de page")
-  - [ ] Regrouper les sections "Identité" et "Apparence". Les InputImagePreview qui était utilisé dans EventForm pour la création peuvent être remplacé par des InputMedia.
-
 - [ ] benev/src/lib/view/TableViewSelect.svelte Utilisé Il faut normaliser le style et utiliser Popover au lieu de Dropdown. On peut peu être utiliser directement InputSelect ?
 
 - [ ] Les filtres de table des colonne de type nombre doivent être réparé
@@ -24,3 +20,5 @@
 - [ ] src/lib/material/media/SelectMedia.svelte Doit devenir un drawer pouvant être instancier une seul fois. Le composant peut être renommé. L'aspect des élément existants doit être le même que InputMedia.svelte.
 
 - [ ] La SaveBar doit être plus visible
+
+- [ ] benev/src/lib/api.ts:54 Il faut supprimer l'api. Les derniers usages de celle-ci doivent être convertient en fonction remote query

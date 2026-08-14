@@ -42,8 +42,7 @@ const zLocationField = z
 // .url() accepte n'importe quel schéma (javascript:, data:, …), or ces liens sont
 // rendus tels quels dans un href par FooterLink: on restreint à http(s)
 const httpUrl = z
-	.string()
-	.url()
+	.url('Doit être un URL valide')
 	.refine(isHttpUrl, 'Le lien doit commencer par https://')
 	.optional()
 	.or(z.string().max(0))
@@ -56,7 +55,7 @@ export const modelEventUpdate = z.object({
 	web: httpUrl,
 	facebook: httpUrl,
 	instagram: httpUrl,
-	email: z.string().email().optional().or(z.string().max(0)),
+	email: z.email().optional().or(z.string().max(0)),
 	phone: z.string().optional(),
 	// `null` = le lieu a été effacé, `undefined` = champ absent, valeur inchangée
 	location: zLocationField,
