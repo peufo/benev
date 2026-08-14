@@ -190,7 +190,6 @@
 		bind:this={saveBar}
 		form={formElement}
 		formId={FORM_ID}
-		issues={updateEvent.fields.allIssues()}
 		pending={updateEvent.pending > 0}
 		onreset={handleReset}
 	/>

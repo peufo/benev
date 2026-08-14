@@ -4,7 +4,6 @@
 	import { elasticOut } from 'svelte/easing'
 	import { TriangleAlertIcon } from '@lucide/svelte'
 	import { beforeNavigate } from '$app/navigation'
-	import { transitionX } from 'fuma'
 	import { on } from 'svelte/events'
 
 	interface Props {
@@ -22,7 +21,7 @@
 		onreset?: () => void
 	}
 
-	let { form, formId, issues, pending = false, onreset }: Props = $props()
+	let { form, formId, pending = false, onreset }: Props = $props()
 
 	let baseline = $state('')
 	let current = $state('')
@@ -97,35 +96,29 @@
 </script>
 
 {#if isDirty}
-	<!-- Le layout racine décale la page par `padding-right` à l'ouverture d'un tiroir, mais un
-	     élément `fixed` l'ignore: on reprend son calcul, marge comprise. -->
 	<div
-		class="fixed bottom-0 left-0 z-30 p-2 sm:p-4"
-		style="right: {transitionX.current + (transitionX.current ? 6 : 0)}px"
 		transition:fly={{ y: 80, duration: 1000, easing: elasticOut }}
+		class={[
+			'fixed bottom-2 left-1/2 -translate-x-1/2 z-30 p-2 sm:p-4',
+			'surface flex flex-wrap items-center gap-3 p-3 ',
+			'max-w-xl w-[calc(100%-16px)] border-2 border-primary shadow-xl',
+		]}
 	>
-		<div
-			class={[
-				'surface flex flex-wrap items-center gap-3 p-3 ',
-				'mx-auto max-w-xl border-2 border-primary shadow-xl',
-			]}
-		>
-			<div class="flex gap-3">
-				<TriangleAlertIcon size={20} class="text-warning shrink-0" />
+		<div class="flex gap-3">
+			<TriangleAlertIcon size={20} class="text-warning shrink-0" />
 
-				<p class="text-sm">Modification en cours !</p>
-			</div>
+			<p class="text-sm">Modification en cours !</p>
+		</div>
 
-			<div class="flex gap-3 ml-auto">
-				<button type="button" class="btn btn-ghost btn-sm" onclick={handleReset}>
-					Réinitialiser
-				</button>
-				<!-- Un vrai bouton de soumission rattaché par `form`: garde la sémantique de la
+		<div class="flex gap-3 ml-auto">
+			<button type="button" class="btn btn-ghost btn-sm" onclick={handleReset}>
+				Réinitialiser
+			</button>
+			<!-- Un vrai bouton de soumission rattaché par `form`: garde la sémantique de la
 					 touche Entrée et fonctionne sans JS, ce qu'un `requestSubmit()` perdrait. -->
-				<button form={formId} type="submit" class="btn btn-primary btn-sm" disabled={pending}>
-					Enregistrer les modifications
-				</button>
-			</div>
+			<button form={formId} type="submit" class="btn btn-primary btn-sm" disabled={pending}>
+				Enregistrer les modifications
+			</button>
 		</div>
 	</div>
 {/if}
