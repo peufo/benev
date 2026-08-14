@@ -32,7 +32,7 @@
      `p-1` est prévu pour des listes de menus, d'où le `p-5` du contenu de réglage. -->
 <section {id} class={['surface scroll-mt-4 p-5', danger && 'border-error/40']}>
 	<div class="mb-4 flex items-center gap-3">
-		<SectionIcon size={20} class={danger ? 'text-error' : 'opacity-70'} />
+		<SectionIcon size={20} class={['shrink-0', danger ? 'text-error' : 'opacity-70']} />
 		<div class="grow">
 			<!-- Le titre reste en encre courante même en zone de danger: `error` mesure 2.87:1
 			     sur `base-100`, la bordure et le bouton portent le signal. -->

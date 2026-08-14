@@ -15,7 +15,7 @@
 </script>
 
 <div class="flex flex-col gap-2">
-	<h3 class="title-md mb-2 text-base-content">Permissions</h3>
+	<h3 class="title-md">Permissions</h3>
 	<InputBoolean
 		field={fields.selfRegisterAllowed}
 		label="Les utilisateurs peuvent devenir membre sans invitation"
@@ -42,7 +42,7 @@
 
 	<InputNumber
 		field={fields.overlapPeriodAllowed}
-		label="Nombre de minutes de chevauchement toléré entre les shifts d'un membre"
+		label="Nombre de minutes de chevauchement toléré entre les périodes de travail d'un membre"
 		value={event.overlapPeriodAllowed}
 		min={0}
 	/>
@@ -60,10 +60,9 @@
 </div>
 
 <div class="mt-10">
-	<h3 class="title-md mb-2 text-base-content">Informations de compte requises</h3>
+	<h3 class="title-md mb-2">Informations de compte requises</h3>
 
-	<!-- Une seule colonne sous `sm`: à deux, ces libellés se cassent en trois lignes. -->
-	<div class="grid grid-cols-1 gap-x-2 sm:grid-cols-2">
+	<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
 		<InputBoolean label="Nom, prénom et email" checked disabled />
 		<InputBoolean
 			label="Adresse email verifié"

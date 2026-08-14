@@ -2,8 +2,9 @@
 	import type { Media } from '@prisma/client'
 	import { PlaceholderImage } from '$lib/ui'
 	import { tip } from 'fuma'
-	import { Trash2Icon } from '@lucide/svelte'
+	import { XIcon } from '@lucide/svelte'
 	import { SelectMedia } from '$lib/material'
+	import { slide } from 'svelte/transition'
 
 	export let key: string | null = null
 	export let label: string
@@ -15,27 +16,32 @@
 	let selectMedia: SelectMedia
 </script>
 
-<div
-	style="width: {x}px;"
-	class="border border-hard rounded-field overflow-hidden cursor-pointer hover:outline-1"
->
-	{#if key}
-		<input type="hidden" name={key} {value} />
-	{/if}
+{#if key}
+	<input type="hidden" name={key} {value} />
+{/if}
+
+<div class="flex flex-col space-y-0.5">
+	<button
+		class={[
+			'border border-hard rounded-field cursor-pointer hover:outline-1 aspect-square',
+			'bg-dash w-40 h-40',
+			'grid place-content-center',
+		]}
+		onclick={() => {
+			selectMedia.show()
+		}}
+		type="button"
+	>
+		{#if value}
+			<img src="/media/{value}" alt={label} class="w-38 h-38 object-scale-down" />
+		{:else}
+			<PlaceholderImage>{label}</PlaceholderImage>
+		{/if}
+	</button>
+
 	{#if value}
-		<!-- Le bouton « désélectionner » était imbriqué dans le bouton de sélection: HTML
-		     invalide, que Svelte 5 refuse désormais de compiler. Les deux sont maintenant
-		     frères dans un conteneur positionné. -->
-		<div>
-			<button
-				onclick={() => {
-					selectMedia.show()
-				}}
-				type="button"
-			>
-				<img src="/media/{value}" alt="Fond de badge" width={x} height={y} />
-				<span class="text-xs">{label}</span>
-			</button>
+		<div class="flex items-center justify-between" transition:slide>
+			<span class="label">{label}</span>
 			<button
 				type="button"
 				onclick={(event) => {
@@ -43,16 +49,12 @@
 					value = null
 					oninput(null)
 				}}
-				class="ml-auto absolute right-2 bottom-1.5"
+				class="btn btn-xs btn-square btn-ghost text-base-content/70 hover:text-error"
 				use:tip={{ content: 'Désélectionner' }}
 			>
-				<Trash2Icon size={12} opacity={0.8} class="hover:text-error" />
+				<XIcon size={14} />
 			</button>
 		</div>
-	{:else}
-		<button onclick={() => selectMedia.show()} type="button">
-			<PlaceholderImage {x} {y}>{label}</PlaceholderImage>
-		</button>
 	{/if}
 </div>
 

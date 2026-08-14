@@ -12,10 +12,6 @@
 	let { onsuccess }: Props = $props()
 
 	let plan = $state(page.url.searchParams.get('plan') || 'basic')
-
-	// La création ne demande que ce qui ne peut pas attendre: identité visuelle, contact et
-	// habillage se posent ensuite dans `/[eventId]/admin/settings`, où la médiathèque de
-	// l'évènement existe enfin.
 </script>
 
 <form

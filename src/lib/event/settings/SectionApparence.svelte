@@ -33,17 +33,17 @@
 		/>
 
 		<InputMedia key="logoId" label="Logo" bind:value={logoId} x={126} y={126} />
-	</div>
 
-	<div class="divider my-0"></div>
-
-	<div class="flex flex-wrap items-start gap-6">
 		<InputMedia
 			key="backgroundImageId"
 			label="Image de fond"
 			bind:value={$theme.backgroundImageId}
 		/>
+	</div>
 
+	<div class="divider my-0"></div>
+
+	<div class="flex flex-wrap items-start gap-6">
 		<label class="fieldset {$theme.backgroundImageId ? 'opacity-40' : ''}">
 			<span class="label">Couleur de fond</span>
 			<input

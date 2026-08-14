@@ -23,12 +23,12 @@ export interface SubNavSection {
  * mutable, qui serait partagé entre les requêtes au rendu serveur.
  */
 export const SETTINGS_SECTIONS: SubNavSection[] = [
-	{ id: 'statut', label: 'Statut', icon: EyeIcon },
-	{ id: 'essentiel', label: "L'essentiel", icon: CalendarIcon },
+	{ id: 'status', label: 'Statut', icon: EyeIcon },
+	{ id: 'essentials', label: "L'essentiel", icon: CalendarIcon },
 	{ id: 'contact', label: 'Contact', icon: AtSignIcon },
-	{ id: 'adhesion', label: 'Adhésion', icon: LogInIcon },
-	{ id: 'champs', label: 'Champs', icon: IdCardIcon },
-	{ id: 'apparence', label: 'Apparence', icon: PaletteIcon },
+	{ id: 'appearance', label: 'Identité', icon: PaletteIcon },
+	{ id: 'membership', label: 'Adhésion', icon: LogInIcon },
+	{ id: 'fields', label: 'Champs', icon: IdCardIcon },
 	{ id: 'danger', label: 'Danger', icon: OctagonAlertIcon },
 ]
 

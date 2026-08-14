@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { GripIcon } from '@lucide/svelte'
+	import { MoveVerticalIcon } from '@lucide/svelte'
 	import { slide } from 'svelte/transition'
 	import { goto } from '$app/navigation'
 	import { toast } from 'svelte-sonner'
@@ -27,7 +27,6 @@
 	}
 </script>
 
-<!-- Ni titre ni bouton d'ajout ici: l'appelant les porte dans l'en-tête de sa section. -->
 <div
 	use:listEditable={{
 		dragElementsSelector: '.drag-button',
@@ -45,10 +44,11 @@
 			transition:slide
 			onclick={() =>
 				goto(urlParam.with({ form_field: field.id }), { replaceState: true, noScroll: true })}
-			class="
-				w-full flex gap-3 py-3 px-4 items-center border rounded-lg
-				bg-base-200/50 hover:bg-base-200 cursor-pointer
-			"
+			class={[
+				'w-full flex gap-3 py-3 px-4 items-center',
+				'border border-hard rounded-field',
+				'bg-base-200/50 hover:bg-base-200 cursor-pointer group',
+			]}
 		>
 			<FieldIcon class="opacity-70" />
 			<span>
@@ -58,8 +58,13 @@
 				{/if}
 			</span>
 
-			<span class="drag-button btn btn-sm btn-square btn-ghost ml-auto">
-				<GripIcon />
+			<span
+				class={[
+					'drag-button btn btn-sm btn-square btn-ghost ml-auto',
+					'opacity-0 group-hover:opacity-100',
+				]}
+			>
+				<MoveVerticalIcon class="text-base-content/70" />
 			</span>
 		</button>
 	{/each}

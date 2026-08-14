@@ -100,9 +100,9 @@ export function useEvent(owner: User, name: string) {
 		/** Les trois anciennes pages de réglages sont devenues une seule, ancrée par section. */
 		async expectSettingsRedirects(page: Page) {
 			for (const [from, anchor] of [
-				['event', 'essentiel'],
-				['theme', 'apparence'],
-				['adhesion', 'adhesion'],
+				['event', 'essentials'],
+				['theme', 'appearance'],
+				['adhesion', 'membership'],
 			]) {
 				await page.goto(`/${eventId}/admin/${from}`)
 				await expect(page).toHaveURL(`/${eventId}/admin/settings#${anchor}`)
@@ -135,7 +135,7 @@ export function useEvent(owner: User, name: string) {
 			await expect(page.getByRole('button', { name: "Supprimer l'évènement" })).toBeVisible()
 			// La navigation de second niveau est rendue par le rail admin, pas par la page.
 			// `:visible` écarte la copie du menu mobile, présente dans le DOM mais repliée.
-			await expect(page.locator('a[href="#champs"]:visible')).toHaveCount(1)
+			await expect(page.locator('a[href="#fields"]:visible')).toHaveCount(1)
 
 			await description.fill('Un centre de recherche appliquée.')
 			await expect(saveBar).toBeVisible()

@@ -34,9 +34,9 @@
 	const StateIcon = $derived(EVENT_STATES[event.state].icon)
 </script>
 
-<div class={['flex gap-4 flex-wrap items-end', 'border border-hard rounded-box p-1']}>
+<div class={['flex gap-4 flex-wrap items-start', 'border border-soft rounded-box p-1']}>
 	<div class="flex gap-4 items-center pl-4 py-2">
-		<StateIcon class={[EVENT_STATES[event.state].class]} size={42} />
+		<StateIcon class={['shrink-0', [EVENT_STATES[event.state].class]]} size={42} />
 
 		<div>
 			<h3 class="title-md">{EVENT_STATES[event.state].label}</h3>
@@ -52,7 +52,7 @@
 			doit publier l'évènement.
 		</p>
 	{:else}
-		<div class="flex gap-2 justify-end grow items-center">
+		<div class="flex gap-2 justify-end grow items-center pt-1 pr-1">
 			{#each getNextStates()[event.state] as { state, label } (state)}
 				<!-- Un `<form>` par transition: `.for()` leur donne à chacun son instance -->
 				<form

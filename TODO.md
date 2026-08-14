@@ -24,3 +24,7 @@
 
 - [ ] La modification des pages doit avoir un bouton "Submit" plutôt qu'un système auto-submit
 - [ ] Les pages devrait avoir un status "draft" | "published"
+
+- [ ] InputMedia est bien, mais il faut revoir le dialog mediateque
+
+- [ ] La SaveBar doit être plus visible

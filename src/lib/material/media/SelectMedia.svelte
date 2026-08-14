@@ -5,7 +5,7 @@
 	import { ButtonDelete, Dialog, InputString, tip } from 'fuma'
 
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
-	import { tick } from 'svelte'
+	import { onMount, tick } from 'svelte'
 	import { api } from '$lib/api'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { deleteMedia, editMedia, uploadMedia } from './media.remote'
@@ -23,6 +23,22 @@
 
 	let { onselect }: Props = $props()
 	let selectedMedia: Media | undefined = $state(undefined)
+
+	// Une page peut monter plusieurs médiatèques (une par `InputMedia`), et un objet de
+	// formulaire distant ne s'attache qu'à un seul `<form>`: chaque instance prend les siens,
+	// identifiés par l'id du composant.
+	const uid = $props.id()
+	const uploadForm = uploadMedia.for(uid)
+	const editForm = editMedia.for(uid)
+	const deleteForm = deleteMedia.for(uid)
+
+	// `portal` ne déplace ses nœuds qu'une fois le composant monté: rendus par le serveur, les
+	// `<form>` ci-dessous arriveraient imbriqués dans celui de la page appelante. Le parseur du
+	// navigateur écarte alors la balise imbriquée, et l'hydratation ne retrouve plus ses nœuds.
+	let mounted = $state(false)
+	onMount(() => {
+		mounted = true
+	})
 
 	async function loadMedias() {
 		medias = await $api.media.search('')
@@ -118,79 +134,81 @@
 	</div>
 </Dialog>
 
-<div class="contents" use:portal={'body'}>
-	<form
-		{...uploadMedia.enhance(
-			enhanceForm({
-				success: 'Nouvelle image',
-				onsuccess: () => {
-					dialogUploadMedia.close()
-					const media = uploadMedia.result
-					if (!media) return
-					medias = [...medias, media]
-					onselect?.(media)
-				},
-			})
-		)}
-		enctype="multipart/form-data"
-	>
-		<UploadMediaDialog
-			bind:this={dialogUploadMedia}
-			title="Nouvelle image"
-			formaction={uploadMedia.action}
-			nameField={uploadMedia.fields.name}
-			freeAspect
-		/>
-	</form>
+{#if mounted}
+	<div class="contents" use:portal={'body'}>
+		<form
+			{...uploadForm.enhance(
+				enhanceForm({
+					success: 'Nouvelle image',
+					onsuccess: () => {
+						dialogUploadMedia.close()
+						const media = uploadForm.result
+						if (!media) return
+						medias = [...medias, media]
+						onselect?.(media)
+					},
+				})
+			)}
+			enctype="multipart/form-data"
+		>
+			<UploadMediaDialog
+				bind:this={dialogUploadMedia}
+				title="Nouvelle image"
+				formaction={uploadForm.action}
+				nameField={uploadForm.fields.name}
+				freeAspect
+			/>
+		</form>
 
-	{#if selectedMedia}
-		<Dialog bind:dialog={dialogEdit}>
-			{#snippet header()}
-				<h3 class="title">Edition d'une image</h3>
-			{/snippet}
+		{#if selectedMedia}
+			<Dialog bind:dialog={dialogEdit}>
+				{#snippet header()}
+					<h3 class="title">Edition d'une image</h3>
+				{/snippet}
 
-			<img src="/media/{selectedMedia.id}" alt={selectedMedia.name} class="mx-auto" />
+				<img src="/media/{selectedMedia.id}" alt={selectedMedia.name} class="mx-auto" />
 
-			<!-- Un seul `<form>` porte les deux remote functions: le `formaction` du bouton
-			     pressé décide laquelle s'exécute. -->
-			<form
-				class="contents"
-				{...editMedia.enhance(
-					enhanceForm({
-						onsuccess: () => {
-							dialogEdit.close()
-							const media = editMedia.result
-							if (media) medias = medias.map((m) => (m.id === media.id ? media : m))
-							dialogMedias.showModal()
-						},
-					})
-				)}
-				{...deleteMedia.enhance(
-					enhanceForm({
-						onsuccess: () => {
-							dialogEdit.close()
-							const media = deleteMedia.result
-							if (media) medias = medias.filter((m) => m.id !== media.id)
-							dialogMedias.showModal()
-						},
-					})
-				)}
-			>
-				<div class="flex flex-row-reverse items-end gap-2 mt-4">
-					<input type="hidden" name="id" value={selectedMedia.id} />
+				<!-- Un seul `<form>` porte les deux remote functions: le `formaction` du bouton
+				     pressé décide laquelle s'exécute. -->
+				<form
+					class="contents"
+					{...editForm.enhance(
+						enhanceForm({
+							onsuccess: () => {
+								dialogEdit.close()
+								const media = editForm.result
+								if (media) medias = medias.map((m) => (m.id === media.id ? media : m))
+								dialogMedias.showModal()
+							},
+						})
+					)}
+					{...deleteForm.enhance(
+						enhanceForm({
+							onsuccess: () => {
+								dialogEdit.close()
+								const media = deleteForm.result
+								if (media) medias = medias.filter((m) => m.id !== media.id)
+								dialogMedias.showModal()
+							},
+						})
+					)}
+				>
+					<div class="flex flex-row-reverse items-end gap-2 mt-4">
+						<input type="hidden" name="id" value={selectedMedia.id} />
 
-					<button formaction={editMedia.action} class="btn btn-primary"> Valider </button>
-					<ButtonDelete formaction={deleteMedia.action} />
+						<button formaction={editForm.action} class="btn btn-primary"> Valider </button>
+						<ButtonDelete formaction={deleteForm.action} />
 
-					<InputString
-						field={editMedia.fields.name}
-						label="Description de l'image"
-						class="grow"
-						autocomplete="off"
-						value={selectedMedia.name}
-					/>
-				</div>
-			</form>
-		</Dialog>
-	{/if}
-</div>
+						<InputString
+							field={editForm.fields.name}
+							label="Description de l'image"
+							class="grow"
+							autocomplete="off"
+							value={selectedMedia.name}
+						/>
+					</div>
+				</form>
+			</Dialog>
+		{/if}
+	</div>
+{/if}

@@ -74,7 +74,7 @@
 
 <OnlyAdmin>
 	<div class="mx-auto flex w-full max-w-3xl flex-col gap-4 pb-24 mb-60">
-		<SettingsSection id="statut" title="Visibilité" icon={EyeIcon}>
+		<SettingsSection id="status" title="Visibilité" icon={EyeIcon}>
 			<EventStateForm isOwner={data.member?.userId == data.event.ownerId} event={data.event} />
 		</SettingsSection>
 
@@ -92,7 +92,7 @@
 			bind:this={formElement}
 			class="flex flex-col gap-4"
 		>
-			<SettingsSection id="essentiel" title="L'essentiel" icon={CalendarIcon}>
+			<SettingsSection id="essentials" title="L'essentiel" icon={CalendarIcon}>
 				{#key resetToken}
 					<div class="flex flex-col gap-4">
 						<SectionEssentiel fields={updateEvent.fields} event={data.event} />
@@ -119,10 +119,46 @@
 				{/key}
 			</SettingsSection>
 
-			<SettingsSection id="adhesion" title="Adhésion" icon={LogInIcon}>
+			<SettingsSection
+				id="appearance"
+				title="Identité"
+				icon={PaletteIcon}
+				subtitle="Affiche, logo et habillage du site"
+			>
+				{#key resetToken}
+					<SectionApparence event={data.event} />
+				{/key}
+			</SettingsSection>
+
+			<SettingsSection id="membership" title="Adhésion" icon={LogInIcon}>
 				{#key resetToken}
 					<SectionAdhesion fields={updateEvent.fields} event={data.event} />
 				{/key}
+			</SettingsSection>
+
+			<!-- Chaque champ s'édite dans son tiroir et s'enregistre seul: cette section ne
+			     dépend donc pas de la barre de sauvegarde, et n'a pas de `{#key resetToken}`. -->
+			<SettingsSection
+				id="fields"
+				title="Champs du profil"
+				icon={IdCardIcon}
+				subtitle="Les informations demandées aux membres, en plus de leur compte"
+			>
+				{#snippet action()}
+					<a
+						class="btn btn-square btn-primary"
+						href={urlParam.with({ form_field: '{}' })}
+						data-sveltekit-replacestate
+						data-sveltekit-noscroll
+						use:tip={{ content: 'Ajouter un champ' }}
+					>
+						<span class="inline-flex">
+							<PlusIcon />
+						</span>
+					</a>
+				{/snippet}
+
+				<MemberFields fields={data.event.memberFields} />
 
 				<div class="divider"></div>
 
@@ -132,39 +168,6 @@
 						<ExternalLinkIcon size={20} class="opacity-70" />
 					</a>
 				</div>
-			</SettingsSection>
-
-			<!-- Chaque champ s'édite dans son tiroir et s'enregistre seul: cette section ne
-			     dépend donc pas de la barre de sauvegarde, et n'a pas de `{#key resetToken}`. -->
-			<SettingsSection
-				id="champs"
-				title="Champs du profil"
-				icon={IdCardIcon}
-				subtitle="Les informations demandées aux membres, en plus de leur compte"
-			>
-				{#snippet action()}
-					<a
-						class="btn btn-square btn-sm btn-primary"
-						href={urlParam.with({ form_field: '{}' })}
-						data-sveltekit-replacestate
-						data-sveltekit-noscroll
-					>
-						<span class="inline-flex" use:tip={{ content: 'Ajouter un champ' }}><PlusIcon /></span>
-					</a>
-				{/snippet}
-
-				<MemberFields fields={data.event.memberFields} />
-			</SettingsSection>
-
-			<SettingsSection
-				id="apparence"
-				title="Apparence"
-				icon={PaletteIcon}
-				subtitle="Affiche, logo et habillage du site"
-			>
-				{#key resetToken}
-					<SectionApparence event={data.event} />
-				{/key}
 			</SettingsSection>
 		</form>
 
