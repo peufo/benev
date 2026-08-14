@@ -36,17 +36,14 @@ export const modelMediaImage = z.object({
 	crop: zCropField,
 })
 
-export const modelEventImages = z.object({
-	poster_image: z.instanceof(File).optional(),
-	poster_crop: zCropField,
-	logo_image: z.instanceof(File).optional(),
-	logo_crop: zCropField,
-})
+/**
+ * Une image choisie dans la médiathèque: `InputMedia` rend toujours son champ caché, donc une
+ * chaîne vide signifie « image détachée » quand un champ absent laisse la valeur en place.
+ * Les colonnes visées sont des scalaires nullables (`posterId`, `logoId`, `backgroundImageId`).
+ */
+export const zMediaId = z
+	.string()
+	.optional()
+	.transform((value) => (value === undefined ? undefined : value || null))
 
 export type MediaImageInput = { image?: File; crop?: Crop }
-export type EventImagesInput = {
-	poster_image?: File
-	poster_crop?: Crop
-	logo_image?: File
-	logo_crop?: Crop
-}

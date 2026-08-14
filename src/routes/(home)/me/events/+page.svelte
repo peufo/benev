@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation'
 	import { Placeholder } from '$lib/ui'
 	import { Dialog } from 'fuma'
-	import { PlusIcon, ChevronRightIcon, HistoryIcon } from '@lucide/svelte'
+	import { PlusIcon, ChevronRightIcon, RotateCcwClockIcon } from '@lucide/svelte'
 	import EventEntry from './EventEntry.svelte'
 	import { IsOrganizerForm } from '$lib/me'
 	import type { EventMember } from './types'
@@ -88,16 +88,10 @@
 <!-- Pied de page du registre: ce qui sort de la liste courante. Les terminés
      s'accumulent sans rien apporter au quotidien, et «Organiser» ne concerne qu'un
      organisateur — ni l'un ni l'autre n'a à passer devant le parcours du bénévole. -->
-<div class="mt-6 flex flex-col gap-2">
+<div class="mt-6 flex flex-wrap gap-2 justify-between">
 	{#if data.nbPast}
-		<a
-			href="/me/events/past"
-			class="
-				flex items-center gap-3 rounded-2xl border border-soft px-4 py-3
-				transition-colors hover:bg-base-200/60
-			"
-		>
-			<HistoryIcon size={18} class="shrink-0 opacity-60" />
+		<a href="/me/events/past" class="btn btn-ghost border-soft">
+			<RotateCcwClockIcon size={18} class="shrink-0 opacity-60" />
 			<span class="grow font-medium">
 				{data.nbPast} évènement{data.nbPast > 1 ? 's' : ''} terminé{data.nbPast > 1 ? 's' : ''}
 			</span>
@@ -108,26 +102,15 @@
 	{#if data.user.isOrganizer}
 		<a
 			href="/me/events/create"
-			class="
-				flex items-center gap-3 rounded-2xl border border-soft px-4 py-3
-				transition-colors hover:bg-base-200/60
-			"
+			class={['btn btn-primary', (data.upcoming.length || data.undated.length) && 'btn-soft']}
 		>
 			<PlusIcon size={18} class="shrink-0 opacity-60" />
 			<span class="grow font-medium">Organiser un nouvel évènement</span>
-			<ChevronRightIcon size={18} class="shrink-0 opacity-60" />
 		</a>
 	{:else}
-		<button
-			onclick={() => becomeOrganizerDialog.showModal()}
-			class="
-				flex items-center gap-3 rounded-2xl border border-soft px-4 py-3 text-left
-				transition-colors hover:bg-base-200/60
-			"
-		>
+		<button onclick={() => becomeOrganizerDialog.showModal()} class="btn btn-primary btn-soft">
 			<PlusIcon size={18} class="shrink-0 opacity-60" />
 			<span class="grow font-medium">Organiser un nouvel évènement</span>
-			<ChevronRightIcon size={18} class="shrink-0 opacity-60" />
 		</button>
 	{/if}
 </div>

@@ -37,11 +37,20 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	})
 
 	test("Navigation sur l'évènement", async () => {
+		await event.setLocation(page)
 		await event.gotoPublic(page)
 		await event.expectLocationInFooter(page)
 	})
 
 	test('Filtres des tables admin', async () => {
 		await event.expectAdminFiltersAccepted(page)
+	})
+
+	test('Les anciennes pages de réglages redirigent vers /admin/settings', async () => {
+		await event.expectSettingsRedirects(page)
+	})
+
+	test('La barre de sauvegarde des réglages suit les modifications', async () => {
+		await event.expectSettingsSaveBar(page)
 	})
 })

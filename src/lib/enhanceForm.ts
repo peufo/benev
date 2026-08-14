@@ -25,6 +25,8 @@ type EnhanceFormOptions = {
 	before?: () => boolean | Promise<boolean>
 	/** Joué après un succès uniquement. */
 	onsuccess?: (instance: EnhanceInstance) => void
+	/** Joué quand la validation échoue, une fois les messages rendus sous les champs. */
+	oninvalid?: (instance: EnhanceInstance) => void
 }
 
 /**
@@ -49,6 +51,7 @@ export function enhanceForm({
 	reset = false,
 	before,
 	onsuccess,
+	oninvalid,
 }: EnhanceFormOptions = {}) {
 	return async (instance: EnhanceInstance) => {
 		if (before && !(await before())) return
@@ -59,6 +62,7 @@ export function enhanceForm({
 			if (!(await instance.submit())) {
 				if (invalid) toast.warning(invalid, { id })
 				else clearPending()
+				oninvalid?.(instance)
 				return
 			}
 			if (success) toast.success(success, { id })

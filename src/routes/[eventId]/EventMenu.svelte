@@ -5,6 +5,7 @@
 	import { MenuIcon, GaugeIcon } from '@lucide/svelte'
 	import { EventPubliqueMenuItems } from '$lib/event'
 	import { adminTabs } from '$lib/layout/adminTabs.svelte'
+	import { adminSubNav, scrollToSection } from '$lib/layout/adminSubNav.svelte'
 
 	interface Props {
 		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
@@ -40,11 +41,29 @@
 		<!-- ADMIN -->
 		{#if adminIsVisible}
 			<h3 class="title-sm pl-3 pt-1">Gestion</h3>
-			{#each adminTabs() as { href, isActive, label, icon: Icon } (href)}
+			{#each adminTabs() as { href, isActive, label, icon: Icon, sections } (href)}
 				<a {href} class="menu-item" class:active={isActive}>
 					<Icon size={20} class="opacity-70" />
 					{label}
 				</a>
+
+				<!-- Le rail admin est masqué sous `lg`: sans ces entrées, une page à sections
+				     n'aurait plus aucune navigation interne sur mobile. -->
+				{#if isActive && sections}
+					{@const activeId = adminSubNav.activeId || sections[0].id}
+					{#each sections as section (section.id)}
+						{@const SectionIcon = section.icon}
+						<a
+							href="#{section.id}"
+							onclick={(event) => scrollToSection(event, section.id)}
+							class="menu-item pl-8 text-xs"
+							class:active={activeId === section.id}
+						>
+							<SectionIcon size={16} class="opacity-60" />
+							{section.label}
+						</a>
+					{/each}
+				{/if}
 			{/each}
 
 			{@const quotaHref = `/${page.params.eventId}/admin/quota`}

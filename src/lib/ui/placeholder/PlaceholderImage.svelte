@@ -10,7 +10,7 @@
 	let { x, y, children }: Props = $props()
 </script>
 
-<div style:width="{x}px" style:height="{y}px" class="p-1.5">
+<div style:width="{x - 1}px" style:height="{y - 1}px" class="p-1.5">
 	<div
 		class={[
 			'grid h-full w-full content-center justify-items-center',

@@ -57,7 +57,7 @@
 		<div class="group relative">
 			<span
 				class="
-				absolute inset-[1px] grid
+				absolute inset-px grid
 				place-content-center rounded-lg bg-base-300/30
 				font-medium opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100
 			"

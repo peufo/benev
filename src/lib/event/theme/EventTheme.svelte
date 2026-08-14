@@ -9,9 +9,12 @@
 	}
 
 	let { event }: Props = $props()
-	untrack(() => theme.set(event))
+	// Une copie, jamais la référence: les champs d'aperçu écrivent dans le store par
+	// `bind:value`, et la partager reviendrait à muter `data.event` — un `reset` de formulaire
+	// y injecterait alors les `defaultValue` vides du DOM.
+	untrack(() => theme.set({ ...event }))
 	$effect.pre(() => {
-		theme.set(event)
+		theme.set({ ...event })
 	})
 </script>
 

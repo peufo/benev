@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { GripIcon, PlusIcon } from '@lucide/svelte'
+	import { GripIcon } from '@lucide/svelte'
 	import { slide } from 'svelte/transition'
 	import { goto } from '$app/navigation'
 	import { toast } from 'svelte-sonner'
 	import type { Field } from '@prisma/client'
 	import { Placeholder } from '$lib/ui'
-	import { listEditable, tip } from 'fuma'
+	import { listEditable } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MEMBER_FIELD_TYPE } from '$lib/constant'
 	import { reorderMemberFields } from './memberField.remote'
@@ -27,18 +27,7 @@
 	}
 </script>
 
-<div class="flex items-center mb-2">
-	<h3 class="font-medium opacity-80 grow">Champs du profil de membre</h3>
-	<a
-		class="btn btn-square btn-sm btn-primary"
-		href={urlParam.with({ form_field: '{}' })}
-		data-sveltekit-replacestate
-		data-sveltekit-noscroll
-	>
-		<span class="inline-flex" use:tip={{ content: 'Ajouter un champ' }}><PlusIcon /></span>
-	</a>
-</div>
-
+<!-- Ni titre ni bouton d'ajout ici: l'appelant les porte dans l'en-tête de sa section. -->
 <div
 	use:listEditable={{
 		dragElementsSelector: '.drag-button',
@@ -49,7 +38,10 @@
 >
 	{#each fields as field (field.id)}
 		{@const FieldIcon = MEMBER_FIELD_TYPE[field.type].icon}
+		<!-- `type="button"` explicite: cette liste vit dans le grand `<form>` de `/admin/settings`,
+		     où un bouton sans type soumettrait la page à chaque champ ouvert. -->
 		<button
+			type="button"
 			transition:slide
 			onclick={() =>
 				goto(urlParam.with({ form_field: field.id }), { replaceState: true, noScroll: true })}

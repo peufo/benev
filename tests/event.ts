@@ -25,10 +25,17 @@ export function useEvent(owner: User, name: string) {
 				})
 			}).toPass()
 
-			await page
-				.getByRole('button', { name: /Pied de page/i })
-				.first()
-				.click()
+			await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
+			await page.waitForURL(`**/${eventId}`)
+			await expect(page).toHaveTitle(new RegExp(eventName))
+		},
+		/**
+		 * Le lieu ne se saisit plus à la création — celle-ci ne demande que l'essentiel — mais
+		 * depuis les réglages. Il faut donc l'y poser avant de vérifier le pied de page.
+		 */
+		async setLocation(page: Page) {
+			await mockPhoton(page)
+			await page.goto(`/${eventId}/admin/settings`)
 			// Le champ de recherche vit dans le popover d'`InputSelect`: il faut l'ouvrir d'abord.
 			await page.getByLabel('Lieu', { exact: true }).click()
 			await page.locator('input[placeholder="Recherche"]:visible').fill('salle des fetes')
@@ -38,9 +45,8 @@ export function useEvent(owner: User, name: string) {
 				.first()
 				.click()
 
-			await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
-			await page.waitForURL(`**/${eventId}`)
-			await expect(page).toHaveTitle(new RegExp(eventName))
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText('Modifications enregistrées')).toBeVisible()
 		},
 		async gotoPublic(page: Page) {
 			await page.goto(`/${eventId}`)
@@ -90,6 +96,65 @@ export function useEvent(owner: User, name: string) {
 				const key = query.split('=')[0]
 				expect(new URL(page.url()).searchParams.has(key), `${route} garde ${key}`).toBe(true)
 			}
+		},
+		/** Les trois anciennes pages de réglages sont devenues une seule, ancrée par section. */
+		async expectSettingsRedirects(page: Page) {
+			for (const [from, anchor] of [
+				['event', 'essentiel'],
+				['theme', 'apparence'],
+				['adhesion', 'adhesion'],
+			]) {
+				await page.goto(`/${eventId}/admin/${from}`)
+				await expect(page).toHaveURL(`/${eventId}/admin/settings#${anchor}`)
+			}
+		},
+		/**
+		 * La barre de sauvegarde est le seul retour sur une modification: elle doit rester
+		 * invisible au chargement, apparaître à la première frappe, et disparaître aussi bien
+		 * par « Réinitialiser » que par un enregistrement. Rien d'autre ne couvre ce contrat.
+		 */
+		async expectSettingsSaveBar(page: Page) {
+			const saveBar = page.getByText('Attention, il reste des modifications non enregistrées !')
+			// `exact`: le sélecteur de média de la section Apparence porte un « Description
+			// de l'image » qui rendrait le libellé ambigu.
+			const description = page.getByLabel('Description', { exact: true })
+
+			// Le thème n'a pas de `defaultValue`: un `reset` mal ordonné y écrirait du vide, que
+			// l'enregistrement suivant graverait en base (`#000000`). On le surveille de bout en bout.
+			const backgroundColor = page.locator('input[name="backgroundColor"]')
+
+			await page.goto(`/${eventId}/admin/settings`)
+			await expect(description).toBeVisible()
+			await expect(saveBar).toBeHidden()
+			await expect(backgroundColor).toHaveValue('#ffffff')
+			// Les champs de profil forment leur propre section, titrée par la page et non
+			// plus par `MemberFields`.
+			await expect(page.getByRole('heading', { name: 'Champs du profil' })).toBeVisible()
+			// La zone de danger vit hors du grand `<form>`: sa confirmation porte le sien.
+			await expect(page.getByRole('heading', { name: 'Zone de danger' })).toBeVisible()
+			await expect(page.getByRole('button', { name: "Supprimer l'évènement" })).toBeVisible()
+			// La navigation de second niveau est rendue par le rail admin, pas par la page.
+			// `:visible` écarte la copie du menu mobile, présente dans le DOM mais repliée.
+			await expect(page.locator('a[href="#champs"]:visible')).toHaveCount(1)
+
+			await description.fill('Un centre de recherche appliquée.')
+			await expect(saveBar).toBeVisible()
+
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+			await expect(description).toHaveValue('')
+			await expect(backgroundColor).toHaveValue('#ffffff')
+
+			await description.fill('Un centre de recherche appliquée.')
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText('Modifications enregistrées')).toBeVisible()
+			await expect(saveBar).toBeHidden()
+
+			// Rechargement: la description est enregistrée, la couleur intacte, la barre muette.
+			await page.reload()
+			await expect(description).toHaveValue('Un centre de recherche appliquée.')
+			await expect(backgroundColor).toHaveValue('#ffffff')
+			await expect(saveBar).toBeHidden()
 		},
 	}
 }

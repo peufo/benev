@@ -1,0 +1,195 @@
+<script lang="ts">
+	import {
+		AtSignIcon,
+		CalendarIcon,
+		ExternalLinkIcon,
+		EyeIcon,
+		IdCardIcon,
+		LogInIcon,
+		OctagonAlertIcon,
+		PaletteIcon,
+		PlusIcon,
+	} from '@lucide/svelte'
+	import { InputTextarea, tip, urlParam } from 'fuma'
+	import { enhanceForm } from '$lib/enhanceForm'
+	import { updateEvent } from '$lib/event/event.remote'
+	import { theme } from '$lib/event/theme/store'
+	import EventDeleteButton from '$lib/event/EventDeleteButton.svelte'
+	import {
+		SectionAdhesion,
+		SectionApparence,
+		SectionContact,
+		SectionEssentiel,
+	} from '$lib/event/settings'
+	import { SETTINGS_SECTIONS, trackSubNavSections } from '$lib/layout/adminSubNav.svelte'
+	import { MemberFields } from '$lib/member'
+	import { eventPath } from '$lib/store'
+	import { SaveBar } from '$lib/ui'
+	import OnlyAdmin from '../OnlyAdmin.svelte'
+	import EventStateForm from './EventStateForm.svelte'
+	import SettingsSection from './SettingsSection.svelte'
+
+	let { data } = $props()
+
+	const FORM_ID = 'event-settings'
+
+	// La navigation de second niveau vit dans le rail admin: la page se contente de lui
+	// signaler quelle section est à l'écran.
+	trackSubNavSections(SETTINGS_SECTIONS)
+
+	let formElement = $state<HTMLFormElement>()
+	let saveBar = $state<ReturnType<typeof SaveBar>>()
+	// Remonte les champs dont l'état vit dans le composant (recadrage, lieu, site web, curseurs
+	// du thème): le `reset()` natif ne restaure que les `defaultValue` du DOM.
+	let resetToken = $state(0)
+
+	function confirmIdChange() {
+		if (data.event.state !== 'published') return true
+		// Tant que rien n'a été saisi, le champ n'a pas de valeur: c'est celle d'origine.
+		const eventId = updateEvent.fields.id.value() ?? data.event.id
+		if (data.event.id === eventId) return true
+		return confirm(
+			`Es tu sûr de vouloir modifier le lien de l'évènement de "/${data.event.id}" pour "${eventId} ?"`
+		)
+	}
+
+	function scrollToFirstIssue({ element }: { element: HTMLFormElement }) {
+		// `field.as()` pose `aria-invalid` sur tous les champs fuma: l'ordre du DOM suffit,
+		// inutile de traduire le chemin de l'erreur en section.
+		const firstInvalid = element.querySelector<HTMLElement>('[aria-invalid="true"]')
+		// `center` plutôt que `start`: la barre d'ancres collante masquerait le champ.
+		firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+		firstInvalid?.focus({ preventScroll: true })
+	}
+
+	function handleReset() {
+		// Les champs du thème n'ont pas de `defaultValue`: leur valeur est posée en propriété,
+		// pas en attribut, et Svelte resynchronise ses `bind:value` sur le `reset` natif. Le
+		// store est donc rétabli ici — après ce cycle — puis les sections remontées pour que
+		// le DOM reprenne les valeurs enregistrées.
+		theme.set({ ...data.event })
+		resetToken++
+	}
+</script>
+
+<OnlyAdmin>
+	<div class="mx-auto flex w-full max-w-3xl flex-col gap-4 pb-24 mb-60">
+		<SettingsSection id="statut" title="Visibilité" icon={EyeIcon}>
+			<EventStateForm isOwner={data.member?.userId == data.event.ownerId} event={data.event} />
+		</SettingsSection>
+
+		<!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
+		<form
+			{...updateEvent.enhance(
+				enhanceForm({
+					before: confirmIdChange,
+					success: 'Modifications enregistrées',
+					oninvalid: scrollToFirstIssue,
+					onsuccess: () => saveBar?.rebase(),
+				})
+			)}
+			id={FORM_ID}
+			bind:this={formElement}
+			class="flex flex-col gap-4"
+		>
+			<SettingsSection id="essentiel" title="L'essentiel" icon={CalendarIcon}>
+				{#key resetToken}
+					<div class="flex flex-col gap-4">
+						<SectionEssentiel fields={updateEvent.fields} event={data.event} />
+						<!-- La description ne fait pas partie du socle partagé avec la création:
+						     elle se rédige une fois l'évènement posé. -->
+						<InputTextarea
+							field={updateEvent.fields.description}
+							label="Description"
+							value={data.event.description || ''}
+							rows={4}
+						/>
+					</div>
+				{/key}
+			</SettingsSection>
+
+			<SettingsSection
+				id="contact"
+				title="Contact"
+				icon={AtSignIcon}
+				subtitle="Affiché dans le pied de page du site"
+			>
+				{#key resetToken}
+					<SectionContact fields={updateEvent.fields} event={data.event} />
+				{/key}
+			</SettingsSection>
+
+			<SettingsSection id="adhesion" title="Adhésion" icon={LogInIcon}>
+				{#key resetToken}
+					<SectionAdhesion fields={updateEvent.fields} event={data.event} />
+				{/key}
+
+				<div class="divider"></div>
+
+				<div class="flex justify-end">
+					<a href="{$eventPath}/register?forcedStepIndex=1" target="_blank" class="btn btn-ghost">
+						Aperçu du formulaire d'adhésion
+						<ExternalLinkIcon size={20} class="opacity-70" />
+					</a>
+				</div>
+			</SettingsSection>
+
+			<!-- Chaque champ s'édite dans son tiroir et s'enregistre seul: cette section ne
+			     dépend donc pas de la barre de sauvegarde, et n'a pas de `{#key resetToken}`. -->
+			<SettingsSection
+				id="champs"
+				title="Champs du profil"
+				icon={IdCardIcon}
+				subtitle="Les informations demandées aux membres, en plus de leur compte"
+			>
+				{#snippet action()}
+					<a
+						class="btn btn-square btn-sm btn-primary"
+						href={urlParam.with({ form_field: '{}' })}
+						data-sveltekit-replacestate
+						data-sveltekit-noscroll
+					>
+						<span class="inline-flex" use:tip={{ content: 'Ajouter un champ' }}><PlusIcon /></span>
+					</a>
+				{/snippet}
+
+				<MemberFields fields={data.event.memberFields} />
+			</SettingsSection>
+
+			<SettingsSection
+				id="apparence"
+				title="Apparence"
+				icon={PaletteIcon}
+				subtitle="Affiche, logo et habillage du site"
+			>
+				{#key resetToken}
+					<SectionApparence event={data.event} />
+				{/key}
+			</SettingsSection>
+		</form>
+
+		<!-- Hors du formulaire: la confirmation de suppression porte son propre `<form>`,
+		     et des formulaires imbriqués sont du HTML invalide. -->
+		<SettingsSection id="danger" title="Zone de danger" icon={OctagonAlertIcon} danger>
+			<div class="flex flex-wrap items-center gap-4">
+				<div class="min-w-0 grow">
+					<p class="font-medium">Supprimer cet évènement</p>
+					<p class="text-sm text-base-content/60">
+						Les secteurs, périodes, membres et inscriptions seront perdus. Cette opération est
+						irréversible.
+					</p>
+				</div>
+				<EventDeleteButton event={data.event} />
+			</div>
+		</SettingsSection>
+	</div>
+
+	<SaveBar
+		bind:this={saveBar}
+		form={formElement}
+		formId={FORM_ID}
+		issues={updateEvent.fields.allIssues()}
+		pending={updateEvent.pending > 0}
+		onreset={handleReset}
+	/>
+</OnlyAdmin>

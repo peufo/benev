@@ -6,15 +6,14 @@ import {
 	ClipboardList,
 	CircleQuestionMark,
 	MapPin,
-	Calendar,
-	LogIn,
 	Gift,
-	Palette,
+	Settings,
 } from '@lucide/svelte'
 
 import { param } from 'fuma'
 import { dev } from '$app/environment'
 import { page } from '$app/state'
+import { SETTINGS_SECTIONS, type SubNavSection } from './adminSubNav.svelte'
 
 // `param` de fuma 2 est un objet runes sans référence à `page`, et n'est plus un store:
 // `derived` laisse place à une fonction qui relit l'état réactif à chaque appel.
@@ -31,6 +30,8 @@ export function adminTabs() {
 		isActive: boolean
 		label: string
 		icon: typeof LucideIcon
+		/** Sections internes de la page, rendues sous l'onglet quand il est actif. */
+		sections?: SubNavSection[]
 	}[] = [
 		{
 			...getPath('/teams'),
@@ -53,19 +54,10 @@ export function adminTabs() {
 			icon: ChartGantt,
 		},
 		{
-			...getPath('/admin/event'),
-			label: "L'évènement",
-			icon: Calendar,
-		},
-		{
-			...getPath('/admin/adhesion'),
-			label: 'Adhésion',
-			icon: LogIn,
-		},
-		{
-			...getPath('/admin/theme'),
-			label: 'Thème',
-			icon: Palette,
+			...getPath('/admin/settings'),
+			label: 'Réglages',
+			icon: Settings,
+			sections: SETTINGS_SECTIONS,
 		},
 		{
 			...getPath('/admin/pages'),
@@ -79,12 +71,17 @@ export function adminTabs() {
 		},
 	]
 
+	// Insertion relative: un index en dur se décale au moindre onglet ajouté ou fusionné.
 	if (dev)
-		tabs.splice(6, 0, {
-			...getPath('/admin/gift'),
-			label: 'Prestations',
-			icon: Gift,
-		})
+		tabs.splice(
+			tabs.findIndex(({ label }) => label === 'Publications'),
+			0,
+			{
+				...getPath('/admin/gift'),
+				label: 'Prestations',
+				icon: Gift,
+			}
+		)
 
 	return tabs
 }

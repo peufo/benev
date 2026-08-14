@@ -1,0 +1,84 @@
+import type { Component } from 'svelte'
+import type { IconProps } from '@lucide/svelte'
+import {
+	AtSignIcon,
+	CalendarIcon,
+	EyeIcon,
+	IdCardIcon,
+	LogInIcon,
+	OctagonAlertIcon,
+	PaletteIcon,
+} from '@lucide/svelte'
+
+export interface SubNavSection {
+	/** L'`id` de la `<section>` correspondante dans la page. */
+	id: string
+	label: string
+	icon: Component<IconProps>
+}
+
+/**
+ * Les sections de `/[eventId]/admin/settings`, rendues par le rail admin sous son onglet actif.
+ * Déclarées ici plutôt que publiées par la page: les dériver de la route évite un registre
+ * mutable, qui serait partagé entre les requêtes au rendu serveur.
+ */
+export const SETTINGS_SECTIONS: SubNavSection[] = [
+	{ id: 'statut', label: 'Statut', icon: EyeIcon },
+	{ id: 'essentiel', label: "L'essentiel", icon: CalendarIcon },
+	{ id: 'contact', label: 'Contact', icon: AtSignIcon },
+	{ id: 'adhesion', label: 'Adhésion', icon: LogInIcon },
+	{ id: 'champs', label: 'Champs', icon: IdCardIcon },
+	{ id: 'apparence', label: 'Apparence', icon: PaletteIcon },
+	{ id: 'danger', label: 'Danger', icon: OctagonAlertIcon },
+]
+
+// Écrit uniquement depuis un `$effect`, donc jamais au rendu serveur: ce module n'a pas d'état
+// qui puisse fuiter d'une requête à l'autre.
+let activeId = $state('')
+
+export const adminSubNav = {
+	/** Vide tant que l'observateur n'a rien vu: la première section fait alors l'actif. */
+	get activeId() {
+		return activeId
+	},
+}
+
+/**
+ * Suit le défilement des sections pour désigner l'entrée active du rail. À appeler depuis la
+ * page qui les rend — c'est elle qui possède les éléments observés.
+ */
+export function trackSubNavSections(sections: SubNavSection[]) {
+	$effect(() => {
+		const visible: Record<string, boolean> = {}
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) visible[entry.target.id] = entry.isIntersecting
+				const first = sections.find(({ id }) => visible[id])
+				if (first) activeId = first.id
+				// La dernière section est souvent trop courte pour couper la bande de lecture:
+				// arrivé en bas de page, c'est elle qu'on regarde.
+				else if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 4)
+					activeId = sections[sections.length - 1].id
+			},
+			// Une bande de lecture en haut de l'écran: la section active est la première
+			// qui la traverse.
+			{ rootMargin: '-10% 0px -60% 0px' }
+		)
+
+		for (const { id } of sections) {
+			const element = document.getElementById(id)
+			if (element) observer.observe(element)
+		}
+		return () => {
+			observer.disconnect()
+			activeId = ''
+		}
+	})
+}
+
+/** Défilement doux vers une section, sans empiler une entrée d'historique par section visitée. */
+export function scrollToSection(event: MouseEvent, id: string) {
+	event.preventDefault()
+	document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+	history.replaceState(history.state, '', `#${id}`)
+}

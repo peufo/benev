@@ -21,7 +21,7 @@
 	import DrawersForm from '$lib/DrawersForm.svelte'
 	import EventMenu from './EventMenu.svelte'
 	import FooterLink from './FooterLink.svelte'
-	import EventTheme from './admin/theme/EventTheme.svelte'
+	import EventTheme from '$lib/event/theme/EventTheme.svelte'
 	import { EventIcon, EventTierBadge } from '$lib/event'
 	import { mapUrl } from '$lib/location'
 	import { eventSchema } from '$lib/seo'

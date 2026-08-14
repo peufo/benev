@@ -27,7 +27,7 @@
 			type="button"
 			role="radio"
 			aria-checked={selected}
-			class="card text-left border rounded-2xl p-4 transition-all duration-200 {selected
+			class="card text-left border rounded-field p-4 transition-all duration-200 {selected
 				? 'border-primary bg-primary/5'
 				: 'border-soft bg-base-100 hover:border-primary/50 hover:bg-base-200/30'}"
 			onclick={() => select(plan)}

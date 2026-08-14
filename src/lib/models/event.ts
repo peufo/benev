@@ -3,6 +3,7 @@ import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
 import { isHttpUrl } from '$lib/url'
 import { zDateNullable, zEnumKeys } from './form'
+import { zMediaId } from './media'
 
 type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
 export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
@@ -70,7 +71,7 @@ export const modelEventState = z.object({
 	state: zEnumKeys(EVENT_STATES).optional(),
 }) satisfies z.ZodType<EventUpdateInput>
 
-export const modelEventSettings = z.object({
+export const modelEventAdhesion = z.object({
 	// Ces cases sont toutes rendues: leur absence signifie bien « décochée ».
 	selfRegisterAllowed: z.boolean().default(false),
 	selfSubscribeAllowed: z.boolean().default(false),
@@ -95,5 +96,36 @@ export type EventTheme = Pick<
 	| 'cardOpacity'
 >
 
-// Le schéma correspondant vit dans `[eventId]/admin/theme/theme.remote.ts`: ses champs sont
-// des `<input>` bruts liés au store d'aperçu, donc convertis depuis la chaîne au cas par cas.
+/**
+ * Ces champs-là sont des `<input>` bruts liés au store d'aperçu, hors des composants `Input*`
+ * de fuma: leur valeur arrive donc en chaîne, et `z.coerce.number()` n'est pas une entrée
+ * `RemoteFormInput` (voir l'en-tête de `$lib/models`).
+ */
+/**
+ * Affiche et logo se choisissent dans la médiathèque de l'évènement, qui n'existe pas avant
+ * lui: ces champs n'apparaissent donc qu'en modification, jamais à la création.
+ */
+export const modelEventMedia = z.object({
+	posterId: zMediaId,
+	logoId: zMediaId,
+}) satisfies z.ZodType<EventUpdateInput>
+
+export const modelEventTheme = z.object({
+	backgroundColor: z.string().optional(),
+	backgroundImageId: zMediaId,
+	// Ces trois-là n'existent qu'avec une image de fond: absents, ils ne touchent à rien.
+	backgroundBlur: z.string().transform(Number).optional(),
+	backgroundBrightness: z.string().transform(Number).optional(),
+	backgroundWhiteness: z.string().transform(Number).optional(),
+	cardOpacity: z.string().transform(Number).optional(),
+}) satisfies z.ZodType<EventUpdateInput>
+
+/**
+ * Le formulaire unique de `/[eventId]/admin/settings`: identité, adhésion et thème en une seule
+ * soumission, les trois n'écrivant jamais qu'une même ligne `Event`. Les images s'ajoutent au
+ * point d'appel, comme pour `createEvent`.
+ */
+export const modelEventSettings = modelEventUpdate
+	.extend(modelEventAdhesion.shape)
+	.extend(modelEventMedia.shape)
+	.extend(modelEventTheme.shape)

@@ -67,19 +67,19 @@ export const EVENT_STATES: Record<
 	draft: {
 		icon: ConstructionIcon,
 		label: 'Évènement en construction',
-		class: 'border-warning',
+		class: 'text-warning',
 		description: `Seul les responsables ont accès au site de l'évènement.`,
 	},
 	published: {
 		icon: GlobeIcon,
 		label: 'Évènement publié',
-		class: 'border-success',
+		class: 'text-success',
 		description: `Le site est publiquement disponible.`,
 	},
 	archived: {
 		icon: ArchiveIcon,
 		label: 'Évènement archivé',
-		class: '',
+		class: 'text-base-content/70',
 		description: `Seul les responsables ont accès au site de l'évènement.`,
 	},
 } as const

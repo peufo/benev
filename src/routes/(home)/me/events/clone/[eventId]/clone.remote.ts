@@ -77,7 +77,7 @@ export const cloneEvent = form(schemaEventClone, async (data) => {
 		cloneWithFieldsMap.pages(pages),
 	])
 
-	redirect(303, `/${newEvent.id}/admin/event`)
+	redirect(303, `/${newEvent.id}/admin/settings`)
 })
 
 function createOwner(eventId: string, userId: string) {

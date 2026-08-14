@@ -63,7 +63,7 @@
 
 	<p style="text-align: center; margin: 24px 0;">
 		<a
-			href="{domain}/{event.id}/admin/event"
+			href="{domain}/{event.id}/admin/settings"
 			style="
 				background: #0d3b66;
 				color: #fff;
