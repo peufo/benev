@@ -1,6 +1,5 @@
 export * from './action.js'
 export { default as InputImage, type Crop } from './InputImage.svelte'
-export { default as InputImagePreview } from './InputImagePreview.svelte'
 export { default as InputOptionInParam } from './InputOptionInParam.svelte'
 export { default as InputOptions } from './InputOptions.svelte'
 export { default as InputSearch } from './InputSearch.svelte'
