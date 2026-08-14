@@ -27,8 +27,8 @@
  * | `z.relations.set`        | `zSet` / `zConnectMany`            | idem, en `name="x[]"`                            |
  * | `z.number()`             | inchangé                           | `field.as('number')` préfixe le `name` de `n:`   |
  *
- * `z.coerce.number()` ne passe pas: son entrée est `unknown`. Pour un champ brut (hors composant
- * `Input*` de fuma), écrire `z.string().transform(Number)`.
+ * `z.coerce.number()` ne passe pas: son entrée est `unknown`. Pour un champ sans `field`, dont le
+ * `name` est posé à la main, écrire `z.string().transform(Number)`.
  */
 export * from './user'
 export * from './event'

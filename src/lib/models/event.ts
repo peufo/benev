@@ -97,11 +97,6 @@ export type EventTheme = Pick<
 >
 
 /**
- * Ces champs-là sont des `<input>` bruts liés au store d'aperçu, hors des composants `Input*`
- * de fuma: leur valeur arrive donc en chaîne, et `z.coerce.number()` n'est pas une entrée
- * `RemoteFormInput` (voir l'en-tête de `$lib/models`).
- */
-/**
  * Affiche et logo se choisissent dans la médiathèque de l'évènement, qui n'existe pas avant
  * lui: ces champs n'apparaissent donc qu'en modification, jamais à la création.
  */
@@ -110,6 +105,11 @@ export const modelEventMedia = z.object({
 	logoId: zMediaId,
 }) satisfies z.ZodType<EventUpdateInput>
 
+/**
+ * Ces champs-là sont liés au store d'aperçu et n'ont pas de `field`: leur valeur arrive donc en
+ * chaîne, et `z.coerce.number()` n'est pas une entrée `RemoteFormInput` (voir l'en-tête de
+ * `$lib/models`).
+ */
 export const modelEventTheme = z.object({
 	backgroundColor: z.string().optional(),
 	backgroundImageId: zMediaId,

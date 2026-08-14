@@ -6,10 +6,6 @@
 
 - [ ] Les filtres de table des colonne de type nombre doivent être réparé
 
-- [ ] Les changement d'ordre de liste doivent utiliser l'icon MoveVerticalIcon au lieu de GripIcon
-  - [ ] "Champs du profil de membre"
-  - [ ] "Ordre des secteurs"
-
 - [ ] Tous les drawers doivent avoir la classes 'surface-drawer'
 
 - [ ] Le formulaire d'édition des champs est completement cassé
@@ -25,6 +21,6 @@
 - [ ] La modification des pages doit avoir un bouton "Submit" plutôt qu'un système auto-submit
 - [ ] Les pages devrait avoir un status "draft" | "published"
 
-- [ ] InputMedia est bien, mais il faut revoir le dialog mediateque
+- [ ] src/lib/material/media/SelectMedia.svelte Doit devenir un drawer pouvant être instancier une seul fois. Le composant peut être renommé. L'aspect des élément existants doit être le même que InputMedia.svelte.
 
 - [ ] La SaveBar doit être plus visible
