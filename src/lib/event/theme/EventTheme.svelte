@@ -2,31 +2,30 @@
 	import { untrack } from 'svelte'
 
 	import type { Event } from '@prisma/client'
-	import { theme } from './store'
+	import { theme } from './state.svelte'
 
 	interface Props {
 		event: Event
 	}
 
 	let { event }: Props = $props()
-	// Une copie, jamais la référence: les champs d'aperçu écrivent dans le store par
-	// `bind:value`, et la partager reviendrait à muter `data.event` — un `reset` de formulaire
-	// y injecterait alors les `defaultValue` vides du DOM.
-	untrack(() => theme.set({ ...event }))
+	// Une copie, jamais la référence: les champs d'aperçu écrivent dans `theme`, et la partager
+	// reviendrait à muter `data.event` — dont les sections se servent pour se rétablir.
+	untrack(() => Object.assign(theme, event))
 	$effect.pre(() => {
-		theme.set({ ...event })
+		Object.assign(theme, event)
 	})
 </script>
 
 <div
 	class="event-background background"
-	class:background-poster={!!$theme.backgroundImageId}
+	class:background-poster={!!theme.backgroundImageId}
 	style="
-		--media: url(/media/{$theme.backgroundImageId});
-		--bg-blur: {$theme.backgroundBlur}px;
-		--bg-color: {$theme.backgroundColor};
-		--bg-brightness: {$theme.backgroundBrightness}%;
-		--bg-whiteness: {$theme.backgroundWhiteness};
+		--media: url(/media/{theme.backgroundImageId});
+		--bg-blur: {theme.backgroundBlur}px;
+		--bg-color: {theme.backgroundColor};
+		--bg-brightness: {theme.backgroundBrightness}%;
+		--bg-whiteness: {theme.backgroundWhiteness};
 	"
 >
 	<div class="background-blur"></div>

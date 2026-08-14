@@ -85,8 +85,14 @@
 }
 @utility bg-dash {
 	box-shadow: 0 0 0 1px var(--color-base-100) inset;
-    background-image: repeating-linear-gradient(-45deg, var(--color-base-100), var(--color-base-100) 9px, var(--color-base-200) 9px, var(--color-base-200) 10px);
-    background-size: 28.5px 28.5px;
+	background-image: repeating-linear-gradient(
+		-45deg,
+		var(--color-base-100),
+		var(--color-base-100) 9px,
+		var(--color-base-200) 9px,
+		var(--color-base-200) 10px
+	);
+	background-size: 28.5px 28.5px;
 }
 
 mark {
@@ -102,4 +108,3 @@ mark {
 	height: 0;
 	pointer-events: none;
 }
-

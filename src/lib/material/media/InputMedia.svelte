@@ -9,8 +9,6 @@
 	export let key: string | null = null
 	export let label: string
 	export let value: string | null | undefined = undefined
-	export let x = 160
-	export let y = 160
 	export let oninput: (media: Media | null) => void = () => {}
 
 	let selectMedia: SelectMedia
@@ -41,7 +39,7 @@
 
 	{#if value}
 		<div class="flex items-center justify-between" transition:slide>
-			<span class="label">{label}</span>
+			<span class="label text-sm">{label}</span>
 			<button
 				type="button"
 				onclick={(event) => {

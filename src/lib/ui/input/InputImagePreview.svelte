@@ -67,6 +67,6 @@
 			<img class="{klass} rounded-lg border" {src} {alt} width={x} height={y} />
 		</div>
 	{:else}
-		<PlaceholderImage {x} {y}>{title}</PlaceholderImage>
+		<PlaceholderImage>{title}</PlaceholderImage>
 	{/if}
 </InputImage>

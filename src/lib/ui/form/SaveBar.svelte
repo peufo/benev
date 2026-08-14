@@ -112,10 +112,10 @@
 			<TriangleAlertIcon size={20} class="text-warning shrink-0" />
 
 			<div class="min-w-0 grow">
-				<p class="text-sm">Attention, il reste des modifications non enregistrées !</p>
+				<p class="text-sm">Tes modifications ne sont pas enregistrées !</p>
 				{#if issues?.length}
-					<!-- Pas de `text-error`: à 2.87:1 sur `base-100` il passe sous le seuil AA, or
-					     ces lignes sont justement ce qu'il faut lire pour corriger. -->
+					<span>Champ{issues.length}</span>
+
 					<ul class="mt-1 flex flex-col text-xs text-base-content/70">
 						{#each issues.slice(0, 3) as issue (issue.message)}
 							<li>{issue.message}</li>

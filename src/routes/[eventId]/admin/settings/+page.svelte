@@ -13,7 +13,7 @@
 	import { InputTextarea, tip, urlParam } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { updateEvent } from '$lib/event/event.remote'
-	import { theme } from '$lib/event/theme/store'
+	import { theme } from '$lib/event/theme/state.svelte'
 	import EventDeleteButton from '$lib/event/EventDeleteButton.svelte'
 	import {
 		SectionAdhesion,
@@ -39,7 +39,7 @@
 
 	let formElement = $state<HTMLFormElement>()
 	let saveBar = $state<ReturnType<typeof SaveBar>>()
-	// Remonte les champs dont l'état vit dans le composant (recadrage, lieu, site web, curseurs
+	// Remonte les champs dont l'état vit dans le composant (recadrage, lieu, site web, médias
 	// du thème): le `reset()` natif ne restaure que les `defaultValue` du DOM.
 	let resetToken = $state(0)
 
@@ -63,11 +63,10 @@
 	}
 
 	function handleReset() {
-		// Les champs du thème n'ont pas de `defaultValue`: leur valeur est posée en propriété,
-		// pas en attribut, et Svelte resynchronise ses `bind:value` sur le `reset` natif. Le
-		// store est donc rétabli ici — après ce cycle — puis les sections remontées pour que
-		// le DOM reprenne les valeurs enregistrées.
-		theme.set({ ...data.event })
+		// L'aperçu du site lit `theme`, que le `reset()` natif ne touche pas: il est rétabli
+		// ici — après ce cycle — puis les sections remontées pour que le DOM reprenne les
+		// valeurs enregistrées.
+		Object.assign(theme, data.event)
 		resetToken++
 	}
 </script>
@@ -126,7 +125,7 @@
 				subtitle="Affiche, logo et habillage du site"
 			>
 				{#key resetToken}
-					<SectionApparence event={data.event} />
+					<SectionApparence fields={updateEvent.fields} event={data.event} />
 				{/key}
 			</SettingsSection>
 

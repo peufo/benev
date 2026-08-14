@@ -36,12 +36,6 @@ import type { OptionRecord } from 'fuma'
 export const PERIOD_MIN_MINUTES = 15
 export const PERIOD_MIN_MS = PERIOD_MIN_MINUTES * 60_000
 
-export const FORMAT_A3 = {
-	x: 297,
-	y: 420,
-	aspect: 297 / 420,
-} as const
-
 export const FORMAT_CARD = {
 	x: 53.98,
 	y: 85.6,

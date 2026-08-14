@@ -105,19 +105,13 @@ export const modelEventMedia = z.object({
 	logoId: zMediaId,
 }) satisfies z.ZodType<EventUpdateInput>
 
-/**
- * Ces champs-là sont liés au store d'aperçu et n'ont pas de `field`: leur valeur arrive donc en
- * chaîne, et `z.coerce.number()` n'est pas une entrée `RemoteFormInput` (voir l'en-tête de
- * `$lib/models`).
- */
 export const modelEventTheme = z.object({
 	backgroundColor: z.string().optional(),
 	backgroundImageId: zMediaId,
-	// Ces trois-là n'existent qu'avec une image de fond: absents, ils ne touchent à rien.
-	backgroundBlur: z.string().transform(Number).optional(),
-	backgroundBrightness: z.string().transform(Number).optional(),
-	backgroundWhiteness: z.string().transform(Number).optional(),
-	cardOpacity: z.string().transform(Number).optional(),
+	backgroundBlur: z.number().optional(),
+	backgroundBrightness: z.number().optional(),
+	backgroundWhiteness: z.number().optional(),
+	cardOpacity: z.number().optional(),
 }) satisfies z.ZodType<EventUpdateInput>
 
 /**

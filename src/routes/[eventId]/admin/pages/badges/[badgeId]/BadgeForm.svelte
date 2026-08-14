@@ -141,13 +141,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 		</div>
 
 		<div class="flex gap-4 items-center justify-around">
-			<InputMedia
-				label="Image de fond"
-				key="backgroundId"
-				bind:value={badge.backgroundId}
-				x={FORMAT_CARD.x * 3}
-				y={FORMAT_CARD.y * 3}
-			/>
+			<InputMedia label="Image de fond" key="backgroundId" bind:value={badge.backgroundId} />
 
 			<InputMedia key="logoId" label="Logo" bind:value={badge.logoId} />
 		</div>
