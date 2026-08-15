@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { ChevronDownIcon, PlusIcon, SaveIcon } from '@lucide/svelte'
+	import { PencilIcon, PlusIcon } from '@lucide/svelte'
+	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 
-	import { Dialog, DropDown, InputString, tip } from 'fuma'
+	import { Dialog, InputSelect, InputString, tip, type PopoverType } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { createView, deleteView, updateView } from './view.remote'
 
@@ -21,12 +22,21 @@
 
 	let dialog: HTMLDialogElement = $state()!
 
-	// Sorti de `fuma-legacy`: fuma 2 ne propose qu'un `TableViewSelect` limité à `views`,
-	// et l'enregistrement passe maintenant par des remote functions.
+	// L'absence de filtre est une vue comme les autres: le select porte alors toujours une
+	// valeur, et « Vue simple » se choisit exactement comme une vue enregistrée.
+	const simpleView: View = { id: '', name: 'Vue simple', query: '' }
+
 	let query = $derived(getQuery(page.url))
 	let selectedView = $derived(views.find((v) => v.query === query))
+	/** Des filtres posés à la main, qui ne correspondent à aucune vue enregistrée. */
 	let isNewView = $derived(!!query && !selectedView)
-	let editedView = $state<View | undefined>(undefined)
+	let items = $derived([simpleView, ...views])
+	// `bind:` et non simple prop: la sélection vient de l'URL, que le composant ne pilote pas
+	// seul — un filtre modifié ailleurs doit faire suivre le libellé affiché.
+	let value = $derived(
+		selectedView ?? (isNewView ? { id: 'new', name: 'Nouvelle vue', query } : simpleView)
+	)
+	let editedView = $derived(isNewView ? undefined : selectedView)
 
 	function getQuery({ searchParams }: URL) {
 		// Construit puis sérialisé immédiatement: pas un état réactif.
@@ -38,102 +48,81 @@
 	}
 </script>
 
-<DropDown>
-	{#snippet activator()}
-		<button
-			type="button"
-			class="menu-item bordered btn-sm gap-1 rounded-lg border font-semibold opacity-90"
+{#snippet viewAction(popover: PopoverType)}
+	<button
+		type="button"
+		class="btn btn-square btn-soft btn-sm"
+		onclick={() => {
+			popover.hide()
+			dialog.showModal()
+		}}
+	>
+		<span
+			class="inline-flex"
+			use:tip={{ content: isNewView ? 'Enregistrer la vue' : 'Modifier la vue' }}
 		>
-			<span>{isNewView ? 'Nouvelle vue' : selectedView?.name || 'Vue simple'}</span>
-			<ChevronDownIcon size={20} class="translate-x-1 translate-y-px opacity-90" />
-		</button>
-	{/snippet}
+			{#if isNewView}
+				<PlusIcon size={18} />
+			{:else}
+				<PencilIcon size={18} />
+			{/if}
+		</span>
+	</button>
+{/snippet}
 
-	<ul class="flex flex-col gap-1">
-		{#if isNewView}
-			<li>
-				<button
-					type="button"
-					class="menu-item w-full pr-[6px]"
-					onclick={() => {
-						editedView = undefined
-						dialog.showModal()
-					}}
-				>
-					<span>Ajouter la nouvelle vue</span>
-					<PlusIcon class="ml-auto opacity-80" size={21} />
-				</button>
-				<hr class="my-1" />
-			</li>
-		{/if}
-
-		<li>
-			<a href={page.url.pathname} class="menu-item" class:active={!query}>
-				<span class="grow">Vue simple</span>
-			</a>
-		</li>
-
-		{#each views as view (view.id)}
-			<li>
-				<a
-					href="{page.url.pathname}?{view.query}"
-					class="menu-item group pr-1"
-					class:active={view.id === selectedView?.id}
-				>
-					<span class="grow">{view.name}</span>
-					<button
-						type="button"
-						class="btn btn-square btn-ghost btn-xs rounded"
-						onclick={(event) => {
-							event.preventDefault()
-							editedView = view
-							dialog.showModal()
-						}}
-					>
-						<span class="inline-flex" use:tip={{ content: `Modifier la vue '${view.name}'` }}
-							><SaveIcon class="opacity-50 group-hover:opacity-80" size={18} /></span
-						>
-					</button>
-				</a>
-			</li>
-		{/each}
-	</ul>
-</DropDown>
+<InputSelect
+	bind:value
+	{items}
+	getLabel={(view) => view.name}
+	onSelect={(view) => goto(view?.query ? `${page.url.pathname}?${view.query}` : page.url.pathname)}
+	append={query ? viewAction : undefined}
+	class="input-sm w-40"
+/>
 
 <Dialog bind:dialog>
 	{#snippet header()}
 		<h2 class="title">
-			{#if editedView}
-				Modifier la vue
-			{:else}
-				Ajouter la nouvelle vue
-			{/if}
+			{editedView ? 'Modifier la vue' : 'Enregistrer la vue'}
 		</h2>
 	{/snippet}
 
-	{@const remoteForm = editedView ? updateView : createView}
-	<form
-		{...remoteForm.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
-		{...deleteView.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
-	>
-		{#if editedView}
-			<input type="hidden" name="id" value={editedView.id} />
-		{/if}
-		<input type="hidden" name="key" value={key} />
-		<input type="hidden" name="query" value={query} />
-
-		<InputString
-			field={remoteForm.fields.name}
-			label="Nom de la vue"
-			value={editedView?.name || ''}
-		/>
-
-		<div class="mt-2 flex flex-row-reverse gap-2">
-			<button class="btn"> Valider </button>
-
+	<!-- `field.as(type, value)` ne fournit qu'une valeur initiale: sans remontage, le nom
+	     resterait celui de la vue précédemment ouverte. -->
+	{#key editedView}
+		{@const remoteForm = editedView ? updateView : createView}
+		<form
+			{...remoteForm.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
+			{...deleteView.enhance(
+				enhanceForm({
+					onsuccess: () => {
+						dialog.close()
+						// La vue supprimée laisserait ses filtres dans l'URL, donc une « Nouvelle vue ».
+						goto(page.url.pathname)
+					},
+				})
+			)}
+		>
 			{#if editedView}
-				<button formaction={deleteView.action} class="btn btn-ghost text-error"> Supprimer </button>
+				<input type="hidden" name="id" value={editedView.id} />
 			{/if}
-		</div>
-	</form>
+			<input type="hidden" name="key" value={key} />
+			<input type="hidden" name="query" value={query} />
+
+			<InputString
+				field={remoteForm.fields.name}
+				label="Nom de la vue"
+				value={editedView?.name || ''}
+			/>
+
+			<div class="mt-2 flex flex-row-reverse gap-2">
+				<button class="btn"> Valider </button>
+
+				{#if editedView}
+					<button formaction={deleteView.action} class="btn btn-ghost text-error">
+						Supprimer
+					</button>
+				{/if}
+			</div>
+		</form>
+	{/key}
 </Dialog>
