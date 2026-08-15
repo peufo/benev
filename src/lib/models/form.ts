@@ -38,6 +38,27 @@ export function zNumber(min?: number) {
 	return z.string().transform(Number).pipe(number)
 }
 
+/**
+ * Un champ texte facultatif dont le contenu, s'il y en a, doit passer `schema` — url, e-mail…
+ * Les trois états d'une mise à jour Prisma: champ vidé = `null` (on efface), champ absent =
+ * `undefined` (on ne touche à rien).
+ *
+ * Le détour par `transform` puis `pipe` n'est pas cosmétique. `schema.or(z.literal(''))` ne
+ * remonte que l'erreur de l'union, « Invalid input », qui ne dit rien à qui a mal saisi son
+ * adresse; et `z.preprocess`, qui donnerait le bon message, a `unknown` en entrée — ce que
+ * `form()` refuse.
+ */
+export function zStringNullable<Schema extends z.ZodType<string, string>>(schema: Schema) {
+	return z
+		.string()
+		.optional()
+		.transform((value) => {
+			if (value === undefined) return undefined
+			return value || null
+		})
+		.pipe(schema.nullish())
+}
+
 /** `<input type="date">` transmet `YYYY-MM-DD`, `datetime-local` transmet `YYYY-MM-DDTHH:mm`. */
 export const zDate = z.string().min(1).transform(toDate)
 

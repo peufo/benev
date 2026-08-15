@@ -31,7 +31,7 @@
 </script>
 
 <div class="flex flex-col gap-6">
-	<div class="flex flex-wrap items-start gap-6">
+	<div class="flex flex-wrap items-start gap-x-6 gap-y-3">
 		<InputMedia key="posterId" label="Affiche" bind:value={posterId} />
 
 		<InputMedia key="logoId" label="Logo" bind:value={logoId} />

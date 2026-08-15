@@ -1,7 +1,7 @@
 import z from 'zod'
 import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '$lib/constant'
-import { zDateNullable, zEnumKeys } from './form'
+import { zDateNullable, zEnumKeys, zStringNullable } from './form'
 import { zMediaId } from './media'
 
 type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
@@ -40,10 +40,7 @@ const zLocationField = z
 
 // .url() accepte n'importe quel schéma (javascript:, data:, …), or ces liens sont
 // rendus tels quels dans un href par FooterLink: on restreint à http(s)
-const httpUrl = z
-	.url({ error: 'Doit être un URL valide', protocol: /https?/ })
-	.optional()
-	.or(z.string().max(0))
+const httpUrl = zStringNullable(z.url({ protocol: /https?/ }))
 
 export const modelEventUpdate = z.object({
 	id: z.string().toLowerCase().min(3),
@@ -53,7 +50,7 @@ export const modelEventUpdate = z.object({
 	web: httpUrl,
 	facebook: httpUrl,
 	instagram: httpUrl,
-	email: z.email().optional().or(z.string().max(0)),
+	email: zStringNullable(z.email()),
 	phone: z.string().optional(),
 	// `null` = le lieu a été effacé, `undefined` = champ absent, valeur inchangée
 	location: zLocationField,

@@ -14,10 +14,12 @@ export default defineConfig({
 		server: { deps: { inline: ['tippy.js'] } },
 	},
 	// fuma est lié par `file:../fuma`, donc `node_modules/fuma` est un lien symbolique vers un
-	// dossier qui garde ses propres `@sveltejs/kit` et `svelte` pour son développement. Sans
+	// dossier qui garde ses propres `@sveltejs/kit`, `svelte` et `zod` pour son développement. Sans
 	// dédoublonnage, `fuma/server` lève un `redirect()` issu de son exemplaire de kit, que
-	// celui de benev ne reconnaît pas: la redirection remonte alors en erreur 500.
-	resolve: { dedupe: ['@sveltejs/kit', 'svelte'] },
+	// celui de benev ne reconnaît pas: la redirection remonte alors en erreur 500. Pour zod, c'est
+	// la configuration globale posée par `z.config()` qui est propre à chaque exemplaire: les
+	// schémas construits dans fuma resteraient en anglais.
+	resolve: { dedupe: ['@sveltejs/kit', 'svelte', 'zod'] },
 	server: { fs: { allow: ['media', '../fuma'] }, allowedHosts: ['mac-de-jo.local'] },
 	optimizeDeps: {
 		// `litepicker` n'est importé nulle part dans `src/`: c'est une dépendance CommonJS du
