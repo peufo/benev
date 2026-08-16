@@ -53,7 +53,6 @@
 			field={formField}
 			label={field.label || field.name}
 			checked={value === true}
-			defaultChecked={value === true}
 			{disabled}
 		/>
 	{:else if field.type === 'number'}

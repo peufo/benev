@@ -1,5 +1,3 @@
-- [ ] Le formulaire d'édition des champs est completement cassé
-
 - [ ] Quand on soumet un formulaire invalide, le champ se vide: benev/src/lib/event/settings/SectionEssentiel.svelte:55
 
 - [ ] le slider "Opacité des surface" réagit mal à la réinitialisation

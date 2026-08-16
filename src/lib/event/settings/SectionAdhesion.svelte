@@ -20,14 +20,12 @@
 		field={fields.selfRegisterAllowed}
 		label="Les utilisateurs peuvent devenir membre sans invitation"
 		checked={event.selfRegisterAllowed}
-		defaultChecked={event.selfRegisterAllowed}
 		onchange={(e) => (event.selfRegisterAllowed = e.currentTarget.checked)}
 	/>
 	<InputBoolean
 		field={fields.selfSubscribeAllowed}
 		label="Les membres peuvent s'inscrire aux périodes de travail"
 		checked={event.selfSubscribeAllowed}
-		defaultChecked={event.selfSubscribeAllowed}
 		onchange={(e) => (event.selfSubscribeAllowed = e.currentTarget.checked)}
 	/>
 
@@ -37,7 +35,6 @@
 			? 'annuler ou '
 			: ''}décliner leurs inscriptions"
 		checked={event.selfSubscribeCancelAllowed}
-		defaultChecked={event.selfSubscribeCancelAllowed}
 	/>
 
 	<InputNumber
@@ -68,31 +65,26 @@
 			label="Adresse email verifié"
 			field={fields.userEmailVerifiedRequired}
 			checked={event.userEmailVerifiedRequired}
-			defaultChecked={event.userEmailVerifiedRequired}
 		/>
 		<InputBoolean
 			label="Adresse postale"
 			field={fields.userAddressRequired}
 			checked={event.userAddressRequired}
-			defaultChecked={event.userAddressRequired}
 		/>
 		<InputBoolean
 			label="Numéro de téléphone"
 			field={fields.userPhoneRequired}
 			checked={event.userPhoneRequired}
-			defaultChecked={event.userPhoneRequired}
 		/>
 		<InputBoolean
 			label="Date de naissance"
 			field={fields.userBirthdayRequired}
 			checked={event.userBirthdayRequired}
-			defaultChecked={event.userBirthdayRequired}
 		/>
 		<InputBoolean
 			label="Photo de profil"
 			field={fields.userAvatarRequired}
 			checked={event.userAvatarRequired}
-			defaultChecked={event.userAvatarRequired}
 		/>
 	</div>
 </div>

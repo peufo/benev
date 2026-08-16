@@ -25,25 +25,22 @@
 		return { value: type, ...MEMBER_FIELD_TYPE[type] }
 	})
 
-	// Sur un nouveau champ, `field` est un objet nu monté par le layout: y écrire ne déclenche
-	// aucun rendu. Le type pilote l'affichage conditionnel et la valeur soumise, il lui faut
-	// donc son propre état — dérivé assignable, pour suivre `field` d'un champ à l'autre.
+	// `field` est un objet nu monté par le layout: y écrire ne déclenche aucun rendu. Tout ce que
+	// le formulaire repilote a donc son propre état — des dérivés assignables, pour se ré-amorcer
+	// quand on passe d'un champ à l'autre.
 	let type = $derived(field.type)
+	let options = $derived(field.options)
+	let canRead = $derived(!!field.memberCanRead)
+	let canWrite = $derived(!!field.memberCanWrite)
 
-	function getMemberRight(value: Partial<Field>): string[] {
-		return [value.memberCanRead && 'read', value.memberCanWrite && 'write'].filter(
-			Boolean
-		) as string[]
-	}
-
-	function handleInputMemberRight(event: Event) {
-		const { value, checked } = event.target as HTMLInputElement
-		if (value === 'write') {
-			field.memberCanWrite = checked
-			if (checked) field.memberCanRead = true
-		} else if (value === 'read') {
-			field.memberCanRead = checked
-			if (!checked) field.memberCanWrite = false
+	function setMemberRight(right: 'read' | 'write', checked: boolean) {
+		// Les deux droits sont couplés: modifier suppose lire.
+		if (right === 'write') {
+			canWrite = checked
+			if (checked) canRead = true
+		} else {
+			canRead = checked
+			if (!checked) canWrite = false
 		}
 	}
 </script>
@@ -80,7 +77,6 @@
 	{/if}
 
 	{#key field.id}
-		<!-- `type` reste aussi en état local: l'affichage conditionnel ci-dessous s'y accroche. -->
 		<InputSelect
 			field={remoteForm.fields.type}
 			label="Type de champ"
@@ -111,7 +107,7 @@
 
 		{#if type === 'select' || type === 'multiselect'}
 			<div transition:slide>
-				<InputOptions key="options" bind:value={field.options} />
+				<InputOptions key="options" bind:value={options} />
 			</div>
 		{/if}
 
@@ -120,45 +116,47 @@
 				<InputBoolean
 					field={remoteForm.fields.allCombinations}
 					checked={field.allCombinations ?? false}
-					defaultChecked={field.allCombinations ?? false}
 					label="Compter par combinaisons de valeurs lors de la syhtèse"
 				/>
 				<!-- TODO: Add help dialog -->
 			</div>
 		{/if}
 
-		<!-- `InputCheckboxs` de fuma 1 laissait tomber le gestionnaire `oninput` (il partait sur
-		     `FormControl`, qui ne le déclare pas): les deux cases n'étaient donc jamais couplées.
-		     Elles sont écrites ici en clair, sans nom: seuls les champs cachés sont soumis. -->
-		<div>
-			<div class="label"><span class="label-text">Les membres peuvent</span></div>
+		<!-- Les deux cases n'ont pas de `name`: leur résultat part par les champs cachés
+		     ci-dessous, que `as('hidden', …)` préfixe de `b:` pour que SvelteKit les relise en
+		     booléens. -->
+		<fieldset class="fieldset">
+			<legend class="label">Les membres peuvent</legend>
 			<div class="flex gap-6">
-				{#each [{ value: 'read', label: 'Lire la valeur' }, { value: 'write', label: 'Modifier la valeur' }] as option (option.value)}
-					<label class="flex items-center gap-2">
-						<input
-							type="checkbox"
-							class="checkbox"
-							value={option.value}
-							checked={getMemberRight(field).includes(option.value)}
-							oninput={handleInputMemberRight}
-						/>
-						<span>{option.label}</span>
-					</label>
-				{/each}
+				<label class="flex items-center gap-2">
+					<input
+						type="checkbox"
+						class="checkbox"
+						checked={canRead}
+						oninput={(e) => setMemberRight('read', e.currentTarget.checked)}
+					/>
+					<span>Lire la valeur</span>
+				</label>
+				<label class="flex items-center gap-2">
+					<input
+						type="checkbox"
+						class="checkbox"
+						checked={canWrite}
+						oninput={(e) => setMemberRight('write', e.currentTarget.checked)}
+					/>
+					<span>Modifier la valeur</span>
+				</label>
 			</div>
-		</div>
+		</fieldset>
 
-		<!-- Les deux cases ci-dessus sont couplées: leur résultat part par ces champs cachés,
-		     que `as('hidden', …)` préfixe de `b:` pour que SvelteKit les relise en booléens. -->
-		<input {...remoteForm.fields.memberCanRead.as('hidden', !!field.memberCanRead)} />
-		<input {...remoteForm.fields.memberCanWrite.as('hidden', !!field.memberCanWrite)} />
+		<input {...remoteForm.fields.memberCanRead.as('hidden', canRead)} />
+		<input {...remoteForm.fields.memberCanWrite.as('hidden', canWrite)} />
 
-		{#if field.memberCanWrite && type !== 'boolean' && type !== 'multiselect'}
+		{#if canWrite && type !== 'boolean' && type !== 'multiselect'}
 			<div transition:slide={{ duration: 200 }}>
 				<InputBoolean
 					field={remoteForm.fields.required}
 					checked={field.required ?? false}
-					defaultChecked={field.required ?? false}
 					label="Les membres doivent renseigner la valeur"
 				/>
 			</div>

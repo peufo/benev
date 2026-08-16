@@ -133,7 +133,6 @@
 				field={remoteForm.fields.overflowPermitted}
 				label="Mode liste d'attente"
 				checked={team.overflowPermitted ?? false}
-				defaultChecked={team.overflowPermitted ?? false}
 				class="w-full"
 			/>
 		</div>

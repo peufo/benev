@@ -194,7 +194,6 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 			field={updateBadge.fields.versoEnabled}
 			label="Afficher le verso"
 			checked={badge.versoEnabled}
-			defaultChecked={badge.versoEnabled}
 			onchange={(event) => (badge.versoEnabled = event.currentTarget.checked)}
 		/>
 	</div>

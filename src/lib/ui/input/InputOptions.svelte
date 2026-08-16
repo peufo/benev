@@ -45,11 +45,9 @@
 
 <input type="hidden" name={key} {value} />
 
-<div class="label">
-	<span class="label-text">Options</span>
-</div>
+<div class="label">Options</div>
 
-<div class="bordered rounded-box border p-2">
+<div class="rounded-box border border-soft p-2">
 	<div use:listEditable={{ items: options, onChange }}>
 		{#each options as option, index (option)}
 			<div class="flex items-center gap-2" transition:slide={{ duration: 200 }}>
