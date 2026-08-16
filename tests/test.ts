@@ -69,4 +69,8 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test('La médiathèque est un tiroir unique', async () => {
 		await event.expectMediaDrawer(page)
 	})
+
+	test("L'invitation reconnaît un compte existant", async () => {
+		await event.expectInviteFindsExistingUser(page, bob.email)
+	})
 })

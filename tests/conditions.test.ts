@@ -45,6 +45,20 @@ test.describe.serial('Conditions de secteur', () => {
 		// TODO: couvrir aussi une condition sur un champ à choix multiple (`InputCheckboxes`).
 	})
 
+	// Le compteur passe par une remote query, et son échec est avalé par un `console.error`:
+	// seule une valeur juste prouve qu'elle répond.
+	test("L'aperçu compte les membres retenus", async () => {
+		await page.goto(`/${event.eventId}/teams?form_team=%7B%7D`)
+		await expect(page.getByText('Visible pour tous les membres')).toBeVisible()
+
+		await expect(async () => {
+			await page.getByRole('button', { name: 'Ajouter une condition' }).click()
+			await page.getByRole('button', { name: 'Membre approuvé' }).click({ timeout: 1000 })
+		}).toPass()
+
+		await expect(page.getByText('Visible pour 1 membre')).toBeVisible()
+	})
+
 	test('Création du secteur avec deux conditions', async () => {
 		await page.goto(`/${event.eventId}/teams?form_team=%7B%7D`)
 		await page.getByLabel('Nom du secteur').fill('Secteur Cond')

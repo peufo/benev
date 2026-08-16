@@ -79,7 +79,6 @@
 		"@tiptap/pm": "^2.3.0",
 		"@tiptap/starter-kit": "^2.3.0",
 		"@tiptap/suggestion": "^2.3.0",
-		"axios": "^1.6.2",
 		"dayjs": "^1.11.10",
 		"debounce": "^1.2.1",
 		"devalue": "^5.8.1",

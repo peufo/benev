@@ -12,7 +12,8 @@ import {
 	sendEmailModel,
 } from '$lib/server'
 import { EmailAcceptInviteNotification } from '$lib/email'
-import { modelInvite, modelMemberSetting } from '$lib/models'
+import { modelInvite, modelMemberCondition, modelMemberSetting } from '$lib/models'
+import { isMemberAllowed } from './conditions/isMemberAllowed'
 
 /**
  * Ces formulaires vivent dans `$lib/member` et non à côté d'une route: ils sont montés depuis
@@ -256,3 +257,31 @@ export const searchMembers = query(z.object({ search: z.string() }), async ({ se
 		take: 10,
 	})
 })
+
+/**
+ * Le compte déjà ouvert derrière une adresse, pour pré-remplir une invitation. Le nom de
+ * famille est réduit à son initiale: il ne s'agit pas de révéler l'identité d'un inconnu à
+ * qui devine son adresse, mais de confirmer à un responsable qu'il vise la bonne personne.
+ */
+export const findUserByEmail = query(z.email(), async (email) => {
+	const { locals, params } = getRequestEvent()
+	await permission.leader(params.eventId!, locals)
+	const user = await prisma.user.findFirst({ where: { email } })
+	if (!user) return null
+	return { firstName: user.firstName, lastName: `${user.lastName[0]}.` }
+})
+
+/**
+ * Combien de membres satisferaient un jeu de conditions. L'aperçu du formulaire de secteur,
+ * qui se rejoue à chaque retouche: la liste elle-même n'est jamais transmise.
+ */
+export const countMembersAllowed = query(
+	z.array(modelMemberCondition),
+	async (conditions): Promise<number> => {
+		const { locals, params } = getRequestEvent()
+		const eventId = params.eventId!
+		await permission.leader(eventId, locals)
+		const members = await prisma.member.findMany({ where: { eventId } })
+		return members.filter((member) => isMemberAllowed(conditions, member)).length
+	}
+)

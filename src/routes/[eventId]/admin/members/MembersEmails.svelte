@@ -2,28 +2,25 @@
 	import { tip } from 'fuma'
 	import { MailsIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
-	import { api } from '$lib/api'
-
-	const getMembersEmails = async () => {
-		const { emails } = await $api.eventGet<{ emails: string[] }>(
-			`/admin/members/email?${page.url.searchParams.toString()}`
-		)
-		return emails
-	}
+	import { getMembersEmails } from './members.remote'
 
 	let isLoading = $state(false)
 
 	async function handleMailing() {
 		if (isLoading) return
 		isLoading = true
-		const membersMail = await getMembersEmails().finally(() => (isLoading = false))
-		const a = document.createElement('a')
-		a.classList.add('hidden')
-		a.href = `mailto:${membersMail.join(';')}`
-		a.target = '_blank'
-		document.body.appendChild(a)
-		a.click()
-		a.remove()
+		try {
+			const membersMail = await getMembersEmails(page.url.searchParams.toString())
+			const a = document.createElement('a')
+			a.classList.add('hidden')
+			a.href = `mailto:${membersMail.join(';')}`
+			a.target = '_blank'
+			document.body.appendChild(a)
+			a.click()
+			a.remove()
+		} finally {
+			isLoading = false
+		}
 	}
 </script>
 

@@ -134,6 +134,19 @@ export function useEvent(owner: User, name: string) {
 			}
 		},
 		/**
+		 * Le formulaire d'invitation reconnaît un compte déjà ouvert et pré-remplit son nom.
+		 * La recherche passe par une remote query dont l'échec resterait silencieux.
+		 */
+		async expectInviteFindsExistingUser(page: Page, email: string) {
+			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			const emailInput = page.getByRole('dialog').getByLabel('Email')
+
+			await expect(async () => {
+				await emailInput.fill(email)
+				await expect(page.getByText('Utilisateur trouvé !')).toBeVisible({ timeout: 2000 })
+			}).toPass()
+		},
+		/**
 		 * La médiathèque est un tiroir unique, monté par le layout de l'évènement: chaque
 		 * `InputMedia` et l'éditeur riche l'ouvrent, au lieu d'en monter chacun le sien.
 		 */

@@ -4,9 +4,8 @@
 	import { slide } from 'svelte/transition'
 	import { toast } from 'svelte-sonner'
 	import type { Member } from '@prisma/client'
-	import { api } from './api'
 	import { enhanceForm } from './enhanceForm'
-	import { createInvite } from './member/member.remote'
+	import { createInvite, findUserByEmail } from './member/member.remote'
 
 	interface Props {
 		onCreate?: (member: Member) => void
@@ -23,18 +22,21 @@
 		const { success } = z.safeParse(z.email(), email)
 		if (!success) return
 		isLoadingUserExists = true
-		const res = await $api.user(email).finally(() => (isLoadingUserExists = false))
-		if (res) {
+		try {
+			const res = await findUserByEmail(email)
+			if (!res) return
 			user.firstName = res.firstName
 			user.lastName = res.lastName
 			toast.success('Utilisateur trouvé !')
+		} finally {
+			isLoadingUserExists = false
 		}
 	}
 
 	// TODO: ajouter l'édition du profile
 	// Lors de la recherche <-- Comment gérer la recherche dans L'ui ?
 	// Si l'utilisateur est membre d'un évenement auquel on est admin ou responsable,
-	// $api.member.search('xyz', { anyEvents: true })
+	// `searchMembers` étendu à tous les évènements
 	// Remplir automatiquement le profile depuis l'événement le plus récent
 </script>
 

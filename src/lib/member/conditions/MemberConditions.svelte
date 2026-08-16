@@ -7,8 +7,6 @@
 		UserCheckIcon,
 	} from '@lucide/svelte'
 
-	import axios from 'axios'
-	import { page } from '$app/state'
 	import type { Field } from '@prisma/client'
 	import { InputNumber, InputSelect, parseOptions, Popover, tip } from 'fuma'
 	import { browser } from '$app/environment'
@@ -16,6 +14,7 @@
 	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
 	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
 	import ConditionValue from './ConditionValue.svelte'
+	import { countMembersAllowed } from '../member.remote'
 
 	interface Props {
 		conditions?: MemberCondition[]
@@ -38,10 +37,7 @@
 
 	const refreshMemberAllowedCount = debounce(async (serialized: string) => {
 		try {
-			const res = await axios.get<number>(
-				`/${page.params.eventId}/teams/membersAllowed?conditions=${encodeURIComponent(serialized)}`
-			)
-			memberAllowedCount = res.data
+			memberAllowedCount = await countMembersAllowed(JSON.parse(serialized))
 		} catch (err) {
 			console.error(err)
 		}
