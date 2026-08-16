@@ -1,6 +1,19 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
 import { useUser } from './user'
 import { useEvent } from './event'
+
+/**
+ * Tant que la page n'est pas hydratée, la saisie ne fait qu'écrire dans le DOM: la copie
+ * réactive des conditions l'ignore, et c'est elle que le champ caché sérialise. Attendre que
+ * la valeur y apparaisse est donc à la fois l'attente de l'hydratation et l'assertion utile.
+ */
+async function fillCondition(page: Page, input: Locator, value: string, serialized: RegExp) {
+	const conditions = page.locator('input[name="conditions"]')
+	await expect(async () => {
+		await input.fill(value)
+		await expect(conditions).toHaveValue(serialized, { timeout: 1000 })
+	}).toPass()
+}
 
 // Les conditions se soumettent par un input caché sérialisé depuis un `$state`: une écriture
 // non réactive ne casse rien de visible, elle se contente de ne jamais atteindre le serveur.
@@ -57,11 +70,15 @@ test.describe.serial('Conditions de secteur', () => {
 		}).toPass()
 
 		await expect(page.getByText('Visible pour 1 membre')).toBeVisible()
+
+		// Le tiroir garde sa copie tant qu'il reste monté: on le referme pour que le test
+		// suivant reparte d'un secteur vierge.
+		await page.goto(`/${event.eventId}/teams`)
+		await expect(page.getByRole('dialog')).toHaveCount(0)
 	})
 
 	test('Création du secteur avec deux conditions', async () => {
 		await page.goto(`/${event.eventId}/teams?form_team=%7B%7D`)
-		await page.getByLabel('Nom du secteur').fill('Secteur Cond')
 
 		// Le menu ne s'ouvre qu'une fois la page hydratée. Rejouer le couple ouverture/choix
 		// l'attend sans avoir à le deviner: tant que le choix échoue, aucune condition n'a
@@ -81,7 +98,11 @@ test.describe.serial('Conditions de secteur', () => {
 		await addCondition('Profil du membre')
 		await page.getByRole('button', { name: 'Sélectioner un champ' }).click()
 		await page.getByRole('option', { name: 'Ville' }).click()
-		await page.getByLabel('Valeur').fill('Lyon')
+		await fillCondition(page, page.getByLabel('Valeur'), 'Lyon', /"expectedValue":"Lyon"/)
+
+		// Le nom en dernier: saisi avant l'hydratation, il serait écrasé par le rendu client,
+		// qui repose la valeur initiale du champ. Les conditions, elles, ont déjà attendu.
+		await page.getByLabel('Nom du secteur').fill('Secteur Cond')
 
 		await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
 		await expect(page.getByRole('link', { name: /Secteur Cond/ }).first()).toBeVisible()
@@ -101,8 +122,8 @@ test.describe.serial('Conditions de secteur', () => {
 	// LE cas de régression: modifier une condition déjà enregistrée. Avant correctif, les
 	// écritures dans le tableau non-proxy passaient inaperçues et étaient perdues.
 	test('Modification de conditions existantes', async () => {
-		await page.getByLabel('Âge minimum').fill('25')
-		await page.getByLabel('Valeur').fill('Paris')
+		await fillCondition(page, page.getByLabel('Âge minimum'), '25', /"args":25/)
+		await fillCondition(page, page.getByLabel('Valeur'), 'Paris', /"expectedValue":"Paris"/)
 
 		await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
 		await expect(page.getByRole('link', { name: /Secteur Cond/ }).first()).toBeVisible()
