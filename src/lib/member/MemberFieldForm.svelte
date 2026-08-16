@@ -29,7 +29,6 @@
 	// le formulaire repilote a donc son propre état — des dérivés assignables, pour se ré-amorcer
 	// quand on passe d'un champ à l'autre.
 	let type = $derived(field.type)
-	let options = $derived(field.options)
 	let canRead = $derived(!!field.memberCanRead)
 	let canWrite = $derived(!!field.memberCanWrite)
 
@@ -107,7 +106,11 @@
 
 		{#if type === 'select' || type === 'multiselect'}
 			<div transition:slide>
-				<InputOptions key="options" bind:value={options} />
+				<!-- Sans `bind:`: `InputOptions` n'a rien à renvoyer, son champ caché porte la valeur
+			     soumise. Et lier `undefined` à un `$bindable` pourvu d'une valeur par défaut lève
+			     — l'erreur tuait l'effet de rendu, et le formulaire entier cessait de se
+			     mettre à jour. -->
+				<InputOptions key="options" value={field.options ?? '[]'} />
 			</div>
 		{/if}
 

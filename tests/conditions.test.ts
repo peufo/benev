@@ -43,9 +43,6 @@ test.describe.serial('Conditions de secteur', () => {
 		await expect(page.getByRole('dialog', { name: 'Nouveau champ' })).toBeHidden()
 
 		// TODO: couvrir aussi une condition sur un champ à choix multiple (`InputCheckboxes`).
-		// Impossible tant que `MemberFieldForm` n'affiche pas l'éditeur d'options: choisir le
-		// type "Liste à choix multiple" met bien à jour le select, mais pas la variable `type`
-		// dont dépend le `{#if}` — donc aucun champ de ce type n'est créable par l'interface.
 	})
 
 	test('Création du secteur avec deux conditions', async () => {
