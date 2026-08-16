@@ -147,11 +147,17 @@ export function useEvent(owner: User, name: string) {
 			// Le thème n'a pas de `defaultValue`: un `reset` mal ordonné y écrirait du vide, que
 			// l'enregistrement suivant graverait en base (`#000000`). On le surveille de bout en bout.
 			const backgroundColor = page.locator('input[name="backgroundColor"]')
+			// « Réinitialiser » remonte la section: le curseur d'opacité est alors récrit, et une
+			// valeur posée avant ses bornes se fait arrondir sur la grille par défaut (0–100, pas
+			// de 1). Il retombait ainsi sur son minimum pendant que le nombre affiché, lui, restait
+			// juste.
+			const cardOpacity = page.locator('input[name="n:cardOpacity"]')
 
 			await page.goto(`/${eventId}/admin/settings`)
 			await expect(description).toBeVisible()
 			await expect(saveBar).toBeHidden()
 			await expect(backgroundColor).toHaveValue('#ffffff')
+			await expect(cardOpacity).toHaveValue('1')
 			// Les champs de profil forment leur propre section, titrée par la page et non
 			// plus par `MemberFields`.
 			await expect(page.getByRole('heading', { name: 'Champs du profil' })).toBeVisible()
@@ -163,12 +169,14 @@ export function useEvent(owner: User, name: string) {
 			await expect(page.locator('a[href="#fields"]:visible')).toHaveCount(1)
 
 			await description.fill('Un centre de recherche appliquée.')
+			await cardOpacity.fill('0.75')
 			await expect(saveBar).toBeVisible()
 
 			await page.getByRole('button', { name: 'Réinitialiser' }).click()
 			await expect(saveBar).toBeHidden()
 			await expect(description).toHaveValue('')
 			await expect(backgroundColor).toHaveValue('#ffffff')
+			await expect(cardOpacity).toHaveValue('1')
 
 			await description.fill('Un centre de recherche appliquée.')
 			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
