@@ -10,7 +10,7 @@
 	import { PAGE_TYPE } from '$lib/constant'
 	import PageTypeHelp from './PageTypeHelp.svelte'
 	import { enhanceForm } from '$lib/enhanceForm'
-	import { SelectMedia } from '$lib/material/media'
+	import { mediaDrawer } from '$lib/material/media'
 	import { deletePage, updatePage } from './page.remote'
 
 	interface Props {
@@ -20,7 +20,6 @@
 
 	let { page, charterAlreadyExist }: Props = $props()
 
-	let selectMedia: SelectMedia = $state()!
 	const { home, charter, email, ...pageTypes } = PAGE_TYPE
 
 	// Une charte déjà publiée disparaît des choix, sauf si c'est celle qu'on édite.
@@ -129,9 +128,10 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 			key="content"
 			value={page.content}
 			onchange={() => saveBar?.refresh()}
-			oninsertMedia={() => {
-				selectMedia.show()
-			}}
+			oninsertMedia={() =>
+				mediaDrawer.open((media) =>
+					inputTextRich.setImage({ src: `/media/${media.id}`, alt: media.name })
+				)}
 		/>
 	{/key}
 
@@ -165,14 +165,4 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	{formId}
 	pending={updatePage.pending > 0}
 	onreset={() => resetToken++}
-/>
-
-<SelectMedia
-	bind:this={selectMedia}
-	onselect={(media) => {
-		inputTextRich.setImage({
-			src: `/media/${media.id}`,
-			alt: media.name,
-		})
-	}}
 />

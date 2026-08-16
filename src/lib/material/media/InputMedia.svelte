@@ -3,15 +3,18 @@
 	import { PlaceholderImage } from '$lib/ui'
 	import { tip } from 'fuma'
 	import { XIcon } from '@lucide/svelte'
-	import { SelectMedia } from '$lib/material'
 	import { slide } from 'svelte/transition'
+	import { mediaDrawer } from './MediaDrawer.svelte'
 
-	export let key: string | null = null
-	export let label: string
-	export let value: string | null | undefined = undefined
-	export let oninput: (media: Media | null) => void = () => {}
+	interface Props {
+		label: string
+		/** Nom du champ caché portant l'id du média. Vide, le champ ne soumet rien. */
+		key?: string | null
+		value?: string | null | undefined
+		oninput?: (media: Media | null) => void
+	}
 
-	let selectMedia: SelectMedia
+	let { label, key = null, value = $bindable(), oninput }: Props = $props()
 </script>
 
 {#if key}
@@ -25,9 +28,11 @@
 			'bg-dash w-40 h-40',
 			'grid place-content-center',
 		]}
-		onclick={() => {
-			selectMedia.show()
-		}}
+		onclick={() =>
+			mediaDrawer.open((media) => {
+				value = media.id
+				oninput?.(media)
+			})}
 		type="button"
 	>
 		{#if value}
@@ -45,7 +50,7 @@
 				onclick={(event) => {
 					event.stopPropagation()
 					value = null
-					oninput(null)
+					oninput?.(null)
 				}}
 				class="btn btn-xs btn-square btn-ghost text-base-content/70 hover:text-error"
 				use:tip={{ content: 'Désélectionner' }}
@@ -55,11 +60,3 @@
 		</div>
 	{/if}
 </div>
-
-<SelectMedia
-	bind:this={selectMedia}
-	onselect={(media) => {
-		value = media.id
-		oninput(media)
-	}}
-/>

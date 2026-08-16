@@ -19,6 +19,7 @@
 	import { Header, Footer, AdminNavigation } from '$lib/layout'
 	import { MemberFieldForm } from '$lib/member'
 	import DrawersForm from '$lib/DrawersForm.svelte'
+	import { MediaDrawer } from '$lib/material/media'
 	import EventMenu from './EventMenu.svelte'
 	import FooterLink from './FooterLink.svelte'
 	import EventTheme from '$lib/event/theme/EventTheme.svelte'
@@ -197,4 +198,8 @@
 			<MemberFieldForm field={data.field || {}} onsuccess={() => close()} />
 		{/snippet}
 	</Drawer>
+
+	<!-- Une seule médiathèque pour toute l'application: les `InputMedia` et l'éditeur riche
+	     l'ouvrent par `mediaDrawer.open()`. -->
+	<MediaDrawer />
 {/if}

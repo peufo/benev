@@ -65,4 +65,8 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test('Le formulaire de champ de profil suit le type et les droits', async () => {
 		await event.expectMemberFieldForm(page)
 	})
+
+	test('La médiathèque est un tiroir unique', async () => {
+		await event.expectMediaDrawer(page)
+	})
 })

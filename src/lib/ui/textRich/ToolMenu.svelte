@@ -19,10 +19,12 @@
 		editor: Editor
 		tools: Tool[]
 		hideLabel?: boolean
+		/** Nom accessible du déclencheur, quand l'icône seule ne dit rien. */
+		label?: string
 		activator?: import('svelte').Snippet
 	}
 
-	let { editor, tools, hideLabel = false, activator }: Props = $props()
+	let { editor, tools, hideLabel = false, label, activator }: Props = $props()
 
 	let dropdown: DropDown = $state()!
 
@@ -45,7 +47,7 @@
 
 <DropDown hideOnBlur bind:this={dropdown}>
 	{#snippet activator()}
-		<button type="button" class="menu-item gap-2">
+		<button type="button" class="menu-item gap-2" aria-label={label}>
 			{#if activator_render}{@render activator_render()}{:else}
 				<IconSelected size={20} class="opacity-70" />
 				{#if !hideLabel}

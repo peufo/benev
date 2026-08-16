@@ -49,6 +49,7 @@
 		},
 	]}
 	hideLabel
+	label="Insérer"
 >
 	{#snippet activator()}
 		<PlusIcon size={20} class="opacity-70" />

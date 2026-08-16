@@ -134,6 +134,40 @@ export function useEvent(owner: User, name: string) {
 			}
 		},
 		/**
+		 * La médiathèque est un tiroir unique, monté par le layout de l'évènement: chaque
+		 * `InputMedia` et l'éditeur riche l'ouvrent, au lieu d'en monter chacun le sien.
+		 */
+		async expectMediaDrawer(page: Page) {
+			const drawer = page.getByRole('dialog', { name: 'Médiathèque' })
+			const poster = page.getByRole('button', { name: 'Affiche' })
+
+			await page.goto(`/${eventId}/admin/settings`)
+			await expect(poster).toBeVisible()
+			// Fermé, le tiroir n'existe pas: c'est ce qui garde sa requête hors des chargements
+			// de page, et ce qui prouve qu'il n'y en a pas un par champ.
+			await expect(drawer).toHaveCount(0)
+
+			await expect(async () => {
+				await poster.click()
+				await expect(drawer).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await expect(drawer).toHaveCount(1)
+			await expect(page.getByRole('button', { name: 'Ajouter une nouvelle image' })).toBeVisible()
+
+			await page.keyboard.press('Escape')
+			await expect(drawer).toBeHidden()
+
+			// L'éditeur riche ouvre le même tiroir.
+			await page.goto(`/${eventId}/admin/pages`)
+			await expect(page.locator('.tiptap')).toBeVisible()
+			await expect(async () => {
+				await page.getByRole('button', { name: 'Insérer' }).click()
+				await page.getByRole('button', { name: 'Image', exact: true }).click({ timeout: 1000 })
+				await expect(drawer).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await expect(drawer).toHaveCount(1)
+		},
+		/**
 		 * Le tiroir de champ de profil. Le type pilote deux blocs conditionnels, et les deux
 		 * droits sont couplés — « modifier » suppose « lire ». Rien de tout cela n'atteignait le
 		 * serveur, et lier `undefined` à l'éditeur d'options levait dans un effet de rendu, ce
