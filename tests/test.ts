@@ -57,4 +57,12 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test('La barre de sauvegarde des réglages suit les modifications', async () => {
 		await event.expectSettingsSaveBar(page)
 	})
+
+	test("L'édition d'une page s'enregistre par la barre de sauvegarde", async () => {
+		await event.expectPageEditorSaveBar(page)
+	})
+
+	test('Le formulaire de champ de profil suit le type et les droits', async () => {
+		await event.expectMemberFieldForm(page)
+	})
 })

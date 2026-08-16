@@ -134,6 +134,103 @@ export function useEvent(owner: User, name: string) {
 			}
 		},
 		/**
+		 * Le tiroir de champ de profil. Le type pilote deux blocs conditionnels, et les deux
+		 * droits sont couplés — « modifier » suppose « lire ». Rien de tout cela n'atteignait le
+		 * serveur, et lier `undefined` à l'éditeur d'options levait dans un effet de rendu, ce
+		 * qui figeait le formulaire entier: le type choisi n'ouvrait plus aucun bloc.
+		 */
+		async expectMemberFieldForm(page: Page) {
+			const drawer = page.getByRole('dialog', { name: 'Nouveau champ' })
+			const typeTrigger = page.getByRole('button', { name: 'Type de champ' })
+			const canRead = page.locator('label').filter({ hasText: 'Lire la valeur' }).locator('input')
+			const canWrite = page
+				.locator('label')
+				.filter({ hasText: 'Modifier la valeur' })
+				.locator('input')
+			const required = page.locator('label').filter({ hasText: 'Les membres doivent renseigner' })
+			const newOption = page.getByPlaceholder('Nouvelle option')
+
+			// Le popover d'`InputSelect` ne réagit qu'une fois la page hydratée: rejouer le couple
+			// clic/vérification attend l'hydratation sans avoir à la deviner.
+			const selectType = async (label: string) => {
+				await expect(async () => {
+					if (!(await typeTrigger.textContent())?.includes(label)) {
+						await typeTrigger.click()
+						await page.getByRole('option', { name: label, exact: true }).click({ timeout: 1000 })
+					}
+					await expect(typeTrigger).toContainText(label, { timeout: 1000 })
+				}).toPass()
+			}
+
+			await page.goto(`/${eventId}/admin/settings?form_field=%7B%7D`)
+			await expect(drawer).toBeVisible()
+
+			await selectType('Liste à choix multiple')
+			await expect(newOption).toBeVisible()
+			await selectType('Text')
+			await expect(newOption).toBeHidden()
+
+			await page.getByLabel('Nom', { exact: true }).fill('Ville')
+			await expect(canRead).not.toBeChecked()
+			await page.locator('label').filter({ hasText: 'Modifier la valeur' }).click()
+			await expect(canRead).toBeChecked()
+			await expect(canWrite).toBeChecked()
+
+			await expect(required).toBeVisible()
+			await required.click()
+
+			await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
+			await expect(drawer).toBeHidden()
+
+			// Réouverture: les trois cases sont restituées. C'est ce qui ne partait pas au serveur.
+			await page.getByRole('button', { name: /Ville/ }).click()
+			await expect(page.getByRole('dialog', { name: 'Modifier le champ' })).toBeVisible()
+			await expect(canRead).toBeChecked()
+			await expect(canWrite).toBeChecked()
+			await expect(required.locator('input')).toBeChecked()
+		},
+		/**
+		 * L'édition d'une page passe par la barre de sauvegarde, et non plus par un
+		 * enregistrement automatique. Le contenu riche est le cas fragile: sa valeur vit dans un
+		 * champ caché que le code écrit, sans le moindre évènement de formulaire — la barre ne
+		 * le voit que si l'éditeur le lui signale.
+		 */
+		async expectPageEditorSaveBar(page: Page) {
+			await page.goto(`/${eventId}/admin/pages`)
+
+			const saveBar = page.getByText('Modification en cours !')
+			const title = page.getByLabel('Titre')
+			const editor = page.locator('.tiptap')
+
+			await expect(title).toBeVisible()
+			await expect(saveBar).toBeHidden()
+			const originalTitle = await title.inputValue()
+
+			// La barre ne suit rien tant que la page n'est pas hydratée: rejouer la saisie attend
+			// l'hydratation sans avoir à la deviner.
+			await expect(async () => {
+				await title.fill('Accueil des bénévoles')
+				await expect(saveBar).toBeVisible({ timeout: 1000 })
+			}).toPass()
+
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+			await expect(title).toHaveValue(originalTitle)
+
+			await editor.click()
+			await page.keyboard.type('Un contenu de test')
+			await expect(saveBar).toBeVisible()
+
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText('Page enregistrée')).toBeVisible()
+			await expect(saveBar).toBeHidden()
+
+			await page.reload()
+			await expect(editor).toContainText('Un contenu de test')
+			await expect(title).toHaveValue(originalTitle)
+			await expect(saveBar).toBeHidden()
+		},
+		/**
 		 * La barre de sauvegarde est le seul retour sur une modification: elle doit rester
 		 * invisible au chargement, apparaître à la première frappe, et disparaître aussi bien
 		 * par « Réinitialiser » que par un enregistrement. Rien d'autre ne couvre ce contrat.

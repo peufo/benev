@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { CheckIcon, LinkIcon, LoaderCircleIcon } from '@lucide/svelte'
+	import { LinkIcon } from '@lucide/svelte'
 	import type { Page } from '@prisma/client'
 	import { invalidateAll } from '$app/navigation'
-	import { tick } from 'svelte'
-	import { InputTextRich } from '$lib/ui'
+	import { InputTextRich, SaveBar } from '$lib/ui'
 	import { ButtonDelete, InputSelect, InputString } from 'fuma'
 
 	import { normalizePath } from '$lib/normalizePath'
 	import { eventPath } from '$lib/store'
 	import { PAGE_TYPE } from '$lib/constant'
-	import { debounce } from '$lib/debounce'
 	import PageTypeHelp from './PageTypeHelp.svelte'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { SelectMedia } from '$lib/material/media'
@@ -23,8 +21,6 @@
 	let { page, charterAlreadyExist }: Props = $props()
 
 	let selectMedia: SelectMedia = $state()!
-	let isDirty = $state(false)
-	let successInvalidateAll = false
 	const { home, charter, email, ...pageTypes } = PAGE_TYPE
 
 	// Une charte déjà publiée disparaît des choix, sauf si c'est celle qu'on édite.
@@ -36,116 +32,103 @@
 	// Dérivé assignable: le type choisi est soumis avant que le serveur ne réponde, et `page`
 	// change d'une publication à l'autre sans que le composant soit remonté.
 	let pageType = $derived(page.type)
-	let submitButton: HTMLButtonElement = $state()!
 	let inputTextRich: InputTextRich = $state()!
-	const deleteFormId = $props.id()
+	const uid = $props.id()
+	const formId = `${uid}-page`
+	const deleteFormId = `${uid}-delete`
+
+	let formElement = $state<HTMLFormElement>()
+	let saveBar = $state<ReturnType<typeof SaveBar>>()
+	// Le `reset()` natif ne restaure que les `defaultValue` du DOM: ni l'éditeur riche, ni le
+	// champ caché du sélecteur de type. Les remonter les rétablit depuis `page`.
+	let resetToken = $state(0)
 
 	let pagePath = $derived(
 		`${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
 	)
-
-	function handleChange() {
-		isDirty = true
-		autosave()
-	}
-	async function handleChangeImediat() {
-		isDirty = true
-		successInvalidateAll = true
-		await tick()
-		submitButton.click()
-	}
-
-	const autosave = debounce(() => {
-		successInvalidateAll = false
-		submitButton.click()
-	}, 800)
 </script>
 
 <!-- HTML interdit les <form> imbriqués: ce formulaire vide n'existe que pour porter l'action,
 son bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
 <form {...deletePage} id={deleteFormId} class="hidden"></form>
 
+<!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
 <form
 	{...updatePage.enhance(
 		enhanceForm({
-			// Sauvegarde automatique: un toast à chaque frappe invalide serait du bruit,
-			// les messages sont déjà rendus sous les champs.
-			invalid: false,
+			success: 'Page enregistrée',
 			onsuccess: async () => {
 				// Le titre et le type se répercutent sur la barre latérale et sur le chemin public.
-				if (successInvalidateAll) await invalidateAll()
-				isDirty = false
+				await invalidateAll()
+				saveBar?.rebase()
 			},
 		})
 	)}
+	id={formId}
+	bind:this={formElement}
 	class="flex flex-col gap-2"
 >
-	<div class="flex gap-2 items-start">
-		<InputString
-			label="Titre"
-			class="grow"
-			field={updatePage.fields.title}
-			value={page.title}
-			oninput={handleChangeImediat}
-		/>
+	{#key resetToken}
+		<div class="flex gap-2 items-start">
+			<InputString label="Titre" class="grow" field={updatePage.fields.title} value={page.title} />
 
-		<!-- Même structure que le `label` de l'`InputString` voisin, pour que les deux champs
-		     s'alignent: fuma rend ses libellés dans un `fieldset.fieldset > label.label`. -->
-		<fieldset class="fieldset">
-			<span class="label">
-				<span>Type de page</span>
-				<PageTypeHelp />
-			</span>
+			<!-- Même structure que le `label` de l'`InputString` voisin, pour que les deux champs
+			     s'alignent: fuma rend ses libellés dans un `fieldset.fieldset > label.label`. -->
+			<fieldset class="fieldset">
+				<span class="label">
+					<span>Type de page</span>
+					<PageTypeHelp />
+				</span>
 
-			{#if page.type === 'home'}
-				<input type="hidden" name="type" value="home" />
-				<div class="menu-item rounded-lg disabled border bordered h-12">
-					<home.icon size={21} class="opacity-70" />
-					<span>{home.label}</span>
-				</div>
-			{:else if page.type === 'email'}
-				<input type="hidden" name="type" value="email" />
-				<div class="menu-item rounded-lg disabled border bordered h-12">
-					<email.icon size={21} class="opacity-70" />
-					<span>{email.label}</span>
-				</div>
-			{:else}
-				<InputSelect
-					field={updatePage.fields.type}
-					items={selectableTypes}
-					value={selectableTypes.find((option) => option.value === pageType)}
-					onSelect={(option) => {
-						if (!option) return
-						pageType = option.value
-						handleChangeImediat()
-					}}
-				>
-					{#snippet selected(option)}
-						<span class="flex items-center gap-2">
-							<option.icon size={21} class="opacity-70" />
+				{#if page.type === 'home'}
+					<input type="hidden" name="type" value="home" />
+					<div class="menu-item rounded-lg disabled border bordered h-12">
+						<home.icon size={21} class="opacity-70" />
+						<span>{home.label}</span>
+					</div>
+				{:else if page.type === 'email'}
+					<input type="hidden" name="type" value="email" />
+					<div class="menu-item rounded-lg disabled border bordered h-12">
+						<email.icon size={21} class="opacity-70" />
+						<span>{email.label}</span>
+					</div>
+				{:else}
+					<InputSelect
+						field={updatePage.fields.type}
+						items={selectableTypes}
+						value={selectableTypes.find((option) => option.value === pageType)}
+						onSelect={(option) => {
+							if (!option) return
+							pageType = option.value
+						}}
+					>
+						{#snippet selected(option)}
+							<span class="flex items-center gap-2">
+								<option.icon size={21} class="opacity-70" />
+								<span>{option.label}</span>
+							</span>
+						{/snippet}
+						{#snippet proposal(option)}
+							<option.icon size={18} class="opacity-70" />
 							<span>{option.label}</span>
-						</span>
-					{/snippet}
-					{#snippet proposal(option)}
-						<option.icon size={18} class="opacity-70" />
-						<span>{option.label}</span>
-					{/snippet}
-				</InputSelect>
-			{/if}
-		</fieldset>
-	</div>
+						{/snippet}
+					</InputSelect>
+				{/if}
+			</fieldset>
+		</div>
+	{/key}
 
 	<input type="hidden" name="id" value={page.id} />
 	{#if page.type !== 'email'}
 		<input type="hidden" name="path" value={normalizePath(page.title)} />
 	{/if}
 
-	{#key page.id}
+	{#key `${page.id}:${resetToken}`}
 		<InputTextRich
 			bind:this={inputTextRich}
 			key="content"
 			value={page.content}
-			onchange={handleChange}
+			onchange={() => saveBar?.refresh()}
 			oninsertMedia={() => {
 				selectMedia.show()
 			}}
@@ -158,8 +141,6 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	{/each}
 
 	<div class="flex gap-2 items-center">
-		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
-
 		<ButtonDelete
 			form={deleteFormId}
 			formaction={deletePage.action}
@@ -175,20 +156,16 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 				<span>{pagePath}</span>
 			</a>
 		{/if}
-
-		{#if isDirty}
-			<div class="flex gap-1 items-center">
-				<LoaderCircleIcon class="animate-spin text-warning" size={20} />
-				<span class="text-sm text-base-content/70">Sauvegarde</span>
-			</div>
-		{:else}
-			<div class="flex gap-1 items-center">
-				<CheckIcon class="text-success" size={20} />
-				<span class="text-sm text-base-content/70">Sauvegardé</span>
-			</div>
-		{/if}
 	</div>
 </form>
+
+<SaveBar
+	bind:this={saveBar}
+	form={formElement}
+	{formId}
+	pending={updatePage.pending > 0}
+	onreset={() => resetToken++}
+/>
 
 <SelectMedia
 	bind:this={selectMedia}

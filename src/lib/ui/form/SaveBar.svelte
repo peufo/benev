@@ -49,11 +49,19 @@
 		baseline = current = serialize(form)
 	}
 
+	/**
+	 * Relit le formulaire. Les évènements DOM couvrent les champs saisis; un champ dont la
+	 * valeur est écrite par du code — le champ caché d'un éditeur riche — n'en émet aucun et
+	 * doit le signaler ici.
+	 */
+	export function refresh() {
+		if (form) current = serialize(form)
+	}
+
 	$effect(() => {
 		const element = form
 		if (!element) return
 
-		const refresh = () => (current = serialize(element))
 		// Ligne de base synchrone: différer d'un `tick` laisserait une frappe immédiate se
 		// faire avaler par la ligne de base, et la barre resterait muette. Tous les champs
 		// cachés de la page (lieu, site web, média) sont rendus en ligne, donc déjà là.
