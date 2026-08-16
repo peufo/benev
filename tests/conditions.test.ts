@@ -49,14 +49,22 @@ test.describe.serial('Conditions de secteur', () => {
 		await page.goto(`/${event.eventId}/teams?form_team=%7B%7D`)
 		await page.getByLabel('Nom du secteur').fill('Secteur Cond')
 
+		// Le menu ne s'ouvre qu'une fois la page hydratée. Rejouer le couple ouverture/choix
+		// l'attend sans avoir à le deviner: tant que le choix échoue, aucune condition n'a
+		// été ajoutée, et rouvrir un menu déjà ouvert ne coûte rien.
+		const addCondition = async (label: string) => {
+			await expect(async () => {
+				await page.getByRole('button', { name: 'Ajouter une condition' }).click()
+				await page.getByRole('button', { name: label }).click({ timeout: 1000 })
+			}).toPass()
+		}
+
 		// Condition "Âge minimum"
-		await page.getByRole('button', { name: 'Ajouter une condition' }).click()
-		await page.getByRole('button', { name: 'Âge minimum' }).click()
+		await addCondition('Âge minimum')
 		await expect(page.getByLabel('Âge minimum')).toHaveValue('18')
 
 		// Condition "Profil du membre" sur Ville = Lyon
-		await page.getByRole('button', { name: 'Ajouter une condition' }).click()
-		await page.getByRole('button', { name: 'Profil du membre' }).click()
+		await addCondition('Profil du membre')
 		await page.getByRole('button', { name: 'Sélectioner un champ' }).click()
 		await page.getByRole('option', { name: 'Ville' }).click()
 		await page.getByLabel('Valeur').fill('Lyon')
