@@ -64,7 +64,7 @@
 	key="form_team"
 	title="{team?.id ? 'Modifier le' : 'Nouveau'} secteur"
 	maxWidth="26em"
-	class="surface-drawer "
+	class="surface-drawer"
 >
 	{#snippet children({ close })}
 		<TeamForm bind:teamForm team={team || {}} {event} onsuccess={() => close()} />
@@ -77,7 +77,7 @@
 	key="form_tag"
 	title="{tag?.id ? "Modifier l'" : 'Nouvelle '} étiquette"
 	maxWidth="400px"
-	class="surface-drawer "
+	class="surface-drawer"
 >
 	{#snippet children({ close })}
 		<TagForm

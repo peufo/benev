@@ -78,7 +78,12 @@
 	</div>
 {/if}
 
-<Drawer title="Modifier le profil de {member.firstName}" key="form_member_profile" classBody="pt-4">
+<Drawer
+	title="Modifier le profil de {member.firstName}"
+	key="form_member_profile"
+	class="surface-drawer"
+	classBody="pt-4"
+>
 	{#snippet children({ close })}
 		<MemberProfileForm memberProfile={member} onsuccess={() => close()} />
 	{/snippet}

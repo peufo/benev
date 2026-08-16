@@ -117,7 +117,13 @@
 <ThanksDialog bind:this={thanksDialog} />
 
 {#if data.member?.roles.includes('admin')}
-	<Drawer key="teams_order" title="Ordre des secteurs" classBody="my-4" maxWidth="350px">
+	<Drawer
+		key="teams_order"
+		title="Ordre des secteurs"
+		class="surface-drawer"
+		classBody="my-4"
+		maxWidth="350px"
+	>
 		<TeamsOrder teams={data.allTeams} />
 	</Drawer>
 {/if}

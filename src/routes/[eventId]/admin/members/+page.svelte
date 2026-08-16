@@ -180,13 +180,19 @@
 	/>
 {/if}
 
-<Drawer title="Résumé des membres" key="members_stats" class="xl:hidden" classBody="p-4 pb-10">
+<Drawer
+	title="Résumé des membres"
+	key="members_stats"
+	class="surface-drawer xl:hidden"
+	classBody="p-4 pb-10"
+>
 	<MembersStats {data} />
 </Drawer>
 
 <Drawer
 	title="Modifier le profil de {data.memberProfile?.firstName}"
 	key="form_member_profile"
+	class="surface-drawer"
 	classBody="pt-4"
 >
 	{#snippet children({ close })}

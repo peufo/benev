@@ -1,9 +1,3 @@
-- [ ] benev/src/lib/view/TableViewSelect.svelte Utilisé Il faut normaliser le style et utiliser Popover au lieu de Dropdown. Utilise directement InputSelect si possible.
-
-- [ ] Les filtres de table des colonne de type nombre doivent être réparé (style et utilisation)
-
-- [ ] Tous les drawers doivent avoir la classes 'surface-drawer'
-
 - [ ] Le formulaire d'édition des champs est completement cassé
 
 - [ ] Quand on soumet un formulaire invalide, le champ se vide: benev/src/lib/event/settings/SectionEssentiel.svelte:55

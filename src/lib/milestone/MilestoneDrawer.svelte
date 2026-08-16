@@ -14,6 +14,7 @@
 	key="form_milestone"
 	title="{milestone?.id ? 'Modifier le' : 'Nouveau'} jalon"
 	maxWidth="400px"
+	class="surface-drawer"
 >
 	{#snippet children({ close })}
 		<MilestoneForm

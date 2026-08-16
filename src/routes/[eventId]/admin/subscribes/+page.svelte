@@ -208,7 +208,7 @@
 <Drawer
 	title="Résumé des inscriptions"
 	key="subscribes_stats"
-	class="xl:hidden"
+	class="surface-drawer xl:hidden"
 	classBody="p-4 pb-10"
 >
 	<SubscribesStats {data} />

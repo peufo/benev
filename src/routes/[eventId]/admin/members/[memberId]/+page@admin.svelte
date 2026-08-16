@@ -170,6 +170,7 @@
 <Drawer
 	title="Modifier le coordonnées de {data.memberProfile.firstName}"
 	key="form_member_contact"
+	class="surface-drawer"
 	classBody="pt-4"
 >
 	{#snippet children({ close })}

@@ -188,7 +188,11 @@
 {#if data.member?.roles.includes('leader')}
 	<DrawersForm event={data.event} team={data.team} period={data.period || {}} tag={data.tag} />
 
-	<Drawer key="form_field" title="{data.field?.id ? 'Modifier le' : 'Nouveau'} champ">
+	<Drawer
+		key="form_field"
+		title="{data.field?.id ? 'Modifier le' : 'Nouveau'} champ"
+		class="surface-drawer"
+	>
 		{#snippet children({ close })}
 			<MemberFieldForm field={data.field || {}} onsuccess={() => close()} />
 		{/snippet}
