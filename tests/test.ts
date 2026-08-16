@@ -32,6 +32,10 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		await bob.expectConnected(freshPage)
 	})
 
+	test('Une soumission refusée ne vide aucun champ', async () => {
+		await event.expectInvalidSubmitKeepsFields(page)
+	})
+
 	test("Création d'un évènement avec un lieu", async () => {
 		await event.create(page)
 	})

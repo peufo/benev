@@ -30,6 +30,31 @@ export function useEvent(owner: User, name: string) {
 			await expect(page).toHaveTitle(new RegExp(eventName))
 		},
 		/**
+		 * Une soumission refusée ne doit rien effacer. Le `<select>` est le cas fragile: sa valeur
+		 * ne vit que dans la liaison de `InputSelectNative`, que le re-rendu du champ — celui que
+		 * déclenche l'arrivée des erreurs — n'a aucune raison de rejouer.
+		 */
+		async expectInvalidSubmitKeepsFields(page: Page) {
+			await page.goto('/me/events/create')
+			const name = page.getByLabel("Nom de l'évènement")
+			const url = page.getByLabel("URL de l'évènement")
+			const timezone = page.getByLabel('Fuseau horaire')
+
+			// Deux caractères: sous le minimum de trois du modèle, donc refusé par le serveur.
+			await expect(async () => {
+				await name.fill('ab')
+				await expect(url).toHaveValue('ab', { timeout: 1000 })
+			}).toPass()
+			const zone = await timezone.inputValue()
+			expect(zone).not.toBe('')
+
+			await page.getByRole('button', { name: 'Créer mon évènement' }).click()
+			await expect(page.getByText('Formulaire incorrect')).toBeVisible()
+			await expect(name).toHaveValue('ab')
+			await expect(url).toHaveValue('ab')
+			await expect(timezone).toHaveValue(zone)
+		},
+		/**
 		 * Le lieu ne se saisit plus à la création — celle-ci ne demande que l'essentiel — mais
 		 * depuis les réglages. Il faut donc l'y poser avant de vérifier le pied de page.
 		 */
