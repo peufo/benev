@@ -25,7 +25,7 @@ export function useEvent(owner: User, name: string) {
 				})
 			}).toPass()
 
-			await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
+			await page.getByRole('button', { name: 'Créer mon évènement' }).click()
 			await page.waitForURL(`**/${eventId}`)
 			await expect(page).toHaveTitle(new RegExp(eventName))
 		},
@@ -114,7 +114,7 @@ export function useEvent(owner: User, name: string) {
 		 * par « Réinitialiser » que par un enregistrement. Rien d'autre ne couvre ce contrat.
 		 */
 		async expectSettingsSaveBar(page: Page) {
-			const saveBar = page.getByText('Attention, il reste des modifications non enregistrées !')
+			const saveBar = page.getByText('Modification en cours !')
 			// `exact`: le sélecteur de média de la section Apparence porte un « Description
 			// de l'image » qui rendrait le libellé ambigu.
 			const description = page.getByLabel('Description', { exact: true })
