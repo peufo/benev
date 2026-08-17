@@ -108,3 +108,7 @@ mark {
 	height: 0;
 	pointer-events: none;
 }
+
+.tiptap .suggestion {
+	@apply bg-primary/5 px-1.5 rounded-field border border-soft;
+}

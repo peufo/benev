@@ -178,10 +178,10 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	<InputColorMap field={badge.typeField} bind:value={badge.colorMap} />
 	<InputColor name="colorDefault" label="(Couleur par défaut)" bind:value={badge.colorDefault} />
 
-	<div class="flex gap-4">
+	<div class="flex gap-4 items-end">
 		<div class="w-28">
-			<label class="floating-label">
-				<span>Tailles cellules</span>
+			<label>
+				<span class="label">Tailles cellules</span>
 				<input
 					class="input"
 					type="number"
