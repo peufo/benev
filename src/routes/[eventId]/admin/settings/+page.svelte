@@ -129,7 +129,12 @@
 				{/key}
 			</SettingsSection>
 
-			<SettingsSection id="membership" title="Adhésion" icon={LogInIcon}>
+			<SettingsSection
+				id="membership"
+				title="Adhésion"
+				icon={LogInIcon}
+				subtitle="Ce que les membres peuvent faire seuls et les informations de compte exigées"
+			>
 				{#key resetToken}
 					<SectionAdhesion fields={updateEvent.fields} event={data.event} />
 				{/key}

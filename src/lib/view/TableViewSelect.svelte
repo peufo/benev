@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { PencilIcon, PlusIcon } from '@lucide/svelte'
+	import { SaveIcon, SavePenIcon, SavePlus, SavePlusIcon } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 
 	import { Dialog, InputSelect, InputString, tip, type PopoverType } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { createView, deleteView, updateView } from './view.remote'
+	import { slide } from 'svelte/transition'
 
 	type View = {
 		id: string
@@ -48,42 +49,51 @@
 	}
 </script>
 
-{#snippet viewAction(popover: PopoverType)}
-	<button
-		type="button"
-		class="btn btn-square btn-soft btn-sm"
-		onclick={() => {
-			popover.hide()
-			dialog.showModal()
-		}}
-	>
-		<span
-			class="inline-flex"
-			use:tip={{ content: isNewView ? 'Enregistrer la vue' : 'Modifier la vue' }}
+{#snippet updateButton(view: View, { popover }: { popover: PopoverType })}
+	{#if isNewView && view !== simpleView}
+		<button
+			class="btn btn-square btn-ghost btn-sm group-hover:bg-base-200"
+			onclick={() => {
+				popover.hide()
+				selectedView = view
+				dialog.showModal()
+			}}
 		>
-			{#if isNewView}
-				<PlusIcon size={18} />
-			{:else}
-				<PencilIcon size={18} />
-			{/if}
-		</span>
-	</button>
+			<SavePenIcon size={18} class="opacity-70" />
+		</button>
+	{/if}
 {/snippet}
 
-<InputSelect
-	bind:value
-	{items}
-	getLabel={(view) => view.name}
-	onSelect={(view) => goto(view?.query ? `${page.url.pathname}?${view.query}` : page.url.pathname)}
-	append={query ? viewAction : undefined}
-	class="input-sm w-40"
-/>
+<div class="flex">
+	<InputSelect
+		bind:value
+		{items}
+		getLabel={(view) => view.name}
+		proposalAppend={updateButton}
+		onSelect={(view) =>
+			goto(view?.query ? `${page.url.pathname}?${view.query}` : page.url.pathname)}
+		class={['input-sm min-w-32', isNewView && 'rounded-r-none']}
+		propsLi={{ class: 'flex-row gap-1 group w-full' }}
+	/>
+	{#if isNewView}
+		<button
+			class="btn btn-square btn-sm joint-item btn-soft rounded-l-none"
+			use:tip={{ content: 'Enregistrer comme nouvelle vue' }}
+			onclick={() => dialog.showModal()}
+			transition:slide={{ axis: 'x' }}
+		>
+			<SaveIcon size={18} class="opacity-70" />
+		</button>
+	{/if}
+</div>
 
-<Dialog bind:dialog>
+<Dialog bind:dialog class="border-hard">
 	{#snippet header()}
-		<h2 class="title">
-			{editedView ? 'Modifier la vue' : 'Enregistrer la vue'}
-		</h2>
+		{#if editedView}
+			<h2 class="title">Enregistrer la vue</h2>
+		{:else}
+			<h2 class="title">Enregistrer comme nouvelle vue</h2>
+		{/if}
 	{/snippet}
 
 	<!-- `field.as(type, value)` ne fournit qu'une valeur initiale: sans remontage, le nom
@@ -112,10 +122,11 @@
 				field={remoteForm.fields.name}
 				label="Nom de la vue"
 				value={editedView?.name || ''}
+				autofocus
 			/>
 
-			<div class="mt-2 flex flex-row-reverse gap-2">
-				<button class="btn"> Valider </button>
+			<div class="mt-2 flex flex-row-reverse justify-between gap-2">
+				<button formaction={remoteForm.action} class="btn"> Valider </button>
 
 				{#if editedView}
 					<button formaction={deleteView.action} class="btn btn-ghost text-error">
