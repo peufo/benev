@@ -141,11 +141,9 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	{/each}
 
 	<div class="flex gap-2 items-center">
-		<ButtonDelete
-			form={deleteFormId}
-			formaction={deletePage.action}
-			disabled={page.type === 'home' || page.type === 'email'}
-		/>
+		{#if page.type !== 'home' && page.type !== 'email'}
+			<ButtonDelete form={deleteFormId} formaction={deletePage.action} />
+		{/if}
 
 		{#if page.type !== 'email'}
 			<a
