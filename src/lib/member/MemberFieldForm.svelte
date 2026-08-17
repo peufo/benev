@@ -15,7 +15,10 @@
 
 	let { field = $bindable({}), onsuccess }: Props = $props()
 
-	const remoteForm = $derived(field.id ? updateMemberField : createMemberField)
+	// L'état d'un formulaire distant vit dans son module et ne se vide pas quand le tiroir se
+	// ferme: sans `for(field.id)`, ce qui a été saisi sur un champ se retrouverait sur le suivant,
+	// par-dessus ses vraies valeurs.
+	const remoteForm = $derived(field.id ? updateMemberField.for(field.id) : createMemberField)
 	const deleteFormId = $props.id()
 
 	// `Object.entries` élargirait la clé en `string`: on la garde typée pour que la sélection
@@ -25,23 +28,14 @@
 		return { value: type, ...MEMBER_FIELD_TYPE[type] }
 	})
 
-	// `field` est un objet nu monté par le layout: y écrire ne déclenche aucun rendu. Tout ce que
-	// le formulaire repilote a donc son propre état — des dérivés assignables, pour se ré-amorcer
-	// quand on passe d'un champ à l'autre.
+	// `field` est un objet nu monté par le layout: y écrire ne déclenche aucun rendu. Le type
+	// pilote l'affichage conditionnel, il lui faut donc son propre état — un dérivé assignable,
+	// pour se ré-amorcer quand on passe d'un champ à l'autre.
 	let type = $derived(field.type)
-	let canRead = $derived(!!field.memberCanRead)
-	let canWrite = $derived(!!field.memberCanWrite)
 
-	function setMemberRight(right: 'read' | 'write', checked: boolean) {
-		// Les deux droits sont couplés: modifier suppose lire.
-		if (right === 'write') {
-			canWrite = checked
-			if (checked) canRead = true
-		} else {
-			canRead = checked
-			if (!checked) canWrite = false
-		}
-	}
+	// `value()` ne renvoie rien tant que la case n'a pas été touchée: le repli sur `field` donne
+	// l'état de départ.
+	let canWrite = $derived(remoteForm.fields.memberCanWrite.value() ?? field.memberCanWrite ?? false)
 </script>
 
 {#if field.id}
@@ -62,6 +56,9 @@
 	{...remoteForm.enhance(
 		enhanceForm({
 			success: 'Succès',
+			// `createMemberField` n'a pas de clé: sans remise à zéro, le champ créé prégarnirait
+			// le formulaire du suivant.
+			reset: true,
 			onsuccess: () => {
 				const created = createMemberField.result
 				if (!field.id && created) globalEvents.emit('field_created', created)
@@ -83,6 +80,7 @@
 			value={fieldTypes.find((option) => option.value === type)}
 			onSelect={(option) => (type = option?.value)}
 			placeholder="Choisir un type"
+			class="w-full"
 		>
 			{#snippet selected(option)}
 				<span class="flex items-center gap-2">
@@ -96,11 +94,11 @@
 			{/snippet}
 		</InputSelect>
 
-		<InputString field={remoteForm.fields.name} label="Nom" value={field.name} autocomplete="off" />
 		<InputString
-			field={remoteForm.fields.label}
-			label="Label"
-			value={field.label ?? ''}
+			field={remoteForm.fields.name}
+			label="Nom"
+			placeholder="Taille de t-shirt"
+			value={field.name}
 			autocomplete="off"
 		/>
 
@@ -119,48 +117,62 @@
 				<InputBoolean
 					field={remoteForm.fields.allCombinations}
 					checked={field.allCombinations ?? false}
-					label="Compter par combinaisons de valeurs lors de la syhtèse"
+					label="Compter par combinaisons"
+					hint="Dans la synthèse, chaque combinaison de valeurs compte comme une réponse distincte."
 				/>
-				<!-- TODO: Add help dialog -->
 			</div>
 		{/if}
 
-		<!-- Les deux cases n'ont pas de `name`: leur résultat part par les champs cachés
-		     ci-dessous, que `as('hidden', …)` préfixe de `b:` pour que SvelteKit les relise en
-		     booléens. -->
-		<fieldset class="fieldset">
-			<legend class="label">Les membres peuvent</legend>
-			<div class="flex gap-6">
-				<label class="flex items-center gap-2">
-					<input
-						type="checkbox"
-						class="checkbox"
-						checked={canRead}
-						oninput={(e) => setMemberRight('read', e.currentTarget.checked)}
-					/>
-					<span>Lire la valeur</span>
-				</label>
-				<label class="flex items-center gap-2">
-					<input
-						type="checkbox"
-						class="checkbox"
-						checked={canWrite}
-						oninput={(e) => setMemberRight('write', e.currentTarget.checked)}
-					/>
-					<span>Modifier la valeur</span>
-				</label>
-			</div>
-		</fieldset>
+		<!-- Les deux droits sont couplés: modifier suppose lire. `set()` repilote l'autre case,
+		     dont le champ est la source de vérité. -->
+		<InputBoolean
+			field={remoteForm.fields.memberCanRead}
+			checked={field.memberCanRead ?? false}
+			label="Visible par les membres"
+			hint="Sinon, seuls les responsables voient la valeur."
+			oninput={(e) => {
+				if (!e.currentTarget.checked) {
+					remoteForm.fields.memberCanWrite.set(false)
+					remoteForm.fields.required.set(false)
+				}
+			}}
+		/>
+		<InputBoolean
+			field={remoteForm.fields.memberCanWrite}
+			checked={field.memberCanWrite ?? false}
+			label="Modifiable par les membres"
+			hint="Le membre renseigne la valeur depuis son profil."
+			oninput={(e) => {
+				if (e.currentTarget.checked) remoteForm.fields.memberCanRead.set(true)
+				else remoteForm.fields.required.set(false)
+			}}
+		/>
 
-		<input {...remoteForm.fields.memberCanRead.as('hidden', canRead)} />
-		<input {...remoteForm.fields.memberCanWrite.as('hidden', canWrite)} />
-
-		{#if canWrite && type !== 'boolean' && type !== 'multiselect'}
+		{#if type !== 'boolean' && type !== 'multiselect'}
 			<div transition:slide={{ duration: 200 }}>
 				<InputBoolean
 					field={remoteForm.fields.required}
 					checked={field.required ?? false}
-					label="Les membres doivent renseigner la valeur"
+					label="Valeur obligatoire"
+					hint="Le profil du membre est signalé incomplet tant que la valeur est vide."
+					oninput={(e) => {
+						if (e.currentTarget.checked) {
+							remoteForm.fields.memberCanRead.set(true)
+							remoteForm.fields.memberCanWrite.set(true)
+						}
+					}}
+				/>
+			</div>
+		{/if}
+
+		{#if canWrite}
+			<div transition:slide={{ duration: 200 }}>
+				<InputString
+					field={remoteForm.fields.label}
+					label="Question du formulaire"
+					placeholder="Quelle est ta taille de t-shirt ?"
+					value={field.label ?? ''}
+					autocomplete="off"
 				/>
 			</div>
 		{/if}

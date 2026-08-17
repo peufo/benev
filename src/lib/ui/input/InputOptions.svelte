@@ -45,13 +45,13 @@
 
 <input type="hidden" name={key} {value} />
 
-<div class="label">Options</div>
+<div class="label text-xs">Options</div>
 
-<div class="rounded-box border border-soft p-2">
-	<div use:listEditable={{ items: options, onChange }}>
+<div class="rounded-box border border-soft p-1">
+	<div class="flex flex-col gap-1" use:listEditable={{ items: options, onChange }}>
 		{#each options as option, index (option)}
 			<div class="flex items-center gap-2" transition:slide={{ duration: 200 }}>
-				<div class="grow pl-4">
+				<div class="grow pl-4 text-sm">
 					{option}
 				</div>
 				<button
@@ -59,13 +59,13 @@
 					class="btn btn-square btn-ghost btn-sm"
 					onclick={() => removeOption(index)}
 				>
-					<Trash2Icon size={20} class="text-error" />
+					<Trash2Icon size={16} class="text-error opacity-70" />
 				</button>
 			</div>
 		{/each}
 	</div>
 
-	<div class="join flex pt-2">
+	<div class="join flex pt-1">
 		<input
 			bind:this={optionInput}
 			type="text"

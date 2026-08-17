@@ -6,7 +6,7 @@ import { MEMBER_FIELD_TYPE } from '$lib/constant'
 export const modelMemberFieldCreate = z.object({
 	name: z.string().min(2),
 	label: z.string().optional(),
-	// Toujours transmis, par un champ caché piloté par le groupe de cases « Les membres peuvent ».
+	// Toujours rendus: une case décochée n'envoie rien, d'où le repli sur `false`.
 	memberCanWrite: z.boolean().default(false),
 	memberCanRead: z.boolean().default(false),
 	// Rendus conditionnellement: leur absence doit laisser la valeur en place.

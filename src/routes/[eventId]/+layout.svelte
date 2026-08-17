@@ -193,6 +193,7 @@
 		key="form_field"
 		title="{data.field?.id ? 'Modifier le' : 'Nouveau'} champ"
 		class="surface-drawer"
+		maxWidth="28rem"
 	>
 		{#snippet children({ close })}
 			<MemberFieldForm field={data.field || {}} onsuccess={() => close()} />
