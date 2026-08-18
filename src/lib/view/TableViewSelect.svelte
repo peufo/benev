@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SaveIcon, SavePenIcon, SavePlus, SavePlusIcon } from '@lucide/svelte'
+	import { SaveIcon, SavePenIcon } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 

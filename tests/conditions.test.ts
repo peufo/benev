@@ -126,7 +126,9 @@ test.describe.serial('Conditions de secteur', () => {
 		await fillCondition(page, page.getByLabel('Valeur'), 'Paris', /"expectedValue":"Paris"/)
 
 		await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
-		await expect(page.getByRole('link', { name: /Secteur Cond/ }).first()).toBeVisible()
+		// Le tiroir ne se referme qu'au succès: c'est lui, et non le secteur déjà listé, qui
+		// prouve que l'écriture est partie avant qu'on aille la relire.
+		await expect(page.getByRole('dialog', { name: /Modifier le secteur/ })).toBeHidden()
 
 		await page.goto(editUrl)
 		await expect(page.getByRole('dialog', { name: /Modifier le secteur/ })).toBeVisible()

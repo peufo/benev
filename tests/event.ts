@@ -181,20 +181,23 @@ export function useEvent(owner: User, name: string) {
 			await expect(drawer).toHaveCount(1)
 		},
 		/**
-		 * Le tiroir de champ de profil. Le type pilote deux blocs conditionnels, et les deux
-		 * droits sont couplés — « modifier » suppose « lire ». Rien de tout cela n'atteignait le
-		 * serveur, et lier `undefined` à l'éditeur d'options levait dans un effet de rendu, ce
-		 * qui figeait le formulaire entier: le type choisi n'ouvrait plus aucun bloc.
+		 * Le tiroir de champ de profil. Le type pilote les blocs conditionnels, et les trois
+		 * cases sont couplées: « modifiable » et « obligatoire » supposent « visible », et
+		 * retirer la visibilité retire les deux autres. Chaque case repilotée l'est par le champ
+		 * distant, pas par le DOM: seul un aller-retour complet prouve que son état part au
+		 * serveur. Lier `undefined` à l'éditeur d'options levait par ailleurs dans un effet de
+		 * rendu, ce qui figeait le formulaire entier — le type choisi n'ouvrait plus aucun bloc.
 		 */
 		async expectMemberFieldForm(page: Page) {
 			const drawer = page.getByRole('dialog', { name: 'Nouveau champ' })
 			const typeTrigger = page.getByRole('button', { name: 'Type de champ' })
-			const canRead = page.locator('label').filter({ hasText: 'Lire la valeur' }).locator('input')
-			const canWrite = page
-				.locator('label')
-				.filter({ hasText: 'Modifier la valeur' })
-				.locator('input')
-			const required = page.locator('label').filter({ hasText: 'Les membres doivent renseigner' })
+			// `InputBoolean` réduit la vraie case à `w-0`: on clique le libellé qui l'enveloppe,
+			// et on lit l'état sur la case qu'il contient.
+			const booleanField = (label: string) => page.locator('label').filter({ hasText: label })
+			const canRead = booleanField('Visible par les membres')
+			const canWrite = booleanField('Modifiable par les membres')
+			const required = booleanField('Valeur obligatoire')
+			const formLabel = page.getByLabel('Question du formulaire')
 			const newOption = page.getByPlaceholder('Nouvelle option')
 
 			// Le popover d'`InputSelect` ne réagit qu'une fois la page hydratée: rejouer le couple
@@ -212,19 +215,37 @@ export function useEvent(owner: User, name: string) {
 			await page.goto(`/${eventId}/admin/settings?form_field=%7B%7D`)
 			await expect(drawer).toBeVisible()
 
+			// Une valeur à choisir dans une liste n'a rien d'obligatoire à remplir: le type ouvre
+			// l'éditeur d'options et referme la case.
 			await selectType('Liste à choix multiple')
 			await expect(newOption).toBeVisible()
+			await expect(required).toBeHidden()
 			await selectType('Text')
 			await expect(newOption).toBeHidden()
 
 			await page.getByLabel('Nom', { exact: true }).fill('Ville')
-			await expect(canRead).not.toBeChecked()
-			await page.locator('label').filter({ hasText: 'Modifier la valeur' }).click()
-			await expect(canRead).toBeChecked()
-			await expect(canWrite).toBeChecked()
+			await expect(canRead.locator('input')).not.toBeChecked()
+			// La question ne se pose qu'à un membre qui peut répondre.
+			await expect(formLabel).toBeHidden()
+
+			await canWrite.click()
+			await expect(canRead.locator('input')).toBeChecked()
+			await expect(canWrite.locator('input')).toBeChecked()
+			await expect(formLabel).toBeVisible()
 
 			await expect(required).toBeVisible()
 			await required.click()
+			await expect(required.locator('input')).toBeChecked()
+
+			// Retirer la visibilité retire tout le reste: un champ caché ne se modifie ni ne s'exige.
+			await canRead.click()
+			await expect(canWrite.locator('input')).not.toBeChecked()
+			await expect(required.locator('input')).not.toBeChecked()
+
+			// Et l'exiger rétablit les deux droits.
+			await required.click()
+			await expect(canRead.locator('input')).toBeChecked()
+			await expect(canWrite.locator('input')).toBeChecked()
 
 			await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
 			await expect(drawer).toBeHidden()
@@ -232,8 +253,8 @@ export function useEvent(owner: User, name: string) {
 			// Réouverture: les trois cases sont restituées. C'est ce qui ne partait pas au serveur.
 			await page.getByRole('button', { name: /Ville/ }).click()
 			await expect(page.getByRole('dialog', { name: 'Modifier le champ' })).toBeVisible()
-			await expect(canRead).toBeChecked()
-			await expect(canWrite).toBeChecked()
+			await expect(canRead.locator('input')).toBeChecked()
+			await expect(canWrite.locator('input')).toBeChecked()
 			await expect(required.locator('input')).toBeChecked()
 		},
 		/**
