@@ -12,7 +12,6 @@
 		key?: string
 		value?: string
 		classToolbar?: string
-		/** Remplacent les évènements de la version Svelte 4. */
 		onchange?: () => void
 		oninsertMedia?: () => void
 	}
@@ -51,8 +50,14 @@
 				},
 			},
 			extensions,
+			// La barre d'outils lit l'état de la sélection: elle suit toutes les transactions.
 			onTransaction() {
 				editor = editor
+			},
+			// La valeur ne suit que les transactions qui modifient le document. Sur `transaction`,
+			// la normalisation du contenu chargé — un document vide sérialisé `'null'`, une page
+			// écrite en HTML — passerait pour une saisie et signalerait une modification.
+			onUpdate() {
 				updateValue()
 			},
 		})
@@ -67,11 +72,11 @@
 	}, 120)
 </script>
 
-<div class="bordered relative rounded-lg border">
+<div class="relative rounded-field border border-hard">
 	{#if editor}
 		<ToolsBar {editor} class={classToolbar} {oninsertMedia} />
 	{/if}
-	<div bind:this={element} class="min-h-[20rem] p-4 pb-10"></div>
+	<div bind:this={element} class="min-h-80 p-4 pb-10"></div>
 </div>
 {#if key}
 	<input type="hidden" name={key} {value} />

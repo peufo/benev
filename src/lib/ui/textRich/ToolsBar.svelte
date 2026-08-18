@@ -19,17 +19,21 @@
 	let { editor, class: klass = '', oninsertMedia }: Props = $props()
 </script>
 
+{#snippet separator()}
+	<div class="mx-1 my-auto h-6 border border-y-0 border-l-0 border-soft"></div>
+{/snippet}
+
 <div
-	class="
-		 sticky top-0 z-10 overflow-y-visible rounded-t-xl border-b bg-base-100
-		{klass}
-	"
+	class={[
+		'sticky top-0 z-10 overflow-y-visible',
+		'rounded-t-field border-b border-soft bg-base-100',
+		klass,
+	]}
 >
 	<div class="flex overflow-x-auto p-2">
 		<ToolMenuNode {editor} />
 		<ToolMenuAlign {editor} />
-		<div class="mx-1 my-auto h-6 border border-y-0 border-l-0"></div>
-
+		{@render separator()}
 		<ToolMark
 			{editor}
 			key="bold"
@@ -57,9 +61,7 @@
 			color={editor.getAttributes('highlight').color || '#e51f68'}
 			setColor={(color) => editor.commands.setHighlight({ color })}
 		/>
-
-		<div class="mx-1 my-auto h-6 border border-y-0 border-l-0"></div>
-
+		{@render separator()}
 		<ToolMenuInsert {editor} {oninsertMedia} />
 	</div>
 </div>

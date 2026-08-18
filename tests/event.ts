@@ -276,6 +276,35 @@ export function useEvent(owner: User, name: string) {
 			await expect(editor).toContainText('Un contenu de test')
 			await expect(title).toHaveValue(originalTitle)
 			await expect(saveBar).toBeHidden()
+
+			// Une frappe unique suffit: l'éditeur n'écrit sa valeur dans le champ caché qu'au
+			// rendu suivant, et la barre doit la lire après ce rendu, pas avant.
+			await editor.click()
+			await page.keyboard.type('!')
+			await expect(saveBar).toBeVisible()
+			// Revenu à l'état d'origine, le formulaire n'a plus rien à enregistrer.
+			await page.keyboard.press('Backspace')
+			await expect(saveBar).toBeHidden()
+
+			// Une page neuve: son contenu vide, que l'éditeur normalise en document ProseMirror,
+			// ne doit pas passer pour une saisie.
+			await page.locator('div:has(> h2:text-is("Pages du site")) form button').click()
+			await expect(title).toHaveValue('Page 2')
+			await expect(editor).toBeVisible()
+			// L'écriture de la valeur est différée: seul un délai prouve qu'elle n'a rien signalé.
+			await page.waitForTimeout(500)
+			await expect(saveBar).toBeHidden()
+
+			// Changer de page ne remonte pas le formulaire: la barre repart de l'enregistrement
+			// chargé au lieu de rester ouverte sur les valeurs de la page quittée.
+			await title.fill('Titre abandonné')
+			await expect(saveBar).toBeVisible()
+			page.once('dialog', (dialog) => dialog.accept())
+			// Le lien de la liste latérale: `exact` écarte le lien vers la page publique, qui
+			// porte le même mot dans son chemin, et `main` la marque du bandeau.
+			await page.getByRole('main').getByRole('link', { name: originalTitle, exact: true }).click()
+			await expect(title).toHaveValue(originalTitle)
+			await expect(saveBar).toBeHidden()
 		},
 		/**
 		 * La barre de sauvegarde est le seul retour sur une modification: elle doit rester

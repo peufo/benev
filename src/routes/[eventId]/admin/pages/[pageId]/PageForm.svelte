@@ -140,17 +140,14 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 		<p class="text-error text-sm">{issue.message}</p>
 	{/each}
 
-	<div class="flex gap-2 items-center">
+	<div class="flex gap-2 items-center justify-between">
 		{#if page.type !== 'home' && page.type !== 'email'}
-			<ButtonDelete form={deleteFormId} formaction={deletePage.action} />
+			<ButtonDelete form={deleteFormId} formaction={deletePage.action} class="btn-sm" />
 		{/if}
 
 		{#if page.type !== 'email'}
-			<a
-				href={pagePath}
-				class="flex items-center gap-1 mr-auto link link-hover text-sm opacity-70 pr-4"
-			>
-				<LinkIcon class="opacity-60 -rotate-45" size={18} />
+			<a href={pagePath} class="flex items-center gap-1 link link-hover text-sm opacity-70 pr-4">
+				<LinkIcon class="opacity-60" size={18} />
 				<span>{pagePath}</span>
 			</a>
 		{/if}
@@ -161,6 +158,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	bind:this={saveBar}
 	form={formElement}
 	{formId}
+	key={page.id}
 	pending={updatePage.pending > 0}
 	onreset={() => resetToken++}
 />

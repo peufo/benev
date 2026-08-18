@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte'
+	import { tick, untrack } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import { elasticOut } from 'svelte/easing'
 	import { TriangleAlertIcon } from '@lucide/svelte'
@@ -14,6 +14,13 @@
 		 * ce que le spread d'`enhance()` laisse en place, et un `id` vide détacherait le bouton.
 		 */
 		formId: string
+		/**
+		 * Identifie l'enregistrement édité. Quand il change sans que le formulaire soit remonté
+		 * — navigation d'une page d'admin à l'autre — les champs conservent ce qui a été saisi
+		 * pour le précédent, l'état d'un `form` distant survivant à la navigation. Le formulaire
+		 * est alors réinitialisé et la ligne de base reprise.
+		 */
+		key?: unknown
 		/** `fields.allIssues()`: le récapitulatif vit ici, seul point visible à la soumission. */
 		issues?: { message: string }[] | undefined
 		pending?: boolean
@@ -21,7 +28,7 @@
 		onreset?: () => void
 	}
 
-	let { form, formId, pending = false, onreset }: Props = $props()
+	let { form, formId, key, pending = false, onreset }: Props = $props()
 
 	let baseline = $state('')
 	let current = $state('')
@@ -53,9 +60,16 @@
 	 * Relit le formulaire. Les évènements DOM couvrent les champs saisis; un champ dont la
 	 * valeur est écrite par du code — le champ caché d'un éditeur riche — n'en émet aucun et
 	 * doit le signaler ici.
+	 *
+	 * La lecture attend le rendu: celui qui appelle vient d'écrire dans un `$state`, que Svelte
+	 * ne pousse dans le champ caché qu'au flush suivant. Relire tout de suite prendrait la
+	 * valeur précédente — la barre resterait en retard d'une frappe et ne se refermerait pas
+	 * au retour à l'état d'origine.
 	 */
 	export function refresh() {
-		if (form) current = serialize(form)
+		void tick().then(() => {
+			if (form) current = serialize(form)
+		})
 	}
 
 	$effect(() => {
@@ -66,18 +80,26 @@
 		// faire avaler par la ligne de base, et la barre resterait muette. Tous les champs
 		// cachés de la page (lieu, site web, média) sont rendus en ligne, donc déjà là.
 		rebase()
-		// Le scraping d'icône d'`EventFormInputWeb` réécrit un champ caché 400 ms après la
-		// frappe, sans évènement: la sortie du champ rattrape ce cas.
-		const refreshLater = () => void tick().then(refresh)
+		// `focusout` rattrape le scraping d'icône d'`EventFormInputWeb`, qui réécrit un champ
+		// caché 400 ms après la frappe, sans évènement.
 		const cleanups = [
 			on(element, 'input', refresh),
 			on(element, 'change', refresh),
-			on(element, 'focusout', refreshLater),
-			on(element, 'reset', refreshLater),
+			on(element, 'focusout', refresh),
+			on(element, 'reset', refresh),
 		]
 		return () => {
 			for (const cleanup of cleanups) cleanup()
 		}
+	})
+
+	// Le montage a déjà posé sa ligne de base, et y réinitialiser effacerait les valeurs d'une
+	// soumission refusée: seuls les changements ultérieurs de `key` comptent.
+	let watchedKey = untrack(() => key)
+	$effect(() => {
+		if (key === watchedKey) return
+		watchedKey = key
+		void reset()
 	})
 
 	beforeNavigate((navigation) => {
@@ -92,7 +114,8 @@
 			navigation.cancel()
 	})
 
-	async function handleReset() {
+	/** Rend au formulaire les valeurs de l'enregistrement chargé, et referme la barre. */
+	async function reset() {
 		form?.reset()
 		// SvelteKit écoute lui aussi `reset` et relit le `FormData` après son propre `tick`:
 		// on le laisse passer avant de restaurer ce qu'il ne connaît pas.
@@ -119,7 +142,7 @@
 		</div>
 
 		<div class="flex gap-3 ml-auto">
-			<button type="button" class="btn btn-ghost btn-sm" onclick={handleReset}>
+			<button type="button" class="btn btn-ghost btn-sm" onclick={() => reset()}>
 				Réinitialiser
 			</button>
 			<!-- Un vrai bouton de soumission rattaché par `form`: garde la sémantique de la
