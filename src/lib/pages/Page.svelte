@@ -36,7 +36,7 @@
 	let canEdit = $derived($pageStore.data.member?.roles.includes('admin'))
 </script>
 
-<PageLayout class="relative max-w-2xl py-16">
+<PageLayout class="relative max-w-2xl py-16 mt-3 mb-20">
 	{#if html && html !== '<p></p>'}
 		<!-- page rédigée par les admins de l'événement dans l'éditeur tiptap -->
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
