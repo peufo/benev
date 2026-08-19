@@ -100,25 +100,13 @@
 			{/each}
 
 			<div class="grow"></div>
-			<label class="flex items-center gap-2 relative">
-				<RulerDimensionLineIcon opacity={0.6} size={16} class="absolute left-2" />
-				<input
-					type="number"
-					class="input input-sm pr-0 pl-7 max-w-20"
-					min={1}
-					step={1}
-					bind:value={aspect.x}
-				/>
+			<label class="input input-sm w-20 pr-0">
+				<RulerDimensionLineIcon opacity={0.6} size={27} />
+				<input type="number" min={1} step={1} bind:value={aspect.x} />
 			</label>
-			<label class="flex items-center gap-2 relative">
-				<RulerDimensionLineIcon opacity={0.6} size={16} class="absolute left-2 rotate-90" />
-				<input
-					type="number"
-					class="input input-sm pr-0 pl-7 max-w-20"
-					min={1}
-					step={1}
-					bind:value={aspect.y}
-				/>
+			<label class="input input-sm w-20 pr-0">
+				<RulerDimensionLineIcon opacity={0.6} size={27} class="rotate-90" />
+				<input type="number" min={1} step={1} bind:value={aspect.y} />
 			</label>
 		</div>
 	{/if}
