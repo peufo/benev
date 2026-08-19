@@ -9,6 +9,7 @@ import {
 	OctagonAlertIcon,
 	PaletteIcon,
 } from '@lucide/svelte'
+import { replaceState } from '$app/navigation'
 
 export interface SubNavSection {
 	/** L'`id` de la `<section>` correspondante dans la page. */
@@ -80,5 +81,5 @@ export function trackSubNavSections(sections: SubNavSection[]) {
 export function scrollToSection(event: MouseEvent, id: string) {
 	event.preventDefault()
 	document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-	history.replaceState(history.state, '', `#${id}`)
+	replaceState(`#${id}`, {})
 }
