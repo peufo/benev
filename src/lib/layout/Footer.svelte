@@ -9,7 +9,11 @@
 </script>
 
 <footer
-	class="footer footer-center border-t border-hard p-6 bg-base-100 gap-5 overflow-hidden {klass}"
+	class={[
+		'footer footer-center border-t border-hard',
+		'p-6 bg-base-100 gap-5 overflow-hidden mt-1',
+		klass,
+	]}
 >
 	{@render children?.()}
 

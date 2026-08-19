@@ -11,8 +11,20 @@
 	let { event }: Props = $props()
 	// Une copie, jamais la référence: les champs d'aperçu écrivent dans `theme`, et la partager
 	// reviendrait à muter `data.event` — dont les sections se servent pour se rétablir.
-	untrack(() => Object.assign(theme, event))
+	let seeded = untrack(() => {
+		Object.assign(theme, event)
+		return event.id
+	})
+
+	/**
+	 * Reposé au changement d'évènement seulement. Toute soumission distante fait rejouer les
+	 * `load`, et recopier à chaque nouvelle `data` écrasait l'habillage en cours d'édition:
+	 * l'image de fond choisie dans la médiathèque disparaissait dès l'envoi suivant, elle seule
+	 * des trois champs image, étant la seule à vivre dans `theme`.
+	 */
 	$effect.pre(() => {
+		if (event.id === seeded) return
+		seeded = event.id
 		Object.assign(theme, event)
 	})
 </script>

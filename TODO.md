@@ -1,0 +1,1 @@
+- [ ] benev/src/lib/plan/PlanHeader.svelte:60 La desélection direct ne marche pas avec cette approche. Pour moi, on peu recherger la page a chaque input

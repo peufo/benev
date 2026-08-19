@@ -222,6 +222,52 @@ export function useEvent(owner: User, name: string) {
 			await page.getByRole('button', { name: 'Réinitialiser' }).click()
 			await expect(saveBar).toBeHidden()
 
+			// Un envoi un peu lourd dure, et le tiroir peut être fermé entre-temps — Échap, clic
+			// sur le voile, impatience. La réponse doit quand même remplir le champ: c'est
+			// pourquoi le formulaire d'envoi vit hors du tiroir, dont la fermeture le démonterait.
+			await page.route('**/uploadMedia', async (route) => {
+				await new Promise((resolve) => setTimeout(resolve, 2000))
+				await route.continue()
+			})
+			await openDrawer()
+			await page.locator('input[type="file"][name="image"]').setInputFiles({
+				name: 'lente.png',
+				mimeType: 'image/png',
+				buffer: Buffer.from(BLUE_SQUARE_PNG, 'base64'),
+			})
+			await page.getByLabel("Description de l'image").fill('Affiche lente')
+			await page.getByRole('button', { name: 'Valider', exact: true }).click()
+			// Le recadrage se ferme au clic, sans attendre la réponse: Échap va donc au tiroir.
+			await expect(page.getByLabel("Description de l'image")).toBeHidden()
+			await page.keyboard.press('Escape')
+			await expect(drawer).toBeHidden()
+			await expect(saveBar).toBeVisible()
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+			await page.unroute('**/uploadMedia')
+
+			// « Image de fond » est le seul des trois champs image à écrire dans l'état global
+			// `theme`, que le layout reposait depuis `data.event` à chaque nouvelle donnée — donc
+			// à chaque soumission distante, qui fait rejouer les `load`. L'image envoyée depuis ce
+			// champ était ainsi écrasée dans la seconde qui suivait son choix.
+			const background = page.getByRole('button', { name: 'Image de fond', exact: true })
+			await expect(async () => {
+				await background.click()
+				await expect(drawer).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await page.locator('input[type="file"][name="image"]').setInputFiles({
+				name: 'fond.png',
+				mimeType: 'image/png',
+				buffer: Buffer.from(BLUE_SQUARE_PNG, 'base64'),
+			})
+			await page.getByLabel("Description de l'image").fill('Fond test')
+			await page.getByRole('button', { name: 'Valider', exact: true }).click()
+			await expect(drawer).toBeHidden()
+			await expect(page.locator('input[name="backgroundImageId"]')).not.toHaveValue('')
+			await expect(saveBar).toBeVisible()
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+
 			// L'éditeur riche ouvre le même tiroir.
 			await page.goto(`/${eventId}/admin/pages`)
 			await expect(page.locator('.tiptap')).toBeVisible()

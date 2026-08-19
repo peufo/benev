@@ -86,7 +86,7 @@
 		getLabel={(team) => team.name}
 		searchable
 		placeholder="Tous les secteurs"
-		class="w-52"
+		class="w-52 input-sm"
 	/>
 
 	<PlanCursor cursor={plan.cursor} />

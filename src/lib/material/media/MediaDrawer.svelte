@@ -42,7 +42,7 @@
 
 	let drawer: Drawer = $state()!
 	let dialogEdit: HTMLDialogElement = $state()!
-	let dialogUploadMedia: UploadMediaDialog = $state()!
+	let dialogUploadMedia: UploadMediaDialog | undefined = $state()
 	let editedMedia: Media | undefined = $state(undefined)
 
 	// Un `dragleave` part à chaque passage au-dessus d'un enfant: seul un compteur distingue la
@@ -80,7 +80,7 @@
 			const s = ignored > 1 ? 's' : ''
 			toast.info(`Une seule image à la fois: ${ignored} fichier${s} ignoré${s}`)
 		}
-		dialogUploadMedia.showWith(image)
+		dialogUploadMedia?.showWith(image)
 	}
 </script>
 
@@ -106,7 +106,7 @@
 	>
 		{#if !isEmpty}
 			<div
-				class="grid grow items-start gap-3 pt-3"
+				class="grid content-start grow items-start gap-3 pt-3"
 				style:grid-template-columns="repeat(auto-fill, minmax(min(9rem, 100%), 1fr))"
 			>
 				{#each medias.current ?? [] as media (media.id)}
@@ -134,37 +134,15 @@
 			</div>
 		{/if}
 
-		<!-- Le formulaire d'envoi *est* la bande basse. Fond opaque obligatoire: les tuiles
-		     défilent dessous. Médiathèque vide, il prend toute la hauteur restante et la zone
-		     devient l'état vide. -->
-		<form
-			class={['py-3', isEmpty ? 'flex grow pb-6' : 'sticky bottom-0 z-10 bg-base-100']}
-			{...uploadMedia.enhance(
-				enhanceForm({
-					success: 'Nouvelle image',
-					onsuccess: () => {
-						dialogUploadMedia.close()
-						const media = uploadMedia.result
-						if (media) handleSelect(media)
-					},
-				})
-			)}
-			enctype="multipart/form-data"
-		>
+		<!-- La bande basse. Fond opaque obligatoire: les tuiles défilent dessous. Médiathèque
+		     vide, elle prend toute la hauteur restante et la zone devient l'état vide. -->
+		<div class={['py-3', isEmpty ? 'flex grow pb-6' : 'sticky bottom-0 z-10 bg-base-100']}>
 			<MediaDropzone
 				active={dragDepth > 0}
 				variant={isEmpty ? 'hero' : 'band'}
-				onclick={() => dialogUploadMedia.show()}
+				onclick={() => dialogUploadMedia?.show()}
 			/>
-
-			<UploadMediaDialog
-				bind:this={dialogUploadMedia}
-				title="Nouvelle image"
-				formaction={uploadMedia.action}
-				nameField={uploadMedia.fields.name}
-				freeAspect
-			/>
-		</form>
+		</div>
 
 		<!-- Le dialogue est rendu dans le tiroir, et monté d'emblée. Frère du tiroir, il recevrait
 		     l'`inert` que celui-ci pose sur son entourage à l'ouverture, et un `<dialog>` ainsi marqué
@@ -209,3 +187,28 @@
 		</Dialog>
 	</div>
 </Drawer>
+
+<!-- Hors du tiroir: la fermeture démonterait le formulaire, et la réponse d'un envoi encore en
+     vol tomberait dans le vide. Son `<dialog>` n'est pas frère du tiroir mais enfant du `<form>`,
+     l'`inert` que `Drawer` pose sur son entourage ne l'atteint donc pas. -->
+<form
+	{...uploadMedia.enhance(
+		enhanceForm({
+			success: 'Nouvelle image',
+			onsuccess: () => {
+				dialogUploadMedia?.close()
+				const media = uploadMedia.result
+				if (media) handleSelect(media)
+			},
+		})
+	)}
+	enctype="multipart/form-data"
+>
+	<UploadMediaDialog
+		bind:this={dialogUploadMedia}
+		title="Nouvelle image"
+		formaction={uploadMedia.action}
+		nameField={uploadMedia.fields.name}
+		freeAspect
+	/>
+</form>

@@ -8,13 +8,13 @@
 
 	interface Props {
 		label: string
-		/** Nom du champ caché portant l'id du média. Vide, le champ ne soumet rien. */
-		key?: string | null
+		/** Nom du champ caché portant l'id du média. */
+		key: string
 		value?: string | null | undefined
 		oninput?: (media: Media | null) => void
 	}
 
-	let { label, key = null, value = $bindable(), oninput }: Props = $props()
+	let { label, key, value = $bindable(), oninput }: Props = $props()
 
 	let input: HTMLInputElement | undefined = $state()
 
@@ -32,9 +32,7 @@
 	}
 </script>
 
-{#if key}
-	<input type="hidden" bind:this={input} name={key} {value} />
-{/if}
+<input type="hidden" bind:this={input} name={key} {value} />
 
 <MediaPreview bind:mediaId={value} {label} onclick={() => mediaDrawer.open(select)}>
 	{#snippet action()}
