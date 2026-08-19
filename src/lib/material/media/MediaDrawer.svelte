@@ -98,6 +98,48 @@
 			<PlusIcon class="text-base-content/70" size={42} />
 		</button>
 	</div>
+
+	<!-- Le dialogue est rendu dans le tiroir, et monté d'emblée. Frère du tiroir, il recevrait
+	     l'`inert` que celui-ci pose sur son entourage à l'ouverture, et un `<dialog>` ainsi marqué
+	     reste mort une fois ouvert: le top layer n'échappe qu'à l'inertie d'un ancêtre, pas à la
+	     sienne. Sous un `{#if}`, `bind:dialog` ne donnerait sa référence qu'au rendu suivant, quand
+	     le clic qui l'ouvre est déjà passé. -->
+	<Dialog bind:dialog={dialogEdit}>
+		{#snippet header()}
+			<h3 class="title">Édition d'une image</h3>
+		{/snippet}
+
+		<!-- `field.as(type, value)` ne fournit qu'une valeur initiale: sans remontage, la description
+		     resterait celle de l'image précédemment ouverte. -->
+		{#key editedMedia}
+			{#if editedMedia}
+				<img src="/media/{editedMedia.id}" alt={editedMedia.name} class="mx-auto" />
+
+				<!-- Un seul `<form>` porte les deux remote functions: le `formaction` du bouton pressé
+				     décide laquelle s'exécute. -->
+				<form
+					class="contents"
+					{...editMedia.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
+					{...deleteMedia.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
+				>
+					<div class="mt-4 flex flex-row-reverse items-end gap-2">
+						<input type="hidden" name="id" value={editedMedia.id} />
+
+						<button formaction={editMedia.action} class="btn btn-primary"> Valider </button>
+						<ButtonDelete formaction={deleteMedia.action} />
+
+						<InputString
+							field={editMedia.fields.name}
+							label="Description de l'image"
+							class="grow"
+							autocomplete="off"
+							value={editedMedia.name}
+						/>
+					</div>
+				</form>
+			{/if}
+		{/key}
+	</Dialog>
 </Drawer>
 
 <form
@@ -121,36 +163,3 @@
 		freeAspect
 	/>
 </form>
-
-{#if editedMedia}
-	<Dialog bind:dialog={dialogEdit}>
-		{#snippet header()}
-			<h3 class="title">Édition d'une image</h3>
-		{/snippet}
-
-		<img src="/media/{editedMedia.id}" alt={editedMedia.name} class="mx-auto" />
-
-		<!-- Un seul `<form>` porte les deux remote functions: le `formaction` du bouton pressé
-		     décide laquelle s'exécute. -->
-		<form
-			class="contents"
-			{...editMedia.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
-			{...deleteMedia.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
-		>
-			<div class="mt-4 flex flex-row-reverse items-end gap-2">
-				<input type="hidden" name="id" value={editedMedia.id} />
-
-				<button formaction={editMedia.action} class="btn btn-primary"> Valider </button>
-				<ButtonDelete formaction={deleteMedia.action} />
-
-				<InputString
-					field={editMedia.fields.name}
-					label="Description de l'image"
-					class="grow"
-					autocomplete="off"
-					value={editedMedia.name}
-				/>
-			</div>
-		</form>
-	</Dialog>
-{/if}
