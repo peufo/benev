@@ -31,7 +31,7 @@
 </script>
 
 <div class="flex flex-col gap-6">
-	<div class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+	<div class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
 		<InputMedia key="posterId" label="Affiche" bind:value={posterId} />
 
 		<InputMedia key="logoId" label="Logo" bind:value={logoId} />

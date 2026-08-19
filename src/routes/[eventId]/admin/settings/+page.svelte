@@ -72,7 +72,7 @@
 </script>
 
 <OnlyAdmin>
-	<div class="mx-auto flex w-full max-w-3xl flex-col gap-4 pb-120">
+	<div class="mx-auto flex w-full max-w-2xl flex-col gap-4 pt-3 pb-120">
 		<SettingsSection id="status" title="Visibilité" icon={EyeIcon}>
 			<EventStateForm isOwner={data.member?.userId == data.event.ownerId} event={data.event} />
 		</SettingsSection>

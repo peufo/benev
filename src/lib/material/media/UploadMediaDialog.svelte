@@ -39,6 +39,17 @@
 		inputFile.click()
 	}
 
+	/**
+	 * Ouvre le recadrage sur un fichier déjà en main (glisser-déposer). Le fichier est écrit dans
+	 * l'input du formulaire, et non gardé de côté: c'est lui qui part dans le `FormData`.
+	 */
+	export function showWith(file: File) {
+		const transfer = new DataTransfer()
+		transfer.items.add(file)
+		inputFile.files = transfer.files
+		onFileSelected()
+	}
+
 	export function close() {
 		dialog?.close()
 	}

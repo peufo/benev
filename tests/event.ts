@@ -173,7 +173,23 @@ export function useEvent(owner: User, name: string) {
 
 			await openDrawer()
 			await expect(drawer).toHaveCount(1)
-			await expect(page.getByRole('button', { name: 'Ajouter une nouvelle image' })).toBeVisible()
+			await expect(page.getByRole('button', { name: /Déposez une image/ })).toBeVisible()
+
+			// Le glisser-déposer accepte le lâcher partout dans le tiroir, et doit écrire le fichier
+			// dans l'input du formulaire: c'est lui qui part dans le `FormData`. Le recadrage qui
+			// s'ouvre prouve que le fichier est arrivé.
+			const dataTransfer = await page.evaluateHandle((base64) => {
+				const bytes = Uint8Array.from(atob(base64), (char) => char.charCodeAt(0))
+				const transfer = new DataTransfer()
+				transfer.items.add(new File([bytes], 'glisse.png', { type: 'image/png' }))
+				return transfer
+			}, BLUE_SQUARE_PNG)
+			// Le lâcher part sur l'enveloppe, et non sur la zone: c'est tout le tiroir qui l'accepte.
+			await drawer.getByRole('presentation').dispatchEvent('drop', { dataTransfer })
+			await expect(page.getByLabel("Description de l'image")).toBeVisible()
+			// Échap ferme la modale, que le tiroir laisse passer tant qu'un `dialog[open]` existe.
+			await page.keyboard.press('Escape')
+			await expect(page.getByLabel("Description de l'image")).toBeHidden()
 
 			// La médiathèque d'un évènement neuf est vide: on y dépose une image pour pouvoir la
 			// choisir. Le champ de fichier est caché, `setInputFiles` n'en a pas besoin.
