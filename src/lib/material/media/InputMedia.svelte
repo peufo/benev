@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { Media } from '@prisma/client'
-	import { PlaceholderImage } from '$lib/ui'
+	import { tick } from 'svelte'
 	import { tip } from 'fuma'
 	import { XIcon } from '@lucide/svelte'
-	import { slide } from 'svelte/transition'
 	import { mediaDrawer } from './MediaDrawer.svelte'
+	import MediaPreview from './MediaPreview.svelte'
 
 	interface Props {
 		label: string
@@ -15,48 +15,39 @@
 	}
 
 	let { label, key = null, value = $bindable(), oninput }: Props = $props()
+
+	let input: HTMLInputElement | undefined = $state()
+
+	/**
+	 * Le champ caché est écrit par du code, et la médiathèque est un tiroir monté ailleurs dans
+	 * la page: rien n'émet le moindre évènement de formulaire. C'est à lui d'annoncer sa nouvelle
+	 * valeur, sans quoi ni la barre de sauvegarde ni l'état du formulaire distant ne voient
+	 * l'image choisie.
+	 */
+	function select(media: Media | null) {
+		value = media?.id ?? null
+		oninput?.(media)
+		// Le champ ne porte la valeur qu'au rendu suivant: annoncer avant ferait lire l'ancienne.
+		void tick().then(() => input?.dispatchEvent(new Event('input', { bubbles: true })))
+	}
 </script>
 
 {#if key}
-	<input type="hidden" name={key} {value} />
+	<input type="hidden" bind:this={input} name={key} {value} />
 {/if}
 
-<div class="flex flex-col space-y-0.5">
-	<button
-		class={[
-			'border border-hard rounded-field cursor-pointer hover:outline-1 aspect-square',
-			'bg-dash w-40 h-40',
-			'grid place-content-center',
-		]}
-		onclick={() =>
-			mediaDrawer.open((media) => {
-				value = media.id
-				oninput?.(media)
-			})}
-		type="button"
-	>
-		{#if value}
-			<img src="/media/{value}" alt={label} class="w-38 h-38 object-scale-down" />
-		{:else}
-			<PlaceholderImage>{label}</PlaceholderImage>
-		{/if}
-	</button>
-
-	{#if value}
-		<div class="flex items-center justify-between" transition:slide>
-			<span class="label text-sm">{label}</span>
-			<button
-				type="button"
-				onclick={(event) => {
-					event.stopPropagation()
-					value = null
-					oninput?.(null)
-				}}
-				class="btn btn-xs btn-square btn-ghost text-base-content/70 hover:text-error"
-				use:tip={{ content: 'Désélectionner' }}
-			>
-				<XIcon size={14} />
-			</button>
-		</div>
-	{/if}
-</div>
+<MediaPreview bind:mediaId={value} {label} onclick={() => mediaDrawer.open(select)}>
+	{#snippet action()}
+		<button
+			type="button"
+			onclick={(event) => {
+				event.stopPropagation()
+				select(null)
+			}}
+			class="btn btn-xs btn-square btn-ghost text-base-content/70 hover:text-error"
+			use:tip={{ content: 'Désélectionner' }}
+		>
+			<XIcon size={14} />
+		</button>
+	{/snippet}
+</MediaPreview>

@@ -6,7 +6,7 @@
 	} = $props()
 </script>
 
-<div class="p-2">
+<div class="p-5">
 	<div
 		class={[
 			'grid h-full w-full content-center justify-items-center p-2',

@@ -36,10 +36,15 @@
 	import { enhanceForm } from '$lib/enhanceForm'
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
 	import { deleteMedia, editMedia, searchMedias, uploadMedia } from './media.remote'
+	import type { ClassValue } from 'svelte/elements'
+	import MediaPreview from './MediaPreview.svelte'
 
-	/** Le cadre d'`InputMedia`: une tuile de la médiathèque a exactement l'aspect du champ. */
-	const TILE =
-		'border border-hard rounded-field cursor-pointer hover:outline-1 aspect-square bg-dash w-full flex items-center justify-center p-1'
+	/** La tuile d'ajout reprend le cadre que `MediaPreview` donne aux médias. */
+	const TILE: ClassValue = [
+		'border border-hard rounded-field cursor-pointer hover:outline-1 aspect-square',
+		'bg-dash',
+		'grid place-content-center',
+	]
 
 	let drawer: Drawer = $state()!
 	let dialogEdit: HTMLDialogElement = $state()!
@@ -57,23 +62,14 @@
 	     qu'ouvert: la requête part au premier affichage, pas à chaque chargement de page. -->
 	{@const medias = searchMedias('')}
 	<div
-		class="grid items-start gap-3 pb-6"
-		style:grid-template-columns="repeat(auto-fill, minmax(min(10rem, 100%), 1fr))"
+		class="grid items-start gap-3 pb-6 pt-3"
+		style:grid-template-columns="repeat(auto-fill, minmax(min(9rem, 100%), 1fr))"
 	>
 		{#each medias.current ?? [] as media (media.id)}
 			<!-- Le bouton d'édition est frère et non enfant du bouton de sélection: un `<button>`
 			     dans un `<button>` est du HTML invalide, que le navigateur réarrange. -->
-			<div class="flex flex-col space-y-0.5">
-				<button type="button" onclick={() => handleSelect(media)} class={TILE}>
-					<img
-						src="/media/{media.id}?size=small"
-						alt={media.name}
-						class="max-h-full max-w-full object-scale-down"
-					/>
-				</button>
-
-				<div class="flex items-center justify-between gap-1">
-					<span class="label truncate text-sm">{media.name || '-'}</span>
+			<MediaPreview label={media.name} mediaId={media.id} onclick={() => handleSelect(media)}>
+				{#snippet action()}
 					{#if media.eventId}
 						<button
 							type="button"
@@ -88,8 +84,8 @@
 							</span>
 						</button>
 					{/if}
-				</div>
-			</div>
+				{/snippet}
+			</MediaPreview>
 		{/each}
 
 		<button

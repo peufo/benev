@@ -31,7 +31,7 @@
 </script>
 
 <div class="flex flex-col gap-6">
-	<div class="flex flex-wrap items-start gap-x-6 gap-y-3">
+	<div class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
 		<InputMedia key="posterId" label="Affiche" bind:value={posterId} />
 
 		<InputMedia key="logoId" label="Logo" bind:value={logoId} />
@@ -45,7 +45,7 @@
 			<input
 				{...fields.backgroundColor.as('color', event.backgroundColor)}
 				oninput={(e) => (theme.backgroundColor = e.currentTarget.value)}
-				class="w-40 h-40 bg-base-100 px-2 rounded-field border border-hard"
+				class="bg-base-100 px-2 rounded-field border border-hard w-full h-full aspect-square"
 			/>
 			<span class="label text-sm">Couleur de fond</span>
 		</label>

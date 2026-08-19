@@ -3,6 +3,10 @@ import cuid from '@paralleldrive/cuid2'
 import type { User } from './user'
 import { mockPhoton, testPlace } from './photon'
 
+/** Un aplat bleu de 64×64, de quoi nourrir la médiathèque sans fichier à versionner. */
+const BLUE_SQUARE_PNG =
+	'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAUElEQVR42u3PQQkAAAgEsEtjMeNbwgi+hcEKLNXzWgQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQErsACvwRBWjdZC+AAAAAASUVORK5CYII='
+
 export function useEvent(owner: User, name: string) {
 	const eventCuid = cuid.createId()
 	const eventName = `${name} ${eventCuid}`
@@ -152,7 +156,14 @@ export function useEvent(owner: User, name: string) {
 		 */
 		async expectMediaDrawer(page: Page) {
 			const drawer = page.getByRole('dialog', { name: 'Médiathèque' })
-			const poster = page.getByRole('button', { name: 'Affiche' })
+			// `exact`: la tuile de l'image déposée plus bas s'appelle « Affiche test ».
+			const poster = page.getByRole('button', { name: 'Affiche', exact: true })
+			const saveBar = page.getByText('Modification en cours !')
+			const openDrawer = () =>
+				expect(async () => {
+					await poster.click()
+					await expect(drawer).toBeVisible({ timeout: 1000 })
+				}).toPass()
 
 			await page.goto(`/${eventId}/admin/settings`)
 			await expect(poster).toBeVisible()
@@ -160,15 +171,40 @@ export function useEvent(owner: User, name: string) {
 			// de page, et ce qui prouve qu'il n'y en a pas un par champ.
 			await expect(drawer).toHaveCount(0)
 
-			await expect(async () => {
-				await poster.click()
-				await expect(drawer).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			await openDrawer()
 			await expect(drawer).toHaveCount(1)
 			await expect(page.getByRole('button', { name: 'Ajouter une nouvelle image' })).toBeVisible()
 
+			// La médiathèque d'un évènement neuf est vide: on y dépose une image pour pouvoir la
+			// choisir. Le champ de fichier est caché, `setInputFiles` n'en a pas besoin.
+			await page.locator('input[type="file"][name="image"]').setInputFiles({
+				name: 'affiche.png',
+				mimeType: 'image/png',
+				buffer: Buffer.from(BLUE_SQUARE_PNG, 'base64'),
+			})
+			await page.getByLabel("Description de l'image").fill('Affiche test')
+			await page.getByRole('button', { name: 'Valider', exact: true }).click()
+
+			// L'image envoyée est choisie dans la foulée. Elle atterrit dans un champ caché, écrit
+			// par du code depuis un tiroir monté hors du formulaire: sans annonce de sa part, la
+			// barre de sauvegarde ne verrait rien.
+			await expect(saveBar).toBeVisible()
+			await expect(poster.getByRole('img', { name: 'Affiche' })).toBeVisible()
+
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+
+			await openDrawer()
 			await page.keyboard.press('Escape')
 			await expect(drawer).toBeHidden()
+
+			// Le tiroir garde l'image déposée: on la choisit cette fois à la main.
+			await openDrawer()
+			await page.getByRole('button', { name: 'Affiche test' }).click()
+			await expect(drawer).toBeHidden()
+			await expect(saveBar).toBeVisible()
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
 
 			// L'éditeur riche ouvre le même tiroir.
 			await page.goto(`/${eventId}/admin/pages`)
