@@ -188,6 +188,7 @@
 				{fields}
 				items={data.subscribes}
 				placholder="Aucune inscription trouvé"
+				class="border-hard"
 			>
 				{#snippet actions(subscribe)}
 					<SubscribeMenu {subscribe} />

@@ -147,6 +147,7 @@
 					fields={tableFields}
 					placholder="Aucun membre trouvé"
 					onCreateField={() => goto(urlParam.with({ form_field: '{}' }))}
+					class="border-hard"
 				>
 					{#snippet actions(member)}
 						<MemberActions
