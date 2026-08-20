@@ -108,7 +108,10 @@
 	<ul class="steps">
 		{#each steps as step, index (step)}
 			<li class="step text-sm" class:step-primary={stepIndex >= index}>
-				<a href={urlParam.with({ forcedStepIndex: index })} class:btn-disabled={index === 0}>
+				<a
+					href={urlParam.with({ forcedStepIndex: index })}
+					class={['btn btn-xs btn-ghost', index === 0 && 'btn-disabled']}
+				>
 					{step}
 				</a>
 			</li>

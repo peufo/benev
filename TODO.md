@@ -2,6 +2,8 @@
 
 - [x] Ajouter un placholder benev/src/lib/period/PeriodForm.svelte:195
 
-- [ ] Formulaire d'adhésion à revoir
+- [ ] Le style des champs du formulaire de profile sont à revoir (Champs obligatoire, oui/non, ...)
+
+- [ ] Affichage de mon profile /me à revoir
 
 - [ ] Mise à jour des CGU passage en code source fermé
