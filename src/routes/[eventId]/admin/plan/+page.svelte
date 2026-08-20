@@ -12,8 +12,8 @@
 </script>
 
 <div
-	style="height: calc(100vh - 96px)"
-	class="overflow-hidden rounded-2xl border footer-hidden flex flex-col"
+	style="height: calc(100vh - 62px)"
+	class="overflow-hidden rounded-box border border-soft footer-hidden flex flex-col"
 >
 	<PlanHeader bind:plan teams={data.teams} views={data.views} class="border-b" />
 	{#if urlParam.has('axis', 'y')}

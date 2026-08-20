@@ -68,6 +68,6 @@
 				>
 			</button>
 		{/if}
-		<Progress {period} class="w-[60px]" />
+		<Progress {period} class="w-15" />
 	</div>
 </div>

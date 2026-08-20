@@ -157,4 +157,29 @@ test.describe.serial('Plan', () => {
 		await page.getByRole('link', { name: 'Bar' }).hover()
 		await expect(ghost).toBeHidden()
 	})
+
+	/**
+	 * Le filtre de secteurs ne vit que dans l'URL: `getPlanData` n'a rien d'autre à lire. Une puce
+	 * se retire depuis le champ, sans que le menu s'ouvre — différer l'écriture à sa fermeture
+	 * laissait le plan sur l'ancien filtre. Le menu, lui, doit survivre à la navigation pour
+	 * qu'on puisse cocher plusieurs secteurs de suite.
+	 */
+	test("Le filtre de secteurs écrit l'URL à chaque changement", async () => {
+		await gotoPlan()
+
+		// Le seul combobox du bandeau: les autres contrôles sont des boutons ou des liens.
+		const teamsFilter = page.getByRole('combobox')
+		await teamsFilter.click()
+		await page.getByRole('option', { name: 'Bar' }).click()
+
+		await expect.poll(() => page.url()).toMatch(/teams=/)
+		await expect(page.getByRole('listbox')).toBeVisible()
+
+		await page.keyboard.press('Escape')
+		await expect(page.getByRole('listbox')).toBeHidden()
+
+		await teamsFilter.getByRole('button', { name: 'Retirer' }).click()
+		await expect.poll(() => page.url()).not.toMatch(/teams=/)
+		await expect(teamsFilter).toContainText('Tous les secteurs')
+	})
 })

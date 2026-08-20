@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { TabsIcon } from '$lib/ui'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
-	import { InputMultiSelect, jsonParse, tip, urlParam, type PopoverType } from 'fuma'
+	import { InputMultiSelect, jsonParse, tip, urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { PeriodCardOptions } from './cardContent'
@@ -52,21 +52,13 @@
 		)
 	)
 
-	let teamsMenu = $state<{ popover: PopoverType }>()
-	let menuWasOpen = false
-	// Le plan est la page la plus lourde de l'application: l'URL n'est écrite qu'à la fermeture
-	// du menu, pas à chaque secteur coché, pour ne la recharger qu'une fois.
-	$effect(() => {
-		const isOpen = !!teamsMenu?.popover.isOpen
-		if (menuWasOpen && !isOpen) {
-			const ids = selectedTeams.map(({ id }) => id)
-			const url = ids.length
-				? urlParam.with({ teams: JSON.stringify(ids) })
-				: urlParam.without('teams')
-			goto(url, { replaceState: true, noScroll: true })
-		}
-		menuWasOpen = isOpen
-	})
+	function selectTeams(selection: TeamOption[]) {
+		const ids = selection.map(({ id }) => id)
+		const url = ids.length
+			? urlParam.with({ teams: JSON.stringify(ids) })
+			: urlParam.without('teams')
+		goto(url, { replaceState: true, noScroll: true, keepFocus: true })
+	}
 </script>
 
 <div class="flex gap-2 items-center p-2 bg-base-100 {klass}" style="--btn-text-case: none;">
@@ -77,16 +69,14 @@
 
 	<TableViewSelect key="plan" {views} />
 
-	<!-- Le layout admin a déjà chargé tous les secteurs: le filtre reste local. `searchable`
-	     explicite, leur nombre variant d'un évènement à l'autre. -->
 	<InputMultiSelect
-		bind:this={teamsMenu}
 		bind:value={selectedTeams}
+		onSelect={selectTeams}
 		items={teams}
 		getLabel={(team) => team.name}
 		searchable
 		placeholder="Tous les secteurs"
-		class="w-52 input-sm"
+		class="w-52! input-sm"
 	/>
 
 	<PlanCursor cursor={plan.cursor} />
