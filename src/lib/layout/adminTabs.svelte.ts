@@ -1,13 +1,13 @@
 import type { Icon as LucideIcon } from '@lucide/svelte'
 import {
-	ChartGantt,
-	FileText,
-	Users,
-	ClipboardList,
-	CircleQuestionMark,
-	MapPin,
-	Gift,
-	Settings,
+	ChartGanttIcon,
+	FileTextIcon,
+	UsersIcon,
+	ClipboardListIcon,
+	CircleQuestionMarkIcon,
+	MapPinnedIcon,
+	GiftIcon,
+	SettingsIcon,
 } from '@lucide/svelte'
 
 import { param } from 'fuma'
@@ -36,38 +36,38 @@ export function adminTabs() {
 		{
 			...getPath('/teams'),
 			label: 'Secteurs',
-			icon: MapPin,
+			icon: MapPinnedIcon,
 		},
 		{
 			...getPath('/admin/members'),
 			label: 'Membres',
-			icon: Users,
+			icon: UsersIcon,
 		},
 		{
 			...getPath('/admin/subscribes'),
 			label: 'Inscriptions',
-			icon: ClipboardList,
+			icon: ClipboardListIcon,
 		},
 		{
 			...getPath('/admin/plan'),
 			label: 'Planification',
-			icon: ChartGantt,
+			icon: ChartGanttIcon,
 		},
 		{
 			...getPath('/admin/settings'),
 			label: 'Réglages',
-			icon: Settings,
+			icon: SettingsIcon,
 			sections: SETTINGS_SECTIONS,
 		},
 		{
 			...getPath('/admin/pages'),
 			label: 'Publications',
-			icon: FileText,
+			icon: FileTextIcon,
 		},
 		{
 			...getPath('/help'),
 			label: 'Aide',
-			icon: CircleQuestionMark,
+			icon: CircleQuestionMarkIcon,
 		},
 	]
 
@@ -77,9 +77,9 @@ export function adminTabs() {
 			tabs.findIndex(({ label }) => label === 'Publications'),
 			0,
 			{
-				...getPath('/admin/gift'),
+				...getPath('/admin/giftIconGiftIcon'),
 				label: 'Prestations',
-				icon: Gift,
+				icon: GiftIcon,
 			}
 		)
 

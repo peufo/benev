@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PlusIcon, ShuffleIcon } from '@lucide/svelte'
+	import { MapPinPlusIcon, ShuffleIcon } from '@lucide/svelte'
 	import { onMount } from 'svelte'
 	import { InputSearch } from '$lib/ui'
 	import { RangePickerButton, tip } from 'fuma'
@@ -64,7 +64,7 @@
 					data-sveltekit-replacestate
 					use:tip={{ content: "Modifier l'ordre des secteur" }}
 				>
-					<ShuffleIcon size={18} />
+					<ShuffleIcon size={16} />
 				</a>
 				<a
 					href={urlParam.with({ form_team: '{}' })}
@@ -73,7 +73,7 @@
 					data-sveltekit-replacestate
 					use:tip={{ content: 'Nouveau secteur' }}
 				>
-					<PlusIcon />
+					<MapPinPlusIcon size={20} />
 				</a>
 			{/if}
 		</div>

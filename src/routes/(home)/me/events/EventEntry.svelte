@@ -2,7 +2,7 @@
 	import { MemberRole } from '$lib/member'
 	import { EVENT_STATES } from '$lib/constant'
 	import { tip } from 'fuma'
-	import { CopyPlusIcon, MapPinIcon, ClockIcon } from '@lucide/svelte'
+	import { CopyPlusIcon, MapPinnedIcon, ClockIcon } from '@lucide/svelte'
 	import { EventIcon, EventPoster } from '$lib/event'
 	import { formatDay, formatRangeDateShort, formatRangeHour } from '$lib/formatRange'
 	import { locality } from '$lib/location/locality'
@@ -68,7 +68,7 @@
 						{/if}
 						{#if location?.label}
 							<span class="inline-flex min-w-0 items-center gap-1" title={location.label}>
-								<MapPinIcon size={14} class="shrink-0" />
+								<MapPinnedIcon size={14} class="shrink-0" />
 								<span class="truncate">{locality(location.label)}</span>
 							</span>
 						{/if}

@@ -117,9 +117,9 @@
 					href={urlParam.without(...tableFields.map((f) => f.key), 'skip', 'take')}
 					class="btn btn-square btn-sm"
 				>
-					<span class="inline-flex" use:tip={{ content: 'Effacer les filtres' }}
-						><FilterXIcon size={18} /></span
-					>
+					<span class="inline-flex" use:tip={{ content: 'Effacer les filtres' }}>
+						<FilterXIcon size={18} />
+					</span>
 				</a>
 
 				<TableViewSelect key="members" views={data.views} />
@@ -130,14 +130,13 @@
 
 				<a
 					type="button"
-					class="btn btn-square btn-sm"
+					class="btn btn-square btn-sm btn-secondary"
 					href={urlParam.with({ form_invite: '{}' })}
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
+					use:tip={{ content: 'Inviter des membres' }}
 				>
-					<span class="inline-flex" use:tip={{ content: 'Inviter des membres' }}
-						><UserPlusIcon /></span
-					>
+					<UserPlusIcon size={20} />
 				</a>
 			</div>
 			{#key tableFields}

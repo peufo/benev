@@ -3,7 +3,7 @@
 	import { MemberRole } from '$lib/member'
 	import { EVENT_TIER } from '$lib/constant'
 	import { formatRangeDate } from '$lib/formatRange'
-	import { CalendarDaysIcon, MailIcon, PhoneIcon, MapPinIcon } from '@lucide/svelte'
+	import { CalendarDaysIcon, MailIcon, PhoneIcon, MapPinnedIcon } from '@lucide/svelte'
 
 	let { data } = $props()
 
@@ -41,7 +41,7 @@
 
 			{#if fullAddress}
 				<div class="flex items-center gap-2">
-					<MapPinIcon size={16} class="opacity-70" />
+					<MapPinnedIcon size={16} class="opacity-70" />
 					<span>{fullAddress}</span>
 				</div>
 			{/if}

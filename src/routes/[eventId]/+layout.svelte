@@ -5,7 +5,7 @@
 		FlaskConicalIcon,
 		GlobeIcon,
 		MailIcon,
-		MapPinIcon,
+		MapPinnedIcon,
 		PhoneIcon,
 	} from '@lucide/svelte'
 	import facebookLogo from '$lib/assets/facebook.svg'
@@ -178,7 +178,7 @@
 		<FooterLink link={data.event.phone} protocol="tel:" icon={PhoneIcon} />
 
 		{#if data.event.location}
-			<FooterLink link={mapUrl(data.event.location)} icon={MapPinIcon}>
+			<FooterLink link={mapUrl(data.event.location)} icon={MapPinnedIcon}>
 				{data.event.location.label}
 			</FooterLink>
 		{/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MapPinIcon } from '@lucide/svelte'
+	import { MapPinnedIcon } from '@lucide/svelte'
 	import { InputSelect } from 'fuma'
 
 	type Suggestion = PrismaJson.Location & { id: string; title: string; detail: string }
@@ -105,7 +105,7 @@
 >
 	{#snippet selected(item)}
 		<span class="flex items-center gap-2">
-			<MapPinIcon size={18} class="opacity-70" />
+			<MapPinnedIcon size={18} class="opacity-70" />
 			<span>{item.label}</span>
 		</span>
 	{/snippet}

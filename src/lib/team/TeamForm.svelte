@@ -97,12 +97,7 @@
 		<input type="hidden" name="id" value={team.id} />
 	{/if}
 
-	<InputString
-		field={remoteForm.fields.name}
-		label="Nom du secteur"
-		value={team.name}
-		class="mt-8"
-	/>
+	<InputString field={remoteForm.fields.name} label="Nom du secteur" value={team.name} />
 
 	{#if page.data.member?.roles.includes('admin')}
 		<InputLeaders field={remoteForm.fields.leaders} value={team.leaders} />
