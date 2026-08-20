@@ -157,7 +157,7 @@
 			class="p-1 sticky shrink-0 left-0 z-10 font-medium text-sm border-r border-hard bg-base-100 flex items-center justify-around"
 		>
 			<a
-				class="btn btn-sm btn-square"
+				class="btn btn-sm btn-square btn-primary"
 				href={urlParam.with({ form_team: '{}' })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll

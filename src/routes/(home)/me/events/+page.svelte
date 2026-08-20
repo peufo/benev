@@ -18,6 +18,8 @@
 		month: 'long',
 		year: 'numeric',
 	})
+
+	const isEmpty = $derived(!data.upcoming.length && !data.undated.length)
 </script>
 
 <!-- L'onglet actif nomme déjà la page à l'écran; le `h1` reste pour que le document
@@ -88,7 +90,7 @@
 <!-- Pied de page du registre: ce qui sort de la liste courante. Les terminés
      s'accumulent sans rien apporter au quotidien, et «Organiser» ne concerne qu'un
      organisateur — ni l'un ni l'autre n'a à passer devant le parcours du bénévole. -->
-<div class="mt-6 flex flex-wrap gap-2 justify-between">
+<div class="mt-6 flex flex-wrap gap-2">
 	{#if data.nbPast}
 		<a href="/me/events/past" class="btn btn-ghost border-soft">
 			<RotateCcwClockIcon size={18} class="shrink-0 opacity-60" />
@@ -102,13 +104,16 @@
 	{#if data.user.isOrganizer}
 		<a
 			href="/me/events/create"
-			class={['btn btn-primary', (data.upcoming.length || data.undated.length) && 'btn-soft']}
+			class={['btn btn-primary', !isEmpty && 'btn-soft', isEmpty ? 'mx-auto' : 'ml-auto']}
 		>
 			<PlusIcon size={18} class="shrink-0 opacity-60" />
 			<span class="grow font-medium">Organiser un nouvel évènement</span>
 		</a>
 	{:else}
-		<button onclick={() => becomeOrganizerDialog.showModal()} class="btn btn-primary btn-soft">
+		<button
+			onclick={() => becomeOrganizerDialog.showModal()}
+			class={['btn btn-primary btn-soft', isEmpty ? 'mx-auto' : 'ml-auto']}
+		>
 			<PlusIcon size={18} class="shrink-0 opacity-60" />
 			<span class="grow font-medium">Organiser un nouvel évènement</span>
 		</button>

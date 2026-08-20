@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { CircleCheckIcon, GiftIcon, TagIcon } from '@lucide/svelte'
+	import { CircleCheckIcon, ShoppingCartIcon, TagIcon } from '@lucide/svelte'
 	import { Placeholder } from '$lib/ui'
 
 	import { CheckoutWaitSSE, ProductUseForm } from '$lib/checkout'
@@ -99,8 +99,8 @@
 				{/if}
 			</li>
 		{:else}
-			<Placeholder class="gap-3">
-				<GiftIcon size={48} class="opacity-40" />
+			<Placeholder class="gap-3 text-center">
+				<ShoppingCartIcon size={48} class="opacity-40 mx-auto" />
 				<p>Tu n'as fait aucun achat</p>
 			</Placeholder>
 		{/each}

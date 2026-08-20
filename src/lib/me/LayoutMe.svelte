@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Component } from 'svelte'
-	import { Calendar, IdCard, CircleDollarSign, type IconProps } from '@lucide/svelte'
+	import { Calendar, IdCard, type IconProps, ShoppingCartIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { contextContainer } from '$lib/ui/context.js'
 	import type { User } from '@prisma/client'
@@ -42,7 +42,7 @@
 			tabs.push({
 				href: '/me/checkouts',
 				label: 'Mes achats',
-				icon: CircleDollarSign,
+				icon: ShoppingCartIcon,
 			})
 
 		return tabs

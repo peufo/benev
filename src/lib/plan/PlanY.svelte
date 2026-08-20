@@ -121,7 +121,7 @@
 	<!-- CREATE TEAM -->
 	<div class="grid place-content-center px-4 sticky top-0" style:height="{TEAM_HEADER_HEIGHT}px">
 		<a
-			class="btn btn-square btn-sm"
+			class="btn btn-square btn-sm btn-primary"
 			href={urlParam.with({ form_team: '{}' })}
 			data-sveltekit-replacestate
 			data-sveltekit-noscroll
