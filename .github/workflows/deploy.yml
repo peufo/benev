@@ -2,7 +2,7 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['main']
+    branches: ['main', 'dev']
 
 env:
   REGISTRY: ghcr.io
@@ -32,6 +32,7 @@ jobs:
       EMAIL_DISABLED: 'true'
       MEDIA_DIR: /tmp/benev-media
       ROOT_USER: root@benevio.test
+      ORIGIN: http://localhost:4173
       BODY_SIZE_LIMIT: '10000000'
       SMTP_HOST: localhost
       SMTP_PORT: '1025'
@@ -82,6 +83,8 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      # Les tags par défaut incluent `type=ref,event=branch`: `main` produit l'image
+      # `:main`, `dev` produit `:dev`. Chaque environnement suit son propre tag.
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
@@ -100,5 +103,8 @@ jobs:
     runs-on: ubuntu-latest
     if: success()
     steps:
+      # Chaque application Dokploy expose son propre webhook (onglet Deployments).
       - name: Trigger deploy webhook
-        run: curl -X POST ${{ secrets.DEPLOY_HOOK_URL }}
+        env:
+          DEPLOY_HOOK_URL: ${{ github.ref_name == 'main' && secrets.DEPLOY_HOOK_URL || secrets.DEPLOY_HOOK_URL_DEV }}
+        run: curl -fsS -X POST "$DEPLOY_HOOK_URL"

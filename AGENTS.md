@@ -317,6 +317,7 @@ Copy `.env.example` to `.env` and fill in:
 ROOT_USER="admin@example.com"              # Root user email (full access)
 DATABASE_URL="mysql://user:pass@host:3306/db"
 MEDIA_DIR="./media"                        # Local media storage path
+ORIGIN="https://benev.io"                  # Public origin of the deployment
 BODY_SIZE_LIMIT=0                          # Disable body size limit for uploads
 
 # EMAIL
@@ -407,10 +408,25 @@ from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. L
 
 ### CI and Deployment
 
-`.github/workflows/deploy.yml` runs on push to `main`: spins up MySQL 8, runs
+`.github/workflows/deploy.yml` runs on push to `main` **and to `dev`**: spins up MySQL 8, runs
 `bunx prisma migrate deploy`, then `bun run check`, `bun run test:unit`, and `bun run test:e2e`
 (Chromium only). Playwright reports are uploaded on failure. The Docker build job (`oven/bun:latest`,
 pushed to `ghcr.io`) only runs if that job passes.
+
+Two environments, both on Dokploy, distinguished only by the branch that was pushed:
+
+| Branch | Image tag                  | Domain         | Webhook secret        |
+| ------ | -------------------------- | -------------- | --------------------- |
+| `main` | `ghcr.io/peufo/benev:main` | `benev.io`     | `DEPLOY_HOOK_URL`     |
+| `dev`  | `ghcr.io/peufo/benev:dev`  | `dev.benev.io` | `DEPLOY_HOOK_URL_DEV` |
+
+The tags come from `docker/metadata-action`'s defaults (`type=ref,event=branch`) — nothing declares
+them. There is no `:latest`: `flavor.latest=auto` only emits it for a **git tag** push, never for a
+branch. A Dokploy application must therefore pull its branch tag by name.
+
+Each Dokploy application exposes its own webhook URL under its _Deployments_ tab; that URL is what
+goes into the matching GitHub secret. The two environments share nothing — separate database,
+separate domain, separate media volume.
 
 Every key in `.env.example` must be set in CI, even with dummy values: `svelte-kit sync` types
 `$env/dynamic` from the present environment, and a missing key becomes `string | undefined` and

@@ -19,7 +19,9 @@ export const githubAuth = github(auth, {
 	clientSecret: env.GITHUB_CLIENT_SECRET,
 })
 
-const origin = dev ? 'http://localhost:5173' : 'https://benev.io'
+// Google valide l'URI de redirection à l'exact: elle doit suivre le domaine servi,
+// sinon `dev.benev.io` renvoie ses utilisateurs sur la production.
+const origin = dev ? 'http://localhost:5173' : env.ORIGIN || 'https://benev.io'
 
 export const googleAuth = google(auth, {
 	clientId: env.GOOGLE_CLIENT_ID,
