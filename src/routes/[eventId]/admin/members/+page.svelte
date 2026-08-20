@@ -122,7 +122,7 @@
 					</span>
 				</a>
 
-				<TableViewSelect key="members" views={data.views} />
+				<TableViewSelect key="members" views={data.views} ignoredKeys={['members_stats']} />
 
 				<MembersExport />
 				<MembersBadges badges={data.badges} />

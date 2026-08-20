@@ -17,9 +17,15 @@
 	interface Props {
 		key: string
 		views: View[]
+		/**
+		 * Paramètres d'URL qui ne décrivent pas un filtre et ne doivent donc ni entrer dans une vue
+		 * enregistrée, ni la faire passer pour modifiée. Les clés `form_*` — tiroirs et dialogues —
+		 * le sont déjà d'office.
+		 */
+		ignoredKeys?: string[]
 	}
 
-	let { key, views }: Props = $props()
+	let { key, views, ignoredKeys = [] }: Props = $props()
 
 	let dialog: HTMLDialogElement = $state()!
 
@@ -39,12 +45,22 @@
 	)
 	let editedView = $derived(isNewView ? undefined : selectedView)
 
+	/** La pagination n'est pas un filtre, pas plus que l'état des tiroirs ouverts par l'URL. */
+	function isIgnored(paramKey: string) {
+		if (paramKey === 'skip' || paramKey === 'take') return true
+		if (paramKey.startsWith('form_')) return true
+		return ignoredKeys.includes(paramKey)
+	}
+
 	function getQuery({ searchParams }: URL) {
 		// Construit puis sérialisé immédiatement: pas un état réactif.
 		// eslint-disable-next-line svelte/prefer-svelte-reactivity
 		const searchParam = new URLSearchParams(searchParams)
-		searchParam.delete('skip')
-		searchParam.delete('take')
+		// Les clés sont figées avant la boucle: l'itérateur de `URLSearchParams` suit les
+		// suppressions et sauterait l'entrée suivante.
+		for (const paramKey of [...searchParam.keys()]) {
+			if (isIgnored(paramKey)) searchParam.delete(paramKey)
+		}
 		return searchParam.toString()
 	}
 </script>

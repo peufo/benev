@@ -67,7 +67,8 @@
 		<div class="grow"></div>
 	{/if}
 
-	<TableViewSelect key="plan" {views} />
+	<!-- Le zoom et l'orientation sont des réglages d'affichage, propres à l'écran du moment. -->
+	<TableViewSelect key="plan" {views} ignoredKeys={['hourSize', 'axis']} />
 
 	<InputMultiSelect
 		bind:value={selectedTeams}

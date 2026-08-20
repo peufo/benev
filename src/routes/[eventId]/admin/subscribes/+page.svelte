@@ -179,7 +179,7 @@
 						><FilterXIcon size={18} /></span
 					>
 				</a>
-				<TableViewSelect key="subscribes" views={data.views} />
+				<TableViewSelect key="subscribes" views={data.views} ignoredKeys={['subscribes_stats']} />
 				<SubscribesImport />
 			</div>
 
