@@ -414,14 +414,31 @@ export function useEvent(owner: User, name: string) {
 			await page.waitForTimeout(500)
 			await expect(saveBar).toBeHidden()
 
-			// Changer de page ne remonte pas le formulaire: la barre repart de l'enregistrement
-			// chargé au lieu de rester ouverte sur les valeurs de la page quittée.
-			await title.fill('Titre abandonné')
-			await expect(saveBar).toBeVisible()
-			page.once('dialog', (dialog) => dialog.accept())
+			// Quitter une page dont le formulaire n'est pas enregistré est refusé: la navigation
+			// est annulée et la barre s'alarme, sans rien perdre de la saisie.
 			// Le lien de la liste latérale: `exact` écarte le lien vers la page publique, qui
 			// porte le même mot dans son chemin, et `main` la marque du bandeau.
-			await page.getByRole('main').getByRole('link', { name: originalTitle, exact: true }).click()
+			const otherPageLink = page
+				.getByRole('main')
+				.getByRole('link', { name: originalTitle, exact: true })
+			const editedUrl = page.url()
+			await title.fill('Titre abandonné')
+			await expect(saveBar).toBeVisible()
+			await otherPageLink.click()
+			await expect(page.locator('.save-bar-alert')).toBeVisible()
+			// Un départ annulé ne laisse rien à attendre: seul un délai prouve qu'il n'a pas eu
+			// lieu. Il couvre aussi le tremblement, qui rendrait les boutons instables.
+			await page.waitForTimeout(500)
+			await expect(page).toHaveURL(editedUrl)
+			await expect(title).toHaveValue('Titre abandonné')
+			await expect(saveBar).toBeVisible()
+
+			// La barre refermée, le départ passe. Changer de page ne remonte pas le formulaire:
+			// il repart de l'enregistrement chargé au lieu de rester ouvert sur les valeurs de
+			// la page quittée.
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+			await otherPageLink.click()
 			await expect(title).toHaveValue(originalTitle)
 			await expect(saveBar).toBeHidden()
 		},

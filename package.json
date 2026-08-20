@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"prestart": "prisma migrate deploy",
-		"start": "node ./build/index.js",
+		"start": "bun ./build/index.js",
 		"postinstall": "prisma generate",
 		"dev": "vite dev --host",
 		"build": "vite build",
