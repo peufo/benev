@@ -34,6 +34,9 @@ declare global {
 			lastName: string
 			phone?: string
 			avatarPlaceholder: string
+			isTermsAccepted?: boolean
+			termsVersion?: string
+			termsAcceptedAt?: Date
 		}
 	}
 }

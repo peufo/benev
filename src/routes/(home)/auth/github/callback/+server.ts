@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { auth, githubAuth, prisma } from '$lib/server'
+import { TERMS_VERSION } from '$lib/constant'
 
 export const GET = async ({ url, cookies, locals }) => {
 	const storedState = cookies.get('github_oauth_state')
@@ -31,6 +32,9 @@ export const GET = async ({ url, cookies, locals }) => {
 				avatarPlaceholder: githubUser.avatar_url,
 				email,
 				isEmailVerified: !!githubUser.email,
+				isTermsAccepted: true,
+				termsVersion: TERMS_VERSION,
+				termsAcceptedAt: new Date(),
 			},
 		})
 		return user

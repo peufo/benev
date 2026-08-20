@@ -19,10 +19,7 @@ export function useUser(name: string) {
 			// Playwright la juge invisible, on clique donc le label qui l'enveloppe.
 			// Le viser par `label` évite le lien homonyme du pied de formulaire.
 			await page.locator('label').filter({ hasText: 'Je suis organisateur' }).click()
-			await page
-				.locator('label')
-				.filter({ hasText: "J'accepte les conditions d'utilisation" })
-				.click()
+			await page.locator('label').filter({ hasText: "J'accepte les conditions" }).click()
 			await page.getByRole('button', { name: 'Créer mon compte' }).click()
 			await page.waitForURL('**/me/events')
 		},

@@ -103,7 +103,12 @@
 		"tippy.js": "^6.3.7",
 		"zod": "^4.1.11"
 	},
-	"license": "AGPL-3.0",
+	"license": "AGPL-3.0-or-later",
+	"author": "Dev Voisard <jonas.voisard@gmail.com>",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/peufo/benev.git"
+	},
 	"volta": {
 		"node": "24.19.0"
 	}

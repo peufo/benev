@@ -81,8 +81,13 @@
 					</td>
 
 					<td>
-						{message.author.firstName}
-						{message.author.lastName}
+						{#if message.author}
+							{message.author.firstName}
+							{message.author.lastName}
+						{:else}
+							{message.authorName || 'Anonyme'}
+							<span class="badge badge-ghost badge-sm ml-1">sans compte</span>
+						{/if}
 					</td>
 					<td>
 						{message.subject}
@@ -93,7 +98,8 @@
 					<td align="right">
 						<a
 							target="_blank"
-							href="mailto:{message.author.email}?subject=Réponse de benev.io: {message.subject}"
+							href="mailto:{message.author?.email ??
+								message.authorEmail}?subject=Réponse de benev.io: {message.subject}"
 							class="btn btn-sm btn-square"
 						>
 							<span class="inline-flex" use:tip={{ content: 'Répondre' }}><MailIcon /></span>

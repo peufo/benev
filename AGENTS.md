@@ -100,7 +100,10 @@ be introduced.
 ### Route Conventions
 
 - `(home)` — public/marketing pages, auth, user dashboard.
-  - `/`, `/events`, `/contact`, `/open-source`, `/terms`, `/qr`
+  - `/`, `/events`, `/contact`, `/open-source`, `/qr`
+  - Textes légaux, tous montés sur `LegalPage` de `$lib/layout` : `/terms`, `/privacy`,
+    `/legal-notice`, `/sales-terms`. Leur liste vit dans `$lib/layout/legal.ts`, qui sert aussi
+    le pied de page, les renvois croisés et l'identité de l'éditeur.
   - `/auth` — login / account creation (`$lib/me/Login.svelte`)
   - `/me/*` — personal dashboard, events, checkouts
   - `/root/*` — superuser tools (users, events, checkouts, messages, mails preview, migrate)

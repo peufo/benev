@@ -1,0 +1,29 @@
+benevio — Plateforme de gestion de bénévoles
+Copyright (C) 2023-2026 Dev Voisard (CHE-400.730.052), Switzerland
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+La licence porte sur le code source de ce dépôt. Elle ne concède aucun droit sur :
+
+  - la marque et le nom « benevio »
+  - le logo et les éléments graphiques de la marque
+  - le nom de domaine benev.io
+  - les données hébergées sur le service benev.io
+
+Ces éléments restent la propriété exclusive de Dev Voisard.
+
+Le service hébergé sur benev.io est régi par ses conditions générales :
+https://benev.io/terms

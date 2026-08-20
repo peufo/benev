@@ -10,6 +10,7 @@ import {
 	sendEmailComponent,
 } from '$lib/server'
 import { modelUserCreate, modelUserLogin, modelUserUpdate } from '$lib/models'
+import { TERMS_VERSION } from '$lib/constant'
 import { modelMediaImage } from '$lib/models/media'
 import { EmailPasswordReset, EmailVerificationLink } from '$lib/email'
 
@@ -20,6 +21,8 @@ export const registerUser = form(modelUserCreate, async (data) => {
 		firstName: data.firstName,
 		lastName: data.lastName,
 		isTermsAccepted: data.isTermsAccepted,
+		termsVersion: TERMS_VERSION,
+		termsAcceptedAt: new Date(),
 		isOrganizer: data.isOrganizer,
 		isEmailVerified: false,
 		avatarPlaceholder: createAvatarPlaceholder(),

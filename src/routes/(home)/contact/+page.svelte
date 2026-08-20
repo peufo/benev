@@ -45,6 +45,24 @@
 					)}
 					class="flex flex-col gap-4 mt-2"
 				>
+					{#if !data.user}
+						<InputString
+							field={sendMessage.fields.authorName}
+							label="Ton nom"
+							variant="block"
+							class="w-full"
+							autocomplete="name"
+						/>
+						<InputString
+							field={sendMessage.fields.authorEmail}
+							label="Ton email"
+							variant="block"
+							class="w-full"
+							autocomplete="email"
+							inputmode="email"
+						/>
+					{/if}
+
 					<InputString
 						field={sendMessage.fields.subject}
 						label="Sujet"
@@ -57,6 +75,15 @@
 						rows={6}
 						variant="block"
 						class="w-full"
+					/>
+
+					<!-- Piège à robots: hors flux et hors tabulation, invisible pour un humain. -->
+					<input
+						{...sendMessage.fields.website.as('text')}
+						tabindex="-1"
+						autocomplete="off"
+						aria-hidden="true"
+						class="absolute left-[-9999px] h-0 w-0 opacity-0"
 					/>
 
 					<div class="flex justify-end">

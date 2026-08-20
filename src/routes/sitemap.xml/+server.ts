@@ -1,7 +1,16 @@
 import { prisma } from '$lib/server'
 
-// `/contact` en est absent : la page redirige vers `/auth` pour les visiteurs anonymes
-const staticPaths = ['/', '/events', '/events/past', '/open-source', '/terms']
+const staticPaths = [
+	'/',
+	'/events',
+	'/events/past',
+	'/open-source',
+	'/contact',
+	'/terms',
+	'/privacy',
+	'/legal-notice',
+	'/sales-terms',
+]
 
 export async function GET({ url }) {
 	const origin = url.origin

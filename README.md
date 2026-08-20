@@ -33,4 +33,10 @@ Platforme de gestion de bénévole
 
 ## Licence
 
-Ce projet est sous licence [AGPL-3.0](LICENSE).
+Copyright (C) 2023-2026 Dev Voisard (CHE-400.730.052), Suisse.
+
+Ce projet est sous licence [AGPL-3.0-or-later](LICENSE) — voir [NOTICE](NOTICE).
+
+La licence porte sur le code source. Elle ne concède aucun droit sur la marque « benevio », le
+logo, le nom de domaine `benev.io`, ni sur les données hébergées par le service. L'utilisation du
+service hébergé est régie par ses [conditions générales](https://benev.io/terms).

@@ -72,6 +72,9 @@ export const prisma = new PrismaClient().$extends({
 						city: null,
 						avatarId: null,
 						avatarPlaceholder: createAvatarPlaceholder(),
+						// Les réponses aux champs personnalisés sont des données personnelles comme les
+						// autres: sans ça, allergies et régime alimentaire survivent au compte supprimé.
+						profileJson: {},
 					},
 				})
 				return query(args)

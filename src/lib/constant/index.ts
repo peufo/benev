@@ -116,6 +116,24 @@ export const EVENT_TIER: Record<
 } as const
 
 /**
+ * Délais de réponse du support, affichés sur la page tarifs et sur la page quota d'un évènement.
+ * Ce sont des cibles indicatives et non des garanties: les conditions de vente le disent, et les
+ * deux pages partagent la même phrase pour ne pas promettre deux choses différentes.
+ */
+export const EVENT_TIER_SUPPORT: Partial<Record<EventTier, string>> = {
+	standard: `Support email — réponse généralement sous 5 jours ouvrables`,
+	premium: `Support email 7/7 — réponse généralement sous 24 heures`,
+	pro: `Support prioritaire — ligne directe avec l'équipe`,
+} as const
+
+/**
+ * Date d'effet des textes légaux, stockée sur l'utilisateur au moment de l'acceptation.
+ * Un booléen seul ne dit pas *quelles* conditions ont été acceptées, ce qui est précisément
+ * ce dont on a besoin le jour où elles changent.
+ */
+export const TERMS_VERSION = '2026-08-20'
+
+/**
  * Découpe le prix d'un plan en valeur et devise.
  * `unit` est absent pour les plans sans montant chiffré (« Sur mesure »).
  */

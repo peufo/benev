@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { EventTier } from '@prisma/client'
 	import { EventTierDetails, TierCard } from '$lib/event'
-	import { EVENT_TIER } from '$lib/constant'
+	import { EVENT_TIER, EVENT_TIER_SUPPORT } from '$lib/constant'
 
 	let { data } = $props()
 
@@ -18,9 +18,8 @@
 	}
 
 	function upgradeFeatures(tier: EventTier): string[] {
-		if (tier === 'standard') return ['Support email — réponse en 5 jours ouvrables']
-		if (tier === 'premium') return ['Support email 7/7 — réponse en 24h']
-		return []
+		const support = EVENT_TIER_SUPPORT[tier]
+		return support ? [support] : []
 	}
 	let { event, member, membersValided, userIsRoot } = $derived(data)
 	let isOwner = $derived(member?.roles.includes('owner') || userIsRoot)

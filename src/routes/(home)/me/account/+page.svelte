@@ -26,7 +26,7 @@
 
 <hr class="my-6 border-soft" />
 <div class="flex flex-wrap justify-end gap-2">
-	<DeleteUserForm />
+	<DeleteUserForm ownedEventsCount={data.ownedEventsCount} />
 	<form {...logoutUser} class="contents">
 		<button class="btn btn-ghost btn-sm"> Déconnexion </button>
 	</form>

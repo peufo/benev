@@ -173,7 +173,7 @@
 				<InputBoolean field={registerUser.fields.isOrganizer} label="Je suis organisateur" />
 				<InputBoolean
 					field={registerUser.fields.isTermsAccepted}
-					label="J'accepte les conditions d'utilisation"
+					label="J'accepte les conditions générales et la politique de confidentialité"
 				/>
 			</div>
 		{/if}
@@ -234,7 +234,9 @@
 
 	<p class="mt-4 text-center text-xs text-balance text-base-content/70">
 		En continuant, tu acceptes nos
-		<a href="/terms" class="link" target="_blank">conditions d'utilisation</a>.
+		<a href="/terms" class="link" target="_blank">conditions générales</a>
+		et notre
+		<a href="/privacy" class="link" target="_blank">politique de confidentialité</a>.
 	</p>
 {/snippet}
 

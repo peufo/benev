@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { TierCard } from '$lib/event'
+	import { EVENT_TIER_SUPPORT } from '$lib/constant'
 </script>
 
 <section class="py-20 md:py-28" id="pricing">
@@ -22,12 +23,12 @@
 			/>
 			<TierCard
 				tier="standard"
-				features={['Support email — réponse en 5 jours ouvrables']}
+				features={[EVENT_TIER_SUPPORT.standard!]}
 				action={{ label: 'Choisir Standard', href: '/me/events/create?plan=standard' }}
 			/>
 			<TierCard
 				tier="premium"
-				features={['Support email 7/7 — réponse en 24h']}
+				features={[EVENT_TIER_SUPPORT.premium!]}
 				action={{ label: 'Choisir Premium', href: '/me/events/create?plan=premium' }}
 			/>
 		</div>
@@ -37,7 +38,7 @@
 			<div class="card-body flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 				<div>
 					<h3 class="text-xl font-bold text-base-content">Pro</h3>
-					<p class="text-base-content/70 mt-1">Tarif sur mesure — ligne directe avec l'équipe</p>
+					<p class="text-base-content/70 mt-1">Tarif sur mesure — {EVENT_TIER_SUPPORT.pro}</p>
 				</div>
 				<a href="/contact" class="btn btn-outline btn-primary whitespace-nowrap">
 					Nous contacter
@@ -58,8 +59,9 @@
 					</div>
 					<div class="collapse-content">
 						<p class="text-base-content/80 leading-relaxed">
-							Non. Tu peux changer de plan à tout moment selon tes besoins. Commence avec l'offre
-							gratuite et passe à un plan supérieur quand ton événement grandit.
+							Non. Commence avec l'offre gratuite et passe à un plan supérieur à tout moment, quand
+							ton événement grandit. C'est un achat unique par événement, sans abonnement ni
+							reconduction.
 						</p>
 					</div>
 				</div>

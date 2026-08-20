@@ -8,7 +8,6 @@ Disallow: /auth
 Disallow: /me
 Disallow: /root
 Disallow: /lab
-Disallow: /contact
 Disallow: /api/
 Disallow: /*/admin
 Disallow: /*/api/

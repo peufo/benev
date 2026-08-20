@@ -1,5 +1,7 @@
 <script lang="ts">
 	import benevio from '$lib/assets/benevio.svg'
+	import { LEGAL_DOCS } from './legal'
+
 	interface Props {
 		class?: string
 		children?: import('svelte').Snippet
@@ -17,11 +19,13 @@
 >
 	{@render children?.()}
 
-	<div class="flex gap-4 text-sm">
+	<nav class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
 		<a href="/open-source" class="link link-hover">Open source</a>
 		<a href="/contact" class="link link-hover">Contact</a>
-		<a href="/terms" class="link link-hover">Conditions</a>
-	</div>
+		{#each LEGAL_DOCS as doc (doc.path)}
+			<a href={doc.path} class="link link-hover">{doc.label}</a>
+		{/each}
+	</nav>
 
 	<div class="text-left">
 		<a href="/" class="btn btn-sm btn-outline ml-auto border-soft">
