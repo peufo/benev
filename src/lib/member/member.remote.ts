@@ -231,9 +231,7 @@ export const deleteMember = form(
 		const member = await permission.member(eventId, locals)
 		const isSelf = member.id === memberId
 		if (!isSelf) await permission.admin(eventId, locals)
-		if (isSelf && member.roles.includes('owner'))
-			throw Error(`Owner can't delete his participation`)
-
+		if (isSelf && member.roles.includes('owner')) error(403, `Owner can't delete his participation`)
 		await prisma.member.delete({ where: { id: memberId, eventId } })
 		redirect(303, redirectTo || '/me')
 	}
