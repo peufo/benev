@@ -94,7 +94,7 @@
 
 <div class="flex grow items-start relative max-w-full">
 	{#if data.member?.roles.includes('leader') || data.userIsRoot}
-		<div class="hidden lg:flex flex-col gap-2 sticky top-1 ml-1 shrink-0">
+		<div class="hidden md:flex flex-col gap-2 sticky top-1 ml-1 shrink-0">
 			<AdminNavigation>
 				<EventTierBadge event={data.event} membersValided={data.membersValided} />
 			</AdminNavigation>

@@ -4,4 +4,4 @@
 	let { data } = $props()
 </script>
 
-<Register event={data.event} user={data.user} member={data.member} charter={data.charter} />
+<Register {...data} />

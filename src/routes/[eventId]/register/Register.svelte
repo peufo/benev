@@ -2,24 +2,16 @@
 	import { ChevronLeftIcon, ChevronRightIcon, XIcon } from '@lucide/svelte'
 	import { page } from '$app/stores'
 	import { afterNavigate, goto, invalidateAll } from '$app/navigation'
-	import type { Event, Field, User, Page } from '@prisma/client'
 
 	import { Card, Placeholder } from '$lib/ui'
 	import { Dialog, tip } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'
 	import { Login, AvatarForm, AccountForm } from '$lib/me'
-	import type { MemberProfile } from '$lib/server'
 	import { slide } from 'svelte/transition'
+	import type { PageData } from './$types'
 
-	interface Props {
-		event: Event & { memberFields: Field[] }
-		user: User | undefined
-		member: MemberProfile | undefined
-		charter: Page | null
-	}
-
-	let { event, user, member, charter }: Props = $props()
+	let { event, user, member, charter }: PageData = $props()
 
 	const isMemberProfileRequired = $derived(
 		!!event.memberFields.filter((f) => f.memberCanWrite).length
@@ -81,27 +73,23 @@
 <Card class="max-w-2xl mx-auto" bodyClass="flex flex-col gap-6">
 	<div class="flex items-center gap-2 mb-4">
 		<h1 class="title">Participer à {event.name}</h1>
-		<div class="join ml-auto border">
+		<div class="join ml-auto border border-soft rounded-field">
 			<a
 				href={urlParam.with({ forcedStepIndex: stepIndex - 1 })}
 				class="btn btn-sm btn-square join-item btn-ghost btn-disabled"
 				class:btn-disabled={stepIndex <= 1}
+				use:tip={{ content: 'Précédent' }}
 			>
-				<span class="inline-flex" use:tip={{ content: 'Précédent' }}
-					><ChevronLeftIcon class={stepIndex <= 1 ? 'opacity-20' : 'opacity-70'} /></span
-				>
+				<ChevronLeftIcon class="opacity-70" />
 			</a>
 
 			<a
 				href={urlParam.with({ forcedStepIndex: stepIndex + 1 })}
 				class="btn btn-sm btn-square join-item btn-ghost"
 				class:btn-disabled={stepIndex >= stepIndexMax}
+				use:tip={{ content: 'Suivant' }}
 			>
-				<span class="inline-flex" use:tip={{ content: 'Suivant' }}
-					><ChevronRightIcon
-						class={stepIndex >= stepIndexMax ? 'opacity-20' : 'opacity-70'}
-					/></span
-				>
+				<ChevronRightIcon class="opacity-70" />
 			</a>
 		</div>
 		{#if !!member}
@@ -110,10 +98,9 @@
 				class="btn btn-square btn-sm"
 				transition:slide={{ axis: 'x' }}
 				onclick={() => dialogRemoveMember.showModal()}
+				use:tip={{ content: 'Annuler et supprimer ma participation' }}
 			>
-				<span class="inline-flex" use:tip={{ content: 'Annuler et supprimer ma participation' }}
-					><XIcon /></span
-				>
+				<XIcon />
 			</button>
 		{/if}
 	</div>

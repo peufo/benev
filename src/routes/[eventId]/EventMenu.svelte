@@ -16,13 +16,13 @@
 	let adminIsVisible = $derived(page.data.member?.roles.includes('leader') || page.data.userIsRoot)
 </script>
 
-<div class="gap-2 hidden lg:flex">
+<div class="gap-2 hidden md:flex">
 	<EventPubliqueMenuItems {pages} class="btn btn-ghost" classActive="btn-active" />
 </div>
 
 <Popover class="max-h-none min-w-50">
 	{#snippet trigger({ trigger })}
-		<button {...trigger} class="btn btn-square ml-2 lg:hidden">
+		<button {...trigger} class="btn btn-square ml-2 md:hidden">
 			<MenuIcon size={24} />
 		</button>
 	{/snippet}

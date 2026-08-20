@@ -193,6 +193,7 @@
 			bind:value={selectedTags}
 			items={searchTags}
 			label="Étiquettes"
+			placeholder="Permis de conduire, Nuit, Montage, ..."
 		>
 			{#snippet selected(tag)}
 				<TagSelectItem {tag} is_editable />
