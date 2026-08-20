@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: benev
+      MYSQL_USER: benev
+      MYSQL_PASSWORD: benev
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      # 3306 est déjà pris par le mysqld local
+      - '3307:3306'
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1', '-u', 'root', '-proot']
+      interval: 5s
+      retries: 20
+      start_period: 20s
+
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    env_file: .env
+    environment:
+      DATABASE_URL: mysql://benev:benev@db:3306/benev
+      ORIGIN: http://localhost:3000
+    volumes:
+      # MEDIA_DIR=./media, relatif au WORKDIR /app
+      - ./media:/app/media
+    depends_on:
+      db:
+        # prestart lance `prisma migrate deploy` immédiatement : il faut un MySQL déjà initialisé
+        condition: service_healthy
+volumes:
+  db_data:
