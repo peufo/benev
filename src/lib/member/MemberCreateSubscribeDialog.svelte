@@ -27,21 +27,24 @@
 
 	type Team = (typeof teams)[number]
 
-	let selectedTeam: Team | null = $state(null)
+	// Le secteur choisi est retenu par son id, pas par l'objet: les périodes affichées suivent
+	// ainsi les rafraîchissements de la requête au lieu de figer l'instantané du moment du clic.
+	let selectedTeamId: string | null = $state(null)
+	const selectedTeam = $derived(teams.find(({ id }) => id === selectedTeamId) ?? null)
 	let selectedPeriod: Period | null = $state(null)
 	let offsetWidth: number = $state()!
 
 	let submitButton: HTMLButtonElement = $state()!
 
 	async function handleClickReturn() {
-		selectedTeam = null
+		selectedTeamId = null
 		search = ''
 		await tick()
 		searchInput.focus()
 	}
 	function handleSelectTeam(team: Team) {
 		setTimeout(async () => {
-			selectedTeam = team
+			selectedTeamId = team.id
 			await tick()
 			dialog.focus()
 		}, 0)
@@ -54,8 +57,23 @@
 		submitButton.click()
 	}
 
+	/**
+	 * Une inscription rend les places qu'elle occupe indisponibles. Le dialogue repart donc de la
+	 * recherche, et redemande les secteurs: la fermeture prépare l'ouverture suivante, qui sert
+	 * le plus souvent à inscrire un autre membre.
+	 */
+	async function handleClose() {
+		selectedTeamId = null
+		selectedPeriod = null
+		search = ''
+		await tick()
+		await teamsQuery.refresh()
+	}
+
 	onMount(() => {
-		const returnKey = (event: KeyboardEvent) => event.key === 'Backspace' && handleClickReturn()
+		// Retour au choix du secteur. Sur l'écran de recherche, la touche appartient au champ.
+		const returnKey = (event: KeyboardEvent) =>
+			event.key === 'Backspace' && selectedTeamId && handleClickReturn()
 		dialog.addEventListener('keydown', returnKey)
 		return () => {
 			dialog.removeEventListener('keydown', returnKey)
@@ -63,7 +81,7 @@
 	})
 </script>
 
-<Dialog bind:dialog class="overflow-x-hidden">
+<Dialog bind:dialog onClose={handleClose} class="overflow-x-hidden">
 	{#snippet header()}
 		<h2 class="title" bind:offsetWidth>{title}</h2>
 	{/snippet}
