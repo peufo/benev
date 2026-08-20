@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+/* En tête, comme toute règle `@import`. Le fichier tient les animations du refus de
+   quitter une page non enregistrée, jouées par `SaveBar.svelte`. */
+@import './lib/ui/form/saveBar.css';
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui' {
 	logs: false;
@@ -23,8 +26,7 @@
 	--color-base-300: #e5e6e6;
 	--color-base-content: #1f2937;
 }
-/* @source '../node_modules/fuma/dist'; */
-@source '../../fuma/src/lib';
+@source '../node_modules/fuma/dist';
 
 @layer components {
 	.surface {

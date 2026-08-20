@@ -1,0 +1,118 @@
+/* Le refus de quitter une page dont le formulaire n'est pas enregistré: la page tremble et
+   la barre d'enregistrement se signale, seule sortie possible. `SaveBar.svelte` pose et
+   retire les classes; `app.css` importe ce fichier. */
+
+@layer components {
+	/* La page tremble sous la barre, qui ne bouge pas — elle porte les deux seules sorties.
+	   Le décalage passe par `left` et `top`, pas par une transformation: une transformation
+	   sur `body` ferait de sa boîte, haute de tout le document, le référentiel des éléments
+	   `fixed`, et enverrait la barre comme le fond d'évènement au pied de la page. */
+	.screen-shake {
+		position: relative;
+		animation: screen-shake 0.5s ease-in-out;
+	}
+
+	/* Le décalage compte dans le débordement: sans quoi une barre de défilement horizontale
+	   clignote le temps du tremblement. `clip` en X laisse `visible` en Y, seule combinaison
+	   qui ne fabrique pas un conteneur de défilement. La verticale n'est pas clipée: cela
+	   escamoterait l'ascenseur de la page et décalerait toute la largeur le temps du geste.
+	   Elle est plus courte que l'horizontale, et n'allonge la course que de quelques pixels. */
+	html:has(.screen-shake) {
+		overflow-x: clip;
+	}
+
+	/* Le temps de l'alerte, la barre passe au jaune d'avertissement — la teinte que porte
+	   déjà son icône. Bordure, fond et contour seulement: le texte reste à l'encre de base.
+	   Les couleurs sont tenues par l'animation, qui l'emporte sur les utilitaires et rend la
+	   barre à son bleu en s'éteignant, sans transition à déclarer sur l'élément.
+	   Le contour n'occupe pas de place: il se dilate sans rien déplacer autour de lui. */
+	.save-bar-alert {
+		outline: 2px solid var(--color-warning);
+		animation:
+			save-bar-flash 1s ease-out,
+			save-bar-ripple 0.5s ease-out 2,
+			save-bar-pop 0.35s ease-out;
+	}
+}
+
+/* Les deux axes sont décalés l'un par rapport à l'autre: en phase, le geste se lirait
+   comme un glissement en diagonale plutôt que comme une vibration. */
+@keyframes screen-shake {
+	10% {
+		left: -2px;
+		top: 3px;
+	}
+	20% {
+		left: 4px;
+		top: -2px;
+	}
+	30% {
+		left: -6px;
+		top: -4px;
+	}
+	40% {
+		left: 6px;
+		top: 3px;
+	}
+	50% {
+		left: -6px;
+		top: 4px;
+	}
+	60% {
+		left: 6px;
+		top: -3px;
+	}
+	70% {
+		left: -6px;
+		top: 2px;
+	}
+	80% {
+		left: 4px;
+		top: 4px;
+	}
+	90% {
+		left: -2px;
+		top: -2px;
+	}
+}
+
+/* Sans image-clé finale: le navigateur interpole vers les valeurs de la barre au repos,
+   qui reprend donc sa bordure `primary` et son fond `base-100` sur les 40 % restants. */
+@keyframes save-bar-flash {
+	0%,
+	60% {
+		border-color: var(--color-warning);
+		background-color: color-mix(in oklab, var(--color-warning) 25%, var(--color-base-100));
+	}
+}
+
+@keyframes save-bar-ripple {
+	from {
+		outline-offset: 0;
+		outline-color: var(--color-warning);
+	}
+	to {
+		outline-offset: 10px;
+		outline-color: transparent;
+	}
+}
+
+@keyframes save-bar-pop {
+	50% {
+		scale: 1.02;
+	}
+}
+
+/* Hors calque, donc prioritaire sur les règles ci-dessus. Le changement de couleur et le
+   contour restent posés le temps de l'alerte: l'attention se porte sans mouvement. */
+@media (prefers-reduced-motion: reduce) {
+	.screen-shake,
+	.save-bar-alert {
+		animation: none;
+	}
+
+	.save-bar-alert {
+		border-color: var(--color-warning);
+		background-color: color-mix(in oklab, var(--color-warning) 25%, var(--color-base-100));
+	}
+}

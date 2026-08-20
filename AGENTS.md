@@ -183,22 +183,42 @@ Things to know when touching this layer:
 
 ## Fuma
 
-The UI depends on a local sibling checkout at `../fuma` (`"fuma": "file:../fuma"`). fuma 2 is
-published on npm, but the link is what benev builds against: fixes land in `../fuma` as they are
-found, and the checkout is usually ahead of the registry. Switching the dependency to a version
-range means publishing first. **Changes to fuma are picked up live; there is no publish step.**
-Four settings make the link work — three in `vite.config.ts`, one in `app.css`:
+The UI depends on fuma 2, and there are **two ways to consume it**. The committed state is the
+registry (`"fuma": "^2.2.7"`), because CI and the Docker build resolve dependencies with no sibling
+checkout in reach. Working on fuma itself means switching to the local link at `../fuma`, where
+fixes land as they are found:
 
-- `server.fs.allow` — serve files from outside the project root (`media` and `../fuma`).
-- `optimizeDeps.exclude: ['fuma']` — no pre-bundling, so edits are seen immediately.
+```bash
+bun run fuma:local   # -> file:../fuma, the checkout, without publishing
+bun run fuma:npm     # -> back to the registry, the state that may be committed
+```
+
+Under the link, bun **copies** the checkout into `node_modules/fuma` — it neither symlinks nor
+hardlinks it (verified on bun 1.2.22). An edit to `../fuma` therefore takes `bun run package` there
+_and_ `bun install` here before benev sees it; nothing is picked up live.
+
+Never commit the link. A step at the head of the CI `test` job rejects a `file:` range before
+`bun install` runs, because the raw resolution error does not point at its cause. Publishing from
+`../fuma` (`npm publish`, whose `prepublishOnly` runs `bun run package`) is what makes a fix
+available to `bun run fuma:npm`, and therefore to `dev.benev.io`.
+
+`vite.config.ts` is written to hold for both modes and needs no switching:
+
+- `server.fs.allow` — serve files from outside the project root (`media` and `../fuma`). Inert
+  when the directory is absent.
+- `optimizeDeps.exclude: ['fuma']` — no pre-bundling, so a reinstalled link is seen without
+  clearing Vite's cache.
 - `optimizeDeps.include: ['litepicker']` — the consequence of that exclusion. `litepicker` is a
   CommonJS dependency of fuma's `RangePicker`, imported nowhere in `src/`; without an explicit
   include the dev server serves raw CJS. It stays declared in `package.json` for that reason.
-- `resolve.dedupe: ['@sveltejs/kit', 'svelte']` — `node_modules/fuma` is a symlink to a checkout
-  that keeps its own copies for development. Without dedupe, `fuma/server` throws a `redirect()`
-  built by _its_ copy of kit, benev's copy does not recognise it, and the redirect surfaces as a 500.
-- `@source '../../fuma/src/lib'` in `app.css` — Tailwind scans fuma's **source**, not `dist`, so
-  classes used only inside fuma components still get generated.
+- `resolve.dedupe: ['@sveltejs/kit', 'svelte', 'zod']` — the copied checkout brings its own
+  `node_modules` along, kept for its development. Without dedupe, `fuma/server`
+  throws a `redirect()` built by _its_ copy of kit, benev's copy does not recognise it, and the
+  redirect surfaces as a 500; for zod it is the global `z.config()` that is per-copy, leaving
+  fuma's schemas in English. Redundant on the registry, required the moment the link is back.
+- `@source '../node_modules/fuma/dist'` in `app.css` — one path that resolves in both modes, since
+  both put a real `dist/` there. It carries the same 47 components as `src/lib/`, so Tailwind finds
+  the same classes: switching modes produces a byte-identical stylesheet.
 
 There is one import surface:
 

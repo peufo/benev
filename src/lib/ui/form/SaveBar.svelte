@@ -34,6 +34,9 @@
 	let current = $state('')
 	const isDirty = $derived(!!baseline && current !== baseline)
 
+	let barElement = $state<HTMLDivElement>()
+	let timers: ReturnType<typeof setTimeout>[] = []
+
 	/**
 	 * Comparer une signature du `FormData` plutôt que lever un drapeau à la première frappe:
 	 * c'est le seul moyen de voir les champs cachés (`InputLocation`, `EventFormInputWeb`),
@@ -110,9 +113,31 @@
 			navigation.to?.url.pathname === navigation.from?.url.pathname
 		)
 			return
-		if (!confirm('Des modifications ne sont pas enregistrées. Quitter la page ?'))
-			navigation.cancel()
+		navigation.cancel()
+		// `leave` — onglet fermé, lien sortant: l'annulation y déclenche la fenêtre native du
+		// navigateur, seul recours possible, et la page n'est plus regardée. Rien à animer.
+		if (navigation.type !== 'leave') refuse()
 	})
+
+	/**
+	 * Rejoue une animation. Retirer puis remettre la classe dans la même passe ne suffit pas:
+	 * le style calculé n'a pas changé entre les deux et le navigateur ne redémarre rien. La
+	 * lecture d'une métrique force le recalcul intermédiaire.
+	 */
+	function replay(element: HTMLElement, className: string, duration: number) {
+		element.classList.remove(className)
+		void element.offsetWidth
+		element.classList.add(className)
+		return setTimeout(() => element.classList.remove(className), duration)
+	}
+
+	/** Le départ est refusé: la page tremble et la barre se signale, seule sortie possible. */
+	function refuse() {
+		if (!barElement) return
+		for (const timer of timers) clearTimeout(timer)
+		navigator.vibrate?.([15, 40, 15])
+		timers = [replay(document.body, 'screen-shake', 500), replay(barElement, 'save-bar-alert', 900)]
+	}
 
 	/** Rend au formulaire les valeurs de l'enregistrement chargé, et referme la barre. */
 	async function reset() {
@@ -128,6 +153,7 @@
 
 {#if isDirty}
 	<div
+		bind:this={barElement}
 		transition:fly={{ y: 80, duration: 1000, easing: elasticOut }}
 		class={[
 			'fixed bottom-2 left-1/2 -translate-x-1/2 z-30 p-2 sm:p-4',
