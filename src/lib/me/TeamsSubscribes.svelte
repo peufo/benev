@@ -57,7 +57,7 @@
 								</div>
 							{/if}
 
-							<span class="text-sm font-semibold">{formatRange(period)}</span>
+							<span class="text-sm">{formatRange(period)}</span>
 							<TagsList tags={period.tags} />
 							<div class="grow"></div>
 						</div>

@@ -16,11 +16,13 @@
 	id="form_member_setting"
 	{...updateMemberSettings.enhance(enhanceForm({ success: 'Préférences sauvegardées' }))}
 	use:autoSubmit
+	class="space-y-2"
 >
 	<InputBoolean
 		field={updateMemberSettings.fields.isNotifiedSubscribe}
 		checked={member.isNotifiedSubscribe}
 		label="Être notifié quand mes inscriptions changent de statut"
+		variant="switch"
 	/>
 
 	{#if member.roles.includes('leader')}
@@ -28,6 +30,7 @@
 			field={updateMemberSettings.fields.isNotifiedLeaderOfSubscribe}
 			checked={member.isNotifiedLeaderOfSubscribe}
 			label="Être notifié quand une inscription sous ma responsabilité change de statut"
+			variant="switch"
 		/>
 	{/if}
 
@@ -36,6 +39,7 @@
 			field={updateMemberSettings.fields.isNotifiedAdminOfNewMember}
 			checked={member.isNotifiedAdminOfNewMember}
 			label="Être notifié quand un nouveau membre rejoint l'événement"
+			variant="switch"
 		/>
 	{/if}
 </form>

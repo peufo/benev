@@ -49,7 +49,9 @@
 	   charge dès le préchargement au survol d'un lien: sans le `:has`, survoler un lien
 	   vers un évènement repeindrait tout le site. Le `:has` les arrime au montage réel du
 	   fond. */
-	:global(body:has(.event-background) .bg-base-100) {
+	/* TODO: désactivé pour l'instant */
+
+	/* :global(body:has(.event-background) .bg-base-100) {
 		background-color: color-mix(
 			in oklab,
 			var(--color-base-100) calc(var(--card-opacity, 1) * 100%),
@@ -69,7 +71,7 @@
 			var(--color-base-300) calc(var(--card-opacity, 1) * 100%),
 			transparent
 		);
-	}
+	} */
 
 	.background {
 		z-index: -10;
