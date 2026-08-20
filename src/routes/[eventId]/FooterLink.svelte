@@ -23,6 +23,10 @@
 	>
 		{#if logo}{@render logo()}{:else if Icon}<Icon />{/if}
 
-		{#if children}{@render children({ label })}{:else}<span>{label}</span>{/if}
+		{#if children}
+			{@render children({ label })}
+		{:else}
+			<span class="truncate">{label}</span>
+		{/if}
 	</a>
 {/if}

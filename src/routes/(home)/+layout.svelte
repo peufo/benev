@@ -1,9 +1,19 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import benevio from '$lib/assets/benevio.svg'
 	import { Header, Footer } from '$lib/layout'
 	import HomeMenu from './HomeMenu.svelte'
 
 	let { data, children } = $props()
+
+	/**
+	 * Le groupe `(home)` porte à la fois les pages publiques et l'espace connecté. Le pied de
+	 * page complet s'adresse à qui évalue le produit ; sous ces routes, on est déjà entré.
+	 */
+	const APP_ROUTES = ['/(home)/me', '/(home)/root', '/(home)/auth', '/(home)/token']
+	let footerVariant: 'public' | 'app' = $derived(
+		APP_ROUTES.some((route) => page.route.id?.startsWith(route)) ? 'app' : 'public'
+	)
 </script>
 
 <!-- Dégradé de page. `secondary` et non `accent`: l'orange est réservé au repérage temporel
@@ -34,4 +44,4 @@
 	{@render children?.()}
 </main>
 
-<Footer />
+<Footer variant={footerVariant} />

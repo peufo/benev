@@ -29,6 +29,18 @@
 
 	let { data, children } = $props()
 
+	/** Sans une seule coordonnée, le premier étage du pied de page n'aurait rien à porter. */
+	let hasEventContact = $derived(
+		!!(
+			data.event.web ||
+			data.event.facebook ||
+			data.event.instagram ||
+			data.event.email ||
+			data.event.phone ||
+			data.event.location
+		)
+	)
+
 	let accessGranted = $derived(
 		data.event.state === 'published' || data.member?.roles.includes('leader') || data.userIsRoot
 	)
@@ -145,8 +157,10 @@
 	</main>
 </div>
 
-<Footer>
-	<div class="flex flex-wrap justify-center">
+<Footer variant={hasEventContact ? 'event' : 'app'}>
+	<!-- Marge négative égale au padding de `btn` : les liens s'alignent optiquement
+	     sur le logo de la bande benevio, en dessous. -->
+	<div class="-ml-3 flex flex-wrap items-center sm:-ml-4">
 		<FooterLink link={data.event.web}>
 			{#snippet logo()}
 				{#if data.event.icon}
