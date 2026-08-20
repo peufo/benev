@@ -20,7 +20,10 @@
 	{#snippet header()}
 		<h2 class="title">{title}</h2>
 	{/snippet}
-	<form {...setMemberLeaderOf.enhance(enhanceForm({ onsuccess: () => dialog?.close() }))}>
+	<form
+		{...setMemberLeaderOf.enhance(enhanceForm({ onsuccess: () => dialog?.close() }))}
+		class="flex gap-2"
+	>
 		<InputMultiSelect
 			field={setMemberLeaderOf.fields.leaderOf}
 			items={searchTeams}
@@ -35,8 +38,6 @@
 			{/snippet}
 		</InputMultiSelect>
 
-		<div class="flex flex-row-reverse mt-2">
-			<button class="btn"> Valider </button>
-		</div>
+		<button class="btn btn-primary"> Valider </button>
 	</form>
 </Dialog>

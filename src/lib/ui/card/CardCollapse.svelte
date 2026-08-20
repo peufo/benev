@@ -54,12 +54,18 @@
 	})
 </script>
 
-<section class="card border border-soft bg-base-100 {klass}">
+<section
+	class={[
+		'card border border-soft bg-base-100',
+		'shadow hover:shadow-md hover:border-hard transition-all',
+		klass,
+	]}
+>
 	<div
 		id={value}
 		bind:this={header}
 		tabindex="0"
-		class="min-w-0 grow cursor-pointer p-2 sm:px-5 sm:py-3 {classHeader}"
+		class={['min-w-0 grow cursor-pointer p-2 sm:px-5 sm:py-3', classHeader]}
 		role="link"
 		onclick={handleClick}
 		onkeydown={(e) => e.key === ' ' && handleClick(null)}

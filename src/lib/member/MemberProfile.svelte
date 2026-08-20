@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { CheckIcon, PencilIcon, XIcon } from '@lucide/svelte'
+	import { CheckIcon, XIcon } from '@lucide/svelte'
 	import type { MemberProfile } from '$lib/server'
-	import { page } from '$app/stores'
-	import { MemberProfileForm, MemberProfileStatus, MemberRole } from '$lib/member'
-	import { CardBasic, Placeholder } from '$lib/ui'
-	import { Drawer, tip } from 'fuma'
-	import { urlParam } from 'fuma'
+	import { MemberProfileForm } from '$lib/member'
+	import { Placeholder } from '$lib/ui'
+	import { Drawer } from 'fuma'
 	import { fade } from 'svelte/transition'
 
 	interface Props {
@@ -14,7 +12,7 @@
 		hideStatus?: boolean
 	}
 
-	let { member, title = 'Profil', hideStatus = false }: Props = $props()
+	let { member }: Props = $props()
 
 	let profile = $derived(
 		member.event.memberFields.map((field) => ({
@@ -23,26 +21,6 @@
 		}))
 	)
 </script>
-
-<div class="flex gap-2 items-center mb-4">
-	<h3 class="title">{title}</h3>
-	{#if !hideStatus}
-		<MemberRole roles={member.roles} />
-		<MemberProfileStatus {member} />
-	{/if}
-	{#if $page.data.member?.roles.includes('leader') || member.event.memberFields.filter((f) => f.memberCanWrite).length}
-		<a
-			href={urlParam.with({ form_member_profile: '{}' })}
-			data-sveltekit-replacestate
-			data-sveltekit-noscroll
-			class="btn btn-square btn-sm ml-2"
-		>
-			<span class="inline-flex" use:tip={{ content: `Modifier le profil de ${member.firstName}` }}
-				><PencilIcon /></span
-			>
-		</a>
-	{/if}
-</div>
 
 {#if !profile.length}
 	<Placeholder>Profil vide</Placeholder>
@@ -53,27 +31,32 @@
 		style:grid-template-columns="repeat(auto-fill, minmax(min(230px, 100%), 1fr))"
 	>
 		{#each profile as { field, value } (field.id)}
-			<CardBasic title={field.name}>
-				{#if typeof value === 'string' || typeof value === 'number'}
-					<p>{value || '-'}</p>
-				{:else if value === true}
-					<div class="badge">
-						<CheckIcon size={14} class="text-success" />
-						<span class="ml-1">Oui</span>
-					</div>
-				{:else if value === false}
-					<span class="badge">
-						<XIcon size={14} class="text-error" />
-						<span class="ml-1">Non</span>
-					</span>
-				{:else if Array.isArray(value)}
-					<ul>
-						{#each value as item, i (i)}
-							<li>• {item}</li>
-						{/each}
-					</ul>
-				{/if}
-			</CardBasic>
+			<div class="">
+				<span class="label text-sm px-2">{field.name}</span>
+				<div class="border border-soft p-2 rounded-field">
+					{#if typeof value === 'string' || typeof value === 'number' || value === undefined}
+						<p>{value || '-'}</p>
+					{:else if value === true}
+						<div class="badge">
+							<CheckIcon size={14} class="text-success" />
+							<span class="ml-1">Oui</span>
+						</div>
+					{:else if value === false}
+						<span class="badge">
+							<XIcon size={14} class="text-error" />
+							<span class="ml-1">Non</span>
+						</span>
+					{:else if Array.isArray(value)}
+						<ul>
+							{#each value as item, i (i)}
+								<li>• {item}</li>
+							{:else}
+								<li>-</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
+			</div>
 		{/each}
 	</div>
 {/if}

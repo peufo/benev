@@ -49,12 +49,12 @@
 		@apply text-xl font-semibold text-base-content/70;
 	}
 
-	.title-sm {
-		@apply text-xs font-bold text-base-content/60;
+	.title-md {
+		@apply font-semibold text-base-content/80;
 	}
 
-	.title-md {
-		@apply font-semibold text-base-content/60;
+	.title-sm {
+		@apply text-xs font-bold text-base-content/90;
 	}
 
 	.tiptap .ProseMirror-selectednode {

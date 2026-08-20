@@ -55,12 +55,9 @@
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				class="btn btn-square btn-sm ml-2"
+				use:tip={{ content: `Modifier les coordonnées de ${data.memberProfile.firstName}` }}
 			>
-				<span
-					class="inline-flex"
-					use:tip={{ content: `Modifier le coordonnées de ${data.memberProfile.firstName}` }}
-					><PencilIcon /></span
-				>
+				<PencilIcon />
 			</a>
 
 			<MembersBadges
@@ -141,12 +138,9 @@
 				type="button"
 				class="btn btn-square btn-sm ml-2"
 				onclick={() => createSubscribeDialog.showModal()}
+				use:tip={{ content: `Inscrire ${data.memberProfile.firstName} à un secteur` }}
 			>
-				<span
-					class="inline-flex"
-					use:tip={{ content: `Inscrire ${data.memberProfile.firstName} à un secteur` }}
-					><ClipboardListIcon size={20} /></span
-				>
+				<ClipboardListIcon size={20} />
 			</button>
 		</div>
 		<TeamsSubscribes teams={data.event.teams} isLeader />
@@ -168,7 +162,7 @@
 />
 
 <Drawer
-	title="Modifier le coordonnées de {data.memberProfile.firstName}"
+	title="Modifier les coordonnées de {data.memberProfile.firstName}"
 	key="form_member_contact"
 	class="surface-drawer"
 	classBody="pt-4"

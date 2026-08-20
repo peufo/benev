@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { InputBoolean } from 'fuma'
-	import MemberDeleteForm from './MemberDeleteForm.svelte'
 	import type { MemberWithComputedValues } from '$lib/server'
 	import { autoSubmit } from '$lib/action'
 	import { enhanceForm } from '$lib/enhanceForm'
@@ -12,8 +11,6 @@
 
 	let { member }: Props = $props()
 </script>
-
-<h3 id="email-settings" class="title mb-4">Mes préférences</h3>
 
 <form
 	id="form_member_setting"
@@ -42,5 +39,3 @@
 		/>
 	{/if}
 </form>
-
-<MemberDeleteForm memberId={member.id} class="w-max mt-2" />

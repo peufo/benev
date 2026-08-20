@@ -22,7 +22,7 @@
 <CardCollapse value={team.id} class="p-1 md:py group" classHeader="sm:pr-3">
 	{#snippet header()}
 		<div class="flex gap-2">
-			<h2 class="title-md text-base-content">{team.name}</h2>
+			<h2 class="title-md">{team.name}</h2>
 
 			<Progress
 				badgeClass="ml-auto"
@@ -67,8 +67,8 @@
 				<p class="text-sm whitespace-pre-line">{team.description}</p>
 			{/if}
 
-			<div>
-				<span class="text-label text-xs">Responsable{team.leaders.length > 1 ? 's' : ''} : </span>
+			<div class="border-t border-soft">
+				<span class="label text-xs">Responsable{team.leaders.length > 1 ? 's' : ''} </span>
 				<div class="flex gap-2 gap-y-1 flex-wrap">
 					<!-- BADGE LEADERS -->
 					<TeamLeaders leaders={team.leaders} />

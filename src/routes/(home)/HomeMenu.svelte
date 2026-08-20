@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { CalendarDays, Heart, Menu, MessagesSquare, type IconProps } from '@lucide/svelte'
 	import { Popover } from 'fuma'
+	import { on } from 'svelte/events'
 	import type { Component } from 'svelte'
 	import type { ClassValue } from 'svelte/elements'
 	import { page } from '$app/state'
@@ -33,7 +34,13 @@
 		</button>
 	{/snippet}
 
-	<div class="menu w-full p-1 gap-1">
-		{@render menuItems('menu-item', 'active')}
-	</div>
+	{#snippet children({ hide })}
+		<!-- Les liens naviguent côté client: sans ce clic délégué, la feuille resterait ouverte
+		     par-dessus la page d'arrivée.
+		     Attaché plutôt que posé en `onclick`: le conteneur n'est pas l'élément
+		     interactif, ce sont les liens qu'il porte. -->
+		<div class="menu w-full p-1 gap-1" {@attach (node) => on(node, 'click', hide)}>
+			{@render menuItems('menu-item', 'active')}
+		</div>
+	{/snippet}
 </Popover>

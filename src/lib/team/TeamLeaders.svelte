@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { MailIcon, PhoneIcon, TriangleAlertIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
-	import { DropDown } from 'fuma'
+	import { Popover } from 'fuma'
+	import { on } from 'svelte/events'
 	import { Avatar } from '$lib/me'
 	interface Props {
 		leaders: Member[]
@@ -11,16 +12,21 @@
 </script>
 
 {#each leaders as member (member.id)}
-	<DropDown>
-		{#snippet activator()}
+	<Popover class="p-1 my-1">
+		{#snippet trigger({ trigger })}
 			<button
-				class="hover:bg-base-200 bg-base-200/40 cursor-pointer flex gap-2 border items-center pr-2 rounded"
+				type="button"
+				{...trigger}
+				class={[
+					'hover:bg-base-200 bg-base-200/40 cursor-pointer',
+					'flex gap-2 items-center pr-2 rounded-field border border-soft',
+				]}
 			>
 				<Avatar
 					firstName={member.firstName}
 					avatarId={member.avatarId}
 					avatarPlaceholder={member.avatarPlaceholder}
-					class="h-8 w-8 rounded border"
+					class="h-8 w-8 rounded-[calc(var(--radius-field)-1px)]"
 				/>
 				<span class="text-sm">
 					{member.firstName}
@@ -28,30 +34,29 @@
 				</span>
 			</button>
 		{/snippet}
-		{#if member.isValidedByUser}
-			<ul class="w-48">
-				<li>
+
+		{#snippet children({ hide })}
+			{#if member.isValidedByUser}
+				<div class="flex flex-col w-48" {@attach (node) => on(node, 'click', hide)}>
 					<a class="menu-item" href="mailto:{member.email}" target="_blank">
-						<MailIcon />
+						<MailIcon size={20} class="opacity-70" />
 						Envoyer un mail
 					</a>
-				</li>
-				{#if member.phone}
-					<li>
+					{#if member.phone}
 						<a class="menu-item" href="tel:{member.phone}" target="_blank">
-							<PhoneIcon />
+							<PhoneIcon size={20} class="opacity-70" />
 							Téléphoner
 						</a>
-					</li>
-				{/if}
-			</ul>
-		{:else}
-			<div class="px-3 py-1 flex gap-2">
-				<TriangleAlertIcon class="text-warning" />
-				<span>{member.firstName} n'a pas confirmé sa participation</span>
-			</div>
-		{/if}
-	</DropDown>
+					{/if}
+				</div>
+			{:else}
+				<div class="px-3 py-1 flex gap-2 max-w-64">
+					<TriangleAlertIcon class="text-warning shrink-0" size={20} />
+					<span class="text-sm">{member.firstName} n'a pas confirmé sa participation</span>
+				</div>
+			{/if}
+		{/snippet}
+	</Popover>
 {:else}
 	<div class="text-error text-sm">Pas de responsable</div>
 {/each}

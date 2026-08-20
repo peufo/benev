@@ -32,11 +32,11 @@
 					{@const subscribe = period.subscribes[0]}
 					<div class="flex gap-2 items-center mt-2">
 						<div
-							class="
-								grow flex gap-2 items-center px-2 py-2 rounded
-								{isLeader ? 'relative z-10 hover:bg-base-200' : ''}
-							"
-							class:bg-base-200={isLeader && urlParam.has('form_period', period.id)}
+							class={[
+								'grow flex gap-2 items-center px-2 py-2 rounded -ml-2',
+								isLeader && 'relative z-10 hover:bg-base-200',
+								isLeader && urlParam.has('form_period', period.id) && 'bg-base-200',
+							]}
 						>
 							{#if isLeader}
 								<a
@@ -57,7 +57,7 @@
 								</div>
 							{/if}
 
-							<span class="text-sm">{formatRange(period)}</span>
+							<span class="text-sm font-semibold">{formatRange(period)}</span>
 							<TagsList tags={period.tags} />
 							<div class="grow"></div>
 						</div>
@@ -65,7 +65,7 @@
 						<SubscribeCreatedBy
 							createdBy={subscribe.createdBy}
 							size={22}
-							class="btn-square btn-sm relative z-10"
+							class="btn-sm relative z-10"
 						/>
 
 						<SubscribeStateForm subscribe={period.subscribes[0]} canBeLarge {isLeader} />
@@ -75,8 +75,8 @@
 						{/if}
 					</div>
 				{/each}
-				<div class="relative z-10">
-					<span class="text-label text-xs">Responsable{team.leaders.length > 1 ? 's' : ''} : </span>
+				<div class="relative z-10 border-t mt-2 border-soft">
+					<span class="label text-xs">Responsable{team.leaders.length > 1 ? 's' : ''} </span>
 					<div class="flex gap-2 gap-y-1 flex-wrap">
 						<!-- BADGE LEADERS -->
 						<TeamLeaders leaders={team.leaders} />

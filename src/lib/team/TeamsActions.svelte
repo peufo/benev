@@ -20,28 +20,37 @@
 </script>
 
 {#if teams.length}
-	<a href="{$eventPath}/admin/members?subscribes_teams={teamsId}" class="btn btn-square btn-sm">
-		<span class="inline-flex" use:tip={{ content: 'Tous les membres de ces secteurs' }}
-			><UsersIcon /></span
-		>
+	<a
+		href="{$eventPath}/admin/members?subscribes_teams={teamsId}"
+		class="btn btn-square btn-sm"
+		use:tip={{ content: 'Tous les membres de ces secteurs' }}
+	>
+		<UsersIcon />
 	</a>
-	<a href="{$eventPath}/admin/subscribes?teams={teamsId}" class="btn btn-square btn-sm">
-		<span class="inline-flex" use:tip={{ content: 'Toutes les inscriptions de ces secteurs' }}
-			><ClipboardCopyIcon /></span
-		>
+	<a
+		href="{$eventPath}/admin/subscribes?teams={teamsId}"
+		class="btn btn-square btn-sm"
+		use:tip={{ content: 'Toutes les inscriptions de ces secteurs' }}
+	>
+		<ClipboardCopyIcon />
 	</a>
-	<a href="{$eventPath}/admin/plan?teams={teamsId}" class="btn btn-square btn-sm">
-		<span class="inline-flex" use:tip={{ content: 'Voir ces secteurs sur le planning' }}
-			><ChartGanttIcon size={20} /></span
-		>
+	<a
+		href="{$eventPath}/admin/plan?teams={teamsId}"
+		class="btn btn-square btn-sm"
+		use:tip={{ content: 'Voir ces secteurs sur le planning' }}
+	>
+		<ChartGanttIcon size={20} />
 	</a>
 {/if}
 
 {#if $page.data.member?.roles.includes('admin')}
-	<button type="button" class="btn btn-square btn-sm" onclick={() => teamDialog.showModal()}>
-		<span class="inline-flex" use:tip={{ content: 'Éditer les secteurs à charge' }}
-			><PencilIcon /></span
-		>
+	<button
+		type="button"
+		class="btn btn-square btn-sm btn-secondary"
+		onclick={() => teamDialog.showModal()}
+		use:tip={{ content: 'Éditer les secteurs à charge' }}
+	>
+		<PencilIcon size={18} />
 	</button>
 {/if}
 

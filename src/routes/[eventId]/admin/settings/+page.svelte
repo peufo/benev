@@ -27,7 +27,7 @@
 	import { SaveBar } from '$lib/ui'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import EventStateForm from './EventStateForm.svelte'
-	import SettingsSection from './SettingsSection.svelte'
+	import Section from '$lib/ui/Section.svelte'
 
 	let { data } = $props()
 
@@ -73,9 +73,9 @@
 
 <OnlyAdmin>
 	<div class="mx-auto flex w-full max-w-2xl flex-col gap-4 pt-3 pb-120">
-		<SettingsSection id="status" title="Visibilité" icon={EyeIcon}>
+		<Section id="status" title="Visibilité" icon={EyeIcon}>
 			<EventStateForm isOwner={data.member?.userId == data.event.ownerId} event={data.event} />
-		</SettingsSection>
+		</Section>
 
 		<!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
 		<form
@@ -91,7 +91,7 @@
 			bind:this={formElement}
 			class="flex flex-col gap-4"
 		>
-			<SettingsSection id="essentials" title="L'essentiel" icon={CalendarIcon}>
+			<Section id="essentials" title="L'essentiel" icon={CalendarIcon}>
 				{#key resetToken}
 					<div class="flex flex-col gap-4">
 						<SectionEssentiel fields={updateEvent.fields} event={data.event} />
@@ -105,9 +105,9 @@
 						/>
 					</div>
 				{/key}
-			</SettingsSection>
+			</Section>
 
-			<SettingsSection
+			<Section
 				id="contact"
 				title="Contact"
 				icon={AtSignIcon}
@@ -116,9 +116,9 @@
 				{#key resetToken}
 					<SectionContact fields={updateEvent.fields} event={data.event} />
 				{/key}
-			</SettingsSection>
+			</Section>
 
-			<SettingsSection
+			<Section
 				id="appearance"
 				title="Identité"
 				icon={PaletteIcon}
@@ -127,9 +127,9 @@
 				{#key resetToken}
 					<SectionApparence fields={updateEvent.fields} event={data.event} />
 				{/key}
-			</SettingsSection>
+			</Section>
 
-			<SettingsSection
+			<Section
 				id="membership"
 				title="Adhésion"
 				icon={LogInIcon}
@@ -138,11 +138,11 @@
 				{#key resetToken}
 					<SectionAdhesion fields={updateEvent.fields} event={data.event} />
 				{/key}
-			</SettingsSection>
+			</Section>
 
 			<!-- Chaque champ s'édite dans son tiroir et s'enregistre seul: cette section ne
 			     dépend donc pas de la barre de sauvegarde, et n'a pas de `{#key resetToken}`. -->
-			<SettingsSection
+			<Section
 				id="fields"
 				title="Champs du profil"
 				icon={IdCardIcon}
@@ -172,12 +172,10 @@
 						<ExternalLinkIcon size={20} class="opacity-70" />
 					</a>
 				</div>
-			</SettingsSection>
+			</Section>
 		</form>
 
-		<!-- Hors du formulaire: la confirmation de suppression porte son propre `<form>`,
-		     et des formulaires imbriqués sont du HTML invalide. -->
-		<SettingsSection id="danger" title="Zone de danger" icon={OctagonAlertIcon} danger>
+		<Section id="danger" title="Zone de danger" icon={OctagonAlertIcon} danger>
 			<div class="flex flex-wrap items-center gap-4">
 				<div class="min-w-0 grow">
 					<p class="font-medium">Supprimer cet évènement</p>
@@ -188,7 +186,7 @@
 				</div>
 				<EventDeleteButton event={data.event} />
 			</div>
-		</SettingsSection>
+		</Section>
 	</div>
 
 	<SaveBar

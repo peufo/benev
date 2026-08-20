@@ -8,14 +8,14 @@
 		class?: string
 	}
 
-	let { createdBy, size = 24, class: klass = '' }: Props = $props()
+	let { createdBy, size = 20, class: klass = '' }: Props = $props()
 
 	const label = $derived(
 		createdBy === 'leader' ? 'Inscrit par un responsable' : 'Inscrit par le membre'
 	)
 </script>
 
-<div class="w-min" use:tip={{ content: label }}>
+<div use:tip={{ content: label }}>
 	{#if createdBy === 'leader'}
 		<ShieldUserIcon class="opacity-60 {klass}" {size} />
 	{:else}
