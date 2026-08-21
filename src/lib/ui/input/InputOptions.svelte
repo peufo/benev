@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PlusIcon, Trash2Icon } from '@lucide/svelte'
+	import { MoveVerticalIcon, PlusIcon, Trash2Icon } from '@lucide/svelte'
 	import { slide } from 'svelte/transition'
 	import { toast } from 'svelte-sonner'
 
@@ -33,7 +33,6 @@
 	}
 
 	function removeOption(index: number) {
-		console.log({ index }) // WTF
 		options = [...options.slice(0, index), ...options.slice(index + 1)]
 		value = JSON.stringify(options)
 	}
@@ -49,15 +48,27 @@
 <div class="label text-xs">Options</div>
 
 <div class="rounded-box border border-soft p-1">
-	<div class="flex flex-col gap-1" use:listEditable={{ items: options, onChange }}>
+	<div
+		class="flex flex-col gap-1"
+		use:listEditable={{ items: options, onChange, dragElementsSelector: '.drag-button' }}
+	>
 		{#each options as option, index (option)}
-			<div class="flex items-center gap-2" transition:slide={{ duration: 200 }}>
+			<div class="flex items-center gap-1 group" transition:slide={{ duration: 200 }}>
 				<div class="grow pl-4 text-sm">
 					{option}
 				</div>
 				<button
 					type="button"
-					class="btn btn-square btn-ghost btn-sm"
+					class={[
+						'drag-button btn btn-sm btn-square btn-ghost',
+						'opacity-0 group-hover:opacity-100',
+					]}
+				>
+					<MoveVerticalIcon size={16} class="text-base-content/70" />
+				</button>
+				<button
+					type="button"
+					class={['btn btn-sm btn-square btn-ghost', 'opacity-0 group-hover:opacity-100']}
 					onclick={() => removeOption(index)}
 				>
 					<Trash2Icon size={16} class="text-error opacity-70" />
