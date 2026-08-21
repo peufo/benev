@@ -142,7 +142,9 @@ async function eventDatesRefresh(eventId: string) {
 	})
 }
 
-const userContactSelect: Prisma.UserSelect = {
+// `satisfies` et non une annotation: sous `: Prisma.UserSelect`, Prisma perd les clés réellement
+// sélectionnées et rend le type complet de `User`, que le spread déverse ensuite dans `Member`.
+const userContactSelect = {
 	email: true,
 	isEmailVerified: true,
 	phone: true,
@@ -154,4 +156,4 @@ const userContactSelect: Prisma.UserSelect = {
 	city: true,
 	avatarId: true,
 	avatarPlaceholder: true,
-}
+} satisfies Prisma.UserSelect

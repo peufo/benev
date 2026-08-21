@@ -43,6 +43,8 @@ model User {
   medias       Media[]
   messages     Message[]
   checkouts    Checkout[]
+  logs         Log[]      @relation("logUser")
+  logsCreated  Log[]      @relation("logCreatedBy")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -170,6 +172,7 @@ model Event {
   badges       Badge[]
   products     Product[]
   milestones   Milestone[]
+  logs         Log[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -257,6 +260,7 @@ model Member {
   subscribes       Subscribe[]
   leaderOf         Team[]
   giftsAllocations GiftAllocation[]
+  logs             Log[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -531,4 +535,43 @@ enum MessageState {
   waitOnAgent
   waitOnAuthor
   done
+}
+
+model Log {
+  id String @id @default(cuid())
+
+  type LogType
+  /// [JsonLogData]
+  data Json
+
+  eventId String?
+  event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // Le sujet de l'action. `user` vaut aussi pour qui n'a pas de membre dans l'évènement.
+  userId   String?
+  user     User?   @relation(name: "logUser", fields: [userId], references: [id], onDelete: SetNull)
+  memberId String?
+  member   Member? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+
+  // L'auteur de l'action, quand elle en a un. Nul pour ce que le serveur décide seul.
+  createdById String?
+  createdBy   User?   @relation(name: "logCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([eventId, createdAt])
+  @@index([type, createdAt])
+}
+
+enum LogType {
+  event_create
+  event_update
+  member_create
+  member_update
+  member_delete
+  invitation_accept
+  invitation_declined
+  message_create
+  email_sent
+  email_failed
 }

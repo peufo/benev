@@ -1,9 +1,11 @@
 import { env } from '$env/dynamic/private'
-import nodemailer, { type SendMailOptions } from 'nodemailer'
+import { type SendMailOptions } from 'nodemailer'
 import type { Component, ComponentProps } from 'svelte'
 import { render } from 'svelte/server'
 import { prisma } from '$lib/server'
 import { withoutTestRecipients } from '$lib/server/recipients'
+import { emailDisabled, enqueueEmail } from '$lib/server/emailQueue'
+import type { LogContext } from '$lib/server/log'
 import type { EmailEvent } from '$lib/email/models'
 import { emailReplacers, type EmailModelProps } from '$lib/pages/emailSuggesions'
 import { injectValues } from '$lib/pages/injectValues'
@@ -12,39 +14,28 @@ import EmailLayout from '$lib/email/EmailLayout.svelte'
 import { getMemberReplacers } from '$lib/pages/memberSuggestions'
 import { domain } from '$lib/email'
 
-const transporter = nodemailer.createTransport({
-	host: env.SMTP_HOST,
-	port: Number(env.SMTP_PORT),
-	auth: {
-		user: env.SMTP_USER,
-		pass: env.SMTP_PASS,
-	},
-})
-
-/**
- * Coupe tout envoi, quelle que soit l'adresse. Positionné par la CI et par le webServer
- * Playwright. Les adresses en `.test` sont filtrées de toute façon (voir `sendEmail`);
- * ce drapeau couvre le reste, par exemple un jeu de données de démo.
- */
-const emailDisabled = env.EMAIL_DISABLED === 'true'
-
-let transporterOK = false
-if (emailDisabled) {
-	console.log('Mail disabled (EMAIL_DISABLED=true)')
-} else {
-	transporter.verify((err: unknown) => {
-		if (err) {
-			console.log('Mail config error')
-			console.error(err)
-		} else {
-			transporterOK = true
-			console.log('Mail config is ready')
-		}
-	})
+export type SendMailOptionsWithLog = SendMailOptions & {
+	/** Rattache la ligne de journal produite par l'envoi. */
+	logContext?: LogContext
 }
 
-export const sendEmail = async ({ from, to, cc, bcc, ...options }: SendMailOptions) => {
-	if (!transporterOK) return
+/**
+ * Met un message en file plutôt que de l'envoyer: la requête rend la main tout de suite, le worker
+ * de `emailQueue` s'occupe du SMTP et journalise le résultat.
+ *
+ * Le rendu du HTML, lui, reste dans la requête (voir `sendEmailComponent` / `sendEmailModel`):
+ * un gabarit manquant doit continuer de lever chez l'appelant, et le message mis en file est
+ * ainsi figé, insensible à une édition ultérieure du gabarit.
+ */
+export const sendEmail = async ({
+	from,
+	to,
+	cc,
+	bcc,
+	logContext,
+	...options
+}: SendMailOptionsWithLog) => {
+	if (emailDisabled) return
 
 	const recipients = {
 		to: withoutTestRecipients(to),
@@ -56,24 +47,19 @@ export const sendEmail = async ({ from, to, cc, bcc, ...options }: SendMailOptio
 	// Plus personne à qui écrire: le message était entièrement destiné à des fixtures.
 	if (!recipients.to.kept && !recipients.cc.kept && !recipients.bcc.kept) return
 
-	return new Promise((resolve) => {
-		transporter.sendMail(
-			{
-				from: `${from || 'Benev.io'} <${env.SMTP_USER}>`,
-				to: recipients.to.kept,
-				cc: recipients.cc.kept,
-				bcc: recipients.bcc.kept,
-				...options,
-			},
-			(err: unknown, info: unknown) => {
-				if (err) console.error(err)
-				resolve(info)
-			}
-		)
-	})
+	enqueueEmail(
+		{
+			from: `${from || 'Benev.io'} <${env.SMTP_USER}>`,
+			to: recipients.to.kept,
+			cc: recipients.cc.kept,
+			bcc: recipients.bcc.kept,
+			...options,
+		},
+		logContext
+	)
 }
 
-export type SendMailOptionsWithProps<Props> = Omit<SendMailOptions, 'html'> & {
+export type SendMailOptionsWithProps<Props> = Omit<SendMailOptionsWithLog, 'html'> & {
 	props: Props
 }
 
@@ -82,10 +68,6 @@ export async function sendEmailComponent<Comp extends Component<any, any, any>>(
 	component: Comp,
 	options: SendMailOptionsWithProps<ComponentProps<Comp>>
 ) {
-	// Svelte 5: le rendu serveur passe par `render()` de `svelte/server`, qui renvoie
-	// `{ head, body }` — la méthode statique `Component.render()` a disparu.
-	// La surcharge de `render()` est conditionnée par `{} extends ComponentProps<Comp>`,
-	// qui ne se résout pas sur un générique non instancié: on l'instancie ici.
 	const { body } = render(component as Component<Record<string, unknown>>, {
 		props: options.props as Record<string, unknown>,
 	})
@@ -101,6 +83,7 @@ export async function sendEmailModel<EmailPath extends EmailEvent>(
 	return sendEmail({
 		...options,
 		html,
+		logContext: { eventId, ...options.logContext },
 	})
 }
 

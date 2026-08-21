@@ -38,6 +38,20 @@ export function withoutTestRecipients(recipients: Recipients): {
 	return { kept: kept.length ? kept : undefined, dropped }
 }
 
+/** Aplatit des destinataires en simples adresses, pour le journal. */
+export function toAddressList(recipients: Recipients): string[] {
+	if (!recipients) return []
+	const entries = Array.isArray(recipients) ? recipients : [recipients]
+	return entries.flatMap((entry) =>
+		typeof entry === 'string'
+			? entry
+					.split(',')
+					.map((part) => extractAddress(part))
+					.filter(Boolean)
+			: [extractAddress(entry)]
+	)
+}
+
 /** Accepte `a@b.test` comme `Nom <a@b.test>`. */
 function extractAddress(recipient: string | Address): string {
 	if (typeof recipient !== 'string') return recipient.address.trim().toLowerCase()
