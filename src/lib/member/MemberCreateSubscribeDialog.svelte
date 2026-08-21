@@ -11,6 +11,7 @@
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { formatRange } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
+	import { on } from 'svelte/events'
 
 	interface Props {
 		dialog: HTMLDialogElement
@@ -71,13 +72,9 @@
 	}
 
 	onMount(() => {
-		// Retour au choix du secteur. Sur l'écran de recherche, la touche appartient au champ.
 		const returnKey = (event: KeyboardEvent) =>
 			event.key === 'Backspace' && selectedTeamId && handleClickReturn()
-		dialog.addEventListener('keydown', returnKey)
-		return () => {
-			dialog.removeEventListener('keydown', returnKey)
-		}
+		return on(dialog, 'keydown', returnKey)
 	})
 </script>
 
