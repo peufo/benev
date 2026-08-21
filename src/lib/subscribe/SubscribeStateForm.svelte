@@ -85,16 +85,12 @@
 	)
 </script>
 
-{#snippet stateIcon()}
-	{@const StateIcon = stateDisplay.icon}
-	<span class="inline-flex" use:tip={{ content: stateDisplay.label }}>
-		<StateIcon class={stateDisplay.class} />
-	</span>
-{/snippet}
-
 {#if !editions.length}
-	<button class="btn btn-square btn-sm btn-ghost opacity-70 relative">
-		{@render stateIcon()}
+	<button
+		class="btn btn-square btn-sm btn-ghost opacity-70 relative"
+		use:tip={{ content: stateDisplay.label }}
+	>
+		<stateDisplay.icon class={stateDisplay.class} />
 	</button>
 {:else}
 	<Popover listenFocus={false} class="p-1">
@@ -105,8 +101,9 @@
 					? 'btn-square'
 					: 'max-sm:btn-square'}"
 				{...trigger}
+				use:tip={{ content: stateDisplay.label }}
 			>
-				{@render stateIcon()}
+				<stateDisplay.icon class={stateDisplay.class} />
 				{#if isConfirmation}
 					<div
 						class="absolute w-3 h-3 bg-error -right-1.5 -top-1.5 rounded-full animate-ping"
