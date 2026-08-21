@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { EyeOffIcon, PencilOffIcon } from '@lucide/svelte'
+	import { HatGlassesIcon, PencilOffIcon } from '@lucide/svelte'
 	import type { Prisma } from '@prisma/client'
 	import {
 		InputBoolean,
@@ -45,27 +45,33 @@
 	let disabled = $derived(!field.memberCanWrite && !isLeader)
 </script>
 
-<div class={[field.type === 'textarea' && 'col-span-full', '@max-lg:col-span-full', klass]}>
-	<div class="h-5">
-		{#if !field.memberCanRead}
-			<span class="inline-flex" use:tip={{ content: 'Les membres ne peuvent pas voir ce champ' }}
-				><EyeOffIcon size={20} class="ml-3 opacity-75" /></span
-			>
-		{:else if !field.memberCanWrite}
-			<span class="inline-flex" use:tip={{ content: 'Les membres ne peuvent pas éditer ce champ' }}
-				><PencilOffIcon size={20} class="ml-3 opacity-75" /></span
-			>
-		{:else if field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
-			<span class="text-error text-xl ml-3">*</span>
-		{/if}
-	</div>
+{#snippet labelAppend()}
+	{#if !field.memberCanRead}
+		<span class="ml-auto mr-1" use:tip={{ content: 'Les membres ne peuvent pas voir ce champ' }}>
+			<HatGlassesIcon size={16} class="opacity-75" />
+		</span>
+	{:else if !field.memberCanWrite}
+		<span class="ml-auto mr-1" use:tip={{ content: 'Les membres ne peuvent pas éditer ce champ' }}>
+			<PencilOffIcon size={16} class="ml-auto opacity-75" />
+		</span>
+	{:else if field.required && field.type !== 'boolean' && field.type !== 'multiselect'}
+		<span
+			class="text-error text-xl ml-auto mr-2 h-4.5"
+			use:tip={{ content: 'Ce champ est obligatoire' }}
+		>
+			*
+		</span>
+	{/if}
+{/snippet}
 
+<div class={[field.type === 'textarea' && 'col-span-full', '@max-lg:col-span-full', klass]}>
 	{#if field.type === 'boolean'}
 		<InputBoolean
 			field={formField}
 			label={field.label || field.name}
 			checked={value === true}
 			{disabled}
+			{labelAppend}
 		/>
 	{:else if field.type === 'number'}
 		<InputNumber
@@ -73,9 +79,16 @@
 			label={field.label || field.name}
 			value={typeof value === 'number' ? value : undefined}
 			{disabled}
+			{labelAppend}
 		/>
 	{:else if field.type === 'textarea'}
-		<InputTextarea field={formField} label={field.label || field.name} value={text} {disabled} />
+		<InputTextarea
+			field={formField}
+			label={field.label || field.name}
+			value={text}
+			{disabled}
+			{labelAppend}
+		/>
 	{:else if field.type === 'select'}
 		{#if compact}
 			<InputSelect
@@ -85,12 +98,14 @@
 				value={options.find((option) => option.value === text)}
 				nullable={!field.required}
 				{disabled}
+				{labelAppend}
 			/>
 		{:else}
 			<InputRadio
 				field={formField}
 				label={field.label || field.name}
 				options={field.options ?? []}
+				{labelAppend}
 			/>
 		{/if}
 	{:else if field.type === 'multiselect'}
@@ -101,6 +116,7 @@
 				items={options}
 				value={options.filter((option) => values.includes(option.value))}
 				{disabled}
+				{labelAppend}
 			/>
 		{:else}
 			<InputCheckboxes
@@ -109,9 +125,16 @@
 				value={values}
 				options={field.options ?? []}
 				{disabled}
+				{labelAppend}
 			/>
 		{/if}
 	{:else}
-		<InputString field={formField} label={field.label || field.name} value={text} {disabled} />
+		<InputString
+			field={formField}
+			label={field.label || field.name}
+			value={text}
+			{disabled}
+			{labelAppend}
+		/>
 	{/if}
 </div>
