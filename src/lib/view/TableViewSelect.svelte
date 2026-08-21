@@ -92,7 +92,7 @@
 		onSelect={(view) =>
 			goto(view?.query ? `${page.url.pathname}?${view.query}` : page.url.pathname)}
 		class={['input-sm min-w-32', isNewView && 'rounded-r-none']}
-		propsLi={{ class: 'flex-row gap-1 group w-full' }}
+		propsLi={{ class: 'flex-row gap-1 group w-full flex-nowrap' }}
 	/>
 	{#if isNewView}
 		<button
