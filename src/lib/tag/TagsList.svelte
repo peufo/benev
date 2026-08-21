@@ -16,7 +16,7 @@
 			style="
 			font-size: 0.6rem;
 			border-color: {tag.color};
-			background-color: {tag.color}20;
+			background-color: {tag.color}30;
 		"
 		>
 			{tag.name}

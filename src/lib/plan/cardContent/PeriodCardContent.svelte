@@ -17,61 +17,65 @@
 	let { period, deltaStartMs, deltaEndMs }: Props = $props()
 </script>
 
-<div class="flex gap-x-1 flex-wrap items-center">
-	{#if !$cardContentOptions.hideRangetime}
-		<div class="text-xs font-semibold m-1 whitespace-nowrap overflow-hidden text-ellipsis mr-auto">
-			{formatRangeHour({
-				start: period.start.getTime() + magnet(deltaStartMs),
-				end: period.end.getTime() + magnet(deltaEndMs),
-			})}
-		</div>
+<div class="space-y-1">
+	<div class="flex gap-x-1 flex-wrap items-center">
+		{#if !$cardContentOptions.hideRangetime}
+			<div
+				class="text-xs font-semibold m-1 whitespace-nowrap overflow-hidden text-ellipsis mr-auto"
+			>
+				{formatRangeHour({
+					start: period.start.getTime() + magnet(deltaStartMs),
+					end: period.end.getTime() + magnet(deltaEndMs),
+				})}
+			</div>
+		{/if}
+
+		{#if !$cardContentOptions.hideProgress}
+			{@const count = countSubscribes(period)}
+			<span
+				class={[
+					'badge badge-sm whitespace-nowrap',
+					count.isComplet && 'border-secondary outline-1 outline-secondary',
+				]}
+			>
+				{count.accepted + count.request} / {count.maxSubscribe}
+			</span>
+		{/if}
+	</div>
+
+	{#if $cardContentOptions.showTags && period.tags.length}
+		<TagsList tags={period.tags} />
 	{/if}
 
-	{#if !$cardContentOptions.hideProgress}
-		{@const count = countSubscribes(period)}
-		<span
-			class={[
-				'badge badge-sm whitespace-nowrap mb-1',
-				count.isComplet && 'border-secondary outline-1 outline-secondary',
-			]}
-		>
-			{count.accepted + count.request} / {count.maxSubscribe}
-		</span>
+	{#if $cardContentOptions.showSlots}
+		{@const nbEmptySlot = Math.max(period.maxSubscribe - period.subscribes.length, 0)}
+		<ul class="flex flex-col gap-1">
+			{#each period.subscribes as subscribe (subscribe.id)}
+				{@const StateIcon = subscribe.state === 'accepted' ? CheckIcon : OctagonAlertIcon}
+				<li class="badge badge-sm whitespace-nowrap">
+					<span>
+						{subscribe.member.firstName}
+						{subscribe.member.lastName}
+					</span>
+					<StateIcon
+						size={15}
+						class="opacity-70 translate-x-1 {subscribe.state === 'accepted'
+							? subscribe.isForcedValidation
+								? 'text-blue-500'
+								: 'text-success'
+							: subscribe.member.isValidedByUser
+								? 'text-warning'
+								: 'text-error'}"
+					/>
+				</li>
+			{/each}
+
+			{#each Array(nbEmptySlot).fill(0) as _, i (i)}
+				<li class="badge badge-sm whitespace-nowrap text-warning">Libre</li>
+			{/each}
+		</ul>
 	{/if}
 </div>
-
-{#if $cardContentOptions.showTags && period.tags.length}
-	<TagsList tags={period.tags} class="px-1 pb-1" />
-{/if}
-
-{#if $cardContentOptions.showSlots}
-	{@const nbEmptySlot = Math.max(period.maxSubscribe - period.subscribes.length, 0)}
-	<ul class="flex flex-col gap-1">
-		{#each period.subscribes as subscribe (subscribe.id)}
-			{@const StateIcon = subscribe.state === 'accepted' ? CheckIcon : OctagonAlertIcon}
-			<li class="badge badge-sm whitespace-nowrap">
-				<span>
-					{subscribe.member.firstName}
-					{subscribe.member.lastName}
-				</span>
-				<StateIcon
-					size={15}
-					class="opacity-70 translate-x-1 {subscribe.state === 'accepted'
-						? subscribe.isForcedValidation
-							? 'text-blue-500'
-							: 'text-success'
-						: subscribe.member.isValidedByUser
-							? 'text-warning'
-							: 'text-error'}"
-				/>
-			</li>
-		{/each}
-
-		{#each Array(nbEmptySlot).fill(0) as _, i (i)}
-			<li class="badge badge-sm whitespace-nowrap text-warning">Libre</li>
-		{/each}
-	</ul>
-{/if}
 
 <a
 	href={urlParam.with({ form_period: period.id })}

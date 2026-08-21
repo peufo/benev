@@ -70,7 +70,7 @@
 			'group relative z-10 hover:z-20',
 			'rounded-md p-1 text-sm border border-hard',
 			'overflow-visible min-h-8',
-			urlParam.has('form_period', period.id) ? 'bg-accent z-20' : 'bg-accent/50',
+			urlParam.has('form_period', period.id) ? 'bg-accent/60 z-20' : 'bg-accent/30',
 		]}
 	>
 		{#each drags as drag, i (i)}
