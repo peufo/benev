@@ -72,6 +72,25 @@ export const logoutUser = form(async () => {
 	locals.auth.setSession(null) // remove cookie
 })
 
+/**
+ * Enregistre l'acceptation des textes légaux en vigueur. La version est stockée avec la date:
+ * un booléen seul ne dirait pas *quelles* conditions ont été acceptées, ce qui est exactement
+ * la question posée le jour où elles changent.
+ */
+export const acceptTerms = form(async () => {
+	const { locals } = getRequestEvent()
+	const session = await locals.auth.validate()
+	if (!session) error(401)
+	await prisma.user.update({
+		where: { id: session.user.id },
+		data: {
+			isTermsAccepted: true,
+			termsVersion: TERMS_VERSION,
+			termsAcceptedAt: new Date(),
+		},
+	})
+})
+
 export const sendEmailVerification = form(async () => {
 	const { locals } = getRequestEvent()
 	const session = await locals.auth.validate()

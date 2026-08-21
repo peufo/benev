@@ -5,6 +5,7 @@
 	// Import direct plutôt que via `$lib/event`: le baril y tirerait tous les composants
 	// évènement dans le layout racine, donc dans chaque page du site.
 	import { theme } from '$lib/event/theme/state.svelte'
+	import TermsAcceptDialog from '$lib/me/TermsAcceptDialog.svelte'
 	import { transitionX } from 'fuma'
 	import {
 		defaultMetaTags,
@@ -14,11 +15,8 @@
 		websiteSchema,
 	} from '$lib/seo'
 	import '../app.css'
-	interface Props {
-		children?: import('svelte').Snippet
-	}
 
-	let { children }: Props = $props()
+	let { data, children } = $props()
 
 	let siteUrl = $derived($page.url.origin)
 
@@ -56,3 +54,5 @@
 >
 	{@render children?.()}
 </div>
+
+<TermsAcceptDialog user={data.user} />
