@@ -8,9 +8,7 @@
 		XIcon,
 	} from '@lucide/svelte'
 	import { Card } from '$lib/ui'
-	import { DropDown, tip } from 'fuma'
-	import { Drawer } from 'fuma'
-	import { urlParam } from 'fuma'
+	import { Drawer, Popover, tip, urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
@@ -72,9 +70,9 @@
 			<MemberProfileStatus member={data.memberProfile} />
 
 			{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}
-				<DropDown hideOnBlur tippyProps={{ arrow: true }}>
-					{#snippet activator()}
-						<button class="btn btn-sm ml-2 whitespace-nowrap">
+				<Popover placement="bottom-end" listenFocus={false} class="p-1">
+					{#snippet trigger({ trigger })}
+						<button type="button" class="btn btn-sm ml-2 whitespace-nowrap" {...trigger}>
 							<MemberRole roles={data.memberProfile.roles} mode="contents" />
 							{#if data.memberProfile.isValidedByEvent}
 								<span
@@ -92,22 +90,30 @@
 						</button>
 					{/snippet}
 
-					<MemberIsValidedByEventForm memberProfile={data.memberProfile} />
+					{#snippet children({ hide })}
+						<div class="flex flex-col w-max">
+							<MemberIsValidedByEventForm memberProfile={data.memberProfile} onsuccess={hide} />
 
-					{#if data.member?.roles.includes('owner')}
-						<MemberIsAdminForm memberProfile={data.memberProfile} />
-					{/if}
+							{#if data.member?.roles.includes('owner')}
+								<MemberIsAdminForm memberProfile={data.memberProfile} onsuccess={hide} />
+							{/if}
 
-					<MemberDeleteForm
-						memberId={data.memberProfile.id}
-						redirectTo="{$eventPath}/admin/members"
-						btn={false}
-						class="menu-item w-full"
-					>
-						<Trash2Icon size={20} class="text-error" />
-						<span>Supprimer le membre</span>
-					</MemberDeleteForm>
-				</DropDown>
+							<MemberDeleteForm
+								memberId={data.memberProfile.id}
+								redirectTo="{$eventPath}/admin/members"
+								btn={false}
+								class="menu-item w-full"
+							>
+								{#snippet children({ waitConfirmation })}
+									<Trash2Icon size={20} class="text-error" />
+									<span class={waitConfirmation ? 'text-error font-semibold' : ''}>
+										{waitConfirmation ? 'Confirmer ?' : 'Supprimer le membre'}
+									</span>
+								{/snippet}
+							</MemberDeleteForm>
+						</div>
+					{/snippet}
+				</Popover>
 			{:else}
 				<MemberRole roles={data.memberProfile.roles} />
 			{/if}

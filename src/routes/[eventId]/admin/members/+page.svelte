@@ -96,7 +96,7 @@
 	{/if}
 {/snippet}
 
-<div class="flex gap-4 items-start">
+<div class="flex gap-1 items-start">
 	<Card class="grow min-w-0" bodyClass="sm:px-2 sm:py-2">
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-x-2 gap-y-2 flex-wrap">
@@ -167,9 +167,9 @@
 		</div>
 	</Card>
 
-	<Card class="hidden xl:block max-w-xs" bodyClass="sm:px-2 sm:py-2">
+	<div class="hidden xl:block surface">
 		<MembersStats {data} />
-	</Card>
+	</div>
 </div>
 
 {#if selectedMember}

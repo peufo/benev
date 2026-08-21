@@ -33,6 +33,7 @@
 	}
 
 	function removeOption(index: number) {
+		console.log({ index }) // WTF
 		options = [...options.slice(0, index), ...options.slice(index + 1)]
 		value = JSON.stringify(options)
 	}

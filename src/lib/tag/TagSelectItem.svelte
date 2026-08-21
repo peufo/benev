@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PencilIcon } from '@lucide/svelte'
 	import type { Tag } from '@prisma/client'
-	import { param } from 'fuma'
+	import { urlParam, tip } from 'fuma'
 
 	interface Props {
 		tag: Tag
@@ -16,9 +16,10 @@
 	<div>{tag.name}</div>
 	{#if is_editable}
 		<a
-			href={param.with({ form_tag: tag.id })}
+			href={urlParam.with({ form_tag: tag.id })}
 			data-sveltekit-replacestate
 			class="btn btn-xs btn-circle btn-ghost min-h-4.5 w-4.5 h-4.5 opacity-80 ml-1 -mr-1"
+			use:tip={{ content: "Modifier l'étiquette" }}
 		>
 			<PencilIcon size={16} />
 		</a>

@@ -13,7 +13,7 @@
 	let total = $derived(Object.values<number>(values).reduce((acc, cur) => acc + cur, 0))
 </script>
 
-<div class="{klass} border p-2 rounded-lg">
+<div class="{klass} border border-hard p-2 rounded-field">
 	<h3 class="title-md p-2">{title}</h3>
 
 	<div

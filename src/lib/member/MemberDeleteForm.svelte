@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte'
 	import { ButtonDelete } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { deleteMember } from './member.remote'
@@ -8,10 +9,16 @@
 		redirectTo?: string
 		class?: string
 		btn?: boolean
-		children?: import('svelte').Snippet
+		children?: Snippet<[{ waitConfirmation: boolean }]>
 	}
 
-	let { memberId, redirectTo = '/me', class: klass = '', btn = true, children }: Props = $props()
+	let {
+		memberId,
+		redirectTo = '/me',
+		class: klass = '',
+		btn = true,
+		children: label,
+	}: Props = $props()
 
 	const uid = $props.id()
 	const remoteForm = deleteMember.for(uid)
@@ -21,6 +28,12 @@
 	<input type="hidden" name="memberId" value={memberId} />
 	<input type="hidden" name="redirectTo" value={redirectTo} />
 	<ButtonDelete formaction={remoteForm.action} class={klass} {btn}>
-		{#if children}{@render children()}{:else}Supprimer ma participation{/if}
+		{#snippet children(state)}
+			{#if label}
+				{@render label(state)}
+			{:else}
+				Supprimer ma participation
+			{/if}
+		{/snippet}
 	</ButtonDelete>
 </form>

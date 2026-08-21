@@ -156,7 +156,7 @@
 	<SubscribeStateForm {subscribe} isLeader />
 {/snippet}
 
-<div class="flex gap-4 items-start">
+<div class="flex gap-1 items-start">
 	<Card class="min-w-0 grow" bodyClass="sm:px-2 sm:py-2">
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-x-2 gap-y-2 flex-wrap">
@@ -201,9 +201,9 @@
 		</div>
 	</Card>
 
-	<Card class="hidden xl:block" bodyClass="sm:px-2 sm:py-2">
+	<div class="surface hidden xl:block">
 		<SubscribesStats {data} />
-	</Card>
+	</div>
 </div>
 
 <Drawer

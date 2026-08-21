@@ -11,3 +11,6 @@
   - [ ] En cliquant sur la représentation en lecture seul (vue profile ou cellule de tableau), on replace l'élément par un input
   - [ ] Une fois les modification faite, on les valides avec la SaveBar
   - [ ] Le système doit fonctionner à la fois sur la table, et a la fois sur le profile
+
+- [ ] L'édition des étiquettes benev/src/lib/period/PeriodForm.svelte:191
+  - [ ] Mettre a jour ou supprimer une étiquette ne l'update pas dans le formulaire du dessous
