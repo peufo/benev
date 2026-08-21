@@ -96,6 +96,16 @@
 		selectedTags = [...selectedTags, tag]
 	}
 
+	// Le tiroir d'étiquette s'ouvre par-dessus ce formulaire, dont les étiquettes sélectionnées
+	// datent du `load`: la fermeture du tiroir ne les rejoue pas, il faut les reporter ici.
+	export function updateTag(tag: Tag) {
+		selectedTags = selectedTags.map((t) => (t.id === tag.id ? tag : t))
+	}
+
+	export function unselectTag(tagId: string) {
+		selectedTags = selectedTags.filter(({ id }) => id !== tagId)
+	}
+
 	async function createNextPeriod() {
 		const duration = daytz(end).diff(start, 'minute')
 		const teamId = selectedTeam?.id ?? period.teamId

@@ -7,8 +7,8 @@
 	interface Props {
 		tag?: Partial<Tag>
 		oncreated?: (tag: Tag) => void
-		onupdated?: () => void
-		ondeleted?: () => void
+		onupdated?: (tag: Tag) => void
+		ondeleted?: (tagId: string) => void
 	}
 
 	let { tag = $bindable({}), oncreated, onupdated, ondeleted }: Props = $props()
@@ -36,7 +36,10 @@
 	bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
 	<form
 		{...deleteTag.enhance(
-			enhanceForm({ success: 'Étiquette supprimée', onsuccess: () => ondeleted?.() })
+			enhanceForm({
+				success: 'Étiquette supprimée',
+				onsuccess: () => tag.id && ondeleted?.(tag.id),
+			})
 		)}
 		id={deleteFormId}
 		class="hidden"
@@ -50,9 +53,12 @@
 		enhanceForm({
 			success: tag.id ? 'Étiquette modifiée' : 'Étiquette crée',
 			onsuccess: () => {
-				if (tag.id) return onupdated?.()
-				const created = createTag.result
-				if (created) oncreated?.(created)
+				// `result` porte l'étiquette telle qu'enregistrée: c'est elle que les formulaires
+				// ouverts en dessous doivent afficher, la leur datant de leur propre chargement.
+				const saved = tag.id ? updateTag.result : createTag.result
+				if (!saved) return
+				if (tag.id) onupdated?.(saved)
+				else oncreated?.(saved)
 			},
 		})
 	)}

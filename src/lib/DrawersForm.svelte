@@ -84,10 +84,16 @@
 			tag={tag || {}}
 			oncreated={async (tag) => {
 				await close({ replaceState: true })
-				periodForm.selectTag(tag)
+				periodForm?.selectTag(tag)
 			}}
-			onupdated={() => close()}
-			ondeleted={() => close()}
+			onupdated={async (tag) => {
+				await close()
+				periodForm?.updateTag(tag)
+			}}
+			ondeleted={async (tagId) => {
+				await close()
+				periodForm?.unselectTag(tagId)
+			}}
 		/>
 	{/snippet}
 </Drawer>

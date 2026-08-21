@@ -19,12 +19,12 @@
 
 <script lang="ts">
 	import type { Subscribe } from '@prisma/client'
-	import { SubscribeState } from '$lib/subscribe'
-	import { Popover } from 'fuma'
+	import { Popover, tip } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { page } from '$app/state'
 	import { setSubscribeState } from './subscribeState.remote'
 	import { SUBSCRIBE_STATE_ACTION } from '$lib/constant'
+	import { getSubscribeState } from './subscribeState'
 
 	interface Props {
 		subscribe: Subscribe & { member: { isValidedByUser: boolean } }
@@ -37,6 +37,7 @@
 	let { subscribe, isLeader = false, canBeLarge = false, onsuccess }: Props = $props()
 
 	let isSelf = $derived(subscribe.memberId === page.data.member?.id)
+	let stateDisplay = $derived(getSubscribeState(subscribe))
 
 	// Une clé par montage, pas par inscription: la même inscription peut être affichée deux fois
 	// simultanément (ligne de période + tiroir de période, `/me` + tiroir…), et deux `<form>` ne
@@ -84,9 +85,16 @@
 	)
 </script>
 
+{#snippet stateIcon()}
+	{@const StateIcon = stateDisplay.icon}
+	<span class="inline-flex" use:tip={{ content: stateDisplay.label }}>
+		<StateIcon class={stateDisplay.class} />
+	</span>
+{/snippet}
+
 {#if !editions.length}
 	<button class="btn btn-square btn-sm btn-ghost opacity-70 relative">
-		<SubscribeState {subscribe} />
+		{@render stateIcon()}
 	</button>
 {:else}
 	<Popover listenFocus={false} class="p-1">
@@ -98,7 +106,7 @@
 					: 'max-sm:btn-square'}"
 				{...trigger}
 			>
-				<SubscribeState {subscribe} />
+				{@render stateIcon()}
 				{#if isConfirmation}
 					<div
 						class="absolute w-3 h-3 bg-error -right-1.5 -top-1.5 rounded-full animate-ping"

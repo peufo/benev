@@ -133,6 +133,35 @@ test.describe.serial('Plan', () => {
 	})
 
 	/**
+	 * Le tiroir d'étiquette s'ouvre par-dessus le formulaire de période, qui garde ses
+	 * étiquettes en mémoire: sa fermeture ne les rejoue pas. Sans `onupdated`/`ondeleted`,
+	 * la puce afficherait encore l'ancien nom, ou une étiquette qui n'existe plus.
+	 */
+	test("L'édition d'une étiquette suit dans la période, sa suppression l'en retire", async () => {
+		const tags = page.getByRole('group').filter({ hasText: 'Étiquettes' }).getByRole('combobox')
+		await expect(tags.getByText('Urgent')).toBeVisible()
+
+		// Le crayon n'est rendu que sur une étiquette sélectionnée, dans le champ lui-même.
+		const editTag = tags.locator('a[href*="form_tag"]')
+		await editTag.click()
+		// Le titre du tiroir compose « Modifier l' » et « étiquette ».
+		const tagDrawer = page.getByRole('dialog', { name: /Modifier l'\s*étiquette/ })
+		await expect(tagDrawer).toBeVisible()
+		await tagDrawer.getByLabel('Nom', { exact: true }).fill('Urgentissime')
+		await tagDrawer.getByRole('button', { name: 'Valider' }).click()
+
+		await expect(tags.getByText('Urgentissime')).toBeVisible()
+
+		await editTag.click()
+		await expect(tagDrawer).toBeVisible()
+		// `ButtonDelete` demande confirmation avant de porter le `formaction`.
+		await tagDrawer.getByRole('button', { name: 'Supprimer' }).click()
+		await tagDrawer.getByRole('button', { name: "T'es sur ?" }).click()
+
+		await expect(tags.getByText('Urgentissime')).toBeHidden()
+	})
+
+	/**
 	 * Un clic seul ne crée plus de période: c'est le survol qui doit annoncer le geste. Le ghost
 	 * prend alors la forme d'un trait d'accroche daté, à l'heure aimantée où commencerait le
 	 * cliqué-glissé, et seulement là où ce geste crée — jamais sur l'entête de secteur.
