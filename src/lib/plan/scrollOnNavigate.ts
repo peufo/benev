@@ -48,7 +48,7 @@ const INGNORED_PARAMS = [
 	'form_milestone',
 	'form_team',
 	'hideRangetime',
-	'showProgress',
+	'hideProgress',
 	'showSlots',
 	'showTags',
 ]

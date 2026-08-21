@@ -3,3 +3,5 @@
 - [x] src/lib/member/MemberCreateSubscribeDialog.svelte Les données utilisé par le dialog doivent se rafraichire entre deux inscriptions
 
 - [x] Il faut créer un dialogue pour s'assurer que l'utilisateur connecté accepte la dernière version des condition d'utilisation.
+
+- [x] benev/src/lib/plan/cardContent/options.ts:13 inversé la logique de l'option showProgress en hideProgress (Afficher par défaut)

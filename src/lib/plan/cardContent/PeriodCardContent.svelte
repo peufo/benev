@@ -17,7 +17,7 @@
 	let { period, deltaStartMs, deltaEndMs }: Props = $props()
 </script>
 
-{#if $cardContentOptions.showProgress}
+{#if !$cardContentOptions.hideProgress}
 	<Progress {period} class="justify-between" badgeClass="ml-1 mr-1 mb-1" progressClass="bg-red-400">
 		<!-- @migration-task: migrate this slot by hand, `before-badge` is an invalid identifier -->
 		<svelte:fragment slot="before-badge">

@@ -3,14 +3,14 @@ import { page } from '$app/stores'
 import type { Component } from 'svelte'
 import { derived } from 'svelte/store'
 
-type CardContentOption = 'showProgress' | 'hideRangetime' | 'showSlots' | 'showTags'
+type CardContentOption = 'hideProgress' | 'hideRangetime' | 'showSlots' | 'showTags'
 
 export const CARD_CONTENT_OPTIONS: Record<
 	CardContentOption,
 	{ title: string; icon: Component<IconProps>; isReversed?: boolean }
 > = {
 	hideRangetime: { title: 'Afficher les heures', icon: ClockIcon, isReversed: true },
-	showProgress: { title: "Afficher l'état des inscriptions", icon: PercentIcon },
+	hideProgress: { title: "Afficher l'état des inscriptions", icon: PercentIcon, isReversed: true },
 	showSlots: { title: 'Afficher les inscriptions', icon: ListChecksIcon },
 	showTags: { title: 'Afficher les étiquettes', icon: TagsIcon },
 }
