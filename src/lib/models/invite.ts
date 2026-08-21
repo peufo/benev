@@ -1,12 +1,11 @@
 import z from 'zod'
+import { zStringNullable } from './form'
 
 export const modelInvite = z.object({
-	// Un champ email vidé vaut « pas d'adresse », que Prisma stocke en `null`. `null` n'étant pas
-	// un `RemoteFormInput`, la conversion se fait à la sortie du schéma et non à son entrée.
-	email: z
-		.union([z.string().email().toLowerCase(), z.literal('')])
-		.optional()
-		.transform((value) => (value === undefined ? undefined : value || null)),
 	firstName: z.string().min(2),
 	lastName: z.string().min(2),
+	email: zStringNullable(z.email().toLowerCase()),
+	// La case est désactivée tant qu'aucune adresse n'est saisie, et un champ désactivé n'est pas
+	// soumis: le défaut couvre aussi bien ce cas que celui de la case décochée.
+	sendEmail: z.boolean().default(false),
 })

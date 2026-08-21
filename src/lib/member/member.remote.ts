@@ -101,10 +101,23 @@ function buildModelMemberProfile(fields: Field[], isPartial: boolean) {
 	return model
 }
 
-export const createInvite = form(modelInvite, async (data) => {
+export const createInvite = form(modelInvite, async ({ sendEmail, ...data }, issue) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	const author = await permission.leader(eventId, locals)
+
+	if (data.email) {
+		const alreadyMember = await prisma.member.findFirst({
+			where: { eventId, email: data.email },
+			select: { firstName: true, lastName: true },
+		})
+		if (alreadyMember)
+			invalid(
+				issue.email(
+					`${alreadyMember.firstName} ${alreadyMember.lastName} utilise déjà cette adresse`
+				)
+			)
+	}
 
 	const member = await prisma.member.create({
 		data: {
@@ -121,7 +134,7 @@ export const createInvite = form(modelInvite, async (data) => {
 
 	await notifyTierQuotaIfNeeded(eventId)
 
-	if (!member.email) return member
+	if (!member.email || !sendEmail) return member
 
 	await sendEmailModel(eventId, 'invitation_create', {
 		from: member.event.name,

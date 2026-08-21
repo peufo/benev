@@ -1,4 +1,5 @@
 import z from 'zod'
+import { zStringNullable } from './form'
 
 /**
  * `InputImage` soumet deux champs par image: `<clé>_image` (le fichier) et `<clé>_crop`
@@ -41,9 +42,6 @@ export const modelMediaImage = z.object({
  * chaîne vide signifie « image détachée » quand un champ absent laisse la valeur en place.
  * Les colonnes visées sont des scalaires nullables (`posterId`, `logoId`, `backgroundImageId`).
  */
-export const zMediaId = z
-	.string()
-	.optional()
-	.transform((value) => (value === undefined ? undefined : value || null))
+export const zMediaId = zStringNullable(z.string())
 
 export type MediaImageInput = { image?: File; crop?: Crop }

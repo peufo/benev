@@ -74,6 +74,10 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		await event.expectInviteFindsExistingUser(page, bob.email)
 	})
 
+	test("L'invitation refuse une adresse déjà membre", async () => {
+		await event.expectInviteRejectsDuplicateEmail(page, bob.email)
+	})
+
 	test("Le profil du membre s'édite sur sa fiche, par la barre de sauvegarde", async () => {
 		await event.expectMemberProfileSaveBar(page)
 	})

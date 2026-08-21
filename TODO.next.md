@@ -5,3 +5,7 @@
 - [ ] Les pages devrait avoir un status "draft" | "published"
 
 - [ ] Le formulaire des badges ecompletement buguer
+
+- [ ] Il faut supprimer MemberImportDialog et faire un vrai outil d'importation capable de prendre comme source, un fichier csv ou un autre événement. Suivi d'une vue pour mapper les colonnes.
+
+- [ ] Dans le mail d'invitation, on peux ajouter un token dans le lien. Grâce à lui, on peut identifié l'utilisateur sur la page de login, placer le formulaire en mode "register" si nécéssaire et pré-remplir le champ email, et validé l'adresse email directement.

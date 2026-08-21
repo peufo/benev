@@ -1,5 +1,5 @@
 import z from 'zod'
-import { zDateNullable } from './form'
+import { zDateNullable, zStringNullable } from './form'
 
 export const modelUserLogin = z.object({
 	email: z.string().email().toLowerCase(),
@@ -19,13 +19,7 @@ export const modelUserCreate = modelUserLogin.extend({
 })
 
 export const modelUserContactUpdate = z.object({
-	// Un email vidé détache l'adresse; `null` n'étant pas un `RemoteFormInput`, la conversion
-	// se fait à la sortie. Un champ absent reste `undefined`: un formulaire partiel ne doit
-	// pas effacer l'adresse.
-	email: z
-		.union([z.string().email().toLowerCase(), z.literal('')])
-		.optional()
-		.transform((value) => (value === undefined ? undefined : value || null)),
+	email: zStringNullable(z.email().toLowerCase()),
 	firstName: z.string().min(2).optional(),
 	lastName: z.string().min(2).optional(),
 	phone: z.string().trim().optional(),

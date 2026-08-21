@@ -143,12 +143,37 @@ export function useEvent(owner: User, name: string) {
 		 */
 		async expectInviteFindsExistingUser(page: Page, email: string) {
 			await page.goto(`/${eventId}/admin/members?form_invite=1`)
-			const emailInput = page.getByRole('dialog').getByLabel('Email')
+			// `exact`: la case « Envoyer l'invitation par email » porte le mot dans son libellé.
+			const emailInput = page.getByRole('dialog').getByLabel('Email (optionnel)', { exact: true })
+			const sendEmail = page.getByRole('checkbox', { name: /Envoyer l'invitation/ })
+
+			// Sans adresse, il n'y a rien à envoyer: la case reste cochée mais hors service.
+			await expect(sendEmail).toBeChecked()
+			await expect(sendEmail).toBeDisabled()
+			// L'évènement est encore en brouillon: l'invité doit savoir ce qu'il y trouvera.
+			await expect(page.getByText("L'évènement n'est pas publié")).toBeVisible()
 
 			await expect(async () => {
 				await emailInput.fill(email)
 				await expect(page.getByText('Utilisateur trouvé !')).toBeVisible({ timeout: 2000 })
 			}).toPass()
+
+			await expect(sendEmail).toBeEnabled()
+		},
+		/**
+		 * `Member` porte un `@@unique([email, eventId])`: le doublon doit se dire sous le champ,
+		 * là où l'erreur Prisma remonterait en 500 muet.
+		 */
+		async expectInviteRejectsDuplicateEmail(page: Page, email: string) {
+			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			const dialog = page.getByRole('dialog')
+			await dialog.getByLabel('Prénom').fill('Doublon')
+			// `exact`: « Prénom » contient « nom ».
+			await dialog.getByLabel('Nom', { exact: true }).fill('Test')
+			await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(email)
+			await dialog.getByRole('button', { name: 'Valider' }).click()
+
+			await expect(dialog.getByText('utilise déjà cette adresse')).toBeVisible()
 		},
 		/**
 		 * La médiathèque est un tiroir unique, monté par le layout de l'évènement: chaque

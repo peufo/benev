@@ -1,6 +1,7 @@
 import { invalid } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import z from 'zod'
+import { zStringNullable } from '$lib/models/form'
 import { prisma, sendEmail, sendEmailComponent } from '$lib/server'
 import { env } from '$env/dynamic/private'
 import { EmailBasic } from '$lib/email'
@@ -10,7 +11,7 @@ const sendMessageSchema = z.object({
 	content: z.string().min(10).max(10_000),
 	// Renseignés par les visiteurs sans compte uniquement: pour les autres, le compte fait foi.
 	authorName: z.string().trim().max(120).optional(),
-	authorEmail: z.union([z.email().toLowerCase(), z.literal('')]).optional(),
+	authorEmail: zStringNullable(z.email().toLowerCase()),
 	// Piège à robots: un champ invisible que seul un script remplit.
 	website: z.string().optional(),
 })

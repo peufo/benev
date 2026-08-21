@@ -32,6 +32,7 @@
 <Drawer key="form_invite" title="Inviter un nouveau membre" class="surface-drawer">
 	{#snippet children({ close })}
 		<InviteForm
+			{event}
 			onCreate={async (member) => {
 				teamForm?.update((t) => ({ ...t, leaders: [...(t.leaders || []), member] }))
 				periodDrawer?.selectMember(member)
