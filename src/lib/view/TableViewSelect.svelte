@@ -69,7 +69,7 @@
 </script>
 
 {#snippet updateButton(view: View, { popover }: { popover: PopoverType })}
-	{#if isNewView && view !== simpleView}
+	{#if view !== simpleView}
 		<button
 			class="btn btn-square btn-ghost btn-sm group-hover:bg-base-200"
 			onclick={() => {
