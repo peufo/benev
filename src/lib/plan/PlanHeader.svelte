@@ -81,7 +81,7 @@
 	/>
 
 	<PlanCursor cursor={plan.cursor} />
-	<div class="join">
+	<div class="join" use:tip={{ content: 'Ctrl + molette' }}>
 		<button
 			type="button"
 			class="btn btn-sm btn-square join-item"
