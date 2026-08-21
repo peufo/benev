@@ -21,7 +21,7 @@
 		MemberProfileStatus,
 		MemberAbsences,
 		MemberRole,
-		MemberProfile,
+		MemberProfileForm,
 		MemberDeleteForm,
 		MemberCreateSubscribeDialog,
 		MemberContactForm,
@@ -133,7 +133,8 @@
 
 	{#if data.event.memberFields.length}
 		<section>
-			<MemberProfile hideStatus member={data.memberProfile} />
+			<h3 class="title mb-4">Profil</h3>
+			<MemberProfileForm compact saveBar memberProfile={data.memberProfile} />
 		</section>
 	{/if}
 

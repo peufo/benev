@@ -21,7 +21,6 @@
 	import MembersEmails from './MembersEmails.svelte'
 	import { globalEvents } from '$lib/globalEvents'
 	import { page } from '$app/stores'
-	import MemberProfileForm from '$lib/member/MemberProfileForm.svelte'
 
 	let { data } = $props()
 
@@ -187,17 +186,4 @@
 	classBody="p-4 pb-10"
 >
 	<MembersStats {data} />
-</Drawer>
-
-<Drawer
-	title="Modifier le profil de {data.memberProfile?.firstName}"
-	key="form_member_profile"
-	class="surface-drawer"
-	classBody="pt-4"
->
-	{#snippet children({ close })}
-		{#if data.memberProfile}
-			<MemberProfileForm memberProfile={data.memberProfile} onsuccess={() => close()} />
-		{/if}
-	{/snippet}
 </Drawer>

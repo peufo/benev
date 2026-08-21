@@ -73,4 +73,8 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test("L'invitation reconnaît un compte existant", async () => {
 		await event.expectInviteFindsExistingUser(page, bob.email)
 	})
+
+	test("Le profil du membre s'édite sur sa fiche, par la barre de sauvegarde", async () => {
+		await event.expectMemberProfileSaveBar(page)
+	})
 })

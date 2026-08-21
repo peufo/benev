@@ -12,11 +12,10 @@
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
 	import {
-		MemberProfile,
+		MemberProfileForm,
 		MemberProfileStatus,
 		MemberRole,
 		MemberSettingsForm,
-		MemberProfileFormButton,
 		MemberDeleteForm,
 	} from '$lib/member'
 	import DownloadSubscribes from '$lib/me/DownloadSubscribes.svelte'
@@ -58,9 +57,8 @@
 			{#snippet action()}
 				<MemberRole roles={data.member.roles} />
 				<MemberProfileStatus member={data.member} />
-				<MemberProfileFormButton member={data.member} />
 			{/snippet}
-			<MemberProfile title="Mon profil" member={data.member} />
+			<MemberProfileForm compact saveBar memberProfile={data.member} />
 		</Section>
 	{/if}
 

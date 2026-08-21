@@ -356,6 +356,103 @@ export function useEvent(owner: User, name: string) {
 			await expect(required.locator('input')).toBeChecked()
 		},
 		/**
+		 * Le profil d'un membre s'édite là où il s'affiche: plus de tiroir, des champs à choix
+		 * rendus en listes déroulantes, et la barre de sauvegarde pour valider. La liste
+		 * déroulante est le cas fragile — sa sélection vit dans le composant, que ni le
+		 * `reset()` natif ni l'arrivée de nouvelles données ne restaurent: seul son remontage
+		 * la ramène sur la valeur enregistrée.
+		 */
+		async expectMemberProfileSaveBar(page: Page) {
+			const saveBar = page.getByText('Modification en cours !')
+			const drawer = page.getByRole('dialog', { name: 'Nouveau champ' })
+			const typeTrigger = page.getByRole('button', { name: 'Type de champ' })
+			const newOption = page.getByPlaceholder('Nouvelle option')
+
+			// Les deux formes de champ à choix, seul moyen d'éprouver les listes déroulantes du
+			// mode compact. `exact`: « Liste à choix multiple » commence par les mêmes mots.
+			const createField = async (type: string, name: string, options: string[]) => {
+				await page.goto(`/${eventId}/admin/settings?form_field=%7B%7D`)
+				await expect(drawer).toBeVisible()
+				// Le popover ne réagit qu'une fois la page hydratée: rejouer le couple
+				// clic/vérification attend l'hydratation sans avoir à la deviner.
+				await expect(async () => {
+					if ((await typeTrigger.textContent()) !== type) {
+						await typeTrigger.click()
+						await page.getByRole('option', { name: type, exact: true }).click({ timeout: 1000 })
+					}
+					await expect(typeTrigger).toContainText(type, { timeout: 1000 })
+				}).toPass()
+				await page.getByLabel('Nom', { exact: true }).fill(name)
+				for (const option of options) {
+					await newOption.fill(option)
+					await newOption.press('Enter')
+				}
+				await page.locator('label').filter({ hasText: 'Modifiable par les membres' }).click()
+				await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
+				await expect(drawer).toBeHidden()
+			}
+
+			await createField('Liste à choix', 'Repas', ['Omnivore', 'Végétarien'])
+			await createField('Liste à choix multiple', 'Allergies', ['Gluten', 'Arachide'])
+
+			// La table renvoie sur la fiche du membre; le tiroir de profil n'existe plus.
+			await page.goto(`/${eventId}/admin/members`)
+			await expect(page.getByRole('dialog', { name: /Modifier le profil/ })).toHaveCount(0)
+			await page
+				.getByRole('link', { name: /Bob The Tester/ })
+				.first()
+				.click()
+
+			const city = page.getByLabel('Ville')
+			const meal = page.getByRole('button', { name: 'Repas' })
+			const allergies = page.getByRole('combobox', { name: 'Allergies' })
+			await expect(page.getByRole('heading', { name: 'Profil', exact: true })).toBeVisible()
+			await expect(meal).toBeVisible()
+			await expect(saveBar).toBeHidden()
+
+			await expect(async () => {
+				await city.fill('Genève')
+				await expect(saveBar).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+			await expect(city).toHaveValue('')
+
+			await city.fill('Genève')
+			await meal.click()
+			await page.getByRole('option', { name: 'Omnivore', exact: true }).click()
+			await expect(meal).toContainText('Omnivore')
+			await expect(saveBar).toBeVisible()
+
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText('Profil enregistré')).toBeVisible()
+			await expect(saveBar).toBeHidden()
+
+			await page.reload()
+			await expect(city).toHaveValue('Genève')
+			await expect(meal).toContainText('Omnivore')
+			await expect(saveBar).toBeHidden()
+
+			// Un choix multiple n'émet aucun évènement de formulaire et ne referme pas son
+			// popover: rien ne rend la main au déclencheur, comme le fait le select simple.
+			// Sans annonce de sa part, la barre ne verrait ce premier choix qu'au second.
+			await allergies.click()
+			await page.getByRole('option', { name: 'Gluten', exact: true }).click()
+			await expect(allergies).toContainText('Gluten')
+			await expect(saveBar).toBeVisible()
+			await page.keyboard.press('Escape')
+
+			// Les sélections abandonnées reviennent aux valeurs enregistrées: c'est ce que le
+			// `reset()` natif, seul, laisserait sur les derniers choix.
+			await meal.click()
+			await page.getByRole('option', { name: 'Végétarien', exact: true }).click()
+			await expect(meal).toContainText('Végétarien')
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+			await expect(meal).toContainText('Omnivore')
+			await expect(allergies).not.toContainText('Gluten')
+		},
+		/**
 		 * L'édition d'une page passe par la barre de sauvegarde, et non plus par un
 		 * enregistrement automatique. Le contenu riche est le cas fragile: sa valeur vit dans un
 		 * champ caché que le code écrit, sans le moindre évènement de formulaire — la barre ne
@@ -477,9 +574,13 @@ export function useEvent(owner: User, name: string) {
 			// `:visible` écarte la copie du menu mobile, présente dans le DOM mais repliée.
 			await expect(page.locator('a[href="#fields"]:visible')).toHaveCount(1)
 
-			await description.fill('Un centre de recherche appliquée.')
-			await cardOpacity.fill('0.75')
-			await expect(saveBar).toBeVisible()
+			// La barre ne suit rien tant que la page n'est pas hydratée: rejouer la saisie attend
+			// l'hydratation sans avoir à la deviner.
+			await expect(async () => {
+				await description.fill('Un centre de recherche appliquée.')
+				await cardOpacity.fill('0.75')
+				await expect(saveBar).toBeVisible({ timeout: 1000 })
+			}).toPass()
 
 			await page.getByRole('button', { name: 'Réinitialiser' }).click()
 			await expect(saveBar).toBeHidden()
