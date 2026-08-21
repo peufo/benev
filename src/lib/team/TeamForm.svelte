@@ -118,19 +118,13 @@
 				? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
 				: ''}
 		/>
-		<div
-			use:tip={{
-				content:
-					'Les inscriptions en attentes de validation ne sont pas comptabilisées. Ainsi, elles ne bloquent pas de nouvelles inscriptions.',
-			}}
-		>
-			<InputBoolean
-				field={remoteForm.fields.overflowPermitted}
-				label="Mode liste d'attente"
-				checked={team.overflowPermitted ?? false}
-				class="w-full"
-			/>
-		</div>
+		<InputBoolean
+			field={remoteForm.fields.overflowPermitted}
+			label="Mode liste d'attente"
+			checked={team.overflowPermitted ?? false}
+			variant="switch"
+			hint="Les inscriptions en attente de validation ne comptent pas comme des places occupées."
+		/>
 	{/if}
 
 	<MemberConditions conditions={team?.conditions || []} memberFields={event.memberFields} />
