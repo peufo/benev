@@ -1,31 +1,28 @@
-<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (before-badge to before_badge) making the component unusable -->
 <script lang="ts">
-	import 'tippy.js/dist/tippy.css'
-	import type { Subscribe } from '@prisma/client'
+	import type { Snippet } from 'svelte'
+	import { countSubscribes, type PeriodCountable } from '$lib/subscribe/subscribesCount'
 
-	export let period: {
-		maxSubscribe: number
-		subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
+	interface Props {
+		period: PeriodCountable
+		class?: string
+		withLabel?: boolean
+		badgeClass?: string
+		progressClass?: string
+		beforeBadge?: Snippet
+		afterBadge?: Snippet
 	}
 
-	let klass = ''
-	export { klass as class }
-	export let withLabel = false
-	export let badgeClass = ''
-	export let progressClass = ''
+	let {
+		period,
+		class: klass = '',
+		withLabel = false,
+		badgeClass = '',
+		progressClass = '',
+		beforeBadge,
+		afterBadge,
+	}: Props = $props()
 
-	$: accepted = period.subscribes.filter(
-		(sub) => sub.state === 'accepted' && !sub.isForcedValidation
-	).length
-	$: acceptedForced = period.subscribes.filter(
-		(sub) => sub.state === 'accepted' && sub.isForcedValidation
-	).length
-	$: request = period.subscribes.filter((sub) => sub.state === 'request').length
-	$: requestWaitUser = period.subscribes.filter(
-		(sub) => sub.state === 'request' && sub.member.isValidedByUser
-	).length
-	$: isComplet = accepted + request >= period.maxSubscribe
-	$: total = Math.max(accepted + request, period.maxSubscribe)
+	const count = $derived(countSubscribes(period))
 
 	const plurial = (n: number) => (n > 1 ? 's' : '')
 </script>
@@ -39,46 +36,49 @@
 	<div class="h-2 rounded w-full relative overflow-hidden bg-base-300 {progressClass}">
 		<div
 			class="h-2 bg-error absolute rounded-r"
-			style:width="{100 * ((accepted + request) / total)}%"
+			style:width="{100 * ((count.accepted + count.request) / count.total)}%"
 		></div>
 		<div
 			class="h-2 bg-warning absolute rounded-r"
-			style:width="{100 * ((accepted + requestWaitUser) / total)}%"
+			style:width="{100 * ((count.accepted + count.requestWaitUser) / count.total)}%"
 		></div>
 		<div
 			class="h-2 bg-blue-500 absolute rounded-r"
-			style:width="{100 * ((accepted + acceptedForced) / total)}%"
+			style:width="{100 * (count.accepted / count.total)}%"
 		></div>
-		<div class="h-2 bg-success absolute rounded-r" style:width="{100 * (accepted / total)}%"></div>
+		<div
+			class="h-2 bg-success absolute rounded-r"
+			style:width="{100 * (count.acceptedByMember / count.total)}%"
+		></div>
 	</div>
 
 	{#if withLabel}
 		<div class="flex gap-1">
 			<span class="badge badge-success" title="confirmé">
-				{accepted + acceptedForced}
+				{count.accepted}
 				<span class="pl-1">
-					Confirmé{plurial(accepted + acceptedForced)}
+					Confirmé{plurial(count.accepted)}
 				</span>
 			</span>
 			<span class="badge badge-warning" title="En attente">
-				{request}
+				{count.request}
 				<span class="pl-1">
-					En attente{plurial(request)}
+					En attente{plurial(count.request)}
 				</span>
 			</span>
 			<span class="opacity-50 px-1">/</span>
 			<span class="badge">
-				{period.maxSubscribe}
+				{count.maxSubscribe}
 				<span class="pl-1">
-					Place{plurial(period.maxSubscribe)}
+					Place{plurial(count.maxSubscribe)}
 				</span>
 			</span>
 		</div>
 	{:else}
-		<slot name="before-badge" />
-		<span class="badge badge-sm whitespace-nowrap {badgeClass}" class:bg-base-200={isComplet}>
-			{accepted + acceptedForced + request} / {period.maxSubscribe}
+		{@render beforeBadge?.()}
+		<span class="badge badge-sm whitespace-nowrap {badgeClass}" class:bg-base-200={count.isComplet}>
+			{count.accepted + count.request} / {count.maxSubscribe}
 		</span>
-		<slot name="after-badge" />
+		{@render afterBadge?.()}
 	{/if}
 </div>
