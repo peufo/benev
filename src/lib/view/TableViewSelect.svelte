@@ -33,8 +33,10 @@
 	// valeur, et « Vue simple » se choisit exactement comme une vue enregistrée.
 	const simpleView: View = { id: '', name: 'Vue simple', query: '' }
 
-	let query = $derived(getQuery(page.url))
-	let selectedView = $derived(views.find((v) => v.query === query))
+	let query = $derived(getQuery(page.url.searchParams))
+	// Les vues enregistrées repassent par le même nettoyage: une clé devenue ignorée ne doit pas
+	// décrocher celles qui l'avaient enregistrée avant.
+	let selectedView = $derived(views.find((v) => getQuery(v.query) === query))
 	/** Des filtres posés à la main, qui ne correspondent à aucune vue enregistrée. */
 	let isNewView = $derived(!!query && !selectedView)
 	let items = $derived([simpleView, ...views])
@@ -52,10 +54,11 @@
 		return ignoredKeys.includes(paramKey)
 	}
 
-	function getQuery({ searchParams }: URL) {
+	/** Gabarit comparable d'un jeu de filtres, débarrassé de ce qui n'en est pas un. */
+	function getQuery(source: URLSearchParams | string) {
 		// Construit puis sérialisé immédiatement: pas un état réactif.
 		// eslint-disable-next-line svelte/prefer-svelte-reactivity
-		const searchParam = new URLSearchParams(searchParams)
+		const searchParam = new URLSearchParams(source)
 		// Les clés sont figées avant la boucle: l'itérateur de `URLSearchParams` suit les
 		// suppressions et sauterait l'entrée suivante.
 		for (const paramKey of [...searchParam.keys()]) {
