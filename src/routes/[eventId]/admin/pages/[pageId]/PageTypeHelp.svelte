@@ -7,7 +7,7 @@
 <DropDown tippyProps={{ trigger: 'mouseenter' }}>
 	{#snippet activator()}
 		<button type="button" class="contents">
-			<CircleHelpIcon size={19} class="opacity-70 rotate-12 ml-2" />
+			<CircleHelpIcon size={18} class="opacity-70 ml-2" />
 		</button>
 	{/snippet}
 	<div class="p-4">

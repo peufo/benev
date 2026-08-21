@@ -1,13 +1,5 @@
-- [x] benev/src/lib/view/TableViewSelect.svelte:19 ajouter des clés a ignorés (par exemple: benev/src/lib/plan/PlanHeader.svelte:70 devrait ignorer form_milstone)
+- [ ] La mise à jours des étiquettes (édition/suppression) n'est pas reporté sur les formulaire du dessous benev/src/lib/period/PeriodForm.svelte:191
 
-- [x] src/lib/member/MemberCreateSubscribeDialog.svelte Les données utilisé par le dialog doivent se rafraichire entre deux inscriptions
+- [ ] benev/src/lib/subscribe/SubscribeStateForm.svelte:89 SubscribeState peu certainement être une simple fonction qui retourne {icon, class, label}
 
-- [x] Il faut créer un dialogue pour s'assurer que l'utilisateur connecté accepte la dernière version des condition d'utilisation.
-
-- [x] benev/src/lib/plan/cardContent/options.ts:13 inversé la logique de l'option showProgress en hideProgress (Afficher par défaut)
-
-- [x] benev/src/routes/[eventId]/admin/members/[memberId]/+page@admin.svelte:75 le menu doit être un Popover et le bouton supprimer pour supprimer les membres doit être réparé
-
-- [ ] L'édition des étiquettes est cassée
-
-- [ ]
+- [ ] Une mise a jour du status d'une inscription provoque un bug qui vide completement le contenu de la table benev/src/routes/[eventId]/admin/subscribes/+page.svelte:156

@@ -164,20 +164,21 @@
 				<div class="grow"></div>
 
 				<!-- SHOW MEMBERS STATS -->
-				<a href={urlParam.with({ subscribes_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
-					<span class="inline-flex" use:tip={{ content: 'Afficher le résumé des inscriptions' }}
-						><SigmaIcon size={18} /></span
-					>
+				<a
+					href={urlParam.with({ subscribes_stats: 1 })}
+					class="btn btn-square btn-sm xl:hidden"
+					use:tip={{ content: 'Afficher le résumé des inscriptions' }}
+				>
+					<SigmaIcon size={18} />
 				</a>
 
 				<!-- RESET FILTERS -->
 				<a
 					href={urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
 					class="btn btn-square btn-sm"
+					use:tip={{ content: 'Effacer les filtres' }}
 				>
-					<span class="inline-flex" use:tip={{ content: 'Effacer les filtres' }}
-						><FilterXIcon size={18} /></span
-					>
+					<FilterXIcon size={18} />
 				</a>
 				<TableViewSelect key="subscribes" views={data.views} ignoredKeys={['subscribes_stats']} />
 				<SubscribesImport />

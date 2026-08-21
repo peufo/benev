@@ -81,13 +81,13 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 
 				{#if page.type === 'home'}
 					<input type="hidden" name="type" value="home" />
-					<div class="menu-item rounded-lg disabled border bordered h-12">
+					<div class="input">
 						<home.icon size={21} class="opacity-70" />
 						<span>{home.label}</span>
 					</div>
 				{:else if page.type === 'email'}
 					<input type="hidden" name="type" value="email" />
-					<div class="menu-item rounded-lg disabled border bordered h-12">
+					<div class="input">
 						<email.icon size={21} class="opacity-70" />
 						<span>{email.label}</span>
 					</div>
