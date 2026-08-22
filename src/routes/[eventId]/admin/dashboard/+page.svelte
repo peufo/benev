@@ -67,14 +67,16 @@
 			class="border-soft"
 		>
 			{#snippet action()}
-				<InputOptionInParam key="members" defaultValue="last" options={membersOptions} />
-				<a
-					href={membersTableHref}
-					class="btn btn-square btn-sm"
-					use:tip={{ content: 'Ouvrir la table des membres' }}
-				>
-					<ExternalLinkIcon size={20} opacity={0.7} />
-				</a>
+				<div class="flex gap-2 ml-auto">
+					<InputOptionInParam key="members" defaultValue="last" options={membersOptions} />
+					<a
+						href={membersTableHref}
+						class="btn btn-square btn-sm"
+						use:tip={{ content: 'Ouvrir la table des membres' }}
+					>
+						<ExternalLinkIcon size={20} opacity={0.7} />
+					</a>
+				</div>
 			{/snippet}
 			<DashboardMembers members={data.members} view={data.membersView} />
 		</Section>
@@ -88,14 +90,16 @@
 				: `Aucune place ouverte par les périodes${scope}`}
 		>
 			{#snippet action()}
-				<InputOptionInParam key="waiting" options={waitingOptions} />
-				<a
-					href={waitingTableHref}
-					class="btn btn-square btn-sm"
-					use:tip={{ content: 'Ouvrir la table des inscriptions' }}
-				>
-					<ExternalLinkIcon size={20} opacity={0.7} />
-				</a>
+				<div class="flex gap-2 ml-auto">
+					<InputOptionInParam key="waiting" options={waitingOptions} />
+					<a
+						href={waitingTableHref}
+						class="btn btn-square btn-sm"
+						use:tip={{ content: 'Ouvrir la table des inscriptions' }}
+					>
+						<ExternalLinkIcon size={20} opacity={0.7} />
+					</a>
+				</div>
 			{/snippet}
 			<DashboardValidations subscribes={data.toValidate} waiting={data.waiting} />
 		</Section>

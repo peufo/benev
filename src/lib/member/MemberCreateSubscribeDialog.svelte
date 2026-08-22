@@ -118,7 +118,9 @@
 	{:else}
 		<form
 			in:fly={{ x: offsetWidth, duration: 250 }}
-			{...createSubscribe.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
+			{...createSubscribe.enhance(
+				enhanceForm({ success: 'Inscription créée', onsuccess: () => dialog.close() })
+			)}
 		>
 			<div class="flex gap-2 items-center">
 				<button type="button" class="btn btn-square btn-ghost btn-sm" onclick={handleClickReturn}>

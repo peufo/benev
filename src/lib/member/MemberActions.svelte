@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { ClipboardListIcon, MailIcon, PhoneIcon } from '@lucide/svelte'
+	import { MailIcon, PhoneIcon } from '@lucide/svelte'
 	import { tip } from 'fuma'
 	import type { Member } from '@prisma/client'
+	import MemberSubscribeButton from './MemberSubscribeButton.svelte'
 
 	interface Props {
 		member: Member
@@ -33,10 +34,6 @@
 		</a>
 	{/if}
 	{#if onSubscribeDialog}
-		<button type="button" class="btn btn-square btn-sm btn-ghost" onclick={onSubscribeDialog}>
-			<span class="inline-flex" use:tip={{ content: `Inscrire ${member.firstName} à un secteur` }}
-				><ClipboardListIcon size={20} class="text-base-content/60" /></span
-			>
-		</button>
+		<MemberSubscribeButton {member} onclick={onSubscribeDialog} />
 	{/if}
 </div>
