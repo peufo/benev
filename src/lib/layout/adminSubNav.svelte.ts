@@ -3,15 +3,11 @@ import type { IconProps } from '@lucide/svelte'
 import {
 	AtSignIcon,
 	CalendarIcon,
-	ClipboardCheckIcon,
 	EyeIcon,
 	IdCardIcon,
 	LogInIcon,
 	OctagonAlertIcon,
 	PaletteIcon,
-	ScrollTextIcon,
-	SigmaIcon,
-	UsersIcon,
 } from '@lucide/svelte'
 import { replaceState } from '$app/navigation'
 
@@ -20,19 +16,6 @@ export interface SubNavSection {
 	id: string
 	label: string
 	icon: Component<IconProps>
-}
-
-/**
- * Les sections de `/[eventId]/admin/dashboard`, dans l'ordre où la page les rend. Le journal est
- * réservé aux admins: sans lui, le rail proposerait une ancre que la page ne rend pas.
- */
-export function dashboardSections(withJournal: boolean): SubNavSection[] {
-	return [
-		{ id: 'stats', label: 'Chiffres clés', icon: SigmaIcon },
-		{ id: 'members', label: 'Derniers adhérents', icon: UsersIcon },
-		{ id: 'validations', label: 'À valider', icon: ClipboardCheckIcon },
-		...(withJournal ? [{ id: 'journal', label: 'Journal', icon: ScrollTextIcon }] : []),
-	]
 }
 
 /**

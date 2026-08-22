@@ -14,14 +14,13 @@ import {
 import { param } from 'fuma'
 import { dev } from '$app/environment'
 import { page } from '$app/state'
-import { dashboardSections, SETTINGS_SECTIONS, type SubNavSection } from './adminSubNav.svelte'
+import { SETTINGS_SECTIONS, type SubNavSection } from './adminSubNav.svelte'
 
 // `param` de fuma 2 est un objet runes sans référence à `page`, et n'est plus un store:
 // `derived` laisse place à une fonction qui relit l'état réactif à chaque appel.
 export function adminTabs() {
 	const query = param.without('skip', 'take', 'form_period')
 	const eventId = page.params.eventId
-	const isAdmin = !!page.data.member?.roles.includes('admin') || !!page.data.userIsRoot
 	const getPath = (p: string) => ({
 		href: `/${eventId}${p}?${query}`,
 		isActive: !!page.route.id?.startsWith(`/[eventId]${p}`),
@@ -39,7 +38,6 @@ export function adminTabs() {
 			...getPath('/admin/dashboard'),
 			label: 'Tableau de bord',
 			icon: LayoutDashboardIcon,
-			sections: dashboardSections(isAdmin),
 		},
 		{
 			...getPath('/teams'),

@@ -2,9 +2,7 @@ import { parseQuery } from 'fuma/server'
 import z from 'zod'
 import { addMemberComputedValues, eventLogsWhere, getLogs, permission, prisma } from '$lib/server'
 import { LOG_FAMILIES, type LogFamily } from '$lib/log'
-
-/** Ce que la section « à valider » montre: une demande qu'un responsable n'a pas encore tranchée. */
-const TO_VALIDATE = { state: 'request', createdBy: 'user' } as const
+import { WAITING, WAITING_KEYS, waitingOf, type Waiting } from './waiting'
 
 export const load = async ({ url, parent, locals, params: { eventId } }) => {
 	await permission.leaderOrRoot(eventId, locals)
@@ -15,29 +13,48 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 		family: z.enum(Object.keys(LOG_FAMILIES) as [LogFamily, ...LogFamily[]]).optional(),
 		memberId: z.string().optional(),
 		teamId: z.string().optional(),
+		waiting: z.enum(WAITING_KEYS).default('us'),
 	})
 
-	const { family, memberId, teamId } = query
+	const { family, memberId, teamId, waiting } = query
 	const inEvent = { period: { team: { eventId } } }
 
-	const [lastMembers, toValidate, nbToValidate] = await Promise.all([
-		prisma.member.findMany({
-			where: { eventId },
-			orderBy: { createdAt: 'desc' },
-			take: 6,
-			include: { user: true, leaderOf: true },
-		}),
-		prisma.subscribe.findMany({
-			where: { ...inEvent, ...TO_VALIDATE },
-			orderBy: { createdAt: 'desc' },
-			take: 6,
-			include: {
-				period: { include: { team: { select: { id: true, name: true } } } },
-				member: { include: { user: true, leaderOf: true } },
-			},
-		}),
-		prisma.subscribe.count({ where: { ...inEvent, ...TO_VALIDATE } }),
-	])
+	const [lastMembers, nbMembers, toValidate, waitingCounts, nbSubscribes, periods] =
+		await Promise.all([
+			prisma.member.findMany({
+				where: { eventId },
+				orderBy: { createdAt: 'desc' },
+				take: 6,
+				include: { user: true, leaderOf: true },
+			}),
+			prisma.member.count({ where: { eventId } }),
+			prisma.subscribe.findMany({
+				where: { ...inEvent, state: 'request', createdBy: waitingOf(waiting).createdBy },
+				orderBy: { createdAt: 'desc' },
+				take: 6,
+				include: {
+					period: { include: { team: { select: { id: true, name: true } } } },
+					member: { include: { user: true, leaderOf: true } },
+				},
+			}),
+			// Les deux camps sont comptés, pas seulement celui qu'on regarde: le bouton de l'autre
+			// annonce ce qu'il cache, sinon il faut cliquer pour savoir s'il y a quelque chose.
+			prisma.subscribe.groupBy({
+				by: ['createdBy'],
+				where: { ...inEvent, state: 'request' },
+				_count: { _all: true },
+			}),
+			prisma.subscribe.count({ where: { ...inEvent, state: { in: ['accepted', 'request'] } } }),
+			// Le nombre d'inscriptions attendu, c'est la somme des places ouvertes par les périodes.
+			prisma.period.aggregate({ where: { team: { eventId } }, _sum: { maxSubscribe: true } }),
+		])
+
+	const nbWaiting = Object.fromEntries(
+		WAITING.map(({ key, createdBy }) => [
+			key,
+			waitingCounts.find((row) => row.createdBy === createdBy)?._count._all ?? 0,
+		])
+	) as Record<Waiting, number>
 
 	return {
 		journal: {
@@ -53,11 +70,15 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 			})),
 		},
 		lastMembers: lastMembers.map((member) => addMemberComputedValues({ ...member, event })),
+		nbMembers,
+		waiting,
 		toValidate: toValidate.map((subscribe) => ({
 			...subscribe,
 			member: addMemberComputedValues({ ...subscribe.member, event }),
 		})),
-		nbToValidate,
+		nbWaiting,
+		nbSubscribes,
+		maxSubscribes: periods._sum.maxSubscribe ?? 0,
 	}
 }
 

@@ -7,12 +7,15 @@
 	import { SubscribeStateForm } from '$lib/subscribe'
 	import { Placeholder } from '$lib/ui'
 	import type { PageData } from './$types'
+	import type { Waiting } from './waiting'
 
-	let { subscribes }: { subscribes: PageData['toValidate'] } = $props()
+	let { subscribes, waiting }: { subscribes: PageData['toValidate']; waiting: Waiting } = $props()
 </script>
 
 {#if !subscribes.length}
-	<Placeholder>Aucune demande en attente</Placeholder>
+	<Placeholder>
+		{waiting === 'us' ? 'Aucune demande à trancher' : 'Aucune proposition sans réponse'}
+	</Placeholder>
 {:else}
 	<ul class="flex flex-col">
 		{#each subscribes as subscribe (subscribe.id)}

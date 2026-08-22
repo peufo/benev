@@ -1,20 +1,16 @@
 <script lang="ts">
-	import { ClipboardCheckIcon, ScrollTextIcon, UsersIcon, XIcon } from '@lucide/svelte'
+	import { ClipboardCheckIcon, ScrollTextIcon, TableIcon, UsersIcon, XIcon } from '@lucide/svelte'
 	import { tip, urlParam } from 'fuma'
 	import { page } from '$app/state'
 	import { InputOptionInParam } from '$lib/ui'
 	import Section from '$lib/ui/Section.svelte'
 	import { LOG_FAMILIES, Logs, loadPreviousEventLogs } from '$lib/log'
-	import { dashboardSections, trackSubNavSections } from '$lib/layout/adminSubNav.svelte'
 	import { eventPath } from '$lib/store'
 	import DashboardMembers from './DashboardMembers.svelte'
 	import DashboardValidations from './DashboardValidations.svelte'
+	import { WAITING, waitingOf } from './waiting'
 
 	let { data } = $props()
-
-	// La navigation de second niveau vit dans le rail admin: la page se contente de lui
-	// signaler quelle section est à l'écran.
-	trackSubNavSections(() => dashboardSections(!!data.journal))
 
 	const families = Object.fromEntries(
 		Object.entries(LOG_FAMILIES).map(([value, { label }]) => [value, label])
@@ -26,6 +22,13 @@
 			? `${data.journal.subject.firstName} ${data.journal.subject.lastName}`
 			: undefined
 	)
+
+	// La table des inscriptions filtrée sur ce que la section montre: le bouton mène à la suite
+	// de la même liste, pas à tout l'évènement.
+	let waitingTableHref = $derived(
+		`${$eventPath}/admin/subscribes?states=${JSON.stringify(['request'])}` +
+			`&createdBy=${waitingOf(data.waiting).createdBy}`
+	)
 </script>
 
 <div class={['lg:grid lg:grid-cols-2', 'max-lg:flex max-lg:flex-col', 'gap-3']}>
@@ -34,32 +37,51 @@
 			id="members"
 			title="Derniers adhérents"
 			icon={UsersIcon}
-			subtitle="Qui a rejoint l'évènement en dernier"
+			subtitle="{data.nbMembers} adhérent{data.nbMembers > 1 ? 's' : ''} à ce jour"
 			class="border-soft"
 		>
 			{#snippet action()}
-				<a href="{$eventPath}/admin/members" class="btn btn-sm">Tous les membres</a>
+				<a
+					href="{$eventPath}/admin/members"
+					class="btn btn-square btn-sm"
+					use:tip={{ content: 'Ouvrir la table des membres' }}
+				>
+					<TableIcon size={20} />
+				</a>
 			{/snippet}
 			<DashboardMembers members={data.lastMembers} />
 		</Section>
 
 		<Section
 			id="validations"
-			title="Inscriptions à valider"
+			title="Inscriptions en attente"
 			icon={ClipboardCheckIcon}
-			subtitle="Les demandes des bénévoles qu'un responsable n'a pas encore tranchées"
+			subtitle="{data.nbSubscribes} inscription{data.nbSubscribes > 1
+				? 's'
+				: ''} sur les {data.maxSubscribes} attendues"
 		>
 			{#snippet action()}
-				{#if data.nbToValidate > data.toValidate.length}
-					<a
-						href="{$eventPath}/admin/subscribes?states={JSON.stringify(['request'])}&createdBy=user"
-						class="btn btn-sm"
-					>
-						Les {data.nbToValidate} demandes
-					</a>
-				{/if}
+				<div class="join">
+					{#each WAITING as { key, label } (key)}
+						<a
+							href={urlParam.with({ waiting: key })}
+							class={['btn btn-sm join-item', data.waiting === key && 'btn-primary']}
+							data-sveltekit-noscroll
+						>
+							{label}
+							<span class="badge badge-xs">{data.nbWaiting[key]}</span>
+						</a>
+					{/each}
+				</div>
+				<a
+					href={waitingTableHref}
+					class="btn btn-square btn-sm"
+					use:tip={{ content: 'Ouvrir la table des inscriptions' }}
+				>
+					<TableIcon size={20} />
+				</a>
 			{/snippet}
-			<DashboardValidations subscribes={data.toValidate} />
+			<DashboardValidations subscribes={data.toValidate} waiting={data.waiting} />
 		</Section>
 	</div>
 
