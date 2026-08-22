@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CheckIcon, CircleAlertIcon } from '@lucide/svelte'
+	import { CheckIcon, GhostIcon, MessageCircleQuestionMarkIcon } from '@lucide/svelte'
 	import { tip } from 'fuma'
 	import type { MemberWithComputedValues } from '$lib/server'
 
@@ -11,27 +11,29 @@
 </script>
 
 {#if member.isValidedByUser}
-	<div class="badge badge-success" use:tip={{ content: 'Le membre a validé sa participation' }}>
+	<div
+		class="badge badge-success badge-soft"
+		use:tip={{ content: 'Le membre a validé sa participation' }}
+	>
 		<CheckIcon class="opacity-80 -translate-x-1" size={20} />
 		Actif
 	</div>
 {:else}
 	<div
-		class="badge badge-warning"
+		class="badge badge-info badge-soft badge-outline"
 		use:tip={{ content: `Le membre n'a pas validé sa participation` }}
 	>
-		<CircleAlertIcon class="opacity-80 -translate-x-1" size={20} />
+		<GhostIcon class="opacity-80 -translate-x-1" size={20} />
 		Inactif
 	</div>
 {/if}
 
 {#if !member.isUserProfileCompleted || !member.isMemberProfileCompleted}
-	{@const fields = [...member.userProfileRequiredFields, ...member.memberProfileRequiredFields]}
 	<div
-		class="badge badge-warning"
-		use:tip={{ content: `Champs manquants: "${fields.join('", "')}"` }}
+		class="badge badge-warning badge-soft badge-outline"
+		use:tip={{ content: `Certaine informations de profile sont manquantes` }}
 	>
-		<CircleAlertIcon class="opacity-80 -translate-x-1" size={20} />
-		Profil incomplet
+		<MessageCircleQuestionMarkIcon class="opacity-80 -translate-x-1" size={20} />
+		Incomplet
 	</div>
 {/if}

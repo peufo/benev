@@ -22,13 +22,18 @@ export interface SubNavSection {
 	icon: Component<IconProps>
 }
 
-/** Les sections de `/[eventId]/admin/dashboard`, dans l'ordre où la page les rend. */
-export const DASHBOARD_SECTIONS: SubNavSection[] = [
-	{ id: 'stats', label: 'Chiffres clés', icon: SigmaIcon },
-	{ id: 'members', label: 'Derniers adhérents', icon: UsersIcon },
-	{ id: 'validations', label: 'À valider', icon: ClipboardCheckIcon },
-	{ id: 'journal', label: 'Journal', icon: ScrollTextIcon },
-]
+/**
+ * Les sections de `/[eventId]/admin/dashboard`, dans l'ordre où la page les rend. Le journal est
+ * réservé aux admins: sans lui, le rail proposerait une ancre que la page ne rend pas.
+ */
+export function dashboardSections(withJournal: boolean): SubNavSection[] {
+	return [
+		{ id: 'stats', label: 'Chiffres clés', icon: SigmaIcon },
+		{ id: 'members', label: 'Derniers adhérents', icon: UsersIcon },
+		{ id: 'validations', label: 'À valider', icon: ClipboardCheckIcon },
+		...(withJournal ? [{ id: 'journal', label: 'Journal', icon: ScrollTextIcon }] : []),
+	]
+}
 
 /**
  * Les sections de `/[eventId]/admin/settings`, rendues par le rail admin sous son onglet actif.
@@ -58,10 +63,12 @@ export const adminSubNav = {
 
 /**
  * Suit le défilement des sections pour désigner l'entrée active du rail. À appeler depuis la
- * page qui les rend — c'est elle qui possède les éléments observés.
+ * page qui les rend — c'est elle qui possède les éléments observés. La liste se passe en
+ * fonction: le tableau de bord la dérive de ses données, qui changent à chaque navigation.
  */
-export function trackSubNavSections(sections: SubNavSection[]) {
+export function trackSubNavSections(getSections: () => SubNavSection[]) {
 	$effect(() => {
+		const sections = getSections()
 		const visible: Record<string, boolean> = {}
 		const observer = new IntersectionObserver(
 			(entries) => {

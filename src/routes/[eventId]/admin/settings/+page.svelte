@@ -35,7 +35,7 @@
 
 	// La navigation de second niveau vit dans le rail admin: la page se contente de lui
 	// signaler quelle section est à l'écran.
-	trackSubNavSections(SETTINGS_SECTIONS)
+	trackSubNavSections(() => SETTINGS_SECTIONS)
 
 	let formElement = $state<HTMLFormElement>()
 	let saveBar = $state<ReturnType<typeof SaveBar>>()

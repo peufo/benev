@@ -14,13 +14,14 @@ import {
 import { param } from 'fuma'
 import { dev } from '$app/environment'
 import { page } from '$app/state'
-import { DASHBOARD_SECTIONS, SETTINGS_SECTIONS, type SubNavSection } from './adminSubNav.svelte'
+import { dashboardSections, SETTINGS_SECTIONS, type SubNavSection } from './adminSubNav.svelte'
 
 // `param` de fuma 2 est un objet runes sans référence à `page`, et n'est plus un store:
 // `derived` laisse place à une fonction qui relit l'état réactif à chaque appel.
 export function adminTabs() {
 	const query = param.without('skip', 'take', 'form_period')
 	const eventId = page.params.eventId
+	const isAdmin = !!page.data.member?.roles.includes('admin') || !!page.data.userIsRoot
 	const getPath = (p: string) => ({
 		href: `/${eventId}${p}?${query}`,
 		isActive: !!page.route.id?.startsWith(`/[eventId]${p}`),
@@ -34,6 +35,12 @@ export function adminTabs() {
 		/** Sections internes de la page, rendues sous l'onglet quand il est actif. */
 		sections?: SubNavSection[]
 	}[] = [
+		{
+			...getPath('/admin/dashboard'),
+			label: 'Tableau de bord',
+			icon: LayoutDashboardIcon,
+			sections: dashboardSections(isAdmin),
+		},
 		{
 			...getPath('/teams'),
 			label: 'Secteurs',
@@ -71,17 +78,6 @@ export function adminTabs() {
 			icon: CircleQuestionMarkIcon,
 		},
 	]
-
-	// Le tableau de bord porte le journal, qui montre les coordonnées éditées et les réglages:
-	// son `load` le refuse aux responsables. Montrer l'onglet quand même mènerait à une impasse
-	// en 403.
-	if (page.data.member?.roles.includes('admin') || page.data.userIsRoot)
-		tabs.unshift({
-			...getPath('/admin/dashboard'),
-			label: 'Tableau de bord',
-			icon: LayoutDashboardIcon,
-			sections: DASHBOARD_SECTIONS,
-		})
 
 	// Insertion relative: un index en dur se décale au moindre onglet ajouté ou fusionné.
 	if (dev)

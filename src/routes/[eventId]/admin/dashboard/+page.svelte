@@ -5,7 +5,7 @@
 	import { InputOptionInParam } from '$lib/ui'
 	import Section from '$lib/ui/Section.svelte'
 	import { LOG_FAMILIES, Logs, loadPreviousEventLogs } from '$lib/log'
-	import { DASHBOARD_SECTIONS, trackSubNavSections } from '$lib/layout/adminSubNav.svelte'
+	import { dashboardSections, trackSubNavSections } from '$lib/layout/adminSubNav.svelte'
 	import { eventPath } from '$lib/store'
 	import DashboardStats from './DashboardStats.svelte'
 	import DashboardMembers from './DashboardMembers.svelte'
@@ -15,7 +15,7 @@
 
 	// La navigation de second niveau vit dans le rail admin: la page se contente de lui
 	// signaler quelle section est à l'écran.
-	trackSubNavSections(DASHBOARD_SECTIONS)
+	trackSubNavSections(() => dashboardSections(!!data.journal))
 
 	const families = Object.fromEntries(
 		Object.entries(LOG_FAMILIES).map(([value, { label }]) => [value, label])
@@ -23,7 +23,9 @@
 
 	let isAdmin = $derived(!!page.data.member?.roles.includes('admin'))
 	let subjectName = $derived(
-		data.subject ? `${data.subject.firstName} ${data.subject.lastName}` : undefined
+		data.journal?.subject
+			? `${data.journal.subject.firstName} ${data.journal.subject.lastName}`
+			: undefined
 	)
 </script>
 
@@ -63,37 +65,44 @@
 		<DashboardValidations subscribes={data.toValidate} />
 	</Section>
 
-	<Section id="journal" title="Journal" icon={ScrollTextIcon}>
-		{#snippet action()}
-			{#if data.subject}
-				<a
-					href={urlParam.without('memberId')}
-					class="btn btn-sm"
-					data-sveltekit-noscroll
-					use:tip={{ content: 'Retirer le filtre' }}
-				>
-					<XIcon size={18} />
-					{subjectName}
-				</a>
-			{/if}
-			<InputOptionInParam key="family" options={families} />
-		{/snippet}
+	{#if data.journal}
+		{@const journal = data.journal}
+		<Section id="journal" title="Journal" icon={ScrollTextIcon}>
+			{#snippet action()}
+				{#if journal.subject}
+					<a
+						href={urlParam.without('memberId')}
+						class="btn btn-sm"
+						data-sveltekit-noscroll
+						use:tip={{ content: 'Retirer le filtre' }}
+					>
+						<XIcon size={18} />
+						{subjectName}
+					</a>
+				{/if}
+				<InputOptionInParam key="family" options={families} />
+			{/snippet}
 
-		<!-- Un filtre différent, c'est un autre ensemble: le fil repart neuf plutôt que d'empiler
-			 ce qui avait été chargé au-dessus de l'ancien. -->
-		{#key `${data.family}:${data.subject?.id}`}
-			<Logs
-				logs={data.logs}
-				hasMore={data.hasMore}
-				title={subjectName ?? data.event?.name}
-				timezone={data.event?.timezone}
-				showNoteForm={isAdmin}
-				noteMemberId={data.subject?.id}
-				loadPrevious={(beforeId) =>
-					loadPreviousEventLogs({ beforeId, family: data.family, memberId: data.subject?.id })}
-				canDeleteNote={(log) =>
-					log.type === 'note_create' && (isAdmin || log.createdById === page.data.member?.userId)}
-			/>
-		{/key}
-	</Section>
+			<!-- Un filtre différent, c'est un autre ensemble: le fil repart neuf plutôt que d'empiler
+				 ce qui avait été chargé au-dessus de l'ancien. -->
+			{#key `${journal.family}:${journal.subject?.id}`}
+				<Logs
+					logs={journal.logs}
+					hasMore={journal.hasMore}
+					title={subjectName ?? data.event?.name}
+					timezone={data.event?.timezone}
+					showNoteForm={isAdmin}
+					noteMemberId={journal.subject?.id}
+					loadPrevious={(beforeId) =>
+						loadPreviousEventLogs({
+							beforeId,
+							family: journal.family,
+							memberId: journal.subject?.id,
+						})}
+					canDeleteNote={(log) =>
+						log.type === 'note_create' && (isAdmin || log.createdById === page.data.member?.userId)}
+				/>
+			{/key}
+		</Section>
+	{/if}
 </div>

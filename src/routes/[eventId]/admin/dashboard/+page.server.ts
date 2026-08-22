@@ -8,10 +8,11 @@ import { LOG_FAMILIES, type LogFamily } from '$lib/log'
 const TO_VALIDATE = { state: 'request', createdBy: 'user' } as const
 
 export const load = async ({ url, parent, locals, params: { eventId } }) => {
-	// `admin/+layout.server.ts` n'exige qu'un rôle de responsable: le tableau de bord, lui, porte
-	// le journal — coordonnées éditées et réglages de l'évènement. Il est réservé aux admins.
-	await permission.adminOrRoot(eventId, locals)
-	const { event } = await parent()
+	await permission.leaderOrRoot(eventId, locals)
+	const { event, member, userIsRoot } = await parent()
+	// Le journal montre les coordonnées éditées et les réglages de l'évènement: comme sur la
+	// fiche d'un membre, il reste réservé aux admins. Le reste de la page sert les responsables.
+	const isAdmin = !!member?.roles.includes('admin') || !!userIsRoot
 
 	const query = parseQuery(url, {
 		take: z.coerce.number().default(30),
@@ -55,15 +56,19 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 		])
 
 	return {
-		family,
-		...(await getLogs(eventLogsWhere({ eventId, family, memberId, teamId }), {
-			take: query.take,
-		})),
-		subject: memberId
-			? await prisma.member.findUnique({
-					where: { id: memberId, eventId },
-					select: { id: true, firstName: true, lastName: true },
-				})
+		journal: isAdmin
+			? {
+					family,
+					subject: memberId
+						? await prisma.member.findUnique({
+								where: { id: memberId, eventId },
+								select: { id: true, firstName: true, lastName: true },
+							})
+						: null,
+					...(await getLogs(eventLogsWhere({ eventId, family, memberId, teamId }), {
+						take: query.take,
+					})),
+				}
 			: null,
 		stats: {
 			membership: getMembershipDistribution(members),
