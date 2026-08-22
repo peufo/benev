@@ -1,9 +1,10 @@
 import { error, invalid, redirect } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import { modelEventCreate, modelEventSettings } from '$lib/models'
-import { jsonOrDbNull, permission, prisma } from '$lib/server'
+import { createLog, jsonOrDbNull, permission, prisma } from '$lib/server'
 import { defaultEmailModels } from '$lib/email/models'
 import { EVENT_TIER } from '$lib/constant'
+import { diffChanges, hasChanges, projectEvent } from '$lib/log'
 
 /**
  * Deux formulaires décrivent un évènement: `EventForm` le crée avec le strict nécessaire, et
@@ -89,11 +90,16 @@ export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issu
 export const updateEvent = form(modelEventSettings, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
-	await permission.admin(eventId, locals)
+	const actor = await permission.admin(eventId, locals)
+	const before = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
 	const event = await prisma.event.update({
 		where: { id: eventId },
 		data: { ...data, location: jsonOrDbNull(data.location) },
 	})
+	// Le thème passe par ce même formulaire mais reste hors journal: `projectEvent` ne retient
+	// que l'identité et les règles d'adhésion, seules à changer ce que vivent les bénévoles.
+	const changes = diffChanges(projectEvent(before), projectEvent(event))
+	if (hasChanges(changes)) await createLog('event_update', { event, changes, actor })
 	// L'URL porte l'id: seul son changement rend la page courante morte. Rediriger à chaque
 	// enregistrement remonterait le défilement d'une page de réglages volontairement longue.
 	if (event.id !== eventId) redirect(303, `/${event.id}/admin/settings`)

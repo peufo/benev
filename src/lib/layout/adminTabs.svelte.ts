@@ -6,6 +6,7 @@ import {
 	ClipboardListIcon,
 	CircleQuestionMarkIcon,
 	MapPinnedIcon,
+	ScrollTextIcon,
 	GiftIcon,
 	SettingsIcon,
 } from '@lucide/svelte'
@@ -70,6 +71,19 @@ export function adminTabs() {
 			icon: CircleQuestionMarkIcon,
 		},
 	]
+
+	// Le journal montre les coordonnées éditées et les réglages: son `load` le refuse aux
+	// responsables. Montrer l'onglet quand même mènerait à une impasse en 403.
+	if (page.data.member?.roles.includes('admin') || page.data.userIsRoot)
+		tabs.splice(
+			tabs.findIndex(({ label }) => label === 'Aide'),
+			0,
+			{
+				...getPath('/admin/logs'),
+				label: 'Journal',
+				icon: ScrollTextIcon,
+			}
+		)
 
 	// Insertion relative: un index en dur se décale au moindre onglet ajouté ou fusionné.
 	if (dev)

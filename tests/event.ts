@@ -176,6 +176,65 @@ export function useEvent(owner: User, name: string) {
 			await expect(dialog.getByText('utilise déjà cette adresse')).toBeVisible()
 		},
 		/**
+		 * Le journal se lit, se filtre, et accepte une note. Les lignes attendues ont été écrites
+		 * par les étapes précédentes du parcours: c'est le tour complet écriture -> rendu, seul à
+		 * pouvoir attraper une charge utile qui ne correspondrait plus à son composant.
+		 */
+		async expectJournal(page: Page) {
+			await page.goto(`/${eventId}/admin/logs`)
+
+			// Le fil tient dans une fenêtre: rien à charger avant, donc l'accueil et non le bouton.
+			await expect(page.getByText('Début du journal')).toBeVisible()
+			await expect(page.getByRole('button', { name: /entrées précédentes/ })).toHaveCount(0)
+
+			// Les réglages modifiés plus haut, rendus par leur diff.
+			await expect(page.getByText("a modifié les réglages de l'évènement").first()).toBeVisible()
+			await expect(page.getByText('Lieu').first()).toBeVisible()
+
+			// La note est la dernière chose arrivée: elle se pose en bas du fil.
+			const note = `Rappeler le comité ${eventCuid}`
+			await page.getByPlaceholder('Ajouter une note').fill(note)
+			await page.getByRole('button', { name: 'Publier la note' }).click()
+			const entries = page.getByRole('listitem')
+			await expect(entries.last()).toContainText(note)
+
+			// Le filtre par famille ne laisse que la note.
+			await page.getByRole('link', { name: 'Notes' }).click()
+			await expect(page.getByText(note)).toBeVisible()
+			await expect(page.getByText("a modifié les réglages de l'évènement")).toHaveCount(0)
+
+			await page.getByRole('button', { name: 'Supprimer la note' }).click()
+			await expect(page.getByText(note)).toHaveCount(0)
+		},
+		/**
+		 * Le fil se charge vers le passé. `take` est piloté par l'URL, ce qui permet de réduire la
+		 * fenêtre à deux entrées au lieu d'en écrire trente pour atteindre le bouton.
+		 */
+		async expectJournalLoadsPrevious(page: Page) {
+			await page.goto(`/${eventId}/admin/logs`)
+			const notes = ['Alpha', 'Bravo', 'Charlie'].map((n) => `${n} ${eventCuid}`)
+			for (const note of notes) {
+				await page.getByPlaceholder('Ajouter une note').fill(note)
+				await page.getByRole('button', { name: 'Publier la note' }).click()
+				await expect(page.getByText(note)).toBeVisible()
+			}
+
+			await page.goto(`/${eventId}/admin/logs?take=2`)
+			const loadPrevious = page.getByRole('button', { name: /entrées précédentes/ })
+			// Fenêtre de deux: les deux dernières notes, et rien avant.
+			await expect(page.getByText(notes[2])).toBeVisible()
+			await expect(page.getByText(notes[0])).toHaveCount(0)
+			await expect(loadPrevious).toBeVisible()
+			// Tant qu'il reste des entrées au-dessus, on n'est pas au début du journal.
+			await expect(page.getByText('Début du journal')).toHaveCount(0)
+
+			await loadPrevious.click()
+
+			await expect(page.getByText(notes[0])).toBeVisible()
+			await expect(page.getByText('Début du journal')).toBeVisible()
+			await expect(loadPrevious).toHaveCount(0)
+		},
+		/**
 		 * La médiathèque est un tiroir unique, monté par le layout de l'évènement: chaque
 		 * `InputMedia` et l'éditeur riche l'ouvrent, au lieu d'en monter chacun le sien.
 		 */

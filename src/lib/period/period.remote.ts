@@ -2,14 +2,17 @@ import { command, form, getRequestEvent } from '$app/server'
 import { redirect } from '@sveltejs/kit'
 import z from 'zod'
 import { modelPeriodCreate, modelPeriodUpdate, validationPeriod } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { createLog, permission, prisma } from '$lib/server'
 
 export const createPeriod = form(
 	modelPeriodCreate.extend({ redirectTo: z.string().optional() }).superRefine(validationPeriod),
 	async ({ redirectTo, ...data }) => {
 		const { locals } = getRequestEvent()
-		await permission.leaderOfTeam(data.team.connect.id, locals)
+		const teamId = data.team.connect.id
+		const actor = await permission.leaderOfTeam(teamId, locals)
 		const period = await prisma.period.create({ data })
+		const team = await prisma.team.findUniqueOrThrow({ where: { id: teamId } })
+		await createLog('period_create', { period, team, actor })
 
 		if (!redirectTo) return period
 		const [path, params] = redirectTo.split('?')
@@ -29,9 +32,13 @@ export const deletePeriod = form(
 	z.object({ id: z.string(), redirectTo: z.string().optional() }),
 	async ({ id, redirectTo }) => {
 		const { locals } = getRequestEvent()
-		const period = await prisma.period.findUniqueOrThrow({ where: { id } })
-		await permission.leaderOfTeam(period.teamId, locals)
+		const period = await prisma.period.findUniqueOrThrow({
+			where: { id },
+			include: { team: true },
+		})
+		const actor = await permission.leaderOfTeam(period.teamId, locals)
 		await prisma.period.delete({ where: { id } })
+		await createLog('period_delete', { period, team: period.team, actor })
 		if (redirectTo) redirect(303, redirectTo)
 	}
 )
@@ -40,6 +47,9 @@ export const deletePeriod = form(
  * Deux appels impératifs — dupliquer la période courante, et la déplacer depuis le planning —
  * qui postaient un `FormData` construit à la main. En `command()`, les arguments passent par
  * devalue: les dates restent des dates, sans jeton de coercition.
+ *
+ * Ni l'un ni l'autre n'entre au journal, `updatePeriod` non plus: le glisser-déposer du planning
+ * les appelle à chaque relâchement, et le bruit noierait les inscriptions.
  */
 export const duplicatePeriod = command(
 	z

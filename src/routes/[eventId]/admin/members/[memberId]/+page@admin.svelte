@@ -4,6 +4,7 @@
 		CheckIcon,
 		ClipboardListIcon,
 		PencilIcon,
+		ScrollTextIcon,
 		Trash2Icon,
 		XIcon,
 	} from '@lucide/svelte'
@@ -27,10 +28,12 @@
 		MemberContactForm,
 	} from '$lib/member'
 	import MembersBadges from '../MembersBadges.svelte'
+	import { Logs, loadPreviousEventLogs } from '$lib/log'
 
 	let { data } = $props()
 
 	let createSubscribeDialog: HTMLDialogElement = $state()!
+	let isAdmin = $derived(!!data.member?.roles.includes('admin'))
 </script>
 
 <Card class="max-w-3xl mx-auto w-full" bodyClass="gap-12">
@@ -160,6 +163,34 @@
 		</div>
 		<Teams teams={data.memberProfile.leaderOf} />
 	</section>
+
+	{#if isAdmin}
+		<section>
+			<div class="flex gap-2 items-center mb-4">
+				<h3 class="title mr-2">Journal</h3>
+				<a
+					href="{$eventPath}/admin/logs?memberId={data.memberProfile.id}"
+					class="btn btn-sm"
+					use:tip={{ content: 'Ouvrir le journal complet' }}
+				>
+					<ScrollTextIcon size={20} />
+				</a>
+			</div>
+
+			<Logs
+				logs={data.journal.logs}
+				hasMore={data.journal.hasMore}
+				title="{data.memberProfile.firstName} {data.memberProfile.lastName}"
+				timezone={data.event.timezone}
+				showNoteForm
+				noteMemberId={data.memberProfile.id}
+				loadPrevious={(beforeId) =>
+					loadPreviousEventLogs({ beforeId, memberId: data.memberProfile.id })}
+				canDeleteNote={(log) =>
+					log.type === 'note_create' && (isAdmin || log.createdById === data.member?.userId)}
+			/>
+		</section>
+	{/if}
 </Card>
 
 <MemberCreateSubscribeDialog

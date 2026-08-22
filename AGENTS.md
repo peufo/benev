@@ -136,6 +136,7 @@ be introduced.
 | `$lib/pages`                | CMS page rendering, suggestions, and nested path logic.                                                              |
 | `$lib/seo`                  | `defaultMetaTags`, `errorMetaTags`, `mergeMetaTags`, JSON-LD schemas. Rendered **once** in the root layout.          |
 | `$lib/constant`             | `EVENT_TIER` — per-tier member quotas and Stripe price bindings.                                                     |
+| `$lib/log`                  | The event journal: `logMap` (one transform per `LogType`), the feed components, `LOG_FAMILIES`. See below.           |
 | `$lib/dayjs.ts`             | Pre-configured dayjs instance (relativeTime plugin + French locale).                                                 |
 
 ---
@@ -183,6 +184,43 @@ Things to know when touching this layer:
 `ensureFieldsWithFilterAreVisibles` — used in `load` functions. Those stay.
 
 ---
+
+## The Journal
+
+Every mutation worth an organizer's attention writes a `Log` row. The rule of the module is that
+**a call site passes the entity it just wrote, never a set of foreign keys**: one transform per
+`LogType` in `$lib/log/logMap.ts` derives both the relation columns and the payload.
+
+```ts
+await createLog('subscribe_state', { subscribe, before: _subscribe.state, actor: author })
+```
+
+`satisfies { [T in LogType]: (input: never) => LogOutput<unknown> }` makes the table exhaustive, and
+`logComponents` in `Log.svelte` does the same for rendering — **adding a value to the enum does not
+compile until it can be both written and read**. `LogInput<T>` / `LogData<T>` derive from the table,
+so a type is declared once.
+
+Three rules govern what goes into `data`:
+
+- **Displayed names are frozen in the payload**, never joined. The feed renders with no `include`
+  at all, and stays true after the member, team or period it cites is gone. The FK columns exist
+  only for filtering and links, and are `SET NULL` for exactly that reason.
+- **A `*_update` carries only the keys that changed**, taken from a projection in `logProject.ts`.
+  The projection _is_ the whitelist — what it does not return never reaches the database. It also
+  returns primitives only, so a `Date` cannot cross the JSON column and make the derived type lie.
+- **Free-form member profile fields are logged by name, never by value.** They are defined per
+  event and can hold anything (diet, health).
+
+`createLog` never throws — a journal that falls must not take down what it journalises.
+
+What is deliberately _not_ logged: searches, reorderings, personal table views, media, tags,
+milestones, a member's own notification preferences, and **`movePeriod` / `updatePeriod` /
+`duplicatePeriod`**, which the planning grid calls on every drag release.
+
+The organizer reads it at `/[eventId]/admin/logs` (admins only, guarded in `load`) and in the
+Journal section of a member's page; `/root/logs` shows the same feed across events. `email_sent` is
+excluded from the event feed — one line per notification sent would bury everything — while
+`email_failed` is exactly what an organizer needs to see.
 
 ## Fuma
 

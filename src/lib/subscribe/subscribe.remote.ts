@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import { isFreeRange } from 'perod'
 import { modelSubscribe } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { createLog, permission, prisma } from '$lib/server'
 import { isMemberAllowed } from '$lib/member'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
 import { periodIsComplet } from '$lib/period/index.js'
@@ -95,6 +95,8 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 			},
 		},
 	})
+
+	await createLog('subscribe_create', { subscribe, actor: session.user })
 
 	if (isLeaderOfTeam && isSelfSubscribe) return
 

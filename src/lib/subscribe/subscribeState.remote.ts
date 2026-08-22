@@ -3,7 +3,7 @@ import type { Prisma, SubscribeState } from '@prisma/client'
 import { form, getRequestEvent } from '$app/server'
 import { isFreeRange } from 'perod'
 import z from 'zod'
-import { notifyTierQuotaIfNeeded, permission, prisma } from '$lib/server'
+import { createLog, notifyTierQuotaIfNeeded, permission, prisma } from '$lib/server'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
 import { periodIsComplet } from '$lib/period'
 
@@ -140,6 +140,12 @@ export const setSubscribeState = form(
 			},
 		})
 
+		await createLog('subscribe_state', {
+			subscribe,
+			before: _subscribe.state,
+			actor: author,
+		})
+
 		// Automatique member validation
 		if (isLeaderAction && !subscribe.member.isValidedByEvent) {
 			await prisma.member.update({
@@ -147,6 +153,13 @@ export const setSubscribeState = form(
 				data: { isValidedByEvent: true },
 			})
 			await notifyTierQuotaIfNeeded(eventId)
+			// Validation implicite: l'organisateur ne l'a pas décidée en tant que telle, mais elle
+			// change le statut du membre — elle doit se lire dans son journal.
+			await createLog('member_validated', {
+				member: subscribe.member,
+				actor: author,
+				isValidedByEvent: true,
+			})
 		}
 
 		const toMember =
@@ -174,6 +187,12 @@ export const setSubscribeState = form(
 	}
 )
 
+/** Le membre et le secteur sont chargés pour le journal: leurs noms y sont figés. */
+const includeForLog = {
+	member: true,
+	period: { include: { team: true } },
+} satisfies Prisma.SubscribeInclude
+
 export const deleteSubscribe = form(
 	z.object({ subscribeId: z.string() }),
 	async ({ subscribeId }) => {
@@ -181,10 +200,12 @@ export const deleteSubscribe = form(
 		const { locals } = getRequestEvent()
 		const subscribe = await prisma.subscribe.findUniqueOrThrow({
 			where: { id: subscribeId },
-			include: { period: true },
+			include: includeForLog,
 		})
-		await permission.leaderOfTeam(subscribe.period.teamId, locals)
-		return prisma.subscribe.delete({ where: { id: subscribeId } })
+		const author = await permission.leaderOfTeam(subscribe.period.teamId, locals)
+		const deleted = await prisma.subscribe.delete({ where: { id: subscribeId } })
+		await createLog('subscribe_delete', { subscribe, actor: author })
+		return deleted
 	}
 )
 
@@ -194,12 +215,18 @@ export const toggleSubscribeIsAbsent = form(
 		const { locals } = getRequestEvent()
 		const subscribe = await prisma.subscribe.findUniqueOrThrow({
 			where: { id: subscribeId },
-			include: { period: true },
+			include: includeForLog,
 		})
-		await permission.leaderOfTeam(subscribe.period.teamId, locals)
-		return prisma.subscribe.update({
+		const author = await permission.leaderOfTeam(subscribe.period.teamId, locals)
+		const isAbsent = !subscribe.isAbsent
+		const updated = await prisma.subscribe.update({
 			where: { id: subscribeId },
-			data: { isAbsent: !subscribe.isAbsent },
+			data: { isAbsent },
 		})
+		await createLog('subscribe_absent', {
+			subscribe: { ...subscribe, isAbsent },
+			actor: author,
+		})
+		return updated
 	}
 )

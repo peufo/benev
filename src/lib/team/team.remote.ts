@@ -1,36 +1,55 @@
 import { command, form, getRequestEvent, query } from '$app/server'
+import type { Prisma } from '@prisma/client'
 import { error } from '@sveltejs/kit'
 import z from 'zod'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
-import { permission, prisma, useAddTeamComputedValues } from '$lib/server'
+import { createLog, permission, prisma, useAddTeamComputedValues } from '$lib/server'
 import { cloneTeam } from '$lib/server/clone.js'
+import { diffChanges, hasChanges, projectTeam } from '$lib/log'
 
 export const createTeam = form(modelTeam, async (data) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
-	await permission.admin(eventId, locals)
-	return prisma.team.create({ data: { ...data, eventId } })
+	const actor = await permission.admin(eventId, locals)
+	const team = await prisma.team.create({ data: { ...data, eventId } })
+	await createLog('team_create', { team, actor })
+	return team
 })
+
+/** Les responsables sont journalisés par leurs noms: un diff de cuid ne se lit pas. */
+const includeLeadersForLog = {
+	leaders: { select: { firstName: true, lastName: true } },
+} satisfies Prisma.TeamInclude
 
 export const updateTeam = form(modelTeamUpdate, async ({ leaders, ...data }) => {
 	const { locals } = getRequestEvent()
 	const member = await permission.leaderOfTeam(data.id, locals)
 	const isAdmin = member.roles.includes('admin')
 	if (!isAdmin && leaders) error(403)
-	return prisma.team.update({
+	const before = await prisma.team.findUniqueOrThrow({
 		where: { id: data.id },
+		include: includeLeadersForLog,
+	})
+	const team = await prisma.team.update({
+		where: { id: data.id },
+		include: includeLeadersForLog,
 		// Retirer le dernier responsable ne transmet aucune clé, exactement comme un formulaire
 		// où `InputLeaders` n'a pas été rendu. C'est le rôle qui tranche: un admin voit toujours
 		// le champ, donc l'absence vaut « plus aucun responsable »; pour les autres elle vaut
 		// « champ jamais rendu », et la relation ne bouge pas.
 		data: { ...data, leaders: isAdmin ? (leaders ?? { set: [] }) : undefined },
 	})
+	const changes = diffChanges(projectTeam(before), projectTeam(team))
+	if (hasChanges(changes)) await createLog('team_update', { team, changes, actor: member })
+	return team
 })
 
 export const deleteTeam = form(z.object({ id: z.string() }), async ({ id }) => {
 	const { locals, params } = getRequestEvent()
-	await permission.admin(params.eventId!, locals)
-	return prisma.team.delete({ where: { id } })
+	const actor = await permission.admin(params.eventId!, locals)
+	const team = await prisma.team.delete({ where: { id } })
+	await createLog('team_delete', { team, actor })
+	return team
 })
 
 export const cloneTeamForm = form(

@@ -3,7 +3,7 @@
 import type { MemberWithComputedValues } from '$lib/server'
 import type { Event, Media, Team } from '@prisma/client'
 import { modelMemberCondition } from '$lib/models'
-import type { LogDataMap } from '$lib/log'
+import type { LogDataMap } from '$lib/log/logMap'
 
 // for information about these interfaces
 declare global {
@@ -55,7 +55,8 @@ declare global {
 		type Location = { label: string; coords?: { lat: number; lon: number } }
 		/**
 		 * Charge utile d'une ligne de journal, discriminée par la colonne `type`.
-		 * La correspondance type -> forme vit dans `$lib/log`, que la page /root/logs lit aussi.
+		 * Dérivée des transformations de `$lib/log/logMap` — module feuille, importé ici plutôt
+		 * que le baril, qui charge aussi des composants.
 		 */
 		type JsonLogData = LogDataMap[keyof LogDataMap]
 	}

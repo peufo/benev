@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/private'
 import nodemailer, { type SendMailOptions } from 'nodemailer'
-import type { EmailFailureReason } from '$lib/log'
-import { createLog, type LogContext } from './log'
+import type { EmailFailureReason, EmailRelations } from '$lib/log/logMap'
+import { createLog } from './log'
 import { isPermanentError, nextDelay } from './emailRetry'
 import { toAddressList } from './recipients'
 
@@ -56,7 +56,11 @@ if (emailDisabled) {
 
 type QueuedEmail = {
 	options: SendMailOptions
-	context: LogContext
+	/**
+	 * Capturé dans la requête, à la mise en file: le worker draine hors requête et n'a plus rien
+	 * à interroger pour rattacher la ligne de journal.
+	 */
+	relations: EmailRelations
 	attempts: number
 }
 
@@ -70,8 +74,8 @@ let draining: Promise<void> | null = null
 let stopped = false
 
 /** Met un message en file et rend la main. Le worker s'en occupe. */
-export function enqueueEmail(options: SendMailOptions, context: LogContext = {}) {
-	const job: QueuedEmail = { options, context, attempts: 0 }
+export function enqueueEmail(options: SendMailOptions, relations: EmailRelations = {}) {
+	const job: QueuedEmail = { options, relations, attempts: 0 }
 	if (stopped) {
 		void logFailure(job, new Error('File close'), 'shutdown')
 		return
@@ -109,17 +113,14 @@ async function runJob(job: QueuedEmail) {
 	try {
 		const info = await transporter.sendMail(job.options)
 		const rejected = toAddressList(info.rejected)
-		await createLog(
-			'email_sent',
-			{
-				subject: job.options.subject ?? '',
-				to: toAddressList(job.options.to),
-				messageId: info.messageId,
-				response: info.response,
-				...(rejected.length ? { rejected } : {}),
-			},
-			job.context
-		)
+		await createLog('email_sent', {
+			relations: job.relations,
+			subject: job.options.subject ?? '',
+			to: toAddressList(job.options.to),
+			messageId: info.messageId,
+			response: info.response,
+			rejected: rejected.length ? rejected : undefined,
+		})
 	} catch (err) {
 		if (isPermanentError(err)) return logFailure(job, err, 'permanent')
 
@@ -143,17 +144,14 @@ async function runJob(job: QueuedEmail) {
 }
 
 async function logFailure(job: QueuedEmail, err: unknown, reason: EmailFailureReason) {
-	await createLog(
-		'email_failed',
-		{
-			subject: job.options.subject ?? '',
-			to: toAddressList(job.options.to),
-			error: describeError(err),
-			attempts: job.attempts,
-			reason,
-		},
-		job.context
-	)
+	await createLog('email_failed', {
+		relations: job.relations,
+		subject: job.options.subject ?? '',
+		to: toAddressList(job.options.to),
+		error: describeError(err),
+		attempts: job.attempts,
+		reason,
+	})
 }
 
 function describeError(err: unknown): string {

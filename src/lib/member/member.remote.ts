@@ -4,6 +4,7 @@ import type { Field, FieldType } from '@prisma/client'
 import z from 'zod'
 import {
 	createAvatarPlaceholder,
+	createLog,
 	getMemberProfile,
 	notifyTierQuotaIfNeeded,
 	permission,
@@ -56,16 +57,38 @@ export const updateMemberProfile = form('unchecked', async (input: RemoteFormInp
 		.safeParse(input)
 	if (!parsed.success) invalid(...parsed.error.issues)
 
-	return prisma.member.update({
+	// La cible n'est pas forcément l'acteur: c'est son profil qu'on complète, pas celui du
+	// responsable qui l'édite.
+	const target = editOwnProfile
+		? member
+		: await prisma.member.findUniqueOrThrow({ where: { id: memberId, eventId } })
+
+	const updated = await prisma.member.update({
 		where: { id: memberId },
 		data: {
 			profileJson: {
-				...member.profileJson,
+				...target.profileJson,
 				...parsed.data,
 			},
 		},
 	})
+
+	// Les champs de profil sont libres par évènement et peuvent porter n'importe quoi (régime,
+	// santé): seuls leurs noms entrent au journal, jamais leurs valeurs.
+	const changed = fields
+		.filter(({ id }) => id in parsed.data && !isSameValue(target.profileJson[id], parsed.data[id]))
+		.map(({ name }) => name)
+	if (changed.length)
+		await createLog('member_update', { member: updated, actor: member, fields: changed })
+
+	return updated
 })
+
+function isSameValue(a: unknown, b: unknown): boolean {
+	if (!a && !b) return true
+	if (Array.isArray(a) || Array.isArray(b)) return JSON.stringify(a) === JSON.stringify(b)
+	return a === b
+}
 
 type ProfileValue = string | string[] | number | boolean | undefined
 
@@ -133,6 +156,7 @@ export const createInvite = form(modelInvite, async ({ sendEmail, ...data }, iss
 	})
 
 	await notifyTierQuotaIfNeeded(eventId)
+	await createLog('member_invite', { member, actor: author, sendEmail })
 
 	if (!member.email || !sendEmail) return member
 
@@ -145,6 +169,9 @@ export const createInvite = form(modelInvite, async ({ sendEmail, ...data }, iss
 			authorName: `${author.firstName} ${author.lastName}`,
 			member: await getMemberProfile({ id: member.id }),
 		},
+		// Un échec d'envoi atterrit ainsi sur la fiche de l'invité, et pas seulement dans le
+		// journal de l'évènement: « l'invitation n'est jamais arrivée » est le cas numéro un.
+		logContext: { memberId: member.id },
 	})
 
 	return member
@@ -171,7 +198,7 @@ export const acceptInvite = form(
 		})
 		if (memberAlreadyExist) {
 			const newIsValidedByEvent = isValidedByEvent || memberAlreadyExist.isValidedByEvent
-			await prisma.member.update({
+			const linked = await prisma.member.update({
 				where: { id: memberAlreadyExist.id },
 				data: {
 					userId: session.user.id,
@@ -180,6 +207,7 @@ export const acceptInvite = form(
 				},
 			})
 			if (newIsValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
+			await createLog('member_join', { member: linked, actor: session.user, wasInvited: true })
 			// TODO: mails to admins ?
 			if (redirectTo) redirect(303, redirectTo)
 			return
@@ -201,6 +229,7 @@ export const acceptInvite = form(
 		})
 		if (isValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
 		const member = await getMemberProfile({ id })
+		await createLog('member_join', { member, actor: session.user, wasInvited: false })
 		// TODO: impossible ... DRAW A DIAGRAM PLEASE
 		if (member.email) {
 			const admins = await prisma.member.findMany({
@@ -245,7 +274,8 @@ export const deleteMember = form(
 		const isSelf = member.id === memberId
 		if (!isSelf) await permission.admin(eventId, locals)
 		if (isSelf && member.roles.includes('owner')) error(403, `Owner can't delete his participation`)
-		await prisma.member.delete({ where: { id: memberId, eventId } })
+		const deleted = await prisma.member.delete({ where: { id: memberId, eventId } })
+		await createLog('member_delete', { member: deleted, actor: member, isSelf })
 		redirect(303, redirectTo || '/me')
 	}
 )

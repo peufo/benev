@@ -81,4 +81,12 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test("Le profil du membre s'édite sur sa fiche, par la barre de sauvegarde", async () => {
 		await event.expectMemberProfileSaveBar(page)
 	})
+
+	test('Le journal rend ce que le parcours a écrit, et accepte une note', async () => {
+		await event.expectJournal(page)
+	})
+
+	test('Le journal charge les entrées précédentes vers le haut', async () => {
+		await event.expectJournalLoadsPrevious(page)
+	})
 })

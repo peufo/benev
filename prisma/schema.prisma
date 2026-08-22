@@ -349,6 +349,7 @@ model Team {
   eventId  String
   event    Event    @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
   periods  Period[]
+  logs     Log[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -544,6 +545,8 @@ model Log {
   /// [JsonLogData]
   data Json
 
+  // Les relations ne servent qu'au filtrage et aux liens: ce que le journal affiche est figé dans
+  // `data`, pour rester vrai après la disparition de ce qui est pointé ici.
   eventId String?
   event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -552,6 +555,8 @@ model Log {
   user     User?   @relation(name: "logUser", fields: [userId], references: [id], onDelete: SetNull)
   memberId String?
   member   Member? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+  teamId   String?
+  team     Team?   @relation(fields: [teamId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   // L'auteur de l'action, quand elle en a un. Nul pour ce que le serveur décide seul.
   createdById String?
@@ -560,18 +565,38 @@ model Log {
   createdAt DateTime @default(now())
 
   @@index([eventId, createdAt])
+  @@index([memberId, createdAt])
   @@index([type, createdAt])
 }
 
+/// Chaque valeur a une transformation dans `$lib/log/logMap.ts` et un composant dans
+/// `$lib/log/Log.svelte`, tous deux exhaustifs sur cette enum: en ajouter une ne compile pas
+/// tant qu'elle n'est ni écrite ni rendue.
 enum LogType {
-  event_create
-  event_update
-  member_create
-  member_update
+  subscribe_create
+  subscribe_state
+  subscribe_delete
+  subscribe_absent
+
+  member_invite
+  member_join
   member_delete
-  invitation_accept
-  invitation_declined
-  message_create
+  member_update
+  member_role
+  member_validated
+
+  event_state
+  event_update
+
+  team_create
+  team_update
+  team_delete
+
+  period_create
+  period_delete
+
+  note_create
+
   email_sent
   email_failed
 }

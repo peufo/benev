@@ -5,7 +5,7 @@ import { render } from 'svelte/server'
 import { prisma } from '$lib/server'
 import { withoutTestRecipients } from '$lib/server/recipients'
 import { emailDisabled, enqueueEmail } from '$lib/server/emailQueue'
-import type { LogContext } from '$lib/server/log'
+import type { EmailRelations } from '$lib/log/logMap'
 import type { EmailEvent } from '$lib/email/models'
 import { emailReplacers, type EmailModelProps } from '$lib/pages/emailSuggesions'
 import { injectValues } from '$lib/pages/injectValues'
@@ -16,7 +16,7 @@ import { domain } from '$lib/email'
 
 export type SendMailOptionsWithLog = SendMailOptions & {
 	/** Rattache la ligne de journal produite par l'envoi. */
-	logContext?: LogContext
+	logContext?: EmailRelations
 }
 
 /**
