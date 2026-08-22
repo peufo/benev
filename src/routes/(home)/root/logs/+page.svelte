@@ -20,6 +20,7 @@
 		<Logs
 			logs={data.logs}
 			hasMore={data.hasMore}
+			class="max-h-[80vh]"
 			showEvent
 			loadPrevious={(beforeId) => loadPreviousRootLogs({ beforeId, type: data.type })}
 		/>

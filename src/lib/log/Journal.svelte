@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
+	import type { ClassValue } from 'svelte/elements'
 	import { ScrollTextIcon, XIcon } from '@lucide/svelte'
 	import { tip, urlParam } from 'fuma'
 	import { page } from '$app/state'
@@ -18,9 +19,11 @@
 		timezone?: string
 		/** Ajouté dans l'entête, après les filtres. */
 		action?: Snippet
+		/** Le fil remplit la section: c'est la page qui dit jusqu'où celle-ci monte. */
+		class?: ClassValue
 	}
 
-	let { journal, title, timezone, action: extraAction }: Props = $props()
+	let { journal, title, timezone, action: extraAction, class: klass }: Props = $props()
 
 	const families = Object.fromEntries(
 		Object.entries(LOG_FAMILIES).map(([value, { label }]) => [value, label])
@@ -32,7 +35,7 @@
 	)
 </script>
 
-<Section id="journal" title="Journal" icon={ScrollTextIcon}>
+<Section id="journal" title="Journal" icon={ScrollTextIcon} class={['flex flex-col', klass]}>
 	{#snippet action()}
 		{#if journal.subject && !journal.pinned}
 			<a

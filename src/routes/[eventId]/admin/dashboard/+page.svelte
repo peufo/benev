@@ -133,6 +133,16 @@
 	</div>
 
 	{#if data.journal}
-		<Journal journal={data.journal} title={data.event?.name} timezone={data.event?.timezone} />
+		<!-- Le fil se règle sur la colonne voisine: hors du flux, il ne pèse plus sur la hauteur de
+		     la ligne de grille et reçoit d'elle la sienne. En dessous de `lg` il reprend le flux,
+		     où c'est sa hauteur maximale qui le borne. -->
+		<div class="lg:relative lg:min-h-128">
+			<Journal
+				journal={data.journal}
+				title={data.event?.name}
+				timezone={data.event?.timezone}
+				class="max-lg:max-h-[80vh] lg:absolute lg:inset-0"
+			/>
+		</div>
 	{/if}
 </div>

@@ -3,7 +3,7 @@
 	import { ChevronUpIcon } from '@lucide/svelte'
 	import dayjs from '$lib/dayjs'
 	import type { LogWithEvent } from './logTypes'
-	import Log from './Log.svelte'
+	import Log, { enterDuration } from './Log.svelte'
 	import NoteForm from './NoteForm.svelte'
 
 	interface Props {
@@ -22,6 +22,7 @@
 		noteMemberId?: string
 		showNoteForm?: boolean
 		showEvent?: boolean
+		/** Le fil occupe la hauteur qu'on lui donne: c'est à l'appelant de la borner. */
 		class?: string
 	}
 
@@ -53,24 +54,49 @@
 	let all = $derived([...loaded.older, ...logs])
 	let oldestId = $derived(all[0]?.id)
 
+	/**
+	 * Tient une position de lecture le temps qu'une ligne s'ouvre. `in:slide` anime la hauteur: une
+	 * correction posée une seule fois est juste à la première frame et fausse à toutes les suivantes.
+	 */
+	function holdScroll(place: (el: HTMLDivElement) => void, duration: number) {
+		const el = container
+		if (!el) return
+		place(el)
+		if (!duration) return
+		const until = performance.now() + duration
+		const frame = () => {
+			place(el)
+			if (performance.now() < until) requestAnimationFrame(frame)
+		}
+		requestAnimationFrame(frame)
+	}
+
+	/** L'entrée déjà en bas au dernier passage. Ce qui arrive après elle s'ouvre sous les yeux. */
+	let newestSeen: string | undefined
+
 	// Le fil se lit comme une conversation: on arrive à la fin. Sauf si le lecteur a chargé vers
 	// le haut — c'est alors sa position qu'il faut préserver, pas la fin.
 	$effect(() => {
-		if (container && all.length && !loaded.older.length)
-			container.scrollTop = container.scrollHeight
+		const newest = all.at(-1)?.id
+		if (!newest || loaded.older.length) return
+		// La fenêtre servie au montage est posée d'un coup: seule une entrée qui arrive ensuite
+		// mérite qu'on suive son ouverture.
+		const duration = newestSeen && newestSeen !== newest ? enterDuration() : 0
+		newestSeen = newest
+		holdScroll((el) => (el.scrollTop = el.scrollHeight), duration)
 	})
 
 	async function loadMore() {
 		if (!loadPrevious || !oldestId || loading) return
 		loading = true
-		const heightBefore = container?.scrollHeight ?? 0
+		// Insérer au-dessus pousse tout vers le bas, mais la distance au bas du fil, elle, ne bouge
+		// pas: c'est cet écart qu'on tient pour que le regard reste sur la ligne qu'il suivait.
+		const fromBottom = container ? container.scrollHeight - container.scrollTop : 0
 		try {
 			const previous = await loadPrevious(oldestId)
 			loaded = { older: [...previous.logs, ...loaded.older], more: previous.hasMore }
 			await tick()
-			// Insérer au-dessus pousse tout vers le bas: on rend la hauteur ajoutée au défilement
-			// pour que le regard reste sur la ligne qu'il suivait.
-			if (container) container.scrollTop += container.scrollHeight - heightBefore
+			holdScroll((el) => (el.scrollTop = el.scrollHeight - fromBottom), enterDuration())
 		} finally {
 			loading = false
 		}
@@ -90,8 +116,8 @@
 	const intlDay = new Intl.DateTimeFormat('fr-CH', { dateStyle: 'full' })
 </script>
 
-<div class="flex flex-col border border-soft rounded-box {klass}">
-	<div bind:this={container} class="flex flex-col gap-2 max-h-[60vh] overflow-y-auto p-2">
+<div class="flex flex-col grow min-h-0 border border-soft rounded-box {klass}">
+	<div bind:this={container} class="flex flex-col gap-2 grow min-h-0 overflow-y-auto p-2">
 		{#if more}
 			<button
 				type="button"
@@ -108,8 +134,8 @@
 			</button>
 		{:else}
 			<div class="text-center px-4 py-8">
-				<p class="title-md">Journal{title ? ` de ${title}` : ''}</p>
-				<p class="text-sm text-base-content/70 mt-1">Vous êtes au début du journal</p>
+				<p class="title-md">{title || ''}</p>
+				<p class="text-sm text-base-content/70 mt-1">Début du journal</p>
 			</div>
 		{/if}
 

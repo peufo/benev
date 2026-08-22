@@ -1,5 +1,6 @@
 <script lang="ts" module>
 	import type { Component } from 'svelte'
+	import { prefersReducedMotion } from 'svelte/motion'
 	import type { IconProps } from '@lucide/svelte'
 	import {
 		CalendarPlusIcon,
@@ -83,9 +84,16 @@
 		email_sent: { icon: MailCheckIcon, class: 'text-success' },
 		email_failed: { icon: MailXIcon, class: 'text-error' },
 	}
+
+	/**
+	 * L'ouverture d'une ligne anime sa hauteur, et `Logs` tient le défilement pendant exactement ce
+	 * temps-là. La durée se déclare donc ici, au plus près de la transition qui la lit.
+	 */
+	export const enterDuration = () => (prefersReducedMotion.current ? 0 : 250)
 </script>
 
 <script lang="ts" generics="T extends LogType">
+	import { slide } from 'svelte/transition'
 	import { tip } from 'fuma'
 	import dayjs from '$lib/dayjs'
 	import type { LogWithEvent } from './logTypes'
@@ -116,7 +124,12 @@
 	let { icon: Icon, class: iconClass } = $derived(logIcons[log.type])
 </script>
 
-<li class="flex items-start gap-3 px-2 py-2 rounded-lg hover:bg-base-200/60">
+<!-- La ligne s'ouvre en poussant le fil. C'est `Logs` qui tient la position de lecture pendant ce
+     temps: une hauteur mesurée une seule fois serait fausse dès la frame suivante. -->
+<li
+	in:slide={{ duration: enterDuration() }}
+	class="flex items-start gap-3 px-2 py-2 rounded-lg hover:bg-base-200/60"
+>
 	<span class="shrink-0 mt-0.5 {iconClass || 'text-base-content/70'}">
 		<Icon size={18} />
 	</span>

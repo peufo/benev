@@ -85,7 +85,7 @@
 	</Section>
 
 	{#if data.journal}
-		<Journal journal={data.journal} timezone={data.event.timezone}>
+		<Journal journal={data.journal} timezone={data.event.timezone} class="max-h-[80vh]">
 			{#snippet action()}
 				<a
 					href="{$eventPath}/admin/dashboard?memberId={data.memberProfile.id}#journal"
