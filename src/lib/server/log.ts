@@ -1,6 +1,14 @@
 import type { LogType, Prisma } from '@prisma/client'
+import { parseQuery } from 'fuma/server'
+import z from 'zod'
 import { logMap, type LogData, type LogInput } from '$lib/log/logMap'
-import { LOG_FAMILIES, LOG_TYPES_FOR_EVENT, type LogFamily } from '$lib/log/logLabels'
+import {
+	LOG_FAMILIES,
+	LOG_FAMILY_KEYS,
+	LOG_TYPES_FOR_EVENT,
+	type LogFamily,
+} from '$lib/log/logLabels'
+import type { EventJournal } from '$lib/log/journal'
 import type { LogOutput } from '$lib/log/logTypes'
 import { prisma } from './prisma'
 
@@ -99,4 +107,45 @@ export async function getLogs(
 		include: { event: { select: { id: true, name: true } } },
 	})
 	return { logs: rows.slice(0, take).reverse(), hasMore: rows.length > take }
+}
+
+/**
+ * Le journal d'un évènement tel que la section le rend, filtre compris.
+ *
+ * Le filtre est lu dans l'URL — c'est `Journal.svelte` qui l'y écrit, où qu'il soit monté — sauf
+ * `memberId`, qui peut venir de la route: la fiche d'un membre ne montre que le sien.
+ */
+export async function getEventJournal({
+	eventId,
+	url,
+	memberId: pinnedMemberId,
+}: {
+	eventId: string
+	url: URL
+	memberId?: string
+}): Promise<EventJournal> {
+	const query = parseQuery(url, {
+		take: z.coerce.number().default(30),
+		family: z.enum(LOG_FAMILY_KEYS).optional(),
+		memberId: z.string().optional(),
+		teamId: z.string().optional(),
+	})
+
+	const filter = {
+		family: query.family,
+		memberId: pinnedMemberId ?? query.memberId,
+		teamId: query.teamId,
+	}
+
+	return {
+		filter,
+		pinned: !!pinnedMemberId,
+		subject: filter.memberId
+			? await prisma.member.findUnique({
+					where: { id: filter.memberId, eventId },
+					select: { id: true, firstName: true, lastName: true },
+				})
+			: null,
+		...(await getLogs(eventLogsWhere({ eventId, ...filter }), { take: query.take })),
+	}
 }

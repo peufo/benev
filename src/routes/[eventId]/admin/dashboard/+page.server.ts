@@ -1,26 +1,21 @@
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
-import { addMemberComputedValues, eventLogsWhere, getLogs, permission, prisma } from '$lib/server'
-import { LOG_FAMILIES, type LogFamily } from '$lib/log'
+import { addMemberComputedValues, getEventJournal, permission, prisma } from '$lib/server'
 import { WAITING, WAITING_KEYS, waitingOf, type Waiting } from './waiting'
 
 export const load = async ({ url, parent, locals, params: { eventId } }) => {
-	await permission.leaderOrRoot(eventId, locals)
+	const actor = await permission.leaderOrRoot(eventId, locals)
 	const { event } = await parent()
+	// Le journal montre les coordonnées éditées et les réglages de l'évènement: comme sur la
+	// fiche d'un membre, il reste réservé aux admins. Le reste de la page sert les responsables.
+	const isAdmin = !actor || actor.roles.includes('admin')
 
-	const query = parseQuery(url, {
-		take: z.coerce.number().default(30),
-		family: z.enum(Object.keys(LOG_FAMILIES) as [LogFamily, ...LogFamily[]]).optional(),
-		memberId: z.string().optional(),
-		teamId: z.string().optional(),
-		waiting: z.enum(WAITING_KEYS).default('us'),
-	})
-
-	const { family, memberId, teamId, waiting } = query
+	const { waiting } = parseQuery(url, { waiting: z.enum(WAITING_KEYS).default('us') })
 	const inEvent = { period: { team: { eventId } } }
 
-	const [lastMembers, nbMembers, toValidate, waitingCounts, nbSubscribes, periods] =
+	const [journal, lastMembers, nbMembers, toValidate, waitingCounts, nbSubscribes, periods] =
 		await Promise.all([
+			isAdmin ? getEventJournal({ eventId, url }) : null,
 			prisma.member.findMany({
 				where: { eventId },
 				orderBy: { createdAt: 'desc' },
@@ -57,18 +52,7 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 	) as Record<Waiting, number>
 
 	return {
-		journal: {
-			family,
-			subject: memberId
-				? await prisma.member.findUnique({
-						where: { id: memberId, eventId },
-						select: { id: true, firstName: true, lastName: true },
-					})
-				: null,
-			...(await getLogs(eventLogsWhere({ eventId, family, memberId, teamId }), {
-				take: query.take,
-			})),
-		},
+		journal,
 		lastMembers: lastMembers.map((member) => addMemberComputedValues({ ...member, event })),
 		nbMembers,
 		waiting,

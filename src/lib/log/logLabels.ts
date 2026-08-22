@@ -51,6 +51,9 @@ export const LOG_FAMILIES = {
 
 export type LogFamily = keyof typeof LOG_FAMILIES
 
+/** Les clés sous la forme qu'exige `z.enum`: un tuple non vide. */
+export const LOG_FAMILY_KEYS = Object.keys(LOG_FAMILIES) as [LogFamily, ...LogFamily[]]
+
 export const LOG_TYPES_FOR_EVENT: LogType[] = Object.values(LOG_FAMILIES).flatMap(({ types }) => [
 	...types,
 ])

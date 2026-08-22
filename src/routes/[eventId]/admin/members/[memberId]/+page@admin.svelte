@@ -15,14 +15,13 @@
 		MemberContactForm,
 	} from '$lib/member'
 	import MembersBadges from '../MembersBadges.svelte'
-	import { Logs, loadPreviousEventLogs } from '$lib/log'
+	import { Journal } from '$lib/log'
 	import Section from '$lib/ui/Section.svelte'
 	import MemberMenu from './MemberMenu.svelte'
 
 	let { data } = $props()
 
 	let createSubscribeDialog: HTMLDialogElement = $state()!
-	let isAdmin = $derived(!!data.member?.roles.includes('admin'))
 </script>
 
 <div class="max-w-3xl mx-auto w-full space-y-3">
@@ -95,8 +94,8 @@
 		</Teams>
 	</Section>
 
-	{#if isAdmin}
-		<Section id="logs" title="Journal">
+	{#if data.journal}
+		<Journal journal={data.journal} timezone={data.event.timezone}>
 			{#snippet action()}
 				<a
 					href="{$eventPath}/admin/dashboard?memberId={data.memberProfile.id}#journal"
@@ -106,19 +105,7 @@
 					<ScrollTextIcon size={20} />
 				</a>
 			{/snippet}
-			<Logs
-				logs={data.journal.logs}
-				hasMore={data.journal.hasMore}
-				title="{data.memberProfile.firstName} {data.memberProfile.lastName}"
-				timezone={data.event.timezone}
-				showNoteForm
-				noteMemberId={data.memberProfile.id}
-				loadPrevious={(beforeId) =>
-					loadPreviousEventLogs({ beforeId, memberId: data.memberProfile.id })}
-				canDeleteNote={(log) =>
-					log.type === 'note_create' && (isAdmin || log.createdById === data.member?.userId)}
-			/>
-		</Section>
+		</Journal>
 	{/if}
 </div>
 
