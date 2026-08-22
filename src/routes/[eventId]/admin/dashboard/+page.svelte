@@ -43,9 +43,9 @@
 			id="validations"
 			title="Inscriptions en attente"
 			icon={ClipboardCheckIcon}
-			subtitle="{data.nbSubscribes} inscription{data.nbSubscribes > 1
-				? 's'
-				: ''} sur les {data.maxSubscribes} attendues"
+			subtitle={data.maxSubscribes
+				? `${data.nbSubscribes} inscription${data.nbSubscribes > 1 ? 's' : ''} sur les ${data.maxSubscribes} attendues`
+				: 'Aucune place ouverte par les périodes'}
 		>
 			{#snippet action()}
 				<div class="join">

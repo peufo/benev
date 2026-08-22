@@ -4,5 +4,5 @@
   - [x] Le sous-titre de la section "Inscriptions" devrait contenire le nombre total d'inscription comparer au nombre d'inscription attendu
   - [x] La section "Inscription" doit afficher un lien vers la table des inscriptions. Un simple bouton icon suffit (ca vaut aussi pour la section "Adhérent")
 
-- [ ] La section "Journal" étant utilisé plusieur fois (dashboard + fiche de membre). Elle devrait être un composant réutilisable plutôt que de recoder les filtre. Il en va de même pour la partie backend.
-- [ ] L'input du journal n'est pas joli. Elle peut-être sur une seul ligne au début avec l'autoresize de InputTextarea. Avec un padding à droite, on peux également encastré le bouton envoie dans l'input.
+- [x] La section "Journal" étant utilisé plusieur fois (dashboard + fiche de membre). Elle devrait être un composant réutilisable plutôt que de recoder les filtre. Il en va de même pour la partie backend.
+- [x] L'input du journal n'est pas joli. Elle peut-être sur une seul ligne au début avec l'autoresize de InputTextarea. Avec un padding à droite, on peux également encastré le bouton envoie dans l'input.
