@@ -93,7 +93,7 @@
 		<stateDisplay.icon class={stateDisplay.class} />
 	</button>
 {:else}
-	<Popover listenFocus={false} class="p-1">
+	<Popover listenFocus={false} class="p-1 my-1">
 		{#snippet trigger({ trigger })}
 			<button
 				type="button"
@@ -105,9 +105,7 @@
 			>
 				<stateDisplay.icon class={stateDisplay.class} />
 				{#if isConfirmation}
-					<div
-						class="absolute w-3 h-3 bg-error -right-1.5 -top-1.5 rounded-full animate-ping"
-					></div>
+					<div class="absolute w-2 h-2 bg-error -right-1 -top-1 rounded-full animate-ping"></div>
 					<div class="absolute w-2 h-2 bg-error -right-1 -top-1 rounded-full"></div>
 					{#if canBeLarge}
 						<span class="font-medium hidden sm:inline">à confirmer</span>

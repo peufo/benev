@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ClipboardCheckIcon, TableIcon, UsersIcon } from '@lucide/svelte'
+	import { ClipboardCheckIcon, ExternalLinkIcon, UsersIcon } from '@lucide/svelte'
 	import { tip, urlParam } from 'fuma'
 	import Section from '$lib/ui/Section.svelte'
 	import { Journal } from '$lib/log'
@@ -33,7 +33,7 @@
 					class="btn btn-square btn-sm"
 					use:tip={{ content: 'Ouvrir la table des membres' }}
 				>
-					<TableIcon size={20} />
+					<ExternalLinkIcon size={20} opacity={0.7} />
 				</a>
 			{/snippet}
 			<DashboardMembers members={data.lastMembers} />
@@ -65,7 +65,7 @@
 					class="btn btn-square btn-sm"
 					use:tip={{ content: 'Ouvrir la table des inscriptions' }}
 				>
-					<TableIcon size={20} />
+					<ExternalLinkIcon size={20} opacity={0.7} />
 				</a>
 			{/snippet}
 			<DashboardValidations subscribes={data.toValidate} waiting={data.waiting} />
