@@ -9,3 +9,7 @@
 - [ ] Il faut supprimer MemberImportDialog et faire un vrai outil d'importation capable de prendre comme source, un fichier csv ou un autre événement. Suivi d'une vue pour mapper les colonnes.
 
 - [ ] Dans le mail d'invitation, on peux ajouter un token dans le lien. Grâce à lui, on peut identifié l'utilisateur sur la page de login, placer le formulaire en mode "register" si nécéssaire et pré-remplir le champ email, et validé l'adresse email directement.
+
+- [ ] Détection des echecs d'envois d'email (rebond inclus). Pour l'instant, même les envois vers un adresse invalide n'est pas détecté
+
+- [ ] Fusionner la modification des informations de contact dois être aussi facile que de modifier les infos de profil.

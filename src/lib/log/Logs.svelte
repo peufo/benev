@@ -93,7 +93,7 @@
 <div class="flex flex-col gap-2 {klass}">
 	<div
 		bind:this={container}
-		class="flex flex-col gap-2 max-h-[60vh] overflow-y-auto border border-soft rounded-2xl p-2"
+		class="flex flex-col gap-2 max-h-[60vh] overflow-y-auto border border-soft rounded-box p-2"
 	>
 		{#if more}
 			<button

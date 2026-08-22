@@ -5,22 +5,14 @@
 	interface Props {
 		id: string
 		title: string
-		icon: Component<IconProps>
+		icon?: Component<IconProps>
 		subtitle?: string | undefined
 		action?: Snippet | undefined
 		danger?: boolean
 		children: Snippet
 	}
 
-	let {
-		id,
-		title,
-		icon: SectionIcon,
-		subtitle = undefined,
-		action = undefined,
-		danger = false,
-		children,
-	}: Props = $props()
+	let { id, title, icon: SectionIcon, subtitle, action, danger = false, children }: Props = $props()
 </script>
 
 <section {id} class={['surface scroll-mt-4 p-5', danger && 'border-error/40']}>

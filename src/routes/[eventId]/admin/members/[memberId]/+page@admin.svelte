@@ -1,34 +1,23 @@
 <script lang="ts">
-	import {
-		ArrowLeftIcon,
-		CheckIcon,
-		ClipboardListIcon,
-		PencilIcon,
-		ScrollTextIcon,
-		Trash2Icon,
-		XIcon,
-	} from '@lucide/svelte'
-	import { Card } from '$lib/ui'
-	import { Drawer, Popover, tip, urlParam } from 'fuma'
+	import { ClipboardListIcon, PencilIcon, ScrollTextIcon } from '@lucide/svelte'
+	import { Drawer, tip, urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
-	import { page } from '$app/stores'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import { Teams, TeamsActions } from '$lib/team'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import MemberContactDetails from './MemberContactDetails.svelte'
-	import MemberIsAdminForm from './MemberIsAdminForm.svelte'
-	import MemberIsValidedByEventForm from './MemberIsValidedByEventForm.svelte'
 	import {
 		MemberProfileStatus,
 		MemberAbsences,
 		MemberRole,
 		MemberProfileForm,
-		MemberDeleteForm,
 		MemberCreateSubscribeDialog,
 		MemberContactForm,
 	} from '$lib/member'
 	import MembersBadges from '../MembersBadges.svelte'
 	import { Logs, loadPreviousEventLogs } from '$lib/log'
+	import Section from '$lib/ui/Section.svelte'
+	import MemberMenu from './MemberMenu.svelte'
 
 	let { data } = $props()
 
@@ -36,94 +25,39 @@
 	let isAdmin = $derived(!!data.member?.roles.includes('admin'))
 </script>
 
-<Card class="max-w-3xl mx-auto w-full" bodyClass="gap-12">
-	<div>
-		<div class="flex gap-2 items-center flex-wrap">
-			<a
-				href="{$eventPath}/admin/members{$page.url.search}"
-				class="btn btn-square btn-ghost btn-sm"
-			>
-				<ArrowLeftIcon size={20} />
-			</a>
+<div class="max-w-3xl mx-auto my-3 w-full space-y-4">
+	<!-- TODO inclure le bouton de retour quelque part + utilisé history.back plutôt, car on vient pas toujours de la table des membres -->
+	<!-- <a
+			href="{$eventPath}/admin/members{$page.url.search}"
+			class="btn btn-square btn-ghost btn-sm"
+		>
+			<ArrowLeftIcon size={20} />
+		</a> -->
 
-			<span class="title">
-				{data.memberProfile.firstName}
-				{data.memberProfile.lastName}
-			</span>
-
-			<a
-				href={urlParam.with({ form_member_contact: '{}' })}
-				data-sveltekit-replacestate
-				data-sveltekit-noscroll
-				class="btn btn-square btn-sm ml-2"
-				use:tip={{ content: `Modifier les coordonnées de ${data.memberProfile.firstName}` }}
-			>
-				<PencilIcon />
-			</a>
-
+	<Section id="member" title="{data.memberProfile.firstName} {data.memberProfile.lastName}">
+		{#snippet action()}
+			{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}
+				<MemberMenu {data} />
+			{:else}
+				<MemberRole roles={data.memberProfile.roles} />
+			{/if}
 			<MembersBadges
 				title="Imprimer un badge"
 				params="memberId={data.memberProfile.id}"
 				badges={data.event.badges}
 			/>
-
-			<div class="grow"></div>
-
-			<MemberAbsences subscribes={data.memberProfile.subscribes} />
-			<MemberProfileStatus member={data.memberProfile} />
-
-			{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}
-				<Popover placement="bottom-end" listenFocus={false} class="p-1">
-					{#snippet trigger({ trigger })}
-						<button type="button" class="btn btn-sm ml-2 whitespace-nowrap" {...trigger}>
-							<MemberRole roles={data.memberProfile.roles} mode="contents" />
-							{#if data.memberProfile.isValidedByEvent}
-								<span
-									class="inline-flex"
-									use:tip={{ content: "Membre approuvé par l'organisation" }}
-									><CheckIcon class="text-success" /></span
-								>
-							{:else}
-								<span
-									class="inline-flex"
-									use:tip={{ content: "Membre non approuvé par l'organisation" }}
-									><XIcon class="text-error" /></span
-								>
-							{/if}
-						</button>
-					{/snippet}
-
-					{#snippet children({ hide })}
-						<div class="flex flex-col w-max">
-							<MemberIsValidedByEventForm memberProfile={data.memberProfile} onsuccess={hide} />
-
-							{#if data.member?.roles.includes('owner')}
-								<MemberIsAdminForm memberProfile={data.memberProfile} onsuccess={hide} />
-							{/if}
-
-							<MemberDeleteForm
-								memberId={data.memberProfile.id}
-								redirectTo="{$eventPath}/admin/members"
-								btn={false}
-								class="menu-item w-full"
-							>
-								{#snippet children({ waitConfirmation })}
-									<Trash2Icon size={20} class="text-error" />
-									<span class={waitConfirmation ? 'text-error font-semibold' : ''}>
-										{waitConfirmation ? 'Confirmer ?' : 'Supprimer le membre'}
-									</span>
-								{/snippet}
-							</MemberDeleteForm>
-						</div>
-					{/snippet}
-				</Popover>
-			{:else}
-				<MemberRole roles={data.memberProfile.roles} />
-			{/if}
-		</div>
+			<a
+				href={urlParam.with({ form_member_contact: '{}' })}
+				data-sveltekit-replacestate
+				data-sveltekit-noscroll
+				class="btn btn-square btn-sm btn-secondary"
+				use:tip={{ content: `Modifier les coordonnées de ${data.memberProfile.firstName}` }}
+			>
+				<PencilIcon />
+			</a>
+		{/snippet}
 
 		<div class="flex gap-2 mt-6">
-			<MemberContactDetails member={data.memberProfile} />
 			<Avatar
 				firstName={data.memberProfile.firstName}
 				avatarId={data.memberProfile.avatarId}
@@ -131,52 +65,55 @@
 				class="w-36 h-36 rounded-md"
 				size="medium"
 			/>
+			<div>
+				<MemberAbsences subscribes={data.memberProfile.subscribes} />
+				<MemberProfileStatus member={data.memberProfile} />
+				<MemberContactDetails member={data.memberProfile} />
+			</div>
 		</div>
-	</div>
-
-	{#if data.event.memberFields.length}
-		<section>
-			<h3 class="title mb-4">Profil</h3>
+		{#if data.event.memberFields.length}
+			<div class="divider"></div>
 			<MemberProfileForm compact saveBar memberProfile={data.memberProfile} />
-		</section>
-	{/if}
+		{/if}
+	</Section>
 
-	<section>
-		<div class="flex gap-2 items-center mb-4">
-			<h3 class="title">Inscriptions</h3>
+	<Section id="subscibes" title="Inscriptions">
+		{#snippet action()}
 			<button
 				type="button"
-				class="btn btn-square btn-sm ml-2"
+				class="btn btn-square btn-sm btn-secondary"
 				onclick={() => createSubscribeDialog.showModal()}
 				use:tip={{ content: `Inscrire ${data.memberProfile.firstName} à un secteur` }}
 			>
 				<ClipboardListIcon size={20} />
 			</button>
-		</div>
-		<TeamsSubscribes teams={data.event.teams} isLeader />
-	</section>
+		{/snippet}
 
-	<section class="relative">
-		<div class="flex gap-2 items-center mb-4">
-			<h3 class="title mr-2">Secteurs à charge</h3>
+		<TeamsSubscribes teams={data.event.teams} isLeader />
+	</Section>
+
+	<Section id="leaderOf" title="Secteurs à charge">
+		{#snippet action()}
 			<TeamsActions teams={data.memberProfile.leaderOf} memberId={data.memberProfile.id} />
-		</div>
-		<Teams teams={data.memberProfile.leaderOf} />
-	</section>
+		{/snippet}
+		<Teams teams={data.memberProfile.leaderOf}>
+			{#snippet placeholder()}
+				<span>Aucun secteur à charge</span>
+			{/snippet}
+		</Teams>
+	</Section>
 
 	{#if isAdmin}
-		<section>
-			<div class="flex gap-2 items-center mb-4">
-				<h3 class="title mr-2">Journal</h3>
+		<Section id="logs" title="Journal">
+			{#snippet action()}
 				<a
 					href="{$eventPath}/admin/logs?memberId={data.memberProfile.id}"
-					class="btn btn-sm"
+					class="btn btn-sm btn-square"
 					use:tip={{ content: 'Ouvrir le journal complet' }}
 				>
 					<ScrollTextIcon size={20} />
 				</a>
-			</div>
-
+			{/snippet}
 			<Logs
 				logs={data.journal.logs}
 				hasMore={data.journal.hasMore}
@@ -189,9 +126,9 @@
 				canDeleteNote={(log) =>
 					log.type === 'note_create' && (isAdmin || log.createdById === data.member?.userId)}
 			/>
-		</section>
+		</Section>
 	{/if}
-</Card>
+</div>
 
 <MemberCreateSubscribeDialog
 	bind:dialog={createSubscribeDialog}
