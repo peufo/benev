@@ -177,20 +177,28 @@ describe('rendu du journal', () => {
 		expect(html).toContain('S, M')
 	})
 
-	it('rend les changements de rôle par ce qui entre et ce qui sort', ({ expect }) => {
-		const html = renderLog(
+	it('rend le passage administrateur', ({ expect }) => {
+		const promu = renderLog(
 			LogMemberRole,
 			'member_role',
 			logMap.member_role({
 				member,
 				actor,
 				isAdmin: { before: { isAdmin: false }, after: { isAdmin: true } },
-				leaderOf: { before: ['Buvette'], after: ['Accueil'] },
 			}).data
 		)
-		expect(html).toContain('Administrateur')
-		expect(html).toContain('Responsable de Accueil')
-		expect(html).toContain('Plus responsable de Buvette')
+		expect(promu).toContain('Administrateur')
+
+		const retire = renderLog(
+			LogMemberRole,
+			'member_role',
+			logMap.member_role({
+				member,
+				actor,
+				isAdmin: { before: { isAdmin: true }, after: { isAdmin: false } },
+			}).data
+		)
+		expect(retire).toContain("N'est plus administrateur")
 	})
 
 	it("rend le statut et les réglages de l'évènement", ({ expect }) => {

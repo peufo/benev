@@ -97,7 +97,7 @@ function getTeamCopyName(initalName: string, teams: string[]): string {
 	return `${name} ${suffix}`
 }
 
-/** Alimente l'`InputSelect` de secteur de `PeriodForm` et `MemberSetLeaderOf`. */
+/** Alimente l'`InputSelect` de secteur de `PeriodForm`. */
 export const searchTeams = query(z.object({ search: z.string() }), async ({ search }) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!

@@ -174,16 +174,15 @@ export const logMap = {
 		},
 	}),
 
+	/** Les responsables d'un secteur se règlent depuis le secteur, et `team_update` en porte le diff. */
 	member_role: ({
 		member,
 		actor,
 		isAdmin,
-		leaderOf,
 	}: {
 		member: MemberSource
 		actor: LogActor
-		isAdmin?: LogUpdate<{ isAdmin: boolean }>
-		leaderOf?: { before: string[]; after: string[] }
+		isAdmin: LogUpdate<{ isAdmin: boolean }>
 	}) => ({
 		eventId: member.eventId,
 		memberId: member.id,
@@ -192,7 +191,6 @@ export const logMap = {
 			member: refPerson(member),
 			actor: refActor(actor),
 			isAdmin,
-			leaderOf,
 		},
 	}),
 

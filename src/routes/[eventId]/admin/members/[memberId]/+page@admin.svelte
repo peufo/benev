@@ -3,7 +3,7 @@
 	import { Drawer, tip, urlParam } from 'fuma'
 	import { eventPath } from '$lib/store'
 	import Avatar from '$lib/me/Avatar.svelte'
-	import { Teams, TeamsActions } from '$lib/team'
+	import { TeamsActions } from '$lib/team'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import MemberContactDetails from './MemberContactDetails.svelte'
 	import {
@@ -37,6 +37,7 @@
 				params="memberId={data.memberProfile.id}"
 				badges={data.event.badges}
 			/>
+			<TeamsActions teams={data.memberProfile.leaderOf} />
 			<a
 				href={urlParam.with({ form_member_contact: '{}' })}
 				data-sveltekit-replacestate
@@ -81,17 +82,6 @@
 		{/snippet}
 
 		<TeamsSubscribes teams={data.event.teams} isLeader />
-	</Section>
-
-	<Section id="leaderOf" title="Secteurs à charge">
-		{#snippet action()}
-			<TeamsActions teams={data.memberProfile.leaderOf} memberId={data.memberProfile.id} />
-		{/snippet}
-		<Teams teams={data.memberProfile.leaderOf}>
-			{#snippet placeholder()}
-				<span>Aucun secteur à charge</span>
-			{/snippet}
-		</Teams>
 	</Section>
 
 	{#if data.journal}

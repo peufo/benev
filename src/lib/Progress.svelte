@@ -6,6 +6,8 @@
 		period: PeriodCountable
 		class?: string
 		withLabel?: boolean
+		/** La jauge fait toute la largeur: le badge passe sous elle, sauf à tenir sur une ligne. */
+		wrap?: boolean
 		badgeClass?: string
 		progressClass?: string
 		beforeBadge?: Snippet
@@ -16,6 +18,7 @@
 		period,
 		class: klass = '',
 		withLabel = false,
+		wrap = true,
 		badgeClass = '',
 		progressClass = '',
 		beforeBadge,
@@ -28,7 +31,7 @@
 </script>
 
 <div
-	class="flex gap-1 flex-wrap {klass}"
+	class={['flex gap-1', wrap ? 'flex-wrap' : 'flex-nowrap', klass]}
 	class:items-center={!withLabel}
 	class:flex-col={withLabel}
 	class:gap-2={withLabel}

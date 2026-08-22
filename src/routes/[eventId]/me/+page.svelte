@@ -6,11 +6,9 @@
 		MapPinnedIcon,
 		OctagonAlertIcon,
 		SettingsIcon,
-		ShieldUserIcon,
 	} from '@lucide/svelte'
 	import { eventPath } from '$lib/store'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
-	import { Teams, TeamsActions } from '$lib/team'
 	import {
 		MemberProfileForm,
 		MemberProfileStatus,
@@ -42,15 +40,6 @@
 		{/snippet}
 		<TeamsSubscribes teams={data.memberTeams} />
 	</Section>
-
-	{#if data.member.leaderOf.length}
-		<Section id="leadersOf" title="Secteurs à charge" icon={ShieldUserIcon}>
-			{#snippet action()}
-				<TeamsActions teams={data.member.leaderOf} memberId={data.member.id} />
-			{/snippet}
-			<Teams teams={data.member.leaderOf} />
-		</Section>
-	{/if}
 
 	{#if data.member.event.memberFields.filter((f) => f.memberCanRead).length}
 		<Section id="profile" title="Mon profil" icon={IdCardIcon}>

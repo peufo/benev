@@ -1,7 +1,6 @@
 import { form, getRequestEvent } from '$app/server'
 import z from 'zod'
 import { modelUserContactUpdate } from '$lib/models'
-import { zSet } from '$lib/models/form'
 import { createLog, notifyTierQuotaIfNeeded, permission, prisma } from '$lib/server'
 import { diffChanges, hasChanges, projectMemberContact } from '$lib/log'
 
@@ -29,27 +28,6 @@ export const setMemberIsAdmin = form(
 		return member
 	}
 )
-
-export const setMemberLeaderOf = form(z.object({ leaderOf: zSet }), async (data) => {
-	const { locals, params } = getRequestEvent()
-	const actor = await permission.admin(params.eventId!, locals)
-	const before = await prisma.member.findUniqueOrThrow({
-		where: { id: params.memberId! },
-		include: { leaderOf: { select: { name: true } } },
-	})
-	const member = await prisma.member.update({
-		where: { id: params.memberId! },
-		data,
-		include: { leaderOf: { select: { name: true } } },
-	})
-	const leaderOf = {
-		before: before.leaderOf.map(({ name }) => name),
-		after: member.leaderOf.map(({ name }) => name),
-	}
-	if (leaderOf.before.join() !== leaderOf.after.join())
-		await createLog('member_role', { member, actor, leaderOf })
-	return member
-})
 
 export const setMemberIsValidedByEvent = form(
 	z.object({ isValidedByEvent: z.boolean().default(false) }),
