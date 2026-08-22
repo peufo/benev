@@ -95,7 +95,7 @@
 	{/if}
 {/snippet}
 
-<div class="flex gap-1 items-start">
+<div class="flex gap-3 items-start">
 	<Card class="grow min-w-0" bodyClass="sm:px-2 sm:py-2">
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-x-2 gap-y-2 flex-wrap">
@@ -166,7 +166,7 @@
 		</div>
 	</Card>
 
-	<div class="hidden xl:block surface">
+	<div class="hidden xl:block surface p-2">
 		<MembersStats {data} />
 	</div>
 </div>

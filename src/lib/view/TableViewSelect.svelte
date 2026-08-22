@@ -28,6 +28,7 @@
 	let { key, views, ignoredKeys = [] }: Props = $props()
 
 	let dialog: HTMLDialogElement = $state()!
+	const uid = $props.id()
 
 	// L'absence de filtre est une vue comme les autres: le select porte alors toujours une
 	// valeur, et « Vue simple » se choisit exactement comme une vue enregistrée.
@@ -115,44 +116,39 @@
 		{/if}
 	{/snippet}
 
-	<!-- `field.as(type, value)` ne fournit qu'une valeur initiale: sans remontage, le nom
-	     resterait celui de la vue précédemment ouverte. -->
-	{#key editedView}
-		{@const remoteForm = editedView ? updateView : createView}
-		<form
-			{...remoteForm.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
-			{...deleteView.enhance(
-				enhanceForm({
-					onsuccess: () => {
-						dialog.close()
-						// La vue supprimée laisserait ses filtres dans l'URL, donc une « Nouvelle vue ».
-						goto(page.url.pathname)
-					},
-				})
-			)}
-		>
+	{@const remoteForm = editedView ? updateView.for(editedView.id) : createView.for(uid)}
+	{@const deleteForm = deleteView.for(editedView?.id ?? uid)}
+	<form
+		{...remoteForm.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
+		{...deleteForm.enhance(
+			enhanceForm({
+				onsuccess: () => {
+					dialog.close()
+					// La vue supprimée laisserait ses filtres dans l'URL, donc une « Nouvelle vue ».
+					goto(page.url.pathname)
+				},
+			})
+		)}
+	>
+		{#if editedView}
+			<input type="hidden" name="id" value={editedView.id} />
+		{/if}
+		<input type="hidden" name="key" value={key} />
+		<input type="hidden" name="query" value={query} />
+
+		<InputString
+			field={remoteForm.fields.name}
+			label="Nom de la vue"
+			value={editedView?.name || ''}
+			autofocus
+		/>
+
+		<div class="mt-2 flex flex-row-reverse justify-between gap-2">
+			<button formaction={remoteForm.action} class="btn"> Valider </button>
+
 			{#if editedView}
-				<input type="hidden" name="id" value={editedView.id} />
+				<button formaction={deleteForm.action} class="btn btn-ghost text-error"> Supprimer </button>
 			{/if}
-			<input type="hidden" name="key" value={key} />
-			<input type="hidden" name="query" value={query} />
-
-			<InputString
-				field={remoteForm.fields.name}
-				label="Nom de la vue"
-				value={editedView?.name || ''}
-				autofocus
-			/>
-
-			<div class="mt-2 flex flex-row-reverse justify-between gap-2">
-				<button formaction={remoteForm.action} class="btn"> Valider </button>
-
-				{#if editedView}
-					<button formaction={deleteView.action} class="btn btn-ghost text-error">
-						Supprimer
-					</button>
-				{/if}
-			</div>
-		</form>
-	{/key}
+		</div>
+	</form>
 </Dialog>

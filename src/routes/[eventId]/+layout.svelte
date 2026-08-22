@@ -104,16 +104,16 @@
 	{/snippet}
 </Header>
 
-<div class="flex grow items-start relative max-w-full">
+<div class="flex grow items-start relative max-w-full px-1 gap-3">
 	{#if data.member?.roles.includes('leader') || data.userIsRoot}
-		<div class="hidden md:flex flex-col gap-2 sticky top-1 ml-1 shrink-0">
+		<div class="hidden md:flex flex-col gap-2 sticky top-1 shrink-0">
 			<AdminNavigation>
 				<EventTierBadge event={data.event} membersValided={data.membersValided} />
 			</AdminNavigation>
 		</div>
 	{/if}
 
-	<main class="grow mx-auto overflow-x-clip self-stretch px-1 min-w-0">
+	<main class="grow mx-auto overflow-x-clip self-stretch min-w-0">
 		{#if accessGranted}
 			{@render children?.()}
 		{:else if data.event.state === 'draft'}

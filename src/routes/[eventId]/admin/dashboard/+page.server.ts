@@ -1,4 +1,3 @@
-import type { SubscribeState } from '@prisma/client'
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
 import { addMemberComputedValues, eventLogsWhere, getLogs, permission, prisma } from '$lib/server'
@@ -9,10 +8,7 @@ const TO_VALIDATE = { state: 'request', createdBy: 'user' } as const
 
 export const load = async ({ url, parent, locals, params: { eventId } }) => {
 	await permission.leaderOrRoot(eventId, locals)
-	const { event, member, userIsRoot } = await parent()
-	// Le journal montre les coordonnées éditées et les réglages de l'évènement: comme sur la
-	// fiche d'un membre, il reste réservé aux admins. Le reste de la page sert les responsables.
-	const isAdmin = !!member?.roles.includes('admin') || !!userIsRoot
+	const { event } = await parent()
 
 	const query = parseQuery(url, {
 		take: z.coerce.number().default(30),
@@ -24,60 +20,37 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 	const { family, memberId, teamId } = query
 	const inEvent = { period: { team: { eventId } } }
 
-	const [members, subscribes, teams, periods, lastMembers, toValidate, nbToValidate] =
-		await Promise.all([
-			prisma.member.findMany({
-				where: { eventId },
-				select: { isValidedByEvent: true, isValidedByUser: true },
-			}),
-			prisma.subscribe.groupBy({ by: ['state'], where: inEvent, _count: { _all: true } }),
-			prisma.team.count({ where: { eventId } }),
-			prisma.period.aggregate({
-				where: { team: { eventId } },
-				_count: { _all: true },
-				_sum: { maxSubscribe: true },
-			}),
-			prisma.member.findMany({
-				where: { eventId },
-				orderBy: { createdAt: 'desc' },
-				take: 6,
-				include: { user: true, leaderOf: true },
-			}),
-			prisma.subscribe.findMany({
-				where: { ...inEvent, ...TO_VALIDATE },
-				orderBy: { createdAt: 'desc' },
-				take: 6,
-				include: {
-					period: { include: { team: { select: { id: true, name: true } } } },
-					member: { include: { user: true, leaderOf: true } },
-				},
-			}),
-			prisma.subscribe.count({ where: { ...inEvent, ...TO_VALIDATE } }),
-		])
+	const [lastMembers, toValidate, nbToValidate] = await Promise.all([
+		prisma.member.findMany({
+			where: { eventId },
+			orderBy: { createdAt: 'desc' },
+			take: 6,
+			include: { user: true, leaderOf: true },
+		}),
+		prisma.subscribe.findMany({
+			where: { ...inEvent, ...TO_VALIDATE },
+			orderBy: { createdAt: 'desc' },
+			take: 6,
+			include: {
+				period: { include: { team: { select: { id: true, name: true } } } },
+				member: { include: { user: true, leaderOf: true } },
+			},
+		}),
+		prisma.subscribe.count({ where: { ...inEvent, ...TO_VALIDATE } }),
+	])
 
 	return {
-		journal: isAdmin
-			? {
-					family,
-					subject: memberId
-						? await prisma.member.findUnique({
-								where: { id: memberId, eventId },
-								select: { id: true, firstName: true, lastName: true },
-							})
-						: null,
-					...(await getLogs(eventLogsWhere({ eventId, family, memberId, teamId }), {
-						take: query.take,
-					})),
-				}
-			: null,
-		stats: {
-			membership: getMembershipDistribution(members),
-			subscribes: getSubscribesDistribution(subscribes),
-			teams,
-			periods: periods._count._all,
-			// Le besoin, tel que les créneaux le déclarent: c'est à lui que se compare le nombre
-			// d'inscriptions validées.
-			places: periods._sum.maxSubscribe ?? 0,
+		journal: {
+			family,
+			subject: memberId
+				? await prisma.member.findUnique({
+						where: { id: memberId, eventId },
+						select: { id: true, firstName: true, lastName: true },
+					})
+				: null,
+			...(await getLogs(eventLogsWhere({ eventId, family, memberId, teamId }), {
+				take: query.take,
+			})),
 		},
 		lastMembers: lastMembers.map((member) => addMemberComputedValues({ ...member, event })),
 		toValidate: toValidate.map((subscribe) => ({
@@ -89,31 +62,3 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 }
 
 export type MembershipDistKey = 'isValided' | 'isValidedByEvent' | 'isValidedByUser'
-
-/** Même découpage que le résumé de la table des membres: les deux chiffres doivent concorder. */
-function getMembershipDistribution(
-	members: { isValidedByEvent: boolean; isValidedByUser: boolean }[]
-): Record<MembershipDistKey, number> {
-	const dist = { isValided: 0, isValidedByEvent: 0, isValidedByUser: 0 }
-	members.forEach(({ isValidedByEvent, isValidedByUser }) => {
-		if (isValidedByEvent && isValidedByUser) dist.isValided++
-		else if (isValidedByUser) dist.isValidedByUser++
-		else if (isValidedByEvent) dist.isValidedByEvent++
-	})
-	return dist
-}
-
-function getSubscribesDistribution(
-	rows: { state: SubscribeState; _count: { _all: number } }[]
-): Record<SubscribeState, number> {
-	// Les états absents valent zéro: une distribution à trous se lirait comme une absence de
-	// données, là où il s'agit d'une absence d'inscriptions.
-	const dist: Record<SubscribeState, number> = {
-		request: 0,
-		accepted: 0,
-		denied: 0,
-		cancelled: 0,
-	}
-	rows.forEach(({ state, _count }) => (dist[state] = _count._all))
-	return dist
-}

@@ -39,8 +39,9 @@
 		ondelete,
 	}: Props = $props()
 
-	const remoteForm = $derived(period?.id ? updatePeriod : createPeriod)
-	const deleteFormId = $props.id()
+	const uid = $props.id()
+	const deleteFormId = `${uid}-delete`
+	const remoteForm = $derived(period?.id ? updatePeriod.for(period.id) : createPeriod.for(uid))
 
 	const detectChange = useDetectChange(period)
 
@@ -84,9 +85,6 @@
 		start = period?.start || defaultStart
 		end = period?.end || defaultEnd
 		maxSubscribe = period?.maxSubscribe || 1
-		// Le champ distant est la source de vérité une fois monté: sans ce `set`, la saisie
-		// faite sur la période précédente resterait affichée en passant à la suivante.
-		remoteForm.fields.maxSubscribe.set(maxSubscribe)
 		selectedTeam = period?.team
 		selectedTags = period?.tags ?? []
 	}

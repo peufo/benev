@@ -10,8 +10,8 @@ export const modelUserCreate = modelUserLogin.extend({
 	firstName: z.string().min(2).trim(),
 	lastName: z.string().min(2).trim(),
 	isOrganizer: z.boolean().optional(),
-	// Le défaut est indispensable: une case décochée n'envoie rien, et `form()` refuse un
-	// booléen non optionnel. Le refus est donc formulé par le refinement, pas par le type.
+	// `form()` refuse un booléen non optionnel: le refus est formulé par le refinement, pas par
+	// le type — le défaut n'est là que pour lui donner cette forme.
 	isTermsAccepted: z
 		.boolean()
 		.default(false)

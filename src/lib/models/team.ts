@@ -42,7 +42,7 @@ export const modelTeam = z.object({
 	// `InputLeaders` soumet lui-même les ids, en `leaders[]`, depuis le champ que lui passe
 	// `TeamForm`.
 	leaders: zConnectMany,
-	// Champ rendu conditionnellement (inscription libre): absent, il ne touche à rien.
+	// Champs rendus conditionnellement (inscription libre): absents, ils ne touchent à rien.
 	closeSubscribing: zDateNullable,
 	overflowPermitted: z.boolean().optional(),
 	// `MemberConditions` sérialise sa liste dans un champ caché.

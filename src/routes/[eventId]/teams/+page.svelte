@@ -48,8 +48,8 @@
 	})
 </script>
 
-<div class="max-w-xl m-auto flex flex-col gap-4 mt-3 mb-20">
-	<div class="surface flex flex-col gap-2">
+<div class="max-w-xl m-auto flex flex-col gap-3 mb-20">
+	<div class="surface flex flex-col gap-2 p-2">
 		<div class="flex gap-1">
 			<InputSearch />
 			<div class="grow"></div>

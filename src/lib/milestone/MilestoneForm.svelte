@@ -14,8 +14,12 @@
 
 	let { milestone = {}, oncreated, onupdated, ondeleted }: Props = $props()
 
-	const remoteForm = $derived(milestone.id ? updateMilestone : createMilestone)
-	const deleteFormId = $props.id()
+	const uid = $props.id()
+	const deleteFormId = `${uid}-delete`
+
+	const remoteForm = $derived(
+		milestone.id ? updateMilestone.for(milestone.id) : createMilestone.for(uid)
+	)
 </script>
 
 {#if milestone.id}

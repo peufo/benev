@@ -27,6 +27,8 @@
 	}: Props = $props()
 
 	const formId = $props.id()
+	const remoteForm = $derived(updateMemberProfile.for(memberProfile.id))
+
 	let formElement = $state<HTMLFormElement>()
 	let bar = $state<ReturnType<typeof SaveBar>>()
 	// Remonte les listes déroulantes, dont la sélection vit dans le composant: le `reset()`
@@ -35,7 +37,7 @@
 </script>
 
 <form
-	{...updateMemberProfile.enhance(
+	{...remoteForm.enhance(
 		enhanceForm({
 			success: 'Profil enregistré',
 			onsuccess: () => {
@@ -76,7 +78,7 @@
 		form={formElement}
 		{formId}
 		key={memberProfile.id}
-		pending={updateMemberProfile.pending > 0}
+		pending={remoteForm.pending > 0}
 		onreset={() => resetToken++}
 	/>
 {/if}

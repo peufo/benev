@@ -14,7 +14,7 @@
 </script>
 
 {#if teams.length}
-	<div class="flex flex-col gap-4">
+	<div class="flex flex-col gap-3">
 		{#each teams as team (team.id)}
 			<TeamCard {team} onclickPeriod={(detail) => onclickPeriod?.({ ...detail, team })} />
 		{/each}

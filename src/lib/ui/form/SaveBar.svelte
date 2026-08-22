@@ -16,9 +16,12 @@
 		formId: string
 		/**
 		 * Identifie l'enregistrement édité. Quand il change sans que le formulaire soit remonté
-		 * — navigation d'une page d'admin à l'autre — les champs conservent ce qui a été saisi
-		 * pour le précédent, l'état d'un `form` distant survivant à la navigation. Le formulaire
-		 * est alors réinitialisé et la ligne de base reprise.
+		 * — navigation d'une page d'admin à l'autre — la ligne de base porte encore l'ancien
+		 * enregistrement: elle est reprise, et le `reset()` rend au formulaire ce que le
+		 * `onreset` du parent ne restaure pas lui-même.
+		 *
+		 * Les champs distants, eux, se réinitialisent par leur instance: voir AGENTS.md,
+		 * « L'état d'un formulaire vit dans son module ».
 		 */
 		key?: unknown
 		/** `fields.allIssues()`: le récapitulatif vit ici, seul point visible à la soumission. */

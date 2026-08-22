@@ -25,7 +25,7 @@
 	let isAdmin = $derived(!!data.member?.roles.includes('admin'))
 </script>
 
-<div class="max-w-3xl mx-auto my-3 w-full space-y-4">
+<div class="max-w-3xl mx-auto w-full space-y-3">
 	<Section id="member" title="{data.memberProfile.firstName} {data.memberProfile.lastName}" back>
 		{#snippet action()}
 			{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}

@@ -31,7 +31,7 @@
 
 	<InputBoolean
 		field={fields.selfSubscribeCancelAllowed}
-		label="Les membre peuvent {event.selfSubscribeAllowed
+		label="Les membre peuvent {fields.selfSubscribeAllowed.value()
 			? 'annuler ou '
 			: ''}décliner leurs inscriptions"
 		checked={event.selfSubscribeCancelAllowed}

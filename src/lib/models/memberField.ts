@@ -6,10 +6,10 @@ import { MEMBER_FIELD_TYPE } from '$lib/constant'
 export const modelMemberFieldCreate = z.object({
 	name: z.string().min(2),
 	label: z.string().optional(),
-	// Toujours rendus: une case décochée n'envoie rien, d'où le repli sur `false`.
+	// Toujours rendus: le défaut ne sert qu'à satisfaire `form()`, qui exige un booléen optionnel.
 	memberCanWrite: z.boolean().default(false),
 	memberCanRead: z.boolean().default(false),
-	// Rendus conditionnellement: leur absence doit laisser la valeur en place.
+	// Rendus selon le type du champ: absents, ils ne touchent à rien.
 	allCombinations: z.boolean().optional(),
 	description: z.string().optional(),
 	options: z.string().optional(),

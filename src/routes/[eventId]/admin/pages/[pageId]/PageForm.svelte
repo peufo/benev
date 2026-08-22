@@ -35,6 +35,7 @@
 	const uid = $props.id()
 	const formId = `${uid}-page`
 	const deleteFormId = `${uid}-delete`
+	const remoteForm = $derived(updatePage.for(page.id))
 
 	let formElement = $state<HTMLFormElement>()
 	let saveBar = $state<ReturnType<typeof SaveBar>>()
@@ -53,7 +54,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 
 <!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
 <form
-	{...updatePage.enhance(
+	{...remoteForm.enhance(
 		enhanceForm({
 			success: 'Page enregistrée',
 			onsuccess: async () => {
@@ -69,7 +70,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 >
 	{#key resetToken}
 		<div class="flex gap-2 items-start">
-			<InputString label="Titre" class="grow" field={updatePage.fields.title} value={page.title} />
+			<InputString label="Titre" class="grow" field={remoteForm.fields.title} value={page.title} />
 
 			<!-- Même structure que le `label` de l'`InputString` voisin, pour que les deux champs
 			     s'alignent: fuma rend ses libellés dans un `fieldset.fieldset > label.label`. -->
@@ -93,7 +94,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 					</div>
 				{:else}
 					<InputSelect
-						field={updatePage.fields.type}
+						field={remoteForm.fields.type}
 						items={selectableTypes}
 						value={selectableTypes.find((option) => option.value === pageType)}
 						onSelect={(option) => {
@@ -136,7 +137,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	{/key}
 
 	<!-- Les refus métier (titre déjà pris, charte en double) remontent au niveau du formulaire -->
-	{#each updatePage.fields.issues() ?? [] as issue (issue.message)}
+	{#each remoteForm.fields.issues() ?? [] as issue (issue.message)}
 		<p class="text-error text-sm">{issue.message}</p>
 	{/each}
 
@@ -159,6 +160,6 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	form={formElement}
 	{formId}
 	key={page.id}
-	pending={updatePage.pending > 0}
+	pending={remoteForm.pending > 0}
 	onreset={() => resetToken++}
 />

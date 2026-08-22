@@ -7,10 +7,9 @@ type MemberSetting = Pick<
 >
 
 export const modelMemberSetting = z.object({
-	// Les trois cases ne sont rendues que selon le rôle du membre: une case absente du formulaire
-	// retombe sur le défaut, comme avant la migration. `isNotifiedSubscribe` est toujours rendue,
-	// donc son absence signifie bien « décochée ».
-	isNotifiedSubscribe: z.boolean().default(false),
-	isNotifiedLeaderOfSubscribe: z.boolean().default(true),
-	isNotifiedAdminOfNewMember: z.boolean().default(true),
-}) satisfies z.ZodType<MemberSetting>
+	// Les deux dernières ne sont rendues que selon le rôle du membre: absentes, elles ne touchent
+	// à rien, et le membre qui redevient responsable retrouve sa préférence.
+	isNotifiedSubscribe: z.boolean().optional(),
+	isNotifiedLeaderOfSubscribe: z.boolean().optional(),
+	isNotifiedAdminOfNewMember: z.boolean().optional(),
+}) satisfies z.ZodType<Partial<MemberSetting>>

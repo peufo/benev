@@ -27,8 +27,9 @@
 	]
 	if (!tag.color) tag.color = colors[Math.round(Math.random() * (colors.length - 1))]
 
-	const remoteForm = $derived(tag.id ? updateTag : createTag)
-	const deleteFormId = $props.id()
+	const uid = $props.id()
+	const deleteFormId = `${uid}-delete`
+	const remoteForm = $derived(tag.id ? updateTag.for(tag.id) : createTag.for(uid))
 </script>
 
 {#if tag.id}
@@ -55,7 +56,7 @@
 			onsuccess: () => {
 				// `result` porte l'étiquette telle qu'enregistrée: c'est elle que les formulaires
 				// ouverts en dessous doivent afficher, la leur datant de leur propre chargement.
-				const saved = tag.id ? updateTag.result : createTag.result
+				const saved = remoteForm.result
 				if (!saved) return
 				if (tag.id) onupdated?.(saved)
 				else oncreated?.(saved)

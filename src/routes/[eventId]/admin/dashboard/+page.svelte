@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ClipboardCheckIcon, ScrollTextIcon, SigmaIcon, UsersIcon, XIcon } from '@lucide/svelte'
+	import { ClipboardCheckIcon, ScrollTextIcon, UsersIcon, XIcon } from '@lucide/svelte'
 	import { tip, urlParam } from 'fuma'
 	import { page } from '$app/state'
 	import { InputOptionInParam } from '$lib/ui'
@@ -7,7 +7,6 @@
 	import { LOG_FAMILIES, Logs, loadPreviousEventLogs } from '$lib/log'
 	import { dashboardSections, trackSubNavSections } from '$lib/layout/adminSubNav.svelte'
 	import { eventPath } from '$lib/store'
-	import DashboardStats from './DashboardStats.svelte'
 	import DashboardMembers from './DashboardMembers.svelte'
 	import DashboardValidations from './DashboardValidations.svelte'
 
@@ -29,80 +28,76 @@
 	)
 </script>
 
-<div class="max-w-4xl mx-auto w-full space-y-4">
-	<Section id="stats" title="Chiffres clés" icon={SigmaIcon}>
-		<DashboardStats stats={data.stats} />
-	</Section>
-
-	<Section
-		id="members"
-		title="Derniers adhérents"
-		icon={UsersIcon}
-		subtitle="Qui a rejoint l'évènement en dernier"
-	>
-		{#snippet action()}
-			<a href="{$eventPath}/admin/members" class="btn btn-sm">Tous les membres</a>
-		{/snippet}
-		<DashboardMembers members={data.lastMembers} />
-	</Section>
-
-	<Section
-		id="validations"
-		title="Inscriptions à valider"
-		icon={ClipboardCheckIcon}
-		subtitle="Les demandes des bénévoles qu'un responsable n'a pas encore tranchées"
-	>
-		{#snippet action()}
-			{#if data.nbToValidate > data.toValidate.length}
-				<a
-					href="{$eventPath}/admin/subscribes?states={JSON.stringify(['request'])}&createdBy=user"
-					class="btn btn-sm"
-				>
-					Les {data.nbToValidate} demandes
-				</a>
-			{/if}
-		{/snippet}
-		<DashboardValidations subscribes={data.toValidate} />
-	</Section>
-
-	{#if data.journal}
-		{@const journal = data.journal}
-		<Section id="journal" title="Journal" icon={ScrollTextIcon}>
+<div class={['lg:grid lg:grid-cols-2', 'max-lg:flex max-lg:flex-col', 'gap-3']}>
+	<div class="flex flex-col gap-3">
+		<Section
+			id="members"
+			title="Derniers adhérents"
+			icon={UsersIcon}
+			subtitle="Qui a rejoint l'évènement en dernier"
+			class="border-soft"
+		>
 			{#snippet action()}
-				{#if journal.subject}
+				<a href="{$eventPath}/admin/members" class="btn btn-sm">Tous les membres</a>
+			{/snippet}
+			<DashboardMembers members={data.lastMembers} />
+		</Section>
+
+		<Section
+			id="validations"
+			title="Inscriptions à valider"
+			icon={ClipboardCheckIcon}
+			subtitle="Les demandes des bénévoles qu'un responsable n'a pas encore tranchées"
+		>
+			{#snippet action()}
+				{#if data.nbToValidate > data.toValidate.length}
 					<a
-						href={urlParam.without('memberId')}
+						href="{$eventPath}/admin/subscribes?states={JSON.stringify(['request'])}&createdBy=user"
 						class="btn btn-sm"
-						data-sveltekit-noscroll
-						use:tip={{ content: 'Retirer le filtre' }}
 					>
-						<XIcon size={18} />
-						{subjectName}
+						Les {data.nbToValidate} demandes
 					</a>
 				{/if}
-				<InputOptionInParam key="family" options={families} />
 			{/snippet}
-
-			<!-- Un filtre différent, c'est un autre ensemble: le fil repart neuf plutôt que d'empiler
-				 ce qui avait été chargé au-dessus de l'ancien. -->
-			{#key `${journal.family}:${journal.subject?.id}`}
-				<Logs
-					logs={journal.logs}
-					hasMore={journal.hasMore}
-					title={subjectName ?? data.event?.name}
-					timezone={data.event?.timezone}
-					showNoteForm={isAdmin}
-					noteMemberId={journal.subject?.id}
-					loadPrevious={(beforeId) =>
-						loadPreviousEventLogs({
-							beforeId,
-							family: journal.family,
-							memberId: journal.subject?.id,
-						})}
-					canDeleteNote={(log) =>
-						log.type === 'note_create' && (isAdmin || log.createdById === page.data.member?.userId)}
-				/>
-			{/key}
+			<DashboardValidations subscribes={data.toValidate} />
 		</Section>
-	{/if}
+	</div>
+
+	<Section id="journal" title="Journal" icon={ScrollTextIcon}>
+		{#snippet action()}
+			{#if data.journal.subject}
+				<a
+					href={urlParam.without('memberId')}
+					class="btn btn-sm"
+					data-sveltekit-noscroll
+					use:tip={{ content: 'Retirer le filtre' }}
+				>
+					<XIcon size={18} />
+					{subjectName}
+				</a>
+			{/if}
+			<InputOptionInParam key="family" options={families} />
+		{/snippet}
+
+		<!-- Un filtre différent, c'est un autre ensemble: le fil repart neuf plutôt que d'empiler
+					 ce qui avait été chargé au-dessus de l'ancien. -->
+		{#key `${data.journal.family}:${data.journal.subject?.id}`}
+			<Logs
+				logs={data.journal.logs}
+				hasMore={data.journal.hasMore}
+				title={subjectName ?? data.event?.name}
+				timezone={data.event?.timezone}
+				showNoteForm={isAdmin}
+				noteMemberId={data.journal.subject?.id}
+				loadPrevious={(beforeId) =>
+					loadPreviousEventLogs({
+						beforeId,
+						family: data.journal.family,
+						memberId: data.journal.subject?.id,
+					})}
+				canDeleteNote={(log) =>
+					log.type === 'note_create' && (isAdmin || log.createdById === page.data.member?.userId)}
+			/>
+		{/key}
+	</Section>
 </div>

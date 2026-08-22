@@ -5,9 +5,10 @@
 
 	interface Props {
 		member: MemberWithComputedValues
+		hideLabel?: boolean
 	}
 
-	let { member }: Props = $props()
+	let { member, hideLabel }: Props = $props()
 </script>
 
 {#if member.isValidedByUser}
@@ -15,25 +16,28 @@
 		class="badge badge-success badge-soft"
 		use:tip={{ content: 'Le membre a validé sa participation' }}
 	>
-		<CheckIcon class="opacity-80 -translate-x-1" size={20} />
-		Actif
+		<CheckIcon class={['opacity-80', !hideLabel && '-translate-x-1']} size={20} />
+		{hideLabel ? '' : 'Actif'}
 	</div>
 {:else}
 	<div
 		class="badge badge-info badge-soft badge-outline"
 		use:tip={{ content: `Le membre n'a pas validé sa participation` }}
 	>
-		<GhostIcon class="opacity-80 -translate-x-1" size={20} />
-		Inactif
+		<GhostIcon class={['opacity-80', !hideLabel && '-translate-x-1']} size={20} />
+		{hideLabel ? '' : 'Inactif'}
 	</div>
 {/if}
 
 {#if !member.isUserProfileCompleted || !member.isMemberProfileCompleted}
 	<div
 		class="badge badge-warning badge-soft badge-outline"
-		use:tip={{ content: `Certaine informations de profile sont manquantes` }}
+		use:tip={{ content: `Certaines informations de profil sont manquantes` }}
 	>
-		<MessageCircleQuestionMarkIcon class="opacity-80 -translate-x-1" size={20} />
-		Incomplet
+		<MessageCircleQuestionMarkIcon
+			class={['opacity-80', !hideLabel && '-translate-x-1']}
+			size={20}
+		/>
+		{hideLabel ? '' : 'Incomplet'}
 	</div>
 {/if}

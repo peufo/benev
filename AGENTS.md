@@ -184,6 +184,55 @@ Things to know when touching this layer:
 `fuma/server` still provides read-side helpers — `parseQuery`,
 `ensureFieldsWithFilterAreVisibles` — used in `load` functions. Those stay.
 
+### L'état d'un formulaire vit dans son module
+
+A `form()` is a **module singleton**. Its input state is born when the page loads and lives as long
+as the tab. `field.as(type, value)` renders `get_value() ?? value` — for `value`, for `checked`, for
+everything: **the argument passed to `as()` is only consulted while the field has never been
+written**. One keystroke, one click on a checkbox, one `fields.x.set()` fills that state, and the
+initial value stops mattering — remounted or not. Only three things write to it: user input,
+`fields.x.set()`, and the native `reset` event, which re-reads the whole `FormData`.
+
+Four rules, no exceptions to weigh:
+
+1. **One instance per edited record.** Any form that carries input and can be shown for more than
+   one record — or more than once at a time — derives its instance:
+
+   ```ts
+   const uid = $props.id()
+   const remoteForm = $derived(team.id ? updateTeam.for(team.id) : createTeam.for(uid))
+   ```
+
+   `for(key)` reference-counts its holders in an `$effect.pre`; the instance is discarded when the
+   last one goes. Inside a `$derived`, the effect belongs to the derived, so the count follows both
+   a change of key and the component's destruction. `$props.id()` keys a creation: one id per
+   mount, a clean slate every time the drawer opens.
+
+2. **`reset` for a form that stays mounted and serves again.** `enhanceForm({ reset: true })`, or an
+   explicit `fields.set(...)` when local state has to be cleared in the same gesture (`InviteForm`).
+
+3. **`{#key}` only re-seeds local state** — a rich editor, a crop, an `InputSelect`'s selection. It
+   never touches a remote field: the fresh `<input>` reads the same module state as the old one.
+
+4. **`fields.x.set()` pilots a field from inside its form** — the coupled checkboxes of
+   `MemberFieldForm`, the link normalisation of `SectionEssentiel`, `Login` carrying a value from
+   one form to the next. Never as a lifecycle reset.
+
+A form without `field` — `<input name="…" bind:value>`, `<textarea name="message">` — never reads
+that state and escapes all of this. So does a form carrying only hidden inputs (`deleteTeam`,
+`cloneTeamForm`, `deletePage`): a hidden input fires no `input` event, and the DOM is re-read at
+every submission. Those keep the base instance, unless several are alive at once — that throws
+`A form object can only be attached to a single <form> element`.
+
+Two consequences of `for()` to know:
+
+- It **injects `id: key`** into the submitted data when the form does not already carry an `id`
+  field. Every schema here is a stripping `z.object()`, so the extra key is discarded — including
+  `updateMemberProfile`, which is `form('unchecked')` but re-parses through a `z.object()`. Inert,
+  as long as no schema grows an `id` field meaning something else.
+- An instance's `action` carries the key. **Every `formaction=` must come from the same instance**,
+  or the button submits to the base one.
+
 ---
 
 ## The Journal

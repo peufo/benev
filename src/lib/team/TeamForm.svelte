@@ -35,11 +35,10 @@
 		onsuccess,
 	}: Props = $props()
 
-	const remoteForm = $derived(team.id ? updateTeam : createTeam)
-	// `$props.id()` ne s'appelle qu'une fois par composant: les deux formulaires cachés en dérivent.
 	const uid = $props.id()
 	const deleteFormId = `${uid}-delete`
 	const cloneFormId = `${uid}-clone`
+	const remoteForm = $derived(team.id ? updateTeam.for(team.id) : createTeam.for(uid))
 
 	// `DrawersForm` s'en sert pour injecter un responsable fraîchement invité.
 	teamForm = {

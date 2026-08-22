@@ -94,7 +94,7 @@ function buildModelMemberProfile(fields: Field[], isPartial: boolean) {
 	const requiredError = 'Valeur manquante'
 
 	const modelByType = {
-		// Une case décochée n'envoie rien: sans défaut, un booléen requis serait toujours en erreur.
+		// Cocher est le seul geste possible: un booléen obligatoire n'a rien à exiger de plus.
 		boolean: z.boolean().default(false),
 		number: z.number({ error: requiredError }),
 		string: z.string().min(1, { message: requiredError }),

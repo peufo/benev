@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ClassValue } from 'svelte/elements'
 	import type { Component, Snippet } from 'svelte'
 	import { ArrowLeftIcon, type IconProps } from '@lucide/svelte'
 	import { tip } from 'fuma'
@@ -13,6 +14,7 @@
 		action?: Snippet | undefined
 		danger?: boolean
 		children: Snippet
+		class?: ClassValue
 	}
 
 	let {
@@ -24,29 +26,35 @@
 		action,
 		danger = false,
 		children,
+		class: klass,
 	}: Props = $props()
 </script>
 
-<section {id} class={['surface scroll-mt-4 p-5', danger && 'border-error/40']}>
-	<div class="mb-4 flex items-center gap-2">
-		{#if back}
-			<button
-				type="button"
-				class="btn btn-square btn-ghost btn-sm -ml-2 shrink-0"
-				aria-label="Retour"
-				onclick={() => history.back()}
-				use:tip={{ content: 'Retour' }}
-			>
-				<ArrowLeftIcon size={20} class={danger ? 'text-error' : 'opacity-70'} />
-			</button>
-		{:else if SectionIcon}
-			<SectionIcon size={20} class={['shrink-0', danger ? 'text-error' : 'opacity-70']} />
-		{/if}
-		<div class="grow">
-			<h2 class="title">{title}</h2>
-			{#if subtitle}
-				<p class="text-sm text-base-content/70">{subtitle}</p>
+<section {id} class={['surface scroll-mt-4 p-5', danger && 'border-error/40', klass]}>
+	<div class="mb-4 flex items-start gap-2 flex-wrap">
+		<div class="flex gap-4 grow">
+			{#if back}
+				<button
+					type="button"
+					class="btn btn-square btn-ghost btn-sm -ml-2 shrink-0"
+					aria-label="Retour"
+					onclick={() => history.back()}
+					use:tip={{ content: 'Retour' }}
+				>
+					<ArrowLeftIcon size={20} class={danger ? 'text-error' : 'opacity-70'} />
+				</button>
+			{:else if SectionIcon}
+				<SectionIcon
+					size={20}
+					class={['shrink-0 translate-y-1', danger ? 'text-error' : 'opacity-70']}
+				/>
 			{/if}
+			<div>
+				<h2 class="title">{title}</h2>
+				{#if subtitle}
+					<p class="text-sm text-base-content/70">{subtitle}</p>
+				{/if}
+			</div>
 		</div>
 		{@render action?.()}
 	</div>

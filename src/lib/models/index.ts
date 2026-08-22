@@ -20,7 +20,7 @@
  *
  * | avant (`parseFormData`)  | après (`form()`)                  | pourquoi                                        |
  * | ------------------------ | --------------------------------- | ----------------------------------------------- |
- * | `z.boolean()`            | `z.boolean().default(false)`       | une case décochée n'envoie rien                 |
+ * | `z.boolean()`            | `z.boolean().optional()`           | voir ci-dessous                                 |
  * | `z.string().nullish()`   | `z.string().optional()`            | `null` n'est pas un `RemoteFormInput`            |
  * | `z.date()`               | `zDate` (`$lib/models/form`)       | un `<input type="date">` envoie une chaîne       |
  * | `z.relation.connect`     | `zConnect`                         | un champ envoie l'id, pas `{ id }`               |
@@ -29,6 +29,11 @@
  *
  * `z.coerce.number()` ne passe pas: son entrée est `unknown`. Pour un champ sans `field`, dont le
  * `name` est posé à la main, écrire `z.string().transform(Number)`.
+ *
+ * Les booléens suivent la garantie d'`InputBoolean`: une case rendue transmet toujours sa valeur,
+ * `off` comprise. Une clé absente signifie donc « case non rendue », jamais « décochée » — d'où
+ * `.optional()` pour un champ affiché conditionnellement, dont l'absence ne doit rien toucher. Les
+ * autres gardent `.default(false)`, `form()` refusant un booléen ni optionnel ni pourvu d'un défaut.
  */
 export * from './user'
 export * from './event'

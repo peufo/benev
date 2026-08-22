@@ -154,36 +154,39 @@
 				<h3 class="title">Édition d'une image</h3>
 			{/snippet}
 
-			<!-- `field.as(type, value)` ne fournit qu'une valeur initiale: sans remontage, la description
-			     resterait celle de l'image précédemment ouverte. -->
-			{#key editedMedia}
-				{#if editedMedia}
-					<img src="/media/{editedMedia.id}" alt={editedMedia.name} class="mx-auto" />
+			{#if editedMedia}
+				{@const editForm = editMedia.for(editedMedia.id)}
+				{@const deleteForm = deleteMedia.for(editedMedia.id)}
+				<img src="/media/{editedMedia.id}" alt={editedMedia.name} class="mx-auto" />
 
-					<!-- Un seul `<form>` porte les deux remote functions: le `formaction` du bouton pressé
-					     décide laquelle s'exécute. -->
-					<form
-						class="contents"
-						{...editMedia.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
-						{...deleteMedia.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
-					>
-						<div class="mt-4 flex flex-row-reverse items-end gap-2">
-							<input type="hidden" name="id" value={editedMedia.id} />
+				<!-- Une instance par image: `field.as(type, value)` ne fournit qu'une valeur initiale, et
+				     l'état d'un formulaire distant vit dans son module — la description resterait celle
+				     de l'image précédemment ouverte. Voir AGENTS.md, « L'état d'un formulaire vit dans
+				     son module ».
 
-							<button formaction={editMedia.action} class="btn btn-primary"> Valider </button>
-							<ButtonDelete formaction={deleteMedia.action} />
+				     Un seul `<form>` porte les deux remote functions: le `formaction` du bouton pressé
+				     décide laquelle s'exécute, et doit donc viser ces instances-là, pas celles de base. -->
+				<form
+					class="contents"
+					{...editForm.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
+					{...deleteForm.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
+				>
+					<div class="mt-4 flex flex-row-reverse items-end gap-2">
+						<input type="hidden" name="id" value={editedMedia.id} />
 
-							<InputString
-								field={editMedia.fields.name}
-								label="Description de l'image"
-								class="grow"
-								autocomplete="off"
-								value={editedMedia.name}
-							/>
-						</div>
-					</form>
-				{/if}
-			{/key}
+						<button formaction={editForm.action} class="btn btn-primary"> Valider </button>
+						<ButtonDelete formaction={deleteForm.action} />
+
+						<InputString
+							field={editForm.fields.name}
+							label="Description de l'image"
+							class="grow"
+							autocomplete="off"
+							value={editedMedia.name}
+						/>
+					</div>
+				</form>
+			{/if}
 		</Dialog>
 	</div>
 </Drawer>

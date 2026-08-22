@@ -2,7 +2,7 @@
 	import type { MemberProfile } from '$lib/server'
 	import { InputString } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
-	import { updateMemberContact as remoteForm } from './memberAdmin.remote'
+	import { updateMemberContact } from './memberAdmin.remote'
 
 	interface Props {
 		class?: string
@@ -11,6 +11,8 @@
 	}
 
 	let { class: klass = '', member, onsuccess }: Props = $props()
+
+	const remoteForm = $derived(updateMemberContact.for(member.id))
 </script>
 
 <form

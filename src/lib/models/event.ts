@@ -66,7 +66,7 @@ export const modelEventState = z.object({
 }) satisfies z.ZodType<EventUpdateInput>
 
 export const modelEventAdhesion = z.object({
-	// Ces cases sont toutes rendues: leur absence signifie bien « décochée ».
+	// Ces cases sont toutes rendues: le défaut ne sert qu'à satisfaire `form()`.
 	selfRegisterAllowed: z.boolean().default(false),
 	selfSubscribeAllowed: z.boolean().default(false),
 	selfSubscribeCancelAllowed: z.boolean().default(false),

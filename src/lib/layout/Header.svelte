@@ -11,7 +11,7 @@
 	let { user = undefined, start, end }: Props = $props()
 </script>
 
-<header class={['surface flex p-1 m-1']}>
+<header class={['surface flex p-1 m-1 mb-3']}>
 	{@render start?.()}
 	<div class="grow"></div>
 	{@render end?.()}

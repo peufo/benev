@@ -26,7 +26,7 @@
 	let upgradeOptions = $derived(getUpgradeOptions(event.tier))
 </script>
 
-<div class="max-w-4xl mx-auto p-6 flex flex-col gap-6">
+<div class="max-w-4xl mx-auto flex flex-col gap-3">
 	<EventTierDetails {event} {membersValided} />
 
 	{#if isOwner && upgradeOptions.length}

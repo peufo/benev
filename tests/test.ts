@@ -82,8 +82,10 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		await event.expectMemberProfileSaveBar(page)
 	})
 
-	test("Le tableau de bord résume l'évènement", async () => {
-		await event.expectDashboard(page)
+	// Avant le journal: les deux secteurs créés ici lui ajoutent deux entrées, et sa fenêtre par
+	// défaut en tient trente.
+	test("Le formulaire de secteur repart de l'enregistrement ouvert", async () => {
+		await event.expectTeamFormStateIsPerTeam(page)
 	})
 
 	test('Le journal rend ce que le parcours a écrit, et accepte une note', async () => {

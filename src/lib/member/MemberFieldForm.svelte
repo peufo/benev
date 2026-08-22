@@ -15,11 +15,12 @@
 
 	let { field = $bindable({}), onsuccess }: Props = $props()
 
-	// L'état d'un formulaire distant vit dans son module et ne se vide pas quand le tiroir se
-	// ferme: sans `for(field.id)`, ce qui a été saisi sur un champ se retrouverait sur le suivant,
-	// par-dessus ses vraies valeurs.
-	const remoteForm = $derived(field.id ? updateMemberField.for(field.id) : createMemberField)
-	const deleteFormId = $props.id()
+	const uid = $props.id()
+	const deleteFormId = `${uid}-delete`
+
+	const remoteForm = $derived(
+		field.id ? updateMemberField.for(field.id) : createMemberField.for(uid)
+	)
 
 	// `Object.entries` élargirait la clé en `string`: on la garde typée pour que la sélection
 	// s'écrive sans cast.
@@ -56,11 +57,8 @@
 	{...remoteForm.enhance(
 		enhanceForm({
 			success: 'Succès',
-			// `createMemberField` n'a pas de clé: sans remise à zéro, le champ créé prégarnirait
-			// le formulaire du suivant.
-			reset: true,
 			onsuccess: () => {
-				const created = createMemberField.result
+				const created = remoteForm.result
 				if (!field.id && created) globalEvents.emit('field_created', created)
 				onsuccess?.()
 			},

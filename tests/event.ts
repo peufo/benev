@@ -176,28 +176,6 @@ export function useEvent(owner: User, name: string) {
 			await expect(dialog.getByText('utilise déjà cette adresse')).toBeVisible()
 		},
 		/**
-		 * Le tableau de bord résume l'évènement au-dessus du journal: des chiffres qui renvoient
-		 * chacun à la table qu'ils résument, les derniers arrivés, et les demandes qu'un
-		 * responsable n'a pas tranchées.
-		 */
-		async expectDashboard(page: Page) {
-			await page.goto(`/${eventId}/admin/dashboard`)
-			await expect(page.getByRole('heading', { name: 'Chiffres clés' })).toBeVisible()
-			await expect(page.getByRole('heading', { name: 'Derniers adhérents' })).toBeVisible()
-			await expect(page.getByRole('heading', { name: 'Inscriptions à valider' })).toBeVisible()
-
-			// Bob a créé l'évènement: il en est le premier adhérent.
-			await expect(
-				page.locator('#members').getByRole('link', { name: /Bob The Tester/ })
-			).toBeVisible()
-
-			// Personne n'a demandé de créneau dans ce parcours.
-			await expect(page.locator('#validations')).toContainText('Aucune demande en attente')
-
-			await page.locator('#stats').getByRole('link', { name: 'Candidature à valider' }).click()
-			await expect(page).toHaveURL(/\/admin\/members\?/)
-		},
-		/**
 		 * Le journal se lit, se filtre, et accepte une note. Les lignes attendues ont été écrites
 		 * par les étapes précédentes du parcours: c'est le tour complet écriture -> rendu, seul à
 		 * pouvoir attraper une charge utile qui ne correspondrait plus à son composant.
@@ -460,6 +438,17 @@ export function useEvent(owner: User, name: string) {
 			await expect(canRead.locator('input')).toBeChecked()
 			await expect(canWrite.locator('input')).toBeChecked()
 			await expect(required.locator('input')).toBeChecked()
+
+			// Et le retour à faux, que rien ne transmettait: une case décochée n'envoie rien, c'est
+			// `InputBoolean` qui pose le relais.
+			await required.click()
+			await expect(required.locator('input')).not.toBeChecked()
+			await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
+			await expect(page.getByRole('dialog', { name: 'Modifier le champ' })).toBeHidden()
+
+			await page.getByRole('button', { name: /Ville/ }).click()
+			await expect(page.getByRole('dialog', { name: 'Modifier le champ' })).toBeVisible()
+			await expect(required.locator('input')).not.toBeChecked()
 		},
 		/**
 		 * Le profil d'un membre s'édite là où il s'affiche: plus de tiroir, des champs à choix
@@ -704,6 +693,73 @@ export function useEvent(owner: User, name: string) {
 			await expect(description).toHaveValue('Un centre de recherche appliquée.')
 			await expect(backgroundColor).toHaveValue('#ffffff')
 			await expect(saveBar).toBeHidden()
+		},
+		/**
+		 * L'état d'un `form()` distant vit dans son module et survit à la fermeture du tiroir:
+		 * sans une instance par secteur, ce qui a été saisi sur l'un se retrouve sur le suivant,
+		 * par-dessus ses vraies valeurs. Voir AGENTS.md, « L'état d'un formulaire vit dans son
+		 * module ».
+		 */
+		async expectTeamFormStateIsPerTeam(page: Page) {
+			const newTeamLink = page.locator('a[href*="form_team=%7B%7D"]')
+			const newDrawer = page.getByRole('dialog', { name: 'Nouveau secteur' })
+			const editDrawer = page.getByRole('dialog', { name: 'Modifier le secteur' })
+			const name = page.getByLabel('Nom du secteur')
+			// `InputBoolean` réduit la vraie case à `w-0`: on clique le libellé qui l'enveloppe,
+			// et on lit l'état sur la case qu'il contient.
+			const overflow = page.locator('label').filter({ hasText: "Mode liste d'attente" })
+			// Le lien crayon n'a pas de nom accessible: on le vise par son href, dans la carte du
+			// secteur — l'ordre des cartes ne décide de rien.
+			const editLink = (teamName: string) =>
+				page
+					.locator('section')
+					.filter({ has: page.getByRole('heading', { name: teamName, exact: true }) })
+					.last()
+					.locator('a[href*="form_team="]')
+
+			const createTeam = async (teamName: string) => {
+				await newTeamLink.first().click()
+				await expect(newDrawer).toBeVisible()
+				// Le secteur précédemment créé ne doit pas prégarnir le suivant.
+				await expect(name).toHaveValue('')
+				// Saisi avant l'hydratation, le nom serait écrasé par le rendu client, qui repose
+				// la valeur initiale du champ.
+				await expect(async () => {
+					await name.fill(teamName)
+					await expect(name).toHaveValue(teamName, { timeout: 1000 })
+				}).toPass()
+				await page.getByRole('button', { name: 'Valider', exact: true }).click()
+				// Le tiroir se ferme par `goto`, côté client: sans hydratation la soumission native
+				// re-rendrait la page avec son paramètre, et le tiroir resterait ouvert. La suite
+				// du test observe donc bien l'application hydratée.
+				await expect(newDrawer).toBeHidden()
+			}
+
+			await page.goto(`/${eventId}/teams`)
+			await createTeam('Alpha')
+			await createTeam('Bravo')
+
+			// Alpha: on touche aux deux champs, et on referme sans valider.
+			await editLink('Alpha').click()
+			await expect(editDrawer).toBeVisible()
+			await expect(name).toHaveValue('Alpha')
+			await expect(overflow.locator('input')).not.toBeChecked()
+			await overflow.click()
+			await expect(overflow.locator('input')).toBeChecked()
+			await name.fill('Alpha modifié mais pas validé')
+			await page.keyboard.press('Escape')
+			await expect(editDrawer).toBeHidden()
+
+			// Bravo: le tiroir affiche Bravo, pas la saisie abandonnée sur Alpha.
+			await editLink('Bravo').click()
+			await expect(editDrawer).toBeVisible()
+			await expect(name).toHaveValue('Bravo')
+			await expect(overflow.locator('input')).not.toBeChecked()
+
+			// Et l'abandon n'a rien enregistré non plus.
+			await page.keyboard.press('Escape')
+			await expect(editDrawer).toBeHidden()
+			await expect(page.getByRole('heading', { name: 'Alpha', exact: true })).toBeVisible()
 		},
 	}
 }

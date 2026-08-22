@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tip } from 'fuma'
-	import dayjs from '$lib/dayjs'
+	import { daytz } from '$lib/dayjs'
 	import { MemberCell, MemberProfileStatus } from '$lib/member'
 	import { Placeholder } from '$lib/ui'
 	import type { PageData } from './$types'
@@ -15,14 +15,15 @@
 		{#each members as member (member.id)}
 			<li class="flex items-center flex-wrap gap-2 py-1 border-b border-soft last:border-0">
 				<MemberCell {member} />
-				<div class="grow"></div>
-				<MemberProfileStatus {member} />
-				<span
-					class="text-xs text-base-content/70 whitespace-nowrap"
-					use:tip={{ content: dayjs(member.createdAt).format('DD.MM.YYYY HH:mm') }}
-				>
-					{dayjs(member.createdAt).fromNow()}
-				</span>
+				<div class="flex gap-1 items-center ml-auto">
+					<MemberProfileStatus {member} hideLabel />
+					<span
+						class="text-xs text-base-content/70 whitespace-nowrap"
+						use:tip={{ content: daytz(member.createdAt).format('DD.MM.YYYY HH:mm') }}
+					>
+						{daytz(member.createdAt).fromNow()}
+					</span>
+				</div>
 			</li>
 		{/each}
 	</ul>
