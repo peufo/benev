@@ -108,21 +108,27 @@
 		const duration = daytz(end).diff(start, 'minute')
 		const teamId = selectedTeam?.id ?? period.teamId
 		if (!teamId) return
-		const nextPeriod = await duplicatePeriod({
-			teamId,
-			start: end,
-			end: daytz(end).add(duration, 'minute').toDate(),
-			// `value()` suit la saisie en cours; il reste vide tant que le champ n'a pas été touché.
-			maxSubscribe: remoteForm.fields.maxSubscribe.value() ?? maxSubscribe,
-			tagIds: selectedTags.map((t) => t.id),
-		})
-		// La période créée devient celle du formulaire: `form_period` la recharge via le `load`,
-		// ce qui permet d'enchaîner les duplications sans rouvrir le tiroir.
-		await goto(urlParam.with({ form_period: nextPeriod.id }), {
-			invalidateAll: true,
-			noScroll: true,
-			keepFocus: true,
-		})
+		try {
+			const nextPeriod = await duplicatePeriod({
+				teamId,
+				start: end,
+				end: daytz(end).add(duration, 'minute').toDate(),
+				// `value()` suit la saisie en cours; il reste vide tant que le champ n'a pas été touché.
+				maxSubscribe: remoteForm.fields.maxSubscribe.value() ?? maxSubscribe,
+				tagIds: selectedTags.map((t) => t.id),
+			})
+			toast.success('Période dupliquée')
+			// La période créée devient celle du formulaire: `form_period` la recharge via le `load`,
+			// ce qui permet d'enchaîner les duplications sans rouvrir le tiroir.
+			await goto(urlParam.with({ form_period: nextPeriod.id }), {
+				invalidateAll: true,
+				noScroll: true,
+				keepFocus: true,
+			})
+		} catch (err) {
+			console.error(err)
+			toast.error('La duplication a échoué')
+		}
 	}
 
 	$effect.pre(() => {
