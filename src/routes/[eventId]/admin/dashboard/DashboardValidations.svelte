@@ -4,17 +4,28 @@
 	import { formatRange } from '$lib/formatRange'
 	import { MemberCell } from '$lib/member'
 	import { eventPath } from '$lib/store'
-	import { SubscribeStateForm } from '$lib/subscribe'
+	import { SubscribeCreatedBy, SubscribeStateForm } from '$lib/subscribe'
 	import { Placeholder } from '$lib/ui'
 	import type { PageData } from './$types'
 	import type { Waiting } from './waiting'
 
-	let { subscribes, waiting }: { subscribes: PageData['toValidate']; waiting: Waiting } = $props()
+	interface Props {
+		subscribes: PageData['toValidate']
+		/** Absent: les deux camps sont listés ensemble. */
+		waiting?: Waiting
+	}
+
+	let { subscribes, waiting }: Props = $props()
+
+	const emptyLabels = {
+		us: 'Aucune demande à trancher',
+		member: 'Aucune proposition sans réponse',
+	} satisfies Record<Waiting, string>
 </script>
 
 {#if !subscribes.length}
 	<Placeholder>
-		{waiting === 'us' ? 'Aucune demande à trancher' : 'Aucune proposition sans réponse'}
+		{waiting ? emptyLabels[waiting] : 'Aucune inscription en attente'}
 	</Placeholder>
 {:else}
 	<ul class="flex flex-col">
@@ -34,6 +45,11 @@
 				>
 					{formatRange(subscribe.period)}
 				</span>
+				<!-- Les deux camps mêlés, il faut lire sur la ligne qui attend qui. Filtrée, la
+				     liste le dit déjà par son bouton. -->
+				{#if !waiting}
+					<SubscribeCreatedBy createdBy={subscribe.createdBy} size={18} />
+				{/if}
 				<SubscribeStateForm {subscribe} isLeader />
 			</li>
 		{/each}

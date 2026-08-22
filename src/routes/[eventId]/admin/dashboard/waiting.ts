@@ -1,6 +1,9 @@
 /**
  * Une inscription en attente attend toujours le camp qui ne l'a pas créée: `us` est ce que
  * l'organisateur a à trancher, `member` ce qu'il a proposé et qui reste sans réponse.
+ *
+ * Le filtre se comporte comme les autres du produit: aucun camp retenu, ce sont les deux qui
+ * s'affichent.
  */
 export const WAITING = [
 	{ key: 'us', label: 'Chez nous', createdBy: 'user' },

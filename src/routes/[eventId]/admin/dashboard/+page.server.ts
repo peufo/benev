@@ -10,7 +10,7 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 	// fiche d'un membre, il reste réservé aux admins. Le reste de la page sert les responsables.
 	const isAdmin = !actor || actor.roles.includes('admin')
 
-	const { waiting } = parseQuery(url, { waiting: z.enum(WAITING_KEYS).default('us') })
+	const { waiting } = parseQuery(url, { waiting: z.enum(WAITING_KEYS).optional() })
 	const inEvent = { period: { team: { eventId } } }
 
 	const [journal, lastMembers, nbMembers, toValidate, waitingCounts, nbSubscribes, periods] =
@@ -24,7 +24,11 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 			}),
 			prisma.member.count({ where: { eventId } }),
 			prisma.subscribe.findMany({
-				where: { ...inEvent, state: 'request', createdBy: waitingOf(waiting).createdBy },
+				where: {
+					...inEvent,
+					state: 'request',
+					...(waiting && { createdBy: waitingOf(waiting).createdBy }),
+				},
 				orderBy: { createdAt: 'desc' },
 				take: 6,
 				include: {

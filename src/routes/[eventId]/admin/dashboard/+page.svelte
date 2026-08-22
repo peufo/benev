@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { ClipboardCheckIcon, ExternalLinkIcon, UsersIcon } from '@lucide/svelte'
-	import { tip, urlParam } from 'fuma'
+	import { tip } from 'fuma'
 	import Section from '$lib/ui/Section.svelte'
+	import { InputOptionInParam } from '$lib/ui'
 	import { Journal } from '$lib/log'
 	import { eventPath } from '$lib/store'
 	import DashboardMembers from './DashboardMembers.svelte'
@@ -10,11 +11,17 @@
 
 	let { data } = $props()
 
+	// Le compte tient dans le libellé: le bouton du camp qu'on ne regarde pas annonce ce qu'il
+	// cache, sinon il faut cliquer pour savoir s'il y a quelque chose.
+	let waitingOptions = $derived(
+		Object.fromEntries(WAITING.map(({ key, label }) => [key, `${label} (${data.nbWaiting[key]})`]))
+	)
+
 	// La table des inscriptions filtrée sur ce que la section montre: le bouton mène à la suite
 	// de la même liste, pas à tout l'évènement.
 	let waitingTableHref = $derived(
 		`${$eventPath}/admin/subscribes?states=${JSON.stringify(['request'])}` +
-			`&createdBy=${waitingOf(data.waiting).createdBy}`
+			(data.waiting ? `&createdBy=${waitingOf(data.waiting).createdBy}` : '')
 	)
 </script>
 
@@ -48,18 +55,7 @@
 				: 'Aucune place ouverte par les périodes'}
 		>
 			{#snippet action()}
-				<div class="join">
-					{#each WAITING as { key, label } (key)}
-						<a
-							href={urlParam.with({ waiting: key })}
-							class={['btn btn-sm join-item', data.waiting === key && 'btn-primary']}
-							data-sveltekit-noscroll
-						>
-							{label}
-							<span class="badge badge-xs">{data.nbWaiting[key]}</span>
-						</a>
-					{/each}
-				</div>
+				<InputOptionInParam key="waiting" options={waitingOptions} />
 				<a
 					href={waitingTableHref}
 					class="btn btn-square btn-sm"
