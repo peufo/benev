@@ -26,15 +26,7 @@
 </script>
 
 <div class="max-w-3xl mx-auto my-3 w-full space-y-4">
-	<!-- TODO inclure le bouton de retour quelque part + utilisé history.back plutôt, car on vient pas toujours de la table des membres -->
-	<!-- <a
-			href="{$eventPath}/admin/members{$page.url.search}"
-			class="btn btn-square btn-ghost btn-sm"
-		>
-			<ArrowLeftIcon size={20} />
-		</a> -->
-
-	<Section id="member" title="{data.memberProfile.firstName} {data.memberProfile.lastName}">
+	<Section id="member" title="{data.memberProfile.firstName} {data.memberProfile.lastName}" back>
 		{#snippet action()}
 			{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}
 				<MemberMenu {data} />

@@ -1,4 +1,5 @@
 import {
+	type IconProps,
 	AlignLeftIcon,
 	ArchiveIcon,
 	CheckIcon,
@@ -6,15 +7,14 @@ import {
 	ConstructionIcon,
 	FileTextIcon,
 	GlobeIcon,
+	HandshakeIcon,
 	HashIcon,
 	HouseIcon,
-	type IconProps,
 	ListChecksIcon,
 	ListIcon,
 	MailIcon,
 	OctagonAlertIcon,
 	OctagonXIcon,
-	ScrollTextIcon,
 	SquareCheckIcon,
 	TypeIcon,
 	XIcon,
@@ -178,7 +178,7 @@ export const SUBSCRIBE_STATE_ACTION: OptionRecord<Subscribe['state']> = {
 
 export const PAGE_TYPE: OptionRecord<Page['type']> = {
 	home: { label: 'Accueil', icon: HouseIcon },
-	charter: { label: 'Charte des bénévoles', icon: ScrollTextIcon },
+	charter: { label: 'Charte des bénévoles', icon: HandshakeIcon },
 	public: { label: 'Page publique', icon: FileTextIcon },
 	member: { label: 'Page de membre', icon: CircleUserIcon },
 	email: { label: "Model d'email", icon: MailIcon },
