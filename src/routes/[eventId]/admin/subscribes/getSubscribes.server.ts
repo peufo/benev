@@ -98,7 +98,9 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 					},
 				},
 			},
-			orderBy: orderBy.length ? orderBy : { period: { start: 'asc' } },
+			// À défaut de tri demandé, les dernières inscriptions en tête: c'est ce que
+			// l'organisateur vient voir, pas le début du planning.
+			orderBy: orderBy.length ? orderBy : { createdAt: 'desc' },
 		})
 		.then((subs) =>
 			subs.map((sub) => ({

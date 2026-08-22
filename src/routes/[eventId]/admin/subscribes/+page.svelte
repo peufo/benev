@@ -45,9 +45,9 @@
 			},
 			{
 				key: 'createdAt',
-				label: 'Inscription',
-				cell: (sub) => sub.createdAt.toLocaleDateString(),
-				visible: false,
+				label: 'Inscrit le',
+				cell: () => createdAtCell,
+				visible: true,
 				type: 'date',
 			},
 			{
@@ -121,6 +121,12 @@
 
 {#snippet memberCell(subscribe: Subscribe)}
 	<MemberCell member={subscribe.member} />
+{/snippet}
+
+{#snippet createdAtCell(subscribe: Subscribe)}
+	<span class="whitespace-nowrap" use:tip={{ content: dayjs(subscribe.createdAt).fromNow() }}>
+		{dayjs(subscribe.createdAt).format('DD.MM.YYYY HH:mm')}
+	</span>
 {/snippet}
 
 {#snippet teamCell(subscribe: Subscribe)}
