@@ -176,12 +176,34 @@ export function useEvent(owner: User, name: string) {
 			await expect(dialog.getByText('utilise déjà cette adresse')).toBeVisible()
 		},
 		/**
+		 * Le tableau de bord résume l'évènement au-dessus du journal: des chiffres qui renvoient
+		 * chacun à la table qu'ils résument, les derniers arrivés, et les demandes qu'un
+		 * responsable n'a pas tranchées.
+		 */
+		async expectDashboard(page: Page) {
+			await page.goto(`/${eventId}/admin/dashboard`)
+			await expect(page.getByRole('heading', { name: 'Chiffres clés' })).toBeVisible()
+			await expect(page.getByRole('heading', { name: 'Derniers adhérents' })).toBeVisible()
+			await expect(page.getByRole('heading', { name: 'Inscriptions à valider' })).toBeVisible()
+
+			// Bob a créé l'évènement: il en est le premier adhérent.
+			await expect(
+				page.locator('#members').getByRole('link', { name: /Bob The Tester/ })
+			).toBeVisible()
+
+			// Personne n'a demandé de créneau dans ce parcours.
+			await expect(page.locator('#validations')).toContainText('Aucune demande en attente')
+
+			await page.locator('#stats').getByRole('link', { name: 'Candidature à valider' }).click()
+			await expect(page).toHaveURL(/\/admin\/members\?/)
+		},
+		/**
 		 * Le journal se lit, se filtre, et accepte une note. Les lignes attendues ont été écrites
 		 * par les étapes précédentes du parcours: c'est le tour complet écriture -> rendu, seul à
 		 * pouvoir attraper une charge utile qui ne correspondrait plus à son composant.
 		 */
 		async expectJournal(page: Page) {
-			await page.goto(`/${eventId}/admin/logs`)
+			await page.goto(`/${eventId}/admin/dashboard`)
 
 			// Le fil tient dans une fenêtre: rien à charger avant, donc l'accueil et non le bouton.
 			await expect(page.getByText('Début du journal')).toBeVisible()
@@ -211,7 +233,7 @@ export function useEvent(owner: User, name: string) {
 		 * fenêtre à deux entrées au lieu d'en écrire trente pour atteindre le bouton.
 		 */
 		async expectJournalLoadsPrevious(page: Page) {
-			await page.goto(`/${eventId}/admin/logs`)
+			await page.goto(`/${eventId}/admin/dashboard`)
 			const notes = ['Alpha', 'Bravo', 'Charlie'].map((n) => `${n} ${eventCuid}`)
 			for (const note of notes) {
 				await page.getByPlaceholder('Ajouter une note').fill(note)
@@ -219,7 +241,7 @@ export function useEvent(owner: User, name: string) {
 				await expect(page.getByText(note)).toBeVisible()
 			}
 
-			await page.goto(`/${eventId}/admin/logs?take=2`)
+			await page.goto(`/${eventId}/admin/dashboard?take=2`)
 			const loadPrevious = page.getByRole('button', { name: /entrées précédentes/ })
 			// Fenêtre de deux: les deux dernières notes, et rien avant.
 			await expect(page.getByText(notes[2])).toBeVisible()
@@ -490,7 +512,7 @@ export function useEvent(owner: User, name: string) {
 			const city = page.getByLabel('Ville')
 			const meal = page.getByRole('button', { name: 'Repas' })
 			const allergies = page.getByRole('combobox', { name: 'Allergies' })
-			await expect(page.getByRole('heading', { name: 'Profil', exact: true })).toBeVisible()
+			await expect(page.getByRole('heading', { name: 'Bob The Tester' })).toBeVisible()
 			await expect(meal).toBeVisible()
 			await expect(saveBar).toBeHidden()
 

@@ -3,11 +3,15 @@ import type { IconProps } from '@lucide/svelte'
 import {
 	AtSignIcon,
 	CalendarIcon,
+	ClipboardCheckIcon,
 	EyeIcon,
 	IdCardIcon,
 	LogInIcon,
 	OctagonAlertIcon,
 	PaletteIcon,
+	ScrollTextIcon,
+	SigmaIcon,
+	UsersIcon,
 } from '@lucide/svelte'
 import { replaceState } from '$app/navigation'
 
@@ -17,6 +21,14 @@ export interface SubNavSection {
 	label: string
 	icon: Component<IconProps>
 }
+
+/** Les sections de `/[eventId]/admin/dashboard`, dans l'ordre où la page les rend. */
+export const DASHBOARD_SECTIONS: SubNavSection[] = [
+	{ id: 'stats', label: 'Chiffres clés', icon: SigmaIcon },
+	{ id: 'members', label: 'Derniers adhérents', icon: UsersIcon },
+	{ id: 'validations', label: 'À valider', icon: ClipboardCheckIcon },
+	{ id: 'journal', label: 'Journal', icon: ScrollTextIcon },
+]
 
 /**
  * Les sections de `/[eventId]/admin/settings`, rendues par le rail admin sous son onglet actif.

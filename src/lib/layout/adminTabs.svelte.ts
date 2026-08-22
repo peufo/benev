@@ -2,11 +2,11 @@ import type { Icon as LucideIcon } from '@lucide/svelte'
 import {
 	ChartGanttIcon,
 	FileTextIcon,
+	LayoutDashboardIcon,
 	UsersIcon,
 	ClipboardListIcon,
 	CircleQuestionMarkIcon,
 	MapPinnedIcon,
-	ScrollTextIcon,
 	GiftIcon,
 	SettingsIcon,
 } from '@lucide/svelte'
@@ -14,7 +14,7 @@ import {
 import { param } from 'fuma'
 import { dev } from '$app/environment'
 import { page } from '$app/state'
-import { SETTINGS_SECTIONS, type SubNavSection } from './adminSubNav.svelte'
+import { DASHBOARD_SECTIONS, SETTINGS_SECTIONS, type SubNavSection } from './adminSubNav.svelte'
 
 // `param` de fuma 2 est un objet runes sans référence à `page`, et n'est plus un store:
 // `derived` laisse place à une fonction qui relit l'état réactif à chaque appel.
@@ -72,18 +72,16 @@ export function adminTabs() {
 		},
 	]
 
-	// Le journal montre les coordonnées éditées et les réglages: son `load` le refuse aux
-	// responsables. Montrer l'onglet quand même mènerait à une impasse en 403.
+	// Le tableau de bord porte le journal, qui montre les coordonnées éditées et les réglages:
+	// son `load` le refuse aux responsables. Montrer l'onglet quand même mènerait à une impasse
+	// en 403.
 	if (page.data.member?.roles.includes('admin') || page.data.userIsRoot)
-		tabs.splice(
-			tabs.findIndex(({ label }) => label === 'Aide'),
-			0,
-			{
-				...getPath('/admin/logs'),
-				label: 'Journal',
-				icon: ScrollTextIcon,
-			}
-		)
+		tabs.unshift({
+			...getPath('/admin/dashboard'),
+			label: 'Tableau de bord',
+			icon: LayoutDashboardIcon,
+			sections: DASHBOARD_SECTIONS,
+		})
 
 	// Insertion relative: un index en dur se décale au moindre onglet ajouté ou fusionné.
 	if (dev)

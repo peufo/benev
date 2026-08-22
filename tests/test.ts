@@ -82,6 +82,10 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		await event.expectMemberProfileSaveBar(page)
 	})
 
+	test("Le tableau de bord résume l'évènement", async () => {
+		await event.expectDashboard(page)
+	})
+
 	test('Le journal rend ce que le parcours a écrit, et accepte une note', async () => {
 		await event.expectJournal(page)
 	})

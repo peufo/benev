@@ -107,7 +107,7 @@
 		<Section id="logs" title="Journal">
 			{#snippet action()}
 				<a
-					href="{$eventPath}/admin/logs?memberId={data.memberProfile.id}"
+					href="{$eventPath}/admin/dashboard?memberId={data.memberProfile.id}#journal"
 					class="btn btn-sm btn-square"
 					use:tip={{ content: 'Ouvrir le journal complet' }}
 				>

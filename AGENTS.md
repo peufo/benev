@@ -110,8 +110,9 @@ be introduced.
   - `/token/[tokenId]/*` — email-link landings (verification, password reset)
 - `[eventId]` — dynamic event slug. All event pages live here:
   - `[eventId]/[pagePath]` — public CMS-like pages for the event.
-  - `[eventId]/admin/*` — organizer tools: event, members, pages, plan, theme, gift, quota,
-    subscribes, adhesion.
+  - `[eventId]/admin/*` — organizer tools: dashboard, members, subscribes, plan, settings,
+    pages, gift, quota, adhesion. `admin` itself redirects — to `dashboard` for an admin, to
+    `members` for a leader, who is refused the first.
   - `[eventId]/register`, `/me`, `/teams`, `/help`, `/invite` — volunteer-facing pages.
   - `[eventId]/api/*` — event-scoped REST endpoints.
 - `+layout.server.ts` / `+page.server.ts` — server `load` functions.
@@ -219,8 +220,9 @@ What is deliberately _not_ logged: searches, reorderings, personal table views, 
 milestones, a member's own notification preferences, and **`movePeriod` / `updatePeriod` /
 `duplicatePeriod`**, which the planning grid calls on every drag release.
 
-The organizer reads it at `/[eventId]/admin/logs` (admins only, guarded in `load`) and in the
-Journal section of a member's page; `/root/logs` shows the same feed across events. `email_sent` is
+The organizer reads it in the Journal section of `/[eventId]/admin/dashboard` (admins only,
+guarded in `load` — which is why the whole tab is) and in the Journal section of a member's page;
+`/root/logs` shows the same feed across events. `email_sent` is
 excluded from the event feed — one line per notification sent would bury everything — while
 `email_failed` is exactly what an organizer needs to see.
 
