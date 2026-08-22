@@ -63,6 +63,18 @@
 			isLoadingUserExists = false
 		}
 	}
+
+	/**
+	 * Le tiroir n'est pas démonté à la fermeture: sans cela, l'invitation suivante repartirait
+	 * avec les valeurs de la précédente. Les champs distants ont leur propre état — vider le
+	 * `<form>` ne suffit pas.
+	 */
+	function reset() {
+		createInvite.fields.set({ firstName: '', lastName: '', email: '', sendEmail: true })
+		email = ''
+		isEmailValid = false
+		user = { firstName: '', lastName: '' }
+	}
 </script>
 
 <form
@@ -73,6 +85,7 @@
 				toast.success(sendEmail ? 'Invitation envoyée' : 'Membre ajouté')
 				// `result` porte le membre créé une fois la soumission résolue.
 				if (createInvite.result) onCreate(createInvite.result)
+				reset()
 			},
 		})
 	)}
