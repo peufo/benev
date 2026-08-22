@@ -4,6 +4,7 @@
 	import {
 		CalendarPlusIcon,
 		ClipboardListIcon,
+		FilePlus2Icon,
 		FileSlidersIcon,
 		MailCheckIcon,
 		MailXIcon,
@@ -46,6 +47,7 @@
 		member_validated: LogMember,
 		member_update: LogMemberUpdate,
 		member_role: LogMemberRole,
+		event_create: LogEvent,
 		event_state: LogEvent,
 		event_update: LogEvent,
 		team_create: LogTeam,
@@ -69,6 +71,7 @@
 		member_validated: { icon: UserCheckIcon, class: 'text-success' },
 		member_update: { icon: PencilIcon, class: '' },
 		member_role: { icon: ShieldIcon, class: '' },
+		event_create: { icon: FilePlus2Icon, class: '' },
 		event_state: { icon: FileSlidersIcon, class: '' },
 		event_update: { icon: FileSlidersIcon, class: '' },
 		team_create: { icon: MapPinnedIcon, class: '' },

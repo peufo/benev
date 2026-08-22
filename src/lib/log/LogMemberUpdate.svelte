@@ -15,11 +15,6 @@
 	<LogDiff changes={log.data.contact} labels={memberContactLabels} {timezone} />
 {/if}
 
-{#if log.data.fields?.length}
-	<div class="flex items-center flex-wrap gap-1 mt-1">
-		<span class="text-base-content/70">Champs de profil&nbsp;:</span>
-		{#each log.data.fields as field (field)}
-			<span class="badge badge-ghost badge-sm">{field}</span>
-		{/each}
-	</div>
+{#if log.data.profile}
+	<LogDiff changes={log.data.profile} {timezone} />
 {/if}

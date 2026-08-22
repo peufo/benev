@@ -9,7 +9,8 @@
 		timezone,
 	}: {
 		changes: LogUpdate<T>
-		labels: Record<keyof T, string>
+		/** Absent, la clé fait le libellé: les champs de profil sont indexés par leur nom. */
+		labels?: Record<keyof T, string>
 		timezone?: string
 	} = $props()
 
@@ -18,7 +19,7 @@
 
 {#each keys as key (key)}
 	<div class="flex items-center flex-wrap gap-1 mt-1">
-		<span class="badge badge-ghost badge-sm mr-1">{labels[key]}</span>
+		<span class="badge badge-ghost badge-sm mr-1">{labels?.[key] ?? String(key)}</span>
 		<span class="opacity-70">{@render snippetValue(changes.before[key], timezone)}</span>
 		<ArrowRightIcon size={14} class="opacity-70" />
 		{@render snippetValue(changes.after[key], timezone)}

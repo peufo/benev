@@ -120,3 +120,23 @@ export function projectPeriod(period: {
 		maxSubscribe: period.maxSubscribe,
 	}
 }
+
+/** La valeur d'un champ de profil, telle que la colonne JSON la restituera. */
+export type ProfileValue = string | string[] | number | boolean | null
+
+export type ProfileSnapshot = Record<string, ProfileValue>
+
+/**
+ * Les champs de profil sont libres par évènement: l'instantané les indexe par leur **nom** et
+ * non par leur id — un cuid ne se lit pas dans un diff, et le nom figé reste vrai après le
+ * renommage ou la suppression du champ.
+ *
+ * Seuls les champs passés en argument entrent: c'est l'appelant qui tient la liste de ce que
+ * l'acteur avait le droit d'écrire.
+ */
+export function projectProfile(
+	fields: { id: string; name: string }[],
+	profile: PrismaJson.MemberProfile
+): ProfileSnapshot {
+	return Object.fromEntries(fields.map(({ id, name }) => [name, profile[id] ?? null]))
+}

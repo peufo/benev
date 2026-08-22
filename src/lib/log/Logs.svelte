@@ -90,11 +90,8 @@
 	const intlDay = new Intl.DateTimeFormat('fr-CH', { dateStyle: 'full' })
 </script>
 
-<div class="flex flex-col gap-2 {klass}">
-	<div
-		bind:this={container}
-		class="flex flex-col gap-2 max-h-[60vh] overflow-y-auto border border-soft rounded-box p-2"
-	>
+<div class="flex flex-col border border-soft rounded-box {klass}">
+	<div bind:this={container} class="flex flex-col gap-2 max-h-[60vh] overflow-y-auto p-2">
 		{#if more}
 			<button
 				type="button"
@@ -129,6 +126,8 @@
 	</div>
 
 	{#if showNoteForm}
-		<NoteForm memberId={noteMemberId} />
+		<div class="border-t border-soft p-2">
+			<NoteForm memberId={noteMemberId} />
+		</div>
 	{/if}
 </div>

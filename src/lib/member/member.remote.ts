@@ -14,6 +14,7 @@ import {
 } from '$lib/server'
 import { EmailAcceptInviteNotification } from '$lib/email'
 import { modelInvite, modelMemberCondition, modelMemberSetting } from '$lib/models'
+import { diffChanges, hasChanges, projectProfile } from '$lib/log'
 import { isMemberAllowed } from './conditions/isMemberAllowed'
 
 /**
@@ -73,22 +74,17 @@ export const updateMemberProfile = form('unchecked', async (input: RemoteFormInp
 		},
 	})
 
-	// Les champs de profil sont libres par évènement et peuvent porter n'importe quoi (régime,
-	// santé): seuls leurs noms entrent au journal, jamais leurs valeurs.
-	const changed = fields
-		.filter(({ id }) => id in parsed.data && !isSameValue(target.profileJson[id], parsed.data[id]))
-		.map(({ name }) => name)
-	if (changed.length)
-		await createLog('member_update', { member: updated, actor: member, fields: changed })
+	// `fields` tient la liste blanche: ce que l'acteur n'avait pas le droit d'écrire n'a pas pu
+	// changer, et n'a donc rien à faire dans le diff.
+	const profile = diffChanges(
+		projectProfile(fields, target.profileJson),
+		projectProfile(fields, updated.profileJson)
+	)
+	if (hasChanges(profile))
+		await createLog('member_update', { member: updated, actor: member, profile })
 
 	return updated
 })
-
-function isSameValue(a: unknown, b: unknown): boolean {
-	if (!a && !b) return true
-	if (Array.isArray(a) || Array.isArray(b)) return JSON.stringify(a) === JSON.stringify(b)
-	return a === b
-}
 
 type ProfileValue = string | string[] | number | boolean | undefined
 

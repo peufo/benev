@@ -4,7 +4,7 @@ import z from 'zod'
 import { Prisma, type Field, type Page, type Period, type Team, type View } from '@prisma/client'
 import { zJson } from '$lib/models/form'
 import { normalizePath } from '$lib/normalizePath'
-import { permission, prisma } from '$lib/server'
+import { createLog, permission, prisma } from '$lib/server'
 import { clonePages, cloneData, cloneTeam } from '$lib/server/clone'
 
 // `CloneSelector` sérialise ses sélections en JSON dans un champ caché: le tableau d'ids
@@ -76,6 +76,11 @@ export const cloneEvent = form(schemaEventClone, async (data) => {
 		cloneWithFieldsMap.teams(teams, deltaTime),
 		cloneWithFieldsMap.pages(pages),
 	])
+	await createLog('event_create', {
+		event: newEvent,
+		actor: member,
+		clonedFrom: { id: event.id, name: event.name },
+	})
 
 	redirect(303, `/${newEvent.id}/admin/settings`)
 })

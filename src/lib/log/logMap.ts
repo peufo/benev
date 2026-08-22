@@ -13,6 +13,7 @@ import {
 	type EventSnapshot,
 	type LogPeriod,
 	type MemberContactSnapshot,
+	type ProfileSnapshot,
 	type TeamSnapshot,
 } from './logProject'
 
@@ -147,20 +148,20 @@ export const logMap = {
 	}),
 
 	/**
-	 * Les champs de profil sont libres par évènement et peuvent porter n'importe quoi (régime,
-	 * santé): seuls leurs **noms** sont journalisés, jamais leurs valeurs. Les coordonnées, elles,
-	 * sont le sujet même de la modification et se lisent en diff.
+	 * Coordonnées et champs de profil se lisent tous deux en diff. Les champs sont libres par
+	 * évènement et peuvent porter n'importe quoi (régime, santé): leur instantané est indexé par
+	 * le nom du champ, et le fil qui les rend est réservé aux admins.
 	 */
 	member_update: ({
 		member,
 		actor,
 		contact,
-		fields,
+		profile,
 	}: {
 		member: MemberSource
 		actor: LogActor
 		contact?: LogUpdate<MemberContactSnapshot>
-		fields?: string[]
+		profile?: LogUpdate<ProfileSnapshot>
 	}) => ({
 		eventId: member.eventId,
 		memberId: member.id,
@@ -169,7 +170,7 @@ export const logMap = {
 			member: refPerson(member),
 			actor: refActor(actor),
 			contact,
-			fields,
+			profile,
 		},
 	}),
 
@@ -210,6 +211,29 @@ export const logMap = {
 		data: {
 			member: refPerson(member),
 			isValidedByEvent,
+			actor: refActor(actor),
+		},
+	}),
+
+	/**
+	 * La première ligne du fil d'un évènement. `clonedFrom` nomme l'évènement copié — celui-ci
+	 * peut disparaître, et le nom figé dit encore d'où venaient les secteurs et les champs.
+	 */
+	event_create: ({
+		event,
+		actor,
+		clonedFrom,
+	}: {
+		event: { id: string; name: string }
+		actor: LogActor
+		clonedFrom?: LogRef
+	}) => ({
+		eventId: event.id,
+		userId: actor.userId,
+		createdById: actor.userId,
+		data: {
+			event: { id: event.id, name: event.name },
+			clonedFrom: clonedFrom ?? null,
 			actor: refActor(actor),
 		},
 	}),

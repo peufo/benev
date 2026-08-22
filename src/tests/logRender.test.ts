@@ -154,7 +154,7 @@ describe('rendu du journal', () => {
 		).toContain('a approuvé')
 	})
 
-	it('rend un diff de coordonnées et les seuls noms des champs de profil', ({ expect }) => {
+	it('rend un diff des coordonnées comme des champs de profil', ({ expect }) => {
 		const html = renderLog(
 			LogMemberUpdate,
 			'member_update',
@@ -162,13 +162,19 @@ describe('rendu du journal', () => {
 				member,
 				actor,
 				contact: { before: { city: 'Nyon' }, after: { city: 'Lausanne' } },
-				fields: ['Régime alimentaire'],
+				// Les champs de profil sont indexés par leur nom: c'est lui qui fait le libellé.
+				profile: {
+					before: { 'Régime alimentaire': null, Tailles: ['S'] },
+					after: { 'Régime alimentaire': 'Végétarien', Tailles: ['S', 'M'] },
+				},
 			}).data
 		)
 		expect(html).toContain('Localité')
 		expect(html).toContain('Nyon')
 		expect(html).toContain('Lausanne')
 		expect(html).toContain('Régime alimentaire')
+		expect(html).toContain('Végétarien')
+		expect(html).toContain('S, M')
 	})
 
 	it('rend les changements de rôle par ce qui entre et ce qui sort', ({ expect }) => {
@@ -189,6 +195,14 @@ describe('rendu du journal', () => {
 
 	it("rend le statut et les réglages de l'évènement", ({ expect }) => {
 		const event = { id: 'fete', name: 'Fête du village', state: 'published' as const }
+		const created = renderLog(
+			LogEvent,
+			'event_create',
+			logMap.event_create({ event, actor, clonedFrom: { id: 'fete-2025', name: 'Fête 2025' } }).data
+		)
+		expect(created).toContain("a créé l'évènement")
+		expect(created).toContain('Fête 2025')
+
 		expect(
 			renderLog(LogEvent, 'event_state', logMap.event_state({ event, before: 'draft', actor }).data)
 		).toContain('Publié')

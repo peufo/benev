@@ -29,6 +29,7 @@ export const LOG_FAMILIES = {
 	config: {
 		label: 'Configuration',
 		types: [
+			'event_create',
 			'event_state',
 			'event_update',
 			'team_create',

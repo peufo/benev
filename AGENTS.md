@@ -208,8 +208,10 @@ Three rules govern what goes into `data`:
 - **A `*_update` carries only the keys that changed**, taken from a projection in `logProject.ts`.
   The projection _is_ the whitelist — what it does not return never reaches the database. It also
   returns primitives only, so a `Date` cannot cross the JSON column and make the derived type lie.
-- **Free-form member profile fields are logged by name, never by value.** They are defined per
-  event and can hold anything (diet, health).
+- **Free-form member profile fields are diffed like the rest**, through `projectProfile`, which
+  indexes them by field **name** rather than by id — a cuid does not read in a diff, and the name
+  frozen in the payload survives the field's renaming. They are defined per event and can hold
+  anything (diet, health): the feed that renders them is admins-only.
 
 `createLog` never throws — a journal that falls must not take down what it journalises.
 

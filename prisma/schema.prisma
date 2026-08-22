@@ -585,6 +585,7 @@ enum LogType {
   member_role
   member_validated
 
+  event_create
   event_state
   event_update
 

@@ -81,6 +81,7 @@ export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issu
 			isValidedByUser: true,
 		},
 	})
+	await createLog('event_create', { event, actor: session.user })
 	if (tier === 'basic') redirect(303, `/${event.id}`)
 	const price = EVENT_TIER[tier].priceId
 	if (!price) redirect(303, `/${event.id}`)

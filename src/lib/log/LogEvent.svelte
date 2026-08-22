@@ -5,7 +5,7 @@
 	import { snippetRef } from './Snippets.svelte'
 	import LogDiff from './LogDiff.svelte'
 
-	type Types = 'event_state' | 'event_update'
+	type Types = 'event_create' | 'event_state' | 'event_update'
 	let { log, timezone }: { log: LogTyped<Types>; timezone?: string } = $props()
 
 	const stateLabels: Record<EventState, string> = {
@@ -22,7 +22,12 @@
 
 <p>
 	{@render snippetRef(log.data.actor)}
-	{#if log.type === 'event_state'}
+	{#if log.type === 'event_create'}
+		a créé l'évènement
+		{#if log.data.clonedFrom}
+			à partir de {@render snippetRef(log.data.clonedFrom)}
+		{/if}
+	{:else if log.type === 'event_state'}
 		a changé le statut de l'évènement
 	{:else}
 		a modifié les réglages de l'évènement
@@ -37,6 +42,6 @@
 		<span aria-hidden="true">→</span>
 		<span class="badge badge-sm {stateClass[log.data.after]}">{stateLabels[log.data.after]}</span>
 	</div>
-{:else}
+{:else if log.type === 'event_update'}
 	<LogDiff changes={log.data.changes} labels={eventLabels} {timezone} />
 {/if}
