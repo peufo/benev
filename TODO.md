@@ -1,0 +1,1 @@
+- [ ] Dans le dashboard, les boutons icon "Ouvrir la table ..." doivent être remplacés par des boutons (lien) "Tous afficher" ou "Voir les n ..."
