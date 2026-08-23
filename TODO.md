@@ -1,1 +1,1 @@
-- La partie "Conditions" du formulaire d'édition de secteur doit être une section à part entière. Avec des explications plus clair pour l'utilisateur. Cette partie peut être retiré du formulaire de création dans le drawer.
+

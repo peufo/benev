@@ -77,7 +77,7 @@ export function adminTabs() {
 			tabs.findIndex(({ label }) => label === 'Publications'),
 			0,
 			{
-				...getPath('/admin/giftIconGiftIcon'),
+				...getPath('/admin/gift'),
 				label: 'Prestations',
 				icon: GiftIcon,
 			}
