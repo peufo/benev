@@ -42,7 +42,7 @@
 
 	function getStepIndexMax() {
 		if (!user) return 0
-		if (!member || !member.isValidedByUser) return 1
+		if (!member || !member.userId) return 1
 		if (!isMemberProfileRequired || !member.isUserProfileCompleted) return 2
 		return 3
 	}
@@ -54,7 +54,7 @@
 		const registerIsDone =
 			!!user &&
 			!!member &&
-			member.isValidedByUser &&
+			!!member.userId &&
 			member.isUserProfileCompleted &&
 			(!isMemberProfileRequired || member.isMemberProfileCompleted) &&
 			(!forcedStepIndex || forcedStepIndex === stepIndexMax)

@@ -100,11 +100,11 @@
 				hint: "Un responsable à confirmé l'inscription du membre",
 			},
 			{
-				key: 'isValidedByUser',
-				label: 'Membre actif',
+				key: 'hasAccount',
+				label: 'Compte benevio',
 				type: 'boolean',
-				cell: (sub) => sub.member.isValidedByUser,
-				hint: `Le membre à confirmé sa participation à l'évenement`,
+				cell: (sub) => !!sub.member.userId,
+				hint: `Le membre a lié un compte : il peut confirmer lui-même ses inscriptions.`,
 			},
 			{
 				key: 'states',

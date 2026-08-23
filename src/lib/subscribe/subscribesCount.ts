@@ -1,7 +1,7 @@
 import type { Subscribe } from '@prisma/client'
 
 export type SubscribeCountable = Pick<Subscribe, 'state' | 'isForcedValidation'> & {
-	member: { isValidedByUser: boolean }
+	member: { userId: string | null }
 }
 
 export type PeriodCountable = {
@@ -17,7 +17,7 @@ export type SubscribesCount = {
 	/** Retenues d'office, sans confirmation du bénévole */
 	acceptedForced: number
 	request: number
-	/** Demandes dont le bénévole a validé son adhésion à l'évènement */
+	/** Demandes en attente du bénévole — celles où il a un compte pour répondre. */
 	requestWaitUser: number
 	maxSubscribe: number
 	/** Dénominateur des jauges : suit le nombre de places, sauf débordement */
@@ -38,7 +38,7 @@ export function countSubscribes({ maxSubscribe, subscribes }: PeriodCountable): 
 			else acceptedByMember++
 		} else if (state === 'request') {
 			request++
-			if (member.isValidedByUser) requestWaitUser++
+			if (member.userId) requestWaitUser++
 		}
 	}
 

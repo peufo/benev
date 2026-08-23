@@ -11,9 +11,10 @@
 	let { data }: Props = $props()
 
 	const DIST_MEMBERS_LABEL: Record<MembershipDistKey, string> = {
-		isValided: 'Validé',
-		isValidedByEvent: 'Initié par un responsable',
-		isValidedByUser: 'Initié par le membre',
+		complete: 'Adhésion complète',
+		toApprove: 'À approuver',
+		noAccount: 'Sans compte',
+		noAccountToApprove: 'Sans compte, à approuver',
 	}
 
 	const DIST_PROFILE_LABEL: Record<MembersProfilDistKey, string> = {
@@ -35,8 +36,8 @@
 			getLabel={(key) => DIST_MEMBERS_LABEL[key]}
 			getHref={(key) =>
 				urlWith({
-					isValidedByUser: key === 'isValided' || key === 'isValidedByUser' ? 'true' : 'false',
-					isValidedByEvent: key === 'isValided' || key === 'isValidedByEvent' ? 'true' : 'false',
+					hasAccount: key === 'complete' || key === 'toApprove' ? 'true' : 'false',
+					isValidedByEvent: key === 'complete' || key === 'noAccount' ? 'true' : 'false',
 				})}
 		/>
 

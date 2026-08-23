@@ -85,7 +85,7 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 							select: {
 								state: true,
 								isForcedValidation: true,
-								member: { select: { isValidedByUser: true } },
+								member: { select: { userId: true } },
 							},
 						},
 					},
@@ -131,5 +131,3 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 		maxSubscribes: teams.reduce((acc, team) => acc + team.maxSubscribe, 0),
 	}
 }
-
-export type MembershipDistKey = 'isValided' | 'isValidedByEvent' | 'isValidedByUser'

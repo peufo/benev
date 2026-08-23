@@ -27,10 +27,9 @@
 	import { getSubscribeState } from './subscribeState'
 
 	interface Props {
-		subscribe: Subscribe & { member: { isValidedByUser: boolean } }
+		subscribe: Subscribe & { member: { userId: string | null } }
 		isLeader?: boolean
 		canBeLarge?: boolean
-		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 	}
 

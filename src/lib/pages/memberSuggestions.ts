@@ -18,7 +18,6 @@ const memberStaticSuggestions: Partial<Record<NestedPaths<DataWithMember>, strin
 	'member.isMemberProfileCompleted': 'Profile de membre complet',
 	'member.isUserProfileCompleted': "Profile d'utilisateur complet",
 	'member.isValidedByEvent': 'Adhésion validé par les organisateurs',
-	'member.isValidedByUser': 'Adhésion validé par le membre',
 	'member.event.name': "Nom de l'évènement",
 }
 
@@ -28,6 +27,7 @@ const memberComputedSuggestions: Record<
 	[string, (data: DataWithMember) => string | string[]]
 > = {
 	age: ['Age', ({ member }) => getAge(member.birthday)],
+	hasAccount: ['A un compte benevio', ({ member }) => (member.userId ? 'Oui' : 'Non')],
 	name: ['Nom et prénom', ({ member }) => `${member.firstName} ${member.lastName}`],
 	address: [
 		'Adresse',

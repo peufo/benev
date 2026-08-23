@@ -51,11 +51,11 @@ const isOngoing = (m: EventMember) => !!m.event.startDate && +m.event.startDate 
 
 export function partitionEventMembers(members: EventMember[]) {
 	const startOfToday = +dayjs().startOf('day')
-	const mine = members.filter((m) => m.isValidedByUser)
+	const mine = members.filter((m) => m.userId)
 	const dated = mine.filter((m) => !!edge(m))
 
 	return {
-		invitations: members.filter((m) => !m.isValidedByUser),
+		invitations: members.filter((m) => !m.userId),
 		// Un évènement déjà commencé est le plus urgent pour le bénévole: il passe devant,
 		// puis on trie sur la fin — se fier au début ferait remonter un évènement en cours
 		// au milieu des passés.

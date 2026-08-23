@@ -22,7 +22,7 @@
 	let selectedPeriod: PeriodWithTeam | undefined = $state(undefined)
 
 	function handleClickPeriod(period: PeriodWithTeam) {
-		if (!data.member?.isValidedByUser) {
+		if (!data.member?.userId) {
 			const redirectTo = encodeURIComponent(`${location.pathname}?subscribeTo=${period.id}`)
 			return goto(eventPath(`/register?redirectTo=${redirectTo}`))
 		}

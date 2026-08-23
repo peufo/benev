@@ -133,7 +133,7 @@ export const searchAvailableTeams = query(z.object({ search: z.string() }), asyn
 				leaders: true,
 				periods: {
 					include: {
-						subscribes: { include: { member: { select: { isValidedByUser: true } } } },
+						subscribes: { include: { member: { select: { userId: true } } } },
 						tags: true,
 					},
 				},

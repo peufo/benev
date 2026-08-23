@@ -22,7 +22,7 @@ export const load = async ({ locals, params: { eventId } }) => {
 						select: {
 							state: true,
 							isForcedValidation: true,
-							member: { select: { isValidedByUser: true } },
+							member: { select: { userId: true } },
 						},
 					},
 				},

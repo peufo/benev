@@ -30,13 +30,16 @@ export const registerUser = form(modelUserCreate, async (data) => {
 
 	const user = await prisma.user.findUnique({
 		where: { email: data.email },
-		include: { members: { select: { isValidedByUser: true } } },
+		select: { auth_key: { select: { id: true, hashed_password: true } } },
 	})
 	if (user) {
-		const isAccountFromInvitation =
-			user.members.filter((m) => m.isValidedByUser === false).length > 0 &&
-			user.members.filter((m) => m.isValidedByUser === true).length === 0
-		if (isAccountFromInvitation) error(401, 'This account already created from an invitation')
+		// Avant, un compte vide était créé lors de l'invitation... Ce n'est heureusment plus le cas maintenant
+		// Une clé `email:` sans hash est une coquille posée par une invitation: elle n'ouvre aucune
+		// session. Une clé OAuth n'a pas de hash non plus, mais elle, elle connecte.
+		const canSignIn = user.auth_key.some(
+			(key) => key.hashed_password !== null || !key.id.startsWith('email:')
+		)
+		if (!canSignIn) error(401, 'This account already created from an invitation')
 		error(401, 'This account already exists')
 	}
 	const newUser = await auth.createUser({

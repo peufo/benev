@@ -5,7 +5,7 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 	if (!user) throw redirectToAuth(url)
 	if (
 		!member ||
-		!member.isValidedByUser ||
+		!member.userId ||
 		!member.isUserProfileCompleted ||
 		!member.isMemberProfileCompleted
 	)
@@ -28,7 +28,7 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 							include: {
 								member: {
 									select: {
-										isValidedByUser: true,
+										userId: true,
 									},
 								},
 							},

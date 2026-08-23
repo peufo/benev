@@ -3,7 +3,7 @@ import type { Component } from 'svelte'
 import type { Subscribe } from '@prisma/client'
 
 export type SubscribeStatable = Pick<Subscribe, 'state' | 'createdBy' | 'isForcedValidation'> & {
-	member: { isValidedByUser: boolean }
+	member: { userId: string | null }
 }
 
 export type SubscribeStateDisplay = {
@@ -29,11 +29,11 @@ export function getSubscribeState(subscribe: SubscribeStatable): SubscribeStateD
 			: 'par un responsable'
 
 	if (state === 'request') {
-		if (createdBy === 'leader' && !member.isValidedByUser)
+		if (createdBy === 'leader' && !member.userId)
 			return {
 				icon: OctagonAlertIcon,
 				class: 'text-error',
-				label: 'En attente de validation du membre (inactif)',
+				label: "En attente de validation du membre, qui n'a pas de compte pour répondre",
 			}
 		return {
 			icon: OctagonAlertIcon,

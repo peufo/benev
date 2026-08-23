@@ -50,7 +50,7 @@
 			<button class="btn btn-primary">Oui je le veux !</button>
 		</form>
 
-		{#if page.data.member?.isValidedByEvent && !page.data.member?.isValidedByUser}
+		{#if page.data.member?.isValidedByEvent && !page.data.member?.userId}
 			<MemberDeleteForm memberId={page.data.member.id} class="w-36">Refuser</MemberDeleteForm>
 		{/if}
 

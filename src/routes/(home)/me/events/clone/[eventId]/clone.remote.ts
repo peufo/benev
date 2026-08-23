@@ -92,7 +92,6 @@ function createOwner(eventId: string, userId: string) {
 			userId,
 			isAdmin: true,
 			isValidedByEvent: true,
-			isValidedByUser: true,
 		},
 	})
 }

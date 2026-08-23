@@ -16,7 +16,7 @@
 		teams: (Team & {
 			leaders: Member[]
 			periods: (Period & {
-				subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
+				subscribes: (Subscribe & { member: { userId: string | null } })[]
 				tags: Tag[]
 			})[]
 		})[]

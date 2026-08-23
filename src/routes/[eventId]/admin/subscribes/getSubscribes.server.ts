@@ -21,7 +21,7 @@ export const subscribesFilterShape = {
 	createdBy: z.enum(['leader', 'user']).optional(),
 	isAbsent: filterBoolean,
 	isValidedByEvent: filterBoolean,
-	isValidedByUser: filterBoolean,
+	hasAccount: filterBoolean,
 }
 
 export type Subscribes = Awaited<ReturnType<typeof getSubscribes>>['subscribes'][number]
@@ -82,8 +82,8 @@ export const getSubscribes = async (event: Event & { memberFields: Field[] }, ur
 	if (query.isAbsent !== undefined) where.push({ isAbsent: query.isAbsent })
 	if (query.isValidedByEvent !== undefined)
 		where.push({ member: { isValidedByEvent: query.isValidedByEvent } })
-	if (query.isValidedByUser !== undefined)
-		where.push({ member: { isValidedByUser: query.isValidedByUser } })
+	if (query.hasAccount !== undefined)
+		where.push({ member: query.hasAccount ? { userId: { not: null } } : { userId: null } })
 	const subscribes = await prisma.subscribe
 		.findMany({
 			where: { AND: where },

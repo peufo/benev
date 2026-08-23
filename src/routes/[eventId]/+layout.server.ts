@@ -38,7 +38,7 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 		})
 
 		const memberCanRegister =
-			!member?.isValidedByUser && (event.selfRegisterAllowed || member?.isValidedByEvent)
+			!member?.userId && (event.selfRegisterAllowed || member?.isValidedByEvent)
 
 		const membersValided = await prisma.member.count({
 			where: { eventId, isValidedByEvent: true },

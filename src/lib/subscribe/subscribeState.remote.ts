@@ -129,7 +129,7 @@ export const setSubscribeState = form(
 								leaders: {
 									where: {
 										email: { not: null },
-										isValidedByUser: true,
+										userId: { not: null },
 										isNotifiedLeaderOfSubscribe: true,
 									},
 								},

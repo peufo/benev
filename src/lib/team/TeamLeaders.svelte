@@ -36,7 +36,7 @@
 		{/snippet}
 
 		{#snippet children({ hide })}
-			{#if member.isValidedByUser}
+			{#if member.userId}
 				<div class="flex flex-col w-48" {@attach (node) => on(node, 'click', hide)}>
 					<a class="menu-item" href="mailto:{member.email}" target="_blank">
 						<MailIcon size={20} class="opacity-70" />
@@ -52,7 +52,9 @@
 			{:else}
 				<div class="px-3 py-1 flex gap-2 max-w-64">
 					<TriangleAlertIcon class="text-warning shrink-0" size={20} />
-					<span class="text-sm">{member.firstName} n'a pas confirmé sa participation</span>
+					<span class="text-sm">
+						{member.firstName} n'a pas de compte : ses coordonnées ne sont pas partagées ici.
+					</span>
 				</div>
 			{/if}
 		{/snippet}

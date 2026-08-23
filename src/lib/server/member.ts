@@ -103,7 +103,7 @@ export async function getMemberProfile(
 							subscribes: {
 								include: {
 									member: {
-										select: { isValidedByUser: true },
+										select: { userId: true },
 									},
 								},
 							},

@@ -29,7 +29,7 @@ export const membersFilterShape = {
 	age: filterNumber,
 	isProfileComplet: filterBoolean,
 	isValidedByEvent: filterBoolean,
-	isValidedByUser: filterBoolean,
+	hasAccount: filterBoolean,
 	isAbsent: filterBoolean,
 	role: z.enum(['member', 'leader', 'admin']).optional(),
 }
@@ -109,8 +109,8 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 	if (query.isValidedByEvent !== undefined) {
 		where.push({ isValidedByEvent: query.isValidedByEvent })
 	}
-	if (query.isValidedByUser !== undefined) {
-		where.push({ isValidedByUser: query.isValidedByUser })
+	if (query.hasAccount !== undefined) {
+		where.push(query.hasAccount ? { userId: { not: null } } : { userId: null })
 	}
 	if (query.isAbsent !== undefined) {
 		where.push({ subscribes: { some: { isAbsent: query.isAbsent } } })
@@ -342,18 +342,21 @@ function getWorkTime(
 		}, 0)
 }
 
-export type MembershipDistKey = 'isValided' | 'isValidedByEvent' | 'isValidedByUser'
+export type MembershipDistKey = 'complete' | 'toApprove' | 'noAccount' | 'noAccountToApprove'
 function getMembershipDistribution(members: Member[]): Record<MembershipDistKey, number> {
 	const dist = {
-		isValided: 0,
-		isValidedByEvent: 0,
-		isValidedByUser: 0,
+		complete: 0,
+		toApprove: 0,
+		noAccount: 0,
+		noAccountToApprove: 0,
 	} satisfies Record<MembershipDistKey, number>
 
-	members.forEach(({ isValidedByEvent, isValidedByUser }) => {
-		if (isValidedByEvent && isValidedByUser) dist.isValided++
-		else if (!isValidedByEvent && isValidedByUser) dist.isValidedByUser++
-		else if (isValidedByEvent && !isValidedByUser) dist.isValidedByEvent++
+	// Les quatre cases du 2x2: le titre annonce le nombre total de membres, aucune ne doit manquer.
+	members.forEach(({ isValidedByEvent, userId }) => {
+		if (isValidedByEvent && userId) dist.complete++
+		else if (isValidedByEvent) dist.noAccount++
+		else if (userId) dist.toApprove++
+		else dist.noAccountToApprove++
 	})
 
 	return dist

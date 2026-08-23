@@ -37,7 +37,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		subscribeBy: (s) => (s.createdBy == 'leader' ? 'event' : 'member'),
 		isAbsent: (s) => s.isAbsent.toString(),
 		memberApproved: (s) => s.member.isValidedByEvent.toString(),
-		memberActive: (s) => s.member.isValidedByUser.toString(),
+		memberHasAccount: (s) => (!!s.member.userId).toString(),
 		status: (s) => s.state,
 		isForcedValidation: (s) => s.isForcedValidation.toString(),
 	}

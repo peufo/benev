@@ -134,11 +134,11 @@ export function getMembersTableFields(
 			hint: "Un responsable à confirmé l'inscription du membre",
 		},
 		{
-			key: 'isValidedByUser',
-			label: 'Membre actif',
+			key: 'hasAccount',
+			label: 'Compte benevio',
 			type: 'boolean',
-			cell: (m) => m.isValidedByUser,
-			hint: 'Le membre à confirmé son invitation',
+			cell: (m) => !!m.userId,
+			hint: 'La personne a lié un compte : elle peut se connecter et gérer ses inscriptions.',
 		},
 		...fields.map((field) => ({
 			key: `field_${field.id}`,

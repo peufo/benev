@@ -199,7 +199,6 @@ export const acceptInvite = form(
 				data: {
 					userId: session.user.id,
 					isValidedByEvent: newIsValidedByEvent,
-					isValidedByUser: true,
 				},
 			})
 			if (newIsValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
@@ -220,7 +219,6 @@ export const acceptInvite = form(
 				userId: session.user.id,
 				eventId,
 				isValidedByEvent,
-				isValidedByUser: true,
 			},
 		})
 		if (isValidedByEvent) await notifyTierQuotaIfNeeded(eventId)

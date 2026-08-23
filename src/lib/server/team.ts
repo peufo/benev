@@ -7,7 +7,7 @@ import { periodIsComplet } from '$lib/period'
 type TeamWithLeadersAndPeriodsSubscribes = Team & {
 	leaders: Member[]
 	periods: (Period & {
-		subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
+		subscribes: (Subscribe & { member: { userId: string | null } })[]
 		tags: Tag[]
 	})[]
 }
@@ -87,8 +87,8 @@ export function useAddTeamComputedValues(
 
 export type PeriodWithComputedValues<P extends Period = Period> = P & {
 	tags: Tag[]
-	subscribes: (Subscribe & { member: { isValidedByUser: boolean } })[]
-	mySubscribe?: Subscribe & { member: { isValidedByUser: boolean } }
+	subscribes: (Subscribe & { member: { userId: string | null } })[]
+	mySubscribe?: Subscribe & { member: { userId: string | null } }
 	isAvailable: boolean
 	isComplete: boolean
 	isDisabled: boolean

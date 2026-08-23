@@ -85,7 +85,6 @@ export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issu
 			eventId: event.id,
 			isAdmin: true,
 			isValidedByEvent: true,
-			isValidedByUser: true,
 		},
 	})
 	await createLog('event_create', { event, actor: session.user })

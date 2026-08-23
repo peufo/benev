@@ -31,7 +31,7 @@ export const load = async ({ url, parent, params: { memberId, eventId } }) => {
 									include: {
 										member: {
 											select: {
-												isValidedByUser: true,
+												userId: true,
 											},
 										},
 									},

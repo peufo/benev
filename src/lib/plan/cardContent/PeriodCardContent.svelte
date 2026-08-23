@@ -63,7 +63,7 @@
 							? subscribe.isForcedValidation
 								? 'text-blue-500'
 								: 'text-success'
-							: subscribe.member.isValidedByUser
+							: subscribe.member.userId
 								? 'text-warning'
 								: 'text-error'}"
 					/>

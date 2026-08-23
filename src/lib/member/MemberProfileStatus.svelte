@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CheckIcon, GhostIcon, MessageCircleQuestionMarkIcon } from '@lucide/svelte'
+	import { GhostIcon, MessageCircleQuestionMarkIcon } from '@lucide/svelte'
 	import { tip } from 'fuma'
 	import type { MemberWithComputedValues } from '$lib/server'
 
@@ -11,21 +11,17 @@
 	let { member, noBadge }: Props = $props()
 </script>
 
-{#if member.isValidedByUser}
-	<div
-		class={noBadge ? 'text-success' : 'badge badge-success badge-soft badge-outline'}
-		use:tip={{ content: 'Le membre a validé sa participation' }}
-	>
-		<CheckIcon class={['opacity-80', !noBadge && '-translate-x-1']} size={20} />
-		{noBadge ? '' : 'Actif'}
-	</div>
-{:else}
+{#if !member.userId}
 	<div
 		class={noBadge ? 'text-info' : 'badge badge-info badge-soft badge-outline'}
-		use:tip={{ content: `Le membre n'a pas validé sa participation` }}
+		use:tip={{
+			content: member.email
+				? `Aucun compte benevio n'est lié à ce membre : il ne peut ni consulter ses créneaux ni confirmer ses inscriptions.`
+				: `Sans email, ce membre ne peut pas lier de compte benevio : il ne peut ni consulter ses créneaux ni confirmer ses inscriptions.`,
+		}}
 	>
 		<GhostIcon class={['opacity-80', !noBadge && '-translate-x-1']} size={20} />
-		{noBadge ? '' : 'Inactif'}
+		{noBadge ? '' : 'Sans compte'}
 	</div>
 {/if}
 

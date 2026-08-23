@@ -115,6 +115,8 @@ export function useEvent(owner: User, name: string) {
 					'period={"start":"2024-01-01T00:00:00.000Z","end":"2025-01-01T00:00:00.000Z"}',
 				],
 				['subscribes', 'isAbsent=false'],
+				['members', 'hasAccount=true'],
+				['subscribes', 'hasAccount=false'],
 			]
 
 			for (const [route, query] of cases) {
