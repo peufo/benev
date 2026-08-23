@@ -696,12 +696,15 @@ export function useEvent(owner: User, name: string) {
 			const saveBar = page.getByText('Modification en cours !')
 			const preset = page.locator('input[name="backgroundPreset"]')
 			const background = page.locator('.event-background')
-			const noTheme = page.getByRole('radio', { name: 'Personalisé' })
+			const noTheme = page.getByRole('radio', { name: 'Personnalisé' })
+			const benevio = page.getByRole('radio', { name: 'benevio' })
 			const papier = page.getByRole('radio', { name: 'Papier' })
 
 			await page.goto(`/${eventId}/admin/settings`)
-			await expect(noTheme).toHaveAttribute('aria-checked', 'true')
-			await expect(preset).toHaveValue('')
+			// Un évènement naît habillé: la création lui pose le thème benevio et ses réglages.
+			await expect(benevio).toHaveAttribute('aria-checked', 'true')
+			await expect(preset).toHaveValue('benevio')
+			await expect(background).toHaveAttribute('style', /\/themes\/benevio\.svg/)
 
 			await expect(async () => {
 				await papier.click()

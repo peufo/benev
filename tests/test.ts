@@ -58,7 +58,7 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		await event.expectSettingsSaveBar(page)
 	})
 
-	test("Un thème par défaut se pose, s'enregistre et se retire", async () => {
+	test("Le thème posé à la création se change, s'enregistre et se retire", async () => {
 		await event.expectThemePresets(page)
 	})
 

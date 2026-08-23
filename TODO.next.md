@@ -10,15 +10,11 @@
 
 - [ ] Dans le mail d'invitation, on peux ajouter un token dans le lien. Grâce à lui, on peut identifié l'utilisateur sur la page de login, placer le formulaire en mode "register" si nécéssaire et pré-remplir le champ email, et valider l'adresse email directement.
 
-- [ ] Il faut ajouter la possibilité d'envoyer une nouvelle invitation à la demande a partire de la fiche de membre. Cela couvre le cas ou on change/corrige l'email du membre.
-
 - [ ] Auto-accepte des inscriptions sur les membres sans compte est peut-être un raccourcie non nécéssaire. Par exemple, si une invitation est en cours pour un membre et qu'un responsable l'inscrit à une période, le membre n'aurra pas eu le temps de lié sont compte et son l'inscription sera automatiquement validé.
 
 - [ ] Sur le profile de membre, mettre en avant les champs requis avec une information manquante. (profile + info de contact)
 
-- [ ] Abandonner le chantier entamé lié au Gift benev/prisma/schema.prisma:469 et nettoyer le code mort qui est lié
-
-- [ ] Réaliser un audite de sécurité
+- [ ] Réaliser un audit de sécurité
 
 - [ ] Revoir le layout de /admin/teams/[teamId]
   - [ ] Formulaire

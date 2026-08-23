@@ -141,7 +141,7 @@
 						{theme.backgroundImageId ? `background-image: url(/media/${theme.backgroundImageId})` : ''}
 					"
 					></span>
-					<span class="text-xs">Personalisé</span>
+					<span class="text-xs">Personnalisé</span>
 				</button>
 
 				{#each Object.entries(THEME_PRESETS) as [key, preset] (key)}
