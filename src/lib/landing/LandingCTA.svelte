@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	interface Props {
 		user?: { email?: string } | null
 	}
@@ -20,11 +21,14 @@
 			</div>
 
 			<div class="flex flex-col items-center gap-4">
-				<a href="/me" class="btn btn-lg btn-secondary">
+				<a href={resolve('/me')} class="btn btn-lg btn-secondary">
 					{user ? 'Voir mes événements' : 'Essayer Benevio'}
 				</a>
 
-				<a href="/open-source" class="btn btn-lg btn-ghost text-white hover:text-primary">
+				<a
+					href={resolve('/open-source')}
+					class="btn btn-lg btn-ghost text-white hover:text-primary"
+				>
 					Contribuer
 				</a>
 			</div>

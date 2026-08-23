@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import benevio from '$lib/assets/benevio.svg'
 	import { Header, Footer } from '$lib/layout'
 	import HomeMenu from './(home)/HomeMenu.svelte'
@@ -10,7 +11,7 @@
 <Header user={page.data.user}>
 	{#snippet start()}
 		<a
-			href="/"
+			href={resolve('/')}
 			class={[
 				'text-lg hover:bg-base-200 h-10 px-2 flex items-center gap-2 rounded-field',
 				'whitespace-nowrap overflow-hidden text-ellipsis min-w-0',

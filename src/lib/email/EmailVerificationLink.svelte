@@ -13,7 +13,11 @@
 <EmailLayout title={isNewUser ? 'Bienvenue sur benev.io' : 'Verification de ton adresse mail'}>
 	<p>
 		Tu peux valider ton adresse email en
-		<a href="{domain}/token/{tokenId}/email_verification" data-sveltekit-preload-data="off">
+		<a
+			href="{domain}/token/{tokenId}/email_verification"
+			rel="external"
+			data-sveltekit-preload-data="off"
+		>
 			cliquant sur ce lien.
 		</a>
 	</p>

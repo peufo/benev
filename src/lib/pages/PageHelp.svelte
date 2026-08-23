@@ -64,7 +64,7 @@
 		Il ne te reste maintenant plus qu'à partager ton évènement
 		<b class="whitespace-nowrap">
 			👉
-			<a href={shareUrl}>{shareUrl}</a>
+			<a href={eventPath('')}>{shareUrl}</a>
 		</b>
 	</p>
 </section>

@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import type { Component } from 'svelte'
 	import { Calendar, IdCard, type IconProps, ShoppingCartIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { contextContainer } from '$lib/ui/context.js'
 	import type { User } from '@prisma/client'
+	import type { ResolvedPathname } from '$app/types'
 
 	interface Props {
 		user: User
@@ -16,7 +18,7 @@
 	contextContainer.set('card')
 
 	type Tab = {
-		href: string
+		href: ResolvedPathname
 		label: string
 		icon: Component<IconProps>
 		isActive?: boolean
@@ -26,13 +28,13 @@
 		const routeId = page.route.id
 		const tabs: Tab[] = [
 			{
-				href: '/me/events',
+				href: resolve('/me/events'),
 				label: 'Mes évènements',
 				icon: Calendar,
 				isActive: routeId?.startsWith('/(home)/me/events') || routeId?.startsWith('/[eventId]'),
 			},
 			{
-				href: '/me/account',
+				href: resolve('/me/account'),
 				label: 'Mon compte',
 				icon: IdCard,
 			},

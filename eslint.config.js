@@ -3,6 +3,7 @@ import prettier from 'eslint-config-prettier'
 import svelte from 'eslint-plugin-svelte'
 import globals from 'globals'
 import ts from 'typescript-eslint'
+import svelteConfig from './svelte.config.js'
 
 export default ts.config(
 	{
@@ -35,6 +36,7 @@ export default ts.config(
 		languageOptions: {
 			parserOptions: {
 				parser: ts.parser,
+				svelteConfig,
 			},
 		},
 		rules: {
@@ -42,6 +44,20 @@ export default ts.config(
 			// valeur affectée en fin de bloc est bien relue au passage suivant, ce que
 			// l'analyse linéaire de la règle ne voit pas.
 			'no-useless-assignment': 'off',
+		},
+	},
+	{
+		// `svelte/no-navigation-without-resolve` admet toute expression typée
+		// `ResolvedPathname` ($app/types): c'est ce qui laisse passer `eventPath()` et
+		// `urlParam.*` sans inliner `resolve()` à chaque appel. Le service de types n'est
+		// branché que sur les fichiers couverts par tsconfig — les configs de la racine
+		// n'appartiennent à aucun projet TS et le feraient échouer.
+		files: ['src/**/*.{ts,js,svelte}', 'tests/**/*.ts'],
+		languageOptions: {
+			parserOptions: {
+				projectService: true,
+				extraFileExtensions: ['.svelte'],
+			},
 		},
 	},
 	{
@@ -75,10 +91,6 @@ export default ts.config(
 					caughtErrors: 'none',
 				},
 			],
-			// Nouveauté d'eslint-plugin-svelte 3: impose `resolve()` de $app/paths sur
-			// chaque href/goto. C'est une migration SvelteKit à part entière (plus de
-			// 150 occurrences), pas un prérequis du lint.
-			'svelte/no-navigation-without-resolve': 'off',
 		},
 	}
 )

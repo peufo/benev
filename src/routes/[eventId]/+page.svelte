@@ -33,12 +33,12 @@
 			{#if data.event.selfSubscribeAllowed}
 				<p>
 					Tu peux
-					<a href="/{data.event.id}/teams"> parcourir les secteurs </a>
+					<a href={eventPath('/teams')}> parcourir les secteurs </a>
 					pour t'inscrire aux périodes de travail qui t'intéressent.
 				</p>
 			{/if}
 			<p>
-				<a href="/{data.event.id}/me">Ton tableau de bord</a> te permetra ensuite de consulter ton profil
+				<a href={eventPath('/me')}>Ton tableau de bord</a> te permetra ensuite de consulter ton profil
 				et tes inscriptions.
 			</p>
 		{/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import type { Event } from '@prisma/client'
 	import { InfinityIcon } from '@lucide/svelte'
 	import { EVENT_TIER } from '$lib/constant'
@@ -25,7 +26,7 @@
 </script>
 
 <a
-	href="/{event.id}/admin/quota"
+	href={resolve('/[eventId]/admin/quota', { eventId: event.id })}
 	class="
 		w-11 h-11 flex items-center justify-center shrink-0
 		border-2 rounded-field -translate-x-px

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { eventPath, withSearch } from '$lib/eventPath'
+	import { resolve } from '$app/paths'
 	import { TriangleAlertIcon } from '@lucide/svelte'
 	import type { Member, Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { page } from '$app/stores'
@@ -27,7 +29,13 @@
 {#if teams.length}
 	<div class="flex flex-col gap-4">
 		{#each teams as team (team.id)}
-			<CardLink title={team.name} href="/{team.eventId}/teams?section={team.id}#{team.id}">
+			<CardLink
+				title={team.name}
+				href={withSearch(
+					resolve('/[eventId]/teams', { eventId: team.eventId }),
+					`section=${team.id}#${team.id}`
+				)}
+			>
 				{#each team.periods as period (period.id)}
 					{@const subscribe = period.subscribes[0]}
 					<div class="flex gap-2 items-center mt-2">
@@ -91,10 +99,10 @@
 		<br />
 		{#if $page.params.eventId}
 			{#if $page.data.event?.selfSubscribeAllowed}
-				<a href="/{$page.params.eventId}/teams" class="btn btn-primary"> Voir les secteurs </a>
+				<a href={eventPath('/teams')} class="btn btn-primary"> Voir les secteurs </a>
 			{/if}
 		{:else}
-			<a href="/" class="btn"> Trouve un évènement </a>
+			<a href={resolve('/')} class="btn"> Trouve un évènement </a>
 		{/if}
 	</Placeholder>
 {/if}

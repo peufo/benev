@@ -110,6 +110,7 @@
 															Gestion des bénévoles par
 															<a
 																href={domain}
+																rel="external"
 																style="color:#067df7; text-decoration:none"
 																target="_blank"
 															>
@@ -120,6 +121,7 @@
 																Définis tes préférences concernant les emails
 																<a
 																	href="{domain}/{eventId}/me#email-settings"
+																	rel="external"
 																	style="color:#067df7; text-decoration:none"
 																	target="_blank"
 																>

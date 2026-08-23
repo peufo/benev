@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { MemberRole } from '$lib/member'
 	import { EVENT_STATES } from '$lib/constant'
 	import { tip } from 'fuma'
@@ -44,7 +45,7 @@
 							<EventIcon icon={member.event.icon} alt="" class="h-5 w-5 shrink-0" />
 						{/if}
 						<a
-							href="/{member.eventId}/me"
+							href={resolve('/[eventId]/me', { eventId: member.eventId })}
 							class="text-lg leading-tight font-semibold wrap-break-word after:absolute after:inset-0 after:content-['']"
 						>
 							{member.event.name}
@@ -78,7 +79,7 @@
 				{#if member.roles.includes('admin')}
 					<a
 						class="btn relative z-10 shrink-0 btn-square btn-ghost btn-sm"
-						href="/me/events/clone/{member.eventId}"
+						href={resolve('/(home)/me/events/clone/[eventId]', { eventId: member.eventId })}
 						use:tip={{ content: "Cloner l'évènement" }}
 					>
 						<CopyPlusIcon size={18} opacity={0.6} />

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { LegalPage } from '$lib/layout'
 </script>
 
@@ -9,9 +10,9 @@
 	</p>
 	<p>
 		Trois autres textes les complètent et en font partie intégrante : la
-		<a href="/privacy">politique de confidentialité</a>, les
-		<a href="/sales-terms">conditions de vente</a> et les
-		<a href="/legal-notice">mentions légales</a>.
+		<a href={resolve('/privacy')}>politique de confidentialité</a>, les
+		<a href={resolve('/sales-terms')}>conditions de vente</a> et les
+		<a href={resolve('/legal-notice')}>mentions légales</a>.
 	</p>
 
 	<section>
@@ -20,7 +21,7 @@
 			benevio est exploité par Dev Voisard, raison individuelle inscrite en Suisse sous le numéro
 			IDE CHE-400.730.052. « Nous » désigne cette entreprise, « tu » désigne la personne qui utilise
 			le service. Les coordonnées complètes figurent dans les
-			<a href="/legal-notice">mentions légales</a>.
+			<a href={resolve('/legal-notice')}>mentions légales</a>.
 		</p>
 	</section>
 
@@ -72,8 +73,8 @@
 			</li>
 			<li>
 				Tu peux supprimer ton compte à tout moment depuis ton profil. Lis d'abord
-				<a href="/privacy">ce que la suppression détruit exactement</a> : si tu es propriétaire d'un évènement,
-				l'opération n'est pas anodine.
+				<a href={resolve('/privacy')}>ce que la suppression détruit exactement</a> : si tu es propriétaire
+				d'un évènement, l'opération n'est pas anodine.
 			</li>
 		</ul>
 	</section>
@@ -149,7 +150,7 @@
 			Au regard du droit de la protection des données, tu es responsable du traitement des données
 			de tes bénévoles et nous agissons comme sous-traitant pour ton compte. La répartition exacte
 			des rôles et nos obligations à ce titre figurent dans la
-			<a href="/privacy">politique de confidentialité</a>.
+			<a href={resolve('/privacy')}>politique de confidentialité</a>.
 		</p>
 	</section>
 
@@ -186,7 +187,7 @@
 		<p>
 			Nous pouvons faire évoluer, modifier ou retirer des fonctionnalités. Si un changement retire
 			une fonctionnalité essentielle d'un palier que tu as payé, tu peux demander un remboursement
-			dans les conditions prévues par les <a href="/sales-terms">conditions de vente</a>.
+			dans les conditions prévues par les <a href={resolve('/sales-terms')}>conditions de vente</a>.
 		</p>
 	</section>
 
@@ -250,7 +251,7 @@
 			la loi, notamment en faveur des consommateurs.
 		</p>
 		<p>
-			Avant d'en arriver là : <a href="/contact">écris-nous</a>. On préfère largement.
+			Avant d'en arriver là : <a href={resolve('/contact')}>écris-nous</a>. On préfère largement.
 		</p>
 	</section>
 </LegalPage>

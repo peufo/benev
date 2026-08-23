@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { CheckIcon, XIcon } from '@lucide/svelte'
 	import { Card, InputSearch } from '$lib/ui'
 	import { DropDown, tip } from 'fuma'
@@ -37,7 +38,10 @@
 
 				<tr>
 					<td>
-						<a href="/root/users/{user.id}" class="link link-hover">
+						<a
+							href={resolve('/(home)/root/users/[userId]', { userId: user.id })}
+							class="link link-hover"
+						>
 							{user.firstName}
 							{user.lastName}
 						</a>
@@ -60,7 +64,10 @@
 						<ul>
 							{#each user.members as member (member.id)}
 								<li>
-									<a class="link link-hover" href="/{member.eventId}">{member.event.name}</a>
+									<a
+										class="link link-hover"
+										href={resolve('/[eventId]', { eventId: member.eventId })}>{member.event.name}</a
+									>
 								</li>
 							{/each}
 						</ul>

@@ -1,16 +1,18 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { CardLink } from '$lib/ui'
 	import { ArrowRight, CalendarX2 } from '@lucide/svelte'
 	import logo from '$lib/assets/logo.svg'
 	import { EventIcon } from '$lib/event/index.js'
 	import { formatRangeDate } from '$lib/formatRange'
 	import type { Event } from '@prisma/client'
+	import type { ResolvedPathname } from '$app/types'
 
 	interface Props {
 		events: Event[]
 		emptyTitle?: string
 		emptyDescription?: string
-		emptyActionHref?: string
+		emptyActionHref?: ResolvedPathname
 		emptyActionLabel?: string
 	}
 
@@ -18,7 +20,7 @@
 		events,
 		emptyTitle = 'Aucun événement',
 		emptyDescription = '',
-		emptyActionHref = '/me',
+		emptyActionHref = resolve('/me'),
 		emptyActionLabel = 'Organiser mon événement',
 	}: Props = $props()
 </script>
@@ -27,7 +29,7 @@
 	<ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
 		{#each events as event (event.id)}
 			<li class="min-w-0">
-				<CardLink href="/{event.id}" class="h-full group">
+				<CardLink href={resolve('/[eventId]', { eventId: event.id })} class="h-full group">
 					<div class="flex gap-4">
 						{#if event.posterId}
 							<img

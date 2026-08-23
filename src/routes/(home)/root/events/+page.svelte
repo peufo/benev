@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { Card, InputSearch } from '$lib/ui'
 	import { Pagination } from 'fuma'
 
@@ -32,7 +33,10 @@
 				<tr>
 					<td>{event.id}</td>
 					<td>
-						<a href="/root/events/{event.id}" class="link link-hover">
+						<a
+							href={resolve('/(home)/root/events/[eventId]', { eventId: event.id })}
+							class="link link-hover"
+						>
 							{event.name}
 						</a>
 					</td>

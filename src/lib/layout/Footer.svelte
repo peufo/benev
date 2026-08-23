@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import type { Snippet } from 'svelte'
 	import benevio from '$lib/assets/benevio.svg'
 	import { LEGAL_DOCS, LEGAL_ENTITY } from './legal'
@@ -18,10 +19,10 @@
 	let { variant = 'public', class: klass = '', children }: Props = $props()
 
 	const PRODUCT_LINKS = [
-		{ path: '/events', label: 'Évènements' },
-		{ path: '/#pricing', label: 'Tarifs' },
-		{ path: '/open-source', label: 'Open source' },
-		{ path: '/contact', label: 'Contact' },
+		{ path: resolve('/events'), label: 'Évènements' },
+		{ path: resolve('/#pricing'), label: 'Tarifs' },
+		{ path: resolve('/open-source'), label: 'Open source' },
+		{ path: resolve('/contact'), label: 'Contact' },
 	]
 
 	const year = new Date().getFullYear()
@@ -29,7 +30,7 @@
 
 {#snippet brandmark(size: string)}
 	<a
-		href="/"
+		href={resolve('/')}
 		class="inline-flex rounded-field outline-primary focus-visible:outline-2 focus-visible:outline-offset-2"
 	>
 		<img src={benevio} alt="benevio, accueil" class={size} />

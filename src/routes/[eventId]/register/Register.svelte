@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ResolvedPathname } from '$app/types'
 	import { ChevronLeftIcon, ChevronRightIcon, XIcon } from '@lucide/svelte'
 	import { page } from '$app/stores'
 	import { afterNavigate, goto, invalidateAll } from '$app/navigation'
@@ -59,7 +60,8 @@
 			(!forcedStepIndex || forcedStepIndex === stepIndexMax)
 
 		if (registerIsDone) {
-			const redirectTo = $page.url.searchParams.get('redirectTo')
+			// Le paramètre vient de l'URL: son chemin est déjà résolu.
+			const redirectTo = $page.url.searchParams.get('redirectTo') as ResolvedPathname | null
 			await goto(redirectTo || eventPath('/me'))
 			return
 		}

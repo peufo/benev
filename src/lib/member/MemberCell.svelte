@@ -3,7 +3,7 @@
 	import { Avatar } from '$lib/me'
 	import { MemberAbsences, MemberRole } from '$lib/member'
 	import type { MemberWithComputedValues } from '$lib/server'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath, withSearch } from '$lib/eventPath'
 
 	import type { Subscribe } from '@prisma/client'
 
@@ -16,7 +16,10 @@
 
 <a
 	class="menu-item pl-0 py-0 flex gap-2 items-center group"
-	href={eventPath('/admin/members/[memberId]', { memberId: member.id }) + page.url.search}
+	href={withSearch(
+		eventPath('/admin/members/[memberId]', { memberId: member.id }),
+		page.url.search
+	)}
 >
 	<Avatar
 		firstName={member.firstName}

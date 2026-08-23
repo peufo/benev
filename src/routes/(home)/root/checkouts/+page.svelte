@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { PlusIcon } from '@lucide/svelte'
 	import { Card } from '$lib/ui'
 	import { Pagination, tip } from 'fuma'
@@ -10,7 +11,7 @@
 	<div class="flex gap-2">
 		<h2 class="title">Checkouts</h2>
 
-		<a href="/root/checkouts/new" class="btn btn-square btn-sm ml-auto">
+		<a href={resolve('/root/checkouts/new')} class="btn btn-square btn-sm ml-auto">
 			<span class="inline-flex" use:tip={{ content: 'Créer un checkout manuellement' }}
 				><PlusIcon /></span
 			>
@@ -32,7 +33,10 @@
 			{#each data.checkouts as checkout (checkout.id)}
 				<tr>
 					<td>
-						<a href="/root/users/{checkout.user.id}" class="link link-hover">
+						<a
+							href={resolve('/(home)/root/users/[userId]', { userId: checkout.user.id })}
+							class="link link-hover"
+						>
 							{checkout.user.firstName}
 							{checkout.user.lastName}
 						</a>

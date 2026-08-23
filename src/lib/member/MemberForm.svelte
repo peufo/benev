@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import type { Event, Page as TPage } from '@prisma/client'
 	import { page } from '$app/state'
 	import { tiptapParser } from '$lib/ui'
@@ -53,6 +54,6 @@
 			<MemberDeleteForm memberId={page.data.member.id} class="w-36">Refuser</MemberDeleteForm>
 		{/if}
 
-		<a href="/me" class="btn btn-ghost"> Non </a>
+		<a href={resolve('/me')} class="btn btn-ghost"> Non </a>
 	</div>
 </section>

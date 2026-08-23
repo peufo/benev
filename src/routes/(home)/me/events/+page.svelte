@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { goto } from '$app/navigation'
 	import { Placeholder } from '$lib/ui'
 	import { Dialog } from 'fuma'
@@ -45,7 +46,10 @@
 							</div>
 						{/if}
 					</div>
-					<a href="/{member.eventId}/me" class="btn shrink-0 btn-sm btn-primary">
+					<a
+						href={resolve('/[eventId]/me', { eventId: member.eventId })}
+						class="btn shrink-0 btn-sm btn-primary"
+					>
 						Voir l'invitation
 					</a>
 				</li>
@@ -82,7 +86,7 @@
 			</p>
 		</Placeholder>
 		<div class="text-center">
-			<a href="/events" class="btn btn-primary"> Trouver un évènement </a>
+			<a href={resolve('/events')} class="btn btn-primary"> Trouver un évènement </a>
 		</div>
 	</div>
 {/if}
@@ -92,7 +96,7 @@
      organisateur — ni l'un ni l'autre n'a à passer devant le parcours du bénévole. -->
 <div class="mt-6 flex flex-wrap gap-2">
 	{#if data.nbPast}
-		<a href="/me/events/past" class="btn btn-ghost border-soft">
+		<a href={resolve('/me/events/past')} class="btn btn-ghost border-soft">
 			<RotateCcwClockIcon size={18} class="shrink-0 opacity-60" />
 			<span class="grow font-medium">
 				{data.nbPast} évènement{data.nbPast > 1 ? 's' : ''} terminé{data.nbPast > 1 ? 's' : ''}
@@ -103,7 +107,7 @@
 
 	{#if data.user.isOrganizer}
 		<a
-			href="/me/events/create"
+			href={resolve('/me/events/create')}
 			class={['btn btn-primary', !isEmpty && 'btn-soft', isEmpty ? 'mx-auto' : 'ml-auto']}
 		>
 			<PlusIcon size={18} class="shrink-0 opacity-60" />
@@ -128,7 +132,7 @@
 		oncancel={() => becomeOrganizerDialog.close()}
 		onsuccess={() => {
 			becomeOrganizerDialog.close()
-			goto('/me/events/create')
+			goto(resolve('/me/events/create'))
 		}}
 	/>
 </Dialog>

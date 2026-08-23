@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { MemberRole } from '$lib/member'
 	import { tip } from 'fuma'
 	import { CopyPlusIcon } from '@lucide/svelte'
@@ -41,7 +42,7 @@
 
 	<div class="flex min-w-0 grow flex-col gap-0.5">
 		<a
-			href="/{member.eventId}/me"
+			href={resolve('/[eventId]/me', { eventId: member.eventId })}
 			class="font-medium wrap-break-word after:absolute after:inset-0 after:content-['']"
 		>
 			{member.event.name}
@@ -62,7 +63,7 @@
 	{#if member.roles.includes('admin')}
 		<a
 			class="btn relative z-10 shrink-0 btn-square btn-ghost btn-sm"
-			href="/me/events/clone/{member.eventId}"
+			href={resolve('/(home)/me/events/clone/[eventId]', { eventId: member.eventId })}
 			use:tip={{ content: "Cloner l'évènement" }}
 		>
 			<CopyPlusIcon size={18} opacity={0.6} />

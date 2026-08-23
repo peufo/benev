@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { slide } from 'svelte/transition'
 	import { MediaQuery } from 'svelte/reactivity'
 	import { isHttpError } from '@sveltejs/kit'
@@ -234,9 +235,9 @@
 
 	<p class="mt-4 text-center text-xs text-balance text-base-content/70">
 		En continuant, tu acceptes nos
-		<a href="/terms" class="link" target="_blank">conditions générales</a>
+		<a href={resolve('/terms')} class="link" target="_blank">conditions générales</a>
 		et notre
-		<a href="/privacy" class="link" target="_blank">politique de confidentialité</a>.
+		<a href={resolve('/privacy')} class="link" target="_blank">politique de confidentialité</a>.
 	</p>
 {/snippet}
 

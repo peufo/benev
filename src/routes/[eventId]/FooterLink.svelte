@@ -19,6 +19,7 @@
 	<a
 		class="btn btn-sm sm:btn-md btn-ghost flex flex-nowrap items-center max-w-96"
 		href="{protocol}{link}"
+		rel="external"
 		target="_blank"
 	>
 		{#if logo}{@render logo()}{:else if Icon}<Icon />{/if}

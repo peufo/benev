@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { PeriodCardOptions } from './cardContent'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath, withSearch } from '$lib/eventPath'
 	import PlanCursor from './PlanCursor.svelte'
 	import type { Plan } from './types'
 	import { clampScale, persistHourSize, withHourSize } from './zoom'
@@ -111,7 +111,10 @@
 		]}
 	/>
 	<a
-		href={eventPath(isFullscreen ? '/admin/plan' : '/admin/plan/fullscreen') + page.url.search}
+		href={withSearch(
+			eventPath(isFullscreen ? '/admin/plan' : '/admin/plan/fullscreen'),
+			page.url.search
+		)}
 		class="btn btn-square btn-sm"
 	>
 		<span class="inline-flex" use:tip={{ content: 'Ouvrir en plein écran' }}

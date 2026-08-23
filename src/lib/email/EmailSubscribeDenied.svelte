@@ -28,7 +28,10 @@
 
 	<p>
 		Retrouve toutes les inscriptions de {member.firstName} sur
-		<a href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}">
+		<a
+			href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
+			rel="external"
+		>
 			son profil.
 		</a>
 	</p>

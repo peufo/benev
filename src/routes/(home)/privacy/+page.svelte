@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { LegalPage, LEGAL_ENTITY } from '$lib/layout'
 </script>
 
@@ -6,7 +7,7 @@
 	<p>
 		Cette politique explique quelles données benevio collecte, pourquoi, qui y a accès et combien de
 		temps elles sont conservées. Elle fait partie intégrante des
-		<a href="/terms">conditions générales</a>.
+		<a href={resolve('/terms')}>conditions générales</a>.
 	</p>
 	<p>
 		benevio est un service suisse. Cette politique applique la loi fédérale sur la protection des
@@ -268,9 +269,9 @@
 		</p>
 		<p>
 			<b>Comment</b> — écris à {LEGAL_ENTITY.email} ou passe par le
-			<a href="/contact">formulaire de contact</a>, qui est accessible <b>sans compte</b>. Nous
-			répondons dans les 30 jours. Nous pouvons te demander de justifier ton identité avant de
-			transmettre des données personnelles.
+			<a href={resolve('/contact')}>formulaire de contact</a>, qui est accessible
+			<b>sans compte</b>. Nous répondons dans les 30 jours. Nous pouvons te demander de justifier
+			ton identité avant de transmettre des données personnelles.
 		</p>
 		<p>
 			Pour les données rattachées à un évènement, l'organisateur est le responsable du traitement :

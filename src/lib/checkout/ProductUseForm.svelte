@@ -6,7 +6,7 @@
 	import { searchOwnedEvents, useProductOnEvent } from './checkout.remote'
 
 	interface Props {
-		product: { id: string; name: string }
+		product: { id: string }
 	}
 
 	let { product }: Props = $props()

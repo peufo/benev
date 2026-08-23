@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import {
 		ArchiveIcon,
 		ArrowLeftIcon,
@@ -125,7 +126,7 @@
 				</p>
 
 				<div class="mt-8">
-					<a href="/me" class="btn btn-sm">
+					<a href={resolve('/me')} class="btn btn-sm">
 						<ArrowLeftIcon />
 						<span>mon profil</span>
 					</a>
@@ -141,7 +142,7 @@
 				{/snippet}
 
 				<div class="mt-8">
-					<a href="/me" class="btn btn-sm">
+					<a href={resolve('/me')} class="btn btn-sm">
 						<ArrowLeftIcon />
 						<span>mon profil</span>
 					</a>

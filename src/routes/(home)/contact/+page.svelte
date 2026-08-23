@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import {
 		CheckIcon,
 		CircleAlertIcon,
@@ -104,8 +105,9 @@
 						<h3 class="font-semibold text-primary">Tu n'organises pas d'événement ?</h3>
 						<p class="text-sm text-base-content/80 mt-1 leading-relaxed">
 							Si tu souhaites contacter les responsables d'un événement,
-							<a href="/events" class="link link-primary">rends-toi dans son espace dédié</a>. Les
-							moyens de contact se trouvent généralement en pied de page.
+							<a href={resolve('/events')} class="link link-primary"
+								>rends-toi dans son espace dédié</a
+							>. Les moyens de contact se trouvent généralement en pied de page.
 						</p>
 					</div>
 				</div>

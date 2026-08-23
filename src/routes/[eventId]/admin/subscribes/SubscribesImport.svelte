@@ -2,7 +2,7 @@
 	import { DownloadIcon, FileSpreadsheetIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { ButtonCopy, DropDown } from 'fuma'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath, withSearch } from '$lib/eventPath'
 
 	let dropdown: DropDown = $state()!
 
@@ -12,7 +12,7 @@
 		const params = new URLSearchParams(page.url.searchParams)
 		const zone = Intl.DateTimeFormat().resolvedOptions()
 		params.set('locale', zone.locale)
-		return `${eventPath('/admin/subscribes/csv')}?${params.toString()}`
+		return withSearch(eventPath('/admin/subscribes/csv'), params.toString())
 	})
 
 	const getSubscribesCSV = async () => {

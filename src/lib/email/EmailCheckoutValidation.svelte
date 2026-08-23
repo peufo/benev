@@ -52,7 +52,7 @@
 	{#if dest === 'user'}
 		<p>
 			Tu peux retrouver tous tes achats sur
-			<a href="{domain}/me/checkouts">ton profil.</a>
+			<a href="{domain}/me/checkouts" rel="external">ton profil.</a>
 		</p>
 
 		<p>Merci pour ta confiance !</p>

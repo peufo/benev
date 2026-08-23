@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { TierCard } from '$lib/event'
 	import { EVENT_TIER_SUPPORT } from '$lib/constant'
 </script>
@@ -40,7 +41,7 @@
 					<h3 class="text-xl font-bold text-base-content">Pro</h3>
 					<p class="text-base-content/70 mt-1">Tarif sur mesure — {EVENT_TIER_SUPPORT.pro}</p>
 				</div>
-				<a href="/contact" class="btn btn-outline btn-primary whitespace-nowrap">
+				<a href={resolve('/contact')} class="btn btn-outline btn-primary whitespace-nowrap">
 					Nous contacter
 				</a>
 			</div>

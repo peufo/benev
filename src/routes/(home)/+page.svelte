@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { page } from '$app/stores'
 	import { JsonLd } from 'svelte-meta-tags'
 	import { Testimonials } from '$lib/testimonials'
@@ -30,7 +31,7 @@
 
 					<div class="mt-8 flex flex-col sm:flex-row items-start gap-4">
 						<a
-							href="/me"
+							href={resolve('/me')}
 							class="
 								btn btn-lg btn-primary
 								shadow-lg hover:shadow-xl
@@ -75,7 +76,7 @@
 				>
 					<!-- Pastilles toutes secondary: les trois affirmations sont indépendantes,
 					     pas des catégories — trois teintes inventeraient une taxonomie. -->
-					<a class="flex items-center gap-2 link link-hover" href="/open-source">
+					<a class="flex items-center gap-2 link link-hover" href={resolve('/open-source')}>
 						<span class="w-2 h-2 rounded-full bg-secondary"></span>
 						Open source
 					</a>

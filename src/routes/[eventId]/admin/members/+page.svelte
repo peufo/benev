@@ -20,7 +20,6 @@
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
 	import { globalEvents } from '$lib/globalEvents'
-	import { page } from '$app/stores'
 
 	let { data } = $props()
 
@@ -49,12 +48,10 @@
 	let selectedMember: Member | undefined = $state(undefined)
 
 	async function handleFieldCreated(field: Field) {
-		const url = new URL($page.url)
 		const PARAM_VISIBLE_KEY = 'members_fields_visible'
-		const fieldsVisible = jsonParse<string[]>(url.searchParams.get(PARAM_VISIBLE_KEY), [])
+		const fieldsVisible = jsonParse<string[]>(urlParam.get(PARAM_VISIBLE_KEY), [])
 		fieldsVisible.push(`field_${field.id}`)
-		url.searchParams.set(PARAM_VISIBLE_KEY, JSON.stringify(fieldsVisible))
-		url.searchParams.delete('form_field')
+		const url = urlParam.with({ [PARAM_VISIBLE_KEY]: JSON.stringify(fieldsVisible) }, 'form_field')
 		await goto(url, { noScroll: true, keepFocus: true, invalidateAll: true })
 		tableFields = getMembersTableFields(data.teams, data.fields, cellSnippets)
 	}

@@ -26,12 +26,14 @@
 		Vérifie
 		<a
 			href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
+			rel="external"
 			target="_blank"
 		>
 			ses informations
 		</a>
 		et
 		<a
+			rel="external"
 			target="_blank"
 			href="{domain}/{subscribe.period.team.eventId}/teams?section={subscribe.period
 				.teamId}&form_period={subscribe.periodId}"

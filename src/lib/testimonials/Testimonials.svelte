@@ -30,7 +30,7 @@
 							<a
 								href={t.eventUrl}
 								target="_blank"
-								rel="noopener noreferrer"
+								rel="external noopener noreferrer"
 								class="inline-flex items-center gap-1 text-sm text-primary hover:underline"
 							>
 								<span>{t.volunteersCount}</span>

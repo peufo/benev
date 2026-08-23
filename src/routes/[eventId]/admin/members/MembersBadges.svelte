@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath, withSearch } from '$lib/eventPath'
 	import { DropDown } from 'fuma'
 	import { tip } from 'fuma'
 	import { IdCardLanyardIcon } from '@lucide/svelte'
@@ -19,7 +19,10 @@
 {#if badges.length === 1}
 	{@const badge = badges[0]}
 	<a
-		href={eventPath('/admin/pages/badges/[badgeId]/pdf', { badgeId: badge.id }) + `?${_params}`}
+		href={withSearch(
+			eventPath('/admin/pages/badges/[badgeId]/pdf', { badgeId: badge.id }),
+			_params
+		)}
 		target="_blank"
 		class="btn btn-square btn-sm"
 		use:tip={{ content: title }}
@@ -37,8 +40,10 @@
 			{#each badges as badge (badge.id)}
 				<li>
 					<a
-						href={eventPath('/admin/pages/badges/[badgeId]/pdf', { badgeId: badge.id }) +
-							`?${_params}`}
+						href={withSearch(
+							eventPath('/admin/pages/badges/[badgeId]/pdf', { badgeId: badge.id }),
+							_params
+						)}
 						target="_blank"
 					>
 						{badge.name}

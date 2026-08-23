@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ResolvedPathname } from '$app/types'
 	import {
 		ClipboardCheckIcon,
 		ExternalLinkIcon,
@@ -9,7 +10,7 @@
 	import Section from '$lib/ui/Section.svelte'
 	import { InputOptionInParam } from '$lib/ui'
 	import { Journal } from '$lib/log'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath, withSearch } from '$lib/eventPath'
 	import DashboardMembers from './DashboardMembers.svelte'
 	import DashboardValidations from './DashboardValidations.svelte'
 	import DashboardTeams from './DashboardTeams.svelte'
@@ -43,11 +44,13 @@
 	// La table des membres filtrée sur ce que la section montre. « Zéro inscription active »
 	// s'y dit avec les deux compteurs, dont l'inclusion se limite déjà à ces deux états.
 	let membersTableHref = $derived(
-		eventPath('/admin/members') +
-			(data.membersView === 'without'
-				? `?subscribes_count_accepted=${JSON.stringify({ max: 0 })}` +
-					`&subscribes_count_request=${JSON.stringify({ max: 0 })}`
-				: '')
+		withSearch(
+			eventPath('/admin/members'),
+			data.membersView === 'without'
+				? `subscribes_count_accepted=${JSON.stringify({ max: 0 })}` +
+						`&subscribes_count_request=${JSON.stringify({ max: 0 })}`
+				: ''
+		)
 	)
 
 	let membersTableLabel = $derived(
@@ -66,9 +69,12 @@
 	// La table des inscriptions filtrée sur ce que la section montre: le bouton mène à la suite
 	// de la même liste, pas à tout l'évènement.
 	let waitingTableHref = $derived(
-		eventPath(`/admin/subscribes?states=${JSON.stringify(['request'])}`) +
-			(data.waiting ? `&createdBy=${waitingOf(data.waiting).createdBy}` : '') +
-			(data.isAdmin ? '' : `&teams=${JSON.stringify(data.teams.map(({ id }) => id))}`)
+		withSearch(
+			eventPath('/admin/subscribes'),
+			`states=${JSON.stringify(['request'])}` +
+				(data.waiting ? `&createdBy=${waitingOf(data.waiting).createdBy}` : '') +
+				(data.isAdmin ? '' : `&teams=${JSON.stringify(data.teams.map(({ id }) => id))}`)
+		)
 	)
 
 	let waitingTableLabel = $derived(
@@ -83,7 +89,7 @@
 	let teamsPageLabel = $derived(seeAll(nbPeriods, 'périodes'))
 </script>
 
-{#snippet seeAllLink(href: string, label: string)}
+{#snippet seeAllLink(href: ResolvedPathname, label: string)}
 	<a {href} class="btn btn-ghost btn-xs ml-auto mt-2 flex w-fit">
 		<span>{label}</span>
 		<ExternalLinkIcon size={12} />

@@ -67,19 +67,18 @@
 
 		{#each data.stats.summary as stat, i (i)}
 			{#if stat}
+				{@const summary = stat}
 				<Distribution
-					title={stat.fieldName}
-					values={stat.distribution}
+					title={summary.fieldName}
+					values={summary.distribution}
 					class="grow"
 					getLabel={(key) => {
-						if (stat?.fieldType !== 'boolean') return key
+						if (summary.fieldType !== 'boolean') return key
 						return key === 'true' ? 'Oui' : 'Non'
 					}}
 					getHref={(key) => {
-						if (!stat) return ''
-						const fieldValue = stat.fieldType === 'multiselect' ? JSON.stringify([key]) : key
-						const k = `field_${stat.fieldId}`
-						return urlWith({ [k]: fieldValue })
+						const fieldValue = summary.fieldType === 'multiselect' ? JSON.stringify([key]) : key
+						return urlWith({ [`field_${summary.fieldId}`]: fieldValue })
 					}}
 				/>
 			{/if}

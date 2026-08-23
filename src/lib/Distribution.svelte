@@ -1,9 +1,10 @@
 <script lang="ts" generics="Keys extends string">
+	import type { ResolvedPathname } from '$app/types'
 	interface Props {
 		title: string
 		class?: string
 		values: Record<Keys, number>
-		getHref: (key: Keys) => string
+		getHref: (key: Keys) => ResolvedPathname
 		getLabel?: (key: Keys) => string
 	}
 

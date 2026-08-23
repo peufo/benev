@@ -1,6 +1,8 @@
 import type { Component } from 'svelte'
 import type { IconProps } from '@lucide/svelte'
 import { replaceState } from '$app/navigation'
+import { page } from '$app/state'
+import type { ResolvedPathname } from '$app/types'
 
 export interface TocSection {
 	/** L'`id` de la `<section>` correspondante dans la page. */
@@ -58,5 +60,8 @@ export function trackActiveSection(getSections: () => TocSection[]) {
 export function scrollToSection(event: MouseEvent, id: string) {
 	event.preventDefault()
 	document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-	replaceState(`#${id}`, {})
+	// Une navigation superficielle n'admet qu'un chemin résolu: le fragment, qui est tout
+	// l'objet ici, s'accroche au chemin courant.
+	const target = `${page.url.pathname}#${id}` as ResolvedPathname
+	replaceState(target, {})
 }

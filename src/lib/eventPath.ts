@@ -1,6 +1,6 @@
 import { resolve } from '$app/paths'
 import { page } from '$app/state'
-import type { RouteId, RouteParams } from '$app/types'
+import type { ResolvedPathname, RouteId, RouteParams } from '$app/types'
 
 /**
  * Les routes montées sous `/[eventId]`, indexées par leur chemin privé du préfixe et associées
@@ -32,12 +32,23 @@ type Params<T extends EventPathArg> =
 			: [params: EventRoutes[P]]
 		: never
 
-const resolveRoute = resolve as (route: string, params: Record<string, string>) => string
+const resolveRoute = resolve as (route: string, params: Record<string, string>) => ResolvedPathname
 
 /** `resolve()` pour l'évènement courant: le préfixe et l'`eventId` sont sous-entendus. */
-export function eventPath<T extends EventPathArg>(...args: [path: T, ...Params<T>]): string {
+export function eventPath<T extends EventPathArg>(
+	...args: [path: T, ...Params<T>]
+): ResolvedPathname {
 	const { eventId } = page.params
 	if (!eventId) throw new Error("eventPath() appelé hors d'une route /[eventId]")
 	const params = args[1] as Record<string, string> | undefined
 	return resolveRoute(`/[eventId]${args[0]}`, { eventId, ...params })
+}
+
+/**
+ * Un chemin résolu suivi de sa query. Le type est conservé: une concaténation retomberait en
+ * `string`, que `svelte/no-navigation-without-resolve` refuse comme cible de navigation.
+ */
+export function withSearch(path: ResolvedPathname, search: string): ResolvedPathname {
+	if (!search) return path
+	return `${path}${search.startsWith('?') ? '' : '?'}${search}` as ResolvedPathname
 }

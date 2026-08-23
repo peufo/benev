@@ -1,4 +1,7 @@
-export type LegalDoc = { path: string; label: string; description: string }
+import { resolve } from '$app/paths'
+import type { ResolvedPathname } from '$app/types'
+
+export type LegalDoc = { path: ResolvedPathname; label: string; description: string }
 
 /**
  * Les quatre textes se citent mutuellement et sont listés dans le pied de page. Une seule
@@ -7,26 +10,26 @@ export type LegalDoc = { path: string; label: string; description: string }
  */
 export const LEGAL_DOCS: LegalDoc[] = [
 	{
-		path: '/terms',
+		path: resolve('/terms'),
 		label: 'Conditions générales',
 		description:
 			`Conditions générales d'utilisation de benevio : ton compte, les contenus publiés, ` +
 			`les obligations des organisateurs, la responsabilité et le droit applicable.`,
 	},
 	{
-		path: '/privacy',
+		path: resolve('/privacy'),
 		label: 'Confidentialité',
 		description:
 			`Quelles données benevio collecte, pourquoi, qui y a accès, combien de temps elles sont ` +
 			`conservées, à quels sous-traitants elles sont confiées et comment exercer tes droits.`,
 	},
 	{
-		path: '/legal-notice',
+		path: resolve('/legal-notice'),
 		label: 'Mentions légales',
 		description: `Éditeur, hébergeur, contact et propriété intellectuelle du service benevio.`,
 	},
 	{
-		path: '/sales-terms',
+		path: resolve('/sales-terms'),
 		label: 'Conditions de vente',
 		description:
 			`Conditions générales de vente de benevio : offres et quotas, achat unique sans ` +
@@ -45,7 +48,7 @@ export const LEGAL_ENTITY = {
 } as const
 
 /** Récupère un document par sa route, pour que ses métas et son titre viennent de la même source. */
-export function legalDoc(path: string): LegalDoc {
+export function legalDoc(path: ResolvedPathname): LegalDoc {
 	const doc = LEGAL_DOCS.find((d) => d.path === path)
 	if (!doc) throw new Error(`Document légal inconnu: ${path}`)
 	return doc

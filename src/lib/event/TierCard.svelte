@@ -1,11 +1,12 @@
 <script lang="ts">
+	import type { ResolvedPathname } from '$app/types'
 	import type { EventTier } from '@prisma/client'
 	import { CheckIcon, InfinityIcon } from '@lucide/svelte'
 	import { EVENT_TIER, parseTierPrice } from '$lib/constant'
 
 	interface Props {
 		tier: EventTier
-		action?: { label: string; href: string } | 'current' | undefined
+		action?: { label: string; href: ResolvedPathname } | 'current' | undefined
 		features?: string[]
 	}
 

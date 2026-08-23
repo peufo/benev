@@ -696,7 +696,7 @@ export function useEvent(owner: User, name: string) {
 			const saveBar = page.getByText('Modification en cours !')
 			const preset = page.locator('input[name="backgroundPreset"]')
 			const background = page.locator('.event-background')
-			const noTheme = page.getByRole('radio', { name: 'Aucun' })
+			const noTheme = page.getByRole('radio', { name: 'Personalisé' })
 			const papier = page.getByRole('radio', { name: 'Papier' })
 
 			await page.goto(`/${eventId}/admin/settings`)

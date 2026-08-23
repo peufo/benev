@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { withSearch } from '$lib/eventPath'
 	import { SaveIcon, SavePenIcon } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
@@ -90,8 +91,7 @@
 		{items}
 		getLabel={(view) => view.name}
 		proposalAppend={updateButton}
-		onSelect={(view) =>
-			goto(view?.query ? `${page.url.pathname}?${view.query}` : page.url.pathname)}
+		onSelect={(view) => goto(withSearch(page.url.pathname, view?.query ?? ''))}
 		class={['input-sm min-w-32', isNewView && 'rounded-r-none']}
 		propsLi={{ class: 'flex-row gap-1 group w-full flex-nowrap' }}
 	/>

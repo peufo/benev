@@ -30,7 +30,7 @@
 					<a
 						href={titleHref}
 						target="_blank"
-						rel="noopener noreferrer"
+						rel="external noopener noreferrer"
 						class="block text-xl font-semibold text-base-content/90 hover:text-primary transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary/50 rounded-sm"
 					>
 						{title}
@@ -45,7 +45,7 @@
 				<a
 					href="https://github.com/peufo/benev/issues/new"
 					target="_blank"
-					rel="noopener noreferrer"
+					rel="external noopener noreferrer"
 					class="btn btn-sm btn-primary shrink-0"
 				>
 					Ouvrir un sujet
@@ -60,7 +60,7 @@
 				<a
 					href={issue.url}
 					target="_blank"
-					rel="noopener noreferrer"
+					rel="external noopener noreferrer"
 					class="group block px-5 py-4 hover:bg-base-200/40 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary/50"
 				>
 					<div class="flex items-baseline gap-2">

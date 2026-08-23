@@ -24,8 +24,6 @@
 		 * « L'état d'un formulaire vit dans son module ».
 		 */
 		key?: unknown
-		/** `fields.allIssues()`: le récapitulatif vit ici, seul point visible à la soumission. */
-		issues?: { message: string }[] | undefined
 		pending?: boolean
 		/** Joué après le `reset()` natif, pour ce qu'il ne restaure pas. */
 		onreset?: () => void

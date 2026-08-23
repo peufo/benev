@@ -1,4 +1,5 @@
 <script lang="ts" module>
+	import { resolve } from '$app/paths'
 	import type { Component } from 'svelte'
 	import { prefersReducedMotion } from 'svelte/motion'
 	import type { IconProps } from '@lucide/svelte'
@@ -138,7 +139,10 @@
 		<LogContent log={typed} {canDelete} {timezone} />
 
 		{#if showEvent && log.event}
-			<a href="/{log.event.id}" class="link link-hover text-xs text-base-content/70">
+			<a
+				href={resolve('/[eventId]', { eventId: log.event.id })}
+				class="link link-hover text-xs text-base-content/70"
+			>
 				{log.event.name}
 			</a>
 		{/if}

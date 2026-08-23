@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ResolvedPathname } from '$app/types'
 	import { ArrowLeftIcon } from '@lucide/svelte'
 	import { contextContainer } from '$lib/ui/context.js'
 	import type { ClassValue } from 'svelte/elements'
@@ -7,7 +8,7 @@
 		class?: ClassValue
 		bodyClass?: ClassValue
 		headerClass?: ClassValue
-		returnUrl?: string
+		returnUrl?: ResolvedPathname
 		style?: string
 		top?: import('svelte').Snippet
 		title?: import('svelte').Snippet
@@ -20,7 +21,7 @@
 		class: klass,
 		bodyClass,
 		headerClass,
-		returnUrl = '',
+		returnUrl,
 		style = '',
 		top,
 		title,

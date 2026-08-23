@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { eventPath } from '$lib/eventPath'
 	import type { Page } from '@prisma/client'
 	import { page } from '$app/state'
 	import { Popover } from 'fuma'
@@ -53,9 +54,8 @@
 					</a>
 				{/each}
 
-				{@const quotaHref = `/${page.params.eventId}/admin/quota`}
 				<a
-					href={quotaHref}
+					href={eventPath('/admin/quota')}
 					class="menu-item"
 					class:active={page.route.id?.startsWith('/[eventId]/admin/quota')}
 				>

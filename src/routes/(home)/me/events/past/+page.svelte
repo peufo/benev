@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { ArrowLeftIcon } from '@lucide/svelte'
 	import { Placeholder } from '$lib/ui'
 	import EventPastRow from './EventPastRow.svelte'
@@ -20,7 +21,11 @@
 </script>
 
 <div class="flex items-center gap-2">
-	<a href="/me/events" class="btn btn-square btn-ghost btn-sm" aria-label="Retour à mes évènements">
+	<a
+		href={resolve('/me/events')}
+		class="btn btn-square btn-ghost btn-sm"
+		aria-label="Retour à mes évènements"
+	>
 		<ArrowLeftIcon size={18} />
 	</a>
 	<h1 class="title">Évènements terminés</h1>

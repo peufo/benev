@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { onMount } from 'svelte'
 	import { InputSearch } from '$lib/ui'
 	import { RangePickerButton, urlParam } from 'fuma'
@@ -8,7 +9,7 @@
 	import { SubscribeForm } from '$lib/subscribe'
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
 	import { goto } from '$app/navigation'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath, withSearch } from '$lib/eventPath'
 	import { page } from '$app/state'
 	import TeamsStats from './TeamsStats.svelte'
 
@@ -61,7 +62,12 @@
 			{#if !data.user && data.teamsHiddenCount}
 				<div class="grid place-content-center p-10 gap-4">
 					<p>Pas de secteur publique</p>
-					<a href="/auth?redirectTo=/{data.event.id}/teams" class="btn btn-primary"> Connexion </a>
+					<a
+						href={withSearch(resolve('/auth'), `redirectTo=${eventPath('/teams')}`)}
+						class="btn btn-primary"
+					>
+						Connexion
+					</a>
 				</div>
 			{:else}
 				<span>Pas de secteur</span>

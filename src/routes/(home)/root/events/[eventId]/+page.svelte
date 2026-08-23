@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { Card } from '$lib/ui'
 	import { msToHours } from '$lib/utils'
 	import { formatRangeDate } from '$lib/formatRange'
@@ -19,7 +20,7 @@
 </script>
 
 <div class="p-4 flex flex-col gap-4">
-	<a href="/root/events" class="inline-flex items-center gap-1 link link-hover text-sm">
+	<a href={resolve('/root/events')} class="inline-flex items-center gap-1 link link-hover text-sm">
 		<ArrowLeftIcon size={16} />
 		Retour aux événements
 	</a>
@@ -28,7 +29,7 @@
 		{#snippet title()}
 			<h2 class="title flex items-center">
 				<span>{event.name}</span>
-				<a href="/{event.id}" class="ml-auto" target="_blank">
+				<a href={resolve('/[eventId]', { eventId: event.id })} class="ml-auto" target="_blank">
 					<ExternalLinkIcon />
 				</a>
 			</h2>
@@ -38,7 +39,10 @@
 			<div class="flex flex-wrap gap-x-4 gap-y-1 text-base-content/80">
 				<span>
 					Propriétaire :
-					<a href="/root/users/{event.ownerId}" class="link link-hover">
+					<a
+						href={resolve('/(home)/root/users/[userId]', { userId: event.ownerId })}
+						class="link link-hover"
+					>
 						{event.owner.firstName}
 						{event.owner.lastName}
 					</a>

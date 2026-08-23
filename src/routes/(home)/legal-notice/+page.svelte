@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { LegalPage, LEGAL_ENTITY } from '$lib/layout'
 </script>
 
@@ -23,11 +24,11 @@
 		<h2>Contact</h2>
 		<p>
 			Par email à {LEGAL_ENTITY.email}, ou via le
-			<a href="/contact">formulaire de contact</a>, accessible sans compte.
+			<a href={resolve('/contact')}>formulaire de contact</a>, accessible sans compte.
 		</p>
 		<p>
 			Pour les demandes relatives aux données personnelles, la marche à suivre est détaillée dans la
-			<a href="/privacy">politique de confidentialité</a>.
+			<a href={resolve('/privacy')}>politique de confidentialité</a>.
 		</p>
 	</section>
 

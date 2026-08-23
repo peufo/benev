@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { Card } from '$lib/ui'
 	import { MemberRole } from '$lib/member'
 	import { EVENT_TIER } from '$lib/constant'
@@ -80,7 +81,10 @@
 					{#each data.members as member (member.id)}
 						<tr>
 							<td>
-								<a href="/root/events/{member.eventId}" class="link link-hover font-medium">
+								<a
+									href={resolve('/(home)/root/events/[eventId]', { eventId: member.eventId })}
+									class="link link-hover font-medium"
+								>
 									{member.event.name}
 								</a>
 							</td>

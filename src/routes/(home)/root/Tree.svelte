@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Tree from './Tree.svelte'
 	import { page } from '$app/stores'
+	import type { ResolvedPathname } from '$app/types'
 	interface Props {
 		tree: string[][]
 		level?: number
@@ -16,7 +17,12 @@
 		{@const isActive = $page.url.pathname.endsWith(pathname)}
 
 		<li>
-			<a href="/root/{pathname}" class:bg-primary={isActive} class:text-white={isActive}>
+			<!-- L'arbre est bâti à l'exécution: `resolve()` ne prend qu'une route connue à la compilation. -->
+			<a
+				href={`/root/${pathname}` as ResolvedPathname}
+				class:bg-primary={isActive}
+				class:text-white={isActive}
+			>
 				{path.at(-1)}
 			</a>
 

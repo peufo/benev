@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { page } from '$app/state'
 	import { CircleCheckIcon, ShoppingCartIcon, TagIcon } from '@lucide/svelte'
 	import { Placeholder } from '$lib/ui'
@@ -83,7 +84,7 @@
 										</span>
 									{:else if product.event}
 										<a
-											href="/{product.event.id}"
+											href={resolve('/[eventId]', { eventId: product.event.id })}
 											class="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
 										>
 											<CircleCheckIcon size={14} />
