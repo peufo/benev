@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+	<defs>
+		<linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0" stop-color="#ffffff" />
+			<stop offset="1" stop-color="#e5e6e6" />
+		</linearGradient>
+		<radialGradient id="paper-light" cx="0.5" cy="0.02" r="0.85">
+			<stop offset="0" stop-color="#ffffff" />
+			<stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+		</radialGradient>
+	</defs>
+	<rect width="1600" height="900" fill="url(#paper)" />
+	<rect width="1600" height="900" fill="url(#paper-light)" />
+</svg>

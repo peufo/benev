@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { untrack } from 'svelte'
+	import { tick, untrack } from 'svelte'
 	import { InputRange } from 'fuma'
+	import { THEME_PRESETS, type ThemePresetKey } from '$lib/constant'
 	import { InputMedia } from '$lib/material'
 	import { theme } from '../theme/state.svelte'
 	import type { EventSettingsFields } from './types'
@@ -19,14 +20,40 @@
 	let posterId = $state(untrack(() => event.posterId))
 	let logoId = $state(untrack(() => event.logoId))
 
+	let presetInput = $state<HTMLInputElement>()
+
+	let activePreset = $derived(
+		theme.backgroundPreset && theme.backgroundPreset in THEME_PRESETS
+			? (theme.backgroundPreset as ThemePresetKey)
+			: undefined
+	)
+
 	/**
-	 * Un champ affiche la valeur de son `field`, l'aperçu lit `theme`: reposer une valeur
-	 * demande d'écrire les deux, comme le fait le `oninput` de chaque curseur.
+	 * La barre de sauvegarde ne resérialise le formulaire que sur un évènement DOM, et ni
+	 * `fields.set()` ni une écriture dans `theme` n'en émettent: le champ du thème annonce
+	 * lui-même la nouvelle donne, comme le fait `InputMedia`. Attendre le rendu, sans quoi
+	 * c'est l'ancienne valeur qui serait relue.
 	 */
-	function restoreBackground() {
-		theme.backgroundBlur = fields.backgroundBlur.set(0)
-		theme.backgroundBrightness = fields.backgroundBrightness.set(100)
-		theme.backgroundWhiteness = fields.backgroundWhiteness.set(0)
+	function notifyForm() {
+		void tick().then(() => presetInput?.dispatchEvent(new Event('input', { bubbles: true })))
+	}
+
+	function selectPreset(key: ThemePresetKey) {
+		const preset = THEME_PRESETS[key]
+		theme.backgroundPreset = key
+		// Un thème et une image de médiathèque s'excluent: c'est le média qui prime au rendu.
+		theme.backgroundImageId = null
+		theme.backgroundBlur = fields.backgroundBlur.set(preset.backgroundBlur)
+		theme.backgroundBrightness = fields.backgroundBrightness.set(preset.backgroundBrightness)
+		theme.backgroundWhiteness = fields.backgroundWhiteness.set(preset.backgroundWhiteness)
+		theme.backgroundGrain = fields.backgroundGrain.set(preset.backgroundGrain)
+		notifyForm()
+	}
+
+	/** Retire le thème sans toucher aux réglages ni au média: seule l'image prédéfinie s'en va. */
+	function clearPreset() {
+		theme.backgroundPreset = null
+		notifyForm()
 	}
 </script>
 
@@ -40,6 +67,7 @@
 			key="backgroundImageId"
 			label="Image de fond"
 			bind:value={theme.backgroundImageId}
+			oninput={(media) => media && clearPreset()}
 		/>
 		<label class={['fieldset pt-0']}>
 			<input
@@ -52,17 +80,6 @@
 	</div>
 
 	<div class="grid gap-4 sm:grid-cols-2">
-		<InputRange
-			field={fields.cardOpacity}
-			label="Opacité des surfaces"
-			value={event.cardOpacity}
-			min={0.6}
-			max={1}
-			step={0.001}
-			oninput={(e) => (theme.cardOpacity = e.currentTarget.valueAsNumber)}
-			class="range-primary"
-		/>
-
 		<InputRange
 			field={fields.backgroundBlur}
 			label="Flou du fond"
@@ -94,10 +111,66 @@
 			class="range-primary"
 		/>
 
-		<div>
-			<button type="button" class="btn btn-ghost btn-sm" onclick={restoreBackground}>
-				Restaurer les paramètres
-			</button>
+		<InputRange
+			field={fields.backgroundGrain}
+			label="Grain"
+			value={event.backgroundGrain}
+			min={0}
+			max={1}
+			step={0.02}
+			oninput={(e) => (theme.backgroundGrain = e.currentTarget.valueAsNumber)}
+			class="range-primary"
+		/>
+
+		<div class="flex flex-col gap-2 col-span-full">
+			<span class="label text-sm">Thème</span>
+			<div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Choisir un thème">
+				<button
+					type="button"
+					role="radio"
+					aria-checked={!activePreset}
+					onclick={clearPreset}
+					class="flex flex-col items-center gap-1.5 rounded-field border p-1.5 transition-colors {!activePreset
+						? 'border-primary bg-primary/5'
+						: 'border-soft hover:border-primary/50 hover:bg-base-200/30'}"
+				>
+					<span
+						class="h-12 w-20 rounded-field border border-soft bg-cover bg-center"
+						style="
+						background-color: {theme.backgroundColor};
+						{theme.backgroundImageId ? `background-image: url(/media/${theme.backgroundImageId})` : ''}
+					"
+					></span>
+					<span class="text-xs">Personalisé</span>
+				</button>
+
+				{#each Object.entries(THEME_PRESETS) as [key, preset] (key)}
+					{@const selected = activePreset === key}
+					<button
+						type="button"
+						role="radio"
+						aria-checked={selected}
+						onclick={() => selectPreset(key as ThemePresetKey)}
+						class="flex flex-col items-center gap-1.5 rounded-field border p-1.5 transition-colors {selected
+							? 'border-primary bg-primary/5'
+							: 'border-soft hover:border-primary/50 hover:bg-base-200/30'}"
+					>
+						<span
+							class="h-12 w-20 rounded-field border border-soft bg-cover bg-center"
+							style="background-image: url({preset.image})"
+						></span>
+						<span class="text-xs">{preset.label}</span>
+					</button>
+				{/each}
+			</div>
+			<!-- Piloté par `theme` plutôt que par un `field`: l'aperçu et la soumission n'ont ainsi
+		     qu'une source, et le `reset` natif du formulaire le rend à sa valeur enregistrée. -->
+			<input
+				type="hidden"
+				bind:this={presetInput}
+				name="backgroundPreset"
+				value={theme.backgroundPreset ?? ''}
+			/>
 		</div>
 	</div>
 </div>

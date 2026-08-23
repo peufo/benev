@@ -67,12 +67,6 @@
 
 <EventTheme event={data.event} />
 
-<!-- Dégradé de page. `secondary` et non `accent`: l'orange est le repère temporel du plan,
-     qui vit précisément dans ces pages — un lavis orange le noierait. -->
-<div
-	class="absolute inset-0 bg-linear-to-b from-secondary/15 via-secondary/6 to-transparent -z-10"
-></div>
-
 <Header user={data.user}>
 	{#snippet start()}
 		<a

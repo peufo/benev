@@ -85,9 +85,10 @@ export type EventTheme = Pick<
 	| 'backgroundBlur'
 	| 'backgroundBrightness'
 	| 'backgroundColor'
+	| 'backgroundGrain'
 	| 'backgroundImageId'
+	| 'backgroundPreset'
 	| 'backgroundWhiteness'
-	| 'cardOpacity'
 >
 
 /**
@@ -102,10 +103,12 @@ export const modelEventMedia = z.object({
 export const modelEventTheme = z.object({
 	backgroundColor: z.string().optional(),
 	backgroundImageId: zMediaId,
+	// Le champ caché du sélecteur de thème est toujours rendu: chaîne vide = aucun thème.
+	backgroundPreset: zStringNullable(z.string()),
 	backgroundBlur: z.number().optional(),
 	backgroundBrightness: z.number().optional(),
 	backgroundWhiteness: z.number().optional(),
-	cardOpacity: z.number().optional(),
+	backgroundGrain: z.number().optional(),
 }) satisfies z.ZodType<EventUpdateInput>
 
 /**

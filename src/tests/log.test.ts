@@ -120,8 +120,9 @@ describe('projections', () => {
 		for (const themeKey of [
 			'backgroundColor',
 			'backgroundImageId',
+			'backgroundPreset',
 			'backgroundBlur',
-			'cardOpacity',
+			'backgroundGrain',
 			'posterId',
 			'logoId',
 		]) {

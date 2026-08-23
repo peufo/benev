@@ -2,9 +2,6 @@
 	import { page } from '$app/stores'
 	import { Toaster } from 'svelte-sonner'
 	import { MetaTags, JsonLd } from 'svelte-meta-tags'
-	// Import direct plutôt que via `$lib/event`: le baril y tirerait tous les composants
-	// évènement dans le layout racine, donc dans chaque page du site.
-	import { theme } from '$lib/event/theme/state.svelte'
 	import TermsAcceptDialog from '$lib/me/TermsAcceptDialog.svelte'
 	import { transitionX } from 'fuma'
 	import {
@@ -47,10 +44,7 @@
 <!-- On doit forcer un padding supplémentaire de 6 à cause de la marge des drawers -->
 <div
 	class="flex min-h-screen flex-col bg-base-200/20"
-	style="
-		--card-opacity: {theme.cardOpacity ?? 1};
-		padding-right: {transitionX.current + (transitionX.current ? 6 : 0)}px;
-	"
+	style="padding-right: {transitionX.current + (transitionX.current ? 6 : 0)}px;"
 >
 	{@render children?.()}
 </div>

@@ -3,7 +3,7 @@ import { form, getRequestEvent } from '$app/server'
 import { modelEventCreate, modelEventSettings } from '$lib/models'
 import { createLog, jsonOrDbNull, permission, prisma } from '$lib/server'
 import { defaultEmailModels } from '$lib/email/models'
-import { EVENT_TIER } from '$lib/constant'
+import { EVENT_TIER, THEME_PRESETS, type ThemePreset } from '$lib/constant'
 import { diffChanges, hasChanges, projectEvent } from '$lib/log'
 
 /**
@@ -51,6 +51,7 @@ export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issu
 		invalid(issue.name('Les noms ne peuvent pas commencer par "archived_"'))
 
 	const { userId } = session.user
+	const theme: keyof typeof THEME_PRESETS = 'benevio'
 	const event = await prisma.event.create({
 		data: {
 			...data,
@@ -70,6 +71,11 @@ export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issu
 					],
 				},
 			},
+			backgroundPreset: theme,
+			backgroundBlur: THEME_PRESETS[theme].backgroundBlur,
+			backgroundBrightness: THEME_PRESETS[theme].backgroundBrightness,
+			backgroundWhiteness: THEME_PRESETS[theme].backgroundWhiteness,
+			backgroundGrain: THEME_PRESETS[theme].backgroundGrain,
 		},
 	})
 	await prisma.member.create({

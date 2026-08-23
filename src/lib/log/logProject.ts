@@ -1,4 +1,14 @@
+import type { Event } from '@prisma/client'
 import { iso } from './logTypes'
+
+// TODO: utiliser une fonction du genre au lieu de projeter toutes les propriété
+// function pick<T, Keys = (keyof T)[]>(source: T, keys: Keys) {
+// 	const res: Partial<T> = {}
+// 	for (const key of keys) {
+// 		res[key] = source[key]
+// 	}
+// 	return res as { [K in Keys[number]]: T[K] }
+// }
 
 /**
  * Les projections tiennent lieu de liste blanche: ce qu'elles ne rendent pas n'entre jamais dans
@@ -31,35 +41,12 @@ export function projectMemberContact(member: MemberContactSource) {
 }
 export type MemberContactSnapshot = ReturnType<typeof projectMemberContact>
 
-export type EventSource = {
-	id: string
-	name: string
-	description: string | null
-	email: string | null
-	phone: string | null
-	web: string | null
-	facebook: string | null
-	instagram: string | null
-	timezone: string
-	location: PrismaJson.Location | null
-	selfRegisterAllowed: boolean
-	selfSubscribeAllowed: boolean
-	selfSubscribeCancelAllowed: boolean
-	closeSubscribing: Date | string | null
-	overlapPeriodAllowed: number
-	userEmailVerifiedRequired: boolean
-	userAddressRequired: boolean
-	userPhoneRequired: boolean
-	userBirthdayRequired: boolean
-	userAvatarRequired: boolean
-}
-
 /**
  * Identité et règles d'adhésion — ce dont dépend « pourquoi les inscriptions sont fermées ? ».
  * Le thème (couleurs, flou, médias) est écrit par le même formulaire mais reste hors journal:
  * il ne change rien à ce que vivent les bénévoles.
  */
-export function projectEvent(event: EventSource) {
+export function projectEvent(event: Event) {
 	return {
 		id: event.id,
 		name: event.name,
@@ -82,6 +69,13 @@ export function projectEvent(event: EventSource) {
 		userPhoneRequired: event.userPhoneRequired,
 		userBirthdayRequired: event.userBirthdayRequired,
 		userAvatarRequired: event.userAvatarRequired,
+		backgroundColor: event.backgroundColor,
+		backgroundImageId: event.backgroundImageId,
+		backgroundBlur: event.backgroundBlur,
+		backgroundBrightness: event.backgroundBrightness,
+		backgroundWhiteness: event.backgroundWhiteness,
+		backgroundGrain: event.backgroundGrain,
+		backgroundPreset: event.backgroundPreset,
 	}
 }
 export type EventSnapshot = ReturnType<typeof projectEvent>

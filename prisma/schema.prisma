@@ -130,14 +130,14 @@ model Event {
   instagram   String?
 
   // Theme
-  backgroundColor   String  @default("#ffffff")
-  backgroundImageId String? @unique
-  backgroundImage   Media?  @relation(name: "background", fields: [backgroundImageId], references: [id], onDelete: SetNull)
-
-  backgroundBlur       Float @default(0)
-  backgroundBrightness Int   @default(100)
-  backgroundWhiteness  Float @default(0)
-  cardOpacity          Float @default(1)
+  backgroundColor      String  @default("#ffffff")
+  backgroundImageId    String? @unique
+  backgroundImage      Media?  @relation(name: "background", fields: [backgroundImageId], references: [id], onDelete: SetNull)
+  backgroundBlur       Float   @default(0)
+  backgroundBrightness Int     @default(100)
+  backgroundWhiteness  Float   @default(0)
+  backgroundGrain      Float   @default(0)
+  backgroundPreset     String?
 
   logoId   String? @unique
   logo     Media?  @relation(name: "logo", fields: [logoId], references: [id], onDelete: SetNull)

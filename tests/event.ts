@@ -648,17 +648,17 @@ export function useEvent(owner: User, name: string) {
 			// Le thème n'a pas de `defaultValue`: un `reset` mal ordonné y écrirait du vide, que
 			// l'enregistrement suivant graverait en base (`#000000`). On le surveille de bout en bout.
 			const backgroundColor = page.locator('input[name="backgroundColor"]')
-			// « Réinitialiser » remonte la section: le curseur d'opacité est alors récrit, et une
+			// « Réinitialiser » remonte la section: le curseur de grain est alors récrit, et une
 			// valeur posée avant ses bornes se fait arrondir sur la grille par défaut (0–100, pas
 			// de 1). Il retombait ainsi sur son minimum pendant que le nombre affiché, lui, restait
 			// juste.
-			const cardOpacity = page.locator('input[name="n:cardOpacity"]')
+			const backgroundGrain = page.locator('input[name="n:backgroundGrain"]')
 
 			await page.goto(`/${eventId}/admin/settings`)
 			await expect(description).toBeVisible()
 			await expect(saveBar).toBeHidden()
 			await expect(backgroundColor).toHaveValue('#ffffff')
-			await expect(cardOpacity).toHaveValue('1')
+			await expect(backgroundGrain).toHaveValue('0')
 			// Les champs de profil forment leur propre section, titrée par la page et non
 			// plus par `MemberFields`.
 			await expect(page.getByRole('heading', { name: 'Champs du profil' })).toBeVisible()
@@ -673,7 +673,7 @@ export function useEvent(owner: User, name: string) {
 			// l'hydratation sans avoir à la deviner.
 			await expect(async () => {
 				await description.fill('Un centre de recherche appliquée.')
-				await cardOpacity.fill('0.75')
+				await backgroundGrain.fill('0.74')
 				await expect(saveBar).toBeVisible({ timeout: 1000 })
 			}).toPass()
 
@@ -681,7 +681,7 @@ export function useEvent(owner: User, name: string) {
 			await expect(saveBar).toBeHidden()
 			await expect(description).toHaveValue('')
 			await expect(backgroundColor).toHaveValue('#ffffff')
-			await expect(cardOpacity).toHaveValue('1')
+			await expect(backgroundGrain).toHaveValue('0')
 
 			await description.fill('Un centre de recherche appliquée.')
 			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
@@ -692,6 +692,48 @@ export function useEvent(owner: User, name: string) {
 			await page.reload()
 			await expect(description).toHaveValue('Un centre de recherche appliquée.')
 			await expect(backgroundColor).toHaveValue('#ffffff')
+			await expect(saveBar).toBeHidden()
+		},
+		/**
+		 * Un thème pose son image et ses réglages par du code: ni `fields.set()` ni une écriture
+		 * dans l'aperçu n'émettent d'évènement DOM, et la barre de sauvegarde ne surveille que
+		 * ceux-là. Sans l'annonce que le champ caché se fait à lui-même, le choix est bien peint
+		 * à l'écran mais n'atteint jamais le serveur — c'est ce silence que le test ferme.
+		 */
+		async expectThemePresets(page: Page) {
+			const saveBar = page.getByText('Modification en cours !')
+			const preset = page.locator('input[name="backgroundPreset"]')
+			const background = page.locator('.event-background')
+			const noTheme = page.getByRole('radio', { name: 'Aucun' })
+			const papier = page.getByRole('radio', { name: 'Papier' })
+
+			await page.goto(`/${eventId}/admin/settings`)
+			await expect(noTheme).toHaveAttribute('aria-checked', 'true')
+			await expect(preset).toHaveValue('')
+
+			await expect(async () => {
+				await papier.click()
+				await expect(saveBar).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await expect(preset).toHaveValue('papier')
+			await expect(papier).toHaveAttribute('aria-checked', 'true')
+			// L'aperçu suit dans la foulée: le fond du site porte l'image du thème.
+			await expect(background).toHaveAttribute('style', /\/themes\/papier\.svg/)
+
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText('Modifications enregistrées')).toBeVisible()
+			await page.reload()
+			await expect(preset).toHaveValue('papier')
+			await expect(background).toHaveAttribute('style', /\/themes\/papier\.svg/)
+
+			// Et le retrait repasse par la même annonce, sinon la barre resterait muette.
+			await expect(async () => {
+				await noTheme.click()
+				await expect(saveBar).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await expect(preset).toHaveValue('')
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText('Modifications enregistrées')).toBeVisible()
 			await expect(saveBar).toBeHidden()
 		},
 		/**

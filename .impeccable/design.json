@@ -392,7 +392,7 @@
 		"rules": [
 			{
 				"name": "The Theme-Only Rule",
-				"body": "Aucune couleur ne vit en dehors de src/app.css. Pas de hex en dur, pas de palette Tailwind brute (slate, red, emerald), pas d'ajout dans un fichier de config. On utilise primary, secondary, accent, neutral, base-*, les états DaisyUI et leurs variantes d'opacité. S'il manque une couleur, on l'ajoute au bloc @plugin 'daisyui/theme'. Seule exception: les logos src/lib/assets/logo.svg, src/lib/assets/benevio.svg et static/favicon.svg sont servis en <img> et ne peuvent pas hériter de currentColor; leurs hex sont écrits en dur et doivent être tenus à jour avec primary et secondary. Rendue inline dans un composant Svelte, la marque repasse par text-primary / text-secondary et currentColor.",
+				"body": "Aucune couleur ne vit en dehors de src/app.css. Pas de hex en dur, pas de palette Tailwind brute (slate, red, emerald), pas d'ajout dans un fichier de config. On utilise primary, secondary, accent, neutral, base-*, les états DaisyUI et leurs variantes d'opacité. S'il manque une couleur, on l'ajoute au bloc @plugin 'daisyui/theme'. Deux exceptions: les logos src/lib/assets/logo.svg, src/lib/assets/benevio.svg et static/favicon.svg sont servis en <img> et ne peuvent pas hériter de currentColor; leurs hex sont écrits en dur et doivent être tenus à jour avec primary et secondary. Rendue inline dans un composant Svelte, la marque repasse par text-primary / text-secondary et currentColor. Les habillages d'évènement (THEME_PRESETS dans $lib/constant, dégradés de static/themes/) portent aussi des hex, parce qu'ils finissent en colonne de base de données et en background-image; ils se dérivent des tokens fortement dilués et restent clairs, le texte base-content des pages bénévoles se lisant à même ce fond.",
 				"section": "colors"
 			},
 			{
@@ -435,7 +435,8 @@
 			"Do laisser beaucoup d'air autour des sections (py-20 md:py-28 en hero, py-12 md:py-20 en contenu).",
 			"Do préférer des icônes Lucide fines et simples aux icônes MDI chargées.",
 			"Do utiliser secondary comme fond, aplat, bordure ou pastille — jamais comme texte.",
-			"Do tenir les hex des logos SVG (logo.svg, benevio.svg, favicon.svg) alignés sur primary et secondary."
+			"Do tenir les hex des logos SVG (logo.svg, benevio.svg, favicon.svg) alignés sur primary et secondary.",
+			"Do garder les habillages de static/themes/ clairs et dérivés des tokens: le texte des pages bénévoles se lit à même ce fond."
 		],
 		"donts": [
 			"Don't écrire de valeurs hex en dur dans les composants (ex: bg-[#2663eb]).",

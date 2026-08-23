@@ -54,6 +54,57 @@ export const MEDIA_PRESETS = {
 	a1: [594, 841],
 } as const
 
+export type ThemePreset = {
+	label: string
+	image: string
+	backgroundBlur: number
+	backgroundBrightness: number
+	backgroundWhiteness: number
+	backgroundGrain: number
+}
+
+/**
+ * Les habillages prêts à poser d'un évènement. Leurs teintes se dérivent des tokens de la charte
+ * et restent claires: le texte des pages bénévoles se lit à même ce fond. `backgroundColor` porte
+ * la dominante du dégradé — c'est lui qu'on voit tant que l'image n'est pas chargée.
+ */
+export const THEME_PRESETS = {
+	benevio: {
+		label: 'benevio',
+		image: '/themes/benevio.svg',
+		backgroundBlur: 0,
+		backgroundBrightness: 100,
+		backgroundWhiteness: 0,
+		backgroundGrain: 0.8,
+	},
+	papier: {
+		label: 'Papier',
+		image: '/themes/papier.svg',
+		backgroundBlur: 0,
+		backgroundBrightness: 100,
+		backgroundWhiteness: 0,
+		backgroundGrain: 0.7,
+	},
+	prairie: {
+		label: 'Prairie',
+		image: '/themes/prairie.svg',
+		backgroundBlur: 0,
+		backgroundBrightness: 100,
+		backgroundWhiteness: 0,
+		backgroundGrain: 0.35,
+	},
+	crepuscule: {
+		label: 'Crépuscule',
+		image: '/themes/crepuscule.svg',
+		backgroundBlur: 0,
+		backgroundBrightness: 100,
+		backgroundWhiteness: 0,
+		backgroundGrain: 0.4,
+	},
+} satisfies Record<string, ThemePreset>
+
+export type ThemePresetKey = keyof typeof THEME_PRESETS
+
 export const EVENT_STATES: Record<
 	EventState,
 	{ label: string; icon: Component<IconProps>; description: string; class: string }
