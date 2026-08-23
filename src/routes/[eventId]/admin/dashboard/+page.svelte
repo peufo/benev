@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { ClipboardCheckIcon, ExternalLinkIcon, MapPinnedIcon, UsersIcon } from '@lucide/svelte'
+	import {
+		ClipboardCheckIcon,
+		ExternalLinkIcon,
+		MapPinnedIcon,
+		UserPlusIcon,
+		UsersIcon,
+	} from '@lucide/svelte'
 	import Section from '$lib/ui/Section.svelte'
 	import { InputOptionInParam } from '$lib/ui'
 	import { Journal } from '$lib/log'
@@ -9,6 +15,7 @@
 	import DashboardTeams from './DashboardTeams.svelte'
 	import { MEMBERS_VIEWS } from './membersView'
 	import { WAITING, waitingOf } from './waiting'
+	import { tip, urlParam } from 'fuma'
 
 	let { data } = $props()
 
@@ -87,18 +94,30 @@
 	<div class="flex flex-col gap-3">
 		<Section
 			id="members"
-			title={data.membersView === 'without' ? 'Membres sans inscription' : 'Derniers adhérents'}
+			title="Membres"
 			icon={UsersIcon}
 			subtitle="{data.nbMembers} adhérent{plurial(data.nbMembers)} à ce jour"
 			class="border-soft"
 		>
 			{#snippet action()}
-				<InputOptionInParam
-					key="members"
-					defaultValue="last"
-					options={membersOptions}
-					class="ml-auto"
-				/>
+				<div class="flex gap-2 ml-auto">
+					<InputOptionInParam
+						key="members"
+						defaultValue="last"
+						options={membersOptions}
+						class="ml-auto"
+					/>
+					<a
+						type="button"
+						class="btn btn-square btn-sm btn-secondary"
+						href={urlParam.with({ form_invite: '{}' })}
+						data-sveltekit-noscroll
+						data-sveltekit-replacestate
+						use:tip={{ content: 'Inviter des membres' }}
+					>
+						<UserPlusIcon size={20} />
+					</a>
+				</div>
 			{/snippet}
 			<DashboardMembers members={data.members} view={data.membersView} />
 			{@render seeAllLink(membersTableHref, membersTableLabel)}
