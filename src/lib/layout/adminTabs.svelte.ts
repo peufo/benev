@@ -14,10 +14,7 @@ import {
 import { param } from 'fuma'
 import { dev } from '$app/environment'
 import { page } from '$app/state'
-import { SETTINGS_SECTIONS, type SubNavSection } from './adminSubNav.svelte'
 
-// `param` de fuma 2 est un objet runes sans référence à `page`, et n'est plus un store:
-// `derived` laisse place à une fonction qui relit l'état réactif à chaque appel.
 export function adminTabs() {
 	const query = param.without('skip', 'take', 'form_period')
 	const eventId = page.params.eventId
@@ -31,8 +28,6 @@ export function adminTabs() {
 		isActive: boolean
 		label: string
 		icon: typeof LucideIcon
-		/** Sections internes de la page, rendues sous l'onglet quand il est actif. */
-		sections?: SubNavSection[]
 	}[] = [
 		{
 			...getPath('/admin/dashboard'),
@@ -63,7 +58,6 @@ export function adminTabs() {
 			...getPath('/admin/settings'),
 			label: 'Réglages',
 			icon: SettingsIcon,
-			sections: SETTINGS_SECTIONS,
 		},
 		{
 			...getPath('/admin/pages'),

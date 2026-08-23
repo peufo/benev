@@ -665,8 +665,8 @@ export function useEvent(owner: User, name: string) {
 			// La zone de danger vit hors du grand `<form>`: sa confirmation porte le sien.
 			await expect(page.getByRole('heading', { name: 'Zone de danger' })).toBeVisible()
 			await expect(page.getByRole('button', { name: "Supprimer l'évènement" })).toBeVisible()
-			// La navigation de second niveau est rendue par le rail admin, pas par la page.
-			// `:visible` écarte la copie du menu mobile, présente dans le DOM mais repliée.
+			// L'ancre de section est portée par le sommaire de la page, une seule fois.
+			// `:visible`: il est masqué sous `lg`, la fenêtre par défaut est plus large.
 			await expect(page.locator('a[href="#fields"]:visible')).toHaveCount(1)
 
 			// La barre ne suit rien tant que la page n'est pas hydratée: rejouer la saisie attend
