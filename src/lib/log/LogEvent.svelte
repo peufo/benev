@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { EventState } from '@prisma/client'
 	import type { LogTyped } from './logMap'
-	import { eventLabels } from './logLabels'
+	import { eventLabels } from './logProject'
 	import { snippetRef } from './Snippets.svelte'
 	import LogDiff from './LogDiff.svelte'
 

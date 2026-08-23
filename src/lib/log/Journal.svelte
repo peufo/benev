@@ -6,7 +6,7 @@
 	import { page } from '$app/state'
 	import { InputOptionInParam } from '$lib/ui'
 	import Section from '$lib/ui/Section.svelte'
-	import { LOG_FAMILIES } from './logLabels'
+	import { LOG_FAMILIES } from './logFamilies'
 	import { loadPreviousEventLogs } from './log.remote'
 	import Logs from './Logs.svelte'
 	import type { EventJournal } from './journal'

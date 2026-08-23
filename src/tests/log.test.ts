@@ -2,7 +2,7 @@ import { describe, it } from 'vitest'
 import { LogType, type SubscribeState } from '@prisma/client'
 import { logMap } from '$lib/log/logMap'
 import { diffChanges, hasChanges, iso } from '$lib/log/logTypes'
-import { projectEvent, projectMemberContact, projectTeam } from '$lib/log/logProject'
+import { eventLabels, projectEvent, projectMemberContact, projectTeam } from '$lib/log/logProject'
 
 const actor = { userId: 'usr_1', firstName: 'Jean', lastName: 'Rey' }
 
@@ -115,18 +115,18 @@ describe('projections', () => {
 		expect(snapshot.birthday).toBe('1990-05-02T00:00:00.000Z')
 	})
 
-	it("laisse le thème de l'évènement hors du journal", ({ expect }) => {
+	// La table des libellés est la liste blanche: si la projection en sortait, le fil afficherait
+	// une ligne que `LogDiff` ne saurait pas nommer.
+	it("projette exactement les clés que l'évènement sait libeller", ({ expect }) => {
+		expect(Object.keys(projectEvent(anEvent()))).toEqual(Object.keys(eventLabels))
+	})
+
+	it("journalise l'habillage mais laisse les médias dehors", ({ expect }) => {
 		const keys = Object.keys(projectEvent(anEvent()))
-		for (const themeKey of [
-			'backgroundColor',
-			'backgroundImageId',
-			'backgroundPreset',
-			'backgroundBlur',
-			'backgroundGrain',
-			'posterId',
-			'logoId',
-		]) {
-			expect(keys).not.toContain(themeKey)
+		expect(keys).toContain('backgroundPreset')
+		expect(keys).toContain('backgroundColor')
+		for (const mediaKey of ['backgroundImageId', 'posterId', 'logoId']) {
+			expect(keys).not.toContain(mediaKey)
 		}
 	})
 
@@ -206,6 +206,13 @@ function anEvent(overrides: Partial<Parameters<typeof projectEvent>[0]> = {}) {
 		userPhoneRequired: false,
 		userBirthdayRequired: false,
 		userAvatarRequired: false,
+		backgroundPreset: 'benevio',
+		backgroundColor: '#ffffff',
+		backgroundImageId: null,
+		backgroundBlur: 0,
+		backgroundBrightness: 100,
+		backgroundWhiteness: 0,
+		backgroundGrain: 0.8,
 		...overrides,
 	}
 }

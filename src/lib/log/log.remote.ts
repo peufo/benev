@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { form, getRequestEvent, query } from '$app/server'
 import z from 'zod'
 import { createLog, eventLogsWhere, getLogs, permission, prisma } from '$lib/server'
-import { LOG_FAMILIES, type LogFamily } from './logLabels'
+import { LOG_FAMILIES, type LogFamily } from './logFamilies'
 
 /**
  * Les notes sont la seule ligne du journal écrite à la main. Elles vivent dans `$lib/log` et non

@@ -1,20 +1,29 @@
 import type { Event } from '@prisma/client'
 import { iso } from './logTypes'
 
-// TODO: utiliser une fonction du genre au lieu de projeter toutes les propriété
-// function pick<T, Keys = (keyof T)[]>(source: T, keys: Keys) {
-// 	const res: Partial<T> = {}
-// 	for (const key of keys) {
-// 		res[key] = source[key]
-// 	}
-// 	return res as { [K in Keys[number]]: T[K] }
-// }
-
 /**
  * Les projections tiennent lieu de liste blanche: ce qu'elles ne rendent pas n'entre jamais dans
  * le journal. Elles ne rendent que des primitives, pour que la colonne JSON restitue exactement
  * ce que le type annonce.
+ *
+ * Chaque entité déclare sa liste une seule fois, en table `clé -> libellé`: `pick` en tire
+ * l'instantané, `LogDiff` y lit le nom de chaque ligne, et l'ordre de la table est celui du diff.
+ * Journaliser un champ de plus tient donc en une ligne — le `satisfies` refuse une clé que
+ * l'entité ne porte pas, et une clé sans libellé n'entre pas.
+ *
+ * Les valeurs qui demandent une conversion — une date, un lieu, des responsables — sont réécrites
+ * après le `pick`. Leur clé garde sa place dans la table, donc dans l'affichage.
  */
+
+/** Les clés listées, et elles seules. */
+function pick<T extends object, K extends keyof T>(source: T, keys: readonly K[]): Pick<T, K> {
+	return Object.fromEntries(keys.map((key) => [key, source[key]])) as Pick<T, K>
+}
+
+/** `Object.keys` rend des `string`; la table, elle, sait exactement ce qu'elle porte. */
+function keysOf<T extends object>(labels: T): (keyof T)[] {
+	return Object.keys(labels) as (keyof T)[]
+}
 
 export type MemberContactSource = {
 	firstName: string
@@ -27,55 +36,68 @@ export type MemberContactSource = {
 	city: string | null
 }
 
+export const memberContactLabels = {
+	firstName: 'Prénom',
+	lastName: 'Nom',
+	email: 'Email',
+	phone: 'Téléphone',
+	birthday: 'Date de naissance',
+	street: 'Rue',
+	zipCode: 'NPA',
+	city: 'Localité',
+} satisfies Partial<Record<keyof MemberContactSource, string>>
+
 export function projectMemberContact(member: MemberContactSource) {
 	return {
-		firstName: member.firstName,
-		lastName: member.lastName,
-		email: member.email ?? null,
-		phone: member.phone ?? null,
+		...pick(member, keysOf(memberContactLabels)),
 		birthday: iso(member.birthday),
-		street: member.street ?? null,
-		zipCode: member.zipCode ?? null,
-		city: member.city ?? null,
 	}
 }
 export type MemberContactSnapshot = ReturnType<typeof projectMemberContact>
 
 /**
- * Identité et règles d'adhésion — ce dont dépend « pourquoi les inscriptions sont fermées ? ».
- * Le thème (couleurs, flou, médias) est écrit par le même formulaire mais reste hors journal:
- * il ne change rien à ce que vivent les bénévoles.
+ * Identité, règles d'adhésion et habillage: tout ce que le formulaire de réglages écrit, sauf les
+ * médias. `backgroundImageId` en est absent pour la raison qui vaut partout ici — un cuid ne se
+ * lit pas dans un diff — et le journal ne suit pas les médias.
  */
-export function projectEvent(event: Event) {
+export const eventLabels = {
+	id: 'Adresse',
+	name: 'Nom',
+	description: 'Description',
+	email: 'Email',
+	phone: 'Téléphone',
+	web: 'Site web',
+	facebook: 'Facebook',
+	instagram: 'Instagram',
+	timezone: 'Fuseau horaire',
+	location: 'Lieu',
+	selfRegisterAllowed: 'Adhésion libre',
+	selfSubscribeAllowed: 'Inscription libre',
+	selfSubscribeCancelAllowed: 'Annulation libre',
+	closeSubscribing: 'Clôture des inscriptions',
+	overlapPeriodAllowed: 'Chevauchement toléré (min)',
+	userEmailVerifiedRequired: 'Email vérifié requis',
+	userAddressRequired: 'Adresse requise',
+	userPhoneRequired: 'Téléphone requis',
+	userBirthdayRequired: 'Date de naissance requise',
+	userAvatarRequired: 'Photo requise',
+	backgroundPreset: 'Thème',
+	backgroundColor: 'Couleur de fond',
+	backgroundBlur: 'Flou du fond',
+	backgroundBrightness: 'Brillance du fond',
+	backgroundWhiteness: 'Blanchissement du fond',
+	backgroundGrain: 'Grain du fond',
+} satisfies Partial<Record<keyof Event, string>>
+
+/** Ce que la projection lit, et rien de plus — un `Event` complet le satisfait. */
+export type EventSource = Pick<Event, keyof typeof eventLabels>
+
+export function projectEvent(event: EventSource) {
 	return {
-		id: event.id,
-		name: event.name,
-		description: event.description ?? null,
-		email: event.email ?? null,
-		phone: event.phone ?? null,
-		web: event.web ?? null,
-		facebook: event.facebook ?? null,
-		instagram: event.instagram ?? null,
-		timezone: event.timezone,
+		...pick(event, keysOf(eventLabels)),
+		closeSubscribing: iso(event.closeSubscribing),
 		// Réduit à son libellé: les coordonnées ne se lisent pas dans un diff.
 		location: event.location?.label ?? null,
-		selfRegisterAllowed: event.selfRegisterAllowed,
-		selfSubscribeAllowed: event.selfSubscribeAllowed,
-		selfSubscribeCancelAllowed: event.selfSubscribeCancelAllowed,
-		closeSubscribing: iso(event.closeSubscribing),
-		overlapPeriodAllowed: event.overlapPeriodAllowed,
-		userEmailVerifiedRequired: event.userEmailVerifiedRequired,
-		userAddressRequired: event.userAddressRequired,
-		userPhoneRequired: event.userPhoneRequired,
-		userBirthdayRequired: event.userBirthdayRequired,
-		userAvatarRequired: event.userAvatarRequired,
-		backgroundColor: event.backgroundColor,
-		backgroundImageId: event.backgroundImageId,
-		backgroundBlur: event.backgroundBlur,
-		backgroundBrightness: event.backgroundBrightness,
-		backgroundWhiteness: event.backgroundWhiteness,
-		backgroundGrain: event.backgroundGrain,
-		backgroundPreset: event.backgroundPreset,
 	}
 }
 export type EventSnapshot = ReturnType<typeof projectEvent>
@@ -88,12 +110,18 @@ export type TeamSource = {
 	leaders?: { firstName: string; lastName: string }[]
 }
 
+export const teamLabels = {
+	name: 'Nom',
+	description: 'Description',
+	closeSubscribing: 'Clôture des inscriptions',
+	overflowPermitted: 'Sur-inscription autorisée',
+	leaders: 'Responsables',
+} satisfies Partial<Record<keyof TeamSource, string>>
+
 export function projectTeam(team: TeamSource) {
 	return {
-		name: team.name,
-		description: team.description ?? null,
+		...pick(team, keysOf(teamLabels)),
 		closeSubscribing: iso(team.closeSubscribing),
-		overflowPermitted: team.overflowPermitted,
 		// Les noms plutôt que les ids: un diff de cuid ne se lit pas.
 		leaders: (team.leaders ?? []).map(({ firstName, lastName }) => `${firstName} ${lastName}`),
 	}

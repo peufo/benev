@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { LogTyped } from './logMap'
-	import { memberContactLabels } from './logLabels'
+	import { memberContactLabels } from './logProject'
 	import { snippetRef } from './Snippets.svelte'
 	import LogDiff from './LogDiff.svelte'
 

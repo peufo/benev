@@ -1,4 +1,4 @@
-import type { LogFamily } from './logLabels'
+import type { LogFamily } from './logFamilies'
 import type { LogWithEvent } from './logTypes'
 
 /**

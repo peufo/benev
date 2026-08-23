@@ -7,7 +7,7 @@ import {
 	LOG_FAMILY_KEYS,
 	LOG_TYPES_FOR_EVENT,
 	type LogFamily,
-} from '$lib/log/logLabels'
+} from '$lib/log/logFamilies'
 import type { EventJournal } from '$lib/log/journal'
 import type { LogOutput } from '$lib/log/logTypes'
 import { prisma } from './prisma'
