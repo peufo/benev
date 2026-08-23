@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MapPinPlusIcon, MoveVerticalIcon, SearchIcon } from '@lucide/svelte'
+	import { MoveVerticalIcon, PlusIcon, SearchIcon } from '@lucide/svelte'
 	import { isHttpError } from '@sveltejs/kit'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { page } from '$app/state'
@@ -170,7 +170,7 @@
 				data-sveltekit-replacestate
 				use:tip={{ content: 'Nouveau secteur' }}
 			>
-				<MapPinPlusIcon size={20} />
+				<PlusIcon size={20} />
 			</a>
 		{/if}
 	</div>
