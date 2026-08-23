@@ -128,7 +128,7 @@
 				: ' à votre charge'} · {nbPeriods} période{plurial(nbPeriods)}"
 		>
 			<DashboardTeams teams={data.teams} />
-			{@render seeAllLink(`${$eventPath}/teams`, teamsPageLabel)}
+			{@render seeAllLink(`${$eventPath}/admin/teams`, teamsPageLabel)}
 		</Section>
 	</div>
 

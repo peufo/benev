@@ -17,7 +17,7 @@
 <section>
 	<h3>Les secteurs</h3>
 	<p>
-		<a href="{$eventPath}/teams">Crée des secteurs</a>
+		<a href="{$eventPath}/admin/teams">Crée des secteurs</a>
 		et nomme leurs responsables.<br />
 
 		Tu pourras ensuite gérer les périodes de travail depuis la page dédiée à chaque secteur ou

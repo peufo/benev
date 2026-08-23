@@ -1,20 +1,11 @@
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
-import {
-	permission,
-	prisma,
-	parseFormKey,
-	getTeam,
-	getPeriodForm,
-	getMilestoneForm,
-	getPlanData,
-} from '$lib/server'
+import { permission, prisma, getPeriodForm, getMilestoneForm, getPlanData } from '$lib/server'
 
 export const load = async ({ locals, url, untrack, params: { eventId } }) => {
 	const member = await permission.leader(eventId, locals)
 
-	const { form_team, form_period, form_milestone } = parseQuery(url, {
-		form_team: z.string().optional(),
+	const { form_period, form_milestone } = parseQuery(url, {
 		form_period: z.string().optional(),
 		form_milestone: z.string().optional(),
 	})
@@ -27,7 +18,6 @@ export const load = async ({ locals, url, untrack, params: { eventId } }) => {
 			select: { id: true, name: true },
 			orderBy: { name: 'asc' },
 		}),
-		team: await parseFormKey(form_team, (id) => getTeam(id, { member }).catch(() => null)),
 		period: await getPeriodForm(form_period),
 		milestone: await getMilestoneForm(form_milestone, eventId),
 	}

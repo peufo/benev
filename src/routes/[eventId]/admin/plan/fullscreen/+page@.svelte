@@ -49,6 +49,6 @@
 	{/if}
 </div>
 
-<DrawersForm event={data.member.event} team={data.team} period={data.period || {}} />
+<DrawersForm event={data.member.event} period={data.period || {}} />
 
 <MilestoneDrawer milestone={data.milestone} />

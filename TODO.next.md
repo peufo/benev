@@ -12,7 +12,15 @@
 
 - [ ] Sur le profile de membre, mettre en avant les champs requis avec une information manquante. (profile + info de contact)
 
-- [ ] La liste d'administration des secteurs doit être revue car les cartes extensible ne sont pas très adapté pour de l'admin. Mais c'est ok pour la vue publique. Il faut donc deux page distinct qui liste les secteurs. Une publique, et une pour l'admin.
-  - [ ] Sur la gauche, la liste des secteurs plutôt dense. If faut la possibilité de filtrer en faisant un recherche. Les secteurs dont on est responsable doivent être mise en avant par rapport aux autres. Sachant qu'un responsable n'as qu'un droit de lecture sur les autres secteurs.
-  - [ ] Quand un secteur est selectionné ([eventId]/admin/teams/[teamId]), on affiche toute ses infos ainsi que la liste de ses périodes
-  - [ ] Sur mobile la surface listant les secteurs ne peut pas s'afficher en même temps que le secteur séléctionné. La navigation ([eventId]/admin/teams <-> [eventId]/admin/teams/[teamId]) doit donc être agréable
+- [ ] Abandonner le chantier entamé lié au Gift benev/prisma/schema.prisma:469 et nettoyer le code mort qui est lié
+
+- [ ] Réaliser un audite de sécurité
+
+- [ ] Revoir le layout de /admin/teams/[teamId]
+  - [ ] Formulaire
+  - [ ] Globale
+  - [ ] Drawer (le passer en overlay)
+
+- [ ] Revoir le layout de /admin/members/[memberId] sur écran large
+
+- [ ] Questionner la pertinence de la liste des secteurs dans le dashboard benev/src/routes/[eventId]/admin/dashboard/+page.svelte:124

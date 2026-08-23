@@ -201,7 +201,7 @@
 
 <!-- TODO: WHY THIS IS NOT IN /[eventId]/admin ???? -->
 {#if data.member?.roles.includes('leader')}
-	<DrawersForm event={data.event} team={data.team} period={data.period || {}} tag={data.tag} />
+	<DrawersForm event={data.event} period={data.period || {}} tag={data.tag} />
 
 	<Drawer
 		key="form_field"

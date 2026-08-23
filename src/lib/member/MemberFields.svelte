@@ -58,10 +58,12 @@
 				{/if}
 			</span>
 
+			<!-- La poignée garde sa place dans la ligne, seule son encre suit le survol. Un écran
+			     n'en a pas à offrir: sous un pointeur grossier elle reste visible. -->
 			<span
 				class={[
 					'drag-button btn btn-sm btn-square btn-ghost ml-auto',
-					'opacity-0 group-hover:opacity-100',
+					'opacity-0 group-hover:opacity-100 pointer-coarse:opacity-100',
 				]}
 			>
 				<MoveVerticalIcon class="text-base-content/70" />

@@ -19,9 +19,11 @@
 	interface Props {
 		conditions?: MemberCondition[]
 		memberFields: Field[]
+		/** Les conditions se soumettent par un input caché, qui n'émet aucun évènement DOM. */
+		onchange?: () => void
 	}
 
-	let { conditions: initialConditions = [], memberFields }: Props = $props()
+	let { conditions: initialConditions = [], memberFields, onchange }: Props = $props()
 
 	// Le tableau vient de `page.data`: ce n'est pas un proxy `$state`, écrire dans une condition
 	// existante passerait donc inaperçu. On en prend une copie réactive — le formulaire se soumet
@@ -42,6 +44,13 @@
 			console.error(err)
 		}
 	}, 300)
+
+	// Lire la sérialisation abonne l'effet à toute écriture, y compris dans une condition déjà
+	// présente: c'est le seul signal qu'un parent puisse recevoir de ce champ caché.
+	$effect(() => {
+		void serializedConditions
+		onchange?.()
+	})
 
 	$effect(() => {
 		if (!conditions.length || !browser) return

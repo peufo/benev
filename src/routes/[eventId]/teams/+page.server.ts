@@ -6,14 +6,10 @@ import { isMemberAllowed } from '$lib/member'
 import type { Period } from '@prisma/client'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
-	const { search, range, onlyAvailable, teams_order } = parseQuery(url, {
+	const { search, range, onlyAvailable } = parseQuery(url, {
 		search: z.string().nullish(),
 		range: filterRange,
 		onlyAvailable: filterBoolean,
-		teams_order: z
-			.string()
-			.nullish()
-			.transform((v) => !!v),
 	})
 
 	const { member, event } = await parent()
@@ -73,14 +69,5 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 				.map((team) => ({ ...team, periods: team.periods.filter((p) => !p.isComplete) }))
 		})
 
-	const allTeams =
-		teams_order && member?.roles.includes('admin')
-			? await prisma.team.findMany({
-					where: { eventId },
-					select: { id: true, name: true },
-					orderBy: { position: 'asc' },
-				})
-			: []
-
-	return { teams, allTeams, teamsHiddenCount }
+	return { teams, teamsHiddenCount }
 }

@@ -1,15 +1,14 @@
 import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
-import { getTeam, prisma, getMemberProfile, parseFormKey, getPeriodForm } from '$lib/server'
+import { prisma, getMemberProfile, parseFormKey, getPeriodForm } from '$lib/server'
 import { eventMetaTags } from '$lib/seo'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const { user } = await parent()
 	const userId = user?.id || ''
 	try {
-		const { form_team, form_field, form_period, form_tag } = parseQuery(url, {
-			form_team: z.string().optional(),
+		const { form_field, form_period, form_tag } = parseQuery(url, {
 			form_field: z.string().optional(),
 			form_period: z.string().optional(),
 			form_tag: z.string().optional(),
@@ -59,7 +58,6 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 			field: await parseFormKey(form_field, (id) =>
 				prisma.field.findUnique({ where: { id, eventId } })
 			),
-			team: await parseFormKey(form_team, (id) => getTeam(id, { member, event }).catch(() => null)),
 			period: await getPeriodForm(form_period),
 			tag: await parseFormKey(form_tag, (id) => prisma.tag.findUnique({ where: { id, eventId } })),
 		}

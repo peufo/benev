@@ -14,7 +14,7 @@
 		{#each teams as team (team.id)}
 			<li class="flex items-center gap-3 py-1 border-b border-soft last:border-0">
 				<a
-					href="{$eventPath}/teams?section={team.id}"
+					href="{$eventPath}/admin/teams/{team.id}"
 					class="link link-hover text-sm truncate min-w-0"
 				>
 					{team.name}

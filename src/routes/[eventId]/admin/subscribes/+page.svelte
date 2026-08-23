@@ -130,7 +130,7 @@
 {/snippet}
 
 {#snippet teamCell(subscribe: Subscribe)}
-	<a href="{$eventPath}/teams?section={subscribe.period.teamId}" class="link link-hover">
+	<a href="{$eventPath}/admin/teams/{subscribe.period.teamId}" class="link link-hover">
 		{subscribe.period.team.name}
 	</a>
 {/snippet}
@@ -142,7 +142,7 @@
 {#snippet periodCell(subscribe: Subscribe)}
 	{@const duration = dayjs(subscribe.period.end).diff(subscribe.period.start, 'minutes')}
 	<a
-		href="{$eventPath}/teams?section={subscribe.period.teamId}&form_period={subscribe.periodId}"
+		href="{$eventPath}/admin/teams/{subscribe.period.teamId}?form_period={subscribe.periodId}"
 		class="link link-hover whitespace-nowrap"
 	>
 		{formatRange(subscribe.period)}

@@ -695,71 +695,93 @@ export function useEvent(owner: User, name: string) {
 			await expect(saveBar).toBeHidden()
 		},
 		/**
-		 * L'état d'un `form()` distant vit dans son module et survit à la fermeture du tiroir:
+		 * L'état d'un `form()` distant vit dans son module et survit au démontage du formulaire:
 		 * sans une instance par secteur, ce qui a été saisi sur l'un se retrouve sur le suivant,
 		 * par-dessus ses vraies valeurs. Voir AGENTS.md, « L'état d'un formulaire vit dans son
-		 * module ».
+		 * module ». La barre de sauvegarde ferme la première porte — quitter un secteur modifié
+		 * est refusé — et l'instance par secteur la seconde, une fois la saisie abandonnée.
 		 */
 		async expectTeamFormStateIsPerTeam(page: Page) {
 			const newTeamLink = page.locator('a[href*="form_team=%7B%7D"]')
 			const newDrawer = page.getByRole('dialog', { name: 'Nouveau secteur' })
-			const editDrawer = page.getByRole('dialog', { name: 'Modifier le secteur' })
-			const name = page.getByLabel('Nom du secteur')
+			// Le tiroir de création s'ouvre par-dessus le formulaire de la page: les deux portent les
+			// mêmes libellés, et chaque locator doit dire duquel il parle.
+			const pageForm = page.locator('#team')
+			const name = pageForm.getByLabel('Nom du secteur')
 			// `InputBoolean` réduit la vraie case à `w-0`: on clique le libellé qui l'enveloppe,
 			// et on lit l'état sur la case qu'il contient.
-			const overflow = page.locator('label').filter({ hasText: "Mode liste d'attente" })
-			// Le lien crayon n'a pas de nom accessible: on le vise par son href, dans la carte du
-			// secteur — l'ordre des cartes ne décide de rien.
-			const editLink = (teamName: string) =>
-				page
-					.locator('section')
-					.filter({ has: page.getByRole('heading', { name: teamName, exact: true }) })
-					.last()
-					.locator('a[href*="form_team="]')
+			const overflow = pageForm.locator('label').filter({ hasText: "Mode liste d'attente" })
+			const saveBar = page.getByText('Modification en cours !')
+			// La ligne du volet gauche porte le nom du secteur suivi de sa jauge: le nom seul suffit
+			// à la désigner, l'ordre de la liste ne décidant de rien.
+			const teamLink = (teamName: string) =>
+				page.locator('aside').getByRole('link', { name: teamName })
 
 			const createTeam = async (teamName: string) => {
 				await newTeamLink.first().click()
 				await expect(newDrawer).toBeVisible()
+				const newName = newDrawer.getByLabel('Nom du secteur')
 				// Le secteur précédemment créé ne doit pas prégarnir le suivant.
-				await expect(name).toHaveValue('')
+				await expect(newName).toHaveValue('')
 				// Saisi avant l'hydratation, le nom serait écrasé par le rendu client, qui repose
 				// la valeur initiale du champ.
 				await expect(async () => {
-					await name.fill(teamName)
-					await expect(name).toHaveValue(teamName, { timeout: 1000 })
+					await newName.fill(teamName)
+					await expect(newName).toHaveValue(teamName, { timeout: 1000 })
 				}).toPass()
-				await page.getByRole('button', { name: 'Valider', exact: true }).click()
-				// Le tiroir se ferme par `goto`, côté client: sans hydratation la soumission native
-				// re-rendrait la page avec son paramètre, et le tiroir resterait ouvert. La suite
-				// du test observe donc bien l'application hydratée.
+				await newDrawer.getByRole('button', { name: 'Valider', exact: true }).click()
+				// La création referme le tiroir et ouvre le secteur: sans hydratation la soumission
+				// native re-rendrait la page avec son paramètre. La suite observe donc bien
+				// l'application hydratée.
 				await expect(newDrawer).toBeHidden()
+				await expect(name).toHaveValue(teamName)
 			}
 
-			await page.goto(`/${eventId}/teams`)
+			await page.goto(`/${eventId}/admin/teams`)
+
+			// Le filtre du volet gauche est purement client: le voir répondre attend l'hydratation
+			// sans avoir à la deviner. Sans elle, le nom saisi dans le tiroir serait écrasé par le
+			// premier rendu client, qui repose la valeur initiale du champ.
+			const searchTeams = page.getByLabel('Rechercher un secteur')
+			await expect(async () => {
+				await searchTeams.fill('zzz')
+				await expect(page.getByText('Aucun secteur trouvé')).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await searchTeams.fill('')
+
 			await createTeam('Alpha')
 			await createTeam('Bravo')
 
-			// Alpha: on touche aux deux champs, et on referme sans valider.
-			await editLink('Alpha').click()
-			await expect(editDrawer).toBeVisible()
+			// Alpha: on touche aux deux champs, et on tente de le quitter sans valider.
+			await teamLink('Alpha').click()
 			await expect(name).toHaveValue('Alpha')
+			await expect(saveBar).toBeHidden()
 			await expect(overflow.locator('input')).not.toBeChecked()
 			await overflow.click()
 			await expect(overflow.locator('input')).toBeChecked()
 			await name.fill('Alpha modifié mais pas validé')
-			await page.keyboard.press('Escape')
-			await expect(editDrawer).toBeHidden()
+			await expect(saveBar).toBeVisible()
 
-			// Bravo: le tiroir affiche Bravo, pas la saisie abandonnée sur Alpha.
-			await editLink('Bravo').click()
-			await expect(editDrawer).toBeVisible()
+			// La barre retient le départ: le volet de gauche ne quitte pas un secteur dont la
+			// saisie n'est pas tranchée.
+			await teamLink('Bravo').click()
+			await expect(name).toHaveValue('Alpha modifié mais pas validé')
+
+			// Réinitialiser rend le formulaire à l'enregistrement, et rouvre le passage.
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+			await expect(name).toHaveValue('Alpha')
+			await expect(overflow.locator('input')).not.toBeChecked()
+
+			// Bravo: le volet affiche Bravo, pas la saisie abandonnée sur Alpha.
+			await teamLink('Bravo').click()
 			await expect(name).toHaveValue('Bravo')
 			await expect(overflow.locator('input')).not.toBeChecked()
 
-			// Et l'abandon n'a rien enregistré non plus.
-			await page.keyboard.press('Escape')
-			await expect(editDrawer).toBeHidden()
-			await expect(page.getByRole('heading', { name: 'Alpha', exact: true })).toBeVisible()
+			// Et l'abandon n'a rien enregistré non plus: revenir sur Alpha le repart du serveur.
+			await teamLink('Alpha').click()
+			await expect(name).toHaveValue('Alpha')
+			await expect(overflow.locator('input')).not.toBeChecked()
 		},
 	}
 }

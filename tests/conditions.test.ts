@@ -61,7 +61,7 @@ test.describe.serial('Conditions de secteur', () => {
 	// Le compteur passe par une remote query, et son échec est avalé par un `console.error`:
 	// seule une valeur juste prouve qu'elle répond.
 	test("L'aperçu compte les membres retenus", async () => {
-		await page.goto(`/${event.eventId}/teams?form_team=%7B%7D`)
+		await page.goto(`/${event.eventId}/admin/teams?form_team=%7B%7D`)
 		await expect(page.getByText('Visible pour tous les membres')).toBeVisible()
 
 		await expect(async () => {
@@ -73,12 +73,12 @@ test.describe.serial('Conditions de secteur', () => {
 
 		// Le tiroir garde sa copie tant qu'il reste monté: on le referme pour que le test
 		// suivant reparte d'un secteur vierge.
-		await page.goto(`/${event.eventId}/teams`)
+		await page.goto(`/${event.eventId}/admin/teams`)
 		await expect(page.getByRole('dialog')).toHaveCount(0)
 	})
 
 	test('Création du secteur avec deux conditions', async () => {
-		await page.goto(`/${event.eventId}/teams?form_team=%7B%7D`)
+		await page.goto(`/${event.eventId}/admin/teams?form_team=%7B%7D`)
 
 		// Le menu ne s'ouvre qu'une fois la page hydratée. Rejouer le couple ouverture/choix
 		// l'attend sans avoir à le deviner: tant que le choix échoue, aucune condition n'a
@@ -109,13 +109,18 @@ test.describe.serial('Conditions de secteur', () => {
 	})
 
 	test('Réouverture: les valeurs enregistrées sont restituées', async () => {
-		await page.goto(`/${event.eventId}/teams`)
-		// Le crayon d'édition n'a pas de nom accessible: on le vise par son href.
-		await page.locator('a[href*="form_team="]:not([href*="%7B%7D"])').first().click()
-		await expect(page.getByRole('dialog', { name: /Modifier le secteur/ })).toBeVisible()
+		await page.goto(`/${event.eventId}/admin/teams`)
+		await page
+			.getByRole('link', { name: /Secteur Cond/ })
+			.first()
+			.click()
+		await expect(page.getByLabel('Nom du secteur')).toHaveValue('Secteur Cond')
 
 		await expect(page.getByLabel('Âge minimum')).toHaveValue('18')
 		await expect(page.getByLabel('Valeur')).toHaveValue('Lyon')
+		// Rien n'a été touché: la barre de sauvegarde reste muette. Un champ caché qui ne
+		// s'accorderait pas avec l'enregistrement chargé la ferait apparaître à l'arrivée.
+		await expect(page.getByText('Modification en cours !')).toBeHidden()
 		editUrl = page.url()
 	})
 
@@ -125,14 +130,14 @@ test.describe.serial('Conditions de secteur', () => {
 		await fillCondition(page, page.getByLabel('Âge minimum'), '25', /"args":25/)
 		await fillCondition(page, page.getByLabel('Valeur'), 'Paris', /"expectedValue":"Paris"/)
 
-		await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
-		// Le tiroir ne se referme qu'au succès: c'est lui, et non le secteur déjà listé, qui
-		// prouve que l'écriture est partie avant qu'on aille la relire.
-		await expect(page.getByRole('dialog', { name: /Modifier le secteur/ })).toBeHidden()
+		// Le secteur s'édite en place: l'enregistrement passe par la barre de sauvegarde.
+		await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+		// Le toast de succès, et non le secteur déjà listé, prouve que l'écriture est partie avant
+		// qu'on aille la relire.
+		await expect(page.getByText('Succès')).toBeVisible()
 
+		// Rechargement complet: l'état du `form()` repart de zéro, les valeurs viennent du serveur.
 		await page.goto(editUrl)
-		await expect(page.getByRole('dialog', { name: /Modifier le secteur/ })).toBeVisible()
-
 		await expect(page.getByLabel('Âge minimum')).toHaveValue('25')
 		await expect(page.getByLabel('Valeur')).toHaveValue('Paris')
 	})

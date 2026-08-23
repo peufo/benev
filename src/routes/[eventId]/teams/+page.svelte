@@ -1,10 +1,7 @@
 <script lang="ts">
-	import { MapPinPlusIcon, ShuffleIcon } from '@lucide/svelte'
 	import { onMount } from 'svelte'
 	import { InputSearch } from '$lib/ui'
-	import { RangePickerButton, tip } from 'fuma'
-	import { Drawer } from 'fuma'
-	import { urlParam } from 'fuma'
+	import { RangePickerButton, urlParam } from 'fuma'
 
 	import { Teams, ToggleOnlyAvailable } from '$lib/team'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -13,7 +10,6 @@
 	import { goto } from '$app/navigation'
 	import { eventPath } from '$lib/store'
 	import { page } from '$app/stores'
-	import TeamsOrder from '$lib/team/TeamsOrder.svelte'
 	import TeamsStats from './TeamsStats.svelte'
 
 	let { data } = $props()
@@ -55,27 +51,6 @@
 			<div class="grow"></div>
 			<RangePickerButton key="range" />
 			<ToggleOnlyAvailable />
-
-			{#if data.member?.roles.includes('admin')}
-				<a
-					href={urlParam.with({ teams_order: 1 })}
-					class="btn btn-sm btn-square btn-secondary"
-					data-sveltekit-noscroll
-					data-sveltekit-replacestate
-					use:tip={{ content: "Modifier l'ordre des secteur" }}
-				>
-					<ShuffleIcon size={16} />
-				</a>
-				<a
-					href={urlParam.with({ form_team: '{}' })}
-					class="btn btn-sm btn-square btn-secondary"
-					data-sveltekit-noscroll
-					data-sveltekit-replacestate
-					use:tip={{ content: 'Nouveau secteur' }}
-				>
-					<MapPinPlusIcon size={20} />
-				</a>
-			{/if}
 		</div>
 
 		<TeamsStats teams={data.teams} />
@@ -115,15 +90,3 @@
 </dialog>
 
 <ThanksDialog bind:this={thanksDialog} />
-
-{#if data.member?.roles.includes('admin')}
-	<Drawer
-		key="teams_order"
-		title="Ordre des secteurs"
-		class="surface-drawer"
-		classBody="my-4"
-		maxWidth="350px"
-	>
-		<TeamsOrder teams={data.allTeams} />
-	</Drawer>
-{/if}

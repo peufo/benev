@@ -40,7 +40,7 @@ export function adminTabs() {
 			icon: LayoutDashboardIcon,
 		},
 		{
-			...getPath('/teams'),
+			...getPath('/admin/teams'),
 			label: 'Secteurs',
 			icon: MapPinnedIcon,
 		},

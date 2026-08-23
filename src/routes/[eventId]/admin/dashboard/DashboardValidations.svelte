@@ -34,7 +34,7 @@
 				<MemberCell member={subscribe.member} />
 				<div class="flex gap-2 ml-auto items-center">
 					<a
-						href="{$eventPath}/teams?section={subscribe.period.teamId}"
+						href="{$eventPath}/admin/teams/{subscribe.period.teamId}"
 						class="link link-hover text-sm"
 					>
 						{subscribe.period.team.name}

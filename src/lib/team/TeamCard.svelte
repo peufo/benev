@@ -7,7 +7,6 @@
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
 	import { CardCollapse, Placeholder } from '$lib/ui'
 
-	import TeamActions from './TeamActions.svelte'
 	import TeamLeaders from './TeamLeaders.svelte'
 	import { PeriodRow } from '$lib/period'
 	import { MemberConditionsBadges } from '$lib/member'
@@ -72,11 +71,6 @@
 				<div class="flex gap-2 gap-y-1 flex-wrap">
 					<!-- BADGE LEADERS -->
 					<TeamLeaders leaders={team.leaders} />
-					{#if team.isLeader}
-						<div class="flex gap-2 ml-auto">
-							<TeamActions {team} />
-						</div>
-					{/if}
 				</div>
 			</div>
 		</div>

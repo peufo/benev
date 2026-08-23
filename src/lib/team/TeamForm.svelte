@@ -1,95 +1,72 @@
-<script lang="ts" module>
-	export type TeamFormInstance = {
-		update: (
-			updater: (team: Partial<TeamWithComputedValues>) => Partial<TeamWithComputedValues>
-		) => void
-	}
-</script>
-
 <script lang="ts">
-	import type { Event, Field } from '@prisma/client'
-	import { CopyPlus } from '@lucide/svelte'
+	import type { Event, Field, Team } from '@prisma/client'
 	import { page } from '$app/state'
-	import { toast } from 'svelte-sonner'
-	import { ButtonDelete, InputBoolean, InputString, InputTextarea, tip } from 'fuma'
+	import { InputBoolean, InputString, InputTextarea } from 'fuma'
 
 	import { MemberConditions } from '$lib/member'
 	import { enhanceForm } from '$lib/enhanceForm'
+	import { SaveBar } from '$lib/ui'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
 	import type { TeamWithComputedValues } from '$lib/server'
-	import { cloneTeamForm, createTeam, deleteTeam, updateTeam } from './team.remote'
+	import { createTeam, updateTeam } from './team.remote'
+	import { registerTeamForm } from './teamFormActive.svelte'
 
 	interface Props {
 		class?: string
 		event: Event & { memberFields: Field[] }
 		team?: Partial<TeamWithComputedValues>
-		teamForm?: TeamFormInstance | undefined
-		onsuccess?: () => void
+		/**
+		 * Barre flottante à la première retouche, au lieu du bouton de validation. Le secteur
+		 * s'édite alors là où il s'affiche, sans étape de bascule.
+		 */
+		saveBar?: boolean
+		oncreated?: (team: Team) => void
+		onupdated?: (team: Team) => void
 	}
 
 	let {
 		class: klass = '',
 		event,
 		team = $bindable({}),
-		teamForm = $bindable(undefined),
-		onsuccess,
+		saveBar = false,
+		oncreated,
+		onupdated,
 	}: Props = $props()
 
-	const uid = $props.id()
-	const deleteFormId = `${uid}-delete`
-	const cloneFormId = `${uid}-clone`
-	const remoteForm = $derived(team.id ? updateTeam.for(team.id) : createTeam.for(uid))
+	const formId = $props.id()
+
+	// Une instance par secteur édité: le formulaire de la page et celui du tiroir de création
+	// peuvent être montés en même temps, et passer d'un secteur au suivant ne doit rien traîner.
+	const remoteForm = $derived(team.id ? updateTeam.for(team.id) : createTeam.for(formId))
 
 	// `DrawersForm` s'en sert pour injecter un responsable fraîchement invité.
-	teamForm = {
-		update(updater) {
-			team = updater(team)
-		},
-	}
+	registerTeamForm((updater) => (team = updater(team)))
 
-	function confirmDelete() {
-		const nb = team.nbSubscribes || 0
-		if (nb === 0) return true
-		const msg = [
-			`Ce secteur contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
-			'Es-tu certain de vouloir le supprimer ?',
-		].join('\n')
-		if (confirm(msg)) return true
-		toast.info('Suppession du secteur annulée !')
-		return false
-	}
+	let formElement = $state<HTMLFormElement>()
+	let bar = $state<ReturnType<typeof SaveBar>>()
+	// Remonte les responsables et les conditions, dont la sélection vit dans le composant: le
+	// `reset()` natif ne restaure que les `defaultValue` du DOM.
+	let resetToken = $state(0)
 </script>
 
-{#if team.id}
-	<!-- HTML interdit les <form> imbriqués: ces formulaires ne portent que les champs cachés, leurs
-	boutons vivent dans la barre d'actions du formulaire principal, associés par l'attribut `form`. -->
-	<form
-		{...deleteTeam.enhance(
-			enhanceForm({
-				before: confirmDelete,
-				success: 'Secteur supprimé',
-				onsuccess: () => onsuccess?.(),
-			})
-		)}
-		id={deleteFormId}
-		class="hidden"
-	>
-		<input type="hidden" name="id" value={team.id} />
-	</form>
-
-	<form
-		{...cloneTeamForm.enhance(
-			enhanceForm({ success: 'Secteur dupliqué', onsuccess: () => onsuccess?.() })
-		)}
-		id={cloneFormId}
-		class="hidden"
-	>
-		<input type="hidden" name="id" value={team.id} />
-	</form>
-{/if}
-
+<!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
 <form
-	{...remoteForm.enhance(enhanceForm({ success: 'Succès', onsuccess: () => onsuccess?.() }))}
+	{...remoteForm.enhance(
+		enhanceForm({
+			success: 'Succès',
+			onsuccess: () => {
+				bar?.rebase()
+				// `result` porte le secteur tel qu'enregistré: c'est lui que l'appelant doit
+				// afficher, le sien datant de son propre chargement.
+				const saved = remoteForm.result
+				if (!saved) return
+				if (team.id) onupdated?.(saved)
+				else oncreated?.(saved)
+			},
+		})
+	)}
+	id={formId}
+	bind:this={formElement}
 	class="flex flex-col gap-4 {klass}"
 >
 	{#if team.id}
@@ -98,9 +75,12 @@
 
 	<InputString field={remoteForm.fields.name} label="Nom du secteur" value={team.name} />
 
-	{#if page.data.member?.roles.includes('admin')}
-		<InputLeaders field={remoteForm.fields.leaders} value={team.leaders} />
-	{/if}
+	{#key resetToken}
+		{#if page.data.member?.roles.includes('admin')}
+			<InputLeaders field={remoteForm.fields.leaders} value={team.leaders} />
+		{/if}
+	{/key}
+
 	<InputTextarea
 		field={remoteForm.fields.description}
 		label="Description"
@@ -126,21 +106,28 @@
 		/>
 	{/if}
 
-	<MemberConditions conditions={team?.conditions || []} memberFields={event.memberFields} />
+	{#key resetToken}
+		<MemberConditions
+			conditions={team?.conditions || []}
+			memberFields={event.memberFields}
+			onchange={() => bar?.refresh()}
+		/>
+	{/key}
 
-	<div class="flex flex-row-reverse gap-2 border-t py-4">
-		<button class="btn btn-primary">Valider</button>
-		{#if team.id}
-			<button
-				type="submit"
-				form={cloneFormId}
-				class="btn btn-soft btn-primary btn-square"
-				use:tip={{ content: 'Dupliquer le secteur' }}
-			>
-				<CopyPlus size={18} />
-			</button>
-			<div class="grow"></div>
-			<ButtonDelete form={deleteFormId} formaction={deleteTeam.action} />
-		{/if}
-	</div>
+	{#if !saveBar}
+		<div class="flex flex-row-reverse gap-2 border-t py-4">
+			<button class="btn btn-primary">Valider</button>
+		</div>
+	{/if}
 </form>
+
+{#if saveBar}
+	<SaveBar
+		bind:this={bar}
+		form={formElement}
+		{formId}
+		key={team.id}
+		pending={remoteForm.pending > 0}
+		onreset={() => resetToken++}
+	/>
+{/if}

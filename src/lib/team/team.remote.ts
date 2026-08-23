@@ -1,6 +1,6 @@
 import { command, form, getRequestEvent, query } from '$app/server'
 import type { Prisma } from '@prisma/client'
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import z from 'zod'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
 import { createLog, permission, prisma, useAddTeamComputedValues } from '$lib/server'
@@ -44,13 +44,21 @@ export const updateTeam = form(modelTeamUpdate, async ({ leaders, ...data }) => 
 	return team
 })
 
-export const deleteTeam = form(z.object({ id: z.string() }), async ({ id }) => {
-	const { locals, params } = getRequestEvent()
-	const actor = await permission.admin(params.eventId!, locals)
-	const team = await prisma.team.delete({ where: { id } })
-	await createLog('team_delete', { team, actor })
-	return team
-})
+/**
+ * `redirectTo` quitte le secteur côté serveur: rendu depuis son propre volet, le formulaire
+ * verrait sinon le `load` de la page rejouer sur un enregistrement qui n'existe plus.
+ */
+export const deleteTeam = form(
+	z.object({ id: z.string(), redirectTo: z.string().optional() }),
+	async ({ id, redirectTo }) => {
+		const { locals, params } = getRequestEvent()
+		const actor = await permission.admin(params.eventId!, locals)
+		const team = await prisma.team.delete({ where: { id } })
+		await createLog('team_delete', { team, actor })
+		if (redirectTo) redirect(303, redirectTo)
+		return team
+	}
+)
 
 export const cloneTeamForm = form(
 	z.object({ id: z.string(), deltaTime: z.number().default(0) }),
