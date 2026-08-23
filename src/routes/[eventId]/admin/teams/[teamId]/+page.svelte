@@ -34,6 +34,11 @@
 		maxSubscribe: team.periods.reduce((acc, p) => acc + p.maxSubscribe, 0),
 		subscribes: team.periods.flatMap((p) => p.subscribes),
 	})
+	// L'entête de la section « secteur » est la même en édition et en lecture: le formulaire la
+	// rend lui-même, les conditions devant partager son `<form>`.
+	const teamSubtitle = $derived(
+		team.range ? formatRangeDate(team.range) : 'Pas de périodes de travail'
+	)
 </script>
 
 <div class="mx-auto w-full max-w-3xl space-y-3">
@@ -44,50 +49,43 @@
 		<span>Tous les secteurs</span>
 	</a>
 
-	<Section
-		id="team"
-		title={team.name}
-		subtitle={team.range ? formatRangeDate(team.range) : 'Pas de périodes de travail'}
-	>
-		{#snippet action()}
-			<a
-				href={`${$eventPath}/admin/members?subscribes_teams=["${team.id}"]`}
-				class="btn btn-square btn-sm btn-ghost"
-				use:tip={{ content: 'Tous les membres du secteur' }}
-			>
-				<UsersIcon />
-			</a>
-			<a
-				href={`${$eventPath}/admin/subscribes?teams=["${team.id}"]`}
-				class="btn btn-square btn-sm btn-ghost"
-				use:tip={{ content: 'Toutes les inscriptions du secteur' }}
-			>
-				<ClipboardCopyIcon size={20} />
-			</a>
-			<a
-				href={`${$eventPath}/admin/plan?teams=["${team.id}"]`}
-				class="btn btn-square btn-sm btn-ghost"
-				use:tip={{ content: 'Voir le planning du secteur' }}
-			>
-				<ChartGanttIcon />
-			</a>
-			{#if isAdmin}
-				<TeamCloneButton
-					{team}
-					oncloned={(clone) => goto(`${$eventPath}/admin/teams/${clone.id}`)}
-				/>
-			{/if}
-		{/snippet}
+	{#snippet teamActions()}
+		<a
+			href={`${$eventPath}/admin/members?subscribes_teams=["${team.id}"]`}
+			class="btn btn-square btn-sm btn-ghost"
+			use:tip={{ content: 'Tous les membres du secteur' }}
+		>
+			<UsersIcon />
+		</a>
+		<a
+			href={`${$eventPath}/admin/subscribes?teams=["${team.id}"]`}
+			class="btn btn-square btn-sm btn-ghost"
+			use:tip={{ content: 'Toutes les inscriptions du secteur' }}
+		>
+			<ClipboardCopyIcon size={20} />
+		</a>
+		<a
+			href={`${$eventPath}/admin/plan?teams=["${team.id}"]`}
+			class="btn btn-square btn-sm btn-ghost"
+			use:tip={{ content: 'Voir le planning du secteur' }}
+		>
+			<ChartGanttIcon />
+		</a>
+		{#if isAdmin}
+			<TeamCloneButton {team} oncloned={(clone) => goto(`${$eventPath}/admin/teams/${clone.id}`)} />
+		{/if}
+	{/snippet}
 
-		{#if team.isLeader}
-			<!-- SvelteKit réutilise ce composant quand seul `teamId` change: sans la clé,
-			     `InputLeaders` et `MemberConditions` garderaient l'état semé par le secteur
-			     précédent. Le champ distant, lui, est déjà porté par `updateTeam.for(id)`. -->
-			{#key team.id}
-				<TeamForm {team} event={data.event} saveBar />
-			{/key}
-		{:else}
-			<!-- Un responsable ne pilote que ses secteurs: les autres se lisent. -->
+	{#if team.isLeader}
+		<!-- SvelteKit réutilise ce composant quand seul `teamId` change: sans la clé,
+		     `InputLeaders` et `MemberConditions` garderaient l'état semé par le secteur
+		     précédent. Le champ distant, lui, est déjà porté par `updateTeam.for(id)`. -->
+		{#key team.id}
+			<TeamForm {team} event={data.event} saveBar subtitle={teamSubtitle} action={teamActions} />
+		{/key}
+	{:else}
+		<!-- Un responsable ne pilote que ses secteurs: les autres se lisent. -->
+		<Section id="team" title={team.name} subtitle={teamSubtitle} action={teamActions}>
 			<div class="flex flex-col gap-4">
 				{#if team.conditions?.length || (team.closeSubscribing && data.event.selfSubscribeAllowed)}
 					<div class="flex flex-wrap gap-2 gap-y-1">
@@ -119,8 +117,8 @@
 					</div>
 				</div>
 			</div>
-		{/if}
-	</Section>
+		</Section>
+	{/if}
 
 	<Section id="periods" title="Périodes de travail">
 		{#snippet action()}

@@ -45,12 +45,13 @@ export const modelTeam = z.object({
 	// Champs rendus conditionnellement (inscription libre): absents, ils ne touchent à rien.
 	closeSubscribing: zDateNullable,
 	overflowPermitted: z.boolean().optional(),
-	// `MemberConditions` sérialise sa liste dans un champ caché.
-	conditions: zJson(z.array(modelMemberCondition)),
 })
 
 export const modelTeamUpdate = modelTeam.extend({
 	id: z.string(),
+	// `MemberConditions` sérialise sa liste dans un champ caché. Absent de la création: le
+	// tiroir ne montre pas la section, et une colonne nulle vaut « ouvert à tous ».
+	conditions: zJson(z.array(modelMemberCondition)),
 	// En mise à jour, la liste transmise remplace l'existante. Optionnelle parce que `TeamForm`
 	// ne rend `InputLeaders` qu'aux admins: c'est `updateTeam` qui interprète l'absence, le
 	// schéma ne connaît pas le rôle.

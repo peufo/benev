@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte'
 	import type { Event, Field, Team } from '@prisma/client'
 	import { page } from '$app/state'
 	import { InputBoolean, InputString, InputTextarea } from 'fuma'
@@ -6,6 +7,7 @@
 	import { MemberConditions } from '$lib/member'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { SaveBar } from '$lib/ui'
+	import Section from '$lib/ui/Section.svelte'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
 	import type { TeamWithComputedValues } from '$lib/server'
 	import { createTeam, updateTeam } from './team.remote'
@@ -17,9 +19,13 @@
 		team?: Partial<TeamWithComputedValues>
 		/**
 		 * Barre flottante à la première retouche, au lieu du bouton de validation. Le secteur
-		 * s'édite alors là où il s'affiche, sans étape de bascule.
+		 * s'édite alors là où il s'affiche, sans étape de bascule, et le formulaire se déplie en
+		 * sections — les conditions d'accès étant la seconde.
 		 */
 		saveBar?: boolean
+		/** L'entête de la section « secteur », que la page possède: elle la rend aussi en lecture seule. */
+		subtitle?: string
+		action?: Snippet
 		oncreated?: (team: Team) => void
 		onupdated?: (team: Team) => void
 	}
@@ -29,6 +35,8 @@
 		event,
 		team = $bindable({}),
 		saveBar = false,
+		subtitle,
+		action,
 		oncreated,
 		onupdated,
 	}: Props = $props()
@@ -49,30 +57,7 @@
 	let resetToken = $state(0)
 </script>
 
-<!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
-<form
-	{...remoteForm.enhance(
-		enhanceForm({
-			success: 'Succès',
-			onsuccess: () => {
-				bar?.rebase()
-				// `result` porte le secteur tel qu'enregistré: c'est lui que l'appelant doit
-				// afficher, le sien datant de son propre chargement.
-				const saved = remoteForm.result
-				if (!saved) return
-				if (team.id) onupdated?.(saved)
-				else oncreated?.(saved)
-			},
-		})
-	)}
-	id={formId}
-	bind:this={formElement}
-	class="flex flex-col gap-4 {klass}"
->
-	{#if team.id}
-		<input type="hidden" name="id" value={team.id} />
-	{/if}
-
+{#snippet fields()}
 	<InputString field={remoteForm.fields.name} label="Nom du secteur" value={team.name} />
 
 	{#key resetToken}
@@ -105,16 +90,51 @@
 			hint="Les inscriptions en attente de validation ne comptent pas comme des places occupées."
 		/>
 	{/if}
+{/snippet}
 
-	{#key resetToken}
-		<MemberConditions
-			conditions={team?.conditions || []}
-			memberFields={event.memberFields}
-			onchange={() => bar?.refresh()}
-		/>
-	{/key}
+<!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
+<form
+	{...remoteForm.enhance(
+		enhanceForm({
+			success: 'Succès',
+			onsuccess: () => {
+				bar?.rebase()
+				// `result` porte le secteur tel qu'enregistré: c'est lui que l'appelant doit
+				// afficher, le sien datant de son propre chargement.
+				const saved = remoteForm.result
+				if (!saved) return
+				if (team.id) onupdated?.(saved)
+				else oncreated?.(saved)
+			},
+		})
+	)}
+	id={formId}
+	bind:this={formElement}
+	class={['flex flex-col', saveBar ? 'gap-3' : 'gap-4', klass]}
+>
+	{#if team.id}
+		<input type="hidden" name="id" value={team.id} />
+	{/if}
 
-	{#if !saveBar}
+	{#if saveBar}
+		<Section id="team" title={team.name ?? ''} {subtitle} {action}>
+			<div class="flex flex-col gap-4">
+				{@render fields()}
+			</div>
+		</Section>
+
+		<!-- Les conditions se soumettent par un champ caché: leur section vit donc dans le
+		     formulaire, et non dans la page qui porte les autres. -->
+		{#key resetToken}
+			<MemberConditions
+				conditions={team?.conditions || []}
+				memberFields={event.memberFields}
+				onchange={() => bar?.refresh()}
+			/>
+		{/key}
+	{:else}
+		{@render fields()}
+
 		<div class="flex flex-row-reverse gap-2 border-t py-4">
 			<button class="btn btn-primary">Valider</button>
 		</div>

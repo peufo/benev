@@ -15,6 +15,18 @@ async function fillCondition(page: Page, input: Locator, value: string, serializ
 	}).toPass()
 }
 
+/**
+ * Le menu ne s'ouvre qu'une fois la page hydratée. Rejouer le couple ouverture/choix l'attend
+ * sans avoir à le deviner: tant que le choix échoue, aucune condition n'a été ajoutée, et
+ * rouvrir un menu déjà ouvert ne coûte rien.
+ */
+async function addCondition(page: Page, label: string) {
+	await expect(async () => {
+		await page.getByRole('button', { name: 'Ajouter une condition' }).click()
+		await page.getByRole('button', { name: label }).click({ timeout: 1000 })
+	}).toPass()
+}
+
 // Les conditions se soumettent par un input caché sérialisé depuis un `$state`: une écriture
 // non réactive ne casse rien de visible, elle se contente de ne jamais atteindre le serveur.
 // Seul un aller-retour complet le prouve.
@@ -58,54 +70,55 @@ test.describe.serial('Conditions de secteur', () => {
 		// TODO: couvrir aussi une condition sur un champ à choix multiple (`InputCheckboxes`).
 	})
 
-	// Le compteur passe par une remote query, et son échec est avalé par un `console.error`:
-	// seule une valeur juste prouve qu'elle répond.
-	test("L'aperçu compte les membres retenus", async () => {
+	// Le tiroir ne propose plus les conditions: elles se règlent dans leur section, sur la page
+	// du secteur. Le compteur passe par une remote query, et son échec est avalé par un
+	// `console.error`: seule une valeur juste prouve qu'elle répond.
+	test('Création du secteur, puis aperçu des membres retenus', async () => {
 		await page.goto(`/${event.eventId}/admin/teams?form_team=%7B%7D`)
+		const drawer = page.getByRole('dialog', { name: 'Nouveau secteur' })
+		await expect(drawer).toBeVisible()
+		await expect(drawer.getByRole('button', { name: 'Ajouter une condition' })).toHaveCount(0)
+
+		// Saisi avant l'hydratation, le nom serait écrasé par le rendu client, qui repose la
+		// valeur initiale du champ.
+		const drawerName = drawer.getByLabel('Nom du secteur')
+		await expect(async () => {
+			await drawerName.fill('Secteur Cond')
+			await expect(drawerName).toHaveValue('Secteur Cond', { timeout: 1000 })
+		}).toPass()
+		await drawer.getByRole('button', { name: 'Valider', exact: true }).click()
+
+		// La création referme le tiroir et ouvre le secteur, où la section des conditions attend.
+		await expect(drawer).toBeHidden()
+		await expect(page.locator('#team').getByLabel('Nom du secteur')).toHaveValue('Secteur Cond')
+		editUrl = page.url()
+		await expect(page.getByText('Aucune condition')).toBeVisible()
 		await expect(page.getByText('Visible pour tous les membres')).toBeVisible()
 
-		await expect(async () => {
-			await page.getByRole('button', { name: 'Ajouter une condition' }).click()
-			await page.getByRole('button', { name: 'Membre approuvé' }).click({ timeout: 1000 })
-		}).toPass()
-
+		await addCondition(page, 'Membre approuvé')
 		await expect(page.getByText('Visible pour 1 membre')).toBeVisible()
 
-		// Le tiroir garde sa copie tant qu'il reste monté: on le referme pour que le test
-		// suivant reparte d'un secteur vierge.
-		await page.goto(`/${event.eventId}/admin/teams`)
-		await expect(page.getByRole('dialog')).toHaveCount(0)
+		// Rien n'est enregistré: la barre remet la section dans l'état du secteur chargé, et le
+		// test suivant repart d'un secteur sans condition.
+		await page.getByRole('button', { name: 'Réinitialiser' }).click()
+		await expect(page.getByText('Modification en cours !')).toBeHidden()
+		await expect(page.getByText('Aucune condition')).toBeVisible()
 	})
 
-	test('Création du secteur avec deux conditions', async () => {
-		await page.goto(`/${event.eventId}/admin/teams?form_team=%7B%7D`)
-
-		// Le menu ne s'ouvre qu'une fois la page hydratée. Rejouer le couple ouverture/choix
-		// l'attend sans avoir à le deviner: tant que le choix échoue, aucune condition n'a
-		// été ajoutée, et rouvrir un menu déjà ouvert ne coûte rien.
-		const addCondition = async (label: string) => {
-			await expect(async () => {
-				await page.getByRole('button', { name: 'Ajouter une condition' }).click()
-				await page.getByRole('button', { name: label }).click({ timeout: 1000 })
-			}).toPass()
-		}
-
+	test('Ajout de deux conditions', async () => {
 		// Condition "Âge minimum"
-		await addCondition('Âge minimum')
+		await addCondition(page, 'Âge minimum')
 		await expect(page.getByLabel('Âge minimum')).toHaveValue('18')
 
 		// Condition "Profil du membre" sur Ville = Lyon
-		await addCondition('Profil du membre')
-		await page.getByRole('button', { name: 'Sélectioner un champ' }).click()
+		await addCondition(page, 'Profil du membre')
+		await page.getByRole('button', { name: 'Sélectionner un champ' }).click()
 		await page.getByRole('option', { name: 'Ville' }).click()
 		await fillCondition(page, page.getByLabel('Valeur'), 'Lyon', /"expectedValue":"Lyon"/)
 
-		// Le nom en dernier: saisi avant l'hydratation, il serait écrasé par le rendu client,
-		// qui repose la valeur initiale du champ. Les conditions, elles, ont déjà attendu.
-		await page.getByLabel('Nom du secteur').fill('Secteur Cond')
-
-		await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
-		await expect(page.getByRole('link', { name: /Secteur Cond/ }).first()).toBeVisible()
+		// Le secteur s'édite en place: l'enregistrement passe par la barre de sauvegarde.
+		await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+		await expect(page.getByText('Succès')).toBeVisible()
 	})
 
 	test('Réouverture: les valeurs enregistrées sont restituées', async () => {
@@ -130,7 +143,6 @@ test.describe.serial('Conditions de secteur', () => {
 		await fillCondition(page, page.getByLabel('Âge minimum'), '25', /"args":25/)
 		await fillCondition(page, page.getByLabel('Valeur'), 'Paris', /"expectedValue":"Paris"/)
 
-		// Le secteur s'édite en place: l'enregistrement passe par la barre de sauvegarde.
 		await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
 		// Le toast de succès, et non le secteur déjà listé, prouve que l'écriture est partie avant
 		// qu'on aille la relire.
