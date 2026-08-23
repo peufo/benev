@@ -2,6 +2,7 @@ import { form, getRequestEvent } from '$app/server'
 import { redirect } from '@sveltejs/kit'
 import { permission, prisma } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
+import { resolve } from '$app/paths'
 
 export const createPage = form(async () => {
 	const { locals, params } = getRequestEvent()
@@ -16,7 +17,7 @@ export const createPage = form(async () => {
 	const page = await prisma.page.create({
 		data: { eventId, title, path: normalizePath(title), content: '' },
 	})
-	redirect(303, `/${eventId}/admin/pages/${page.id}`)
+	redirect(303, resolve('/[eventId]/admin/pages/[pageId]', { eventId, pageId: page.id }))
 })
 
 export const createBadge = form(async () => {
@@ -39,7 +40,7 @@ export const createBadge = form(async () => {
 			logoId: event.logoId,
 		},
 	})
-	redirect(303, `/${eventId}/admin/pages/badges/${badge.id}`)
+	redirect(303, resolve('/[eventId]/admin/pages/badges/[badgeId]', { eventId, badgeId: badge.id }))
 })
 
 function getNewBadgeName(badges: { name: string }[]): string {

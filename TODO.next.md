@@ -12,8 +12,6 @@
 
 - [ ] Il faut ajouter la possibilité d'envoyer une nouvelle invitation à la demande a partire de la fiche de membre. Cela couvre le cas ou on change/corrige l'email du membre.
 
-- [ ] Supprimer totalement l'utilisation de isValidedByUser au profit member.userId. Il faut également clarifier l'information donné à l'organisteur car le terme "Inactif" n'est pas le bon.
-
 - [ ] Auto-accepte des inscriptions sur les membres sans compte est peut-être un raccourcie non nécéssaire. Par exemple, si une invitation est en cours pour un membre et qu'un responsable l'inscrit à une période, le membre n'aurra pas eu le temps de lié sont compte et son l'inscription sera automatiquement validé.
 
 - [ ] Sur le profile de membre, mettre en avant les champs requis avec une information manquante. (profile + info de contact)

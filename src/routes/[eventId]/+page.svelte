@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Page, PageHelp } from '$lib/pages'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { CircleQuestionMarkIcon } from '@lucide/svelte'
 
 	let { data } = $props()
@@ -8,7 +8,7 @@
 
 {#if data.memberCanRegister}
 	<div class="text-center my-8">
-		<a href="{$eventPath}/register" class="btn btn-primary"> Je veux devenir bénévole </a>
+		<a href={eventPath('/register')} class="btn btn-primary"> Je veux devenir bénévole </a>
 	</div>
 {/if}
 
@@ -47,6 +47,6 @@
 
 {#if data.memberCanRegister}
 	<div class="text-center my-8">
-		<a href="{$eventPath}/register" class="btn btn-primary"> Je veux devenir bénévole </a>
+		<a href={eventPath('/register')} class="btn btn-primary"> Je veux devenir bénévole </a>
 	</div>
 {/if}

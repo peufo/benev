@@ -10,7 +10,7 @@
 	import type { Event, Field, Tag } from '@prisma/client'
 	import { TagForm } from './tag'
 	import type { FormDataPeriod } from './server'
-	import { eventPath } from './store'
+	import { eventPath } from '$lib/eventPath'
 	import MemberImportDialog from './member/MemberImportDialog.svelte'
 
 	let periodDrawer: PeriodDrawer = $state()!
@@ -74,7 +74,7 @@
 				// Créer un secteur depuis le planning ne doit pas quitter le planning: seule la
 				// page d'administration des secteurs suit la création jusqu'à son volet.
 				if (page.route.id?.startsWith('/[eventId]/admin/teams'))
-					await goto(`${$eventPath}/admin/teams/${team.id}`)
+					await goto(eventPath('/admin/teams/[teamId]', { teamId: team.id }))
 			}}
 		/>
 	{/snippet}

@@ -24,7 +24,7 @@
 		SubscribeStateForm,
 	} from '$lib/subscribe'
 	import { formatRange } from '$lib/formatRange'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { SUBSCRIBE_STATE } from '$lib/constant'
 	import { TagsList } from '$lib/tag'
 	import dayjs from '$lib/dayjs'
@@ -130,7 +130,10 @@
 {/snippet}
 
 {#snippet teamCell(subscribe: Subscribe)}
-	<a href="{$eventPath}/admin/teams/{subscribe.period.teamId}" class="link link-hover">
+	<a
+		href={eventPath('/admin/teams/[teamId]', { teamId: subscribe.period.teamId })}
+		class="link link-hover"
+	>
 		{subscribe.period.team.name}
 	</a>
 {/snippet}
@@ -142,7 +145,9 @@
 {#snippet periodCell(subscribe: Subscribe)}
 	{@const duration = dayjs(subscribe.period.end).diff(subscribe.period.start, 'minutes')}
 	<a
-		href="{$eventPath}/admin/teams/{subscribe.period.teamId}?form_period={subscribe.periodId}"
+		href={eventPath(`/admin/teams/[teamId]?form_period=${subscribe.periodId}`, {
+			teamId: subscribe.period.teamId,
+		})}
 		class="link link-hover whitespace-nowrap"
 	>
 		{formatRange(subscribe.period)}

@@ -7,7 +7,7 @@
 	import { listEditable, tip, urlParam, useCommand } from 'fuma'
 	import Progress from '$lib/Progress.svelte'
 	import { Placeholder } from '$lib/ui'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { reorderTeams } from '$lib/team/team.remote'
 	import type { LayoutData } from './$types'
 
@@ -57,7 +57,7 @@
 		hotKey: 'k',
 		onSelect: (index) => {
 			const team = rows[index]
-			if (team) goto(`${$eventPath}/admin/teams/${team.id}`)
+			if (team) goto(eventPath('/admin/teams/[teamId]', { teamId: team.id }))
 		},
 	})
 
@@ -96,7 +96,7 @@
 
 {#snippet row(team: TeamRow, index: number, isMine: boolean)}
 	<a
-		href="{$eventPath}/admin/teams/{team.id}"
+		href={eventPath('/admin/teams/[teamId]', { teamId: team.id })}
 		{...command.item(index)}
 		onclickcapture={interceptClick}
 		draggable="false"

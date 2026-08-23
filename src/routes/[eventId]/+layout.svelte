@@ -10,12 +10,12 @@
 	} from '@lucide/svelte'
 	import facebookLogo from '$lib/assets/facebook.svg'
 	import instagramLogo from '$lib/assets/instagram.svg'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { JsonLd } from 'svelte-meta-tags'
 
 	import { Card } from '$lib/ui'
 	import { Drawer } from 'fuma'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { Header, Footer, AdminNavigation } from '$lib/layout'
 	import { MemberFieldForm } from '$lib/member'
 	import DrawersForm from '$lib/DrawersForm.svelte'
@@ -46,9 +46,9 @@
 	)
 
 	// Les metas de l'évènement sont publiées par le `load` et rendues par le layout racine
-	let eventUrl = $derived(`${$page.url.origin}/${data.event.id}`)
+	let eventUrl = $derived(`${page.url.origin}/${data.event.id}`)
 	let eventImage = $derived(
-		data.event.posterId ? `${$page.url.origin}/media/${data.event.posterId}?size=large` : undefined
+		data.event.posterId ? `${page.url.origin}/media/${data.event.posterId}?size=large` : undefined
 	)
 </script>
 
@@ -70,7 +70,7 @@
 <Header user={data.user}>
 	{#snippet start()}
 		<a
-			href="{$eventPath}/me"
+			href={eventPath('/me')}
 			class="
 				text-lg hover:bg-base-200 h-10 px-2 flex items-center gap-2 rounded-lg
 				whitespace-nowrap overflow-hidden text-ellipsis min-w-0

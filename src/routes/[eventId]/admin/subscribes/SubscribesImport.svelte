@@ -1,23 +1,22 @@
 <script lang="ts">
 	import { DownloadIcon, FileSpreadsheetIcon } from '@lucide/svelte'
-	import { derived } from 'svelte/store'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { ButtonCopy, DropDown } from 'fuma'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 
 	let dropdown: DropDown = $state()!
 
-	let urlSubscribesCSV = derived(page, ({ url }) => {
+	let urlSubscribesCSV = $derived.by(() => {
 		// Construit puis sérialisé immédiatement: pas un état réactif.
 		// eslint-disable-next-line svelte/prefer-svelte-reactivity
-		const params = new URLSearchParams(url.searchParams)
+		const params = new URLSearchParams(page.url.searchParams)
 		const zone = Intl.DateTimeFormat().resolvedOptions()
 		params.set('locale', zone.locale)
-		return `${$eventPath}/admin/subscribes/csv?${params.toString()}`
+		return `${eventPath('/admin/subscribes/csv')}?${params.toString()}`
 	})
 
 	const getSubscribesCSV = async () => {
-		const res = await fetch($urlSubscribesCSV)
+		const res = await fetch(urlSubscribesCSV)
 		const csv = await res.text()
 		return csv
 	}
@@ -38,7 +37,7 @@
 			value={getSubscribesCSV}
 			label="Copier les données"
 		/>
-		<a href={$urlSubscribesCSV} class="menu-item" target="_parent">
+		<a href={urlSubscribesCSV} class="menu-item" target="_parent">
 			<FileSpreadsheetIcon size={20} />
 			<span>Télécharger un CSV</span>
 		</a>

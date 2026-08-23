@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { ButtonCopy, tip } from 'fuma'
 	import { LinkIcon, PencilIcon } from '@lucide/svelte'
-	import { page as pageStore } from '$app/stores'
+	import { page as appPage } from '$app/state'
 
-	import { eventPath } from '$lib/store/index.js'
+	import { eventPath } from '$lib/eventPath'
 
 	import type { Page } from '@prisma/client'
 	import { tiptapParser } from '$lib/ui'
@@ -33,7 +33,13 @@
 		return injectValues(_html, replacers)
 	}
 	let html = $derived(getHTML(page?.content))
-	let canEdit = $derived($pageStore.data.member?.roles.includes('admin'))
+	let canEdit = $derived(appPage.data.member?.roles.includes('admin'))
+	// `eventPath` rend un chemin relatif à la page courante: le lien à copier doit être résolu
+	// contre elle pour redevenir une URL entière.
+	let shareUrl = $derived(
+		new URL(page ? eventPath('/[pagePath]', { pagePath: page.path }) : eventPath(''), appPage.url)
+			.href
+	)
 </script>
 
 <PageLayout class="relative max-w-2xl py-16 mt-3 mb-20">
@@ -50,7 +56,9 @@
 	<div class="flex justify-end gap-2 not-prose absolute right-5 top-5">
 		{#if canEdit}
 			<a
-				href="{$eventPath}/admin/pages{page ? `/${page.id}` : ''}"
+				href={page
+					? eventPath('/admin/pages/[pageId]', { pageId: page.id })
+					: eventPath('/admin/pages')}
 				class="btn btn-sm btn-square btn-ghost"
 			>
 				<span class="inline-flex" use:tip={{ content: 'Éditer cette page' }}
@@ -60,7 +68,7 @@
 		{/if}
 		<ButtonCopy
 			title="Copier le lien de la page"
-			value="https://benev.io{$eventPath}{page ? `/${page.path}` : ''}"
+			value={shareUrl}
 			successMessage="Lien copier"
 			Icon={LinkIcon}
 		/>

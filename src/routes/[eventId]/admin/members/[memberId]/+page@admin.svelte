@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ClipboardListIcon, PencilIcon, ScrollTextIcon } from '@lucide/svelte'
 	import { Drawer, tip, urlParam } from 'fuma'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import Avatar from '$lib/me/Avatar.svelte'
 	import { TeamsActions } from '$lib/team'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
@@ -88,7 +88,7 @@
 		<Journal journal={data.journal} timezone={data.event.timezone} class="max-h-[80vh]">
 			{#snippet action()}
 				<a
-					href="{$eventPath}/admin/dashboard?memberId={data.memberProfile.id}#journal"
+					href={eventPath(`/admin/dashboard?memberId=${data.memberProfile.id}#journal`)}
 					class="btn btn-sm btn-square"
 					use:tip={{ content: 'Ouvrir le journal complet' }}
 				>

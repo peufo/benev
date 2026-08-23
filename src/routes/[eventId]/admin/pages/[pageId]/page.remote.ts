@@ -2,6 +2,7 @@ import { form, getRequestEvent } from '$app/server'
 import { invalid, redirect } from '@sveltejs/kit'
 import { modelPageUpdate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
+import { resolve } from '$app/paths'
 import { normalizePath } from '$lib/normalizePath.js'
 
 const RESERVED_PATHS = [
@@ -49,5 +50,5 @@ export const deletePage = form(async () => {
 		where: { id: params.pageId!, eventId, type: { notIn: ['home', 'email'] } },
 	})
 	// La page courante n'existe plus: `load` renverrait de toute façon vers la page d'accueil.
-	redirect(303, `/${eventId}/admin/pages`)
+	redirect(303, resolve('/[eventId]/admin/pages', { eventId }))
 })

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores'
-	import { eventPath } from '$lib/store'
+	import { page } from '$app/state'
+	import { eventPath } from '$lib/eventPath'
 	import { DropDown } from 'fuma'
 	import { tip } from 'fuma'
 	import { IdCardLanyardIcon } from '@lucide/svelte'
@@ -13,13 +13,13 @@
 
 	let { params = '', title = 'Imprimer les badges', badges }: Props = $props()
 
-	let _params = $derived(params || $page.url.searchParams.toString())
+	let _params = $derived(params || page.url.searchParams.toString())
 </script>
 
 {#if badges.length === 1}
 	{@const badge = badges[0]}
 	<a
-		href="{$eventPath}/admin/pages/badges/{badge.id}/pdf?{_params}"
+		href={eventPath('/admin/pages/badges/[badgeId]/pdf', { badgeId: badge.id }) + `?${_params}`}
 		target="_blank"
 		class="btn btn-square btn-sm"
 		use:tip={{ content: title }}
@@ -36,7 +36,11 @@
 		<ul class="menu">
 			{#each badges as badge (badge.id)}
 				<li>
-					<a href="{$eventPath}/admin/pages/badges/{badge.id}/pdf?{_params}" target="_blank">
+					<a
+						href={eventPath('/admin/pages/badges/[badgeId]/pdf', { badgeId: badge.id }) +
+							`?${_params}`}
+						target="_blank"
+					>
 						{badge.name}
 					</a>
 				</li>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { TriangleAlertIcon } from '@lucide/svelte'
 	import type { Member, Subscribe } from '@prisma/client'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
 	import { tip } from 'fuma'
 	import { Avatar } from '$lib/me'
@@ -29,7 +29,7 @@
 					hover:bg-base-200 bg-base-200/40 border border-soft
 				"
 				title="Voir les infos de {subscribe.member.firstName}"
-				href="{$eventPath}/admin/members/{subscribe.memberId}"
+				href={eventPath('/admin/members/[memberId]', { memberId: subscribe.memberId })}
 			>
 				<Avatar
 					firstName={subscribe.member.firstName}

@@ -8,8 +8,8 @@
 	import { SubscribeForm } from '$lib/subscribe'
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
 	import { goto } from '$app/navigation'
-	import { eventPath } from '$lib/store'
-	import { page } from '$app/stores'
+	import { eventPath } from '$lib/eventPath'
+	import { page } from '$app/state'
 	import TeamsStats from './TeamsStats.svelte'
 
 	let { data } = $props()
@@ -23,14 +23,14 @@
 	function handleClickPeriod(period: PeriodWithTeam) {
 		if (!data.member?.isValidedByUser) {
 			const redirectTo = encodeURIComponent(`${location.pathname}?subscribeTo=${period.id}`)
-			return goto(`${$eventPath}/register?redirectTo=${redirectTo}`)
+			return goto(eventPath(`/register?redirectTo=${redirectTo}`))
 		}
 		selectedPeriod = period
 		subscribeDialog?.showModal()
 	}
 
 	onMount(() => {
-		const subscribeTo = $page.url.searchParams.get('subscribeTo')
+		const subscribeTo = page.url.searchParams.get('subscribeTo')
 		if (!subscribeTo) return
 		const period = data.teams
 			.map((t) => t.periods)
@@ -78,7 +78,7 @@
 			period={selectedPeriod}
 			onclose={() => {
 				subscribeDialog.close()
-				if ($page.url.searchParams.has('subscribeTo'))
+				if (page.url.searchParams.has('subscribeTo'))
 					goto(urlParam.without('subscribeTo'), { replaceState: true })
 			}}
 			onsuccess={() => {

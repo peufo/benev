@@ -1,0 +1,1 @@
+- [ ] Supprimer totalement l'utilisation de isValidedByUser au profit member.userId. Il faut également clarifier l'information donné à l'organisteur car le terme "Inactif" n'est pas le bon.

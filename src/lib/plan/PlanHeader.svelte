@@ -3,9 +3,9 @@
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { InputMultiSelect, jsonParse, tip, urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { PeriodCardOptions } from './cardContent'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import PlanCursor from './PlanCursor.svelte'
 	import type { Plan } from './types'
 	import { clampScale, persistHourSize, withHourSize } from './zoom'
@@ -47,7 +47,7 @@
 	// mais `InputMultiSelect` la porte en items. Le dérivé se ré-amorce à chaque navigation, ce
 	// qui fait suivre les boutons précédent/suivant du navigateur.
 	let selectedTeams = $derived(
-		jsonParse<string[]>($page.url.searchParams.get('teams'), []).flatMap(
+		jsonParse<string[]>(page.url.searchParams.get('teams'), []).flatMap(
 			(id) => teams.find((team) => team.id === id) ?? []
 		)
 	)
@@ -110,9 +110,8 @@
 			{ label: 'Vue vertical', icon: AlignStartHorizontalIcon, value: 'y' },
 		]}
 	/>
-
 	<a
-		href="{$eventPath}/admin/plan{isFullscreen ? '' : '/fullscreen'}{$page.url.search}"
+		href={eventPath(isFullscreen ? '/admin/plan' : '/admin/plan/fullscreen') + page.url.search}
 		class="btn btn-square btn-sm"
 	>
 		<span class="inline-flex" use:tip={{ content: 'Ouvrir en plein écran' }}

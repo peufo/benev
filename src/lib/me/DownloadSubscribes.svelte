@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { tip } from 'fuma'
 	import { CalendarArrowUp } from '@lucide/svelte'
 	import { page } from '$app/state'
@@ -9,7 +9,7 @@
 	async function downloadCalendar() {
 		loading = true
 		try {
-			const res = await fetch($eventPath + '/api/ical')
+			const res = await fetch(eventPath('/api/ical'))
 			if (!res.ok) throw new Error()
 			const blob = await res.blob()
 			const url = URL.createObjectURL(blob)

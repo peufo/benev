@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit'
 import { prisma } from '$lib/server'
+import { resolve } from '$app/paths'
 
 export const load = async ({ params: { badgeId, eventId } }) => {
 	const badge = await prisma.badge.findUnique({
@@ -11,7 +12,7 @@ export const load = async ({ params: { badgeId, eventId } }) => {
 			accessSectorsField: true,
 		},
 	})
-	if (!badge) redirect(302, `/${eventId}/admin/pages`)
+	if (!badge) redirect(302, resolve('/[eventId]/admin/pages', { eventId }))
 
 	return {
 		badge,

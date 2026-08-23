@@ -7,7 +7,7 @@
 		OctagonAlertIcon,
 		SettingsIcon,
 	} from '@lucide/svelte'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
 	import {
 		MemberProfileForm,
@@ -27,7 +27,7 @@
 		{#snippet action()}
 			{#if data.event.selfSubscribeAllowed}
 				<a
-					href="{$eventPath}/teams"
+					href={eventPath('/teams')}
 					class="btn btn-square btn-sm ml-auto"
 					use:tip={{ content: 'Voir les secteurs' }}
 				>

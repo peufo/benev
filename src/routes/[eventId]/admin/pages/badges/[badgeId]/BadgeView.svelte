@@ -5,7 +5,7 @@
 	import type { PageData } from './$types'
 	import type { Member } from '@prisma/client'
 	import { searchMembers } from '$lib/member/member.remote'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { debounce } from '$lib/debounce'
 	import { fade } from 'svelte/transition'
 	import { browser } from '$app/environment'
@@ -71,7 +71,9 @@
 				<object
 					in:fade
 					title="Aperçu du badge"
-					data="{$eventPath}/admin/pages/badges/{badge.id}/pdf?memberId={member.id}"
+					data={eventPath(`/admin/pages/badges/[badgeId]/pdf?memberId=${member.id}`, {
+						badgeId: badge.id,
+					})}
 					type="application/pdf"
 					width={clientWidth}
 					height={clientHeight}

@@ -1,24 +1,23 @@
 <script lang="ts">
 	import { ContactIcon, DownloadIcon, FileSpreadsheetIcon } from '@lucide/svelte'
 	import { ButtonCopy, DropDown, tip } from 'fuma'
-	import { eventPath } from '$lib/store'
-	import { page } from '$app/stores'
-	import { derived } from 'svelte/store'
+	import { eventPath } from '$lib/eventPath'
+	import { page } from '$app/state'
 
 	let dropdown: DropDown = $state()!
 	type Mode = 'csv' | 'vcard'
 
-	let urlMembers = derived(page, ({ url }) => {
+	let urlMembers = $derived.by(() => {
 		// Construit puis sérialisé immédiatement: pas un état réactif.
 		// eslint-disable-next-line svelte/prefer-svelte-reactivity
-		const params = new URLSearchParams(url.searchParams)
+		const params = new URLSearchParams(page.url.searchParams)
 		const zone = Intl.DateTimeFormat().resolvedOptions()
 		params.set('locale', zone.locale)
-		return (mode: Mode) => `${$eventPath}/admin/members/${mode}?${params.toString()}`
+		return (mode: Mode) => `${eventPath(`/admin/members/${mode}`)}?${params.toString()}`
 	})
 
 	const getMembersCSV = async () => {
-		const res = await fetch($urlMembers('csv'))
+		const res = await fetch(urlMembers('csv'))
 		const csv = await res.text()
 		return csv
 	}
@@ -41,11 +40,11 @@
 			value={getMembersCSV}
 			label="Copier les données"
 		/>
-		<a href={$urlMembers('csv')} class="menu-item" target="_parent">
+		<a href={urlMembers('csv')} class="menu-item" target="_parent">
 			<FileSpreadsheetIcon size={20} />
 			<span>Télécharger un CSV</span>
 		</a>
-		<a href={$urlMembers('vcard')} class="menu-item" target="_parent">
+		<a href={urlMembers('vcard')} class="menu-item" target="_parent">
 			<ContactIcon size={20} />
 			<span>Télécharger les contacts</span>
 		</a>

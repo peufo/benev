@@ -2,6 +2,7 @@
 	import { ChevronLeftIcon, ChevronRightIcon, XIcon } from '@lucide/svelte'
 	import { page } from '$app/stores'
 	import { afterNavigate, goto, invalidateAll } from '$app/navigation'
+	import { eventPath } from '$lib/eventPath'
 
 	import { Card, Placeholder } from '$lib/ui'
 	import { Dialog, tip } from 'fuma'
@@ -59,7 +60,7 @@
 
 		if (registerIsDone) {
 			const redirectTo = $page.url.searchParams.get('redirectTo')
-			await goto(redirectTo || `/${event.id}/me`)
+			await goto(redirectTo || eventPath('/me'))
 			return
 		}
 

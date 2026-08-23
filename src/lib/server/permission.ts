@@ -2,6 +2,7 @@ import { error, redirect } from '@sveltejs/kit'
 import { env } from '$env/dynamic/private'
 import { prisma } from '$lib/server'
 import { isTierQuotaReached } from '$lib/server/tierQuota'
+import { resolve } from '$app/paths'
 import {
 	type MemberRole,
 	type MemberWithComputedValuesAndAccount,
@@ -105,7 +106,7 @@ export function redirectToAuth(url: URL) {
 	return redirect(302, `/auth?redirectTo=${url.pathname}`)
 }
 export function redirectToRegister(eventId: string, url: URL) {
-	return redirect(302, `/${eventId}/register?redirectTo=${url.pathname}`)
+	return redirect(302, resolve('/[eventId]/register', { eventId }) + `?redirectTo=${url.pathname}`)
 }
 export async function getUserIdOrRedirect(url: URL, locals: App.Locals) {
 	const session = await locals.auth.validate()

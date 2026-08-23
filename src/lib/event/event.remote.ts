@@ -1,6 +1,7 @@
 import { error, invalid, redirect } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import { modelEventCreate, modelEventSettings } from '$lib/models'
+import { resolve } from '$app/paths'
 import { createLog, jsonOrDbNull, permission, prisma } from '$lib/server'
 import { defaultEmailModels } from '$lib/email/models'
 import { EVENT_TIER, THEME_PRESETS } from '$lib/constant'
@@ -88,9 +89,9 @@ export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issu
 		},
 	})
 	await createLog('event_create', { event, actor: session.user })
-	if (tier === 'basic') redirect(303, `/${event.id}`)
+	if (tier === 'basic') redirect(303, resolve('/[eventId]', { eventId: event.id }))
 	const price = EVENT_TIER[tier].priceId
-	if (!price) redirect(303, `/${event.id}`)
+	if (!price) redirect(303, resolve('/[eventId]', { eventId: event.id }))
 	redirect(303, `/me/checkouts/create?price=${price}&eventId=${event.id}`)
 })
 
@@ -107,7 +108,8 @@ export const updateEvent = form(modelEventSettings, async (data) => {
 	if (hasChanges(changes)) await createLog('event_update', { event, changes, actor })
 	// L'URL porte l'id: seul son changement rend la page courante morte. Rediriger à chaque
 	// enregistrement remonterait le défilement d'une page de réglages volontairement longue.
-	if (event.id !== eventId) redirect(303, `/${event.id}/admin/settings`)
+	if (event.id !== eventId)
+		redirect(303, resolve('/[eventId]/admin/settings', { eventId: event.id }))
 })
 
 export const deleteEvent = form(async () => {

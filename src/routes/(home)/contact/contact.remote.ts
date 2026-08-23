@@ -13,7 +13,7 @@ const sendMessageSchema = z.object({
 	authorName: z.string().trim().max(120).optional(),
 	authorEmail: zStringNullable(z.email().toLowerCase()),
 	// Piège à robots: un champ invisible que seul un script remplit.
-	website: z.string().optional(),
+	contact_url_2: z.string().optional(),
 })
 
 /**
@@ -41,7 +41,7 @@ export const sendMessage = form(sendMessageSchema, async (data, issue) => {
 
 	// Rempli, donc rempli par un robot: on répond comme si de rien n'était plutôt que d'expliquer
 	// le filtre à celui qui l'a déclenché.
-	if (data.website) return
+	if (data.contact_url_2) return
 
 	const author = session?.user ?? null
 	const email = author?.email || data.authorEmail

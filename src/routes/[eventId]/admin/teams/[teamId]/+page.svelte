@@ -12,7 +12,7 @@
 	import { page } from '$app/state'
 	import { tip, urlParam } from 'fuma'
 	import { daytz } from '$lib/dayjs'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { formatRangeDate } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
 	import Section from '$lib/ui/Section.svelte'
@@ -44,35 +44,38 @@
 <div class="mx-auto w-full max-w-3xl space-y-3">
 	<!-- Un lien, et non `history.back()`: il tient au rechargement et au partage, et c'est le
 	     seul chemin de retour quand le volet gauche est masqué. -->
-	<a href="{$eventPath}/admin/teams" class="btn btn-sm btn-ghost -ml-2 md:hidden">
+	<a href={eventPath('/admin/teams')} class="btn btn-sm btn-ghost -ml-2 md:hidden">
 		<ArrowLeftIcon size={20} class="opacity-70" />
 		<span>Tous les secteurs</span>
 	</a>
 
 	{#snippet teamActions()}
 		<a
-			href={`${$eventPath}/admin/members?subscribes_teams=["${team.id}"]`}
+			href={eventPath(`/admin/members?subscribes_teams=["${team.id}"]`)}
 			class="btn btn-square btn-sm btn-ghost"
 			use:tip={{ content: 'Tous les membres du secteur' }}
 		>
 			<UsersIcon />
 		</a>
 		<a
-			href={`${$eventPath}/admin/subscribes?teams=["${team.id}"]`}
+			href={eventPath(`/admin/subscribes?teams=["${team.id}"]`)}
 			class="btn btn-square btn-sm btn-ghost"
 			use:tip={{ content: 'Toutes les inscriptions du secteur' }}
 		>
 			<ClipboardCopyIcon size={20} />
 		</a>
 		<a
-			href={`${$eventPath}/admin/plan?teams=["${team.id}"]`}
+			href={eventPath(`/admin/plan?teams=["${team.id}"]`)}
 			class="btn btn-square btn-sm btn-ghost"
 			use:tip={{ content: 'Voir le planning du secteur' }}
 		>
 			<ChartGanttIcon />
 		</a>
 		{#if isAdmin}
-			<TeamCloneButton {team} oncloned={(clone) => goto(`${$eventPath}/admin/teams/${clone.id}`)} />
+			<TeamCloneButton
+				{team}
+				oncloned={(clone) => goto(eventPath('/admin/teams/[teamId]', { teamId: clone.id }))}
+			/>
 		{/if}
 	{/snippet}
 
@@ -155,7 +158,7 @@
 						Cette opération est irréversible.
 					</p>
 				</div>
-				<TeamDeleteButton {team} redirectTo="{$eventPath}/admin/teams" />
+				<TeamDeleteButton {team} redirectTo={eventPath('/admin/teams')} />
 			</div>
 		</Section>
 	{/if}

@@ -3,7 +3,7 @@
 	import dayjs from '$lib/dayjs'
 	import { formatRange } from '$lib/formatRange'
 	import { MemberCell } from '$lib/member'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { SubscribeCreatedBy, SubscribeStateForm } from '$lib/subscribe'
 	import { Placeholder } from '$lib/ui'
 	import type { PageData } from './$types'
@@ -34,7 +34,7 @@
 				<MemberCell member={subscribe.member} />
 				<div class="flex gap-2 ml-auto items-center">
 					<a
-						href="{$eventPath}/admin/teams/{subscribe.period.teamId}"
+						href={eventPath('/admin/teams/[teamId]', { teamId: subscribe.period.teamId })}
 						class="link link-hover text-sm"
 					>
 						{subscribe.period.team.name}

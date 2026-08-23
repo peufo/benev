@@ -11,7 +11,8 @@
 	import { SvelteSet } from 'svelte/reactivity'
 	import { Dialog } from 'fuma'
 	import { SelectorList } from '$lib/ui'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
+	import { page } from '$app/state'
 	import { searchImportableEvents } from './memberImport.remote'
 	import { toast } from 'svelte-sonner'
 
@@ -86,7 +87,7 @@
 	async function loadSourceMembers(eventId: string) {
 		isLoading = true
 		try {
-			const response = await fetch(`${$eventPath}/admin/members/import?sourceEventId=${eventId}`)
+			const response = await fetch(eventPath(`/admin/members/import?sourceEventId=${eventId}`))
 			const data = await response.json()
 
 			if (data.type === 'members_and_fields') {
@@ -157,14 +158,14 @@
 		try {
 			const importOptions = {
 				sourceEventId: selectedEvent.id,
-				targetEventId: $eventPath.split('/')[1], // Extract eventId from path
+				targetEventId: page.params.eventId,
 				selectedMemberIds: Array.from(selectedMemberIds),
 				fieldMappings,
 				preserveTeamAssignments: false,
 				sendInvitationEmails: false,
 			}
 
-			const response = await fetch(`${$eventPath}/admin/members/import`, {
+			const response = await fetch(eventPath('/admin/members/import'), {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(importOptions),

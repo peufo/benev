@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Progress from '$lib/Progress.svelte'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { Placeholder } from '$lib/ui'
 	import type { PageData } from './$types'
 
@@ -14,7 +14,7 @@
 		{#each teams as team (team.id)}
 			<li class="flex items-center gap-3 py-1 border-b border-soft last:border-0">
 				<a
-					href="{$eventPath}/admin/teams/{team.id}"
+					href={eventPath('/admin/teams/[teamId]', { teamId: team.id })}
 					class="link link-hover text-sm truncate min-w-0"
 				>
 					{team.name}

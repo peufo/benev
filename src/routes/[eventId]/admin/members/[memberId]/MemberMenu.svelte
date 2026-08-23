@@ -5,7 +5,7 @@
 	import { CheckIcon, Trash2Icon, XIcon } from '@lucide/svelte'
 	import MemberIsValidedByEventForm from './MemberIsValidedByEventForm.svelte'
 	import MemberIsAdminForm from './MemberIsAdminForm.svelte'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 
 	let { data }: { data: PageData } = $props()
 </script>
@@ -41,7 +41,7 @@
 
 			<MemberDeleteForm
 				memberId={data.memberProfile.id}
-				redirectTo="{$eventPath}/admin/members"
+				redirectTo={eventPath('/admin/members')}
 				btn={false}
 				class="menu-item w-full"
 			>

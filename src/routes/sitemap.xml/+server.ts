@@ -1,4 +1,5 @@
 import { prisma } from '$lib/server'
+import { resolve } from '$app/paths'
 
 const staticPaths = [
 	'/',
@@ -14,6 +15,9 @@ const staticPaths = [
 
 export async function GET({ url }) {
 	const origin = url.origin
+	// `resolve` rend un chemin relatif à la requête courante tant que `paths.relative` vaut son
+	// défaut: seule une résolution contre l'URL de la requête en tire l'absolu qu'attend un sitemap.
+	const absolute = (path: string) => new URL(path, url).pathname
 	const staticsPages = staticPaths.map((path) => urlElement(origin, path))
 
 	const events = await prisma.event.findMany({
@@ -23,17 +27,30 @@ export async function GET({ url }) {
 
 	const eventsSiteMap = events
 		.map((event) => {
-			const basePath = `/${event.id}`
 			const homePage = event.pages.find((p) => p.type === 'home')
 			if (!homePage) return ''
-			const indexUrlElement = urlElement(origin, basePath, homePage.updatedAt)
+			const indexUrlElement = urlElement(
+				origin,
+				absolute(resolve('/[eventId]', { eventId: event.id })),
+				homePage.updatedAt
+			)
 			// Sans inscription libre, /teams répond 401 aux visiteurs anonymes
 			const teamsUrlElement = event.selfSubscribeAllowed
-				? urlElement(origin, basePath + '/teams', event.updatedAt)
+				? urlElement(
+						origin,
+						absolute(resolve('/[eventId]/teams', { eventId: event.id })),
+						event.updatedAt
+					)
 				: ''
 			const pagesUrlElement = event.pages
 				.filter((p) => p.type === 'public' || p.type === 'charter')
-				.map((p) => urlElement(origin, `${basePath}/${p.path}`, p.updatedAt))
+				.map((p) =>
+					urlElement(
+						origin,
+						absolute(resolve('/[eventId]/[pagePath]', { eventId: event.id, pagePath: p.path })),
+						p.updatedAt
+					)
+				)
 			return [indexUrlElement, teamsUrlElement, ...pagesUrlElement].join('')
 		})
 		.join('')

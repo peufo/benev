@@ -6,7 +6,7 @@
 	import { ButtonDelete, InputSelect, InputString } from 'fuma'
 
 	import { normalizePath } from '$lib/normalizePath'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { PAGE_TYPE } from '$lib/constant'
 	import PageTypeHelp from './PageTypeHelp.svelte'
 	import { enhanceForm } from '$lib/enhanceForm'
@@ -44,7 +44,9 @@
 	let resetToken = $state(0)
 
 	let pagePath = $derived(
-		`${$eventPath}${page.type === 'home' ? '' : `/${normalizePath(page.title)}`}`
+		page.type === 'home'
+			? eventPath('')
+			: eventPath('/[pagePath]', { pagePath: normalizePath(page.title) })
 	)
 </script>
 

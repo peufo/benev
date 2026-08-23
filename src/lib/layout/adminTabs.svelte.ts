@@ -14,12 +14,12 @@ import {
 import { param } from 'fuma'
 import { dev } from '$app/environment'
 import { page } from '$app/state'
+import { eventPath, type EventRouteWithoutParams } from '$lib/eventPath'
 
 export function adminTabs() {
 	const query = param.without('skip', 'take', 'form_period')
-	const eventId = page.params.eventId
-	const getPath = (p: string) => ({
-		href: `/${eventId}${p}?${query}`,
+	const getPath = (p: EventRouteWithoutParams) => ({
+		href: `${eventPath(p)}?${query}`,
 		isActive: !!page.route.id?.startsWith(`/[eventId]${p}`),
 	})
 

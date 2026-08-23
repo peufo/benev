@@ -22,7 +22,7 @@
 		SectionEssentiel,
 	} from '$lib/event/settings'
 	import { MemberFields } from '$lib/member'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import { SaveBar, TableOfContent, type TocSection } from '$lib/ui'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import EventStateForm from './EventStateForm.svelte'
@@ -174,7 +174,11 @@
 					<div class="divider"></div>
 
 					<div class="flex justify-end">
-						<a href="{$eventPath}/register?forcedStepIndex=1" target="_blank" class="btn btn-ghost">
+						<a
+							href={eventPath('/register?forcedStepIndex=1')}
+							target="_blank"
+							class="btn btn-ghost"
+						>
 							Aperçu du formulaire d'adhésion
 							<ExternalLinkIcon size={20} class="opacity-70" />
 						</a>

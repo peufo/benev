@@ -2,6 +2,7 @@ import type { FieldType } from '@prisma/client'
 import { form, getRequestEvent } from '$app/server'
 import { redirect } from '@sveltejs/kit'
 import { modelBadgeUpdate } from '$lib/models'
+import { resolve } from '$app/paths'
 import { permission, prisma } from '$lib/server'
 
 export const updateBadge = form(modelBadgeUpdate, async ({ backgroundId, logoId, ...data }) => {
@@ -32,7 +33,7 @@ export const deleteBadge = form(async () => {
 	await permission.admin(eventId, locals)
 
 	await prisma.badge.delete({ where: { id: params.badgeId! } })
-	redirect(303, `/${eventId}/admin/pages`)
+	redirect(303, resolve('/[eventId]/admin/pages', { eventId }))
 })
 
 function connectedId(relation: { connect: { id: string } } | { disconnect: true }) {

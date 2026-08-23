@@ -3,7 +3,7 @@
 
 	import { Card } from '$lib/ui'
 	import { tip } from 'fuma'
-	import { eventPath } from '$lib/store'
+	import { eventPath } from '$lib/eventPath'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { PAGE_TYPE } from '$lib/constant'
 	import { IdCardLanyardIcon, PlusIcon } from '@lucide/svelte'
@@ -31,7 +31,7 @@
 				{#each data.pages as { id, title, type } (id)}
 					{@const PageIcon = PAGE_TYPE[type].icon}
 					<a
-						href="{$eventPath}/admin/pages/{id}"
+						href={eventPath('/admin/pages/[pageId]', { pageId: id })}
 						class="menu-item"
 						class:active={page.params.pageId === id}
 					>
@@ -44,7 +44,7 @@
 				{#each data.emails as { id, title, type } (id)}
 					{@const EmailIcon = PAGE_TYPE[type].icon}
 					<a
-						href="{$eventPath}/admin/pages/{id}"
+						href={eventPath('/admin/pages/[pageId]', { pageId: id })}
 						class="menu-item"
 						class:active={page.params.pageId === id}
 					>
@@ -66,7 +66,7 @@
 				</div>
 				{#each data.badges as badge (badge.id)}
 					<a
-						href="{$eventPath}/admin/pages/badges/{badge.id}"
+						href={eventPath('/admin/pages/badges/[badgeId]', { badgeId: badge.id })}
 						class="menu-item"
 						class:active={page.params.badgeId === badge.id}
 					>
