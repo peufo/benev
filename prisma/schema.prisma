@@ -165,7 +165,6 @@ model Event {
   pages        Page[]
   members      Member[]
   memberFields Field[]
-  gifts        Gift[]
   views        View[]
   medias       Media[]
   Tag          Tag[]
@@ -257,10 +256,9 @@ model Member {
   /// [MemberProfile]
   profileJson Json @default("{}")
 
-  subscribes       Subscribe[]
-  leaderOf         Team[]
-  giftsAllocations GiftAllocation[]
-  logs             Log[]
+  subscribes Subscribe[]
+  leaderOf   Team[]
+  logs       Log[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -464,53 +462,6 @@ model Milestone {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Gift {
-  id             String             @id @default(cuid())
-  name           String
-  eventId        String
-  event          Event              @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  allocations    GiftAllocation[]
-  conditions     GiftCondition[]
-  conditionsMode GiftConditionsMode @default(sum)
-
-  @@unique([eventId, name])
-}
-
-enum GiftConditionsMode {
-  sum
-  highest
-}
-
-model GiftCondition {
-  id String @id @default(cuid())
-
-  type    GiftConditionType
-  content String
-  value   Int               @default(1)
-
-  giftId String
-  gift   Gift   @relation(fields: [giftId], references: [id], onDelete: Cascade)
-}
-
-enum GiftConditionType {
-  teams
-  period
-  hours
-}
-
-model GiftAllocation {
-  id String @id @default(cuid())
-
-  giftId String
-  gift   Gift   @relation(fields: [giftId], references: [id], onDelete: Cascade)
-
-  memberId String
-  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-
-  qteDue   Int
-  qteGiven Int
 }
 
 model Message {

@@ -54,7 +54,7 @@ Benevio est utilisé sur les quatre temps d'un événement. Aucun n'est secondai
 1. **La préparation, au calme.** L'organisateur construit équipes, créneaux et planning depuis un ordinateur, sur plusieurs semaines. C'est là que vivent les interfaces denses: la grille de planning glisser-déposer (`$lib/plan`), la liste des membres, les quotas, les champs personnalisés, les pages CMS de l'événement.
 2. **L'inscription du bénévole.** Il reçoit un lien, s'inscrit à des créneaux depuis son téléphone, souvent une seule fois, sans jamais revenir. La friction se paie ici plus cher que partout ailleurs.
 3. **Le jour J, sur le terrain.** Téléphone en main, dehors, parfois en plein soleil: pointer les arrivées, retrouver qui manque. Le produit porte pour cela un QR par membre (`/qr/[memberId]`), des badges PDF imprimables et un export iCal des créneaux.
-4. **Le bilan.** Compter, attribuer les dédommagements (`Gift`), exporter les listes, remercier.
+4. **Le bilan.** Compter les heures, exporter les listes, remercier.
 
 La lisibilité en extérieur et sur petit écran n'est donc pas une précaution théorique: c'est le troisième temps.
 

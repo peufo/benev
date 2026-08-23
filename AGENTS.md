@@ -75,7 +75,7 @@ be introduced.
 │   │   ├── models/            # Zod schemas (modelUserCreate, modelEventUpdate…)
 │   │   ├── ui/                # Components fuma 2 does not cover
 │   │   ├── email/             # Svelte email template components
-│   │   ├── event/, team/, period/, subscribe/, member/, gift/, tag/, pages/, plan/,
+│   │   ├── event/, team/, period/, subscribe/, member/, tag/, pages/, plan/,
 │   │   │   milestone/, view/, me/, layout/, checkout/, landing/, material/, location/,
 │   │   │   testimonials/
 │   │   ├── seo/               # Meta tags + JSON-LD schemas
@@ -111,7 +111,7 @@ be introduced.
 - `[eventId]` — dynamic event slug. All event pages live here:
   - `[eventId]/[pagePath]` — public CMS-like pages for the event.
   - `[eventId]/admin/*` — organizer tools: dashboard, members, subscribes, plan, settings,
-    pages, gift, quota, adhesion. `admin` itself redirects — to `dashboard` for an admin, to
+    pages, quota, adhesion. `admin` itself redirects — to `dashboard` for an admin, to
     `members` for a leader, who is refused the first.
   - `[eventId]/register`, `/me`, `/teams`, `/help`, `/invite` — volunteer-facing pages.
   - `[eventId]/api/*` — event-scoped REST endpoints.
@@ -362,10 +362,10 @@ by `parseOptions` need no `getValue` at all. The search box appears on its own a
 **A parent that repilots `value` after a user selection must bind it.** Passed as a plain prop,
 a `$bindable` stops following the parent as soon as the component has written to it — the display
 then sticks to the user's last choice while the model moves on. `bind:value` takes the setter path
-and has no such problem (`GiftConditions.svelte`, which clears the field after each pick). Where
-binding is impossible because the model holds a string rather than the item, wrap the input in
-`{#key}` on whatever invalidates the selection — the operator select of `MemberConditions.svelte`,
-keyed on the field id, and the `{#key period}` of `PeriodForm.svelte`.
+and has no such problem (`SubscribeInviteForm.svelte`, which clears the field after each
+successful subscription). Where binding is impossible because the model holds a string rather than
+the item, wrap the input in `{#key}` on whatever invalidates the selection — the operator select of
+`MemberConditions.svelte`, keyed on the field id, and the `{#key period}` of `PeriodForm.svelte`.
 
 ### Fixing fuma
 
@@ -552,8 +552,7 @@ breaks `svelte-check`.
 
 - **MySQL** + **Prisma v6**, schema in `prisma/schema.prisma`, with `prisma-json-types-generator`.
 - Models: `User`, `Session`, `Key`, `Token`, `Event`, `Member`, `Team`, `Period`, `Subscribe`,
-  `Page`, `Field`, `View`, `Tag`, `Milestone`, `Gift`, `GiftCondition`, `GiftAllocation`, `Badge`,
-  `Media`, `Message`, `Product`, `Checkout`.
+  `Page`, `Field`, `View`, `Tag`, `Milestone`, `Badge`, `Media`, `Message`, `Product`, `Checkout`.
 - The Prisma client is extended with query middleware in `$lib/server/prisma.ts`:
   - Event soft deletes (renames ID/name instead of hard delete).
   - Event date auto-sync when periods are created/updated/deleted.
@@ -623,11 +622,11 @@ breaks `svelte-check`.
 - **Never commit**: leave changes in the working tree. The user commits.
 - **Fuma first**: before writing a new input, table or dialog, check whether `fuma` already exports
   one. If it almost fits, fix it in `../fuma` rather than growing a local twin.
-- **Event-scoped data**: most entities (teams, members, pages, fields, gifts, badges) belong to an
+- **Event-scoped data**: most entities (teams, members, pages, fields, badges) belong to an
   `Event`; queries should filter by `eventId`.
 - **Computed member values**: `getMemberProfile` in `$lib/server/member.ts` enriches raw `Member`
-  records with roles, subscription stats and gift allocations. Prefer it over raw Prisma queries
-  when member context is needed.
+  records with roles and subscription stats. Prefer it over raw Prisma queries when member
+  context is needed.
 - **Planning grid**: the volunteer schedule visualization is a custom drag-and-drop grid in
   `$lib/plan/`, with its own period stacking and scroll-centering logic.
 - **Reusable components must not own their surface**: a component that can be mounted inside a

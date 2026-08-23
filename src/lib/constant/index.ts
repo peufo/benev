@@ -21,15 +21,7 @@ import {
 } from '@lucide/svelte'
 import type { Component } from 'svelte'
 import { env } from '$env/dynamic/public'
-import type {
-	EventState,
-	EventTier,
-	Field,
-	GiftConditionType,
-	GiftConditionsMode,
-	Page,
-	Subscribe,
-} from '@prisma/client'
+import type { EventState, EventTier, Field, Page, Subscribe } from '@prisma/client'
 import type { OptionRecord } from 'fuma'
 
 /** Durée minimale d'une période de travail. */
@@ -193,16 +185,6 @@ export function parseTierPrice(price: string): { value: string; unit?: string } 
 	if (!unit || isNaN(+value)) return { value: price }
 	return { value, unit }
 }
-
-export const GIFT_CONDITION_MODE: Record<GiftConditionsMode, string> = {
-	sum: 'Somme des conditions',
-	highest: 'Plus haute condition',
-}
-export const GIFT_CONDITION_TYPE: Record<GiftConditionType, string> = {
-	teams: `Doit être inscrit à l'un de ces secteurs`,
-	hours: `Doit avoir un minimum d'heure de travail de`,
-	period: `Doit travailer durant la période de`,
-} as const
 
 export const MEMBER_FIELD_TYPE: OptionRecord<Field['type']> = {
 	string: { label: 'Text', icon: TypeIcon },

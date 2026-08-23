@@ -7,29 +7,29 @@ import {
 	ClipboardListIcon,
 	CircleQuestionMarkIcon,
 	MapPinnedIcon,
-	GiftIcon,
 	SettingsIcon,
 } from '@lucide/svelte'
 
 import { param } from 'fuma'
-import { dev } from '$app/environment'
 import { page } from '$app/state'
 import type { ResolvedPathname } from '$app/types'
 import { eventPath, withSearch, type EventRouteWithoutParams } from '$lib/eventPath'
 
-export function adminTabs() {
+type AdminTab = {
+	href: ResolvedPathname
+	isActive: boolean
+	label: string
+	icon: typeof LucideIcon
+}
+
+export function adminTabs(): AdminTab[] {
 	const query = param.without('skip', 'take', 'form_period')
 	const getPath = (p: EventRouteWithoutParams) => ({
 		href: withSearch(eventPath(p), query),
 		isActive: !!page.route.id?.startsWith(`/[eventId]${p}`),
 	})
 
-	const tabs: {
-		href: ResolvedPathname
-		isActive: boolean
-		label: string
-		icon: typeof LucideIcon
-	}[] = [
+	return [
 		{
 			...getPath('/admin/dashboard'),
 			label: 'Tableau de bord',
@@ -71,18 +71,4 @@ export function adminTabs() {
 			icon: CircleQuestionMarkIcon,
 		},
 	]
-
-	// Insertion relative: un index en dur se décale au moindre onglet ajouté ou fusionné.
-	if (dev)
-		tabs.splice(
-			tabs.findIndex(({ label }) => label === 'Publications'),
-			0,
-			{
-				...getPath('/admin/gift'),
-				label: 'Prestations',
-				icon: GiftIcon,
-			}
-		)
-
-	return tabs
 }
