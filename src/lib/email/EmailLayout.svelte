@@ -57,7 +57,7 @@
 													<div>
 														{#if showLogo}
 															<img
-																src="{domain}/logo.webp"
+																src="{domain}/logo.svg"
 																alt="Logo de benev.io"
 																style="height: 100px;"
 															/>
