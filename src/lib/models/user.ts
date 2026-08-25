@@ -1,8 +1,16 @@
 import z from 'zod'
 import { zDateNullable, zStringNullable } from './form'
 
+/**
+ * Sur une valeur vide, le message par défaut annonce une adresse malformée: ce n'est pas la forme
+ * qui est en cause, c'est l'absence. D'où les deux messages distincts.
+ */
+export const modelEmail = z
+	.email({ error: (issue) => (issue.input === '' ? 'Email requis' : 'Email invalide') })
+	.toLowerCase()
+
 export const modelUserLogin = z.object({
-	email: z.string().email().toLowerCase(),
+	email: modelEmail,
 	password: z.string().min(8),
 })
 

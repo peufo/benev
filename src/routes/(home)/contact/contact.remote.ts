@@ -3,6 +3,7 @@ import { form, getRequestEvent } from '$app/server'
 import z from 'zod'
 import { zStringNullable } from '$lib/models/form'
 import { prisma, sendEmail, sendEmailComponent } from '$lib/server'
+import { createRateLimit } from '$lib/server/rateLimit'
 import { env } from '$env/dynamic/private'
 import { EmailBasic } from '$lib/email'
 
@@ -18,22 +19,10 @@ const sendMessageSchema = z.object({
 
 /**
  * Le formulaire est public: une personne dont les données sont dans benevio sans y avoir de
- * compte doit pouvoir exercer ses droits. D'où la limite par adresse IP, en mémoire du
- * processus — suffisant pour un déploiement à instance unique, à revoir s'il en naît une seconde.
+ * compte doit pouvoir exercer ses droits. D'où la limite, et par adresse IP faute d'un compte
+ * sur lequel s'appuyer.
  */
-const RATE_LIMIT_WINDOW_MS = 10 * 60_000
-const RATE_LIMIT_MAX = 3
-const RATE_LIMIT_MAX_ENTRIES = 10_000
-const sendsByIp = new Map<string, number[]>()
-
-function isRateLimited(ip: string) {
-	const now = Date.now()
-	const recent = (sendsByIp.get(ip) ?? []).filter((at) => now - at < RATE_LIMIT_WINDOW_MS)
-	if (recent.length >= RATE_LIMIT_MAX) return true
-	if (sendsByIp.size > RATE_LIMIT_MAX_ENTRIES) sendsByIp.clear()
-	sendsByIp.set(ip, [...recent, now])
-	return false
-}
+const isRateLimited = createRateLimit({ windowMs: 10 * 60_000, max: 1 })
 
 export const sendMessage = form(sendMessageSchema, async (data, issue) => {
 	const { locals, getClientAddress } = getRequestEvent()

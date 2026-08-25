@@ -1,5 +1,5 @@
 import { error, invalid, redirect } from '@sveltejs/kit'
-import { form, getRequestEvent } from '$app/server'
+import { command, form, getRequestEvent } from '$app/server'
 import z from 'zod'
 import {
 	auth,
@@ -9,7 +9,8 @@ import {
 	prisma,
 	sendEmailComponent,
 } from '$lib/server'
-import { modelUserCreate, modelUserLogin, modelUserUpdate } from '$lib/models'
+import { createRateLimit } from '$lib/server/rateLimit'
+import { modelEmail, modelUserCreate, modelUserLogin, modelUserUpdate } from '$lib/models'
 import { TERMS_VERSION } from '$lib/constant'
 import { modelMediaImage } from '$lib/models/media'
 import { EmailPasswordReset, EmailVerificationLink } from '$lib/email'
@@ -101,23 +102,23 @@ export const sendEmailVerification = form(async () => {
 	await sendVerificationEmail(session.user)
 })
 
-export const resetPassword = form(
-	z.object({ email: z.string().email().toLowerCase() }),
-	async ({ email }) => {
-		// Adresse inconnue: on ne le dit pas et on ne lève pas non plus. Répondre différemment
-		// selon l'existence du compte permettrait d'énumérer les utilisateurs — et `findUniqueOrThrow`
-		// remontait en 500 chez la personne qui s'est simplement trompée d'adresse.
-		const user = await prisma.user.findUnique({ where: { email }, select: { id: true } })
-		if (!user) return
+/**
+ * Chaque demande met un message dans la file SMTP et écrit une ligne de journal: sans borne, le
+ * bouton suffit à inonder les deux, et la boîte de la personne visée avec.
+ */
+const isResetRateLimited = createRateLimit({ windowMs: 15 * 60_000, max: 3 })
 
-		const tokenId = await generateToken('passwordReset', user.id)
-		await sendEmailComponent(EmailPasswordReset, {
-			to: email,
-			subject: 'Reinitialisation du mot de passe',
-			props: { tokenId },
-		})
-	}
-)
+export const resetPassword = command(modelEmail, async (email) => {
+	if (isResetRateLimited(email)) error(429, 'Too many reset requests')
+	const user = await prisma.user.findUnique({ where: { email }, select: { id: true } })
+	if (!user) return
+	const tokenId = await generateToken('passwordReset', user.id)
+	await sendEmailComponent(EmailPasswordReset, {
+		to: email,
+		subject: 'Reinitialisation du mot de passe',
+		props: { tokenId },
+	})
+})
 
 /**
  * Les champs requis dépendent de l'évènement d'où l'on vient (`eventId`): cette part de la

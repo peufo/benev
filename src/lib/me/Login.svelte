@@ -6,6 +6,7 @@
 	import { InputBoolean, InputString } from 'fuma'
 	import { toast } from 'svelte-sonner'
 	import { page } from '$app/state'
+	import { modelEmail } from '$lib/models'
 	import { contextContainer } from '$lib/ui/context.js'
 	import Oauth from './Oauth.svelte'
 	import { loginUser, registerUser, resetPassword } from './user.remote'
@@ -29,6 +30,24 @@
 
 	const reducedMotion = new MediaQuery('(prefers-reduced-motion: reduce)')
 	let slideDuration = $derived(reducedMotion.current ? 0 : 220)
+
+	/**
+	 * `resetPassword` est un `command()`, pas un `form()`: il n'a donc pas de champ où rendre ses
+	 * erreurs, et c'est voulu — l'email affiché appartient à `loginUser`, deux sources d'issues sous
+	 * le même input en empileraient les messages.
+	 */
+	let resetPasswordIssue = $state('')
+
+	const RESET_COOLDOWN_S = 60
+	let resetCooldown = $state(0)
+
+	// L'effet se réexécute à chaque décrément, ce qui réarme le timer; son nettoyage couvre aussi
+	// le démontage du composant.
+	$effect(() => {
+		if (resetCooldown <= 0) return
+		const id = setTimeout(() => resetCooldown--, 1000)
+		return () => clearTimeout(id)
+	})
 
 	let redirectTo = $derived(page.url.searchParams.get('redirectTo'))
 	let isPending = $derived(loginUser.pending + registerUser.pending + resetPassword.pending > 0)
@@ -59,6 +78,7 @@
 	}
 
 	async function handleAuth(submit: () => Promise<boolean>) {
+		resetPasswordIssue = ''
 		try {
 			// `submit()` renvoie `false` quand la validation échoue: les messages sont déjà rendus
 			// sous les champs concernés, il n'y a rien à annoncer en plus.
@@ -92,14 +112,29 @@
 		}
 	}
 
-	async function handleReset(submit: () => Promise<boolean>) {
+	async function handleReset() {
+		// Validé ici plutôt que par le serveur: un `command()` lève au lieu de renvoyer des issues,
+		// et `z.config(z.locales.fr())` ne tourne que dans `hooks.server.ts`. Les messages de
+		// `modelEmail` étant écrits à la main, ils sont justes des deux côtés — et le tour est évité.
+		const parsed = modelEmail.safeParse(loginUser.fields.email.value()?.trim() ?? '')
+		if (!parsed.success) {
+			resetPasswordIssue = parsed.error.issues[0].message
+			return
+		}
+
+		resetPasswordIssue = ''
 		try {
-			if (!(await submit())) return
+			await resetPassword(parsed.data)
 			recoveryNeeded = false
-			setMode('login')
+			resetCooldown = RESET_COOLDOWN_S
 			// Le serveur ne dit pas si l'adresse est connue, le message non plus.
 			toast.success('Si un compte existe avec cet email, le lien vient de partir')
 		} catch (err) {
+			if (getErrorMessage(err).includes('Too many reset requests')) {
+				resetPasswordIssue = 'Trop de demandes. Réessaie dans quelques minutes.'
+				resetCooldown = RESET_COOLDOWN_S
+				return
+			}
 			console.error(err)
 			toast.error("L'envoi du lien a échoué. Réessaie dans un instant.")
 		}
@@ -124,17 +159,10 @@
 
 	<div class="divider my-2 text-xs text-base-content/70">ou</div>
 
-	<!-- Trois remote functions sur un même `<form>`: SvelteKit n'exécute que celle dont
-	     l'`action` correspond au `formaction` du bouton pressé. Le bouton principal reste le
-	     premier `submit` du formulaire, c'est lui que déclenche la touche Entrée.
-
-	     `[&_.input]:w-full` s'applique au formulaire entier: `.input` de DaisyUI plafonne à
-	     20rem, et `InputBoolean` ne transmet pas `class` à son enveloppe. -->
 	<form
 		class="flex flex-col gap-2 [&_.input]:w-full"
 		{...loginUser.enhance(({ submit }) => handleAuth(submit))}
 		{...registerUser.enhance(({ submit }) => handleAuth(submit))}
-		{...resetPassword.enhance(({ submit }) => handleReset(submit))}
 	>
 		{#if mode === 'register'}
 			<div transition:slide|local={{ duration: slideDuration }} class="grid grid-cols-2 gap-3">
@@ -160,7 +188,13 @@
 			type="email"
 			autocomplete="email"
 			inputmode="email"
+			oninput={() => (resetPasswordIssue = '')}
 		/>
+		{#if resetPasswordIssue && !loginUser.fields.email.issues()?.length}
+			<p class="mb-1 text-xs text-error" transition:slide={{ duration: 200 }}>
+				{resetPasswordIssue}
+			</p>
+		{/if}
 		<InputString
 			field={mode === 'login' ? loginUser.fields.password : registerUser.fields.password}
 			label="Mot de passe"
@@ -206,9 +240,10 @@
 					t'envoie un lien pour en définir un.
 				</p>
 				<button
+					type="button"
 					class="btn btn-primary btn-sm mt-3 w-full"
-					formaction={resetPassword.action}
-					disabled={isPending}
+					onclick={handleReset}
+					disabled={isPending || resetCooldown > 0}
 				>
 					Recevoir le lien
 				</button>
@@ -217,11 +252,12 @@
 
 		{#if mode === 'login'}
 			<button
-				class="link link-hover mx-auto py-2 text-sm text-base-content/70"
-				formaction={resetPassword.action}
-				disabled={isPending}
+				type="button"
+				class="link link-hover mx-auto py-2 text-sm text-base-content/70 disabled:opacity-60"
+				onclick={handleReset}
+				disabled={isPending || resetCooldown > 0}
 			>
-				Mot de passe oublié ?
+				{resetCooldown ? `Renvoyer dans ${resetCooldown} s` : 'Mot de passe oublié ?'}
 			</button>
 		{/if}
 	</form>
