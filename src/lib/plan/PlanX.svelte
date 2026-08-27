@@ -6,6 +6,7 @@
 	import { afterNavigate, goto } from '$app/navigation'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
+	import { eventPath } from '$lib/eventPath'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { persistHourSize, withHourSize } from './zoom'
 	import { scrollOnZoom } from './scrollOnZoom'
@@ -128,7 +129,7 @@
 			style:width="{totalWidth}px"
 		>
 			<a
-				href={urlParam.with({ form_team: team.id })}
+				href={eventPath('/admin/teams/[teamId]', { teamId: team.id })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				style:width="{TEAM_HEADER_WIDTH}px"

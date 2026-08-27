@@ -4,6 +4,7 @@
 	import { PlusIcon } from '@lucide/svelte'
 	import type { Team } from '@prisma/client'
 	import { afterNavigate } from '$app/navigation'
+	import { eventPath } from '$lib/eventPath'
 	import TeamCol from './TeamCol.svelte'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { persistHourSize, withHourSize } from './zoom'
@@ -96,7 +97,7 @@
 			style:height="{totalHeight}px"
 		>
 			<a
-				href={urlParam.with({ form_team: team.id })}
+				href={eventPath('/admin/teams/[teamId]', { teamId: team.id })}
 				data-sveltekit-replacestate
 				data-sveltekit-noscroll
 				style:height="{TEAM_HEADER_HEIGHT}px"
