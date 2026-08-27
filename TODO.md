@@ -4,6 +4,6 @@
 
 - [ ] Verifier le pipeline de deploiement dev. Le hook de déploiement par sur l'environmenent de prod...
 
-- [ ] L'image du partage wattsapp est un webp (degueu) au lieu d'être le svg
+- [ ] Quand on partage le lien sur Watssapp, l'image qui apparait est un webp avec un découpage pas très jolie. Est-il possible que ca utilise e svg à la place ?
 
 - [ ] Dans le plan, faire en sorte que les périodes avec la même étiquête soit sur la même ligne quand il y en à plusieur. Peut-être qu'un simple tri sur la première étiquète suffit. J'espère en tout cas.
