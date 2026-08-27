@@ -105,4 +105,10 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test("L'invitation se renvoie depuis la fiche du membre", async () => {
 		await event.expectResendInvite(page)
 	})
+
+	// Après les secteurs, qui n'existent qu'à partir de là, et après le journal, dont la fenêtre
+	// de trente entrées déborderait de ce que ce parcours y ajoute.
+	test("L'invitation confie des secteurs dès la création du membre", async () => {
+		await event.expectInviteAssignsTeams(page)
+	})
 })

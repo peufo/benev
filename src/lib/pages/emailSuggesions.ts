@@ -45,6 +45,24 @@ const suggestionAuthorName: Suggestion<'invitation_create' | 'subscribe_request'
 	getValue: (data) => data.authorName,
 }
 
+/**
+ * La phrase entière, et non la seule liste des secteurs: une invitation ordinaire n'en confie
+ * aucun, et un gabarit qui porterait « en tant que responsable des secteurs {liste}. » afficherait
+ * alors une clause vide suivie d'un point. L'espace initiale appartient donc à la valeur.
+ */
+const suggestionAsLeaderOf: Suggestion<'invitation_create'> = {
+	id: 'asLeaderOf',
+	label: 'Responsabilité des secteurs',
+	getValue: ({ member }) => {
+		const names = member.leaderOf.map(({ name }) => name)
+		if (!names.length) return ''
+		const list = new Intl.ListFormat('fr', { type: 'conjunction' }).format(names)
+		return names.length === 1
+			? ` en tant que responsable du secteur ${list}`
+			: ` en tant que responsable des secteurs ${list}`
+	},
+}
+
 const suggestionsSubscribe: Suggestion<
 	'subscribe_request' | 'subscribe_accepted' | 'subscribe_cancelled' | 'subscribe_denied'
 >[] = [
@@ -63,6 +81,7 @@ const suggestionsSubscribe: Suggestion<
 export const emailSuggestions: EmailSuggestions = {
 	invitation_create: [
 		suggestionAuthorName,
+		suggestionAsLeaderOf,
 		{
 			id: 'acceptURL',
 			label: "Lien pour accepter l'invitation",

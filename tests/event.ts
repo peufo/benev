@@ -863,5 +863,46 @@ export function useEvent(owner: User, name: string) {
 			await expect(name).toHaveValue('Alpha')
 			await expect(overflow.locator('input')).not.toBeChecked()
 		},
+		/**
+		 * Le seul geste qui nomme un responsable hors du secteur. La relation est écrite avec le
+		 * membre, et le journal en fige les noms — le fil se rend sans jointure, et `teamId` ne
+		 * pourrait de toute façon en désigner qu'un.
+		 */
+		async expectInviteAssignsTeams(page: Page) {
+			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			const dialog = page.getByRole('dialog')
+			await dialog.getByLabel('Prénom').fill('Alyx')
+			// `exact`: « Prénom » contient « nom ».
+			await dialog.getByLabel('Nom', { exact: true }).fill('Vance')
+
+			// Le combobox tient ses secteurs d'une remote query: attendre la proposition, c'est
+			// attendre l'hydratation et la réponse. Un clic de trop ne fait que refermer le
+			// popover, que la tentative suivante rouvre.
+			const combobox = dialog.getByRole('combobox', { name: 'Responsable des secteurs' })
+			const option = dialog.getByRole('option', { name: 'Alpha', exact: true })
+			await expect(async () => {
+				await combobox.click()
+				await expect(option).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await option.click()
+
+			await dialog.getByRole('button', { name: 'Valider' }).click()
+			// Sans adresse, il n'y a rien à envoyer: le libellé du succès le dit.
+			await expect(page.getByText('Membre ajouté')).toBeVisible()
+
+			await page.goto(`/${eventId}/admin/members`)
+			await page
+				.getByRole('link', { name: /Alyx Vance/ })
+				.first()
+				.click()
+			await expect(page.getByRole('heading', { name: 'Alyx Vance' })).toBeVisible()
+			// Le rôle se dérive de la relation: le badge dit qu'elle a bien été écrite.
+			await expect(page.getByText('Responsable', { exact: true })).toBeVisible()
+
+			const journal = page.locator('#journal').getByRole('listitem')
+			await expect(
+				journal.filter({ hasText: 'a invité Alyx Vance' }).filter({ hasText: 'Alpha' })
+			).toHaveCount(1)
+		},
 	}
 }

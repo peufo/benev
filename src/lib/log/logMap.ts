@@ -86,11 +86,13 @@ export const logMap = {
 		actor,
 		sendEmail,
 		resent,
+		teams,
 	}: {
 		member: MemberSource
 		actor: LogActor
 		sendEmail: boolean
 		resent?: boolean
+		teams?: LogRef[]
 	}) => ({
 		eventId: member.eventId,
 		memberId: member.id,
@@ -104,6 +106,9 @@ export const logMap = {
 			// Un renvoi ne crée rien: seule cette ligne distingue les deux gestes. La clé reste
 			// optionnelle, les lignes déjà écrites ne la portent pas.
 			...(resent && { resent: true as const }),
+			// Les secteurs confiés dès l'invitation. `teamId` ne pourrait en désigner qu'un: la
+			// liste vit dans la charge utile, et rien ne la joint au rendu.
+			...(teams?.length && { teams }),
 			actor: refActor(actor),
 		},
 	}),
@@ -179,7 +184,10 @@ export const logMap = {
 		},
 	}),
 
-	/** Les responsables d'un secteur se règlent depuis le secteur, et `team_update` en porte le diff. */
+	/**
+	 * Les responsables d'un secteur se règlent depuis le secteur — `team_update` en porte le diff —
+	 * ou dès l'invitation, que `member_invite` journalise.
+	 */
 	member_role: ({
 		member,
 		actor,

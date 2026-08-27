@@ -9,7 +9,6 @@
 		OctagonAlertIcon,
 		PaletteIcon,
 		PlusIcon,
-		UserRoundPlusIcon,
 	} from '@lucide/svelte'
 	import { InputTextarea, tip, urlParam } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
@@ -80,8 +79,9 @@
 </script>
 
 <OnlyAdmin>
-	<div class="mx-auto flex w-full max-w-2xl items-start gap-3 pb-120 lg:max-w-4xl">
-		<div class="flex w-full max-w-2xl min-w-0 flex-col gap-3">
+	<div class="mx-auto flex w-full items-start gap-3 pb-120">
+		<TableOfContent sections={SECTIONS} title="Réglages" />
+		<div class="mx-auto flex w-full max-w-2xl min-w-0 flex-col gap-3">
 			<Section id="status" title="Statut" icon={EyeIcon}>
 				<div class="flex flex-col gap-4">
 					<EventStateForm isOwner={data.member?.userId == data.event.ownerId} event={data.event} />
@@ -206,8 +206,6 @@
 				</div>
 			</Section>
 		</div>
-
-		<TableOfContent sections={SECTIONS} title="Réglages" />
 	</div>
 
 	<SaveBar

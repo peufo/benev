@@ -124,11 +124,14 @@ describe('rendu du journal', () => {
 				member: { ...member, email: 'marc@example.org' },
 				actor,
 				sendEmail: false,
+				// Les secteurs confiés à l'invitation: leurs noms sont figés, rien n'est joint.
+				teams: [{ id: 'team_bar', name: 'Bar' }],
 			}).data
 		)
 		expect(invited).toContain('marc@example.org')
 		expect(invited).toContain('aucun email envoyé')
 		expect(invited).toContain('a invité')
+		expect(invited).toContain('Bar')
 
 		// Le renvoi rejoue le même type: seul le drapeau le distingue du premier envoi.
 		const resent = renderLog(
@@ -143,6 +146,7 @@ describe('rendu du journal', () => {
 		)
 		expect(resent).toContain('a renvoyé une invitation à')
 		expect(resent).not.toContain('aucun email envoyé')
+		expect(resent).not.toContain('responsable de')
 
 		expect(
 			renderLog(

@@ -37,6 +37,12 @@
 		{#if log.data.email && !log.data.sendEmail}
 			<span class="badge badge-sm badge-warning badge-outline">aucun email envoyé</span>
 		{/if}
+		{#if log.data.teams?.length}
+			<span>responsable de</span>
+			{#each log.data.teams as team (team.id)}
+				<span class="badge badge-sm badge-ghost">{team.name}</span>
+			{/each}
+		{/if}
 	{:else if log.type === 'member_join' && !log.data.isValidedByEvent}
 		<span class="badge badge-sm badge-warning badge-outline">en attente d'approbation</span>
 	{/if}

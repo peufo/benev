@@ -121,10 +121,14 @@ function buildModelMemberProfile(fields: Field[], isPartial: boolean) {
 	return model
 }
 
-export const createInvite = form(modelInvite, async ({ sendEmail, ...data }, issue) => {
+export const createInvite = form(modelInvite, async ({ sendEmail, leaderOf, ...data }, issue) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	const author = await permission.leader(eventId, locals)
+
+	// Nommer un responsable reste réservé aux administrateurs, comme dans `updateTeam`: le champ
+	// n'est pas rendu aux autres, et un formulaire forgé ne doit pas contourner la règle.
+	if (leaderOf.length && !author.roles.includes('admin')) error(403)
 
 	if (data.email) {
 		const alreadyMember = await prisma.member.findFirst({
@@ -139,6 +143,16 @@ export const createInvite = form(modelInvite, async ({ sendEmail, ...data }, iss
 			)
 	}
 
+	// La relation many-to-many ne connaît pas l'évènement: relire les secteurs vaut validation des
+	// ids reçus, et donne les noms que le journal fige.
+	const teams = leaderOf.length
+		? await prisma.team.findMany({
+				where: { id: { in: leaderOf }, eventId },
+				select: { id: true, name: true },
+			})
+		: []
+	if (teams.length !== leaderOf.length) error(400, 'Secteur inconnu')
+
 	const member = await prisma.member.create({
 		data: {
 			...data,
@@ -148,12 +162,13 @@ export const createInvite = form(modelInvite, async ({ sendEmail, ...data }, iss
 			isNotifiedSubscribe: !!data.email,
 			isNotifiedLeaderOfSubscribe: !!data.email,
 			isNotifiedAdminOfNewMember: !!data.email,
+			leaderOf: { connect: teams.map(({ id }) => ({ id })) },
 		},
 		include: { event: true },
 	})
 
 	await notifyTierQuotaIfNeeded(eventId)
-	await createLog('member_invite', { member, actor: author, sendEmail })
+	await createLog('member_invite', { member, actor: author, sendEmail, teams })
 
 	if (!member.email || !sendEmail) return member
 

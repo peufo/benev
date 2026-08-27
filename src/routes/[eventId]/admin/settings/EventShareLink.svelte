@@ -15,7 +15,10 @@
 
 <div class="flex flex-col gap-3 rounded-box border border-soft p-4">
 	<div class="flex gap-2">
-		<h3 class="title-md">Partage</h3>
+		<div>
+			<h3 class="title-md">Partage</h3>
+			<span class="text-sm text-base-content/80">L'adresse du site, à diffuser aux bénévoles.</span>
+		</div>
 
 		<a
 			class="btn btn-sm ml-auto"

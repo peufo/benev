@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { InputBoolean, InputString } from 'fuma'
+	import { InputBoolean, InputMultiSelect, InputString } from 'fuma'
 	import z from 'zod'
 	import { slide } from 'svelte/transition'
 	import { toast } from 'svelte-sonner'
-	import type { Event, EventState, Member } from '@prisma/client'
+	import type { Event, EventState, Member, Team } from '@prisma/client'
+	import { page } from '$app/state'
 	import { enhanceForm } from './enhanceForm'
 	import { createInvite, findUserByEmail } from './member/member.remote'
+	import { searchTeams } from './team/team.remote'
 
 	interface Props {
 		event: Event
@@ -17,6 +19,13 @@
 	let isEmailValid = $state(false)
 	let isLoadingUserExists = $state(false)
 	let user = $state({ firstName: '', lastName: '' })
+	// Lié, et non passé en simple prop: `reset()` repilote la sélection après coup, ce qu'un
+	// `$bindable` cesse de suivre dès que le composant y a écrit.
+	let leaderOf = $state<Team[]>([])
+
+	// Le tiroir est monté pour tout responsable, mais nommer un responsable reste le fait des
+	// administrateurs — `createInvite` refuse les autres.
+	let isAdmin = $derived(!!page.data.member?.roles.includes('admin'))
 
 	/**
 	 * Une case désactivée n'est pas soumise, et celle-ci n'est renseignée qu'au premier clic:
@@ -70,10 +79,18 @@
 	 * `<form>` ne suffit pas.
 	 */
 	function reset() {
-		createInvite.fields.set({ firstName: '', lastName: '', email: '', sendEmail: true })
+		createInvite.fields.set({
+			firstName: '',
+			lastName: '',
+			email: '',
+			sendEmail: true,
+			leaderOf: [],
+		})
 		email = ''
 		isEmailValid = false
 		user = { firstName: '', lastName: '' }
+		// Les cases cachées du multi-select se dérivent de cette liste, pas de l'état du champ.
+		leaderOf = []
 	}
 </script>
 
@@ -119,6 +136,26 @@
 				</div>
 			{/if}
 		</div>
+
+		{#if isAdmin}
+			<div class="col-span-2">
+				<InputMultiSelect
+					field={createInvite.fields.leaderOf}
+					label="Responsable des secteurs"
+					bind:value={leaderOf}
+					items={searchTeams}
+					placeholder="Aucun secteur"
+					class="w-full"
+				>
+					{#snippet selected(team)}
+						<span>{team.name}</span>
+					{/snippet}
+					{#snippet proposal(team)}
+						<span>{team.name}</span>
+					{/snippet}
+				</InputMultiSelect>
+			</div>
+		{/if}
 
 		<div class="col-span-2">
 			<InputBoolean
