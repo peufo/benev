@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Checkout, User, Product } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
-	import { domain } from '.'
+	import { ORIGIN } from '$app/env/public'
 
 	interface Props {
 		checkout: Checkout & { user: User; products: Product[] }
@@ -52,7 +52,7 @@
 	{#if dest === 'user'}
 		<p>
 			Tu peux retrouver tous tes achats sur
-			<a href="{domain}/me/checkouts" rel="external">ton profil.</a>
+			<a href="{ORIGIN}/me/checkouts" rel="external">ton profil.</a>
 		</p>
 
 		<p>Merci pour ta confiance !</p>

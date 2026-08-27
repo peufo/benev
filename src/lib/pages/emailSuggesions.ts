@@ -1,6 +1,6 @@
 import type { Period, Subscribe, Team } from '@prisma/client'
 import type { MemberWithComputedValues } from '$lib/server'
-import { domain } from '$lib/email'
+import { ORIGIN } from '$app/env/public'
 import type { Replacer } from './injectValues'
 import type { EmailEvent } from '$lib/email/models'
 import { formatRange } from '$lib/formatRange'
@@ -67,7 +67,7 @@ export const emailSuggestions: EmailSuggestions = {
 			id: 'acceptURL',
 			label: "Lien pour accepter l'invitation",
 			getValue: ({ member }) =>
-				`<a href="${domain}/${member.eventId}/me" data-sveltekit-preload-data="off">ce lien</a>`,
+				`<a href="${ORIGIN}/${member.eventId}/me" data-sveltekit-preload-data="off">ce lien</a>`,
 		},
 	],
 	invitation_accept: [],

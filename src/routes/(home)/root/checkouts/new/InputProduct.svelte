@@ -1,12 +1,12 @@
 <script lang="ts">
-	import env from '$app/env/public'
+	import { PRICE_STANDARD, PRICE_PREMIUM, PRICE_STANDARD_TO_PREMIUM } from '$app/env/public'
 	import { InputNumber } from 'fuma'
 	import { createCheckout } from './checkout.remote'
 
 	const products = [
-		{ priceId: env.PRICE_STANDARD, name: 'Plan standard' },
-		{ priceId: env.PRICE_PREMIUM, name: 'Plan premium' },
-		{ priceId: env.PRICE_STANDARD_TO_PREMIUM, name: 'Plan premium (upgrade)' },
+		{ priceId: PRICE_STANDARD, name: 'Plan standard' },
+		{ priceId: PRICE_PREMIUM, name: 'Plan premium' },
+		{ priceId: PRICE_STANDARD_TO_PREMIUM, name: 'Plan premium (upgrade)' },
 	]
 </script>
 

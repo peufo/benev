@@ -2,7 +2,7 @@ import objectPath from 'object-path'
 import type { Field } from '@prisma/client'
 import type { MemberWithComputedValues } from '$lib/server'
 import { getAge } from '$lib/utils'
-import { domain } from '$lib/email'
+import { ORIGIN } from '$app/env/public'
 import type { NestedPaths } from './nestedPaths'
 import type { Replacer } from './injectValues'
 
@@ -38,13 +38,13 @@ const memberComputedSuggestions: Record<
 	me: [
 		'Lien vers le tableau de bord',
 		({ member }) => {
-			const href = `${domain}/${member.eventId}/me`
+			const href = `${ORIGIN}/${member.eventId}/me`
 			return `<a href="${href}">tableau de bord</a>`
 		},
 	],
 	teams: [
 		'Lien vers les secteurs',
-		({ member }) => `<a href="${domain}/${member.eventId}/teams">secteurs</a>`,
+		({ member }) => `<a href="${ORIGIN}/${member.eventId}/teams">secteurs</a>`,
 	],
 }
 

@@ -8,7 +8,7 @@
 	import { eventPath } from '$lib/eventPath'
 	import { debounce } from '$lib/debounce'
 	import { fade } from 'svelte/transition'
-	import { browser } from '$app/environment'
+	import { browser } from '$app/env'
 
 	interface Props {
 		badge: PageData['badge']

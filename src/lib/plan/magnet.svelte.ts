@@ -1,4 +1,4 @@
-import { browser } from '$app/environment'
+import { browser } from '$app/env'
 import { time } from './utils'
 
 // La touche modificatrice est un état global du document: un `$state` de module suffit,

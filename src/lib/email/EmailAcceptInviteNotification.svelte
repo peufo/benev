@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Event, Member } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
-	import { domain } from '.'
+	import { ORIGIN } from '$app/env/public'
 
 	interface Props {
 		member: Member & { event: Event }
@@ -21,7 +21,7 @@
 	</p>
 	<p>
 		Tu peux trouver toutes ses informations
-		<a href="{domain}/{member.event.id}/admin/members/{member.id}" rel="external">
+		<a href="{ORIGIN}/{member.event.id}/admin/members/{member.id}" rel="external">
 			sur son profil.
 		</a>
 	</p>

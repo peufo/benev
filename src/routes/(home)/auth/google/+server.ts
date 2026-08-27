@@ -1,4 +1,4 @@
-import { dev } from '$app/environment'
+import { dev } from '$app/env'
 import { googleAuth } from '$lib/server/lucia.js'
 import { redirect } from '@sveltejs/kit'
 

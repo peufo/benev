@@ -1,4 +1,4 @@
-import { page } from '$app/state'
+import { ORIGIN } from '$app/env/public'
 import type { Extensions } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
@@ -43,7 +43,7 @@ export const extensions: Extensions = [
 		width: '100%',
 		height: 360,
 		nocookie: true,
-		origin: page.url.origin,
+		origin: ORIGIN,
 		modestBranding: true,
 		HTMLAttributes: {
 			class: 'mx-auto rounded',

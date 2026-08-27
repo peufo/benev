@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import env from '$app/env/private'
+import { ROOT_USER } from '$app/env/private'
 import { prisma } from '$lib/server'
 import { isTierQuotaReached } from '$lib/server/tierQuota'
 import { resolve } from '$app/paths'
@@ -32,7 +32,7 @@ export const permission = {
 async function rootPermission(locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) error(401)
-	if (session.user.email !== env.ROOT_USER) error(403, "You're not root user")
+	if (session.user.email !== ROOT_USER) error(403, "You're not root user")
 	return session.user
 }
 
@@ -54,7 +54,7 @@ function createMemberOrRootPermission(role: MemberRole) {
 	): Promise<MemberWithComputedValuesAndAccount | null> => {
 		const session = await locals.auth.validate()
 		if (!session) error(401)
-		if (session.user.email === env.ROOT_USER) return null
+		if (session.user.email === ROOT_USER) return null
 		return checkMemberRole(session, eventId, role)
 	}
 }

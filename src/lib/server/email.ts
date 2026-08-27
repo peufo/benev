@@ -1,4 +1,5 @@
-import env from '$app/env/private'
+import { SMTP_USER, EMAIL_DISABLED } from '$app/env/private'
+import { ORIGIN } from '$app/env/public'
 import { type SendMailOptions } from 'nodemailer'
 import type { Component, ComponentProps } from 'svelte'
 import { render } from 'svelte/server'
@@ -12,7 +13,6 @@ import { injectValues } from '$lib/pages/injectValues'
 import { tiptapParser } from '$lib/ui/textRich/tiptapParser'
 import EmailLayout from '$lib/email/EmailLayout.svelte'
 import { getMemberReplacers } from '$lib/pages/memberSuggestions'
-import { domain } from '$lib/email'
 
 export type SendMailOptionsWithLog = SendMailOptions & {
 	/** Rattache la ligne de journal produite par l'envoi. */
@@ -38,7 +38,7 @@ export const sendEmail = async ({
 	logContext,
 	...options
 }: SendMailOptionsWithLog) => {
-	if (env.EMAIL_DISABLED) return
+	if (EMAIL_DISABLED) return
 
 	const recipients = {
 		to: withoutTestRecipients(to),
@@ -52,7 +52,7 @@ export const sendEmail = async ({
 
 	enqueueEmail(
 		{
-			from: `${from || 'Benev.io'} <${env.SMTP_USER}>`,
+			from: `${from || 'Benev.io'} <${SMTP_USER}>`,
 			to: recipients.to.kept,
 			cc: recipients.cc.kept,
 			bcc: recipients.bcc.kept,
@@ -102,9 +102,9 @@ export async function renderEmailModel<EmailPath extends EmailEvent>(
 		props: { title: model.event.name, subtitle: model.title },
 	})
 	const html = layout.body.replace('__SLOT__', injectValues(modelHTML, replacers))
-	return injectDomain(html)
+	return injectOrigin(html)
 }
 
-function injectDomain(html: string): string {
-	return html.replaceAll(/(<[^>]*)src="\//g, `$1src="${domain}/`)
+function injectOrigin(html: string): string {
+	return html.replaceAll(/(<[^>]*)src="\//g, `$1src="${ORIGIN}/`)
 }

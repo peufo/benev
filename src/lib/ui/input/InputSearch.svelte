@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { XIcon } from '@lucide/svelte'
 	import type { FocusEventHandler, FormEventHandler, KeyboardEventHandler } from 'svelte/elements'
-	import { browser } from '$app/environment'
+	import { browser } from '$app/env'
 	import { page } from '$app/stores'
 	import { bindValueWithParams } from './action.js'
 

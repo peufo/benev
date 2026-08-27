@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import { loadStripe } from '@stripe/stripe-js'
-	import env from '$app/env/public'
+	import { STRIPE_KEY } from '$app/env/public'
 	import { Card } from '$lib/ui'
 
 	let { data } = $props()
@@ -12,7 +12,7 @@
 
 	async function initCheckout() {
 		try {
-			const stripe = await loadStripe(env.STRIPE_KEY)
+			const stripe = await loadStripe(STRIPE_KEY)
 			if (!stripe) throw 'stripe is not defined'
 			const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret })
 			isLoading = false

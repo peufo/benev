@@ -1,6 +1,6 @@
 <script lang="ts">
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
-	import { domain } from '.'
+	import { ORIGIN } from '$app/env/public'
 
 	interface Props {
 		isNewUser?: boolean
@@ -14,7 +14,7 @@
 	<p>
 		Tu peux valider ton adresse email en
 		<a
-			href="{domain}/token/{tokenId}/email_verification"
+			href="{ORIGIN}/token/{tokenId}/email_verification"
 			rel="external"
 			data-sveltekit-preload-data="off"
 		>

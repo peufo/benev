@@ -2,9 +2,7 @@
 
 - [ ] Il faut ajouter la possibilité d'envoyer une nouvelle invitation à la demande depuis la fiche de membre. Ca couvre le cas ou on change/corrige l'email du membre.
 
-- [ ] Verifier le pipeline de deploiement dev
-
-- [ ] Utiliser PUBLIC_ORIGIN au lieu des valeur literals (ex: benev/src/lib/email/index.ts:2 , benev/src/lib/server/lucia.ts:24)
+- [ ] Verifier le pipeline de deploiement dev. Le hook de déploiement par sur l'environmenent de prod...
 
 - [ ] L'image du partage wattsapp est un webp (degueu) au lieu d'être le svg
 

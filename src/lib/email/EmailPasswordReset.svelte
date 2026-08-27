@@ -1,6 +1,6 @@
 <script lang="ts">
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
-	import { domain } from '.'
+	import { ORIGIN } from '$app/env/public'
 
 	interface Props {
 		tokenId: string
@@ -13,7 +13,7 @@
 	<p>
 		Tu peux changer ton mot de passe en
 		<a
-			href="{domain}/token/{tokenId}/reset_password"
+			href="{ORIGIN}/token/{tokenId}/reset_password"
 			rel="external"
 			data-sveltekit-preload-data="off"
 		>

@@ -7,6 +7,7 @@ export default defineConfig({
 	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
 	test: {
 		environment: 'node',
+		setupFiles: ['src/tests/setupEnv.ts'],
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 		// `tiptapParser`, utilisé par le rendu serveur des e-mails, tire les extensions de
 		// l'éditeur et donc `tippy.js/dist/tippy.css`. Externalisé, le CSS remonte au

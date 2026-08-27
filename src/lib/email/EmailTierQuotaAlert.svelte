@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Event, EventTier, User } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
-	import { domain } from '.'
+	import { ORIGIN } from '$app/env/public'
 	import { EVENT_TIER } from '$lib/constant'
 
 	interface Props {
@@ -63,7 +63,7 @@
 
 	<p style="text-align: center; margin: 24px 0;">
 		<a
-			href="{domain}/{event.id}/admin/settings"
+			href="{ORIGIN}/{event.id}/admin/settings"
 			rel="external"
 			style="
 				background: #0d3b66;

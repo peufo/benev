@@ -1,4 +1,4 @@
-import env from '$app/env/private'
+import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_DISABLED } from '$app/env/private'
 import nodemailer, { type SendMailOptions } from 'nodemailer'
 import type { EmailFailureReason, EmailRelations } from '$lib/log/logMap'
 import { createLog } from './log'
@@ -17,11 +17,11 @@ import { toAddressList } from './recipients'
  */
 
 const transporter = nodemailer.createTransport({
-	host: env.SMTP_HOST,
-	port: Number(env.SMTP_PORT),
+	host: SMTP_HOST,
+	port: Number(SMTP_PORT),
 	auth: {
-		user: env.SMTP_USER,
-		pass: env.SMTP_PASS,
+		user: SMTP_USER,
+		pass: SMTP_PASS,
 	},
 	// Le worker est sérialisé: une seule connexion, gardée ouverte d'un message au suivant plutôt
 	// que rouverte à chaque fois.
@@ -39,7 +39,7 @@ const transporter = nodemailer.createTransport({
  * Playwright. Les adresses en `.test` sont filtrées de toute façon (voir `sendEmail`);
  * ce drapeau couvre le reste, par exemple un jeu de données de démo.
  */
-if (env.EMAIL_DISABLED) {
+if (EMAIL_DISABLED) {
 	console.log('Mail disabled (EMAIL_DISABLED=true)')
 } else {
 	// Signal d'exploitation au démarrage, rien de plus. Un échec ici ne coupe pas les envois:

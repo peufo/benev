@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events'
 import Stripe from 'stripe'
-import env from '$app/env/private'
+import { PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, ROOT_USER } from '$app/env/private'
 
 import type { Prisma } from '@prisma/client'
 import type { User } from 'lucia'
@@ -10,7 +10,7 @@ import { prisma, sendEmailComponent, createSSE } from '$lib/server'
 import { useProduct } from '$lib/server/useProduct'
 import { EmailCheckoutValidation } from '$lib/email'
 
-export const stripe = new Stripe(env.PRIVATE_STRIPE_KEY)
+export const stripe = new Stripe(PRIVATE_STRIPE_KEY)
 
 const bus = new EventEmitter()
 
@@ -89,7 +89,7 @@ function useCheckout(options: CheckoutOptions) {
 
 export const checkout = useCheckout({
 	returnPath: '/me/checkouts',
-	hookSecretKey: env.PRIVATE_STRIPE_WEBHOOK_KEY,
+	hookSecretKey: PRIVATE_STRIPE_WEBHOOK_KEY,
 	getLineItems(user, url) {
 		const price = url.searchParams.get('price')
 		if (!price) throw new Error(`Url param "price" is required`)
@@ -139,7 +139,7 @@ export const checkout = useCheckout({
 				},
 			}),
 			sendEmailComponent(EmailCheckoutValidation, {
-				to: env.ROOT_USER,
+				to: ROOT_USER,
 				subject: 'Nouvel achat',
 				props: {
 					dest: 'root',

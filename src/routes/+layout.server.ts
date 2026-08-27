@@ -1,5 +1,5 @@
 import { prisma } from '$lib/server'
-import env from '$app/env/private'
+import { ROOT_USER } from '$app/env/private'
 
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()
@@ -9,6 +9,6 @@ export const load = async ({ locals }) => {
 	})
 	return {
 		user,
-		userIsRoot: user.email === env.ROOT_USER,
+		userIsRoot: user.email === ROOT_USER,
 	}
 }

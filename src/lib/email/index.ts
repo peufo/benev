@@ -1,9 +1,3 @@
-import env from '$app/env/public'
-
-// TODO: Use explicit env and declare env.ORIGIN as public var
-// then... drop this
-export const domain = env.ORIGIN
-
 export { default as EmailBasic } from './EmailBasic.svelte'
 export { default as EmailSubscribeRequest } from './EmailSubscribeRequest.svelte'
 export { default as EmailSubscribeDenied } from './EmailSubscribeDenied.svelte'

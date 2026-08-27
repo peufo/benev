@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { domain } from '.'
+	import { ORIGIN } from '$app/env/public'
 
 	interface Props {
 		title?: string
@@ -57,7 +57,7 @@
 													<div>
 														{#if showLogo}
 															<img
-																src="{domain}/logo.svg"
+																src="{ORIGIN}/logo.svg"
 																alt="Logo de benev.io"
 																style="height: 100px;"
 															/>
@@ -98,7 +98,7 @@
 												<tr>
 													<td>
 														<img
-															src="{domain}/logo.svg"
+															src="{ORIGIN}/logo.svg"
 															alt="Logo de Benev.io"
 															style="height: 50px"
 														/>
@@ -109,7 +109,7 @@
 														>
 															Gestion des bénévoles par
 															<a
-																href={domain}
+																href={ORIGIN}
 																rel="external"
 																style="color:#067df7; text-decoration:none"
 																target="_blank"
@@ -120,7 +120,7 @@
 																<br />
 																Définis tes préférences concernant les emails
 																<a
-																	href="{domain}/{eventId}/me#email-settings"
+																	href="{ORIGIN}/{eventId}/me#email-settings"
 																	rel="external"
 																	style="color:#067df7; text-decoration:none"
 																	target="_blank"

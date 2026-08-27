@@ -3,7 +3,7 @@
 	import type { SubscribeWithTeam } from '$lib/pages/emailSuggesions'
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
 	import { formatRange } from '$lib/formatRange'
-	import { domain } from '.'
+	import { ORIGIN } from '$app/env/public'
 
 	interface Props {
 		member: MemberWithComputedValues
@@ -29,7 +29,7 @@
 	<p>
 		Retrouve toutes les inscriptions de {member.firstName} sur
 		<a
-			href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
+			href="{ORIGIN}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
 			rel="external"
 		>
 			son profil.

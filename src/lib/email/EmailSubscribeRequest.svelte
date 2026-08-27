@@ -3,7 +3,7 @@
 	import type { SubscribeWithTeam } from '$lib/pages/emailSuggesions'
 	import EmailLayout from '$lib/email/EmailLayout.svelte'
 	import { formatRange } from '$lib/formatRange'
-	import { domain } from '.'
+	import { ORIGIN } from '$app/env/public'
 
 	interface Props {
 		member: MemberWithComputedValues
@@ -25,7 +25,7 @@
 	<p>
 		Vérifie
 		<a
-			href="{domain}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
+			href="{ORIGIN}/{subscribe.period.team.eventId}/admin/members/{subscribe.memberId}"
 			rel="external"
 			target="_blank"
 		>
@@ -35,7 +35,7 @@
 		<a
 			rel="external"
 			target="_blank"
-			href="{domain}/{subscribe.period.team.eventId}/teams?section={subscribe.period
+			href="{ORIGIN}/{subscribe.period.team.eventId}/teams?section={subscribe.period
 				.teamId}&form_period={subscribe.periodId}"
 		>
 			valide son inscription

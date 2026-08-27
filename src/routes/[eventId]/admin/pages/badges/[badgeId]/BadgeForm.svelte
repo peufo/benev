@@ -16,7 +16,7 @@
 	import InputFieldSelect from './InputFieldSelect.svelte'
 	import InputColorPalette from './InputColorPalette.svelte'
 	import InputColor from './InputColor.svelte'
-	import { browser } from '$app/environment'
+	import { browser } from '$app/env'
 	import { fade } from 'svelte/transition'
 	import { deleteBadge, updateBadge } from './badge.remote'
 

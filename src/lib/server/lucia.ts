@@ -1,9 +1,14 @@
 import { lucia } from 'lucia'
 import { sveltekit } from 'lucia/middleware'
 import { prisma as adapter } from '@lucia-auth/adapter-prisma'
-import { dev } from '$app/environment'
+import { dev } from '$app/env'
 import { prisma } from './prisma'
-import env from '$app/env/private'
+import {
+	GITHUB_CLIENT_ID,
+	GITHUB_CLIENT_SECRET,
+	GOOGLE_CLIENT_ID,
+	GOOGLE_CLIENT_SECRET,
+} from '$app/env/private'
 import { ORIGIN } from '$app/env/public'
 
 import { github, google } from '@lucia-auth/oauth/providers'
@@ -16,13 +21,13 @@ export const auth = lucia({
 })
 
 export const githubAuth = github(auth, {
-	clientId: env.GITHUB_CLIENT_ID,
-	clientSecret: env.GITHUB_CLIENT_SECRET,
+	clientId: GITHUB_CLIENT_ID,
+	clientSecret: GITHUB_CLIENT_SECRET,
 })
 
 export const googleAuth = google(auth, {
-	clientId: env.GOOGLE_CLIENT_ID,
-	clientSecret: env.GOOGLE_CLIENT_SECRET,
+	clientId: GOOGLE_CLIENT_ID,
+	clientSecret: GOOGLE_CLIENT_SECRET,
 	redirectUri: `${ORIGIN}/auth/google/callback`,
 	scope: ['email', 'profile'],
 })

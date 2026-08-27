@@ -13,7 +13,7 @@
 	import type { ClassValue } from 'svelte/elements'
 	import type { Field } from '@prisma/client'
 	import { InputNumber, InputSelect, Popover } from 'fuma'
-	import { browser } from '$app/environment'
+	import { browser } from '$app/env'
 	import { debounce } from '$lib/debounce'
 	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
 	import { Placeholder } from '$lib/ui'
