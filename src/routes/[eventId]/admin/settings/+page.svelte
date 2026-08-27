@@ -9,6 +9,7 @@
 		OctagonAlertIcon,
 		PaletteIcon,
 		PlusIcon,
+		UserRoundPlusIcon,
 	} from '@lucide/svelte'
 	import { InputTextarea, tip, urlParam } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
@@ -25,6 +26,7 @@
 	import { eventPath } from '$lib/eventPath'
 	import { SaveBar, TableOfContent, type TocSection } from '$lib/ui'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
+	import EventShareLink from './EventShareLink.svelte'
 	import EventStateForm from './EventStateForm.svelte'
 	import Section from '$lib/ui/Section.svelte'
 
@@ -81,7 +83,12 @@
 	<div class="mx-auto flex w-full max-w-2xl items-start gap-3 pb-120 lg:max-w-4xl">
 		<div class="flex w-full max-w-2xl min-w-0 flex-col gap-3">
 			<Section id="status" title="Statut" icon={EyeIcon}>
-				<EventStateForm isOwner={data.member?.userId == data.event.ownerId} event={data.event} />
+				<div class="flex flex-col gap-4">
+					<EventStateForm isOwner={data.member?.userId == data.event.ownerId} event={data.event} />
+					{#if data.event.state !== 'archived'}
+						<EventShareLink event={data.event} />
+					{/if}
+				</div>
 			</Section>
 
 			<!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->

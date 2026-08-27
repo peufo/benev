@@ -2,15 +2,7 @@
   - [ ] Définir la meilleur approche: {status: 'draft' | 'valided', published: boolean} ou {status: 'draft' | 'valided' | 'published'}
   - [ ] Le drawer "Ordre des secteurs" pourrais permettre de choisir qu'elle secteurs sont publiés.
 
-- [ ] Les pages devrait avoir un status "draft" | "published"
-
-- [ ] Le formulaire des badges completement buguer
-
-- [ ] Il faut supprimer MemberImportDialog et faire un vrai outil d'importation capable de prendre comme source, un fichier csv ou un autre événement. Suivi d'une vue pour mapper les colonnes.
-
 - [ ] Auto-accepte des inscriptions sur les membres sans compte est peut-être un raccourcie non nécéssaire. Par exemple, si une invitation est en cours pour un membre et qu'un responsable l'inscrit à une période, le membre n'aurra pas eu le temps de lié sont compte et son l'inscription sera automatiquement validé.
-
-- [ ] Sur le profile de membre, mettre en avant les champs requis avec une information manquante. (profile + info de contact)
 
 - [ ] Réaliser un audit de sécurité
 
@@ -26,3 +18,7 @@
 - [ ] Permetre d'ajouter des champs de profile directement dupuis la fiche de profil d'un membre.
 
 - [ ] Dans le menu de navigation principal, Supprimer le lien "open source", ajouter "Documentation" et "prix", adappter un peu mieux responsive.
+
+- [ ] Dans le plan, faire en sorte que les périodes avec la même étiquête soit sur la même ligne quand il y en à plusieur. Peut-être qu'un simple tri sur la première étiquète suffit. J'espère en tout cas.
+
+- [ ] La page d'aide en placeholder de la page d'accueil est confuse

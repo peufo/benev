@@ -12,6 +12,7 @@
 	import type { FormDataPeriod } from './server'
 	import { eventPath } from '$lib/eventPath'
 	import MemberImportDialog from './member/MemberImportDialog.svelte'
+	import { dev } from '$app/env'
 
 	let periodDrawer: PeriodDrawer = $state()!
 	let periodForm: PeriodForm = $state()!
@@ -41,11 +42,12 @@
 				await close()
 			}}
 		/>
-
-		<button class="menu-item" onclick={openImportDialog}>
-			<UserRoundPlusIcon size={20} />
-			<span>Importer des membres</span>
-		</button>
+		{#if dev}
+			<button class="menu-item" onclick={openImportDialog}>
+				<UserRoundPlusIcon size={20} />
+				<span>Importer des membres</span>
+			</button>
+		{/if}
 	{/snippet}
 </Drawer>
 
