@@ -38,6 +38,6 @@ export const modelUserContactUpdate = z.object({
 })
 
 export const modelUserUpdate = modelUserContactUpdate.extend({
-	email: z.string().email().toLowerCase().optional(),
+	email: z.email().toLowerCase().optional(),
 	isOrganizer: z.boolean().optional(),
 })
