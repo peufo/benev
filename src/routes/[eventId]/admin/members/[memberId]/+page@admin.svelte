@@ -56,13 +56,18 @@
 		{/snippet}
 
 		<div class="flex gap-2 mt-6">
-			<Avatar
-				firstName={data.memberProfile.firstName}
-				avatarId={data.memberProfile.avatarId}
-				avatarPlaceholder={data.memberProfile.avatarPlaceholder}
-				class="w-36 h-36 rounded-md"
-				size="medium"
-			/>
+			<div class="flex flex-col items-center gap-1 w-36 shrink-0">
+				<Avatar
+					firstName={data.memberProfile.firstName}
+					avatarId={data.memberProfile.avatarId}
+					avatarPlaceholder={data.memberProfile.avatarPlaceholder}
+					class="w-36 h-36 rounded-md"
+					size="medium"
+				/>
+				{#if data.memberProfile.userProfileRequiredFields.includes('avatarId')}
+					<span class="text-xs text-warning">Photo de profil requise</span>
+				{/if}
+			</div>
 			<div>
 				<MemberAbsences subscribes={data.memberProfile.subscribes} />
 				<MemberProfileStatus member={data.memberProfile} />

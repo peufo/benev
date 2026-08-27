@@ -6,4 +6,6 @@
 
 - [ ] Détecter et journaliser les emails qui non pas été recu par la destinataire.
 
-- [ ] Ajouter un lien de partage à copier dans les settings (section status).
+- [ ] Ajouter un lien de partage à copier dans les settings (section status). Il faut indiqué à l'utilisateur que ce lien est inutile dans le cas ou l'événement n'est pas publié. Dans ce cas faut plutôt passer par une invitation.
+
+- [ ] Dans les settings, placer le TOC à gauche + le laisser prendre plus de place en hauteur
