@@ -6,6 +6,6 @@
 	let { children }: Props = $props()
 </script>
 
-<div class="prose max-w-none grow bg-white">
+<div class="max-w-none grow bg-white">
 	{@render children?.()}
 </div>

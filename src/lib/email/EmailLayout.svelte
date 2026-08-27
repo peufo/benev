@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ORIGIN } from '$app/env/public'
+	import type { Snippet } from 'svelte'
 
 	interface Props {
 		title?: string
@@ -90,49 +91,12 @@
 										</tbody>
 									</table>
 
-									{#if signature}{@render signature()}{:else}
+									{#if signature}
+										{@render signature()}
+									{:else}
 										<hr style="border:none;border-top:1px solid #eaeaea;margin:26px 0;width:100%" />
-
-										<table width="100%" cellpadding="0" cellspacing="0">
-											<tbody>
-												<tr>
-													<td>
-														<img
-															src="{ORIGIN}/logo.svg"
-															alt="Logo de Benev.io"
-															style="height: 50px"
-														/>
-													</td>
-													<td style="vertical-align: top;">
-														<p
-															style="color:#666666;font-size:12px;line-height:24px; padding-top: 10px;"
-														>
-															Gestion des bénévoles par
-															<a
-																href={ORIGIN}
-																rel="external"
-																style="color:#067df7; text-decoration:none"
-																target="_blank"
-															>
-																benev.io
-															</a>
-															{#if eventId}
-																<br />
-																Définis tes préférences concernant les emails
-																<a
-																	href="{ORIGIN}/{eventId}/me#email-settings"
-																	rel="external"
-																	style="color:#067df7; text-decoration:none"
-																	target="_blank"
-																>
-																	sur ton profil
-																</a>
-															{/if}
-														</p>
-													</td>
-												</tr>
-											</tbody>
-										</table>
+										{@render center(eventLink, 'font-size: 12px;')}
+										{@render center(poweredBy)}
 									{/if}
 								</div>
 							</td>
@@ -143,3 +107,36 @@
 		</tr>
 	</tbody>
 </table>
+
+{#snippet poweredBy()}
+	<a href={ORIGIN} rel="external" style="color:#067df7; text-decoration:none" target="_blank">
+		<span style="font-size: 10px; color: #333;"> Powered by </span>
+		<img src="{ORIGIN}/benevio.svg" alt="Logo de Benev.io" style="height: 20px; display: inline;" />
+	</a>
+{/snippet}
+
+{#snippet eventLink()}
+	{#if eventId}
+		Définis tes préférences concernant les emails
+		<a
+			href="{ORIGIN}/{eventId}/me#email-settings"
+			rel="external"
+			style="color:#067df7; text-decoration:none"
+			target="_blank"
+		>
+			sur ton profil
+		</a>
+	{/if}
+{/snippet}
+
+{#snippet center(content: Snippet, style?: string)}
+	<table width="100%" cellpadding="0" cellspacing="0" {style}>
+		<tbody>
+			<tr>
+				<td align="center">
+					{@render content()}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+{/snippet}

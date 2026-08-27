@@ -5,9 +5,15 @@ export const SITE_TAGLINE = 'Plateforme de gestion de bénévoles'
 export const SITE_DESCRIPTION =
 	'Gère simplement tes bénévoles avec benevio : inscriptions, planification, suivi et communication regroupés dans un outil gratuit pour les petits événements, open source et sans engagement.'
 
-/** Metas de base, surchargées par le `metaTags` publié dans les données de page */
+/**
+ * Metas de base, surchargées par le `metaTags` publié dans les données de page
+ *
+ * `og.png` est une bannière 1200×630 : les aperçus (WhatsApp, Facebook, Signal) recadrent en
+ * 1.91:1, un logo carré y perdait la moitié de sa hauteur. PNG et non WebP — les crawlers
+ * sociaux ne lisent de façon fiable que JPEG et PNG, et aucun n'accepte le SVG.
+ */
 export function defaultMetaTags(url: URL): MetaTagsProps {
-	const image = `${url.origin}/logo.webp`
+	const image = `${url.origin}/og.png`
 	// Sans la query string : filtres et paramètres de tracking pointent la même page canonique
 	const canonical = `${url.origin}${url.pathname}`
 	return {
@@ -22,10 +28,12 @@ export function defaultMetaTags(url: URL): MetaTagsProps {
 			siteName: SITE_NAME,
 			title: `${SITE_NAME} | ${SITE_TAGLINE}`,
 			description: SITE_DESCRIPTION,
-			images: [{ url: image, width: 500, height: 500, alt: `Logo de ${SITE_NAME}` }],
+			images: [
+				{ url: image, type: 'image/png', width: 1200, height: 630, alt: `Logo de ${SITE_NAME}` },
+			],
 		},
 		twitter: {
-			cardType: 'summary',
+			cardType: 'summary_large_image',
 			title: `${SITE_NAME} | ${SITE_TAGLINE}`,
 			description: SITE_DESCRIPTION,
 			image,
