@@ -26,6 +26,10 @@
 }
 @source '../node_modules/fuma/dist';
 
+html {
+	scrollbar-gutter: stable;
+}
+
 @layer components {
 	.surface {
 		@apply bg-base-100 rounded-box border border-soft p-1;

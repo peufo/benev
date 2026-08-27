@@ -22,3 +22,7 @@
 - [ ] Revoir le layout de /admin/members/[memberId] sur écran large
 
 - [ ] Questionner la pertinence de la liste des secteurs dans le dashboard benev/src/routes/[eventId]/admin/dashboard/+page.svelte:124
+
+- [ ] Permetre d'ajouter des champs de profile directement dupuis la fiche de profil d'un membre.
+
+- [ ] Dans le menu de navigation principal, Supprimer le lien "open source", ajouter "Documentation" et "prix", adappter un peu mieux responsive.
