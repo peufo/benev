@@ -133,7 +133,7 @@
 	<table width="100%" cellpadding="0" cellspacing="0" {style}>
 		<tbody>
 			<tr>
-				<td align="center">
+				<td align="center" style="text-align: center;">
 					{@render content()}
 				</td>
 			</tr>

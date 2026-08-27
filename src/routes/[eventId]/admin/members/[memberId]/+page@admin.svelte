@@ -18,6 +18,7 @@
 	import { Journal } from '$lib/log'
 	import Section from '$lib/ui/Section.svelte'
 	import MemberMenu from './MemberMenu.svelte'
+	import MemberResendInviteForm from './MemberResendInviteForm.svelte'
 
 	let { data } = $props()
 
@@ -38,6 +39,11 @@
 				badges={data.event.badges}
 			/>
 			<TeamsActions teams={data.memberProfile.leaderOf} />
+			<!-- La réponse au badge « Sans compte » rendu juste en dessous: tant que personne n'a
+			     lié de compte, l'invitation peut être rejouée — après correction de l'adresse. -->
+			{#if data.memberProfile.email && !data.memberProfile.userId}
+				<MemberResendInviteForm email={data.memberProfile.email} />
+			{/if}
 			<a
 				href={urlParam.with({ form_member_contact: '{}' })}
 				data-sveltekit-replacestate

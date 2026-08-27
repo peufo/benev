@@ -178,6 +178,47 @@ export function useEvent(owner: User, name: string) {
 			await expect(dialog.getByText('utilise déjà cette adresse')).toBeVisible()
 		},
 		/**
+		 * L'invitation se rejoue depuis la fiche — le cas de l'adresse corrigée après coup. Le
+		 * journal du membre, filtré sur lui seul, porte les deux gestes et les distingue.
+		 */
+		async expectResendInvite(page: Page) {
+			const email = `gordon-${eventCuid}@example.org`
+			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			const dialog = page.getByRole('dialog')
+			await dialog.getByLabel('Prénom').fill('Gordon')
+			// `exact`: « Prénom » contient « nom ».
+			await dialog.getByLabel('Nom', { exact: true }).fill('Freeman')
+
+			// La case ne s'active qu'une fois l'adresse reconnue valide, côté client: l'attendre,
+			// c'est attendre l'hydratation sans avoir à la deviner.
+			const sendEmail = page.getByRole('checkbox', { name: /Envoyer l'invitation/ })
+			await expect(async () => {
+				await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(email)
+				await expect(sendEmail).toBeEnabled({ timeout: 1000 })
+			}).toPass()
+			await dialog.getByRole('button', { name: 'Valider' }).click()
+			await expect(page.getByText('Invitation envoyée')).toBeVisible()
+
+			await page.goto(`/${eventId}/admin/members`)
+			await page
+				.getByRole('link', { name: /Gordon Freeman/ })
+				.first()
+				.click()
+			await expect(page.getByRole('heading', { name: 'Gordon Freeman' })).toBeVisible()
+
+			// Le geste écrit à un bénévole: le bouton fait relire l'adresse avant de partir.
+			const resend = page.getByRole('button', { name: `Renvoyer l'invitation à ${email}` })
+			page.once('dialog', (confirmation) => confirmation.accept())
+			await resend.click()
+			await expect(page.getByText('Invitation renvoyée')).toBeVisible()
+
+			const journal = page.locator('#journal').getByRole('listitem')
+			await expect(journal.filter({ hasText: 'a invité Gordon Freeman' })).toHaveCount(1)
+			await expect(
+				journal.filter({ hasText: 'a renvoyé une invitation à Gordon Freeman' })
+			).toHaveCount(1)
+		},
+		/**
 		 * Le journal se lit, se filtre, et accepte une note. Les lignes attendues ont été écrites
 		 * par les étapes précédentes du parcours: c'est le tour complet écriture -> rendu, seul à
 		 * pouvoir attraper une charge utile qui ne correspondrait plus à son composant.

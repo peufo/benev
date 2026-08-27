@@ -8,7 +8,9 @@
 
 <p>
 	{#if log.type === 'member_invite'}
-		{@render snippetRef(log.data.actor)} a invité {@render snippetRef(log.data.member)}
+		{@render snippetRef(log.data.actor)}
+		{log.data.resent ? 'a renvoyé une invitation à' : 'a invité'}
+		{@render snippetRef(log.data.member)}
 	{:else if log.type === 'member_join'}
 		{@render snippetRef(log.data.member)}
 		{log.data.wasInvited ? "a accepté l'invitation" : "a rejoint l'évènement"}

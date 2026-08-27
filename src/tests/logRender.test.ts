@@ -128,6 +128,21 @@ describe('rendu du journal', () => {
 		)
 		expect(invited).toContain('marc@example.org')
 		expect(invited).toContain('aucun email envoyé')
+		expect(invited).toContain('a invité')
+
+		// Le renvoi rejoue le même type: seul le drapeau le distingue du premier envoi.
+		const resent = renderLog(
+			LogMember,
+			'member_invite',
+			logMap.member_invite({
+				member: { ...member, email: 'marc@example.org' },
+				actor,
+				sendEmail: true,
+				resent: true,
+			}).data
+		)
+		expect(resent).toContain('a renvoyé une invitation à')
+		expect(resent).not.toContain('aucun email envoyé')
 
 		expect(
 			renderLog(

@@ -99,4 +99,10 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test('Le journal charge les entrées précédentes vers le haut', async () => {
 		await event.expectJournalLoadsPrevious(page)
 	})
+
+	// Après le journal: les deux entrées écrites ici déborderaient la fenêtre de trente que
+	// `expectJournal` suppose complète.
+	test("L'invitation se renvoie depuis la fiche du membre", async () => {
+		await event.expectResendInvite(page)
+	})
 })

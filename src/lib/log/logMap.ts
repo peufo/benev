@@ -85,10 +85,12 @@ export const logMap = {
 		member,
 		actor,
 		sendEmail,
+		resent,
 	}: {
 		member: MemberSource
 		actor: LogActor
 		sendEmail: boolean
+		resent?: boolean
 	}) => ({
 		eventId: member.eventId,
 		memberId: member.id,
@@ -99,6 +101,9 @@ export const logMap = {
 			// Première réponse à « l'invitation n'est jamais arrivée »: peut-être n'a-t-elle
 			// jamais été demandée.
 			sendEmail,
+			// Un renvoi ne crée rien: seule cette ligne distingue les deux gestes. La clé reste
+			// optionnelle, les lignes déjà écrites ne la portent pas.
+			...(resent && { resent: true as const }),
 			actor: refActor(actor),
 		},
 	}),
