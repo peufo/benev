@@ -2,4 +2,8 @@
 
 - [ ] Dans le mail d'invitation, on peux ajouter un token dans le lien. Grâce à lui, on peut identifié l'utilisateur sur la page de login, placer le formulaire en mode "register" si nécéssaire et pré-remplir les champs et valider l'adresse email directement.
 
-- [ ] Il faut ajouter la possibilité d'envoyer une nouvelle invitation à la demande depuis la fiche de membre. Ca couvre le cas ou on change/corrige l'email du membre.
+- [ ] benev/src/lib/member/MemberProfileForm.svelte:12 Le rendu en mode non-compact des champs de type "Liste à choix" ne reflete pas la valeur
+
+- [ ] Détecter et journaliser les emails qui non pas été recu par la destinataire.
+
+- [ ] Ajouter un lien de partage à copier dans les settings (section status).

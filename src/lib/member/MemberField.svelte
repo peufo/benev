@@ -105,6 +105,8 @@
 				field={formField}
 				label={field.label || field.name}
 				options={field.options ?? []}
+				value={text}
+				{disabled}
 				{labelAppend}
 			/>
 		{/if}
