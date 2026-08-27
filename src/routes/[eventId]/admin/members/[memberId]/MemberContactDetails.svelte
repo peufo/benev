@@ -3,7 +3,6 @@
 	import {
 		Building2Icon,
 		CakeIcon,
-		GhostIcon,
 		MailCheckIcon,
 		MailWarningIcon,
 		PhoneIcon,

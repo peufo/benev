@@ -3,9 +3,10 @@ import { sveltekit } from 'lucia/middleware'
 import { prisma as adapter } from '@lucia-auth/adapter-prisma'
 import { dev } from '$app/environment'
 import { prisma } from './prisma'
+import env from '$app/env/private'
+import { ORIGIN } from '$app/env/public'
 
 import { github, google } from '@lucia-auth/oauth/providers'
-import { env } from '$env/dynamic/private'
 
 export const auth = lucia({
 	adapter: adapter(prisma),
@@ -19,14 +20,10 @@ export const githubAuth = github(auth, {
 	clientSecret: env.GITHUB_CLIENT_SECRET,
 })
 
-// Google valide l'URI de redirection à l'exact: elle doit suivre le domaine servi,
-// sinon `dev.benev.io` renvoie ses utilisateurs sur la production.
-const origin = dev ? 'http://localhost:5173' : env.ORIGIN || 'https://benev.io'
-
 export const googleAuth = google(auth, {
 	clientId: env.GOOGLE_CLIENT_ID,
 	clientSecret: env.GOOGLE_CLIENT_SECRET,
-	redirectUri: `${origin}/auth/google/callback`,
+	redirectUri: `${ORIGIN}/auth/google/callback`,
 	scope: ['email', 'profile'],
 })
 

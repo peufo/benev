@@ -1,4 +1,4 @@
-import { env } from '$env/dynamic/private'
+import env from '$app/env/private'
 import nodemailer, { type SendMailOptions } from 'nodemailer'
 import type { EmailFailureReason, EmailRelations } from '$lib/log/logMap'
 import { createLog } from './log'
@@ -39,9 +39,7 @@ const transporter = nodemailer.createTransport({
  * Playwright. Les adresses en `.test` sont filtrées de toute façon (voir `sendEmail`);
  * ce drapeau couvre le reste, par exemple un jeu de données de démo.
  */
-export const emailDisabled = env.EMAIL_DISABLED === 'true'
-
-if (emailDisabled) {
+if (env.EMAIL_DISABLED) {
 	console.log('Mail disabled (EMAIL_DISABLED=true)')
 } else {
 	// Signal d'exploitation au démarrage, rien de plus. Un échec ici ne coupe pas les envois:

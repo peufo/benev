@@ -1,4 +1,5 @@
 import ical, { ICalCalendarMethod } from 'ical-generator'
+import { ORIGIN } from '$app/env/public'
 
 export const GET = async () => {
 	// Create and use user token
@@ -15,7 +16,7 @@ export const GET = async () => {
 		summary: 'Secteur XY',
 		description: 'It works ;)',
 		location: 'my room',
-		url: 'https://benev.io/me',
+		url: `${ORIGIN}/me`,
 	})
 
 	return new Response(calendar.toString(), {

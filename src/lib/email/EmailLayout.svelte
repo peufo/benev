@@ -98,7 +98,7 @@
 												<tr>
 													<td>
 														<img
-															src="{domain}/logo.webp"
+															src="{domain}/logo.svg"
 															alt="Logo de Benev.io"
 															style="height: 50px"
 														/>

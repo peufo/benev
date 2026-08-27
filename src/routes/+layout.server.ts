@@ -1,5 +1,5 @@
 import { prisma } from '$lib/server'
-import { env } from '$env/dynamic/private'
+import env from '$app/env/private'
 
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()

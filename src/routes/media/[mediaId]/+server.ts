@@ -1,6 +1,6 @@
 import path from 'node:path'
 import fs from 'node:fs/promises'
-import { env } from '$env/dynamic/private'
+import env from '$app/env/private'
 import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
 import { zEnumKeys } from '$lib/models/form'

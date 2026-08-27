@@ -412,7 +412,7 @@ bun run check:watch
 bun run lint              # prettier --check . && eslint .
 bun run format            # prettier --write .
 
-bun start                 # Production: prestart runs `prisma migrate deploy`, then node ./build/index.js
+bun start                 # Production: prestart runs `prisma migrate deploy`, then serves ./build
 bun run dev:stripe        # Forward Stripe webhooks to localhost:5173/me/checkouts/validation
 ```
 
@@ -431,7 +431,7 @@ Copy `.env.example` to `.env` and fill in:
 ROOT_USER="admin@example.com"              # Root user email (full access)
 DATABASE_URL="mysql://user:pass@host:3306/db"
 MEDIA_DIR="./media"                        # Local media storage path
-ORIGIN="https://benev.io"                  # Public origin of the deployment
+PUBLIC_ORIGIN="https://benev.io"           # Origin every absolute link is built from
 BODY_SIZE_LIMIT=0                          # Disable body size limit for uploads
 
 # EMAIL
@@ -441,15 +441,22 @@ SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
 GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
 
 # MONETISATION
-PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, PUBLIC_STRIPE_KEY,
-PUBLIC_PRICE_STANDARD, PUBLIC_PRICE_PREMIUM, PUBLIC_PRICE_STANDARD_TO_PREMIUM
+PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, STRIPE_KEY,
+PRICE_STANDARD, PRICE_PREMIUM, PRICE_STANDARD_TO_PREMIUM
 ```
 
 `EMAIL_DISABLED="true"` is **not** in `.env.example`: it is set by `playwright.config.ts` and by
 CI to log emails instead of sending them.
 
 All `PUBLIC_*` variables are exposed to the browser. All others are server-only
-(`$env/dynamic/private`).
+(`$app/env/private`).
+
+`PUBLIC_ORIGIN` is the single declaration of the served origin — email links, the badges' QR code,
+the Google OAuth redirect URI and the YouTube embeds all read it, on the client as well as the
+server, hence the `PUBLIC_` prefix. adapter-node reads its own `ORIGIN` for the CSRF check behind
+the proxy, so the `start` script derives it: `ORIGIN=$PUBLIC_ORIGIN bun ./build/index.js`. Nothing
+declares `ORIGIN` any more, and an unset `PUBLIC_ORIGIN` therefore **stops the boot** with
+`Invalid ORIGIN: ''` rather than silently sending everyone to the wrong domain.
 
 ---
 

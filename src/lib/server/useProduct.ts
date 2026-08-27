@@ -1,4 +1,4 @@
-import { env } from '$env/dynamic/public'
+import env from '$app/env/public'
 import type { EventTier } from '@prisma/client'
 
 import { prisma } from '$lib/server/prisma'
@@ -20,13 +20,13 @@ export async function useProduct(eventId: string, productId: string) {
 	if (event.tier === 'premium' || event.tier === 'pro') {
 		throw new Error('The event is already on tier "premium" or "pro"')
 	}
-	if (event.tier === 'standard' && product.priceId === env.PUBLIC_PRICE_STANDARD_TO_PREMIUM) {
+	if (event.tier === 'standard' && product.priceId === env.PRICE_STANDARD_TO_PREMIUM) {
 		return setEventTier('premium')
 	}
-	if (event.tier === 'basic' && product.priceId === env.PUBLIC_PRICE_PREMIUM) {
+	if (event.tier === 'basic' && product.priceId === env.PRICE_PREMIUM) {
 		return setEventTier('premium')
 	}
-	if (event.tier === 'basic' && product.priceId === env.PUBLIC_PRICE_STANDARD) {
+	if (event.tier === 'basic' && product.priceId === env.PRICE_STANDARD) {
 		return setEventTier('standard')
 	}
 	throw new Error('This product cannot be activated')

@@ -20,7 +20,7 @@ import {
 	XIcon,
 } from '@lucide/svelte'
 import type { Component } from 'svelte'
-import { env } from '$env/dynamic/public'
+import env from '$app/env/public'
 import type { EventState, EventTier, Field, Page, Subscribe } from '@prisma/client'
 import type { OptionRecord } from 'fuma'
 
@@ -141,14 +141,14 @@ export const EVENT_TIER: Record<
 		label: 'Standard',
 		max: 200,
 		price: '99 CHF',
-		priceId: env.PUBLIC_PRICE_STANDARD,
+		priceId: env.PRICE_STANDARD,
 	},
 	premium: {
 		label: 'Premium',
 		max: null,
 		price: '249 CHF',
-		priceId: env.PUBLIC_PRICE_PREMIUM,
-		upgradePriceId: { standard: env.PUBLIC_PRICE_STANDARD_TO_PREMIUM },
+		priceId: env.PRICE_PREMIUM,
+		upgradePriceId: { standard: env.PRICE_STANDARD_TO_PREMIUM },
 	},
 	pro: {
 		label: 'Pro',

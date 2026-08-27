@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { env } from '$env/dynamic/private'
+import env from '$app/env/private'
 import { prisma } from '$lib/server'
 import { isTierQuotaReached } from '$lib/server/tierQuota'
 import { resolve } from '$app/paths'

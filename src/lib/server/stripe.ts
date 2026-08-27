@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events'
 import Stripe from 'stripe'
-import { env } from '$env/dynamic/private'
+import env from '$app/env/private'
 
 import type { Prisma } from '@prisma/client'
 import type { User } from 'lucia'

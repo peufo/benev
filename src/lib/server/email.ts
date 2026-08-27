@@ -1,10 +1,10 @@
-import { env } from '$env/dynamic/private'
+import env from '$app/env/private'
 import { type SendMailOptions } from 'nodemailer'
 import type { Component, ComponentProps } from 'svelte'
 import { render } from 'svelte/server'
 import { prisma } from '$lib/server'
 import { withoutTestRecipients } from '$lib/server/recipients'
-import { emailDisabled, enqueueEmail } from '$lib/server/emailQueue'
+import { enqueueEmail } from '$lib/server/emailQueue'
 import type { EmailRelations } from '$lib/log/logMap'
 import type { EmailEvent } from '$lib/email/models'
 import { emailReplacers, type EmailModelProps } from '$lib/pages/emailSuggesions'
@@ -17,6 +17,9 @@ import { domain } from '$lib/email'
 export type SendMailOptionsWithLog = SendMailOptions & {
 	/** Rattache la ligne de journal produite par l'envoi. */
 	logContext?: EmailRelations
+}
+export type SendMailOptionsWithProps<Props> = Omit<SendMailOptionsWithLog, 'html'> & {
+	props: Props
 }
 
 /**
@@ -35,7 +38,7 @@ export const sendEmail = async ({
 	logContext,
 	...options
 }: SendMailOptionsWithLog) => {
-	if (emailDisabled) return
+	if (env.EMAIL_DISABLED) return
 
 	const recipients = {
 		to: withoutTestRecipients(to),
@@ -59,17 +62,13 @@ export const sendEmail = async ({
 	)
 }
 
-export type SendMailOptionsWithProps<Props> = Omit<SendMailOptionsWithLog, 'html'> & {
-	props: Props
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function sendEmailComponent<Comp extends Component<any, any, any>>(
 	component: Comp,
-	options: SendMailOptionsWithProps<ComponentProps<Comp>>
+	{ props, ...options }: SendMailOptionsWithProps<ComponentProps<Comp>>
 ) {
 	const { body } = render(component as Component<Record<string, unknown>>, {
-		props: options.props as Record<string, unknown>,
+		props: { ...props } as Record<string, unknown>,
 	})
 	return sendEmail({ ...options, html: body })
 }
@@ -77,9 +76,9 @@ export async function sendEmailComponent<Comp extends Component<any, any, any>>(
 export async function sendEmailModel<EmailPath extends EmailEvent>(
 	eventId: string,
 	emailPath: EmailPath,
-	options: SendMailOptionsWithProps<EmailModelProps[EmailPath]>
+	{ props, ...options }: SendMailOptionsWithProps<EmailModelProps[EmailPath]>
 ) {
-	const html = await renderEmailModel(eventId, emailPath, options.props)
+	const html = await renderEmailModel(eventId, emailPath, props)
 	return sendEmail({
 		...options,
 		html,

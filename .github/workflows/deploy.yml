@@ -44,10 +44,10 @@ jobs:
   #     GOOGLE_CLIENT_SECRET: ci
   #     PRIVATE_STRIPE_KEY: sk_test_ci
   #     PRIVATE_STRIPE_WEBHOOK_KEY: whsec_ci
-  #     PUBLIC_STRIPE_KEY: pk_test_ci
-  #     PUBLIC_PRICE_STANDARD: price_ci_standard
-  #     PUBLIC_PRICE_PREMIUM: price_ci_premium
-  #     PUBLIC_PRICE_STANDARD_TO_PREMIUM: price_ci_standard_to_premium
+  #     STRIPE_KEY: pk_test_ci
+  #     PRICE_STANDARD: price_ci_standard
+  #     PRICE_PREMIUM: price_ci_premium
+  #     PRICE_STANDARD_TO_PREMIUM: price_ci_standard_to_premium
   #   steps:
   #     - uses: actions/checkout@v5
   #     - uses: oven-sh/setup-bun@v2

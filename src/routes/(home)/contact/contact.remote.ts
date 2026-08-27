@@ -4,7 +4,7 @@ import z from 'zod'
 import { zStringNullable } from '$lib/models/form'
 import { prisma, sendEmail, sendEmailComponent } from '$lib/server'
 import { createRateLimit } from '$lib/server/rateLimit'
-import { env } from '$env/dynamic/private'
+import { SMTP_USER, ROOT_USER } from '$app/env/private'
 import { EmailBasic } from '$lib/email'
 
 const sendMessageSchema = z.object({
@@ -53,7 +53,7 @@ export const sendMessage = form(sendMessageSchema, async (data, issue) => {
 		}),
 		sendEmail({
 			from: `${name} depuis benevio`,
-			to: [env.SMTP_USER, env.ROOT_USER],
+			to: [SMTP_USER, ROOT_USER],
 			replyTo: email,
 			subject: data.subject,
 			text: data.content,

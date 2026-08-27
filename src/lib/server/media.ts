@@ -3,7 +3,7 @@ import path from 'node:path'
 import sharp from 'sharp'
 import type { Prisma } from '@prisma/client'
 import { prisma } from './prisma'
-import { env } from '$env/dynamic/private'
+import env from '$app/env/private'
 import { error } from '@sveltejs/kit'
 import type { MediaImageInput } from '$lib/models/media'
 

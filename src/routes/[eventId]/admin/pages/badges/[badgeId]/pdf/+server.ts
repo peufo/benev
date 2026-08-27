@@ -3,7 +3,8 @@ import z from 'zod'
 import sharp from 'sharp'
 import PDFDocument from 'pdfkit'
 import QrCode from 'qrcode'
-import { env } from '$env/dynamic/private'
+import { MEDIA_DIR } from '$app/env/private'
+import { ORIGIN } from '$app/env/public'
 import type { Member } from '@prisma/client'
 import { prisma, permission } from '$lib/server'
 import logoBenev from '$lib/assets/logo.svg?raw'
@@ -269,7 +270,7 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 				const qrX = LAYOUT.width / 2 - qrCodeSize / 2
 				const qrY = LAYOUT.height - textHeight - qrCodeSize
 				const text = `Imprimé le ${getFormater(event.timezone).format(new Date())} depuis benev.io`
-				const qrCode = await QrCode.toBuffer(`https://benev.io/qr/${member.id}`, {
+				const qrCode = await QrCode.toBuffer(`${ORIGIN}/qr/${member.id}`, {
 					margin: 0,
 					width: qrCodeSize,
 				})
@@ -327,7 +328,7 @@ async function getImageBuffer(
 	} = {}
 ): Promise<Buffer | null> {
 	if (!mediaId) return null
-	const filePath = path.resolve(env.MEDIA_DIR, mediaId, 'original.webp')
+	const filePath = path.resolve(MEDIA_DIR, mediaId, 'original.webp')
 	if (!existsSync(filePath)) return null
 	let pipe = sharp(filePath)
 	if (opts.size) pipe = pipe.resize(opts.size.width, opts.size.height)
