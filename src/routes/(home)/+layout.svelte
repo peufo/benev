@@ -41,7 +41,7 @@
 	{/snippet}
 </Header>
 
-<main class="grow p-2 sm:p-4 relative">
+<main class="grow px-1 relative">
 	{@render children?.()}
 </main>
 

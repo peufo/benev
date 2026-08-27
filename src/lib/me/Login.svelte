@@ -282,11 +282,9 @@
 		{@render content()}
 	</div>
 {:else}
-	<div class="px-4 py-10 md:py-16">
-		<div class="card mx-auto w-full max-w-md border border-hard bg-base-100 shadow-lg">
-			<div class="card-body gap-0 p-6 sm:p-8">
-				{@render content()}
-			</div>
+	<div class="card mx-auto w-full max-w-md border border-soft bg-base-100 shadow-lg">
+		<div class="card-body gap-0 p-6 sm:p-8">
+			{@render content()}
 		</div>
 	</div>
 {/if}

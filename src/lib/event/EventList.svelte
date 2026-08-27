@@ -26,7 +26,7 @@
 </script>
 
 {#if events.length}
-	<ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+	<ul class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 		{#each events as event (event.id)}
 			<li class="min-w-0">
 				<CardLink href={resolve('/[eventId]', { eventId: event.id })} class="h-full group">

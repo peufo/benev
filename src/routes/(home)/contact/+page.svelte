@@ -15,7 +15,7 @@
 	let { data } = $props()
 </script>
 
-<div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
+<div class="max-w-6xl mx-auto sm:px-6 py-12 md:py-20">
 	<!-- Hero -->
 	<section class="max-w-2xl mb-12 md:mb-16">
 		<h1
