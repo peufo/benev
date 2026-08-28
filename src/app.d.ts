@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { MemberWithComputedValues } from '$lib/server'
+import type { Invite, MemberWithComputedValues } from '$lib/server'
 import type { Event, Media, Team } from '@prisma/client'
 import { modelMemberCondition } from '$lib/models'
 import type { LogDataMap } from '$lib/log/logMap'
@@ -13,6 +13,8 @@ declare global {
 		}
 		interface PageData {
 			member?: MemberWithComputedValues
+			/** L'invitation en cours, lue du cookie par le layout racine. Jamais le jeton lui-même. */
+			invite?: Invite | null
 			event?: Event
 			medias?: Media[]
 			isLeader?: boolean

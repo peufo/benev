@@ -1,6 +1,6 @@
-- [ ] Dans le mail d'invitation, on peux ajouter un token dans le lien. Grâce à lui, on peut identifié l'utilisateur sur la page de login, placer le formulaire en mode "register" si nécéssaire et pré-remplir les champs et valider l'adresse email directement.
-
 - [ ] Raccourcir le message de la checkbox "Envoyer une invitation"
+
+- [ ] Ajouter un toggle "Nommer adminisatrateur.ice" dans le formulaire d'invitation
 
 - [ ] Onboarding de l'organisateur
   - [ ] La page d'aide en placeholder de la page d'accueil est confuse
@@ -8,8 +8,6 @@
   - [ ] Mettre un message de bienvenu dans le journal
 
 - [ ] Placer l'indicateur de quota dans la section "Status" des settings
-
-- [ ] Ajouter un toggle "Nommer adminisatrateur.ice" dans le formulaire d'invitation
 
 - [ ] Les calls (await prisma) devrait tous lever des issues au lieux de faire des erreur 500
 
@@ -21,4 +19,10 @@
 
 - [ ] Dans le formulaire de secteur, affcher la fin des inscriptions par défaut si il est définit
 
-- [ ] S'assurer que tous les termes utilisé dans l'app soit inclusif.
+- [ ] S'assurer que tous les thermes utilisé dans l'app soit inclusif.
+
+- [ ] Gérer le cas ou on clique sur un lien d'invitation alors qu'on est connecté à un autre compte
+
+- [ ] Le bouton "Refuser" ne fonctionne pas benev/src/lib/member/MemberForm.svelte:54. A cette étape la, le user n'est pas encore connecté au membre. Il ne peut donc pas légitimement le supprimer. Par contre il peut le dissocier de son addresse email.
+
+- [ ] La liste des invitations est moche

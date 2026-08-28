@@ -3,6 +3,8 @@ import { form, getRequestEvent, query } from '$app/server'
 import type { Field, FieldType } from '@prisma/client'
 import z from 'zod'
 import {
+	clearInviteCookie,
+	consumeInviteToken,
 	createAvatarPlaceholder,
 	createLog,
 	getMemberProfile,
@@ -181,7 +183,7 @@ export const createInvite = form(modelInvite, async ({ sendEmail, leaderOf, ...d
 export const acceptInvite = form(
 	z.object({ redirectTo: z.string().optional() }),
 	async ({ redirectTo }) => {
-		const { locals, params } = getRequestEvent()
+		const { locals, params, cookies } = getRequestEvent()
 		const eventId = params.eventId!
 		const session = await locals.auth.validate()
 		if (!session) error(401)
@@ -206,6 +208,9 @@ export const acceptInvite = form(
 				},
 			})
 			if (newIsValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
+			// L'adhésion est le terme du parcours d'invitation: le lien a fini son travail.
+			await consumeInviteToken(linked.id)
+			clearInviteCookie(cookies)
 			await createLog('member_join', { member: linked, actor: session.user, wasInvited: true })
 			// TODO: mails to admins ?
 			if (redirectTo) redirect(303, redirectTo)

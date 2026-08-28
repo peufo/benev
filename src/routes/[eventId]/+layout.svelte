@@ -42,8 +42,23 @@
 		)
 	)
 
+	/**
+	 * Un évènement en brouillon réserve son espace aux responsables: un bénévole n'y verrait qu'une
+	 * annonce. Le tunnel d'inscription fait exception pour qui a affaire ici — l'invité que désigne
+	 * le cookie, avant même d'avoir un compte, et le membre déjà validé qui finit son parcours après
+	 * l'adhésion, quand le cookie a été consommé. On invite son équipe pendant qu'on prépare
+	 * l'évènement: le lien du mail doit mener quelque part.
+	 */
+	let isRegisteringWithInvitation = $derived(
+		page.route.id === '/[eventId]/register' &&
+			(data.invite?.eventId === data.event.id || !!data.member?.isValidedByEvent)
+	)
+
 	let accessGranted = $derived(
-		data.event.state === 'published' || data.member?.roles.includes('leader') || data.userIsRoot
+		data.event.state === 'published' ||
+			data.member?.roles.includes('leader') ||
+			data.userIsRoot ||
+			isRegisteringWithInvitation
 	)
 
 	// Les metas de l'évènement sont publiées par le `load` et rendues par le layout racine

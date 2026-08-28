@@ -3,6 +3,7 @@ import { command, form, getRequestEvent } from '$app/server'
 import z from 'zod'
 import {
 	auth,
+	claimInvite,
 	createAvatarPlaceholder,
 	generateToken,
 	media,
@@ -16,7 +17,7 @@ import { modelMediaImage } from '$lib/models/media'
 import { EmailPasswordReset, EmailVerificationLink } from '$lib/email'
 
 export const registerUser = form(modelUserCreate, async (data) => {
-	const { locals } = getRequestEvent()
+	const { locals, cookies } = getRequestEvent()
 	const attributes = {
 		email: data.email,
 		firstName: data.firstName,
@@ -54,11 +55,14 @@ export const registerUser = form(modelUserCreate, async (data) => {
 	const session = await auth.createSession({ userId: newUser.userId, attributes: {} })
 	locals.auth.setSession(session)
 
-	await sendVerificationEmail(session.user, 'Bienvenue')
+	// Le lien d'invitation n'a été délivré qu'à cette adresse: la vérifier une seconde fois ne
+	// prouverait rien de plus, et ferait attendre un message pour rien.
+	const invite = await claimInvite(cookies, session.user)
+	if (!invite) await sendVerificationEmail(session.user, 'Bienvenue')
 })
 
 export const loginUser = form(modelUserLogin, async ({ email, password }) => {
-	const { locals } = getRequestEvent()
+	const { locals, cookies } = getRequestEvent()
 	// Lucia distingue clé inconnue et mot de passe faux; l'exposer permettrait d'énumérer les
 	// comptes. Sans ce `catch`, l'erreur remonte en 500 « Internal Error » côté client.
 	const user = await auth.useKey('email', email, password).catch(() => {
@@ -66,6 +70,8 @@ export const loginUser = form(modelUserLogin, async ({ email, password }) => {
 	})
 	const session = await auth.createSession({ userId: user.userId, attributes: {} })
 	locals.auth.setSession(session)
+	// Un invité qui avait déjà un compte fait valider son adresse au passage.
+	await claimInvite(cookies, session.user)
 })
 
 export const logoutUser = form(async () => {

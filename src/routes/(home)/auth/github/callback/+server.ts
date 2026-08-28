@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { auth, githubAuth, prisma } from '$lib/server'
+import { auth, claimInvite, githubAuth, prisma } from '$lib/server'
 import { TERMS_VERSION } from '$lib/constant'
 
 export const GET = async ({ url, cookies, locals }) => {
@@ -46,8 +46,12 @@ export const GET = async ({ url, cookies, locals }) => {
 		attributes: {},
 	})
 	locals.auth.setSession(session)
+
+	// Le cookie d'invitation est ce qui la fait survivre à l'aller-retour chez le fournisseur:
+	// l'invité repart vers son évènement, et non vers son tableau de bord.
+	const invite = await claimInvite(cookies, session.user)
 	return new Response(null, {
 		status: 302,
-		headers: { Location: '/me' },
+		headers: { Location: invite ? `/${invite.eventId}/register` : '/me' },
 	})
 }

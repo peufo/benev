@@ -17,8 +17,17 @@
 
 	let { onSuccess }: Props = $props()
 
+	/**
+	 * L'invitation que porte le cookie, résolue par le layout racine. Elle nomme la personne, dit
+	 * si elle a déjà un compte, et pré-remplit ce qu'on sait d'elle.
+	 */
+	const invite = $derived(page.data.invite)
+
 	// `state` était le nom de la variable de mode, ce qui bloquait la migration vers les runes.
-	let mode = $state<'login' | 'register'>('login')
+	// Un invité sans compte arrive directement sur « Créer un compte »: c'est le geste attendu.
+	let mode = $state<'login' | 'register'>(
+		page.data.invite && !page.data.invite.hasAccount ? 'register' : 'login'
+	)
 
 	/** Un compte créé par invitation n'a pas de mot de passe: la sortie est un lien de récupération. */
 	let recoveryNeeded = $state(false)
@@ -144,7 +153,11 @@
 {#snippet content()}
 	{#if !isEmbedded}
 		<h1 class="text-2xl font-bold text-primary">
-			{mode === 'login' ? 'Connexion' : 'Créer un compte'}
+			{#if invite}
+				<span>Salut {invite.firstName} 👋</span>
+			{:else}
+				{mode === 'login' ? 'Connexion' : 'Créer un compte'}
+			{/if}
 		</h1>
 		<p class="mt-1 text-sm text-base-content/70">
 			{mode === 'login'
@@ -168,12 +181,14 @@
 			<div transition:slide|local={{ duration: slideDuration }} class="grid grid-cols-2 gap-3">
 				<InputString
 					field={registerUser.fields.firstName}
+					value={invite?.firstName}
 					label="Prénom"
 					variant="block"
 					autocomplete="given-name"
 				/>
 				<InputString
 					field={registerUser.fields.lastName}
+					value={invite?.lastName}
 					label="Nom"
 					variant="block"
 					autocomplete="family-name"
@@ -181,8 +196,14 @@
 			</div>
 		{/if}
 
+		<!--
+			`value` est la valeur *initiale* du champ: fuma la passe à `field.as(type, value)`, qui ne
+			la consulte que tant que rien n'a été saisi. Rendue au SSR, effacée par la première
+			frappe — exactement ce qu'on veut d'un pré-remplissage.
+		-->
 		<InputString
 			field={mode === 'login' ? loginUser.fields.email : registerUser.fields.email}
+			value={invite?.email}
 			label="Email"
 			variant="block"
 			type="email"

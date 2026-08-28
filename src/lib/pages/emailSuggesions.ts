@@ -14,7 +14,7 @@ type PropsWithMember<Keys extends string, U extends Record<Keys, Record<string, 
 export type EmailModelProps = PropsWithMember<
 	EmailEvent,
 	{
-		invitation_create: { authorName: string }
+		invitation_create: { authorName: string; tokenId: string }
 		// `{}` est ici le seul type d'« aucune prop » viable: il doit satisfaire la
 		// contrainte Record<string, unknown> sans index signature, sinon l'intersection
 		// `& { member }` de PropsWithMember réduit `member` à never.
@@ -85,8 +85,10 @@ export const emailSuggestions: EmailSuggestions = {
 		{
 			id: 'acceptURL',
 			label: "Lien pour accepter l'invitation",
-			getValue: ({ member }) =>
-				`<a href="${ORIGIN}/${member.eventId}/me" data-sveltekit-preload-data="off">ce lien</a>`,
+			// Nominatif: le jeton identifie l'invité sur la page de connexion, y pré-remplit ses
+			// champs et vaut vérification de son adresse.
+			getValue: ({ tokenId }) =>
+				`<a href="${ORIGIN}/token/${tokenId}/invitation" data-sveltekit-preload-data="off">ce lien</a>`,
 		},
 	],
 	invitation_accept: [],

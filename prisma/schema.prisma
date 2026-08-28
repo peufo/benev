@@ -97,13 +97,19 @@ model Token {
   id      String    @id
   type    TokenType
   expires BigInt
-  userId  String
-  user    User      @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  // Un jeton appartient à l'un ou à l'autre: `emailVerification` et `passwordReset` visent un
+  // compte, `invitation` vise un membre qui n'en a pas encore.
+  userId   String?
+  user     User?   @relation(references: [id], fields: [userId], onDelete: Cascade)
+  memberId String?
+  member   Member? @relation(references: [id], fields: [memberId], onDelete: Cascade)
 }
 
 enum TokenType {
   emailVerification
   passwordReset
+  invitation
 }
 
 model Event {
@@ -258,6 +264,7 @@ model Member {
   subscribes Subscribe[]
   leaderOf   Team[]
   logs       Log[]
+  tokens     Token[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -54,6 +54,6 @@
 			<MemberDeleteForm memberId={page.data.member.id} class="w-36">Refuser</MemberDeleteForm>
 		{/if}
 
-		<a href={resolve('/me')} class="btn btn-ghost"> Non </a>
+		<a href={resolve('/me')} class="btn btn-ghost mr-auto"> Retour </a>
 	</div>
 </section>
