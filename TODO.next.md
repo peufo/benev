@@ -20,3 +20,5 @@
 - [ ] Dans le menu de navigation principal, Supprimer le lien "open source", ajouter "Documentation" et "prix", adappter un peu mieux responsive.
 
 - [ ] Dans le plan, faire en sorte que les périodes avec la même étiquête soit sur la même ligne quand il y en à plusieur. Peut-être qu'un simple tri sur la première étiquète suffit. J'espère en tout cas.
+
+- [ ] Détecter et journaliser les emails qui non pas été recu par la destinataire.

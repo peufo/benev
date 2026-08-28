@@ -84,7 +84,7 @@
 		"dayjs": "^1.11.10",
 		"debounce": "^1.2.1",
 		"devalue": "^5.8.1",
-		"fuma": "^2.5.3",
+		"fuma": "file:../fuma",
 		"ical-generator": "^8.1.1",
 		"js-confetti": "^0.11.0",
 		"litepicker": "^2.0.12",

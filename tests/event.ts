@@ -904,5 +904,44 @@ export function useEvent(owner: User, name: string) {
 				journal.filter({ hasText: 'a invité Alyx Vance' }).filter({ hasText: 'Alpha' })
 			).toHaveCount(1)
 		},
+		/**
+		 * Le membre créé par le tiroir est écrit dans le champ par son appelant, sans passer par
+		 * la liste: la barre de sauvegarde ne le voit que si le select annonce toute valeur, d'où
+		 * qu'elle vienne.
+		 */
+		async expectTeamLeaderInvitedFromField(page: Page) {
+			await page.goto(`/${eventId}/admin/teams`)
+			await page.locator('aside').getByRole('link', { name: 'Alpha' }).click()
+
+			const combobox = page.getByRole('combobox', { name: 'Responsables' })
+			const inviteLink = page.locator('a[href*="form_invite=%7B%7D"]')
+			// Le lien vit dans le popover: l'attendre, c'est attendre l'hydratation. Un clic de
+			// trop ne fait que refermer le popover, que la tentative suivante rouvre.
+			await expect(async () => {
+				await combobox.click()
+				await expect(inviteLink).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await inviteLink.click()
+
+			const dialog = page.getByRole('dialog', { name: 'Inviter un nouveau membre' })
+			await dialog.getByLabel('Prénom').fill('Gordon')
+			// `exact`: « Prénom » contient « nom ».
+			await dialog.getByLabel('Nom', { exact: true }).fill('Freeman')
+			// Appelé depuis un secteur, le tiroir cache le champ qui rouvrirait celui d'où l'on vient.
+			await expect(dialog.getByText('Responsable des secteurs')).toBeHidden()
+			await dialog.getByRole('button', { name: 'Valider' }).click()
+			await expect(dialog).toBeHidden()
+
+			const saveBar = page.getByText('Modification en cours !')
+			await expect(combobox.getByText('Gordon Freeman')).toBeVisible()
+			await expect(saveBar).toBeVisible()
+
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(saveBar).toBeHidden()
+
+			// Rechargée, la puce ne tient plus qu'à ce que la soumission a écrit.
+			await page.reload()
+			await expect(combobox.getByText('Gordon Freeman')).toBeVisible()
+		},
 	}
 }

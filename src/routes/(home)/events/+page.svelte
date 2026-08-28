@@ -11,7 +11,7 @@
 			Événements à venir
 		</h1>
 		<p class="mt-4 text-lg md:text-xl text-base-content/70 leading-relaxed">
-			Découvre les prochaines éditions gérées avec benevio et rejoins l'équipe de bénévoles.
+			Découvre les prochains événement qui ont besoins de toi et rejoins l'équipes.
 		</p>
 	</section>
 

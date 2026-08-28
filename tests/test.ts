@@ -111,4 +111,8 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test("L'invitation confie des secteurs dès la création du membre", async () => {
 		await event.expectInviteAssignsTeams(page)
 	})
+
+	test('Un responsable invité depuis le secteur ouvre la barre de sauvegarde', async () => {
+		await event.expectTeamLeaderInvitedFromField(page)
+	})
 })
