@@ -37,19 +37,43 @@ const RESERVED_IDS = [
 	'contact',
 ]
 
+type EventIdentityIssue = {
+	id(message: string): Parameters<typeof invalid>[0]
+	name(message: string): Parameters<typeof invalid>[0]
+}
+
+/**
+ * Nom et URL sont uniques dans toute la base, et l'URL sert en plus de préfixe de route: les
+ * deux se valident au même endroit, à la création comme au réglage. `currentId` exclut
+ * l'évènement de sa propre vérification.
+ */
+async function checkEventIdentity(
+	{ id, name }: { id: string; name: string },
+	issue: EventIdentityIssue,
+	currentId?: string
+) {
+	if (RESERVED_IDS.includes(id))
+		invalid(issue.id(`Les noms suivant sont réservés: ${RESERVED_IDS.join(', ')}`))
+	if (id.startsWith('deleted_'))
+		invalid(issue.id('Les noms ne peuvent pas commencer par "deleted_"'))
+	if (id.startsWith('archived_'))
+		invalid(issue.id('Les noms ne peuvent pas commencer par "archived_"'))
+
+	// Un évènement supprimé garde sa ligne, préfixée: la contrainte de la base le compte encore.
+	const taken = await prisma.event.findMany({
+		where: { id: { not: currentId }, OR: [{ id }, { name }] },
+		select: { id: true, name: true },
+	})
+	if (taken.some((event) => event.id === id)) invalid(issue.id('Cette URL est déjà prise'))
+	if (taken.some((event) => event.name === name)) invalid(issue.name('Ce nom est déjà pris'))
+}
+
 export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issue) => {
 	const { locals } = getRequestEvent()
 	const session = await locals.auth.validate()
 	if (!session) error(401)
 
-	const exist = await prisma.event.findUnique({ where: { id: data.id } })
-	if (exist) invalid(issue.name('Désolé, ce nom est déjà pris'))
-	if (RESERVED_IDS.includes(data.id))
-		invalid(issue.name(`Les noms suivant sont réservés: ${RESERVED_IDS.join(', ')}`))
-	if (data.id.startsWith('deleted_'))
-		invalid(issue.name('Les noms ne peuvent pas commencer par "deleted_"'))
-	if (data.id.startsWith('archived_'))
-		invalid(issue.name('Les noms ne peuvent pas commencer par "archived_"'))
+	await checkEventIdentity(data, issue)
 
 	const { userId } = session.user
 	const theme: keyof typeof THEME_PRESETS = 'benevio'
@@ -94,10 +118,11 @@ export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issu
 	redirect(303, `/me/checkouts/create?price=${price}&eventId=${event.id}`)
 })
 
-export const updateEvent = form(modelEventSettings, async (data) => {
+export const updateEvent = form(modelEventSettings, async (data, issue) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	const actor = await permission.admin(eventId, locals)
+	await checkEventIdentity(data, issue, eventId)
 	const before = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
 	const event = await prisma.event.update({
 		where: { id: eventId },

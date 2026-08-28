@@ -9,10 +9,16 @@ export const createPage = form(async () => {
 	const eventId = params.eventId!
 	await permission.admin(eventId, locals)
 
-	const pagesCount = await prisma.page.count({
+	// Le chemin est unique par évènement: compter les pages ne suffit pas, une page renommée
+	// « Page 2 » ferait échouer la création de la deuxième.
+	const pages = await prisma.page.findMany({
 		where: { eventId, type: { not: 'email' } },
+		select: { path: true },
 	})
-	const title = `Page ${pagesCount + 1}`
+	const paths = pages.map((page) => page.path)
+	let n = pages.length + 1
+	while (paths.includes(normalizePath(`Page ${n}`))) n++
+	const title = `Page ${n}`
 
 	const page = await prisma.page.create({
 		data: { eventId, title, path: normalizePath(title), content: '' },

@@ -14,6 +14,7 @@ import {
 	sendEmailComponent,
 	sendEmailModel,
 	sendInviteEmail,
+	uniqueIssue,
 } from '$lib/server'
 import { EmailAcceptInviteNotification } from '$lib/email'
 import { modelInvite, modelMemberCondition, modelMemberSetting } from '$lib/models'
@@ -155,19 +156,23 @@ export const createInvite = form(modelInvite, async ({ sendEmail, leaderOf, ...d
 		: []
 	if (teams.length !== leaderOf.length) error(400, 'Secteur inconnu')
 
-	const member = await prisma.member.create({
-		data: {
-			...data,
-			eventId,
-			isValidedByEvent: true,
-			avatarPlaceholder: createAvatarPlaceholder(),
-			isNotifiedSubscribe: !!data.email,
-			isNotifiedLeaderOfSubscribe: !!data.email,
-			isNotifiedAdminOfNewMember: !!data.email,
-			leaderOf: { connect: teams.map(({ id }) => ({ id })) },
-		},
-		include: { event: true },
-	})
+	const member = await prisma.member
+		.create({
+			data: {
+				...data,
+				eventId,
+				isValidedByEvent: true,
+				avatarPlaceholder: createAvatarPlaceholder(),
+				isNotifiedSubscribe: !!data.email,
+				isNotifiedLeaderOfSubscribe: !!data.email,
+				isNotifiedAdminOfNewMember: !!data.email,
+				leaderOf: { connect: teams.map(({ id }) => ({ id })) },
+			},
+			include: { event: true },
+		})
+		// Deux invitations simultanées passent toutes deux le test ci-dessus: c'est la
+		// contrainte de la base qui tranche, et son message doit rester sous le champ.
+		.catch(uniqueIssue(issue.email('Cette adresse est déjà utilisée dans cet évènement')))
 
 	await notifyTierQuotaIfNeeded(eventId)
 	await createLog('member_invite', { member, actor: author, sendEmail, teams })
@@ -195,8 +200,11 @@ export const acceptInvite = form(
 
 		// Si le membre existe déjà, on le link au user
 		// TODO: update member contact details from user
+		// Chercher aussi par `userId`: un membre déjà lié dont l'adresse a divergé n'est pas
+		// retrouvé par la sienne, et la paire utilisateur/évènement est unique — la création
+		// plus bas échouerait alors sur la contrainte.
 		const memberAlreadyExist = await prisma.member.findFirst({
-			where: { eventId, email: session.user.email },
+			where: { eventId, OR: [{ userId: session.user.id }, { email: session.user.email }] },
 		})
 		if (memberAlreadyExist) {
 			const newIsValidedByEvent = isValidedByEvent || memberAlreadyExist.isValidedByEvent

@@ -3,15 +3,19 @@ import type { Prisma } from '@prisma/client'
 import { error, redirect } from '@sveltejs/kit'
 import z from 'zod'
 import { modelTeam, modelTeamUpdate } from '$lib/models'
-import { createLog, permission, prisma, useAddTeamComputedValues } from '$lib/server'
+import { createLog, permission, prisma, uniqueIssue, useAddTeamComputedValues } from '$lib/server'
 import { cloneTeam } from '$lib/server/clone.js'
 import { diffChanges, hasChanges, projectTeam } from '$lib/log'
 
-export const createTeam = form(modelTeam, async (data) => {
+const NAME_TAKEN = 'Un secteur porte déjà ce nom'
+
+export const createTeam = form(modelTeam, async (data, issue) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	const actor = await permission.admin(eventId, locals)
-	const team = await prisma.team.create({ data: { ...data, eventId } })
+	const team = await prisma.team
+		.create({ data: { ...data, eventId } })
+		.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 	await createLog('team_create', { team, actor })
 	return team
 })
@@ -21,7 +25,7 @@ const includeLeadersForLog = {
 	leaders: { select: { firstName: true, lastName: true } },
 } satisfies Prisma.TeamInclude
 
-export const updateTeam = form(modelTeamUpdate, async ({ leaders, ...data }) => {
+export const updateTeam = form(modelTeamUpdate, async ({ leaders, ...data }, issue) => {
 	const { locals } = getRequestEvent()
 	const member = await permission.leaderOfTeam(data.id, locals)
 	const isAdmin = member.roles.includes('admin')
@@ -30,15 +34,17 @@ export const updateTeam = form(modelTeamUpdate, async ({ leaders, ...data }) => 
 		where: { id: data.id },
 		include: includeLeadersForLog,
 	})
-	const team = await prisma.team.update({
-		where: { id: data.id },
-		include: includeLeadersForLog,
-		// Retirer le dernier responsable ne transmet aucune clé, exactement comme un formulaire
-		// où `InputLeaders` n'a pas été rendu. C'est le rôle qui tranche: un admin voit toujours
-		// le champ, donc l'absence vaut « plus aucun responsable »; pour les autres elle vaut
-		// « champ jamais rendu », et la relation ne bouge pas.
-		data: { ...data, leaders: isAdmin ? (leaders ?? { set: [] }) : undefined },
-	})
+	const team = await prisma.team
+		.update({
+			where: { id: data.id },
+			include: includeLeadersForLog,
+			// Retirer le dernier responsable ne transmet aucune clé, exactement comme un formulaire
+			// où `InputLeaders` n'a pas été rendu. C'est le rôle qui tranche: un admin voit toujours
+			// le champ, donc l'absence vaut « plus aucun responsable »; pour les autres elle vaut
+			// « champ jamais rendu », et la relation ne bouge pas.
+			data: { ...data, leaders: isAdmin ? (leaders ?? { set: [] }) : undefined },
+		})
+		.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 	const changes = diffChanges(projectTeam(before), projectTeam(team))
 	if (hasChanges(changes)) await createLog('team_update', { team, changes, actor: member })
 	return team

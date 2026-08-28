@@ -1,22 +1,28 @@
 import { form, getRequestEvent } from '$app/server'
 import z from 'zod'
 import { modelViewCreate } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { permission, prisma, uniqueIssue } from '$lib/server'
 
-export const createView = form(modelViewCreate, async (data) => {
+const NAME_TAKEN = 'Une vue porte déjà ce nom'
+
+export const createView = form(modelViewCreate, async (data, issue) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.leader(eventId, locals)
-	return prisma.view.create({ data: { ...data, eventId } })
+	return prisma.view
+		.create({ data: { ...data, eventId } })
+		.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 })
 
 export const updateView = form(
 	modelViewCreate.extend({ id: z.string() }),
-	async ({ id, ...data }) => {
+	async ({ id, ...data }, issue) => {
 		const { locals, params } = getRequestEvent()
 		const eventId = params.eventId!
 		await permission.leader(eventId, locals)
-		return prisma.view.update({ where: { id, eventId }, data: { ...data, eventId } })
+		return prisma.view
+			.update({ where: { id, eventId }, data: { ...data, eventId } })
+			.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 	}
 )
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { CopyIcon, LinkIcon, TriangleAlertIcon, UserRoundPlusIcon } from '@lucide/svelte'
+	import { CopyIcon, LinkIcon, UserRoundPlusIcon } from '@lucide/svelte'
 	import { urlParam, useCopy } from 'fuma'
 	import { page } from '$app/state'
 	import { eventPath } from '$lib/eventPath'

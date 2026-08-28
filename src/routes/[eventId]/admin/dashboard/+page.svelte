@@ -13,7 +13,6 @@
 	import { eventPath, withSearch } from '$lib/eventPath'
 	import DashboardMembers from './DashboardMembers.svelte'
 	import DashboardValidations from './DashboardValidations.svelte'
-	import DashboardTeams from './DashboardTeams.svelte'
 	import { MEMBERS_VIEWS } from './membersView'
 	import { WAITING, waitingOf } from './waiting'
 	import { tip, urlParam } from 'fuma'

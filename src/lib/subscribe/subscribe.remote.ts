@@ -72,13 +72,17 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 
 	const isAutoAccepted = isLeaderOfTeam && (isSelfSubscribe || !memberInvited.userId)
 
-	const subscribe = await prisma.subscribe.create({
-		data: {
-			...data,
-			isForcedValidation: isAutoAccepted && !memberInvited.userId,
-			state: isAutoAccepted ? 'accepted' : 'request',
-			createdBy: isSelfSubscribe ? 'user' : 'leader',
-		},
+	// Une inscription annulée ou refusée garde sa ligne, et la paire membre/période est unique:
+	// se réinscrire réactive celle-ci plutôt que d'échouer sur la contrainte.
+	const subscribeData = {
+		isForcedValidation: isAutoAccepted && !memberInvited.userId,
+		state: isAutoAccepted ? ('accepted' as const) : ('request' as const),
+		createdBy: isSelfSubscribe ? ('user' as const) : ('leader' as const),
+	}
+	const subscribe = await prisma.subscribe.upsert({
+		where: { memberId_periodId: { memberId: data.memberId, periodId: data.periodId } },
+		create: { ...data, ...subscribeData },
+		update: { ...subscribeData, isAbsent: false },
 		include: {
 			member: true,
 			period: {

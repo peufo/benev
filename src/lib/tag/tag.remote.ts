@@ -1,20 +1,26 @@
 import { form, getRequestEvent, query } from '$app/server'
 import z from 'zod'
 import { modelTagCreate, modelTagUpdate } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { permission, prisma, uniqueIssue } from '$lib/server'
 
-export const createTag = form(modelTagCreate, async (data) => {
+const NAME_TAKEN = 'Une étiquette porte déjà ce nom'
+
+export const createTag = form(modelTagCreate, async (data, issue) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.leader(eventId, locals)
-	return prisma.tag.create({ data: { ...data, eventId } })
+	return prisma.tag
+		.create({ data: { ...data, eventId } })
+		.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 })
 
-export const updateTag = form(modelTagUpdate, async (data) => {
+export const updateTag = form(modelTagUpdate, async (data, issue) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.leader(eventId, locals)
-	return prisma.tag.update({ where: { id: data.id, eventId }, data })
+	return prisma.tag
+		.update({ where: { id: data.id, eventId }, data })
+		.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 })
 
 export const deleteTag = form(z.object({ id: z.string() }), async ({ id }) => {

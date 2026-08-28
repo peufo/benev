@@ -2,20 +2,26 @@ import { command, form, getRequestEvent, query } from '$app/server'
 import type { FieldType } from '@prisma/client'
 import z from 'zod'
 import { modelMemberFieldCreate, modelMemberFieldUpdate } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { permission, prisma, uniqueIssue } from '$lib/server'
 
-export const createMemberField = form(modelMemberFieldCreate, async (data) => {
+const NAME_TAKEN = 'Un champ porte déjà ce nom'
+
+export const createMemberField = form(modelMemberFieldCreate, async (data, issue) => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
 	await permission.admin(eventId, locals)
 	const nbFields = await prisma.field.count({ where: { eventId } })
-	return prisma.field.create({ data: { ...data, eventId, position: nbFields } })
+	return prisma.field
+		.create({ data: { ...data, eventId, position: nbFields } })
+		.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 })
 
-export const updateMemberField = form(modelMemberFieldUpdate, async (data) => {
+export const updateMemberField = form(modelMemberFieldUpdate, async (data, issue) => {
 	const { locals, params } = getRequestEvent()
 	await permission.admin(params.eventId!, locals)
-	return prisma.field.update({ where: { id: data.id }, data })
+	return prisma.field
+		.update({ where: { id: data.id }, data })
+		.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 })
 
 export const deleteMemberField = form(z.object({ id: z.string() }), async ({ id }) => {
