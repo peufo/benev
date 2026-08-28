@@ -28,19 +28,19 @@
 	]}
 	aria-label={title}
 >
-	<h2 class="title-sm px-3 pt-2 pb-1 flex gap-3 items-center">
+	<h2 class="title-sm px-3 pt-2 pb-2 flex gap-3 items-center">
 		<Icon size={16} />
 		<span>{title}</span>
 	</h2>
 
-	<ul class="flex flex-col text-sm">
+	<ul class="flex flex-col text-sm gap-1">
 		{#each sections as { id, label, icon: SectionIcon } (id)}
 			{@const isCurrent = toc.activeId === id}
 			<li>
 				<a
 					href="#{id}"
 					onclick={(event) => scrollToSection(event, id)}
-					class="menu-item py-1"
+					class="menu-item py-2"
 					class:active={isCurrent}
 					aria-current={isCurrent ? 'true' : undefined}
 				>

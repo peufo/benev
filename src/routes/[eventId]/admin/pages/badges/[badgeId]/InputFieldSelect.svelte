@@ -49,8 +49,9 @@
 	{#snippet proposal(memberField)}
 		<MemberFieldSnippet field={memberField} />
 	{/snippet}
-	{#snippet append()}
+	{#snippet append({ hide })}
 		<a
+			onclick={hide}
 			href={urlParam.with({ form_field: JSON.stringify({ type }) })}
 			class="btn btn-square btn-soft btn-sm"
 			data-sveltekit-noscroll

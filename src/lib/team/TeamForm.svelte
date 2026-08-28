@@ -23,6 +23,11 @@
 		 * sections — les conditions d'accès étant la seconde.
 		 */
 		saveBar?: boolean
+		/**
+		 * Le tiroir « inviter un membre » est ouvert dessous: c'est lui qui recevra le secteur
+		 * créé, et rouvrir une invitation d'ici ferait boucler la pile.
+		 */
+		hideLeaders?: boolean
 		/** L'entête de la section « secteur », que la page possède: elle la rend aussi en lecture seule. */
 		subtitle?: string
 		action?: Snippet
@@ -35,6 +40,7 @@
 		event,
 		team = $bindable({}),
 		saveBar = false,
+		hideLeaders = false,
 		subtitle,
 		action,
 		oncreated,
@@ -61,7 +67,7 @@
 	<InputString field={remoteForm.fields.name} label="Nom du secteur" value={team.name} />
 
 	{#key resetToken}
-		{#if page.data.member?.roles.includes('admin')}
+		{#if page.data.member?.roles.includes('admin') && !hideLeaders}
 			<InputLeaders field={remoteForm.fields.leaders} value={team.leaders} />
 		{/if}
 	{/key}

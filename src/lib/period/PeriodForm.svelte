@@ -215,8 +215,9 @@
 			{#snippet proposal(tag)}
 				<TagSelectItem {tag} />
 			{/snippet}
-			{#snippet append()}
+			{#snippet append({ hide })}
 				<a
+					onclick={hide}
 					href={urlParam.with({ form_tag: '{}' })}
 					class="btn btn-square btn-soft btn-sm"
 					data-sveltekit-noscroll

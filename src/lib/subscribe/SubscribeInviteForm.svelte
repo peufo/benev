@@ -46,8 +46,9 @@
 			<span class="ml-auto text-xs opacity-70">{item.email}</span>
 		{/snippet}
 
-		{#snippet append()}
+		{#snippet append({ hide })}
 			<a
+				onclick={hide}
 				href={urlParam.with({ form_invite: '{}' })}
 				class="btn btn-square btn-soft btn-sm"
 				data-sveltekit-noscroll
