@@ -65,7 +65,7 @@
 	</div>
 {/snippet}
 
-<footer class={['footer-shell surface m-1 mt-2 px-4 py-0 sm:px-6', klass]}>
+<footer class={['footer-shell surface m-1 mt-3 px-4 py-0 sm:px-6', klass]}>
 	{#if variant === 'public'}
 		<div class="mx-auto w-full max-w-6xl">
 			<div
