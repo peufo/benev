@@ -9,7 +9,7 @@
 	import { type DrawerFrom, teamCall } from './drawerCall.svelte'
 	import { createInvite, findUserByEmail } from './member/member.remote'
 	import { searchTeams } from './team/team.remote'
-	import { PlusIcon } from '@lucide/svelte'
+	import { PlusIcon, TriangleAlertIcon } from '@lucide/svelte'
 
 	interface Props {
 		event: Event
@@ -36,31 +36,39 @@
 	// `$bindable` cesse de suivre dès que le composant y a écrit.
 	let leaderOf = $state<Team[]>([])
 
-	// Le tiroir est monté pour tout responsable, mais nommer un responsable reste le fait des
+	// Le tiroir est monté pour tout responsable, mais distribuer un rôle reste le fait des
 	// administrateurs — `createInvite` refuse les autres.
-	let isAdmin = $derived(!!page.data.member?.roles.includes('admin'))
+	let isAuthorAdmin = $derived(!!page.data.member?.roles.includes('admin'))
 
 	/**
 	 * Une case désactivée n'est pas soumise, et celle-ci n'est renseignée qu'au premier clic:
 	 * sans valeur, c'est l'état initial — coché — qui fait foi.
 	 */
 	let sendEmail = $derived(isEmailValid && (createInvite.fields.sendEmail.value() ?? true))
+	let inviteIsAdmin = $derived(createInvite.fields.isAdmin.value() ?? false)
 
 	/**
 	 * Tant que l'évènement n'est pas publié, `[eventId]/+layout.svelte` réserve l'espace aux
-	 * responsables: l'invité ne verra rien d'autre qu'une annonce. Autant le dire avant l'envoi.
+	 * responsables: l'invitation partirait vers une annonce. Autant le dire avant l'envoi.
 	 */
-	const accessHint: Partial<Record<EventState, string>> = {
+	const accessWarning: Partial<Record<EventState, string>> = {
 		draft:
-			`L'évènement n'étant pas encore publié: un bénévole n'y verra qu'une annonce « Bientôt disponible », ` +
-			`tandis qu'un responsable ou un administrateur accède déjà à tout l'espace.`,
-		archived: `L'évènement est archivé: seuls les responsables et les administrateurs y ont encore accès.`,
+			`L'évènement n'est pas encore publié: la personne invitée n'y verra qu'une annonce ` +
+			`« Bientôt disponible » et ne pourra pas s'inscrire.`,
+		archived: `L'évènement est archivé: la personne invitée n'y aura plus accès.`,
 	}
 
+	/**
+	 * Un responsable ou une administratrice accède déjà à tout l'espace, publié ou non:
+	 * l'invitation garde son sens, et l'avertissement n'a plus lieu d'être. Ouvert depuis un
+	 * formulaire de secteur, l'invité en rejoint les responsables: le champ n'est pas rendu,
+	 * mais le rôle est bien celui-là.
+	 */
+	let inviteHasRole = $derived(inviteIsAdmin || !!leaderOf.length || hideLeaderOf)
+	let warning = $derived(sendEmail && !inviteHasRole ? accessWarning[event.state] : undefined)
+
 	let hint = $derived(
-		isEmailValid
-			? accessHint[event.state]
-			: `Renseigne un email valide pour envoyer une invitation.`
+		isEmailValid ? undefined : `Renseigne un email valide pour envoyer une invitation.`
 	)
 
 	// Typé par sa forme et non par `Event`, qui désigne ici le modèle Prisma.
@@ -93,6 +101,7 @@
 			email: '',
 			sendEmail: true,
 			leaderOf: [],
+			isAdmin: false,
 		})
 		email = ''
 		isEmailValid = false
@@ -145,7 +154,7 @@
 			{/if}
 		</div>
 
-		{#if isAdmin && !hideLeaderOf}
+		{#if isAuthorAdmin && !hideLeaderOf}
 			<div class="col-span-2">
 				<InputMultiSelect
 					field={createInvite.fields.leaderOf}
@@ -177,6 +186,16 @@
 			</div>
 		{/if}
 
+		{#if isAuthorAdmin}
+			<div class="col-span-2">
+				<InputBoolean
+					label="Nommer administrateur.ice"
+					field={createInvite.fields.isAdmin}
+					hint="Accès complet aux réglages, aux membres et à la facturation de l'évènement."
+				/>
+			</div>
+		{/if}
+
 		<div class="col-span-2">
 			<InputBoolean
 				label="Envoyer l'invitation par email"
@@ -187,6 +206,16 @@
 				{hint}
 			/>
 		</div>
+
+		{#if warning}
+			<div
+				transition:slide
+				class="col-span-2 flex gap-3 rounded-2xl border border-soft p-4 text-sm"
+			>
+				<TriangleAlertIcon size={20} class="text-warning shrink-0" />
+				<p>{warning}</p>
+			</div>
+		{/if}
 	</div>
 
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">

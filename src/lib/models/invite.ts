@@ -12,4 +12,6 @@ export const modelInvite = z.object({
 	// appartiennent bien à l'évènement, et en relire les noms pour le journal. Le défaut couvre
 	// la sélection vide comme le champ jamais rendu — il est réservé aux administrateurs.
 	leaderOf: z.array(z.string()).default([]),
+	// Comme `leaderOf`, la case n'est rendue qu'aux administrateurs: son absence vaut « non ».
+	isAdmin: z.boolean().default(false),
 })

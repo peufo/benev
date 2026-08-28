@@ -129,9 +129,9 @@ export const createInvite = form(modelInvite, async ({ sendEmail, leaderOf, ...d
 	const eventId = params.eventId!
 	const author = await permission.leader(eventId, locals)
 
-	// Nommer un responsable reste réservé aux administrateurs, comme dans `updateTeam`: le champ
-	// n'est pas rendu aux autres, et un formulaire forgé ne doit pas contourner la règle.
-	if (leaderOf.length && !author.roles.includes('admin')) error(403)
+	// Distribuer un rôle reste réservé aux administrateurs, comme dans `updateTeam`: les champs
+	// ne sont pas rendus aux autres, et un formulaire forgé ne doit pas contourner la règle.
+	if ((leaderOf.length || data.isAdmin) && !author.roles.includes('admin')) error(403)
 
 	if (data.email) {
 		const alreadyMember = await prisma.member.findFirst({

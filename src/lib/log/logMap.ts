@@ -109,6 +109,9 @@ export const logMap = {
 			// Les secteurs confiés dès l'invitation. `teamId` ne pourrait en désigner qu'un: la
 			// liste vit dans la charge utile, et rien ne la joint au rendu.
 			...(teams?.length && { teams }),
+			// Le rôle donné dès l'invitation, sur le même principe: optionnel, les lignes déjà
+			// écrites ne le portent pas.
+			...(member.isAdmin && { isAdmin: true as const }),
 			actor: refActor(actor),
 		},
 	}),
@@ -440,6 +443,7 @@ type MemberSource = {
 	lastName: string
 	email?: string | null
 	isValidedByEvent?: boolean
+	isAdmin?: boolean
 }
 
 type TeamSource = { id: string; name: string; eventId: string }

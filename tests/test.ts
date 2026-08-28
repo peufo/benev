@@ -115,4 +115,10 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test('Un responsable invité depuis le secteur ouvre la barre de sauvegarde', async () => {
 		await event.expectTeamLeaderInvitedFromField(page)
 	})
+
+	// En dernier: le membre créé ici est administrateur, ce que les badges de rôle des étapes
+	// précédentes ne s'attendent pas à croiser.
+	test("L'invitation nomme un administrateur dès la création du membre", async () => {
+		await event.expectInviteNamesAdmin(page)
+	})
 })

@@ -145,15 +145,17 @@ export function useEvent(owner: User, name: string) {
 		 */
 		async expectInviteFindsExistingUser(page: Page, email: string) {
 			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			const dialog = page.getByRole('dialog')
 			// `exact`: la case « Envoyer l'invitation par email » porte le mot dans son libellé.
-			const emailInput = page.getByRole('dialog').getByLabel('Email (optionnel)', { exact: true })
+			const emailInput = dialog.getByLabel('Email (optionnel)', { exact: true })
 			const sendEmail = page.getByRole('checkbox', { name: /Envoyer l'invitation/ })
+			const draftWarning = page.getByText("L'évènement n'est pas encore publié")
 
-			// Sans adresse, il n'y a rien à envoyer: la case reste cochée mais hors service.
+			// Sans adresse, il n'y a rien à envoyer: la case reste cochée mais hors service, et
+			// l'avertissement ne porterait sur aucun envoi.
 			await expect(sendEmail).toBeChecked()
 			await expect(sendEmail).toBeDisabled()
-			// L'évènement est encore en brouillon: l'invité doit savoir ce qu'il y trouvera.
-			await expect(page.getByText("L'évènement n'est pas publié")).toBeVisible()
+			await expect(draftWarning).toBeHidden()
 
 			await expect(async () => {
 				await emailInput.fill(email)
@@ -161,6 +163,20 @@ export function useEvent(owner: User, name: string) {
 			}).toPass()
 
 			await expect(sendEmail).toBeEnabled()
+			// L'évènement est encore en brouillon et l'invité n'a aucun rôle: l'invitation
+			// partirait vers une annonce, et l'avertissement le dit.
+			await expect(draftWarning).toBeVisible()
+
+			// Nommé administrateur.ice, l'invité accède déjà à tout l'espace: l'avertissement
+			// tombe. La case est réduite à zéro pixel — c'est son libellé qui la bascule.
+			const isAdmin = page.getByRole('checkbox', { name: /Nommer administrateur/ })
+			await dialog.getByText('Nommer administrateur.ice').click()
+			await expect(isAdmin).toBeChecked()
+			await expect(draftWarning).toBeHidden()
+
+			await dialog.getByText('Nommer administrateur.ice').click()
+			await expect(isAdmin).not.toBeChecked()
+			await expect(draftWarning).toBeVisible()
 		},
 		/**
 		 * `Member` porte un `@@unique([email, eventId])`: le doublon doit se dire sous le champ,
@@ -902,6 +918,44 @@ export function useEvent(owner: User, name: string) {
 			const journal = page.locator('#journal').getByRole('listitem')
 			await expect(
 				journal.filter({ hasText: 'a invité Alyx Vance' }).filter({ hasText: 'Alpha' })
+			).toHaveCount(1)
+		},
+		/**
+		 * Le rôle donné dès l'invitation: la case n'est rendue qu'aux administrateurs, et rien
+		 * d'autre ne prouve qu'elle atteint bien la colonne `isAdmin` du membre créé.
+		 */
+		async expectInviteNamesAdmin(page: Page) {
+			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			const dialog = page.getByRole('dialog')
+			await dialog.getByLabel('Prénom').fill('Wallace')
+			// `exact`: « Prénom » contient « nom ».
+			await dialog.getByLabel('Nom', { exact: true }).fill('Breen')
+
+			// La case est réduite à zéro pixel — c'est son libellé qui la bascule. Le rejeu
+			// attend l'hydratation: avant elle, le clic ne coche rien.
+			const isAdmin = page.getByRole('checkbox', { name: /Nommer administrateur/ })
+			await expect(async () => {
+				await dialog.getByText('Nommer administrateur.ice').click()
+				await expect(isAdmin).toBeChecked({ timeout: 1000 })
+			}).toPass()
+
+			await dialog.getByRole('button', { name: 'Valider' }).click()
+			// Sans adresse, il n'y a rien à envoyer: le libellé du succès le dit.
+			await expect(page.getByText('Membre ajouté')).toBeVisible()
+
+			await page.goto(`/${eventId}/admin/members`)
+			await page
+				.getByRole('link', { name: /Wallace Breen/ })
+				.first()
+				.click()
+			await expect(page.getByRole('heading', { name: 'Wallace Breen' })).toBeVisible()
+			await expect(page.getByText('Administrateur', { exact: true })).toBeVisible()
+
+			const journal = page.locator('#journal').getByRole('listitem')
+			await expect(
+				journal
+					.filter({ hasText: 'a invité Wallace Breen' })
+					.filter({ hasText: 'administrateur.ice' })
 			).toHaveCount(1)
 		},
 		/**

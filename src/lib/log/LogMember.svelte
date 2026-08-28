@@ -37,6 +37,9 @@
 		{#if log.data.email && !log.data.sendEmail}
 			<span class="badge badge-sm badge-warning badge-outline">aucun email envoyé</span>
 		{/if}
+		{#if log.data.isAdmin}
+			<span class="badge badge-sm badge-ghost">administrateur.ice</span>
+		{/if}
 		{#if log.data.teams?.length}
 			<span>responsable de</span>
 			{#each log.data.teams as team (team.id)}
