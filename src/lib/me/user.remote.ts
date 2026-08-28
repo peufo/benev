@@ -4,6 +4,7 @@ import z from 'zod'
 import {
 	auth,
 	claimInvite,
+	clearInviteCookie,
 	createAvatarPlaceholder,
 	generateToken,
 	media,
@@ -80,6 +81,15 @@ export const logoutUser = form(async () => {
 	if (!session) error(401)
 	await auth.invalidateSession(session.sessionId)
 	locals.auth.setSession(null) // remove cookie
+})
+
+/**
+ * L'invitation vise une autre adresse et la personne choisit de rester sur son compte: le cookie
+ * n'a plus rien à porter. Le jeton, lui, survit — le lien du mail reste valable pour celui à qui
+ * il a été envoyé.
+ */
+export const dismissInvite = form(async () => {
+	clearInviteCookie(getRequestEvent().cookies)
 })
 
 /**

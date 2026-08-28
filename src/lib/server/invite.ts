@@ -59,6 +59,13 @@ export async function getInvitedMember(cookies: Cookies) {
 	return readValidInviteToken(tokenId)
 }
 
+/**
+ * Les adresses se comparent sans casse: une majuscule de plus n'est pas une autre boîte, et la
+ * collation MySQL rend déjà le même compte pour `Claire@x.ch` et `claire@x.ch`.
+ */
+export const isSameEmail = (a?: string | null, b?: string | null) =>
+	!!a && !!b && a.toLowerCase() === b.toLowerCase()
+
 export type Invite = {
 	eventId: string
 	eventName: string
@@ -104,7 +111,7 @@ export async function claimInvite(
 	const member = await getInvitedMember(cookies)
 	// Une adresse qui ne correspond pas est le cas ordinaire de la boîte partagée: le jeton prouve
 	// l'accès à *cette* boîte, il n'autorise rien pour une autre.
-	if (!member || member.email !== user.email) return null
+	if (!member || !isSameEmail(member.email, user.email)) return null
 	if (!user.isEmailVerified) {
 		await prisma.user.update({ where: { id: user.id }, data: { isEmailVerified: true } })
 	}

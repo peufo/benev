@@ -5,6 +5,7 @@ import {
 	prisma,
 	getInvitedMember,
 	getMemberProfile,
+	isSameEmail,
 	parseFormKey,
 	getPeriodForm,
 } from '$lib/server'
@@ -30,7 +31,7 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 		// lisible sans être connecté, qui porte l'invitation jusqu'au tunnel d'inscription.
 		const invited = user ? await getInvitedMember(cookies) : null
 		const invitedId =
-			invited?.eventId === eventId && invited.email === user?.email ? invited.id : null
+			invited?.eventId === eventId && isSameEmail(invited.email, user?.email) ? invited.id : null
 
 		const member =
 			user &&
