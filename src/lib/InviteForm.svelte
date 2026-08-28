@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { untrack } from 'svelte'
 	import { InputBoolean, InputMultiSelect, InputString, tip } from 'fuma'
 	import z from 'zod'
 	import { slide } from 'svelte/transition'
@@ -53,20 +52,15 @@
 	 */
 	const accessHint: Partial<Record<EventState, string>> = {
 		draft:
-			`L'évènement n'est pas publié: un bénévole n'y verra qu'une annonce « Bientôt disponible », ` +
+			`L'évènement n'étant pas encore publié: un bénévole n'y verra qu'une annonce « Bientôt disponible », ` +
 			`tandis qu'un responsable ou un administrateur accède déjà à tout l'espace.`,
 		archived: `L'évènement est archivé: seuls les responsables et les administrateurs y ont encore accès.`,
 	}
 
 	let hint = $derived(
-		[
-			isEmailValid
-				? `Un lien d'invitation sera envoyé à ${email}.`
-				: `Renseigne un email valide pour envoyer une invitation.`,
-			accessHint[event.state],
-		]
-			.filter(Boolean)
-			.join(' ')
+		isEmailValid
+			? accessHint[event.state]
+			: `Renseigne un email valide pour envoyer une invitation.`
 	)
 
 	// Typé par sa forme et non par `Event`, qui désigne ici le modèle Prisma.

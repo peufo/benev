@@ -21,7 +21,7 @@
 		</div>
 
 		<a
-			class="btn btn-sm ml-auto"
+			class="btn btn-sm ml-auto btn-secondary"
 			href={urlParam.with({ form_invite: '{}' })}
 			data-sveltekit-noscroll
 			data-sveltekit-replacestate
@@ -49,12 +49,9 @@
 	</div>
 
 	{#if event.state === 'draft'}
-		<p class="flex min-w-0 grow items-center gap-2 text-sm">
-			<TriangleAlertIcon size={20} class="shrink-0 text-warning mx-2" />
-			<span class="italic">
-				Tant que l'évènement n'est pas publié, ce lien n'est pas pertinent.<br /> Mais tu peux déjà inviter
-				des membres et les nommer responsable de secteur.
-			</span>
+		<p class="italic text-xs">
+			Ce lien n'est pas pertinent tant que l'évènement n'est pas publié.<br />
+			Mais tu peux déjà inviter les administrateur·ices et les responsables de secteur.
 		</p>
 	{/if}
 </div>

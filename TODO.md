@@ -20,3 +20,5 @@
 - [ ] Afficher la fin des inscriptions global sur la liste des secteurs
 
 - [ ] Dans le formulaire de secteur, affcher la fin des inscriptions par défaut si il est définit
+
+- [ ] S'assurer que tous les termes utilisé dans l'app soit inclusif.
