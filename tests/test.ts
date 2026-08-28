@@ -121,4 +121,9 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test("L'invitation nomme un administrateur dès la création du membre", async () => {
 		await event.expectInviteNamesAdmin(page)
 	})
+
+	// Après les secteurs: le réglage posé ici se lit sur eux.
+	test('La fin des inscriptions par défaut se lit sur le secteur et sa carte', async () => {
+		await event.expectDefaultCloseSubscribing(page)
+	})
 })

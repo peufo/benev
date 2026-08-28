@@ -997,5 +997,35 @@ export function useEvent(owner: User, name: string) {
 			await page.reload()
 			await expect(combobox.getByText('Gordon Freeman')).toBeVisible()
 		},
+		/**
+		 * La fin des inscriptions par défaut vit sur l'évènement. Le formulaire de secteur ne la
+		 * montrait pas — un `<input type="date">` n'affiche jamais son `placeholder` — et la carte
+		 * publique n'annonçait d'échéance qu'aux secteurs qui en portaient une à eux.
+		 */
+		async expectDefaultCloseSubscribing(page: Page) {
+			await page.goto(`/${eventId}/admin/settings`)
+			const closeSubscribing = page.getByLabel('Fin des inscriptions par défaut')
+			const saveBar = page.getByText('Modification en cours !')
+			// La barre ne suit rien tant que la page n'est pas hydratée: rejouer la saisie attend
+			// l'hydratation sans avoir à la deviner.
+			await expect(async () => {
+				await closeSubscribing.fill('2099-09-12')
+				await expect(saveBar).toBeVisible({ timeout: 1000 })
+			}).toPass()
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText('Modifications enregistrées')).toBeVisible()
+
+			// `\s`: le libellé porte une espace insécable, que la normalisation ne réduit pas.
+			await page.goto(`/${eventId}/admin/teams`)
+			await page.locator('aside').getByRole('link', { name: 'Alpha' }).click()
+			await expect(
+				page.locator('#team').getByText(/Par défaut\s*:\s*12 septembre 2099/)
+			).toBeVisible()
+
+			await page.goto(`/${eventId}/teams`)
+			await expect(
+				page.getByText('Fin des inscriptions le 12 septembre 2099').first()
+			).toBeVisible()
+		},
 	}
 }

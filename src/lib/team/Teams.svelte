@@ -6,7 +6,6 @@
 	interface Props {
 		teams: TeamWithComputedValues[]
 		placeholder?: import('svelte').Snippet
-		/** Remplacent les évènements de la version Svelte 4. */
 		onclickPeriod?: (value: PeriodWithComputedValues & { team: TeamWithComputedValues }) => void
 	}
 

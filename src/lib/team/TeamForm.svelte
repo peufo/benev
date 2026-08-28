@@ -4,6 +4,8 @@
 	import { page } from '$app/state'
 	import { InputBoolean, InputString, InputTextarea } from 'fuma'
 
+	import { daytz } from '$lib/dayjs'
+
 	import { MemberConditions } from '$lib/member'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { SaveBar } from '$lib/ui'
@@ -58,6 +60,14 @@
 	let resetToken = $state(0)
 </script>
 
+<!-- Un `<input type="date">` n'affiche jamais son `placeholder`: la date héritée de l'évènement
+     se dit à côté du libellé, où elle reste lisible champ vide comme rempli. -->
+{#snippet closeSubscribingDefault()}
+	<span class="ml-auto text-xs font-normal opacity-70">
+		Par défaut&nbsp;: {daytz(event.closeSubscribing).format('DD MMMM YYYY')}
+	</span>
+{/snippet}
+
 {#snippet fields()}
 	<InputString field={remoteForm.fields.name} label="Nom du secteur" value={team.name} />
 
@@ -79,9 +89,7 @@
 			type="date"
 			label="Fin des inscriptions"
 			value={team.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
-			placeholder={event.closeSubscribing && !team?.closeSubscribing
-				? `Par défaut: ${event.closeSubscribing.toLocaleDateString()}`
-				: ''}
+			labelAppend={event.closeSubscribing ? closeSubscribingDefault : undefined}
 		/>
 		<InputBoolean
 			field={remoteForm.fields.overflowPermitted}
