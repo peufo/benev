@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Dialog } from 'fuma'
 	import JSConfetti from 'js-confetti'
 
 	let dialog: HTMLDialogElement = $state()!
@@ -13,14 +14,14 @@
 	}
 </script>
 
-<dialog bind:this={dialog} class="modal">
-	<div class="modal-box flex flex-col gap-4">
+<Dialog bind:dialog hideCloseButton>
+	{#snippet header()}
 		<h2 class="text-center text-2xl">Un énorme merci !</h2>
+	{/snippet}
 
-		<p>Tu recevras une confirmation par mail dès que ton inscription sera validée.</p>
+	<p>Tu recevras une confirmation par mail dès que ton inscription sera validée.</p>
 
-		<div class="flex gap-2 justify-end">
-			<button class="btn" onclick={() => dialog.close()}>OK, ça joue !</button>
-		</div>
+	<div class="flex gap-2 justify-end">
+		<button class="btn" onclick={() => dialog.close()}>OK, ça joue !</button>
 	</div>
-</dialog>
+</Dialog>

@@ -20,14 +20,13 @@
 
 <form
 	{...createSubscribe.enhance(enhanceForm({ onsuccess: () => onsuccess?.() }))}
-	class="modal-box flex flex-col gap-4"
+	class="flex flex-col gap-4"
 >
 	<input type="hidden" name="memberId" value={memberId} />
 	<input type="hidden" name="periodId" value={period.id} />
 
-	<h2 class="card-title">{team.name}</h2>
-	<p class="font-semibold">{formatRange(period)}</p>
-
+	<h2 class="font-semibold text-lg">{team.name}</h2>
+	<p class="font-semibold text-lg">{formatRange(period)}</p>
 	<p>Souhaites-tu t'inscrire à cette période ?</p>
 
 	<div class="flex flex-row-reverse gap-2">

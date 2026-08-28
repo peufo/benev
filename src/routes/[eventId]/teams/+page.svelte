@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths'
 	import { onMount } from 'svelte'
 	import { InputSearch } from '$lib/ui'
-	import { RangePickerButton, urlParam } from 'fuma'
+	import { Dialog, RangePickerButton, urlParam } from 'fuma'
 
 	import { Teams, ToggleOnlyAvailable } from '$lib/team'
 	import ThanksDialog from './ThanksDialog.svelte'
@@ -22,6 +22,7 @@
 	let selectedPeriod: PeriodWithTeam | undefined = $state(undefined)
 
 	function handleClickPeriod(period: PeriodWithTeam) {
+		if (period.isDisabled) return
 		if (!data.member?.userId) {
 			const redirectTo = encodeURIComponent(`${location.pathname}?subscribeTo=${period.id}`)
 			return goto(eventPath(`/register?redirectTo=${redirectTo}`))
@@ -76,7 +77,11 @@
 	</Teams>
 </div>
 
-<dialog class="modal" bind:this={subscribeDialog}>
+<Dialog bind:dialog={subscribeDialog}>
+	{#snippet header()}
+		<span class="title">Nouvelle inscription</span>
+	{/snippet}
+
 	{#if selectedPeriod && data.member}
 		<SubscribeForm
 			memberId={data.member.id}
@@ -93,6 +98,6 @@
 			}}
 		/>
 	{/if}
-</dialog>
+</Dialog>
 
 <ThanksDialog bind:this={thanksDialog} />

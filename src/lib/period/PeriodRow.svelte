@@ -1,9 +1,5 @@
 <script lang="ts">
-	import { ClipboardListIcon } from '@lucide/svelte'
-	import { stopPropagation } from 'svelte/legacy'
-
-	import { tip, urlParam } from 'fuma'
-	import { goto } from '$app/navigation'
+	import { urlParam } from 'fuma'
 	import { daytz } from '$lib/dayjs'
 
 	import { SubscribeStateForm } from '$lib/subscribe'
@@ -22,11 +18,7 @@
 
 	function handlePeriodClick(event: Event) {
 		if (clickInteractiveElement(event)) return
-		if (period.team.isLeader) {
-			const url = urlParam.toggle({ form_period: period.id })
-			return goto(url, { replaceState: true, noScroll: true, keepFocus: true })
-		}
-		if (!period.isDisabled) onclickPeriod?.(period)
+		onclickPeriod?.(period)
 	}
 
 	function clickInteractiveElement(event: Event) {
@@ -58,15 +50,6 @@
 	<div class="flex gap-3 ml-auto">
 		{#if period.mySubscribe}
 			<SubscribeStateForm subscribe={period.mySubscribe} isLeader={!!period.team.isLeader} />
-		{:else if period.team.isLeader && period.isAvailable}
-			<button
-				class="btn btn-square btn-sm"
-				onclick={stopPropagation(() => onclickPeriod?.(period))}
-			>
-				<span class="inline-flex" use:tip={{ content: "M'inscrire à cette période" }}
-					><ClipboardListIcon size={20} /></span
-				>
-			</button>
 		{/if}
 		<Progress {period} class="w-15" />
 	</div>

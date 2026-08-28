@@ -142,7 +142,13 @@
 		{/snippet}
 
 		{#each team.periods as period (period.id)}
-			<PeriodRow period={{ ...period, team }} />
+			<PeriodRow
+				period={{ ...period, team }}
+				onclickPeriod={() => {
+					const url = urlParam.toggle({ form_period: period.id })
+					return goto(url, { replaceState: true, noScroll: true, keepFocus: true })
+				}}
+			/>
 		{:else}
 			<Placeholder>Aucune période de travail</Placeholder>
 		{/each}
