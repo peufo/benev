@@ -10,14 +10,9 @@
 
 	interface Props {
 		period?: Partial<FormDataPeriod>
-		periodForm: PeriodForm
 	}
 
-	let { period = {}, periodForm = $bindable() }: Props = $props()
-
-	export function selectMember(m: Member) {
-		member = m
-	}
+	let { period = {} }: Props = $props()
 
 	let member: Member | undefined = $state(undefined)
 
@@ -33,7 +28,6 @@
 >
 	{#snippet children({ close })}
 		<PeriodForm
-			bind:this={periodForm}
 			{period}
 			onsuccess={() => noOverlay || close()}
 			ondelete={() => noOverlay || close()}

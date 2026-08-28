@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte'
+	import { untrack, type Snippet } from 'svelte'
 	import type { Event, Field, Team } from '@prisma/client'
 	import { page } from '$app/state'
 	import { InputBoolean, InputString, InputTextarea } from 'fuma'
@@ -10,8 +10,8 @@
 	import Section from '$lib/ui/Section.svelte'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
 	import type { TeamWithComputedValues } from '$lib/server'
+	import type { DrawerFrom } from '$lib/drawerCall.svelte'
 	import { createTeam, updateTeam } from './team.remote'
-	import { registerTeamForm } from './teamFormActive.svelte'
 
 	interface Props {
 		class?: string
@@ -23,11 +23,8 @@
 		 * sections — les conditions d'accès étant la seconde.
 		 */
 		saveBar?: boolean
-		/**
-		 * Le tiroir « inviter un membre » est ouvert dessous: c'est lui qui recevra le secteur
-		 * créé, et rouvrir une invitation d'ici ferait boucler la pile.
-		 */
-		hideLeaders?: boolean
+		/** Qui a ouvert le tiroir. Absent du formulaire rendu à même la page. */
+		openedFrom?: DrawerFrom
 		/** L'entête de la section « secteur », que la page possède: elle la rend aussi en lecture seule. */
 		subtitle?: string
 		action?: Snippet
@@ -40,7 +37,7 @@
 		event,
 		team = $bindable({}),
 		saveBar = false,
-		hideLeaders = false,
+		openedFrom,
 		subtitle,
 		action,
 		oncreated,
@@ -52,9 +49,7 @@
 	// Une instance par secteur édité: le formulaire de la page et celui du tiroir de création
 	// peuvent être montés en même temps, et passer d'un secteur au suivant ne doit rien traîner.
 	const remoteForm = $derived(team.id ? updateTeam.for(team.id) : createTeam.for(formId))
-
-	// `DrawersForm` s'en sert pour injecter un responsable fraîchement invité.
-	registerTeamForm((updater) => (team = updater(team)))
+	const hideLeaders = $derived(openedFrom === 'invite')
 
 	let formElement = $state<HTMLFormElement>()
 	let bar = $state<ReturnType<typeof SaveBar>>()

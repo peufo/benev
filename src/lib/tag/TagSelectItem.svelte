@@ -1,23 +1,24 @@
 <script lang="ts">
 	import { PencilIcon } from '@lucide/svelte'
 	import type { Tag } from '@prisma/client'
-	import { urlParam, tip } from 'fuma'
+	import { tip } from 'fuma'
+	import type { DrawerLinkAttributes } from '$lib/drawerCall.svelte'
 
 	interface Props {
 		tag: Tag
-		is_editable?: boolean
+		/** Le lien du tiroir d'édition. Absent, l'étiquette se rend sans crayon. */
+		edit?: DrawerLinkAttributes
 	}
 
-	let { tag, is_editable = false }: Props = $props()
+	let { tag, edit }: Props = $props()
 </script>
 
 <div class="flex items-center">
 	<div class="rounded-full w-3 h-3 -translate-x-1" style="background-color: {tag.color};"></div>
 	<div>{tag.name}</div>
-	{#if is_editable}
+	{#if edit}
 		<a
-			href={urlParam.with({ form_tag: tag.id })}
-			data-sveltekit-replacestate
+			{...edit}
 			class="btn btn-xs btn-circle btn-ghost min-h-4.5 w-4.5 h-4.5 opacity-80 ml-1 -mr-1"
 			use:tip={{ content: "Modifier l'étiquette" }}
 		>

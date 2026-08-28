@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
-	import { InputSelect, tip, urlParam } from 'fuma'
+	import { InputSelect, tip } from 'fuma'
+	import { inviteCall } from '$lib/drawerCall.svelte'
 	import { searchMembers } from '$lib/member/member.remote'
 	import { createSubscribe } from './subscribe.remote'
 	import { enhanceForm } from '$lib/enhanceForm'
@@ -47,12 +48,11 @@
 		{/snippet}
 
 		{#snippet append({ hide })}
+			<!-- Sans `from`: rien ne boucle entre une période et une invitation, et le tiroir garde
+			     donc son champ « Responsable des secteurs ». -->
 			<a
-				onclick={hide}
-				href={urlParam.with({ form_invite: '{}' })}
+				{...inviteCall.link({ oncreated: (invited) => (member = invited) }, { onclick: hide })}
 				class="btn btn-square btn-soft btn-sm"
-				data-sveltekit-noscroll
-				data-sveltekit-replacestate
 				use:tip={{ content: 'Inviter un nouveau membre' }}
 			>
 				<UserPlusIcon size={20} />

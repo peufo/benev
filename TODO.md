@@ -11,3 +11,7 @@
 - [ ] Placer l'indicateur de quota dans la section "Status" des settings
 
 - [ ] Ajouter un toggle "Nommer adminisatrateur.ice" dans le formulaire d'invitation
+
+- [ ] Les calls (await prisma) devrait tous lever des issues au lieux de faire des erreur 500
+
+- [ ] Placer le bouton supprimer du secteur dans les actions au lieu de dans la section "danger"

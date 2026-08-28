@@ -13,6 +13,7 @@
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { goto } from '$app/navigation'
 	import { searchTeams } from '$lib/team/team.remote'
+	import { tagCall } from '$lib/drawerCall.svelte'
 	import { searchTags } from '$lib/tag/tag.remote'
 	import { TagSelectItem } from '$lib/tag'
 	import { toast } from 'svelte-sonner'
@@ -89,18 +90,18 @@
 		selectedTags = period?.tags ?? []
 	}
 
-	export function selectTag(tag: Tag) {
+	function selectTag(tag: Tag) {
 		if (selectedTags.some(({ id }) => id === tag.id)) return
 		selectedTags = [...selectedTags, tag]
 	}
 
 	// Le tiroir d'étiquette s'ouvre par-dessus ce formulaire, dont les étiquettes sélectionnées
 	// datent du `load`: la fermeture du tiroir ne les rejoue pas, il faut les reporter ici.
-	export function updateTag(tag: Tag) {
+	function replaceTag(tag: Tag) {
 		selectedTags = selectedTags.map((t) => (t.id === tag.id ? tag : t))
 	}
 
-	export function unselectTag(tagId: string) {
+	function unselectTag(tagId: string) {
 		selectedTags = selectedTags.filter(({ id }) => id !== tagId)
 	}
 
@@ -210,18 +211,18 @@
 			placeholder="Permis de conduire, Nuit, Montage, ..."
 		>
 			{#snippet selected(tag)}
-				<TagSelectItem {tag} is_editable />
+				<TagSelectItem
+					{tag}
+					edit={tagCall.link({ onupdated: replaceTag, ondeleted: unselectTag }, { value: tag.id })}
+				/>
 			{/snippet}
 			{#snippet proposal(tag)}
 				<TagSelectItem {tag} />
 			{/snippet}
 			{#snippet append({ hide })}
 				<a
-					onclick={hide}
-					href={urlParam.with({ form_tag: '{}' })}
+					{...tagCall.link({ oncreated: selectTag }, { onclick: hide })}
 					class="btn btn-square btn-soft btn-sm"
-					data-sveltekit-noscroll
-					data-sveltekit-replacestate
 					use:tip={{ content: 'Nouvelle étiquette' }}
 				>
 					<PlusIcon size={20} />

@@ -1,26 +1,34 @@
 <script lang="ts">
-	import { InputBoolean, InputMultiSelect, InputString, tip, urlParam } from 'fuma'
+	import { untrack } from 'svelte'
+	import { InputBoolean, InputMultiSelect, InputString, tip } from 'fuma'
 	import z from 'zod'
 	import { slide } from 'svelte/transition'
 	import { toast } from 'svelte-sonner'
 	import type { Event, EventState, Member, Team } from '@prisma/client'
 	import { page } from '$app/state'
 	import { enhanceForm } from './enhanceForm'
+	import { type DrawerFrom, teamCall } from './drawerCall.svelte'
 	import { createInvite, findUserByEmail } from './member/member.remote'
 	import { searchTeams } from './team/team.remote'
 	import { PlusIcon } from '@lucide/svelte'
 
 	interface Props {
 		event: Event
-		/**
-		 * Le tiroir « nouveau secteur » est ouvert dessous: c'est lui qui recevra le membre
-		 * invité, et rouvrir un secteur d'ici ferait boucler la pile.
-		 */
-		hideLeaderOf?: boolean
+		/** Qui a ouvert le tiroir. */
+		openedFrom?: DrawerFrom
 		onCreate?: (member: Member) => void
 	}
 
-	let { event, hideLeaderOf = false, onCreate = () => {} }: Props = $props()
+	let { event, openedFrom, onCreate = () => {} }: Props = $props()
+
+	/**
+	 * Ouvert depuis un formulaire de secteur, le membre invité y rejoint les responsables:
+	 * rouvrir un secteur d'ici ferait boucler la pile.
+	 *
+	 * Figé: la provenance ne change pas pendant la vie du tiroir, et l'appel s'éteint avec la clé
+	 * de l'URL, avant le démontage — le relire ferait revenir le champ le temps qu'il glisse.
+	 */
+	const hideLeaderOf = $derived(openedFrom === 'team')
 	let email = $state('')
 	let isEmailValid = $state(false)
 	let isLoadingUserExists = $state(false)
@@ -98,11 +106,6 @@
 		// Les cases cachées du multi-select se dérivent de cette liste, pas de l'état du champ.
 		leaderOf = []
 	}
-
-	/** Le secteur créé depuis le champ « Responsable des secteurs » y revient sélectionné. */
-	export function selectTeam(team: Team) {
-		leaderOf = [...leaderOf, team]
-	}
 </script>
 
 <form
@@ -166,11 +169,11 @@
 					{/snippet}
 					{#snippet append({ hide })}
 						<a
-							onclick={hide}
-							href={urlParam.with({ form_team: '{}' })}
+							{...teamCall.link(
+								{ from: 'invite', oncreated: (team) => (leaderOf = [...leaderOf, team]) },
+								{ onclick: hide }
+							)}
 							class="btn btn-square btn-soft btn-sm"
-							data-sveltekit-noscroll
-							data-sveltekit-replacestate
 							use:tip={{ content: 'Créer un nouveau secteur' }}
 						>
 							<PlusIcon size={20} />

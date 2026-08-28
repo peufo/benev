@@ -2,8 +2,9 @@
 	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
 	import type { RemoteFormField } from '@sveltejs/kit'
-	import { InputMultiSelect, tip, urlParam } from 'fuma'
+	import { InputMultiSelect, tip } from 'fuma'
 	import { searchMembers } from '$lib/member/member.remote'
+	import { inviteCall } from '$lib/drawerCall.svelte'
 	import MemberLink from './MemberLink.svelte'
 
 	interface Props {
@@ -16,18 +17,15 @@
 
 	// Dérivé assignable, et non une liaison remontant vers `team.leaders`: `TeamForm` porte
 	// `team` en objet nu, donc y écrire une propriété ne redéclencherait aucun rendu. Le
-	// dérivé se ré-amorce quand le parent réassigne `team` — c'est ainsi qu'un responsable
-	// fraîchement invité apparaît ici.
+	// dérivé se ré-amorce quand le parent réassigne `team`.
+	//
+	// Lié, et non passé en simple prop: le multi-select écrit lui-même `value` à chaque choix,
+	// et un `$bindable` cesse alors de suivre le parent — le responsable rendu par le tiroir
+	// d'invitation n'apparaîtrait plus dès qu'une sélection l'a précédé.
 	let leaders = $derived(value ?? [])
 </script>
 
-<InputMultiSelect
-	{field}
-	label="Responsables"
-	value={leaders}
-	onSelect={(selection) => (leaders = selection)}
-	items={searchMembers}
->
+<InputMultiSelect {field} label="Responsables" bind:value={leaders} items={searchMembers}>
 	{#snippet selected(member)}
 		<MemberLink id={member.id} firstName={member.firstName} lastName={member.lastName} />
 	{/snippet}
@@ -36,11 +34,11 @@
 	{/snippet}
 	{#snippet append({ hide })}
 		<a
-			onclick={hide}
-			href={urlParam.with({ form_invite: '{}' })}
+			{...inviteCall.link(
+				{ from: 'team', oncreated: (member) => (leaders = [...leaders, member]) },
+				{ onclick: hide }
+			)}
 			class="btn btn-square btn-soft btn-sm"
-			data-sveltekit-noscroll
-			data-sveltekit-replacestate
 			use:tip={{ content: 'Inviter un nouveau membre' }}
 		>
 			<UserPlusIcon size={20} />

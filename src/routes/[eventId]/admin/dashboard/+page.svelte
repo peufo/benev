@@ -96,7 +96,12 @@
 	</a>
 {/snippet}
 
-<div class={['gap-3', data.journal ? 'lg:grid lg:grid-cols-2 max-lg:flex' : 'flex', 'flex-col']}>
+<div
+	class={[
+		'gap-3 flex-col',
+		data.journal ? 'lg:grid lg:grid-cols-2 overflow-hidden max-lg:flex' : 'flex',
+	]}
+>
 	<div class="flex flex-col gap-3">
 		<Section
 			id="members"
@@ -152,7 +157,7 @@
 				? ''
 				: ' à votre charge'} · {nbPeriods} période{plurial(nbPeriods)}"
 		>
-			<DashboardTeams teams={data.teams} />
+			<!-- <DashboardTeams teams={data.teams} /> -->
 			{@render seeAllLink(eventPath('/admin/teams'), teamsPageLabel)}
 		</Section>
 	</div>
