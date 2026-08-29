@@ -142,7 +142,7 @@ export const createInvite = form(modelInvite, async ({ sendEmail, leaderOf, ...d
 		if (alreadyMember)
 			invalid(
 				issue.email(
-					`${alreadyMember.firstName} ${alreadyMember.lastName} utilise déjà cette adresse`
+					`Cette email est déjà associée à ${alreadyMember.firstName} ${alreadyMember.lastName}`
 				)
 			)
 	}
