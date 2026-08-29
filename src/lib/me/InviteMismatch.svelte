@@ -35,7 +35,7 @@
 
 	<!-- Les deux adresses en regard plutôt qu'en phrase: elles se comparent d'un coup d'œil, et
 	     une adresse longue ne se coupe plus au milieu d'un mot. -->
-	<dl class="mt-4 flex flex-col gap-2 rounded-2xl border border-soft p-5 text-sm">
+	<dl class="mt-4 flex flex-col gap-2 rounded-box border border-soft p-5 text-sm">
 		<div class="flex flex-wrap gap-x-2">
 			<dt class="text-base-content/70">Invitation envoyée à</dt>
 			<dd class="font-semibold break-all">{invitedEmail}</dd>
@@ -46,16 +46,11 @@
 		</div>
 	</dl>
 
-	<p class="mt-4 text-sm leading-relaxed text-base-content/70">
-		L'adhésion se rattache à l'adresse invitée. En te déconnectant, l'inscription reprend à son nom
-		— et le lien du mail reste valable dans tous les cas.
-	</p>
-
 	<!-- Le bouton principal d'abord dans le DOM: c'est lui que déclenche la touche Entrée. -->
 	<form
 		{...logout.enhance(enhanceForm({ onsuccess: () => document.location.reload() }))}
 		{...dismissInvite.enhance(enhanceForm({ onsuccess: () => invalidateAll() }))}
-		class="mt-8 flex flex-wrap gap-2"
+		class="mt-8 flex flex-wrap gap-2 flex-row-reverse justify-between"
 	>
 		<button formaction={logout.action} class="btn btn-primary"> Changer de compte </button>
 		<button formaction={dismissInvite.action} class="btn"> Rester avec mon compte </button>

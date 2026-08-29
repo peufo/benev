@@ -13,49 +13,27 @@
 
 	interface Props {
 		event: Event
-		/** Qui a ouvert le tiroir. */
 		openedFrom?: DrawerFrom
 		onCreate?: (member: Member) => void
 	}
 
 	let { event, openedFrom, onCreate = () => {} }: Props = $props()
 
-	/**
-	 * Ouvert depuis un formulaire de secteur, le membre invité y rejoint les responsables:
-	 * rouvrir un secteur d'ici ferait boucler la pile.
-	 *
-	 * Figé: la provenance ne change pas pendant la vie du tiroir, et l'appel s'éteint avec la clé
-	 * de l'URL, avant le démontage — le relire ferait revenir le champ le temps qu'il glisse.
-	 */
 	const hideLeaderOf = $derived(openedFrom === 'team')
 	let email = $state('')
 	let isEmailValid = $state(false)
 	let isLoadingUserExists = $state(false)
 	let user = $state({ firstName: '', lastName: '' })
-	// Lié, et non passé en simple prop: `reset()` repilote la sélection après coup, ce qu'un
-	// `$bindable` cesse de suivre dès que le composant y a écrit.
 	let leaderOf = $state<Team[]>([])
-
-	// Le tiroir est monté pour tout responsable, mais distribuer un rôle reste le fait des
-	// administrateurs — `createInvite` refuse les autres.
 	let isAuthorAdmin = $derived(!!page.data.member?.roles.includes('admin'))
-
-	/**
-	 * Une case désactivée n'est pas soumise, et celle-ci n'est renseignée qu'au premier clic:
-	 * sans valeur, c'est l'état initial — coché — qui fait foi.
-	 */
 	let sendEmail = $derived(isEmailValid && (createInvite.fields.sendEmail.value() ?? true))
 	let inviteIsAdmin = $derived(createInvite.fields.isAdmin.value() ?? false)
 
-	/**
-	 * Tant que l'évènement n'est pas publié, `[eventId]/+layout.svelte` réserve l'espace aux
-	 * responsables: l'invitation partirait vers une annonce. Autant le dire avant l'envoi.
-	 */
 	const accessWarning: Partial<Record<EventState, string>> = {
 		draft:
-			`L'évènement n'est pas encore publié: la personne invitée n'y verra qu'une annonce ` +
+			`L'évènement n'étant pas encore publié, un membre sans résponsablités ne verra qu'une annonce ` +
 			`« Bientôt disponible » et ne pourra pas s'inscrire.`,
-		archived: `L'évènement est archivé: la personne invitée n'y aura plus accès.`,
+		archived: `L'évènement est archivé: le membre invitée n'y aura plus accès.`,
 	}
 
 	/**
@@ -191,7 +169,7 @@
 				<InputBoolean
 					label="Nommer administrateur.ice"
 					field={createInvite.fields.isAdmin}
-					hint="Accès complet aux réglages, aux membres et à la facturation de l'évènement."
+					hint="Accès complet aux réglages, à la planification et aux publications de l'évènement."
 				/>
 			</div>
 		{/if}
@@ -210,7 +188,7 @@
 		{#if warning}
 			<div
 				transition:slide
-				class="col-span-2 flex gap-3 rounded-2xl border border-soft p-4 text-sm"
+				class="col-span-2 flex gap-3 rounded-field border border-warning bg-dash p-4 text-sm"
 			>
 				<TriangleAlertIcon size={20} class="text-warning shrink-0" />
 				<p>{warning}</p>
