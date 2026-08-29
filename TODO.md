@@ -1,0 +1,1 @@
+- BUG: Le menu de navigation admin est visible pour un invité alors que celui-ci n'a pas encore accepté l'invitation

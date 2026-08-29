@@ -7,8 +7,7 @@
 	let { children }: Props = $props()
 </script>
 
-<div class="flex flex-col gap-4">
-	<CheckoutWaitSSE removeCheckoutId />
-
+<CheckoutWaitSSE removeCheckoutId />
+<div class="mb-1 footer-hidden">
 	{@render children?.()}
 </div>

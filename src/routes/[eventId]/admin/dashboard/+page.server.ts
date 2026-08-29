@@ -124,10 +124,9 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 			member: addMemberComputedValues({ ...subscribe.member, event }),
 		})),
 		nbWaiting,
-		teams,
-		// Dérivés des secteurs plutôt que comptés à part: les deux chiffres suivent alors la même
-		// portée que la liste, sans risque de la contredire.
+		// TODO: Y a surement un moyen moins couteux de calculé ces chiffres
 		nbSubscribes: teams.reduce((acc, team) => acc + team.subscribes.length, 0),
 		maxSubscribes: teams.reduce((acc, team) => acc + team.maxSubscribe, 0),
+		nbPeriods: teams.reduce((acc, team) => acc + team.nbPeriods, 0),
 	}
 }

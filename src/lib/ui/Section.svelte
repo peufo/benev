@@ -13,7 +13,7 @@
 		subtitle?: string | undefined
 		action?: Snippet | undefined
 		danger?: boolean
-		children: Snippet
+		children?: Snippet
 		class?: ClassValue
 	}
 
@@ -30,8 +30,8 @@
 	}: Props = $props()
 </script>
 
-<section {id} class={['surface scroll-mt-4 p-5', danger && 'border-error/40', klass]}>
-	<div class="mb-4 flex items-start gap-2 flex-wrap">
+<section {id} class={['surface scroll-mt-4 p-5 space-y-4', danger && 'border-error/40', klass]}>
+	<div class="flex items-start gap-2 flex-wrap">
 		<div class="flex gap-4 grow">
 			{#if back}
 				<button
@@ -56,8 +56,12 @@
 				{/if}
 			</div>
 		</div>
-		{@render action?.()}
+		{#if action}
+			<div class="flex gap-2 ml-auto">
+				{@render action?.()}
+			</div>
+		{/if}
 	</div>
 
-	{@render children()}
+	{@render children?.()}
 </section>

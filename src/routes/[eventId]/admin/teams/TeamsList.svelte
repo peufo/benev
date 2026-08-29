@@ -147,7 +147,7 @@
 {/snippet}
 
 <div class="flex flex-col gap-2">
-	<div class="flex gap-1">
+	<div class="flex gap-1 sticky top-0 z-10 bg-base-100 -m-2 p-2 -translate-y-2">
 		<label class="input input-sm grow">
 			<SearchIcon size={16} opacity={0.6} />
 			<input

@@ -13,7 +13,7 @@
 	<aside
 		class={[
 			'surface p-2 w-full shrink-0 md:w-72 md:sticky md:top-1',
-			'md:max-h-[calc(100dvh-0.5rem)] md:overflow-y-auto',
+			'max-h-main overflow-auto',
 			selected && 'max-md:hidden',
 		]}
 	>

@@ -43,6 +43,7 @@
 	onMount(awaitCheckoutNotification)
 </script>
 
+<!-- TODO: utilisé un toast à la place -->
 {#if isNewCheckoutAwaited}
 	<div class="h-20 grid place-content-center border-primary border rounded">
 		<span class="loading loading-infinity loading-lg text-primary"></span>

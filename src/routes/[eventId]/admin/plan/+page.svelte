@@ -11,10 +11,7 @@
 	let teams = $derived(data.teams_periods)
 </script>
 
-<div
-	style="height: calc(100vh - 62px)"
-	class="overflow-hidden rounded-box border border-soft footer-hidden flex flex-col"
->
+<div class={['overflow-hidden rounded-box border border-soft flex flex-col', 'h-main']}>
 	<PlanHeader bind:plan teams={data.teams} views={data.views} class="border-b" />
 	{#if urlParam.has('axis', 'y')}
 		<PlanY bind:plan bind:teams />

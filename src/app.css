@@ -116,3 +116,11 @@ mark {
 .tiptap .suggestion {
 	@apply bg-primary/5 px-1.5 rounded-field border border-soft;
 }
+
+.h-main {
+	height: calc(100vh - 70px);
+}
+
+.max-h-main {
+	max-height: calc(100vh - 70px);
+}

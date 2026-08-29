@@ -29,7 +29,9 @@
 
 - [ ] S'assurer que tous les thermes utilisé dans l'app soit inclusif.
 
-- [ ] La liste des invitations est moche
+- Les éléments highlight sont moche
+  - La liste des invitations benev/src/routes/(home)/me/events/+page.svelte:38
+  - La période listé dans benev/src/routes/(home)/me/events/EventEntry.svelte:94 (A supprimer ?)
 
 - [ ] Onboarding de l'organisateur
   - [ ] La page d'aide en placeholder de la page d'accueil est confuse
