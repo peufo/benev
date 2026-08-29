@@ -126,4 +126,19 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	test('La fin des inscriptions par défaut se lit sur le secteur et sa carte', async () => {
 		await event.expectDefaultCloseSubscribing(page)
 	})
+
+	test("Un invité refuse l'invitation et son adresse quitte la fiche", async ({
+		browser: invitedBrowser,
+	}) => {
+		const chell = useUser('Chell')
+		const invitedPage = await invitedBrowser.newPage()
+		try {
+			// Le compte existe avant l'invitation: c'est le cas ordinaire, et le tunnel rattache
+			// alors le membre par son adresse.
+			await chell.register(invitedPage)
+			await event.expectDeclineInvite(page, invitedPage, chell.email)
+		} finally {
+			await invitedPage.close()
+		}
+	})
 })

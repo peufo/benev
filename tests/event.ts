@@ -1027,5 +1027,55 @@ export function useEvent(owner: User, name: string) {
 				page.getByText('Fin des inscriptions le 12 septembre 2099').first()
 			).toBeVisible()
 		},
+		/**
+		 * Le refus d'une invitation, des deux côtés. À cette étape l'invité n'est relié à aucun
+		 * membre: le bouton passait par `deleteMember`, que la permission refusait en 403 — il ne
+		 * se passait rien. Ce qu'il retire, c'est son adresse, la fiche appartenant à l'évènement
+		 * qui l'a créée.
+		 */
+		async expectDeclineInvite(page: Page, invitedPage: Page, invitedEmail: string) {
+			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			const dialog = page.getByRole('dialog')
+			await dialog.getByLabel('Prénom').fill('Chell')
+			// `exact`: « Prénom » contient « nom ».
+			await dialog.getByLabel('Nom', { exact: true }).fill('Johnson')
+			await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(invitedEmail)
+			await dialog.getByRole('button', { name: 'Valider' }).click()
+			await expect(dialog).toBeHidden()
+
+			const openMember = async () => {
+				await page.goto(`/${eventId}/admin/members`)
+				await page
+					.getByRole('link', { name: /Chell Johnson/ })
+					.first()
+					.click()
+				await expect(page.getByRole('heading', { name: 'Chell Johnson' })).toBeVisible()
+			}
+			// Tant qu'une adresse est là, l'invitation peut être rejouée: c'est ce bouton, et lui
+			// seul, que le refus fait disparaître.
+			const resend = page.getByRole('button', { name: /Renvoyer l'invitation/ })
+			await openMember()
+			await expect(resend).toBeVisible()
+
+			// L'évènement est en brouillon: l'adresse du compte suffit à le rattacher au membre
+			// invité, sans jeton.
+			await invitedPage.goto(`/${eventId}/register`)
+			const decline = invitedPage.getByRole('button', { name: /^(Refuser|Confirmer)$/ })
+			await decline.click()
+			// Hydratée, la page demande confirmation avant de soumettre; sans elle, la soumission
+			// native du premier clic est déjà partie. Le second clic n'a lieu que dans le premier cas.
+			if (await decline.isVisible().catch(() => false)) await decline.click()
+			await invitedPage.waitForURL('**/me/events')
+
+			await openMember()
+			await expect(resend).toHaveCount(0)
+
+			const journal = page.locator('#journal').getByRole('listitem')
+			await expect(
+				journal
+					.filter({ hasText: "a refusé l'invitation de Chell Johnson" })
+					.filter({ hasText: 'adresse retirée' })
+			).toHaveCount(1)
+		},
 	}
 }

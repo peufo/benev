@@ -116,6 +116,31 @@ export const logMap = {
 		},
 	}),
 
+	/**
+	 * Le refus d'une invitation. L'invité n'est jamais relié au membre — ce qu'il retire, c'est
+	 * son adresse, la ligne appartenant à l'évènement qui l'a créée. Cette adresse partie, le
+	 * journal est le seul endroit où l'organisateur peut encore savoir laquelle a refusé.
+	 */
+	member_decline: ({
+		member,
+		actor,
+		email,
+	}: {
+		member: MemberSource
+		actor: LogActor
+		email: string
+	}) => ({
+		eventId: member.eventId,
+		memberId: member.id,
+		userId: actor.userId,
+		createdById: actor.userId,
+		data: {
+			member: refPerson(member),
+			email,
+			actor: refActor(actor),
+		},
+	}),
+
 	/** L'acteur est celui qui rejoint: personne d'autre ne peut accepter à sa place. */
 	member_join: ({
 		member,

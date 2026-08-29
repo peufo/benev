@@ -19,6 +19,7 @@ export const LOG_FAMILIES = {
 		types: [
 			'member_invite',
 			'member_join',
+			'member_decline',
 			'member_delete',
 			'member_update',
 			'member_role',

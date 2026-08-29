@@ -3,15 +3,13 @@
 	import type { Event, Page as TPage } from '@prisma/client'
 	import { page } from '$app/state'
 	import { tiptapParser } from '$lib/ui'
-	import { urlParam } from 'fuma'
-	import MemberDeleteForm from './MemberDeleteForm.svelte'
+	import { ButtonDelete, urlParam } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
-	import { acceptInvite } from './member.remote'
+	import { acceptInvite, declineInvite } from './member.remote'
 
 	interface Props {
 		event: Event
 		charter: TPage | null
-		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 	}
 
@@ -50,8 +48,17 @@
 			<button class="btn btn-primary">Oui je le veux !</button>
 		</form>
 
+		<!-- Refuser ne supprime pas la fiche, qui appartient à l'évènement: le compte n'y est pas
+		     encore relié, et n'en retire que son adresse. -->
 		{#if page.data.member?.isValidedByEvent && !page.data.member?.userId}
-			<MemberDeleteForm memberId={page.data.member.id} class="w-36">Refuser</MemberDeleteForm>
+			<form {...declineInvite.enhance(enhanceForm())} class="contents">
+				<input type="hidden" name="memberId" value={page.data.member.id} />
+				<ButtonDelete formaction={declineInvite.action} class="w-36">
+					{#snippet children({ waitConfirmation })}
+						{waitConfirmation ? 'Confirmer' : 'Refuser'}
+					{/snippet}
+				</ButtonDelete>
+			</form>
 		{/if}
 
 		<a href={resolve('/me')} class="btn btn-ghost mr-auto"> Retour </a>

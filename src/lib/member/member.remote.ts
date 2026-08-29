@@ -8,6 +8,7 @@ import {
 	createAvatarPlaceholder,
 	createLog,
 	getMemberProfile,
+	isSameEmail,
 	notifyTierQuotaIfNeeded,
 	permission,
 	prisma,
@@ -275,6 +276,43 @@ export const acceptInvite = form(
 		if (redirectTo) redirect(303, redirectTo)
 	}
 )
+
+/**
+ * Refuser une invitation. À cette étape le compte n'est relié à aucun membre: la ligne
+ * appartient à l'évènement qui l'a créée, et l'invité n'a pas à la supprimer. Ce qui est à lui,
+ * c'est son adresse — la retirer suffit à ce que l'invitation cesse de le viser, et
+ * l'organisateur garde une fiche à corriger ou à effacer lui-même.
+ */
+export const declineInvite = form(z.object({ memberId: z.string() }), async ({ memberId }) => {
+	const { locals, params, cookies } = getRequestEvent()
+	const eventId = params.eventId!
+	const session = await locals.auth.validate()
+	if (!session) error(401)
+
+	// Le droit vient de l'adresse et non d'un lien de membre qui n'existe pas encore: seul son
+	// titulaire la retire, et seulement tant que personne n'a réclamé la fiche.
+	const member = await prisma.member.findUnique({ where: { id: memberId, eventId } })
+	if (!member?.email || member.userId) error(403)
+	if (!isSameEmail(member.email, session.user.email)) error(403)
+	const email = member.email
+
+	const declined = await prisma.member.update({
+		where: { id: member.id },
+		data: {
+			email: null,
+			isEmailVerified: false,
+			// Sans adresse, il n'y a plus rien à notifier.
+			isNotifiedSubscribe: false,
+			isNotifiedLeaderOfSubscribe: false,
+			isNotifiedAdminOfNewMember: false,
+		},
+	})
+	// Le lien reçu par email a fini son travail, dans un sens comme dans l'autre.
+	await consumeInviteToken(declined.id)
+	clearInviteCookie(cookies)
+	await createLog('member_decline', { member: declined, actor: session.user, email })
+	redirect(303, '/me')
+})
 
 export const deleteMember = form(
 	z.object({ memberId: z.string(), redirectTo: z.string().optional() }),

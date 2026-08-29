@@ -156,6 +156,16 @@ describe('rendu du journal', () => {
 			)
 		).toContain("a accepté l'invitation")
 
+		// L'adresse a quitté la fiche: la ligne du journal est le seul endroit où elle survit.
+		const declined = renderLog(
+			LogMember,
+			'member_decline',
+			logMap.member_decline({ member, actor, email: 'marc@example.org' }).data
+		)
+		expect(declined).toContain("a refusé l'invitation de")
+		expect(declined).toContain('marc@example.org')
+		expect(declined).toContain('adresse retirée')
+
 		expect(
 			renderLog(
 				LogMember,

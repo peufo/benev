@@ -17,6 +17,7 @@
 		UserCheckIcon,
 		UserMinusIcon,
 		UserPlusIcon,
+		UserXIcon,
 	} from '@lucide/svelte'
 	import type { LogType } from '@prisma/client'
 	import type { LogTyped } from './logMap'
@@ -45,6 +46,7 @@
 		subscribe_absent: LogSubscribe,
 		member_invite: LogMember,
 		member_join: LogMember,
+		member_decline: LogMember,
 		member_delete: LogMember,
 		member_validated: LogMember,
 		member_update: LogMemberUpdate,
@@ -69,6 +71,7 @@
 		subscribe_absent: { icon: ClipboardListIcon, class: 'text-warning' },
 		member_invite: { icon: UserPlusIcon, class: '' },
 		member_join: { icon: UserPlusIcon, class: '' },
+		member_decline: { icon: UserXIcon, class: 'text-warning' },
 		member_delete: { icon: UserMinusIcon, class: 'text-error' },
 		member_validated: { icon: UserCheckIcon, class: 'text-success' },
 		member_update: { icon: PencilIcon, class: '' },

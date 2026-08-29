@@ -2,7 +2,8 @@
 	import type { LogTyped } from './logMap'
 	import { snippetRef } from './Snippets.svelte'
 
-	type Types = 'member_invite' | 'member_join' | 'member_delete' | 'member_validated'
+	type Types =
+		'member_invite' | 'member_join' | 'member_decline' | 'member_delete' | 'member_validated'
 	let { log }: { log: LogTyped<Types> } = $props()
 </script>
 
@@ -14,6 +15,10 @@
 	{:else if log.type === 'member_join'}
 		{@render snippetRef(log.data.member)}
 		{log.data.wasInvited ? "a accepté l'invitation" : "a rejoint l'évènement"}
+	{:else if log.type === 'member_decline'}
+		{@render snippetRef(log.data.actor)}
+		a refusé l'invitation de
+		{@render snippetRef(log.data.member)}
 	{:else if log.type === 'member_delete'}
 		{#if log.data.isSelf}
 			{@render snippetRef(log.data.member)} a quitté l'évènement
@@ -46,6 +51,9 @@
 				<span class="badge badge-sm badge-ghost">{team.name}</span>
 			{/each}
 		{/if}
+	{:else if log.type === 'member_decline'}
+		<span>{log.data.email}</span>
+		<span class="badge badge-sm badge-warning badge-outline">adresse retirée</span>
 	{:else if log.type === 'member_join' && !log.data.isValidedByEvent}
 		<span class="badge badge-sm badge-warning badge-outline">en attente d'approbation</span>
 	{/if}
