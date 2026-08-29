@@ -35,3 +35,5 @@
   - [ ] La page d'aide en placeholder de la page d'accueil est confuse
   - [ ] La page admin par défaut doit être le dashboard
   - [ ] Mettre un message de bienvenu dans le journal
+
+- [ ] Quand on pase d'un événement à l'autre, le formulaire dans settings ne ce met pas à jour. Simplement mettre .for(id) au formulaire résous, le problème, mais les issues de formulaire ne remonte plus.

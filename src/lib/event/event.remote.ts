@@ -42,6 +42,10 @@ type EventIdentityIssue = {
 	name(message: string): Parameters<typeof invalid>[0]
 }
 
+function isSame(a: string, b: string) {
+	return a.normalize().toLowerCase() === b.normalize().toLowerCase()
+}
+
 /**
  * Nom et URL sont uniques dans toute la base, et l'URL sert en plus de préfixe de route: les
  * deux se valident au même endroit, à la création comme au réglage. `currentId` exclut
@@ -64,8 +68,8 @@ async function checkEventIdentity(
 		where: { id: { not: currentId }, OR: [{ id }, { name }] },
 		select: { id: true, name: true },
 	})
-	if (taken.some((event) => event.id === id)) invalid(issue.id('Cette URL est déjà prise'))
-	if (taken.some((event) => event.name === name)) invalid(issue.name('Ce nom est déjà pris'))
+	if (taken.some((event) => isSame(event.id, id))) invalid(issue.id('Cette URL est déjà prise'))
+	if (taken.some((event) => isSame(event.name, name))) invalid(issue.name('Ce nom est déjà pris'))
 }
 
 export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issue) => {
