@@ -19,7 +19,8 @@ export default defineConfig({
 	// dédoublonnage, `fuma/server` lève un `redirect()` issu de son exemplaire de kit, que
 	// celui de benev ne reconnaît pas: la redirection remonte alors en erreur 500. Pour zod, c'est
 	// la configuration globale posée par `z.config()` qui est propre à chaque exemplaire: les
-	// schémas construits dans fuma resteraient en anglais.
+	// schémas construits dans fuma resteraient en anglais. Pour dayjs, c'est l'`include` ci-dessous
+	// qui ne porterait pas: il résout depuis la racine du projet, donc pas l'exemplaire imbriqué.
 	resolve: { dedupe: ['@sveltejs/kit', 'svelte', 'zod', 'dayjs'] },
 	server: { fs: { allow: ['media', '../fuma'] }, allowedHosts: ['mac-de-jo.local'] },
 	optimizeDeps: {
