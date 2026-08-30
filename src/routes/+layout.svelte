@@ -43,7 +43,7 @@
 
 <!-- On doit forcer un padding supplémentaire de 6 à cause de la marge des drawers -->
 <div
-	class="flex min-h-screen flex-col bg-base-200/20"
+	class={['flex min-h-screen flex-col bg-base-200/20']}
 	style="padding-right: {transitionX.current + (transitionX.current ? 6 : 0)}px;"
 >
 	{@render children?.()}

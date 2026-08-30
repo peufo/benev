@@ -284,8 +284,6 @@
 					{/if}
 				{/if}
 			</div>
-		{:else}
-			<Placeholder>Aucune condition</Placeholder>
 		{/each}
 	</div>
 

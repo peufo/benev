@@ -30,7 +30,7 @@
 	<input type="hidden" name="id" value={team.id} />
 	<button
 		type="submit"
-		class="btn btn-square btn-sm btn-ghost"
+		class="btn btn-square btn-sm btn-primary"
 		use:tip={{ content: 'Dupliquer le secteur' }}
 	>
 		<CopyPlusIcon size={20} />

@@ -2,10 +2,11 @@
 	import { toast } from 'svelte-sonner'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { deleteTeam } from './team.remote'
+	import { tip } from 'fuma'
+	import { Trash2Icon } from '@lucide/svelte'
 
 	interface Props {
 		team: { id: string; nbSubscribes?: number }
-		/** Où atterrir après la suppression. Redirigé par le serveur, pas par le client. */
 		redirectTo?: string
 	}
 
@@ -18,6 +19,7 @@
 		if (nb === 0) return true
 		const msg = [
 			`Ce secteur contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
+			'Cette opération est irréversible.',
 			'Es-tu certain de vouloir le supprimer ?',
 		].join('\n')
 		if (confirm(msg)) return true
@@ -34,5 +36,11 @@
 	{#if redirectTo}
 		<input type="hidden" name="redirectTo" value={redirectTo} />
 	{/if}
-	<button type="submit" class="btn btn-error">Supprimer le secteur</button>
+	<button
+		type="submit"
+		class="btn btn-sm btn-error btn-square btn-soft"
+		use:tip={{ content: 'Supprimer ce secteur' }}
+	>
+		<Trash2Icon size={20} />
+	</button>
 </form>

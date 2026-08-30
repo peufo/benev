@@ -9,6 +9,9 @@ type Params = {
 	keyDownPreventDefault?: boolean
 }
 
+/**
+ * @deprecated use import { command } from 'fuma' instead
+ */
 export function selector(
 	node: HTMLElement,
 	{

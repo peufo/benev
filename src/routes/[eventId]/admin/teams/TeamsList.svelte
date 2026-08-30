@@ -103,35 +103,30 @@
 		class={[
 			'menu-item group select-none gap-2',
 			page.params.teamId === team.id && 'active',
-			// Le curseur clavier se pose par-dessus le secteur ouvert sans le remplacer: les deux
-			// repères ne disent pas la même chose.
 			keyboard && command.focusIndex === index && 'outline-2 outline-primary',
 		]}
 	>
 		<span class="min-w-0 truncate text-sm" class:font-medium={isMine}>{team.name}</span>
 
-		<!-- La jauge cède la place à la poignée au survol: la ligne reste dense, et l'ordre se
-		     modifie là où il se lit. Le glissé tactile, lui, marche déjà — mais un écran n'a pas
-		     de survol à offrir: sous un pointeur grossier la poignée prend sa propre place, en
-		     permanence, et la jauge ne s'efface plus. -->
-		<span class="relative ml-auto flex w-[45%] shrink-0 items-center gap-1">
-			<Progress
-				period={team}
-				wrap={false}
-				class="min-w-0 flex-1 {isAdmin ? 'pointer-fine:group-hover:invisible' : ''}"
-			/>
-			{#if isAdmin}
-				<span
-					class={[
-						'drag-button btn btn-xs btn-square btn-ghost',
-						'absolute right-0 opacity-0 pointer-fine:group-hover:opacity-100',
-						'pointer-coarse:static pointer-coarse:opacity-100',
-					]}
-				>
-					<MoveVerticalIcon size={16} class="text-base-content/70" />
-				</span>
-			{/if}
-		</span>
+		<Progress
+			period={team}
+			class={[
+				'ml-auto min-w-0 w-16 shrink-0',
+				isAdmin && 'pointer-fine:group-hover:w-8 pointer-fine:group-hover:invisible',
+			]}
+			badgeClass="ml-auto"
+		/>
+		{#if isAdmin}
+			<span
+				class={[
+					'drag-button btn btn-sm btn-square btn-ghost',
+					'absolute right-1 opacity-0 pointer-fine:group-hover:opacity-100',
+					'pointer-coarse:static pointer-coarse:opacity-100',
+				]}
+			>
+				<MoveVerticalIcon size={16} class="text-base-content/70" />
+			</span>
+		{/if}
 	</a>
 {/snippet}
 
@@ -147,7 +142,12 @@
 {/snippet}
 
 <div class="flex flex-col gap-2">
-	<div class="flex gap-1 sticky top-0 z-10 bg-base-100 -m-2 p-2 -translate-y-2">
+	<div
+		class={[
+			'flex gap-1 sticky top-0 z-10 -m-2 p-2 -translate-y-2',
+			'bg-base-100/30 backdrop-blur-md',
+		]}
+	>
 		<label class="input input-sm grow">
 			<SearchIcon size={16} opacity={0.6} />
 			<input

@@ -1,22 +1,22 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import { countSubscribes, type PeriodCountable } from '$lib/subscribe/subscribesCount'
+	import type { ClassValue } from 'svelte/elements'
 
 	interface Props {
 		period: PeriodCountable
-		class?: string
+		class?: ClassValue
 		withLabel?: boolean
-		/** La jauge fait toute la largeur: le badge passe sous elle, sauf à tenir sur une ligne. */
 		wrap?: boolean
-		badgeClass?: string
-		progressClass?: string
+		badgeClass?: ClassValue
+		progressClass?: ClassValue
 		beforeBadge?: Snippet
 		afterBadge?: Snippet
 	}
 
 	let {
 		period,
-		class: klass = '',
+		class: klass,
 		withLabel = false,
 		wrap = true,
 		badgeClass = '',
@@ -36,7 +36,7 @@
 	class:flex-col={withLabel}
 	class:gap-2={withLabel}
 >
-	<div class="h-2 rounded w-full relative overflow-hidden bg-base-300 {progressClass}">
+	<div class={['h-2 rounded w-full relative overflow-hidden bg-base-300', progressClass]}>
 		<div
 			class="h-2 bg-error absolute rounded-r"
 			style:width="{100 * ((count.accepted + count.request) / count.total)}%"
@@ -79,7 +79,10 @@
 		</div>
 	{:else}
 		{@render beforeBadge?.()}
-		<span class="badge badge-sm whitespace-nowrap {badgeClass}" class:bg-base-200={count.isComplet}>
+		<span
+			class={['badge badge-sm whitespace-nowrap', badgeClass]}
+			class:bg-base-200={count.isComplet}
+		>
 			{count.accepted + count.request} / {count.maxSubscribe}
 		</span>
 		{@render afterBadge?.()}

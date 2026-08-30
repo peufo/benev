@@ -3,9 +3,7 @@
 	import type { Event, Field, Team } from '@prisma/client'
 	import { page } from '$app/state'
 	import { InputBoolean, InputString, InputTextarea } from 'fuma'
-
 	import { daytz } from '$lib/dayjs'
-
 	import { MemberConditions } from '$lib/member'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { SaveBar } from '$lib/ui'
@@ -132,8 +130,6 @@
 			</div>
 		</Section>
 
-		<!-- Les conditions se soumettent par un champ caché: leur section vit donc dans le
-		     formulaire, et non dans la page qui porte les autres. -->
 		{#key resetToken}
 			<MemberConditions
 				conditions={team?.conditions || []}

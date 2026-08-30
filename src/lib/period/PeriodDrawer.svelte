@@ -15,24 +15,16 @@
 	let { period = {} }: Props = $props()
 
 	let member: Member | undefined = $state(undefined)
-
-	let noOverlay = $derived(!page.route.id?.startsWith('/[eventId]/admin/plan'))
 </script>
 
 <Drawer
 	key="form_period"
-	{noOverlay}
 	maxWidth="400px"
 	title="{period?.id ? 'Édition' : 'Création'} d'une période"
 	class="surface-drawer"
 >
 	{#snippet children({ close })}
-		<PeriodForm
-			{period}
-			onsuccess={() => noOverlay || close()}
-			ondelete={() => noOverlay || close()}
-			disableRedirect={!noOverlay}
-		/>
+		<PeriodForm {period} onsuccess={() => close()} ondelete={() => close()} />
 
 		{#if period?.id}
 			<div class="divider"></div>
