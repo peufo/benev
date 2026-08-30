@@ -20,14 +20,18 @@ export default defineConfig({
 	// celui de benev ne reconnaît pas: la redirection remonte alors en erreur 500. Pour zod, c'est
 	// la configuration globale posée par `z.config()` qui est propre à chaque exemplaire: les
 	// schémas construits dans fuma resteraient en anglais.
-	resolve: { dedupe: ['@sveltejs/kit', 'svelte', 'zod'] },
+	resolve: { dedupe: ['@sveltejs/kit', 'svelte', 'zod', 'dayjs'] },
 	server: { fs: { allow: ['media', '../fuma'] }, allowedHosts: ['mac-de-jo.local'] },
 	optimizeDeps: {
-		// `litepicker` n'est importé nulle part dans `src/`: c'est une dépendance CommonJS du
-		// `RangePicker` de fuma. Comme `fuma` est exclu du pré-bundling pour que ses
-		// modifications soient vues à chaud, la sienne doit être demandée explicitement — sans
-		// quoi le serveur de dev sert du CJS brut. Elle reste donc déclarée dans package.json.
-		include: ['litepicker'],
+		// Dépendances CommonJS atteintes depuis fuma, exclu du pré-bundling pour que ses
+		// modifications soient vues à chaud: sans demande explicite, le serveur de dev en sert
+		// le CJS brut, dont l'import `default` n'existe pas.
+		// - `litepicker`, dépendance du `RangePicker`, importée nulle part dans `src/`. Elle
+		//   reste déclarée dans package.json pour cette raison.
+		// - les greffons dayjs de l'`InputDateTime`. `src/lib/dayjs.ts` importe les mêmes, mais
+		//   sans l'extension `.js`: deux spécificateurs distincts pour l'optimiseur, donc ceux
+		//   de fuma passent à travers.
+		include: ['litepicker', 'dayjs/plugin/utc.js', 'dayjs/plugin/timezone.js'],
 		exclude: ['fuma'],
 	},
 })

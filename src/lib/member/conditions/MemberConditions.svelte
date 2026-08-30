@@ -16,7 +16,6 @@
 	import { browser } from '$app/env'
 	import { debounce } from '$lib/debounce'
 	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
-	import { Placeholder } from '$lib/ui'
 	import Section from '$lib/ui/Section.svelte'
 	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
 	import ConditionValue from './ConditionValue.svelte'

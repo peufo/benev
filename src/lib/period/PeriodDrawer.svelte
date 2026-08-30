@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Drawer } from 'fuma'
-	import { page } from '$app/state'
 	import PeriodForm from './PeriodForm.svelte'
 	import type { Member } from '@prisma/client'
 	import { SubscribeInviteForm } from '$lib/subscribe'

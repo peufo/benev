@@ -4,7 +4,6 @@
 		ChartGanttIcon,
 		ClipboardCopyIcon,
 		ClockIcon,
-		OctagonAlertIcon,
 		PlusIcon,
 		UsersIcon,
 	} from '@lucide/svelte'

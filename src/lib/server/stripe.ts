@@ -105,7 +105,7 @@ export const checkout = useCheckout({
 		const products: Prisma.ProductCreateManyCheckoutInput[] = []
 		for (const item of items) {
 			const priceId = item.price?.id || 'wtf'
-			products.push({ name: item.description, priceId })
+			products.push({ name: item.description || 'Pas de description', priceId })
 		}
 
 		const checkoutCreated = await prisma.checkout.create({
