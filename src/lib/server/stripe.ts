@@ -10,7 +10,12 @@ import { prisma, sendEmailComponent, createSSE } from '$lib/server'
 import { useProduct } from '$lib/server/useProduct'
 import { EmailCheckoutValidation } from '$lib/email'
 
-export const stripe = new Stripe(PRIVATE_STRIPE_KEY)
+/**
+ * Le client est créé au premier appel, pas à l'import: `vite build` évalue ce module pour lire les
+ * options des routes, sans environnement, et le constructeur de Stripe refuse une clé vide.
+ */
+let client: Stripe | undefined
+export const useStripe = () => (client ??= new Stripe(PRIVATE_STRIPE_KEY))
 
 const bus = new EventEmitter()
 
@@ -22,10 +27,10 @@ type CheckoutOptions = {
 }
 
 async function getStripCustomerId(user: User): Promise<string> {
-	const { data } = await stripe.customers.list({ email: user.email })
+	const { data } = await useStripe().customers.list({ email: user.email })
 	if (data.length) return data[0].id
 
-	const newCustomer = await stripe.customers.create({
+	const newCustomer = await useStripe().customers.create({
 		name: `${user.firstName} ${user.lastName}`,
 		email: user.email,
 		phone: user.phone,
@@ -38,7 +43,7 @@ function useCheckout(options: CheckoutOptions) {
 		async create(user: User, url: URL) {
 			const lineItems = options.getLineItems(user, url)
 			if (!lineItems.length) throw Error('Once on item is required')
-			const { client_secret } = await stripe.checkout.sessions.create({
+			const { client_secret } = await useStripe().checkout.sessions.create({
 				mode: 'payment',
 				ui_mode: 'embedded',
 				customer: await getStripCustomerId(user),
@@ -57,14 +62,14 @@ function useCheckout(options: CheckoutOptions) {
 			if (!signature) error(400)
 			try {
 				const payload = await request.text()
-				const event = await stripe.webhooks.constructEventAsync(
+				const event = await useStripe().webhooks.constructEventAsync(
 					payload,
 					signature,
 					options.hookSecretKey
 				)
 				if (event.type === 'checkout.session.completed') {
 					const newCheckout = event.data.object
-					const { data: items } = await stripe.checkout.sessions.listLineItems(newCheckout.id)
+					const { data: items } = await useStripe().checkout.sessions.listLineItems(newCheckout.id)
 					await options.onSuccess(newCheckout, items)
 					bus.emit(newCheckout.id)
 				}
