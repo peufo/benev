@@ -110,7 +110,7 @@
 
 {#snippet poweredBy()}
 	<a href={ORIGIN} rel="external" style="color:#067df7; text-decoration:none" target="_blank">
-		<span style="font-size: 10px; color: #333;"> Powered by </span>
+		<span style="font-size: 10px; color: #333;"> Propulsé par </span>
 		<img src="{ORIGIN}/benevio.svg" alt="Logo de Benev.io" style="height: 20px; display: inline;" />
 	</a>
 {/snippet}
