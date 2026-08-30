@@ -19,10 +19,7 @@ export const variables = defineEnvVars({
 	SMTP_USER: { schema: dynamicString },
 	SMTP_PASS: { schema: dynamicString },
 	EMAIL_DISABLED: {
-		schema: z
-			.string()
-			.default(building ? 'true' : '')
-			.transform((str) => str !== ''),
+		schema: dynamicString.default(building ? 'true' : '').transform((str) => str !== ''),
 	},
 
 	GITHUB_CLIENT_ID: { schema: dynamicString },
