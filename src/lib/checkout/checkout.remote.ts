@@ -29,7 +29,6 @@ export const useProductOnEvent = form(
 			include: { checkout: true },
 		})
 		if (!product || product.checkout.userId !== session.user.userId) error(403)
-
 		await useProduct(eventId, productId)
 		return { success: true }
 	}

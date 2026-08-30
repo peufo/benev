@@ -2,6 +2,7 @@ import { PRICE_STANDARD, PRICE_PREMIUM, PRICE_STANDARD_TO_PREMIUM } from '$app/e
 import type { EventTier } from '@prisma/client'
 
 import { prisma } from '$lib/server/prisma'
+import { error } from '@sveltejs/kit'
 
 export async function useProduct(eventId: string, productId: string) {
 	const [event, product] = await Promise.all([
@@ -12,13 +13,13 @@ export async function useProduct(eventId: string, productId: string) {
 		}),
 	])
 	if (product.eventId) {
-		throw new Error('This product is already activated for an event')
+		error(403, 'This product is already activated for an event')
 	}
 	if (event.ownerId !== product.checkout.userId) {
-		throw new Error('The event owner and product owner must be the same person')
+		error(403, 'The event owner and product owner must be the same person')
 	}
 	if (event.tier === 'premium' || event.tier === 'pro') {
-		throw new Error('The event is already on tier "premium" or "pro"')
+		error(403, 'The event is already on tier "premium" or "pro"')
 	}
 	if (event.tier === 'standard' && product.priceId === PRICE_STANDARD_TO_PREMIUM) {
 		return setEventTier('premium')
@@ -29,7 +30,7 @@ export async function useProduct(eventId: string, productId: string) {
 	if (event.tier === 'basic' && product.priceId === PRICE_STANDARD) {
 		return setEventTier('standard')
 	}
-	throw new Error('This product cannot be activated')
+	error(403, 'This product cannot be activated')
 
 	async function setEventTier(tier: EventTier) {
 		return prisma.$transaction([

@@ -11,8 +11,6 @@
 	let checkoutId = $derived(page.url.searchParams.get('checkoutId'))
 
 	const dayFormater = new Intl.DateTimeFormat('fr-ch', { day: 'numeric', month: 'short' })
-
-	let productsToAssign = $derived(data.checkouts.flatMap((c) => c.products).filter((p) => !p.event))
 </script>
 
 <h1 class="sr-only">Mes achats</h1>
@@ -22,13 +20,6 @@
 		allreadyLoaded={(checkoutId) => !!data.checkouts.find(({ id }) => id === checkoutId)}
 		eventSource="/me/checkouts/validation"
 	/>
-
-	{#if productsToAssign.length}
-		<p class="rounded-2xl border border-soft bg-secondary/10 p-4 text-sm">
-			<b>{productsToAssign.length}</b>
-			produit{productsToAssign.length > 1 ? 's' : ''} à affecter à un évènement ci-dessous.
-		</p>
-	{/if}
 
 	<ul>
 		{#each data.checkouts as checkout (checkout.id)}

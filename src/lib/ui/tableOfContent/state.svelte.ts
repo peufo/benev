@@ -35,7 +35,7 @@ export function trackActiveSection(getSections: () => TocSection[]) {
 			},
 			// Une bande de lecture en haut de l'écran: la section active est la première
 			// qui la traverse.
-			{ rootMargin: '-15% 0px -60% 0px' }
+			{ rootMargin: '-20% 0px -60% 0px' }
 		)
 
 		for (const { id } of sections) {

@@ -28,7 +28,7 @@
 	]}
 	aria-label={title}
 >
-	<h2 class="title-sm px-3 pt-2 pb-2 flex gap-3 items-center">
+	<h2 class="title-md px-3 pt-2 pb-2 flex gap-3 items-center">
 		<Icon size={16} />
 		<span>{title}</span>
 	</h2>
