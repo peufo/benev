@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte'
 	import MemberField from './MemberField.svelte'
 	import type { MemberProfile } from '$lib/server'
 	import { enhanceForm } from '$lib/enhanceForm'
@@ -34,6 +35,19 @@
 	// Remonte les listes déroulantes, dont la sélection vit dans le composant: le `reset()`
 	// natif ne restaure que les `defaultValue` du DOM.
 	let resetToken = $state(0)
+
+	/**
+	 * Un champ créé depuis la fiche du membre apparaît ici sans que rien n'y ait été saisi:
+	 * la ligne de base doit l'intégrer, sans quoi la barre s'ouvrirait sur un champ vide.
+	 * Une saisie en attente, elle, prime — la reprendre l'effacerait.
+	 */
+	const fieldIds = $derived(memberProfile.event.memberFields.map(({ id }) => id).join())
+	let watchedFieldIds = untrack(() => fieldIds)
+	$effect(() => {
+		if (fieldIds === watchedFieldIds) return
+		watchedFieldIds = fieldIds
+		if (!bar?.dirty()) bar?.rebase()
+	})
 </script>
 
 <form

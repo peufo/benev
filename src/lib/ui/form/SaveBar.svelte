@@ -35,6 +35,15 @@
 	let current = $state('')
 	const isDirty = $derived(!!baseline && current !== baseline)
 
+	/**
+	 * Le formulaire porte-t-il des modifications non enregistrées. Ce que lit un parent dont
+	 * le formulaire peut gagner un champ en cours de route: reprendre la ligne de base
+	 * effacerait une saisie en attente.
+	 */
+	export function dirty() {
+		return isDirty
+	}
+
 	let barElement = $state<HTMLDivElement>()
 	let timers: ReturnType<typeof setTimeout>[] = []
 

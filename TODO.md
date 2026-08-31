@@ -4,7 +4,7 @@
 
 - [x] Revoir le layout des publications (src/routes/[eventId]/admin/pages/+layout.svelte). Il faut séparer la section "Navigation" du reste. Sur mobile, le comportement doit être semblable à /admin/teams. La partie qui concerne l'édition des badges peut également être découpé en deux partie (formulaire / apercu)
 
-- [ ] Permetre d'ajouter des champs de profile directement dupuis la fiche de profil d'un membre.
+- [x] Permetre d'ajouter des champs de profile directement dupuis la fiche de profil d'un membre.
 
 - [ ] S'assurer que tous les termes utilisé dans l'app soit inclusif.
 

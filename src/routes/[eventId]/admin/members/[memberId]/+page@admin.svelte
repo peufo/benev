@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ClipboardListIcon, PencilIcon, ScrollTextIcon } from '@lucide/svelte'
+	import { ClipboardListIcon, PencilIcon, PlusIcon, ScrollTextIcon } from '@lucide/svelte'
 	import { Drawer, tip, urlParam } from 'fuma'
 	import { eventPath } from '$lib/eventPath'
 	import Avatar from '$lib/me/Avatar.svelte'
@@ -16,11 +16,16 @@
 	} from '$lib/member'
 	import MembersBadges from '../MembersBadges.svelte'
 	import { Journal } from '$lib/log'
+	import { Placeholder } from '$lib/ui'
 	import Section from '$lib/ui/Section.svelte'
 	import MemberMenu from './MemberMenu.svelte'
 	import MemberResendInviteForm from './MemberResendInviteForm.svelte'
 
 	let { data } = $props()
+
+	// Créer un champ de profil passe par `permission.admin`: un responsable consulte la fiche
+	// mais ne définit pas ce qu'on demande aux membres.
+	const isAdmin = $derived(!!data.member?.roles.includes('admin') || !!data.userIsRoot)
 
 	let createSubscribeDialog: HTMLDialogElement = $state()!
 </script>
@@ -74,9 +79,32 @@
 				<MemberContactDetails member={data.memberProfile} />
 			</div>
 		</div>
-		{#if data.event.memberFields.length}
+		{#if isAdmin || data.memberProfile.event.memberFields.length}
 			<div class="divider"></div>
-			<MemberProfileForm compact saveBar memberProfile={data.memberProfile} />
+
+			<div class="flex items-center gap-2">
+				<h3 class="title-md grow">Champs du profil</h3>
+				{#if isAdmin}
+					<!-- Le tiroir vit dans le layout de l'évènement: il s'ouvre par l'URL, sur
+					     place, et l'enregistrement recharge la fiche avec le nouveau champ. -->
+					<a
+						href={urlParam.with({ form_field: '{}' })}
+						data-sveltekit-replacestate
+						data-sveltekit-noscroll
+						class="btn btn-square btn-sm btn-secondary"
+						aria-label="Ajouter un champ au profil"
+						use:tip={{ content: 'Ajouter un champ au profil' }}
+					>
+						<PlusIcon size={20} />
+					</a>
+				{/if}
+			</div>
+
+			{#if data.memberProfile.event.memberFields.length}
+				<MemberProfileForm compact saveBar memberProfile={data.memberProfile} />
+			{:else}
+				<Placeholder class="h-20">Aucun champ de profil</Placeholder>
+			{/if}
 		{/if}
 	</Section>
 

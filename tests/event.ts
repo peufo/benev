@@ -608,6 +608,37 @@ export function useEvent(owner: User, name: string) {
 			await expect(saveBar).toBeHidden()
 			await expect(meal).toContainText('Omnivore')
 			await expect(allergies).not.toContainText('Gluten')
+
+			// Un champ se définit depuis la fiche elle-même. Il rejoint le formulaire sans
+			// ouvrir la barre: rien n'y a été saisi, et la ligne de base doit le prendre en
+			// compte plutôt que le lire comme une modification.
+			await page.getByRole('link', { name: 'Ajouter un champ au profil' }).click()
+			await expect(drawer).toBeVisible()
+			await expect(async () => {
+				if ((await typeTrigger.textContent()) !== 'Text') {
+					await typeTrigger.click()
+					await page.getByRole('option', { name: 'Text', exact: true }).click({ timeout: 1000 })
+				}
+				await expect(typeTrigger).toContainText('Text', { timeout: 1000 })
+			}).toPass()
+			await drawer.getByLabel('Nom', { exact: true }).fill('Surnom')
+			await drawer.locator('label').filter({ hasText: 'Modifiable par les membres' }).click()
+			await drawer.getByRole('button', { name: 'Valider', exact: true }).click()
+			await expect(drawer).toBeHidden()
+
+			const nickname = page.getByLabel('Surnom')
+			await expect(nickname).toBeVisible()
+			await expect(saveBar).toBeHidden()
+
+			await nickname.fill('Bobby')
+			await expect(saveBar).toBeVisible()
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText('Profil enregistré')).toBeVisible()
+			await expect(saveBar).toBeHidden()
+
+			await page.reload()
+			await expect(page.getByLabel('Surnom')).toHaveValue('Bobby')
+			await expect(saveBar).toBeHidden()
 		},
 		/**
 		 * L'édition d'une page passe par la barre de sauvegarde, et non plus par un
