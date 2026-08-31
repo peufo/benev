@@ -1,65 +1,83 @@
 <script lang="ts">
+	import { IdCardLanyardIcon, PlusIcon } from '@lucide/svelte'
+	import type { Page } from '@prisma/client'
 	import { page } from '$app/state'
-
-	import { Card } from '$lib/ui'
 	import { tip } from 'fuma'
 	import { eventPath } from '$lib/eventPath'
-	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { PAGE_TYPE } from '$lib/constant'
-	import { IdCardLanyardIcon, PlusIcon } from '@lucide/svelte'
 	import { enhanceForm } from '$lib/enhanceForm'
+	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import { createBadge, createPage } from './pages.remote'
 
 	let { data, children } = $props()
+
+	// Les deux volets ne cohabitent pas sous `md`: c'est la présence d'une publication dans
+	// l'URL qui décide lequel occupe l'écran, et le retour arrière du navigateur rejoue la
+	// bascule. Même règle qu'à /admin/teams.
+	const selected = $derived(!!page.params.pageId || !!page.params.badgeId)
 </script>
 
-<Card class="mx-auto" style="min-width: min(100%, 1280px)">
-	<OnlyAdmin>
-		<div class="flex items-start">
-			<div class="flex flex-col gap-1 max-w-[200px]">
-				<div class="flex gap-2 mb-2 items-center">
-					<h2 class="title-md">Pages du site</h2>
+<!-- Pages et modèles d'email partagent la même route d'édition, et l'icône que `PAGE_TYPE`
+     leur donne est facultative — `OptionRecord` la déclare ainsi. -->
+{#snippet entry({ id, title, type }: { id: string; title: string; type: Page['type'] })}
+	{@const EntryIcon = PAGE_TYPE[type].icon}
+	<a
+		href={eventPath('/admin/pages/[pageId]', { pageId: id })}
+		class={['menu-item', page.params.pageId === id && 'active']}
+	>
+		{#if EntryIcon}
+			<EntryIcon class="w-6 shrink-0 opacity-60" size={20} />
+		{/if}
+		<span class="min-w-0 truncate text-sm">{title}</span>
+	</a>
+{/snippet}
+
+<OnlyAdmin>
+	<div class="flex items-start gap-3">
+		<aside
+			class={[
+				'surface w-full shrink-0 p-2 md:sticky md:top-1 md:w-72',
+				'max-h-main overflow-auto',
+				'flex flex-col gap-4',
+				selected && 'max-md:hidden',
+			]}
+		>
+			<!-- Les pages du site forment sa navigation: elles se lisent d'un bloc, séparées des
+			     modèles, qui ne sont pas des destinations. -->
+			<section class="flex flex-col gap-1">
+				<div class="flex items-center gap-2 pl-3">
+					<h2 class="title-md grow">Navigation</h2>
 					<form
-						{...createPage.enhance(enhanceForm({ success: 'Nouvelle page créer !' }))}
+						{...createPage.enhance(enhanceForm({ success: 'Nouvelle page créée !' }))}
 						class="contents"
 					>
-						<button class="btn btn-square btn-sm ml-auto" use:tip={{ content: 'Nouvelle page' }}>
+						<button class="btn btn-square btn-sm" use:tip={{ content: 'Nouvelle page' }}>
 							<PlusIcon class="opacity-70" />
 						</button>
 					</form>
 				</div>
-				{#each data.pages as { id, title, type } (id)}
-					{@const PageIcon = PAGE_TYPE[type].icon}
-					<a
-						href={eventPath('/admin/pages/[pageId]', { pageId: id })}
-						class="menu-item"
-						class:active={page.params.pageId === id}
-					>
-						<PageIcon class="opacity-60 w-6 shrink-0" size={20} />
-						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
-					</a>
+				{#each data.pages as pageEntry (pageEntry.id)}
+					{@render entry(pageEntry)}
 				{/each}
+			</section>
 
-				<h2 class="title-md my-2">Models d'email</h2>
-				{#each data.emails as { id, title, type } (id)}
-					{@const EmailIcon = PAGE_TYPE[type].icon}
-					<a
-						href={eventPath('/admin/pages/[pageId]', { pageId: id })}
-						class="menu-item"
-						class:active={page.params.pageId === id}
-					>
-						<EmailIcon class="opacity-60 w-6 shrink-0" size={20} />
-						<span class="overflow-hidden text-ellipsis text-sm">{title}</span>
-					</a>
+			<div class="border-soft border-t"></div>
+
+			<section class="flex flex-col gap-1">
+				<h2 class="title-md pl-3">Modèles d'email</h2>
+				{#each data.emails as email (email.id)}
+					{@render entry(email)}
 				{/each}
-				<div class="flex gap-2 my-2 items-center">
-					<h2 class="title-md my-2">Models de badge</h2>
+			</section>
 
+			<section class="flex flex-col gap-1">
+				<div class="flex items-center gap-2 pl-3">
+					<h2 class="title-md grow">Modèles de badge</h2>
 					<form
-						{...createBadge.enhance(enhanceForm({ success: 'Nouveau badge créer !' }))}
+						{...createBadge.enhance(enhanceForm({ success: 'Nouveau badge créé !' }))}
 						class="contents"
 					>
-						<button class="btn btn-square btn-sm ml-auto" use:tip={{ content: 'Nouveau badge' }}>
+						<button class="btn btn-square btn-sm" use:tip={{ content: 'Nouveau badge' }}>
 							<PlusIcon class="opacity-70" />
 						</button>
 					</form>
@@ -67,22 +85,17 @@
 				{#each data.badges as badge (badge.id)}
 					<a
 						href={eventPath('/admin/pages/badges/[badgeId]', { badgeId: badge.id })}
-						class="menu-item"
-						class:active={page.params.badgeId === badge.id}
+						class={['menu-item', page.params.badgeId === badge.id && 'active']}
 					>
-						<IdCardLanyardIcon size="20" opacity={0.6} />
-						<span class="overflow-hidden text-ellipsis text-sm">
-							{badge.name}
-						</span>
+						<IdCardLanyardIcon class="w-6 shrink-0 opacity-60" size={20} />
+						<span class="min-w-0 truncate text-sm">{badge.name}</span>
 					</a>
 				{/each}
-			</div>
+			</section>
+		</aside>
 
-			<div class="divider divider-horizontal"></div>
-
-			<div class="grow">
-				{@render children?.()}
-			</div>
+		<div class={['min-w-0 grow', !selected && 'max-md:hidden']}>
+			{@render children?.()}
 		</div>
-	</OnlyAdmin>
-</Card>
+	</div>
+</OnlyAdmin>

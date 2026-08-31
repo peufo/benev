@@ -36,7 +36,7 @@
 <input type="hidden" name="colorMap" value={JSON.stringify(value)} />
 
 {#if field?.type === 'select'}
-	<div in:fade class="flex gap-1 flex-wrap justify-stretch max-w-80">
+	<div in:fade class="flex flex-wrap gap-1">
 		{#each options as option (option)}
 			<InputColor label={option} bind:value={value[option]} />
 		{/each}

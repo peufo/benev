@@ -97,7 +97,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	)}
 	id={formId}
 	bind:this={formElement}
-	class="flex flex-col gap-2 max-w-md"
+	class="flex flex-col gap-2"
 >
 	<InputString
 		field={remoteForm.fields.name}
@@ -193,12 +193,17 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 			type="select"
 		/>
 
-		<InputColorMap
-			field={draft.typeField}
-			bind:value={draft.colorMap}
-			onchange={() => saveBar?.refresh()}
-		/>
-		<InputColor name="colorDefault" label="(Couleur par défaut)" value={badge.colorDefault} />
+		<fieldset class="fieldset">
+			<span class="label">Couleurs par type de membre</span>
+			<div class="flex flex-wrap items-start gap-1">
+				<InputColorMap
+					field={draft.typeField}
+					bind:value={draft.colorMap}
+					onchange={() => saveBar?.refresh()}
+				/>
+				<InputColor name="colorDefault" label="Par défaut" value={badge.colorDefault} />
+			</div>
+		</fieldset>
 	{/key}
 
 	<!-- Le nuancier est une `<datalist>` partagée par tous les sélecteurs de couleur. -->

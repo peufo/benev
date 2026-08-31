@@ -415,6 +415,7 @@ export function useEvent(owner: User, name: string) {
 
 			// L'éditeur riche ouvre le même tiroir.
 			await page.goto(`/${eventId}/admin/pages`)
+			await page.locator('aside').getByRole('link', { name: 'Bienvenue' }).click()
 			await expect(page.locator('.tiptap')).toBeVisible()
 			await expect(async () => {
 				await page.getByRole('button', { name: 'Insérer' }).click()
@@ -616,6 +617,9 @@ export function useEvent(owner: User, name: string) {
 		 */
 		async expectPageEditorSaveBar(page: Page) {
 			await page.goto(`/${eventId}/admin/pages`)
+			// La liste occupe seule la colonne de gauche: aucune publication n'est ouverte tant
+			// qu'on n'en a pas choisi une.
+			await page.locator('aside').getByRole('link', { name: 'Bienvenue' }).click()
 
 			const saveBar = page.getByText('Modification en cours !')
 			const title = page.getByLabel('Titre')
@@ -660,7 +664,7 @@ export function useEvent(owner: User, name: string) {
 
 			// Une page neuve: son contenu vide, que l'éditeur normalise en document ProseMirror,
 			// ne doit pas passer pour une saisie.
-			await page.locator('div:has(> h2:text-is("Pages du site")) form button').click()
+			await page.locator('div:has(> h2:text-is("Navigation")) form button').click()
 			await expect(title).toHaveValue('Page 2')
 			await expect(editor).toBeVisible()
 			// L'écriture de la valeur est différée: seul un délai prouve qu'elle n'a rien signalé.

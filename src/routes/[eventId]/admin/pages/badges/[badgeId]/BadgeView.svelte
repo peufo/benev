@@ -29,7 +29,7 @@
 	}
 </script>
 
-<div class="grow flex flex-col gap-4 h-auto max-w-sm">
+<div class="flex flex-col gap-4">
 	<InputSelect
 		label="Aperçu du badge de"
 		placeholder="Choisir un membre pour l'aperçu"
@@ -55,7 +55,9 @@
 	</InputSelect>
 
 	{#if member}
-		<div class="rounded-lg overflow-hidden grow" bind:clientWidth bind:clientHeight>
+		<!-- L'`<object>` veut des dimensions en pixels: le conteneur les lui donne, et sa
+		     hauteur doit donc être posée plutôt que déduite de son contenu. -->
+		<div class="h-128 overflow-hidden rounded-lg" bind:clientWidth bind:clientHeight>
 			{#key refreshKey}
 				<object
 					in:fade
