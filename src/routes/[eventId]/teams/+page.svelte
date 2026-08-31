@@ -7,6 +7,7 @@
 	import { Teams, ToggleOnlyAvailable } from '$lib/team'
 	import ThanksDialog from './ThanksDialog.svelte'
 	import { SubscribeForm } from '$lib/subscribe'
+	import { memberIsRegistered } from '$lib/member'
 	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
 	import { goto } from '$app/navigation'
 	import { eventPath, withSearch } from '$lib/eventPath'
@@ -23,7 +24,9 @@
 
 	function handleClickPeriod(period: PeriodWithTeam) {
 		if (period.isDisabled) return
-		if (!data.member?.userId) {
+		// Adhésion à faire, ou profil incomplet: le tunnel reprend la main. Le `subscribeTo` du
+		// `redirectTo` fait rouvrir ce dialogue-ci au retour, sur la même période.
+		if (!memberIsRegistered(data.member)) {
 			const redirectTo = encodeURIComponent(`${location.pathname}?subscribeTo=${period.id}`)
 			return goto(eventPath(`/register?redirectTo=${redirectTo}`))
 		}

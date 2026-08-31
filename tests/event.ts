@@ -149,7 +149,7 @@ export function useEvent(owner: User, name: string) {
 			// `exact`: la case « Envoyer l'invitation par email » porte le mot dans son libellé.
 			const emailInput = dialog.getByLabel('Email (optionnel)', { exact: true })
 			const sendEmail = page.getByRole('checkbox', { name: /Envoyer l'invitation/ })
-			const draftWarning = page.getByText("L'évènement n'est pas encore publié")
+			const draftWarning = page.getByText("L'évènement n'étant pas encore publié")
 
 			// Sans adresse, il n'y a rien à envoyer: la case reste cochée mais hors service, et
 			// l'avertissement ne porterait sur aucun envoi.
@@ -191,7 +191,9 @@ export function useEvent(owner: User, name: string) {
 			await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(email)
 			await dialog.getByRole('button', { name: 'Valider' }).click()
 
-			await expect(dialog.getByText('utilise déjà cette adresse')).toBeVisible()
+			// Le contrôle préalable nomme le membre qui tient déjà l'adresse; la contrainte de la
+			// base, elle, dirait « Cette adresse est déjà utilisée dans cet évènement ».
+			await expect(dialog.getByText('Cette email est déjà associée à')).toBeVisible()
 		},
 		/**
 		 * L'invitation se rejoue depuis la fiche — le cas de l'adresse corrigée après coup. Le

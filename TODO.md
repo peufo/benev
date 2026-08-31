@@ -1,2 +1,1 @@
-- [ ] BUG: Le menu de navigation admin est visible pour un invité alors que celui-ci n'a pas encore accepté l'invitation
-- [ ] BUG: Il est possible de quiter le formulaire d'adhésion au lieu de remplir son profile et d'aller s'inscrire à une période
+- [ ] La croix pour quitter le formulaire d'adhésion ne devrait pas permetre de supprimé l'adhésion

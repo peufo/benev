@@ -26,23 +26,32 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 		// même l'adhésion. L'adresse doit correspondre — le jeton n'ouvre que la boîte à laquelle il
 		// a été envoyé.
 		//
-		// Sans session il n'y a personne à rattacher, d'où la garde: `member` désigne partout
-		// ailleurs un membre relié à un compte. C'est `data.invite`, posé par le layout racine et
-		// lisible sans être connecté, qui porte l'invitation jusqu'au tunnel d'inscription.
+		// Sans session il n'y a personne à rattacher, d'où la garde: c'est `data.invite`, posé par le
+		// layout racine et lisible sans être connecté, qui porte l'invitation jusqu'au tunnel.
 		const invited = user ? await getInvitedMember(cookies) : null
 		const invitedId =
 			invited?.eventId === eventId && isSameEmail(invited.email, user?.email) ? invited.id : null
 
-		const member =
-			user &&
-			(await getMemberProfile({
-				eventId,
-				OR: [
-					{ userId },
-					{ event: { state: 'draft' }, email: user.email },
-					...(invitedId ? [{ id: invitedId }] : []),
-				],
-			}).catch(() => undefined))
+		// La fiche de ce compte. Rien d'autre ne s'appelle `member`: les rôles, le menu de gestion et
+		// les gardes de /admin en dépendent, et une invitation non honorée n'en donne aucun.
+		const member = user
+			? await getMemberProfile({ eventId, userId }).catch(() => undefined)
+			: undefined
+
+		// La fiche que le tunnel d'inscription peut revendiquer — celle que désigne le jeton, ou celle
+		// retrouvée par adresse sur un évènement en brouillon. Sans compte relié, elle n'ouvre rien
+		// d'autre que /register.
+		const memberToClaim =
+			!member && user
+				? await getMemberProfile({
+						eventId,
+						OR: [
+							{ event: { state: 'draft' }, email: user.email },
+							...(invitedId ? [{ id: invitedId }] : []),
+						],
+					}).catch(() => undefined)
+				: undefined
+
 		const isLeader = member?.roles.includes('leader') || member?.roles.includes('admin')
 
 		const event = await prisma.event.findUniqueOrThrow({
@@ -61,7 +70,7 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 		})
 
 		const memberCanRegister =
-			!member?.userId && (event.selfRegisterAllowed || member?.isValidedByEvent)
+			!member && (event.selfRegisterAllowed || memberToClaim?.isValidedByEvent)
 
 		const membersValided = await prisma.member.count({
 			where: { eventId, isValidedByEvent: true },
@@ -71,6 +80,7 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 			userId,
 			event,
 			member,
+			memberToClaim,
 			memberCanRegister,
 			membersValided,
 			metaTags: eventMetaTags(event, url),

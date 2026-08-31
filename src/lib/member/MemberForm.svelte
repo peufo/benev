@@ -50,9 +50,9 @@
 
 		<!-- Refuser ne supprime pas la fiche, qui appartient à l'évènement: le compte n'y est pas
 		     encore relié, et n'en retire que son adresse. -->
-		{#if page.data.member?.isValidedByEvent && !page.data.member?.userId}
+		{#if page.data.memberToClaim?.isValidedByEvent}
 			<form {...declineInvite.enhance(enhanceForm())} class="contents">
-				<input type="hidden" name="memberId" value={page.data.member.id} />
+				<input type="hidden" name="memberId" value={page.data.memberToClaim.id} />
 				<ButtonDelete formaction={declineInvite.action} class="w-36">
 					{#snippet children({ waitConfirmation })}
 						{waitConfirmation ? 'Confirmer' : 'Refuser'}

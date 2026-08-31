@@ -14,3 +14,4 @@ export { default as MemberSubscribeButton } from './MemberSubscribeButton.svelte
 export { default as MemberSettingsForm } from './MemberSettingsForm.svelte'
 export { default as MemberContactForm } from './MemberContactForm.svelte'
 export * from './conditions'
+export * from './registered'

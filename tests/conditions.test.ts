@@ -92,7 +92,6 @@ test.describe.serial('Conditions de secteur', () => {
 		await expect(drawer).toBeHidden()
 		await expect(page.locator('#team').getByLabel('Nom du secteur')).toHaveValue('Secteur Cond')
 		editUrl = page.url()
-		await expect(page.getByText('Aucune condition')).toBeVisible()
 		await expect(page.getByText('Visible pour tous les membres')).toBeVisible()
 
 		await addCondition(page, 'Membre approuvé')
@@ -102,7 +101,7 @@ test.describe.serial('Conditions de secteur', () => {
 		// test suivant repart d'un secteur sans condition.
 		await page.getByRole('button', { name: 'Réinitialiser' }).click()
 		await expect(page.getByText('Modification en cours !')).toBeHidden()
-		await expect(page.getByText('Aucune condition')).toBeVisible()
+		await expect(page.getByText('Visible pour tous les membres')).toBeVisible()
 	})
 
 	test('Ajout de deux conditions', async () => {

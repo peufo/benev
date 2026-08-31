@@ -68,7 +68,7 @@ function getUserProfileRequiredFIelds({ event, ...member }: MemberWithEventAndLe
 function getMemberProfileRequiredFields({ profileJson, event }: MemberWithEventAndLeaderOf) {
 	const requiredFields: string[] = []
 	event.memberFields.forEach((field) => {
-		if (!field.required || !field.memberCanRead) return
+		if (!field.required || !field.memberCanWrite) return
 		if (field.type === 'boolean' || field.type === 'multiselect') return
 		const fieldValue = profileJson[field.id]
 		if (!fieldValue) requiredFields.push(field.name)

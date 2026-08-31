@@ -2,8 +2,8 @@ import { error } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import { isFreeRange } from 'perod'
 import { modelSubscribe } from '$lib/models'
-import { createLog, permission, prisma } from '$lib/server'
-import { isMemberAllowed } from '$lib/member'
+import { addMemberComputedValues, createLog, permission, prisma } from '$lib/server'
+import { isMemberAllowed, memberIsRegistered } from '$lib/member'
 import { subscribeNotification } from '$lib/email/subscribeNotification'
 import { periodIsComplet } from '$lib/period/index.js'
 
@@ -21,9 +21,11 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 				team: { select: { closeSubscribing: true, conditions: true, overflowPermitted: true } },
 			},
 		}),
-		prisma.member.findUniqueOrThrow({
+		prisma.member.findUnique({
 			where: { userId_eventId: { userId: session.user.id, eventId } },
-			include: { event: true, user: true },
+			// De quoi passer par `addMemberComputedValues`, et savoir si le profil est complet:
+			// bien plus léger que `getMemberProfile`, qui remonterait périodes et inscriptions.
+			include: { event: { include: { memberFields: true } }, leaderOf: true, user: true },
 		}),
 		prisma.member.findUniqueOrThrow({
 			where: { id: data.memberId },
@@ -36,6 +38,9 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 			},
 		}),
 	])
+
+	// Aucune fiche reliée à ce compte: l'adhésion reste à faire, et le tunnel est le seul chemin.
+	if (!memberAuthor) error(403, `Tu n'es pas encore membre de cet évènement`)
 
 	// Check if the period is already complet
 	if (periodIsComplet(period)) {
@@ -56,6 +61,10 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 		const closeSubscribing = period.team.closeSubscribing || memberAuthor.event.closeSubscribing
 		const DAY = 1000 * 60 * 60 * 24
 		if (closeSubscribing && closeSubscribing.getTime() < new Date().getTime() - DAY) error(403)
+		// Le tunnel d'inscription n'est pas décoratif: ce que l'évènement rend obligatoire est
+		// demandé avant la première période, pas après.
+		if (!memberIsRegistered(addMemberComputedValues(memberAuthor)))
+			error(403, `Complète ton profil avant de t'inscrire à une période`)
 		if (!isMemberAllowed(period.team.conditions, memberAuthor)) error(403)
 	}
 

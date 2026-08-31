@@ -13,6 +13,12 @@ declare global {
 		}
 		interface PageData {
 			member?: MemberWithComputedValues
+			/**
+			 * La fiche que le tunnel d'inscription peut revendiquer: invitée par jeton, ou retrouvée
+			 * par adresse sur un brouillon. Elle n'est reliée à aucun compte — ses rôles ne valent
+			 * rien tant que l'adhésion n'est pas faite.
+			 */
+			memberToClaim?: MemberWithComputedValues
 			/** L'invitation en cours, lue du cookie par le layout racine. Jamais le jeton lui-même. */
 			invite?: Invite | null
 			event?: Event

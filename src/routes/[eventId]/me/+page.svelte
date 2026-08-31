@@ -22,7 +22,7 @@
 	let { data } = $props()
 </script>
 
-<div class="max-w-2xl mx-auto mt-3 space-y-4 mb-20">
+<div class="max-w-2xl mx-auto space-y-3 mb-20">
 	<Section id="subscribes" title="Mes inscriptions" icon={ClipboardListIcon}>
 		{#snippet action()}
 			{#if data.event.selfSubscribeAllowed}

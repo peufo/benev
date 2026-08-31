@@ -8,12 +8,12 @@
 	import { Card, Placeholder } from '$lib/ui'
 	import { Dialog, tip } from 'fuma'
 	import { urlParam } from 'fuma'
-	import { MemberDeleteForm, MemberForm, MemberProfileForm } from '$lib/member'
+	import { MemberDeleteForm, MemberForm, MemberProfileForm, memberIsRegistered } from '$lib/member'
 	import { Login, AvatarForm, AccountForm } from '$lib/me'
 	import { slide } from 'svelte/transition'
 	import type { PageData } from './$types'
 
-	let { event, user, member, charter }: PageData = $props()
+	let { event, user, member, memberToClaim, charter }: PageData = $props()
 
 	const isMemberProfileRequired = $derived(
 		!!event.memberFields.filter((f) => f.memberCanWrite).length
@@ -42,7 +42,8 @@
 
 	function getStepIndexMax() {
 		if (!user) return 0
-		if (!member || !member.userId) return 1
+		// `member` est la fiche reliée au compte: sans elle, l'adhésion reste à faire.
+		if (!member) return 1
 		if (!isMemberProfileRequired || !member.isUserProfileCompleted) return 2
 		return 3
 	}
@@ -51,13 +52,10 @@
 		await invalidateAll()
 		stepIndex = getStepIndex($page.url)
 
+		// Le même prédicat que les gardes qui renvoient ici: s'ils divergeaient, le tunnel se
+		// croirait fini et la page d'arrivée le relancerait aussitôt.
 		const registerIsDone =
-			!!user &&
-			!!member &&
-			!!member.userId &&
-			member.isUserProfileCompleted &&
-			(!isMemberProfileRequired || member.isMemberProfileCompleted) &&
-			(!forcedStepIndex || forcedStepIndex === stepIndexMax)
+			!!user && memberIsRegistered(member) && (!forcedStepIndex || forcedStepIndex === stepIndexMax)
 
 		if (registerIsDone) {
 			// Le paramètre vient de l'URL: son chemin est déjà résolu.
@@ -126,7 +124,7 @@
 	<div>
 		{#if stepIndex === 0}
 			<Login onSuccess={() => document.location.reload()} />
-		{:else if !event.selfRegisterAllowed && !member?.isValidedByEvent}
+		{:else if !event.selfRegisterAllowed && !(member ?? memberToClaim)?.isValidedByEvent}
 			<Placeholder class="border text-center bg-base-100/90">
 				<h2 class="text-lg">Invitation requise</h2>
 				<p>

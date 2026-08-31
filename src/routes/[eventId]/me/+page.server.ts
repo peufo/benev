@@ -1,15 +1,10 @@
 import { prisma, redirectToAuth, redirectToRegister } from '$lib/server'
+import { memberIsRegistered } from '$lib/member'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const { member, user } = await parent()
 	if (!user) throw redirectToAuth(url)
-	if (
-		!member ||
-		!member.userId ||
-		!member.isUserProfileCompleted ||
-		!member.isMemberProfileCompleted
-	)
-		throw redirectToRegister(eventId, url)
+	if (!memberIsRegistered(member)) throw redirectToRegister(eventId, url)
 
 	const memberId = member.id
 	return {

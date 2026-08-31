@@ -11,8 +11,6 @@
   - [ ] Globale
   - [ ] Drawer (le passer en overlay)
 
-- [ ] Revoir le layout de /admin/members/[memberId] sur écran large
-
 - [ ] Questionner la pertinence de la liste des secteurs dans le dashboard benev/src/routes/[eventId]/admin/dashboard/+page.svelte:124
 
 - [ ] Permetre d'ajouter des champs de profile directement dupuis la fiche de profil d'un membre.
@@ -39,3 +37,7 @@
   - [ ] Mettre un message de bienvenu dans le journal
 
 - [ ] Quand on pase d'un événement à l'autre, le formulaire dans settings ne ce met pas à jour. Simplement mettre .for(id) au formulaire résous, le problème, mais les issues de formulaire ne remonte plus.
+
+- [ ] Un responsable devrait quand même avoir accès au journal dans le dashboard et dans la fiche de membre
+
+- [ ] Les deux pages "Tu dois être administrateur pour accéder à cette page" sont diférentes (/admin/pages et /admin/settings)

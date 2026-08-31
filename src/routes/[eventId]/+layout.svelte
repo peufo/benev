@@ -51,7 +51,9 @@
 	 */
 	let isRegisteringWithInvitation = $derived(
 		page.route.id === '/[eventId]/register' &&
-			(data.invite?.eventId === data.event.id || !!data.member?.isValidedByEvent)
+			(data.invite?.eventId === data.event.id ||
+				!!data.memberToClaim?.isValidedByEvent ||
+				!!data.member?.isValidedByEvent)
 	)
 
 	let accessGranted = $derived(
