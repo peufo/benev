@@ -13,13 +13,16 @@
 	let { tag, edit }: Props = $props()
 </script>
 
-<div class="flex items-center">
-	<div class="rounded-full w-3 h-3 -translate-x-1" style="background-color: {tag.color};"></div>
-	<div>{tag.name}</div>
+<div class="flex items-center min-w-0">
+	<div
+		class="rounded-full w-3 h-3 -translate-x-1 shrink-0"
+		style="background-color: {tag.color};"
+	></div>
+	<div class="truncate">{tag.name}</div>
 	{#if edit}
 		<a
 			{...edit}
-			class="btn btn-xs btn-circle btn-ghost min-h-4.5 w-4.5 h-4.5 opacity-80 ml-1 -mr-1"
+			class="btn btn-xs btn-circle btn-ghost min-h-4.5 w-4.5 h-4.5 shrink-0 opacity-80 ml-1 -mr-1"
 			use:tip={{ content: "Modifier l'étiquette" }}
 		>
 			<PencilIcon size={16} />
