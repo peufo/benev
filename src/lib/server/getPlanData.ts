@@ -52,7 +52,8 @@ export async function getPlanData({
 					where: wherePeriods,
 					orderBy: { start: 'asc' },
 					include: {
-						tags: true,
+						// Même ordre que le regroupement de getStacks: le badge de tête est celui du groupe.
+						tags: { orderBy: { name: 'asc' } },
 						subscribes: {
 							where: {
 								state: { in: ['request', 'accepted'] },

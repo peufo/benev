@@ -17,13 +17,9 @@
 
 - [ ] Dans le menu de navigation principal, Supprimer le lien "open source", ajouter "Documentation" et "prix", adappter un peu mieux responsive.
 
-- [ ] Dans le plan, faire en sorte que les périodes avec la même étiquête soit sur la même ligne quand il y en à plusieur. Peut-être qu'un simple tri sur la première étiquète suffit. J'espère en tout cas.
-
 - [ ] Détecter et journaliser les emails qui non pas été recu par la destinataire.
 
 - [ ] Placer l'indicateur de quota dans la section "Status" des settings
-
-- [ ] Placer le bouton supprimer du secteur dans les actions au lieu de dans la section "danger"
 
 - [ ] S'assurer que tous les thermes utilisé dans l'app soit inclusif.
 
