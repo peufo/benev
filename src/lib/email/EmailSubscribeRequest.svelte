@@ -35,8 +35,8 @@
 		<a
 			rel="external"
 			target="_blank"
-			href="{ORIGIN}/{subscribe.period.team.eventId}/teams?section={subscribe.period
-				.teamId}&form_period={subscribe.periodId}"
+			href="{ORIGIN}/{subscribe.period.team.eventId}/admin/teams/{subscribe.period
+				.teamId}?form_period={subscribe.periodId}"
 		>
 			valide son inscription
 		</a>
