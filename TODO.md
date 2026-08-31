@@ -1,6 +1,6 @@
 - [x] Les textes à l'intérieur des tags ne doivent pas wrap. Il doivent plutôt ellipsis ...
 
-- [ ] Le formulaire des badges (/admin/pages/badges/) est completement bugguer. Comme pour les autres publications, le formulaire doit utiliser la savebar.
+- [x] Le formulaire des badges (/admin/pages/badges/) est completement bugguer. Comme pour les autres publications, le formulaire doit utiliser la savebar.
 
 - [ ] Revoir le layout des publications (src/routes/[eventId]/admin/pages/+layout.svelte). Il faut séparer la section "Navigation" du reste. Sur mobile, le comportement doit être semblable à /admin/teams. La partie qui concerne l'édition des badges peut également être découpé en deux partie (formulaire / apercu)
 

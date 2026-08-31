@@ -6,9 +6,7 @@
 	import type { Member } from '@prisma/client'
 	import { searchMembers } from '$lib/member/member.remote'
 	import { eventPath } from '$lib/eventPath'
-	import { debounce } from '$lib/debounce'
 	import { fade } from 'svelte/transition'
-	import { browser } from '$app/env'
 
 	interface Props {
 		badge: PageData['badge']
@@ -23,21 +21,12 @@
 	let clientWidth: number = $state()!
 	let clientHeight: number = $state()!
 
-	function useRefresh() {
-		if (!browser) return () => {}
-		let firstCall = true
-		return debounce(() => {
-			if (!firstCall) {
-				refreshKey = {}
-			}
-			firstCall = false
-		}, 400)
-	}
+	// Le PDF est rendu par le serveur: seul un enregistrement peut le changer, et c'est le
+	// formulaire qui sait quand il en a réussi un.
 	let refreshKey = $state({})
-	const refresh = useRefresh()
-	$effect.pre(() => {
-		if (badge) refresh()
-	})
+	export function refresh() {
+		refreshKey = {}
+	}
 </script>
 
 <div class="grow flex flex-col gap-4 h-auto max-w-sm">

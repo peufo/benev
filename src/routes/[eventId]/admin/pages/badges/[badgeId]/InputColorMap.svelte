@@ -8,18 +8,26 @@
 	interface Props {
 		value: Record<string, string>
 		field: Field | null
+		/**
+		 * L'attribution d'une couleur à une nouvelle option est écrite par du code: aucun
+		 * évènement de formulaire ne l'annonce, et la barre de sauvegarde ne la verrait pas.
+		 */
+		onchange?: () => void
 	}
 
-	let { value = $bindable(), field }: Props = $props()
+	let { value = $bindable(), field, onchange }: Props = $props()
 
 	let options = $derived(JSON.parse(field?.options || '[]') as string[])
-	// Photo des options déjà traitées, comparée à `options` par l'effet ci-dessous.
+	// Photo des options déjà traitées. Comparée par contenu: le champ change d'identité à
+	// chaque rechargement des données, sans que ses options aient bougé.
 	let currentOptions = $state(untrack(() => options))
 	$effect.pre(() => {
-		if (options !== currentOptions) {
-			options.reduce((acc, cur) => ({ ...acc, [cur]: value[cur] || getNextColor() }), {})
-			currentOptions = options
-		}
+		if (options.join('\n') === currentOptions.join('\n')) return
+		currentOptions = options
+		// Chaque option doit porter une couleur, sans quoi le nuancier en affiche une que le
+		// badge n'utilise pas. Les options disparues laissent la leur derrière elles.
+		value = Object.fromEntries(options.map((option) => [option, value[option] || getNextColor()]))
+		onchange?.()
 	})
 </script>
 

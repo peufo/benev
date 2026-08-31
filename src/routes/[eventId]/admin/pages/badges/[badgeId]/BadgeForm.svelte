@@ -1,61 +1,80 @@
 <script lang="ts">
-	import {
-		CheckIcon,
-		CircleAlertIcon,
-		LinkIcon,
-		LoaderCircleIcon,
-		RotateCcwIcon,
-		UnlinkIcon,
-	} from '@lucide/svelte'
+	import { LinkIcon, RotateCcwIcon, UnlinkIcon } from '@lucide/svelte'
+	import { fade } from 'svelte/transition'
+	import { invalidateAll } from '$app/navigation'
+	import { ButtonDelete, InputBoolean, InputNumber, InputString, tip } from 'fuma'
 	import type { PageData } from './$types'
-	import { ButtonDelete, InputBoolean, tip } from 'fuma'
 	import { InputMedia } from '$lib/material/media'
 	import { FORMAT_CARD } from '$lib/constant'
-	import { debounce } from '$lib/debounce'
+	import { SaveBar } from '$lib/ui'
+	import { enhanceForm } from '$lib/enhanceForm'
 	import InputColorMap from './InputColorMap.svelte'
 	import InputFieldSelect from './InputFieldSelect.svelte'
 	import InputColorPalette from './InputColorPalette.svelte'
 	import InputColor from './InputColor.svelte'
-	import { browser } from '$app/env'
-	import { fade } from 'svelte/transition'
 	import { deleteBadge, updateBadge } from './badge.remote'
 
 	interface Props {
 		badge: PageData['badge']
+		/** Joué après un enregistrement: l'aperçu est un PDF que seul le serveur sait rendre. */
+		onsaved?: () => void
 	}
 
-	let { badge = $bindable() }: Props = $props()
+	let { badge, onsaved }: Props = $props()
 
-	let submitButton: HTMLButtonElement = $state()!
-	let isSuccess = $state(true)
+	const uid = $props.id()
+	const formId = `${uid}-badge`
+	const deleteFormId = `${uid}-delete`
+	const remoteForm = $derived(updateBadge.for(badge.id))
+
+	let formElement = $state<HTMLFormElement>()
+	let saveBar = $state<ReturnType<typeof SaveBar>>()
+	/**
+	 * Le `reset()` natif rend leurs valeurs aux champs de fuma, qui portent un `defaultValue`.
+	 * Les champs cachés écrits par du code — relations, médias, nuancier — n'en ont pas: les
+	 * remonter est le seul moyen de leur rendre l'enregistrement chargé.
+	 */
+	let resetToken = $state(0)
+
 	let lockAspectRatio = $state(true)
-	const deleteFormId = $props.id()
 
-	// Les champs restent des `<input>` bruts liés à `badge`: ils pilotent l'aperçu en direct et
-	// s'écrivent aussi par programme (ratio, restauration). Le schéma convertit à l'arrivée.
-	function useAutosave() {
-		if (!browser) return () => {}
-		let firstCall = true
-		return debounce(() => {
-			if (!firstCall) {
-				submitButton?.click()
-			}
-			firstCall = false
-		}, 300)
-	}
-	const autosave = useAutosave()
-	// `run()` de svelte/legacy, réécrit à l'identique: le pré-effet relance la sauvegarde
-	// à chaque écriture sur `badge`.
-	$effect.pre(() => {
-		if (badge) autosave()
-	})
+	// Les deux dimensions se pilotent l'une l'autre: la source de vérité est le champ, pas
+	// `badge`, qui n'en donne que la valeur de départ.
+	const width = $derived(remoteForm.fields.width.value() ?? badge.width)
+	const height = $derived(remoteForm.fields.height.value() ?? badge.height)
+	const isDefaultFormat = $derived(width === FORMAT_CARD.x && height === FORMAT_CARD.y)
 
-	function aspectRatioWidth(value: number): number {
-		return Math.round((value / FORMAT_CARD.aspect) * 100) / 100
+	// Sélections et couleurs pilotent le nuancier et ce qui est soumis: elles vivent ici, et
+	// se reprennent depuis `badge` à chaque réinitialisation.
+	function seed() {
+		return {
+			typeField: badge.typeField,
+			accessDaysField: badge.accessDaysField,
+			accessSectorsField: badge.accessSectorsField,
+			labelField: badge.labelField,
+			colorMap: { ...badge.colorMap },
+		}
 	}
-	function aspectRatioHeight(value: number): number {
-		return Math.round(value * FORMAT_CARD.aspect * 100) / 100
+	let draft = $state(seed())
+
+	/**
+	 * Le verrou de ratio repilote l'**autre** dimension, jamais celle qu'on saisit: réécrire
+	 * le champ sous les doigts en déplacerait le curseur à chaque frappe.
+	 */
+	function lockHeightTo(nextWidth: number) {
+		if (!lockAspectRatio || Number.isNaN(nextWidth)) return
+		setSize(remoteForm.fields.height, nextWidth / FORMAT_CARD.aspect)
 	}
+	function lockWidthTo(nextHeight: number) {
+		if (!lockAspectRatio || Number.isNaN(nextHeight)) return
+		setSize(remoteForm.fields.width, nextHeight * FORMAT_CARD.aspect)
+	}
+	function setSize(field: { set: (value: number) => void }, value: number) {
+		field.set(Math.round(value * 100) / 100)
+		// `set()` n'émet aucun évènement de formulaire: sans annonce, la barre ne voit rien.
+		saveBar?.refresh()
+	}
+
 	const RatioIcon = $derived(lockAspectRatio ? LinkIcon : UnlinkIcon)
 </script>
 
@@ -63,163 +82,156 @@
 son bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
 <form {...deleteBadge} id={deleteFormId} class="hidden"></form>
 
+<!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
 <form
-	{...updateBadge.enhance(async ({ submit }) => {
-		try {
-			await submit()
-			isSuccess = true
-		} catch {
-			isSuccess = false
-		}
-	})}
-	class="flex flex-col gap-2"
+	{...remoteForm.enhance(
+		enhanceForm({
+			success: 'Badge enregistré',
+			onsuccess: async () => {
+				// Le nom se répercute sur la barre latérale, et l'aperçu est rendu par le serveur.
+				await invalidateAll()
+				saveBar?.rebase()
+				onsaved?.()
+			},
+		})
+	)}
+	id={formId}
+	bind:this={formElement}
+	class="flex flex-col gap-2 max-w-md"
 >
-	<label class="floating-label">
-		<span>Nom de la configuration</span>
-		<input class="input w-full" type="text" name="name" bind:value={badge.name} />
-	</label>
+	<InputString
+		field={remoteForm.fields.name}
+		label="Nom de la configuration"
+		value={badge.name}
+		autocomplete="off"
+	/>
 
-	<div class="flex gap-2">
-		<div class="w-28">
-			<label class="floating-label">
-				<span>Largeur (mm)</span>
-				<input
-					class="input"
-					type="number"
-					name="width"
-					step="0.01"
-					bind:value={badge.width}
-					oninput={() => {
-						if (lockAspectRatio) badge.height = aspectRatioWidth(badge.width)
-					}}
-				/>
-			</label>
-		</div>
+	<div class="flex gap-2 items-end">
+		<InputNumber
+			field={remoteForm.fields.width}
+			label="Largeur (mm)"
+			value={badge.width}
+			step="0.01"
+			class="w-28"
+			oninput={(event) => lockHeightTo(event.currentTarget.valueAsNumber)}
+		/>
 		<button
 			type="button"
-			class="btn btn-sm btn-ghost btn-square self-end mb-2"
+			class="btn btn-sm btn-ghost btn-square mb-1"
 			onclick={() => (lockAspectRatio = !lockAspectRatio)}
 			use:tip={{ content: 'Conserver le ratio' }}
 		>
 			<RatioIcon size={18} />
 		</button>
-		<div class="w-28">
-			<label class="floating-label">
-				<span>Hauteur (mm)</span>
-				<input
-					class="input"
-					type="number"
-					name="height"
-					step="0.01"
-					bind:value={badge.height}
-					oninput={() => {
-						if (lockAspectRatio) badge.width = aspectRatioHeight(badge.height)
-					}}
-				/>
-			</label>
-		</div>
-		{#if badge.width !== FORMAT_CARD.x || badge.height !== FORMAT_CARD.y}
+		<InputNumber
+			field={remoteForm.fields.height}
+			label="Hauteur (mm)"
+			value={badge.height}
+			step="0.01"
+			class="w-28"
+			oninput={(event) => lockWidthTo(event.currentTarget.valueAsNumber)}
+		/>
+		{#if !isDefaultFormat}
 			<button
 				in:fade
 				type="button"
-				class="btn btn-sm btn-ghost btn-square self-end mb-2"
+				class="btn btn-sm btn-ghost btn-square mb-1"
 				onclick={() => {
-					badge.width = FORMAT_CARD.x
-					badge.height = FORMAT_CARD.y
+					setSize(remoteForm.fields.width, FORMAT_CARD.x)
+					setSize(remoteForm.fields.height, FORMAT_CARD.y)
 				}}
 			>
-				<span class="inline-flex" use:tip={{ content: 'Restaurer les dimensions par défaut' }}
-					><RotateCcwIcon size={18} /></span
-				>
+				<span class="inline-flex" use:tip={{ content: 'Restaurer les dimensions par défaut' }}>
+					<RotateCcwIcon size={18} />
+				</span>
 			</button>
 		{/if}
 	</div>
 
-	<div>
-		<div class="label">
-			<span class="label-text">Illustrations</span>
-		</div>
+	{#key resetToken}
+		<fieldset class="fieldset">
+			<span class="label">Illustrations</span>
+			<div class="flex gap-4 items-center justify-around">
+				<InputMedia
+					label="Image de fond"
+					key="backgroundId"
+					value={badge.backgroundId}
+					oninput={() => saveBar?.refresh()}
+				/>
+				<InputMedia
+					label="Logo"
+					key="logoId"
+					value={badge.logoId}
+					oninput={() => saveBar?.refresh()}
+				/>
+			</div>
+		</fieldset>
 
-		<div class="flex gap-4 items-center justify-around">
-			<InputMedia label="Image de fond" key="backgroundId" bind:value={badge.backgroundId} />
+		<InputFieldSelect
+			field={remoteForm.fields.accessDaysField}
+			label="Champ accès 1 (Liste à choix multiple)"
+			bind:value={draft.accessDaysField}
+			type="multiselect"
+		/>
+		<InputFieldSelect
+			field={remoteForm.fields.accessSectorsField}
+			label="Champ accès 2 (Liste à choix multiple)"
+			bind:value={draft.accessSectorsField}
+			type="multiselect"
+		/>
+		<InputFieldSelect
+			field={remoteForm.fields.labelField}
+			label="Champ: Label (Liste à choix ou text)"
+			bind:value={draft.labelField}
+			type="select"
+			typesAccepted={['select', 'string']}
+		/>
+		<InputFieldSelect
+			field={remoteForm.fields.typeField}
+			label="Champ: Type de membre (Liste à choix)"
+			bind:value={draft.typeField}
+			type="select"
+		/>
 
-			<InputMedia key="logoId" label="Logo" bind:value={badge.logoId} />
-		</div>
-	</div>
+		<InputColorMap
+			field={draft.typeField}
+			bind:value={draft.colorMap}
+			onchange={() => saveBar?.refresh()}
+		/>
+		<InputColor name="colorDefault" label="(Couleur par défaut)" value={badge.colorDefault} />
+	{/key}
 
-	<InputFieldSelect
-		field={updateBadge.fields.accessDaysField}
-		label="Champ accès 1 (Liste à choix multiple)"
-		bind:value={badge.accessDaysField}
-		type="multiselect"
-	/>
-	<InputFieldSelect
-		field={updateBadge.fields.accessSectorsField}
-		label="Champ accès 2 (Liste à choix multiple)"
-		bind:value={badge.accessSectorsField}
-		type="multiselect"
-	/>
-	<InputFieldSelect
-		field={updateBadge.fields.labelField}
-		label="Champ: Label (Liste à choix ou text)"
-		bind:value={badge.labelField}
-		type="select"
-		typesAccepted={['select', 'string']}
-	/>
-	<InputFieldSelect
-		field={updateBadge.fields.typeField}
-		label="Champ: Type de membre (Liste à choix)"
-		bind:value={badge.typeField}
-		type="select"
-	/>
-
-	<!-- Instance to place in /+layout.svelte -->
+	<!-- Le nuancier est une `<datalist>` partagée par tous les sélecteurs de couleur. -->
 	<InputColorPalette />
-	<InputColorMap field={badge.typeField} bind:value={badge.colorMap} />
-	<InputColor name="colorDefault" label="(Couleur par défaut)" bind:value={badge.colorDefault} />
 
 	<div class="flex gap-4 items-end">
-		<div class="w-28">
-			<label>
-				<span class="label">Tailles cellules</span>
-				<input
-					class="input"
-					type="number"
-					name="accessCellSize"
-					bind:value={badge.accessCellSize}
-				/>
-			</label>
-		</div>
+		<InputNumber
+			field={remoteForm.fields.accessCellSize}
+			label="Taille des cellules"
+			value={badge.accessCellSize}
+			class="w-28"
+		/>
 		<InputBoolean
-			field={updateBadge.fields.versoEnabled}
+			field={remoteForm.fields.versoEnabled}
 			label="Afficher le verso"
 			checked={badge.versoEnabled}
-			onchange={(event) => (badge.versoEnabled = event.currentTarget.checked)}
+			class="grow"
 		/>
 	</div>
 
-	<div class="flex gap-2">
-		<button class="hidden" bind:this={submitButton}>Sauvegarder</button>
-
-		<ButtonDelete form={deleteFormId} formaction={deleteBadge.action} />
-
-		<div class="grow"></div>
-
-		{#if updateBadge.pending > 0}
-			<div class="flex gap-1 items-center">
-				<LoaderCircleIcon class="animate-spin text-warning" size={20} />
-				<span class="text-sm text-base-content/70">Sauvegarde</span>
-			</div>
-		{:else if isSuccess}
-			<div class="flex gap-1 items-center">
-				<CheckIcon class="text-success" size={20} />
-				<span class="text-sm text-base-content/70">Sauvegardé</span>
-			</div>
-		{:else}
-			<div class="flex gap-1 items-center">
-				<CircleAlertIcon class="text-error" size={20} />
-				<span class="text-sm text-base-content/70">Erreur</span>
-			</div>
-		{/if}
+	<div class="flex pt-2">
+		<ButtonDelete form={deleteFormId} formaction={deleteBadge.action} class="btn-sm" />
 	</div>
 </form>
+
+<SaveBar
+	bind:this={saveBar}
+	form={formElement}
+	{formId}
+	key={badge.id}
+	pending={remoteForm.pending > 0}
+	onreset={() => {
+		draft = seed()
+		resetToken++
+	}}
+/>

@@ -2,11 +2,13 @@
 	import BadgeForm from './BadgeForm.svelte'
 	import BadgeView from './BadgeView.svelte'
 
-	let { data = $bindable() } = $props()
+	let { data } = $props()
+
+	let view = $state<ReturnType<typeof BadgeView>>()
 </script>
 
 <div class="flex gap-12 pl-12">
-	<BadgeForm bind:badge={data.badge} />
+	<BadgeForm badge={data.badge} onsaved={() => view?.refresh()} />
 	<div class="divider divider-horizontal"></div>
-	<BadgeView badge={data.badge} defaultMember={data.member} />
+	<BadgeView bind:this={view} badge={data.badge} defaultMember={data.member} />
 </div>

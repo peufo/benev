@@ -14,17 +14,9 @@
 		value: Field | null
 		type: FieldType
 		typesAccepted?: FieldType[]
-		oninput?: (memberField: Field) => void
 	}
 
-	let {
-		field,
-		label,
-		value = $bindable(),
-		type,
-		typesAccepted = [type],
-		oninput = () => {},
-	}: Props = $props()
+	let { field, label, value = $bindable(), type, typesAccepted = [type] }: Props = $props()
 
 	// `InputSelect` n'appelle sa recherche qu'avec `{ search }`: le filtre par type est
 	// propre à cette instance, il se fixe ici.
@@ -32,16 +24,14 @@
 		searchMemberFields({ search, types: typesAccepted })
 </script>
 
+<!-- Liaison par accesseurs: `InputSelect` cesserait de suivre une valeur passée en simple prop
+     dès qu'il y a écrit lui-même, et le parent ne pourrait plus la reprendre. -->
 <InputSelect
 	{field}
 	{label}
-	value={value ?? undefined}
+	bind:value={() => value ?? undefined, (memberField) => (value = memberField ?? null)}
 	nullable
 	items={searchItems}
-	onSelect={(memberField) => {
-		value = memberField ?? null
-		if (memberField) oninput(memberField)
-	}}
 >
 	{#snippet selected(memberField)}
 		<MemberFieldSnippet field={memberField} updateLink />

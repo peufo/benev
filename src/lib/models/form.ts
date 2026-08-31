@@ -29,16 +29,6 @@ export function zJsonOr<Schema extends z.ZodType>(schema: Schema) {
 }
 
 /**
- * Champ numérique **brut**, c'est-à-dire un `<input type="number">` écrit à la main plutôt que
- * l'`InputNumber` de fuma. Ce dernier passe par `field.as('number')`, qui préfixe le `name` de
- * `n:` et fait convertir SvelteKit lui-même: dans ce cas, `z.number()` convient directement.
- */
-export function zNumber(min?: number) {
-	const number = min === undefined ? z.number() : z.number().min(min)
-	return z.string().transform(Number).pipe(number)
-}
-
-/**
  * Un champ texte facultatif dont le contenu, s'il y en a, doit passer `schema` — url, e-mail…
  * Les trois états d'une mise à jour Prisma: champ vidé = `null` (on efface), champ absent =
  * `undefined` (on ne touche à rien).

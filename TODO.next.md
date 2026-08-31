@@ -22,3 +22,5 @@
   - [ ] Mettre un message de bienvenu dans le journal
 
 - [ ] La croix pour quitter le formulaire d'adhésion ne devrait pas permetre de supprimé l'adhésion
+
+- [ ] Le filtre du journal devrait utilisé un InputSelect (également dans /root/logs)
