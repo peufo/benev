@@ -261,7 +261,8 @@ Three rules govern what goes into `data`:
 - **Free-form member profile fields are diffed like the rest**, through `projectProfile`, which
   indexes them by field **name** rather than by id — a cuid does not read in a diff, and the name
   frozen in the payload survives the field's renaming. They are defined per event and can hold
-  anything (diet, health): the feed that renders them is admins-only.
+  anything (diet, health): the feed that renders them is reserved to leaders and above, who
+  already read those same values on a member's page.
 
 `createLog` never throws — a journal that falls must not take down what it journalises.
 
@@ -269,11 +270,12 @@ What is deliberately _not_ logged: searches, reorderings, personal table views, 
 milestones, a member's own notification preferences, and **`movePeriod` / `updatePeriod` /
 `duplicatePeriod`**, which the planning grid calls on every drag release.
 
-The organizer reads it in the Journal section of `/[eventId]/admin/dashboard` (admins only,
-guarded in `load` — which is why the whole tab is) and in the Journal section of a member's page;
-`/root/logs` shows the same feed across events. `email_sent` is
-excluded from the event feed — one line per notification sent would bury everything — while
-`email_failed` is exactly what an organizer needs to see.
+The organizer reads it in the Journal section of `/[eventId]/admin/dashboard` and in the Journal
+section of a member's page. Both routes sit under the leader guard of `/[eventId]/admin`, and
+`loadPreviousEventLogs` asks for no more than that; only the note **form** stays with the admins.
+`/root/logs` shows the same feed across events. `email_sent` is excluded from the event feed —
+one line per notification sent would bury everything — while `email_failed` is exactly what an
+organizer needs to see.
 
 ## Fuma
 

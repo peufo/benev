@@ -123,19 +123,17 @@
 		<TeamsSubscribes teams={data.event.teams} isLeader />
 	</Section>
 
-	{#if data.journal}
-		<Journal journal={data.journal} timezone={data.event.timezone} class="max-h-[80vh]">
-			{#snippet action()}
-				<a
-					href={eventPath(`/admin/dashboard?memberId=${data.memberProfile.id}#journal`)}
-					class="btn btn-sm btn-square"
-					use:tip={{ content: 'Ouvrir le journal complet' }}
-				>
-					<ScrollTextIcon size={20} />
-				</a>
-			{/snippet}
-		</Journal>
-	{/if}
+	<Journal journal={data.journal} timezone={data.event.timezone} class="max-h-[80vh]">
+		{#snippet action()}
+			<a
+				href={eventPath(`/admin/dashboard?memberId=${data.memberProfile.id}#journal`)}
+				class="btn btn-sm btn-square"
+				use:tip={{ content: 'Ouvrir le journal complet' }}
+			>
+				<ScrollTextIcon size={20} />
+			</a>
+		{/snippet}
+	</Journal>
 </div>
 
 <MemberCreateSubscribeDialog

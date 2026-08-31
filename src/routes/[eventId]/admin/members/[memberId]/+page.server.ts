@@ -2,12 +2,9 @@ import { getEventJournal, getMemberProfile, prisma } from '$lib/server'
 
 export const load = async ({ url, parent, params: { memberId, eventId } }) => {
 	const { member } = await parent()
-	const isAdmin = !!member?.roles.includes('admin')
 
 	return {
-		// Le journal d'une personne montre ses coordonnées éditées et ses changements de rôle:
-		// réservé aux admins, comme l'onglet Journal.
-		journal: isAdmin ? await getEventJournal({ eventId, url, memberId }) : null,
+		journal: await getEventJournal({ eventId, url, memberId }),
 		memberProfile: await getMemberProfile(
 			{ id: memberId, eventId },
 			member && { member, event: member.event }

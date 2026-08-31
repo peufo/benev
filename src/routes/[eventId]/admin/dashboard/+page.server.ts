@@ -8,8 +8,8 @@ import { WAITING, WAITING_KEYS, waitingOf, type Waiting } from './waiting'
 export const load = async ({ url, parent, locals, params: { eventId } }) => {
 	const actor = await permission.leaderOrRoot(eventId, locals)
 	const { event } = await parent()
-	// Le journal montre les coordonnées éditées et les réglages de l'évènement: comme sur la
-	// fiche d'un membre, il reste réservé aux admins. Le reste de la page sert les responsables.
+	// Ce que la page compte — membres, inscriptions, secteurs — se limite aux secteurs d'un
+	// responsable. Le journal, lui, porte sur l'évènement entier et se lit à tous les rangs.
 	const isAdmin = !actor || actor.roles.includes('admin')
 
 	const { waiting, members: membersView } = parseQuery(url, {
@@ -39,7 +39,7 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 		waitingCounts,
 		teamsRaw,
 	] = await Promise.all([
-		isAdmin ? getEventJournal({ eventId, url }) : null,
+		getEventJournal({ eventId, url }),
 		prisma.member.findMany({
 			where: { eventId, ...(membersView === 'without' && withoutSubscribe) },
 			orderBy: { createdAt: 'desc' },

@@ -79,12 +79,7 @@
 	</a>
 {/snippet}
 
-<div
-	class={[
-		'gap-3 flex-col',
-		data.journal ? 'lg:grid lg:grid-cols-2 overflow-hidden max-lg:flex' : 'flex',
-	]}
->
+<div class="flex-col gap-3 overflow-hidden max-lg:flex lg:grid lg:grid-cols-2">
 	<div class="flex flex-col gap-3">
 		<Section
 			id="members"
@@ -145,12 +140,10 @@
 		</Section>
 	</div>
 
-	{#if data.journal}
-		<Journal
-			journal={data.journal}
-			title={data.event?.name}
-			timezone={data.event?.timezone}
-			class="h-main"
-		/>
-	{/if}
+	<Journal
+		journal={data.journal}
+		title={data.event?.name}
+		timezone={data.event?.timezone}
+		class="h-main"
+	/>
 </div>

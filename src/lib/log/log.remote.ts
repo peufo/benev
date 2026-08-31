@@ -59,7 +59,7 @@ export const loadPreviousEventLogs = query(
 	async ({ beforeId, take, ...filter }) => {
 		const { locals, params } = getRequestEvent()
 		const eventId = params.eventId!
-		await permission.adminOrRoot(eventId, locals)
+		await permission.leaderOrRoot(eventId, locals)
 		return getLogs(eventLogsWhere({ eventId, ...filter }), { take, beforeId })
 	}
 )
