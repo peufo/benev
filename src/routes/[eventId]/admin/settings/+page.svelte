@@ -33,6 +33,13 @@
 
 	const FORM_ID = 'event-settings'
 
+	/**
+	 * Une instance par évènement: la barre latérale d'administration mène d'un évènement à
+	 * l'autre sans remonter la page, et l'état du formulaire, lui, vit dans son module — il
+	 * porterait encore les valeurs de l'évènement quitté. Voir AGENTS.md.
+	 */
+	const remoteForm = $derived(updateEvent.for(data.event.id))
+
 	// Libellés courts, distincts des titres de section: le sommaire se lit en diagonale.
 	const SECTIONS: TocSection[] = [
 		{ id: 'status', label: 'Statut', icon: EyeIcon },
@@ -53,7 +60,7 @@
 	function confirmIdChange() {
 		if (data.event.state !== 'published') return true
 		// Tant que rien n'a été saisi, le champ n'a pas de valeur: c'est celle d'origine.
-		const eventId = updateEvent.fields.id.value() ?? data.event.id
+		const eventId = remoteForm.fields.id.value() ?? data.event.id
 		if (data.event.id === eventId) return true
 		return confirm(
 			`Es tu sûr de vouloir modifier le lien de l'évènement de "/${data.event.id}" pour "${eventId} ?"`
@@ -93,7 +100,7 @@
 
 			<!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
 			<form
-				{...updateEvent.enhance(
+				{...remoteForm.enhance(
 					enhanceForm({
 						before: confirmIdChange,
 						success: 'Modifications enregistrées',
@@ -108,11 +115,11 @@
 				<Section id="essentials" title="L'essentiel" icon={CalendarIcon}>
 					{#key resetToken}
 						<div class="flex flex-col gap-4">
-							<SectionEssentiel fields={updateEvent.fields} event={data.event} />
+							<SectionEssentiel fields={remoteForm.fields} event={data.event} />
 							<!-- La description ne fait pas partie du socle partagé avec la création:
 							     elle se rédige une fois l'évènement posé. -->
 							<InputTextarea
-								field={updateEvent.fields.description}
+								field={remoteForm.fields.description}
 								label="Description"
 								value={data.event.description || ''}
 								rows={4}
@@ -128,7 +135,7 @@
 					subtitle="Affiché dans le pied de page du site"
 				>
 					{#key resetToken}
-						<SectionContact fields={updateEvent.fields} event={data.event} />
+						<SectionContact fields={remoteForm.fields} event={data.event} />
 					{/key}
 				</Section>
 
@@ -139,7 +146,7 @@
 					subtitle="Affiche, logo et habillage du site"
 				>
 					{#key resetToken}
-						<SectionApparence fields={updateEvent.fields} event={data.event} />
+						<SectionApparence fields={remoteForm.fields} event={data.event} />
 					{/key}
 				</Section>
 
@@ -150,7 +157,7 @@
 					subtitle="Ce que les membres peuvent faire seuls et les informations de compte exigées"
 				>
 					{#key resetToken}
-						<SectionAdhesion fields={updateEvent.fields} event={data.event} />
+						<SectionAdhesion fields={remoteForm.fields} event={data.event} />
 					{/key}
 				</Section>
 
@@ -212,7 +219,8 @@
 		bind:this={saveBar}
 		form={formElement}
 		formId={FORM_ID}
-		pending={updateEvent.pending > 0}
+		key={data.event.id}
+		pending={remoteForm.pending > 0}
 		onreset={handleReset}
 	/>
 </OnlyAdmin>

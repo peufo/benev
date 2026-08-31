@@ -781,6 +781,19 @@ export function useEvent(owner: User, name: string) {
 			await expect(description).toHaveValue('Un centre de recherche appliquée.')
 			await expect(backgroundColor).toHaveValue('#ffffff')
 			await expect(saveBar).toBeHidden()
+
+			// Le formulaire tient son instance de l'évènement édité: les refus du serveur
+			// doivent atteindre le champ de *cette* instance, sans quoi rien ne s'affiche.
+			const eventUrl = page.getByLabel("URL de l'évènement")
+			await eventUrl.fill('admin')
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText(/Les noms suivant sont réservés/)).toBeVisible()
+			await expect(eventUrl).toHaveAttribute('aria-invalid', 'true')
+			await expect(saveBar).toBeVisible()
+
+			await page.getByRole('button', { name: 'Réinitialiser' }).click()
+			await expect(saveBar).toBeHidden()
+			await expect(eventUrl).toHaveValue(eventId)
 		},
 		/**
 		 * Un thème pose son image et ses réglages par du code: ni `fields.set()` ni une écriture

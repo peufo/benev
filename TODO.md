@@ -8,7 +8,7 @@
 
 - [ ] S'assurer que tous les termes utilisé dans l'app soit inclusif.
 
-- [ ] Quand on passe d'un événement à l'autre, le formulaire dans settings ne ce met pas à jour. Simplement mettre .for(id) au formulaire résous, le problème, mais les issues de formulaire ne remonte plus.
+- [x] Quand on passe d'un événement à l'autre, le formulaire dans settings ne ce met pas à jour. Simplement mettre .for(id) au formulaire résous, le problème, mais les issues de formulaire ne remonte plus.
 
 - [ ] Un responsable doivent quand même avoir accès au journal dans le dashboard et dans la fiche de membre
 
