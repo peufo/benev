@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InputOptionInParam } from '$lib/ui'
+	import { InputSelectInParam } from '$lib/ui'
 	import { LOG_TYPES, Logs } from '$lib/log'
 	import { loadPreviousRootLogs } from './logs.remote'
 
@@ -12,7 +12,7 @@
 
 <div class="max-w-4xl mx-auto">
 	<div class="flex flex-wrap gap-1 mb-4">
-		<InputOptionInParam key="type" options={types} />
+		<InputSelectInParam key="type" options={types} placeholder="Tous les types" />
 	</div>
 
 	<!-- Pas de `timezone`: hors évènement, `page.data.event` n'existe pas. -->

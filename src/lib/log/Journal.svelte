@@ -4,7 +4,7 @@
 	import { ScrollTextIcon, XIcon } from '@lucide/svelte'
 	import { tip, urlParam } from 'fuma'
 	import { page } from '$app/state'
-	import { InputOptionInParam } from '$lib/ui'
+	import { InputSelectInParam } from '$lib/ui'
 	import Section from '$lib/ui/Section.svelte'
 	import { LOG_FAMILIES } from './logFamilies'
 	import { loadPreviousEventLogs } from './log.remote'
@@ -48,7 +48,7 @@
 				{subjectName}
 			</a>
 		{/if}
-		<InputOptionInParam key="family" options={families} />
+		<InputSelectInParam key="family" options={families} placeholder="Tout le journal" />
 		{@render extraAction?.()}
 	{/snippet}
 

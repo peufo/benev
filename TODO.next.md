@@ -23,8 +23,6 @@
 
 - [ ] La croix pour quitter le formulaire d'adhésion ne devrait pas permetre de supprimé l'adhésion
 
-- [ ] Le filtre du journal doit utiliser un InputSelect (également dans /root/logs)
-
 - [ ] Dans la liste de mes évènements, les tag "En cours" ne devrait pas écraser le tag "En construction"
 
 - [ ] Tester l'outil de duplication d'événement + repasser sur l'estétique

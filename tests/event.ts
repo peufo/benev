@@ -260,7 +260,8 @@ export function useEvent(owner: User, name: string) {
 			await expect(entries.last()).toContainText(note)
 
 			// Le filtre par famille ne laisse que la note.
-			await page.getByRole('link', { name: 'Notes' }).click()
+			await page.getByRole('button', { name: 'Tout le journal' }).click()
+			await page.getByRole('option', { name: 'Notes' }).click()
 			await expect(page.getByText(note)).toBeVisible()
 			await expect(page.getByText("a modifié les réglages de l'évènement")).toHaveCount(0)
 
