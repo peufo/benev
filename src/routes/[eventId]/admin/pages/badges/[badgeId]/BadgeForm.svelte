@@ -106,52 +106,68 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 		autocomplete="off"
 	/>
 
-	<div class="flex gap-2 items-end">
-		<InputNumber
-			field={remoteForm.fields.width}
-			label="Largeur (mm)"
-			value={badge.width}
-			step="0.01"
-			class="w-28"
-			oninput={(event) => lockHeightTo(event.currentTarget.valueAsNumber)}
-		/>
-		<button
-			type="button"
-			class="btn btn-sm btn-ghost btn-square mb-1"
-			onclick={() => (lockAspectRatio = !lockAspectRatio)}
-			use:tip={{ content: 'Conserver le ratio' }}
-		>
-			<RatioIcon size={18} />
-		</button>
-		<InputNumber
-			field={remoteForm.fields.height}
-			label="Hauteur (mm)"
-			value={badge.height}
-			step="0.01"
-			class="w-28"
-			oninput={(event) => lockWidthTo(event.currentTarget.valueAsNumber)}
-		/>
-		{#if !isDefaultFormat}
+	<div
+		class="grid gap-4 items-end"
+		style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));"
+	>
+		<div class="flex items-end gap-1">
+			<InputNumber
+				field={remoteForm.fields.width}
+				label="Largeur (mm)"
+				value={badge.width}
+				step="0.01"
+				oninput={(event) => lockHeightTo(event.currentTarget.valueAsNumber)}
+			/>
 			<button
-				in:fade
 				type="button"
-				class="btn btn-sm btn-ghost btn-square mb-1"
-				onclick={() => {
-					setSize(remoteForm.fields.width, FORMAT_CARD.x)
-					setSize(remoteForm.fields.height, FORMAT_CARD.y)
-				}}
+				class="btn btn-soft btn-square mb-1"
+				onclick={() => (lockAspectRatio = !lockAspectRatio)}
+				use:tip={{ content: 'Conserver le ratio' }}
 			>
-				<span class="inline-flex" use:tip={{ content: 'Restaurer les dimensions par défaut' }}>
-					<RotateCcwIcon size={18} />
-				</span>
+				<RatioIcon size={18} />
 			</button>
-		{/if}
+			<InputNumber
+				field={remoteForm.fields.height}
+				label="Hauteur (mm)"
+				value={badge.height}
+				step="0.01"
+				oninput={(event) => lockWidthTo(event.currentTarget.valueAsNumber)}
+			/>
+			{#if !isDefaultFormat}
+				<button
+					in:fade
+					type="button"
+					class="btn btn-ghost btn-square mb-1"
+					onclick={() => {
+						setSize(remoteForm.fields.width, FORMAT_CARD.x)
+						setSize(remoteForm.fields.height, FORMAT_CARD.y)
+					}}
+				>
+					<span class="inline-flex" use:tip={{ content: 'Restaurer les dimensions par défaut' }}>
+						<RotateCcwIcon size={18} />
+					</span>
+				</button>
+			{/if}
+		</div>
+
+		<InputNumber
+			field={remoteForm.fields.accessCellSize}
+			label="Taille des cellules"
+			value={badge.accessCellSize}
+		/>
+		<InputBoolean
+			field={remoteForm.fields.versoEnabled}
+			label="Afficher le verso"
+			checked={badge.versoEnabled}
+			class="grow my-0.75 mt-auto"
+			variant="switch"
+		/>
 	</div>
 
 	{#key resetToken}
-		<fieldset class="fieldset">
+		<fieldset class="fieldset max-w-100">
 			<span class="label">Illustrations</span>
-			<div class="flex gap-4 items-center justify-around">
+			<div class="grid gap-4 grid-cols-2">
 				<InputMedia
 					label="Image de fond"
 					key="backgroundId"
@@ -167,31 +183,33 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 			</div>
 		</fieldset>
 
-		<InputFieldSelect
-			field={remoteForm.fields.accessDaysField}
-			label="Champ accès 1 (Liste à choix multiple)"
-			bind:value={draft.accessDaysField}
-			type="multiselect"
-		/>
-		<InputFieldSelect
-			field={remoteForm.fields.accessSectorsField}
-			label="Champ accès 2 (Liste à choix multiple)"
-			bind:value={draft.accessSectorsField}
-			type="multiselect"
-		/>
-		<InputFieldSelect
-			field={remoteForm.fields.labelField}
-			label="Champ: Label (Liste à choix ou text)"
-			bind:value={draft.labelField}
-			type="select"
-			typesAccepted={['select', 'string']}
-		/>
-		<InputFieldSelect
-			field={remoteForm.fields.typeField}
-			label="Champ: Type de membre (Liste à choix)"
-			bind:value={draft.typeField}
-			type="select"
-		/>
+		<div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+			<InputFieldSelect
+				field={remoteForm.fields.accessDaysField}
+				label="Champ accès 1 (Liste à choix multiple)"
+				bind:value={draft.accessDaysField}
+				type="multiselect"
+			/>
+			<InputFieldSelect
+				field={remoteForm.fields.accessSectorsField}
+				label="Champ accès 2 (Liste à choix multiple)"
+				bind:value={draft.accessSectorsField}
+				type="multiselect"
+			/>
+			<InputFieldSelect
+				field={remoteForm.fields.labelField}
+				label="Champ: Label (Liste à choix ou text)"
+				bind:value={draft.labelField}
+				type="select"
+				typesAccepted={['select', 'string']}
+			/>
+			<InputFieldSelect
+				field={remoteForm.fields.typeField}
+				label="Champ: Type de membre (Liste à choix)"
+				bind:value={draft.typeField}
+				type="select"
+			/>
+		</div>
 
 		<fieldset class="fieldset">
 			<span class="label">Couleurs par type de membre</span>
@@ -208,21 +226,6 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 
 	<!-- Le nuancier est une `<datalist>` partagée par tous les sélecteurs de couleur. -->
 	<InputColorPalette />
-
-	<div class="flex gap-4 items-end">
-		<InputNumber
-			field={remoteForm.fields.accessCellSize}
-			label="Taille des cellules"
-			value={badge.accessCellSize}
-			class="w-28"
-		/>
-		<InputBoolean
-			field={remoteForm.fields.versoEnabled}
-			label="Afficher le verso"
-			checked={badge.versoEnabled}
-			class="grow"
-		/>
-	</div>
 
 	<div class="flex pt-2">
 		<ButtonDelete form={deleteFormId} formaction={deleteBadge.action} class="btn-sm" />

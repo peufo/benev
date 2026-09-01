@@ -36,9 +36,8 @@
 	<div class="flex items-start gap-3">
 		<aside
 			class={[
-				'surface w-full shrink-0 p-2 md:sticky md:top-1 md:w-72',
-				'max-h-main overflow-auto',
-				'flex flex-col gap-4',
+				'surface w-full shrink-0 p-2 md:sticky md:top-1 md:w-60',
+				'max-h-main overflow-auto space-y-4',
 				selected && 'max-md:hidden',
 			]}
 		>
@@ -51,7 +50,10 @@
 						{...createPage.enhance(enhanceForm({ success: 'Nouvelle page créée !' }))}
 						class="contents"
 					>
-						<button class="btn btn-square btn-sm" use:tip={{ content: 'Nouvelle page' }}>
+						<button
+							class="btn btn-square btn-sm btn-primary btn-soft"
+							use:tip={{ content: 'Nouvelle page' }}
+						>
 							<PlusIcon class="opacity-70" />
 						</button>
 					</form>
@@ -61,7 +63,7 @@
 				{/each}
 			</section>
 
-			<div class="border-soft border-t"></div>
+			<div class="divider"></div>
 
 			<section class="flex flex-col gap-1">
 				<h2 class="title-md pl-3">Modèles d'email</h2>
@@ -70,6 +72,8 @@
 				{/each}
 			</section>
 
+			<div class="divider"></div>
+
 			<section class="flex flex-col gap-1">
 				<div class="flex items-center gap-2 pl-3">
 					<h2 class="title-md grow">Modèles de badge</h2>
@@ -77,7 +81,10 @@
 						{...createBadge.enhance(enhanceForm({ success: 'Nouveau badge créé !' }))}
 						class="contents"
 					>
-						<button class="btn btn-square btn-sm" use:tip={{ content: 'Nouveau badge' }}>
+						<button
+							class="btn btn-square btn-sm btn-primary btn-soft"
+							use:tip={{ content: 'Nouveau badge' }}
+						>
 							<PlusIcon class="opacity-70" />
 						</button>
 					</form>
