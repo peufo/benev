@@ -56,7 +56,7 @@
 				class="btn btn-square btn-sm btn-secondary"
 				use:tip={{ content: `Modifier les coordonnées de ${data.memberProfile.firstName}` }}
 			>
-				<PencilIcon />
+				<PencilIcon size={20} />
 			</a>
 		{/snippet}
 
@@ -85,8 +85,14 @@
 			<div class="flex items-center gap-2">
 				<h3 class="title-md grow">Champs du profil</h3>
 				{#if isAdmin}
-					<!-- Le tiroir vit dans le layout de l'évènement: il s'ouvre par l'URL, sur
-					     place, et l'enregistrement recharge la fiche avec le nouveau champ. -->
+					<a
+						href={eventPath('/admin/settings#fields')}
+						class="btn btn-square btn-sm btn-secondary btn-soft"
+						use:tip={{ content: 'Editer les champs' }}
+					>
+						<PencilIcon size={20} />
+					</a>
+
 					<a
 						href={urlParam.with({ form_field: '{}' })}
 						data-sveltekit-replacestate
