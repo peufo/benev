@@ -11,6 +11,6 @@
 
 <div class="mt-1">
 	<span class="badge badge-sm {log.data.isAdmin.after.isAdmin ? 'badge-info' : 'badge-ghost'}">
-		{log.data.isAdmin.after.isAdmin ? 'Administrateur' : "N'est plus administrateur"}
+		{log.data.isAdmin.after.isAdmin ? 'Administrateur·ice' : "N'est plus administrateur·ice"}
 	</span>
 </div>

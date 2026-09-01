@@ -625,7 +625,9 @@ breaks `svelte-check`.
 
 - **French-first**: all user-facing strings are in French, including error messages. Server-side
   sentinel strings (`'Invalid credentials'`, `'This account already exists'`) stay in English and
-  are translated at the component boundary.
+  are translated at the component boundary. That French is **inclusive**: epicene wording first,
+  the midpoint otherwise (`organisateur·ice`, `invité·e`) — the rule and its separator live in
+  `PRODUCT.md`.
 - **Manual edits between prompts**: the user frequently edits files manually between prompts.
   **Always re-read a file before modifying it.** Do not assume it still matches your last edit.
 - **Never commit**: leave changes in the working tree. The user commits.

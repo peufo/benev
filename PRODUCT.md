@@ -85,7 +85,8 @@ Paiements par Stripe. Prix en CHF; le produit est ancré en Suisse (Dev Voisard,
 **Contraintes durables**
 
 - **Une seule langue: le français.** Aucune infrastructure d'i18n n'existe et aucune n'est prévue; `<html lang="fr">`. Ne pas introduire de chaînes anglaises visibles par l'utilisateur.
-- **Tutoiement.** L'interface tutoie l'utilisateur, partout.
+- **Tutoiement.** L'interface tutoie la personne qui la lit, partout.
+- **Écriture inclusive.** Aucune formulation ne doit présumer du genre de qui lit. On cherche d'abord la tournure épicène — « la personne qui a créé l'évènement », « tout le monde peut… », un rôle plutôt qu'un pronom. Quand il n'y en a pas, on double par un point médian : `organisateur·ice`, `administrateur·ice`, `invité·e`, `certain·e`, pluriel `·ices` / `·es`. Le point médian `·`, jamais le point ordinaire, qu'un lecteur d'écran prend pour une fin de phrase. Les rôles déjà épicènes — membre, responsable, propriétaire, bénévole — restent tels quels.
 - Comptes créés par invitation: un membre inscrit par un organisateur existe sans mot de passe et réclame son compte par le lien de réinitialisation. Tout parcours d'authentification doit tenir ce cas.
 - Les flux d'authentification ne doivent pas permettre d'énumérer les comptes.
 - Les médias sont stockés sur le système de fichiers local (`MEDIA_DIR`), pas sur un service objet.

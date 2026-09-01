@@ -33,7 +33,7 @@
 		draft:
 			`L'évènement n'étant pas encore publié, un membre sans résponsablités ne verra qu'une annonce ` +
 			`« Bientôt disponible » et ne pourra pas s'inscrire.`,
-		archived: `L'évènement est archivé: le membre invitée n'y aura plus accès.`,
+		archived: `L'évènement est archivé: la personne invitée n'y aura plus accès.`,
 	}
 
 	/**
@@ -61,7 +61,7 @@
 			if (!res) return
 			user.firstName = res.firstName
 			user.lastName = res.lastName
-			toast.success('Utilisateur trouvé !')
+			toast.success('Compte trouvé !')
 		} finally {
 			isLoadingUserExists = false
 		}
@@ -167,7 +167,7 @@
 		{#if isAuthorAdmin}
 			<div class="col-span-2">
 				<InputBoolean
-					label="Nommer administrateur.ice"
+					label="Nommer administrateur·ice"
 					field={createInvite.fields.isAdmin}
 					hint="Accès complet aux réglages, à la planification et aux publications de l'évènement."
 				/>

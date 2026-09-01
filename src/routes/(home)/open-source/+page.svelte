@@ -111,7 +111,7 @@
 			{:else}
 				<div class="bg-base-200/40 rounded-xl p-8 text-center">
 					<p class="text-base-content/60">
-						Aucun sujet ouvert pour le moment. Sois le premier à en créer un sur
+						Aucun sujet ouvert pour le moment. Ouvre le premier sur
 						<a
 							href="https://github.com/peufo/benev/issues/new"
 							target="_blank"

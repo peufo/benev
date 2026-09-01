@@ -13,7 +13,7 @@
 	export const rolesMap: Record<MemberRole, { icon: Component<IconProps>; label: string }> = {
 		root: { label: '__ROOT_USER__', icon: ShieldIcon },
 		owner: { label: 'Propriétaire', icon: CrownIcon },
-		admin: { label: 'Administrateur', icon: StarIcon },
+		admin: { label: 'Administrateur·ice', icon: StarIcon },
 		leader: { label: 'Responsable', icon: ShieldUserIcon },
 		member: { label: 'Membre', icon: CircleUserIcon },
 	}

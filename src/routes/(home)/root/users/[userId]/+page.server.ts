@@ -5,7 +5,7 @@ export const load = async ({ params }) => {
 	const user = await prisma.user.findUnique({
 		where: { id: params.userId },
 	})
-	if (!user) error(404, 'Utilisateur introuvable')
+	if (!user) error(404, 'Compte introuvable')
 
 	const members = await prisma.member.findMany({
 		where: { userId: user.id, event: { deletedAt: null } },

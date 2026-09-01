@@ -6,7 +6,7 @@
 	type Permission = boolean | string | undefined
 
 	const permissions: [string, [Permission, Permission, Permission, Permission]][] = [
-		['Nommer des administrateurs', [true, false, false, false]],
+		['Nommer des administrateur·ices', [true, false, false, false]],
 		["Supprimer l'évènement", [true, false, false, false]],
 		["Configurer l'évènement", [true, true, false, false]],
 		['Modifier les pages', [true, true, false, false]],
@@ -21,7 +21,7 @@
 			'Inscrire un membre à une période',
 			[true, true, 'Seulement les périodes de ses secteurs', false],
 		],
-		['Supprimer un membre', [true, true, 'Lui-même', 'Lui-même']],
+		['Supprimer un membre', [true, true, 'Soi-même', 'Soi-même']],
 		[
 			'Modifier les profils de membres',
 			[true, true, true, 'Son propre profil ( sauf les champs en lecture seul )'],
@@ -36,7 +36,7 @@
 				'Si initiée par un responsable',
 				'Si initiée par un responsable',
 				'Si initiée par un responsable',
-				'Si initiée par lui-même',
+				'Si initiée par soi-même',
 			],
 		],
 		[
@@ -64,15 +64,15 @@
 		<OwnerIcon class="opacity-70" />
 		Propriétaire
 	</h4>
-	<p>C'est le créateur de l’évènement.</p>
+	<p>La personne qui a créé l’évènement.</p>
 </section>
 
 <section>
 	<h4 class="flex gap-2">
 		<AdminIcon class="opacity-70" />
-		Administrateur
+		Administrateur·ice
 	</h4>
-	<p>Nommé par le propriétaire, il hérite pratiquement de tous les droits de celui-ci.</p>
+	<p>Nommé·e par le propriétaire, ce rôle en hérite pratiquement tous les droits.</p>
 </section>
 
 <section>
@@ -81,8 +81,8 @@
 		Responsable de secteur
 	</h4>
 	<p>
-		Nommé par un administrateur ou par le propriétaire, il peut gérer tout ce qui se rapporte à son
-		secteur.
+		Nommé·e par le propriétaire ou par un·e administrateur·ice, ce rôle gère tout ce qui se rapporte
+		à son secteur.
 	</p>
 </section>
 
@@ -92,7 +92,7 @@
 		Membre
 	</h4>
 	<p>
-		Quiconque souhaitant s’inscrire à une période de travail, il peut suivre et modifier ses
+		Quiconque souhaite s’inscrire à une période de travail: ce rôle suit et modifie ses propres
 		inscriptions.
 	</p>
 </section>

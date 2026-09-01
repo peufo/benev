@@ -14,7 +14,7 @@
 			<span class="text-error">Supprimer mon compte</span>
 		{/snippet}
 
-		<p>Es-tu certain de vouloir supprimer ton compte ?</p>
+		<p>Es-tu certain·e de vouloir supprimer ton compte ?</p>
 		<p>Attention, cette opération est <b>irréversible</b> !</p>
 
 		{#if ownedEventsCount > 0}

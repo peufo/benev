@@ -20,7 +20,7 @@
 		const msg = [
 			`Ce secteur contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
 			'Cette opération est irréversible.',
-			'Es-tu certain de vouloir le supprimer ?',
+			'Es-tu certain·e de vouloir le supprimer ?',
 		].join('\n')
 		if (confirm(msg)) return true
 		toast.info('Suppression du secteur annulée !')

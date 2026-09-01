@@ -26,17 +26,17 @@
 			</li>
 			<li>
 				<b>Ta participation à un évènement</b> — inscriptions, équipes, réponses aux champs
-				personnalisés, présence. L'<b>organisateur de cet évènement</b> en est responsable du
-				traitement : c'est lui qui décide ce qu'il demande et pourquoi. Nous agissons pour son
-				compte, comme <b>sous-traitant</b>.
+				personnalisés, présence. L'<b>organisateur·ice de cet évènement</b> en est responsable du
+				traitement : c'est cette personne qui décide ce qu'elle demande et pourquoi. Nous agissons
+				pour son compte, comme <b>sous-traitant</b>.
 			</li>
 		</ul>
 		<p>
 			Concrètement : pour une question sur ton compte, écris-nous. Pour une question sur ce qu'un
-			évènement sait de toi, l'organisateur est le premier interlocuteur — mais écris-nous quand
-			même si tu n'obtiens pas de réponse.
+			évènement sait de toi, l'organisateur·ice est la première personne à qui écrire — mais
+			écris-nous quand même si tu n'obtiens pas de réponse.
 		</p>
-		<p>Comme sous-traitant d'un organisateur, nous nous engageons à :</p>
+		<p>Comme sous-traitant d'un·e organisateur·ice, nous nous engageons à :</p>
 		<ul>
 			<li>
 				ne traiter les données que sur ses instructions et pour les finalités de son évènement ;
@@ -44,8 +44,8 @@
 			<li>soumettre à la confidentialité toute personne ayant accès à ces données ;</li>
 			<li>appliquer les mesures de sécurité décrites au point 10 ;</li>
 			<li>
-				ne recourir qu'aux sous-traitants ultérieurs listés au point 5, et informer l'organisateur
-				de tout changement afin qu'il puisse s'y opposer ;
+				ne recourir qu'aux sous-traitants ultérieurs listés au point 5, et informer
+				l'organisateur·ice de tout changement afin qu'il puisse s'y opposer ;
 			</li>
 			<li>
 				l'assister pour répondre aux demandes des personnes concernées et en cas de violation de
@@ -71,9 +71,9 @@
 			</li>
 			<li>
 				<b>Participation</b> — rôle, équipes, réponses aux champs personnalisés définis par
-				l'organisateur, inscriptions aux créneaux et leur état, présence ou absence constatée,
+				l'organisateur·ice, inscriptions aux créneaux et leur état, présence ou absence constatée,
 				dotations attribuées. Les données de ton compte sont <b>recopiées sur ta fiche de membre</b>
-				dans chaque évènement où tu participes, pour que l'organisateur dispose d'informations à jour.
+				dans chaque évènement où tu participes, pour que l'organisateur·ice dispose d'informations à jour.
 			</li>
 			<li>
 				<b>Achats</b> — montant, devise, date, identifiant de la session de paiement, palier acheté
@@ -109,7 +109,9 @@
 					</tr>
 					<tr>
 						<td>Organiser un évènement et ses équipes</td>
-						<td>Contrat, intérêt légitime ou consentement, selon ce que demande l'organisateur</td>
+						<td
+							>Contrat, intérêt légitime ou consentement, selon ce que demande l'organisateur·ice</td
+						>
 					</tr>
 					<tr>
 						<td>Envoyer les emails liés à ton activité (inscription, validation, alertes)</td>
@@ -141,10 +143,10 @@
 		<ul>
 			<li>Toi, sur ton profil.</li>
 			<li>
-				Les organisateurs et responsables des évènements où ta participation est validée. Un
+				Les organisateur·ices et responsables des évènements où ta participation est validée. Un
 				responsable voit les informations des bénévoles de son équipe, <b
-					>y compris les réponses aux champs personnalisés que l'organisateur a choisi de ne pas te
-					rendre visibles</b
+					>y compris les réponses aux champs personnalisés que l'organisateur·ice a choisi de ne pas
+					te rendre visibles</b
 				>.
 			</li>
 			<li>
@@ -158,9 +160,9 @@
 			qui en dispose peut afficher l'image.
 		</p>
 		<p>
-			<b>Exports.</b> Les organisateurs et responsables peuvent exporter la liste des membres (CSV, vCard)
-			et les plannings (iCal). Ces fichiers quittent benevio : leur usage relève de l'organisateur. Un
-			organisateur peut également importer des membres d'un de ses évènements vers un autre.
+			<b>Exports.</b> Les organisateur·ices et responsables peuvent exporter la liste des membres (CSV,
+			vCard) et les plannings (iCal). Ces fichiers quittent benevio : leur usage relève de l'organisateur·ice,
+			qui peut également importer des membres d'un de ses évènements vers un autre.
 		</p>
 	</section>
 
@@ -249,7 +251,7 @@
 				personnelle, pour préserver l'historique de l'évènement.
 			</li>
 			<li>
-				<b>Un évènement supprimé par son organisateur</b> — conservé <b>12 mois</b>, puis effacé
+				<b>Un évènement supprimé par son organisateur·ice</b> — conservé <b>12 mois</b>, puis effacé
 				définitivement.
 			</li>
 			<li>
@@ -274,9 +276,9 @@
 			ton identité avant de transmettre des données personnelles.
 		</p>
 		<p>
-			Pour les données rattachées à un évènement, l'organisateur est le responsable du traitement :
-			adresse-toi d'abord à lui. Si tu n'obtiens pas de réponse, écris-nous et nous ferons le
-			nécessaire.
+			Pour les données rattachées à un évènement, l'organisateur·ice est le responsable du
+			traitement : adresse-toi d'abord à lui. Si tu n'obtiens pas de réponse, écris-nous et nous
+			ferons le nécessaire.
 		</p>
 		<p>
 			<b>Recours</b> — tu peux saisir le Préposé fédéral à la protection des données et à la transparence
@@ -326,20 +328,20 @@
 	</section>
 
 	<section>
-		<h2>11. Mineurs</h2>
+		<h2>11. Mineur·es</h2>
 		<p>
 			Le bénévolat n'a pas d'âge minimum, et benevio n'en impose pas non plus. En dessous de
-			<b>16 ans</b>, le compte suppose l'accord d'un représentant légal.
+			<b>16 ans</b>, le compte suppose l'accord d'un·e représentant·e légal·e.
 		</p>
 		<p>
-			L'organisateur qui enrôle des bénévoles mineurs est responsable de leur information et des
-			autorisations parentales. Il lui revient aussi de limiter les champs personnalisés qu'il leur
-			demande à ce qui est réellement nécessaire à l'évènement.
+			L'organisateur·ice qui enrôle des bénévoles mineur·es est responsable de leur information et
+			des autorisations parentales. Il lui revient aussi de limiter les champs personnalisés
+			demandés à ce qui est réellement nécessaire à l'évènement.
 		</p>
 		<p>
-			Un représentant légal peut à tout moment demander l'accès aux données de son enfant ou leur
-			suppression, à l'adresse indiquée au point 8. Si un compte a été ouvert par un mineur sans
-			autorisation, signale-le nous : nous le supprimerons.
+			Un·e représentant·e légal·e peut à tout moment demander l'accès aux données de son enfant ou
+			leur suppression, à l'adresse indiquée au point 8. Si un compte a été ouvert par un·e mineur·e
+			sans autorisation, signale-le nous : nous le supprimerons.
 		</p>
 	</section>
 

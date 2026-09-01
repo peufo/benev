@@ -74,7 +74,7 @@
 					</div>
 					<div class="collapse-content">
 						<p class="text-base-content/80 leading-relaxed">
-							Les bénévoles peuvent continuer à s'inscrire, mais l'accès à l'espace administrateur
+							Les bénévoles peuvent continuer à s'inscrire, mais l'accès à l'espace d'administration
 							est restreint. Passe à un plan supérieur pour retrouver toutes les fonctionnalités.
 						</p>
 					</div>

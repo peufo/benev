@@ -128,7 +128,7 @@
 			<Placeholder class="border text-center bg-base-100/90">
 				<h2 class="text-lg">Invitation requise</h2>
 				<p>
-					Tu dois être invité par un responsable pour pouvoir devenir membre de cette évènement.
+					Tu dois être invité·e par un responsable pour pouvoir devenir membre de cet évènement.
 				</p>
 			</Placeholder>
 		{:else if stepIndex === 1 && user}

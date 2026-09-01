@@ -134,8 +134,8 @@
 					et il ne peut pas s'y inscrire.
 				</p>
 				<p>
-					Les responsables du secteur, eux, y accèdent toujours et peuvent y inscrire n'importe quel
-					membre à la main. Un membre déjà inscrit garde son accès.
+					Les responsables du secteur y accèdent toujours et peuvent y inscrire n'importe quel
+					membre à la main. Une personne déjà inscrite garde son accès.
 				</p>
 			</div>
 		</Popover>

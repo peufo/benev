@@ -159,7 +159,7 @@ export function useEvent(owner: User, name: string) {
 
 			await expect(async () => {
 				await emailInput.fill(email)
-				await expect(page.getByText('Utilisateur trouvé !')).toBeVisible({ timeout: 2000 })
+				await expect(page.getByText('Compte trouvé !')).toBeVisible({ timeout: 2000 })
 			}).toPass()
 
 			await expect(sendEmail).toBeEnabled()
@@ -167,14 +167,14 @@ export function useEvent(owner: User, name: string) {
 			// partirait vers une annonce, et l'avertissement le dit.
 			await expect(draftWarning).toBeVisible()
 
-			// Nommé administrateur.ice, l'invité accède déjà à tout l'espace: l'avertissement
+			// Nommé·e administrateur·ice, l'invité accède déjà à tout l'espace: l'avertissement
 			// tombe. La case est réduite à zéro pixel — c'est son libellé qui la bascule.
 			const isAdmin = page.getByRole('checkbox', { name: /Nommer administrateur/ })
-			await dialog.getByText('Nommer administrateur.ice').click()
+			await dialog.getByText('Nommer administrateur·ice').click()
 			await expect(isAdmin).toBeChecked()
 			await expect(draftWarning).toBeHidden()
 
-			await dialog.getByText('Nommer administrateur.ice').click()
+			await dialog.getByText('Nommer administrateur·ice').click()
 			await expect(isAdmin).not.toBeChecked()
 			await expect(draftWarning).toBeVisible()
 		},
@@ -985,7 +985,7 @@ export function useEvent(owner: User, name: string) {
 			// attend l'hydratation: avant elle, le clic ne coche rien.
 			const isAdmin = page.getByRole('checkbox', { name: /Nommer administrateur/ })
 			await expect(async () => {
-				await dialog.getByText('Nommer administrateur.ice').click()
+				await dialog.getByText('Nommer administrateur·ice').click()
 				await expect(isAdmin).toBeChecked({ timeout: 1000 })
 			}).toPass()
 
@@ -999,13 +999,13 @@ export function useEvent(owner: User, name: string) {
 				.first()
 				.click()
 			await expect(page.getByRole('heading', { name: 'Wallace Breen' })).toBeVisible()
-			await expect(page.getByText('Administrateur', { exact: true })).toBeVisible()
+			await expect(page.getByText('Administrateur·ice', { exact: true })).toBeVisible()
 
 			const journal = page.locator('#journal').getByRole('listitem')
 			await expect(
 				journal
 					.filter({ hasText: 'a invité Wallace Breen' })
-					.filter({ hasText: 'administrateur.ice' })
+					.filter({ hasText: 'administrateur·ice' })
 			).toHaveCount(1)
 		},
 		/**

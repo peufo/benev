@@ -64,8 +64,8 @@
 			exclusive de Dev Voisard.
 		</p>
 		<p>
-			Les contenus publiés par les organisateurs et les bénévoles — textes, images, affiches, logos
-			d'évènement — restent la propriété de leurs auteurs.
+			Les contenus publiés par les organisateur·ices et les bénévoles — textes, images, affiches,
+			logos d'évènement — restent la propriété de leurs auteur·ices.
 		</p>
 	</section>
 

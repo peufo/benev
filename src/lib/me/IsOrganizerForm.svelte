@@ -13,7 +13,7 @@
 <form {...updateAccount.enhance(enhanceForm({ onsuccess: () => onsuccess?.() }))}>
 	<input {...updateAccount.fields.isOrganizer.as('hidden', true)} />
 
-	<p>Souhaite-tu devenir organisateur d'évenements ?</p>
+	<p>Souhaites-tu organiser des évènements ?</p>
 
 	<div class="flex flex-row-reverse gap-2 items-center mt-4">
 		<button class="btn btn-primary">Oui, je le veux </button>

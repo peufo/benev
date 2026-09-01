@@ -74,11 +74,11 @@
 			},
 			{
 				key: 'createdBy',
-				label: 'Inscrit par',
+				label: 'Inscrit·e par',
 				type: 'select',
 				options: {
-					leader: { label: 'Inscrit par un responsable', icon: ShieldUserIcon },
-					user: { label: 'Inscrit par le membre', icon: CircleUserIcon },
+					leader: { label: 'Inscrit·e par un responsable', icon: ShieldUserIcon },
+					user: { label: 'Inscrit·e par le membre', icon: CircleUserIcon },
 				},
 				cell: () => createdByCell,
 			},

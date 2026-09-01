@@ -144,7 +144,7 @@
 		}
 		const msg = [
 			`Cette période de travail contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
-			'Es-tu certain de vouloir la supprimer ?',
+			'Es-tu certain·e de vouloir la supprimer ?',
 		].join('\n')
 		if (confirm(msg)) {
 			ondelete?.()

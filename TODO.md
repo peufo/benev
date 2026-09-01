@@ -6,7 +6,7 @@
 
 - [x] Permetre d'ajouter des champs de profile directement dupuis la fiche de profil d'un membre.
 
-- [ ] S'assurer que tous les termes utilisé dans l'app soit inclusif.
+- [x] S'assurer que tous les termes utilisé dans l'app soit inclusif.
 
 - [x] Quand on passe d'un événement à l'autre, le formulaire dans settings ne ce met pas à jour. Simplement mettre .for(id) au formulaire résous, le problème, mais les issues de formulaire ne remonte plus.
 

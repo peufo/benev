@@ -19,6 +19,6 @@
 	<input {...setMemberIsAdmin.fields.isAdmin.as('hidden', !isAdmin)} />
 	<button class="menu-item w-full">
 		<TargetRoleIcon size={20} />
-		<span>{isAdmin ? 'Retirer' : 'Attribuer'} le rôle d'administrateur</span>
+		<span>{isAdmin ? 'Retirer' : 'Attribuer'} le rôle d'administrateur·ice</span>
 	</button>
 </form>

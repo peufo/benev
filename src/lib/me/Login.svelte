@@ -226,7 +226,7 @@
 
 		{#if mode === 'register'}
 			<div transition:slide|local={{ duration: slideDuration }} class="flex flex-col gap-2 pt-2">
-				<InputBoolean field={registerUser.fields.isOrganizer} label="Je suis organisateur" />
+				<InputBoolean field={registerUser.fields.isOrganizer} label="Je suis organisateur·ice" />
 				<InputBoolean
 					field={registerUser.fields.isTermsAccepted}
 					label="J'accepte les conditions générales et la politique de confidentialité"
@@ -255,9 +255,9 @@
 				transition:slide|local={{ duration: slideDuration }}
 				class="mt-2 rounded-2xl border border-soft bg-secondary/10 p-4"
 			>
-				<p class="font-semibold text-primary">Ce compte a été créé par un organisateur</p>
+				<p class="font-semibold text-primary">Ce compte a été créé par une invitation</p>
 				<p class="mt-1 text-sm leading-relaxed text-base-content/80">
-					Tu as été invité avec cet email, mais tu n'as pas encore choisi de mot de passe. On
+					Tu as été invité·e avec cet email, mais tu n'as pas encore choisi de mot de passe. On
 					t'envoie un lien pour en définir un.
 				</p>
 				<button

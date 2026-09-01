@@ -11,6 +11,6 @@
 	{@render children?.()}
 {:else}
 	<div class="surface grid place-content-center py-20">
-		<p class="opacity-70">Tu dois être administrateur pour accéder à cette page</p>
+		<p class="opacity-70">Tu dois être administrateur·ice pour accéder à cette page</p>
 	</div>
 {/if}

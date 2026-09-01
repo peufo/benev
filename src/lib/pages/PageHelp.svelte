@@ -43,19 +43,19 @@
 </section>
 
 <section>
-	<h3>Inviter des administrateurs</h3>
+	<h3>Inviter des administrateur·ices</h3>
 	<p>
-		Les administrateurs te soutiennent dans la gestion de ton évènement. Pour en nommer de nouveaux,
-		tu peux rechercher ou inviter un utilisateur à partir de
+		Les administrateur·ices te soutiennent dans la gestion de ton évènement. Pour en nommer, tu peux
+		rechercher ou inviter quelqu'un à partir de
 		<a href={eventPath('/admin/members')}>la liste des membres</a>, puis lui attribuer le rôle
-		d'administrateur depuis son profil.
+		d'administrateur·ice depuis son profil.
 	</p>
 </section>
 
 <section>
 	<h3>Partage</h3>
 	<p>
-		Ton évènement est par défaut en mode "brouillon". Une fois que tu es prêt à le rendre public,
+		Ton évènement est par défaut en mode "brouillon". Une fois que tu es prêt·e à le rendre public,
 		change son statut sur <a href={eventPath('/admin/settings#status')}
 			>l'onglet de configuration.</a
 		>

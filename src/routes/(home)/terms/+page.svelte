@@ -30,20 +30,20 @@
 		<p>benevio sert à organiser le bénévolat d'un évènement. Il distingue trois rôles :</p>
 		<ul>
 			<li>
-				<b>Organisateur</b> — il crée l'évènement, le configure, gère les membres et paie le palier. Il
-				a accès à toutes les données de son évènement.
+				<b>Organisateur·ice</b> — crée l'évènement, le configure, gère les membres et paie le palier.
+				A accès à toutes les données de son évènement.
 			</li>
 			<li>
-				<b>Responsable</b> — désigné par l'organisateur sur une ou plusieurs équipes. Il gère les périodes
-				de son équipe, valide les inscriptions et voit les informations des bénévoles concernés.
+				<b>Responsable</b> — désigné·e par l'organisateur·ice sur une ou plusieurs équipes. Gère les périodes
+				de son équipe, valide les inscriptions et voit les informations des bénévoles de cette équipe.
 			</li>
 			<li>
-				<b>Bénévole</b> — il s'inscrit sur des créneaux, suit ses inscriptions et tient son profil à jour.
+				<b>Bénévole</b> — s'inscrit sur des créneaux, suit ses inscriptions et tient son profil à jour.
 			</li>
 		</ul>
 		<p>
-			Les rôles se déterminent évènement par évènement : un même compte peut être organisateur de
-			l'un et bénévole d'un autre.
+			Les rôles se déterminent évènement par évènement : un même compte peut être organisateur·ice
+			de l'un et bénévole d'un autre.
 		</p>
 	</section>
 
@@ -53,23 +53,24 @@
 			<li>
 				<b>Il n'y a pas d'âge minimum pour être bénévole</b>, et donc pas d'âge minimum pour avoir
 				un compte. En dessous de <b>16 ans</b>, l'ouverture et l'utilisation du compte supposent
-				l'accord d'un représentant légal, qui peut à tout moment demander sa suppression. Un
-				organisateur qui enrôle des bénévoles mineurs répond de leur encadrement et des
+				l'accord d'un·e représentant·e légal·e, qui peut à tout moment demander sa suppression.
+				L'organisateur·ice qui enrôle des bénévoles mineur·es répond de leur encadrement et des
 				autorisations requises.
 			</li>
 			<li>
-				Tes informations doivent être exactes et tenues à jour : les organisateurs des évènements
-				auxquels tu participes s'y fient pour te contacter et pour organiser leurs équipes.
+				Tes informations doivent être exactes et tenues à jour : les organisateur·ices des
+				évènements auxquels tu participes s'y fient pour te contacter et pour organiser leurs
+				équipes.
 			</li>
 			<li>
 				Ton compte est personnel. Garde ton mot de passe confidentiel et préviens-nous si tu
 				soupçonnes un accès non autorisé.
 			</li>
 			<li>
-				<b>Compte créé par invitation</b> — un organisateur peut créer un compte à ton nom pour t'inviter
-				sur son évènement. Ce compte existe sans mot de passe : tu le réclames par le lien de réinitialisation
-				envoyé à ton adresse email. Tant que tu n'as pas validé ta participation, tu restes libre d'ignorer
-				l'invitation.
+				<b>Compte créé par invitation</b> — un·e organisateur·ice peut créer un compte à ton nom pour
+				t'inviter sur son évènement. Ce compte existe sans mot de passe : tu le réclames par le lien de
+				réinitialisation envoyé à ton adresse email. Tant que tu n'as pas validé ta participation, tu
+				restes libre d'ignorer l'invitation.
 			</li>
 			<li>
 				Tu peux supprimer ton compte à tout moment depuis ton profil. Lis d'abord
@@ -125,7 +126,7 @@
 
 	<section>
 		<h2>6. Si tu organises un évènement</h2>
-		<p>Comme organisateur, tu es responsable de ton évènement, et notamment :</p>
+		<p>Comme organisateur·ice, tu es responsable de ton évènement, et notamment :</p>
 		<ul>
 			<li>du contenu de tes pages et de ta charte des bénévoles ;</li>
 			<li>
@@ -200,7 +201,7 @@
 		<p>
 			Pour le reste, dans la mesure permise par la loi, notre responsabilité est exclue, notamment
 			pour la perte de données, le manque à gagner, l'interruption du service, ainsi que pour les
-			agissements d'un organisateur, d'un responsable, d'un bénévole ou d'un service tiers.
+			agissements d'un·e organisateur·ice, d'un responsable, d'un bénévole ou d'un service tiers.
 		</p>
 		<p>
 			En tout état de cause, pour un évènement donné, notre responsabilité est plafonnée au montant

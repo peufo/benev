@@ -15,8 +15,7 @@
 					Prêt à simplifier ta prochaine édition ?
 				</h2>
 				<p class="mt-4 text-lg text-white/70 leading-relaxed">
-					Rejoins les organisateurs qui passent moins de temps sur l'admin et plus sur leur
-					événement.
+					Rejoins celles et ceux qui passent moins de temps sur l'admin et plus sur leur événement.
 				</p>
 			</div>
 

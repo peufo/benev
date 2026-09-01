@@ -22,7 +22,7 @@
 	{/snippet}
 	<form {...deleteEvent.enhance(enhanceForm({ success: 'Évènement supprimé' }))} class="contents">
 		<p>
-			Es-tu certain de supprimer cette évènement ?<br />
+			Es-tu certain·e de supprimer cet évènement ?<br />
 			Cette opération est <b>irréversible !</b>
 		</p>
 

@@ -126,7 +126,7 @@
 
 <Dialog bind:dialog={becomeOrganizerDialog}>
 	{#snippet header()}
-		<h2 class="card-title">Devenir organisateur</h2>
+		<h2 class="card-title">Organiser un évènement</h2>
 	{/snippet}
 	<IsOrganizerForm
 		oncancel={() => becomeOrganizerDialog.close()}

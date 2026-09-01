@@ -11,7 +11,7 @@
 	let { createdBy, size = 20, class: klass = '' }: Props = $props()
 
 	const label = $derived(
-		createdBy === 'leader' ? 'Inscrit par un responsable' : 'Inscrit par le membre'
+		createdBy === 'leader' ? 'Inscrit·e par un responsable' : 'Inscrit·e par le membre'
 	)
 </script>
 

@@ -14,7 +14,7 @@ export const LEGAL_DOCS: LegalDoc[] = [
 		label: 'Conditions générales',
 		description:
 			`Conditions générales d'utilisation de benevio : ton compte, les contenus publiés, ` +
-			`les obligations des organisateurs, la responsabilité et le droit applicable.`,
+			`les obligations des organisateur·ices, la responsabilité et le droit applicable.`,
 	},
 	{
 		path: resolve('/privacy'),

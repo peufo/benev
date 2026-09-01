@@ -30,7 +30,7 @@
 	{/snippet}
 
 	<p class="mt-4 leading-relaxed">
-		Le lien d'invitation à <b>{eventName}</b> ne vise pas le compte avec lequel tu es connecté.
+		Le lien d'invitation à <b>{eventName}</b> ne vise pas le compte avec lequel tu es connecté·e.
 	</p>
 
 	<!-- Les deux adresses en regard plutôt qu'en phrase: elles se comparent d'un coup d'œil, et
@@ -41,7 +41,7 @@
 			<dd class="font-semibold break-all">{invitedEmail}</dd>
 		</div>
 		<div class="flex flex-wrap gap-x-2">
-			<dt class="text-base-content/70">Tu es connecté avec</dt>
+			<dt class="text-base-content/70">Tu es connecté·e avec</dt>
 			<dd class="font-semibold break-all">{currentEmail}</dd>
 		</div>
 	</dl>

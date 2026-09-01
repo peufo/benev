@@ -41,7 +41,7 @@ type EmailReplacers = {
 
 const suggestionAuthorName: Suggestion<'invitation_create' | 'subscribe_request'> = {
 	id: 'authorName',
-	label: "Auteur de l'invitation",
+	label: "Auteur·ice de l'invitation",
 	getValue: (data) => data.authorName,
 }
 

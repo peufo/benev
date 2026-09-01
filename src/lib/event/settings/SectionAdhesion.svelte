@@ -18,7 +18,7 @@
 	<h3 class="title-md">Permissions</h3>
 	<InputBoolean
 		field={fields.selfRegisterAllowed}
-		label="Les utilisateurs peuvent devenir membre sans invitation"
+		label="Tout le monde peut devenir membre sans invitation"
 		checked={event.selfRegisterAllowed}
 		onchange={(e) => (event.selfRegisterAllowed = e.currentTarget.checked)}
 	/>

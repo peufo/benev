@@ -117,7 +117,7 @@
 				</tbody>
 			</table>
 		{:else}
-			<p class="text-base-content/70">Cet utilisateur n'est membre d'aucun événement.</p>
+			<p class="text-base-content/70">Ce compte n'est membre d'aucun évènement.</p>
 		{/if}
 	</Card>
 </div>

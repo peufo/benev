@@ -18,7 +18,7 @@
 	options={{
 		admin: {
 			icon: StarIcon,
-			label: 'Administrateurs',
+			label: 'Administrateur·ices',
 		},
 		leader: {
 			icon: ShieldUserIcon,

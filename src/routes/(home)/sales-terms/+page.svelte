@@ -15,8 +15,8 @@
 	<section>
 		<h2>1. Ce qui est vendu</h2>
 		<p>
-			benevio est gratuit jusqu'à un certain nombre de bénévoles. Au-delà, l'organisateur achète un
-			palier, qui relève le quota de son évènement. <b
+			benevio est gratuit jusqu'à un certain nombre de bénévoles. Au-delà, l'organisateur·ice achète
+			un palier, qui relève le quota de son évènement. <b
 				>Aucune fonctionnalité n'est réservée aux paliers payants</b
 			> : ils portent sur le volume de bénévoles, pas sur les fonctions.
 		</p>
