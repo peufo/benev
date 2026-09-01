@@ -1,9 +1,11 @@
 <script lang="ts">
+	import type { ClassValue } from 'svelte/elements'
+
 	interface Props {
 		avatarId: string | null
 		avatarPlaceholder: string
 		firstName: string
-		class?: string
+		class?: ClassValue
 		size?: 'medium' | 'large'
 	}
 

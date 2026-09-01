@@ -5,7 +5,7 @@
 <script lang="ts">
 	import Cropper from 'svelte-easy-crop'
 	import { UploadIcon } from '@lucide/svelte'
-
+	import type { ClassValue } from 'svelte/elements'
 	import { Popover, Dialog } from 'fuma'
 
 	interface Props {
@@ -17,6 +17,7 @@
 		actions?: import('svelte').Snippet<[{ hide: () => void }]>
 		children?: import('svelte').Snippet
 		onsubmit?: (value: { crop: Crop; image: string }) => void
+		class?: ClassValue
 	}
 
 	let {
@@ -27,6 +28,7 @@
 		actions,
 		children,
 		onsubmit,
+		class: klass,
 	}: Props = $props()
 	let dialog: HTMLDialogElement = $state()!
 	let image = $state('')
@@ -65,7 +67,7 @@
 		{#snippet trigger(popover)}
 			<button
 				type="button"
-				class="block overflow-hidden rounded-lg transition-shadow hover:shadow-lg"
+				class={['block overflow-hidden rounded-lg transition-shadow hover:shadow-lg', klass]}
 				{...popover.trigger}
 			>
 				{@render preview()}

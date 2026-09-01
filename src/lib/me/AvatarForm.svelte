@@ -6,17 +6,19 @@
 	import { enhanceForm } from '$lib/enhanceForm'
 	import Avatar from './Avatar.svelte'
 	import { deleteAvatar, generateAvatar, uploadAvatar } from './user.remote'
+	import type { ClassValue } from 'svelte/elements'
 
 	interface Props {
 		user: User
-		class?: string
+		class?: ClassValue
+		classInput?: ClassValue
 		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 	}
 
 	// La taille par défaut vit dans la valeur du prop: la fusionner à une taille
 	// passée par le parent créerait un conflit d'utilitaires (h-28 vs h-20).
-	let { user, class: klass = 'h-28 w-28', onsuccess }: Props = $props()
+	let { user, class: klass = 'h-28 w-28', classInput, onsuccess }: Props = $props()
 
 	// Un même `<form>` porte trois remote functions: SvelteKit choisit celle dont l'`action`
 	// correspond au `formaction` du bouton pressé, les autres attachements s'abstiennent.
@@ -30,7 +32,7 @@
 	enctype="multipart/form-data"
 	class="contents"
 >
-	<InputImage formaction={uploadAvatar.action} title="Photo de profil">
+	<InputImage formaction={uploadAvatar.action} title="Photo de profil" class={classInput}>
 		<Avatar
 			firstName={user.firstName}
 			avatarId={user.avatarId}

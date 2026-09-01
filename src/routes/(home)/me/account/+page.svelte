@@ -5,9 +5,9 @@
 	let { data } = $props()
 </script>
 
-<header class="flex items-center gap-4 sm:gap-6">
-	<AvatarForm user={data.user} class="h-20 w-20 sm:h-24 sm:w-24" />
-	<div class="min-w-0">
+<header class="flex items-start gap-4 sm:gap-6">
+	<AvatarForm user={data.user} class="h-20 w-20 sm:h-24 sm:w-24" classInput="shrink-0" />
+	<div class="min-w-0 shrink">
 		<h1 class="truncate text-xl font-semibold">
 			{data.user.firstName}
 			{data.user.lastName}
