@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { getTextColor } from '$lib/utils'
-	import { getNextColor } from './InputColorPalette.svelte'
 
 	interface Props {
 		name?: string
 		label?: string
-		value?: string
+		/**
+		 * Requise, et sans valeur de repli: lier `undefined` à un `$bindable` qui en porte une
+		 * lève, et l'erreur interrompt le rendu de toute la page.
+		 */
+		value: string
 	}
 
-	let { name = '', label = name, value = $bindable(getNextColor()) }: Props = $props()
+	let { name = '', label = name, value = $bindable() }: Props = $props()
 
 	let input: HTMLInputElement = $state()!
 </script>

@@ -29,11 +29,7 @@
 
 	let formElement = $state<HTMLFormElement>()
 	let saveBar = $state<ReturnType<typeof SaveBar>>()
-	/**
-	 * Le `reset()` natif rend leurs valeurs aux champs de fuma, qui portent un `defaultValue`.
-	 * Les champs cachés écrits par du code — relations, médias, nuancier — n'en ont pas: les
-	 * remonter est le seul moyen de leur rendre l'enregistrement chargé.
-	 */
+	/** Remonte la couleur par défaut, que le `reset()` natif ne restaure pas. */
 	let resetToken = $state(0)
 
 	let lockAspectRatio = $state(true)
@@ -44,10 +40,16 @@
 	const height = $derived(remoteForm.fields.height.value() ?? badge.height)
 	const isDefaultFormat = $derived(width === FORMAT_CARD.x && height === FORMAT_CARD.y)
 
-	// Sélections et couleurs pilotent le nuancier et ce qui est soumis: elles vivent ici, et
-	// se reprennent depuis `badge` à chaque réinitialisation.
+	/**
+	 * Images, sélections et couleurs pilotent le nuancier et ce qui est soumis: elles vivent
+	 * ici, et se reprennent depuis `badge` à chaque réinitialisation. `badge` n'en donne que la
+	 * graine — chaque soumission distante fait rejouer les `load`, et une valeur qui suivrait
+	 * la donnée serait rendue à l'enregistrement dans la seconde qui suit son choix.
+	 */
 	function seed() {
 		return {
+			backgroundId: badge.backgroundId,
+			logoId: badge.logoId,
 			typeField: badge.typeField,
 			accessDaysField: badge.accessDaysField,
 			accessSectorsField: badge.accessSectorsField,
@@ -164,65 +166,53 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 		/>
 	</div>
 
-	{#key resetToken}
-		<fieldset class="fieldset max-w-100">
-			<span class="label">Illustrations</span>
-			<div class="grid gap-4 grid-cols-2">
-				<InputMedia
-					label="Image de fond"
-					key="backgroundId"
-					value={badge.backgroundId}
-					oninput={() => saveBar?.refresh()}
-				/>
-				<InputMedia
-					label="Logo"
-					key="logoId"
-					value={badge.logoId}
-					oninput={() => saveBar?.refresh()}
-				/>
-			</div>
-		</fieldset>
-
-		<div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
-			<InputFieldSelect
-				field={remoteForm.fields.accessDaysField}
-				label="Champ accès 1 (Liste à choix multiple)"
-				bind:value={draft.accessDaysField}
-				type="multiselect"
-			/>
-			<InputFieldSelect
-				field={remoteForm.fields.accessSectorsField}
-				label="Champ accès 2 (Liste à choix multiple)"
-				bind:value={draft.accessSectorsField}
-				type="multiselect"
-			/>
-			<InputFieldSelect
-				field={remoteForm.fields.labelField}
-				label="Champ: Label (Liste à choix ou text)"
-				bind:value={draft.labelField}
-				type="select"
-				typesAccepted={['select', 'string']}
-			/>
-			<InputFieldSelect
-				field={remoteForm.fields.typeField}
-				label="Champ: Type de membre (Liste à choix)"
-				bind:value={draft.typeField}
-				type="select"
-			/>
+	<fieldset class="fieldset max-w-100">
+		<span class="label">Illustrations</span>
+		<div class="grid gap-4 grid-cols-2">
+			<InputMedia label="Image de fond" key="backgroundId" bind:value={draft.backgroundId} />
+			<InputMedia label="Logo" key="logoId" bind:value={draft.logoId} />
 		</div>
+	</fieldset>
 
-		<fieldset class="fieldset">
-			<span class="label">Couleurs par type de membre</span>
-			<div class="flex flex-wrap items-start gap-1">
-				<InputColorMap
-					field={draft.typeField}
-					bind:value={draft.colorMap}
-					onchange={() => saveBar?.refresh()}
-				/>
+	<div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+		<InputFieldSelect
+			field={remoteForm.fields.accessDaysField}
+			label="Champ accès 1 (Liste à choix multiple)"
+			bind:value={draft.accessDaysField}
+			type="multiselect"
+		/>
+		<InputFieldSelect
+			field={remoteForm.fields.accessSectorsField}
+			label="Champ accès 2 (Liste à choix multiple)"
+			bind:value={draft.accessSectorsField}
+			type="multiselect"
+		/>
+		<InputFieldSelect
+			field={remoteForm.fields.labelField}
+			label="Champ: Label (Liste à choix ou text)"
+			bind:value={draft.labelField}
+			type="select"
+			typesAccepted={['select', 'string']}
+		/>
+		<InputFieldSelect
+			field={remoteForm.fields.typeField}
+			label="Champ: Type de membre (Liste à choix)"
+			bind:value={draft.typeField}
+			type="select"
+		/>
+	</div>
+
+	<fieldset class="fieldset">
+		<span class="label">Couleurs par type de membre</span>
+		<div class="flex flex-wrap items-start gap-1">
+			<InputColorMap field={draft.typeField} bind:value={draft.colorMap} />
+			<!-- Le `reset()` natif rend au sélecteur de couleur son attribut `value`, que Svelte
+			     ne pose pas: seul son remontage lui rend la couleur enregistrée. -->
+			{#key resetToken}
 				<InputColor name="colorDefault" label="Par défaut" value={badge.colorDefault} />
-			</div>
-		</fieldset>
-	{/key}
+			{/key}
+		</div>
+	</fieldset>
 
 	<!-- Le nuancier est une `<datalist>` partagée par tous les sélecteurs de couleur. -->
 	<InputColorPalette />

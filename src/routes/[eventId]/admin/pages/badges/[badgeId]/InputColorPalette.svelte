@@ -17,12 +17,12 @@
 		'#3A86FF',
 	]
 
-	let colorIndex = 0
-	export function getNextColor() {
-		if (colorIndex >= palette.length) {
-			colorIndex = 0
-		}
-		return palette[colorIndex++]
+	/**
+	 * La couleur attribuée d'office à une option, prise à son rang. Déterministe: le nuancier
+	 * se dérive des options, et une dérivation peut rejouer sans redistribuer les couleurs.
+	 */
+	export function paletteColor(index) {
+		return palette[index % palette.length]
 	}
 </script>
 
