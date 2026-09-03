@@ -158,8 +158,10 @@
 					<li>
 						<a href={eventPath('/admin/teams')} class="link link-hover link-primary">
 							Crée tes secteurs
-						</a>
-						et leurs périodes de travail : c'est là-dessus que tes bénévoles s'inscrivent.
+						</a>, et
+						<a href={eventPath('/admin/plan')} class="link link-hover link-primary">
+							planifie les périodes de travail
+						</a> : c'est là-dessus que tes bénévoles s'inscrivent.
 					</li>
 					<li>
 						<a href={eventPath('/admin/pages')} class="link link-hover link-primary">

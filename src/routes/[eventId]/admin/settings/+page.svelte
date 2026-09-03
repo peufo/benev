@@ -87,7 +87,7 @@
 
 <OnlyAdmin>
 	<div class="mx-auto flex w-full items-start gap-3 pb-140">
-		<TableOfContent sections={SECTIONS} title="Réglages" />
+		<TableOfContent sections={SECTIONS} title="Configuration" />
 		<div class="mx-auto flex w-full max-w-2xl min-w-0 flex-col gap-3">
 			<Section id="status" title="Statut" icon={EyeIcon}>
 				<div class="flex flex-col gap-4">

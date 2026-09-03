@@ -57,7 +57,7 @@ export function adminTabs(): AdminTab[] {
 		},
 		{
 			...getPath('/admin/settings'),
-			label: 'Réglages',
+			label: 'Configuration',
 			icon: SettingsIcon,
 		},
 		{

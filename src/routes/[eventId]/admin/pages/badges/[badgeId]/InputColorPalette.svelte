@@ -1,4 +1,4 @@
-<script module>
+<script lang="ts" module>
 	export const palette = [
 		'#FFD1DC',
 		'#FFDAC1',
@@ -21,7 +21,7 @@
 	 * La couleur attribuée d'office à une option, prise à son rang. Déterministe: le nuancier
 	 * se dérive des options, et une dérivation peut rejouer sans redistribuer les couleurs.
 	 */
-	export function paletteColor(index) {
+	export function paletteColor(index: number) {
 		return palette[index % palette.length]
 	}
 </script>
