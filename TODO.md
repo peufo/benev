@@ -1,1 +1,0 @@
-- [ ] S'assurer que le checkout fonctionne

@@ -323,6 +323,8 @@ export const deleteMember = form(
 		const isSelf = member.id === memberId
 		if (!isSelf) await permission.admin(eventId, locals)
 		if (isSelf && member.roles.includes('owner')) error(403, `Owner can't delete his participation`)
+		if (isSelf && !member.isEmailVerified)
+			error(403, 'You must have to verifed your email to be able to cancel your registration')
 		const deleted = await prisma.member.delete({ where: { id: memberId, eventId } })
 		await createLog('member_delete', { member: deleted, actor: member, isSelf })
 		redirect(303, redirectTo || '/me')

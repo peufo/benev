@@ -1,16 +1,15 @@
 <script lang="ts">
 	import type { ResolvedPathname } from '$app/types'
-	import { ChevronLeftIcon, ChevronRightIcon, XIcon } from '@lucide/svelte'
+	import { ChevronLeftIcon, ChevronRightIcon } from '@lucide/svelte'
 	import { page } from '$app/stores'
 	import { afterNavigate, goto, invalidateAll } from '$app/navigation'
 	import { eventPath } from '$lib/eventPath'
 
 	import { Card, Placeholder } from '$lib/ui'
-	import { Dialog, tip } from 'fuma'
+	import { tip } from 'fuma'
 	import { urlParam } from 'fuma'
-	import { MemberDeleteForm, MemberForm, MemberProfileForm, memberIsRegistered } from '$lib/member'
+	import { MemberForm, MemberProfileForm, memberIsRegistered } from '$lib/member'
 	import { Login, AvatarForm, AccountForm } from '$lib/me'
-	import { slide } from 'svelte/transition'
 	import type { PageData } from './$types'
 
 	let { event, user, member, memberToClaim, charter }: PageData = $props()
@@ -25,7 +24,6 @@
 		...(isMemberProfileRequired ? [`Profil ${event.name}`] : []),
 	])
 
-	let dialogRemoveMember: HTMLDialogElement = $state()!
 	let forcedStepIndex = 0
 	let stepIndexMax = $state(getStepIndexMax())
 	let stepIndex = $state(getStepIndex($page.url))
@@ -93,17 +91,6 @@
 				<ChevronRightIcon class="opacity-70" />
 			</a>
 		</div>
-		{#if !!member}
-			<button
-				type="button"
-				class="btn btn-square btn-sm"
-				transition:slide={{ axis: 'x' }}
-				onclick={() => dialogRemoveMember.showModal()}
-				use:tip={{ content: 'Annuler et supprimer ma participation' }}
-			>
-				<XIcon />
-			</button>
-		{/if}
 	</div>
 
 	<ul class="steps">
@@ -141,17 +128,3 @@
 		{/if}
 	</div>
 </Card>
-
-{#if member}
-	<Dialog bind:dialog={dialogRemoveMember}>
-		{#snippet header()}
-			<h2 class="title">On abandonne ?</h2>
-		{/snippet}
-		<div class="flex gap-2 justify-end">
-			<MemberDeleteForm memberId={member.id}>Supprimer ma participation</MemberDeleteForm>
-			<button type="button" class="btn" onclick={() => dialogRemoveMember.close()}>
-				Je reste
-			</button>
-		</div>
-	</Dialog>
-{/if}
