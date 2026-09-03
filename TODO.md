@@ -1,0 +1,1 @@
+- [ ] Dans la liste de mes évènements, les tag "En cours" ne devrait pas écraser le tag "En construction"

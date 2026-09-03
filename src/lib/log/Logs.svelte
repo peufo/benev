@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte'
+	import { tick, type Snippet } from 'svelte'
 	import { ChevronUpIcon } from '@lucide/svelte'
 	import dayjs from '$lib/dayjs'
 	import type { LogWithEvent } from './logTypes'
@@ -24,6 +24,7 @@
 		showEvent?: boolean
 		/** Le fil occupe la hauteur qu'on lui donne: c'est à l'appelant de la borner. */
 		class?: string
+		before?: Snippet
 	}
 
 	let {
@@ -37,6 +38,7 @@
 		showNoteForm = false,
 		showEvent = false,
 		class: klass = '',
+		before,
 	}: Props = $props()
 
 	let container = $state<HTMLDivElement>()
@@ -137,6 +139,7 @@
 				<p class="title-md">{title || ''}</p>
 				<p class="text-sm text-base-content/70 mt-1">Début du journal</p>
 			</div>
+			{@render before?.()}
 		{/if}
 
 		{#each days as [day, dayLogs] (day)}

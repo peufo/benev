@@ -21,9 +21,10 @@
 		action?: Snippet
 		/** Le fil remplit la section: c'est la page qui dit jusqu'où celle-ci monte. */
 		class?: ClassValue
+		before?: Snippet
 	}
 
-	let { journal, title, timezone, action: extraAction, class: klass }: Props = $props()
+	let { journal, title, timezone, action: extraAction, class: klass, before }: Props = $props()
 
 	const families = Object.fromEntries(
 		Object.entries(LOG_FAMILIES).map(([value, { label }]) => [value, label])
@@ -65,6 +66,7 @@
 			loadPrevious={(beforeId) => loadPreviousEventLogs({ beforeId, ...journal.filter })}
 			canDeleteNote={(log) =>
 				log.type === 'note_create' && (isAdmin || log.createdById === page.data.member?.userId)}
+			{before}
 		/>
 	{/key}
 </Section>

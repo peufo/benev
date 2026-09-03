@@ -1,3 +1,5 @@
+- [ ] Tester l'outil de duplication d'événement + repasser sur l'estétique
+
 - [ ] https://github.com/peufo/benev/issues/127 Ajouter les status / visibilité pour les secteurs de travail
   - [ ] Définir la meilleur approche: {status: 'draft' | 'valided', published: boolean} ou {status: 'draft' | 'valided' | 'published'}
   - [ ] Le drawer "Ordre des secteurs" pourrais permettre de choisir qu'elle secteurs sont publiés.
@@ -17,12 +19,6 @@
   - La période listé dans benev/src/routes/(home)/me/events/EventEntry.svelte:94 (A supprimer ?)
 
 - [ ] Onboarding de l'organisateur
-  - [ ] La page d'aide en placeholder de la page d'accueil est confuse
+  - [ ] La page d'aide en placeholder de la page d'accueil est confuse.
   - [ ] La page admin par défaut doit être le dashboard
   - [ ] Mettre un message de bienvenu dans le journal
-
-- [ ] La croix pour quitter le formulaire d'adhésion ne devrait pas permetre de supprimé l'adhésion
-
-- [ ] Dans la liste de mes évènements, les tag "En cours" ne devrait pas écraser le tag "En construction"
-
-- [ ] Tester l'outil de duplication d'événement + repasser sur l'estétique

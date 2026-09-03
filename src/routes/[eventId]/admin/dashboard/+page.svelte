@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Component } from 'svelte'
 	import type { ResolvedPathname } from '$app/types'
+	import { resolve } from '$app/paths'
 	import {
 		ChartGanttIcon,
 		ClipboardCheckIcon,
@@ -145,5 +146,42 @@
 		title={data.event?.name}
 		timezone={data.event?.timezone}
 		class="h-main"
-	/>
+	>
+		{#snippet before()}
+			<div class="text-sm border border-hard rounded-box p-4 bg-dash mb-10">
+				<h4 class="text-lg title-md">Salut 👋</h4>
+				<p class="mt-1">
+					Bienvenue dans l'espace de gestion de ton évènement. Trois choses pour démarrer :
+				</p>
+
+				<ul class="list-disc pl-5 my-3 flex flex-col gap-1">
+					<li>
+						<a href={eventPath('/admin/teams')} class="link link-hover link-primary">
+							Crée tes secteurs
+						</a>
+						et leurs périodes de travail : c'est là-dessus que tes bénévoles s'inscrivent.
+					</li>
+					<li>
+						<a href={eventPath('/admin/pages')} class="link link-hover link-primary">
+							Soigne ta page d'accueil
+						</a>, puis rends l'évènement public depuis
+						<a href={eventPath('/admin/settings#status')} class="link link-hover link-primary">
+							la configuration
+						</a>.
+					</li>
+					<li>
+						Ce journal garde la trace de tout ce qui bouge dans l'évènement, et tu peux y ajouter
+						tes propres notes.
+					</li>
+				</ul>
+
+				<p>
+					Le reste est détaillé dans
+					<a href={eventPath('/help')} class="link link-hover link-primary">l'aide</a>. Une
+					question, un pépin ?
+					<a href={resolve('/contact')} class="link link-hover link-primary">Écris-nous</a>.
+				</p>
+			</div>
+		{/snippet}
+	</Journal>
 </div>
