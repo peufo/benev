@@ -45,7 +45,7 @@ function useCheckout(options: CheckoutOptions) {
 			if (!lineItems.length) throw Error('Once on item is required')
 			const { client_secret } = await useStripe().checkout.sessions.create({
 				mode: 'payment',
-				ui_mode: 'embedded',
+				ui_mode: 'embedded_page',
 				customer: await getStripCustomerId(user),
 				allow_promotion_codes: true,
 				line_items: lineItems,
