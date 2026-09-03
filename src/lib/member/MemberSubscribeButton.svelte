@@ -13,9 +13,9 @@
 
 <button
 	type="button"
-	class="btn btn-square btn-sm btn-ghost"
+	class="btn btn-square btn-sm btn-secondary btn-soft"
 	{onclick}
 	use:tip={{ content: `Inscrire ${member.firstName} à un secteur` }}
 >
-	<ClipboardListIcon size={20} class="text-base-content/60" />
+	<ClipboardListIcon size={20} />
 </button>
