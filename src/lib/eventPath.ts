@@ -1,6 +1,7 @@
 import { resolve } from '$app/paths'
 import { page } from '$app/state'
 import type { ResolvedPathname, RouteId, RouteParams } from '$app/types'
+import type { MemberRole } from '$lib/server'
 
 /**
  * Les routes montées sous `/[eventId]`, indexées par leur chemin privé du préfixe et associées
@@ -51,4 +52,14 @@ export function eventPath<T extends EventPathArg>(
 export function withSearch(path: ResolvedPathname, search: string): ResolvedPathname {
 	if (!search) return path
 	return `${path}${search.startsWith('?') ? '' : '?'}${search}` as ResolvedPathname
+}
+
+/**
+ * L'entrée d'un évènement pour la personne qui y adhère: le tableau de bord dès qu'elle a une
+ * charge à y tenir — responsable comme administrateur·ice —, son espace bénévole sinon.
+ */
+export function eventHomePath(eventId: string, roles: MemberRole[] = []): ResolvedPathname {
+	return roles.includes('leader')
+		? resolve('/[eventId]/admin/dashboard', { eventId })
+		: resolve('/[eventId]/me', { eventId })
 }

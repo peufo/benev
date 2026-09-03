@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
+	import { eventHomePath } from '$lib/eventPath'
 	import { MemberRole } from '$lib/member'
 	import { tip } from 'fuma'
 	import { CopyPlusIcon } from '@lucide/svelte'
@@ -42,7 +43,7 @@
 
 	<div class="flex min-w-0 grow flex-col gap-0.5">
 		<a
-			href={resolve('/[eventId]/me', { eventId: member.eventId })}
+			href={eventHomePath(member.eventId, member.roles)}
 			class="font-medium wrap-break-word after:absolute after:inset-0 after:content-['']"
 		>
 			{member.event.name}

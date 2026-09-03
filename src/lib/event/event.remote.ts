@@ -116,9 +116,11 @@ export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issu
 		},
 	})
 	await createLog('event_create', { event, actor: session.user })
-	if (tier === 'basic') redirect(303, resolve('/[eventId]', { eventId: event.id }))
+	// L'évènement naît vide: c'est le tableau de bord qui dit quoi en faire, pas sa page publique.
+	const dashboard = resolve('/[eventId]/admin/dashboard', { eventId: event.id })
+	if (tier === 'basic') redirect(303, dashboard)
 	const price = EVENT_TIER[tier].priceId
-	if (!price) redirect(303, resolve('/[eventId]', { eventId: event.id }))
+	if (!price) redirect(303, dashboard)
 	redirect(303, `/me/checkouts/create?price=${price}&eventId=${event.id}`)
 })
 

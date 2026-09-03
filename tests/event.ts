@@ -30,8 +30,10 @@ export function useEvent(owner: User, name: string) {
 			}).toPass()
 
 			await page.getByRole('button', { name: 'Créer mon évènement' }).click()
-			await page.waitForURL(`**/${eventId}`)
-			await expect(page).toHaveTitle(new RegExp(eventName))
+			// L'évènement s'ouvre sur sa gestion: les pages d'admin sont en `noindex`, leur titre
+			// ne porte donc pas le nom — c'est l'entête qui l'affiche.
+			await page.waitForURL(`**/${eventId}/admin/dashboard`)
+			await expect(page.getByRole('link', { name: eventName })).toBeVisible()
 		},
 		/**
 		 * Une soumission refusée ne doit rien effacer. Le `<select>` est le cas fragile: sa valeur

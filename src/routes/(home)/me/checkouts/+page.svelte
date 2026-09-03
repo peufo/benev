@@ -74,8 +74,12 @@
 											Affecté à un évènement supprimé
 										</span>
 									{:else if product.event}
+										<!-- Un produit ne s'associe qu'à un évènement dont on est propriétaire:
+										     le lien mène à sa gestion, pas à sa page publique. -->
 										<a
-											href={resolve('/[eventId]', { eventId: product.event.id })}
+											href={resolve('/[eventId]/admin/dashboard', {
+												eventId: product.event.id,
+											})}
 											class="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
 										>
 											<CircleCheckIcon size={14} />

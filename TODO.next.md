@@ -18,7 +18,4 @@
   - La liste des invitations benev/src/routes/(home)/me/events/+page.svelte:38
   - La période listé dans benev/src/routes/(home)/me/events/EventEntry.svelte:94 (A supprimer ?)
 
-- [ ] Onboarding de l'organisateur
-  - [ ] La page d'aide en placeholder de la page d'accueil est confuse.
-  - [ ] La page admin par défaut doit être le dashboard
-  - [ ] Mettre un message de bienvenu dans le journal
+- [ ] Le bouton de reset de la recherche ne fonctionne pas. (/members)
