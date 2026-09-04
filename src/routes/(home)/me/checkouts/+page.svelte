@@ -26,7 +26,7 @@
 			<li
 				class={[
 					'border-t border-soft px-2 py-3 first:border-t-0 sm:px-3',
-					checkout.id === checkoutId && 'rounded-lg border-t-0 bg-secondary/10',
+					checkout.id === checkoutId && 'rounded-lg border-t-0 bg-accent-soft',
 				]}
 			>
 				<div class="flex items-center gap-3 sm:gap-4">

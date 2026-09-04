@@ -98,7 +98,7 @@
 		</div>
 
 		<div class="lg:col-span-2 flex flex-col gap-6">
-			<div class="bg-secondary/10 border border-soft rounded-box p-6">
+			<div class="bg-accent-soft border border-soft rounded-box p-6">
 				<div class="flex items-start gap-3">
 					<CircleAlertIcon size={22} class="text-primary shrink-0 mt-0.5" />
 					<div>
@@ -137,7 +137,7 @@
 			<div class="grid md:grid-cols-2 gap-4">
 				{#each data.messages as message (message.id)}
 					<article
-						class="border border-soft rounded-box p-5 bg-base-100 hover:border-secondary/40 transition-colors"
+						class="border border-soft rounded-box p-5 bg-base-100 hover:border-hard transition-colors"
 					>
 						<div class="flex gap-3 items-start">
 							<div class="grow">

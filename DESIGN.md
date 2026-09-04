@@ -5,7 +5,7 @@ colors:
   primary: '#2663eb'
   primary-content: '#ffffff'
   secondary: '#11b981'
-  secondary-content: '#1f2937'
+  secondary-content: '#ffffff'
   accent: '#e69214'
   accent-content: '#1f2937'
   neutral: '#2b3440'
@@ -95,14 +95,14 @@ Le thème est défini **dans `src/app.css`**, via le bloc `@plugin 'daisyui/them
 @plugin 'daisyui/theme' { name: 'light'; ... }
 ```
 
-Un seul thème est déclaré (`light`), rendu par défaut. Les composants n'utilisent que les classes sémantiques DaisyUI (`btn-primary`, `card`, `input`, `badge-success`) et les utilitaires Tailwind adossés aux mêmes tokens (`bg-secondary/10`, `text-base-content/70`, `border-soft`). **Les valeurs hex de ce document sont une transcription du thème, pas une source à recopier.**
+Un seul thème est déclaré (`light`), rendu par défaut. Les composants n'utilisent que les classes sémantiques DaisyUI (`btn-primary`, `card`, `input`, `badge-success`) et les utilitaires Tailwind adossés aux mêmes tokens (`bg-accent-soft`, `text-base-content/70`, `border-soft`). **Les valeurs hex de ce document sont une transcription du thème, pas une source à recopier.**
 
 **Key Characteristics:**
 
 - Une seule police, Barlow, porte toute la hiérarchie par le poids et la taille.
 - Le bleu franc (`primary`) est l'accent principal et porte l'action; il est présent mais jamais étouffant.
-- Le vert (`secondary`) est la couleur de la marque — c'est le point du logo. Il porte l'atmosphère, la confirmation et le dégradé de page.
-- L'orange (`accent`) est un marqueur fonctionnel rare, réservé au repérage temporel des plannings.
+- Le vert (`secondary`) est la couleur de la marque — c'est le point du logo. Il ne s'emploie qu'à pleine force: pastilles, boutons, bordures pleines, halo du hero.
+- L'orange (`accent`) porte deux choses qui ne se croisent jamais: l'atmosphère des pages `(home)`, fortement dilué, et le repérage temporel des plannings, à pleine force.
 - Le bleu et le vert sont les deux couleurs du logo; la charte ne fait que prolonger la marque à l'écran.
 - Les surfaces sont planes par défaut; les ombres apparaissent seulement sur les cards, la navigation et les éléments interactifs majeurs.
 - Les coins sont arrondis de manière modérée: 8px pour les boutons et champs, 16px pour les cards et la navbar.
@@ -115,20 +115,20 @@ Bleu et vert sont deux teintes claires (L≈55% et L≈70% en OKLCH). Elles se t
 
 ### Tokens du thème
 
-| Token               | Valeur    | Rôle                                                                                                                                                                                                      |
-| ------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `primary`           | `#2663eb` | Bleu franc. Couleur d'action: titres, boutons principaux, liens actifs, étapes franchies. Contraste 5.16:1 sur `base-100`.                                                                                |
-| `primary-content`   | `#ffffff` | Texte sur fond `primary`. Contraste 5.16:1.                                                                                                                                                               |
-| `secondary`         | `#11b981` | Vert. Couleur de marque (le point du logo): aplats de confirmation, fonds `secondary/5`–`secondary/10`, bordures `secondary/20`, dégradé de page, pastilles. **2.54:1 sur `base-100` — jamais en texte.** |
-| `secondary-content` | `#1f2937` | Texte sur fond `secondary`. Contraste 5.79:1.                                                                                                                                                             |
-| `accent`            | `#e69214` | Orange. Marqueur de position temporelle dans les plannings (`bg-accent` en filet de 3px, `hover:bg-accent/5`). **2.47:1 sur `base-100` — jamais en texte.**                                               |
-| `accent-content`    | `#1f2937` | Texte sur fond `accent`. Contraste 5.93:1.                                                                                                                                                                |
-| `neutral`           | `#2b3440` | Gris ardoise. Textes d'aide discrets (`label-text-alt`).                                                                                                                                                  |
-| `neutral-content`   | `#d7dde4` | Texte sur fond `neutral`. Contraste 9.20:1.                                                                                                                                                               |
-| `base-100`          | `#ffffff` | Surfaces: cards, navbar, champs, modales.                                                                                                                                                                 |
-| `base-200`          | `#f2f2f2` | Fond de hover léger, fond d'application (`bg-base-200/20`), lignes alternées.                                                                                                                             |
-| `base-300`          | `#e5e6e6` | État actif (`menu-item.active` via `base-300/80`), séparateurs appuyés.                                                                                                                                   |
-| `base-content`      | `#1f2937` | Texte principal. Contraste 14.68:1 sur `base-100`.                                                                                                                                                        |
+| Token               | Valeur    | Rôle                                                                                                                                                                                                                                                                         |
+| ------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `primary`           | `#2663eb` | Bleu franc. Couleur d'action: titres, boutons principaux, liens actifs, étapes franchies. Contraste 5.16:1 sur `base-100`.                                                                                                                                                   |
+| `primary-content`   | `#ffffff` | Texte sur fond `primary`. Contraste 5.16:1.                                                                                                                                                                                                                                  |
+| `secondary`         | `#11b981` | Vert. Couleur de marque (le point du logo): `btn-secondary`, pastilles, bordures et contours pleins, halo du hero. **À pleine force ou pas du tout** (voir la règle plus bas). 2.54:1 sur `base-100` — jamais en texte.                                                      |
+| `secondary-content` | `#ffffff` | Blanc sur fond `secondary`. **2.54:1 — exception assumée par le porteur du produit**, qui juge le blanc plus juste que l'encre et la lisibilité suffisante. Si la question se rouvrait, un vert à `oklch(65% 0.149 162)` (`#00aa72`) franchirait 3:1 sans changer de teinte. |
+| `accent`            | `#e69214` | Orange. Deux emplois disjoints: le voile d'atmosphère des pages `(home)` (`bg-accent-soft`, `bg-accent-softer`, dégradé de page) et le marqueur de position temporelle des plannings (`bg-accent` en filet de 3px). **2.47:1 sur `base-100` — jamais en texte.**             |
+| `accent-content`    | `#1f2937` | Texte sur fond `accent`. Contraste 5.93:1.                                                                                                                                                                                                                                   |
+| `neutral`           | `#2b3440` | Gris ardoise. Textes d'aide discrets (`label-text-alt`).                                                                                                                                                                                                                     |
+| `neutral-content`   | `#d7dde4` | Texte sur fond `neutral`. Contraste 9.20:1.                                                                                                                                                                                                                                  |
+| `base-100`          | `#ffffff` | Surfaces: cards, navbar, champs, modales.                                                                                                                                                                                                                                    |
+| `base-200`          | `#f2f2f2` | Fond de hover léger, fond d'application (`bg-base-200/20`), lignes alternées.                                                                                                                                                                                                |
+| `base-300`          | `#e5e6e6` | État actif (`menu-item.active` via `base-300/80`), séparateurs appuyés.                                                                                                                                                                                                      |
+| `base-content`      | `#1f2937` | Texte principal. Contraste 14.68:1 sur `base-100`.                                                                                                                                                                                                                           |
 
 `info`, `success`, `warning` et `error` ne sont pas redéfinis: ils sont hérités des valeurs par défaut de DaisyUI v5 et servent uniquement de signaux d'état (`badge-success`, `badge-warning`, `--color-error` sur les champs invalides).
 
@@ -137,7 +137,16 @@ Bleu et vert sont deux teintes claires (L≈55% et L≈70% en OKLCH). Elles se t
 Deux utilitaires dérivent la bordure de `base-content` plutôt que d'introduire une couleur:
 
 - **`.border-soft`** — `color-mix(in oklab, var(--color-base-content) 18%, #0000)`. Bordure par défaut des cards internes, champs, encarts, séparateurs.
-- **`.border-hard`** — `color-mix(in oklab, var(--color-base-content) 40%, #0000)`. Bordure des conteneurs qui doivent tenir seuls: card principale, pied de page.
+- **`.border-hard`** — `color-mix(in oklab, var(--color-base-content) 25%, #0000)`. Bordure des conteneurs qui doivent tenir seuls: card principale, pied de page.
+
+### Utilitaires d'aplat chaud
+
+Deux utilitaires portent tout le voile d'atmosphère du produit. Ils sont **opaques** — un `color-mix` sur `base-100`, pas une opacité — pour qu'un encart posé sur le dégradé de page ne cumule pas deux couches et garde le même rendu partout:
+
+- **`.bg-accent-soft`** — 12 % d'`accent` sur `base-100`, soit `#fdf2e7`. Aplat des encarts « ce bloc compte »: l'invitation à reprendre, le prochain créneau, l'achat qui vient d'aboutir. Encre `base-content` à 13.30:1.
+- **`.bg-accent-softer`** — 6 %, soit `#fef9f3`. Aplat des grandes surfaces, où 12 % pèserait: la Trust Band, le survol des lignes d'équipe du planning.
+
+`bg-dash` est d'une autre nature: une hachure diagonale `base-100`/`base-200` qui dit « pas encore disponible » — l'invitation dont l'adresse n'est pas prouvée. Elle s'oppose à `bg-accent-soft` dans le même composant.
 
 ### Named Rules
 
@@ -147,9 +156,15 @@ Deux familles de fichiers échappent au thème par nécessité. Les logos `src/l
 
 Les habillages d'évènement — `THEME_PRESETS` dans `$lib/constant` et les dégradés de `static/themes/` — portent eux aussi des hex: leurs valeurs atterrissent dans une colonne de base de données et dans des SVG servis en `background-image`, hors de portée des tokens. Elles s'en **dérivent** malgré tout — neutres, `secondary`, `primary` et `accent` fortement dilués sur du blanc — et **restent claires**: le texte `base-content` des pages bénévoles se lit à même ce fond.
 
-**The One Accent Rule.** Le bleu (`primary`) porte l'action et reste l'accent dominant de la plupart des écrans. Le vert (`secondary`) porte la marque, l'atmosphère et la confirmation — il peut prendre un aplat, mais il ne dispute jamais au bleu l'action principale d'un écran: deux boutons pleins de couleurs différentes côte à côte, c'est une hiérarchie ratée. L'orange (`accent`) est réservé au repérage temporel des plannings; il ne devient pas un accent décoratif ailleurs.
+**The One Accent Rule.** Le bleu (`primary`) porte l'action et reste l'accent dominant de la plupart des écrans. Le vert (`secondary`) porte la marque et la confirmation — il peut prendre un aplat plein, mais il ne dispute jamais au bleu l'action principale d'un écran: deux boutons pleins de couleurs différentes côte à côte, c'est une hiérarchie ratée.
 
-**The Chromatic-Never-Reads Rule.** Ni `secondary` (2.54:1 sur `base-100`) ni `accent` (2.47:1) ne portent du texte: pas de `text-secondary` ni de `text-accent` sur une phrase à lire, pas d'icône seule porteuse d'information dans ces teintes. Ils fonctionnent comme fond, aplat, bordure, pastille ou trait. En aplat plein, leur texte est `secondary-content` / `accent-content` — l'encre `#1f2937`, qui remonte à 5.79:1 et 5.93:1. `badge-secondary badge-outline` sur `base-100` reste légitime: c'est le contour qui porte la couleur, pas la lecture.
+L'orange (`accent`) porte **deux langages qui ne partagent aucun écran**, et c'est ce qui les autorise à coexister: fortement dilué, il est le voile d'atmosphère des pages du groupe `(home)`; à pleine force, il est le repérage temporel des plannings, sous `[eventId]/admin/plan`. Le dégradé de page n'existe que dans `(home)/+layout.svelte` et le groupe `[eventId]` n'en hérite pas. Il ne devient pas pour autant un accent décoratif: dilué il est un fond, plein il est un marqueur, jamais une troisième couleur d'action.
+
+**The Undiluted Green Rule.** `secondary` s'emploie **à pleine force ou pas du tout**. Pas de `secondary/5`, `/10`, `/20`, `/30`. La raison est mesurable: composité sur blanc, le vert ne s'affaiblit pas, il **change de teinte** — `#11b981` est à 162°, `bg-secondary/10` rend `#e7f8f2` à 173° et `bg-secondary/5` rend `#f3fcf9` à 174°. À ces chromas (0.010–0.020), les cyans-verts se lisent comme un voile froid et clinique; les jaunes-orangés, à chroma identique, se lisent comme une matière — crème, sable, papier. D'où `bg-accent-soft` pour l'atmosphère.
+
+La règle sert le vert plutôt qu'elle ne le prive: trois pastilles `bg-secondary` sur un aplat `bg-secondary/5` se diluaient dans leur propre voile; sur la crème, elles portent. **Seule exception**, arbitrée: le halo `from-secondary/40` du hero, une lumière floue derrière le point vert du logo — pas une surface sur laquelle on lit.
+
+**The Chromatic-Never-Reads Rule.** Ni `secondary` (2.54:1 sur `base-100`) ni `accent` (2.47:1) ne portent du texte: pas de `text-secondary` ni de `text-accent` sur une phrase à lire, pas d'icône seule porteuse d'information dans ces teintes. Ils fonctionnent comme fond, aplat, bordure, pastille ou trait. En aplat plein, le texte d'`accent` est `accent-content`, l'encre `#1f2937` qui remonte à 5.93:1. `secondary-content` est le blanc, à 2.54:1: une exception assumée, documentée dans la table ci-dessus, et non un modèle à étendre. `badge-secondary badge-outline` sur `base-100` reste légitime: c'est le contour qui porte la couleur, pas la lecture.
 
 **The /70 Floor Rule.** Le texte atténué descend à `base-content/70` (5.54:1) au plus bas. `base-content/60` tombe à 4.04:1 et échoue AA sur du texte courant; on le réserve aux libellés non essentiels en gras (`.title-sm`), là où l'information est aussi portée ailleurs. La règle vaut aussi pour `primary`: à 5.16:1 le bleu n'a plus la réserve de l'ancien bleu ardoise (11.45:1), donc **`text-primary` ne s'atténue pas** — `text-primary/70` tombe à 2.68:1.
 
@@ -175,7 +190,7 @@ Trois classes utilitaires vivent dans `src/app.css` et complètent l'échelle: `
 
 ## 4. Elevation
 
-Le système est **plat par défaut, soulevé avec intention**. La profondeur n'est pas décorative: elle signale l'interactivité ou délimite une surface. Le fond d'application est `bg-base-200/20`, recouvert sur les pages publiques d'un dégradé descendant `from-secondary/10 via-secondary/5 to-transparent`.
+Le système est **plat par défaut, soulevé avec intention**. La profondeur n'est pas décorative: elle signale l'interactivité ou délimite une surface. Le fond d'application est `bg-base-200/20`, recouvert sur le groupe `(home)` d'un dégradé descendant `from-accent/10 via-accent/5 to-transparent`.
 
 ### Shadow Vocabulary
 
@@ -227,9 +242,9 @@ Tous les composants s'appuient sur DaisyUI v5 et sur la bibliothèque `fuma` (li
 
 ### Signature Component: Trust Band
 
-Bande horizontale pleine largeur, fond `bg-secondary/5`, bordures `border-y border-secondary/20`, contenu centré en `py-6`. Elle porte les preuves de confiance (open source, gratuit, personnalisable) sous forme de petites pastilles suivies d'un mot. C'est le moment où le design dit « tu peux y aller » sans être tape-à-l'œil.
+Bande horizontale pleine largeur, fond `bg-accent-softer`, bordures `border-y border-soft`, contenu centré en `py-6`. Elle porte les preuves de confiance (open source, gratuit, personnalisable) sous forme de petites pastilles suivies d'un mot. C'est le moment où le design dit « tu peux y aller » sans être tape-à-l'œil.
 
-Les pastilles sont **toutes `bg-secondary`**. La couleur n'encode rien ici — les trois affirmations sont indépendantes, pas des catégories: trois teintes différentes inventeraient une taxonomie qui n'existe pas.
+Les pastilles sont **toutes `bg-secondary`**, à pleine force. La couleur n'encode rien ici — les trois affirmations sont indépendantes, pas des catégories: trois teintes différentes inventeraient une taxonomie qui n'existe pas. Le fond est chaud et la bordure neutre précisément pour que ces trois points verts soient la seule couleur de la bande.
 
 ## 6. Do's and Don'ts
 
@@ -242,7 +257,8 @@ Les pastilles sont **toutes `bg-secondary`**. La couleur n'encode rien ici — l
 - **Do** passer `variant="block"` aux champs `fuma` dans les formulaires.
 - **Do** laisser beaucoup d'air autour des sections (`py-20 md:py-28` en hero, `py-12 md:py-20` en contenu).
 - **Do** préférer des icônes Lucide fines et simples aux icônes MDI chargées.
-- **Do** utiliser `secondary` comme fond, aplat, bordure ou pastille — jamais comme texte.
+- **Do** utiliser `secondary` à pleine force — bouton, pastille, bordure, contour — jamais dilué, jamais comme texte.
+- **Do** utiliser `bg-accent-soft` / `bg-accent-softer` pour tout aplat d'atmosphère ou d'encart, plutôt qu'une opacité: opaques, ils ne se cumulent pas avec le dégradé de page.
 - **Do** tenir les hex des logos SVG (`logo.svg`, `benevio.svg`, `favicon.svg`) alignés sur `primary` et `secondary`.
 
 ### Don't:
@@ -252,6 +268,7 @@ Les pastilles sont **toutes `bg-secondary`**. La couleur n'encode rien ici — l
 - **Don't** écrire de valeurs de rayon, d'ombre ou d'espacement en dur si un token Tailwind ou DaisyUI existe.
 - **Don't** imbriquer une card dans une card, ni faire porter sa propre surface à un composant montable.
 - **Don't** utiliser `text-secondary` (2.54:1) ni `text-accent` (2.47:1) sur du texte à lire: sous le seuil AA.
+- **Don't** diluer `secondary` (`bg-secondary/10`, `border-secondary/20`…): dilué, ce n'est plus le vert de la marque mais un cyan à 173°.
 - **Don't** descendre le texte atténué sous `base-content/70`, ni atténuer `text-primary` du tout.
 - **Don't** utiliser de gradients flashy ou de « hero metric » (gros chiffre + petit label).
 - **Don't** tomber dans le template startup: pas de grille de cartes identiques icône + titre + texte.

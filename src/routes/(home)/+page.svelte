@@ -36,7 +36,7 @@
 								btn btn-lg btn-primary
 								shadow-lg hover:shadow-xl
 								transition-shadow duration-200
-								min-w-[220px]
+								min-w-55
 							"
 						>
 							{data.user ? 'Voir mes événements' : 'Organiser mon événement'}
@@ -55,11 +55,9 @@
 					</div>
 				</div>
 
-				<!-- Marque animée. Absente en mobile: le header porte déjà le mot-marque, et la
-				     colonne repousserait les CTA sous la ligne de flottaison. -->
 				<div class="hidden md:flex items-center justify-center relative">
 					<div
-						class="w-80 h-80 lg:w-96 lg:h-96 rounded-full bg-linear-to-br from-secondary/30 to-primary/10 blur-3xl absolute"
+						class="w-80 h-80 lg:w-96 lg:h-96 rounded-full bg-linear-to-br from-accent/20 to-accent/5 blur-3xl absolute"
 					></div>
 					<AnimatedLogo class="relative w-80 lg:w-96" />
 				</div>
@@ -68,7 +66,7 @@
 	</section>
 
 	<!-- Trust band -->
-	<section class="border-y border-secondary/20 bg-secondary/5">
+	<section class="border-y border-soft bg-accent-softer">
 		<div class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
 			<div class="flex flex-col md:flex-row items-center justify-between gap-4">
 				<div

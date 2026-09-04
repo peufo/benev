@@ -53,7 +53,8 @@
 						</a>
 						{#if isOngoing}
 							<span class="badge badge-sm badge-primary">En cours</span>
-						{:else if member.event.state !== 'published'}
+						{/if}
+						{#if member.event.state !== 'published'}
 							<span class="badge badge-ghost badge-sm">
 								{STATE_SHORT[member.event.state] ?? EVENT_STATES[member.event.state].label}
 							</span>
@@ -90,9 +91,9 @@
 			</div>
 
 			<!-- Le prochain créneau est la réponse que le bénévole vient chercher: il est
-			     détaché du reste, sur le fond sable qui porte déjà les invitations. -->
+			     détaché du reste sur un fond crème. -->
 			{#if next}
-				<div class="rounded-field border border-soft bg-secondary/10 px-3 py-2">
+				<div class="rounded-field border border-soft bg-accent-soft px-3 py-2">
 					<div class="flex items-center gap-2 text-sm font-semibold text-primary">
 						<ClockIcon size={15} class="shrink-0" />
 						<span>

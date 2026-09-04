@@ -43,7 +43,7 @@
 					class={[
 						'flex flex-wrap items-center justify-between gap-x-3 gap-y-2 p-3',
 						'border border-soft rounded-box',
-						data.emailToVerify && 'bg-dash',
+						data.emailToVerify ? 'bg-dash' : 'bg-accent-soft',
 					]}
 				>
 					<div class="min-w-0">

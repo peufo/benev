@@ -253,7 +253,7 @@
 			<div
 				role="status"
 				transition:slide|local={{ duration: slideDuration }}
-				class="mt-2 rounded-box border border-soft bg-secondary/10 p-4"
+				class="mt-2 rounded-box border border-soft bg-accent-soft p-4"
 			>
 				<p class="font-semibold text-primary">Ce compte a été créé par une invitation</p>
 				<p class="mt-1 text-sm leading-relaxed text-base-content/80">
