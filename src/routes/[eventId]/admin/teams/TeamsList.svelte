@@ -97,13 +97,13 @@
 {#snippet row(team: TeamRow, index: number, isMine: boolean)}
 	<a
 		href={eventPath('/admin/teams/[teamId]', { teamId: team.id })}
-		{...command.item(index)}
+		{...command.item(index, '52px')}
 		onclickcapture={interceptClick}
 		draggable="false"
 		class={[
 			'menu-item group select-none gap-2',
 			page.params.teamId === team.id && 'active',
-			keyboard && command.focusIndex === index && 'outline-2 outline-primary',
+			keyboard && command.focusIndex === index && 'outline-1 outline-accent bg-accent-soft',
 		]}
 	>
 		<span class="min-w-0 truncate text-sm" class:font-medium={isMine}>{team.name}</span>
@@ -132,7 +132,7 @@
 
 {#snippet list(items: TeamRow[], offset: number, isMine: boolean)}
 	<div
-		class="flex flex-col"
+		class="flex flex-col pt-1"
 		use:listEditable={{ items, onChange: handleReorder, dragElementsSelector: '.drag-button' }}
 	>
 		{#each items as team, index (team.id)}

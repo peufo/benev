@@ -62,7 +62,7 @@ html {
 	}
 
 	.tiptap .ProseMirror-selectednode {
-		@apply outline outline-primary rounded;
+		@apply outline outline-accent rounded-field;
 	}
 
 	/* Le zoom repeint l'échelle et le défilement un frame avant que les indicateurs ne se

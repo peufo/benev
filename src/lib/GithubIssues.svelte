@@ -61,7 +61,7 @@
 					href={issue.url}
 					target="_blank"
 					rel="external noopener noreferrer"
-					class="group block px-5 py-4 hover:bg-base-200/40 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary/50"
+					class="group block px-5 py-4 hover:bg-base-200/40 transition-colors focus-visible:outline focus-visible:outline-offset-0 focus-visible:outline-primary/50"
 				>
 					<div class="flex items-baseline gap-2">
 						<span class="font-mono shrink-0 text-base-content/50">
