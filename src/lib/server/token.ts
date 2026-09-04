@@ -39,6 +39,23 @@ export const validateToken = async (tokenType: TokenType, tokenId: string) => {
 }
 
 /**
+ * Lit sans consommer, comme `readInviteToken`: le lien de vérification peut tomber sur une session
+ * ouverte par quelqu'un d'autre, et la page qui le dit doit laisser le jeton valable pour rouvrir
+ * la bonne.
+ */
+export const readUserToken = async (tokenType: TokenType, tokenId: string) => {
+	const token = await prisma.token.findUnique({
+		where: { id: tokenId, type: tokenType },
+		select: { expires: true, user: { select: { id: true, email: true } } },
+	})
+	if (!token?.user) return null
+	return { user: token.user, isExpired: !isWithinExpiration(Number(token.expires)) }
+}
+
+/** `deleteMany`: deux clics concurrents sur le même lien ne doivent pas lever. */
+export const consumeToken = (tokenId: string) => prisma.token.deleteMany({ where: { id: tokenId } })
+
+/**
  * Le jeton du lien d'invitation. Il vit 90 jours — une invitation se lit rarement le jour même —
  * et tourne à chaque envoi: c'est ce qui révoque le lien parti à une adresse erronée quand un
  * responsable la corrige avant de renvoyer l'invitation.

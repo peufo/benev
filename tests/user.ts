@@ -51,6 +51,24 @@ export function useUser(name: string) {
 			await prisma.member.updateMany({ where: { email }, data: { isEmailVerified: true } })
 			if (page) await page.reload()
 		},
+
+		/**
+		 * Le jeton que porte le lien de vérification. `EMAIL_DISABLED` interdit de le lire depuis le
+		 * navigateur: il est posé en base, avec la durée de vie que lui donne `generateToken`.
+		 */
+		async createEmailVerificationToken() {
+			const user = await prisma.user.findUniqueOrThrow({ where: { email } })
+			const id = cuid.createId()
+			await prisma.token.create({
+				data: {
+					id,
+					type: 'emailVerification',
+					expires: Date.now() + 2 * 60 * 60 * 1000,
+					userId: user.id,
+				},
+			})
+			return id
+		},
 	}
 }
 
