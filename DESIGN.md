@@ -205,10 +205,10 @@ Tous les composants s'appuient sur DaisyUI v5 et sur la bibliothèque `fuma` (li
 ### Cards / Containers
 
 - **Composant:** `Card` de `$lib/fuma-legacy` — `card border border-hard bg-base-100 shadow-lg`, corps `card-body rounded-b-2xl p-2 sm:p-8`.
-- **Corner Style:** `rounded-2xl` (16px).
+- **Corner Style:** `rounded-box` (16px).
 - **Background:** `base-100`.
 - **Border:** `border-hard` sur la card autonome, `border-soft` sur les encarts internes.
-- **Encart interne:** `border border-soft rounded-2xl p-5` — c'est la forme d'un bloc secondaire _dans_ une card, pas une card imbriquée.
+- **Encart interne:** `border border-soft rounded-box p-5` — c'est la forme d'un bloc secondaire _dans_ une card, pas une card imbriquée.
 
 ### Inputs / Fields
 

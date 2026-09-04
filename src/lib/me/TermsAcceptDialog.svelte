@@ -72,7 +72,7 @@
 			{/if}
 		</p>
 
-		<ul class="mt-4 flex flex-col gap-3 rounded-2xl border border-soft p-5">
+		<ul class="mt-4 flex flex-col gap-3 rounded-box border border-soft p-5">
 			{#each LEGAL_DOCS as doc (doc.path)}
 				<li>
 					<!-- Nouvel onglet: lire ne doit pas coûter la page sur laquelle on était. -->

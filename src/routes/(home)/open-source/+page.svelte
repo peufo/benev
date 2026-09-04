@@ -48,7 +48,7 @@
 			</div>
 
 			<div class="hidden lg:block shrink-0">
-				<div class="bg-base-200 rounded-2xl p-6 font-mono text-sm shadow-inner w-80">
+				<div class="bg-base-200 rounded-box p-6 font-mono text-sm shadow-inner w-80">
 					<div class="flex gap-2 mb-4">
 						<div class="w-3 h-3 rounded-full bg-red-400"></div>
 						<div class="w-3 h-3 rounded-full bg-yellow-400"></div>
@@ -78,7 +78,7 @@
 	<!-- Contribuer -->
 	<section class="flex flex-col gap-8">
 		<div class="flex items-start gap-5">
-			<div class="bg-base-100 rounded-xl p-3 shadow-sm border border-soft shrink-0">
+			<div class="bg-base-100 rounded-field p-3 shadow-sm border border-soft shrink-0">
 				<GitBranch size={28} class="text-primary" />
 			</div>
 			<div>
@@ -109,7 +109,7 @@
 					showNewIssueButton
 				/>
 			{:else}
-				<div class="bg-base-200/40 rounded-xl p-8 text-center">
+				<div class="bg-base-200/40 rounded-field p-8 text-center">
 					<p class="text-base-content/60">
 						Aucun sujet ouvert pour le moment. Ouvre le premier sur
 						<a

@@ -37,11 +37,11 @@
 		teams={data.teams}
 		views={data.views}
 		isFullscreen
-		class="border-2 rounded-2xl"
+		class="border-2 rounded-box"
 	/>
 </div>
 
-<div class="h-screen overflow-hidden rounded-2xl" use:mouseOnTop>
+<div class="h-screen overflow-hidden rounded-box" use:mouseOnTop>
 	{#if urlParam.has('axis', 'y')}
 		<PlanY bind:plan bind:teams />
 	{:else}

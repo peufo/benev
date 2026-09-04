@@ -92,7 +92,7 @@
 			<!-- Le prochain créneau est la réponse que le bénévole vient chercher: il est
 			     détaché du reste, sur le fond sable qui porte déjà les invitations. -->
 			{#if next}
-				<div class="rounded-xl border border-soft bg-secondary/10 px-3 py-2">
+				<div class="rounded-field border border-soft bg-secondary/10 px-3 py-2">
 					<div class="flex items-center gap-2 text-sm font-semibold text-primary">
 						<ClockIcon size={15} class="shrink-0" />
 						<span>

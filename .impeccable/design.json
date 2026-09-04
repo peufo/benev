@@ -340,7 +340,7 @@
 			"name": "Inset Panel",
 			"kind": "card",
 			"refersTo": "inset-panel",
-			"description": "Bloc secondaire à l'intérieur d'une card (border border-soft rounded-2xl p-5). Remplace la card imbriquée.",
+			"description": "Bloc secondaire à l'intérieur d'une card (border border-soft rounded-box p-5). Remplace la card imbriquée.",
 			"html": "<div class=\"ds-inset\"><h3 class=\"ds-inset-title\">Tu n'organises pas d'événement ?</h3><p class=\"ds-inset-body\">Rends-toi dans l'espace dédié de l'événement.</p></div>",
 			"css": ".ds-inset { background: rgba(17, 185, 129, 0.1); color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 16px; padding: 20px; } .ds-inset-title { color: #2663eb; font-size: 1rem; font-weight: 600; margin: 0; } .ds-inset-body { color: rgba(31, 41, 55, 0.8); font-size: 0.875rem; line-height: 1.6; margin: 4px 0 0; }"
 		},

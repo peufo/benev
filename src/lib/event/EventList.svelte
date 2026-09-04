@@ -74,7 +74,7 @@
 		{/each}
 	</ul>
 {:else}
-	<div class="text-center py-20 md:py-28 bg-base-100 border border-soft rounded-2xl">
+	<div class="text-center py-20 md:py-28 bg-base-100 border border-soft rounded-box">
 		<CalendarX2 size={48} class="mx-auto text-secondary mb-4" />
 		<h2 class="text-2xl font-bold text-primary">{emptyTitle}</h2>
 		{#if emptyDescription}
