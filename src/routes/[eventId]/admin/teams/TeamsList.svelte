@@ -97,11 +97,11 @@
 {#snippet row(team: TeamRow, index: number, isMine: boolean)}
 	<a
 		href={eventPath('/admin/teams/[teamId]', { teamId: team.id })}
-		{...command.item(index, '52px')}
+		{...command.item(index)}
 		onclickcapture={interceptClick}
 		draggable="false"
 		class={[
-			'menu-item group select-none gap-2',
+			'menu-item group select-none gap-2 scroll-mt-13 scroll-mb-2',
 			page.params.teamId === team.id && 'active',
 			keyboard && command.focusIndex === index && 'outline-1 outline-accent bg-accent-soft',
 		]}
