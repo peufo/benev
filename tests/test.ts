@@ -134,9 +134,9 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		const invitedPage = await invitedBrowser.newPage()
 		try {
 			// Le compte existe avant l'invitation: c'est le cas ordinaire, et le tunnel rattache
-			// alors le membre par son adresse.
+			// alors le membre par son adresse, une fois celle-ci prouvée.
 			await chell.register(invitedPage)
-			await event.expectDeclineInvite(page, invitedPage, chell.email)
+			await event.expectDeclineInvite(page, invitedPage, chell)
 		} finally {
 			await invitedPage.close()
 		}

@@ -1086,13 +1086,13 @@ export function useEvent(owner: User, name: string) {
 		 * se passait rien. Ce qu'il retire, c'est son adresse, la fiche appartenant à l'évènement
 		 * qui l'a créée.
 		 */
-		async expectDeclineInvite(page: Page, invitedPage: Page, invitedEmail: string) {
+		async expectDeclineInvite(page: Page, invitedPage: Page, invited: User) {
 			await page.goto(`/${eventId}/admin/members?form_invite=1`)
 			const dialog = page.getByRole('dialog')
 			await dialog.getByLabel('Prénom').fill('Chell')
 			// `exact`: « Prénom » contient « nom ».
 			await dialog.getByLabel('Nom', { exact: true }).fill('Johnson')
-			await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(invitedEmail)
+			await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(invited.email)
 			await dialog.getByRole('button', { name: 'Valider' }).click()
 			await expect(dialog).toBeHidden()
 
@@ -1110,8 +1110,9 @@ export function useEvent(owner: User, name: string) {
 			await openMember()
 			await expect(resend).toBeVisible()
 
-			// L'évènement est en brouillon: l'adresse du compte suffit à le rattacher au membre
-			// invité, sans jeton.
+			// Sans le jeton du mail, c'est la vérification de l'adresse qui donne accès à la fiche
+			// invitée — refuser demande la même preuve qu'accepter.
+			await invited.verifyEmail()
 			await invitedPage.goto(`/${eventId}/register`)
 			const decline = invitedPage.getByRole('button', { name: /^(Refuser|Confirmer)$/ })
 			await decline.click()

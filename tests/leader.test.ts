@@ -64,8 +64,9 @@ test.describe.serial("Journal d'un responsable", () => {
 		await invite.getByRole('button', { name: 'Valider' }).click()
 		await expect(invite).toBeHidden()
 
-		// L'évènement est en brouillon: l'adresse du compte suffit à rattacher le membre invité,
-		// sans jeton.
+		// Sans le jeton du mail, c'est la vérification de l'adresse qui prouve que la fiche invitée
+		// est bien la sienne.
+		await lead.verifyEmail()
 		await leadPage.goto(`/${event.eventId}/register`)
 		const accept = leadPage.getByRole('button', { name: 'Oui je le veux !' })
 		await expect(accept).toBeVisible()

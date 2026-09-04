@@ -3,9 +3,8 @@ import { parseQuery } from 'fuma/server'
 import z from 'zod'
 import {
 	prisma,
-	getInvitedMember,
+	findClaimableMember,
 	getMemberProfile,
-	isSameEmail,
 	parseFormKey,
 	getPeriodForm,
 } from '$lib/server'
@@ -21,36 +20,34 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 			form_tag: z.string().optional(),
 		})
 
-		// Le jeton d'invitation est la troisième clé pour retrouver le membre: sans lui, un évènement
-		// publié ne rattache personne par email, et l'invité bute sur « Invitation requise » avant
-		// même l'adhésion. L'adresse doit correspondre — le jeton n'ouvre que la boîte à laquelle il
-		// a été envoyé.
-		//
-		// Sans session il n'y a personne à rattacher, d'où la garde: c'est `data.invite`, posé par le
-		// layout racine et lisible sans être connecté, qui porte l'invitation jusqu'au tunnel.
-		const invited = user ? await getInvitedMember(cookies) : null
-		const invitedId =
-			invited?.eventId === eventId && isSameEmail(invited.email, user?.email) ? invited.id : null
-
 		// La fiche de ce compte. Rien d'autre ne s'appelle `member`: les rôles, le menu de gestion et
 		// les gardes de /admin en dépendent, et une invitation non honorée n'en donne aucun.
 		const member = user
 			? await getMemberProfile({ eventId, userId }).catch(() => undefined)
 			: undefined
 
-		// La fiche que le tunnel d'inscription peut revendiquer — celle que désigne le jeton, ou celle
-		// retrouvée par adresse sur un évènement en brouillon. Sans compte relié, elle n'ouvre rien
+		// La fiche que le tunnel d'inscription peut revendiquer. `findClaimableMember` en est le seul
+		// juge — l'adhésion et le refus s'y rapportent aussi. Sans compte relié, elle n'ouvre rien
 		// d'autre que /register.
-		const memberToClaim =
-			!member && user
-				? await getMemberProfile({
-						eventId,
-						OR: [
-							{ event: { state: 'draft' }, email: user.email },
-							...(invitedId ? [{ id: invitedId }] : []),
-						],
-					}).catch(() => undefined)
-				: undefined
+		//
+		// Sans session il n'y a personne à rattacher, d'où la garde: c'est `data.invite`, posé par le
+		// layout racine et lisible sans être connecté, qui porte l'invitation jusqu'au tunnel.
+		const claimable = !member && user ? await findClaimableMember(cookies, user, eventId) : null
+		const memberToClaim = claimable
+			? await getMemberProfile({ id: claimable.id }).catch(() => undefined)
+			: undefined
+
+		// Une fiche porte cette adresse sans que le compte l'ait prouvée — ni jeton, ni vérification.
+		// Le calcul vit ici et non dans le tunnel: c'est aussi ce qui ouvre l'évènement en brouillon,
+		// dont l'espace est fermé aux bénévoles et où le tunnel est le seul endroit où le dire.
+		const emailToVerify =
+			user &&
+			!member &&
+			!memberToClaim &&
+			!user.isEmailVerified &&
+			(await prisma.member.count({ where: { eventId, userId: null, email: user.email } }))
+				? user.email
+				: null
 
 		const isLeader = member?.roles.includes('leader') || member?.roles.includes('admin')
 
@@ -81,6 +78,7 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 			event,
 			member,
 			memberToClaim,
+			emailToVerify,
 			memberCanRegister,
 			membersValided,
 			metaTags: eventMetaTags(event, url),

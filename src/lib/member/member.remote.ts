@@ -7,8 +7,8 @@ import {
 	consumeInviteToken,
 	createAvatarPlaceholder,
 	createLog,
+	findClaimableMember,
 	getMemberProfile,
-	isSameEmail,
 	notifyTierQuotaIfNeeded,
 	permission,
 	prisma,
@@ -201,12 +201,14 @@ export const acceptInvite = form(
 
 		// Si le membre existe déjà, on le link au user
 		// TODO: update member contact details from user
-		// Chercher aussi par `userId`: un membre déjà lié dont l'adresse a divergé n'est pas
-		// retrouvé par la sienne, et la paire utilisateur/évènement est unique — la création
-		// plus bas échouerait alors sur la contrainte.
-		const memberAlreadyExist = await prisma.member.findFirst({
-			where: { eventId, OR: [{ userId: session.user.id }, { email: session.user.email }] },
-		})
+		//
+		// Deux questions bien distinctes, que le même `findFirst` mélangeait: la fiche que ce compte
+		// possède déjà — retrouvée par `userId`, son adresse ayant pu diverger — et celle qu'il a le
+		// droit de reprendre, dont `findClaimableMember` est seul juge. Rapprocher par simple égalité
+		// d'adresse donnait la fiche d'une personne invitée à qui ouvrait un compte à son nom.
+		const ownMember = await prisma.member.findFirst({ where: { eventId, userId: session.user.id } })
+		const memberAlreadyExist =
+			ownMember ?? (await findClaimableMember(cookies, session.user, eventId))
 		if (memberAlreadyExist) {
 			const newIsValidedByEvent = isValidedByEvent || memberAlreadyExist.isValidedByEvent
 			const linked = await prisma.member.update({
@@ -231,6 +233,12 @@ export const acceptInvite = form(
 			select: { selfRegisterAllowed: true },
 		})
 		if (!selfRegisterAllowed) error(403)
+
+		// Une fiche porte déjà cette adresse sans que ce compte puisse la reprendre. Rien à créer:
+		// `@@unique([email, eventId])` et la recopie de l'adresse sur le membre rendraient un 500 à
+		// la place de ce que le tunnel sait expliquer.
+		const taken = await prisma.member.count({ where: { eventId, email: session.user.email } })
+		if (taken) error(403, 'Email verification required')
 
 		const { id } = await prisma.member.create({
 			data: {
@@ -289,11 +297,11 @@ export const declineInvite = form(z.object({ memberId: z.string() }), async ({ m
 	const session = await locals.auth.validate()
 	if (!session) error(401)
 
-	// Le droit vient de l'adresse et non d'un lien de membre qui n'existe pas encore: seul son
-	// titulaire la retire, et seulement tant que personne n'a réclamé la fiche.
-	const member = await prisma.member.findUnique({ where: { id: memberId, eventId } })
-	if (!member?.email || member.userId) error(403)
-	if (!isSameEmail(member.email, session.user.email)) error(403)
+	// Le droit vient de l'adresse et non d'un lien de membre qui n'existe pas encore. Refuser une
+	// invitation demande donc la même preuve que l'accepter: retirer l'adresse d'une fiche est une
+	// écriture comme une autre, et coupe l'évènement de la personne qu'il visait.
+	const member = await findClaimableMember(cookies, session.user, eventId)
+	if (member?.id !== memberId || !member.email) error(403)
 	const email = member.email
 
 	const declined = await prisma.member.update({
@@ -323,8 +331,6 @@ export const deleteMember = form(
 		const isSelf = member.id === memberId
 		if (!isSelf) await permission.admin(eventId, locals)
 		if (isSelf && member.roles.includes('owner')) error(403, `Owner can't delete his participation`)
-		if (isSelf && !member.isEmailVerified)
-			error(403, 'You must have to verifed your email to be able to cancel your registration')
 		const deleted = await prisma.member.delete({ where: { id: memberId, eventId } })
 		await createLog('member_delete', { member: deleted, actor: member, isSelf })
 		redirect(303, redirectTo || '/me')

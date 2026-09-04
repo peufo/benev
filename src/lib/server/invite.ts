@@ -99,9 +99,6 @@ export async function getInvite(cookies: Cookies): Promise<Invite | null> {
  * qu'à cette adresse: la présenter vaut la preuve d'accès que demande le lien de vérification,
  * d'où l'email validé sans second message.
  *
- * L'écriture passe par le client étendu et non par `auth.updateUserAttributes`, seul moyen que le
- * drapeau soit recopié sur les `Member` — ce dont dépend `userEmailVerifiedRequired`.
- *
  * Le jeton, lui, survit: le tunnel s'en sert encore pour retrouver le membre jusqu'à l'adhésion.
  */
 export async function claimInvite(
@@ -116,4 +113,29 @@ export async function claimInvite(
 		await prisma.user.update({ where: { id: user.id }, data: { isEmailVerified: true } })
 	}
 	return member
+}
+
+/**
+ * La fiche que ce compte a le droit de revendiquer dans cet évènement: créée par l'organisation,
+ * reliée à personne, et portant son adresse.
+ *
+ * L'égalité des adresses ne suffit pas, il faut avoir prouvé celle-ci — par le jeton envoyé à
+ * cette boîte, ou par la vérification du compte. Sans cette preuve, ouvrir un compte à l'adresse
+ * d'une personne invitée donnerait sa fiche: profil, inscriptions, rôles et identité dans
+ * l'évènement.
+ *
+ * Seul juge de la question: le tunnel, l'adhésion et le refus s'y rapportent tous les trois, et
+ * deux règles pour une même question laissent forcément passer la plus large.
+ */
+export async function findClaimableMember(
+	cookies: Cookies,
+	user: { email: string; isEmailVerified: boolean },
+	eventId: string
+) {
+	// `readValidInviteToken` a déjà écarté le jeton périmé et la fiche déjà reliée.
+	const invited = await getInvitedMember(cookies)
+	if (invited?.eventId === eventId && isSameEmail(invited.email, user.email)) return invited
+
+	if (!user.isEmailVerified) return null
+	return prisma.member.findFirst({ where: { eventId, userId: null, email: user.email } })
 }

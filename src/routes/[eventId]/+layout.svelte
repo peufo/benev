@@ -53,7 +53,10 @@
 		page.route.id === '/[eventId]/register' &&
 			(data.invite?.eventId === data.event.id ||
 				!!data.memberToClaim?.isValidedByEvent ||
-				!!data.member?.isValidedByEvent)
+				!!data.member?.isValidedByEvent ||
+				// Une fiche l'attend, l'adresse reste à prouver: le tunnel est le seul endroit qui
+				// puisse le lui dire, et lui refuser l'entrée le laisserait sans explication.
+				!!data.emailToVerify)
 	)
 
 	let accessGranted = $derived(

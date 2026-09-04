@@ -1,5 +1,14 @@
 import { expect, type Page } from '@playwright/test'
 import cuid from '@paralleldrive/cuid2'
+import { PrismaClient } from '@prisma/client'
+
+/**
+ * La suite tourne avec `EMAIL_DISABLED`: `sendEmail` rend la main avant d'écrire quoi que ce soit,
+ * et aucun lien de vérification n'est lisible depuis le navigateur. La seule façon d'obtenir une
+ * adresse vérifiée — ce qu'exige désormais la reprise d'une fiche invitée — est de poser le
+ * drapeau en base, sur la même que celle du serveur previewé.
+ */
+const prisma = new PrismaClient()
 
 export function useUser(name: string) {
 	// domaine .test (RFC 2606): jamais routable, aucun mail ne peut y arriver
@@ -32,6 +41,15 @@ export function useUser(name: string) {
 		},
 		async expectConnected(page: Page) {
 			await expect(page.getByRole('heading', { name: 'Mes évènements' })).toBeVisible()
+		},
+		/**
+		 * Ce que ferait le clic sur le lien reçu par email. La recopie sur les `Member` est faite à
+		 * la main: le client d'ici n'est pas celui, étendu, de `$lib/server/prisma.ts`.
+		 */
+		async verifyEmail(page?: Page) {
+			await prisma.user.update({ where: { email }, data: { isEmailVerified: true } })
+			await prisma.member.updateMany({ where: { email }, data: { isEmailVerified: true } })
+			if (page) await page.reload()
 		},
 	}
 }

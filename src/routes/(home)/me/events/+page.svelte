@@ -3,9 +3,9 @@
 	import { goto } from '$app/navigation'
 	import { Placeholder } from '$lib/ui'
 	import { Dialog } from 'fuma'
-	import { PlusIcon, ChevronRightIcon, RotateCcwClockIcon } from '@lucide/svelte'
+	import { PlusIcon, ChevronRightIcon, RotateCcwClockIcon, MailWarningIcon } from '@lucide/svelte'
 	import EventEntry from './EventEntry.svelte'
-	import { IsOrganizerForm } from '$lib/me'
+	import { IsOrganizerForm, EmailVerificationButton } from '$lib/me'
 	import type { EventMember } from './types'
 
 	let { data } = $props()
@@ -33,6 +33,22 @@
 		<h2 class="title-sm uppercase">
 			Invitation{data.invitations.length > 1 ? 's' : ''} en attente
 		</h2>
+
+		<!-- La reprise d'une fiche demande une adresse prouvée: le dire ici, où l'invitation se lit,
+		     plutôt que de la laisser buter au bout du tunnel. -->
+		{#if data.emailToVerify}
+			<div class="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+				<p class="flex min-w-0 items-center gap-2 text-sm">
+					<MailWarningIcon size={18} class="shrink-0 text-warning" />
+					<span>
+						Confirme <b class="break-all">{data.emailToVerify}</b> pour reprendre
+						{data.invitations.length > 1 ? 'ces invitations' : 'cette invitation'}.
+					</span>
+				</p>
+				<EmailVerificationButton class="btn shrink-0 btn-sm btn-primary" label="Confirmer" />
+			</div>
+		{/if}
+
 		<ul class="mt-1">
 			{#each data.invitations as member (member.id)}
 				<li
