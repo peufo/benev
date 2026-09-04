@@ -1,12 +1,17 @@
 import { prisma } from '$lib/server'
 import { resolve } from '$app/paths'
+import { getDocs } from '$lib/doc/engine/registry.server'
 
+// Les pages de documentation viennent de leur registre: une page ajoutée y entre sans qu'on
+// pense à cette liste.
 const staticPaths = [
 	'/',
 	'/events',
 	'/events/past',
 	'/open-source',
 	'/contact',
+	'/docs',
+	...getDocs().map(({ path }) => path),
 	'/terms',
 	'/privacy',
 	'/legal-notice',

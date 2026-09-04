@@ -17,6 +17,8 @@ import { diffChanges, hasChanges, projectEvent } from '$lib/log'
  */
 
 const RESERVED_IDS = [
+	'doc',
+	'docs',
 	'auth',
 	'me',
 	'users',
@@ -56,8 +58,7 @@ async function checkEventIdentity(
 	issue: EventIdentityIssue,
 	currentId?: string
 ) {
-	if (RESERVED_IDS.includes(id))
-		invalid(issue.id(`Les noms suivant sont réservés: ${RESERVED_IDS.join(', ')}`))
+	if (RESERVED_IDS.includes(id)) invalid(issue.id(`Ce nom n'est pas disponible`))
 	if (id.startsWith('deleted_'))
 		invalid(issue.id('Les noms ne peuvent pas commencer par "deleted_"'))
 	if (id.startsWith('archived_'))

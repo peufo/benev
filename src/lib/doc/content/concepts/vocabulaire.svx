@@ -1,0 +1,36 @@
+---
+title: Le vocabulaire de benevio
+label: Le vocabulaire
+description: Évènement, secteur, période, membre, inscription, adhésion — les six mots à connaître.
+---
+
+## Évènement
+
+La brique du dessus. Tout lui appartient : les secteurs, les membres, les pages d'information, le
+thème. Une personne peut participer à plusieurs évènements sans que rien ne circule de l'un à
+l'autre.
+
+## Secteur
+
+Une équipe de travail : le bar, la sécurité, le montage. Un secteur a des **responsables**, qui
+gèrent ses créneaux et valident les inscriptions qui le concernent.
+
+## Période
+
+Un créneau de travail dans un secteur : un début, une fin, un nombre de places. C'est l'unité sur
+laquelle un·e bénévole s'inscrit.
+
+## Membre
+
+Une personne rattachée à un évènement. Le même compte est membre de chaque évènement auquel il
+participe, avec un profil et un rôle propres à chacun.
+
+## Inscription
+
+Le lien entre un membre et une période. Elle peut être demandée par le membre puis validée par un
+responsable, ou proposée par un responsable puis acceptée par le membre.
+
+## L'adhésion {#adhesion}
+
+Les informations que tu demandes à quelqu'un pour rejoindre ton évènement. Tu choisis les champs :
+l'âge, un régime alimentaire, une taille de t-shirt, ce que tu veux.

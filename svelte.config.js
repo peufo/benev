@@ -1,9 +1,20 @@
 import adapter from '@sveltejs/adapter-node'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+import { mdsvex } from 'mdsvex'
+import rehypeDocSections from './src/lib/doc/engine/rehypeDocSections.js'
 
 /** @type {import('@sveltejs/kit').Config} */
 export default {
-	preprocess: vitePreprocess(),
+	// `.svx` plutôt que `.md`: `svelte-check` lit cette liste, et `.md` y ferait entrer
+	// AGENTS.md, DESIGN.md et PRODUCT.md, qui ne sont pas des composants.
+	extensions: ['.svelte', '.svx'],
+	// mdsvex d'abord: il rend du Svelte à partir du markdown, que `vitePreprocess` traite
+	// ensuite pour le `lang="ts"` des blocs `<script>` d'une page de documentation.
+	// `rehypeDocSections` découpe la page en chapitres: l'auteur écrit `## Titre`, jamais la carte.
+	preprocess: [
+		mdsvex({ extensions: ['.svx'], rehypePlugins: [rehypeDocSections] }),
+		vitePreprocess(),
+	],
 	kit: {
 		adapter: adapter(),
 		experimental: {

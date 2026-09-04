@@ -1,0 +1,22 @@
+---
+title: Qui peut faire quoi
+label: Rôles et droits
+description: Les quatre rôles d'un évènement et le détail de ce que chacun peut faire.
+---
+
+<script lang="ts">
+	import { RolesGlossary, WhoCanDoWhat } from '$lib/doc/content'
+</script>
+
+## Les quatre rôles
+
+Chaque membre d'un évènement porte un rôle, et un seul. Les droits vont en s'élargissant du membre
+au propriétaire.
+
+<RolesGlossary />
+
+## Le détail des droits
+
+Passe la souris sur les icônes pour lire les conditions.
+
+<WhoCanDoWhat />

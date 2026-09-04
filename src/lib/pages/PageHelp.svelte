@@ -1,5 +1,5 @@
 <script lang="ts">
-	import WhoCanDoWhat from './WhoCanDoWhat.svelte'
+	import { RolesGlossary, WhoCanDoWhat } from '$lib/doc/content'
 	import { page } from '$app/state'
 	import { eventPath } from '$lib/eventPath'
 
@@ -69,4 +69,7 @@
 	</p>
 </section>
 <hr />
+
+<h3>Les rôles au sein de l'évènement</h3>
+<RolesGlossary />
 <WhoCanDoWhat />

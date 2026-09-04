@@ -8,14 +8,20 @@
 
 - [ ] Réaliser un audit de sécurité
 
-- [ ] Dans le menu de navigation principal, Supprimer le lien "open source", ajouter "Documentation" et "prix", adappter un peu mieux responsive.
-
 - [ ] Détecter et journaliser les emails qui non pas été recu par la destinataire.
 
 - [ ] Placer l'indicateur de quota dans la section "Status" des settings
 
-- Les éléments highlight sont moche
-  - La liste des invitations benev/src/routes/(home)/me/events/+page.svelte:38
-  - La période listé dans benev/src/routes/(home)/me/events/EventEntry.svelte:94 (A supprimer ?)
+- [ ] Metre un fond plus présent (avec du grain) pour la doc
 
-- [ ] Le bouton de reset de la recherche ne fonctionne pas. (/members)
+- [ ] Dans le menu de navigation principal, Supprimer le lien "open source", ajouter "Documentation" et "prix", adapter un peu mieux responsive.
+
+- [ ] Limiter le nombre de pages d'un événement
+
+- [ ] Nouvelle navigation
+  - [ ] pages: Au lieu de ce transformé en menu sandwich les pages du header doivent se transformé en onglets (je pense que ca doit rester en haut de page dans une prolongation du header).
+    - [ ] event: Etant donner qu'on ne métrise pas le nombre de page d'une événement, on peut regrouper les pages secondaire dans un onglet "Info"
+    - [ ] event: Le lien vers /[eventId]/me doit ce trouver dans la liste des pages (Au lieu de cliquer sur le nom de l'événement en haut à gauche)
+    - [ ] landing: On a que quatres liens, ca passe
+    - [ ] admin: La page d'aide étant remplacé par la vrai doc, le quota peut être placer dans la section "statut" de la configuration, le lien vers /admin/pages peut être placer dans les settings (TOC ou section pour être accéssible en mobile). Ca réduit le nombre d'onglet à 6. Ce qui devrait être résonnable pour être placer horizontalement
+  - [ ] context: Le changement de context ce fait via un menu

@@ -1,0 +1,20 @@
+---
+title: Créer ton évènement
+label: Créer un évènement
+description: De la création du compte à un évènement prêt à recevoir ses premiers bénévoles.
+---
+
+## Ton compte
+
+Crée un compte, puis un évènement. Tu en es le **propriétaire** : c'est le rôle qui donne tous les
+droits, y compris celui de nommer des administrateur·ices.
+
+## Tes premiers secteurs
+
+Un secteur est une équipe de travail : le bar, la sécurité, le montage. Commence par les créer,
+même vides — les périodes viendront ensuite.
+
+## Les pages d'information
+
+La page d'accueil de ton évènement est ce que tes bénévoles voient en premier. Tu peux en créer
+d'autres : une FAQ, une charte, les conditions d'accès.

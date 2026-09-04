@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { CalendarDays, Heart, Menu, MessagesSquare, type IconProps } from '@lucide/svelte'
+	import {
+		BookOpenTextIcon,
+		CalendarDaysIcon,
+		MenuIcon,
+		MessagesSquareIcon,
+		WalletIcon,
+		type IconProps,
+	} from '@lucide/svelte'
 	import { Popover } from 'fuma'
 	import { on } from 'svelte/events'
 	import type { Component } from 'svelte'
@@ -9,9 +16,10 @@
 	import type { Pathname } from '$app/types'
 
 	const tabs: { path: Pathname; label: string; Icon: Component<IconProps> }[] = [
-		{ path: '/open-source', label: 'Open source', Icon: Heart },
-		{ path: '/contact', label: 'Contact', Icon: MessagesSquare },
-		{ path: '/events', label: 'Évènements', Icon: CalendarDays },
+		{ path: '/#pricing', label: 'Tarifs', Icon: WalletIcon },
+		{ path: '/docs', label: 'Documentation', Icon: BookOpenTextIcon },
+		{ path: '/contact', label: 'Contact', Icon: MessagesSquareIcon },
+		{ path: '/events', label: 'Évènements', Icon: CalendarDaysIcon },
 	]
 </script>
 
@@ -32,7 +40,7 @@
 <Popover class="my-1 min-w-50">
 	{#snippet trigger({ trigger })}
 		<button {...trigger} class="btn btn-square ml-2 lg:hidden">
-			<Menu />
+			<MenuIcon />
 		</button>
 	{/snippet}
 

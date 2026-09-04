@@ -1,0 +1,20 @@
+---
+title: Publier et partager ton évènement
+label: Publier et partager
+description: Passer du brouillon à un évènement public, et diffuser le lien à tes bénévoles.
+---
+
+## Du brouillon au public
+
+Un évènement naît en **brouillon** : toi seul·e le vois. Tant qu'il l'est, personne ne peut
+s'inscrire, et il n'apparaît nulle part.
+
+## Le lien à partager
+
+Une fois publié, ton évènement a une adresse à lui. C'est le seul lien à diffuser : tes bénévoles
+y trouvent les secteurs, les créneaux et le formulaire d'adhésion.
+
+## Inviter des membres
+
+Tu peux aussi inviter quelqu'un directement par courriel. La personne reçoit un lien qui lui crée
+un compte et la rattache à ton évènement.

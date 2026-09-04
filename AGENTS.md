@@ -34,6 +34,7 @@ The non-obvious parts:
 
 - **No `tailwind.config`, no PostCSS.** Tailwind is a Vite plugin (`@tailwindcss/vite`); the
   theme lives in `src/app.css`, alongside `@plugin '@tailwindcss/typography'`.
+- **mdsvex** ne sert qu'à `/docs`: extension `.svx`, préprocesseur déclaré avant `vitePreprocess`.
 - **Lucide (`@lucide/svelte`) is the only icon set.**
 - **Font**: Barlow (400–800) via Google Fonts in `src/app.html`.
 - **`fuma` v2 is linked to a sibling checkout**, not the registry — see [Fuma](#fuma).
@@ -64,7 +65,7 @@ be introduced.
 │   ├── app.css                # Tailwind v4 entry + DaisyUI theme + @utility layer
 │   ├── hooks.server.ts        # Auth middleware (Lucia session handling)
 │   ├── routes/
-│   │   ├── (home)/            # Layout group: marketing, auth, /me, /root, /terms, /contact…
+│   │   ├── (home)/            # Layout group: marketing, /docs, auth, /me, /root, /terms…
 │   │   ├── [eventId]/         # Event-specific pages (public + admin)
 │   │   ├── api/               # Global API routes (ical, scrap-icon)
 │   │   ├── lab/               # Scratch space for UI experiments
@@ -73,6 +74,7 @@ be introduced.
 │   ├── lib/
 │   │   ├── server/            # Server-only modules (auth, prisma, permissions, email, stripe…)
 │   │   ├── models/            # Zod schemas (modelUserCreate, modelEventUpdate…)
+│   │   ├── doc/               # Documentation produit: `engine/` le moteur, `content/` les pages
 │   │   ├── ui/                # Components fuma 2 does not cover
 │   │   ├── email/             # Svelte email template components
 │   │   ├── event/, team/, period/, subscribe/, member/, tag/, pages/, plan/,
@@ -104,6 +106,8 @@ be introduced.
   - Textes légaux, tous montés sur `LegalPage` de `$lib/layout` : `/terms`, `/privacy`,
     `/legal-notice`, `/sales-terms`. Leur liste vit dans `$lib/layout/legal.ts`, qui sert aussi
     le pied de page, les renvois croisés et l'identité de l'éditeur.
+  - `/docs`, `/docs/[...slug]` — documentation produit, plus `/docs/[...slug].md`, `/llms.txt` et
+    `/llms-full.txt` pour la lecture par les machines.
   - `/auth` — login / account creation (`$lib/me/Login.svelte`)
   - `/me/*` — personal dashboard, events, checkouts
   - `/root/*` — superuser tools (users, events, checkouts, messages, mails preview, migrate)
@@ -135,6 +139,7 @@ be introduced.
 | `$lib/email`                | Svelte components for transactional emails.                                                                          |
 | `$lib/plan`                 | Drag-and-drop planning grid for team/period visualization.                                                           |
 | `$lib/pages`                | CMS page rendering, suggestions, and nested path logic.                                                              |
+| `$lib/doc`                  | La documentation produit, en deux moitiés: `engine/` rend et navigue, `content/` est ce qui se lit.                  |
 | `$lib/seo`                  | `defaultMetaTags`, `errorMetaTags`, `mergeMetaTags`, JSON-LD schemas. Rendered **once** in the root layout.          |
 | `$lib/constant`             | `EVENT_TIER` — per-tier member quotas and Stripe price bindings.                                                     |
 | `$lib/log`                  | The event journal: `logMap` (one transform per `LogType`), the feed components, `LOG_FAMILIES`. See below.           |
@@ -276,6 +281,81 @@ section of a member's page. Both routes sit under the leader guard of `/[eventId
 `/root/logs` shows the same feed across events. `email_sent` is excluded from the event feed —
 one line per notification sent would bury everything — while `email_failed` is exactly what an
 organizer needs to see.
+
+## La documentation
+
+`/docs` sert la documentation produit, écrite en markdown dans `src/lib/doc/content/` et rendue par
+**mdsvex** (extension `.svx`, pas `.md` — `svelte-check` lit la liste `extensions` de
+`svelte.config.js`, et `.md` y ferait entrer `AGENTS.md` et ses voisins).
+
+`$lib/doc` se lit en deux moitiés, et **la dépendance ne va que dans un sens**:
+
+- **`engine/`** rend, découpe, convertit et navigue. Il ignore ce qu'il sert. `DocNav.svelte` en
+  fait partie: un composant n'est pas du contenu parce qu'il est un composant.
+- **`content/`** est ce qui se lit — les pages `.svx`, l'ordre dans lequel elles se suivent, et les
+  composants qu'elles emploient (`WhoCanDoWhat`, `RolesGlossary`) avec les données derrière eux.
+  Rien n'y importe le moteur, et `content/index.ts` en est la seule porte.
+
+Un seul module du moteur connaît le contenu: **`engine/registry.server.ts`**, qui lit l'arbre, les
+sources et les jumeaux markdown, et n'expose que des `Doc`. C'est pour cela que
+`docToMarkdown()` prend les jumeaux en argument plutôt que de les lire: la conversion n'a pas à
+savoir quels composants existent, seulement comment les remplacer.
+
+**Une page est du markdown nu.** Le découpage en chapitres appartient au rendu, pas au fichier:
+
+```markdown
+---
+title: Le vocabulaire de benevio
+label: Le vocabulaire
+description: Évènement, secteur, période… — la description SEO et le sous-titre du sommaire.
+---
+
+## Évènement
+
+La brique du dessus.
+
+## L'adhésion {#adhesion}
+
+Ce que tu demandes à quelqu'un pour rejoindre ton évènement.
+```
+
+`engine/rehypeDocSections.js`, greffon rehype déclaré dans `svelte.config.js`, enveloppe chaque
+`##` et ce qui le suit dans une `<section class="surface …">` — le rendu de `Section` de `$lib/ui`,
+dépouillé de ce dont une documentation n'a pas l'usage (icône, sous-titre, action). Ce qui précède
+le premier titre devient un chapeau, hors carte.
+
+Quatre règles, et elles ne se devinent pas:
+
+1. **Les balises de premier niveau restent à la racine.** Le greffon laisse `<script>`, `<style>` et
+   `<svelte:*>` où il les trouve: mdsvex les remonte en tête du composant _après_ lui
+   (`extract_parts`), et enfermées dans une `<section>` elles deviendraient du HTML mort. C'est ce
+   qui permet à une page d'importer `WhoCanDoWhat` et de s'en servir au milieu d'un chapitre.
+2. **L'ancre d'un chapitre est dérivée de son titre** par `slugify()`, sauf si le titre en fige une
+   avec `{#id}`. Une ancre visée par l'aide contextuelle mérite d'être figée: sans cela, reformuler
+   le titre casse le lien. `slug.js` et `rehypeDocSections.js` sont en JavaScript, et non en
+   TypeScript, parce que `svelte.config.js` les importe et que Node ne charge pas de TypeScript.
+3. **`content/tree.ts` ne porte que l'ordre et les groupes.** Titre, libellé et description viennent
+   du frontmatter, pour qu'ils ne puissent pas diverger du contenu. Une entrée du registre sans
+   fichier lève une erreur au démarrage plutôt que de laisser un lien mort. Le slug d'une page est
+   son chemin sous `content/`, et lui n'est jamais dérivé: le renommer casse les liens.
+4. **Tout composant employé dans une page a un jumeau markdown** dans `content/markdownParts.ts`,
+   dérivé des mêmes données que son rendu Svelte (`WhoCanDoWhat` et `RolesGlossary` lisent tous deux
+   `content/permissions.ts` et `$lib/member/roles.ts`). Un test unitaire croise le registre avec les
+   composants réellement employés: sans jumeau, le markdown servi perdrait ce morceau en silence.
+
+La même page est servie en markdown pur sur `/docs/<slug>.md`, indexée par `/llms.txt` et
+concaténée dans `/llms-full.txt` — c'est cette surface que lisent les agents. La source en étant
+déjà, `docToMarkdown()` se contente de retirer le frontmatter et les blocs `<script>`, de poser le
+titre en `#`, d'ôter les `{#id}` et de substituer les jumeaux.
+
+`engine/parse.ts` relit les mêmes `##` pour bâtir le sommaire, avec le `createSlugger()` du greffon: les
+deux parcourent le document dans le même ordre et tombent donc sur les mêmes ancres, doublons
+compris. Il courbe l'apostrophe du libellé, que smartypants a courbée dans le titre rendu.
+
+`content/sources.server.ts` lit les sources brutes une fois à l'import et n'existe qu'au serveur;
+le navigateur ne reçoit que la page compilée, par le glob paresseux de `content/pages.ts`. Les deux
+indexent par slug — le chemin sous `content/`, sans extension — pour que le moteur n'ait jamais de
+chemin de fichier à construire.
 
 ## Fuma
 
