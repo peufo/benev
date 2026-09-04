@@ -461,6 +461,9 @@ export function useEvent(owner: User, name: string) {
 
 			await page.goto(`/${eventId}/admin/settings?form_field=%7B%7D`)
 			await expect(drawer).toBeVisible()
+			// Le premier champ est une liste: le tiroir garde le focus plutôt que d'armer son
+			// déclencheur.
+			await expect(drawer).toBeFocused()
 
 			// Une valeur à choisir dans une liste n'a rien d'obligatoire à remplir: le type ouvre
 			// l'éditeur d'options et referme la case.
@@ -872,6 +875,8 @@ export function useEvent(owner: User, name: string) {
 				const newName = newDrawer.getByLabel('Nom du secteur')
 				// Le secteur précédemment créé ne doit pas prégarnir le suivant.
 				await expect(newName).toHaveValue('')
+				// Le tiroir pose le focus sur son premier champ de saisie: on tape sans cliquer.
+				await expect(newName).toBeFocused()
 				// Saisi avant l'hydratation, le nom serait écrasé par le rendu client, qui repose
 				// la valeur initiale du champ.
 				await expect(async () => {
