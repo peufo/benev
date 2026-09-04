@@ -21,6 +21,7 @@
 	const PRODUCT_LINKS = [
 		{ path: resolve('/events'), label: 'Évènements' },
 		{ path: resolve('/#pricing'), label: 'Tarifs' },
+		{ path: resolve('/docs'), label: 'Documentation' },
 		{ path: resolve('/open-source'), label: 'Open source' },
 		{ path: resolve('/contact'), label: 'Contact' },
 	]
@@ -77,9 +78,7 @@
 				<div class="col-span-2 md:col-span-1">
 					{@render brandmark('h-7')}
 
-					<p class="mt-4 max-w-xs text-base-content/70">
-						Tes bénévoles choisissent leurs créneaux. Tu gardes la vue d'ensemble.
-					</p>
+					<p class="mt-4 max-w-xs text-base-content/70">Laisse tes bénévoles faire :)</p>
 				</div>
 
 				<nav aria-labelledby="footer-produit" class="flex flex-col items-start gap-2 text-sm">

@@ -22,11 +22,12 @@
 					<h1
 						class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary leading-[1.1] tracking-tight"
 					>
-						Tes bénévoles s'inscrivent tout seuls
+						Laisse tes bénévoles faire :)
 					</h1>
 
 					<p class="mt-6 text-lg md:text-xl text-base-content/70 max-w-lg leading-relaxed">
-						Tu poses les secteurs et les créneaux, ils choisissent leur poste. Simple et précis.
+						Tu poses les secteurs et les créneaux, ils choisissent leur poste. C'est simple et
+						précis.
 					</p>
 
 					<div class="mt-8 flex flex-col sm:flex-row items-start gap-4">
