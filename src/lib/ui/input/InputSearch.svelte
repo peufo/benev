@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { XIcon } from '@lucide/svelte'
+	import { SearchIcon } from '@lucide/svelte'
 	import type { FocusEventHandler, FormEventHandler, KeyboardEventHandler } from 'svelte/elements'
-	import { browser } from '$app/env'
 	import { page } from '$app/stores'
 	import { bindValueWithParams } from './action.js'
 
@@ -26,18 +25,16 @@
 		onkeydown,
 		onkeyup,
 	}: Props = $props()
-
-	let inputElement: HTMLInputElement = $state()!
 </script>
 
-<div class="relative {klass}">
+<label class="input input-sm {klass}">
+	<SearchIcon size={16} opacity={0.6} />
 	<input
-		bind:this={inputElement}
 		bind:value
 		name={key}
-		type="text"
-		class="input input-sm w-full pr-8"
+		type="search"
 		placeholder="Recherche"
+		aria-label="Recherche"
 		autocomplete="off"
 		inputmode="search"
 		{onblur}
@@ -46,17 +43,4 @@
 		{onkeyup}
 		use:bindValueWithParams={{ bindEnable: true, initValue: (v) => (value = v) }}
 	/>
-
-	<button
-		class="btn btn-square btn-sm absolute right-0"
-		class:hidden={!browser}
-		style:scale={value ? 0.75 : 0}
-		onclick={() => {
-			value = ''
-			inputElement.dispatchEvent(new Event('input', { bubbles: true }))
-		}}
-		tabindex={value ? 0 : -1}
-	>
-		<XIcon />
-	</button>
-</div>
+</label>
