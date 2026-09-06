@@ -1,16 +1,24 @@
 <script lang="ts">
-	import { ArrowLeftIcon, ArrowRightIcon, FileTextIcon } from '@lucide/svelte'
+	import { tip } from 'fuma'
+	import { ArrowLeftIcon, ArrowRightIcon, ClockIcon, FileTextIcon } from '@lucide/svelte'
 
 	let { data } = $props()
 
 	const Content = $derived(data.content)
 </script>
 
-<header class="px-2 pt-4 pb-2">
-	<h1 class="text-3xl font-bold tracking-tight">{data.doc.title}</h1>
-	{#if data.doc.description}
-		<p class="text-base-content/70 mt-2">{data.doc.description}</p>
-	{/if}
+<header class="flex items-start gap-4 pl-2 pt-4 pb-2">
+	<div class="min-w-0 grow">
+		<h1 class="text-3xl font-bold tracking-tight">{data.doc.title}</h1>
+		{#if data.doc.description}
+			<p class="text-base-content/70 mt-2">{data.doc.description}</p>
+		{/if}
+	</div>
+
+	<span class="badge" use:tip={{ content: 'Temps de lecture' }}>
+		<ClockIcon size={14} />
+		{data.doc.readingTime}&nbsp;min
+	</span>
 </header>
 
 <Content />
@@ -19,13 +27,13 @@
 	{#if data.previous}
 		<a href={data.previous.path} class="btn btn-ghost btn-sm">
 			<ArrowLeftIcon size={16} class="opacity-70" />
-			{data.previous.label}
+			{data.previous.title}
 		</a>
 	{/if}
 
 	{#if data.next}
 		<a href={data.next.path} class="btn btn-ghost btn-sm ml-auto">
-			{data.next.label}
+			{data.next.title}
 			<ArrowRightIcon size={16} class="opacity-70" />
 		</a>
 	{/if}

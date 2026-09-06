@@ -1,7 +1,6 @@
 ---
 title: Le jour J
-label: Le jour J
-description: Les badges à imprimer, le QR de chaque bénévole, les présences et les agendas.
+description: Les badges, le QR code, les présences, les agendas
 ---
 
 ## Les badges {#badges}

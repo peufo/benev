@@ -1,7 +1,6 @@
 ---
 title: Créer ton évènement
-label: Créer ton évènement
-description: Le compte, les réglages qui donnent son allure au site, les secteurs et les créneaux.
+description: Le compte, les réglages, les secteurs, les créneaux
 ---
 
 ## Compte et évènement

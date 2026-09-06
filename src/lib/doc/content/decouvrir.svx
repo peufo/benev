@@ -1,7 +1,6 @@
 ---
 title: Découvrir benevio
-label: Découvrir benevio
-description: Un site pour ton évènement, un planning, et des inscriptions qui se gèrent presque toutes seules.
+description: Le site, le planning, les inscriptions, le prix
 ---
 
 ## Ce que benevio fait

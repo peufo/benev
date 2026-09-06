@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ClockIcon } from '@lucide/svelte'
+
 	let { data } = $props()
 </script>
 
@@ -9,19 +11,30 @@
 	</p>
 </header>
 
-<section class="surface p-3">
-	<ul class="flex flex-col gap-1">
-		{#each data.pages as docPage (docPage.slug)}
-			<li>
-				<a href={docPage.path} class="menu-item flex-col items-start gap-0.5 py-2">
-					<span class="title-md">{docPage.label}</span>
-					{#if docPage.description}
-						<span class="text-base-content/70 text-sm whitespace-normal">
-							{docPage.description}
-						</span>
-					{/if}
-				</a>
-			</li>
-		{/each}
-	</ul>
-</section>
+<!-- Une liste ordonnée: le rang affiché est celui de l'ordre de lecture, autant que le dire ici. -->
+<ol class="grid gap-3 sm:grid-cols-2">
+	{#each data.pages as docPage, index (docPage.slug)}
+		<li class="min-w-0">
+			<a
+				href={docPage.path}
+				class={[
+					'flex h-full flex-col gap-1 rounded-lg p-4 sm:p-5',
+					'bg-base-100 border-soft hover:border-hard border shadow transition-all hover:shadow-md',
+				]}
+			>
+				<div class="flex items-center gap-2 text-sm">
+					<span class="text-primary font-bold text-xl">{index + 1}.</span>
+					<span class="title">{docPage.title}</span>
+					<span class="text-base-content/70 ml-auto flex items-center gap-1.5 text-xs">
+						<ClockIcon size={12} />
+						{docPage.readingTime}&nbsp;min
+					</span>
+				</div>
+
+				{#if docPage.description}
+					<span class="text-base-content/70 text-sm">{docPage.description}</span>
+				{/if}
+			</a>
+		</li>
+	{/each}
+</ol>

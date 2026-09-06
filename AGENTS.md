@@ -303,17 +303,23 @@ y faire.
   Rien n'y importe le moteur, et `content/index.ts` en est la seule porte.
 
 Un seul module du moteur connaît le contenu: **`engine/registry.server.ts`**, qui lit l'arbre, les
-sources et les jumeaux markdown, et n'expose que des `Doc`. C'est pour cela que
-`docToMarkdown()` prend les jumeaux en argument plutôt que de les lire: la conversion n'a pas à
-savoir quels composants existent, seulement comment les remplacer.
+sources et les jumeaux markdown, et n'en expose que trois formes: `DocPage` l'identité, de quoi
+nommer une page et l'atteindre — c'est tout ce que reçoivent la navigation et les voisins;
+`DocSummary`, ce qu'il faut pour annoncer une page sans la servir — l'index et `llms.txt`; et `Doc`,
+la page entière, source comprise. C'est pour cela que `docToMarkdown()` prend les jumeaux en
+argument plutôt que de les lire: la conversion n'a pas à savoir quels composants existent, seulement
+comment les remplacer.
+
+**Le temps de lecture se mesure sur le markdown converti**, jamais sur la source. C'est la seule
+forme où les jumeaux ont pris la place de leurs composants: comptée sur la source, la page des rôles
+perdrait les dix-sept lignes du tableau des droits, réduites à une balise de vingt caractères.
 
 **Une page est du markdown nu.** Le découpage en chapitres appartient au rendu, pas au fichier:
 
 ```markdown
 ---
 title: Ouvrir les inscriptions
-label: Ouvrir les inscriptions
-description: Publier, décider ce que les gens font seuls… — la description SEO et le sous-titre du sommaire.
+description: Publier, l'adhésion, les conditions d'accès
 ---
 
 ## Publier ton évènement
@@ -345,10 +351,14 @@ Cinq règles, et elles ne se devinent pas:
 3. **Seul un `##` reçoit une ancre**, et lui seul entre au sommaire. Un `{#id}` posé sur un `###`
    traverserait le greffon intact et Svelte y lirait l'ouverture d'un bloc: la page ne compile plus.
    Tout lien interne vise donc un `##`.
-4. **`content/tree.ts` ne porte que l'ordre de lecture.** Titre, libellé et description viennent
-   du frontmatter, pour qu'ils ne puissent pas diverger du contenu. Une entrée du registre sans
-   fichier lève une erreur au démarrage plutôt que de laisser un lien mort. Le slug d'une page est
-   son chemin sous `content/`, et lui n'est jamais dérivé: le renommer casse les liens.
+4. **`content/tree.ts` ne porte que l'ordre de lecture** — celui de la navigation, des boutons
+   précédent/suivant, et du rang que l'index affiche sur chaque carte. Titre et description viennent
+   du frontmatter, pour qu'ils ne puissent pas diverger du contenu. **La description est un
+   fragment, pas une phrase**: elle tient sur une carte de l'index, sous le titre de la page, et
+   dans les métadonnées — un test la plafonne à dix mots et lui refuse le point final. Une entrée du
+   registre sans fichier lève une erreur au démarrage plutôt que de laisser un lien mort. Le slug
+   d'une page est son chemin sous `content/`, et lui n'est jamais dérivé: le renommer casse les
+   liens.
 5. **Tout composant employé dans une page a un jumeau markdown** dans `content/markdownParts.ts`,
    dérivé des mêmes données que son rendu Svelte (`WhoCanDoWhat` et `RolesGlossary` lisent tous deux
    `content/permissions.ts` et `$lib/member/roles.ts`). Un test unitaire croise le registre avec les

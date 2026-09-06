@@ -36,7 +36,7 @@
 					class:font-semibold={isCurrent}
 					aria-current={isCurrent ? 'page' : undefined}
 				>
-					<span class="truncate">{pageEntry.label}</span>
+					<span class="truncate">{pageEntry.title}</span>
 				</a>
 
 				{#if isCurrent && sections.length}

@@ -1,7 +1,6 @@
 ---
 title: Ton équipe
-label: Ton équipe
-description: Les rôles d'un évènement, ce que chacun peut faire, et comment on entre dans ta liste.
+description: Les rôles, les droits, les invitations
 ---
 
 <script lang="ts">

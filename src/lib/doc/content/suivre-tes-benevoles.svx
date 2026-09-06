@@ -1,7 +1,6 @@
 ---
 title: Suivre tes bénévoles
-label: Suivre tes bénévoles
-description: Le tableau de bord, les inscriptions à trancher, les courriels qui partent, et tes exports.
+description: Le tableau de bord, les états, les courriels, les exports
 ---
 
 ## Ton tableau de bord

@@ -1,7 +1,6 @@
 ---
 title: Ouvrir les inscriptions
-label: Ouvrir les inscriptions
-description: Publier ton évènement, décider ce que les gens font seuls, et choisir ce que tu leur demandes.
+description: Publier, l'adhésion, les conditions d'accès
 ---
 
 ## Publier ton évènement {#publier}

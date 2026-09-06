@@ -2,8 +2,9 @@ import { resolve } from '$app/paths'
 import { DOC_MARKDOWN_PARTS, DOC_SLUGS } from '../content'
 import { DOC_SOURCES } from '../content/sources.server'
 import { readFrontmatter, readSections } from './parse'
+import { readingTime } from './readingTime'
 import { docToMarkdown } from './toMarkdown'
-import type { Doc, DocPage } from './types'
+import type { Doc, DocPage, DocSummary } from './types'
 
 /**
  * Le seul module du moteur qui connaisse le contenu: il lit l'arbre, les sources et les jumeaux
@@ -20,15 +21,16 @@ const docs = new Map<string, Doc>(
 		if (source === undefined) throw new Error(`Page de documentation introuvable: ${slug}.svx`)
 
 		const { data, body } = readFrontmatter(source)
-		const title = data.title || slug
 		return [
 			slug,
 			{
 				slug,
 				path: resolve('/(home)/docs/[...slug]', { slug }),
-				title,
-				label: data.label || title,
+				title: data.title || slug,
 				description: data.description || '',
+				// Le temps se mesure sur le markdown converti et non sur la source: c'est la seule
+				// forme où les composants ont cédé la place à ce qu'ils rendent.
+				readingTime: readingTime(docToMarkdown(source, DOC_MARKDOWN_PARTS)),
 				sections: readSections(body),
 				source,
 			},
@@ -49,6 +51,11 @@ export function getDocNav(): DocPage[] {
 	return DOC_SLUGS.map(asDocPage)
 }
 
+/** Les pages annoncées sans être servies: l'index de la documentation et `llms.txt`. */
+export function getDocSummaries(): DocSummary[] {
+	return getDocs().map(({ sections: _sections, source: _source, ...summary }) => summary)
+}
+
 /**
  * Les pages qui encadrent celle-ci dans l'ordre de lecture. Réduites à leur identité: la source
  * d'une page voisine n'a rien à faire au navigateur.
@@ -62,8 +69,8 @@ export function getDocNeighbours(slug: string) {
 }
 
 function asDocPage(slug: string): DocPage {
-	const { path, label } = docs.get(slug)!
-	return { slug, path, label }
+	const { path, title } = docs.get(slug)!
+	return { slug, path, title }
 }
 
 export function getDocMarkdown(slug: string): string | undefined {

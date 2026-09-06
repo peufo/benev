@@ -1,4 +1,4 @@
-import { getDocNav, getDocs } from '$lib/doc/engine/registry.server'
+import { getDocSummaries } from '$lib/doc/engine/registry.server'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '$lib/seo'
 
 /**
@@ -7,12 +7,11 @@ import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '$lib/seo'
  * là que les agents le cherchent.
  */
 export function GET({ url }) {
-	const descriptions = new Map(getDocs().map((doc) => [doc.slug, doc.description]))
-
-	const lines = getDocNav().map(({ slug, path, label }) => {
-		const description = descriptions.get(slug)
-		return `- [${label}](${url.origin}${path}.md)${description ? `: ${description}` : ''}`
-	})
+	// Le temps de lecture n'y entre pas: il s'adresse à quelqu'un qui lit, pas à ce qui indexe.
+	const lines = getDocSummaries().map(
+		({ path, title, description }) =>
+			`- [${title}](${url.origin}${path}.md)${description ? `: ${description}` : ''}`
+	)
 
 	return text(
 		[

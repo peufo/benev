@@ -1,6 +1,7 @@
 import { describe, it } from 'vitest'
 import { createSlugger, readHeading, slugify } from '../lib/doc/engine/slug.js'
 import { readComponents, readFrontmatter, readSections } from '../lib/doc/engine/parse'
+import { readingTime } from '../lib/doc/engine/readingTime'
 import { docToMarkdown } from '../lib/doc/engine/toMarkdown'
 import { DOC_MARKDOWN_PARTS, DOC_SLUGS } from '../lib/doc/content'
 
@@ -161,6 +162,39 @@ describe('surface markdown', () => {
 	})
 })
 
+describe('temps de lecture', () => {
+	it('ne descend jamais sous la minute', ({ expect }) => {
+		expect(readingTime('Trois mots seulement')).toBe(1)
+		expect(readingTime('')).toBe(1)
+	})
+
+	it('croît avec la longueur du texte', ({ expect }) => {
+		const paragraphe = 'mot '.repeat(200)
+		expect(readingTime(paragraphe)).toBe(1)
+		expect(readingTime(paragraphe.repeat(4))).toBe(4)
+	})
+
+	/** Ni le code ni le `<script>` d'une page ne se lisent: les compter gonflerait le chiffre. */
+	it('ne compte ni le code ni les balises', ({ expect }) => {
+		const code = ['```ts', 'mot '.repeat(400), '```'].join('\n')
+		expect(readingTime(code)).toBe(1)
+		expect(readingTime(`<script>${'mot '.repeat(400)}</script>`)).toBe(1)
+	})
+
+	/** Le libellé d'un lien se lit, son adresse non. */
+	it("ne compte pas l'adresse d'un lien", ({ expect }) => {
+		expect(readingTime('[un](/docs/creer-ton-evenement#periodes)')).toBe(readingTime('un'))
+	})
+
+	it('donne à chaque page un temps de lecture', ({ expect }) => {
+		for (const { slug, source } of pages) {
+			const minutes = readingTime(docToMarkdown(source, DOC_MARKDOWN_PARTS))
+			expect(minutes, slug).toBeGreaterThanOrEqual(1)
+			expect(Number.isInteger(minutes), slug).toBe(true)
+		}
+	})
+})
+
 describe("règles d'écriture", () => {
 	/**
 	 * Le rendu ouvre une carte à chaque `##`: ce qui précède le premier titre flotterait hors de
@@ -194,6 +228,19 @@ describe("règles d'écriture", () => {
 				expect(DOC_SLUGS, where).toContain(target)
 				if (anchor) expect(anchors.get(target) ?? [], where).toContain(anchor)
 			}
+		}
+	})
+
+	/**
+	 * La description tient sur une carte de l'index et sous le titre de la page: un fragment, pas
+	 * une phrase. Le plafond est large — la phrase à laquelle elle échappe en faisait quinze — mais
+	 * sans lui elle y revient au premier ajout de page.
+	 */
+	it('donne à chaque page une description courte et sans phrase', ({ expect }) => {
+		for (const { slug, source } of pages) {
+			const { description } = readFrontmatter(source).data
+			expect(description.split(/\s+/).length, slug).toBeLessThanOrEqual(10)
+			expect(description, slug).not.toMatch(/[.!?]$/)
 		}
 	})
 })
