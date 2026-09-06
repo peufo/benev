@@ -5,35 +5,39 @@ description: Le tableau de bord, les états, les courriels, les exports
 
 ## Ton tableau de bord
 
-C'est l'écran à ouvrir chaque jour. Il rassemble qui vient d'arriver, quelles inscriptions attendent
-une réponse, où en est le remplissage secteur par secteur, et le journal de ce qui s'est passé.
+C'est l'écran à ouvrir chaque jour. Il rassemble :
+
+- qui vient d'arriver,
+- quelles inscriptions attendent une réponse,
+- où en est le remplissage secteur par secteur,
+- le journal de ce qui s'est passé.
 
 Un·e responsable y voit les mêmes blocs, restreints à ses propres secteurs.
 
 ## Les quatre états {#etats}
 
-Une inscription est dans l'un de quatre états :
+Une inscription est dans l'un de ces quatre états :
 
-- **Demande en cours** — elle attend une réponse.
-- **Validée** — c'est confirmé des deux côtés.
-- **Déclinée** — la personne à qui on l'a proposée a dit non.
-- **Annulée** — celle qui l'a créée est revenue dessus.
+- **Demande en cours** : elle attend une réponse.
+- **Validée** : c'est confirmé des deux côtés.
+- **Déclinée** : la personne à qui on l'a proposée a dit non.
+- **Annulée** : celle qui l'a créée est revenue dessus.
 
-Rien ne disparaît : une inscription déclinée ou annulée garde sa ligne, et se rétablit.
+Rien ne disparaît : une inscription déclinée ou annulée garde sa ligne et peut être rétablie.
 
 ## Qui doit répondre {#qui-repond}
 
 **Une inscription attend toujours le camp qui ne l'a pas créée.**
 
 Un membre demande un créneau : les responsables du secteur confirment ou déclinent. Un responsable
-propose un créneau : c'est le membre qui accepte ou refuse. Celui qui a créé l'inscription, lui, ne
-peut que l'annuler.
+propose un créneau : c'est le membre qui accepte ou refuse. Celui qui a créé l'inscription ne peut
+que l'annuler.
 
-Le tableau de bord en fait un filtre. **« Chez nous »** rassemble ce que tu as à trancher, **« Chez
+Le tableau de bord en fait un filtre : **« Chez nous »** rassemble ce que tu as à trancher, **« Chez
 le membre »** ce que tu as proposé et qui reste sans réponse.
 
 Quand tu inscris quelqu'un [qui n'a pas encore de compte](/docs/ton-equipe#membre-compte),
-l'inscription est validée d'office : personne ne peut répondre à sa place.
+l'inscription est validée d'office, personne ne peut répondre à sa place.
 
 ## Les courriels {#courriels}
 
@@ -41,10 +45,10 @@ Chaque création et chaque changement d'état envoie un message : vers les respo
 quand c'est le membre qui a bougé, vers le membre quand ce sont les responsables. Chacun règle
 ensuite ce qu'il veut recevoir depuis son espace personnel.
 
-### Les six modèles que tu réécris
+### Les six modèles que tu peux réécrire
 
-Depuis **Publications**, tu réécris à ta façon les messages qui vont vers tes bénévoles. Chacun
-arrive avec un texte par défaut qui fonctionne déjà.
+Depuis **Publications**, tu peux réécrire à ta façon les messages qui vont vers tes bénévoles.
+Chacun arrive avec un texte par défaut qui fonctionne déjà.
 
 | Modèle | Quand il part |
 | --- | --- |
@@ -60,10 +64,9 @@ d'adresse, la réinitialisation de mot de passe ou la confirmation de paiement.
 
 ### Les variables
 
-Dans l'éditeur, tu insères des valeurs que benevio remplace à l'envoi : le prénom, le nom de
-l'évènement, le secteur, le créneau concerné, le lien pour accepter. **Chacune de
-[tes propres questions](/docs/ouvrir-les-inscriptions#adhesion) est disponible aussi** — de quoi
-rappeler à quelqu'un la taille de t-shirt qu'il a annoncée.
+Dans l'éditeur, tu peux insérer des valeurs que benevio remplace à l'envoi : le prénom, le nom de
+l'évènement, le secteur, le créneau concerné ou le lien pour accepter. **Chacune de
+[tes propres questions](/docs/ouvrir-les-inscriptions#adhesion) est disponible aussi.**
 
 Il n'y a pas d'aperçu : pour tester un modèle, envoie-le-toi depuis une seconde adresse.
 
@@ -85,8 +88,8 @@ Filtre sur « secteur : bar » et « samedi », et tu imprimes les badges de l'�
 
 ### Enregistrer une vue
 
-Un jeu de filtres qui te resservira se garde sous un nom. Tous tes responsables le retrouvent, et
-une vue suit quand tu [dupliques ton évènement](/docs/creer-ton-evenement#dupliquer).
+Tu peux garder sous un nom un jeu de filtres qui te resservira. Tous tes responsables le retrouvent,
+et une vue suit quand tu [dupliques ton évènement](/docs/creer-ton-evenement#dupliquer).
 
 ## Le quota {#quota}
 

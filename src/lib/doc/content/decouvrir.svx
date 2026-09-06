@@ -1,15 +1,16 @@
 ---
 title: Découvrir benevio
-description: Le site, le planning, les inscriptions, le prix
+description: Le vocabulaire, ton site public, ton espace de gestion
 ---
 
 ## Ce que benevio fait
 
 - **Un site**, avec sa propre adresse, que tu peux diffuser facilement.
-- **Un planning** découpé en secteur et en créneaux.
-- **Des inscriptions** initiées par un responsable ou par le membre lui-même. Les courriels de demande de validations partent tout seuls.
+- **Un planning** découpé en secteurs et en créneaux.
+- **Des inscriptions** initiées par un responsable ou par le membre lui-même. Les courriels de
+  demande et de validation partent tout seuls.
 
-Le jour venu, tu peux imprimer les badges, les plannings et les listes de distributions.
+Le jour venu, tu peux imprimer les badges, les plannings et les listes de distribution.
 
 ## Les mots à connaître {#vocabulaire}
 
@@ -22,8 +23,8 @@ personne peut participer à plusieurs évènements sans que rien ne circule de l
 
 ### Secteur
 
-C'est une équipe de travail comme par exemple, le bar, la sécurité ou le montage. Chaque secteur a ses **responsables**, qui
-gèrent ses créneaux et répondent à ses inscriptions.
+C'est une équipe de travail, comme par exemple le bar, la sécurité ou le montage. Chaque secteur a
+ses **responsables**, qui gèrent ses créneaux et répondent à ses inscriptions.
 
 ### Période
 
@@ -33,13 +34,13 @@ un·e bénévole s'inscrit. Côté gestion on dit « période », côté bénév
 ### Inscription
 
 Le lien entre un membre et un créneau. Une inscription peut être dans un des
-[états](/docs/suivre-tes-benevoles#etats) suivant : demandée, validée, déclinée ou annulée.
+[états](/docs/suivre-tes-benevoles#etats) suivants : demandée, validée, déclinée ou annulée.
 
 ### Membre
 
-N'importe quels personne en lien avec ton évènement. En plus de ses inscriptions et responsablités,
-sa fiche contient touts les informations que tu veux y rattacher.
-A noter qu'un membre n'est pas forcément [relié à un compte utilsateur](/docs/ton-equipe#membre-compte).
+N'importe quelle personne en lien avec ton évènement. En plus de ses inscriptions et de ses
+responsabilités, sa fiche contient toutes les informations que tu veux y rattacher. À noter qu'un
+membre n'est pas forcément [relié à un compte utilisateur](/docs/ton-equipe#membre-compte).
 
 ### Adhésion
 
@@ -51,16 +52,17 @@ Ce que tu demandes à quelqu'un pour rejoindre ton évènement : les information
 C'est `benev.io/ton-evenement`, le seul lien à diffuser.
 Tes bénévoles y trouvent les secteurs et leur espace personnel une fois inscrits.
 
-Tu peux éditer le contenu de la page d'accueil et ajouter d'autre pages complémentaires:
+Tu peux éditer le contenu de la page d'accueil et ajouter d'autres pages complémentaires :
 
-- **Page publique** : FAQ, conditions, etc...
-- **Charte des bénévole** : Devant être lue lors de l'adhésion
-- **Page de membre** : Pages personalisées accésibles uniquement par les membres
+- **Page publique** : FAQ, conditions, etc.
+- **Charte des bénévoles** : devant être lue lors de l'adhésion.
+- **Page de membre** : page personnalisée accessible uniquement par les membres.
 
 ## Ton espace de gestion {#gestion}
 
-C'est ton envers du décor. Tu y trouveras, le tableau de bord, la planification la
-table des membres et des inscriptions, la configuration et la gestion des tes publications (pages, models d'email, badges).
+C'est ton envers du décor. Tu y trouveras le tableau de bord, la planification, la table des membres
+et des inscriptions, la configuration et la gestion de tes publications (pages, modèles de courriel,
+badges).
 
-Cet espace est accéssibles pour [les adminitrateur·ices et les responsable](/docs/ton-equipe#roles).
+Cet espace est accessible aux [administrateur·ices et aux responsables](/docs/ton-equipe#roles).
 Un·e responsable ne peut gérer que ses propres secteurs.

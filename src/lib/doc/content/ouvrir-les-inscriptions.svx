@@ -5,17 +5,17 @@ description: Publier, l'adhésion, les conditions d'accès
 
 ## Publier ton évènement {#publier}
 
-Ton évènement est dans l'un de trois états, que tu changes depuis **Configuration** :
+Ton évènement est dans l'un de ces trois états, que tu changes depuis **Configuration** :
 
-- **En construction** — ton brouillon. Seuls tes responsables y accèdent.
-- **Publié** — le site est visible de tous.
-- **Archivé** — l'évènement est passé, il se referme comme un brouillon.
+- **En construction** : c'est ton brouillon, seuls tes responsables y accèdent.
+- **Publié** : le site est visible de tous.
+- **Archivé** : l'évènement est passé, il se referme comme un brouillon.
 
-Rien n'est définitif : tu peux repasser en brouillon, puis republier.
+Rien n'est définitif, tu peux repasser en brouillon puis republier.
 
 ## Le libre-service {#autonomie}
 
-Publier ne suffit pas. Deux cases décident du reste :
+Publier ne suffit pas, deux cases décident du reste :
 
 - **Tout le monde peut devenir membre sans invitation.** Décochée, ton évènement est sur invitation
   seule, et qui arrive par le lien lit « Invitation requise ».
@@ -24,9 +24,11 @@ Publier ne suffit pas. Deux cases décident du reste :
 
 Les deux cochées, c'est le libre-service. Les deux décochées, tu fais tout à la main.
 
-Trois réglages complètent ça : autoriser ou non les membres à annuler leurs inscriptions, tolérer un
-chevauchement entre deux créneaux d'une même personne, et fixer une date de fin des inscriptions.
-Un secteur peut fermer plus tôt que l'évènement.
+Trois réglages complètent ça :
+
+- autoriser ou non les membres à annuler leurs inscriptions,
+- tolérer un chevauchement entre deux créneaux d'une même personne,
+- fixer une date de fin des inscriptions, qu'un secteur peut avancer pour lui-même.
 
 ## L'adhésion {#adhesion}
 
@@ -39,21 +41,21 @@ benevio demande toujours le nom, le prénom et le courriel. Tu peux exiger en pl
 vérifiée, une adresse postale, un téléphone, une date de naissance ou une photo.
 
 **Demande le strict nécessaire.** Chaque case cochée est un écran de plus entre la personne et son
-premier créneau, et beaucoup s'inscrivent depuis leur téléphone, une seule fois.
+premier créneau.
 
 ### Tes propres questions
 
-Au-delà, tu poses les questions que tu veux : une taille de t-shirt, un régime alimentaire, un
-permis de conduire, une motivation. Six formats sont disponibles — texte court, texte long, nombre,
+Tu peux ensuite poser les questions que tu veux : une taille de t-shirt, un régime alimentaire, un
+permis de conduire, une motivation. Six formats sont disponibles : texte court, texte long, nombre,
 oui/non, liste à choix, liste à choix multiple.
 
-Chaque question porte trois réglages : **visible par les membres**, **modifiable par les membres**,
-**obligatoire**. Une question invisible aux membres est l'endroit où tu notes ce qui ne regarde que
-toi.
+Chaque question porte trois réglages : **visible par les membres**, **modifiable par les membres**
+et **obligatoire**. Une question invisible aux membres est l'endroit où tu notes ce qui ne regarde
+que toi.
 
 Ces réponses te resservent partout : colonnes et filtres de tes tables,
 [conditions d'accès à un secteur](#conditions),
-[variables de tes courriels](/docs/suivre-tes-benevoles#courriels), couleurs de tes
+[variables de tes courriels](/docs/suivre-tes-benevoles#courriels) et couleurs de tes
 [badges](/docs/le-jour-j#badges).
 
 ### La charte
@@ -73,20 +75,20 @@ Le bar demande d'être majeur·e, la navette demande le permis. Les **conditions
 secteur font ce tri toutes seules.
 
 Sans condition, un secteur est ouvert à tous les membres. Dès qu'il en porte une, il faut **toutes**
-les remplir pour qu'il apparaisse. Tu peux exiger d'être un membre approuvé, un âge minimum, ou une
+les remplir pour qu'il apparaisse. Tu peux exiger d'être un membre approuvé, un âge minimum ou une
 réponse précise à l'une de tes questions.
 
-Tes responsables passent quand même, et peuvent y inscrire qui ils veulent à la main. Une personne
+Tes responsables passent quand même et peuvent y inscrire qui ils veulent à la main. Une personne
 déjà inscrite garde sa place, même si elle cesse de remplir la condition.
 
-**Le piège** : une condition qui porte sur une question que les membres ne remplissent pas eux-mêmes
-bloque tout le monde. Si tu réserves un secteur à « permis de conduire : oui », assure-toi que la
-question est **modifiable par les membres**.
+**Attention** : une condition qui porte sur une question que les membres ne remplissent pas
+eux-mêmes bloque tout le monde. Si tu réserves un secteur à « permis de conduire : oui », assure-toi
+que la question est **modifiable par les membres**.
 
 ## Diffuser le lien
 
 Une fois publié, ton évènement a son adresse, que la configuration te donne à copier. C'est le seul
-lien à partager : il mène à tout le reste.
+lien à partager, il mène à tout le reste.
 
 Tu peux aussi [inviter quelqu'un par courriel](/docs/ton-equipe#invitation) depuis ta liste de
 membres, et le nommer responsable au passage.

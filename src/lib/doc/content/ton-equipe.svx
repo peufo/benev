@@ -10,14 +10,17 @@ description: Les rôles, les droits, les invitations
 ## Les quatre rôles {#roles}
 
 Chaque membre porte un rôle, et chacun contient le précédent : un·e administrateur·ice est aussi
-responsable, et responsable est aussi membre.
+responsable, et un·e responsable est aussi membre.
 
 <RolesGlossary />
 
-Ces rôles ne se choisissent pas dans une liste, ils se déduisent de la situation. Nommer quelqu'un
-responsable, c'est le [rattacher à un secteur](/docs/creer-ton-evenement#secteurs) — l'en retirer lui
-retire son rôle. Le rôle d'administrateur·ice se donne depuis la fiche d'un membre, et seul le
-propriétaire peut le faire. Celui de propriétaire, lui, ne se transmet pas.
+Ces rôles ne se choisissent pas dans une liste, ils se déduisent de la situation :
+
+- Nommer quelqu'un responsable, c'est le
+  [rattacher à un secteur](/docs/creer-ton-evenement#secteurs). L'en retirer lui retire son rôle.
+- Le rôle d'administrateur·ice se donne depuis la fiche d'un membre, et seul le propriétaire peut le
+  faire.
+- Le rôle de propriétaire ne se transmet pas.
 
 ## Qui peut faire quoi {#droits}
 
@@ -27,13 +30,14 @@ Passe la souris sur les icônes pour lire les conditions.
 
 ## Membre ou compte {#membre-compte}
 
-Un **membre** est une fiche dans ton évènement. Un **compte** est quelqu'un qui se connecte. Les deux
-existent séparément, et c'est ce qui te permet de travailler d'avance.
+Un **membre** est une fiche dans ton évènement. Un **compte** est quelqu'un qui se connecte. Les
+deux existent séparément, ce qui te permet de travailler d'avance.
 
-Quand tu invites quelqu'un, sa fiche existe aussitôt : tu peux la remplir, l'inscrire à des créneaux,
-imprimer son badge. La personne, elle, ne verra ses créneaux qu'une fois son compte réclamé. C'est
-pourquoi [les inscriptions que tu crées pour elle sont validées d'emblée](/docs/suivre-tes-benevoles#qui-repond)
-— il n'y a personne pour répondre.
+Quand tu invites quelqu'un, sa fiche existe aussitôt : tu peux la remplir, l'inscrire à des créneaux
+et imprimer son badge. La personne, elle, ne verra ses créneaux qu'une fois son compte réclamé.
+C'est pourquoi
+[les inscriptions que tu crées pour elle sont validées d'emblée](/docs/suivre-tes-benevoles#qui-repond),
+il n'y a personne pour répondre.
 
 Ce qui rattache un compte à une fiche, c'est l'adresse courriel, **et seulement si elle est
 prouvée** : par le lien d'invitation reçu dans cette boîte, ou par une adresse déjà vérifiée. Sans
@@ -42,15 +46,15 @@ son adresse.
 
 ## Inviter quelqu'un {#invitation}
 
-L'invitation part de ta liste de membres, avec les secteurs dont la personne sera responsable si
-c'est le cas. Elle reçoit un lien qui la rattache à ton évènement.
+L'invitation part de ta liste de membres, avec les secteurs dont la personne sera responsable le cas
+échéant. Elle reçoit un lien qui la rattache à ton évènement.
 
 **Inviter vaut approbation** : la personne compte dans ton [quota](/docs/suivre-tes-benevoles#quota)
 dès l'envoi, pas à son arrivée.
 
 ### Corriger une adresse
 
-Tu t'es trompé·e d'adresse ? Corrige-la et renvoie l'invitation : le lien précédent ne vaut alors
+Tu t'es trompé·e d'adresse ? Corrige-la et renvoie l'invitation, le lien précédent ne vaut alors
 plus rien.
 
 Si la personne est connectée avec une autre adresse que celle que tu as invitée, benevio ne rattache
@@ -60,5 +64,4 @@ compte et ignorer l'invitation.
 ### Quand on décline
 
 Décliner **ne supprime pas la fiche**. Elle reste dans ta liste, privée de son adresse et de ses
-notifications. Tu vois donc qu'il s'est passé quelque chose, et tu peux corriger l'adresse et
-réinviter, ou supprimer la fiche.
+notifications. Tu peux alors corriger l'adresse et réinviter, ou supprimer la fiche.
