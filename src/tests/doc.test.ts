@@ -160,3 +160,40 @@ describe('surface markdown', () => {
 		expect(markdown).toContain('| Nommer des administrateur·ices | oui | non | non | non |')
 	})
 })
+
+describe("règles d'écriture", () => {
+	/**
+	 * Le rendu ouvre une carte à chaque `##`: ce qui précède le premier titre flotterait hors de
+	 * toute carte. Les balises de premier niveau ne comptent pas — mdsvex les remonte en tête du
+	 * composant, et le greffon les laisse à la racine.
+	 */
+	it('ne met rien avant le premier chapitre', ({ expect }) => {
+		for (const { slug, source } of pages) {
+			const { body } = readFrontmatter(source)
+			const lede = body.replace(/<script[\s\S]*?<\/script>/g, '').split(/^##[^#]/m)[0]
+			expect(lede.trim(), slug).toBe('')
+		}
+	})
+
+	/**
+	 * Un renvoi mort ne se voit qu'en le suivant. Le registre sait quelles pages existent et quelles
+	 * ancres elles offrent: autant le lui demander ici.
+	 */
+	it('ne renvoie qu’à des pages et des ancres qui existent', ({ expect }) => {
+		const anchors = new Map(
+			pages.map(({ slug, source }) => [slug, readSections(source).map(({ id }) => id)])
+		)
+
+		for (const { slug, source } of pages) {
+			for (const [, href] of source.matchAll(/\]\((\/docs[^)\s]*)\)/g)) {
+				const [path, anchor] = href.split('#')
+				const target = path.replace(/^\/docs\/?/, '')
+				// L'index de la documentation n'a ni slug ni ancre à vérifier.
+				if (!target) continue
+				const where = `${slug} renvoie à ${href}`
+				expect(DOC_SLUGS, where).toContain(target)
+				if (anchor) expect(anchors.get(target) ?? [], where).toContain(anchor)
+			}
+		}
+	})
+})

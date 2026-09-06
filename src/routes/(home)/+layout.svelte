@@ -20,9 +20,7 @@
 <!-- Dégradé de page en `accent`. Composité sur blanc, le vert dérive vers le cyan (173°) et
      se lit comme un voile froid; l'orange dérive vers la crème (75°) et se lit comme du papier.
      Le repérage temporel des plannings vit sous `[eventId]`, jamais sur ce groupe de routes. -->
-<div
-	class="absolute inset-0 bg-linear-to-b from-accent/5 via-transparent to-transparent -z-10"
-></div>
+<div class="absolute inset-0 bg-linear-to-b from-accent/10 via-accent/5 to-transparent -z-10"></div>
 
 <Header user={data.user}>
 	{#snippet start()}

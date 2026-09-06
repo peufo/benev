@@ -1,0 +1,51 @@
+---
+title: Comment l'application est organisée
+label: L'anatomie
+description: Le site public que voient tes bénévoles, l'espace de gestion que tu es seul·e à ouvrir.
+---
+
+## Le site public
+
+C'est `benev.io/ton-evenement`, l'adresse que tu diffuses. On y trouve :
+
+- **L'accueil** et les pages que tu as écrites.
+- **Les [secteurs](/docs/decouvrir/vocabulaire)**, avec leurs périodes et le bouton pour s'inscrire.
+- **[L'adhésion](/docs/demarrer/adhesion)**, le formulaire par lequel on rejoint ton évènement.
+- **L'espace du membre**, où chacun retrouve ses créneaux, son profil et ses préférences de
+  notification.
+
+Une page peut être réservée aux membres : elle n'apparaît alors que pour les personnes connectées et
+rattachées à l'évènement.
+
+## L'espace de gestion
+
+La même adresse, suivie de `/admin`. Neuf entrées :
+
+- **Tableau de bord** — qui vient d'arriver, quelles inscriptions attendent une réponse, où en est le
+  remplissage, et le journal de ce qui s'est passé.
+- **Secteurs** — les créer, les décrire,
+  [nommer leurs responsables](/docs/demarrer/secteurs-et-periodes).
+- **Membres** — la table de tout le monde, avec ses
+  [filtres et ses exports](/docs/avance/filtrer-trier-exporter).
+- **Inscriptions** — la même chose côté créneaux :
+  [confirmer, décliner, marquer une absence](/docs/demarrer/suivre-les-inscriptions).
+- **Planification** — la grille glisser-déposer.
+- **Configuration** — le nom, l'adresse, l'identité,
+  [l'adhésion et les champs de profil](/docs/demarrer/adhesion).
+- **Publications** — les pages du site, les [modèles de courriel](/docs/avance/modeles-d-email) et
+  les [badges](/docs/avance/badges).
+- **Quota** — ton palier et le nombre de membres approuvés.
+- **Aide** — les raccourcis vers tes écrans et le lien à partager.
+
+## Ce qui décide de ce que tu vois
+
+Le seuil de l'espace de gestion est le rôle [**responsable**](/docs/decouvrir/roles-et-droits). En
+dessous, tout est refusé.
+
+Au-dessus, ça dépend de ton rôle. Un·e responsable ne voit ses chiffres que pour ses propres
+secteurs, et n'ouvre ni la configuration ni les publications. Un·e administrateur·ice voit tout.
+
+## Le reste du site
+
+Hors de ton évènement, `benev.io` porte ton compte : tes évènements, tes paiements, et la page qui te
+permet de [repartir de l'édition précédente](/docs/avance/dupliquer-un-evenement).

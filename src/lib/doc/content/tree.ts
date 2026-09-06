@@ -9,12 +9,34 @@ export type DocGroup = { label: string; slugs: string[] }
 
 export const DOC_TREE: DocGroup[] = [
 	{
-		label: 'Démarrer',
-		slugs: ['demarrer/creer-un-evenement', 'demarrer/publier-et-partager'],
+		label: 'Découvrir',
+		slugs: [
+			'decouvrir/vue-d-ensemble',
+			'decouvrir/anatomie',
+			'decouvrir/vocabulaire',
+			'decouvrir/roles-et-droits',
+		],
 	},
 	{
-		label: 'Concepts',
-		slugs: ['concepts/vocabulaire', 'concepts/qui-peut-faire-quoi'],
+		label: 'Démarrer',
+		slugs: [
+			'demarrer/creer-un-evenement',
+			'demarrer/secteurs-et-periodes',
+			'demarrer/adhesion',
+			'demarrer/publier-et-partager',
+			'demarrer/suivre-les-inscriptions',
+		],
+	},
+	{
+		label: 'Aller plus loin',
+		slugs: [
+			'avance/comptes-et-membres',
+			'avance/filtrer-trier-exporter',
+			'avance/conditions-d-acces',
+			'avance/modeles-d-email',
+			'avance/badges',
+			'avance/dupliquer-un-evenement',
+		],
 	},
 ]
 

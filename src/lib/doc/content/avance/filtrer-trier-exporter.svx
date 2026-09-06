@@ -1,0 +1,50 @@
+---
+title: Filtrer, enregistrer une vue, exporter
+label: Filtrer et exporter
+description: Le filtre courant gouverne l'export, le mailing et les badges — c'est tout l'intérêt.
+---
+
+## Filtrer une table
+
+Les tables des membres et des inscriptions se filtrent sur tout : le nom, la date d'adhésion, le
+secteur, le nombre d'heures, l'état, la présence d'un compte, et **une colonne par
+[champ de profil](/docs/demarrer/adhesion#champs) que tu as défini**.
+
+Le type du champ décide du filtre : une case pour un Oui / Non, une liste pour une Liste à choix, un
+intervalle pour un Nombre. Les colonnes s'affichent et se masquent, et le panneau de synthèse donne
+la répartition par champ.
+
+## Ce que le filtre emporte avec lui
+
+C'est là que ça devient utile. Le filtre courant ne sert pas qu'à regarder : il gouverne aussi
+
+- l'**export CSV** et l'export des contacts,
+- le **courriel groupé**, qui s'ouvre avec les adresses filtrées,
+- l'**[impression des badges](/docs/avance/badges)**.
+
+Filtre sur « secteur = bar » et « samedi », et tu imprimes les badges de l'équipe du bar du samedi.
+
+## Enregistrer une vue
+
+Un jeu de filtres qui te servira encore se garde sous un nom. Dès que tes filtres ne correspondent à
+aucune vue connue, le bouton pour en créer une apparaît.
+
+Une vue est partagée : tous les responsables de l'évènement la retrouvent. Il en existe sur trois
+surfaces (les membres, les inscriptions et la planification), et chacune a ses vues à elle. « Vue
+simple » est le retour à l'absence de filtre.
+
+Créer une vue demande le rôle de [responsable](/docs/decouvrir/roles-et-droits), et les vues font
+partie de ce qu'une [duplication](/docs/avance/dupliquer-un-evenement) reprend.
+
+## Les exports
+
+| Export | Où | Contenu |
+| --- | --- | --- |
+| CSV des membres | Table des membres | Coordonnées, adhésion, heures, inscriptions, secteurs à charge, et une colonne par champ de profil |
+| CSV des inscriptions | Table des inscriptions | Membre, secteur, début, fin, durée, étiquettes, auteur, absence, état |
+| Contacts | Table des membres | Un fichier de cartes de visite, à importer dans un carnet d'adresses |
+| Agenda | Espace du bénévole | Les créneaux de la personne, à ajouter à son agenda |
+
+Les deux CSV se copient aussi directement dans le presse-papier.
+
+Les dates sortent dans le fuseau horaire de l'évènement, pas dans le tien.

@@ -1,0 +1,53 @@
+---
+title: Ce que benevio fait
+label: Vue d'ensemble
+description: Un site pour ton évènement, un planning, des inscriptions qui se valident, et de quoi tenir le jour J.
+---
+
+## Un site à toi
+
+Chaque évènement a [son propre site](/docs/decouvrir/anatomie), à sa propre adresse. Tu écris la page
+d'accueil, tu ajoutes les pages que tu veux, tu choisis l'habillage.
+
+C'est le seul lien à diffuser. Tes bénévoles y trouvent les infos, les créneaux et le formulaire
+d'adhésion.
+
+## Un planning
+
+Tu découpes ton évènement en **secteurs** (le bar, la sécurité, le montage), puis chaque secteur en
+**périodes de travail** : un début, une fin, un nombre de places.
+
+[La planification](/docs/demarrer/secteurs-et-periodes) les montre toutes sur une grille. Tu poses,
+déplaces et redimensionnes les périodes à la souris.
+
+## Des inscriptions dans les deux sens
+
+Un membre demande une période, un responsable valide. Ou un responsable propose, le membre confirme.
+[Une inscription attend toujours le camp qui ne l'a pas créée](/docs/demarrer/suivre-les-inscriptions#qui-repond),
+et un courriel part à chaque fois.
+
+## Les informations que tu récoltes
+
+benevio demande le nom et le courriel. Au-delà, tu définis
+[tes propres champs](/docs/demarrer/adhesion#champs) : un régime alimentaire, une taille de t-shirt,
+un permis de conduire.
+
+Ils ne servent pas qu'à remplir un formulaire. Ils deviennent des colonnes de tes tables, des
+[conditions d'accès](/docs/avance/conditions-d-acces) à un secteur, et des couleurs sur les
+[badges](/docs/avance/badges).
+
+## Le suivi et l'export
+
+Les tables des membres et des inscriptions se filtrent sur tout, et
+[le filtre courant se transporte avec toi](/docs/avance/filtrer-trier-exporter) : ce que tu exportes
+en CSV, à qui tu écris, quels badges tu imprimes.
+
+## Le jour J
+
+Des badges au format carte, avec photo, couleurs et QR. L'export des créneaux vers ton agenda. Et de
+quoi pointer les absences.
+
+## Ce que ça coûte
+
+Gratuit jusqu'à 50 membres approuvés. Au-delà, un achat unique par évènement, sans abonnement. Le
+quota porte sur le nombre de membres, jamais sur les fonctionnalités.

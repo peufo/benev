@@ -1,0 +1,56 @@
+---
+title: Repartir de l'édition précédente
+label: Dupliquer un évènement
+description: Reprendre secteurs, périodes, pages et champs d'une édition, avec les dates décalées.
+---
+
+## Choisir ce que tu reprends
+
+Ton évènement revient chaque année. Plutôt que de tout refaire, duplique l'édition précédente depuis
+la liste de tes évènements. Quatre listes à cocher :
+
+- Les **[secteurs](/docs/demarrer/secteurs-et-periodes)**, avec leurs périodes, leurs
+  [conditions d'accès](/docs/avance/conditions-d-acces) et le mode liste d'attente.
+- Les **[champs de profil](/docs/demarrer/adhesion#champs)**.
+- Les **pages** du site.
+- Les **[vues](/docs/avance/filtrer-trier-exporter)** enregistrées.
+
+Décoche le secteur qui n'existe plus, la page devenue fausse.
+
+## Décaler les dates
+
+Un champ, en jours. Toutes les périodes reprises et les dates de fin d'inscription se décalent
+d'autant.
+
+Vérifie que tu tombes sur les bons jours de semaine : d'une année à l'autre, 365 jours ne ramènent
+pas au même samedi. 364 ou 371 sont souvent les bons chiffres.
+
+## Ce qui suit et ce qui ne suit pas
+
+| Repris | Pas repris |
+| --- | --- |
+| Les réglages de l'évènement, le thème, le contact | Les **membres** |
+| Les secteurs et leurs périodes | Les **inscriptions** |
+| Les conditions d'accès | Les **responsables** de secteurs |
+| Les champs de profil | Les étiquettes et les jalons |
+| Les pages et les modèles de courriel | Les badges |
+| Les vues | L'affiche et le lieu |
+| Le logo et l'image de fond | |
+
+L'absence des membres est voulue : une nouvelle édition recommence son recrutement, et son quota.
+L'absence des responsables en est la conséquence, puisque ce sont des membres.
+
+Le nouvel évènement arrive en brouillon, nommé comme l'ancien suivi d'un numéro. Renomme-le et
+[corrige son adresse](/docs/demarrer/creer-un-evenement) avant de le publier.
+
+## Ce qui est recousu pour toi
+
+Tes vues, tes conditions d'accès et tes pages font référence à des champs de profil. En dupliquant,
+ces champs sont recréés, et toutes ces références sont réécrites vers les nouveaux.
+
+Une vue qui filtrait sur « régime alimentaire » filtre toujours dessus dans la copie.
+
+## Dupliquer un seul secteur
+
+Dans un même évènement, un secteur se duplique depuis sa fiche, avec un décalage de dates lui aussi.
+Celle-là **conserve les responsables**, ce qu'on veut quand on crée le samedi à partir du vendredi.

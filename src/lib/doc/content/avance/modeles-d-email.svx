@@ -1,0 +1,49 @@
+---
+title: Personnaliser les courriels
+label: Modèles de courriel
+description: Six messages que tu réécris à ta façon, avec les variables du profil — et la règle qui décide lesquels partent.
+---
+
+## Les six modèles
+
+benevio envoie des courriels à ta place. Six d'entre eux t'appartiennent : tu les réécris depuis
+**Publications**, section « Modèles d'email ».
+
+| Modèle | Quand il part |
+| --- | --- |
+| Invitation | Tu [invites quelqu'un](/docs/avance/comptes-et-membres#invitation) par courriel |
+| Adhésion validée | Tu approuves un membre |
+| Inscription | Un·e responsable inscrit un membre à une période |
+| Inscription acceptée | Un·e responsable confirme une inscription |
+| Inscription déclinée | Un·e responsable refuse une inscription |
+| Inscription annulée | Un·e responsable annule une inscription |
+
+Ils sont créés avec un texte par défaut qui fonctionne. Tu n'as rien à faire si tu n'y touches pas.
+
+## La règle qui décide
+
+Regarde la colonne de droite : **tous ces messages vont vers le membre.**
+
+Un modèle personnalisable ne part que lorsque le destinataire est un membre. Quand c'est un·e
+responsable qui doit être prévenu·e, parce qu'un bénévole vient de
+[demander un créneau](/docs/demarrer/suivre-les-inscriptions#qui-repond), c'est un message standard
+qui part, et tu ne le réécris pas.
+
+## Les variables
+
+Dans l'éditeur, tu insères des valeurs qui seront remplacées à l'envoi : le prénom, le nom de
+l'évènement, le nom de la personne qui a écrit, le secteur, la période concernée, le lien pour
+accepter, le lien vers l'espace du bénévole.
+
+**Chacun de tes [champs de profil](/docs/demarrer/adhesion#champs) est aussi disponible.** Tu peux
+rappeler à quelqu'un la taille de t-shirt qu'il a annoncée, ou son régime alimentaire.
+
+## Les autres courriels
+
+Le reste ne se personnalise pas : la vérification d'adresse, la réinitialisation de mot de passe, la
+confirmation de paiement, l'alerte de quota et les notifications vers les responsables.
+
+## Vérifier
+
+Il n'y a pas d'aperçu. Le moyen sûr de tester un modèle est de te l'envoyer : invite-toi à une
+seconde adresse, ou inscris-toi à une période depuis un compte de test.

@@ -1,0 +1,67 @@
+---
+title: L'adhésion et les champs de profil
+label: L'adhésion
+description: Ce que tu demandes aux personnes qui rejoignent ton évènement, et comment tu le demandes.
+---
+
+## Ce que benevio demande déjà
+
+Le nom, le prénom et le courriel sont demandés d'office. Tout le reste se règle dans
+**Configuration**, sections « Adhésion » et « Champs du profil ».
+
+## Ce que tu exiges en plus
+
+Cinq cases, chacune rendant une information obligatoire pour adhérer :
+
+- Adresse courriel vérifiée
+- Adresse postale
+- Numéro de téléphone
+- Date de naissance
+- Photo de profil
+
+Demande le strict nécessaire. Chaque case cochée est un écran de plus entre la personne et son
+premier créneau, et beaucoup de gens s'inscrivent depuis leur téléphone, une seule fois.
+
+## Tes propres champs {#champs}
+
+Au-delà, tu définis les champs que tu veux. Six types :
+
+| Type | Pour quoi |
+| --- | --- |
+| Text | Une ligne : une taille de t-shirt, un numéro de plaque |
+| Text long | Un paragraphe : des remarques, une motivation |
+| Nombre | Un âge, un nombre d'années d'expérience |
+| Oui / Non | A le permis, est véhiculé·e, a déjà participé |
+| Liste à choix | Un régime alimentaire, une taille de vêtement |
+| Liste à choix multiple | Des jours de disponibilité, des compétences |
+
+Chaque champ porte une **question**, celle que la personne lira dans le formulaire, et trois
+réglages :
+
+- **Visible par les membres** — sinon, seuls les responsables voient la valeur.
+- **Modifiable par les membres** — la personne renseigne elle-même la valeur depuis son profil.
+- **Valeur obligatoire** — le profil reste signalé incomplet tant qu'elle est vide.
+
+Un champ invisible aux membres est l'endroit où tu notes ce qui te regarde toi : une remarque
+interne, un niveau de confiance.
+
+Ces champs servent ensuite partout : [colonnes et filtres](/docs/avance/filtrer-trier-exporter) de
+tes tables, [conditions d'accès](/docs/avance/conditions-d-acces) à un secteur,
+[variables de tes courriels](/docs/avance/modeles-d-email), couleurs des
+[badges](/docs/avance/badges).
+
+## La charte
+
+Si tu crées une page de type **Charte des bénévoles**, elle s'affiche pendant l'adhésion et doit être
+acceptée pour aller plus loin. Une seule par évènement.
+
+## Vérifier ce que ça donne
+
+Le bouton « Aperçu du formulaire d'adhésion », au bas de la section des champs, ouvre
+[le tunnel](/docs/avance/comptes-et-membres) tel que tes bénévoles le verront. Utilise-le après
+chaque changement.
+
+## Ce qui bloque une inscription
+
+Un profil incomplet empêche de s'inscrire à une période. La personne est renvoyée vers son profil
+avec le message qui le dit, sans forcément comprendre pourquoi.

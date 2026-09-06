@@ -1,0 +1,50 @@
+---
+title: Les badges
+label: Les badges
+description: Des cartes nominatives en PDF, colorées par un champ de profil, avec photo et QR.
+---
+
+## Ce qu'il y a dessus
+
+Un badge est une carte nominative imprimable, au format carte de crédit (54 × 86 mm par défaut). Tu
+les configures depuis **Publications**, section « Badges », et jusqu'à dix modèles par évènement.
+
+Le recto porte l'image de fond, le logo, le prénom et le nom, la photo de profil, et deux grilles
+d'accès. Le verso, si tu le gardes, porte un **QR code**.
+
+Le fond et le logo reprennent par défaut l'affiche et le logo de ton évènement. Les dimensions se
+règlent au millimètre.
+
+## Rattacher les champs
+
+Quatre emplacements du badge sont alimentés par tes
+[champs de profil](/docs/demarrer/adhesion#champs), et chacun exige un type précis.
+
+| Emplacement | Type de champ exigé | Exemple |
+| --- | --- | --- |
+| Type de membre | Liste à choix | Bénévole, Responsable, Artiste, Presse |
+| Label | Liste à choix ou Text | La fonction, l'équipe |
+| Accès — jours | Liste à choix multiple | Vendredi, Samedi, Dimanche |
+| Accès — secteurs | Liste à choix multiple | Backstage, Bar, Loges |
+
+Si tu n'as pas ces champs, crée-les d'abord. Un champ du mauvais type est refusé.
+
+## Les couleurs
+
+Le champ « type de membre » pilote la couleur du badge : tu associes une couleur à chaque valeur de
+la liste. Le texte s'assombrit ou s'éclaircit tout seul pour rester lisible.
+
+## Imprimer
+
+Depuis la table des membres, l'impression produit un PDF **pour les membres
+[actuellement filtrés](/docs/avance/filtrer-trier-exporter)**. Filtre d'abord, imprime ensuite.
+Depuis la fiche d'un membre, tu n'imprimes que le sien.
+
+## Le QR
+
+Il ne mène pas à une page publique. Scanné par un·e [responsable](/docs/decouvrir/roles-et-droits)
+connecté·e, il ouvre la **fiche du membre** dans l'espace de gestion, de quoi vérifier une identité
+ou marquer une présence sur place.
+
+Scanné par la personne elle-même, il ouvre son propre espace. Scanné par quelqu'un qui n'est pas
+connecté, il ne donne rien.

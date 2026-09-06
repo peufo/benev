@@ -1,0 +1,42 @@
+---
+title: Réserver un secteur à certains membres
+label: Conditions d'accès
+description: Poser des conditions sur un secteur pour qu'il ne s'affiche que devant les bonnes personnes.
+---
+
+## Comment ça marche
+
+Certains postes ne s'ouvrent pas à tout le monde : le bar demande d'être majeur·e, la navette demande
+le permis. Les **conditions d'accès** d'un [secteur](/docs/decouvrir/vocabulaire) automatisent ce
+tri.
+
+Sans condition, le secteur est ouvert à tous les membres. Dès qu'une condition est posée, un membre
+doit **toutes** les remplir, sinon le secteur n'apparaît pas dans sa liste.
+
+Il ne voit pas un message d'erreur : le secteur n'existe pas pour lui. Le site lui signale seulement
+que des secteurs lui sont cachés, ce qui l'invite à se connecter ou à compléter son profil.
+
+## Les trois sortes de condition
+
+- **Membre approuvé** — réserve le secteur aux personnes dont tu as validé l'adhésion.
+- **Âge minimum** — calculé depuis la date de naissance. Exige donc que tu
+  [la demandes à l'adhésion](/docs/demarrer/adhesion), sans quoi la condition n'est jamais remplie.
+- **Valeur d'un [champ de profil](/docs/demarrer/adhesion#champs)** — n'importe lequel de tes champs,
+  comparé à une valeur.
+
+Les comparaisons disponibles dépendent du type du champ : égal ou différent pour un texte, plus grand
+ou plus petit pour un nombre, contient pour une liste à choix multiple.
+
+## Les responsables passent toujours
+
+Un·e [responsable](/docs/decouvrir/roles-et-droits) du secteur y accède quelles que soient les
+conditions, et peut y inscrire n'importe quel membre à la main.
+
+Une personne déjà inscrite garde son accès, même si elle cesse de remplir la condition. Poser une
+condition ne déloge personne.
+
+## Le piège
+
+Une condition qui porte sur un champ que les membres ne remplissent pas eux-mêmes bloque tout le
+monde. Si tu réserves un secteur à « permis = oui », assure-toi que le champ est **modifiable par les
+membres**, sinon personne ne pourra jamais y répondre.

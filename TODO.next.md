@@ -12,11 +12,9 @@
 
 - [ ] Placer l'indicateur de quota dans la section "Status" des settings
 
-- [ ] Metre un fond plus présent (avec du grain) pour la doc
-
 - [ ] Dans le menu de navigation principal, Supprimer le lien "open source", ajouter "Documentation" et "prix", adapter un peu mieux responsive.
 
-- [ ] Limiter le nombre de pages d'un événement
+- [ ] Limiter le nombre de pages d'un événement (4 pages suffise)
 
 - [ ] Nouvelle navigation
   - [ ] pages: Au lieu de ce transformé en menu sandwich les pages du header doivent se transformé en onglets (je pense que ca doit rester en haut de page dans une prolongation du header).
