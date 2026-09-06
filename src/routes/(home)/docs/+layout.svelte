@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cubicOut } from 'svelte/easing'
+	import { fly } from 'svelte/transition'
 	import { page } from '$app/state'
 	import { DocNav } from '$lib/doc'
 
@@ -12,7 +14,12 @@
 <div class="mx-auto w-full max-w-6xl gap-3 pb-40 lg:flex lg:items-start">
 	<DocNav pages={data.docNav} sections={doc?.sections} slug={doc?.slug} />
 
-	<div class="mx-auto flex w-full max-w-2xl min-w-0 flex-col gap-3">
-		{@render children?.()}
-	</div>
+	{#key doc}
+		<div
+			class="mx-auto flex w-full max-w-2xl min-w-0 flex-col gap-3"
+			in:fly={{ y: 20, opacity: 0, duration: 500, easing: cubicOut }}
+		>
+			{@render children?.()}
+		</div>
+	{/key}
 </div>
