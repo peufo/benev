@@ -5,14 +5,11 @@ description: Le site, le planning, les inscriptions, le prix
 
 ## Ce que benevio fait
 
-Tu organises un évènement et il te faut des bénévoles. benevio te donne trois choses :
+- **Un site**, avec sa propre adresse, que tu peux diffuser facilement.
+- **Un planning** découpé en secteur et en créneaux.
+- **Des inscriptions** initiées par un responsable ou par le membre lui-même. Les courriels de demande de validations partent tout seuls.
 
-- **Un site à toi**, à sa propre adresse, que tu diffuses et rien d'autre.
-- **Un planning** découpé en équipes et en créneaux, que tu poses à la souris.
-- **Des inscriptions qui se gèrent** : chacun choisit ses créneaux, tu valides, les courriels
-  partent tout seuls.
-
-Le jour venu, tu imprimes des badges, tu pointes les présences et tu comptes les heures.
+Le jour venu, tu peux imprimer les badges, les plannings et les listes de distributions.
 
 ## Les mots à connaître {#vocabulaire}
 
@@ -20,12 +17,12 @@ benevio emploie six mots, toujours dans le même sens.
 
 ### Évènement
 
-Ta manifestation. Tout lui appartient : les secteurs, les membres, les pages, l'habillage. Une même
+Ta manifestation. Tout lui appartient : les secteurs, les membres, les pages, l'identité. Une même
 personne peut participer à plusieurs évènements sans que rien ne circule de l'un à l'autre.
 
 ### Secteur
 
-Une équipe de travail : le bar, la sécurité, le montage. Chaque secteur a ses **responsables**, qui
+C'est une équipe de travail comme par exemple, le bar, la sécurité ou le montage. Chaque secteur a ses **responsables**, qui
 gèrent ses créneaux et répondent à ses inscriptions.
 
 ### Période
@@ -35,13 +32,14 @@ un·e bénévole s'inscrit. Côté gestion on dit « période », côté bénév
 
 ### Inscription
 
-Le lien entre une personne et un créneau. Elle porte un
-[état](/docs/suivre-tes-benevoles#etats) : demandée, validée, déclinée ou annulée.
+Le lien entre un membre et un créneau. Une inscription peut être dans un des
+[états](/docs/suivre-tes-benevoles#etats) suivant : demandée, validée, déclinée ou annulée.
 
 ### Membre
 
-Une personne rattachée à ton évènement. C'est une fiche, et
-[elle peut exister avant même que la personne se connecte](/docs/ton-equipe#membre-compte).
+N'importe quels personne en lien avec ton évènement. En plus de ses inscriptions et responsablités,
+sa fiche contient touts les informations que tu veux y rattacher.
+A noter qu'un membre n'est pas forcément [relié à un compte utilsateur](/docs/ton-equipe#membre-compte).
 
 ### Adhésion
 
@@ -50,27 +48,19 @@ Ce que tu demandes à quelqu'un pour rejoindre ton évènement : les information
 
 ## Ton site public {#site-public}
 
-C'est `benev.io/ton-evenement`, le seul lien à diffuser. Tes bénévoles y trouvent tes pages
-d'information, les secteurs avec leurs créneaux, le formulaire d'adhésion, et leur espace personnel
-une fois inscrits.
+C'est `benev.io/ton-evenement`, le seul lien à diffuser.
+Tes bénévoles y trouvent les secteurs et leur espace personnel une fois inscrits.
 
-Une page peut être réservée aux membres : elle n'apparaît alors que pour les personnes rattachées à
-ton évènement.
+Tu peux éditer le contenu de la page d'accueil et ajouter d'autre pages complémentaires:
+
+- **Page publique** : FAQ, conditions, etc...
+- **Charte des bénévole** : Devant être lue lors de l'adhésion
+- **Page de membre** : Pages personalisées accésibles uniquement par les membres
 
 ## Ton espace de gestion {#gestion}
 
-La même adresse, suivie de `/admin`. C'est ton envers du décor : le tableau de bord, tes secteurs, la
-table de tes membres, celle des inscriptions, la grille de planification, la configuration et tes
-publications.
+C'est ton envers du décor. Tu y trouveras, le tableau de bord, la planification la
+table des membres et des inscriptions, la configuration et la gestion des tes publications (pages, models d'email, badges).
 
-Il s'ouvre à partir du rôle de [responsable](/docs/ton-equipe#roles) — en dessous, il est fermé. Un·e
-responsable n'y voit que ses propres secteurs, et ne touche ni à la configuration ni aux
-publications. Un·e administrateur·ice voit tout.
-
-## Ce que ça coûte {#prix}
-
-Gratuit jusqu'à 50 membres approuvés. Au-delà, tu achètes un palier une seule fois, pour cet
-évènement : pas d'abonnement, pas de reconduction.
-
-Le prix porte sur le nombre de bénévoles, **jamais sur les fonctionnalités**. Un petit évènement
-gratuit dispose exactement du même outil qu'un grand.
+Cet espace est accéssibles pour [les adminitrateur·ices et les responsable](/docs/ton-equipe#roles).
+Un·e responsable ne peut gérer que ses propres secteurs.
