@@ -1,0 +1,97 @@
+---
+title: Créer ton évènement
+label: Créer ton évènement
+description: Le compte, les réglages qui donnent son allure au site, les secteurs et les créneaux.
+---
+
+## Compte et évènement
+
+Crée un compte, puis ton évènement. Tu en es le **propriétaire** : tous les droits, et le seul à
+pouvoir nommer des administrateur·ices.
+
+Ton évènement naît en brouillon. Personne ne le voit tant que tu ne l'as pas
+[publié](/docs/ouvrir-les-inscriptions#publier) — tu as donc tout le temps de le construire.
+
+## Les réglages {#reglages}
+
+Tout se passe dans **Configuration**, section par section.
+
+### L'essentiel
+
+Le nom, l'adresse du site, le fuseau horaire et la description.
+
+L'adresse se déduit du nom, et tu peux la changer. **Fais-le avant de publier** : une fois le lien
+diffusé, le remplacer casse tout ce qui pointait dessus.
+
+Tu n'as pas à saisir les dates de ton évènement : elles se calent sur les créneaux que tu poses.
+
+### Le contact
+
+Courriel, téléphone, site web, réseaux, lieu. C'est le pied de page de ton site, et c'est par là que
+tes bénévoles te joindront — autant y mettre une adresse que tu relèves.
+
+### L'habillage
+
+L'affiche, le logo, l'image de fond et ses réglages. Quatre thèmes sont prêts à poser — benevio,
+Papier, Prairie et Crépuscule — et chacun s'ajuste ensuite.
+
+## Découper en secteurs {#secteurs}
+
+Un secteur est une équipe : le bar, la sécurité, le montage, la caisse. Commence par les créer, même
+vides.
+
+Donne à chacun une description. Elle s'affiche sur ton site, et c'est souvent elle qui décide
+quelqu'un à choisir un poste plutôt qu'un autre.
+
+Depuis la fiche d'un secteur, tu désignes ses **responsables**. Ils gèrent ses créneaux et répondent
+à ses inscriptions, sans rien voir du reste de ton évènement : c'est ta façon de déléguer.
+
+## Poser les créneaux {#periodes}
+
+Un créneau a un début, une fin et un nombre de places. Tu le crées depuis la fiche du secteur, ou
+directement sur la grille.
+
+### La planification
+
+La grille montre tous tes secteurs et tous leurs créneaux. Tu poses un créneau en glissant sur le
+vide, tu le déplaces, tu l'étires, tu le dupliques.
+
+L'axe se bascule à l'horizontale ou à la verticale, le zoom se règle, et tu peux n'afficher que
+quelques secteurs pour y voir clair.
+
+### Étiquettes et jalons
+
+Les **étiquettes** se posent sur un créneau depuis son formulaire : un nom, une couleur. Elles
+servent ensuite à filtrer, et suivent dans tes exports.
+
+Les **jalons** marquent un instant sur la grille — l'ouverture des portes, le début du concert —
+pour situer tes créneaux dans le déroulé de la journée.
+
+### La liste d'attente
+
+Un secteur peut accepter plus de demandes que de places : les inscriptions en attente ne bloquent
+alors rien, et tu tranches ensuite. Sans ce mode, un créneau complet n'accepte plus personne.
+
+## Dupliquer une édition {#dupliquer}
+
+Ton évènement revient chaque année ? Duplique-le depuis la liste de tes évènements plutôt que de
+tout refaire. Tu choisis ce que tu reprends — secteurs, questions de profil, pages, vues
+enregistrées — et tu décoches le secteur qui n'existe plus, la page devenue fausse.
+
+Tu saisis un décalage en jours, et toutes les dates suivent. **Vérifie que tu retombes sur les bons
+jours de la semaine** : 365 jours ne ramènent pas au même samedi, 364 ou 371 sont souvent les bons
+chiffres.
+
+| Ce qui suit | Ce qui ne suit pas |
+| --- | --- |
+| Les réglages, le thème, le contact | Les membres |
+| Les secteurs et leurs créneaux | Les inscriptions |
+| Les conditions d'accès | Les responsables |
+| Les questions de profil | Les étiquettes et les jalons |
+| Les pages et les modèles de courriel | Les badges |
+
+Une nouvelle édition recommence son recrutement, et son quota avec. La copie arrive en brouillon :
+renomme-la et corrige son adresse avant de la publier.
+
+Un seul secteur se duplique aussi, depuis sa fiche, décalage compris. Celle-là **garde ses
+responsables** — pratique pour créer le samedi à partir du vendredi.

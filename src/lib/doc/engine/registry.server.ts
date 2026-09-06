@@ -1,9 +1,9 @@
 import { resolve } from '$app/paths'
-import { DOC_MARKDOWN_PARTS, DOC_SLUGS, DOC_TREE } from '../content'
+import { DOC_MARKDOWN_PARTS, DOC_SLUGS } from '../content'
 import { DOC_SOURCES } from '../content/sources.server'
 import { readFrontmatter, readSections } from './parse'
 import { docToMarkdown } from './toMarkdown'
-import type { Doc, DocNavGroup, DocPage } from './types'
+import type { Doc, DocPage } from './types'
 
 /**
  * Le seul module du moteur qui connaisse le contenu: il lit l'arbre, les sources et les jumeaux
@@ -15,7 +15,7 @@ import type { Doc, DocNavGroup, DocPage } from './types'
 const docs = new Map<string, Doc>(
 	DOC_SLUGS.map((slug) => {
 		const source = DOC_SOURCES[slug]
-		// Une entrée de `DOC_TREE` sans fichier ne peut pas se rattraper à l'exécution: elle
+		// Une entrée de `DOC_SLUGS` sans fichier ne peut pas se rattraper à l'exécution: elle
 		// laisserait un lien mort dans la navigation de toutes les pages.
 		if (source === undefined) throw new Error(`Page de documentation introuvable: ${slug}.svx`)
 
@@ -44,16 +44,14 @@ export function getDocs(): Doc[] {
 	return DOC_SLUGS.map((slug) => docs.get(slug)!)
 }
 
-export function getDocNav(): DocNavGroup[] {
-	return DOC_TREE.map(({ label, slugs }) => ({
-		label,
-		pages: slugs.map(asDocPage),
-	}))
+/** Les pages dans l'ordre de lecture, réduites à leur identité: la navigation n'a besoin de rien d'autre. */
+export function getDocNav(): DocPage[] {
+	return DOC_SLUGS.map(asDocPage)
 }
 
 /**
- * Les pages qui encadrent celle-ci dans l'ordre de lecture, groupes traversés. Réduites à leur
- * identité: la source d'une page voisine n'a rien à faire au navigateur.
+ * Les pages qui encadrent celle-ci dans l'ordre de lecture. Réduites à leur identité: la source
+ * d'une page voisine n'a rien à faire au navigateur.
  */
 export function getDocNeighbours(slug: string) {
 	const index = DOC_SLUGS.indexOf(slug)

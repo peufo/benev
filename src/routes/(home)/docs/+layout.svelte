@@ -10,7 +10,7 @@
 </script>
 
 <div class="mx-auto w-full max-w-6xl gap-3 pb-40 lg:flex lg:items-start">
-	<DocNav groups={data.docNav} sections={doc?.sections} slug={doc?.slug} />
+	<DocNav pages={data.docNav} sections={doc?.sections} slug={doc?.slug} />
 
 	<div class="mx-auto flex w-full max-w-2xl min-w-0 flex-col gap-3">
 		{@render children?.()}

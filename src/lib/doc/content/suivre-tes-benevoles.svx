@@ -1,0 +1,98 @@
+---
+title: Suivre tes bénévoles
+label: Suivre tes bénévoles
+description: Le tableau de bord, les inscriptions à trancher, les courriels qui partent, et tes exports.
+---
+
+## Ton tableau de bord
+
+C'est l'écran à ouvrir chaque jour. Il rassemble qui vient d'arriver, quelles inscriptions attendent
+une réponse, où en est le remplissage secteur par secteur, et le journal de ce qui s'est passé.
+
+Un·e responsable y voit les mêmes blocs, restreints à ses propres secteurs.
+
+## Les quatre états {#etats}
+
+Une inscription est dans l'un de quatre états :
+
+- **Demande en cours** — elle attend une réponse.
+- **Validée** — c'est confirmé des deux côtés.
+- **Déclinée** — la personne à qui on l'a proposée a dit non.
+- **Annulée** — celle qui l'a créée est revenue dessus.
+
+Rien ne disparaît : une inscription déclinée ou annulée garde sa ligne, et se rétablit.
+
+## Qui doit répondre {#qui-repond}
+
+**Une inscription attend toujours le camp qui ne l'a pas créée.**
+
+Un membre demande un créneau : les responsables du secteur confirment ou déclinent. Un responsable
+propose un créneau : c'est le membre qui accepte ou refuse. Celui qui a créé l'inscription, lui, ne
+peut que l'annuler.
+
+Le tableau de bord en fait un filtre. **« Chez nous »** rassemble ce que tu as à trancher, **« Chez
+le membre »** ce que tu as proposé et qui reste sans réponse.
+
+Quand tu inscris quelqu'un [qui n'a pas encore de compte](/docs/ton-equipe#membre-compte),
+l'inscription est validée d'office : personne ne peut répondre à sa place.
+
+## Les courriels {#courriels}
+
+Chaque création et chaque changement d'état envoie un message : vers les responsables du secteur
+quand c'est le membre qui a bougé, vers le membre quand ce sont les responsables. Chacun règle
+ensuite ce qu'il veut recevoir depuis son espace personnel.
+
+### Les six modèles que tu réécris
+
+Depuis **Publications**, tu réécris à ta façon les messages qui vont vers tes bénévoles. Chacun
+arrive avec un texte par défaut qui fonctionne déjà.
+
+| Modèle | Quand il part |
+| --- | --- |
+| Invitation | Tu [invites quelqu'un](/docs/ton-equipe#invitation) |
+| Adhésion validée | Tu approuves un membre |
+| Inscription | Tu inscris un membre à un créneau |
+| Inscription acceptée | Tu confirmes une inscription |
+| Inscription déclinée | Tu refuses une inscription |
+| Inscription annulée | Tu annules une inscription |
+
+Les messages qui préviennent tes responsables ne se réécrivent pas, pas plus que la vérification
+d'adresse, la réinitialisation de mot de passe ou la confirmation de paiement.
+
+### Les variables
+
+Dans l'éditeur, tu insères des valeurs que benevio remplace à l'envoi : le prénom, le nom de
+l'évènement, le secteur, le créneau concerné, le lien pour accepter. **Chacune de
+[tes propres questions](/docs/ouvrir-les-inscriptions#adhesion) est disponible aussi** — de quoi
+rappeler à quelqu'un la taille de t-shirt qu'il a annoncée.
+
+Il n'y a pas d'aperçu : pour tester un modèle, envoie-le-toi depuis une seconde adresse.
+
+## Filtrer et exporter {#exports}
+
+Les tables des membres et des inscriptions se filtrent sur tout : le nom, la date d'adhésion, le
+secteur, le nombre d'heures, l'état, et **une colonne par question que tu as posée**. Les colonnes
+s'affichent et se masquent, et un panneau de synthèse donne la répartition.
+
+### Ton filtre décide de tout le reste
+
+Ce que tu vois à l'écran est ce qui sort de la table :
+
+- l'**export CSV** des membres ou des inscriptions, et l'export des contacts,
+- le **courriel groupé**, qui s'ouvre avec les adresses filtrées,
+- l'**impression des [badges](/docs/le-jour-j#badges)**.
+
+Filtre sur « secteur : bar » et « samedi », et tu imprimes les badges de l'équipe du bar du samedi.
+
+### Enregistrer une vue
+
+Un jeu de filtres qui te resservira se garde sous un nom. Tous tes responsables le retrouvent, et
+une vue suit quand tu [dupliques ton évènement](/docs/creer-ton-evenement#dupliquer).
+
+## Le quota {#quota}
+
+**Valider une inscription approuve le membre.** Un seul geste pour toi, mais ça compte dans ton
+quota, qui porte sur les membres approuvés.
+
+Le dépassement ferme ton espace de gestion, sauf la page qui te permet de changer de palier. Tes
+bénévoles, eux, continuent de s'inscrire normalement.

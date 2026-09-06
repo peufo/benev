@@ -15,5 +15,3 @@ export type Doc = DocPage & {
 	sections: TocSection[]
 	source: string
 }
-
-export type DocNavGroup = { label: string; pages: DocPage[] }

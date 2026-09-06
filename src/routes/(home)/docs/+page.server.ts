@@ -8,12 +8,9 @@ const DESCRIPTION =
 export const load = () => {
 	const descriptions = new Map(getDocs().map((doc) => [doc.slug, doc.description]))
 	return {
-		groups: getDocNav().map(({ label, pages }) => ({
-			label,
-			pages: pages.map((docPage) => ({
-				...docPage,
-				description: descriptions.get(docPage.slug) ?? '',
-			})),
+		pages: getDocNav().map((docPage) => ({
+			...docPage,
+			description: descriptions.get(docPage.slug) ?? '',
 		})),
 		metaTags: pageMetaTags({ title: 'Documentation', description: DESCRIPTION }),
 	}

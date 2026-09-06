@@ -9,22 +9,19 @@
 	</p>
 </header>
 
-{#each data.groups as group (group.label)}
-	<section class="surface p-5">
-		<h2 class="title mb-3">{group.label}</h2>
-		<ul class="flex flex-col gap-1">
-			{#each group.pages as docPage (docPage.slug)}
-				<li>
-					<a href={docPage.path} class="menu-item flex-col items-start gap-0.5 py-2">
-						<span class="title-md">{docPage.label}</span>
-						{#if docPage.description}
-							<span class="text-base-content/70 text-sm whitespace-normal">
-								{docPage.description}
-							</span>
-						{/if}
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</section>
-{/each}
+<section class="surface p-3">
+	<ul class="flex flex-col gap-1">
+		{#each data.pages as docPage (docPage.slug)}
+			<li>
+				<a href={docPage.path} class="menu-item flex-col items-start gap-0.5 py-2">
+					<span class="title-md">{docPage.label}</span>
+					{#if docPage.description}
+						<span class="text-base-content/70 text-sm whitespace-normal">
+							{docPage.description}
+						</span>
+					{/if}
+				</a>
+			</li>
+		{/each}
+	</ul>
+</section>

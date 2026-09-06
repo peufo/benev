@@ -18,7 +18,17 @@ import { createSlugger } from './slug.js'
 
 /** Reprises de `Section.svelte`: une page de documentation n'a plus le composant, mais son allure. */
 const SECTION_CLASS = ['surface', 'scroll-mt-4', 'p-5', 'space-y-4']
-const BODY_CLASS = ['prose', 'max-w-none']
+/**
+ * Un `###` découpe un chapitre long, il n'ouvre pas un chapitre: sans ces reprises, la typographie
+ * de `prose` le rendrait plus gros et plus sombre que le titre de la carte qui le contient.
+ */
+const BODY_CLASS = [
+	'prose',
+	'max-w-none',
+	'prose-h3:text-lg',
+	'prose-h3:font-semibold',
+	'prose-h3:text-base-content/80',
+]
 
 /**
  * Ce que Svelte exige au premier niveau du composant. mdsvex les remonte en tête après nous, par

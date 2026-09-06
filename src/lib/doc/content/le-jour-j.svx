@@ -1,0 +1,58 @@
+---
+title: Le jour J
+label: Le jour J
+description: Les badges à imprimer, le QR de chaque bénévole, les présences et les agendas.
+---
+
+## Les badges {#badges}
+
+Un badge est une carte nominative imprimable, au format d'une carte de crédit. Tu en configures
+jusqu'à dix modèles depuis **Publications**.
+
+Le recto porte l'image de fond, le logo, le nom, la photo et deux grilles d'accès — les jours et les
+secteurs. Le verso, si tu le gardes, porte un QR code. Le fond et le logo reprennent par défaut ceux
+de ton évènement.
+
+### Ce que le badge lit dans les profils
+
+Quatre emplacements se nourrissent de
+[tes propres questions](/docs/ouvrir-les-inscriptions#adhesion), et chacun attend un format précis.
+
+| Emplacement | Format attendu | Exemple |
+| --- | --- | --- |
+| Type de membre | Liste à choix | Bénévole, Responsable, Artiste, Presse |
+| Label | Liste à choix ou texte | La fonction, l'équipe |
+| Accès — jours | Liste à choix multiple | Vendredi, Samedi, Dimanche |
+| Accès — secteurs | Liste à choix multiple | Backstage, Bar, Loges |
+
+Si ces questions n'existent pas encore, crée-les d'abord : benevio refuse un format qui ne
+correspond pas.
+
+### Les couleurs
+
+Le type de membre pilote la couleur du badge : tu associes une couleur à chaque valeur de la liste,
+et le texte s'éclaircit ou s'assombrit tout seul pour rester lisible.
+
+### Imprimer
+
+Depuis la table des membres, tu sors un PDF pour
+[les personnes actuellement filtrées](/docs/suivre-tes-benevoles#exports). Depuis la fiche de
+quelqu'un, tu n'imprimes que le sien.
+
+## Le QR code {#qr}
+
+Scanné par un·e [responsable](/docs/ton-equipe#roles) connecté·e, le QR ouvre la fiche du membre :
+de quoi vérifier une identité ou retrouver quelqu'un, téléphone en main.
+
+Scanné par la personne elle-même, il ouvre son espace personnel. Scanné par quelqu'un qui n'est pas
+connecté, il ne donne rien.
+
+## Pointer les présences
+
+La table des inscriptions te sert de feuille de présence : chaque ligne se marque **absente** d'un
+clic. À la fin de la journée, tu sais qui est venu.
+
+## L'agenda personnel
+
+Chacun exporte ses créneaux vers son propre agenda, depuis son espace personnel. C'est le meilleur
+rappel que tu puisses lui donner : il verra sa garde du samedi matin là où il voit ses rendez-vous.

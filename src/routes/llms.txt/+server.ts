@@ -9,12 +9,9 @@ import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '$lib/seo'
 export function GET({ url }) {
 	const descriptions = new Map(getDocs().map((doc) => [doc.slug, doc.description]))
 
-	const groups = getDocNav().map(({ label, pages }) => {
-		const lines = pages.map(({ slug, path, label: pageLabel }) => {
-			const description = descriptions.get(slug)
-			return `- [${pageLabel}](${url.origin}${path}.md)${description ? `: ${description}` : ''}`
-		})
-		return `## ${label}\n\n${lines.join('\n')}`
+	const lines = getDocNav().map(({ slug, path, label }) => {
+		const description = descriptions.get(slug)
+		return `- [${label}](${url.origin}${path}.md)${description ? `: ${description}` : ''}`
 	})
 
 	return text(
@@ -22,7 +19,7 @@ export function GET({ url }) {
 			`# ${SITE_NAME} — ${SITE_TAGLINE}`,
 			`> ${SITE_DESCRIPTION}`,
 			`La documentation complète en un fichier: ${url.origin}/llms-full.txt`,
-			...groups,
+			`## Documentation\n\n${lines.join('\n')}`,
 		].join('\n\n') + '\n'
 	)
 }

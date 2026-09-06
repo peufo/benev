@@ -1,0 +1,77 @@
+---
+title: Découvrir benevio
+label: Découvrir benevio
+description: Un site pour ton évènement, un planning, et des inscriptions qui se gèrent presque toutes seules.
+---
+
+## Ce que benevio fait
+
+Tu organises un évènement et il te faut des bénévoles. benevio te donne trois choses :
+
+- **Un site à toi**, à sa propre adresse, que tu diffuses et rien d'autre.
+- **Un planning** découpé en équipes et en créneaux, que tu poses à la souris.
+- **Des inscriptions qui se gèrent** : chacun choisit ses créneaux, tu valides, les courriels
+  partent tout seuls.
+
+Le jour venu, tu imprimes des badges, tu pointes les présences et tu comptes les heures.
+
+## Les mots à connaître {#vocabulaire}
+
+benevio emploie six mots, toujours dans le même sens.
+
+### Évènement
+
+Ta manifestation. Tout lui appartient : les secteurs, les membres, les pages, l'habillage. Une même
+personne peut participer à plusieurs évènements sans que rien ne circule de l'un à l'autre.
+
+### Secteur
+
+Une équipe de travail : le bar, la sécurité, le montage. Chaque secteur a ses **responsables**, qui
+gèrent ses créneaux et répondent à ses inscriptions.
+
+### Période
+
+Un créneau de travail dans un secteur : un début, une fin, un nombre de places. C'est ce sur quoi
+un·e bénévole s'inscrit. Côté gestion on dit « période », côté bénévole « créneau ».
+
+### Inscription
+
+Le lien entre une personne et un créneau. Elle porte un
+[état](/docs/suivre-tes-benevoles#etats) : demandée, validée, déclinée ou annulée.
+
+### Membre
+
+Une personne rattachée à ton évènement. C'est une fiche, et
+[elle peut exister avant même que la personne se connecte](/docs/ton-equipe#membre-compte).
+
+### Adhésion
+
+Ce que tu demandes à quelqu'un pour rejoindre ton évènement : les informations dont tu as besoin,
+[tes propres questions](/docs/ouvrir-les-inscriptions#adhesion), et ta charte si tu en as une.
+
+## Ton site public {#site-public}
+
+C'est `benev.io/ton-evenement`, le seul lien à diffuser. Tes bénévoles y trouvent tes pages
+d'information, les secteurs avec leurs créneaux, le formulaire d'adhésion, et leur espace personnel
+une fois inscrits.
+
+Une page peut être réservée aux membres : elle n'apparaît alors que pour les personnes rattachées à
+ton évènement.
+
+## Ton espace de gestion {#gestion}
+
+La même adresse, suivie de `/admin`. C'est ton envers du décor : le tableau de bord, tes secteurs, la
+table de tes membres, celle des inscriptions, la grille de planification, la configuration et tes
+publications.
+
+Il s'ouvre à partir du rôle de [responsable](/docs/ton-equipe#roles) — en dessous, il est fermé. Un·e
+responsable n'y voit que ses propres secteurs, et ne touche ni à la configuration ni aux
+publications. Un·e administrateur·ice voit tout.
+
+## Ce que ça coûte {#prix}
+
+Gratuit jusqu'à 50 membres approuvés. Au-delà, tu achètes un palier une seule fois, pour cet
+évènement : pas d'abonnement, pas de reconduction.
+
+Le prix porte sur le nombre de bénévoles, **jamais sur les fonctionnalités**. Un petit évènement
+gratuit dispose exactement du même outil qu'un grand.
