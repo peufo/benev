@@ -3,7 +3,7 @@
 	import { Drawer, urlParam } from 'fuma'
 	import { scrollToSection, trackActiveSection, type TocSection } from '$lib/ui'
 	import type { DocPage } from './types'
-	import { slide } from 'svelte/transition'
+	import { fly, slide } from 'svelte/transition'
 
 	interface Props {
 		pages: DocPage[]
@@ -33,6 +33,7 @@
 					href={pageEntry.path}
 					class="menu-item py-1.5 text-sm"
 					class:active={isCurrent}
+					class:font-semibold={isCurrent}
 					aria-current={isCurrent ? 'page' : undefined}
 				>
 					<span class="truncate">{pageEntry.label}</span>
@@ -85,6 +86,7 @@
 		'max-h-[calc(100dvh-1rem)] overflow-y-auto',
 	]}
 	aria-label="Documentation"
+	in:fly={{ x: -80 }}
 >
 	{@render tree()}
 </nav>
