@@ -15,7 +15,7 @@ d'adhésion.
 ## Un planning
 
 Tu découpes ton évènement en **secteurs** (le bar, la sécurité, le montage), puis chaque secteur en
-**périodes de travail** : un début, une fin, un nombre de places.
+**périodes de travail**. Une période a un début, une fin et un nombre de places.
 
 [La planification](/docs/demarrer/secteurs-et-periodes) les montre toutes sur une grille. Tu poses,
 déplaces et redimensionnes les périodes à la souris.
@@ -32,20 +32,20 @@ benevio demande le nom et le courriel. Au-delà, tu définis
 [tes propres champs](/docs/demarrer/adhesion#champs) : un régime alimentaire, une taille de t-shirt,
 un permis de conduire.
 
-Ils ne servent pas qu'à remplir un formulaire. Ils deviennent des colonnes de tes tables, des
+Ces champs deviennent des colonnes de tes tables, des
 [conditions d'accès](/docs/avance/conditions-d-acces) à un secteur, et des couleurs sur les
 [badges](/docs/avance/badges).
 
 ## Le suivi et l'export
 
 Les tables des membres et des inscriptions se filtrent sur tout, et
-[le filtre courant se transporte avec toi](/docs/avance/filtrer-trier-exporter) : ce que tu exportes
-en CSV, à qui tu écris, quels badges tu imprimes.
+[le filtre courant se transporte avec toi](/docs/avance/filtrer-trier-exporter). Il décide de ce que
+tu exportes en CSV, à qui tu écris et quels badges tu imprimes.
 
 ## Le jour J
 
-Des badges au format carte, avec photo, couleurs et QR. L'export des créneaux vers ton agenda. Et de
-quoi pointer les absences.
+Tu imprimes des badges au format carte, avec photo, couleurs et QR. Tes bénévoles exportent leurs
+créneaux vers leur agenda. Tu pointes les absences.
 
 ## Ce que ça coûte
 

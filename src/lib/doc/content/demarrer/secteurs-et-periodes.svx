@@ -9,8 +9,8 @@ description: Découper ton évènement en équipes, poser les créneaux, et dél
 Un [secteur](/docs/decouvrir/vocabulaire) est une équipe de travail : le bar, la sécurité, le
 montage, la caisse. Commence par les créer, même vides.
 
-Donne à chacun une description : elle s'affiche sur le site public, et c'est souvent ce qui décide
-quelqu'un à choisir un poste plutôt qu'un autre. Un secteur peut aussi ne s'ouvrir
+Donne à chacun une description. Elle s'affiche sur le site public, et c'est souvent ce qui décide
+quelqu'un à choisir un poste. Un secteur peut aussi ne s'ouvrir
 [qu'à certaines personnes](/docs/avance/conditions-d-acces).
 
 ## Nommer les responsables
@@ -24,7 +24,7 @@ aller-retour.
 
 ## Poser les périodes
 
-Une période, c'est un début, une fin et un nombre de places. Quinze minutes au minimum.
+Une période a un début, une fin et un nombre de places. Elle dure quinze minutes au minimum.
 
 Tu les crées depuis la fiche du secteur, ou directement sur la planification. Un secteur peut porter
 une **date de fin des inscriptions** qui lui est propre, plus tôt que
@@ -35,12 +35,12 @@ une **date de fin des inscriptions** qui lui est propre, plus tôt que
 La grille montre tous tes secteurs et toutes leurs périodes. Tu poses une période en glissant sur le
 vide, tu la déplaces, tu la redimensionnes, tu la dupliques.
 
-L'axe se bascule de l'horizontal au vertical, le zoom se règle, et tu peux filtrer sur quelques
-secteurs pour y voir clair. Pour un grand planning, la vue plein écran gagne la place du menu.
+L'axe se bascule de l'horizontal au vertical et le zoom se règle. Tu peux filtrer sur quelques
+secteurs pour y voir clair, et la vue plein écran gagne la place du menu.
 
 ## Étiquettes et jalons
 
-Deux repères, qui n'ont pas d'onglet à eux :
+Deux repères n'ont pas d'onglet à eux :
 
 - Les **étiquettes** se posent sur une période, depuis son formulaire. Un nom, une couleur. Elles
   servent à filtrer et se retrouvent dans

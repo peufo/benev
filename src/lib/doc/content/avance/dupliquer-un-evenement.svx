@@ -7,7 +7,7 @@ description: Reprendre secteurs, périodes, pages et champs d'une édition, avec
 ## Choisir ce que tu reprends
 
 Ton évènement revient chaque année. Plutôt que de tout refaire, duplique l'édition précédente depuis
-la liste de tes évènements. Quatre listes à cocher :
+la liste de tes évènements. Tu coches quatre listes :
 
 - Les **[secteurs](/docs/demarrer/secteurs-et-periodes)**, avec leurs périodes, leurs
   [conditions d'accès](/docs/avance/conditions-d-acces) et le mode liste d'attente.
@@ -19,8 +19,8 @@ Décoche le secteur qui n'existe plus, la page devenue fausse.
 
 ## Décaler les dates
 
-Un champ, en jours. Toutes les périodes reprises et les dates de fin d'inscription se décalent
-d'autant.
+Tu saisis un décalage en jours. Toutes les périodes reprises et les dates de fin d'inscription se
+décalent d'autant.
 
 Vérifie que tu tombes sur les bons jours de semaine : d'une année à l'autre, 365 jours ne ramènent
 pas au même samedi. 364 ou 371 sont souvent les bons chiffres.
@@ -37,8 +37,8 @@ pas au même samedi. 364 ou 371 sont souvent les bons chiffres.
 | Les vues | L'affiche et le lieu |
 | Le logo et l'image de fond | |
 
-L'absence des membres est voulue : une nouvelle édition recommence son recrutement, et son quota.
-L'absence des responsables en est la conséquence, puisque ce sont des membres.
+Une nouvelle édition recommence son recrutement, et son quota. Les responsables ne suivent pas non
+plus, puisque ce sont des membres.
 
 Le nouvel évènement arrive en brouillon, nommé comme l'ancien suivi d'un numéro. Renomme-le et
 [corrige son adresse](/docs/demarrer/creer-un-evenement) avant de le publier.
@@ -46,7 +46,7 @@ Le nouvel évènement arrive en brouillon, nommé comme l'ancien suivi d'un num�
 ## Ce qui est recousu pour toi
 
 Tes vues, tes conditions d'accès et tes pages font référence à des champs de profil. En dupliquant,
-ces champs sont recréés, et toutes ces références sont réécrites vers les nouveaux.
+benevio recrée ces champs et réécrit toutes ces références vers les nouveaux.
 
 Une vue qui filtrait sur « régime alimentaire » filtre toujours dessus dans la copie.
 

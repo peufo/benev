@@ -6,12 +6,12 @@ description: Ce que tu demandes aux personnes qui rejoignent ton évènement, et
 
 ## Ce que benevio demande déjà
 
-Le nom, le prénom et le courriel sont demandés d'office. Tout le reste se règle dans
+benevio demande le nom, le prénom et le courriel d'office. Tout le reste se règle dans
 **Configuration**, sections « Adhésion » et « Champs du profil ».
 
 ## Ce que tu exiges en plus
 
-Cinq cases, chacune rendant une information obligatoire pour adhérer :
+Cinq cases rendent chacune une information obligatoire pour adhérer :
 
 - Adresse courriel vérifiée
 - Adresse postale
@@ -24,7 +24,7 @@ premier créneau, et beaucoup de gens s'inscrivent depuis leur téléphone, une 
 
 ## Tes propres champs {#champs}
 
-Au-delà, tu définis les champs que tu veux. Six types :
+Au-delà, tu définis les champs que tu veux. Ils sont de six types :
 
 | Type | Pour quoi |
 | --- | --- |
@@ -35,8 +35,8 @@ Au-delà, tu définis les champs que tu veux. Six types :
 | Liste à choix | Un régime alimentaire, une taille de vêtement |
 | Liste à choix multiple | Des jours de disponibilité, des compétences |
 
-Chaque champ porte une **question**, celle que la personne lira dans le formulaire, et trois
-réglages :
+Chaque champ porte une **question**, celle que la personne lira dans le formulaire. Il porte aussi
+trois réglages :
 
 - **Visible par les membres** — sinon, seuls les responsables voient la valeur.
 - **Modifiable par les membres** — la personne renseigne elle-même la valeur depuis son profil.
@@ -63,5 +63,5 @@ chaque changement.
 
 ## Ce qui bloque une inscription
 
-Un profil incomplet empêche de s'inscrire à une période. La personne est renvoyée vers son profil
-avec le message qui le dit, sans forcément comprendre pourquoi.
+Un profil incomplet empêche de s'inscrire à une période. benevio renvoie la personne vers son profil
+avec le message qui le dit, sans qu'elle comprenne forcément pourquoi.

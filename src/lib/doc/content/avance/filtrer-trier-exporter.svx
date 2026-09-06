@@ -1,7 +1,7 @@
 ---
 title: Filtrer, enregistrer une vue, exporter
 label: Filtrer et exporter
-description: Le filtre courant gouverne l'export, le mailing et les badges — c'est tout l'intérêt.
+description: Le filtre courant gouverne l'export, le courriel groupé et l'impression des badges.
 ---
 
 ## Filtrer une table
@@ -16,7 +16,7 @@ la répartition par champ.
 
 ## Ce que le filtre emporte avec lui
 
-C'est là que ça devient utile. Le filtre courant ne sert pas qu'à regarder : il gouverne aussi
+Le filtre courant décide aussi de ce qui sort de la table :
 
 - l'**export CSV** et l'export des contacts,
 - le **courriel groupé**, qui s'ouvre avec les adresses filtrées,
@@ -26,12 +26,11 @@ Filtre sur « secteur = bar » et « samedi », et tu imprimes les badges de l'�
 
 ## Enregistrer une vue
 
-Un jeu de filtres qui te servira encore se garde sous un nom. Dès que tes filtres ne correspondent à
+Tu gardes sous un nom un jeu de filtres qui te resservira. Dès que tes filtres ne correspondent à
 aucune vue connue, le bouton pour en créer une apparaît.
 
-Une vue est partagée : tous les responsables de l'évènement la retrouvent. Il en existe sur trois
-surfaces (les membres, les inscriptions et la planification), et chacune a ses vues à elle. « Vue
-simple » est le retour à l'absence de filtre.
+Tous les responsables de l'évènement retrouvent une vue enregistrée. Trois surfaces ont chacune ses
+vues : les membres, les inscriptions et la planification. « Vue simple » enlève tous les filtres.
 
 Créer une vue demande le rôle de [responsable](/docs/decouvrir/roles-et-droits), et les vues font
 partie de ce qu'une [duplication](/docs/avance/dupliquer-un-evenement) reprend.
@@ -45,6 +44,6 @@ partie de ce qu'une [duplication](/docs/avance/dupliquer-un-evenement) reprend.
 | Contacts | Table des membres | Un fichier de cartes de visite, à importer dans un carnet d'adresses |
 | Agenda | Espace du bénévole | Les créneaux de la personne, à ajouter à son agenda |
 
-Les deux CSV se copient aussi directement dans le presse-papier.
+Les deux CSV se copient aussi dans le presse-papier.
 
 Les dates sortent dans le fuseau horaire de l'évènement, pas dans le tien.

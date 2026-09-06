@@ -1,7 +1,7 @@
 ---
 title: Comptes et membres
 label: Comptes et membres
-description: Un membre est une fiche, un compte est une personne connectée — et ce n'est pas la même chose.
+description: Un membre est une fiche, un compte est une personne connectée. Les deux existent séparément.
 ---
 
 ## Un membre sans compte
@@ -9,18 +9,17 @@ description: Un membre est une fiche, un compte est une personne connectée — 
 Un **membre** est une fiche dans ton évènement. Un **compte** est quelqu'un qui se connecte. Les deux
 existent séparément.
 
-Quand tu invites quelqu'un, tu crées sa fiche tout de suite : son nom, son courriel, ses secteurs, et
-aucun compte relié. Cette fiche est utilisable. Tu peux la remplir, l'inscrire à des périodes,
+Quand tu invites quelqu'un, tu crées sa fiche tout de suite, avec son nom, son courriel et ses
+secteurs. Cette fiche est utilisable. Tu peux la remplir, l'inscrire à des périodes,
 [l'imprimer sur un badge](/docs/avance/badges).
 
 La personne, elle, ne peut ni consulter ses créneaux ni confirmer ses inscriptions tant qu'elle n'a
-pas réclamé son compte. C'est pourquoi
-[les inscriptions que tu crées pour elle](/docs/demarrer/suivre-les-inscriptions#qui-repond) sont
-validées d'office.
+pas réclamé son compte. C'est pourquoi benevio valide d'office
+[les inscriptions que tu crées pour elle](/docs/demarrer/suivre-les-inscriptions#qui-repond).
 
 ## Ce qui rattache un compte à une fiche
 
-L'adresse courriel, **mais seulement si elle est prouvée**. Deux façons de la prouver :
+L'adresse courriel, **mais seulement si elle est prouvée**. Elle se prouve de deux façons :
 
 - La personne arrive par le lien d'invitation qu'elle a reçu dans cette boîte.
 - L'adresse de son compte est déjà vérifiée.
@@ -33,29 +32,29 @@ sa fiche : son profil, ses inscriptions, ses rôles.
 Il vaut **90 jours**, et il est rattaché à la fiche, pas à l'adresse.
 
 Le renvoyer **révoque le précédent**. C'est ce qu'il faut quand tu as saisi une adresse fautive :
-corrige-la, renvoie, l'ancien lien ne vaut plus rien. Le renvoi se fait depuis la fiche du membre, et
-il est limité à trois par quart d'heure.
+corrige-la, renvoie, l'ancien lien ne vaut plus rien. Le renvoi se fait depuis la fiche du membre. Tu
+peux le refaire trois fois par quart d'heure.
 
-Suivre le lien ne consomme pas l'invitation. Elle est mise de côté pendant que la personne se
-connecte ou crée son compte, puis honorée à l'arrivée.
+Suivre le lien ne consomme pas l'invitation. benevio la met de côté pendant que la personne se
+connecte ou crée son compte, puis l'honore à l'arrivée.
 
 ## Quand le lien vise une autre adresse
 
-Tu invites `marie@boulot.ch`, Marie est connectée avec `marie@perso.ch`. benevio le dit explicitement
-plutôt que de rattacher n'importe quoi, et Marie choisit : se déconnecter pour réclamer la fiche, ou
-rester sur son compte et ignorer l'invitation.
+Tu invites `marie@boulot.ch`, Marie est connectée avec `marie@perso.ch`. benevio ne rattache rien et
+le signale. Marie choisit : se déconnecter pour réclamer la fiche, ou rester sur son compte et
+ignorer l'invitation.
 
 ## Décliner une invitation
 
 Décliner **ne supprime pas la fiche**. Elle reste dans ta liste, privée de son adresse courriel et de
 ses notifications.
 
-Tu vois donc qu'il s'est passé quelque chose, et tu peux corriger l'adresse et réinviter, ou
-supprimer la fiche.
+Tu vois donc qu'il s'est passé quelque chose. Tu peux corriger l'adresse et réinviter, ou supprimer
+la fiche.
 
 ## Le tunnel d'adhésion
 
-Ce que traverse une personne qui rejoint ton évènement : **Connexion**, puis **Adhésion** avec
+Une personne qui rejoint ton évènement traverse **Connexion**, puis **Adhésion** avec
 [la charte](/docs/demarrer/adhesion) si tu en as une, puis **Mon compte** avec ce que tu exiges, puis
 **Profil** avec [tes propres champs](/docs/demarrer/adhesion#champs).
 

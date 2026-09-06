@@ -13,8 +13,8 @@ tri.
 Sans condition, le secteur est ouvert à tous les membres. Dès qu'une condition est posée, un membre
 doit **toutes** les remplir, sinon le secteur n'apparaît pas dans sa liste.
 
-Il ne voit pas un message d'erreur : le secteur n'existe pas pour lui. Le site lui signale seulement
-que des secteurs lui sont cachés, ce qui l'invite à se connecter ou à compléter son profil.
+Le secteur n'existe pas pour lui, et aucun message ne le lui dit. Le site lui signale seulement que
+des secteurs lui sont cachés, ce qui l'invite à se connecter ou à compléter son profil.
 
 ## Les trois sortes de condition
 

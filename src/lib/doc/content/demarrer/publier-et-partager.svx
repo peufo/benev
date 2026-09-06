@@ -6,15 +6,14 @@ description: Passer du brouillon au public, ouvrir les inscriptions, et diffuser
 
 ## Les trois états
 
-Un évènement est dans l'un de trois états, que tu changes depuis **Configuration**, section
+Ton évènement est dans l'un de trois états. Tu en changes depuis **Configuration**, section
 « Statut » :
 
 - **En construction** — le brouillon. Seuls les responsables ont accès au site.
 - **Publié** — le site est publiquement disponible.
 - **Archivé** — l'évènement est passé. Comme le brouillon, seuls les responsables y accèdent.
 
-Tu peux repasser un évènement publié en brouillon, et republier un évènement archivé. Rien n'est
-définitif.
+Tu peux repasser un évènement publié en brouillon, et republier un évènement archivé.
 
 ## Ouvrir les inscriptions {#ouvrir}
 
@@ -30,7 +29,7 @@ Les deux cochées, c'est le mode libre-service. Les deux décochées, tu fais to
 
 ## Les autres réglages d'inscription
 
-Trois de plus, dans la même section :
+La même section en porte trois autres :
 
 - **Les membres peuvent annuler ou décliner leurs inscriptions** — sinon, ils doivent te le demander.
 - **Le chevauchement toléré**, en minutes, entre deux créneaux d'une même personne. Zéro par défaut :
@@ -49,5 +48,5 @@ Tu peux aussi inviter quelqu'un par courriel, depuis la liste des membres. La pe
 [un lien qui la rattache à ton évènement](/docs/avance/comptes-et-membres#invitation), et tu peux la
 nommer responsable de secteurs au passage.
 
-Une personne invitée est **approuvée d'office** : elle compte dans ton quota dès l'invitation, pas à
-son arrivée.
+Inviter quelqu'un l'**approuve d'office**. Cette personne compte dans ton quota dès l'invitation, pas
+à son arrivée.

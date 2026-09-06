@@ -11,14 +11,14 @@ description: Les quatre rôles d'un évènement, comment on les obtient, et le d
 ## Les quatre rôles
 
 Chaque membre d'un évènement porte un rôle. Les droits vont en s'élargissant du membre au
-propriétaire, et chaque rôle contient les précédents : un·e administrateur·ice est aussi responsable
+propriétaire, et chaque rôle contient les précédents. Un·e administrateur·ice est aussi responsable
 et membre.
 
 <RolesGlossary />
 
 ## Comment on les obtient
 
-Les rôles ne se choisissent pas dans une liste : ils se déduisent de ta situation.
+Les rôles ne se choisissent pas dans une liste. Ils se déduisent de ta situation.
 
 - **Propriétaire** — la personne qui a [créé l'évènement](/docs/demarrer/creer-un-evenement). Il n'y
   en a qu'une, et le rôle ne se transmet pas.
@@ -29,7 +29,7 @@ Les rôles ne se choisissent pas dans une liste : ils se déduisent de ta situat
 - **Membre** — toute personne dont l'[adhésion](/docs/decouvrir/vocabulaire#adhesion) est
   enregistrée.
 
-Retirer quelqu'un de ses secteurs lui retire son rôle de responsable, sans autre formalité.
+Retirer quelqu'un de ses secteurs lui retire son rôle de responsable.
 
 ## Le détail des droits
 

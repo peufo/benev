@@ -9,7 +9,7 @@ description: Le compte, l'évènement, et les réglages qui donnent son identit�
 Crée un compte, puis un évènement. Tu en es le [**propriétaire**](/docs/decouvrir/roles-et-droits),
 le rôle qui donne tous les droits.
 
-L'évènement naît en brouillon : personne ne le voit tant que tu ne l'as pas
+L'évènement naît en brouillon. Personne ne le voit tant que tu ne l'as pas
 [publié](/docs/demarrer/publier-et-partager).
 
 ## L'essentiel
@@ -17,7 +17,7 @@ L'évènement naît en brouillon : personne ne le voit tant que tu ne l'as pas
 Dans **Configuration**, la section « L'essentiel » porte ce qui ne changera plus beaucoup : le nom,
 l'adresse du site, le fuseau horaire, les dates et la description.
 
-L'adresse est dérivée du nom, et tu peux la modifier. Change-la avant de publier : une fois le lien
+L'adresse dérive du nom, et tu peux la modifier. Change-la avant de publier : une fois le lien
 diffusé, le remplacer casse tout ce qui pointait dessus.
 
 Tu n'as pas à saisir les dates à la main. Elles se calent sur tes
@@ -34,5 +34,5 @@ relèves.
 « Identité » habille le site : l'affiche, le logo, l'image de fond et ses réglages (flou, luminosité,
 blanchissement, grain).
 
-Quatre thèmes sont prêts à poser : **benevio**, **Papier**, **Prairie** et **Crépuscule**. Prends-en
-un comme point de départ, puis ajuste.
+Quatre thèmes sont prêts à poser : **benevio**, **Papier**, **Prairie** et **Crépuscule**. Chacun
+sert de point de départ et s'ajuste ensuite.

@@ -14,12 +14,12 @@ C'est `benev.io/ton-evenement`, l'adresse que tu diffuses. On y trouve :
 - **L'espace du membre**, où chacun retrouve ses créneaux, son profil et ses préférences de
   notification.
 
-Une page peut être réservée aux membres : elle n'apparaît alors que pour les personnes connectées et
+Tu peux réserver une page aux membres. Elle n'apparaît alors que pour les personnes connectées et
 rattachées à l'évènement.
 
 ## L'espace de gestion
 
-La même adresse, suivie de `/admin`. Neuf entrées :
+La même adresse, suivie de `/admin`. Elle compte neuf entrées :
 
 - **Tableau de bord** — qui vient d'arriver, quelles inscriptions attendent une réponse, où en est le
   remplissage, et le journal de ce qui s'est passé.
