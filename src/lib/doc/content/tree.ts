@@ -8,8 +8,8 @@
 export const DOC_SLUGS = [
 	'decouvrir',
 	'creer-ton-evenement',
-	'ouvrir-les-inscriptions',
 	'ton-equipe',
+	'ouvrir-les-inscriptions',
 	'suivre-tes-benevoles',
 	'le-jour-j',
 ]

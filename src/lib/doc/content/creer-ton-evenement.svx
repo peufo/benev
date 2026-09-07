@@ -5,7 +5,7 @@ description: Le compte, les réglages, les secteurs, les créneaux
 
 ## Compte et évènement
 
-Crée un compte, puis ton évènement. Tu en es le **propriétaire** : tu as tous les droits et tu es le
+Crée un compte, puis ton évènement. Tu en es le **propriétaire**. Ca signifit que tu as tous les droits et tu es le
 seul à pouvoir nommer des administrateur·ices.
 
 Ton évènement est créé en brouillon. Personne ne le voit tant que tu ne l'as pas
@@ -19,7 +19,7 @@ Tout se passe dans **Configuration**, section par section.
 
 Le nom, l'adresse du site, le fuseau horaire et la description.
 
-L'adresse se déduit du nom et tu peux la changer. **Fais-le avant de publier** : une fois le lien
+L'adresse se déduit du nom et tu peux la changer. **Fais-le avant de publier**, car une fois le lien
 diffusé, le remplacer casse tout ce qui pointait dessus.
 
 Tu n'as pas à saisir les dates de ton évènement, elles se calent sur les créneaux que tu poses.
@@ -31,44 +31,46 @@ site, et c'est par là que tes bénévoles te joindront.
 
 ### L'identité
 
-L'affiche, le logo, l'image de fond et ses réglages. Quatre thèmes sont prêts à l'emploi : benevio,
-Papier, Prairie et Crépuscule. Tu peux ensuite ajuster celui que tu choisis.
+L'affiche, le logo, l'image de fond et ses réglages. Des thèmes sont prêts à l'emploi, mais tu peux y ajouter ta touche personelle.
 
 ## Découper en secteurs {#secteurs}
 
-Un secteur est une équipe de travail : le bar, la sécurité, le montage, la caisse. Commence par les
+Un secteur est une équipe de travail comme par exemple: le bar, la sécurité, le montage, la caisse. Commence par les
 créer, même vides.
 
-Donne à chacun une description. Elle s'affiche sur ton site et c'est souvent elle qui décide
-quelqu'un à choisir un poste plutôt qu'un autre.
+Avec de bonnes descriptions, tes bénévoles sauront à quoi s'attendre quand ils vondront s'inscrire.
 
-Depuis la fiche d'un secteur, tu désignes ses **responsables**. Ils gèrent ses créneaux et répondent
-à ses inscriptions, sans rien voir du reste de ton évènement.
+Depuis la fiche d'un secteur, tu peux désigner des **responsables**. Ils pourront gèrer les créneaux et répondres
+aux inscriptions qui les concernes.
 
-## Poser les créneaux {#periodes}
+## Plannification {#periodes}
 
-Un créneau a un début, une fin et un nombre de places. Tu peux le créer depuis la fiche du secteur
-ou directement sur la grille.
+Tu peux éditer les créneaux depuis la fiche du secteur ou directement sur la grille de plannification.
 
-### La planification
-
-La grille montre tous tes secteurs et tous leurs créneaux. Tu peux y poser un créneau en glissant
-sur le vide, le déplacer, l'étirer ou le dupliquer.
+La grille offre une vue d'ensemble tous tes secteurs et tous leurs créneaux.
+Un simple cliquer-glisser te permet d'y ajouter un créneau.
+Et avec la fonction "Dupliquer après", il est possible d'enchainer plusieurs créneaux similaires en quelques cliques.
 
 Tu peux aussi basculer l'axe à l'horizontale ou à la verticale, régler le zoom et n'afficher que
 quelques secteurs.
 
-### Étiquettes et jalons
+### Les étiquettes
 
-- **Les étiquettes** se posent sur un créneau depuis son formulaire : un nom, une couleur. Elles
-  servent ensuite à filtrer et suivent dans tes exports.
-- **Les jalons** marquent un instant sur la grille, comme l'ouverture des portes ou le début du
-  concert.
+Une étiquette est un nom et une couleur arbitraire qui designe généralement une catégorie ou un sous-secteur.
+Elles peuvent être collé aux créneaux depuis leur formulaire et permettes de les regrouper visuelement ou de les filtrer.
 
-### La liste d'attente
+### Les jalons
 
-Un secteur peut accepter plus de demandes que de places : les inscriptions en attente ne bloquent
-alors rien et tu tranches ensuite. Sans ce mode, un créneau complet n'accepte plus personne.
+Les jalons marquent un instant sur la grille, comme l'ouverture des portes ou le début d'un concert.
+Ils permettent de rapidement naviguer et de s'y retrouver dans le calendrier.
+
+Pour créer un jalon, passe ta souris sur la dernière ligne (ou colonne) de la planification et clique sur la punaise qui apparait.
+
+### Mode liste d'attente
+
+Avec cette option activé, un secteur peut accepter plus de demandes que de places.
+Les inscriptions non validé ne bloquent donc pas les nouvelles.
+Sans ce mode, un créneau est considéré comme complet même si il contient des inscription en attente de validation.
 
 ## Dupliquer une édition {#dupliquer}
 
