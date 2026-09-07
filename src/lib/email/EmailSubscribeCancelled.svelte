@@ -20,7 +20,7 @@
 >
 	<p>
 		<b>{member.firstName} {member.lastName}</b>
-		a annulé sa participation à la période de travail suivante :
+		a annulé sa participation au créneau suivant :
 	</p>
 
 	<b>{subscribe.period.team.name}</b><br />

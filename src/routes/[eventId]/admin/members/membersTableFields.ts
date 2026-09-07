@@ -90,7 +90,7 @@ export function getMembersTableFields(
 		},
 		{
 			key: 'subscribes_range',
-			label: 'Inscriptions (période)',
+			label: 'Inscriptions (créneau)',
 			type: 'date',
 			cell(m) {
 				const subscribesAccepted = m.subscribes.filter(({ state }) => state === 'accepted')

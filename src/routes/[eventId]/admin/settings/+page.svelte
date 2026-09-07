@@ -205,7 +205,7 @@
 					<div class="min-w-0 grow">
 						<p class="font-medium">Supprimer cet évènement</p>
 						<p class="text-sm text-base-content/60">
-							Les secteurs, périodes, membres et inscriptions seront perdus. Cette opération est
+							Les secteurs, créneaux, membres et inscriptions seront perdus. Cette opération est
 							irréversible.
 						</p>
 					</div>

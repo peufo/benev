@@ -27,7 +27,7 @@
 
 	<h2 class="font-semibold text-lg">{team.name}</h2>
 	<p class="font-semibold text-lg">{formatRange(period)}</p>
-	<p>Souhaites-tu t'inscrire à cette période ?</p>
+	<p>Souhaites-tu t'inscrire à ce créneau ?</p>
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn btn-primary">Oui je le veux !</button>

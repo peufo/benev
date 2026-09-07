@@ -112,7 +112,7 @@ test.describe.serial('Plan', () => {
 	 * formulaire ne se recharge pas entre les deux: seul le rappel `oncreated` porte la nouvelle
 	 * étiquette jusqu'à l'`InputMultiSelect`.
 	 */
-	test('Une étiquette créée depuis une période y est sélectionnée', async () => {
+	test('Une étiquette créée depuis un créneau y est sélectionnée', async () => {
 		await gotoPlan('?form_period={}')
 		// `InputMultiSelect` déclare son libellé à côté du combobox, pas dessus: `getByLabel`
 		// ne le voit donc pas.
@@ -137,7 +137,7 @@ test.describe.serial('Plan', () => {
 	 * étiquettes en mémoire: sa fermeture ne les rejoue pas. Sans `onupdated`/`ondeleted`,
 	 * la puce afficherait encore l'ancien nom, ou une étiquette qui n'existe plus.
 	 */
-	test("L'édition d'une étiquette suit dans la période, sa suppression l'en retire", async () => {
+	test("L'édition d'une étiquette suit dans le créneau, sa suppression l'en retire", async () => {
 		const tags = page.getByRole('group').filter({ hasText: 'Étiquettes' }).getByRole('combobox')
 		await expect(tags.getByText('Urgent')).toBeVisible()
 

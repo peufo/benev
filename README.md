@@ -13,19 +13,19 @@ Platforme de gestion de bénévole
 - [x] Éditer des équipes
 - [x] Nommer des responsables
 - [x] Inviter des nouveaux utilisateurs
-- [x] Vue d'ensemble des bénévoles d'un évènement (filtre sur la période)
+- [x] Vue d'ensemble des bénévoles d'un évènement (filtre sur le créneau)
 
 ### Responsable
 
-- [x] Éditer les besoins en bénévoles (période + nombre de bénévoles)
+- [x] Éditer les besoins en bénévoles (créneau + nombre de bénévoles)
 - [x] Être averti en cas de nouvelle inscription
 - [x] Valider des inscriptions
-- [x] Lister les bénévoles (et leur info) par période
+- [x] Lister les bénévoles (et leur info) par créneau
 
 ### Bénévole
 
-- [x] Visualiser les équipes, leur périodes et les besoins en bénévoles
-- [x] S'inscrire sur une période
+- [x] Visualiser les équipes, leurs créneaux et les besoins en bénévoles
+- [x] S'inscrire sur un créneau
 - [x] Être averti lors da la validation de l'inscription
 - [x] Visualiser ses inscriptions
 - [x] Renseigner toute les infos util à l'organisation

@@ -67,7 +67,7 @@
 			},
 			{
 				key: 'period',
-				label: 'Période',
+				label: 'Créneau',
 				type: 'date',
 				cell: () => periodCell,
 				visible: true,

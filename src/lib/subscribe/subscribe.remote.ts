@@ -64,7 +64,7 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 		// Le tunnel d'inscription n'est pas décoratif: ce que l'évènement rend obligatoire est
 		// demandé avant la première période, pas après.
 		if (!memberIsRegistered(addMemberComputedValues(memberAuthor)))
-			error(403, `Complète ton profil avant de t'inscrire à une période`)
+			error(403, `Complète ton profil avant de t'inscrire à un créneau`)
 		if (!isMemberAllowed(period.team.conditions, memberAuthor)) error(403)
 	}
 
@@ -76,7 +76,7 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 	)
 	if (isMemberBusy) {
 		const startMessage = isSelfSubscribe ? 'Tu es' : 'Ce membre est'
-		error(403, `${startMessage} déjà occupé durant cette période`)
+		error(403, `${startMessage} déjà occupé durant ce créneau`)
 	}
 
 	const isAutoAccepted = isLeaderOfTeam && (isSelfSubscribe || !memberInvited.userId)

@@ -24,7 +24,7 @@
 	/>
 	<InputBoolean
 		field={fields.selfSubscribeAllowed}
-		label="Les membres peuvent s'inscrire aux périodes de travail"
+		label="Les membres peuvent s'inscrire aux créneaux"
 		checked={event.selfSubscribeAllowed}
 		onchange={(e) => (event.selfSubscribeAllowed = e.currentTarget.checked)}
 	/>
@@ -39,7 +39,7 @@
 
 	<InputNumber
 		field={fields.overlapPeriodAllowed}
-		label="Nombre de minutes de chevauchement toléré entre les périodes de travail d'un membre"
+		label="Nombre de minutes de chevauchement toléré entre les créneaux d'un membre"
 		value={event.overlapPeriodAllowed}
 		min={0}
 	/>

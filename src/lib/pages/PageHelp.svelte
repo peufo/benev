@@ -25,8 +25,7 @@
 		<a href={eventPath('/admin/teams')}>Crée des secteurs</a>
 		et nomme leurs responsables.<br />
 
-		Tu pourras ensuite gérer les périodes de travail depuis la page dédiée à chaque secteur ou
-		depuis
+		Tu pourras ensuite gérer les créneaux depuis la page dédiée à chaque secteur ou depuis
 		<a href={eventPath('/admin/plan')}>la planification.</a>
 	</p>
 </section>

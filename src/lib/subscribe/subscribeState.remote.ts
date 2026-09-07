@@ -104,7 +104,7 @@ export const setSubscribeState = form(
 			)
 			if (memberIsBusy) {
 				const startMessage = isSelfAction ? 'Tu es' : 'Ce membre est'
-				error(403, `${startMessage} déjà occupé durant cette période`)
+				error(403, `${startMessage} déjà occupé durant ce créneau`)
 			}
 		}
 

@@ -60,7 +60,7 @@
 							{/if}
 
 							{#if subscribe.isAbsent}
-								<div class="z-10" use:tip={{ content: 'Absent à la période de travail' }}>
+								<div class="z-10" use:tip={{ content: 'Absent au créneau' }}>
 									<TriangleAlertIcon class="text-warning" size={20} />
 								</div>
 							{/if}

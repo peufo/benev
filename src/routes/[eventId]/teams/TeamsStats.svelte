@@ -10,7 +10,7 @@
 <div class="flex gap-2">
 	<span class="badge">{teams.length} Secteurs</span>
 	<span class="badge">
-		{teams.reduce((acc, cur) => acc + cur.periods.length, 0)} Périodes
+		{teams.reduce((acc, cur) => acc + cur.periods.length, 0)} Créneaux
 	</span>
 	<span class="badge">
 		{teams.reduce((acc, cur) => acc + cur.nbSubscribes, 0)} /

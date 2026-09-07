@@ -35,9 +35,7 @@
 	})
 	// L'entête de la section « secteur » est la même en édition et en lecture: le formulaire la
 	// rend lui-même, les conditions devant partager son `<form>`.
-	const teamSubtitle = $derived(
-		team.range ? formatRangeDate(team.range) : 'Pas de périodes de travail'
-	)
+	const teamSubtitle = $derived(team.range ? formatRangeDate(team.range) : 'Pas de créneaux')
 </script>
 
 <a href={eventPath('/admin/teams')} class="btn btn-sm btn-ghost md:hidden my-3">
@@ -115,7 +113,7 @@
 		</Section>
 	{/if}
 
-	<Section id="periods" title="Périodes de travail">
+	<Section id="periods" title="Créneaux">
 		{#snippet action()}
 			<Progress period={total} class="mt-1 w-40" />
 			{#if team.isLeader}
@@ -126,7 +124,7 @@
 					class="btn btn-square btn-sm btn-secondary"
 					data-sveltekit-noscroll
 					data-sveltekit-replacestate
-					use:tip={{ content: 'Ajouter une période' }}
+					use:tip={{ content: 'Ajouter un créneau' }}
 				>
 					<PlusIcon />
 				</a>
@@ -142,7 +140,7 @@
 					}}
 				/>
 			{:else}
-				<Placeholder>Aucune période de travail</Placeholder>
+				<Placeholder>Aucun créneau</Placeholder>
 			{/each}
 		</div>
 	</Section>

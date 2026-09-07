@@ -19,7 +19,7 @@
 <Drawer
 	key="form_period"
 	maxWidth="400px"
-	title="{period?.id ? 'Édition' : 'Création'} d'une période"
+	title="{period?.id ? 'Édition' : 'Création'} d'un créneau"
 	class="surface-drawer"
 >
 	{#snippet children({ close })}

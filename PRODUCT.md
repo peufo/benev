@@ -63,13 +63,13 @@ La lisibilité en extérieur et sur petit écran n'est donc pas une précaution 
 **Ce que le produit fait**
 
 - Événements avec états (brouillon, ouvert, archivé), pages CMS propres à chaque événement, thème et médias personnalisés.
-- Équipes, périodes (créneaux) et inscriptions, avec validation par les responsables et conditions d'accès paramétrables.
+- Équipes, créneaux et inscriptions, avec validation par les responsables et conditions d'accès paramétrables.
 - Membres avec champs personnalisés par événement, invitations par email, charte à accepter, profils enrichis (rôles, statistiques, dons).
 - Planning glisser-déposer, jalons, vues sauvegardées, tags.
 - Badges PDF avec QR, export iCal, exports de listes.
 - Emails transactionnels: vérification, réinitialisation, demandes d'inscription (envoyée / acceptée / refusée / annulée), validation de paiement.
 
-**Vocabulaire du domaine** — à employer tel quel dans l'interface et le code: _événement_, _équipe_, _période_ (ou _créneau_), _membre_, _bénévole_, _responsable_, _adhésion_, _inscription_, _charte_, _jalon_, _don_, _badge_.
+**Vocabulaire du domaine** — à employer tel quel dans l'interface et le code: _événement_, _équipe_, _créneau_, _membre_, _bénévole_, _responsable_, _adhésion_, _inscription_, _charte_, _jalon_, _don_, _badge_.
 
 **Paliers et quotas** — le quota porte sur le nombre de **membres validés**, jamais sur les fonctionnalités:
 

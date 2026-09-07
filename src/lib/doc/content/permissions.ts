@@ -36,12 +36,12 @@ export const PERMISSIONS: PermissionRow[] = [
 		values: [true, true, 'Seulement ses secteurs', false],
 	},
 	{
-		label: 'Gérer les périodes',
-		values: [true, true, 'Seulement les périodes de ses secteurs', false],
+		label: 'Gérer les créneaux',
+		values: [true, true, 'Seulement les créneaux de ses secteurs', false],
 	},
 	{
-		label: 'Inscrire un membre à une période',
-		values: [true, true, 'Seulement les périodes de ses secteurs', false],
+		label: 'Inscrire un membre à un créneau',
+		values: [true, true, 'Seulement les créneaux de ses secteurs', false],
 	},
 	{ label: 'Supprimer un membre', values: [true, true, 'Soi-même', 'Soi-même'] },
 	{
@@ -54,7 +54,7 @@ export const PERMISSIONS: PermissionRow[] = [
 		values: [true, true, true, false],
 	},
 	{ label: 'Accèder à la planification', values: [true, true, true, false] },
-	{ label: "S'inscrire à une période", values: [true, true, true, undefined] },
+	{ label: "S'inscrire à un créneau", values: [true, true, true, undefined] },
 	{
 		label: 'Annuler une inscription',
 		values: [

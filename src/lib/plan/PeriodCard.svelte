@@ -48,7 +48,7 @@
 			// Les dates viennent du serveur, et les deltas ne retombent à zéro qu'une fois la carte
 			// repositionnée dessus: dans l'autre ordre elle reviendrait un instant à sa place d'origine.
 			onupdate?.({ ...period, start: moved.start, end: moved.end })
-			toast.success('Période mise à jour')
+			toast.success('Créneau mis à jour')
 		} catch (err) {
 			toast.error('Erreur')
 			console.error(err)

@@ -26,10 +26,9 @@ personne peut participer à plusieurs évènements sans que rien ne circule de l
 C'est une équipe de travail, comme par exemple le bar, la sécurité ou le montage. Chaque secteur a
 ses **responsables**, qui gèrent ses créneaux et répondent à ses inscriptions.
 
-### Période
+### Créneau
 
-Un créneau de travail dans un secteur : un début, une fin, un nombre de places. C'est ce sur quoi
-un·e bénévole s'inscrit. Côté gestion on dit « période », côté bénévole « créneau ».
+Un temps de travail dans un secteur définit par un début, une fin et un nombre bénévoles attendus.
 
 ### Inscription
 

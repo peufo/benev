@@ -7,7 +7,7 @@
 	key="onlyAvailable"
 	defaultValue="false"
 	options={[
-		{ value: 'true', label: "N'afficher que les périodes disponibles", icon: EyeOffIcon },
+		{ value: 'true', label: "N'afficher que les créneaux disponibles", icon: EyeOffIcon },
 		{ value: 'false', label: 'Tout afficher', icon: EyeIcon },
 	]}
 />

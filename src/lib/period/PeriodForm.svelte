@@ -118,7 +118,7 @@
 				maxSubscribe: remoteForm.fields.maxSubscribe.value() ?? maxSubscribe,
 				tagIds: selectedTags.map((t) => t.id),
 			})
-			toast.success('Période dupliquée')
+			toast.success('Créneau dupliqué')
 			// La période créée devient celle du formulaire: `form_period` la recharge via le `load`,
 			// ce qui permet d'enchaîner les duplications sans rouvrir le tiroir.
 			await goto(urlParam.with({ form_period: nextPeriod.id }), {
@@ -143,14 +143,14 @@
 			return true
 		}
 		const msg = [
-			`Cette période de travail contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
-			'Es-tu certain·e de vouloir la supprimer ?',
+			`Ce créneau contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
+			'Es-tu certain·e de vouloir le supprimer ?',
 		].join('\n')
 		if (confirm(msg)) {
 			ondelete?.()
 			return true
 		}
-		toast.info('Suppession de la période annulée !')
+		toast.info('Suppression du créneau annulée !')
 		return false
 	}
 </script>
@@ -159,7 +159,7 @@
 	<!-- HTML interdit les <form> imbriqués: ce formulaire ne porte que les champs cachés, son
 	bouton vit dans la barre d'actions du formulaire principal, associé par l'attribut `form`. -->
 	<form
-		{...deletePeriod.enhance(enhanceForm({ before: confirmDelete, success: 'Période supprimée' }))}
+		{...deletePeriod.enhance(enhanceForm({ before: confirmDelete, success: 'Créneau supprimé' }))}
 		id={deleteFormId}
 		class="hidden"
 	>
@@ -173,7 +173,7 @@
 <form
 	{...remoteForm.enhance(
 		enhanceForm({
-			success: period?.id ? 'Période mise à jour' : 'Période ajoutée',
+			success: period?.id ? 'Créneau mis à jour' : 'Créneau ajouté',
 			onsuccess: () => onsuccess?.(),
 		})
 	)}

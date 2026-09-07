@@ -34,7 +34,7 @@
 				A accès à toutes les données de son évènement.
 			</li>
 			<li>
-				<b>Responsable</b> — désigné·e par l'organisateur·ice sur une ou plusieurs équipes. Gère les périodes
+				<b>Responsable</b> — désigné·e par l'organisateur·ice sur une ou plusieurs équipes. Gère les créneaux
 				de son équipe, valide les inscriptions et voit les informations des bénévoles de cette équipe.
 			</li>
 			<li>

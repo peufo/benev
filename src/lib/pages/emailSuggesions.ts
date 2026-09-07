@@ -73,7 +73,7 @@ const suggestionsSubscribe: Suggestion<
 	},
 	{
 		id: 'subscribe.period',
-		label: 'Période de travail',
+		label: 'Créneau',
 		getValue: (data) => formatRange(data.subscribe.period, data.member.event.timezone),
 	},
 ]

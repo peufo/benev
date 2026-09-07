@@ -20,7 +20,7 @@
 >
 	<p>
 		<b>{member.firstName} {member.lastName}</b>
-		a décliné de participer à la période de travail suivante :
+		a décliné de participer au créneau suivant :
 	</p>
 
 	<b>{subscribe.period.team.name}</b><br />

@@ -23,6 +23,6 @@ export const ROLE_DESCRIPTIONS: Record<Exclude<MemberRole, 'root'>, string> = {
 		'Nommé·e par le propriétaire ou par un·e administrateur·ice, ce rôle gère tout ce qui se ' +
 		'rapporte à son secteur.',
 	member:
-		"Quiconque souhaite s'inscrire à une période de travail: ce rôle suit et modifie ses " +
+		"Quiconque souhaite s'inscrire à un créneau: ce rôle suit et modifie ses " +
 		'propres inscriptions.',
 }

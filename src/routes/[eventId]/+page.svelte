@@ -21,7 +21,7 @@
 			<p>
 				Tu peux
 				<a href={eventPath('/teams')}> parcourir les secteurs </a>
-				pour t'inscrire aux périodes de travail qui t'intéressent.
+				pour t'inscrire aux créneaux qui t'intéressent.
 			</p>
 		{/if}
 		<p>

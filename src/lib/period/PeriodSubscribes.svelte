@@ -18,7 +18,7 @@
 	{#each subscribes as subscribe (subscribe.id)}
 		<div class="flex items-center gap-1">
 			{#if subscribe.isAbsent}
-				<div use:tip={{ content: 'Ce membre a été absent à sa periode de travail' }}>
+				<div use:tip={{ content: 'Ce membre a été absent à son créneau' }}>
 					<TriangleAlertIcon class="text-warning" size={20} />
 				</div>
 			{/if}

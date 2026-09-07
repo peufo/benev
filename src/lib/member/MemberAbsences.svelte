@@ -12,7 +12,7 @@
 </script>
 
 {#if nbAbsences}
-	{@const content = `Absent à ${nbAbsences} période${nbAbsences > 1 ? 's' : ''}`}
+	{@const content = `Absent à ${nbAbsences} créneau${nbAbsences > 1 ? 'x' : ''}`}
 	<div use:tip={{ content }}>
 		<TriangleAlertIcon class="text-warning" size={20} />
 	</div>

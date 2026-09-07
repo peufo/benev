@@ -10,7 +10,7 @@
 </script>
 
 {#if isAbsent}
-	<div use:tip={{ content: 'Absent à sa période de travail' }}>
+	<div use:tip={{ content: 'Absent à son créneau' }}>
 		<TriangleAlertIcon class="text-warning" size={20} />
 	</div>
 {/if}

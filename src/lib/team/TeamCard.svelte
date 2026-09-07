@@ -43,7 +43,7 @@
 
 		<div class="flex flex-wrap gap-2 items-center">
 			<span class="text-sm font-semibold mt-1 mb-2">
-				{team.range ? formatRangeDate(team.range) : 'Pas de périodes de travail'}
+				{team.range ? formatRangeDate(team.range) : 'Pas de créneaux'}
 			</span>
 		</div>
 
@@ -88,7 +88,7 @@
 		{#each team.periods as period (period.id)}
 			<PeriodRow period={{ ...period, team }} {onclickPeriod} />
 		{:else}
-			<Placeholder>Aucune période de travail</Placeholder>
+			<Placeholder>Aucun créneau</Placeholder>
 		{/each}
 	</div>
 </CardCollapse>

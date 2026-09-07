@@ -36,8 +36,8 @@
 		<InputOptionInParam
 			key="isAbsent"
 			options={{
-				false: { label: 'Présent à toutes ses périodes', icon: CircleCheckIcon },
-				true: { label: 'Absent à une période ou plus', icon: TriangleAlertIcon },
+				false: { label: 'Présent à tous ses créneaux', icon: CircleCheckIcon },
+				true: { label: 'Absent à un créneau ou plus', icon: TriangleAlertIcon },
 			}}
 		/>
 	</div>

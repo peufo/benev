@@ -21,7 +21,7 @@
 	<p>
 		Bonne nouvelle ! <br />
 		<b>{member.firstName} {member.lastName}</b>
-		a confirmé sa participation à la période suivante :
+		a confirmé sa participation au créneau suivant :
 	</p>
 
 	<b>{subscribe.period.team.name}</b><br />

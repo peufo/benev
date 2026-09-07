@@ -117,7 +117,7 @@
 			icon={ClipboardCheckIcon}
 			subtitle={data.maxSubscribes
 				? `${data.nbSubscribes} inscription${plurial(data.nbSubscribes)} sur les ${data.maxSubscribes} attendues${scope}`
-				: `Aucune place ouverte par les périodes${scope}`}
+				: `Aucune place ouverte par les créneaux${scope}`}
 		>
 			{#snippet action()}
 				<InputOptionInParam key="waiting" options={waitingOptions} class="ml-auto" />
@@ -132,7 +132,7 @@
 			icon={MapPinnedIcon}
 			subtitle="{data.teams.length} secteur{plurial(data.teams.length)}{data.isAdmin
 				? ''
-				: ' à votre charge'} · {data.nbPeriods} période{plurial(data.nbPeriods)}"
+				: ' à votre charge'} · {data.nbPeriods} créneau{data.nbPeriods > 1 ? 'x' : ''}"
 		>
 			{#snippet action()}
 				{@render seeAllLink(eventPath('/admin/plan'), 'Voir la planification', ChartGanttIcon)}
@@ -160,7 +160,7 @@
 							Crée tes secteurs
 						</a>, et
 						<a href={eventPath('/admin/plan')} class="link link-hover link-primary">
-							planifie les périodes de travail
+							planifie les créneaux
 						</a> : c'est là-dessus que tes bénévoles s'inscrivent.
 					</li>
 					<li>

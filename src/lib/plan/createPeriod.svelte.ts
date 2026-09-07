@@ -184,7 +184,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 			if (_end.diff(_start) < PERIOD_MIN_MS) {
 				detachGhost()
 				toast.info(
-					`Cliquez-glissez pour définir la durée de la période (${PERIOD_MIN_MINUTES} minutes minimum)`
+					`Cliquez-glissez pour définir la durée du créneau (${PERIOD_MIN_MINUTES} minutes minimum)`
 				)
 				// L'invitation reste sous les yeux: le trait d'accroche reprend sa place.
 				showHoverGhost()

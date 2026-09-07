@@ -3,7 +3,7 @@ import { pageMetaTags } from '$lib/seo'
 
 const DESCRIPTION =
 	'Le guide de benevio pour les organisateur·ices : créer un évènement, ouvrir les inscriptions, ' +
-	'comprendre les secteurs, les périodes et les rôles.'
+	'comprendre les secteurs, les créneaux et les rôles.'
 
 export const load = () => ({
 	pages: getDocSummaries(),

@@ -28,7 +28,7 @@ export const validationPeriod = (
 		ctx.addIssue({
 			code: 'custom',
 			path: ['end'],
-			message: `La période doit durer au moins ${PERIOD_MIN_MINUTES} minutes`,
+			message: `Le créneau doit durer au moins ${PERIOD_MIN_MINUTES} minutes`,
 			fatal: true,
 		})
 	}
