@@ -21,8 +21,6 @@ export const ROLE_DESCRIPTIONS: Record<Exclude<MemberRole, 'root'>, string> = {
 	admin: 'Nommé·e par le propriétaire, ce rôle en hérite pratiquement tous les droits.',
 	leader:
 		'Nommé·e par le propriétaire ou par un·e administrateur·ice, ce rôle gère tout ce qui se ' +
-		'rapporte à son secteur.',
-	member:
-		"Quiconque souhaite s'inscrire à un créneau: ce rôle suit et modifie ses " +
-		'propres inscriptions.',
+		'rapporte à ses secteurs.',
+	member: "Quiconque qui a rejoind l'évènement. Ce rôle permet de suivre ses propres inscriptions.",
 }

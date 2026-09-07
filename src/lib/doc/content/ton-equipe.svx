@@ -9,9 +9,6 @@ description: Les rôles, les droits, les invitations
 
 ## Les quatre rôles {#roles}
 
-Chaque membre porte un rôle, et chacun contient le précédent : un·e administrateur·ice est aussi
-responsable, et un·e responsable est aussi membre.
-
 <RolesGlossary />
 
 Ces rôles ne se choisissent pas dans une liste, ils se déduisent de la situation :
@@ -33,35 +30,29 @@ Passe la souris sur les icônes pour lire les conditions.
 Un **membre** est une fiche dans ton évènement. Un **compte** est quelqu'un qui se connecte. Les
 deux existent séparément, ce qui te permet de travailler d'avance.
 
-Quand tu invites quelqu'un, sa fiche existe aussitôt : tu peux la remplir, l'inscrire à des créneaux
-et imprimer son badge. La personne, elle, ne verra ses créneaux qu'une fois son compte réclamé.
-C'est pourquoi
-[les inscriptions que tu crées pour elle sont validées d'emblée](/docs/suivre-tes-benevoles#qui-repond),
-il n'y a personne pour répondre.
+Quand tu invites quelqu'un, sa fiche existe aussitôt : tu peux la remplir, l'inscrire à des créneaux et imprimer son badge.
+La personne, elle, ne pourra pas voir son tableau de bord tant qu'elle n'aura pas accepter l'invitation avec son compte.
+
+C'est pour éviter qu'elles restent éternelement en attentes que [les inscriptions que tu crées pour un membre sans compte rattacher sont validées d'emblée](/docs/suivre-tes-benevoles#qui-repond). Il n'y a personne pour répondre.
 
 Ce qui rattache un compte à une fiche, c'est l'adresse courriel, **et seulement si elle est
-prouvée** : par le lien d'invitation reçu dans cette boîte, ou par une adresse déjà vérifiée. Sans
-cette précaution, n'importe qui récupérerait la fiche de quelqu'un d'autre en ouvrant un compte à
+vérifier** par le lien d'invitation reçu dans cette boîte, ou par une adresse déjà vérifiée. Sans
+cette précaution, n'importe qui pourrair récupérer la fiche de quelqu'un d'autre en ouvrant un compte à
 son adresse.
 
 ## Inviter quelqu'un {#invitation}
 
-L'invitation part de ta liste de membres, avec les secteurs dont la personne sera responsable le cas
-échéant. Elle reçoit un lien qui la rattache à ton évènement.
+L'invitation se fait depuis ta liste de membres.
+Il n'est pas obligatoire de renseigner un email car un membre peut être entièrement gérer par un responsable.
+
+// TODO: Ajouter une section concernant les publication et model de mail dans creer-ton-evenement.svx et mentionné ici que l'email est personnalisable
+Mais si tu en renseigne un, le destinataire reçevra un email contenant le lien qui le rattache à ton évènement.
 
 **Inviter vaut approbation** : la personne compte dans ton [quota](/docs/suivre-tes-benevoles#quota)
 dès l'envoi, pas à son arrivée.
 
+// TODO: Mentionner le tunelle d'adhésion ( Charte, formulaires, ...) avec un lien vers /ouvrir-les-inscriptions#adhesion
+
 ### Corriger une adresse
 
-Tu t'es trompé·e d'adresse ? Corrige-la et renvoie l'invitation, le lien précédent ne vaut alors
-plus rien.
-
-Si la personne est connectée avec une autre adresse que celle que tu as invitée, benevio ne rattache
-rien et le lui dit. À elle de choisir : se déconnecter pour réclamer la fiche, ou rester sur son
-compte et ignorer l'invitation.
-
-### Quand on décline
-
-Décliner **ne supprime pas la fiche**. Elle reste dans ta liste, privée de son adresse et de ses
-notifications. Tu peux alors corriger l'adresse et réinviter, ou supprimer la fiche.
+Tu t'es trompé·e d'adresse ? Corrige-la et renvoie l'invitation, le lien précédent est simplement invalidé.
