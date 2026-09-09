@@ -35,7 +35,7 @@ et imprimer son badge. La personne, elle, ne verra son tableau de bord qu'une fo
 acceptée avec son compte.
 
 C'est pour éviter qu'elles restent éternellement en attente que
-[les inscriptions que tu crées pour un membre sans compte rattaché sont validées d'emblée](/docs/suivre-tes-benevoles#qui-repond).
+[les inscriptions que tu crées pour un membre sans compte rattaché sont validées d'emblée](/docs/gestion#qui-repond).
 Il n'y a personne pour répondre.
 
 Ce qui rattache un compte à une fiche, c'est l'adresse courriel, **et seulement si elle est
@@ -52,7 +52,7 @@ Mais si tu en renseignes une, la personne reçoit un courriel contenant le lien 
 évènement. Ce message fait partie des
 [modèles que tu peux réécrire](/docs/creer-ton-evenement#publications).
 
-**Inviter vaut approbation** : la personne compte dans ton [quota](/docs/suivre-tes-benevoles#quota)
+**Inviter vaut approbation** : la personne compte dans ton [quota](/docs/gestion#quota)
 dès l'envoi, pas à son arrivée.
 
 Elle passe malgré tout par ton [adhésion](/docs/ouvrir-les-inscriptions#adhesion) : elle réclame son

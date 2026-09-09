@@ -6,8 +6,6 @@
 
 - [ ] Auto-accepte des inscriptions sur les membres sans compte est peut-être un raccourcie non nécéssaire. Par exemple, si une invitation est en cours pour un membre et qu'un responsable l'inscrit à une période, le membre n'aurra pas eu le temps de lié sont compte et son l'inscription sera automatiquement validé.
 
-- [ ] Réaliser un audit de sécurité
-
 - [ ] Détecter et journaliser les emails qui non pas été recu par la destinataire.
 
 - Vérifié que l'option "Compté par combinéson" est bien implémenté
@@ -15,9 +13,11 @@
 - [ ] Nouvelle navigation
   - [ ] Limiter le nombre de pages d'un événement (6 pages suffisent largement)
   - [ ] Placer l'indicateur de quota dans la section "Status" des settings
-  - [ ] pages: Au lieu de ce transformé en menu sandwich les pages du header doivent se transformé en onglets (je pense que ca doit rester en haut de page dans une prolongation du header).
+  - [ ] pages: Au lieu de ce transformer en menu sandwich les pages du header doivent se transformé en onglets (je pense que ca doit rester en haut de page dans une prolongation du header, mais en bas prêt du pousse, ca peut être bien aussi, si c'est pas trop compliqué).
     - [ ] event: Etant donner qu'on ne métrise pas le nombre de page d'une événement, on peut regrouper les pages secondaire dans un onglet "Info"
     - [ ] event: Le lien vers /[eventId]/me doit ce trouver dans la liste des pages (Au lieu de cliquer sur le nom de l'événement en haut à gauche)
     - [ ] landing: On a que 4 liens, ca passe
     - [ ] admin: La page d'aide étant remplacé par la vrai doc, le quota peut être placer dans la section "statut" de la configuration, le lien vers /admin/pages peut être placer dans les settings (TOC ou section pour être accéssible en mobile). Ca réduit le nombre d'onglet à 6. Ce qui devrait être résonnable pour être placer horizontalement
-  - [ ] context: Le changement de context ce fait via un menu
+  - [ ] context-admin: Pour les responables, un toogle de devrait etre dispo dans le header. Un indicateur visuel doit facilement nous faire comprendre qu'on est en mode admin.
+  - [ ] context-user: L'avatar doit ouvrir un menu (Mon compte, Mes événements, (Mes achats), Déconnexion)
+  - [ ] context-global: Le bouton en haut à gauche ouvrir un menu (Petite liste de mes événements, Lien vers tous les événements, Lien vers la documentation)

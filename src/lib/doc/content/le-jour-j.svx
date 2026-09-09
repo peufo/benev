@@ -1,55 +1,62 @@
 ---
 title: Le jour J
-description: Les badges, le QR code, les présences, les agendas
+description: Les exports, les impressions, les présences, les agendas
 ---
 
-## Les badges {#badges}
+## Ce que tu peux sortir {#exports}
 
-Un badge est une carte nominative imprimable, au format d'une carte de crédit. Tu peux en configurer
-jusqu'à dix modèles depuis **Publications**.
+**Ton filtre décide de tout le reste.** Ce que tu as
+[affiché dans la table](/docs/gestion#tables) est ce qui sort, et pas seulement la page que tu vois :
+l'ensemble filtré, jusqu'au dernier nom.
 
-Le recto porte l'image de fond, le logo, le nom, la photo et deux grilles d'accès : les jours et les
-secteurs. Le verso, si tu le gardes, porte un QR code. Le fond et le logo reprennent par défaut ceux
-de ton évènement.
+Depuis la table des membres :
 
-### Ce que le badge lit dans les profils
+- l'**export CSV**, avec une colonne par question que tu as posée, ou la même chose copiée
+  directement dans ton presse-papier,
+- l'**export des contacts**, à glisser dans le répertoire de ton téléphone,
+- le **courriel groupé**, qui ouvre ta messagerie avec les adresses déjà en place.
 
-Quatre emplacements se nourrissent de
-[tes propres questions](/docs/ouvrir-les-inscriptions#adhesion), et chacun attend un format précis.
+Depuis la table des inscriptions, l'**export CSV** des créneaux : qui, quel secteur, quelles heures,
+quel état, et la présence.
 
-| Emplacement | Format attendu | Exemple |
-| --- | --- | --- |
-| Type de membre | Liste à choix | Bénévole, Responsable, Artiste, Presse |
-| Label | Liste à choix ou texte | La fonction, l'équipe |
-| Accès aux jours | Liste à choix multiple | Vendredi, Samedi, Dimanche |
-| Accès aux secteurs | Liste à choix multiple | Backstage, Bar, Loges |
+Filtre sur « secteur : bar » et « samedi », et tu sors l'équipe du bar du samedi.
 
-Si ces questions n'existent pas encore, crée-les d'abord : benevio refuse un format qui ne
-correspond pas.
+## Imprimer les badges {#impressions}
 
-### Les couleurs
+Tes [modèles de badge](/docs/configuration-avancee#badges) se dessinent à l'avance. Le jour venu, il
+ne reste qu'à imprimer.
 
-Le type de membre pilote la couleur du badge : tu associes une couleur à chaque valeur de la liste,
-et le texte s'éclaircit ou s'assombrit tout seul pour rester lisible.
+Depuis la table des membres, le bouton badge sort un PDF pour les personnes filtrées, une page
+chacune. Si tu as plusieurs modèles, un menu te laisse choisir lequel. Depuis la fiche de quelqu'un,
+tu n'imprimes que le sien.
 
-### Imprimer
-
-Depuis la table des membres, tu sors un PDF pour
-[les personnes actuellement filtrées](/docs/suivre-tes-benevoles#exports). Depuis la fiche de
-quelqu'un, tu n'imprimes que le sien.
+Un·e [responsable](/docs/ton-equipe#roles) peut imprimer, même sans pouvoir configurer les modèles.
 
 ## Le QR code {#qr}
 
-Scanné par un·e [responsable](/docs/ton-equipe#roles) connecté·e, le QR code ouvre la fiche du
-membre : de quoi vérifier une identité ou retrouver quelqu'un.
+Scanné par un·e responsable connecté·e, le QR code du badge ouvre la fiche du membre : de quoi
+vérifier une identité ou retrouver quelqu'un.
 
 Scanné par la personne elle-même, il ouvre son espace personnel. Scanné par quelqu'un qui n'est pas
-connecté, il ne donne rien.
+connecté, il ne mène qu'à la page de connexion.
 
-## Pointer les présences
+## Pointer les présences {#presences}
 
-La table des inscriptions te sert de feuille de présence : chaque ligne peut être marquée
-**absente** d'un clic. À la fin de la journée, tu sais qui est venu.
+La table des inscriptions te sert de feuille de présence. Le menu **« … »** en bout de ligne porte
+**Marquer comme absent**, et de quoi revenir dessus. Tu retrouves le même geste dans la liste des
+inscrits d'un créneau.
+
+**L'absence se note par créneau, pas par personne** : quelqu'un peut manquer le samedi matin et être
+là le soir. Un·e responsable ne pointe que les créneaux de ses secteurs, et chaque geste est inscrit
+au journal.
+
+Ce que ça te rend ensuite :
+
+- dans la table des inscriptions, une colonne **Absent** qui se filtre,
+- dans la table des membres, une alerte sur la ligne de qui a manqué, et, sous le filtre
+  **Bénévoles**, de quoi ne garder que les personnes venues à tous leurs créneaux ou celles qui en
+  ont manqué au moins un,
+- une colonne de plus dans l'[export des inscriptions](#exports).
 
 ## L'agenda personnel
 

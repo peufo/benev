@@ -49,20 +49,15 @@ Mais le plus important est certainement de rédiger la **charte des bénévoles*
 acceptée par les nouveaux membres
 [rejoignant ton évènement](/docs/ouvrir-les-inscriptions#adhesion).
 
+### Les modèles de courriel et de badge
 
-TODO: Une nouvelle page devrait être créer pour la configuration avancée au lieu de dispercer ca dans suivre-tes-bénévolre et le-jour-j
-### Les modèles de courriel et badge
+Des messages simples et génériques partent vers tes bénévoles quand un·e responsable effectue une
+action qui les concerne. Tu peux
+[les réécrire entièrement](/docs/configuration-avancee#courriels) et y insérer des valeurs que
+benevio remplace à l'envoi, comme le prénom ou le créneau concerné.
 
-Des messages simples et génériques sont envoyés aux bénévoles quand un·e responsable effectue une
-action qui les concerne.
-
-Heureusement, tu peux entièrement les personnaliser à l'image de ton évènement. L'éditeur te laisse
-y insérer des valeurs dynamiques que injectées lors de l'envoi, comme le prénom ou le créneau
-concerné.
-
-Les modèle disponibles sont listé [sur cette page](/docs/suivre-tes-benevoles#courriels).
-
-C'est aussi depuis **Publications** que se dessinent tes [badges](/docs/le-jour-j#badges).
+C'est aussi depuis **Publications** que se dessinent tes
+[badges](/docs/configuration-avancee#badges), les cartes nominatives que tu imprimeras le jour venu.
 
 ## Découper en secteurs {#secteurs}
 

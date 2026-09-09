@@ -55,8 +55,8 @@ que toi.
 
 Ces réponses te resservent partout : colonnes et filtres de tes tables,
 [conditions d'accès à un secteur](#conditions),
-[variables de tes courriels](/docs/suivre-tes-benevoles#courriels) et couleurs de tes
-[badges](/docs/le-jour-j#badges).
+[variables de tes courriels](/docs/configuration-avancee#courriels) et couleurs de tes
+[badges](/docs/configuration-avancee#badges).
 
 ### La charte
 

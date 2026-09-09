@@ -1,1 +1,0 @@
-- [ ] Doc: "Créer ton évènement" - Ajouter une section concernant les publications

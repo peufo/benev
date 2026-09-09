@@ -10,6 +10,7 @@ export const DOC_SLUGS = [
 	'creer-ton-evenement',
 	'ton-equipe',
 	'ouvrir-les-inscriptions',
-	'suivre-tes-benevoles',
+	'gestion',
 	'le-jour-j',
+	'configuration-avancee',
 ]

@@ -10,7 +10,7 @@ description: Le vocabulaire, ton site public, ton espace de gestion
 - **Des inscriptions** initiées par un responsable ou par le membre lui-même. Les courriels de
   demande et de validation partent tout seuls.
 
-Le jour venu, tu peux imprimer les badges, les plannings et les listes de distribution.
+Le jour venu, tu imprimes les badges et tu exportes les listes dont tu as besoin.
 
 ## Les mots à connaître {#vocabulaire}
 
@@ -33,7 +33,7 @@ Un temps de travail dans un secteur définit par un début, une fin et un nombre
 ### Inscription
 
 Le lien entre un membre et un créneau. Une inscription peut être dans un des
-[états](/docs/suivre-tes-benevoles#etats) suivants : demandée, validée, déclinée ou annulée.
+[états](/docs/gestion#etats) suivants : demandée, validée, déclinée ou annulée.
 
 ### Membre
 

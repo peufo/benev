@@ -1,0 +1,95 @@
+---
+title: Gestion
+description: Le tableau de bord, les états, les tables, les vues
+---
+
+## Ton tableau de bord
+
+C'est l'écran à ouvrir chaque jour. Il rassemble :
+
+- qui vient d'arriver,
+- quelles inscriptions attendent une réponse,
+- où en est le remplissage secteur par secteur,
+- le journal de ce qui s'est passé.
+
+Un·e responsable y voit les mêmes blocs, restreints à ses propres secteurs.
+
+## Les quatre états {#etats}
+
+Une inscription est dans l'un de ces quatre états :
+
+- **Demande en cours** : elle attend une réponse.
+- **Validée** : c'est confirmé des deux côtés.
+- **Déclinée** : la personne à qui on l'a proposée a dit non.
+- **Annulée** : celle qui l'a créée est revenue dessus.
+
+Rien ne disparaît : une inscription déclinée ou annulée garde sa ligne et peut être rétablie.
+
+## Qui doit répondre {#qui-repond}
+
+**Une inscription attend toujours le camp qui ne l'a pas créée.**
+
+Un membre demande un créneau : les responsables du secteur confirment ou déclinent. Un·e responsable
+propose un créneau : c'est le membre qui accepte ou refuse. Celui qui a créé l'inscription ne peut
+que l'annuler.
+
+Le tableau de bord en fait un filtre : **« Chez nous »** rassemble ce que tu as à trancher, **« Chez
+le membre »** ce que tu as proposé et qui reste sans réponse.
+
+Quand tu inscris quelqu'un [qui n'a pas encore de compte](/docs/ton-equipe#membre-compte),
+l'inscription est validée d'office, personne ne peut répondre à sa place.
+
+## Les tables {#tables}
+
+Deux tables portent ton travail quotidien : celle des **membres** et celle des **inscriptions**.
+Elles se manient de la même façon.
+
+**Les colonnes t'appartiennent.** Le bouton « … » de la ligne d'en-tête ouvre leur liste : un clic
+affiche ou masque, un glisser-déposer réordonne. La table des membres offre en plus **une colonne
+par question que tu as posée**.
+
+**Le filtre est dans l'en-tête de la colonne.** Clique sur son titre et tu obtiens ce que son type
+permet : une recherche pour un texte, un minimum et un maximum pour un nombre, une plage pour une
+date, la liste des réponses pour un choix, oui ou non pour une case à cocher. Les colonnes de date
+et de nombre portent aussi le tri. Une colonne filtrée ne se masque pas, et un bouton efface tous
+les filtres d'un coup.
+
+À côté de la recherche, trois boutons découpent tes membres par rôle : administrateur·ices,
+responsables, bénévoles.
+
+Et surtout : **ce que tu vois à l'écran est exactement ce qui
+[sort de la table](/docs/le-jour-j#exports)**.
+
+### Le résumé
+
+Un panneau de synthèse donne la répartition de ce que tu regardes : les adhésions, les profils
+complets, le nombre d'inscriptions par personne, et **une barre par question de type liste ou
+oui/non**.
+
+Chaque barre est un filtre : clique dessus et la table se restreint. Le résumé porte toujours sur
+l'ensemble filtré, jamais sur la seule page affichée.
+
+## Les vues enregistrées {#vues}
+
+Un jeu de filtres qui te ressert mérite un nom. Le sélecteur en haut de l'écran affiche **« Vue
+simple »** tant que rien n'est filtré, **« Nouvelle vue »** dès que tu poses un filtre, et le bouton
+à côté l'enregistre.
+
+Une vue retient ta recherche, tes filtres, ton tri, et **les colonnes affichées dans leur ordre**.
+
+**Trois écrans en ont** : les deux tables et la
+[planification](/docs/creer-ton-evenement#periodes). Sur celle-ci, la vue retient les secteurs
+choisis, ce que les cartes affichent et la date où tu t'es posé·e, mais ni le zoom ni l'orientation,
+qui restent propres à l'écran du moment.
+
+**Une vue appartient à l'évènement, pas à toi** : tous tes responsables la retrouvent, et peuvent la
+modifier ou la supprimer. Elle suit quand tu
+[dupliques ton évènement](/docs/creer-ton-evenement#dupliquer), filtres sur tes questions compris.
+
+## Le quota {#quota}
+
+**Valider une inscription approuve le membre.** Un seul geste pour toi, mais ça compte dans ton
+quota, qui porte sur les membres approuvés.
+
+Le dépassement ferme ton espace de gestion, sauf la page qui te permet de changer de palier. Tes
+bénévoles, eux, continuent de s'inscrire normalement.
