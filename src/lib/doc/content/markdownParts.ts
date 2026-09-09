@@ -4,7 +4,7 @@ import { PERMISSION_ROLES, PERMISSIONS, type Permission } from './permissions'
 /**
  * Un composant employé dans une page de documentation ne traverse pas la surface markdown: il faut
  * lui donner un jumeau, dérivé des mêmes données que son rendu Svelte. Le test unitaire qui croise
- * ce registre avec `readComponents()` refuse qu'une entrée manque — sans quoi le `.md` servi
+ * ce registre avec `readComponents()` refuse qu'une entrée manque: sans quoi le `.md` servi
  * perdrait silencieusement un morceau de son contenu.
  */
 export const DOC_MARKDOWN_PARTS: Record<string, () => string> = {
@@ -14,7 +14,7 @@ export const DOC_MARKDOWN_PARTS: Record<string, () => string> = {
 
 function rolesGlossaryMarkdown(): string {
 	return PERMISSION_ROLES.map(
-		(role) => `**${ROLE_LABELS[role]}** — ${ROLE_DESCRIPTIONS[role]}`
+		(role) => `**${ROLE_LABELS[role]}**\n\n${ROLE_DESCRIPTIONS[role]}`
 	).join('\n\n')
 }
 

@@ -21,8 +21,8 @@ Quatre emplacements se nourrissent de
 | --- | --- | --- |
 | Type de membre | Liste à choix | Bénévole, Responsable, Artiste, Presse |
 | Label | Liste à choix ou texte | La fonction, l'équipe |
-| Accès — jours | Liste à choix multiple | Vendredi, Samedi, Dimanche |
-| Accès — secteurs | Liste à choix multiple | Backstage, Bar, Loges |
+| Accès aux jours | Liste à choix multiple | Vendredi, Samedi, Dimanche |
+| Accès aux secteurs | Liste à choix multiple | Backstage, Bar, Loges |
 
 Si ces questions n'existent pas encore, crée-les d'abord : benevio refuse un format qui ne
 correspond pas.

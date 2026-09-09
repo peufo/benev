@@ -1,12 +1,12 @@
 ---
 title: Créer ton évènement
-description: Le compte, les réglages, les secteurs, les créneaux
+description: Les réglages, les publications, les secteurs, les créneaux
 ---
 
 ## Compte et évènement
 
-Crée un compte, puis ton évènement. Tu en es le **propriétaire**. Ca signifit que tu as tous les droits et tu es le
-seul à pouvoir nommer des administrateur·ices.
+Crée un compte, puis ton évènement. Tu en es le **propriétaire**. Ça signifie que tu as tous les
+droits et que tu es seul·e à pouvoir nommer des administrateur·ices.
 
 Ton évènement est créé en brouillon. Personne ne le voit tant que tu ne l'as pas
 [publié](/docs/ouvrir-les-inscriptions#publier), tu as donc tout le temps de le construire.
@@ -31,52 +31,85 @@ site, et c'est par là que tes bénévoles te joindront.
 
 ### L'identité
 
-L'affiche, le logo, l'image de fond et ses réglages. Des thèmes sont prêts à l'emploi, mais tu peux y ajouter ta touche personelle.
+L'affiche, le logo, l'image de fond et ses réglages. Des thèmes sont prêts à l'emploi, mais tu peux
+y ajouter ta touche personnelle.
+
+## Tes publications {#publications}
+
+L'onglet **Publications** rassemble ce que tes bénévoles lisent : les pages de ton site et les
+courriels qui partent au nom de l'évènement.
+
+### Les pages
+
+Ta **page d'accueil** t'attend là, prête à être éditée. Tant qu'elle sera laissée vide, un message
+de bienvenue par défaut sera affiché. Tu peux ajouter des **pages publiques** pour une FAQ ou un
+plan d'accès, des **pages de membre** que seuls tes membres voient.
+
+Mais le plus important est certainement de rédiger la **charte des bénévoles** qui devra être
+acceptée par les nouveaux membres
+[rejoignant ton évènement](/docs/ouvrir-les-inscriptions#adhesion).
+
+
+TODO: Une nouvelle page devrait être créer pour la configuration avancée au lieu de dispercer ca dans suivre-tes-bénévolre et le-jour-j
+### Les modèles de courriel et badge
+
+Des messages simples et génériques sont envoyés aux bénévoles quand un·e responsable effectue une
+action qui les concerne.
+
+Heureusement, tu peux entièrement les personnaliser à l'image de ton évènement. L'éditeur te laisse
+y insérer des valeurs dynamiques que injectées lors de l'envoi, comme le prénom ou le créneau
+concerné.
+
+Les modèle disponibles sont listé [sur cette page](/docs/suivre-tes-benevoles#courriels).
+
+C'est aussi depuis **Publications** que se dessinent tes [badges](/docs/le-jour-j#badges).
 
 ## Découper en secteurs {#secteurs}
 
-Un secteur est une équipe de travail comme par exemple: le bar, la sécurité, le montage, la caisse. Commence par les
-créer, même vides.
+Un secteur est une équipe de travail, comme par exemple le bar, la sécurité, le montage ou la
+caisse. Commence par les créer, même vides.
 
-Avec de bonnes descriptions, tes bénévoles sauront à quoi s'attendre quand ils vondront s'inscrire.
+Avec de bonnes descriptions, tes bénévoles sauront à quoi s'attendre quand ils voudront s'inscrire.
 
-Depuis la fiche d'un secteur, tu peux désigner des **responsables**. Ils pourront gèrer les créneaux et répondres
-aux inscriptions qui les concernes.
+Depuis la fiche d'un secteur, tu peux désigner des **responsables**. Ils pourront gérer les créneaux
+et répondre aux inscriptions qui les concernent.
 
-## Plannification {#periodes}
+## Planification {#periodes}
 
-Tu peux éditer les créneaux depuis la fiche du secteur ou directement sur la grille de plannification.
+Tu peux éditer les créneaux depuis la fiche du secteur ou directement sur la grille de planification.
 
-La grille offre une vue d'ensemble tous tes secteurs et tous leurs créneaux.
-Un simple cliquer-glisser te permet d'y ajouter un créneau.
-Et avec la fonction "Dupliquer après", il est possible d'enchainer plusieurs créneaux similaires en quelques cliques.
+La grille offre une vue d'ensemble de tous tes secteurs et de tous leurs créneaux. Un simple
+cliquer-glisser te permet d'y ajouter un créneau. Et avec la fonction « Dupliquer après », il est
+possible d'enchaîner plusieurs créneaux similaires en quelques clics.
 
 Tu peux aussi basculer l'axe à l'horizontale ou à la verticale, régler le zoom et n'afficher que
 quelques secteurs.
 
 ### Les étiquettes
 
-Une étiquette est un nom et une couleur arbitraire qui designe généralement une catégorie ou un sous-secteur.
-Elles peuvent être collé aux créneaux depuis leur formulaire et permettes de les regrouper visuelement ou de les filtrer.
+Une étiquette est un nom et une couleur arbitraires, qui désignent généralement une catégorie ou un
+sous-secteur. Elles se collent aux créneaux depuis leur formulaire et permettent de les regrouper
+visuellement ou de les filtrer.
 
 ### Les jalons
 
 Les jalons marquent un instant sur la grille, comme l'ouverture des portes ou le début d'un concert.
 Ils permettent de rapidement naviguer et de s'y retrouver dans le calendrier.
 
-Pour créer un jalon, passe ta souris sur la dernière ligne (ou colonne) de la planification et clique sur la punaise qui apparait.
+Pour créer un jalon, passe ta souris sur la dernière ligne (ou colonne) de la planification et
+clique sur la punaise qui apparaît.
 
 ### Mode liste d'attente
 
-Avec cette option activé, un secteur peut accepter plus de demandes que de places.
-Les inscriptions non validé ne bloquent donc pas les nouvelles.
-Sans ce mode, un créneau est considéré comme complet même si il contient des inscription en attente de validation.
+Avec cette option activée, un secteur peut accepter plus de demandes que de places. Les inscriptions
+non validées ne bloquent donc pas les nouvelles. Sans ce mode, un créneau est considéré comme
+complet même s'il contient des inscriptions en attente de validation.
 
 ## Dupliquer une édition {#dupliquer}
 
 Ton évènement revient chaque année ? Tu peux le dupliquer depuis la liste de tes évènements plutôt
-que de tout refaire. Tu choisis ce que tu reprends — secteurs, questions de profil, pages, vues
-enregistrées — et tu décoches ce qui n'a plus lieu d'être.
+que de tout refaire. Tu choisis ce que tu reprends (secteurs, questions de profil, pages, vues
+enregistrées) et tu décoches ce qui n'a plus lieu d'être.
 
 Tu saisis un décalage en jours et toutes les dates suivent. **Vérifie que tu retombes sur les bons
 jours de la semaine** : 365 jours ne ramènent pas au même samedi, 364 ou 371 sont souvent les bons

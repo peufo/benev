@@ -9,7 +9,7 @@ const modules = import.meta.glob<string>('./**/*.svx', {
 })
 
 /**
- * Indexées par slug — le chemin sous `content/`, sans extension. Cette correspondance appartient
+ * Indexées par slug: le chemin sous `content/`, sans extension. Cette correspondance appartient
  * au contenu: le moteur ne construit jamais de chemin de fichier.
  */
 export const DOC_SOURCES: Record<string, string> = Object.fromEntries(

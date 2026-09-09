@@ -18,13 +18,13 @@
 			<a
 				href={docPage.path}
 				class={[
-					'flex h-full flex-col gap-1 rounded-lg p-4 sm:p-5',
+					'flex h-full flex-col gap-3 rounded-lg p-4 sm:p-5',
 					'bg-base-100 border-soft hover:border-hard border shadow transition-all hover:shadow-md',
 				]}
 			>
 				<div class="flex items-center gap-2 text-sm">
 					<span class="text-primary font-bold text-xl">{index + 1}.</span>
-					<span class="title">{docPage.title}</span>
+					<span class="title font-medium">{docPage.title}</span>
 					<span class="text-base-content/70 ml-auto flex items-center gap-1.5 text-xs">
 						<ClockIcon size={12} />
 						{docPage.readingTime}&nbsp;min

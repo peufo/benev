@@ -29,7 +29,7 @@ Rien ne disparaît : une inscription déclinée ou annulée garde sa ligne et pe
 
 **Une inscription attend toujours le camp qui ne l'a pas créée.**
 
-Un membre demande un créneau : les responsables du secteur confirment ou déclinent. Un responsable
+Un membre demande un créneau : les responsables du secteur confirment ou déclinent. Un·e responsable
 propose un créneau : c'est le membre qui accepte ou refuse. Celui qui a créé l'inscription ne peut
 que l'annuler.
 
@@ -50,14 +50,13 @@ ensuite ce qu'il veut recevoir depuis son espace personnel.
 Depuis **Publications**, tu peux réécrire à ta façon les messages qui vont vers tes bénévoles.
 Chacun arrive avec un texte par défaut qui fonctionne déjà.
 
-| Modèle | Quand il part |
+| Modèle | Il part quand un·e responsable… |
 | --- | --- |
-| Invitation | Tu [invites quelqu'un](/docs/ton-equipe#invitation) |
-| Adhésion validée | Tu approuves un membre |
-| Inscription | Tu inscris un membre à un créneau |
-| Inscription acceptée | Tu confirmes une inscription |
-| Inscription déclinée | Tu refuses une inscription |
-| Inscription annulée | Tu annules une inscription |
+| Invitation | [invite quelqu'un](/docs/ton-equipe#invitation) |
+| Adhésion validée | approuve la participation d'un membre |
+| Inscription | inscrit un membre à un créneau |
+| Inscription acceptée/déclinée | tranche sur une inscription initiée par un membre |
+| Inscription annulée | annule une inscription initiée par un·e responsable |
 
 Les messages qui préviennent tes responsables ne se réécrivent pas, pas plus que la vérification
 d'adresse, la réinitialisation de mot de passe ou la confirmation de paiement.

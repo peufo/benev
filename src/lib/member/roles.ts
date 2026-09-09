@@ -22,5 +22,5 @@ export const ROLE_DESCRIPTIONS: Record<Exclude<MemberRole, 'root'>, string> = {
 	leader:
 		'Nommé·e par le propriétaire ou par un·e administrateur·ice, ce rôle gère tout ce qui se ' +
 		'rapporte à ses secteurs.',
-	member: "Quiconque qui a rejoind l'évènement. Ce rôle permet de suivre ses propres inscriptions.",
+	member: "Quiconque a rejoint l'évènement. Ce rôle permet de suivre ses propres inscriptions.",
 }
