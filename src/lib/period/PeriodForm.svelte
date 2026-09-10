@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CopyIcon, PlusIcon } from '@lucide/svelte'
+	import { PlusIcon, RedoDotIcon, UndoDotIcon } from '@lucide/svelte'
 	import { daytz } from '$lib/dayjs'
 	import {
 		ButtonDelete,
@@ -105,23 +105,26 @@
 		selectedTags = selectedTags.filter(({ id }) => id !== tagId)
 	}
 
-	async function createNextPeriod() {
-		const duration = daytz(end).diff(start, 'minute')
+	/** Duplique le créneau juste avant ou juste après lui, en conservant sa durée. */
+	async function duplicateAside(direction: 'before' | 'after') {
 		const teamId = selectedTeam?.id ?? period.teamId
 		if (!teamId) return
+		const duration = daytz(end).diff(start, 'minute')
+		const newStart =
+			direction === 'after' ? end : daytz(start).subtract(duration, 'minute').toDate()
 		try {
-			const nextPeriod = await duplicatePeriod({
+			const newPeriod = await duplicatePeriod({
 				teamId,
-				start: end,
-				end: daytz(end).add(duration, 'minute').toDate(),
+				start: newStart,
+				end: daytz(newStart).add(duration, 'minute').toDate(),
 				// `value()` suit la saisie en cours; il reste vide tant que le champ n'a pas été touché.
 				maxSubscribe: remoteForm.fields.maxSubscribe.value() ?? maxSubscribe,
 				tagIds: selectedTags.map((t) => t.id),
 			})
 			toast.success('Créneau dupliqué')
-			// La période créée devient celle du formulaire: `form_period` la recharge via le `load`,
+			// Le créneau créé devient celui du formulaire: `form_period` le recharge via le `load`,
 			// ce qui permet d'enchaîner les duplications sans rouvrir le tiroir.
-			await goto(urlParam.with({ form_period: nextPeriod.id }), {
+			await goto(urlParam.with({ form_period: newPeriod.id }), {
 				invalidateAll: true,
 				noScroll: true,
 				keepFocus: true,
@@ -279,10 +282,19 @@
 				type="button"
 				class="btn btn-soft btn-primary btn-square"
 				class:btn-disabled={!start || !end}
-				onclick={createNextPeriod}
+				onclick={() => duplicateAside('after')}
 				use:tip={{ content: 'Dupliquer après' }}
 			>
-				<CopyIcon size={18} />
+				<RedoDotIcon size={18} />
+			</button>
+			<button
+				type="button"
+				class="btn btn-soft btn-primary btn-square"
+				class:btn-disabled={!start || !end}
+				onclick={() => duplicateAside('before')}
+				use:tip={{ content: 'Dupliquer avant' }}
+			>
+				<UndoDotIcon size={18} />
 			</button>
 			<div class="grow"></div>
 			<ButtonDelete form={deleteFormId} formaction={deletePeriod.action} />
