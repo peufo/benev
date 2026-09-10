@@ -89,7 +89,7 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 			field: await parseFormKey(form_field, (id) =>
 				prisma.field.findUnique({ where: { id, eventId } })
 			),
-			period: await getPeriodForm(form_period),
+			period: await getPeriodForm(form_period, eventId),
 			tag: await parseFormKey(form_tag, (id) => prisma.tag.findUnique({ where: { id, eventId } })),
 		}
 	} catch {

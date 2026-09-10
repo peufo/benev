@@ -18,7 +18,7 @@ export const load = async ({ locals, url, untrack, params: { eventId } }) => {
 			select: { id: true, name: true },
 			orderBy: { name: 'asc' },
 		}),
-		period: await getPeriodForm(form_period),
+		period: await getPeriodForm(form_period, eventId),
 		milestone: await getMilestoneForm(form_milestone, eventId),
 	}
 }

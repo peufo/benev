@@ -28,6 +28,10 @@ import type { OptionRecord } from 'fuma'
 export const PERIOD_MIN_MINUTES = 15
 export const PERIOD_MIN_MS = PERIOD_MIN_MINUTES * 60_000
 
+/** Durée proposée par le formulaire d'un créneau encore vide. */
+export const PERIOD_DEFAULT_MINUTES = 240
+export const PERIOD_DEFAULT_MS = PERIOD_DEFAULT_MINUTES * 60_000
+
 export const FORMAT_CARD = {
 	x: 53.98,
 	y: 85.6,

@@ -18,6 +18,7 @@
 	import { TagSelectItem } from '$lib/tag'
 	import { toast } from 'svelte-sonner'
 	import { enhanceForm } from '$lib/enhanceForm'
+	import { PERIOD_DEFAULT_MINUTES } from '$lib/constant'
 	import { getEventTimeZone } from '$lib/timezone'
 	import { createPeriod, deletePeriod, duplicatePeriod, updatePeriod } from './period.remote'
 
@@ -60,7 +61,7 @@
 	}
 
 	let defaultStart = daytz().startOf('hour').add(1, 'hour').toDate()
-	let defaultEnd = daytz().startOf('hour').add(3, 'hours').toDate()
+	let defaultEnd = daytz(defaultStart).add(PERIOD_DEFAULT_MINUTES, 'minute').toDate()
 	let start = $state(period.start || defaultStart)
 	let end = $state(period?.end || defaultEnd)
 
