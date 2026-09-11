@@ -30,7 +30,6 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 		prisma.member.findUniqueOrThrow({
 			where: { id: data.memberId },
 			include: {
-				user: true,
 				subscribes: {
 					where: { state: { in: ['accepted', 'request'] } },
 					include: { period: true },
@@ -79,12 +78,16 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 		error(403, `${startMessage} déjà occupé durant ce créneau`)
 	}
 
-	const isAutoAccepted = isLeaderOfTeam && (isSelfSubscribe || !memberInvited.userId)
+	// Une inscription attend toujours le camp qui ne l'a pas créée: seul un responsable qui
+	// s'inscrit lui-même n'attend personne. Un membre sans compte n'y fait pas exception, il
+	// répondra une fois son invitation acceptée; d'ici là, le responsable peut confirmer à sa place.
+	const isAutoAccepted = isLeaderOfTeam && isSelfSubscribe
 
 	// Une inscription annulée ou refusée garde sa ligne, et la paire membre/période est unique:
-	// se réinscrire réactive celle-ci plutôt que d'échouer sur la contrainte.
+	// se réinscrire réactive celle-ci plutôt que d'échouer sur la contrainte. La validation forcée
+	// d'une vie antérieure ne doit pas y survivre.
 	const subscribeData = {
-		isForcedValidation: isAutoAccepted && !memberInvited.userId,
+		isForcedValidation: false,
 		state: isAutoAccepted ? ('accepted' as const) : ('request' as const),
 		createdBy: isSelfSubscribe ? ('user' as const) : ('leader' as const),
 	}

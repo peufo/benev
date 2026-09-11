@@ -57,7 +57,7 @@
 	{#if (log.type === 'subscribe_create' || log.type === 'subscribe_state') && log.data.isForced}
 		<span
 			class="badge badge-sm badge-ghost"
-			title="Le membre n'a pas de compte: la validation ne pouvait pas lui être demandée"
+			title="Confirmée par un responsable au nom du membre, sans attendre sa réponse"
 		>
 			validation forcée
 		</span>

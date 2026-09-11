@@ -36,8 +36,11 @@ que l'annuler.
 Le tableau de bord en fait un filtre : **« Chez nous »** rassemble ce que tu as à trancher, **« Chez
 le membre »** ce que tu as proposé et qui reste sans réponse.
 
-Quand tu inscris quelqu'un [qui n'a pas encore de compte](/docs/ton-equipe#membre-compte),
-l'inscription est validée d'office, personne ne peut répondre à sa place.
+La règle vaut aussi quand tu inscris quelqu'un
+[qui n'a pas encore de compte](/docs/ton-equipe#membre-compte) : l'inscription attend, la personne y
+répondra une fois son invitation acceptée. Si elle ne doit jamais ouvrir de compte, tu peux trancher
+à sa place avec **« Confirmer au nom du membre »** ; l'inscription est alors marquée comme telle, pour
+que personne ne la prenne pour un oui de sa part.
 
 ## Les tables {#tables}
 

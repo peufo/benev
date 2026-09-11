@@ -33,7 +33,7 @@ export function getSubscribeState(subscribe: SubscribeStatable): SubscribeStateD
 			return {
 				icon: OctagonAlertIcon,
 				class: 'text-error',
-				label: "En attente de validation du membre, qui n'a pas de compte pour répondre",
+				label: "En attente de validation du membre, qui n'a pas encore lié de compte",
 			}
 		return {
 			icon: OctagonAlertIcon,

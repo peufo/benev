@@ -4,11 +4,11 @@
   - [ ] Définir la meilleur approche: {status: 'draft' | 'valided', published: boolean} ou {status: 'draft' | 'valided' | 'published'}
   - [ ] Le drawer "Ordre des secteurs" pourrais permettre de choisir qu'elle secteurs sont publiés.
 
-- [ ] Auto-accepte des inscriptions sur les membres sans compte est peut-être un raccourcie non nécéssaire. Par exemple, si une invitation est en cours pour un membre et qu'un responsable l'inscrit à une période, le membre n'aurra pas eu le temps de lié sont compte et son l'inscription sera automatiquement validé.
-
 - [ ] Détecter et journaliser les emails qui non pas été recu par la destinataire.
 
-- Vérifié que l'option "Compté par combinéson" est bien implémenté
+- [ ] Vérifié que l'option "Compté par combinéson" est bien implémenté
+
+- [ ] Limiter la longueur des créneau à 7 jours. Sinon ca casse l'affichage dans la plannif
 
 - [ ] Nouvelle navigation
   - [ ] Limiter le nombre de pages d'un événement (6 pages suffisent largement)
@@ -19,5 +19,12 @@
     - [ ] landing: On a que 4 liens, ca passe
     - [ ] admin: La page d'aide étant remplacé par la vrai doc, le quota peut être placer dans la section "statut" de la configuration, le lien vers /admin/pages peut être placer dans les settings (TOC ou section pour être accéssible en mobile). Ca réduit le nombre d'onglet à 6. Ce qui devrait être résonnable pour être placer horizontalement
   - [ ] context-admin: Pour les responables, un toogle de devrait etre dispo dans le header. Un indicateur visuel doit facilement nous faire comprendre qu'on est en mode admin.
-  - [ ] context-user: L'avatar doit ouvrir un menu (Mon compte, Mes événements, (Mes achats), Déconnexion)
   - [ ] context-global: Le bouton en haut à gauche ouvrir un menu (Petite liste de mes événements, Lien vers tous les événements, Lien vers la documentation)
+
+- [ ] L'avatar en haut à droite doit ouvrir un menu (Mon compte, Mes événements, (Mes achats), Déconnexion)
+
+- [ ] Le message de bienvenue du journal doit pointer sur la doc. + Il faut trouver un endroit ou mettre le lien vers la doc.
+
+- [ ] Dans l'édition des page (models d'email + page) le titre de la carte est en trop
+
+- [ ] L'ordre des pages doit pouvoir être changer depuis la list (listEditable). De la même manière que les secteurs.

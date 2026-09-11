@@ -34,9 +34,9 @@ Quand tu invites quelqu'un, sa fiche existe aussitôt : tu peux la remplir, l'in
 et imprimer son badge. La personne, elle, ne verra son tableau de bord qu'une fois l'invitation
 acceptée avec son compte.
 
-C'est pour éviter qu'elles restent éternellement en attente que
-[les inscriptions que tu crées pour un membre sans compte rattaché sont validées d'emblée](/docs/gestion#qui-repond).
-Il n'y a personne pour répondre.
+Les inscriptions que tu lui crées attendent sa réponse, comme n'importe quelle inscription proposée
+par un·e responsable : elle la donnera une fois son compte rattaché. Tu peux aussi
+[les confirmer à sa place](/docs/gestion#qui-repond).
 
 Ce qui rattache un compte à une fiche, c'est l'adresse courriel, **et seulement si elle est
 vérifiée** : par le lien d'invitation reçu dans cette boîte, ou par une adresse déjà vérifiée. Sans

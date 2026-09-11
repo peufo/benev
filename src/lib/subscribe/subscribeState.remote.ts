@@ -30,10 +30,9 @@ export const setSubscribeState = form(
 		subscribeId: z.string(),
 		state: z.enum(['request', 'accepted', 'denied', 'cancelled']),
 	}),
-	async ({ subscribeId, state: _state }) => {
+	async ({ subscribeId, state }) => {
 		const { locals, params } = getRequestEvent()
 		const eventId = params.eventId!
-		let state = _state
 
 		const whereSubscribe: Prisma.SubscribeWhereInput = {
 			id: { not: subscribeId },
@@ -69,8 +68,10 @@ export const setSubscribeState = form(
 		// Check author permission
 		let author = await permission.member(eventId, locals)
 		const isSelfAction = author.id === _subscribe.memberId
-		let isForcedValidation =
-			state == 'accepted' && !isSelfAction && _subscribe.createdBy === 'leader'
+		// La seule origine d'une validation forcée: un responsable qui confirme, au nom du membre,
+		// une inscription qu'il a lui-même proposée.
+		const isForcedValidation =
+			state === 'accepted' && !isSelfAction && _subscribe.createdBy === 'leader'
 		const isLeaderAction =
 			isForcedValidation || (_subscribe.createdBy === 'leader') === isCreatorEdition
 		if (isLeaderAction) {
@@ -84,12 +85,6 @@ export const setSubscribeState = form(
 			if (!isSelfAction) error(403, "You can't self update subscribe status")
 			if ((state === 'cancelled' || state === 'denied') && !author.event.selfSubscribeCancelAllowed)
 				error(403, "L'annulation ou le refus d'une inscription n'est pas authorisé.")
-		}
-
-		// Enure auto accept if membre don't have user account behind
-		if (state === 'request' && !_subscribe.member.userId) {
-			state = 'accepted'
-			isForcedValidation = true
 		}
 
 		// Check if member is free in this period
