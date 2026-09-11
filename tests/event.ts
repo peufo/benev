@@ -793,7 +793,7 @@ export function useEvent(owner: User, name: string) {
 			const eventUrl = page.getByLabel("URL de l'évènement")
 			await eventUrl.fill('admin')
 			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
-			await expect(page.getByText(/Les noms suivant sont réservés/)).toBeVisible()
+			await expect(page.getByText(/Ce nom n'est pas disponible/)).toBeVisible()
 			await expect(eventUrl).toHaveAttribute('aria-invalid', 'true')
 			await expect(saveBar).toBeVisible()
 

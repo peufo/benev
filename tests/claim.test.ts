@@ -41,9 +41,8 @@ test.describe.serial("Reprise d'une fiche invitée", () => {
 
 	test("Le registre propose la vérification sans attendre l'ouverture du tunnel", async () => {
 		await guestPage.goto('/me/events')
-		// Le libellé court la ligne du gabarit: le viser en entier buterait sur le retour à la ligne.
-		await expect(guestPage.getByText('pour reprendre')).toBeVisible()
-		await expect(guestPage.getByText(guest.email)).toBeVisible()
+		// Un fragment plutôt que la phrase: sa fin s'accorde au nombre d'invitations.
+		await expect(guestPage.getByText('valider ton adresse email pour consulter')).toBeVisible()
 		await guestPage.getByRole('button', { name: 'Confirmer' }).click()
 		await expect(guestPage.getByText('Email de vérification envoyé')).toBeVisible()
 	})
@@ -59,7 +58,7 @@ test.describe.serial("Reprise d'une fiche invitée", () => {
 	test("L'adresse vérifiée, l'adhésion reprend la fiche au lieu d'en créer une seconde", async () => {
 		await guest.verifyEmail()
 		await guestPage.goto('/me/events')
-		await expect(guestPage.getByText('pour reprendre')).toHaveCount(0)
+		await expect(guestPage.getByText('valider ton adresse email pour consulter')).toHaveCount(0)
 
 		await guestPage.goto(`/${event.eventId}/register`)
 		const accept = guestPage.getByRole('button', { name: 'Oui je le veux !' })

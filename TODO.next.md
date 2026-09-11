@@ -1,8 +1,7 @@
 - [ ] Tester l'outil de duplication d'événement + repasser sur l'estétique
 
-- [ ] https://github.com/peufo/benev/issues/127 Ajouter les status / visibilité pour les secteurs de travail
-  - [ ] Définir la meilleur approche: {status: 'draft' | 'valided', published: boolean} ou {status: 'draft' | 'valided' | 'published'}
-  - [ ] Le drawer "Ordre des secteurs" pourrais permettre de choisir qu'elle secteurs sont publiés.
+- [ ] https://github.com/peufo/benev/issues/127 Ajouter les status / visibilité pour les secteurs de travail. Définir la meilleur approche: {status: 'draft' | 'valided', published: boolean} ou {status: 'draft' | 'valided' | 'published'}
+      La même question ce pose pour les pages. Elles ont besoins d'un status ou d'une gestion de la visibilité. L'ordre des pages doit également pouvoir être éditer depuis la list (listEditable). De la même manière que les secteurs. Je crois que le champ "index" existe déjà, mais n'est pas utilisé. Il faut être cohérant avec le model Team.
 
 - [ ] Détecter et journaliser les emails qui non pas été recu par la destinataire.
 
@@ -23,8 +22,6 @@
 
 - [ ] L'avatar en haut à droite doit ouvrir un menu (Mon compte, Mes événements, (Mes achats), Déconnexion)
 
-- [ ] Le message de bienvenue du journal doit pointer sur la doc. + Il faut trouver un endroit ou mettre le lien vers la doc.
+- [ ] Le message de bienvenue du journal doit pointer sur la doc. Il faut trouver un endroit ou mettre le lien vers la doc.
 
 - [ ] Dans l'édition des page (models d'email + page) le titre de la carte est en trop
-
-- [ ] L'ordre des pages doit pouvoir être changer depuis la list (listEditable). De la même manière que les secteurs.

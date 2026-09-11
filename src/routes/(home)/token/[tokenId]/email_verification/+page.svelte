@@ -16,7 +16,7 @@
 <Section
 	id="email_verification_ok"
 	class="max-w-lg mx-auto"
-	title="Adress confirmée"
+	title="Adresse confirmée"
 	icon={MailCheckIcon}
 >
 	<p class="mt-4 leading-relaxed">
