@@ -3,11 +3,12 @@
 	import type { Page } from '@prisma/client'
 	import { eventPath } from '$lib/eventPath'
 	import { page } from '$app/state'
-	import { PAGE_TYPE } from '$lib/constant'
+	import { PAGE_STATES, PAGE_TYPE } from '$lib/constant'
 	import type { ClassValue } from 'svelte/elements'
 
 	interface Props {
-		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
+		/** Les brouillons n'y figurent que pour les admins: le serveur les a déjà écartés sinon. */
+		pages: Pick<Page, 'id' | 'title' | 'type' | 'path' | 'state'>[]
 		hideIndex?: boolean
 		hideTeams?: boolean
 		class?: ClassValue
@@ -40,8 +41,8 @@
 {/if}
 
 <!-- PAGES -->
-{#each pages.filter((p) => p.type !== 'home' && (isMember || p.type !== 'member')) as { title, path, id, type } (id)}
-	{@const PageIcon = PAGE_TYPE[type].icon}
+{#each pages.filter((p) => p.type !== 'home' && (isMember || p.type !== 'member')) as { title, path, id, type, state } (id)}
+	{@const PageIcon = state === 'draft' ? PAGE_STATES.draft.icon : PAGE_TYPE[type].icon}
 	<a
 		href={eventPath('/[pagePath]', { pagePath: path })}
 		class={[klass, page.params.pagePath === path && classActive]}

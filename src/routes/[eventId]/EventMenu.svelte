@@ -9,7 +9,7 @@
 	import { adminTabs } from '$lib/layout/adminTabs.svelte'
 
 	interface Props {
-		pages: Pick<Page, 'id' | 'title' | 'type' | 'path'>[]
+		pages: Pick<Page, 'id' | 'title' | 'type' | 'path' | 'state'>[]
 	}
 
 	let { pages }: Props = $props()

@@ -15,13 +15,14 @@ import {
 	MailIcon,
 	OctagonAlertIcon,
 	OctagonXIcon,
+	PencilLineIcon,
 	SquareCheckIcon,
 	TypeIcon,
 	XIcon,
 } from '@lucide/svelte'
 import type { Component } from 'svelte'
 import { PRICE_STANDARD, PRICE_PREMIUM, PRICE_STANDARD_TO_PREMIUM } from '$app/env/public'
-import type { EventState, EventTier, Field, Page, Subscribe } from '@prisma/client'
+import type { EventState, EventTier, Field, Page, PageState, Subscribe } from '@prisma/client'
 import type { OptionRecord } from 'fuma'
 
 /** Durée minimale d'une période de travail. */
@@ -101,10 +102,15 @@ export const THEME_PRESETS = {
 
 export type ThemePresetKey = keyof typeof THEME_PRESETS
 
-export const EVENT_STATES: Record<
-	EventState,
-	{ label: string; icon: Component<IconProps>; description: string; class: string }
-> = {
+/** Ce qu'un registre d'états décrit: le bloc de statut et les badges le lisent tel quel. */
+export type StateOption = {
+	label: string
+	icon: Component<IconProps>
+	description: string
+	class: string
+}
+
+export const EVENT_STATES: Record<EventState, StateOption> = {
 	draft: {
 		icon: ConstructionIcon,
 		label: 'Évènement en construction',
@@ -122,6 +128,21 @@ export const EVENT_STATES: Record<
 		label: 'Évènement archivé',
 		class: 'text-base-content/70',
 		description: `Seul les responsables ont accès au site de l'évènement.`,
+	},
+} as const
+
+export const PAGE_STATES: Record<PageState, StateOption> = {
+	draft: {
+		icon: PencilLineIcon,
+		label: 'Brouillon',
+		class: 'text-warning',
+		description: `Seuls les organisateur·ices voient cette page.`,
+	},
+	published: {
+		icon: GlobeIcon,
+		label: 'Page publiée',
+		class: 'text-success',
+		description: `La page est dans la navigation du site.`,
 	},
 } as const
 

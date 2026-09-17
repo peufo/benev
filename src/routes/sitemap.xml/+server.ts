@@ -27,7 +27,7 @@ export async function GET({ url }) {
 
 	const events = await prisma.event.findMany({
 		where: { state: 'published', deletedAt: null },
-		include: { pages: { select: { path: true, type: true, updatedAt: true } } },
+		include: { pages: { select: { path: true, type: true, state: true, updatedAt: true } } },
 	})
 
 	const eventsSiteMap = events
@@ -48,7 +48,7 @@ export async function GET({ url }) {
 					)
 				: ''
 			const pagesUrlElement = event.pages
-				.filter((p) => p.type === 'public' || p.type === 'charter')
+				.filter((p) => p.state === 'published' && (p.type === 'public' || p.type === 'charter'))
 				.map((p) =>
 					urlElement(
 						origin,

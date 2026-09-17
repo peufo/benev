@@ -1,5 +1,6 @@
-import { form, getRequestEvent } from '$app/server'
+import { command, form, getRequestEvent } from '$app/server'
 import { redirect } from '@sveltejs/kit'
+import z from 'zod'
 import { permission, prisma } from '$lib/server'
 import { normalizePath } from '$lib/normalizePath.js'
 import { resolve } from '$app/paths'
@@ -20,10 +21,21 @@ export const createPage = form(async () => {
 	while (paths.includes(normalizePath(`Page ${n}`))) n++
 	const title = `Page ${n}`
 
+	// Une page naît en brouillon, et en queue de navigation.
 	const page = await prisma.page.create({
-		data: { eventId, title, path: normalizePath(title), content: '' },
+		data: { eventId, title, path: normalizePath(title), content: '', position: pages.length },
 	})
 	redirect(303, resolve('/[eventId]/admin/pages/[pageId]', { eventId, pageId: page.id }))
+})
+
+/** Même contrat que `reorderTeams`: la liste des ids, dans l'ordre voulu. */
+export const reorderPages = command(z.array(z.string()), async (ids) => {
+	const { locals, params } = getRequestEvent()
+	const eventId = params.eventId!
+	await permission.admin(eventId, locals)
+	return prisma.$transaction(
+		ids.map((id, position) => prisma.page.update({ where: { id, eventId }, data: { position } }))
+	)
 })
 
 export const createBadge = form(async () => {

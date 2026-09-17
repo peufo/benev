@@ -45,6 +45,10 @@ Ta **page d'accueil** t'attend là, prête à être éditée. Tant qu'elle sera 
 de bienvenue par défaut sera affiché. Tu peux ajouter des **pages publiques** pour une FAQ ou un
 plan d'accès, des **pages de membre** que seuls tes membres voient.
 
+Une nouvelle page naît en **brouillon** : tu la rédiges à ton rythme, seuls les organisateur·ices
+la voient. Le bouton « Publier » la fait entrer dans le menu du site. Les pages s'y suivent dans
+l'ordre de ta liste, que tu réarranges en les glissant.
+
 Mais le plus important est certainement de rédiger la **charte des bénévoles** qui devra être
 acceptée par les nouveaux membres
 [rejoignant ton évènement](/docs/ouvrir-les-inscriptions#adhesion).

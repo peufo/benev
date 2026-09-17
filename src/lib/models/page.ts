@@ -1,6 +1,6 @@
 import z from 'zod'
 import { zEnumKeys } from './form'
-import { PAGE_TYPE } from '$lib/constant'
+import { PAGE_STATES, PAGE_TYPE } from '$lib/constant'
 import type { Prisma } from '@prisma/client'
 
 export const modelPageUpdate = z.object({
@@ -10,3 +10,9 @@ export const modelPageUpdate = z.object({
 	title: z.string().min(2),
 	content: z.string(),
 }) satisfies z.ZodType<Prisma.PageUpdateWithoutEventInput>
+
+/** Le statut a sa propre porte: `modelPageUpdate` ne le porte pas, changer d'état a ses effets. */
+export const modelPageState = z.object({
+	id: z.string(),
+	state: zEnumKeys(PAGE_STATES),
+})

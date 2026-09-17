@@ -93,6 +93,7 @@ export const createEvent = form(modelEventCreate, async ({ tier, ...data }, issu
 					data: [
 						{
 							type: 'home',
+							state: 'published',
 							title: 'Bienvenue',
 							path: 'bienvenue',
 							content: 'null',

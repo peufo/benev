@@ -7,7 +7,8 @@
 	import { PAGE_TYPE } from '$lib/constant'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
-	import { createBadge, createPage } from './pages.remote'
+	import PagesList from './PagesList.svelte'
+	import { createBadge } from './pages.remote'
 
 	let { data, children } = $props()
 
@@ -17,7 +18,7 @@
 	const selected = $derived(!!page.params.pageId || !!page.params.badgeId)
 </script>
 
-<!-- Pages et modèles d'email partagent la même route d'édition, et l'icône que `PAGE_TYPE`
+<!-- Les modèles d'email partagent la route d'édition des pages, et l'icône que `PAGE_TYPE`
      leur donne est facultative — `OptionRecord` la déclare ainsi. -->
 {#snippet entry({ id, title, type }: { id: string; title: string; type: Page['type'] })}
 	{@const EntryIcon = PAGE_TYPE[type].icon}
@@ -41,27 +42,9 @@
 				selected && 'max-md:hidden',
 			]}
 		>
-			<!-- Les pages du site forment sa navigation: elles se lisent d'un bloc, séparées des
-			     modèles, qui ne sont pas des destinations. -->
-			<section class="flex flex-col gap-1">
-				<div class="flex items-center gap-2 pl-3">
-					<h2 class="title-md grow">Navigation</h2>
-					<form
-						{...createPage.enhance(enhanceForm({ success: 'Nouvelle page créée !' }))}
-						class="contents"
-					>
-						<button
-							class="btn btn-square btn-sm btn-primary btn-soft"
-							use:tip={{ content: 'Nouvelle page' }}
-						>
-							<PlusIcon class="opacity-70" />
-						</button>
-					</form>
-				</div>
-				{#each data.pages as pageEntry (pageEntry.id)}
-					{@render entry(pageEntry)}
-				{/each}
-			</section>
+			<!-- Les pages du site forment sa navigation: elles se lisent d'un bloc, dans l'ordre
+			     du menu, séparées des modèles, qui ne sont pas des destinations. -->
+			<PagesList pages={data.pages} />
 
 			<div class="divider"></div>
 

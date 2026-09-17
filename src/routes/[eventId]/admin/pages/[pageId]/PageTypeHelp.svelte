@@ -56,5 +56,12 @@
 				aux profils.
 			</p>
 		</section>
+
+		<div class="divider"></div>
+
+		<p class="text-base-content/80">
+			Quel que soit son type, une page en brouillon n'est visible que des organisateur·ices, qui la
+			prévisualisent par son lien.
+		</p>
 	</div>
 </DropDown>

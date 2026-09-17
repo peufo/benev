@@ -7,6 +7,7 @@
 
 	import type { Page } from '@prisma/client'
 	import { tiptapParser } from '$lib/ui'
+	import { PAGE_STATES } from '$lib/constant'
 
 	import type { MemberWithComputedValues } from '$lib/server'
 	import PageLayout from './PageLayout.svelte'
@@ -43,6 +44,13 @@
 </script>
 
 <PageLayout class="relative max-w-2xl py-16 mt-3 mb-20">
+	{#if canEdit && page?.state === 'draft'}
+		<span class="badge badge-warning not-prose absolute left-5 top-5">
+			<PAGE_STATES.draft.icon size={16} />
+			<span class="ml-1">{PAGE_STATES.draft.label}</span>
+		</span>
+	{/if}
+
 	{#if html && html !== '<p></p>'}
 		<!-- page rédigée par les admins de l'événement dans l'éditeur tiptap -->
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->

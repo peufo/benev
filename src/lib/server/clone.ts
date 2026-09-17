@@ -1,5 +1,5 @@
 import { defaultEmailModels } from '$lib/email/models'
-import type { Page, PageType, Period, Prisma, Team } from '@prisma/client'
+import type { Page, PageState, PageType, Period, Prisma, Team } from '@prisma/client'
 
 type ExcludeProps = 'id' | 'createdAt' | 'updatedAt' | 'eventId'
 export function cloneData<T extends object>(data: T) {
@@ -37,6 +37,7 @@ export function clonePages(eventPages: Page[]): Prisma.PageCreateManyEventInput[
 	const home = cloneData(
 		eventPages.find((p) => p.type === 'home') || {
 			type: 'home' as PageType,
+			state: 'published' as PageState,
 			title: 'Bienvenue',
 			path: 'bienvenue',
 			content: 'null',

@@ -15,7 +15,10 @@ export const load = async ({ parent, params: { eventId } }) => {
 
 	return {
 		inviteMismatch,
-		charter: await prisma.page.findFirst({ where: { eventId, type: 'charter' } }),
+		// Une charte en brouillon n'engage encore personne.
+		charter: await prisma.page.findFirst({
+			where: { eventId, type: 'charter', state: 'published' },
+		}),
 		metaTags: NOINDEX_FOLLOW,
 	}
 }

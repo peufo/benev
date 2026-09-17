@@ -279,12 +279,13 @@ model Page {
   eventId String
   event   Event  @relation(references: [id], fields: [eventId], onDelete: Cascade, onUpdate: Cascade)
 
-  title String
-  path  String @default("")
-  index Int    @default(0)
+  title    String
+  path     String @default("")
+  position Int    @default(0)
 
-  type        PageType @default(public)
-  content     String   @db.Text
+  type        PageType  @default(public)
+  state       PageState @default(draft)
+  content     String    @db.Text
   description String?
 
   createdAt DateTime @default(now())
@@ -299,6 +300,11 @@ enum PageType {
   public
   member
   email
+}
+
+enum PageState {
+  draft
+  published
 }
 
 model Badge {

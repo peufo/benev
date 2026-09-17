@@ -11,7 +11,7 @@ import {
 import { eventMetaTags } from '$lib/seo'
 
 export const load = async ({ parent, url, cookies, params: { eventId } }) => {
-	const { user } = await parent()
+	const { user, userIsRoot } = await parent()
 	const userId = user?.id || ''
 	try {
 		const { form_field, form_period, form_tag } = parseQuery(url, {
@@ -50,6 +50,7 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 				: null
 
 		const isLeader = member?.roles.includes('leader') || member?.roles.includes('admin')
+		const isAdmin = member?.roles.includes('admin') || userIsRoot
 
 		const event = await prisma.event.findUniqueOrThrow({
 			where: { id: eventId, deletedAt: null },
@@ -82,9 +83,12 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 			memberCanRegister,
 			membersValided,
 			metaTags: eventMetaTags(event, url),
+			// Une seule source pour la navigation publique et le volet d'administration: les
+			// brouillons n'en sortent que pour les admins, leur titre ne quitte pas le serveur sinon.
 			pages: await prisma.page.findMany({
-				where: { eventId, type: { not: 'email' } },
-				select: { id: true, title: true, path: true, type: true },
+				where: { eventId, type: { not: 'email' }, ...(!isAdmin && { state: 'published' }) },
+				select: { id: true, title: true, path: true, type: true, state: true },
+				orderBy: { position: 'asc' },
 			}),
 			field: await parseFormKey(form_field, (id) =>
 				prisma.field.findUnique({ where: { id, eventId } })
