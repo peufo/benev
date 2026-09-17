@@ -26,11 +26,19 @@
 		memberFields: Field[]
 		/** Les conditions se soumettent par un input caché, qui n'émet aucun évènement DOM. */
 		onchange?: () => void
+		/** L'`id` du formulaire qui reçoit les conditions, quand la section est rendue hors de lui. */
+		form?: string
 		/** La section remplit la page: c'est elle qui dit jusqu'où celle-ci monte. */
 		class?: ClassValue
 	}
 
-	let { conditions: initialConditions = [], memberFields, onchange, class: klass }: Props = $props()
+	let {
+		conditions: initialConditions = [],
+		memberFields,
+		onchange,
+		form,
+		class: klass,
+	}: Props = $props()
 
 	// Le tableau vient de `page.data`: ce n'est pas un proxy `$state`, écrire dans une condition
 	// existante passerait donc inaperçu. On en prend une copie réactive — le formulaire se soumet
@@ -172,7 +180,7 @@
 		</Popover>
 	{/snippet}
 
-	<input type="hidden" name="conditions" value={serializedConditions} />
+	<input type="hidden" name="conditions" value={serializedConditions} {form} />
 
 	<div class="mt-4 flex flex-col gap-2">
 		{#each conditions as condition, index (index)}

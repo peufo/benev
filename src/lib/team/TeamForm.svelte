@@ -100,51 +100,62 @@
 {/snippet}
 
 <!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
-<form
-	{...remoteForm.enhance(
-		enhanceForm({
-			success: 'Succès',
-			onsuccess: () => {
-				bar?.rebase()
-				// `result` porte le secteur tel qu'enregistré: c'est lui que l'appelant doit
-				// afficher, le sien datant de son propre chargement.
-				const saved = remoteForm.result
-				if (!saved) return
-				if (team.id) onupdated?.(saved)
-				else oncreated?.(saved)
-			},
-		})
-	)}
-	id={formId}
-	bind:this={formElement}
-	class={['flex flex-col', saveBar ? 'gap-3' : 'gap-4', klass]}
->
-	{#if team.id}
-		<input type="hidden" name="id" value={team.id} />
-	{/if}
+{#snippet teamForm(klass = '')}
+	<form
+		{...remoteForm.enhance(
+			enhanceForm({
+				success: 'Succès',
+				onsuccess: () => {
+					bar?.rebase()
+					// `result` porte le secteur tel qu'enregistré: c'est lui que l'appelant doit
+					// afficher, le sien datant de son propre chargement.
+					const saved = remoteForm.result
+					if (!saved) return
+					if (team.id) onupdated?.(saved)
+					else oncreated?.(saved)
+				},
+			})
+		)}
+		id={formId}
+		bind:this={formElement}
+		class={['flex flex-col gap-4', klass]}
+	>
+		{#if team.id}
+			<input type="hidden" name="id" value={team.id} />
+		{/if}
 
-	{#if saveBar}
-		<Section id="team" title={team.name ?? ''} {subtitle} {action}>
-			<div class="flex flex-col gap-4">
-				{@render fields()}
+		{@render fields()}
+
+		{#if !saveBar}
+			<div class="flex flex-row-reverse gap-2 border-t py-4">
+				<button class="btn btn-primary">Valider</button>
 			</div>
+		{/if}
+	</form>
+{/snippet}
+
+{#if saveBar}
+	<div class={['flex flex-col gap-3', klass]}>
+		<!-- L'entête de la section, et les actions qu'elle porte, restent hors du `<form>`: ces
+		     actions ont leurs propres formulaires, et HTML n'en imbrique pas. Le navigateur
+		     abandonnerait le balisage rendu au serveur, et l'hydratation avec lui. -->
+		<Section id="team" title={team.name ?? ''} {subtitle} {action}>
+			{@render teamForm()}
 		</Section>
 
+		<!-- Les conditions se soumettent avec le secteur: leur champ caché s'y rattache par `form`. -->
 		{#key resetToken}
 			<MemberConditions
+				form={formId}
 				conditions={team?.conditions || []}
 				memberFields={event.memberFields}
 				onchange={() => bar?.refresh()}
 			/>
 		{/key}
-	{:else}
-		{@render fields()}
-
-		<div class="flex flex-row-reverse gap-2 border-t py-4">
-			<button class="btn btn-primary">Valider</button>
-		</div>
-	{/if}
-</form>
+	</div>
+{:else}
+	{@render teamForm(klass)}
+{/if}
 
 {#if saveBar}
 	<SaveBar
