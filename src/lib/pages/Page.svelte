@@ -43,11 +43,13 @@
 	)
 </script>
 
-<PageLayout class="relative max-w-2xl py-16 mt-3 mb-20">
+<PageLayout class="relative max-w-2xl py-16 mb-20">
 	{#if canEdit && page?.state === 'draft'}
 		<span class="badge badge-warning not-prose absolute left-5 top-5">
 			<PAGE_STATES.draft.icon size={16} />
-			<span class="ml-1">{PAGE_STATES.draft.label}</span>
+			<span class="ml-1">
+				{PAGE_STATES.draft.label} - {PAGE_STATES.draft.description}
+			</span>
 		</span>
 	{/if}
 

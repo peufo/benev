@@ -1080,6 +1080,14 @@ export function useEvent(owner: User, name: string) {
 				page.locator('#team').getByText(/Par défaut\s*:\s*12 septembre 2099/)
 			).toBeVisible()
 
+			// La liste des bénévoles ne porte que les secteurs publiés: Alpha, né en brouillon,
+			// n'y a pas encore de carte. Le libellé de la transition suppose l'inscription libre,
+			// la même condition qui fait afficher l'échéance sur la carte.
+			await page.getByRole('button', { name: 'Brouillon', exact: true }).click()
+			page.once('dialog', (confirmation) => void confirmation.accept())
+			await page.getByRole('button', { name: 'Valider et ouvrir les inscriptions' }).click()
+			await expect(page.getByText('Publié', { exact: true }).first()).toBeVisible()
+
 			await page.goto(`/${eventId}/teams`)
 			await expect(
 				page.getByText('Fin des inscriptions le 12 septembre 2099').first()

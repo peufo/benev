@@ -29,8 +29,9 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 		.findMany({
 			where: {
 				eventId,
-				// Un brouillon n'existe pas pour les bénévoles; un responsable voit tout.
-				...(!isLeader && { state: { not: 'draft' } }),
+				// Cette vue est celle des bénévoles: un brouillon n'y est listé pour personne, les
+				// responsables le retrouvent dans l'administration.
+				state: { not: 'draft' },
 				...(search && { name: { contains: search } }),
 			},
 			include: {
@@ -57,11 +58,11 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 		.then((teams) => teams.map(addTeamComputedValues))
 		.then((teams) =>
 			teams.filter((team) => {
-				if (isLeader) return true
 				if (isMemberSubscribeToTeam(team.periods)) return true
 				// Un planning validé n'est pas ouvert: il ne se montre qu'à ses inscrits, et ne compte
 				// pas parmi les secteurs cachés par leurs conditions.
 				if (team.state === 'validated') return false
+				if (isLeader) return true
 				if (isMemberAllowed(team.conditions, member)) return true
 				teamsHiddenCount++
 				return false
