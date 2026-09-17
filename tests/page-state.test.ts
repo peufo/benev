@@ -49,7 +49,7 @@ test.describe.serial("Statut d'une page", () => {
 			.click()
 		await page.waitForURL('**/admin/pages/**')
 		await expect(page.getByText('Nouvelle page créée, en brouillon')).toBeVisible()
-		await expect(page.getByRole('button', { name: 'Brouillon', exact: true })).toBeVisible()
+		await expect(page.getByRole('button', { name: 'Statut' })).toContainText('Brouillon')
 		// « Page N »: le rang compte l'accueil, le titre se lit plutôt qu'il ne se devine.
 		const title = await page.getByLabel('Titre').inputValue()
 		const path = title.toLowerCase().replaceAll(' ', '-')
@@ -61,9 +61,11 @@ test.describe.serial("Statut d'une page", () => {
 		const response = await guestPage.goto(`/${event.eventId}/${path}`)
 		expect(response?.status()).toBe(404)
 
-		await page.getByRole('button', { name: 'Brouillon', exact: true }).click()
-		await page.getByRole('button', { name: 'Publier', exact: true }).click()
-		await expect(page.getByText('Page publiée').first()).toBeVisible()
+		// Le statut est un champ du formulaire: il se choisit, puis s'enregistre avec le reste.
+		await page.getByRole('button', { name: 'Statut' }).click()
+		await page.getByRole('option', { name: 'Page publiée' }).click()
+		await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+		await expect(page.getByText('Page enregistrée').first()).toBeVisible()
 		await guestPage.goto(`/${event.eventId}`)
 		await expect(guestPage.getByRole('link', { name: title }).first()).toBeVisible()
 

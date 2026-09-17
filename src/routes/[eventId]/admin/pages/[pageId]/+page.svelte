@@ -3,13 +3,10 @@
 	import type { Page } from '@prisma/client'
 	import { getMemberSuggestions } from '$lib/pages/memberSuggestions'
 	import { suggestionItems, type SuggestionItem } from '$lib/ui'
-	import Section from '$lib/ui/Section.svelte'
 	import { emailSuggestions } from '$lib/pages/emailSuggesions'
 	import type { EmailEvent } from '$lib/email/models'
 	import { eventPath } from '$lib/eventPath'
-	import { PAGE_TYPE } from '$lib/constant'
 	import PageForm from './PageForm.svelte'
-	import PageStateMenu from './PageStateMenu.svelte'
 
 	let { data } = $props()
 
@@ -36,19 +33,6 @@
 	<span>Toutes les publications</span>
 </a>
 
-<!-- L'accueil et les modèles de courriel sont toujours visibles: rien à publier. -->
-{#snippet pageActions()}
-	{#if data.page.type !== 'home' && data.page.type !== 'email'}
-		<PageStateMenu page={data.page} />
-	{/if}
-{/snippet}
-
-<Section
-	id="page"
-	title={PAGE_TYPE[data.page.type].label}
-	icon={PAGE_TYPE[data.page.type].icon}
-	action={pageActions}
-	class="min-w-0"
->
+<section class="surface min-w-0 p-5">
 	<PageForm page={data.page} charterAlreadyExist={!!data.pages.find((p) => p.type === 'charter')} />
-</Section>
+</section>

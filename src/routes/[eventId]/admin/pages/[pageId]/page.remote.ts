@@ -1,6 +1,6 @@
 import { form, getRequestEvent } from '$app/server'
 import { invalid, redirect } from '@sveltejs/kit'
-import { modelPageState, modelPageUpdate } from '$lib/models'
+import { modelPageUpdate } from '$lib/models'
 import { permission, prisma } from '$lib/server'
 import { resolve } from '$app/paths'
 import { normalizePath } from '$lib/normalizePath.js'
@@ -38,18 +38,10 @@ export const updatePage = form(modelPageUpdate, async (data) => {
 		if (charterAlreadyExist) invalid('Il existe déjà une charte des bénévoles')
 	}
 
-	return prisma.page.update({ where: { id: data.id }, data })
-})
-
-/** L'accueil et les modèles de courriel n'ont pas de brouillon: leur statut ne bouge pas. */
-export const setPageState = form(modelPageState, async ({ id, state }) => {
-	const { locals, params } = getRequestEvent()
-	const eventId = params.eventId!
-	await permission.admin(eventId, locals)
-	const page = await prisma.page.findUniqueOrThrow({ where: { id, eventId } })
-	if (page.type === 'home' || page.type === 'email')
-		invalid('Cette publication est toujours visible')
-	await prisma.page.update({ where: { id }, data: { state } })
+	// L'accueil et les modèles de courriel n'ont pas de brouillon: ils sont toujours visibles,
+	// et le formulaire ne leur propose pas de statut.
+	const state = data.type === 'home' || data.type === 'email' ? 'published' : data.state
+	return prisma.page.update({ where: { id: data.id }, data: { ...data, state } })
 })
 
 export const deletePage = form(async () => {

@@ -58,7 +58,7 @@
 	>
 		{#if EntryIcon}
 			<span
-				class="inline-flex w-6 shrink-0 opacity-60"
+				class={['inline-flex w-6 shrink-0', state === 'draft' ? 'text-warning' : 'opacity-60']}
 				use:tip={{ content: state === 'draft' ? PAGE_STATES.draft.label : undefined }}
 			>
 				<EntryIcon size={20} />

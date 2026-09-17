@@ -16,7 +16,12 @@
 </a>
 
 <div class="flex flex-col items-start gap-3 xl:flex-row">
-	<Section id="badge-form" title="Configuration" icon={IdCardLanyardIcon} class="w-full min-w-0">
+	<Section
+		id="badge-form"
+		title="Configuration d'un badge"
+		icon={IdCardLanyardIcon}
+		class="w-full min-w-0"
+	>
 		<BadgeForm badge={data.badge} onsaved={() => view?.refresh()} />
 	</Section>
 

@@ -103,7 +103,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 >
 	<InputString
 		field={remoteForm.fields.name}
-		label="Nom de la configuration"
+		label="Nom du badge"
 		value={badge.name}
 		autocomplete="off"
 	/>
