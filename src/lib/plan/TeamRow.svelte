@@ -29,6 +29,7 @@
 			{#each periods as period (period.id)}
 				<PeriodCard
 					{period}
+					teamState={team.state}
 					{plan}
 					drags={[
 						{ class: 'top-full', moveStart: true, icon: ArrowLeftToLineIcon },

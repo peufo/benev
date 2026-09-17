@@ -21,6 +21,7 @@
 	import { PERIOD_DEFAULT_MINUTES } from '$lib/constant'
 	import { getEventTimeZone } from '$lib/timezone'
 	import { createPeriod, deletePeriod, duplicatePeriod, updatePeriod } from './period.remote'
+	import { engagedSubscribes, notifiedSentence, scheduleChanged } from './periodChange'
 
 	type PeriodProp = Partial<Period & { team: Team; tags: Tag[]; subscribes: Subscribe[] }>
 
@@ -140,14 +141,29 @@
 		if (detectChange(period)) setPeriod(period)
 	})
 
+	// Hors brouillon, les inscrit·es ont reçu leur horaire: c'est ce qui vaut confirmation.
+	const engaged = $derived(engagedSubscribes(period.subscribes ?? []).length)
+	const isTeamLive = $derived(!!period.team && period.team.state !== 'draft')
+
+	function confirmUpdate() {
+		if (!period.id || !isTeamLive || !engaged) return true
+		const { start: initialStart, end: initialEnd } = period
+		if (!initialStart || !initialEnd) return true
+		if (!scheduleChanged({ start: initialStart, end: initialEnd }, { start, end })) return true
+		const msg = [notifiedSentence(engaged, 'avec le nouvel horaire'), 'Continuer ?'].join('\n')
+		if (confirm(msg)) return true
+		toast.info('Modification annulée')
+		return false
+	}
+
 	function confirmDelete() {
-		const nb = period.subscribes?.length || 0
-		if (nb === 0) {
+		if (engaged === 0) {
 			ondelete?.()
 			return true
 		}
 		const msg = [
-			`Ce créneau contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
+			`Ce créneau contient déjà ${engaged} inscription${engaged > 1 ? 's' : ''} !`,
+			...(isTeamLive ? [notifiedSentence(engaged, 'annonçant sa suppression')] : []),
 			'Es-tu certain·e de vouloir le supprimer ?',
 		].join('\n')
 		if (confirm(msg)) {
@@ -177,6 +193,7 @@
 <form
 	{...remoteForm.enhance(
 		enhanceForm({
+			before: confirmUpdate,
 			success: period?.id ? 'Créneau mis à jour' : 'Créneau ajouté',
 			onsuccess: () => onsuccess?.(),
 		})

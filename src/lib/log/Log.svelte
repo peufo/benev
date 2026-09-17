@@ -4,6 +4,7 @@
 	import { prefersReducedMotion } from 'svelte/motion'
 	import type { IconProps } from '@lucide/svelte'
 	import {
+		CalendarClockIcon,
 		CalendarPlusIcon,
 		ClipboardListIcon,
 		FilePlus2Icon,
@@ -59,6 +60,7 @@
 		team_state: LogTeam,
 		team_delete: LogTeam,
 		period_create: LogPeriod,
+		period_update: LogPeriod,
 		period_delete: LogPeriod,
 		note_create: LogNote,
 		email_sent: LogEmail,
@@ -85,6 +87,7 @@
 		team_state: { icon: MapPinnedIcon, class: '' },
 		team_delete: { icon: MapPinnedIcon, class: 'text-error' },
 		period_create: { icon: CalendarPlusIcon, class: '' },
+		period_update: { icon: CalendarClockIcon, class: '' },
 		period_delete: { icon: CalendarPlusIcon, class: 'text-error' },
 		note_create: { icon: StickyNoteIcon, class: '' },
 		email_sent: { icon: MailCheckIcon, class: 'text-success' },

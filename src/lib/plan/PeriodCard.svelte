@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner'
+	import { isHttpError } from '@sveltejs/kit'
 	import type { Component } from 'svelte'
+	import type { TeamState } from '@prisma/client'
 	import type { IconProps } from '@lucide/svelte'
 	import type { ClassValue } from 'svelte/elements'
 	import { urlParam } from 'fuma'
@@ -9,11 +11,14 @@
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
 	import { movePeriod } from '$lib/period/period.remote'
+	import { engagedSubscribes, notifiedSentence, scheduleChanged } from '$lib/period/periodChange'
 	import { magnet } from './magnet.svelte'
 	import DragButton from './DragButton.svelte'
 
 	interface Props {
 		period: PeriodWithMembers
+		/** Hors brouillon, déplacer un créneau inscrit prévient ses inscrit·es: on confirme avant. */
+		teamState: TeamState
 		plan: Plan
 		drags: {
 			icon?: Component<IconProps>
@@ -25,7 +30,7 @@
 		onupdate?: (value: PeriodWithMembers) => void
 	}
 
-	let { period, plan, drags, onupdate }: Props = $props()
+	let { period, teamState, plan, drags, onupdate }: Props = $props()
 
 	let deltaStartMs = $state(0)
 	let deltaEndMs = $state(0)
@@ -43,18 +48,31 @@
 
 		const start = new Date(period.start.getTime() + magnet(deltaStartMs))
 		const end = new Date(period.end.getTime() + magnet(deltaEndMs))
+		if (!confirmMove({ start, end })) {
+			deltaStartMs = 0
+			deltaEndMs = 0
+			return
+		}
 		try {
-			const moved = await movePeriod({ id: period.id, teamId: period.teamId, start, end })
+			const moved = await movePeriod({ id: period.id, start, end })
 			// Les dates viennent du serveur, et les deltas ne retombent à zéro qu'une fois la carte
 			// repositionnée dessus: dans l'autre ordre elle reviendrait un instant à sa place d'origine.
 			onupdate?.({ ...period, start: moved.start, end: moved.end })
 			toast.success('Créneau mis à jour')
 		} catch (err) {
-			toast.error('Erreur')
+			// `HttpError` n'étend pas `Error`: son message se lit dans `body`.
+			toast.error(isHttpError(err) ? err.body.message : 'Erreur')
 			console.error(err)
 		}
 		deltaStartMs = 0
 		deltaEndMs = 0
+	}
+
+	function confirmMove(after: { start: Date; end: Date }) {
+		if (teamState === 'draft') return true
+		const n = engagedSubscribes(period.subscribes).length
+		if (!n || !scheduleChanged(period, after)) return true
+		return confirm([notifiedSentence(n, 'avec le nouvel horaire'), 'Continuer ?'].join('\n'))
 	}
 </script>
 

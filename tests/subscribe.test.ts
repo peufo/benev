@@ -138,4 +138,72 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		await guestPage.locator('#subscribes').getByRole('button').last().hover()
 		await expect(guestPage.getByRole('tooltip')).toHaveText('Inscription confirmée par le membre')
 	})
+
+	/** La ligne du seul créneau du secteur, qui ouvre son tiroir d'édition. */
+	async function openPeriodDrawer() {
+		await page.goto(`/${event.eventId}/admin/teams`)
+		await page.getByRole('link', { name: 'Alpha' }).click()
+		const row = page.locator('[role="button"].menu-item').first()
+		const drawer = page.getByRole('dialog', { name: "Édition d'un créneau" })
+		await expect(async () => {
+			await row.click()
+			await expect(drawer).toBeVisible({ timeout: 1000 })
+		}).toPass()
+		return drawer
+	}
+
+	test("Changer l'horaire d'un créneau validé prévient ses inscrit·es", async () => {
+		const drawer = await openPeriodDrawer()
+		// Le libellé « Début » vise le champ de l'heure; l'heure du jour, posée par défaut à la
+		// création, est inconnue: on vise celle qu'elle n'est pas.
+		const start = drawer.getByLabel('Début')
+		const current = await start.inputValue()
+		await start.fill(current === '10:00' ? '11:00' : '10:00')
+
+		// Sans écouteur, Playwright refuse le `confirm()` et rien ne part.
+		page.once('dialog', (confirmation) => {
+			expect(confirmation.message()).toContain('1 inscrit·e recevra un courriel')
+			void confirmation.accept()
+		})
+		await drawer.getByRole('button', { name: 'Valider', exact: true }).click()
+		await expect(page.getByText('Créneau mis à jour')).toBeVisible()
+		await expect(drawer).toBeHidden()
+
+		await page.goto(`/${event.eventId}/admin/dashboard`)
+		const entries = page.locator('#journal').getByRole('listitem')
+		const moved = entries.filter({ hasText: 'a modifié un créneau de Alpha' })
+		await expect(moved).toHaveCount(1)
+		await expect(moved).toContainText('Début')
+		await expect(moved).toContainText('1 inscrit·e prévenu·e')
+	})
+
+	test('Supprimer un créneau validé prévient et journalise chaque inscription', async () => {
+		const drawer = await openPeriodDrawer()
+		page.once('dialog', (confirmation) => {
+			expect(confirmation.message()).toContain('annonçant sa suppression')
+			void confirmation.accept()
+		})
+		await drawer.getByRole('button', { name: 'Supprimer' }).click()
+		await drawer.getByRole('button', { name: "T'es sur ?" }).click()
+		await expect(page.getByText('Créneau supprimé')).toBeVisible()
+		await expect(drawer).toBeHidden()
+
+		// Le compte lié a recopié son nom sur la fiche: Glados Aperture est devenue Guest The Tester.
+		await page.goto(`/${event.eventId}/admin/dashboard`)
+		const entries = page.locator('#journal').getByRole('listitem')
+		await expect(entries.filter({ hasText: 'a retiré un créneau de Alpha' })).toHaveCount(1)
+		await expect(
+			entries.filter({ hasText: "a supprimé l'inscription de Guest The Tester à Alpha" })
+		).toHaveCount(1)
+
+		// La ligne de l'inscription appartient au membre: elle se lit aussi sur sa page.
+		await page.goto(`/${event.eventId}/admin/members`)
+		await page
+			.getByRole('link', { name: /Guest The Tester/ })
+			.first()
+			.click()
+		await expect(
+			page.locator('#journal').getByRole('listitem').filter({ hasText: "a supprimé l'inscription" })
+		).toHaveCount(1)
+	})
 })

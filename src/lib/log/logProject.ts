@@ -131,6 +131,12 @@ export type TeamSnapshot = ReturnType<typeof projectTeam>
 /** Un créneau, tel qu'il s'affichera dans le fil. */
 export type LogPeriod = { start: string; end: string; maxSubscribe: number }
 
+export const periodLabels = {
+	start: 'Début',
+	end: 'Fin',
+	maxSubscribe: 'Places',
+} satisfies Record<keyof LogPeriod, string>
+
 export function projectPeriod(period: {
 	start: Date | string
 	end: Date | string

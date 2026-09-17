@@ -272,8 +272,12 @@ Three rules govern what goes into `data`:
 `createLog` never throws — a journal that falls must not take down what it journalises.
 
 What is deliberately _not_ logged: searches, reorderings, personal table views, media, tags,
-milestones, a member's own notification preferences, and **`movePeriod` / `updatePeriod` /
-`duplicatePeriod`**, which the planning grid calls on every drag release.
+milestones, a member's own notification preferences, and **`duplicatePeriod`**. `movePeriod` and
+`updatePeriod`, which the planning grid calls on every drag release, only write a `period_update`
+when the change reaches volunteers already notified: team out of `draft` and at least one
+`accepted` or `request` subscribe on the period (`settlePeriodUpdate` in `$lib/server/period.ts`,
+which also sends the « ton créneau a changé » email when the schedule moved). A draft being
+built stays silent.
 
 The organizer reads it in the Journal section of `/[eventId]/admin/dashboard` and in the Journal
 section of a member's page. Both routes sit under the leader guard of `/[eventId]/admin`, and
@@ -698,8 +702,9 @@ breaks `svelte-check`.
   `svelte/server` (the old static `Component.render()` is gone). SMTP via Nodemailer.
   `EMAIL_DISABLED=true` logs instead of sending; CI and E2E rely on it. Transactional emails cover
   verification links, password reset, subscribe notifications
-  (request/accepted/denied/cancelled) and checkout validation. `/root/mails/*` previews templates
-  in the browser.
+  (request/accepted/denied/cancelled), period changes and deletions (`EmailPeriodChanged`, to the
+  engaged subscribers of a team out of draft) and checkout validation. `/root/mails/*` previews
+  templates in the browser.
 - **Media**: uploads (avatars, event backgrounds, logos, posters, badge assets) are stored on the
   local filesystem under `MEDIA_DIR` (default `./media`), recorded in the `Media` table with
   relations to `User`, `Event` and `Badge`, and served by `/media/[mediaId]`. `sharp` handles

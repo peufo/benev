@@ -371,6 +371,30 @@ export const logMap = {
 		data: { team: teamRef(team), period: projectPeriod(period), actor: refActor(actor) },
 	}),
 
+	/**
+	 * Seulement quand le changement compte: secteur hors brouillon et inscriptions engagées. Les
+	 * glissers du planning sur un brouillon ou un créneau vide restent muets. `period` est l'état
+	 * d'arrivée, `changes` ne porte que ce qui a bougé, `notified` le nombre de courriels partis.
+	 */
+	period_update: ({
+		period,
+		team,
+		changes,
+		notified,
+		actor,
+	}: PeriodInput & { changes: LogUpdate<LogPeriod>; notified: number }) => ({
+		eventId: team.eventId,
+		teamId: team.id,
+		createdById: actor.userId,
+		data: {
+			team: teamRef(team),
+			period: projectPeriod(period),
+			changes,
+			notified,
+			actor: refActor(actor),
+		},
+	}),
+
 	period_delete: ({ period, team, actor }: PeriodInput) => ({
 		eventId: team.eventId,
 		teamId: team.id,

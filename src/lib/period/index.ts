@@ -12,3 +12,4 @@ export function periodIsComplet(
 	).length
 	return nbSubscribe >= period.maxSubscribe
 }
+export * from './periodChange'

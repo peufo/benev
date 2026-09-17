@@ -2,7 +2,13 @@ import { describe, it } from 'vitest'
 import { LogType, type SubscribeState } from '@prisma/client'
 import { logMap } from '$lib/log/logMap'
 import { diffChanges, hasChanges, iso } from '$lib/log/logTypes'
-import { eventLabels, projectEvent, projectMemberContact, projectTeam } from '$lib/log/logProject'
+import {
+	eventLabels,
+	projectEvent,
+	projectMemberContact,
+	projectPeriod,
+	projectTeam,
+} from '$lib/log/logProject'
 
 const actor = { userId: 'usr_1', firstName: 'Jean', lastName: 'Rey' }
 
@@ -67,6 +73,31 @@ describe('logMap', () => {
 		})
 		expect(log.data.period.start).toBe('2026-07-04T08:00:00.000Z')
 		expect(typeof log.data.period.end).toBe('string')
+	})
+
+	it("ne journalise d'un créneau modifié que ce qui a bougé", ({ expect }) => {
+		const before = {
+			start: new Date('2026-07-04T08:00:00Z'),
+			end: new Date('2026-07-04T12:00:00Z'),
+			maxSubscribe: 2,
+		}
+		const after = { ...before, start: new Date('2026-07-04T09:00:00Z') }
+		const changes = diffChanges(projectPeriod(before), projectPeriod(after))
+		const log = logMap.period_update({
+			period: after,
+			team: { id: 'tm_1', name: 'Buvette', eventId: 'fete' },
+			changes,
+			notified: 1,
+			actor,
+		})
+		expect(log.eventId).toBe('fete')
+		expect(log.teamId).toBe('tm_1')
+		expect(Object.keys(log.data.changes.after)).toEqual(['start'])
+		expect(log.data.changes.before.start).toBe('2026-07-04T08:00:00.000Z')
+		expect(log.data.changes.after.start).toBe('2026-07-04T09:00:00.000Z')
+		// Le créneau figé est celui d'arrivée: un changement de places seul dit encore lequel.
+		expect(log.data.period.start).toBe('2026-07-04T09:00:00.000Z')
+		expect(log.data.notified).toBe(1)
 	})
 
 	it('transmet tel quel le contexte capturé à la mise en file des emails', ({ expect }) => {

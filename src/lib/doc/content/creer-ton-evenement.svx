@@ -100,6 +100,15 @@ possible d'enchaîner plusieurs créneaux similaires en quelques clics.
 Tu peux aussi basculer l'axe à l'horizontale ou à la verticale, régler le zoom et n'afficher que
 quelques secteurs.
 
+### Modifier un créneau après validation
+
+Tant que le secteur est en brouillon, déplace, redimensionne et supprime tes créneaux librement,
+personne n'en sait rien. Par contre, une fois le secteur validé, les personnes inscrites ont reçu leur horaire.
+Changer l'heure d'un créneau qui a des inscriptions leur envoie un courriel avec le nouvel horaire,
+et le supprimer leur annonce qu'il n'a plus lieu. Dans les deux cas, une confirmation te donne le
+nombre de membres concernés.
+
+
 ### Les étiquettes
 
 Une étiquette est un nom et une couleur arbitraires, qui désignent généralement une catégorie ou un

@@ -294,6 +294,26 @@ describe('rendu du journal', () => {
 		)
 		expect(created).toContain('Buvette')
 		expect(created).toContain('3 places')
+
+		const moved = renderLog(
+			LogPeriod,
+			'period_update',
+			logMap.period_update({
+				period: { ...period, start: new Date('2026-07-04T09:00:00Z') },
+				team,
+				changes: {
+					before: { start: '2026-07-04T08:00:00.000Z' },
+					after: { start: '2026-07-04T09:00:00.000Z' },
+				},
+				notified: 1,
+				actor,
+			}).data
+		)
+		expect(moved).toContain('a modifié un créneau de')
+		expect(moved).toContain('Début')
+		expect(moved).toContain('10:00')
+		expect(moved).toContain('11:00')
+		expect(moved).toContain('1 inscrit·e prévenu·e')
 	})
 
 	it('rend les deux issues d’un envoi', ({ expect }) => {

@@ -566,6 +566,7 @@ enum LogType {
   team_delete
 
   period_create
+  period_update
   period_delete
 
   note_create

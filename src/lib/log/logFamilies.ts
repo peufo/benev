@@ -37,6 +37,7 @@ export const LOG_FAMILIES = {
 			'team_state',
 			'team_delete',
 			'period_create',
+			'period_update',
 			'period_delete',
 		] satisfies LogType[],
 	},
