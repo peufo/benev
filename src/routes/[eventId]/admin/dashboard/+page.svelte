@@ -179,7 +179,7 @@
 
 				<p>
 					Le reste est détaillé dans
-					<a href={eventPath('/help')} class="link link-hover link-primary">l'aide</a>. Une
+					<a href={resolve('/docs')} class="link link-hover link-primary">la documentation</a>. Une
 					question, un pépin ?
 					<a href={resolve('/contact')} class="link link-hover link-primary">Écris-nous</a>.
 				</p>

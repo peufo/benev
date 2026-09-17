@@ -12,6 +12,7 @@ import {
 
 import { param } from 'fuma'
 import { page } from '$app/state'
+import { resolve } from '$app/paths'
 import type { ResolvedPathname } from '$app/types'
 import { eventPath, withSearch, type EventRouteWithoutParams } from '$lib/eventPath'
 
@@ -66,7 +67,8 @@ export function adminTabs(): AdminTab[] {
 			icon: FileTextIcon,
 		},
 		{
-			...getPath('/help'),
+			href: resolve('/docs'),
+			isActive: false,
 			label: 'Aide',
 			icon: CircleQuestionMarkIcon,
 		},

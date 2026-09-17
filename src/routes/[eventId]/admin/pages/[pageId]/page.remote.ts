@@ -11,7 +11,6 @@ const RESERVED_PATHS = [
 	'register',
 	'teams',
 	'subscribes',
-	'help',
 	'api',
 	'invite',
 	'members',

@@ -117,7 +117,7 @@ be introduced.
   - `[eventId]/admin/*` — organizer tools: dashboard, members, subscribes, plan, settings,
     pages, quota, adhesion. `admin` itself redirects — to `dashboard` for an admin, to
     `members` for a leader, who is refused the first.
-  - `[eventId]/register`, `/me`, `/teams`, `/help`, `/invite` — volunteer-facing pages.
+  - `[eventId]/register`, `/me`, `/teams`, `/invite` — volunteer-facing pages.
   - `[eventId]/api/*` — event-scoped REST endpoints.
 - `+layout.server.ts` / `+page.server.ts` — server `load` functions.
 - `+server.ts` — REST endpoints (GET, POST, PATCH, DELETE).
