@@ -6,6 +6,7 @@
 	import { afterNavigate } from '$app/navigation'
 	import { eventPath } from '$lib/eventPath'
 	import TeamCol from './TeamCol.svelte'
+	import TeamStateIcon from '$lib/team/TeamStateIcon.svelte'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { persistHourSize, withHourSize } from './zoom'
 	import { scrollOnZoom } from './scrollOnZoom'
@@ -110,7 +111,8 @@
 					hover:underline
 				"
 			>
-				<span class="text-sm">
+				<span class="text-sm inline-flex items-center gap-1">
+					<TeamStateIcon {team} />
 					{team.name}
 				</span>
 			</a>

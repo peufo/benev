@@ -109,8 +109,25 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		await accept.click()
 		await expect(accept).toBeHidden()
 
+		// Le secteur est né en brouillon: la demande préparée n'existe pas encore pour le membre.
 		await guestPage.goto(`/${event.eventId}/me`)
 		const toConfirm = guestPage.getByRole('button', { name: 'à confirmer' })
+		await expect(guestPage.getByRole('heading', { name: 'Mes inscriptions' })).toBeVisible()
+		await expect(toConfirm).toHaveCount(0)
+
+		// Valider le secteur libère la demande, et le créneau apparaît au membre. C'est sans
+		// retour: la confirmation annonce le courriel qui part.
+		await page.goto(`/${event.eventId}/admin/teams`)
+		await page.getByRole('link', { name: 'Alpha' }).click()
+		await page.getByRole('button', { name: 'Brouillon', exact: true }).click()
+		page.once('dialog', (confirmation) => {
+			expect(confirmation.message()).toContain("1 demande d'inscription partira")
+			void confirmation.accept()
+		})
+		await page.getByRole('button', { name: 'Valider', exact: true }).click()
+		await expect(page.getByText('Validé', { exact: true }).first()).toBeVisible()
+
+		await guestPage.reload()
 		await expect(toConfirm).toBeVisible()
 		await toConfirm.click()
 		await guestPage.getByRole('button', { name: 'Confirmer', exact: true }).click()

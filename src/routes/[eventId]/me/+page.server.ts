@@ -10,7 +10,8 @@ export const load = async ({ url, parent, params: { eventId } }) => {
 	return {
 		member,
 		memberTeams: await prisma.team.findMany({
-			where: { periods: { some: { subscribes: { some: { memberId } } } } },
+			// Un secteur en brouillon ne prépare encore rien que le membre doive voir.
+			where: { state: { not: 'draft' }, periods: { some: { subscribes: { some: { memberId } } } } },
 			include: {
 				leaders: true,
 				periods: {

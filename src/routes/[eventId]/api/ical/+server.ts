@@ -5,7 +5,10 @@ export const GET = async ({ params: { eventId }, locals }) => {
 	const member = await permission.member(eventId, locals)
 
 	const memberTeams = await prisma.team.findMany({
-		where: { periods: { some: { subscribes: { some: { memberId: member.id } } } } },
+		where: {
+			state: { not: 'draft' },
+			periods: { some: { subscribes: { some: { memberId: member.id } } } },
+		},
 		include: {
 			event: { select: { name: true } },
 			periods: {

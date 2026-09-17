@@ -1,4 +1,10 @@
-import type { EventState, LogType, SubscribeCreatedBy, SubscribeState } from '@prisma/client'
+import type {
+	EventState,
+	LogType,
+	SubscribeCreatedBy,
+	SubscribeState,
+	TeamState,
+} from '@prisma/client'
 import {
 	refActor,
 	refPerson,
@@ -334,6 +340,21 @@ export const logMap = {
 		teamId: team.id,
 		createdById: actor.userId,
 		data: { team: teamRef(team), changes, actor: refActor(actor) },
+	}),
+
+	team_state: ({
+		team,
+		before,
+		actor,
+	}: {
+		team: TeamSource & { state: TeamState }
+		before: TeamState
+		actor: LogActor
+	}) => ({
+		eventId: team.eventId,
+		teamId: team.id,
+		createdById: actor.userId,
+		data: { team: teamRef(team), before, after: team.state, actor: refActor(actor) },
 	}),
 
 	/** `teamId` reste nul: le secteur n'existe plus, son nom est figé dans `data`. */

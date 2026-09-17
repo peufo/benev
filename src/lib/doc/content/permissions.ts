@@ -36,6 +36,10 @@ export const PERMISSIONS: PermissionRow[] = [
 		values: [true, true, 'Seulement ses secteurs', false],
 	},
 	{
+		label: 'Valider ou publier un secteur',
+		values: [true, true, 'Seulement ses secteurs', false],
+	},
+	{
 		label: 'Gérer les créneaux',
 		values: [true, true, 'Seulement les créneaux de ses secteurs', false],
 	},

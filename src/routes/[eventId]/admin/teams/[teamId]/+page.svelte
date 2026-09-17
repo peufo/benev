@@ -20,6 +20,7 @@
 	import TeamCloneButton from '$lib/team/TeamCloneButton.svelte'
 	import TeamDeleteButton from '$lib/team/TeamDeleteButton.svelte'
 	import TeamLeaders from '$lib/team/TeamLeaders.svelte'
+	import TeamStateMenu from '$lib/team/TeamStateMenu.svelte'
 	import { PeriodRow } from '$lib/period'
 	import { MemberConditionsBadges } from '$lib/member'
 
@@ -44,6 +45,7 @@
 </a>
 
 {#snippet teamActions()}
+	<TeamStateMenu {team} canEdit={team.isLeader} />
 	<a
 		href={eventPath(`/admin/members?subscribes_teams=["${team.id}"]`)}
 		class="btn btn-square btn-sm"

@@ -5,6 +5,7 @@
 	import type { Milestone, Team } from '@prisma/client'
 	import { afterNavigate, goto } from '$app/navigation'
 	import TeamRow from '$lib/plan/TeamRow.svelte'
+	import TeamStateIcon from '$lib/team/TeamStateIcon.svelte'
 	import { daytz, type Dayjs } from '$lib/dayjs'
 	import { eventPath } from '$lib/eventPath'
 	import type { PeriodWithMembers, Plan } from './types'
@@ -134,7 +135,7 @@
 				data-sveltekit-noscroll
 				style:width="{TEAM_HEADER_WIDTH}px"
 				class="
-					p-1 sticky shrink-0 left-0 z-20 font-medium text-sm
+					p-1 sticky shrink-0 left-0 z-20 font-medium text-sm flex items-center gap-1
 					border-r border-hard
 					cursor-pointer
 					not-group-hover/team:bg-base-100
@@ -142,6 +143,7 @@
 					hover:underline
 				"
 			>
+				<TeamStateIcon {team} />
 				{team.name}
 			</a>
 			<TeamRow {team} {plan} onupdate={(newTeam) => (teams = teams.with(teamIndex, newTeam))} />

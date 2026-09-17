@@ -349,6 +349,7 @@ model Team {
   name              String
   description       String?   @db.Text
   leaders           Member[]
+  state             TeamState @default(draft)
   closeSubscribing  DateTime?
   overflowPermitted Boolean   @default(false)
 
@@ -365,6 +366,12 @@ model Team {
   updatedAt DateTime @updatedAt
 
   @@unique([name, eventId])
+}
+
+enum TeamState {
+  draft
+  validated
+  published
 }
 
 model Period {
@@ -555,6 +562,7 @@ enum LogType {
 
   team_create
   team_update
+  team_state
   team_delete
 
   period_create

@@ -52,7 +52,7 @@ export const setSubscribeState = form(
 				},
 				period: {
 					include: {
-						team: { select: { overflowPermitted: true } },
+						team: { select: { overflowPermitted: true, state: true } },
 						subscribes: {
 							where: whereSubscribe,
 						},
@@ -83,6 +83,8 @@ export const setSubscribeState = form(
 
 		if (!isLeaderAction) {
 			if (!isSelfAction) error(403, "You can't self update subscribe status")
+			// Un brouillon n'est pas visible du membre: il n'a rien à y répondre.
+			if (_subscribe.period.team.state === 'draft') error(403)
 			if ((state === 'cancelled' || state === 'denied') && !author.event.selfSubscribeCancelAllowed)
 				error(403, "L'annulation ou le refus d'une inscription n'est pas authorisé.")
 		}
@@ -156,6 +158,10 @@ export const setSubscribeState = form(
 				isValidedByEvent: true,
 			})
 		}
+
+		// Tant que le secteur est en brouillon, rien ne part vers le membre: il ne connaît pas encore
+		// ce planning. Seul un responsable peut agir ici, le courriel irait forcément au membre.
+		if (subscribe.period.team.state === 'draft') return
 
 		const toMember =
 			subscribe.member.isNotifiedSubscribe && subscribe.member.email ? [subscribe.member.email] : []

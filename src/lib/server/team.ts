@@ -68,7 +68,12 @@ export function useAddTeamComputedValues(
 				let isDisabled = true
 				if (team.isLeader) isDisabled = false
 
-				if (isAvailable && event?.selfSubscribeAllowed && !team.isClosedSubscribing) {
+				if (
+					isAvailable &&
+					event?.selfSubscribeAllowed &&
+					!team.isClosedSubscribing &&
+					team.state === 'published'
+				) {
 					if (ctx?.member?.id) isDisabled = false
 					else if (event?.selfRegisterAllowed) isDisabled = false
 				}

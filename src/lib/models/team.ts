@@ -57,3 +57,13 @@ export const modelTeamUpdate = modelTeam.extend({
 	// schéma ne connaît pas le rôle.
 	leaders: zSet.optional(),
 })
+
+/**
+ * Le statut ne passe ni par `modelTeam` ni par `modelTeamUpdate`: le changer a des effets de
+ * bord (les courriels différés), et n'appartient qu'à `setTeamState`. Le brouillon n'est pas
+ * une cible: une fois les bénévoles prévenus, un secteur n'y revient pas.
+ */
+export const modelTeamState = z.object({
+	id: z.string(),
+	state: z.enum(['validated', 'published']),
+})

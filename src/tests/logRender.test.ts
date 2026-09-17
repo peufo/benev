@@ -278,6 +278,15 @@ describe('rendu du journal', () => {
 		expect(updated).toContain('Responsables')
 		expect(updated).toContain('Zoe The Tester')
 
+		const validated = renderLog(
+			LogTeam,
+			'team_state',
+			logMap.team_state({ team: { ...team, state: 'validated' }, before: 'draft', actor }).data
+		)
+		expect(validated).toContain('a changé le statut du secteur')
+		expect(validated).toContain('Brouillon')
+		expect(validated).toContain('Validé')
+
 		const created = renderLog(
 			LogPeriod,
 			'period_create',

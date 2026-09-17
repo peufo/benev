@@ -34,6 +34,7 @@ export const LOG_FAMILIES = {
 			'event_update',
 			'team_create',
 			'team_update',
+			'team_state',
 			'team_delete',
 			'period_create',
 			'period_delete',

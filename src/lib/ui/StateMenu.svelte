@@ -1,4 +1,4 @@
-<script lang="ts" generics="S extends string">
+<script lang="ts" generics="S extends string, T extends S = S">
 	import type { RemoteForm } from '@sveltejs/kit'
 	import type { ClassValue } from 'svelte/elements'
 	import { ChevronDownIcon } from '@lucide/svelte'
@@ -7,13 +7,23 @@
 	import type { StateOption } from '$lib/constant'
 	import { enhanceForm } from '$lib/enhanceForm'
 
+	type Transition = {
+		state: T
+		label: string
+		/** Demandé avant d'envoyer, par le dialogue natif: pour ce qui ne se défait pas. */
+		confirm?: string
+	}
+
 	interface Props {
 		states: Record<S, StateOption>
 		state: S
-		/** Les changements possibles depuis l'état courant, dans l'ordre du menu. Vide: lecture seule. */
-		transitions: { state: S; label: string }[]
+		/**
+		 * Les changements possibles depuis l'état courant, dans l'ordre du menu. Vide: lecture
+		 * seule. `T` restreint les cibles quand un état ne se rejoint plus une fois quitté.
+		 */
+		transitions: Transition[]
 		/** La fonction distante qui change l'état: elle reçoit `id` et `state`. */
-		form: RemoteForm<{ id: string; state: S }, void>
+		form: RemoteForm<{ id: string; state: T }, void>
 		/** L'enregistrement dont l'état change, et la clé de l'instance du formulaire. */
 		id: string
 		class?: ClassValue
@@ -27,7 +37,7 @@
 	const remoteForm = $derived(form.for(id))
 	const StateIcon = $derived(states[value].icon)
 	// L'état visé se lit sur le bouton pressé, que le succès ne connaît plus.
-	let chosen = $state<S>()
+	let chosen = $state<T>()
 </script>
 
 {#snippet current()}
@@ -60,6 +70,11 @@
 			<form
 				{...remoteForm.enhance(
 					enhanceForm({
+						// Le clic sur le bouton précède l'évènement `submit`: `chosen` est déjà posé.
+						before: () => {
+							const transition = transitions.find(({ state }) => state === chosen)
+							return !transition?.confirm || confirm(transition.confirm)
+						},
 						onsuccess: () => {
 							if (chosen) toast.success(states[chosen].label)
 							hide()

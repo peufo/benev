@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ClockIcon } from '@lucide/svelte'
 	import { daytz } from '$lib/dayjs'
+	import { TEAM_STATES } from '$lib/constant'
 	import { page } from '$app/state'
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeDate } from '$lib/formatRange'
@@ -48,8 +49,18 @@
 		</div>
 
 		<div class="flex flex-col gap-4 mt-4">
-			{#if team.conditions?.length || (closeSubscribing && event?.selfSubscribeAllowed)}
+			{#if (team.isLeader && team.state !== 'published') || team.conditions?.length || (closeSubscribing && event?.selfSubscribeAllowed)}
 				<div class="flex gap-2 gap-y-1 flex-wrap">
+					<!-- BADGE STATE: pour le responsable. Un inscrit d'un secteur validé voit ses
+					     créneaux, le mot ne lui dirait rien. -->
+					{#if team.isLeader && team.state !== 'published'}
+						{@const StateIcon = TEAM_STATES[team.state].icon}
+						<span class="badge" class:badge-warning={team.state === 'draft'}>
+							<StateIcon size={16} />
+							<span class="ml-1">{TEAM_STATES[team.state].label}</span>
+						</span>
+					{/if}
+
 					<!-- BADGE SUBSCRIBE CLOSED -->
 					{#if closeSubscribing && event?.selfSubscribeAllowed}
 						<span class="badge" class:badge-warning={team.isClosedSubscribing}>

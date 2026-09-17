@@ -2,9 +2,15 @@ import { error } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import { isFreeRange } from 'perod'
 import { modelSubscribe } from '$lib/models'
-import { addMemberComputedValues, createLog, permission, prisma } from '$lib/server'
+import {
+	addMemberComputedValues,
+	createLog,
+	includeForRequestNotification,
+	permission,
+	prisma,
+	sendSubscribeRequestNotification,
+} from '$lib/server'
 import { isMemberAllowed, memberIsRegistered } from '$lib/member'
-import { subscribeNotification } from '$lib/email/subscribeNotification'
 import { periodIsComplet } from '$lib/period/index.js'
 
 export const createSubscribe = form(modelSubscribe, async (data) => {
@@ -18,7 +24,14 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 			where: { id: data.periodId },
 			include: {
 				subscribes: { where: { state: { in: ['accepted', 'request'] } } },
-				team: { select: { closeSubscribing: true, conditions: true, overflowPermitted: true } },
+				team: {
+					select: {
+						state: true,
+						closeSubscribing: true,
+						conditions: true,
+						overflowPermitted: true,
+					},
+				},
 			},
 		}),
 		prisma.member.findUnique({
@@ -57,6 +70,8 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 	// Check if self subscribe conditions is respected
 	if (!isLeaderOfTeam) {
 		if (!memberAuthor.event.selfSubscribeAllowed) error(403)
+		// Seul un secteur publié est ouvert aux inscriptions libres; un brouillon n'est même pas visible.
+		if (period.team.state !== 'published') error(403)
 		const closeSubscribing = period.team.closeSubscribing || memberAuthor.event.closeSubscribing
 		const DAY = 1000 * 60 * 60 * 24
 		if (closeSubscribing && closeSubscribing.getTime() < new Date().getTime() - DAY) error(403)
@@ -95,47 +110,17 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 		where: { memberId_periodId: { memberId: data.memberId, periodId: data.periodId } },
 		create: { ...data, ...subscribeData },
 		update: { ...subscribeData, isAbsent: false },
-		include: {
-			member: true,
-			period: {
-				include: {
-					team: {
-						include: {
-							leaders: true,
-							event: {
-								include: { owner: { select: { email: true } } },
-							},
-						},
-					},
-				},
-			},
-		},
+		include: includeForRequestNotification,
 	})
 
 	await createLog('subscribe_create', { subscribe, actor: session.user })
 
 	if (isLeaderOfTeam && isSelfSubscribe) return
+	// En brouillon, la demande attend que le secteur en sorte: `sendPendingSubscribeRequests`.
+	if (subscribe.period.team.state === 'draft') return
 
-	const memberMail =
-		subscribe.member.isNotifiedSubscribe && subscribe.member.email ? [subscribe.member.email] : []
-	const leadersMail = subscribe.period.team.leaders.map(({ email }) => email as string)
-	if (leadersMail.length === 0) {
-		leadersMail.push(subscribe.period.team.event.owner.email)
-	}
-	const to = subscribe.createdBy === 'user' ? leadersMail : memberMail
-	const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
-
-	if (to.length)
-		await subscribeNotification
-			.request({
-				from: subscribe.period.team.event.name,
-				to,
-				replyTo,
-				subject: 'Nouvelle inscription',
-				props: {
-					subscribe,
-					authorName: `${session.user.firstName} ${session.user.lastName}`,
-				},
-			})
-			.catch(console.error)
+	await sendSubscribeRequestNotification(
+		subscribe,
+		`${session.user.firstName} ${session.user.lastName}`
+	).catch(console.error)
 })

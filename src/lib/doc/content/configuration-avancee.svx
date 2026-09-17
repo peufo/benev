@@ -7,7 +7,9 @@ description: Les modèles de courriel, les variables, les badges
 
 Chaque création et chaque changement d'état d'inscription envoie un message : vers les responsables
 du secteur quand c'est le membre qui a bougé, vers le membre quand ce sont les responsables. Chacun
-règle ensuite ce qu'il veut recevoir depuis son espace personnel.
+règle ensuite ce qu'il veut recevoir depuis son espace personnel. Un
+[secteur en brouillon](/docs/creer-ton-evenement#secteurs) fait exception : rien n'y part vers les
+bénévoles tant qu'il n'est pas validé.
 
 Les messages qui vont vers tes bénévoles, tu peux les réécrire à ta façon. Ils t'attendent dans
 **Publications**, section « Modèles d'email », et chacun arrive avec un texte par défaut qui

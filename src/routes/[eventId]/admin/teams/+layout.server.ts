@@ -12,6 +12,7 @@ export const load = async ({ locals, params: { eventId } }) => {
 		select: {
 			id: true,
 			name: true,
+			state: true,
 			leaders: { select: { id: true } },
 			periods: {
 				select: {
@@ -32,9 +33,10 @@ export const load = async ({ locals, params: { eventId } }) => {
 
 	// Un secteur se réduit à ce que `Progress` consomme: la somme des places de ses périodes et
 	// leurs inscriptions mises à plat.
-	const teams = teamsRaw.map(({ id, name, periods }) => ({
+	const teams = teamsRaw.map(({ id, name, state, periods }) => ({
 		id,
 		name,
+		state,
 		nbPeriods: periods.length,
 		maxSubscribe: periods.reduce((acc, period) => acc + period.maxSubscribe, 0),
 		subscribes: periods.flatMap((period) => period.subscribes),

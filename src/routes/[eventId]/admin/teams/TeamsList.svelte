@@ -9,6 +9,7 @@
 	import { Placeholder } from '$lib/ui'
 	import { eventPath } from '$lib/eventPath'
 	import { reorderTeams } from '$lib/team/team.remote'
+	import TeamStateIcon from '$lib/team/TeamStateIcon.svelte'
 	import type { LayoutData } from './$types'
 
 	type TeamRow = LayoutData['teams'][number]
@@ -105,6 +106,7 @@
 			keyboard && command.focusIndex === index && 'outline-1 outline-accent bg-accent-soft',
 		]}
 	>
+		<TeamStateIcon {team} />
 		<span class="min-w-0 truncate text-sm" class:font-medium={isMine}>{team.name}</span>
 
 		<Progress

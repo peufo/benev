@@ -28,6 +28,8 @@
 		onchange?: () => void
 		/** L'`id` du formulaire qui reçoit les conditions, quand la section est rendue hors de lui. */
 		form?: string
+		/** Tant que le secteur n'est pas publié, les conditions ne s'appliquent à personne encore. */
+		published?: boolean
 		/** La section remplit la page: c'est elle qui dit jusqu'où celle-ci monte. */
 		class?: ClassValue
 	}
@@ -37,6 +39,7 @@
 		memberFields,
 		onchange,
 		form,
+		published = true,
 		class: klass,
 	}: Props = $props()
 
@@ -302,6 +305,9 @@
 				tous les membres
 			{:else}
 				{memberAllowedCount} membre{memberAllowedCount > 1 ? 's' : ''}
+			{/if}
+			{#if !published}
+				<strong>une fois le secteur publié</strong>
 			{/if}
 		</span>
 	</div>

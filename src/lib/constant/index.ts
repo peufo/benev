@@ -4,7 +4,6 @@ import {
 	ArchiveIcon,
 	CheckIcon,
 	CircleUserIcon,
-	ConstructionIcon,
 	FileTextIcon,
 	GlobeIcon,
 	HandshakeIcon,
@@ -15,14 +14,22 @@ import {
 	MailIcon,
 	OctagonAlertIcon,
 	OctagonXIcon,
-	PencilLineIcon,
+	PickaxeIcon,
 	SquareCheckIcon,
 	TypeIcon,
 	XIcon,
 } from '@lucide/svelte'
 import type { Component } from 'svelte'
 import { PRICE_STANDARD, PRICE_PREMIUM, PRICE_STANDARD_TO_PREMIUM } from '$app/env/public'
-import type { EventState, EventTier, Field, Page, PageState, Subscribe } from '@prisma/client'
+import type {
+	EventState,
+	EventTier,
+	Field,
+	Page,
+	PageState,
+	Subscribe,
+	TeamState,
+} from '@prisma/client'
 import type { OptionRecord } from 'fuma'
 
 /** Durée minimale d'une période de travail. */
@@ -112,7 +119,7 @@ export type StateOption = {
 
 export const EVENT_STATES: Record<EventState, StateOption> = {
 	draft: {
-		icon: ConstructionIcon,
+		icon: PickaxeIcon,
 		label: 'Évènement en construction',
 		class: 'text-warning',
 		description: `Seul les responsables ont accès au site de l'évènement.`,
@@ -131,9 +138,36 @@ export const EVENT_STATES: Record<EventState, StateOption> = {
 	},
 } as const
 
+/**
+ * Un secteur naît en brouillon: tant qu'il y reste, les bénévoles ne le voient pas et aucun
+ * courriel ne leur part, même quand un responsable les inscrit. Le quitter envoie les demandes
+ * restées en attente, et c'est sans retour: validé ou publié, un secteur ne redevient pas
+ * brouillon. Les libellés sont courts, ils servent aux badges du journal et aux toasts.
+ */
+export const TEAM_STATES: Record<TeamState, StateOption> = {
+	draft: {
+		icon: PickaxeIcon,
+		label: 'Brouillon',
+		class: 'text-warning',
+		description: `Les bénévoles ne voient ni le secteur, ni les inscriptions que tu leur prépares. Aucun courriel ne part.`,
+	},
+	validated: {
+		icon: CheckIcon,
+		label: 'Validé',
+		class: 'text-info',
+		description: `Les bénévoles inscrits sont prévenus et retrouvent leurs créneaux. Le secteur n'est pas listé, personne ne s'y inscrit seul.`,
+	},
+	published: {
+		icon: GlobeIcon,
+		label: 'Publié',
+		class: 'text-success',
+		description: `Listé pour tous les bénévoles, inscription libre selon les conditions d'accès.`,
+	},
+} as const
+
 export const PAGE_STATES: Record<PageState, StateOption> = {
 	draft: {
-		icon: PencilLineIcon,
+		icon: PickaxeIcon,
 		label: 'Brouillon',
 		class: 'text-warning',
 		description: `Seuls les organisateur·ices voient cette page.`,

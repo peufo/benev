@@ -73,6 +73,22 @@ Avec de bonnes descriptions, tes bénévoles sauront à quoi s'attendre quand il
 Depuis la fiche d'un secteur, tu peux désigner des **responsables**. Ils pourront gérer les créneaux
 et répondre aux inscriptions qui les concernent.
 
+### Brouillon, validé, publié
+
+Un secteur naît en **brouillon**. Tant qu'il y reste, tes bénévoles ne le voient pas, et les
+inscriptions que tu leur prépares restent silencieuses : aucun courriel ne part, rien n'apparaît
+dans leur espace. Tu peux donc construire ton planning, le défaire et le refaire au calme.
+
+Quand il est prêt, **valide-le** : les demandes en attente partent d'un coup, après une
+confirmation qui t'en donne le nombre, et chaque bénévole retrouve ses créneaux, à confirmer. Le
+secteur validé n'est pas listé : seuls ses inscrits le voient, personne ne s'y inscrit seul.
+Valider est définitif, un secteur ne revient pas en brouillon.
+
+**Ouvre les inscriptions** pour que tout le monde le voie et puisse s'y inscrire, dans les limites
+de ses [conditions d'accès](/docs/ouvrir-les-inscriptions#conditions). Tu peux les refermer et les
+rouvrir autant de fois que nécessaire. Depuis le brouillon, « Valider et ouvrir les inscriptions »
+fait les deux d'un geste.
+
 ## Planification {#periodes}
 
 Tu peux éditer les créneaux depuis la fiche du secteur ou directement sur la grille de planification.

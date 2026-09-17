@@ -2,8 +2,15 @@ import { command, form, getRequestEvent, query } from '$app/server'
 import type { Prisma } from '@prisma/client'
 import { error, redirect } from '@sveltejs/kit'
 import z from 'zod'
-import { modelTeam, modelTeamUpdate } from '$lib/models'
-import { createLog, permission, prisma, uniqueIssue, useAddTeamComputedValues } from '$lib/server'
+import { modelTeam, modelTeamState, modelTeamUpdate } from '$lib/models'
+import {
+	createLog,
+	permission,
+	prisma,
+	sendPendingSubscribeRequests,
+	uniqueIssue,
+	useAddTeamComputedValues,
+} from '$lib/server'
 import { cloneTeam } from '$lib/server/clone.js'
 import { diffChanges, hasChanges, projectTeam } from '$lib/log'
 
@@ -93,6 +100,24 @@ export const cloneTeamForm = form(
 		})
 	}
 )
+
+/**
+ * Le statut a sa propre porte, séparée d'`updateTeam`: quitter le brouillon envoie les demandes
+ * d'inscription restées en attente, et un formulaire enregistré par mégarde ne doit pas le faire.
+ * Le brouillon est à sens unique, le modèle ne l'accepte pas comme cible: les bénévoles prévenus
+ * ne peuvent pas être déprévenus.
+ */
+export const setTeamState = form(modelTeamState, async ({ id, state }) => {
+	const { locals, params } = getRequestEvent()
+	const eventId = params.eventId!
+	const actor = await permission.leaderOfTeam(id, locals)
+	const before = await prisma.team.findUniqueOrThrow({ where: { id, eventId } })
+	if (before.state === state) return
+	const team = await prisma.team.update({ where: { id }, data: { state } })
+	await createLog('team_state', { team, before: before.state, actor })
+	if (before.state === 'draft')
+		await sendPendingSubscribeRequests(team.id, `${actor.firstName} ${actor.lastName}`)
+})
 
 /** Le glisser-déposer transmettait un JSON dans un `FormData`: l'ordre suffit. */
 export const reorderTeams = command(z.array(z.string()), async (ids) => {

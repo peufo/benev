@@ -16,7 +16,10 @@ export async function getEventMembers(user: { id: string; email: string }) {
 			leaderOf: true,
 			// `period` et `team` alimentent le prochain créneau du bénévole: c'est la réponse
 			// à «où et quand suis-je attendu», que la date de l'évènement seule ne donne pas.
-			subscribes: { include: { period: { include: { team: { select: { name: true } } } } } },
+			subscribes: {
+				where: { period: { team: { state: { not: 'draft' } } } },
+				include: { period: { include: { team: { select: { name: true } } } } },
+			},
 		},
 	})
 

@@ -104,7 +104,8 @@
 	<form
 		{...remoteForm.enhance(
 			enhanceForm({
-				success: 'Succès',
+				// Un secteur naît en brouillon: le dire à la création, pour que le défaut ne surprenne pas.
+				success: team.id ? 'Succès' : 'Secteur créé en brouillon',
 				onsuccess: () => {
 					bar?.rebase()
 					// `result` porte le secteur tel qu'enregistré: c'est lui que l'appelant doit
@@ -147,6 +148,7 @@
 		{#key resetToken}
 			<MemberConditions
 				form={formId}
+				published={team.state === 'published'}
 				conditions={team?.conditions || []}
 				memberFields={event.memberFields}
 				onchange={() => bar?.refresh()}

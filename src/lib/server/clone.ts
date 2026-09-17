@@ -14,6 +14,7 @@ export function cloneTeam(
 	return {
 		name: team.name,
 		description: team.description,
+		state: team.state,
 		overflowPermitted: team.overflowPermitted,
 		closeSubscribing:
 			team.closeSubscribing && new Date(team.closeSubscribing.getTime() + deltaTimeMS),
