@@ -62,16 +62,15 @@
 	})
 
 	/**
-	 * Une fois la page hydratée, `command` prend le clic en charge — c'est lui qui navigue et
-	 * qui déplace le curseur clavier. Le `href` reste pour le rendu serveur, où aucun écouteur
-	 * n'est encore posé.
+	 * Le lien navigue par son `href`, et `command` ne tient que le clavier: les flèches et
+	 * Entrée depuis la recherche. Le clic sur une ligne ne fait que poser son curseur.
 	 *
-	 * En capture, et sur le lien: la poignée de glissé arrête la propagation du clic qui suit
-	 * le relâchement, ce qui suffit à museler `command` mais **pas** l'action par défaut du
-	 * lien. Sans cette interception venue d'au-dessus, un simple glissé rechargerait la page.
+	 * La poignée de glissé arrête la propagation du clic qui suit le relâchement, mais pas
+	 * l'action par défaut du lien: sans cette interception, un simple glissé changerait de
+	 * secteur. Elle ne vise que la poignée, pour que le reste de la ligne navigue comme un lien.
 	 */
 	function interceptClick(event: MouseEvent) {
-		event.preventDefault()
+		if ((event.target as Element).closest('.drag-button')) event.preventDefault()
 	}
 
 	/**
