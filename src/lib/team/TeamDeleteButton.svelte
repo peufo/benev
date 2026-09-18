@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { toast } from 'svelte-sonner'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { deleteTeam } from './team.remote'
-	import { tip } from 'fuma'
+	import { confirmDialog, tip } from 'fuma'
 	import { Trash2Icon } from '@lucide/svelte'
 
 	interface Props {
-		team: { id: string; nbSubscribes?: number }
+		team: { id: string; nbSubscribes?: number; periods?: unknown[] }
 		redirectTo?: string
 	}
 
@@ -14,17 +13,21 @@
 
 	const remoteForm = $derived(deleteTeam.for(team.id))
 
+	// Un secteur vide part sans question; dès qu'un créneau est planifié, le travail perdu se relit.
 	function confirmDelete() {
-		const nb = team.nbSubscribes || 0
-		if (nb === 0) return true
-		const msg = [
-			`Ce secteur contient déjà ${nb} inscription${nb > 1 ? 's' : ''} !`,
-			'Cette opération est irréversible.',
-			'Es-tu certain·e de vouloir le supprimer ?',
-		].join('\n')
-		if (confirm(msg)) return true
-		toast.info('Suppression du secteur annulée !')
-		return false
+		const nbPeriods = team.periods?.length ?? 0
+		const nbSubscribes = team.nbSubscribes ?? 0
+		if (nbPeriods === 0 && nbSubscribes === 0) return true
+		const contents = [
+			nbPeriods && `${nbPeriods} créneau${nbPeriods > 1 ? 'x' : ''}`,
+			nbSubscribes && `${nbSubscribes} inscription${nbSubscribes > 1 ? 's' : ''}`,
+		].filter(Boolean)
+		return confirmDialog({
+			title: 'Supprimer ce secteur ?',
+			message: `Il contient déjà ${contents.join(' et ')}. Cette opération est irréversible.`,
+			confirmLabel: 'Supprimer',
+			danger: true,
+		})
 	}
 </script>
 

@@ -120,11 +120,10 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		await page.goto(`/${event.eventId}/admin/teams`)
 		await page.getByRole('link', { name: 'Alpha' }).click()
 		await page.getByRole('button', { name: 'Brouillon', exact: true }).click()
-		page.once('dialog', (confirmation) => {
-			expect(confirmation.message()).toContain("1 demande d'inscription partira")
-			void confirmation.accept()
-		})
 		await page.getByRole('button', { name: 'Valider', exact: true }).click()
+		const confirmation = page.getByRole('dialog')
+		await expect(confirmation).toContainText("1 demande d'inscription partira")
+		await confirmation.getByRole('button', { name: 'Confirmer' }).click()
 		await expect(page.getByText('Validé', { exact: true }).first()).toBeVisible()
 
 		await guestPage.reload()

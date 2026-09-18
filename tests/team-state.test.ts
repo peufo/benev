@@ -65,11 +65,10 @@ test.describe.serial("Statut d'un secteur", () => {
 		// Le statut est un menu dans les actions de la carte: son bouton porte l'état courant.
 		// Quitter le brouillon se confirme (les courriels partent), et ne se défait pas.
 		await page.getByRole('button', { name: 'Brouillon', exact: true }).click()
-		page.once('dialog', (confirmation) => {
-			expect(confirmation.message()).toContain('Aucun courriel à envoyer')
-			void confirmation.accept()
-		})
 		await page.getByRole('button', { name: 'Valider et ouvrir les inscriptions' }).click()
+		const confirmation = page.getByRole('dialog')
+		await expect(confirmation).toContainText('Aucun courriel à envoyer')
+		await confirmation.getByRole('button', { name: 'Confirmer' }).click()
 		await expect(page.getByText('Publié', { exact: true }).first()).toBeVisible()
 		await page.getByRole('button', { name: 'Publié', exact: true }).click()
 		await expect(page.getByRole('button', { name: 'Fermer les inscriptions' })).toBeVisible()

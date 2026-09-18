@@ -32,7 +32,7 @@
 			pending === 0
 				? 'Aucun courriel à envoyer.'
 				: `${pending} demande${pending > 1 ? 's' : ''} d'inscription partir${pending > 1 ? 'ont' : 'a'} aux bénévoles.`
-		return `${emails}\nUn secteur validé ne revient pas en brouillon.`
+		return `${emails} Un secteur validé ne revient pas en brouillon.`
 	})
 
 	const transitions: Record<TeamState, Transition[]> = $derived({

@@ -10,7 +10,7 @@
 		PaletteIcon,
 		PlusIcon,
 	} from '@lucide/svelte'
-	import { InputTextarea, tip, urlParam } from 'fuma'
+	import { confirmDialog, InputTextarea, tip, urlParam } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { updateEvent } from '$lib/event/event.remote'
 	import { theme } from '$lib/event/theme/state.svelte'
@@ -62,9 +62,12 @@
 		// Tant que rien n'a été saisi, le champ n'a pas de valeur: c'est celle d'origine.
 		const eventId = remoteForm.fields.id.value() ?? data.event.id
 		if (data.event.id === eventId) return true
-		return confirm(
-			`Es tu sûr de vouloir modifier le lien de l'évènement de "/${data.event.id}" pour "${eventId} ?"`
-		)
+		return confirmDialog({
+			title: "Modifier le lien de l'évènement ?",
+			message: `L'évènement est publié : les liens déjà partagés vers « /${data.event.id} » cesseront de fonctionner. Le nouveau lien sera « /${eventId} ».`,
+			confirmLabel: 'Modifier le lien',
+			danger: true,
+		})
 	}
 
 	function scrollToFirstIssue({ element }: { element: HTMLFormElement }) {

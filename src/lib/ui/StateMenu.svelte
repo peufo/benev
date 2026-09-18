@@ -2,7 +2,7 @@
 	import type { RemoteForm } from '@sveltejs/kit'
 	import type { ClassValue } from 'svelte/elements'
 	import { ChevronDownIcon } from '@lucide/svelte'
-	import { Popover, tip } from 'fuma'
+	import { confirmDialog, Popover, tip } from 'fuma'
 	import { toast } from 'svelte-sonner'
 	import type { StateOption } from '$lib/constant'
 	import { enhanceForm } from '$lib/enhanceForm'
@@ -10,7 +10,7 @@
 	type Transition = {
 		state: T
 		label: string
-		/** Demandé avant d'envoyer, par le dialogue natif: pour ce qui ne se défait pas. */
+		/** Message d'une confirmation demandée avant d'envoyer: pour ce qui ne se défait pas. */
 		confirm?: string
 	}
 
@@ -71,9 +71,10 @@
 				{...remoteForm.enhance(
 					enhanceForm({
 						// Le clic sur le bouton précède l'évènement `submit`: `chosen` est déjà posé.
-						before: () => {
+						before: async () => {
 							const transition = transitions.find(({ state }) => state === chosen)
-							return !transition?.confirm || confirm(transition.confirm)
+							if (!transition?.confirm) return true
+							return confirmDialog({ title: transition.label, message: transition.confirm })
 						},
 						onsuccess: () => {
 							if (chosen) toast.success(states[chosen].label)

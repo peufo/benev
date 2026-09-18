@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CircleCheckIcon, EllipsisIcon, Trash2Icon, TriangleAlertIcon } from '@lucide/svelte'
-	import { Popover } from 'fuma'
+	import { confirmDialog, Popover } from 'fuma'
 	import type { Subscribe } from '@prisma/client'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { deleteSubscribe, toggleSubscribeIsAbsent } from './subscribeState.remote'
@@ -45,7 +45,13 @@
 			<form
 				{...deleteForm.enhance(
 					enhanceForm({
-						before: () => confirm('Supprimer définitivement cette inscription ?'),
+						before: () =>
+							confirmDialog({
+								title: 'Supprimer cette inscription ?',
+								message: 'Elle sera définitivement supprimée.',
+								confirmLabel: 'Supprimer',
+								danger: true,
+							}),
 						success: 'Inscription supprimée',
 						onsuccess: hide,
 					})

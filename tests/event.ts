@@ -228,8 +228,8 @@ export function useEvent(owner: User, name: string) {
 
 			// Le geste écrit à un bénévole: le bouton fait relire l'adresse avant de partir.
 			const resend = page.getByRole('button', { name: `Renvoyer l'invitation à ${email}` })
-			page.once('dialog', (confirmation) => confirmation.accept())
 			await resend.click()
+			await page.getByRole('dialog').getByRole('button', { name: 'Renvoyer' }).click()
 			await expect(page.getByText('Invitation renvoyée')).toBeVisible()
 
 			const journal = page.locator('#journal').getByRole('listitem')
@@ -1084,8 +1084,8 @@ export function useEvent(owner: User, name: string) {
 			// n'y a pas encore de carte. Le libellé de la transition suppose l'inscription libre,
 			// la même condition qui fait afficher l'échéance sur la carte.
 			await page.getByRole('button', { name: 'Brouillon', exact: true }).click()
-			page.once('dialog', (confirmation) => void confirmation.accept())
 			await page.getByRole('button', { name: 'Valider et ouvrir les inscriptions' }).click()
+			await page.getByRole('dialog').getByRole('button', { name: 'Confirmer' }).click()
 			await expect(page.getByText('Publié', { exact: true }).first()).toBeVisible()
 
 			await page.goto(`/${eventId}/teams`)
