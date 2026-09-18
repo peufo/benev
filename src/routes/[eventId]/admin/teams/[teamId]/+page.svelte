@@ -14,8 +14,7 @@
 	import { eventPath } from '$lib/eventPath'
 	import { formatRangeDate } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
-	import Section from '$lib/ui/Section.svelte'
-	import { Placeholder } from '$lib/ui'
+	import { Placeholder, Surface } from '$lib/ui'
 	import { TeamForm } from '$lib/team'
 	import TeamCloneButton from '$lib/team/TeamCloneButton.svelte'
 	import TeamDeleteButton from '$lib/team/TeamDeleteButton.svelte'
@@ -34,8 +33,6 @@
 		maxSubscribe: team.periods.reduce((acc, p) => acc + p.maxSubscribe, 0),
 		subscribes: team.periods.flatMap((p) => p.subscribes),
 	})
-	// L'entête de la section « secteur » est la même en édition et en lecture: le formulaire la
-	// rend lui-même, les conditions devant partager son `<form>`.
 	const teamSubtitle = $derived(team.range ? formatRangeDate(team.range) : 'Pas de créneaux')
 </script>
 
@@ -70,34 +67,22 @@
 {/snippet}
 
 <div class="grid gap-3 xl:grid-cols-2 items-start">
-	{#if team.isLeader}
-		{#key team.id}
-			<section id="team" class="surface">
-				<div class="flex gap-2 items-start flex-wrap">
-					<div class="pt-1 pb-2">
-						<h2 class="title">{data.team.name}</h2>
-						<p class="text-sm text-base-content/70">{teamSubtitle}</p>
-					</div>
-					<div class="flex gap-2 ml-auto">
-						{@render teamActions()}
-					</div>
-				</div>
-
+	<Surface id="team" title={team.name} subtitle={teamSubtitle} action={teamActions}>
+		{#if team.isLeader}
+			{#key team.id}
 				<TeamForm {team} event={data.event} saveBar />
+			{/key}
 
-				{#if isAdmin}
-					<div class="flex justify-between pt-2 border-t border-soft mt-4">
-						<TeamDeleteButton {team} redirectTo={eventPath('/admin/teams')} />
-						<TeamCloneButton
-							{team}
-							oncloned={(clone) => goto(eventPath('/admin/teams/[teamId]', { teamId: clone.id }))}
-						/>
-					</div>
-				{/if}
-			</section>
-		{/key}
-	{:else}
-		<Section id="team" title={team.name} subtitle={teamSubtitle} action={teamActions}>
+			{#if isAdmin}
+				<div class="flex justify-between pt-2 border-t border-soft mt-4">
+					<TeamDeleteButton {team} redirectTo={eventPath('/admin/teams')} />
+					<TeamCloneButton
+						{team}
+						oncloned={(clone) => goto(eventPath('/admin/teams/[teamId]', { teamId: clone.id }))}
+					/>
+				</div>
+			{/if}
+		{:else}
 			<div class="flex flex-col gap-4">
 				{#if team.conditions?.length || (team.closeSubscribing && data.event.selfSubscribeAllowed)}
 					<div class="flex flex-wrap gap-2 gap-y-1">
@@ -127,42 +112,35 @@
 					</div>
 				</div>
 			</div>
-		</Section>
-	{/if}
-	<section class="surface">
-		<div class="flex gap-2 items-start flex-wrap">
-			<div class="pt-1 pb-2">
-				<h2 class="title">Créneaux</h2>
-			</div>
-			<div class="flex gap-2 ml-auto">
-				<Progress period={total} class="mt-1 w-40" />
-				{#if team.isLeader}
-					<a
-						href={urlParam.with({
-							form_period: JSON.stringify({ team: { id: team.id, name: team.name } }),
-						})}
-						class="btn btn-square btn-sm btn-secondary"
-						data-sveltekit-noscroll
-						data-sveltekit-replacestate
-						use:tip={{ content: 'Ajouter un créneau' }}
-					>
-						<PlusIcon />
-					</a>
-				{/if}
-			</div>
-		</div>
-		<div class="mt-2">
-			{#each team.periods as period (period.id)}
-				<PeriodRow
-					period={{ ...period, team }}
-					onclickPeriod={() => {
-						const url = urlParam.toggle({ form_period: period.id })
-						return goto(url, { replaceState: true, noScroll: true, keepFocus: true })
-					}}
-				/>
-			{:else}
-				<Placeholder>Aucun créneau</Placeholder>
-			{/each}
-		</div>
-	</section>
+		{/if}
+	</Surface>
+	<Surface title="Créneaux">
+		{#snippet action()}
+			<Progress period={total} class="mt-1 w-40" />
+			{#if team.isLeader}
+				<a
+					href={urlParam.with({
+						form_period: JSON.stringify({ team: { id: team.id, name: team.name } }),
+					})}
+					class="btn btn-square btn-sm btn-secondary"
+					data-sveltekit-noscroll
+					data-sveltekit-replacestate
+					use:tip={{ content: 'Ajouter un créneau' }}
+				>
+					<PlusIcon />
+				</a>
+			{/if}
+		{/snippet}
+		{#each team.periods as period (period.id)}
+			<PeriodRow
+				period={{ ...period, team }}
+				onclickPeriod={() => {
+					const url = urlParam.toggle({ form_period: period.id })
+					return goto(url, { replaceState: true, noScroll: true, keepFocus: true })
+				}}
+			/>
+		{:else}
+			<Placeholder>Aucun créneau</Placeholder>
+		{/each}
+	</Surface>
 </div>

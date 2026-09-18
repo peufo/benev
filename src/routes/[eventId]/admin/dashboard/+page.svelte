@@ -2,17 +2,8 @@
 	import type { Component } from 'svelte'
 	import type { ResolvedPathname } from '$app/types'
 	import { resolve } from '$app/paths'
-	import {
-		ChartGanttIcon,
-		ClipboardCheckIcon,
-		ExternalLinkIcon,
-		MapPinnedIcon,
-		UserPlusIcon,
-		UsersIcon,
-		type IconProps,
-	} from '@lucide/svelte'
-	import Section from '$lib/ui/Section.svelte'
-	import { InputOptionInParam } from '$lib/ui'
+	import { ChartGanttIcon, ExternalLinkIcon, UserPlusIcon, type IconProps } from '@lucide/svelte'
+	import { InputOptionInParam, Surface } from '$lib/ui'
 	import { Journal } from '$lib/log'
 	import { eventPath, withSearch } from '$lib/eventPath'
 	import DashboardMembers from './DashboardMembers.svelte'
@@ -82,12 +73,10 @@
 
 <div class="flex-col gap-3 overflow-hidden max-lg:flex lg:grid lg:grid-cols-2">
 	<div class="flex flex-col gap-3">
-		<Section
+		<Surface
 			id="members"
 			title="Membres"
-			icon={UsersIcon}
 			subtitle="{data.nbMembers} adhérent{plurial(data.nbMembers)} à ce jour"
-			class="border-soft"
 		>
 			{#snippet action()}
 				<InputOptionInParam
@@ -109,12 +98,11 @@
 				</a>
 			{/snippet}
 			<DashboardMembers members={data.members} view={data.membersView} />
-		</Section>
+		</Surface>
 
-		<Section
+		<Surface
 			id="validations"
 			title="Inscriptions en attente"
-			icon={ClipboardCheckIcon}
 			subtitle={data.maxSubscribes
 				? `${data.nbSubscribes} inscription${plurial(data.nbSubscribes)} sur les ${data.maxSubscribes} attendues${scope}`
 				: `Aucune place ouverte par les créneaux${scope}`}
@@ -124,12 +112,11 @@
 				{@render seeAllLink(waitingTableHref, 'Voir les inscriptions')}
 			{/snippet}
 			<DashboardValidations subscribes={data.toValidate} waiting={data.waiting} />
-		</Section>
+		</Surface>
 
-		<Section
+		<Surface
 			id="teams"
 			title="Secteurs"
-			icon={MapPinnedIcon}
 			subtitle="{data.teams.length} secteur{plurial(data.teams.length)}{data.isAdmin
 				? ''
 				: ' à votre charge'} · {data.nbPeriods} créneau{data.nbPeriods > 1 ? 'x' : ''}"
@@ -138,7 +125,7 @@
 				{@render seeAllLink(eventPath('/admin/plan'), 'Voir la planification', ChartGanttIcon)}
 				{@render seeAllLink(eventPath('/admin/teams'), 'Voir le liste des secteurs')}
 			{/snippet}
-		</Section>
+		</Surface>
 	</div>
 
 	<Journal

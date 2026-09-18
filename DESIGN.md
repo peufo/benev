@@ -219,7 +219,9 @@ Tous les composants s'appuient sur DaisyUI v5 et sur la bibliothèque `fuma` (li
 
 ### Cards / Containers
 
-- **Composant:** `Card` de `$lib/fuma-legacy` — `card border border-hard bg-base-100 shadow-lg`, corps `card-body rounded-b-2xl p-2 sm:p-8`.
+- **Surface de travail:** `Surface` de `$lib/ui` — la classe `.surface` (`bg-base-100 rounded-box border border-soft p-2`), un entête compact avec le titre à gauche et des actions `btn-sm` à droite. C'est le conteneur des écrans d'administration: tuiles du tableau de bord, journal, fiche membre, secteur.
+- **Chapitre:** `Section` de `$lib/ui` — la même surface, `p-5`, avec une icône et un sous-titre, sans actions dans l'entête. Un bouton qui agit sur le chapitre se pose dans un pied `border-t border-soft pt-4`. C'est la forme des pages qui se lisent de haut en bas: réglages, `/me`.
+- **Composant hérité:** `Card` de `$lib/ui` — `card border border-hard bg-base-100 shadow-lg`, corps `card-body rounded-b-2xl p-2 sm:p-8`. Ne plus l'employer sur les écrans d'administration.
 - **Corner Style:** `rounded-box` (16px).
 - **Background:** `base-100`.
 - **Border:** `border-hard` sur la card autonome, `border-soft` sur les encarts internes.

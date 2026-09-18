@@ -125,25 +125,25 @@ be introduced.
 
 ### Key Modules
 
-| Module                      | Purpose                                                                                                              |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `$lib/server`               | Re-exports all server-only utilities. **Must only be imported from server files.**                                   |
-| `$lib/server/prisma.ts`     | Extended Prisma client with query middleware for event date syncing, soft deletes, and user/member data duplication. |
-| `$lib/server/lucia.ts`      | Lucia auth instance, GitHub/Google OAuth providers.                                                                  |
-| `$lib/server/permission.ts` | Role-based guards: `member`, `leader`, `admin`, `owner`, `root`, plus `leaderOfTeam`.                                |
-| `$lib/server/member.ts`     | Member profile resolution with computed values (roles, stats).                                                       |
-| `$lib/server/stripe.ts`     | Checkout session creation and Stripe webhook handling.                                                               |
-| `$lib/server/email.ts`      | SMTP transport and email rendering/sending. Honours `EMAIL_DISABLED=true`.                                           |
-| `$lib/models`               | Zod v4 schemas, consumed by `form()` remote functions.                                                               |
-| `$lib/ui`                   | Components fuma 2 does not cover: `card`, `badge`, `tabs`, `dialog`, `placeholder`, `textRich`, `input`.             |
-| `$lib/email`                | Svelte components for transactional emails.                                                                          |
-| `$lib/plan`                 | Drag-and-drop planning grid for team/period visualization.                                                           |
-| `$lib/pages`                | CMS page rendering, suggestions, and nested path logic.                                                              |
-| `$lib/doc`                  | La documentation produit, en deux moitiés: `engine/` rend et navigue, `content/` est ce qui se lit.                  |
-| `$lib/seo`                  | `defaultMetaTags`, `errorMetaTags`, `mergeMetaTags`, JSON-LD schemas. Rendered **once** in the root layout.          |
-| `$lib/constant`             | `EVENT_TIER` — per-tier member quotas and Stripe price bindings.                                                     |
-| `$lib/log`                  | The event journal: `logMap` (one transform per `LogType`), the feed components, `LOG_FAMILIES`. See below.           |
-| `$lib/dayjs.ts`             | Pre-configured dayjs instance (relativeTime plugin + French locale).                                                 |
+| Module                      | Purpose                                                                                                                           |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `$lib/server`               | Re-exports all server-only utilities. **Must only be imported from server files.**                                                |
+| `$lib/server/prisma.ts`     | Extended Prisma client with query middleware for event date syncing, soft deletes, and user/member data duplication.              |
+| `$lib/server/lucia.ts`      | Lucia auth instance, GitHub/Google OAuth providers.                                                                               |
+| `$lib/server/permission.ts` | Role-based guards: `member`, `leader`, `admin`, `owner`, `root`, plus `leaderOfTeam`.                                             |
+| `$lib/server/member.ts`     | Member profile resolution with computed values (roles, stats).                                                                    |
+| `$lib/server/stripe.ts`     | Checkout session creation and Stripe webhook handling.                                                                            |
+| `$lib/server/email.ts`      | SMTP transport and email rendering/sending. Honours `EMAIL_DISABLED=true`.                                                        |
+| `$lib/models`               | Zod v4 schemas, consumed by `form()` remote functions.                                                                            |
+| `$lib/ui`                   | Components fuma 2 does not cover: `Surface` and `Section`, `card`, `badge`, `tabs`, `dialog`, `placeholder`, `textRich`, `input`. |
+| `$lib/email`                | Svelte components for transactional emails.                                                                                       |
+| `$lib/plan`                 | Drag-and-drop planning grid for team/period visualization.                                                                        |
+| `$lib/pages`                | CMS page rendering, suggestions, and nested path logic.                                                                           |
+| `$lib/doc`                  | La documentation produit, en deux moitiés: `engine/` rend et navigue, `content/` est ce qui se lit.                               |
+| `$lib/seo`                  | `defaultMetaTags`, `errorMetaTags`, `mergeMetaTags`, JSON-LD schemas. Rendered **once** in the root layout.                       |
+| `$lib/constant`             | `EVENT_TIER` — per-tier member quotas and Stripe price bindings.                                                                  |
+| `$lib/log`                  | The event journal: `logMap` (one transform per `LogType`), the feed components, `LOG_FAMILIES`. See below.                        |
+| `$lib/dayjs.ts`             | Pre-configured dayjs instance (relativeTime plugin + French locale).                                                              |
 
 ---
 

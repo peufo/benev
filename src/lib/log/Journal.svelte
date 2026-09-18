@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import type { ClassValue } from 'svelte/elements'
-	import { ScrollTextIcon, XIcon } from '@lucide/svelte'
+	import { XIcon } from '@lucide/svelte'
 	import { tip, urlParam } from 'fuma'
 	import { page } from '$app/state'
-	import { InputSelectInParam } from '$lib/ui'
-	import Section from '$lib/ui/Section.svelte'
+	import { InputSelectInParam, Surface } from '$lib/ui'
 	import { LOG_FAMILIES } from './logFamilies'
 	import { loadPreviousEventLogs } from './log.remote'
 	import Logs from './Logs.svelte'
@@ -36,7 +35,7 @@
 	)
 </script>
 
-<Section id="journal" title="Journal" icon={ScrollTextIcon} class={['flex flex-col', klass]}>
+<Surface id="journal" title="Journal" class={['flex flex-col', klass]}>
 	{#snippet action()}
 		{#if journal.subject && !journal.pinned}
 			<a
@@ -69,4 +68,4 @@
 			{before}
 		/>
 	{/key}
-</Section>
+</Surface>

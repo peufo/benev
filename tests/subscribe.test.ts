@@ -133,8 +133,10 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		await expect(guestPage.getByText('Status changé')).toBeVisible()
 		await expect(toConfirm).toHaveCount(0)
 
-		// Le dernier bouton de la section est celui de l'état: un membre n'a pas de menu après lui.
-		await guestPage.locator('#subscribes').getByRole('button').last().hover()
+		// Le dernier bouton de la carte du secteur est celui de l'état: un membre n'a pas de menu
+		// après lui. La section, elle, en porte d'autres dans son pied.
+		const teamCard = guestPage.getByRole('heading', { name: 'Alpha' }).locator('..')
+		await teamCard.getByRole('button').last().hover()
 		await expect(guestPage.getByRole('tooltip')).toHaveText('Inscription confirmée par le membre')
 	})
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { tip } from 'fuma'
 	import {
 		ClipboardListIcon,
 		IdCardIcon,
@@ -24,29 +23,29 @@
 
 <div class="max-w-2xl mx-auto space-y-3 mb-20">
 	<Section id="subscribes" title="Mes inscriptions" icon={ClipboardListIcon}>
-		{#snippet action()}
-			{#if data.event.selfSubscribeAllowed}
-				<a
-					href={eventPath('/teams')}
-					class="btn btn-square btn-sm ml-auto"
-					use:tip={{ content: 'Voir les secteurs' }}
-				>
-					<MapPinnedIcon size={20} />
-				</a>
-			{/if}
-			{#if data.memberTeams.length}
-				<DownloadSubscribes />
-			{/if}
-		{/snippet}
 		<TeamsSubscribes teams={data.memberTeams} />
+
+		{#if data.memberTeams.length}
+			<div class="flex justify-between gap-2 border-t border-soft pt-4">
+				{#if data.event.selfSubscribeAllowed}
+					<a href={eventPath('/teams')} class="btn btn-sm">
+						<MapPinnedIcon size={20} class="opacity-70" />
+						<span>Voir les secteurs</span>
+					</a>
+				{/if}
+				<div class="ml-auto">
+					<DownloadSubscribes />
+				</div>
+			</div>
+		{/if}
 	</Section>
 
 	{#if data.member.event.memberFields.filter((f) => f.memberCanRead).length}
 		<Section id="profile" title="Mon profil" icon={IdCardIcon}>
-			{#snippet action()}
+			<div class="flex flex-wrap items-center gap-2">
 				<MemberRole roles={data.member.roles} />
 				<MemberProfileStatus member={data.member} />
-			{/snippet}
+			</div>
 			<MemberProfileForm compact saveBar memberProfile={data.member} />
 		</Section>
 	{/if}

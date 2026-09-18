@@ -16,8 +16,7 @@
 	} from '$lib/member'
 	import MembersBadges from '../MembersBadges.svelte'
 	import { Journal } from '$lib/log'
-	import { Placeholder } from '$lib/ui'
-	import Section from '$lib/ui/Section.svelte'
+	import { Placeholder, Surface } from '$lib/ui'
 	import MemberMenu from './MemberMenu.svelte'
 	import MemberResendInviteForm from './MemberResendInviteForm.svelte'
 
@@ -31,7 +30,7 @@
 </script>
 
 <div class="max-w-3xl mx-auto w-full space-y-3">
-	<Section id="member" title="{data.memberProfile.firstName} {data.memberProfile.lastName}" back>
+	<Surface id="member" title="{data.memberProfile.firstName} {data.memberProfile.lastName}" back>
 		{#snippet action()}
 			{#if data.member?.roles.includes('admin') && !data.memberProfile.roles.includes('owner')}
 				<MemberMenu {data} />
@@ -60,7 +59,7 @@
 			</a>
 		{/snippet}
 
-		<div class="flex gap-2 mt-6">
+		<div class="flex gap-2 mt-2">
 			<div class="flex flex-col items-center gap-1 w-36 shrink-0">
 				<Avatar
 					firstName={data.memberProfile.firstName}
@@ -82,8 +81,8 @@
 		{#if isAdmin || data.memberProfile.event.memberFields.length}
 			<div class="divider"></div>
 
-			<div class="flex items-center gap-2">
-				<h3 class="title-md grow">Champs du profil</h3>
+			<div class="flex items-center gap-2 pb-2">
+				<h3 class="title-md opacity-80 grow">Champs du profil</h3>
 				{#if isAdmin}
 					<a
 						href={eventPath('/admin/settings#fields')}
@@ -112,9 +111,9 @@
 				<Placeholder class="h-20">Aucun champ de profil</Placeholder>
 			{/if}
 		{/if}
-	</Section>
+	</Surface>
 
-	<Section id="subscibes" title="Inscriptions">
+	<Surface id="subscibes" title="Inscriptions">
 		{#snippet action()}
 			<button
 				type="button"
@@ -127,7 +126,7 @@
 		{/snippet}
 
 		<TeamsSubscribes teams={data.event.teams} isLeader />
-	</Section>
+	</Surface>
 
 	<Journal journal={data.journal} timezone={data.event.timezone} class="max-h-[80vh]">
 		{#snippet action()}

@@ -67,7 +67,7 @@ test.describe.serial("Statut d'un secteur", () => {
 		await page.getByRole('button', { name: 'Brouillon', exact: true }).click()
 		await page.getByRole('button', { name: 'Valider et ouvrir les inscriptions' }).click()
 		const confirmation = page.getByRole('dialog')
-		await expect(confirmation).toContainText('Aucun courriel à envoyer')
+		await expect(confirmation).toContainText('ne peut pas être repassé en brouillon')
 		await confirmation.getByRole('button', { name: 'Confirmer' }).click()
 		await expect(page.getByText('Publié', { exact: true }).first()).toBeVisible()
 		await page.getByRole('button', { name: 'Publié', exact: true }).click()

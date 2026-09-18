@@ -15,7 +15,7 @@ function getFormater(timeZone?: string) {
 
 function getFormaterDate(timeZone?: string) {
 	return new Intl.DateTimeFormat('fr-ch', {
-		dateStyle: 'full',
+		dateStyle: 'long',
 		...(timeZone ? { timeZone } : {}),
 	})
 }
