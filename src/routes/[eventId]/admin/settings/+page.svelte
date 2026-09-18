@@ -172,32 +172,22 @@
 					icon={IdCardIcon}
 					subtitle="Les informations demandées aux membres, en plus de leur compte"
 				>
-					{#snippet action()}
+					<MemberFields fields={data.event.memberFields} />
+
+					<div class="flex justify-between gap-2 border-t border-soft pt-4">
+						<a href={eventPath('/register?forcedStepIndex=1')} target="_blank" class="btn btn-sm">
+							<span>Aperçu du formulaire d'adhésion</span>
+							<ExternalLinkIcon size={20} class="opacity-70" />
+						</a>
 						<a
-							class="btn btn-square btn-primary"
+							class="btn btn-secondary btn-sm"
 							href={urlParam.with({ form_field: '{}' })}
 							data-sveltekit-replacestate
 							data-sveltekit-noscroll
 							use:tip={{ content: 'Ajouter un champ' }}
 						>
-							<span class="inline-flex">
-								<PlusIcon />
-							</span>
-						</a>
-					{/snippet}
-
-					<MemberFields fields={data.event.memberFields} />
-
-					<div class="divider"></div>
-
-					<div class="flex justify-end">
-						<a
-							href={eventPath('/register?forcedStepIndex=1')}
-							target="_blank"
-							class="btn btn-ghost"
-						>
-							Aperçu du formulaire d'adhésion
-							<ExternalLinkIcon size={20} class="opacity-70" />
+							<PlusIcon />
+							<span>Ajouter un champs</span>
 						</a>
 					</div>
 				</Section>

@@ -12,7 +12,7 @@
 	let dialog: HTMLDialogElement = $state()!
 </script>
 
-<button class="btn btn-error" type="button" onclick={() => dialog.showModal()}>
+<button class="btn btn-error btn-sm" type="button" onclick={() => dialog.showModal()}>
 	Supprimer l'évènement
 </button>
 

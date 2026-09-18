@@ -176,7 +176,7 @@
 		{/if}
 	{/key}
 
-	<div class="flex flex-row-reverse gap-2 border-t pt-4">
+	<div class="flex flex-row-reverse gap-2 border-t border-soft pt-4">
 		<button class="btn btn-primary">Valider</button>
 		{#if field.id}
 			<div class="grow"></div>
