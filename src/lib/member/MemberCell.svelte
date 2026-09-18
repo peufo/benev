@@ -25,7 +25,7 @@
 		firstName={member.firstName}
 		avatarId={member.avatarId}
 		avatarPlaceholder={member.avatarPlaceholder}
-		class="h-8 w-8 rounded border group-hover:scale-125 transition-transform"
+		class="h-8 w-8 rounded-field group-hover:scale-115 group-hover:-rotate-3 transition-transform"
 	/>
 	<span class="whitespace-nowrap">
 		{member.firstName}
