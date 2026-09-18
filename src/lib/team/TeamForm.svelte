@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte'
 	import type { Event, Field, Team } from '@prisma/client'
 	import { page } from '$app/state'
 	import { InputBoolean, InputString, InputTextarea } from 'fuma'
@@ -7,14 +6,12 @@
 	import { MemberConditions } from '$lib/member'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { SaveBar } from '$lib/ui'
-	import Section from '$lib/ui/Section.svelte'
 	import InputLeaders from '$lib/team/InputLeaders.svelte'
 	import type { TeamWithComputedValues } from '$lib/server'
 	import type { DrawerFrom } from '$lib/drawerCall.svelte'
 	import { createTeam, updateTeam } from './team.remote'
 
 	interface Props {
-		class?: string
 		event: Event & { memberFields: Field[] }
 		team?: Partial<TeamWithComputedValues>
 		/**
@@ -25,21 +22,15 @@
 		saveBar?: boolean
 		/** Qui a ouvert le tiroir. Absent du formulaire rendu à même la page. */
 		openedFrom?: DrawerFrom
-		/** L'entête de la section « secteur », que la page possède: elle la rend aussi en lecture seule. */
-		subtitle?: string
-		action?: Snippet
 		oncreated?: (team: Team) => void
 		onupdated?: (team: Team) => void
 	}
 
 	let {
-		class: klass = '',
 		event,
 		team = $bindable({}),
 		saveBar = false,
 		openedFrom,
-		subtitle,
-		action,
 		oncreated,
 		onupdated,
 	}: Props = $props()
@@ -100,7 +91,7 @@
 {/snippet}
 
 <!-- `id` après le spread: `enhance()` pose ses propres attributs, et les siens gagneraient. -->
-{#snippet teamForm(klass = '')}
+{#snippet teamForm()}
 	<form
 		{...remoteForm.enhance(
 			enhanceForm({
@@ -119,7 +110,7 @@
 		)}
 		id={formId}
 		bind:this={formElement}
-		class={['flex flex-col gap-4', klass]}
+		class={['flex flex-col gap-4']}
 	>
 		{#if team.id}
 			<input type="hidden" name="id" value={team.id} />
@@ -136,27 +127,19 @@
 {/snippet}
 
 {#if saveBar}
-	<div class={['flex flex-col gap-3', klass]}>
-		<!-- L'entête de la section, et les actions qu'elle porte, restent hors du `<form>`: ces
-		     actions ont leurs propres formulaires, et HTML n'en imbrique pas. Le navigateur
-		     abandonnerait le balisage rendu au serveur, et l'hydratation avec lui. -->
-		<Section id="team" title={team.name ?? ''} {subtitle} {action}>
-			{@render teamForm()}
-		</Section>
+	{@render teamForm()}
 
-		<!-- Les conditions se soumettent avec le secteur: leur champ caché s'y rattache par `form`. -->
-		{#key resetToken}
-			<MemberConditions
-				form={formId}
-				published={team.state === 'published'}
-				conditions={team?.conditions || []}
-				memberFields={event.memberFields}
-				onchange={() => bar?.refresh()}
-			/>
-		{/key}
-	</div>
+	{#key resetToken}
+		<MemberConditions
+			form={formId}
+			published={team.state === 'published'}
+			conditions={team?.conditions || []}
+			memberFields={event.memberFields}
+			onchange={() => bar?.refresh()}
+		/>
+	{/key}
 {:else}
-	{@render teamForm(klass)}
+	{@render teamForm()}
 {/if}
 
 {#if saveBar}

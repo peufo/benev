@@ -7,7 +7,7 @@
 
 <div
 	class={[
-		'surface',
+		'surface p-1',
 		'max-w-13 hover:max-w-75 transition-[max-width] duration-300 overflow-hidden',
 		'whitespace-nowrap shrink-0 group',
 	]}

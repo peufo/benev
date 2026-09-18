@@ -2,7 +2,7 @@
 	import {
 		ArrowLeftIcon,
 		ChartGanttIcon,
-		ClipboardCopyIcon,
+		ClipboardListIcon,
 		ClockIcon,
 		PlusIcon,
 		UsersIcon,
@@ -45,7 +45,6 @@
 </a>
 
 {#snippet teamActions()}
-	<TeamStateMenu {team} canEdit={team.isLeader} />
 	<a
 		href={eventPath(`/admin/members?subscribes_teams=["${team.id}"]`)}
 		class="btn btn-square btn-sm"
@@ -58,7 +57,7 @@
 		class="btn btn-square btn-sm"
 		use:tip={{ content: 'Toutes les inscriptions du secteur' }}
 	>
-		<ClipboardCopyIcon size={20} opacity={0.7} />
+		<ClipboardListIcon size={20} opacity={0.7} />
 	</a>
 	<a
 		href={eventPath(`/admin/plan?teams=["${team.id}"]`)}
@@ -67,19 +66,35 @@
 	>
 		<ChartGanttIcon size={20} opacity={0.7} />
 	</a>
-	{#if isAdmin}
-		<TeamDeleteButton {team} redirectTo={eventPath('/admin/teams')} />
-		<TeamCloneButton
-			{team}
-			oncloned={(clone) => goto(eventPath('/admin/teams/[teamId]', { teamId: clone.id }))}
-		/>
-	{/if}
+	<TeamStateMenu {team} canEdit={team.isLeader} />
 {/snippet}
 
 <div class="grid gap-3 xl:grid-cols-2 items-start">
 	{#if team.isLeader}
 		{#key team.id}
-			<TeamForm {team} event={data.event} saveBar subtitle={teamSubtitle} action={teamActions} />
+			<section class="surface">
+				<div class="flex gap-2 items-start flex-wrap">
+					<div class="pt-1 pb-2">
+						<h2 class="title">{data.team.name}</h2>
+						<p class="text-sm text-base-content/70">{teamSubtitle}</p>
+					</div>
+					<div class="flex gap-2 ml-auto">
+						{@render teamActions()}
+					</div>
+				</div>
+
+				<TeamForm {team} event={data.event} saveBar />
+
+				{#if isAdmin}
+					<div class="flex justify-between pt-2 border-t border-soft mt-4">
+						<TeamDeleteButton {team} redirectTo={eventPath('/admin/teams')} />
+						<TeamCloneButton
+							{team}
+							oncloned={(clone) => goto(eventPath('/admin/teams/[teamId]', { teamId: clone.id }))}
+						/>
+					</div>
+				{/if}
+			</section>
 		{/key}
 	{:else}
 		<Section id="team" title={team.name} subtitle={teamSubtitle} action={teamActions}>
@@ -114,25 +129,29 @@
 			</div>
 		</Section>
 	{/if}
-
-	<Section id="periods" title="Créneaux">
-		{#snippet action()}
-			<Progress period={total} class="mt-1 w-40" />
-			{#if team.isLeader}
-				<a
-					href={urlParam.with({
-						form_period: JSON.stringify({ team: { id: team.id, name: team.name } }),
-					})}
-					class="btn btn-square btn-sm btn-secondary"
-					data-sveltekit-noscroll
-					data-sveltekit-replacestate
-					use:tip={{ content: 'Ajouter un créneau' }}
-				>
-					<PlusIcon />
-				</a>
-			{/if}
-		{/snippet}
-		<div>
+	<section class="surface">
+		<div class="flex gap-2 items-start flex-wrap">
+			<div class="pt-1 pb-2">
+				<h2 class="title">Créneaux</h2>
+			</div>
+			<div class="flex gap-2 ml-auto">
+				<Progress period={total} class="mt-1 w-40" />
+				{#if team.isLeader}
+					<a
+						href={urlParam.with({
+							form_period: JSON.stringify({ team: { id: team.id, name: team.name } }),
+						})}
+						class="btn btn-square btn-sm btn-secondary"
+						data-sveltekit-noscroll
+						data-sveltekit-replacestate
+						use:tip={{ content: 'Ajouter un créneau' }}
+					>
+						<PlusIcon />
+					</a>
+				{/if}
+			</div>
+		</div>
+		<div class="mt-2">
 			{#each team.periods as period (period.id)}
 				<PeriodRow
 					period={{ ...period, team }}
@@ -145,5 +164,5 @@
 				<Placeholder>Aucun créneau</Placeholder>
 			{/each}
 		</div>
-	</Section>
+	</section>
 </div>

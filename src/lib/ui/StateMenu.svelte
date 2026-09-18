@@ -27,10 +27,11 @@
 		/** L'enregistrement dont l'état change, et la clé de l'instance du formulaire. */
 		id: string
 		class?: ClassValue
+		classLabel?: ClassValue
 	}
 
 	// `state` est le nom du rune: la prop se lit sous un autre nom.
-	let { states, state: value, transitions, form, id, class: klass }: Props = $props()
+	let { states, state: value, transitions, form, id, class: klass, classLabel }: Props = $props()
 
 	const uid = $props.id()
 	// Une instance par enregistrement: `for()` injecte `id` dans les données soumises.
@@ -42,7 +43,7 @@
 
 {#snippet current()}
 	<StateIcon size={20} class={states[value].class} />
-	<span>{states[value].label}</span>
+	<span class={classLabel}>{states[value].label}</span>
 {/snippet}
 
 {#if !transitions.length}

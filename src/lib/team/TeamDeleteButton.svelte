@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { deleteTeam } from './team.remote'
-	import { confirmDialog, tip } from 'fuma'
+	import { confirmDialog } from 'fuma'
 	import { Trash2Icon } from '@lucide/svelte'
 
 	interface Props {
@@ -39,11 +39,8 @@
 	{#if redirectTo}
 		<input type="hidden" name="redirectTo" value={redirectTo} />
 	{/if}
-	<button
-		type="submit"
-		class="btn btn-sm btn-error btn-square btn-soft"
-		use:tip={{ content: 'Supprimer ce secteur' }}
-	>
-		<Trash2Icon size={20} />
+	<button type="submit" class="btn btn-sm btn-error btn-ghost">
+		<Trash2Icon size={18} />
+		<span>Supprimer</span>
 	</button>
 </form>

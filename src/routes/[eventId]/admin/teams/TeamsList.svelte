@@ -120,12 +120,12 @@
 		{#if isAdmin}
 			<span
 				class={[
-					'drag-button btn btn-sm btn-square btn-ghost',
+					'drag-button btn btn-sm btn-square btn-soft btn-primary',
 					'absolute right-1 opacity-0 pointer-fine:group-hover:opacity-100',
 					'pointer-coarse:static pointer-coarse:opacity-100',
 				]}
 			>
-				<MoveVerticalIcon size={16} class="text-base-content/70" />
+				<MoveVerticalIcon size={16} />
 			</span>
 		{/if}
 	</a>

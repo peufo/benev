@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { CopyPlusIcon } from '@lucide/svelte'
 	import type { Team } from '@prisma/client'
-	import { tip } from 'fuma'
 	import { enhanceForm } from '$lib/enhanceForm'
 	import { cloneTeamForm } from './team.remote'
 
@@ -28,11 +27,8 @@
 	class="contents"
 >
 	<input type="hidden" name="id" value={team.id} />
-	<button
-		type="submit"
-		class="btn btn-square btn-sm btn-primary"
-		use:tip={{ content: 'Dupliquer le secteur' }}
-	>
+	<button type="submit" class="btn btn-sm btn-primary btn-soft">
 		<CopyPlusIcon size={20} />
+		<span>Dupliquer</span>
 	</button>
 </form>

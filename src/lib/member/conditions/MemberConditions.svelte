@@ -116,72 +116,70 @@
 	}
 </script>
 
-<!-- La section porte sa propre surface: elle se monte à même la page, jamais dans un tiroir ni
-     dans une carte. -->
-<Section
-	id="conditions"
-	title="Conditions d'accès"
-	icon={FunnelIcon}
-	subtitle="Qui voit ce secteur et peut s'y inscrire"
-	class={klass}
->
-	{#snippet action()}
-		<Popover listenHover class="w-max max-w-sm my-1 surface">
-			{#snippet trigger(popover)}
-				<button
-					type="button"
-					class="btn btn-square btn-ghost"
-					aria-label="Aide"
-					{...popover.trigger}
-				>
-					<CircleQuestionMarkIcon size={20} opacity={0.7} />
-				</button>
-			{/snippet}
-			<div class="flex flex-col gap-2 text-sm text-base-content/70">
-				<p>Sans condition, le secteur est ouvert à tous les membres.</p>
-				<p>
-					Dès qu'une condition est posée, un membre doit
-					<b class="font-semibold">toutes</b> les remplir. Sinon, le secteur n'apparaît pas dans sa liste
-					et il ne peut pas s'y inscrire.
-				</p>
-				<p>
-					Les responsables du secteur y accèdent toujours et peuvent y inscrire n'importe quel
-					membre à la main. Une personne déjà inscrite garde son accès.
-				</p>
-			</div>
-		</Popover>
+<section id="conditions" title="Conditions d'accès" class="mt-3 surface pl-3">
+	<div class="flex gap-2 items-start flex-wrap">
+		<div class="pt-1 pb-2">
+			<p class="text-sm">Conditions d'accès</p>
+			<p class="text-xs text-base-content/70">Qui voit ce secteur et peut s'y inscrire</p>
+		</div>
+		<div class="flex gap-2 ml-auto">
+			<Popover class="w-max max-w-sm my-1 surface">
+				{#snippet trigger(popover)}
+					<button
+						type="button"
+						class="btn btn-square btn-ghost btn-sm"
+						aria-label="Aide"
+						{...popover.trigger}
+					>
+						<CircleQuestionMarkIcon size={20} opacity={0.7} />
+					</button>
+				{/snippet}
+				<div class="flex flex-col gap-2 text-sm text-base-content/70">
+					<p>Sans condition, le secteur est ouvert à tous les membres.</p>
+					<p>
+						Dès qu'une condition est posée, un membre doit
+						<b class="font-semibold">toutes</b> les remplir. Sinon, le secteur n'apparaît pas dans sa
+						liste et il ne peut pas s'y inscrire.
+					</p>
+					<p>
+						Les responsables du secteur y accèdent toujours et peuvent y inscrire n'importe quel
+						membre à la main. Une personne déjà inscrite garde son accès.
+					</p>
+				</div>
+			</Popover>
 
-		<Popover listenHover placement="bottom-end" class="my-1">
-			{#snippet trigger(popover)}
-				<button
-					type="button"
-					class="btn btn-square btn-secondary btn-soft"
-					aria-label="Ajouter une condition"
-					{...popover.trigger}
-				>
-					<PlusIcon />
-				</button>
-			{/snippet}
-			{#snippet children(popover)}
-				<ul class="menu w-64">
-					{#each addConditionOptions as [type, option] (type)}
-						<li>
-							<button
-								type="button"
-								class="flex-col items-start gap-0"
-								onclick={() => {
-									addCondition(type)
-									popover.hide()
-								}}
-							>
-								<span>{option.label}</span>
-							</button>
-						</li>
-					{/each}
-				</ul>
-			{/snippet}
-		</Popover>
-	{/snippet}
+			<Popover placement="bottom-end" class="my-1">
+				{#snippet trigger(popover)}
+					<button
+						type="button"
+						class="btn btn-square btn-secondary btn-soft btn-sm"
+						aria-label="Ajouter une condition"
+						{...popover.trigger}
+					>
+						<PlusIcon />
+					</button>
+				{/snippet}
+				{#snippet children(popover)}
+					<ul class="menu w-64">
+						{#each addConditionOptions as [type, option] (type)}
+							<li>
+								<button
+									type="button"
+									class="flex-col items-start gap-0"
+									onclick={() => {
+										addCondition(type)
+										popover.hide()
+									}}
+								>
+									<span>{option.label}</span>
+								</button>
+							</li>
+						{/each}
+					</ul>
+				{/snippet}
+			</Popover>
+		</div>
+	</div>
 
 	<input type="hidden" name="conditions" value={serializedConditions} {form} />
 
@@ -297,7 +295,7 @@
 		{/each}
 	</div>
 
-	<div class="mt-4 flex items-center gap-2 border-t border-soft pt-3 text-sm">
+	<div class="flex items-center gap-2 border-t border-soft pt-2 text-sm mt-2 px-2">
 		<UsersIcon size={18} class="opacity-70 shrink-0" />
 		<span>
 			Visible pour
@@ -311,4 +309,4 @@
 			{/if}
 		</span>
 	</div>
-</Section>
+</section>

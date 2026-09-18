@@ -36,7 +36,7 @@ html {
 
 @layer components {
 	.surface {
-		@apply bg-base-100 rounded-box border border-soft p-1;
+		@apply bg-base-100 rounded-box border border-soft p-2;
 	}
 
 	.surface-drawer {

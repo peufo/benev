@@ -12,7 +12,7 @@
 <div class="flex items-start gap-3">
 	<aside
 		class={[
-			'surface p-2 w-full shrink-0 md:w-72 md:sticky md:top-1',
+			'surface p-2 w-full shrink-0 md:w-80 md:sticky md:top-1',
 			'max-h-main overflow-auto',
 			selected && 'max-md:hidden',
 		]}
