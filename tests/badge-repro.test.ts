@@ -32,7 +32,7 @@ test.describe.serial('Badge repro', () => {
 			.first()
 			.click()
 		await page.waitForURL('**/admin/pages/badges/**')
-		await expect(page.getByLabel('Nom de la configuration')).toBeVisible()
+		await expect(page.getByLabel('Nom du badge')).toBeVisible()
 
 		const typeTrigger = page.getByRole('button', { name: 'Champ: Type de membre' })
 		const labelTrigger = page.getByRole('button', { name: 'Champ: Label' })

@@ -188,10 +188,11 @@ test.describe.serial('Plan', () => {
 	})
 
 	/**
-	 * Le filtre de secteurs ne vit que dans l'URL: `getPlanData` n'a rien d'autre à lire. Une puce
-	 * se retire depuis le champ, sans que le menu s'ouvre — différer l'écriture à sa fermeture
-	 * laissait le plan sur l'ancien filtre. Le menu, lui, doit survivre à la navigation pour
-	 * qu'on puisse cocher plusieurs secteurs de suite.
+	 * Le filtre de secteurs ne vit que dans l'URL: `getPlanData` n'a rien d'autre à lire. Le champ
+	 * n'affiche qu'un compte (`countOnly`): un secteur se retire en le décochant dans le menu, et
+	 * l'URL doit suivre chaque coche sans attendre la fermeture, qui laissait le plan sur l'ancien
+	 * filtre. Le menu, lui, doit survivre à la navigation pour qu'on puisse cocher plusieurs
+	 * secteurs de suite.
 	 */
 	test("Le filtre de secteurs écrit l'URL à chaque changement", async () => {
 		await gotoPlan()
@@ -203,11 +204,13 @@ test.describe.serial('Plan', () => {
 
 		await expect.poll(() => page.url()).toMatch(/teams=/)
 		await expect(page.getByRole('listbox')).toBeVisible()
+		await expect(teamsFilter).toContainText('1 sélectionné')
 
 		await page.keyboard.press('Escape')
 		await expect(page.getByRole('listbox')).toBeHidden()
 
-		await teamsFilter.getByRole('button', { name: 'Retirer' }).click()
+		await teamsFilter.click()
+		await page.getByRole('option', { name: 'Bar' }).click()
 		await expect.poll(() => page.url()).not.toMatch(/teams=/)
 		await expect(teamsFilter).toContainText('Tous les secteurs')
 	})

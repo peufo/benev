@@ -72,7 +72,7 @@
 <div class="grid gap-3 xl:grid-cols-2 items-start">
 	{#if team.isLeader}
 		{#key team.id}
-			<section class="surface">
+			<section id="team" class="surface">
 				<div class="flex gap-2 items-start flex-wrap">
 					<div class="pt-1 pb-2">
 						<h2 class="title">{data.team.name}</h2>

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import {
 		CircleQuestionMarkIcon,
-		FunnelIcon,
 		IdCardIcon,
 		PersonStandingIcon,
 		PlusIcon,
@@ -10,13 +9,11 @@
 		UsersIcon,
 	} from '@lucide/svelte'
 
-	import type { ClassValue } from 'svelte/elements'
 	import type { Field } from '@prisma/client'
 	import { InputNumber, InputSelect, Popover } from 'fuma'
 	import { browser } from '$app/env'
 	import { debounce } from '$lib/debounce'
 	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
-	import Section from '$lib/ui/Section.svelte'
 	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
 	import ConditionValue from './ConditionValue.svelte'
 	import { countMembersAllowed } from '../member.remote'
@@ -30,8 +27,6 @@
 		form?: string
 		/** Tant que le secteur n'est pas publié, les conditions ne s'appliquent à personne encore. */
 		published?: boolean
-		/** La section remplit la page: c'est elle qui dit jusqu'où celle-ci monte. */
-		class?: ClassValue
 	}
 
 	let {
@@ -40,7 +35,6 @@
 		onchange,
 		form,
 		published = true,
-		class: klass,
 	}: Props = $props()
 
 	// Le tableau vient de `page.data`: ce n'est pas un proxy `$state`, écrire dans une condition
