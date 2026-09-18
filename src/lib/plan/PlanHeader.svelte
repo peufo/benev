@@ -77,7 +77,7 @@
 		getLabel={(team) => team.name}
 		searchable
 		placeholder="Tous les secteurs"
-		class="w-52! input-sm"
+		class="min-w-36 max-w-36 input-sm"
 		countOnly
 	/>
 
