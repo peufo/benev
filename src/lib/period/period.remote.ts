@@ -34,8 +34,10 @@ export const createPeriod = form(
  * sinon un·e responsable éditerait n'importe quel créneau en soumettant son propre secteur.
  */
 export const updatePeriod = form(
-	modelPeriodUpdate.superRefine(validationPeriod),
-	async (data, issue) => {
+	modelPeriodUpdate.extend({ notify: z.boolean().default(true) }).superRefine(validationPeriod),
+	// `data` part tel quel à Prisma, qui refuserait un `notify` inconnu. SvelteKit exige un
+	// booléen facultatif dans un schéma de formulaire; absent, on prévient, la voie sûre.
+	async ({ notify, ...data }, issue) => {
 		const { locals } = getRequestEvent()
 		const before = await getPeriodForChange(data.id)
 		const actor = await permission.leaderOfTeam(before.teamId, locals)
@@ -64,7 +66,7 @@ export const updatePeriod = form(
 		}
 
 		const period = await prisma.period.update({ where: { id: data.id }, data })
-		await settlePeriodUpdate(before, period, actor)
+		await settlePeriodUpdate(before, period, actor, notify)
 		return period
 	}
 )
@@ -126,13 +128,15 @@ export const duplicatePeriod = command(
 // Le planning laisse glisser librement: c'est ici que la durée minimale est refusée, comme
 // pour les formulaires.
 export const movePeriod = command(
-	z.object({ id: z.string(), start: z.date(), end: z.date() }).superRefine(validationPeriod),
-	async ({ id, start, end }) => {
+	z
+		.object({ id: z.string(), start: z.date(), end: z.date(), notify: z.boolean() })
+		.superRefine(validationPeriod),
+	async ({ id, start, end, notify }) => {
 		const { locals } = getRequestEvent()
 		const before = await getPeriodForChange(id)
 		const actor = await permission.leaderOfTeam(before.teamId, locals)
 		const period = await prisma.period.update({ where: { id }, data: { start, end } })
-		await settlePeriodUpdate(before, period, actor)
+		await settlePeriodUpdate(before, period, actor, notify)
 		return period
 	}
 )

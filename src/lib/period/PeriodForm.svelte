@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PlusIcon, RedoDotIcon, UndoDotIcon } from '@lucide/svelte'
+	import { tick } from 'svelte'
 	import { daytz } from '$lib/dayjs'
 	import {
 		ButtonDelete,
@@ -9,6 +10,7 @@
 		urlParam,
 		InputNumber,
 		InputDateTime,
+		confirmDialog,
 	} from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { goto } from '$app/navigation'
@@ -22,6 +24,7 @@
 	import { getEventTimeZone } from '$lib/timezone'
 	import { createPeriod, deletePeriod, duplicatePeriod, updatePeriod } from './period.remote'
 	import { engagedSubscribes, notifiedSentence, scheduleChanged } from './periodChange'
+	import { selectNotify } from './selectNotify'
 
 	type PeriodProp = Partial<Period & { team: Team; tags: Tag[]; subscribes: Subscribe[] }>
 
@@ -141,32 +144,59 @@
 		if (detectChange(period)) setPeriod(period)
 	})
 
-	// Hors brouillon, les inscrit·es ont reçu leur horaire: c'est ce qui vaut confirmation.
+	// Hors brouillon, les inscrit·es ont reçu leur horaire: c'est ce qui vaut la question.
 	const engaged = $derived(engagedSubscribes(period.subscribes ?? []).length)
 	const isTeamLive = $derived(!!period.team && period.team.state !== 'draft')
 
-	function confirmUpdate() {
-		if (!period.id || !isTeamLive || !engaged) return true
+	// Prévenir ou non: `true` tant que la question ne s'est pas posée, le serveur décidant seul
+	// si un courriel a un sens.
+	let notify = $state(true)
+
+	function needsNotifyChoice() {
+		if (!period.id || !isTeamLive || !engaged) return false
 		const { start: initialStart, end: initialEnd } = period
-		if (!initialStart || !initialEnd) return true
-		if (!scheduleChanged({ start: initialStart, end: initialEnd }, { start, end })) return true
-		const msg = [notifiedSentence(engaged, 'avec le nouvel horaire'), 'Continuer ?'].join('\n')
-		if (confirm(msg)) return true
-		toast.info('Modification annulée')
-		return false
+		if (!initialStart || !initialEnd) return false
+		return scheduleChanged({ start: initialStart, end: initialEnd }, { start, end })
 	}
 
-	function confirmDelete() {
+	/**
+	 * SvelteKit capture le `FormData` dans son écouteur `submit`, avant le callback d'`enhance`: le
+	 * `before` d'`enhanceForm` arrive trop tard pour y glisser le choix. Le clic est donc retenu le
+	 * temps du dialogue, et la soumission rejouée une fois le champ caché à jour. Toujours par ce
+	 * chemin, même sans question: la soumission native suit le clic de façon synchrone, avant que
+	 * Svelte n'ait écrit `notify` dans le DOM.
+	 */
+	async function gateUpdate(event: MouseEvent & { currentTarget: HTMLButtonElement }) {
+		event.preventDefault()
+		const button = event.currentTarget
+		const form = button.form
+		if (!form?.reportValidity()) return
+		notify = true
+		if (needsNotifyChoice()) {
+			const choice = await selectNotify(engaged)
+			if (choice === undefined) return toast.info('Modification annulée')
+			notify = choice
+		}
+		await tick()
+		form.requestSubmit(button)
+	}
+
+	async function confirmDelete() {
 		if (engaged === 0) {
 			ondelete?.()
 			return true
 		}
-		const msg = [
+		const message = [
 			`Ce créneau contient déjà ${engaged} inscription${engaged > 1 ? 's' : ''} !`,
 			...(isTeamLive ? [notifiedSentence(engaged, 'annonçant sa suppression')] : []),
-			'Es-tu certain·e de vouloir le supprimer ?',
-		].join('\n')
-		if (confirm(msg)) {
+		].join(' ')
+		const confirmed = await confirmDialog({
+			title: 'Supprimer ce créneau ?',
+			message,
+			confirmLabel: 'Supprimer',
+			danger: true,
+		})
+		if (confirmed) {
 			ondelete?.()
 			return true
 		}
@@ -193,7 +223,6 @@
 <form
 	{...remoteForm.enhance(
 		enhanceForm({
-			before: confirmUpdate,
 			success: period?.id ? 'Créneau mis à jour' : 'Créneau ajouté',
 			onsuccess: () => onsuccess?.(),
 		})
@@ -202,6 +231,8 @@
 >
 	{#if period?.id}
 		<input type="hidden" name="id" value={period.id} />
+		<!-- Le préfixe `b:` est celui que `field.as('checkbox')` pose: SvelteKit en fait un booléen. -->
+		<input type="hidden" name="b:notify" value={notify ? 'on' : 'off'} />
 	{/if}
 
 	{#if !disableRedirect}
@@ -295,7 +326,7 @@
 
 	<div class="flex flex-row-reverse gap-3 grow">
 		{#if period?.id}
-			<button class="btn btn-primary" type="submit">Valider</button>
+			<button class="btn btn-primary" type="submit" onclick={gateUpdate}>Valider</button>
 			<button
 				type="button"
 				class="btn btn-soft btn-primary btn-square"

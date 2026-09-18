@@ -11,13 +11,14 @@
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
 	import { movePeriod } from '$lib/period/period.remote'
-	import { engagedSubscribes, notifiedSentence, scheduleChanged } from '$lib/period/periodChange'
+	import { engagedSubscribes, scheduleChanged } from '$lib/period/periodChange'
+	import { selectNotify } from '$lib/period/selectNotify'
 	import { magnet } from './magnet.svelte'
 	import DragButton from './DragButton.svelte'
 
 	interface Props {
 		period: PeriodWithMembers
-		/** Hors brouillon, déplacer un créneau inscrit prévient ses inscrit·es: on confirme avant. */
+		/** Hors brouillon, déplacer un créneau inscrit peut prévenir ses inscrit·es: on demande avant. */
 		teamState: TeamState
 		plan: Plan
 		drags: {
@@ -48,13 +49,15 @@
 
 		const start = new Date(period.start.getTime() + magnet(deltaStartMs))
 		const end = new Date(period.end.getTime() + magnet(deltaEndMs))
-		if (!confirmMove({ start, end })) {
+		// Les deltas restent le temps du dialogue: la carte est vue là où elle atterrira.
+		const notify = await chooseNotify({ start, end })
+		if (notify === undefined) {
 			deltaStartMs = 0
 			deltaEndMs = 0
 			return
 		}
 		try {
-			const moved = await movePeriod({ id: period.id, start, end })
+			const moved = await movePeriod({ id: period.id, start, end, notify })
 			// Les dates viennent du serveur, et les deltas ne retombent à zéro qu'une fois la carte
 			// repositionnée dessus: dans l'autre ordre elle reviendrait un instant à sa place d'origine.
 			onupdate?.({ ...period, start: moved.start, end: moved.end })
@@ -68,11 +71,12 @@
 		deltaEndMs = 0
 	}
 
-	function confirmMove(after: { start: Date; end: Date }) {
+	/** `true` sans question quand personne n'a rien reçu; `undefined` quand on renonce au geste. */
+	async function chooseNotify(after: { start: Date; end: Date }): Promise<boolean | undefined> {
 		if (teamState === 'draft') return true
 		const n = engagedSubscribes(period.subscribes).length
 		if (!n || !scheduleChanged(period, after)) return true
-		return confirm([notifiedSentence(n, 'avec le nouvel horaire'), 'Continuer ?'].join('\n'))
+		return selectNotify(n)
 	}
 </script>
 

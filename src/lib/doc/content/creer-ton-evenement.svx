@@ -104,9 +104,9 @@ quelques secteurs.
 
 Tant que le secteur est en brouillon, déplace, redimensionne et supprime tes créneaux librement,
 personne n'en sait rien. Par contre, une fois le secteur validé, les personnes inscrites ont reçu leur horaire.
-Changer l'heure d'un créneau qui a des inscriptions leur envoie un courriel avec le nouvel horaire,
-et le supprimer leur annonce qu'il n'a plus lieu. Dans les deux cas, une confirmation te donne le
-nombre de membres concernés.
+Changer l'heure d'un créneau qui a des inscriptions te demande alors si tu souhaites leur envoyer le nouvel
+horaire par courriel. A toi de choisir si c'est nécéssaire ou non.
+La suppression, quant à elle, ne te laisse pas l'option de ne pas communiquer. 
 
 
 ### Les étiquettes

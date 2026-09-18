@@ -160,12 +160,11 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		const current = await start.inputValue()
 		await start.fill(current === '10:00' ? '11:00' : '10:00')
 
-		// Sans écouteur, Playwright refuse le `confirm()` et rien ne part.
-		page.once('dialog', (confirmation) => {
-			expect(confirmation.message()).toContain('1 inscrit·e recevra un courriel')
-			void confirmation.accept()
-		})
+		// Le dialogue de fuma est monté dans `body`, hors du tiroir, et n'a pas de nom accessible.
 		await drawer.getByRole('button', { name: 'Valider', exact: true }).click()
+		const choice = page.getByRole('dialog').filter({ hasText: 'déjà reçu cet horaire' })
+		await expect(choice).toContainText('1 inscrit·e a déjà reçu')
+		await choice.getByRole('button', { name: 'Valider et notifier' }).click()
 		await expect(page.getByText('Créneau mis à jour')).toBeVisible()
 		await expect(drawer).toBeHidden()
 
@@ -177,14 +176,35 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		await expect(moved).toContainText('1 inscrit·e prévenu·e')
 	})
 
+	test("Retoucher l'horaire sans prévenir se journalise sans courriel", async () => {
+		const drawer = await openPeriodDrawer()
+		const start = drawer.getByLabel('Début')
+		const current = await start.inputValue()
+		await start.fill(current === '10:00' ? '11:00' : '10:00')
+
+		await drawer.getByRole('button', { name: 'Valider', exact: true }).click()
+		const choice = page.getByRole('dialog').filter({ hasText: 'déjà reçu cet horaire' })
+		await choice.getByRole('button', { name: 'Valider', exact: true }).click()
+		await expect(page.getByText('Créneau mis à jour')).toBeVisible()
+		await expect(drawer).toBeHidden()
+
+		await page.goto(`/${event.eventId}/admin/dashboard`)
+		const entries = page.locator('#journal').getByRole('listitem')
+		const silent = entries
+			.filter({ hasText: 'a modifié un créneau de Alpha' })
+			.filter({ hasText: 'aucun courriel' })
+		await expect(silent).toHaveCount(1)
+	})
+
 	test('Supprimer un créneau validé prévient et journalise chaque inscription', async () => {
 		const drawer = await openPeriodDrawer()
-		page.once('dialog', (confirmation) => {
-			expect(confirmation.message()).toContain('annonçant sa suppression')
-			void confirmation.accept()
-		})
 		await drawer.getByRole('button', { name: 'Supprimer' }).click()
 		await drawer.getByRole('button', { name: "T'es sur ?" }).click()
+		await page
+			.getByRole('dialog')
+			.filter({ hasText: 'annonçant sa suppression' })
+			.getByRole('button', { name: 'Supprimer' })
+			.click()
 		await expect(page.getByText('Créneau supprimé')).toBeVisible()
 		await expect(drawer).toBeHidden()
 

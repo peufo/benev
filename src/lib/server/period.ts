@@ -72,19 +72,20 @@ export async function notifyPeriodChange(
 /**
  * Ce qui suit une mise à jour, partagé par le formulaire et le planning: journal et courriels,
  * seulement quand le changement compte. En brouillon personne n'a rien reçu, et un créneau sans
- * inscription n'engage personne. Le nombre de places seul se journalise sans courriel.
+ * inscription n'engage personne. Le nombre de places seul se journalise sans courriel, et un
+ * horaire retouché n'en envoie que si l'organisateur·ice l'a choisi (`notify`).
  */
 export async function settlePeriodUpdate(
 	before: PeriodForChange,
 	after: Period,
-	actor: LogActor & { email: string }
+	actor: LogActor & { email: string },
+	notify: boolean
 ): Promise<void> {
 	if (before.team.state === 'draft' || !before.subscribes.length) return
 	const changes = diffChanges(projectPeriod(before), projectPeriod(after))
 	if (!hasChanges(changes)) return
-	const notified = scheduleChanged(before, after)
-		? await notifyPeriodChange(before, after, actor)
-		: 0
+	const notified =
+		notify && scheduleChanged(before, after) ? await notifyPeriodChange(before, after, actor) : 0
 	await createLog('period_update', { period: after, team: before.team, changes, notified, actor })
 }
 
