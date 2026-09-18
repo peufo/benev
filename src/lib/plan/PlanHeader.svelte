@@ -78,6 +78,7 @@
 		searchable
 		placeholder="Tous les secteurs"
 		class="w-52! input-sm"
+		countOnly
 	/>
 
 	<PlanCursor cursor={plan.cursor} />

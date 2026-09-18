@@ -1,6 +1,6 @@
 @import 'tailwindcss';
-/* En tête, comme toute règle `@import`. Le fichier tient les animations du refus de
-   quitter une page non enregistrée, jouées par `SaveBar.svelte`. */
+/* Le fichier tient les animations du refus de quitter une page non enregistrée, jouées par
+   `SaveBar.svelte`. */
 @import './lib/ui/form/saveBar.css';
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui' {
@@ -25,6 +25,9 @@
 	--color-base-300: #e5e6e6;
 	--color-base-content: #1f2937;
 }
+/* Après le thème: les composants de fuma se stylent avec ses tokens. Ses `.menu-item` et
+   `.title-*` sont repris ci-dessous, dans une `@layer components` qui vient après et l'emporte. */
+@import 'fuma/css';
 @source '../node_modules/fuma/dist';
 
 html {
@@ -40,28 +43,6 @@ html {
 		@apply rounded-box border border-hard m-1;
 	}
 
-	.menu-item {
-		@apply flex items-center gap-3 px-3 py-1.25 cursor-pointer hover:bg-base-200 rounded-field whitespace-nowrap text-ellipsis;
-	}
-	.menu-item.active {
-		@apply bg-base-300/80;
-	}
-	.menu-item.disabled {
-		@apply cursor-default bg-base-200/50 hover:bg-base-200/50;
-	}
-
-	.title {
-		@apply text-xl font-semibold text-base-content/70;
-	}
-
-	.title-md {
-		@apply font-semibold text-base-content/80;
-	}
-
-	.title-sm {
-		@apply text-xs font-bold text-base-content/90;
-	}
-
 	.tiptap .ProseMirror-selectednode {
 		@apply outline outline-accent rounded-field;
 	}
@@ -71,14 +52,6 @@ html {
 	.zooming .hide-on-zoom {
 		visibility: hidden;
 	}
-}
-
-@utility border-soft {
-	border-color: color-mix(in oklab, var(--color-base-content) 18%, #0000);
-}
-
-@utility border-hard {
-	border-color: color-mix(in oklab, var(--color-base-content) 25%, #0000);
 }
 
 @utility bg-accent-soft {
