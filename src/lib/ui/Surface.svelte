@@ -50,6 +50,5 @@
 			{/if}
 		</div>
 	{/if}
-
 	{@render children?.()}
 </section>

@@ -1,16 +1,12 @@
 <script lang="ts">
-	import { Card } from '$lib/ui'
+	import { Surface } from '$lib/ui'
 	import { InputNumber, InputSelect, InputString } from 'fuma'
 
 	import InputProduct from './InputProduct.svelte'
 	import { createCheckout, searchUsers } from './checkout.remote'
 </script>
 
-<Card class="max-w-2xl mx-auto">
-	{#snippet title()}
-		<h2 class="title">New checkout</h2>
-	{/snippet}
-
+<Surface title="New checkout" class="max-w-2xl mx-auto">
 	<form {...createCheckout} class="flex flex-col gap-4">
 		<InputString field={createCheckout.fields.name} label="Name" value="Correction" />
 		<InputSelect
@@ -47,4 +43,4 @@
 			<button class="btn"> Valider </button>
 		</div>
 	</form>
-</Card>
+</Surface>

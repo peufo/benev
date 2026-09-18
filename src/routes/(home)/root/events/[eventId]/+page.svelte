@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { Card } from '$lib/ui'
+	import { Surface } from '$lib/ui'
 	import { msToHours } from '$lib/utils'
 	import { formatRangeDate } from '$lib/formatRange'
 	import {
@@ -25,14 +25,16 @@
 		Retour aux événements
 	</a>
 
-	<Card>
-		{#snippet title()}
-			<h2 class="title flex items-center">
-				<span>{event.name}</span>
-				<a href={resolve('/[eventId]', { eventId: event.id })} class="ml-auto" target="_blank">
-					<ExternalLinkIcon />
-				</a>
-			</h2>
+	<Surface title={event.name}>
+		{#snippet action()}
+			<a
+				href={resolve('/[eventId]', { eventId: event.id })}
+				class="btn btn-square btn-sm"
+				target="_blank"
+				aria-label="Ouvrir l'évènement"
+			>
+				<ExternalLinkIcon size={20} class="opacity-70" />
+			</a>
 		{/snippet}
 
 		<div class="flex flex-col gap-2 text-sm">
@@ -57,54 +59,51 @@
 				</div>
 			{/if}
 		</div>
-	</Card>
+	</Surface>
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-		<Card>
-			<div class="flex items-center gap-3">
+		<Surface>
+			<div class="flex items-center gap-3 p-2">
 				<ClockIcon size={24} class="text-primary opacity-80" />
 				<div>
 					<div class="text-2xl font-bold">{stats.shiftsCount}</div>
 					<div class="text-sm text-base-content/70">Shifts organisés</div>
 				</div>
 			</div>
-		</Card>
+		</Surface>
 
-		<Card>
-			<div class="flex items-center gap-3">
+		<Surface>
+			<div class="flex items-center gap-3 p-2">
 				<ClockIcon size={24} class="text-warning opacity-80" />
 				<div>
 					<div class="text-2xl font-bold">{msToHours(stats.plannedWorkMs)}</div>
 					<div class="text-sm text-base-content/70">Heures prévues</div>
 				</div>
 			</div>
-		</Card>
+		</Surface>
 
-		<Card>
-			<div class="flex items-center gap-3">
+		<Surface>
+			<div class="flex items-center gap-3 p-2">
 				<CheckCircleIcon size={24} class="text-success opacity-80" />
 				<div>
 					<div class="text-2xl font-bold">{msToHours(stats.confirmedWorkMs)}</div>
 					<div class="text-sm text-base-content/70">Heures confirmées</div>
 				</div>
 			</div>
-		</Card>
+		</Surface>
 
-		<Card>
-			<div class="flex items-center gap-3">
+		<Surface>
+			<div class="flex items-center gap-3 p-2">
 				<UsersIcon size={24} class="text-info opacity-80" />
 				<div>
 					<div class="text-2xl font-bold">{stats.membersCount}</div>
 					<div class="text-sm text-base-content/70">Membres</div>
 				</div>
 			</div>
-		</Card>
+		</Surface>
 	</div>
 
-	<Card>
-		{#snippet title()}
-			<h3 class="title">Inscriptions ({totalSubscribes})</h3>
-		{/snippet}
+	<Surface title="Inscriptions ({totalSubscribes})">
 		<div class="flex flex-wrap gap-4">
 			<div class="flex items-center gap-2">
 				<span class="badge badge-warning badge-sm">{stats.subscribesByState.request}</span>
@@ -123,5 +122,5 @@
 				<span class="text-sm text-base-content/70">Annulées</span>
 			</div>
 		</div>
-	</Card>
+	</Surface>
 </div>

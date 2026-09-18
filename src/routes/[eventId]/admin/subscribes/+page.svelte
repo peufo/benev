@@ -8,7 +8,7 @@
 		TriangleAlertIcon,
 	} from '@lucide/svelte'
 	import type { PageData } from './$types'
-	import { Card, InputSearch } from '$lib/ui'
+	import { InputSearch, Surface } from '$lib/ui'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { Drawer, tip } from 'fuma'
 	import { Pagination } from 'fuma'
@@ -168,7 +168,7 @@
 {/snippet}
 
 <div class="flex gap-3 items-start">
-	<Card class="min-w-0 grow" bodyClass="sm:px-2 sm:py-2">
+	<Surface class="min-w-0 grow">
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-x-2 gap-y-2 flex-wrap">
 				<InputSearch />
@@ -211,7 +211,7 @@
 				<Pagination />
 			</div>
 		</div>
-	</Card>
+	</Surface>
 
 	<div class="surface hidden xl:block p-2">
 		<SubscribesStats {data} />

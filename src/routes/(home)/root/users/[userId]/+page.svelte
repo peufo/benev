@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { Card } from '$lib/ui'
+	import { Surface } from '$lib/ui'
 	import { MemberRole } from '$lib/member'
 	import { EVENT_TIER } from '$lib/constant'
 	import { formatRangeDate } from '$lib/formatRange'
@@ -13,11 +13,7 @@
 </script>
 
 <div class="flex flex-col gap-4 p-4">
-	<Card>
-		{#snippet title()}
-			<h2 class="title">{user.firstName} {user.lastName}</h2>
-		{/snippet}
-
+	<Surface title="{user.firstName} {user.lastName}">
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 			<div class="flex items-center gap-2">
 				<MailIcon size={16} class="opacity-70" />
@@ -58,13 +54,9 @@
 				Compte créé le {user.createdAt.toLocaleDateString()}
 			</div>
 		</div>
-	</Card>
+	</Surface>
 
-	<Card>
-		{#snippet title()}
-			<h2 class="title">Événements ({data.members.length})</h2>
-		{/snippet}
-
+	<Surface title="Événements ({data.members.length})">
 		{#if data.members.length}
 			<table class="table">
 				<thead>
@@ -119,5 +111,5 @@
 		{:else}
 			<p class="text-base-content/70">Ce compte n'est membre d'aucun évènement.</p>
 		{/if}
-	</Card>
+	</Surface>
 </div>

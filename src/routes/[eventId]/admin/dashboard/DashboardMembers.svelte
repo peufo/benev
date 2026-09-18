@@ -39,7 +39,7 @@
 {#if !members.length}
 	<Placeholder>{emptyLabels[view]}</Placeholder>
 {:else}
-	<ul class="flex flex-col">
+	<ul class="flex flex-col pl-2">
 		{#each members as member (member.id)}
 			<li class="flex items-center flex-wrap gap-2 py-1 border-b border-soft last:border-0">
 				<MemberCell {member} />

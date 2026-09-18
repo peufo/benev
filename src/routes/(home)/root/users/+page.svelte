@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
 	import { CheckIcon, XIcon } from '@lucide/svelte'
-	import { Card, InputSearch } from '$lib/ui'
+	import { InputSearch, Surface } from '$lib/ui'
 	import { DropDown, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import TDSortable from './TDSortable.svelte'
@@ -9,14 +9,9 @@
 	let { data } = $props()
 </script>
 
-<Card>
-	{#snippet title()}
-		<h2 class="title">Users ({data.usersCount})</h2>
-	{/snippet}
+<Surface title="Users ({data.usersCount})">
 	{#snippet action()}
-		<div>
-			<InputSearch />
-		</div>
+		<InputSearch />
 	{/snippet}
 	<table class="table">
 		<thead>
@@ -87,4 +82,4 @@
 	<div class="flex justify-end mt-2">
 		<Pagination />
 	</div>
-</Card>
+</Surface>

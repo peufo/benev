@@ -1,22 +1,22 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
 	import { PlusIcon } from '@lucide/svelte'
-	import { Card } from '$lib/ui'
+	import { Surface } from '$lib/ui'
 	import { Pagination, tip } from 'fuma'
 
 	let { data } = $props()
 </script>
 
-<Card>
-	<div class="flex gap-2">
-		<h2 class="title">Checkouts</h2>
-
-		<a href={resolve('/root/checkouts/new')} class="btn btn-square btn-sm ml-auto">
-			<span class="inline-flex" use:tip={{ content: 'Créer un checkout manuellement' }}
-				><PlusIcon /></span
-			>
+<Surface title="Checkouts">
+	{#snippet action()}
+		<a
+			href={resolve('/root/checkouts/new')}
+			class="btn btn-square btn-sm btn-secondary"
+			use:tip={{ content: 'Créer un checkout manuellement' }}
+		>
+			<PlusIcon size={20} />
 		</a>
-	</div>
+	{/snippet}
 
 	<table class="table">
 		<thead>
@@ -58,4 +58,4 @@
 	<div class="flex justify-end mt-2">
 		<Pagination />
 	</div>
-</Card>
+</Surface>

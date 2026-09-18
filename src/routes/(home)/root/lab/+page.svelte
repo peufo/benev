@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { Card } from '$lib/ui'
+	import { Surface } from '$lib/ui'
 	import { sendEvent } from './lab.remote'
 
 	let events: string[] = $state([])
@@ -20,7 +20,7 @@
 	})
 </script>
 
-<Card class="max-w-3xl mx-auto">
+<Surface class="max-w-3xl mx-auto">
 	<form {...sendEvent}>
 		<button class="btn"> send event</button>
 	</form>
@@ -30,4 +30,4 @@
 	{#each events as event, i (i)}
 		{JSON.stringify(event)}
 	{/each}
-</Card>
+</Surface>

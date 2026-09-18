@@ -1,19 +1,14 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { Card, InputSearch } from '$lib/ui'
+	import { InputSearch, Surface } from '$lib/ui'
 	import { Pagination } from 'fuma'
 
 	let { data } = $props()
 </script>
 
-<Card class="min-w-0" bodyClass="overflow-auto">
-	{#snippet title()}
-		<h2 class="title">Evenements ({data.eventsCount})</h2>
-	{/snippet}
+<Surface title="Evenements ({data.eventsCount})" class="min-w-0 overflow-auto">
 	{#snippet action()}
-		<div>
-			<InputSearch />
-		</div>
+		<InputSearch />
 	{/snippet}
 	<table class="table">
 		<thead>
@@ -56,4 +51,4 @@
 	<div class="ml-auto">
 		<Pagination />
 	</div>
-</Card>
+</Surface>

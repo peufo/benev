@@ -1,15 +1,11 @@
 <script lang="ts">
 	// import { toast } from 'svelte-sonner'
-	import { Card } from '$lib/ui'
+	import { Surface } from '$lib/ui'
 	// import { enhance } from '$app/forms'
 </script>
 
 <div class="max-w-md">
-	<Card>
-		{#snippet title()}
-			<h2>Actions</h2>
-		{/snippet}
-
+	<Surface title="Actions">
 		<!-- <form
 			method="post"
 			class="flex flex-col gap-2"
@@ -23,5 +19,5 @@
 				Migrate events address to location
 			</button>
 		</form> -->
-	</Card>
+	</Surface>
 </div>

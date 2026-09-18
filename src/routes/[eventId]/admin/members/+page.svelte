@@ -3,7 +3,7 @@
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick, untrack } from 'svelte'
 	import { goto } from '$app/navigation'
-	import { InputSearch, Card, Badge } from '$lib/ui'
+	import { InputSearch, Surface, Badge } from '$lib/ui'
 	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
 	import { Drawer, tip } from 'fuma'
 	import { Pagination } from 'fuma'
@@ -93,7 +93,7 @@
 {/snippet}
 
 <div class="flex gap-3 items-start">
-	<Card class="grow min-w-0" bodyClass="sm:px-2 sm:py-2">
+	<Surface class="grow min-w-0">
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-x-2 gap-y-2 flex-wrap">
 				<InputSearch class="max-w-43.75" />
@@ -161,7 +161,7 @@
 				<Pagination />
 			</div>
 		</div>
-	</Card>
+	</Surface>
 
 	<div class="hidden xl:block surface p-2">
 		<MembersStats {data} />

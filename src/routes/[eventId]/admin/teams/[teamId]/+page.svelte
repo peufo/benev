@@ -69,9 +69,11 @@
 <div class="grid gap-3 xl:grid-cols-2 items-start">
 	<Surface id="team" title={team.name} subtitle={teamSubtitle} action={teamActions}>
 		{#if team.isLeader}
-			{#key team.id}
-				<TeamForm {team} event={data.event} saveBar />
-			{/key}
+			<div class="px-2">
+				{#key team.id}
+					<TeamForm {team} event={data.event} saveBar />
+				{/key}
+			</div>
 
 			{#if isAdmin}
 				<div class="flex justify-between pt-2 border-t border-soft mt-4">

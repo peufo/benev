@@ -28,7 +28,7 @@
 		{waiting ? emptyLabels[waiting] : 'Aucune inscription en attente'}
 	</Placeholder>
 {:else}
-	<ul class="flex flex-col">
+	<ul class="flex flex-col pl-2">
 		{#each subscribes as subscribe (subscribe.id)}
 			<li class="flex items-center flex-wrap gap-2 py-1 border-b border-soft last:border-0">
 				<MemberCell member={subscribe.member} />
