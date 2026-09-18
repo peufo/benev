@@ -21,7 +21,14 @@
 
 <section {id} class={['surface scroll-mt-4', klass]}>
 	{#if title || back || action}
-		<div class={['flex items-start gap-2 flex-wrap pb-4', !back && 'pl-2', !action && 'pr-1']}>
+		<div
+			class={[
+				'flex items-start gap-2 flex-wrap',
+				children && 'pb-4',
+				!back && 'pl-2',
+				!action && 'pr-1',
+			]}
+		>
 			{#if back}
 				<button
 					type="button"

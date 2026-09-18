@@ -93,7 +93,7 @@
 		<div class="bg-accent rounded w-0.75 h-8 bottom-0" use:indicator.element></div>
 
 		<div
-			class="sticky bg-base-100 left-0 border-r shrink-0 z-10"
+			class="sticky bg-base-100 left-0 border-r border-hard shrink-0 z-10"
 			style:width="{TEAM_HEADER_WIDTH}px"
 		></div>
 
@@ -104,7 +104,7 @@
 					style:left="{TEAM_HEADER_WIDTH}px"
 					class="
 						font-medium sticky
-						border-l
+						border-l border-hard
 						left-0 p-1 w-min whitespace-nowrap text-sm
 					"
 				>
@@ -115,7 +115,7 @@
 					{#each hours.filter((h, i) => !(i % hourSpan)) as hour (hour)}
 						{@const isEndNextDay = hour + hourSpan > 24}
 						{@const span = isEndNextDay ? 24 - hour : hourSpan}
-						<div style:width="{plan.hourSize * span}px" class="border-l px-1">
+						<div style:width="{plan.hourSize * span}px" class="border-l border-hard px-1">
 							{isEndNextDay ? '' : hour.toString().padStart(2, '0')}
 						</div>
 					{/each}
