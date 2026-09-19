@@ -37,6 +37,9 @@ export function zJsonOr<Schema extends z.ZodType>(schema: Schema) {
  * remonte que l'erreur de l'union, « Invalid input », qui ne dit rien à qui a mal saisi son
  * adresse; et `z.preprocess`, qui donnerait le bon message, a `unknown` en entrée — ce que
  * `form()` refuse.
+ *
+ * Le trim se fait ici, avant le `pipe`: posé sur `schema` (`z.email().trim()`), il s'exécuterait
+ * après la vérification du format, qui refuse l'espace qu'un clavier de téléphone ajoute à la fin.
  */
 export function zStringNullable<Schema extends z.ZodType<string, string>>(schema: Schema) {
 	return z
@@ -44,7 +47,7 @@ export function zStringNullable<Schema extends z.ZodType<string, string>>(schema
 		.optional()
 		.transform((value) => {
 			if (value === undefined) return undefined
-			return value || null
+			return value.trim() || null
 		})
 		.pipe(schema.nullish())
 }
