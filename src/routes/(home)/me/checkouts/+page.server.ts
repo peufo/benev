@@ -15,5 +15,12 @@ export const load = async ({ url, locals }) => {
 		},
 	})
 
-	return { checkouts }
+	return {
+		checkouts: checkouts.map((checkout) => ({
+			...checkout,
+			// Seul un achat passé par Stripe a un document à télécharger; une correction
+			// saisie par root porte un cuid, pas un id de session.
+			hasInvoice: checkout.id.startsWith('cs_'),
+		})),
+	}
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
 	import { page } from '$app/state'
-	import { CircleCheckIcon, ShoppingCartIcon, TagIcon } from '@lucide/svelte'
+	import { CircleCheckIcon, FileTextIcon, ShoppingCartIcon, TagIcon } from '@lucide/svelte'
 	import { Placeholder } from '$lib/ui'
 
 	import { CheckoutWaitSSE, ProductUseForm } from '$lib/checkout'
@@ -43,13 +43,27 @@
 					<div class="min-w-0 grow">
 						<div class="truncate font-medium">{checkout.name || 'Achat'}</div>
 						{#if !checkout.products.length}
-							<!-- Sans cette ligne, une écriture sans produit n'est qu'un montant nu:
-							     l'utilisateur ne peut pas savoir si quelque chose manque. On ne
-							     déduit rien du montant — un achat à 0 CHF reste un achat. -->
-							<div class="text-sm text-base-content/70">Aucun produit rattaché</div>
+							<div class="text-xs text-base-content/70">Aucun produit rattaché</div>
+						{:else}
+							{@const plural = checkout.products.length > 1 ? 's' : ''}
+							<div class="text-xs text-base-content/70">
+								{checkout.products.length} produit{plural} rattaché{plural}
+							</div>
 						{/if}
 					</div>
-
+					{#if checkout.hasInvoice}
+						<a
+							href={resolve('/(home)/me/checkouts/[checkoutId]/invoice', {
+								checkoutId: checkout.id,
+							})}
+							target="_blank"
+							rel="noopener"
+							class="btn btn-ghost btn-sm shrink-0"
+						>
+							<FileTextIcon size={16} class="opacity-70" />
+							<span class="hidden sm:inline">Facture</span>
+						</a>
+					{/if}
 					<div class="shrink-0 font-semibold tabular-nums">
 						{(checkout.amount / 100).toFixed(2)}
 						{checkout.currency?.toUpperCase()}

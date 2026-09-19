@@ -48,6 +48,9 @@ function useCheckout(options: CheckoutOptions) {
 				ui_mode: 'embedded_page',
 				customer: await getStripCustomerId(user),
 				allow_promotion_codes: true,
+				// Sans cela, Stripe n'émet qu'un reçu: la facture PDF que l'utilisateur
+				// télécharge depuis « Mes achats » n'existe que si on la demande ici.
+				invoice_creation: { enabled: true },
 				line_items: lineItems,
 				return_url: `${url.origin}${options.returnPath}?checkoutId={CHECKOUT_SESSION_ID}`,
 				metadata: {
@@ -78,6 +81,25 @@ function useCheckout(options: CheckoutOptions) {
 				console.error(err)
 				error(400)
 			}
+		},
+		/**
+		 * L'adresse du document d'un achat: la facture PDF quand Stripe en a émis une, sinon le
+		 * reçu du paiement (les achats antérieurs à `invoice_creation`). `null` pour un achat qui
+		 * n'a pas transité par Stripe, comme une correction saisie par root.
+		 */
+		async getInvoiceUrl(checkoutId: string): Promise<string | null> {
+			if (!checkoutId.startsWith('cs_')) return null
+			const session = await useStripe().checkout.sessions.retrieve(checkoutId, {
+				expand: ['invoice', 'payment_intent.latest_charge'],
+			})
+			const invoice = session.invoice
+			if (invoice && typeof invoice !== 'string' && invoice.invoice_pdf) return invoice.invoice_pdf
+
+			const paymentIntent = session.payment_intent
+			if (!paymentIntent || typeof paymentIntent === 'string') return null
+			const charge = paymentIntent.latest_charge
+			if (!charge || typeof charge === 'string') return null
+			return charge.receipt_url
 		},
 		async subscribe(checkoutId: string) {
 			const { readable, subscribe } = createSSE()
