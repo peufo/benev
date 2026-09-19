@@ -12,8 +12,3 @@
 	<img src={googleLogo} alt="" width="18" height="18" aria-hidden="true" />
 	<span>Continuer avec Google</span>
 </a>
-
-<!--
-	La connexion Github reste désactivée tant qu'on ne sait pas garantir le partage de l'email:
-	https://github.com/peufo/benev/issues/136
--->

@@ -27,7 +27,7 @@ colour, type and spacing, not this file. `TODO.md` is the user's running task li
 
 SvelteKit v2 (**remote functions enabled**) · TypeScript v6 (strict, `verbatimModuleSyntax`) ·
 Vite v8 · Svelte v5 **runes-only** · Tailwind v4 + DaisyUI v5 · Zod v4 · Prisma v6 / MySQL ·
-Lucia v2 (GitHub + Google OAuth) · Stripe · Nodemailer (SMTP Infomaniak) · Playwright + Vitest ·
+Lucia v2 (Google OAuth) · Stripe · Nodemailer (SMTP Infomaniak) · Playwright + Vitest ·
 Bun runtime, Docker image built by GitHub Actions to GHCR.
 
 The non-obvious parts:
@@ -129,7 +129,7 @@ be introduced.
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `$lib/server`               | Re-exports all server-only utilities. **Must only be imported from server files.**                                                |
 | `$lib/server/prisma.ts`     | Extended Prisma client with query middleware for event date syncing, soft deletes, and user/member data duplication.              |
-| `$lib/server/lucia.ts`      | Lucia auth instance, GitHub/Google OAuth providers.                                                                               |
+| `$lib/server/lucia.ts`      | Lucia auth instance, Google OAuth provider.                                                                                       |
 | `$lib/server/permission.ts` | Role-based guards: `member`, `leader`, `admin`, `owner`, `root`, plus `leaderOfTeam`.                                             |
 | `$lib/server/member.ts`     | Member profile resolution with computed values (roles, stats).                                                                    |
 | `$lib/server/stripe.ts`     | Checkout session creation and Stripe webhook handling.                                                                            |
@@ -545,7 +545,7 @@ BODY_SIZE_LIMIT=0                          # Disable body size limit for uploads
 SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
 
 # AUTHENTICATION
-GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
+GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
 
 # MONETISATION
 PRIVATE_STRIPE_KEY, PRIVATE_STRIPE_WEBHOOK_KEY, STRIPE_KEY,
@@ -678,7 +678,7 @@ breaks `svelte-check`.
 
 - Sessions are handled by **Lucia v2** with a Prisma adapter; `hooks.server.ts` attaches
   `locals.auth`.
-- Users authenticate via email + password, GitHub OAuth, or Google OAuth.
+- Users authenticate via email + password or Google OAuth.
 - Accounts can also be **created by an organizer through an invitation**: such a user exists but
   has no password, and must go through the password-reset link to claim the account.
   `$lib/me/Login.svelte` handles this case explicitly.

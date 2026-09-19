@@ -66,8 +66,8 @@
 				photo de profil. Le mot de passe est haché : il n'est jamais stocké en clair.
 			</li>
 			<li>
-				<b>Connexion Google ou GitHub</b>, si tu choisis ce mode — adresse email, nom et photo de
-				profil transmis par le fournisseur.
+				<b>Connexion Google</b>, si tu choisis ce mode — adresse email, nom et photo de profil
+				transmis par le fournisseur.
 			</li>
 			<li>
 				<b>Participation</b> — rôle, équipes, réponses aux champs personnalisés définis par
@@ -194,7 +194,7 @@
 						<td>Irlande, États-Unis</td>
 					</tr>
 					<tr>
-						<td>Google, GitHub</td>
+						<td>Google</td>
 						<td>Connexion, uniquement si tu choisis ce mode</td>
 						<td>Email, nom, photo de profil</td>
 						<td>États-Unis</td>
@@ -228,13 +228,10 @@
 
 	<section>
 		<h2>6. Cookies</h2>
-		<p>benevio pose trois cookies, tous strictement nécessaires :</p>
+		<p>benevio pose deux cookies, tous strictement nécessaires :</p>
 		<ul>
 			<li>un cookie de session, pour te garder connecté ;</li>
-			<li>
-				deux cookies techniques de courte durée, uniquement si tu passes par la connexion Google ou
-				GitHub.
-			</li>
+			<li>un cookie technique de courte durée, uniquement si tu passes par la connexion Google.</li>
 		</ul>
 		<p>
 			Aucun cookie publicitaire, aucun traceur, aucune mesure d'audience, aucun bouton de réseau

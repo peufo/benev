@@ -3,26 +3,16 @@ import { sveltekit } from 'lucia/middleware'
 import { prisma as adapter } from '@lucia-auth/adapter-prisma'
 import { dev } from '$app/env'
 import { prisma } from './prisma'
-import {
-	GITHUB_CLIENT_ID,
-	GITHUB_CLIENT_SECRET,
-	GOOGLE_CLIENT_ID,
-	GOOGLE_CLIENT_SECRET,
-} from '$app/env/private'
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '$app/env/private'
 import { ORIGIN } from '$app/env/public'
 
-import { github, google } from '@lucia-auth/oauth/providers'
+import { google } from '@lucia-auth/oauth/providers'
 
 export const auth = lucia({
 	adapter: adapter(prisma),
 	env: dev ? 'DEV' : 'PROD',
 	middleware: sveltekit(),
 	getUserAttributes: (data) => data,
-})
-
-export const githubAuth = github(auth, {
-	clientId: GITHUB_CLIENT_ID,
-	clientSecret: GITHUB_CLIENT_SECRET,
 })
 
 export const googleAuth = google(auth, {

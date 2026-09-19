@@ -38,8 +38,6 @@ jobs:
   #     SMTP_PORT: '1025'
   #     SMTP_USER: ci@benevio.test
   #     SMTP_PASS: ci
-  #     GITHUB_CLIENT_ID: ci
-  #     GITHUB_CLIENT_SECRET: ci
   #     GOOGLE_CLIENT_ID: ci
   #     GOOGLE_CLIENT_SECRET: ci
   #     PRIVATE_STRIPE_KEY: sk_test_ci

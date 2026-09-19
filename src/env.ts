@@ -22,8 +22,6 @@ export const variables = defineEnvVars({
 		schema: dynamicString.default(building ? 'true' : '').transform((str) => str !== ''),
 	},
 
-	GITHUB_CLIENT_ID: { schema: dynamicString },
-	GITHUB_CLIENT_SECRET: { schema: dynamicString },
 	GOOGLE_CLIENT_ID: { schema: dynamicString },
 	GOOGLE_CLIENT_SECRET: { schema: dynamicString },
 
