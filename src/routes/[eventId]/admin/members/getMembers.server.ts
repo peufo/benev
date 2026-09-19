@@ -13,6 +13,8 @@ import type {
 	SubscribeState,
 } from '@prisma/client'
 import { prisma, addMemberComputedValues, type MemberWithComputedValues } from '$lib/server'
+import { jsonParse } from '$lib/jsonParse'
+import { combinationKey } from './fieldsSummary'
 
 export type MemberWithComputedValue = Awaited<ReturnType<typeof getMembers>>['members'][number]
 
@@ -287,15 +289,23 @@ export const getMembers = async (event: Event & { memberFields: Field[] }, url: 
 			summary: fields
 				.map((field) => {
 					if (field.type === 'select' || field.type === 'multiselect') {
+						const options = jsonParse<string[]>(field.options, [])
 						return {
 							fieldId: field.id,
 							fieldName: field.name,
 							fieldType: field.type,
+							allCombinations: field.allCombinations,
 							distribution: members.reduce(
 								(acc, { profileJson }) => {
 									const value = profileJson[field.id]
 									if (value === undefined) return acc
-									const keys = Array.isArray(value) ? value : [String(value)]
+									const keys = !Array.isArray(value)
+										? [String(value)]
+										: field.allCombinations
+											? value.length
+												? [combinationKey(value, options)]
+												: []
+											: value
 									keys.forEach((key) => {
 										if (!key) return
 										if (acc[key]) acc = { ...acc, [key]: acc[key] + 1 }

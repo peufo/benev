@@ -74,11 +74,17 @@
 					values={summary.distribution}
 					class="grow"
 					getLabel={(key) => {
-						if (summary.fieldType !== 'boolean') return key
-						return key === 'true' ? 'Oui' : 'Non'
+						if (summary.fieldType === 'boolean') return key === 'true' ? 'Oui' : 'Non'
+						if (summary.fieldType === 'multiselect' && summary.allCombinations)
+							return (JSON.parse(key) as string[]).join(', ')
+						return key
 					}}
 					getHref={(key) => {
-						const fieldValue = summary.fieldType === 'multiselect' ? JSON.stringify([key]) : key
+						// Une combinaison est déjà le tableau JSON que le filtre attend.
+						const fieldValue =
+							summary.fieldType !== 'multiselect' || summary.allCombinations
+								? key
+								: JSON.stringify([key])
 						return urlWith({ [`field_${summary.fieldId}`]: fieldValue })
 					}}
 				/>
