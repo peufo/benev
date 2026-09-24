@@ -7,6 +7,7 @@ import { MEDIA_DIR } from '$app/env/private'
 import { ORIGIN } from '$app/env/public'
 import type { Member } from '@prisma/client'
 import { prisma, permission } from '$lib/server'
+import { pdfStream } from '$lib/server/pdf'
 import logoBenev from '$lib/assets/logo.svg?raw'
 import { getMembers } from '../../../../members/getMembers.server'
 import { existsSync } from 'node:fs'
@@ -68,29 +69,7 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 		margin: 0,
 		autoFirstPage: false,
 	})
-	const stream = new ReadableStream({
-		start(controller) {
-			doc.on('data', (chunk) => {
-				try {
-					controller.enqueue(chunk)
-				} catch (err) {
-					doc.removeAllListeners()
-				}
-			})
-			doc.on('end', () => {
-				try {
-					controller.close()
-				} catch (e) {
-					// Le flux est déjà clos (client déconnecté): rien à faire
-				}
-			})
-			doc.on('error', (err) => controller.error(err))
-		},
-		cancel() {
-			doc.removeAllListeners('data')
-			doc.end()
-		},
-	})
+	const stream = pdfStream(doc)
 	generateBadges().catch((err) => {
 		console.error(err)
 		doc.end()

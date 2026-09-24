@@ -3,6 +3,7 @@
 		ArrowLeftIcon,
 		ChartGanttIcon,
 		ClipboardListIcon,
+		FileDownIcon,
 		PlusIcon,
 		UsersIcon,
 	} from '@lucide/svelte'
@@ -62,6 +63,14 @@
 		use:tip={{ content: 'Voir le planning du secteur' }}
 	>
 		<ChartGanttIcon size={20} opacity={0.7} />
+	</a>
+	<a
+		href={eventPath('/admin/teams/[teamId]/pdf', { teamId: team.id })}
+		target="_blank"
+		class="btn btn-square btn-sm"
+		use:tip={{ content: 'Exporter le secteur en PDF' }}
+	>
+		<FileDownIcon size={20} opacity={0.7} />
 	</a>
 	<TeamStateMenu {team} canEdit={team.isLeader} />
 {/snippet}

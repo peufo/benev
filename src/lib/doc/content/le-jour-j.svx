@@ -21,6 +21,10 @@ quel état, et la présence.
 
 Filtre sur « secteur : bar » et « samedi », et tu sors l'équipe du bar du samedi.
 
+Sans passer par un filtre, la page d'un secteur sort aussi le **PDF du secteur** : chaque créneau,
+avec ses inscrit·es et leur téléphone, les demandes en attente signalées. De quoi l'afficher au
+stand ou le glisser dans la poche de son ou sa responsable.
+
 ## Imprimer les badges {#impressions}
 
 Tes [modèles de badge](/docs/configuration-avancee#badges) se dessinent à l'avance. Le jour venu, il
