@@ -7,7 +7,7 @@
 	import { enhanceForm } from '$lib/enhanceForm'
 
 	interface Props {
-		event: Event & { owner: { firstName: string } }
+		event: Event & { owner: { firstName: string; lastName: string } }
 		isOwner: boolean
 	}
 
@@ -27,8 +27,8 @@
 	function handleClickState(e: MouseEvent | KeyboardEvent) {
 		if (!page.data.userIsRoot && !page.data.member?.roles.includes('owner')) {
 			e.preventDefault()
-			const owner = `${page.data.member?.firstName} ${page.data.member?.lastName}`
-			toast.warning(`Seul le propriétaire, ${owner}, peut changer le status de cet évènement`)
+			const owner = `${event.owner.firstName} ${event.owner.lastName}`
+			toast.warning(`Seul ${owner}, propriétaire de l'évènement, peut changer son statut`)
 		}
 	}
 	const StateIcon = $derived(EVENT_STATES[event.state].icon)

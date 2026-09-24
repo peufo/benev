@@ -58,6 +58,7 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 				owner: {
 					select: {
 						firstName: true,
+						lastName: true,
 					},
 				},
 				memberFields: {
