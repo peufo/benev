@@ -1,23 +1,19 @@
 import { expect, type Page } from '@playwright/test'
 import cuid from '@paralleldrive/cuid2'
-import { PrismaClient } from '@prisma/client'
+import { verifyEmail } from './seed'
+import { gotoHydrated } from './hydrated'
 
 /**
- * La suite tourne avec `EMAIL_DISABLED`: `sendEmail` rend la main avant d'écrire quoi que ce soit,
- * et aucun lien de vérification n'est lisible depuis le navigateur. La seule façon d'obtenir une
- * adresse vérifiée — ce qu'exige désormais la reprise d'une fiche invitée — est de poser le
- * drapeau en base, sur la même que celle du serveur previewé.
+ * Le compte créé par le formulaire, pour les seuls tests qui portent sur l'inscription elle-même.
+ * Partout ailleurs, `seedUser` et `signIn` de `./seed` ouvrent la session sans y passer.
  */
-const prisma = new PrismaClient()
-
-/** `email` fixe l'adresse: celle de `ROOT_USER` dans `playwright.config.ts`, pour les pages root. */
-export function useUser(name: string, fixedEmail?: string) {
+export function useUser(name: string) {
 	// domaine .test (RFC 2606): jamais routable, aucun mail ne peut y arriver
-	const email = fixedEmail ?? `${name.toLowerCase()}-${cuid.createId()}@benevio.test`
+	const email = `${name.toLowerCase()}-${cuid.createId()}@benevio.test`
 	const password = '12341234'
 
 	async function register(page: Page) {
-		await page.goto('/auth')
+		await gotoHydrated(page, '/auth')
 		await page.getByRole('button', { name: 'Créer un compte' }).click()
 		await page.getByLabel('Prénom').fill(name)
 		await page.getByLabel('Nom', { exact: true }).fill('The Tester')
@@ -36,54 +32,20 @@ export function useUser(name: string, fixedEmail?: string) {
 		email,
 		register,
 		async login(page: Page) {
-			await page.goto('/auth')
+			await gotoHydrated(page, '/auth')
 			await page.getByLabel('Email').fill(email)
 			await page.getByLabel('Mot de passe').fill(password)
 			await page.getByRole('button', { name: 'Se connecter' }).click()
 			await page.waitForURL('**/me/events')
 		},
-		/** Pour une adresse fixe, qui survit d'une exécution de la suite à la suivante. */
-		async loginOrRegister(page: Page) {
-			await page.goto('/auth')
-			await page.getByLabel('Email').fill(email)
-			await page.getByLabel('Mot de passe').fill(password)
-			await page.getByRole('button', { name: 'Se connecter' }).click()
-			const connected = await page.waitForURL('**/me/events', { timeout: 5_000 }).then(
-				() => true,
-				() => false
-			)
-			if (!connected) await register(page)
-		},
 		async expectConnected(page: Page) {
 			await expect(page.getByRole('heading', { name: 'Mes évènements' })).toBeVisible()
 		},
 		/**
-		 * Ce que ferait le clic sur le lien reçu par email. La recopie sur les `Member` est faite à
-		 * la main: le client d'ici n'est pas celui, étendu, de `$lib/server/prisma.ts`.
+		 * La suite tourne avec `EMAIL_DISABLED`: aucun lien de vérification n'est lisible depuis le
+		 * navigateur, et la reprise d'une fiche invitée exige pourtant une adresse prouvée.
 		 */
-		async verifyEmail(page?: Page) {
-			await prisma.user.update({ where: { email }, data: { isEmailVerified: true } })
-			await prisma.member.updateMany({ where: { email }, data: { isEmailVerified: true } })
-			if (page) await page.reload()
-		},
-
-		/**
-		 * Le jeton que porte le lien de vérification. `EMAIL_DISABLED` interdit de le lire depuis le
-		 * navigateur: il est posé en base, avec la durée de vie que lui donne `generateToken`.
-		 */
-		async createEmailVerificationToken() {
-			const user = await prisma.user.findUniqueOrThrow({ where: { email } })
-			const id = cuid.createId()
-			await prisma.token.create({
-				data: {
-					id,
-					type: 'emailVerification',
-					expires: Date.now() + 2 * 60 * 60 * 1000,
-					userId: user.id,
-				},
-			})
-			return id
-		},
+		verifyEmail: () => verifyEmail({ email }),
 	}
 }
 

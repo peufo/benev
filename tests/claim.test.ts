@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
-import { useUser } from './user'
 import { useEvent } from './event'
+import { seedInvitedMember, seedUser, signIn, verifyEmail, type SeededUser } from './seed'
+import { gotoHydrated } from './hydrated'
 
 /**
  * Reprendre une fiche créée par l'organisation demande d'avoir prouvé son adresse — le jeton reçu
@@ -9,9 +10,9 @@ import { useEvent } from './event'
  * et rôles compris. L'état de l'évènement n'entre plus dans la question.
  */
 test.describe.serial("Reprise d'une fiche invitée", () => {
-	const boss = useUser('Boss')
-	const guest = useUser('Guest')
-	const event = useEvent(boss, 'Reprise')
+	const event = useEvent('Reprise')
+	/** Le compte de la personne invitée: ouvert, mais sans adresse prouvée. */
+	let guest: SeededUser
 	let page: Page
 	let guestPage: Page
 
@@ -25,22 +26,20 @@ test.describe.serial("Reprise d'une fiche invitée", () => {
 	})
 
 	test('Préparation: un évènement, une invitation, un compte non vérifié', async () => {
-		await boss.register(page)
+		await signIn(page, await seedUser('Boss'))
 		await event.create(page)
-		await guest.register(guestPage)
 
-		await page.goto(`/${event.eventId}/admin/members?form_invite=1`)
-		const dialog = page.getByRole('dialog')
-		await dialog.getByLabel('Prénom').fill('Glados')
-		// `exact`: « Prénom » contient « nom ».
-		await dialog.getByLabel('Nom', { exact: true }).fill('Aperture')
-		await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(guest.email)
-		await dialog.getByRole('button', { name: 'Valider' }).click()
-		await expect(dialog).toBeHidden()
+		guest = await seedUser('Guest', { isEmailVerified: false })
+		await signIn(guestPage, guest)
+		await seedInvitedMember(event.eventId, {
+			firstName: 'Glados',
+			lastName: 'Aperture',
+			email: guest.email,
+		})
 	})
 
 	test("Le registre propose la vérification sans attendre l'ouverture du tunnel", async () => {
-		await guestPage.goto('/me/events')
+		await gotoHydrated(guestPage, '/me/events')
 		// Un fragment plutôt que la phrase: sa fin s'accorde au nombre d'invitations.
 		await expect(guestPage.getByText('valider ton adresse email pour consulter')).toBeVisible()
 		await guestPage.getByRole('button', { name: 'Confirmer' }).click()
@@ -48,7 +47,7 @@ test.describe.serial("Reprise d'une fiche invitée", () => {
 	})
 
 	test("Sans adresse prouvée, le tunnel ne propose pas l'adhésion", async () => {
-		await guestPage.goto(`/${event.eventId}/register`)
+		await gotoHydrated(guestPage, `/${event.eventId}/register`)
 		await expect(
 			guestPage.getByRole('heading', { name: 'Confirme ton adresse email' })
 		).toBeVisible()
@@ -56,11 +55,11 @@ test.describe.serial("Reprise d'une fiche invitée", () => {
 	})
 
 	test("L'adresse vérifiée, l'adhésion reprend la fiche au lieu d'en créer une seconde", async () => {
-		await guest.verifyEmail()
-		await guestPage.goto('/me/events')
+		await verifyEmail(guest)
+		await gotoHydrated(guestPage, '/me/events')
 		await expect(guestPage.getByText('valider ton adresse email pour consulter')).toHaveCount(0)
 
-		await guestPage.goto(`/${event.eventId}/register`)
+		await gotoHydrated(guestPage, `/${event.eventId}/register`)
 		const accept = guestPage.getByRole('button', { name: 'Oui je le veux !' })
 		await expect(accept).toBeVisible()
 		await accept.click()
@@ -68,7 +67,7 @@ test.describe.serial("Reprise d'une fiche invitée", () => {
 
 		// La liaison recopie les coordonnées du compte sur la fiche: le nom posé par
 		// l'organisation disparaît. S'il restait, c'est qu'un second membre aurait été créé.
-		await page.goto(`/${event.eventId}/admin/members`)
+		await gotoHydrated(page, `/${event.eventId}/admin/members`)
 		await expect(page.getByRole('link', { name: /Guest The Tester/ })).toHaveCount(1)
 		await expect(page.getByRole('link', { name: /Glados Aperture/ })).toHaveCount(0)
 	})

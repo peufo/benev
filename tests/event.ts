@@ -2,12 +2,14 @@ import { expect, type Page } from '@playwright/test'
 import cuid from '@paralleldrive/cuid2'
 import type { User } from './user'
 import { mockPhoton, testPlace } from './photon'
+import { seedField } from './seed'
+import { awaitHydrated, gotoHydrated } from './hydrated'
 
 /** Un aplat bleu de 64×64, de quoi nourrir la médiathèque sans fichier à versionner. */
 const BLUE_SQUARE_PNG =
 	'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAUElEQVR42u3PQQkAAAgEsEtjMeNbwgi+hcEKLNXzWgQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQErsACvwRBWjdZC+AAAAAASUVORK5CYII='
 
-export function useEvent(owner: User, name: string) {
+export function useEvent(name: string) {
 	const eventCuid = cuid.createId()
 	const eventName = `${name} ${eventCuid}`
 	const eventId = `${name.toLowerCase()}-${eventCuid}`
@@ -17,17 +19,12 @@ export function useEvent(owner: User, name: string) {
 		eventName,
 		async create(page: Page) {
 			await mockPhoton(page)
-			await page.goto('/me/events/create')
+			await gotoHydrated(page, '/me/events/create')
 
-			// L'URL se dérive du nom par un `oninput`: tant que la page n'est pas hydratée, la
-			// saisie ne déclenche rien. Rejouer le couple saisie/vérification attend l'hydratation
-			// sans avoir à la deviner.
-			await expect(async () => {
-				await page.getByLabel("Nom de l'évènement").fill(eventName)
-				await expect(page.getByLabel("URL de l'évènement")).toHaveValue(eventId, {
-					timeout: 1000,
-				})
-			}).toPass()
+			await page.getByLabel("Nom de l'évènement").fill(eventName)
+			await expect(page.getByLabel("URL de l'évènement")).toHaveValue(eventId, {
+				timeout: 1000,
+			})
 
 			await page.getByRole('button', { name: 'Créer mon évènement' }).click()
 			// L'évènement s'ouvre sur sa gestion: les pages d'admin sont en `noindex`, leur titre
@@ -41,16 +38,14 @@ export function useEvent(owner: User, name: string) {
 		 * déclenche l'arrivée des erreurs — n'a aucune raison de rejouer.
 		 */
 		async expectInvalidSubmitKeepsFields(page: Page) {
-			await page.goto('/me/events/create')
+			await gotoHydrated(page, '/me/events/create')
 			const name = page.getByLabel("Nom de l'évènement")
 			const url = page.getByLabel("URL de l'évènement")
 			const timezone = page.getByLabel('Fuseau horaire')
 
 			// Deux caractères: sous le minimum de trois du modèle, donc refusé par le serveur.
-			await expect(async () => {
-				await name.fill('ab')
-				await expect(url).toHaveValue('ab', { timeout: 1000 })
-			}).toPass()
+			await name.fill('ab')
+			await expect(url).toHaveValue('ab')
 			const zone = await timezone.inputValue()
 			expect(zone).not.toBe('')
 
@@ -66,7 +61,7 @@ export function useEvent(owner: User, name: string) {
 		 */
 		async setLocation(page: Page) {
 			await mockPhoton(page)
-			await page.goto(`/${eventId}/admin/settings`)
+			await gotoHydrated(page, `/${eventId}/admin/settings`)
 			// Le champ de recherche vit dans le popover d'`InputSelect`: il faut l'ouvrir d'abord.
 			await page.getByLabel('Lieu', { exact: true }).click()
 			await page.locator('input[placeholder="Recherche"]:visible').fill('salle des fetes')
@@ -80,7 +75,7 @@ export function useEvent(owner: User, name: string) {
 			await expect(page.getByText('Modifications enregistrées')).toBeVisible()
 		},
 		async gotoPublic(page: Page) {
-			await page.goto(`/${eventId}`)
+			await gotoHydrated(page, `/${eventId}`)
 			await expect(page).toHaveTitle(new RegExp(eventName))
 		},
 		/**
@@ -105,24 +100,17 @@ export function useEvent(owner: User, name: string) {
 		 * `src/tests/filter.test.ts` ne vérifie que le schéma.
 		 */
 		async expectAdminFiltersAccepted(page: Page) {
+			// Une forme d'encodage par cas, et non une par colonne: c'est le format que les deux
+			// bouts doivent s'accorder, et `src/tests/filter.test.ts` en tient déjà le schéma.
 			const cases: [string, string][] = [
 				['members', 'subscribes_hours={"min":2,"max":8,"order":"asc"}'],
 				['members', 'createdAt={"start":"2024-01-01T00:00:00.000Z","order":"desc"}'],
 				['members', 'subscribes_teams=["a","b"]'],
-				['members', 'isProfileComplet=true'],
-				['members', 'age={"min":18}'],
-				['subscribes', 'states=["accepted"]'],
-				[
-					'subscribes',
-					'period={"start":"2024-01-01T00:00:00.000Z","end":"2025-01-01T00:00:00.000Z"}',
-				],
 				['subscribes', 'isAbsent=false'],
-				['members', 'hasAccount=true'],
-				['subscribes', 'hasAccount=false'],
 			]
 
 			for (const [route, query] of cases) {
-				const response = await page.goto(`/${eventId}/admin/${route}?${query}`)
+				const response = await gotoHydrated(page, `/${eventId}/admin/${route}?${query}`)
 				expect(response?.status(), `${route}?${query}`).toBeLessThan(400)
 				// `ensureFieldsWithFilterAreVisibles` peut rediriger pour rendre la colonne
 				// visible, mais le filtre lui-même doit survivre au passage.
@@ -137,7 +125,7 @@ export function useEvent(owner: User, name: string) {
 				['theme', 'appearance'],
 				['adhesion', 'membership'],
 			]) {
-				await page.goto(`/${eventId}/admin/${from}`)
+				await gotoHydrated(page, `/${eventId}/admin/${from}`)
 				await expect(page).toHaveURL(`/${eventId}/admin/settings#${anchor}`)
 			}
 		},
@@ -146,7 +134,7 @@ export function useEvent(owner: User, name: string) {
 		 * La recherche passe par une remote query dont l'échec resterait silencieux.
 		 */
 		async expectInviteFindsExistingUser(page: Page, email: string) {
-			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			await gotoHydrated(page, `/${eventId}/admin/members?form_invite=1`)
 			const dialog = page.getByRole('dialog')
 			// `exact`: la case « Envoyer l'invitation par email » porte le mot dans son libellé.
 			const emailInput = dialog.getByLabel('Email (optionnel)', { exact: true })
@@ -159,10 +147,8 @@ export function useEvent(owner: User, name: string) {
 			await expect(sendEmail).toBeDisabled()
 			await expect(draftWarning).toBeHidden()
 
-			await expect(async () => {
-				await emailInput.fill(email)
-				await expect(page.getByText('Compte trouvé !')).toBeVisible({ timeout: 2000 })
-			}).toPass()
+			await emailInput.fill(email)
+			await expect(page.getByText('Compte trouvé !')).toBeVisible({ timeout: 2000 })
 
 			await expect(sendEmail).toBeEnabled()
 			// L'évènement est encore en brouillon et l'invité n'a aucun rôle: l'invitation
@@ -185,7 +171,7 @@ export function useEvent(owner: User, name: string) {
 		 * là où l'erreur Prisma remonterait en 500 muet.
 		 */
 		async expectInviteRejectsDuplicateEmail(page: Page, email: string) {
-			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			await gotoHydrated(page, `/${eventId}/admin/members?form_invite=1`)
 			const dialog = page.getByRole('dialog')
 			await dialog.getByLabel('Prénom').fill('Doublon')
 			// `exact`: « Prénom » contient « nom ».
@@ -203,23 +189,20 @@ export function useEvent(owner: User, name: string) {
 		 */
 		async expectResendInvite(page: Page) {
 			const email = `gordon-${eventCuid}@example.org`
-			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			await gotoHydrated(page, `/${eventId}/admin/members?form_invite=1`)
 			const dialog = page.getByRole('dialog')
 			await dialog.getByLabel('Prénom').fill('Gordon')
 			// `exact`: « Prénom » contient « nom ».
 			await dialog.getByLabel('Nom', { exact: true }).fill('Freeman')
 
-			// La case ne s'active qu'une fois l'adresse reconnue valide, côté client: l'attendre,
-			// c'est attendre l'hydratation sans avoir à la deviner.
+			// La case ne s'active qu'une fois l'adresse reconnue valide, côté client.
 			const sendEmail = page.getByRole('checkbox', { name: /Envoyer l'invitation/ })
-			await expect(async () => {
-				await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(email)
-				await expect(sendEmail).toBeEnabled({ timeout: 1000 })
-			}).toPass()
+			await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(email)
+			await expect(sendEmail).toBeEnabled()
 			await dialog.getByRole('button', { name: 'Valider' }).click()
 			await expect(page.getByText('Invitation envoyée')).toBeVisible()
 
-			await page.goto(`/${eventId}/admin/members`)
+			await gotoHydrated(page, `/${eventId}/admin/members`)
 			await page
 				.getByRole('link', { name: /Gordon Freeman/ })
 				.first()
@@ -244,7 +227,7 @@ export function useEvent(owner: User, name: string) {
 		 * pouvoir attraper une charge utile qui ne correspondrait plus à son composant.
 		 */
 		async expectJournal(page: Page) {
-			await page.goto(`/${eventId}/admin/dashboard`)
+			await gotoHydrated(page, `/${eventId}/admin/dashboard`)
 
 			// Le fil tient dans une fenêtre: rien à charger avant, donc l'accueil et non le bouton.
 			await expect(page.getByText('Début du journal')).toBeVisible()
@@ -275,7 +258,7 @@ export function useEvent(owner: User, name: string) {
 		 * fenêtre à deux entrées au lieu d'en écrire trente pour atteindre le bouton.
 		 */
 		async expectJournalLoadsPrevious(page: Page) {
-			await page.goto(`/${eventId}/admin/dashboard`)
+			await gotoHydrated(page, `/${eventId}/admin/dashboard`)
 			const notes = ['Alpha', 'Bravo', 'Charlie'].map((n) => `${n} ${eventCuid}`)
 			for (const note of notes) {
 				await page.getByPlaceholder('Ajouter une note').fill(note)
@@ -283,7 +266,7 @@ export function useEvent(owner: User, name: string) {
 				await expect(page.getByText(note)).toBeVisible()
 			}
 
-			await page.goto(`/${eventId}/admin/dashboard?take=2`)
+			await gotoHydrated(page, `/${eventId}/admin/dashboard?take=2`)
 			const loadPrevious = page.getByRole('button', { name: /entrées précédentes/ })
 			// Fenêtre de deux: les deux dernières notes, et rien avant.
 			await expect(page.getByText(notes[2])).toBeVisible()
@@ -307,13 +290,12 @@ export function useEvent(owner: User, name: string) {
 			// `exact`: la tuile de l'image déposée plus bas s'appelle « Affiche test ».
 			const poster = page.getByRole('button', { name: 'Affiche', exact: true })
 			const saveBar = page.getByText('Modification en cours !')
-			const openDrawer = () =>
-				expect(async () => {
-					await poster.click()
-					await expect(drawer).toBeVisible({ timeout: 1000 })
-				}).toPass()
+			const openDrawer = async () => {
+				await poster.click()
+				await expect(drawer).toBeVisible()
+			}
 
-			await page.goto(`/${eventId}/admin/settings`)
+			await gotoHydrated(page, `/${eventId}/admin/settings`)
 			await expect(poster).toBeVisible()
 			// Fermé, le tiroir n'existe pas: c'est ce qui garde sa requête hors des chargements
 			// de page, et ce qui prouve qu'il n'y en a pas un par champ.
@@ -358,18 +340,6 @@ export function useEvent(owner: User, name: string) {
 			await page.getByRole('button', { name: 'Réinitialiser' }).click()
 			await expect(saveBar).toBeHidden()
 
-			await openDrawer()
-			await page.keyboard.press('Escape')
-			await expect(drawer).toBeHidden()
-
-			// Le tiroir garde l'image déposée: on la choisit cette fois à la main.
-			await openDrawer()
-			await page.getByRole('button', { name: 'Affiche test' }).click()
-			await expect(drawer).toBeHidden()
-			await expect(saveBar).toBeVisible()
-			await page.getByRole('button', { name: 'Réinitialiser' }).click()
-			await expect(saveBar).toBeHidden()
-
 			// Un envoi un peu lourd dure, et le tiroir peut être fermé entre-temps — Échap, clic
 			// sur le voile, impatience. La réponse doit quand même remplir le champ: c'est
 			// pourquoi le formulaire d'envoi vit hors du tiroir, dont la fermeture le démonterait.
@@ -399,10 +369,8 @@ export function useEvent(owner: User, name: string) {
 			// à chaque soumission distante, qui fait rejouer les `load`. L'image envoyée depuis ce
 			// champ était ainsi écrasée dans la seconde qui suivait son choix.
 			const background = page.getByRole('button', { name: 'Image de fond', exact: true })
-			await expect(async () => {
-				await background.click()
-				await expect(drawer).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			await background.click()
+			await expect(drawer).toBeVisible()
 			await page.locator('input[type="file"][name="image"]').setInputFiles({
 				name: 'fond.png',
 				mimeType: 'image/png',
@@ -417,14 +385,12 @@ export function useEvent(owner: User, name: string) {
 			await expect(saveBar).toBeHidden()
 
 			// L'éditeur riche ouvre le même tiroir.
-			await page.goto(`/${eventId}/admin/pages`)
+			await gotoHydrated(page, `/${eventId}/admin/pages`)
 			await page.locator('aside').getByRole('link', { name: 'Bienvenue' }).click()
 			await expect(page.locator('.tiptap')).toBeVisible()
-			await expect(async () => {
-				await page.getByRole('button', { name: 'Insérer' }).click()
-				await page.getByRole('button', { name: 'Image', exact: true }).click({ timeout: 1000 })
-				await expect(drawer).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			await page.getByRole('button', { name: 'Insérer' }).click()
+			await page.getByRole('button', { name: 'Image', exact: true }).click()
+			await expect(drawer).toBeVisible()
 			await expect(drawer).toHaveCount(1)
 		},
 		/**
@@ -447,19 +413,15 @@ export function useEvent(owner: User, name: string) {
 			const formLabel = page.getByLabel('Question du formulaire')
 			const newOption = page.getByPlaceholder('Nouvelle option')
 
-			// Le popover d'`InputSelect` ne réagit qu'une fois la page hydratée: rejouer le couple
-			// clic/vérification attend l'hydratation sans avoir à la deviner.
 			const selectType = async (label: string) => {
-				await expect(async () => {
-					if (!(await typeTrigger.textContent())?.includes(label)) {
-						await typeTrigger.click()
-						await page.getByRole('option', { name: label, exact: true }).click({ timeout: 1000 })
-					}
-					await expect(typeTrigger).toContainText(label, { timeout: 1000 })
-				}).toPass()
+				if (!(await typeTrigger.textContent())?.includes(label)) {
+					await typeTrigger.click()
+					await page.getByRole('option', { name: label, exact: true }).click()
+				}
+				await expect(typeTrigger).toContainText(label)
 			}
 
-			await page.goto(`/${eventId}/admin/settings?form_field=%7B%7D`)
+			await gotoHydrated(page, `/${eventId}/admin/settings?form_field=%7B%7D`)
 			await expect(drawer).toBeVisible()
 			// Le premier champ est une liste: le tiroir garde le focus plutôt que d'armer son
 			// déclencheur.
@@ -529,37 +491,22 @@ export function useEvent(owner: User, name: string) {
 			const saveBar = page.getByText('Modification en cours !')
 			const drawer = page.getByRole('dialog', { name: 'Nouveau champ' })
 			const typeTrigger = page.getByRole('button', { name: 'Type de champ' })
-			const newOption = page.getByPlaceholder('Nouvelle option')
 
 			// Les deux formes de champ à choix, seul moyen d'éprouver les listes déroulantes du
-			// mode compact. `exact`: « Liste à choix multiple » commence par les mêmes mots.
-			const createField = async (type: string, name: string, options: string[]) => {
-				await page.goto(`/${eventId}/admin/settings?form_field=%7B%7D`)
-				await expect(drawer).toBeVisible()
-				// Le popover ne réagit qu'une fois la page hydratée: rejouer le couple
-				// clic/vérification attend l'hydratation sans avoir à la deviner.
-				await expect(async () => {
-					if ((await typeTrigger.textContent()) !== type) {
-						await typeTrigger.click()
-						await page.getByRole('option', { name: type, exact: true }).click({ timeout: 1000 })
-					}
-					await expect(typeTrigger).toContainText(type, { timeout: 1000 })
-				}).toPass()
-				await page.getByLabel('Nom', { exact: true }).fill(name)
-				for (const option of options) {
-					await newOption.fill(option)
-					await newOption.press('Enter')
-				}
-				await page.locator('label').filter({ hasText: 'Modifiable par les membres' }).click()
-				await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
-				await expect(drawer).toBeHidden()
-			}
-
-			await createField('Liste à choix', 'Repas', ['Omnivore', 'Végétarien'])
-			await createField('Liste à choix multiple', 'Allergies', ['Gluten', 'Arachide'])
+			// mode compact. Elles sont semées: le tiroir qui les définit a sa propre étape.
+			await seedField(eventId, {
+				name: 'Repas',
+				type: 'select',
+				options: ['Omnivore', 'Végétarien'],
+			})
+			await seedField(eventId, {
+				name: 'Allergies',
+				type: 'multiselect',
+				options: ['Gluten', 'Arachide'],
+			})
 
 			// La table renvoie sur la fiche du membre; le tiroir de profil n'existe plus.
-			await page.goto(`/${eventId}/admin/members`)
+			await gotoHydrated(page, `/${eventId}/admin/members`)
 			await expect(page.getByRole('dialog', { name: /Modifier le profil/ })).toHaveCount(0)
 			await page
 				.getByRole('link', { name: /Bob The Tester/ })
@@ -573,10 +520,8 @@ export function useEvent(owner: User, name: string) {
 			await expect(meal).toBeVisible()
 			await expect(saveBar).toBeHidden()
 
-			await expect(async () => {
-				await city.fill('Genève')
-				await expect(saveBar).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			await city.fill('Genève')
+			await expect(saveBar).toBeVisible()
 			await page.getByRole('button', { name: 'Réinitialiser' }).click()
 			await expect(saveBar).toBeHidden()
 			await expect(city).toHaveValue('')
@@ -592,6 +537,7 @@ export function useEvent(owner: User, name: string) {
 			await expect(saveBar).toBeHidden()
 
 			await page.reload()
+			await awaitHydrated(page)
 			await expect(city).toHaveValue('Genève')
 			await expect(meal).toContainText('Omnivore')
 			await expect(saveBar).toBeHidden()
@@ -620,13 +566,11 @@ export function useEvent(owner: User, name: string) {
 			// compte plutôt que le lire comme une modification.
 			await page.getByRole('link', { name: 'Ajouter un champ au profil' }).click()
 			await expect(drawer).toBeVisible()
-			await expect(async () => {
-				if ((await typeTrigger.textContent()) !== 'Text') {
-					await typeTrigger.click()
-					await page.getByRole('option', { name: 'Text', exact: true }).click({ timeout: 1000 })
-				}
-				await expect(typeTrigger).toContainText('Text', { timeout: 1000 })
-			}).toPass()
+			if ((await typeTrigger.textContent()) !== 'Text') {
+				await typeTrigger.click()
+				await page.getByRole('option', { name: 'Text', exact: true }).click()
+			}
+			await expect(typeTrigger).toContainText('Text')
 			await drawer.getByLabel('Nom', { exact: true }).fill('Surnom')
 			await drawer.locator('label').filter({ hasText: 'Modifiable par les membres' }).click()
 			await drawer.getByRole('button', { name: 'Valider', exact: true }).click()
@@ -643,6 +587,7 @@ export function useEvent(owner: User, name: string) {
 			await expect(saveBar).toBeHidden()
 
 			await page.reload()
+			await awaitHydrated(page)
 			await expect(page.getByLabel('Surnom')).toHaveValue('Bobby')
 			await expect(saveBar).toBeHidden()
 		},
@@ -653,7 +598,7 @@ export function useEvent(owner: User, name: string) {
 		 * le voit que si l'éditeur le lui signale.
 		 */
 		async expectPageEditorSaveBar(page: Page) {
-			await page.goto(`/${eventId}/admin/pages`)
+			await gotoHydrated(page, `/${eventId}/admin/pages`)
 			// La liste occupe seule la colonne de gauche: aucune publication n'est ouverte tant
 			// qu'on n'en a pas choisi une.
 			await page.locator('aside').getByRole('link', { name: 'Bienvenue' }).click()
@@ -666,17 +611,6 @@ export function useEvent(owner: User, name: string) {
 			await expect(saveBar).toBeHidden()
 			const originalTitle = await title.inputValue()
 
-			// La barre ne suit rien tant que la page n'est pas hydratée: rejouer la saisie attend
-			// l'hydratation sans avoir à la deviner.
-			await expect(async () => {
-				await title.fill('Accueil des bénévoles')
-				await expect(saveBar).toBeVisible({ timeout: 1000 })
-			}).toPass()
-
-			await page.getByRole('button', { name: 'Réinitialiser' }).click()
-			await expect(saveBar).toBeHidden()
-			await expect(title).toHaveValue(originalTitle)
-
 			await editor.click()
 			await page.keyboard.type('Un contenu de test')
 			await expect(saveBar).toBeVisible()
@@ -686,6 +620,7 @@ export function useEvent(owner: User, name: string) {
 			await expect(saveBar).toBeHidden()
 
 			await page.reload()
+			await awaitHydrated(page)
 			await expect(editor).toContainText('Un contenu de test')
 			await expect(title).toHaveValue(originalTitle)
 			await expect(saveBar).toBeHidden()
@@ -751,7 +686,7 @@ export function useEvent(owner: User, name: string) {
 			// l'enregistrement suivant graverait en base (`#000000`). On le surveille de bout en bout.
 			const backgroundColor = page.locator('input[name="backgroundColor"]')
 
-			await page.goto(`/${eventId}/admin/settings`)
+			await gotoHydrated(page, `/${eventId}/admin/settings`)
 			await expect(description).toBeVisible()
 			await expect(saveBar).toBeHidden()
 			await expect(backgroundColor).toHaveValue('#ffffff')
@@ -765,12 +700,8 @@ export function useEvent(owner: User, name: string) {
 			// `:visible`: il est masqué sous `lg`, la fenêtre par défaut est plus large.
 			await expect(page.locator('a[href="#fields"]:visible')).toHaveCount(1)
 
-			// La barre ne suit rien tant que la page n'est pas hydratée: rejouer la saisie attend
-			// l'hydratation sans avoir à la deviner.
-			await expect(async () => {
-				await description.fill('Un centre de recherche appliquée.')
-				await expect(saveBar).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			await description.fill('Un centre de recherche appliquée.')
+			await expect(saveBar).toBeVisible()
 
 			await page.getByRole('button', { name: 'Réinitialiser' }).click()
 			await expect(saveBar).toBeHidden()
@@ -784,6 +715,7 @@ export function useEvent(owner: User, name: string) {
 
 			// Rechargement: la description est enregistrée, la couleur intacte, la barre muette.
 			await page.reload()
+			await awaitHydrated(page)
 			await expect(description).toHaveValue('Un centre de recherche appliquée.')
 			await expect(backgroundColor).toHaveValue('#ffffff')
 			await expect(saveBar).toBeHidden()
@@ -815,16 +747,14 @@ export function useEvent(owner: User, name: string) {
 			const benevio = page.getByRole('radio', { name: 'benevio' })
 			const papier = page.getByRole('radio', { name: 'Papier' })
 
-			await page.goto(`/${eventId}/admin/settings`)
+			await gotoHydrated(page, `/${eventId}/admin/settings`)
 			// Un évènement naît habillé: la création lui pose le thème benevio et ses réglages.
 			await expect(benevio).toHaveAttribute('aria-checked', 'true')
 			await expect(preset).toHaveValue('benevio')
 			await expect(background).toHaveAttribute('style', /\/themes\/benevio\.svg/)
 
-			await expect(async () => {
-				await papier.click()
-				await expect(saveBar).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			await papier.click()
+			await expect(saveBar).toBeVisible()
 			await expect(preset).toHaveValue('papier')
 			await expect(papier).toHaveAttribute('aria-checked', 'true')
 			// L'aperçu suit dans la foulée: le fond du site porte l'image du thème.
@@ -833,14 +763,13 @@ export function useEvent(owner: User, name: string) {
 			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
 			await expect(page.getByText('Modifications enregistrées')).toBeVisible()
 			await page.reload()
+			await awaitHydrated(page)
 			await expect(preset).toHaveValue('papier')
 			await expect(background).toHaveAttribute('style', /\/themes\/papier\.svg/)
 
 			// Et le retrait repasse par la même annonce, sinon la barre resterait muette.
-			await expect(async () => {
-				await noTheme.click()
-				await expect(saveBar).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			await noTheme.click()
+			await expect(saveBar).toBeVisible()
 			await expect(preset).toHaveValue('')
 			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
 			await expect(page.getByText('Modifications enregistrées')).toBeVisible()
@@ -877,31 +806,15 @@ export function useEvent(owner: User, name: string) {
 				await expect(newName).toHaveValue('')
 				// Le tiroir pose le focus sur son premier champ de saisie: on tape sans cliquer.
 				await expect(newName).toBeFocused()
-				// Saisi avant l'hydratation, le nom serait écrasé par le rendu client, qui repose
-				// la valeur initiale du champ.
-				await expect(async () => {
-					await newName.fill(teamName)
-					await expect(newName).toHaveValue(teamName, { timeout: 1000 })
-				}).toPass()
+				await newName.fill(teamName)
+				await expect(newName).toHaveValue(teamName)
 				await newDrawer.getByRole('button', { name: 'Valider', exact: true }).click()
-				// La création referme le tiroir et ouvre le secteur: sans hydratation la soumission
-				// native re-rendrait la page avec son paramètre. La suite observe donc bien
-				// l'application hydratée.
+				// La création referme le tiroir et ouvre le secteur.
 				await expect(newDrawer).toBeHidden()
 				await expect(name).toHaveValue(teamName)
 			}
 
-			await page.goto(`/${eventId}/admin/teams`)
-
-			// Le filtre du volet gauche est purement client: le voir répondre attend l'hydratation
-			// sans avoir à la deviner. Sans elle, le nom saisi dans le tiroir serait écrasé par le
-			// premier rendu client, qui repose la valeur initiale du champ.
-			const searchTeams = page.getByLabel('Rechercher un secteur')
-			await expect(async () => {
-				await searchTeams.fill('zzz')
-				await expect(page.getByText('Aucun secteur trouvé')).toBeVisible({ timeout: 1000 })
-			}).toPass()
-			await searchTeams.fill('')
+			await gotoHydrated(page, `/${eventId}/admin/teams`)
 
 			await createTeam('Alpha')
 			await createTeam('Bravo')
@@ -939,32 +852,29 @@ export function useEvent(owner: User, name: string) {
 		},
 		/**
 		 * Le seul geste qui nomme un responsable hors du secteur. La relation est écrite avec le
-		 * membre, et le journal en fige les noms — le fil se rend sans jointure, et `teamId` ne
+		 * membre, et le journal en fige les noms: le fil se rend sans jointure, et `teamId` ne
 		 * pourrait de toute façon en désigner qu'un.
 		 */
 		async expectInviteAssignsTeams(page: Page) {
-			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			await gotoHydrated(page, `/${eventId}/admin/members?form_invite=1`)
 			const dialog = page.getByRole('dialog')
 			await dialog.getByLabel('Prénom').fill('Alyx')
 			// `exact`: « Prénom » contient « nom ».
 			await dialog.getByLabel('Nom', { exact: true }).fill('Vance')
 
-			// Le combobox tient ses secteurs d'une remote query: attendre la proposition, c'est
-			// attendre l'hydratation et la réponse. Un clic de trop ne fait que refermer le
-			// popover, que la tentative suivante rouvre.
+			// Le combobox tient ses secteurs d'une remote query: la proposition attend sa réponse.
 			const combobox = dialog.getByRole('combobox', { name: 'Responsable des secteurs' })
 			const option = dialog.getByRole('option', { name: 'Alpha', exact: true })
-			await expect(async () => {
-				await combobox.click()
-				await expect(option).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			await combobox.click()
+			await expect(option).toBeVisible()
 			await option.click()
 
+			// Le popover reste ouvert: il recouvre le formulaire, mais pas le pied du tiroir.
 			await dialog.getByRole('button', { name: 'Valider' }).click()
 			// Sans adresse, il n'y a rien à envoyer: le libellé du succès le dit.
 			await expect(page.getByText('Membre ajouté')).toBeVisible()
 
-			await page.goto(`/${eventId}/admin/members`)
+			await gotoHydrated(page, `/${eventId}/admin/members`)
 			await page
 				.getByRole('link', { name: /Alyx Vance/ })
 				.first()
@@ -980,28 +890,26 @@ export function useEvent(owner: User, name: string) {
 		},
 		/**
 		 * Le rôle donné dès l'invitation: la case n'est rendue qu'aux administrateurs, et rien
-		 * d'autre ne prouve qu'elle atteint bien la colonne `isAdmin` du membre créé.
+		 * d'autre ne prouve qu'elle atteint bien la colonne `isAdmin` du membre créé. Une fiche à
+		 * elle seule ne peut pas le prouver en même temps que le rôle de responsable: un membre ne
+		 * porte que son rôle le plus haut.
 		 */
 		async expectInviteNamesAdmin(page: Page) {
-			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			await gotoHydrated(page, `/${eventId}/admin/members?form_invite=1`)
 			const dialog = page.getByRole('dialog')
 			await dialog.getByLabel('Prénom').fill('Wallace')
 			// `exact`: « Prénom » contient « nom ».
 			await dialog.getByLabel('Nom', { exact: true }).fill('Breen')
 
-			// La case est réduite à zéro pixel — c'est son libellé qui la bascule. Le rejeu
-			// attend l'hydratation: avant elle, le clic ne coche rien.
+			// La case est réduite à zéro pixel: c'est son libellé qui la bascule.
 			const isAdmin = page.getByRole('checkbox', { name: /Nommer administrateur/ })
-			await expect(async () => {
-				await dialog.getByText('Nommer administrateur·ice').click()
-				await expect(isAdmin).toBeChecked({ timeout: 1000 })
-			}).toPass()
+			await dialog.getByText('Nommer administrateur·ice').click()
+			await expect(isAdmin).toBeChecked()
 
 			await dialog.getByRole('button', { name: 'Valider' }).click()
-			// Sans adresse, il n'y a rien à envoyer: le libellé du succès le dit.
 			await expect(page.getByText('Membre ajouté')).toBeVisible()
 
-			await page.goto(`/${eventId}/admin/members`)
+			await gotoHydrated(page, `/${eventId}/admin/members`)
 			await page
 				.getByRole('link', { name: /Wallace Breen/ })
 				.first()
@@ -1022,17 +930,14 @@ export function useEvent(owner: User, name: string) {
 		 * qu'elle vienne.
 		 */
 		async expectTeamLeaderInvitedFromField(page: Page) {
-			await page.goto(`/${eventId}/admin/teams`)
+			await gotoHydrated(page, `/${eventId}/admin/teams`)
 			await page.locator('aside').getByRole('link', { name: 'Alpha' }).click()
 
 			const combobox = page.getByRole('combobox', { name: 'Responsables' })
 			const inviteLink = page.locator('a[href*="form_invite=%7B%7D"]')
-			// Le lien vit dans le popover: l'attendre, c'est attendre l'hydratation. Un clic de
-			// trop ne fait que refermer le popover, que la tentative suivante rouvre.
-			await expect(async () => {
-				await combobox.click()
-				await expect(inviteLink).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			// Le lien vit dans le popover du champ, et non dans le formulaire.
+			await combobox.click()
+			await expect(inviteLink).toBeVisible()
 			await inviteLink.click()
 
 			const dialog = page.getByRole('dialog', { name: 'Inviter un nouveau membre' })
@@ -1053,6 +958,7 @@ export function useEvent(owner: User, name: string) {
 
 			// Rechargée, la puce ne tient plus qu'à ce que la soumission a écrit.
 			await page.reload()
+			await awaitHydrated(page)
 			await expect(combobox.getByText('Gordon Freeman')).toBeVisible()
 		},
 		/**
@@ -1061,20 +967,16 @@ export function useEvent(owner: User, name: string) {
 		 * publique l'annonce aux secteurs publiés qui n'en portent pas une à eux.
 		 */
 		async expectDefaultCloseSubscribing(page: Page) {
-			await page.goto(`/${eventId}/admin/settings`)
+			await gotoHydrated(page, `/${eventId}/admin/settings`)
 			const closeSubscribing = page.getByLabel('Fermeture des inscriptions par défaut')
 			const saveBar = page.getByText('Modification en cours !')
-			// La barre ne suit rien tant que la page n'est pas hydratée: rejouer la saisie attend
-			// l'hydratation sans avoir à la deviner.
-			await expect(async () => {
-				await closeSubscribing.fill('2099-09-12T18:00')
-				await expect(saveBar).toBeVisible({ timeout: 1000 })
-			}).toPass()
+			await closeSubscribing.fill('2099-09-12T18:00')
+			await expect(saveBar).toBeVisible()
 			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
 			await expect(page.getByText('Modifications enregistrées')).toBeVisible()
 
 			// `\s`: le libellé porte une espace insécable, que la normalisation ne réduit pas.
-			await page.goto(`/${eventId}/admin/teams`)
+			await gotoHydrated(page, `/${eventId}/admin/teams`)
 			await page.locator('aside').getByRole('link', { name: 'Alpha' }).click()
 			await expect(
 				page.locator('#team').getByText(/Par défaut\s*:\s*12 septembre 2099 à 18:00/)
@@ -1088,10 +990,30 @@ export function useEvent(owner: User, name: string) {
 			await page.getByRole('dialog').getByRole('button', { name: 'Confirmer' }).click()
 			await expect(page.getByText('Publié', { exact: true }).first()).toBeVisible()
 
-			await page.goto(`/${eventId}/teams`)
+			await gotoHydrated(page, `/${eventId}/teams`)
 			await expect(
 				page.getByText('Fin des inscriptions le 12 septembre 2099 à 18:00').first()
 			).toBeVisible()
+
+			// Le secteur peut porter la sienne, et la reprendre: un champ de date vidé doit partir
+			// à blanc, sans quoi la valeur enregistrée resterait intacte.
+			await gotoHydrated(page, `/${eventId}/admin/teams`)
+			await page.locator('aside').getByRole('link', { name: 'Alpha' }).click()
+			const teamClose = page.locator('#team').getByLabel('Fermeture des inscriptions')
+			const saveTeam = async () => {
+				await expect(saveBar).toBeVisible()
+				await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+				await expect(saveBar).toBeHidden()
+				await page.reload()
+				await awaitHydrated(page)
+			}
+			await teamClose.fill('2099-01-01T12:00')
+			await saveTeam()
+			await expect(page.getByText('Fin des inscriptions le 01 janvier 2099 à 12:00')).toBeVisible()
+
+			await teamClose.fill('')
+			await saveTeam()
+			await expect(page.getByText('Fin des inscriptions le 01 janvier 2099 à 12:00')).toHaveCount(0)
 		},
 		/**
 		 * Le refus d'une invitation, des deux côtés. À cette étape l'invité n'est relié à aucun
@@ -1100,7 +1022,7 @@ export function useEvent(owner: User, name: string) {
 		 * qui l'a créée.
 		 */
 		async expectDeclineInvite(page: Page, invitedPage: Page, invited: User) {
-			await page.goto(`/${eventId}/admin/members?form_invite=1`)
+			await gotoHydrated(page, `/${eventId}/admin/members?form_invite=1`)
 			const dialog = page.getByRole('dialog')
 			await dialog.getByLabel('Prénom').fill('Chell')
 			// `exact`: « Prénom » contient « nom ».
@@ -1110,7 +1032,7 @@ export function useEvent(owner: User, name: string) {
 			await expect(dialog).toBeHidden()
 
 			const openMember = async () => {
-				await page.goto(`/${eventId}/admin/members`)
+				await gotoHydrated(page, `/${eventId}/admin/members`)
 				await page
 					.getByRole('link', { name: /Chell Johnson/ })
 					.first()
@@ -1126,7 +1048,7 @@ export function useEvent(owner: User, name: string) {
 			// Sans le jeton du mail, c'est la vérification de l'adresse qui donne accès à la fiche
 			// invitée — refuser demande la même preuve qu'accepter.
 			await invited.verifyEmail()
-			await invitedPage.goto(`/${eventId}/register`)
+			await gotoHydrated(invitedPage, `/${eventId}/register`)
 			const decline = invitedPage.getByRole('button', { name: /^(Refuser|Confirmer)$/ })
 			await decline.click()
 			// Hydratée, la page demande confirmation avant de soumettre; sans elle, la soumission

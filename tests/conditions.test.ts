@@ -1,38 +1,29 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
-import { useUser } from './user'
 import { useEvent } from './event'
+import { seedField, seedUser, signIn } from './seed'
+import { gotoHydrated } from './hydrated'
 
 /**
- * Tant que la page n'est pas hydratée, la saisie ne fait qu'écrire dans le DOM: la copie
- * réactive des conditions l'ignore, et c'est elle que le champ caché sérialise. Attendre que
- * la valeur y apparaisse est donc à la fois l'attente de l'hydratation et l'assertion utile.
+ * La copie réactive des conditions est ce que le champ caché sérialise: seule la valeur qui y
+ * apparaît prouve que la saisie l'a atteinte, et non le seul DOM.
  */
 async function fillCondition(page: Page, input: Locator, value: string, serialized: RegExp) {
 	const conditions = page.locator('input[name="conditions"]')
-	await expect(async () => {
-		await input.fill(value)
-		await expect(conditions).toHaveValue(serialized, { timeout: 1000 })
-	}).toPass()
+	await input.fill(value)
+	await expect(conditions).toHaveValue(serialized)
 }
 
-/**
- * Le menu ne s'ouvre qu'une fois la page hydratée. Rejouer le couple ouverture/choix l'attend
- * sans avoir à le deviner: tant que le choix échoue, aucune condition n'a été ajoutée, et
- * rouvrir un menu déjà ouvert ne coûte rien.
- */
+/** Ouvre le menu des conditions et en choisit une. */
 async function addCondition(page: Page, label: string) {
-	await expect(async () => {
-		await page.getByRole('button', { name: 'Ajouter une condition' }).click()
-		await page.getByRole('button', { name: label }).click({ timeout: 1000 })
-	}).toPass()
+	await page.getByRole('button', { name: 'Ajouter une condition' }).click()
+	await page.getByRole('button', { name: label }).click()
 }
 
 // Les conditions se soumettent par un input caché sérialisé depuis un `$state`: une écriture
 // non réactive ne casse rien de visible, elle se contente de ne jamais atteindre le serveur.
 // Seul un aller-retour complet le prouve.
 test.describe.serial('Conditions de secteur', () => {
-	const bob = useUser('Cond')
-	const event = useEvent(bob, 'Cond')
+	const event = useEvent('Cond')
 	let page: Page
 	let editUrl: string
 
@@ -44,28 +35,10 @@ test.describe.serial('Conditions de secteur', () => {
 	})
 
 	test('Préparation: compte, évènement, champ de profil', async () => {
-		await bob.register(page)
+		await signIn(page, await seedUser('Cond'))
 		await event.create(page)
-
-		// Le popover d'`InputSelect` ne réagit qu'une fois la page hydratée: rejouer le couple
-		// clic/vérification attend l'hydratation sans avoir à la deviner.
-		const selectFieldType = async (label: string) => {
-			const trigger = page.getByRole('button', { name: 'Type de champ' })
-			await expect(async () => {
-				if (!(await trigger.textContent())?.includes(label)) {
-					await trigger.click()
-					await page.getByRole('option', { name: label, exact: true }).click({ timeout: 1000 })
-				}
-				await expect(trigger).toContainText(label, { timeout: 1000 })
-			}).toPass()
-		}
-
-		// Champ de profil "Ville" (type Text)
-		await page.goto(`/${event.eventId}/admin/members?form_field=%7B%7D`)
-		await selectFieldType('Text')
-		await page.getByLabel('Nom', { exact: true }).fill('Ville')
-		await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
-		await expect(page.getByRole('dialog', { name: 'Nouveau champ' })).toBeHidden()
+		// Le tiroir de champ est couvert par le parcours: ici il n'est qu'un préalable.
+		await seedField(event.eventId, { name: 'Ville', type: 'string' })
 
 		// TODO: couvrir aussi une condition sur un champ à choix multiple (`InputCheckboxes`).
 	})
@@ -74,18 +47,14 @@ test.describe.serial('Conditions de secteur', () => {
 	// du secteur. Le compteur passe par une remote query, et son échec est avalé par un
 	// `console.error`: seule une valeur juste prouve qu'elle répond.
 	test('Création du secteur, puis aperçu des membres retenus', async () => {
-		await page.goto(`/${event.eventId}/admin/teams?form_team=%7B%7D`)
+		await gotoHydrated(page, `/${event.eventId}/admin/teams?form_team=%7B%7D`)
 		const drawer = page.getByRole('dialog', { name: 'Nouveau secteur' })
 		await expect(drawer).toBeVisible()
 		await expect(drawer.getByRole('button', { name: 'Ajouter une condition' })).toHaveCount(0)
 
-		// Saisi avant l'hydratation, le nom serait écrasé par le rendu client, qui repose la
-		// valeur initiale du champ.
 		const drawerName = drawer.getByLabel('Nom du secteur')
-		await expect(async () => {
-			await drawerName.fill('Secteur Cond')
-			await expect(drawerName).toHaveValue('Secteur Cond', { timeout: 1000 })
-		}).toPass()
+		await drawerName.fill('Secteur Cond')
+		await expect(drawerName).toHaveValue('Secteur Cond')
 		await drawer.getByRole('button', { name: 'Valider', exact: true }).click()
 
 		// La création referme le tiroir et ouvre le secteur, où la section des conditions attend.
@@ -121,7 +90,7 @@ test.describe.serial('Conditions de secteur', () => {
 	})
 
 	test('Réouverture: les valeurs enregistrées sont restituées', async () => {
-		await page.goto(`/${event.eventId}/admin/teams`)
+		await gotoHydrated(page, `/${event.eventId}/admin/teams`)
 		await page
 			.getByRole('link', { name: /Secteur Cond/ })
 			.first()
@@ -148,7 +117,7 @@ test.describe.serial('Conditions de secteur', () => {
 		await expect(page.getByText('Succès')).toBeVisible()
 
 		// Rechargement complet: l'état du `form()` repart de zéro, les valeurs viennent du serveur.
-		await page.goto(editUrl)
+		await gotoHydrated(page, editUrl)
 		await expect(page.getByLabel('Âge minimum')).toHaveValue('25')
 		await expect(page.getByLabel('Valeur')).toHaveValue('Paris')
 	})

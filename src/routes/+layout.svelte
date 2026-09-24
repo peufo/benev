@@ -17,6 +17,12 @@
 
 	let siteUrl = $derived($page.url.origin)
 
+	// Les tests E2E attendent ce marqueur au lieu de rejouer un geste jusqu'à ce qu'il porte:
+	// avant l'hydratation, un clic ne déclenche rien et une saisie est écrasée par le rendu client.
+	$effect(() => {
+		document.documentElement.dataset.hydrated = ''
+	})
+
 	/**
 	 * Unique point de rendu des metas du site : `MetaTags` écrit dans `<svelte:head>` sans
 	 * dédoublonner, donc deux instances empilées produiraient des balises en double.

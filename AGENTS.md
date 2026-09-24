@@ -655,9 +655,29 @@ from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. L
 ### E2E Tests (Playwright)
 
 - Config: `playwright.config.ts`; test directory `tests/`.
-- Fixtures: `tests/user.ts`, `tests/event.ts`, `tests/test.ts`, `tests/photon.ts` — they create
-  isolated users and events with unique CUIDs.
 - The config builds and previews the app on port 4173 with `EMAIL_DISABLED=true` before running.
+- Fixtures: `tests/seed.ts`, `tests/hydrated.ts`, `tests/event.ts`, `tests/user.ts`,
+  `tests/photon.ts`. Chaque test bâtit son monde avec des CUID uniques.
+- `--workers=1` est la seule mesure qui vaille: c'est ce que fait la CI, et la parallélisation
+  locale masque les régressions de durée en ajoutant ses propres échecs.
+
+**Ce qui se sème et ce qui se clique.** `tests/seed.ts` écrit en base, sur le `PrismaClient` brut,
+tout ce qui n'est qu'un préalable: comptes (`seedUser`), sessions (`signIn`, qui pose le cookie
+`auth_session` sans passer par le formulaire), membres, secteurs, créneaux, champs de profil. Ce
+client n'est **pas** celui, étendu, de `$lib/server/prisma.ts`: la recopie des coordonnées du
+`User` sur ses `Member` et la synchronisation des dates de l'évènement n'ont pas lieu, et ce qui
+en dépend est posé à la main. **L'évènement, lui, se crée toujours par l'interface**
+(`useEvent().create`): c'est la seule entité à contenu dérivé (pages par défaut, modèles d'e-mail,
+thème). `useUser().register()` ne sert plus qu'aux tests qui portent sur l'inscription elle-même.
+
+Un geste qui n'est le sujet d'aucune assertion se sème. Un geste qui écrit une ligne de journal
+qu'on va lire, ou dont l'aller-retour est le contrat du test, se clique.
+
+**Attendre l'hydratation, jamais la deviner.** Le layout racine pose
+`document.documentElement.dataset.hydrated` dans un `$effect`, et `gotoHydrated(page, url)` /
+`awaitHydrated(page)` de `tests/hydrated.ts` l'attendent. Avant ce marqueur, un clic ne déclenche
+rien et une saisie est écrasée par le premier rendu client. Tout `goto` et tout `reload` passe par
+là; aucun geste ne se rejoue dans un `expect(...).toPass()` pour attendre que la page réponde.
 
 ### CI and Deployment
 

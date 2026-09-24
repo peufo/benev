@@ -1,9 +1,10 @@
 import { expect, test, type Page } from '@playwright/test'
 import { useUser } from './user'
 import { useEvent } from './event'
+import { gotoHydrated } from './hydrated'
 
 test('Page vitrine', async ({ page }) => {
-	await page.goto('/')
+	await gotoHydrated(page, '/')
 	await expect(page).toHaveTitle(/benevio/i)
 	await expect(page.getByRole('heading', { name: /Laisse tes bénévoles faire/i })).toBeVisible()
 })
@@ -11,7 +12,7 @@ test('Page vitrine', async ({ page }) => {
 // serial + page partagée: la session doit survivre d'une étape à l'autre
 test.describe.serial("Parcours d'un organisateur", () => {
 	const bob = useUser('Bob')
-	const event = useEvent(bob, 'Aperture')
+	const event = useEvent('Aperture')
 	let page: Page
 
 	test.beforeAll(async ({ browser }) => {
@@ -106,18 +107,18 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		await event.expectResendInvite(page)
 	})
 
+	test('Un responsable invité depuis le secteur ouvre la barre de sauvegarde', async () => {
+		await event.expectTeamLeaderInvitedFromField(page)
+	})
+
 	// Après les secteurs, qui n'existent qu'à partir de là, et après le journal, dont la fenêtre
 	// de trente entrées déborderait de ce que ce parcours y ajoute.
 	test("L'invitation confie des secteurs dès la création du membre", async () => {
 		await event.expectInviteAssignsTeams(page)
 	})
 
-	test('Un responsable invité depuis le secteur ouvre la barre de sauvegarde', async () => {
-		await event.expectTeamLeaderInvitedFromField(page)
-	})
-
-	// En dernier: le membre créé ici est administrateur, ce que les badges de rôle des étapes
-	// précédentes ne s'attendent pas à croiser.
+	// En dernier: le membre créé ici est administrateur, et un membre ne porte que son rôle le
+	// plus haut. Les badges de rôle des étapes précédentes ne s'attendent pas à le croiser.
 	test("L'invitation nomme un administrateur dès la création du membre", async () => {
 		await event.expectInviteNamesAdmin(page)
 	})

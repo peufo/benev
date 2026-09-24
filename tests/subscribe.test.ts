@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
-import { useUser } from './user'
 import { useEvent } from './event'
+import { seedInvitedMember, seedPeriod, seedTeam, seedUser, signIn } from './seed'
+import { awaitHydrated, gotoHydrated } from './hydrated'
 
 /**
  * Une inscription proposée par un·e responsable attend la réponse du membre, et une fiche sans
@@ -9,9 +10,9 @@ import { useEvent } from './event'
  * l'organisation à la réponse du membre.
  */
 test.describe.serial("Inscription d'une fiche invitée", () => {
-	const boss = useUser('Boss')
-	const guest = useUser('Guest')
-	const event = useEvent(boss, 'Attente')
+	const event = useEvent('Attente')
+	/** Le compte de la personne invitée, semé à la préparation. */
+	let guest: Awaited<ReturnType<typeof seedUser>>
 	let page: Page
 	let guestPage: Page
 
@@ -25,56 +26,29 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 	})
 
 	test('Préparation: un évènement publié, un secteur, un créneau, une invitation', async () => {
-		await boss.register(page)
+		await signIn(page, await seedUser('Boss'))
 		await event.create(page)
 
 		// En brouillon, l'espace bénévole n'existe pas encore: la personne invitée n'y verrait
 		// rien à trancher.
-		await page.goto(`/${event.eventId}/admin/settings`)
+		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
 		await page.getByRole('button', { name: 'Publier', exact: true }).click()
 		await expect(page.getByText('Évènement publié').first()).toBeVisible()
 
-		await page.goto(`/${event.eventId}/admin/teams`)
-		const newTeam = page.locator('a[href*="form_team=%7B%7D"]').first()
-		const teamDrawer = page.getByRole('dialog', { name: 'Nouveau secteur' })
-		// Le tiroir ne s'ouvre qu'une fois la page hydratée: rejouer le couple clic/vérification
-		// l'attend sans avoir à le deviner.
-		await expect(async () => {
-			await newTeam.click()
-			await expect(teamDrawer).toBeVisible({ timeout: 1000 })
-		}).toPass()
-		const teamName = teamDrawer.getByLabel('Nom du secteur')
-		await expect(async () => {
-			await teamName.fill('Alpha')
-			await expect(teamName).toHaveValue('Alpha', { timeout: 1000 })
-		}).toPass()
-		await teamDrawer.getByRole('button', { name: 'Valider', exact: true }).click()
-		await expect(teamDrawer).toBeHidden()
+		// Le secteur naît en brouillon, comme par le tiroir: c'est ce statut que la suite éprouve.
+		const team = await seedTeam(event.eventId, 'Alpha')
+		await seedPeriod(team.id)
 
-		// Depuis la page du secteur, le tiroir de créneau arrive avec le secteur choisi et des
-		// horaires par défaut, à venir: rien d'autre à remplir.
-		await page.getByRole('link', { name: 'Alpha' }).click()
-		const newPeriod = page.locator('a[href*="form_period"]').first()
-		const periodDrawer = page.getByRole('dialog', { name: "Création d'un créneau" })
-		await expect(async () => {
-			await newPeriod.click()
-			await expect(periodDrawer).toBeVisible({ timeout: 1000 })
-		}).toPass()
-		await periodDrawer.getByRole('button', { name: 'Ajouter' }).click()
-		await expect(periodDrawer).toBeHidden()
-
-		await page.goto(`/${event.eventId}/admin/members?form_invite=1`)
-		const invite = page.getByRole('dialog')
-		await invite.getByLabel('Prénom').fill('Glados')
-		// `exact`: « Prénom » contient « nom ».
-		await invite.getByLabel('Nom', { exact: true }).fill('Aperture')
-		await invite.getByLabel('Email (optionnel)', { exact: true }).fill(guest.email)
-		await invite.getByRole('button', { name: 'Valider' }).click()
-		await expect(invite).toBeHidden()
+		guest = await seedUser('Guest')
+		await seedInvitedMember(event.eventId, {
+			firstName: 'Glados',
+			lastName: 'Aperture',
+			email: guest.email,
+		})
 	})
 
 	test("L'organisation inscrit la fiche: la demande attend le membre", async () => {
-		await page.goto(`/${event.eventId}/admin/members`)
+		await gotoHydrated(page, `/${event.eventId}/admin/members`)
 		await page
 			.getByRole('link', { name: /Glados Aperture/ })
 			.first()
@@ -101,32 +75,51 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 	})
 
 	test('Le membre lie son compte et répond lui-même', async () => {
-		await guest.register(guestPage)
-		await guest.verifyEmail()
-		await guestPage.goto(`/${event.eventId}/register`)
+		await signIn(guestPage, guest)
+		await gotoHydrated(guestPage, `/${event.eventId}/register`)
 		const accept = guestPage.getByRole('button', { name: 'Oui je le veux !' })
 		await expect(accept).toBeVisible()
 		await accept.click()
 		await expect(accept).toBeHidden()
 
-		// Le secteur est né en brouillon: la demande préparée n'existe pas encore pour le membre.
-		await guestPage.goto(`/${event.eventId}/me`)
+		// Le secteur est né en brouillon: il ne se montre pas au membre, et la demande préparée
+		// n'existe pas encore pour lui.
+		await gotoHydrated(guestPage, `/${event.eventId}/teams`)
+		await expect(guestPage.getByText('Pas de secteur')).toBeVisible()
+		await expect(guestPage.getByText('Alpha')).toHaveCount(0)
+
+		await gotoHydrated(guestPage, `/${event.eventId}/me`)
 		const toConfirm = guestPage.getByRole('button', { name: 'à confirmer' })
 		await expect(guestPage.getByRole('heading', { name: 'Mes inscriptions' })).toBeVisible()
 		await expect(toConfirm).toHaveCount(0)
 
 		// Valider le secteur libère la demande, et le créneau apparaît au membre. C'est sans
-		// retour: la confirmation annonce le courriel qui part.
-		await page.goto(`/${event.eventId}/admin/teams`)
+		// retour: la confirmation annonce le courriel qui part et le brouillon qu'on quitte.
+		await gotoHydrated(page, `/${event.eventId}/admin/teams`)
 		await page.getByRole('link', { name: 'Alpha' }).click()
 		await page.getByRole('button', { name: 'Brouillon', exact: true }).click()
 		await page.getByRole('button', { name: 'Valider', exact: true }).click()
 		const confirmation = page.getByRole('dialog')
 		await expect(confirmation).toContainText("1 demande d'inscription partira")
+		await expect(confirmation).toContainText('ne peut pas être repassé en brouillon')
 		await confirmation.getByRole('button', { name: 'Confirmer' }).click()
 		await expect(page.getByText('Validé', { exact: true }).first()).toBeVisible()
 
+		// Et le retour en arrière n'est plus proposé nulle part dans le menu d'état.
+		await page.getByRole('button', { name: 'Validé', exact: true }).click()
+		await expect(page.getByRole('button', { name: /brouillon/i })).toHaveCount(0)
+		await page.keyboard.press('Escape')
+
+		await gotoHydrated(page, `/${event.eventId}/admin/dashboard`)
+		await expect(
+			page
+				.locator('#journal')
+				.getByRole('listitem')
+				.filter({ hasText: 'a changé le statut du secteur Alpha' })
+		).toHaveCount(1)
+
 		await guestPage.reload()
+		await awaitHydrated(guestPage)
 		await expect(toConfirm).toBeVisible()
 		await toConfirm.click()
 		await guestPage.getByRole('button', { name: 'Confirmer', exact: true }).click()
@@ -142,14 +135,12 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 
 	/** La ligne du seul créneau du secteur, qui ouvre son tiroir d'édition. */
 	async function openPeriodDrawer() {
-		await page.goto(`/${event.eventId}/admin/teams`)
+		await gotoHydrated(page, `/${event.eventId}/admin/teams`)
 		await page.getByRole('link', { name: 'Alpha' }).click()
 		const row = page.locator('[role="button"].menu-item').first()
 		const drawer = page.getByRole('dialog', { name: "Édition d'un créneau" })
-		await expect(async () => {
-			await row.click()
-			await expect(drawer).toBeVisible({ timeout: 1000 })
-		}).toPass()
+		await row.click()
+		await expect(drawer).toBeVisible()
 		return drawer
 	}
 
@@ -169,7 +160,7 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		await expect(page.getByText('Créneau mis à jour')).toBeVisible()
 		await expect(drawer).toBeHidden()
 
-		await page.goto(`/${event.eventId}/admin/dashboard`)
+		await gotoHydrated(page, `/${event.eventId}/admin/dashboard`)
 		const entries = page.locator('#journal').getByRole('listitem')
 		const moved = entries.filter({ hasText: 'a modifié un créneau de Alpha' })
 		await expect(moved).toHaveCount(1)
@@ -189,7 +180,7 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		await expect(page.getByText('Créneau mis à jour')).toBeVisible()
 		await expect(drawer).toBeHidden()
 
-		await page.goto(`/${event.eventId}/admin/dashboard`)
+		await gotoHydrated(page, `/${event.eventId}/admin/dashboard`)
 		const entries = page.locator('#journal').getByRole('listitem')
 		const silent = entries
 			.filter({ hasText: 'a modifié un créneau de Alpha' })
@@ -210,7 +201,7 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		await expect(drawer).toBeHidden()
 
 		// Le compte lié a recopié son nom sur la fiche: Glados Aperture est devenue Guest The Tester.
-		await page.goto(`/${event.eventId}/admin/dashboard`)
+		await gotoHydrated(page, `/${event.eventId}/admin/dashboard`)
 		const entries = page.locator('#journal').getByRole('listitem')
 		await expect(entries.filter({ hasText: 'a retiré un créneau de Alpha' })).toHaveCount(1)
 		await expect(
@@ -218,7 +209,7 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		).toHaveCount(1)
 
 		// La ligne de l'inscription appartient au membre: elle se lit aussi sur sa page.
-		await page.goto(`/${event.eventId}/admin/members`)
+		await gotoHydrated(page, `/${event.eventId}/admin/members`)
 		await page
 			.getByRole('link', { name: /Guest The Tester/ })
 			.first()

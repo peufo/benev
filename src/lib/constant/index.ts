@@ -228,12 +228,7 @@ export const EVENT_TIER_SUPPORT: Partial<Record<EventTier, string>> = {
 	pro: `Support prioritaire — ligne directe avec l'équipe`,
 } as const
 
-/**
- * Date d'effet des textes légaux, stockée sur l'utilisateur au moment de l'acceptation.
- * Un booléen seul ne dit pas *quelles* conditions ont été acceptées, ce qui est précisément
- * ce dont on a besoin le jour où elles changent.
- */
-export const TERMS_VERSION = '2026-08-20'
+export { TERMS_VERSION } from './terms'
 
 /**
  * Découpe le prix d'un plan en valeur et devise.

@@ -1,15 +1,15 @@
 import { expect, test, type Page } from '@playwright/test'
-import { useUser } from './user'
 import { useEvent } from './event'
+import { seedUser, signIn } from './seed'
+import { gotoHydrated } from './hydrated'
 
 test.describe.serial('Plan', () => {
-	const zoe = useUser('Zoe')
-	const event = useEvent(zoe, 'Zoom')
+	const event = useEvent('Zoom')
 	let page: Page
 
 	test.beforeAll(async ({ browser }) => {
 		page = await browser.newPage()
-		await zoe.register(page)
+		await signIn(page, await seedUser('Zoe'))
 		await event.create(page)
 	})
 	test.afterAll(async () => {
@@ -17,13 +17,12 @@ test.describe.serial('Plan', () => {
 	})
 
 	/**
-	 * Le plan est rendu côté serveur: ses contrôles existent à l'écran avant d'être actifs, et un
-	 * clic ou une molette arrivés trop tôt ne déclenchent rien. Il se recentre sur son curseur une
-	 * fois hydraté: c'est le signal que les écouteurs sont posés. Rend la grille, qui porte le
-	 * défilement et dont la largeur suit l'échelle.
+	 * Rend la grille, qui porte le défilement et dont la largeur suit l'échelle. Le plan se
+	 * recentre sur son curseur au montage: un défilement non nul est le contrat, et ce qui dit
+	 * que ses écouteurs sont posés.
 	 */
 	async function gotoPlan(query = '') {
-		await page.goto(`/${event.eventId}/admin/plan${query}`)
+		await gotoHydrated(page, `/${event.eventId}/admin/plan${query}`)
 		const grid = page.locator('div.overflow-scroll.grow').first()
 		await expect.poll(() => grid.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0)
 		return grid

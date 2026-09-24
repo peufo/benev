@@ -1,15 +1,14 @@
 import { expect, test, type Page } from '@playwright/test'
-import { useUser } from './user'
 import { useEvent } from './event'
+import { seedMember, seedUser, signIn } from './seed'
+import { gotoHydrated } from './hydrated'
 
 /**
  * Une page naît en brouillon: elle n'entre au menu du site qu'une fois publiée, et son adresse
  * n'existe pas pour qui n'organise pas.
  */
 test.describe.serial("Statut d'une page", () => {
-	const boss = useUser('Boss')
-	const guest = useUser('Guest')
-	const event = useEvent(boss, 'Page')
+	const event = useEvent('Page')
 	let page: Page
 	let guestPage: Page
 
@@ -23,24 +22,20 @@ test.describe.serial("Statut d'une page", () => {
 	})
 
 	test('Préparation: un évènement publié, un bénévole', async () => {
-		await boss.register(page)
+		await signIn(page, await seedUser('Boss'))
 		await event.create(page)
 
-		await page.goto(`/${event.eventId}/admin/settings`)
+		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
 		await page.getByRole('button', { name: 'Publier', exact: true }).click()
 		await expect(page.getByText('Évènement publié').first()).toBeVisible()
 
-		await guest.register(guestPage)
-		await guest.verifyEmail()
-		await guestPage.goto(`/${event.eventId}/register`)
-		const accept = guestPage.getByRole('button', { name: 'Oui je le veux !' })
-		await expect(accept).toBeVisible()
-		await accept.click()
-		await expect(accept).toBeHidden()
+		const guest = await seedUser('Guest')
+		await seedMember(event.eventId, guest)
+		await signIn(guestPage, guest)
 	})
 
 	test('Une page naît en brouillon et entre au menu une fois publiée', async () => {
-		await page.goto(`/${event.eventId}/admin/pages`)
+		await gotoHydrated(page, `/${event.eventId}/admin/pages`)
 		await page
 			.locator('section')
 			.filter({ hasText: 'Navigation' })
@@ -55,10 +50,10 @@ test.describe.serial("Statut d'une page", () => {
 		const path = title.toLowerCase().replaceAll(' ', '-')
 
 		// Le menu public ignore le brouillon, et son adresse n'existe pas pour un bénévole.
-		await guestPage.goto(`/${event.eventId}`)
+		await gotoHydrated(guestPage, `/${event.eventId}`)
 		await expect(guestPage.getByRole('link', { name: 'Bienvenue' }).first()).toBeVisible()
 		await expect(guestPage.getByRole('link', { name: title })).toHaveCount(0)
-		const response = await guestPage.goto(`/${event.eventId}/${path}`)
+		const response = await gotoHydrated(guestPage, `/${event.eventId}/${path}`)
 		expect(response?.status()).toBe(404)
 
 		// Le statut est un champ du formulaire: il se choisit, puis s'enregistre avec le reste.
@@ -66,12 +61,12 @@ test.describe.serial("Statut d'une page", () => {
 		await page.getByRole('option', { name: 'Page publiée' }).click()
 		await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
 		await expect(page.getByText('Page enregistrée').first()).toBeVisible()
-		await guestPage.goto(`/${event.eventId}`)
+		await gotoHydrated(guestPage, `/${event.eventId}`)
 		await expect(guestPage.getByRole('link', { name: title }).first()).toBeVisible()
 
 		// Une ligne du volet porte une poignée de glissé: le clic ailleurs sur la ligne doit
 		// rester une navigation, ce que le clic sur l'accueil, sans poignée, ne prouve pas.
-		await page.goto(`/${event.eventId}/admin/pages`)
+		await gotoHydrated(page, `/${event.eventId}/admin/pages`)
 		await page.locator('aside').getByRole('link', { name: title }).click()
 		await page.waitForURL('**/admin/pages/**')
 		await expect(page.getByLabel('Titre')).toHaveValue(title)
