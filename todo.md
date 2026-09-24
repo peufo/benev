@@ -1,1 +1,0 @@
-- Ajouter les info concernant les licences dans /root
