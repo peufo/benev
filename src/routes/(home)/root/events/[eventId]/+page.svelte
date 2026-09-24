@@ -3,6 +3,8 @@
 	import { Surface } from '$lib/ui'
 	import { msToHours } from '$lib/utils'
 	import { formatRangeDate } from '$lib/formatRange'
+	import { EVENT_TIER } from '$lib/constant'
+	import ProductsTable from '../../products/ProductsTable.svelte'
 	import {
 		CalendarDaysIcon,
 		UsersIcon,
@@ -16,6 +18,7 @@
 
 	let event = $derived(data.event)
 	let stats = $derived(data.stats)
+	let tier = $derived(EVENT_TIER[event.tier])
 	let totalSubscribes = $derived(Object.values(stats.subscribesByState).reduce((a, b) => a + b, 0))
 </script>
 
@@ -50,6 +53,7 @@
 					</a>
 				</span>
 				<span class="badge badge-sm badge-ghost capitalize">{event.state}</span>
+				<span class="badge badge-sm badge-ghost">Licence {tier.label}</span>
 			</div>
 
 			{#if event.startDate && event.endDate}
@@ -96,7 +100,12 @@
 			<div class="flex items-center gap-3 p-2">
 				<UsersIcon size={24} class="text-info opacity-80" />
 				<div>
-					<div class="text-2xl font-bold">{stats.membersCount}</div>
+					<div class="text-2xl font-bold">
+						{stats.membersCount}
+						{#if tier.max}
+							<span class="text-base font-normal text-base-content/60">/ {tier.max}</span>
+						{/if}
+					</div>
 					<div class="text-sm text-base-content/70">Membres</div>
 				</div>
 			</div>
@@ -122,5 +131,13 @@
 				<span class="text-sm text-base-content/70">Annulées</span>
 			</div>
 		</div>
+	</Surface>
+
+	<Surface title="Licences ({data.products.length})" class="min-w-0 overflow-auto">
+		{#if data.products.length}
+			<ProductsTable products={data.products} hideEvent />
+		{:else}
+			<p class="text-base-content/70">Aucun produit activé sur cet évènement.</p>
+		{/if}
 	</Surface>
 </div>

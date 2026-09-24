@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths'
 	import { InputSearch, Surface } from '$lib/ui'
 	import { Pagination } from 'fuma'
+	import { EVENT_TIER } from '$lib/constant'
 
 	let { data } = $props()
 </script>
@@ -18,6 +19,7 @@
 				<th>CreatedAt</th>
 				<th>DeletedAt</th>
 				<th>State</th>
+				<th>Licence</th>
 				<th>Owner</th>
 				<th>Members</th>
 				<th></th>
@@ -42,6 +44,9 @@
 						{event.deletedAt?.toLocaleDateString() || '-'}
 					</td>
 					<td>{event.state}</td>
+					<td>
+						<span class="badge badge-sm badge-ghost">{EVENT_TIER[event.tier].label}</span>
+					</td>
 					<td>{event.owner.firstName} {event.owner.lastName}</td>
 					<td>{event._count.members}</td>
 				</tr>

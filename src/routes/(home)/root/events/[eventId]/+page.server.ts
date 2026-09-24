@@ -35,12 +35,21 @@ export const load = async ({ params }) => {
 		{ request: 0, accepted: 0, denied: 0, cancelled: 0 }
 	)
 
-	const membersCount = await prisma.member.count({
-		where: { eventId: params.eventId },
-	})
+	const [membersCount, products] = await Promise.all([
+		prisma.member.count({ where: { eventId: params.eventId } }),
+		prisma.product.findMany({
+			where: { eventId: params.eventId },
+			orderBy: { createdAt: 'desc' },
+			include: {
+				event: { select: { id: true, name: true } },
+				checkout: { include: { user: true } },
+			},
+		}),
+	])
 
 	return {
 		event,
+		products,
 		stats: {
 			shiftsCount,
 			plannedWorkMs,
