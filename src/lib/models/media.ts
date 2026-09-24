@@ -33,7 +33,12 @@ const zCropField = z
 	.pipe(zCrop.optional())
 
 export const modelMediaImage = z.object({
-	image: z.instanceof(File).optional(),
+	// SvelteKit remet un `LazyFile` qu'un Proxy fait passer pour un `File` par `getPrototypeOf`.
+	// Bun ignore ce piège devant `instanceof` (vérifié en 1.4.2), pas devant `isPrototypeOf`:
+	// `z.instanceof(File)` refuserait tout envoi en production.
+	image: z
+		.custom<File>((value) => Object.prototype.isPrototypeOf.call(File.prototype, value as object))
+		.optional(),
 	crop: zCropField,
 })
 

@@ -9,7 +9,7 @@
 		"postinstall": "prisma generate",
 		"dev": "vite dev --host",
 		"build": "vite build",
-		"preview": "vite preview --host",
+		"preview": "bun --bun vite preview --host",
 		"generate": "prisma generate",
 		"timezones": "node scripts/timezones.mjs",
 		"fuma:local": "bun add fuma@file:../fuma",
