@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Event, Field, Team } from '@prisma/client'
 	import { page } from '$app/state'
-	import { InputBoolean, InputString, InputTextarea } from 'fuma'
+	import { InputBoolean, InputDateTime, InputString, InputTextarea } from 'fuma'
 	import { daytz } from '$lib/dayjs'
 	import { MemberConditions } from '$lib/member'
 	import { enhanceForm } from '$lib/enhanceForm'
@@ -49,11 +49,11 @@
 	let resetToken = $state(0)
 </script>
 
-<!-- Un `<input type="date">` n'affiche jamais son `placeholder`: la date héritée de l'évènement
-     se dit à côté du libellé, où elle reste lisible champ vide comme rempli. -->
+<!-- Un champ de date n'affiche jamais son `placeholder`: la date héritée de l'évènement se dit
+     à côté du libellé, où elle reste lisible champ vide comme rempli. -->
 {#snippet closeSubscribingDefault()}
 	<span class="ml-auto text-xs font-normal opacity-70">
-		Par défaut&nbsp;: {daytz(event.closeSubscribing).format('DD MMMM YYYY')}
+		Par défaut&nbsp;: {daytz(event.closeSubscribing).format('DD MMMM YYYY [à] HH:mm')}
 	</span>
 {/snippet}
 
@@ -73,13 +73,17 @@
 	/>
 
 	{#if event.selfSubscribeAllowed}
-		<InputString
-			field={remoteForm.fields.closeSubscribing}
-			type="date"
-			label="Fin des inscriptions"
-			value={team.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
-			labelAppend={event.closeSubscribing ? closeSubscribingDefault : undefined}
-		/>
+		<!-- L'affichage de la date vit dans le composant: la clé le remet à la valeur enregistrée. -->
+		{#key resetToken}
+			<InputDateTime
+				field={remoteForm.fields.closeSubscribing}
+				layout="datetime"
+				label="Fermeture des inscriptions"
+				value={team.closeSubscribing}
+				timezone={event.timezone}
+				labelAppend={event.closeSubscribing ? closeSubscribingDefault : undefined}
+			/>
+		{/key}
 		<InputBoolean
 			field={remoteForm.fields.overflowPermitted}
 			label="Mode liste d'attente"

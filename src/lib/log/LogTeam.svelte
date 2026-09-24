@@ -24,9 +24,13 @@
 </script>
 
 <p>
-	{@render snippetRef(log.data.actor)}
-	{verbs[log.type]}
-	{@render snippetRef(log.data.team)}
+	{#if log.type === 'team_state' && !log.data.actor}
+		Comme programmé, le statut du secteur {@render snippetRef(log.data.team)} a changé
+	{:else}
+		{@render snippetRef(log.data.actor)}
+		{verbs[log.type]}
+		{@render snippetRef(log.data.team)}
+	{/if}
 </p>
 
 {#if log.type === 'team_update'}

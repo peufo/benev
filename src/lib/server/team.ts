@@ -37,15 +37,9 @@ export function useAddTeamComputedValues(
 			ctx.isLeader ||
 			ctx.member?.roles.includes('admin') ||
 			!!team.leaders.find((m) => ctx.member?.id === m.id)
-		const closeSubscribing = team?.closeSubscribing || event.closeSubscribing
-		const DAY = 1000 * 60 * 60 * 24
-		const isClosedSubscribing =
-			!!closeSubscribing && closeSubscribing.getTime() + DAY < new Date().getTime()
-
 		return addPeriodsComputedValues({
 			...team,
 			isLeader,
-			isClosedSubscribing,
 			maxSubscribes,
 			nbSubscribes,
 			nbSubscribesAccepted,
@@ -68,12 +62,7 @@ export function useAddTeamComputedValues(
 				let isDisabled = true
 				if (team.isLeader) isDisabled = false
 
-				if (
-					isAvailable &&
-					event?.selfSubscribeAllowed &&
-					!team.isClosedSubscribing &&
-					team.state === 'published'
-				) {
+				if (isAvailable && event?.selfSubscribeAllowed && team.state === 'published') {
 					if (ctx?.member?.id) isDisabled = false
 					else if (event?.selfRegisterAllowed) isDisabled = false
 				}
@@ -104,7 +93,6 @@ export type TeamWithComputedValues = Team & {
 	periods: PeriodWithComputedValues[]
 	isLeader: boolean
 	isAvailable: boolean
-	isClosedSubscribing: boolean
 	maxSubscribes: number
 	nbSubscribes: number
 	nbSubscribesAccepted: number

@@ -143,6 +143,7 @@ be introduced.
 | `$lib/seo`                  | `defaultMetaTags`, `errorMetaTags`, `mergeMetaTags`, JSON-LD schemas. Rendered **once** in the root layout.                       |
 | `$lib/constant`             | `EVENT_TIER` — per-tier member quotas and Stripe price bindings.                                                                  |
 | `$lib/log`                  | The event journal: `logMap` (one transform per `LogType`), the feed components, `LOG_FAMILIES`. See below.                        |
+| `$lib/server/scheduler.ts`  | The ticker of scheduled tasks; `$lib/server/tasks/` holds the tasks and starts it. See below.                                     |
 | `$lib/dayjs.ts`             | Pre-configured dayjs instance (relativeTime plugin + French locale).                                                              |
 
 ---
@@ -285,6 +286,30 @@ section of a member's page. Both routes sit under the leader guard of `/[eventId
 `/root/logs` shows the same feed across events. `email_sent` is excluded from the event feed —
 one line per notification sent would bury everything — while `email_failed` is exactly what an
 organizer needs to see.
+
+## Scheduled tasks
+
+One Bun process serves each environment, so scheduled work is an in-process ticker, not a cron
+nor a job table: `createScheduler()` in `$lib/server/scheduler.ts`, started from
+`hooks.server.ts` and stopped on `sveltekit:shutdown` **before** the email queue drains. The task
+list and the prisma-backed store live in `$lib/server/tasks/index.ts`, which is **imported by its
+path, never through the `$lib/server` barrel** (it runs at module evaluation, and the barrel is
+in an import cycle).
+
+The rule of the module: **a task receives a window `(since, until]`, never "now"**. `since` is the
+cursor of its last successful run, persisted in `TaskRun`, and `until` becomes the next cursor. A
+scheduled date therefore applies **once**, when its instant passes; a restart replays what it
+missed; a date already in the past when it is written never fires; and a default value in the
+past cannot undo what an organizer just did by hand. A failed run keeps the old cursor, so tasks
+must be idempotent on their window: `teamSchedule` writes with
+`updateMany({ where: { id, state: <expected> } })` and only journals when a row moved. With no
+cursor yet, the window is empty: the first run sets the marker without replaying history.
+
+`SCHEDULER_DISABLED=true` (set by `playwright.config.ts`) stops the ticker; `/root/tasks` shows
+each task's last run and runs it on demand, which is how the E2E suite triggers one. The pure
+part of a task lives outside `$lib/server` so it can be unit-tested: `$lib/team/teamSchedule.ts`
+plans the closings the task then applies (only `published` → `validated`; opening stays a
+manual gesture).
 
 ## La documentation
 

@@ -257,7 +257,7 @@ describe('rendu du journal', () => {
 			}).data
 		)
 		expect(updated).toContain('Inscription libre')
-		expect(updated).toContain('Clôture des inscriptions')
+		expect(updated).toContain('Fermeture des inscriptions')
 		expect(updated).toContain('01.07.2026')
 	})
 
@@ -286,6 +286,19 @@ describe('rendu du journal', () => {
 		expect(validated).toContain('a changé le statut du secteur')
 		expect(validated).toContain('Brouillon')
 		expect(validated).toContain('Validé')
+
+		// La transition programmée n'a pas d'acteur: le fil le dit, sans tiret orphelin.
+		const scheduled = logMap.team_state({
+			team: { ...team, state: 'published' },
+			before: 'validated',
+			actor: null,
+		})
+		expect(scheduled.createdById).toBeNull()
+		const published = renderLog(LogTeam, 'team_state', scheduled.data)
+		expect(published).toContain('Comme programmé')
+		expect(published).toContain('Buvette')
+		expect(published).not.toContain('a changé le statut du secteur')
+		expect(published).toContain('Publié')
 
 		const created = renderLog(
 			LogPeriod,

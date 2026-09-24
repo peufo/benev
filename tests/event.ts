@@ -1056,18 +1056,18 @@ export function useEvent(owner: User, name: string) {
 			await expect(combobox.getByText('Gordon Freeman')).toBeVisible()
 		},
 		/**
-		 * La fin des inscriptions par défaut vit sur l'évènement. Le formulaire de secteur ne la
-		 * montrait pas — un `<input type="date">` n'affiche jamais son `placeholder` — et la carte
-		 * publique n'annonçait d'échéance qu'aux secteurs qui en portaient une à eux.
+		 * La fermeture des inscriptions par défaut vit sur l'évènement. Le formulaire de secteur la
+		 * dit à côté du libellé, un champ de date n'affichant jamais son `placeholder`, et la carte
+		 * publique l'annonce aux secteurs publiés qui n'en portent pas une à eux.
 		 */
 		async expectDefaultCloseSubscribing(page: Page) {
 			await page.goto(`/${eventId}/admin/settings`)
-			const closeSubscribing = page.getByLabel('Fin des inscriptions par défaut')
+			const closeSubscribing = page.getByLabel('Fermeture des inscriptions par défaut')
 			const saveBar = page.getByText('Modification en cours !')
 			// La barre ne suit rien tant que la page n'est pas hydratée: rejouer la saisie attend
 			// l'hydratation sans avoir à la deviner.
 			await expect(async () => {
-				await closeSubscribing.fill('2099-09-12')
+				await closeSubscribing.fill('2099-09-12T18:00')
 				await expect(saveBar).toBeVisible({ timeout: 1000 })
 			}).toPass()
 			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
@@ -1077,7 +1077,7 @@ export function useEvent(owner: User, name: string) {
 			await page.goto(`/${eventId}/admin/teams`)
 			await page.locator('aside').getByRole('link', { name: 'Alpha' }).click()
 			await expect(
-				page.locator('#team').getByText(/Par défaut\s*:\s*12 septembre 2099/)
+				page.locator('#team').getByText(/Par défaut\s*:\s*12 septembre 2099 à 18:00/)
 			).toBeVisible()
 
 			// La liste des bénévoles ne porte que les secteurs publiés: Alpha, né en brouillon,
@@ -1090,7 +1090,7 @@ export function useEvent(owner: User, name: string) {
 
 			await page.goto(`/${eventId}/teams`)
 			await expect(
-				page.getByText('Fin des inscriptions le 12 septembre 2099').first()
+				page.getByText('Fin des inscriptions le 12 septembre 2099 à 18:00').first()
 			).toBeVisible()
 		},
 		/**

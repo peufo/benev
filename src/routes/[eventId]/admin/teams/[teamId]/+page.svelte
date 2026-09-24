@@ -3,14 +3,12 @@
 		ArrowLeftIcon,
 		ChartGanttIcon,
 		ClipboardListIcon,
-		ClockIcon,
 		PlusIcon,
 		UsersIcon,
 	} from '@lucide/svelte'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { tip, urlParam } from 'fuma'
-	import { daytz } from '$lib/dayjs'
 	import { eventPath } from '$lib/eventPath'
 	import { formatRangeDate } from '$lib/formatRange'
 	import Progress from '$lib/Progress.svelte'
@@ -20,6 +18,8 @@
 	import TeamDeleteButton from '$lib/team/TeamDeleteButton.svelte'
 	import TeamLeaders from '$lib/team/TeamLeaders.svelte'
 	import TeamStateMenu from '$lib/team/TeamStateMenu.svelte'
+	import TeamScheduleBadge from '$lib/team/TeamScheduleBadge.svelte'
+	import { nextClose } from '$lib/team/teamSchedule'
 	import { PeriodRow } from '$lib/period'
 	import { MemberConditionsBadges } from '$lib/member'
 
@@ -70,6 +70,11 @@
 	<Surface id="team" title={team.name} subtitle={teamSubtitle} action={teamActions}>
 		{#if team.isLeader}
 			<div class="px-2">
+				{#if nextClose(team, data.event)}
+					<div class="mb-2">
+						<TeamScheduleBadge {team} event={data.event} />
+					</div>
+				{/if}
 				{#key team.id}
 					<TeamForm {team} event={data.event} saveBar />
 				{/key}
@@ -86,16 +91,9 @@
 			{/if}
 		{:else}
 			<div class="flex flex-col gap-4">
-				{#if team.conditions?.length || (team.closeSubscribing && data.event.selfSubscribeAllowed)}
+				{#if team.conditions?.length || nextClose(team, data.event)}
 					<div class="flex flex-wrap gap-2 gap-y-1">
-						{#if team.closeSubscribing && data.event.selfSubscribeAllowed}
-							<span class="badge" class:badge-warning={team.isClosedSubscribing}>
-								<ClockIcon size={16} />
-								<span class="ml-1">
-									Fin des inscriptions le {daytz(team.closeSubscribing).format('DD MMMM YYYY')}
-								</span>
-							</span>
-						{/if}
+						<TeamScheduleBadge {team} event={data.event} />
 						<MemberConditionsBadges
 							conditions={team.conditions || []}
 							memberFields={data.event.memberFields}

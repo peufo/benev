@@ -342,6 +342,7 @@ export const logMap = {
 		data: { team: teamRef(team), changes, actor: refActor(actor) },
 	}),
 
+	/** Sans acteur quand une transition programmée s'applique: le fil dit alors « comme programmé ». */
 	team_state: ({
 		team,
 		before,
@@ -349,12 +350,12 @@ export const logMap = {
 	}: {
 		team: TeamSource & { state: TeamState }
 		before: TeamState
-		actor: LogActor
+		actor: LogActor | null
 	}) => ({
 		eventId: team.eventId,
 		teamId: team.id,
-		createdById: actor.userId,
-		data: { team: teamRef(team), before, after: team.state, actor: refActor(actor) },
+		createdById: actor?.userId ?? null,
+		data: { team: teamRef(team), before, after: team.state, actor: actor ? refActor(actor) : null },
 	}),
 
 	/** `teamId` reste nul: le secteur n'existe plus, son nom est figé dans `data`. */

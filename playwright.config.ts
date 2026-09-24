@@ -8,7 +8,9 @@ const config: PlaywrightTestConfig = {
 		port,
 		reuseExistingServer: !process.env.CI,
 		timeout: 180_000,
-		env: { EMAIL_DISABLED: 'true' },
+		// Le ticker est coupé: les tests déclenchent une tâche à la main depuis `/root/tasks`,
+		// que `ROOT_USER` leur ouvre.
+		env: { EMAIL_DISABLED: 'true', SCHEDULER_DISABLED: 'true', ROOT_USER: 'root@benevio.test' },
 	},
 	use: { baseURL: `http://localhost:${port}` },
 	testDir: 'tests',

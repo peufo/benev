@@ -31,7 +31,8 @@ Trois réglages complètent ça :
 
 - autoriser ou non les membres à annuler leurs inscriptions,
 - tolérer un chevauchement entre deux créneaux d'une même personne,
-- fixer une date de fin des inscriptions, qu'un secteur peut avancer pour lui-même.
+- programmer la fermeture des inscriptions pour tous les secteurs à la fois ; chaque secteur
+  peut avoir sa propre date, qui l'emporte.
 
 ## L'adhésion {#adhesion}
 

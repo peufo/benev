@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { InputBoolean, InputNumber, InputString } from 'fuma'
+	import { InputBoolean, InputDateTime, InputNumber } from 'fuma'
 	import { slide } from 'svelte/transition'
 	import type { EventSettingsFields } from './types'
 
@@ -45,12 +45,14 @@
 	/>
 
 	{#if event.selfSubscribeAllowed}
+		<!-- La fermeture programmée des secteurs qui n'ont pas la leur: `published` → `validated`. -->
 		<div transition:slide={{ duration: 200 }}>
-			<InputString
+			<InputDateTime
 				field={fields.closeSubscribing}
-				type="date"
-				label="Fin des inscriptions par défaut"
-				value={event.closeSubscribing?.toISOString().slice(0, 10) ?? ''}
+				layout="datetime"
+				label="Fermeture des inscriptions par défaut"
+				value={event.closeSubscribing}
+				timezone={event.timezone}
 			/>
 		</div>
 	{/if}

@@ -74,7 +74,7 @@ export const eventLabels = {
 	selfRegisterAllowed: 'Adhésion libre',
 	selfSubscribeAllowed: 'Inscription libre',
 	selfSubscribeCancelAllowed: 'Annulation libre',
-	closeSubscribing: 'Clôture des inscriptions',
+	closeSubscribing: 'Fermeture des inscriptions',
 	overlapPeriodAllowed: 'Chevauchement toléré (min)',
 	userEmailVerifiedRequired: 'Email vérifié requis',
 	userAddressRequired: 'Adresse requise',
@@ -113,7 +113,7 @@ export type TeamSource = {
 export const teamLabels = {
 	name: 'Nom',
 	description: 'Description',
-	closeSubscribing: 'Clôture des inscriptions',
+	closeSubscribing: 'Fermeture des inscriptions',
 	overflowPermitted: 'Sur-inscription autorisée',
 	leaders: 'Responsables',
 } satisfies Partial<Record<keyof TeamSource, string>>

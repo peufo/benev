@@ -409,6 +409,17 @@ model Subscribe {
   @@unique([memberId, periodId])
 }
 
+/// Une ligne par tâche planifiée: le repère jusqu'où elle a lu, et son dernier passage.
+model TaskRun {
+  name     String   @id
+  /// Borne haute de la dernière fenêtre traitée: la suivante commence ici.
+  cursor   DateTime
+  ranAt    DateTime
+  duration Int
+  count    Int      @default(0)
+  error    String?  @db.Text
+}
+
 model View {
   id String @id @default(cuid())
 

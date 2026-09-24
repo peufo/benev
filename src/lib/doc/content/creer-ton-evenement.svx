@@ -89,6 +89,11 @@ de ses [conditions d'accès](/docs/ouvrir-les-inscriptions#conditions). Tu peux 
 rouvrir autant de fois que nécessaire. Depuis le brouillon, « Valider et ouvrir les inscriptions »
 fait les deux d'un geste.
 
+La fermeture se **programme** aussi : à la date dite, le secteur repasse en validé, à la minute
+près, et le journal en garde la trace comme programmée. La date se pose sur le secteur, ou une
+fois pour tous dans [les réglages de l'évènement](/docs/ouvrir-les-inscriptions#autonomie). Une
+date déjà passée n'a plus d'effet : un secteur rouvert à la main reste ouvert.
+
 ## Planification {#periodes}
 
 Tu peux éditer les créneaux depuis la fiche du secteur ou directement sur la grille de planification.

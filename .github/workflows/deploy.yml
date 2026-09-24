@@ -30,6 +30,7 @@ jobs:
   #   env:
   #     DATABASE_URL: mysql://root:root@127.0.0.1:3306/benev_test
   #     EMAIL_DISABLED: 'true'
+  #     SCHEDULER_DISABLED: 'true'
   #     MEDIA_DIR: /tmp/benev-media
   #     ROOT_USER: root@benevio.test
   #     ORIGIN: http://localhost:4173

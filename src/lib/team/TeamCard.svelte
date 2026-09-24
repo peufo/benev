@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { ClockIcon } from '@lucide/svelte'
-	import { daytz } from '$lib/dayjs'
 	import { page } from '$app/state'
 	import Progress from '$lib/Progress.svelte'
 	import { formatRangeDate } from '$lib/formatRange'
@@ -8,6 +6,8 @@
 	import { CardCollapse, Placeholder } from '$lib/ui'
 
 	import TeamLeaders from './TeamLeaders.svelte'
+	import TeamScheduleBadge from './TeamScheduleBadge.svelte'
+	import { nextClose } from './teamSchedule'
 	import { PeriodRow } from '$lib/period'
 	import { MemberConditionsBadges } from '$lib/member'
 	interface Props {
@@ -18,12 +18,6 @@
 	let { team, onclickPeriod }: Props = $props()
 
 	let event = $derived(page.data.event)
-	/**
-	 * La date du secteur l'emporte, à défaut celle de l'évènement — la règle même dont
-	 * `isClosedSubscribing` est calculé. Sans ce repli, un secteur fermé par le réglage global
-	 * n'affichait aucune échéance.
-	 */
-	let closeSubscribing = $derived(team.closeSubscribing ?? event?.closeSubscribing)
 </script>
 
 <CardCollapse value={team.id} class="p-1 md:py group" classHeader="sm:pr-3">
@@ -48,16 +42,10 @@
 		</div>
 
 		<div class="flex flex-col gap-4 mt-4">
-			{#if team.conditions?.length || (closeSubscribing && event?.selfSubscribeAllowed)}
+			{#if team.conditions?.length || (event && nextClose(team, event))}
 				<div class="flex gap-2 gap-y-1 flex-wrap">
-					<!-- BADGE SUBSCRIBE CLOSED -->
-					{#if closeSubscribing && event?.selfSubscribeAllowed}
-						<span class="badge" class:badge-warning={team.isClosedSubscribing}>
-							<ClockIcon size={16} />
-							<span class="ml-1">
-								Fin des inscriptions le {daytz(closeSubscribing).format('DD MMMM YYYY')}
-							</span>
-						</span>
+					{#if event}
+						<TeamScheduleBadge {team} {event} />
 					{/if}
 
 					<!-- BADGES CONDITIONS -->

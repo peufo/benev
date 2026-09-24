@@ -27,7 +27,6 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 				team: {
 					select: {
 						state: true,
-						closeSubscribing: true,
 						conditions: true,
 						overflowPermitted: true,
 					},
@@ -72,9 +71,6 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 		if (!memberAuthor.event.selfSubscribeAllowed) error(403)
 		// Seul un secteur publié est ouvert aux inscriptions libres; un brouillon n'est même pas visible.
 		if (period.team.state !== 'published') error(403)
-		const closeSubscribing = period.team.closeSubscribing || memberAuthor.event.closeSubscribing
-		const DAY = 1000 * 60 * 60 * 24
-		if (closeSubscribing && closeSubscribing.getTime() < new Date().getTime() - DAY) error(403)
 		// Le tunnel d'inscription n'est pas décoratif: ce que l'évènement rend obligatoire est
 		// demandé avant la première période, pas après.
 		if (!memberIsRegistered(addMemberComputedValues(memberAuthor)))

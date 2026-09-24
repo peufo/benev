@@ -21,6 +21,10 @@ export const variables = defineEnvVars({
 	EMAIL_DISABLED: {
 		schema: dynamicString.default(building ? 'true' : '').transform((str) => str !== ''),
 	},
+	/** Coupe le ticker des tâches planifiées: posé par les tests E2E, qui les déclenchent à la main. */
+	SCHEDULER_DISABLED: {
+		schema: dynamicString.default(building ? 'true' : '').transform((str) => str !== ''),
+	},
 
 	GOOGLE_CLIENT_ID: { schema: dynamicString },
 	GOOGLE_CLIENT_SECRET: { schema: dynamicString },
