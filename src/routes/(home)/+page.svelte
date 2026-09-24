@@ -12,7 +12,7 @@
 <!-- Le produit n'est décrit que sur l'accueil : le layout racine couvre aussi les évènements -->
 <JsonLd schema={softwareApplicationSchema($page.url.origin)} />
 
-<div class="-mx-2 sm:-mx-4">
+<div class="-mx-1">
 	<!-- Hero: asymétrique -->
 	<section class="relative overflow-hidden">
 		<div class="max-w-6xl mx-auto px-4 sm:px-6 py-20 md:py-28">
