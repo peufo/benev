@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatRange } from '$lib/formatRange'
+	import { formatRangeDateShort } from '$lib/formatRange'
 	import { getRangeOfTeam } from '$lib/plan'
 	import type { Period, Team } from '@prisma/client'
 
@@ -14,15 +14,16 @@
 	const DAY = 1000 * 60 * 60 * 24
 </script>
 
-<div class="flex flex-col gap-1">
-	<span>{team.name}</span>
-	{#if range}
-		<span class="text-xs opacity-50 line-through">{formatRange(range)}</span>
-		<span class="text-xs text-green-700">
-			{formatRange({
+<!-- Sans l'heure, qu'un décalage en jours ne touche pas; avec le jour de la semaine, qu'il
+     déplace. `text-wrap` contre le `nowrap` que `.input` pose sur toute la ligne. -->
+{#if range}
+	<div class="flex flex-col items-end text-xs text-right text-wrap">
+		<span class="opacity-50 line-through">{formatRangeDateShort(range)}</span>
+		<span class="text-base-content/70">
+			{formatRangeDateShort({
 				start: range.start.getTime() + deltaDays * DAY,
 				end: range.end.getTime() + deltaDays * DAY,
 			})}
 		</span>
-	{/if}
-</div>
+	</div>
+{/if}

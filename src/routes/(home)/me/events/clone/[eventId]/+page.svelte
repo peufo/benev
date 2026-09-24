@@ -1,6 +1,14 @@
 <script lang="ts">
-	import LabelPage from './LabelPage.svelte'
-	import LabelField from './LabelField.svelte'
+	import { resolve } from '$app/paths'
+	import {
+		ArrowLeftIcon,
+		FileTextIcon,
+		MapPinnedIcon,
+		TableIcon,
+		TextCursorInputIcon,
+	} from '@lucide/svelte'
+	import { InputNumber } from 'fuma'
+	import { MEMBER_FIELD_TYPE, PAGE_TYPE } from '$lib/constant'
 	import CloneSelector from './CloneSelector.svelte'
 	import LabelTeam from './LabelTeam.svelte'
 	import { cloneEvent } from './clone.remote'
@@ -10,69 +18,86 @@
 	let deltaDays = $state(365)
 </script>
 
-<h2 class="title">Cloner l'évènement "{data.event.name}"</h2>
+<div class="flex flex-col gap-6">
+	<div class="flex items-start gap-3">
+		<a href={resolve('/me/events')} class="btn btn-ghost btn-square btn-sm mt-0.5">
+			<ArrowLeftIcon />
+		</a>
+		<div>
+			<h1 class="text-2xl font-bold text-base-content">Cloner « {data.event.name} »</h1>
+			<p class="text-base-content/70">
+				Le nouvel évènement reprend les réglages de celui-ci. Choisis ce que tu emportes en plus.
+			</p>
+		</div>
+	</div>
 
-<form {...cloneEvent} class="flex flex-col gap-4">
-	<div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+	<form {...cloneEvent} class="flex flex-col gap-6">
 		<CloneSelector
-			class="sm:col-span-2"
 			items={data.event.teams}
 			key="teams"
-			legend="Secteurs"
+			title="Secteurs"
+			icon={MapPinnedIcon}
+			subtitle="Avec leurs créneaux, décalés du nombre de jours choisi. Sans les inscriptions."
 			labelAll="Tous les secteurs"
 			placeholder="Aucun secteur"
+			getLabel={(team) => team.name}
 		>
-			{#snippet label(team)}
+			{#snippet append(team)}
 				<LabelTeam {team} {deltaDays} />
 			{/snippet}
 
-			<div class="grow"></div>
-			<!-- Champ brut: `deltaDays` pilote aussi l'aperçu des dates dans `LabelTeam`. -->
-			<label class="floating-label">
-				<span>Nombre de jours de décalage</span>
-				<input class="input" type="number" name="deltaDays" bind:value={deltaDays} />
-			</label>
+			<!-- `InputProps` exclut `name`: la valeur liée pilote l'aperçu des dates, le champ caché
+			     la soumet. -->
+			<InputNumber label="Décalage des dates, en jours" bind:value={deltaDays} class="max-w-xs" />
+			<input type="hidden" name="deltaDays" value={deltaDays} />
 		</CloneSelector>
 
 		<CloneSelector
 			items={data.event.pages}
 			key="pages"
-			legend="Publications"
+			title="Publications"
+			icon={FileTextIcon}
 			labelAll="Toutes les publications"
-			placeholder="Aucune pages"
+			placeholder="Aucune publication"
+			getLabel={(page) => page.title}
 		>
-			{#snippet label(page)}
-				<LabelPage {page} />
+			{#snippet append(page)}
+				{@const PageIcon = PAGE_TYPE[page.type].icon}
+				<PageIcon size={18} class="shrink-0 opacity-70" />
 			{/snippet}
 		</CloneSelector>
 
 		<CloneSelector
 			items={data.event.memberFields}
 			key="fields"
-			legend="Champs de membres"
+			title="Champs de membres"
+			icon={TextCursorInputIcon}
 			labelAll="Tous les champs de membres"
-			placeholder="Aucun champs"
+			placeholder="Aucun champ"
+			getLabel={(field) => field.name}
 		>
-			{#snippet label(field)}
-				<LabelField {field} />
+			{#snippet append(field)}
+				{@const FieldIcon = MEMBER_FIELD_TYPE[field.type].icon}
+				<FieldIcon size={18} class="shrink-0 opacity-70" />
 			{/snippet}
 		</CloneSelector>
 
 		<CloneSelector
-			class="sm:col-span-2"
 			items={data.event.views}
 			key="views"
-			legend="Vues"
+			title="Vues"
+			icon={TableIcon}
 			labelAll="Toutes les vues"
 			placeholder="Aucune vue"
+			getLabel={(view) => view.name}
 		>
-			{#snippet label(view)}
-				<span>{view.name} ({view.key})</span>
+			{#snippet append(view)}
+				<span class="text-xs opacity-70">{view.key}</span>
 			{/snippet}
 		</CloneSelector>
-	</div>
 
-	<div class="flex flex-row-reverse gap-2 border-t pt-4">
-		<button class="btn btn-primary">Valider</button>
-	</div>
-</form>
+		<div class="flex flex-row-reverse border-t border-soft pt-4">
+			<button class="btn btn-primary">Cloner l'évènement</button>
+		</div>
+	</form>
+</div>
