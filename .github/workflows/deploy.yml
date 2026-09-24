@@ -9,73 +9,73 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # test:
-  #   runs-on: ubuntu-latest
-  #   services:
-  #     mysql:
-  #       image: mysql:8
-  #       env:
-  #         MYSQL_ROOT_PASSWORD: root
-  #         MYSQL_DATABASE: benev_test
-  #       ports:
-  #         - 3306:3306
-  #       options: >-
-  #         --health-cmd="mysqladmin ping -h localhost -uroot -proot"
-  #         --health-interval=10s
-  #         --health-timeout=5s
-  #         --health-retries=10
-  #   # `svelte-kit sync` type les clés de $env/dynamic d'après l'environnement présent:
-  #   # une variable absente devient `string | undefined` et fait échouer `svelte-check`.
-  #   # Toutes les clés du .env.example doivent donc être définies, même en factice.
-  #   env:
-  #     DATABASE_URL: mysql://root:root@127.0.0.1:3306/benev_test
-  #     EMAIL_DISABLED: 'true'
-  #     SCHEDULER_DISABLED: 'true'
-  #     MEDIA_DIR: /tmp/benev-media
-  #     ROOT_USER: root@benevio.test
-  #     ORIGIN: http://localhost:4173
-  #     BODY_SIZE_LIMIT: '10000000'
-  #     SMTP_HOST: localhost
-  #     SMTP_PORT: '1025'
-  #     SMTP_USER: ci@benevio.test
-  #     SMTP_PASS: ci
-  #     GOOGLE_CLIENT_ID: ci
-  #     GOOGLE_CLIENT_SECRET: ci
-  #     PRIVATE_STRIPE_KEY: sk_test_ci
-  #     PRIVATE_STRIPE_WEBHOOK_KEY: whsec_ci
-  #     STRIPE_KEY: pk_test_ci
-  #     PRICE_STANDARD: price_ci_standard
-  #     PRICE_PREMIUM: price_ci_premium
-  #     PRICE_STANDARD_TO_PREMIUM: price_ci_standard_to_premium
-  #   steps:
-  #     - uses: actions/checkout@v5
-  #     - uses: oven-sh/setup-bun@v2
-  #     # `file:../fuma` ne se résout que sur la machine de dev: sans ce contrôle, l'oubli
-  #     # remonte en erreur d'installation, sans rapport visible avec sa cause.
-  #     - name: Refuser le lien local vers fuma
-  #       run: |
-  #         if grep -q '"fuma": "file:' package.json; then
-  #           echo "::error file=package.json::fuma est en lien local. Lance 'bun run fuma:npm' avant de pousser."
-  #           exit 1
-  #         fi
-  #     - run: bun install --frozen-lockfile
-  #     - run: mkdir -p $MEDIA_DIR
-  #     - run: bunx prisma migrate deploy
-  #     - run: bun run check
-  #     - run: bun run test:unit
-  #     - run: bunx playwright install --with-deps chromium
-  #     - run: bun run test:e2e
-  #     - uses: actions/upload-artifact@v4
-  #       if: failure()
-  #       with:
-  #         name: playwright-report
-  #         path: |
-  #           playwright-report/
-  #           test-results/
-  #         retention-days: 7
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: benev_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    # Hors `building`, les schémas de `src/env.ts` exigent une valeur non vide: le serveur de
+    # preview que démarre l'e2e ne boote pas sans elles, et `prisma migrate deploy` lit
+    # `DATABASE_URL`. Toutes les clés du .env.example sont donc définies, même en factice.
+    env:
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/benev_test
+      EMAIL_DISABLED: 'true'
+      SCHEDULER_DISABLED: 'true'
+      MEDIA_DIR: /tmp/benev-media
+      ROOT_USER: root@benevio.test
+      ORIGIN: http://localhost:4173
+      BODY_SIZE_LIMIT: '10000000'
+      SMTP_HOST: localhost
+      SMTP_PORT: '1025'
+      SMTP_USER: ci@benevio.test
+      SMTP_PASS: ci
+      GOOGLE_CLIENT_ID: ci
+      GOOGLE_CLIENT_SECRET: ci
+      PRIVATE_STRIPE_KEY: sk_test_ci
+      PRIVATE_STRIPE_WEBHOOK_KEY: whsec_ci
+      STRIPE_KEY: pk_test_ci
+      PRICE_STANDARD: price_ci_standard
+      PRICE_PREMIUM: price_ci_premium
+      PRICE_STANDARD_TO_PREMIUM: price_ci_standard_to_premium
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      # `file:../fuma` ne se résout que sur la machine de dev: sans ce contrôle, l'oubli
+      # remonte en erreur d'installation, sans rapport visible avec sa cause.
+      - name: Refuser le lien local vers fuma
+        run: |
+          if grep -q '"fuma": "file:' package.json; then
+            echo "::error file=package.json::fuma est en lien local. Lance 'bun run fuma:npm' avant de pousser."
+            exit 1
+          fi
+      - run: bun install --frozen-lockfile
+      - run: mkdir -p $MEDIA_DIR
+      - run: bunx prisma migrate deploy
+      - run: bun run check
+      - run: bun run test:unit
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
 
   build-and-push-image:
-    # needs: test
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read
