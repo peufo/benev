@@ -33,8 +33,17 @@ export const cloneEvent = form(schemaEventClone, async (data) => {
 			views: { where: { id: { in: data.views } } },
 		},
 	})
+	// Le clone est un nouvel évènement: sa licence s'achète, sa publication se décide, et ses
+	// alertes de quota partent de zéro. Rien de cela ne passe dans le reste déversé.
 	const {
 		name: eventName,
+		state,
+		tier,
+		notifiedQuota80,
+		notifiedQuota90,
+		notifiedQuota100,
+		startDate,
+		endDate,
 		closeSubscribing,
 		deletedAt,
 		ownerId,
@@ -56,6 +65,10 @@ export const cloneEvent = form(schemaEventClone, async (data) => {
 			id: normalizePath(name),
 			name,
 			closeSubscribing: closeSubscribing && new Date(closeSubscribing.getTime() + deltaTime),
+			// Les créneaux sont créés par imbrication, que le middleware de synchronisation des
+			// dates ne voit pas: les bornes se décalent ici.
+			startDate: startDate && new Date(startDate.getTime() + deltaTime),
+			endDate: endDate && new Date(endDate.getTime() + deltaTime),
 			location: location ?? Prisma.DbNull,
 			backgroundImage: backgroundImageId ? { connect: { id: backgroundImageId } } : {},
 			logo: logoId ? { connect: { id: logoId } } : {},

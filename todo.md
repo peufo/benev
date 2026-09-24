@@ -1,2 +1,1 @@
-- Verifier que la licence ne se duplique pas avec l'événement
 - Ajouter les info concernant les licences dans /root
