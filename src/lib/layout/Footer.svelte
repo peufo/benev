@@ -2,6 +2,8 @@
 	import { resolve } from '$app/paths'
 	import type { Snippet } from 'svelte'
 	import benevio from '$lib/assets/benevio.svg'
+	import dayjs from '$lib/dayjs'
+	import { APP_VERSION } from '$lib/version'
 	import { LEGAL_DOCS, LEGAL_ENTITY } from './legal'
 
 	interface Props {
@@ -27,6 +29,7 @@
 	]
 
 	const year = new Date().getFullYear()
+	const buildDate = dayjs(APP_VERSION.date).format('DD.MM.YYYY')
 </script>
 
 {#snippet brandmark(size: string)}
@@ -51,6 +54,29 @@
 	</span>
 {/snippet}
 
+<!-- La version déployée: une date seule ne dirait pas laquelle de deux mises en ligne du jour,
+     le sha seul ne dirait pas si le site est vivant. Le lien vers le commit tient parce que
+     benevio est open source. -->
+{#snippet buildStamp(extraClass = '')}
+	<span class={['text-sm text-base-content/70', extraClass]}>
+		<time datetime={APP_VERSION.date}>{buildDate}</time>
+		·
+		{#if APP_VERSION.hasSource}
+			<a
+				href="https://github.com/peufo/benev/commit/{APP_VERSION.commit}"
+				title="Code source de cette version"
+				target="_blank"
+				rel="noreferrer"
+				class="link link-hover hover:text-base-content transition-colors"
+			>
+				{APP_VERSION.commit}
+			</a>
+		{:else}
+			{APP_VERSION.commit}
+		{/if}
+	</span>
+{/snippet}
+
 <!-- La bande plateforme : identique dans `app` et au second étage de `event`. Elle se distingue
      par le filet et l'échelle, jamais par un second fond — sous un thème d'évènement, `base-100`
      et `base-200` deviennent tous deux translucides et cesseraient de se différencier. -->
@@ -63,6 +89,7 @@
 		</nav>
 
 		{@render copyright('md:ml-auto')}
+		{@render buildStamp()}
 	</div>
 {/snippet}
 
@@ -101,8 +128,9 @@
 				</nav>
 			</div>
 
-			<div class="border-t border-soft py-4">
+			<div class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-soft py-4">
 				{@render copyright()}
+				{@render buildStamp('md:ml-auto')}
 			</div>
 		</div>
 	{:else if variant === 'event'}

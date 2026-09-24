@@ -3,6 +3,11 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import { mdsvex } from 'mdsvex'
 import rehypeDocSections from './src/lib/doc/engine/rehypeDocSections.js'
 
+// Date et commit du build, que `$lib/version.ts` redécoupe. Le sha vient du workflow, `.git`
+// étant hors du contexte de l'image: absent, un build local se dit simplement `dev`.
+const commit = process.env.BUILD_COMMIT?.slice(0, 7) ?? 'dev'
+const version = `${new Date().toISOString().slice(0, 10)}_${commit}`
+
 /** @type {import('@sveltejs/kit').Config} */
 export default {
 	// `.svx` plutôt que `.md`: `svelte-check` lit cette liste, et `.md` y ferait entrer
@@ -17,6 +22,7 @@ export default {
 	],
 	kit: {
 		adapter: adapter(),
+		version: { name: version },
 		experimental: {
 			remoteFunctions: true,
 			explicitEnvironmentVariables: true,

@@ -105,6 +105,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # `.git` est exclu du contexte: sans cet argument, le pied de page affiche `dev`.
+          build-args: |
+            BUILD_COMMIT=${{ github.sha }}
   trigger-deploy:
     needs: build-and-push-image
     runs-on: ubuntu-latest
