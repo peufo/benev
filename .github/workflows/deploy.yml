@@ -84,6 +84,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+      # `file:../fuma` ne se résout que sur la machine de dev: sans ce contrôle, l'oubli
+      # remonte en erreur d'installation dans l'image, sans rapport visible avec sa cause.
+      - name: Refuser le lien local vers fuma
+        run: |
+          if grep -q '"fuma": "file:' package.json; then
+            echo "::error file=package.json::fuma est en lien local. Lance 'bun run fuma:npm' avant de pousser."
+            exit 1
+          fi
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:

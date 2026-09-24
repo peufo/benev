@@ -32,13 +32,7 @@
 		: '-translate-y-full'}"
 	style:z-index={100}
 >
-	<PlanHeader
-		bind:plan
-		teams={data.teams}
-		views={data.views}
-		isFullscreen
-		class="border-2 rounded-box"
-	/>
+	<PlanHeader bind:plan teams={data.teams} views={data.views} isFullscreen />
 </div>
 
 <div class="h-screen overflow-hidden rounded-box" use:mouseOnTop>
