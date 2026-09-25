@@ -14,7 +14,9 @@ export function cloneTeam(
 	return {
 		name: team.name,
 		description: team.description,
-		state: team.state,
+		// Une copie n'a encore prévenu personne: quitter le brouillon reste le geste qui l'ouvre
+		// aux bénévoles, et qui envoie les demandes en attente.
+		state: 'draft',
 		overflowPermitted: team.overflowPermitted,
 		closeSubscribing:
 			team.closeSubscribing && new Date(team.closeSubscribing.getTime() + deltaTimeMS),
@@ -48,6 +50,9 @@ export function clonePages(eventPages: Page[]): Prisma.PageCreateManyEventInput[
 		const eventPage = eventPages.find((p) => p.path === page.path)
 		return eventPage ? cloneData(eventPage) : page
 	})
-	const rest = eventPages.filter((p) => p.type !== 'home' && p.type !== 'email').map(cloneData)
+	// L'accueil et les courriels n'ont pas de brouillon; les autres pages se republient à la main.
+	const rest = eventPages
+		.filter((p) => p.type !== 'home' && p.type !== 'email')
+		.map((p) => ({ ...cloneData(p), state: 'draft' as PageState }))
 	return [home, ...emails, ...rest]
 }
