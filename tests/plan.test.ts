@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { useEvent } from './event'
-import { seedUser, signIn } from './seed'
+import { seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
 
 test.describe.serial('Plan', () => {
@@ -212,5 +212,27 @@ test.describe.serial('Plan', () => {
 		await page.getByRole('option', { name: 'Bar' }).click()
 		await expect.poll(() => page.url()).not.toMatch(/teams=/)
 		await expect(teamsFilter).toContainText('Tous les secteurs')
+	})
+
+	/**
+	 * Le serveur charge tout créneau qui croise la plage affichée, et un créneau de trois semaines
+	 * la déborde des deux côtés. Posé sur ses vraies dates, il élargissait la zone de défilement au
+	 * delà de la grille: le bord qui charge la plage suivante n'était plus atteint.
+	 */
+	test('Un créneau plus long que la plage ne déborde pas de la grille', async () => {
+		const team = await seedTeam(event.eventId, 'Camping')
+		const period = await seedPeriod(team.id, { inDays: -10, hours: 30 * 24 })
+
+		const grid = await gotoPlan(`?cursor=${new Date().toJSON()}`)
+		const card = grid.locator(`[id="${period.id}"]`)
+		await expect(card).toBeVisible()
+		// Trois semaines ne se lisent pas «08:00 – 08:00»: le libellé porte les jours.
+		await expect(card).toContainText(/\d{2}\.\d{2} \d{2}:\d{2} – /)
+
+		const scaleWidth = await grid
+			.locator('> div')
+			.first()
+			.evaluate((el) => (el as HTMLElement).offsetWidth)
+		expect(await grid.evaluate((el) => el.scrollWidth)).toBe(scaleWidth)
 	})
 })

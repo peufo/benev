@@ -6,10 +6,10 @@
 	import type { IconProps } from '@lucide/svelte'
 	import type { ClassValue } from 'svelte/elements'
 	import { urlParam } from 'fuma'
-	import { daytz } from '$lib/dayjs'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
+	import { clipToPlan } from './clipToPlan'
 	import { movePeriod } from '$lib/period/period.remote'
 	import { engagedSubscribes, scheduleChanged } from '$lib/period/periodChange'
 	import { selectNotify } from '$lib/period/selectNotify'
@@ -37,10 +37,26 @@
 	let deltaEndMs = $state(0)
 
 	let msSize = $derived(time(plan.hourSize).to('hour'))
-	let startPx = $derived(msSize * (-plan.start.diff(daytz(period.start)) + magnet(deltaStartMs)))
-	let sizePx = $derived(
-		msSize *
-			(daytz(period.end).diff(daytz(period.start)) - magnet(deltaStartMs) + magnet(deltaEndMs))
+	let shown = $derived(
+		clipToPlan(
+			{
+				start: period.start.getTime() + magnet(deltaStartMs),
+				end: period.end.getTime() + magnet(deltaEndMs),
+			},
+			plan
+		)
+	)
+	let startPx = $derived(msSize * (shown.start - plan.start.valueOf()))
+	let sizePx = $derived(msSize * (shown.end - shown.start))
+
+	// Tirer un bord coupé déplacerait une date hors de vue. La coupe se lit sur les dates au repos:
+	// lue pendant le geste, elle démonterait la poignée qu'on tient.
+	let cut = $derived(clipToPlan({ start: +period.start, end: +period.end }, plan))
+	let visibleDrags = $derived(
+		drags.filter(
+			({ moveStart, moveEnd }) =>
+				!(moveStart && !moveEnd && cut.clippedStart) && !(moveEnd && !moveStart && cut.clippedEnd)
+		)
 	)
 
 	async function handleGrabDone() {
@@ -92,10 +108,15 @@
 			'group relative z-10 hover:z-20',
 			'rounded-md p-1 text-sm border border-hard',
 			'overflow-visible min-h-8',
+			// Le côté coupé par le bord de la plage reste ouvert: le créneau continue au-delà.
+			shown.clippedStart &&
+				(plan.axis === 'x' ? 'rounded-l-none border-l-0' : 'rounded-t-none border-t-0'),
+			shown.clippedEnd &&
+				(plan.axis === 'x' ? 'rounded-r-none border-r-0' : 'rounded-b-none border-b-0'),
 			urlParam.has('form_period', period.id) ? 'bg-accent/60 z-20' : 'bg-accent/30',
 		]}
 	>
-		{#each drags as drag, i (i)}
+		{#each visibleDrags as drag, i (i)}
 			<DragButton
 				class={drag.class}
 				icon={drag.icon}

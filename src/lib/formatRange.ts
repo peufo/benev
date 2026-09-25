@@ -74,3 +74,16 @@ export const formatRangeHour = ({ start, end }: Range, timeZone?: string) => {
 	if (_start.isSame(_end)) return _start.format('HH:mm')
 	return [_start.format('HH:mm'), _end.format('HH:mm')].join(' – ')
 }
+
+/**
+ * Comme `formatRangeHour`, mais un créneau qui passe minuit dit aussi ses jours: sur le plan,
+ * «08:00 – 18:00» ne distinguerait pas trois jours de montage d'une journée.
+ */
+export const formatRangeHourSpan = ({ start, end }: Range, timeZone?: string) => {
+	const tz = timeZone ?? getEventTimeZone()
+	const _start = dayjs(start).tz(tz)
+	const _end = dayjs(end).tz(tz)
+	// Un créneau du soir qui finit à minuit pile reste un créneau d'un jour.
+	if (_start.isSame(_end.subtract(1, 'ms'), 'day')) return formatRangeHour({ start, end }, tz)
+	return [_start.format('ddd DD.MM HH:mm'), _end.format('ddd DD.MM HH:mm')].join(' – ')
+}

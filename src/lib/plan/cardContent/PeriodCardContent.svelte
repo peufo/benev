@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CheckIcon, OctagonAlertIcon } from '@lucide/svelte'
-	import { formatRangeHour } from '$lib/formatRange'
+	import { formatRangeHourSpan } from '$lib/formatRange'
 	import { urlParam } from 'fuma'
 	import { magnet } from '../magnet.svelte'
 	import type { PeriodWithMembers } from '../types'
@@ -23,7 +23,7 @@
 			<div
 				class="text-xs font-semibold m-1 whitespace-nowrap overflow-hidden text-ellipsis mr-auto"
 			>
-				{formatRangeHour({
+				{formatRangeHourSpan({
 					start: period.start.getTime() + magnet(deltaStartMs),
 					end: period.end.getTime() + magnet(deltaEndMs),
 				})}
