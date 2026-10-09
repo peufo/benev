@@ -109,7 +109,7 @@
 		"svelte-portal": "^2.2.1",
 		"svelte-sonner": "^1.1.1",
 		"tippy.js": "^6.3.7",
-		"zod": "^4.1.11"
+		"zod": "^4.5.4"
 	},
 	"license": "AGPL-3.0-or-later",
 	"author": "Dev Voisard <jonas.voisard@gmail.com>",
