@@ -88,6 +88,7 @@
 		>
 			<button
 				class="btn btn-square btn-sm btn-primary btn-soft"
+				aria-label="Nouvelle page"
 				use:tip={{ content: 'Nouvelle page' }}
 			>
 				<PlusIcon class="opacity-70" />

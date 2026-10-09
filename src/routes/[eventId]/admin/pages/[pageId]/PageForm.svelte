@@ -177,9 +177,6 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	{#if isFixed}
 		<input type="hidden" name="state" value="published" />
 	{/if}
-	{#if page.type !== 'email'}
-		<input type="hidden" name="path" value={normalizePath(page.title)} />
-	{/if}
 
 	{#key `${page.id}:${resetToken}`}
 		<InputTextRich

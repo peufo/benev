@@ -332,6 +332,7 @@
 				class="btn btn-soft btn-primary btn-square"
 				class:btn-disabled={!start || !end}
 				onclick={() => duplicateAside('after')}
+				aria-label="Dupliquer après"
 				use:tip={{ content: 'Dupliquer après' }}
 			>
 				<RedoDotIcon size={18} />
@@ -341,6 +342,7 @@
 				class="btn btn-soft btn-primary btn-square"
 				class:btn-disabled={!start || !end}
 				onclick={() => duplicateAside('before')}
+				aria-label="Dupliquer avant"
 				use:tip={{ content: 'Dupliquer avant' }}
 			>
 				<UndoDotIcon size={18} />

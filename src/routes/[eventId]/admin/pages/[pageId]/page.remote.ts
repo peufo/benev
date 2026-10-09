@@ -40,7 +40,12 @@ export const updatePage = form(modelPageUpdate, async (data) => {
 	// L'accueil et les modèles de courriel n'ont pas de brouillon: ils sont toujours visibles,
 	// et le formulaire ne leur propose pas de statut.
 	const state = data.type === 'home' || data.type === 'email' ? 'published' : data.state
-	return prisma.page.update({ where: { id: data.id }, data: { ...data, state } })
+	// Le chemin suit le titre soumis, celui-là même dont on vient de vérifier l'unicité. Un modèle
+	// de courriel n'est pas une destination: il n'en a pas.
+	return prisma.page.update({
+		where: { id: data.id },
+		data: { ...data, state, ...(data.type !== 'email' && { path }) },
+	})
 })
 
 export const deletePage = form(async () => {

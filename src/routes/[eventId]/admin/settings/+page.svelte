@@ -187,7 +187,7 @@
 							use:tip={{ content: 'Ajouter un champ' }}
 						>
 							<PlusIcon />
-							<span>Ajouter un champs</span>
+							<span>Ajouter un champ</span>
 						</a>
 					</div>
 				</Section>

@@ -66,6 +66,7 @@
 					>
 						<button
 							class="btn btn-square btn-sm btn-primary btn-soft"
+							aria-label="Nouveau badge"
 							use:tip={{ content: 'Nouveau badge' }}
 						>
 							<PlusIcon class="opacity-70" />

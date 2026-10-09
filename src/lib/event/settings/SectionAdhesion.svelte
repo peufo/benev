@@ -31,7 +31,7 @@
 
 	<InputBoolean
 		field={fields.selfSubscribeCancelAllowed}
-		label="Les membre peuvent {fields.selfSubscribeAllowed.value()
+		label="Les membres peuvent {fields.selfSubscribeAllowed.value()
 			? 'annuler ou '
 			: ''}décliner leurs inscriptions"
 		checked={event.selfSubscribeCancelAllowed}
@@ -64,7 +64,7 @@
 	<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
 		<InputBoolean label="Nom, prénom et email" checked disabled />
 		<InputBoolean
-			label="Adresse email verifié"
+			label="Adresse email vérifiée"
 			field={fields.userEmailVerifiedRequired}
 			checked={event.userEmailVerifiedRequired}
 		/>

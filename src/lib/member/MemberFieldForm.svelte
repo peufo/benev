@@ -56,7 +56,7 @@
 <form
 	{...remoteForm.enhance(
 		enhanceForm({
-			success: 'Succès',
+			success: field.id ? 'Champ modifié' : 'Champ ajouté',
 			onsuccess: () => {
 				const created = remoteForm.result
 				if (!field.id && created) globalEvents.emit('field_created', created)

@@ -30,7 +30,7 @@ export const extensions: Extensions = [
 		alignments: ['left', 'center', 'right'],
 	}),
 	Placeholder.configure({
-		placeholder: 'Write here ...',
+		placeholder: 'Écris ici…',
 	}),
 	Indent,
 	Image.configure({

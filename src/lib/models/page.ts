@@ -7,7 +7,6 @@ export const modelPageUpdate = z.object({
 	id: z.string(),
 	type: zEnumKeys(PAGE_TYPE),
 	state: zEnumKeys(PAGE_STATES),
-	path: z.string().optional(),
 	title: z.string().min(2),
 	content: z.string(),
 }) satisfies z.ZodType<Prisma.PageUpdateWithoutEventInput>
