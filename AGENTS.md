@@ -754,6 +754,26 @@ breaks `svelte-check`.
   local filesystem under `MEDIA_DIR` (default `./media`), recorded in the `Media` table with
   relations to `User`, `Event` and `Badge`, and served by `/media/[mediaId]`. `sharp` handles
   image processing.
+- **Demo videos** (the landing's `Workflow.svelte`) are not in the repo. cademo films them from
+  the scenarios in `demos/` into `demos/.out/videos` (ignored), and `bun run demo:publish`
+  rsyncs them under content-hashed names into `MEDIA_DIR/demos` of every environment listed in
+  `DEMO_TARGETS` (a script-only key, absent from `.env.example`). `/media/demos/[file]` serves
+  them with byte ranges, which Safari requires to play a video, and an immutable cache. That
+  folder is reserved: media ids are cuids, never `demos`. Only the manifest
+  `src/lib/landing/videos.json` is committed. A video does not delta-compress: in `static/`,
+  every regeneration would add its full weight to the history. In `bun run dev`, Vite serves
+  `./media` itself (`server.fs.allow`) before the route is reached. The `cademo` skill
+  (provided by cademo, overwritten by `cademo init --skill`: never edit it here) covers writing
+  and filming a demo; publishing is benev's own step:
+  - Once the user has approved the video, `bun run demo:publish` (`scripts/publish-demos.ts`)
+    uploads what changed to every target and merges the URLs into the manifest. Commit the
+    manifest, never the MP4.
+  - The landing reads a demo by its id (`demo('<id>', title)` in `Workflow.svelte`): an id
+    missing from the manifest does not compile.
+  - `DEMO_TARGETS` in `.env`: space-separated rsync destinations, the local one
+    (`./media/demos`) and the media volume of each Dokploy environment
+    (`root@host:/var/lib/docker/volumes/<volume>/_data/demos`, SSH key access). If it is
+    missing, tell the user rather than copying the video into `static/`.
 
 ---
 

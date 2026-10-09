@@ -22,3 +22,4 @@ bun.lock
 
 # mdsvex: pas de parseur prettier pour cette extension
 *.svx
+/.claude/skills/cademo

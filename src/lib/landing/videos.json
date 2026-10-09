@@ -1,0 +1,36 @@
+{
+	"config-fields": {
+		"video": "/media/demos/config-fields.76ff18c7.mp4"
+	},
+	"create-event": {
+		"video": "/media/demos/create-event.50d666f1.mp4"
+	},
+	"create-pages": {
+		"video": "/media/demos/create-pages.dcd1021d.mp4"
+	},
+	"create-teams": {
+		"video": "/media/demos/create-teams.e2f64d54.mp4",
+		"poster": "/media/demos/create-teams.9021f6d3.jpg"
+	},
+	"create-view": {
+		"video": "/media/demos/create-view.08025946.mp4"
+	},
+	"edit-theme": {
+		"video": "/media/demos/edit-theme.a2aa45c9.mp4"
+	},
+	"export-data": {
+		"video": "/media/demos/export-data.786f43be.mp4"
+	},
+	"planif-edit": {
+		"video": "/media/demos/planif-edit.eb31dd2b.mp4"
+	},
+	"planif-view": {
+		"video": "/media/demos/planif-view.651e50de.mp4"
+	},
+	"subscribe": {
+		"video": "/media/demos/subscribe.213e07b3.mp4"
+	},
+	"subscribe-validation": {
+		"video": "/media/demos/subscribe-validation.38fe8b98.mp4"
+	}
+}

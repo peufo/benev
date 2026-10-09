@@ -6,7 +6,8 @@
 	import { activeVideoIndex, reportVisibility } from './videoStore'
 
 	interface Video {
-		src: string
+		video: string
+		poster?: string
 		title: string
 	}
 
@@ -75,7 +76,8 @@
 	     flottaison. `metadata` suffit à peindre la première image. -->
 	<video
 		bind:this={videoElement}
-		src={videos[activeIndex].src}
+		src={videos[activeIndex].video}
+		poster={videos[activeIndex].poster}
 		preload="metadata"
 		muted
 		playsinline

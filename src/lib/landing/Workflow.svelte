@@ -1,6 +1,10 @@
 <script lang="ts">
 	import VideoCarousel from './VideoCarousel.svelte'
 	import { activeVideoIndex } from './videoStore'
+	import manifest from './videos.json'
+
+	/** Servies par `/media/demos`, déposées par `bun run demo:publish`. */
+	const demo = (id: keyof typeof manifest, title: string) => ({ ...manifest[id], title })
 
 	const steps = [
 		{
@@ -9,11 +13,11 @@
 			description:
 				'Configure les secteurs, les créneaux et les besoins en bénévoles. Chaque événement a son propre mini-site avec des pages personnalisables pour centraliser toute la communication.',
 			videos: [
-				{ src: '/videos/create-event.mp4', title: "Créer l'événement" },
-				{ src: '/videos/edit-theme.mp4', title: 'Personnaliser le thème' },
-				{ src: '/videos/create-pages.mp4', title: 'Créer la charte et les pages' },
-				{ src: '/videos/create-teams.mp4', title: 'Créer les secteurs' },
-				{ src: '/videos/planif-edit.mp4', title: 'Planifier les créneaux' },
+				demo('create-event', "Créer l'événement"),
+				demo('edit-theme', 'Personnaliser le thème'),
+				demo('create-pages', 'Créer la charte et les pages'),
+				demo('create-teams', 'Créer les secteurs'),
+				demo('planif-edit', 'Planifier les créneaux'),
 			],
 		},
 		{
@@ -22,9 +26,9 @@
 			description:
 				'Laisse les bénévoles choisir leurs créneaux en autonomie. Ou garde le contrôle et gère les inscriptions toi-même.',
 			videos: [
-				{ src: '/videos/config-fields.mp4', title: "Configuration de l'adhésion" },
-				{ src: '/videos/subscribe.mp4', title: "Inscription d'un bénévole" },
-				{ src: '/videos/subscribe-validation.mp4', title: 'Valider une inscription' },
+				demo('config-fields', "Configuration de l'adhésion"),
+				demo('subscribe', "Inscription d'un bénévole"),
+				demo('subscribe-validation', 'Valider une inscription'),
 			],
 		},
 		{
@@ -33,9 +37,9 @@
 			description:
 				'Consulte et exporte la liste des bénévoles, les créneaux et les contacts en quelques clics.',
 			videos: [
-				{ src: '/videos/create-view.mp4', title: 'Créer des vues' },
-				{ src: '/videos/planif-view.mp4', title: 'Suivi de la planification' },
-				{ src: '/videos/export-data.mp4', title: 'Exporter les données' },
+				demo('create-view', 'Créer des vues'),
+				demo('planif-view', 'Suivi de la planification'),
+				demo('export-data', 'Exporter les données'),
 			],
 		},
 	]

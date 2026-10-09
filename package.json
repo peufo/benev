@@ -27,7 +27,11 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"dev:stripe": "stripe listen --forward-to localhost:5173/me/checkouts/validation"
+		"dev:stripe": "stripe listen --forward-to localhost:5173/me/checkouts/validation",
+		"demo": "cademo make",
+		"demo:edit": "cademo edit",
+		"demo:publish": "bun scripts/publish-demos.ts",
+		"cademo:local": "(cd ../capture && bun run pack) && bun remove cademo && bun add -d ../capture/.pack/cademo.tgz"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
@@ -41,6 +45,7 @@
 		"@types/object-path": "^0.11.4",
 		"@types/pdfkit": "^0.17.4",
 		"@types/qrcode": "^1.5.6",
+		"cademo": "../capture/.pack/cademo.tgz",
 		"daisyui": "^5.7.4",
 		"eslint": "^10.8.0",
 		"eslint-config-prettier": "^10.1.8",
