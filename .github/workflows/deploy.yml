@@ -50,12 +50,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
-      # `file:../fuma` ne se résout que sur la machine de dev: sans ce contrôle, l'oubli
-      # remonte en erreur d'installation, sans rapport visible avec sa cause.
-      - name: Refuser le lien local vers fuma
+      # `bun run fuma:local` / `cademo:local` pointent sur une archive du checkout voisin, qui
+      # n'existe que sur la machine de dev: sans ce contrôle, l'oubli remonte en erreur
+      # d'installation, sans rapport visible avec sa cause.
+      - name: Refuser les dépendances locales
         run: |
-          if grep -q '"fuma": "file:' package.json; then
-            echo "::error file=package.json::fuma est en lien local. Lance 'bun run fuma:npm' avant de pousser."
+          if grep -nE '": "(file:|link:|\.\.?/)' package.json; then
+            echo "::error file=package.json::Dépendance locale. Lance 'bun run <paquet>:npm' avant de pousser."
             exit 1
           fi
       - run: bun install --frozen-lockfile
@@ -84,12 +85,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
-      # `file:../fuma` ne se résout que sur la machine de dev: sans ce contrôle, l'oubli
-      # remonte en erreur d'installation dans l'image, sans rapport visible avec sa cause.
-      - name: Refuser le lien local vers fuma
+      # `bun run fuma:local` / `cademo:local` pointent sur une archive du checkout voisin, qui
+      # n'existe que sur la machine de dev: sans ce contrôle, l'oubli remonte en erreur
+      # d'installation dans l'image, sans rapport visible avec sa cause.
+      - name: Refuser les dépendances locales
         run: |
-          if grep -q '"fuma": "file:' package.json; then
-            echo "::error file=package.json::fuma est en lien local. Lance 'bun run fuma:npm' avant de pousser."
+          if grep -nE '": "(file:|link:|\.\.?/)' package.json; then
+            echo "::error file=package.json::Dépendance locale. Lance 'bun run <paquet>:npm' avant de pousser."
             exit 1
           fi
       - name: Log in to the Container registry

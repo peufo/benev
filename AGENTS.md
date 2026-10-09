@@ -37,7 +37,8 @@ The non-obvious parts:
 - **mdsvex** ne sert qu'à `/docs`: extension `.svx`, préprocesseur déclaré avant `vitePreprocess`.
 - **Lucide (`@lucide/svelte`) is the only icon set.**
 - **Font**: Barlow (400–800) via Google Fonts in `src/app.html`.
-- **`fuma` v2 is linked to a sibling checkout**, not the registry — see [Fuma](#fuma).
+- **`fuma` v2 and `cademo` toggle between the registry and a sibling checkout** — see
+  [Sibling packages](#sibling-packages-fuma-and-cademo).
 - Emails are Svelte components rendered with `render()` from `svelte/server`.
 
 ### Svelte 5 and SvelteKit experimental flags
@@ -407,41 +408,55 @@ le navigateur ne reçoit que la page compilée, par le glob paresseux de `conten
 indexent par slug — le chemin sous `content/`, sans extension — pour que le moteur n'ait jamais de
 chemin de fichier à construire.
 
-## Fuma
+## Sibling packages: fuma and cademo
 
-The UI depends on fuma 2, and there are **two ways to consume it**. The committed state is the
-registry (`"fuma": "^2.2.7"`), because CI and the Docker build resolve dependencies with no sibling
-checkout in reach. Working on fuma itself means switching to the local link at `../fuma`, where
-fixes land as they are found:
+Two dependencies are developed alongside benev, in sibling checkouts: **fuma** (`../fuma`, the UI
+kit) and **cademo** (`../cademo`, the demo videos). Each has **two ways to be consumed**, toggled by
+the same pair of scripts, both backed by `scripts/use-package.ts`:
 
 ```bash
-bun run fuma:local   # -> file:../fuma, the checkout, without publishing
-bun run fuma:npm     # -> back to the registry, the state that may be committed
+bun run fuma:local     # symlinks ../fuma: `bun run package:watch` there is seen here live
+bun run fuma:npm       # back to the registry, the state that may be committed
+bun run cademo:local   # builds ../cademo, packs it, installs the archive
+bun run cademo:npm
 ```
 
-Under the link, bun **copies** the checkout into `node_modules/fuma` — it neither symlinks nor
-hardlinks it (verified on bun 1.2.22). An edit to `../fuma` therefore takes `bun run package` there
-_and_ `bun install` here before benev sees it; nothing is picked up live.
+The local mode is never `file:../<pkg>`: bun **copies** the checkout at install time, its
+`node_modules` included (verified on bun 1.2.22), which gives neither live edits nor a clean
+install. Each package declares one of two ways instead:
 
-Never commit the link. A step at the head of the CI `test` job rejects a `file:` range before
-`bun install` runs, because the raw resolution error does not point at its cause. Publishing from
-`../fuma` (`npm publish`, whose `prepublishOnly` runs `bun run package`) is what makes a fix
-available to `bun run fuma:npm`, and therefore to `dev.benev.io`.
+- **fuma is linked** (`bun link` there, `link:fuma` here). `node_modules/fuma` is a symlink, so
+  `bun run package:watch` in `../fuma` reaches benev's dev server with no reinstall. Its
+  dependencies resolve from `../fuma/node_modules`; `resolve.dedupe` in `vite.config.ts` brings
+  kit, svelte and zod back to benev's copies.
+- **cademo is packed**: the local mode installs `../cademo/.pack/cademo.tgz`, the archive
+  `npm publish` would upload. A link would load cademo's own playwright, which does not recognise
+  the objects of benev's. An edit there takes another `bun run cademo:local`.
+
+`<pkg>:npm` removes the package before adding it back: otherwise bun keeps the symlink in place
+when the published version matches the checkout's.
+
+The committed state is the registry, because CI and the Docker build resolve dependencies with no
+sibling checkout in reach. A step at the head of both CI jobs rejects any `file:`, `link:` or
+relative range in `package.json` before `bun install` runs, because the raw resolution error does
+not point at its cause. Publishing from the checkout (`npm publish`) is what makes a fix available
+to `bun run <pkg>:npm`, and therefore to `dev.benev.io`.
+
+## Fuma
 
 `vite.config.ts` is written to hold for both modes and needs no switching:
 
 - `server.fs.allow` — serve files from outside the project root (`media` and `../fuma`). Inert
   when the directory is absent.
-- `optimizeDeps.exclude: ['fuma']` — no pre-bundling, so a reinstalled link is seen without
-  clearing Vite's cache.
+- `optimizeDeps.exclude: ['fuma']` — no pre-bundling, so a rebuilt `dist/` behind the link is
+  seen without clearing Vite's cache.
 - `optimizeDeps.include: ['litepicker']` — the consequence of that exclusion. `litepicker` is a
   CommonJS dependency of fuma's `RangePicker`, imported nowhere in `src/`; without an explicit
   include the dev server serves raw CJS. It stays declared in `package.json` for that reason.
-- `resolve.dedupe: ['@sveltejs/kit', 'svelte', 'zod']` — the copied checkout brings its own
-  `node_modules` along, kept for its development. Without dedupe, `fuma/server`
-  throws a `redirect()` built by _its_ copy of kit, benev's copy does not recognise it, and the
-  redirect surfaces as a 500; for zod it is the global `z.config()` that is per-copy, leaving
-  fuma's schemas in English. Redundant on the registry, required the moment the link is back.
+- `resolve.dedupe: ['@sveltejs/kit', 'svelte', 'zod']` — under the link, fuma's imports resolve
+  from `../fuma/node_modules`, and even from the registry it ships a nested `zod`. Without
+  dedupe, `fuma/server` throws a `redirect()` built by _its_ copy of kit, benev's copy does not
+  recognise it, and the redirect surfaces as a 500; for zod it is the global `z.config()` that is per-copy, leaving fuma's schemas in English.
 - `@source '../node_modules/fuma/dist'` in `app.css` — one path that resolves in both modes, since
   both put a real `dist/` there. It carries the same 47 components as `src/lib/`, so Tailwind finds
   the same classes: switching modes produces a byte-identical stylesheet.
