@@ -15,7 +15,8 @@ demo('config-fields', async ({ page, director }) => {
 	await director.click(page.getByRole('button', { name: 'Enregistrer les modifications' }))
 	await expect(page.getByText('Modifications enregistrées')).toBeVisible()
 
-	// Une question à soi
+	// Une question à soi: la section vient à l'écran avant que la main ne s'y rende.
+	await director.scrollTo(page.locator('#fields'))
 	await director.click(page.getByRole('link', { name: 'Ajouter un champ' }))
 	const drawer = page.getByRole('dialog', { name: 'Nouveau champ' })
 	await expect(drawer).toBeVisible()

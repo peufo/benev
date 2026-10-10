@@ -185,28 +185,76 @@ export function festivalFriday() {
 const LOGO = fileURLToPath(new URL('./assets/logo-festival.png', import.meta.url))
 
 /**
- * L'identité que pose la démo `create-space`: le logo et le thème Crépuscule. Le média est
- * écrit là où `$lib/server/media` l'aurait écrit, sous `MEDIA_DIR` (celui du `.env`).
+ * L'identité que pose la démo `create-space` et que les autres retrouvent: le logo, sur le thème
+ * par défaut que l'évènement reçoit à sa création. Le média est écrit là où `$lib/server/media`
+ * l'aurait écrit, sous `MEDIA_DIR` (celui du `.env`).
  */
-async function seedIdentity(eventId: string, createdById: string) {
+export async function seedIdentity(eventId: string, createdById: string) {
 	const logo = await prisma.media.create({
 		data: { eventId, name: 'Logo du festival', createdById },
 	})
 	const dir = path.resolve(process.env.MEDIA_DIR ?? './media', logo.id)
 	await mkdir(dir, { recursive: true })
 	await sharp(LOGO).toFile(path.resolve(dir, 'original.webp'))
-	// Les réglages de `THEME_PRESETS.crepuscule`, que `$lib/constant` ne laisse pas importer hors
-	// de SvelteKit (il lit `$app/env/public`).
-	await prisma.event.update({
-		where: { id: eventId },
+	await prisma.event.update({ where: { id: eventId }, data: { logoId: logo.id } })
+}
+
+/** Le texte de la charte, collé d'un document existant comme le ferait une organisatrice. */
+export const CHARTER = `
+<p>Merci de rejoindre l'équipe du Festival des Lumières&nbsp;! Cette charte dit ce qu'on attend les un·es des autres.</p>
+<h3>Nos valeurs</h3>
+<ul>
+	<li><p><strong>Bienveillance</strong>&nbsp;: envers le public, les artistes et toute l'équipe.</p></li>
+	<li><p><strong>Fiabilité</strong>&nbsp;: on honore les créneaux choisis, ou on prévient à temps.</p></li>
+	<li><p><strong>Sobriété</strong>&nbsp;: pas d'alcool pendant les créneaux.</p></li>
+</ul>
+<h3>Ce que le festival t'offre</h3>
+<ul>
+	<li><p>Un pass pour tout le week-end</p></li>
+	<li><p>Les repas et les boissons pendant tes créneaux</p></li>
+	<li><p>Le t-shirt de l'équipe</p></li>
+</ul>`
+
+/** La charte que rédige la démo `create-pages`, publiée: chaque bénévole l'accepte en adhérant. */
+export async function seedCharter(eventId: string) {
+	await prisma.page.create({
 		data: {
-			logoId: logo.id,
-			backgroundPreset: 'crepuscule',
-			backgroundBlur: 0,
-			backgroundBrightness: 100,
-			backgroundWhiteness: 0,
-			backgroundGrain: 0.4,
+			eventId,
+			title: 'Charte',
+			path: 'charte',
+			type: 'charter',
+			state: 'published',
+			content: CHARTER,
 		},
+	})
+}
+
+/** Une bénévole qui a son compte benevio, mais n'a pas encore rejoint le festival. */
+export async function seedVolunteer(page: Page): Promise<SeededUser> {
+	const user = await createVolunteer()
+	await page.context().clearCookies()
+	await signIn(page, user)
+	return user
+}
+
+/** Le compte de Sophie, la bénévole de la démo `subscribe`. */
+export async function createVolunteer(): Promise<SeededUser> {
+	const email = 'sophie.rapin@benevio.test'
+	await prisma.user.deleteMany({ where: { email } })
+	return prisma.user.create({
+		data: {
+			id: cuid.createId(),
+			email,
+			firstName: 'Sophie',
+			lastName: 'Rapin',
+			phone: '079 412 58 31',
+			isEmailVerified: true,
+			isTermsAccepted: true,
+			termsVersion: TERMS_VERSION,
+			termsAcceptedAt: new Date(),
+			avatarPlaceholder: avatar('sophie'),
+		},
+		select: { id: true, email: true, firstName: true, lastName: true },
 	})
 }
 

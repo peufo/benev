@@ -1,10 +1,11 @@
 import { demo, expect } from 'cademo'
-import { createEvent, seedOrganizer } from './fixtures'
+import { createEvent, seedIdentity, seedOrganizer } from './fixtures'
 import { gotoHydrated } from '../tests/hydrated'
 
 demo('create-teams', async ({ page, director }) => {
-	await seedOrganizer(page)
+	const organizer = await seedOrganizer(page)
 	const { eventId } = await createEvent(page)
+	await seedIdentity(eventId, organizer.id)
 	await gotoHydrated(page, `/${eventId}/admin/teams`)
 
 	await director.start()
