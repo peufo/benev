@@ -48,7 +48,6 @@
         "zod": "^4.5.4",
       },
       "devDependencies": {
-        "cademo": "../cademo/.pack/cademo.tgz",
         "@eslint/js": "^10.0.1",
         "@playwright/test": "^1.54.2",
         "@sveltejs/adapter-node": "^5.5.7",
@@ -61,6 +60,7 @@
         "@types/object-path": "^0.11.4",
         "@types/pdfkit": "^0.17.4",
         "@types/qrcode": "^1.5.6",
+        "cademo": "^0.1.1",
         "daisyui": "^5.7.4",
         "eslint": "^10.8.0",
         "eslint-config-prettier": "^10.1.8",
@@ -809,7 +809,7 @@
 
     "c12": ["c12@3.1.0", "", { "dependencies": { "chokidar": "^4.0.3", "confbox": "^0.2.2", "defu": "^6.1.4", "dotenv": "^16.6.1", "exsolve": "^1.0.7", "giget": "^2.0.0", "jiti": "^2.4.2", "ohash": "^2.0.11", "pathe": "^2.0.3", "perfect-debounce": "^1.0.0", "pkg-types": "^2.2.0", "rc9": "^2.1.2" }, "peerDependencies": { "magicast": "^0.3.5" }, "optionalPeers": ["magicast"] }, "sha512-uWoS8OU1MEIsOv8p/5a82c3H31LsWVR5qiyXVfBNOzfffjUWtPnhAb4BYI2uG2HfGmZmFjCtui5XNWaps+iFuw=="],
 
-    "cademo": ["cademo@../cademo/.pack/cademo.tgz", { "dependencies": { "@remotion/cli": "4.0.534", "@remotion/google-fonts": "4.0.534", "react": "^19.1.0", "react-dom": "^19.1.0", "remotion": "4.0.534" }, "peerDependencies": { "@playwright/test": ">=1.50" }, "bin": { "cademo": "./dist/cli.js" } }],
+    "cademo": ["cademo@0.1.1", "", { "dependencies": { "@remotion/cli": "4.0.534", "@remotion/google-fonts": "4.0.534", "react": "^19.1.0", "react-dom": "^19.1.0", "remotion": "4.0.534" }, "peerDependencies": { "@playwright/test": ">=1.50" }, "bin": { "cademo": "dist/cli.js" } }, "sha512-n3DkA+HYQUSHWQ3h0HjYuDnifHcNoHmct5uI/MxSV2Nj33V01lolaojdUYeKN5hZhd1wtePH0DVE8HDa1VG1/g=="],
 
     "callsites": ["callsites@3.1.0", "", {}, "sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ=="],
 
