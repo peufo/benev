@@ -13,11 +13,10 @@
 			description:
 				'Configure les secteurs, les créneaux et les besoins en bénévoles. Chaque événement a son propre mini-site avec des pages personnalisables pour centraliser toute la communication.',
 			videos: [
-				demo('create-event', "Créer l'événement"),
-				demo('edit-theme', 'Personnaliser le thème'),
+				demo('create-space', "Créer l'événement et son identité"),
 				demo('create-pages', 'Créer la charte et les pages'),
 				demo('create-teams', 'Créer les secteurs'),
-				demo('planif-edit', 'Planifier les créneaux'),
+				demo('planif', 'Planifier les créneaux'),
 			],
 		},
 		{
@@ -36,11 +35,7 @@
 			title: 'Suivi et organisation',
 			description:
 				'Consulte et exporte la liste des bénévoles, les créneaux et les contacts en quelques clics.',
-			videos: [
-				demo('create-view', 'Créer des vues'),
-				demo('planif-view', 'Suivi de la planification'),
-				demo('export-data', 'Exporter les données'),
-			],
+			videos: [demo('create-view', 'Créer des vues'), demo('export-data', 'Exporter les données')],
 		},
 	]
 </script>
