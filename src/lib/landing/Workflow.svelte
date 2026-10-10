@@ -34,8 +34,13 @@
 			number: '03',
 			title: 'Suivi et organisation',
 			description:
-				'Consulte et exporte la liste des bénévoles, les créneaux et les contacts en quelques clics.',
-			videos: [demo('create-view', 'Créer des vues'), demo('export-data', 'Exporter les données')],
+				'Consulte et exporte la liste des bénévoles, les créneaux et les contacts en quelques clics. Imprime les feuilles de secteur et les badges pour le jour J.',
+			videos: [
+				demo('create-view', 'Créer des vues'),
+				demo('export-data', 'Exporter les données'),
+				demo('team-pdf', "Imprimer la feuille d'un secteur"),
+				demo('badges', 'Créer et imprimer les badges'),
+			],
 		},
 	]
 </script>

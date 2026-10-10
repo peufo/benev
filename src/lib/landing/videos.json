@@ -1,4 +1,8 @@
 {
+	"badges": {
+		"video": "/media/demos/badges.a14b697c.mp4",
+		"poster": "/media/demos/badges.feab767c.jpg"
+	},
 	"config-fields": {
 		"video": "/media/demos/config-fields.96302abc.mp4",
 		"poster": "/media/demos/config-fields.d9d7c46f.jpg"
@@ -34,5 +38,9 @@
 	"subscribe-validation": {
 		"video": "/media/demos/subscribe-validation.5dc551ea.mp4",
 		"poster": "/media/demos/subscribe-validation.f49cfb42.jpg"
+	},
+	"team-pdf": {
+		"video": "/media/demos/team-pdf.7eee2448.mp4",
+		"poster": "/media/demos/team-pdf.ddf445af.jpg"
 	}
 }

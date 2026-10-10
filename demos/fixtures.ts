@@ -4,7 +4,8 @@ import { mockPhoton } from '../tests/photon'
 import { gotoHydrated } from '../tests/hydrated'
 import { TERMS_VERSION } from '../src/lib/constant/terms'
 import cuid from '@paralleldrive/cuid2'
-import { mkdir } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
+import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
@@ -424,4 +425,60 @@ export async function seedFestival(
 	}
 
 	return { organizer, eventId, name, teams: seededTeams, members, fieldIds, at }
+}
+
+/**
+ * Le PDF s'ouvre dans un nouvel onglet, que la caméra ne suit pas: l'onglet est refermé aussitôt,
+ * et son adresse rejouée dans l'onglet filmé, où s'affiche le visualiseur de Chromium.
+ */
+export async function showInPlace(page: Page, popup: Promise<Page>, { draw = 2000 } = {}) {
+	const tab = await popup
+	const url = tab.url()
+	await tab.close()
+	await page.goto(url)
+	// Le visualiseur dessine après `load`: sans ce délai, la coupe montrerait sa page grise.
+	await page.waitForTimeout(draw)
+}
+
+const BADGE_BACKGROUND = fileURLToPath(new URL('./assets/badge-background.png', import.meta.url))
+
+/** Le fond des badges: la lueur moutarde du logo, qui s'éteint dans son crème. */
+export async function seedBadgeBackground(eventId: string, createdById: string) {
+	const media = await prisma.media.create({
+		data: { eventId, name: 'Fond des badges', createdById },
+	})
+	const dir = path.resolve(process.env.MEDIA_DIR ?? './media', media.id)
+	await mkdir(dir, { recursive: true })
+	await sharp(BADGE_BACKGROUND).toFile(path.resolve(dir, 'original.webp'))
+	return media.id
+}
+
+const AVATARS = fileURLToPath(new URL('./.out/avatars', import.meta.url))
+
+/**
+ * Une photo de profil pour chaque membre: le badge n'imprime que celle-là, jamais l'avatar de
+ * remplacement. Gardée en cache, pour ne pas solliciter DiceBear à chaque prise.
+ */
+export async function seedAvatars(
+	eventId: string,
+	createdById: string,
+	members: { id: string; firstName: string; lastName: string }[]
+) {
+	await mkdir(AVATARS, { recursive: true })
+	for (const member of members) {
+		const seed = `${member.firstName} ${member.lastName}`
+		const cached = path.resolve(AVATARS, `${encodeURIComponent(seed)}.png`)
+		if (!existsSync(cached)) {
+			const res = await fetch(
+				`https://api.dicebear.com/7.x/thumbs/png?size=256&seed=${encodeURIComponent(seed)}`
+			)
+			if (!res.ok) throw new Error(`DiceBear: ${res.status} pour ${seed}`)
+			await writeFile(cached, Buffer.from(await res.arrayBuffer()))
+		}
+		const media = await prisma.media.create({ data: { eventId, name: seed, createdById } })
+		const dir = path.resolve(process.env.MEDIA_DIR ?? './media', media.id)
+		await mkdir(dir, { recursive: true })
+		await sharp(cached).toFile(path.resolve(dir, 'original.webp'))
+		await prisma.member.update({ where: { id: member.id }, data: { avatarId: media.id } })
+	}
 }
