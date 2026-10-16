@@ -93,12 +93,14 @@ export const logMap = {
 		sendEmail,
 		resent,
 		teams,
+		importedFrom,
 	}: {
 		member: MemberSource
 		actor: LogActor
 		sendEmail: boolean
 		resent?: boolean
 		teams?: LogRef[]
+		importedFrom?: string
 	}) => ({
 		eventId: member.eventId,
 		memberId: member.id,
@@ -118,6 +120,9 @@ export const logMap = {
 			// Le rôle donné dès l'invitation, sur le même principe: optionnel, les lignes déjà
 			// écrites ne le portent pas.
 			...(member.isAdmin && { isAdmin: true as const }),
+			// Un membre importé n'a pas été invité un par un: la source, fichier ou évènement, dit
+			// d'où vient la fiche. Optionnelle elle aussi.
+			...(importedFrom && { importedFrom }),
 			actor: refActor(actor),
 		},
 	}),

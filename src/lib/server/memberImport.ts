@@ -1,6 +1,5 @@
 import type { Member, Event, Field } from '@prisma/client'
-import { prisma, notifyTierQuotaIfNeeded } from '#lib/server/index.js'
-import { createAvatarPlaceholder } from '#lib/server/index.js'
+import { prisma } from '#lib/server/index.js'
 
 export interface FieldMapping {
 	sourceFieldId: string
@@ -9,26 +8,6 @@ export interface FieldMapping {
 	targetFieldName: string | null // for display
 	sourceFieldType: string
 	targetFieldType: string | null
-}
-
-export interface ImportOptions {
-	sourceEventId: string
-	targetEventId: string
-	selectedMemberIds: string[]
-	fieldMappings: FieldMapping[]
-	preserveTeamAssignments: boolean
-	sendInvitationEmails: boolean
-}
-
-interface ImportResult {
-	success: boolean
-	importedCount: number
-	skippedCount: number
-	errors: string[]
-	details: {
-		imported: Array<{ id: string; name: string; email: string }>
-		skipped: Array<{ name: string; email: string; reason: string }>
-	}
 }
 
 type MemberWithFields = Member & {
@@ -151,118 +130,6 @@ class MemberImportService {
 		})
 
 		return transformedProfile
-	}
-
-	/**
-	 * Check for existing members to avoid duplicates
-	 */
-	async getExistingMemberEmails(eventId: string, emails: string[]): Promise<Set<string>> {
-		const existingMembers = await prisma.member.findMany({
-			where: {
-				eventId,
-				email: { in: emails },
-			},
-			select: { email: true },
-		})
-
-		return new Set(existingMembers.map((m) => m.email).filter(Boolean) as string[])
-	}
-
-	/**
-	 * Main import function
-	 */
-	async importMembers(options: ImportOptions): Promise<ImportResult> {
-		const result: ImportResult = {
-			success: false,
-			importedCount: 0,
-			skippedCount: 0,
-			errors: [],
-			details: {
-				imported: [],
-				skipped: [],
-			},
-		}
-
-		try {
-			// Get source members
-			const sourceMembers = await this.getSourceMembers(options.sourceEventId)
-			const selectedMembers = sourceMembers.filter((m) => options.selectedMemberIds.includes(m.id))
-
-			// Check for existing members
-			const memberEmails = selectedMembers.map((m) => m.email).filter(Boolean) as string[]
-			const existingEmails = await this.getExistingMemberEmails(options.targetEventId, memberEmails)
-
-			// Process each member
-			for (const sourceMember of selectedMembers) {
-				const memberName = `${sourceMember.firstName} ${sourceMember.lastName}`
-
-				// Skip if member already exists
-				if (sourceMember.email && existingEmails.has(sourceMember.email)) {
-					result.skippedCount++
-					result.details.skipped.push({
-						name: memberName,
-						email: sourceMember.email,
-						reason: 'Membre déjà existant',
-					})
-					continue
-				}
-
-				try {
-					// Transform profile data
-					const transformedProfile = this.transformProfileData(
-						sourceMember.profileJson,
-						options.fieldMappings
-					)
-
-					// Create new member
-					const newMember = await prisma.member.create({
-						data: {
-							eventId: options.targetEventId,
-							email: sourceMember.email,
-							phone: sourceMember.phone,
-							firstName: sourceMember.firstName,
-							lastName: sourceMember.lastName,
-							birthday: sourceMember.birthday,
-							street: sourceMember.street,
-							zipCode: sourceMember.zipCode,
-							city: sourceMember.city,
-							profileJson: transformedProfile,
-							isValidedByEvent: true, // Auto-validate imported members
-							avatarPlaceholder: createAvatarPlaceholder(),
-							// Notification settings
-							isNotifiedSubscribe: !!sourceMember.email,
-							isNotifiedReminder: !!sourceMember.email,
-							isNotifiedLeaderOfSubscribe: !!sourceMember.email,
-							isNotifiedAdminOfNewMember: !!sourceMember.email,
-						},
-					})
-
-					result.importedCount++
-					result.details.imported.push({
-						id: newMember.id,
-						name: memberName,
-						email: sourceMember.email || '',
-					})
-				} catch (error) {
-					result.errors.push(`Erreur lors de l'import de ${memberName}: ${error}`)
-					result.details.skipped.push({
-						name: memberName,
-						email: sourceMember.email || '',
-						reason: 'Erreur lors de la création',
-					})
-				}
-			}
-
-			result.success = result.errors.length === 0
-
-			if (result.importedCount > 0) {
-				await notifyTierQuotaIfNeeded(options.targetEventId)
-			}
-		} catch (error) {
-			result.errors.push(`Erreur générale: ${error}`)
-		}
-
-		return result
 	}
 
 	/**

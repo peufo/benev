@@ -1,5 +1,7 @@
 import { describe, it } from 'vitest'
 import {
+	buildMembers,
+	importBlocker,
 	guessMapping,
 	distinctValues,
 	guessTarget,
@@ -214,5 +216,67 @@ describe('suggérer un champ', () => {
 			type: 'select',
 			options: '["L","M"]',
 		})
+	})
+})
+
+describe('construire les membres', () => {
+	const bool = field({ id: 'tshirt', name: 'T-shirt', type: 'boolean' })
+	const all = [...fields, bool]
+	const table = {
+		headers: ['Nom complet', 'Email', 'Naissance', 'Taille', 'Régime', 'Âge', 'T-shirt', 'Note'],
+		rows: [
+			[
+				'Ada King Lovelace',
+				'Ada@Example.com',
+				'10.12.1815',
+				's',
+				'végétarien; Sans gluten',
+				'36,5',
+				'Oui',
+				'x',
+			],
+			['', 'nobody@example.com', '', '', '', '', '', ''],
+			['Ada Bis', 'ada@example.com', '', '', '', '', 'non', ''],
+		],
+	}
+	const mapping = [
+		'contact:fullName',
+		'contact:email',
+		'contact:birthday',
+		'field:size',
+		'field:diet',
+		'field:age',
+		'field:tshirt',
+		null,
+	] as const
+
+	it('convertit chaque valeur au type de son champ', ({ expect }) => {
+		const { rows } = buildMembers(table, [...mapping], all)
+		expect(rows).toEqual([
+			{
+				line: 2,
+				firstName: 'Ada',
+				lastName: 'King Lovelace',
+				email: 'ada@example.com',
+				birthday: '1815-12-10',
+				profile: { size: 'S', diet: ['Végétarien', 'Sans gluten'], age: 36.5, tshirt: true },
+			},
+		])
+	})
+
+	it('écarte les lignes sans nom et les adresses en double', ({ expect }) => {
+		const { skipped } = buildMembers(table, [...mapping], all)
+		expect(skipped.map(({ line, reason }) => [line, reason])).toEqual([
+			[3, 'Nom manquant'],
+			[4, 'Adresse en double dans le fichier'],
+		])
+	})
+
+	it("refuse d'importer sans colonne de nom ou avec une colonne en erreur", ({ expect }) => {
+		const reports = reportColumns(table, [...mapping], all)
+		expect(importBlocker(reports, [...mapping])).toBeNull()
+		expect(importBlocker(reports, ['contact:email'])).toMatch(/nom/)
+		const wrong = reportColumns(table, ['contact:fullName', 'field:age'], all)
+		expect(importBlocker(wrong, ['contact:fullName', 'field:age'])).toMatch(/rouge/)
 	})
 })

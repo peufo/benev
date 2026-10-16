@@ -6,7 +6,9 @@
 	import { eventPath } from '#lib/eventPath.js'
 	import { Placeholder, Surface } from '#lib/ui/index.js'
 	import {
+		buildMembers,
 		guessMapping,
+		importBlocker,
 		parseCsv,
 		reportColumns,
 		type ColumnStatus,
@@ -14,6 +16,7 @@
 	} from '#lib/member/import/index.js'
 	import { importSource } from '../importSource.svelte'
 	import ColumnHeader from './ColumnHeader.svelte'
+	import ImportBar from './ImportBar.svelte'
 	import ValueMapDialog from './ValueMapDialog.svelte'
 
 	let { data } = $props()
@@ -22,6 +25,7 @@
 	let readError = $state(false)
 	/** La colonne dont on fait correspondre les valeurs, le temps du dialogue. */
 	let mappedColumn: number | null = $state(null)
+	let importing = $state(false)
 
 	// Le fichier ne survit pas à un rechargement: sans lui, il n'y a rien à mapper.
 	onMount(async () => {
@@ -41,6 +45,11 @@
 		report?.filter(
 			({ status }) => status === 'unmapped' || status === 'duplicate' || status === 'invalid'
 		).length ?? 0
+	)
+	const built = $derived(source.table && buildMembers(source.table, source.mapping, data.fields))
+	const blocker = $derived(report && importBlocker(report, source.mapping))
+	const ignoredColumns = $derived(
+		report?.filter(({ status }) => status === 'ignored' || status === 'unmapped').length ?? 0
 	)
 	const mappedField = $derived.by(() => {
 		if (mappedColumn === null) return undefined
@@ -95,7 +104,11 @@
 					{/if}
 				</p>
 
-				<div class="max-h-[70vh] overflow-auto rounded-box border border-soft">
+				<!-- Pendant l'import, le mappage et les valeurs ne bougent plus. -->
+				<fieldset
+					disabled={importing}
+					class="max-h-[70vh] min-w-0 overflow-auto rounded-box border border-soft"
+				>
 					<table class="table table-sm table-pin-rows">
 						<thead>
 							<tr>
@@ -148,7 +161,18 @@
 							{/each}
 						</tbody>
 					</table>
-				</div>
+				</fieldset>
+
+				{#if built}
+					<ImportBar
+						sourceName={source.csv.name}
+						rows={built.rows}
+						skipped={built.skipped}
+						{blocker}
+						{ignoredColumns}
+						bind:importing
+					/>
+				{/if}
 			{/if}
 		{:else}
 			<Placeholder><span class="loading loading-spinner"></span></Placeholder>

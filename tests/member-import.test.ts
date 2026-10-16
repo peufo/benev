@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { useEvent } from './event'
-import { seedField, seedMember, seedTeam, seedUser, signIn } from './seed'
+import { seedField, seedInvitedMember, seedMember, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
 
 /**
@@ -35,6 +35,13 @@ test.describe.serial('Import de membres', () => {
 			options: ['Small', 'Medium', 'Large'],
 		})
 
+		// Grace est déjà membre de la cible: l'import doit l'écarter, pas la dupliquer.
+		await seedInvitedMember(target.eventId, {
+			firstName: 'Grace',
+			lastName: 'Brewster',
+			email: 'grace@example.com',
+		})
+
 		const team = await seedTeam(target.eventId, 'Alpha')
 		const lead = await seedUser('Lead')
 		await seedMember(target.eventId, lead, { leaderOf: [team.id] })
@@ -56,7 +63,7 @@ test.describe.serial('Import de membres', () => {
 		).toBeVisible()
 	})
 
-	test("L'admin choisit un fichier CSV et corrige son mappage", async () => {
+	test("L'admin choisit un fichier CSV, corrige son mappage et l'importe", async () => {
 		await gotoHydrated(page, `/${target.eventId}/admin/members/import`)
 		await page.getByLabel('Fichier CSV').setInputFiles({
 			name: 'membres.csv',
@@ -112,9 +119,29 @@ test.describe.serial('Import de membres', () => {
 		await expect(column('Régime')).not.toContainText('Aucun champ trouvé')
 		await expect(page.getByText('à vérifier')).toHaveCount(0)
 
-		// Le fichier ne vit que dans le navigateur: un rechargement ramène au choix.
-		await page.reload()
+		// L'import part, et son rapport dit ce qui est entré et ce qui a été écarté.
+		await expect(page.getByLabel('Envoyer une invitation par e-mail')).not.toBeChecked()
+		await page.getByRole('button', { name: 'Importer 3 membres' }).click()
+		await page.waitForURL(`**/${target.eventId}/admin/members/import/report`)
+		await expect(page.getByRole('heading', { name: "Rapport d'import" })).toBeVisible()
+		const stat = (label: string) => page.locator('dl > div').filter({ hasText: label })
+		await expect(stat('Importés')).toContainText('2')
+		await expect(stat('Écartés')).toContainText('1')
+		await expect(stat('Échecs')).toContainText('0')
+		const grace = page.getByRole('row').filter({ hasText: 'grace@example.com' })
+		await expect(grace).toContainText('Déjà membre: Grace Brewster')
+		await expect(page.getByRole('link', { name: 'Ada Lovelace' })).toBeVisible()
+
+		// Le fichier est oublié: revenir en arrière ramène au choix de la source.
+		await page.goBack()
 		await page.waitForURL(`**/${target.eventId}/admin/members/import`)
+
+		// Le rapport ne survit pas à un rechargement; le journal, lui, garde une ligne par membre.
+		await gotoHydrated(page, `/${target.eventId}/admin/members/import/report`)
+		await page.waitForURL(`**/${target.eventId}/admin/members`)
+		await gotoHydrated(page, `/${target.eventId}/admin/dashboard`)
+		await expect(page.getByText('a importé')).toHaveCount(2)
+		await expect(page.getByText('depuis membres.csv').first()).toBeVisible()
 	})
 
 	test("Un·e responsable n'y a pas accès", async () => {

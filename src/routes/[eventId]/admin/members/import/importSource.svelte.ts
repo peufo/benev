@@ -1,5 +1,8 @@
 import { getContext, setContext } from 'svelte'
 import type { ColumnTarget, CsvTable } from '#lib/member/import/index.js'
+import type { ImportResult } from '#lib/member/memberImport.remote.js'
+
+export type ImportReport = { source: string; results: ImportResult[] }
 
 const KEY = 'import_source'
 
@@ -12,6 +15,8 @@ class ImportSource {
 	csv: File | null = $state(null)
 	table: CsvTable | null = $state(null)
 	mapping: ColumnTarget[] = $state([])
+	/** Le rapport du dernier import. Lui non plus ne survit pas à un rechargement. */
+	report: ImportReport | null = $state(null)
 
 	setCsv(file: File) {
 		this.csv = file

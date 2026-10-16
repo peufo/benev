@@ -10,7 +10,11 @@
 <p>
 	{#if log.type === 'member_invite'}
 		{@render snippetRef(log.data.actor)}
-		{log.data.resent ? 'a renvoyé une invitation à' : 'a invité'}
+		{log.data.importedFrom
+			? 'a importé'
+			: log.data.resent
+				? 'a renvoyé une invitation à'
+				: 'a invité'}
 		{@render snippetRef(log.data.member)}
 	{:else if log.type === 'member_join'}
 		{@render snippetRef(log.data.member)}
@@ -34,6 +38,9 @@
 
 <div class="flex items-center flex-wrap gap-2 mt-1 text-base-content/70">
 	{#if log.type === 'member_invite'}
+		{#if log.data.importedFrom}
+			<span class="badge badge-sm badge-ghost">depuis {log.data.importedFrom}</span>
+		{/if}
 		{#if log.data.email}
 			<span>{log.data.email}</span>
 		{:else}
