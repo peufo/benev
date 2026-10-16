@@ -62,7 +62,7 @@ test.describe.serial('Rappel avant un créneau', () => {
 
 	test("Un évènement qui a coupé le rappel n'en envoie pas", async () => {
 		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
-		await page.getByRole('button', { name: 'La veille, 24 heures avant' }).click()
+		await page.getByRole('button', { name: /reçoit un courriel avant le début/ }).click()
 		await page.getByRole('option', { name: 'Aucun rappel' }).click()
 		await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
 		await expect(page.getByText('Modifications enregistrées')).toBeVisible()
