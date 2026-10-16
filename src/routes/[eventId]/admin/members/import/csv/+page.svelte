@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { CircleXIcon, TriangleAlertIcon } from '@lucide/svelte'
 	import { onMount } from 'svelte'
-	import { goto } from '$app/navigation'
+	import { goto, invalidateAll } from '$app/navigation'
 	import { tip } from 'fuma'
+	import type { Field } from '@prisma/client'
 	import { eventPath } from '#lib/eventPath.js'
 	import { Placeholder, Surface } from '#lib/ui/index.js'
 	import {
-		CONTACT_TARGETS,
 		guessMapping,
 		parseCsv,
 		reportColumns,
@@ -14,11 +13,15 @@
 		type ColumnTarget,
 	} from '#lib/member/import/index.js'
 	import { importSource } from '../importSource.svelte'
+	import ColumnHeader from './ColumnHeader.svelte'
+	import ValueMapDialog from './ValueMapDialog.svelte'
 
 	let { data } = $props()
 
 	const source = importSource.get()
 	let readError = $state(false)
+	/** La colonne dont on fait correspondre les valeurs, le temps du dialogue. */
+	let mappedColumn: number | null = $state(null)
 
 	// Le fichier ne survit pas à un rechargement: sans lui, il n'y a rien à mapper.
 	onMount(async () => {
@@ -39,6 +42,11 @@
 			({ status }) => status === 'unmapped' || status === 'duplicate' || status === 'invalid'
 		).length ?? 0
 	)
+	const mappedField = $derived.by(() => {
+		if (mappedColumn === null) return undefined
+		const target = source.mapping[mappedColumn]
+		return data.fields.find((field) => `field:${field.id}` === target)
+	})
 
 	const columnClass: Record<ColumnStatus, string> = {
 		ok: '',
@@ -52,8 +60,14 @@
 		return `${count} ${count > 1 ? plural : singular}`
 	}
 
-	function setTarget(column: number, value: string) {
-		source.mapping[column] = (value || null) as ColumnTarget
+	function setTarget(column: number, target: ColumnTarget) {
+		source.mapping[column] = target
+	}
+
+	// Le champ n'existe dans `data.fields` qu'une fois les données rechargées.
+	async function handleFieldCreated(column: number, field: Field) {
+		await invalidateAll()
+		source.mapping[column] = `field:${field.id}`
 	}
 </script>
 
@@ -87,54 +101,26 @@
 							<tr>
 								<th class="w-0 align-bottom text-base-content/50">#</th>
 								{#each source.table.headers as header, column (column)}
-									{@const { status, invalid } = report[column]}
+									{@const columnReport = report[column]}
 									<th
 										class={[
-											'min-w-48 align-top font-normal',
-											columnClass[status],
-											(status === 'duplicate' || status === 'invalid') && 'bg-error/10',
+											'min-w-56 align-top font-normal',
+											columnClass[columnReport.status],
+											(columnReport.status === 'duplicate' || columnReport.status === 'invalid') &&
+												'bg-error/10',
 										]}
 									>
-										<div class="flex flex-col gap-1">
-											<span class="font-semibold text-base-content">{header}</span>
-											<select
-												class="select select-sm w-full"
-												aria-label="Champ pour la colonne « {header} »"
-												value={source.mapping[column] ?? ''}
-												onchange={(e) => setTarget(column, e.currentTarget.value)}
-											>
-												<option value="" disabled>Choisir un champ</option>
-												<option value="ignore">Ignorer la colonne</option>
-												<optgroup label="Coordonnées">
-													{#each Object.entries(CONTACT_TARGETS) as [key, label] (key)}
-														<option value="contact:{key}">{label}</option>
-													{/each}
-												</optgroup>
-												{#if data.fields.length}
-													<optgroup label="Profil">
-														{#each data.fields as field (field.id)}
-															<option value="field:{field.id}">{field.name}</option>
-														{/each}
-													</optgroup>
-												{/if}
-											</select>
-											{#if status === 'unmapped'}
-												<span class="flex items-center gap-1 text-xs">
-													<TriangleAlertIcon size={14} class="text-warning shrink-0" />
-													Aucun champ trouvé
-												</span>
-											{:else if status === 'duplicate'}
-												<span class="flex items-center gap-1 text-xs">
-													<CircleXIcon size={14} class="text-error shrink-0" />
-													Champ déjà utilisé
-												</span>
-											{:else if status === 'invalid'}
-												<span class="flex items-center gap-1 text-xs">
-													<CircleXIcon size={14} class="text-error shrink-0" />
-													{plural(invalid.size, 'valeur invalide', 'valeurs invalides')}
-												</span>
-											{/if}
-										</div>
+										<ColumnHeader
+											{header}
+											{column}
+											rows={source.table.rows}
+											target={source.mapping[column]}
+											report={columnReport}
+											fields={data.fields}
+											onchange={(target) => setTarget(column, target)}
+											oncreated={(field) => handleFieldCreated(column, field)}
+											onmapvalues={() => (mappedColumn = column)}
+										/>
 									</th>
 								{/each}
 							</tr>
@@ -145,19 +131,17 @@
 									<td class="text-base-content/50">{index + 2}</td>
 									{#each row as cell, column (column)}
 										{@const { status, invalid } = report[column]}
-										{@const issue = invalid.get(index)}
-										<td
-											class={[
-												'max-w-64 truncate',
-												columnClass[status],
-												status !== 'ignored' && issue && 'bg-error/15',
-											]}
-										>
-											{#if status !== 'ignored' && issue}
-												<span use:tip={{ content: issue }}>{cell}</span>
-											{:else}
-												{cell}
-											{/if}
+										{@const issue = status === 'ignored' ? undefined : invalid.get(index)}
+										<td class={['p-0', columnClass[status], issue && 'bg-error/15']}>
+											<!-- Réécrite à la validation, pas à chaque frappe: toute la table se revalide. -->
+											<input
+												class="input input-ghost input-sm w-full min-w-24 bg-transparent"
+												aria-label="Ligne {index + 2}, colonne « {source.table.headers[column]} »"
+												aria-invalid={!!issue}
+												value={cell}
+												onchange={(e) => (row[column] = e.currentTarget.value.trim())}
+												use:tip={{ content: issue ?? '', disable: !issue }}
+											/>
 										</td>
 									{/each}
 								</tr>
@@ -170,4 +154,14 @@
 			<Placeholder><span class="loading loading-spinner"></span></Placeholder>
 		{/if}
 	</Surface>
+
+	{#if source.table && mappedColumn !== null && mappedField}
+		<ValueMapDialog
+			columnName={source.table.headers[mappedColumn]}
+			column={mappedColumn}
+			rows={source.table.rows}
+			field={mappedField}
+			onclose={() => (mappedColumn = null)}
+		/>
+	{/if}
 {/if}

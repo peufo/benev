@@ -5,6 +5,10 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const NUMBER = /^-?\d+([.,]\d+)?$/
 const BOOLEANS = ['oui', 'non', 'yes', 'no', 'true', 'false', 'vrai', 'faux', '1', '0', 'x']
 
+/** La virgule décimale d'un tableur francophone est acceptée. */
+export const isNumber = (value: string) => NUMBER.test(value)
+export const isBoolean = (value: string) => BOOLEANS.includes(value.toLowerCase())
+
 /** `jj.mm.aaaa`, `jj/mm/aaaa`, `jj-mm-aaaa` ou `aaaa-mm-jj`, à condition que la date existe. */
 export function parseBirthday(value: string): Date | null {
 	const swiss = value.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/)
@@ -52,9 +56,9 @@ export function validateCell(value: string, target: Target): string | null {
 
 	switch (field.type) {
 		case 'number':
-			return NUMBER.test(value) ? null : "N'est pas un nombre"
+			return isNumber(value) ? null : "N'est pas un nombre"
 		case 'boolean':
-			return BOOLEANS.includes(value.toLowerCase()) ? null : 'Ni « oui » ni « non »'
+			return isBoolean(value) ? null : 'Ni « oui » ni « non »'
 		case 'select':
 			return isOption(value) ? null : "N'est pas une option du champ"
 		case 'multiselect': {

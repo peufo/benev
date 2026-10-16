@@ -10,7 +10,8 @@
 
 	interface Props {
 		field?: Partial<Field>
-		onsuccess?: () => void
+		/** Reçoit le champ créé; rien après une modification. */
+		onsuccess?: (created?: Field) => void
 	}
 
 	let { field = $bindable({}), onsuccess }: Props = $props()
@@ -58,9 +59,9 @@
 		enhanceForm({
 			success: field.id ? 'Champ modifié' : 'Champ ajouté',
 			onsuccess: () => {
-				const created = remoteForm.result
-				if (!field.id && created) globalEvents.emit('field_created', created)
-				onsuccess?.()
+				const created = field.id ? undefined : remoteForm.result
+				if (created) globalEvents.emit('field_created', created)
+				onsuccess?.(created)
 			},
 		})
 	)}

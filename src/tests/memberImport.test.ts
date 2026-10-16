@@ -1,10 +1,14 @@
 import { describe, it } from 'vitest'
 import {
 	guessMapping,
+	distinctValues,
 	guessTarget,
+	matchOption,
 	parseBirthday,
 	parseCsv,
+	replaceValues,
 	reportColumns,
+	suggestField,
 	validateCell,
 	type ImportField,
 } from '#lib/member/import/index.js'
@@ -144,5 +148,71 @@ describe('état des colonnes', () => {
 			'ignored',
 			'duplicate',
 		])
+	})
+})
+
+describe('correspondance des valeurs', () => {
+	const sizes = ['Small', 'Medium', 'Large', 'Extra large']
+
+	it('compte les valeurs distinctes, éléments de liste compris', ({ expect }) => {
+		const rows = [['M'], ['L'], ['M'], ['']]
+		expect(distinctValues(rows, 0)).toEqual([
+			{ value: 'M', count: 2 },
+			{ value: 'L', count: 1 },
+		])
+		expect(distinctValues([['a, b'], ['b']], 0, true)).toEqual([
+			{ value: 'b', count: 2 },
+			{ value: 'a', count: 1 },
+		])
+	})
+
+	it('reconnaît une option, son abréviation, ou la valeur qui la prolonge', ({ expect }) => {
+		expect(matchOption('medium', sizes)).toBe('Medium')
+		expect(matchOption('M', sizes)).toBe('Medium')
+		expect(matchOption('Large (XL)', ['Small', 'Large'])).toBe('Large')
+	})
+
+	it('refuse de choisir entre deux candidates', ({ expect }) => {
+		expect(matchOption('Lar', ['Large', 'Largest'])).toBeNull()
+		expect(matchOption('XXL', sizes)).toBeNull()
+	})
+
+	it('réécrit une colonne, simple ou liste', ({ expect }) => {
+		const rows = [
+			['M', 'Végé; GF'],
+			['L', 'GF'],
+			['', ''],
+		]
+		replaceValues(rows, 0, { M: 'Medium' })
+		replaceValues(rows, 1, { GF: 'Sans gluten', Végé: 'Végétarien' }, true)
+		expect(rows).toEqual([
+			['Medium', 'Végétarien, Sans gluten'],
+			['L', 'Sans gluten'],
+			['', ''],
+		])
+	})
+})
+
+describe('suggérer un champ', () => {
+	const suggest = (...values: string[]) =>
+		suggestField(
+			'Colonne',
+			values.map((value) => [value]),
+			0
+		)
+
+	it('devine le type depuis les valeurs', ({ expect }) => {
+		expect(suggest('12', '3,5').type).toBe('number')
+		expect(suggest('oui', 'Non', '').type).toBe('boolean')
+		expect(suggest('a'.repeat(101)).type).toBe('textarea')
+		expect(suggest('Ada', 'Alan').type).toBe('string')
+	})
+
+	it('propose une liste quand les valeurs se répètent', ({ expect }) => {
+		expect(suggest('M', 'L', 'M')).toEqual({
+			name: 'Colonne',
+			type: 'select',
+			options: '["L","M"]',
+		})
 	})
 })

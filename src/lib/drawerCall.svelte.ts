@@ -1,4 +1,4 @@
-import type { Member, Tag, Team } from '@prisma/client'
+import type { Field, Member, Tag, Team } from '@prisma/client'
 import { page } from '$app/state'
 import { urlParam } from 'fuma'
 
@@ -63,3 +63,4 @@ function drawerCall<Created, Updated = Created>(key: string) {
 export const inviteCall = drawerCall<Member>('form_invite')
 export const teamCall = drawerCall<Team>('form_team')
 export const tagCall = drawerCall<Tag>('form_tag')
+export const fieldCall = drawerCall<Field>('form_field')

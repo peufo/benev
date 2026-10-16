@@ -14,7 +14,6 @@ test.describe.serial('Import de membres', () => {
 	const source = useEvent('Source')
 	let page: Page
 	let leadPage: Page
-	let sizeFieldId: string
 
 	test.beforeAll(async ({ browser }) => {
 		page = await browser.newPage()
@@ -30,12 +29,11 @@ test.describe.serial('Import de membres', () => {
 		await source.create(page)
 		await target.create(page)
 
-		const size = await seedField(target.eventId, {
+		await seedField(target.eventId, {
 			name: 'Taille',
 			type: 'select',
-			options: ['S', 'M', 'L'],
+			options: ['Small', 'Medium', 'Large'],
 		})
-		sizeFieldId = size.id
 
 		const team = await seedTeam(target.eventId, 'Alpha')
 		const lead = await seedUser('Lead')
@@ -64,9 +62,10 @@ test.describe.serial('Import de membres', () => {
 			name: 'membres.csv',
 			mimeType: 'text/csv',
 			buffer: Buffer.from(
-				'Prénom;Nom;Courriel;Taille;Inconnue\n' +
-					'Ada;Lovelace;ada@example.com;M;x\n' +
-					'Alan;Turing;alan@example.com;XXL;y\n'
+				'Prénom;Nom;Courriel;Taille;Régime\n' +
+					'Ada;Lovelace;ada@example.com;M;vegan\n' +
+					'Alan;Turing;alan@;Large;vegan\n' +
+					'Grace;Hopper;grace@example.com;M;omni\n'
 			),
 		})
 
@@ -75,18 +74,43 @@ test.describe.serial('Import de membres', () => {
 			page.getByRole('heading', { name: 'Importer depuis « membres.csv »' })
 		).toBeVisible()
 
-		const select = (header: string) => page.getByLabel(`Champ pour la colonne « ${header} »`)
-		await expect(select('Prénom')).toHaveValue('contact:firstName')
-		await expect(select('Nom')).toHaveValue('contact:lastName')
-		await expect(select('Courriel')).toHaveValue('contact:email')
-		await expect(select('Taille')).toHaveValue(`field:${sizeFieldId}`)
-		await expect(page.getByText('1 valeur invalide')).toBeVisible()
-		await expect(page.getByText('Aucun champ trouvé')).toBeVisible()
-		await expect(page.getByText('2 colonnes à vérifier')).toBeVisible()
+		// Le sélecteur d'une colonne porte son en-tête pour libellé.
+		const selector = (header: string) => page.getByLabel(header, { exact: true })
+		const column = (header: string) => page.locator('th').filter({ has: selector(header) })
+		const cell = (line: number, header: string) =>
+			page.getByLabel(`Ligne ${line}, colonne « ${header} »`)
 
-		await select('Inconnue').selectOption('ignore')
-		await expect(page.getByText('Aucun champ trouvé')).toHaveCount(0)
-		await expect(page.getByText('1 colonne à vérifier')).toBeVisible()
+		await expect(selector('Prénom')).toContainText('Prénom')
+		await expect(selector('Nom')).toContainText('Nom de famille')
+		await expect(selector('Courriel')).toContainText('E-mail')
+		await expect(selector('Taille')).toContainText('Taille')
+		await expect(column('Courriel')).toContainText('1 valeur invalide')
+		await expect(column('Taille')).toContainText('2 valeurs invalides')
+		await expect(column('Régime')).toContainText('Aucun champ trouvé')
+		await expect(page.getByText('3 colonnes à vérifier')).toBeVisible()
+
+		// `M` est reconnu comme l'abréviation de `Medium`, `Large` est déjà une option.
+		await column('Taille').getByRole('button', { name: 'Correspondance' }).click()
+		const dialog = page.getByRole('dialog')
+		const rowM = dialog.getByRole('listitem').filter({ hasText: '× 2' })
+		await expect(rowM.getByRole('button').first()).toHaveText('Medium')
+		await dialog.getByRole('button', { name: 'Appliquer' }).click()
+		await expect(cell(2, 'Taille')).toHaveValue('Medium')
+		await expect(column('Taille')).not.toContainText('invalide')
+
+		// Une valeur se corrige dans sa cellule.
+		await cell(3, 'Courriel').fill('alan@example.com')
+		await cell(3, 'Courriel').press('Tab')
+		await expect(column('Courriel')).not.toContainText('invalide')
+
+		// Le champ manquant se crée depuis la colonne, prérempli d'après elle.
+		await selector('Régime').click()
+		await page.getByRole('link', { name: 'Créer un champ' }).click()
+		await expect(page.getByRole('textbox', { name: 'Nom', exact: true })).toHaveValue('Régime')
+		await page.getByRole('button', { name: 'Valider' }).click()
+		await expect(selector('Régime')).toContainText('Régime')
+		await expect(column('Régime')).not.toContainText('Aucun champ trouvé')
+		await expect(page.getByText('à vérifier')).toHaveCount(0)
 
 		// Le fichier ne vit que dans le navigateur: un rechargement ramène au choix.
 		await page.reload()

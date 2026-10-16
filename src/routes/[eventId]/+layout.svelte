@@ -20,6 +20,7 @@
 	import { Header, Footer, AdminNavigation } from '#lib/layout/index.js'
 	import { MemberFieldForm } from '#lib/member/index.js'
 	import DrawersForm from '#lib/DrawersForm.svelte'
+	import { fieldCall } from '#lib/drawerCall.svelte.js'
 	import { MediaDrawer } from '#lib/material/media/index.js'
 	import EventMenu from './EventMenu.svelte'
 	import FooterLink from './FooterLink.svelte'
@@ -225,7 +226,15 @@
 		maxWidth="28rem"
 	>
 		{#snippet children({ close })}
-			<MemberFieldForm field={data.field || {}} onsuccess={() => close()} />
+			<MemberFieldForm
+				field={data.field || {}}
+				onsuccess={async (created) => {
+					// Lu avant la fermeture, qui retire de l'URL la clé dont dépend `current`.
+					const caller = fieldCall.current
+					await close()
+					if (created) caller?.oncreated?.(created)
+				}}
+			/>
 		{/snippet}
 	</Drawer>
 
