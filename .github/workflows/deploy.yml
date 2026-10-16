@@ -54,8 +54,12 @@ jobs:
       # n'existe que sur la machine de dev: sans ce contrôle, l'oubli remonte en erreur
       # d'installation, sans rapport visible avec sa cause.
       - name: Refuser les dépendances locales
+        # Seules les sections de dépendances comptent: `imports` mappe légitimement `#lib` sur `./src/lib`.
         run: |
-          if grep -nE '": "(file:|link:|\.\.?/)' package.json; then
+          locales=$(jq -r '(.dependencies, .devDependencies, .optionalDependencies, .peerDependencies) // {}
+            | to_entries[] | select(.value | test("^(file:|link:|\\.\\.?/)")) | "\(.key): \(.value)"' package.json)
+          if [ -n "$locales" ]; then
+            echo "$locales"
             echo "::error file=package.json::Dépendance locale. Lance 'bun run <paquet>:npm' avant de pousser."
             exit 1
           fi
@@ -89,8 +93,12 @@ jobs:
       # n'existe que sur la machine de dev: sans ce contrôle, l'oubli remonte en erreur
       # d'installation dans l'image, sans rapport visible avec sa cause.
       - name: Refuser les dépendances locales
+        # Seules les sections de dépendances comptent: `imports` mappe légitimement `#lib` sur `./src/lib`.
         run: |
-          if grep -nE '": "(file:|link:|\.\.?/)' package.json; then
+          locales=$(jq -r '(.dependencies, .devDependencies, .optionalDependencies, .peerDependencies) // {}
+            | to_entries[] | select(.value | test("^(file:|link:|\\.\\.?/)")) | "\(.key): \(.value)"' package.json)
+          if [ -n "$locales" ]; then
+            echo "$locales"
             echo "::error file=package.json::Dépendance locale. Lance 'bun run <paquet>:npm' avant de pousser."
             exit 1
           fi
