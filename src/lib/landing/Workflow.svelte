@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
+	import { ArrowRightIcon } from '@lucide/svelte'
 	import VideoCarousel from './VideoCarousel.svelte'
 	import { activeVideoIndex } from './videoStore'
 	import manifest from './videos.json'
@@ -85,6 +87,13 @@
 					</div>
 				</div>
 			{/each}
+		</div>
+
+		<div class="mt-16 md:mt-20">
+			<a href={resolve('docs')} class="btn btn-lg btn-ghost text-primary hover:bg-primary/5">
+				Découvre toutes les fonctionnalités
+				<ArrowRightIcon size={20} />
+			</a>
 		</div>
 	</div>
 </section>

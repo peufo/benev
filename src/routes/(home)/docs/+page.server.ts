@@ -2,8 +2,8 @@ import { getDocSummaries } from '#lib/doc/engine/registry.server.js'
 import { pageMetaTags } from '#lib/seo/index.js'
 
 const DESCRIPTION =
-	'Le guide de benevio pour les organisateur·ices : créer un évènement, ouvrir les inscriptions, ' +
-	'comprendre les secteurs, les créneaux et les rôles.'
+	'Le guide de benevio : inscriptions, planning des créneaux, rappels, courriels personnalisés, ' +
+	'badges, exports et présences de tes bénévoles.'
 
 export const load = () => ({
 	pages: getDocSummaries(),

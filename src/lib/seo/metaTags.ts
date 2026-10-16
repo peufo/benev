@@ -2,8 +2,9 @@ import type { MetaTagsProps } from 'svelte-meta-tags'
 
 export const SITE_NAME = 'benevio'
 export const SITE_TAGLINE = 'Plateforme de gestion de bénévoles'
+/** Google tronque autour de 155 caractères: les fonctionnalités nommées ici sont celles qu'on cherche. */
 export const SITE_DESCRIPTION =
-	'Gère simplement tes bénévoles avec benevio : inscriptions, planification, suivi et communication regroupés dans un outil gratuit pour les petits événements, open source et sans engagement.'
+	'Gère tes bénévoles avec benevio : inscriptions en libre-service, planning des créneaux, rappels, courriels personnalisés et badges. Gratuit et open source.'
 
 /**
  * Metas de base, surchargées par le `metaTags` publié dans les données de page

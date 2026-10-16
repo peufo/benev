@@ -1,6 +1,7 @@
 import type { Thing, WithContext } from 'schema-dts'
 import { EVENT_TIER, parseTierPrice } from '#lib/constant/index.js'
 import { mapUrl } from '#lib/location/index.js'
+import { FEATURES } from '#lib/landing/features.js'
 import { SITE_DESCRIPTION, SITE_NAME } from './metaTags'
 
 export const REPOSITORY_URL = 'https://github.com/peufo/benev'
@@ -61,6 +62,7 @@ export function softwareApplicationSchema(siteUrl: string): WithContext<Thing> {
 		// `codeRepository` appartient à SoftwareSourceCode, pas à SoftwareApplication
 		sameAs: [REPOSITORY_URL],
 		license: 'https://www.gnu.org/licenses/agpl-3.0.html',
+		featureList: FEATURES.map(({ name }) => name),
 		publisher: { '@id': organizationId(siteUrl) },
 		offers: tierOffers(siteUrl),
 	}

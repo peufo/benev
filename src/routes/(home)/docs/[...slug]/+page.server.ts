@@ -11,6 +11,10 @@ export const load = ({ params }) => {
 	return {
 		doc: rest,
 		...getDocNeighbours(params.slug),
-		metaTags: pageMetaTags({ title: doc.title, description: doc.description }),
+		// Le frontmatter donne un fragment taillé pour une carte: seul, il ne dit ni de quoi ni de qui.
+		metaTags: pageMetaTags({
+			title: doc.title,
+			description: `${doc.title}, la documentation de benevio : ${doc.description.charAt(0).toLowerCase()}${doc.description.slice(1)}.`,
+		}),
 	}
 }

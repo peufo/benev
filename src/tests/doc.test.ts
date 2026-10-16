@@ -4,6 +4,7 @@ import { readComponents, readFrontmatter, readSections } from '../lib/doc/engine
 import { readingTime } from '../lib/doc/engine/readingTime'
 import { docToMarkdown } from '../lib/doc/engine/toMarkdown'
 import { DOC_MARKDOWN_PARTS, DOC_SLUGS } from '../lib/doc/content'
+import { FEATURES } from '../lib/landing/features'
 
 /**
  * Les sources de la documentation, lues comme le fait `registry.server.ts`. Le test tourne sur les
@@ -228,6 +229,20 @@ describe("règles d'écriture", () => {
 				expect(DOC_SLUGS, where).toContain(target)
 				if (anchor) expect(anchors.get(target) ?? [], where).toContain(anchor)
 			}
+		}
+	})
+
+	/** L'accueil, le JSON-LD et `llms.txt` renvoient chaque fonctionnalité au chapitre qui l'explique. */
+	it('renvoie chaque fonctionnalité à un chapitre qui existe', ({ expect }) => {
+		const anchors = new Map(
+			pages.map(({ slug, source }) => [slug, readSections(source).map(({ id }) => id)])
+		)
+
+		for (const { name, doc } of FEATURES) {
+			const [path, anchor] = doc.split('#')
+			const target = path.replace(/^\/docs\/?/, '')
+			expect(DOC_SLUGS, name).toContain(target)
+			if (anchor) expect(anchors.get(target) ?? [], name).toContain(anchor)
 		}
 	})
 

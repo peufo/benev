@@ -80,7 +80,7 @@ Ce qu'il faut savoir :
 - si tu déplaces un créneau, le rappel suit le nouvel horaire,
 - chaque bénévole peut couper ses rappels dans **Mes préférences**, sur son espace personnel.
 
-## L'agenda personnel
+## L'agenda personnel {#agenda}
 
 Chacun peut exporter ses créneaux vers son propre agenda, depuis son espace personnel. Avec le
 rappel, c'est ce qui l'aide le plus à ne rien oublier.
