@@ -8,7 +8,7 @@ import { gotoHydrated } from './hydrated'
  * apparaît prouve que la saisie l'a atteinte, et non le seul DOM.
  */
 async function fillCondition(page: Page, input: Locator, value: string, serialized: RegExp) {
-	const conditions = page.locator('input[name="conditions"]')
+	const conditions = page.locator('input[name^="conditions/"]')
 	await input.fill(value)
 	await expect(conditions).toHaveValue(serialized)
 }

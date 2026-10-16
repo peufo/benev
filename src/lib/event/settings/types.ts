@@ -1,6 +1,6 @@
-import type { RemoteFormFields } from '@sveltejs/kit'
+import type { RemoteFormFields } from '$app/server'
 import type z from 'zod'
-import type { modelEventSettings, modelEventUpdate } from '$lib/models'
+import type { modelEventSettings, modelEventUpdate } from '#lib/models/index.js'
 
 /**
  * Le socle commun aux deux formulaires qui décrivent un évènement: `createEvent` y ajoute le

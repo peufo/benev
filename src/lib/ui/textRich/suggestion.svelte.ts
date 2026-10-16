@@ -2,7 +2,7 @@ import type { SuggestionOptions } from '@tiptap/suggestion'
 import { writable, get } from 'svelte/store'
 import { tippy, type TippyInstance } from 'fuma'
 
-import SuggesionList from '$lib/ui/textRich/SuggesionList.svelte'
+import SuggesionList from '#lib/ui/textRich/SuggesionList.svelte'
 import { mount, unmount } from 'svelte'
 import type { SuggestionProps } from '@tiptap/suggestion'
 

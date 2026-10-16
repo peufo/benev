@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest'
-import { timezoneOptions } from '$lib/timezone'
-import { TIMEZONE_GROUPS, TIMEZONE_WINDOW_END } from '$lib/timezone.data'
+import { timezoneOptions } from '#lib/timezone.js'
+import { TIMEZONE_GROUPS, TIMEZONE_WINDOW_END } from '#lib/timezone.data.js'
 
 const allZones = Intl.supportedValuesOf('timeZone')
 const knownZones = new Set(TIMEZONE_GROUPS.flatMap((group) => group.zones))

@@ -4,8 +4,8 @@
 	import { InputSelect } from 'fuma'
 	import type { PageData } from './$types'
 	import type { Member } from '@prisma/client'
-	import { searchMembers } from '$lib/member/member.remote'
-	import { eventPath } from '$lib/eventPath'
+	import { searchMembers } from '#lib/member/member.remote.js'
+	import { eventPath, currentEventId } from '#lib/eventPath.js'
 	import { fade } from 'svelte/transition'
 
 	interface Props {
@@ -34,7 +34,7 @@
 		label="Aperçu du badge de"
 		placeholder="Choisir un membre pour l'aperçu"
 		bind:value={member}
-		items={searchMembers}
+		items={({ search }) => searchMembers({ search, eventId: currentEventId() })}
 	>
 		{#snippet selected(item)}
 			{@const badgeType = item.profileJson[badge.typeFieldId || '']}

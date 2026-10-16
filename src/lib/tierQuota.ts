@@ -1,5 +1,5 @@
 import type { EventTier } from '@prisma/client'
-import { EVENT_TIER } from '$lib/constant'
+import { EVENT_TIER } from '#lib/constant/index.js'
 
 export function computeIsTierQuotaReached(membersValided: number, tier: EventTier): boolean {
 	const max = EVENT_TIER[tier].max

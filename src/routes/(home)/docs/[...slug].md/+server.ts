@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { getDocMarkdown } from '$lib/doc/engine/registry.server'
+import { getDocMarkdown } from '#lib/doc/engine/registry.server.js'
 
 /**
  * La même page, en markdown. Les agents et les modèles de langage lisent cette surface plutôt que

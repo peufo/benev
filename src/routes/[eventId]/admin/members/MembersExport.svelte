@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ContactIcon, DownloadIcon, FileSpreadsheetIcon } from '@lucide/svelte'
 	import { ButtonCopy, DropDown, tip } from 'fuma'
-	import { eventPath, withSearch } from '$lib/eventPath'
+	import { eventPath, withSearch } from '#lib/eventPath.js'
 	import { page } from '$app/state'
 
 	let dropdown: DropDown = $state()!
@@ -10,7 +10,7 @@
 	let urlMembers = $derived.by(() => {
 		// Construit puis sérialisé immédiatement: pas un état réactif.
 		// eslint-disable-next-line svelte/prefer-svelte-reactivity
-		const params = new URLSearchParams(page.url.searchParams)
+		const params = new URLSearchParams(page.url.search)
 		const zone = Intl.DateTimeFormat().resolvedOptions()
 		params.set('locale', zone.locale)
 		return (mode: Mode) => withSearch(eventPath(`/admin/members/${mode}`), params.toString())

@@ -1,4 +1,4 @@
-import { checkout } from '$lib/server'
+import { checkout } from '#lib/server/index.js'
 import { error } from '@sveltejs/kit'
 
 export const POST = async ({ request }) => checkout.handleHook(request)

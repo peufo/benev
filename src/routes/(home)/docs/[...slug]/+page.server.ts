@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { getDoc, getDocNeighbours } from '$lib/doc/engine/registry.server'
-import { pageMetaTags } from '$lib/seo'
+import { getDoc, getDocNeighbours } from '#lib/doc/engine/registry.server.js'
+import { pageMetaTags } from '#lib/seo/index.js'
 
 export const load = ({ params }) => {
 	const doc = getDoc(params.slug)

@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { MAX_ATTEMPTS, RETRY_DELAYS, isPermanentError, nextDelay } from '$lib/server/emailRetry'
+import { MAX_ATTEMPTS, RETRY_DELAYS, isPermanentError, nextDelay } from '#lib/server/emailRetry.js'
 
 /**
  * La politique de réessai décide seule du sort d'un message: se tromper de côté coûte soit un

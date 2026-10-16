@@ -1,5 +1,5 @@
 import { getSubscribes } from './getSubscribes.server'
-import { prisma, json } from '$lib/server'
+import { prisma, json } from '#lib/server/index.js'
 
 export const GET = async ({ url, params: { eventId } }) => {
 	const event = await prisma.event.findUniqueOrThrow({

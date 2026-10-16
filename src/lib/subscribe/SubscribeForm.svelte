@@ -2,8 +2,8 @@
 	import { preventDefault } from 'svelte/legacy'
 
 	import type { Period, Team } from '@prisma/client'
-	import { formatRange } from '$lib/formatRange'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { formatRange } from '#lib/formatRange.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { createSubscribe } from './subscribe.remote'
 
 	interface Props {
@@ -22,8 +22,8 @@
 	{...createSubscribe.enhance(enhanceForm({ onsuccess: () => onsuccess?.() }))}
 	class="flex flex-col gap-4"
 >
-	<input type="hidden" name="memberId" value={memberId} />
-	<input type="hidden" name="periodId" value={period.id} />
+	<input {...createSubscribe.fields.memberId.as('hidden', memberId)} />
+	<input {...createSubscribe.fields.periodId.as('hidden', period.id)} />
 
 	<h2 class="font-semibold text-lg">{team.name}</h2>
 	<p class="font-semibold text-lg">{formatRange(period)}</p>

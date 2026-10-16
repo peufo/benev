@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SearchIcon } from '@lucide/svelte'
 	import type { FocusEventHandler, FormEventHandler, KeyboardEventHandler } from 'svelte/elements'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { bindValueWithParams } from './action.js'
 
 	interface Props {
@@ -19,7 +19,7 @@
 	let {
 		class: klass = '',
 		key = 'search',
-		value = $bindable($page.url.searchParams.get(key) || ''),
+		value = $bindable(page.url.searchParams.get(key) || ''),
 		oninput,
 		onblur,
 		onkeydown,

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Field } from '@prisma/client'
 	import { InputCheckboxes, InputNumber, InputRadio, InputString } from 'fuma'
-	import type { MemberCondition } from '$lib/models'
+	import type { MemberCondition } from '#lib/models/index.js'
 
 	type ProfileCondition = Extract<MemberCondition, { type: 'profile' }>
 

@@ -2,10 +2,10 @@
 	import { Drawer } from 'fuma'
 	import PeriodForm from './PeriodForm.svelte'
 	import type { Member } from '@prisma/client'
-	import { SubscribeInviteForm } from '$lib/subscribe'
+	import { SubscribeInviteForm } from '#lib/subscribe/index.js'
 	import PeriodSubscribes from './PeriodSubscribes.svelte'
-	import Progress from '$lib/Progress.svelte'
-	import type { FormDataPeriod } from '$lib/server'
+	import Progress from '#lib/Progress.svelte'
+	import type { FormDataPeriod } from '#lib/server/index.js'
 
 	interface Props {
 		period?: Partial<FormDataPeriod>

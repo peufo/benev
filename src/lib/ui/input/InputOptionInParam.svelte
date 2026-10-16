@@ -39,8 +39,7 @@
 			class="btn join-item btn-sm"
 			class:btn-primary={active}
 			class:w-9={opt.icon}
-			data-sveltekit-keepfocus
-			data-sveltekit-noscroll
+			data-sveltekit-reset="false"
 			data-sveltekit-replacestate
 		>
 			{#if OptIcon}

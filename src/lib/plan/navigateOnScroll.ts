@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation'
-import { debounce } from '$lib/debounce'
+import { debounce } from '#lib/debounce.js'
 import { urlParam } from 'fuma'
 import { RANGE_DAYS } from './constants'
 import { page } from '$app/state'

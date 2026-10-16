@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { currentEventId } from '#lib/eventPath.js'
 	import { tip } from 'fuma'
 	import { MailsIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
@@ -10,7 +11,10 @@
 		if (isLoading) return
 		isLoading = true
 		try {
-			const membersMail = await getMembersEmails(page.url.searchParams.toString())
+			const membersMail = await getMembersEmails({
+				search: page.url.searchParams.toString(),
+				eventId: currentEventId(),
+			})
 			const a = document.createElement('a')
 			a.classList.add('hidden')
 			a.href = `mailto:${membersMail.join(';')}`

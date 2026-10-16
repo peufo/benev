@@ -5,8 +5,7 @@ import { createSlugger } from './slug.js'
  * n'écrit que du markdown. Le greffon s'insère entre `remark2rehype` et la stringification, deux
  * étapes que mdsvex configure en `allowDangerousHtml` — les nœuds bruts en ressortent intacts.
  *
- * Ce module est en JavaScript parce que `svelte.config.js` l'importe, et que Node ne charge pas de
- * TypeScript. Il est typé en JSDoc, `checkJs` s'applique.
+ * `vite.config.ts` le passe à mdsvex. Il est typé en JSDoc, `checkJs` s'applique.
  *
  * @typedef {object} HastNode
  * @property {string} type

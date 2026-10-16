@@ -1,4 +1,4 @@
-import { getUserIdOrRedirect, prisma } from '$lib/server'
+import { getUserIdOrRedirect, prisma } from '#lib/server/index.js'
 
 export const load = async ({ url, locals }) => {
 	const userId = await getUserIdOrRedirect(url, locals)

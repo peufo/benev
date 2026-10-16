@@ -1,4 +1,4 @@
-import type { MemberRole } from '$lib/server'
+import type { MemberRole } from '#lib/server/index.js'
 
 /**
  * `true` accordé · `false` refusé · `undefined` paramétrable par l'organisateur·ice · une chaîne

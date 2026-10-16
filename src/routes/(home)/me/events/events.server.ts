@@ -1,5 +1,5 @@
-import { addMemberComputedValues, prisma, hidePrivateProfilValues } from '$lib/server'
-import dayjs from '$lib/dayjs'
+import { addMemberComputedValues, prisma, hidePrivateProfilValues } from '#lib/server/index.js'
+import dayjs from '#lib/dayjs.js'
 
 /**
  * Les adhésions de l'utilisateur, enrichies de son prochain créneau.

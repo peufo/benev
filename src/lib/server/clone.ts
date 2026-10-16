@@ -1,4 +1,4 @@
-import { defaultEmailModels } from '$lib/email/models'
+import { defaultEmailModels } from '#lib/email/models.js'
 import type { Page, PageState, PageType, Period, Prisma, Team } from '@prisma/client'
 
 type ExcludeProps = 'id' | 'createdAt' | 'updatedAt' | 'eventId'

@@ -1,17 +1,17 @@
-import type { EmailModelProps } from '$lib/pages/emailSuggesions'
+import type { EmailModelProps } from '#lib/pages/emailSuggesions.js'
 import {
 	getMemberProfile,
 	sendEmailComponent,
 	sendEmailModel,
 	type SendMailOptionsWithProps,
-} from '$lib/server'
+} from '#lib/server/index.js'
 import type { SubscribeState } from '@prisma/client'
 import {
 	EmailSubscribeRequest,
 	EmailSubscribeAccepted,
 	EmailSubscribeCancelled,
 	EmailSubscribeDenied,
-} from '$lib/email'
+} from '#lib/email/index.js'
 
 type SubscribeNotification<State extends SubscribeState> = (
 	options: SendMailOptionsWithProps<Omit<EmailModelProps[`subscribe_${State}`], 'member'>>

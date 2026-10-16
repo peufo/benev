@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ClassValue } from 'svelte/elements'
-	import logo from '$lib/assets/logo.svg'
+	import logo from '#lib/assets/logo.svg'
 	import EventIcon from './EventIcon.svelte'
 
 	interface Props {

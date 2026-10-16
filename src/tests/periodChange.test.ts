@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { engagedSubscribes, scheduleChanged } from '$lib/period/periodChange'
+import { engagedSubscribes, scheduleChanged } from '#lib/period/periodChange.js'
 
 describe('engagedSubscribes', () => {
 	it("ne garde que ce qui attend une réponse ou l'a reçue", ({ expect }) => {

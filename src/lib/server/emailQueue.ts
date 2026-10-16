@@ -1,6 +1,6 @@
 import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_DISABLED } from '$app/env/private'
 import nodemailer, { type SendMailOptions } from 'nodemailer'
-import type { EmailFailureReason, EmailRelations } from '$lib/log/logMap'
+import type { EmailFailureReason, EmailRelations } from '#lib/log/logMap.js'
 import { createLog } from './log'
 import { isPermanentError, nextDelay } from './emailRetry'
 import { toAddressList } from './recipients'

@@ -2,7 +2,7 @@
 	import { cubicOut } from 'svelte/easing'
 	import { fly } from 'svelte/transition'
 	import { page } from '$app/state'
-	import { DocNav } from '$lib/doc'
+	import { DocNav } from '#lib/doc/index.js'
 
 	let { data, children } = $props()
 

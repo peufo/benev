@@ -187,7 +187,7 @@ const LOGO = fileURLToPath(new URL('./assets/logo-festival.png', import.meta.url
 
 /**
  * L'identité que pose la démo `create-space` et que les autres retrouvent: le logo, sur le thème
- * par défaut que l'évènement reçoit à sa création. Le média est écrit là où `$lib/server/media`
+ * par défaut que l'évènement reçoit à sa création. Le média est écrit là où `#lib/server/media.js`
  * l'aurait écrit, sous `MEDIA_DIR` (celui du `.env`).
  */
 export async function seedIdentity(eventId: string, createdById: string) {

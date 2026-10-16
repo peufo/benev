@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import EventTierSelector from './EventTierSelector.svelte'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { createEvent } from './event.remote'
 	import SectionEssentiel from './settings/SectionEssentiel.svelte'
 
@@ -18,7 +18,7 @@
 	{...createEvent.enhance(enhanceForm({ onsuccess: () => onsuccess?.() }))}
 	class="flex flex-col gap-6"
 >
-	<EventTierSelector bind:value={plan} />
+	<EventTierSelector field={createEvent.fields.tier} bind:value={plan} />
 	<SectionEssentiel fields={createEvent.fields} />
 	<div class="flex gap-2 pt-4">
 		<button class="btn btn-primary w-full">Créer mon évènement</button>

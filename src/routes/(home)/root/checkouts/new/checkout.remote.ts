@@ -2,8 +2,8 @@ import type { Prisma } from '@prisma/client'
 import { form, getRequestEvent, query } from '$app/server'
 import { redirect } from '@sveltejs/kit'
 import z from 'zod'
-import { modelCheckout } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { modelCheckout } from '#lib/models/index.js'
+import { permission, prisma } from '#lib/server/index.js'
 
 export const searchUsers = query(z.object({ search: z.string() }), async ({ search }) => {
 	const { locals } = getRequestEvent()

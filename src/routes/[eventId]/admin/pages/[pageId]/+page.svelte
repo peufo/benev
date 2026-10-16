@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { ArrowLeftIcon } from '@lucide/svelte'
 	import type { Page } from '@prisma/client'
-	import { getMemberSuggestions } from '$lib/pages/memberSuggestions'
-	import { suggestionItems, type SuggestionItem } from '$lib/ui'
-	import { emailSuggestions } from '$lib/pages/emailSuggesions'
-	import type { EmailEvent } from '$lib/email/models'
-	import { eventPath } from '$lib/eventPath'
+	import { getMemberSuggestions } from '#lib/pages/memberSuggestions.js'
+	import { suggestionItems, type SuggestionItem } from '#lib/ui/index.js'
+	import { emailSuggestions } from '#lib/pages/emailSuggesions.js'
+	import type { EmailEvent } from '#lib/email/models.js'
+	import { eventPath } from '#lib/eventPath.js'
 	import PageForm from './PageForm.svelte'
 
 	let { data } = $props()

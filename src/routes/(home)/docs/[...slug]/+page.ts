@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { loadDocComponent } from '$lib/doc/content'
+import { loadDocComponent } from '#lib/doc/content/index.js'
 
 export const load = async ({ params, data }) => {
 	const importComponent = loadDocComponent(params.slug)

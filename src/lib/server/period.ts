@@ -1,10 +1,10 @@
 import type { Period, Prisma } from '@prisma/client'
-import { periodIsComplet } from '$lib/period'
-import { ENGAGED_STATES, scheduleChanged } from '$lib/period/periodChange'
-import { PERIOD_DEFAULT_MS } from '$lib/constant'
-import { createLog, parseFormKey, prisma, sendEmailComponent } from '$lib/server'
-import { EmailPeriodChanged } from '$lib/email'
-import { diffChanges, hasChanges, projectPeriod, type LogActor } from '$lib/log'
+import { periodIsComplet } from '#lib/period/index.js'
+import { ENGAGED_STATES, scheduleChanged } from '#lib/period/periodChange.js'
+import { PERIOD_DEFAULT_MS } from '#lib/constant/index.js'
+import { createLog, parseFormKey, prisma, sendEmailComponent } from '#lib/server/index.js'
+import { EmailPeriodChanged } from '#lib/email/index.js'
+import { diffChanges, hasChanges, projectPeriod, type LogActor } from '#lib/log/index.js'
 
 export type FormDataPeriod = Awaited<ReturnType<typeof getPeriod>>
 

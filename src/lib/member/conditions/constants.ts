@@ -1,4 +1,4 @@
-import type { MemberConditionOperator } from '$lib/models'
+import type { MemberConditionOperator } from '#lib/models/index.js'
 import type { FieldType } from '@prisma/client'
 
 export const CONDITION_OPERATOR: Record<FieldType, MemberConditionOperator[]> = {

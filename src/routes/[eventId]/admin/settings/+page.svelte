@@ -11,23 +11,23 @@
 		PlusIcon,
 	} from '@lucide/svelte'
 	import { confirmDialog, InputTextarea, tip, urlParam } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { updateEvent } from '$lib/event/event.remote'
-	import { theme } from '$lib/event/theme/state.svelte'
-	import EventDeleteButton from '$lib/event/EventDeleteButton.svelte'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { updateEvent } from '#lib/event/event.remote.js'
+	import { theme } from '#lib/event/theme/state.svelte.js'
+	import EventDeleteButton from '#lib/event/EventDeleteButton.svelte'
 	import {
 		SectionAdhesion,
 		SectionApparence,
 		SectionContact,
 		SectionEssentiel,
-	} from '$lib/event/settings'
-	import { MemberFields } from '$lib/member'
-	import { eventPath } from '$lib/eventPath'
-	import { SaveBar, TableOfContent, type TocSection } from '$lib/ui'
+	} from '#lib/event/settings/index.js'
+	import { MemberFields } from '#lib/member/index.js'
+	import { eventPath } from '#lib/eventPath.js'
+	import { SaveBar, TableOfContent, type TocSection } from '#lib/ui/index.js'
 	import OnlyAdmin from '../OnlyAdmin.svelte'
 	import EventShareLink from './EventShareLink.svelte'
 	import EventStateForm from './EventStateForm.svelte'
-	import Section from '$lib/ui/Section.svelte'
+	import Section from '#lib/ui/Section.svelte'
 
 	let { data } = $props()
 
@@ -183,7 +183,7 @@
 							class="btn btn-secondary btn-sm"
 							href={urlParam.with({ form_field: '{}' })}
 							data-sveltekit-replacestate
-							data-sveltekit-noscroll
+							data-sveltekit-reset="false"
 							use:tip={{ content: 'Ajouter un champ' }}
 						>
 							<PlusIcon />

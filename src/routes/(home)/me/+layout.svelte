@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { LayoutMe } from '$lib/me'
+	import { LayoutMe } from '#lib/me/index.js'
 
 	let { data, children } = $props()
 </script>

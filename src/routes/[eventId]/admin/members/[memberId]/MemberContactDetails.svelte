@@ -7,8 +7,8 @@
 		MailWarningIcon,
 		PhoneIcon,
 	} from '@lucide/svelte'
-	import type { MemberWithComputedValues } from '$lib/server'
-	import { getAge } from '$lib/utils'
+	import type { MemberWithComputedValues } from '#lib/server/index.js'
+	import { getAge } from '#lib/utils.js'
 
 	interface Props {
 		member: MemberWithComputedValues

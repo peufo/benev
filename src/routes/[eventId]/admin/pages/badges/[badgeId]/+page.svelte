@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ArrowLeftIcon } from '@lucide/svelte'
-	import { eventPath } from '$lib/eventPath'
-	import { Surface } from '$lib/ui'
+	import { eventPath } from '#lib/eventPath.js'
+	import { Surface } from '#lib/ui/index.js'
 	import BadgeForm from './BadgeForm.svelte'
 	import BadgeView from './BadgeView.svelte'
 

@@ -1,7 +1,6 @@
 import { ClockIcon, type IconProps, ListChecksIcon, PercentIcon, TagsIcon } from '@lucide/svelte'
-import { page } from '$app/stores'
+import { page } from '$app/state'
 import type { Component } from 'svelte'
-import { derived } from 'svelte/store'
 
 type CardContentOption = 'hideProgress' | 'hideRangetime' | 'showSlots' | 'showTags'
 
@@ -15,9 +14,9 @@ export const CARD_CONTENT_OPTIONS: Record<
 	showTags: { title: 'Afficher les étiquettes', icon: TagsIcon },
 }
 
-export const cardContentOptions = derived(page, ({ url }) =>
-	Object.keys(CARD_CONTENT_OPTIONS).reduce<Partial<Record<CardContentOption, boolean>>>(
-		(acc, key) => ({ ...acc, [key]: url.searchParams.has(key) }),
+export function getCardContentOptions() {
+	return Object.keys(CARD_CONTENT_OPTIONS).reduce<Partial<Record<CardContentOption, boolean>>>(
+		(acc, key) => ({ ...acc, [key]: page.url.searchParams.has(key) }),
 		{}
 	)
-)
+}

@@ -2,7 +2,7 @@
 	import { untrack } from 'svelte'
 
 	import type { Event } from '@prisma/client'
-	import { THEME_PRESETS, type ThemePresetKey } from '$lib/constant'
+	import { THEME_PRESETS, type ThemePresetKey } from '#lib/constant/index.js'
 	import { theme } from './state.svelte'
 
 	interface Props {

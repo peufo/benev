@@ -1,8 +1,8 @@
 import type { Snippet } from 'svelte'
 import { jsonParse, type TableField } from 'fuma'
 import type { Field } from '@prisma/client'
-import { getAge } from '$lib/utils'
-import { formatRange } from '$lib/formatRange'
+import { getAge } from '#lib/utils.js'
+import { formatRange } from '#lib/formatRange.js'
 import type { MemberWithComputedValue } from './getMembers.server'
 
 type Team = { id: string; name: string }

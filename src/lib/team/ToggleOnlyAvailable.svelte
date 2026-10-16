@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { EyeIcon, EyeOffIcon } from '@lucide/svelte'
-	import { TabsIcon } from '$lib/ui'
+	import { TabsIcon } from '#lib/ui/index.js'
 </script>
 
 <TabsIcon

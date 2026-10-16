@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
-import { createLog, permission, prisma } from '$lib/server'
-import { modelEventState } from '$lib/models'
+import { createLog, permission, prisma } from '#lib/server/index.js'
+import { modelEventState } from '#lib/models/index.js'
 
 export const setEventState = form(modelEventState, async (data) => {
 	const { locals, params } = getRequestEvent()

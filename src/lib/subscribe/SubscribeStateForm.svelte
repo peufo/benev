@@ -20,10 +20,10 @@
 <script lang="ts">
 	import type { Subscribe } from '@prisma/client'
 	import { Popover, tip } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { page } from '$app/state'
 	import { setSubscribeState } from './subscribeState.remote'
-	import { SUBSCRIBE_STATE_ACTION } from '$lib/constant'
+	import { SUBSCRIBE_STATE_ACTION } from '#lib/constant/index.js'
 	import { getSubscribeState } from './subscribeState'
 
 	interface Props {
@@ -126,15 +126,14 @@
 				)}
 				class="flex flex-col gap-1"
 			>
-				<input type="hidden" name="subscribeId" value={subscribe.id} />
+				<input {...remoteForm.fields.subscribeId.as('hidden', subscribe.id)} />
 				{#each editions as [state, edit] (state)}
 					{@const EditIcon = edit.icon}
 					<!-- `stopPropagation`: le popover reste dans le flux DOM de la ligne de période,
 					     dont le clic ouvre le tiroir. -->
 					<button
+						{...remoteForm.fields.state.as('submit', state)}
 						class="menu-item w-full"
-						name="state"
-						value={state}
 						onclick={(event) => event.stopPropagation()}
 					>
 						<EditIcon class={edit.class} />

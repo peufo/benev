@@ -1,8 +1,8 @@
 import { command, form, getRequestEvent } from '$app/server'
 import { redirect } from '@sveltejs/kit'
 import z from 'zod'
-import { permission, prisma } from '$lib/server'
-import { normalizePath } from '$lib/normalizePath.js'
+import { permission, prisma } from '#lib/server/index.js'
+import { normalizePath } from '#lib/normalizePath.js'
 import { resolve } from '$app/paths'
 
 export const createPage = form(async () => {

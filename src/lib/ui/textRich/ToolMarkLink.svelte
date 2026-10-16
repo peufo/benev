@@ -4,7 +4,7 @@
 
 	import { Dialog, InputString } from 'fuma'
 	import z from 'zod'
-	import ToolMark from '$lib/ui/textRich/ToolMark.svelte'
+	import ToolMark from '#lib/ui/textRich/ToolMark.svelte'
 
 	interface Props {
 		editor: Editor

@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { getStacks } from '$lib/plan/getStacks'
+import { getStacks } from '#lib/plan/getStacks.js'
 
 type TestPeriod = { id: string; start: Date; end: Date; tags: { name: string }[] }
 

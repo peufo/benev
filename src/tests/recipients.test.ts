@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { withoutTestRecipients } from '$lib/server/recipients'
+import { withoutTestRecipients } from '#lib/server/recipients.js'
 
 /**
  * Le filtre est la dernière barrière avant un vrai envoi SMTP: une régression silencieuse

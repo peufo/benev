@@ -2,15 +2,17 @@
 	import type { Event } from '@prisma/client'
 	import { untrack } from 'svelte'
 	import { InputString } from 'fuma'
-	import { debounce } from '$lib/debounce'
-	import { normalizeUrl } from '$lib/url'
+	import { debounce } from '#lib/debounce.js'
+	import { normalizeUrl } from '#lib/url.js'
 	import { EventIcon } from '.'
+	import type { EventFields } from './settings/types'
 
 	interface Props {
+		fields: EventFields
 		event?: Event | undefined
 	}
 
-	let { event = undefined }: Props = $props()
+	let { fields, event = undefined }: Props = $props()
 
 	let scrapPending = $state(false)
 	// Icône affichée: remplacée par le scraping dès que l'URL change.
@@ -31,8 +33,8 @@
 	}, 400)
 </script>
 
-<input type="hidden" name="icon" value={icon} />
-<input type="hidden" name="web" {value} />
+<input {...fields.icon.as('hidden', icon ?? '')} />
+<input {...fields.web.as('hidden', value)} />
 
 <div class="flex items-end gap-2">
 	<InputString label="Site web" class="grow" bind:value={typed} oninput={handleInput} />

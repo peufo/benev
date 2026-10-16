@@ -14,7 +14,7 @@ import { param } from 'fuma'
 import { page } from '$app/state'
 import { resolve } from '$app/paths'
 import type { ResolvedPathname } from '$app/types'
-import { eventPath, withSearch, type EventRouteWithoutParams } from '$lib/eventPath'
+import { eventPath, withSearch, type EventRouteWithoutParams } from '#lib/eventPath.js'
 
 type AdminTab = {
 	href: ResolvedPathname
@@ -67,7 +67,7 @@ export function adminTabs(): AdminTab[] {
 			icon: FileTextIcon,
 		},
 		{
-			href: resolve('/docs'),
+			href: resolve('docs'),
 			isActive: false,
 			label: 'Aide',
 			icon: CircleQuestionMarkIcon,

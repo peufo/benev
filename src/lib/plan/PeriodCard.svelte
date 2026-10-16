@@ -10,9 +10,9 @@
 	import { PeriodCardContent } from './cardContent'
 	import { time } from './utils'
 	import { clipToPlan } from './clipToPlan'
-	import { movePeriod } from '$lib/period/period.remote'
-	import { engagedSubscribes, scheduleChanged } from '$lib/period/periodChange'
-	import { selectNotify } from '$lib/period/selectNotify'
+	import { movePeriod } from '#lib/period/period.remote.js'
+	import { engagedSubscribes, scheduleChanged } from '#lib/period/periodChange.js'
+	import { selectNotify } from '#lib/period/selectNotify.js'
 	import { magnet } from './magnet.svelte'
 	import DragButton from './DragButton.svelte'
 

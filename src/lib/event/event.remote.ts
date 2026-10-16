@@ -1,11 +1,11 @@
 import { error, invalid, redirect } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
-import { modelEventCreate, modelEventSettings } from '$lib/models'
+import { modelEventCreate, modelEventSettings } from '#lib/models/index.js'
 import { resolve } from '$app/paths'
-import { createLog, jsonOrDbNull, permission, prisma } from '$lib/server'
-import { defaultEmailModels } from '$lib/email/models'
-import { EVENT_TIER, THEME_PRESETS } from '$lib/constant'
-import { diffChanges, hasChanges, projectEvent } from '$lib/log'
+import { createLog, jsonOrDbNull, permission, prisma } from '#lib/server/index.js'
+import { defaultEmailModels } from '#lib/email/models.js'
+import { EVENT_TIER, THEME_PRESETS } from '#lib/constant/index.js'
+import { diffChanges, hasChanges, projectEvent } from '#lib/log/index.js'
 
 /**
  * Deux formulaires décrivent un évènement: `EventForm` le crée avec le strict nécessaire, et

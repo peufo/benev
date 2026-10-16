@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
-	import { countSubscribes, type PeriodCountable } from '$lib/subscribe/subscribesCount'
+	import { countSubscribes, type PeriodCountable } from '#lib/subscribe/subscribesCount.js'
 	import type { ClassValue } from 'svelte/elements'
 
 	interface Props {

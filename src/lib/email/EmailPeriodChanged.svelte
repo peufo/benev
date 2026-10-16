@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Event, Member } from '@prisma/client'
 	import { ORIGIN } from '$app/env/public'
-	import EmailLayout from '$lib/email/EmailLayout.svelte'
-	import { formatRange } from '$lib/formatRange'
+	import EmailLayout from '#lib/email/EmailLayout.svelte'
+	import { formatRange } from '#lib/formatRange.js'
 
 	type Range = { start: Date; end: Date }
 

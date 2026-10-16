@@ -2,7 +2,7 @@
 	import type { Event, EventTier, User } from '@prisma/client'
 	import EmailLayout from './EmailLayout.svelte'
 	import { ORIGIN } from '$app/env/public'
-	import { EVENT_TIER } from '$lib/constant'
+	import { EVENT_TIER } from '#lib/constant/index.js'
 
 	interface Props {
 		event: Event

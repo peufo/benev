@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { LinkIcon, RotateCcwIcon, UnlinkIcon } from '@lucide/svelte'
 	import { fade } from 'svelte/transition'
-	import { invalidateAll } from '$app/navigation'
+	import { refreshAll } from '$app/navigation'
 	import { ButtonDelete, InputBoolean, InputNumber, InputString, tip } from 'fuma'
 	import type { PageData } from './$types'
-	import { InputMedia } from '$lib/material/media'
-	import { FORMAT_CARD } from '$lib/constant'
-	import { SaveBar } from '$lib/ui'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { InputMedia } from '#lib/material/media/index.js'
+	import { FORMAT_CARD } from '#lib/constant/index.js'
+	import { SaveBar } from '#lib/ui/index.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import InputColorMap from './InputColorMap.svelte'
 	import InputFieldSelect from './InputFieldSelect.svelte'
 	import InputColorPalette from './InputColorPalette.svelte'
@@ -91,7 +91,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 			success: 'Badge enregistré',
 			onsuccess: async () => {
 				// Le nom se répercute sur la barre latérale, et l'aperçu est rendu par le serveur.
-				await invalidateAll()
+				await refreshAll()
 				saveBar?.rebase()
 				onsaved?.()
 			},
@@ -169,8 +169,12 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	<fieldset class="fieldset max-w-100">
 		<span class="label">Illustrations</span>
 		<div class="grid gap-4 grid-cols-2">
-			<InputMedia label="Image de fond" key="backgroundId" bind:value={draft.backgroundId} />
-			<InputMedia label="Logo" key="logoId" bind:value={draft.logoId} />
+			<InputMedia
+				label="Image de fond"
+				field={remoteForm.fields.backgroundId}
+				bind:value={draft.backgroundId}
+			/>
+			<InputMedia label="Logo" field={remoteForm.fields.logoId} bind:value={draft.logoId} />
 		</div>
 	</fieldset>
 
@@ -205,11 +209,19 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 	<fieldset class="fieldset">
 		<span class="label">Couleurs par type de membre</span>
 		<div class="flex flex-wrap items-start gap-1">
-			<InputColorMap field={draft.typeField} bind:value={draft.colorMap} />
+			<InputColorMap
+				field={draft.typeField}
+				colorMapField={remoteForm.fields.colorMap}
+				bind:value={draft.colorMap}
+			/>
 			<!-- Le `reset()` natif rend au sélecteur de couleur son attribut `value`, que Svelte
 			     ne pose pas: seul son remontage lui rend la couleur enregistrée. -->
 			{#key resetToken}
-				<InputColor name="colorDefault" label="Par défaut" value={badge.colorDefault} />
+				<InputColor
+					field={remoteForm.fields.colorDefault}
+					label="Par défaut"
+					value={badge.colorDefault}
+				/>
 			{/key}
 		</div>
 	</fieldset>

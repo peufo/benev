@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { tip, urlParam } from 'fuma'
 	import { parseOptions, type Options, type Option } from 'fuma'
-	import { page } from '$app/state'
+	import { page, type ReadonlyURL } from '$app/state'
 
 	interface Props {
 		options: Options
@@ -14,13 +14,13 @@
 
 	let _options = $derived(getOptions(page.url))
 
-	function getOptions(url: URL) {
+	function getOptions(url: ReadonlyURL) {
 		return parseOptions(options).map((option) => ({
 			...option,
 			isActive: getIsActive(option, url),
 		}))
 	}
-	function getIsActive(option: Option, { searchParams }: URL) {
+	function getIsActive(option: Option, { searchParams }: ReadonlyURL) {
 		if (searchParams.get(key) === option.value) return true
 		if (!searchParams.has(key)) return option.value === defaultValue
 		return false
@@ -31,7 +31,7 @@
 	{#each _options as { value, label, icon: OptionIcon, isActive } (value)}
 		<a
 			href={urlParam.with({ [key]: value })}
-			data-sveltekit-noscroll
+			data-sveltekit-reset="false"
 			data-sveltekit-replacestate
 			class="flex h-7 w-7 items-center justify-center gap-2 rounded p-1"
 			class:px-2={showLabel}

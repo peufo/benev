@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
 	import { CheckIcon, XIcon } from '@lucide/svelte'
-	import { InputSearch, Surface } from '$lib/ui'
+	import { InputSearch, Surface } from '#lib/ui/index.js'
 	import { DropDown, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import TDSortable from './TDSortable.svelte'

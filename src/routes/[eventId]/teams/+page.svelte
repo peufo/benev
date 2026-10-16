@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
 	import { onMount } from 'svelte'
-	import { InputSearch } from '$lib/ui'
+	import { InputSearch } from '#lib/ui/index.js'
 	import { Dialog, RangePickerButton, urlParam } from 'fuma'
 
-	import { Teams, ToggleOnlyAvailable } from '$lib/team'
+	import { Teams, ToggleOnlyAvailable } from '#lib/team/index.js'
 	import ThanksDialog from './ThanksDialog.svelte'
-	import { SubscribeForm } from '$lib/subscribe'
-	import { memberIsRegistered } from '$lib/member'
-	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
+	import { SubscribeForm } from '#lib/subscribe/index.js'
+	import { memberIsRegistered } from '#lib/member/index.js'
+	import type { PeriodWithComputedValues, TeamWithComputedValues } from '#lib/server/index.js'
 	import { goto } from '$app/navigation'
-	import { eventPath, withSearch } from '$lib/eventPath'
+	import { eventPath, withSearch } from '#lib/eventPath.js'
 	import { page } from '$app/state'
 	import TeamsStats from './TeamsStats.svelte'
 
@@ -67,7 +67,7 @@
 				<div class="grid place-content-center p-10 gap-4">
 					<p>Pas de secteur publique</p>
 					<a
-						href={withSearch(resolve('/auth'), `redirectTo=${eventPath('/teams')}`)}
+						href={withSearch(resolve('auth'), `redirectTo=${eventPath('/teams')}`)}
 						class="btn btn-primary"
 					>
 						Connexion
@@ -93,7 +93,7 @@
 			onclose={() => {
 				subscribeDialog.close()
 				if (page.url.searchParams.has('subscribeTo'))
-					goto(urlParam.without('subscribeTo'), { replaceState: true })
+					goto(urlParam.without('subscribeTo'), { replace: true })
 			}}
 			onsuccess={() => {
 				subscribeDialog.close()

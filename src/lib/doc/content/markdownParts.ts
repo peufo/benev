@@ -1,4 +1,4 @@
-import { ROLE_DESCRIPTIONS, ROLE_LABELS } from '$lib/member/roles'
+import { ROLE_DESCRIPTIONS, ROLE_LABELS } from '#lib/member/roles.js'
 import { PERMISSION_ROLES, PERMISSIONS, type Permission } from './permissions'
 
 /**

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { HouseIcon, MapPinnedIcon } from '@lucide/svelte'
 	import type { Page } from '@prisma/client'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath } from '#lib/eventPath.js'
 	import { page } from '$app/state'
-	import { PAGE_STATES, PAGE_TYPE } from '$lib/constant'
+	import { PAGE_STATES, PAGE_TYPE } from '#lib/constant/index.js'
 	import type { ClassValue } from 'svelte/elements'
 
 	interface Props {

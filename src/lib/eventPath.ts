@@ -1,7 +1,7 @@
 import { resolve } from '$app/paths'
 import { page } from '$app/state'
 import type { ResolvedPathname, RouteId, RouteParams } from '$app/types'
-import type { MemberRole } from '$lib/server'
+import type { MemberRole } from '#lib/server/index.js'
 
 /**
  * Les routes montées sous `/[eventId]`, indexées par leur chemin privé du préfixe et associées
@@ -35,12 +35,21 @@ type Params<T extends EventPathArg> =
 
 const resolveRoute = resolve as (route: string, params: Record<string, string>) => ResolvedPathname
 
+/**
+ * L'évènement de la route courante. Une `query()` ne peut pas lire `params`: c'est d'ici que ses
+ * appelants tirent l'`eventId` qu'elle reçoit en argument.
+ */
+export function currentEventId(): string {
+	const { eventId } = page.params
+	if (!eventId) throw new Error("Appelé hors d'une route /[eventId]")
+	return eventId
+}
+
 /** `resolve()` pour l'évènement courant: le préfixe et l'`eventId` sont sous-entendus. */
 export function eventPath<T extends EventPathArg>(
 	...args: [path: T, ...Params<T>]
 ): ResolvedPathname {
-	const { eventId } = page.params
-	if (!eventId) throw new Error("eventPath() appelé hors d'une route /[eventId]")
+	const eventId = currentEventId()
 	const params = args[1] as Record<string, string> | undefined
 	return resolveRoute(`/[eventId]${args[0]}`, { eventId, ...params })
 }

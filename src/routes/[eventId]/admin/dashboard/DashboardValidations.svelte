@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { tip } from 'fuma'
-	import dayjs from '$lib/dayjs'
-	import { formatRange } from '$lib/formatRange'
-	import { MemberCell } from '$lib/member'
-	import { eventPath } from '$lib/eventPath'
-	import { SubscribeCreatedBy, SubscribeStateForm } from '$lib/subscribe'
-	import { Placeholder } from '$lib/ui'
+	import dayjs from '#lib/dayjs.js'
+	import { formatRange } from '#lib/formatRange.js'
+	import { MemberCell } from '#lib/member/index.js'
+	import { eventPath } from '#lib/eventPath.js'
+	import { SubscribeCreatedBy, SubscribeStateForm } from '#lib/subscribe/index.js'
+	import { Placeholder } from '#lib/ui/index.js'
 	import type { PageData } from './$types'
 	import type { Waiting } from './waiting'
 

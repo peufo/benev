@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { CheckIcon, OctagonAlertIcon } from '@lucide/svelte'
-	import { formatRangeHourSpan } from '$lib/formatRange'
+	import { formatRangeHourSpan } from '#lib/formatRange.js'
 	import { urlParam } from 'fuma'
 	import { magnet } from '../magnet.svelte'
 	import type { PeriodWithMembers } from '../types'
-	import { cardContentOptions } from './options'
-	import { TagsList } from '$lib/tag'
-	import { countSubscribes } from '$lib/subscribe'
+	import { getCardContentOptions } from './options'
+	import { TagsList } from '#lib/tag/index.js'
+	import { countSubscribes } from '#lib/subscribe/index.js'
 
 	interface Props {
 		period: PeriodWithMembers
@@ -15,11 +15,12 @@
 	}
 
 	let { period, deltaStartMs, deltaEndMs }: Props = $props()
+	const cardContentOptions = $derived(getCardContentOptions())
 </script>
 
 <div class="space-y-1">
 	<div class="flex gap-x-1 flex-wrap items-center">
-		{#if !$cardContentOptions.hideRangetime}
+		{#if !cardContentOptions.hideRangetime}
 			<div
 				class="text-xs font-semibold m-1 whitespace-nowrap overflow-hidden text-ellipsis mr-auto"
 			>
@@ -30,7 +31,7 @@
 			</div>
 		{/if}
 
-		{#if !$cardContentOptions.hideProgress}
+		{#if !cardContentOptions.hideProgress}
 			{@const count = countSubscribes(period)}
 			<span
 				class={[
@@ -43,11 +44,11 @@
 		{/if}
 	</div>
 
-	{#if $cardContentOptions.showTags && period.tags.length}
+	{#if cardContentOptions.showTags && period.tags.length}
 		<TagsList tags={period.tags} />
 	{/if}
 
-	{#if $cardContentOptions.showSlots}
+	{#if cardContentOptions.showSlots}
 		{@const nbEmptySlot = Math.max(period.maxSubscribe - period.subscribes.length, 0)}
 		<ul class="flex flex-col gap-1">
 			{#each period.subscribes as subscribe (subscribe.id)}
@@ -80,8 +81,8 @@
 <a
 	href={urlParam.with({ form_period: period.id })}
 	class="absolute inset-0"
-	data-sveltekit-noscroll
-	data-sveltekit-preload-data="off"
+	data-sveltekit-reset="false"
+	data-sveltekit-preload-data="false"
 	data-sveltekit-replacestate
 >
 	<!-- Espace explicite: le lien recouvre la carte et ne doit pas être vide. -->

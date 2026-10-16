@@ -6,8 +6,8 @@
 	import { InputBoolean, InputString } from 'fuma'
 	import { toast } from 'svelte-sonner'
 	import { page } from '$app/state'
-	import { modelEmail } from '$lib/models'
-	import { contextContainer } from '$lib/ui/context.js'
+	import { modelEmail } from '#lib/models/index.js'
+	import { contextContainer } from '#lib/ui/context.js'
 	import Oauth from './Oauth.svelte'
 	import { loginUser, registerUser, resetPassword } from './user.remote'
 
@@ -58,7 +58,6 @@
 		return () => clearTimeout(id)
 	})
 
-	let redirectTo = $derived(page.url.searchParams.get('redirectTo'))
 	let isPending = $derived(loginUser.pending + registerUser.pending + resetPassword.pending > 0)
 
 	/**
@@ -234,10 +233,6 @@
 			</div>
 		{/if}
 
-		{#if redirectTo}
-			<input type="hidden" name="redirectTo" value={redirectTo} />
-		{/if}
-
 		<button
 			class="btn btn-primary mt-4 w-full"
 			formaction={mode === 'login' ? loginUser.action : registerUser.action}
@@ -292,9 +287,9 @@
 
 	<p class="mt-4 text-center text-xs text-balance text-base-content/70">
 		En continuant, tu acceptes nos
-		<a href={resolve('/terms')} class="link" target="_blank">conditions générales</a>
+		<a href={resolve('terms')} class="link" target="_blank">conditions générales</a>
 		et notre
-		<a href={resolve('/privacy')} class="link" target="_blank">politique de confidentialité</a>.
+		<a href={resolve('privacy')} class="link" target="_blank">politique de confidentialité</a>.
 	</p>
 {/snippet}
 

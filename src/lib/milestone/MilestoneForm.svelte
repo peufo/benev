@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Milestone } from '@prisma/client'
 	import { ButtonDelete, InputDateTime, InputString } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { getEventTimeZone } from '$lib/timezone'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { getEventTimeZone } from '#lib/timezone.js'
 	import { createMilestone, deleteMilestone, updateMilestone } from './milestone.remote'
 
 	interface Props {
@@ -32,7 +32,7 @@
 		id={deleteFormId}
 		class="hidden"
 	>
-		<input type="hidden" name="id" value={milestone.id} />
+		<input {...deleteMilestone.fields.id.as('hidden', milestone.id)} />
 	</form>
 {/if}
 
@@ -45,10 +45,6 @@
 	)}
 	class="flex flex-col gap-4"
 >
-	{#if milestone.id}
-		<input type="hidden" name="id" value={milestone.id} />
-	{/if}
-
 	<InputString
 		field={remoteForm.fields.name}
 		label="Nom"

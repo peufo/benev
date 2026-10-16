@@ -8,13 +8,13 @@
 		TriangleAlertIcon,
 	} from '@lucide/svelte'
 	import type { PageData } from './$types'
-	import { InputSearch, Surface } from '$lib/ui'
-	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
+	import { InputSearch, Surface } from '#lib/ui/index.js'
+	import TableViewSelect from '#lib/view/TableViewSelect.svelte'
 	import { Drawer, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { Table, type TableField } from 'fuma'
 	import { urlParam } from 'fuma'
-	import { MemberCell } from '$lib/member'
+	import { MemberCell } from '#lib/member/index.js'
 	import SubscribesImport from './SubscribesImport.svelte'
 	import SubscribesStats from './SubscribesStats.svelte'
 	import {
@@ -22,12 +22,12 @@
 		SubscribeIsAbsent,
 		SubscribeMenu,
 		SubscribeStateForm,
-	} from '$lib/subscribe'
-	import { formatRange } from '$lib/formatRange'
-	import { eventPath } from '$lib/eventPath'
-	import { SUBSCRIBE_STATE } from '$lib/constant'
-	import { TagsList } from '$lib/tag'
-	import dayjs from '$lib/dayjs'
+	} from '#lib/subscribe/index.js'
+	import { formatRange } from '#lib/formatRange.js'
+	import { eventPath } from '#lib/eventPath.js'
+	import { SUBSCRIBE_STATE } from '#lib/constant/index.js'
+	import { TagsList } from '#lib/tag/index.js'
+	import dayjs from '#lib/dayjs.js'
 
 	let { data } = $props()
 

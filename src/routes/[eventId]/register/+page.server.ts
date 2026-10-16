@@ -1,5 +1,5 @@
-import { isSameEmail, prisma } from '$lib/server'
-import { NOINDEX_FOLLOW } from '$lib/seo'
+import { isSameEmail, prisma } from '#lib/server/index.js'
+import { NOINDEX_FOLLOW } from '#lib/seo/index.js'
 
 export const load = async ({ parent, params: { eventId } }) => {
 	const { user, invite } = await parent()

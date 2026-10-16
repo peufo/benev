@@ -1,6 +1,6 @@
 import { getMembers, type MemberWithComputedValue } from '../getMembers.server'
-import { prisma, permission } from '$lib/server'
-import { getAge } from '$lib/utils'
+import { prisma, permission } from '#lib/server/index.js'
+import { getAge } from '#lib/utils.js'
 import z from 'zod'
 import { getCSV } from 'fuma'
 import { parseQuery } from 'fuma/server'

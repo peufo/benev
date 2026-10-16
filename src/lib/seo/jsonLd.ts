@@ -1,6 +1,6 @@
 import type { Thing, WithContext } from 'schema-dts'
-import { EVENT_TIER, parseTierPrice } from '$lib/constant'
-import { mapUrl } from '$lib/location'
+import { EVENT_TIER, parseTierPrice } from '#lib/constant/index.js'
+import { mapUrl } from '#lib/location/index.js'
 import { SITE_DESCRIPTION, SITE_NAME } from './metaTags'
 
 export const REPOSITORY_URL = 'https://github.com/peufo/benev'

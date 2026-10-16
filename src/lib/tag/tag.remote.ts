@@ -1,7 +1,8 @@
 import { form, getRequestEvent, query } from '$app/server'
 import z from 'zod'
-import { modelTagCreate, modelTagUpdate } from '$lib/models'
-import { permission, prisma, uniqueIssue } from '$lib/server'
+import { modelTagCreate, modelTagUpdate } from '#lib/models/index.js'
+import { zSearchInEvent } from '#lib/models/form.js'
+import { permission, prisma, uniqueIssue } from '#lib/server/index.js'
 
 const NAME_TAKEN = 'Une étiquette porte déjà ce nom'
 
@@ -31,9 +32,8 @@ export const deleteTag = form(z.object({ id: z.string() }), async ({ id }) => {
 })
 
 /** Alimente l'`InputMultiSelect` des étiquettes de `PeriodForm`. */
-export const searchTags = query(z.object({ search: z.string() }), async ({ search }) => {
-	const { locals, params } = getRequestEvent()
-	const eventId = params.eventId!
+export const searchTags = query(zSearchInEvent, async ({ search, eventId }) => {
+	const { locals } = getRequestEvent()
 	await permission.leader(eventId, locals)
 	return prisma.tag.findMany({
 		where: { eventId, name: { contains: search } },

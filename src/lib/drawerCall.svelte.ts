@@ -16,7 +16,7 @@ type DrawerCall<Created, Updated = Created> = {
 export type DrawerLinkAttributes = {
 	href: string
 	onclick: () => void
-	'data-sveltekit-noscroll': true
+	'data-sveltekit-reset': 'false'
 	'data-sveltekit-replacestate': true
 }
 
@@ -49,7 +49,7 @@ function drawerCall<Created, Updated = Created>(key: string) {
 					onclick?.()
 					call = next
 				},
-				'data-sveltekit-noscroll': true,
+				'data-sveltekit-reset': 'false',
 				'data-sveltekit-replacestate': true,
 			}
 		},

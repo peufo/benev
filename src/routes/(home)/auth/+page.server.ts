@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit'
-import { NOINDEX_FOLLOW, pageMetaTags } from '$lib/seo'
+import { NOINDEX_FOLLOW, pageMetaTags } from '#lib/seo/index.js'
 
 export const load = async ({ locals, url }) => {
 	const session = await locals.auth.validate()

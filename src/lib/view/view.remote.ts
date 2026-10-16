@@ -1,7 +1,7 @@
 import { form, getRequestEvent } from '$app/server'
 import z from 'zod'
-import { modelViewCreate } from '$lib/models'
-import { permission, prisma, uniqueIssue } from '$lib/server'
+import { modelViewCreate } from '#lib/models/index.js'
+import { permission, prisma, uniqueIssue } from '#lib/server/index.js'
 
 const NAME_TAKEN = 'Une vue porte déjà ce nom'
 

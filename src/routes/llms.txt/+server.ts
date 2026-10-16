@@ -1,5 +1,5 @@
-import { getDocSummaries } from '$lib/doc/engine/registry.server'
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '$lib/seo'
+import { getDocSummaries } from '#lib/doc/engine/registry.server.js'
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '#lib/seo/index.js'
 
 /**
  * Index au format llms.txt: un modèle de langage y trouve la carte de la documentation et le lien

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { TeamState } from '@prisma/client'
-	import { TEAM_STATES } from '$lib/constant'
+	import { TEAM_STATES } from '#lib/constant/index.js'
 	import type { LogTyped } from './logMap'
 	import { teamLabels } from './logProject'
 	import { snippetRef } from './Snippets.svelte'

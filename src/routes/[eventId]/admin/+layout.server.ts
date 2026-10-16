@@ -1,6 +1,6 @@
-import { prisma, isTierQuotaReached, redirectToRegister } from '$lib/server'
+import { prisma, isTierQuotaReached, redirectToRegister } from '#lib/server/index.js'
 import { error, redirect } from '@sveltejs/kit'
-import { NOINDEX } from '$lib/seo'
+import { NOINDEX } from '#lib/seo/index.js'
 import { resolve } from '$app/paths'
 
 export const load = async ({ parent, route, url, params: { eventId } }) => {

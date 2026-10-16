@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { Prisma } from '@prisma/client'
 import { isValidationError } from '@sveltejs/kit'
-import { isUniqueConstraintError, uniqueIssue } from '$lib/server/uniqueIssue'
+import { isUniqueConstraintError, uniqueIssue } from '#lib/server/uniqueIssue.js'
 
 /**
  * Le filtre par champ repose sur le nom que MySQL donne à ses index — `Modèle_champ_key` —

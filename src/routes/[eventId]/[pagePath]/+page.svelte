@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page as currentPage } from '$app/state'
 	import { JsonLd } from 'svelte-meta-tags'
-	import Page from '$lib/pages/Page.svelte'
-	import { eventPath } from '$lib/eventPath'
-	import { breadcrumbSchema, SITE_NAME } from '$lib/seo'
+	import Page from '#lib/pages/Page.svelte'
+	import { eventPath } from '#lib/eventPath.js'
+	import { breadcrumbSchema, SITE_NAME } from '#lib/seo/index.js'
 	let { data } = $props()
 
 	let origin = $derived(currentPage.url.origin)

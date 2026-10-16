@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type Snippet } from 'svelte'
-	import { PlaceholderImage } from '$lib/ui'
+	import { PlaceholderImage } from '#lib/ui/index.js'
 	import { slide } from 'svelte/transition'
 	import type { HTMLButtonAttributes } from 'svelte/elements'
 

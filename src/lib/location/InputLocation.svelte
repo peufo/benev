@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { MapPinnedIcon } from '@lucide/svelte'
 	import { InputSelect } from 'fuma'
+	import type { RemoteFormField } from '$app/server'
 
 	type Suggestion = PrismaJson.Location & { id: string; title: string; detail: string }
 
@@ -19,7 +20,8 @@
 	}
 
 	interface Props {
-		key?: string
+		/** Champ du formulaire qui porte le lieu, sérialisé en JSON. */
+		field: RemoteFormField<string>
 		label?: string
 		value?: PrismaJson.Location | null
 		placeholder?: string
@@ -28,7 +30,7 @@
 	}
 
 	let {
-		key = 'location',
+		field,
 		label = 'Lieu',
 		value = $bindable(null),
 		placeholder = 'Commence à taper une adresse ou un lieu…',
@@ -90,7 +92,7 @@
 </script>
 
 <!-- La remote function reçoit du JSON en clair: `"null"` signifie « lieu effacé ». -->
-<input type="hidden" name={key} value={JSON.stringify(value)} />
+<input {...field.as('hidden', JSON.stringify(value))} />
 
 <!-- La recherche reste dans le navigateur: `items` prend la fonction telle quelle, et le
      composant se charge de temporiser la frappe et d'afficher chargement et erreur. -->

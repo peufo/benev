@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DialogConfirm } from '$lib/ui'
+	import { DialogConfirm } from '#lib/ui/index.js'
 	import { deleteUser } from './user.remote'
 
 	let { ownedEventsCount = 0 }: { ownedEventsCount?: number } = $props()

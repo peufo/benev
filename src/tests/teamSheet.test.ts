@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { teamSheet, type TeamSheetInput } from '$lib/team/teamSheet'
+import { teamSheet, type TeamSheetInput } from '#lib/team/teamSheet.js'
 
 type Period = TeamSheetInput['periods'][number]
 

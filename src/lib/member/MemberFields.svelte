@@ -4,10 +4,10 @@
 	import { goto } from '$app/navigation'
 	import { toast } from 'svelte-sonner'
 	import type { Field } from '@prisma/client'
-	import { Placeholder } from '$lib/ui'
+	import { Placeholder } from '#lib/ui/index.js'
 	import { listEditable } from 'fuma'
 	import { urlParam } from 'fuma'
-	import { MEMBER_FIELD_TYPE } from '$lib/constant'
+	import { MEMBER_FIELD_TYPE } from '#lib/constant/index.js'
 	import { reorderMemberFields } from './memberField.remote'
 
 	interface Props {
@@ -42,8 +42,7 @@
 		<button
 			type="button"
 			transition:slide
-			onclick={() =>
-				goto(urlParam.with({ form_field: field.id }), { replaceState: true, noScroll: true })}
+			onclick={() => goto(urlParam.with({ form_field: field.id }), { replace: true, reset: false })}
 			class={[
 				'w-full flex gap-3 py-3 px-4 items-center',
 				'border border-hard rounded-field',

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Popover, tip } from 'fuma'
 	import type { PageData } from './$types'
-	import { MemberDeleteForm, MemberRole } from '$lib/member'
+	import { MemberDeleteForm, MemberRole } from '#lib/member/index.js'
 	import { CheckIcon, Trash2Icon, XIcon } from '@lucide/svelte'
 	import MemberIsValidedByEventForm from './MemberIsValidedByEventForm.svelte'
 	import MemberIsAdminForm from './MemberIsAdminForm.svelte'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath } from '#lib/eventPath.js'
 
 	let { data }: { data: PageData } = $props()
 </script>

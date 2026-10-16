@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest'
-import dayjs from '$lib/dayjs'
-import { clipToPlan } from '$lib/plan/clipToPlan'
+import dayjs from '#lib/dayjs.js'
+import { clipToPlan } from '#lib/plan/clipToPlan.js'
 
 const plan = { start: dayjs(new Date(2026, 8, 1)), end: dayjs(new Date(2026, 8, 15)) }
 const day = (d: number, hour = 0) => new Date(2026, 8, d, hour).getTime()

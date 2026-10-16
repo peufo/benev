@@ -1,7 +1,7 @@
 import { command, getRequestEvent } from '$app/server'
 import { MessageState } from '@prisma/client'
 import z from 'zod'
-import { permission, prisma } from '$lib/server'
+import { permission, prisma } from '#lib/server/index.js'
 
 /** Appelé impérativement depuis la liste: un `command()` plutôt qu'un POST axios. */
 export const setMessageState = command(

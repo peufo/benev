@@ -2,10 +2,10 @@
 	import { ExternalLinkIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { Dialog } from 'fuma'
-	import dayjs from '$lib/dayjs'
-	import { TERMS_VERSION } from '$lib/constant'
-	import { LEGAL_DOCS } from '$lib/layout/legal'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import dayjs from '#lib/dayjs.js'
+	import { TERMS_VERSION } from '#lib/constant/index.js'
+	import { LEGAL_DOCS } from '#lib/layout/legal.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { acceptTerms, logoutUser } from './user.remote'
 
 	interface Props {

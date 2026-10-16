@@ -1,11 +1,11 @@
 import { invalid } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import z from 'zod'
-import { zStringNullable } from '$lib/models/form'
-import { prisma, sendEmail, sendEmailComponent } from '$lib/server'
-import { createRateLimit } from '$lib/server/rateLimit'
+import { zStringNullable } from '#lib/models/form.js'
+import { prisma, sendEmail, sendEmailComponent } from '#lib/server/index.js'
+import { createRateLimit } from '#lib/server/rateLimit.js'
 import { SMTP_USER, ROOT_USER } from '$app/env/private'
-import { EmailBasic } from '$lib/email'
+import { EmailBasic } from '#lib/email/index.js'
 
 const sendMessageSchema = z.object({
 	subject: z.string().min(3).max(252),

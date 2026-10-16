@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { eventHomePath } from '$lib/eventPath'
-	import { MemberRole } from '$lib/member'
-	import { EVENT_STATES } from '$lib/constant'
+	import { eventHomePath } from '#lib/eventPath.js'
+	import { MemberRole } from '#lib/member/index.js'
+	import { EVENT_STATES } from '#lib/constant/index.js'
 	import { tip } from 'fuma'
 	import { CopyPlusIcon, MapPinnedIcon, ClockIcon } from '@lucide/svelte'
-	import { EventIcon, EventPoster } from '$lib/event'
-	import { formatDay, formatRangeDateShort, formatRangeHour } from '$lib/formatRange'
-	import { locality } from '$lib/location/locality'
+	import { EventIcon, EventPoster } from '#lib/event/index.js'
+	import { formatDay, formatRangeDateShort, formatRangeHour } from '#lib/formatRange.js'
+	import { locality } from '#lib/location/locality.js'
 	import type { EventMember } from './types'
 
 	interface Props {

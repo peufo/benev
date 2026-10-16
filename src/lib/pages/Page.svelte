@@ -3,13 +3,13 @@
 	import { LinkIcon, PencilIcon } from '@lucide/svelte'
 	import { page as appPage } from '$app/state'
 
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath } from '#lib/eventPath.js'
 
 	import type { Page } from '@prisma/client'
-	import { tiptapParser } from '$lib/ui'
-	import { PAGE_STATES } from '$lib/constant'
+	import { tiptapParser } from '#lib/ui/index.js'
+	import { PAGE_STATES } from '#lib/constant/index.js'
 
-	import type { MemberWithComputedValues } from '$lib/server'
+	import type { MemberWithComputedValues } from '#lib/server/index.js'
 	import PageLayout from './PageLayout.svelte'
 	import { getMemberReplacers } from './memberSuggestions'
 	import { injectValues } from './injectValues'
@@ -38,8 +38,10 @@
 	// `eventPath` rend un chemin relatif à la page courante: le lien à copier doit être résolu
 	// contre elle pour redevenir une URL entière.
 	let shareUrl = $derived(
-		new URL(page ? eventPath('/[pagePath]', { pagePath: page.path }) : eventPath(''), appPage.url)
-			.href
+		new URL(
+			page ? eventPath('/[pagePath]', { pagePath: page.path }) : eventPath(''),
+			appPage.url.href
+		).href
 	)
 </script>
 

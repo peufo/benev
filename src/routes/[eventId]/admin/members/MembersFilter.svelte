@@ -7,7 +7,7 @@
 		TriangleAlertIcon,
 	} from '@lucide/svelte'
 	import { slide } from 'svelte/transition'
-	import { InputOptionInParam } from '$lib/ui'
+	import { InputOptionInParam } from '#lib/ui/index.js'
 	import { urlParam } from 'fuma'
 </script>
 

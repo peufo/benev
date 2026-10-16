@@ -1,9 +1,9 @@
 import type { FieldType } from '@prisma/client'
 import { form, getRequestEvent } from '$app/server'
 import { redirect } from '@sveltejs/kit'
-import { modelBadgeUpdate } from '$lib/models'
+import { modelBadgeUpdate } from '#lib/models/index.js'
 import { resolve } from '$app/paths'
-import { permission, prisma } from '$lib/server'
+import { permission, prisma } from '#lib/server/index.js'
 
 export const updateBadge = form(modelBadgeUpdate, async ({ backgroundId, logoId, ...data }) => {
 	const { locals, params } = getRequestEvent()

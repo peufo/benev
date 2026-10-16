@@ -1,9 +1,8 @@
 /**
  * L'ancre d'un chapitre de documentation, dérivée de son titre.
  *
- * Ce module est en JavaScript et non en TypeScript parce que `svelte.config.js` l'atteint par
- * `rehypeDocSections.js`, et que Node ne charge pas de TypeScript. Il est typé en JSDoc: `checkJs`
- * le passe au crible comme le reste.
+ * `vite.config.ts` l'atteint par `rehypeDocSections.js`. Il est typé en JSDoc: `checkJs` le passe
+ * au crible comme le reste.
  *
  * Toute ponctuation devient un tiret, ce qui rend la fonction insensible à smartypants: le greffon
  * lit `L’adhésion` là où l'extracteur lit `L'adhésion`, et les deux tombent sur `l-adhesion`.

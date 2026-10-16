@@ -4,7 +4,7 @@
 
 <script lang="ts">
 	import Cropper from 'svelte-easy-crop'
-	import type { RemoteFormField } from '@sveltejs/kit'
+	import type { RemoteFormField } from '$app/server'
 	import { Dialog, InputString } from 'fuma'
 	import { RulerDimensionLineIcon } from '@lucide/svelte'
 
@@ -12,7 +12,9 @@
 		aspect?: { x: number; y: number }
 		title?: string
 		formaction?: string | undefined
-		key?: string
+		/** Champs du formulaire englobant: le fichier choisi et son recadrage sérialisé. */
+		imageField: RemoteFormField<File>
+		cropField: RemoteFormField<string>
 		/** Champ du formulaire englobant; fourni, il ouvre la saisie du nom de l'image. */
 		nameField?: RemoteFormField<string>
 		freeAspect?: boolean
@@ -24,7 +26,8 @@
 		aspect = $bindable({ x: 4, y: 3 }),
 		title = 'Nouvelle image',
 		formaction = undefined,
-		key = '',
+		imageField,
+		cropField,
 		nameField = undefined,
 		freeAspect = false,
 		onsubmit,
@@ -127,11 +130,10 @@
 		{/if}
 	</div>
 	<div class="flex justify-end items-end gap-2 mt-2">
-		<input type="hidden" name="{key ? `${key}_` : ''}crop" value={JSON.stringify(crop)} />
+		<input {...cropField.as('hidden', crop ? JSON.stringify(crop) : '')} />
 		<input
 			class="hidden"
-			type="file"
-			name="{key ? `${key}_` : ''}image"
+			{...imageField.as('file')}
 			accept="image/jpeg, image/png, image/webp, image/gif, image/avif, image/tiff"
 			bind:this={inputFile}
 			onchange={onFileSelected}

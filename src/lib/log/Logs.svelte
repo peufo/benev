@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { tick, type Snippet } from 'svelte'
 	import { ChevronUpIcon } from '@lucide/svelte'
-	import dayjs from '$lib/dayjs'
+	import dayjs from '#lib/dayjs.js'
 	import type { LogWithEvent } from './logTypes'
 	import Log, { enterDuration } from './Log.svelte'
 	import NoteForm from './NoteForm.svelte'

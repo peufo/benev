@@ -4,13 +4,14 @@
 	import { toast } from 'svelte-sonner'
 
 	import { listEditable, tip } from 'fuma'
+	import type { RemoteFormField } from '$app/server'
 
 	interface Props {
-		key: string
+		field: RemoteFormField<string>
 		value?: string | undefined | null
 	}
 
-	let { key, value = $bindable('[]') }: Props = $props()
+	let { field, value = $bindable('[]') }: Props = $props()
 
 	let options: string[] = $state(JSON.parse(value || '[]'))
 	let newOption = $state('')
@@ -43,7 +44,7 @@
 	}
 </script>
 
-<input type="hidden" name={key} {value} />
+<input {...field.as('hidden', value ?? '[]')} />
 
 <div class="label text-xs">Options</div>
 

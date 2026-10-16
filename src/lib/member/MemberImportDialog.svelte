@@ -10,8 +10,8 @@
 	import { fly } from 'svelte/transition'
 	import { SvelteSet } from 'svelte/reactivity'
 	import { Dialog } from 'fuma'
-	import { SelectorList } from '$lib/ui'
-	import { eventPath } from '$lib/eventPath'
+	import { SelectorList } from '#lib/ui/index.js'
+	import { eventPath, currentEventId } from '#lib/eventPath.js'
 	import { page } from '$app/state'
 	import { searchImportableEvents } from './memberImport.remote'
 	import { toast } from 'svelte-sonner'
@@ -49,7 +49,7 @@
 		targetFieldType: string | null
 	}
 
-	// Réponse de POST /admin/members/import, cf. `ImportResult` dans $lib/server/memberImport.
+	// Réponse de POST /admin/members/import, cf. `ImportResult` dans #lib/server/memberImport.
 	// Redéclaré ici (comme les interfaces ci-dessus) pour ne pas importer un module serveur.
 	interface ImportResults {
 		success: boolean
@@ -64,7 +64,7 @@
 
 	let search = $state('')
 	let searchInput: HTMLInputElement = $state()!
-	const eventsQuery = $derived(searchImportableEvents({ search }))
+	const eventsQuery = $derived(searchImportableEvents({ search, eventId: currentEventId() }))
 	const importableEvents = $derived(eventsQuery.current ?? [])
 
 	type ImportableEvent = (typeof importableEvents)[number]

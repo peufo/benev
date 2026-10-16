@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { addMemberComputedValues, hidePrivateProfilValues, prisma } from '$lib/server'
+import { addMemberComputedValues, hidePrivateProfilValues, prisma } from '#lib/server/index.js'
 
 export const load = async ({ params }) => {
 	const user = await prisma.user.findUnique({

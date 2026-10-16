@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { rolesMap } from '$lib/member/MemberRole.svelte'
-	import { setMemberIsAdmin } from '$lib/member/memberAdmin.remote'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { rolesMap } from '#lib/member/MemberRole.svelte'
+	import { setMemberIsAdmin } from '#lib/member/memberAdmin.remote.js'
 
 	interface Props {
 		memberProfile: PageData['memberProfile']

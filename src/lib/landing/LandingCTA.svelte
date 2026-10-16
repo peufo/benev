@@ -20,14 +20,11 @@
 			</div>
 
 			<div class="flex flex-col items-center gap-4">
-				<a href={resolve('/me')} class="btn btn-lg btn-secondary">
+				<a href={resolve('me')} class="btn btn-lg btn-secondary">
 					{user ? 'Voir mes événements' : 'Essayer Benevio'}
 				</a>
 
-				<a
-					href={resolve('/open-source')}
-					class="btn btn-lg btn-ghost text-white hover:text-primary"
-				>
+				<a href={resolve('open-source')} class="btn btn-lg btn-ghost text-white hover:text-primary">
 					Contribuer
 				</a>
 			</div>

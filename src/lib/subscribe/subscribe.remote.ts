@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import { isFreeRange } from 'perod'
-import { modelSubscribe } from '$lib/models'
+import { modelSubscribe } from '#lib/models/index.js'
 import {
 	addMemberComputedValues,
 	createLog,
@@ -9,9 +9,9 @@ import {
 	permission,
 	prisma,
 	sendSubscribeRequestNotification,
-} from '$lib/server'
-import { isMemberAllowed, memberIsRegistered } from '$lib/member'
-import { periodIsComplet } from '$lib/period/index.js'
+} from '#lib/server/index.js'
+import { isMemberAllowed, memberIsRegistered } from '#lib/member/index.js'
+import { periodIsComplet } from '#lib/period/index.js'
 
 export const createSubscribe = form(modelSubscribe, async (data) => {
 	const { locals, params } = getRequestEvent()

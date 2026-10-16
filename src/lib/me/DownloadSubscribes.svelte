@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath } from '#lib/eventPath.js'
 	import { tip } from 'fuma'
 	import { CalendarArrowUp } from '@lucide/svelte'
 	import { page } from '$app/state'

@@ -1,8 +1,8 @@
 import { getRequestEvent, query } from '$app/server'
 import z from 'zod'
-import { getLogs, permission } from '$lib/server'
+import { getLogs, permission } from '#lib/server/index.js'
 import type { LogType } from '@prisma/client'
-import { LOG_TYPES } from '$lib/log'
+import { LOG_TYPES } from '#lib/log/index.js'
 
 /** Le pendant root de `loadPreviousEventLogs`: tous évènements confondus, et tous types. */
 export const loadPreviousRootLogs = query(

@@ -13,19 +13,19 @@
 	import type { Component } from 'svelte'
 	import type { ClassValue } from 'svelte/elements'
 	import { page } from '$app/state'
-	import type { Pathname } from '$app/types'
+	import type { Path } from '$app/types'
 
-	const tabs: { path: Pathname; label: string; Icon: Component<IconProps> }[] = [
-		{ path: '/#pricing', label: 'Tarifs', Icon: WalletIcon },
-		{ path: '/docs', label: 'Documentation', Icon: BookOpenTextIcon },
-		{ path: '/contact', label: 'Contact', Icon: MessagesSquareIcon },
-		{ path: '/events', label: 'Évènements', Icon: CalendarDaysIcon },
+	const tabs: { path: Path; label: string; Icon: Component<IconProps> }[] = [
+		{ path: '#pricing', label: 'Tarifs', Icon: WalletIcon },
+		{ path: 'docs', label: 'Documentation', Icon: BookOpenTextIcon },
+		{ path: 'contact', label: 'Contact', Icon: MessagesSquareIcon },
+		{ path: 'events', label: 'Évènements', Icon: CalendarDaysIcon },
 	]
 </script>
 
 {#snippet menuItems(klass: ClassValue, classActive: ClassValue)}
 	{#each tabs as { path, label, Icon } (path)}
-		{@const isActive = page.route.id?.startsWith(`/(home)${path}`)}
+		{@const isActive = page.route.id?.startsWith(`/(home)/${path}`)}
 		<a href={resolve(path)} class={[klass, isActive && classActive]}>
 			<Icon size={20} class="opacity-70" />
 			{label}

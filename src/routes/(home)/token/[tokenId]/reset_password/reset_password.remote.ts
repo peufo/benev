@@ -1,7 +1,7 @@
 import { form, getRequestEvent } from '$app/server'
 import { redirect } from '@sveltejs/kit'
 import { z } from 'zod'
-import { auth, validateToken } from '$lib/server'
+import { auth, validateToken } from '#lib/server/index.js'
 
 // SvelteKit réécrit `url.pathname` avec la route appelante avant de rejouer le
 // matching: `params` porte donc bien les paramètres de la page.

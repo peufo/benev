@@ -2,9 +2,9 @@
 	import { resolve } from '$app/paths'
 	import type { Event, Page as TPage } from '@prisma/client'
 	import { page } from '$app/state'
-	import { tiptapParser } from '$lib/ui'
+	import { tiptapParser } from '#lib/ui/index.js'
 	import { ButtonDelete, urlParam } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { acceptInvite, declineInvite } from './member.remote'
 
 	interface Props {
@@ -44,7 +44,9 @@
 			{...acceptInvite.enhance(enhanceForm({ onsuccess: () => onsuccess?.() }))}
 			class="contents"
 		>
-			<input type="hidden" name="redirectTo" value={urlParam.with({ section: 'profile' })} />
+			<input
+				{...acceptInvite.fields.redirectTo.as('hidden', urlParam.with({ section: 'profile' }))}
+			/>
 			<button class="btn btn-primary">Oui je le veux !</button>
 		</form>
 
@@ -52,7 +54,7 @@
 		     encore relié, et n'en retire que son adresse. -->
 		{#if page.data.memberToClaim?.isValidedByEvent}
 			<form {...declineInvite.enhance(enhanceForm())} class="contents">
-				<input type="hidden" name="memberId" value={page.data.memberToClaim.id} />
+				<input {...declineInvite.fields.memberId.as('hidden', page.data.memberToClaim.id)} />
 				<ButtonDelete formaction={declineInvite.action} class="w-36">
 					{#snippet children({ waitConfirmation })}
 						{waitConfirmation ? 'Confirmer' : 'Refuser'}
@@ -61,6 +63,6 @@
 			</form>
 		{/if}
 
-		<a href={resolve('/me')} class="btn btn-ghost mr-auto"> Retour </a>
+		<a href={resolve('me')} class="btn btn-ghost mr-auto"> Retour </a>
 	</div>
 </section>

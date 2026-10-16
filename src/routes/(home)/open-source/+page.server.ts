@@ -1,5 +1,5 @@
-import type { GithubIssue } from '$lib/types/github'
-import { pageMetaTags } from '$lib/seo'
+import type { GithubIssue } from '#lib/types/github.js'
+import { pageMetaTags } from '#lib/seo/index.js'
 
 interface GitHubApiLabel {
 	name: string

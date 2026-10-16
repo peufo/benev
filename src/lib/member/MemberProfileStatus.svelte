@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { GhostIcon, MessageCircleQuestionMarkIcon } from '@lucide/svelte'
 	import { tip } from 'fuma'
-	import type { MemberWithComputedValues } from '$lib/server'
+	import type { MemberWithComputedValues } from '#lib/server/index.js'
 
 	interface Props {
 		member: MemberWithComputedValues

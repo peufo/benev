@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
 	import { UsersIcon, InfinityIcon, TriangleAlertIcon } from '@lucide/svelte'
-	import { EVENT_TIER } from '$lib/constant'
+	import { EVENT_TIER } from '#lib/constant/index.js'
 
 	interface Props {
 		event: Event

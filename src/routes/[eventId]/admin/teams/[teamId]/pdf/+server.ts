@@ -1,9 +1,9 @@
 import PDFDocument from 'pdfkit'
 import { error } from '@sveltejs/kit'
-import { permission, prisma } from '$lib/server'
-import { pdfStream } from '$lib/server/pdf'
-import dayjs from '$lib/dayjs'
-import { teamSheet, type TeamSheetPeriod } from '$lib/team/teamSheet'
+import { permission, prisma } from '#lib/server/index.js'
+import { pdfStream } from '#lib/server/pdf.js'
+import dayjs from '#lib/dayjs.js'
+import { teamSheet, type TeamSheetPeriod } from '#lib/team/teamSheet.js'
 
 const TEXT = '#1f2937'
 const MUTED = '#6b7280'

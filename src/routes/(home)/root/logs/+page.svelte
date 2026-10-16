@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { InputSelectInParam } from '$lib/ui'
-	import { LOG_TYPES, Logs } from '$lib/log'
+	import { InputSelectInParam } from '#lib/ui/index.js'
+	import { LOG_TYPES, Logs } from '#lib/log/index.js'
 	import { loadPreviousRootLogs } from './logs.remote'
 
 	let { data } = $props()

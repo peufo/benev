@@ -1,11 +1,11 @@
 <script lang="ts" generics="S extends string, T extends S = S">
-	import type { RemoteForm } from '@sveltejs/kit'
+	import type { RemoteForm, RemoteFormField } from '$app/server'
 	import type { ClassValue } from 'svelte/elements'
 	import { ChevronDownIcon } from '@lucide/svelte'
 	import { confirmDialog, Popover, tip } from 'fuma'
 	import { toast } from 'svelte-sonner'
-	import type { StateOption } from '$lib/constant'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import type { StateOption } from '#lib/constant/index.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 
 	type Transition = {
 		state: T
@@ -36,6 +36,8 @@
 	const uid = $props.id()
 	// Une instance par enregistrement: `for()` injecte `id` dans les données soumises.
 	const remoteForm = $derived(form.for(id))
+	// `T` reste générique ici: TypeScript ne sait pas résoudre le champ qu'il type.
+	const stateField = $derived(remoteForm.fields.state as RemoteFormField<string>)
 	const StateIcon = $derived(states[value].icon)
 	// L'état visé se lit sur le bouton pressé, que le succès ne connaît plus.
 	let chosen = $state<T>()
@@ -90,9 +92,8 @@
 					<!-- La description explique le bouton sans entrer dans son nom: elle est
 					     rattachée par `aria-describedby`, et soustraite au texte du bouton. -->
 					<button
+						{...stateField.as('submit', target)}
 						class="menu-item w-full items-start"
-						name="state"
-						value={target}
 						aria-describedby="{uid}-{target}"
 						onclick={() => (chosen = target)}
 					>

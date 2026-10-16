@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Drawer } from 'fuma'
-	import { MilestoneForm } from '$lib/milestone'
+	import { MilestoneForm } from '#lib/milestone/index.js'
 	import type { Milestone } from '@prisma/client'
 
 	interface Props {
@@ -19,7 +19,7 @@
 	{#snippet children({ close })}
 		<MilestoneForm
 			milestone={milestone || {}}
-			oncreated={() => close({ replaceState: true })}
+			oncreated={() => close()}
 			onupdated={() => close()}
 			ondeleted={() => close()}
 		/>

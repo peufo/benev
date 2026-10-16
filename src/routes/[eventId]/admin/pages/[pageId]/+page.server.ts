@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit'
-import { prisma } from '$lib/server'
+import { prisma } from '#lib/server/index.js'
 import { resolve } from '$app/paths'
 
 export const load = async ({ params: { pageId, eventId } }) => {

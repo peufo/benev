@@ -1,5 +1,5 @@
-import { getDocSummaries } from '$lib/doc/engine/registry.server'
-import { pageMetaTags } from '$lib/seo'
+import { getDocSummaries } from '#lib/doc/engine/registry.server.js'
+import { pageMetaTags } from '#lib/seo/index.js'
 
 const DESCRIPTION =
 	'Le guide de benevio pour les organisateur·ices : créer un évènement, ouvrir les inscriptions, ' +

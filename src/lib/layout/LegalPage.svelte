@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { Card } from '$lib/ui'
-	import { TERMS_VERSION } from '$lib/constant'
-	import dayjs from '$lib/dayjs'
+	import { Card } from '#lib/ui/index.js'
+	import { TERMS_VERSION } from '#lib/constant/index.js'
+	import dayjs from '#lib/dayjs.js'
 	import { LEGAL_DOCS } from './legal'
 
 	interface Props {

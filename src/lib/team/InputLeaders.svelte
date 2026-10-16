@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { currentEventId } from '#lib/eventPath.js'
 	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
-	import type { RemoteFormField } from '@sveltejs/kit'
+	import type { RemoteFormField } from '$app/server'
 	import { InputMultiSelect, tip } from 'fuma'
-	import { searchMembers } from '$lib/member/member.remote'
-	import { inviteCall } from '$lib/drawerCall.svelte'
+	import { searchMembers } from '#lib/member/member.remote.js'
+	import { inviteCall } from '#lib/drawerCall.svelte.js'
 	import MemberLink from './MemberLink.svelte'
 
 	interface Props {
@@ -25,7 +26,12 @@
 	let leaders = $derived(value ?? [])
 </script>
 
-<InputMultiSelect {field} label="Responsables" bind:value={leaders} items={searchMembers}>
+<InputMultiSelect
+	{field}
+	label="Responsables"
+	bind:value={leaders}
+	items={({ search }) => searchMembers({ search, eventId: currentEventId() })}
+>
 	{#snippet selected(member)}
 		<MemberLink id={member.id} firstName={member.firstName} lastName={member.lastName} />
 	{/snippet}

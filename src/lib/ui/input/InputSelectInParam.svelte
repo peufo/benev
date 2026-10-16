@@ -27,7 +27,7 @@
 		const url = option
 			? urlParam.with({ [key]: option.value }, ...removeKeys)
 			: urlParam.without(key, ...removeKeys)
-		goto(url, { replaceState: true, noScroll: true, keepFocus: true })
+		goto(url, { replace: true, reset: false })
 	}
 </script>
 

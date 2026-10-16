@@ -1,4 +1,4 @@
-import { permission, prisma } from '$lib/server'
+import { permission, prisma } from '#lib/server/index.js'
 
 export const load = async ({ locals, params: { eventId } }) => {
 	await permission.admin(eventId, locals)

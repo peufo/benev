@@ -1,4 +1,4 @@
-import { EVENT_TIER } from '$lib/constant'
+import { EVENT_TIER } from '#lib/constant/index.js'
 import type { EventTier } from '@prisma/client'
 
 /** Ce qu'un produit active, relu dans les prix de `EVENT_TIER`: un prix inconnu reste affiché brut. */

@@ -1,4 +1,4 @@
-import { getInvite, prisma } from '$lib/server'
+import { getInvite, prisma } from '#lib/server/index.js'
 import { ROOT_USER } from '$app/env/private'
 
 export const load = async ({ locals, cookies }) => {

@@ -1,4 +1,4 @@
-import type { TocSection } from '$lib/ui'
+import type { TocSection } from '#lib/ui/index.js'
 import { createSlugger } from './slug.js'
 
 /**

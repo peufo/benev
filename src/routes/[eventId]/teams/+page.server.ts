@@ -1,8 +1,8 @@
 import z from 'zod'
-import { filterBoolean, filterRange } from '$lib/models/filter'
+import { filterBoolean, filterRange } from '#lib/models/filter.js'
 import { parseQuery } from 'fuma/server'
-import { useAddTeamComputedValues, prisma } from '$lib/server'
-import { isMemberAllowed } from '$lib/member'
+import { useAddTeamComputedValues, prisma } from '#lib/server/index.js'
+import { isMemberAllowed } from '#lib/member/index.js'
 import type { Period } from '@prisma/client'
 
 export const load = async ({ parent, url, params: { eventId } }) => {

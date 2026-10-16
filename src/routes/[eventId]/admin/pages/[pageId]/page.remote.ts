@@ -1,9 +1,9 @@
 import { form, getRequestEvent } from '$app/server'
 import { invalid, redirect } from '@sveltejs/kit'
-import { modelPageUpdate } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { modelPageUpdate } from '#lib/models/index.js'
+import { permission, prisma } from '#lib/server/index.js'
 import { resolve } from '$app/paths'
-import { normalizePath } from '$lib/normalizePath.js'
+import { normalizePath } from '#lib/normalizePath.js'
 
 const RESERVED_PATHS = [
 	'admin',

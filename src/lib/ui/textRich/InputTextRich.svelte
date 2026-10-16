@@ -4,25 +4,20 @@
 	import debounce from 'debounce'
 
 	import { jsonParse } from 'fuma'
-	import ToolsBar from '$lib/ui/textRich/ToolsBar.svelte'
-	import { extensions } from '$lib/ui/textRich/extensions.js'
+	import type { RemoteFormField } from '$app/server'
+	import ToolsBar from '#lib/ui/textRich/ToolsBar.svelte'
+	import { extensions } from '#lib/ui/textRich/extensions.js'
 
 	interface Props {
-		/** Nom du champ caché portant la valeur. Vide, l'éditeur ne soumet rien. */
-		key?: string
+		/** Champ du formulaire qui porte la valeur. Absent, l'éditeur ne soumet rien. */
+		field?: RemoteFormField<string>
 		value?: string
 		classToolbar?: string
 		onchange?: () => void
 		oninsertMedia?: () => void
 	}
 
-	let {
-		key = '',
-		value = $bindable(''),
-		classToolbar = '',
-		onchange,
-		oninsertMedia,
-	}: Props = $props()
+	let { field, value = $bindable(''), classToolbar = '', onchange, oninsertMedia }: Props = $props()
 
 	let element: HTMLDivElement = $state()!
 	let editor: Editor | null = $state(null)
@@ -78,6 +73,6 @@
 	{/if}
 	<div bind:this={element} class="min-h-80 p-4 pb-10"></div>
 </div>
-{#if key}
-	<input type="hidden" name={key} {value} />
+{#if field}
+	<input {...field.as('hidden', value)} />
 {/if}

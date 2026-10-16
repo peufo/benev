@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath } from '#lib/eventPath.js'
 
 	interface Props {
 		id: string

@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest'
 import { render } from 'svelte/server'
-import EmailPeriodChanged from '$lib/email/EmailPeriodChanged.svelte'
+import EmailPeriodChanged from '#lib/email/EmailPeriodChanged.svelte'
 
 /**
  * Le courriel se rend au serveur, sans `page.data`: le fuseau doit lui arriver en prop. Les deux

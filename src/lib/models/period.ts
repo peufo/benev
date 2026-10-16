@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import z from 'zod'
-import { PERIOD_MIN_MINUTES, PERIOD_MIN_MS } from '$lib/constant'
+import { PERIOD_MIN_MINUTES, PERIOD_MIN_MS } from '#lib/constant/index.js'
 import { zConnect, zConnectMany, zDate, zSet } from './form'
 
 export const modelPeriodCreate = z.object({

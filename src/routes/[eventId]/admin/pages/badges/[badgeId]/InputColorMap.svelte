@@ -1,15 +1,19 @@
 <script lang="ts">
 	import type { Field } from '@prisma/client'
+	import type { RemoteFormField } from '$app/server'
 	import { fade } from 'svelte/transition'
 	import InputColor from './InputColor.svelte'
 	import { paletteColor } from './InputColorPalette.svelte'
 
 	interface Props {
 		value: Record<string, string>
+		/** Le champ de profil dont les options reçoivent une couleur. */
 		field: Field | null
+		/** Champ du formulaire qui porte le nuancier, sérialisé en JSON. */
+		colorMapField: RemoteFormField<string>
 	}
 
-	let { value = $bindable(), field }: Props = $props()
+	let { value = $bindable(), field, colorMapField }: Props = $props()
 
 	let options = $derived(JSON.parse(field?.options || '[]') as string[])
 
@@ -27,7 +31,7 @@
 
 <!-- La remote function attend du JSON en clair: `zJson` le désérialise, là où `parseFormData`
      réclamait le jeton `USE_COERCE_JSON`. -->
-<input type="hidden" name="colorMap" value={JSON.stringify(colorMap)} />
+<input {...colorMapField.as('hidden', JSON.stringify(colorMap))} />
 
 {#if field?.type === 'select'}
 	<div in:fade class="flex flex-wrap gap-1">

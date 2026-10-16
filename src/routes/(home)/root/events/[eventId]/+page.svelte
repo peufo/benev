@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { Surface } from '$lib/ui'
-	import { msToHours } from '$lib/utils'
-	import { formatRangeDate } from '$lib/formatRange'
-	import { EVENT_TIER } from '$lib/constant'
+	import { Surface } from '#lib/ui/index.js'
+	import { msToHours } from '#lib/utils.js'
+	import { formatRangeDate } from '#lib/formatRange.js'
+	import { EVENT_TIER } from '#lib/constant/index.js'
 	import ProductsTable from '../../products/ProductsTable.svelte'
 	import {
 		CalendarDaysIcon,
@@ -23,7 +23,7 @@
 </script>
 
 <div class="p-4 flex flex-col gap-4">
-	<a href={resolve('/root/events')} class="inline-flex items-center gap-1 link link-hover text-sm">
+	<a href={resolve('root/events')} class="inline-flex items-center gap-1 link link-hover text-sm">
 		<ArrowLeftIcon size={16} />
 		Retour aux événements
 	</a>

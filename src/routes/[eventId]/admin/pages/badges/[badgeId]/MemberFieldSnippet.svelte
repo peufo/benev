@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { PencilIcon } from '@lucide/svelte'
-	import { MEMBER_FIELD_TYPE } from '$lib/constant'
+	import { MEMBER_FIELD_TYPE } from '#lib/constant/index.js'
 	import type { Field } from '@prisma/client'
 	import { tip, urlParam } from 'fuma'
 

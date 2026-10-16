@@ -22,7 +22,7 @@
  * | ------------------------ | --------------------------------- | ----------------------------------------------- |
  * | `z.boolean()`            | `z.boolean().optional()`           | voir ci-dessous                                 |
  * | `z.string().nullish()`   | `z.string().optional()`            | `null` n'est pas un `RemoteFormInput`            |
- * | `z.date()`               | `zDate` (`$lib/models/form`)       | un `<input type="date">` envoie une chaîne       |
+ * | `z.date()`               | `zDate` (`#lib/models/form`)       | un `<input type="date">` envoie une chaîne       |
  * | `z.relation.connect`     | `zConnect`                         | un champ envoie l'id, pas `{ id }`               |
  * | `z.relations.set`        | `zSet` / `zConnectMany`            | idem, en `name="x[]"`                            |
  * | `z.number()`             | inchangé                           | `field.as('number')` préfixe le `name` de `n:`   |

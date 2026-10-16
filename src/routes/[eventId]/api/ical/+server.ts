@@ -1,5 +1,5 @@
 import ical, { ICalCalendarMethod } from 'ical-generator'
-import { prisma, permission } from '$lib/server'
+import { prisma, permission } from '#lib/server/index.js'
 
 export const GET = async ({ params: { eventId }, locals }) => {
 	const member = await permission.member(eventId, locals)

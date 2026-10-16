@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type { ResolvedPathname } from '$app/types'
 	import { ChevronLeftIcon, ChevronRightIcon } from '@lucide/svelte'
-	import { page } from '$app/stores'
-	import { afterNavigate, goto, invalidateAll } from '$app/navigation'
-	import { eventPath } from '$lib/eventPath'
+	import { page, type ReadonlyURL } from '$app/state'
+	import { afterNavigate, goto, refreshAll } from '$app/navigation'
+	import { eventPath } from '#lib/eventPath.js'
 
-	import { Card, Placeholder } from '$lib/ui'
+	import { Card, Placeholder } from '#lib/ui/index.js'
 	import { tip } from 'fuma'
 	import { urlParam } from 'fuma'
-	import { MemberForm, MemberProfileForm, memberIsRegistered } from '$lib/member'
-	import { Login, AvatarForm, AccountForm } from '$lib/me'
+	import { MemberForm, MemberProfileForm, memberIsRegistered } from '#lib/member/index.js'
+	import { Login, AvatarForm, AccountForm } from '#lib/me/index.js'
 	import type { PageData } from './$types'
 
 	let { event, user, member, memberToClaim, charter }: PageData = $props()
@@ -26,12 +26,12 @@
 
 	let forcedStepIndex = 0
 	let stepIndexMax = $state(getStepIndexMax())
-	let stepIndex = $state(getStepIndex($page.url))
+	let stepIndex = $state(getStepIndex(page.url))
 	afterNavigate(({ to }) => {
 		stepIndex = getStepIndex(to?.url)
 	})
 
-	function getStepIndex(url?: URL): number {
+	function getStepIndex(url?: ReadonlyURL): number {
 		forcedStepIndex = Number(url?.searchParams.get('forcedStepIndex') || 0)
 		stepIndexMax = getStepIndexMax()
 		if (forcedStepIndex && forcedStepIndex <= stepIndexMax) return forcedStepIndex
@@ -47,8 +47,8 @@
 	}
 
 	async function onSucces() {
-		await invalidateAll()
-		stepIndex = getStepIndex($page.url)
+		await refreshAll()
+		stepIndex = getStepIndex(page.url)
 
 		// Le même prédicat que les gardes qui renvoient ici: s'ils divergeaient, le tunnel se
 		// croirait fini et la page d'arrivée le relancerait aussitôt.
@@ -57,7 +57,7 @@
 
 		if (registerIsDone) {
 			// Le paramètre vient de l'URL: son chemin est déjà résolu.
-			const redirectTo = $page.url.searchParams.get('redirectTo') as ResolvedPathname | null
+			const redirectTo = page.url.searchParams.get('redirectTo') as ResolvedPathname | null
 			await goto(redirectTo || eventPath('/me'))
 			return
 		}

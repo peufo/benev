@@ -2,10 +2,10 @@ import { form, getRequestEvent } from '$app/server'
 import { redirect } from '@sveltejs/kit'
 import z from 'zod'
 import { Prisma, type Field, type Page, type Period, type Team, type View } from '@prisma/client'
-import { zJson } from '$lib/models/form'
-import { normalizePath } from '$lib/normalizePath'
-import { createLog, permission, prisma } from '$lib/server'
-import { clonePages, cloneData, cloneTeam } from '$lib/server/clone'
+import { zJson } from '#lib/models/form.js'
+import { normalizePath } from '#lib/normalizePath.js'
+import { createLog, permission, prisma } from '#lib/server/index.js'
+import { clonePages, cloneData, cloneTeam } from '#lib/server/clone.js'
 
 // `CloneSelector` sérialise ses sélections en JSON dans un champ caché: le tableau d'ids
 // arrive donc en chaîne, et `deltaDays` vient d'un `<input type="number">` brut.

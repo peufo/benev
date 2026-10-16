@@ -1,8 +1,8 @@
 import { getSubscribes, type Subscribes } from '../getSubscribes.server'
-import { prisma, permission } from '$lib/server'
+import { prisma, permission } from '#lib/server/index.js'
 import z from 'zod'
 import { getCSV } from 'fuma'
-import dayjs from '$lib/dayjs'
+import dayjs from '#lib/dayjs.js'
 import { parseQuery } from 'fuma/server'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {

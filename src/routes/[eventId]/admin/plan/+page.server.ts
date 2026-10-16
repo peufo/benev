@@ -1,4 +1,4 @@
-import { getMilestoneForm, getPlanData } from '$lib/server'
+import { getMilestoneForm, getPlanData } from '#lib/server/index.js'
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
 

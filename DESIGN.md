@@ -154,7 +154,7 @@ Deux utilitaires portent tout le voile d'atmosphère du produit. Ils sont **opaq
 
 Deux familles de fichiers échappent au thème par nécessité. Les logos `src/lib/assets/logo.svg`, `src/lib/assets/benevio.svg` et `static/favicon.svg` sont servis en `<img>` et ne peuvent pas hériter de `currentColor`. Leurs hex sont donc écrits en dur et **doivent être tenus à jour avec `primary` et `secondary`**. Quand la marque est rendue inline dans un composant Svelte, elle repasse par `text-primary` / `text-secondary` et `currentColor`.
 
-Les habillages d'évènement — `THEME_PRESETS` dans `$lib/constant` et les dégradés de `static/themes/` — portent eux aussi des hex: leurs valeurs atterrissent dans une colonne de base de données et dans des SVG servis en `background-image`, hors de portée des tokens. Elles s'en **dérivent** malgré tout — neutres, `secondary`, `primary` et `accent` fortement dilués sur du blanc — et **restent claires**: le texte `base-content` des pages bénévoles se lit à même ce fond.
+Les habillages d'évènement — `THEME_PRESETS` dans `#lib/constant` et les dégradés de `static/themes/` — portent eux aussi des hex: leurs valeurs atterrissent dans une colonne de base de données et dans des SVG servis en `background-image`, hors de portée des tokens. Elles s'en **dérivent** malgré tout — neutres, `secondary`, `primary` et `accent` fortement dilués sur du blanc — et **restent claires**: le texte `base-content` des pages bénévoles se lit à même ce fond.
 
 **The One Accent Rule.** Le bleu (`primary`) porte l'action et reste l'accent dominant de la plupart des écrans. Le vert (`secondary`) porte la marque et la confirmation — il peut prendre un aplat plein, mais il ne dispute jamais au bleu l'action principale d'un écran: deux boutons pleins de couleurs différentes côte à côte, c'est une hiérarchie ratée.
 
@@ -202,7 +202,7 @@ Le système est **plat par défaut, soulevé avec intention**. La profondeur n'e
 
 **The Purposeful Lift Rule.** Une ombre ne justifie sa place que si elle guide l'œil vers une action ou délimite une surface cliquable. Pas d'ombres sur du texte statique ou des conteneurs purement informatifs. On utilise les utilitaires Tailwind (`shadow-sm`, `shadow-lg`, `shadow-xl`) plutôt que des valeurs d'ombre écrites en dur.
 
-**The No-Nested-Card Rule.** Une card ne contient jamais une autre card. Un composant réutilisable susceptible d'être monté dans une card (`Login`, les formulaires d'étape de `Register`) ne fournit pas sa propre surface: il lit le contexte `contextContainer` de `$lib/fuma-legacy` et se rend nu quand il est déjà porté.
+**The No-Nested-Card Rule.** Une card ne contient jamais une autre card. Un composant réutilisable susceptible d'être monté dans une card (`Login`, les formulaires d'étape de `Register`) ne fournit pas sa propre surface: il lit le contexte `contextContainer` de `#lib/fuma-legacy` et se rend nu quand il est déjà porté.
 
 ## 5. Components
 
@@ -219,9 +219,9 @@ Tous les composants s'appuient sur DaisyUI v5 et sur la bibliothèque `fuma` (li
 
 ### Cards / Containers
 
-- **Surface de travail:** `Surface` de `$lib/ui` — la classe `.surface` (`bg-base-100 rounded-box border border-soft p-2`), un entête compact avec le titre à gauche et des actions `btn-sm` à droite. C'est le conteneur des écrans d'administration: tuiles du tableau de bord, journal, fiche membre, secteur.
-- **Chapitre:** `Section` de `$lib/ui` — la même surface, `p-5`, avec une icône et un sous-titre, sans actions dans l'entête. Un bouton qui agit sur le chapitre se pose dans un pied `border-t border-soft pt-4`. C'est la forme des pages qui se lisent de haut en bas: réglages, `/me`.
-- **Composant hérité:** `Card` de `$lib/ui` — `card border border-hard bg-base-100 shadow-lg`, corps `card-body rounded-b-2xl p-2 sm:p-8`. Ne plus l'employer sur les écrans d'administration.
+- **Surface de travail:** `Surface` de `#lib/ui` — la classe `.surface` (`bg-base-100 rounded-box border border-soft p-2`), un entête compact avec le titre à gauche et des actions `btn-sm` à droite. C'est le conteneur des écrans d'administration: tuiles du tableau de bord, journal, fiche membre, secteur.
+- **Chapitre:** `Section` de `#lib/ui` — la même surface, `p-5`, avec une icône et un sous-titre, sans actions dans l'entête. Un bouton qui agit sur le chapitre se pose dans un pied `border-t border-soft pt-4`. C'est la forme des pages qui se lisent de haut en bas: réglages, `/me`.
+- **Composant hérité:** `Card` de `#lib/ui` — `card border border-hard bg-base-100 shadow-lg`, corps `card-body rounded-b-2xl p-2 sm:p-8`. Ne plus l'employer sur les écrans d'administration.
 - **Corner Style:** `rounded-box` (16px).
 - **Background:** `base-100`.
 - **Border:** `border-hard` sur la card autonome, `border-soft` sur les encarts internes.

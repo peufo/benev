@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
 	import type { Snippet } from 'svelte'
-	import benevio from '$lib/assets/benevio.svg'
-	import dayjs from '$lib/dayjs'
-	import { APP_VERSION } from '$lib/version'
+	import benevio from '#lib/assets/benevio.svg'
+	import dayjs from '#lib/dayjs.js'
+	import { APP_VERSION } from '#lib/version.js'
 	import { LEGAL_DOCS, LEGAL_ENTITY } from './legal'
 
 	interface Props {
@@ -21,11 +21,11 @@
 	let { variant = 'public', class: klass = '', children }: Props = $props()
 
 	const PRODUCT_LINKS = [
-		{ path: resolve('/events'), label: 'Évènements' },
-		{ path: resolve('/#pricing'), label: 'Tarifs' },
-		{ path: resolve('/docs'), label: 'Documentation' },
-		{ path: resolve('/open-source'), label: 'Open source' },
-		{ path: resolve('/contact'), label: 'Contact' },
+		{ path: resolve('events'), label: 'Évènements' },
+		{ path: resolve('#pricing'), label: 'Tarifs' },
+		{ path: resolve('docs'), label: 'Documentation' },
+		{ path: resolve('open-source'), label: 'Open source' },
+		{ path: resolve('contact'), label: 'Contact' },
 	]
 
 	const year = new Date().getFullYear()
@@ -34,7 +34,7 @@
 
 {#snippet brandmark(size: string)}
 	<a
-		href={resolve('/')}
+		href={resolve('')}
 		class="inline-flex rounded-field outline-primary focus-visible:outline-2 focus-visible:outline-offset-2"
 	>
 		<img src={benevio} alt="benevio, accueil" class={size} />

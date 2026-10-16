@@ -1,4 +1,5 @@
 <script lang="ts" module>
+	import { currentEventId } from '#lib/eventPath.js'
 	import type { Media } from '@prisma/client'
 	import { goto } from '$app/navigation'
 	import { urlParam } from 'fuma'
@@ -21,9 +22,8 @@
 		open(handler: (media: Media) => void) {
 			onselect = handler
 			return goto(urlParam.with({ [MEDIA_DRAWER_KEY]: 1 }), {
-				replaceState: true,
-				noScroll: true,
-				keepFocus: true,
+				replace: true,
+				reset: false,
 			})
 		},
 	}
@@ -34,7 +34,7 @@
 	import { ButtonDelete, Dialog, Drawer, InputString, tip } from 'fuma'
 	import { toast } from 'svelte-sonner'
 
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import UploadMediaDialog from './UploadMediaDialog.svelte'
 	import { deleteMedia, editMedia, searchMedias, uploadMedia } from './media.remote'
 	import MediaDropzone from './MediaDropzone.svelte'
@@ -87,7 +87,7 @@
 <Drawer bind:this={drawer} key={MEDIA_DRAWER_KEY} title="Médiathèque" class="surface-drawer">
 	<!-- Le tiroir est monté sur toutes les pages de l'évènement, mais ne rend son contenu
 	     qu'ouvert: la requête part au premier affichage, pas à chaque chargement de page. -->
-	{@const medias = searchMedias('')}
+	{@const medias = searchMedias({ search: '', eventId: currentEventId() })}
 	<!-- `undefined` tant que la requête est en vol: distinguer le chargement de la médiathèque
 	     vide évite de montrer l'état vide un instant avant les tuiles. -->
 	{@const isEmpty = medias.current?.length === 0}
@@ -164,18 +164,21 @@
 				     de l'image précédemment ouverte. Voir AGENTS.md, « L'état d'un formulaire vit dans
 				     son module ».
 
-				     Un seul `<form>` porte les deux remote functions: le `formaction` du bouton pressé
-				     décide laquelle s'exécute, et doit donc viser ces instances-là, pas celles de base. -->
+				     La suppression a son propre `<form>`, vide: SvelteKit refuse qu'un envoi porte un
+				     champ d'une autre remote function, ici la description. `for()` y injecte l'`id`. Son
+				     bouton reste dans la barre, associé par l'attribut `form`. -->
+				<form
+					{...deleteForm.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
+					id="media-delete-{editedMedia.id}"
+					class="hidden"
+				></form>
 				<form
 					class="contents"
 					{...editForm.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
-					{...deleteForm.enhance(enhanceForm({ onsuccess: () => dialogEdit.close() }))}
 				>
 					<div class="mt-4 flex flex-row-reverse items-end gap-2">
-						<input type="hidden" name="id" value={editedMedia.id} />
-
-						<button formaction={editForm.action} class="btn btn-primary"> Valider </button>
-						<ButtonDelete formaction={deleteForm.action} />
+						<button class="btn btn-primary"> Valider </button>
+						<ButtonDelete form="media-delete-{editedMedia.id}" formaction={deleteForm.action} />
 
 						<InputString
 							field={editForm.fields.name}
@@ -212,6 +215,8 @@
 		title="Nouvelle image"
 		formaction={uploadMedia.action}
 		nameField={uploadMedia.fields.name}
+		imageField={uploadMedia.fields.image}
+		cropField={uploadMedia.fields.crop}
 		freeAspect
 	/>
 </form>

@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { subscribeNotification } from '$lib/email/subscribeNotification'
+import { subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { prisma } from './prisma'
 
 /** Le membre pour lui écrire, les responsables pour répondre, le propriétaire à défaut. */

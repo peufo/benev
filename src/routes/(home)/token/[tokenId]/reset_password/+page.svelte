@@ -3,7 +3,7 @@
 	import { InputString } from 'fuma'
 	import { LockKeyholeOpenIcon } from '@lucide/svelte'
 
-	import { Section } from '$lib/ui'
+	import { Section } from '#lib/ui/index.js'
 	import { resetPassword } from './reset_password.remote'
 
 	const redirectTo = page.url.searchParams.get('redirectTo')
@@ -24,7 +24,7 @@
 		/>
 
 		{#if redirectTo}
-			<input type="hidden" name="redirectTo" value={redirectTo} />
+			<input {...resetPassword.fields.redirectTo.as('hidden', redirectTo)} />
 		{/if}
 		<div class="flex justify-end">
 			<button class="btn btn-primary">Réinitialiser</button>

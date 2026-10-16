@@ -1,10 +1,10 @@
 import z from 'zod'
-import { zJsonOr } from '$lib/models/form'
+import { zJsonOr } from '#lib/models/form.js'
 import { parseQuery } from 'fuma/server'
 import type { Event, Prisma } from '@prisma/client'
-import { prisma } from '$lib/server'
-import { RANGE_DAYS } from '$lib/plan/constants'
-import dayjs from '$lib/dayjs'
+import { prisma } from '#lib/server/index.js'
+import { RANGE_DAYS } from '#lib/plan/constants.js'
+import dayjs from '#lib/dayjs.js'
 
 export type PlanData = Awaited<ReturnType<typeof getPlanData>>
 

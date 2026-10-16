@@ -3,7 +3,7 @@
 	import { InputString, tip } from 'fuma'
 	import { page } from '$app/state'
 	import type { User } from '@prisma/client'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { sendEmailVerification, updateAccount } from './user.remote'
 
 	interface Props {
@@ -46,7 +46,7 @@
 	class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2 md:grid-cols-12"
 >
 	{#if page.data.event?.id}
-		<input type="hidden" name="eventId" value={page.data.event.id} />
+		<input {...updateAccount.fields.eventId.as('hidden', page.data.event.id)} />
 	{/if}
 
 	<fieldset class="fieldset md:col-span-6">

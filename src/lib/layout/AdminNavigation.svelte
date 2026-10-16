@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { adminTabs } from '$lib/layout/adminTabs.svelte'
+	import { adminTabs } from '#lib/layout/adminTabs.svelte.js'
 	import type { Snippet } from 'svelte'
 
 	let { children }: { children?: Snippet } = $props()

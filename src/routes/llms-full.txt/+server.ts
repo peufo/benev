@@ -1,5 +1,5 @@
-import { getDocMarkdown, getDocs } from '$lib/doc/engine/registry.server'
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '$lib/seo'
+import { getDocMarkdown, getDocs } from '#lib/doc/engine/registry.server.js'
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '#lib/seo/index.js'
 
 /** Toute la documentation d'un bloc, dans l'ordre de lecture, pour une lecture en une requête. */
 export function GET() {

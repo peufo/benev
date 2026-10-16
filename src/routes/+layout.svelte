@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { Toaster } from 'svelte-sonner'
 	import { MetaTags, JsonLd } from 'svelte-meta-tags'
-	import TermsAcceptDialog from '$lib/me/TermsAcceptDialog.svelte'
+	import TermsAcceptDialog from '#lib/me/TermsAcceptDialog.svelte'
 	import { transitionX } from 'fuma'
 	import {
 		defaultMetaTags,
@@ -10,12 +10,12 @@
 		mergeMetaTags,
 		organizationSchema,
 		websiteSchema,
-	} from '$lib/seo'
+	} from '#lib/seo/index.js'
 	import '../app.css'
 
 	let { data, children } = $props()
 
-	let siteUrl = $derived($page.url.origin)
+	let siteUrl = $derived(page.url.origin)
 
 	// Les tests E2E attendent ce marqueur au lieu de rejouer un geste jusqu'à ce qu'il porte:
 	// avant l'hydratation, un clic ne déclenche rien et une saisie est écrasée par le rendu client.
@@ -30,8 +30,8 @@
 	 */
 	let metaTags = $derived(
 		mergeMetaTags(
-			defaultMetaTags($page.url),
-			$page.error ? errorMetaTags($page.status) : $page.data.metaTags
+			defaultMetaTags(page.url),
+			page.error ? errorMetaTags(page.status) : page.data.metaTags
 		)
 	)
 </script>

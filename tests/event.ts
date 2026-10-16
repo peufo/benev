@@ -95,7 +95,7 @@ export function useEvent(name: string) {
 		},
 		/**
 		 * L'encodage des filtres de colonne est un contrat entre les `TableHead*` de fuma, qui
-		 * l'écrivent dans l'URL, et les schémas de `$lib/models/filter`, qui le relisent. Rien
+		 * l'écrivent dans l'URL, et les schémas de `#lib/models/filter.js`, qui le relisent. Rien
 		 * ne relie les deux bouts: on constate ici qu'une URL filtrée passe bout en bout, là où
 		 * `src/tests/filter.test.ts` ne vérifie que le schéma.
 		 */
@@ -323,7 +323,7 @@ export function useEvent(name: string) {
 
 			// La médiathèque d'un évènement neuf est vide: on y dépose une image pour pouvoir la
 			// choisir. Le champ de fichier est caché, `setInputFiles` n'en a pas besoin.
-			await page.locator('input[type="file"][name="image"]').setInputFiles({
+			await page.locator('input[type="file"][name^="image/"]').setInputFiles({
 				name: 'affiche.png',
 				mimeType: 'image/png',
 				buffer: Buffer.from(BLUE_SQUARE_PNG, 'base64'),
@@ -348,7 +348,7 @@ export function useEvent(name: string) {
 				await route.continue()
 			})
 			await openDrawer()
-			await page.locator('input[type="file"][name="image"]').setInputFiles({
+			await page.locator('input[type="file"][name^="image/"]').setInputFiles({
 				name: 'lente.png',
 				mimeType: 'image/png',
 				buffer: Buffer.from(BLUE_SQUARE_PNG, 'base64'),
@@ -371,7 +371,7 @@ export function useEvent(name: string) {
 			const background = page.getByRole('button', { name: 'Image de fond', exact: true })
 			await background.click()
 			await expect(drawer).toBeVisible()
-			await page.locator('input[type="file"][name="image"]').setInputFiles({
+			await page.locator('input[type="file"][name^="image/"]').setInputFiles({
 				name: 'fond.png',
 				mimeType: 'image/png',
 				buffer: Buffer.from(BLUE_SQUARE_PNG, 'base64'),
@@ -379,7 +379,7 @@ export function useEvent(name: string) {
 			await page.getByLabel("Description de l'image").fill('Fond test')
 			await page.getByRole('button', { name: 'Valider', exact: true }).click()
 			await expect(drawer).toBeHidden()
-			await expect(page.locator('input[name="backgroundImageId"]')).not.toHaveValue('')
+			await expect(page.locator('input[name^="backgroundImageId/"]')).not.toHaveValue('')
 			await expect(saveBar).toBeVisible()
 			await page.getByRole('button', { name: 'Réinitialiser' }).click()
 			await expect(saveBar).toBeHidden()
@@ -684,7 +684,7 @@ export function useEvent(name: string) {
 
 			// Le thème n'a pas de `defaultValue`: un `reset` mal ordonné y écrirait du vide, que
 			// l'enregistrement suivant graverait en base (`#000000`). On le surveille de bout en bout.
-			const backgroundColor = page.locator('input[name="backgroundColor"]')
+			const backgroundColor = page.locator('input[name^="backgroundColor/"]')
 
 			await gotoHydrated(page, `/${eventId}/admin/settings`)
 			await expect(description).toBeVisible()
@@ -741,7 +741,7 @@ export function useEvent(name: string) {
 		 */
 		async expectThemePresets(page: Page) {
 			const saveBar = page.getByText('Modification en cours !')
-			const preset = page.locator('input[name="backgroundPreset"]')
+			const preset = page.locator('input[name^="backgroundPreset/"]')
 			const background = page.locator('.event-background')
 			const noTheme = page.getByRole('radio', { name: 'Personnalisé' })
 			const benevio = page.getByRole('radio', { name: 'benevio' })

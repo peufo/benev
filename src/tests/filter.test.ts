@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { filterBoolean, filterMultiselect, filterNumber, filterRange } from '$lib/models/filter'
+import { filterBoolean, filterMultiselect, filterNumber, filterRange } from '#lib/models/filter.js'
 
 /**
  * Ces schémas relisent ce que les composants `TableHead*` de fuma écrivent dans l'URL. Les deux

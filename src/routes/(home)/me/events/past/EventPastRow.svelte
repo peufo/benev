@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { eventHomePath } from '$lib/eventPath'
-	import { MemberRole } from '$lib/member'
+	import { eventHomePath } from '#lib/eventPath.js'
+	import { MemberRole } from '#lib/member/index.js'
 	import { tip } from 'fuma'
 	import { CopyPlusIcon } from '@lucide/svelte'
-	import { EventPoster } from '$lib/event'
-	import { locality } from '$lib/location/locality'
+	import { EventPoster } from '#lib/event/index.js'
+	import { locality } from '#lib/location/locality.js'
 	import type { EventMember } from '../types'
 
 	interface Props {

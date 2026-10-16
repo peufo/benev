@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, it, vi } from 'vitest'
-import { createScheduler, type TaskRunRecord, type TaskStore } from '$lib/server/scheduler'
+import { createScheduler, type TaskRunRecord, type TaskStore } from '#lib/server/scheduler.js'
 
 /**
  * Le ticker seul, aux faux timers et sur un store en mémoire: ce qui compte est la fenêtre que

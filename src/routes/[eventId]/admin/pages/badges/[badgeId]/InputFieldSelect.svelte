@@ -1,4 +1,5 @@
 <script lang="ts" module>
+	import { currentEventId } from '#lib/eventPath.js'
 	/**
 	 * Qui a demandé la création d'un champ. Le tiroir est monté une seule fois par le layout de
 	 * l'évènement, et n'annonce le champ créé qu'au global: sans ce jeton, les quatre sélecteurs
@@ -13,9 +14,9 @@
 	import { PlusIcon } from '@lucide/svelte'
 	import { InputSelect, tip, urlParam } from 'fuma'
 	import type { Field, FieldType } from '@prisma/client'
-	import type { RemoteFormField } from '@sveltejs/kit'
-	import { globalEvents } from '$lib/globalEvents'
-	import { searchMemberFields } from '$lib/member/memberField.remote'
+	import type { RemoteFormField } from '$app/server'
+	import { globalEvents } from '#lib/globalEvents.js'
+	import { searchMemberFields } from '#lib/member/memberField.remote.js'
 	import MemberFieldSnippet from './MemberFieldSnippet.svelte'
 
 	interface Props {
@@ -35,7 +36,7 @@
 	// `InputSelect` n'appelle sa recherche qu'avec `{ search }`: le filtre par type est
 	// propre à cette instance, il se fixe ici.
 	const searchItems = ({ search }: { search: string }) =>
-		searchMemberFields({ search, types: typesAccepted })
+		searchMemberFields({ search, types: typesAccepted, eventId: currentEventId() })
 
 	// Le champ créé depuis ce sélecteur y prend place: c'est ce qu'on venait y chercher. Un
 	// type rejeté ne s'y met pas — le tiroir laisse en changer après coup.
@@ -73,7 +74,7 @@
 			}}
 			href={urlParam.with({ form_field: JSON.stringify({ type }) })}
 			class="btn btn-square btn-soft btn-sm"
-			data-sveltekit-noscroll
+			data-sveltekit-reset="false"
 			data-sveltekit-replacestate
 			aria-label="Nouveau champ"
 			use:tip={{ content: 'Nouveau champ' }}

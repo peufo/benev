@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Login } from '$lib/me'
+	import { Login } from '#lib/me/index.js'
 </script>
 
 <Login />

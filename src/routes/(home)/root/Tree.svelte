@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Tree from './Tree.svelte'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import type { ResolvedPathname } from '$app/types'
 	interface Props {
 		tree: string[][]
@@ -14,7 +14,7 @@
 	{#each tree.filter((p) => p.length === level + 1) as path, index (path.join('/'))}
 		{@const pathname = path.join('/')}
 		{@const children = tree.filter((p, i) => i !== index && p.join('/').startsWith(pathname))}
-		{@const isActive = $page.url.pathname.endsWith(pathname)}
+		{@const isActive = page.url.pathname.endsWith(pathname)}
 
 		<li>
 			<!-- L'arbre est bâti à l'exécution: `resolve()` ne prend qu'une route connue à la compilation. -->

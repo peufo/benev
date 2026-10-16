@@ -8,7 +8,7 @@
 		StarIcon,
 	} from '@lucide/svelte'
 	import type { Component } from 'svelte'
-	import type { MemberRole } from '$lib/server'
+	import type { MemberRole } from '#lib/server/index.js'
 	import { ROLE_LABELS, ROLES_ORDER } from './roles'
 
 	const rolesIcons: Record<MemberRole, Component<IconProps>> = {

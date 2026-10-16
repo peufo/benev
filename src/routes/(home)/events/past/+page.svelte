@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { EventList, EventsTabs } from '$lib/event/index.js'
+	import { EventList, EventsTabs } from '#lib/event/index.js'
 
 	let { data } = $props()
 </script>

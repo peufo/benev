@@ -3,14 +3,14 @@
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick, untrack } from 'svelte'
 	import { goto } from '$app/navigation'
-	import { InputSearch, Surface, Badge } from '$lib/ui'
-	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
+	import { InputSearch, Surface, Badge } from '#lib/ui/index.js'
+	import TableViewSelect from '#lib/view/TableViewSelect.svelte'
 	import { Drawer, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { Table } from 'fuma'
 	import { urlParam } from 'fuma'
 	import { jsonParse } from 'fuma'
-	import { MemberActions, MemberCell, MemberCreateSubscribeDialog } from '$lib/member'
+	import { MemberActions, MemberCell, MemberCreateSubscribeDialog } from '#lib/member/index.js'
 	import { getMembersTableFields, getSubscribedTeams } from './membersTableFields'
 	import { msToHours } from './msToHours'
 	import type { MemberWithComputedValue } from './getMembers.server'
@@ -19,7 +19,7 @@
 	import MembersBadges from './MembersBadges.svelte'
 	import MembersStats from './MembersStats.svelte'
 	import MembersEmails from './MembersEmails.svelte'
-	import { globalEvents } from '$lib/globalEvents'
+	import { globalEvents } from '#lib/globalEvents.js'
 
 	let { data } = $props()
 
@@ -52,7 +52,7 @@
 		const fieldsVisible = jsonParse<string[]>(urlParam.get(PARAM_VISIBLE_KEY), [])
 		fieldsVisible.push(`field_${field.id}`)
 		const url = urlParam.with({ [PARAM_VISIBLE_KEY]: JSON.stringify(fieldsVisible) }, 'form_field')
-		await goto(url, { noScroll: true, keepFocus: true, invalidateAll: true })
+		await goto(url, { reset: false, refreshAll: true })
 		tableFields = getMembersTableFields(data.teams, data.fields, cellSnippets)
 	}
 </script>
@@ -128,7 +128,7 @@
 					type="button"
 					class="btn btn-square btn-sm btn-secondary"
 					href={urlParam.with({ form_invite: '{}' })}
-					data-sveltekit-noscroll
+					data-sveltekit-reset="false"
 					data-sveltekit-replacestate
 					use:tip={{ content: 'Inviter des membres' }}
 				>

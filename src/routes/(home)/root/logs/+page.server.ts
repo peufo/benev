@@ -1,7 +1,7 @@
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
 import { LogType } from '@prisma/client'
-import { getLogs } from '$lib/server'
+import { getLogs } from '#lib/server/index.js'
 
 export const load = async ({ url }) => {
 	const { take, type } = parseQuery(url, {

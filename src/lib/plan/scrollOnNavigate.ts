@@ -1,4 +1,4 @@
-import type { AfterNavigate } from '@sveltejs/kit'
+import type { AfterNavigate } from '$app/navigation'
 import { isScrollEnd, isScrollStart } from './navigateOnScroll'
 import type { Plan } from './types'
 

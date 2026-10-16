@@ -58,7 +58,7 @@ test.describe.serial('Modèle de badge', () => {
 		// Le champ créé prend place dans le sélecteur qui l'a demandé, et lui seul.
 		await expect(typeTrigger).toContainText('Type de membre')
 		await expect(labelTrigger).toContainText('Selectionner une valeur')
-		await expect(page.locator('input[name="typeField"]')).toHaveCount(1)
+		await expect(page.locator('input[name^="typeField/"]')).toHaveCount(1)
 		// Le nuancier suit le champ choisi: une couleur par option.
 		await expect(page.getByRole('button', { name: 'bénévole' })).toBeVisible()
 		await expect(page.getByRole('button', { name: 'respo' })).toBeVisible()

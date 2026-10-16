@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { MailWarningIcon } from '@lucide/svelte'
 	import type { PageData } from './$types'
-	import { EmailVerificationButton } from '$lib/me'
+	import { EmailVerificationButton } from '#lib/me/index.js'
 	import { resolve } from '$app/paths'
 
 	let { data }: { data: PageData } = $props()

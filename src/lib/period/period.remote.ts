@@ -1,7 +1,7 @@
 import { command, form, getRequestEvent } from '$app/server'
 import { error, invalid, redirect } from '@sveltejs/kit'
 import z from 'zod'
-import { modelPeriodCreate, modelPeriodUpdate, validationPeriod } from '$lib/models'
+import { modelPeriodCreate, modelPeriodUpdate, validationPeriod } from '#lib/models/index.js'
 import {
 	createLog,
 	getPeriodForChange,
@@ -9,7 +9,7 @@ import {
 	permission,
 	prisma,
 	settlePeriodUpdate,
-} from '$lib/server'
+} from '#lib/server/index.js'
 
 export const createPeriod = form(
 	modelPeriodCreate.extend({ redirectTo: z.string().optional() }).superRefine(validationPeriod),

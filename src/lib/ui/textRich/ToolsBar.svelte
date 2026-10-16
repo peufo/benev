@@ -2,12 +2,12 @@
 	import { BaselineIcon, BoldIcon, ItalicIcon, PaintBucketIcon } from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
 
-	import ToolMenuNode from '$lib/ui/textRich/ToolMenuNode.svelte'
-	import ToolMark from '$lib/ui/textRich/ToolMark.svelte'
-	import ToolMarkColor from '$lib/ui/textRich/ToolMarkColor.svelte'
-	import ToolMarkLink from '$lib/ui/textRich/ToolMarkLink.svelte'
-	import ToolMenuAlign from '$lib/ui/textRich/ToolMenuAlign.svelte'
-	import ToolMenuInsert from '$lib/ui/textRich/ToolMenuInsert.svelte'
+	import ToolMenuNode from '#lib/ui/textRich/ToolMenuNode.svelte'
+	import ToolMark from '#lib/ui/textRich/ToolMark.svelte'
+	import ToolMarkColor from '#lib/ui/textRich/ToolMarkColor.svelte'
+	import ToolMarkLink from '#lib/ui/textRich/ToolMarkLink.svelte'
+	import ToolMenuAlign from '#lib/ui/textRich/ToolMenuAlign.svelte'
+	import ToolMenuInsert from '#lib/ui/textRich/ToolMenuInsert.svelte'
 
 	interface Props {
 		editor: Editor

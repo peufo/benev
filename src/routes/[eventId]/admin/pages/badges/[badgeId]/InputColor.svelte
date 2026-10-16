@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { getTextColor } from '$lib/utils'
+	import type { RemoteFormField } from '$app/server'
+	import { getTextColor } from '#lib/utils.js'
 
 	interface Props {
-		name?: string
+		/** Champ du formulaire qui porte la couleur. Absent, le sélecteur ne soumet rien. */
+		field?: RemoteFormField<string>
 		label?: string
 		/**
 		 * Requise, et sans valeur de repli: lier `undefined` à un `$bindable` qui en porte une
@@ -11,7 +13,7 @@
 		value: string
 	}
 
-	let { name = '', label = name, value = $bindable() }: Props = $props()
+	let { field, label = '', value = $bindable() }: Props = $props()
 
 	let input: HTMLInputElement = $state()!
 </script>
@@ -23,10 +25,14 @@
 	onclick={() => input.click()}
 >
 	<span class="lowercase">{label}</span>
+	<!-- Le sélecteur reste lié à `value`, que le champ caché soumet: `field.as()` poserait sa
+	     propre valeur sur l'input et se disputerait la liaison. -->
+	{#if field}
+		<input {...field.as('hidden', value)} />
+	{/if}
 	<input
 		bind:value
 		bind:this={input}
-		{name}
 		type="color"
 		list="palette"
 		class="absolute invisible left-0 -bottom-1"

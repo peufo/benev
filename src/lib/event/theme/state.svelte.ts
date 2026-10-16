@@ -1,4 +1,4 @@
-import type { EventTheme } from '$lib/models'
+import type { EventTheme } from '#lib/models/index.js'
 
 /**
  * L'aperçu de l'habillage: les réglages y écrivent à chaque frappe, `EventTheme` et le layout

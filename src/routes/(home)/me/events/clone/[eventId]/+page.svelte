@@ -8,7 +8,7 @@
 		TextCursorInputIcon,
 	} from '@lucide/svelte'
 	import { InputNumber } from 'fuma'
-	import { MEMBER_FIELD_TYPE, PAGE_TYPE } from '$lib/constant'
+	import { MEMBER_FIELD_TYPE, PAGE_TYPE } from '#lib/constant/index.js'
 	import CloneSelector from './CloneSelector.svelte'
 	import LabelTeam from './LabelTeam.svelte'
 	import { cloneEvent } from './clone.remote'
@@ -20,7 +20,7 @@
 
 <div class="flex flex-col gap-6">
 	<div class="flex items-start gap-3">
-		<a href={resolve('/me/events')} class="btn btn-ghost btn-square btn-sm mt-0.5">
+		<a href={resolve('me/events')} class="btn btn-ghost btn-square btn-sm mt-0.5">
 			<ArrowLeftIcon />
 		</a>
 		<div>
@@ -34,6 +34,7 @@
 	<form {...cloneEvent} class="flex flex-col gap-6">
 		<CloneSelector
 			items={data.event.teams}
+			field={cloneEvent.fields.teams}
 			key="teams"
 			title="Secteurs"
 			icon={MapPinnedIcon}
@@ -49,11 +50,12 @@
 			<!-- `InputProps` exclut `name`: la valeur liée pilote l'aperçu des dates, le champ caché
 			     la soumet. -->
 			<InputNumber label="Décalage des dates, en jours" bind:value={deltaDays} class="max-w-xs" />
-			<input type="hidden" name="deltaDays" value={deltaDays} />
+			<input {...cloneEvent.fields.deltaDays.as('hidden', String(deltaDays))} />
 		</CloneSelector>
 
 		<CloneSelector
 			items={data.event.pages}
+			field={cloneEvent.fields.pages}
 			key="pages"
 			title="Publications"
 			icon={FileTextIcon}
@@ -69,6 +71,7 @@
 
 		<CloneSelector
 			items={data.event.memberFields}
+			field={cloneEvent.fields.fields}
 			key="fields"
 			title="Champs de membres"
 			icon={TextCursorInputIcon}
@@ -84,6 +87,7 @@
 
 		<CloneSelector
 			items={data.event.views}
+			field={cloneEvent.fields.views}
 			key="views"
 			title="Vues"
 			icon={TableIcon}

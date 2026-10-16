@@ -1,10 +1,10 @@
 import type { Task } from '../scheduler'
 import { prisma } from '../prisma'
 import { createLog } from '../log'
-import { planTransitions } from '$lib/team/teamSchedule'
+import { planTransitions } from '#lib/team/teamSchedule.js'
 
 /**
- * Applique les fermetures programmées des secteurs (voir `$lib/team/teamSchedule`). Chaque
+ * Applique les fermetures programmées des secteurs (voir `#lib/team/teamSchedule.js`). Chaque
  * écriture exige l'état de départ: un secteur déjà refermé à la main n'est ni réécrit ni
  * journalisé, et rejouer une fenêtre après un échec ne produit rien de plus. On ne quitte jamais
  * `draft` ici, donc jamais de `sendPendingSubscribeRequests`.

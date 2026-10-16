@@ -1,4 +1,4 @@
-import { type Dayjs } from '$lib/dayjs'
+import { type Dayjs } from '#lib/dayjs.js'
 
 export type Day = { hours: number[]; date: Dayjs }
 

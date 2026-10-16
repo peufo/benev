@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Page } from '$lib/pages'
-	import { eventPath } from '$lib/eventPath'
+	import { Page } from '#lib/pages/index.js'
+	import { eventPath } from '#lib/eventPath.js'
 
 	let { data } = $props()
 </script>

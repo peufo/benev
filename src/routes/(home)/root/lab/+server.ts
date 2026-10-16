@@ -1,4 +1,4 @@
-import { createSSE } from '$lib/server/sse'
+import { createSSE } from '#lib/server/sse.js'
 import { bus } from './bus'
 
 export async function GET({ request }) {

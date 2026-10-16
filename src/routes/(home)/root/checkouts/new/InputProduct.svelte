@@ -15,17 +15,12 @@
 
 	<div class="flex flex-col gap-3 mt-2">
 		{#each products as product, index (product.priceId)}
-			{@const prefix = `products[${index}]`}
+			{@const fields = createCheckout.fields.products[index]}
 			<div class="flex items-center gap-3">
-				<input type="hidden" name="{prefix}.priceId" value={product.priceId} />
-				<input type="hidden" name="{prefix}.name" value={product.name} />
+				<input {...fields.priceId.as('hidden', product.priceId)} />
+				<input {...fields.name.as('hidden', product.name)} />
 				<span class="grow">{product.name}</span>
-				<InputNumber
-					field={createCheckout.fields.products[index].quantity}
-					label="Qté"
-					value={0}
-					class="w-24"
-				/>
+				<InputNumber field={fields.quantity} label="Qté" value={0} class="w-24" />
 			</div>
 		{/each}
 	</div>

@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { permission } from '$lib/server'
+import { permission } from '#lib/server/index.js'
 
 export const load = async ({ parent, locals }) => {
 	const { event, userIsRoot } = await parent()

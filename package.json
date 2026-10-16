@@ -37,8 +37,9 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@playwright/test": "^1.54.2",
-		"@sveltejs/adapter-node": "^5.5.7",
-		"@sveltejs/kit": "^2.70.1",
+		"@sveltejs/adapter-node": "^6.0.0",
+		"@sveltejs/kit": "^3.0.0",
+		"@sveltejs/load-config": "^0.2.2",
 		"@sveltejs/vite-plugin-svelte": "^7.2.0",
 		"@tailwindcss/vite": "^4.3.3",
 		"@types/bun": "^1.4.2",
@@ -58,8 +59,8 @@
 		"prettier-plugin-svelte": "^4.1.1",
 		"prisma": "^6.19.3",
 		"prisma-json-types-generator": "^3.6.2",
-		"svelte": "^5.56.8",
-		"svelte-check": "^4.7.4",
+		"svelte": "^5.57.1",
+		"svelte-check": "^4.7.5",
 		"tailwindcss": "^4.3.3",
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.65.0",
@@ -92,7 +93,7 @@
 		"dayjs": "^1.11.23",
 		"debounce": "^1.2.1",
 		"devalue": "^5.8.1",
-		"fuma": "^2.6.7",
+		"fuma": "^3.0.0",
 		"ical-generator": "^8.1.1",
 		"js-confetti": "^0.11.0",
 		"litepicker": "^2.0.12",
@@ -119,5 +120,9 @@
 	},
 	"volta": {
 		"node": "24.19.0"
+	},
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
 	}
 }

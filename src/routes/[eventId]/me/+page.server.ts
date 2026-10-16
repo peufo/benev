@@ -1,5 +1,5 @@
-import { prisma, redirectToAuth, redirectToRegister } from '$lib/server'
-import { memberIsRegistered } from '$lib/member'
+import { prisma, redirectToAuth, redirectToRegister } from '#lib/server/index.js'
+import { memberIsRegistered } from '#lib/member/index.js'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
 	const { member, user } = await parent()

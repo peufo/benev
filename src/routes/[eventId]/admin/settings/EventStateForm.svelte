@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { Event, EventState } from '@prisma/client'
-	import { EVENT_STATES } from '$lib/constant'
+	import { EVENT_STATES } from '#lib/constant/index.js'
 	import { page } from '$app/state'
 	import { toast } from 'svelte-sonner'
 	import { setEventState } from './event.remote'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 
 	interface Props {
 		event: Event & { owner: { firstName: string; lastName: string } }
@@ -55,11 +55,12 @@
 		<div class="flex gap-2 justify-end grow items-center pt-1 pr-1">
 			{#each getNextStates()[event.state] as { state, label } (state)}
 				<!-- Un `<form>` par transition: `.for()` leur donne à chacun son instance -->
+				{@const stateForm = setEventState.for(state)}
 				<form
-					{...setEventState.for(state).enhance(enhanceForm({ success: EVENT_STATES[state].label }))}
+					{...stateForm.enhance(enhanceForm({ success: EVENT_STATES[state].label }))}
 					class="contents"
 				>
-					<input type="hidden" name="state" value={state} />
+					<input {...stateForm.fields.state.as('hidden', state)} />
 					<button
 						class="btn btn-sm btn-primary"
 						onclick={handleClickState}

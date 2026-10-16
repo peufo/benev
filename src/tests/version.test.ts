@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { APP_VERSION, parseVersion } from '$lib/version'
+import { APP_VERSION, parseVersion } from '#lib/version.js'
 
 describe('version', () => {
-	// Le contrat tient entre deux fichiers: `svelte.config.js` compose la chaîne, `version.ts` la
+	// Le contrat tient entre deux fichiers: `vite.config.ts` compose la chaîne, `version.ts` la
 	// redécoupe. Ce test échoue si l'un des deux change d'encodage sans l'autre.
-	it('lit le nom composé par svelte.config.js', () => {
+	it('lit le nom composé par vite.config.ts', () => {
 		expect(APP_VERSION.date).toMatch(/^\d{4}-\d{2}-\d{2}$/)
 		expect(APP_VERSION.commit).toMatch(/^([0-9a-f]{7,}|dev)$/)
 	})

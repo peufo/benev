@@ -1,7 +1,7 @@
 import { PRICE_STANDARD, PRICE_PREMIUM, PRICE_STANDARD_TO_PREMIUM } from '$app/env/public'
 import type { EventTier } from '@prisma/client'
 
-import { prisma } from '$lib/server/prisma'
+import { prisma } from '#lib/server/prisma.js'
 import { error } from '@sveltejs/kit'
 
 export async function useProduct(eventId: string, productId: string) {

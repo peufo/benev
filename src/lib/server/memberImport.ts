@@ -1,6 +1,6 @@
 import type { Member, Event, Field } from '@prisma/client'
-import { prisma, notifyTierQuotaIfNeeded } from '$lib/server'
-import { createAvatarPlaceholder } from '$lib/server'
+import { prisma, notifyTierQuotaIfNeeded } from '#lib/server/index.js'
+import { createAvatarPlaceholder } from '#lib/server/index.js'
 
 export interface FieldMapping {
 	sourceFieldId: string

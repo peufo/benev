@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import z from 'zod'
-import { zStringNullable } from '$lib/models/form'
+import { zStringNullable } from '#lib/models/form.js'
 
 describe('zStringNullable', () => {
 	const email = zStringNullable(z.email().toLowerCase())

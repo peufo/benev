@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { getTeam, permission } from '$lib/server'
+import { getTeam, permission } from '#lib/server/index.js'
 
 export const load = async ({ parent, locals, params: { eventId, teamId } }) => {
 	const actor = await permission.leaderOrRoot(eventId, locals)

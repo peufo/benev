@@ -1,4 +1,4 @@
-import dayjs from '$lib/dayjs'
+import dayjs from '#lib/dayjs.js'
 
 export const getAge = (date: Date | null) => {
 	if (!date) return '-'

@@ -1,6 +1,6 @@
-import type { MemberConditionOperator } from '$lib/models'
+import type { MemberConditionOperator } from '#lib/models/index.js'
 import type { Member, Team } from '@prisma/client'
-import dayjs from '$lib/dayjs'
+import dayjs from '#lib/dayjs.js'
 
 export function isMemberAllowed(
 	conditions: Team['conditions'] | null,

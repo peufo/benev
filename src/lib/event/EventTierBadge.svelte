@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths'
 	import type { Event } from '@prisma/client'
 	import { InfinityIcon } from '@lucide/svelte'
-	import { EVENT_TIER } from '$lib/constant'
+	import { EVENT_TIER } from '#lib/constant/index.js'
 	import { tip } from 'fuma'
 
 	interface Props {

@@ -1,4 +1,4 @@
-import { debounce } from '$lib/debounce'
+import { debounce } from '#lib/debounce.js'
 
 type AutoSubmitOption = {
 	debounceMs?: number

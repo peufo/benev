@@ -1,4 +1,4 @@
-import { getMemberProfile, prisma } from '$lib/server'
+import { getMemberProfile, prisma } from '#lib/server/index.js'
 import { error } from '@sveltejs/kit'
 
 export const load = async () => {

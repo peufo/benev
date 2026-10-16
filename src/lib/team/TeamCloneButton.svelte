@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { CopyPlusIcon } from '@lucide/svelte'
 	import type { Team } from '@prisma/client'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { cloneTeamForm } from './team.remote'
 
 	interface Props {
@@ -26,7 +26,6 @@
 	)}
 	class="contents"
 >
-	<input type="hidden" name="id" value={team.id} />
 	<button type="submit" class="btn btn-sm btn-primary btn-soft">
 		<CopyPlusIcon size={20} />
 		<span>Dupliquer</span>

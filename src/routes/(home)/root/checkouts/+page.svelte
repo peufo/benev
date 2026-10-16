@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
 	import { PlusIcon } from '@lucide/svelte'
-	import { Surface } from '$lib/ui'
+	import { Surface } from '#lib/ui/index.js'
 	import { Pagination, tip } from 'fuma'
 
 	let { data } = $props()
@@ -10,7 +10,7 @@
 <Surface title="Checkouts">
 	{#snippet action()}
 		<a
-			href={resolve('/root/checkouts/new')}
+			href={resolve('root/checkouts/new')}
 			class="btn btn-square btn-sm btn-secondary"
 			use:tip={{ content: 'Créer un checkout manuellement' }}
 		>

@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { tick } from 'svelte'
 	import { tip } from 'fuma'
-	import { daytz } from '$lib/dayjs'
+	import { daytz } from '#lib/dayjs.js'
 	import {
 		MemberCell,
 		MemberCreateSubscribeDialog,
 		MemberProfileStatus,
 		MemberSubscribeButton,
-	} from '$lib/member'
-	import { Placeholder } from '$lib/ui'
+	} from '#lib/member/index.js'
+	import { Placeholder } from '#lib/ui/index.js'
 	import type { PageData } from './$types'
 	import type { MembersView } from './membersView'
 

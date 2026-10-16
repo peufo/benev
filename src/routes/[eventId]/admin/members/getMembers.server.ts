@@ -1,7 +1,7 @@
 import z from 'zod'
-import { filterBoolean, filterMultiselect, filterNumber, filterRange } from '$lib/models/filter'
+import { filterBoolean, filterMultiselect, filterNumber, filterRange } from '#lib/models/filter.js'
 import { parseQuery } from 'fuma/server'
-import dayjs from '$lib/dayjs'
+import dayjs from '#lib/dayjs.js'
 import type {
 	Event,
 	Field,
@@ -12,8 +12,12 @@ import type {
 	Subscribe,
 	SubscribeState,
 } from '@prisma/client'
-import { prisma, addMemberComputedValues, type MemberWithComputedValues } from '$lib/server'
-import { jsonParse } from '$lib/jsonParse'
+import {
+	prisma,
+	addMemberComputedValues,
+	type MemberWithComputedValues,
+} from '#lib/server/index.js'
+import { jsonParse } from '#lib/jsonParse.js'
 import { combinationKey } from './fieldsSummary'
 
 export type MemberWithComputedValue = Awaited<ReturnType<typeof getMembers>>['members'][number]

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Dialog } from 'fuma'
 	import type { Event } from '@prisma/client'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { deleteEvent } from './event.remote'
 
 	interface Props {

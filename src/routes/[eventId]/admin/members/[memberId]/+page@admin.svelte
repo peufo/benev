@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { ClipboardListIcon, PencilIcon, PlusIcon, ScrollTextIcon } from '@lucide/svelte'
 	import { Drawer, tip, urlParam } from 'fuma'
-	import { eventPath } from '$lib/eventPath'
-	import Avatar from '$lib/me/Avatar.svelte'
-	import { TeamsActions } from '$lib/team'
-	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
+	import { eventPath } from '#lib/eventPath.js'
+	import Avatar from '#lib/me/Avatar.svelte'
+	import { TeamsActions } from '#lib/team/index.js'
+	import TeamsSubscribes from '#lib/me/TeamsSubscribes.svelte'
 	import MemberContactDetails from './MemberContactDetails.svelte'
 	import {
 		MemberProfileStatus,
@@ -13,10 +13,10 @@
 		MemberProfileForm,
 		MemberCreateSubscribeDialog,
 		MemberContactForm,
-	} from '$lib/member'
+	} from '#lib/member/index.js'
 	import MembersBadges from '../MembersBadges.svelte'
-	import { Journal } from '$lib/log'
-	import { Placeholder, Surface } from '$lib/ui'
+	import { Journal } from '#lib/log/index.js'
+	import { Placeholder, Surface } from '#lib/ui/index.js'
 	import MemberMenu from './MemberMenu.svelte'
 	import MemberResendInviteForm from './MemberResendInviteForm.svelte'
 
@@ -51,7 +51,7 @@
 			<a
 				href={urlParam.with({ form_member_contact: '{}' })}
 				data-sveltekit-replacestate
-				data-sveltekit-noscroll
+				data-sveltekit-reset="false"
 				class="btn btn-square btn-sm btn-secondary"
 				use:tip={{ content: `Modifier les coordonnées de ${data.memberProfile.firstName}` }}
 			>
@@ -95,7 +95,7 @@
 					<a
 						href={urlParam.with({ form_field: '{}' })}
 						data-sveltekit-replacestate
-						data-sveltekit-noscroll
+						data-sveltekit-reset="false"
 						class="btn btn-square btn-sm btn-secondary"
 						aria-label="Ajouter un champ au profil"
 						use:tip={{ content: 'Ajouter un champ au profil' }}

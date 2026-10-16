@@ -15,8 +15,8 @@ interface RateLimitOptions {
  * l'existence d'un compte, appeler ce garde *après* la lecture en base ferait de la limite un
  * révélateur.
  *
- * À importer d'ici, jamais du barrel `$lib/server`: la fabrique s'appelle à l'évaluation du module,
- * or le barrel participe à un cycle (`server/team` → `$lib/period` → `$lib/me` → `user.remote`) qui
+ * À importer d'ici, jamais du barrel `#lib/server`: la fabrique s'appelle à l'évaluation du module,
+ * or le barrel participe à un cycle (`server/team` → `#lib/period` → `#lib/me` → `user.remote`) qui
  * la laisse à `undefined` selon le point d'entrée. Les autres exports du barrel n'y sont pas exposés
  * parce qu'ils ne sont lus que dans des corps de fonction.
  */

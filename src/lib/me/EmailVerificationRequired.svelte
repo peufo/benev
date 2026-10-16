@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { MailWarningIcon } from '@lucide/svelte'
 	import { resolve } from '$app/paths'
-	import { Section } from '$lib/ui'
+	import { Section } from '#lib/ui/index.js'
 	import EmailVerificationButton from './EmailVerificationButton.svelte'
 
 	interface Props {
@@ -26,7 +26,7 @@
 
 	<div class="mt-8 flex flex-wrap gap-2 flex-row-reverse justify-between">
 		<EmailVerificationButton bind:sent />
-		<a href={resolve('/me')} class="btn btn-ghost">Retour</a>
+		<a href={resolve('me')} class="btn btn-ghost">Retour</a>
 	</div>
 
 	{#if sent}

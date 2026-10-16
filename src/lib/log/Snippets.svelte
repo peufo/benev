@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import dayjs from '$lib/dayjs'
+	import dayjs from '#lib/dayjs.js'
 	import type { LogPeriod } from './logProject'
 	import type { LogRef } from './logTypes'
 

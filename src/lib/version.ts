@@ -1,7 +1,7 @@
 import { version } from '$app/env'
 
 /**
- * Découpe le `kit.version.name` gelé au build par `svelte.config.js`, qui seul compose l'autre
+ * Découpe le `kit.version.name` gelé au build par `vite.config.ts`, qui seul compose l'autre
  * moitié de cet encodage. C'est aussi la chaîne que compare le store `updated` de SvelteKit.
  */
 export function parseVersion(name: string) {

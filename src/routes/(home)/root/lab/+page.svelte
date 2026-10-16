@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { Surface } from '$lib/ui'
+	import { Surface } from '#lib/ui/index.js'
 	import { sendEvent } from './lab.remote'
 
 	let events: string[] = $state([])

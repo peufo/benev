@@ -2,8 +2,8 @@
 	import type { Team, TeamState } from '@prisma/client'
 	import type { ClassValue } from 'svelte/elements'
 	import { page } from '$app/state'
-	import { TEAM_STATES } from '$lib/constant'
-	import { StateMenu } from '$lib/ui'
+	import { TEAM_STATES } from '#lib/constant/index.js'
+	import { StateMenu } from '#lib/ui/index.js'
 	import { setTeamState } from './team.remote'
 
 	interface Props {

@@ -2,9 +2,9 @@
 	import { resolve } from '$app/paths'
 	import { page } from '$app/state'
 	import { CircleCheckIcon, FileTextIcon, ShoppingCartIcon, TagIcon } from '@lucide/svelte'
-	import { Placeholder } from '$lib/ui'
+	import { Placeholder } from '#lib/ui/index.js'
 
-	import { CheckoutWaitSSE, ProductUseForm } from '$lib/checkout'
+	import { CheckoutWaitSSE, ProductUseForm } from '#lib/checkout/index.js'
 
 	let { data } = $props()
 

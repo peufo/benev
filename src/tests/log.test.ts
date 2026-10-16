@@ -1,14 +1,14 @@
 import { describe, it } from 'vitest'
 import { LogType, type SubscribeState } from '@prisma/client'
-import { logMap } from '$lib/log/logMap'
-import { diffChanges, hasChanges, iso } from '$lib/log/logTypes'
+import { logMap } from '#lib/log/logMap.js'
+import { diffChanges, hasChanges, iso } from '#lib/log/logTypes.js'
 import {
 	eventLabels,
 	projectEvent,
 	projectMemberContact,
 	projectPeriod,
 	projectTeam,
-} from '$lib/log/logProject'
+} from '#lib/log/logProject.js'
 
 const actor = { userId: 'usr_1', firstName: 'Jean', lastName: 'Rey' }
 

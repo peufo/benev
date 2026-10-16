@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { eventPath, withSearch } from '$lib/eventPath'
+	import { eventPath, withSearch } from '#lib/eventPath.js'
 	import { DropDown } from 'fuma'
 	import { tip } from 'fuma'
 	import { IdCardLanyardIcon } from '@lucide/svelte'

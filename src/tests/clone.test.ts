@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest'
 import type { Page, PageType, Period, Team } from '@prisma/client'
-import { clonePages, cloneTeam } from '$lib/server/clone'
+import { clonePages, cloneTeam } from '#lib/server/clone.js'
 
 const day = 1000 * 60 * 60 * 24
 const createdAt = new Date('2026-06-01T08:00:00Z')

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PlusIcon, ExternalLinkIcon, FilterIcon, DownloadIcon, PencilIcon } from '@lucide/svelte'
 	import { tip } from 'fuma'
-	import { Surface } from '$lib/ui'
+	import { Surface } from '#lib/ui/index.js'
 </script>
 
 {#snippet squareButton(label: string, Icon: typeof PlusIcon, secondary = false)}

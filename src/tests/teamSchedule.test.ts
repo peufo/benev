@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { effectiveClose, nextClose, planTransitions } from '$lib/team/teamSchedule'
+import { effectiveClose, nextClose, planTransitions } from '#lib/team/teamSchedule.js'
 
 const since = new Date('2026-09-19T10:00:00Z')
 const until = new Date('2026-09-19T10:01:00Z')

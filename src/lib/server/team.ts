@@ -1,8 +1,8 @@
-import { getRangeOfTeam } from '$lib/plan/getRange'
+import { getRangeOfTeam } from '#lib/plan/getRange.js'
 import type { Event, Member, Period, Subscribe, Team, Tag } from '@prisma/client'
 import { prisma } from './prisma'
 import type { MemberWithComputedValues } from './member'
-import { periodIsComplet } from '$lib/period'
+import { periodIsComplet } from '#lib/period/index.js'
 
 type TeamWithLeadersAndPeriodsSubscribes = Team & {
 	leaders: Member[]

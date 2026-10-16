@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { Avatar } from '$lib/me'
-	import { MemberAbsences, MemberRole } from '$lib/member'
-	import type { MemberWithComputedValues } from '$lib/server'
-	import { eventPath, withSearch } from '$lib/eventPath'
+	import { Avatar } from '#lib/me/index.js'
+	import { MemberAbsences, MemberRole } from '#lib/member/index.js'
+	import type { MemberWithComputedValues } from '#lib/server/index.js'
+	import { eventPath, withSearch } from '#lib/eventPath.js'
 
 	import type { Subscribe } from '@prisma/client'
 

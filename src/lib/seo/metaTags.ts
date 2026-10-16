@@ -12,7 +12,7 @@ export const SITE_DESCRIPTION =
  * 1.91:1, un logo carré y perdait la moitié de sa hauteur. PNG et non WebP — les crawlers
  * sociaux ne lisent de façon fiable que JPEG et PNG, et aucun n'accepte le SVG.
  */
-export function defaultMetaTags(url: URL): MetaTagsProps {
+export function defaultMetaTags(url: Pick<URL, 'origin' | 'pathname'>): MetaTagsProps {
 	const image = `${url.origin}/og.png`
 	// Sans la query string : filtres et paramètres de tracking pointent la même page canonique
 	const canonical = `${url.origin}${url.pathname}`

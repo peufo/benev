@@ -1,4 +1,4 @@
-import { getInvitedMember } from '$lib/server'
+import { getInvitedMember } from '#lib/server/index.js'
 import { getEventMembers, partitionEventMembers } from './events.server'
 
 export const load = async ({ parent, cookies }) => {

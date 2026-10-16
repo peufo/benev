@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Team } from '@prisma/client'
 	import { tip } from 'fuma'
-	import { TEAM_STATES } from '$lib/constant'
+	import { TEAM_STATES } from '#lib/constant/index.js'
 
 	interface Props {
 		team: Pick<Team, 'state'>

@@ -1,5 +1,5 @@
 import { tick } from 'svelte'
-import { debounce } from '$lib/debounce'
+import { debounce } from '#lib/debounce.js'
 import { clampScale, markZoomScroll } from './zoom'
 
 type scrollOnWheelOptions = {

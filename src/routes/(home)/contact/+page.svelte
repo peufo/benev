@@ -7,9 +7,9 @@
 		ClockIcon,
 		SendIcon,
 	} from '@lucide/svelte'
-	import { Card } from '$lib/ui'
+	import { Card } from '#lib/ui/index.js'
 	import { InputString, InputTextarea } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { sendMessage } from './contact.remote'
 
 	let { data } = $props()
@@ -105,7 +105,7 @@
 						<h3 class="font-semibold text-primary">Tu n'organises pas d'événement ?</h3>
 						<p class="text-sm text-base-content/80 mt-1 leading-relaxed">
 							Si tu souhaites contacter les responsables d'un événement,
-							<a href={resolve('/events')} class="link link-primary"
+							<a href={resolve('events')} class="link link-primary"
 								>rends-toi dans son espace dédié</a
 							>. Les moyens de contact se trouvent généralement en pied de page.
 						</p>

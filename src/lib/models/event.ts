@@ -1,6 +1,6 @@
 import z from 'zod'
 import type { Prisma } from '@prisma/client'
-import { EVENT_STATES } from '$lib/constant'
+import { EVENT_STATES } from '#lib/constant/index.js'
 import { zDateNullable, zEnumKeys, zStringNullable } from './form'
 import { zMediaId } from './media'
 
@@ -9,7 +9,7 @@ export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
 
 /**
  * Le formulaire soumet `null` pour effacer un lieu, là où Prisma attend `DbNull`.
- * La conversion se fait côté action via `jsonOrDbNull` ($lib/server): ce module est
+ * La conversion se fait côté action via `jsonOrDbNull` (#lib/server): ce module est
  * importé par des composants Svelte, il doit rester exempt de runtime Prisma.
  */
 type FormInput<T> = Omit<T, 'location'> & { location?: PrismaJson.Location | null }

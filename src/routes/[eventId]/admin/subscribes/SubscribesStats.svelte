@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { PageData } from './$types'
 	import { urlParam } from 'fuma'
-	import Distribution from '$lib/Distribution.svelte'
-	import { SUBSCRIBE_STATE } from '$lib/constant'
+	import Distribution from '#lib/Distribution.svelte'
+	import { SUBSCRIBE_STATE } from '#lib/constant/index.js'
 
 	interface Props {
 		data: PageData

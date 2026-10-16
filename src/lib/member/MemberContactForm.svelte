@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { MemberProfile } from '$lib/server'
+	import type { MemberProfile } from '#lib/server/index.js'
 	import { InputString } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { updateMemberContact } from './memberAdmin.remote'
 
 	interface Props {

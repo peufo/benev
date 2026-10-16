@@ -1,5 +1,5 @@
-import { daytz } from '$lib/dayjs'
-import type { PlanData } from '$lib/server'
+import { daytz } from '#lib/dayjs.js'
+import type { PlanData } from '#lib/server/index.js'
 import { getDays } from './getDays'
 import type { Plan } from './types'
 

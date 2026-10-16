@@ -10,12 +10,12 @@ import {
 	media,
 	prisma,
 	sendEmailComponent,
-} from '$lib/server'
-import { createRateLimit } from '$lib/server/rateLimit'
-import { modelEmail, modelUserCreate, modelUserLogin, modelUserUpdate } from '$lib/models'
-import { TERMS_VERSION } from '$lib/constant'
-import { modelMediaImage } from '$lib/models/media'
-import { EmailPasswordReset, EmailVerificationLink } from '$lib/email'
+} from '#lib/server/index.js'
+import { createRateLimit } from '#lib/server/rateLimit.js'
+import { modelEmail, modelUserCreate, modelUserLogin, modelUserUpdate } from '#lib/models/index.js'
+import { TERMS_VERSION } from '#lib/constant/index.js'
+import { modelMediaImage } from '#lib/models/media.js'
+import { EmailPasswordReset, EmailVerificationLink } from '#lib/email/index.js'
 
 export const registerUser = form(modelUserCreate, async (data) => {
 	const { locals, cookies } = getRequestEvent()

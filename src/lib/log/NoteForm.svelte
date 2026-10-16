@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SendHorizontalIcon } from '@lucide/svelte'
 	import { InputTextarea } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { createNote } from './log.remote'
 
 	interface Props {
@@ -22,7 +22,7 @@
 	{...remoteForm.enhance(enhanceForm({ reset: true, invalid: false }))}
 	class="relative flex flex-col"
 >
-	{#if memberId}<input type="hidden" name="memberId" value={memberId} />{/if}
+	{#if memberId}<input {...remoteForm.fields.memberId.as('hidden', memberId)} />{/if}
 
 	<!-- Le champ part sur une ligne et grandit avec la note: `min-h-10` défait le plancher de
 	     5rem de `.textarea`, que la hauteur posée par l'autoresize ne peut pas franchir, et laisse

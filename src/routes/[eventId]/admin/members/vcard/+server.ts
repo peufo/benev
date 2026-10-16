@@ -1,5 +1,5 @@
 import { getMembers, type MemberWithComputedValue } from '../getMembers.server'
-import { prisma, permission } from '$lib/server'
+import { prisma, permission } from '#lib/server/index.js'
 
 export const GET = async ({ url, locals, params: { eventId } }) => {
 	await permission.leader(eventId, locals)

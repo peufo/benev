@@ -36,7 +36,7 @@ demo('create-space', async ({ page, director }) => {
 	const drawer = page.getByRole('dialog', { name: 'Médiathèque' })
 	await expect(drawer).toBeVisible()
 	// Le sélecteur de fichiers du système n'est pas filmable: le fichier arrive directement.
-	await page.locator('input[type="file"][name="image"]').setInputFiles(LOGO)
+	await page.locator('input[type="file"][name^="image/"]').setInputFiles(LOGO)
 	const description = page.getByLabel("Description de l'image")
 	await expect(description).toBeVisible()
 	await director.click(page.getByRole('button', { name: '1:1', exact: true }))

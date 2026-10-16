@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { TeamState } from '@prisma/client'
 	import { ClockIcon } from '@lucide/svelte'
-	import { daytz } from '$lib/dayjs'
+	import { daytz } from '#lib/dayjs.js'
 	import { nextClose, type Scheduled } from './teamSchedule'
 
 	interface Props {

@@ -4,10 +4,10 @@
 	import { PinIcon, PlusIcon } from '@lucide/svelte'
 	import type { Milestone, Team } from '@prisma/client'
 	import { afterNavigate, goto } from '$app/navigation'
-	import TeamRow from '$lib/plan/TeamRow.svelte'
-	import TeamStateIcon from '$lib/team/TeamStateIcon.svelte'
-	import { daytz, type Dayjs } from '$lib/dayjs'
-	import { eventPath } from '$lib/eventPath'
+	import TeamRow from '#lib/plan/TeamRow.svelte'
+	import TeamStateIcon from '#lib/team/TeamStateIcon.svelte'
+	import { daytz, type Dayjs } from '#lib/dayjs.js'
+	import { eventPath } from '#lib/eventPath.js'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { persistHourSize, withHourSize } from './zoom'
 	import { scrollOnZoom } from './scrollOnZoom'
@@ -33,8 +33,8 @@
 		const offsetX = parseInt(element.style.translate) - TEAM_HEADER_WIDTH + element.offsetWidth / 2
 		const timestamp = plan.start.add(offsetX / plan.hourSize, 'hour').startOf('hour')
 		goto(urlParam.with({ form_milestone: JSON.stringify({ timestamp: timestamp.toJSON() }) }), {
-			replaceState: true,
-			noScroll: true,
+			replace: true,
+			reset: false,
 		})
 	}
 
@@ -132,7 +132,7 @@
 			<a
 				href={eventPath('/admin/teams/[teamId]', { teamId: team.id })}
 				data-sveltekit-replacestate
-				data-sveltekit-noscroll
+				data-sveltekit-reset="false"
 				style:width="{TEAM_HEADER_WIDTH}px"
 				class="
 					p-1 sticky shrink-0 left-0 z-20 font-medium text-sm flex items-center gap-1
@@ -163,7 +163,7 @@
 				class="btn btn-sm btn-square btn-secondary"
 				href={urlParam.with({ form_team: '{}' })}
 				data-sveltekit-replacestate
-				data-sveltekit-noscroll
+				data-sveltekit-reset="false"
 				use:tip={{ content: 'Ajouter un secteur' }}
 			>
 				<PlusIcon />
@@ -186,7 +186,7 @@
 					<a
 						href={urlParam.with({ form_milestone: milestone.id })}
 						data-sveltekit-replacestate
-						data-sveltekit-noscroll
+						data-sveltekit-reset="false"
 						class="z-10 badge badge-accent badge-outline bg-base-100 hover:ring-1 ring-accent -translate-x-1/2"
 					>
 						{milestone.name}

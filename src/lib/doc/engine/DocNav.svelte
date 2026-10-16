@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ListIcon } from '@lucide/svelte'
 	import { Drawer, urlParam } from 'fuma'
-	import { scrollToSection, trackActiveSection, type TocSection } from '$lib/ui'
+	import { scrollToSection, trackActiveSection, type TocSection } from '#lib/ui/index.js'
 	import type { DocPage } from './types'
 	import { fly, slide } from 'svelte/transition'
 
@@ -72,7 +72,7 @@
 <a
 	href={urlParam.with({ [DRAWER_KEY]: '1' })}
 	class="btn btn-ghost mb-3 w-full justify-start lg:hidden"
-	data-sveltekit-noscroll
+	data-sveltekit-reset="false"
 	data-sveltekit-replacestate
 >
 	<ListIcon size={20} class="opacity-70" />

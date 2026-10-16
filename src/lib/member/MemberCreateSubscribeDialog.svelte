@@ -1,16 +1,17 @@
 <script lang="ts">
+	import { currentEventId } from '#lib/eventPath.js'
 	import { ArrowLeftIcon, SearchIcon } from '@lucide/svelte'
 	import { onMount, tick } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import type { Period } from '@prisma/client'
 
-	import { SelectorList } from '$lib/ui'
+	import { SelectorList } from '#lib/ui/index.js'
 	import { Dialog } from 'fuma'
-	import { searchAvailableTeams } from '$lib/team/team.remote'
-	import { createSubscribe } from '$lib/subscribe/subscribe.remote'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { formatRange } from '$lib/formatRange'
-	import Progress from '$lib/Progress.svelte'
+	import { searchAvailableTeams } from '#lib/team/team.remote.js'
+	import { createSubscribe } from '#lib/subscribe/subscribe.remote.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { formatRange } from '#lib/formatRange.js'
+	import Progress from '#lib/Progress.svelte'
 	import { on } from 'svelte/events'
 
 	interface Props {
@@ -23,7 +24,7 @@
 
 	let search = $state('')
 	let searchInput: HTMLInputElement = $state()!
-	const teamsQuery = $derived(searchAvailableTeams({ search }))
+	const teamsQuery = $derived(searchAvailableTeams({ search, eventId: currentEventId() }))
 	const teams = $derived(teamsQuery.current ?? [])
 
 	type Team = (typeof teams)[number]
@@ -140,8 +141,8 @@
 					<Progress period={item} class="ml-auto" />
 				{/snippet}
 			</SelectorList>
-			<input type="hidden" name="memberId" value={memberId} />
-			<input type="hidden" name="periodId" value={selectedPeriod?.id} />
+			<input {...createSubscribe.fields.memberId.as('hidden', memberId)} />
+			<input {...createSubscribe.fields.periodId.as('hidden', selectedPeriod?.id ?? '')} />
 			<button type="submit" bind:this={submitButton} class="hidden">submit</button>
 		</form>
 	{/if}

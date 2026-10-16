@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { auth, claimInvite, googleAuth, prisma } from '$lib/server'
-import { TERMS_VERSION } from '$lib/constant'
+import { auth, claimInvite, googleAuth, prisma } from '#lib/server/index.js'
+import { TERMS_VERSION } from '#lib/constant/index.js'
 
 export const GET = async ({ url, cookies, locals }) => {
 	const storedState = cookies.get('google_oauth_state')

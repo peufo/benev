@@ -7,8 +7,8 @@ import {
 	getMemberProfile,
 	parseFormKey,
 	getPeriodForm,
-} from '$lib/server'
-import { eventMetaTags } from '$lib/seo'
+} from '#lib/server/index.js'
+import { eventMetaTags } from '#lib/seo/index.js'
 
 export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 	const { user, userIsRoot } = await parent()

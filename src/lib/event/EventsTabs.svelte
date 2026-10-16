@@ -4,15 +4,11 @@
 </script>
 
 <div class="tabs mb-8">
-	<a
-		href={resolve('/events')}
-		class="tab tab-lg"
-		class:tab-active={page.url.pathname === '/events'}
-	>
+	<a href={resolve('events')} class="tab tab-lg" class:tab-active={page.url.pathname === '/events'}>
 		À venir
 	</a>
 	<a
-		href={resolve('/events/past')}
+		href={resolve('events/past')}
 		class="tab tab-lg"
 		class:tab-active={page.url.pathname === '/events/past'}
 	>

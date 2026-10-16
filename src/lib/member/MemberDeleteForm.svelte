@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import { ButtonDelete } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { deleteMember } from './member.remote'
 
 	interface Props {
@@ -25,8 +25,8 @@
 </script>
 
 <form {...remoteForm.enhance(enhanceForm())} class="contents">
-	<input type="hidden" name="memberId" value={memberId} />
-	<input type="hidden" name="redirectTo" value={redirectTo} />
+	<input {...remoteForm.fields.memberId.as('hidden', memberId)} />
+	<input {...remoteForm.fields.redirectTo.as('hidden', redirectTo)} />
 	<ButtonDelete formaction={remoteForm.action} class={klass} {btn}>
 		{#snippet children(state)}
 			{#if label}

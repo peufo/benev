@@ -1,6 +1,12 @@
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
-import { permission, prisma, getPeriodForm, getMilestoneForm, getPlanData } from '$lib/server'
+import {
+	permission,
+	prisma,
+	getPeriodForm,
+	getMilestoneForm,
+	getPlanData,
+} from '#lib/server/index.js'
 
 export const load = async ({ locals, url, untrack, params: { eventId } }) => {
 	const member = await permission.leader(eventId, locals)

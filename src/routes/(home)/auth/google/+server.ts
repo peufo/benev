@@ -1,5 +1,5 @@
 import { dev } from '$app/env'
-import { googleAuth } from '$lib/server/lucia.js'
+import { googleAuth } from '#lib/server/lucia.js'
 import { redirect } from '@sveltejs/kit'
 
 export const GET = async ({ cookies }) => {
@@ -10,5 +10,5 @@ export const GET = async ({ cookies }) => {
 		path: '/',
 		maxAge: 60 * 60,
 	})
-	redirect(302, url.toString())
+	redirect(302, url.toString(), { external: true })
 }

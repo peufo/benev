@@ -3,8 +3,8 @@ import fs from 'node:fs/promises'
 import { MEDIA_DIR } from '$app/env/private'
 import { error } from '@sveltejs/kit'
 import { parseQuery } from 'fuma/server'
-import { zEnumKeys } from '$lib/models/form'
-import { MEDIA_PRESETS } from '$lib/constant'
+import { zEnumKeys } from '#lib/models/form.js'
+import { MEDIA_PRESETS } from '#lib/constant/index.js'
 import sharp from 'sharp'
 
 export const GET = async ({ url, params: { mediaId } }) => {

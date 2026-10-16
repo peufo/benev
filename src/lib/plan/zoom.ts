@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation'
-import { debounce } from '$lib/debounce'
+import { debounce } from '#lib/debounce.js'
 import { urlParam } from 'fuma'
 import type { Plan } from './types'
 
@@ -47,8 +47,7 @@ export function consumeZoomScroll() {
  */
 export const persistHourSize = debounce((hourSize: number) => {
 	goto(urlParam.with({ hourSize: Math.round(hourSize * 100) / 100 }), {
-		replaceState: true,
-		noScroll: true,
-		keepFocus: true,
+		replace: true,
+		reset: false,
 	})
 }, 300)

@@ -1,7 +1,7 @@
-import { json, error } from '@sveltejs/kit'
-import { permission } from '$lib/server'
-import { memberImportService, type ImportOptions } from '$lib/server/memberImport'
-import { modelImportOptions } from '$lib/models/memberImport'
+import { error } from '@sveltejs/kit'
+import { permission } from '#lib/server/index.js'
+import { memberImportService, type ImportOptions } from '#lib/server/memberImport.js'
+import { modelImportOptions } from '#lib/models/memberImport.js'
 
 /**
  * GET: Fetch importable events and source members
@@ -17,7 +17,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 		// Filter out the current event
 		const filteredEvents = importableEvents.filter((event) => event.id !== eventId)
 
-		return json({
+		return Response.json({
 			type: 'events',
 			events: filteredEvents.map((event) => ({
 				id: event.id,
@@ -42,7 +42,7 @@ export const GET = async ({ url, locals, params: { eventId } }) => {
 				targetFields
 			)
 
-			return json({
+			return Response.json({
 				type: 'members_and_fields',
 				members: sourceMembers.map((member) => ({
 					id: member.id,
@@ -109,7 +109,7 @@ export const POST = async ({ request, locals, params: { eventId } }) => {
 		// Execute import
 		const result = await memberImportService.importMembers(mappedOptions)
 
-		return json(result)
+		return Response.json(result)
 	} catch (err) {
 		if (err instanceof Error) {
 			error(400, `Erreur lors de l'import: ${err.message}`)

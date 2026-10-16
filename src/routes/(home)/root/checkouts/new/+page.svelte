@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Surface } from '$lib/ui'
+	import { Surface } from '#lib/ui/index.js'
 	import { InputNumber, InputSelect, InputString } from 'fuma'
 
 	import InputProduct from './InputProduct.svelte'

@@ -8,7 +8,7 @@
  * lu « au niveau » (un réglage par défaut dans le passé ne défait pas un geste manuel).
  *
  * Ce module ne connaît ni prisma ni les tâches: il reçoit un `TaskStore` et se teste aux faux
- * timers. La liste des tâches et le store en base vivent dans `$lib/server/tasks`.
+ * timers. La liste des tâches et le store en base vivent dans `#lib/server/tasks/index.js`.
  */
 
 export type TaskWindow = { since: Date; until: Date }

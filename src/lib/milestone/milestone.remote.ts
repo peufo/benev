@@ -1,7 +1,7 @@
 import { form, getRequestEvent } from '$app/server'
 import z from 'zod'
-import { modelMilestoneCreate, modelMilestoneUpdate } from '$lib/models'
-import { permission, prisma } from '$lib/server'
+import { modelMilestoneCreate, modelMilestoneUpdate } from '#lib/models/index.js'
+import { permission, prisma } from '#lib/server/index.js'
 
 export const createMilestone = form(modelMilestoneCreate, async (data) => {
 	const { locals, params } = getRequestEvent()

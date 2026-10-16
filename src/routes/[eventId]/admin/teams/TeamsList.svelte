@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { MoveVerticalIcon, PlusIcon, SearchIcon } from '@lucide/svelte'
 	import { isHttpError } from '@sveltejs/kit'
-	import { goto, invalidateAll } from '$app/navigation'
+	import { goto, refreshAll } from '$app/navigation'
 	import { page } from '$app/state'
 	import { toast } from 'svelte-sonner'
 	import { listEditable, tip, urlParam, useCommand } from 'fuma'
-	import Progress from '$lib/Progress.svelte'
-	import { Placeholder } from '$lib/ui'
-	import { eventPath } from '$lib/eventPath'
-	import { reorderTeams } from '$lib/team/team.remote'
-	import TeamStateIcon from '$lib/team/TeamStateIcon.svelte'
+	import Progress from '#lib/Progress.svelte'
+	import { Placeholder } from '#lib/ui/index.js'
+	import { eventPath } from '#lib/eventPath.js'
+	import { reorderTeams } from '#lib/team/team.remote.js'
+	import TeamStateIcon from '#lib/team/TeamStateIcon.svelte'
 	import type { LayoutData } from './$types'
 
 	type TeamRow = LayoutData['teams'][number]
@@ -85,7 +85,7 @@
 		ordered = next
 		try {
 			await reorderTeams(next.map(({ id }) => id))
-			await invalidateAll()
+			await refreshAll()
 			toast.success('Nouvel ordre sauvegardé')
 		} catch (err) {
 			console.error(err)
@@ -167,7 +167,7 @@
 			<a
 				href={urlParam.with({ form_team: '{}' })}
 				class="btn btn-sm btn-square btn-secondary"
-				data-sveltekit-noscroll
+				data-sveltekit-reset="false"
 				data-sveltekit-replacestate
 				use:tip={{ content: 'Nouveau secteur' }}
 			>

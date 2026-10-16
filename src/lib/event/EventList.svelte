@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { CardLink } from '$lib/ui'
+	import { CardLink } from '#lib/ui/index.js'
 	import { ArrowRight, CalendarX2 } from '@lucide/svelte'
-	import logo from '$lib/assets/logo.svg'
-	import { EventIcon } from '$lib/event/index.js'
-	import { formatRangeDate } from '$lib/formatRange'
+	import logo from '#lib/assets/logo.svg'
+	import { EventIcon } from '#lib/event/index.js'
+	import { formatRangeDate } from '#lib/formatRange.js'
 	import type { Event } from '@prisma/client'
 	import type { ResolvedPathname } from '$app/types'
 
@@ -20,7 +20,7 @@
 		events,
 		emptyTitle = 'Aucun événement',
 		emptyDescription = '',
-		emptyActionHref = resolve('/me'),
+		emptyActionHref = resolve('me'),
 		emptyActionLabel = 'Organiser mon événement',
 	}: Props = $props()
 </script>

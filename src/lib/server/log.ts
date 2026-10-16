@@ -1,15 +1,15 @@
 import type { LogType, Prisma } from '@prisma/client'
 import { parseQuery } from 'fuma/server'
 import z from 'zod'
-import { logMap, type LogData, type LogInput } from '$lib/log/logMap'
+import { logMap, type LogData, type LogInput } from '#lib/log/logMap.js'
 import {
 	LOG_FAMILIES,
 	LOG_FAMILY_KEYS,
 	LOG_TYPES_FOR_EVENT,
 	type LogFamily,
-} from '$lib/log/logFamilies'
-import type { EventJournal } from '$lib/log/journal'
-import type { LogOutput } from '$lib/log/logTypes'
+} from '#lib/log/logFamilies.js'
+import type { EventJournal } from '#lib/log/journal.js'
+import type { LogOutput } from '#lib/log/logTypes.js'
 import { prisma } from './prisma'
 
 /**

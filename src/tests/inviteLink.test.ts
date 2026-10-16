@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { ORIGIN } from '$app/env/public'
-import { emailSuggestions, type EmailModelProps } from '$lib/pages/emailSuggesions'
+import { emailSuggestions, type EmailModelProps } from '#lib/pages/emailSuggesions.js'
 
 /**
  * Tout le parcours d'invitation pend à cette URL: sans le jeton, la page de connexion ne sait plus

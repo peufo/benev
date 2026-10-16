@@ -2,19 +2,20 @@
 	import type { Media } from '@prisma/client'
 	import { tick } from 'svelte'
 	import { tip } from 'fuma'
+	import type { RemoteFormField } from '$app/server'
 	import { XIcon } from '@lucide/svelte'
 	import { mediaDrawer } from './MediaDrawer.svelte'
 	import MediaPreview from './MediaPreview.svelte'
 
 	interface Props {
 		label: string
-		/** Nom du champ caché portant l'id du média. */
-		key: string
+		/** Champ du formulaire qui porte l'id du média. */
+		field: RemoteFormField<string>
 		value?: string | null | undefined
 		oninput?: (media: Media | null) => void
 	}
 
-	let { label, key, value = $bindable(), oninput }: Props = $props()
+	let { label, field, value = $bindable(), oninput }: Props = $props()
 
 	let input: HTMLInputElement | undefined = $state()
 
@@ -32,7 +33,7 @@
 	}
 </script>
 
-<input type="hidden" bind:this={input} name={key} {value} />
+<input {...field.as('hidden', value ?? '')} bind:this={input} />
 
 <MediaPreview bind:mediaId={value} {label} onclick={() => mediaDrawer.open(select)}>
 	{#snippet action()}

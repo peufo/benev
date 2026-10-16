@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { deleteTeam } from './team.remote'
 	import { confirmDialog } from 'fuma'
 	import { Trash2Icon } from '@lucide/svelte'
@@ -35,9 +35,8 @@
 	{...remoteForm.enhance(enhanceForm({ before: confirmDelete, success: 'Secteur supprimé' }))}
 	class="contents"
 >
-	<input type="hidden" name="id" value={team.id} />
 	{#if redirectTo}
-		<input type="hidden" name="redirectTo" value={redirectTo} />
+		<input {...remoteForm.fields.redirectTo.as('hidden', redirectTo)} />
 	{/if}
 	<button type="submit" class="btn btn-sm btn-error btn-ghost">
 		<Trash2Icon size={18} />

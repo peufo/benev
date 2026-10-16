@@ -7,7 +7,7 @@ import z from 'zod'
  *
  * `form()` contraint l'ENTRÉE du schéma à `RemoteFormInput` — chaîne, nombre, booléen, `File`,
  * ou objet/tableau de ceux-ci. La plupart de ce qui suit part donc d'une chaîne (ou d'un tableau
- * de chaînes) et produit la forme métier. Voir l'en-tête de `$lib/models` pour la démarche.
+ * de chaînes) et produit la forme métier. Voir l'en-tête de `#lib/models/index.js` pour la démarche.
  */
 
 /**
@@ -92,6 +92,12 @@ export const zConnectNullable = z
 function idToConnect(id: string) {
 	return { connect: { id } }
 }
+
+/**
+ * L'argument des recherches d'un évènement. Une `query()` ne lit pas `params`: l'évènement voyage
+ * avec la recherche, et la garde de permission porte sur lui.
+ */
+export const zSearchInEvent = z.object({ search: z.string(), eventId: z.string() })
 
 /** Une liste d'ids (`name="x[]"`) vers `{ connect: [...] }`, pour une création. */
 export const zConnectMany = relationIds('connect')

@@ -1,4 +1,4 @@
-import dayjs from '$lib/dayjs'
+import dayjs from '#lib/dayjs.js'
 import { getEventTimeZone } from './timezone'
 
 function getFormater(timeZone?: string) {

@@ -1,15 +1,17 @@
 <script lang="ts">
 	import { Check } from '@lucide/svelte'
 	import type { EventTier } from '@prisma/client'
-	import { EVENT_TIER } from '$lib/constant'
+	import type { RemoteFormField } from '$app/server'
+	import { EVENT_TIER } from '#lib/constant/index.js'
 
 	interface Props {
+		field: RemoteFormField<string>
 		value?: string
 		/** Remplacent les évènements de la version Svelte 4. */
 		onchange?: (value: string) => void
 	}
 
-	let { value = $bindable('basic'), onchange }: Props = $props()
+	let { field, value = $bindable('basic'), onchange }: Props = $props()
 
 	const plans: EventTier[] = ['basic', 'standard', 'premium']
 
@@ -59,4 +61,4 @@
 	{/each}
 </div>
 
-<input type="hidden" name="tier" {value} />
+<input {...field.as('hidden', value)} />

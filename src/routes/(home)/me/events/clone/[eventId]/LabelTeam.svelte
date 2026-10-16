@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { formatRangeDateShort } from '$lib/formatRange'
-	import { getRangeOfTeam } from '$lib/plan'
+	import { formatRangeDateShort } from '#lib/formatRange.js'
+	import { getRangeOfTeam } from '#lib/plan/index.js'
 	import type { Period, Team } from '@prisma/client'
 
 	interface Props {

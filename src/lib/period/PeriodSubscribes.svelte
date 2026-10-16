@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { TriangleAlertIcon } from '@lucide/svelte'
 	import type { Member, Subscribe } from '@prisma/client'
-	import { eventPath } from '$lib/eventPath'
-	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
+	import { eventPath } from '#lib/eventPath.js'
+	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '#lib/subscribe/index.js'
 	import { tip } from 'fuma'
-	import { Avatar } from '$lib/me'
+	import { Avatar } from '#lib/me/index.js'
 
 	interface Props {
 		subscribes: (Subscribe & { member: Member })[]

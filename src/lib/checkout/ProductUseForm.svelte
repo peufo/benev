@@ -2,7 +2,7 @@
 	import { LinkIcon } from '@lucide/svelte'
 	import { InputSelect } from 'fuma'
 	import { slide } from 'svelte/transition'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { searchOwnedEvents, useProductOnEvent } from './checkout.remote'
 
 	interface Props {
@@ -23,7 +23,7 @@
 		{...form.enhance(enhanceForm({ success: 'Produit associé' }))}
 		class="flex flex-col gap-2 w-full"
 	>
-		<input type="hidden" name="productId" value={product.id} />
+		<input {...form.fields.productId.as('hidden', product.id)} />
 		<InputSelect
 			field={form.fields.eventId}
 			items={searchOwnedEvents}

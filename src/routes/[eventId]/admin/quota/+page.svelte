@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { EventTier } from '@prisma/client'
-	import { EventTierDetails, TierCard } from '$lib/event'
-	import { EVENT_TIER, EVENT_TIER_SUPPORT } from '$lib/constant'
+	import { EventTierDetails, TierCard } from '#lib/event/index.js'
+	import { EVENT_TIER, EVENT_TIER_SUPPORT } from '#lib/constant/index.js'
 
 	let { data } = $props()
 

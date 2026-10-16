@@ -1,6 +1,6 @@
 import z from 'zod'
 import { parseQuery } from 'fuma/server'
-import { prisma } from '$lib/server'
+import { prisma } from '#lib/server/index.js'
 import type { Prisma } from '@prisma/client'
 
 export const load = async ({ url }) => {

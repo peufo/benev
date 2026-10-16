@@ -2,7 +2,7 @@
 	import { IdCardIcon, PersonStandingIcon, UserCheckIcon } from '@lucide/svelte'
 	import type { Field } from '@prisma/client'
 
-	import type { MemberCondition } from '$lib/models'
+	import type { MemberCondition } from '#lib/models/index.js'
 	import { CONDITION_OPERATOR_LABEL } from './constants'
 
 	interface Props {

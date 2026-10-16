@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath } from '#lib/eventPath.js'
 	import type { Page } from '@prisma/client'
 	import { page } from '$app/state'
 	import { Popover } from 'fuma'
 	import { on } from 'svelte/events'
 	import { MenuIcon, GaugeIcon } from '@lucide/svelte'
-	import { EventPubliqueMenuItems } from '$lib/event'
-	import { adminTabs } from '$lib/layout/adminTabs.svelte'
+	import { EventPubliqueMenuItems } from '#lib/event/index.js'
+	import { adminTabs } from '#lib/layout/adminTabs.svelte.js'
 
 	interface Props {
 		pages: Pick<Page, 'id' | 'title' | 'type' | 'path' | 'state'>[]

@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit'
-import { auth, consumeToken, prisma, readUserToken } from '$lib/server'
-import { NOINDEX, pageMetaTags } from '$lib/seo'
+import { auth, consumeToken, prisma, readUserToken } from '#lib/server/index.js'
+import { NOINDEX, pageMetaTags } from '#lib/seo/index.js'
 
 export const load = async ({ params, locals }) => {
 	const token = await readUserToken('emailVerification', params.tokenId)

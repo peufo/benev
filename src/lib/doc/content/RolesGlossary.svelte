@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { rolesMap } from '$lib/member/MemberRole.svelte'
-	import { ROLE_DESCRIPTIONS } from '$lib/member/roles'
+	import { rolesMap } from '#lib/member/MemberRole.svelte'
+	import { ROLE_DESCRIPTIONS } from '#lib/member/roles.js'
 	import { PERMISSION_ROLES } from './permissions'
 </script>
 

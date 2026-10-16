@@ -1,5 +1,5 @@
 import type { SubscribeState } from '@prisma/client'
-import dayjs, { type Dayjs } from '$lib/dayjs'
+import dayjs, { type Dayjs } from '#lib/dayjs.js'
 
 type Person = { firstName: string; lastName: string; phone: string | null }
 

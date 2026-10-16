@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition'
-	import { InputOptions } from '$lib/ui'
+	import { InputOptions } from '#lib/ui/index.js'
 	import { ButtonDelete, InputBoolean, InputSelect, InputString } from 'fuma'
 	import type { Field } from '@prisma/client'
-	import { MEMBER_FIELD_TYPE } from '$lib/constant'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { globalEvents } from '$lib/globalEvents'
+	import { MEMBER_FIELD_TYPE } from '#lib/constant/index.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { globalEvents } from '#lib/globalEvents.js'
 	import { createMemberField, deleteMemberField, updateMemberField } from './memberField.remote'
 
 	interface Props {
@@ -49,7 +49,7 @@
 		id={deleteFormId}
 		class="hidden"
 	>
-		<input type="hidden" name="id" value={field.id} />
+		<input {...deleteMemberField.fields.id.as('hidden', field.id)} />
 	</form>
 {/if}
 
@@ -66,10 +66,6 @@
 	)}
 	class="flex flex-col gap-4"
 >
-	{#if field.id}
-		<input type="hidden" name="id" value={field.id} />
-	{/if}
-
 	{#key field.id}
 		<InputSelect
 			field={remoteForm.fields.type}
@@ -106,7 +102,7 @@
 			     soumise. Et lier `undefined` à un `$bindable` pourvu d'une valeur par défaut lève
 			     — l'erreur tuait l'effet de rendu, et le formulaire entier cessait de se
 			     mettre à jour. -->
-				<InputOptions key="options" value={field.options ?? '[]'} />
+				<InputOptions field={remoteForm.fields.options} value={field.options ?? '[]'} />
 			</div>
 		{/if}
 

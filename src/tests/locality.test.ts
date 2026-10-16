@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { locality } from '$lib/location/locality'
+import { locality } from '#lib/location/locality.js'
 
 describe('locality', () => {
 	it('retient la localité derrière le code postal', ({ expect }) => {

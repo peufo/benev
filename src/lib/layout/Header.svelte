@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AuthIcon from '$lib/me/AuthIcon.svelte'
+	import AuthIcon from '#lib/me/AuthIcon.svelte'
 	import type { User } from '@prisma/client'
 
 	interface Props {

@@ -2,8 +2,8 @@
 	import type { Component } from 'svelte'
 	import { CheckIcon, ClockIcon, MailIcon, OctagonAlertIcon, type IconProps } from '@lucide/svelte'
 	import type { Message, MessageState } from '@prisma/client'
-	import { invalidateAll } from '$app/navigation'
-	import { InputOptionInParam } from '$lib/ui'
+	import { refreshAll } from '$app/navigation'
+	import { InputOptionInParam } from '#lib/ui/index.js'
 	import { DropDown, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { toast } from 'svelte-sonner'
@@ -34,7 +34,7 @@
 		try {
 			await setMessageState({ messageId: message.id, state })
 			toast.success('State updated')
-			await invalidateAll()
+			await refreshAll()
 		} catch (err) {
 			console.error(err)
 			toast.error('error')

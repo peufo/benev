@@ -2,7 +2,8 @@ import { command, form, getRequestEvent, query } from '$app/server'
 import type { Prisma } from '@prisma/client'
 import { error, redirect } from '@sveltejs/kit'
 import z from 'zod'
-import { modelTeam, modelTeamState, modelTeamUpdate } from '$lib/models'
+import { modelTeam, modelTeamState, modelTeamUpdate } from '#lib/models/index.js'
+import { zSearchInEvent } from '#lib/models/form.js'
 import {
 	createLog,
 	permission,
@@ -10,9 +11,9 @@ import {
 	sendPendingSubscribeRequests,
 	uniqueIssue,
 	useAddTeamComputedValues,
-} from '$lib/server'
-import { cloneTeam } from '$lib/server/clone.js'
-import { diffChanges, hasChanges, projectTeam } from '$lib/log'
+} from '#lib/server/index.js'
+import { cloneTeam } from '#lib/server/clone.js'
+import { diffChanges, hasChanges, projectTeam } from '#lib/log/index.js'
 
 const NAME_TAKEN = 'Un secteur porte déjà ce nom'
 
@@ -137,9 +138,8 @@ function getTeamCopyName(initalName: string, teams: string[]): string {
 }
 
 /** Alimente l'`InputSelect` de secteur de `PeriodForm`. */
-export const searchTeams = query(z.object({ search: z.string() }), async ({ search }) => {
-	const { locals, params } = getRequestEvent()
-	const eventId = params.eventId!
+export const searchTeams = query(zSearchInEvent, async ({ search, eventId }) => {
+	const { locals } = getRequestEvent()
 	await permission.leader(eventId, locals)
 	return prisma.team.findMany({
 		where: { eventId, name: { contains: search } },
@@ -151,9 +151,8 @@ export const searchTeams = query(z.object({ search: z.string() }), async ({ sear
  * Alimente le choix de secteur de `MemberCreateSubscribeDialog`, qui a besoin des périodes et
  * de leur disponibilité: un responsable ne peut inscrire quelqu'un que sur une place libre.
  */
-export const searchAvailableTeams = query(z.object({ search: z.string() }), async ({ search }) => {
-	const { locals, params } = getRequestEvent()
-	const eventId = params.eventId!
+export const searchAvailableTeams = query(zSearchInEvent, async ({ search, eventId }) => {
+	const { locals } = getRequestEvent()
 	const member = await permission.leader(eventId, locals)
 	const addTeamComputedValues = useAddTeamComputedValues({ member, event: member.event })
 

@@ -4,7 +4,7 @@
 	import { urlParam } from 'fuma'
 	import type { Dayjs } from 'dayjs'
 	import { goto } from '$app/navigation'
-	import { daytz } from '$lib/dayjs'
+	import { daytz } from '#lib/dayjs.js'
 
 	interface Props {
 		cursor: Dayjs
@@ -31,7 +31,7 @@
 		oninput={async (event) => {
 			const newDate = daytz(event.currentTarget.value)
 			if (!newDate.isValid()) return
-			goto(urlParam.with({ cursor: newDate.toJSON() }), { keepFocus: true, replaceState: true })
+			goto(urlParam.with({ cursor: newDate.toJSON() }), { reset: false, replace: true })
 		}}
 	/>
 

@@ -4,7 +4,7 @@ import { teamSchedule } from './teamSchedule'
 
 /**
  * Les tâches planifiées de l'application et leur ticker. À importer par ce chemin, jamais par le
- * baril `$lib/server`: `startScheduler` s'appelle à l'évaluation de `hooks.server.ts`, et le
+ * baril `#lib/server`: `startScheduler` s'appelle à l'évaluation de `hooks.server.ts`, et le
  * baril participe à un cycle (voir `rateLimit.ts`).
  */
 

@@ -67,9 +67,10 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 		await expect(dialog).toBeHidden()
 
 		// Après le bouton d'ajout de la section vient la ligne du créneau, dont le premier bouton
-		// porte l'état et l'explique en infobulle.
+		// porte l'état et l'explique en infobulle. Le dialogue fermé a rendu le focus au bouton
+		// d'ajout, dont l'infobulle reste ouverte: on vise la seconde.
 		await subscribes.getByRole('button').nth(1).hover()
-		await expect(page.getByRole('tooltip')).toHaveText(
+		await expect(page.getByRole('tooltip').filter({ hasText: 'En attente' })).toHaveText(
 			"En attente de validation du membre, qui n'a pas encore lié de compte"
 		)
 	})

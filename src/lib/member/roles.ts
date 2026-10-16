@@ -1,4 +1,4 @@
-import type { MemberRole } from '$lib/server'
+import type { MemberRole } from '#lib/server/index.js'
 
 /** Du plus doté au moins doté. `MemberRole.svelte` s'en sert pour désigner le rôle affiché. */
 export const ROLES_ORDER = ['root', 'owner', 'admin', 'leader', 'member'] as const

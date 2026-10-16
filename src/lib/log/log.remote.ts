@@ -1,11 +1,11 @@
 import { error } from '@sveltejs/kit'
 import { form, getRequestEvent, query } from '$app/server'
 import z from 'zod'
-import { createLog, eventLogsWhere, getLogs, permission, prisma } from '$lib/server'
+import { createLog, eventLogsWhere, getLogs, permission, prisma } from '#lib/server/index.js'
 import { LOG_FAMILIES, type LogFamily } from './logFamilies'
 
 /**
- * Les notes sont la seule ligne du journal écrite à la main. Elles vivent dans `$lib/log` et non
+ * Les notes sont la seule ligne du journal écrite à la main. Elles vivent dans `#lib/log/index.js` et non
  * à côté d'une route: le fil est monté depuis l'onglet Journal comme depuis la fiche d'un membre.
  */
 
@@ -50,15 +50,15 @@ export const deleteNote = form(z.object({ id: z.string() }), async ({ id }) => {
  */
 export const loadPreviousEventLogs = query(
 	z.object({
+		eventId: z.string(),
 		beforeId: z.string(),
 		family: z.enum(Object.keys(LOG_FAMILIES) as [LogFamily, ...LogFamily[]]).optional(),
 		memberId: z.string().optional(),
 		teamId: z.string().optional(),
 		take: z.number().min(1).max(100).default(30),
 	}),
-	async ({ beforeId, take, ...filter }) => {
-		const { locals, params } = getRequestEvent()
-		const eventId = params.eventId!
+	async ({ eventId, beforeId, take, ...filter }) => {
+		const { locals } = getRequestEvent()
 		await permission.leaderOrRoot(eventId, locals)
 		return getLogs(eventLogsWhere({ eventId, ...filter }), { take, beforeId })
 	}

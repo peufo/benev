@@ -1,5 +1,5 @@
-import { prisma } from '$lib/server'
-import { pageMetaTags } from '$lib/seo'
+import { prisma } from '#lib/server/index.js'
+import { pageMetaTags } from '#lib/seo/index.js'
 
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()

@@ -10,19 +10,19 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { tip, urlParam } from 'fuma'
-	import { eventPath } from '$lib/eventPath'
-	import { formatRangeDate } from '$lib/formatRange'
-	import Progress from '$lib/Progress.svelte'
-	import { Placeholder, Surface } from '$lib/ui'
-	import { TeamForm } from '$lib/team'
-	import TeamCloneButton from '$lib/team/TeamCloneButton.svelte'
-	import TeamDeleteButton from '$lib/team/TeamDeleteButton.svelte'
-	import TeamLeaders from '$lib/team/TeamLeaders.svelte'
-	import TeamStateMenu from '$lib/team/TeamStateMenu.svelte'
-	import TeamScheduleBadge from '$lib/team/TeamScheduleBadge.svelte'
-	import { nextClose } from '$lib/team/teamSchedule'
-	import { PeriodRow } from '$lib/period'
-	import { MemberConditionsBadges } from '$lib/member'
+	import { eventPath } from '#lib/eventPath.js'
+	import { formatRangeDate } from '#lib/formatRange.js'
+	import Progress from '#lib/Progress.svelte'
+	import { Placeholder, Surface } from '#lib/ui/index.js'
+	import { TeamForm } from '#lib/team/index.js'
+	import TeamCloneButton from '#lib/team/TeamCloneButton.svelte'
+	import TeamDeleteButton from '#lib/team/TeamDeleteButton.svelte'
+	import TeamLeaders from '#lib/team/TeamLeaders.svelte'
+	import TeamStateMenu from '#lib/team/TeamStateMenu.svelte'
+	import TeamScheduleBadge from '#lib/team/TeamScheduleBadge.svelte'
+	import { nextClose } from '#lib/team/teamSchedule.js'
+	import { PeriodRow } from '#lib/period/index.js'
+	import { MemberConditionsBadges } from '#lib/member/index.js'
 
 	let { data } = $props()
 
@@ -132,7 +132,7 @@
 						form_period: JSON.stringify({ team: { id: team.id, name: team.name } }),
 					})}
 					class="btn btn-square btn-sm btn-secondary"
-					data-sveltekit-noscroll
+					data-sveltekit-reset="false"
 					data-sveltekit-replacestate
 					use:tip={{ content: 'Ajouter un créneau' }}
 				>
@@ -145,7 +145,7 @@
 				period={{ ...period, team }}
 				onclickPeriod={() => {
 					const url = urlParam.toggle({ form_period: period.id })
-					return goto(url, { replaceState: true, noScroll: true, keepFocus: true })
+					return goto(url, { replace: true, reset: false })
 				}}
 			/>
 		{:else}

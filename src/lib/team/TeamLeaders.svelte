@@ -3,7 +3,7 @@
 	import type { Member } from '@prisma/client'
 	import { Popover } from 'fuma'
 	import { on } from 'svelte/events'
-	import { Avatar } from '$lib/me'
+	import { Avatar } from '#lib/me/index.js'
 	interface Props {
 		leaders: Member[]
 	}

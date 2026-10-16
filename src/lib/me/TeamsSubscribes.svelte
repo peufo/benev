@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { eventPath, withSearch } from '$lib/eventPath'
+	import { eventPath, withSearch } from '#lib/eventPath.js'
 	import { resolve } from '$app/paths'
 	import { TriangleAlertIcon } from '@lucide/svelte'
 	import type { Member, Period, Subscribe, Tag, Team } from '@prisma/client'
-	import { page } from '$app/stores'
-	import { formatRange } from '$lib/formatRange'
-	import { CardLink, Placeholder } from '$lib/ui'
+	import { page } from '$app/state'
+	import { formatRange } from '#lib/formatRange.js'
+	import { CardLink, Placeholder } from '#lib/ui/index.js'
 	import { urlParam } from 'fuma'
-	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '$lib/subscribe'
+	import { SubscribeCreatedBy, SubscribeMenu, SubscribeStateForm } from '#lib/subscribe/index.js'
 	import { tip } from 'fuma'
-	import TeamLeaders from '$lib/team/TeamLeaders.svelte'
-	import { TagsList } from '$lib/tag'
+	import TeamLeaders from '#lib/team/TeamLeaders.svelte'
+	import { TagsList } from '#lib/tag/index.js'
 
 	interface Props {
 		teams: (Team & {
@@ -51,7 +51,7 @@
 									href={urlParam.toggle({ form_period: period.id })}
 									class="absolute inset-0"
 									data-sveltekit-replacestate
-									data-sveltekit-noscroll
+									data-sveltekit-reset="false"
 								>
 									<!-- Espace explicite: le lien recouvre la carte et ne doit pas être vide. -->
 									<!-- eslint-disable-next-line svelte/no-useless-mustaches -->
@@ -97,12 +97,12 @@
 	<Placeholder>
 		<span>Aucune inscription pour le moment</span>
 		<br />
-		{#if $page.params.eventId}
-			{#if $page.data.event?.selfSubscribeAllowed}
+		{#if page.params.eventId}
+			{#if page.data.event?.selfSubscribeAllowed}
 				<a href={eventPath('/teams')} class="btn btn-primary"> Voir les secteurs </a>
 			{/if}
 		{:else}
-			<a href={resolve('/')} class="btn"> Trouve un évènement </a>
+			<a href={resolve('')} class="btn"> Trouve un évènement </a>
 		{/if}
 	</Placeholder>
 {/if}

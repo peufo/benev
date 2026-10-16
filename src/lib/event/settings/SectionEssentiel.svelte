@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
 	import { InputSelectNative, InputString } from 'fuma'
-	import { normalizePath } from '$lib/normalizePath'
-	import { timezoneOptions } from '$lib/timezone'
+	import { normalizePath } from '#lib/normalizePath.js'
+	import { timezoneOptions } from '#lib/timezone.js'
 	import type { EventFields } from './types'
 
 	interface Props {

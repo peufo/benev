@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InviteMismatch, EmailVerificationRequired } from '$lib/me'
+	import { InviteMismatch, EmailVerificationRequired } from '#lib/me/index.js'
 	import Register from './Register.svelte'
 
 	let { data } = $props()

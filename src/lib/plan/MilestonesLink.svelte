@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatDatetime } from '$lib/formatRange'
+	import { formatDatetime } from '#lib/formatRange.js'
 	import type { Milestone } from '@prisma/client'
 	import type { Dayjs } from 'dayjs'
 	import { urlParam } from 'fuma'

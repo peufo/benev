@@ -1,4 +1,4 @@
-import { parseFormKey, prisma } from '$lib/server'
+import { parseFormKey, prisma } from '#lib/server/index.js'
 
 /**
  * `PlanX` ouvre le tiroir « nouveau jalon » en passant `{ timestamp }` en JSON dans l'URL: la

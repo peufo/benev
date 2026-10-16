@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import GithubIssues from '$lib/GithubIssues.svelte'
+	import GithubIssues from '#lib/GithubIssues.svelte'
 	import { Code, GitBranch, ArrowRight } from '@lucide/svelte'
 
 	let { data } = $props()
@@ -27,7 +27,7 @@
 				</p>
 				<div class="mt-8 flex flex-col sm:flex-row gap-4">
 					<a
-						href={resolve('/me/events?new-event')}
+						href={resolve('me/events?new-event')}
 						class="btn btn-primary btn-lg
 							shadow-lg hover:shadow-xl hover:shadow-primary/20
 							transition-all duration-200 ease-out"
@@ -146,7 +146,7 @@
 			être simple.
 		</p>
 		<a
-			href={resolve('/me/events/create')}
+			href={resolve('me/events/create')}
 			class="btn btn-primary btn-lg mt-8
 				shadow-lg hover:shadow-xl hover:shadow-primary/20
 				transition-all duration-200 ease-out"

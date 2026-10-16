@@ -1,11 +1,12 @@
 <script lang="ts">
+	import { currentEventId } from '#lib/eventPath.js'
 	import { UserPlusIcon } from '@lucide/svelte'
 	import type { Member } from '@prisma/client'
 	import { InputSelect, tip } from 'fuma'
-	import { inviteCall } from '$lib/drawerCall.svelte'
-	import { searchMembers } from '$lib/member/member.remote'
+	import { inviteCall } from '#lib/drawerCall.svelte.js'
+	import { searchMembers } from '#lib/member/member.remote.js'
 	import { createSubscribe } from './subscribe.remote'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 
 	interface Props {
 		periodId: string
@@ -30,12 +31,12 @@
 	)}
 	class="{klass} flex gap-2 justify-end grow w-full"
 >
-	<input type="hidden" name="periodId" value={periodId} />
+	<input {...createSubscribe.fields.periodId.as('hidden', periodId)} />
 	<InputSelect
 		field={createSubscribe.fields.memberId}
 		class="grow"
 		placeholder="Inscrire un membre"
-		items={searchMembers}
+		items={({ search }) => searchMembers({ search, eventId: currentEventId() })}
 		bind:value={member}
 	>
 		{#snippet selected(item)}

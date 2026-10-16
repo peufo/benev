@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import Progress from '$lib/Progress.svelte'
-	import { formatRangeDate } from '$lib/formatRange'
-	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
-	import { CardCollapse, Placeholder } from '$lib/ui'
+	import Progress from '#lib/Progress.svelte'
+	import { formatRangeDate } from '#lib/formatRange.js'
+	import type { PeriodWithComputedValues, TeamWithComputedValues } from '#lib/server/index.js'
+	import { CardCollapse, Placeholder } from '#lib/ui/index.js'
 
 	import TeamLeaders from './TeamLeaders.svelte'
 	import TeamScheduleBadge from './TeamScheduleBadge.svelte'
 	import { nextClose } from './teamSchedule'
-	import { PeriodRow } from '$lib/period'
-	import { MemberConditionsBadges } from '$lib/member'
+	import { PeriodRow } from '#lib/period/index.js'
+	import { MemberConditionsBadges } from '#lib/member/index.js'
 	interface Props {
 		team: TeamWithComputedValues
 		onclickPeriod?: (value: PeriodWithComputedValues) => void

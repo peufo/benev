@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { untrack } from 'svelte'
 	import MemberField from './MemberField.svelte'
-	import type { MemberProfile } from '$lib/server'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { SaveBar } from '$lib/ui'
+	import type { MemberProfile } from '#lib/server/index.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { SaveBar } from '#lib/ui/index.js'
 	import { updateMemberProfile } from './member.remote'
 
 	interface Props {
@@ -64,7 +64,7 @@
 	bind:this={formElement}
 	class={['@container', 'grid grid-cols-2 gap-x-4 gap-y-3', klass]}
 >
-	<input type="hidden" name="memberId" value={memberProfile.id} />
+	<input {...remoteForm.fields.memberId.as('hidden', memberProfile.id)} />
 
 	{#key resetToken}
 		{#each memberProfile.event.memberFields as field (field.id)}

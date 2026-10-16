@@ -3,10 +3,14 @@
 	import { untrack } from 'svelte'
 	import type { IconProps } from '@lucide/svelte'
 	import { InputBoolean } from 'fuma'
-	import { Placeholder, Section } from '$lib/ui'
+	import type { RemoteFormField } from '$app/server'
+	import { Placeholder, Section } from '#lib/ui/index.js'
 
 	interface Props {
 		items: Item[]
+		/** Champ du formulaire qui porte les ids retenus, sérialisés en JSON. */
+		field: RemoteFormField<string>
+		/** Suffixe de l'ancre de la section. */
 		key: string
 		title: string
 		icon: Component<IconProps>
@@ -21,6 +25,7 @@
 
 	let {
 		items,
+		field,
 		key,
 		title,
 		icon,
@@ -44,7 +49,7 @@
 
 <!-- Seul ce champ est soumis: les cases, sans `field`, n'ont pas de `name` et ne servent qu'à le
      composer. -->
-<input type="hidden" name={key} value={getJsonIds(_items)} />
+<input {...field.as('hidden', getJsonIds(_items))} />
 
 <Section id="clone-{key}" {title} {icon} {subtitle}>
 	{@render children?.()}

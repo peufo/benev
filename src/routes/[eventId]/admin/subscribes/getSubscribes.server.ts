@@ -1,7 +1,7 @@
 import z from 'zod'
-import { filterBoolean, filterMultiselect, filterRange } from '$lib/models/filter'
+import { filterBoolean, filterMultiselect, filterRange } from '#lib/models/filter.js'
 import { parseQuery } from 'fuma/server'
-import { addMemberComputedValues, prisma } from '$lib/server'
+import { addMemberComputedValues, prisma } from '#lib/server/index.js'
 import type {
 	Event,
 	Field,

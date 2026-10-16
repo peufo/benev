@@ -6,17 +6,17 @@
 		OctagonAlertIcon,
 		SettingsIcon,
 	} from '@lucide/svelte'
-	import { eventPath } from '$lib/eventPath'
-	import TeamsSubscribes from '$lib/me/TeamsSubscribes.svelte'
+	import { eventPath } from '#lib/eventPath.js'
+	import TeamsSubscribes from '#lib/me/TeamsSubscribes.svelte'
 	import {
 		MemberProfileForm,
 		MemberProfileStatus,
 		MemberRole,
 		MemberSettingsForm,
 		MemberDeleteForm,
-	} from '$lib/member'
-	import DownloadSubscribes from '$lib/me/DownloadSubscribes.svelte'
-	import Section from '$lib/ui/Section.svelte'
+	} from '#lib/member/index.js'
+	import DownloadSubscribes from '#lib/me/DownloadSubscribes.svelte'
+	import Section from '#lib/ui/Section.svelte'
 
 	let { data } = $props()
 </script>

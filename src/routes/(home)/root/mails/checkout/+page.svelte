@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Placeholder } from '$lib/ui'
-	import { EmailCheckoutValidation } from '$lib/email'
+	import { Placeholder } from '#lib/ui/index.js'
+	import { EmailCheckoutValidation } from '#lib/email/index.js'
 
 	let { data } = $props()
 </script>

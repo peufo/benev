@@ -5,7 +5,7 @@ import {
 	consumeInviteToken,
 	readInviteToken,
 	setInviteCookie,
-} from '$lib/server'
+} from '#lib/server/index.js'
 
 /**
  * Le lien du mail d'invitation. Il ne consomme pas son jeton — l'invité a encore une session à

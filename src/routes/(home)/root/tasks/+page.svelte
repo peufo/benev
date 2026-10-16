@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation'
+	import { refreshAll } from '$app/navigation'
 	import { PlayIcon } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
-	import dayjs from '$lib/dayjs'
-	import { Surface } from '$lib/ui'
+	import dayjs from '#lib/dayjs.js'
+	import { Surface } from '#lib/ui/index.js'
 	import { runTask } from './tasks.remote'
 
 	let { data } = $props()
@@ -15,7 +15,7 @@
 			const record = await runTask({ name })
 			if (record.error) toast.error(record.error)
 			else toast.success(`${name}: ${record.count} effet(s) en ${record.duration} ms`)
-			await invalidateAll()
+			await refreshAll()
 		} finally {
 			running = undefined
 		}

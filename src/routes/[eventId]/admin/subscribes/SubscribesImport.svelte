@@ -2,14 +2,14 @@
 	import { DownloadIcon, FileSpreadsheetIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { ButtonCopy, DropDown } from 'fuma'
-	import { eventPath, withSearch } from '$lib/eventPath'
+	import { eventPath, withSearch } from '#lib/eventPath.js'
 
 	let dropdown: DropDown = $state()!
 
 	let urlSubscribesCSV = $derived.by(() => {
 		// Construit puis sérialisé immédiatement: pas un état réactif.
 		// eslint-disable-next-line svelte/prefer-svelte-reactivity
-		const params = new URLSearchParams(page.url.searchParams)
+		const params = new URLSearchParams(page.url.search)
 		const zone = Intl.DateTimeFormat().resolvedOptions()
 		params.set('locale', zone.locale)
 		return withSearch(eventPath('/admin/subscribes/csv'), params.toString())

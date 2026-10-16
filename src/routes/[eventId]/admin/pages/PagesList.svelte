@@ -2,13 +2,13 @@
 	import { MoveVerticalIcon, PlusIcon } from '@lucide/svelte'
 	import type { Page } from '@prisma/client'
 	import { isHttpError } from '@sveltejs/kit'
-	import { invalidateAll } from '$app/navigation'
+	import { refreshAll } from '$app/navigation'
 	import { page } from '$app/state'
 	import { toast } from 'svelte-sonner'
 	import { listEditable, tip } from 'fuma'
-	import { eventPath } from '$lib/eventPath'
-	import { PAGE_STATES, PAGE_TYPE } from '$lib/constant'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { eventPath } from '#lib/eventPath.js'
+	import { PAGE_STATES, PAGE_TYPE } from '#lib/constant/index.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { createPage, reorderPages } from './pages.remote'
 
 	type PageRow = Pick<Page, 'id' | 'title' | 'type' | 'state'>
@@ -38,7 +38,7 @@
 		ordered = reordered
 		try {
 			await reorderPages(reordered.map(({ id }) => id))
-			await invalidateAll()
+			await refreshAll()
 			toast.success('Nouvel ordre sauvegardé')
 		} catch (err) {
 			console.error(err)

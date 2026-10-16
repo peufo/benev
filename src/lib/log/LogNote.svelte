@@ -25,7 +25,6 @@
 
 	{#if canDelete}
 		<form {...deleteThisNote}>
-			<input type="hidden" name="id" value={log.id} />
 			<button
 				type="submit"
 				class="btn btn-ghost btn-square btn-xs"

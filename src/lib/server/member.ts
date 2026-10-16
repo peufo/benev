@@ -5,7 +5,7 @@ import {
 	prisma,
 	type AddTeamComputedValuesContext,
 	type TeamWithComputedValues,
-} from '$lib/server'
+} from '#lib/server/index.js'
 
 export type MemberRole = 'member' | 'leader' | 'admin' | 'owner' | 'root'
 type MemberWithEventAndLeaderOf = Member & {

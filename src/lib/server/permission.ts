@@ -1,13 +1,13 @@
 import { error, redirect } from '@sveltejs/kit'
 import { ROOT_USER } from '$app/env/private'
-import { prisma } from '$lib/server'
-import { isTierQuotaReached } from '$lib/server/tierQuota'
+import { prisma } from '#lib/server/index.js'
+import { isTierQuotaReached } from '#lib/server/tierQuota.js'
 import { resolve } from '$app/paths'
 import {
 	type MemberRole,
 	type MemberWithComputedValuesAndAccount,
 	getMemberProfile,
-} from '$lib/server/member'
+} from '#lib/server/member.js'
 import type { Session } from 'lucia'
 
 export const permission = {

@@ -1,6 +1,6 @@
-import { prisma } from '$lib/server'
+import { prisma } from '#lib/server/index.js'
 import { resolve } from '$app/paths'
-import { getDocs } from '$lib/doc/engine/registry.server'
+import { getDocs } from '#lib/doc/engine/registry.server.js'
 
 // Les pages de documentation viennent de leur registre: une page ajoutée y entre sans qu'on
 // pense à cette liste.

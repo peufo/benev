@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte'
 	import { loadStripe } from '@stripe/stripe-js'
 	import { STRIPE_KEY } from '$app/env/public'
-	import { Card } from '$lib/ui'
+	import { Card } from '#lib/ui/index.js'
 
 	let { data } = $props()
 

@@ -1,6 +1,6 @@
 import { ROOT_USER } from '$app/env/private'
 import { error } from '@sveltejs/kit'
-import { NOINDEX } from '$lib/seo'
+import { NOINDEX } from '#lib/seo/index.js'
 
 export const load = async ({ locals }) => {
 	const session = await locals.auth.validate()

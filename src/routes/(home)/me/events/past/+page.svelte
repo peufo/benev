@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
 	import { ArrowLeftIcon } from '@lucide/svelte'
-	import { Placeholder } from '$lib/ui'
+	import { Placeholder } from '#lib/ui/index.js'
 	import EventPastRow from './EventPastRow.svelte'
 
 	let { data } = $props()
@@ -22,7 +22,7 @@
 
 <div class="flex items-center gap-2">
 	<a
-		href={resolve('/me/events')}
+		href={resolve('me/events')}
 		class="btn btn-square btn-ghost btn-sm"
 		aria-label="Retour à mes évènements"
 	>

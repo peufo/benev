@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { tip } from 'fuma'
 	import { CheckIcon, CircleHelpIcon, ListTodoIcon } from '@lucide/svelte'
-	import { rolesMap } from '$lib/member/MemberRole.svelte'
+	import { rolesMap } from '#lib/member/MemberRole.svelte'
 	import { PERMISSION_ROLES, PERMISSIONS } from './permissions'
 </script>
 

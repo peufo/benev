@@ -1,5 +1,5 @@
 import { ensureFieldsWithFilterAreVisibles } from 'fuma/server'
-import { prisma } from '$lib/server'
+import { prisma } from '#lib/server/index.js'
 import { getMembers, membersFilterShape } from './getMembers.server'
 
 export const load = async ({ url, parent, params: { eventId } }) => {

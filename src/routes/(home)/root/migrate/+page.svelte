@@ -1,6 +1,6 @@
 <script lang="ts">
 	// import { toast } from 'svelte-sonner'
-	import { Surface } from '$lib/ui'
+	import { Surface } from '#lib/ui/index.js'
 	// import { enhance } from '$app/forms'
 </script>
 

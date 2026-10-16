@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { computeIsTierQuotaReached } from '$lib/tierQuota'
+import { computeIsTierQuotaReached } from '#lib/tierQuota.js'
 
 describe('computeIsTierQuotaReached', () => {
 	it('returns false for unlimited tiers', ({ expect }) => {

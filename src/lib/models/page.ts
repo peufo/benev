@@ -1,6 +1,6 @@
 import z from 'zod'
 import { zEnumKeys } from './form'
-import { PAGE_STATES, PAGE_TYPE } from '$lib/constant'
+import { PAGE_STATES, PAGE_TYPE } from '#lib/constant/index.js'
 import type { Prisma } from '@prisma/client'
 
 export const modelPageUpdate = z.object({

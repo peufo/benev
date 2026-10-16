@@ -1,4 +1,4 @@
-import type { MemberWithComputedValues } from '$lib/server'
+import type { MemberWithComputedValues } from '#lib/server/index.js'
 
 type Registrable = Pick<
 	MemberWithComputedValues,

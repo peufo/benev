@@ -1,4 +1,4 @@
-import { prisma } from '$lib/server'
+import { prisma } from '#lib/server/index.js'
 import { error } from '@sveltejs/kit'
 
 export const load = async () => {

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount, untrack } from 'svelte'
 	import { urlParam } from 'fuma'
-	import { invalidateAll, goto } from '$app/navigation'
-	import { page } from '$app/stores'
+	import { refreshAll, goto } from '$app/navigation'
+	import { page } from '$app/state'
 
 	interface Props {
 		allreadyLoaded?: (checkoutId: string) => boolean
@@ -16,14 +16,14 @@
 		eventSource = '/me/checkouts/validation',
 	}: Props = $props()
 
-	let checkoutId = $page.url.searchParams.get('checkoutId')
+	let checkoutId = page.url.searchParams.get('checkoutId')
 	// État d'attente amorcé au montage puis piloté par la notification SSE.
 	let isNewCheckoutAwaited = $state(!!checkoutId && !untrack(() => allreadyLoaded)(checkoutId))
 
 	const handleCheckoutNotification = async () => {
 		isNewCheckoutAwaited = false
-		if (!removeCheckoutId) invalidateAll()
-		else goto(urlParam.without('checkoutId'), { noScroll: true, invalidateAll: true })
+		if (!removeCheckoutId) refreshAll()
+		else goto(urlParam.without('checkoutId'), { reset: false, refreshAll: true })
 	}
 
 	function awaitCheckoutNotification() {

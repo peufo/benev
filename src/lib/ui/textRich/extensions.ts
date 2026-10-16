@@ -10,8 +10,8 @@ import Placeholder from '@tiptap/extension-placeholder'
 import Image from '@tiptap/extension-image'
 import Youtube from '@tiptap/extension-youtube'
 import Mention from '@tiptap/extension-mention'
-import { Indent } from '$lib/ui/textRich/indent.js'
-import { suggestion } from '$lib/ui/textRich/suggestion.svelte.js'
+import { Indent } from '#lib/ui/textRich/indent.js'
+import { suggestion } from '#lib/ui/textRich/suggestion.svelte.js'
 
 export const extensions: Extensions = [
 	StarterKit.configure({

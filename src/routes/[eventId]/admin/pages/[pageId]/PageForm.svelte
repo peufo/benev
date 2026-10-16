@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { LinkIcon } from '@lucide/svelte'
 	import type { Page, PageState } from '@prisma/client'
-	import { invalidateAll } from '$app/navigation'
-	import { InputTextRich, SaveBar } from '$lib/ui'
+	import { refreshAll } from '$app/navigation'
+	import { InputTextRich, SaveBar } from '#lib/ui/index.js'
 	import { ButtonDelete, InputSelect, InputString } from 'fuma'
 
-	import { normalizePath } from '$lib/normalizePath'
-	import { eventPath } from '$lib/eventPath'
-	import { PAGE_STATES, PAGE_TYPE } from '$lib/constant'
+	import { normalizePath } from '#lib/normalizePath.js'
+	import { eventPath } from '#lib/eventPath.js'
+	import { PAGE_STATES, PAGE_TYPE } from '#lib/constant/index.js'
 	import PageTypeHelp from './PageTypeHelp.svelte'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { mediaDrawer } from '$lib/material/media'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { mediaDrawer } from '#lib/material/media/index.js'
 	import { deletePage, updatePage } from './page.remote'
 
 	interface Props {
@@ -82,7 +82,7 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 			success: 'Page enregistrée',
 			onsuccess: async () => {
 				// Le titre et le type se répercutent sur la barre latérale et sur le chemin public.
-				await invalidateAll()
+				await refreshAll()
 				saveBar?.rebase()
 			},
 		})
@@ -109,13 +109,13 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 				</span>
 
 				{#if page.type === 'home'}
-					<input type="hidden" name="type" value="home" />
+					<input {...remoteForm.fields.type.as('hidden', 'home')} />
 					<div class="input">
 						<home.icon size={21} class="opacity-70" />
 						<span>{home.label}</span>
 					</div>
 				{:else if page.type === 'email'}
-					<input type="hidden" name="type" value="email" />
+					<input {...remoteForm.fields.type.as('hidden', 'email')} />
 					<div class="input">
 						<email.icon size={21} class="opacity-70" />
 						<span>{email.label}</span>
@@ -173,15 +173,14 @@ son bouton vit dans la barre d'actions du formulaire principal, associé par l'a
 		</div>
 	{/key}
 
-	<input type="hidden" name="id" value={page.id} />
 	{#if isFixed}
-		<input type="hidden" name="state" value="published" />
+		<input {...remoteForm.fields.state.as('hidden', 'published')} />
 	{/if}
 
 	{#key `${page.id}:${resetToken}`}
 		<InputTextRich
 			bind:this={inputTextRich}
-			key="content"
+			field={remoteForm.fields.content}
 			value={page.content}
 			onchange={() => saveBar?.refresh()}
 			oninsertMedia={() =>

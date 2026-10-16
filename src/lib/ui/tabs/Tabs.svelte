@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores'
-	import type { Tab } from '$lib/ui/tabs/index.js'
+	import { page } from '$app/state'
+	import type { Tab } from '#lib/ui/tabs/index.js'
 
 	interface Props {
 		tabs: Tab[]
@@ -18,10 +18,10 @@
 >
 	{#each tabs as tab (tab.href)}
 		{@const TabIcon = tab.icon}
-		{@const active = tab.isActive ?? $page.url.pathname.startsWith(tab.href)}
+		{@const active = tab.isActive ?? page.url.pathname.startsWith(tab.href)}
 		<a
 			href={tab.href}
-			data-sveltekit-noscroll
+			data-sveltekit-reset="false"
 			class="
         menu-item grow flex-col justify-center gap-0 rounded-lg py-2
         text-sm lg:flex-row lg:gap-3 lg:text-base

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { InputSearch, Surface } from '$lib/ui'
+	import { InputSearch, Surface } from '#lib/ui/index.js'
 	import { Pagination } from 'fuma'
-	import { EVENT_TIER } from '$lib/constant'
+	import { EVENT_TIER } from '#lib/constant/index.js'
 
 	let { data } = $props()
 </script>

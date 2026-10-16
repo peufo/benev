@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Tag } from '@prisma/client'
 	import { ButtonDelete, InputString } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { createTag, deleteTag, updateTag } from './tag.remote'
 
 	interface Props {
@@ -29,6 +29,7 @@
 
 	const uid = $props.id()
 	const deleteFormId = `${uid}-delete`
+	let deletedId: string | undefined
 	const remoteForm = $derived(tag.id ? updateTag.for(tag.id) : createTag.for(uid))
 </script>
 
@@ -39,13 +40,19 @@
 		{...deleteTag.enhance(
 			enhanceForm({
 				success: 'Étiquette supprimée',
-				onsuccess: () => tag.id && ondeleted?.(tag.id),
+				// L'id est relevé à l'envoi: au succès, les données rechargées ne portent plus
+				// l'étiquette et `tag` est déjà vide.
+				before: () => {
+					deletedId = tag.id
+					return true
+				},
+				onsuccess: () => deletedId && ondeleted?.(deletedId),
 			})
 		)}
 		id={deleteFormId}
 		class="hidden"
 	>
-		<input type="hidden" name="id" value={tag.id} />
+		<input {...deleteTag.fields.id.as('hidden', tag.id)} />
 	</form>
 {/if}
 
@@ -65,16 +72,12 @@
 	)}
 	class="flex flex-col gap-4"
 >
-	{#if tag.id}
-		<input type="hidden" name="id" value={tag.id} />
-	{/if}
-
 	<InputString field={remoteForm.fields.name} label="Nom" value={tag.name} autocomplete="off" />
 	<label class="form-control w-full max-w-xs">
 		<div class="label">
 			<span class="label-text">Couleur</span>
 		</div>
-		<input name="color" type="color" class="input w-full" value={tag.color} list="colors" />
+		<input {...remoteForm.fields.color.as('color', tag.color)} class="input w-full" list="colors" />
 		<datalist id="colors">
 			{#each colors as color (color)}
 				<option value={color}></option>

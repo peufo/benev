@@ -3,7 +3,7 @@
 	import type { Component } from 'svelte'
 	import { Calendar, IdCard, type IconProps, ShoppingCartIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
-	import { contextContainer } from '$lib/ui/context.js'
+	import { contextContainer } from '#lib/ui/context.js'
 	import type { User } from '@prisma/client'
 	import type { ResolvedPathname } from '$app/types'
 
@@ -28,13 +28,13 @@
 		const routeId = page.route.id
 		const tabs: Tab[] = [
 			{
-				href: resolve('/me/events'),
+				href: resolve('me/events'),
 				label: 'Mes évènements',
 				icon: Calendar,
 				isActive: routeId?.startsWith('/(home)/me/events') || routeId?.startsWith('/[eventId]'),
 			},
 			{
-				href: resolve('/me/account'),
+				href: resolve('me/account'),
 				label: 'Mon compte',
 				icon: IdCard,
 			},
@@ -60,7 +60,7 @@
 			{@const _isActive = isActive ?? page.url.pathname.startsWith(href)}
 			<a
 				{href}
-				data-sveltekit-noscroll
+				data-sveltekit-reset="false"
 				aria-current={_isActive ? 'page' : undefined}
 				class={[
 					'btn btn-ghost grow',

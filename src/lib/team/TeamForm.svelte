@@ -2,13 +2,13 @@
 	import type { Event, Field, Team } from '@prisma/client'
 	import { page } from '$app/state'
 	import { InputBoolean, InputDateTime, InputString, InputTextarea } from 'fuma'
-	import { daytz } from '$lib/dayjs'
-	import { MemberConditions } from '$lib/member'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { SaveBar } from '$lib/ui'
-	import InputLeaders from '$lib/team/InputLeaders.svelte'
-	import type { TeamWithComputedValues } from '$lib/server'
-	import type { DrawerFrom } from '$lib/drawerCall.svelte'
+	import { daytz } from '#lib/dayjs.js'
+	import { MemberConditions } from '#lib/member/index.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { SaveBar } from '#lib/ui/index.js'
+	import InputLeaders from '#lib/team/InputLeaders.svelte'
+	import type { TeamWithComputedValues } from '#lib/server/index.js'
+	import type { DrawerFrom } from '#lib/drawerCall.svelte.js'
 	import { createTeam, updateTeam } from './team.remote'
 
 	interface Props {
@@ -39,7 +39,8 @@
 
 	// Une instance par secteur édité: le formulaire de la page et celui du tiroir de création
 	// peuvent être montés en même temps, et passer d'un secteur au suivant ne doit rien traîner.
-	const remoteForm = $derived(team.id ? updateTeam.for(team.id) : createTeam.for(formId))
+	const updateForm = $derived(team.id ? updateTeam.for(team.id) : undefined)
+	const remoteForm = $derived(updateForm ?? createTeam.for(formId))
 	const hideLeaders = $derived(openedFrom === 'invite')
 
 	let formElement = $state<HTMLFormElement>()
@@ -116,10 +117,6 @@
 		bind:this={formElement}
 		class={['flex flex-col gap-4']}
 	>
-		{#if team.id}
-			<input type="hidden" name="id" value={team.id} />
-		{/if}
-
 		{@render fields()}
 
 		{#if !saveBar}
@@ -133,14 +130,18 @@
 {#if saveBar}
 	{@render teamForm()}
 
+	<!-- Les conditions n'appartiennent qu'au schéma de la modification. -->
 	{#key resetToken}
-		<MemberConditions
-			form={formId}
-			published={team.state === 'published'}
-			conditions={team?.conditions || []}
-			memberFields={event.memberFields}
-			onchange={() => bar?.refresh()}
-		/>
+		{#if updateForm}
+			<MemberConditions
+				field={updateForm.fields.conditions}
+				form={formId}
+				published={team.state === 'published'}
+				conditions={team?.conditions || []}
+				memberFields={event.memberFields}
+				onchange={() => bar?.refresh()}
+			/>
+		{/if}
 	{/key}
 {:else}
 	{@render teamForm()}

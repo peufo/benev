@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CheckoutWaitSSE } from '$lib/checkout'
+	import { CheckoutWaitSSE } from '#lib/checkout/index.js'
 	interface Props {
 		children?: import('svelte').Snippet
 	}

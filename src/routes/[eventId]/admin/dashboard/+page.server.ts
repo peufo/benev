@@ -1,7 +1,7 @@
 import { parseQuery } from 'fuma/server'
 import type { Prisma } from '@prisma/client'
 import z from 'zod'
-import { addMemberComputedValues, getEventJournal, permission, prisma } from '$lib/server'
+import { addMemberComputedValues, getEventJournal, permission, prisma } from '#lib/server/index.js'
 import { MEMBERS_VIEW_DEFAULT, MEMBERS_VIEW_KEYS } from './membersView'
 import { WAITING, WAITING_KEYS, waitingOf, type Waiting } from './waiting'
 

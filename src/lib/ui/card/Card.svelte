@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ResolvedPathname } from '$app/types'
 	import { ArrowLeftIcon } from '@lucide/svelte'
-	import { contextContainer } from '$lib/ui/context.js'
+	import { contextContainer } from '#lib/ui/context.js'
 	import type { ClassValue } from 'svelte/elements'
 
 	interface Props {

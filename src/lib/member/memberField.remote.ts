@@ -1,8 +1,9 @@
 import { command, form, getRequestEvent, query } from '$app/server'
 import type { FieldType } from '@prisma/client'
 import z from 'zod'
-import { modelMemberFieldCreate, modelMemberFieldUpdate } from '$lib/models'
-import { permission, prisma, uniqueIssue } from '$lib/server'
+import { modelMemberFieldCreate, modelMemberFieldUpdate } from '#lib/models/index.js'
+import { zSearchInEvent } from '#lib/models/form.js'
+import { permission, prisma, uniqueIssue } from '#lib/server/index.js'
 
 const NAME_TAKEN = 'Un champ porte déjà ce nom'
 
@@ -54,10 +55,9 @@ const fieldTypes = [
 
 /** Alimente l'`InputSelect` de `InputFieldSelect`, sur la page des badges. */
 export const searchMemberFields = query(
-	z.object({ search: z.string(), types: z.array(z.enum(fieldTypes)).optional() }),
-	async ({ search, types }) => {
-		const { locals, params } = getRequestEvent()
-		const eventId = params.eventId!
+	zSearchInEvent.extend({ types: z.array(z.enum(fieldTypes)).optional() }),
+	async ({ search, eventId, types }) => {
+		const { locals } = getRequestEvent()
 		await permission.leader(eventId, locals)
 		return prisma.field.findMany({
 			where: { eventId, name: { contains: search }, ...(types && { type: { in: types } }) },

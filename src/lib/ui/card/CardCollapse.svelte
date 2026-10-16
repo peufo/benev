@@ -39,7 +39,7 @@
 	let timeout: NodeJS.Timeout | undefined = undefined
 	async function handleClick(event: MouseEvent | null) {
 		if (isClickOnInteractiveElement(event)) return
-		await goto(urlParam.toggle({ section: value }), { noScroll: true, keepFocus: true })
+		await goto(urlParam.toggle({ section: value }), { reset: false })
 	}
 
 	function isClickOnInteractiveElement(event: MouseEvent | null) {

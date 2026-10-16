@@ -1,5 +1,5 @@
 <script lang="ts">
-	import EmailLayout from '$lib/email/EmailLayout.svelte'
+	import EmailLayout from '#lib/email/EmailLayout.svelte'
 	import { ORIGIN } from '$app/env/public'
 
 	interface Props {
@@ -16,7 +16,7 @@
 		<a
 			href="{ORIGIN}/token/{tokenId}/email_verification"
 			rel="external"
-			data-sveltekit-preload-data="off"
+			data-sveltekit-preload-data="false"
 		>
 			cliquant sur ce lien.
 		</a>

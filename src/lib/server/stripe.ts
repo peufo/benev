@@ -6,9 +6,9 @@ import type { Prisma } from '@prisma/client'
 import type { User } from 'lucia'
 import { error } from '@sveltejs/kit'
 
-import { prisma, sendEmailComponent, createSSE } from '$lib/server'
-import { useProduct } from '$lib/server/useProduct'
-import { EmailCheckoutValidation } from '$lib/email'
+import { prisma, sendEmailComponent, createSSE } from '#lib/server/index.js'
+import { useProduct } from '#lib/server/useProduct.js'
+import { EmailCheckoutValidation } from '#lib/email/index.js'
 
 /**
  * Le client est créé au premier appel, pas à l'import: `vite build` évalue ce module pour lire les

@@ -1,9 +1,9 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { Invite, MemberWithComputedValues } from '$lib/server'
+import type { Invite, MemberWithComputedValues } from '#lib/server/index.js'
 import type { Event, Media, Team } from '@prisma/client'
-import { modelMemberCondition } from '$lib/models'
-import type { LogDataMap } from '$lib/log/logMap'
+import { modelMemberCondition } from '#lib/models/index.js'
+import type { LogDataMap } from '#lib/log/logMap.js'
 
 // for information about these interfaces
 declare global {
@@ -35,7 +35,7 @@ declare global {
 /// <reference types="lucia" />
 declare global {
 	namespace Lucia {
-		type Auth = import('$lib/server').Auth
+		type Auth = import('#lib/server/index.js').Auth
 		type DatabaseUserAttributes = {
 			email: string
 			isEmailVerified: boolean
@@ -63,7 +63,7 @@ declare global {
 		type Location = { label: string; coords?: { lat: number; lon: number } }
 		/**
 		 * Charge utile d'une ligne de journal, discriminée par la colonne `type`.
-		 * Dérivée des transformations de `$lib/log/logMap` — module feuille, importé ici plutôt
+		 * Dérivée des transformations de `#lib/log/logMap.js` — module feuille, importé ici plutôt
 		 * que le baril, qui charge aussi des composants.
 		 */
 		type JsonLogData = LogDataMap[keyof LogDataMap]

@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { currentEventId } from '#lib/eventPath.js'
 	import type { Snippet } from 'svelte'
 	import type { ClassValue } from 'svelte/elements'
 	import { XIcon } from '@lucide/svelte'
 	import { tip, urlParam } from 'fuma'
 	import { page } from '$app/state'
-	import { InputSelectInParam, Surface } from '$lib/ui'
+	import { InputSelectInParam, Surface } from '#lib/ui/index.js'
 	import { LOG_FAMILIES } from './logFamilies'
 	import { loadPreviousEventLogs } from './log.remote'
 	import Logs from './Logs.svelte'
@@ -41,7 +42,7 @@
 			<a
 				href={urlParam.without('memberId')}
 				class="btn btn-sm"
-				data-sveltekit-noscroll
+				data-sveltekit-reset="false"
 				use:tip={{ content: 'Retirer le filtre' }}
 			>
 				<XIcon size={18} />
@@ -62,7 +63,8 @@
 			{timezone}
 			showNoteForm={isAdmin}
 			noteMemberId={journal.subject?.id}
-			loadPrevious={(beforeId) => loadPreviousEventLogs({ beforeId, ...journal.filter })}
+			loadPrevious={(beforeId) =>
+				loadPreviousEventLogs({ beforeId, ...journal.filter, eventId: currentEventId() })}
 			canDeleteNote={(log) =>
 				log.type === 'note_create' && (isAdmin || log.createdById === page.data.member?.userId)}
 			{before}

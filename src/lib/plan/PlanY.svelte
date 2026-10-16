@@ -4,9 +4,9 @@
 	import { PlusIcon } from '@lucide/svelte'
 	import type { Team } from '@prisma/client'
 	import { afterNavigate } from '$app/navigation'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath } from '#lib/eventPath.js'
 	import TeamCol from './TeamCol.svelte'
-	import TeamStateIcon from '$lib/team/TeamStateIcon.svelte'
+	import TeamStateIcon from '#lib/team/TeamStateIcon.svelte'
 	import type { PeriodWithMembers, Plan } from './types'
 	import { persistHourSize, withHourSize } from './zoom'
 	import { scrollOnZoom } from './scrollOnZoom'
@@ -100,7 +100,7 @@
 			<a
 				href={eventPath('/admin/teams/[teamId]', { teamId: team.id })}
 				data-sveltekit-replacestate
-				data-sveltekit-noscroll
+				data-sveltekit-reset="false"
 				style:height="{TEAM_HEADER_HEIGHT}px"
 				class="
 					px-1 sticky top-0 z-10 font-medium flex items-center
@@ -127,7 +127,7 @@
 			class="btn btn-square btn-sm btn-secondary"
 			href={urlParam.with({ form_team: '{}' })}
 			data-sveltekit-replacestate
-			data-sveltekit-noscroll
+			data-sveltekit-reset="false"
 			use:tip={{ content: 'Ajouter un secteur' }}
 		>
 			<PlusIcon />

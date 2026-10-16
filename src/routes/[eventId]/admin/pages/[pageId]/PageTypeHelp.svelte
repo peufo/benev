@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { CircleHelpIcon } from '@lucide/svelte'
 	import { DropDown } from 'fuma'
-	import { PAGE_TYPE } from '$lib/constant'
+	import { PAGE_TYPE } from '#lib/constant/index.js'
 </script>
 
 <DropDown tippyProps={{ trigger: 'mouseenter' }}>

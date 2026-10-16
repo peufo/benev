@@ -2,9 +2,9 @@ import { describe, it } from 'vitest'
 import { Prisma } from '@prisma/client'
 // Import direct des modules et non du barrel racine: celui-ci tire tout l'arbre UI,
 // donc le CSS de tippy, que Vitest ne sait pas charger en environnement `node`.
-import { modelEventUpdate } from '$lib/models'
-import { jsonOrDbNull } from '$lib/server'
-import { mapUrl } from '$lib/location'
+import { modelEventUpdate } from '#lib/models/index.js'
+import { jsonOrDbNull } from '#lib/server/index.js'
+import { mapUrl } from '#lib/location/index.js'
 
 /**
  * Reproduit ce que `form()` transmet au schéma: le POJO issu du `FormData`, où le champ
@@ -60,7 +60,7 @@ describe('champ location du formulaire évènement', () => {
 	})
 })
 
-// la conversion vit côté serveur pour garder $lib/models exempt de runtime Prisma
+// la conversion vit côté serveur pour garder #lib/models exempt de runtime Prisma
 describe('jsonOrDbNull', () => {
 	it('convertit un effacement en DbNull, seule façon de vider une colonne Json', ({ expect }) => {
 		expect(jsonOrDbNull(null)).toBe(Prisma.DbNull)

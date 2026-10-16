@@ -1,4 +1,4 @@
-import { getEventJournal, getMemberProfile, prisma } from '$lib/server'
+import { getEventJournal, getMemberProfile, prisma } from '#lib/server/index.js'
 
 export const load = async ({ url, parent, params: { memberId, eventId } }) => {
 	const { member } = await parent()

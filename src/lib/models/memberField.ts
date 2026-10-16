@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import z from 'zod'
 import { zEnumKeys } from './form'
-import { MEMBER_FIELD_TYPE } from '$lib/constant'
+import { MEMBER_FIELD_TYPE } from '#lib/constant/index.js'
 
 export const modelMemberFieldCreate = z.object({
 	name: z.string().min(2),

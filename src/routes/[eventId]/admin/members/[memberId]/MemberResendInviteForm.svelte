@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { SendIcon } from '@lucide/svelte'
 	import { confirmDialog, tip } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { resendInvite } from '$lib/member/memberAdmin.remote'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { resendInvite } from '#lib/member/memberAdmin.remote.js'
 
 	let { email }: { email: string } = $props()
 </script>

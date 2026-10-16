@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InputSearch, Surface } from '$lib/ui'
+	import { InputSearch, Surface } from '#lib/ui/index.js'
 	import { Pagination } from 'fuma'
 	import ProductsTable from './ProductsTable.svelte'
 

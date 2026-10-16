@@ -25,7 +25,7 @@ colour, type and spacing, not this file. `TODO.md` is the user's running task li
 
 ## Technology Stack
 
-SvelteKit v2 (**remote functions enabled**) · TypeScript v6 (strict, `verbatimModuleSyntax`) ·
+SvelteKit v3 (**remote functions enabled**) · TypeScript v6 (strict, `verbatimModuleSyntax`) ·
 Vite v8 · Svelte v5 **runes-only** · Tailwind v4 + DaisyUI v5 · Zod v4 · Prisma v6 / MySQL ·
 Lucia v2 (Google OAuth) · Stripe · Nodemailer (SMTP Infomaniak) · Playwright + Vitest ·
 Bun runtime, Docker image built by GitHub Actions to GHCR.
@@ -37,15 +37,18 @@ The non-obvious parts:
 - **mdsvex** ne sert qu'à `/docs`: extension `.svx`, préprocesseur déclaré avant `vitePreprocess`.
 - **Lucide (`@lucide/svelte`) is the only icon set.**
 - **Font**: Barlow (400–800) via Google Fonts in `src/app.html`.
-- **`fuma` v2 and `cademo` toggle between the registry and a sibling checkout** — see
+- **`fuma` v3 and `cademo` toggle between the registry and a sibling checkout** — see
   [Sibling packages](#sibling-packages-fuma-and-cademo).
 - Emails are Svelte components rendered with `render()` from `svelte/server`.
 
 ### Svelte 5 and SvelteKit experimental flags
 
-`svelte.config.js` turns on two experimental features the codebase depends on:
+There is no `svelte.config.js`: SvelteKit 3 takes its whole configuration (adapter, mdsvex,
+`extensions`, `version`) as the options of the `sveltekit()` plugin in `vite.config.ts`, which is
+also where svelte-check and ESLint (through `@sveltejs/load-config`) read it. It turns on two
+experimental features the codebase depends on:
 
-- `kit.experimental.remoteFunctions: true` — required by every `*.remote.ts` file and by fuma 2's
+- `experimental.remoteFunctions: true` — required by every `*.remote.ts` file and by fuma 3's
   input components.
 - `compilerOptions.experimental.async: true` — async SSR / `await` in components.
 
@@ -76,7 +79,7 @@ be introduced.
 │   │   ├── server/            # Server-only modules (auth, prisma, permissions, email, stripe…)
 │   │   ├── models/            # Zod schemas (modelUserCreate, modelEventUpdate…)
 │   │   ├── doc/               # Documentation produit: `engine/` le moteur, `content/` les pages
-│   │   ├── ui/                # Components fuma 2 does not cover
+│   │   ├── ui/                # Components fuma 3 does not cover
 │   │   ├── email/             # Svelte email template components
 │   │   ├── event/, team/, period/, subscribe/, member/, tag/, pages/, plan/,
 │   │   │   milestone/, view/, me/, layout/, checkout/, landing/, material/, location/,
@@ -95,8 +98,7 @@ be introduced.
 ├── TODO.md                    # User's running task list
 ├── .impeccable/design.json    # Machine-readable sidecar of DESIGN.md
 ├── Dockerfile, .github/workflows/deploy.yml
-├── svelte.config.js           # Node adapter + experimental flags
-├── vite.config.ts             # Tailwind plugin, Vitest config, fuma linking
+├── vite.config.ts             # SvelteKit config (adapter, mdsvex, flags), Tailwind, Vitest, fuma
 └── prettier.config.cjs, eslint.config.js, playwright.config.ts, tsconfig.json
 ```
 
@@ -104,12 +106,12 @@ be introduced.
 
 - `(home)` — public/marketing pages, auth, user dashboard.
   - `/`, `/events`, `/contact`, `/open-source`, `/qr`
-  - Textes légaux, tous montés sur `LegalPage` de `$lib/layout` : `/terms`, `/privacy`,
-    `/legal-notice`, `/sales-terms`. Leur liste vit dans `$lib/layout/legal.ts`, qui sert aussi
+  - Textes légaux, tous montés sur `LegalPage` de `#lib/layout` : `/terms`, `/privacy`,
+    `/legal-notice`, `/sales-terms`. Leur liste vit dans `#lib/layout/legal.ts`, qui sert aussi
     le pied de page, les renvois croisés et l'identité de l'éditeur.
   - `/docs`, `/docs/[...slug]` — documentation produit, plus `/docs/[...slug].md`, `/llms.txt` et
     `/llms-full.txt` pour la lecture par les machines.
-  - `/auth` — login / account creation (`$lib/me/Login.svelte`)
+  - `/auth` — login / account creation (`#lib/me/Login.svelte`)
   - `/me/*` — personal dashboard, events, checkouts
   - `/root/*` — superuser tools (users, events, checkouts, messages, mails preview, migrate)
   - `/token/[tokenId]/*` — email-link landings (verification, password reset)
@@ -128,24 +130,24 @@ be introduced.
 
 | Module                      | Purpose                                                                                                                           |
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `$lib/server`               | Re-exports all server-only utilities. **Must only be imported from server files.**                                                |
-| `$lib/server/prisma.ts`     | Extended Prisma client with query middleware for event date syncing, soft deletes, and user/member data duplication.              |
-| `$lib/server/lucia.ts`      | Lucia auth instance, Google OAuth provider.                                                                                       |
-| `$lib/server/permission.ts` | Role-based guards: `member`, `leader`, `admin`, `owner`, `root`, plus `leaderOfTeam`.                                             |
-| `$lib/server/member.ts`     | Member profile resolution with computed values (roles, stats).                                                                    |
-| `$lib/server/stripe.ts`     | Checkout session creation and Stripe webhook handling.                                                                            |
-| `$lib/server/email.ts`      | SMTP transport and email rendering/sending. Honours `EMAIL_DISABLED=true`.                                                        |
-| `$lib/models`               | Zod v4 schemas, consumed by `form()` remote functions.                                                                            |
-| `$lib/ui`                   | Components fuma 2 does not cover: `Surface` and `Section`, `card`, `badge`, `tabs`, `dialog`, `placeholder`, `textRich`, `input`. |
-| `$lib/email`                | Svelte components for transactional emails.                                                                                       |
-| `$lib/plan`                 | Drag-and-drop planning grid for team/period visualization.                                                                        |
-| `$lib/pages`                | CMS page rendering, suggestions, and nested path logic.                                                                           |
-| `$lib/doc`                  | La documentation produit, en deux moitiés: `engine/` rend et navigue, `content/` est ce qui se lit.                               |
-| `$lib/seo`                  | `defaultMetaTags`, `errorMetaTags`, `mergeMetaTags`, JSON-LD schemas. Rendered **once** in the root layout.                       |
-| `$lib/constant`             | `EVENT_TIER` — per-tier member quotas and Stripe price bindings.                                                                  |
-| `$lib/log`                  | The event journal: `logMap` (one transform per `LogType`), the feed components, `LOG_FAMILIES`. See below.                        |
-| `$lib/server/scheduler.ts`  | The ticker of scheduled tasks; `$lib/server/tasks/` holds the tasks and starts it. See below.                                     |
-| `$lib/dayjs.ts`             | Pre-configured dayjs instance (relativeTime plugin + French locale).                                                              |
+| `#lib/server`               | Re-exports all server-only utilities. **Must only be imported from server files.**                                                |
+| `#lib/server/prisma.ts`     | Extended Prisma client with query middleware for event date syncing, soft deletes, and user/member data duplication.              |
+| `#lib/server/lucia.ts`      | Lucia auth instance, Google OAuth provider.                                                                                       |
+| `#lib/server/permission.ts` | Role-based guards: `member`, `leader`, `admin`, `owner`, `root`, plus `leaderOfTeam`.                                             |
+| `#lib/server/member.ts`     | Member profile resolution with computed values (roles, stats).                                                                    |
+| `#lib/server/stripe.ts`     | Checkout session creation and Stripe webhook handling.                                                                            |
+| `#lib/server/email.ts`      | SMTP transport and email rendering/sending. Honours `EMAIL_DISABLED=true`.                                                        |
+| `#lib/models`               | Zod v4 schemas, consumed by `form()` remote functions.                                                                            |
+| `#lib/ui`                   | Components fuma 3 does not cover: `Surface` and `Section`, `card`, `badge`, `tabs`, `dialog`, `placeholder`, `textRich`, `input`. |
+| `#lib/email`                | Svelte components for transactional emails.                                                                                       |
+| `#lib/plan`                 | Drag-and-drop planning grid for team/period visualization.                                                                        |
+| `#lib/pages`                | CMS page rendering, suggestions, and nested path logic.                                                                           |
+| `#lib/doc`                  | La documentation produit, en deux moitiés: `engine/` rend et navigue, `content/` est ce qui se lit.                               |
+| `#lib/seo`                  | `defaultMetaTags`, `errorMetaTags`, `mergeMetaTags`, JSON-LD schemas. Rendered **once** in the root layout.                       |
+| `#lib/constant`             | `EVENT_TIER` — per-tier member quotas and Stripe price bindings.                                                                  |
+| `#lib/log`                  | The event journal: `logMap` (one transform per `LogType`), the feed components, `LOG_FAMILIES`. See below.                        |
+| `#lib/server/scheduler.ts`  | The ticker of scheduled tasks; `#lib/server/tasks/` holds the tasks and starts it. See below.                                     |
+| `#lib/dayjs.ts`             | Pre-configured dayjs instance (relativeTime plugin + French locale).                                                              |
 
 ---
 
@@ -157,7 +159,7 @@ SvelteKit remote function declared in a `*.remote.ts` file:
 ```ts
 // src/lib/me/user.remote.ts
 import { form, getRequestEvent } from '$app/server'
-import { modelUserLogin } from '$lib/models'
+import { modelUserLogin } from '#lib/models/index.js'
 
 export const loginUser = form(modelUserLogin, async ({ email, password }) => {
 	/* … */
@@ -182,9 +184,20 @@ Things to know when touching this layer:
   yields JSON.
 - Uncaught exceptions in a remote function surface to the client as a generic 500. Wrap expected
   failures in `error(status, message)` so the UI can say something useful.
-- Several remote functions can be spread onto the same `<form>`; SvelteKit runs the one whose
-  `action` matches the pressed button's `formaction`. The **first submit button in DOM order** is
-  what the Enter key triggers.
+- **Every control of a `form()` comes from `fields.x.as(...)`**, a hidden input as much as a text
+  field. SvelteKit suffixes each name with the id of its remote function (`state/<id>`) and refuses
+  a submission carrying any other key (`form_field_unbound`). A hidden value is
+  `<input {...remoteForm.fields.x.as('hidden', value)} />`: `value` may be neither `null` nor
+  `undefined`, and its type picks the coercion (a number submits as a number, a boolean as
+  `on`/`off`). A button that carries a value is `as('submit', value)`. A bespoke input that writes
+  a hidden field takes the `RemoteFormField` as a prop: `InputMedia`, `InputLocation`,
+  `InputOptions`, `InputTextRich`. E2E selectors therefore match a prefix: `input[name^="x/"]`.
+- **One remote function per `<form>` as soon as one of them has a field**, whose key would be
+  foreign to the other. An action without fields (delete, regenerate) gets its own empty
+  `<form id=…>`, and its button points at it with `form=` and `formaction=` (`MediaDrawer`,
+  `AvatarForm`, `TableViewSelect`). Field-less functions can still share a form: SvelteKit runs
+  the one whose `action` matches the pressed button's `formaction` (`TermsAcceptDialog`,
+  `InviteMismatch`). The **first submit button in DOM order** is what the Enter key triggers.
 - `form.pending` (a counter) and `form.fields.x.value()` / `.set()` are available for loading
   states and cross-form value carry-over.
 
@@ -225,20 +238,23 @@ Four rules, no exceptions to weigh:
    `MemberFieldForm`, the link normalisation of `SectionEssentiel`, `Login` carrying a value from
    one form to the next. Never as a lifecycle reset.
 
-A form without `field` — `<input name="…" bind:value>`, `<textarea name="message">` — never reads
-that state and escapes all of this. So does a form carrying only hidden inputs (`deleteTeam`,
-`cloneTeamForm`, `deletePage`): a hidden input fires no `input` event, and the DOM is re-read at
-every submission. Those keep the base instance, unless several are alive at once — that throws
+A hidden field escapes all of this: `as('hidden', value)` renders `value` as given, never the
+module state. A form carrying only hidden fields (`deletePeriod`, `deleteTag`, `deletePage`)
+therefore keeps the base instance, unless several are alive at once, which throws
 `A form object can only be attached to a single <form> element`.
 
-Two consequences of `for()` to know:
+Three consequences of `for()` to know:
 
 - It **injects `id: key`** into the submitted data when the form does not already carry an `id`
-  field. Every schema here is a stripping `z.object()`, so the extra key is discarded — including
+  field, so an update keyed on its record needs no hidden `id`. Every schema here is a stripping
+  `z.object()`, so the extra key is discarded — including
   `updateMemberProfile`, which is `form('unchecked')` but re-parses through a `z.object()`. Inert,
   as long as no schema grows an `id` field meaning something else.
 - An instance's `action` carries the key. **Every `formaction=` must come from the same instance**,
   or the button submits to the base one.
+- `team.id ? updateTeam.for(…) : createTeam.for(…)` exposes only the fields both schemas share. A
+  field that only one of them declares is read on that instance, derived on its own (`notify` and
+  `redirectTo` in `PeriodForm`, `conditions` in `TeamForm`).
 
 ---
 
@@ -246,7 +262,7 @@ Two consequences of `for()` to know:
 
 Every mutation worth an organizer's attention writes a `Log` row. The rule of the module is that
 **a call site passes the entity it just wrote, never a set of foreign keys**: one transform per
-`LogType` in `$lib/log/logMap.ts` derives both the relation columns and the payload.
+`LogType` in `#lib/log/logMap.ts` derives both the relation columns and the payload.
 
 ```ts
 await createLog('subscribe_state', { subscribe, before: _subscribe.state, actor: author })
@@ -277,7 +293,7 @@ What is deliberately _not_ logged: searches, reorderings, personal table views, 
 milestones, a member's own notification preferences, and **`duplicatePeriod`**. `movePeriod` and
 `updatePeriod`, which the planning grid calls on every drag release, only write a `period_update`
 when the change reaches volunteers already notified: team out of `draft` and at least one
-`accepted` or `request` subscribe on the period (`settlePeriodUpdate` in `$lib/server/period.ts`,
+`accepted` or `request` subscribe on the period (`settlePeriodUpdate` in `#lib/server/period.ts`,
 which also sends the « ton créneau a changé » email when the schedule moved). A draft being
 built stays silent.
 
@@ -291,10 +307,10 @@ organizer needs to see.
 ## Scheduled tasks
 
 One Bun process serves each environment, so scheduled work is an in-process ticker, not a cron
-nor a job table: `createScheduler()` in `$lib/server/scheduler.ts`, started from
+nor a job table: `createScheduler()` in `#lib/server/scheduler.ts`, started from
 `hooks.server.ts` and stopped on `sveltekit:shutdown` **before** the email queue drains. The task
-list and the prisma-backed store live in `$lib/server/tasks/index.ts`, which is **imported by its
-path, never through the `$lib/server` barrel** (it runs at module evaluation, and the barrel is
+list and the prisma-backed store live in `#lib/server/tasks/index.ts`, which is **imported by its
+path, never through the `#lib/server` barrel** (it runs at module evaluation, and the barrel is
 in an import cycle).
 
 The rule of the module: **a task receives a window `(since, until]`, never "now"**. `since` is the
@@ -308,15 +324,15 @@ cursor yet, the window is empty: the first run sets the marker without replaying
 
 `SCHEDULER_DISABLED=true` (set by `playwright.config.ts`) stops the ticker; `/root/tasks` shows
 each task's last run and runs it on demand, which is how the E2E suite triggers one. The pure
-part of a task lives outside `$lib/server` so it can be unit-tested: `$lib/team/teamSchedule.ts`
+part of a task lives outside `#lib/server` so it can be unit-tested: `#lib/team/teamSchedule.ts`
 plans the closings the task then applies (only `published` → `validated`; opening stays a
 manual gesture).
 
 ## La documentation
 
 `/docs` sert la documentation produit, écrite en markdown dans `src/lib/doc/content/` et rendue par
-**mdsvex** (extension `.svx`, pas `.md` — `svelte-check` lit la liste `extensions` de
-`svelte.config.js`, et `.md` y ferait entrer `AGENTS.md` et ses voisins).
+**mdsvex** (extension `.svx`, pas `.md`: `svelte-check` lit la liste `extensions` passée à
+`sveltekit()` dans `vite.config.ts`, et `.md` y ferait entrer `AGENTS.md` et ses voisins).
 
 **Elle n'est pas technique, et elle n'a que deux niveaux: la page et le chapitre.** Le lecteur est
 celui de `PRODUCT.md` — bénévole lui-même, pressé. Pas de groupes de pages, pas de page pour un
@@ -324,7 +340,7 @@ réglage: une poignée de pages larges, dont les chapitres se structurent en int
 Une valeur de contrat qui n'aide pas à décider (une durée de jeton, une limite d'envois) n'a rien à
 y faire.
 
-`$lib/doc` se lit en deux moitiés, et **la dépendance ne va que dans un sens**:
+`#lib/doc` se lit en deux moitiés, et **la dépendance ne va que dans un sens**:
 
 - **`engine/`** rend, découpe, convertit et navigue. Il ignore ce qu'il sert. `DocNav.svelte` en
   fait partie: un composant n'est pas du contenu parce qu'il est un composant.
@@ -363,8 +379,8 @@ Ton évènement est dans l'un de trois états.
 Un titre de troisième niveau structure un chapitre long, sans entrer au sommaire.
 ```
 
-`engine/rehypeDocSections.js`, greffon rehype déclaré dans `svelte.config.js`, enveloppe chaque
-`##` et ce qui le suit dans une `<section class="surface …">` — le rendu de `Section` de `$lib/ui`,
+`engine/rehypeDocSections.js`, greffon rehype déclaré dans `vite.config.ts`, enveloppe chaque
+`##` et ce qui le suit dans une `<section class="surface …">` — le rendu de `Section` de `#lib/ui`,
 dépouillé de ce dont une documentation n'a pas l'usage (icône, sous-titre, action). Ce qui précède
 le premier titre devient un chapeau, hors carte.
 
@@ -376,8 +392,8 @@ Cinq règles, et elles ne se devinent pas:
    qui permet à une page d'importer `WhoCanDoWhat` et de s'en servir au milieu d'un chapitre.
 2. **L'ancre d'un chapitre est dérivée de son titre** par `slugify()`, sauf si le titre en fige une
    avec `{#id}`. Une ancre visée d'une autre page mérite d'être figée: sans cela, reformuler le
-   titre casse le lien. `slug.js` et `rehypeDocSections.js` sont en JavaScript, et non en
-   TypeScript, parce que `svelte.config.js` les importe et que Node ne charge pas de TypeScript.
+   titre casse le lien. `slug.js` et `rehypeDocSections.js` sont typés en JSDoc, `checkJs` les
+   passe au crible.
 3. **Seul un `##` reçoit une ancre**, et lui seul entre au sommaire. Un `{#id}` posé sur un `###`
    traverserait le greffon intact et Svelte y lirait l'ouverture d'un bloc: la page ne compile plus.
    Tout lien interne vise donc un `##`.
@@ -391,7 +407,7 @@ Cinq règles, et elles ne se devinent pas:
    liens.
 5. **Tout composant employé dans une page a un jumeau markdown** dans `content/markdownParts.ts`,
    dérivé des mêmes données que son rendu Svelte (`WhoCanDoWhat` et `RolesGlossary` lisent tous deux
-   `content/permissions.ts` et `$lib/member/roles.ts`). Un test unitaire croise le registre avec les
+   `content/permissions.ts` et `#lib/member/roles.ts`). Un test unitaire croise le registre avec les
    composants réellement employés: sans jumeau, le markdown servi perdrait ce morceau en silence.
 
 La même page est servie en markdown pur sur `/docs/<slug>.md`, indexée par `/llms.txt` et
@@ -468,7 +484,7 @@ There is one import surface:
 - **`from 'fuma/server'`** — read-side helpers for `load` functions: `parseQuery`,
   `ensureFieldsWithFilterAreVisibles`.
 
-What fuma 2 does not cover lives in `$lib/ui` and belongs to benev — `Card`, `Placeholder`,
+What fuma 3 does not cover lives in `#lib/ui` and belongs to benev — `Card`, `Placeholder`,
 `Badge`, `Tabs`, `Dialog`, `InputTextRich` and the tiptap toolbar, `SelectorList`, `InputImage`,
 `InputSearch`. The dependency runs one way, from benev to the package.
 
@@ -484,7 +500,7 @@ form to look like another:
 
 - **A remote query**, `RemoteQueryFunction<{ search: string }, Item[]>` — the default when the list
   lives in the database. Write a `query()` next to the domain's other remote functions:
-  `searchMembers` in `$lib/member/member.remote.ts`, `searchTeams` in `$lib/team/team.remote.ts`.
+  `searchMembers` in `#lib/member/member.remote.ts`, `searchTeams` in `#lib/team/team.remote.ts`.
   To fix an extra argument, wrap it at the call site rather than widening the query — see
   `InputFieldSelect.svelte` on the badges page:
 
@@ -494,7 +510,7 @@ form to look like another:
   ```
 
 - **A function returning a promise**, for a search that must stay in the browser — Photon
-  geocoding in `$lib/location/InputLocation.svelte` (mocked in E2E). fuma tempers the keystrokes,
+  geocoding in `#lib/location/InputLocation.svelte` (mocked in E2E). fuma tempers the keystrokes,
   drops out-of-order responses and renders loading then error; do not re-implement any of that.
 
 - **A plain array**, when the data is already loaded — the secteurs of `PlanHeader.svelte`, an
@@ -578,7 +594,7 @@ Copy `.env.example` to `.env` and fill in:
 ROOT_USER="admin@example.com"              # Root user email (full access)
 DATABASE_URL="mysql://user:pass@host:3306/db"
 MEDIA_DIR="./media"                        # Local media storage path
-PUBLIC_ORIGIN="https://benev.io"           # Origin every absolute link is built from
+ORIGIN="https://benev.io"                  # Origin every absolute link is built from
 BODY_SIZE_LIMIT=0                          # Disable body size limit for uploads
 
 # EMAIL
@@ -595,15 +611,18 @@ PRICE_STANDARD, PRICE_PREMIUM, PRICE_STANDARD_TO_PREMIUM
 `EMAIL_DISABLED="true"` is **not** in `.env.example`: it is set by `playwright.config.ts` and by
 CI to log emails instead of sending them.
 
-All `PUBLIC_*` variables are exposed to the browser. All others are server-only
-(`$app/env/private`).
+Every variable is declared in `src/env.ts`, with a zod schema. Those marked `public: true` reach the
+browser through `$app/env/public`; the others are server-only (`$app/env/private`). Outside the
+build, an empty or missing value **stops the boot** rather than silently sending everyone to the
+wrong domain.
 
-`PUBLIC_ORIGIN` is the single declaration of the served origin — email links, the badges' QR code,
-the Google OAuth redirect URI and the YouTube embeds all read it, on the client as well as the
-server, hence the `PUBLIC_` prefix. adapter-node reads its own `ORIGIN` for the CSRF check behind
-the proxy, so the `start` script derives it: `ORIGIN=$PUBLIC_ORIGIN bun ./build/index.js`. Nothing
-declares `ORIGIN` any more, and an unset `PUBLIC_ORIGIN` therefore **stops the boot** with
-`Invalid ORIGIN: ''` rather than silently sending everyone to the wrong domain.
+`ORIGIN` is the single declaration of the served origin: email links, the badges' QR code, the
+Google OAuth redirect URI and the YouTube embeds all read it, on the client as well as the server,
+hence `public: true`. It belongs to the app alone: adapter-node does not read it. The CSRF check
+compares a form's `Origin` with the origin adapter-node rebuilds from the `Host` header, in `https`
+unless `PROTOCOL_HEADER` names another source, from the headers Dokploy's proxy forwards.
+`paths.origin` stays unset on purpose: it would freeze one origin into an image built once per
+environment. A local `bun start` over plain http fails that check; `bun run preview` does not.
 
 ---
 
@@ -623,14 +642,17 @@ declares `ORIGIN` any more, and an unset `PUBLIC_ORIGIN` therefore **stops the b
 
 ### Naming and Patterns
 
-- Server-only files that must not run in the browser live in `$lib/server/` or are named
+- Server-only files that must not run in the browser live in `#lib/server/` or are named
   `*.server.ts`.
-- Validation schemas live in `$lib/models/` and are named `modelUserCreate`, `modelEventUpdate`…
+- Validation schemas live in `#lib/models/` and are named `modelUserCreate`, `modelEventUpdate`…
 - Mutations live in `*.remote.ts` next to the feature they serve.
-- API routes (`+server.ts`) return JSON. Client-side consumption in `$lib/api.ts` uses `axios` +
+- API routes (`+server.ts`) return JSON. Client-side consumption in `#lib/api.ts` uses `axios` +
   `devalue`.
 - fuma components import from `'fuma'`; read-side server helpers from `'fuma/server'`; benev's own
-  components from `'$lib/ui'`.
+  components from `'#lib/ui/index.js'`.
+- **`#lib`, not `$lib`**: a Node subpath import declared in `package.json` (`imports`), so every
+  specifier carries its extension: `#lib/dayjs.js` for `dayjs.ts`, `#lib/ui/index.js` for a
+  folder, `#lib/plan/TeamRow.svelte` as is.
 - **Icons**: always `@lucide/svelte`, with the `Icon` suffix — `import { CheckIcon, UploadIcon }
 from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. Lucide strokes
   its icons: colour them with `text-*`, never `fill-*`, which renders them invisible.
@@ -679,7 +701,7 @@ from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. L
 **Ce qui se sème et ce qui se clique.** `tests/seed.ts` écrit en base, sur le `PrismaClient` brut,
 tout ce qui n'est qu'un préalable: comptes (`seedUser`), sessions (`signIn`, qui pose le cookie
 `auth_session` sans passer par le formulaire), membres, secteurs, créneaux, champs de profil. Ce
-client n'est **pas** celui, étendu, de `$lib/server/prisma.ts`: la recopie des coordonnées du
+client n'est **pas** celui, étendu, de `#lib/server/prisma.ts`: la recopie des coordonnées du
 `User` sur ses `Member` et la synchronisation des dates de l'évènement n'ont pas lieu, et ce qui
 en dépend est posé à la main. **L'évènement, lui, se crée toujours par l'interface**
 (`useEvent().create`): c'est la seule entité à contenu dérivé (pages par défaut, modèles d'e-mail,
@@ -727,7 +749,7 @@ breaks `svelte-check`.
 - **MySQL** + **Prisma v6**, schema in `prisma/schema.prisma`, with `prisma-json-types-generator`.
 - Models: `User`, `Session`, `Key`, `Token`, `Event`, `Member`, `Team`, `Period`, `Subscribe`,
   `Page`, `Field`, `View`, `Tag`, `Milestone`, `Badge`, `Media`, `Message`, `Product`, `Checkout`.
-- The Prisma client is extended with query middleware in `$lib/server/prisma.ts`:
+- The Prisma client is extended with query middleware in `#lib/server/prisma.ts`:
   - Event soft deletes (renames ID/name instead of hard delete).
   - Event date auto-sync when periods are created/updated/deleted.
   - User data duplicated onto linked `Member` records on create/update.
@@ -741,10 +763,10 @@ breaks `svelte-check`.
 - Users authenticate via email + password or Google OAuth.
 - Accounts can also be **created by an organizer through an invitation**: such a user exists but
   has no password, and must go through the password-reset link to claim the account.
-  `$lib/me/Login.svelte` handles this case explicitly.
+  `#lib/me/Login.svelte` handles this case explicitly.
 - Role hierarchy within an event: `member` → `leader` → `admin` → `owner`.
 - A special `ROOT_USER` email bypasses all permission checks.
-- Permission checks go through `permission.*` helpers from `$lib/server/permission.ts`, in `load`
+- Permission checks go through `permission.*` helpers from `#lib/server/permission.ts`, in `load`
   functions and remote functions.
 - Member roles are computed dynamically (`isAdmin`, `leaderOf`…) and merged into
   `MemberWithComputedValues`.
@@ -754,11 +776,11 @@ breaks `svelte-check`.
 ## Payments, Email, Media
 
 - **Tiers**: events sit on `basic`, `standard`, `premium` or `pro` (`EventTier` enum), with member
-  quotas in `$lib/constant` enforced by `computeIsTierQuotaReached` in `$lib/tierQuota.ts`. Stripe
+  quotas in `#lib/constant` enforced by `computeIsTierQuotaReached` in `#lib/tierQuota.ts`. Stripe
   handles checkout sessions and webhook validation; the webhook endpoint is
   `/me/checkouts/validation` (`+server.ts`, POST), and signatures are verified with
   `PRIVATE_STRIPE_WEBHOOK_KEY`.
-- **Email**: Svelte components in `$lib/email/`, rendered server-side with `render()` from
+- **Email**: Svelte components in `#lib/email/`, rendered server-side with `render()` from
   `svelte/server` (the old static `Component.render()` is gone). SMTP via Nodemailer.
   `EMAIL_DISABLED=true` logs instead of sending; CI and E2E rely on it. Transactional emails cover
   verification links, password reset, subscribe notifications
@@ -794,7 +816,7 @@ breaks `svelte-check`.
 
 ## Security Considerations
 
-- **Server-only imports**: never import `$lib/server` or Prisma into client code. SvelteKit errors
+- **Server-only imports**: never import `#lib/server` or Prisma into client code. SvelteKit errors
   at build time, but stay vigilant with dynamic imports.
 - **Validation**: every remote function takes a Zod schema. Do not hand-parse `FormData`.
 - **Account enumeration**: auth flows must answer identically whether or not an account exists.
@@ -821,13 +843,13 @@ breaks `svelte-check`.
   one. If it almost fits, fix it in `../fuma` rather than growing a local twin.
 - **Event-scoped data**: most entities (teams, members, pages, fields, badges) belong to an
   `Event`; queries should filter by `eventId`.
-- **Computed member values**: `getMemberProfile` in `$lib/server/member.ts` enriches raw `Member`
+- **Computed member values**: `getMemberProfile` in `#lib/server/member.ts` enriches raw `Member`
   records with roles and subscription stats. Prefer it over raw Prisma queries when member
   context is needed.
 - **Planning grid**: the volunteer schedule visualization is a custom drag-and-drop grid in
-  `$lib/plan/`, with its own period stacking and scroll-centering logic.
+  `#lib/plan/`, with its own period stacking and scroll-centering logic.
 - **Reusable components must not own their surface**: a component that can be mounted inside a
-  `Card` (like `Login`) reads `contextContainer` from `$lib/ui/context.js` and renders bare when it
+  `Card` (like `Login`) reads `contextContainer` from `#lib/ui/context.js` and renders bare when it
   is already carried. No nested cards.
 - **Meta tags render once**: `MetaTags` does not deduplicate, so only the root layout renders it.
   Pages publish overrides through `metaTags` in their `load` data.

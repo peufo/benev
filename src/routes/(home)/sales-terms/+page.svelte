@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { LegalPage, LEGAL_ENTITY } from '$lib/layout'
-	import { EVENT_TIER, EVENT_TIER_SUPPORT } from '$lib/constant'
+	import { LegalPage, LEGAL_ENTITY } from '#lib/layout/index.js'
+	import { EVENT_TIER, EVENT_TIER_SUPPORT } from '#lib/constant/index.js'
 
 	const tiers = Object.values(EVENT_TIER)
 </script>
@@ -9,7 +9,7 @@
 <LegalPage title="Conditions de vente">
 	<p>
 		Ces conditions régissent l'achat d'un palier sur benevio. Elles complètent les
-		<a href={resolve('/terms')}>conditions générales</a>, qui restent applicables.
+		<a href={resolve('terms')}>conditions générales</a>, qui restent applicables.
 	</p>
 
 	<section>
@@ -158,7 +158,7 @@
 		<p>
 			Notre responsabilité en lien avec un achat est plafonnée au montant payé pour l'évènement
 			concerné. Les limites et les réserves énoncées à l'article 9 des
-			<a href={resolve('/terms')}>conditions générales</a> s'appliquent, en particulier celle relative
+			<a href={resolve('terms')}>conditions générales</a> s'appliquent, en particulier celle relative
 			à la faute intentionnelle et à la négligence grave, qui ne peuvent pas être exclues.
 		</p>
 	</section>

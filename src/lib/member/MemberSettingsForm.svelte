@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { InputBoolean } from 'fuma'
-	import type { MemberWithComputedValues } from '$lib/server'
-	import { autoSubmit } from '$lib/action'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import type { MemberWithComputedValues } from '#lib/server/index.js'
+	import { autoSubmit } from '#lib/action/index.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { updateMemberSettings } from './member.remote'
 
 	interface Props {

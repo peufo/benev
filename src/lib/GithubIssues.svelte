@@ -1,6 +1,6 @@
 <script lang="ts">
-	import dayjs from '$lib/dayjs'
-	import type { GithubIssue } from '$lib/types/github'
+	import dayjs from '#lib/dayjs.js'
+	import type { GithubIssue } from '#lib/types/github.js'
 	import { MessageSquare } from '@lucide/svelte'
 
 	interface Props {

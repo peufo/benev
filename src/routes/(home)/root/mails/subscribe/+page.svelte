@@ -4,7 +4,7 @@
 		EmailSubscribeAccepted,
 		EmailSubscribeDenied,
 		EmailSubscribeCancelled,
-	} from '$lib/email'
+	} from '#lib/email/index.js'
 
 	let { data } = $props()
 </script>

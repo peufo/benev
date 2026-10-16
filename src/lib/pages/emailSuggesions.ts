@@ -1,9 +1,9 @@
 import type { Period, Subscribe, Team } from '@prisma/client'
-import type { MemberWithComputedValues } from '$lib/server'
+import type { MemberWithComputedValues } from '#lib/server/index.js'
 import { ORIGIN } from '$app/env/public'
 import type { Replacer } from './injectValues'
-import type { EmailEvent } from '$lib/email/models'
-import { formatRange } from '$lib/formatRange'
+import type { EmailEvent } from '#lib/email/models.js'
+import { formatRange } from '#lib/formatRange.js'
 
 export type SubscribeWithTeam = Subscribe & {
 	period: Period & { team: Team }

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { updateAccount } from './user.remote'
 
 	interface Props {

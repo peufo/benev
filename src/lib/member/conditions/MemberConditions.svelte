@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { currentEventId } from '#lib/eventPath.js'
 	import {
 		CircleQuestionMarkIcon,
 		IdCardIcon,
@@ -12,8 +13,9 @@
 	import type { Field } from '@prisma/client'
 	import { InputNumber, InputSelect, Popover } from 'fuma'
 	import { browser } from '$app/env'
-	import { debounce } from '$lib/debounce'
-	import type { MemberCondition, MemberConditionOperator } from '$lib/models'
+	import type { RemoteFormField } from '$app/server'
+	import { debounce } from '#lib/debounce.js'
+	import type { MemberCondition, MemberConditionOperator } from '#lib/models/index.js'
 	import { CONDITION_OPERATOR, CONDITION_OPERATOR_LABEL } from './constants'
 	import ConditionValue from './ConditionValue.svelte'
 	import { countMembersAllowed } from '../member.remote'
@@ -23,6 +25,8 @@
 		memberFields: Field[]
 		/** Les conditions se soumettent par un input caché, qui n'émet aucun évènement DOM. */
 		onchange?: () => void
+		/** Champ du formulaire qui porte les conditions, sérialisées en JSON. */
+		field: RemoteFormField<string>
 		/** L'`id` du formulaire qui reçoit les conditions, quand la section est rendue hors de lui. */
 		form?: string
 		/** Tant que le secteur n'est pas publié, les conditions ne s'appliquent à personne encore. */
@@ -33,6 +37,7 @@
 		conditions: initialConditions = [],
 		memberFields,
 		onchange,
+		field: conditionsField,
 		form,
 		published = true,
 	}: Props = $props()
@@ -50,7 +55,10 @@
 
 	const refreshMemberAllowedCount = debounce(async (serialized: string) => {
 		try {
-			memberAllowedCount = await countMembersAllowed(JSON.parse(serialized))
+			memberAllowedCount = await countMembersAllowed({
+				conditions: JSON.parse(serialized),
+				eventId: currentEventId(),
+			})
 		} catch (err) {
 			console.error(err)
 		}
@@ -175,7 +183,7 @@
 		</div>
 	</div>
 
-	<input type="hidden" name="conditions" value={serializedConditions} {form} />
+	<input {...conditionsField.as('hidden', serializedConditions)} {form} />
 
 	<div class="mt-4 flex flex-col gap-2">
 		{#each conditions as condition, index (index)}

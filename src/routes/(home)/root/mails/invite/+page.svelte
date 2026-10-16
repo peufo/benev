@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { EmailAcceptInviteNotification } from '$lib/email'
+	import { EmailAcceptInviteNotification } from '#lib/email/index.js'
 
 	let { data } = $props()
 </script>

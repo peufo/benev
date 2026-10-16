@@ -3,9 +3,9 @@
 	import type { ResolvedPathname } from '$app/types'
 	import { resolve } from '$app/paths'
 	import { ChartGanttIcon, ExternalLinkIcon, UserPlusIcon, type IconProps } from '@lucide/svelte'
-	import { InputOptionInParam, Surface } from '$lib/ui'
-	import { Journal } from '$lib/log'
-	import { eventPath, withSearch } from '$lib/eventPath'
+	import { InputOptionInParam, Surface } from '#lib/ui/index.js'
+	import { Journal } from '#lib/log/index.js'
+	import { eventPath, withSearch } from '#lib/eventPath.js'
 	import DashboardMembers from './DashboardMembers.svelte'
 	import DashboardValidations from './DashboardValidations.svelte'
 	import { MEMBERS_VIEWS } from './membersView'
@@ -90,7 +90,7 @@
 					type="button"
 					class="btn btn-square btn-sm btn-secondary"
 					href={urlParam.with({ form_invite: '{}' })}
-					data-sveltekit-noscroll
+					data-sveltekit-reset="false"
 					data-sveltekit-replacestate
 					use:tip={{ content: 'Inviter des membres' }}
 				>
@@ -166,9 +166,9 @@
 
 				<p>
 					Le reste est détaillé dans
-					<a href={resolve('/docs')} class="link link-hover link-primary">la documentation</a>. Une
+					<a href={resolve('docs')} class="link link-hover link-primary">la documentation</a>. Une
 					question, un pépin ?
-					<a href={resolve('/contact')} class="link link-hover link-primary">Écris-nous</a>.
+					<a href={resolve('contact')} class="link link-hover link-primary">Écris-nous</a>.
 				</p>
 			</div>
 		{/snippet}

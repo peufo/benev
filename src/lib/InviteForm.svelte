@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { currentEventId } from '#lib/eventPath.js'
 	import { InputBoolean, InputMultiSelect, InputString, tip } from 'fuma'
 	import z from 'zod'
 	import { slide } from 'svelte/transition'
@@ -57,7 +58,7 @@
 		if (!isEmailValid) return
 		isLoadingUserExists = true
 		try {
-			const res = await findUserByEmail(email)
+			const res = await findUserByEmail({ email, eventId: currentEventId() })
 			if (!res) return
 			user.firstName = res.firstName
 			user.lastName = res.lastName
@@ -138,7 +139,7 @@
 					field={createInvite.fields.leaderOf}
 					label="Responsable des secteurs"
 					bind:value={leaderOf}
-					items={searchTeams}
+					items={({ search }) => searchTeams({ search, eventId: currentEventId() })}
 					placeholder="Aucun secteur"
 					class="w-full"
 				>

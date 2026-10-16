@@ -7,12 +7,15 @@
 	import { UploadIcon } from '@lucide/svelte'
 	import type { ClassValue } from 'svelte/elements'
 	import { Popover, Dialog } from 'fuma'
+	import type { RemoteFormField } from '$app/server'
 
 	interface Props {
 		aspect?: number
 		title?: string
 		formaction?: string | undefined
-		key?: string
+		/** Champs du formulaire englobant: le fichier choisi et son recadrage sérialisé. */
+		imageField: RemoteFormField<File>
+		cropField: RemoteFormField<string>
 		/** Reçoit `hide` pour fermer le menu depuis un bouton de soumission (formaction). */
 		actions?: import('svelte').Snippet<[{ hide: () => void }]>
 		children?: import('svelte').Snippet
@@ -24,7 +27,8 @@
 		aspect = 1,
 		title = 'Image',
 		formaction = undefined,
-		key = '',
+		imageField,
+		cropField,
 		actions,
 		children,
 		onsubmit,
@@ -121,11 +125,10 @@
 		{/if}
 	</div>
 	<div class="mt-2 flex justify-end">
-		<input type="hidden" name="{key ? `${key}_` : ''}crop" value={JSON.stringify(crop)} />
+		<input {...cropField.as('hidden', crop ? JSON.stringify(crop) : '')} />
 		<input
 			class="hidden"
-			type="file"
-			name="{key ? `${key}_` : ''}image"
+			{...imageField.as('file')}
 			accept="image/jpeg, image/png, image/webp, image/gif, image/avif, image/tiff"
 			bind:this={inputFile}
 			onchange={onFileSelected}

@@ -1,5 +1,5 @@
 import type { ResolvedPathname } from '$app/types'
-import type { TocSection } from '$lib/ui'
+import type { TocSection } from '#lib/ui/index.js'
 
 /** L'identité d'une page: de quoi la nommer et l'atteindre, et rien de plus. */
 export type DocPage = {

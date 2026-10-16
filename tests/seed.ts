@@ -10,7 +10,7 @@ import { TERMS_VERSION } from '../src/lib/constant/terms'
  *
  * Deux règles s'appliquent à tout ce qui est écrit ici:
  *
- * - Ce client n'est **pas** celui, étendu, de `$lib/server/prisma.ts`: la recopie des coordonnées
+ * - Ce client n'est **pas** celui, étendu, de `#lib/server/prisma.ts`: la recopie des coordonnées
  *   du `User` sur ses `Member` et la synchronisation des dates de l'évènement sur ses créneaux
  *   n'ont pas lieu. Ce qui en dépend est posé à la main.
  * - L'évènement, lui, se crée toujours par l'interface (`useEvent().create`): c'est la seule entité
@@ -180,7 +180,7 @@ export function seedField(
 
 /**
  * Ce que ferait le clic sur le lien reçu par email. La recopie sur les `Member` est faite à la
- * main: le client d'ici n'est pas celui, étendu, de `$lib/server/prisma.ts`.
+ * main: le client d'ici n'est pas celui, étendu, de `#lib/server/prisma.ts`.
  */
 export async function verifyEmail({ email }: Pick<SeededUser, 'email'>) {
 	await prisma.user.update({ where: { email }, data: { isEmailVerified: true } })

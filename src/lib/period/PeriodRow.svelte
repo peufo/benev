@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { urlParam } from 'fuma'
-	import { daytz } from '$lib/dayjs'
+	import { daytz } from '#lib/dayjs.js'
 
-	import { SubscribeStateForm } from '$lib/subscribe'
-	import Progress from '$lib/Progress.svelte'
+	import { SubscribeStateForm } from '#lib/subscribe/index.js'
+	import Progress from '#lib/Progress.svelte'
 
-	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server/team'
-	import { TagsList } from '$lib/tag'
+	import type { PeriodWithComputedValues, TeamWithComputedValues } from '#lib/server/team.js'
+	import { TagsList } from '#lib/tag/index.js'
 
 	interface Props {
 		period: PeriodWithComputedValues & { team: TeamWithComputedValues }

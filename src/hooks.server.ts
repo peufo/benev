@@ -1,9 +1,8 @@
-import { auth, closeTransporter, drainEmailQueue } from '$lib/server'
-import { startScheduler, stopScheduler } from '$lib/server/tasks'
+import { auth, closeTransporter, drainEmailQueue } from '#lib/server/index.js'
+import { startScheduler, stopScheduler } from '#lib/server/tasks/index.js'
 import { SCHEDULER_DISABLED } from '$app/env/private'
 import { building } from '$app/env'
-import type { Handle } from '@sveltejs/kit'
-import { sequence } from '@sveltejs/kit/hooks'
+import { sequence, type Handle } from '@sveltejs/kit/hooks'
 import z from 'zod'
 
 // zod finalise ses messages au parse, pas à la construction du schéma: les poser ici, une fois au

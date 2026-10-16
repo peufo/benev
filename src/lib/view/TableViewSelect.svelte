@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { withSearch } from '$lib/eventPath'
+	import { withSearch } from '#lib/eventPath.js'
 	import { SaveIcon, SavePenIcon } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
+	import type { ResolvedPathname } from '$app/types'
 
 	import { Dialog, InputSelect, InputString, tip, type PopoverType } from 'fuma'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { createView, deleteView, updateView } from './view.remote'
 	import { slide } from 'svelte/transition'
 
@@ -35,7 +36,7 @@
 	// valeur, et « Vue simple » se choisit exactement comme une vue enregistrée.
 	const simpleView: View = { id: '', name: 'Vue simple', query: '' }
 
-	let query = $derived(getQuery(page.url.searchParams))
+	let query = $derived(getQuery(page.url.search))
 	// Les vues enregistrées repassent par le même nettoyage: une clé devenue ignorée ne doit pas
 	// décrocher celles qui l'avaient enregistrée avant.
 	let selectedView = $derived(views.find((v) => getQuery(v.query) === query))
@@ -91,7 +92,7 @@
 		{items}
 		getLabel={(view) => view.name}
 		proposalAppend={updateButton}
-		onSelect={(view) => goto(withSearch(page.url.pathname, view?.query ?? ''))}
+		onSelect={(view) => goto(withSearch(page.url.pathname as ResolvedPathname, view?.query ?? ''))}
 		class={['input-sm min-w-32', isNewView && 'rounded-r-none']}
 		propsLi={{ class: 'flex-row gap-1 group w-full flex-nowrap' }}
 	/>
@@ -118,8 +119,9 @@
 
 	{@const remoteForm = editedView ? updateView.for(editedView.id) : createView.for(uid)}
 	{@const deleteForm = deleteView.for(editedView?.id ?? uid)}
+	<!-- La suppression a son propre `<form>`, vide: SvelteKit refuse qu'un envoi porte un champ
+	     d'une autre remote function. `for()` y injecte l'`id`. -->
 	<form
-		{...remoteForm.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}
 		{...deleteForm.enhance(
 			enhanceForm({
 				onsuccess: () => {
@@ -129,12 +131,12 @@
 				},
 			})
 		)}
-	>
-		{#if editedView}
-			<input type="hidden" name="id" value={editedView.id} />
-		{/if}
-		<input type="hidden" name="key" value={key} />
-		<input type="hidden" name="query" value={query} />
+		id="{uid}-delete"
+		class="hidden"
+	></form>
+	<form {...remoteForm.enhance(enhanceForm({ onsuccess: () => dialog.close() }))}>
+		<input {...remoteForm.fields.key.as('hidden', key)} />
+		<input {...remoteForm.fields.query.as('hidden', query)} />
 
 		<InputString
 			field={remoteForm.fields.name}
@@ -144,10 +146,12 @@
 		/>
 
 		<div class="mt-2 flex flex-row-reverse justify-between gap-2">
-			<button formaction={remoteForm.action} class="btn"> Valider </button>
+			<button class="btn"> Valider </button>
 
 			{#if editedView}
-				<button formaction={deleteForm.action} class="btn btn-ghost text-error"> Supprimer </button>
+				<button form="{uid}-delete" formaction={deleteForm.action} class="btn btn-ghost text-error">
+					Supprimer
+				</button>
 			{/if}
 		</div>
 	</form>

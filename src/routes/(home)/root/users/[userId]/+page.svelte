@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import { Surface } from '$lib/ui'
-	import { MemberRole } from '$lib/member'
-	import { EVENT_TIER } from '$lib/constant'
-	import { formatRangeDate } from '$lib/formatRange'
+	import { Surface } from '#lib/ui/index.js'
+	import { MemberRole } from '#lib/member/index.js'
+	import { EVENT_TIER } from '#lib/constant/index.js'
+	import { formatRangeDate } from '#lib/formatRange.js'
 	import { CalendarDaysIcon, MailIcon, PhoneIcon, MapPinnedIcon } from '@lucide/svelte'
 
 	let { data } = $props()

@@ -10,26 +10,26 @@ export type LegalDoc = { path: ResolvedPathname; label: string; description: str
  */
 export const LEGAL_DOCS: LegalDoc[] = [
 	{
-		path: resolve('/terms'),
+		path: resolve('terms'),
 		label: 'Conditions générales',
 		description:
 			`Conditions générales d'utilisation de benevio : ton compte, les contenus publiés, ` +
 			`les obligations des organisateur·ices, la responsabilité et le droit applicable.`,
 	},
 	{
-		path: resolve('/privacy'),
+		path: resolve('privacy'),
 		label: 'Confidentialité',
 		description:
 			`Quelles données benevio collecte, pourquoi, qui y a accès, combien de temps elles sont ` +
 			`conservées, à quels sous-traitants elles sont confiées et comment exercer tes droits.`,
 	},
 	{
-		path: resolve('/legal-notice'),
+		path: resolve('legal-notice'),
 		label: 'Mentions légales',
 		description: `Éditeur, hébergeur, contact et propriété intellectuelle du service benevio.`,
 	},
 	{
-		path: resolve('/sales-terms'),
+		path: resolve('sales-terms'),
 		label: 'Conditions de vente',
 		description:
 			`Conditions générales de vente de benevio : offres et quotas, achat unique sans ` +

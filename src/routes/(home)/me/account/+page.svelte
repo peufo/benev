@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { AccountForm, AvatarForm, DeleteUserForm } from '$lib/me'
-	import { logoutUser } from '$lib/me/user.remote'
+	import { AccountForm, AvatarForm, DeleteUserForm } from '#lib/me/index.js'
+	import { logoutUser } from '#lib/me/user.remote.js'
 
 	let { data } = $props()
 </script>

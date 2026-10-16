@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { urlParam } from 'fuma'
-	import { PlanX, PlanY } from '$lib/plan'
-	import PlanHeader from '$lib/plan/PlanHeader.svelte'
-	import { MilestoneDrawer } from '$lib/milestone'
-	import { getPlan } from '$lib/plan/getPlan.js'
+	import { PlanX, PlanY } from '#lib/plan/index.js'
+	import PlanHeader from '#lib/plan/PlanHeader.svelte'
+	import { MilestoneDrawer } from '#lib/milestone/index.js'
+	import { getPlan } from '#lib/plan/getPlan.js'
 
 	let { data } = $props()
 	let plan = $derived(getPlan(data))

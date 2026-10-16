@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Surface, TabsIcon } from '$lib/ui'
-	import TableViewSelect from '$lib/view/TableViewSelect.svelte'
+	import { Surface, TabsIcon } from '#lib/ui/index.js'
+	import TableViewSelect from '#lib/view/TableViewSelect.svelte'
 	import { InputMultiSelect, jsonParse, tip, urlParam } from 'fuma'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { PeriodCardOptions } from './cardContent'
-	import { eventPath, withSearch } from '$lib/eventPath'
+	import { eventPath, withSearch } from '#lib/eventPath.js'
 	import PlanCursor from './PlanCursor.svelte'
 	import type { Plan } from './types'
 	import { clampScale, persistHourSize, withHourSize } from './zoom'
@@ -50,7 +50,7 @@
 		const url = ids.length
 			? urlParam.with({ teams: JSON.stringify(ids) })
 			: urlParam.without('teams')
-		goto(url, { replaceState: true, noScroll: true, keepFocus: true })
+		goto(url, { replace: true, reset: false })
 	}
 </script>
 

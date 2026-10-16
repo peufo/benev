@@ -13,7 +13,7 @@
 			class:shadow={isActive}
 			href={urlParam.toggle({ [key]: '1' })}
 			data-sveltekit-replacestate
-			data-sveltekit-noscroll
+			data-sveltekit-reset="false"
 			use:tip={{ content: title }}
 		>
 			<OptionIcon size={17} class="opacity-70" />

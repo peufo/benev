@@ -1,12 +1,12 @@
 import { form, getRequestEvent, query } from '$app/server'
 import z from 'zod'
-import { modelMediaImage } from '$lib/models/media'
-import { media, permission, prisma } from '$lib/server'
+import { modelMediaImage } from '#lib/models/media.js'
+import { zSearchInEvent } from '#lib/models/form.js'
+import { media, permission, prisma } from '#lib/server/index.js'
 
 /** Alimente la médiathèque. Un média appartient à l'évènement, ou l'habille déjà. */
-export const searchMedias = query(z.string().default(''), async (search) => {
-	const { locals, params } = getRequestEvent()
-	const eventId = params.eventId!
+export const searchMedias = query(zSearchInEvent, async ({ search, eventId }) => {
+	const { locals } = getRequestEvent()
 	await permission.leader(eventId, locals)
 	return prisma.media.findMany({
 		where: {

@@ -2,7 +2,7 @@
 	import type { ResolvedPathname } from '$app/types'
 	import type { EventTier } from '@prisma/client'
 	import { CheckIcon, InfinityIcon } from '@lucide/svelte'
-	import { EVENT_TIER, parseTierPrice } from '$lib/constant'
+	import { EVENT_TIER, parseTierPrice } from '#lib/constant/index.js'
 
 	interface Props {
 		tier: EventTier

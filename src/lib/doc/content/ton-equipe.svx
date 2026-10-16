@@ -4,7 +4,7 @@ description: Les rôles, les droits, les invitations
 ---
 
 <script lang="ts">
-	import { RolesGlossary, WhoCanDoWhat } from '$lib/doc/content'
+	import { RolesGlossary, WhoCanDoWhat } from '#lib/doc/content/index.js'
 </script>
 
 ## Les quatre rôles {#roles}

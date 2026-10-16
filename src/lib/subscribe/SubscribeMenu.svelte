@@ -2,7 +2,7 @@
 	import { CircleCheckIcon, EllipsisIcon, Trash2Icon, TriangleAlertIcon } from '@lucide/svelte'
 	import { confirmDialog, Popover } from 'fuma'
 	import type { Subscribe } from '@prisma/client'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { deleteSubscribe, toggleSubscribeIsAbsent } from './subscribeState.remote'
 
 	interface Props {
@@ -30,7 +30,7 @@
 					enhanceForm({ success: 'Présence mise à jour', onsuccess: hide })
 				)}
 			>
-				<input type="hidden" name="subscribeId" value={subscribe.id} />
+				<input {...toggleIsAbsentForm.fields.subscribeId.as('hidden', subscribe.id)} />
 				<button class="menu-item w-full">
 					{#if subscribe.isAbsent}
 						<CircleCheckIcon class="text-success" size={20} />
@@ -57,7 +57,7 @@
 					})
 				)}
 			>
-				<input type="hidden" name="subscribeId" value={subscribe.id} />
+				<input {...deleteForm.fields.subscribeId.as('hidden', subscribe.id)} />
 				<button class="menu-item w-full">
 					<Trash2Icon class="text-error/80" size={20} />
 					<span>Supprimer</span>

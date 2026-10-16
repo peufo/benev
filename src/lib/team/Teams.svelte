@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { PeriodWithComputedValues, TeamWithComputedValues } from '$lib/server'
-	import { Placeholder } from '$lib/ui'
+	import type { PeriodWithComputedValues, TeamWithComputedValues } from '#lib/server/index.js'
+	import { Placeholder } from '#lib/ui/index.js'
 	import TeamCard from './TeamCard.svelte'
 
 	interface Props {

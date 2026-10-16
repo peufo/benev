@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { MailCheckIcon } from '@lucide/svelte'
 	import { resolve } from '$app/paths'
-	import { Section } from '$lib/ui'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { logoutUser } from '$lib/me/user.remote'
+	import { Section } from '#lib/ui/index.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { logoutUser } from '#lib/me/user.remote.js'
 
 	let { data } = $props()
 
@@ -38,11 +38,12 @@
 	</dl>
 
 	<!-- Le bouton principal d'abord dans le DOM: c'est lui que déclenche la touche Entrée. Le
-	     rechargement retombe sur cette URL, où le jeton attend encore d'ouvrir la bonne session. -->
+	     succès rejoue le `load` de cette URL, où le jeton attend encore d'ouvrir la bonne session:
+	     il redirige de lui-même, un rechargement doublerait la navigation. -->
 	<div class="mt-8 flex flex-wrap gap-2 flex-row-reverse justify-between">
-		<form {...logout.enhance(enhanceForm({ onsuccess: () => document.location.reload() }))}>
+		<form {...logout.enhance(enhanceForm())}>
 			<button class="btn btn-primary"> Changer de compte </button>
 		</form>
-		<a href={resolve('/me')} class="btn"> Rester avec mon compte </a>
+		<a href={resolve('me')} class="btn"> Rester avec mon compte </a>
 	</div>
 </Section>

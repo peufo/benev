@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { MemberWithComputedValues } from '$lib/server'
-	import type { SubscribeWithTeam } from '$lib/pages/emailSuggesions'
-	import EmailLayout from '$lib/email/EmailLayout.svelte'
-	import { formatRange } from '$lib/formatRange'
+	import type { MemberWithComputedValues } from '#lib/server/index.js'
+	import type { SubscribeWithTeam } from '#lib/pages/emailSuggesions.js'
+	import EmailLayout from '#lib/email/EmailLayout.svelte'
+	import { formatRange } from '#lib/formatRange.js'
 	import { ORIGIN } from '$app/env/public'
 
 	interface Props {

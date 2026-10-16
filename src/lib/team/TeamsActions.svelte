@@ -2,7 +2,7 @@
 	import { tip } from 'fuma'
 	import { ChartGanttIcon, ClipboardCopyIcon, UsersIcon } from '@lucide/svelte'
 	import type { Team } from '@prisma/client'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath } from '#lib/eventPath.js'
 
 	interface Props {
 		teams: Team[]

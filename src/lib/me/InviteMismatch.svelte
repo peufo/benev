@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { TriangleAlertIcon } from '@lucide/svelte'
-	import { invalidateAll } from '$app/navigation'
-	import { Card } from '$lib/ui'
-	import { enhanceForm } from '$lib/enhanceForm'
+	import { refreshAll } from '$app/navigation'
+	import { Card } from '#lib/ui/index.js'
+	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { dismissInvite, logoutUser } from './user.remote'
 
 	interface Props {
@@ -49,7 +49,7 @@
 	<!-- Le bouton principal d'abord dans le DOM: c'est lui que déclenche la touche Entrée. -->
 	<form
 		{...logout.enhance(enhanceForm({ onsuccess: () => document.location.reload() }))}
-		{...dismissInvite.enhance(enhanceForm({ onsuccess: () => invalidateAll() }))}
+		{...dismissInvite.enhance(enhanceForm({ onsuccess: () => refreshAll() }))}
 		class="mt-8 flex flex-wrap gap-2 flex-row-reverse justify-between"
 	>
 		<button formaction={logout.action} class="btn btn-primary"> Changer de compte </button>

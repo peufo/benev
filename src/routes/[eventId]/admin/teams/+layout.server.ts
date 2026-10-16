@@ -1,4 +1,4 @@
-import { permission, prisma } from '$lib/server'
+import { permission, prisma } from '#lib/server/index.js'
 
 export const load = async ({ locals, params: { eventId } }) => {
 	// `admin/+layout.server.ts` a déjà refusé les non-responsables: ce garde ne sert qu'à

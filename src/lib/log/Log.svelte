@@ -104,7 +104,7 @@
 <script lang="ts" generics="T extends LogType">
 	import { slide } from 'svelte/transition'
 	import { tip } from 'fuma'
-	import dayjs from '$lib/dayjs'
+	import dayjs from '#lib/dayjs.js'
 	import type { LogWithEvent } from './logTypes'
 
 	let {

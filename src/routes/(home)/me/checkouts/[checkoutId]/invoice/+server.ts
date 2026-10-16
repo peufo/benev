@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { checkout, getUserOrRedirect, prisma } from '$lib/server'
+import { checkout, getUserOrRedirect, prisma } from '#lib/server/index.js'
 
 /** Renvoie vers le document Stripe de l'achat, facture ou reçu selon ce qui existe. */
 export const GET = async ({ url, locals, params }) => {
@@ -12,5 +12,5 @@ export const GET = async ({ url, locals, params }) => {
 
 	const invoiceUrl = await checkout.getInvoiceUrl(owned.id).catch(() => null)
 	if (!invoiceUrl) error(404, 'Aucune facture pour cet achat')
-	redirect(302, invoiceUrl)
+	redirect(302, invoiceUrl, { external: true })
 }

@@ -51,7 +51,7 @@ C'est la position qu'un concurrent ne peut pas copier honnêtement. Un SaaS ferm
 
 Benevio est utilisé sur les quatre temps d'un événement. Aucun n'est secondaire.
 
-1. **La préparation, au calme.** L'organisateur construit équipes, créneaux et planning depuis un ordinateur, sur plusieurs semaines. C'est là que vivent les interfaces denses: la grille de planning glisser-déposer (`$lib/plan`), la liste des membres, les quotas, les champs personnalisés, les pages CMS de l'événement.
+1. **La préparation, au calme.** L'organisateur construit équipes, créneaux et planning depuis un ordinateur, sur plusieurs semaines. C'est là que vivent les interfaces denses: la grille de planning glisser-déposer (`#lib/plan`), la liste des membres, les quotas, les champs personnalisés, les pages CMS de l'événement.
 2. **L'inscription du bénévole.** Il reçoit un lien, s'inscrit à des créneaux depuis son téléphone, souvent une seule fois, sans jamais revenir. La friction se paie ici plus cher que partout ailleurs.
 3. **Le jour J, sur le terrain.** Téléphone en main, dehors, parfois en plein soleil: pointer les arrivées, retrouver qui manque. Le produit porte pour cela un QR par membre (`/qr/[memberId]`), des badges PDF imprimables et un export iCal des créneaux.
 4. **Le bilan.** Compter les heures, exporter les listes, remercier.
@@ -122,9 +122,9 @@ Paiements par Stripe. Prix en CHF; le produit est ancré en Suisse (Dev Voisard,
 
 Ce sont de vraies personnes et de vrais événements. Leurs citations ne doivent pas être réécrites, résumées ni complétées.
 
-**Preuves d'ouverture, vérifiables en direct** — la page `/open-source` affiche les issues GitHub ouvertes et fermées du dépôt, en temps réel (`$lib/GithubIssues.svelte`). La licence et le dépôt sont publics.
+**Preuves d'ouverture, vérifiables en direct** — la page `/open-source` affiche les issues GitHub ouvertes et fermées du dépôt, en temps réel (`#lib/GithubIssues.svelte`). La licence et le dépôt sont publics.
 
-**Prix réels** — les montants du tableau ci-dessus sont ceux de `$lib/constant`, liés à de vrais identifiants de prix Stripe.
+**Prix réels** — les montants du tableau ci-dessus sont ceux de `#lib/constant`, liés à de vrais identifiants de prix Stripe.
 
 **Ce qui n'existe pas et ne doit pas être inventé:**
 

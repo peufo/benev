@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { currentEventId } from '#lib/eventPath.js'
 	import { PlusIcon, RedoDotIcon, UndoDotIcon } from '@lucide/svelte'
 	import { tick } from 'svelte'
-	import { daytz } from '$lib/dayjs'
+	import { daytz } from '#lib/dayjs.js'
 	import {
 		ButtonDelete,
 		InputSelect,
@@ -14,14 +15,14 @@
 	} from 'fuma'
 	import type { Period, Subscribe, Tag, Team } from '@prisma/client'
 	import { goto } from '$app/navigation'
-	import { searchTeams } from '$lib/team/team.remote'
-	import { tagCall } from '$lib/drawerCall.svelte'
-	import { searchTags } from '$lib/tag/tag.remote'
-	import { TagSelectItem } from '$lib/tag'
+	import { searchTeams } from '#lib/team/team.remote.js'
+	import { tagCall } from '#lib/drawerCall.svelte.js'
+	import { searchTags } from '#lib/tag/tag.remote.js'
+	import { TagSelectItem } from '#lib/tag/index.js'
 	import { toast } from 'svelte-sonner'
-	import { enhanceForm } from '$lib/enhanceForm'
-	import { PERIOD_DEFAULT_MINUTES } from '$lib/constant'
-	import { getEventTimeZone } from '$lib/timezone'
+	import { enhanceForm } from '#lib/enhanceForm.js'
+	import { PERIOD_DEFAULT_MINUTES } from '#lib/constant/index.js'
+	import { getEventTimeZone } from '#lib/timezone.js'
 	import { createPeriod, deletePeriod, duplicatePeriod, updatePeriod } from './period.remote'
 	import { engagedSubscribes, notifiedSentence, scheduleChanged } from './periodChange'
 	import { selectNotify } from './selectNotify'
@@ -47,7 +48,11 @@
 
 	const uid = $props.id()
 	const deleteFormId = `${uid}-delete`
-	const remoteForm = $derived(period?.id ? updatePeriod.for(period.id) : createPeriod.for(uid))
+	// Les deux instances restent nommées: `notify` n'appartient qu'au schéma de la modification,
+	// `redirectTo` qu'à celui de la création, et l'union des deux n'expose aucun des deux champs.
+	const updateForm = $derived(period?.id ? updatePeriod.for(period.id) : undefined)
+	const createForm = $derived(period?.id ? undefined : createPeriod.for(uid))
+	const remoteForm = $derived(updateForm ?? createForm!)
 
 	const detectChange = useDetectChange(period)
 
@@ -130,9 +135,8 @@
 			// Le créneau créé devient celui du formulaire: `form_period` le recharge via le `load`,
 			// ce qui permet d'enchaîner les duplications sans rouvrir le tiroir.
 			await goto(urlParam.with({ form_period: newPeriod.id }), {
-				invalidateAll: true,
-				noScroll: true,
-				keepFocus: true,
+				refreshAll: true,
+				reset: false,
 			})
 		} catch (err) {
 			console.error(err)
@@ -213,9 +217,9 @@
 		id={deleteFormId}
 		class="hidden"
 	>
-		<input type="hidden" name="id" value={period.id} />
+		<input {...deletePeriod.fields.id.as('hidden', period.id)} />
 		{#if !disableRedirect}
-			<input type="hidden" name="redirectTo" value={urlParam.without('form_period')} />
+			<input {...deletePeriod.fields.redirectTo.as('hidden', urlParam.without('form_period'))} />
 		{/if}
 	</form>
 {/if}
@@ -229,21 +233,17 @@
 	)}
 	class="flex flex-col gap-3 {klass}"
 >
-	{#if period?.id}
-		<input type="hidden" name="id" value={period.id} />
-		<!-- Le préfixe `b:` est celui que `field.as('checkbox')` pose: SvelteKit en fait un booléen. -->
-		<input type="hidden" name="b:notify" value={notify ? 'on' : 'off'} />
-	{/if}
-
-	{#if !disableRedirect}
-		<input type="hidden" name="redirectTo" value={urlParam.without('form_period')} />
+	{#if updateForm}
+		<input {...updateForm.fields.notify.as('hidden', notify)} />
+	{:else if createForm && !disableRedirect}
+		<input {...createForm.fields.redirectTo.as('hidden', urlParam.without('form_period'))} />
 	{/if}
 
 	{#key period}
 		<InputSelect
 			field={remoteForm.fields.team}
 			bind:value={selectedTeam}
-			items={searchTeams}
+			items={({ search }) => searchTeams({ search, eventId: currentEventId() })}
 			label="Secteur"
 			class="w-full"
 		>
@@ -258,7 +258,7 @@
 		<InputMultiSelect
 			field={remoteForm.fields.tags}
 			bind:value={selectedTags}
-			items={searchTags}
+			items={({ search }) => searchTags({ search, eventId: currentEventId() })}
 			label="Étiquettes"
 			placeholder="Permis de conduire, Nuit, Montage, ..."
 		>

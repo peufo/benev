@@ -2,7 +2,7 @@
 	import { PencilIcon } from '@lucide/svelte'
 	import type { Tag } from '@prisma/client'
 	import { tip } from 'fuma'
-	import type { DrawerLinkAttributes } from '$lib/drawerCall.svelte'
+	import type { DrawerLinkAttributes } from '#lib/drawerCall.svelte.js'
 
 	interface Props {
 		tag: Tag

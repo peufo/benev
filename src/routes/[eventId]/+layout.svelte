@@ -9,24 +9,24 @@
 		MapPinnedIcon,
 		PhoneIcon,
 	} from '@lucide/svelte'
-	import facebookLogo from '$lib/assets/facebook.svg'
-	import instagramLogo from '$lib/assets/instagram.svg'
+	import facebookLogo from '#lib/assets/facebook.svg'
+	import instagramLogo from '#lib/assets/instagram.svg'
 	import { page } from '$app/state'
 	import { JsonLd } from 'svelte-meta-tags'
 
-	import { Card } from '$lib/ui'
+	import { Card } from '#lib/ui/index.js'
 	import { Drawer } from 'fuma'
-	import { eventPath } from '$lib/eventPath'
-	import { Header, Footer, AdminNavigation } from '$lib/layout'
-	import { MemberFieldForm } from '$lib/member'
-	import DrawersForm from '$lib/DrawersForm.svelte'
-	import { MediaDrawer } from '$lib/material/media'
+	import { eventPath } from '#lib/eventPath.js'
+	import { Header, Footer, AdminNavigation } from '#lib/layout/index.js'
+	import { MemberFieldForm } from '#lib/member/index.js'
+	import DrawersForm from '#lib/DrawersForm.svelte'
+	import { MediaDrawer } from '#lib/material/media/index.js'
 	import EventMenu from './EventMenu.svelte'
 	import FooterLink from './FooterLink.svelte'
-	import EventTheme from '$lib/event/theme/EventTheme.svelte'
-	import { EventIcon, EventTierBadge } from '$lib/event'
-	import { mapUrl } from '$lib/location'
-	import { eventSchema } from '$lib/seo'
+	import EventTheme from '#lib/event/theme/EventTheme.svelte'
+	import { EventIcon, EventTierBadge } from '#lib/event/index.js'
+	import { mapUrl } from '#lib/location/index.js'
+	import { eventSchema } from '#lib/seo/index.js'
 
 	let { data, children } = $props()
 
@@ -146,7 +146,7 @@
 				</p>
 
 				<div class="mt-8">
-					<a href={resolve('/me')} class="btn btn-sm">
+					<a href={resolve('me')} class="btn btn-sm">
 						<ArrowLeftIcon />
 						<span>mon profil</span>
 					</a>
@@ -162,7 +162,7 @@
 				{/snippet}
 
 				<div class="mt-8">
-					<a href={resolve('/me')} class="btn btn-sm">
+					<a href={resolve('me')} class="btn btn-sm">
 						<ArrowLeftIcon />
 						<span>mon profil</span>
 					</a>

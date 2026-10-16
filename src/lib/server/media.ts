@@ -5,7 +5,7 @@ import type { Prisma } from '@prisma/client'
 import { prisma } from './prisma'
 import { MEDIA_DIR } from '$app/env/private'
 import { error } from '@sveltejs/kit'
-import type { MediaImageInput } from '$lib/models/media'
+import type { MediaImageInput } from '#lib/models/media.js'
 
 type UploadOption = {
 	where?: Prisma.MediaWhereInput

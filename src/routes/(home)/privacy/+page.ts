@@ -1,5 +1,5 @@
-import { pageMetaTags } from '$lib/seo'
-import { legalDoc } from '$lib/layout/legal'
+import { pageMetaTags } from '#lib/seo/index.js'
+import { legalDoc } from '#lib/layout/legal.js'
 
 const doc = legalDoc('/privacy')
 

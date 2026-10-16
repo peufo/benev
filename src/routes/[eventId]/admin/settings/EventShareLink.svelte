@@ -3,13 +3,13 @@
 	import { CopyIcon, LinkIcon, UserRoundPlusIcon } from '@lucide/svelte'
 	import { urlParam, useCopy } from 'fuma'
 	import { page } from '$app/state'
-	import { eventPath } from '$lib/eventPath'
+	import { eventPath } from '#lib/eventPath.js'
 
 	let { event }: { event: Event } = $props()
 
 	// `eventPath` rend un chemin relatif: le lien à diffuser doit être résolu contre la page
 	// courante pour redevenir une URL entière.
-	const shareUrl = $derived(new URL(eventPath(''), page.url).href)
+	const shareUrl = $derived(new URL(eventPath(''), page.url.href).href)
 	const copy = $derived(useCopy({ value: () => shareUrl, successMessage: 'Lien copié' }))
 </script>
 
@@ -23,7 +23,7 @@
 		<a
 			class="btn btn-sm ml-auto btn-secondary"
 			href={urlParam.with({ form_invite: '{}' })}
-			data-sveltekit-noscroll
+			data-sveltekit-reset="false"
 			data-sveltekit-replacestate
 		>
 			<UserRoundPlusIcon size={20} class="opacity-70" />

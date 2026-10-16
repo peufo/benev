@@ -30,7 +30,7 @@ export function bindValueWithParams(
 		const newUrl = node.value
 			? urlParam.with({ [name]: node.value }, 'skip', 'take')
 			: urlParam.without(name, 'skip', 'take')
-		await goto(newUrl, { replaceState: true, keepFocus: true, noScroll: true })
+		await goto(newUrl, { replace: true, reset: false })
 	}, debounceTime)
 
 	importValueFromParams()
@@ -65,7 +65,7 @@ export function bindCheckedWithParams(
 		const newUrl = node.checked
 			? urlParam.with({ [name]: node.value }, 'skip', 'take')
 			: urlParam.without(name, 'skip', 'take')
-		await goto(newUrl, { replaceState: true, keepFocus: true, noScroll: true })
+		await goto(newUrl, { replace: true, reset: false })
 	}, debounceTime)
 
 	importValueFromParams()

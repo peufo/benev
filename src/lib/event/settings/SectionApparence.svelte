@@ -2,8 +2,8 @@
 	import type { Event } from '@prisma/client'
 	import { tick, untrack } from 'svelte'
 	import { InputRange } from 'fuma'
-	import { THEME_PRESETS, type ThemePresetKey } from '$lib/constant'
-	import { InputMedia } from '$lib/material'
+	import { THEME_PRESETS, type ThemePresetKey } from '#lib/constant/index.js'
+	import { InputMedia } from '#lib/material/index.js'
 	import { theme } from '../theme/state.svelte'
 	import type { EventSettingsFields } from './types'
 
@@ -59,12 +59,12 @@
 
 <div class="flex flex-col gap-6">
 	<div class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
-		<InputMedia key="posterId" label="Affiche" bind:value={posterId} />
+		<InputMedia field={fields.posterId} label="Affiche" bind:value={posterId} />
 
-		<InputMedia key="logoId" label="Logo" bind:value={logoId} />
+		<InputMedia field={fields.logoId} label="Logo" bind:value={logoId} />
 
 		<InputMedia
-			key="backgroundImageId"
+			field={fields.backgroundImageId}
 			label="Image de fond"
 			bind:value={theme.backgroundImageId}
 			oninput={(media) => media && clearPreset()}
@@ -166,10 +166,8 @@
 			<!-- Piloté par `theme` plutôt que par un `field`: l'aperçu et la soumission n'ont ainsi
 		     qu'une source, et le `reset` natif du formulaire le rend à sa valeur enregistrée. -->
 			<input
-				type="hidden"
+				{...fields.backgroundPreset.as('hidden', theme.backgroundPreset ?? '')}
 				bind:this={presetInput}
-				name="backgroundPreset"
-				value={theme.backgroundPreset ?? ''}
 			/>
 		</div>
 	</div>

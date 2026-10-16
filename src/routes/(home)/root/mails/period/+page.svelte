@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { EmailPeriodChanged } from '$lib/email'
+	import { EmailPeriodChanged } from '#lib/email/index.js'
 
 	let { data } = $props()
 </script>

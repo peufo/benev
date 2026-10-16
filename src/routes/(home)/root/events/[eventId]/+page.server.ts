@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { prisma } from '$lib/server'
+import { prisma } from '#lib/server/index.js'
 import type { SubscribeState } from '@prisma/client'
 
 export const load = async ({ params }) => {

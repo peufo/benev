@@ -1,5 +1,5 @@
-import { error, invalid, redirect, type RemoteFormInput } from '@sveltejs/kit'
-import { form, getRequestEvent, query } from '$app/server'
+import { error, invalid, redirect } from '@sveltejs/kit'
+import { form, getRequestEvent, query, type RemoteFormInput } from '$app/server'
 import type { Field, FieldType } from '@prisma/client'
 import z from 'zod'
 import {
@@ -16,14 +16,15 @@ import {
 	sendEmailModel,
 	sendInviteEmail,
 	uniqueIssue,
-} from '$lib/server'
-import { EmailAcceptInviteNotification } from '$lib/email'
-import { modelInvite, modelMemberCondition, modelMemberSetting } from '$lib/models'
-import { diffChanges, hasChanges, projectProfile } from '$lib/log'
+} from '#lib/server/index.js'
+import { EmailAcceptInviteNotification } from '#lib/email/index.js'
+import { modelInvite, modelMemberCondition, modelMemberSetting } from '#lib/models/index.js'
+import { zSearchInEvent } from '#lib/models/form.js'
+import { diffChanges, hasChanges, projectProfile } from '#lib/log/index.js'
 import { isMemberAllowed } from './conditions/isMemberAllowed'
 
 /**
- * Ces formulaires vivent dans `$lib/member` et non à côté d'une route: ils sont montés depuis
+ * Ces formulaires vivent dans `#lib/member` et non à côté d'une route: ils sont montés depuis
  * `[eventId]/me`, `[eventId]/register` et `[eventId]/admin/members`. `getRequestEvent().params`
  * reste renseigné dans tous les cas — SvelteKit rejoue le matching depuis la page appelante.
  */
@@ -338,9 +339,8 @@ export const deleteMember = form(
 )
 
 /** Alimente les selects de membre: invitation, responsables, aperçu de badge. */
-export const searchMembers = query(z.object({ search: z.string() }), async ({ search }) => {
-	const { locals, params } = getRequestEvent()
-	const eventId = params.eventId!
+export const searchMembers = query(zSearchInEvent, async ({ search, eventId }) => {
+	const { locals } = getRequestEvent()
 	await permission.leader(eventId, locals)
 	return prisma.member.findMany({
 		where: {
@@ -361,23 +361,25 @@ export const searchMembers = query(z.object({ search: z.string() }), async ({ se
  * famille est réduit à son initiale: il ne s'agit pas de révéler l'identité d'un inconnu à
  * qui devine son adresse, mais de confirmer à un responsable qu'il vise la bonne personne.
  */
-export const findUserByEmail = query(z.email(), async (email) => {
-	const { locals, params } = getRequestEvent()
-	await permission.leader(params.eventId!, locals)
-	const user = await prisma.user.findFirst({ where: { email } })
-	if (!user) return null
-	return { firstName: user.firstName, lastName: `${user.lastName[0]}.` }
-})
+export const findUserByEmail = query(
+	z.object({ email: z.email(), eventId: z.string() }),
+	async ({ email, eventId }) => {
+		const { locals } = getRequestEvent()
+		await permission.leader(eventId, locals)
+		const user = await prisma.user.findFirst({ where: { email } })
+		if (!user) return null
+		return { firstName: user.firstName, lastName: `${user.lastName[0]}.` }
+	}
+)
 
 /**
  * Combien de membres satisferaient un jeu de conditions. L'aperçu du formulaire de secteur,
  * qui se rejoue à chaque retouche: la liste elle-même n'est jamais transmise.
  */
 export const countMembersAllowed = query(
-	z.array(modelMemberCondition),
-	async (conditions): Promise<number> => {
-		const { locals, params } = getRequestEvent()
-		const eventId = params.eventId!
+	z.object({ conditions: z.array(modelMemberCondition), eventId: z.string() }),
+	async ({ conditions, eventId }): Promise<number> => {
+		const { locals } = getRequestEvent()
 		await permission.leader(eventId, locals)
 		const members = await prisma.member.findMany({ where: { eventId } })
 		return members.filter((member) => isMemberAllowed(conditions, member)).length

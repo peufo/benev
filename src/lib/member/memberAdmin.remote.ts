@@ -1,18 +1,18 @@
 import { error } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
 import z from 'zod'
-import { modelUserContactUpdate } from '$lib/models'
+import { modelUserContactUpdate } from '#lib/models/index.js'
 import {
 	createLog,
 	notifyTierQuotaIfNeeded,
 	permission,
 	prisma,
 	sendInviteEmail,
-} from '$lib/server'
+} from '#lib/server/index.js'
 // Jamais depuis le baril: la fabrique s'appelle à l'évaluation du module, or le cycle l'y
 // laisserait à `undefined` selon le point d'entrée.
-import { createRateLimit } from '$lib/server/rateLimit'
-import { diffChanges, hasChanges, projectMemberContact } from '$lib/log'
+import { createRateLimit } from '#lib/server/rateLimit.js'
+import { diffChanges, hasChanges, projectMemberContact } from '#lib/log/index.js'
 
 /**
  * Formulaires d'administration d'un membre. Ils sont montés depuis

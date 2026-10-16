@@ -1,6 +1,6 @@
-import { prisma } from '$lib/server'
+import { prisma } from '#lib/server/index.js'
 import { error } from '@sveltejs/kit'
-import { mergeMetaTags, pageMetaTags, tiptapExcerpt } from '$lib/seo'
+import { mergeMetaTags, pageMetaTags, tiptapExcerpt } from '#lib/seo/index.js'
 
 export const load = async ({ params, parent }) => {
 	const { member, event, metaTags, userIsRoot } = await parent()

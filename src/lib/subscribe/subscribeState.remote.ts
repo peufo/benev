@@ -3,9 +3,9 @@ import type { Prisma, SubscribeState } from '@prisma/client'
 import { form, getRequestEvent } from '$app/server'
 import { isFreeRange } from 'perod'
 import z from 'zod'
-import { createLog, notifyTierQuotaIfNeeded, permission, prisma } from '$lib/server'
-import { subscribeNotification } from '$lib/email/subscribeNotification'
-import { periodIsComplet } from '$lib/period'
+import { createLog, notifyTierQuotaIfNeeded, permission, prisma } from '#lib/server/index.js'
+import { subscribeNotification } from '#lib/email/subscribeNotification.js'
+import { periodIsComplet } from '#lib/period/index.js'
 
 type Edtions = Record<SubscribeState, SubscribeState[]>
 const creatorEditions: Edtions = {
