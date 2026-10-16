@@ -38,7 +38,7 @@ cartes, pas une liste dense.
   existe, son icône sinon, et à défaut un **monogramme** tiré du nom (`eventInitials`)
   sur fond sable. Une tuile vide dirait « actif manquant »; un monogramme identifie.
 - **Le prochain créneau prime**: le créneau accepté le plus proche (jour, heures,
-  secteur) est détaché dans un encart `bg-secondary/10`, en `primary`. C'est la réponse
+  secteur) est détaché dans un encart `bg-accent-soft`, en `primary`. C'est la réponse
   littérale à « où et quand », et elle passe avant les compteurs.
 - **Trois groupes visibles**: invitations en attente, « À venir », « Sans date ».
   « À venir » épingle les évènements en cours, puis trie sur la date de fin.

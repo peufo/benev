@@ -188,7 +188,22 @@ Trois classes utilitaires vivent dans `src/app.css` et complètent l'échelle: `
 
 **The Weight Contrast Rule.** Ne pas créer de tailles intermédiaires plates. Sauter d'au moins un poids (400 → 600 → 700/800) et d'au moins 1.25× en taille entre deux niveaux de hiérarchie.
 
-## 4. Elevation
+## 4. Layout
+
+Deux densités, qui ne se mélangent pas. Les pages publiques respirent: une colonne centrée, de grandes respirations entre chapitres. Les écrans d'administration empilent des surfaces serrées, parce qu'on y travaille au calme mais longtemps.
+
+### Pages publiques
+
+- **Conteneur:** `max-w-6xl mx-auto px-4 sm:px-6` pour les chapitres qui portent une grille (« Comment ça marche », le mur d'affiches, `/events`). `max-w-5xl` pour ce qui se lit en largeur moyenne (la bande de confiance, les témoignages). Les parcours d'un seul formulaire se resserrent à `max-w-lg` ou `max-w-md`.
+- **Rythme vertical:** chaque chapitre de la landing tient en `py-20 md:py-28`. Son entête (titre puis chapeau) se sépare du contenu par `mb-12 md:mb-16` à `mb-16 md:mb-20`.
+- **Entête de chapitre:** titre en `text-3xl md:text-4xl font-extrabold text-primary tracking-tight`, chapeau en `mt-4 text-lg text-base-content/70 max-w-xl`. Une action de sortie (« Voir les événements passés ») se pose à droite du bloc sur desktop, alignée sur sa base, et passe dessous sur mobile.
+- **Points de rupture:** ceux de Tailwind, en mobile d'abord. `md` (768px) est la bascule principale, celle où les colonnes apparaissent.
+
+### Écrans d'application
+
+Les `Surface` et `Section` de `#lib/ui` s'empilent dans la colonne de la page. Une surface garde `p-2` et ses actions en `btn-sm`; un chapitre prend `p-5` et `space-y-4`. Le planning (`#lib/plan`) est l'exception assumée: il occupe toute la largeur disponible.
+
+## 5. Elevation & Depth
 
 Le système est **plat par défaut, soulevé avec intention**. La profondeur n'est pas décorative: elle signale l'interactivité ou délimite une surface. Le fond d'application est `bg-base-200/20`, recouvert sur le groupe `(home)` d'un dégradé descendant `from-accent/10 via-accent/5 to-transparent`.
 
@@ -202,9 +217,23 @@ Le système est **plat par défaut, soulevé avec intention**. La profondeur n'e
 
 **The Purposeful Lift Rule.** Une ombre ne justifie sa place que si elle guide l'œil vers une action ou délimite une surface cliquable. Pas d'ombres sur du texte statique ou des conteneurs purement informatifs. On utilise les utilitaires Tailwind (`shadow-sm`, `shadow-lg`, `shadow-xl`) plutôt que des valeurs d'ombre écrites en dur.
 
-**The No-Nested-Card Rule.** Une card ne contient jamais une autre card. Un composant réutilisable susceptible d'être monté dans une card (`Login`, les formulaires d'étape de `Register`) ne fournit pas sa propre surface: il lit le contexte `contextContainer` de `#lib/fuma-legacy` et se rend nu quand il est déjà porté.
+**The No-Nested-Card Rule.** Une card ne contient jamais une autre card. Un composant réutilisable susceptible d'être monté dans une card (`Login`, les formulaires d'étape de `Register`) ne fournit pas sa propre surface: il lit le contexte `contextContainer` de `#lib/ui/context.js` et se rend nu quand il est déjà porté.
 
-## 5. Components
+## 6. Shapes
+
+Des coins arrondis modérés, des filets fins, et rien d'autre. Le produit n'a pas de silhouette signature: la forme reste en retrait pour que le contenu (une affiche, un créneau, un nom) porte l'identité.
+
+- **Deux rayons.** `rounded-box` (16px) pour un conteneur: surface, chapitre, card, encart interne, modale. `rounded-field` (8px) pour ce qui vit dedans: bouton, champ, encart compact (le prochain créneau de `/me`), vignette d'affiche. `rounded-lg` vaut le même 8px et se rencontre encore là où `rounded-field` serait plus juste.
+- **Le cercle** (`rounded-full`) est réservé aux pastilles, aux avatars et aux points de la bande de confiance.
+- **La barre de navigation** n'arrondit que ses coins du bas (`rounded-b-xl`, 12px): elle est suspendue au haut de l'écran.
+- **Filets:** toujours 1px, en `border-soft` ou `border-hard`. Une bordure ne porte jamais de couleur de marque comme accent latéral.
+- **Affiches:** sur la landing, au format A réel des préréglages média (`aspect-210/297`, `object-cover`); dans les listes d'évènements, recadrées en `aspect-3/4`. Elles gardent toujours leur filet `border-soft`, qui les détache d'un fond clair quand l'affiche elle-même est blanche.
+
+### Named Rules
+
+**The Two Radii Rule.** Un conteneur prend `rounded-box`, ce qu'il contient prend `rounded-field`. Un troisième rayon inventé au cas par cas (`rounded-md`, `rounded-2xl`) est une hiérarchie de forme qui n'existe pas.
+
+## 7. Components
 
 Tous les composants s'appuient sur DaisyUI v5 et sur la bibliothèque `fuma` (liée en local). Les classes utilitaires Tailwind ajustent l'espacement, la typographie et les cas particuliers. Aucune valeur de couleur ou de rayon n'est écrite en dur.
 
@@ -248,7 +277,21 @@ Bande horizontale pleine largeur, fond `bg-accent-softer`, bordures `border-y bo
 
 Les pastilles sont **toutes `bg-secondary`**, à pleine force. La couleur n'encode rien ici — les trois affirmations sont indépendantes, pas des catégories: trois teintes différentes inventeraient une taxonomie qui n'existe pas. Le fond est chaud et la bordure neutre précisément pour que ces trois points verts soient la seule couleur de la bande.
 
-## 6. Do's and Don'ts
+### Signature Component: Poster Wall
+
+`PosterWall` de `#lib/landing`, juste sous la bande de confiance. C'est une illustration, pas un chapitre: ni titre, ni chapeau, ni lien. Les affiches des évènements qui ont trouvé leurs bénévoles avec benevio parlent d'elles-mêmes; la preuve sociale du produit est faite de leurs images, pas d'une rangée de logos ni d'un compteur.
+
+- **Composition:** une seule rangée pleine largeur, affiches de 144px (160px à `md`), en `py-12 md:py-16`. Une respiration entre le hero et « Comment ça marche ».
+- **Défilement:** la bande avance d'elle-même à 30px/s, vers la gauche, en boucle. Elle porte deux copies de la liste (la seconde `aria-hidden`, images sans `alt`); arrivée à la moitié, elle revient d'une moitié, ce qui ne se voit pas. Les éléments sont espacés par une marge et non par un `gap`, pour que les deux copies mesurent exactement la moitié de la bande. Un masque en dégradé efface les deux bords sur 4rem.
+- **Prise en main:** à la souris, on clique et on glisse la bande, qui fait le tour dans les deux sens; au doigt, c'est le défilement natif, inertie comprise. Après un geste, la bande attend 1,5s avant de repartir.
+- **Légende:** le nombre de membres validés et le nombre d'heures de créneaux acceptés, en `text-sm text-base-content/70 tabular-nums`. Pas de nom: l'affiche le porte, et l'`alt` le dit. Les chiffres restent ceux d'un évènement: ni total de plateforme ni gros chiffre.
+- **Pas de lien:** la plupart des évènements sont archivés.
+- **Sélection:** publiés ou archivés, déjà commencés, au moins 20 membres validés, affiche présente sur le disque; les douze plus récents. Sous quatre, la section ne s'affiche pas: une instance neuve n'expose pas une bande vide.
+- **Couleur:** aucune. Les affiches apportent toute la couleur de la section, et c'est pour cela qu'elle n'a ni fond ni pastille.
+
+**The Pausable Motion Rule.** Un mouvement qui démarre seul cède la main dès qu'on le touche: il s'arrête au survol, se laisse saisir et glisser, se met en pause par un bouton (`btn-sm btn-circle` sur fond `base-100`, posé par-dessus la bande en haut à droite, hors de l'élément masqué pour que le fondu ne l'efface pas), et ne démarre pas du tout sous `prefers-reduced-motion`. Dans ce dernier cas, la copie, le bouton et le masque disparaissent, et la rangée devient une bande qu'on fait défiler à la main.
+
+## 8. Do's and Don'ts
 
 ### Do:
 

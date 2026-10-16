@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 2,
-	"generatedAt": "2026-07-29T00:00:00.000Z",
+	"generatedAt": "2026-10-16T12:27:30.000Z",
 	"title": "Design System: benevio",
 	"extensions": {
 		"themeSource": {
@@ -236,12 +236,14 @@
 			{
 				"name": "border-soft",
 				"value": "color-mix(in oklab, var(--color-base-content) 18%, #0000)",
-				"purpose": "Bordure par défaut: cards internes, champs, encarts, séparateurs."
+				"purpose": "Bordure par défaut: surfaces de travail (.surface), cards internes, champs, encarts, séparateurs.",
+				"source": "fuma.css (@utility), repris par benev"
 			},
 			{
 				"name": "border-hard",
-				"value": "color-mix(in oklab, var(--color-base-content) 40%, #0000)",
-				"purpose": "Bordure des conteneurs autonomes: card principale, pied de page."
+				"value": "color-mix(in oklab, var(--color-base-content) 25%, #0000)",
+				"purpose": "Bordure des conteneurs qui doivent tenir seuls: card principale, pied de page, tiroir (.surface-drawer).",
+				"source": "fuma.css (@utility), repris par benev"
 			}
 		],
 		"typographyMeta": {
@@ -324,7 +326,30 @@
 				"name": "2xl",
 				"value": "1536px"
 			}
-		]
+		],
+		"warmFills": [
+			{
+				"name": "bg-accent-soft",
+				"value": "color-mix(in oklab, var(--color-accent) 12%, var(--color-base-100))",
+				"hex": "#fdf2e7",
+				"purpose": "Aplat opaque des encarts « ce bloc compte »: l'invitation à reprendre, le prochain créneau, l'achat qui vient d'aboutir. Encre base-content à 13.30:1."
+			},
+			{
+				"name": "bg-accent-softer",
+				"value": "color-mix(in oklab, var(--color-accent) 6%, var(--color-base-100))",
+				"hex": "#fef9f3",
+				"purpose": "Aplat des grandes surfaces, où 12 % pèserait: la Trust Band, le survol des lignes d'équipe du planning."
+			},
+			{
+				"name": "bg-dash",
+				"value": "repeating-linear-gradient(-45deg, var(--color-base-100) 0 9px, var(--color-base-200) 9px 18px)",
+				"purpose": "Hachure « pas encore disponible »: l'invitation dont l'adresse n'est pas prouvée. S'oppose à bg-accent-soft dans le même composant."
+			}
+		],
+		"pageAtmosphere": {
+			"value": "linear-gradient(to bottom, color-mix(in oklab, var(--color-accent) 10%, transparent), color-mix(in oklab, var(--color-accent) 5%, transparent), transparent)",
+			"scope": "(home)/+layout.svelte uniquement; le groupe [eventId] n'en hérite pas."
+		}
 	},
 	"components": [
 		{
@@ -344,20 +369,36 @@
 			"css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; font-weight: 600; line-height: 1; padding: 0 16px; height: 40px; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 8px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn:hover { background: #f2f2f2; } .ds-btn:focus-visible { outline: 2px solid #2663eb; outline-offset: 2px; }"
 		},
 		{
-			"name": "Card",
+			"name": "Surface",
 			"kind": "card",
-			"refersTo": "card",
-			"description": "Conteneur autonome de $lib/fuma-legacy (card border border-hard bg-base-100 shadow-lg), corps en p-2 sm:p-8. Ne s'imbrique jamais dans une autre card.",
-			"html": "<div class=\"ds-card\"><h2 class=\"ds-card-title\">Titre de la card</h2><p class=\"ds-card-body\">Contenu de la card.</p></div>",
-			"css": ".ds-card { background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid rgba(31, 41, 55, 0.4); border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); padding: 32px; } .ds-card-title { color: rgba(31, 41, 55, 0.7); font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin: 0 0 8px; } .ds-card-body { font-size: 1rem; font-weight: 400; line-height: 1.5; margin: 0; }"
+			"refersTo": "surface",
+			"description": "Surface de travail des écrans d'administration (.surface: bg-base-100 rounded-box border-soft p-2): titre compact à gauche, actions btn-sm à droite. Tuiles du tableau de bord, journal, fiche membre, secteur.",
+			"html": "<section class=\"ds-surface\"><div class=\"ds-surface-head\"><h2 class=\"ds-surface-title\">Journal</h2><button class=\"ds-btn-sm\">Exporter</button></div><p class=\"ds-surface-body\">Nicole a accepté l'inscription de Valérie au créneau Bar, samedi 18:00–22:00.</p></section>",
+			"css": ".ds-surface { background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 16px; padding: 8px; max-width: 420px; } .ds-surface-head { display: flex; align-items: flex-start; gap: 8px; padding: 0 4px 16px 8px; } .ds-surface-title { flex: 1; margin: 0; padding-top: 4px; font-size: 1rem; font-weight: 600; color: rgba(31, 41, 55, 0.6); opacity: 0.8; } .ds-btn-sm { font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 600; height: 32px; padding: 0 12px; background: #ffffff; color: #1f2937; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 8px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-sm:hover { background: #f2f2f2; } .ds-btn-sm:focus-visible { outline: 2px solid #2663eb; outline-offset: 2px; } .ds-surface-body { margin: 0; padding: 0 8px 8px; font-size: 0.875rem; line-height: 1.5; }"
+		},
+		{
+			"name": "Section",
+			"kind": "card",
+			"refersTo": "section",
+			"description": "Chapitre des pages qui se lisent de haut en bas (réglages, /me, /docs): la même surface en p-5, icône et sous-titre, sans actions dans l'entête; un bouton qui agit sur le chapitre se pose dans un pied border-t border-soft pt-4.",
+			"html": "<section class=\"ds-section\"><div class=\"ds-section-head\"><svg class=\"ds-section-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4\"/></svg><div><h2 class=\"ds-section-title\">Inscriptions</h2><p class=\"ds-section-sub\">Qui peut s'inscrire, et à quelles conditions</p></div></div><p class=\"ds-section-body\">Les bénévoles choisissent leurs créneaux eux-mêmes.</p><div class=\"ds-section-foot\"><button class=\"ds-section-btn\">Enregistrer</button></div></section>",
+			"css": ".ds-section { background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 16px; padding: 20px; max-width: 480px; display: flex; flex-direction: column; gap: 16px; } .ds-section-head { display: flex; gap: 16px; } .ds-section-icon { width: 20px; height: 20px; flex-shrink: 0; opacity: 0.7; transform: translateY(4px); } .ds-section-title { margin: 0; font-size: 1.25rem; font-weight: 600; line-height: 1.4; color: rgba(31, 41, 55, 0.7); } .ds-section-sub { margin: 0; font-size: 0.875rem; color: rgba(31, 41, 55, 0.7); } .ds-section-body { margin: 0; line-height: 1.5; } .ds-section-foot { border-top: 1px solid rgba(31, 41, 55, 0.18); padding-top: 16px; display: flex; justify-content: flex-end; } .ds-section-btn { font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; font-weight: 600; height: 40px; padding: 0 16px; background: #2663eb; color: #ffffff; border: 1px solid #2663eb; border-radius: 8px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-section-btn:hover { background: #1e51c9; } .ds-section-btn:focus-visible { outline: 2px solid #2663eb; outline-offset: 2px; }"
 		},
 		{
 			"name": "Inset Panel",
 			"kind": "card",
 			"refersTo": "inset-panel",
-			"description": "Bloc secondaire à l'intérieur d'une card (border border-soft rounded-box p-5). Remplace la card imbriquée.",
+			"description": "Bloc secondaire dans une card ou une surface (border border-soft rounded-box p-5), à la place d'une card imbriquée. Quand le bloc compte, il prend bg-accent-soft.",
 			"html": "<div class=\"ds-inset\"><h3 class=\"ds-inset-title\">Tu n'organises pas d'événement ?</h3><p class=\"ds-inset-body\">Rends-toi dans l'espace dédié de l'événement.</p></div>",
-			"css": ".ds-inset { background: rgba(17, 185, 129, 0.1); color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 16px; padding: 20px; } .ds-inset-title { color: #2663eb; font-size: 1rem; font-weight: 600; margin: 0; } .ds-inset-body { color: rgba(31, 41, 55, 0.8); font-size: 0.875rem; line-height: 1.6; margin: 4px 0 0; }"
+			"css": ".ds-inset { background: #fdf2e7; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 16px; padding: 20px; } .ds-inset-title { color: #2663eb; font-size: 1rem; font-weight: 600; margin: 0; } .ds-inset-body { color: rgba(31, 41, 55, 0.8); font-size: 0.875rem; line-height: 1.6; margin: 4px 0 0; }"
+		},
+		{
+			"name": "Card (héritée)",
+			"kind": "card",
+			"refersTo": "card",
+			"description": "Card autonome de #lib/ui (card border border-hard bg-base-100 shadow-lg), corps p-2 sm:p-8. Ne plus l'employer sur les écrans d'administration; ne s'imbrique jamais.",
+			"html": "<div class=\"ds-card\"><h2 class=\"ds-card-title\">Titre de la card</h2><p class=\"ds-card-body\">Contenu de la card.</p></div>",
+			"css": ".ds-card { background: #ffffff; color: #1f2937; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; border: 1px solid rgba(31, 41, 55, 0.25); border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); padding: 32px; } .ds-card-title { color: rgba(31, 41, 55, 0.7); font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin: 0 0 8px; } .ds-card-body { font-size: 1rem; font-weight: 400; line-height: 1.5; margin: 0; }"
 		},
 		{
 			"name": "Text Input",
@@ -390,16 +431,24 @@
 			"description": "Bande horizontale de confiance pleine largeur, fond chaud bg-accent-softer et bordures border-soft. Les pastilles sont toutes secondary à pleine force: la couleur n'encode rien ici, elle affirme. Trois teintes différentes suggéreraient à tort trois catégories. Le fond est chaud et la bordure neutre pour que ces trois points verts soient la seule couleur de la bande.",
 			"html": "<div class=\"ds-trust-band\"><span class=\"ds-trust-dot\"></span><span>Open source</span><span class=\"ds-trust-dot\"></span><span>Gratuit jusqu'à 50 bénévoles</span><span class=\"ds-trust-dot\"></span><span>Personnalisable à ton image</span></div>",
 			"css": ".ds-trust-band { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 24px; background: #fef9f3; border-top: 1px solid rgba(31, 41, 55, 0.18); border-bottom: 1px solid rgba(31, 41, 55, 0.18); padding: 24px; color: rgba(31, 41, 55, 0.7); font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 0.875rem; font-weight: 400; } .ds-trust-dot { width: 8px; height: 8px; border-radius: 9999px; background: #11b981; }"
+		},
+		{
+			"name": "Poster Wall",
+			"kind": "custom",
+			"refersTo": "poster-wall",
+			"description": "Mur d'affiches de la landing (PosterWall de #lib/landing): rangée pleine largeur sans entête, qui défile en boucle, s'arrête au survol et se glisse à la souris; légende membres validés + heures. Aperçu en aplats: les vraies affiches sont des médias.",
+			"html": "<div class=\"ds-marquee\"><div class=\"ds-track\"><ul class=\"ds-posters\"><li><figure><div class=\"ds-poster\" style=\"background:#e8d8f0\"></div><figcaption><p class=\"ds-poster-meta\"><span>184 bénévoles</span><span>1’694 heures</span></p></figcaption></figure></li><li><figure><div class=\"ds-poster\" style=\"background:#f3e0c8\"></div><figcaption><p class=\"ds-poster-meta\"><span>401 bénévoles</span><span>3’029 heures</span></p></figcaption></figure></li><li><figure><div class=\"ds-poster\" style=\"background:#d8e4ee\"></div><figcaption><p class=\"ds-poster-meta\"><span>121 bénévoles</span><span>1’083 heures</span></p></figcaption></figure></li><li><figure><div class=\"ds-poster\" style=\"background:#dfe8d6\"></div><figcaption><p class=\"ds-poster-meta\"><span>110 bénévoles</span><span>666 heures</span></p></figcaption></figure></li></ul><ul class=\"ds-posters\" aria-hidden=\"true\"><li><figure><div class=\"ds-poster\" style=\"background:#e8d8f0\"></div><figcaption><p class=\"ds-poster-meta\"><span>184 bénévoles</span><span>1’694 heures</span></p></figcaption></figure></li><li><figure><div class=\"ds-poster\" style=\"background:#f3e0c8\"></div><figcaption><p class=\"ds-poster-meta\"><span>401 bénévoles</span><span>3’029 heures</span></p></figcaption></figure></li><li><figure><div class=\"ds-poster\" style=\"background:#d8e4ee\"></div><figcaption><p class=\"ds-poster-meta\"><span>121 bénévoles</span><span>1’083 heures</span></p></figcaption></figure></li><li><figure><div class=\"ds-poster\" style=\"background:#dfe8d6\"></div><figcaption><p class=\"ds-poster-meta\"><span>110 bénévoles</span><span>666 heures</span></p></figcaption></figure></li></ul></div></div>",
+			"css": ".ds-marquee { overflow: hidden; mask-image: linear-gradient(to right, transparent, #000 4rem, #000 calc(100% - 4rem), transparent); } .ds-track { display: flex; width: max-content; animation: ds-marquee 24s linear infinite; } .ds-marquee:hover .ds-track { animation-play-state: paused; } @keyframes ds-marquee { to { transform: translateX(-50%); } } @media (prefers-reduced-motion: reduce) { .ds-track { animation: none; } .ds-marquee { overflow-x: auto; mask-image: none; } } .ds-posters { list-style: none; margin: 0; padding: 0; display: flex; font-family: Barlow, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; color: #1f2937; } .ds-posters li { width: 144px; padding-right: 20px; flex-shrink: 0; } .ds-posters figure { margin: 0; } .ds-poster { aspect-ratio: 210 / 297; border: 1px solid rgba(31, 41, 55, 0.18); border-radius: 8px; } .ds-posters figcaption { margin-top: 12px; } .ds-poster-name { margin: 0; font-weight: 600; line-height: 1.375; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } .ds-poster-meta { margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 0 12px; font-size: 0.875rem; color: rgba(31, 41, 55, 0.7); font-variant-numeric: tabular-nums; }"
 		}
 	],
 	"narrative": {
 		"northStar": "Le carnet de bord bien tenu",
-		"overview": "benevio est un outil de gestion de bénévoles pensé comme un carnet de bord: clair, structuré, sans fioriture. L'interface ne cherche pas à impressionner par des effets visuels; elle gagne la confiance par l'ordre, la lisibilité et la chaleur discrète. L'atmosphère est franche et utile. On évite le ton corporate, les illustrations 3D stériles, les grilles de cartes identiques et les gradients agressifs. Le thème visuel est défini dans src/app.css via le bloc @plugin 'daisyui/theme' de Tailwind CSS v4 + DaisyUI v5: les composants utilisent les classes sémantiques DaisyUI et les utilitaires Tailwind adossés aux mêmes tokens, jamais des valeurs en dur.",
+		"overview": "benevio est un outil de gestion de bénévoles pensé comme un carnet de bord: clair, structuré, sans fioriture. L'interface ne cherche pas à impressionner par des effets visuels; elle gagne la confiance par l'ordre, la lisibilité et la chaleur discrète. Chaque écran doit donner l'impression que quelqu'un a déjà fait le tri et mis les bonnes informations au bon endroit.\n\nL'atmosphère est **franche et utile**. On évite le ton corporate (« transformez votre workflow »), les illustrations 3D stériles, les grilles de cartes identiques et les gradients agressifs. On parle à des bénévoles pressés, pas à des chefs d'entreprise. La transparence open source est un atout visuel: le design doit sentir l'outil accessible et le service honnête.",
 		"keyCharacteristics": [
 			"Une seule police, Barlow, porte toute la hiérarchie par le poids et la taille.",
-			"Le bleu franc (primary, #2663eb) est l'accent principal et porte l'action; il est présent mais jamais étouffant.",
-			"Le vert (secondary, #11b981) est la couleur de la marque — c'est le point du logo. Il ne s'emploie qu'à pleine force: pastilles, boutons, bordures pleines, halo du hero.",
-			"L'orange (accent, #e69214) porte deux choses qui ne se croisent jamais: l'atmosphère des pages (home), fortement dilué, et le repérage temporel des plannings, à pleine force.",
+			"Le bleu franc (`primary`) est l'accent principal et porte l'action; il est présent mais jamais étouffant.",
+			"Le vert (`secondary`) est la couleur de la marque — c'est le point du logo. Il ne s'emploie qu'à pleine force: pastilles, boutons, bordures pleines, halo du hero.",
+			"L'orange (`accent`) porte deux choses qui ne se croisent jamais: l'atmosphère des pages `(home)`, fortement dilué, et le repérage temporel des plannings, à pleine force.",
 			"Le bleu et le vert sont les deux couleurs du logo; la charte ne fait que prolonger la marque à l'écran.",
 			"Les surfaces sont planes par défaut; les ombres apparaissent seulement sur les cards, la navigation et les éléments interactifs majeurs.",
 			"Les coins sont arrondis de manière modérée: 8px pour les boutons et champs, 16px pour les cards et la navbar."
@@ -407,27 +456,27 @@
 		"rules": [
 			{
 				"name": "The Theme-Only Rule",
-				"body": "Aucune couleur ne vit en dehors de src/app.css. Pas de hex en dur, pas de palette Tailwind brute (slate, red, emerald), pas d'ajout dans un fichier de config. On utilise primary, secondary, accent, neutral, base-*, les états DaisyUI et leurs variantes d'opacité. S'il manque une couleur, on l'ajoute au bloc @plugin 'daisyui/theme'. Deux exceptions: les logos src/lib/assets/logo.svg, src/lib/assets/benevio.svg et static/favicon.svg sont servis en <img> et ne peuvent pas hériter de currentColor; leurs hex sont écrits en dur et doivent être tenus à jour avec primary et secondary. Rendue inline dans un composant Svelte, la marque repasse par text-primary / text-secondary et currentColor. Les habillages d'évènement (THEME_PRESETS dans $lib/constant, dégradés de static/themes/) portent aussi des hex, parce qu'ils finissent en colonne de base de données et en background-image; ils se dérivent des tokens fortement dilués et restent clairs, le texte base-content des pages bénévoles se lisant à même ce fond.",
+				"body": "Aucune couleur ne vit en dehors de `src/app.css`. Pas de hex en dur (`bg-[#2663eb]`), pas de palette Tailwind brute (`text-slate-700`, `bg-green-500`), pas d'ajout dans un fichier de config. On utilise `primary`, `secondary`, `accent`, `neutral`, `base-*`, les états DaisyUI et leurs variantes d'opacité (`/5`, `/10`, `/20`, `/40`, `/70`). S'il manque une couleur, on l'ajoute au bloc `@plugin 'daisyui/theme'`.\n\nDeux familles de fichiers échappent au thème par nécessité. Les logos `src/lib/assets/logo.svg`, `src/lib/assets/benevio.svg` et `static/favicon.svg` sont servis en `<img>` et ne peuvent pas hériter de `currentColor`. Leurs hex sont donc écrits en dur et **doivent être tenus à jour avec `primary` et `secondary`**. Quand la marque est rendue inline dans un composant Svelte, elle repasse par `text-primary` / `text-secondary` et `currentColor`.\n\nLes habillages d'évènement — `THEME_PRESETS` dans `#lib/constant` et les dégradés de `static/themes/` — portent eux aussi des hex: leurs valeurs atterrissent dans une colonne de base de données et dans des SVG servis en `background-image`, hors de portée des tokens. Elles s'en **dérivent** malgré tout — neutres, `secondary`, `primary` et `accent` fortement dilués sur du blanc — et **restent claires**: le texte `base-content` des pages bénévoles se lit à même ce fond.",
 				"section": "colors"
 			},
 			{
 				"name": "The One Accent Rule",
-				"body": "Le bleu (primary) porte l'action et reste l'accent dominant de la plupart des écrans. Le vert (secondary) porte la marque et la confirmation — il peut prendre un aplat plein, mais il ne dispute jamais au bleu l'action principale d'un écran: deux boutons pleins de couleurs différentes côte à côte, c'est une hiérarchie ratée. L'orange (accent) porte deux langages qui ne partagent aucun écran, et c'est ce qui les autorise à coexister: fortement dilué, il est le voile d'atmosphère des pages du groupe (home); à pleine force, il est le repérage temporel des plannings, sous [eventId]/admin/plan. Le dégradé de page n'existe que dans (home)/+layout.svelte et le groupe [eventId] n'en hérite pas. Il ne devient pas pour autant un accent décoratif: dilué il est un fond, plein il est un marqueur, jamais une troisième couleur d'action.",
+				"body": "Le bleu (`primary`) porte l'action et reste l'accent dominant de la plupart des écrans. Le vert (`secondary`) porte la marque et la confirmation — il peut prendre un aplat plein, mais il ne dispute jamais au bleu l'action principale d'un écran: deux boutons pleins de couleurs différentes côte à côte, c'est une hiérarchie ratée.\n\nL'orange (`accent`) porte **deux langages qui ne partagent aucun écran**, et c'est ce qui les autorise à coexister: fortement dilué, il est le voile d'atmosphère des pages du groupe `(home)`; à pleine force, il est le repérage temporel des plannings, sous `[eventId]/admin/plan`. Le dégradé de page n'existe que dans `(home)/+layout.svelte` et le groupe `[eventId]` n'en hérite pas. Il ne devient pas pour autant un accent décoratif: dilué il est un fond, plein il est un marqueur, jamais une troisième couleur d'action.",
 				"section": "colors"
 			},
 			{
 				"name": "The Undiluted Green Rule",
-				"body": "secondary s'emploie à pleine force ou pas du tout. Pas de secondary/5, /10, /20, /30. La raison est mesurable: composité sur blanc, le vert ne s'affaiblit pas, il change de teinte — #11b981 est à 162°, bg-secondary/10 rend #e7f8f2 à 173° et bg-secondary/5 rend #f3fcf9 à 174°. À ces chromas (0.010–0.020), les cyans-verts se lisent comme un voile froid et clinique; les jaunes-orangés, à chroma identique, se lisent comme une matière — crème, sable, papier. D'où bg-accent-soft pour l'atmosphère. La règle sert le vert plutôt qu'elle ne le prive: trois pastilles bg-secondary sur un aplat bg-secondary/5 se diluaient dans leur propre voile; sur la crème, elles portent. Seule exception, arbitrée: le halo from-secondary/40 du hero, une lumière floue derrière le point vert du logo — pas une surface sur laquelle on lit.",
+				"body": "`secondary` s'emploie **à pleine force ou pas du tout**. Pas de `secondary/5`, `/10`, `/20`, `/30`. La raison est mesurable: composité sur blanc, le vert ne s'affaiblit pas, il **change de teinte** — `#11b981` est à 162°, `bg-secondary/10` rend `#e7f8f2` à 173° et `bg-secondary/5` rend `#f3fcf9` à 174°. À ces chromas (0.010–0.020), les cyans-verts se lisent comme un voile froid et clinique; les jaunes-orangés, à chroma identique, se lisent comme une matière — crème, sable, papier. D'où `bg-accent-soft` pour l'atmosphère.\n\nLa règle sert le vert plutôt qu'elle ne le prive: trois pastilles `bg-secondary` sur un aplat `bg-secondary/5` se diluaient dans leur propre voile; sur la crème, elles portent. **Seule exception**, arbitrée: le halo `from-secondary/40` du hero, une lumière floue derrière le point vert du logo — pas une surface sur laquelle on lit.",
 				"section": "colors"
 			},
 			{
 				"name": "The Chromatic-Never-Reads Rule",
-				"body": "Ni secondary (2.54:1 sur base-100) ni accent (2.47:1) ne portent du texte: pas de text-secondary ni de text-accent sur une phrase à lire, pas d'icône seule porteuse d'information dans ces teintes. Ils fonctionnent comme fond, aplat, bordure, pastille ou trait. En aplat plein, le texte d'accent est accent-content, l'encre #1f2937 qui remonte à 5.93:1. secondary-content est le blanc, à 2.54:1: une exception assumée, documentée dans colorMeta, et non un modèle à étendre. badge-secondary badge-outline sur base-100 reste légitime: c'est le contour qui porte la couleur, pas la lecture.",
+				"body": "Ni `secondary` (2.54:1 sur `base-100`) ni `accent` (2.47:1) ne portent du texte: pas de `text-secondary` ni de `text-accent` sur une phrase à lire, pas d'icône seule porteuse d'information dans ces teintes. Ils fonctionnent comme fond, aplat, bordure, pastille ou trait. En aplat plein, le texte d'`accent` est `accent-content`, l'encre `#1f2937` qui remonte à 5.93:1. `secondary-content` est le blanc, à 2.54:1: une exception assumée, documentée dans la table ci-dessus, et non un modèle à étendre. `badge-secondary badge-outline` sur `base-100` reste légitime: c'est le contour qui porte la couleur, pas la lecture.",
 				"section": "colors"
 			},
 			{
 				"name": "The /70 Floor Rule",
-				"body": "Le texte atténué descend à base-content/70 (5.54:1) au plus bas. base-content/60 tombe à 4.04:1 et échoue AA sur du texte courant; on le réserve aux libellés non essentiels en gras (.title-sm), là où l'information est aussi portée ailleurs. La règle vaut aussi pour primary: à 5.16:1 le bleu n'a plus la réserve de l'ancien bleu ardoise (11.45:1), donc text-primary ne s'atténue pas — text-primary/70 tombe à 2.68:1.",
+				"body": "Le texte atténué descend à `base-content/70` (5.54:1) au plus bas. `base-content/60` tombe à 4.04:1 et échoue AA sur du texte courant; on le réserve aux libellés non essentiels en gras (`.title-sm`), là où l'information est aussi portée ailleurs. La règle vaut aussi pour `primary`: à 5.16:1 le bleu n'a plus la réserve de l'ancien bleu ardoise (11.45:1), donc **`text-primary` ne s'atténue pas** — `text-primary/70` tombe à 2.68:1.",
 				"section": "colors"
 			},
 			{
@@ -437,40 +486,51 @@
 			},
 			{
 				"name": "The Purposeful Lift Rule",
-				"body": "Une ombre ne justifie sa place que si elle guide l'œil vers une action ou délimite une surface cliquable. Pas d'ombres sur du texte statique ou des conteneurs purement informatifs. On utilise les utilitaires Tailwind (shadow-sm, shadow-lg, shadow-xl) plutôt que des valeurs d'ombre écrites en dur.",
+				"body": "Une ombre ne justifie sa place que si elle guide l'œil vers une action ou délimite une surface cliquable. Pas d'ombres sur du texte statique ou des conteneurs purement informatifs. On utilise les utilitaires Tailwind (`shadow-sm`, `shadow-lg`, `shadow-xl`) plutôt que des valeurs d'ombre écrites en dur.",
 				"section": "elevation"
 			},
 			{
 				"name": "The No-Nested-Card Rule",
-				"body": "Une card ne contient jamais une autre card. Un composant réutilisable susceptible d'être monté dans une card (Login, les formulaires d'étape de Register) ne fournit pas sa propre surface: il lit le contexte contextContainer de $lib/fuma-legacy et se rend nu quand il est déjà porté.",
+				"body": "Une card ne contient jamais une autre card. Un composant réutilisable susceptible d'être monté dans une card (`Login`, les formulaires d'étape de `Register`) ne fournit pas sa propre surface: il lit le contexte `contextContainer` de `#lib/ui/context.js` et se rend nu quand il est déjà porté.",
 				"section": "elevation"
+			},
+			{
+				"name": "The Two Radii Rule",
+				"body": "Un conteneur prend `rounded-box`, ce qu'il contient prend `rounded-field`. Un troisième rayon inventé au cas par cas (`rounded-md`, `rounded-2xl`) est une hiérarchie de forme qui n'existe pas.",
+				"section": "shapes"
+			},
+			{
+				"name": "The Pausable Motion Rule",
+				"body": "Un mouvement qui démarre seul cède la main dès qu'on le touche: il s'arrête au survol, se laisse saisir et glisser, se met en pause par un bouton (`btn-sm btn-circle` sur fond `base-100`, posé par-dessus la bande en haut à droite, hors de l'élément masqué pour que le fondu ne l'efface pas), et ne démarre pas du tout sous `prefers-reduced-motion`. Dans ce dernier cas, la copie, le bouton et le masque disparaissent, et la rangée devient une bande qu'on fait défiler à la main.",
+				"section": "components"
 			}
 		],
 		"dos": [
-			"Do définir toute couleur dans le bloc @plugin 'daisyui/theme' de src/app.css.",
-			"Do utiliser primary, secondary, accent, neutral, base-*, les états DaisyUI et leurs variantes d'opacité.",
-			"Do utiliser border-soft / border-hard plutôt que border-base-300 ou une couleur de bordure choisie au cas par cas.",
-			"Do utiliser Barlow pour tout le texte, de l'UI au marketing.",
-			"Do passer variant=\"block\" aux champs fuma dans les formulaires.",
-			"Do laisser beaucoup d'air autour des sections (py-20 md:py-28 en hero, py-12 md:py-20 en contenu).",
-			"Do préférer des icônes Lucide fines et simples aux icônes MDI chargées.",
-			"Do utiliser secondary comme fond, aplat, bordure ou pastille — jamais comme texte.",
-			"Do tenir les hex des logos SVG (logo.svg, benevio.svg, favicon.svg) alignés sur primary et secondary.",
-			"Do garder les habillages de static/themes/ clairs et dérivés des tokens: le texte des pages bénévoles se lit à même ce fond."
+			"**Do** définir toute couleur dans le bloc `@plugin 'daisyui/theme'` de `src/app.css`.",
+			"**Do** utiliser `primary`, `secondary`, `accent`, `neutral`, `base-*`, les états DaisyUI et leurs variantes d'opacité.",
+			"**Do** utiliser `border-soft` / `border-hard` plutôt que `border-base-300` ou une couleur de bordure choisie au cas par cas.",
+			"**Do** utiliser Barlow pour tout le texte, de l'UI au marketing.",
+			"**Do** passer `variant=\"block\"` aux champs `fuma` dans les formulaires.",
+			"**Do** laisser beaucoup d'air autour des sections (`py-20 md:py-28` en hero, `py-12 md:py-20` en contenu).",
+			"**Do** préférer des icônes Lucide fines et simples aux icônes MDI chargées.",
+			"**Do** utiliser `secondary` à pleine force — bouton, pastille, bordure, contour — jamais dilué, jamais comme texte.",
+			"**Do** utiliser `bg-accent-soft` / `bg-accent-softer` pour tout aplat d'atmosphère ou d'encart, plutôt qu'une opacité: opaques, ils ne se cumulent pas avec le dégradé de page.",
+			"**Do** tenir les hex des logos SVG (`logo.svg`, `benevio.svg`, `favicon.svg`) alignés sur `primary` et `secondary`."
 		],
 		"donts": [
-			"Don't écrire de valeurs hex en dur dans les composants (ex: bg-[#2663eb]).",
-			"Don't utiliser la palette Tailwind brute (slate, red, emerald…): elle court-circuite le thème. bg-green-500 est d'autant plus inutile que secondary est le vert.",
-			"Don't écrire de valeurs de rayon, d'ombre ou d'espacement en dur si un token Tailwind ou DaisyUI existe.",
-			"Don't imbriquer une card dans une card, ni faire porter sa propre surface à un composant montable.",
-			"Don't utiliser text-secondary (2.54:1) ni text-accent (2.47:1) sur du texte à lire: sous le seuil AA.",
-			"Don't descendre le texte atténué sous base-content/70, ni atténuer text-primary du tout.",
-			"Don't utiliser de gradients flashy ou de « hero metric » (gros chiffre + petit label).",
-			"Don't tomber dans le template startup: pas de grille de cartes identiques icône + titre + texte.",
-			"Don't utiliser d'illustrations 3D stériles ou un ton « transformez votre workflow ».",
-			"Don't éparpiller des emojis partout ou adopter un ton « hey poto »; on reste adulte et décontracté.",
-			"Don't employer de side-stripe borders (bordures verticales colorées de plus de 1px) comme accent sur les listes ou cards.",
-			"Don't utiliser de glassmorphism ou de gradient text à des fins décoratives."
+			"**Don't** écrire de valeurs hex en dur dans les composants (ex: `bg-[#2663eb]`).",
+			"**Don't** utiliser la palette Tailwind brute (`slate`, `red`, `emerald`…): elle court-circuite le thème. `bg-green-500` est d'autant plus inutile que `secondary` _est_ le vert.",
+			"**Don't** écrire de valeurs de rayon, d'ombre ou d'espacement en dur si un token Tailwind ou DaisyUI existe.",
+			"**Don't** imbriquer une card dans une card, ni faire porter sa propre surface à un composant montable.",
+			"**Don't** utiliser `text-secondary` (2.54:1) ni `text-accent` (2.47:1) sur du texte à lire: sous le seuil AA.",
+			"**Don't** diluer `secondary` (`bg-secondary/10`, `border-secondary/20`…): dilué, ce n'est plus le vert de la marque mais un cyan à 173°.",
+			"**Don't** descendre le texte atténué sous `base-content/70`, ni atténuer `text-primary` du tout.",
+			"**Don't** utiliser de gradients flashy ou de « hero metric » (gros chiffre + petit label).",
+			"**Don't** tomber dans le template startup: pas de grille de cartes identiques icône + titre + texte.",
+			"**Don't** utiliser d'illustrations 3D stériles ou un ton « transformez votre workflow ».",
+			"**Don't** éparpiller des emojis partout ou adopter un ton « hey poto »; on reste adulte et décontracté.",
+			"**Don't** employer de side-stripe borders (bordures verticales colorées de plus de 1px) comme accent sur les listes ou cards.",
+			"**Don't** utiliser de glassmorphism ou de gradient text à des fins décoratives."
 		]
 	}
 }

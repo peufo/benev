@@ -3,7 +3,13 @@
 	import { page } from '$app/state'
 	import { JsonLd } from 'svelte-meta-tags'
 	import { Testimonials } from '#lib/testimonials/index.js'
-	import { Workflow, LandingCTA, AnimatedLogo, PricingSection } from '#lib/landing/index.js'
+	import {
+		Workflow,
+		LandingCTA,
+		AnimatedLogo,
+		PricingSection,
+		PosterWall,
+	} from '#lib/landing/index.js'
 	import { softwareApplicationSchema } from '#lib/seo/index.js'
 
 	let { data } = $props()
@@ -91,6 +97,10 @@
 			</div>
 		</div>
 	</section>
+
+	{#if data.posterEvents.length}
+		<PosterWall events={data.posterEvents} />
+	{/if}
 
 	<!-- Workflow -->
 	<Workflow />
