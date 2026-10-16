@@ -13,6 +13,12 @@ Ton évènement est dans l'un de ces trois états, que tu changes depuis **Confi
 
 Rien n'est définitif, tu peux repasser en brouillon puis republier.
 
+### L'archivage automatique
+
+Un évènement publié, terminé depuis 30 jours et où plus rien ne bouge s'archive tout seul. Tu reçois
+d'abord un e-mail, et tu as alors 14 jours pour le **garder ouvert**, d'un bouton dans
+**Configuration**. Sans réponse, il est archivé, et tu peux toujours le republier.
+
 Chaque secteur a aussi son propre statut, qui décide de ce que les bénévoles en voient et de ce
 qu'ils reçoivent : c'est expliqué avec [les secteurs](/docs/creer-ton-evenement#secteurs).
 

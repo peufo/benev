@@ -13,7 +13,22 @@ export const setEventState = form(modelEventState, async (data) => {
 	if (!session) error(401)
 
 	const before = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
-	const event = await prisma.event.update({ where: { id: eventId }, data })
+	// Un changement de statut à la main tranche la question: l'avertissement en cours n'a plus d'objet.
+	const event = await prisma.event.update({
+		where: { id: eventId },
+		data: { ...data, archiveNoticeAt: null },
+	})
 	if (before.state !== event.state)
 		await createLog('event_state', { event, before: before.state, actor: session.user })
+})
+
+/** La réponse à l'avertissement d'archivage: l'évènement repart pour un délai d'inactivité complet. */
+export const keepEventOpen = form(async () => {
+	const { locals, params } = getRequestEvent()
+	const eventId = params.eventId!
+	await permission.ownerOrRoot(eventId, locals)
+	await prisma.event.update({
+		where: { id: eventId },
+		data: { archiveNoticeAt: null, archiveKeptAt: new Date() },
+	})
 })

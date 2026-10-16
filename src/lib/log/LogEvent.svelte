@@ -21,15 +21,19 @@
 </script>
 
 <p>
-	{@render snippetRef(log.data.actor)}
-	{#if log.type === 'event_create'}
+	{#if log.type === 'event_state' && !log.data.actor}
+		Faute d'activité, l'évènement a été archivé automatiquement
+	{:else if log.type === 'event_create'}
+		{@render snippetRef(log.data.actor)}
 		a créé l'évènement
 		{#if log.data.clonedFrom}
 			à partir de {@render snippetRef(log.data.clonedFrom)}
 		{/if}
 	{:else if log.type === 'event_state'}
+		{@render snippetRef(log.data.actor)}
 		a changé le statut de l'évènement
 	{:else}
+		{@render snippetRef(log.data.actor)}
 		a modifié les réglages de l'évènement
 	{/if}
 </p>

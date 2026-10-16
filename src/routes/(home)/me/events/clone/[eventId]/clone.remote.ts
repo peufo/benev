@@ -34,7 +34,8 @@ export const cloneEvent = form(schemaEventClone, async (data) => {
 		},
 	})
 	// Le clone est un nouvel évènement: sa licence s'achète, sa publication se décide, et ses
-	// alertes de quota partent de zéro. Rien de cela ne passe dans le reste déversé.
+	// alertes de quota comme son archivage partent de zéro. Rien de cela ne passe dans le reste
+	// déversé.
 	const {
 		name: eventName,
 		state,
@@ -42,6 +43,8 @@ export const cloneEvent = form(schemaEventClone, async (data) => {
 		notifiedQuota80,
 		notifiedQuota90,
 		notifiedQuota100,
+		archiveNoticeAt,
+		archiveKeptAt,
 		startDate,
 		endDate,
 		closeSubscribing,

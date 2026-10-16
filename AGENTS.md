@@ -328,6 +328,13 @@ part of a task lives outside `#lib/server` so it can be unit-tested: `#lib/team/
 plans the closings the task then applies (only `published` → `validated`; opening stays a
 manual gesture).
 
+`eventArchive` is the one task that reads a **state** rather than a date crossed in its window:
+a published event, ended (or undated) and with no authored log for `ARCHIVE_IDLE_DAYS`, gets an
+email to its owner and `archiveNoticeAt`; `ARCHIVE_GRACE_DAYS` later it is archived, unless
+« Garder ouvert » (`keepEventOpen`, which sets `archiveKeptAt`) or a manual state change cleared
+the notice first. The notice is what makes reading a state safe: nothing is archived without one,
+old events included. Its pure part is `#lib/event/eventArchive.ts`.
+
 ## La documentation
 
 `/docs` sert la documentation produit, écrite en markdown dans `src/lib/doc/content/` et rendue par

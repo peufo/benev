@@ -9,3 +9,4 @@ export { default as EmailAcceptInviteNotification } from './EmailAcceptInviteNot
 export { default as EmailCheckoutValidation } from './EmailCheckoutValidation.svelte'
 export { default as EmailTierQuotaAlert } from './EmailTierQuotaAlert.svelte'
 export { default as EmailPeriodChanged } from './EmailPeriodChanged.svelte'
+export { default as EmailArchiveNotice } from './EmailArchiveNotice.svelte'

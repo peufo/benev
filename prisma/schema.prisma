@@ -125,6 +125,11 @@ model Event {
   notifiedQuota90  DateTime?
   notifiedQuota100 DateTime?
 
+  // Archivage automatique: l'avertissement parti, et le dernier « Garder ouvert », qui relance
+  // le compteur d'inactivité.
+  archiveNoticeAt DateTime?
+  archiveKeptAt   DateTime?
+
   description String?
   icon        String?
   email       String?

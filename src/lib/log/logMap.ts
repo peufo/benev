@@ -290,15 +290,16 @@ export const logMap = {
 	}: {
 		event: { id: string; name: string; state: EventState }
 		before: EventState
-		actor: LogActor
+		/** Nul pour l'archivage automatique. */
+		actor: LogActor | null
 	}) => ({
 		eventId: event.id,
-		createdById: actor.userId,
+		createdById: actor?.userId ?? null,
 		data: {
 			event: { id: event.id, name: event.name },
 			before,
 			after: event.state,
-			actor: refActor(actor),
+			actor: actor ? refActor(actor) : null,
 		},
 	}),
 
