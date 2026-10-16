@@ -229,6 +229,7 @@ class MemberImportService {
 							avatarPlaceholder: createAvatarPlaceholder(),
 							// Notification settings
 							isNotifiedSubscribe: !!sourceMember.email,
+							isNotifiedReminder: !!sourceMember.email,
 							isNotifiedLeaderOfSubscribe: !!sourceMember.email,
 							isNotifiedAdminOfNewMember: !!sourceMember.email,
 						},

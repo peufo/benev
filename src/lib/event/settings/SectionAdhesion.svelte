@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Event } from '@prisma/client'
-	import { InputBoolean, InputDateTime, InputNumber } from 'fuma'
+	import { InputBoolean, InputDateTime, InputNumber, InputSelect } from 'fuma'
 	import { slide } from 'svelte/transition'
+	import { REMINDER_OPTIONS } from '#lib/period/periodReminder.js'
 	import type { EventSettingsFields } from './types'
 
 	interface Props {
@@ -12,6 +13,12 @@
 	// `event` est muté localement par les deux premières cases pour piloter l'affichage
 	// conditionnel avant l'enregistrement.
 	let { fields, event = $bindable() }: Props = $props()
+
+	// Le champ soumet une chaîne: le modèle la reconvertit en nombre d'heures.
+	const reminderOptions = REMINDER_OPTIONS.map(({ value, label }) => ({
+		value: String(value),
+		label,
+	}))
 </script>
 
 <div class="flex flex-col gap-2">
@@ -56,6 +63,17 @@
 			/>
 		</div>
 	{/if}
+</div>
+
+<div class="mt-10">
+	<h3 class="title-md mb-2">Rappel avant les créneaux</h3>
+	<InputSelect
+		field={fields.reminderHours}
+		label="Chaque inscription acceptée reçoit un courriel avant le début de son créneau"
+		items={reminderOptions}
+		value={reminderOptions.find(({ value }) => value === String(event.reminderHours))}
+		class="w-full"
+	/>
 </div>
 
 <div class="mt-10">

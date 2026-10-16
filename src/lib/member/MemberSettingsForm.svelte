@@ -25,6 +25,13 @@
 		variant="switch"
 	/>
 
+	<InputBoolean
+		field={updateMemberSettings.fields.isNotifiedReminder}
+		checked={member.isNotifiedReminder}
+		label="Recevoir un rappel avant chacun de mes créneaux"
+		variant="switch"
+	/>
+
 	{#if member.roles.includes('leader')}
 		<InputBoolean
 			field={updateMemberSettings.fields.isNotifiedLeaderOfSubscribe}

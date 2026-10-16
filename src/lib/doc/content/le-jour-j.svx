@@ -1,6 +1,6 @@
 ---
 title: Le jour J
-description: Les exports, les impressions, les présences, les agendas
+description: Les exports, les impressions, les présences, les rappels, les agendas
 ---
 
 ## Ce que tu peux sortir {#exports}
@@ -62,7 +62,25 @@ Ce que ça te rend ensuite :
   ont manqué au moins un,
 - une colonne de plus dans l'[export des inscriptions](#exports).
 
+## Le rappel avant chaque créneau {#rappels}
+
+**Chaque bénévole reçoit un courriel avant chacun de ses créneaux**, la veille par défaut : le
+secteur, l'horaire, le lieu de l'évènement. En cas d'empêchement, une réponse au courriel suffit :
+elle arrive aux responsables du secteur.
+
+Tu choisis le délai dans les [réglages](/docs/creer-ton-evenement#reglages), à la rubrique
+**Adhésion** : deux heures avant, la veille, trois jours avant, ou aucun rappel.
+
+Ce qu'il faut savoir :
+
+- seules les **inscriptions acceptées** reçoivent un rappel, jamais une demande en attente ni un
+  secteur encore en brouillon,
+- une inscription acceptée après l'heure du rappel n'en reçoit pas : le courriel d'acceptation vient
+  de lui donner l'horaire,
+- si tu déplaces un créneau, le rappel suit le nouvel horaire,
+- chaque bénévole peut couper ses rappels dans **Mes préférences**, sur son espace personnel.
+
 ## L'agenda personnel
 
-Chacun peut exporter ses créneaux vers son propre agenda, depuis son espace personnel. C'est le
-meilleur rappel que tu puisses lui donner.
+Chacun peut exporter ses créneaux vers son propre agenda, depuis son espace personnel. Avec le
+rappel, c'est ce qui l'aide le plus à ne rien oublier.

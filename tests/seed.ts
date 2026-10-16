@@ -130,6 +130,7 @@ export function seedInvitedMember(
 			isValidedByEvent: true,
 			avatarPlaceholder: AVATAR_PLACEHOLDER,
 			isNotifiedSubscribe: !!member.email,
+			isNotifiedReminder: !!member.email,
 			isNotifiedLeaderOfSubscribe: !!member.email,
 			isNotifiedAdminOfNewMember: !!member.email,
 			...rest,

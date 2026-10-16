@@ -166,6 +166,7 @@ export const createInvite = form(modelInvite, async ({ sendEmail, leaderOf, ...d
 				isValidedByEvent: true,
 				avatarPlaceholder: createAvatarPlaceholder(),
 				isNotifiedSubscribe: !!data.email,
+				isNotifiedReminder: !!data.email,
 				isNotifiedLeaderOfSubscribe: !!data.email,
 				isNotifiedAdminOfNewMember: !!data.email,
 				leaderOf: { connect: teams.map(({ id }) => ({ id })) },

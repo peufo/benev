@@ -10,3 +10,4 @@ export { default as EmailCheckoutValidation } from './EmailCheckoutValidation.sv
 export { default as EmailTierQuotaAlert } from './EmailTierQuotaAlert.svelte'
 export { default as EmailPeriodChanged } from './EmailPeriodChanged.svelte'
 export { default as EmailArchiveNotice } from './EmailArchiveNotice.svelte'
+export { default as EmailPeriodReminder } from './EmailPeriodReminder.svelte'

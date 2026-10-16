@@ -328,6 +328,12 @@ part of a task lives outside `#lib/server` so it can be unit-tested: `#lib/team/
 plans the closings the task then applies (only `published` → `validated`; opening stays a
 manual gesture).
 
+`periodReminder` sends one reminder per accepted subscribe, `Event.reminderHours` before its
+period starts (`0` turns it off, `#lib/period/periodReminder.ts` plans it). A replayed window
+must not send twice, so `Subscribe.remindedAt` is written **before** the email, with
+`updateMany({ where: { id, remindedAt: null } })`. `settlePeriodUpdate` clears it when a period's
+start moves, and the new instant fires if it is still ahead.
+
 `eventArchive` is the one task that reads a **state** rather than a date crossed in its window:
 a published event, ended (or undated) and with no authored log for `ARCHIVE_IDLE_DAYS`, gets an
 email to its owner and `archiveNoticeAt`; `ARCHIVE_GRACE_DAYS` later it is archived, unless
@@ -792,7 +798,7 @@ breaks `svelte-check`.
   `EMAIL_DISABLED=true` logs instead of sending; CI and E2E rely on it. Transactional emails cover
   verification links, password reset, subscribe notifications
   (request/accepted/denied/cancelled), period changes and deletions (`EmailPeriodChanged`, to the
-  engaged subscribers of a team out of draft) and checkout validation. `/root/mails/*` previews
+  engaged subscribers of a team out of draft), period reminders (`EmailPeriodReminder`) and checkout validation. `/root/mails/*` previews
   templates in the browser.
 - **Media**: uploads (avatars, event backgrounds, logos, posters, badge assets) are stored on the
   local filesystem under `MEDIA_DIR` (default `./media`), recorded in the `Media` table with

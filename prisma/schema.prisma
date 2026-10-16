@@ -166,6 +166,8 @@ model Event {
   userBirthdayRequired       Boolean   @default(false)
   userAvatarRequired         Boolean   @default(false)
   overlapPeriodAllowed       Int       @default(0)
+  /// Heures entre le rappel et le début d'un créneau, 0 = pas de rappel.
+  reminderHours              Int       @default(24)
 
   startDate DateTime?
   endDate   DateTime?
@@ -257,6 +259,7 @@ model Member {
   isNotifiedSubscribe         Boolean @default(true)
   isNotifiedLeaderOfSubscribe Boolean @default(true)
   isNotifiedAdminOfNewMember  Boolean @default(true)
+  isNotifiedReminder          Boolean @default(true)
 
   userId  String?
   user    User?   @relation(references: [id], fields: [userId], onDelete: SetNull)
@@ -407,6 +410,9 @@ model Subscribe {
   member   Member @relation(references: [id], fields: [memberId], onDelete: Cascade)
 
   isAbsent Boolean @default(false)
+
+  /// Posé avant l'envoi du rappel: une fenêtre rejouée n'en envoie pas un second.
+  remindedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -76,6 +76,7 @@ export const eventLabels = {
 	selfSubscribeCancelAllowed: 'Annulation libre',
 	closeSubscribing: 'Fermeture des inscriptions',
 	overlapPeriodAllowed: 'Chevauchement toléré (min)',
+	reminderHours: 'Rappel avant un créneau (h)',
 	userEmailVerifiedRequired: 'Email vérifié requis',
 	userAddressRequired: 'Adresse requise',
 	userPhoneRequired: 'Téléphone requis',

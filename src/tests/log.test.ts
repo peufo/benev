@@ -232,6 +232,7 @@ function anEvent(overrides: Partial<Parameters<typeof projectEvent>[0]> = {}) {
 		selfSubscribeCancelAllowed: false,
 		closeSubscribing: null,
 		overlapPeriodAllowed: 0,
+		reminderHours: 24,
 		userEmailVerifiedRequired: false,
 		userAddressRequired: false,
 		userPhoneRequired: false,

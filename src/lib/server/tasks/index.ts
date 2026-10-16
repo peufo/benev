@@ -2,6 +2,7 @@ import { prisma } from '../prisma'
 import { createScheduler, type Scheduler, type TaskStore } from '../scheduler'
 import { teamSchedule } from './teamSchedule'
 import { eventArchive } from './eventArchive'
+import { periodReminder } from './periodReminder'
 
 /**
  * Les tâches planifiées de l'application et leur ticker. À importer par ce chemin, jamais par le
@@ -9,7 +10,7 @@ import { eventArchive } from './eventArchive'
  * baril participe à un cycle (voir `rateLimit.ts`).
  */
 
-const tasks = [teamSchedule, eventArchive]
+const tasks = [teamSchedule, eventArchive, periodReminder]
 
 /** Le curseur de chaque tâche vit en base: c'est lui qui permet de rattraper un arrêt. */
 const store: TaskStore = {

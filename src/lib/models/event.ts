@@ -3,6 +3,7 @@ import type { Prisma } from '@prisma/client'
 import { EVENT_STATES } from '#lib/constant/index.js'
 import { zDateNullable, zEnumKeys, zStringNullable } from './form'
 import { zMediaId } from './media'
+import { REMINDER_HOURS } from '#lib/period/periodReminder.js'
 
 type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
 export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
@@ -78,6 +79,8 @@ export const modelEventAdhesion = z.object({
 	userBirthdayRequired: z.boolean().default(false),
 	userAvatarRequired: z.boolean().default(false),
 	overlapPeriodAllowed: z.number(),
+	// Le délai se choisit par boutons radio, qui soumettent une chaîne.
+	reminderHours: z.enum(REMINDER_HOURS.map(String) as [string, ...string[]]).transform(Number),
 }) satisfies z.ZodType<EventUpdateInput>
 
 export type EventTheme = Pick<

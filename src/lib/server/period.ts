@@ -74,6 +74,9 @@ export async function notifyPeriodChange(
  * seulement quand le changement compte. En brouillon personne n'a rien reçu, et un créneau sans
  * inscription n'engage personne. Le nombre de places seul se journalise sans courriel, et un
  * horaire retouché n'en envoie que si l'organisateur·ice l'a choisi (`notify`).
+ *
+ * Un début déplacé rend aussi son rappel au créneau, quoi qu'il en soit du reste: la tâche
+ * `period-reminder` le renverra si le nouvel instant est encore à venir.
  */
 export async function settlePeriodUpdate(
 	before: PeriodForChange,
@@ -81,6 +84,12 @@ export async function settlePeriodUpdate(
 	actor: LogActor & { email: string },
 	notify: boolean
 ): Promise<void> {
+	if (before.start.getTime() !== after.start.getTime()) {
+		await prisma.subscribe.updateMany({
+			where: { periodId: after.id, remindedAt: { not: null } },
+			data: { remindedAt: null },
+		})
+	}
 	if (before.team.state === 'draft' || !before.subscribes.length) return
 	const changes = diffChanges(projectPeriod(before), projectPeriod(after))
 	if (!hasChanges(changes)) return
