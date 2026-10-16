@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { UserRoundPlusIcon } from '@lucide/svelte'
 	import { Drawer } from 'fuma'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
@@ -11,8 +10,6 @@
 	import type { FormDataPeriod } from './server'
 	import { eventPath } from '#lib/eventPath.js'
 	import { inviteCall, tagCall, teamCall } from '#lib/drawerCall.svelte.js'
-	import MemberImportDialog from './member/MemberImportDialog.svelte'
-	import { dev } from '$app/env'
 
 	interface Props {
 		event: Event & { memberFields: Field[] }
@@ -21,17 +18,7 @@
 	}
 
 	let { event, period = {}, tag = null }: Props = $props()
-
-	let importDialog: HTMLDialogElement = $state()!
-
-	function openImportDialog() {
-		importDialog.showModal()
-	}
 </script>
-
-{#if dev}
-	<MemberImportDialog bind:dialog={importDialog} />
-{/if}
 
 <Drawer key="form_invite" title="Inviter un nouveau membre" class="surface-drawer">
 	{#snippet children({ close })}
@@ -44,12 +31,6 @@
 				caller?.oncreated?.(member)
 			}}
 		/>
-		{#if dev}
-			<button class="menu-item" onclick={openImportDialog}>
-				<UserRoundPlusIcon size={20} />
-				<span>Importer des membres</span>
-			</button>
-		{/if}
 	{/snippet}
 </Drawer>
 

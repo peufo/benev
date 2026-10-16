@@ -46,6 +46,7 @@ class MemberImportService {
 	async getImportableEvents(userId: string): Promise<ImportableEvent[]> {
 		const events = await prisma.event.findMany({
 			where: {
+				deletedAt: null,
 				OR: [
 					{ ownerId: userId }, // User owns the event
 					{
@@ -63,7 +64,8 @@ class MemberImportService {
 					select: { members: true },
 				},
 			},
-			orderBy: { name: 'asc' },
+			// L'édition précédente, la source la plus probable, sort en tête.
+			orderBy: [{ startDate: { sort: 'desc', nulls: 'last' } }, { name: 'asc' }],
 		})
 
 		return events

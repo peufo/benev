@@ -25,10 +25,8 @@
 
 <DropDown bind:this={dropdown} hideOnBlur>
 	{#snippet activator()}
-		<button class="btn btn-square btn-sm">
-			<span class="inline-flex" use:tip={{ content: 'Exporter les données des membres' }}
-				><DownloadIcon size={20} /></span
-			>
+		<button class="btn btn-square btn-sm" use:tip={{ content: 'Exporter les données des membres' }}>
+			<DownloadIcon size={18} />
 		</button>
 	{/snippet}
 

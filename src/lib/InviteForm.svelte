@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { currentEventId } from '#lib/eventPath.js'
+	import { currentEventId, eventPath } from '#lib/eventPath.js'
 	import { InputBoolean, InputMultiSelect, InputString, tip } from 'fuma'
 	import z from 'zod'
 	import { slide } from 'svelte/transition'
@@ -10,7 +10,7 @@
 	import { type DrawerFrom, teamCall } from './drawerCall.svelte'
 	import { createInvite, findUserByEmail } from './member/member.remote'
 	import { searchTeams } from './team/team.remote'
-	import { PlusIcon, TriangleAlertIcon } from '@lucide/svelte'
+	import { UploadIcon, PlusIcon, TriangleAlertIcon } from '@lucide/svelte'
 
 	interface Props {
 		event: Event
@@ -199,5 +199,12 @@
 
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">
 		<button class="btn btn-primary">Valider</button>
+		<!-- Un responsable peut inviter, mais l'import lit les membres d'un autre évènement. -->
+		{#if isAuthorAdmin || page.data.userIsRoot}
+			<a class="btn btn-ghost mr-auto" href={eventPath('/admin/members/import')}>
+				<UploadIcon size={20} class="opacity-70" />
+				Importer des membres
+			</a>
+		{/if}
 	</div>
 </form>

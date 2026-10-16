@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { FilterXIcon, SigmaIcon, UserPlusIcon } from '@lucide/svelte'
+	import { FilterXIcon, UploadIcon, SigmaIcon, UserPlusIcon } from '@lucide/svelte'
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick, untrack } from 'svelte'
 	import { goto } from '$app/navigation'
+	import { page } from '$app/state'
+	import { eventPath } from '#lib/eventPath.js'
 	import { InputSearch, Surface, Badge } from '#lib/ui/index.js'
 	import TableViewSelect from '#lib/view/TableViewSelect.svelte'
 	import { Drawer, tip } from 'fuma'
@@ -43,6 +45,9 @@
 			globalEvents.off('field_created', handleFieldCreated)
 		}
 	})
+
+	// Les responsables lisent aussi cette page, mais l'import lit les membres d'un autre évènement.
+	const isAdmin = $derived(!!page.data.member?.roles.includes('admin') || !!page.data.userIsRoot)
 
 	let createSubscribeDialog: HTMLDialogElement = $state()!
 	let selectedMember: Member | undefined = $state(undefined)
@@ -120,9 +125,20 @@
 
 				<TableViewSelect key="members" views={data.views} ignoredKeys={['members_stats']} />
 
-				<MembersExport />
 				<MembersBadges badges={data.badges} />
 				<MembersEmails />
+				<MembersExport />
+
+				{#if isAdmin}
+					<a
+						href={eventPath('/admin/members/import')}
+						class="btn btn-square btn-sm"
+						aria-label="Importer des membres"
+						use:tip={{ content: 'Importer des membres' }}
+					>
+						<UploadIcon size={18} />
+					</a>
+				{/if}
 
 				<a
 					type="button"
