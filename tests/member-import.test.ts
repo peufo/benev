@@ -1,11 +1,12 @@
 import { expect, test, type Page } from '@playwright/test'
 import { useEvent } from './event'
-import { seedMember, seedTeam, seedUser, signIn } from './seed'
+import { seedField, seedMember, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
 
 /**
  * L'entrée de l'import: on choisit une source, un autre évènement dont on est admin ou un
- * fichier CSV, et on arrive sur le mappage. Lire les membres d'un autre évènement reste
+ * fichier CSV, et on arrive sur le mappage. Chaque colonne du fichier y reçoit un champ deviné,
+ * et celles qui ne passent pas sont signalées. Lire les membres d'un autre évènement reste
  * réservé aux admins.
  */
 test.describe.serial('Import de membres', () => {
@@ -13,6 +14,7 @@ test.describe.serial('Import de membres', () => {
 	const source = useEvent('Source')
 	let page: Page
 	let leadPage: Page
+	let sizeFieldId: string
 
 	test.beforeAll(async ({ browser }) => {
 		page = await browser.newPage()
@@ -27,6 +29,13 @@ test.describe.serial('Import de membres', () => {
 		await signIn(page, await seedUser('Boss'))
 		await source.create(page)
 		await target.create(page)
+
+		const size = await seedField(target.eventId, {
+			name: 'Taille',
+			type: 'select',
+			options: ['S', 'M', 'L'],
+		})
+		sizeFieldId = size.id
 
 		const team = await seedTeam(target.eventId, 'Alpha')
 		const lead = await seedUser('Lead')
@@ -49,18 +58,35 @@ test.describe.serial('Import de membres', () => {
 		).toBeVisible()
 	})
 
-	test("L'admin choisit un fichier CSV comme source", async () => {
+	test("L'admin choisit un fichier CSV et corrige son mappage", async () => {
 		await gotoHydrated(page, `/${target.eventId}/admin/members/import`)
 		await page.getByLabel('Fichier CSV').setInputFiles({
 			name: 'membres.csv',
 			mimeType: 'text/csv',
-			buffer: Buffer.from('prénom,nom,email\nAda,Lovelace,ada@example.com\n'),
+			buffer: Buffer.from(
+				'Prénom;Nom;Courriel;Taille;Inconnue\n' +
+					'Ada;Lovelace;ada@example.com;M;x\n' +
+					'Alan;Turing;alan@example.com;XXL;y\n'
+			),
 		})
 
 		await page.waitForURL(`**/${target.eventId}/admin/members/import/csv`)
 		await expect(
 			page.getByRole('heading', { name: 'Importer depuis « membres.csv »' })
 		).toBeVisible()
+
+		const select = (header: string) => page.getByLabel(`Champ pour la colonne « ${header} »`)
+		await expect(select('Prénom')).toHaveValue('contact:firstName')
+		await expect(select('Nom')).toHaveValue('contact:lastName')
+		await expect(select('Courriel')).toHaveValue('contact:email')
+		await expect(select('Taille')).toHaveValue(`field:${sizeFieldId}`)
+		await expect(page.getByText('1 valeur invalide')).toBeVisible()
+		await expect(page.getByText('Aucun champ trouvé')).toBeVisible()
+		await expect(page.getByText('2 colonnes à vérifier')).toBeVisible()
+
+		await select('Inconnue').selectOption('ignore')
+		await expect(page.getByText('Aucun champ trouvé')).toHaveCount(0)
+		await expect(page.getByText('1 colonne à vérifier')).toBeVisible()
 
 		// Le fichier ne vit que dans le navigateur: un rechargement ramène au choix.
 		await page.reload()

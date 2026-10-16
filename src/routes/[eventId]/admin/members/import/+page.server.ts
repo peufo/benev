@@ -1,9 +1,8 @@
-import { permission } from '#lib/server/index.js'
 import { memberImportService } from '#lib/server/memberImport.js'
 
-export const load = async ({ locals, params: { eventId } }) => {
-	const member = await permission.admin(eventId, locals)
-	const events = await memberImportService.getImportableEvents(member.userId)
+export const load = async ({ parent, params: { eventId } }) => {
+	const { importerId } = await parent()
+	const events = await memberImportService.getImportableEvents(importerId)
 
 	return {
 		importableEvents: events

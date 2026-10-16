@@ -4,6 +4,6 @@
 	let { data } = $props()
 </script>
 
-<Surface back title="Importer depuis « {data.sourceEvent.name} »">
+<Surface class="max-w-3xl mx-auto w-full" back title="Importer depuis « {data.sourceEvent.name} »">
 	<Placeholder>Le mappage des champs arrive bientôt.</Placeholder>
 </Surface>
