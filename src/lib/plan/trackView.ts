@@ -1,5 +1,6 @@
 import type { Dayjs } from 'dayjs'
 import type { Plan } from './types'
+import { planTime } from './utils'
 
 export type View = {
 	start: Dayjs
@@ -15,8 +16,8 @@ export function trackView(node: HTMLDivElement, { plan, padding, onChange }: Tra
 	function computeView() {
 		const offset = plan.axis === 'x' ? node.scrollLeft : node.scrollTop
 		const len = (plan.axis === 'x' ? node.clientWidth : node.clientHeight) - padding
-		const start = plan.start.add(offset / plan.hourSize, 'hours')
-		const end = start.add(len / plan.hourSize, 'hours')
+		const start = planTime(plan, offset / plan.hourSize)
+		const end = planTime(plan, (offset + len) / plan.hourSize)
 		onChange({ start, end })
 	}
 

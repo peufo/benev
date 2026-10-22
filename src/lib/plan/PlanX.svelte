@@ -15,7 +15,8 @@
 	import { navigateOnScroll } from './navigateOnScroll'
 	import { usePositionIndicator } from './positionIndicator'
 	import { useGrabScale } from './grabScale'
-	import { time } from './utils'
+	import { planTime, time } from './utils'
+	import { getHourTicks } from './getDays'
 	import { trackView, type View } from './trackView'
 	import MilestonesLink from './MilestonesLink.svelte'
 
@@ -31,11 +32,7 @@
 	function createMilestoneAt(event: MouseEvent) {
 		const element = event.currentTarget as HTMLElement
 		const offsetX = parseInt(element.style.translate) - TEAM_HEADER_WIDTH + element.offsetWidth / 2
-		// Relu dans le fuseau: `add()` garderait le décalage de `plan.start`, et `startOf` arrondirait
-		// une heure trop loin passé un changement d'heure.
-		const timestamp = daytz(
-			plan.start.valueOf() + time(offsetX / plan.hourSize, 'hour').to('ms')
-		).startOf('hour')
+		const timestamp = planTime(plan, offsetX / plan.hourSize).startOf('hour')
 		goto(urlParam.with({ form_milestone: JSON.stringify({ timestamp: timestamp.toJSON() }) }), {
 			replace: true,
 			reset: false,
@@ -116,14 +113,11 @@
 				</div>
 				<!-- HOURS -->
 				<div class="flex text-sm">
-					<!-- Clé par index: au passage à l'heure d'hiver, la même heure revient deux fois. -->
-					{#each hours as hour, i (i)}
-						{#if !(i % hourSpan)}
-							{@const span = Math.min(hourSpan, hours.length - i)}
-							<div style:width="{plan.hourSize * span}px" class="border-l border-hard px-1">
-								{span < hourSpan ? '' : hour.toString().padStart(2, '0')}
-							</div>
-						{/if}
+					<!-- Clé par index: au passage à l'heure d'hiver, le même libellé revient deux fois. -->
+					{#each getHourTicks(hours, hourSpan) as { span, label }, i (i)}
+						<div style:width="{plan.hourSize * span}px" class="border-l border-hard px-1">
+							{label}
+						</div>
 					{/each}
 				</div>
 			</div>

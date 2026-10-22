@@ -8,7 +8,7 @@ import { goto } from '$app/navigation'
 import { urlParam } from 'fuma'
 import { page } from '$app/state'
 import { PERIOD_MIN_MINUTES, PERIOD_MIN_MS } from '#lib/constant/index.js'
-import { time } from './utils'
+import { planTime, time } from './utils'
 import type { Plan } from './types'
 
 type Params = {
@@ -90,7 +90,7 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 	function pxToTime(px: number): Dayjs {
 		const hours = px / plan.hourSize
 		const magnetValue = time(hours, 'hour').roundBy(15, 'minute')
-		return plan.start.add(magnetValue, 'hour')
+		return planTime(plan, magnetValue)
 	}
 	function timeToPx(time: Dayjs): number {
 		return (time.diff(plan.start, 'ms') * plan.hourSize) / 3_600_000

@@ -14,6 +14,7 @@
 	import { scrollOnNavigate } from './scrollOnNavigate'
 	import { usePositionIndicator } from './positionIndicator'
 	import { useGrabScale } from './grabScale'
+	import { getHourTicks } from './getDays'
 
 	interface Props {
 		teams: (Team & { periods: PeriodWithMembers[] })[]
@@ -80,14 +81,11 @@
 				</div>
 				<!-- HOURS -->
 				<div class="flex flex-col items-end text-sm text-right">
-					<!-- Clé par index: au passage à l'heure d'hiver, la même heure revient deux fois. -->
-					{#each hours as hour, i (i)}
-						{#if !(i % hourSpan)}
-							{@const span = Math.min(hourSpan, hours.length - i)}
-							<div style:height="{plan.hourSize * span}px" class="border-t px-1">
-								{span < hourSpan ? '' : hour.toString().padStart(2, '0')}
-							</div>
-						{/if}
+					<!-- Clé par index: au passage à l'heure d'hiver, le même libellé revient deux fois. -->
+					{#each getHourTicks(hours, hourSpan) as { span, label }, i (i)}
+						<div style:height="{plan.hourSize * span}px" class="border-t px-1">
+							{label}
+						</div>
 					{/each}
 				</div>
 			</div>

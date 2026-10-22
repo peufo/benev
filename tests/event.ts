@@ -329,8 +329,11 @@ export function useEvent(name: string) {
 			// Un envoi un peu lourd dure, et le tiroir peut être fermé entre-temps — Échap, clic
 			// sur le voile, impatience. La réponse doit quand même remplir le champ: c'est
 			// pourquoi le formulaire d'envoi vit hors du tiroir, dont la fermeture le démonterait.
+			// L'envoi est retenu jusqu'à ce que le tiroir soit fermé, quelle que soit la machine.
+			let releaseUpload = () => {}
+			const uploadHeld = new Promise<void>((resolve) => (releaseUpload = resolve))
 			await page.route('**/uploadMedia', async (route) => {
-				await new Promise((resolve) => setTimeout(resolve, 1000))
+				await uploadHeld
 				await route.continue()
 			})
 			await openDrawer()
@@ -345,6 +348,7 @@ export function useEvent(name: string) {
 			await expect(page.getByLabel("Description de l'image")).toBeHidden()
 			await page.keyboard.press('Escape')
 			await expect(drawer).toBeHidden()
+			releaseUpload()
 			await expect(saveBar).toBeVisible()
 			await page.getByRole('button', { name: 'Réinitialiser' }).click()
 			await expect(saveBar).toBeHidden()
@@ -986,22 +990,21 @@ export function useEvent(name: string) {
 			await gotoHydrated(page, `/${eventId}/admin/teams`)
 			await page.locator('aside').getByRole('link', { name: 'Alpha' }).click()
 			const teamClose = page.locator('#team').getByLabel('Fermeture des inscriptions')
-			// La date posée se lit dans le libellé, rendu depuis la donnée relue après l'envoi. Le
-			// champ vidé, lui, ne se prouve qu'au rechargement.
-			const saveTeam = async ({ reload = true } = {}) => {
+			const saveTeam = async () => {
 				await expect(saveBar).toBeVisible()
 				await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
 				await expect(saveBar).toBeHidden()
-				if (!reload) return
-				await page.reload()
-				await awaitHydrated(page)
 			}
+			// La date posée se lit dans le libellé, rendu depuis la donnée relue après l'envoi.
 			await teamClose.fill('2099-01-01T12:00')
-			await saveTeam({ reload: false })
+			await saveTeam()
 			await expect(page.getByText('Fin des inscriptions le 01 janvier 2099 à 12:00')).toBeVisible()
 
+			// Le champ vidé, lui, ne se prouve qu'au rechargement.
 			await teamClose.fill('')
 			await saveTeam()
+			await page.reload()
+			await awaitHydrated(page)
 			await expect(page.getByText('Fin des inscriptions le 01 janvier 2099 à 12:00')).toHaveCount(0)
 		},
 		/**

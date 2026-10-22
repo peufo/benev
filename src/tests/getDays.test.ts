@@ -1,9 +1,9 @@
 import { describe, it } from 'vitest'
 import dayjs from '#lib/dayjs.js'
-import { getDays } from '#lib/plan/getDays.js'
+import { getDays, getHourTicks } from '#lib/plan/getDays.js'
+import { time } from '#lib/plan/utils.js'
 
 const ZONE = 'Europe/Zurich'
-const HOUR_MS = 3_600_000
 
 /** La plage telle que `getPlan` la construit: du minuit du premier jour à la fin du dernier. */
 function range(first: string, last: string, zone = ZONE) {
@@ -45,12 +45,19 @@ describe('getDays', () => {
 		]) {
 			const { start, end, days } = range(first, last)
 			const cells = days.reduce((acc, { hours }) => acc + hours.length, 0)
-			expect(cells).toBe(Math.ceil(end.diff(start) / HOUR_MS))
+			expect(cells).toBe(Math.ceil(time(end.diff(start)).to('hour')))
 		}
 	})
 
 	it("garde 24 heures par jour dans un fuseau sans heure d'été", ({ expect }) => {
 		const { days } = range('2026-10-22', '2026-10-28', 'UTC')
 		for (const { hours } of days) expect(hours).toEqual(HOURS)
+	})
+
+	it('gradue le jour de 25 heures sans libeller la case tronquée', ({ expect }) => {
+		const { days } = range('2026-10-22', '2026-10-28')
+		const ticks = getHourTicks(days[3].hours, 6)
+		expect(ticks.map(({ span }) => span)).toEqual([6, 6, 6, 6, 1])
+		expect(ticks.map(({ label }) => label)).toEqual(['00', '05', '11', '17', ''])
 	})
 })

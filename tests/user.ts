@@ -1,6 +1,5 @@
 import { expect, type Page } from '@playwright/test'
 import cuid from '@paralleldrive/cuid2'
-import { verifyEmail } from './seed'
 import { gotoHydrated } from './hydrated'
 
 /**
@@ -41,12 +40,5 @@ export function useUser(name: string) {
 		async expectConnected(page: Page) {
 			await expect(page.getByRole('heading', { name: 'Mes évènements' })).toBeVisible()
 		},
-		/**
-		 * La suite tourne avec `EMAIL_DISABLED`: aucun lien de vérification n'est lisible depuis le
-		 * navigateur, et la reprise d'une fiche invitée exige pourtant une adresse prouvée.
-		 */
-		verifyEmail: () => verifyEmail({ email }),
 	}
 }
-
-export type User = ReturnType<typeof useUser>

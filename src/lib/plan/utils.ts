@@ -1,3 +1,6 @@
+import { daytz, type Dayjs } from '#lib/dayjs.js'
+import type { Plan } from './types'
+
 type TimeUnit = 'hour' | 'minute' | 'second' | 'ms'
 const CONVERSION: Record<TimeUnit, Record<TimeUnit, number>> = {
 	hour: {
@@ -36,4 +39,13 @@ export function time(value: number, unit: TimeUnit = 'ms') {
 			return Math.round(value / round) * round
 		},
 	}
+}
+
+/**
+ * L'instant situé `hours` heures écoulées après le début du plan, relu dans le fuseau: `add()`
+ * garderait le décalage de `plan.start`, et toute lecture murale (`startOf`, `format`) tomberait
+ * une heure à côté passé un changement d'heure.
+ */
+export function planTime(plan: Pick<Plan, 'start'>, hours: number): Dayjs {
+	return daytz(plan.start.valueOf() + time(hours, 'hour').to('ms'))
 }
