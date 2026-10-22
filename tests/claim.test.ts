@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { seedInvitedMember, seedUser, signIn, verifyEmail, type SeededUser } from './seed'
 import { gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * Reprendre une fiche créée par l'organisation demande d'avoir prouvé son adresse — le jeton reçu
@@ -13,17 +14,8 @@ test.describe.serial("Reprise d'une fiche invitée", () => {
 	const event = useEvent('Reprise')
 	/** Le compte de la personne invitée: ouvert, mais sans adresse prouvée. */
 	let guest: SeededUser
-	let page: Page
-	let guestPage: Page
-
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-		guestPage = await browser.newPage()
-	})
-	test.afterAll(async () => {
-		await page.close()
-		await guestPage.close()
-	})
+	const page = sharedPage()
+	const guestPage = sharedPage()
 
 	test('Préparation: un évènement, une invitation, un compte non vérifié', async () => {
 		await signIn(page, await seedUser('Boss'))

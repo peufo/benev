@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { seedInvitedMember, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * Le journal était réservé aux administrateurs, alors que tout ce qu'il montre — coordonnées,
@@ -10,17 +11,8 @@ import { gotoHydrated } from './hydrated'
  */
 test.describe.serial("Journal d'un responsable", () => {
 	const event = useEvent('Journalerie')
-	let page: Page
-	let leadPage: Page
-
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-		leadPage = await browser.newPage()
-	})
-	test.afterAll(async () => {
-		await page.close()
-		await leadPage.close()
-	})
+	const page = sharedPage()
+	const leadPage = sharedPage()
 
 	test('Préparation: un évènement, un secteur, un·e responsable invité·e', async () => {
 		await signIn(page, await seedUser('Boss'))

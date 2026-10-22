@@ -1,19 +1,16 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { prisma, seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 test.describe.serial('Plan', () => {
 	const event = useEvent('Zoom')
-	let page: Page
+	const page = sharedPage()
 
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
+	test.beforeAll(async () => {
 		await signIn(page, await seedUser('Zoe'))
 		await event.create(page)
-	})
-	test.afterAll(async () => {
-		await page.close()
 	})
 
 	/**

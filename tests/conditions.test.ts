@@ -2,6 +2,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test'
 import { useEvent } from './event'
 import { seedField, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * La copie réactive des conditions est ce que le champ caché sérialise: seule la valeur qui y
@@ -24,15 +25,8 @@ async function addCondition(page: Page, label: string) {
 // Seul un aller-retour complet le prouve.
 test.describe.serial('Conditions de secteur', () => {
 	const event = useEvent('Cond')
-	let page: Page
+	const page = sharedPage()
 	let editUrl: string
-
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-	})
-	test.afterAll(async () => {
-		await page.close()
-	})
 
 	test('Préparation: compte, évènement, champ de profil', async () => {
 		await signIn(page, await seedUser('Cond'))

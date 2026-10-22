@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { seedMember, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * Une page naît en brouillon: elle n'entre au menu du site qu'une fois publiée, et son adresse
@@ -9,17 +10,8 @@ import { gotoHydrated } from './hydrated'
  */
 test.describe.serial("Statut d'une page", () => {
 	const event = useEvent('Page')
-	let page: Page
-	let guestPage: Page
-
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-		guestPage = await browser.newPage()
-	})
-	test.afterAll(async () => {
-		await page.close()
-		await guestPage.close()
-	})
+	const page = sharedPage()
+	const guestPage = sharedPage()
 
 	test('Préparation: un évènement publié, un bénévole', async () => {
 		await signIn(page, await seedUser('Boss'))

@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { seedUser, signIn } from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * Le modèle de badge se règle par des `InputSelect` sur des champs de profil, dont l'un se crée
@@ -10,12 +11,7 @@ import { awaitHydrated, gotoHydrated } from './hydrated'
  */
 test.describe.serial('Modèle de badge', () => {
 	const event = useEvent('Badgerie')
-	let page: Page
-
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-	})
-	test.afterAll(async () => page.close())
+	const page = sharedPage()
 
 	test('Préparation: un évènement', async () => {
 		await signIn(page, await seedUser('Bobbadge'))

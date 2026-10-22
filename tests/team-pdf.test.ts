@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { prisma, seedMember, seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * Le PDF d'un secteur porte les téléphones de ses inscrit·es: ce qui se vérifie ici, c'est à qui
@@ -10,16 +11,9 @@ import { gotoHydrated } from './hydrated'
 test.describe.serial("PDF d'un secteur", () => {
 	const event = useEvent('Feuille')
 	const other = useEvent('Voisin')
-	let page: Page
+	const page = sharedPage()
 	let teamId: string
 	let foreignTeamId: string
-
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-	})
-	test.afterAll(async () => {
-		await page.close()
-	})
 
 	test('Préparation: un secteur, un créneau, une inscription', async () => {
 		await signIn(page, await seedUser('Boss'))

@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { prisma, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * Une date de fermeture referme un secteur publié, sans personne au clavier. Le ticker est coupé
@@ -9,13 +10,9 @@ import { gotoHydrated } from './hydrated'
  */
 test.describe.serial('Transitions programmées d’un secteur', () => {
 	const event = useEvent('Programme')
-	let page: Page
+	const page = sharedPage()
 
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-	})
 	test.afterAll(async () => {
-		await page.close()
 		await prisma.$disconnect()
 	})
 

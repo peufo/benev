@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { seedInvitedMember, seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * Une inscription proposée par un·e responsable attend la réponse du membre, et une fiche sans
@@ -13,17 +14,8 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 	const event = useEvent('Attente')
 	/** Le compte de la personne invitée, semé à la préparation. */
 	let guest: Awaited<ReturnType<typeof seedUser>>
-	let page: Page
-	let guestPage: Page
-
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-		guestPage = await browser.newPage()
-	})
-	test.afterAll(async () => {
-		await page.close()
-		await guestPage.close()
-	})
+	const page = sharedPage()
+	const guestPage = sharedPage()
 
 	test('Préparation: un évènement publié, un secteur, un créneau, une invitation', async () => {
 		await signIn(page, await seedUser('Boss'))

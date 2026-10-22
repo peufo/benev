@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { prisma, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 const DAY = 24 * 60 * 60 * 1000
 const daysAgo = (days: number) => new Date(Date.now() - days * DAY)
@@ -14,13 +15,9 @@ const daysAgo = (days: number) => new Date(Date.now() - days * DAY)
 test.describe.serial('Archivage automatique d’un évènement', () => {
 	const kept = useEvent('Garde')
 	const forgotten = useEvent('Oubli')
-	let page: Page
+	const page = sharedPage()
 
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-	})
 	test.afterAll(async () => {
-		await page.close()
 		await prisma.$disconnect()
 	})
 

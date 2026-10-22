@@ -707,7 +707,10 @@ from '@lucide/svelte'`, used as `<UploadIcon size={20} class="opacity-70" />`. L
 - Config: `playwright.config.ts`; test directory `tests/`.
 - The config builds and previews the app on port 4173 with `EMAIL_DISABLED=true` before running.
 - Fixtures: `tests/seed.ts`, `tests/hydrated.ts`, `tests/event.ts`, `tests/user.ts`,
-  `tests/photon.ts`. Chaque test bâtit son monde avec des CUID uniques.
+  `tests/photon.ts`, `tests/sharedPage.ts`. Chaque test bâtit son monde avec des CUID uniques.
+- Un `describe.serial` dont les étapes partagent une session déclare sa page par
+  `const page = sharedPage()`, qui l'ouvre et la ferme autour du bloc. `tests/event.ts` ne porte
+  que la création de l'évènement: ce qu'un test vérifie s'écrit dans son propre fichier.
 - `--workers=1` est la seule mesure qui vaille: c'est ce que fait la CI, et la parallélisation
   locale masque les régressions de durée en ajoutant ses propres échecs.
 

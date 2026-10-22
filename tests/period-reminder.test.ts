@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { prisma, seedMember, seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 const HOUR = 60 * 60_000
 
@@ -13,15 +14,11 @@ const HOUR = 60 * 60_000
  */
 test.describe.serial('Rappel avant un créneau', () => {
 	const event = useEvent('Rappel')
-	let page: Page
+	const page = sharedPage()
 	let periodId: string
 	let subscribeId: string
 
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-	})
 	test.afterAll(async () => {
-		await page.close()
 		await prisma.$disconnect()
 	})
 

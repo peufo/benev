@@ -1,6 +1,7 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { seedEmailVerificationToken, seedUser, signIn, type SeededUser } from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * Le lien de vérification confirme l'adresse à laquelle il a été envoyé — c'est tout ce que prouve
@@ -10,19 +11,10 @@ import { awaitHydrated, gotoHydrated } from './hydrated'
 test.describe.serial('Lien de vérification ouvert depuis un autre compte', () => {
 	let alice: SeededUser
 	let bob: SeededUser
-	// `browser.newPage()` ouvre un contexte par page: les deux sessions ne partagent pas de cookie.
-	let alicePage: Page
-	let bobPage: Page
+	// `sharedPage()` ouvre un contexte par page: les deux sessions ne partagent pas de cookie.
+	const alicePage = sharedPage()
+	const bobPage = sharedPage()
 	let link: string
-
-	test.beforeAll(async ({ browser }) => {
-		alicePage = await browser.newPage()
-		bobPage = await browser.newPage()
-	})
-	test.afterAll(async () => {
-		await alicePage.close()
-		await bobPage.close()
-	})
 
 	test('Préparation: deux comptes, un lien pour le premier', async () => {
 		alice = await seedUser('Alice', { isEmailVerified: false })

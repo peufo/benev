@@ -1,7 +1,8 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
 import { seedField, seedInvitedMember, seedMember, seedTeam, seedUser, signIn } from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
+import { sharedPage } from './sharedPage'
 
 /**
  * L'entrée de l'import: on choisit une source, un autre évènement dont on est admin ou un
@@ -12,17 +13,8 @@ import { awaitHydrated, gotoHydrated } from './hydrated'
 test.describe.serial('Import de membres', () => {
 	const target = useEvent('Cible')
 	const source = useEvent('Source')
-	let page: Page
-	let leadPage: Page
-
-	test.beforeAll(async ({ browser }) => {
-		page = await browser.newPage()
-		leadPage = await browser.newPage()
-	})
-	test.afterAll(async () => {
-		await page.close()
-		await leadPage.close()
-	})
+	const page = sharedPage()
+	const leadPage = sharedPage()
 
 	test('Préparation: deux évènements, un·e responsable dans la cible', async () => {
 		await signIn(page, await seedUser('Boss'))
