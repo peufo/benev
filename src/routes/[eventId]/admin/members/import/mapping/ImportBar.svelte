@@ -51,14 +51,17 @@
 		importing = true
 		done = 0
 		const results: ImportResult[] = skipped.map((row) => ({ ...row, status: 'skipped' }))
-		const invite = sendEmail && !tooManyInvites
 
 		// En séquence: chaque lot fait avancer la barre, et la file d'e-mails reçoit par petits pas.
 		for (let index = 0; index < rows.length; index += IMPORT_BATCH_SIZE) {
 			const batch = rows.slice(index, index + IMPORT_BATCH_SIZE)
 			try {
 				results.push(
-					...(await importMembers({ source: sourceName, sendEmail: invite, rows: batch }))
+					...(await importMembers({
+						source: sourceName,
+						sendEmail: sendEmail && !tooManyInvites,
+						rows: batch,
+					}))
 				)
 			} catch (err) {
 				const reason = isHttpError(err) ? err.body.message : 'Le serveur ne répond pas'

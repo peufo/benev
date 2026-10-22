@@ -29,9 +29,13 @@ type Inviter = { firstName: string; lastName: string; email: string }
  * fiche — typiquement quand l'adresse vient d'être corrigée. Le jeton tourne à chaque envoi, ce
  * qui règle justement ce cas: le lien parti à la mauvaise adresse ne vaut plus rien.
  */
-export async function sendInviteEmail(member: InvitedMember, author: Inviter) {
+export async function sendInviteEmail(
+	member: InvitedMember,
+	author: Inviter,
+	{ bulk = false } = {}
+): Promise<boolean> {
 	const tokenId = await generateInviteToken(member.id)
-	await sendEmailModel(member.eventId, 'invitation_create', {
+	return sendEmailModel(member.eventId, 'invitation_create', {
 		from: member.event.name,
 		to: member.email,
 		replyTo: author.email,
@@ -44,6 +48,7 @@ export async function sendInviteEmail(member: InvitedMember, author: Inviter) {
 		// Un échec d'envoi atterrit ainsi sur la fiche de l'invité, et pas seulement dans le
 		// journal de l'évènement: « l'invitation n'est jamais arrivée » est le cas numéro un.
 		logContext: { memberId: member.id },
+		bulk,
 	})
 }
 

@@ -17,6 +17,8 @@ import { getMemberReplacers } from '#lib/pages/memberSuggestions.js'
 export type SendMailOptionsWithLog = SendMailOptions & {
 	/** Rattache la ligne de journal produite par l'envoi. */
 	logContext?: EmailRelations
+	/** Un envoi en masse, qui passe après tout le reste (voir `emailQueue`). */
+	bulk?: boolean
 }
 export type SendMailOptionsWithProps<Props> = Omit<SendMailOptionsWithLog, 'html'> & {
 	props: Props
@@ -29,6 +31,9 @@ export type SendMailOptionsWithProps<Props> = Omit<SendMailOptionsWithLog, 'html
  * Le rendu du HTML, lui, reste dans la requête (voir `sendEmailComponent` / `sendEmailModel`):
  * un gabarit manquant doit continuer de lever chez l'appelant, et le message mis en file est
  * ainsi figé, insensible à une édition ultérieure du gabarit.
+ *
+ * `false` seulement si la file a refusé le message. Un envoi coupé ou entièrement destiné à des
+ * adresses `.test` n'est pas un refus.
  */
 export const sendEmail = async ({
 	from,
@@ -36,9 +41,10 @@ export const sendEmail = async ({
 	cc,
 	bcc,
 	logContext,
+	bulk,
 	...options
-}: SendMailOptionsWithLog) => {
-	if (EMAIL_DISABLED) return
+}: SendMailOptionsWithLog): Promise<boolean> => {
+	if (EMAIL_DISABLED) return true
 
 	const recipients = {
 		to: withoutTestRecipients(to),
@@ -48,9 +54,9 @@ export const sendEmail = async ({
 	const dropped = [...recipients.to.dropped, ...recipients.cc.dropped, ...recipients.bcc.dropped]
 	if (dropped.length) console.log(`Mail: adresses .test écartées (${dropped.join(', ')})`)
 	// Plus personne à qui écrire: le message était entièrement destiné à des fixtures.
-	if (!recipients.to.kept && !recipients.cc.kept && !recipients.bcc.kept) return
+	if (!recipients.to.kept && !recipients.cc.kept && !recipients.bcc.kept) return true
 
-	enqueueEmail(
+	return enqueueEmail(
 		{
 			from: `${from || 'Benev.io'} <${SMTP_USER}>`,
 			to: recipients.to.kept,
@@ -58,7 +64,8 @@ export const sendEmail = async ({
 			bcc: recipients.bcc.kept,
 			...options,
 		},
-		logContext
+		logContext,
+		{ bulk }
 	)
 }
 

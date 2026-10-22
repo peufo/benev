@@ -24,10 +24,13 @@ export type ImportResult = {
 }
 
 /**
- * Le plafond par import est tenu par le client, qui envoie par lots: seul le serveur voit tous les
- * lots d'un évènement, et c'est ici que la file d'e-mails est vraiment protégée.
+ * Un import peut viser n'importe quelle adresse: sans plafond, un compte malveillant ferait de nous
+ * un relais de spam, et la réputation de l'expéditeur est commune à tous les évènements.
  */
-const isInviteLimited = createRateLimit({ windowMs: 60 * 60 * 1000, max: MAX_IMPORT_INVITES })
+const isInviteLimited = createRateLimit({
+	windowMs: 24 * 60 * 60 * 1000,
+	max: MAX_IMPORT_INVITES,
+})
 
 /**
  * Un lot de lignes du fichier, déjà converties par `buildMembers`. Chaque ligne réussit ou échoue
@@ -75,16 +78,29 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 				},
 			})
 
-			const invited = sendEmail && !!member.email && !isInviteLimited(eventId)
+			const wanted = sendEmail && !!member.email
+			const limited = wanted && isInviteLimited(author.userId ?? author.id)
+			// Envoyée avant le journal, pour qu'il ne dise pas « invité·e » d'un message refusé.
+			const invited =
+				wanted &&
+				!limited &&
+				(await sendInviteEmail({ ...member, email: member.email!, event }, author, { bulk: true }))
 			await createLog('member_invite', {
 				member,
 				actor: author,
 				sendEmail: invited,
 				importedFrom: source,
 			})
-			if (invited) await sendInviteEmail({ ...member, email: member.email!, event }, author)
 
-			result('imported', { memberId: member.id, invited })
+			result('imported', {
+				memberId: member.id,
+				invited,
+				reason: limited
+					? `Plus de ${MAX_IMPORT_INVITES} invitations en un jour: à renvoyer depuis sa fiche`
+					: wanted && !invited
+						? "File d'e-mails saturée: invitation à renvoyer depuis sa fiche"
+						: undefined,
+			})
 		} catch (err) {
 			// Une adresse prise entre la lecture ci-dessus et l'écriture: un doublon, pas une panne.
 			if (isUniqueConstraintError(err, 'email')) {

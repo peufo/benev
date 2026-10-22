@@ -14,6 +14,10 @@ import { toAddressList } from './recipients'
  * chaque tentative: une file est un état mutable éphémère, un journal est append-only. Un arrêt
  * brutal peut donc perdre un message — mais plus jamais en silence, `drainEmailQueue` journalisant
  * ce qu'il abandonne.
+ *
+ * Deux voies, parce que le worker est sérialisé: un envoi en masse (les invitations d'un import)
+ * ferait sinon attendre derrière lui un mot de passe oublié ou une inscription. La voie lente ne
+ * se vide que lorsque la voie normale est vide.
  */
 
 const transporter = nodemailer.createTransport({
@@ -60,42 +64,56 @@ type QueuedEmail = {
 	 */
 	relations: EmailRelations
 	attempts: number
+	/** Un réessai revient dans sa voie: un envoi en masse ne doit pas passer devant l'urgent. */
+	bulk: boolean
 }
 
-/** Au-delà, on refuse à l'entrée plutôt que de laisser la mémoire enfler sans borne. */
+/**
+ * Au-delà, on refuse à l'entrée plutôt que de laisser la mémoire enfler sans borne: chaque message
+ * garde son HTML rendu.
+ */
 const MAX_QUEUE_SIZE = 500
+const MAX_BULK_SIZE = 1000
 
 const queue: QueuedEmail[] = []
+const bulkQueue: QueuedEmail[] = []
 /** Jobs en attente d'un réessai: hors de la file, mais pas encore perdus. */
 const retrying = new Set<QueuedEmail>()
 let draining: Promise<void> | null = null
 let stopped = false
 
-/** Met un message en file et rend la main. Le worker s'en occupe. */
-export function enqueueEmail(options: SendMailOptions, relations: EmailRelations = {}) {
-	const job: QueuedEmail = { options, relations, attempts: 0 }
+/**
+ * Met un message en file et rend la main. Le worker s'en occupe. `false` si la file l'a refusé,
+ * ce qu'elle journalise déjà: l'appelant n'a plus qu'à ne pas prétendre l'avoir envoyé.
+ */
+export function enqueueEmail(
+	options: SendMailOptions,
+	relations: EmailRelations = {},
+	{ bulk = false } = {}
+): boolean {
+	const job: QueuedEmail = { options, relations, attempts: 0, bulk }
 	if (stopped) {
 		void logFailure(job, new Error('File close'), 'shutdown')
-		return
+		return false
 	}
-	if (queue.length >= MAX_QUEUE_SIZE) {
-		void logFailure(
-			job,
-			new Error(`File d'attente saturée (${MAX_QUEUE_SIZE} messages)`),
-			'overflow'
-		)
-		return
+	const max = bulk ? MAX_BULK_SIZE : MAX_QUEUE_SIZE
+	if (laneOf(job).length >= max) {
+		void logFailure(job, new Error(`File d'attente saturée (${max} messages)`), 'overflow')
+		return false
 	}
-	queue.push(job)
+	laneOf(job).push(job)
 	void drain()
+	return true
 }
+
+const laneOf = (job: QueuedEmail) => (job.bulk ? bulkQueue : queue)
 
 function drain(): Promise<void> {
 	if (draining) return draining
 	draining = (async () => {
 		try {
 			while (!stopped) {
-				const job = queue.shift()
+				const job = queue.shift() ?? bulkQueue.shift()
 				if (!job) break
 				await runJob(job)
 			}
@@ -132,7 +150,7 @@ async function runJob(job: QueuedEmail) {
 		const timer = setTimeout(() => {
 			retrying.delete(job)
 			if (stopped) return
-			queue.push(job)
+			laneOf(job).push(job)
 			void drain()
 		}, delay)
 		// Une minuterie de réessai ne doit jamais retenir le conteneur au redémarrage. Ce qu'elle
@@ -177,7 +195,7 @@ export async function drainEmailQueue({ timeout = 10_000 } = {}) {
 	clearTimeout(guard)
 	stopped = true
 
-	const abandoned = [...queue.splice(0), ...retrying]
+	const abandoned = [...queue.splice(0), ...bulkQueue.splice(0), ...retrying]
 	retrying.clear()
 	if (!abandoned.length) return
 

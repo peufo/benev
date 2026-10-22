@@ -26,13 +26,16 @@ export type ImportRow = {
 	profile: Record<string, ProfileValue>
 }
 
+/**
+ * Tenu par le serveur, par compte et sur une journée: créer un second évènement ne le contourne
+ * pas. Le client ne fait que l'annoncer.
+ */
+export const MAX_IMPORT_INVITES = 500
+
 export type SkippedRow = { line: number; name: string; email: string; reason: string }
 
 export const memberName = ({ firstName, lastName }: Pick<ImportRow, 'firstName' | 'lastName'>) =>
 	`${firstName} ${lastName}`.trim()
-
-/** La file d'e-mails est en mémoire et sérialisée: un import ne doit pas la saturer. */
-export const MAX_IMPORT_INVITES = 50
 
 export type BuildOptions = {
 	/** Le numéro de la première ligne: 2 sous l'en-tête d'un fichier, 1 sans fichier derrière. */
