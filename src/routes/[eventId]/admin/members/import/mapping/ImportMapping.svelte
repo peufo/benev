@@ -6,10 +6,7 @@
 	import { plural } from '#lib/utils.js'
 	import { Placeholder, Surface } from '#lib/ui/index.js'
 	import {
-		buildMembers,
-		importBlocker,
 		isBlocking,
-		reportColumns,
 		type ColumnStatus,
 		type ColumnTarget,
 		type ImportField,
@@ -17,6 +14,7 @@
 	} from '#lib/member/import/index.js'
 	import { importSource } from '../importSource.svelte'
 	import ColumnHeader from './ColumnHeader.svelte'
+	import { ImportPreview } from './importPreview.svelte'
 	import ImportBar from './ImportBar.svelte'
 	import ValueMapDialog from './ValueMapDialog.svelte'
 
@@ -38,16 +36,29 @@
 	let mappedColumn: number | null = $state(null)
 	let importing = $state(false)
 
-	const report = $derived(reportColumns(table, source.mapping, fields, source.excluded))
+	const preview = new ImportPreview({
+		get table() {
+			return table
+		},
+		get fields() {
+			return fields
+		},
+		get firstLine() {
+			return firstLine
+		},
+		get mapping() {
+			return source.mapping
+		},
+		get excluded() {
+			return source.excluded
+		},
+	})
+
 	const toCheck = $derived(
-		report.filter(({ status }) => status === 'unmapped' || isBlocking(status)).length
+		preview.reports.filter(({ status }) => status === 'unmapped' || isBlocking(status)).length
 	)
-	const built = $derived(
-		buildMembers(table, source.mapping, fields, { firstLine, excluded: source.excluded })
-	)
-	const blocker = $derived(importBlocker(report, source.mapping))
 	const ignoredColumns = $derived(
-		report.filter(({ status }) => status === 'ignored' || status === 'unmapped').length
+		preview.reports.filter(({ status }) => status === 'ignored' || status === 'unmapped').length
 	)
 	const mappedField = $derived.by(() => {
 		if (mappedColumn === null) return undefined
@@ -124,7 +135,7 @@
 						</th>
 						<th class="w-0 align-bottom text-base-content/50">#</th>
 						{#each table.headers as header, column (column)}
-							{@const columnReport = report[column]}
+							{@const columnReport = preview.columns[column].report}
 							<th class={['min-w-56 align-top font-normal', columnClass[columnReport.status]]}>
 								<ColumnHeader
 									{header}
@@ -158,10 +169,15 @@
 							</td>
 							<td class="text-base-content/50">{line}</td>
 							{#each row as cell, column (column)}
-								{@const { status, invalid } = report[column]}
-								{@const issue = status === 'ignored' ? undefined : invalid.get(index)}
+								<!-- Lus un à un: quand la colonne se revalide, seules les cellules dont le motif
+								change se mettent à jour. -->
+								{@const status = preview.columns[column].report.status}
+								{@const issue =
+									isExcluded || status === 'ignored'
+										? undefined
+										: preview.columns[column].issues.get(index)}
 								<td class={['p-0', columnClass[status], issue && 'bg-error/15']}>
-									<!-- Réécrite à la validation, pas à chaque frappe: toute la table se revalide. -->
+									<!-- Réécrite à la validation, pas à chaque frappe: seule sa colonne se revalide. -->
 									<input
 										class="input input-ghost input-sm w-full min-w-24 bg-transparent"
 										aria-label="Ligne {line}, colonne « {table.headers[column]} »"
@@ -180,9 +196,9 @@
 
 		<ImportBar
 			{sourceName}
-			rows={built.rows}
-			skipped={built.skipped}
-			{blocker}
+			rows={preview.members.rows}
+			skipped={preview.members.skipped}
+			blocker={preview.blocker}
 			{ignoredColumns}
 			bind:importing
 		/>

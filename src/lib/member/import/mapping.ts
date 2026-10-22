@@ -102,6 +102,13 @@ export function resolveTarget(target: TargetKey, fields: ImportField[]): Target 
 	return field ? { kind, field } : null
 }
 
+/** La cible de chaque colonne, `null` pour une colonne ignorée ou sans champ. */
+export function resolveTargets(mapping: ColumnTarget[], fields: ImportField[]): (Target | null)[] {
+	return mapping.map((target) =>
+		target && target !== 'ignore' ? resolveTarget(target, fields) : null
+	)
+}
+
 export type ColumnStatus = 'ok' | 'unmapped' | 'ignored' | 'duplicate' | 'invalid'
 
 /** Une colonne en double ou aux valeurs refusées empêche d'importer. */
@@ -113,34 +120,62 @@ export type ColumnReport = {
 	invalid: Map<number, string>
 }
 
+/** Combien de colonnes visent chaque cible: au-delà d'une, elles sont en double. */
+export function targetUsage(mapping: ColumnTarget[]): Map<string, number> {
+	const usage = new Map<string, number>()
+	for (const target of mapping) {
+		if (!target || target === 'ignore') continue
+		for (const key of covers(target)) usage.set(key, (usage.get(key) ?? 0) + 1)
+	}
+	return usage
+}
+
+/**
+ * Le motif de chaque cellule refusée, lignes décochées comprises: cocher ou décocher une ligne ne
+ * doit pas revalider la colonne, seulement refiltrer (`columnReport`).
+ */
+export function columnIssues(
+	rows: string[][],
+	column: number,
+	resolved: Target | null
+): Map<number, string> {
+	const issues = new Map<number, string>()
+	if (!resolved) return issues
+	rows.forEach((row, index) => {
+		const issue = validateCell(row[column], resolved)
+		if (issue) issues.set(index, issue)
+	})
+	return issues
+}
+
 /** Une ligne exclue de l'import n'a rien à valider: sa valeur fautive ne doit rien bloquer. */
+export function columnReport(
+	target: ColumnTarget,
+	resolved: Target | null,
+	issues: Map<number, string>,
+	usage: Map<string, number>,
+	excluded: ReadonlySet<number> = new Set()
+): ColumnReport {
+	if (target === 'ignore') return { status: 'ignored', invalid: new Map() }
+	if (!target || !resolved) return { status: 'unmapped', invalid: new Map() }
+	const invalid = new Map([...issues].filter(([index]) => !excluded.has(index)))
+	if (covers(target).some((key) => (usage.get(key) ?? 0) > 1)) {
+		return { status: 'duplicate', invalid }
+	}
+	return { status: invalid.size ? 'invalid' : 'ok', invalid }
+}
+
 export function reportColumns(
 	table: CsvTable,
 	mapping: ColumnTarget[],
 	fields: ImportField[],
 	excluded: ReadonlySet<number> = new Set()
 ): ColumnReport[] {
-	const usage = new Map<string, number>()
-	for (const target of mapping) {
-		if (!target || target === 'ignore') continue
-		for (const key of covers(target)) usage.set(key, (usage.get(key) ?? 0) + 1)
-	}
-
+	const usage = targetUsage(mapping)
+	const targets = resolveTargets(mapping, fields)
 	return table.headers.map((_, column) => {
-		const invalid = new Map<number, string>()
-		const target = mapping[column]
-		if (target === 'ignore') return { status: 'ignored', invalid }
-		const resolved = target && resolveTarget(target, fields)
-		if (!target || !resolved) return { status: 'unmapped', invalid }
-
-		table.rows.forEach((row, index) => {
-			if (excluded.has(index)) return
-			const issue = validateCell(row[column], resolved)
-			if (issue) invalid.set(index, issue)
-		})
-		if (covers(target).some((key) => (usage.get(key) ?? 0) > 1)) {
-			return { status: 'duplicate', invalid }
-		}
-		return { status: invalid.size ? 'invalid' : 'ok', invalid }
+		const resolved = targets[column] ?? null
+		const issues = columnIssues(table.rows, column, resolved)
+		return columnReport(mapping[column] ?? null, resolved, issues, usage, excluded)
 	})
 }

@@ -1,6 +1,8 @@
 import { describe, it } from 'vitest'
 import {
 	buildMembers,
+	columnIssues,
+	columnReport,
 	guessFromValues,
 	memberTable,
 	importBlocker,
@@ -12,7 +14,9 @@ import {
 	parseCsv,
 	replaceValues,
 	reportColumns,
+	resolveTargets,
 	suggestField,
+	targetUsage,
 	validateCell,
 	type ImportField,
 } from '#lib/member/import/index.js'
@@ -152,6 +156,15 @@ describe('état des colonnes', () => {
 			'ignored',
 			'duplicate',
 		])
+	})
+
+	it('valide les lignes décochées, mais ne les compte pas', ({ expect }) => {
+		const mapping = guessMapping(table.headers, fields)
+		const [, email] = resolveTargets(mapping, fields)
+		const issues = columnIssues(table.rows, 1, email)
+		expect([...issues.keys()]).toEqual([1])
+		const report = columnReport(mapping[1], email, issues, targetUsage(mapping), new Set([1]))
+		expect(report).toEqual({ status: 'ok', invalid: new Map() })
 	})
 })
 

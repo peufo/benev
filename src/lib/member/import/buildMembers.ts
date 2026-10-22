@@ -1,9 +1,10 @@
 import {
 	isBlocking,
-	resolveTarget,
+	resolveTargets,
 	type ColumnReport,
 	type ColumnTarget,
 	type ImportField,
+	type Target,
 } from './mapping.js'
 import type { CsvTable } from './parseCsv.js'
 import { findOption, parseBirthday, parseBoolean, parseList } from './validateCell.js'
@@ -54,57 +55,67 @@ export function buildMembers(
 	fields: ImportField[],
 	{ firstLine = 2, excluded = new Set() }: BuildOptions = {}
 ): { rows: ImportRow[]; skipped: SkippedRow[] } {
-	const targets = mapping.map((target) =>
-		target && target !== 'ignore' ? resolveTarget(target, fields) : null
+	const targets = resolveTargets(mapping, fields)
+	return collectMembers(
+		table.rows.flatMap((cells, index) =>
+			excluded.has(index) ? [] : [buildRow(cells, targets, index + firstLine)]
+		)
 	)
+}
+
+/** Une ligne convertie, sans regard pour les autres: le doublon d'adresse est l'affaire de `collectMembers`. */
+export function buildRow(cells: string[], targets: (Target | null)[], line: number): ImportRow {
+	const row: ImportRow = { line, firstName: '', lastName: '', profile: {} }
+
+	targets.forEach((target, column) => {
+		const value = cells[column]
+		if (!target || !value) return
+		if (target.kind === 'field') {
+			const converted = convert(value, target.field)
+			if (converted !== undefined) row.profile[target.field.id] = converted
+			return
+		}
+		switch (target.key) {
+			case 'fullName': {
+				const [firstName, ...lastName] = value.split(/\s+/)
+				row.firstName = firstName
+				row.lastName = lastName.join(' ')
+				return
+			}
+			case 'email':
+				row.email = value.toLowerCase()
+				return
+			case 'birthday':
+				row.birthday = parseBirthday(value)?.toISOString().slice(0, 10)
+				return
+			default:
+				row[target.key] = value
+		}
+	})
+
+	return row
+}
+
+/** Écarte les lignes sans nom et les adresses déjà vues. Les lignes décochées n'y arrivent pas. */
+export function collectMembers(built: ImportRow[]): { rows: ImportRow[]; skipped: SkippedRow[] } {
 	const rows: ImportRow[] = []
 	const skipped: SkippedRow[] = []
 	const emails = new Set<string>()
 
-	table.rows.forEach((cells, index) => {
-		if (excluded.has(index)) return
-		const row: ImportRow = { line: index + firstLine, firstName: '', lastName: '', profile: {} }
-
-		targets.forEach((target, column) => {
-			const value = cells[column]
-			if (!target || !value) return
-			if (target.kind === 'field') {
-				const converted = convert(value, target.field)
-				if (converted !== undefined) row.profile[target.field.id] = converted
-				return
-			}
-			switch (target.key) {
-				case 'fullName': {
-					const [firstName, ...lastName] = value.split(/\s+/)
-					row.firstName = firstName
-					row.lastName = lastName.join(' ')
-					return
-				}
-				case 'email':
-					row.email = value.toLowerCase()
-					return
-				case 'birthday':
-					row.birthday = parseBirthday(value)?.toISOString().slice(0, 10)
-					return
-				default:
-					row[target.key] = value
-			}
-		})
-
+	for (const row of built) {
 		const name = memberName(row)
 		const email = row.email ?? ''
-		if (!name) return skipped.push({ line: row.line, name, email, reason: 'Nom manquant' })
+		if (!name) {
+			skipped.push({ line: row.line, name, email, reason: 'Nom manquant' })
+			continue
+		}
 		if (row.email && emails.has(row.email)) {
-			return skipped.push({
-				line: row.line,
-				name,
-				email,
-				reason: 'Adresse en double dans le fichier',
-			})
+			skipped.push({ line: row.line, name, email, reason: 'Adresse en double dans le fichier' })
+			continue
 		}
 		if (row.email) emails.add(row.email)
 		rows.push(row)
-	})
+	}
 
 	return { rows, skipped }
 }
