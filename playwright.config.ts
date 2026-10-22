@@ -12,7 +12,12 @@ const config: PlaywrightTestConfig = {
 		// que `ROOT_USER` leur ouvre.
 		env: { EMAIL_DISABLED: 'true', SCHEDULER_DISABLED: 'true', ROOT_USER: 'root@benevio.test' },
 	},
-	use: { baseURL: `http://localhost:${port}` },
+	use: {
+		baseURL: `http://localhost:${port}`,
+		// Tiroirs, journal et connexion renoncent à leurs transitions sous cette préférence:
+		// Playwright n'a plus à attendre qu'un élément s'immobilise ou finisse de sortir.
+		contextOptions: { reducedMotion: 'reduce' },
+	},
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
 	forbidOnly: !!process.env.CI,

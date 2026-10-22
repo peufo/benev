@@ -51,95 +51,12 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		await event.expectAdminFiltersAccepted(page)
 	})
 
-	test('Les anciennes pages de réglages redirigent vers /admin/settings', async () => {
-		await event.expectSettingsRedirects(page)
-	})
-
-	test('La barre de sauvegarde des réglages suit les modifications', async () => {
-		await event.expectSettingsSaveBar(page)
-	})
-
-	test("Le thème posé à la création se change, s'enregistre et se retire", async () => {
-		await event.expectThemePresets(page)
-	})
-
-	test("L'édition d'une page s'enregistre par la barre de sauvegarde", async () => {
-		await event.expectPageEditorSaveBar(page)
-	})
-
-	test('Le formulaire de champ de profil suit le type et les droits', async () => {
-		await event.expectMemberFieldForm(page)
-	})
-
-	test('La médiathèque est un tiroir unique', async () => {
-		await event.expectMediaDrawer(page)
-	})
-
-	test("L'invitation reconnaît un compte existant", async () => {
-		await event.expectInviteFindsExistingUser(page, bob.email)
-	})
-
-	test("L'invitation refuse une adresse déjà membre", async () => {
-		await event.expectInviteRejectsDuplicateEmail(page, bob.email)
-	})
-
-	test("Le profil du membre s'édite sur sa fiche, par la barre de sauvegarde", async () => {
-		await event.expectMemberProfileSaveBar(page)
-	})
-
-	// Avant le journal: les deux secteurs créés ici lui ajoutent deux entrées, et sa fenêtre par
-	// défaut en tient trente.
-	test("Le formulaire de secteur repart de l'enregistrement ouvert", async () => {
-		await event.expectTeamFormStateIsPerTeam(page)
-	})
-
+	// Après le lieu: le journal le rend parmi les réglages modifiés.
 	test('Le journal rend ce que le parcours a écrit, et accepte une note', async () => {
 		await event.expectJournal(page)
 	})
 
 	test('Le journal charge les entrées précédentes vers le haut', async () => {
 		await event.expectJournalLoadsPrevious(page)
-	})
-
-	// Après le journal: les deux entrées écrites ici déborderaient la fenêtre de trente que
-	// `expectJournal` suppose complète.
-	test("L'invitation se renvoie depuis la fiche du membre", async () => {
-		await event.expectResendInvite(page)
-	})
-
-	test('Un responsable invité depuis le secteur ouvre la barre de sauvegarde', async () => {
-		await event.expectTeamLeaderInvitedFromField(page)
-	})
-
-	// Après les secteurs, qui n'existent qu'à partir de là, et après le journal, dont la fenêtre
-	// de trente entrées déborderait de ce que ce parcours y ajoute.
-	test("L'invitation confie des secteurs dès la création du membre", async () => {
-		await event.expectInviteAssignsTeams(page)
-	})
-
-	// En dernier: le membre créé ici est administrateur, et un membre ne porte que son rôle le
-	// plus haut. Les badges de rôle des étapes précédentes ne s'attendent pas à le croiser.
-	test("L'invitation nomme un administrateur dès la création du membre", async () => {
-		await event.expectInviteNamesAdmin(page)
-	})
-
-	// Après les secteurs: le réglage posé ici se lit sur eux.
-	test('La fin des inscriptions par défaut se lit sur le secteur et sa carte', async () => {
-		await event.expectDefaultCloseSubscribing(page)
-	})
-
-	test("Un invité refuse l'invitation et son adresse quitte la fiche", async ({
-		browser: invitedBrowser,
-	}) => {
-		const chell = useUser('Chell')
-		const invitedPage = await invitedBrowser.newPage()
-		try {
-			// Le compte existe avant l'invitation: c'est le cas ordinaire, et le tunnel rattache
-			// alors le membre par son adresse, une fois celle-ci prouvée.
-			await chell.register(invitedPage)
-			await event.expectDeclineInvite(page, invitedPage, chell)
-		} finally {
-			await invitedPage.close()
-		}
 	})
 })

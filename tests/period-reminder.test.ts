@@ -78,7 +78,7 @@ test.describe.serial('Rappel avant un créneau', () => {
 
 	test('La veille du créneau, l’inscription acceptée reçoit son rappel', async () => {
 		await prisma.event.update({ where: { id: event.eventId }, data: { reminderHours: 24 } })
-		await runPeriodReminder()
+		// Le curseur posé par l'étape précédente suffit: l'instant du rappel tombe après lui.
 		await startInOneDay()
 		await runPeriodReminder()
 		expect(await remindedAt()).not.toBeNull()

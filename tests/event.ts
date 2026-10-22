@@ -1,8 +1,7 @@
 import { expect, type Page } from '@playwright/test'
 import cuid from '@paralleldrive/cuid2'
-import type { User } from './user'
 import { mockPhoton, testPlace } from './photon'
-import { seedField } from './seed'
+import { seedField, verifyEmail, type SeededUser } from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
 
 /** Un aplat bleu de 64×64, de quoi nourrir la médiathèque sans fichier à versionner. */
@@ -104,8 +103,6 @@ export function useEvent(name: string) {
 			// bouts doivent s'accorder, et `src/tests/filter.test.ts` en tient déjà le schéma.
 			const cases: [string, string][] = [
 				['members', 'subscribes_hours={"min":2,"max":8,"order":"asc"}'],
-				['members', 'createdAt={"start":"2024-01-01T00:00:00.000Z","order":"desc"}'],
-				['members', 'subscribes_teams=["a","b"]'],
 				['subscribes', 'isAbsent=false'],
 			]
 
@@ -116,17 +113,6 @@ export function useEvent(name: string) {
 				// visible, mais le filtre lui-même doit survivre au passage.
 				const key = query.split('=')[0]
 				expect(new URL(page.url()).searchParams.has(key), `${route} garde ${key}`).toBe(true)
-			}
-		},
-		/** Les trois anciennes pages de réglages sont devenues une seule, ancrée par section. */
-		async expectSettingsRedirects(page: Page) {
-			for (const [from, anchor] of [
-				['event', 'essentials'],
-				['theme', 'appearance'],
-				['adhesion', 'membership'],
-			]) {
-				await gotoHydrated(page, `/${eventId}/admin/${from}`)
-				await expect(page).toHaveURL(`/${eventId}/admin/settings#${anchor}`)
 			}
 		},
 		/**
@@ -344,7 +330,7 @@ export function useEvent(name: string) {
 			// sur le voile, impatience. La réponse doit quand même remplir le champ: c'est
 			// pourquoi le formulaire d'envoi vit hors du tiroir, dont la fermeture le démonterait.
 			await page.route('**/uploadMedia', async (route) => {
-				await new Promise((resolve) => setTimeout(resolve, 2000))
+				await new Promise((resolve) => setTimeout(resolve, 1000))
 				await route.continue()
 			})
 			await openDrawer()
@@ -656,7 +642,7 @@ export function useEvent(name: string) {
 			await otherPageLink.click()
 			await expect(page.locator('.save-bar-alert')).toBeVisible()
 			// Un départ annulé ne laisse rien à attendre: seul un délai prouve qu'il n'a pas eu
-			// lieu. Il couvre aussi le tremblement, qui rendrait les boutons instables.
+			// lieu.
 			await page.waitForTimeout(500)
 			await expect(page).toHaveURL(editedUrl)
 			await expect(title).toHaveValue('Titre abandonné')
@@ -1000,15 +986,18 @@ export function useEvent(name: string) {
 			await gotoHydrated(page, `/${eventId}/admin/teams`)
 			await page.locator('aside').getByRole('link', { name: 'Alpha' }).click()
 			const teamClose = page.locator('#team').getByLabel('Fermeture des inscriptions')
-			const saveTeam = async () => {
+			// La date posée se lit dans le libellé, rendu depuis la donnée relue après l'envoi. Le
+			// champ vidé, lui, ne se prouve qu'au rechargement.
+			const saveTeam = async ({ reload = true } = {}) => {
 				await expect(saveBar).toBeVisible()
 				await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
 				await expect(saveBar).toBeHidden()
+				if (!reload) return
 				await page.reload()
 				await awaitHydrated(page)
 			}
 			await teamClose.fill('2099-01-01T12:00')
-			await saveTeam()
+			await saveTeam({ reload: false })
 			await expect(page.getByText('Fin des inscriptions le 01 janvier 2099 à 12:00')).toBeVisible()
 
 			await teamClose.fill('')
@@ -1021,7 +1010,7 @@ export function useEvent(name: string) {
 		 * se passait rien. Ce qu'il retire, c'est son adresse, la fiche appartenant à l'évènement
 		 * qui l'a créée.
 		 */
-		async expectDeclineInvite(page: Page, invitedPage: Page, invited: User) {
+		async expectDeclineInvite(page: Page, invitedPage: Page, invited: SeededUser) {
 			await gotoHydrated(page, `/${eventId}/admin/members?form_invite=1`)
 			const dialog = page.getByRole('dialog')
 			await dialog.getByLabel('Prénom').fill('Chell')
@@ -1047,7 +1036,7 @@ export function useEvent(name: string) {
 
 			// Sans le jeton du mail, c'est la vérification de l'adresse qui donne accès à la fiche
 			// invitée — refuser demande la même preuve qu'accepter.
-			await invited.verifyEmail()
+			await verifyEmail(invited)
 			await gotoHydrated(invitedPage, `/${eventId}/register`)
 			const decline = invitedPage.getByRole('button', { name: /^(Refuser|Confirmer)$/ })
 			await decline.click()

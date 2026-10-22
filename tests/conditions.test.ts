@@ -37,7 +37,7 @@ test.describe.serial('Conditions de secteur', () => {
 	test('Préparation: compte, évènement, champ de profil', async () => {
 		await signIn(page, await seedUser('Cond'))
 		await event.create(page)
-		// Le tiroir de champ est couvert par le parcours: ici il n'est qu'un préalable.
+		// Le tiroir de champ est couvert par `members.test.ts`: ici il n'est qu'un préalable.
 		await seedField(event.eventId, { name: 'Ville', type: 'string' })
 
 		// TODO: couvrir aussi une condition sur un champ à choix multiple (`InputCheckboxes`).

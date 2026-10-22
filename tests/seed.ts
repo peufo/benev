@@ -5,8 +5,8 @@ import { TERMS_VERSION } from '../src/lib/constant/terms'
 
 /**
  * Ce que les tests écrivent en base plutôt que de le cliquer. La création par l'interface reste
- * couverte, le parcours de `test.ts` la jouant pour chaque entité, mais la rejouer dans chaque
- * fichier ne prouvait rien de plus et coûtait le plus clair de la suite.
+ * couverte, `test.ts`, `members.test.ts` et `teams.test.ts` la jouant pour chaque entité, mais la
+ * rejouer dans chaque fichier ne prouvait rien de plus et coûtait le plus clair de la suite.
  *
  * Deux règles s'appliquent à tout ce qui est écrit ici:
  *
