@@ -1,5 +1,5 @@
 import type { Field } from '@prisma/client'
-import { validateCell } from './validateCell.js'
+import { isEmail, isPhone, parseBirthday, validateCell } from './validateCell.js'
 import type { CsvTable } from './parseCsv.js'
 
 export type ImportField = Pick<Field, 'id' | 'name' | 'label' | 'type' | 'options'>
@@ -60,11 +60,29 @@ export function guessTarget(header: string, fields: ImportField[]): TargetKey | 
 	return null
 }
 
+/**
+ * Ce que disent les valeurs quand l'en-tête ne dit rien: une sélection copiée sans sa ligne
+ * d'en-tête, ou un titre inconnu. Seules les formes sans ambiguïté sont reconnues, et toutes les
+ * valeurs non vides doivent y répondre.
+ */
+export function guessFromValues(rows: string[][], column: number): TargetKey | null {
+	const values = rows.map((row) => row[column]).filter(Boolean)
+	if (!values.length) return null
+	if (values.every(isEmail)) return 'contact:email'
+	if (values.every((value) => parseBirthday(value))) return 'contact:birthday'
+	if (values.every(isPhone)) return 'contact:phone'
+	return null
+}
+
 /** Une cible n'est devinée qu'une fois: la première colonne qui y répond la garde. */
-export function guessMapping(headers: string[], fields: ImportField[]): ColumnTarget[] {
+export function guessMapping(
+	headers: string[],
+	fields: ImportField[],
+	rows: string[][] = []
+): ColumnTarget[] {
 	const taken = new Set<string>()
-	return headers.map((header) => {
-		const target = guessTarget(header, fields)
+	return headers.map((header, column) => {
+		const target = guessTarget(header, fields) ?? guessFromValues(rows, column)
 		if (!target || covers(target).some((key) => taken.has(key))) return null
 		for (const key of covers(target)) taken.add(key)
 		return target

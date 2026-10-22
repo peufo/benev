@@ -121,7 +121,7 @@ test.describe.serial('Import de membres', () => {
 			),
 		})
 
-		await page.waitForURL(`**/${target.eventId}/admin/members/import/csv`)
+		await page.waitForURL(`**/${target.eventId}/admin/members/import/text`)
 		await expect(
 			page.getByRole('heading', { name: 'Importer depuis « membres.csv »' })
 		).toBeVisible()
@@ -187,6 +187,41 @@ test.describe.serial('Import de membres', () => {
 		await gotoHydrated(page, `/${target.eventId}/admin/dashboard`)
 		await expect(page.getByText('depuis membres.csv')).toHaveCount(2)
 		await expect(page.getByText(`depuis ${source.eventName}`).first()).toBeVisible()
+	})
+
+	test("L'admin colle une sélection de tableur sans en-tête", async () => {
+		await gotoHydrated(page, `/${target.eventId}/admin/members/import`)
+		const paste = page.locator('#source-paste')
+		await expect(paste.getByRole('button', { name: 'Continuer' })).toBeDisabled()
+		await paste
+			.getByLabel('Données collées')
+			.fill(
+				'Katherine\tJohnson\tkatherine@example.com\n' + 'Dorothy\tVaughan\tdorothy@example.com\n'
+			)
+		// La case d'`InputBoolean` est masquée derrière sa coche dessinée: on clique son libellé.
+		const header = paste.getByLabel('La première ligne contient les en-têtes')
+		await paste.getByText('La première ligne contient les en-têtes').click()
+		await expect(header).not.toBeChecked()
+		await paste.getByRole('button', { name: 'Continuer' }).click()
+
+		await page.waitForURL(`**/${target.eventId}/admin/members/import/text`)
+		await expect(
+			page.getByRole('heading', { name: 'Importer depuis « Données collées »' })
+		).toBeVisible()
+
+		// Sans en-tête, les adresses se reconnaissent à leur forme; le nom reste à désigner.
+		const selector = (header: string) => page.getByLabel(header, { exact: true })
+		await expect(page.getByLabel('Ligne 1, colonne « Colonne 1 »')).toHaveValue('Katherine')
+		await expect(selector('Colonne 3')).toContainText('E-mail')
+		await selector('Colonne 1').click()
+		await page.getByRole('option', { name: /^Prénom\s*Coordonnée$/ }).click()
+		await selector('Colonne 2').click()
+		await page.getByRole('option', { name: /^Nom de famille\s*Coordonnée$/ }).click()
+
+		await page.getByRole('button', { name: 'Importer 2 membres' }).click()
+		await page.waitForURL(`**/${target.eventId}/admin/members/import/report`)
+		await expect(page.locator('dl > div').filter({ hasText: 'Importés' })).toContainText('2')
+		await expect(page.getByRole('link', { name: 'Katherine Johnson' })).toBeVisible()
 	})
 
 	test("Un·e responsable n'y a pas accès", async () => {

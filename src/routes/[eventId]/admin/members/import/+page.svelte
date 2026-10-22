@@ -1,6 +1,12 @@
 <script lang="ts">
-	import { CalendarIcon, FileSpreadsheetIcon } from '@lucide/svelte'
+	import {
+		ArrowRightIcon,
+		CalendarIcon,
+		ClipboardPasteIcon,
+		FileSpreadsheetIcon,
+	} from '@lucide/svelte'
 	import { goto } from '$app/navigation'
+	import { InputBoolean } from 'fuma'
 	import { eventPath } from '#lib/eventPath.js'
 	import { Placeholder, Section, Surface } from '#lib/ui/index.js'
 	import { importSource } from './importSource.svelte'
@@ -8,12 +14,19 @@
 	let { data } = $props()
 
 	const source = importSource.get()
+	let pasted = $state('')
+	let pastedHeader = $state(true)
 
 	async function handleFile(event: Event & { currentTarget: HTMLInputElement }) {
 		const file = event.currentTarget.files?.[0]
 		if (!file) return
 		source.setCsv(file)
-		await goto(eventPath('/admin/members/import/csv'))
+		await goto(eventPath('/admin/members/import/text'))
+	}
+
+	async function handlePasted() {
+		source.setPasted(pasted, pastedHeader)
+		await goto(eventPath('/admin/members/import/text'))
 	}
 </script>
 
@@ -33,6 +46,40 @@
 			aria-label="Fichier CSV"
 			onchange={handleFile}
 		/>
+	</Section>
+
+	<Section
+		id="source-paste"
+		title="Coller des données"
+		subtitle="Une sélection copiée dans un tableur, ou une liste d'adresses."
+		icon={ClipboardPasteIcon}
+	>
+		<!-- Pas de lecture du presse-papier par l'API: elle demande une permission, et Firefox la
+		     refuse aux pages. Le collage au clavier marche partout. -->
+		<div class="flex flex-col gap-2">
+			<textarea
+				class="textarea w-full font-mono text-sm"
+				rows="6"
+				aria-label="Données collées"
+				placeholder="Colle ici des lignes copiées depuis Excel, Numbers ou Google Sheets"
+				bind:value={pasted}></textarea>
+			<div class="flex flex-wrap items-center gap-2">
+				<InputBoolean
+					label="La première ligne contient les en-têtes"
+					bind:checked={pastedHeader}
+					class="w-auto"
+				/>
+				<button
+					type="button"
+					class="btn btn-primary ml-auto"
+					disabled={!pasted.trim()}
+					onclick={handlePasted}
+				>
+					Continuer
+					<ArrowRightIcon size={20} />
+				</button>
+			</div>
+		</div>
 	</Section>
 
 	<Section

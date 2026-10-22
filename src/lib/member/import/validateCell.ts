@@ -5,6 +5,11 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const NUMBER = /^-?\d+([.,]\d+)?$/
 const BOOLEANS = ['oui', 'non', 'yes', 'no', 'true', 'false', 'vrai', 'faux', '1', '0', 'x']
 
+export const isEmail = (value: string) => EMAIL.test(value)
+/** Un numéro tel qu'on l'écrit: indicatif, espaces, points ou tirets, au moins neuf chiffres. */
+export const isPhone = (value: string) =>
+	/^\+?[\d\s./()-]+$/.test(value) && value.replace(/\D/g, '').length >= 9
+
 /** La virgule décimale d'un tableur francophone est acceptée. */
 export const isNumber = (value: string) => NUMBER.test(value)
 export const isBoolean = (value: string) => BOOLEANS.includes(value.toLowerCase())

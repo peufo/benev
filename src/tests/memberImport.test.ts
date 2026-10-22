@@ -1,6 +1,7 @@
 import { describe, it } from 'vitest'
 import {
 	buildMembers,
+	guessFromValues,
 	memberTable,
 	importBlocker,
 	guessMapping,
@@ -360,5 +361,36 @@ describe("les membres d'un autre évènement", () => {
 		expect(reportColumns(table, mapping, fields)[5].status).toBe('invalid')
 		const { rows } = buildMembers(table, mapping, fields, { firstLine: 1, excluded })
 		expect(rows.map(({ line, firstName }) => [line, firstName])).toEqual([[1, 'Ada']])
+	})
+})
+
+describe('données collées', () => {
+	const pasted =
+		'Ada\tLovelace\tada@example.com\t+41 79 123 45 67\nAlan\tTuring\talan@example.com\t'
+
+	it('lit une sélection de tableur sans en-tête', ({ expect }) => {
+		expect(parseCsv(pasted, { header: false })).toEqual({
+			headers: ['Colonne 1', 'Colonne 2', 'Colonne 3', 'Colonne 4'],
+			rows: [
+				['Ada', 'Lovelace', 'ada@example.com', '+41 79 123 45 67'],
+				['Alan', 'Turing', 'alan@example.com', ''],
+			],
+		})
+	})
+
+	it("devine les colonnes à leurs valeurs quand l'en-tête ne dit rien", ({ expect }) => {
+		const { headers, rows } = parseCsv(pasted, { header: false })
+		expect(guessMapping(headers, fields, rows)).toEqual([
+			null,
+			null,
+			'contact:email',
+			'contact:phone',
+		])
+	})
+
+	it('ne devine rien sur une colonne mêlée', ({ expect }) => {
+		expect(guessFromValues([['ada@example.com'], ['Ada']], 0)).toBeNull()
+		expect(guessFromValues([['10.12.1815'], ['1912-06-23']], 0)).toBe('contact:birthday')
+		expect(guessFromValues([['12'], ['13']], 0)).toBeNull()
 	})
 })
