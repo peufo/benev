@@ -1,9 +1,14 @@
-import { parseOptions } from 'fuma'
-import { resolveTarget, type ColumnReport, type ColumnTarget, type ImportField } from './mapping.js'
+import {
+	isBlocking,
+	resolveTarget,
+	type ColumnReport,
+	type ColumnTarget,
+	type ImportField,
+} from './mapping.js'
 import type { CsvTable } from './parseCsv.js'
-import { isBoolean, parseBirthday, parseList } from './validateCell.js'
+import { findOption, parseBirthday, parseBoolean, parseList } from './validateCell.js'
 
-export type ProfileValue = string | number | boolean | string[]
+export type ProfileValue = NonNullable<PrismaJson.MemberProfile[string]>
 
 /** Une ligne prête à écrire: les valeurs ont déjà le type de leur champ. */
 export type ImportRow = {
@@ -23,10 +28,11 @@ export type ImportRow = {
 
 export type SkippedRow = { line: number; name: string; email: string; reason: string }
 
+export const memberName = ({ firstName, lastName }: Pick<ImportRow, 'firstName' | 'lastName'>) =>
+	`${firstName} ${lastName}`.trim()
+
 /** La file d'e-mails est en mémoire et sérialisée: un import ne doit pas la saturer. */
 export const MAX_IMPORT_INVITES = 50
-
-const TRUE = ['oui', 'yes', 'true', 'vrai', '1', 'x']
 
 export type BuildOptions = {
 	/** Le numéro de la première ligne: 2 sous l'en-tête d'un fichier, 1 sans fichier derrière. */
@@ -82,7 +88,7 @@ export function buildMembers(
 			}
 		})
 
-		const name = `${row.firstName} ${row.lastName}`.trim()
+		const name = memberName(row)
 		const email = row.email ?? ''
 		if (!name) return skipped.push({ line: row.line, name, email, reason: 'Nom manquant' })
 		if (row.email && emails.has(row.email)) {
@@ -105,29 +111,21 @@ function convert(value: string, field: ImportField): ProfileValue | undefined {
 		case 'number':
 			return Number(value.replace(',', '.'))
 		case 'boolean':
-			return isBoolean(value) ? TRUE.includes(value.toLowerCase()) : undefined
+			return parseBoolean(value)
 		case 'select':
-			return canonicalOption(value, field)
+			return findOption(value, field)
 		case 'multiselect':
 			return parseList(value)
-				.map((item) => canonicalOption(item, field))
+				.map((item) => findOption(item, field))
 				.filter((item) => item !== undefined)
 		default:
 			return value
 	}
 }
 
-/** La valeur enregistrée de l'option, que la cellule cite sa valeur ou son libellé. */
-function canonicalOption(value: string, field: ImportField): string | undefined {
-	const needle = value.toLowerCase()
-	return parseOptions(field.options ?? []).find((option) =>
-		[option.value, option.label].some((text) => text.toLowerCase() === needle)
-	)?.value
-}
-
 /** La raison qui empêche d'importer, ou `null` si rien ne s'y oppose. */
 export function importBlocker(reports: ColumnReport[], mapping: ColumnTarget[]): string | null {
-	if (reports.some(({ status }) => status === 'duplicate' || status === 'invalid')) {
+	if (reports.some(({ status }) => isBlocking(status))) {
 		return "Corrige d'abord les colonnes en rouge"
 	}
 	const hasName = mapping.some(

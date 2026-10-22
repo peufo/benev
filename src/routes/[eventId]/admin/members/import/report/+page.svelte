@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation'
 	import { UploadIcon, UsersIcon } from '@lucide/svelte'
 	import { eventPath } from '#lib/eventPath.js'
+	import { plural } from '#lib/utils.js'
 	import { Surface } from '#lib/ui/index.js'
 	import type { ImportResult } from '#lib/member/memberImport.remote.js'
 	import { importSource } from '../importSource.svelte'
@@ -15,8 +16,7 @@
 	})
 
 	const results = $derived(source.report?.results ?? [])
-	const count = (status: ImportResult['status']) =>
-		results.filter((result) => result.status === status).length
+	const counts = $derived(Object.groupBy(results, ({ status }) => status))
 	const invited = $derived(results.filter((result) => result.invited).length)
 
 	// Ce qui demande un geste d'abord: les lignes écartées ou en échec.
@@ -26,32 +26,24 @@
 	)
 
 	const STATUS = {
-		imported: { label: 'Importé', class: 'badge-success' },
-		skipped: { label: 'Écarté', class: 'badge-warning' },
-		failed: { label: 'Échec', class: 'badge-error' },
-	} satisfies Record<ImportResult['status'], { label: string; class: string }>
-
-	function plural(count: number, singular: string, plural: string) {
-		return `${count} ${count > 1 ? plural : singular}`
-	}
+		imported: { label: 'Importé', title: 'Importés', class: 'badge-success' },
+		skipped: { label: 'Écarté', title: 'Écartés', class: 'badge-warning' },
+		failed: { label: 'Échec', title: 'Échecs', class: 'badge-error' },
+	} satisfies Record<ImportResult['status'], { label: string; title: string; class: string }>
 </script>
 
 {#if source.report}
 	<div class="max-w-3xl mx-auto w-full space-y-3">
 		<Surface title="Rapport d'import" subtitle="Depuis « {source.report.source} »">
 			<dl class="grid grid-cols-3 gap-2 px-2">
-				<div>
-					<dt class="text-sm text-base-content/70">Importés</dt>
-					<dd class="text-2xl font-bold">{count('imported')}</dd>
-				</div>
-				<div>
-					<dt class="text-sm text-base-content/70">Écartés</dt>
-					<dd class="text-2xl font-bold">{count('skipped')}</dd>
-				</div>
-				<div>
-					<dt class="text-sm text-base-content/70">Échecs</dt>
-					<dd class="text-2xl font-bold">{count('failed')}</dd>
-				</div>
+				{#each Object.entries(STATUS) as [status, { title }] (status)}
+					<div>
+						<dt class="text-sm text-base-content/70">{title}</dt>
+						<dd class="text-2xl font-bold">
+							{counts[status as ImportResult['status']]?.length ?? 0}
+						</dd>
+					</div>
+				{/each}
 			</dl>
 			<p class="px-2 pt-3 text-sm text-base-content/70">
 				{invited

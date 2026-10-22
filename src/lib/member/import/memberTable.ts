@@ -14,17 +14,12 @@ export type SourceMember = Pick<
 	'firstName' | 'lastName' | 'email' | 'phone' | 'birthday' | 'street' | 'zipCode' | 'city'
 > & { profileJson: PrismaJson.MemberProfile }
 
+type MemberContact = Exclude<ContactKey, 'fullName'>
+
 /** `fullName` n'a pas lieu d'être: un membre porte son prénom et son nom séparément. */
-const CONTACTS = [
-	'firstName',
-	'lastName',
-	'email',
-	'phone',
-	'birthday',
-	'street',
-	'zipCode',
-	'city',
-] as const satisfies ContactKey[]
+const CONTACTS = (Object.keys(CONTACT_TARGETS) as ContactKey[]).filter(
+	(key): key is MemberContact => key !== 'fullName'
+)
 
 /**
  * Les membres d'un autre évènement, écrits comme un CSV les écrirait: tout ce qui suit, mappage,
@@ -35,7 +30,7 @@ const CONTACTS = [
 export function memberTable(members: SourceMember[], fields: ImportField[]): ImportTable {
 	const columns = [
 		...CONTACTS.map((key) => ({
-			header: CONTACT_TARGETS[key] as string,
+			header: CONTACT_TARGETS[key],
 			hint: undefined,
 			read: (member: SourceMember) => contactValue(member, key),
 		})),
@@ -56,7 +51,7 @@ export function memberTable(members: SourceMember[], fields: ImportField[]): Imp
 	}
 }
 
-function contactValue(member: SourceMember, key: (typeof CONTACTS)[number]): string {
+function contactValue(member: SourceMember, key: MemberContact): string {
 	if (key === 'birthday') return member.birthday?.toISOString().slice(0, 10) ?? ''
 	return member[key] ?? ''
 }

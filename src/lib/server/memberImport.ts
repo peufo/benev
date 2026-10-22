@@ -7,7 +7,7 @@ export function getImportableEvents(userId: string) {
 			deletedAt: null,
 			OR: [{ ownerId: userId }, { members: { some: { userId, isAdmin: true } } }],
 		},
-		include: { _count: { select: { members: true } } },
+		select: { id: true, name: true, startDate: true, _count: { select: { members: true } } },
 		// L'édition précédente, la source la plus probable, sort en tête.
 		orderBy: [{ startDate: { sort: 'desc', nulls: 'last' } }, { name: 'asc' }],
 	})

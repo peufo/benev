@@ -1,9 +1,25 @@
 import type { Cookies } from '@sveltejs/kit'
 import { dev } from '$app/env'
+import { createAvatarPlaceholder } from './avatar'
 import { sendEmailModel } from './email'
 import { getMemberProfile } from './member'
 import { prisma } from './prisma'
 import { generateInviteToken, readValidInviteToken } from './token'
+
+/**
+ * Ce que porte un membre que l'organisation inscrit elle-même, à l'invitation comme à l'import:
+ * validé d'emblée, et notifié seulement s'il a une adresse où l'être.
+ */
+export function invitedMemberDefaults(email?: string | null) {
+	return {
+		isValidedByEvent: true,
+		avatarPlaceholder: createAvatarPlaceholder(),
+		isNotifiedSubscribe: !!email,
+		isNotifiedReminder: !!email,
+		isNotifiedLeaderOfSubscribe: !!email,
+		isNotifiedAdminOfNewMember: !!email,
+	}
+}
 
 type InvitedMember = { id: string; eventId: string; email: string; event: { name: string } }
 type Inviter = { firstName: string; lastName: string; email: string }

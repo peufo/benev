@@ -1,8 +1,8 @@
 import { command, getRequestEvent } from '$app/server'
 import type { Field } from '@prisma/client'
 import {
-	createAvatarPlaceholder,
 	createLog,
+	invitedMemberDefaults,
 	isUniqueConstraintError,
 	notifyTierQuotaIfNeeded,
 	permission,
@@ -11,7 +11,7 @@ import {
 } from '#lib/server/index.js'
 import { createRateLimit } from '#lib/server/rateLimit.js'
 import { modelMemberImport } from '#lib/models/index.js'
-import { MAX_IMPORT_INVITES, type ProfileValue } from '#lib/member/import/index.js'
+import { MAX_IMPORT_INVITES, memberName, type ProfileValue } from '#lib/member/import/index.js'
 
 export type ImportResult = {
 	line: number
@@ -38,16 +38,18 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 	const eventId = params.eventId!
 	const author = await permission.admin(eventId, locals)
 
-	const fields = await prisma.field.findMany({ where: { eventId } })
-	const event = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
-	const existing = await prisma.member.findMany({
-		where: { eventId, email: { in: rows.flatMap((row) => row.email ?? []) } },
-		select: { email: true, firstName: true, lastName: true },
-	})
+	const [fields, event, existing] = await Promise.all([
+		prisma.field.findMany({ where: { eventId } }),
+		prisma.event.findUniqueOrThrow({ where: { id: eventId }, select: { name: true } }),
+		prisma.member.findMany({
+			where: { eventId, email: { in: rows.flatMap((row) => row.email ?? []) } },
+			select: { email: true, firstName: true, lastName: true },
+		}),
+	])
 
 	const results: ImportResult[] = []
 	for (const { line, profile, birthday, ...contact } of rows) {
-		const name = `${contact.firstName} ${contact.lastName}`.trim()
+		const name = memberName(contact)
 		const email = contact.email ?? ''
 		const result = (status: ImportResult['status'], extra?: Partial<ImportResult>) =>
 			results.push({ line, name, email, status, ...extra })
@@ -69,12 +71,7 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 					birthday: birthday ? new Date(birthday) : undefined,
 					profileJson: filterProfile(profile, fields),
 					eventId,
-					isValidedByEvent: true,
-					avatarPlaceholder: createAvatarPlaceholder(),
-					isNotifiedSubscribe: !!contact.email,
-					isNotifiedReminder: !!contact.email,
-					isNotifiedLeaderOfSubscribe: !!contact.email,
-					isNotifiedAdminOfNewMember: !!contact.email,
+					...invitedMemberDefaults(contact.email),
 				},
 			})
 

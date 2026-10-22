@@ -17,6 +17,7 @@
 	import type { Field } from '@prisma/client'
 	import { MEMBER_FIELD_TYPE } from '#lib/constant/index.js'
 	import { fieldCall } from '#lib/drawerCall.svelte.js'
+	import { plural } from '#lib/utils.js'
 	import {
 		CONTACT_TARGETS,
 		suggestField,
@@ -154,8 +155,7 @@
 			Champ déjà utilisé
 		{:else if report.status === 'invalid'}
 			<CircleXIcon size={14} class="text-error shrink-0" />
-			{report.invalid.size}
-			{report.invalid.size > 1 ? 'valeurs invalides' : 'valeur invalide'}
+			{plural(report.invalid.size, 'valeur invalide', 'valeurs invalides')}
 		{/if}
 
 		{#if canMapValues}

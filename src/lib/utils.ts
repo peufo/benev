@@ -16,6 +16,11 @@ export function getTextColor(bg: string): string {
 	return brightness > 128 ? '#000000' : '#ffffff'
 }
 
+/** `3 membres`, `1 membre`: le pluriel ne se déduit pas toujours du singulier. */
+export function plural(count: number, singular: string, plural: string) {
+	return `${count} ${count > 1 ? plural : singular}`
+}
+
 export function msToHours(ms: number): string {
 	const hours = ms / (1000 * 60 * 60)
 	return (

@@ -1,18 +1,46 @@
 import { parseOptions } from 'fuma'
-import type { Target } from './mapping.js'
+import z from 'zod'
+import { jsonParse } from '#lib/jsonParse.js'
+import type { ImportField, Target } from './mapping.js'
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const NUMBER = /^-?\d+([.,]\d+)?$/
-const BOOLEANS = ['oui', 'non', 'yes', 'no', 'true', 'false', 'vrai', 'faux', '1', '0', 'x']
+const TRUTHY = ['oui', 'yes', 'true', 'vrai', '1', 'x']
+const FALSY = ['non', 'no', 'false', 'faux', '0']
 
-export const isEmail = (value: string) => EMAIL.test(value)
+/** Le validateur du serveur: une adresse qu'il refuse ferait échouer tout son lot. */
+const zEmail = z.email()
+export const isEmail = (value: string) => zEmail.safeParse(value).success
 /** Un numéro tel qu'on l'écrit: indicatif, espaces, points ou tirets, au moins neuf chiffres. */
 export const isPhone = (value: string) =>
 	/^\+?[\d\s./()-]+$/.test(value) && value.replace(/\D/g, '').length >= 9
 
 /** La virgule décimale d'un tableur francophone est acceptée. */
 export const isNumber = (value: string) => NUMBER.test(value)
-export const isBoolean = (value: string) => BOOLEANS.includes(value.toLowerCase())
+
+/** `undefined` si la cellule n'est ni un « oui » ni un « non ». */
+export function parseBoolean(value: string): boolean | undefined {
+	const word = value.toLowerCase()
+	if (TRUTHY.includes(word)) return true
+	if (FALSY.includes(word)) return false
+}
+export const isBoolean = (value: string) => parseBoolean(value) !== undefined
+
+/** Chaque cellule y passe: les options d'un champ ne s'indexent qu'une fois. */
+const optionIndexes = new WeakMap<ImportField, Map<string, string>>()
+
+/** La valeur enregistrée de l'option, que la cellule cite sa valeur ou son libellé. */
+export function findOption(value: string, field: ImportField): string | undefined {
+	let index = optionIndexes.get(field)
+	if (!index) {
+		index = new Map()
+		for (const option of parseOptions(field.options ?? []).toReversed()) {
+			index.set(option.label.toLowerCase(), option.value)
+			index.set(option.value.toLowerCase(), option.value)
+		}
+		optionIndexes.set(field, index)
+	}
+	return index.get(value.toLowerCase())
+}
 
 /** `jj.mm.aaaa`, `jj/mm/aaaa`, `jj-mm-aaaa` ou `aaaa-mm-jj`, à condition que la date existe. */
 export function parseBirthday(value: string): Date | null {
@@ -29,12 +57,8 @@ export function parseBirthday(value: string): Date | null {
 /** Notre export écrit un tableau JSON; un tableur, plutôt une liste séparée par `,` ou `;`. */
 export function parseList(value: string): string[] {
 	if (value.startsWith('[')) {
-		try {
-			const list: unknown = JSON.parse(value)
-			if (Array.isArray(list)) return list.map(String)
-		} catch {
-			// Pas du JSON: on retombe sur la liste séparée.
-		}
+		const list = jsonParse<unknown>(value, null)
+		if (Array.isArray(list)) return list.map(String)
 	}
 	return value
 		.split(/[,;]/)
@@ -47,17 +71,13 @@ export function validateCell(value: string, target: Target): string | null {
 	if (!value) return null
 
 	if (target.kind === 'contact') {
-		if (target.key === 'email' && !EMAIL.test(value)) return 'Adresse e-mail invalide'
+		if (target.key === 'email' && !isEmail(value)) return 'Adresse e-mail invalide'
 		if (target.key === 'birthday' && !parseBirthday(value)) return 'Date illisible'
 		return null
 	}
 
 	const { field } = target
-	const options = parseOptions(field.options ?? [])
-	const isOption = (item: string) =>
-		options.some((option) =>
-			[option.value, option.label].some((text) => text.toLowerCase() === item.toLowerCase())
-		)
+	const isOption = (item: string) => findOption(item, field) !== undefined
 
 	switch (field.type) {
 		case 'number':

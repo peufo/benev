@@ -4,8 +4,14 @@
 	import { beforeNavigate, goto } from '$app/navigation'
 	import { InputBoolean, tip } from 'fuma'
 	import { eventPath } from '#lib/eventPath.js'
+	import { plural } from '#lib/utils.js'
 	import { IMPORT_BATCH_SIZE } from '#lib/models/memberImport.js'
-	import { MAX_IMPORT_INVITES, type ImportRow, type SkippedRow } from '#lib/member/import/index.js'
+	import {
+		MAX_IMPORT_INVITES,
+		memberName,
+		type ImportRow,
+		type SkippedRow,
+	} from '#lib/member/import/index.js'
 	import { importMembers, type ImportResult } from '#lib/member/memberImport.remote.js'
 	import { importSource } from '../importSource.svelte'
 
@@ -14,8 +20,6 @@
 		sourceName: string
 		rows: ImportRow[]
 		skipped: SkippedRow[]
-		/** Les lignes décochées, qui ne seront pas importées. */
-		unchecked: number
 		/** Ce qui empêche d'importer, ou `null`. */
 		blocker: string | null
 		ignoredColumns: number
@@ -26,7 +30,6 @@
 		sourceName,
 		rows,
 		skipped,
-		unchecked,
 		blocker,
 		ignoredColumns,
 		importing = $bindable(),
@@ -43,10 +46,6 @@
 	beforeNavigate(({ cancel }) => {
 		if (importing) cancel()
 	})
-
-	function plural(count: number, singular: string, plural: string) {
-		return `${count} ${count > 1 ? plural : singular}`
-	}
 
 	async function start() {
 		importing = true
@@ -66,7 +65,7 @@
 				results.push(
 					...batch.map((row) => ({
 						line: row.line,
-						name: `${row.firstName} ${row.lastName}`.trim(),
+						name: memberName(row),
 						email: row.email ?? '',
 						status: 'failed' as const,
 						reason,
@@ -111,8 +110,8 @@
 						{plural(skipped.length, 'ligne écartée', 'lignes écartées')}
 					</span>
 				{/if}
-				{#if unchecked}
-					· {plural(unchecked, 'ligne décochée', 'lignes décochées')}
+				{#if source.excluded.size}
+					· {plural(source.excluded.size, 'ligne décochée', 'lignes décochées')}
 				{/if}
 				{#if ignoredColumns}
 					· {plural(ignoredColumns, 'colonne ignorée', 'colonnes ignorées')}

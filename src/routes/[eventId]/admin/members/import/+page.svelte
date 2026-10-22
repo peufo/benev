@@ -8,6 +8,7 @@
 	import { goto } from '$app/navigation'
 	import { InputBoolean } from 'fuma'
 	import { eventPath } from '#lib/eventPath.js'
+	import { plural } from '#lib/utils.js'
 	import { Placeholder, Section, Surface } from '#lib/ui/index.js'
 	import { importSource } from './importSource.svelte'
 
@@ -100,8 +101,7 @@
 						>
 							<span class="grow font-medium">{event.name}</span>
 							<span class="text-sm text-base-content/70">
-								{event.memberCount}
-								{event.memberCount > 1 ? 'membres' : 'membre'}
+								{plural(event.memberCount, 'membre', 'membres')}
 								{#if event.startDate}
 									· {event.startDate.getFullYear()}
 								{/if}

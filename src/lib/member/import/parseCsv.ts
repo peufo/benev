@@ -16,7 +16,7 @@ export type CsvTable = {
 export function parseCsv(text: string, { header = true } = {}): CsvTable {
 	const { data } = Papa.parse<string[]>(text.replace(/^\uFEFF/, ''), { skipEmptyLines: 'greedy' })
 	const [head = [], ...body] = header ? data : [[], ...data]
-	const width = Math.max(head.length, ...body.map((row) => row.length))
+	const width = body.reduce((max, row) => Math.max(max, row.length), head.length)
 	const headers = Array.from(
 		{ length: width },
 		(_, index) => head[index]?.trim() || `Colonne ${index + 1}`

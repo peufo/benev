@@ -104,6 +104,9 @@ export function resolveTarget(target: TargetKey, fields: ImportField[]): Target 
 
 export type ColumnStatus = 'ok' | 'unmapped' | 'ignored' | 'duplicate' | 'invalid'
 
+/** Une colonne en double ou aux valeurs refusées empêche d'importer. */
+export const isBlocking = (status: ColumnStatus) => status === 'duplicate' || status === 'invalid'
+
 export type ColumnReport = {
 	status: ColumnStatus
 	/** Le motif de chaque cellule refusée, indexé par ligne. */

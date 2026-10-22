@@ -3,10 +3,12 @@
 	import { tip } from 'fuma'
 	import type { Field } from '@prisma/client'
 	import { eventPath } from '#lib/eventPath.js'
+	import { plural } from '#lib/utils.js'
 	import { Placeholder, Surface } from '#lib/ui/index.js'
 	import {
 		buildMembers,
 		importBlocker,
+		isBlocking,
 		reportColumns,
 		type ColumnStatus,
 		type ColumnTarget,
@@ -38,9 +40,7 @@
 
 	const report = $derived(reportColumns(table, source.mapping, fields, source.excluded))
 	const toCheck = $derived(
-		report.filter(
-			({ status }) => status === 'unmapped' || status === 'duplicate' || status === 'invalid'
-		).length
+		report.filter(({ status }) => status === 'unmapped' || isBlocking(status)).length
 	)
 	const built = $derived(
 		buildMembers(table, source.mapping, fields, { firstLine, excluded: source.excluded })
@@ -62,12 +62,8 @@
 		ok: '',
 		ignored: 'opacity-50',
 		unmapped: 'bg-warning/10',
-		duplicate: '',
-		invalid: '',
-	}
-
-	function plural(count: number, singular: string, plural: string) {
-		return `${count} ${count > 1 ? plural : singular}`
+		duplicate: 'bg-error/10',
+		invalid: 'bg-error/10',
 	}
 
 	function setTarget(column: number, target: ColumnTarget) {
@@ -129,14 +125,7 @@
 						<th class="w-0 align-bottom text-base-content/50">#</th>
 						{#each table.headers as header, column (column)}
 							{@const columnReport = report[column]}
-							<th
-								class={[
-									'min-w-56 align-top font-normal',
-									columnClass[columnReport.status],
-									(columnReport.status === 'duplicate' || columnReport.status === 'invalid') &&
-										'bg-error/10',
-								]}
-							>
+							<th class={['min-w-56 align-top font-normal', columnClass[columnReport.status]]}>
 								<ColumnHeader
 									{header}
 									{column}
@@ -193,7 +182,6 @@
 			{sourceName}
 			rows={built.rows}
 			skipped={built.skipped}
-			unchecked={source.excluded.size}
 			{blocker}
 			{ignoredColumns}
 			bind:importing
