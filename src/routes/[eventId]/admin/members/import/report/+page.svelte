@@ -12,7 +12,7 @@
 
 	// Le rapport ne vit que le temps de la session de navigation: le journal, lui, reste.
 	onMount(() => {
-		if (!source.report) goto(eventPath('/admin/members'), { replaceState: true })
+		if (!source.report) goto(eventPath('/admin/members'), { replace: true })
 	})
 
 	const results = $derived(source.report?.results ?? [])

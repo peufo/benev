@@ -80,7 +80,7 @@
 
 		source.report = { source: sourceName, results: results.sort((a, b) => a.line - b.line) }
 		importing = false
-		await goto(eventPath('/admin/members/import/report'), { replaceState: true })
+		await goto(eventPath('/admin/members/import/report'), { replace: true })
 		// Plus de source: un retour arrière ramène à son choix, pas à un second import.
 		source.reset()
 	}

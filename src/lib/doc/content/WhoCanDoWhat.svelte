@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tip } from 'fuma'
-	import { CheckIcon, CircleHelpIcon, ListTodoIcon } from '@lucide/svelte'
+	import { CheckIcon, CircleQuestionMarkIcon, ListTodoIcon } from '@lucide/svelte'
 	import { rolesMap } from '#lib/member/MemberRole.svelte'
 	import { PERMISSION_ROLES, PERMISSIONS } from './permissions'
 </script>
@@ -33,7 +33,7 @@
 						{:else if value === undefined}
 							<td>
 								<span class="inline-flex" use:tip={{ content: 'Paramétrable' }}>
-									<CircleHelpIcon class="text-warning" />
+									<CircleQuestionMarkIcon class="text-warning" />
 								</span>
 							</td>
 						{:else}

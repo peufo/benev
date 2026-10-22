@@ -26,7 +26,7 @@
 	// Le texte ne survit pas à un rechargement: sans lui, il n'y a rien à mapper.
 	onMount(async () => {
 		const text = source.text
-		if (!text) return goto(eventPath('/admin/members/import'), { replaceState: true })
+		if (!text) return goto(eventPath('/admin/members/import'), { replace: true })
 		if (source.key === text.kind && source.table) return
 		try {
 			source.load(text.kind, parseCsv(await text.read(), { header: text.header }), data.fields)

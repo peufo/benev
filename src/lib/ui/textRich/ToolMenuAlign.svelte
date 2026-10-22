@@ -1,10 +1,10 @@
 <script lang="ts">
 	import {
-		AlignCenterIcon,
-		AlignLeftIcon,
-		AlignRightIcon,
-		IndentDecreaseIcon,
-		IndentIncreaseIcon,
+		TextAlignCenterIcon,
+		TextAlignStartIcon,
+		TextAlignEndIcon,
+		ListIndentDecreaseIcon,
+		ListIndentIncreaseIcon,
 	} from '@lucide/svelte'
 	import type { Editor } from '@tiptap/core'
 
@@ -24,30 +24,30 @@
 		{
 			attributes: { textAlign: 'left' },
 			label: 'Aligner à gauche',
-			icon: AlignLeftIcon,
+			icon: TextAlignStartIcon,
 			action: () => editor.commands.setTextAlign('left'),
 		},
 		{
 			attributes: { textAlign: 'center' },
 			label: 'Aligner au centre',
-			icon: AlignCenterIcon,
+			icon: TextAlignCenterIcon,
 			action: () => editor.commands.setTextAlign('center'),
 		},
 		{
 			attributes: { textAlign: 'right' },
 			label: 'Aligner à droite',
-			icon: AlignRightIcon,
+			icon: TextAlignEndIcon,
 			action: () => editor.commands.setTextAlign('right'),
 		},
 		{
 			newSection: true,
 			label: 'Retrait à droite',
-			icon: IndentIncreaseIcon,
+			icon: ListIndentIncreaseIcon,
 			action: () => editor.commands.indent(),
 		},
 		{
 			label: 'Retrait à gauche',
-			icon: IndentDecreaseIcon,
+			icon: ListIndentDecreaseIcon,
 			action: () => editor.commands.outdent(),
 		},
 	]}

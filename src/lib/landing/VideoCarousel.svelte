@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy'
-
 	import { tip } from 'fuma'
 	import { slide } from 'svelte/transition'
 	import { activeVideoIndex, reportVisibility } from './videoStore'
@@ -59,7 +57,7 @@
 		}
 	}
 
-	run(() => {
+	$effect(() => {
 		if (videoElement && $activeVideoIndex !== undefined) {
 			if ($activeVideoIndex === index) {
 				videoElement.play().catch(() => undefined)

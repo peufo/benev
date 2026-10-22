@@ -1,6 +1,6 @@
 import {
 	type IconProps,
-	AlignLeftIcon,
+	TextAlignStartIcon,
 	ArchiveIcon,
 	CheckIcon,
 	CircleUserIcon,
@@ -242,7 +242,7 @@ export function parseTierPrice(price: string): { value: string; unit?: string } 
 
 export const MEMBER_FIELD_TYPE: OptionRecord<Field['type']> = {
 	string: { label: 'Text', icon: TypeIcon },
-	textarea: { label: 'Text long', icon: AlignLeftIcon },
+	textarea: { label: 'Text long', icon: TextAlignStartIcon },
 	number: { label: 'Nombre', icon: HashIcon },
 	boolean: { label: 'Oui / Non', icon: SquareCheckIcon },
 	select: { label: 'Liste à choix', icon: ListIcon },

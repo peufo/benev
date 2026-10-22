@@ -33,8 +33,8 @@ export const modelMemberCondition = z.union([
 	}),
 ])
 
-export type MemberCondition = (typeof modelMemberCondition)['_output']
-export type MemberConditionOperator = (typeof memberConditionOperator)['_output']
+export type MemberCondition = z.output<typeof modelMemberCondition>
+export type MemberConditionOperator = z.output<typeof memberConditionOperator>
 
 export const modelTeam = z.object({
 	name: z.string().min(3),

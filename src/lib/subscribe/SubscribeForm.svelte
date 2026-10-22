@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy'
-
 	import type { Period, Team } from '@prisma/client'
 	import { formatRange } from '#lib/formatRange.js'
 	import { enhanceForm } from '#lib/enhanceForm.js'
@@ -31,6 +29,6 @@
 
 	<div class="flex flex-row-reverse gap-2">
 		<button class="btn btn-primary">Oui je le veux !</button>
-		<button class="btn btn-ghost" onclick={preventDefault(() => onclose?.())}> Non </button>
+		<button type="button" class="btn btn-ghost" onclick={() => onclose?.()}> Non </button>
 	</div>
 </form>

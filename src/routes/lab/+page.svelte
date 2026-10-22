@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PlusIcon, ExternalLinkIcon, FilterIcon, DownloadIcon, PencilIcon } from '@lucide/svelte'
+	import { PlusIcon, ExternalLinkIcon, FunnelIcon, DownloadIcon, PencilIcon } from '@lucide/svelte'
 	import { tip } from 'fuma'
 	import { Surface } from '#lib/ui/index.js'
 </script>
@@ -47,7 +47,7 @@
 		back
 	>
 		{#snippet action()}
-			{@render squareButton('Filtrer', FilterIcon)}
+			{@render squareButton('Filtrer', FunnelIcon)}
 			{@render squareButton('Télécharger', DownloadIcon)}
 			{@render squareButton('Modifier', PencilIcon, true)}
 			{@render squareButton('Ajouter', PlusIcon, true)}
@@ -61,7 +61,7 @@
 
 	<Surface title="Contenu défilant" class="flex flex-col h-64">
 		{#snippet action()}
-			{@render squareButton('Filtrer', FilterIcon)}
+			{@render squareButton('Filtrer', FunnelIcon)}
 		{/snippet}
 		<ul class="grow overflow-y-auto divide-y divide-base-300">
 			{#each { length: 30 } as _, i (i)}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CircleHelpIcon } from '@lucide/svelte'
+	import { CircleQuestionMarkIcon } from '@lucide/svelte'
 	import { DropDown } from 'fuma'
 	import { PAGE_TYPE } from '#lib/constant/index.js'
 </script>
@@ -7,7 +7,7 @@
 <DropDown tippyProps={{ trigger: 'mouseenter' }}>
 	{#snippet activator()}
 		<button type="button" class="contents">
-			<CircleHelpIcon size={18} class="opacity-70 ml-2" />
+			<CircleQuestionMarkIcon size={18} class="opacity-70 ml-2" />
 		</button>
 	{/snippet}
 	<div class="p-4">

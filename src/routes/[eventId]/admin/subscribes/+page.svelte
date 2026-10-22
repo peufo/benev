@@ -2,7 +2,7 @@
 	import {
 		CircleCheckIcon,
 		CircleUserIcon,
-		FilterXIcon,
+		FunnelXIcon,
 		ShieldUserIcon,
 		SigmaIcon,
 		TriangleAlertIcon,
@@ -189,7 +189,7 @@
 					class="btn btn-square btn-sm"
 					use:tip={{ content: 'Effacer les filtres' }}
 				>
-					<FilterXIcon size={18} />
+					<FunnelXIcon size={18} />
 				</a>
 				<TableViewSelect key="subscribes" views={data.views} ignoredKeys={['subscribes_stats']} />
 				<SubscribesImport />

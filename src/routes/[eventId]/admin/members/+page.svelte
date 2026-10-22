@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { FilterXIcon, UploadIcon, SigmaIcon, UserPlusIcon } from '@lucide/svelte'
+	import { FunnelXIcon, UploadIcon, SigmaIcon, UserPlusIcon } from '@lucide/svelte'
 	import type { Field, Member } from '@prisma/client'
 	import { onMount, tick, untrack } from 'svelte'
 	import { goto } from '$app/navigation'
@@ -119,7 +119,7 @@
 					class="btn btn-square btn-sm"
 				>
 					<span class="inline-flex" use:tip={{ content: 'Effacer les filtres' }}>
-						<FilterXIcon size={18} />
+						<FunnelXIcon size={18} />
 					</span>
 				</a>
 

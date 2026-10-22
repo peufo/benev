@@ -10,7 +10,7 @@
 		UsersIcon,
 		ArrowLeftIcon,
 		ClockIcon,
-		CheckCircleIcon,
+		CircleCheckBigIcon,
 		ExternalLinkIcon,
 	} from '@lucide/svelte'
 
@@ -88,7 +88,7 @@
 
 		<Surface>
 			<div class="flex items-center gap-3 p-2">
-				<CheckCircleIcon size={24} class="text-success opacity-80" />
+				<CircleCheckBigIcon size={24} class="text-success opacity-80" />
 				<div>
 					<div class="text-2xl font-bold">{msToHours(stats.confirmedWorkMs)}</div>
 					<div class="text-sm text-base-content/70">Heures confirmées</div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation'
+	import { refreshAll } from '$app/navigation'
 	import { tip } from 'fuma'
 	import type { Field } from '@prisma/client'
 	import { eventPath } from '#lib/eventPath.js'
@@ -93,7 +93,7 @@
 
 	// Le champ n'existe dans `fields` qu'une fois les données rechargées.
 	async function handleFieldCreated(column: number, field: Field) {
-		await invalidateAll()
+		await refreshAll()
 		source.mapping[column] = `field:${field.id}`
 	}
 </script>

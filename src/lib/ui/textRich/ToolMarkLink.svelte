@@ -21,13 +21,13 @@
 			return
 		}
 
-		const isEmail = z.string().email().safeParse(linkHref)
+		const isEmail = z.email().safeParse(linkHref)
 		if (isEmail.success) linkHref = 'mailto:' + linkHref
 		else if (!linkHref.match(/^http(s)?:\/\//)) {
 			linkHref = 'https://' + linkHref
 		}
 
-		const isUrl = z.string().url().safeParse(linkHref)
+		const isUrl = z.url().safeParse(linkHref)
 		if (!isUrl.success) {
 			linkError = 'URL invalide'
 			return

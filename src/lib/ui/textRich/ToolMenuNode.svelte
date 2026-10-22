@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {
-		AlignLeftIcon,
+		TextAlignStartIcon,
 		Heading1Icon,
 		Heading2Icon,
 		Heading3Icon,
@@ -24,7 +24,7 @@
 		{
 			key: 'paragraph',
 			label: 'Texte',
-			icon: AlignLeftIcon,
+			icon: TextAlignStartIcon,
 			action: () => editor.commands.setParagraph(),
 		},
 		{
