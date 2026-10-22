@@ -422,6 +422,12 @@ Cinq règles, et elles ne se devinent pas:
    dérivé des mêmes données que son rendu Svelte (`WhoCanDoWhat` et `RolesGlossary` lisent tous deux
    `content/permissions.ts` et `#lib/member/roles.ts`). Un test unitaire croise le registre avec les
    composants réellement employés: sans jumeau, le markdown servi perdrait ce morceau en silence.
+   Le jumeau reçoit les attributs **littéraux** de la balise (`id="planif"`), jamais une
+   expression `{…}`, qui n'a de valeur qu'à l'exécution.
+
+Une démo filmée s'insère dans un chapitre par `<DemoVideo id="<id>" title="…" />`, après le
+paragraphe qu'elle illustre, une au plus par chapitre. Son jumeau en fait un lien vers le MP4.
+L'id doit déjà figurer dans `src/lib/landing/videos.json`: une vidéo se publie avant d'être citée.
 
 La même page est servie en markdown pur sur `/docs/<slug>.md`, indexée par `/llms.txt` et
 concaténée dans `/llms-full.txt` — c'est cette surface que lisent les agents. La source en étant
@@ -821,8 +827,9 @@ breaks `svelte-check`.
   - Once the user has approved the video, `bun run demo:publish` (`scripts/publish-demos.ts`)
     uploads what changed to every target and merges the URLs into the manifest. Commit the
     manifest, never the MP4.
-  - The landing reads a demo by its id (`demo('<id>', title)` in `Workflow.svelte`): an id
-    missing from the manifest does not compile.
+  - The landing reads a demo by its id (`demo('<id>', title)` in `Workflow.svelte`), the docs
+    through `<DemoVideo id="<id>">` (see « La documentation »): an id missing from the manifest
+    does not compile, and a unit test checks the `.svx` sources as well.
   - `DEMO_TARGETS` in `.env`: space-separated rsync destinations, the local one
     (`./media/demos`) and the media volume of each Dokploy environment
     (`root@host:/var/lib/docker/volumes/<volume>/_data/demos`, SSH key access). If it is

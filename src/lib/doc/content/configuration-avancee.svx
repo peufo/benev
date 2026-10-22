@@ -3,6 +3,10 @@ title: Configuration avancée
 description: Les modèles de courriel, les variables, les badges
 ---
 
+<script lang="ts">
+	import { DemoVideo } from '#lib/doc/content/index.js'
+</script>
+
 ## Les modèles de courriel {#courriels}
 
 Chaque création et chaque changement d'état d'inscription envoie un message : vers les responsables
@@ -45,8 +49,11 @@ Il n'y a pas d'aperçu : pour tester un modèle, envoie-le-toi depuis une second
 
 L'objet du message et son expéditeur sont figés : tu écris le corps, pas l'en-tête.
 
-Les messages qui préviennent tes responsables ne se réécrivent pas non plus, pas plus que la
-vérification d'adresse, la réinitialisation de mot de passe ou la confirmation de paiement.
+Les messages qui préviennent tes responsables ne se réécrivent pas non plus. Ni ceux que benevio
+envoie de lui-même : le [rappel avant un créneau](/docs/le-jour-j#rappels), l'annonce d'un créneau
+déplacé ou supprimé, l'avis d'[archivage automatique](/docs/ouvrir-les-inscriptions#publier),
+l'alerte de [quota](/docs/gestion#quota), la vérification d'adresse, la réinitialisation de mot de
+passe et la confirmation de paiement.
 
 Et **ne laisse jamais un modèle vide** : le texte par défaut ne revient pas tout seul, tes bénévoles
 recevraient un courriel sans contenu.
@@ -78,8 +85,8 @@ Les deux grilles d'accès sont interchangeables : rien ne t'oblige à y mettre l
 secteurs. Garde en revanche des réponses très courtes, leur texte s'imprime dans une case de
 quelques millimètres.
 
-Si ces questions n'existent pas encore, le bouton **+** posé à côté du champ te la crée sans quitter
-la page. benevio refuse un format qui ne correspond pas.
+Si ces questions n'existent pas encore, le bouton **+** (« Nouveau champ ») posé à côté de
+l'emplacement te la crée sans quitter la page. benevio refuse un format qui ne correspond pas.
 
 ### Les couleurs
 
@@ -88,5 +95,8 @@ et le texte s'éclaircit ou s'assombrit tout seul pour rester lisible.
 
 ### L'aperçu
 
-Sous la configuration, le panneau **Aperçu** dessine le badge d'un membre de ton choix, exactement
-comme il sortira de l'imprimante. Prends quelqu'un dont le profil est bien rempli.
+À côté de la configuration, ou dessous sur un petit écran, le panneau **Aperçu** dessine le badge
+d'un membre de ton choix, exactement comme il sortira de l'imprimante. Prends quelqu'un dont le
+profil est bien rempli.
+
+<DemoVideo id="badges" title="Colorer les badges par rôle, puis les imprimer" />

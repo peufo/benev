@@ -5,6 +5,7 @@
  * Les sources brutes ne sont pas de la partie: elles vivent dans `sources.server.ts`, que
  * SvelteKit interdit au navigateur.
  */
+export { default as DemoVideo } from './DemoVideo.svelte'
 export { default as RolesGlossary } from './RolesGlossary.svelte'
 export { default as WhoCanDoWhat } from './WhoCanDoWhat.svelte'
 export * from './markdownParts'

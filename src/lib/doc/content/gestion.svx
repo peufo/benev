@@ -3,25 +3,30 @@ title: Gestion
 description: Le tableau de bord, les états, les tables, les vues
 ---
 
+<script lang="ts">
+	import { DemoVideo } from '#lib/doc/content/index.js'
+</script>
+
 ## Ton tableau de bord
 
 C'est l'écran à ouvrir chaque jour. Il rassemble :
 
-- qui vient d'arriver,
+- les membres : les « Derniers arrivés », et ceux « Sans inscription » à qui proposer un créneau,
 - quelles inscriptions attendent une réponse,
 - où en est le remplissage secteur par secteur,
-- le journal de ce qui s'est passé.
+- le journal de ce qui s'est passé : inscriptions, invitations, imports, changements de réglages.
+  Tu peux y ajouter tes propres notes.
 
 Un·e responsable y voit les mêmes blocs, restreints à ses propres secteurs.
 
 ## Les quatre états {#etats}
 
-Une inscription est dans l'un de ces quatre états :
+Une inscription porte l'un de ces quatre états, tels que tu les lis à l'écran :
 
 - **Demande en cours** : elle attend une réponse.
-- **Validée** : c'est confirmé des deux côtés.
-- **Déclinée** : la personne à qui on l'a proposée a dit non.
-- **Annulée** : celle qui l'a créée est revenue dessus.
+- **Validé** : c'est confirmé des deux côtés.
+- **Décliné** : la personne à qui on l'a proposée a dit non.
+- **Annulé** : celle qui l'a créée est revenue dessus.
 
 Rien ne disparaît : une inscription déclinée ou annulée garde sa ligne et peut être rétablie.
 
@@ -41,6 +46,8 @@ La règle vaut aussi quand tu inscris quelqu'un
 répondra une fois son invitation acceptée. Si elle ne doit jamais ouvrir de compte, tu peux trancher
 à sa place avec **« Confirmer au nom du membre »** ; l'inscription est alors marquée comme telle, pour
 que personne ne la prenne pour un oui de sa part.
+
+<DemoVideo id="subscribe-validation" title="Valider les demandes depuis le tableau de bord" />
 
 ## Les tables {#tables}
 
@@ -72,6 +79,10 @@ oui/non**.
 Chaque barre est un filtre : clique dessus et la table se restreint. Le résumé porte toujours sur
 l'ensemble filtré, jamais sur la seule page affichée.
 
+Pour une liste à choix multiple, chaque réponse cochée compte séparément. Active « Compter par
+combinaisons » sur la question si tu préfères compter chaque combinaison comme une réponse à part,
+« samedi et dimanche » par exemple.
+
 ## Les vues enregistrées {#vues}
 
 Un jeu de filtres qui te ressert mérite un nom. Le sélecteur en haut de l'écran affiche **« Vue
@@ -89,10 +100,17 @@ qui restent propres à l'écran du moment.
 modifier ou la supprimer. Elle suit quand tu
 [dupliques ton évènement](/docs/creer-ton-evenement#dupliquer), filtres sur tes questions compris.
 
+<DemoVideo id="create-view" title="Enregistrer une vue" />
+
 ## Le quota {#quota}
 
-**Valider une inscription approuve le membre.** Un seul geste pour toi, mais ça compte dans ton
-quota, qui porte sur les membres approuvés.
+Ton quota porte sur les **membres approuvés**, et plusieurs gestes approuvent sans le dire :
 
-Le dépassement ferme ton espace de gestion, sauf la page qui te permet de changer de palier. Tes
-bénévoles, eux, continuent de s'inscrire normalement.
+- répondre à une inscription, en tant que responsable,
+- [inviter](/docs/ton-equipe#invitation) ou [importer](/docs/ton-equipe#import) quelqu'un,
+- le bouton « Approuver la participation » de sa fiche, qui sert aussi à revenir en arrière.
+
+Le palier gratuit, Basique, compte 50 membres approuvés, Standard 200, et Premium est sans limite.
+Le dépassement ferme ton espace de gestion, sauf la page **Quota** qui te permet de changer de
+palier. Tes bénévoles, eux, continuent de s'inscrire normalement. Tes factures t'attendent dans
+**Mes achats**, sur ton espace personnel.

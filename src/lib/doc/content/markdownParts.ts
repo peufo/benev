@@ -1,3 +1,4 @@
+import manifest from '#lib/landing/videos.json'
 import { ROLE_DESCRIPTIONS, ROLE_LABELS } from '#lib/member/roles.js'
 import { PERMISSION_ROLES, PERMISSIONS, type Permission } from './permissions'
 
@@ -6,10 +7,19 @@ import { PERMISSION_ROLES, PERMISSIONS, type Permission } from './permissions'
  * lui donner un jumeau, dérivé des mêmes données que son rendu Svelte. Le test unitaire qui croise
  * ce registre avec `readComponents()` refuse qu'une entrée manque: sans quoi le `.md` servi
  * perdrait silencieusement un morceau de son contenu.
+ *
+ * Un jumeau reçoit les attributs de la balise, tels qu'écrits dans la source.
  */
-export const DOC_MARKDOWN_PARTS: Record<string, () => string> = {
+export const DOC_MARKDOWN_PARTS: Record<string, (props: Record<string, string>) => string> = {
+	DemoVideo: demoVideoMarkdown,
 	RolesGlossary: rolesGlossaryMarkdown,
 	WhoCanDoWhat: permissionsMarkdown,
+}
+
+/** Une vidéo ne se lit pas: ce qui la remplace dit qu'elle existe, et où la regarder. */
+function demoVideoMarkdown({ id, title }: Record<string, string>): string {
+	const demo = manifest[id as keyof typeof manifest]
+	return demo ? `[Vidéo : ${title}](${demo.video})` : ''
 }
 
 function rolesGlossaryMarkdown(): string {

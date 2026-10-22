@@ -3,21 +3,27 @@ title: Ouvrir les inscriptions
 description: Publier, l'adhésion, les conditions d'accès
 ---
 
+<script lang="ts">
+	import { DemoVideo } from '#lib/doc/content/index.js'
+</script>
+
 ## Publier ton évènement {#publier}
 
-Ton évènement est dans l'un de ces trois états, que tu changes depuis **Configuration** :
+Ton évènement est dans l'un de ces trois états, que tu changes depuis la section **Statut** de
+**Configuration** :
 
 - **En construction** : c'est ton brouillon, seuls tes responsables y accèdent.
 - **Publié** : le site est visible de tous.
 - **Archivé** : l'évènement est passé, il se referme comme un brouillon.
 
-Rien n'est définitif, tu peux repasser en brouillon puis republier.
+Rien n'est définitif : « Repasser en brouillon » et « Archiver » se défont, et un évènement archivé
+se republie d'un clic. Seul·e le ou la propriétaire change cet état.
 
 ### L'archivage automatique
 
-Un évènement publié, terminé depuis 30 jours et où plus rien ne bouge s'archive tout seul. Tu reçois
-d'abord un e-mail, et tu as alors 14 jours pour le **garder ouvert**, d'un bouton dans
-**Configuration**. Sans réponse, il est archivé, et tu peux toujours le republier.
+Un évènement publié, terminé depuis 30 jours et où plus rien ne bouge s'archive tout seul. Son
+propriétaire reçoit d'abord un courriel, et a alors 14 jours pour le **garder ouvert**, d'un bouton
+dans **Configuration**. Sans réponse, il est archivé, et tu peux toujours le republier.
 
 Chaque secteur a aussi son propre statut, qui décide de ce que les bénévoles en voient et de ce
 qu'ils reçoivent : c'est expliqué avec [les secteurs](/docs/creer-ton-evenement#secteurs).
@@ -35,10 +41,13 @@ Les deux cochées, c'est le libre-service. Les deux décochées, tu fais tout à
 
 Trois réglages complètent ça :
 
-- autoriser ou non les membres à annuler leurs inscriptions,
-- tolérer un chevauchement entre deux créneaux d'une même personne,
-- programmer la fermeture des inscriptions pour tous les secteurs à la fois ; chaque secteur
-  peut avoir sa propre date, qui l'emporte.
+- autoriser ou non les membres à annuler ou décliner leurs inscriptions,
+- tolérer, en minutes, un chevauchement entre deux créneaux d'une même personne,
+- programmer la « Fermeture des inscriptions par défaut » pour tous les secteurs à la fois ;
+  chaque secteur peut avoir sa propre date, qui l'emporte. Ce réglage n'apparaît que si les
+  membres peuvent s'inscrire eux-mêmes.
+
+<DemoVideo id="subscribe" title="Un·e bénévole rejoint l'évènement et choisit son créneau" />
 
 ## L'adhésion {#adhesion}
 
@@ -55,23 +64,25 @@ premier créneau.
 
 ### Tes propres questions
 
-Tu peux ensuite poser les questions que tu veux : une taille de t-shirt, un régime alimentaire, un
-permis de conduire, une motivation. Six formats sont disponibles : texte court, texte long, nombre,
-oui/non, liste à choix, liste à choix multiple.
+Tu peux ensuite poser les questions que tu veux, dans la section **Champs du profil** : une taille
+de t-shirt, un régime alimentaire, un permis de conduire, une motivation. Six formats sont
+disponibles : texte court, texte long, nombre, oui/non, liste à choix, liste à choix multiple.
 
 Chaque question porte trois réglages : **visible par les membres**, **modifiable par les membres**
-et **obligatoire**. Une question invisible aux membres est l'endroit où tu notes ce qui ne regarde
-que toi.
+et **valeur obligatoire**, ce dernier absent pour un oui/non et un choix multiple. Une question
+invisible aux membres est l'endroit où tu notes ce qui ne regarde que toi.
 
 Ces réponses te resservent partout : colonnes et filtres de tes tables,
 [conditions d'accès à un secteur](#conditions),
 [variables de tes courriels](/docs/configuration-avancee#courriels) et couleurs de tes
 [badges](/docs/configuration-avancee#badges).
 
+<DemoVideo id="config-fields" title="Configurer l'adhésion et ajouter une question" />
+
 ### La charte
 
-Crée une page de type **Charte des bénévoles** et elle s'affichera pendant l'adhésion, à accepter
-pour aller plus loin. Une seule par évènement.
+Crée une page de type **Charte des bénévoles** et, une fois publiée, elle s'affichera pendant
+l'adhésion, à accepter pour aller plus loin. Une seule par évènement.
 
 ### Vérifie ce que ça donne
 
@@ -85,8 +96,9 @@ Le bar demande d'être majeur·e, la navette demande le permis. Les **conditions
 secteur font ce tri toutes seules.
 
 Sans condition, un secteur est ouvert à tous les membres. Dès qu'il en porte une, il faut **toutes**
-les remplir pour qu'il apparaisse. Tu peux exiger d'être un membre approuvé, un âge minimum ou une
-réponse précise à l'une de tes questions.
+les remplir pour qu'il apparaisse. Tu peux exiger d'être un membre approuvé (« Membre approuvé »),
+un âge minimum (« Âge minimum ») ou une réponse précise à l'une de tes questions (« Profil du
+membre »).
 
 Tes responsables passent quand même et peuvent y inscrire qui ils veulent à la main. Une personne
 déjà inscrite garde sa place, même si elle cesse de remplir la condition.

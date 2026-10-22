@@ -3,6 +3,10 @@ title: Le jour J
 description: Les exports, les impressions, les présences, les rappels, les agendas
 ---
 
+<script lang="ts">
+	import { DemoVideo } from '#lib/doc/content/index.js'
+</script>
+
 ## Ce que tu peux sortir {#exports}
 
 **Ton filtre décide de tout le reste.** Ce que tu as
@@ -21,9 +25,13 @@ quel état, et la présence.
 
 Filtre sur « secteur : bar » et « samedi », et tu sors l'équipe du bar du samedi.
 
+<DemoVideo id="export-data" title="Exporter les données d'une vue" />
+
 Sans passer par un filtre, la page d'un secteur sort aussi le **PDF du secteur** : chaque créneau,
 avec ses inscrit·es et leur téléphone, les demandes en attente signalées. De quoi l'afficher au
 stand ou le glisser dans la poche de son ou sa responsable.
+
+<DemoVideo id="team-pdf" title="Imprimer la feuille d'un secteur" />
 
 ## Imprimer les badges {#impressions}
 
@@ -64,12 +72,13 @@ Ce que ça te rend ensuite :
 
 ## Le rappel avant chaque créneau {#rappels}
 
-**Chaque bénévole reçoit un courriel avant chacun de ses créneaux**, la veille par défaut : le
-secteur, l'horaire, le lieu de l'évènement. En cas d'empêchement, une réponse au courriel suffit :
-elle arrive aux responsables du secteur.
+**Chaque bénévole reçoit un courriel avant chacun de ses créneaux**, 24 heures avant par défaut :
+le secteur, l'horaire, et le lieu de l'évènement s'il est renseigné. En cas d'empêchement, une
+réponse au courriel suffit : elle arrive aux responsables du secteur, ou au courriel de contact de
+l'évènement si le secteur n'en a pas.
 
 Tu choisis le délai dans les [réglages](/docs/creer-ton-evenement#reglages), à la rubrique
-**Adhésion** : deux heures avant, la veille, trois jours avant, ou aucun rappel.
+**Adhésion** : « 2 heures avant », « 24 heures avant », « 3 jours avant » ou « Aucun rappel ».
 
 Ce qu'il faut savoir :
 
@@ -78,9 +87,11 @@ Ce qu'il faut savoir :
 - une inscription acceptée après l'heure du rappel n'en reçoit pas : le courriel d'acceptation vient
   de lui donner l'horaire,
 - si tu déplaces un créneau, le rappel suit le nouvel horaire,
-- chaque bénévole peut couper ses rappels dans **Mes préférences**, sur son espace personnel.
+- chaque bénévole peut couper ses rappels dans **Mes préférences**, sur son espace personnel :
+  c'est la case « Recevoir un rappel avant chacun de mes créneaux ».
 
 ## L'agenda personnel {#agenda}
 
-Chacun peut exporter ses créneaux vers son propre agenda, depuis son espace personnel. Avec le
-rappel, c'est ce qui l'aide le plus à ne rien oublier.
+Chacun·e peut exporter ses créneaux vers son propre agenda, avec le bouton « Ajouter à mon agenda »
+de **Mes inscriptions**, sur son espace personnel. Avec le rappel, c'est ce qui l'aide le plus à ne
+rien oublier.

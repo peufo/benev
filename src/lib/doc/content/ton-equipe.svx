@@ -1,6 +1,6 @@
 ---
 title: Ton équipe
-description: Les rôles, les droits, les invitations
+description: Les rôles, les droits, les invitations, l'import
 ---
 
 <script lang="ts">
@@ -52,8 +52,8 @@ Mais si tu en renseignes une, la personne reçoit un courriel contenant le lien 
 évènement. Ce message fait partie des
 [modèles que tu peux réécrire](/docs/creer-ton-evenement#publications).
 
-**Inviter vaut approbation** : la personne compte dans ton [quota](/docs/gestion#quota)
-dès l'envoi, pas à son arrivée.
+**Inviter vaut approbation** : la personne compte dans ton [quota](/docs/gestion#quota) dès que
+sa fiche existe, avec ou sans adresse, pas à son arrivée.
 
 Elle passe malgré tout par ton [adhésion](/docs/ouvrir-les-inscriptions#adhesion) : elle réclame son
 compte, accepte ta charte si tu en as une et répond à tes questions de profil. L'invitation lui
@@ -61,5 +61,52 @@ compte, accepte ta charte si tu en as une et répond à tes questions de profil.
 
 ### Corriger une adresse
 
-Tu t'es trompé·e d'adresse ? Corrige-la et renvoie l'invitation, le lien précédent est simplement
-invalidé.
+Tu t'es trompé·e d'adresse ? Corrige-la sur sa fiche, puis clique sur « Renvoyer l'invitation » : le
+lien précédent est simplement invalidé.
+
+## Importer des membres {#import}
+
+Ta liste existe déjà dans un tableur, ou dans l'édition de l'an dernier ? Plutôt que d'inviter les
+gens un par un, importe-les. Le bouton « Importer des membres » se trouve dans la barre de ta liste
+de membres et au pied du formulaire d'invitation. Il est réservé aux administrateur·ices.
+
+### Trois sources
+
+- **Un fichier CSV** : une ligne par membre, une colonne par information. La première ligne porte
+  les titres des colonnes, et le séparateur (virgule, point-virgule ou tabulation) est reconnu tout
+  seul. Enregistre-le en UTF-8, sinon les accents arrivent brouillés.
+- **Des données collées** : une sélection copiée dans Excel, Numbers ou Google Sheets, ou une simple
+  liste d'adresses. Décoche « La première ligne contient les en-têtes » si ta sélection n'en a pas.
+- **Un autre évènement** dont tu es administrateur·ice : ses membres arrivent avec leurs
+  coordonnées et leurs réponses à tes questions, mais sans leurs rôles, leurs inscriptions ni leur
+  photo.
+
+### Faire correspondre les colonnes
+
+benevio devine à quoi correspond chaque colonne d'après son titre : le prénom, le nom, le courriel,
+le téléphone, la date de naissance, l'adresse, ou l'une de
+[tes propres questions](/docs/ouvrir-les-inscriptions#adhesion). Tu corriges d'un clic ce qu'il a
+mal deviné, et une colonne que tu ne rattaches à rien est simplement ignorée.
+
+Une colonne en rouge bloque l'import : un champ choisi deux fois, ou des valeurs que le champ
+n'accepte pas, comme une date illisible ou une réponse qui n'est pas une option de la liste. Il
+faut aussi qu'au moins une colonne porte le prénom ou le nom.
+Chaque cellule se corrige sur place, et pour une liste à choix, le bouton « Correspondance » associe
+chaque valeur du fichier à une option, par exemple « M » à « Medium ».
+
+Il te manque la question ? Le bouton **+** de la colonne la crée, nommée d'après la colonne. Et une
+ligne que tu ne veux pas importer se décoche.
+
+### Ce qui arrive à l'import
+
+Les membres importés sont **approuvés**, comme une invitation : ils comptent aussitôt dans ton
+[quota](/docs/gestion#quota). Une ligne est écartée si elle n'a pas de nom, si son adresse figure
+déjà plus haut dans le fichier, ou si cette adresse est déjà celle d'un membre. Sans adresse, rien
+ne permet de reconnaître un doublon : vérifie ces lignes-là toi-même.
+
+Aucun courriel ne part, sauf si tu coches « Envoyer une invitation par e-mail ». Au-delà de cinq
+cents invitations en vingt-quatre heures, les suivantes se renvoient depuis la fiche de chaque
+membre.
+
+Un rapport détaille chaque ligne à la fin : importée, écartée et pourquoi, ou en échec. Le
+[journal](/docs/gestion) garde la trace de chaque membre importé, et de sa source.

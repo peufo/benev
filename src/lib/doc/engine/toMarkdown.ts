@@ -8,7 +8,10 @@ import { readFrontmatter } from './parse'
  * Les jumeaux sont passés en argument plutôt que lus du contenu: la conversion n'a pas à savoir
  * quels composants existent, seulement comment les remplacer.
  */
-export function docToMarkdown(source: string, parts: Record<string, () => string>): string {
+export function docToMarkdown(
+	source: string,
+	parts: Record<string, (props: Record<string, string>) => string>
+): string {
 	const { data, body } = readFrontmatter(source)
 
 	const markdown = body
@@ -19,9 +22,19 @@ export function docToMarkdown(source: string, parts: Record<string, () => string
 		// Un composant sans jumeau est laissé tel quel plutôt que supprimé: la balise reste visible
 		// dans le markdown servi, et le test de couverture du registre échoue avant qu'elle n'y
 		// arrive.
-		.replace(/<([A-Z][A-Za-z0-9]*)\b[^>]*\/>/g, (tag, name: string) => parts[name]?.() ?? tag)
+		.replace(
+			/<([A-Z][A-Za-z0-9]*)\b([^>]*)\/>/g,
+			(tag, name: string, attributes: string) => parts[name]?.(readAttributes(attributes)) ?? tag
+		)
 		.replace(/\n{3,}/g, '\n\n')
 		.trim()
 
 	return `${data.title ? `# ${data.title}\n\n` : ''}${markdown}\n`
+}
+
+/** Seuls les attributs littéraux se lisent: une expression `{…}` n'a de valeur qu'à l'exécution. */
+function readAttributes(attributes: string): Record<string, string> {
+	return Object.fromEntries(
+		Array.from(attributes.matchAll(/([A-Za-z][\w-]*)="([^"]*)"/g), ([, key, value]) => [key, value])
+	)
 }

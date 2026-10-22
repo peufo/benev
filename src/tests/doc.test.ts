@@ -5,6 +5,7 @@ import { readingTime } from '../lib/doc/engine/readingTime'
 import { docToMarkdown } from '../lib/doc/engine/toMarkdown'
 import { DOC_MARKDOWN_PARTS, DOC_SLUGS } from '../lib/doc/content'
 import { FEATURES } from '../lib/landing/features'
+import manifest from '../lib/landing/videos.json'
 
 /**
  * Les sources de la documentation, lues comme le fait `registry.server.ts`. Le test tourne sur les
@@ -160,6 +161,26 @@ describe('surface markdown', () => {
 		const markdown = docToMarkdown('---\ntitle: T\n---\n<WhoCanDoWhat />\n', DOC_MARKDOWN_PARTS)
 		expect(markdown).toContain('| Qui peut faire quoi ? | Propriétaire |')
 		expect(markdown).toContain('| Nommer des administrateur·ices | oui | non | non | non |')
+	})
+
+	it('passe au jumeau les attributs de la balise', ({ expect }) => {
+		const markdown = docToMarkdown(
+			'---\ntitle: T\n---\n<DemoVideo id="planif" title="Planifier les créneaux" />\n',
+			DOC_MARKDOWN_PARTS
+		)
+		expect(markdown).toContain(`[Vidéo : Planifier les créneaux](${manifest.planif.video})`)
+	})
+
+	/**
+	 * Le type de `DemoVideo` refuse un id inconnu dans un composant Svelte, mais rien ne garantit
+	 * que svelte-check lise les attributs d'un `.svx` avec la même rigueur.
+	 */
+	it('ne cite que des vidéos publiées', ({ expect }) => {
+		for (const { slug, source } of pages) {
+			for (const [, id] of source.matchAll(/<DemoVideo\b[^>]*\bid="([^"]*)"/g)) {
+				expect(Object.keys(manifest), `${slug} cite la vidéo ${id}`).toContain(id)
+			}
+		}
 	})
 })
 

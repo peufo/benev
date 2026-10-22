@@ -3,17 +3,25 @@ title: Créer ton évènement
 description: Les réglages, les publications, les secteurs, les créneaux
 ---
 
+<script lang="ts">
+	import { DemoVideo } from '#lib/doc/content/index.js'
+</script>
+
 ## Compte et évènement
 
 Crée un compte, puis ton évènement. Tu en es le **propriétaire**. Ça signifie que tu as tous les
-droits et que tu es seul·e à pouvoir nommer des administrateur·ices.
+droits et que tu es seul·e à pouvoir nommer des administrateur·ices, publier l'évènement ou le
+supprimer.
 
 Ton évènement est créé en brouillon. Personne ne le voit tant que tu ne l'as pas
 [publié](/docs/ouvrir-les-inscriptions#publier), tu as donc tout le temps de le construire.
 
 ## Les réglages {#reglages}
 
-Tout se passe dans **Configuration**, section par section.
+Tout se passe dans **Configuration**, section par section. Les trois premières sont décrites ici.
+**Statut**, **Adhésion** et **Champs du profil** décident de qui entre et comment : elles sont
+expliquées avec [l'ouverture des inscriptions](/docs/ouvrir-les-inscriptions). La **Zone de
+danger**, tout en bas, sert à supprimer l'évènement.
 
 ### L'essentiel
 
@@ -24,15 +32,17 @@ diffusé, le remplacer casse tout ce qui pointait dessus.
 
 Tu n'as pas à saisir les dates de ton évènement, elles se calent sur les créneaux que tu poses.
 
-### Le contact
+### Contact
 
-Le courriel, le téléphone, le site web, les réseaux sociaux et le lieu. C'est le pied de page de ton
-site, et c'est par là que tes bénévoles te joindront.
+Le courriel, le téléphone, le site web, les pages Facebook et Instagram, et le lieu. C'est le pied
+de page de ton site, et c'est par là que tes bénévoles te joindront.
 
-### L'identité
+### Identité
 
-L'affiche, le logo, l'image de fond et ses réglages. Des thèmes sont prêts à l'emploi, mais tu peux
-y ajouter ta touche personnelle.
+L'affiche, le logo, l'image de fond et ses réglages (couleur, flou, brillance, grain). Quatre
+thèmes sont prêts à l'emploi, mais tu peux y ajouter ta touche personnelle.
+
+<DemoVideo id="create-space" title="Créer l'évènement et son identité" />
 
 ## Tes publications {#publications}
 
@@ -49,9 +59,14 @@ Une nouvelle page naît en **brouillon** : tu la rédiges à ton rythme, seuls l
 la voient. Passe son statut à « Page publiée », enregistre, et elle entre dans le menu du site. Les
 pages s'y suivent dans l'ordre de ta liste, que tu peux réarranger à ta guise.
 
+Une page de membre peut aussi s'adresser à chacun·e : tape `@` pour y insérer son prénom, ses
+secteurs ou n'importe quelle [variable des courriels](/docs/configuration-avancee#courriels).
+
 Mais le plus important est certainement de rédiger la **charte des bénévoles** qui devra être
 acceptée par les nouveaux membres
 [rejoignant ton évènement](/docs/ouvrir-les-inscriptions#adhesion).
+
+<DemoVideo id="create-pages" title="Créer la charte et les pages" />
 
 ### Les modèles de courriel et de badge
 
@@ -72,6 +87,8 @@ Avec de bonnes descriptions, tes bénévoles sauront à quoi s'attendre quand il
 
 Depuis la fiche d'un secteur, tu peux désigner des **responsables**. Ils pourront gérer les créneaux
 et répondre aux inscriptions qui les concernent.
+
+<DemoVideo id="create-teams" title="Créer un secteur et nommer sa responsable" />
 
 ### Brouillon, validé, publié
 
@@ -99,20 +116,25 @@ date déjà passée n'a plus d'effet : un secteur rouvert à la main reste ouver
 Tu peux éditer les créneaux depuis la fiche du secteur ou directement sur la grille de planification.
 
 La grille offre une vue d'ensemble de tous tes secteurs et de tous leurs créneaux. Un simple
-cliquer-glisser te permet d'y ajouter un créneau. Et avec la fonction « Dupliquer après », il est
-possible d'enchaîner plusieurs créneaux similaires en quelques clics.
+cliquer-glisser te permet d'y ajouter un créneau. Et avec « Dupliquer après » ou « Dupliquer
+avant », il est possible d'enchaîner plusieurs créneaux similaires en quelques clics.
 
-Tu peux aussi basculer l'axe à l'horizontale ou à la verticale, régler le zoom et n'afficher que
-quelques secteurs.
+Tu peux aussi basculer l'axe à l'horizontale ou à la verticale, régler le zoom (Ctrl + molette),
+n'afficher que quelques secteurs et passer en plein écran.
+
+<DemoVideo id="planif" title="Planifier les créneaux" />
 
 ### Modifier un créneau après validation
 
 Tant que le secteur est en brouillon, déplace, redimensionne et supprime tes créneaux librement,
-personne n'en sait rien. Par contre, une fois le secteur validé, les personnes inscrites ont reçu leur horaire.
-Changer l'heure d'un créneau qui a des inscriptions te demande alors si tu souhaites leur envoyer le nouvel
-horaire par courriel. A toi de choisir si c'est nécéssaire ou non.
-La suppression, quant à elle, ne te laisse pas l'option de ne pas communiquer. 
+personne n'en sait rien. Une fois le secteur validé, les personnes inscrites ont reçu leur horaire.
 
+Changer l'heure d'un créneau qui a des inscriptions, validées ou en attente, ouvre alors la question
+« Prévenir les inscrit·es ? ». **Valider et notifier** leur envoie le nouvel horaire par courriel,
+**Valider** enregistre sans rien envoyer : à toi de juger si le changement le mérite. Dans les deux
+cas, le [rappel](/docs/le-jour-j#rappels) suit le nouvel horaire.
+
+La suppression d'un créneau, elle, prévient toujours ses inscrit·es.
 
 ### Les étiquettes
 
@@ -125,7 +147,7 @@ visuellement ou de les filtrer.
 Les jalons marquent un instant sur la grille, comme l'ouverture des portes ou le début d'un concert.
 Ils permettent de rapidement naviguer et de s'y retrouver dans le calendrier.
 
-Pour créer un jalon, passe ta souris sur la dernière ligne (ou colonne) de la planification et
+Pour créer un jalon, passe en vue horizontale, survole la dernière ligne de la planification et
 clique sur la punaise qui apparaît.
 
 ### Mode liste d'attente
@@ -136,9 +158,10 @@ complet même s'il contient des inscriptions en attente de validation.
 
 ## Dupliquer une édition {#dupliquer}
 
-Ton évènement revient chaque année ? Tu peux le dupliquer depuis la liste de tes évènements plutôt
-que de tout refaire. Tu choisis ce que tu reprends (secteurs, questions de profil, pages, vues
-enregistrées) et tu décoches ce qui n'a plus lieu d'être.
+Ton évènement revient chaque année ? Tu peux le dupliquer depuis la liste de tes évènements, ou
+depuis tes « Évènements terminés », plutôt que de tout refaire. Tu choisis ce que tu reprends
+(**Secteurs**, **Publications**, **Champs de membres**, **Vues**) et tu décoches ce qui n'a plus
+lieu d'être.
 
 Tu saisis un décalage en jours et toutes les dates suivent. **Vérifie que tu retombes sur les bons
 jours de la semaine** : 365 jours ne ramènent pas au même samedi, 364 ou 371 sont souvent les bons
@@ -147,12 +170,17 @@ chiffres.
 | Ce qui suit | Ce qui ne suit pas |
 | --- | --- |
 | Les réglages, le thème, le contact | Les membres |
+| Le logo et l'image de fond | L'affiche |
 | Les secteurs et leurs créneaux | Les inscriptions |
 | Les conditions d'accès | Les responsables |
 | Les questions de profil | Les étiquettes et les jalons |
 | Les pages et les modèles de courriel | Les badges |
 
-La copie arrive en brouillon : renomme-la et corrige son adresse avant de la publier. Une nouvelle
+Tout ce qui suit le fait seulement si tu l'as coché : sans **Publications**, les modèles de
+courriel repartent de leur texte par défaut.
+
+La copie arrive en brouillon, et ses secteurs et ses pages aussi, sauf la page d'accueil.
+Renomme-la, corrige son adresse et pose la nouvelle affiche avant de la publier. Une nouvelle
 édition recommence son recrutement, et son quota avec.
 
 Tu peux aussi dupliquer un seul secteur depuis sa fiche, décalage compris. Celui-là **garde ses

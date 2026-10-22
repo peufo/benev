@@ -64,6 +64,12 @@ export const FEATURE_GROUPS: FeatureGroup[] = [
 				doc: '/docs/ouvrir-les-inscriptions#autonomie',
 			},
 			{
+				name: "L'import de membres",
+				description:
+					"Ta liste depuis un fichier CSV, un tableur ou l'édition précédente, colonnes reconnues et vérifiées avant l'import.",
+				doc: '/docs/ton-equipe#import',
+			},
+			{
 				name: "La liste d'attente",
 				description:
 					'Un secteur accepte plus de demandes que de places, et tu valides au fil des réponses.',
@@ -95,7 +101,7 @@ export const FEATURE_GROUPS: FeatureGroup[] = [
 			{
 				name: 'Les rappels automatiques',
 				description:
-					'Un courriel avant chaque créneau, la veille ou deux heures avant, qui suit le créneau si son horaire bouge.',
+					'Un courriel avant chaque créneau, de deux heures à trois jours avant, qui suit le créneau si son horaire bouge.',
 				doc: '/docs/le-jour-j#rappels',
 			},
 			{

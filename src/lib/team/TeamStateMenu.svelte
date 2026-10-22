@@ -32,7 +32,7 @@
 			pending === 0
 				? ''
 				: `${pending} demande${pending > 1 ? 's' : ''} d'inscription partir${pending > 1 ? 'ont' : 'a'} aux bénévoles.`
-		return `${emails} Un fois validé, un secteur ne peut pas être repassé en brouillon.`
+		return `${emails} Une fois validé, un secteur ne peut pas être repassé en brouillon.`
 	})
 
 	const transitions: Record<TeamState, Transition[]> = $derived({

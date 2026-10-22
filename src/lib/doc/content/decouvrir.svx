@@ -28,7 +28,8 @@ ses **responsables**, qui gèrent ses créneaux et répondent à ses inscription
 
 ### Créneau
 
-Un temps de travail dans un secteur définit par un début, une fin et un nombre bénévoles attendus.
+Un temps de travail dans un secteur, défini par un début, une fin et un nombre de bénévoles
+attendus.
 
 ### Inscription
 
