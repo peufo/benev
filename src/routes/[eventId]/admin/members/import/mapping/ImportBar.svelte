@@ -14,6 +14,8 @@
 		sourceName: string
 		rows: ImportRow[]
 		skipped: SkippedRow[]
+		/** Les lignes décochées, qui ne seront pas importées. */
+		unchecked: number
 		/** Ce qui empêche d'importer, ou `null`. */
 		blocker: string | null
 		ignoredColumns: number
@@ -24,6 +26,7 @@
 		sourceName,
 		rows,
 		skipped,
+		unchecked,
 		blocker,
 		ignoredColumns,
 		importing = $bindable(),
@@ -76,9 +79,8 @@
 		source.report = { source: sourceName, results: results.sort((a, b) => a.line - b.line) }
 		importing = false
 		await goto(eventPath('/admin/members/import/report'), { replaceState: true })
-		// Plus de fichier: un retour arrière ramène au choix de la source, pas à un second import.
-		source.csv = null
-		source.table = null
+		// Plus de source: un retour arrière ramène à son choix, pas à un second import.
+		source.reset()
 	}
 </script>
 
@@ -108,6 +110,9 @@
 					>
 						{plural(skipped.length, 'ligne écartée', 'lignes écartées')}
 					</span>
+				{/if}
+				{#if unchecked}
+					· {plural(unchecked, 'ligne décochée', 'lignes décochées')}
 				{/if}
 				{#if ignoredColumns}
 					· {plural(ignoredColumns, 'colonne ignorée', 'colonnes ignorées')}

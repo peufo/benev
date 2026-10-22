@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { useEvent } from './event'
 import { seedField, seedInvitedMember, seedMember, seedTeam, seedUser, signIn } from './seed'
-import { gotoHydrated } from './hydrated'
+import { awaitHydrated, gotoHydrated } from './hydrated'
 
 /**
  * L'entrée de l'import: on choisit une source, un autre évènement dont on est admin ou un
@@ -29,6 +29,25 @@ test.describe.serial('Import de membres', () => {
 		await source.create(page)
 		await target.create(page)
 
+		// Même nom que dans la cible: la colonne se mappe d'office.
+		const sourceSize = await seedField(source.eventId, {
+			name: 'Taille',
+			type: 'select',
+			options: ['Small', 'Medium', 'Large'],
+		})
+		await seedInvitedMember(source.eventId, {
+			firstName: 'Marie',
+			lastName: 'Curie',
+			email: 'marie@example.com',
+			profileJson: { [sourceSize.id]: 'Medium' },
+		})
+		await seedInvitedMember(source.eventId, { firstName: 'Pierre', lastName: 'Curie' })
+		await seedInvitedMember(source.eventId, {
+			firstName: 'Grace',
+			lastName: 'Hopper',
+			email: 'grace@example.com',
+		})
+
 		await seedField(target.eventId, {
 			name: 'Taille',
 			type: 'select',
@@ -48,7 +67,7 @@ test.describe.serial('Import de membres', () => {
 		await signIn(leadPage, lead)
 	})
 
-	test("L'admin choisit un autre évènement comme source", async () => {
+	test("L'admin importe une partie des membres d'un autre évènement", async () => {
 		await gotoHydrated(page, `/${target.eventId}/admin/members`)
 		await page.getByRole('link', { name: 'Importer des membres' }).click()
 		await page.waitForURL(`**/${target.eventId}/admin/members/import`)
@@ -61,6 +80,32 @@ test.describe.serial('Import de membres', () => {
 		await expect(
 			page.getByRole('heading', { name: `Importer depuis « ${source.eventName} »` })
 		).toBeVisible()
+
+		// Une ligne par membre, une colonne par coordonnée et par champ: la même page que le CSV.
+		const selector = (header: string) => page.getByLabel(header, { exact: true })
+		await expect(selector('E-mail')).toContainText('E-mail')
+		await expect(selector('Taille')).toContainText('Taille')
+		await expect(page.getByText('à vérifier')).toHaveCount(0)
+
+		// La source vient du serveur: un rechargement la rend, décochée ou non.
+		await page.reload()
+		await awaitHydrated(page)
+		// Triés par nom de famille: les Curie ouvrent la liste, Pierre en deuxième.
+		await expect(page.getByLabel('Ligne 2, colonne « Prénom »')).toHaveValue('Pierre')
+		await page.getByLabel('Importer la ligne 2').uncheck()
+		await expect(page.getByText('1 ligne décochée')).toBeVisible()
+
+		await page.getByRole('button', { name: /^Importer \d+ membres$/ }).click()
+		await page.waitForURL(`**/${target.eventId}/admin/members/import/report`)
+		await expect(page.getByRole('link', { name: 'Marie Curie' })).toBeVisible()
+		await expect(page.getByRole('row').filter({ hasText: 'grace@example.com' })).toContainText(
+			'Déjà membre: Grace Brewster'
+		)
+		await expect(page.getByText('Pierre Curie')).toHaveCount(0)
+
+		// Le profil suit: la taille de Marie arrive sur le champ homonyme de la cible.
+		await page.getByRole('link', { name: 'Marie Curie' }).click()
+		await expect(page.getByRole('button', { name: 'Taille' })).toContainText('Medium')
 	})
 
 	test("L'admin choisit un fichier CSV, corrige son mappage et l'importe", async () => {
@@ -140,8 +185,8 @@ test.describe.serial('Import de membres', () => {
 		await gotoHydrated(page, `/${target.eventId}/admin/members/import/report`)
 		await page.waitForURL(`**/${target.eventId}/admin/members`)
 		await gotoHydrated(page, `/${target.eventId}/admin/dashboard`)
-		await expect(page.getByText('a importé')).toHaveCount(2)
-		await expect(page.getByText('depuis membres.csv').first()).toBeVisible()
+		await expect(page.getByText('depuis membres.csv')).toHaveCount(2)
+		await expect(page.getByText(`depuis ${source.eventName}`).first()).toBeVisible()
 	})
 
 	test("Un·e responsable n'y a pas accès", async () => {

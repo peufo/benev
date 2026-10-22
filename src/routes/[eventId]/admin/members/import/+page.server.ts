@@ -1,8 +1,8 @@
-import { memberImportService } from '#lib/server/memberImport.js'
+import { getImportableEvents } from '#lib/server/memberImport.js'
 
 export const load = async ({ parent, params: { eventId } }) => {
 	const { importerId } = await parent()
-	const events = await memberImportService.getImportableEvents(importerId)
+	const events = await getImportableEvents(importerId)
 
 	return {
 		importableEvents: events

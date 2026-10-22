@@ -21,6 +21,7 @@
 		CONTACT_TARGETS,
 		suggestField,
 		type ColumnReport,
+		type FieldSuggestion,
 		type ColumnTarget,
 		type ContactKey,
 		type ImportField,
@@ -30,6 +31,8 @@
 		header: string
 		column: number
 		rows: string[][]
+		/** Le champ à créer quand la source le connaît; sinon, deviné d'après les valeurs. */
+		hint?: FieldSuggestion
 		target: ColumnTarget
 		report: ColumnReport
 		fields: ImportField[]
@@ -38,8 +41,18 @@
 		onmapvalues: () => void
 	}
 
-	let { header, column, rows, target, report, fields, onchange, oncreated, onmapvalues }: Props =
-		$props()
+	let {
+		header,
+		column,
+		rows,
+		hint,
+		target,
+		report,
+		fields,
+		onchange,
+		oncreated,
+		onmapvalues,
+	}: Props = $props()
 
 	type Item = {
 		value: Exclude<ColumnTarget, null>
@@ -121,7 +134,7 @@
 			<a
 				{...fieldCall.link(
 					{ oncreated },
-					{ value: JSON.stringify(suggestField(header, rows, column)), onclick: hide }
+					{ value: JSON.stringify(hint ?? suggestField(header, rows, column)), onclick: hide }
 				)}
 				class="btn btn-square btn-soft btn-sm"
 				aria-label="Créer un champ"

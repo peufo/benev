@@ -121,7 +121,13 @@ export function seedMember(
  */
 export function seedInvitedMember(
 	eventId: string,
-	member: { firstName: string; lastName: string; email?: string; leaderOf?: string[] }
+	member: {
+		firstName: string
+		lastName: string
+		email?: string
+		leaderOf?: string[]
+		profileJson?: Record<string, string | string[] | number | boolean>
+	}
 ) {
 	const { leaderOf = [], ...rest } = member
 	return prisma.member.create({

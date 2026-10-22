@@ -1,6 +1,7 @@
 import { describe, it } from 'vitest'
 import {
 	buildMembers,
+	memberTable,
 	importBlocker,
 	guessMapping,
 	distinctValues,
@@ -278,5 +279,86 @@ describe('construire les membres', () => {
 		expect(importBlocker(reports, ['contact:email'])).toMatch(/nom/)
 		const wrong = reportColumns(table, ['contact:fullName', 'field:age'], all)
 		expect(importBlocker(wrong, ['contact:fullName', 'field:age'])).toMatch(/rouge/)
+	})
+})
+
+describe("les membres d'un autre évènement", () => {
+	const member = {
+		firstName: 'Ada',
+		lastName: 'Lovelace',
+		email: 'ada@example.com',
+		phone: null,
+		birthday: new Date(Date.UTC(1815, 11, 10)),
+		street: null,
+		zipCode: null,
+		city: null,
+	}
+	const sourceFields = [
+		size,
+		diet,
+		age,
+		field({ id: 'tshirt', name: 'T-shirt', type: 'boolean' }),
+		field({ id: 'empty', name: 'Vide', type: 'string' }),
+	]
+	const table = memberTable(
+		[
+			{
+				...member,
+				profileJson: { size: 'M', diet: ['Végétarien', 'Sans gluten'], age: 36, tshirt: true },
+			},
+			{ ...member, firstName: 'Alan', birthday: null, profileJson: { diet: ['a, b'] } },
+		],
+		sourceFields
+	)
+
+	it('écrit chaque membre comme une ligne de CSV, sans colonne vide', ({ expect }) => {
+		expect(table.headers).toEqual([
+			'Prénom',
+			'Nom de famille',
+			'E-mail',
+			'Date de naissance',
+			'Taille',
+			'Régime',
+			'Âge',
+			'T-shirt',
+		])
+		expect(table.rows[0]).toEqual([
+			'Ada',
+			'Lovelace',
+			'ada@example.com',
+			'1815-12-10',
+			'M',
+			'Végétarien, Sans gluten',
+			'36',
+			'Oui',
+		])
+		expect(table.rows[1][5]).toBe('["a, b"]')
+	})
+
+	it('se mappe sur les coordonnées et les champs homonymes de la cible', ({ expect }) => {
+		expect(guessMapping(table.headers, fields)).toEqual([
+			'contact:firstName',
+			'contact:lastName',
+			'contact:email',
+			'contact:birthday',
+			'field:size',
+			'field:diet',
+			'field:age',
+			null,
+		])
+	})
+
+	it('propose de recréer le champ source', ({ expect }) => {
+		expect(table.hints?.[7]).toEqual({ name: 'T-shirt', type: 'boolean', options: undefined })
+		expect(table.hints?.[0]).toBeUndefined()
+	})
+
+	it("n'importe ni ne valide les lignes décochées", ({ expect }) => {
+		const mapping = guessMapping(table.headers, fields)
+		const excluded = new Set([1])
+		expect(reportColumns(table, mapping, fields, excluded)[5].status).toBe('ok')
+		expect(reportColumns(table, mapping, fields)[5].status).toBe('invalid')
+		const { rows } = buildMembers(table, mapping, fields, { firstLine: 1, excluded })
+		expect(rows.map(({ line, firstName }) => [line, firstName])).toEqual([[1, 'Ada']])
 	})
 })

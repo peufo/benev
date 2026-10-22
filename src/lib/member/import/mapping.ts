@@ -92,10 +92,12 @@ export type ColumnReport = {
 	invalid: Map<number, string>
 }
 
+/** Une ligne exclue de l'import n'a rien à valider: sa valeur fautive ne doit rien bloquer. */
 export function reportColumns(
 	table: CsvTable,
 	mapping: ColumnTarget[],
-	fields: ImportField[]
+	fields: ImportField[],
+	excluded: ReadonlySet<number> = new Set()
 ): ColumnReport[] {
 	const usage = new Map<string, number>()
 	for (const target of mapping) {
@@ -111,6 +113,7 @@ export function reportColumns(
 		if (!target || !resolved) return { status: 'unmapped', invalid }
 
 		table.rows.forEach((row, index) => {
+			if (excluded.has(index)) return
 			const issue = validateCell(row[column], resolved)
 			if (issue) invalid.set(index, issue)
 		})

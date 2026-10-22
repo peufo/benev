@@ -28,14 +28,22 @@ export const MAX_IMPORT_INVITES = 50
 
 const TRUE = ['oui', 'yes', 'true', 'vrai', '1', 'x']
 
+export type BuildOptions = {
+	/** Le numéro de la première ligne: 2 sous l'en-tête d'un fichier, 1 sans fichier derrière. */
+	firstLine?: number
+	/** Les lignes décochées: ni importées ni écartées, absentes du rapport. */
+	excluded?: ReadonlySet<number>
+}
+
 /**
- * Les lignes du fichier, converties selon le mappage. Une colonne ignorée, sans champ ou en
- * erreur n'écrit rien: `canImport` refuse déjà un mappage qui en contient d'erronées.
+ * Les lignes de la source, converties selon le mappage. Une colonne ignorée, sans champ ou en
+ * erreur n'écrit rien: `importBlocker` refuse déjà un mappage qui en contient d'erronées.
  */
 export function buildMembers(
 	table: CsvTable,
 	mapping: ColumnTarget[],
-	fields: ImportField[]
+	fields: ImportField[],
+	{ firstLine = 2, excluded = new Set() }: BuildOptions = {}
 ): { rows: ImportRow[]; skipped: SkippedRow[] } {
 	const targets = mapping.map((target) =>
 		target && target !== 'ignore' ? resolveTarget(target, fields) : null
@@ -45,7 +53,8 @@ export function buildMembers(
 	const emails = new Set<string>()
 
 	table.rows.forEach((cells, index) => {
-		const row: ImportRow = { line: index + 2, firstName: '', lastName: '', profile: {} }
+		if (excluded.has(index)) return
+		const row: ImportRow = { line: index + firstLine, firstName: '', lastName: '', profile: {} }
 
 		targets.forEach((target, column) => {
 			const value = cells[column]

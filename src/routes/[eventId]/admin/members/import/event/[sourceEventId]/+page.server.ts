@@ -1,5 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { permission, prisma } from '#lib/server/index.js'
+import { getSourceMembers } from '#lib/server/memberImport.js'
+import { memberTable } from '#lib/member/import/index.js'
 
 export const load = async ({ locals, parent, params: { eventId, sourceEventId } }) => {
 	if (sourceEventId === eventId) error(400, 'Un évènement ne peut pas importer ses propres membres')
@@ -7,10 +9,13 @@ export const load = async ({ locals, parent, params: { eventId, sourceEventId } 
 	await parent()
 	await permission.admin(sourceEventId, locals)
 
-	return {
-		sourceEvent: await prisma.event.findUniqueOrThrow({
+	const [sourceEvent, { members, fields }] = await Promise.all([
+		prisma.event.findUniqueOrThrow({
 			where: { id: sourceEventId, deletedAt: null },
 			select: { id: true, name: true },
 		}),
-	}
+		getSourceMembers(sourceEventId),
+	])
+
+	return { sourceEvent, table: memberTable(members, fields) }
 }
