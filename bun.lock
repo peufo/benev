@@ -28,7 +28,7 @@
         "dayjs": "^1.11.23",
         "debounce": "^1.2.1",
         "devalue": "^5.8.1",
-        "fuma": "^3.0.0",
+        "fuma": "^3.0.2",
         "ical-generator": "^8.1.1",
         "js-confetti": "^0.11.0",
         "litepicker": "^2.0.12",
@@ -928,7 +928,7 @@
 
     "fsevents": ["fsevents@2.3.3", "", { "os": "darwin" }, "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="],
 
-    "fuma": ["fuma@3.0.0", "", { "dependencies": { "@faker-js/faker": "^10.4.0", "@lucide/svelte": "^1.14.0", "dayjs": "^1.11.20", "debounce": "^3.0.0", "devalue": "^5.7.1", "dotenv": "^17.4.2", "fuse.js": "^7.3.0", "litepicker": "^2.0.12", "perod": "^1.4.1", "runed": "^0.37.1", "svelte-easy-crop": "^5.0.1", "svelte-sonner": "^1.1.1", "tippy.js": "^6.3.7", "zod": "^4.4.1" }, "peerDependencies": { "@sveltejs/kit": "^3.0.0-next.0", "daisyui": "^5.5.17", "svelte": "^5.56.4", "tailwindcss": "^4.1.18" } }, "sha512-uvaNNWJ1MIdnk4fm6rljLfcBm42IIdXSL326ZvGQgVGCfm14QT8eCyG/lI0PC0SC5DNVb91gfjpbjPB1aF5WbA=="],
+    "fuma": ["fuma@3.0.2", "", { "dependencies": { "@faker-js/faker": "^10.4.0", "@lucide/svelte": "^1.14.0", "dayjs": "^1.11.20", "debounce": "^3.0.0", "devalue": "^5.7.1", "dotenv": "^17.4.2", "fuse.js": "^7.3.0", "litepicker": "^2.0.12", "perod": "^1.4.1", "runed": "^0.37.1", "svelte-easy-crop": "^5.0.1", "svelte-sonner": "^1.1.1", "tippy.js": "^6.3.7", "zod": "^4.4.1" }, "peerDependencies": { "@sveltejs/kit": "^3.0.0-next.0", "daisyui": "^5.5.17", "svelte": "^5.56.4", "tailwindcss": "^4.1.18" } }, "sha512-yGk+Yet4P7kZb1qCnGCZhFDgDwUNHGmZo3Q0zwbOUyI1y0H9NibM206AsRB13dq0wnze9/olGqPmpWaUEIT+Ng=="],
 
     "fuse.js": ["fuse.js@7.5.0", "", {}, "sha512-sQtrEfA+ez/3G0cCZecF70oqpCRttCexYUG4mUrtWL49ULUzUyxokt5kyqwtKzj1270RaKih+hcP3qLcumccow=="],
 
