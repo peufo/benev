@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { useEvent } from './event'
-import { seedPeriod, seedTeam, seedUser, signIn } from './seed'
+import { prisma, seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
 
 test.describe.serial('Plan', () => {
@@ -234,5 +234,32 @@ test.describe.serial('Plan', () => {
 			.first()
 			.evaluate((el) => (el as HTMLElement).offsetWidth)
 		expect(await grid.evaluate((el) => el.scrollWidth)).toBe(scaleWidth)
+	})
+
+	/**
+	 * Les créneaux se placent en temps écoulé, l'échelle en heures affichées: le dimanche du
+	 * passage à l'heure d'hiver doit donc compter 25 cases, sans quoi tout ce qui le suit glisse
+	 * d'une heure. Date et fuseau sont fixés: le navigateur de la CI est en UTC, et la bascule
+	 * n'arrive que deux fois l'an.
+	 */
+	test("Le changement d'heure ne décale pas les créneaux", async () => {
+		await prisma.event.update({ where: { id: event.eventId }, data: { timezone: 'Europe/Zurich' } })
+		const team = await seedTeam(event.eventId, 'Bascule')
+		// Lundi 26 octobre 2026, 10:00 à Zurich: le lendemain du passage à l'heure d'hiver.
+		const period = await seedPeriod(team.id, { at: new Date('2026-10-26T09:00:00Z') })
+
+		const grid = await gotoPlan('?cursor=2026-10-25T12:00:00.000Z')
+		const card = grid.locator(`[id="${period.id}"]`)
+		await expect(card).toBeVisible()
+
+		const days = grid.locator('> div').first().locator('> div')
+		const sunday = days.filter({ hasText: 'dimanche 25.10' })
+		const monday = days.filter({ hasText: 'lundi 26.10' })
+		const [sundayBox, mondayBox] = await Promise.all([sunday.boundingBox(), monday.boundingBox()])
+		expect(sundayBox!.width / mondayBox!.width).toBeCloseTo(25 / 24)
+
+		const ten = monday.getByText('10', { exact: true })
+		const [cardBox, tenBox] = await Promise.all([card.boundingBox(), ten.boundingBox()])
+		expect(Math.abs(cardBox!.x - tenBox!.x)).toBeLessThanOrEqual(2)
 	})
 })

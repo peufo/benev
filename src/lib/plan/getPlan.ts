@@ -1,4 +1,5 @@
 import { daytz } from '#lib/dayjs.js'
+import { getEventTimeZone } from '#lib/timezone.js'
 import type { PlanData } from '#lib/server/index.js'
 import { getDays } from './getDays'
 import type { Plan } from './types'
@@ -6,7 +7,7 @@ import type { Plan } from './types'
 export function getPlan(data: PlanData): Plan {
 	const start = daytz(data.range.start).startOf('day')
 	const end = daytz(data.range.end).endOf('day')
-	const days = getDays(start, end)
+	const days = getDays(start, end, getEventTimeZone())
 	const milestones = data.milestones.map((m) => ({ ...m, time: daytz(m.timestamp) }))
 	return {
 		axis: data.axis,

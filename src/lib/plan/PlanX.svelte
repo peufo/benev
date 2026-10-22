@@ -31,7 +31,11 @@
 	function createMilestoneAt(event: MouseEvent) {
 		const element = event.currentTarget as HTMLElement
 		const offsetX = parseInt(element.style.translate) - TEAM_HEADER_WIDTH + element.offsetWidth / 2
-		const timestamp = plan.start.add(offsetX / plan.hourSize, 'hour').startOf('hour')
+		// Relu dans le fuseau: `add()` garderait le décalage de `plan.start`, et `startOf` arrondirait
+		// une heure trop loin passé un changement d'heure.
+		const timestamp = daytz(
+			plan.start.valueOf() + time(offsetX / plan.hourSize, 'hour').to('ms')
+		).startOf('hour')
 		goto(urlParam.with({ form_milestone: JSON.stringify({ timestamp: timestamp.toJSON() }) }), {
 			replace: true,
 			reset: false,
@@ -112,12 +116,14 @@
 				</div>
 				<!-- HOURS -->
 				<div class="flex text-sm">
-					{#each hours.filter((h, i) => !(i % hourSpan)) as hour (hour)}
-						{@const isEndNextDay = hour + hourSpan > 24}
-						{@const span = isEndNextDay ? 24 - hour : hourSpan}
-						<div style:width="{plan.hourSize * span}px" class="border-l border-hard px-1">
-							{isEndNextDay ? '' : hour.toString().padStart(2, '0')}
-						</div>
+					<!-- Clé par index: au passage à l'heure d'hiver, la même heure revient deux fois. -->
+					{#each hours as hour, i (i)}
+						{#if !(i % hourSpan)}
+							{@const span = Math.min(hourSpan, hours.length - i)}
+							<div style:width="{plan.hourSize * span}px" class="border-l border-hard px-1">
+								{span < hourSpan ? '' : hour.toString().padStart(2, '0')}
+							</div>
+						{/if}
 					{/each}
 				</div>
 			</div>

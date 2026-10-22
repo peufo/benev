@@ -80,12 +80,14 @@
 				</div>
 				<!-- HOURS -->
 				<div class="flex flex-col items-end text-sm text-right">
-					{#each hours.filter((h, i) => !(i % hourSpan)) as hour (hour)}
-						{@const isEndNextDay = hour + hourSpan > 24}
-						{@const span = isEndNextDay ? 24 - hour : hourSpan}
-						<div style:height="{plan.hourSize * span}px" class="border-t px-1">
-							{isEndNextDay ? '' : hour.toString().padStart(2, '0')}
-						</div>
+					<!-- Clé par index: au passage à l'heure d'hiver, la même heure revient deux fois. -->
+					{#each hours as hour, i (i)}
+						{#if !(i % hourSpan)}
+							{@const span = Math.min(hourSpan, hours.length - i)}
+							<div style:height="{plan.hourSize * span}px" class="border-t px-1">
+								{span < hourSpan ? '' : hour.toString().padStart(2, '0')}
+							</div>
+						{/if}
 					{/each}
 				</div>
 			</div>

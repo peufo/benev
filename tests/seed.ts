@@ -153,10 +153,21 @@ export function seedTeam(eventId: string, name: string, state: TeamState = 'draf
  * Un créneau à venir. Les dates de l'évènement ne suivent pas, faute de la synchronisation que ce
  * client n'a pas, ce dont aucun test n'a besoin: elles n'encadrent rien côté lecture.
  */
-export function seedPeriod(teamId: string, { inDays = 7, hours = 2, maxSubscribe = 4 } = {}) {
-	const start = new Date()
-	start.setDate(start.getDate() + inDays)
-	start.setMinutes(0, 0, 0)
+/** Relatif à aujourd'hui par défaut; `at` fixe le début quand le test vise une date précise. */
+export function seedPeriod(
+	teamId: string,
+	{
+		inDays = 7,
+		hours = 2,
+		maxSubscribe = 4,
+		at,
+	}: { inDays?: number; hours?: number; maxSubscribe?: number; at?: Date } = {}
+) {
+	const start = at ? new Date(at) : new Date()
+	if (!at) {
+		start.setDate(start.getDate() + inDays)
+		start.setMinutes(0, 0, 0)
+	}
 	const end = new Date(start.getTime() + hours * 60 * 60 * 1000)
 	return prisma.period.create({ data: { teamId, start, end, maxSubscribe } })
 }
