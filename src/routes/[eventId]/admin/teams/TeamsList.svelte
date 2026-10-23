@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { MoveVerticalIcon, PlusIcon, SearchIcon } from '@lucide/svelte'
-	import { isHttpError } from '@sveltejs/kit'
 	import { goto, refreshAll } from '$app/navigation'
 	import { page } from '$app/state'
 	import { toast } from 'svelte-sonner'
+	import { errorMessage } from '#lib/error.js'
 	import { listEditable, tip, urlParam, useCommand } from 'fuma'
 	import Progress from '#lib/Progress.svelte'
 	import { Placeholder } from '#lib/ui/index.js'
@@ -89,7 +89,7 @@
 			toast.success('Nouvel ordre sauvegardé')
 		} catch (err) {
 			console.error(err)
-			toast.error(isHttpError(err) ? err.body.message : 'Réordonnancement impossible')
+			toast.error(errorMessage(err, 'Réordonnancement impossible'))
 		}
 	}
 </script>

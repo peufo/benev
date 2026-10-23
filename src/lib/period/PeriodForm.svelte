@@ -20,6 +20,7 @@
 	import { searchTags } from '#lib/tag/tag.remote.js'
 	import { TagSelectItem } from '#lib/tag/index.js'
 	import { toast } from 'svelte-sonner'
+	import { errorMessage } from '#lib/error.js'
 	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { PERIOD_DEFAULT_MINUTES } from '#lib/constant/index.js'
 	import { getEventTimeZone } from '#lib/timezone.js'
@@ -138,7 +139,7 @@
 			})
 		} catch (err) {
 			console.error(err)
-			toast.error('La duplication a échoué')
+			toast.error(errorMessage(err, 'La duplication a échoué'))
 		}
 	}
 

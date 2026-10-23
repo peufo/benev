@@ -1,5 +1,6 @@
 import { isWithinExpiration, generateRandomString } from 'lucia/utils'
 import type { TokenType } from '@prisma/client'
+import { error } from '@sveltejs/kit'
 import { prisma } from '.'
 
 const HOURE = 1000 * 60 * 60
@@ -23,14 +24,17 @@ export const generateToken = async (tokenType: TokenType, userId: string, expire
 	return tokenId
 }
 
+/**
+ * Consomme le jeton. Un lien déjà servi et un lien périmé se disent de la même façon: dans les
+ * deux cas, ce qu'il reste à faire est d'en demander un autre.
+ */
 export const validateToken = async (tokenType: TokenType, tokenId: string) => {
-	const [token] = await prisma.$transaction([
-		prisma.token.findUniqueOrThrow({ where: { id: tokenId, type: tokenType } }),
-		prisma.token.delete({ where: { id: tokenId, type: tokenType } }),
-	])
-
-	const tokenExpires = Number(token.expires)
-	if (!isWithinExpiration(tokenExpires)) throw new Error('Expired token')
+	const token = await prisma.token.findUnique({ where: { id: tokenId, type: tokenType } })
+	// Le compte de lignes effacées tranche entre deux soumissions simultanées du même lien.
+	const consumed = token ? (await consumeToken(tokenId)).count > 0 : false
+	if (!token || !consumed || !isWithinExpiration(Number(token.expires))) {
+		error(400, 'Ce lien a expiré, demande-en un nouveau')
+	}
 	// `userId` n'est nul que pour un jeton `invitation`, qui vise un membre: les autres types
 	// n'existent que rattachés à un compte.
 	if (!token.userId) throw new Error('Token without user')

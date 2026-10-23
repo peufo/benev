@@ -58,6 +58,20 @@ export default ts.config(
 		},
 	},
 	{
+		// Une `Error` levée dans une fonction distante arrive au client en 500 « Une erreur est
+		// survenue »: un refus attendu passe par `error(4xx, '…')`, qui garde son message.
+		files: ['**/*.remote.ts'],
+		rules: {
+			'no-restricted-syntax': [
+				'error',
+				{
+					selector: "ThrowStatement > NewExpression[callee.name='Error']",
+					message: "Lève un refus avec error(4xx, '…') de @sveltejs/kit, pas une Error.",
+				},
+			],
+		},
+	},
+	{
 		files: ['**/*.cjs'],
 		rules: {
 			'@typescript-eslint/no-require-imports': 'off',

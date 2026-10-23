@@ -3,6 +3,7 @@
 	import { slide } from 'svelte/transition'
 	import { goto } from '$app/navigation'
 	import { toast } from 'svelte-sonner'
+	import { errorMessage } from '#lib/error.js'
 	import type { Field } from '@prisma/client'
 	import { Placeholder } from '#lib/ui/index.js'
 	import { listEditable } from 'fuma'
@@ -22,7 +23,8 @@
 			await reorderMemberFields(reorderedFields.map(({ id }) => id))
 			toast.success('Nouvel ordre sauvegardé')
 		} catch (err) {
-			toast.error(err instanceof Error ? err.message : 'Réordonnancement impossible')
+			console.error(err)
+			toast.error(errorMessage(err, 'Réordonnancement impossible'))
 		}
 	}
 </script>

@@ -20,7 +20,7 @@ export const GET = async ({ url, cookies, locals }) => {
 		if (existingUser) return existingUser
 
 		const { email } = googleUser
-		if (!email) error(403, 'You need provide an email from your Google account')
+		if (!email) error(403, "Ton compte Google ne partage pas d'adresse email")
 
 		const userAlreadyExist = await prisma.user.findFirst({ where: { email } })
 		if (userAlreadyExist) return userAlreadyExist

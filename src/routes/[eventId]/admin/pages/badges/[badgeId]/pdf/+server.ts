@@ -47,7 +47,7 @@ export const GET = async ({ url, locals, params: { eventId, badgeId } }) => {
 		}),
 	]).catch((err) => {
 		console.error(err)
-		error(404, `Not found: ${JSON.stringify({ eventId, badgeId })}`)
+		error(404, 'Badge introuvable')
 	})
 
 	const DIMENSIONS_MM = {

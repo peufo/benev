@@ -2,11 +2,11 @@
 	import { resolve } from '$app/paths'
 	import { slide } from 'svelte/transition'
 	import { MediaQuery } from 'svelte/reactivity'
-	import { isHttpError } from '@sveltejs/kit'
 	import { InputBoolean, InputString } from 'fuma'
 	import { toast } from 'svelte-sonner'
 	import { page } from '$app/state'
 	import { modelEmail } from '#lib/models/index.js'
+	import { errorCode, errorMessage } from '#lib/error.js'
 	import { contextContainer } from '#lib/ui/context.js'
 	import Oauth from './Oauth.svelte'
 	import { loginUser, registerUser, resetPassword } from './user.remote'
@@ -77,13 +77,6 @@
 		setMode(mode === 'login' ? 'register' : 'login')
 	}
 
-	/** `error()` traverse les remote functions en `HttpError`, qui n'est pas une `Error`. */
-	function getErrorMessage(err: unknown): string {
-		if (isHttpError(err)) return err.body.message
-		if (err instanceof Error) return err.message
-		return String(err)
-	}
-
 	async function handleAuth(submit: () => Promise<boolean>) {
 		resetPasswordIssue = ''
 		try {
@@ -93,21 +86,18 @@
 			toast.success(mode === 'login' ? 'Content de te revoir' : 'Bienvenue')
 			await onSuccess?.()
 		} catch (err) {
-			const reason = getErrorMessage(err)
-
-			if (reason.includes('This account already created from an invitation')) {
-				recoveryNeeded = true
-				setMode('login')
-				return
-			}
-			if (reason.includes('This account already exists')) {
-				setMode('login')
-				toast.error('Un compte existe déjà avec cet email. Connecte-toi ci-dessous.')
-				return
-			}
-			if (reason.includes('Invalid credentials')) {
-				toast.error('Email ou mot de passe incorrect')
-				return
+			switch (errorCode(err)) {
+				case 'account_invited':
+					recoveryNeeded = true
+					setMode('login')
+					return
+				case 'account_exists':
+					setMode('login')
+					toast.error(`${errorMessage(err)}. Connecte-toi ci-dessous.`)
+					return
+				case 'invalid_credentials':
+					toast.error(errorMessage(err))
+					return
 			}
 
 			console.error(err)
@@ -137,8 +127,8 @@
 			// Le serveur ne dit pas si l'adresse est connue, le message non plus.
 			toast.success('Si un compte existe avec cet email, le lien vient de partir')
 		} catch (err) {
-			if (getErrorMessage(err).includes('Too many reset requests')) {
-				resetPasswordIssue = 'Trop de demandes. Réessaie dans quelques minutes.'
+			if (errorCode(err) === 'reset_rate_limited') {
+				resetPasswordIssue = errorMessage(err)
 				resetCooldown = RESET_COOLDOWN_S
 				return
 			}

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { UploadIcon } from '@lucide/svelte'
-	import { isHttpError } from '@sveltejs/kit'
 	import { beforeNavigate, goto } from '$app/navigation'
 	import { InputBoolean, tip } from 'fuma'
 	import { eventPath } from '#lib/eventPath.js'
 	import { plural } from '#lib/utils.js'
+	import { errorMessage } from '#lib/error.js'
 	import { IMPORT_BATCH_SIZE } from '#lib/models/memberImport.js'
 	import {
 		MAX_IMPORT_INVITES,
@@ -47,12 +47,6 @@
 		if (importing) cancel()
 	})
 
-	// Le serveur plafonne déjà chaque lot: ce refus ne vient que d'un quota dépassé par ailleurs
-	// pendant l'import.
-	function translateError(message: string) {
-		return message === 'Tier quota reached' ? 'Quota de ton offre atteint' : message
-	}
-
 	async function start() {
 		importing = true
 		done = 0
@@ -70,9 +64,7 @@
 					}))
 				)
 			} catch (err) {
-				const reason = isHttpError(err)
-					? translateError(err.body.message)
-					: 'Le serveur ne répond pas'
+				const reason = errorMessage(err, 'Le serveur ne répond pas')
 				results.push(
 					...batch.map((row) => ({
 						line: row.line,

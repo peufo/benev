@@ -7,6 +7,7 @@
 	import { DropDown, tip } from 'fuma'
 	import { Pagination } from 'fuma'
 	import { toast } from 'svelte-sonner'
+	import { errorMessage } from '#lib/error.js'
 	import { setMessageState } from './message.remote'
 
 	let { data } = $props()
@@ -33,11 +34,11 @@
 	async function updateMessageState(message: Message, state: Message['state']) {
 		try {
 			await setMessageState({ messageId: message.id, state })
-			toast.success('State updated')
+			toast.success('État mis à jour')
 			await refreshAll()
 		} catch (err) {
 			console.error(err)
-			toast.error('error')
+			toast.error(errorMessage(err, "L'état n'a pas pu être changé"))
 		}
 	}
 </script>

@@ -2,6 +2,7 @@ import type { Invite, MemberWithComputedValues } from '#lib/server/index.js'
 import type { Event, Media, Team } from '@prisma/client'
 import { modelMemberCondition } from '#lib/models/index.js'
 import type { LogDataMap } from '#lib/log/logMap.js'
+import type { ErrorCode } from '#lib/error.js'
 
 declare global {
 	namespace App {
@@ -23,6 +24,10 @@ declare global {
 			isLeader?: boolean
 			team?: Team
 			userIsRoot?: boolean
+		}
+		interface Error {
+			/** Posé seulement quand le client doit réagir à l'erreur, pas juste l'afficher. */
+			code?: ErrorCode
 		}
 	}
 }

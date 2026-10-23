@@ -1,6 +1,6 @@
 import type { FieldType } from '@prisma/client'
 import { form, getRequestEvent } from '$app/server'
-import { redirect } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import { modelBadgeUpdate } from '#lib/models/index.js'
 import { resolve } from '$app/paths'
 import { permission, prisma } from '#lib/server/index.js'
@@ -48,6 +48,7 @@ function idToConnectionData(id?: string | null) {
 async function checkFieldType(id: string | undefined, ...types: FieldType[]) {
 	if (!id) return
 	const field = await prisma.field.findUniqueOrThrow({ where: { id } })
-	if (!types.includes(field.type))
-		throw new Error(`The "${field.label}" field is not of type ["${types}"]`)
+	if (!types.includes(field.type)) {
+		error(400, `Le champ « ${field.label} » ne convient pas à cet emplacement`)
+	}
 }

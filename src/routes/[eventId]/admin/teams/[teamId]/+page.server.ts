@@ -8,11 +8,11 @@ export const load = async ({ parent, locals, params: { eventId, teamId } }) => {
 	// Le root n'est responsable de rien: sans ce drapeau, `useAddTeamComputedValues` le rangerait
 	// en lecture seule sur tous les secteurs.
 	const ctx = actor ? { member: actor, event } : { event, isLeader: true }
-	const team = await getTeam(teamId, ctx).catch(() => error(404, 'not found'))
+	const team = await getTeam(teamId, ctx).catch(() => error(404, 'Secteur introuvable'))
 
 	// `getTeam` ne cherche que par `id`: sans cette vérification, le secteur d'un autre évènement
 	// se lirait depuis n'importe quelle URL.
-	if (team.eventId !== eventId) error(404, 'not found')
+	if (team.eventId !== eventId) error(404, 'Secteur introuvable')
 
 	return { team }
 }

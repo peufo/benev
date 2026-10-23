@@ -179,11 +179,24 @@ Things to know when touching this layer:
 
 - **`await submit()` returns a boolean.** `false` means validation failed and the issues are
   already rendered under the fields — do not treat it as success.
-- **Thrown errors are `HttpError`, which does _not_ extend `Error`.** Use `isHttpError(err)` from
-  `@sveltejs/kit` and read `err.body.message`. `err instanceof Error` is false and `String(err)`
-  yields JSON.
-- Uncaught exceptions in a remote function surface to the client as a generic 500. Wrap expected
-  failures in `error(status, message)` so the UI can say something useful.
+- **Errors follow one rule in three layers**, with `#lib/error.ts` as the entry point (it stays
+  importable from the client):
+  1. The server writes the message **in French, where it raises the error**:
+     `error(403, 'Ce créneau est complet')`. That is where the context is known; there is no
+     catalogue of messages. An expected refusal is always `error(4xx, '…')`, never
+     `throw new Error`, which reaches the client as a 500 and loses its text (ESLint refuses it in
+     `*.remote.ts`).
+  2. When the client must **react** rather than just display, the error also carries a typed
+     `code`: `error(401, 'Email ou mot de passe incorrect', { code: 'invalid_credentials' })`.
+     `ErrorCode` lists them and types `App.Error.code`. Never compare message strings.
+  3. `handleError` in `hooks.server.ts` and `hooks.client.ts` catches the rest: a bare
+     `error(403)` (whose message SvelteKit sets to `Error: 403`), the framework's own errors (an
+     unknown route), invalid remote arguments, and unexpected exceptions, which it logs and
+     answers with « Une erreur est survenue », so no internal text (Prisma's) reaches the client.
+- **Read an error with `errorMessage(err, fallback)` and `errorCode(err)`**, never by hand.
+  Thrown errors are `HttpError`, which does _not_ extend `Error`: `err instanceof Error` is false
+  and `String(err)` yields JSON. `errorMessage` returns the component's `fallback` for a 5xx or a
+  network failure, since the component knows which gesture failed. `enhanceForm` already does it.
 - **Every control of a `form()` comes from `fields.x.as(...)`**, a hidden input as much as a text
   field. SvelteKit suffixes each name with the id of its remote function (`state/<id>`) and refuses
   a submission carrying any other key (`form_field_unbound`). A hidden value is
@@ -850,7 +863,8 @@ breaks `svelte-check`.
   at build time, but stay vigilant with dynamic imports.
 - **Validation**: every remote function takes a Zod schema. Do not hand-parse `FormData`.
 - **Account enumeration**: auth flows must answer identically whether or not an account exists.
-  `loginUser` returns a single `Invalid credentials` for both unknown email and wrong password;
+  `loginUser` returns a single `invalid_credentials` error, same message, for both unknown email
+  and wrong password;
   `resetPassword` returns silently for unknown addresses.
 - **Auth redirects**: unauthenticated users go to `/auth?redirectTo=...`. Unauthorized users get
   HTTP 403.
@@ -861,11 +875,10 @@ breaks `svelte-check`.
 
 ## Useful Context for Agents
 
-- **French-first**: all user-facing strings are in French, including error messages. Server-side
-  sentinel strings (`'Invalid credentials'`, `'This account already exists'`) stay in English and
-  are translated at the component boundary. That French is **inclusive**: epicene wording first,
-  the midpoint otherwise (`organisateur·ice`, `invité·e`) — the rule and its separator live in
-  `PRODUCT.md`.
+- **French-first**: all user-facing strings are in French, including error messages, which the
+  server writes in French where it raises them (see the error rule under Mutations). That French
+  is **inclusive**: epicene wording first, the midpoint otherwise (`organisateur·ice`,
+  `invité·e`); the rule and its separator live in `PRODUCT.md`.
 - **Manual edits between prompts**: the user frequently edits files manually between prompts.
   **Always re-read a file before modifying it.** Do not assume it still matches your last edit.
 - **Never commit**: leave changes in the working tree. The user commits. One exception: a session

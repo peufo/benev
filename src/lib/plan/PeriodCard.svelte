@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner'
-	import { isHttpError } from '@sveltejs/kit'
+	import { errorMessage } from '#lib/error.js'
 	import type { Component } from 'svelte'
 	import type { TeamState } from '@prisma/client'
 	import type { IconProps } from '@lucide/svelte'
@@ -78,8 +78,7 @@
 			onupdate?.({ ...period, start: moved.start, end: moved.end })
 			toast.success('Créneau mis à jour')
 		} catch (err) {
-			// `HttpError` n'étend pas `Error`: son message se lit dans `body`.
-			toast.error(isHttpError(err) ? err.body.message : 'Erreur')
+			toast.error(errorMessage(err, "Le créneau n'a pas pu être déplacé"))
 			console.error(err)
 		}
 		deltaStartMs = 0

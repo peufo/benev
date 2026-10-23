@@ -233,7 +233,7 @@ export const acceptInvite = form(
 		// `@@unique([email, eventId])` et la recopie de l'adresse sur le membre rendraient un 500 à
 		// la place de ce que le tunnel sait expliquer.
 		const taken = await prisma.member.count({ where: { eventId, email: session.user.email } })
-		if (taken) error(403, 'Email verification required')
+		if (taken) error(403, 'Une fiche porte déjà ton adresse: vérifie ton email pour la reprendre')
 
 		const { id } = await prisma.member.create({
 			data: {
@@ -325,7 +325,8 @@ export const deleteMember = form(
 		const member = await permission.member(eventId, locals)
 		const isSelf = member.id === memberId
 		if (!isSelf) await permission.admin(eventId, locals)
-		if (isSelf && member.roles.includes('owner')) error(403, `Owner can't delete his participation`)
+		if (isSelf && member.roles.includes('owner'))
+			error(403, 'Le ou la propriétaire ne peut pas quitter son évènement')
 		const deleted = await prisma.member.delete({ where: { id: memberId, eventId } })
 		await createLog('member_delete', { member: deleted, actor: member, isSelf })
 		redirect(303, redirectTo || '/me')

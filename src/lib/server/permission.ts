@@ -9,6 +9,8 @@ import {
 	getMemberProfile,
 } from '#lib/server/member.js'
 import type { Session } from 'lucia'
+import { Prisma } from '@prisma/client'
+import { ROLE_LABELS } from '#lib/member/roles.js'
 
 export const permission = {
 	root: rootPermission,
@@ -29,7 +31,7 @@ export const permission = {
 async function rootPermission(locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) error(401)
-	if (session.user.email !== ROOT_USER) error(403, "You're not root user")
+	if (session.user.email !== ROOT_USER) error(403, "Réservé à l'équipe benevio")
 	return session.user
 }
 
@@ -73,17 +75,21 @@ async function checkMemberRole(
 	role: MemberRole,
 	checkQuota = true
 ): Promise<MemberWithComputedValuesAndAccount> {
-	try {
-		const member = await getMemberProfile({ userId: session.user.id, eventId })
-		if (!member.roles.includes(role)) throw new Error(`Member don't have role '${role}'`)
-		if (checkQuota && (await isTierQuotaReached(member.event))) {
-			throw new Error('Tier quota reached')
-		}
-		return { ...member, email: session.user.email, userId: session.user.id }
-	} catch (err: unknown) {
-		if (err instanceof Error) error(403, err.message)
-		error(403)
+	// Seule l'absence de fiche est un refus attendu. Toute autre erreur de lecture remonte en 500,
+	// pour que `handleError` la journalise au lieu d'en faire passer le texte au client.
+	const member = await getMemberProfile({ userId: session.user.id, eventId }).catch((err) => {
+		if (isRecordNotFound(err)) error(403, 'Tu ne fais pas partie de cet évènement')
+		throw err
+	})
+	if (!member.roles.includes(role)) error(403, `Ce geste demande le rôle ${ROLE_LABELS[role]}`)
+	if (checkQuota && (await isTierQuotaReached(member.event))) {
+		error(403, 'Quota de ton offre atteint')
 	}
+	return { ...member, email: session.user.email, userId: session.user.id }
+}
+
+function isRecordNotFound(err: unknown) {
+	return err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025'
 }
 
 async function leaderOfTeam(

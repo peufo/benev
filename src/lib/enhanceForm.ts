@@ -1,5 +1,5 @@
-import { isHttpError } from '@sveltejs/kit'
 import { toast } from 'svelte-sonner'
+import { errorMessage } from '#lib/error.js'
 
 /**
  * Surface minimale d'une instance de formulaire distant, volontairement plus large
@@ -35,8 +35,8 @@ type EnhanceFormOptions = {
  *
  * - `submit()` renvoie `false` quand la validation échoue: ce n'est **pas** un succès,
  *   et les messages sont déjà rendus sous les champs.
- * - Une erreur levée est un `HttpError`, qui n'étend pas `Error`: son message se lit
- *   dans `err.body.message` après `isHttpError(err)`.
+ * - Une erreur levée s'affiche par `errorMessage(err)` de `#lib/error.js`, qui lit le message
+ *   français écrit par le serveur.
  *
  * ```svelte
  * <form {...sendMessage.enhance(enhanceForm({
@@ -71,9 +71,7 @@ export function enhanceForm({
 			onsuccess?.(instance)
 		} catch (err) {
 			console.error(err)
-			// `HttpError` n'étend pas `Error`: `String(err)` rendrait du JSON.
-			if (isHttpError(err)) toast.error(err.body.message, { id })
-			else toast.error('Une erreur est survenue', { id })
+			toast.error(errorMessage(err), { id })
 		}
 	}
 }

@@ -1,5 +1,5 @@
 import { command, form, getRequestEvent } from '$app/server'
-import { redirect } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import z from 'zod'
 import { permission, prisma } from '#lib/server/index.js'
 import { normalizePath } from '#lib/normalizePath.js'
@@ -47,8 +47,7 @@ export const createBadge = form(async () => {
 		where: { id: eventId },
 		include: { badges: { select: { name: true } } },
 	})
-	if (event.badges.length >= 10)
-		throw new Error("You can't create more than 10 badge configuration")
+	if (event.badges.length >= 10) error(400, 'Dix badges au plus par évènement')
 
 	const badge = await prisma.badge.create({
 		data: {

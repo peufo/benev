@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import { form, getRequestEvent, query } from '$app/server'
-import { redirect } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import z from 'zod'
 import { modelCheckout } from '#lib/models/index.js'
 import { permission, prisma } from '#lib/server/index.js'
@@ -33,7 +33,7 @@ export const createCheckout = form(modelCheckout, async (data) => {
 			Array<Prisma.ProductUncheckedCreateWithoutCheckoutInput>(quantity).fill({ priceId, name })
 		)
 
-	if (products.length === 0) throw new Error('Aucun produit sélectionné')
+	if (products.length === 0) error(400, 'Aucun produit sélectionné')
 
 	await prisma.checkout.create({ data: { ...data, products: { create: products } } })
 	redirect(303, '/root/checkouts')

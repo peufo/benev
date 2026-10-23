@@ -42,8 +42,12 @@ export const registerUser = form(modelUserCreate, async (data) => {
 		const canSignIn = user.auth_key.some(
 			(key) => key.hashed_password !== null || !key.id.startsWith('email:')
 		)
-		if (!canSignIn) error(401, 'This account already created from an invitation')
-		error(401, 'This account already exists')
+		if (!canSignIn) {
+			error(401, 'Ce compte a été créé par une invitation: choisis ton mot de passe', {
+				code: 'account_invited',
+			})
+		}
+		error(401, 'Un compte existe déjà avec cet email', { code: 'account_exists' })
 	}
 	const newUser = await auth.createUser({
 		key: {
@@ -65,9 +69,9 @@ export const registerUser = form(modelUserCreate, async (data) => {
 export const loginUser = form(modelUserLogin, async ({ email, password }) => {
 	const { locals, cookies } = getRequestEvent()
 	// Lucia distingue clé inconnue et mot de passe faux; l'exposer permettrait d'énumérer les
-	// comptes. Sans ce `catch`, l'erreur remonte en 500 « Internal Error » côté client.
+	// comptes. Sans ce `catch`, l'erreur remonte en 500 côté client et ne dit plus rien.
 	const user = await auth.useKey('email', email, password).catch(() => {
-		error(401, 'Invalid credentials')
+		error(401, 'Email ou mot de passe incorrect', { code: 'invalid_credentials' })
 	})
 	const session = await auth.createSession({ userId: user.userId, attributes: {} })
 	locals.auth.setSession(session)
@@ -125,7 +129,9 @@ export const sendEmailVerification = form(async () => {
 const isResetRateLimited = createRateLimit({ windowMs: 15 * 60_000, max: 3 })
 
 export const resetPassword = command(modelEmail, async (email) => {
-	if (isResetRateLimited(email)) error(429, 'Too many reset requests')
+	if (isResetRateLimited(email)) {
+		error(429, 'Trop de demandes. Réessaie dans quelques minutes.', { code: 'reset_rate_limited' })
+	}
 	const user = await prisma.user.findUnique({ where: { email }, select: { id: true } })
 	if (!user) return
 	const tokenId = await generateToken('passwordReset', user.id)

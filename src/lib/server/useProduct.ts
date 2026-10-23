@@ -13,13 +13,13 @@ export async function useProduct(eventId: string, productId: string) {
 		}),
 	])
 	if (product.eventId) {
-		error(403, 'This product is already activated for an event')
+		error(403, 'Ce produit est déjà activé pour un évènement')
 	}
 	if (event.ownerId !== product.checkout.userId) {
-		error(403, 'The event owner and product owner must be the same person')
+		error(403, "Le produit doit appartenir au ou à la propriétaire de l'évènement")
 	}
 	if (event.tier === 'premium' || event.tier === 'pro') {
-		error(403, 'The event is already on tier "premium" or "pro"')
+		error(403, "Cet évènement a déjà l'offre premium ou pro")
 	}
 	if (event.tier === 'standard' && product.priceId === PRICE_STANDARD_TO_PREMIUM) {
 		return setEventTier('premium')
@@ -30,7 +30,7 @@ export async function useProduct(eventId: string, productId: string) {
 	if (event.tier === 'basic' && product.priceId === PRICE_STANDARD) {
 		return setEventTier('standard')
 	}
-	error(403, 'This product cannot be activated')
+	error(403, "Ce produit ne s'applique pas à cet évènement")
 
 	async function setEventTier(tier: EventTier) {
 		return prisma.$transaction([

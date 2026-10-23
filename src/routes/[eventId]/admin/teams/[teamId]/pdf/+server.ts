@@ -48,7 +48,7 @@ export const GET = async ({ locals, params: { eventId, teamId } }) => {
 			},
 		},
 	})
-	if (!team) error(404, 'not found')
+	if (!team) error(404, 'Secteur introuvable')
 
 	const sheet = teamSheet(team, team.event.timezone)
 	const doc = new PDFDocument({

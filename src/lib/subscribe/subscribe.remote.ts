@@ -54,7 +54,7 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 	if (!memberAuthor) error(403, `Tu n'es pas encore membre de cet évènement`)
 
 	if (periodIsComplet(period)) {
-		error(403, 'Sorry, this period is already complet')
+		error(403, 'Ce créneau est complet')
 	}
 
 	const isLeaderOfTeam = await permission

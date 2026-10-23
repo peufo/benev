@@ -2,8 +2,9 @@ import { auth, closeTransporter, drainEmailQueue } from '#lib/server/index.js'
 import { startScheduler, stopScheduler } from '#lib/server/tasks/index.js'
 import { SCHEDULER_DISABLED } from '$app/env/private'
 import { building } from '$app/env'
-import { sequence, type Handle } from '@sveltejs/kit/hooks'
+import { sequence, type Handle, type HandleServerError } from '@sveltejs/kit/hooks'
 import z from 'zod'
+import { normalizeCaughtError } from '#lib/error.js'
 
 // zod finalise ses messages au parse, pas à la construction du schéma: posée ici, au démarrage,
 // la locale vaut pour tous les modèles quel que soit leur ordre d'import. `form()` parse côté
@@ -30,3 +31,13 @@ const authentication: Handle = async ({ event, resolve }) => {
 }
 
 export const handle = sequence(authentication)
+
+/**
+ * Le filet des messages: un `error(403)` sans texte, une route inconnue ou une erreur imprévue
+ * arrivent en français au toast comme à `+error.svelte`. Définir ce hook remplace le log par
+ * défaut de SvelteKit, d'où le `console.error` des erreurs imprévues.
+ */
+export const handleError: HandleServerError = (caught) => {
+	if (caught.kind === 'unknown') console.error(caught.error)
+	return normalizeCaughtError(caught)
+}

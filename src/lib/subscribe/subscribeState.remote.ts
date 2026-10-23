@@ -63,7 +63,8 @@ export const setSubscribeState = form(
 
 		const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
 		const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
-		if (!isCreatorEdition && !isSubscriberEdition) error(403, 'Invalid edition')
+		if (!isCreatorEdition && !isSubscriberEdition)
+			error(403, 'Cette inscription ne peut pas passer à cet état')
 
 		let author = await permission.member(eventId, locals)
 		const isSelfAction = author.id === _subscribe.memberId
@@ -77,15 +78,15 @@ export const setSubscribeState = form(
 			author = await permission.leader(eventId, locals)
 			const isInLeaderTeams = author.leaderOf.find(({ id }) => id === _subscribe.period.teamId)
 			if (!author.roles.includes('admin') && !isInLeaderTeams)
-				error(403, "You're not leader of this team")
+				error(403, "Tu n'es pas responsable de ce secteur")
 		}
 
 		if (!isLeaderAction) {
-			if (!isSelfAction) error(403, "You can't self update subscribe status")
+			if (!isSelfAction) error(403, 'Seule la personne inscrite peut répondre à cette inscription')
 			// Un brouillon n'est pas visible du membre: il n'a rien à y répondre.
 			if (_subscribe.period.team.state === 'draft') error(403)
 			if ((state === 'cancelled' || state === 'denied') && !author.event.selfSubscribeCancelAllowed)
-				error(403, "L'annulation ou le refus d'une inscription n'est pas authorisé.")
+				error(403, "L'annulation ou le refus d'une inscription n'est pas autorisé")
 		}
 
 		if (state === 'accepted') {
@@ -106,7 +107,7 @@ export const setSubscribeState = form(
 		const { overflowPermitted } = _subscribe.period.team
 		if (state === 'accepted' || (state === 'request' && !overflowPermitted)) {
 			if (periodIsComplet(_subscribe.period)) {
-				error(403, 'Sorry, this period is already complet')
+				error(403, 'Ce créneau est complet')
 			}
 		}
 

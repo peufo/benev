@@ -98,6 +98,6 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 			tag: await parseFormKey(form_tag, (id) => prisma.tag.findUnique({ where: { id, eventId } })),
 		}
 	} catch {
-		error(404, 'not found')
+		error(404, "Cet évènement n'existe pas")
 	}
 }
