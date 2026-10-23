@@ -38,6 +38,7 @@
 	title="Dupliquer « {team.name} »"
 	maxWidth="26em"
 	class="surface-drawer"
+	classBody="flex flex-col"
 >
 	{#snippet children({ close })}
 		<form
@@ -51,7 +52,7 @@
 					},
 				})
 			)}
-			class="flex flex-col gap-4"
+			class="flex grow flex-col gap-4"
 		>
 			<p class="text-sm text-base-content/70">
 				La copie reprend les créneaux et les responsables, sans les inscriptions.
@@ -94,7 +95,10 @@
 				<Placeholder>Aucun créneau</Placeholder>
 			{/if}
 
-			<div class="flex flex-row-reverse border-t border-soft pt-4">
+			<!-- Fond opaque: la liste des créneaux défile dessous. -->
+			<div
+				class="sticky bottom-0 mt-auto flex flex-row-reverse border-t border-soft bg-base-100 py-4"
+			>
 				<button class="btn btn-primary">
 					<CopyPlusIcon size={20} />
 					Dupliquer le secteur
