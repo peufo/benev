@@ -13,4 +13,5 @@ vite.config.ts.timestamp-*
 /playwright-report
 /dumps
 .impeccable/hook.cache.json
+/.claude/worktrees
 /demos/.out

@@ -51,7 +51,13 @@ export default defineConfig({
 	// schémas construits dans fuma resteraient en anglais. Pour dayjs, c'est l'`include` ci-dessous
 	// qui ne porterait pas: il résout depuis la racine du projet, donc pas l'exemplaire imbriqué.
 	resolve: { dedupe: ['@sveltejs/kit', 'svelte', 'zod', 'dayjs'] },
-	server: { fs: { allow: ['media', '../fuma'] }, allowedHosts: ['mac-de-jo.local'] },
+	server: {
+		fs: { allow: ['media', '../fuma'] },
+		allowedHosts: ['mac-de-jo.local'],
+		// Les worktrees des agents Claude Code sont des copies complètes du dépôt sous la racine:
+		// surveillées, chacune de leurs écritures recharge le serveur de dev.
+		watch: { ignored: ['**/.claude/worktrees/**'] },
+	},
 	optimizeDeps: {
 		// Dépendances CommonJS atteintes depuis fuma, exclu du pré-bundling pour que ses
 		// modifications soient vues à chaud: sans demande explicite, le serveur de dev en sert

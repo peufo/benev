@@ -18,6 +18,7 @@ export default ts.config(
 			'static/',
 			'test-results/',
 			'playwright-report/',
+			'.claude/worktrees/',
 		],
 	},
 	js.configs.recommended,
