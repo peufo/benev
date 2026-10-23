@@ -868,7 +868,9 @@ breaks `svelte-check`.
   `PRODUCT.md`.
 - **Manual edits between prompts**: the user frequently edits files manually between prompts.
   **Always re-read a file before modifying it.** Do not assume it still matches your last edit.
-- **Never commit**: leave changes in the working tree. The user commits.
+- **Never commit**: leave changes in the working tree. The user commits. One exception: a session
+  running in a worktree (`.claude/worktrees/*`) commits its work as it goes, without asking;
+  `/integrate` then lands those commits on `dev`, rebased, and removes the worktree.
 - **Fuma first**: before writing a new input, table or dialog, check whether `fuma` already exports
   one. If it almost fits, fix it in `../fuma` rather than growing a local twin.
 - **Event-scoped data**: most entities (teams, members, pages, fields, badges) belong to an
