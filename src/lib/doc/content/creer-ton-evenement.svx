@@ -183,5 +183,7 @@ La copie arrive en brouillon, et ses secteurs et ses pages aussi, sauf la page d
 Renomme-la, corrige son adresse et pose la nouvelle affiche avant de la publier. Une nouvelle
 édition recommence son recrutement, et son quota avec.
 
-Tu peux aussi dupliquer un seul secteur depuis sa fiche, décalage compris. Celui-là **garde ses
-responsables**, pratique pour créer le samedi à partir du vendredi.
+Tu peux aussi dupliquer un seul secteur depuis sa fiche. Tu saisis un décalage en jours, et un
+aperçu montre chaque créneau à sa nouvelle date avant que tu valides. La copie reprend les mêmes
+horaires et **garde ses responsables** : pratique pour créer le samedi à partir du vendredi, il ne
+te reste qu'à la renommer.

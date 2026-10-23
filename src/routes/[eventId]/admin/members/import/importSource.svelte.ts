@@ -1,6 +1,7 @@
 import { getContext, setContext } from 'svelte'
 import { SvelteSet } from 'svelte/reactivity'
 import {
+	decodeCsv,
 	guessMapping,
 	type ColumnTarget,
 	type ImportField,
@@ -42,7 +43,12 @@ class ImportSource {
 
 	setCsv(file: File) {
 		this.reset()
-		this.text = { kind: 'csv', name: file.name, read: () => file.text(), header: true }
+		this.text = {
+			kind: 'csv',
+			name: file.name,
+			read: async () => decodeCsv(await file.arrayBuffer()),
+			header: true,
+		}
 	}
 
 	setPasted(text: string, header: boolean) {

@@ -75,11 +75,12 @@ export const deleteTeam = form(
 )
 
 export const cloneTeamForm = form(
-	z.object({ id: z.string(), deltaTime: z.number().default(0) }),
-	async ({ id, deltaTime }) => {
+	z.object({ id: z.string(), deltaDays: z.number().int() }),
+	async ({ id, deltaDays }) => {
 		const { locals, params } = getRequestEvent()
 		const eventId = params.eventId!
-		await permission.admin(eventId, locals)
+		// Rien à journaliser, donc pas d'acteur à exiger: le root, qui voit le bouton, duplique aussi.
+		await permission.adminOrRoot(eventId, locals)
 		const [teams, team] = await Promise.all([
 			prisma.team
 				.findMany({ where: { eventId }, select: { name: true } })
@@ -89,7 +90,7 @@ export const cloneTeamForm = form(
 				include: { periods: true, leaders: true },
 			}),
 		])
-		const clone = cloneTeam(team, deltaTime)
+		const clone = cloneTeam(team, deltaDays * 1000 * 60 * 60 * 24)
 		// leaders are not handle by cloneTeam()
 		clone.leaders = { connect: team.leaders.map(({ id }) => ({ id })) }
 		return prisma.team.create({

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
-import { seedUser, signIn } from './seed'
+import { prisma, seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
 import { sharedPage } from './sharedPage'
 
@@ -206,5 +206,31 @@ test.describe.serial('Secteurs et responsables', () => {
 				.filter({ hasText: 'a invité Wallace Breen' })
 				.filter({ hasText: 'administrateur·ice' })
 		).toHaveCount(1)
+	})
+
+	/** L'aperçu du tiroir et ce que le serveur écrit doivent tomber sur le même jour. */
+	test('Dupliquer un secteur décale ses créneaux du nombre de jours choisi', async () => {
+		const team = await seedTeam(event.eventId, 'Vendredi')
+		// Un vendredi, à une heure qui le reste dans tous les fuseaux d'Europe.
+		const period = await seedPeriod(team.id, { at: new Date('2030-06-14T08:00:00Z') })
+		await gotoHydrated(page, `/${event.eventId}/admin/teams/${team.id}`)
+
+		await page.getByRole('button', { name: 'Dupliquer', exact: true }).click()
+		const drawer = page.getByRole('dialog', { name: 'Dupliquer « Vendredi »' })
+		await expect(drawer).toBeVisible()
+		await expect(drawer.getByText(/^samedi/)).toBeVisible()
+
+		await drawer.getByLabel('Décalage des dates, en jours').fill('2')
+		await expect(drawer.getByText(/^dimanche/)).toBeVisible()
+		await drawer.getByRole('button', { name: 'Dupliquer le secteur' }).click()
+
+		await expect(drawer).toBeHidden()
+		await expect(page.locator('#team').getByLabel('Nom du secteur')).toHaveValue('Vendredi copie')
+		const clone = await prisma.team.findFirstOrThrow({
+			where: { eventId: event.eventId, name: 'Vendredi copie' },
+			include: { periods: true },
+		})
+		const DAY = 1000 * 60 * 60 * 24
+		expect(clone.periods.map((p) => p.start.getTime())).toEqual([period.start.getTime() + 2 * DAY])
 	})
 })

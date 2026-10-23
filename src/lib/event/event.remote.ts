@@ -147,7 +147,7 @@ export const updateEvent = form(modelEventSettings, async (data, issue) => {
 export const deleteEvent = form(async () => {
 	const { locals, params } = getRequestEvent()
 	const eventId = params.eventId!
-	await permission.admin(eventId, locals)
+	await permission.ownerOrRoot(eventId, locals)
 	await prisma.event.delete({ where: { id: eventId } })
 	redirect(303, '/me')
 })

@@ -2,6 +2,7 @@ import { command, getRequestEvent } from '$app/server'
 import type { Field } from '@prisma/client'
 import {
 	createLog,
+	getTierQuotaRemaining,
 	invitedMemberDefaults,
 	isUniqueConstraintError,
 	notifyTierQuotaIfNeeded,
@@ -41,14 +42,17 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 	const eventId = params.eventId!
 	const author = await permission.admin(eventId, locals)
 
-	const [fields, event, existing] = await Promise.all([
+	const [fields, event, existing, remaining] = await Promise.all([
 		prisma.field.findMany({ where: { eventId } }),
 		prisma.event.findUniqueOrThrow({ where: { id: eventId }, select: { name: true } }),
 		prisma.member.findMany({
 			where: { eventId, email: { in: rows.flatMap((row) => row.email ?? []) } },
 			select: { email: true, firstName: true, lastName: true },
 		}),
+		getTierQuotaRemaining(author.event),
 	])
+	// Chaque membre importé est approuvé: sans ce plafond, un lot dépasserait le palier d'autant.
+	let quota = remaining
 
 	const results: ImportResult[] = []
 	for (const { line, profile, birthday, ...contact } of rows) {
@@ -66,6 +70,12 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 			result('skipped', { reason: `Déjà membre: ${already.firstName} ${already.lastName}` })
 			continue
 		}
+		if (quota <= 0) {
+			result('skipped', {
+				reason: "Quota de ton offre atteint: change d'offre pour importer le reste",
+			})
+			continue
+		}
 
 		try {
 			const member = await prisma.member.create({
@@ -77,6 +87,7 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 					...invitedMemberDefaults(contact.email),
 				},
 			})
+			quota--
 
 			const wanted = sendEmail && !!member.email
 			const limited = wanted && isInviteLimited(author.userId ?? author.id)

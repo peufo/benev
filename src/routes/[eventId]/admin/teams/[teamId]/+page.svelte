@@ -27,8 +27,8 @@
 	let { data } = $props()
 
 	const team = $derived(data.team)
-	// Dupliquer et supprimer passent tous deux par `permission.admin`: un responsable de secteur
-	// édite le sien, mais ne le clone ni ne le supprime.
+	// Dupliquer et supprimer sont réservés aux admins: un responsable de secteur édite le sien,
+	// mais ne le clone ni ne le supprime.
 	const isAdmin = $derived(!!page.data.member?.roles.includes('admin') || !!page.data.userIsRoot)
 	const total = $derived({
 		maxSubscribe: team.periods.reduce((acc, p) => acc + p.maxSubscribe, 0),

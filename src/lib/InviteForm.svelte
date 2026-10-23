@@ -199,8 +199,9 @@
 
 	<div class="flex flex-row-reverse gap-2 border-t pt-4">
 		<button class="btn btn-primary">Valider</button>
-		<!-- Un responsable peut inviter, mais l'import lit les membres d'un autre évènement. -->
-		{#if isAuthorAdmin || page.data.userIsRoot}
+		<!-- Un responsable peut inviter, mais l'import lit les membres d'un autre évènement. Le root
+		     non plus: l'import a besoin d'un membre pour signer le journal et les invitations. -->
+		{#if isAuthorAdmin}
 			<a class="btn btn-ghost mr-auto" href={eventPath('/admin/members/import')}>
 				<UploadIcon size={20} class="opacity-70" />
 				Importer des membres

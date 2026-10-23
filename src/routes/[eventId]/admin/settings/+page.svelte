@@ -40,16 +40,19 @@
 	 */
 	const remoteForm = $derived(updateEvent.for(data.event.id))
 
+	// `deleteEvent` passe par `permission.ownerOrRoot`: un·e admin n'a pas de zone de danger.
+	const canDelete = $derived(data.member?.userId === data.event.ownerId || !!data.userIsRoot)
+
 	// Libellés courts, distincts des titres de section: le sommaire se lit en diagonale.
-	const SECTIONS: TocSection[] = [
+	const SECTIONS: TocSection[] = $derived([
 		{ id: 'status', label: 'Statut', icon: EyeIcon },
 		{ id: 'essentials', label: "L'essentiel", icon: CalendarIcon },
 		{ id: 'contact', label: 'Contact', icon: AtSignIcon },
 		{ id: 'appearance', label: 'Identité', icon: PaletteIcon },
 		{ id: 'membership', label: 'Adhésion', icon: LogInIcon },
 		{ id: 'fields', label: 'Champs', icon: IdCardIcon },
-		{ id: 'danger', label: 'Danger', icon: OctagonAlertIcon },
-	]
+		...(canDelete ? [{ id: 'danger', label: 'Danger', icon: OctagonAlertIcon }] : []),
+	])
 
 	let formElement = $state<HTMLFormElement>()
 	let saveBar = $state<ReturnType<typeof SaveBar>>()
@@ -193,18 +196,20 @@
 				</Section>
 			</form>
 
-			<Section id="danger" title="Zone de danger" icon={OctagonAlertIcon} danger>
-				<div class="flex flex-wrap items-center gap-4">
-					<div class="min-w-0 grow">
-						<p class="font-medium">Supprimer cet évènement</p>
-						<p class="text-sm text-base-content/60">
-							Les secteurs, créneaux, membres et inscriptions seront perdus. Cette opération est
-							irréversible.
-						</p>
+			{#if canDelete}
+				<Section id="danger" title="Zone de danger" icon={OctagonAlertIcon} danger>
+					<div class="flex flex-wrap items-center gap-4">
+						<div class="min-w-0 grow">
+							<p class="font-medium">Supprimer cet évènement</p>
+							<p class="text-sm text-base-content/60">
+								Les secteurs, créneaux, membres et inscriptions seront perdus. Cette opération est
+								irréversible.
+							</p>
+						</div>
+						<EventDeleteButton event={data.event} />
 					</div>
-					<EventDeleteButton event={data.event} />
-				</div>
-			</Section>
+				</Section>
+			{/if}
 		</div>
 	</div>
 

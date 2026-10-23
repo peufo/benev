@@ -49,7 +49,8 @@ export const updateMemberProfile = form('unchecked', async (input: RemoteFormInp
 	const { memberId } = input
 	if (typeof memberId !== 'string') error(400, 'memberId manquant')
 	const editOwnProfile = member.id === memberId
-	if (!editOwnProfile && !isLeader) error(401)
+	// Le profil d'un autre est un geste de gestion: `leader` refuse aussi quand le quota est dépassé.
+	if (!editOwnProfile) await permission.leader(eventId, locals)
 
 	const fields = await prisma.field.findMany({
 		where: {

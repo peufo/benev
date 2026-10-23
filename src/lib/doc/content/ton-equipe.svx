@@ -74,7 +74,7 @@ de membres et au pied du formulaire d'invitation. Il est réservé aux administr
 
 - **Un fichier CSV** : une ligne par membre, une colonne par information. La première ligne porte
   les titres des colonnes, et le séparateur (virgule, point-virgule ou tabulation) est reconnu tout
-  seul. Enregistre-le en UTF-8, sinon les accents arrivent brouillés.
+  seul, tout comme l'encodage : un fichier enregistré par Excel garde ses accents.
 - **Des données collées** : une sélection copiée dans Excel, Numbers ou Google Sheets, ou une simple
   liste d'adresses. Décoche « La première ligne contient les en-têtes » si ta sélection n'en a pas.
 - **Un autre évènement** dont tu es administrateur·ice : ses membres arrivent avec leurs
@@ -102,7 +102,8 @@ ligne que tu ne veux pas importer se décoche.
 Les membres importés sont **approuvés**, comme une invitation : ils comptent aussitôt dans ton
 [quota](/docs/gestion#quota). Une ligne est écartée si elle n'a pas de nom, si son adresse figure
 déjà plus haut dans le fichier, ou si cette adresse est déjà celle d'un membre. Sans adresse, rien
-ne permet de reconnaître un doublon : vérifie ces lignes-là toi-même.
+ne permet de reconnaître un doublon : vérifie ces lignes-là toi-même. Une fois ton quota atteint,
+les lignes suivantes sont écartées elles aussi : change de palier pour les importer.
 
 Aucun courriel ne part, sauf si tu coches « Envoyer une invitation par e-mail ». Au-delà de cinq
 cents invitations en vingt-quatre heures, les suivantes se renvoient depuis la fiche de chaque

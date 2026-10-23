@@ -47,7 +47,8 @@
 	})
 
 	// Les responsables lisent aussi cette page, mais l'import lit les membres d'un autre évènement.
-	const isAdmin = $derived(!!page.data.member?.roles.includes('admin') || !!page.data.userIsRoot)
+	// Le root non plus: l'import a besoin d'un membre pour signer le journal et les invitations.
+	const isAdmin = $derived(!!page.data.member?.roles.includes('admin'))
 
 	let createSubscribeDialog: HTMLDialogElement = $state()!
 	let selectedMember: Member | undefined = $state(undefined)

@@ -12,7 +12,9 @@ import type { Session } from 'lucia'
 
 export const permission = {
 	root: rootPermission,
-	member: createMemberPermission('member'),
+	// Le quota ferme l'espace de gestion, pas celui des bénévoles: un geste de responsable qui
+	// passe par ce garde remonte à `leader` ou `admin`, qui le contrôlent.
+	member: createMemberPermissionWithoutQuotaCheck('member'),
 	leader: createMemberPermission('leader'),
 	admin: createMemberPermission('admin'),
 	owner: createMemberPermission('owner'),

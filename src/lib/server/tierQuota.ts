@@ -7,11 +7,19 @@ import { EmailTierQuotaAlert } from '#lib/email/index.js'
 
 export { computeIsTierQuotaReached } from '#lib/tierQuota.js'
 
+function countMembersValided(eventId: string) {
+	return prisma.member.count({ where: { eventId, isValidedByEvent: true } })
+}
+
 export async function isTierQuotaReached(event: { id: string; tier: EventTier }): Promise<boolean> {
-	const membersValided = await prisma.member.count({
-		where: { eventId: event.id, isValidedByEvent: true },
-	})
-	return computeIsTierQuotaReached(membersValided, event.tier)
+	return computeIsTierQuotaReached(await countMembersValided(event.id), event.tier)
+}
+
+/** Les membres qu'il reste à approuver avant de dépasser le palier: `max` pile reste permis. */
+export async function getTierQuotaRemaining(event: { id: string; tier: EventTier }) {
+	const max = EVENT_TIER[event.tier].max
+	if (max === null) return Infinity
+	return Math.max(0, max - (await countMembersValided(event.id)))
 }
 
 export async function notifyTierQuotaIfNeeded(eventId: string) {

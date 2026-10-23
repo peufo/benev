@@ -3,6 +3,7 @@ import {
 	buildMembers,
 	columnIssues,
 	columnReport,
+	decodeCsv,
 	guessFromValues,
 	memberTable,
 	importBlocker,
@@ -36,6 +37,18 @@ const age = field({ id: 'age', name: 'Âge', type: 'number' })
 const fields = [size, diet, age]
 
 describe('lecture du CSV', () => {
+	const bytes = (...values: number[]) => new Uint8Array(values).buffer
+
+	it("décode l'UTF-8 et retire son BOM", ({ expect }) => {
+		const buffer = new TextEncoder().encode('\uFEFFPrénom\nÉléonore').buffer
+		expect(decodeCsv(buffer)).toBe('Prénom\nÉléonore')
+	})
+
+	it("se rabat sur Windows-1252, celui d'Excel sous Windows", ({ expect }) => {
+		// « Eléonore », le « é » sur un seul octet.
+		expect(decodeCsv(bytes(0x45, 0x6c, 0xe9, 0x6f, 0x6e, 0x6f, 0x72, 0x65))).toBe('Eléonore')
+	})
+
 	it('devine le point-virgule et retire le BOM', ({ expect }) => {
 		const table = parseCsv('\uFEFFPrénom;Nom\nAda;Lovelace\n')
 		expect(table).toEqual({ headers: ['Prénom', 'Nom'], rows: [['Ada', 'Lovelace']] })
