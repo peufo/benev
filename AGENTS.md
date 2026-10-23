@@ -653,6 +653,13 @@ environment. A local `bun start` over plain http fails that check; `bun run prev
   `eslint-plugin-svelte`, `eslint-config-prettier`.
 - **Imports**: `verbatimModuleSyntax: true`. Always use `import type` for type-only imports.
 - **Language**: UI text and most comments are in **French**. Comments explain _why_, not _what_.
+- **A comment says only what the code does not.** First ask whether the code can say it: a
+  better name, an extracted function, a narrower type, a named constant. What is left is the
+  comment's job: _why_ (a constraint, a trap, the obvious alternative and why it fails), or a
+  synthesis of a _how_ the reader would otherwise rebuild from several places. A comment that
+  paraphrases the next line, restates a name or a value, or tells the circumstances the code was
+  written in is noise: delete it. Length follows the same rule: one line that carries the reason
+  beats a paragraph around it.
 - **No changelog comments.** A comment must still be true and useful a year from now. Never write
   what a change replaced, what used to be there, or what is deprecated (`// remplace l'ancien X`,
   `/** Remplacent les évènements de la version Svelte 4 */`, `// le jeton Y n'a plus cours`). That

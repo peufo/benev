@@ -22,7 +22,6 @@ export default defineConfig({
 			extensions: ['.svelte', '.svx'],
 			// mdsvex d'abord: il rend du Svelte à partir du markdown, que `vitePreprocess` traite
 			// ensuite pour le `lang="ts"` des blocs `<script>` d'une page de documentation.
-			// `rehypeDocSections` découpe la page en chapitres: l'auteur écrit `## Titre`, jamais la carte.
 			preprocess: [
 				mdsvex({ extensions: ['.svx'], rehypePlugins: [rehypeDocSections] }),
 				vitePreprocess(),
@@ -43,9 +42,8 @@ export default defineConfig({
 		// chargeur ESM de Node qui le refuse: on le fait traiter par Vite.
 		server: { deps: { inline: ['tippy.js'] } },
 	},
-	// fuma est lié par `file:../fuma`, donc `node_modules/fuma` est un lien symbolique vers un
-	// dossier qui garde ses propres `@sveltejs/kit`, `svelte` et `zod` pour son développement. Sans
-	// dédoublonnage, `fuma/server` lève un `redirect()` issu de son exemplaire de kit, que
+	// Lié (`bun run fuma:local`), fuma résout ses imports depuis `../fuma/node_modules`; publié, il
+	// embarque encore son propre `zod`. Sans dédoublonnage, `fuma/server` lève un `redirect()` issu de son exemplaire de kit, que
 	// celui de benev ne reconnaît pas: la redirection remonte alors en erreur 500. Pour zod, c'est
 	// la configuration globale posée par `z.config()` qui est propre à chaque exemplaire: les
 	// schémas construits dans fuma resteraient en anglais. Pour dayjs, c'est l'`include` ci-dessous
@@ -54,8 +52,6 @@ export default defineConfig({
 	server: {
 		fs: { allow: ['media', '../fuma'] },
 		allowedHosts: ['mac-de-jo.local'],
-		// Les worktrees des agents Claude Code sont des copies complètes du dépôt sous la racine:
-		// surveillées, chacune de leurs écritures recharge le serveur de dev.
 		watch: { ignored: ['**/.claude/worktrees/**'] },
 	},
 	optimizeDeps: {
