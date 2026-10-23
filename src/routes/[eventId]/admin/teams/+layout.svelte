@@ -12,12 +12,16 @@
 <div class="flex items-start gap-3">
 	<aside
 		class={[
-			'surface p-2 w-full shrink-0 md:w-80 md:sticky md:top-1',
-			'max-h-main overflow-auto',
+			'surface p-0 w-full shrink-0 md:w-80 md:sticky md:top-1',
+			'flex flex-col max-h-main overflow-hidden',
 			selected && 'max-md:hidden',
 		]}
 	>
-		<TeamsList teams={data.teams} myTeamIds={data.myTeamIds} />
+		<!-- Le défilement vit sous la carte: porté par elle, la barre de défilement serait peinte
+		     en carré par-dessus ses coins arrondis. -->
+		<div class="overflow-auto p-2">
+			<TeamsList teams={data.teams} myTeamIds={data.myTeamIds} />
+		</div>
 	</aside>
 
 	<div class={['grow min-w-0', !selected && 'max-md:hidden']}>
