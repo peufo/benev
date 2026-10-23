@@ -1,8 +1,8 @@
 import { describe, it } from 'vitest'
 import type { Page, PageType, Period, Team } from '@prisma/client'
 import { clonePages, cloneTeam } from '#lib/server/clone.js'
+import { shiftDays } from '#lib/wallClock.js'
 
-const day = 1000 * 60 * 60 * 24
 const createdAt = new Date('2026-06-01T08:00:00Z')
 
 const team: Team & { periods: Period[] } = {
@@ -48,7 +48,7 @@ function aPage(type: PageType, path: string): Page {
 
 describe('cloneTeam', () => {
 	it('repart en brouillon, créneaux décalés', ({ expect }) => {
-		const clone = cloneTeam(team, 7 * day)
+		const clone = cloneTeam(team, (date) => shiftDays(date, 7, 'Europe/Zurich'))
 		expect(clone.state).toBe('draft')
 		expect(clone.periods?.create).toEqual([
 			{
@@ -57,6 +57,26 @@ describe('cloneTeam', () => {
 				end: new Date('2026-07-08T22:00:00Z'),
 			},
 		])
+	})
+	it("garde l'heure des créneaux à travers un changement d'heure", ({ expect }) => {
+		const saturday = {
+			...team.periods[0],
+			start: new Date('2026-10-24T08:00:00Z'),
+			end: new Date('2026-10-24T12:00:00Z'),
+		}
+		const clone = cloneTeam(
+			{ ...team, periods: [saturday], closeSubscribing: new Date('2026-10-23T16:00:00Z') },
+			(date) => shiftDays(date, 1, 'Europe/Zurich')
+		)
+		// 10:00-14:00 le samedi (CEST), 10:00-14:00 le dimanche (CET).
+		expect(clone.periods?.create).toEqual([
+			{
+				maxSubscribe: 4,
+				start: new Date('2026-10-25T09:00:00Z'),
+				end: new Date('2026-10-25T13:00:00Z'),
+			},
+		])
+		expect(clone.closeSubscribing).toEqual(new Date('2026-10-24T16:00:00Z'))
 	})
 })
 

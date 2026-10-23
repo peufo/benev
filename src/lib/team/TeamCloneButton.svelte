@@ -4,6 +4,8 @@
 	import { Drawer, InputNumber } from 'fuma'
 	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { formatDatetime, formatDay, formatRangeHour } from '#lib/formatRange.js'
+	import { getEventTimeZone } from '#lib/timezone.js'
+	import { shiftDays } from '#lib/wallClock.js'
 	import { Placeholder } from '#lib/ui/index.js'
 	import { cloneTeamForm } from './team.remote'
 
@@ -16,15 +18,13 @@
 
 	let { team, oncloned }: Props = $props()
 
-	const DAY = 1000 * 60 * 60 * 24
 	const remoteForm = $derived(cloneTeamForm.for(team.id))
 	let drawer = $state<ReturnType<typeof Drawer>>()
 	// Le cas qui motive le bouton: le samedi à partir du vendredi.
 	let deltaDays = $state(1)
 
-	const delta = $derived((deltaDays ?? 0) * DAY)
 	const periods = $derived(team.periods.toSorted((a, b) => +a.start - +b.start))
-	const shift = (date: Date) => date.getTime() + delta
+	const shift = (date: Date) => shiftDays(date, deltaDays ?? 0, getEventTimeZone())
 </script>
 
 <button type="button" class="btn btn-sm btn-primary btn-soft" onclick={() => drawer?.open()}>

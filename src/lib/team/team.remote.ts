@@ -13,6 +13,7 @@ import {
 	useAddTeamComputedValues,
 } from '#lib/server/index.js'
 import { cloneTeam } from '#lib/server/clone.js'
+import { shiftDays } from '#lib/wallClock.js'
 import { diffChanges, hasChanges, projectTeam } from '#lib/log/index.js'
 
 const NAME_TAKEN = 'Un secteur porte déjà ce nom'
@@ -81,7 +82,7 @@ export const cloneTeamForm = form(
 		const eventId = params.eventId!
 		// Rien à journaliser, donc pas d'acteur à exiger: le root, qui voit le bouton, duplique aussi.
 		await permission.adminOrRoot(eventId, locals)
-		const [teams, team] = await Promise.all([
+		const [teams, team, { timezone }] = await Promise.all([
 			prisma.team
 				.findMany({ where: { eventId }, select: { name: true } })
 				.then((res) => res.map((t) => t.name)),
@@ -89,8 +90,9 @@ export const cloneTeamForm = form(
 				where: { id, eventId },
 				include: { periods: true, leaders: true },
 			}),
+			prisma.event.findUniqueOrThrow({ where: { id: eventId }, select: { timezone: true } }),
 		])
-		const clone = cloneTeam(team, deltaDays * 1000 * 60 * 60 * 24)
+		const clone = cloneTeam(team, (date) => shiftDays(date, deltaDays, timezone))
 		// leaders are not handle by cloneTeam()
 		clone.leaders = { connect: team.leaders.map(({ id }) => ({ id })) }
 		return prisma.team.create({

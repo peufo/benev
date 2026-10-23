@@ -6,6 +6,7 @@ import { zJson } from '#lib/models/form.js'
 import { normalizePath } from '#lib/normalizePath.js'
 import { createLog, permission, prisma } from '#lib/server/index.js'
 import { clonePages, cloneData, cloneTeam } from '#lib/server/clone.js'
+import { shiftDays } from '#lib/wallClock.js'
 
 // `CloneSelector` sérialise ses sélections en JSON dans un champ caché: le tableau d'ids
 // arrive donc en chaîne, et `deltaDays` vient d'un `<input type="number">` brut.
@@ -60,18 +61,18 @@ export const cloneEvent = form(schemaEventClone, async (data) => {
 		location,
 		...copiedData
 	} = cloneData(event)
-	const deltaTime = data.deltaDays * 1000 * 60 * 60 * 24
+	const shift = (date: Date) => shiftDays(date, data.deltaDays, event.timezone)
 	const name = await getAvailableCloneName(eventName)
 	const newEvent = await prisma.event.create({
 		data: {
 			...copiedData,
 			id: normalizePath(name),
 			name,
-			closeSubscribing: closeSubscribing && new Date(closeSubscribing.getTime() + deltaTime),
+			closeSubscribing: closeSubscribing && shift(closeSubscribing),
 			// Les créneaux sont créés par imbrication, que le middleware de synchronisation des
 			// dates ne voit pas: les bornes se décalent ici.
-			startDate: startDate && new Date(startDate.getTime() + deltaTime),
-			endDate: endDate && new Date(endDate.getTime() + deltaTime),
+			startDate: startDate && shift(startDate),
+			endDate: endDate && shift(endDate),
 			location: location ?? Prisma.DbNull,
 			backgroundImage: backgroundImageId ? { connect: { id: backgroundImageId } } : {},
 			logo: logoId ? { connect: { id: logoId } } : {},
@@ -89,7 +90,7 @@ export const cloneEvent = form(schemaEventClone, async (data) => {
 	await Promise.all([
 		createOwner(newEvent.id, member.userId),
 		cloneWithFieldsMap.views(views),
-		cloneWithFieldsMap.teams(teams, deltaTime),
+		cloneWithFieldsMap.teams(teams, shift),
 		cloneWithFieldsMap.pages(pages),
 	])
 	await createLog('event_create', {
@@ -152,7 +153,7 @@ function useCloneFieldsMap(eventId: string, fieldsMap: Map<Field, Field>) {
 				})),
 			})
 		},
-		async teams(teams: (Team & { periods: Period[] })[], deltaTime: number) {
+		async teams(teams: (Team & { periods: Period[] })[], shift: (date: Date) => Date) {
 			for (const team of teams) {
 				const conditions = team.conditions
 				if (conditions) {
@@ -166,7 +167,7 @@ function useCloneFieldsMap(eventId: string, fieldsMap: Map<Field, Field>) {
 				}
 				await prisma.team.create({
 					data: {
-						...cloneTeam(team, deltaTime),
+						...cloneTeam(team, shift),
 						eventId,
 						conditions: conditions || Prisma.JsonNull,
 					},

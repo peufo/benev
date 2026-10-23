@@ -7,9 +7,10 @@ export function cloneData<T extends object>(data: T) {
 	return rest as Omit<T, ExcludeProps>
 }
 
+/** `shift` décale chaque date: `shiftDays` en garde l'heure murale, changement d'heure compris. */
 export function cloneTeam(
 	team: Team & { periods: Period[] },
-	deltaTimeMS: number
+	shift: (date: Date) => Date
 ): Prisma.TeamCreateWithoutEventInput {
 	return {
 		name: team.name,
@@ -18,21 +19,23 @@ export function cloneTeam(
 		// aux bénévoles, et qui envoie les demandes en attente.
 		state: 'draft',
 		overflowPermitted: team.overflowPermitted,
-		closeSubscribing:
-			team.closeSubscribing && new Date(team.closeSubscribing.getTime() + deltaTimeMS),
+		closeSubscribing: team.closeSubscribing && shift(team.closeSubscribing),
 		conditions: team.conditions || undefined,
 		position: team.position,
 		periods: {
-			create: team.periods.map((p) => clonePeriod(p, deltaTimeMS)),
+			create: team.periods.map((p) => clonePeriod(p, shift)),
 		},
 	}
 }
 
-function clonePeriod(period: Period, deltaTimeMS: number): Prisma.PeriodCreateWithoutTeamInput {
+function clonePeriod(
+	period: Period,
+	shift: (date: Date) => Date
+): Prisma.PeriodCreateWithoutTeamInput {
 	return {
 		maxSubscribe: period.maxSubscribe,
-		start: new Date(period.start.getTime() + deltaTimeMS),
-		end: new Date(period.end.getTime() + deltaTimeMS),
+		start: shift(period.start),
+		end: shift(period.end),
 	}
 }
 

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { formatRangeDateShort } from '#lib/formatRange.js'
 	import { getRangeOfTeam } from '#lib/plan/index.js'
+	import { getEventTimeZone } from '#lib/timezone.js'
+	import { shiftDays } from '#lib/wallClock.js'
 	import type { Period, Team } from '@prisma/client'
 
 	interface Props {
@@ -11,7 +13,7 @@
 	let { team, deltaDays }: Props = $props()
 
 	const range = $derived(getRangeOfTeam(team))
-	const DAY = 1000 * 60 * 60 * 24
+	const shift = (date: Date) => shiftDays(date, deltaDays, getEventTimeZone())
 </script>
 
 <!-- Sans l'heure, qu'un décalage en jours ne touche pas; avec le jour de la semaine, qu'il
@@ -21,8 +23,8 @@
 		<span class="opacity-50 line-through">{formatRangeDateShort(range)}</span>
 		<span class="text-base-content/70">
 			{formatRangeDateShort({
-				start: range.start.getTime() + deltaDays * DAY,
-				end: range.end.getTime() + deltaDays * DAY,
+				start: shift(range.start),
+				end: shift(range.end),
 			})}
 		</span>
 	</div>
