@@ -88,8 +88,6 @@ Avec de bonnes descriptions, tes bénévoles sauront à quoi s'attendre quand il
 Depuis la fiche d'un secteur, tu peux désigner des **responsables**. Ils pourront gérer les créneaux
 et répondre aux inscriptions qui les concernent.
 
-<DemoVideo id="create-teams" title="Créer un secteur et nommer sa responsable" />
-
 ### Brouillon, validé, publié
 
 Un secteur naît en **brouillon**. Tant qu'il y reste, tes bénévoles ne le voient pas, et les
@@ -105,6 +103,8 @@ Valider est définitif, un secteur ne revient pas en brouillon.
 de ses [conditions d'accès](/docs/ouvrir-les-inscriptions#conditions). Tu peux les refermer et les
 rouvrir autant de fois que nécessaire. Depuis le brouillon, « Valider et ouvrir les inscriptions »
 fait les deux d'un geste.
+
+<DemoVideo id="team-states" title="Valider un secteur et ouvrir ses inscriptions" />
 
 La fermeture se **programme** aussi : à la date dite, le secteur repasse en validé, à la minute
 près, et le journal en garde la trace comme programmée. La date se pose sur le secteur, ou une
@@ -187,3 +187,5 @@ Tu peux aussi dupliquer un seul secteur depuis sa fiche. Tu saisis un décalage 
 aperçu montre chaque créneau à sa nouvelle date avant que tu valides. La copie reprend les mêmes
 horaires et **garde ses responsables** : pratique pour créer le samedi à partir du vendredi, il ne
 te reste qu'à la renommer.
+
+<DemoVideo id="team-clone" title="Dupliquer un secteur au lendemain" />

@@ -1,4 +1,8 @@
 {
+	"access-conditions": {
+		"video": "/media/demos/access-conditions.9f3b872e.mp4",
+		"poster": "/media/demos/access-conditions.ab6abcd4.jpg"
+	},
 	"badges": {
 		"video": "/media/demos/badges.a14b697c.mp4",
 		"poster": "/media/demos/badges.feab767c.jpg"
@@ -27,9 +31,17 @@
 		"video": "/media/demos/export-data.c19c8f0c.mp4",
 		"poster": "/media/demos/export-data.b3c5d244.jpg"
 	},
+	"member-import": {
+		"video": "/media/demos/member-import.e2a16f44.mp4",
+		"poster": "/media/demos/member-import.57a651ef.jpg"
+	},
 	"planif": {
 		"video": "/media/demos/planif.8c592806.mp4",
 		"poster": "/media/demos/planif.8c8ac289.jpg"
+	},
+	"presences": {
+		"video": "/media/demos/presences.97fa1fb1.mp4",
+		"poster": "/media/demos/presences.ce1fbff3.jpg"
 	},
 	"subscribe": {
 		"video": "/media/demos/subscribe.167fb080.mp4",
@@ -39,8 +51,16 @@
 		"video": "/media/demos/subscribe-validation.5dc551ea.mp4",
 		"poster": "/media/demos/subscribe-validation.f49cfb42.jpg"
 	},
+	"team-clone": {
+		"video": "/media/demos/team-clone.3d367217.mp4",
+		"poster": "/media/demos/team-clone.00de55db.jpg"
+	},
 	"team-pdf": {
 		"video": "/media/demos/team-pdf.7eee2448.mp4",
 		"poster": "/media/demos/team-pdf.ddf445af.jpg"
+	},
+	"team-states": {
+		"video": "/media/demos/team-states.b7186671.mp4",
+		"poster": "/media/demos/team-states.4309f99a.jpg"
 	}
 }

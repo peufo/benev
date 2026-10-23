@@ -103,6 +103,8 @@ membre »).
 Tes responsables passent quand même et peuvent y inscrire qui ils veulent à la main. Une personne
 déjà inscrite garde sa place, même si elle cesse de remplir la condition.
 
+<DemoVideo id="access-conditions" title="Réserver le bar aux majeur·es" />
+
 **Attention** : une condition qui porte sur une question que les membres ne remplissent pas
 eux-mêmes bloque tout le monde. Si tu réserves un secteur à « permis de conduire : oui », assure-toi
 que la question est **modifiable par les membres**.

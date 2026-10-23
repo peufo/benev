@@ -70,6 +70,8 @@ Ce que ça te rend ensuite :
   ont manqué au moins un,
 - une colonne de plus dans l'[export des inscriptions](#exports).
 
+<DemoVideo id="presences" title="Noter deux absences, puis les retrouver" />
+
 ## Le rappel avant chaque créneau {#rappels}
 
 **Chaque bénévole reçoit un courriel avant chacun de ses créneaux**, 24 heures avant par défaut :

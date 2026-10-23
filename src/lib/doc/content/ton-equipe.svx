@@ -4,7 +4,7 @@ description: Les rôles, les droits, les invitations, l'import
 ---
 
 <script lang="ts">
-	import { RolesGlossary, WhoCanDoWhat } from '#lib/doc/content/index.js'
+	import { DemoVideo, RolesGlossary, WhoCanDoWhat } from '#lib/doc/content/index.js'
 </script>
 
 ## Les quatre rôles {#roles}
@@ -96,6 +96,8 @@ chaque valeur du fichier à une option, par exemple « M » à « Medium ».
 
 Il te manque la question ? Le bouton **+** de la colonne la crée, nommée d'après la colonne. Et une
 ligne que tu ne veux pas importer se décoche.
+
+<DemoVideo id="member-import" title="Importer des membres depuis un fichier CSV" />
 
 ### Ce qui arrive à l'import
 
