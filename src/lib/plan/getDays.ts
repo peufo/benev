@@ -1,4 +1,5 @@
-import { type Dayjs } from '#lib/dayjs.js'
+import dayjs, { type Dayjs } from '#lib/dayjs.js'
+import { startOfNextDay } from '#lib/wallClock.js'
 import { time } from './utils'
 
 const HOUR_MS = time(1, 'hour').to('ms')
@@ -8,9 +9,10 @@ export type Day = { hours: number[]; date: Dayjs }
 /**
  * Découpe la plage en jours, et chaque jour en heures **réelles**: le plan place tout en temps
  * écoulé, un jour de changement d'heure compte donc 23 ou 25 cases (`00 01 02 02 03…` en automne).
- * Chaque heure est libellée en relisant l'instant dans le fuseau: `add()` sur un objet `tz` garde
- * le décalage d'origine, et lirait l'heure murale d'avant la bascule. Un seul formateur sert toute
- * la plage: `.tz()` en recrée un à chaque appel, soit des centaines par plan.
+ * Minuits et heures se lisent par `Intl` (`#lib/wallClock`), jamais par `add()` ou `startOf()` de
+ * dayjs, qui repassent par le fuseau de la machine: un navigateur à New York découperait mal le jour
+ * de bascule d'un évènement à Zurich. Un seul formateur sert toute la plage: `.tz()` en recrée un
+ * à chaque appel, soit des centaines par plan.
  */
 export function getDays(start: Dayjs, end: Dayjs, timezone: string): Day[] {
 	const hourOf = new Intl.DateTimeFormat('en-GB', {
@@ -20,8 +22,7 @@ export function getDays(start: Dayjs, end: Dayjs, timezone: string): Day[] {
 	})
 	const days: Day[] = []
 	for (let day = start; day.isBefore(end);) {
-		// `startOf` relit l'heure murale dans le fuseau, et retombe sur le vrai minuit local.
-		const next = day.add(1, 'day').startOf('day')
+		const next = dayjs(startOfNextDay(day.valueOf(), timezone)).tz(timezone)
 		const until = Math.min(next.valueOf(), end.valueOf())
 		const hours: number[] = []
 		for (let ms = day.valueOf(); ms < until; ms += HOUR_MS) hours.push(Number(hourOf.format(ms)))

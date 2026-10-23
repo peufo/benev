@@ -45,6 +45,17 @@ export function fromWallClock(wall: number, timeZone: string): number {
 	return wall - offsetAt(wall - offsetAt(wall))
 }
 
+const floorDay = (wall: number) => wall - (((wall % DAY_MS) + DAY_MS) % DAY_MS)
+
+export function startOfDay(ms: number, timeZone: string): number {
+	return fromWallClock(floorDay(wallClock(ms, timeZone)), timeZone)
+}
+
+/** Le minuit local qui suit `ms`: 23 ou 25 heures plus loin un jour de changement d'heure. */
+export function startOfNextDay(ms: number, timeZone: string): number {
+	return fromWallClock(floorDay(wallClock(ms, timeZone)) + DAY_MS, timeZone)
+}
+
 /** Déplace de `days` jours sans toucher l'heure murale, changement d'heure ou non. */
 export function shiftDays(date: Date | number, days: number, timeZone: string): Date {
 	return new Date(fromWallClock(wallClock(+date, timeZone) + days * DAY_MS, timeZone))
