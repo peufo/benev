@@ -26,6 +26,7 @@ export const permission = {
 	ownerOrRoot: createMemberOrRootPermission('owner'),
 	leaderOfTeam,
 	leaderWithoutQuotaCheck: createMemberPermissionWithoutQuotaCheck('leader'),
+	adminWithoutQuotaCheck: createMemberPermissionWithoutQuotaCheck('admin'),
 }
 
 async function rootPermission(locals: App.Locals) {

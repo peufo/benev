@@ -1,6 +1,14 @@
 import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
-import { seedField, seedInvitedMember, seedMember, seedTeam, seedUser, signIn } from './seed'
+import {
+	prisma,
+	seedField,
+	seedInvitedMember,
+	seedMember,
+	seedTeam,
+	seedUser,
+	signIn,
+} from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
 import { sharedPage } from './sharedPage'
 
@@ -212,6 +220,26 @@ test.describe.serial('Import de membres', () => {
 		await page.waitForURL(`**/${target.eventId}/admin/members/import/report`)
 		await expect(page.locator('dl > div').filter({ hasText: 'Importés' })).toContainText('2')
 		await expect(page.getByRole('link', { name: 'Katherine Johnson' })).toBeVisible()
+	})
+
+	test("Une source au-delà du quota de son offre s'importe quand même", async () => {
+		// L'offre basique tient 50 membres approuvés: la source en compte 3, puis 53.
+		await prisma.member.createMany({
+			data: Array.from({ length: 50 }, (_, index) => ({
+				eventId: source.eventId,
+				firstName: 'Membre',
+				lastName: String(index + 1),
+				isValidedByEvent: true,
+			})),
+		})
+		const response = await page.goto(
+			`/${target.eventId}/admin/members/import/event/${source.eventId}`
+		)
+		expect(response?.status()).toBe(200)
+		await awaitHydrated(page)
+		await expect(
+			page.getByRole('heading', { name: `Importer depuis « ${source.eventName} »` })
+		).toBeVisible()
 	})
 
 	test("Un·e responsable n'y a pas accès", async () => {
