@@ -29,8 +29,7 @@
 	})
 </script>
 
-<!-- La remote function attend du JSON en clair: `zJson` le désérialise, là où `parseFormData`
-     réclamait le jeton `USE_COERCE_JSON`. -->
+<!-- La remote function attend du JSON en clair, que `zJson` désérialise. -->
 <input {...colorMapField.as('hidden', JSON.stringify(colorMap))} />
 
 {#if field?.type === 'select'}

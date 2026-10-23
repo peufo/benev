@@ -14,14 +14,12 @@ demo('create-space', async ({ page, director }) => {
 
 	await director.start()
 
-	// La création
 	await director.type(page.getByLabel("Nom de l'évènement"), 'Festival des Lumières')
 	const url = page.getByLabel("URL de l'évènement")
 	await expect(url).toHaveValue('festival-des-lumieres')
 	await director.click(page.getByRole('button', { name: 'Créer mon évènement' }))
 	await page.waitForURL('**/festival-des-lumieres/admin/dashboard')
 
-	// L'identité
 	await director.click(page.getByRole('link', { name: 'Configuration', exact: true }))
 	// Le menu latéral, ouvert au survol, se replie quand la main le quitte et décale le sommaire:
 	// la main part vers « Identité », puis rattrape le lien une fois le sommaire immobile.

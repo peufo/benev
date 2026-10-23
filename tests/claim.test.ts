@@ -5,10 +5,10 @@ import { gotoHydrated } from './hydrated'
 import { sharedPage } from './sharedPage'
 
 /**
- * Reprendre une fiche créée par l'organisation demande d'avoir prouvé son adresse — le jeton reçu
- * par email, ou la vérification du compte. `acceptInvite` rapprochait sur la seule égalité des
- * adresses: ouvrir un compte au nom d'une personne invitée donnait sa fiche, profil, inscriptions
- * et rôles compris. L'état de l'évènement n'entre plus dans la question.
+ * Reprendre une fiche créée par l'organisation demande d'avoir prouvé son adresse: le jeton reçu
+ * par email, ou la vérification du compte. Sans cette preuve, ouvrir un compte au nom d'une
+ * personne invitée suffirait à prendre sa fiche, profil, inscriptions et rôles compris. L'état de
+ * l'évènement n'entre pas dans la question.
  */
 test.describe.serial("Reprise d'une fiche invitée", () => {
 	const event = useEvent('Reprise')

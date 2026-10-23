@@ -36,9 +36,9 @@ export const registerUser = form(modelUserCreate, async (data) => {
 		select: { auth_key: { select: { id: true, hashed_password: true } } },
 	})
 	if (user) {
-		// Avant, un compte vide était créé lors de l'invitation... Ce n'est heureusment plus le cas maintenant
-		// Une clé `email:` sans hash est une coquille posée par une invitation: elle n'ouvre aucune
-		// session. Une clé OAuth n'a pas de hash non plus, mais elle, elle connecte.
+		// Une clé `email:` sans hash est une coquille que posaient les invitations, qui n'en créent
+		// plus: elle n'ouvre aucune session. Une clé OAuth n'a pas de hash non plus, mais elle, elle
+		// connecte.
 		const canSignIn = user.auth_key.some(
 			(key) => key.hashed_password !== null || !key.id.startsWith('email:')
 		)

@@ -20,8 +20,8 @@ export const suggestion: Omit<SuggestionOptions<SuggestionItem>, 'editor'> = {
 		const target = document.createElement('div')
 		let component: ReturnType<typeof mount> | undefined
 
-		// Svelte 5: `mount()` renvoie les exports du composant, pas une instance avec
-		// `$set`/`$destroy`. Les mises à jour passent par un objet de props réactif.
+		// `mount()` renvoie les exports du composant, sans `$set`: les mises à jour passent par un
+		// objet de props réactif.
 		const props = $state<{
 			suggestion: SuggestionProps<SuggestionItem> | undefined
 			keyDownEvent: KeyboardEvent | undefined

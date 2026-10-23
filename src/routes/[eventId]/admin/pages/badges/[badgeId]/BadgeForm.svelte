@@ -43,7 +43,7 @@
 	/**
 	 * Images, sélections et couleurs pilotent le nuancier et ce qui est soumis: elles vivent
 	 * ici, et se reprennent depuis `badge` à chaque réinitialisation. `badge` n'en donne que la
-	 * graine — chaque soumission distante fait rejouer les `load`, et une valeur qui suivrait
+	 * graine: chaque soumission distante fait rejouer les `load`, et une valeur qui suivrait
 	 * la donnée serait rendue à l'enregistrement dans la seconde qui suit son choix.
 	 */
 	function seed() {

@@ -51,7 +51,6 @@ test.describe.serial('Modèle de badge', () => {
 		await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
 		await expect(drawer).toBeHidden()
 
-		// Le champ créé prend place dans le sélecteur qui l'a demandé, et lui seul.
 		await expect(typeTrigger).toContainText('Type de membre')
 		await expect(labelTrigger).toContainText('Selectionner une valeur')
 		await expect(page.locator('input[name^="typeField/"]')).toHaveCount(1)

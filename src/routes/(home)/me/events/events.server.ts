@@ -4,7 +4,7 @@ import dayjs from '#lib/dayjs.js'
 /**
  * Les adhésions de l'utilisateur, enrichies de son prochain créneau.
  * Partagé par `/me/events` et `/me/events/past`, qui doivent trier selon les
- * mêmes règles — sans quoi un évènement pourrait manquer aux deux pages.
+ * mêmes règles, sans quoi un évènement pourrait manquer aux deux pages.
  */
 export async function getEventMembers(user: { id: string; email: string }) {
 	const members = await prisma.member.findMany({
@@ -29,8 +29,7 @@ export async function getEventMembers(user: { id: string; email: string }) {
 		.map(addMemberComputedValues)
 		.map((member) => hidePrivateProfilValues(member))
 		.map((member) => {
-			// Seules les inscriptions acceptées engagent le bénévole; `request` et `denied`
-			// ne doivent pas être comptées comme des créneaux à assurer.
+			// Seules les inscriptions acceptées engagent le bénévole.
 			const accepted = member.subscribes.filter((s) => s.state === 'accepted')
 			const toCome = accepted
 				.filter((s) => +s.period.end >= now)
@@ -60,13 +59,12 @@ export function partitionEventMembers(members: EventMember[]) {
 	return {
 		invitations: members.filter((m) => !m.userId),
 		// Un évènement déjà commencé est le plus urgent pour le bénévole: il passe devant,
-		// puis on trie sur la fin — se fier au début ferait remonter un évènement en cours
+		// puis on trie sur la fin: se fier au début ferait remonter un évènement en cours
 		// au milieu des passés.
 		upcoming: dated
 			.filter((m) => +edge(m)! >= startOfToday)
 			.sort((a, b) => +isOngoing(b) - +isOngoing(a) || +edge(a)! - +edge(b)!),
 		undated: mine.filter((m) => !edge(m)),
-		// Les passés repartent du plus récent.
 		past: dated
 			.filter((m) => +edge(m)! < startOfToday)
 			.sort((a, b) => +(b.event.startDate ?? 0) - +(a.event.startDate ?? 0)),

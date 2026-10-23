@@ -3,8 +3,8 @@ import type { Log } from '@prisma/client'
 /**
  * Les briques partagées par les transformations de `logMap.ts` et par les composants du fil.
  *
- * Module feuille, sans import de composant: c'est lui que `app.d.ts` lit pour typer la colonne
- * `data`, et un baril chargeant du Svelte n'y aurait pas sa place.
+ * Module feuille, sans import de composant: `app.d.ts` le lit, à travers `logMap.ts`, pour typer
+ * la colonne `data`, et un baril chargeant du Svelte n'y aurait pas sa place.
  */
 
 /**
@@ -24,7 +24,7 @@ export type LogActor = {
 	lastName: string
 }
 
-/** Une modification, réduite aux clés qui ont bougé (voir `pickChanges`). */
+/** Une modification, réduite aux clés qui ont bougé (voir `diffChanges`). */
 export type LogUpdate<T> = { before: Partial<T>; after: Partial<T> }
 
 /**

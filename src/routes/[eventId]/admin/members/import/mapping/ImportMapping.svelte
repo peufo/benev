@@ -115,7 +115,6 @@
 			{/if}
 		</p>
 
-		<!-- Pendant l'import, le mappage et les valeurs ne bougent plus. -->
 		<fieldset
 			disabled={importing}
 			class="max-h-[70vh] min-w-0 overflow-auto rounded-box border border-soft"

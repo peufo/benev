@@ -43,8 +43,8 @@ function formatOffset(minutes: number) {
 }
 
 /**
- * Une entrée par comportement horaire — soit une soixantaine, contre plus de 400 identifiants
- * IANA — étiquetée par son décalage UTC du moment et ses villes les plus connues.
+ * Une entrée par comportement horaire (une soixantaine, contre plus de 400 identifiants
+ * IANA), étiquetée par son décalage UTC du moment et ses villes les plus connues.
  *
  * `current`, le fuseau déjà enregistré, représente toujours son groupe: autrement une valeur
  * absorbée par un autre représentant serait remplacée sans bruit à la première soumission.

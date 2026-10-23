@@ -8,7 +8,6 @@
 
 	interface Props {
 		user: User
-		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 	}
 
@@ -17,8 +16,8 @@
 	let verificationEmailSent = $state(false)
 	const verificationEmailMessage = 'Un email de verification à été envoyé'
 
-	// Les champs manquants relevés par l'évènement sont désormais renvoyés par la remote
-	// function elle-même (via `invalid`), au lieu d'être posés à la main au montage.
+	// Chaque champ manquant reçoit son erreur de `updateAccount`, par `invalid()`: cette liste ne
+	// fait que les annoncer avant l'envoi.
 	let requiredFields = $derived(page.data.member?.userProfileRequiredFields ?? [])
 
 	function getEmailError(): string {

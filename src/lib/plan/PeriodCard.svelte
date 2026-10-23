@@ -27,7 +27,6 @@
 			moveStart?: boolean
 			moveEnd?: boolean
 		}[]
-		/** Remplacent les évènements de la version Svelte 4. */
 		onupdate?: (value: PeriodWithMembers) => void
 	}
 

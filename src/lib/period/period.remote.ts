@@ -94,9 +94,9 @@ export const deletePeriod = form(
 )
 
 /**
- * Deux appels impératifs, dupliquer la période courante et la déplacer depuis le planning, qui
- * postaient un `FormData` construit à la main. En `command()`, les arguments passent par devalue:
- * les dates restent des dates, sans jeton de coercition.
+ * Deux appels impératifs, dupliquer la période courante et la déplacer depuis le planning. En
+ * `command()`, les arguments passent par devalue: les dates restent des dates, sans jeton de
+ * coercition.
  *
  * Dupliquer n'entre pas au journal. Déplacer y entre au même titre qu'`updatePeriod`: seulement
  * quand le changement atteint des inscrit·es déjà prévenu·es, le glisser-déposer d'un brouillon

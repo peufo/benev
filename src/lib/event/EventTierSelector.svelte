@@ -7,7 +7,6 @@
 	interface Props {
 		field: RemoteFormField<string>
 		value?: string
-		/** Remplacent les évènements de la version Svelte 4. */
 		onchange?: (value: string) => void
 	}
 

@@ -28,14 +28,12 @@ demo('create-pages', async ({ page, director }) => {
 	}, CHARTER)
 	await expect(editor.getByText('Nos valeurs')).toBeVisible()
 
-	// Rédigée, elle peut être publiée.
 	await director.click(page.getByRole('button', { name: 'Statut' }))
 	await director.click(page.getByRole('option', { name: /Page publiée/ }))
 
 	await director.click(page.getByRole('button', { name: 'Enregistrer les modifications' }))
 	await expect(page.getByText('Page enregistrée')).toBeVisible()
 
-	// La page rejoint la navigation du site
 	await director.click(page.getByRole('banner').getByRole('link', { name: 'Charte' }))
 	await expect(page.getByRole('heading', { name: 'Nos valeurs' })).toBeVisible()
 	await director.pause(2000)

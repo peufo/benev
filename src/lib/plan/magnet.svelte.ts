@@ -1,8 +1,7 @@
 import { browser } from '$app/env'
 import { time } from './utils'
 
-// La touche modificatrice est un état global du document: un `$state` de module suffit,
-// plus besoin d'un store ni de son abonnement.
+// La touche modificatrice est un état global du document: un `$state` de module suffit.
 let isCtrlDown = $state(false)
 
 if (browser) {

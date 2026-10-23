@@ -6,7 +6,7 @@ export const load = async ({ params, locals }) => {
 	const token = await readUserToken('emailVerification', params.tokenId)
 	const session = await locals.auth.validate()
 
-	// Jeton inconnu — le plus souvent déjà honoré — ou périmé: le parcours ordinaire reprend la
+	// Jeton inconnu (le plus souvent déjà honoré) ou périmé: le parcours ordinaire reprend la
 	// main, et dira lui-même s'il faut se connecter.
 	if (!token || token.isExpired) {
 		if (token) await consumeToken(params.tokenId)
@@ -19,7 +19,7 @@ export const load = async ({ params, locals }) => {
 	await prisma.user.update({ where: { id: token.user.id }, data: { isEmailVerified: true } })
 
 	// Une session ouverte sur un autre compte n'est pas remplacée en silence: la page propose le
-	// changement, elle ne le décide pas. Le jeton survit — c'est lui qui ouvrira la bonne session
+	// changement, elle ne le décide pas. Le jeton survit: c'est lui qui ouvrira la bonne session
 	// au rechargement.
 	if (session && session.user.id !== token.user.id) {
 		return {

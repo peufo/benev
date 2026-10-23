@@ -14,7 +14,6 @@ async function fillCondition(page: Page, input: Locator, value: string, serializ
 	await expect(conditions).toHaveValue(serialized)
 }
 
-/** Ouvre le menu des conditions et en choisit une. */
 async function addCondition(page: Page, label: string) {
 	await page.getByRole('button', { name: 'Ajouter une condition' }).click()
 	await page.getByRole('button', { name: label }).click()
@@ -37,7 +36,7 @@ test.describe.serial('Conditions de secteur', () => {
 		// TODO: couvrir aussi une condition sur un champ à choix multiple (`InputCheckboxes`).
 	})
 
-	// Le tiroir ne propose plus les conditions: elles se règlent dans leur section, sur la page
+	// Le tiroir ne propose pas les conditions: elles se règlent dans leur section, sur la page
 	// du secteur. Le compteur passe par une remote query, et son échec est avalé par un
 	// `console.error`: seule une valeur juste prouve qu'elle répond.
 	test('Création du secteur, puis aperçu des membres retenus', async () => {
@@ -68,11 +67,9 @@ test.describe.serial('Conditions de secteur', () => {
 	})
 
 	test('Ajout de deux conditions', async () => {
-		// Condition "Âge minimum"
 		await addCondition(page, 'Âge minimum')
 		await expect(page.getByLabel('Âge minimum')).toHaveValue('18')
 
-		// Condition "Profil du membre" sur Ville = Lyon
 		await addCondition(page, 'Profil du membre')
 		await page.getByRole('button', { name: 'Sélectionner un champ' }).click()
 		await page.getByRole('option', { name: 'Ville' }).click()
@@ -99,8 +96,8 @@ test.describe.serial('Conditions de secteur', () => {
 		editUrl = page.url()
 	})
 
-	// LE cas de régression: modifier une condition déjà enregistrée. Avant correctif, les
-	// écritures dans le tableau non-proxy passaient inaperçues et étaient perdues.
+	// Le cas fragile: modifier une condition déjà enregistrée. Une écriture dans un tableau qui
+	// ne serait pas un proxy `$state` passerait inaperçue et se perdrait.
 	test('Modification de conditions existantes', async () => {
 		await fillCondition(page, page.getByLabel('Âge minimum'), '25', /"args":25/)
 		await fillCondition(page, page.getByLabel('Valeur'), 'Paris', /"expectedValue":"Paris"/)

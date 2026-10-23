@@ -23,12 +23,12 @@ export type DrawerLinkAttributes = {
 type LinkOptions = {
 	/** La valeur du paramètre: `'{}'` pour une création, l'id pour une édition (`parseFormKey`). */
 	value?: string
-	/** Joué avant l'enregistrement — refermer le popover qui porte le lien, typiquement. */
+	/** Joué avant l'enregistrement: refermer le popover qui porte le lien, typiquement. */
 	onclick?: () => void
 }
 
 /**
- * Les tiroirs de `DrawersForm` vivent à la racine de l'évènement, hors de l'arbre de l'appelant —
+ * Les tiroirs de `DrawersForm` vivent à la racine de l'évènement, hors de l'arbre de l'appelant,
  * lequel peut d'ailleurs être rendu à même la page, comme le `TeamForm` de `/admin/teams/[teamId]`.
  * Le lien qui ouvre le tiroir est donc le seul à savoir qui appelle et ce qu'il attend en retour.
  *

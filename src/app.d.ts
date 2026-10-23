@@ -1,11 +1,8 @@
-// See https://kit.svelte.dev/docs/types#app
-
 import type { Invite, MemberWithComputedValues } from '#lib/server/index.js'
 import type { Event, Media, Team } from '@prisma/client'
 import { modelMemberCondition } from '#lib/models/index.js'
 import type { LogDataMap } from '#lib/log/logMap.js'
 
-// for information about these interfaces
 declare global {
 	namespace App {
 		interface Locals {
@@ -27,8 +24,6 @@ declare global {
 			team?: Team
 			userIsRoot?: boolean
 		}
-		// interface Error {}
-		// interface Platform {}
 	}
 }
 
@@ -55,7 +50,7 @@ declare global {
 		type MemberConditions = (typeof modelMemberCondition)['_output'][]
 		type MemberProfile = Record<string, string | string[] | number | boolean | undefined | null>
 		/**
-		 * Lieu, partagé par Event et à terme Team / Period.
+		 * Le lieu d'un évènement.
 		 * `coords` est groupé (et non deux champs optionnels) pour rendre impossible
 		 * une latitude sans longitude. Absent pour les lieux issus de l'ancien champ
 		 * texte, qui n'ont jamais été géocodés: le lien retombe sur une recherche.

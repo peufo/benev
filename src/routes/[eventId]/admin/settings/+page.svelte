@@ -35,7 +35,7 @@
 
 	/**
 	 * Une instance par évènement: la barre latérale d'administration mène d'un évènement à
-	 * l'autre sans remonter la page, et l'état du formulaire, lui, vit dans son module — il
+	 * l'autre sans remonter la page, et l'état du formulaire vit dans son module, où il
 	 * porterait encore les valeurs de l'évènement quitté. Voir AGENTS.md.
 	 */
 	const remoteForm = $derived(updateEvent.for(data.event.id))
@@ -84,7 +84,7 @@
 
 	function handleReset() {
 		// L'aperçu du site lit `theme`, que le `reset()` natif ne touche pas: il est rétabli
-		// ici — après ce cycle — puis les sections remontées pour que le DOM reprenne les
+		// ici, après ce cycle, puis les sections remontées pour que le DOM reprenne les
 		// valeurs enregistrées.
 		Object.assign(theme, data.event)
 		resetToken++

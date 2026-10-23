@@ -4,7 +4,7 @@ import { isValidationError } from '@sveltejs/kit'
 import { isUniqueConstraintError, uniqueIssue } from '#lib/server/uniqueIssue.js'
 
 /**
- * Le filtre par champ repose sur le nom que MySQL donne à ses index — `Modèle_champ_key` —
+ * Le filtre par champ repose sur le nom que MySQL donne à ses index (`Modèle_champ_key`),
  * transmis tel quel par Prisma. Un changement de format ferait blâmer le mauvais champ, ou
  * laisserait repasser un 500: c'est ce contrat-là que le test fige.
  */

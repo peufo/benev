@@ -1,13 +1,6 @@
 import z from 'zod'
 import { zStringNullable } from './form'
 
-/**
- * `InputImage` soumet deux champs par image: `<clé>_image` (le fichier) et `<clé>_crop`
- * (le recadrage sérialisé). Sans clé, ils s'appellent simplement `image` et `crop`.
- *
- * Un `<input type="file">` vide n'envoie rien — SvelteKit écarte le fichier fantôme — d'où
- * l'optionnalité de bout en bout: c'est `media.upload` qui refuse une image manquante.
- */
 export type Crop = z.infer<typeof zCrop>
 
 const zCrop = z.object({
@@ -17,7 +10,7 @@ const zCrop = z.object({
 	height: z.number(),
 })
 
-/** Le recadrage arrive en JSON, et vaut littéralement `"null"` tant qu'aucun n'a été fait. */
+/** Le recadrage arrive en JSON dans un champ caché, vide tant qu'aucun n'a été fait. */
 const zCropField = z
 	.string()
 	.optional()
@@ -32,6 +25,10 @@ const zCropField = z
 	})
 	.pipe(zCrop.optional())
 
+/**
+ * Un `<input type="file">` vide n'envoie rien (SvelteKit écarte le fichier fantôme), d'où
+ * l'optionnalité de bout en bout: c'est `media.upload` qui refuse une image manquante.
+ */
 export const modelMediaImage = z.object({
 	// SvelteKit remet un `LazyFile` qu'un Proxy fait passer pour un `File` par `getPrototypeOf`.
 	// Bun ignore ce piège devant `instanceof` (vérifié en 1.4.2), pas devant `isPrototypeOf`:

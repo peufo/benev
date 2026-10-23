@@ -18,7 +18,6 @@
 		/** Champ du formulaire englobant; fourni, il ouvre la saisie du nom de l'image. */
 		nameField?: RemoteFormField<string>
 		freeAspect?: boolean
-		/** Remplacent les évènements de la version Svelte 4. */
 		onsubmit?: (value: { crop: CropArea; image: string }) => void
 	}
 

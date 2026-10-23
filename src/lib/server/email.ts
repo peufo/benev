@@ -53,7 +53,6 @@ export const sendEmail = async ({
 	}
 	const dropped = [...recipients.to.dropped, ...recipients.cc.dropped, ...recipients.bcc.dropped]
 	if (dropped.length) console.log(`Mail: adresses .test écartées (${dropped.join(', ')})`)
-	// Plus personne à qui écrire: le message était entièrement destiné à des fixtures.
 	if (!recipients.to.kept && !recipients.cc.kept && !recipients.bcc.kept) return true
 
 	return enqueueEmail(

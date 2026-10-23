@@ -19,7 +19,7 @@
 </script>
 
 <!-- Les modèles d'email partagent la route d'édition des pages, et l'icône que `PAGE_TYPE`
-     leur donne est facultative — `OptionRecord` la déclare ainsi. -->
+     leur donne est facultative: `OptionRecord` la déclare ainsi. -->
 {#snippet entry({ id, title, type }: { id: string; title: string; type: Page['type'] })}
 	{@const EntryIcon = PAGE_TYPE[type].icon}
 	<a

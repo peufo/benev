@@ -15,7 +15,7 @@
 
 	let { event, size = 'a5', class: klass, fallbackClass = 'w-9' }: Props = $props()
 
-	// En base, `icon` vaut le plus souvent '' et parfois la chaîne 'undefined' — vestiges
+	// En base, `icon` vaut le plus souvent '' et parfois la chaîne 'undefined', vestiges
 	// du scrap de favicon. Sans ce filtre, `EventIcon` tente de les charger et échoue.
 	let icon = $derived(event.icon?.startsWith('http') ? event.icon : null)
 </script>

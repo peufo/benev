@@ -12,7 +12,6 @@ import { sharedPage } from './sharedPage'
  */
 test.describe.serial("Inscription d'une fiche invitée", () => {
 	const event = useEvent('Attente')
-	/** Le compte de la personne invitée, semé à la préparation. */
 	let guest: Awaited<ReturnType<typeof seedUser>>
 	const page = sharedPage()
 	const guestPage = sharedPage()

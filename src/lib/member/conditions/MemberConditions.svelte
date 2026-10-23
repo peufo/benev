@@ -64,8 +64,6 @@
 		}
 	}, 300)
 
-	// Lire la sérialisation abonne l'effet à toute écriture, y compris dans une condition déjà
-	// présente: c'est le seul signal qu'un parent puisse recevoir de ce champ caché.
 	$effect(() => {
 		void serializedConditions
 		onchange?.()
@@ -93,7 +91,6 @@
 			]
 	}
 
-	// Le libellé ouvre le bouton, l'aide le suit: le nom accessible reste préfixé du libellé.
 	const ADD_CONDITION = {
 		valided: { label: 'Membre approuvé' },
 		age: { label: 'Âge minimum' },
@@ -223,7 +220,6 @@
 
 						<div class="flex flex-col gap-1">
 							<div class="flex flex-wrap gap-2">
-								<!-- SELECT FIELD -->
 								<!-- Le getter re-dérive l'item du modèle à chaque fois: contrairement à une
 								     `value` passée en simple prop, la liaison continue de suivre le parent. -->
 								<InputSelect
@@ -246,7 +242,6 @@
 									}
 								/>
 
-								<!-- SELECT OPERATOR -->
 								{#if condition.args.fieldId}
 									{@const fieldId = condition.args.fieldId}
 									{@const field = memberFields.find((f) => f.id === fieldId)}

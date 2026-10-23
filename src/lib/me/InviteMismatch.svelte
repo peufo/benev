@@ -33,8 +33,7 @@
 		Le lien d'invitation à <b>{eventName}</b> ne vise pas le compte avec lequel tu es connecté·e.
 	</p>
 
-	<!-- Les deux adresses en regard plutôt qu'en phrase: elles se comparent d'un coup d'œil, et
-	     une adresse longue ne se coupe plus au milieu d'un mot. -->
+	<!-- Les deux adresses en regard plutôt qu'en phrase: elles se comparent d'un coup d'œil. -->
 	<dl class="mt-4 flex flex-col gap-2 rounded-box border border-soft p-5 text-sm">
 		<div class="flex flex-wrap gap-x-2">
 			<dt class="text-base-content/70">Invitation envoyée à</dt>

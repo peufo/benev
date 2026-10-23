@@ -33,7 +33,7 @@ type EnhanceFormOptions = {
  * Fabrique le callback de `remoteForm.enhance(...)` avec le traitement que tout
  * formulaire du produit doit avoir:
  *
- * - `submit()` renvoie `false` quand la validation échoue — ce n'est **pas** un succès,
+ * - `submit()` renvoie `false` quand la validation échoue: ce n'est **pas** un succès,
  *   et les messages sont déjà rendus sous les champs.
  * - Une erreur levée est un `HttpError`, qui n'étend pas `Error`: son message se lit
  *   dans `err.body.message` après `isHttpError(err)`.

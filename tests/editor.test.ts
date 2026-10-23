@@ -18,10 +18,9 @@ test.describe.serial('Publications et médiathèque', () => {
 	})
 
 	/**
-	 * L'édition d'une page passe par la barre de sauvegarde, et non plus par un
-	 * enregistrement automatique. Le contenu riche est le cas fragile: sa valeur vit dans un
-	 * champ caché que le code écrit, sans le moindre évènement de formulaire — la barre ne
-	 * le voit que si l'éditeur le lui signale.
+	 * Le contenu riche est le cas fragile: sa valeur vit dans un champ caché que le code écrit,
+	 * sans le moindre évènement de formulaire. La barre ne le voit que si l'éditeur le lui
+	 * signale.
 	 */
 	test("L'édition d'une page s'enregistre par la barre de sauvegarde", async () => {
 		await gotoHydrated(page, `/${event.eventId}/admin/pages`)
@@ -157,8 +156,8 @@ test.describe.serial('Publications et médiathèque', () => {
 		await page.getByRole('button', { name: 'Réinitialiser' }).click()
 		await expect(saveBar).toBeHidden()
 
-		// Un envoi un peu lourd dure, et le tiroir peut être fermé entre-temps — Échap, clic
-		// sur le voile, impatience. La réponse doit quand même remplir le champ: c'est
+		// Un envoi un peu lourd dure, et le tiroir peut être fermé entre-temps (Échap, clic
+		// sur le voile, impatience). La réponse doit quand même remplir le champ: c'est
 		// pourquoi le formulaire d'envoi vit hors du tiroir, dont la fermeture le démonterait.
 		// L'envoi est retenu jusqu'à ce que le tiroir soit fermé, quelle que soit la machine.
 		let releaseUpload = () => {}
@@ -185,10 +184,9 @@ test.describe.serial('Publications et médiathèque', () => {
 		await expect(saveBar).toBeHidden()
 		await page.unroute('**/uploadMedia')
 
-		// « Image de fond » est le seul des trois champs image à écrire dans l'état global
-		// `theme`, que le layout reposait depuis `data.event` à chaque nouvelle donnée — donc
-		// à chaque soumission distante, qui fait rejouer les `load`. L'image envoyée depuis ce
-		// champ était ainsi écrasée dans la seconde qui suivait son choix.
+		// « Image de fond » est le seul des trois champs image à vivre dans l'état global
+		// `theme`, que chaque soumission distante, en rejouant les `load`, risque de reposer
+		// depuis `data.event` (voir `EventTheme.svelte`).
 		const background = page.getByRole('button', { name: 'Image de fond', exact: true })
 		await background.click()
 		await expect(drawer).toBeVisible()

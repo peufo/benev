@@ -100,9 +100,8 @@
 		{#if type === 'select' || type === 'multiselect'}
 			<div transition:slide>
 				<!-- Sans `bind:`: `InputOptions` n'a rien à renvoyer, son champ caché porte la valeur
-			     soumise. Et lier `undefined` à un `$bindable` pourvu d'une valeur par défaut lève
-			     — l'erreur tuait l'effet de rendu, et le formulaire entier cessait de se
-			     mettre à jour. -->
+			     soumise. Et lier `undefined` à un `$bindable` pourvu d'une valeur par défaut lève:
+			     l'erreur tue l'effet de rendu, et le formulaire entier cesse de se mettre à jour. -->
 				<InputOptions field={remoteForm.fields.options} value={field.options ?? '[]'} />
 			</div>
 		{/if}

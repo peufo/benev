@@ -7,7 +7,6 @@
 	import { on } from 'svelte/events'
 
 	interface Props {
-		/** Le formulaire surveillé. */
 		form: HTMLFormElement | undefined
 		/**
 		 * L'`id` de ce formulaire, passé en clair: le lire sur l'élément le ferait dépendre de
@@ -141,7 +140,6 @@
 		return setTimeout(() => element.classList.remove(className), duration)
 	}
 
-	/** Le départ est refusé: la page tremble et la barre se signale, seule sortie possible. */
 	function refuse() {
 		if (!barElement) return
 		for (const timer of timers) clearTimeout(timer)
@@ -149,7 +147,6 @@
 		timers = [replay(document.body, 'screen-shake', 500), replay(barElement, 'save-bar-alert', 900)]
 	}
 
-	/** Rend au formulaire les valeurs de l'enregistrement chargé, et referme la barre. */
 	async function reset() {
 		form?.reset()
 		// SvelteKit écoute lui aussi `reset` et relit le `FormData` après son propre `tick`:

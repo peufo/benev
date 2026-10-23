@@ -20,7 +20,6 @@ type Union<L extends unknown | undefined, R extends unknown | undefined> = L ext
 		: L | R
 
 /**
- * NestedPaths
  * Get all the possible paths of an object
  * @example
  * type Keys = NestedPaths<{ a: { b: { c: string } }>

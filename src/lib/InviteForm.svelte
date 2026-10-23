@@ -70,7 +70,7 @@
 
 	/**
 	 * Le tiroir n'est pas démonté à la fermeture: sans cela, l'invitation suivante repartirait
-	 * avec les valeurs de la précédente. Les champs distants ont leur propre état — vider le
+	 * avec les valeurs de la précédente. Les champs distants ont leur propre état: vider le
 	 * `<form>` ne suffit pas.
 	 */
 	function reset() {

@@ -7,7 +7,6 @@ export default defineConfig({
 	// Hors du dépôt: `bun run demo:publish` la dépose dans `MEDIA_DIR/demos`.
 	output: 'demos/.out/videos',
 	workDir: 'demos/.out',
-	// Même serveur que la suite de tests.
 	webServer: playwright.webServer,
 	baseURL: playwright.use?.baseURL,
 	locale: 'fr-CH',

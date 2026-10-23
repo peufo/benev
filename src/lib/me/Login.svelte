@@ -23,7 +23,6 @@
 	 */
 	const invite = $derived(page.data.invite)
 
-	// `state` était le nom de la variable de mode, ce qui bloquait la migration vers les runes.
 	// Un invité sans compte arrive directement sur « Créer un compte »: c'est le geste attendu.
 	let mode = $state<'login' | 'register'>(
 		page.data.invite && !page.data.invite.hasAccount ? 'register' : 'login'
@@ -33,8 +32,8 @@
 	let recoveryNeeded = $state(false)
 
 	// Monté dans une `Card` (étape « Connexion » de l'inscription à un évènement), le composant
-	// ne dessine pas sa propre surface: ce serait une card dans une card. Le titre descend d'un
-	// niveau pour la même raison, la Card porte déjà le `h1`.
+	// ne dessine pas sa propre surface: ce serait une card dans une card. Il tait aussi son titre,
+	// la Card porte déjà le `h1`.
 	const isEmbedded = !!contextContainer.get()
 
 	const reducedMotion = new MediaQuery('(prefers-reduced-motion: reduce)')

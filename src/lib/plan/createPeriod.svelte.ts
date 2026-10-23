@@ -75,8 +75,8 @@ export const createPeriod: Action<HTMLDivElement, Params> = (
 	/** Le ghost appartient au formulaire de création tant que son tiroir est ouvert. */
 	let isPendingCreation = false
 	let preserveGhostOnLocationChange = false
-	// `page` de `$app/state` n'est plus un store: l'action tourne déjà dans un effet, l'effet
-	// enfant créé ici est donc détruit avec le nœud, sans désabonnement à tenir.
+	// L'action tourne déjà dans un effet: l'effet enfant créé ici est détruit avec le nœud, sans
+	// désabonnement à tenir.
 	$effect(() => {
 		void page.url // seule dépendance: n'importe quelle navigation
 		if (preserveGhostOnLocationChange) return

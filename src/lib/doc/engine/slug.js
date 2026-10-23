@@ -1,9 +1,6 @@
 /**
  * L'ancre d'un chapitre de documentation, dérivée de son titre.
  *
- * `vite.config.ts` l'atteint par `rehypeDocSections.js`. Il est typé en JSDoc: `checkJs` le passe
- * au crible comme le reste.
- *
  * Toute ponctuation devient un tiret, ce qui rend la fonction insensible à smartypants: le greffon
  * lit `L’adhésion` là où l'extracteur lit `L'adhésion`, et les deux tombent sur `l-adhesion`.
  *
@@ -23,7 +20,7 @@ export function slugify(text) {
 }
 
 /**
- * Un titre de chapitre peut figer son ancre — `## L'adhésion {#adhesion}` — pour survivre à sa
+ * Un titre de chapitre peut figer son ancre (`## L'adhésion {#adhesion}`) pour survivre à sa
  * propre reformulation. Rend le titre sans le suffixe, et l'ancre si elle est déclarée.
  *
  * @param {string} heading

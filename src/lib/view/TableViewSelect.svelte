@@ -21,8 +21,8 @@
 		views: View[]
 		/**
 		 * Paramètres d'URL qui ne décrivent pas un filtre et ne doivent donc ni entrer dans une vue
-		 * enregistrée, ni la faire passer pour modifiée. Les clés `form_*` — tiroirs et dialogues —
-		 * le sont déjà d'office.
+		 * enregistrée, ni la faire passer pour modifiée. Les clés `form_*` (tiroirs et dialogues) le
+		 * sont déjà d'office.
 		 */
 		ignoredKeys?: string[]
 	}
@@ -44,7 +44,7 @@
 	let isNewView = $derived(!!query && !selectedView)
 	let items = $derived([simpleView, ...views])
 	// `bind:` et non simple prop: la sélection vient de l'URL, que le composant ne pilote pas
-	// seul — un filtre modifié ailleurs doit faire suivre le libellé affiché.
+	// seul. Un filtre modifié ailleurs doit faire suivre le libellé affiché.
 	let value = $derived(
 		selectedView ?? (isNewView ? { id: 'new', name: 'Nouvelle vue', query } : simpleView)
 	)

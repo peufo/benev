@@ -78,7 +78,7 @@
 {/snippet}
 
 <!-- La bande plateforme : identique dans `app` et au second étage de `event`. Elle se distingue
-     par le filet et l'échelle, jamais par un second fond — sous un thème d'évènement, `base-100`
+     par le filet et l'échelle, jamais par un second fond: sous un thème d'évènement, `base-100`
      et `base-200` deviennent tous deux translucides et cesseraient de se différencier. -->
 {#snippet platformStrip()}
 	<div class="flex flex-wrap items-center gap-x-5 gap-y-2 py-3">
@@ -148,7 +148,7 @@
 
 <style>
 	/* La page planning se masque le pied de page pour tenir dans la hauteur d'écran. Le sujet
-	   du `:has` est `body` et sa cible la coque elle-même : sans cela, la règle frappait
+	   du `:has` est `body` et sa cible la coque elle-même : sans cela, la règle frapperait
 	   n'importe quel `<footer>` du document. */
 	:global(body:has(.footer-hidden) .footer-shell) {
 		display: none;

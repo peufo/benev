@@ -30,8 +30,8 @@ test.describe.serial("Parcours d'un organisateur", () => {
 
 	/**
 	 * Une soumission refusée ne doit rien effacer. Le `<select>` est le cas fragile: sa valeur
-	 * ne vit que dans la liaison de `InputSelectNative`, que le re-rendu du champ — celui que
-	 * déclenche l'arrivée des erreurs — n'a aucune raison de rejouer.
+	 * ne vit que dans la liaison de `InputSelectNative`, que le re-rendu du champ, déclenché par
+	 * l'arrivée des erreurs, n'a aucune raison de rejouer.
 	 */
 	test('Une soumission refusée ne vide aucun champ', async () => {
 		await gotoHydrated(page, '/me/events/create')
@@ -57,8 +57,7 @@ test.describe.serial("Parcours d'un organisateur", () => {
 	})
 
 	test("Navigation sur l'évènement", async () => {
-		// Le lieu ne se saisit plus à la création — celle-ci ne demande que l'essentiel — mais
-		// depuis les réglages. Il faut donc l'y poser avant de vérifier le pied de page.
+		// La création ne demande pas le lieu: il se pose depuis les réglages.
 		await mockPhoton(page)
 		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
 		// Le champ de recherche vit dans le popover d'`InputSelect`: il faut l'ouvrir d'abord.
@@ -71,9 +70,8 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		await gotoHydrated(page, `/${event.eventId}`)
 		await expect(page).toHaveTitle(new RegExp(event.eventName))
 
-		// Le lieu est stocké en Json (`Event.location`) puis rendu en pied de page. Un bug de
-		// sérialisation a déjà écrit un booléen dans cette colonne sans que rien ne le détecte:
-		// cette assertion ferme la porte.
+		// Le lieu est stocké en Json (`Event.location`), que rien ne type à l'écriture: seul son
+		// rendu en pied de page prouve que la colonne reçoit bien un lieu.
 		const link = page.getByRole('link', { name: new RegExp(testPlace.label, 'i') })
 		await expect(link).toBeVisible()
 		await expect(link).toHaveAttribute(
@@ -158,11 +156,9 @@ test.describe.serial("Parcours d'un organisateur", () => {
 
 		await gotoHydrated(page, `/${event.eventId}/admin/dashboard?take=2`)
 		const loadPrevious = page.getByRole('button', { name: /entrées précédentes/ })
-		// Fenêtre de deux: les deux dernières notes, et rien avant.
 		await expect(page.getByText(notes[2])).toBeVisible()
 		await expect(page.getByText(notes[0])).toHaveCount(0)
 		await expect(loadPrevious).toBeVisible()
-		// Tant qu'il reste des entrées au-dessus, on n'est pas au début du journal.
 		await expect(page.getByText('Début du journal')).toHaveCount(0)
 
 		await loadPrevious.click()

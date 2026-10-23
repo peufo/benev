@@ -142,7 +142,6 @@ test.describe.serial('Import de membres', () => {
 		await expect(cell(2, 'Taille')).toHaveValue('Medium')
 		await expect(column('Taille')).not.toContainText('invalide')
 
-		// Une valeur se corrige dans sa cellule.
 		await cell(3, 'Courriel').fill('alan@example.com')
 		await cell(3, 'Courriel').press('Tab')
 		await expect(column('Courriel')).not.toContainText('invalide')
@@ -156,7 +155,6 @@ test.describe.serial('Import de membres', () => {
 		await expect(column('Régime')).not.toContainText('Aucun champ trouvé')
 		await expect(page.getByText('à vérifier')).toHaveCount(0)
 
-		// L'import part, et son rapport dit ce qui est entré et ce qui a été écarté.
 		await expect(page.getByLabel('Envoyer une invitation par e-mail')).not.toBeChecked()
 		await page.getByRole('button', { name: 'Importer 3 membres' }).click()
 		await page.waitForURL(`**/${target.eventId}/admin/members/import/report`)

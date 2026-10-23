@@ -53,12 +53,10 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 	// Aucune fiche reliée à ce compte: l'adhésion reste à faire, et le tunnel est le seul chemin.
 	if (!memberAuthor) error(403, `Tu n'es pas encore membre de cet évènement`)
 
-	// Check if the period is already complet
 	if (periodIsComplet(period)) {
 		error(403, 'Sorry, this period is already complet')
 	}
 
-	// Check if author as the right to create this subscribe
 	const isLeaderOfTeam = await permission
 		.leaderOfTeam(period.teamId, locals)
 		.then(() => true)
@@ -66,7 +64,6 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 	const isSelfSubscribe = data.memberId === memberAuthor.id
 	if (!isLeaderOfTeam && !isSelfSubscribe) error(403)
 
-	// Check if self subscribe conditions is respected
 	if (!isLeaderOfTeam) {
 		if (!memberAuthor.event.selfSubscribeAllowed) error(403)
 		// Seul un secteur publié est ouvert aux inscriptions libres; un brouillon n'est même pas visible.
@@ -78,7 +75,6 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 		if (!isMemberAllowed(period.team.conditions, memberAuthor)) error(403)
 	}
 
-	// Check if member is free in this period
 	const isMemberBusy = !isFreeRange(
 		period,
 		memberInvited.subscribes.map((sub) => sub.period),

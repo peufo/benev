@@ -32,7 +32,6 @@ import type {
 } from '@prisma/client'
 import type { OptionRecord } from 'fuma'
 
-/** Durée minimale d'une période de travail. */
 export const PERIOD_MIN_MINUTES = 15
 export const PERIOD_MIN_MS = PERIOD_MIN_MINUTES * 60_000
 
@@ -70,7 +69,7 @@ export type ThemePreset = {
 /**
  * Les habillages prêts à poser d'un évènement. Leurs teintes se dérivent des tokens de la charte
  * et restent claires: le texte des pages bénévoles se lit à même ce fond. `backgroundColor` porte
- * la dominante du dégradé — c'est lui qu'on voit tant que l'image n'est pas chargée.
+ * la dominante du dégradé: c'est lui qu'on voit tant que l'image n'est pas chargée.
  */
 export const THEME_PRESETS = {
 	benevio: {

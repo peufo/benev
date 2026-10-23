@@ -5,7 +5,6 @@
 </script>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
-	<!-- Hero -->
 	<section class="max-w-2xl mb-6 md:mb-8">
 		<h1 class="text-4xl md:text-5xl font-extrabold text-primary tracking-tight leading-[1.05]">
 			Événements passés

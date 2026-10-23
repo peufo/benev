@@ -5,7 +5,7 @@
 		/** Un fichier est en vol au-dessus du tiroir: le lâcher tombera ici. */
 		active?: boolean
 		/**
-		 * `hero`: médiathèque vide. La zone prend toute la place et porte l'état vide — un
+		 * `hero`: médiathèque vide. La zone prend toute la place et porte l'état vide: un
 		 * `Placeholder` gris par-dessus ferait deux boîtes pour un seul message.
 		 */
 		variant?: 'band' | 'hero'

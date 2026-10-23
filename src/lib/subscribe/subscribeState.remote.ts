@@ -65,7 +65,6 @@ export const setSubscribeState = form(
 		const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
 		if (!isCreatorEdition && !isSubscriberEdition) error(403, 'Invalid edition')
 
-		// Check author permission
 		let author = await permission.member(eventId, locals)
 		const isSelfAction = author.id === _subscribe.memberId
 		// La seule origine d'une validation forcée: un responsable qui confirme, au nom du membre,
@@ -89,7 +88,6 @@ export const setSubscribeState = form(
 				error(403, "L'annulation ou le refus d'une inscription n'est pas authorisé.")
 		}
 
-		// Check if member is free in this period
 		if (state === 'accepted') {
 			const memberPeriodsAccepted = _subscribe.member.subscribes
 				.filter((sub) => sub.state === 'accepted')
@@ -105,7 +103,6 @@ export const setSubscribeState = form(
 			}
 		}
 
-		// Check if the period is already complet
 		const { overflowPermitted } = _subscribe.period.team
 		if (state === 'accepted' || (state === 'request' && !overflowPermitted)) {
 			if (periodIsComplet(_subscribe.period)) {
@@ -143,7 +140,6 @@ export const setSubscribeState = form(
 			actor: author,
 		})
 
-		// Automatique member validation
 		if (isLeaderAction && !subscribe.member.isValidedByEvent) {
 			await prisma.member.update({
 				where: { id: subscribe.memberId },

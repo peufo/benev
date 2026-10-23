@@ -44,7 +44,6 @@
 				classActive="active"
 			/>
 
-			<!-- ADMIN -->
 			{#if adminIsVisible}
 				<h3 class="title-sm pl-3 pt-1">Gestion</h3>
 				{#each adminTabs() as { href, isActive, label, icon: Icon } (href)}

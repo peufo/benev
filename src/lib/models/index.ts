@@ -7,33 +7,33 @@
  * (longueurs minimales, email, url) pour qu'elles divergent.
  *
  * Chacun est un `z.object()` annoté `satisfies z.ZodType<Prisma.XInput>`, qui confronte la
- * **sortie** du schéma au type Prisma correspondant. Un `satisfies` sur la forme brute ne le
- * permettait pas: il ne sait pas décrire la sortie d'un `transform`, or `zConnect`, `zDate` et
- * `zJson` en sont. Se passer de l'annotation laisserait un champ mal typé filer jusqu'à Prisma.
+ * **sortie** du schéma au type Prisma correspondant. Un `satisfies` sur la forme brute (l'objet
+ * passé à `z.object()`) ne le permettrait pas: il ne sait pas décrire la sortie d'un `transform`,
+ * or `zConnect`, `zDate` et `zJson` en sont. Se passer de l'annotation laisserait un champ mal
+ * typé filer jusqu'à Prisma.
  *
  * La contrainte de `form()` porte sur l'**entrée** du schéma, qui doit être un `RemoteFormInput`:
- * chaîne, nombre, booléen, `File`, ou objet/tableau de ceux-ci — jamais `null`, jamais `unknown`.
- * La **sortie** reste libre: les `transform` vers les formes Prisma sont conservés tels quels,
- * donc les gestionnaires ne changent pas.
+ * chaîne, nombre, booléen, `File`, ou objet/tableau de ceux-ci, jamais `null` ni `unknown`.
+ * La **sortie** reste libre: un `transform` y produit directement la forme Prisma.
  *
- * Les conversions à faire, une fois pour toutes:
+ * Ce qu'il faut écrire pour chaque sorte de champ:
  *
- * | avant (`parseFormData`)  | après (`form()`)                  | pourquoi                                        |
- * | ------------------------ | --------------------------------- | ----------------------------------------------- |
- * | `z.boolean()`            | `z.boolean().optional()`           | voir ci-dessous                                 |
- * | `z.string().nullish()`   | `z.string().optional()`            | `null` n'est pas un `RemoteFormInput`            |
- * | `z.date()`               | `zDate` (`#lib/models/form`)       | un `<input type="date">` envoie une chaîne       |
- * | `z.relation.connect`     | `zConnect`                         | un champ envoie l'id, pas `{ id }`               |
- * | `z.relations.set`        | `zSet` / `zConnectMany`            | idem, en `name="x[]"`                            |
- * | `z.number()`             | inchangé                           | `field.as('number')` préfixe le `name` de `n:`   |
+ * | champ              | schéma                                  | pourquoi                              |
+ * | ------------------ | --------------------------------------- | ------------------------------------- |
+ * | case à cocher      | `z.boolean().optional()` / `.default()` | voir ci-dessous                       |
+ * | texte facultatif   | `z.string().optional()`                 | `null` n'est pas un `RemoteFormInput` |
+ * | date               | `zDate` (`#lib/models/form`)            | le champ envoie une chaîne            |
+ * | relation           | `zConnect`                              | le champ envoie l'id, pas `{ id }`    |
+ * | liste de relations | `zSet` / `zConnectMany`                 | idem, en `name="x[]"`                 |
+ * | nombre             | `z.number()`                            | `as('number')` préfixe de `n:`        |
  *
  * `z.coerce.number()` ne passe pas: son entrée est `unknown`. Pour un champ sans `field`, dont le
  * `name` est posé à la main, écrire `z.string().transform(Number)`.
  *
  * Les booléens suivent la garantie d'`InputBoolean`: une case rendue transmet toujours sa valeur,
- * `off` comprise. Une clé absente signifie donc « case non rendue », jamais « décochée » — d'où
+ * `off` comprise. Une clé absente signifie donc « case non rendue », jamais « décochée »: d'où
  * `.optional()` pour un champ affiché conditionnellement, dont l'absence ne doit rien toucher. Les
- * autres gardent `.default(false)`, `form()` refusant un booléen ni optionnel ni pourvu d'un défaut.
+ * autres prennent `.default(false)`: `form()` refuse un booléen ni optionnel ni muni d'un défaut.
  */
 export * from './user'
 export * from './event'

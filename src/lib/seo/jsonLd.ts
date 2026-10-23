@@ -43,7 +43,7 @@ export function websiteSchema(siteUrl: string): WithContext<Thing> {
  * Décrit le produit benevio. À ne rendre que sur l'accueil : le layout racine couvre aussi
  * les pages d'évènement, qui ne sont pas le logiciel.
  *
- * Sans `aggregateRating` ni `review` — aucune note réelle n'est collectée à ce jour — Google
+ * Sans `aggregateRating` ni `review` (aucune note réelle n'est collectée), Google
  * n'affichera pas le rich result « Software App ». Le balisage reste utile pour rattacher
  * l'entité et sa grille tarifaire.
  */

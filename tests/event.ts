@@ -22,7 +22,7 @@ export function useEvent(name: string) {
 
 			await page.getByRole('button', { name: 'Créer mon évènement' }).click()
 			// L'évènement s'ouvre sur sa gestion: les pages d'admin sont en `noindex`, leur titre
-			// ne porte donc pas le nom — c'est l'entête qui l'affiche.
+			// ne porte donc pas le nom. C'est l'entête qui l'affiche.
 			await page.waitForURL(`**/${eventId}/admin/dashboard`)
 			await expect(page.getByRole('link', { name: eventName })).toBeVisible()
 		},

@@ -10,7 +10,6 @@
 
 	interface Props {
 		period: PeriodWithComputedValues & { team: TeamWithComputedValues }
-		/** Remplacent les évènements de la version Svelte 4. */
 		onclickPeriod?: (value: PeriodWithComputedValues) => void
 	}
 
@@ -40,7 +39,6 @@
 >
 	<div class="flex gap-1 flex-wrap items-center">
 		<span class="text-sm" class:opacity-80={period.isDisabled}>
-			<!-- {formatRange(period)} -->
 			{daytz(period.start).format('dddd, DD.MM.YY, HH:mm —')}
 			{daytz(period.end).format('HH:mm')}
 		</span>

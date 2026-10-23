@@ -33,8 +33,7 @@ test.describe.serial("Réglages de l'évènement", () => {
 		await expect(description).toBeVisible()
 		await expect(saveBar).toBeHidden()
 		await expect(backgroundColor).toHaveValue('#ffffff')
-		// Les champs de profil forment leur propre section, titrée par la page et non
-		// plus par `MemberFields`.
+		// Les champs de profil forment leur propre section, titrée par la page.
 		await expect(page.getByRole('heading', { name: 'Champs du profil' })).toBeVisible()
 		// La zone de danger vit hors du grand `<form>`: sa confirmation porte le sien.
 		await expect(page.getByRole('heading', { name: 'Zone de danger' })).toBeVisible()
@@ -56,7 +55,6 @@ test.describe.serial("Réglages de l'évènement", () => {
 		await expect(page.getByText('Modifications enregistrées')).toBeVisible()
 		await expect(saveBar).toBeHidden()
 
-		// Rechargement: la description est enregistrée, la couleur intacte, la barre muette.
 		await page.reload()
 		await awaitHydrated(page)
 		await expect(description).toHaveValue('Un centre de recherche appliquée.')
@@ -81,7 +79,7 @@ test.describe.serial("Réglages de l'évènement", () => {
 	 * Un thème pose son image et ses réglages par du code: ni `fields.set()` ni une écriture
 	 * dans l'aperçu n'émettent d'évènement DOM, et la barre de sauvegarde ne surveille que
 	 * ceux-là. Sans l'annonce que le champ caché se fait à lui-même, le choix est bien peint
-	 * à l'écran mais n'atteint jamais le serveur — c'est ce silence que le test ferme.
+	 * à l'écran mais n'atteint jamais le serveur.
 	 */
 	test("Le thème posé à la création se change, s'enregistre et se retire", async () => {
 		const saveBar = page.getByText('Modification en cours !')

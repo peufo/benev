@@ -6,14 +6,13 @@ import { isPermanentError, nextDelay } from './emailRetry'
 import { toAddressList } from './recipients'
 
 /**
- * Un envoi SMTP coûte une poignée de main TLS et parfois plusieurs secondes; l'attendre dans le
- * fil de la requête faisait payer cette latence à l'utilisateur avant sa redirection. Les messages
- * sont donc mis en file et drainés en tâche de fond, un à la fois.
+ * Un envoi SMTP coûte une poignée de main TLS et parfois plusieurs secondes: attendu dans la
+ * requête, l'utilisateur paierait cette latence avant sa redirection. Les messages sont donc mis
+ * en file et drainés en tâche de fond, un à la fois.
  *
- * La file vit en mémoire. Ce qui est durable, ce n'est pas elle mais la ligne `Log` écrite après
- * chaque tentative: une file est un état mutable éphémère, un journal est append-only. Un arrêt
- * brutal peut donc perdre un message — mais plus jamais en silence, `drainEmailQueue` journalisant
- * ce qu'il abandonne.
+ * La file vit en mémoire. Ce qui est durable, c'est la ligne `Log` écrite après chaque tentative.
+ * Un arrêt du serveur peut donc perdre un message, mais pas en silence: `drainEmailQueue`
+ * journalise ce qu'il abandonne.
  *
  * Deux voies, parce que le worker est sérialisé: un envoi en masse (les invitations d'un import)
  * ferait sinon attendre derrière lui un mot de passe oublié ou une inscription. La voie lente ne
@@ -83,8 +82,8 @@ let draining: Promise<void> | null = null
 let stopped = false
 
 /**
- * Met un message en file et rend la main. Le worker s'en occupe. `false` si la file l'a refusé,
- * ce qu'elle journalise déjà: l'appelant n'a plus qu'à ne pas prétendre l'avoir envoyé.
+ * `false` si la file a refusé le message, ce qu'elle journalise déjà: l'appelant n'a plus qu'à
+ * ne pas prétendre l'avoir envoyé.
  */
 export function enqueueEmail(
 	options: SendMailOptions,

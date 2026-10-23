@@ -8,7 +8,6 @@ demo('create-view', async ({ page, director }) => {
 
 	await director.start()
 
-	// Une colonne de plus: le téléphone, pour joindre l'équipe.
 	const fields = page.getByRole('columnheader').last()
 	await director.click(fields.getByRole('button').first())
 	await director.click(fields.getByRole('link', { name: 'Téléphone' }))

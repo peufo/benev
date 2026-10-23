@@ -5,9 +5,9 @@ import { building } from '$app/env'
 import { sequence, type Handle } from '@sveltejs/kit/hooks'
 import z from 'zod'
 
-// zod finalise ses messages au parse, pas à la construction du schéma: les poser ici, une fois au
-// démarrage du serveur, les traduit tous quel que soit l'ordre d'import des modèles. C'est bien le
-// serveur qui valide — `form()` parse le schéma côté serveur et renvoie les issues au client.
+// zod finalise ses messages au parse, pas à la construction du schéma: posée ici, au démarrage,
+// la locale vaut pour tous les modèles quel que soit leur ordre d'import. `form()` parse côté
+// serveur et renvoie au client des issues déjà traduites.
 z.config(z.locales.fr())
 
 if (!building && !SCHEDULER_DISABLED) void startScheduler()

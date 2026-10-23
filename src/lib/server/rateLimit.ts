@@ -1,5 +1,4 @@
 interface RateLimitOptions {
-	/** Largeur de la fenêtre glissante. */
 	windowMs: number
 	/** Nombre d'occurrences tolérées à l'intérieur de la fenêtre. */
 	max: number

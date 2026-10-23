@@ -203,7 +203,6 @@ describe('temps de lecture', () => {
 		expect(readingTime(`<script>${'mot '.repeat(400)}</script>`)).toBe(1)
 	})
 
-	/** Le libellé d'un lien se lit, son adresse non. */
 	it("ne compte pas l'adresse d'un lien", ({ expect }) => {
 		expect(readingTime('[un](/docs/creer-ton-evenement#periodes)')).toBe(readingTime('un'))
 	})
@@ -220,7 +219,7 @@ describe('temps de lecture', () => {
 describe("règles d'écriture", () => {
 	/**
 	 * Le rendu ouvre une carte à chaque `##`: ce qui précède le premier titre flotterait hors de
-	 * toute carte. Les balises de premier niveau ne comptent pas — mdsvex les remonte en tête du
+	 * toute carte. Les balises de premier niveau ne comptent pas: mdsvex les remonte en tête du
 	 * composant, et le greffon les laisse à la racine.
 	 */
 	it('ne met rien avant le premier chapitre', ({ expect }) => {
@@ -269,8 +268,8 @@ describe("règles d'écriture", () => {
 
 	/**
 	 * La description tient sur une carte de l'index et sous le titre de la page: un fragment, pas
-	 * une phrase. Le plafond est large — la phrase à laquelle elle échappe en faisait quinze — mais
-	 * sans lui elle y revient au premier ajout de page.
+	 * une phrase. Le plafond est large, mais sans lui elle redevient une phrase au premier ajout de
+	 * page.
 	 */
 	it('donne à chaque page une description courte et sans phrase', ({ expect }) => {
 		for (const { slug, source } of pages) {

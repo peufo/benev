@@ -174,7 +174,6 @@
 				<InputSearch />
 				<div class="grow"></div>
 
-				<!-- SHOW MEMBERS STATS -->
 				<a
 					href={urlParam.with({ subscribes_stats: 1 })}
 					class="btn btn-square btn-sm xl:hidden"
@@ -183,7 +182,6 @@
 					<SigmaIcon size={18} />
 				</a>
 
-				<!-- RESET FILTERS -->
 				<a
 					href={urlParam.without(...fields.map((f) => f.key), 'skip', 'take')}
 					class="btn btn-square btn-sm"

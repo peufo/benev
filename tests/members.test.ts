@@ -20,8 +20,7 @@ test.describe.serial('Membres et invitations', () => {
 	 * cases sont couplées: « modifiable » et « obligatoire » supposent « visible », et
 	 * retirer la visibilité retire les deux autres. Chaque case repilotée l'est par le champ
 	 * distant, pas par le DOM: seul un aller-retour complet prouve que son état part au
-	 * serveur. Lier `undefined` à l'éditeur d'options levait par ailleurs dans un effet de
-	 * rendu, ce qui figeait le formulaire entier — le type choisi n'ouvrait plus aucun bloc.
+	 * serveur.
 	 */
 	test('Le formulaire de champ de profil suit le type et les droits', async () => {
 		const drawer = page.getByRole('dialog', { name: 'Nouveau champ' })
@@ -76,7 +75,6 @@ test.describe.serial('Membres et invitations', () => {
 		await expect(canWrite.locator('input')).not.toBeChecked()
 		await expect(required.locator('input')).not.toBeChecked()
 
-		// Et l'exiger rétablit les deux droits.
 		await required.click()
 		await expect(canRead.locator('input')).toBeChecked()
 		await expect(canWrite.locator('input')).toBeChecked()
@@ -84,15 +82,13 @@ test.describe.serial('Membres et invitations', () => {
 		await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
 		await expect(drawer).toBeHidden()
 
-		// Réouverture: les trois cases sont restituées. C'est ce qui ne partait pas au serveur.
 		await page.getByRole('button', { name: /Ville/ }).click()
 		await expect(page.getByRole('dialog', { name: 'Modifier le champ' })).toBeVisible()
 		await expect(canRead.locator('input')).toBeChecked()
 		await expect(canWrite.locator('input')).toBeChecked()
 		await expect(required.locator('input')).toBeChecked()
 
-		// Et le retour à faux, que rien ne transmettait: une case décochée n'envoie rien, c'est
-		// `InputBoolean` qui pose le relais.
+		// Une case décochée n'envoie rien: c'est `InputBoolean` qui pose le relais du retour à faux.
 		await required.click()
 		await expect(required.locator('input')).not.toBeChecked()
 		await page.getByRole('button', { name: 'Valider', exact: true }).last().click()
@@ -104,11 +100,9 @@ test.describe.serial('Membres et invitations', () => {
 	})
 
 	/**
-	 * Le profil d'un membre s'édite là où il s'affiche: plus de tiroir, des champs à choix
-	 * rendus en listes déroulantes, et la barre de sauvegarde pour valider. La liste
-	 * déroulante est le cas fragile — sa sélection vit dans le composant, que ni le
-	 * `reset()` natif ni l'arrivée de nouvelles données ne restaurent: seul son remontage
-	 * la ramène sur la valeur enregistrée.
+	 * Les champs à choix y sont des listes déroulantes, le cas fragile: leur sélection vit dans
+	 * le composant, que ni le `reset()` natif ni l'arrivée de nouvelles données ne restaurent.
+	 * Seul son remontage la ramène sur la valeur enregistrée.
 	 *
 	 * Après le champ « Ville », que la fiche édite.
 	 */
@@ -130,7 +124,6 @@ test.describe.serial('Membres et invitations', () => {
 			options: ['Gluten', 'Arachide'],
 		})
 
-		// La table renvoie sur la fiche du membre; le tiroir de profil n'existe plus.
 		await gotoHydrated(page, `/${event.eventId}/admin/members`)
 		await expect(page.getByRole('dialog', { name: /Modifier le profil/ })).toHaveCount(0)
 		await page
@@ -244,7 +237,7 @@ test.describe.serial('Membres et invitations', () => {
 		await expect(draftWarning).toBeVisible()
 
 		// Nommé·e administrateur·ice, l'invité accède déjà à tout l'espace: l'avertissement
-		// tombe. La case est réduite à zéro pixel — c'est son libellé qui la bascule.
+		// tombe. La case est réduite à zéro pixel: c'est son libellé qui la bascule.
 		const isAdmin = page.getByRole('checkbox', { name: /Nommer administrateur/ })
 		await dialog.getByText('Nommer administrateur·ice').click()
 		await expect(isAdmin).toBeChecked()
@@ -274,7 +267,7 @@ test.describe.serial('Membres et invitations', () => {
 	})
 
 	/**
-	 * L'invitation se rejoue depuis la fiche — le cas de l'adresse corrigée après coup. Le
+	 * L'invitation se rejoue depuis la fiche: le cas de l'adresse corrigée après coup. Le
 	 * journal du membre, filtré sur lui seul, porte les deux gestes et les distingue.
 	 */
 	test("L'invitation se renvoie depuis la fiche du membre", async () => {
@@ -314,9 +307,7 @@ test.describe.serial('Membres et invitations', () => {
 
 	/**
 	 * Le refus d'une invitation, des deux côtés. À cette étape l'invité n'est relié à aucun
-	 * membre: le bouton passait par `deleteMember`, que la permission refusait en 403 — il ne
-	 * se passait rien. Ce qu'il retire, c'est son adresse, la fiche appartenant à l'évènement
-	 * qui l'a créée.
+	 * membre: le refus retire son adresse, la fiche appartenant à l'évènement qui l'a créée.
 	 */
 	test("Un invité refuse l'invitation et son adresse quitte la fiche", async ({
 		browser: invitedBrowser,
@@ -351,7 +342,7 @@ test.describe.serial('Membres et invitations', () => {
 			await expect(resend).toBeVisible()
 
 			// Sans le jeton du mail, c'est la vérification de l'adresse qui donne accès à la fiche
-			// invitée — refuser demande la même preuve qu'accepter.
+			// invitée: refuser demande la même preuve qu'accepter.
 			await verifyEmail(chell)
 			await gotoHydrated(invitedPage, `/${event.eventId}/register`)
 			const decline = invitedPage.getByRole('button', { name: /^(Refuser|Confirmer)$/ })

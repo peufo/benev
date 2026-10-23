@@ -17,8 +17,8 @@ test.describe.serial('Secteurs et responsables', () => {
 	 * L'état d'un `form()` distant vit dans son module et survit au démontage du formulaire:
 	 * sans une instance par secteur, ce qui a été saisi sur l'un se retrouve sur le suivant,
 	 * par-dessus ses vraies valeurs. Voir AGENTS.md, « L'état d'un formulaire vit dans son
-	 * module ». La barre de sauvegarde ferme la première porte — quitter un secteur modifié
-	 * est refusé — et l'instance par secteur la seconde, une fois la saisie abandonnée.
+	 * module ». La barre de sauvegarde ferme la première porte, en refusant de quitter un
+	 * secteur modifié, et l'instance par secteur la seconde, une fois la saisie abandonnée.
 	 *
 	 * Crée « Alpha » et « Bravo », que les étapes suivantes lisent.
 	 */
@@ -59,7 +59,6 @@ test.describe.serial('Secteurs et responsables', () => {
 		await createTeam('Alpha')
 		await createTeam('Bravo')
 
-		// Alpha: on touche aux deux champs, et on tente de le quitter sans valider.
 		await teamLink('Alpha').click()
 		await expect(name).toHaveValue('Alpha')
 		await expect(saveBar).toBeHidden()

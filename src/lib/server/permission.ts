@@ -26,11 +26,6 @@ export const permission = {
 	leaderWithoutQuotaCheck: createMemberPermissionWithoutQuotaCheck('leader'),
 }
 
-/**
- * Refuse, comme tous les gardes de ce module — il rendait un booléen, qu'aucun des trois points
- * d'appel ne lisait: `searchUsers`, `createCheckout` et `setMessageState` étaient donc ouverts à
- * n'importe quel compte connecté.
- */
 async function rootPermission(locals: App.Locals) {
 	const session = await locals.auth.validate()
 	if (!session) error(401)

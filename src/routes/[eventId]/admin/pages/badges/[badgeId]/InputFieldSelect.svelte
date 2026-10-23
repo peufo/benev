@@ -3,7 +3,7 @@
 	/**
 	 * Qui a demandé la création d'un champ. Le tiroir est monté une seule fois par le layout de
 	 * l'évènement, et n'annonce le champ créé qu'au global: sans ce jeton, les quatre sélecteurs
-	 * de la page reprendraient le même champ. Le contexte du module suffit — il n'y a qu'un
+	 * de la page reprendraient le même champ. Le contexte du module suffit: il n'y a qu'un
 	 * tiroir, donc qu'un demandeur à la fois.
 	 */
 	let requester: string | undefined = undefined
@@ -39,7 +39,7 @@
 		searchMemberFields({ search, types: typesAccepted, eventId: currentEventId() })
 
 	// Le champ créé depuis ce sélecteur y prend place: c'est ce qu'on venait y chercher. Un
-	// type rejeté ne s'y met pas — le tiroir laisse en changer après coup.
+	// type rejeté ne s'y met pas: le tiroir laisse en changer après coup.
 	onMount(() => {
 		const claim = (created: Field) => {
 			if (requester !== uid) return

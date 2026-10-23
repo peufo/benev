@@ -61,7 +61,7 @@ test.describe.serial('Plan', () => {
 		// Le point sous le curseur reste en place: la vue suit l'échelle.
 		expect(await grid.evaluate((el) => el.scrollLeft)).toBeGreaterThan(scrollBefore)
 
-		// L'échelle finit dans l'URL — mais sans que les données ne repartent.
+		// L'échelle finit dans l'URL, mais sans que les données ne repartent.
 		await expect.poll(() => page.url()).toMatch(/hourSize=/)
 		expect(dataRequests).toEqual([])
 	})
@@ -87,8 +87,7 @@ test.describe.serial('Plan', () => {
 	})
 
 	/**
-	 * Les boutons +/- règlent la même échelle que la molette, par le même chemin client. En lien
-	 * `href`, ils dépendaient du rechargement provoqué par l'URL, qui n'a plus lieu.
+	 * Les boutons +/- règlent la même échelle que la molette, par le même chemin client.
 	 */
 	test("Les boutons d'échelle du bandeau zooment aussi", async () => {
 		const grid = await gotoPlan()
@@ -158,9 +157,9 @@ test.describe.serial('Plan', () => {
 	})
 
 	/**
-	 * Un clic seul ne crée plus de période: c'est le survol qui doit annoncer le geste. Le ghost
+	 * Un clic seul ne crée pas de période: c'est le survol qui doit annoncer le geste. Le ghost
 	 * prend alors la forme d'un trait d'accroche daté, à l'heure aimantée où commencerait le
-	 * cliqué-glissé, et seulement là où ce geste crée — jamais sur l'entête de secteur.
+	 * cliqué-glissé, et seulement là où ce geste crée: jamais sur l'entête de secteur.
 	 */
 	test('Le survol du plan annonce la création par un trait daté', async () => {
 		await gotoPlan('?form_team={}')
@@ -186,9 +185,8 @@ test.describe.serial('Plan', () => {
 	/**
 	 * Le filtre de secteurs ne vit que dans l'URL: `getPlanData` n'a rien d'autre à lire. Le champ
 	 * n'affiche qu'un compte (`countOnly`): un secteur se retire en le décochant dans le menu, et
-	 * l'URL doit suivre chaque coche sans attendre la fermeture, qui laissait le plan sur l'ancien
-	 * filtre. Le menu, lui, doit survivre à la navigation pour qu'on puisse cocher plusieurs
-	 * secteurs de suite.
+	 * l'URL doit suivre chaque coche sans attendre la fermeture. Le menu, lui, doit survivre à la
+	 * navigation pour qu'on puisse cocher plusieurs secteurs de suite.
 	 */
 	test("Le filtre de secteurs écrit l'URL à chaque changement", async () => {
 		await gotoPlan()
@@ -213,8 +211,8 @@ test.describe.serial('Plan', () => {
 
 	/**
 	 * Le serveur charge tout créneau qui croise la plage affichée, et un créneau de trois semaines
-	 * la déborde des deux côtés. Posé sur ses vraies dates, il élargissait la zone de défilement au
-	 * delà de la grille: le bord qui charge la plage suivante n'était plus atteint.
+	 * la déborde des deux côtés. Posé sur ses vraies dates, il élargirait la zone de défilement au
+	 * delà de la grille, et le bord qui charge la plage suivante ne serait plus atteint.
 	 */
 	test('Un créneau plus long que la plage ne déborde pas de la grille', async () => {
 		const team = await seedTeam(event.eventId, 'Camping')

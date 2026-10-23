@@ -4,7 +4,7 @@
  *   bun run timezones
  *
  * Deux zones sont fusionnées quand elles partagent le même décalage UTC *et* exactement les mêmes
- * instants de changement d'heure sur la fenêtre couverte — Le Caire, Beyrouth et Jérusalem restent
+ * instants de changement d'heure sur la fenêtre couverte. Le Caire, Beyrouth et Jérusalem restent
  * donc distincts d'Athènes, dont ils ne diffèrent que par la date des bascules.
  *
  * À relancer quand la fenêtre approche de sa fin (`src/tests/timezone.test.ts` le signale) ou après
@@ -92,8 +92,8 @@ function offsetAt(zone, ms) {
 
 /**
  * Instants exacts (à la minute) où le décalage change sur [from, to). Le balayage avance d'une
- * semaine — aucune règle IANA n'enchaîne deux bascules plus vite, la pause du Ramadan au Maroc
- * étant la plus courte à ~1 mois — puis dichotomie dans la semaine qui contient le changement.
+ * semaine (aucune règle IANA n'enchaîne deux bascules plus vite, la pause du Ramadan au Maroc
+ * étant la plus courte à ~1 mois), puis dichotomie dans la semaine qui contient le changement.
  */
 function transitionsOf(zone, from, to) {
 	const shifts = []

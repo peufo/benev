@@ -86,7 +86,6 @@
 				<div class="relative z-10 border-t mt-2 border-soft">
 					<span class="label text-xs">Responsable{team.leaders.length > 1 ? 's' : ''} </span>
 					<div class="flex gap-2 gap-y-1 flex-wrap">
-						<!-- BADGE LEADERS -->
 						<TeamLeaders leaders={team.leaders} />
 					</div>
 				</div>

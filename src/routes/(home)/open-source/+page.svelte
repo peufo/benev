@@ -10,7 +10,6 @@
 </script>
 
 <div class="max-w-5xl mx-auto flex flex-col gap-24 py-12 px-4 md:px-8">
-	<!-- Hero -->
 	<section>
 		<div class="flex flex-col lg:flex-row lg:items-end gap-10 lg:gap-16 py-8 md:py-16">
 			<div class="max-w-2xl">
@@ -75,7 +74,6 @@
 		</p>
 	</section>
 
-	<!-- Contribuer -->
 	<section class="flex flex-col gap-8">
 		<div class="flex items-start gap-5">
 			<div class="bg-base-100 rounded-field p-3 shadow-sm border border-soft shrink-0">
@@ -138,7 +136,6 @@
 		{/if}
 	</section>
 
-	<!-- CTA final -->
 	<section class="text-center py-12">
 		<h2 class="text-3xl md:text-4xl font-bold text-primary">Prêt à organiser ton événement ?</h2>
 		<p class="mt-4 text-lg text-base-content/70 max-w-xl mx-auto leading-relaxed">

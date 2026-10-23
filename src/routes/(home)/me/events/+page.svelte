@@ -57,7 +57,7 @@
 
 <!-- Pied de page du registre: ce qui sort de la liste courante. Les terminés
      s'accumulent sans rien apporter au quotidien, et «Organiser» ne concerne qu'un
-     organisateur — ni l'un ni l'autre n'a à passer devant le parcours du bénévole. -->
+     organisateur: ni l'un ni l'autre n'a à passer devant le parcours du bénévole. -->
 <div class="mt-6 flex flex-wrap gap-2">
 	{#if data.nbPast}
 		<a href={resolve('me/events/past')} class="btn btn-ghost border-soft">

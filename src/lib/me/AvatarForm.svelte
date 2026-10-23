@@ -12,7 +12,6 @@
 		user: User
 		class?: ClassValue
 		classInput?: ClassValue
-		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 	}
 

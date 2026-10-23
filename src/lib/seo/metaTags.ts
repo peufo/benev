@@ -10,7 +10,7 @@ export const SITE_DESCRIPTION =
  * Metas de base, surchargées par le `metaTags` publié dans les données de page
  *
  * `og.png` est une bannière 1200×630 : les aperçus (WhatsApp, Facebook, Signal) recadrent en
- * 1.91:1, un logo carré y perdait la moitié de sa hauteur. PNG et non WebP — les crawlers
+ * 1.91:1, un logo carré y perdrait la moitié de sa hauteur. PNG et non WebP: les crawlers
  * sociaux ne lisent de façon fiable que JPEG et PNG, et aucun n'accepte le SVG.
  */
 export function defaultMetaTags(url: Pick<URL, 'origin' | 'pathname'>): MetaTagsProps {
@@ -47,9 +47,6 @@ export function defaultMetaTags(url: Pick<URL, 'origin' | 'pathname'>): MetaTags
  * `MetaTags` rend son contenu dans un `<svelte:head>` sans dédoublonnage : deux instances
  * empilées produisent deux `<link rel="canonical">`, deux `description`, deux `robots`.
  * On merge donc en amont pour n'en rendre qu'une seule, à la racine.
- *
- * `svelte-meta-tags@3` n'expose pas de helper de merge (l'API `deepMerge` est arrivée en v4,
- * qui exige Svelte 5).
  */
 export function mergeMetaTags(
 	base: MetaTagsProps,
@@ -128,7 +125,7 @@ export function tiptapExcerpt(content: string | null | undefined, maxLength = 15
 	return text.slice(0, maxLength).replace(/\s+\S*$/, '') + '…'
 }
 
-/** Metas des pages applicatives : hors index, mais les liens restent suivis */
+/** Metas des pages applicatives */
 export const NOINDEX: MetaTagsProps = { robots: 'noindex,nofollow' }
 export const NOINDEX_FOLLOW: MetaTagsProps = { robots: 'noindex,follow' }
 

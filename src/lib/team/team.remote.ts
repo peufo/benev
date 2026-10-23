@@ -121,7 +121,6 @@ export const setTeamState = form(modelTeamState, async ({ id, state }) => {
 		await sendPendingSubscribeRequests(team.id, `${actor.firstName} ${actor.lastName}`)
 })
 
-/** Le glisser-déposer transmettait un JSON dans un `FormData`: l'ordre suffit. */
 export const reorderTeams = command(z.array(z.string()), async (ids) => {
 	const { locals, params } = getRequestEvent()
 	await permission.admin(params.eventId!, locals)
@@ -138,7 +137,6 @@ function getTeamCopyName(initalName: string, teams: string[]): string {
 	return `${name} ${suffix}`
 }
 
-/** Alimente l'`InputSelect` de secteur de `PeriodForm`. */
 export const searchTeams = query(zSearchInEvent, async ({ search, eventId }) => {
 	const { locals } = getRequestEvent()
 	await permission.leader(eventId, locals)

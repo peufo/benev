@@ -13,8 +13,6 @@ import type { LogOutput } from '#lib/log/logTypes.js'
 import { prisma } from './prisma'
 
 /**
- * Écrit une ligne dans le journal.
- *
  * La transformation dérive les relations depuis ce que la mutation vient d'écrire: le point
  * d'appel passe l'entité, pas ses clés étrangères.
  *

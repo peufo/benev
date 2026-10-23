@@ -4,9 +4,9 @@ import { awaitHydrated, gotoHydrated } from './hydrated'
 import { sharedPage } from './sharedPage'
 
 /**
- * Le lien de vérification confirme l'adresse à laquelle il a été envoyé — c'est tout ce que prouve
- * le jeton — mais il ne remplace plus la session ouverte par un autre compte, ni ne ferme celles
- * du compte visé.
+ * Le lien de vérification confirme l'adresse à laquelle il a été envoyé: c'est tout ce que prouve
+ * le jeton. Il ne remplace pas la session ouverte par un autre compte, ni ne ferme celles du
+ * compte visé.
  */
 test.describe.serial('Lien de vérification ouvert depuis un autre compte', () => {
 	let alice: SeededUser
@@ -33,7 +33,7 @@ test.describe.serial('Lien de vérification ouvert depuis un autre compte', () =
 		await expect(bobPage.getByText(alice.email)).toBeVisible()
 		await expect(bobPage.getByText(bob.email)).toBeVisible()
 
-		// La session d'Alice, ouverte ailleurs, a survécu au clic — et voit l'adresse confirmée.
+		// La session d'Alice, ouverte ailleurs, a survécu au clic, et voit l'adresse confirmée.
 		await alicePage.reload()
 		await awaitHydrated(alicePage)
 		await expect(alicePage.getByText('Email non verifié')).toBeHidden()

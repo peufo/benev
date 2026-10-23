@@ -27,7 +27,7 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 			: undefined
 
 		// La fiche que le tunnel d'inscription peut revendiquer. `findClaimableMember` en est le seul
-		// juge — l'adhésion et le refus s'y rapportent aussi. Sans compte relié, elle n'ouvre rien
+		// juge: l'adhésion et le refus s'y rapportent aussi. Sans compte relié, elle n'ouvre rien
 		// d'autre que /register.
 		//
 		// Sans session il n'y a personne à rattacher, d'où la garde: c'est `data.invite`, posé par le
@@ -37,7 +37,7 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 			? await getMemberProfile({ id: claimable.id }).catch(() => undefined)
 			: undefined
 
-		// Une fiche porte cette adresse sans que le compte l'ait prouvée — ni jeton, ni vérification.
+		// Une fiche porte cette adresse sans que le compte l'ait prouvée: ni jeton, ni vérification.
 		// Le calcul vit ici et non dans le tunnel: c'est aussi ce qui ouvre l'évènement en brouillon,
 		// dont l'espace est fermé aux bénévoles et où le tunnel est le seul endroit où le dire.
 		const emailToVerify =

@@ -16,7 +16,6 @@
 </script>
 
 <div class="max-w-6xl mx-auto sm:px-6 py-12 md:py-20">
-	<!-- Hero -->
 	<section class="max-w-2xl mb-12 md:mb-16">
 		<h1
 			class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary tracking-tight leading-[1.05]"
@@ -28,7 +27,6 @@
 		</p>
 	</section>
 
-	<!-- Formulaire + contexte -->
 	<div class="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
 		<div class="lg:col-span-3">
 			<Card>
@@ -130,7 +128,6 @@
 		</div>
 	</div>
 
-	<!-- Messages -->
 	{#if data.messages.length}
 		<section class="mt-16 md:mt-24">
 			<h2 class="text-2xl md:text-3xl font-bold text-primary tracking-tight mb-6">Mes demandes</h2>

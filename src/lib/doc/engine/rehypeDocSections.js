@@ -3,9 +3,7 @@ import { createSlugger } from './slug.js'
 /**
  * Découpe une page de documentation en chapitres: chaque `##` ouvre une surface, et l'auteur
  * n'écrit que du markdown. Le greffon s'insère entre `remark2rehype` et la stringification, deux
- * étapes que mdsvex configure en `allowDangerousHtml` — les nœuds bruts en ressortent intacts.
- *
- * `vite.config.ts` le passe à mdsvex. Il est typé en JSDoc, `checkJs` s'applique.
+ * étapes que mdsvex configure en `allowDangerousHtml`: les nœuds bruts en ressortent intacts.
  *
  * @typedef {object} HastNode
  * @property {string} type
@@ -15,7 +13,7 @@ import { createSlugger } from './slug.js'
  * @property {HastNode[]} [children]
  */
 
-/** Reprises de `Section.svelte`: une page de documentation n'a plus le composant, mais son allure. */
+/** Reprises de `Section.svelte`: une page de documentation en garde l'allure sans le composant. */
 const SECTION_CLASS = ['surface', 'scroll-mt-4', 'p-5', 'space-y-4']
 /**
  * Un `###` découpe un chapitre long, il n'ouvre pas un chapitre: sans ces reprises, la typographie
@@ -33,7 +31,7 @@ const BODY_CLASS = [
  * Ce que Svelte exige au premier niveau du composant. mdsvex les remonte en tête après nous, par
  * `extract_parts`: enfermées dans une `<section>`, ces balises deviendraient du HTML mort et
  * l'import des composants de contenu disparaîtrait. Elles arrivent tantôt en `raw`, tantôt en
- * `text` selon le tokeniseur qui les a reconnues — d'où le test sur la valeur et non sur le type.
+ * `text` selon le tokeniseur qui les a reconnues: d'où le test sur la valeur et non sur le type.
  */
 const TOP_LEVEL = /^\s*<(script|style|svelte:)/i
 

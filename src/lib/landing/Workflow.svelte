@@ -66,7 +66,6 @@
 					class:opacity-100={isActive || $activeVideoIndex === -1}
 					class:opacity-40={!isActive && $activeVideoIndex !== -1}
 				>
-					<!-- Texte -->
 					<div class={i % 2 === 1 ? 'md:order-2' : ''}>
 						<span
 							class="text-7xl md:text-8xl font-extrabold text-primary/10 leading-none select-none"
@@ -81,7 +80,6 @@
 						</p>
 					</div>
 
-					<!-- Visuel animé -->
 					<div class={i % 2 === 1 ? 'md:order-1' : ''}>
 						<VideoCarousel videos={step.videos} index={i} />
 					</div>

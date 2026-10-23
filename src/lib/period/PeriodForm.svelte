@@ -33,7 +33,6 @@
 		class?: string
 		period?: PeriodProp
 		disableRedirect?: boolean
-		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 		ondelete?: () => void
 	}
@@ -115,7 +114,6 @@
 		selectedTags = selectedTags.filter(({ id }) => id !== tagId)
 	}
 
-	/** Duplique le créneau juste avant ou juste après lui, en conservant sa durée. */
 	async function duplicateAside(direction: 'before' | 'after') {
 		const teamId = selectedTeam?.id ?? period.teamId
 		if (!teamId) return

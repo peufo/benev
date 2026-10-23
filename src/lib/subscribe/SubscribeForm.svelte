@@ -8,7 +8,6 @@
 		team: Team
 		memberId: string
 		period: Period
-		/** Remplacent les évènements de la version Svelte 4. */
 		onclose?: () => void
 		onsuccess?: () => void
 	}

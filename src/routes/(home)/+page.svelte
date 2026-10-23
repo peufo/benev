@@ -19,11 +19,9 @@
 <JsonLd schema={softwareApplicationSchema(page.url.origin)} />
 
 <div class="-mx-1">
-	<!-- Hero: asymétrique -->
 	<section class="relative overflow-hidden">
 		<div class="max-w-6xl mx-auto px-4 sm:px-6 py-20 md:py-28">
 			<div class="grid md:grid-cols-2 gap-12 items-center">
-				<!-- Texte -->
 				<div class="text-left">
 					<h1
 						class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary leading-[1.1] tracking-tight"
@@ -72,7 +70,6 @@
 		</div>
 	</section>
 
-	<!-- Trust band -->
 	<section class="border-y border-soft bg-accent-softer">
 		<div class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
 			<div class="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -80,7 +77,7 @@
 					class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-base-content/70"
 				>
 					<!-- Pastilles toutes secondary: les trois affirmations sont indépendantes,
-					     pas des catégories — trois teintes inventeraient une taxonomie. -->
+					     pas des catégories. Trois teintes inventeraient une taxonomie. -->
 					<a class="flex items-center gap-2 link link-hover" href={resolve('open-source')}>
 						<span class="w-2 h-2 rounded-full bg-secondary"></span>
 						Open source
@@ -102,15 +99,11 @@
 		<PosterWall events={data.posterEvents} />
 	{/if}
 
-	<!-- Workflow -->
 	<Workflow />
 
-	<!-- Pricing -->
 	<PricingSection />
 
-	<!-- Testimonials -->
 	<Testimonials />
 
-	<!-- Final CTA -->
 	<LandingCTA user={data.user} />
 </div>

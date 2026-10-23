@@ -8,7 +8,7 @@
 	const MEDIA_DRAWER_KEY = 'select_media'
 
 	/**
-	 * La médiathèque est montée une seule fois, par le layout de l'évènement — un tiroir par
+	 * La médiathèque est montée une seule fois, par le layout de l'évènement: un tiroir par
 	 * `InputMedia` empilerait autant de formulaires d'envoi que de champs.
 	 *
 	 * Qui veut une image dépose ici ce qu'il compte en faire; le tiroir l'appelle au choix. Le
@@ -160,7 +160,7 @@
 				<img src="/media/{editedMedia.id}" alt={editedMedia.name} class="mx-auto" />
 
 				<!-- Une instance par image: `field.as(type, value)` ne fournit qu'une valeur initiale, et
-				     l'état d'un formulaire distant vit dans son module — la description resterait celle
+				     l'état d'un formulaire distant vit dans son module: la description resterait celle
 				     de l'image précédemment ouverte. Voir AGENTS.md, « L'état d'un formulaire vit dans
 				     son module ».
 

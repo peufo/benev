@@ -20,7 +20,6 @@ demo('planif', async ({ page, director }) => {
 
 	await director.start()
 
-	// Un créneau se trace à même la grille.
 	const card = (await reference.locator('xpath=ancestor::div[@id][1]').boundingBox())!
 	const hour = card.width / 4
 	const lane = (await row.boundingBox())!
@@ -33,7 +32,6 @@ demo('planif', async ({ page, director }) => {
 	await director.click(drawer.getByRole('button', { name: 'Ajouter' }))
 	await expect(drawer).toBeHidden()
 
-	// Rouvert, il se duplique à la suite.
 	await director.click(row.getByText('12:00 – 16:00'))
 	const edit = page.getByRole('dialog', { name: "Édition d'un créneau" })
 	await expect(edit).toBeVisible()
@@ -44,7 +42,6 @@ demo('planif', async ({ page, director }) => {
 	await director.press('Escape')
 	await expect(edit).toBeHidden()
 
-	// Le suivi: qui vient, créneau par créneau.
 	const slots = page.locator('a[href*="showSlots"]')
 	await director.note(slots, 'Afficher les inscriptions', { placement: 'bottom' })
 	await director.click(slots)

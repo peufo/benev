@@ -8,7 +8,6 @@
 		keyDownEvent?: KeyboardEvent
 	}
 
-	// La prop s'appelait `props`, ce qui entrait en conflit avec la rune `$props()`.
 	let { suggestion, keyDownEvent }: ComponentProps = $props()
 
 	function handleSelect(index: number) {

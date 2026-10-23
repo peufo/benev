@@ -32,10 +32,6 @@ export const deleteMemberField = form(z.object({ id: z.string() }), async ({ id 
 	return prisma.field.delete({ where: { id, eventId } })
 })
 
-/**
- * Le glisser-déposer envoyait un `FormData` dont chaque clé était un id de champ. En `command()`
- * l'ordre voyage tel quel: la position d'un champ est son index dans le tableau.
- */
 export const reorderMemberFields = command(z.array(z.string()), async (ids) => {
 	const { locals, params } = getRequestEvent()
 	await permission.admin(params.eventId!, locals)
@@ -53,7 +49,6 @@ const fieldTypes = [
 	'multiselect',
 ] as const satisfies readonly FieldType[]
 
-/** Alimente l'`InputSelect` de `InputFieldSelect`, sur la page des badges. */
 export const searchMemberFields = query(
 	zSearchInEvent.extend({ types: z.array(z.enum(fieldTypes)).optional() }),
 	async ({ search, eventId, types }) => {

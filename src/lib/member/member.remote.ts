@@ -65,8 +65,6 @@ export const updateMemberProfile = form('unchecked', async (input: RemoteFormInp
 		.safeParse(input)
 	if (!parsed.success) invalid(...parsed.error.issues)
 
-	// La cible n'est pas forcément l'acteur: c'est son profil qu'on complète, pas celui du
-	// responsable qui l'édite.
 	const target = editOwnProfile
 		? member
 		: await prisma.member.findUniqueOrThrow({ where: { id: memberId, eventId } })
@@ -197,13 +195,12 @@ export const acceptInvite = form(
 			.then(() => true)
 			.catch(() => false)
 
-		// Si le membre existe déjà, on le link au user
 		// TODO: update member contact details from user
 		//
-		// Deux questions bien distinctes, que le même `findFirst` mélangeait: la fiche que ce compte
-		// possède déjà — retrouvée par `userId`, son adresse ayant pu diverger — et celle qu'il a le
-		// droit de reprendre, dont `findClaimableMember` est seul juge. Rapprocher par simple égalité
-		// d'adresse donnait la fiche d'une personne invitée à qui ouvrait un compte à son nom.
+		// La fiche que ce compte possède déjà se retrouve par `userId`, son adresse ayant pu diverger.
+		// Celle qu'il a le droit de reprendre, seul `findClaimableMember` en juge: rapprocher par
+		// simple égalité d'adresse donnerait la fiche d'une personne invitée à qui ouvre un compte à
+		// son nom.
 		const ownMember = await prisma.member.findFirst({ where: { eventId, userId: session.user.id } })
 		const memberAlreadyExist =
 			ownMember ?? (await findClaimableMember(cookies, session.user, eventId))
@@ -335,7 +332,6 @@ export const deleteMember = form(
 	}
 )
 
-/** Alimente les selects de membre: invitation, responsables, aperçu de badge. */
 export const searchMembers = query(zSearchInEvent, async ({ search, eventId }) => {
 	const { locals } = getRequestEvent()
 	await permission.leader(eventId, locals)

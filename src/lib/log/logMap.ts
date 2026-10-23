@@ -199,7 +199,7 @@ export const logMap = {
 	/**
 	 * Coordonnées et champs de profil se lisent tous deux en diff. Les champs sont libres par
 	 * évènement et peuvent porter n'importe quoi (régime, santé): leur instantané est indexé par
-	 * le nom du champ, et le fil qui les rend est réservé aux admins.
+	 * le nom du champ, et le fil qui les rend est réservé aux responsables et au-delà.
 	 */
 	member_update: ({
 		member,

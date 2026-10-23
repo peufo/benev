@@ -12,7 +12,7 @@ type EventRoutes = {
 }
 type EventRoute = keyof EventRoutes & string
 
-/** Les routes qu'`eventId` suffit à résoudre — celles qui se passent sans second argument. */
+/** Les routes qu'`eventId` suffit à résoudre: celles qui se passent sans second argument. */
 export type EventRouteWithoutParams = {
 	[K in EventRoute]: keyof EventRoutes[K] extends never ? K : never
 }[EventRoute]
@@ -65,7 +65,7 @@ export function withSearch(path: ResolvedPathname, search: string): ResolvedPath
 
 /**
  * L'entrée d'un évènement pour la personne qui y adhère: le tableau de bord dès qu'elle a une
- * charge à y tenir — responsable comme administrateur·ice —, son espace bénévole sinon.
+ * charge à y tenir (responsable comme administrateur·ice), son espace bénévole sinon.
  */
 export function eventHomePath(eventId: string, roles: MemberRole[] = []): ResolvedPathname {
 	return roles.includes('leader')

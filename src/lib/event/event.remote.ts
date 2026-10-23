@@ -9,8 +9,8 @@ import { diffChanges, hasChanges, projectEvent } from '#lib/log/index.js'
 
 /**
  * Deux formulaires décrivent un évènement: `EventForm` le crée avec le strict nécessaire, et
- * `/[eventId]/admin/settings` le complète en une soumission unique — identité, adhésion et
- * thème n'écrivant jamais qu'une même ligne `Event`.
+ * `/[eventId]/admin/settings` le complète en une soumission unique: identité, adhésion et
+ * thème n'écrivent jamais qu'une même ligne `Event`.
  *
  * Affiche et logo n'existent qu'en modification: ce sont des médias de la médiathèque de
  * l'évènement, laquelle lui est postérieure.

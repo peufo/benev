@@ -107,14 +107,12 @@
 
 				<div class="grow"></div>
 
-				<!-- SHOW MEMBERS STATS -->
 				<a href={urlParam.with({ members_stats: 1 })} class="btn btn-square btn-sm xl:hidden">
 					<span class="inline-flex" use:tip={{ content: 'Afficher le résumé des membres' }}
 						><SigmaIcon size={18} /></span
 					>
 				</a>
 
-				<!-- RESET FILTER -->
 				<a
 					href={urlParam.without(...tableFields.map((f) => f.key), 'skip', 'take')}
 					class="btn btn-square btn-sm"

@@ -5,9 +5,9 @@ import { gotoHydrated } from './hydrated'
 import { sharedPage } from './sharedPage'
 
 /**
- * Le journal était réservé aux administrateurs, alors que tout ce qu'il montre — coordonnées,
- * rôles, champs de profil — se lit déjà sur la fiche d'un membre, que les responsables ouvrent.
- * Rien d'autre ne couvre son ouverture: le reste du parcours se joue en propriétaire.
+ * Le journal est ouvert aux responsables: tout ce qu'il montre (coordonnées, rôles, champs de
+ * profil) se lit déjà sur la fiche d'un membre, qu'ils ouvrent. Rien d'autre ne couvre cette
+ * ouverture: le reste du parcours se joue en propriétaire.
  */
 test.describe.serial("Journal d'un responsable", () => {
 	const event = useEvent('Journalerie')

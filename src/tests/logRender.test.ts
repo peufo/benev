@@ -16,7 +16,7 @@ import LogEmail from '#lib/log/LogEmail.svelte'
  * Le rendu de chaque famille, alimenté par la charge utile que produit vraiment `logMap`.
  *
  * `svelte-check` vérifie déjà les accès de propriétés; ce qu'il ne voit pas, c'est ce qui casse à
- * l'exécution — un `.join()` sur une clé absente, un libellé indexé par une valeur inconnue. Le
+ * l'exécution: un `.join()` sur une clé absente, un libellé indexé par une valeur inconnue. Le
  * tour complet transformation -> composant est le seul à l'attraper.
  *
  * `Log.svelte` n'est pas monté ici: il importe `LogNote`, donc `log.remote.ts`, donc `$app/server`,

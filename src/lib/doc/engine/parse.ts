@@ -3,7 +3,7 @@ import { createSlugger } from './slug.js'
 
 /**
  * Lecture du frontmatter d'une page: des scalaires `clé: valeur` sur une ligne, rien d'autre. Ni
- * listes, ni valeurs sur plusieurs lignes — mdsvex en accepterait, mais une page de documentation
+ * listes, ni valeurs sur plusieurs lignes: mdsvex en accepterait, mais une page de documentation
  * n'a besoin que de son titre et de sa description.
  */
 export function readFrontmatter(source: string): { data: Record<string, string>; body: string } {
@@ -39,7 +39,7 @@ export function readSections(body: string): TocSection[] {
 	return sections
 }
 
-/** Les composants employés dans la page — ceux dont la surface markdown attend un jumeau. */
+/** Les composants employés dans la page: ceux dont la surface markdown attend un jumeau. */
 export function readComponents(body: string): string[] {
 	const names = new Set<string>()
 	for (const [, name] of body.matchAll(/<([A-Z][A-Za-z0-9]*)/g)) names.add(name)
@@ -65,8 +65,8 @@ function* codeFreeLines(body: string): Generator<string> {
 
 /**
  * mdsvex courbe les apostrophes du titre rendu (smartypants). Le sommaire lit la source: sans cette
- * substitution, il écrirait le titre autrement que la page. Les ancres, elles, ne s'en soucient pas
- * — `slugify` réduit toute ponctuation à un tiret.
+ * substitution, il écrirait le titre autrement que la page. Les ancres, elles, ne s'en soucient pas:
+ * `slugify` réduit toute ponctuation à un tiret.
  */
 function typographic(title: string): string {
 	return title.replace(/'/g, '’')

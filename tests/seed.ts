@@ -4,9 +4,9 @@ import { PrismaClient, type FieldType, type TeamState } from '@prisma/client'
 import { TERMS_VERSION } from '../src/lib/constant/terms'
 
 /**
- * Ce que les tests écrivent en base plutôt que de le cliquer. La création par l'interface reste
- * couverte, `test.ts`, `members.test.ts` et `teams.test.ts` la jouant pour chaque entité, mais la
- * rejouer dans chaque fichier ne prouvait rien de plus et coûtait le plus clair de la suite.
+ * Ce que les tests écrivent en base plutôt que de le cliquer. La création par l'interface est
+ * couverte par `test.ts`, `members.test.ts` et `teams.test.ts`: la rejouer dans chaque fichier ne
+ * prouverait rien de plus et coûterait le plus clair de la suite.
  *
  * Deux règles s'appliquent à tout ce qui est écrit ici:
  *
@@ -33,8 +33,8 @@ export type SeededUser = {
 /**
  * Un compte prêt à s'en servir: conditions acceptées à la version courante, sans quoi
  * `TermsAcceptDialog` s'ouvrirait par-dessus chaque page, et sans mot de passe, puisque
- * `signIn` ouvre la session directement. `useUser().register()` reste pour les tests qui
- * portent sur l'inscription elle-même.
+ * `signIn` ouvre la session directement. `useUser().register()` sert aux tests qui portent
+ * sur l'inscription elle-même.
  */
 export async function seedUser(
 	name: string,

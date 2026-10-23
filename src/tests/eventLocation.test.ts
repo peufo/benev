@@ -8,7 +8,7 @@ import { mapUrl } from '#lib/location/index.js'
 
 /**
  * Reproduit ce que `form()` transmet au schéma: le POJO issu du `FormData`, où le champ
- * `location` d'`InputLocation` est déjà une chaîne JSON — plus de jeton `USE_COERCE_JSON`.
+ * `location` d'`InputLocation` est déjà une chaîne JSON.
  */
 const submit = async (location?: unknown) => {
 	const input: Record<string, string> = { id: 'mon-event', name: 'Mon Event' }
@@ -47,8 +47,7 @@ describe('champ location du formulaire évènement', () => {
 		})
 	})
 
-	// `.pipe()` conserve le chemin du sous-champ fautif, là où l'ancienne union
-	// (objet | chaîne JSON) faisait remonter l'erreur au niveau du champ
+	// `.pipe()` rattache l'erreur au sous-champ fautif, pas au champ `location` entier
 	it('refuse des coordonnées incomplètes', async ({ expect }) => {
 		await expect(submit({ label: 'X', coords: { lat: 1 } })).rejects.toMatchObject({
 			issues: [{ path: ['location', 'coords', 'lon'] }],

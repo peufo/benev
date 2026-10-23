@@ -262,7 +262,6 @@ export async function createVolunteer(): Promise<SeededUser> {
 type FestivalOptions = {
 	/** Les secteurs, publiés. */
 	teams?: boolean
-	/** Leurs créneaux. */
 	periods?: boolean
 	/** Les bénévoles, leurs profils et leurs inscriptions. */
 	volunteers?: boolean

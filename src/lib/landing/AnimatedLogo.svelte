@@ -9,9 +9,9 @@
 
 	// Le tracé anime `stroke-dashoffset`, une propriété de peinture: contrairement à
 	// `transform` et `opacity`, elle ne part pas au compositeur et s'exécute sur le thread
-	// principal — que l'hydratation bloque par salves. Lancée au chargement, la séquence se
-	// figeait en plein tracé. On attend donc que le thread soit libre. Le point et la
-	// lévitation, eux, sont composités: ils n'ont jamais eu besoin d'attendre.
+	// principal, que l'hydratation bloque par salves. Lancée au chargement, la séquence se
+	// figerait en plein tracé: on attend que le thread soit libre. Le point et la lévitation,
+	// composités, n'ont pas besoin d'attendre.
 	let go = $state(false)
 
 	onMount(() => {
@@ -24,8 +24,8 @@
 		return () => cancelIdleCallback(id)
 	})
 
-	// Les bénévoles qui rejoignent. Ce sont les mêmes points que celui de la marque —
-	// `logo.svg` dit du sien qu'il est « l'humain » — en plus petits et en retard sur lui.
+	// Les bénévoles qui rejoignent. Ce sont les mêmes points que celui de la marque (`logo.svg`
+	// dit du sien qu'il est « l'humain »), en plus petits et en retard sur lui.
 	// Chacun dérive vers la marque en apparaissant: `dx`/`dy` pointent vers l'extérieur
 	// depuis son centre (≈103,100), en pourcentage de la taille du point lui-même.
 	// Trois positions posées à la main: on ne génère pas ce qui se lit d'un coup d'œil.
@@ -40,7 +40,7 @@
 
 <!--
 	La marque se dessine, son point arrive, puis les bénévoles la rejoignent. Le tracé est en
-	CSS pur — les longueurs de `logo.svg` sont connues (hampe 120, boucle 2π·40 ≈ 251.33),
+	CSS pur: les longueurs de `logo.svg` sont connues (hampe 120, boucle 2π·40 ≈ 251.33),
 	donc rien ne justifie de les mesurer au montage.
 
 	La géométrie est reprise de `src/lib/assets/logo.svg` mais rendue inline pour que la marque
@@ -153,7 +153,7 @@
 	}
 
 	/* La séquence attend que le thread principal soit libre (voir le script). En pause elle
-	   reste sur son premier état — marque non tracée — donc le départ ne fait rien clignoter:
+	   reste sur son premier état, marque non tracée, donc le départ ne fait rien clignoter:
 	   c'est déjà ce que le serveur a rendu. */
 	.stem,
 	.bowl,
@@ -170,7 +170,7 @@
 	}
 
 	/* Lévitation continue. Portée par le `<g>` et non par le cercle: l'arrivée anime déjà
-	   son `transform`, les deux s'écraseraient. Le `<g>` lévite dès le chargement — le
+	   son `transform`, les deux s'écraseraient. Le `<g>` lévite dès le chargement: le
 	   point qu'il porte étant encore invisible, chacun est déjà déphasé quand il paraît.
 	   `ease-in-out` et non la décélération du reste: une oscillation veut du sinusoïdal. */
 	.float {

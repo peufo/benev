@@ -2,9 +2,8 @@ import { describe, it } from 'vitest'
 import { GET } from '../routes/robots.txt/+server'
 
 /**
- * Le fichier statique `static/robots.txt` a laissé place à une route: la production doit
- * continuer à servir exactement les mêmes règles, et les autres domaines — `dev.benev.io`
- * en tête — ne doivent jamais être indexables, sous peine de dupliquer tout le site.
+ * Seule la production s'ouvre aux robots: les autres domaines, `dev.benev.io` en tête, ne
+ * doivent jamais être indexables, sous peine de dupliquer tout le site.
  */
 const robots = async (url: string) => {
 	const response = await GET({ url: new URL(url) } as Parameters<typeof GET>[0])

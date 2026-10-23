@@ -8,7 +8,7 @@ import { WAITING, WAITING_KEYS, waitingOf, type Waiting } from './waiting'
 export const load = async ({ url, parent, locals, params: { eventId } }) => {
 	const actor = await permission.leaderOrRoot(eventId, locals)
 	const { event } = await parent()
-	// Ce que la page compte — membres, inscriptions, secteurs — se limite aux secteurs d'un
+	// Ce que la page compte (membres, inscriptions, secteurs) se limite aux secteurs d'un
 	// responsable. Le journal, lui, porte sur l'évènement entier et se lit à tous les rangs.
 	const isAdmin = !actor || actor.roles.includes('admin')
 
@@ -18,12 +18,11 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 	})
 
 	// Sans inscription: ni acceptée, ni en attente. Un refus ou une annulation remet le membre
-	// dans la liste — c'est quelqu'un à relancer.
+	// dans la liste: c'est quelqu'un à relancer.
 	const withoutSubscribe = {
 		subscribes: { none: { state: { in: ['accepted', 'request'] } } },
 	} satisfies Prisma.MemberWhereInput
 
-	// Un responsable ne pilote que ses secteurs: tout ce que la page compte s'y limite.
 	const teamWhere: Prisma.TeamWhereInput = {
 		eventId,
 		...(isAdmin ? {} : { id: { in: actor.leaderOf.map(({ id }) => id) } }),
@@ -79,7 +78,7 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 				periods: {
 					select: {
 						maxSubscribe: true,
-						// Le condensé ne rend qu'une jauge: les refus et annulations n'y entrent pas.
+						// Les refus et annulations ne comptent pas parmi les inscriptions.
 						subscribes: {
 							where: { state: { in: ['accepted', 'request'] } },
 							select: {
@@ -94,8 +93,6 @@ export const load = async ({ url, parent, locals, params: { eventId } }) => {
 		}),
 	])
 
-	// Un secteur se réduit à ce que `Progress` consomme: la somme des places de ses périodes et
-	// leurs inscriptions mises à plat.
 	const teams = teamsRaw.map(({ id, name, periods }) => ({
 		id,
 		name,

@@ -12,7 +12,6 @@
 	import type { EventJournal } from './journal'
 
 	interface Props {
-		/** Ce que `getEventJournal` a servi: la fenêtre du fil et le filtre qui l'a produite. */
 		journal: EventJournal
 		/** Nommé en tête du fil quand celui-ci ne porte pas sur un membre. */
 		title?: string

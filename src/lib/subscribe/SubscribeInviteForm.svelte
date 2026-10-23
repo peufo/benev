@@ -12,7 +12,6 @@
 		periodId: string
 		class?: string
 		member?: Member | undefined
-		/** Remplacent les évènements de la version Svelte 4. */
 		onsuccess?: () => void
 	}
 

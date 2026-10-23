@@ -10,7 +10,6 @@
 		trigger?: HTMLElement | undefined
 		keyDownEvent?: KeyboardEvent | undefined
 		keyDownPreventDefault?: boolean
-		/** Remplace l'évènement `select` de la version Svelte 4. */
 		onSelect?: (index: number) => void
 		children?: import('svelte').Snippet<[{ item: Item; index: number }]>
 	}

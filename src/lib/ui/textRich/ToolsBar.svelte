@@ -12,7 +12,6 @@
 	interface Props {
 		editor: Editor
 		class?: string
-		/** Remplacent les évènements de la version Svelte 4. */
 		oninsertMedia?: () => void
 	}
 

@@ -13,10 +13,6 @@ type UploadOption = {
 }
 
 export const media = {
-	/**
-	 * Le fichier et son recadrage arrivent déjà validés par le schéma de la remote function
-	 * (`modelMediaImage`): ce module ne relit plus le `FormData`.
-	 */
 	async upload({ image, crop }: MediaImageInput, opt: UploadOption) {
 		if (!image || image.size === 0) throw new Error('image is not defined')
 		if (crop === undefined) throw new Error('no crop data')

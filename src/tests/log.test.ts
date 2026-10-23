@@ -42,7 +42,7 @@ describe('logMap', () => {
 
 		const log = logMap.subscribe_state({ subscribe, before: 'request', actor })
 
-		// Aucun point d'appel n'a eu à remonter `period.team.eventId` lui-même.
+		// Le point d'appel n'a pas à remonter `period.team.eventId` lui-même.
 		expect(log.eventId).toBe('fete')
 		expect(log.memberId).toBe('mbr_1')
 		expect(log.teamId).toBe('tm_1')
@@ -54,7 +54,7 @@ describe('logMap', () => {
 		const log = logMap.member_delete({ member, actor, isSelf: false })
 
 		// La ligne est écrite après la suppression: il n'y a plus de membre à pointer, seul le
-		// nom conservé dit qui est parti. Le type l'interdit déjà — reste à vérifier qu'aucune
+		// nom conservé dit qui est parti. Le type l'interdit déjà, reste à vérifier qu'aucune
 		// clé ne se glisse à l'exécution, car `createLog` la reprendrait telle quelle.
 		expect('memberId' in log).toBe(false)
 		expect(log.data.member).toEqual({ id: 'mbr_1', name: 'Marc Dupont' })

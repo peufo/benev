@@ -19,7 +19,6 @@ demo('subscribe', async ({ page, director }) => {
 	await director.click(page.getByText('M', { exact: true }))
 	await director.click(page.getByRole('button', { name: 'Valider' }))
 
-	// Le choix d'un créneau, depuis son tableau de bord.
 	await director.click(page.getByText('Voir les secteurs', { exact: true }))
 	const bar = page.getByRole('link', { name: /^Bar principal/ })
 	await director.click(bar.getByRole('heading', { name: 'Bar principal' }))

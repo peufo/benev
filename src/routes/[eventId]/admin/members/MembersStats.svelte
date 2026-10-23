@@ -22,8 +22,7 @@
 		isIncomplet: 'Incomplet',
 	}
 
-	// `urlParam` de fuma 2 est un objet runes, plus un store: `derived` n'a plus lieu
-	// d'être, la fonction relit l'état réactif à chaque appel.
+	// `urlParam` est un objet à runes: une simple fonction relit l'état réactif à chaque appel.
 	const urlWith = (params: Record<string, string>) =>
 		urlParam.with(params, 'skip', 'take', 'summary', 'members_stats')
 </script>

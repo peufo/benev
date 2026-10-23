@@ -22,7 +22,6 @@
 		 * seule. `T` restreint les cibles quand un état ne se rejoint plus une fois quitté.
 		 */
 		transitions: Transition[]
-		/** La fonction distante qui change l'état: elle reçoit `id` et `state`. */
 		form: RemoteForm<{ id: string; state: T }, void>
 		/** L'enregistrement dont l'état change, et la clé de l'instance du formulaire. */
 		id: string

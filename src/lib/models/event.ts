@@ -9,9 +9,9 @@ type EventCreateInput = Omit<Prisma.EventUncheckedCreateInput, 'ownerId'>
 export type EventUpdateInput = Omit<Prisma.EventUncheckedUpdateInput, 'ownerId'>
 
 /**
- * Le formulaire soumet `null` pour effacer un lieu, là où Prisma attend `DbNull`.
- * La conversion se fait côté action via `jsonOrDbNull` (#lib/server): ce module est
- * importé par des composants Svelte, il doit rester exempt de runtime Prisma.
+ * Un lieu effacé sort du schéma en `null`, là où Prisma attend `DbNull`. La conversion se fait
+ * dans la remote function via `jsonOrDbNull` (#lib/server): ce module est importé par des
+ * composants Svelte, il doit rester exempt de runtime Prisma.
  */
 type FormInput<T> = Omit<T, 'location'> & { location?: PrismaJson.Location | null }
 
@@ -53,7 +53,6 @@ export const modelEventUpdate = z.object({
 	instagram: httpUrl,
 	email: zStringNullable(z.email()),
 	phone: z.string().optional(),
-	// `null` = le lieu a été effacé, `undefined` = champ absent, valeur inchangée
 	location: zLocationField,
 	timezone: z.string().optional(),
 }) satisfies z.ZodType<FormInput<EventUpdateInput>>

@@ -15,7 +15,7 @@
 	let { fields, event }: Props = $props()
 
 	// Affiche et logo se soumettent par leur id, comme le fond. `untrack`: la valeur de départ
-	// est une graine, pas un lien — c'est le `{#key resetToken}` de la page qui remonte la
+	// est une graine, pas un lien: c'est le `{#key resetToken}` de la page qui remonte la
 	// section pour les rétablir depuis `data.event`.
 	let posterId = $state(untrack(() => event.posterId))
 	let logoId = $state(untrack(() => event.logoId))

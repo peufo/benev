@@ -31,7 +31,7 @@ export const validateToken = async (tokenType: TokenType, tokenId: string) => {
 
 	const tokenExpires = Number(token.expires)
 	if (!isWithinExpiration(tokenExpires)) throw new Error('Expired token')
-	// La colonne est nullable depuis que `invitation` vise un membre: ces deux types-là, eux,
+	// `userId` n'est nul que pour un jeton `invitation`, qui vise un membre: les autres types
 	// n'existent que rattachés à un compte.
 	if (!token.userId) throw new Error('Token without user')
 

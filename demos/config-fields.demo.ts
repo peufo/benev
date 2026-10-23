@@ -8,7 +8,6 @@ demo('config-fields', async ({ page, director }) => {
 
 	await director.start()
 
-	// Les informations de compte exigées
 	await director.click(page.getByRole('link', { name: 'Adhésion', exact: true }))
 	// fuma masque la case derrière son interrupteur: c'est le libellé qui se clique.
 	await director.click(page.getByText('Numéro de téléphone', { exact: true }))

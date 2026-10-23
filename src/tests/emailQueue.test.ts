@@ -48,7 +48,7 @@ describe('isPermanentError', () => {
 	})
 
 	// Une coupure réseau ou un délai dépassé n'a pas de code SMTP: c'est exactement le cas qu'il
-	// faut réessayer, et l'ancien code le confondait avec un succès.
+	// faut réessayer.
 	it('tient une erreur sans code pour passagère', ({ expect }) => {
 		expect(isPermanentError(new Error('ETIMEDOUT'))).toBe(false)
 		expect(isPermanentError(Object.assign(new Error('socket'), { code: 'ECONNRESET' }))).toBe(false)

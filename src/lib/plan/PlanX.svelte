@@ -204,7 +204,6 @@
 		</button>
 	</div>
 
-	<!-- MILESTONE NAVIGATION -->
 	<MilestonesLink {milestonesBefore} {milestonesAfter} />
 
 	<div class="h-48"></div>

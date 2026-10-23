@@ -21,7 +21,6 @@
 	let isMember = $derived(!!page.data.member)
 </script>
 
-<!-- HOME -->
 {#if !hideIndex && pageHome}
 	<a href={eventPath('')} class={[klass, page.route.id === '/[eventId]' && classActive]}>
 		<HouseIcon size={20} class="opacity-70" />
@@ -29,7 +28,6 @@
 	</a>
 {/if}
 
-<!-- TEAMS -->
 {#if !hideTeams && page.data.event?.selfSubscribeAllowed}
 	<a
 		href={eventPath('/teams')}
@@ -40,7 +38,6 @@
 	</a>
 {/if}
 
-<!-- PAGES -->
 {#each pages.filter((p) => p.type !== 'home' && (isMember || p.type !== 'member')) as { title, path, id, type, state } (id)}
 	{@const PageIcon = state === 'draft' ? PAGE_STATES.draft.icon : PAGE_TYPE[type].icon}
 	<a

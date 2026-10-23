@@ -16,7 +16,7 @@ const memberConditionOperator = z.enum([
 	'not',
 ])
 
-/** Aussi parsé depuis un corps JSON par `[eventId]/teams/membersAllowed`: reste tel quel. */
+/** Aussi l'argument de la `query()` `countMembersAllowed`, hors formulaire: reste tel quel. */
 export const modelMemberCondition = z.union([
 	z.object({ type: z.literal('valided') }),
 	z.object({

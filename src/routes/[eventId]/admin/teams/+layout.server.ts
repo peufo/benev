@@ -5,7 +5,7 @@ export const load = async ({ locals, params: { eventId } }) => {
 	// identifier l'acteur. Il rend `null` pour le root, qui n'est responsable de rien.
 	const actor = await permission.leaderOrRoot(eventId, locals)
 
-	// Un responsable voit tous les secteurs — en lecture seule sur ceux qu'il ne dirige pas.
+	// Un responsable voit tous les secteurs, en lecture seule sur ceux qu'il ne dirige pas.
 	const teamsRaw = await prisma.team.findMany({
 		where: { eventId },
 		orderBy: { position: 'asc' },

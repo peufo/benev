@@ -6,10 +6,8 @@
 	export { snippetPeriod, snippetRef, snippetValue, snippetBool }
 
 	/**
-	 * Le fuseau voyage en argument et non dans un module: un `$state` de module est partagé entre
-	 * les requêtes au rendu serveur, et n'aurait de toute façon pas été posé — seul un `$effect`
-	 * l'aurait écrit, ce qui ne s'exécute pas côté serveur. Il reste indéfini hors évènement,
-	 * `/root/logs` n'en ayant aucun à nommer.
+	 * Le fuseau voyage en argument et non dans un `$state` de module, qui serait partagé entre les
+	 * requêtes au rendu serveur. Il reste indéfini hors évènement, `/root/logs` n'en ayant aucun.
 	 */
 	function inZone(value: string, timezone: string | undefined) {
 		const date = dayjs(value)
