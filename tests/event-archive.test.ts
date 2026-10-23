@@ -56,6 +56,9 @@ test.describe.serial('Archivage automatique d’un évènement', () => {
 	test("L'avertissement précède l'archivage", async () => {
 		await runEventArchive()
 		await expectNotice(forgotten.eventId, true)
+
+		// Un second passage dans le délai de grâce ne fait rien de plus.
+		await runEventArchive()
 		const event = await prisma.event.findUniqueOrThrow({ where: { id: forgotten.eventId } })
 		expect(event.state).toBe('published')
 	})

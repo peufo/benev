@@ -93,6 +93,8 @@ test.describe.serial("Parcours d'un organisateur", () => {
 		// bouts doivent s'accorder, et `src/tests/filter.test.ts` en tient déjà le schéma.
 		const cases: [string, string][] = [
 			['members', 'subscribes_hours={"min":2,"max":8,"order":"asc"}'],
+			['members', 'createdAt={"start":"2024-01-01T00:00:00.000Z","order":"desc"}'],
+			['members', 'subscribes_teams=["a","b"]'],
 			['subscribes', 'isAbsent=false'],
 		]
 

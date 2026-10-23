@@ -14,6 +14,18 @@ test.describe.serial("Réglages de l'évènement", () => {
 		await seedTeam(event.eventId, 'Alpha')
 	})
 
+	// Le 301 sert les signets et les liens déjà partis, dont ceux de `EmailTierQuotaAlert`.
+	test('Les anciennes pages de réglages redirigent vers leur section', async () => {
+		for (const [from, anchor] of [
+			['event', 'essentials'],
+			['theme', 'appearance'],
+			['adhesion', 'membership'],
+		]) {
+			await gotoHydrated(page, `/${event.eventId}/admin/${from}`)
+			await expect(page).toHaveURL(`/${event.eventId}/admin/settings#${anchor}`)
+		}
+	})
+
 	/**
 	 * La barre de sauvegarde est le seul retour sur une modification: elle doit rester
 	 * invisible au chargement, apparaître à la première frappe, et disparaître aussi bien
