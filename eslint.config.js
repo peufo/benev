@@ -42,18 +42,12 @@ export default ts.config(
 				svelteConfig,
 			},
 		},
-		rules: {
-			// Les blocs `$:` sont réévalués à chaque changement de dépendance: une
-			// valeur affectée en fin de bloc est bien relue au passage suivant, ce que
-			// l'analyse linéaire de la règle ne voit pas.
-			'no-useless-assignment': 'off',
-		},
 	},
 	{
 		// `svelte/no-navigation-without-resolve` admet toute expression typée
 		// `ResolvedPathname` ($app/types): c'est ce qui laisse passer `eventPath()` et
 		// `urlParam.*` sans inliner `resolve()` à chaque appel. Le service de types n'est
-		// branché que sur les fichiers couverts par tsconfig — les configs de la racine
+		// branché que sur les fichiers couverts par tsconfig: les configs de la racine
 		// n'appartiennent à aucun projet TS et le feraient échouer.
 		files: ['src/**/*.{ts,js,svelte}', 'tests/**/*.ts'],
 		languageOptions: {
@@ -64,7 +58,6 @@ export default ts.config(
 		},
 	},
 	{
-		// Les fichiers `.cjs` (configs Prettier, PostCSS) sont du CommonJS par nature.
 		files: ['**/*.cjs'],
 		rules: {
 			'@typescript-eslint/no-require-imports': 'off',
@@ -83,14 +76,11 @@ export default ts.config(
 			'@typescript-eslint/no-unused-vars': [
 				'error',
 				{
-					// `_` marque une valeur volontairement ignorée (params, déstructuration).
 					argsIgnorePattern: '^_',
 					varsIgnorePattern: '^_',
 					destructuredArrayIgnorePattern: '^_',
-					// `const { id, ...rest } = obj` sert à retirer des clés: les clés
-					// écartées ne sont jamais lues, c'est le but.
+					// `const { id, ...rest } = obj` sert à retirer des clés.
 					ignoreRestSiblings: true,
-					// `catch (err)` sans usage de `err` reste un catch légitime.
 					caughtErrors: 'none',
 				},
 			],
