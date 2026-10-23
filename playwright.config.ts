@@ -1,10 +1,12 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
 
-const port = 4173
+// Un worktree qui tourne à côté d'un autre choisit son port: `reuseExistingServer` reprendrait
+// sinon le serveur du voisin, et testerait son code.
+const port = Number(process.env.E2E_PORT ?? 4173)
 
 const config: PlaywrightTestConfig = {
 	webServer: {
-		command: 'bun run build && bun run preview',
+		command: `bun run build && bun run preview --port ${port} --strictPort`,
 		port,
 		reuseExistingServer: !process.env.CI,
 		timeout: 180_000,
