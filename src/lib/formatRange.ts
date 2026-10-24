@@ -71,7 +71,9 @@ export const formatRangeHour = ({ start, end }: Range, timeZone?: string) => {
 	const tz = timeZone ?? getEventTimeZone()
 	const _start = dayjs(start).tz(tz)
 	const _end = dayjs(end).tz(tz)
-	if (_start.isSame(_end)) return _start.format('HH:mm')
+	// Pas `isSame`: sur une instance `.tz()`, dayjs repasse par l'heure murale et se trompe
+	// d'instant pendant l'heure qui précède ou répète le changement d'heure.
+	if (+start === +end) return _start.format('HH:mm')
 	return [_start.format('HH:mm'), _end.format('HH:mm')].join(' – ')
 }
 
