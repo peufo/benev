@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { GhostIcon, MessageCircleQuestionMarkIcon } from '@lucide/svelte'
+	import { GhostIcon, HourglassIcon, MessageCircleQuestionMarkIcon } from '@lucide/svelte'
 	import { tip } from 'fuma'
 	import type { MemberWithComputedValues } from '#lib/server/index.js'
 
@@ -11,7 +11,15 @@
 	let { member, noBadge }: Props = $props()
 </script>
 
-{#if !member.userId}
+{#if !member.userId && member.invitePendingAt}
+	<div
+		class={noBadge ? 'text-info' : 'badge badge-info badge-soft badge-outline'}
+		use:tip={{ content: `L'invitation partira à la publication de l'évènement.` }}
+	>
+		<HourglassIcon class={['opacity-80', !noBadge && '-translate-x-1']} size={20} />
+		{noBadge ? '' : 'Invitation en attente'}
+	</div>
+{:else if !member.userId}
 	<div
 		class={noBadge ? 'text-info' : 'badge badge-info badge-soft badge-outline'}
 		use:tip={{

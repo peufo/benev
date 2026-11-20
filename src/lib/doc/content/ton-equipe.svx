@@ -52,6 +52,11 @@ Mais si tu en renseignes une, la personne reçoit un courriel contenant le lien 
 évènement. Ce message fait partie des
 [modèles que tu peux réécrire](/docs/creer-ton-evenement#publications).
 
+Si ton évènement n'est pas encore publié, l'invitation d'un membre sans rôle
+[attend sa publication](/docs/ouvrir-les-inscriptions#publier) : sans cela, la personne ne trouverait
+qu'une annonce « Bientôt disponible ». Un·e responsable ou un·e administrateur·ice, qui accède déjà
+à l'évènement, reçoit la sienne tout de suite.
+
 **Inviter vaut approbation** : la personne compte dans ton [quota](/docs/gestion#quota) dès que
 sa fiche existe, avec ou sans adresse, pas à son arrivée.
 
@@ -108,9 +113,9 @@ déjà plus haut dans le fichier, ou si cette adresse est déjà celle d'un memb
 ne permet de reconnaître un doublon : vérifie ces lignes-là toi-même. Une fois ton quota atteint,
 les lignes suivantes sont écartées elles aussi : change de palier pour les importer.
 
-Aucun courriel ne part, sauf si tu coches « Envoyer une invitation par e-mail ». Au-delà de cinq
-cents invitations en vingt-quatre heures, les suivantes se renvoient depuis la fiche de chaque
-membre.
+Aucun courriel ne part, sauf si tu coches « Envoyer une invitation par e-mail ». Dans un évènement
+pas encore publié, les invitations attendent sa publication. Au-delà de cinq cents invitations en
+vingt-quatre heures, les suivantes se renvoient depuis la fiche de chaque membre.
 
 Un rapport détaille chaque ligne à la fin : importée, écartée et pourquoi, ou en échec. Le
 [journal](/docs/gestion) garde la trace de chaque membre importé, et de sa source.

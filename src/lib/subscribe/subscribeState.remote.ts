@@ -7,7 +7,7 @@ import z from 'zod'
 import { createLog, notifyTierQuotaIfNeeded, permission, prisma } from '#lib/server/index.js'
 import { subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { periodIsComplet } from '#lib/period/index.js'
-import { canAccessEvent } from '#lib/event/eventAccess.js'
+import { canAccessEvent, isRequestHeld } from '#lib/event/eventAccess.js'
 
 type Edtions = Record<SubscribeState, SubscribeState[]>
 const creatorEditions: Edtions = {
@@ -121,9 +121,15 @@ export const setSubscribeState = form(
 			}
 		}
 
+		const isHeld = isRequestHeld(author.event.state, _subscribe.period.team.state)
 		const subscribe = await prisma.subscribe.update({
 			where: { id: subscribeId },
-			data: { state, isForcedValidation },
+			data: {
+				state,
+				isForcedValidation,
+				// Une demande renouvelée retenue part à la publication: `sendPendingSubscribeRequests`.
+				...(state === 'request' && { notifiedAt: isHeld ? null : new Date() }),
+			},
 			include: {
 				member: true,
 				period: {
@@ -166,9 +172,10 @@ export const setSubscribeState = form(
 			})
 		}
 
-		// Tant que le secteur est en brouillon, rien ne part vers le membre: il ne connaît pas encore
-		// ce planning. Seul un responsable peut agir ici, le courriel irait forcément au membre.
-		if (subscribe.period.team.state === 'draft') return
+		// Tant que le secteur est en brouillon ou l'évènement fermé, rien ne part vers le membre: il
+		// ne peut pas encore voir ce planning. Seul un responsable peut agir ici, le courriel irait
+		// forcément au membre.
+		if (isHeld) return
 
 		const toMember =
 			subscribe.member.isNotifiedSubscribe && subscribe.member.email ? [subscribe.member.email] : []

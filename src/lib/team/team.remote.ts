@@ -120,7 +120,7 @@ export const setTeamState = form(modelTeamState, async ({ id, state }) => {
 	const team = await prisma.team.update({ where: { id }, data: { state } })
 	await createLog('team_state', { team, before: before.state, actor })
 	if (before.state === 'draft')
-		await sendPendingSubscribeRequests(team.id, `${actor.firstName} ${actor.lastName}`)
+		await sendPendingSubscribeRequests({ teamId: team.id }, `${actor.firstName} ${actor.lastName}`)
 })
 
 export const reorderTeams = command(z.array(z.string()), async (ids) => {

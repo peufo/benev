@@ -4,6 +4,7 @@
 	import { eventLabels } from './logProject'
 	import { snippetRef } from './Snippets.svelte'
 	import LogDiff from './LogDiff.svelte'
+	import { plural } from '#lib/utils.js'
 
 	type Types = 'event_create' | 'event_state' | 'event_update'
 	let { log, timezone }: { log: LogTyped<Types>; timezone?: string } = $props()
@@ -45,6 +46,25 @@
 		</span>
 		<span aria-hidden="true">→</span>
 		<span class="badge badge-sm {stateClass[log.data.after]}">{stateLabels[log.data.after]}</span>
+		{#if log.data.released?.invitations}
+			<span class="text-base-content/70">
+				{plural(log.data.released.invitations, 'invitation envoyée', 'invitations envoyées')}
+			</span>
+		{/if}
+		{#if log.data.released?.requests}
+			<span class="text-base-content/70">
+				{plural(
+					log.data.released.requests,
+					"demande d'inscription envoyée",
+					"demandes d'inscription envoyées"
+				)}
+			</span>
+		{/if}
+		{#if log.data.released?.left}
+			<span class="badge badge-sm badge-warning badge-outline">
+				{plural(log.data.released.left, 'invitation en attente', 'invitations en attente')}
+			</span>
+		{/if}
 	</div>
 {:else if log.type === 'event_update'}
 	<LogDiff changes={log.data.changes} labels={eventLabels} {timezone} />

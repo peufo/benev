@@ -829,6 +829,14 @@ breaks `svelte-check`.
   (request/accepted/denied/cancelled), period changes and deletions (`EmailPeriodChanged`, to the
   engaged subscribers of a team out of draft), period reminders (`EmailPeriodReminder`) and checkout validation. `/root/mails/*` previews
   templates in the browser.
+- **Held emails**: an event that is not published does not write to volunteers who could not get
+  in. `isInviteHeld` and `isRequestHeld` (`#lib/event/eventAccess.ts`) decide: the invitation of a
+  member without a role sets `Member.invitePendingAt` instead of leaving, and a leader's request
+  waits with `Subscribe.notifiedAt` null. `setEventState` releases both on publication
+  (`sendPendingInvites` in `#lib/server/inviteBulk.ts`, behind the import's daily cap, and
+  `sendPendingSubscribeRequests`); the owner may decline the invitations, which clears them.
+  `notifiedAt` is written before the email, as `remindedAt` is, so a republication sends nothing
+  twice.
 - **Media**: uploads (avatars, event backgrounds, logos, posters, badge assets) are stored on the
   local filesystem under `MEDIA_DIR` (default `./media`), recorded in the `Media` table with
   relations to `User`, `Event` and `Badge`, and served by `/media/[mediaId]`. `sharp` handles

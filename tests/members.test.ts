@@ -235,7 +235,7 @@ test.describe.serial('Membres et invitations', () => {
 		// `exact`: la case « Envoyer l'invitation par email » porte le mot dans son libellé.
 		const emailInput = dialog.getByLabel('Email (optionnel)', { exact: true })
 		const sendEmail = page.getByRole('checkbox', { name: /Envoyer l'invitation/ })
-		const draftWarning = page.getByText("L'évènement n'étant pas encore publié")
+		const draftWarning = page.getByText("l'invitation partira à sa publication")
 
 		// Sans adresse, il n'y a rien à envoyer: la case reste cochée mais hors service, et
 		// l'avertissement ne porterait sur aucun envoi.
@@ -248,11 +248,11 @@ test.describe.serial('Membres et invitations', () => {
 
 		await expect(sendEmail).toBeEnabled()
 		// L'évènement est encore en brouillon et l'invité n'a aucun rôle: l'invitation
-		// partirait vers une annonce, et l'avertissement le dit.
+		// attendra la publication, et l'avertissement le dit.
 		await expect(draftWarning).toBeVisible()
 
-		// Nommé·e administrateur·ice, l'invité accède déjà à tout l'espace: l'avertissement
-		// tombe. La case est réduite à zéro pixel: c'est son libellé qui la bascule.
+		// Nommé·e administrateur·ice, l'invité accède déjà à tout l'espace: l'invitation part
+		// tout de suite, et l'avertissement tombe. La case est réduite à zéro pixel: c'est son libellé qui la bascule.
 		const isAdmin = page.getByRole('checkbox', { name: /Nommer administrateur/ })
 		await dialog.getByText('Nommer administrateur·ice').click()
 		await expect(isAdmin).toBeChecked()
@@ -298,7 +298,8 @@ test.describe.serial('Membres et invitations', () => {
 		await dialog.getByLabel('Email (optionnel)', { exact: true }).fill(email)
 		await expect(sendEmail).toBeEnabled()
 		await dialog.getByRole('button', { name: 'Valider' }).click()
-		await expect(page.getByText('Invitation envoyée')).toBeVisible()
+		// En brouillon, l'invitation attend la publication; le renvoi, lui, part tout de suite.
+		await expect(page.getByText('Membre ajouté, invitation à la publication')).toBeVisible()
 
 		await gotoHydrated(page, `/${event.eventId}/admin/members`)
 		await page

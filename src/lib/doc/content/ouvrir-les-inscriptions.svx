@@ -19,6 +19,14 @@ Ton évènement est dans l'un de ces trois états, que tu changes depuis la sect
 Rien n'est définitif : « Repasser en brouillon » et « Archiver » se défont, et un évènement archivé
 se republie d'un clic. Seul·e le ou la propriétaire change cet état.
 
+### Ce qui part à la publication
+
+Tant que ton évènement n'est pas publié, rien ne part vers des bénévoles qui ne pourraient pas y
+entrer. Les invitations que tu envoies à des membres sans rôle attendent, et les créneaux que tes
+responsables proposent aussi. Au moment de publier, une case te propose d'envoyer les invitations en
+attente, et les propositions de créneaux partent d'elles-mêmes. Décoche la case si tu préfères
+inviter chaque personne depuis sa fiche.
+
 ### L'archivage automatique
 
 Un évènement publié, terminé depuis 30 jours et où plus rien ne bouge s'archive tout seul. Son

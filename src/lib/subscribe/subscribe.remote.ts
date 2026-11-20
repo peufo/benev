@@ -9,7 +9,7 @@ import {
 	includeForRequestNotification,
 	permission,
 	prisma,
-	sendSubscribeRequestNotification,
+	notifySubscribeRequest,
 } from '#lib/server/index.js'
 import { isMemberAllowed, memberIsRegistered } from '#lib/member/index.js'
 import { periodIsComplet } from '#lib/period/index.js'
@@ -103,10 +103,11 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 	const isAutoAccepted = isLeaderOfTeam && isSelfSubscribe
 
 	// Une inscription annulée ou refusée garde sa ligne, et la paire membre/période est unique:
-	// se réinscrire réactive celle-ci plutôt que d'échouer sur la contrainte. La validation forcée
-	// d'une vie antérieure ne doit pas y survivre.
+	// se réinscrire réactive celle-ci plutôt que d'échouer sur la contrainte. Ni la validation
+	// forcée ni l'envoi d'une vie antérieure ne doivent y survivre.
 	const subscribeData = {
 		isForcedValidation: false,
+		notifiedAt: null,
 		state: isAutoAccepted ? ('accepted' as const) : ('request' as const),
 		createdBy: isSelfSubscribe ? ('user' as const) : ('leader' as const),
 	}
@@ -120,11 +121,5 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 	await createLog('subscribe_create', { subscribe, actor: session.user })
 
 	if (isLeaderOfTeam && isSelfSubscribe) return
-	// En brouillon, la demande attend que le secteur en sorte: `sendPendingSubscribeRequests`.
-	if (subscribe.period.team.state === 'draft') return
-
-	await sendSubscribeRequestNotification(
-		subscribe,
-		`${session.user.firstName} ${session.user.lastName}`
-	).catch(console.error)
+	await notifySubscribeRequest(subscribe, `${session.user.firstName} ${session.user.lastName}`)
 })

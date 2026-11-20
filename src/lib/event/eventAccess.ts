@@ -1,4 +1,4 @@
-import type { EventState } from '@prisma/client'
+import type { EventState, TeamState } from '@prisma/client'
 
 /**
  * Qui entre dans l'espace d'un évènement. Publié, il est ouvert à tous; en brouillon ou archivé,
@@ -14,4 +14,17 @@ export function canAccessEvent(
 	userIsRoot = false
 ): boolean {
 	return event.state === 'published' || !!member?.roles.includes('leader') || userIsRoot
+}
+
+/**
+ * Une invitation qui ne mènerait qu'à l'annonce attend la publication: le membre sortirait du
+ * tunnel sans plus pouvoir revenir. Un rôle ouvre l'espace même fermé, et l'invitation part alors.
+ */
+export function isInviteHeld(eventState: EventState, { hasRole }: { hasRole: boolean }): boolean {
+	return eventState !== 'published' && !hasRole
+}
+
+/** Une demande d'inscription attend que le membre puisse y répondre: évènement et secteur ouverts. */
+export function isRequestHeld(eventState: EventState, teamState: TeamState): boolean {
+	return eventState !== 'published' || teamState === 'draft'
 }

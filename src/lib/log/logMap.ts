@@ -91,6 +91,7 @@ export const logMap = {
 		member,
 		actor,
 		sendEmail,
+		held,
 		resent,
 		teams,
 		importedFrom,
@@ -98,6 +99,8 @@ export const logMap = {
 		member: MemberSource
 		actor: LogActor
 		sendEmail: boolean
+		/** L'invitation attend la publication de l'évènement. */
+		held?: boolean
 		resent?: boolean
 		teams?: LogRef[]
 		importedFrom?: string
@@ -111,6 +114,7 @@ export const logMap = {
 			// Première réponse à « l'invitation n'est jamais arrivée »: peut-être n'a-t-elle
 			// jamais été demandée.
 			sendEmail,
+			...(held && { held: true as const }),
 			// Un renvoi ne crée rien: seule cette ligne distingue les deux gestes. La clé reste
 			// optionnelle, les lignes déjà écrites ne la portent pas.
 			...(resent && { resent: true as const }),
@@ -292,11 +296,14 @@ export const logMap = {
 		event,
 		before,
 		actor,
+		released,
 	}: {
 		event: { id: string; name: string; state: EventState }
 		before: EventState
 		/** Nul pour l'archivage automatique. */
 		actor: LogActor | null
+		/** Ce que la publication a envoyé de ce que l'évènement retenait. */
+		released?: { invitations: number; requests: number; left: number }
 	}) => ({
 		eventId: event.id,
 		createdById: actor?.userId ?? null,
@@ -305,6 +312,9 @@ export const logMap = {
 			before,
 			after: event.state,
 			actor: actor ? refActor(actor) : null,
+			// Une ligne par membre noierait le journal: les comptes suffisent. Optionnelle, les
+			// lignes déjà écrites ne la portent pas.
+			...(released && { released }),
 		},
 	}),
 

@@ -11,6 +11,7 @@
 	import { createInvite, findUserByEmail } from './member/member.remote'
 	import { searchTeams } from './team/team.remote'
 	import { UploadIcon, PlusIcon, TriangleAlertIcon } from '@lucide/svelte'
+	import { isInviteHeld } from './event/eventAccess'
 
 	interface Props {
 		event: Event
@@ -30,11 +31,9 @@
 	let sendEmail = $derived(isEmailValid && (createInvite.fields.sendEmail.value() ?? true))
 	let inviteIsAdmin = $derived(createInvite.fields.isAdmin.value() ?? false)
 
-	const accessWarning: Partial<Record<EventState, string>> = {
-		draft:
-			`L'évènement n'étant pas encore publié, un membre sans résponsablités ne verra qu'une annonce ` +
-			`« Bientôt disponible » et ne pourra pas s'inscrire.`,
-		archived: `L'évènement est archivé: la personne invitée n'y aura plus accès.`,
+	const heldWarning: Partial<Record<EventState, string>> = {
+		draft: `L'évènement n'est pas encore publié: l'invitation partira à sa publication.`,
+		archived: `L'évènement est archivé: l'invitation partira s'il est republié.`,
 	}
 
 	/**
@@ -44,7 +43,8 @@
 	 * mais le rôle est bien celui-là.
 	 */
 	let inviteHasRole = $derived(inviteIsAdmin || !!leaderOf.length || hideLeaderOf)
-	let warning = $derived(sendEmail && !inviteHasRole ? accessWarning[event.state] : undefined)
+	let held = $derived(sendEmail && isInviteHeld(event.state, { hasRole: inviteHasRole }))
+	let warning = $derived(held ? heldWarning[event.state] : undefined)
 
 	let hint = $derived(
 		isEmailValid ? undefined : `Renseigne un email valide pour envoyer une invitation.`
@@ -95,7 +95,13 @@
 		enhanceForm({
 			// Le libellé du succès dépend de la case: le message est posé ici, pas en option.
 			onsuccess: () => {
-				toast.success(sendEmail ? 'Invitation envoyée' : 'Membre ajouté')
+				toast.success(
+					held
+						? 'Membre ajouté, invitation à la publication'
+						: sendEmail
+							? 'Invitation envoyée'
+							: 'Membre ajouté'
+				)
 				// `result` porte le membre créé une fois la soumission résolue.
 				if (createInvite.result) onCreate(createInvite.result)
 				reset()

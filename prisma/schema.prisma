@@ -261,6 +261,9 @@ model Member {
   isNotifiedAdminOfNewMember  Boolean @default(true)
   isNotifiedReminder          Boolean @default(true)
 
+  /// Posé quand l'invitation attend la publication de l'évènement; effacé à l'envoi.
+  invitePendingAt DateTime?
+
   userId  String?
   user    User?   @relation(references: [id], fields: [userId], onDelete: SetNull)
   eventId String
@@ -413,6 +416,9 @@ model Subscribe {
 
   /// Posé avant l'envoi du rappel: une fenêtre rejouée n'en envoie pas un second.
   remindedAt DateTime?
+  /// Posé avant l'envoi de la demande d'inscription: une publication rejouée n'en envoie pas une
+  /// seconde.
+  notifiedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

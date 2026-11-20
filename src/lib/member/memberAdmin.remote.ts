@@ -91,5 +91,7 @@ export const resendInvite = form(async () => {
 		error(429, 'Invitation déjà renvoyée: réessaie dans quelques minutes')
 
 	await sendInviteEmail({ ...member, email: member.email }, author)
+	if (member.invitePendingAt)
+		await prisma.member.update({ where: { id: member.id }, data: { invitePendingAt: null } })
 	await createLog('member_invite', { member, actor: author, sendEmail: true, resent: true })
 })

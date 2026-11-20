@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { UploadIcon } from '@lucide/svelte'
 	import { beforeNavigate, goto } from '$app/navigation'
+	import { page } from '$app/state'
+	import { isInviteHeld } from '#lib/event/eventAccess.js'
 	import { InputBoolean, tip } from 'fuma'
 	import { eventPath } from '#lib/eventPath.js'
 	import { plural } from '#lib/utils.js'
@@ -41,6 +43,10 @@
 
 	const withEmail = $derived(rows.filter((row) => row.email).length)
 	const tooManyInvites = $derived(withEmail > MAX_IMPORT_INVITES)
+	// Un membre importé n'a pas de rôle: dans un évènement fermé, son invitation attend.
+	const invitesHeld = $derived(
+		!!page.data.event && isInviteHeld(page.data.event.state, { hasRole: false })
+	)
 
 	// Quitter la page laisserait l'import à moitié fait, sans rapport pour dire où il s'est arrêté.
 	beforeNavigate(({ cancel }) => {
@@ -128,7 +134,9 @@
 			disabled={!withEmail || tooManyInvites}
 			hint={tooManyInvites
 				? `Plus de ${MAX_IMPORT_INVITES} adresses: les invitations se renvoient depuis la fiche de chaque membre.`
-				: undefined}
+				: invitesHeld
+					? "L'évènement n'est pas publié: les invitations partiront à sa publication."
+					: undefined}
 			class="w-auto"
 		/>
 

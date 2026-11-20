@@ -18,6 +18,7 @@
 	const results = $derived(source.report?.results ?? [])
 	const counts = $derived(Object.groupBy(results, ({ status }) => status))
 	const invited = $derived(results.filter((result) => result.invited).length)
+	const held = $derived(results.filter((result) => result.held).length)
 
 	// Ce qui demande un geste d'abord: les lignes écartées ou en échec.
 	const order: Record<ImportResult['status'], number> = { failed: 0, skipped: 1, imported: 2 }
@@ -46,9 +47,13 @@
 				{/each}
 			</dl>
 			<p class="px-2 pt-3 text-sm text-base-content/70">
-				{invited
-					? plural(invited, 'invitation envoyée par e-mail', 'invitations envoyées par e-mail')
-					: 'Aucune invitation envoyée par e-mail'}
+				{#if held}
+					{plural(held, 'invitation partira', 'invitations partiront')} à la publication de l'évènement
+				{:else if invited}
+					{plural(invited, 'invitation envoyée par e-mail', 'invitations envoyées par e-mail')}
+				{:else}
+					Aucune invitation envoyée par e-mail
+				{/if}
 			</p>
 
 			<div class="flex flex-wrap justify-end gap-2 border-t border-soft pt-4 mt-4">
@@ -100,6 +105,10 @@
 										<span class="block text-xs text-base-content/70">{result.reason}</span>
 									{:else if result.invited}
 										<span class="block text-xs text-base-content/70">Invitation envoyée</span>
+									{:else if result.held}
+										<span class="block text-xs text-base-content/70">
+											Invitation à la publication
+										</span>
 									{/if}
 								</td>
 							</tr>

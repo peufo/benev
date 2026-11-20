@@ -10,7 +10,8 @@ import {
 	prisma,
 	sendInviteEmail,
 } from '#lib/server/index.js'
-import { createRateLimit } from '#lib/server/rateLimit.js'
+import { isInviteLimited } from '#lib/server/inviteBulk.js'
+import { isInviteHeld } from '#lib/event/eventAccess.js'
 import { modelMemberImport } from '#lib/models/index.js'
 import { MAX_IMPORT_INVITES, memberName, type ProfileValue } from '#lib/member/import/index.js'
 
@@ -22,16 +23,9 @@ export type ImportResult = {
 	memberId?: string
 	reason?: string
 	invited?: boolean
+	/** L'invitation attend la publication de l'évènement. */
+	held?: boolean
 }
-
-/**
- * Un import peut viser n'importe quelle adresse: sans plafond, un compte malveillant ferait de nous
- * un relais de spam, et la réputation de l'expéditeur est commune à tous les évènements.
- */
-const isInviteLimited = createRateLimit({
-	windowMs: 24 * 60 * 60 * 1000,
-	max: MAX_IMPORT_INVITES,
-})
 
 /**
  * Un lot de lignes du fichier, déjà converties par `buildMembers`. Chaque ligne réussit ou échoue
@@ -44,7 +38,10 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 
 	const [fields, event, existing, remaining] = await Promise.all([
 		prisma.field.findMany({ where: { eventId } }),
-		prisma.event.findUniqueOrThrow({ where: { id: eventId }, select: { name: true } }),
+		prisma.event.findUniqueOrThrow({
+			where: { id: eventId },
+			select: { name: true, state: true },
+		}),
 		prisma.member.findMany({
 			where: { eventId, email: { in: rows.flatMap((row) => row.email ?? []) } },
 			select: { email: true, firstName: true, lastName: true },
@@ -53,6 +50,8 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 	])
 	// Chaque membre importé est approuvé: sans ce plafond, un lot dépasserait le palier d'autant.
 	let quota = remaining
+	// Un membre importé n'a jamais de rôle: dans un évènement fermé, son invitation attend.
+	const holdInvites = isInviteHeld(event.state, { hasRole: false })
 
 	const results: ImportResult[] = []
 	for (const { line, profile, birthday, ...contact } of rows) {
@@ -77,6 +76,9 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 			continue
 		}
 
+		const wanted = sendEmail && !!contact.email
+		const isHeld = wanted && holdInvites
+		const sendNow = wanted && !holdInvites
 		try {
 			const member = await prisma.member.create({
 				data: {
@@ -85,30 +87,32 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 					profileJson: filterProfile(profile, fields),
 					eventId,
 					...invitedMemberDefaults(contact.email),
+					...(isHeld && { invitePendingAt: new Date() }),
 				},
 			})
 			quota--
 
-			const wanted = sendEmail && !!member.email
-			const limited = wanted && isInviteLimited(author.userId ?? author.id)
+			const limited = sendNow && isInviteLimited(author.userId ?? author.id)
 			// Envoyée avant le journal, pour qu'il ne dise pas « invité·e » d'un message refusé.
 			const invited =
-				wanted &&
+				sendNow &&
 				!limited &&
 				(await sendInviteEmail({ ...member, email: member.email!, event }, author, { bulk: true }))
 			await createLog('member_invite', {
 				member,
 				actor: author,
 				sendEmail: invited,
+				held: isHeld,
 				importedFrom: source,
 			})
 
 			result('imported', {
 				memberId: member.id,
 				invited,
+				held: isHeld,
 				reason: limited
 					? `Plus de ${MAX_IMPORT_INVITES} invitations en un jour: à renvoyer depuis sa fiche`
-					: wanted && !invited
+					: sendNow && !invited
 						? "File d'e-mails saturée: invitation à renvoyer depuis sa fiche"
 						: undefined,
 			})

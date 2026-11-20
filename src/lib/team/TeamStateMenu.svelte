@@ -28,10 +28,12 @@
 
 	const confirmation = $derived.by(() => {
 		const pending = team.nbSubscribesRequest ?? 0
+		// Dans un évènement fermé, les demandes attendent sa publication plutôt que ce geste.
+		const when = page.data.event?.state === 'published' ? '' : " à la publication de l'évènement"
 		const emails =
 			pending === 0
 				? ''
-				: `${pending} demande${pending > 1 ? 's' : ''} d'inscription partir${pending > 1 ? 'ont' : 'a'} aux bénévoles.`
+				: `${pending} demande${pending > 1 ? 's' : ''} d'inscription partir${pending > 1 ? 'ont' : 'a'} aux bénévoles${when}.`
 		return `${emails} Une fois validé, un secteur ne peut pas être repassé en brouillon.`
 	})
 

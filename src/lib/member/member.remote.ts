@@ -22,6 +22,7 @@ import { modelInvite, modelMemberCondition, modelMemberSetting } from '#lib/mode
 import { zSearchInEvent } from '#lib/models/form.js'
 import { diffChanges, hasChanges, projectProfile } from '#lib/log/index.js'
 import { isMemberAllowed } from './conditions/isMemberAllowed'
+import { isInviteHeld } from '#lib/event/eventAccess.js'
 
 /**
  * Ces formulaires vivent dans `#lib/member` et non à côté d'une route: ils sont montés depuis
@@ -157,12 +158,16 @@ export const createInvite = form(modelInvite, async ({ sendEmail, leaderOf, ...d
 		: []
 	if (teams.length !== leaderOf.length) error(400, 'Secteur inconnu')
 
+	const hasRole = teams.length > 0 || !!data.isAdmin
+	const held = sendEmail && !!data.email && isInviteHeld(author.event.state, { hasRole })
+
 	const member = await prisma.member
 		.create({
 			data: {
 				...data,
 				eventId,
 				...invitedMemberDefaults(data.email),
+				...(held && { invitePendingAt: new Date() }),
 				leaderOf: { connect: teams.map(({ id }) => ({ id })) },
 			},
 			include: { event: true },
@@ -172,9 +177,15 @@ export const createInvite = form(modelInvite, async ({ sendEmail, leaderOf, ...d
 		.catch(uniqueIssue(issue.email('Cette adresse est déjà utilisée dans cet évènement')))
 
 	await notifyTierQuotaIfNeeded(eventId)
-	await createLog('member_invite', { member, actor: author, sendEmail, teams })
+	await createLog('member_invite', {
+		member,
+		actor: author,
+		sendEmail: sendEmail && !held,
+		held,
+		teams,
+	})
 
-	if (!member.email || !sendEmail) return member
+	if (!member.email || !sendEmail || held) return member
 
 	await sendInviteEmail({ ...member, email: member.email }, author)
 
@@ -211,6 +222,7 @@ export const acceptInvite = form(
 				data: {
 					userId: session.user.id,
 					isValidedByEvent: newIsValidedByEvent,
+					invitePendingAt: null,
 				},
 			})
 			if (newIsValidedByEvent) await notifyTierQuotaIfNeeded(eventId)

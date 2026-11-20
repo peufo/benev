@@ -46,7 +46,9 @@
 		{:else}
 			<span class="badge badge-sm badge-ghost">sans adresse email</span>
 		{/if}
-		{#if log.data.email && !log.data.sendEmail}
+		{#if log.data.held}
+			<span class="badge badge-sm badge-ghost">invitation à la publication</span>
+		{:else if log.data.email && !log.data.sendEmail}
 			<span class="badge badge-sm badge-warning badge-outline">aucun email envoyé</span>
 		{/if}
 		{#if log.data.isAdmin}
