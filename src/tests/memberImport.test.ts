@@ -380,6 +380,19 @@ describe("les membres d'un autre évènement", () => {
 		expect(table.hints?.[0]).toBeUndefined()
 	})
 
+	it('désigne les lignes des responsables de secteur', ({ expect }) => {
+		expect(table.leaders).toEqual([])
+		const withLeader = memberTable(
+			[
+				{ ...member, profileJson: {} },
+				{ ...member, firstName: 'Alan', profileJson: {}, isLeader: true },
+				{ ...member, firstName: 'Grace', profileJson: {}, isLeader: false },
+			],
+			sourceFields
+		)
+		expect(withLeader.leaders).toEqual([1])
+	})
+
 	it("n'importe ni ne valide les lignes décochées", ({ expect }) => {
 		const mapping = guessMapping(table.headers, fields)
 		const excluded = new Set([1])

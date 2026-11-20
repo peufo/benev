@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { ShieldUserIcon } from '@lucide/svelte'
 	import { refreshAll } from '$app/navigation'
 	import { tip } from 'fuma'
 	import type { Field } from '@prisma/client'
 	import { eventPath } from '#lib/eventPath.js'
 	import { plural } from '#lib/utils.js'
 	import { Placeholder, Surface } from '#lib/ui/index.js'
+	import MemberRole from '#lib/member/MemberRole.svelte'
 	import {
 		isBlocking,
 		type ColumnStatus,
@@ -69,6 +71,12 @@
 	const allChecked = $derived(!source.excluded.size)
 	const noneChecked = $derived(source.excluded.size === table.rows.length)
 
+	const leaders = $derived(new Set(table.leaders))
+	const onlyLeadersChecked = $derived(
+		source.excluded.size === table.rows.length - leaders.size &&
+			[...leaders].every((index) => !source.excluded.has(index))
+	)
+
 	const columnClass: Record<ColumnStatus, string> = {
 		ok: '',
 		ignored: 'opacity-50',
@@ -91,6 +99,13 @@
 		if (!checked) table.rows.forEach((_, index) => source.excluded.add(index))
 	}
 
+	function checkOnlyLeaders() {
+		source.excluded.clear()
+		table.rows.forEach((_, index) => {
+			if (!leaders.has(index)) source.excluded.add(index)
+		})
+	}
+
 	// Le champ n'existe dans `fields` qu'une fois les données rechargées.
 	async function handleFieldCreated(column: number, field: Field) {
 		await refreshAll()
@@ -105,15 +120,28 @@
 			<a class="link" href={eventPath('/admin/members/import')}>Choisir une autre source</a>
 		</Placeholder>
 	{:else}
-		<p class="px-2 pb-3 text-sm text-base-content/70">
-			{plural(table.rows.length, 'ligne', 'lignes')}
-			· {plural(table.headers.length, 'colonne', 'colonnes')}
-			{#if toCheck}
-				· <strong class="text-base-content">
-					{plural(toCheck, 'colonne à vérifier', 'colonnes à vérifier')}
-				</strong>
+		<div class="flex flex-wrap items-center gap-2 px-2 pb-3">
+			<p class="grow text-sm text-base-content/70">
+				{plural(table.rows.length, 'ligne', 'lignes')}
+				· {plural(table.headers.length, 'colonne', 'colonnes')}
+				{#if toCheck}
+					· <strong class="text-base-content">
+						{plural(toCheck, 'colonne à vérifier', 'colonnes à vérifier')}
+					</strong>
+				{/if}
+			</p>
+			{#if leaders.size}
+				<button
+					type="button"
+					class="btn btn-sm"
+					disabled={importing || onlyLeadersChecked}
+					onclick={checkOnlyLeaders}
+				>
+					<ShieldUserIcon size={16} class="opacity-70" />
+					Ne cocher que les responsables ({leaders.size})
+				</button>
 			{/if}
-		</p>
+		</div>
 
 		<fieldset
 			disabled={importing}
@@ -166,7 +194,14 @@
 									onchange={(e) => toggleRow(index, e.currentTarget.checked)}
 								/>
 							</td>
-							<td class="text-base-content/50">{line}</td>
+							<td class="text-base-content/50">
+								<span class="inline-flex items-center gap-1">
+									{line}
+									{#if leaders.has(index)}
+										<MemberRole roles={['leader']} mode="icon" iconSize={14} />
+									{/if}
+								</span>
+							</td>
 							{#each row as cell, column (column)}
 								<!-- Lus un à un: quand la colonne se revalide, seules les cellules dont le motif
 								change se mettent à jour. -->

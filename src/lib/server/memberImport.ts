@@ -1,4 +1,5 @@
 import { prisma } from '#lib/server/index.js'
+import type { SourceMember } from '#lib/member/import/index.js'
 
 /** Les évènements dont `userId` peut lire les membres: ceux qu'il possède ou administre. */
 export function getImportableEvents(userId: string) {
@@ -15,10 +16,11 @@ export function getImportableEvents(userId: string) {
 
 /**
  * Ce qu'un import reprend d'un autre évènement: coordonnées et profil. Rôles, secteurs dirigés,
- * inscriptions et avatar restent attachés à l'évènement source.
+ * inscriptions et avatar restent attachés à l'évènement source; savoir qui dirige un secteur ne
+ * sert qu'à cocher ces lignes-là d'un geste.
  */
 export async function getSourceMembers(eventId: string) {
-	const [members, fields] = await Promise.all([
+	const [rows, fields] = await Promise.all([
 		prisma.member.findMany({
 			where: { eventId },
 			select: {
@@ -31,6 +33,7 @@ export async function getSourceMembers(eventId: string) {
 				zipCode: true,
 				city: true,
 				profileJson: true,
+				_count: { select: { leaderOf: true } },
 			},
 			orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }],
 		}),
@@ -40,5 +43,9 @@ export async function getSourceMembers(eventId: string) {
 			orderBy: { position: 'asc' },
 		}),
 	])
+	const members: SourceMember[] = rows.map(({ _count, ...member }) => ({
+		...member,
+		isLeader: _count.leaderOf > 0,
+	}))
 	return { members, fields }
 }

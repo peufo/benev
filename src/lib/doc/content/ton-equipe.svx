@@ -79,7 +79,8 @@ de membres et au pied du formulaire d'invitation. Il est réservé aux administr
   liste d'adresses. Décoche « La première ligne contient les en-têtes » si ta sélection n'en a pas.
 - **Un autre évènement** dont tu es administrateur·ice : ses membres arrivent avec leurs
   coordonnées et leurs réponses à tes questions, mais sans leurs rôles, leurs inscriptions ni leur
-  photo.
+  photo. Pour ne reprendre que ton équipe de responsables, « Ne cocher que les responsables »
+  décoche d'un geste tous ceux qui ne dirigeaient aucun secteur.
 
 ### Faire correspondre les colonnes
 

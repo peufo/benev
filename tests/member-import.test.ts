@@ -35,11 +35,13 @@ test.describe.serial('Import de membres', () => {
 			type: 'select',
 			options: ['Small', 'Medium', 'Large'],
 		})
+		const sourceTeam = await seedTeam(source.eventId, 'Physique')
 		await seedInvitedMember(source.eventId, {
 			firstName: 'Marie',
 			lastName: 'Curie',
 			email: 'marie@example.com',
 			profileJson: { [sourceSize.id]: 'Medium' },
+			leaderOf: [sourceTeam.id],
 		})
 		await seedInvitedMember(source.eventId, { firstName: 'Pierre', lastName: 'Curie' })
 		await seedInvitedMember(source.eventId, {
@@ -65,6 +67,21 @@ test.describe.serial('Import de membres', () => {
 		const lead = await seedUser('Lead')
 		await seedMember(target.eventId, lead, { leaderOf: [team.id] })
 		await signIn(leadPage, lead)
+	})
+
+	test("L'admin ne coche que les responsables de l'autre évènement", async () => {
+		await gotoHydrated(page, `/${target.eventId}/admin/members/import/event/${source.eventId}`)
+		const shortcut = page.getByRole('button', { name: 'Ne cocher que les responsables (1)' })
+		await shortcut.click()
+		await expect(shortcut).toBeDisabled()
+		// Triés par nom de famille: Marie, la seule responsable, ouvre la liste.
+		await expect(page.getByText('1 membre à importer')).toBeVisible()
+		await expect(page.getByLabel('Importer la ligne 1')).toBeChecked()
+		await expect(page.getByLabel('Importer la ligne 2')).not.toBeChecked()
+
+		await page.getByLabel('Importer toutes les lignes').check()
+		await expect(page.getByText('décochée')).toHaveCount(0)
+		await expect(shortcut).toBeEnabled()
 	})
 
 	test("L'admin importe une partie des membres d'un autre évènement", async () => {

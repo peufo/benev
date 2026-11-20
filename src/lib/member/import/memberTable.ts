@@ -7,12 +7,16 @@ import type { FieldSuggestion } from './values.js'
  * Une table d'import, et pour chaque colonne le champ à créer si elle n'en trouve pas. Un fichier
  * ne dit rien de ses colonnes; un évènement connaît le champ dont chacune vient.
  */
-export type ImportTable = CsvTable & { hints?: (FieldSuggestion | undefined)[] }
+export type ImportTable = CsvTable & {
+	hints?: (FieldSuggestion | undefined)[]
+	/** Les index des lignes dont le membre dirige un secteur de l'évènement source. */
+	leaders?: number[]
+}
 
 export type SourceMember = Pick<
 	Member,
 	'firstName' | 'lastName' | 'email' | 'phone' | 'birthday' | 'street' | 'zipCode' | 'city'
-> & { profileJson: PrismaJson.MemberProfile }
+> & { profileJson: PrismaJson.MemberProfile; isLeader?: boolean }
 
 type MemberContact = Exclude<ContactKey, 'fullName'>
 
@@ -48,6 +52,7 @@ export function memberTable(members: SourceMember[], fields: ImportField[]): Imp
 		headers: columns.map(({ header }) => header),
 		rows: members.map((_, index) => columns.map(({ values }) => values[index])),
 		hints: columns.map(({ hint }) => hint),
+		leaders: members.flatMap((member, index) => (member.isLeader ? [index] : [])),
 	}
 }
 
