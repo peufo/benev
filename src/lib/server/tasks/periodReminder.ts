@@ -1,9 +1,11 @@
 import type { Task } from '../scheduler'
 import { prisma } from '../prisma'
+import { includeMemberRole, memberHasRole } from '../subscribe'
 import { sendEmailComponent } from '../email'
 import { EmailPeriodReminder } from '#lib/email/index.js'
 import { formatRange } from '#lib/formatRange.js'
 import { planReminders, REMINDER_MAX_HOURS } from '#lib/period/periodReminder.js'
+import { isMemberMailHeld } from '#lib/event/eventAccess.js'
 
 const HOUR = 60 * 60_000
 
@@ -11,8 +13,9 @@ const HOUR = 60 * 60_000
  * Rappelle leur créneau aux inscrit·es accepté·es (voir `#lib/period/periodReminder.js`). Le
  * marqueur `remindedAt` se pose avant l'envoi et exige d'être vide: une fenêtre rejouée après un
  * échec ne double jamais un courriel, au prix d'en perdre un si le processus tombe entre les deux.
- * Une demande en attente n'est pas un engagement, et un secteur en brouillon n'a rien annoncé. Un
- * évènement fermé ne voit pas son rappel rattrapé à sa publication: la fenêtre est passée.
+ * Une demande en attente n'est pas un engagement, et un secteur en brouillon n'a rien annoncé. Dans
+ * un évènement fermé, seul un membre qui a un rôle est rappelé (`isMemberMailHeld`); les autres ne
+ * le sont pas à la publication, la fenêtre étant passée.
  */
 export const periodReminder: Task = {
 	name: 'period-reminder',
@@ -23,7 +26,7 @@ export const periodReminder: Task = {
 				start: { gt: since, lte: new Date(until.getTime() + REMINDER_MAX_HOURS * HOUR) },
 				team: {
 					state: { not: 'draft' },
-					event: { reminderHours: { gt: 0 }, deletedAt: null, state: 'published' },
+					event: { reminderHours: { gt: 0 }, deletedAt: null },
 				},
 				subscribes: { some: { state: 'accepted', remindedAt: null } },
 			},
@@ -36,7 +39,7 @@ export const periodReminder: Task = {
 				},
 				subscribes: {
 					where: { state: 'accepted', remindedAt: null },
-					include: { member: true },
+					include: { member: { include: includeMemberRole } },
 				},
 			},
 		})
@@ -50,6 +53,8 @@ export const periodReminder: Task = {
 			const leaders = team.leaders.map(({ email }) => email as string)
 			const replyTo = leaders.length ? leaders : event.email ? [event.email] : undefined
 			for (const { id, member } of period.subscribes) {
+				const hasRole = memberHasRole(member, event)
+				if (isMemberMailHeld(event.state, team.state, { hasRole })) continue
 				const { count } = await prisma.subscribe.updateMany({
 					where: { id, state: 'accepted', remindedAt: null },
 					data: { remindedAt: until },

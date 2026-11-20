@@ -17,6 +17,7 @@ test.describe.serial('Rappel avant un créneau', () => {
 	const page = sharedPage()
 	let periodId: string
 	let subscribeId: string
+	let leaderSubscribeId: string
 
 	test.afterAll(async () => {
 		await prisma.$disconnect()
@@ -38,8 +39,8 @@ test.describe.serial('Rappel avant un créneau', () => {
 		})
 	}
 
-	async function remindedAt() {
-		const subscribe = await prisma.subscribe.findUniqueOrThrow({ where: { id: subscribeId } })
+	async function remindedAt(id = subscribeId) {
+		const subscribe = await prisma.subscribe.findUniqueOrThrow({ where: { id } })
 		return subscribe.remindedAt
 	}
 
@@ -53,16 +54,24 @@ test.describe.serial('Rappel avant un créneau', () => {
 		const subscribe = await prisma.subscribe.create({
 			data: { periodId: period.id, memberId: member.id, state: 'accepted' },
 		})
+		const leader = await seedMember(event.eventId, await seedUser('Responsable'), {
+			leaderOf: [team.id],
+		})
+		const leaderSubscribe = await prisma.subscribe.create({
+			data: { periodId: period.id, memberId: leader.id, state: 'accepted' },
+		})
 		periodId = period.id
 		subscribeId = subscribe.id
+		leaderSubscribeId = leaderSubscribe.id
 	})
 
-	test("Un évènement non publié n'envoie pas de rappel", async () => {
+	test('Un évènement non publié ne rappelle que ceux qui y ont un rôle', async () => {
 		// Le premier passage pose le curseur: une date antérieure ne rejouerait pas.
 		await runPeriodReminder()
 		await startInOneDay()
 		await runPeriodReminder()
 		expect(await remindedAt()).toBeNull()
+		expect(await remindedAt(leaderSubscribeId)).not.toBeNull()
 
 		// Publier n'est pas le sujet: c'est le préalable des étapes suivantes.
 		await prisma.event.update({ where: { id: event.eventId }, data: { state: 'published' } })

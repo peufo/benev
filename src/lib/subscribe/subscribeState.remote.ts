@@ -4,10 +4,17 @@ import { form, getRequestEvent } from '$app/server'
 import { ROOT_USER } from '$app/env/private'
 import { isFreeRange } from 'perod'
 import z from 'zod'
-import { createLog, notifyTierQuotaIfNeeded, permission, prisma } from '#lib/server/index.js'
+import {
+	createLog,
+	includeMemberRole,
+	memberHasRole,
+	notifyTierQuotaIfNeeded,
+	permission,
+	prisma,
+} from '#lib/server/index.js'
 import { subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { periodIsComplet } from '#lib/period/index.js'
-import { canAccessEvent, isVolunteerMailHeld } from '#lib/event/eventAccess.js'
+import { canAccessEvent, isMemberMailHeld } from '#lib/event/eventAccess.js'
 
 type Edtions = Record<SubscribeState, SubscribeState[]>
 const creatorEditions: Edtions = {
@@ -48,6 +55,7 @@ export const setSubscribeState = form(
 			include: {
 				member: {
 					include: {
+						...includeMemberRole,
 						subscribes: {
 							where: whereSubscribe,
 							include: { period: true },
@@ -121,7 +129,11 @@ export const setSubscribeState = form(
 			}
 		}
 
-		const isHeld = isVolunteerMailHeld(author.event.state, _subscribe.period.team.state)
+		// Le geste d'un membre écrit aux responsables; celui d'un responsable, au membre.
+		const hasRole = !isLeaderAction || memberHasRole(_subscribe.member, author.event)
+		const isHeld = isMemberMailHeld(author.event.state, _subscribe.period.team.state, {
+			hasRole,
+		})
 		const subscribe = await prisma.subscribe.update({
 			where: { id: subscribeId },
 			data: {
@@ -172,9 +184,6 @@ export const setSubscribeState = form(
 			})
 		}
 
-		// Tant que le secteur est en brouillon ou l'évènement fermé, rien ne part vers le membre: il
-		// ne peut pas encore voir ce planning. Seul un responsable peut agir ici, le courriel irait
-		// forcément au membre.
 		if (isHeld) return
 
 		const toMember =

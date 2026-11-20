@@ -2,10 +2,17 @@ import type { Period, Prisma } from '@prisma/client'
 import { periodIsComplet } from '#lib/period/index.js'
 import { ENGAGED_STATES, scheduleChanged } from '#lib/period/periodChange.js'
 import { PERIOD_DEFAULT_MS } from '#lib/constant/index.js'
-import { createLog, parseFormKey, prisma, sendEmailComponent } from '#lib/server/index.js'
+import {
+	createLog,
+	includeMemberRole,
+	memberHasRole,
+	parseFormKey,
+	prisma,
+	sendEmailComponent,
+} from '#lib/server/index.js'
 import { EmailPeriodChanged } from '#lib/email/index.js'
 import { diffChanges, hasChanges, projectPeriod, type LogActor } from '#lib/log/index.js'
-import { isVolunteerMailHeld } from '#lib/event/eventAccess.js'
+import { isMemberMailHeld } from '#lib/event/eventAccess.js'
 
 export type FormDataPeriod = Awaited<ReturnType<typeof getPeriod>>
 
@@ -16,13 +23,13 @@ export type FormDataPeriod = Awaited<ReturnType<typeof getPeriod>>
 export const includeForPeriodChange = {
 	team: {
 		include: {
-			event: { select: { id: true, name: true, timezone: true, state: true } },
+			event: { select: { id: true, name: true, timezone: true, state: true, ownerId: true } },
 			leaders: { where: { email: { not: null } }, select: { email: true } },
 		},
 	},
 	subscribes: {
 		where: { state: { in: [...ENGAGED_STATES] } },
-		include: { member: true },
+		include: { member: { include: includeMemberRole } },
 	},
 } satisfies Prisma.PeriodInclude
 
@@ -37,9 +44,9 @@ type Range = { start: Date; end: Date }
 /**
  * Un courriel par inscrit·e engagé·e qui accepte les notifications, `after` nul pour une
  * suppression. La réponse va aux responsables, à défaut à l'auteur·ice du geste. Un envoi qui
- * tombe n'arrête pas les autres. Rend le nombre de destinataires: aucun tant que l'évènement est
- * fermé ou le secteur en brouillon, rien n'étant rejoué à leur ouverture, puisque le membre y
- * trouve l'horaire à jour.
+ * tombe n'arrête pas les autres. Rend le nombre de destinataires: un secteur en brouillon n'en a
+ * aucun, un évènement fermé que ceux qui y ont un rôle. Rien n'est rejoué à l'ouverture, puisque le
+ * membre y trouve l'horaire à jour.
  */
 export async function notifyPeriodChange(
 	period: PeriodForChange,
@@ -47,13 +54,14 @@ export async function notifyPeriodChange(
 	actor: { email: string }
 ): Promise<number> {
 	const { team } = period
-	if (isVolunteerMailHeld(team.event.state, team.state)) return 0
 	const leaders = team.leaders.map(({ email }) => email as string)
 	const replyTo = leaders.length ? leaders : [actor.email]
 	const subject = after ? 'Ton créneau a changé' : 'Ton créneau a été supprimé'
 	let notified = 0
 	for (const { member } of period.subscribes) {
 		if (!member.isNotifiedSubscribe || !member.email) continue
+		const hasRole = memberHasRole(member, team.event)
+		if (isMemberMailHeld(team.event.state, team.state, { hasRole })) continue
 		notified++
 		await sendEmailComponent(EmailPeriodChanged, {
 			from: team.event.name,

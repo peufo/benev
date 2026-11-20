@@ -1,11 +1,21 @@
-import type { Prisma } from '@prisma/client'
+import type { Member, Prisma } from '@prisma/client'
 import { subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { prisma } from './prisma'
-import { isVolunteerMailHeld } from '#lib/event/eventAccess.js'
+import { isMemberMailHeld } from '#lib/event/eventAccess.js'
+
+/** Ce qui ouvre un évènement fermé, lu sur une fiche brute plutôt que sur `getMemberProfile`. */
+export const includeMemberRole = { _count: { select: { leaderOf: true } } } as const
+
+export function memberHasRole(
+	member: Pick<Member, 'isAdmin' | 'userId'> & { _count: { leaderOf: number } },
+	event: { ownerId: string }
+): boolean {
+	return member.isAdmin || member._count.leaderOf > 0 || member.userId === event.ownerId
+}
 
 /** Le membre pour lui écrire, les responsables pour répondre, le propriétaire à défaut. */
 export const includeForRequestNotification = {
-	member: true,
+	member: { include: includeMemberRole },
 	period: {
 		include: {
 			team: {
@@ -50,8 +60,8 @@ export async function sendSubscribeRequestNotification(
 }
 
 /**
- * L'envoi de la demande d'inscription, s'il a lieu d'être: tant que le membre ne peut pas y
- * répondre, elle attend `sendPendingSubscribeRequests`. Le marqueur est posé avant l'envoi, comme
+ * L'envoi de la demande d'inscription, s'il a lieu d'être: tant que son destinataire ne peut pas
+ * y répondre, elle attend `sendPendingSubscribeRequests`. Le marqueur est posé avant l'envoi, comme
  * `remindedAt`: deux relâches concurrentes n'envoient qu'une fois. Rend `true` si l'envoi est parti.
  */
 export async function notifySubscribeRequest(
@@ -59,7 +69,8 @@ export async function notifySubscribeRequest(
 	authorName: string
 ): Promise<boolean> {
 	const { team } = subscribe.period
-	if (isVolunteerMailHeld(team.event.state, team.state)) return false
+	const hasRole = subscribe.createdBy === 'user' || memberHasRole(subscribe.member, team.event)
+	if (isMemberMailHeld(team.event.state, team.state, { hasRole })) return false
 	const { count } = await prisma.subscribe.updateMany({
 		where: { id: subscribe.id, notifiedAt: null },
 		data: { notifiedAt: new Date() },

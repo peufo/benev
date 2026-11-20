@@ -25,9 +25,15 @@ export function isInviteHeld(eventState: EventState, { hasRole }: { hasRole: boo
 }
 
 /**
- * Un e-mail aux bénévoles d'un secteur (demande d'inscription, créneau modifié ou supprimé, rappel)
- * attend qu'ils puissent voir ce qu'il annonce: évènement publié, secteur hors brouillon.
+ * Un e-mail à un membre (inscription, créneau modifié ou supprimé, rappel) attend qu'il puisse voir
+ * ce qu'il annonce. Un secteur en brouillon se prépare en silence pour tous, mais un évènement fermé
+ * ne retient que ce qui va à un membre sans rôle, le seul qu'il laisse dehors. Les responsables,
+ * destinataires des demandes d'un membre, en ont toujours un.
  */
-export function isVolunteerMailHeld(eventState: EventState, teamState: TeamState): boolean {
-	return eventState !== 'published' || teamState === 'draft'
+export function isMemberMailHeld(
+	eventState: EventState,
+	teamState: TeamState,
+	{ hasRole }: { hasRole: boolean }
+): boolean {
+	return teamState === 'draft' || (eventState !== 'published' && !hasRole)
 }

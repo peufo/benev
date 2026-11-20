@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { canAccessEvent, isInviteHeld, isVolunteerMailHeld } from '#lib/event/eventAccess.js'
+import { canAccessEvent, isInviteHeld, isMemberMailHeld } from '#lib/event/eventAccess.js'
 
 const member = { roles: ['member'] }
 const leader = { roles: ['leader', 'member'] }
@@ -36,18 +36,23 @@ describe('isInviteHeld', () => {
 	})
 })
 
-describe('isVolunteerMailHeld', () => {
-	it("retient l'e-mail d'un évènement non publié, quel que soit le secteur", () => {
-		expect(isVolunteerMailHeld('draft', 'published')).toBe(true)
-		expect(isVolunteerMailHeld('archived', 'published')).toBe(true)
+describe('isMemberMailHeld', () => {
+	const role = { hasRole: true }
+	const noRole = { hasRole: false }
+
+	it("retient celui d'un membre sans rôle tant que l'évènement n'est pas publié", () => {
+		expect(isMemberMailHeld('draft', 'published', noRole)).toBe(true)
+		expect(isMemberMailHeld('archived', 'published', noRole)).toBe(true)
+		expect(isMemberMailHeld('published', 'published', noRole)).toBe(false)
 	})
 
-	it("retient celle d'un secteur en brouillon, même publié", () => {
-		expect(isVolunteerMailHeld('published', 'draft')).toBe(true)
+	it("laisse partir celui d'un rôle, qui entre dans l'évènement fermé", () => {
+		expect(isMemberMailHeld('draft', 'published', role)).toBe(false)
+		expect(isMemberMailHeld('archived', 'validated', role)).toBe(false)
 	})
 
-	it("laisse partir celle d'un secteur ouvert d'un évènement publié", () => {
-		expect(isVolunteerMailHeld('published', 'published')).toBe(false)
-		expect(isVolunteerMailHeld('published', 'validated')).toBe(false)
+	it('retient tout ce qui touche un secteur en brouillon', () => {
+		expect(isMemberMailHeld('published', 'draft', role)).toBe(true)
+		expect(isMemberMailHeld('draft', 'draft', role)).toBe(true)
 	})
 })
