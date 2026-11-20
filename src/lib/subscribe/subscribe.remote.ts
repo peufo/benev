@@ -22,8 +22,10 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 	if (!session) error(401)
 
 	const [period, memberAuthor, memberInvited] = await Promise.all([
-		prisma.period.findUniqueOrThrow({
-			where: { id: data.periodId },
+		// L'évènement de l'URL est celui que les gardes contrôlent: un créneau ou une fiche d'un
+		// autre évènement n'existent pas ici.
+		prisma.period.findUnique({
+			where: { id: data.periodId, team: { eventId } },
 			include: {
 				subscribes: { where: { state: { in: ['accepted', 'request'] } } },
 				team: {
@@ -41,8 +43,8 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 			// bien plus léger que `getMemberProfile`, qui remonterait périodes et inscriptions.
 			include: { event: { include: { memberFields: true } }, leaderOf: true, user: true },
 		}),
-		prisma.member.findUniqueOrThrow({
-			where: { id: data.memberId },
+		prisma.member.findUnique({
+			where: { id: data.memberId, eventId },
 			include: {
 				subscribes: {
 					where: { state: { in: ['accepted', 'request'] } },
@@ -52,6 +54,8 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 		}),
 	])
 
+	if (!period) error(404, 'Ce créneau est introuvable')
+	if (!memberInvited) error(404, 'Ce membre est introuvable')
 	// Aucune fiche reliée à ce compte: l'adhésion reste à faire, et le tunnel est le seul chemin.
 	if (!memberAuthor) error(403, `Tu n'es pas encore membre de cet évènement`)
 

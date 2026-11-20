@@ -41,8 +41,10 @@ export const setSubscribeState = form(
 			state: { in: ['accepted', 'request'] },
 		}
 
-		const _subscribe = await prisma.subscribe.findUniqueOrThrow({
-			where: { id: subscribeId },
+		// Le rôle d'admin ne vaut que pour l'évènement de l'URL: une inscription d'un autre
+		// évènement n'existe pas ici.
+		const _subscribe = await prisma.subscribe.findUnique({
+			where: { id: subscribeId, period: { team: { eventId } } },
 			include: {
 				member: {
 					include: {
@@ -62,6 +64,7 @@ export const setSubscribeState = form(
 				},
 			},
 		})
+		if (!_subscribe) error(404, 'Cette inscription est introuvable')
 
 		const isSubscriberEdition = subscriberEditions[_subscribe.state].includes(state)
 		const isCreatorEdition = creatorEditions[_subscribe.state].includes(state)
