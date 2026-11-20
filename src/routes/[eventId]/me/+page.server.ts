@@ -1,10 +1,13 @@
 import { prisma, redirectToAuth, redirectToRegister } from '#lib/server/index.js'
 import { memberIsRegistered } from '#lib/member/index.js'
+import { canAccessEvent } from '#lib/event/eventAccess.js'
 
 export const load = async ({ url, parent, params: { eventId } }) => {
-	const { member, user } = await parent()
+	const { member, user, event, userIsRoot } = await parent()
 	if (!user) throw redirectToAuth(url)
 	if (!memberIsRegistered(member)) throw redirectToRegister(eventId, url)
+	// Le layout n'affiche que l'annonce d'un évènement fermé: secteurs et responsables restent ici.
+	if (!canAccessEvent(event, member, userIsRoot)) return { member, memberTeams: [] }
 
 	const memberId = member.id
 	return {

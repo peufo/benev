@@ -9,6 +9,7 @@ import {
 	getPeriodForm,
 } from '#lib/server/index.js'
 import { eventMetaTags } from '#lib/seo/index.js'
+import { canAccessEvent } from '#lib/event/eventAccess.js'
 
 export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 	const { user, userIsRoot } = await parent()
@@ -86,11 +87,14 @@ export const load = async ({ parent, url, cookies, params: { eventId } }) => {
 			metaTags: eventMetaTags(event, url),
 			// Une seule source pour la navigation publique et le volet d'administration: les
 			// brouillons n'en sortent que pour les admins, leur titre ne quitte pas le serveur sinon.
-			pages: await prisma.page.findMany({
-				where: { eventId, type: { not: 'email' }, ...(!isAdmin && { state: 'published' }) },
-				select: { id: true, title: true, path: true, type: true, state: true },
-				orderBy: { position: 'asc' },
-			}),
+			// Un évènement fermé n'a pas de navigation à offrir, pas même au tunnel d'inscription.
+			pages: canAccessEvent(event, member, userIsRoot)
+				? await prisma.page.findMany({
+						where: { eventId, type: { not: 'email' }, ...(!isAdmin && { state: 'published' }) },
+						select: { id: true, title: true, path: true, type: true, state: true },
+						orderBy: { position: 'asc' },
+					})
+				: [],
 			field: await parseFormKey(form_field, (id) =>
 				prisma.field.findUnique({ where: { id, eventId } })
 			),

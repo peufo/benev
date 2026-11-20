@@ -1,8 +1,15 @@
 import ical, { ICalCalendarMethod } from 'ical-generator'
+import { error } from '@sveltejs/kit'
+import { ROOT_USER } from '$app/env/private'
 import { prisma, permission } from '#lib/server/index.js'
+import { canAccessEvent } from '#lib/event/eventAccess.js'
 
 export const GET = async ({ params: { eventId }, locals }) => {
 	const member = await permission.member(eventId, locals)
+	const session = await locals.auth.validate()
+	const userIsRoot = session?.user.email === ROOT_USER
+	if (!canAccessEvent(member.event, member, userIsRoot))
+		error(403, "Cet évènement n'est pas ouvert")
 
 	const memberTeams = await prisma.team.findMany({
 		where: {
