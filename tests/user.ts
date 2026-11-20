@@ -17,7 +17,7 @@ export function useUser(name: string) {
 		await page.getByLabel('Prénom').fill(name)
 		await page.getByLabel('Nom', { exact: true }).fill('The Tester')
 		await page.getByLabel('Email').fill(email)
-		await page.getByLabel('Mot de passe').fill(password)
+		await page.getByLabel('Mot de passe', { exact: true }).fill(password)
 		// `InputBoolean` réduit la vraie case à `w-0` et dessine son état à côté:
 		// Playwright la juge invisible, on clique donc le label qui l'enveloppe.
 		// Le viser par `label` évite le lien homonyme du pied de formulaire.
@@ -33,7 +33,7 @@ export function useUser(name: string) {
 		async login(page: Page) {
 			await gotoHydrated(page, '/auth')
 			await page.getByLabel('Email').fill(email)
-			await page.getByLabel('Mot de passe').fill(password)
+			await page.getByLabel('Mot de passe', { exact: true }).fill(password)
 			await page.getByRole('button', { name: 'Se connecter' }).click()
 			await page.waitForURL('**/me/events')
 		},

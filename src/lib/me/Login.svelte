@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths'
 	import { slide } from 'svelte/transition'
 	import { MediaQuery } from 'svelte/reactivity'
-	import { InputBoolean, InputString } from 'fuma'
+	import { InputBoolean, InputPassword, InputString } from 'fuma'
 	import { toast } from 'svelte-sonner'
 	import { page } from '$app/state'
 	import { modelEmail } from '#lib/models/index.js'
@@ -204,11 +204,9 @@
 				{resetPasswordIssue}
 			</p>
 		{/if}
-		<InputString
+		<InputPassword
 			field={mode === 'login' ? loginUser.fields.password : registerUser.fields.password}
 			label="Mot de passe"
-			variant="block"
-			type="password"
 			autocomplete={mode === 'login' ? 'current-password' : 'new-password'}
 		/>
 

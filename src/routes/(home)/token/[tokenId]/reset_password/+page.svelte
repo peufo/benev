@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { InputString } from 'fuma'
+	import { InputPassword } from 'fuma'
 	import { LockKeyholeOpenIcon } from '@lucide/svelte'
 
 	import { Section } from '#lib/ui/index.js'
@@ -16,9 +16,8 @@
 	class="max-w-md mx-auto"
 >
 	<form {...resetPassword} class="space-y-3">
-		<InputString
+		<InputPassword
 			field={resetPassword.fields.password}
-			type="password"
 			label="Nouveau mot de passe"
 			autocomplete="new-password"
 		/>
