@@ -70,6 +70,39 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 		expect(subscribe.notifiedAt).toBeNull()
 	})
 
+	/**
+	 * Le tiroir ouvert depuis un secteur ne soumet aucun rôle: le membre n'en devient responsable
+	 * qu'à l'enregistrement du secteur, et c'est ce geste qui envoie l'invitation retenue.
+	 */
+	test("Invité depuis un secteur, le responsable reçoit l'invitation à son enregistrement", async () => {
+		const carla = { firstName: 'Carla', lastName: 'Bruni' }
+		await gotoHydrated(page, `/${event.eventId}/admin/teams`)
+		await page.locator('aside').getByRole('link', { name: 'Buvette' }).click()
+
+		await page.getByRole('combobox', { name: 'Responsables' }).click()
+		await page.locator('a[href*="form_invite=%7B%7D"]').click()
+		const dialog = page.getByRole('dialog', { name: 'Inviter un nouveau membre' })
+		await dialog.getByLabel('Prénom').fill(carla.firstName)
+		// `exact`: « Prénom » contient « nom ».
+		await dialog.getByLabel('Nom', { exact: true }).fill(carla.lastName)
+		await dialog
+			.getByLabel('Email (optionnel)', { exact: true })
+			.fill(`carla-${event.eventId}@example.org`)
+		await expect(
+			dialog.getByText("l'invitation partira quand tu enregistreras le secteur")
+		).toBeVisible()
+		await dialog.getByRole('button', { name: 'Valider' }).click()
+		await expect(
+			page.getByText("Membre ajouté, invitation à l'enregistrement du secteur")
+		).toBeVisible()
+		expect((await findMember(carla)).invitePendingAt).not.toBeNull()
+
+		const saveBar = page.getByText('Modification en cours !')
+		await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+		await expect(saveBar).toBeHidden()
+		expect((await findMember(carla)).invitePendingAt).toBeNull()
+	})
+
 	test('La publication annonce ce qui attendait, puis l’envoie', async () => {
 		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
 		const sendInvites = page.getByRole('checkbox', { name: "Envoyer l'invitation en attente" })

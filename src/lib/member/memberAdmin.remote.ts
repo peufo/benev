@@ -8,6 +8,7 @@ import {
 	permission,
 	prisma,
 	sendInviteEmail,
+	sendInvitesReleasedByRole,
 } from '#lib/server/index.js'
 // Jamais depuis le baril: la fabrique s'appelle à l'évaluation du module, or le cycle l'y
 // laisserait à `undefined` selon le point d'entrée.
@@ -26,7 +27,8 @@ export const setMemberIsAdmin = form(
 	z.object({ isAdmin: z.boolean().default(false) }),
 	async (data) => {
 		const { locals, params } = getRequestEvent()
-		const actor = await permission.owner(params.eventId!, locals)
+		const eventId = params.eventId!
+		const actor = await permission.owner(eventId, locals)
 		const before = await prisma.member.findUniqueOrThrow({ where: { id: params.memberId! } })
 		const member = await prisma.member.update({ where: { id: params.memberId! }, data })
 		if (before.isAdmin !== member.isAdmin)
@@ -35,6 +37,7 @@ export const setMemberIsAdmin = form(
 				actor,
 				isAdmin: { before: { isAdmin: before.isAdmin }, after: { isAdmin: member.isAdmin } },
 			})
+		if (member.isAdmin) await sendInvitesReleasedByRole(eventId, [member.id], actor)
 		return member
 	}
 )

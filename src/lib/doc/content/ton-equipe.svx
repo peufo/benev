@@ -55,7 +55,8 @@ Mais si tu en renseignes une, la personne reçoit un courriel contenant le lien 
 Si ton évènement n'est pas encore publié, l'invitation d'un membre sans rôle
 [attend sa publication](/docs/ouvrir-les-inscriptions#publier) : sans cela, la personne ne trouverait
 qu'une annonce « Bientôt disponible ». Un·e responsable ou un·e administrateur·ice, qui accède déjà
-à l'évènement, reçoit la sienne tout de suite.
+à l'évènement, reçoit la sienne tout de suite. Une invitation en attente part aussi dès que tu
+confies un secteur à la personne, ou le rôle d'administrateur·ice.
 
 **Inviter vaut approbation** : la personne compte dans ton [quota](/docs/gestion#quota) dès que
 sa fiche existe, avec ou sans adresse, pas à son arrivée.

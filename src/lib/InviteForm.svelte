@@ -35,16 +35,20 @@
 		draft: `L'évènement n'est pas encore publié: l'invitation partira à sa publication.`,
 		archived: `L'évènement est archivé: l'invitation partira s'il est republié.`,
 	}
+	const heldForTeamWarning = `L'évènement n'est pas ouvert: l'invitation partira quand tu enregistreras le secteur, qui en fera un·e responsable.`
 
 	/**
 	 * Un responsable ou une administratrice accède déjà à tout l'espace, publié ou non:
 	 * l'invitation garde son sens, et l'avertissement n'a plus lieu d'être. Ouvert depuis un
-	 * formulaire de secteur, l'invité en rejoint les responsables: le champ n'est pas rendu,
-	 * mais le rôle est bien celui-là.
+	 * formulaire de secteur, l'invité n'en devient responsable qu'à l'enregistrement de ce
+	 * secteur: jusque-là le serveur ne lui connaît aucun rôle, et c'est `updateTeam` qui envoie
+	 * l'invitation retenue.
 	 */
-	let inviteHasRole = $derived(inviteIsAdmin || !!leaderOf.length || hideLeaderOf)
+	let inviteHasRole = $derived(inviteIsAdmin || !!leaderOf.length)
 	let held = $derived(sendEmail && isInviteHeld(event.state, { hasRole: inviteHasRole }))
-	let warning = $derived(held ? heldWarning[event.state] : undefined)
+	let warning = $derived(
+		held ? (hideLeaderOf ? heldForTeamWarning : heldWarning[event.state]) : undefined
+	)
 
 	let hint = $derived(
 		isEmailValid ? undefined : `Renseigne un email valide pour envoyer une invitation.`
@@ -97,7 +101,9 @@
 			onsuccess: () => {
 				toast.success(
 					held
-						? 'Membre ajouté, invitation à la publication'
+						? hideLeaderOf
+							? "Membre ajouté, invitation à l'enregistrement du secteur"
+							: 'Membre ajouté, invitation à la publication'
 						: sendEmail
 							? 'Invitation envoyée'
 							: 'Membre ajouté'

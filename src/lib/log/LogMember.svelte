@@ -14,7 +14,9 @@
 			? 'a importé'
 			: log.data.resent
 				? 'a renvoyé une invitation à'
-				: 'a invité'}
+				: log.data.released
+					? "a envoyé l'invitation en attente de"
+					: 'a invité'}
 		{@render snippetRef(log.data.member)}
 	{:else if log.type === 'member_join'}
 		{@render snippetRef(log.data.member)}

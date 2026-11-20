@@ -4,6 +4,8 @@ import { createAvatarPlaceholder } from './avatar'
 import { sendEmailModel } from './email'
 import { getMemberProfile } from './member'
 import { prisma } from './prisma'
+import { createLog } from './log'
+import type { LogActor } from '#lib/log/index.js'
 import { generateInviteToken, readValidInviteToken } from './token'
 
 /**
@@ -50,6 +52,50 @@ export async function sendInviteEmail(
 		logContext: { memberId: member.id },
 		bulk,
 	})
+}
+
+/**
+ * Une invitation retenue part dès que son membre reçoit un rôle, qui lui ouvre l'évènement fermé
+ * (`isInviteHeld`). Le marqueur est levé avant l'envoi, pour que deux gestes concurrents n'envoient
+ * qu'une fois, et reposé si la file refuse: la publication ou la fiche du membre le reprendront.
+ */
+export async function sendInvitesReleasedByRole(
+	eventId: string,
+	memberIds: string[],
+	author: Inviter & LogActor
+): Promise<void> {
+	if (!memberIds.length) return
+	const members = await prisma.member.findMany({
+		where: {
+			id: { in: memberIds },
+			eventId,
+			invitePendingAt: { not: null },
+			userId: null,
+			email: { not: null },
+		},
+		include: { event: { select: { name: true } } },
+	})
+	for (const member of members) {
+		const { count } = await prisma.member.updateMany({
+			where: { id: member.id, invitePendingAt: { not: null } },
+			data: { invitePendingAt: null },
+		})
+		if (!count) continue
+		const queued = await sendInviteEmail({ ...member, email: member.email! }, author).catch(
+			(err) => {
+				console.error(err)
+				return false
+			}
+		)
+		if (!queued) {
+			await prisma.member.update({
+				where: { id: member.id },
+				data: { invitePendingAt: member.invitePendingAt },
+			})
+			continue
+		}
+		await createLog('member_invite', { member, actor: author, sendEmail: true, released: true })
+	}
 }
 
 /**

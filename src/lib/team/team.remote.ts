@@ -8,6 +8,7 @@ import {
 	createLog,
 	permission,
 	prisma,
+	sendInvitesReleasedByRole,
 	sendPendingSubscribeRequests,
 	uniqueIssue,
 	useAddTeamComputedValues,
@@ -26,6 +27,7 @@ export const createTeam = form(modelTeam, async (data, issue) => {
 		.create({ data: { ...data, eventId } })
 		.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 	await createLog('team_create', { team, actor })
+	await sendInvitesReleasedByRole(eventId, leaderIds(data.leaders), actor)
 	return team
 })
 
@@ -56,8 +58,12 @@ export const updateTeam = form(modelTeamUpdate, async ({ leaders, ...data }, iss
 		.catch(uniqueIssue(issue.name(NAME_TAKEN)))
 	const changes = diffChanges(projectTeam(before), projectTeam(team))
 	if (hasChanges(changes)) await createLog('team_update', { team, changes, actor: member })
+	if (isAdmin) await sendInvitesReleasedByRole(team.eventId, leaderIds(leaders), member)
 	return team
 })
+
+const leaderIds = (leaders?: { connect: { id: string }[] } | { set: { id: string }[] }) =>
+	(leaders ? ('connect' in leaders ? leaders.connect : leaders.set) : []).map(({ id }) => id)
 
 /**
  * `redirectTo` quitte le secteur côté serveur: rendu depuis son propre volet, le formulaire

@@ -93,6 +93,7 @@ export const logMap = {
 		sendEmail,
 		held,
 		resent,
+		released,
 		teams,
 		importedFrom,
 	}: {
@@ -102,6 +103,8 @@ export const logMap = {
 		/** L'invitation attend la publication de l'évènement. */
 		held?: boolean
 		resent?: boolean
+		/** L'invitation retenue est partie quand le membre a reçu un rôle. */
+		released?: boolean
 		teams?: LogRef[]
 		importedFrom?: string
 	}) => ({
@@ -118,6 +121,7 @@ export const logMap = {
 			// Un renvoi ne crée rien: seule cette ligne distingue les deux gestes. La clé reste
 			// optionnelle, les lignes déjà écrites ne la portent pas.
 			...(resent && { resent: true as const }),
+			...(released && { released: true as const }),
 			// Les secteurs confiés dès l'invitation. `teamId` ne pourrait en désigner qu'un: la
 			// liste vit dans la charge utile, et rien ne la joint au rendu.
 			...(teams?.length && { teams }),
