@@ -144,11 +144,8 @@
 			/>
 		</div>
 
-		<!-- Le dialogue est rendu dans le tiroir, et monté d'emblée. Frère du tiroir, il recevrait
-		     l'`inert` que celui-ci pose sur son entourage à l'ouverture, et un `<dialog>` ainsi marqué
-		     reste mort une fois ouvert: le top layer n'échappe qu'à l'inertie d'un ancêtre, pas à la
-		     sienne. Sous un `{#if}`, `bind:dialog` ne donnerait sa référence qu'au rendu suivant, quand
-		     le clic qui l'ouvre est déjà passé. -->
+		<!-- Le dialogue est monté d'emblée: sous un `{#if}`, `bind:dialog` ne donnerait sa référence
+		     qu'au rendu suivant, quand le clic qui l'ouvre est déjà passé. -->
 		<Dialog bind:dialog={dialogEdit}>
 			{#snippet header()}
 				<h3 class="title">Édition d'une image</h3>
@@ -195,8 +192,8 @@
 </Drawer>
 
 <!-- Hors du tiroir: la fermeture démonterait le formulaire, et la réponse d'un envoi encore en
-     vol tomberait dans le vide. Son `<dialog>` n'est pas frère du tiroir mais enfant du `<form>`,
-     l'`inert` que `Drawer` pose sur son entourage ne l'atteint donc pas. -->
+     vol tomberait dans le vide. L'`inert` que `Drawer` pose sur son entourage épargne les
+     `<dialog>` présents à l'ouverture: celui-ci doit donc être monté d'emblée. -->
 <form
 	{...uploadMedia.enhance(
 		enhanceForm({
