@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { prisma } from './prisma'
-import { isRequestHeld } from '#lib/event/eventAccess.js'
+import { isVolunteerMailHeld } from '#lib/event/eventAccess.js'
 
 /** Le membre pour lui écrire, les responsables pour répondre, le propriétaire à défaut. */
 export const includeForRequestNotification = {
@@ -59,7 +59,7 @@ export async function notifySubscribeRequest(
 	authorName: string
 ): Promise<boolean> {
 	const { team } = subscribe.period
-	if (isRequestHeld(team.event.state, team.state)) return false
+	if (isVolunteerMailHeld(team.event.state, team.state)) return false
 	const { count } = await prisma.subscribe.updateMany({
 		where: { id: subscribe.id, notifiedAt: null },
 		data: { notifiedAt: new Date() },

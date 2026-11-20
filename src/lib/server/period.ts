@@ -5,6 +5,7 @@ import { PERIOD_DEFAULT_MS } from '#lib/constant/index.js'
 import { createLog, parseFormKey, prisma, sendEmailComponent } from '#lib/server/index.js'
 import { EmailPeriodChanged } from '#lib/email/index.js'
 import { diffChanges, hasChanges, projectPeriod, type LogActor } from '#lib/log/index.js'
+import { isVolunteerMailHeld } from '#lib/event/eventAccess.js'
 
 export type FormDataPeriod = Awaited<ReturnType<typeof getPeriod>>
 
@@ -15,7 +16,7 @@ export type FormDataPeriod = Awaited<ReturnType<typeof getPeriod>>
 export const includeForPeriodChange = {
 	team: {
 		include: {
-			event: { select: { id: true, name: true, timezone: true } },
+			event: { select: { id: true, name: true, timezone: true, state: true } },
 			leaders: { where: { email: { not: null } }, select: { email: true } },
 		},
 	},
@@ -36,7 +37,9 @@ type Range = { start: Date; end: Date }
 /**
  * Un courriel par inscrit·e engagé·e qui accepte les notifications, `after` nul pour une
  * suppression. La réponse va aux responsables, à défaut à l'auteur·ice du geste. Un envoi qui
- * tombe n'arrête pas les autres. Rend le nombre de destinataires.
+ * tombe n'arrête pas les autres. Rend le nombre de destinataires: aucun tant que l'évènement est
+ * fermé ou le secteur en brouillon, rien n'étant rejoué à leur ouverture, puisque le membre y
+ * trouve l'horaire à jour.
  */
 export async function notifyPeriodChange(
 	period: PeriodForChange,
@@ -44,6 +47,7 @@ export async function notifyPeriodChange(
 	actor: { email: string }
 ): Promise<number> {
 	const { team } = period
+	if (isVolunteerMailHeld(team.event.state, team.state)) return 0
 	const leaders = team.leaders.map(({ email }) => email as string)
 	const replyTo = leaders.length ? leaders : [actor.email]
 	const subject = after ? 'Ton créneau a changé' : 'Ton créneau a été supprimé'

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { canAccessEvent, isInviteHeld, isRequestHeld } from '#lib/event/eventAccess.js'
+import { canAccessEvent, isInviteHeld, isVolunteerMailHeld } from '#lib/event/eventAccess.js'
 
 const member = { roles: ['member'] }
 const leader = { roles: ['leader', 'member'] }
@@ -36,18 +36,18 @@ describe('isInviteHeld', () => {
 	})
 })
 
-describe('isRequestHeld', () => {
-	it("retient la demande d'un évènement non publié, quel que soit le secteur", () => {
-		expect(isRequestHeld('draft', 'published')).toBe(true)
-		expect(isRequestHeld('archived', 'published')).toBe(true)
+describe('isVolunteerMailHeld', () => {
+	it("retient l'e-mail d'un évènement non publié, quel que soit le secteur", () => {
+		expect(isVolunteerMailHeld('draft', 'published')).toBe(true)
+		expect(isVolunteerMailHeld('archived', 'published')).toBe(true)
 	})
 
 	it("retient celle d'un secteur en brouillon, même publié", () => {
-		expect(isRequestHeld('published', 'draft')).toBe(true)
+		expect(isVolunteerMailHeld('published', 'draft')).toBe(true)
 	})
 
 	it("laisse partir celle d'un secteur ouvert d'un évènement publié", () => {
-		expect(isRequestHeld('published', 'published')).toBe(false)
-		expect(isRequestHeld('published', 'validated')).toBe(false)
+		expect(isVolunteerMailHeld('published', 'published')).toBe(false)
+		expect(isVolunteerMailHeld('published', 'validated')).toBe(false)
 	})
 })

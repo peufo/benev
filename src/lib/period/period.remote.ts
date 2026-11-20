@@ -74,8 +74,8 @@ export const updatePeriod = form(
 /**
  * Les inscriptions tombent avec le créneau (`onDelete: Cascade`). Celles qui engageaient
  * quelqu'un reçoivent chacune leur ligne, pour que la page du membre en garde la trace; les
- * déclinées et annulées gardent leur historique de statut, c'est assez. Hors brouillon, chaque
- * inscrit·e est prévenu·e.
+ * déclinées et annulées gardent leur historique de statut, c'est assez. Chaque inscrit·e est
+ * prévenu·e, si l'évènement est publié et le secteur hors brouillon (`notifyPeriodChange`).
  */
 export const deletePeriod = form(
 	z.object({ id: z.string(), redirectTo: z.string().optional() }),
@@ -88,7 +88,7 @@ export const deletePeriod = form(
 		for (const subscribe of period.subscribes) {
 			await createLog('subscribe_delete', { subscribe: { ...subscribe, period }, actor })
 		}
-		if (period.team.state !== 'draft') await notifyPeriodChange(period, null, actor)
+		await notifyPeriodChange(period, null, actor)
 		if (redirectTo) redirect(303, redirectTo)
 	}
 )

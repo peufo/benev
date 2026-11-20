@@ -7,7 +7,7 @@ import z from 'zod'
 import { createLog, notifyTierQuotaIfNeeded, permission, prisma } from '#lib/server/index.js'
 import { subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { periodIsComplet } from '#lib/period/index.js'
-import { canAccessEvent, isRequestHeld } from '#lib/event/eventAccess.js'
+import { canAccessEvent, isVolunteerMailHeld } from '#lib/event/eventAccess.js'
 
 type Edtions = Record<SubscribeState, SubscribeState[]>
 const creatorEditions: Edtions = {
@@ -121,7 +121,7 @@ export const setSubscribeState = form(
 			}
 		}
 
-		const isHeld = isRequestHeld(author.event.state, _subscribe.period.team.state)
+		const isHeld = isVolunteerMailHeld(author.event.state, _subscribe.period.team.state)
 		const subscribe = await prisma.subscribe.update({
 			where: { id: subscribeId },
 			data: {

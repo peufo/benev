@@ -43,7 +43,7 @@ test.describe.serial('Rappel avant un créneau', () => {
 		return subscribe.remindedAt
 	}
 
-	test('Préparation: un secteur publié, une inscription acceptée', async () => {
+	test('Préparation: un évènement en brouillon, un secteur publié, une inscription acceptée', async () => {
 		// `/root/tasks` n'est ouvert qu'à `ROOT_USER`, dont `playwright.config.ts` fixe l'adresse.
 		await signIn(page, await seedUser('Root', { email: 'root@benevio.test' }))
 		await event.create(page)
@@ -57,6 +57,17 @@ test.describe.serial('Rappel avant un créneau', () => {
 		subscribeId = subscribe.id
 	})
 
+	test("Un évènement non publié n'envoie pas de rappel", async () => {
+		// Le premier passage pose le curseur: une date antérieure ne rejouerait pas.
+		await runPeriodReminder()
+		await startInOneDay()
+		await runPeriodReminder()
+		expect(await remindedAt()).toBeNull()
+
+		// Publier n'est pas le sujet: c'est le préalable des étapes suivantes.
+		await prisma.event.update({ where: { id: event.eventId }, data: { state: 'published' } })
+	})
+
 	test("Un évènement qui a coupé le rappel n'en envoie pas", async () => {
 		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
 		await page.getByRole('button', { name: /reçoit un courriel avant le début/ }).click()
@@ -66,8 +77,6 @@ test.describe.serial('Rappel avant un créneau', () => {
 		const saved = await prisma.event.findUniqueOrThrow({ where: { id: event.eventId } })
 		expect(saved.reminderHours).toBe(0)
 
-		// Le premier passage pose le curseur: une date antérieure ne rejouerait pas.
-		await runPeriodReminder()
 		await startInOneDay()
 		await runPeriodReminder()
 		expect(await remindedAt()).toBeNull()

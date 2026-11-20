@@ -24,7 +24,10 @@ export function isInviteHeld(eventState: EventState, { hasRole }: { hasRole: boo
 	return eventState !== 'published' && !hasRole
 }
 
-/** Une demande d'inscription attend que le membre puisse y répondre: évènement et secteur ouverts. */
-export function isRequestHeld(eventState: EventState, teamState: TeamState): boolean {
+/**
+ * Un e-mail aux bénévoles d'un secteur (demande d'inscription, créneau modifié ou supprimé, rappel)
+ * attend qu'ils puissent voir ce qu'il annonce: évènement publié, secteur hors brouillon.
+ */
+export function isVolunteerMailHeld(eventState: EventState, teamState: TeamState): boolean {
 	return eventState !== 'published' || teamState === 'draft'
 }
