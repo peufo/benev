@@ -8,11 +8,12 @@
 
 	let origin = $derived(currentPage.url.origin)
 	let breadcrumb = $derived(
-		breadcrumbSchema([
-			{ name: SITE_NAME, url: `${origin}/` },
-			{ name: data.event.name, url: `${origin}/${data.event.id}` },
-			{ name: data.page.title, url: `${origin}/${data.event.id}/${data.page.path}` },
-		])
+		data.page &&
+			breadcrumbSchema([
+				{ name: SITE_NAME, url: `${origin}/` },
+				{ name: data.event.name, url: `${origin}/${data.event.id}` },
+				{ name: data.page.title, url: `${origin}/${data.event.id}/${data.page.path}` },
+			])
 	)
 </script>
 
@@ -20,7 +21,9 @@
 	<JsonLd schema={breadcrumb} />
 {/if}
 
-<Page page={data.page} member={data.member} />
+{#if data.page}
+	<Page page={data.page} member={data.member} />
+{/if}
 
 {#if data.memberCanRegister}
 	<div class="text-center my-8">

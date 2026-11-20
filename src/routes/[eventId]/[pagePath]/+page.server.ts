@@ -1,10 +1,14 @@
 import { prisma } from '#lib/server/index.js'
 import { error } from '@sveltejs/kit'
 import { mergeMetaTags, pageMetaTags, tiptapExcerpt } from '#lib/seo/index.js'
+import { canAccessEvent } from '#lib/event/eventAccess.js'
 
 export const load = async ({ params, parent }) => {
 	const { member, event, metaTags, userIsRoot } = await parent()
 	const isAdmin = member?.roles.includes('admin') || userIsRoot
+	// Fermé, l'évènement n'affiche que son annonce, qu'une erreur masquerait: le contenu reste au
+	// serveur.
+	if (!canAccessEvent(event, member, userIsRoot)) return { page: null }
 
 	// TODO: tryOr404
 	// Un admin prévisualise ses brouillons par leur lien; pour tout autre lecteur, ils n'existent pas.

@@ -1,11 +1,13 @@
 import { error } from '@sveltejs/kit'
 import type { Prisma, SubscribeState } from '@prisma/client'
 import { form, getRequestEvent } from '$app/server'
+import { ROOT_USER } from '$app/env/private'
 import { isFreeRange } from 'perod'
 import z from 'zod'
 import { createLog, notifyTierQuotaIfNeeded, permission, prisma } from '#lib/server/index.js'
 import { subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { periodIsComplet } from '#lib/period/index.js'
+import { canAccessEvent } from '#lib/event/eventAccess.js'
 
 type Edtions = Record<SubscribeState, SubscribeState[]>
 const creatorEditions: Edtions = {
@@ -83,6 +85,11 @@ export const setSubscribeState = form(
 
 		if (!isLeaderAction) {
 			if (!isSelfAction) error(403, 'Seule la personne inscrite peut répondre à cette inscription')
+			// Comme pour s'inscrire: un évènement fermé ne se manipule pas par un appel direct.
+			const session = await locals.auth.validate()
+			const userIsRoot = session?.user.email === ROOT_USER
+			if (!canAccessEvent(author.event, author, userIsRoot))
+				error(403, "Cet évènement n'est pas ouvert")
 			// Un brouillon n'est pas visible du membre: il n'a rien à y répondre.
 			if (_subscribe.period.team.state === 'draft') error(403)
 			if ((state === 'cancelled' || state === 'denied') && !author.event.selfSubscribeCancelAllowed)

@@ -26,6 +26,7 @@
 	import FooterLink from './FooterLink.svelte'
 	import EventTheme from '#lib/event/theme/EventTheme.svelte'
 	import { EventIcon, EventTierBadge } from '#lib/event/index.js'
+	import { canAccessEvent } from '#lib/event/eventAccess.js'
 	import { mapUrl } from '#lib/location/index.js'
 	import { eventSchema } from '#lib/seo/index.js'
 
@@ -61,10 +62,7 @@
 	)
 
 	let accessGranted = $derived(
-		data.event.state === 'published' ||
-			data.member?.roles.includes('leader') ||
-			data.userIsRoot ||
-			isRegisteringWithInvitation
+		canAccessEvent(data.event, data.member, data.userIsRoot) || isRegisteringWithInvitation
 	)
 
 	// Les metas de l'évènement sont publiées par le `load` et rendues par le layout racine

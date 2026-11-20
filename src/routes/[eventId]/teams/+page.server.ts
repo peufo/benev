@@ -4,6 +4,7 @@ import { parseQuery } from 'fuma/server'
 import { useAddTeamComputedValues, prisma } from '#lib/server/index.js'
 import { isMemberAllowed } from '#lib/member/index.js'
 import type { Period } from '@prisma/client'
+import { canAccessEvent } from '#lib/event/eventAccess.js'
 
 export const load = async ({ parent, url, params: { eventId } }) => {
 	const { search, range, onlyAvailable } = parseQuery(url, {
@@ -12,7 +13,9 @@ export const load = async ({ parent, url, params: { eventId } }) => {
 		onlyAvailable: filterBoolean,
 	})
 
-	const { member, event } = await parent()
+	const { member, event, userIsRoot } = await parent()
+	// Le layout de l'évènement n'en montre que l'annonce: les secteurs restent au serveur.
+	if (!canAccessEvent(event, member, userIsRoot)) return { teams: [], teamsHiddenCount: 0 }
 
 	const isLeader = member?.roles.includes('leader')
 

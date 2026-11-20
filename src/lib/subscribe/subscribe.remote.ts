@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { form, getRequestEvent } from '$app/server'
+import { ROOT_USER } from '$app/env/private'
 import { isFreeRange } from 'perod'
 import { modelSubscribe } from '#lib/models/index.js'
 import {
@@ -12,6 +13,7 @@ import {
 } from '#lib/server/index.js'
 import { isMemberAllowed, memberIsRegistered } from '#lib/member/index.js'
 import { periodIsComplet } from '#lib/period/index.js'
+import { canAccessEvent } from '#lib/event/eventAccess.js'
 
 export const createSubscribe = form(modelSubscribe, async (data) => {
 	const { locals, params } = getRequestEvent()
@@ -65,12 +67,18 @@ export const createSubscribe = form(modelSubscribe, async (data) => {
 	if (!isLeaderOfTeam && !isSelfSubscribe) error(403)
 
 	if (!isLeaderOfTeam) {
+		const author = addMemberComputedValues(memberAuthor)
+		// Un évènement en brouillon ou archivé est fermé aux bénévoles: le layout le cache, et
+		// l'appel direct ne doit pas les y faire entrer.
+		const userIsRoot = session.user.email === ROOT_USER
+		if (!canAccessEvent(author.event, author, userIsRoot))
+			error(403, "Cet évènement n'est pas ouvert")
 		if (!memberAuthor.event.selfSubscribeAllowed) error(403)
 		// Seul un secteur publié est ouvert aux inscriptions libres; un brouillon n'est même pas visible.
 		if (period.team.state !== 'published') error(403)
 		// Le tunnel d'inscription n'est pas décoratif: ce que l'évènement rend obligatoire est
 		// demandé avant la première période, pas après.
-		if (!memberIsRegistered(addMemberComputedValues(memberAuthor)))
+		if (!memberIsRegistered(author))
 			error(403, `Complète ton profil avant de t'inscrire à un créneau`)
 		if (!isMemberAllowed(period.team.conditions, memberAuthor)) error(403)
 	}

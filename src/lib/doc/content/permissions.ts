@@ -30,6 +30,10 @@ export const PERMISSIONS: PermissionRow[] = [
 		label: "Publier, archiver ou repasser l'évènement en brouillon",
 		values: [true, false, false, false],
 	},
+	{
+		label: "Accéder à l'évènement en brouillon ou archivé",
+		values: [true, true, true, "Seulement le tunnel d'inscription, sur invitation"],
+	},
 	{ label: "Supprimer l'évènement", values: [true, false, false, false] },
 	{ label: "Configurer l'évènement", values: [true, true, false, false] },
 	{ label: "Dupliquer l'évènement", values: [true, true, false, false] },
@@ -46,10 +50,6 @@ export const PERMISSIONS: PermissionRow[] = [
 	},
 	{
 		label: 'Gérer les créneaux',
-		values: [true, true, 'Seulement les créneaux de ses secteurs', false],
-	},
-	{
-		label: 'Inscrire un membre à un créneau',
 		values: [true, true, 'Seulement les créneaux de ses secteurs', false],
 	},
 	{ label: 'Supprimer un membre', values: [true, true, 'Soi-même', 'Soi-même'] },
@@ -71,21 +71,25 @@ export const PERMISSIONS: PermissionRow[] = [
 		values: [true, true, 'Librement dans ses secteurs, ailleurs comme un membre', undefined],
 	},
 	{
+		label: 'Inscrire un autre membre à un créneau',
+		values: [true, true, 'Seulement les créneaux de ses secteurs', false],
+	},
+	{
 		label: 'Annuler une inscription',
 		values: [
 			'Si initiée par un responsable',
 			'Si initiée par un responsable',
-			'Si initiée par un responsable',
+			'Si initiée par un responsable, dans ses secteurs',
 			"Si initiée par soi-même, et si l'évènement le permet",
 		],
 	},
 	{
 		label: 'Confirmer ou décliner une inscription',
 		values: [
-			'Si initiée par le membre',
-			'Si initiée par le membre',
-			'Si initiée par le membre',
-			'Si initiée par un responsable',
+			'Si initiée par le membre. Confirmer au nom du membre, si initiée par un responsable',
+			'Si initiée par le membre. Confirmer au nom du membre, si initiée par un responsable',
+			'Dans ses secteurs: si initiée par le membre. Confirmer au nom du membre, si initiée par un responsable',
+			"Si initiée par un responsable. Décliner seulement si l'évènement le permet",
 		],
 	},
 ]
