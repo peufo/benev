@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { MAX_IMPORT_INVITES } from '#lib/member/import/buildMembers.js'
 import { createRateLimit } from './rateLimit'
-import { sendInviteEmail } from './invite'
+import { sendHeldInvite } from './invite'
 import { prisma } from './prisma'
 
 // Les invitations en nombre: un import, ou celles qu'un évènement retenait jusqu'à sa publication.
@@ -40,19 +40,17 @@ export async function sendPendingInvites(eventId: string, author: Inviter) {
 		orderBy: { invitePendingAt: 'asc' },
 	})
 	let sent = 0
-	for (const member of members) {
-		if (isInviteLimited(author.userId)) break
-		const queued = await sendInviteEmail({ ...member, email: member.email! }, author, {
-			bulk: true,
-		}).catch((err) => {
-			console.error(err)
-			return false
-		})
-		if (!queued) continue
-		await prisma.member.update({ where: { id: member.id }, data: { invitePendingAt: null } })
-		sent++
+	let left = 0
+	for (const [index, member] of members.entries()) {
+		if (isInviteLimited(author.userId)) {
+			left += members.length - index
+			break
+		}
+		const outcome = await sendHeldInvite(member, author, { bulk: true })
+		if (outcome === 'sent') sent++
+		if (outcome === 'refused') left++
 	}
-	return { sent, left: members.length - sent }
+	return { sent, left }
 }
 
 /** Publier sans inviter: le choix est fait, la fiche de chaque membre garde le renvoi. */

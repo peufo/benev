@@ -40,11 +40,14 @@ export const setEventState = form(
 
 		const before = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
 		// Un changement de statut à la main tranche la question: l'avertissement en cours n'a plus
-		// d'objet.
-		const event = await prisma.event.update({
-			where: { id: eventId },
+		// d'objet. La transition n'a lieu que depuis l'état lu: de deux publications simultanées,
+		// une seule relâche et journalise.
+		const { count } = await prisma.event.updateMany({
+			where: { id: eventId, state: before.state },
 			data: { ...data, archiveNoticeAt: null },
 		})
+		if (!count) return
+		const event = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
 		if (before.state === event.state) return
 
 		const released =

@@ -54,10 +54,44 @@ export async function sendInviteEmail(
 	})
 }
 
+type HeldMember = Omit<InvitedMember, 'email'> & {
+	email: string | null
+	invitePendingAt: Date | null
+}
+
+/**
+ * L'envoi d'une invitation retenue. Le marqueur est levé avant l'envoi: deux gestes concurrents,
+ * deux publications ou une publication et un rôle donné, n'envoient qu'une fois, puisque chaque
+ * envoi fait tourner le jeton et rendrait le premier lien caduc. `taken` quand un autre geste l'a
+ * déjà levé. Reposé si la file refuse, la publication ou la fiche du membre le reprendront.
+ */
+export async function sendHeldInvite(
+	member: HeldMember,
+	author: Inviter,
+	{ bulk = false } = {}
+): Promise<'sent' | 'taken' | 'refused'> {
+	const { count } = await prisma.member.updateMany({
+		where: { id: member.id, invitePendingAt: { not: null } },
+		data: { invitePendingAt: null },
+	})
+	if (!count) return 'taken'
+	const queued =
+		!!member.email &&
+		(await sendInviteEmail({ ...member, email: member.email }, author, { bulk }).catch((err) => {
+			console.error(err)
+			return false
+		}))
+	if (queued) return 'sent'
+	await prisma.member.update({
+		where: { id: member.id },
+		data: { invitePendingAt: member.invitePendingAt },
+	})
+	return 'refused'
+}
+
 /**
  * Une invitation retenue part dès que son membre reçoit un rôle, qui lui ouvre l'évènement fermé
- * (`isInviteHeld`). Le marqueur est levé avant l'envoi, pour que deux gestes concurrents n'envoient
- * qu'une fois, et reposé si la file refuse: la publication ou la fiche du membre le reprendront.
+ * (`isInviteHeld`).
  */
 export async function sendInvitesReleasedByRole(
 	eventId: string,
@@ -76,24 +110,7 @@ export async function sendInvitesReleasedByRole(
 		include: { event: { select: { name: true } } },
 	})
 	for (const member of members) {
-		const { count } = await prisma.member.updateMany({
-			where: { id: member.id, invitePendingAt: { not: null } },
-			data: { invitePendingAt: null },
-		})
-		if (!count) continue
-		const queued = await sendInviteEmail({ ...member, email: member.email! }, author).catch(
-			(err) => {
-				console.error(err)
-				return false
-			}
-		)
-		if (!queued) {
-			await prisma.member.update({
-				where: { id: member.id },
-				data: { invitePendingAt: member.invitePendingAt },
-			})
-			continue
-		}
+		if ((await sendHeldInvite(member, author)) !== 'sent') continue
 		await createLog('member_invite', { member, actor: author, sendEmail: true, released: true })
 	}
 }
