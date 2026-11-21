@@ -15,7 +15,7 @@ import {
 
 type SubscribeNotification<State extends SubscribeState> = (
 	options: SendMailOptionsWithProps<Omit<EmailModelProps[`subscribe_${State}`], 'member'>>
-) => Promise<unknown>
+) => Promise<boolean>
 
 export const subscribeNotification: { [S in SubscribeState]: SubscribeNotification<S> } = {
 	async request({ props, ...restOptions }) {

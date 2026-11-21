@@ -38,8 +38,9 @@ export type SubscribeForRequestNotification = Prisma.SubscribeGetPayload<{
  */
 export async function sendSubscribeRequestNotification(
 	subscribe: SubscribeForRequestNotification,
-	authorName: string
-) {
+	authorName: string,
+	{ bulk = false } = {}
+): Promise<'sent' | 'nobody' | 'refused'> {
 	const memberMail =
 		subscribe.member.isNotifiedSubscribe && subscribe.member.email ? [subscribe.member.email] : []
 	const leadersMail = subscribe.period.team.leaders.map(({ email }) => email as string)
@@ -48,25 +49,30 @@ export async function sendSubscribeRequestNotification(
 	}
 	const to = subscribe.createdBy === 'user' ? leadersMail : memberMail
 	const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
-	if (!to.length) return
+	if (!to.length) return 'nobody'
 
-	await subscribeNotification.request({
+	const queued = await subscribeNotification.request({
 		from: subscribe.period.team.event.name,
 		to,
 		replyTo,
 		subject: 'Nouvelle inscription',
 		props: { subscribe, authorName },
+		bulk,
 	})
+	return queued ? 'sent' : 'refused'
 }
 
 /**
  * L'envoi de la demande d'inscription, s'il a lieu d'être: tant que son destinataire ne peut pas
  * y répondre, elle attend `sendPendingSubscribeRequests`. Le marqueur est posé avant l'envoi, comme
- * `remindedAt`: deux relâches concurrentes n'envoient qu'une fois. Rend `true` si l'envoi est parti.
+ * `remindedAt`: deux relâches concurrentes n'envoient qu'une fois. Un message que la file refuse
+ * rend son marqueur, et la demande reste en attente de la prochaine relâche. Rend `true` si un
+ * e-mail est parti.
  */
 export async function notifySubscribeRequest(
 	subscribe: SubscribeForRequestNotification,
-	authorName: string
+	authorName: string,
+	{ bulk = false } = {}
 ): Promise<boolean> {
 	const { team } = subscribe.period
 	const hasRole = subscribe.createdBy === 'user' || memberHasRole(subscribe.member, team.event)
@@ -76,15 +82,23 @@ export async function notifySubscribeRequest(
 		data: { notifiedAt: new Date() },
 	})
 	if (!count) return false
-	await sendSubscribeRequestNotification(subscribe, authorName).catch(console.error)
-	return true
+	const outcome = await sendSubscribeRequestNotification(subscribe, authorName, { bulk }).catch(
+		(err) => {
+			console.error(err)
+			return 'refused' as const
+		}
+	)
+	if (outcome === 'refused')
+		await prisma.subscribe.update({ where: { id: subscribe.id }, data: { notifiedAt: null } })
+	return outcome === 'sent'
 }
 
 /**
  * Les demandes qu'un responsable a créées pendant que le secteur était en brouillon, ou que
  * l'évènement n'était pas publié: c'est en quittant cet état qu'elles partent. Seules celles encore
- * sans réponse sont concernées, une inscription confirmée n'a rien à recevoir. Un envoi qui
- * tombe n'arrête ni les autres, ni la transition. Rend le nombre de demandes envoyées.
+ * sans réponse sont concernées, une inscription confirmée n'a rien à recevoir. Elles partent en
+ * masse, derrière les e-mails urgents. Un envoi qui tombe n'arrête ni les autres, ni la
+ * transition. Rend le nombre d'e-mails partis.
  */
 export async function sendPendingSubscribeRequests(
 	scope: { teamId: string } | { eventId: string },
@@ -97,7 +111,7 @@ export async function sendPendingSubscribeRequests(
 	})
 	let sent = 0
 	for (const subscribe of subscribes) {
-		if (await notifySubscribeRequest(subscribe, authorName)) sent++
+		if (await notifySubscribeRequest(subscribe, authorName, { bulk: true })) sent++
 	}
 	return sent
 }
