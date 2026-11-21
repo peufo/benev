@@ -27,9 +27,16 @@ export const getHeldEmails = query(z.string(), async (eventId) => {
 })
 
 export const setEventState = form(
-	// Absent quand la case n'a pas été proposée: rien n'attendait, ce qui attend depuis part.
-	modelEventState.extend({ sendInvites: z.boolean().optional() }),
-	async ({ sendInvites, ...data }) => {
+	/**
+	 * `announcedInvites` est le compte que la page a montré: une invitation retenue depuis, par un
+	 * import ou un autre onglet, n'a été ni proposée ni confirmée. `sendInvites` est absent quand
+	 * la case ne l'a pas été non plus.
+	 */
+	modelEventState.extend({
+		sendInvites: z.boolean().optional(),
+		announcedInvites: z.number().optional(),
+	}),
+	async ({ sendInvites, announcedInvites = 0, ...data }) => {
 		const { locals, params } = getRequestEvent()
 		const eventId = params.eventId!
 		await permission.ownerOrRoot(eventId, locals)
@@ -39,6 +46,12 @@ export const setEventState = form(
 		if (!session) error(401)
 
 		const before = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
+		const publishing = data.state === 'published' && before.state !== 'published'
+		if (publishing && (await countPendingInvites(eventId)) > announcedInvites)
+			error(
+				409,
+				"D'autres invitations attendent depuis l'ouverture de la page: relis ce qui partira avant de publier"
+			)
 		// Un changement de statut à la main tranche la question: l'avertissement en cours n'a plus
 		// d'objet. La transition n'a lieu que depuis l'état lu: de deux publications simultanées,
 		// une seule relâche et journalise.
@@ -52,7 +65,7 @@ export const setEventState = form(
 
 		const released =
 			event.state === 'published'
-				? await releaseHeldEmails(eventId, session.user, sendInvites ?? true)
+				? await releaseHeldEmails(eventId, session.user, sendInvites ?? false)
 				: undefined
 		await createLog('event_state', { event, before: before.state, actor: session.user, released })
 		return released

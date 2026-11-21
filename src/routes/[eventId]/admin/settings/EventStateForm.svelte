@@ -108,11 +108,17 @@
 								if (stateForm.result) releasedMessage(stateForm.result)
 								else toast.success(EVENT_STATES.published.label)
 							},
+							// Le refus d'une publication vient le plus souvent d'un compte qui a bougé:
+							// le relire fait apparaître la case qui manquait.
+							onerror: () => state === 'published' && getHeldEmails(event.id).refresh(),
 						})
 					)}
 					class="contents"
 				>
 					<input {...stateForm.fields.state.as('hidden', state)} />
+					{#if state === 'published'}
+						<input {...stateForm.fields.announcedInvites.as('hidden', held.invitations)} />
+					{/if}
 					{#if asksInvites}
 						<InputBoolean
 							label={held.invitations > 1

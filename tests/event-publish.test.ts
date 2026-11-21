@@ -185,4 +185,38 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 				.filter({ hasText: '1 invitation non envoyée' })
 		).toBeVisible()
 	})
+
+	/**
+	 * La case et la confirmation se fondent sur le compte lu à l'ouverture de la page: une
+	 * invitation retenue depuis, par un import d'un autre onglet, n'a été proposée à personne.
+	 */
+	test("Une invitation retenue après l'ouverture de la page attend d'être proposée", async () => {
+		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
+		await page.getByRole('button', { name: 'Repasser en brouillon' }).click()
+		await expect(page.getByText('Évènement en construction').first()).toBeVisible()
+		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
+		const sendInvites = page.getByRole('checkbox', { name: "Envoyer l'invitation en attente" })
+		await expect(sendInvites).toHaveCount(0)
+
+		const late = { firstName: 'Tardif', lastName: 'Import' }
+		const { id } = await seedInvitedMember(event.eventId, {
+			...late,
+			email: `tardif-${event.eventId}@example.org`,
+		})
+		await prisma.member.update({ where: { id }, data: { invitePendingAt: new Date() } })
+
+		await page.getByRole('button', { name: 'Publier', exact: true }).click()
+		await expect(page.getByText("D'autres invitations attendent")).toBeVisible()
+		await expect(sendInvites).toBeChecked()
+		const { state } = await prisma.event.findUniqueOrThrow({ where: { id: event.eventId } })
+		expect(state).toBe('draft')
+		expect((await findMember(late)).invitePendingAt).not.toBeNull()
+
+		await page.getByRole('button', { name: 'Publier', exact: true }).click()
+		const confirmation = page.getByRole('dialog')
+		await expect(confirmation).toContainText('1 invitation')
+		await confirmation.getByRole('button', { name: 'Publier' }).click()
+		await expect(page.getByText('Évènement publié: 1 e-mail envoyé')).toBeVisible()
+		expect((await findMember(late)).invitePendingAt).toBeNull()
+	})
 })

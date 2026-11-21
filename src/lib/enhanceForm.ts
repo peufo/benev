@@ -27,6 +27,8 @@ type EnhanceFormOptions = {
 	onsuccess?: (instance: EnhanceInstance) => void
 	/** Joué quand la validation échoue, une fois les messages rendus sous les champs. */
 	oninvalid?: (instance: EnhanceInstance) => void
+	/** Joué quand le serveur refuse, une fois le message affiché. */
+	onerror?: (err: unknown) => void
 }
 
 /**
@@ -52,6 +54,7 @@ export function enhanceForm({
 	before,
 	onsuccess,
 	oninvalid,
+	onerror,
 }: EnhanceFormOptions = {}) {
 	return async (instance: EnhanceInstance) => {
 		if (before && !(await before())) return
@@ -72,6 +75,7 @@ export function enhanceForm({
 		} catch (err) {
 			console.error(err)
 			toast.error(errorMessage(err), { id })
+			onerror?.(err)
 		}
 	}
 }
