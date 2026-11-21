@@ -6,8 +6,11 @@ import {
 	createLog,
 	permission,
 	prisma,
+	rewriteLog,
 	sendPendingSubscribeRequests,
 } from '#lib/server/index.js'
+import { runInBackground } from '#lib/server/background.js'
+import type { LogInput } from '#lib/log/logMap.js'
 import {
 	clearPendingInvites,
 	countPendingInvites,
@@ -63,33 +66,55 @@ export const setEventState = form(
 		const event = await prisma.event.findUniqueOrThrow({ where: { id: eventId } })
 		if (before.state === event.state) return
 
-		const released =
-			event.state === 'published'
-				? await releaseHeldEmails(eventId, session.user, sendInvites ?? false)
-				: undefined
-		await createLog('event_state', { event, before: before.state, actor: session.user, released })
-		return released
+		const log = { event, before: before.state, actor: session.user }
+		if (event.state !== 'published') {
+			await createLog('event_state', log)
+			return
+		}
+		return releaseHeldEmails(eventId, session.user, sendInvites ?? false, log)
 	}
 )
+
+type StateLog = LogInput<'event_state'>
+type Author = { userId: string; firstName: string; lastName: string; email: string }
 
 /**
  * Ce que l'évènement fermé retenait part à sa publication. Les demandes d'inscription partent
  * toujours, comme à la sortie d'un secteur du brouillon; les invitations, seulement si la case
  * proposée est restée cochée, et un refus les efface.
+ *
+ * Les envois partent en arrière-plan: des centaines feraient tomber la requête sur un geste déjà
+ * fait. La réponse dit ce qui part, la ligne du journal, écrite tout de suite, prend ensuite les
+ * comptes de ce qui est vraiment parti.
  */
 async function releaseHeldEmails(
 	eventId: string,
-	author: { userId: string; firstName: string; lastName: string; email: string },
-	sendInvites: boolean
+	author: Author,
+	sendInvites: boolean,
+	log: StateLog
 ) {
+	const declined = sendInvites ? 0 : await clearPendingInvites(eventId)
+	const [invitations, requests] = await Promise.all([
+		sendInvites ? countPendingInvites(eventId) : 0,
+		countPendingSubscribeRequests(eventId),
+	])
+	const nothing = { invitations: 0, requests: 0, limited: 0, refused: 0, declined }
+	const logId = await createLog('event_state', { ...log, released: nothing })
+	if (invitations || requests)
+		runInBackground(`publication ${eventId}`, async () => {
+			const released = await sendHeldEmails(eventId, author, sendInvites)
+			if (logId)
+				await rewriteLog(logId, 'event_state', { ...log, released: { ...released, declined } })
+		})
+	return { invitations, requests }
+}
+
+async function sendHeldEmails(eventId: string, author: Author, sendInvites: boolean) {
 	const authorName = `${author.firstName} ${author.lastName}`
 	const requests = await sendPendingSubscribeRequests({ eventId }, authorName)
-	if (!sendInvites) {
-		const declined = await clearPendingInvites(eventId)
-		return { invitations: 0, requests, limited: 0, refused: 0, declined }
-	}
+	if (!sendInvites) return { invitations: 0, requests, limited: 0, refused: 0 }
 	const { sent, limited, refused } = await sendPendingInvites(eventId, author)
-	return { invitations: sent, requests, limited, refused, declined: 0 }
+	return { invitations: sent, requests, limited, refused }
 }
 
 /** La réponse à l'avertissement d'archivage: l'évènement repart pour un délai d'inactivité complet. */

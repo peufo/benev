@@ -18,6 +18,21 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 	const findMember = ({ firstName }: { firstName: string }) =>
 		prisma.member.findFirstOrThrow({ where: { eventId: event.eventId, firstName } })
 
+	/**
+	 * Les envois de la publication partent en arrière-plan, et sa ligne de journal prend leurs
+	 * comptes quand ils ont fini: c'est elle qu'on attend avant de lire les marqueurs.
+	 */
+	const sent = (released: { invitations: number; requests: number }) =>
+		expect
+			.poll(async () => {
+				const log = await prisma.log.findFirst({
+					where: { eventId: event.eventId, type: 'event_state' },
+					orderBy: { createdAt: 'desc' },
+				})
+				return log?.data
+			})
+			.toMatchObject({ released })
+
 	async function invite({ firstName, lastName }: { firstName: string; lastName: string }) {
 		await gotoHydrated(page, `/${event.eventId}/admin/members?form_invite=1`)
 		const dialog = page.getByRole('dialog')
@@ -128,7 +143,8 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 			"1 invitation et 1 demande d'inscription partiront par e-mail."
 		)
 		await confirmation.getByRole('button', { name: 'Publier' }).click()
-		await expect(page.getByText('Évènement publié: 2 e-mails envoyés')).toBeVisible()
+		await expect(page.getByText("Évènement publié: 2 e-mails en cours d'envoi")).toBeVisible()
+		await sent({ invitations: 1, requests: 1 })
 
 		const member = await findMember(ada)
 		expect(member.invitePendingAt).toBeNull()
@@ -216,7 +232,8 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 		const confirmation = page.getByRole('dialog')
 		await expect(confirmation).toContainText('1 invitation')
 		await confirmation.getByRole('button', { name: 'Publier' }).click()
-		await expect(page.getByText('Évènement publié: 1 e-mail envoyé')).toBeVisible()
+		await expect(page.getByText("Évènement publié: 1 e-mail en cours d'envoi")).toBeVisible()
+		await sent({ invitations: 1, requests: 0 })
 		expect((await findMember(late)).invitePendingAt).toBeNull()
 	})
 })

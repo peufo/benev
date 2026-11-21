@@ -1,6 +1,7 @@
 import type { Member, Prisma } from '@prisma/client'
 import { subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { prisma } from './prisma'
+import { isShuttingDown } from './background'
 import { isMemberMailHeld } from '#lib/event/eventAccess.js'
 
 /** Ce qui ouvre un évènement fermé, lu sur une fiche brute plutôt que sur `getMemberProfile`. */
@@ -111,6 +112,7 @@ export async function sendPendingSubscribeRequests(
 	})
 	let sent = 0
 	for (const subscribe of subscribes) {
+		if (isShuttingDown()) break
 		if (await notifySubscribeRequest(subscribe, authorName, { bulk: true })) sent++
 	}
 	return sent

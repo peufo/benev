@@ -838,7 +838,11 @@ breaks `svelte-check`.
   (`sendPendingInvites` in `#lib/server/inviteBulk.ts`, behind the import's daily cap, and
   `sendPendingSubscribeRequests`); the owner may decline the invitations, which clears them.
   `notifiedAt` is written before the email, as `remindedAt` is, so a republication sends nothing
-  twice.
+  twice. Those sends run **in the background** (`runInBackground`, `#lib/server/background.ts`,
+  imported by its path): the request answers with what is leaving, and the `event_state` log line,
+  written at once, is rewritten with what actually left (`rewriteLog`). On shutdown,
+  `settleBackground` stops the loops between two items and waits for them before the email queue
+  drains; what they leave keeps its marker.
 - **Media**: uploads (avatars, event backgrounds, logos, posters, badge assets) are stored on the
   local filesystem under `MEDIA_DIR` (default `./media`), recorded in the `Media` table with
   relations to `User`, `Event` and `Badge`, and served by `/media/[mediaId]`. `sharp` handles

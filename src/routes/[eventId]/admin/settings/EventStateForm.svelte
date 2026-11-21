@@ -41,7 +41,7 @@
 	const canKeepOpen = $derived(page.data.userIsRoot || page.data.member?.roles.includes('owner'))
 
 	// Les envois que l'évènement fermé retient ne partent qu'à sa publication: elle les annonce.
-	type ReleasedEmails = { invitations: number; requests: number; limited: number; refused: number }
+	type ReleasedEmails = { invitations: number; requests: number }
 
 	const held = $derived(
 		event.state === 'published' ? { invitations: 0, requests: 0 } : await getHeldEmails(event.id)
@@ -60,16 +60,17 @@
 		})
 	}
 
-	function releasedMessage({ invitations, requests, limited, refused }: ReleasedEmails) {
-		const sent = invitations + requests
-		const message = sent
-			? `${EVENT_STATES.published.label}: ${plural(sent, 'e-mail envoyé', 'e-mails envoyés')}`
-			: EVENT_STATES.published.label
-		const left = limited + refused
-		if (!left) return toast.success(message)
-		const waiting = plural(left, 'invitation reste', 'invitations restent')
-		const causes = [limited && 'plafond quotidien atteint', refused && "file d'envoi saturée"]
-		toast.warning(`${message}. ${waiting} en attente: ${causes.filter(Boolean).join(', ')}`)
+	/**
+	 * Les envois partent en arrière-plan: le toast ne peut dire que ce qui part. Ce qui est
+	 * vraiment parti, et ce que le plafond ou la file a retenu, se lit au journal.
+	 */
+	function releasedMessage({ invitations, requests }: ReleasedEmails) {
+		const sending = invitations + requests
+		toast.success(
+			sending
+				? `${EVENT_STATES.published.label}: ${plural(sending, "e-mail en cours d'envoi", "e-mails en cours d'envoi")}`
+				: EVENT_STATES.published.label
+		)
 	}
 </script>
 

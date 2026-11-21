@@ -20,7 +20,10 @@ import { prisma } from './prisma'
  * Le worker d'emails l'appelle notamment depuis son chemin d'erreur, où lever une seconde fois
  * ferait perdre la trace de la première.
  */
-export async function createLog<T extends LogType>(type: T, input: LogInput<T>): Promise<void> {
+export async function createLog<T extends LogType>(
+	type: T,
+	input: LogInput<T>
+): Promise<string | null> {
 	try {
 		// `logMap[type]` est une union de toutes les transformations: TypeScript en intersecte les
 		// paramètres et n'accepte plus rien. Le lien type -> entrée est déjà vérifié par la
@@ -32,7 +35,7 @@ export async function createLog<T extends LogType>(type: T, input: LogInput<T>):
 		// pour la même raison — et parce que c'est la liste de ce qu'une transformation peut poser.
 		const logType: LogType = type
 		const payload: PrismaJson.JsonLogData = data
-		await prisma.log.create({
+		const { id } = await prisma.log.create({
 			data: {
 				type: logType,
 				data: payload,
@@ -42,9 +45,27 @@ export async function createLog<T extends LogType>(type: T, input: LogInput<T>):
 				userId: relations.userId ?? null,
 				createdById: relations.createdById ?? null,
 			},
+			select: { id: true },
 		})
+		return id
 	} catch (err) {
 		console.error(`[log] écriture impossible (${type})`, err)
+		return null
+	}
+}
+
+/**
+ * Complète une ligne écrite avant que son geste ait fini, comme la publication dont les envois
+ * partent en arrière-plan: la ligne garde sa date, celle du geste, et prend la charge de la même
+ * transformation. Les relations ne bougent pas.
+ */
+export async function rewriteLog<T extends LogType>(id: string, type: T, input: LogInput<T>) {
+	try {
+		const transform = logMap[type] as (input: LogInput<T>) => LogOutput<LogData<T>>
+		const payload: PrismaJson.JsonLogData = transform(input).data
+		await prisma.log.update({ where: { id }, data: { data: payload } })
+	} catch (err) {
+		console.error(`[log] réécriture impossible (${type})`, err)
 	}
 }
 

@@ -3,6 +3,7 @@ import { MAX_IMPORT_INVITES } from '#lib/member/import/buildMembers.js'
 import { createRateLimit } from './rateLimit'
 import { sendHeldInvite } from './invite'
 import { prisma } from './prisma'
+import { isShuttingDown } from './background'
 
 // Les invitations en nombre: un import, ou celles qu'un évènement retenait jusqu'à sa publication.
 // À importer par son chemin, jamais du barrel `#lib/server`: le plafond se crée à l'évaluation du
@@ -44,6 +45,11 @@ export async function sendPendingInvites(eventId: string, author: Inviter) {
 	let limited = 0
 	let refused = 0
 	for (const [index, member] of members.entries()) {
+		// À l'arrêt, la file refuserait de toute façon: le reste garde son marqueur.
+		if (isShuttingDown()) {
+			refused += members.length - index
+			break
+		}
 		if (isInviteLimited(author.userId)) {
 			limited = members.length - index
 			break
