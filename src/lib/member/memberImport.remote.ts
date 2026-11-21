@@ -98,6 +98,7 @@ export const importMembers = command(modelMemberImport, async ({ source, sendEma
 				sendNow &&
 				!limited &&
 				(await sendInviteEmail({ ...member, email: member.email!, event }, author, { bulk: true }))
+			if (sendNow && !limited && !invited) isInviteLimited.refund(author.userId ?? author.id)
 			await createLog('member_invite', {
 				member,
 				actor: author,

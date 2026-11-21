@@ -30,8 +30,9 @@ const pendingInvites = (eventId: string) =>
 	}) satisfies Prisma.MemberWhereInput
 
 /**
- * Envoie les invitations que l'évènement retenait. Ce que le plafond refuse reste en attente, et
- * part à la prochaine publication ou depuis la fiche du membre.
+ * Envoie les invitations que l'évènement retenait. Ce que le plafond (`limited`) ou la file
+ * (`refused`) refuse reste en attente, et part à la prochaine publication ou depuis la fiche du
+ * membre: l'organisateur·ice n'y fait pas la même chose, d'où deux comptes.
  */
 export async function sendPendingInvites(eventId: string, author: Inviter) {
 	const members = await prisma.member.findMany({
@@ -40,17 +41,19 @@ export async function sendPendingInvites(eventId: string, author: Inviter) {
 		orderBy: { invitePendingAt: 'asc' },
 	})
 	let sent = 0
-	let left = 0
+	let limited = 0
+	let refused = 0
 	for (const [index, member] of members.entries()) {
 		if (isInviteLimited(author.userId)) {
-			left += members.length - index
+			limited = members.length - index
 			break
 		}
 		const outcome = await sendHeldInvite(member, author, { bulk: true })
 		if (outcome === 'sent') sent++
-		if (outcome === 'refused') left++
+		else isInviteLimited.refund(author.userId)
+		if (outcome === 'refused') refused++
 	}
-	return { sent, left }
+	return { sent, limited, refused }
 }
 
 /** Publier sans inviter: le choix est fait, la fiche de chaque membre garde le renvoi. */

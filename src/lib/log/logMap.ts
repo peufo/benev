@@ -307,7 +307,7 @@ export const logMap = {
 		/** Nul pour l'archivage automatique. */
 		actor: LogActor | null
 		/** Ce que la publication a envoyé de ce que l'évènement retenait. */
-		released?: { invitations: number; requests: number; left: number }
+		released?: { invitations: number; requests: number; limited: number; refused: number }
 	}) => ({
 		eventId: event.id,
 		createdById: actor?.userId ?? null,
@@ -318,7 +318,13 @@ export const logMap = {
 			actor: actor ? refActor(actor) : null,
 			// Une ligne par membre noierait le journal: les comptes suffisent. Optionnelle, les
 			// lignes déjà écrites ne la portent pas.
-			...(released && { released }),
+			...(released && {
+				released: {
+					invitations: released.invitations,
+					requests: released.requests,
+					left: released.limited + released.refused,
+				},
+			}),
 		},
 	}),
 

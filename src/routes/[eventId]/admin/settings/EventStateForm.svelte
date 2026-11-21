@@ -41,7 +41,7 @@
 	const canKeepOpen = $derived(page.data.userIsRoot || page.data.member?.roles.includes('owner'))
 
 	// Les envois que l'évènement fermé retient ne partent qu'à sa publication: elle les annonce.
-	type ReleasedEmails = { invitations: number; requests: number; left: number }
+	type ReleasedEmails = { invitations: number; requests: number; limited: number; refused: number }
 
 	const held = $derived(
 		event.state === 'published' ? { invitations: 0, requests: 0 } : await getHeldEmails(event.id)
@@ -60,14 +60,16 @@
 		})
 	}
 
-	function releasedMessage({ invitations, requests, left }: ReleasedEmails) {
+	function releasedMessage({ invitations, requests, limited, refused }: ReleasedEmails) {
 		const sent = invitations + requests
 		const message = sent
 			? `${EVENT_STATES.published.label}: ${plural(sent, 'e-mail envoyé', 'e-mails envoyés')}`
 			: EVENT_STATES.published.label
+		const left = limited + refused
 		if (!left) return toast.success(message)
 		const waiting = plural(left, 'invitation reste', 'invitations restent')
-		toast.warning(`${message}. ${waiting} en attente: plafond quotidien atteint`)
+		const causes = [limited && 'plafond quotidien atteint', refused && "file d'envoi saturée"]
+		toast.warning(`${message}. ${waiting} en attente: ${causes.filter(Boolean).join(', ')}`)
 	}
 </script>
 

@@ -73,10 +73,10 @@ async function releaseHeldEmails(
 	const requests = await sendPendingSubscribeRequests({ eventId }, authorName)
 	if (!sendInvites) {
 		await clearPendingInvites(eventId)
-		return { invitations: 0, requests, left: 0 }
+		return { invitations: 0, requests, limited: 0, refused: 0 }
 	}
-	const { sent, left } = await sendPendingInvites(eventId, author)
-	return { invitations: sent, requests, left }
+	const { sent, limited, refused } = await sendPendingInvites(eventId, author)
+	return { invitations: sent, requests, limited, refused }
 }
 
 /** La réponse à l'avertissement d'archivage: l'évènement repart pour un délai d'inactivité complet. */
