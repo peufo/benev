@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
-import { prisma, seedPeriod, seedTeam, seedUser, signIn } from './seed'
+import { prisma, seedInvitedMember, seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { gotoHydrated } from './hydrated'
 import { sharedPage } from './sharedPage'
 
@@ -35,7 +35,21 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 		await signIn(page, await seedUser('Pub'))
 		await event.create(page)
 		const team = await seedTeam(event.eventId, 'Buvette', 'published')
-		await seedPeriod(team.id)
+		const period = await seedPeriod(team.id)
+		// Une proposition à un membre sans adresse n'a personne à qui partir: la publication ne
+		// doit pas l'annoncer parmi ses e-mails.
+		const unreachable = await seedInvitedMember(event.eventId, {
+			firstName: 'Sans',
+			lastName: 'Adresse',
+		})
+		await prisma.subscribe.create({
+			data: {
+				periodId: period.id,
+				memberId: unreachable.id,
+				state: 'request',
+				createdBy: 'leader',
+			},
+		})
 	})
 
 	test("En brouillon, l'invitation d'un membre sans rôle attend la publication", async () => {

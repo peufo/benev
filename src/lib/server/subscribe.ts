@@ -121,10 +121,16 @@ export function countPendingSubscribeRequests(eventId: string) {
 	return prisma.subscribe.count({ where: pendingRequests({ eventId }) })
 }
 
+/**
+ * Une proposition de responsable s'adresse au membre: sans adresse ou sans notification, elle n'a
+ * personne à qui partir, et l'annoncer à la publication promettrait un e-mail qui n'existe pas. Le
+ * filtre reprend celui de `sendSubscribeRequestNotification`.
+ */
 const pendingRequests = (team: Prisma.TeamWhereInput) =>
 	({
 		period: { team: { ...team, state: { not: 'draft' } } },
 		state: 'request',
 		createdBy: 'leader',
 		notifiedAt: null,
+		member: { email: { not: null }, isNotifiedSubscribe: true },
 	}) satisfies Prisma.SubscribeWhereInput
