@@ -307,7 +307,13 @@ export const logMap = {
 		/** Nul pour l'archivage automatique. */
 		actor: LogActor | null
 		/** Ce que la publication a envoyé de ce que l'évènement retenait. */
-		released?: { invitations: number; requests: number; limited: number; refused: number }
+		released?: {
+			invitations: number
+			requests: number
+			limited: number
+			refused: number
+			declined: number
+		}
 	}) => ({
 		eventId: event.id,
 		createdById: actor?.userId ?? null,
@@ -323,6 +329,8 @@ export const logMap = {
 					invitations: released.invitations,
 					requests: released.requests,
 					left: released.limited + released.refused,
+					// Absent des lignes plus anciennes: le type dérivé doit le dire.
+					...(released.declined > 0 && { declined: released.declined }),
 				},
 			}),
 		},

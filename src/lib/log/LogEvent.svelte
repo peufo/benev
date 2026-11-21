@@ -60,6 +60,11 @@
 				)}
 			</span>
 		{/if}
+		{#if log.data.released?.declined}
+			<span class="text-base-content/70">
+				{plural(log.data.released.declined, 'invitation non envoyée', 'invitations non envoyées')}
+			</span>
+		{/if}
 		{#if log.data.released?.left}
 			<span class="badge badge-sm badge-warning badge-outline">
 				{plural(log.data.released.left, 'invitation en attente', 'invitations en attente')}

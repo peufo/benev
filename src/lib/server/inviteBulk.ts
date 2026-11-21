@@ -56,12 +56,20 @@ export async function sendPendingInvites(eventId: string, author: Inviter) {
 	return { sent, limited, refused }
 }
 
-/** Publier sans inviter: le choix est fait, la fiche de chaque membre garde le renvoi. */
+/**
+ * Publier sans inviter: le choix est fait, la fiche de chaque membre garde le renvoi. Rend le
+ * nombre d'invitations qui seraient parties, celui que la publication annonçait et que le journal
+ * doit dire; le marqueur s'efface aussi des fiches qui n'avaient plus personne à atteindre.
+ */
 export async function clearPendingInvites(eventId: string) {
-	await prisma.member.updateMany({
-		where: { eventId, invitePendingAt: { not: null } },
-		data: { invitePendingAt: null },
-	})
+	const [declined] = await prisma.$transaction([
+		prisma.member.count({ where: pendingInvites(eventId) }),
+		prisma.member.updateMany({
+			where: { eventId, invitePendingAt: { not: null } },
+			data: { invitePendingAt: null },
+		}),
+	])
+	return declined
 }
 
 /** Le compte que la publication proposera d'envoyer. */

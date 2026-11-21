@@ -173,5 +173,16 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 			where: { memberId: (await findMember(ada)).id },
 		})
 		expect(subscribe.notifiedAt).toEqual(notifiedAt)
+
+		// Le choix de ne pas inviter se lit au journal, qui sinon ressemblerait à une publication
+		// où rien n'attendait.
+		await gotoHydrated(page, `/${event.eventId}/admin/dashboard`)
+		await expect(
+			page
+				.locator('#journal')
+				.getByRole('listitem')
+				.filter({ hasText: "a changé le statut de l'évènement" })
+				.filter({ hasText: '1 invitation non envoyée' })
+		).toBeVisible()
 	})
 })
