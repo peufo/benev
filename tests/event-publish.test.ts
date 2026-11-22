@@ -294,4 +294,39 @@ test.describe.serial('Un secteur publié dans un évènement fermé', () => {
 		expect(await notifiedAt(leaderRequestId)).not.toBeNull()
 		expect(await notifiedAt(volunteerRequestId)).toBeNull()
 	})
+
+	/** L'envoi d'une vie antérieure ne compte pas: la demande rétablie repart, ou attend. */
+	test('Une proposition rétablie repart comme la première', async () => {
+		const team = await prisma.team.findFirstOrThrow({
+			where: { eventId: event.eventId, name: 'Accueil' },
+		})
+		const period = await seedPeriod(team.id)
+		const leader = await seedInvitedMember(event.eventId, {
+			firstName: 'Max',
+			lastName: 'Retour',
+			email: `max-${event.eventId}@example.org`,
+			leaderOf: [team.id],
+		})
+		const previously = new Date('2020-01-01')
+		const { id } = await prisma.subscribe.create({
+			data: {
+				periodId: period.id,
+				memberId: leader.id,
+				state: 'cancelled',
+				createdBy: 'leader',
+				notifiedAt: previously,
+			},
+		})
+
+		await gotoHydrated(page, `/${event.eventId}/admin/members/${leader.id}`)
+		const subscribes = page.locator('#subscibes')
+		// Le premier bouton ajoute une inscription, le second porte l'état de la ligne.
+		await subscribes.getByRole('button').nth(1).click()
+		await page.getByRole('button', { name: 'Rétablir' }).click()
+		await expect(page.getByText('Status changé')).toBeVisible()
+
+		const subscribe = await prisma.subscribe.findUniqueOrThrow({ where: { id } })
+		expect(subscribe.state).toBe('request')
+		expect(subscribe.notifiedAt!.getTime()).toBeGreaterThan(previously.getTime())
+	})
 })

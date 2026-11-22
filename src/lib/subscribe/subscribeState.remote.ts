@@ -6,8 +6,10 @@ import { isFreeRange } from 'perod'
 import z from 'zod'
 import {
 	createLog,
+	includeForRequestNotification,
 	includeMemberRole,
 	memberHasRole,
+	notifySubscribeRequest,
 	notifyTierQuotaIfNeeded,
 	permission,
 	prisma,
@@ -139,8 +141,8 @@ export const setSubscribeState = form(
 			data: {
 				state,
 				isForcedValidation,
-				// Une demande renouvelée retenue part à la publication: `sendPendingSubscribeRequests`.
-				...(state === 'request' && { notifiedAt: isHeld ? null : new Date() }),
+				// L'envoi d'une vie antérieure ne vaut pas pour la demande renouvelée.
+				...(state === 'request' && { notifiedAt: null }),
 			},
 			include: {
 				member: true,
@@ -184,6 +186,18 @@ export const setSubscribeState = form(
 			})
 		}
 
+		const authorName = `${author.firstName} ${author.lastName}`
+		// Une demande renouvelée part comme la première: le marqueur posé avant l'envoi, rendu si la
+		// file refuse, et retenue tant que son destinataire ne peut pas y répondre.
+		if (state === 'request') {
+			const renewed = await prisma.subscribe.findUniqueOrThrow({
+				where: { id: subscribeId },
+				include: includeForRequestNotification,
+			})
+			await notifySubscribeRequest(renewed, authorName)
+			return
+		}
+
 		if (isHeld) return
 
 		const toMember =
@@ -205,7 +219,7 @@ export const setSubscribeState = form(
 			await subscribeNotification[state]({
 				...emailOptions,
 				subject: subjects[state],
-				props: { subscribe, authorName: `${author.firstName} ${author.lastName}` },
+				props: { subscribe, authorName },
 			})
 		}
 	}
