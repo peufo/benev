@@ -48,14 +48,16 @@
 	)
 
 	function confirmRelease(sendInvites: boolean) {
+		const invitations = sendInvites ? held.invitations : 0
 		const parts = [
-			sendInvites && held.invitations && plural(held.invitations, 'invitation', 'invitations'),
+			invitations && plural(invitations, 'invitation', 'invitations'),
 			held.requests && plural(held.requests, "demande d'inscription", "demandes d'inscription"),
 		].filter(Boolean)
 		if (!parts.length) return true
+		const verb = invitations + held.requests > 1 ? 'partiront' : 'partira'
 		return confirmDialog({
 			title: "Publier l'évènement ?",
-			message: `${parts.join(' et ')} partiront par e-mail.`,
+			message: `${parts.join(' et ')} ${verb} par e-mail.`,
 			confirmLabel: 'Publier',
 		})
 	}

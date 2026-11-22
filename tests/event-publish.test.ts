@@ -230,7 +230,7 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 
 		await page.getByRole('button', { name: 'Publier', exact: true }).click()
 		const confirmation = page.getByRole('dialog')
-		await expect(confirmation).toContainText('1 invitation')
+		await expect(confirmation).toContainText('1 invitation partira par e-mail.')
 		await confirmation.getByRole('button', { name: 'Publier' }).click()
 		await expect(page.getByText("Évènement publié: 1 e-mail en cours d'envoi")).toBeVisible()
 		await sent({ invitations: 1, requests: 0 })
