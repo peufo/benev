@@ -238,3 +238,60 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 		expect((await findMember(late)).invitePendingAt).toBeNull()
 	})
 })
+
+/**
+ * Le secteur qui quitte le brouillon relâche ses demandes destinataire par destinataire: dans un
+ * évènement encore fermé, un membre qui a un rôle y entre déjà et reçoit la sienne, les autres
+ * attendent la publication.
+ */
+test.describe.serial('Un secteur publié dans un évènement fermé', () => {
+	const event = useEvent('SecteurFerme')
+	const page = sharedPage()
+	let leaderRequestId = ''
+	let volunteerRequestId = ''
+
+	test('Préparation: un secteur en brouillon, deux propositions', async () => {
+		await signIn(page, await seedUser('Sect'))
+		await event.create(page)
+		const other = await seedTeam(event.eventId, 'Accueil', 'published')
+		const team = await seedTeam(event.eventId, 'Cuisine')
+		const period = await seedPeriod(team.id)
+		const leader = await seedInvitedMember(event.eventId, {
+			firstName: 'Lea',
+			lastName: 'Der',
+			email: `lea-${event.eventId}@example.org`,
+			leaderOf: [other.id],
+		})
+		const volunteer = await seedInvitedMember(event.eventId, {
+			firstName: 'Val',
+			lastName: 'Bene',
+			email: `val-${event.eventId}@example.org`,
+		})
+		const request = (memberId: string) =>
+			prisma.subscribe.create({
+				data: { periodId: period.id, memberId, state: 'request', createdBy: 'leader' },
+			})
+		leaderRequestId = (await request(leader.id)).id
+		volunteerRequestId = (await request(volunteer.id)).id
+	})
+
+	test('Le responsable reçoit sa demande, le bénévole sans rôle attend', async () => {
+		await gotoHydrated(page, `/${event.eventId}/admin/teams`)
+		await page.locator('aside').getByRole('link', { name: 'Cuisine' }).click()
+		await page.getByRole('button', { name: 'Brouillon', exact: true }).click()
+		await page
+			.getByRole('button', { name: /^Valider et (publier|ouvrir les inscriptions)$/ })
+			.click()
+		const confirmation = page.getByRole('dialog')
+		await expect(confirmation).toContainText(
+			'reçoit la sienne maintenant, les autres bénévoles à la publication'
+		)
+		await confirmation.getByRole('button', { name: 'Confirmer' }).click()
+		await expect(page.getByText('Publié', { exact: true }).first()).toBeVisible()
+
+		const notifiedAt = async (id: string) =>
+			(await prisma.subscribe.findUniqueOrThrow({ where: { id } })).notifiedAt
+		expect(await notifiedAt(leaderRequestId)).not.toBeNull()
+		expect(await notifiedAt(volunteerRequestId)).toBeNull()
+	})
+})

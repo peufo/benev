@@ -97,9 +97,11 @@ export async function notifySubscribeRequest(
 /**
  * Les demandes qu'un responsable a créées pendant que le secteur était en brouillon, ou que
  * l'évènement n'était pas publié: c'est en quittant cet état qu'elles partent. Seules celles encore
- * sans réponse sont concernées, une inscription confirmée n'a rien à recevoir. Elles partent en
- * masse, derrière les e-mails urgents. Un envoi qui tombe n'arrête ni les autres, ni la
- * transition. Rend le nombre d'e-mails partis.
+ * sans réponse sont concernées, une inscription confirmée n'a rien à recevoir. L'état de
+ * l'évènement ne filtre rien ici: `notifySubscribeRequest` tranche par destinataire, et un membre
+ * qui a un rôle reçoit la sienne dès que le secteur quitte le brouillon. Elles partent en masse,
+ * derrière les e-mails urgents. Un envoi qui tombe n'arrête ni les autres, ni la transition. Rend
+ * le nombre d'e-mails partis.
  */
 export async function sendPendingSubscribeRequests(
 	scope: { teamId: string } | { eventId: string },
@@ -107,7 +109,7 @@ export async function sendPendingSubscribeRequests(
 ): Promise<number> {
 	const team = 'teamId' in scope ? { id: scope.teamId } : { eventId: scope.eventId }
 	const subscribes = await prisma.subscribe.findMany({
-		where: pendingRequests({ ...team, event: { state: 'published' } }),
+		where: pendingRequests(team),
 		include: includeForRequestNotification,
 	})
 	let sent = 0
