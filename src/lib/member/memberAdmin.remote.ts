@@ -23,14 +23,25 @@ import { diffChanges, hasChanges, projectMemberContact } from '#lib/log/index.js
  * seul ne rend jamais.
  */
 
+/**
+ * Les `params` d'une fonction distante sont ceux de la page appelante, que le client déclare: un
+ * droit vérifié sur `eventId` ne vaut rien pour un `memberId` d'un autre évènement.
+ */
+async function findEventMember(eventId: string) {
+	const { params } = getRequestEvent()
+	const member = await prisma.member.findUnique({ where: { id: params.memberId!, eventId } })
+	if (!member) error(404, 'Ce membre est introuvable')
+	return member
+}
+
 export const setMemberIsAdmin = form(
 	z.object({ isAdmin: z.boolean().default(false) }),
 	async (data) => {
 		const { locals, params } = getRequestEvent()
 		const eventId = params.eventId!
 		const actor = await permission.owner(eventId, locals)
-		const before = await prisma.member.findUniqueOrThrow({ where: { id: params.memberId! } })
-		const member = await prisma.member.update({ where: { id: params.memberId! }, data })
+		const before = await findEventMember(eventId)
+		const member = await prisma.member.update({ where: { id: before.id }, data })
 		if (before.isAdmin !== member.isAdmin)
 			await createLog('member_role', {
 				member,
@@ -48,7 +59,8 @@ export const setMemberIsValidedByEvent = form(
 		const { locals, params } = getRequestEvent()
 		const eventId = params.eventId!
 		const actor = await permission.leader(eventId, locals)
-		const member = await prisma.member.update({ where: { id: params.memberId! }, data })
+		const { id } = await findEventMember(eventId)
+		const member = await prisma.member.update({ where: { id }, data })
 		if (data.isValidedByEvent) await notifyTierQuotaIfNeeded(eventId)
 		await createLog('member_validated', {
 			member,
@@ -60,9 +72,10 @@ export const setMemberIsValidedByEvent = form(
 
 export const updateMemberContact = form(modelUserContactUpdate, async (data) => {
 	const { locals, params } = getRequestEvent()
-	const actor = await permission.leader(params.eventId!, locals)
-	const before = await prisma.member.findUniqueOrThrow({ where: { id: params.memberId! } })
-	const member = await prisma.member.update({ where: { id: params.memberId! }, data })
+	const eventId = params.eventId!
+	const actor = await permission.leader(eventId, locals)
+	const before = await findEventMember(eventId)
+	const member = await prisma.member.update({ where: { id: before.id }, data })
 	const contact = diffChanges(projectMemberContact(before), projectMemberContact(member))
 	if (hasChanges(contact)) await createLog('member_update', { member, actor, contact })
 	return member

@@ -1,6 +1,15 @@
 import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
-import { seedField, seedUser, signIn, verifyEmail, type SeededUser } from './seed'
+import {
+	prisma,
+	seedField,
+	seedInvitedMember,
+	seedMember,
+	seedUser,
+	signIn,
+	verifyEmail,
+	type SeededUser,
+} from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
 import { sharedPage } from './sharedPage'
 
@@ -380,5 +389,59 @@ test.describe.serial('Membres et invitations', () => {
 		} finally {
 			await invitedPage.close()
 		}
+	})
+})
+
+/**
+ * Les `params` d'une fonction distante viennent de l'en-tête `x-sveltekit-pathname`, que le
+ * navigateur envoie: rien n'empêche d'y mettre le `memberId` d'un autre évènement. Le droit
+ * vérifié sur l'évènement de l'URL ne doit pas couvrir cette fiche.
+ */
+test.describe.serial("Une fiche d'un autre évènement", () => {
+	const ownEvent = useEvent('Domaine')
+	const otherEvent = useEvent('Ailleurs')
+	const page = sharedPage()
+	let alyxId: string
+	let bobElsewhereId: string
+
+	test('Préparation: deux évènements, chacun à son propriétaire', async ({ browser }) => {
+		const bob = await seedUser('Bob')
+		const eve = await seedUser('Eve')
+		const evePage = await browser.newPage()
+		try {
+			await signIn(evePage, eve)
+			await otherEvent.create(evePage)
+		} finally {
+			await evePage.close()
+		}
+		await signIn(page, bob)
+		await ownEvent.create(page)
+
+		alyxId = (await seedInvitedMember(ownEvent.eventId, { firstName: 'Alyx', lastName: 'Vance' }))
+			.id
+		bobElsewhereId = (await seedMember(otherEvent.eventId, bob)).id
+	})
+
+	test("Le rôle d'administrateur·ice ne se donne pas hors de l'évènement", async () => {
+		await page.route('**/_app/remote/**', (route) => {
+			const headers = route.request().headers()
+			const pathname = headers['x-sveltekit-pathname']
+			if (pathname) headers['x-sveltekit-pathname'] = pathname.replace(alyxId, bobElsewhereId)
+			return route.continue({ headers })
+		})
+		try {
+			await gotoHydrated(page, `/${ownEvent.eventId}/admin/members/${alyxId}`)
+			await page
+				.getByRole('button', { name: /Membre/ })
+				.first()
+				.click()
+			await page.getByRole('button', { name: "Attribuer le rôle d'administrateur·ice" }).click()
+			await expect(page.getByText('Ce membre est introuvable')).toBeVisible()
+		} finally {
+			await page.unroute('**/_app/remote/**')
+		}
+
+		const bobElsewhere = await prisma.member.findUniqueOrThrow({ where: { id: bobElsewhereId } })
+		expect(bobElsewhere.isAdmin).toBe(false)
 	})
 })
