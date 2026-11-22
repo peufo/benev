@@ -69,7 +69,7 @@
 	{#key resetToken}
 		{#each memberProfile.event.memberFields as field (field.id)}
 			{@const value = memberProfile.profileJson[field.id] || ''}
-			<MemberField {field} {value} {compact} />
+			<MemberField {field} fields={remoteForm.fields} {value} {compact} />
 		{/each}
 	{/key}
 

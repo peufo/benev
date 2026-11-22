@@ -18,6 +18,11 @@
 
 	interface Props {
 		field: Omit<Prisma.FieldUncheckedCreateInput, 'eventId'>
+		/**
+		 * Ceux de l'instance que porte le `<form>`: lus sur une autre, la saisie n'y arrive
+		 * jamais, et `InputBoolean` laisserait son relais `false` à côté de la case cochée.
+		 */
+		fields: (typeof updateMemberProfile)['fields']
 		value?: string | number | boolean | string[]
 		/**
 		 * Les champs à choix tiennent sur une ligne, en liste déroulante: de quoi poser le
@@ -27,11 +32,11 @@
 		class?: string
 	}
 
-	let { field, value = '', compact = false, class: klass = '' }: Props = $props()
+	let { field, fields, value = '', compact = false, class: klass = '' }: Props = $props()
 
 	// Le schéma est construit côté serveur à partir des champs de l'évènement: le formulaire est
 	// donc `unchecked`, et ses `fields` s'indexent par l'id du champ.
-	const formField = $derived(updateMemberProfile.fields[field.id!])
+	const formField = $derived(fields[field.id!])
 
 	// Avec un `field`, les composants de fuma prennent `value` comme valeur initiale: elle
 	// sert de repli tant que le champ n'a rien.

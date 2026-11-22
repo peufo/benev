@@ -123,6 +123,7 @@ test.describe.serial('Membres et invitations', () => {
 			type: 'multiselect',
 			options: ['Gluten', 'Arachide'],
 		})
+		await seedField(event.eventId, { name: 'Permis de conduire', type: 'boolean' })
 
 		await gotoHydrated(page, `/${event.eventId}/admin/members`)
 		await expect(page.getByRole('dialog', { name: /Modifier le profil/ })).toHaveCount(0)
@@ -159,6 +160,20 @@ test.describe.serial('Membres et invitations', () => {
 		await expect(city).toHaveValue('Genève')
 		await expect(meal).toContainText('Omnivore')
 		await expect(saveBar).toBeHidden()
+
+		// Décochée, la case confie sa valeur à un champ caché de même clé: les deux ne doivent
+		// jamais partir ensemble, dans un sens comme dans l'autre.
+		const license = page.locator('label').filter({ hasText: 'Permis de conduire' })
+		for (const checked of [true, false]) {
+			await license.click()
+			await expect(license.locator('input')).toBeChecked({ checked })
+			await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+			await expect(page.getByText('Profil enregistré')).toBeVisible()
+			await expect(saveBar).toBeHidden()
+			await page.reload()
+			await awaitHydrated(page)
+			await expect(license.locator('input')).toBeChecked({ checked })
+		}
 
 		// Un choix multiple n'émet aucun évènement de formulaire et ne referme pas son
 		// popover: rien ne rend la main au déclencheur, comme le fait le select simple.
