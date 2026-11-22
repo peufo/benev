@@ -210,7 +210,8 @@ test.describe.serial("Ce qui part à la publication d'un évènement", () => {
 		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
 		await page.getByRole('button', { name: 'Repasser en brouillon' }).click()
 		await expect(page.getByText('Évènement en construction').first()).toBeVisible()
-		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
+		// Sans recharger: le formulaire apparu avec la transition doit être intercepté comme celui
+		// du chargement, sans quoi il part en soumission native et saute la confirmation.
 		const sendInvites = page.getByRole('checkbox', { name: "Envoyer l'invitation en attente" })
 		await expect(sendInvites).toHaveCount(0)
 

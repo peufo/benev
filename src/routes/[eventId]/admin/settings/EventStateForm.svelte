@@ -43,9 +43,13 @@
 	// Les envois que l'évènement fermé retient ne partent qu'à sa publication: elle les annonce.
 	type ReleasedEmails = { invitations: number; requests: number }
 
-	const held = $derived(
-		event.state === 'published' ? { invitations: 0, requests: 0 } : await getHeldEmails(event.id)
-	)
+	/**
+	 * Lu même quand l'évènement est publié, où il ne sert pas: un `await` qui n'apparaît qu'au
+	 * passage en brouillon laisse le formulaire « Publier », né de cette mise à jour, sans son
+	 * `enhance` (Svelte 5.57, rendu asynchrone). Il partirait en soumission native, sans
+	 * confirmation ni toast.
+	 */
+	const held = $derived(await getHeldEmails(event.id))
 
 	function confirmRelease(sendInvites: boolean) {
 		const invitations = sendInvites ? held.invitations : 0
