@@ -20,7 +20,7 @@
 	let { team, canEdit = false, class: klass }: Props = $props()
 
 	type Target = Exclude<TeamState, 'draft'>
-	type Transition = { state: Target; label: string; confirm?: string }
+	type Transition = { state: Target; label: string; confirm?: string; description?: string }
 
 	// Sans inscription libre dans l'évènement, il n'y a pas d'inscriptions à ouvrir: publier ne
 	// fait que lister le secteur.
@@ -40,6 +40,10 @@
 		return `${emails} Une fois validé, un secteur ne peut pas être repassé en brouillon.`
 	})
 
+	// La description de `published` promet l'inscription libre, celle de `validated` le courriel
+	// de sortie du brouillon: chacune ne vaut que dans un cas.
+	const listed = $derived(open ? undefined : 'Listé pour tous les bénévoles.')
+
 	const transitions: Record<TeamState, Transition[]> = $derived({
 		draft: [
 			{ state: 'validated', label: 'Valider', confirm: confirmation },
@@ -47,11 +51,22 @@
 				state: 'published',
 				label: open ? 'Valider et ouvrir les inscriptions' : 'Valider et publier',
 				confirm: confirmation,
+				description: listed,
 			},
 		],
-		validated: [{ state: 'published', label: open ? 'Ouvrir les inscriptions' : 'Publier' }],
+		validated: [
+			{
+				state: 'published',
+				label: open ? 'Ouvrir les inscriptions' : 'Publier',
+				description: listed,
+			},
+		],
 		published: [
-			{ state: 'validated', label: open ? 'Fermer les inscriptions' : 'Retirer de la liste' },
+			{
+				state: 'validated',
+				label: open ? 'Fermer les inscriptions' : 'Retirer de la liste',
+				description: `${open ? `Plus personne ne s'y inscrit seul.` : `Le secteur n'est plus listé.`} Les inscriptions déjà faites restent, aucun courriel ne part.`,
+			},
 		],
 	})
 </script>

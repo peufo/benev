@@ -12,6 +12,8 @@
 		label: string
 		/** Message d'une confirmation demandée avant d'envoyer: pour ce qui ne se défait pas. */
 		confirm?: string
+		/** Ce que fait le geste, quand la description de l'état visé ne vaut pas depuis l'état courant. */
+		description?: string
 	}
 
 	interface Props {
@@ -86,7 +88,7 @@
 				)}
 				class="flex flex-col w-max max-w-72"
 			>
-				{#each transitions as { state: target, label } (target)}
+				{#each transitions as { state: target, label, description } (target)}
 					{@const TargetIcon = states[target].icon}
 					<!-- La description explique le bouton sans entrer dans son nom: elle est
 					     rattachée par `aria-describedby`, et soustraite au texte du bouton. -->
@@ -100,7 +102,7 @@
 						<span class="flex flex-col items-start text-left whitespace-normal">
 							<span class="font-medium">{label}</span>
 							<span id="{uid}-{target}" class="text-xs opacity-70" aria-hidden="true">
-								{states[target].description}
+								{description ?? states[target].description}
 							</span>
 						</span>
 					</button>
