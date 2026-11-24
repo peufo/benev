@@ -86,6 +86,7 @@ Ce qu'il faut savoir :
 
 - seules les **inscriptions acceptées** reçoivent un rappel, jamais une demande en attente ni un
   secteur encore en brouillon,
+- un évènement archivé n'envoie plus aucun rappel,
 - une inscription acceptée après l'heure du rappel n'en reçoit pas : le courriel d'acceptation vient
   de lui donner l'horaire,
 - si tu déplaces un créneau, le rappel suit le nouvel horaire,

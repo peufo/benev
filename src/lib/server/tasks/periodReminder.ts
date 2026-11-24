@@ -13,9 +13,11 @@ const HOUR = 60 * 60_000
  * Rappelle leur créneau aux inscrit·es accepté·es (voir `#lib/period/periodReminder.js`). Le
  * marqueur `remindedAt` se pose avant l'envoi et exige d'être vide: une fenêtre rejouée après un
  * échec ne double jamais un courriel, au prix d'en perdre un si le processus tombe entre les deux.
- * Une demande en attente n'est pas un engagement, et un secteur en brouillon n'a rien annoncé. Dans
- * un évènement fermé, seul un membre qui a un rôle est rappelé (`isMemberMailHeld`); les autres ne
- * le sont pas à la publication, la fenêtre étant passée.
+ * Une demande en attente n'est pas un engagement, et un secteur en brouillon n'a rien annoncé. Un
+ * évènement archivé ne rappelle plus personne, rôle ou non: `isMemberMailHeld` laisserait passer
+ * les responsables, et l'archivage automatique y range des évènements qui ont encore des créneaux.
+ * En brouillon, seul un membre qui a un rôle est rappelé; les autres ne le sont pas à la
+ * publication, la fenêtre étant passée.
  */
 export const periodReminder: Task = {
 	name: 'period-reminder',
@@ -26,7 +28,7 @@ export const periodReminder: Task = {
 				start: { gt: since, lte: new Date(until.getTime() + REMINDER_MAX_HOURS * HOUR) },
 				team: {
 					state: { not: 'draft' },
-					event: { reminderHours: { gt: 0 }, deletedAt: null },
+					event: { reminderHours: { gt: 0 }, deletedAt: null, state: { not: 'archived' } },
 				},
 				subscribes: { some: { state: 'accepted', remindedAt: null } },
 			},

@@ -72,6 +72,16 @@ test.describe.serial('Rappel avant un créneau', () => {
 		await runPeriodReminder()
 		expect(await remindedAt()).toBeNull()
 		expect(await remindedAt(leaderSubscribeId)).not.toBeNull()
+	})
+
+	test('Un évènement archivé ne rappelle personne, pas même ceux qui y ont un rôle', async () => {
+		// Archiver n'est pas le sujet, et rendre son rappel au responsable le remet en jeu.
+		await prisma.event.update({ where: { id: event.eventId }, data: { state: 'archived' } })
+		await prisma.subscribe.update({ where: { id: leaderSubscribeId }, data: { remindedAt: null } })
+		await startInOneDay()
+		await runPeriodReminder()
+		expect(await remindedAt()).toBeNull()
+		expect(await remindedAt(leaderSubscribeId)).toBeNull()
 
 		// Publier n'est pas le sujet: c'est le préalable des étapes suivantes.
 		await prisma.event.update({ where: { id: event.eventId }, data: { state: 'published' } })
