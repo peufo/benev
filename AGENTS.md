@@ -833,8 +833,13 @@ breaks `svelte-check`.
   in. `isInviteHeld` and `isMemberMailHeld` (`#lib/event/eventAccess.ts`) decide, per recipient:
   a member with a role gets in, and so gets every email. The invitation of a member without a role
   sets `Member.invitePendingAt` instead of leaving, and a leader's request to such a member waits
-  with `Subscribe.notifiedAt` null. Period changes, deletions and reminders are simply not sent to
-  them while the event is closed, and nothing replays them at publication. `setEventState` releases both on publication
+  with `Subscribe.notifiedAt` null. The hold only covers a subscribe the member has never heard of
+  (`isSubscribeAnnounced`: created by the member, or `notifiedAt` set): a volunteer who knows their
+  slot keeps getting its status changes, period changes and reminders when the event goes back to
+  draft. For the others, those emails are simply not sent and nothing replays them, since the
+  proposal released at publication carries the current schedule. A proposal force-validated while
+  held is released with it, announced as accepted. Reminders skip archived events altogether.
+  `setEventState` releases both on publication
   (`sendPendingInvites` in `#lib/server/inviteBulk.ts`, behind the import's daily cap, and
   `sendPendingSubscribeRequests`); the owner may decline the invitations, which clears them.
   `notifiedAt` is written before the email, as `remindedAt` is, so a republication sends nothing

@@ -1,4 +1,4 @@
-import type { EventState, TeamState } from '@prisma/client'
+import type { EventState, SubscribeCreatedBy, TeamState } from '@prisma/client'
 
 /**
  * Qui entre dans l'espace d'un évènement. Publié, il est ouvert à tous; en brouillon ou archivé,
@@ -27,13 +27,26 @@ export function isInviteHeld(eventState: EventState, { hasRole }: { hasRole: boo
 /**
  * Un e-mail à un membre (inscription, créneau modifié ou supprimé, rappel) attend qu'il puisse voir
  * ce qu'il annonce. Un secteur en brouillon se prépare en silence pour tous, mais un évènement fermé
- * ne retient que ce qui va à un membre sans rôle, le seul qu'il laisse dehors. Les responsables,
- * destinataires des demandes d'un membre, en ont toujours un.
+ * ne retient que ce qui va à un membre sans rôle, le seul qu'il laisse dehors, et seulement sur une
+ * inscription dont il ne sait rien encore (`announced`): celle qu'il connaît continue de le tenir au
+ * courant quand l'évènement repasse en brouillon ou est archivé. Les responsables, destinataires
+ * des demandes d'un membre, ont toujours un rôle.
  */
 export function isMemberMailHeld(
 	eventState: EventState,
 	teamState: TeamState,
-	{ hasRole }: { hasRole: boolean }
+	{ hasRole, announced = false }: { hasRole: boolean; announced?: boolean }
 ): boolean {
-	return teamState === 'draft' || (eventState !== 'published' && !hasRole)
+	return teamState === 'draft' || (eventState !== 'published' && !hasRole && !announced)
+}
+
+/**
+ * Le membre connaît son inscription s'il l'a créée lui-même, ou si elle lui a été annoncée:
+ * `notifiedAt` est posé au départ de la proposition comme de la demande.
+ */
+export function isSubscribeAnnounced(subscribe: {
+	createdBy: SubscribeCreatedBy
+	notifiedAt: Date | null
+}): boolean {
+	return subscribe.createdBy === 'user' || subscribe.notifiedAt !== null
 }

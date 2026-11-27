@@ -47,3 +47,19 @@ export const subscribeNotification: { [S in SubscribeState]: SubscribeNotificati
 		else return await sendEmailModel(member.eventId, 'subscribe_cancelled', options)
 	},
 }
+
+/**
+ * Une proposition validée de force pendant qu'elle attendait n'a jamais été annoncée: le membre
+ * l'apprend déjà acceptée, par le modèle qui lui dit qu'un·e responsable a accepté sa demande.
+ * `accepted` enverrait aux responsables le composant qui leur est destiné.
+ */
+export const announceAccepted: SubscribeNotification<'accepted'> = async ({
+	props,
+	...restOptions
+}) => {
+	const member = await getMemberProfile({ id: props.subscribe.memberId })
+	return await sendEmailModel(member.eventId, 'subscribe_accepted', {
+		...restOptions,
+		props: { ...props, member },
+	})
+}

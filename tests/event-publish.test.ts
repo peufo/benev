@@ -329,4 +329,29 @@ test.describe.serial('Un secteur publié dans un évènement fermé', () => {
 		expect(subscribe.state).toBe('request')
 		expect(subscribe.notifiedAt!.getTime()).toBeGreaterThan(previously.getTime())
 	})
+
+	/**
+	 * Une proposition validée de force pendant qu'elle attendait: le courriel d'acceptation a été
+	 * retenu comme elle, et c'est la publication qui apprend au bénévole qu'il est inscrit.
+	 */
+	test('La publication annonce aussi la proposition validée de force entre-temps', async () => {
+		await prisma.subscribe.update({
+			where: { id: volunteerRequestId },
+			data: { state: 'accepted', isForcedValidation: true },
+		})
+
+		await gotoHydrated(page, `/${event.eventId}/admin/settings`)
+		await page.getByRole('button', { name: 'Publier', exact: true }).click()
+		const confirmation = page.getByRole('dialog')
+		await expect(confirmation).toContainText("1 demande d'inscription partira par e-mail.")
+		await confirmation.getByRole('button', { name: 'Publier' }).click()
+
+		await expect
+			.poll(
+				async () =>
+					(await prisma.subscribe.findUniqueOrThrow({ where: { id: volunteerRequestId } }))
+						.notifiedAt
+			)
+			.not.toBeNull()
+	})
 })

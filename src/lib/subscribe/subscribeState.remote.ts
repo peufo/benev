@@ -16,7 +16,7 @@ import {
 } from '#lib/server/index.js'
 import { subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { periodIsComplet } from '#lib/period/index.js'
-import { canAccessEvent, isMemberMailHeld } from '#lib/event/eventAccess.js'
+import { canAccessEvent, isMemberMailHeld, isSubscribeAnnounced } from '#lib/event/eventAccess.js'
 
 type Edtions = Record<SubscribeState, SubscribeState[]>
 const creatorEditions: Edtions = {
@@ -135,6 +135,7 @@ export const setSubscribeState = form(
 		const hasRole = !isLeaderAction || memberHasRole(_subscribe.member, author.event)
 		const isHeld = isMemberMailHeld(author.event.state, _subscribe.period.team.state, {
 			hasRole,
+			announced: isSubscribeAnnounced(_subscribe),
 		})
 		const subscribe = await prisma.subscribe.update({
 			where: { id: subscribeId },
@@ -216,11 +217,18 @@ export const setSubscribeState = form(
 		}
 
 		if (emailOptions.to.length) {
-			await subscribeNotification[state]({
+			const queued = await subscribeNotification[state]({
 				...emailOptions,
 				subject: subjects[state],
 				props: { subscribe, authorName },
 			})
+			// Une validation forcée apprend au membre son inscription: aucune relâche ne doit la lui
+			// annoncer une seconde fois.
+			if (queued && isLeaderAction && !subscribe.notifiedAt)
+				await prisma.subscribe.update({
+					where: { id: subscribeId },
+					data: { notifiedAt: new Date() },
+				})
 		}
 	}
 )

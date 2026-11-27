@@ -5,7 +5,7 @@ import { sendEmailComponent } from '../email'
 import { EmailPeriodReminder } from '#lib/email/index.js'
 import { formatRange } from '#lib/formatRange.js'
 import { planReminders, REMINDER_MAX_HOURS } from '#lib/period/periodReminder.js'
-import { isMemberMailHeld } from '#lib/event/eventAccess.js'
+import { isMemberMailHeld, isSubscribeAnnounced } from '#lib/event/eventAccess.js'
 
 const HOUR = 60 * 60_000
 
@@ -16,8 +16,8 @@ const HOUR = 60 * 60_000
  * Une demande en attente n'est pas un engagement, et un secteur en brouillon n'a rien annoncé. Un
  * évènement archivé ne rappelle plus personne, rôle ou non: `isMemberMailHeld` laisserait passer
  * les responsables, et l'archivage automatique y range des évènements qui ont encore des créneaux.
- * En brouillon, seul un membre qui a un rôle est rappelé; les autres ne le sont pas à la
- * publication, la fenêtre étant passée.
+ * En brouillon, seul est rappelé un membre qui a un rôle ou qui connaît déjà son inscription; les
+ * autres ne le sont pas à la publication, la fenêtre étant passée.
  */
 export const periodReminder: Task = {
 	name: 'period-reminder',
@@ -54,9 +54,11 @@ export const periodReminder: Task = {
 			const { team, event } = period
 			const leaders = team.leaders.map(({ email }) => email as string)
 			const replyTo = leaders.length ? leaders : event.email ? [event.email] : undefined
-			for (const { id, member } of period.subscribes) {
+			for (const subscribe of period.subscribes) {
+				const { id, member } = subscribe
 				const hasRole = memberHasRole(member, event)
-				if (isMemberMailHeld(event.state, team.state, { hasRole })) continue
+				const announced = isSubscribeAnnounced(subscribe)
+				if (isMemberMailHeld(event.state, team.state, { hasRole, announced })) continue
 				const { count } = await prisma.subscribe.updateMany({
 					where: { id, state: 'accepted', remindedAt: null },
 					data: { remindedAt: until },

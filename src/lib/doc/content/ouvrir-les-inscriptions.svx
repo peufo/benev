@@ -27,6 +27,10 @@ responsables proposent aussi. Au moment de publier, une case te propose d'envoye
 attente, et les propositions de créneaux partent d'elles-mêmes. Décoche la case si tu préfères
 inviter chaque personne depuis sa fiche.
 
+Un·e bénévole qui connaît déjà son inscription reste prévenu·e quand tu repasses l'évènement en
+brouillon : un créneau déplacé, une inscription annulée, le rappel avant son créneau lui arrivent
+comme avant. Un évènement archivé, lui, n'envoie plus de rappel.
+
 ### L'archivage automatique
 
 Un évènement publié, terminé depuis 30 jours et où plus rien ne bouge s'archive tout seul. Son

@@ -12,7 +12,7 @@ import {
 } from '#lib/server/index.js'
 import { EmailPeriodChanged } from '#lib/email/index.js'
 import { diffChanges, hasChanges, projectPeriod, type LogActor } from '#lib/log/index.js'
-import { isMemberMailHeld } from '#lib/event/eventAccess.js'
+import { isMemberMailHeld, isSubscribeAnnounced } from '#lib/event/eventAccess.js'
 
 export type FormDataPeriod = Awaited<ReturnType<typeof getPeriod>>
 
@@ -45,8 +45,8 @@ type Range = { start: Date; end: Date }
  * Un courriel par inscrit·e engagé·e qui accepte les notifications, `after` nul pour une
  * suppression. La réponse va aux responsables, à défaut à l'auteur·ice du geste. Un envoi qui
  * tombe n'arrête pas les autres. Rend le nombre de destinataires: un secteur en brouillon n'en a
- * aucun, un évènement fermé que ceux qui y ont un rôle. Rien n'est rejoué à l'ouverture, puisque le
- * membre y trouve l'horaire à jour.
+ * aucun, un évènement fermé ceux qui y ont un rôle ou connaissent déjà leur inscription. Rien n'est
+ * rejoué à l'ouverture: la proposition retenue partira avec l'horaire à jour.
  */
 export async function notifyPeriodChange(
 	period: PeriodForChange,
@@ -58,10 +58,12 @@ export async function notifyPeriodChange(
 	const replyTo = leaders.length ? leaders : [actor.email]
 	const subject = after ? 'Ton créneau a changé' : 'Ton créneau a été supprimé'
 	let notified = 0
-	for (const { member } of period.subscribes) {
+	for (const subscribe of period.subscribes) {
+		const { member } = subscribe
 		if (!member.isNotifiedSubscribe || !member.email) continue
 		const hasRole = memberHasRole(member, team.event)
-		if (isMemberMailHeld(team.event.state, team.state, { hasRole })) continue
+		const announced = isSubscribeAnnounced(subscribe)
+		if (isMemberMailHeld(team.event.state, team.state, { hasRole, announced })) continue
 		notified++
 		await sendEmailComponent(EmailPeriodChanged, {
 			from: team.event.name,

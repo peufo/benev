@@ -51,8 +51,9 @@ test.describe.serial('Rappel avant un créneau', () => {
 		const team = await seedTeam(event.eventId, 'Buvette', 'published')
 		const period = await seedPeriod(team.id, { inDays: 7 })
 		const member = await seedMember(event.eventId, await seedUser('Benevole'))
+		// Une proposition validée de force pendant qu'elle attendait: le bénévole n'en sait rien.
 		const subscribe = await prisma.subscribe.create({
-			data: { periodId: period.id, memberId: member.id, state: 'accepted' },
+			data: { periodId: period.id, memberId: member.id, state: 'accepted', createdBy: 'leader' },
 		})
 		const leader = await seedMember(event.eventId, await seedUser('Responsable'), {
 			leaderOf: [team.id],
@@ -65,7 +66,7 @@ test.describe.serial('Rappel avant un créneau', () => {
 		leaderSubscribeId = leaderSubscribe.id
 	})
 
-	test('Un évènement non publié ne rappelle que ceux qui y ont un rôle', async () => {
+	test('Un évènement non publié ne rappelle pas une inscription jamais annoncée', async () => {
 		// Le premier passage pose le curseur: une date antérieure ne rejouerait pas.
 		await runPeriodReminder()
 		await startInOneDay()
@@ -74,10 +75,21 @@ test.describe.serial('Rappel avant un créneau', () => {
 		expect(await remindedAt(leaderSubscribeId)).not.toBeNull()
 	})
 
+	/** Un évènement publié puis repassé en brouillon: ses bénévoles savent qu'ils viennent. */
+	test("Il rappelle celle que le bénévole connaît, sans rôle qu'il ait", async () => {
+		await prisma.subscribe.update({ where: { id: subscribeId }, data: { notifiedAt: new Date() } })
+		await startInOneDay()
+		await runPeriodReminder()
+		expect(await remindedAt()).not.toBeNull()
+	})
+
 	test('Un évènement archivé ne rappelle personne, pas même ceux qui y ont un rôle', async () => {
-		// Archiver n'est pas le sujet, et rendre son rappel au responsable le remet en jeu.
+		// Archiver n'est pas le sujet, et rendre leur rappel aux deux inscriptions les remet en jeu.
 		await prisma.event.update({ where: { id: event.eventId }, data: { state: 'archived' } })
-		await prisma.subscribe.update({ where: { id: leaderSubscribeId }, data: { remindedAt: null } })
+		await prisma.subscribe.updateMany({
+			where: { id: { in: [subscribeId, leaderSubscribeId] } },
+			data: { remindedAt: null },
+		})
 		await startInOneDay()
 		await runPeriodReminder()
 		expect(await remindedAt()).toBeNull()

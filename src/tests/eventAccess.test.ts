@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { canAccessEvent, isInviteHeld, isMemberMailHeld } from '#lib/event/eventAccess.js'
+import {
+	canAccessEvent,
+	isInviteHeld,
+	isMemberMailHeld,
+	isSubscribeAnnounced,
+} from '#lib/event/eventAccess.js'
 
 const member = { roles: ['member'] }
 const leader = { roles: ['leader', 'member'] }
@@ -54,5 +59,23 @@ describe('isMemberMailHeld', () => {
 	it('retient tout ce qui touche un secteur en brouillon', () => {
 		expect(isMemberMailHeld('published', 'draft', role)).toBe(true)
 		expect(isMemberMailHeld('draft', 'draft', role)).toBe(true)
+		expect(isMemberMailHeld('draft', 'draft', { hasRole: true, announced: true })).toBe(true)
+	})
+
+	it('laisse partir ce qui touche une inscription déjà connue, même évènement fermé', () => {
+		const announced = { hasRole: false, announced: true }
+		expect(isMemberMailHeld('draft', 'published', announced)).toBe(false)
+		expect(isMemberMailHeld('archived', 'validated', announced)).toBe(false)
+	})
+})
+
+describe('isSubscribeAnnounced', () => {
+	it('connaît une inscription créée par le membre lui-même', () => {
+		expect(isSubscribeAnnounced({ createdBy: 'user', notifiedAt: null })).toBe(true)
+	})
+
+	it("ne connaît la proposition d'un·e responsable qu'une fois envoyée", () => {
+		expect(isSubscribeAnnounced({ createdBy: 'leader', notifiedAt: null })).toBe(false)
+		expect(isSubscribeAnnounced({ createdBy: 'leader', notifiedAt: new Date() })).toBe(true)
 	})
 })

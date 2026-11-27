@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
-import { seedInvitedMember, seedPeriod, seedTeam, seedUser, signIn } from './seed'
+import { prisma, seedInvitedMember, seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
 import { sharedPage } from './sharedPage'
 
@@ -178,6 +178,35 @@ test.describe.serial("Inscription d'une fiche invitée", () => {
 			.filter({ hasText: 'a modifié un créneau de Alpha' })
 			.filter({ hasText: 'aucun courriel' })
 		await expect(silent).toHaveCount(1)
+	})
+
+	/**
+	 * Repasser en brouillon ferme l'évènement aux bénévoles, pas leur boîte: le membre, sans rôle,
+	 * connaît son créneau depuis qu'il y a répondu, et apprend qu'il bouge.
+	 */
+	test("Repassé en brouillon, l'évènement prévient encore l'inscrit·e qui connaît son créneau", async () => {
+		// Fermer l'évènement n'est pas le sujet: c'est le préalable du geste observé.
+		await prisma.event.update({ where: { id: event.eventId }, data: { state: 'draft' } })
+
+		const drawer = await openPeriodDrawer()
+		const start = drawer.getByLabel('Début')
+		const current = await start.inputValue()
+		await start.fill(current === '10:00' ? '11:00' : '10:00')
+		await drawer.getByRole('button', { name: 'Valider', exact: true }).click()
+		const choice = page.getByRole('dialog').filter({ hasText: 'déjà reçu cet horaire' })
+		await choice.getByRole('button', { name: 'Valider et notifier' }).click()
+		await expect(page.getByText('Créneau mis à jour')).toBeVisible()
+		await expect(drawer).toBeHidden()
+
+		await gotoHydrated(page, `/${event.eventId}/admin/dashboard`)
+		const notified = page
+			.locator('#journal')
+			.getByRole('listitem')
+			.filter({ hasText: 'a modifié un créneau de Alpha' })
+			.filter({ hasText: '1 inscrit·e prévenu·e' })
+		await expect(notified).toHaveCount(2)
+
+		await prisma.event.update({ where: { id: event.eventId }, data: { state: 'published' } })
 	})
 
 	test('Supprimer un créneau validé prévient et journalise chaque inscription', async () => {

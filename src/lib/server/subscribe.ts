@@ -1,5 +1,5 @@
 import type { Member, Prisma } from '@prisma/client'
-import { subscribeNotification } from '#lib/email/subscribeNotification.js'
+import { announceAccepted, subscribeNotification } from '#lib/email/subscribeNotification.js'
 import { prisma } from './prisma'
 import { isShuttingDown } from './background'
 import { isMemberMailHeld } from '#lib/event/eventAccess.js'
@@ -35,7 +35,8 @@ export type SubscribeForRequestNotification = Prisma.SubscribeGetPayload<{
 
 /**
  * Le courriel « Nouvelle inscription »: aux responsables quand le membre s'inscrit, au membre
- * quand un responsable l'inscrit. Sans responsable, le propriétaire reçoit à leur place.
+ * quand un responsable l'inscrit. Sans responsable, le propriétaire reçoit à leur place. Une
+ * proposition déjà validée de force s'annonce acceptée.
  */
 export async function sendSubscribeRequestNotification(
 	subscribe: SubscribeForRequestNotification,
@@ -52,14 +53,12 @@ export async function sendSubscribeRequestNotification(
 	const replyTo = subscribe.createdBy === 'user' ? memberMail : leadersMail
 	if (!to.length) return 'nobody'
 
-	const queued = await subscribeNotification.request({
-		from: subscribe.period.team.event.name,
-		to,
-		replyTo,
-		subject: 'Nouvelle inscription',
-		props: { subscribe, authorName },
-		bulk,
-	})
+	const options = { from: subscribe.period.team.event.name, to, replyTo, bulk }
+	const props = { subscribe, authorName }
+	const queued =
+		subscribe.state === 'accepted'
+			? await announceAccepted({ ...options, subject: 'Inscription acceptée', props })
+			: await subscribeNotification.request({ ...options, subject: 'Nouvelle inscription', props })
 	return queued ? 'sent' : 'refused'
 }
 
@@ -96,8 +95,9 @@ export async function notifySubscribeRequest(
 
 /**
  * Les demandes qu'un responsable a créées pendant que le secteur était en brouillon, ou que
- * l'évènement n'était pas publié: c'est en quittant cet état qu'elles partent. Seules celles encore
- * sans réponse sont concernées, une inscription confirmée n'a rien à recevoir. L'état de
+ * l'évènement n'était pas publié: c'est en quittant cet état qu'elles partent. Celles encore sans
+ * réponse, et celles qu'un·e responsable a validées de force entre-temps: le membre n'en a rien su,
+ * le courriel d'acceptation ayant été retenu comme la proposition. L'état de
  * l'évènement ne filtre rien ici: `notifySubscribeRequest` tranche par destinataire, et un membre
  * qui a un rôle reçoit la sienne dès que le secteur quitte le brouillon. Elles partent en masse,
  * derrière les e-mails urgents. Un envoi qui tombe n'arrête ni les autres, ni la transition. Rend
@@ -133,7 +133,7 @@ export function countPendingSubscribeRequests(eventId: string) {
 const pendingRequests = (team: Prisma.TeamWhereInput) =>
 	({
 		period: { team: { ...team, state: { not: 'draft' } } },
-		state: 'request',
+		state: { in: ['request', 'accepted'] },
 		createdBy: 'leader',
 		notifiedAt: null,
 		member: { email: { not: null }, isNotifiedSubscribe: true },
