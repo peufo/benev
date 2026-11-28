@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { useEvent } from './event'
-import { prisma, seedPeriod, seedTeam, seedUser, signIn } from './seed'
+import { prisma, seedMember, seedPeriod, seedTeam, seedUser, signIn } from './seed'
 import { awaitHydrated, gotoHydrated } from './hydrated'
 import { sharedPage } from './sharedPage'
 
@@ -231,5 +231,29 @@ test.describe.serial('Secteurs et responsables', () => {
 		})
 		const DAY = 1000 * 60 * 60 * 24
 		expect(clone.periods.map((p) => p.start.getTime())).toEqual([period.start.getTime() + 2 * DAY])
+	})
+
+	/**
+	 * Le formulaire ne rend pas le champ des responsables à un responsable: son absence ne doit
+	 * pas se lire comme « plus personne », que `updateTeam` refuse aux non-admins.
+	 * Change de session: reste la dernière étape.
+	 */
+	test('Un responsable modifie son secteur sans toucher aux responsables', async () => {
+		const team = await seedTeam(event.eventId, 'Charlie')
+		const leader = await seedUser('Eli')
+		await seedMember(event.eventId, leader, { leaderOf: [team.id] })
+		await signIn(page, leader)
+		await gotoHydrated(page, `/${event.eventId}/admin/teams/${team.id}`)
+
+		await page.locator('#team').getByLabel('Description').fill('Accueil des artistes')
+		await page.getByRole('button', { name: 'Enregistrer les modifications' }).click()
+		await expect(page.getByText('Modification en cours !')).toBeHidden()
+
+		const saved = await prisma.team.findUniqueOrThrow({
+			where: { id: team.id },
+			include: { leaders: true },
+		})
+		expect(saved.description).toBe('Accueil des artistes')
+		expect(saved.leaders.map(({ userId }) => userId)).toEqual([leader.id])
 	})
 })

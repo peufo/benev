@@ -105,13 +105,25 @@ export const zConnectMany = relationIds('connect')
 /** Idem vers `{ set: [...] }`: la liste transmise remplace l'existant, pour une mise à jour. */
 export const zSet = relationIds('set')
 
+/**
+ * Comme `zSet`, mais une clé absente reste absente, pour une liste que le formulaire ne rend pas
+ * toujours. `zSet.optional()` ne le fait pas: le `.default([])` intérieur répond à `undefined`
+ * avant lui, et l'absence devient une liste vide.
+ */
+export const zSetOptional = z
+	.array(z.string())
+	.optional()
+	.transform((ids) => ids && toRelation('set', ids))
+
 function relationIds<Operation extends 'connect' | 'set'>(operation: Operation) {
 	return z
 		.array(z.string())
 		.default([])
-		.transform(
-			(ids) => ({ [operation]: ids.map((id) => ({ id })) }) as Record<Operation, { id: string }[]>
-		)
+		.transform((ids) => toRelation(operation, ids))
+}
+
+function toRelation<Operation extends 'connect' | 'set'>(operation: Operation, ids: string[]) {
+	return { [operation]: ids.map((id) => ({ id })) } as Record<Operation, { id: string }[]>
 }
 
 /**

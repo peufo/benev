@@ -1,5 +1,5 @@
 import z from 'zod'
-import { zConnectMany, zDateNullable, zJson, zSet } from './form'
+import { zConnectMany, zDateNullable, zJson, zSetOptional } from './form'
 
 const memberConditionOperator = z.enum([
 	'equals',
@@ -55,7 +55,7 @@ export const modelTeamUpdate = modelTeam.extend({
 	// En mise à jour, la liste transmise remplace l'existante. Optionnelle parce que `TeamForm`
 	// ne rend `InputLeaders` qu'aux admins: c'est `updateTeam` qui interprète l'absence, le
 	// schéma ne connaît pas le rôle.
-	leaders: zSet.optional(),
+	leaders: zSetOptional,
 })
 
 /**
