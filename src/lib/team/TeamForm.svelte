@@ -7,6 +7,7 @@
 	import { enhanceForm } from '#lib/enhanceForm.js'
 	import { SaveBar } from '#lib/ui/index.js'
 	import InputLeaders from '#lib/team/InputLeaders.svelte'
+	import TeamLeaders from '#lib/team/TeamLeaders.svelte'
 	import type { TeamWithComputedValues } from '#lib/server/index.js'
 	import type { DrawerFrom } from '#lib/drawerCall.svelte.js'
 	import { createTeam, updateTeam } from './team.remote'
@@ -41,7 +42,9 @@
 	// peuvent être montés en même temps, et passer d'un secteur au suivant ne doit rien traîner.
 	const updateForm = $derived(team.id ? updateTeam.for(team.id) : undefined)
 	const remoteForm = $derived(updateForm ?? createTeam.for(formId))
-	const hideLeaders = $derived(openedFrom === 'invite')
+	const canEditLeaders = $derived(
+		!!page.data.member?.roles.includes('admin') && openedFrom !== 'invite'
+	)
 
 	let formElement = $state<HTMLFormElement>()
 	let bar = $state<ReturnType<typeof SaveBar>>()
@@ -61,11 +64,20 @@
 {#snippet fields()}
 	<InputString field={remoteForm.fields.name} label="Nom du secteur" value={team.name} />
 
-	{#key resetToken}
-		{#if page.data.member?.roles.includes('admin') && !hideLeaders}
+	<!-- Seul un admin nomme les responsables (`updateTeam` refuse la clé aux autres): un
+	     responsable du secteur, comme le root, les voit sans pouvoir les changer. -->
+	{#if canEditLeaders}
+		{#key resetToken}
 			<InputLeaders field={remoteForm.fields.leaders} value={team.leaders} />
-		{/if}
-	{/key}
+		{/key}
+	{:else if team.id}
+		<fieldset class="fieldset">
+			<span class="label">Responsable{team.leaders?.length === 1 ? '' : 's'}</span>
+			<div class="flex flex-wrap gap-2 gap-y-1">
+				<TeamLeaders leaders={team.leaders ?? []} />
+			</div>
+		</fieldset>
+	{/if}
 
 	<InputTextarea
 		field={remoteForm.fields.description}
