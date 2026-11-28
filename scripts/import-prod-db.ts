@@ -2,12 +2,18 @@
  * Remplace la base locale par une copie de celle de prod, puis lui applique les migrations en
  * attente.
  *
- *   bun run db:import            # dump frais de la prod, rangé dans dumps/benevio-<date>.sql
- *   bun run db:import <fichier>  # rejoue un dump déjà téléchargé
+ *   bun run db:import            # dump frais de la prod, rangé dans dumps/benevio-<date>.sql,
+ *                                # et copie des médias de prod dans MEDIA_DIR
+ *   bun run db:import <fichier>  # rejoue un dump déjà téléchargé, sans toucher aux médias
  *
- * Lit dans `.env` PROD_DB, `hôte-ssh:service-docker` du MySQL de prod:
+ * Lit dans `.env` PROD_DB, `hôte-ssh:service-docker` du MySQL de prod, et PROD_MEDIA, la source
+ * rsync du volume media de prod:
  *
  *   PROD_DB="root@hôte:benevio-db-xxxxxx"
+ *   PROD_MEDIA="root@hôte:/var/lib/docker/volumes/<volume>/_data"
+ *
+ * La copie des médias ne supprime rien: un média local absent de la prod reste servi à un
+ * ancien dump qu'on rejouerait.
  *
  * Le nom du conteneur change à chaque redémarrage de la tâche swarm, pas celui du service.
  * Le dump se fait avec l'utilisateur applicatif du conteneur, dont les identifiants ne quittent
@@ -47,7 +53,16 @@ async function dumpProd() {
 	return path
 }
 
+async function copyMedia() {
+	const source = process.env.PROD_MEDIA
+	const target = process.env.MEDIA_DIR
+	if (!source || !target) throw new Error('PROD_MEDIA ou MEDIA_DIR manque dans .env')
+	console.log(`Copie des médias de ${source}…`)
+	await run(['rsync', '-az', `${source.replace(/\/$/, '')}/`, `${target.replace(/\/$/, '')}/`])
+}
+
 const path = process.argv[2] ?? (await dumpProd())
+if (!process.argv[2]) await copyMedia()
 const file = Bun.file(path)
 if (!(await file.exists())) throw new Error(`Dump introuvable: ${path}`)
 
