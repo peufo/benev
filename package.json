@@ -29,6 +29,7 @@
 		"demo": "cademo make",
 		"demo:edit": "cademo edit",
 		"demo:publish": "bun scripts/publish-demos.ts",
+		"db:import": "bun scripts/import-prod-db.ts",
 		"fuma:local": "bun scripts/use-package.ts fuma local",
 		"fuma:npm": "bun scripts/use-package.ts fuma npm",
 		"cademo:local": "bun scripts/use-package.ts cademo local",
